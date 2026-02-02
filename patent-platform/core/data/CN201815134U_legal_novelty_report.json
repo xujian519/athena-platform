@@ -1,0 +1,59 @@
+{
+  "patent_number": "CN201815134U",
+  "patent_title": "混二元酸二甲酯生产中的甲醇精馏装置",
+  "analysis_date": "2025-12-08T18:03:24.501744",
+  "legal_basis": "根据专利法新颖性定义，只有单个对比文件包含权利要求全部技术特征时才破坏新颖性",
+  "claim1_full_text": "混二元酸二甲酯生产中的甲醇精馏装置, 其特征在于:所述精馏装置包括与混二元酸二甲酯酯化反应釜的酯化气相出口连通的精馏塔, 和与所述精馏塔顶部的精馏气相出口连通的冷凝器。",
+  "technical_features": [
+    "混二元酸二甲酯生产",
+    "甲醇精馏装置",
+    "精馏塔",
+    "酯化反应釜",
+    "酯化气相出口",
+    "连通",
+    "精馏塔顶部",
+    "精馏气相出口",
+    "冷凝器"
+  ],
+  "search_strategy": {
+    "principle": "严格AND逻辑，确保检索到包含全部技术特征的对比文件",
+    "chinese_queries": [
+      "混二元酸二甲酯 AND 甲醇精馏装置 AND 精馏塔 AND 酯化反应釜 AND 冷凝器 AND 连通",
+      "混二元酸二甲酯生产 AND 精馏装置 AND (酯化反应釜 AND 酯化气相出口) AND (精馏塔 AND 连通) AND (精馏塔顶部 AND 精馏气相出口) AND 冷凝器",
+      "混二元酸二甲酯 AND 酯化反应 AND 精馏 AND 直接 AND 气相 AND 连通 AND 精馏塔 AND 冷凝器",
+      "(甲醇精馏装置 OR 精馏装置) AND (酯化反应釜 OR 反应釜) AND (精馏塔 OR 蒸馏塔) AND 冷凝器 AND 气相 AND 连通"
+    ],
+    "english_queries": [
+      "dimethyl adipate AND methanol distillation AND distillation tower AND esterification reactor AND condenser AND connection",
+      "DBE AND dimethyl adipate production AND methanol recovery AND (esterification reactor AND vapor outlet) AND (distillation column AND direct connection) AND (column top AND vapor outlet) AND condenser",
+      "dimethyl adipate AND esterification AND distillation AND direct AND vapor AND connection AND distillation tower AND condenser",
+      "(methanol distillation OR recovery apparatus) AND (esterification reactor OR reaction vessel) AND (distillation tower OR column) AND condenser AND vapor AND connection"
+    ]
+  },
+  "search_results": {
+    "total_patents_found": 0,
+    "successful_retrievals": 0,
+    "patent_details": []
+  },
+  "legal_novelty_analysis": {
+    "novelty_level": "HIGH",
+    "confidence": 0.8,
+    "assessment": "未发现包含主要技术特征的对比文件，具有较高新颖性",
+    "critical_patents": [],
+    "high_risk_patents": [],
+    "medium_risk_patents": [],
+    "total_analyzed": 0
+  },
+  "conclusion": {
+    "novelty_level": "HIGH",
+    "confidence": 0.8,
+    "assessment": "未发现包含主要技术特征的对比文件，具有较高新颖性",
+    "legal_opinion": "未发现包含权利要求主要技术特征的对比文件，根据现有检索结果，该权利要求具备新颖性。",
+    "recommendations": [
+      "目标专利具有较好的新颖性前景",
+      "建议继续推进专利申请流程",
+      "定期监控相关技术领域的专利动态",
+      "考虑拓展相关技术领域的专利布局"
+    ]
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "case_id": "CN202310000001.0",
+  "timestamp": "2025-12-30T12:30:25.974025",
+  "metadata": {
+    "total_tasks": 4,
+    "ai_executed": 0,
+    "human_intervened": 4,
+    "avg_confidence": 0.9333333333333332,
+    "total_execution_time": 1.8596649169921875e-05
+  },
+  "task_breakdown": [
+    {
+      "task_id": "creative_extract_problem",
+      "sequence": 0,
+      "description": "提取发明要解决的技术问题",
+      "task_type": "AI_WITH_VALIDATION",
+      "result": {
+        "message": "AI验证完成任务: 提取发明要解决的技术问题",
+        "human_modified": true,
+        "modifications": [
+          "修正了特征描述",
+          "补充了对比细节"
+        ]
+      },
+      "confidence": 0.9,
+      "human_intervention": true,
+      "execution_time": 5.7220458984375e-06
+    },
+    {
+      "task_id": "creative_identify_differences",
+      "sequence": 1,
+      "description": "识别与现有技术的区别特征",
+      "task_type": "AI_WITH_VALIDATION",
+      "result": {
+        "message": "AI验证完成任务: 识别与现有技术的区别特征",
+        "human_modified": true,
+        "modifications": [
+          "修正了特征描述",
+          "补充了对比细节"
+        ]
+      },
+      "confidence": 0.9,
+      "human_intervention": true,
+      "execution_time": 5.9604644775390625e-06
+    },
+    {
+      "task_id": "creative_obviousness_analysis",
+      "sequence": 2,
+      "description": "显而易见性分析",
+      "task_type": "HUMAN_GUIDED_AI",
+      "result": {
+        "framework": {
+          "legal_basis": "专利法第22条第3款",
+          "key_questions": [
+            "区别特征是什么？",
+            "现有技术是否给出技术启示？",
+            "是否显而易见？"
+          ],
+          "analysis_structure": {
+            "step1": "确定区别特征",
+            "step2": "分析技术启示",
+            "step3": "判断显而易见性"
+          }
+        },
+        "filled_details": {
+          "difference_features": [
+            "特征X",
+            "特征Y"
+          ],
+          "technical_teaching": "现有技术未给出...",
+          "obviousness": "对本领域技术人员来说..."
+        },
+        "reasoning": "基于专利法第22条第3款，经分析..."
+      },
+      "confidence": "human_guided",
+      "human_intervention": true,
+      "execution_time": 6.9141387939453125e-06
+    },
+    {
+      "task_id": "creative_creative_conclusion",
+      "sequence": 3,
+      "description": "创造性结论判断",
+      "task_type": "HUMAN_DECISION",
+      "result": {
+        "decision": "专利权全部无效",
+        "reasoning": "经综合分析现有技术特征...",
+        "confidence": 1.0,
+        "expert_signature": "专家ID: H001"
+      },
+      "confidence": 1.0,
+      "human_intervention": true,
+      "execution_time": 0.0
+    }
+  ],
+  "final_conclusion": "专利权全部无效",
+  "confidence_report": {
+    "high_confidence": 3,
+    "medium_confidence": 0,
+    "low_confidence": 0,
+    "human_verified": 4
+  },
+  "recommendations": [
+    {
+      "type": "human_intervention",
+      "priority": "medium",
+      "message": "4个任务需要人类介入",
+      "task_ids": [
+        "creative_extract_problem",
+        "creative_identify_differences",
+        "creative_obviousness_analysis",
+        "creative_creative_conclusion"
+      ]
+    }
+  ]
+}

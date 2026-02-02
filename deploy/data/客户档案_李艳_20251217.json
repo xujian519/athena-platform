@@ -1,0 +1,136 @@
+{
+  "customer_id": "9ab020cb-0951-43c4-8092-089b285b21e5",
+  "basic_info": {
+    "name": "李艳",
+    "type": "INDIVIDUAL",
+    "status": "considering",
+    "source": "temporary_consultation",
+    "contact_method": "phone_consultation"
+  },
+  "consultation_info": {
+    "consultation_date": "2025-12-17",
+    "consultation_type": "patent_consultation",
+    "current_status": "considering_options",
+    "decision_factors": [
+      "专利申请费用",
+      "申请流程复杂度",
+      "时间安排",
+      "技术保护需求"
+    ],
+    "concerns": [
+      "申请费用较高",
+      "流程复杂",
+      "时间周期长"
+    ]
+  },
+  "follow_up_plan": {
+    "status": "pending",
+    "next_contact": "2025-12-20",
+    "contact_method": "phone",
+    "purpose": "解答疑虑，提供详细信息",
+    "talking_points": [
+      "详细解释费减政策和可能的费用减免",
+      "简化申请流程说明",
+      "提供成功案例参考",
+      "明确时间节点和预期结果"
+    ]
+  },
+  "value_proposition": {
+    "potential_benefits": [
+      "专利技术保护",
+      "市场竞争优势",
+      "资产增值潜力",
+      "政府政策支持"
+    ],
+    "addressing_concerns": [
+      "费用问题 - 介绍费减政策",
+      "流程复杂 - 全程代理服务",
+      "时间周期 - 优化申请流程"
+    ]
+  },
+  "competitor_analysis": {
+    "status": "not_started",
+    "questions": [
+      "客户是否在比较不同代理机构",
+      "主要考虑因素是什么",
+      "对价格敏感度如何"
+    ]
+  },
+  "conversion_strategy": {
+    "approach": "value_first",
+    "key_selling_points": [
+      "专业团队经验",
+      "成功案例展示",
+      "费用透明化",
+      "全流程服务"
+    ],
+    "incentives": [
+      "首次咨询免费",
+      "费减申请协助",
+      "进度实时追踪"
+    ]
+  },
+  "timeline": {
+    "consultation_date": "2025-12-17",
+    "decision_deadline": "2025-12-25",
+    "conversion_probability": "medium",
+    "priority_score": 6
+  },
+  "required_actions": [
+    {
+      "action": "费用政策详解",
+      "deadline": "2025-12-20",
+      "responsible": "业务团队",
+      "status": "pending"
+    },
+    {
+      "action": "成功案例准备",
+      "deadline": "2025-12-19",
+      "responsible": "市场团队",
+      "status": "pending"
+    },
+    {
+      "action": "竞争分析",
+      "deadline": "2025-12-21",
+      "responsible": "销售团队",
+      "status": "pending"
+    }
+  ],
+  "risk_assessment": [
+    {
+      "risk": "选择其他代理机构",
+      "probability": "medium",
+      "mitigation": "突出差异化优势"
+    },
+    {
+      "risk": "决定不申请专利",
+      "probability": "low",
+      "mitigation": "强调专利价值"
+    },
+    {
+      "risk": "决策周期过长",
+      "probability": "medium",
+      "mitigation": "设置合理跟进频率"
+    }
+  ],
+  "system_info": {
+    "created_by": "xiaonuo_hybrid_system",
+    "created_at": "2025-12-17 17:38:49",
+    "database": "postgresql",
+    "customer_id_short": "9ab020cb",
+    "last_updated": "2025-12-17 17:45:00"
+  },
+  "tags": ["考虑中", "临时客户", "价格敏感", "需要跟进", "决策阶段"],
+  "conversion_factors": {
+    "positive_factors": [
+      "有专利保护需求",
+      "主动咨询",
+      "认真考虑"
+    ],
+    "negative_factors": [
+      "费用考虑",
+      "流程担忧",
+      "时间要求"
+    ]
+  }
+}

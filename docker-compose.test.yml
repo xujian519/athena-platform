@@ -1,0 +1,381 @@
+# Athena 测试环境 Docker Compose 配置
+# Test Environment Docker Compose Configuration
+# 包含所有测试所需的基础设施服务
+
+services:
+  # =========================
+  # PostgreSQL 数据库 (带pgvector扩展)
+  # =========================
+  postgres-test:
+    image: pgvector/pgvector:pg16
+    container_name: athena_postgres_test
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: athena_test
+      POSTGRES_PASSWORD: athena_test_password_2024
+      POSTGRES_DB: athena_test_db
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5433:5432"  # 使用5433避免与本地PostgreSQL冲突
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+      - ./init-postgres.sql:/docker-entrypoint-initdb.d/init-postgres.sql
+    networks:
+      - test-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U athena_test -d athena_test_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    labels:
+      - "com.athena.service=postgres-test"
+      - "com.athena.environment=test"
+
+  # =========================
+  # Redis 缓存
+  # =========================
+  redis-test:
+    image: redis:7-alpine
+    container_name: athena_redis_test
+    restart: unless-stopped
+    command: >
+      redis-server
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+      --appendonly no
+      --save ""
+    ports:
+      - "6380:6379"  # 使用6380避免与本地Redis冲突
+    networks:
+      - test-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+    labels:
+      - "com.athena.service=redis-test"
+      - "com.athena.environment=test"
+
+  # =========================
+  # Qdrant 向量数据库
+  # =========================
+  qdrant-test:
+    image: qdrant/qdrant:latest
+    container_name: athena_qdrant_test
+    restart: unless-stopped
+    environment:
+      QDRANT__SERVICE__HTTP_PORT: 6333
+      QDRANT__SERVICE__GRPC_PORT: 6334
+      QDRANT__LOG_LEVEL: DEBUG
+      QDRANT__SERVICE__MAX_REQUEST_SIZE_MB: 32
+    ports:
+      - "6334:6333"  # HTTP API (使用6334避免冲突)
+      - "6335:6334"  # gRPC API
+    volumes:
+      - qdrant_test_data:/qdrant/storage
+    networks:
+      - test-network
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 5s bash -c ':> /dev/tcp/127.0.0.1/6333' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    labels:
+      - "com.athena.service=qdrant-test"
+      - "com.athena.environment=test"
+
+  # =========================
+  # Neo4j 图数据库 (轻量级配置用于测试)
+  # =========================
+  neo4j-test:
+    image: neo4j:5-community
+    container_name: athena_neo4j_test
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: neo4j/athena_test_2024
+      NEO4J_dbms_default__database: neo4j
+      NEO4J_dbms_memory_pagecache_size: 256M
+      NEO4J_dbms_memory_heap_initial__size: 128M
+      NEO4J_dbms_memory_heap_max__size: 128M
+      NEO4J_dbms_connector_bolt_advertised__address: :7688
+      NEO4J_dbms_connector_http_advertised__address: :7475
+      NEO4J_dbms_logs_debug_level: WARN
+      NEO4J_dbms_ssl_policy_bolt_tls__level: DISABLED
+    ports:
+      - "7475:7474"  # HTTP (使用7475避免冲突)
+      - "7688:7687"  # Bolt (使用7688避免冲突)
+    volumes:
+      - neo4j_test_data:/data
+      - neo4j_test_logs:/logs
+    networks:
+      - test-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:7474 || exit 1"]
+      interval: 20s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    labels:
+      - "com.athena.service=neo4j-test"
+      - "com.athena.environment=test"
+
+  # =========================
+  # MinIO (S3兼容对象存储 - 用于文件系统测试)
+  # =========================
+  minio-test:
+    image: minio/minio:latest
+    container_name: athena_minio_test
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
+    ports:
+      - "9001:9000"  # API
+      - "9002:9001"  # Console
+    volumes:
+      - minio_test_data:/data
+    networks:
+      - test-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+    labels:
+      - "com.athena.service=minio-test"
+      - "com.athena.environment=test"
+
+  # =========================
+  # Grafana (监控仪表板 - 可选)
+  # =========================
+  grafana-test:
+    image: grafana/grafana:latest
+    container_name: athena_grafana_test
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin123
+      GF_INSTALL_PLUGINS: ""
+    ports:
+      - "3001:3000"  # 使用3001避免冲突
+    volumes:
+      - grafana_test_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    networks:
+      - test-network
+    profiles:
+      - monitoring
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+    labels:
+      - "com.athena.service=grafana-test"
+      - "com.athena.environment=test"
+
+  # =========================
+  # Prometheus (监控指标收集 - 可选)
+  # =========================
+  prometheus-test:
+    image: prom/prometheus:latest
+    container_name: athena_prometheus_test
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=1d'
+    ports:
+      - "9091:9090"  # 使用9091避免冲突
+    volumes:
+      - prometheus_test_data:/prometheus
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks:
+      - test-network
+    profiles:
+      - monitoring
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+    labels:
+      - "com.athena.service=prometheus-test"
+      - "com.athena.environment=test"
+
+networks:
+  test-network:
+    name: athena-test-network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.29.0.0/16
+
+volumes:
+  postgres_test_data:
+    name: athena_postgres_test_data
+  redis_test_data:
+    name: athena_redis_test_data
+  qdrant_test_data:
+    name: athena_qdrant_test_data
+  neo4j_test_data:
+    name: athena_neo4j_test_data
+  neo4j_test_logs:
+    name: athena_neo4j_test_logs
+  minio_test_data:
+    name: athena_minio_test_data
+  grafana_test_data:
+    name: athena_grafana_test_data
+  prometheus_test_data:
+    name: athena_prometheus_test_data
+
+# =========================
+# 使用说明
+# =========================
+#
+# 1. 启动核心测试服务:
+#    docker-compose -f docker-compose.test.yml up -d postgres-test redis-test qdrant-test neo4j-test
+#
+# 2. 启动所有测试服务:
+#    docker-compose -f docker-compose.test.yml up -d
+#
+# 3. 启动包含监控的服务:
+#    docker-compose -f docker-compose.test.yml --profile monitoring up -d
+#
+# 4. 停止测试服务:
+#    docker-compose -f docker-compose.test.yml down
+#
+# 5. 清理测试数据:
+#    docker-compose -f docker-compose.test.yml down -v
+#
+# 6. 查看服务状态:
+#    docker-compose -f docker-compose.test.yml ps
+#
+# 7. 查看服务日志:
+#    docker-compose -f docker-compose.test.yml logs -f [service_name]
+#
+# =========================
+# 测试环境连接信息
+# =========================
+#
+# PostgreSQL:
+#   Host: localhost
+#   Port: 5433
+#   User: athena_test
+#   Password: athena_test_password_2024
+#   Database: athena_test_db
+#
+# Redis:
+#   Host: localhost
+#   Port: 6380
+#
+# Qdrant:
+#   Host: localhost
+#   Port: 6334
+#   API: http://localhost:6334
+#
+# Neo4j:
+#   Host: localhost
+#   HTTP Port: 7475
+#   Bolt Port: 7688
+#   User: neo4j
+#   Password: athena_test_2024
+#
+# MinIO:
+#   Endpoint: http://localhost:9001
+#   Access Key: minioadmin
+#   Secret Key: minioadmin123
+#
+# Grafana (可选):
+#   URL: http://localhost:3001
+#   User: admin
+#   Password: admin123
+#
+# Prometheus (可选):
+#   URL: http://localhost:9091
+#
+# =========================
+# 资源需求
+# =========================
+#
+# 最小配置:
+#   CPU: 4核
+#   内存: 4GB
+#   磁盘: 10GB
+#
+# 推荐配置:
+#   CPU: 6核
+#   内存: 8GB
+#   磁盘: 20GB
+#
+# =========================
+# 环境变量设置
+# =========================
+#
+# 创建 .env.test 文件:
+#
+# TEST_DATABASE_URL=postgresql://athena_test:athena_test_password_2024@localhost:5433/athena_test_db
+# TEST_REDIS_URL=redis://localhost:6380/0
+# TEST_QDRANT_URL=http://localhost:6334
+# TEST_NEO4J_URI=bolt://localhost:7688
+# TEST_NEO4J_USER=neo4j
+# TEST_NEO4J_PASSWORD=athena_test_2024
+# TEST_MINIO_ENDPOINT=http://localhost:9001
+# TEST_MINIO_ACCESS_KEY=minioadmin
+# TEST_MINIO_SECRET_KEY=minioadmin123
+#
+# =========================

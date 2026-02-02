@@ -1,0 +1,271 @@
+{
+  "task_id": "priority_task_wy_patent_001",
+  "task_title": "王玉荣专利优先申报任务",
+  "task_type": "priority_patent_filing",
+  "priority": "CRITICAL",
+  "urgency": "IMMEDIATE",
+  "importance_level": "HIGH_IMPORTANCE",
+
+  "customer_info": {
+    "customer_id": "ad6709d0-1852-46e7-9868-4937cd55e869",
+    "customer_name": "王玉荣",
+    "contact_phone": "13563072598",
+    "payment_status": "fully_paid",
+    "total_fee": 4530
+  },
+
+  "critical_deadline": {
+    "hard_deadline": "2025-12-31 23:59:59",
+    "deadline_description": "元旦前必须完成申报",
+    "deadline_reason": "客户明确要求，此为重要承诺",
+    "working_days_remaining": 10,
+    "calendar_days_remaining": 14
+  },
+
+  "patent_cases": [
+    {
+      "case_id": "wy_case_001",
+      "title": "一种智能控制的新型温室大棚开窗通风装置",
+      "current_stage": "preparation",
+      "deadline": "2025-12-31",
+      "blocking_factors": []
+    },
+    {
+      "case_id": "wy_case_002",
+      "title": "便携式电动果树修剪采摘一体机",
+      "current_stage": "preparation",
+      "deadline": "2025-12-31",
+      "blocking_factors": []
+    }
+  ],
+
+  "expedited_schedule": {
+    "original_plan": {
+      "submission_date": "2026-01-15",
+      "reason": "正常工作流程时间安排"
+    },
+    "accelerated_plan": {
+      "submission_date": "2025-12-31",
+      "acceleration_days": 15,
+      "reason": "客户重要要求，元旦前必须申报"
+    }
+  },
+
+  "immediate_action_plan": [
+    {
+      "step": 1,
+      "action": "紧急技术交底书完善",
+      "deadline": "2025-12-18",
+      "priority": "CRITICAL",
+      "assigned_to": "专利工程师",
+      "status": "pending",
+      "time_required": "8小时",
+      "description": "立即联系王玉荣，48小时内完善技术交底书所有细节",
+      "risk_mitigation": "如客户配合困难，安排上门服务"
+    },
+    {
+      "step": 2,
+      "action": "快速专利检索",
+      "deadline": "2025-12-19",
+      "priority": "CRITICAL",
+      "assigned_to": "检索分析师",
+      "status": "pending",
+      "time_required": "12小时",
+      "description": "加班进行专利检索，确保检索质量",
+      "backup_plan": "如发现重大问题，24小时内提出解决方案"
+    },
+    {
+      "step": 3,
+      "action": "申请文件并行撰写",
+      "deadline": "2025-12-25",
+      "priority": "HIGH",
+      "assigned_to": "专利代理人团队",
+      "status": "pending",
+      "time_required": "40小时",
+      "description": "安排2名代理人并行撰写，确保质量",
+      "quality_control": "每完成一个立即进行审核"
+    },
+    {
+      "step": 4,
+      "action": "客户快速确认",
+      "deadline": "2025-12-28",
+      "priority": "HIGH",
+      "assigned_to": "客户经理 + 代理人",
+      "status": "pending",
+      "time_required": "8小时",
+      "description": "预约客户时间，现场确认文件",
+      "backup": "如客户无法到场，安排视频确认"
+    },
+    {
+      "step": 5,
+      "action": "最终审核和提交",
+      "deadline": "2025-12-31",
+      "priority": "CRITICAL",
+      "assigned_to": "主管 + 申请部",
+      "status": "pending",
+      "time_required": "16小时",
+      "description": "跨年夜加班完成最终审核和提交",
+      "contingency": "预留12月31日全天作为缓冲时间"
+    }
+  ],
+
+  "resource_allocation": {
+    "team_assignment": {
+      "project_manager": "主管亲自负责",
+      "patent_attorneys": "2名资深代理人",
+      "technical_analyst": "1名专门分析师",
+      "search_specialist": "1名专职检索员",
+      "case_manager": "1名专案经理"
+    },
+    "special_arrangements": [
+      "优先安排团队时间",
+      "加班费用审批通过",
+      "跨部门协调支持",
+      "主管全程跟进"
+    ]
+  },
+
+  "risk_management": {
+    "high_risk_factors": [
+      {
+        "risk": "客户配合时间不足",
+        "probability": "MEDIUM",
+        "impact": "HIGH",
+        "mitigation": "安排上门服务，准备标准化模板"
+      },
+      {
+        "risk": "检索发现重大问题",
+        "probability": "LOW",
+        "impact": "CRITICAL",
+        "mitigation": "立即启动备用方案，调整技术方案"
+      },
+      {
+        "risk": "撰写时间不足",
+        "probability": "MEDIUM",
+        "impact": "HIGH",
+        "mitigation": "增加人手，并行处理，主管加班审核"
+      },
+      {
+        "risk": "系统或流程延误",
+        "probability": "LOW",
+        "impact": "MEDIUM",
+        "mitigation": "提前测试系统，准备人工备用流程"
+      }
+    ],
+    "contingency_plans": [
+      "如技术方案需要重大调整，启动B方案",
+      "如时间不够，申请特殊加急处理通道",
+      "如团队人手不足，协调外部专家支持"
+    ]
+  },
+
+  "communication_plan": {
+    "internal_reporting": [
+      {
+        "report_type": "每日进度报告",
+        "frequency": "每日17:00",
+        "recipients": ["主管", "项目经理", "团队负责人"],
+        "format": "简明扼要的进度和问题"
+      },
+      {
+        "report_type": "风险预警报告",
+        "trigger": "发现任何可能影响截止日期的问题",
+        "recipients": ["主管", "客户经理"],
+        "action": "立即上报，1小时内响应"
+      }
+    ],
+    "client_communication": [
+      {
+        "contact_time": "2025-12-18",
+        "purpose": "技术交底书完善",
+        "method": "电话 + 上门",
+        "responsible": "专利工程师 + 客户经理"
+      },
+      {
+        "contact_time": "2025-12-22",
+        "purpose": "进度汇报",
+        "method": "电话",
+        "responsible": "客户经理"
+      },
+      {
+        "contact_time": "2025-12-28",
+        "purpose": "文件确认",
+        "method": "现场",
+        "responsible": "代理人 + 客户经理"
+      },
+      {
+        "contact_time": "2025-12-31",
+        "purpose": "提交完成通知",
+        "method": "电话 + 短信",
+        "responsible": "项目经理"
+      }
+    ]
+  },
+
+  "quality_assurance": {
+    "accelerated_qa_process": [
+      {
+        "check_point": "技术交底书完整性",
+        "timing": "2025-12-18",
+        "criteria": ["技术方案清晰", "创新点明确", "实施例充分"]
+      },
+      {
+        "check_point": "检索报告质量",
+        "timing": "2025-12-19",
+        "criteria": ["检索范围完整", "对比分析深入", "结论明确"]
+      },
+      {
+        "check_point": "申请文件审核",
+        "timing": "2025-12-26",
+        "criteria": ["权利要求恰当", "说明书完整", "附图清晰"],
+        "reviewer": "主管亲自审核"
+      }
+    ],
+    "quality_standards": "不因时间压力降低质量标准，确保提交质量"
+  },
+
+  "tracking_metrics": {
+    "kpi_indicators": [
+      {
+        "metric": "按时完成率",
+        "target": "100%",
+        "current": "0%"
+      },
+      {
+        "metric": "质量合格率",
+        "target": "100%",
+        "measurement": "主管审核通过率"
+      },
+      {
+        "metric": "客户满意度",
+        "target": "满意",
+        "measurement": "按时提交 + 专业服务"
+      }
+    ]
+  },
+
+  "task_notes": [
+    "🚨 元旦前申报是客户硬性要求，关系公司信誉",
+    "⚠️ 时间紧迫，需要全体团队全力以赴",
+    "📞 客户配合度良好，已缴费且积极",
+    "🎯 技术方案相对成熟，创新性较好",
+    "🏆 成功完成将提升公司专业形象"
+  ],
+
+  "success_criteria": [
+    "2025年12月31日前完成两个专利申请提交",
+    "申请文件质量符合标准，无重大问题",
+    "客户对服务过程和结果满意",
+    "团队按时完成，无重大延误"
+  ],
+
+  "system_info": {
+    "created_by": "xiaonuo_hybrid_system",
+    "created_at": "2025-12-17 20:15:00",
+    "last_updated": "2025-12-17 20:15:00",
+    "database": "postgresql_yunpat",
+    "customer_id_short": "ad6709d0",
+    "task_priority": "CRITICAL",
+    "review_required": "主管审批"
+  }
+}

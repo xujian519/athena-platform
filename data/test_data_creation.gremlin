@@ -1,0 +1,93 @@
+// 创建专利节点
+
+g.addV('Patent').property('id', 'CN202410001234')
+ .property('title', '基于AI的专利分析系统')
+ .property('inventor', '张三')
+ .property('assignee', 'Athena科技公司')
+ .property('category', '人工智能')
+ .property('application_date', '2024-01-01');
+
+
+g.addV('Patent').property('id', 'CN202410001235')
+ .property('title', '专利检索优化方法')
+ .property('inventor', '李四')
+ .property('assignee', 'Athena科技公司')
+ .property('category', '信息检索')
+ .property('application_date', '2024-01-02');
+
+
+g.addV('Patent').property('id', 'CN202410001236')
+ .property('title', '智能法律文书生成系统')
+ .property('inventor', '王五')
+ .property('assignee', '创新法律科技')
+ .property('category', '法律科技')
+ .property('application_date', '2024-01-03');
+
+
+// 创建公司节点
+
+g.addV('Company').property('id', 'athena_tech')
+ .property('name', 'Athena科技公司')
+ .property('type', '科技企业')
+ .property('location', '北京')
+ .property('founded', '2020');
+
+
+g.addV('Company').property('id', 'innovative_legal')
+ .property('name', '创新法律科技')
+ .property('type', '法律科技')
+ .property('location', '上海')
+ .property('founded', '2019');
+
+
+// 创建发明人节点
+
+g.addV('Inventor').property('id', 'zhang_san')
+ .property('name', '张三')
+ .property('field', '人工智能')
+ .property('experience', '10年');
+
+
+g.addV('Inventor').property('id', 'li_si')
+ .property('name', '李四')
+ .property('field', '信息检索')
+ .property('experience', '8年');
+
+
+g.addV('Inventor').property('id', 'wang_wu')
+ .property('name', '王五')
+ .property('field', '法律科技')
+ .property('experience', '12年');
+
+
+// 创建技术节点
+
+g.addV('Technology').property('id', 'ai_tech')
+ .property('name', '人工智能')
+ .property('category', '前沿技术');
+
+
+g.addV('Technology').property('id', 'ir_tech')
+ .property('name', '信息检索')
+ .property('category', '信息技术');
+
+
+g.addV('Technology').property('id', 'legal_tech')
+ .property('name', '法律科技')
+ .property('category', '垂直应用');
+
+
+// 创建专利-公司关系
+g.V('CN202410001234').addE('ASSIGNED_TO').to(g.V('athena_tech'));
+g.V('CN202410001235').addE('ASSIGNED_TO').to(g.V('athena_tech'));
+g.V('CN202410001236').addE('ASSIGNED_TO').to(g.V('innovative_legal'));
+
+// 创建专利-发明人关系
+g.V('CN202410001234').addE('INVENTED_BY').to(g.V('zhang_san'));
+g.V('CN202410001235').addE('INVENTED_BY').to(g.V('li_si'));
+g.V('CN202410001236').addE('INVENTED_BY').to(g.V('wang_wu'));
+
+// 创建专利-技术关系
+g.V('CN202410001234').addE('USES_TECHNOLOGY').to(g.V('ai_tech'));
+g.V('CN202410001235').addE('USES_TECHNOLOGY').to(g.V('ir_tech'));
+g.V('CN202410001236').addE('USES_TECHNOLOGY').to(g.V('legal_tech'));

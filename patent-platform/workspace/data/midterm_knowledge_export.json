@@ -1,0 +1,387 @@
+{
+  "entities": [
+    {
+      "entity_id": "standard_GB/T 150.1-2011",
+      "title": "压力容器 第1部分：通用要求",
+      "content": "规定了压力容器的设计、制造、检验和验收要求",
+      "knowledge_type": "patent_standard",
+      "source": "tech_standards",
+      "tags": [
+        "压力容器",
+        "国家标准",
+        "技术规范"
+      ],
+      "metadata": {
+        "code": "GB/T 150.1-2011",
+        "category": "压力容器",
+        "type": "GB标准"
+      },
+      "confidence": 1.0,
+      "created_at": "2025-12-05T14:09:31.667431",
+      "updated_at": "2025-12-05T14:09:31.667442",
+      "version": 1,
+      "related_entities": []
+    },
+    {
+      "entity_id": "standard_GB/T 151-2014",
+      "title": "热交换器",
+      "content": "规定了管壳式热交换器的设计、制造、检验要求",
+      "knowledge_type": "patent_standard",
+      "source": "tech_standards",
+      "tags": [
+        "换热设备",
+        "国家标准",
+        "技术规范"
+      ],
+      "metadata": {
+        "code": "GB/T 151-2014",
+        "category": "换热设备",
+        "type": "GB标准"
+      },
+      "confidence": 1.0,
+      "created_at": "2025-12-05T14:09:31.667444",
+      "updated_at": "2025-12-05T14:09:31.667445",
+      "version": 1,
+      "related_entities": []
+    },
+    {
+      "entity_id": "standard_GB/T 20801-2006",
+      "title": "压力管道规范 工业管道",
+      "content": "规定了工业压力管道的设计、制造、安装、检验要求",
+      "knowledge_type": "patent_standard",
+      "source": "tech_standards",
+      "tags": [
+        "压力管道",
+        "国家标准",
+        "技术规范"
+      ],
+      "metadata": {
+        "code": "GB/T 20801-2006",
+        "category": "压力管道",
+        "type": "GB标准"
+      },
+      "confidence": 1.0,
+      "created_at": "2025-12-05T14:09:31.667446",
+      "updated_at": "2025-12-05T14:09:31.667446",
+      "version": 1,
+      "related_entities": []
+    },
+    {
+      "entity_id": "case_fd0c18b77121f27b",
+      "title": "高通诉苹果专利侵权案",
+      "content": "涉及移动通信标准必要专利（SEP）的许可费率争议",
+      "knowledge_type": "industry_case",
+      "source": "industry_reports",
+      "tags": [
+        "标准必要专利",
+        "许可费率",
+        "FRAND原则",
+        "移动通信"
+      ],
+      "metadata": {
+        "outcome": "法院裁定按FRAND原则确定许可费率",
+        "case_type": "专利诉讼",
+        "importance": "high"
+      },
+      "confidence": 1.0,
+      "created_at": "2025-12-05T14:09:31.667454",
+      "updated_at": "2025-12-05T14:09:31.667454",
+      "version": 1,
+      "related_entities": []
+    },
+    {
+      "entity_id": "case_a33b1b964a85e4a3",
+      "title": "华为诉三星专利侵权案",
+      "content": "涉及4G通信专利的跨境侵权诉讼",
+      "knowledge_type": "industry_case",
+      "source": "industry_reports",
+      "tags": [
+        "4G专利",
+        "跨境诉讼",
+        "专利池",
+        "交叉许可"
+      ],
+      "metadata": {
+        "outcome": "达成和解协议",
+        "case_type": "专利诉讼",
+        "importance": "high"
+      },
+      "confidence": 1.0,
+      "created_at": "2025-12-05T14:09:31.667456",
+      "updated_at": "2025-12-05T14:09:31.667456",
+      "version": 1,
+      "related_entities": []
+    },
+    {
+      "entity_id": "case_9004a404d58ae968",
+      "title": "宁德时代专利保护案例",
+      "content": "动力电池技术专利布局与保护策略",
+      "knowledge_type": "industry_case",
+      "source": "industry_reports",
+      "tags": [
+        "动力电池",
+        "专利布局",
+        "技术壁垒",
+        "知识产权保护"
+      ],
+      "metadata": {
+        "outcome": "成功建立技术壁垒",
+        "case_type": "专利诉讼",
+        "importance": "high"
+      },
+      "confidence": 1.0,
+      "created_at": "2025-12-05T14:09:31.667457",
+      "updated_at": "2025-12-05T14:09:31.667457",
+      "version": 1,
+      "related_entities": []
+    },
+    {
+      "entity_id": "term_精馏塔",
+      "title": "精馏塔",
+      "content": "用于分离液体混合物的化工设备。相关概念：传质, 分离, 提纯",
+      "knowledge_type": "tech_glossary",
+      "source": "custom_input",
+      "tags": [
+        "化工设备",
+        "技术术语",
+        "传质",
+        "分离",
+        "提纯"
+      ],
+      "metadata": {
+        "category": "化工设备",
+        "definition": "用于分离液体混合物的化工设备",
+        "related_concepts": [
+          "传质",
+          "分离",
+          "提纯"
+        ]
+      },
+      "confidence": 1.0,
+      "created_at": "2025-12-05T14:09:31.667482",
+      "updated_at": "2025-12-05T14:09:31.667483",
+      "version": 1,
+      "related_entities": []
+    },
+    {
+      "entity_id": "term_反应器",
+      "title": "反应器",
+      "content": "进行化学反应的设备或系统。相关概念：化学反应, 催化剂, 转化率",
+      "knowledge_type": "tech_glossary",
+      "source": "custom_input",
+      "tags": [
+        "反应设备",
+        "技术术语",
+        "化学反应",
+        "催化剂",
+        "转化率"
+      ],
+      "metadata": {
+        "category": "反应设备",
+        "definition": "进行化学反应的设备或系统",
+        "related_concepts": [
+          "化学反应",
+          "催化剂",
+          "转化率"
+        ]
+      },
+      "confidence": 1.0,
+      "created_at": "2025-12-05T14:09:31.667484",
+      "updated_at": "2025-12-05T14:09:31.667485",
+      "version": 1,
+      "related_entities": []
+    },
+    {
+      "entity_id": "term_换热器",
+      "title": "换热器",
+      "content": "实现热量传递的设备。相关概念：传热, 热交换, 节能",
+      "knowledge_type": "tech_glossary",
+      "source": "custom_input",
+      "tags": [
+        "换热设备",
+        "技术术语",
+        "传热",
+        "热交换",
+        "节能"
+      ],
+      "metadata": {
+        "category": "换热设备",
+        "definition": "实现热量传递的设备",
+        "related_concepts": [
+          "传热",
+          "热交换",
+          "节能"
+        ]
+      },
+      "confidence": 1.0,
+      "created_at": "2025-12-05T14:09:31.667486",
+      "updated_at": "2025-12-05T14:09:31.667486",
+      "version": 1,
+      "related_entities": []
+    },
+    {
+      "entity_id": "term_压缩机",
+      "title": "压缩机",
+      "content": "提高气体压力的机械设备。相关概念：气体压缩, 压力提升, 能量转换",
+      "knowledge_type": "tech_glossary",
+      "source": "custom_input",
+      "tags": [
+        "流体机械",
+        "技术术语",
+        "气体压缩",
+        "压力提升",
+        "能量转换"
+      ],
+      "metadata": {
+        "category": "流体机械",
+        "definition": "提高气体压力的机械设备",
+        "related_concepts": [
+          "气体压缩",
+          "压力提升",
+          "能量转换"
+        ]
+      },
+      "confidence": 1.0,
+      "created_at": "2025-12-05T14:09:31.667487",
+      "updated_at": "2025-12-05T14:09:31.667488",
+      "version": 1,
+      "related_entities": []
+    }
+  ],
+  "relations": [
+    {
+      "relation_id": "rel_standard_GB/T 150.1-2011_standard_GB/T 151-2014_国家标准",
+      "source_entity": "standard_GB/T 150.1-2011",
+      "target_entity": "standard_GB/T 151-2014",
+      "relation_type": "related_by_tag",
+      "strength": 0.8,
+      "description": "通过标签 '国家标准' 关联",
+      "evidence": [
+        "共同标签: 国家标准"
+      ],
+      "created_at": "2025-12-05T14:09:31.667501"
+    },
+    {
+      "relation_id": "rel_standard_GB/T 150.1-2011_standard_GB/T 20801-2006_国家标准",
+      "source_entity": "standard_GB/T 150.1-2011",
+      "target_entity": "standard_GB/T 20801-2006",
+      "relation_type": "related_by_tag",
+      "strength": 0.8,
+      "description": "通过标签 '国家标准' 关联",
+      "evidence": [
+        "共同标签: 国家标准"
+      ],
+      "created_at": "2025-12-05T14:09:31.667503"
+    },
+    {
+      "relation_id": "rel_standard_GB/T 151-2014_term_换热器_换热设备",
+      "source_entity": "standard_GB/T 151-2014",
+      "target_entity": "term_换热器",
+      "relation_type": "related_by_tag",
+      "strength": 0.8,
+      "description": "通过标签 '换热设备' 关联",
+      "evidence": [
+        "共同标签: 换热设备"
+      ],
+      "created_at": "2025-12-05T14:09:31.667576"
+    },
+    {
+      "relation_id": "rel_standard_GB/T 151-2014_standard_GB/T 20801-2006_国家标准",
+      "source_entity": "standard_GB/T 151-2014",
+      "target_entity": "standard_GB/T 20801-2006",
+      "relation_type": "related_by_tag",
+      "strength": 0.8,
+      "description": "通过标签 '国家标准' 关联",
+      "evidence": [
+        "共同标签: 国家标准"
+      ],
+      "created_at": "2025-12-05T14:09:31.667578"
+    },
+    {
+      "relation_id": "rel_term_精馏塔_term_反应器_技术术语",
+      "source_entity": "term_精馏塔",
+      "target_entity": "term_反应器",
+      "relation_type": "related_by_tag",
+      "strength": 0.8,
+      "description": "通过标签 '技术术语' 关联",
+      "evidence": [
+        "共同标签: 技术术语"
+      ],
+      "created_at": "2025-12-05T14:09:31.667644"
+    },
+    {
+      "relation_id": "rel_term_精馏塔_term_换热器_技术术语",
+      "source_entity": "term_精馏塔",
+      "target_entity": "term_换热器",
+      "relation_type": "related_by_tag",
+      "strength": 0.8,
+      "description": "通过标签 '技术术语' 关联",
+      "evidence": [
+        "共同标签: 技术术语"
+      ],
+      "created_at": "2025-12-05T14:09:31.667645"
+    },
+    {
+      "relation_id": "rel_term_精馏塔_term_压缩机_技术术语",
+      "source_entity": "term_精馏塔",
+      "target_entity": "term_压缩机",
+      "relation_type": "related_by_tag",
+      "strength": 0.8,
+      "description": "通过标签 '技术术语' 关联",
+      "evidence": [
+        "共同标签: 技术术语"
+      ],
+      "created_at": "2025-12-05T14:09:31.667646"
+    },
+    {
+      "relation_id": "rel_term_反应器_term_换热器_技术术语",
+      "source_entity": "term_反应器",
+      "target_entity": "term_换热器",
+      "relation_type": "related_by_tag",
+      "strength": 0.8,
+      "description": "通过标签 '技术术语' 关联",
+      "evidence": [
+        "共同标签: 技术术语"
+      ],
+      "created_at": "2025-12-05T14:09:31.667663"
+    },
+    {
+      "relation_id": "rel_term_反应器_term_压缩机_技术术语",
+      "source_entity": "term_反应器",
+      "target_entity": "term_压缩机",
+      "relation_type": "related_by_tag",
+      "strength": 0.8,
+      "description": "通过标签 '技术术语' 关联",
+      "evidence": [
+        "共同标签: 技术术语"
+      ],
+      "created_at": "2025-12-05T14:09:31.667665"
+    },
+    {
+      "relation_id": "rel_term_换热器_term_压缩机_技术术语",
+      "source_entity": "term_换热器",
+      "target_entity": "term_压缩机",
+      "relation_type": "related_by_tag",
+      "strength": 0.8,
+      "description": "通过标签 '技术术语' 关联",
+      "evidence": [
+        "共同标签: 技术术语"
+      ],
+      "created_at": "2025-12-05T14:09:31.667682"
+    }
+  ],
+  "statistics": {
+    "total_entities": 10,
+    "total_relations": 10,
+    "knowledge_types": {
+      "patent_standard": 3,
+      "industry_case": 3,
+      "tech_glossary": 4
+    },
+    "data_sources": {
+      "tech_standards": 3,
+      "industry_reports": 3,
+      "custom_input": 4
+    }
+  }
+}

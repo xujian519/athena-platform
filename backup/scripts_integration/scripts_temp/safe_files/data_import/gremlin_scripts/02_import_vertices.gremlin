@@ -1,0 +1,49 @@
+// 顶点导入脚本
+// 生成时间: 2025-12-14T21:24:33.151252
+
+// 创建属性键和索引
+
+mgmt = graph.openManagement()
+
+try {
+    // 创建通用属性键
+    if (!mgmt.containsPropertyKey('entity_id')) {
+        mgmt.makePropertyKey('entity_id').dataType(String.class).make()
+    }
+    if (!mgmt.containsPropertyKey('name')) {
+        mgmt.makePropertyKey('name').dataType(String.class).make()
+    }
+    if (!mgmt.containsPropertyKey('created_at')) {
+        mgmt.makePropertyKey('created_at').dataType(Date.class).make()
+    }
+
+    // 创建索引
+    mgmt.buildIndex('byEntityId', Vertex.class)
+        .addKey(mgmt.getPropertyKey('entity_id'))
+        .buildCompositeIndex()
+
+    mgmt.buildIndex('byName', Vertex.class)
+        .addKey(mgmt.getPropertyKey('name'))
+        .buildCompositeIndex()
+
+    mgmt.commit()
+    println("✅ 索引创建完成")
+} catch (e) {
+    mgmt.rollback()
+    println("⚠️ 索引创建失败: " + e.message)
+}
+
+g.tx().commit()
+g.tx().open()
+println("开始导入顶点...")
+
+// 导入 Patent 顶点 (1,000,000 条)
+
+patent_count = 0
+batch_size = 1000
+
+// 模拟导入 Patent 数据
+(1..10000).each { i ->
+    vertex = g.addV('Patent')
+        .property('entity_id', 'patent_' + i.toString())
+        .property('created_at', new Date())

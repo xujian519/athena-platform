@@ -1,0 +1,120 @@
+{
+  "default_crawler_config": {
+    "name": "Athena通用爬虫",
+    "base_url": "",
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    },
+    "timeout": 30,
+    "max_retries": 3,
+    "retry_delay": 1.0,
+    "rate_limit": 1.0,
+    "use_proxy": false,
+    "proxy_list": [],
+    "cache_enabled": true,
+    "cache_ttl": 3600
+  },
+  "preset_configs": {
+    "news": {
+      "name": "新闻网站爬虫",
+      "base_url": "",
+      "headers": {
+        "User-Agent": "Mozilla/5.0 (compatible; NewsCrawler/1.0)",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+      },
+      "rate_limit": 0.5,
+      "cache_enabled": true,
+      "cache_ttl": 1800
+    },
+    "ecommerce": {
+      "name": "电商网站爬虫",
+      "base_url": "",
+      "headers": {
+        "User-Agent": "Mozilla/5.0 (compatible; EcommerceCrawler/1.0)",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+      },
+      "rate_limit": 1.0,
+      "cache_enabled": false,
+      "max_retries": 5
+    },
+    "social_media": {
+      "name": "社交媒体爬虫",
+      "base_url": "",
+      "headers": {
+        "User-Agent": "Mozilla/5.0 (compatible; SocialMediaCrawler/1.0)",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+      },
+      "rate_limit": 2.0,
+      "cache_enabled": true,
+      "cache_ttl": 600
+    },
+    "forum": {
+      "name": "论坛网站爬虫",
+      "base_url": "",
+      "headers": {
+        "User-Agent": "Mozilla/5.0 (compatible; ForumCrawler/1.0)",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+      },
+      "rate_limit": 0.8,
+      "cache_enabled": true,
+      "cache_ttl": 3600
+    }
+  },
+  "extraction_rules": {
+    "common_selectors": {
+      "title": ["title", "h1", ".title", ".headline"],
+      "content": ["article", ".content", ".post-content", "main", "#content"],
+      "author": [".author", ".byline", ".writer", "[rel='author']"],
+      "date": [".date", ".publish-date", ".timestamp", "time[datetime]"],
+      "category": [".category", ".tag", ".label"]
+    },
+    "data_types": {
+      "text": {
+        "clean": true,
+        "min_length": 10
+      },
+      "links": {
+        "extract_attributes": ["href", "title", "text"],
+        "filter_external": false
+      },
+      "images": {
+        "extract_attributes": ["src", "alt", "title"],
+        "min_width": 100,
+        "min_height": 100
+      },
+      "tables": {
+        "extract_headers": true,
+        "max_rows": 1000
+      }
+    }
+  },
+  "output_formats": {
+    "json": {
+      "pretty_print": true,
+      "include_metadata": true
+    },
+    "csv": {
+      "encoding": "utf-8",
+      "include_index": false
+    },
+    "xml": {
+      "pretty_print": true,
+      "include_declaration": true
+    }
+  },
+  "storage": {
+    "cache_dir": "/Users/xujian/Athena工作平台/data/crawler/cache",
+    "results_dir": "/Users/xujian/Athena工作平台/data/crawler/results",
+    "logs_dir": "/Users/xujian/Athena工作平台/logs",
+    "max_cache_size_mb": 1000,
+    "auto_cleanup": true,
+    "retention_days": 30
+  },
+  "monitoring": {
+    "enable_metrics": true,
+    "log_level": "INFO",
+    "track_performance": true,
+    "alert_on_errors": true,
+    "max_concurrent_requests": 100
+  }
+}

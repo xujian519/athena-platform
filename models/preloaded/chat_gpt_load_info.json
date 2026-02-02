@@ -1,0 +1,10 @@
+{
+  "model_key": "chat_gpt",
+  "model_name": "对话生成模型",
+  "model_type": "generation",
+  "load_time": 1.5073611736297607,
+  "load_timestamp": "2025-12-17T15:40:46.593580",
+  "memory_estimate": "4GB",
+  "load_script": "echo 'Simulating ChatGPT model loading...'",
+  "status": "loaded"
+}

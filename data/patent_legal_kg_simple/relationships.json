@@ -1,0 +1,2426 @@
+[
+  {
+    "id": "rel_1",
+    "source": "entity_1",
+    "target": "entity_18",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利纠纷案件适用法律问题的若干规定_20201229 包含术语 标准",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520515"
+    }
+  },
+  {
+    "id": "rel_2",
+    "source": "entity_1",
+    "target": "entity_23",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利纠纷案件适用法律问题的若干规定_20201229 包含术语 行政复议",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520531"
+    }
+  },
+  {
+    "id": "rel_3",
+    "source": "entity_1",
+    "target": "entity_26",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利纠纷案件适用法律问题的若干规定_20201229 包含术语 许可",
+    "properties": {
+      "frequency": 9,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520539"
+    }
+  },
+  {
+    "id": "rel_4",
+    "source": "entity_1",
+    "target": "entity_27",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利纠纷案件适用法律问题的若干规定_20201229 包含术语 说明书",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520544"
+    }
+  },
+  {
+    "id": "rel_5",
+    "source": "entity_1",
+    "target": "entity_28",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利纠纷案件适用法律问题的若干规定_20201229 包含术语 假冒",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520548"
+    }
+  },
+  {
+    "id": "rel_6",
+    "source": "entity_1",
+    "target": "entity_29",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利纠纷案件适用法律问题的若干规定_20201229 包含术语 复审",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520553"
+    }
+  },
+  {
+    "id": "rel_7",
+    "source": "entity_1",
+    "target": "entity_34",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利纠纷案件适用法律问题的若干规定_20201229 包含术语 发明专利",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520564"
+    }
+  },
+  {
+    "id": "rel_8",
+    "source": "entity_1",
+    "target": "entity_35",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利纠纷案件适用法律问题的若干规定_20201229 包含术语 附图",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520571"
+    }
+  },
+  {
+    "id": "rel_9",
+    "source": "entity_1",
+    "target": "entity_36",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利纠纷案件适用法律问题的若干规定_20201229 包含术语 强制许可",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520578"
+    }
+  },
+  {
+    "id": "rel_10",
+    "source": "entity_1",
+    "target": "entity_38",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利纠纷案件适用法律问题的若干规定_20201229 包含术语 创造性",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520585"
+    }
+  },
+  {
+    "id": "rel_11",
+    "source": "entity_1",
+    "target": "entity_39",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利纠纷案件适用法律问题的若干规定_20201229 包含术语 外观设计专利",
+    "properties": {
+      "frequency": 7,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520589"
+    }
+  },
+  {
+    "id": "rel_12",
+    "source": "entity_1",
+    "target": "entity_40",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利纠纷案件适用法律问题的若干规定_20201229 包含术语 专利法",
+    "properties": {
+      "frequency": 8,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520593"
+    }
+  },
+  {
+    "id": "rel_13",
+    "source": "entity_1",
+    "target": "entity_41",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利纠纷案件适用法律问题的若干规定_20201229 包含术语 无效宣告",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520598"
+    }
+  },
+  {
+    "id": "rel_14",
+    "source": "entity_1",
+    "target": "entity_43",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利纠纷案件适用法律问题的若干规定_20201229 包含术语 实用新型专利",
+    "properties": {
+      "frequency": 3,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520602"
+    }
+  },
+  {
+    "id": "rel_15",
+    "source": "entity_1",
+    "target": "entity_44",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利纠纷案件适用法律问题的若干规定_20201229 包含术语 侵权",
+    "properties": {
+      "frequency": 31,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520607"
+    }
+  },
+  {
+    "id": "rel_16",
+    "source": "entity_2",
+    "target": "entity_19",
+    "type": "contains",
+    "description": "国防专利条例_20040917 包含术语 权利要求书",
+    "properties": {
+      "frequency": 3,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520628"
+    }
+  },
+  {
+    "id": "rel_17",
+    "source": "entity_2",
+    "target": "entity_20",
+    "type": "contains",
+    "description": "国防专利条例_20040917 包含术语 国防专利",
+    "properties": {
+      "frequency": 185,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520635"
+    }
+  },
+  {
+    "id": "rel_18",
+    "source": "entity_2",
+    "target": "entity_21",
+    "type": "contains",
+    "description": "国防专利条例_20040917 包含术语 初步审查",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520639"
+    }
+  },
+  {
+    "id": "rel_19",
+    "source": "entity_2",
+    "target": "entity_22",
+    "type": "contains",
+    "description": "国防专利条例_20040917 包含术语 请求书",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520644"
+    }
+  },
+  {
+    "id": "rel_20",
+    "source": "entity_2",
+    "target": "entity_25",
+    "type": "contains",
+    "description": "国防专利条例_20040917 包含术语 新颖性",
+    "properties": {
+      "frequency": 3,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520654"
+    }
+  },
+  {
+    "id": "rel_21",
+    "source": "entity_2",
+    "target": "entity_26",
+    "type": "contains",
+    "description": "国防专利条例_20040917 包含术语 许可",
+    "properties": {
+      "frequency": 3,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520661"
+    }
+  },
+  {
+    "id": "rel_22",
+    "source": "entity_2",
+    "target": "entity_27",
+    "type": "contains",
+    "description": "国防专利条例_20040917 包含术语 说明书",
+    "properties": {
+      "frequency": 4,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520666"
+    }
+  },
+  {
+    "id": "rel_23",
+    "source": "entity_2",
+    "target": "entity_29",
+    "type": "contains",
+    "description": "国防专利条例_20040917 包含术语 复审",
+    "properties": {
+      "frequency": 10,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520677"
+    }
+  },
+  {
+    "id": "rel_24",
+    "source": "entity_2",
+    "target": "entity_31",
+    "type": "contains",
+    "description": "国防专利条例_20040917 包含术语 实施细则",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520685"
+    }
+  },
+  {
+    "id": "rel_25",
+    "source": "entity_2",
+    "target": "entity_34",
+    "type": "contains",
+    "description": "国防专利条例_20040917 包含术语 发明专利",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520694"
+    }
+  },
+  {
+    "id": "rel_26",
+    "source": "entity_2",
+    "target": "entity_37",
+    "type": "contains",
+    "description": "国防专利条例_20040917 包含术语 摘要",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520706"
+    }
+  },
+  {
+    "id": "rel_27",
+    "source": "entity_2",
+    "target": "entity_38",
+    "type": "contains",
+    "description": "国防专利条例_20040917 包含术语 创造性",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520717"
+    }
+  },
+  {
+    "id": "rel_28",
+    "source": "entity_2",
+    "target": "entity_40",
+    "type": "contains",
+    "description": "国防专利条例_20040917 包含术语 专利法",
+    "properties": {
+      "frequency": 4,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520723"
+    }
+  },
+  {
+    "id": "rel_29",
+    "source": "entity_2",
+    "target": "entity_42",
+    "type": "contains",
+    "description": "国防专利条例_20040917 包含术语 实用性",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520728"
+    }
+  },
+  {
+    "id": "rel_30",
+    "source": "entity_2",
+    "target": "entity_41",
+    "type": "contains",
+    "description": "国防专利条例_20040917 包含术语 无效宣告",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520733"
+    }
+  },
+  {
+    "id": "rel_31",
+    "source": "entity_2",
+    "target": "entity_45",
+    "type": "contains",
+    "description": "国防专利条例_20040917 包含术语 转让",
+    "properties": {
+      "frequency": 5,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520745"
+    }
+  },
+  {
+    "id": "rel_32",
+    "source": "entity_3",
+    "target": "entity_18",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 标准",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520783"
+    }
+  },
+  {
+    "id": "rel_33",
+    "source": "entity_3",
+    "target": "entity_19",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 权利要求书",
+    "properties": {
+      "frequency": 3,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520791"
+    }
+  },
+  {
+    "id": "rel_34",
+    "source": "entity_3",
+    "target": "entity_21",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 初步审查",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520809"
+    }
+  },
+  {
+    "id": "rel_35",
+    "source": "entity_3",
+    "target": "entity_22",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 请求书",
+    "properties": {
+      "frequency": 3,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520819"
+    }
+  },
+  {
+    "id": "rel_36",
+    "source": "entity_3",
+    "target": "entity_24",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 优先权",
+    "properties": {
+      "frequency": 6,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520830"
+    }
+  },
+  {
+    "id": "rel_37",
+    "source": "entity_3",
+    "target": "entity_25",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 新颖性",
+    "properties": {
+      "frequency": 3,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520845"
+    }
+  },
+  {
+    "id": "rel_38",
+    "source": "entity_3",
+    "target": "entity_26",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 许可",
+    "properties": {
+      "frequency": 60,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520856"
+    }
+  },
+  {
+    "id": "rel_39",
+    "source": "entity_3",
+    "target": "entity_27",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 说明书",
+    "properties": {
+      "frequency": 5,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520866"
+    }
+  },
+  {
+    "id": "rel_40",
+    "source": "entity_3",
+    "target": "entity_28",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 假冒",
+    "properties": {
+      "frequency": 3,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520882"
+    }
+  },
+  {
+    "id": "rel_41",
+    "source": "entity_3",
+    "target": "entity_29",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 复审",
+    "properties": {
+      "frequency": 3,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520897"
+    }
+  },
+  {
+    "id": "rel_42",
+    "source": "entity_3",
+    "target": "entity_30",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 现有技术",
+    "properties": {
+      "frequency": 4,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520905"
+    }
+  },
+  {
+    "id": "rel_43",
+    "source": "entity_3",
+    "target": "entity_33",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 实质审查",
+    "properties": {
+      "frequency": 7,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520925"
+    }
+  },
+  {
+    "id": "rel_44",
+    "source": "entity_3",
+    "target": "entity_34",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 发明专利",
+    "properties": {
+      "frequency": 24,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520934"
+    }
+  },
+  {
+    "id": "rel_45",
+    "source": "entity_3",
+    "target": "entity_35",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 附图",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520952"
+    }
+  },
+  {
+    "id": "rel_46",
+    "source": "entity_3",
+    "target": "entity_37",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 摘要",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520965"
+    }
+  },
+  {
+    "id": "rel_47",
+    "source": "entity_3",
+    "target": "entity_36",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 强制许可",
+    "properties": {
+      "frequency": 20,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520976"
+    }
+  },
+  {
+    "id": "rel_48",
+    "source": "entity_3",
+    "target": "entity_38",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 创造性",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520992"
+    }
+  },
+  {
+    "id": "rel_49",
+    "source": "entity_3",
+    "target": "entity_39",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 外观设计专利",
+    "properties": {
+      "frequency": 13,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.520999"
+    }
+  },
+  {
+    "id": "rel_50",
+    "source": "entity_3",
+    "target": "entity_40",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 专利法",
+    "properties": {
+      "frequency": 5,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521008"
+    }
+  },
+  {
+    "id": "rel_51",
+    "source": "entity_3",
+    "target": "entity_42",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 实用性",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521018"
+    }
+  },
+  {
+    "id": "rel_52",
+    "source": "entity_3",
+    "target": "entity_41",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 无效宣告",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521028"
+    }
+  },
+  {
+    "id": "rel_53",
+    "source": "entity_3",
+    "target": "entity_43",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 实用新型专利",
+    "properties": {
+      "frequency": 15,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521035"
+    }
+  },
+  {
+    "id": "rel_54",
+    "source": "entity_3",
+    "target": "entity_44",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 侵权",
+    "properties": {
+      "frequency": 33,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521050"
+    }
+  },
+  {
+    "id": "rel_55",
+    "source": "entity_3",
+    "target": "entity_45",
+    "type": "contains",
+    "description": "中华人民共和国专利法_20201017 包含术语 转让",
+    "properties": {
+      "frequency": 6,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521062"
+    }
+  },
+  {
+    "id": "rel_56",
+    "source": "entity_4",
+    "target": "entity_16",
+    "type": "contains",
+    "description": "4-现有技术和现有设计（200408） 包含术语 审查指南",
+    "properties": {
+      "frequency": 8,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521116"
+    }
+  },
+  {
+    "id": "rel_57",
+    "source": "entity_4",
+    "target": "entity_17",
+    "type": "contains",
+    "description": "4-现有技术和现有设计（200408） 包含术语 规范",
+    "properties": {
+      "frequency": 5,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521161"
+    }
+  },
+  {
+    "id": "rel_58",
+    "source": "entity_4",
+    "target": "entity_18",
+    "type": "contains",
+    "description": "4-现有技术和现有设计（200408） 包含术语 标准",
+    "properties": {
+      "frequency": 95,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521204"
+    }
+  },
+  {
+    "id": "rel_59",
+    "source": "entity_4",
+    "target": "entity_24",
+    "type": "contains",
+    "description": "4-现有技术和现有设计（200408） 包含术语 优先权",
+    "properties": {
+      "frequency": 8,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521319"
+    }
+  },
+  {
+    "id": "rel_60",
+    "source": "entity_4",
+    "target": "entity_25",
+    "type": "contains",
+    "description": "4-现有技术和现有设计（200408） 包含术语 新颖性",
+    "properties": {
+      "frequency": 6,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521363"
+    }
+  },
+  {
+    "id": "rel_61",
+    "source": "entity_4",
+    "target": "entity_27",
+    "type": "contains",
+    "description": "4-现有技术和现有设计（200408） 包含术语 说明书",
+    "properties": {
+      "frequency": 9,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521424"
+    }
+  },
+  {
+    "id": "rel_62",
+    "source": "entity_4",
+    "target": "entity_29",
+    "type": "contains",
+    "description": "4-现有技术和现有设计（200408） 包含术语 复审",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521497"
+    }
+  },
+  {
+    "id": "rel_63",
+    "source": "entity_4",
+    "target": "entity_30",
+    "type": "contains",
+    "description": "4-现有技术和现有设计（200408） 包含术语 现有技术",
+    "properties": {
+      "frequency": 45,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521518"
+    }
+  },
+  {
+    "id": "rel_64",
+    "source": "entity_4",
+    "target": "entity_33",
+    "type": "contains",
+    "description": "4-现有技术和现有设计（200408） 包含术语 实质审查",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521582"
+    }
+  },
+  {
+    "id": "rel_65",
+    "source": "entity_4",
+    "target": "entity_35",
+    "type": "contains",
+    "description": "4-现有技术和现有设计（200408） 包含术语 附图",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521680"
+    }
+  },
+  {
+    "id": "rel_66",
+    "source": "entity_4",
+    "target": "entity_38",
+    "type": "contains",
+    "description": "4-现有技术和现有设计（200408） 包含术语 创造性",
+    "properties": {
+      "frequency": 4,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521788"
+    }
+  },
+  {
+    "id": "rel_67",
+    "source": "entity_4",
+    "target": "entity_40",
+    "type": "contains",
+    "description": "4-现有技术和现有设计（200408） 包含术语 专利法",
+    "properties": {
+      "frequency": 26,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521831"
+    }
+  },
+  {
+    "id": "rel_68",
+    "source": "entity_4",
+    "target": "entity_41",
+    "type": "contains",
+    "description": "4-现有技术和现有设计（200408） 包含术语 无效宣告",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521881"
+    }
+  },
+  {
+    "id": "rel_69",
+    "source": "entity_4",
+    "target": "entity_45",
+    "type": "contains",
+    "description": "4-现有技术和现有设计（200408） 包含术语 转让",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521963"
+    }
+  },
+  {
+    "id": "rel_70",
+    "source": "entity_5",
+    "target": "entity_17",
+    "type": "contains",
+    "description": "专利代理条例_20181106 包含术语 规范",
+    "properties": {
+      "frequency": 4,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521972"
+    }
+  },
+  {
+    "id": "rel_71",
+    "source": "entity_5",
+    "target": "entity_20",
+    "type": "contains",
+    "description": "专利代理条例_20181106 包含术语 国防专利",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521983"
+    }
+  },
+  {
+    "id": "rel_72",
+    "source": "entity_5",
+    "target": "entity_26",
+    "type": "contains",
+    "description": "专利代理条例_20181106 包含术语 许可",
+    "properties": {
+      "frequency": 10,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.521997"
+    }
+  },
+  {
+    "id": "rel_73",
+    "source": "entity_5",
+    "target": "entity_40",
+    "type": "contains",
+    "description": "专利代理条例_20181106 包含术语 专利法",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.522033"
+    }
+  },
+  {
+    "id": "rel_74",
+    "source": "entity_5",
+    "target": "entity_45",
+    "type": "contains",
+    "description": "专利代理条例_20181106 包含术语 转让",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.522046"
+    }
+  },
+  {
+    "id": "rel_75",
+    "source": "entity_6",
+    "target": "entity_18",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释（二）_20201229 包含术语 标准",
+    "properties": {
+      "frequency": 10,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.522064"
+    }
+  },
+  {
+    "id": "rel_76",
+    "source": "entity_6",
+    "target": "entity_19",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释（二）_20201229 包含术语 权利要求书",
+    "properties": {
+      "frequency": 6,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.522067"
+    }
+  },
+  {
+    "id": "rel_77",
+    "source": "entity_6",
+    "target": "entity_26",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释（二）_20201229 包含术语 许可",
+    "properties": {
+      "frequency": 12,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.522092"
+    }
+  },
+  {
+    "id": "rel_78",
+    "source": "entity_6",
+    "target": "entity_27",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释（二）_20201229 包含术语 说明书",
+    "properties": {
+      "frequency": 7,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.522096"
+    }
+  },
+  {
+    "id": "rel_79",
+    "source": "entity_6",
+    "target": "entity_29",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释（二）_20201229 包含术语 复审",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.522106"
+    }
+  },
+  {
+    "id": "rel_80",
+    "source": "entity_6",
+    "target": "entity_30",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释（二）_20201229 包含术语 现有技术",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.522111"
+    }
+  },
+  {
+    "id": "rel_81",
+    "source": "entity_6",
+    "target": "entity_34",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释（二）_20201229 包含术语 发明专利",
+    "properties": {
+      "frequency": 4,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.522123"
+    }
+  },
+  {
+    "id": "rel_82",
+    "source": "entity_6",
+    "target": "entity_35",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释（二）_20201229 包含术语 附图",
+    "properties": {
+      "frequency": 6,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.522131"
+    }
+  },
+  {
+    "id": "rel_83",
+    "source": "entity_6",
+    "target": "entity_38",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释（二）_20201229 包含术语 创造性",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.522146"
+    }
+  },
+  {
+    "id": "rel_84",
+    "source": "entity_6",
+    "target": "entity_39",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释（二）_20201229 包含术语 外观设计专利",
+    "properties": {
+      "frequency": 4,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.522150"
+    }
+  },
+  {
+    "id": "rel_85",
+    "source": "entity_6",
+    "target": "entity_40",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释（二）_20201229 包含术语 专利法",
+    "properties": {
+      "frequency": 8,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.522155"
+    }
+  },
+  {
+    "id": "rel_86",
+    "source": "entity_6",
+    "target": "entity_41",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释（二）_20201229 包含术语 无效宣告",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.522162"
+    }
+  },
+  {
+    "id": "rel_87",
+    "source": "entity_6",
+    "target": "entity_44",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释（二）_20201229 包含术语 侵权",
+    "properties": {
+      "frequency": 52,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.522170"
+    }
+  },
+  {
+    "id": "rel_88",
+    "source": "entity_7",
+    "target": "entity_26",
+    "type": "contains",
+    "description": "最高人民法院关于审理申请注册的药品相关的专利权纠纷民事案件适用法律若干问题的规定_20210704 包含术语 许可",
+    "properties": {
+      "frequency": 11,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.522189"
+    }
+  },
+  {
+    "id": "rel_89",
+    "source": "entity_7",
+    "target": "entity_40",
+    "type": "contains",
+    "description": "最高人民法院关于审理申请注册的药品相关的专利权纠纷民事案件适用法律若干问题的规定_20210704 包含术语 专利法",
+    "properties": {
+      "frequency": 14,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.522207"
+    }
+  },
+  {
+    "id": "rel_90",
+    "source": "entity_7",
+    "target": "entity_44",
+    "type": "contains",
+    "description": "最高人民法院关于审理申请注册的药品相关的专利权纠纷民事案件适用法律若干问题的规定_20210704 包含术语 侵权",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.522214"
+    }
+  },
+  {
+    "id": "rel_91",
+    "source": "entity_8",
+    "target": "entity_15",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 质押",
+    "properties": {
+      "frequency": 14,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.522722"
+    }
+  },
+  {
+    "id": "rel_92",
+    "source": "entity_8",
+    "target": "entity_16",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 审查指南",
+    "properties": {
+      "frequency": 530,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.523007"
+    }
+  },
+  {
+    "id": "rel_93",
+    "source": "entity_8",
+    "target": "entity_17",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 规范",
+    "properties": {
+      "frequency": 17,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.523527"
+    }
+  },
+  {
+    "id": "rel_94",
+    "source": "entity_8",
+    "target": "entity_18",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 标准",
+    "properties": {
+      "frequency": 79,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.524012"
+    }
+  },
+  {
+    "id": "rel_95",
+    "source": "entity_8",
+    "target": "entity_19",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 权利要求书",
+    "properties": {
+      "frequency": 305,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.524263"
+    }
+  },
+  {
+    "id": "rel_96",
+    "source": "entity_8",
+    "target": "entity_20",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 国防专利",
+    "properties": {
+      "frequency": 7,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.525003"
+    }
+  },
+  {
+    "id": "rel_97",
+    "source": "entity_8",
+    "target": "entity_21",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 初步审查",
+    "properties": {
+      "frequency": 248,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.525291"
+    }
+  },
+  {
+    "id": "rel_98",
+    "source": "entity_8",
+    "target": "entity_22",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 请求书",
+    "properties": {
+      "frequency": 130,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.525647"
+    }
+  },
+  {
+    "id": "rel_99",
+    "source": "entity_8",
+    "target": "entity_24",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 优先权",
+    "properties": {
+      "frequency": 647,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.526028"
+    }
+  },
+  {
+    "id": "rel_100",
+    "source": "entity_8",
+    "target": "entity_23",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 行政复议",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.526950"
+    }
+  },
+  {
+    "id": "rel_101",
+    "source": "entity_8",
+    "target": "entity_25",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 新颖性",
+    "properties": {
+      "frequency": 249,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.527304"
+    }
+  },
+  {
+    "id": "rel_102",
+    "source": "entity_8",
+    "target": "entity_26",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 许可",
+    "properties": {
+      "frequency": 209,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.527760"
+    }
+  },
+  {
+    "id": "rel_103",
+    "source": "entity_8",
+    "target": "entity_27",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 说明书",
+    "properties": {
+      "frequency": 671,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.528117"
+    }
+  },
+  {
+    "id": "rel_104",
+    "source": "entity_8",
+    "target": "entity_29",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 复审",
+    "properties": {
+      "frequency": 356,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.529042"
+    }
+  },
+  {
+    "id": "rel_105",
+    "source": "entity_8",
+    "target": "entity_30",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 现有技术",
+    "properties": {
+      "frequency": 280,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.529376"
+    }
+  },
+  {
+    "id": "rel_106",
+    "source": "entity_8",
+    "target": "entity_31",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 实施细则",
+    "properties": {
+      "frequency": 425,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.529719"
+    }
+  },
+  {
+    "id": "rel_107",
+    "source": "entity_8",
+    "target": "entity_32",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 著作权法",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.530211"
+    }
+  },
+  {
+    "id": "rel_108",
+    "source": "entity_8",
+    "target": "entity_33",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 实质审查",
+    "properties": {
+      "frequency": 240,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.530503"
+    }
+  },
+  {
+    "id": "rel_109",
+    "source": "entity_8",
+    "target": "entity_34",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 发明专利",
+    "properties": {
+      "frequency": 482,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.530812"
+    }
+  },
+  {
+    "id": "rel_110",
+    "source": "entity_8",
+    "target": "entity_35",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 附图",
+    "properties": {
+      "frequency": 315,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.531569"
+    }
+  },
+  {
+    "id": "rel_111",
+    "source": "entity_8",
+    "target": "entity_37",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 摘要",
+    "properties": {
+      "frequency": 114,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.532035"
+    }
+  },
+  {
+    "id": "rel_112",
+    "source": "entity_8",
+    "target": "entity_36",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 强制许可",
+    "properties": {
+      "frequency": 5,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.532559"
+    }
+  },
+  {
+    "id": "rel_113",
+    "source": "entity_8",
+    "target": "entity_38",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 创造性",
+    "properties": {
+      "frequency": 309,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.533301"
+    }
+  },
+  {
+    "id": "rel_114",
+    "source": "entity_8",
+    "target": "entity_39",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 外观设计专利",
+    "properties": {
+      "frequency": 207,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.533576"
+    }
+  },
+  {
+    "id": "rel_115",
+    "source": "entity_8",
+    "target": "entity_40",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 专利法",
+    "properties": {
+      "frequency": 980,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.533940"
+    }
+  },
+  {
+    "id": "rel_116",
+    "source": "entity_8",
+    "target": "entity_42",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 实用性",
+    "properties": {
+      "frequency": 62,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.534334"
+    }
+  },
+  {
+    "id": "rel_117",
+    "source": "entity_8",
+    "target": "entity_41",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 无效宣告",
+    "properties": {
+      "frequency": 380,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.534653"
+    }
+  },
+  {
+    "id": "rel_118",
+    "source": "entity_8",
+    "target": "entity_43",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 实用新型专利",
+    "properties": {
+      "frequency": 216,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.534927"
+    }
+  },
+  {
+    "id": "rel_119",
+    "source": "entity_8",
+    "target": "entity_44",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 侵权",
+    "properties": {
+      "frequency": 12,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.535719"
+    }
+  },
+  {
+    "id": "rel_120",
+    "source": "entity_8",
+    "target": "entity_45",
+    "type": "contains",
+    "description": "专利审查指南（最新版） 包含术语 转让",
+    "properties": {
+      "frequency": 54,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536203"
+    }
+  },
+  {
+    "id": "rel_121",
+    "source": "entity_9",
+    "target": "entity_19",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释_20091228 包含术语 权利要求书",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536215"
+    }
+  },
+  {
+    "id": "rel_122",
+    "source": "entity_9",
+    "target": "entity_26",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释_20091228 包含术语 许可",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536232"
+    }
+  },
+  {
+    "id": "rel_123",
+    "source": "entity_9",
+    "target": "entity_27",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释_20091228 包含术语 说明书",
+    "properties": {
+      "frequency": 6,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536236"
+    }
+  },
+  {
+    "id": "rel_124",
+    "source": "entity_9",
+    "target": "entity_30",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释_20091228 包含术语 现有技术",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536245"
+    }
+  },
+  {
+    "id": "rel_125",
+    "source": "entity_9",
+    "target": "entity_35",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释_20091228 包含术语 附图",
+    "properties": {
+      "frequency": 4,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536256"
+    }
+  },
+  {
+    "id": "rel_126",
+    "source": "entity_9",
+    "target": "entity_39",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释_20091228 包含术语 外观设计专利",
+    "properties": {
+      "frequency": 6,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536267"
+    }
+  },
+  {
+    "id": "rel_127",
+    "source": "entity_9",
+    "target": "entity_40",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释_20091228 包含术语 专利法",
+    "properties": {
+      "frequency": 19,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536271"
+    }
+  },
+  {
+    "id": "rel_128",
+    "source": "entity_9",
+    "target": "entity_41",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释_20091228 包含术语 无效宣告",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536277"
+    }
+  },
+  {
+    "id": "rel_129",
+    "source": "entity_9",
+    "target": "entity_43",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释_20091228 包含术语 实用新型专利",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536280"
+    }
+  },
+  {
+    "id": "rel_130",
+    "source": "entity_9",
+    "target": "entity_44",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释_20091228 包含术语 侵权",
+    "properties": {
+      "frequency": 17,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536285"
+    }
+  },
+  {
+    "id": "rel_131",
+    "source": "entity_9",
+    "target": "entity_45",
+    "type": "contains",
+    "description": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释_20091228 包含术语 转让",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536291"
+    }
+  },
+  {
+    "id": "rel_132",
+    "source": "entity_10",
+    "target": "entity_19",
+    "type": "contains",
+    "description": "权利要求的解释及原则 包含术语 权利要求书",
+    "properties": {
+      "frequency": 4,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536315"
+    }
+  },
+  {
+    "id": "rel_133",
+    "source": "entity_10",
+    "target": "entity_24",
+    "type": "contains",
+    "description": "权利要求的解释及原则 包含术语 优先权",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536335"
+    }
+  },
+  {
+    "id": "rel_134",
+    "source": "entity_10",
+    "target": "entity_27",
+    "type": "contains",
+    "description": "权利要求的解释及原则 包含术语 说明书",
+    "properties": {
+      "frequency": 31,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536353"
+    }
+  },
+  {
+    "id": "rel_135",
+    "source": "entity_10",
+    "target": "entity_30",
+    "type": "contains",
+    "description": "权利要求的解释及原则 包含术语 现有技术",
+    "properties": {
+      "frequency": 3,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536370"
+    }
+  },
+  {
+    "id": "rel_136",
+    "source": "entity_10",
+    "target": "entity_35",
+    "type": "contains",
+    "description": "权利要求的解释及原则 包含术语 附图",
+    "properties": {
+      "frequency": 13,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536393"
+    }
+  },
+  {
+    "id": "rel_137",
+    "source": "entity_10",
+    "target": "entity_40",
+    "type": "contains",
+    "description": "权利要求的解释及原则 包含术语 专利法",
+    "properties": {
+      "frequency": 3,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536418"
+    }
+  },
+  {
+    "id": "rel_138",
+    "source": "entity_10",
+    "target": "entity_43",
+    "type": "contains",
+    "description": "权利要求的解释及原则 包含术语 实用新型专利",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536432"
+    }
+  },
+  {
+    "id": "rel_139",
+    "source": "entity_10",
+    "target": "entity_44",
+    "type": "contains",
+    "description": "权利要求的解释及原则 包含术语 侵权",
+    "properties": {
+      "frequency": 18,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536439"
+    }
+  },
+  {
+    "id": "rel_140",
+    "source": "entity_11",
+    "target": "entity_40",
+    "type": "contains",
+    "description": "最高人民法院关于审理涉专利权评价报告案件适用法律问题的批复_20250730 包含术语 专利法",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536453"
+    }
+  },
+  {
+    "id": "rel_141",
+    "source": "entity_12",
+    "target": "entity_18",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利授权确权行政案件适用法律若干问题的规定（一）_20200910 包含术语 标准",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536469"
+    }
+  },
+  {
+    "id": "rel_142",
+    "source": "entity_12",
+    "target": "entity_19",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利授权确权行政案件适用法律若干问题的规定（一）_20200910 包含术语 权利要求书",
+    "properties": {
+      "frequency": 7,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536473"
+    }
+  },
+  {
+    "id": "rel_143",
+    "source": "entity_12",
+    "target": "entity_27",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利授权确权行政案件适用法律若干问题的规定（一）_20200910 包含术语 说明书",
+    "properties": {
+      "frequency": 15,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536498"
+    }
+  },
+  {
+    "id": "rel_144",
+    "source": "entity_12",
+    "target": "entity_29",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利授权确权行政案件适用法律若干问题的规定（一）_20200910 包含术语 复审",
+    "properties": {
+      "frequency": 4,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536507"
+    }
+  },
+  {
+    "id": "rel_145",
+    "source": "entity_12",
+    "target": "entity_35",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利授权确权行政案件适用法律若干问题的规定（一）_20200910 包含术语 附图",
+    "properties": {
+      "frequency": 9,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536527"
+    }
+  },
+  {
+    "id": "rel_146",
+    "source": "entity_12",
+    "target": "entity_38",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利授权确权行政案件适用法律若干问题的规定（一）_20200910 包含术语 创造性",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536542"
+    }
+  },
+  {
+    "id": "rel_147",
+    "source": "entity_12",
+    "target": "entity_39",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利授权确权行政案件适用法律若干问题的规定（一）_20200910 包含术语 外观设计专利",
+    "properties": {
+      "frequency": 13,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536547"
+    }
+  },
+  {
+    "id": "rel_148",
+    "source": "entity_12",
+    "target": "entity_40",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利授权确权行政案件适用法律若干问题的规定（一）_20200910 包含术语 专利法",
+    "properties": {
+      "frequency": 17,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536551"
+    }
+  },
+  {
+    "id": "rel_149",
+    "source": "entity_12",
+    "target": "entity_41",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利授权确权行政案件适用法律若干问题的规定（一）_20200910 包含术语 无效宣告",
+    "properties": {
+      "frequency": 9,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536558"
+    }
+  },
+  {
+    "id": "rel_150",
+    "source": "entity_12",
+    "target": "entity_44",
+    "type": "contains",
+    "description": "最高人民法院关于审理专利授权确权行政案件适用法律若干问题的规定（一）_20200910 包含术语 侵权",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536566"
+    }
+  },
+  {
+    "id": "rel_151",
+    "source": "entity_13",
+    "target": "entity_15",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 质押",
+    "properties": {
+      "frequency": 4,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536604"
+    }
+  },
+  {
+    "id": "rel_152",
+    "source": "entity_13",
+    "target": "entity_16",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 审查指南",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536630"
+    }
+  },
+  {
+    "id": "rel_153",
+    "source": "entity_13",
+    "target": "entity_17",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 规范",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536652"
+    }
+  },
+  {
+    "id": "rel_154",
+    "source": "entity_13",
+    "target": "entity_18",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 标准",
+    "properties": {
+      "frequency": 3,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536685"
+    }
+  },
+  {
+    "id": "rel_155",
+    "source": "entity_13",
+    "target": "entity_19",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 权利要求书",
+    "properties": {
+      "frequency": 12,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536699"
+    }
+  },
+  {
+    "id": "rel_156",
+    "source": "entity_13",
+    "target": "entity_20",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 国防专利",
+    "properties": {
+      "frequency": 6,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536724"
+    }
+  },
+  {
+    "id": "rel_157",
+    "source": "entity_13",
+    "target": "entity_21",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 初步审查",
+    "properties": {
+      "frequency": 9,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536742"
+    }
+  },
+  {
+    "id": "rel_158",
+    "source": "entity_13",
+    "target": "entity_22",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 请求书",
+    "properties": {
+      "frequency": 33,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536760"
+    }
+  },
+  {
+    "id": "rel_159",
+    "source": "entity_13",
+    "target": "entity_24",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 优先权",
+    "properties": {
+      "frequency": 60,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536779"
+    }
+  },
+  {
+    "id": "rel_160",
+    "source": "entity_13",
+    "target": "entity_26",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 许可",
+    "properties": {
+      "frequency": 33,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536830"
+    }
+  },
+  {
+    "id": "rel_161",
+    "source": "entity_13",
+    "target": "entity_27",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 说明书",
+    "properties": {
+      "frequency": 32,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536849"
+    }
+  },
+  {
+    "id": "rel_162",
+    "source": "entity_13",
+    "target": "entity_28",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 假冒",
+    "properties": {
+      "frequency": 3,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536883"
+    }
+  },
+  {
+    "id": "rel_163",
+    "source": "entity_13",
+    "target": "entity_29",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 复审",
+    "properties": {
+      "frequency": 33,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536906"
+    }
+  },
+  {
+    "id": "rel_164",
+    "source": "entity_13",
+    "target": "entity_30",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 现有技术",
+    "properties": {
+      "frequency": 4,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536922"
+    }
+  },
+  {
+    "id": "rel_165",
+    "source": "entity_13",
+    "target": "entity_31",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 实施细则",
+    "properties": {
+      "frequency": 5,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536936"
+    }
+  },
+  {
+    "id": "rel_166",
+    "source": "entity_13",
+    "target": "entity_33",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 实质审查",
+    "properties": {
+      "frequency": 11,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536967"
+    }
+  },
+  {
+    "id": "rel_167",
+    "source": "entity_13",
+    "target": "entity_34",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 发明专利",
+    "properties": {
+      "frequency": 45,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.536986"
+    }
+  },
+  {
+    "id": "rel_168",
+    "source": "entity_13",
+    "target": "entity_35",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 附图",
+    "properties": {
+      "frequency": 36,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.537024"
+    }
+  },
+  {
+    "id": "rel_169",
+    "source": "entity_13",
+    "target": "entity_37",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 摘要",
+    "properties": {
+      "frequency": 9,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.537050"
+    }
+  },
+  {
+    "id": "rel_170",
+    "source": "entity_13",
+    "target": "entity_36",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 强制许可",
+    "properties": {
+      "frequency": 9,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.537071"
+    }
+  },
+  {
+    "id": "rel_171",
+    "source": "entity_13",
+    "target": "entity_38",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 创造性",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.537105"
+    }
+  },
+  {
+    "id": "rel_172",
+    "source": "entity_13",
+    "target": "entity_39",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 外观设计专利",
+    "properties": {
+      "frequency": 27,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.537119"
+    }
+  },
+  {
+    "id": "rel_173",
+    "source": "entity_13",
+    "target": "entity_40",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 专利法",
+    "properties": {
+      "frequency": 115,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.537137"
+    }
+  },
+  {
+    "id": "rel_174",
+    "source": "entity_13",
+    "target": "entity_41",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 无效宣告",
+    "properties": {
+      "frequency": 36,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.537168"
+    }
+  },
+  {
+    "id": "rel_175",
+    "source": "entity_13",
+    "target": "entity_43",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 实用新型专利",
+    "properties": {
+      "frequency": 30,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.537182"
+    }
+  },
+  {
+    "id": "rel_176",
+    "source": "entity_13",
+    "target": "entity_44",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 侵权",
+    "properties": {
+      "frequency": 7,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.537213"
+    }
+  },
+  {
+    "id": "rel_177",
+    "source": "entity_13",
+    "target": "entity_45",
+    "type": "contains",
+    "description": "中华人民共和国专利法实施细则_20231211 包含术语 转让",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.537238"
+    }
+  },
+  {
+    "id": "rel_178",
+    "source": "entity_14",
+    "target": "entity_16",
+    "type": "contains",
+    "description": "3-说明书和权利要求书 包含术语 审查指南",
+    "properties": {
+      "frequency": 5,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.537343"
+    }
+  },
+  {
+    "id": "rel_179",
+    "source": "entity_14",
+    "target": "entity_18",
+    "type": "contains",
+    "description": "3-说明书和权利要求书 包含术语 标准",
+    "properties": {
+      "frequency": 7,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.537458"
+    }
+  },
+  {
+    "id": "rel_180",
+    "source": "entity_14",
+    "target": "entity_19",
+    "type": "contains",
+    "description": "3-说明书和权利要求书 包含术语 权利要求书",
+    "properties": {
+      "frequency": 12,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.537492"
+    }
+  },
+  {
+    "id": "rel_181",
+    "source": "entity_14",
+    "target": "entity_24",
+    "type": "contains",
+    "description": "3-说明书和权利要求书 包含术语 优先权",
+    "properties": {
+      "frequency": 2,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.537692"
+    }
+  },
+  {
+    "id": "rel_182",
+    "source": "entity_14",
+    "target": "entity_25",
+    "type": "contains",
+    "description": "3-说明书和权利要求书 包含术语 新颖性",
+    "properties": {
+      "frequency": 5,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.537774"
+    }
+  },
+  {
+    "id": "rel_183",
+    "source": "entity_14",
+    "target": "entity_27",
+    "type": "contains",
+    "description": "3-说明书和权利要求书 包含术语 说明书",
+    "properties": {
+      "frequency": 425,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.537878"
+    }
+  },
+  {
+    "id": "rel_184",
+    "source": "entity_14",
+    "target": "entity_29",
+    "type": "contains",
+    "description": "3-说明书和权利要求书 包含术语 复审",
+    "properties": {
+      "frequency": 94,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.537997"
+    }
+  },
+  {
+    "id": "rel_185",
+    "source": "entity_14",
+    "target": "entity_30",
+    "type": "contains",
+    "description": "3-说明书和权利要求书 包含术语 现有技术",
+    "properties": {
+      "frequency": 54,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.538038"
+    }
+  },
+  {
+    "id": "rel_186",
+    "source": "entity_14",
+    "target": "entity_31",
+    "type": "contains",
+    "description": "3-说明书和权利要求书 包含术语 实施细则",
+    "properties": {
+      "frequency": 10,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.538090"
+    }
+  },
+  {
+    "id": "rel_187",
+    "source": "entity_14",
+    "target": "entity_33",
+    "type": "contains",
+    "description": "3-说明书和权利要求书 包含术语 实质审查",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.538168"
+    }
+  },
+  {
+    "id": "rel_188",
+    "source": "entity_14",
+    "target": "entity_34",
+    "type": "contains",
+    "description": "3-说明书和权利要求书 包含术语 发明专利",
+    "properties": {
+      "frequency": 5,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.538216"
+    }
+  },
+  {
+    "id": "rel_189",
+    "source": "entity_14",
+    "target": "entity_35",
+    "type": "contains",
+    "description": "3-说明书和权利要求书 包含术语 附图",
+    "properties": {
+      "frequency": 24,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.538314"
+    }
+  },
+  {
+    "id": "rel_190",
+    "source": "entity_14",
+    "target": "entity_38",
+    "type": "contains",
+    "description": "3-说明书和权利要求书 包含术语 创造性",
+    "properties": {
+      "frequency": 7,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.538500"
+    }
+  },
+  {
+    "id": "rel_191",
+    "source": "entity_14",
+    "target": "entity_40",
+    "type": "contains",
+    "description": "3-说明书和权利要求书 包含术语 专利法",
+    "properties": {
+      "frequency": 59,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.538579"
+    }
+  },
+  {
+    "id": "rel_192",
+    "source": "entity_14",
+    "target": "entity_42",
+    "type": "contains",
+    "description": "3-说明书和权利要求书 包含术语 实用性",
+    "properties": {
+      "frequency": 1,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.538626"
+    }
+  },
+  {
+    "id": "rel_193",
+    "source": "entity_14",
+    "target": "entity_43",
+    "type": "contains",
+    "description": "3-说明书和权利要求书 包含术语 实用新型专利",
+    "properties": {
+      "frequency": 3,
+      "confidence": 1.0,
+      "created_at": "2025-12-15T00:17:21.538713"
+    }
+  },
+  {
+    "id": "rel_194",
+    "source": "entity_40",
+    "target": "entity_31",
+    "type": "defines",
+    "description": "专利法 defines 实施细则",
+    "properties": {
+      "source": "predefined",
+      "confidence": 0.9,
+      "created_at": "2025-12-15T00:17:21.538832"
+    }
+  },
+  {
+    "id": "rel_195",
+    "source": "entity_34",
+    "target": "entity_25",
+    "type": "requires",
+    "description": "发明专利 requires 新颖性",
+    "properties": {
+      "source": "predefined",
+      "confidence": 0.9,
+      "created_at": "2025-12-15T00:17:21.538835"
+    }
+  },
+  {
+    "id": "rel_196",
+    "source": "entity_34",
+    "target": "entity_38",
+    "type": "requires",
+    "description": "发明专利 requires 创造性",
+    "properties": {
+      "source": "predefined",
+      "confidence": 0.9,
+      "created_at": "2025-12-15T00:17:21.538837"
+    }
+  },
+  {
+    "id": "rel_197",
+    "source": "entity_34",
+    "target": "entity_42",
+    "type": "requires",
+    "description": "发明专利 requires 实用性",
+    "properties": {
+      "source": "predefined",
+      "confidence": 0.9,
+      "created_at": "2025-12-15T00:17:21.538839"
+    }
+  },
+  {
+    "id": "rel_198",
+    "source": "entity_43",
+    "target": "entity_25",
+    "type": "requires",
+    "description": "实用新型专利 requires 新颖性",
+    "properties": {
+      "source": "predefined",
+      "confidence": 0.9,
+      "created_at": "2025-12-15T00:17:21.538841"
+    }
+  },
+  {
+    "id": "rel_199",
+    "source": "entity_43",
+    "target": "entity_42",
+    "type": "requires",
+    "description": "实用新型专利 requires 实用性",
+    "properties": {
+      "source": "predefined",
+      "confidence": 0.9,
+      "created_at": "2025-12-15T00:17:21.538843"
+    }
+  },
+  {
+    "id": "rel_200",
+    "source": "entity_39",
+    "target": "entity_25",
+    "type": "requires",
+    "description": "外观设计专利 requires 新颖性",
+    "properties": {
+      "source": "predefined",
+      "confidence": 0.9,
+      "created_at": "2025-12-15T00:17:21.538845"
+    }
+  },
+  {
+    "id": "rel_201",
+    "source": "entity_19",
+    "target": "entity_27",
+    "type": "accompanies",
+    "description": "权利要求书 accompanies 说明书",
+    "properties": {
+      "source": "predefined",
+      "confidence": 0.9,
+      "created_at": "2025-12-15T00:17:21.538847"
+    }
+  },
+  {
+    "id": "rel_202",
+    "source": "entity_26",
+    "target": "entity_45",
+    "type": "similar_to",
+    "description": "许可 similar_to 转让",
+    "properties": {
+      "source": "predefined",
+      "confidence": 0.9,
+      "created_at": "2025-12-15T00:17:21.538851"
+    }
+  }
+]

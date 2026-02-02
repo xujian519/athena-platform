@@ -1,0 +1,8 @@
+{
+  "MD033": {
+    "allowed_elements": ["mark", "strong", "code", "br", "em", "b", "i", "sub", "sup"]
+  },
+  "MD013": false,
+  "MD050": false
+}
+

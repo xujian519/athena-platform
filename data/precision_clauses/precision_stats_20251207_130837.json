@@ -1,0 +1,19 @@
+{
+  "total_clauses": 1237,
+  "source_documents": 14,
+  "clause_types": {
+    "examination_standard": 139,
+    "general_rule": 549,
+    "rights_obligations": 511,
+    "implementation_rule": 20,
+    "judgment_principle": 2,
+    "fee_regulation": 6,
+    "time_limit": 10
+  },
+  "importance_distribution": {
+    "high": 329,
+    "medium": 908,
+    "low": 0
+  },
+  "avg_keywords": 1.2473726758286177
+}

@@ -1,0 +1,141 @@
+{
+  "name": "法律领域知识图谱",
+  "description": "整合法律法规、司法案例、法律专家和法条关系的专业知识图谱",
+  "domain": "legal",
+  "version": "1.0.0",
+  "created": "2025-12-14T21:05:36.941819",
+  "entity_types": {
+    "Law": {
+      "description": "法律法规",
+      "properties": [
+        "name",
+        "type",
+        "level",
+        "issuing_authority",
+        "effective_date",
+        "status",
+        "content_summary"
+      ],
+      "example": {
+        "name": "专利法实施细则",
+        "type": "行政法规",
+        "level": "国家级",
+        "issuing_authority": "国务院",
+        "effective_date": "2001-07-01",
+        "status": "现行有效"
+      }
+    },
+    "LegalCase": {
+      "description": "司法案例",
+      "properties": [
+        "case_number",
+        "case_name",
+        "court",
+        "case_type",
+        "decision_date",
+        "involved_patents",
+        "key_issues"
+      ],
+      "example": {
+        "case_number": "(2020)最高法知民终1234号",
+        "case_name": "某某专利侵权纠纷案",
+        "court": "最高人民法院",
+        "case_type": "专利侵权",
+        "decision_date": "2020-12-15"
+      }
+    },
+    "LegalExpert": {
+      "description": "法律专家",
+      "properties": [
+        "name",
+        "title",
+        "organization",
+        "specialization",
+        "experience_years",
+        "notable_cases",
+        "publications"
+      ],
+      "example": {
+        "name": "张法官",
+        "title": "高级法官",
+        "organization": "最高人民法院知识产权法庭",
+        "specialization": "专利法、知识产权保护",
+        "experience_years": 15
+      }
+    },
+    "LegalProvision": {
+      "description": "具体法条",
+      "properties": [
+        "article_number",
+        "content",
+        "interpretation",
+        "related_cases",
+        "application_scope"
+      ],
+      "example": {
+        "article_number": "第25条",
+        "content": "发明和实用新型专利权被授予后...",
+        "interpretation": "规定了专利权的保护范围"
+      }
+    }
+  },
+  "relation_types": {
+    "REGULATES": {
+      "description": "规范/管辖",
+      "properties": [
+        "scope",
+        "conditions",
+        "exceptions"
+      ]
+    },
+    "REFERENCED_IN": {
+      "description": "被引用于",
+      "properties": [
+        "context",
+        "importance",
+        "frequency"
+      ]
+    },
+    "JUDGED_BY": {
+      "description": "由...审理",
+      "properties": [
+        "role",
+        "decision_type"
+      ]
+    },
+    "SPECIALIZES_IN": {
+      "description": "专长于",
+      "properties": [
+        "expertise_level",
+        "years",
+        "achievements"
+      ]
+    },
+    "PRECEDES": {
+      "description": "优先于",
+      "properties": [
+        "priority_type",
+        "conditions"
+      ]
+    }
+  },
+  "data_sources": {
+    "national_laws": {
+      "type": "structured_data",
+      "path": "data/legal/national_laws.json",
+      "format": "json",
+      "entity_mapping": "Law"
+    },
+    "court_cases": {
+      "type": "structured_data",
+      "path": "data/legal/court_cases.json",
+      "format": "json",
+      "entity_mapping": "LegalCase"
+    },
+    "legal_experts": {
+      "type": "api_data",
+      "endpoint": "legal/experts",
+      "entity_mapping": "LegalExpert"
+    }
+  }
+}

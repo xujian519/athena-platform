@@ -1,0 +1,56 @@
+{
+  "service_name": "Athena多模态文件系统",
+  "version": "1.0.0",
+  "deployment": {
+    "port": 8001,
+    "host": "0.0.0.0",
+    "auto_start": true,
+    "reload": false
+  },
+  "storage": {
+    "base_path": "/Users/xujian/Athena工作平台/storage-system/data/multimodal_files",
+    "create_dirs": true,
+    "auto_cleanup": false
+  },
+  "security": {
+    "token_expiry": 86400,
+    "session_timeout": 24,
+    "max_file_size": 104857600
+  },
+  "supported_formats": {
+    "image": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"],
+    "document": [".pdf", ".doc", ".docx", ".txt", ".md", ".json", ".xml", ".csv"],
+    "audio": [".mp3", ".wav", ".flac", ".aac"],
+    "video": [".mp4", ".avi", ".mkv", ".mov"],
+    "archive": [".zip", ".rar", ".7z", ".tar", ".gz"]
+  },
+  "api_endpoints": {
+    "total": 10,
+    "core": [
+      "GET /",
+      "GET /health",
+      "POST /auth/login",
+      "POST /upload",
+      "GET /files",
+      "GET /files/{file_id}",
+      "GET /files/{file_id}/download",
+      "GET /download/{file_id}",
+      "GET /statistics",
+      "OPTIONS /{path:path}"
+    ]
+  },
+  "status": "running",
+  "uptime": "2025-12-16T15:17:29",
+  "last_test": {
+    "timestamp": "2025-12-16T15:20:00",
+    "tests_passed": 5,
+    "tests_total": 5,
+    "features_verified": [
+      "健康检查",
+      "用户认证",
+      "文件上传",
+      "文件列表",
+      "统计信息"
+    ]
+  }
+}

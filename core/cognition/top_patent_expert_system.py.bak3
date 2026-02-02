@@ -1,0 +1,900 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+顶级专利专家系统
+Top Patent Expert System
+
+集成中国顶级专利代理人、专利律师、专利审查员和技术专家的专家系统
+
+作者: 小娜·天秤女神
+创建时间: 2025-12-16
+版本: v1.0 Top Expert System
+"""
+
+import asyncio
+import json
+import logging
+from core.logging_config import setup_logging
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple
+from dataclasses import dataclass, field
+from pathlib import Path
+
+# 配置日志
+logging.basicConfig(level=logging.INFO)
+logger = setup_logging()
+
+@dataclass
+class ExpertConsultation:
+    """专家咨询"""
+    expert_id: str
+    expert_type: str  # agent, lawyer, examiner, technical
+    consultation_type: str  # writing, legal, examination, technical
+    query: str
+    response: str
+    confidence: float
+    reasoning_process: str
+    references: List[str] = field(default_factory=list)
+    timestamp: datetime = field(default_factory=datetime.now)
+
+@dataclass
+class PatentContext:
+    """专利分析上下文"""
+    technology_field: str
+    patent_type: str
+    analysis_stage: str
+    user_intent: str
+    technical_complexity: str
+    deadline_requirement: str
+    target_jurisdiction: str
+
+@dataclass
+class ExpertTeamAnalysis:
+    """专家团队分析结果"""
+    analysis_id: str
+    team_composition: List[Dict[str, Any]]
+    individual_opinions: List[ExpertConsultation]
+    consensus_opinion: str
+    risk_assessment: Dict[str, Any]
+    recommendations: List[str]
+    next_steps: List[str]
+    confidence_score: float
+    analysis_time: float
+    conclusions: List[str] = field(default_factory=list)
+
+class TopPatentExpertSystem:
+    """顶级专利专家系统"""
+
+    def __init__(self):
+        self.name = "顶级专利专家系统"
+        self.version = "v1.0 Top Expert"
+
+        # 专家数据库
+        self.expert_database_path = "/Users/xujian/Athena工作平台/knowledge/top_patent_experts.json"
+        self.expert_database = None
+
+        # 专家实例缓存
+        self.agent_experts = {}
+        self.lawyer_experts = {}
+        self.examiner_experts = {}
+        self.technical_experts = {}
+
+        # 分析规则
+        self.composition_rules = {}
+        self.consensus_mechanism = {}
+
+        # 历史咨询记录
+        self.consultation_history = []
+
+        self.is_initialized = False
+
+    async def initialize(self):
+        """初始化专家系统"""
+        logger.info("🌟 初始化顶级专利专家系统...")
+
+        try:
+            # 1. 加载专家数据库
+            await self._load_expert_database()
+
+            # 2. 初始化专家实例
+            await self._initialize_expert_instances()
+
+            # 3. 构建团队组合规则
+            await self._build_team_composition_rules()
+
+            # 4. 建立共识机制
+            await self._establish_consensus_mechanism()
+
+            self.is_initialized = True
+            logger.info("✅ 顶级专利专家系统初始化完成")
+
+        except Exception as e:
+            logger.error(f"❌ 专家系统初始化失败: {str(e)}")
+            raise
+
+    async def analyze_with_expert_team(self,
+                                     technology_field: str,
+                                     ipc_section: str,
+                                     patent_type: str,
+                                     analysis_type: str,
+                                     technical_description: str,
+                                     user_requirements: List[str] = None) -> ExpertTeamAnalysis:
+        """使用专家团队进行分析"""
+        if not self.is_initialized:
+            raise RuntimeError("专家系统未初始化")
+
+        logger.info(f"👥 专家团队分析: {technology_field} - {analysis_type}")
+        start_time = datetime.now()
+
+        # 1. 确定需要的专家组合
+        team_composition = await self._determine_team_composition(
+            technology_field, ipc_section, patent_type, analysis_type
+        )
+
+        # 2. 收集各专家意见
+        individual_opinions = []
+        for expert in team_composition:
+            opinion = await self._consult_expert(
+                expert, technical_description, analysis_type, user_requirements
+            )
+            individual_opinions.append(opinion)
+
+        # 3. 形成团队共识
+        consensus_opinion = await self._form_consensus(individual_opinions)
+
+        # 4. 风险评估
+        risk_assessment = await self._conduct_team_risk_assessment(individual_opinions)
+
+        # 5. 制定建议
+        recommendations = await self._generate_team_recommendations(
+            consensus_opinion, individual_opinions
+        )
+
+        # 6. 确定下一步行动
+        next_steps = await self._determine_next_steps(recommendations, analysis_type)
+
+        # 7. 计算团队置信度
+        confidence_score = await self._calculate_team_confidence(individual_opinions)
+
+        analysis_time = (datetime.now() - start_time).total_seconds()
+
+        analysis_result = ExpertTeamAnalysis(
+            analysis_id=f"expert_team_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+            team_composition=team_composition,
+            individual_opinions=individual_opinions,
+            consensus_opinion=consensus_opinion,
+            risk_assessment=risk_assessment,
+            recommendations=recommendations,
+            next_steps=next_steps,
+            confidence_score=confidence_score,
+            analysis_time=analysis_time
+        )
+
+        # 8. 记录分析历史
+        await self._record_analysis(analysis_result)
+
+        logger.info(f"✅ 专家团队分析完成，耗时: {analysis_time:.2f}秒")
+        return analysis_result
+
+    async def _determine_team_composition(self, technology_field: str, ipc_section: str,
+                                        patent_type: str, analysis_type: str) -> List[Dict[str, Any]]:
+        """确定专家团队组合"""
+        team = []
+
+        # 基于IPC分类选择技术专家
+        if ipc_section in self.expert_database.get("technical_experts_by_ipc", {}):
+            ipc_experts = self.expert_database["technical_experts_by_ipc"][ipc_section]
+            if isinstance(ipc_experts, list):
+                for ipc_expert in ipc_experts:
+                    team.append({
+                        "id": ipc_expert["technical_expert"]["id"],
+                        "type": "technical",
+                        "name": ipc_expert["technical_expert"]["name"],
+                        "title": ipc_expert["technical_expert"]["title"],
+                        "specialization": ipc_expert["technical_expert"]["expertise"],
+                        "role": "技术评估"
+                    })
+            else:
+                team.append({
+                    "id": ipc_experts["technical_expert"]["id"],
+                    "type": "technical",
+                    "name": ipc_experts["technical_expert"]["name"],
+                    "title": ipc_experts["technical_expert"]["title"],
+                    "specialization": ipc_experts["technical_expert"]["expertise"],
+                    "role": "技术评估"
+                })
+
+        # 根据分析类型选择相应专家
+        if analysis_type in ["申请撰写", "审查答复", "专利布局"]:
+            # 需要专利代理人
+            best_agent = await self._select_best_agent(technology_field)
+            if best_agent:
+                team.append({
+                    "id": best_agent["id"],
+                    "type": "agent",
+                    "name": best_agent["name"],
+                    "title": best_agent["title"],
+                    "specialization": best_agent["specialization"],
+                    "role": "申请策略"
+                })
+
+        if analysis_type in ["侵权分析", "法律风险评估", "专利诉讼"]:
+            # 需要专利律师
+            best_lawyer = await self._select_best_lawyer(technology_field)
+            if best_lawyer:
+                team.append({
+                    "id": best_lawyer["id"],
+                    "type": "lawyer",
+                    "name": best_lawyer["name"],
+                    "title": best_lawyer["title"],
+                    "specialization": best_lawyer["specialization"],
+                    "role": "法律分析"
+                })
+
+        if analysis_type in ["审查预判", "授权前景评估"]:
+            # 需要专利审查员
+            best_examiner = await self._select_best_examiner(technology_field)
+            if best_examiner:
+                team.append({
+                    "id": best_examiner["id"],
+                    "type": "examiner",
+                    "name": best_examiner["name"],
+                    "title": best_examiner["title"],
+                    "specialization": best_examiner["expertise_areas"],
+                    "role": "审查分析"
+                })
+
+        return team
+
+    async def _consult_expert(self, expert: Dict[str, Any], technical_description: str,
+                             analysis_type: str, user_requirements: List[str] = None) -> ExpertConsultation:
+        """咨询单个专家"""
+        logger.info(f"👨‍⚖️ 咨询专家: {expert['name']} ({expert['type']})")
+
+        # 生成专家特定的提示词
+        expert_prompt = await self._generate_expert_prompt(
+            expert, technical_description, analysis_type, user_requirements
+        )
+
+        # 模拟专家响应（实际应用中这里会调用AI）
+        expert_response = await self._simulate_expert_response(
+            expert, expert_prompt, technical_description
+        )
+
+        # 计算响应置信度
+        confidence = await self._calculate_expert_confidence(
+            expert, expert_response, technical_description
+        )
+
+        # 生成推理过程
+        reasoning_process = await self._generate_reasoning_process(
+            expert, technical_description, expert_response
+        )
+
+        consultation = ExpertConsultation(
+            expert_id=expert["id"],
+            expert_type=expert["type"],
+            consultation_type=analysis_type,
+            query=technical_description,
+            response=expert_response,
+            confidence=confidence,
+            reasoning_process=reasoning_process,
+            references=await self._get_expert_references(expert)
+        )
+
+        return consultation
+
+    async def _generate_expert_prompt(self, expert: Dict[str, Any], technical_description: str,
+                                    analysis_type: str, user_requirements: List[str] = None) -> str:
+        """生成专家特定的提示词"""
+
+        expert_type = expert["type"]
+        expert_name = expert["name"]
+        expert_title = expert["title"]
+        specialization = expert["specialization"]
+
+        base_prompt = f"""
+作为中国{expert_title}{expert_name}，您在{', '.join(specialization)}领域拥有丰富的专业经验。
+
+请基于您的专业知识和实践经验，对以下技术方案进行分析：
+
+【技术描述】
+{technical_description}
+
+【分析类型】
+{analysis_type}
+
+【用户要求】
+{', '.join(user_requirements) if user_requirements else '无特殊要求'}
+
+请从您的专业角度提供：
+1. 技术方案的专业评估
+2. 专利前景分析
+3. 存在的问题和改进建议
+4. 下一步行动计划
+
+请以您的专业身份，给出权威、准确、实用的分析意见。
+        """
+
+        # 根据专家类型调整提示词
+        if expert_type == "agent":
+            base_prompt += f"""
+
+作为资深专利代理人，请特别关注：
+- 权利要求的撰写策略
+- 申请文件的合规性
+- 审查意见的答复技巧
+- 专利布局建议
+
+请基于您{expert.get('experience', 0)}年的专利代理经验，{expert.get('success_cases', 0)}个成功案例，
+以及{expert.get('success_rate', 0):.1%}的成功率，提供专业建议。
+            """
+
+        elif expert_type == "lawyer":
+            base_prompt += f"""
+
+作为专利律师，请特别关注：
+- 法律风险的识别和评估
+- 侵权可能性分析
+- 法律条文适用
+- 诉讼策略建议
+
+请基于您{expert.get('experience', 0)}年的知识产权法律经验，{expert.get('court_cases', 0)}个诉讼案例，
+以及{expert.get('win_rate', 0):.1%}的胜诉率，提供专业建议。
+            """
+
+        elif expert_type == "examiner":
+            base_prompt += f"""
+
+作为资深专利审查员，请特别关注：
+- 新颖性判断标准
+- 创造性评估方法
+- 审查意见的常见问题
+- 授权前景评估
+
+请基于您{expert.get('experience', 0)}年的专利审查经验，{expert.get('reviewed_applications', 0)}个申请的审查经验，
+以及{expert.get('grant_rate', 0):.1%}的授权率，提供专业建议。
+            """
+
+        elif expert_type == "technical":
+            base_prompt += f"""
+
+作为技术专家，请特别关注：
+- 技术方案的可行性
+- 技术创新点识别
+- 技术效果评估
+- 技术发展趋势
+
+请基于您{expert.get('experience', 0)}年的技术研发经验，提供专业的技术评估和建议。
+            """
+
+        return base_prompt
+
+    async def _simulate_expert_response(self, expert: Dict[str, Any], prompt: str,
+                                       technical_description: str) -> str:
+        """模拟专家响应"""
+        expert_type = expert["type"]
+        expert_name = expert["name"]
+
+        # 根据专家类型和领域生成专业响应
+        if expert_type == "agent":
+            response = await self._generate_agent_response(expert, technical_description)
+        elif expert_type == "lawyer":
+            response = await self._generate_lawyer_response(expert, technical_description)
+        elif expert_type == "examiner":
+            response = await self._generate_examiner_response(expert, technical_description)
+        elif expert_type == "technical":
+            response = await self._generate_technical_response(expert, technical_description)
+        else:
+            response = f"专家{expert_name}正在分析您提供的技术方案..."
+
+        return response
+
+    async def _generate_agent_response(self, expert: Dict[str, Any], description: str) -> str:
+        """生成专利代理人响应"""
+        return f"""
+作为资深专利代理人，我对您的技术方案进行了专业分析：
+
+【技术方案评估】
+您提供的技术方案具有一定的创新性，建议从以下角度优化专利申请：
+
+1. **权利要求布局建议**
+   - 独立权利要求应突出核心技术特征
+   - 从属权利要求应形成完整的保护层次
+   - 建议采用"功能+结构"的撰写方式
+
+2. **申请策略建议**
+   - 优先申请发明专利，保护核心技术
+   - 考虑申请PCT国际专利，扩大保护范围
+   - 同时申请实用新型专利，获得快速授权
+
+3. **审查意见准备**
+   - 提前准备技术对比文件
+   - 准备实验数据支持创造性
+   - 制定分层次的答复策略
+
+基于我{expert.get('experience', 0)}年的专利代理经验，您的技术方案授权前景较好，
+建议尽快启动专利申请程序。
+        """
+
+    async def _generate_lawyer_response(self, expert: Dict[str, Any], description: str) -> str:
+        """生成专利律师响应"""
+        return f"""
+作为专利律师，我从法律角度对您的技术方案进行了分析：
+
+【法律风险评估】
+1. **专利侵权风险**
+   - 技术方案可能涉及现有专利的规避设计
+   - 建议进行FTO（Freedom to Operate）分析
+   - 重点关注核心技术的专利布局
+
+2. **法律保护策略**
+   - 建议采用"专利+商业秘密"的组合保护
+   - 制定专利许可和转让策略
+   - 建立专利预警机制
+
+3. **合规性建议**
+   - 确保技术方案符合相关法律法规
+   - 注意避免触犯他人专利权
+   - 建立内部知识产权管理制度
+
+基于我处理过{expert.get('court_cases', 0)}个专利纠纷案件的经验，
+建议您在实施前进行全面的法律风险评估。
+        """
+
+    async def _generate_examiner_response(self, expert: Dict[str, Any], description: str) -> str:
+        """生成专利审查员响应"""
+        return f"""
+作为资深专利审查员，我从审查角度对您的技术方案进行了分析：
+
+【专利性评估】
+1. **新颖性分析**
+   - 建议进行全面的技术检索
+   - 重点关注核心技术特征的现有技术状况
+   - 考虑抵触申请的影响
+
+2. **创造性分析**
+   - 采用"三步法"进行评估
+   - 技术方案应具有突出的实质性特点
+   - 需要证明技术方案的显著进步
+
+3. **实用性分析**
+   - 技术方案应能够制造或使用
+   - 应能够产生积极效果
+   - 避免纯理论性描述
+
+4. **申请建议**
+   - 说明书应充分公开技术方案
+   - 权利要求应得到说明书支持
+   - 建议提供实施例支持技术效果
+
+基于我审查过{expert.get('reviewed_applications', 0)}个专利申请的经验，
+您的技术方案具备授权前景，建议按要求准备申请材料。
+        """
+
+    async def _generate_technical_response(self, expert: Dict[str, Any], description: str) -> str:
+        """生成技术专家响应"""
+        return f"""
+作为技术专家，我对您的技术方案进行了技术评估：
+
+【技术创新性评估】
+1. **技术方案创新点**
+   - 识别出{len(description.split())}个关键技术特征
+   - 创新点主要集中在工艺改进和结构优化
+   - 建议进一步强化技术效果的量化数据
+
+2. **技术可行性分析**
+   - 技术方案在理论上是可行的
+   - 建议提供实验验证数据
+   - 考虑技术方案的工程实施难度
+
+3. **技术发展趋势**
+   - 该技术领域发展迅速
+   - 建议关注国际前沿技术发展
+   - 考虑技术的产业化前景
+
+4. **改进建议**
+   - 进一步优化技术参数
+   - 增强技术的差异化特征
+   - 考虑与其他技术的融合应用
+
+基于我{expert.get('experience', 0)}年的技术研发经验，
+您的技术方案具有较好的创新性和实用性，建议继续完善并寻求专利保护。
+        """
+
+    async def _form_consensus(self, opinions: List[ExpertConsultation]) -> str:
+        """形成团队共识"""
+        # 收集各专家的主要观点
+        agent_opinions = [op for op in opinions if op.expert_type == "agent"]
+        lawyer_opinions = [op for op in opinions if op.expert_type == "lawyer"]
+        examiner_opinions = [op for op in opinions if op.expert_type == "examiner"]
+        technical_opinions = [op for op in opinions if op.expert_type == "technical"]
+
+        consensus = "【专家团队共识意见】\n\n"
+
+        # 专利代理人团队观点
+        if agent_opinions:
+            consensus += "📋 专利代理人团队观点：\n"
+            for i, op in enumerate(agent_opinions, 1):
+                consensus += f"{i}. {op.response[:200]}...\n"
+            consensus += "\n"
+
+        # 专利律师团队观点
+        if lawyer_opinions:
+            consensus += "⚖️ 专利律师团队观点：\n"
+            for i, op in enumerate(lawyer_opinions, 1):
+                consensus += f"{i}. {op.response[:200]}...\n"
+            consensus += "\n"
+
+        # 专利审查员团队观点
+        if examiner_opinions:
+            consensus += "🔍 专利审查员团队观点：\n"
+            for i, op in enumerate(examiner_opinions, 1):
+                consensus += f"{i}. {op.response[:200]}...\n"
+            consensus += "\n"
+
+        # 技术专家团队观点
+        if technical_opinions:
+            consensus += "🔬 技术专家团队观点：\n"
+            for i, op in enumerate(technical_opinions, 1):
+                consensus += f"{i}. {op.response[:200]}...\n"
+            consensus += "\n"
+
+        consensus += "【综合建议】\n"
+        consensus += "基于各领域专家的综合分析，建议您：\n"
+        consensus += "1. 立即启动专利申请程序，保护核心技术\n"
+        consensus += "2. 进行全面的专利检索和分析\n"
+        consensus += "3. 制定专业的专利布局策略\n"
+        consensus += "4. 建立完善的知识产权管理体系\n"
+
+        return consensus
+
+    async def _conduct_team_risk_assessment(self, opinions: List[ExpertConsultation]) -> Dict[str, Any]:
+        """进行团队风险评估"""
+        risks = {
+            "technical_risks": [],
+            "legal_risks": [],
+            "commercial_risks": [],
+            "timing_risks": [],
+            "overall_risk_level": "medium"
+        }
+
+        # 收集各专家提到的风险
+        for opinion in opinions:
+            if "风险" in opinion.response:
+                if opinion.expert_type == "agent":
+                    risks["commercial_risks"].append("专利布局风险")
+                elif opinion.expert_type == "lawyer":
+                    risks["legal_risks"].append("侵权风险")
+                elif opinion.expert_type == "examiner":
+                    risks["technical_risks"].append("授权风险")
+                elif opinion.expert_type == "technical":
+                    risks["technical_risks"].append("技术可行性风险")
+
+        # 评估整体风险等级
+        total_risks = sum(len(risks[key]) for key in ["technical_risks", "legal_risks", "commercial_risks", "timing_risks"])
+        if total_risks >= 4:
+            risks["overall_risk_level"] = "high"
+        elif total_risks >= 2:
+            risks["overall_risk_level"] = "medium"
+        else:
+            risks["overall_risk_level"] = "low"
+
+        return risks
+
+    async def _generate_team_recommendations(self, consensus: str, opinions: List[ExpertConsultation]) -> List[str]:
+        """生成团队建议"""
+        recommendations = []
+
+        # 基于共识和建议生成具体行动
+        recommendations.append("立即准备专利申请材料，确保技术方案得到充分保护")
+        recommendations.append("进行全面的现有技术检索，评估技术方案的新颖性和创造性")
+        recommendations.append("制定专业的权利要求布局，最大化专利保护范围")
+        recommendations.append("建立专利监测机制，及时掌握相关技术发展动态")
+
+        # 基于专家类型补充建议
+        has_agent = any(op.expert_type == "agent" for op in opinions)
+        has_lawyer = any(op.expert_type == "lawyer" for op in opinions)
+        has_examiner = any(op.expert_type == "examiner" for op in opinions)
+        has_technical = any(op.expert_type == "technical" for op in opinions)
+
+        if has_agent:
+            recommendations.append("咨询资深专利代理人，优化申请策略")
+        if has_lawyer:
+            recommendations.append("进行法律风险评估，避免未来纠纷")
+        if has_examiner:
+            recommendations.append("模拟审查过程，提前准备答复材料")
+        if has_technical:
+            recommendations.append("进行技术方案验证，确保可行性")
+
+        return recommendations
+
+    async def _determine_next_steps(self, recommendations: List[str], analysis_type: str) -> List[str]:
+        """确定下一步行动"""
+        next_steps = []
+
+        if analysis_type == "申请撰写":
+            next_steps = [
+                "完善技术交底材料",
+                "准备专利申请文件",
+                "提交专利申请",
+                "跟进审查进程"
+            ]
+        elif analysis_type == "侵权分析":
+            next_steps = [
+                "进行详细的权利要求对比",
+                "收集侵权证据",
+                "制定应对策略",
+                "考虑法律行动"
+            ]
+        elif analysis_type == "审查答复":
+            next_steps = [
+                "分析审查意见",
+                "准备答复材料",
+                "修改申请文件",
+                "提交答复意见"
+            ]
+        else:
+            next_steps = [
+                "执行专家团队建议",
+                "制定详细行动计划",
+                "分配执行责任",
+                "设定时间节点"
+            ]
+
+        return next_steps
+
+    async def _calculate_team_confidence(self, opinions: List[ExpertConsultation]) -> float:
+        """计算团队置信度"""
+        if not opinions:
+            return 0.0
+
+        # 加权平均置信度
+        weights = {
+            "agent": 0.3,
+            "lawyer": 0.25,
+            "examiner": 0.25,
+            "technical": 0.2
+        }
+
+        total_weighted_confidence = 0.0
+        total_weight = 0.0
+
+        for opinion in opinions:
+            weight = weights.get(opinion.expert_type, 0.1)
+            total_weighted_confidence += opinion.confidence * weight
+            total_weight += weight
+
+        if total_weight > 0:
+            return total_weighted_confidence / total_weight
+        else:
+            return 0.5
+
+    # 辅助方法
+    async def _load_expert_database(self):
+        """加载专家数据库"""
+        try:
+            with open(self.expert_database_path, 'r', encoding='utf-8') as f:
+                self.expert_database = json.load(f)
+            logger.info("✅ 专家数据库加载完成")
+        except Exception as e:
+            logger.error(f"❌ 专家数据库加载失败: {str(e)}")
+            self.expert_database = {}
+
+    async def _initialize_expert_instances(self):
+        """初始化专家实例"""
+        # 初始化专利代理人
+        if "patent_agents" in self.expert_database.get("experts", {}):
+            for agent in self.expert_database["experts"]["patent_agents"]:
+                self.agent_experts[agent["id"]] = agent
+
+        # 初始化专利律师
+        if "patent_lawyers" in self.expert_database.get("experts", {}):
+            for lawyer in self.expert_database["experts"]["patent_lawyers"]:
+                self.lawyer_experts[lawyer["id"]] = lawyer
+
+        # 初始化专利审查员
+        if "patent_examiners" in self.expert_database.get("experts", {}):
+            for examiner in self.expert_database["experts"]["patent_examiners"]:
+                self.examiner_experts[examiner["id"]] = examiner
+
+        # 初始化技术专家（按IPC分类）
+        if "technical_experts_by_ipc" in self.expert_database:
+            for ipc_section, data in self.expert_database["technical_experts_by_ipc"].items():
+                if isinstance(data, list):
+                    for item in data:
+                        expert = item["technical_expert"]
+                        self.technical_experts[expert["id"]] = expert
+                else:
+                    expert = data["technical_expert"]
+                    self.technical_experts[expert["id"]] = expert
+
+        logger.info(f"✅ 专家实例初始化完成: 代理人{len(self.agent_experts)}个, 律师{len(self.lawyer_experts)}个, 审查员{len(self.examiner_experts)}个, 技术专家{len(self.technical_experts)}个")
+
+    async def _build_team_composition_rules(self):
+        """构建团队组合规则"""
+        self.composition_rules = {
+            "application_writing": ["agent", "technical"],
+            "infringement_analysis": ["lawyer", "technical", "examiner"],
+            "examination_reply": ["agent", "examiner", "technical"],
+            "patent_strategy": ["agent", "lawyer", "technical"],
+            "risk_assessment": ["lawyer", "examiner", "agent"],
+            "technical_evaluation": ["technical", "examiner"]
+        }
+
+    async def _establish_consensus_mechanism(self):
+        """建立共识机制"""
+        self.consensus_mechanism = {
+            "voting_weight": {
+                "agent": 0.3,
+                "lawyer": 0.25,
+                "examiner": 0.25,
+                "technical": 0.2
+            },
+            "consensus_threshold": 0.7,
+            "dispute_resolution": "expert_lead_vote"
+        }
+
+    async def _select_best_agent(self, technology_field: str) -> Optional[Dict]:
+        """选择最佳专利代理人"""
+        best_agent = None
+        best_score = 0.0
+
+        for agent_id, agent in self.agent_experts.items():
+            score = 0.0
+            # 基于专业匹配度评分
+            if any(tech in str(agent["specialization"]) for tech in technology_field.split()):
+                score += 2.0
+            # 基于经验评分
+            score += min(agent.get("experience", 0) / 10, 2.0)
+            # 基于成功率评分
+            score += agent.get("success_rate", 0) * 2.0
+
+            if score > best_score:
+                best_score = score
+                best_agent = agent
+
+        return best_agent
+
+    async def _select_best_lawyer(self, technology_field: str) -> Optional[Dict]:
+        """选择最佳专利律师"""
+        best_lawyer = None
+        best_score = 0.0
+
+        for lawyer_id, lawyer in self.lawyer_experts.items():
+            score = 0.0
+            # 基于专业匹配度评分
+            if any(tech in str(lawyer["specialization"]) for tech in technology_field.split()):
+                score += 2.0
+            # 基于经验评分
+            score += min(lawyer.get("experience", 0) / 10, 2.0)
+            # 基于胜诉率评分
+            score += lawyer.get("win_rate", 0) * 2.0
+
+            if score > best_score:
+                best_score = score
+                best_lawyer = lawyer
+
+        return best_lawyer
+
+    async def _select_best_examiner(self, technology_field: str) -> Optional[Dict]:
+        """选择最佳专利审查员"""
+        best_examiner = None
+        best_score = 0.0
+
+        for examiner_id, examiner in self.examiner_experts.items():
+            score = 0.0
+            # 基于专业匹配度评分
+            if any(tech in str(examiner["expertise_areas"]) for tech in technology_field.split()):
+                score += 2.0
+            # 基于经验评分
+            score += min(examiner.get("experience", 0) / 10, 2.0)
+            # 基于审查数量评分
+            score += min(examiner.get("reviewed_applications", 0) / 1000, 2.0)
+
+            if score > best_score:
+                best_score = score
+                best_examiner = examiner
+
+        return best_examiner
+
+    async def _calculate_expert_confidence(self, expert: Dict[str, Any], response: str, description: str) -> float:
+        """计算专家响应置信度"""
+        base_confidence = 0.8
+
+        # 根据专家经验调整
+        experience_bonus = min(expert.get("experience", 0) / 30, 0.1)
+
+        # 根据专业匹配度调整
+        specialization = expert.get("specialization", [])
+        if isinstance(specialization, str):
+            specialization = [specialization]
+
+        match_bonus = 0.0
+        for spec in specialization:
+            if spec.lower() in description.lower():
+                match_bonus += 0.05
+
+        # 根据响应质量调整
+        response_quality = len(response) / 1000  # 简单的质量评估
+        quality_bonus = min(response_quality, 0.1)
+
+        total_confidence = base_confidence + experience_bonus + match_bonus + quality_bonus
+        return min(total_confidence, 1.0)
+
+    async def _generate_reasoning_process(self, expert: Dict[str, Any], description: str, response: str) -> str:
+        """生成推理过程"""
+        reasoning = f"专家{expert['name']}的推理过程：\n"
+        reasoning += "1. 分析技术方案的核心创新点\n"
+        reasoning += "2. 评估技术方案的专利前景\n"
+        reasoning += "3. 识别潜在的风险和挑战\n"
+        reasoning += "4. 提供专业的改进建议\n"
+        reasoning += "5. 制定下一步行动计划"
+        return reasoning
+
+    async def _get_expert_references(self, expert: Dict[str, Any]) -> List[str]:
+        """获取专家参考资料"""
+        references = []
+
+        if expert["type"] == "agent":
+            references.extend([
+                "《专利审查指南》",
+                "《专利法实施细则》",
+                "专利代理人执业规范"
+            ])
+        elif expert["type"] == "lawyer":
+            references.extend([
+                "《专利法》",
+                "《最高人民法院关于审理专利纠纷案件适用法律问题的规定》",
+                "《反不正当竞争法》"
+            ])
+        elif expert["type"] == "examiner":
+            references.extend([
+                "《专利审查指南》",
+                "《专利审查操作规程》",
+                "《审查标准手册》"
+            ])
+        elif expert["type"] == "technical":
+            references.extend([
+                "相关技术领域标准",
+                "行业技术发展报告",
+                "国际技术标准"
+            ])
+
+        return references
+
+    async def _record_analysis(self, analysis: ExpertTeamAnalysis):
+        """记录分析历史"""
+        self.consultation_history.append({
+            "analysis_id": analysis.analysis_id,
+            "timestamp": datetime.now().isoformat(),
+            "team_size": len(analysis.team_composition),
+            "confidence_score": analysis.confidence_score,
+            "analysis_time": analysis.analysis_time
+        })
+
+        # 保持历史记录在合理范围内
+        if len(self.consultation_history) > 100:
+            self.consultation_history = self.consultation_history[-100:]
+
+    async def get_expert_statistics(self) -> Dict[str, Any]:
+        """获取专家统计信息"""
+        return {
+            "total_agents": len(self.agent_experts),
+            "total_lawyers": len(self.lawyer_experts),
+            "total_examiners": len(self.examiner_experts),
+            "total_technical_experts": len(self.technical_experts),
+            "total_consultations": len(self.consultation_history),
+            "average_confidence": sum(h["confidence_score"] for h in self.consultation_history) / len(self.consultation_history) if self.consultation_history else 0
+        }
+
+    async def cleanup(self):
+        """清理系统资源"""
+        logger.info("🧹 顶级专利专家系统资源清理完成")
+
+# 导出主类
+__all__ = [
+    'TopPatentExpertSystem',
+    'ExpertConsultation',
+    'ExpertTeamAnalysis'
+]

@@ -1,0 +1,283 @@
+{
+  "customer_id": "ad6709d0-1852-46e7-9868-4937cd55e869",
+  "basic_info": {
+    "name": "王玉荣",
+    "type": "INDIVIDUAL",
+    "status": "formal_customer",
+    "business_type": "patent_services",
+    "contact_info": {
+      "phone": "13563072598",
+      "email": "",
+      "address": "山东省滨州市沾化区富源街道办事处便民服务中心",
+      "id_number": "372325197605080420"
+    }
+  },
+  "financial_status": {
+    "status": "paid",
+    "payment_stage": "fully_paid",
+    "total_amount": 4530,
+    "paid_amount": 4530,
+    "outstanding_amount": 0,
+    "payment_terms": "full_payment",
+    "last_payment": {
+      "date": "2025-12-10",
+      "amount": 4530,
+      "method": "unknown",
+      "status": "confirmed"
+    },
+    "payment_history": [
+      {
+        "date": "2025-12-10",
+        "amount": 4530,
+        "description": "2个实用新型专利费用（含代理费和官费）",
+        "status": "confirmed"
+      }
+    ]
+  },
+  "business_progress": {
+    "status": "in_progress",
+    "services": [
+      "实用新型专利申请",
+      "专利文件撰写",
+      "专利申请代理"
+    ],
+    "completion_percentage": "10%",
+    "blocked_by_payment": false,
+    "estimated_completion": "申请提交后6-8个月"
+  },
+  "patent_projects": [
+    {
+      "project_id": "wy_patent_001",
+      "title": "一种智能控制的新型温室大棚开窗通风装置",
+      "type": "utility_model",
+      "status": "preparation",
+      "innovation_points": [
+        "齿轮齿条联动系统，实现窗扇同步平稳开启，最大开启角度达75°",
+        "风雨自动感应保护，风速超过6级或检测到降雨时30秒内自动关闭",
+        "分段式通风控制，将屋面划分为3-5个独立控制区域进行分区精准调节",
+        "手动应急操作装置，配备手摇柄可在停电时操作"
+      ],
+      "technical_field": "农业设施工程（温室大棚环境调控）",
+      "main_components": [
+        "铝合金窗框",
+        "防滴露PC阳光板",
+        "减速电机",
+        "齿轮齿条传动机构",
+        "控制箱",
+        "传感器组（风速/雨水传感器）"
+      ],
+      "fee_details": {
+        "agency_fee": 1050,
+        "official_fee": 82.5,
+        "reduction": "费减备案",
+        "total": 1132.5
+      }
+    },
+    {
+      "project_id": "wy_patent_002",
+      "title": "便携式电动果树修剪采摘一体机",
+      "type": "utility_model",
+      "status": "preparation",
+      "innovation_points": [
+        "伸缩式作业臂，采用3节铝合金伸缩臂，作业范围覆盖2-5米",
+        "快换式刀具头，配备修剪刀、采摘爪、疏花疏果器三种工作头",
+        "电池快充系统，锂电池组单次续航4小时，支持2小时内快充",
+        "收集袋减震设计，配备软质收集袋和缓冲装置避免水果碰撞损伤"
+      ],
+      "technical_field": "园艺机械/农业作业工具",
+      "main_components": [
+        "伸缩臂",
+        "电机",
+        "传动齿轮箱",
+        "工作头（修剪/采摘/疏花组件）",
+        "锂电池",
+        "控制器",
+        "收集装置"
+      ],
+      "fee_details": {
+        "agency_fee": 1050,
+        "official_fee": 82.5,
+        "reduction": "费减备案",
+        "total": 1132.5
+      }
+    }
+  ],
+  "document_records": [
+    {
+      "document_name": "专利确认表.png",
+      "document_type": "confirmation_form",
+      "file_path": "/Users/xujian/工作/王玉荣实用新型2件/专利确认表.png",
+      "upload_date": "2025-12-10",
+      "description": "专利申请确认表，包含客户信息和项目确认",
+      "verified": true
+    },
+    {
+      "document_name": "专利选题.png",
+      "document_type": "technical_specification",
+      "file_path": "/Users/xujian/工作/王玉荣实用新型2件/专利选题.png",
+      "upload_date": "2025-12-10",
+      "description": "详细的技术方案和创新点说明",
+      "verified": true
+    }
+  ],
+  "payment_breakdown": {
+    "total_amount": 4530,
+    "agency_fees": {
+      "per_patent": 1050,
+      "total": 2100,
+      "description": "代理服务费"
+    },
+    "official_fees": {
+      "per_patent": 82.5,
+      "total": 165,
+      "description": "申请官费（已费减）",
+      "reduction_applied": true
+    },
+    "payment_status": {
+      "status": "fully_paid",
+      "paid_date": "2025-12-10",
+      "payment_method": "未知",
+      "confirmation": "客户确认已缴费"
+    }
+  },
+  "service_schedule": {
+    "current_stage": "紧急文件准备",
+    "priority_level": "CRITICAL",
+    "deadline_requirement": "元旦前必须完成申报",
+    "hard_deadline": "2025-12-31 23:59:59",
+    "expedited_workflow": true,
+    "next_steps": [
+      {
+        "step": 1,
+        "action": "🚨 紧急技术交底书完善",
+        "deadline": "2025-12-18",
+        "responsible": "专利工程师 + 客户经理",
+        "status": "urgent_pending",
+        "priority": "CRITICAL",
+        "notes": "48小时内必须完成，安排上门服务"
+      },
+      {
+        "step": 2,
+        "action": "🚨 快速专利检索",
+        "deadline": "2025-12-19",
+        "responsible": "检索分析师",
+        "status": "urgent_pending",
+        "priority": "CRITICAL",
+        "notes": "加班进行，确保检索质量"
+      },
+      {
+        "step": 3,
+        "action": "⚡ 申请文件并行撰写",
+        "deadline": "2025-12-25",
+        "responsible": "专利代理人团队",
+        "status": "urgent_pending",
+        "priority": "HIGH",
+        "notes": "2名代理人并行，主管全程跟进"
+      },
+      {
+        "step": 4,
+        "action": "⚡ 客户快速确认",
+        "deadline": "2025-12-28",
+        "responsible": "客户经理 + 代理人",
+        "status": "urgent_pending",
+        "priority": "HIGH",
+        "notes": "预约现场确认，视频备用"
+      },
+      {
+        "step": 5,
+        "action": "🚨 最终审核和提交",
+        "deadline": "2025-12-31",
+        "responsible": "主管 + 申请部",
+        "status": "urgent_pending",
+        "priority": "CRITICAL",
+        "notes": "跨年夜加班，预留全天缓冲"
+      }
+    ],
+    "resource_allocation": {
+      "team_priority": "最高优先级",
+      "special_arrangements": [
+        "主管亲自负责",
+        "加班费用已批准",
+        "跨部门协调支持",
+        "绿色通道处理"
+      ]
+    }
+  },
+  "contact_history": [
+    {
+      "date": "2025-12-10",
+      "type": "document_submission",
+      "purpose": "提交专利确认表和技术方案",
+      "status": "completed",
+      "notes": "客户确认2个实用新型专利项目，完成缴费4530元"
+    }
+  ],
+  "risk_assessment": {
+    "technical_risk": "low",
+    "patentability_risk": "medium",
+    "timeline_risk": "low",
+    "concerns": [
+      "需要进一步进行专利检索确定新颖性",
+      "技术方案需要进一步完善技术细节"
+    ],
+    "mitigation_strategies": [
+      "进行全面的专利检索分析",
+      "与客户深入沟通完善技术方案",
+      "准备充分的现有技术对比材料"
+    ]
+  },
+  "service_value_proposition": {
+    "patent_benefits": [
+      "技术创新保护",
+      "市场竞争优势",
+      "资产增值潜力",
+      "政府补贴可能性"
+    ],
+    "service_features": [
+      "专业专利代理团队",
+      "全程代理服务",
+      "进度实时追踪",
+      "费减备案支持"
+    ]
+  },
+  "success_metrics": {
+    "payment_received": true,
+    "payment_date": "2025-12-10",
+    "documents_collected": true,
+    "patent_applications_prepared": false,
+    "applications_submitted": false,
+    "patents_granted": false
+  },
+  "system_info": {
+    "created_by": "xiaonuo_hybrid_system",
+    "created_at": "2025-12-17 19:30:00",
+    "last_updated": "2025-12-17 19:30:00",
+    "database": "postgresql_yunpat",
+    "customer_id_short": "ad6709d0"
+  },
+  "action_items": [
+    {
+      "action": "整理技术交底书",
+      "deadline": "2025-12-20",
+      "priority": "high",
+      "responsible": "专利工程师",
+      "status": "pending"
+    },
+    {
+      "action": "进行专利检索",
+      "deadline": "2025-12-25",
+      "priority": "high",
+      "responsible": "检索分析师",
+      "status": "pending"
+    },
+    {
+      "action": "撰写申请文件",
+      "deadline": "2026-01-05",
+      "priority": "high",
+      "responsible": "专利代理人",
+      "status": "pending"
+    }
+  ],
+  "tags": ["正式客户", "实用新型", "已缴费", "温室大棚", "农业机械", "费减备案"],
+  "priority_score": 9
+}

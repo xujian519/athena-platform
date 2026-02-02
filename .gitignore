@@ -1,0 +1,279 @@
+# Python缓存文件
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# 分发 / 打包
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# 单元测试 / 覆盖率报告
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# 环境变量
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+PyPI
+
+# Pyre type checker
+.pyre/
+
+# macOS系统文件
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon必须以Tab结尾
+Icon
+
+# 缩略图
+._*
+
+# 文件夹配置
+.DS_Store
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows系统文件
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+# Windows链接
+*.lnk
+
+# IDE和编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 日志文件
+*.log
+logs/
+*.out
+
+# 运行时缓存
+.runtime/
+.cache/
+query_cache/
+
+# 临时文件
+*.tmp
+*.temp
+*.bak
+*~
+*.old
+
+# Node.js依赖
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 浏览器缓存
+.crawler_cache/
+.scrapy_cache/
+
+# 数据库文件
+*.sqlite
+*.sqlite3
+*.db
+
+# 备份文件
+*.backup
+*.bak
+*.old
+
+# 报告文件(保留最新，删除旧版本)
+*_report_*
+*_verification_report_*
+*_summary_*
+*_implementation_report_*
+*_technology_comparison_*
+*_analysis_*
+*_log_*
+
+# MCP服务器相关
+mcp-servers/*/node_modules/
+.mcp-pids/
+
+# PID文件
+*.pid
+*.lock
+
+# SSL证书
+*.pem
+*.key
+*.crt
+*.csr
+
+# 大文件
+*.tar.gz
+*.zip
+*.rar
+*.7z
+
+# 其他配置文件
+.env.local.json
+*.orig
+*.rej*.py[cod]
+*.pyo
+*.pyd
+temp/
+tmp/
+claude-code/
+.claude/
+claude_code/
+
+# Neo4j数据库文件
+data/neo4j/
+*.id-buffer.tmp.*
+
+# 数据目录 - 全部忽略
+data/vectors_qdrant/
+data/patents/
+data/legal/
+data/feedback/
+data/memory/
+data/support_data/
+data/clause_level_vectors/
+data/ai_papers/
+data/prometheus/
+
+# 历史系统数据
+history-24-system/
+*_report_*.json
+*_paragraphs.json
+*_chapters.json
+
+# 向量数据库
+qdrant/
+*.qdrant
+
+# 图数据库
+neo4j/
+
+# 生产环境
+production/
+*.pid
+*.lock
+
+# 模型文件 - 全部忽略（模型文件太大，不应该提交到git）
+models/converted/
+models/intent_recognition/
+models/modelscope/
+models/bge-*/
+models/chinese-*/
+models/roberta-*/
+models/hfl/
+
+# 模型文件扩展名
+*.pkl
+*.pth
+*.pt
+*.bin
+*.safetensors
+*.onnx
+*.onnx_data
+*.gguf
+*.ckpt
+
+# Prometheus数据
+data/prometheus/
+
+# 其他大文件和数据目录
+*.npy
+*.parquet
+*.feather

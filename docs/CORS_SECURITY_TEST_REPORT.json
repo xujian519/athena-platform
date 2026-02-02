@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-01-26T22:57:56.533705",
+  "summary": {
+    "total_files": 30939,
+    "safe_files": 26013,
+    "unsafe_files": 2,
+    "template_files": 76,
+    "test_files": 4848
+  },
+  "issues": [
+    {
+      "file": "scripts/quick_start.py",
+      "issue": "读取失败: [Errno 2] No such file or directory: '/Users/xujian/Athena工作平台/scripts/quick_start.py'"
+    },
+    {
+      "file": "scripts/athena.py",
+      "issue": "读取失败: [Errno 2] No such file or directory: '/Users/xujian/Athena工作平台/scripts/athena.py'"
+    }
+  ]
+}

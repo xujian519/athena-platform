@@ -1,0 +1,74 @@
+{
+  "test_time": "2025-12-18T10:28:44.395381",
+  "test_results": {
+    "connection": true,
+    "basic_queries": [],
+    "search_tests": [
+      {
+        "keyword": "人工智能",
+        "category": "热门技术",
+        "title_count": 10736,
+        "abstract_count": 29978,
+        "applicant_count": 5863,
+        "title_time": 25.716534,
+        "abstract_time": 68.796487,
+        "applicant_time": 42.62484
+      },
+      {
+        "keyword": "电解铝",
+        "category": "传统工业",
+        "title_count": 1084,
+        "abstract_count": 2328,
+        "applicant_count": 5,
+        "title_time": 26.594456,
+        "abstract_time": 70.642779,
+        "applicant_time": 40.697191
+      },
+      {
+        "keyword": "华为",
+        "category": "知名企业",
+        "title_count": 57,
+        "abstract_count": 331,
+        "applicant_count": 90325,
+        "title_time": 25.426891,
+        "abstract_time": 66.691605,
+        "applicant_time": 95.423726
+      },
+      {
+        "keyword": "汽车",
+        "category": "行业应用",
+        "title_count": 452514,
+        "abstract_count": 673839,
+        "applicant_count": 488324,
+        "title_time": 29.68745,
+        "abstract_time": 69.612132,
+        "applicant_time": 13.069302
+      },
+      {
+        "keyword": "医疗",
+        "category": "重要领域",
+        "title_count": 55563,
+        "abstract_count": 287118,
+        "applicant_count": 188493,
+        "title_time": 24.470499,
+        "abstract_time": 71.17419,
+        "applicant_time": 54.125531
+      }
+    ],
+    "performance_stats": {
+      "简单计数": 0.6016050000000001,
+      "条件计数": 0.04501533333333333,
+      "模糊搜索": 27.559974999999998,
+      "复合查询": 0.7504780000000001,
+      "分组统计": 0.6235313333333333
+    },
+    "sample_data": [],
+    "errors": []
+  },
+  "summary": {
+    "connection_status": true,
+    "search_tests_count": 5,
+    "performance_tests_count": 5,
+    "errors_count": 0
+  }
+}

@@ -1,0 +1,210 @@
+name: 测试CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    name: 运行测试套件
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.12", "3.13", "3.14"]
+
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: athena_test
+          POSTGRES_PASSWORD: athena_test_password_2024
+          POSTGRES_DB: athena_test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5433:5432
+
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6380:6379
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov pytest-asyncio pytest-mock
+          pip install redis numpy
+          pip install pydantic fastapi
+
+      - name: 代码质量检查
+        run: |
+          python -m py_compile tests/
+          echo "代码语法检查通过"
+
+      - name: 运行单元测试
+        env:
+          TEST_DATABASE_URL: postgresql://athena_test:athena_test_password_2024@localhost:5433/athena_test_db
+          TEST_REDIS_URL: redis://localhost:6380/15
+        run: |
+          pytest tests/unit/ -v --tb=short --cov=core --cov-report=xml --cov-report=term
+
+      - name: 运行核心测试
+        env:
+          TEST_DATABASE_URL: postgresql://athena_test:athena_test_password_2024@localhost:5433/athena_test_db
+          TEST_REDIS_URL: redis://localhost:6380/15
+        run: |
+          pytest tests/core/ -v --tb=short --cov=core --cov-report=xml --cov-append --cov-report=term
+
+      - name: 运行集成测试
+        env:
+          TEST_DATABASE_URL: postgresql://athena_test:athena_test_password_2024@localhost:5433/athena_test_db
+          TEST_REDIS_URL: redis://localhost:6380/15
+        run: |
+          pytest tests/integration/ -v --tb=short --cov=core --cov-append --cov-report=term
+
+      - name: 生成覆盖率报告
+        run: |
+          pytest tests/ --cov=core --cov-report=xml --cov-report=html --cov-report=term --no-cov-on-fail -q
+
+      - name: 上传覆盖率到Codecov
+        uses: codecov/codecov-action@v4
+        if: matrix.python-version == '3.14'
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+      - name: 归档测试报告
+        if: matrix.python-version == '3.14'
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            htmlcov/
+            coverage.xml
+
+      - name: 测试摘要
+        if: matrix.python-version == '3.14'
+        run: |
+          echo "## 测试结果摘要" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ 所有测试通过" >> $GITHUB_STEP_SUMMARY
+          pytest tests/ --co -q >> $GITHUB_STEP_SUMMARY || true
+
+  test-docker:
+    name: Docker环境测试
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 启动测试服务
+        run: |
+          docker-compose -f docker-compose.test.yml up -d postgres-test redis-test qdrant-test
+          echo "等待服务启动..."
+          sleep 30
+
+      - name: 检查服务状态
+        run: |
+          docker-compose -f docker-compose.test.yml ps
+
+      - name: 运行Docker测试
+        run: |
+          docker-compose -f docker-compose.test.yml exec -T postgres-test pg_isready -U athena_test || exit 1
+          docker-compose -f docker-compose.test.yml exec -T redis-test redis-cli ping || exit 1
+
+      - name: 运行测试套件
+        run: |
+          docker run --rm \
+            --network host \
+            -v $(pwd):/app \
+            -w /app \
+            python:3.14 \
+            sh -c "pip install pytest pytest-cov pytest-asyncio && pytest tests/ -v --tb=short"
+
+      - name: 清理
+        if: always()
+        run: |
+          docker-compose -f docker-compose.test.yml down -v
+
+  lint:
+    name: 代码质量检查
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: 安装lint工具
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff black mypy
+
+      - name: 运行Ruff检查
+        run: |
+          ruff check . --output-format=github || true
+
+      - name: 运行Black格式检查
+        run: |
+          black --check . || true
+
+      - name: 运行Mypy类型检查
+        run: |
+          mypy core/ --ignore-missing-imports --no-strict-optional || true
+
+  security-scan:
+    name: 安全扫描
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 运行Trivy漏洞扫描
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+        continue-on-error: true
+
+      - name: 上传扫描结果到GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'

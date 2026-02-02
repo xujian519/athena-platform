@@ -1,0 +1,156 @@
+{
+  "name": "科研合作知识图谱",
+  "description": "揭示科研人员、机构、论文和项目之间合作关系的知识图谱",
+  "domain": "scientific_collaboration",
+  "version": "1.0.0",
+  "created": "2025-12-14T21:05:36.942840",
+  "entity_types": {
+    "Researcher": {
+      "description": "科研人员",
+      "properties": [
+        "name",
+        "institution",
+        "field",
+        "h_index",
+        "publications",
+        "grants",
+        "collaborators"
+      ],
+      "example": {
+        "name": "李教授",
+        "institution": "清华大学",
+        "field": "人工智能",
+        "h_index": 85,
+        "publications": 200
+      }
+    },
+    "Institution": {
+      "description": "科研机构",
+      "properties": [
+        "name",
+        "type",
+        "rankings",
+        "research_areas",
+        "faculty_count",
+        "annual_budget"
+      ],
+      "example": {
+        "name": "清华大学",
+        "type": "综合性大学",
+        "rankings": {
+          "QS": 15,
+          "THE": 20
+        },
+        "research_areas": [
+          "AI",
+          "材料",
+          "能源"
+        ]
+      }
+    },
+    "Paper": {
+      "description": "学术论文",
+      "properties": [
+        "title",
+        "authors",
+        "venue",
+        "year",
+        "citations",
+        "doi",
+        "keywords"
+      ],
+      "example": {
+        "title": "Attention Is All You Need",
+        "authors": [
+          "Vaswani et al."
+        ],
+        "venue": "NeurIPS",
+        "year": 2017,
+        "citations": 50000
+      }
+    },
+    "ResearchProject": {
+      "description": "研究项目",
+      "properties": [
+        "title",
+        "funding_agency",
+        "budget",
+        "duration",
+        "participants",
+        "outcomes"
+      ],
+      "example": {
+        "title": "脑机接口关键技术研究",
+        "funding_agency": "国家自然科学基金",
+        "budget": "1000万元",
+        "duration": "2022-2025"
+      }
+    }
+  },
+  "relation_types": {
+    "CO_AUTHORS": {
+      "description": "合作作者",
+      "properties": [
+        "paper_count",
+        "frequency"
+      ]
+    },
+    "SUPERVISES": {
+      "description": "指导",
+      "properties": [
+        "relationship_type",
+        "duration"
+      ]
+    },
+    "AFFILIATED_WITH": {
+      "description": "隶属于",
+      "properties": [
+        "position",
+        "department"
+      ]
+    },
+    "FUNDS": {
+      "description": "资助",
+      "properties": [
+        "amount",
+        "requirements",
+        "duration"
+      ]
+    },
+    "COLLABORATES_ON": {
+      "description": "合作项目",
+      "properties": [
+        "project_type",
+        "role",
+        "contributions"
+      ]
+    }
+  },
+  "data_sources": {
+    "publication_databases": {
+      "type": "api_integration",
+      "sources": [
+        "IEEE Xplore",
+        "ACM Digital",
+        "PubMed"
+      ],
+      "access_method": "API"
+    },
+    "grant_databases": {
+      "type": "structured_data",
+      "path": "data/research/grants.json",
+      "format": "json"
+    },
+    "university_profiles": {
+      "type": "web_scraping",
+      "targets": [
+        "university_websites",
+        "faculty_pages"
+      ],
+      "extract_entities": [
+        "Researcher",
+        "Institution"
+      ]
+    }
+  }
+}

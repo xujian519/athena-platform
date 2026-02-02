@@ -1,0 +1,50 @@
+// 法律领域知识图谱导入脚本
+// Generated on 2025-12-14T21:05:36.942334
+
+// 1. 创建法律法规顶点
+law_law_patent_001 = g.addV('Law').property('id', 'law_patent_001')
+  .property('name', '中华人民共和国专利法')
+  .property('type', '法律')
+  .property('level', '国家级')
+  .property('issuing_authority', '全国人大常委会')
+;
+
+law_law_copyright_001 = g.addV('Law').property('id', 'law_copyright_001')
+  .property('name', '中华人民共和国著作权法')
+  .property('type', '法律')
+  .property('level', '国家级')
+  .property('issuing_authority', '全国人大常委会')
+;
+
+// 2. 创建案例顶点
+case_case_001 = g.addV('LegalCase').property('id', 'case_001')
+  .property('case_number', '(2021)京73民初1234号')
+  .property('case_name', '某科技公司专利侵权案')
+  .property('court', '北京知识产权法院')
+;
+
+// 3. 创建法律专家顶点
+expert_expert_001 = g.addV('LegalExpert').property('id', 'expert_001')
+  .property('name', '王法官')
+  .property('title', '高级法官')
+  .property('organization', '北京知识产权法院')
+  .property('specialization', '专利纠纷')
+;
+
+// 4. 创建关系边
+// 案例与法律的关系
+case_case_001.addE('REFERENCED_IN').to(law_law_patent_001)
+  .property('context', '专利侵权认定')
+  .property('importance', 'high')
+;
+
+case_case_001.addE('REFERENCED_IN').to(law_law_copyright_001)
+  .property('context', '专利侵权认定')
+  .property('importance', 'high')
+;
+
+// 专家与案例的关系
+case_case_001.addE('JUDGED_BY').to(expert_expert_001)
+  .property('role', '审理法官')
+;
+

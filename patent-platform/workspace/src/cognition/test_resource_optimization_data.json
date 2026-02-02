@@ -1,0 +1,715 @@
+{
+  "export_time": "2025-12-11T13:52:06.642512",
+  "resource_metrics": {
+    "cpu": [
+      {
+        "timestamp": "2025-12-11T13:51:21.422917",
+        "usage_percent": 28.3,
+        "absolute_value": 14,
+        "unit": "cores",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:24.430504",
+        "usage_percent": 9.0,
+        "absolute_value": 14,
+        "unit": "cores",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:27.434977",
+        "usage_percent": 11.6,
+        "absolute_value": 14,
+        "unit": "cores",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:30.445898",
+        "usage_percent": 15.3,
+        "absolute_value": 14,
+        "unit": "cores",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:33.464238",
+        "usage_percent": 95.0,
+        "absolute_value": 4.0,
+        "unit": "cores",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:33.464574",
+        "usage_percent": 18.8,
+        "absolute_value": 14,
+        "unit": "cores",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:36.500962",
+        "usage_percent": 14.6,
+        "absolute_value": 14,
+        "unit": "cores",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:39.538360",
+        "usage_percent": 13.9,
+        "absolute_value": 14,
+        "unit": "cores",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:42.575661",
+        "usage_percent": 12.3,
+        "absolute_value": 14,
+        "unit": "cores",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:45.586217",
+        "usage_percent": 10.6,
+        "absolute_value": 14,
+        "unit": "cores",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:48.597433",
+        "usage_percent": 6.6,
+        "absolute_value": 14,
+        "unit": "cores",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:51.607303",
+        "usage_percent": 18.9,
+        "absolute_value": 14,
+        "unit": "cores",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:54.610740",
+        "usage_percent": 7.8,
+        "absolute_value": 14,
+        "unit": "cores",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:57.620246",
+        "usage_percent": 7.8,
+        "absolute_value": 14,
+        "unit": "cores",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:52:00.628769",
+        "usage_percent": 16.4,
+        "absolute_value": 14,
+        "unit": "cores",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:52:03.634230",
+        "usage_percent": 11.2,
+        "absolute_value": 14,
+        "unit": "cores",
+        "additional_info": {}
+      }
+    ],
+    "memory": [
+      {
+        "timestamp": "2025-12-11T13:51:21.422917",
+        "usage_percent": 55.7,
+        "absolute_value": 20.058975219726562,
+        "unit": "GB",
+        "additional_info": {
+          "available": 21.24066162109375,
+          "total": 48.0
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:24.430504",
+        "usage_percent": 55.8,
+        "absolute_value": 20.069412231445312,
+        "unit": "GB",
+        "additional_info": {
+          "available": 21.22857666015625,
+          "total": 48.0
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:27.434977",
+        "usage_percent": 55.6,
+        "absolute_value": 20.014007568359375,
+        "unit": "GB",
+        "additional_info": {
+          "available": 21.290573120117188,
+          "total": 48.0
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:30.445898",
+        "usage_percent": 56.9,
+        "absolute_value": 20.6103515625,
+        "unit": "GB",
+        "additional_info": {
+          "available": 20.6865234375,
+          "total": 48.0
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:33.464574",
+        "usage_percent": 56.4,
+        "absolute_value": 20.37030029296875,
+        "unit": "GB",
+        "additional_info": {
+          "available": 20.922683715820312,
+          "total": 48.0
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:36.500962",
+        "usage_percent": 56.3,
+        "absolute_value": 20.301559448242188,
+        "unit": "GB",
+        "additional_info": {
+          "available": 20.999603271484375,
+          "total": 48.0
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:39.538360",
+        "usage_percent": 56.3,
+        "absolute_value": 20.315032958984375,
+        "unit": "GB",
+        "additional_info": {
+          "available": 20.984878540039062,
+          "total": 48.0
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:42.575661",
+        "usage_percent": 56.0,
+        "absolute_value": 20.1790771484375,
+        "unit": "GB",
+        "additional_info": {
+          "available": 21.116485595703125,
+          "total": 48.0
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:45.586217",
+        "usage_percent": 55.8,
+        "absolute_value": 20.085464477539062,
+        "unit": "GB",
+        "additional_info": {
+          "available": 21.209991455078125,
+          "total": 48.0
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:48.597433",
+        "usage_percent": 56.1,
+        "absolute_value": 20.223831176757812,
+        "unit": "GB",
+        "additional_info": {
+          "available": 21.073394775390625,
+          "total": 48.0
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:51.607303",
+        "usage_percent": 56.2,
+        "absolute_value": 20.27154541015625,
+        "unit": "GB",
+        "additional_info": {
+          "available": 21.02972412109375,
+          "total": 48.0
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:54.610740",
+        "usage_percent": 56.0,
+        "absolute_value": 20.200485229492188,
+        "unit": "GB",
+        "additional_info": {
+          "available": 21.09814453125,
+          "total": 48.0
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:57.620246",
+        "usage_percent": 55.9,
+        "absolute_value": 20.150650024414062,
+        "unit": "GB",
+        "additional_info": {
+          "available": 21.147293090820312,
+          "total": 48.0
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:52:00.628769",
+        "usage_percent": 56.6,
+        "absolute_value": 20.488143920898438,
+        "unit": "GB",
+        "additional_info": {
+          "available": 20.810897827148438,
+          "total": 48.0
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:52:03.634230",
+        "usage_percent": 56.3,
+        "absolute_value": 20.297683715820312,
+        "unit": "GB",
+        "additional_info": {
+          "available": 20.993423461914062,
+          "total": 48.0
+        }
+      }
+    ],
+    "disk": [
+      {
+        "timestamp": "2025-12-11T13:51:21.422917",
+        "usage_percent": 2.9,
+        "absolute_value": 11.350955963134766,
+        "unit": "GB",
+        "additional_info": {
+          "free": 382.2693061828613,
+          "total": 926.3517189025879
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:24.430504",
+        "usage_percent": 2.9,
+        "absolute_value": 11.350955963134766,
+        "unit": "GB",
+        "additional_info": {
+          "free": 382.2692756652832,
+          "total": 926.3517189025879
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:27.434977",
+        "usage_percent": 2.9,
+        "absolute_value": 11.350955963134766,
+        "unit": "GB",
+        "additional_info": {
+          "free": 382.26932525634766,
+          "total": 926.3517189025879
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:30.445898",
+        "usage_percent": 2.9,
+        "absolute_value": 11.350955963134766,
+        "unit": "GB",
+        "additional_info": {
+          "free": 382.26892471313477,
+          "total": 926.3517189025879
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:33.464574",
+        "usage_percent": 2.9,
+        "absolute_value": 11.350955963134766,
+        "unit": "GB",
+        "additional_info": {
+          "free": 382.26904678344727,
+          "total": 926.3517189025879
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:36.500962",
+        "usage_percent": 2.9,
+        "absolute_value": 11.350955963134766,
+        "unit": "GB",
+        "additional_info": {
+          "free": 382.2689514160156,
+          "total": 926.3517189025879
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:39.538360",
+        "usage_percent": 2.9,
+        "absolute_value": 11.350955963134766,
+        "unit": "GB",
+        "additional_info": {
+          "free": 382.26903915405273,
+          "total": 926.3517189025879
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:42.575661",
+        "usage_percent": 2.9,
+        "absolute_value": 11.350955963134766,
+        "unit": "GB",
+        "additional_info": {
+          "free": 382.2690658569336,
+          "total": 926.3517189025879
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:45.586217",
+        "usage_percent": 2.9,
+        "absolute_value": 11.350955963134766,
+        "unit": "GB",
+        "additional_info": {
+          "free": 382.2690544128418,
+          "total": 926.3517189025879
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:48.597433",
+        "usage_percent": 2.9,
+        "absolute_value": 11.350955963134766,
+        "unit": "GB",
+        "additional_info": {
+          "free": 382.2679977416992,
+          "total": 926.3517189025879
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:51.607303",
+        "usage_percent": 2.9,
+        "absolute_value": 11.350955963134766,
+        "unit": "GB",
+        "additional_info": {
+          "free": 382.26879119873047,
+          "total": 926.3517189025879
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:54.610740",
+        "usage_percent": 2.9,
+        "absolute_value": 11.350955963134766,
+        "unit": "GB",
+        "additional_info": {
+          "free": 382.26876068115234,
+          "total": 926.3517189025879
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:57.620246",
+        "usage_percent": 2.9,
+        "absolute_value": 11.350955963134766,
+        "unit": "GB",
+        "additional_info": {
+          "free": 382.268741607666,
+          "total": 926.3517189025879
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:52:00.628769",
+        "usage_percent": 2.9,
+        "absolute_value": 11.350955963134766,
+        "unit": "GB",
+        "additional_info": {
+          "free": 382.2685432434082,
+          "total": 926.3517189025879
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:52:03.634230",
+        "usage_percent": 2.9,
+        "absolute_value": 11.350955963134766,
+        "unit": "GB",
+        "additional_info": {
+          "free": 382.2685317993164,
+          "total": 926.3517189025879
+        }
+      }
+    ],
+    "network": [
+      {
+        "timestamp": "2025-12-11T13:51:21.422917",
+        "usage_percent": 0.0,
+        "absolute_value": 6419517440,
+        "unit": "bytes",
+        "additional_info": {
+          "bytes_sent": 4209723392,
+          "bytes_recv": 2209794048,
+          "packets_sent": 538144983,
+          "packets_recv": 537787636
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:24.430504",
+        "usage_percent": 0.0,
+        "absolute_value": 6419966976,
+        "unit": "bytes",
+        "additional_info": {
+          "bytes_sent": 4210115584,
+          "bytes_recv": 2209851392,
+          "packets_sent": 538145498,
+          "packets_recv": 537788065
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:27.434977",
+        "usage_percent": 0.0,
+        "absolute_value": 6420289536,
+        "unit": "bytes",
+        "additional_info": {
+          "bytes_sent": 4210356224,
+          "bytes_recv": 2209933312,
+          "packets_sent": 538145955,
+          "packets_recv": 537788559
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:30.445898",
+        "usage_percent": 0.0,
+        "absolute_value": 6420752384,
+        "unit": "bytes",
+        "additional_info": {
+          "bytes_sent": 4210738176,
+          "bytes_recv": 2210014208,
+          "packets_sent": 538146606,
+          "packets_recv": 537789180
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:33.464574",
+        "usage_percent": 0.0,
+        "absolute_value": 6421851136,
+        "unit": "bytes",
+        "additional_info": {
+          "bytes_sent": 4211748864,
+          "bytes_recv": 2210102272,
+          "packets_sent": 538147558,
+          "packets_recv": 537789631
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:36.500962",
+        "usage_percent": 0.0,
+        "absolute_value": 6422712320,
+        "unit": "bytes",
+        "additional_info": {
+          "bytes_sent": 4212521984,
+          "bytes_recv": 2210190336,
+          "packets_sent": 538148466,
+          "packets_recv": 537790255
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:39.538360",
+        "usage_percent": 0.0,
+        "absolute_value": 6423011328,
+        "unit": "bytes",
+        "additional_info": {
+          "bytes_sent": 4212759552,
+          "bytes_recv": 2210251776,
+          "packets_sent": 538148862,
+          "packets_recv": 537790676
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:42.575661",
+        "usage_percent": 0.0,
+        "absolute_value": 6423296000,
+        "unit": "bytes",
+        "additional_info": {
+          "bytes_sent": 4212986880,
+          "bytes_recv": 2210309120,
+          "packets_sent": 538149249,
+          "packets_recv": 537791106
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:45.586217",
+        "usage_percent": 0.0,
+        "absolute_value": 6423671808,
+        "unit": "bytes",
+        "additional_info": {
+          "bytes_sent": 4213292032,
+          "bytes_recv": 2210379776,
+          "packets_sent": 538149675,
+          "packets_recv": 537791526
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:48.597433",
+        "usage_percent": 0.0,
+        "absolute_value": 6424351744,
+        "unit": "bytes",
+        "additional_info": {
+          "bytes_sent": 4213917696,
+          "bytes_recv": 2210434048,
+          "packets_sent": 538150319,
+          "packets_recv": 537791925
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:51.607303",
+        "usage_percent": 0.0,
+        "absolute_value": 6425189376,
+        "unit": "bytes",
+        "additional_info": {
+          "bytes_sent": 4214676480,
+          "bytes_recv": 2210512896,
+          "packets_sent": 538151102,
+          "packets_recv": 537792426
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:54.610740",
+        "usage_percent": 0.0,
+        "absolute_value": 6426066944,
+        "unit": "bytes",
+        "additional_info": {
+          "bytes_sent": 4215463936,
+          "bytes_recv": 2210603008,
+          "packets_sent": 538151941,
+          "packets_recv": 537793093
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:51:57.620246",
+        "usage_percent": 0.0,
+        "absolute_value": 6426927104,
+        "unit": "bytes",
+        "additional_info": {
+          "bytes_sent": 4216244224,
+          "bytes_recv": 2210682880,
+          "packets_sent": 538152722,
+          "packets_recv": 537793744
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:52:00.628769",
+        "usage_percent": 0.0,
+        "absolute_value": 6428316672,
+        "unit": "bytes",
+        "additional_info": {
+          "bytes_sent": 4217562112,
+          "bytes_recv": 2210754560,
+          "packets_sent": 538153903,
+          "packets_recv": 537794257
+        }
+      },
+      {
+        "timestamp": "2025-12-11T13:52:03.634230",
+        "usage_percent": 0.0,
+        "absolute_value": 6428898304,
+        "unit": "bytes",
+        "additional_info": {
+          "bytes_sent": 4218073088,
+          "bytes_recv": 2210825216,
+          "packets_sent": 538154512,
+          "packets_recv": 537794750
+        }
+      }
+    ],
+    "gpu": [],
+    "cache": [
+      {
+        "timestamp": "2025-12-11T13:51:21.422917",
+        "usage_percent": 0.41717529296875,
+        "absolute_value": 0.41717529296875,
+        "unit": "percent",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:24.430504",
+        "usage_percent": 0.417938232421875,
+        "absolute_value": 0.417938232421875,
+        "unit": "percent",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:27.434977",
+        "usage_percent": 0.4180908203125,
+        "absolute_value": 0.4180908203125,
+        "unit": "percent",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:30.445898",
+        "usage_percent": 0.4180908203125,
+        "absolute_value": 0.4180908203125,
+        "unit": "percent",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:33.464574",
+        "usage_percent": 1.167144775390625,
+        "absolute_value": 1.167144775390625,
+        "unit": "percent",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:36.500962",
+        "usage_percent": 1.16790771484375,
+        "absolute_value": 1.16790771484375,
+        "unit": "percent",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:39.538360",
+        "usage_percent": 1.167755126953125,
+        "absolute_value": 1.167755126953125,
+        "unit": "percent",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:42.575661",
+        "usage_percent": 1.167144775390625,
+        "absolute_value": 1.167144775390625,
+        "unit": "percent",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:45.586217",
+        "usage_percent": 1.167144775390625,
+        "absolute_value": 1.167144775390625,
+        "unit": "percent",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:48.597433",
+        "usage_percent": 1.1676025390625,
+        "absolute_value": 1.1676025390625,
+        "unit": "percent",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:51.607303",
+        "usage_percent": 1.1676025390625,
+        "absolute_value": 1.1676025390625,
+        "unit": "percent",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:54.610740",
+        "usage_percent": 1.16790771484375,
+        "absolute_value": 1.16790771484375,
+        "unit": "percent",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:51:57.620246",
+        "usage_percent": 1.16790771484375,
+        "absolute_value": 1.16790771484375,
+        "unit": "percent",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:52:00.628769",
+        "usage_percent": 1.16790771484375,
+        "absolute_value": 1.16790771484375,
+        "unit": "percent",
+        "additional_info": {}
+      },
+      {
+        "timestamp": "2025-12-11T13:52:03.634230",
+        "usage_percent": 1.16790771484375,
+        "absolute_value": 1.16790771484375,
+        "unit": "percent",
+        "additional_info": {}
+      }
+    ]
+  },
+  "optimization_history": [
+    {
+      "timestamp": 

@@ -1,0 +1,285 @@
+{
+  "target_patent_extraction_workflow": {
+    "metadata": {
+      "version": "1.0",
+      "created_date": "2025-12-12",
+      "purpose": "目标专利权利要求书技术特征提取标准化流程",
+      "application_context": "作为所有技术比对、新颖性分析、创造性分析的预备步骤",
+      "workflow_description": "先提取目标专利技术特征 → 后续进行各种分析"
+    },
+
+    "workflow_definition": {
+      "step_1_target_patent_identification": {
+        "name": "目标专利识别",
+        "description": "确定待分析的目标专利",
+        "inputs": {
+          "patent_number": "专利号",
+          "application_number": "申请号",
+          "title": "专利标题",
+          "document_source": "文档来源（CNIPA/USPTO/EPO等）"
+        },
+        "outputs": {
+          "target_patent_id": "目标专利唯一标识",
+          "patent_basic_info": "专利基本信息"
+        }
+      },
+
+      "step_2_claims_collection": {
+        "name": "权利要求收集",
+        "description": "获取目标专利的所有权利要求",
+        "inputs": {
+          "target_patent_id": "目标专利ID",
+          "document_format": "文档格式（PDF/XML/HTML/TEXT）"
+        },
+        "process": {
+          "download_full_text": "下载权利要求书全文",
+          "parse_claims_structure": "解析权利要求结构",
+          "extract_independent_claims": "提取独立权利要求",
+          "extract_dependent_claims": "提取从属权利要求"
+        },
+        "outputs": {
+          "all_claims": "所有权利要求文本",
+          "independent_claims": "独立权利要求列表",
+          "dependent_claims": "从属权利要求列表"
+        }
+      },
+
+      "step_3_technical_feature_extraction": {
+        "name": "技术特征提取",
+        "description": "使用标准化模板提取技术特征",
+        "core_template": "enhanced_patent_claims_analysis_template.json",
+        "extraction_rules": {
+          "punctuation_based_splitting": {
+            "description": "基于标点符号分割",
+            "splitting_priority": ["。", "，", "：", "；"],
+            "rule_description": "按标点符号顺序分割，每个分割点代表一个技术特征"
+          },
+          "entity_recognition": {
+            "description": "实体识别规则",
+            "entity_types": ["部件", "组件", "材料", "位置", "参数", "结构"],
+            "reference_number_preservation": "保留所有附图标记"
+          },
+          "relationship_extraction": {
+            "description": "关系提取规则",
+            "relationship_types": [
+              "包含关系", "连接关系", "位置关系",
+              "固定关系", "接触关系", "尺寸关系"
+            ]
+          }
+        },
+        "outputs": {
+          "feature_extraction_result": "技术特征提取结果",
+          "extraction_statistics": "提取统计信息",
+          "quality_metrics": "质量指标"
+        }
+      },
+
+      "step_4_validation_and_quality_check": {
+        "name": "验证和质量检查",
+        "description": "确保提取结果的准确性和完整性",
+        "validation_rules": {
+          "feature_completeness": "检查是否遗漏技术特征",
+          "entity_consistency": "检查实体识别的一致性",
+          "relationship_validity": "检查关系的有效性",
+          "format_compliance": "检查格式是否符合标准"
+        },
+        "quality_metrics": {
+          "feature_coverage_rate": "特征覆盖率",
+          "entity_recognition_accuracy": "实体识别准确率",
+          "relationship_extraction_precision": "关系提取精确率",
+          "overall_quality_score": "总体质量评分"
+        }
+      },
+
+      "step_5_output_generation": {
+        "name": "输出生成",
+        "description": "生成标准化的目标专利分析结果",
+        "output_formats": {
+          "structured_json": "结构化JSON数据",
+          "feature_list": "技术特征清单",
+          "entity_relationship_diagram": "实体关系图谱",
+          "extraction_report": "提取分析报告"
+        },
+        "output_content": {
+          "target_patent_info": "目标专利基本信息",
+          "extracted_features": "提取的技术特征",
+          "identified_entities": "识别的实体",
+          "analyzed_relationships": "分析的关系",
+          "protection_scope_analysis": "保护范围分析"
+        }
+      }
+    },
+
+    "extraction_template_usage": {
+      "template_application": {
+        "applicable_documents": [
+          "发明权利要求书",
+          "实用新型权利要求书",
+          "PCT申请的权利要求书"
+        ],
+        "required_sections": {
+          "independent_claims": "独立权利要求（必须）",
+          "dependent_claims": "从属权利要求（建议）",
+          "reference_numbers": "附图标记（必须保留）"
+        },
+        "extraction_focus": {
+          "technical_features": "技术特征（核心）",
+          "structural_elements": "结构要素",
+          "functional_elements": "功能要素",
+          "numerical_parameters": "数值参数",
+          "material_specifications": "材料规格"
+        }
+      }
+    },
+
+    "integration_with_downstream_analysis": {
+      "novelty_analysis": {
+        "input_from_extraction": "技术特征列表、实体信息",
+        "preparation_for": "现有技术检索、特征对比",
+        "key_outputs_needed": [
+          "complete_feature_list",
+          "essential_features",
+          "distinguishing_features"
+        ]
+      },
+
+      "inventive_step_analysis": {
+        "input_from_extraction": "技术特征、实体关系",
+        "preparation_for": "最接近现有技术识别、非显而易见性判断",
+        "key_outputs_needed": [
+          "technical_solution_overview",
+          "feature_relationships",
+          "innovation_points"
+        ]
+      },
+
+      "infringement_analysis": {
+        "input_from_extraction": "完整技术特征分解",
+        "preparation_for": "被诉侵权技术对比、全面覆盖原则判断",
+        "key_outputs_needed": [
+          "all_technical_features",
+          "feature_hierarchy",
+          "essential_vs_optional_features"
+        ]
+      },
+
+      "fto_analysis": {
+        "input_from_extraction": "技术特征、保护范围",
+        "preparation_for": "侵权风险识别、规避设计",
+        "key_outputs_needed": [
+          "core_protected_features",
+          "protection_scope_boundaries",
+          "potential_workaround_areas"
+        ]
+      }
+    },
+
+    "standard_output_format": {
+      "target_patent_extraction_result": {
+        "patent_identification": {
+          "patent_number": "专利号",
+          "application_number": "申请号",
+          "title": "专利标题",
+          "application_date": "申请日",
+          "publication_date": "公开日"
+        },
+
+        "claims_overview": {
+          "total_claims_count": "权利要求总数",
+          "independent_claims_count": "独立权利要求数量",
+          "dependent_claims_count": "从属权利要求数量",
+          "main_claim_number": "主权利要求编号"
+        },
+
+        "feature_extraction_details": {
+          "extraction_method": "基于标点符号分割",
+          "punctuation_analysis": "标点符号统计",
+          "total_features_extracted": "提取的特征总数",
+          "feature_categorization": "特征分类统计"
+        },
+
+        "extracted_technical_features": {
+          "features_list": [
+            {
+              "feature_id": "特征唯一标识",
+              "sequence_number": "特征序号",
+              "feature_text": "特征原文",
+              "splitting_punctuation": "分割标点",
+              "feature_category": "特征分类",
+              "feature_importance": "特征重要性"
+            }
+          ],
+          "feature_statistics": {
+            "essential_features_count": "必要特征数",
+            "structural_features_count": "结构特征数",
+            "functional_features_count": "功能特征数"
+          }
+        },
+
+        "entity_analysis": {
+          "identified_entities": [
+            {
+              "entity_id": "实体ID",
+              "entity_name": "实体名称",
+              "entity_type": "实体类型",
+              "reference_number": "附图标记",
+              "related_features": "相关特征ID列表"
+            }
+          ],
+          "entity_relationships": [
+            {
+              "relationship_id": "关系ID",
+              "subject_entity": "主实体",
+              "object_entity": "客体实体",
+              "relationship_type": "关系类型",
+              "relationship_description": "关系描述"
+            }
+          ]
+        },
+
+        "downstream_analysis_ready": {
+          "ready_for_novelty_analysis": "是/否",
+          "ready_for_creativity_analysis": "是/否",
+          "ready_for_infringement_analysis": "是/否",
+          "ready_for_fto_analysis": "是/否"
+        }
+      }
+    },
+
+    "quality_control_guidelines": {
+      "accuracy_requirements": {
+        "feature_extraction_accuracy": "≥95%",
+        "entity_recognition_precision": "≥90%",
+        "relationship_identification_recall": "≥85%"
+      },
+
+      "completeness_requirements": {
+        "all_punctuation_points_covered": "所有标点分割点必须处理",
+        "all_reference_numbers_preserved": "所有附图标记必须保留",
+        "all_claims_analyzed": "所有权利要求必须分析"
+      },
+
+      "consistency_requirements": {
+        "terminology_consistency": "术语使用一致",
+        "format_standardization": "格式标准化",
+        "classification_consistency": "分类一致"
+      }
+    },
+
+    "implementation_tools": {
+      "primary_tool": "patent_claims_analyzer.py",
+      "supporting_tools": [
+        "patent_document_parser",
+        "entity_recognition_engine",
+        "relationship_analyzer",
+        "quality_validator"
+      ],
+      "integration_options": [
+        "standalone_execution",
+        "api_integration",
+        "batch_processing",
+        "workflow_orchestration"
+      ]
+    }
+  }
+}

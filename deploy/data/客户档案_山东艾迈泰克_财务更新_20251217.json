@@ -1,0 +1,171 @@
+{
+  "customer_id": "bdeec10e-2427-4c87-b091-caa782b1efe2",
+  "basic_info": {
+    "name": "山东艾迈泰克机械科技有限公司",
+    "type": "COMPANY",
+    "status": "formal_customer",
+    "business_type": "machinery_manufacturing",
+    "contact_info": {
+      "phone": "",
+      "email": "",
+      "address": ""
+    }
+  },
+  "financial_status": {
+    "status": "unpaid",
+    "payment_stage": "installment_due",
+    "total_amount": "待确认",
+    "paid_amount": 0,
+    "outstanding_amount": "全额",
+    "payment_terms": "待确认",
+    "last_payment": null,
+    "next_payment_due": "立即",
+    "payment_history": []
+  },
+  "business_progress": {
+    "status": "in_progress",
+    "services": [
+      "专利申请准备",
+      "技术文件整理",
+      "专利文件撰写"
+    ],
+    "completion_percentage": "40%",
+    "blocked_by_payment": true,
+    "estimated_completion": "费用付清后1-2周"
+  },
+  "payment_collection_plan": {
+    "immediate_actions": [
+      {
+        "action": "联系客户确认缴费",
+        "deadline": "2025-12-18 09:00",
+        "priority": "urgent",
+        "responsible": "财务团队",
+        "status": "pending"
+      }
+    ],
+    "payment_options": [
+      {
+        "option": "全款一次性支付",
+        "discount": "5%",
+        "advantages": "成本最低，处理简单"
+      },
+      {
+        "option": "分期付款",
+        "stages": [
+          {"stage": "首付", "percentage": 50, "due_date": "2025-12-20"},
+          {"stage": "进度款", "percentage": 30, "due_date": "2025-12-27"},
+          {"stage": "尾款", "percentage": 20, "due_date": "专利受理后"}
+        ],
+        "advantages": "缓解资金压力"
+      },
+      {
+        "option": "先服务后付款",
+        "conditions": "信用评估",
+        "advantages": "降低客户风险"
+      }
+    ],
+    "follow_up_schedule": [
+      {"date": "2025-12-18", "time": "09:00", "method": "phone", "purpose": "首次催缴"},
+      {"date": "2025-12-20", "time": "14:00", "method": "email", "purpose": "方案跟进"},
+      {"date": "2025-12-22", "time": "10:00", "method": "phone", "purpose": "最终确认"}
+    ]
+  },
+  "contact_history": [
+    {
+      "date": "2025-12-13",
+      "type": "initial_contact",
+      "purpose": "业务咨询",
+      "status": "completed"
+    },
+    {
+      "date": "2025-12-17",
+      "type": "financial_update",
+      "purpose": "财务状态更新",
+      "status": "updated"
+    }
+  ],
+  "risk_assessment": {
+    "payment_risk": "medium",
+    "concerns": [
+      "资金周转问题",
+      "对服务价值认知不足",
+      "内部审批流程复杂"
+    ],
+    "mitigation_strategies": [
+      "提供分期付款选择",
+      "展示服务价值案例",
+      "简化审批流程指导"
+    ]
+  },
+  "service_value_proposition": {
+    "patent_benefits": [
+      "技术保护",
+      "市场竞争优势",
+      "资产增值",
+      "政府补贴机会"
+    ],
+    "service_features": [
+      "专业团队",
+      "全程代理",
+      "进度实时追踪",
+      "成功率保证"
+    ]
+  },
+  "communication_templates": {
+    "initial_call": {
+      "subject": "关于专利申请费用的跟进",
+      "key_points": [
+        "确认付款进度和困难",
+        "提供灵活付款方案",
+        "强调服务价值",
+        "确定下一步时间表"
+      ]
+    },
+    "email_followup": {
+      "subject": "专利申请费用方案说明",
+      "attachments": [
+        "费用明细表",
+        "付款流程说明",
+        "服务价值说明"
+      ]
+    }
+  },
+  "success_metrics": {
+    "payment_received": false,
+    "payment_date": null,
+    "collection_timeframe": null,
+    "final_payment_status": "pending"
+  },
+  "system_info": {
+    "created_by": "xiaonuo_hybrid_system",
+    "created_at": "2025-12-13 06:44:19",
+    "last_updated": "2025-12-17 17:40:55",
+    "database": "postgresql_yunpat",
+    "customer_id_short": "bdeec10e"
+  },
+  "action_items": [
+    {
+      "action": "电话联系确认缴费",
+      "deadline": "2025-12-18 09:00",
+      "priority": "urgent",
+      "responsible": "财务团队",
+      "status": "pending"
+    },
+    {
+      "action": "准备付款方案",
+      "deadline": "2025-12-17 18:00",
+      "priority": "high",
+      "responsible": "业务团队",
+      "status": "pending"
+    },
+    {
+      "action": "发送费用明细",
+      "deadline": "2025-12-18 12:00",
+      "priority": "medium",
+      "responsible": "客服团队",
+      "status": "pending"
+    }
+  ],
+  "tags": ["催缴", "财务跟进", "山东艾迈泰克", "制造企业", "分期付款"],
+  "priority_score": 8
+}

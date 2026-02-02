@@ -1,0 +1,86 @@
+{
+  "task_planner": {
+    "create_plan": {
+      "max_time": 1.0,
+      "min_success_rate": 0.95,
+      "description": "创建执行计划的最大允许时间"
+    },
+    "execute_plan": {
+      "max_time": 2.0,
+      "min_success_rate": 0.90,
+      "description": "执行计划的最大允许时间"
+    },
+    "memory_usage": {
+      "max_mb": 50,
+      "description": "任务规划器的最大内存使用量（MB）"
+    }
+  },
+  "prompt_chain": {
+    "create_chain": {
+      "max_time": 0.5,
+      "min_success_rate": 0.95,
+      "description": "创建提示链的最大允许时间"
+    },
+    "execute_chain": {
+      "max_time": 3.0,
+      "min_success_rate": 0.85,
+      "description": "执行提示链的最大允许时间"
+    },
+    "memory_usage": {
+      "max_mb": 30,
+      "description": "提示链处理器的最大内存使用量（MB）"
+    }
+  },
+  "goal_manager": {
+    "create_goal": {
+      "max_time": 0.3,
+      "min_success_rate": 0.95,
+      "description": "创建目标的最大允许时间"
+    },
+    "update_progress": {
+      "max_time": 0.1,
+      "min_success_rate": 0.95,
+      "description": "更新进度的最大允许时间"
+    },
+    "memory_usage": {
+      "max_mb": 20,
+      "description": "目标管理器的最大内存使用量（MB）"
+    }
+  },
+  "agent_integrations": {
+    "response_time": {
+      "max_time": 1.5,
+      "min_success_rate": 0.90,
+      "description": "智能体响应的最大允许时间"
+    },
+    "concurrent_load": {
+      "max_time_per_request": 2.0,
+      "min_success_rate": 0.80,
+      "description": "并发负载下每个请求的最大允许时间"
+    },
+    "memory_usage": {
+      "max_mb": 100,
+      "description": "智能体集成的最大内存使用量（MB）"
+    }
+  },
+  "system_requirements": {
+    "total_memory_usage": {
+      "max_mb": 500,
+      "description": "整个系统的最大内存使用量（MB）"
+    },
+    "cpu_usage": {
+      "max_percent": 80,
+      "description": "最大CPU使用率（%）"
+    },
+    "response_time": {
+      "max_seconds": 3.0,
+      "description": "系统响应的最大允许时间"
+    }
+  },
+  "baseline_info": {
+    "created_date": "2025-12-17",
+    "system_version": "1.0.0",
+    "test_environment": "development",
+    "description": "智能体设计模式性能基准数据"
+  }
+}

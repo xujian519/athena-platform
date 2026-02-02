@@ -1,0 +1,124 @@
+{
+  "update_time": "2025-12-17 17:45",
+  "summary": {
+    "total_customers": 4,
+    "formal_customers": 4,
+    "test_customers": 0,
+    "pending_payment": 2,
+    "paid_customers": 2,
+    "in_progress_services": 3
+  },
+  "customer_details": [
+    {
+      "id": "d9a5213a-224d-4061-81c2-3947aff5cf37",
+      "name": "张国艳",
+      "phone": "13854382805",
+      "address": "滨州沾化富源街道",
+      "status": "formal_customer",
+      "type": "INDIVIDUAL",
+      "business_status": "new_inquiry",
+      "financial_status": "pending",
+      "priority": "medium",
+      "source": "temporary_inquiry",
+      "notes": "新客户，正在跟进专利服务需求",
+      "created_at": "2025-12-17 17:30:51",
+      "responsible_person": "傅玉秀",
+      "next_action": "2025-12-18 08:30 联系办理费减备案"
+    },
+    {
+      "id": "bdeec10e-2427-4c87-b091-caa782b1efe2",
+      "name": "山东艾迈泰克机械科技有限公司",
+      "phone": "",
+      "status": "formal_customer",
+      "type": "COMPANY",
+      "business_status": "in_progress",
+      "financial_status": "paid",
+      "priority": "normal",
+      "source": "excel_import",
+      "notes": "正常业务客户，手续办理中",
+      "created_at": "2025-12-13 06:44:19"
+    },
+    {
+      "name": "刘宝元",
+      "phone": "",
+      "status": "formal_customer",
+      "type": "UNKNOWN",
+      "business_status": "in_progress",
+      "financial_status": "pending_payment",
+      "priority": "high",
+      "notes": "手续在办理，费用未到账，需要催缴",
+      "payment_follow_up": "2025-12-18"
+    },
+    {
+      "name": "范文新",
+      "phone": "",
+      "status": "formal_customer",
+      "type": "UNKNOWN",
+      "business_status": "in_progress",
+      "financial_status": "pending_payment",
+      "priority": "high",
+      "notes": "手续在办理，费用未到账，需要催缴",
+      "payment_follow_up": "2025-12-18"
+    },
+    {
+      "name": "孙俊霞",
+      "phone": "",
+      "status": "formal_customer",
+      "type": "UNKNOWN",
+      "business_status": "patent_name_confirmed",
+      "financial_status": "paid",
+      "priority": "normal",
+      "notes": "专利名称已确定，费用已付清",
+      "patent_status": "ready_for_filing"
+    }
+  ],
+  "financial_summary": {
+    "paid_customers": 2,
+    "pending_payment": 2,
+    "total_revenue_confirmed": "已确认",
+    "outstanding_amount": "待确认",
+    "payment_collection_rate": "50%"
+  },
+  "business_summary": {
+    "new_inquiries": 1,
+    "in_progress_services": 3,
+    "patent_names_confirmed": 1,
+    "ready_for_filing": 1
+  },
+  "action_items": [
+    {
+      "task": "张国艳专利服务跟进",
+      "responsible": "傅玉秀",
+      "deadline": "2025-12-18 08:30",
+      "priority": "high",
+      "status": "pending"
+    },
+    {
+      "task": "刘宝元费用催缴",
+      "responsible": "待分配",
+      "deadline": "2025-12-18",
+      "priority": "high",
+      "status": "pending"
+    },
+    {
+      "task": "范文新费用催缴",
+      "responsible": "待分配",
+      "deadline": "2025-12-18",
+      "priority": "high",
+      "status": "pending"
+    },
+    {
+      "task": "孙俊霞专利申请准备",
+      "responsible": "待分配",
+      "deadline": "2025-12-19",
+      "priority": "normal",
+      "status": "pending"
+    }
+  ],
+  "system_status": {
+    "database": "postgresql",
+    "last_update": "2025-12-17 17:45:00",
+    "data_integrity": "good",
+    "backup_status": "automated"
+  }
+}

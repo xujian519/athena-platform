@@ -1,0 +1,302 @@
+{
+  "patent_entity_recognition_config": {
+    "version": "2.0",
+    "description": "专利领域智能实体识别配置",
+    "last_updated": "2025-12-12",
+
+    "entity_types": {
+      "technical_component": {
+        "description": "技术部件和组件",
+        "subtypes": {
+          "mechanical": "机械部件",
+          "electronic": "电子部件",
+          "chemical": "化学部件",
+          "optical": "光学部件",
+          "thermal": "热学部件"
+        },
+        "patterns": [
+          "([^，。；:]+?)本体",
+          "([^，。；:]+?]部件",
+          "([^，。；:]+?]组件",
+          "([^，。；:]+?]装置",
+          "([^，。；:]+?]设备",
+          "([^，。；:]+?]机构",
+          "([^，。；:]+?]单元",
+          "([^，。；:]+?]模块",
+          "([^，。；:]+?]器",
+          "([^，。；:]+?]机"
+        ],
+        "dev/examples": ["母线本体", "处理器", "传感器", "齿轮", "电路板", "控制器"]
+      },
+
+      "material": {
+        "description": "材料相关实体",
+        "subtypes": {
+          "metal": "金属材料",
+          "polymer": "高分子材料",
+          "ceramic": "陶瓷材料",
+          "composite": "复合材料",
+          "coating": "涂层材料"
+        },
+        "patterns": [
+          "([^，。；:]+?]板",
+          "([^，。；:]+?]层",
+          "([^，。；:]+?]膜",
+          "([^，。；:]+?]材料",
+          "([^，。；:]+?]合金",
+          "([^，。；:]+?]涂层",
+          "([^，。；:]+?]塑料",
+          "([^，。；:]+?]橡胶"
+        ],
+        "dev/examples": ["接触铜板", "铝合金", "不锈钢", "陶瓷涂层", "复合材料"]
+      },
+
+      "structural_feature": {
+        "description": "结构特征实体",
+        "subtypes": {
+          "opening": "开口特征",
+          "projection": "凸起特征",
+          "connection": "连接特征",
+          "sealing": "密封特征"
+        },
+        "patterns": [
+          "([^，。；:]+?]槽",
+          "([^，。；:]+?]孔",
+          "([^，。；:]+?]口",
+          "([^，。；:]+?]腔",
+          "([^，。；:]+?]缝",
+          "([^，。；:]+?]凸起",
+          "([^，。；:]+?]凹陷",
+          "([^，。；:]+?]台阶"
+        ],
+        "dev/examples": ["凹槽", "通孔", "安装孔", "密封槽", "定位台阶"]
+      },
+
+      "position": {
+        "description": "位置和方位实体",
+        "subtypes": {
+          "area": "区域位置",
+          "direction": "方向位置",
+          "reference": "参考位置"
+        },
+        "patterns": [
+          "([^，。；:]+?]区域",
+          "([^，。；:]+?]位置",
+          "([^，。；:]+?]部位",
+          "([^，。；:]+?]端部",
+          "([^，。；:]+?]侧部",
+          "([^，。；:]+?]中部",
+          "([^，。；:]+?]表面",
+          "([^，。；:]+?]顶部",
+          "([^，。；:]+?]底部"
+        ],
+        "dev/examples": ["接触区域", "安装位置", "固定端", "表面", "中心位置"]
+      },
+
+      "parameter": {
+        "description": "技术参数实体",
+        "subtypes": {
+          "dimension": "尺寸参数",
+          "physical": "物理参数",
+          "chemical": "化学参数",
+          "electrical": "电学参数"
+        },
+        "patterns": [
+          "(\\d+\\.?\\d*)\\s*mm",
+          "(\\d+\\.?\\d*)\\s*cm",
+          "(\\d+\\.?\\d*)\\s*μm",
+          "(\\d+\\.?\\d*)\\s*℃",
+          "(\\d+\\.?\\d*)\\s*MPa",
+          "(\\d+\\.?\\d*)\\s*V",
+          "(\\d+\\.?\\d*)\\s*A",
+          "(\\d+\\.?\\d*)\\s*Hz",
+          "(\\d+\\.?\\d*)\\s*%"
+        ],
+        "dev/examples": ["10mm", "25℃", "100MPa", "220V", "50Hz"]
+      },
+
+      "method": {
+        "description": "方法和工艺实体",
+        "subtypes": {
+          "manufacturing": "制造方法",
+          "processing": "处理方法",
+          "assembly": "装配方法",
+          "testing": "测试方法"
+        },
+        "patterns": [
+          "([^，。；:]+?]方法",
+          "([^，。；:]+?]工艺",
+          "([^，。；:]+?]步骤",
+          "([^，。；:]+?]过程",
+          "([^，。；:]+?]技术",
+          "([^，。；:]+?]手段"
+        ],
+        "dev/examples": ["热处理工艺", "焊接方法", "装配步骤", "测试过程"]
+      },
+
+      "function": {
+        "description": "功能作用实体",
+        "subtypes": {
+          "control": "控制功能",
+          "transmission": "传输功能",
+          "protection": "保护功能",
+          "optimization": "优化功能"
+        },
+        "patterns": [
+          "([^，。；:]+?]功能",
+          "([^，。；:]+?]作用",
+          "([^，。；:]+?]效果",
+          "([^，。；:]+?]能力"
+        ],
+        "dev/examples": ["控制功能", "传输作用", "保护效果", "优化能力"]
+      }
+    },
+
+    "domain_vocabularies": {
+      "electrical_patents": {
+        "components": [
+          "导体", "绝缘体", "半导体", "电阻", "电容", "电感", "二极管", "晶体管",
+          "集成电路", "芯片", "电路板", "母线", "电极", "触点", "接线端子", "开关"
+        ],
+        "materials": [
+          "铜", "铝", "银", "金", "导电胶", "绝缘材料", "环氧树脂", "硅橡胶"
+        ],
+        "parameters": [
+          "电压", "电流", "电阻", "功率", "频率", "电容", "电感", "阻抗"
+        ]
+      },
+      "mechanical_patents": {
+        "components": [
+          "齿轮", "轴", "轴承", "凸轮", "连杆", "曲轴", "活塞", "气缸", "弹簧",
+          "传动装置", "减速器", "联轴器", "离合器", "制动器"
+        ],
+        "materials": [
+          "钢", "铁", "铝合金", "钛合金", "碳纤维", "工程塑料", "陶瓷"
+        ],
+        "parameters": [
+          "扭矩", "转速", "压力", "行程", "间隙", "配合公差"
+        ]
+      },
+      "chemical_patents": {
+        "components": [
+          "反应器", "分离塔", "换热器", "泵", "阀门", "管道", "储罐", "混合器"
+        ],
+        "materials": [
+          "催化剂", "溶剂", "反应物", "产物", "添加剂", "稳定剂"
+        ],
+        "parameters": [
+          "温度", "压力", "浓度", "pH值", "流速", "转化率"
+        ]
+      }
+    },
+
+    "recognition_strategies": {
+      "rule_based": {
+        "enabled": true,
+        "priority": 1,
+        "description": "基于正则表达式的规则匹配",
+        "advantages": [
+          "快速准确",
+          "不需要训练数据",
+          "容易理解和修改"
+        ],
+        "limitations": [
+          "需要手工维护规则",
+          "难以处理新实体",
+          "对上下文理解有限"
+        ]
+      },
+
+      "statistical_ml": {
+        "enabled": false,
+        "priority": 2,
+        "models": ["CRF", "HMM", "SVM"],
+        "description": "基于统计机器学习的识别",
+        "advantages": [
+          "可以从数据中学习",
+          "处理一定的上下文",
+          "相对较好的泛化能力"
+        ],
+        "limitations": [
+          "需要大量标注数据",
+          "特征工程复杂",
+          "难以捕捉长距离依赖"
+        ]
+      },
+
+      "deep_learning": {
+        "enabled": true,
+        "priority": 3,
+        "models": ["BERT", "RoBERTa", "ChatGLM"],
+        "description": "基于深度学习的识别",
+        "advantages": [
+          "自动特征学习",
+          "强大的上下文理解",
+          "端到端训练"
+        ],
+        "limitations": [
+          "需要大量计算资源",
+          "训练时间长",
+          "黑盒模型"
+        ]
+      },
+
+      "llm_based": {
+        "enabled": true,
+        "priority": 4,
+        "models": ["ChatGPT", "Claude", "ChatGLM", "LLaMA"],
+        "description": "基于大语言模型的识别",
+        "advantages": [
+          "强大的语言理解",
+          "零样本或少样本学习",
+          "可解释性好"
+        ],
+        "limitations": [
+          "推理速度慢",
+          "成本高",
+          "API依赖"
+        ]
+      }
+    },
+
+    "fusion_strategy": {
+      "method": "weighted_voting",
+      "weights": {
+        "rule_based": 0.3,
+        "statistical_ml": 0.2,
+        "deep_learning": 0.3,
+        "llm_based": 0.2
+      },
+      "confidence_threshold": 0.6,
+      "conflict_resolution": "highest_confidence"
+    },
+
+    "evaluation_metrics": {
+      "precision": "精确率",
+      "recall": "召回率",
+      "f1_score": "F1分数",
+      "accuracy": "准确率"
+    },
+
+    "optimization_targets": {
+      "precision": "> 0.90",
+      "recall": "> 0.85",
+      "f1_score": "> 0.87",
+      "inference_time": "< 500ms per claim"
+    },
+
+    "training_data": {
+      "annotated_patents": "专利标注数据集路径",
+      "validation_split": 0.2,
+      "test_split": 0.1,
+      "data_augmentation": true
+    },
+
+    "infrastructure/infrastructure/deployment": {
+      "batch_size": 32,
+      "max_sequence_length": 512,
+      "model_cache": true,
+      "api_endpoint": "/api/v1/entity-recognition"
+    }
+  }
+}

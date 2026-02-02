@@ -1,0 +1,71 @@
+{
+  "start_time": "2025-12-17T04:10:43.906659",
+  "test_results": {
+    "core_components": {
+      "task_planner": {
+        "create_plan": {
+          "avg_ms": 0.02765809840639122,
+          "min_ms": 0.01087499549612403,
+          "max_ms": 0.1542919926578179,
+          "std_dev": 0.03898475426244675
+        },
+        "batch_10": {
+          "total_time_ms": 0.17779100744519383,
+          "avg_time_per_task_ms": 0.017779100744519383,
+          "memory_increase_mb": 0.0,
+          "throughput_tasks_per_sec": 56245.814362026256
+        },
+        "batch_50": {
+          "total_time_ms": 0.6238750065676868,
+          "avg_time_per_task_ms": 0.012477500131353736,
+          "memory_increase_mb": 0.03125,
+          "throughput_tasks_per_sec": 80144.25882370284
+        },
+        "batch_100": {
+          "total_time_ms": 1.1804999958258122,
+          "avg_time_per_task_ms": 0.011804999958258122,
+          "memory_increase_mb": 0.046875,
+          "throughput_tasks_per_sec": 84709.8689992333
+        },
+        "baseline_comparison": {
+          "baseline_max_ms": 1000.0,
+          "actual_max_ms": 0.1542919926578179,
+          "meets_baseline": true
+        }
+      },
+      "prompt_chain": {
+        "create_chain": {
+          "avg_ms": 0,
+          "min_ms": 0,
+          "max_ms": 0,
+          "std_dev": 0.0
+        },
+        "chain_length_3": {
+          "execution_time_ms": 3.787249996094033,
+          "avg_step_time_ms": 1.2624166653646778
+        },
+        "chain_length_5": {
+          "execution_time_ms": 6.092583003919572,
+          "avg_step_time_ms": 1.2185166007839143
+        },
+        "chain_length_10": {
+          "execution_time_ms": 12.401708998368122,
+          "avg_step_time_ms": 1.2401708998368122
+        }
+      },
+      "goal_manager": {
+        "create_goal": {
+          "avg_ms": 0.021796757355332375,
+          "min_ms": 0.016249992768280208,
+          "max_ms": 0.1019589981297031,
+          "std_dev": 0.017061589815386715
+        },
+        "update_progress": {
+          "avg_ms": 0.00034384793252684176,
+          "min_ms": 0.00016599369700998068,
+          "max_ms": 0.0024999899324029684,
+          "std_dev": 0.0005198581530296591
+        }
+      }
+    },
+    "agent_integrations": 

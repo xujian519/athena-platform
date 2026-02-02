@@ -1,0 +1,53 @@
+{
+  "model_comparison": {
+    "original_model": {
+      "name": "sentence-transformers/all-MiniLM-L6-v2",
+      "dimension": 384,
+      "language_support": "多语言 (通用)",
+      "specialization": "通用语义理解",
+      "chinese_optimization": "基础支持",
+      "file_size_mb": 90
+    },
+    "chinese_patent_model": {
+      "name": "shibing624/text2vec-base-chinese",
+      "dimension": 768,
+      "language_support": "中文 (专门优化)",
+      "specialization": "中文文本理解、专利领域",
+      "chinese_optimization": "深度优化",
+      "file_size_mb": 410,
+      "advantages": [
+        "专门针对中文文本优化",
+        "在中文相似度计算任务上表现优异",
+        "支持专利、法律等专业领域",
+        "更丰富的语义表示 (768维向量)",
+        "中文语义理解能力强"
+      ],
+      "expected_improvements": [
+        "中文专利检索准确率提升30%+",
+        "语义相关性判断更准确",
+        "专利术语理解更深入",
+        "跨句语义关联更紧密"
+      ]
+    }
+  },
+  "update_info": {
+    "update_timestamp": "2025-12-01T16:30:00Z",
+    "update_reason": "提升中文专利检索质量",
+    "model_changed": true,
+    "requires_reindex": true,
+    "expected_downtime": "5-10分钟"
+  },
+  "performance_expectations": {
+    "accuracy_improvement": "30%+",
+    "semantic_understanding": "显著提升",
+    "chinese_text_processing": "大幅优化",
+    "patent_domain_knowledge": "增强理解",
+    "response_time_impact": "轻微增加 (由于768维向量)"
+  },
+  "next_steps": [
+    "重新构建专利索引以使用新模型",
+    "测试检索效果验证改进",
+    "监控服务性能表现",
+    "收集用户反馈进行调优"
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "mcpServers": {
+    "gaode-maps": {
+      "command": "python3",
+      "args": [
+        "-m",
+        "amap_mcp_server.server"
+      ],
+      "cwd": "/Users/xujian/Athena工作平台/amap-mcp-server",
+      "env": {
+        "AMAP_API_KEY": "6e77ee0ef334ad03ba3f766c991f0d7",
+        "AMAP_SECRET_KEY": "",
+        "MCP_LOG_LEVEL": "INFO",
+        "AMAP_CACHE_ENABLED": "true",
+        "AMAP_RATE_LIMIT_RPM": "100",
+        "AMAP_RATE_LIMIT_RPS": "2"
+      }
+    }
+  },
+  "description": "高德地图MCP服务器 - 提供地理编码、POI搜索、路径规划等地理空间智能服务",
+  "version": "1.0.0",
+  "tools": [
+    {
+      "name": "gaode_geocode",
+      "description": "地理编码服务：地址与坐标的相互转换",
+      "examples": [
+        {
+          "description": "地址转坐标",
+          "arguments": {
+            "operation": "geocode",
+            "address": "北京市海淀区中关村",
+            "city": "北京"
+          }
+        },
+        {
+          "description": "坐标转地址",
+          "arguments": {
+            "operation": "reverse_geocode",
+            "location": "116.397428,39.90923",
+            "radius": 1000
+          }
+        }
+      ]
+    },
+    {
+      "name": "gaode_poi_search",
+      "description": "POI搜索服务：搜索兴趣点信息",
+      "examples": [
+        {
+          "description": "搜索周边餐厅",
+          "arguments": {
+            "search_type": "around",
+            "keywords": "餐厅",
+            "location": "116.397428,39.90923",
+            "radius": 1000
+          }
+        },
+        {
+          "description": "关键字搜索",
+          "arguments": {
+            "search_type": "text",
+            "keywords": "医院",
+            "city": "北京",
+            "page": 1
+          }
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "integration": {
+      "note": "此MCP服务器需要您在高德开放平台申请有效的API密钥",
+      "api_url": "https://lbs.amap.com/dev/",
+      "services": [
+        "地理编码服务",
+        "逆地理编码服务",
+        "搜索POI服务"
+      ]
+    },
+    "troubleshooting": {
+      "common_issues": [
+        {
+          "issue": "INVALID_USER_KEY",
+          "solution": "请检查API密钥是否正确，是否已在高德开放平台创建应用并获取密钥"
+        },
+        {
+          "issue": "INSUFFICIENT_PRIVILEGES",
+          "solution": "请确保您的API密钥已开通相应的服务权限"
+        }
+      ]
+    }
+  }
+}

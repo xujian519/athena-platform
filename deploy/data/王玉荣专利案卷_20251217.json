@@ -1,0 +1,335 @@
+{
+  "batch_id": "wy_patent_batch_001",
+  "customer_info": {
+    "customer_id": "ad6709d0-1852-46e7-9868-4937cd55e869",
+    "customer_name": "王玉荣",
+    "contact_phone": "13563072598",
+    "address": "山东省滨州市沾化区富源街道办事处便民服务中心",
+    "id_number": "372325197605080420"
+  },
+  "batch_info": {
+    "batch_title": "王玉荣实用新型专利申请（2件）",
+    "batch_type": "utility_model_patents",
+    "submission_date": "2025-12-10",
+    "total_patents": 2,
+    "total_fee": 4530,
+    "payment_status": "fully_paid",
+    "payment_date": "2025-12-10",
+    "fee_reduction_applied": true,
+    "current_stage": "preparation",
+    "estimated_filing_date": "2026-01-15"
+  },
+  "patent_cases": [
+    {
+      "case_id": "wy_case_001",
+      "case_number": "TBD",
+      "title": "一种智能控制的新型温室大棚开窗通风装置",
+      "patent_type": "utility_model",
+      "application_field": "农业设施工程",
+      "technical_field": "温室大棚环境调控",
+
+      "technical_solution": {
+        "background": "传统温室大棚通风系统存在自动化程度低、响应速度慢、无法根据天气条件自动调节等问题",
+        "main_innovation_points": [
+          {
+            "innovation": "齿轮齿条联动系统",
+            "description": "采用双排齿轮齿条设计，实现窗扇同步平稳开启，最大开启角度达75°",
+            "advantages": "提高开启平稳性，增大通风面积，降低能耗"
+          },
+          {
+            "innovation": "风雨自动感应保护",
+            "description": "配备风速传感器和雨水传感器，当风速超过6级或检测到降雨时，30秒内自动关闭窗户",
+            "advantages": "保护温室结构，避免作物受损，提高安全性"
+          },
+          {
+            "innovation": "分段式通风控制",
+            "description": "将屋面划分为3-5个独立控制区域，可根据不同作物对通风需求的差异进行分区精准调节",
+            "advantages": "满足不同作物需求，提高通风效率，降低能耗"
+          },
+          {
+            "innovation": "手动应急操作装置",
+            "description": "配备手摇柄，在停电或控制系统故障时可通过手动方式开启/关闭窗户",
+            "advantages": "提高系统可靠性，确保紧急情况下正常运行"
+          }
+        ],
+        "main_components": [
+          "铝合金窗框",
+          "防滴露PC阳光板",
+          "减速电机",
+          "齿轮齿条传动机构",
+          "控制箱",
+          "风速传感器",
+          "雨水传感器",
+          "手摇柄应急装置"
+        ]
+      },
+
+      "application_status": {
+        "current_stage": "preparation",
+        "progress": 15,
+        "key_milestones": [
+          {
+            "milestone": "技术交底",
+            "status": "completed",
+            "completion_date": "2025-12-10"
+          },
+          {
+            "milestone": "专利检索",
+            "status": "pending",
+            "planned_date": "2025-12-25"
+          },
+          {
+            "milestone": "申请文件撰写",
+            "status": "pending",
+            "planned_date": "2026-01-05"
+          },
+          {
+            "milestone": "申请提交",
+            "status": "pending",
+            "planned_date": "2026-01-15"
+          }
+        ]
+      },
+
+      "fee_details": {
+        "agency_fee": 1050,
+        "official_fee": 82.5,
+        "reduction": "费减备案",
+        "total": 1132.5,
+        "payment_status": "paid",
+        "payment_date": "2025-12-10"
+      },
+
+      "documents": [
+        {
+          "document_name": "专利确认表.png",
+          "document_type": "confirmation_form",
+          "file_path": "/Users/xujian/工作/王玉荣实用新型2件/专利确认表.png",
+          "upload_date": "2025-12-10"
+        },
+        {
+          "document_name": "技术方案说明.png",
+          "document_type": "technical_specification",
+          "file_path": "/Users/xujian/工作/王玉荣实用新型2件/专利选题.png",
+          "upload_date": "2025-12-10"
+        }
+      ],
+
+      "inventor_info": {
+        "name": "王玉荣",
+        "id_number": "372325197605080420",
+        "address": "山东省滨州市沾化区富源街道办事处便民服务中心"
+      },
+
+      "priority_analysis": {
+        "novelty_assessment": "medium",
+        "inventive_step": "medium",
+        "industrial_applicability": "high",
+        "estimated_success_rate": "75%",
+        "recommended_strategy": "重点保护核心控制系统的智能化特点"
+      }
+    },
+
+    {
+      "case_id": "wy_case_002",
+      "case_number": "TBD",
+      "title": "便携式电动果树修剪采摘一体机",
+      "patent_type": "utility_model",
+      "application_field": "园艺机械",
+      "technical_field": "农业作业工具",
+
+      "technical_solution": {
+        "background": "传统果树修剪和采摘工具功能单一，需要携带多种工具，工作效率低，劳动强度大",
+        "main_innovation_points": [
+          {
+            "innovation": "伸缩式作业臂",
+            "description": "采用3节铝合金伸缩臂，作业范围覆盖2-5米，可灵活调节高度和角度",
+            "advantages": "扩大作业范围，适应不同高度的果树，提高工作效率"
+          },
+          {
+            "innovation": "快换式刀具头",
+            "description": "配备修剪刀、采摘爪、疏花疏果器三种工作头，更换时间不超过30秒",
+            "advantages": "一机多用，快速切换功能，减少工具携带"
+          },
+          {
+            "innovation": "电池快充系统",
+            "description": "使用锂电池组，单次续航4小时，支持快充模式（2小时内充满电）",
+            "advantages": "延长工作时间，减少充电等待，提高使用便利性"
+          },
+          {
+            "innovation": "收集袋减震设计",
+            "description": "配备软质收集袋和缓冲装置，有效避免采摘过程中水果碰撞损伤",
+            "advantages": "保护果实品质，减少经济损失"
+          }
+        ],
+        "main_components": [
+          "伸缩臂（3节铝合金）",
+          "电机",
+          "传动齿轮箱",
+          "工作头快换装置",
+          "修剪刀组件",
+          "采摘爪组件",
+          "疏花疏果器组件",
+          "锂电池组",
+          "快充控制器",
+          "软质收集袋",
+          "缓冲减震装置"
+        ]
+      },
+
+      "application_status": {
+        "current_stage": "preparation",
+        "progress": 15,
+        "key_milestones": [
+          {
+            "milestone": "技术交底",
+            "status": "completed",
+            "completion_date": "2025-12-10"
+          },
+          {
+            "milestone": "专利检索",
+            "status": "pending",
+            "planned_date": "2025-12-25"
+          },
+          {
+            "milestone": "申请文件撰写",
+            "status": "pending",
+            "planned_date": "2026-01-05"
+          },
+          {
+            "milestone": "申请提交",
+            "status": "pending",
+            "planned_date": "2026-01-15"
+          }
+        ]
+      },
+
+      "fee_details": {
+        "agency_fee": 1050,
+        "official_fee": 82.5,
+        "reduction": "费减备案",
+        "total": 1132.5,
+        "payment_status": "paid",
+        "payment_date": "2025-12-10"
+      },
+
+      "documents": [
+        {
+          "document_name": "专利确认表.png",
+          "document_type": "confirmation_form",
+          "file_path": "/Users/xujian/工作/王玉荣实用新型2件/专利确认表.png",
+          "upload_date": "2025-12-10"
+        },
+        {
+          "document_name": "技术方案说明.png",
+          "document_type": "technical_specification",
+          "file_path": "/Users/xujian/工作/王玉荣实用新型2件/专利选题.png",
+          "upload_date": "2025-12-10"
+        }
+      ],
+
+      "inventor_info": {
+        "name": "王玉荣",
+        "id_number": "372325197605080420",
+        "address": "山东省滨州市沾化区富源街道办事处便民服务中心"
+      },
+
+      "priority_analysis": {
+        "novelty_assessment": "medium",
+        "inventive_step": "medium",
+        "industrial_applicability": "high",
+        "estimated_success_rate": "80%",
+        "recommended_strategy": "强调多功能集成和便携式设计的创新性"
+      }
+    }
+  ],
+
+  "batch_management": {
+    "responsible_team": {
+      "patent_attorney": "待分配",
+      "technical_analyst": "待分配",
+      "search_specialist": "待分配",
+      "case_manager": "系统"
+    },
+
+    "workflow": {
+      "current_step": "技术交底资料整理",
+      "next_step": "专利检索分析",
+      "critical_path": [
+        "技术交底完善",
+        "专利检索",
+        "可专利性分析",
+        "申请文件撰写",
+        "客户确认",
+        "正式提交"
+      ]
+    },
+
+    "quality_control": {
+      "review_checkpoints": [
+        "技术方案完整性检查",
+        "检索结果分析",
+        "权利要求书审核",
+        "说明书审核",
+        "附图审核"
+      ],
+      "approval_workflow": "代理人审核 -> 主管审批 -> 客户确认 -> 提交申请"
+    }
+  },
+
+  "risk_management": {
+    "identified_risks": [
+      {
+        "risk": "专利检索发现高度相似的现有技术",
+        "probability": "medium",
+        "impact": "high",
+        "mitigation": "提前进行详细检索，准备替代方案"
+      },
+      {
+        "risk": "技术方案描述不够充分",
+        "probability": "low",
+        "impact": "medium",
+        "mitigation": "与客户深入沟通，完善技术细节"
+      }
+    ],
+    "contingency_plans": [
+      "如检索发现问题，及时与客户沟通调整技术方案",
+      "准备多个权利要求版本，提高授权可能性"
+    ]
+  },
+
+  "system_info": {
+    "created_by": "xiaonuo_hybrid_system",
+    "created_at": "2025-12-17 19:35:00",
+    "last_updated": "2025-12-17 19:35:00",
+    "database": "postgresql_yunpat",
+    "customer_id_short": "ad6709d0"
+  },
+
+  "follow_up_actions": [
+    {
+      "action": "联系客户完善技术交底书",
+      "deadline": "2025-12-20",
+      "priority": "high",
+      "responsible": "专利工程师",
+      "status": "pending"
+    },
+    {
+      "action": "进行专利检索分析",
+      "deadline": "2025-12-25",
+      "priority": "high",
+      "responsible": "检索分析师",
+      "status": "pending"
+    },
+    {
+      "action": "可专利性评估报告",
+      "deadline": "2025-12-28",
+      "priority": "medium",
+      "responsible": "专利代理人",
+      "status": "pending"
+    }
+  ],
+
+  "tags": ["实用新型", "温室大棚", "农业机械", "已缴费", "费减备案", "智能控制", "多功能工具"],
+  "batch_priority_score": 9
+}

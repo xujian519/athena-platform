@@ -1,0 +1,271 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+NebulaGraph图数据库客户端
+NebulaGraph Graph Database Client
+
+修复后的NebulaGraph Python客户端，提供简洁的API用于连接和操作NebulaGraph
+
+作者: 小诺·双鱼公主
+创建时间: 2025-12-24
+版本: v1.0.0-fixed
+"""
+
+import logging
+from typing import List, Dict, Any, Optional, Tuple
+from dataclasses import dataclass
+
+# 修复后的正确导入方式
+from nebula3.gclient.net.SessionPool import SessionPool
+from nebula3.gclient.net.Connection import Connection
+from nebula3.Config import SessionPoolConfig
+from core.config.secure_config import get_config
+config = get_config()
+
+
+logger = logging.getLogger(__name__)
+
+
+@dataclass
+class NebulaGraphConfig:
+    """NebulaGraph连接配置"""
+    host: str = "127.0.0.1"
+    port: int = 9669
+    username: str = "root"
+    password: str = "nebula"  # NebulaGraph默认密码
+    space_name: str = "patent_kg"
+    pool_size: int = 10
+
+
+class NebulaGraphClient:
+    """
+    NebulaGraph图数据库客户端
+
+    使用SessionPool进行连接管理，支持执行nGQL查询
+    """
+
+    def __init__(
+        self,
+        config: Optional[NebulaGraphConfig] = None,
+        **kwargs
+    ):
+        """
+        初始化NebulaGraph客户端
+
+        Args:
+            config: NebulaGraph配置对象
+            **kwargs: 直接配置参数（优先级高于config）
+        """
+        if config:
+            self.config = config
+        else:
+            self.config = NebulaGraphConfig(**kwargs)
+
+        # 更新配置（如果有kwargs传入）
+        for key, value in kwargs.items():
+            if hasattr(self.config, key):
+                setattr(self.config, key, value)
+
+        self._pool: Optional[SessionPool] = None
+        self._connected = False
+
+        logger.info(f"🔗 NebulaGraph客户端初始化: {self.config.host}:{self.config.port}")
+
+    def connect(self) -> bool:
+        """
+        连接到NebulaGraph
+
+        Returns:
+            连接是否成功
+        """
+        try:
+            # 创建SessionPool
+            self._pool = SessionPool(
+                username=self.config.username,
+                password=self.config.password,
+                space_name=self.config.space_name,
+                addresses=[(self.config.host, self.config.port)]
+            )
+
+            # 配置连接池
+            pool_config = SessionPoolConfig()
+            pool_config.max_connection_pool_size = self.config.pool_size
+
+            # 初始化连接
+            init_result = self._pool.init(pool_config)
+
+            if init_result:
+                self._connected = True
+                logger.info(f"✅ NebulaGraph连接成功: {self.config.space_name}")
+                return True
+            else:
+                logger.error(f"❌ NebulaGraph连接失败: init返回False")
+                return False
+
+        except Exception as e:
+            logger.error(f"❌ NebulaGraph连接异常: {e}")
+            return False
+
+    def execute(self, query: str) -> Optional[Any]:
+        """
+        执行nGQL查询
+
+        Args:
+            query: nGQL查询语句
+
+        Returns:
+            查询结果对象，失败返回None
+        """
+        if not self._connected:
+            logger.error("⚠️  未连接到NebulaGraph，请先调用connect()")
+            return None
+
+        try:
+            result = self._pool.execute(query)
+
+            if result.is_succeeded():
+                logger.debug(f"✅ 查询执行成功: {query[:50]}...")
+                return result
+            else:
+                logger.error(f"❌ 查询执行失败: {result.error_msg()}")
+                return None
+
+        except Exception as e:
+            logger.error(f"❌ 查询执行异常: {e}")
+            return None
+
+    def get_space_info(self) -> Dict[str, Any]:
+        """
+        获取当前Space的信息
+
+        Returns:
+            Space信息字典
+        """
+        info = {
+            "space_name": self.config.space_name,
+            "tags": [],
+            "edge_types": [],
+            "nodes": 0,
+            "edges": 0
+        }
+
+        # 获取Tags
+        result = self.execute("SHOW TAGS;")
+        if result and result.is_succeeded():
+            for row_id in range(result.row_size()):
+                tag_name = result.row_values(row_id)[0].as_string()
+                info["tags"].append(tag_name)
+
+        # 获取Edge Types
+        result = self.execute("SHOW EDGES;")
+        if result and result.is_succeeded():
+            for row_id in range(result.row_size()):
+                edge_name = result.row_values(row_id)[0].as_string()
+                info["edge_types"].append(edge_name)
+
+        # 获取节点数量
+        result = self.execute(f"USE {self.config.space_name}; MATCH (v) RETURN count(v) AS count;")
+        if result and result.is_succeeded() and result.row_size() > 0:
+            count = result.row_values(0)[0].as_int()
+            info["nodes"] = count
+
+        # 获取边数量
+        result = self.execute(f"USE {self.config.space_name}; MATCH ()-[e]->() RETURN count(e) AS count;")
+        if result and result.is_succeeded() and result.row_size() > 0:
+            count = result.row_values(0)[0].as_int()
+            info["edges"] = count
+
+        return info
+
+    def list_spaces(self) -> List[str]:
+        """
+        列出所有Space
+
+        Returns:
+            Space名称列表
+        """
+        result = self.execute("SHOW SPACES;")
+        if not result or not result.is_succeeded():
+            return []
+
+        spaces = []
+        for row_id in range(result.row_size()):
+            space_name = result.row_values(row_id)[0].as_string()
+            spaces.append(space_name)
+
+        return spaces
+
+    def close(self) -> Any:
+        """关闭连接"""
+        if self._pool:
+            self._pool.close()
+            self._connected = False
+            logger.info("🔌 NebulaGraph连接已关闭")
+
+    def __enter__(self):
+        """上下文管理器入口"""
+        self.connect()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """上下文管理器出口"""
+        self.close()
+
+
+# 便捷函数
+def get_nebula_client(**kwargs) -> NebulaGraphClient:
+    """
+    获取NebulaGraph客户端实例
+
+    Args:
+        **kwargs: 连接配置参数
+
+    Returns:
+        NebulaGraph客户端实例
+    """
+    return NebulaGraphClient(**kwargs)
+
+
+# 测试代码
+if __name__ == "__main__":
+    import asyncio
+
+    async def test():
+        print("🧪 测试NebulaGraph客户端")
+        print("=" * 80)
+
+        # 创建客户端
+        client = NebulaGraphClient(
+            host="127.0.0.1",
+            port=9669,
+            username="root",
+            password=config.get("NEBULA_PASSWORD", required=True),  # NebulaGraph默认密码
+            space_name="patent_kg"
+        )
+
+        # 连接
+        print("\n1️⃣  连接NebulaGraph...")
+        if client.connect():
+            print("✅ 连接成功")
+
+            # 获取Space信息
+            print("\n2️⃣  获取Space信息...")
+            info = client.get_space_info()
+            print(f"Space名称: {info['space_name']}")
+            print(f"Tags: {info['tags']}")
+            print(f"Edge Types: {info['edge_types']}")
+            print(f"节点数: {info['nodes']}")
+            print(f"边数: {info['edges']}")
+
+            # 列出所有Space
+            print("\n3️⃣  列出所有Space...")
+            spaces = client.list_spaces()
+            print(f"Spaces: {spaces}")
+
+            # 关闭连接
+            client.close()
+            print("\n✅ 测试完成")
+        else:
+            print("❌ 连接失败")
+
+    asyncio.run(test())

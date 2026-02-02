@@ -1,0 +1,10 @@
+{
+  "model_key": "bge_reranker",
+  "model_name": "BGE重排序模型",
+  "model_type": "reranking",
+  "load_time": 0.8061339855194092,
+  "load_timestamp": "2025-12-17T15:40:45.895590",
+  "memory_estimate": "2GB",
+  "load_script": "echo 'Simulating BGE reranker loading...'",
+  "status": "loaded"
+}

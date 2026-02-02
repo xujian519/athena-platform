@@ -1,0 +1,92 @@
+{
+  "cost_limits": {
+    "monthly_limit": 100.0,
+    "daily_limit": 10.0,
+    "per_request_limit": 0.01,
+    "enable_cost_control": true
+  },
+  "routing": {
+    "strategy": "auto",
+    "confidence_threshold": 0.7,
+    "enable_smart_routing": true,
+    "prefer_internal_for": [
+      "github.com",
+      "stackoverflow.com",
+      "wikipedia.org",
+      "docs.python.org",
+      "developer.mozilla.org",
+      "crates.io",
+      "npmjs.com",
+      "pypi.org"
+    ],
+    "force_external_for": [
+      "linkedin.com",
+      "twitter.com",
+      "facebook.com",
+      "instagram.com",
+      "medium.com",
+      "www.reddit.com"
+    ]
+  },
+  "crawl4ai": {
+    "enabled": true,
+    "mode": "basic",
+    "use_browser": false,
+    "headless": true,
+    "delay_before_return_html": 0.5,
+    "js_code": null,
+    "wait_for": null,
+    "css_selector": null,
+    "llm_extraction_prompt": null,
+    "similarity_threshold": 0.7,
+    "chunk_size": 1000,
+    "overlap": 100,
+    "max_concurrent": 3,
+    "llm_provider": "openai",
+    "llm_model": "gpt-3.5-turbo",
+    "llm_api_key": null
+  },
+  "firecrawl": {
+    "enabled": true,
+    "api_key": null,
+    "base_url": "https://api.firecrawl.dev/v1",
+    "mode": "scrape",
+    "timeout": 30,
+    "max_pages": 100,
+    "include_paths": [],
+    "exclude_paths": [],
+    "allow_backlinks": false,
+    "ignore_sitemap": false,
+    "max_concurrent": 3,
+    "formats": ["markdown", "html"],
+    "only_main_content": true,
+    "wait_for": 0,
+    "screenshot": false,
+    "remove_base64_images": true
+  },
+  "internal": {
+    "enabled": true,
+    "max_concurrent": 5,
+    "rate_limit": 1.0,
+    "timeout": 10,
+    "max_retries": 3,
+    "cache_enabled": true,
+    "cache_ttl": 3600,
+    "user_agent": "Mozilla/5.0 (compatible; Athena-Crawler/2.0)",
+    "respect_robots_txt": true,
+    "headers": {
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      "Accept-Language": "en-US,en;q=0.5",
+      "Accept-Encoding": "gzip, deflate",
+      "DNT": "1",
+      "Connection": "keep-alive",
+      "Upgrade-Insecure-Requests": "1"
+    }
+  },
+  "default_strategy": "auto",
+  "enable_logging": true,
+  "log_level": "INFO",
+  "metrics_enabled": true,
+  "cache_directory": "./cache",
+  "temp_directory": "./temp"
+}

@@ -1,0 +1,156 @@
+{
+  "task_id": "d972fc26-5c50-4c0f-b15c-0e846bc36374",
+  "basic_info": {
+    "title": "张国艳专利服务跟进",
+    "customer_name": "张国艳",
+    "customer_phone": "13854382805",
+    "customer_address": "滨州沾化富源街道",
+    "responsible_person": "傅玉秀",
+    "creator": "爸爸",
+    "task_type": "patent_service",
+    "priority": "high",
+    "status": "pending",
+    "created_at": "2025-12-17 17:35:00",
+    "reminder_time": "2025-12-18 08:30:00",
+    "deadline": "2025-12-18 17:00:00"
+  },
+  "main_objectives": [
+    "联系客户张国艳进行专利咨询",
+    "办理费减备案手续",
+    "准备委托协议和授权文件",
+    "为客户提供4个实用新型专利名称方案"
+  ],
+  "patent_names": {
+    "technical_field": "待确认（需要与客户沟通具体技术领域）",
+    "proposed_names": [
+      {
+        "name": "一种具有XXX结构的装置",
+        "category": "实用新型",
+        "description": "适用于客户具体技术领域的XXX结构改进",
+        "advantages": "结构简单、制造成本低、实用性强"
+      },
+      {
+        "name": "一种XXX的智能控制系统",
+        "category": "实用新型",
+        "description": "基于XXX技术的智能控制方案",
+        "advantages": "自动化程度高、操作便捷、节能环保"
+      },
+      {
+        "name": "一种多功能XXX设备",
+        "category": "实用新型",
+        "description": "集成多种功能的XXX设备设计",
+        "advantages": "一机多用、空间利用率高、性价比好"
+      },
+      {
+        "name": "一种便携式XXX工具",
+        "category": "实用新型",
+        "description": "轻量化设计的便携式XXX工具",
+        "advantages": "携带方便、使用灵活、适用范围广"
+      }
+    ],
+    "note": "需要根据客户实际技术领域调整XXX部分，确保专利名称的准确性和专业性"
+  },
+  "required_documents": [
+    {
+      "document": "费减备案申请表",
+      "status": "pending",
+      "responsible": "客户",
+      "notes": "需要客户提供相关证明材料"
+    },
+    {
+      "document": "委托代理协议",
+      "status": "pending",
+      "responsible": "我方",
+      "notes": "准备标准委托协议模板"
+    },
+    {
+      "document": "专利代理委托书",
+      "status": "pending",
+      "responsible": "客户",
+      "notes": "需要客户签字盖章"
+    },
+    {
+      "document": "发明人身份证明",
+      "status": "pending",
+      "responsible": "客户",
+      "notes": "身份证复印件等"
+    },
+    {
+      "document": "技术交底书",
+      "status": "pending",
+      "responsible": "客户",
+      "notes": "详细介绍技术方案"
+    }
+  ],
+  "contact_plan": {
+    "first_contact": {
+      "time": "2025-12-18 08:30",
+      "method": "phone",
+      "purpose": "初步沟通，确认费减资格和专利类型",
+      "key_points": [
+        "确认客户是否符合费减条件（个人或小企业）",
+        "了解客户的具体技术领域和发明内容",
+        "介绍费减备案流程和所需材料",
+        "提供专利名称建议"
+      ]
+    },
+    "follow_up": {
+      "timeline": "2025-12-18 - 2025-12-20",
+      "actions": [
+        "发送费减备案材料清单",
+        "准备委托协议草稿",
+        "根据客户反馈调整专利名称",
+        "安排技术交底书撰写指导"
+      ]
+    }
+  },
+  "cost_reduction_info": {
+    "policy": "个人或小微企业申请费减",
+    "reduction_rate": "85%（个人）或70%（小微企业）",
+    "required_documents": [
+      "费减备案申请表",
+      "收入证明（企业）或收入证明（个人）",
+      "营业执照（企业）或身份证明（个人）"
+    ],
+    "process": [
+      "提交费减备案申请",
+      "专利局审核",
+      "备案成功后享受费减",
+      "后续缴费时自动减免"
+    ]
+  },
+  "risk_management": [
+    {
+      "risk": "客户不符合费减条件",
+      "mitigation": "提前确认客户资格，准备正常收费标准方案"
+    },
+    {
+      "risk": "技术方案不够清晰",
+      "mitigation": "安排专业技术人员参与沟通"
+    },
+    {
+      "risk": "客户时间安排紧张",
+      "mitigation": "提供上门服务或远程文件处理"
+    }
+  ],
+  "success_criteria": [
+    "成功联系到客户并确认合作意向",
+    "完成费减备案手续办理",
+    "签署委托协议",
+    "确定最终专利名称",
+    "完成技术交底书收集"
+  ],
+  "reminder_settings": {
+    "first_reminder": "2025-12-18 08:30",
+    "reminder_method": "system_notification",
+    "reminder_message": "重要提醒：联系张国艳 (13854382805) 办理费减备案和委托手续，准备专利名称方案",
+    "backup_reminder": "2025-12-18 09:00"
+  },
+  "tags": ["张国艳", "专利服务", "费减备案", "实用新型", "傅玉秀", "高优先级"],
+  "system_info": {
+    "created_by": "xiaonuo_hybrid_system",
+    "database": "postgresql",
+    "customer_id": "d9a5213a-224d-4061-81c2-3947aff5cf37",
+    "last_updated": "2025-12-17 17:35:00"
+  }
+}

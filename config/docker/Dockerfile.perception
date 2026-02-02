@@ -1,0 +1,88 @@
+# Athena 感知模块 Dockerfile
+# 基于Python 3.14，使用Poetry管理依赖
+# 最后更新: 2026-01-26
+
+FROM python:3.14-slim
+
+# 设置工作目录
+WORKDIR /app
+
+# 设置环境变量
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    # 设置时区
+    TZ=Asia/Shanghai \
+    # 设置Python路径
+    PYTHONPATH=/app:/app/core
+
+# 安装系统依赖
+RUN apt-get update && apt-get install -y \
+    # 基础工具
+    build-essential \
+    curl \
+    wget \
+    git \
+    # 图像处理依赖
+    libgl1 \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libgomp1 \
+    # OCR依赖
+    tesseract-ocr \
+    tesseract-ocr-chi-sim \
+    tesseract-ocr-chi-tra \
+    tesseract-ocr-eng \
+    # 清理缓存
+    && rm -rf /var/lib/apt/lists/*
+
+# 安装Poetry
+RUN curl -sSL https://install.python-poetry.org | python3 - \
+    && poetry --version
+
+# 复制项目文件
+COPY pyproject.toml poetry.lock* ./
+
+# 安装Python依赖（仅生产依赖）
+RUN poetry config virtualenvs.create false \
+    && poetry install --only main --no-interaction --no-ansi
+
+# 复制应用代码
+COPY core/perception/ ./core/perception/
+COPY core/logging_config.py ./core/
+
+# 创建必要的目录
+RUN mkdir -p /app/logs/perception \
+    /app/tmp/perception \
+    /app/.cache \
+    /app/config
+
+# 设置权限
+RUN chmod +x /app/tmp/perception \
+    && chmod -R 755 /app/logs \
+    && chmod -R 755 /app/.cache
+
+# 创建非root用户
+RUN useradd -m -u 1000 -s /bin/bash athena \
+    && chown -R athena:athena /app
+
+USER athena
+
+# 暴露端口
+EXPOSE 8000 9090
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# 启动命令
+CMD ["uvicorn", "core.perception.api:app", \
+     "--host", "0.0.0.0", \
+     "--port", "8000", \
+     "--workers", "4", \
+     "--log-level", "info", \
+     "--access-log", \
+     "--no-use-colors"]

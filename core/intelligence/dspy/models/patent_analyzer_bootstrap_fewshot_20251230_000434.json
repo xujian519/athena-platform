@@ -1,0 +1,6 @@
+{
+  "optimizer": "bootstrap_fewshot",
+  "timestamp": "20251230_000434",
+  "model_class": "PatentAnalyzer",
+  "trainset_size": 628
+}

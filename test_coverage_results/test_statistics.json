@@ -1,0 +1,660 @@
+{
+  "summary": {
+    "total_test_files": 55,
+    "total_test_functions": 7,
+    "total_test_classes": 137,
+    "total_code_lines": 19946
+  },
+  "by_directory": {
+    "collaboration": {
+      "files": 1,
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 535
+    },
+    "core": {
+      "files": 8,
+      "test_functions": 0,
+      "test_classes": 46,
+      "code_lines": 3236
+    },
+    "evaluation": {
+      "files": 1,
+      "test_functions": 0,
+      "test_classes": 7,
+      "code_lines": 412
+    },
+    "integration": {
+      "files": 20,
+      "test_functions": 4,
+      "test_classes": 32,
+      "code_lines": 5949
+    },
+    "performance": {
+      "files": 1,
+      "test_functions": 0,
+      "test_classes": 1,
+      "code_lines": 898
+    },
+    "planning": {
+      "files": 1,
+      "test_functions": 0,
+      "test_classes": 5,
+      "code_lines": 440
+    },
+    "protocols": {
+      "files": 1,
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 527
+    },
+    "root": {
+      "files": 10,
+      "test_functions": 3,
+      "test_classes": 9,
+      "code_lines": 3216
+    },
+    "unit": {
+      "files": 12,
+      "test_functions": 0,
+      "test_classes": 37,
+      "code_lines": 4733
+    }
+  },
+  "test_files": [
+    {
+      "path": "collaboration/test_multi_agent_collaboration.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 535,
+      "has_error": true
+    },
+    {
+      "path": "core/memory/test_unified_memory_system.py",
+      "test_functions": 0,
+      "test_classes": 10,
+      "code_lines": 486,
+      "has_error": false
+    },
+    {
+      "path": "core/perception/test_factory.py",
+      "test_functions": 0,
+      "test_classes": 5,
+      "code_lines": 398,
+      "has_error": true
+    },
+    {
+      "path": "core/perception/test_integration.py",
+      "test_functions": 0,
+      "test_classes": 5,
+      "code_lines": 310,
+      "has_error": true
+    },
+    {
+      "path": "core/perception/test_integration_extended.py",
+      "test_functions": 0,
+      "test_classes": 5,
+      "code_lines": 363,
+      "has_error": true
+    },
+    {
+      "path": "core/perception/test_monitoring.py",
+      "test_functions": 0,
+      "test_classes": 6,
+      "code_lines": 390,
+      "has_error": true
+    },
+    {
+      "path": "core/perception/test_performance_benchmark.py",
+      "test_functions": 0,
+      "test_classes": 6,
+      "code_lines": 654,
+      "has_error": true
+    },
+    {
+      "path": "core/perception/test_processor_performance.py",
+      "test_functions": 0,
+      "test_classes": 6,
+      "code_lines": 403,
+      "has_error": true
+    },
+    {
+      "path": "core/perception/test_text_processor.py",
+      "test_functions": 0,
+      "test_classes": 3,
+      "code_lines": 232,
+      "has_error": true
+    },
+    {
+      "path": "evaluation/test_xiaonuo_feedback_system.py",
+      "test_functions": 0,
+      "test_classes": 7,
+      "code_lines": 412,
+      "has_error": false
+    },
+    {
+      "path": "integration/core/intent/test_intent_integration.py",
+      "test_functions": 0,
+      "test_classes": 10,
+      "code_lines": 405,
+      "has_error": true
+    },
+    {
+      "path": "integration/core/intent/test_intent_refactoring.py",
+      "test_functions": 0,
+      "test_classes": 9,
+      "code_lines": 500,
+      "has_error": true
+    },
+    {
+      "path": "integration/learning/test_learning_api.py",
+      "test_functions": 0,
+      "test_classes": 4,
+      "code_lines": 230,
+      "has_error": false
+    },
+    {
+      "path": "integration/phase1/test_cross_task_workflow_memory.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 285,
+      "has_error": true
+    },
+    {
+      "path": "integration/test_agent_integrations.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 628,
+      "has_error": true
+    },
+    {
+      "path": "integration/test_agents_production_readiness.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 419,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_bert_integration.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 245,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_bge_integration.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 284,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_bge_performance.py",
+      "test_functions": 2,
+      "test_classes": 0,
+      "code_lines": 253,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_end_to_end_collaboration.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 595,
+      "has_error": true
+    },
+    {
+      "path": "integration/test_integration.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 139,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_laws_ondemand.py",
+      "test_functions": 1,
+      "test_classes": 0,
+      "code_lines": 86,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_llm_cache.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 236,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_llm_integration.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 137,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_local_bert_speed.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 171,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_ondemand_services.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 134,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_xiaonuo_chat.py",
+      "test_functions": 1,
+      "test_classes": 0,
+      "code_lines": 170,
+      "has_error": false
+    },
+    {
+      "path": "integration/tools/test_integration.py",
+      "test_functions": 0,
+      "test_classes": 1,
+      "code_lines": 203,
+      "has_error": true
+    },
+    {
+      "path": "integration/tools/test_real_tools.py",
+      "test_functions": 0,
+      "test_classes": 6,
+      "code_lines": 500,
+      "has_error": true
+    },
+    {
+      "path": "integration/tools/test_stress.py",
+      "test_functions": 0,
+      "test_classes": 2,
+      "code_lines": 329,
+      "has_error": true
+    },
+    {
+      "path": "performance/test_performance_benchmarks.py",
+      "test_functions": 0,
+      "test_classes": 1,
+      "code_lines": 898,
+      "has_error": true
+    },
+    {
+      "path": "planning/test_unified_planning_interface.py",
+      "test_functions": 0,
+      "test_classes": 5,
+      "code_lines": 440,
+      "has_error": true
+    },
+    {
+      "path": "protocols/test_collaboration_protocols.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 527,
+      "has_error": true
+    },
+    {
+      "path": "test_fixed_engines.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 145,
+      "has_error": false
+    },
+    {
+      "path": "test_framework.py",
+      "test_functions": 0,
+      "test_classes": 7,
+      "code_lines": 571,
+      "has_error": false
+    },
+    {
+      "path": "test_human_in_loop_decision.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 263,
+      "has_error": false
+    },
+    {
+      "path": "test_numpy_compatibility.py",
+      "test_functions": 1,
+      "test_classes": 0,
+      "code_lines": 64,
+      "has_error": false
+    },
+    {
+      "path": "test_optimized_xiaonuo.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 256,
+      "has_error": false
+    },
+    {
+      "path": "test_patent_database_comprehensive.py",
+      "test_functions": 0,
+      "test_classes": 1,
+      "code_lines": 487,
+      "has_error": true
+    },
+    {
+      "path": "test_postgresql_patent_db.py",
+      "test_functions": 0,
+      "test_classes": 1,
+      "code_lines": 468,
+      "has_error": false
+    },
+    {
+      "path": "test_technical_analysis_depth.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 330,
+      "has_error": false
+    },
+    {
+      "path": "test_unified_report_service.py",
+      "test_functions": 2,
+      "test_classes": 0,
+      "code_lines": 380,
+      "has_error": true
+    },
+    {
+      "path": "test_xiaonuo_optimized_complete.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 252,
+      "has_error": false
+    },
+    {
+      "path": "unit/communication/test_async_batch_processor.py",
+      "test_functions": 0,
+      "test_classes": 1,
+      "code_lines": 166,
+      "has_error": true
+    },
+    {
+      "path": "unit/communication/test_communication_engine.py",
+      "test_functions": 0,
+      "test_classes": 6,
+      "code_lines": 422,
+      "has_error": false
+    },
+    {
+      "path": "unit/communication/test_dynamic_connection_pool.py",
+      "test_functions": 0,
+      "test_classes": 3,
+      "code_lines": 392,
+      "has_error": true
+    },
+    {
+      "path": "unit/communication/test_monitoring.py",
+      "test_functions": 0,
+      "test_classes": 5,
+      "code_lines": 308,
+      "has_error": false
+    },
+    {
+      "path": "unit/communication/test_validation.py",
+      "test_functions": 0,
+      "test_classes": 5,
+      "code_lines": 442,
+      "has_error": true
+    },
+    {
+      "path": "unit/mcp/test_mcp_client_manager.py",
+      "test_functions": 0,
+      "test_classes": 7,
+      "code_lines": 356,
+      "has_error": true
+    },
+    {
+      "path": "unit/planning/test_task_complexity_analyzer.py",
+      "test_functions": 0,
+      "test_classes": 2,
+      "code_lines": 302,
+      "has_error": true
+    },
+    {
+      "path": "unit/state/test_state_module.py",
+      "test_functions": 0,
+      "test_classes": 4,
+      "code_lines": 481,
+      "has_error": true
+    },
+    {
+      "path": "unit/test_agentic_task_planner.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 385,
+      "has_error": true
+    },
+    {
+      "path": "unit/test_goal_management_system.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 569,
+      "has_error": true
+    },
+    {
+      "path": "unit/test_prompt_chain_processor.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 539,
+      "has_error": false
+    },
+    {
+      "path": "unit/tools/test_tool_groups.py",
+      "test_functions": 0,
+      "test_classes": 4,
+      "code_lines": 371,
+      "has_error": true
+    }
+  ],
+  "import_errors": [
+    "tests/collaboration/test_multi_agent_collaboration.py",
+    "tests/core/perception/test_factory.py",
+    "tests/core/perception/test_integration.py",
+    "tests/core/perception/test_integration_extended.py",
+    "tests/core/perception/test_monitoring.py",
+    "tests/core/perception/test_performance_benchmark.py",
+    "tests/core/perception/test_processor_performance.py",
+    "tests/core/perception/test_text_processor.py",
+    "tests/integration/core/intent/test_intent_integration.py",
+    "tests/integration/core/intent/test_intent_refactoring.py",
+    "tests/integration/phase1/test_cross_task_workflow_memory.py",
+    "tests/integration/test_agent_integrations.py",
+    "tests/integration/test_end_to_end_collaboration.py",
+    "tests/integration/tools/test_integration.py",
+    "tests/integration/tools/test_real_tools.py",
+    "tests/integration/tools/test_stress.py",
+    "tests/performance/test_performance_benchmarks.py",
+    "tests/planning/test_unified_planning_interface.py",
+    "tests/protocols/test_collaboration_protocols.py",
+    "tests/test_patent_database_comprehensive.py",
+    "tests/test_unified_report_service.py",
+    "tests/unit/communication/test_async_batch_processor.py",
+    "tests/unit/communication/test_dynamic_connection_pool.py",
+    "tests/unit/communication/test_validation.py",
+    "tests/unit/mcp/test_mcp_client_manager.py",
+    "tests/unit/planning/test_task_complexity_analyzer.py",
+    "tests/unit/state/test_state_module.py",
+    "tests/unit/test_agentic_task_planner.py",
+    "tests/unit/test_goal_management_system.py",
+    "tests/unit/tools/test_tool_groups.py"
+  ],
+  "working_tests": [
+    {
+      "path": "core/memory/test_unified_memory_system.py",
+      "test_functions": 0,
+      "test_classes": 10,
+      "code_lines": 486,
+      "has_error": false
+    },
+    {
+      "path": "evaluation/test_xiaonuo_feedback_system.py",
+      "test_functions": 0,
+      "test_classes": 7,
+      "code_lines": 412,
+      "has_error": false
+    },
+    {
+      "path": "integration/learning/test_learning_api.py",
+      "test_functions": 0,
+      "test_classes": 4,
+      "code_lines": 230,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_agents_production_readiness.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 419,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_bert_integration.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 245,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_bge_integration.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 284,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_bge_performance.py",
+      "test_functions": 2,
+      "test_classes": 0,
+      "code_lines": 253,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_integration.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 139,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_laws_ondemand.py",
+      "test_functions": 1,
+      "test_classes": 0,
+      "code_lines": 86,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_llm_cache.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 236,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_llm_integration.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 137,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_local_bert_speed.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 171,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_ondemand_services.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 134,
+      "has_error": false
+    },
+    {
+      "path": "integration/test_xiaonuo_chat.py",
+      "test_functions": 1,
+      "test_classes": 0,
+      "code_lines": 170,
+      "has_error": false
+    },
+    {
+      "path": "test_fixed_engines.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 145,
+      "has_error": false
+    },
+    {
+      "path": "test_framework.py",
+      "test_functions": 0,
+      "test_classes": 7,
+      "code_lines": 571,
+      "has_error": false
+    },
+    {
+      "path": "test_human_in_loop_decision.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 263,
+      "has_error": false
+    },
+    {
+      "path": "test_numpy_compatibility.py",
+      "test_functions": 1,
+      "test_classes": 0,
+      "code_lines": 64,
+      "has_error": false
+    },
+    {
+      "path": "test_optimized_xiaonuo.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 256,
+      "has_error": false
+    },
+    {
+      "path": "test_postgresql_patent_db.py",
+      "test_functions": 0,
+      "test_classes": 1,
+      "code_lines": 468,
+      "has_error": false
+    },
+    {
+      "path": "test_technical_analysis_depth.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 330,
+      "has_error": false
+    },
+    {
+      "path": "test_xiaonuo_optimized_complete.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 252,
+      "has_error": false
+    },
+    {
+      "path": "unit/communication/test_communication_engine.py",
+      "test_functions": 0,
+      "test_classes": 6,
+      "code_lines": 422,
+      "has_error": false
+    },
+    {
+      "path": "unit/communication/test_monitoring.py",
+      "test_functions": 0,
+      "test_classes": 5,
+      "code_lines": 308,
+      "has_error": false
+    },
+    {
+      "path": "unit/test_prompt_chain_processor.py",
+      "test_functions": 0,
+      "test_classes": 0,
+      "code_lines": 539,
+      "has_error": false
+    }
+  ]
+}

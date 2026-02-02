@@ -1,0 +1,235 @@
+{
+  "task_id": "f8a9c32d-7e41-4f63-9d2a-8cb571d6ef10",
+  "task_title": "山东艾迈泰克机械科技有限公司费用催缴",
+  "task_type": "payment_collection",
+  "priority": "high",
+  "urgency": "immediate",
+  "created_at": "2025-12-17 17:55:00",
+  "deadline": "2025-12-18 17:00",
+
+  "customer_info": {
+    "name": "山东艾迈泰克机械科技有限公司",
+    "customer_id": "bdeec10e-2427-4c87-b091-caa782b1efe2",
+    "business_type": "machinery_manufacturing",
+    "status": "formal_customer"
+  },
+
+  "financial_details": {
+    "payment_status": "unpaid",
+    "amount_due": "全额",
+    "payment_stage": "installment_due",
+    "last_payment": null,
+    "payment_history": [],
+    "total_services": 3,
+    "services_provided": [
+      "专利申请准备",
+      "技术文件整理",
+      "专利文件撰写"
+    ]
+  },
+
+  "collection_strategy": {
+    "approach": "value_first",
+    "tone": "professional_service",
+    "main_objectives": [
+      "确认付款困难和时间表",
+      "提供灵活付款方案",
+      "强调服务价值",
+      "确定下一步行动计划"
+    ],
+
+    "payment_options": {
+      "option_1": {
+        "type": "full_payment",
+        "name": "全款一次性支付",
+        "discount": "5%",
+        "advantages": "成本最低，处理简单",
+        "deadline": "2025-12-20"
+      },
+
+      "option_2": {
+        "type": "installment",
+        "name": "分期付款方案",
+        "stages": [
+          {"stage": "首付", "amount": "50%", "due": "2025-12-20"},
+          {"stage": "进度款", "amount": "30%", "due": "2025-12-27"},
+          {"stage": "尾款", "amount": "20%", "due": "专利受理后"}
+        ],
+        "advantages": "缓解资金压力，分阶段付款"
+      },
+
+      "option_3": {
+        "type": "service_first",
+        "name": "先服务后付款",
+        "conditions": "信用评估",
+        "advantages": "降低客户风险"
+      }
+    }
+  },
+
+  "contact_plan": [
+    {
+      "step": 1,
+      "date": "2025-12-18",
+      "time": "09:00",
+      "method": "phone",
+      "purpose": "首次催缴沟通",
+      "key_points": [
+        "了解付款困难原因",
+        "介绍三种付款方案",
+        "强调专利保护重要性",
+        "约定下次沟通时间"
+      ],
+      "expected_outcome": "了解客户支付能力和时间表"
+    },
+
+    {
+      "step": 2,
+      "date": "2025-12-19",
+      "method": "email",
+      "purpose": "发送详细付款方案",
+      "attachments": [
+        "费用明细表.pdf",
+        "付款流程说明.pdf",
+        "分期付款计划.pdf"
+      ],
+      "expected_outcome": "客户确认付款方案"
+    },
+
+    {
+      "step": 3,
+      "date": "2025-12-20",
+      "time": "14:00",
+      "method": "phone",
+      "purpose": "最终确认",
+      "key_points": [
+        "确认最终付款方案",
+        "约定具体付款时间",
+        "明确服务启动条件",
+        "安排后续工作计划"
+      ],
+      "expected_outcome": "获得明确的付款承诺"
+    }
+  ],
+
+  "talking_points": {
+    "opening": [
+      "您好，这里是[公司名]，联系您是关于专利申请费用的跟进事宜",
+      "想了解一下您在付款方面是否遇到了什么困难"
+    ],
+
+    "value_emphasis": [
+      "专利保护对于制造企业特别重要，可以保护核心技术",
+      "我们是专业团队，已经有[成功案例]个客户成功申请专利",
+      "专利申请不仅保护技术，还能增加企业资产价值"
+    ],
+
+    "payment_flexibility": [
+      "我们理解企业的资金压力，提供多种付款方式",
+      "可以根据您的实际情况调整付款节奏",
+      "付款后我们会立即推进专利申请流程"
+    ]
+  },
+
+  "objection_handling": {
+    "资金紧张": [
+      "我们提供分期付款，首期只需50%",
+      "可以先启动服务，分期支付后续费用"
+    ],
+
+    "对服务效果不确定": [
+      "我们有成功案例可以参考",
+      "提供满意度保证，不满意可以申请调整"
+    ],
+
+      "需要内部审批": [
+        "我们可以提供详细的费用明细供内部审批",
+        "协助您准备审批所需的材料"
+      ]
+  },
+
+  "success_criteria": [
+    "获得客户明确的付款时间表",
+    "确定具体的付款方案",
+    "收到付款承诺或实际付款",
+    "更新客户财务状态"
+  ],
+
+  "backup_plans": {
+    "if_no_response": [
+      "发送邮件跟进",
+      "联系业务介绍人",
+      "调整付款方案"
+    ],
+
+    "if_payment_delayed": [
+      "了解延迟原因",
+      "提供更多灵活性",
+      "考虑部分服务启动"
+    ]
+  },
+
+  "documentation": {
+    "required_records": [
+      "通话时间和内容",
+      "客户反馈和承诺",
+      "发送的方案和材料",
+      "付款确认记录"
+    ],
+
+    "escalation_triggers": [
+      "连续3次联系无回应",
+      "承诺付款时间超过7天",
+      "客户要求特殊处理"
+    ]
+  },
+
+  "follow_up_reminders": [
+    {
+      "date": "2025-12-18 08:50",
+      "action": "准备通话资料",
+      "reminder": "准备付款方案和服务价值资料"
+    },
+
+    {
+      "date": "2025-12-18 12:00",
+      "action": "检查通话结果",
+      "reminder": "确认是否取得联系和反馈"
+    },
+
+    {
+      "date": "2025-12-19 10:00",
+      "action": "检查邮件发送",
+      "reminder": "确认客户是否查看了付款方案"
+    }
+  ],
+
+  "responsible_team": {
+    "primary": "财务团队",
+    "secondary": "业务团队",
+    "support": "客服团队"
+  },
+
+  "status_tracking": {
+    "created": "2025-12-17 17:55:00",
+    "first_contact": "pending",
+    "payment_confirmed": "pending",
+    "payment_received": "pending",
+    "task_completed": "pending"
+  },
+
+  "notes": [
+    "客户是制造企业，对专利保护有需求",
+    "业务已在进行中，但被付款问题阻塞",
+    "需要灵活处理，避免失去客户",
+    "重点是确认付款时间表，不是强迫立即付款"
+  ],
+
+  "tags": ["催缴", "制造企业", "分期付款", "山东艾迈泰克", "财务跟进"],
+
+  "system_info": {
+    "created_by": "xiaonuo_hybrid_system",
+    "database": "postgresql_yunpat",
+    "last_updated": "2025-12-17 17:55:00"
+  }
+}

@@ -1,0 +1,42 @@
+# Core Services Multi-Stage Dockerfile
+
+# Base stage
+FROM python:3.11-slim as base
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Health checker service
+FROM base as health-checker
+EXPOSE 9001
+COPY health-checker/ ./health-checker/
+CMD ["python", "main.py"]
+
+# Cache service
+FROM base as cache
+EXPOSE 9002
+COPY cache/ ./cache/
+CMD ["python", "cache_server.py"]
+
+# Platform monitor service
+FROM base as platform-monitor
+EXPOSE 9003
+COPY platform-monitor/ ./platform-monitor/
+CMD ["python", "main.py"]
+
+# To run a specific service:
+# docker run --name health-checker athena-core-services:health-checker
+# docker run --name cache athena-core-services:cache
+# docker run --name monitor athena-core-services:platform-monitor

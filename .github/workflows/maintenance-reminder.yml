@@ -1,0 +1,97 @@
+name: 定期维护提醒
+
+on:
+  schedule:
+    # 每月1号早上9点
+    - cron: '0 9 1 * *'
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  maintenance-reminder:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: 设置Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.14'
+
+    - name: 安装依赖
+      run: |
+        pip install numpy
+        pip install requests
+
+    - name: 运行维护检查
+      run: |
+        python3 tools/manage_numpy_versions.py --check --latest > maintenance_check.txt
+
+    - name: 创建维护报告
+      run: |
+        cat > maintenance_report.md << EOF
+        # 📅 Numpy维护提醒报告
+
+        **日期**: $(date +%Y-%m-%d)
+        **自动检查**: ✅ 已完成
+
+        ## 📊 当前状态
+
+        \`\`\`
+        $(cat maintenance_check.txt)
+        \`\`\`
+
+        ## 🎯 建议行动
+
+        1. **如果版本过旧**:
+           \`\`\`bash
+           python3 tools/manage_numpy_versions.py --recommend
+           python3 tools/manage_numpy_versions.py --update-requirements
+           \`\`\`
+
+        2. **如果测试失败**:
+           \`\`\`bash
+           python3 test_numpy_compatibility.py
+           python3 tools/fix_numpy_compatibility.py --directory .
+           \`\`\`
+
+        3. **定期任务**（每月执行）:
+           - [ ] 检查numpy版本更新
+           - [ ] 运行完整兼容性测试
+           - [ ] 更新requirements文件
+           - [ ] 检查新代码的兼容性
+           - [ ] 更新文档（如需要）
+
+        ## 📚 相关文档
+
+        - [Numpy开发规范](docs/development_guidelines_numpy.md)
+        - [兼容性报告](docs/numpy_compatibility_report.md)
+        - [版本管理工具](tools/manage_numpy_versions.py)
+
+        ---
+        *此报告由GitHub Actions自动生成*
+        EOF
+
+    - name: 创建Issue（如果需要维护）
+      if: contains(steps.maintenance-reminder.outputs.check-result, '需要升级: 是')
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const report = fs.readFileSync('maintenance_report.md', 'utf8');
+
+          github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: `📅 Numpy维护提醒 - ${new Date().toISOString().split('T')[0]}`,
+            body: report,
+            labels: ['maintenance', 'numpy', 'dependency-update']
+          });
+
+    - name: 上传报告
+      uses: actions/upload-artifact@v3
+      with:
+        name: maintenance-report-${{ github.run_number }}
+        path: |
+          maintenance_check.txt
+          maintenance_report.md

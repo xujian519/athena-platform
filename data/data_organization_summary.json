@@ -1,0 +1,47 @@
+{
+  "timestamp": "2025-12-07T03:02:12.455074",
+  "organization": {
+    "neo4j_data": {
+      "path": "/Users/xujian/Athena工作平台/data/knowledge_graph_neo4j",
+      "description": "Neo4j知识图谱数据",
+      "subdirectories": [
+        "queries",
+        "raw_data",
+        "import_scripts",
+        "schemas",
+        "processed_data",
+        "exports"
+      ]
+    },
+    "qdrant_data": {
+      "path": "/Users/xujian/Athena工作平台/data/vectors_qdrant",
+      "description": "Qdrant向量库数据",
+      "subdirectories": [
+        "embeddings",
+        "models",
+        "collections",
+        "metadata",
+        "indexes"
+      ]
+    },
+    "support_data": {
+      "path": "/Users/xujian/Athena工作平台/data/support_data",
+      "description": "支撑数据（数据库、配置、日志等）",
+      "subdirectories": [
+        "databases",
+        "cache",
+        "workspace",
+        "logs",
+        "configs",
+        "templates",
+        "external",
+        "reports"
+      ]
+    }
+  },
+  "statistics": {
+    "total_files_processed": 17,
+    "duplicate_files_found": 0,
+    "duplicate_files": []
+  }
+}

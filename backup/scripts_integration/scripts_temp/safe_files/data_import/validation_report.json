@@ -1,0 +1,50 @@
+{
+  "status": "simulated",
+  "timestamp": "2025-12-14T21:29:20.214400",
+  "janusgraph_status": {
+    "container_running": true,
+    "port_accessible": true,
+    "rest_api": "需要配置"
+  },
+  "data_validation": {
+    "vertices_imported": {
+      "Patent": 10000,
+      "Company": 1000,
+      "Inventor": 5000,
+      "Technology": 500,
+      "LegalCase": 100
+    },
+    "edges_imported": {
+      "OWNED_BY": 5000,
+      "INVENTED_BY": 20000,
+      "RELATES_TO": 5000,
+      "CITES": 15000
+    },
+    "total_entities": 16100,
+    "total_relationships": 45000
+  },
+  "sample_queries": [
+    {
+      "description": "查询所有专利",
+      "gremlin": "g.V().hasLabel('Patent').limit(10)",
+      "expected_results": "10条专利记录"
+    },
+    {
+      "description": "查询专利-公司关系",
+      "gremlin": "g.V().hasLabel('Patent').out('OWNED_BY')",
+      "expected_results": "专利所属公司"
+    },
+    {
+      "description": "统计实体数量",
+      "gremlin": "g.V().groupCount().by(label)",
+      "expected_results": "各类型实体数量"
+    }
+  ],
+  "next_steps": [
+    "1. 确保JanusGraph容器正常运行",
+    "2. 配置REST API或使用Gremlin控制台",
+    "3. 执行导入脚本",
+    "4. 验证导入结果",
+    "5. 连接到混合搜索API"
+  ]
+}

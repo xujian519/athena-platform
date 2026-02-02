@@ -1,0 +1,15 @@
+{
+  "original_path": "/Users/xujian/.cache/huggingface/hub/models--sentence-transformers--all-MiniLM-L6-v2/snapshots/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/1_Pooling",
+  "moved_at": "2025-12-16T00:43:47.388860",
+  "provider": "huggingface",
+  "type": "unknown",
+  "architecture": "unknown",
+  "category": "other",
+  "config": {
+    "word_embedding_dimension": 384,
+    "pooling_mode_cls_token": false,
+    "pooling_mode_mean_tokens": true,
+    "pooling_mode_max_tokens": false,
+    "pooling_mode_mean_sqrt_len_tokens": false
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "optimizer": "miprov2_v2",
+  "timestamp": "20251230_005018",
+  "model_class": "PatentAnalyzer",
+  "trainset_size": 628,
+  "model_name": "glm-4-plus",
+  "metadata": {
+    "num_batches": 4,
+    "batch_size": 25,
+    "actual_num_trials": 20,
+    "best_score": 0.0,
+    "training_history": []
+  }
+}

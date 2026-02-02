@@ -1,0 +1,325 @@
+# Prometheus 告警规则 - 感知模块
+# 文件位置: config/monitoring/perception-alerts.yml
+# 最后更新: 2026-01-26
+
+groups:
+  # ========================================
+  # 感知模块服务可用性告警
+  # ========================================
+  - name: perception_service_alerts
+    interval: 30s
+    rules:
+      # 服务不可用告警
+      - alert: PerceptionServiceDown
+        expr: up{job="perception-service"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: perception
+        annotations:
+          summary: "感知模块服务不可用"
+          description: "感知模块服务已宕机超过1分钟"
+          runbook_url: "https://docs.athena.platform/runbooks/perception-service-down"
+
+      # 高错误率告警
+      - alert: PerceptionHighErrorRate
+        expr: |
+          (
+            rate(perception_requests_total{status=~"5.."}[5m])
+            /
+            rate(perception_requests_total[5m])
+          ) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+          service: perception
+        annotations:
+          summary: "感知模块错误率过高"
+          description: "错误率超过5%，当前值: {{ $value | humanizePercentage }}"
+          runbook_url: "https://docs.athena.platform/runbooks/high-error-rate"
+
+      # P95延迟过高告警
+      - alert: PerceptionHighLatency
+        expr: |
+          histogram_quantile(0.95,
+            rate(perception_request_duration_seconds_bucket[5m])
+          ) > 5.0
+        for: 5m
+        labels:
+          severity: warning
+          service: perception
+        annotations:
+          summary: "感知模块响应延迟过高"
+          description: "P95延迟超过5秒，当前值: {{ $value }}秒"
+          runbook_url: "https://docs.athena.platform/runbooks/high-latency"
+
+  # ========================================
+  # 感知模块性能告警
+  # ========================================
+  - name: perception_performance_alerts
+    interval: 30s
+    rules:
+      # CPU使用率过高
+      - alert: PerceptionHighCPUUsage
+        expr: |
+          rate(process_cpu_seconds_total{job="perception-service"}[5m]) * 100 > 80
+        for: 10m
+        labels:
+          severity: warning
+          service: perception
+        annotations:
+          summary: "感知模块CPU使用率过高"
+          description: "CPU使用率超过80%，当前值: {{ $value }}%"
+
+      # 内存使用率过高
+      - alert: PerceptionHighMemoryUsage
+        expr: |
+          (
+            process_resident_memory_bytes{job="perception-service"}
+            /
+            perception_memory_limit_bytes
+          ) > 0.8
+        for: 10m
+        labels:
+          severity: warning
+          service: perception
+        annotations:
+          summary: "感知模块内存使用率过高"
+          description: "内存使用率超过80%，当前值: {{ $value | humanizePercentage }}"
+
+      # 请求队列堆积
+      - alert: PerceptionRequestBacklog
+        expr: perception_requests_pending > 100
+        for: 5m
+        labels:
+          severity: warning
+          service: perception
+        annotations:
+          summary: "感知模块请求队列堆积"
+          description: "待处理请求数超过100，当前值: {{ $value }}"
+
+  # ========================================
+  # 感知模块缓存告警
+  # ========================================
+  - name: perception_cache_alerts
+    interval: 30s
+    rules:
+      # 缓存命中率过低
+      - alert: PerceptionLowCacheHitRate
+        expr: |
+          (
+            rate(perception_cache_hits_total[5m])
+            /
+            (
+              rate(perception_cache_hits_total[5m])
+              +
+              rate(perception_cache_misses_total[5m])
+            )
+          ) < 0.7
+        for: 10m
+        labels:
+          severity: info
+          service: perception
+        annotations:
+          summary: "感知模块缓存命中率过低"
+          description: "缓存命中率低于70%，当前值: {{ $value | humanizePercentage }}"
+
+      # Redis连接失败
+      - alert: PerceptionRedisConnectionFailed
+        expr: up{job="perception-redis"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          service: perception
+        annotations:
+          summary: "感知模块Redis连接失败"
+          description: "无法连接到Redis缓存服务"
+
+  # ========================================
+  # 感知模块数据库告警
+  # ========================================
+  - name: perception_database_alerts
+    interval: 30s
+    rules:
+      # 数据库连接池耗尽
+      - alert: PerceptionDBConnectionPoolExhausted
+        expr: |
+          perception_db_connections_active
+          /
+          perception_db_connections_max > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          service: perception
+        annotations:
+          summary: "感知模块数据库连接池接近耗尽"
+          description: "连接池使用率超过90%，当前值: {{ $value | humanizePercentage }}"
+
+      # 数据库查询慢
+      - alert: PerceptionSlowDBQuery
+        expr: |
+          histogram_quantile(0.95,
+            rate(perception_db_query_duration_seconds_bucket[5m])
+          ) > 2.0
+        for: 10m
+        labels:
+          severity: warning
+          service: perception
+        annotations:
+          summary: "感知模块数据库查询过慢"
+          description: "P95查询延迟超过2秒，当前值: {{ $value }}秒"
+
+  # ========================================
+  # 感知模块OCR告警
+  # ========================================
+  - name: perception_ocr_alerts
+    interval: 30s
+    rules:
+      # OCR识别准确率过低
+      - alert: PerceptionOCRLowAccuracy
+        expr: |
+          (
+            rate(perception_ocr_success_total[10m])
+            /
+            rate(perception_ocr_requests_total[10m])
+          ) < 0.85
+        for: 15m
+        labels:
+          severity: warning
+          service: perception
+          module: ocr
+        annotations:
+          summary: "OCR识别成功率过低"
+          description: "OCR成功率低于85%，当前值: {{ $value | humanizePercentage }}"
+
+      # Tesseract服务不可用
+      - alert: PerceptionTesseractDown
+        expr: up{job="perception-service",endpoint="tesseract"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          service: perception
+          module: ocr
+        annotations:
+          summary: "Tesseract OCR服务不可用"
+          description: "无法访问Tesseract OCR服务"
+
+  # ========================================
+  # 智能体特定告警
+  # ========================================
+  - name: perception_agent_alerts
+    interval: 30s
+    rules:
+      # Athena智能体请求失败率过高
+      - alert: PerceptionAgentAthenaHighFailureRate
+        expr: |
+          (
+            rate(perception_requests_total{agent_id="athena",status=~"5.."}[5m])
+            /
+            rate(perception_requests_total{agent_id="athena"}[5m])
+          ) > 0.10
+        for: 5m
+        labels:
+          severity: warning
+          service: perception
+          agent: athena
+        annotations:
+          summary: "Athena智能体请求失败率过高"
+          description: "Athena智能体失败率超过10%，当前值: {{ $value | humanizePercentage }}"
+
+      # 小诺智能体请求失败率过高
+      - alert: PerceptionAgentXiaonuoHighFailureRate
+        expr: |
+          (
+            rate(perception_requests_total{agent_id="xiaonuo",status=~"5.."}[5m])
+            /
+            rate(perception_requests_total{agent_id="xiaonuo"}[5m])
+          ) > 0.10
+        for: 5m
+        labels:
+          severity: warning
+          service: perception
+          agent: xiaonuo
+        annotations:
+          summary: "小诺智能体请求失败率过高"
+          description: "小诺智能体失败率超过10%，当前值: {{ $value | humanizePercentage }}"
+
+      # 小娜智能体请求失败率过高
+      - alert: PerceptionAgentXiaonaHighFailureRate
+        expr: |
+          (
+            rate(perception_requests_total{agent_id="xiaona",status=~"5.."}[5m])
+            /
+            rate(perception_requests_total{agent_id="xiaona"}[5m])
+          ) > 0.10
+        for: 5m
+        labels:
+          severity: warning
+          service: perception
+          agent: xiaona
+        annotations:
+          summary: "小娜智能体请求失败率过高"
+          description: "小娜智能体失败率超过10%，当前值: {{ $value | humanizePercentage }}"
+
+  # ========================================
+  # 存储告警
+  # ========================================
+  - name: perception_storage_alerts
+    interval: 30s
+    rules:
+      # 磁盘空间不足
+      - alert: PerceptionLowDiskSpace
+        expr: |
+          (
+            node_filesystem_avail_bytes{mountpoint="/app/data"}
+            /
+            node_filesystem_size_bytes{mountpoint="/app/data"}
+          ) < 0.2
+        for: 10m
+        labels:
+          severity: warning
+          service: perception
+        annotations:
+          summary: "感知模块磁盘空间不足"
+          description: "可用磁盘空间低于20%，当前值: {{ $value | humanizePercentage }}"
+
+      # 临时文件堆积
+      - alert: PerceptionTempFileBacklog
+        expr: perception_temp_files_count > 1000
+        for: 15m
+        labels:
+          severity: info
+          service: perception
+        annotations:
+          summary: "感知模块临时文件堆积"
+          description: "临时文件数量超过1000，当前值: {{ $value }}"
+
+# ========================================
+# 使用说明
+# ========================================
+#
+# 1. 将此文件放置在Prometheus配置目录：
+#    cp perception-alerts.yml /etc/prometheus/
+#
+# 2. 在Prometheus主配置文件中引用：
+#    rule_files:
+#      - 'perception-alerts.yml'
+#
+# 3. 验证规则语法：
+#    promtool check rules /etc/prometheus/perception-alerts.yml
+#
+# 4. 重新加载Prometheus配置：
+#    kill -HUP $(pidof prometheus)
+#
+# 5. 查看告警规则状态：
+#    http://localhost:9090/alerts
+#
+# ========================================
+# 告警级别说明
+# ========================================
+#
+# critical: 严重影响服务可用性，需要立即处理
+# warning:  服务性能下降，需要尽快处理
+# info:     信息性告警，建议关注
+#
+# ========================================

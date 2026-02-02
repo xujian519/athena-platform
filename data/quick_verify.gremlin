@@ -1,0 +1,24 @@
+
+# 快速验证脚本 - 在Gremlin控制台中执行
+
+# 1. 检查图的基本信息
+graph.toString()
+
+# 2. 验证数据存在性
+graph.traversal().V().hasNext()
+
+# 3. 获取图的基本统计
+node_count = graph.traversal().V().count().next()
+edge_count = graph.traversal().E().count().next()
+
+println("=== 图统计 ===")
+println("节点数量: " + node_count)
+println("边数量: " + edge_count)
+
+# 4. 验证示例数据
+println("\n=== 示例节点 ===")
+graph.traversal().V().hasLabel('Patent').limit(3).valueMap().toList()
+
+# 5. 验证关系
+println("\n=== 示例关系 ===")
+graph.traversal().E().limit(3).project('id', 'label', 'outV', 'inV').by(id).by(label).by(outV().id()).by(inV().id()).toList()

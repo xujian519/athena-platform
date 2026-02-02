@@ -1,0 +1,6 @@
+{
+  "optimizer": "miprov2",
+  "timestamp": "20251230_003511",
+  "model_class": "PatentAnalyzer",
+  "trainset_size": 628
+}

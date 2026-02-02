@@ -1,0 +1,189 @@
+{
+  "update_time": "2025-12-17 17:50",
+  "update_summary": "新增3个正式客户信息：李艳、曹新乐、王玉荣",
+  "customer_database": {
+    "total_customers": 7,
+    "formal_customers": 7,
+    "temporary_customers": 0,
+    "considering_customers": 1
+  },
+  "customer_details": [
+    {
+      "id": "d9a5213a-224d-4061-81c2-3947aff5cf37",
+      "name": "张国艳",
+      "phone": "13854382805",
+      "address": "滨州沾化富源街道",
+      "status": "formal_customer",
+      "type": "INDIVIDUAL",
+      "business_status": "new_inquiry",
+      "financial_status": "pending",
+      "priority": "medium",
+      "responsible_person": "傅玉秀",
+      "next_action": "2025-12-18 08:30 联系办理费减备案"
+    },
+    {
+      "id": "bdeec10e-2427-4c87-b091-caa782b1efe2",
+      "name": "山东艾迈泰克机械科技有限公司",
+      "status": "formal_customer",
+      "type": "COMPANY",
+      "business_status": "in_progress",
+      "financial_status": "paid",
+      "priority": "normal",
+      "notes": "正常业务客户，手续办理中"
+    },
+    {
+      "name": "刘宝元",
+      "status": "formal_customer",
+      "type": "UNKNOWN",
+      "business_status": "in_progress",
+      "financial_status": "pending_payment",
+      "priority": "high",
+      "notes": "手续在办理，费用未到账，需要催缴",
+      "payment_follow_up": "2025-12-18"
+    },
+    {
+      "name": "范文新",
+      "status": "formal_customer",
+      "type": "UNKNOWN",
+      "business_status": "in_progress",
+      "financial_status": "pending_payment",
+      "priority": "high",
+      "notes": "手续在办理，费用未到账，需要催缴",
+      "payment_follow_up": "2025-12-18"
+    },
+    {
+      "name": "孙俊霞",
+      "status": "formal_customer",
+      "type": "UNKNOWN",
+      "business_status": "patent_name_confirmed",
+      "financial_status": "paid",
+      "priority": "normal",
+      "notes": "专利名称已确定，费用已付清",
+      "patent_status": "ready_for_filing"
+    },
+    {
+      "name": "曹新乐",
+      "status": "formal_customer",
+      "type": "UNKNOWN",
+      "business_status": "confirmed_paid",
+      "financial_status": "paid",
+      "priority": "normal",
+      "notes": "证书客户，费用已经支付，文件已经写完，需要正式管理",
+      "patent_status": "certificate_ready"
+    },
+    {
+      "id": "9ab020cb-0951-43c4-8092-089b285b21e5",
+      "name": "李艳",
+      "status": "considering",
+      "type": "INDIVIDUAL",
+      "business_status": "decision_phase",
+      "financial_status": "pending",
+      "priority": "medium",
+      "notes": "临时客户，目前在考虑中",
+      "decision_timeline": "2025-12-25",
+      "next_contact": "2025-12-20"
+    },
+    {
+      "name": "王玉荣",
+      "status": "formal_customer",
+      "type": "UNKNOWN",
+      "business_status": "confirmed_paid",
+      "financial_status": "paid",
+      "priority": "normal",
+      "notes": "专利申请已确认，费用已支付",
+      "patent_status": "application_confirmed"
+    }
+  ],
+  "business_summary": {
+    "total_customers": 7,
+    "formal_customers": 7,
+    "considering_customers": 1,
+    "financial_status": {
+      "paid_customers": 4,
+      "pending_payment": 2,
+      "pending_decision": 1,
+      "payment_collection_rate": "66.7%"
+    },
+    "business_progress": {
+      "new_inquiries": 1,
+      "in_progress": 5,
+      "confirmed_paid": 3,
+      "certificate_ready": 1,
+      "ready_for_filing": 1
+    }
+  },
+  "immediate_actions": [
+    {
+      "task": "张国艳专利服务跟进",
+      "responsible": "傅玉秀",
+      "deadline": "2025-12-18 08:30",
+      "priority": "high",
+      "status": "pending"
+    },
+    {
+      "task": "刘宝元费用催缴",
+      "responsible": "待分配",
+      "deadline": "2025-12-18",
+      "priority": "high",
+      "status": "pending"
+    },
+    {
+      "task": "范文新费用催缴",
+      "responsible": "待分配",
+      "deadline": "2025-12-18",
+      "priority": "high",
+      "status": "pending"
+    },
+    {
+      "task": "李艳跟进计划",
+      "responsible": "业务团队",
+      "deadline": "2025-12-20",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "task": "曹新乐证书客户管理",
+      "responsible": "客服团队",
+      "deadline": "2025-12-18",
+      "priority": "normal",
+      "status": "pending"
+    },
+    {
+      "task": "王玉荣专利申请准备",
+      "responsible": "业务团队",
+      "deadline": "2025-12-18",
+      "priority": "normal",
+      "status": "pending"
+    }
+  ],
+  "priority_matrix": {
+    "high_priority": [
+      "张国艳专利服务跟进",
+      "刘宝元费用催缴",
+      "范文新费用催缴"
+    ],
+    "medium_priority": [
+      "李艳决策跟进",
+      "曹新乐证书管理"
+    ],
+    "normal_priority": [
+      "王玉荣专利申请",
+      "孙俊霞专利申报"
+    ]
+  },
+  "revenue_analysis": {
+    "confirmed_revenue": "4个客户已确认付款",
+    "potential_revenue": "2个客户费用待确认",
+    "lost_revenue": "1个客户在考虑中",
+    "recovery_opportunities": [
+      "李艳 - 通过价值展示促进决策",
+      "刘宝元/范文新 - 解决缴费问题"
+    ]
+  },
+  "system_status": {
+    "database": "postgresql_yunpat",
+    "last_update": "2025-12-17 17:50",
+    "data_integrity": "good",
+    "backup_required": true
+  }
+}

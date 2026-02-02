@@ -1,0 +1,232 @@
+# Athena多模态文件系统部署配置
+# Multimodal File System Deployment Configuration
+
+version: "1.0.0"
+system_name: "Athena Multimodal File System"
+description: "多模态文件处理和分析系统"
+
+# 核心服务配置
+services:
+  # 多模态处理服务
+  multimodal_processor:
+    name: "多模态处理服务"
+    host: "localhost"
+    port: 8012
+    status: "running"
+    endpoint: "http://localhost:8012"
+    description: "文档、图像、音频、视频的综合处理服务"
+    supported_formats:
+      documents: ["pdf", "docx", "txt"]
+      images: ["png", "jpg", "jpeg", "tiff", "bmp", "gif"]
+      audio: ["mp3", "wav", "m4a", "flac"]
+      video: ["mp4", "avi", "mov", "mkv"]
+    features:
+      - "文档文本提取"
+      - "OCR文字识别"
+      - "图像处理分析"
+      - "音频特征提取"
+      - "视频帧提取"
+      - "多模态AI理解"
+      - "技术图纸识别"
+
+  # GLM视觉服务
+  glm_vision:
+    name: "GLM全系列模型服务"
+    host: "localhost"
+    port: 8091
+    status: "running"
+    endpoint: "http://localhost:8091"
+    description: "GLM-4V多模态视觉理解服务"
+    models:
+      - "glm-4v-plus"  # 多模态理解
+      - "glm-4.6"       # 推理专家
+      - "glm-4.6-code"  # 编程专家
+      - "glm-4-flash"    # 快速响应
+      - "cogvideox"      # 视频生成
+      - "cogview-4"      # 文生图
+      - "cogview-3-plus" # 高质量文生图
+    capabilities:
+      - "深度推理与思考"
+      - "专业代码生成"
+      - "多模态理解"
+      - "图像生成"
+      - "视频生成"
+      - "专利专业分析"
+      - "智能体协调"
+      - "长文档处理"
+
+  # 化学式分析服务
+  chemical_analyzer:
+    name: "化学式分析服务"
+    type: "embedded"
+    status: "available"
+    description: "ChemPy增强的化学式识别和分析"
+    features:
+      - "分子式解析"
+      - "分子量计算"
+      - "化学术语识别"
+      - "化学缩写映射"
+      - "中文化学名称识别"
+    libraries:
+      - "ChemPy"
+      - "正则表达式匹配"
+      - "GLM-4V图像识别"
+
+# 系统功能配置
+capabilities:
+  # 文档处理
+  document_processing:
+    enabled: true
+    supported_types: ["patent", "technical", "scientific", "legal"]
+    features:
+      - "PDF文本提取"
+      - "Word文档解析"
+      - "OCR文字识别"
+      - "多语言支持"
+
+  # 图像处理
+  image_processing:
+    enabled: true
+    supported_types: ["technical_drawing", "chemical_structure", "patent_drawing", "diagram"]
+    features:
+      - "技术图纸识别"
+      - "化学结构式分析"
+      - "专利附图理解"
+      - "图表数据提取"
+      - "OCR文字识别"
+
+  # 音频处理
+  audio_processing:
+    enabled: true
+    supported_formats: ["speech", "interview", "meeting"]
+    features:
+      - "语音识别(FunASR/Paraformer)"
+      - "音频转录"
+      - "说话人识别"
+      - "情感分析"
+
+  # 视频处理
+  video_processing:
+    enabled: true
+    supported_formats: ["presentation", "lecture", "demonstration"]
+    features:
+      - "视频帧提取"
+      - "音频转录"
+      - "内容分析"
+      - "关键帧识别"
+
+# 部署配置
+deployment:
+  environment: "development"
+  log_level: "INFO"
+  max_file_size: "100MB"
+  concurrent_processing: 4
+  temp_directory: "/tmp/athena_multimodal"
+
+  # 存储配置
+  storage:
+    upload_directory: "/Users/xujian/Athena工作平台/data/multimodal_uploads"
+    processed_directory: "/Users/xujian/Athena工作平台/data/multimodal_processed"
+    cache_directory: "/Users/xujian/Athena工作平台/data/multimodal_cache"
+
+  # 安全配置
+  security:
+    allowed_file_types: ["pdf", "docx", "txt", "png", "jpg", "jpeg", "tiff", "bmp", "gif", "mp3", "wav", "m4a", "mp4", "avi", "mov"]
+    max_files_per_request: 10
+    rate_limit: 100  # requests per minute
+
+# API路由配置
+api_routes:
+  base_path: "/api/v1/multimodal"
+  endpoints:
+    # 文件上传和处理
+    upload:
+      path: "/upload"
+      method: "POST"
+      description: "上传多模态文件进行处理"
+
+    # 图像分析
+    analyze_image:
+      path: "/analyze/image"
+      method: "POST"
+      description: "分析图像内容（技术图纸、化学结构等）"
+
+    # 文档处理
+    process_document:
+      path: "/process/document"
+      method: "POST"
+      description: "处理文档内容（PDF、Word等）"
+
+    # 音频转录
+    transcribe_audio:
+      path: "/transcribe/audio"
+      method: "POST"
+      description: "音频文件转录"
+
+    # 视频分析
+    analyze_video:
+      path: "/analyze/video"
+      method: "POST"
+      description: "视频内容分析"
+
+    # 化学式分析
+    analyze_chemical:
+      path: "/analyze/chemical"
+      method: "POST"
+      description: "化学式和化学名称分析"
+
+    # 跨模态搜索
+    search:
+      path: "/search"
+      method: "GET"
+      description: "跨模态内容搜索"
+
+    # 处理状态查询
+    status:
+      path: "/status/{task_id}"
+      method: "GET"
+      description: "查询处理任务状态"
+
+# 监控和日志
+monitoring:
+  enabled: true
+  metrics:
+    - "processing_time"
+    - "success_rate"
+    - "error_rate"
+    - "queue_length"
+    - "resource_usage"
+
+  logging:
+    level: "INFO"
+    file: "/Users/xujian/Athena工作平台/logs/multimodal_system.log"
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# 健康检查
+health_check:
+  enabled: true
+  interval: 30  # seconds
+  services:
+    - name: "multimodal_processor"
+      url: "http://localhost:8012/"
+      timeout: 5
+    - name: "glm_vision"
+      url: "http://localhost:8091/health"
+      timeout: 5
+
+# 性能配置
+performance:
+  caching:
+    enabled: true
+    ttl: 3600  # seconds
+    max_size: "1GB"
+
+  processing:
+    max_concurrent_tasks: 10
+    task_timeout: 300  # seconds
+    retry_attempts: 3
+
+  optimization:
+    image_compression: true
+    audio_normalization: true
+    video_thumbnail_generation: true

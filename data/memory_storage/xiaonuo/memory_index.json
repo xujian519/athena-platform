@@ -1,0 +1,19 @@
+{
+  "memories": [
+    {
+      "memory_id": "startup_guide_20251217_062402",
+      "title": "Athena工作平台启动指南 2025-12-17",
+      "category": "system_startup",
+      "tags": [
+        "启动",
+        "按需启动",
+        "优化",
+        "指南",
+        "2025-12-17"
+      ],
+      "timestamp": "2025-12-17T06:24:02.465326",
+      "priority": "high"
+    }
+  ],
+  "last_updated": "2025-12-17T06:24:02.465654"
+}

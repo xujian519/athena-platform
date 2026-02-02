@@ -1,0 +1,282 @@
+{
+  "customer_id": "b6f2c8d1-7e45-4f89-a2c3-5d8e7f9a1b2c",
+  "basic_info": {
+    "name": "曹新乐",
+    "type": "INDIVIDUAL",
+    "status": "formal_customer",
+    "business_type": "patent_services",
+    "contact_info": {
+      "phone": "未记录",
+      "email": "未记录",
+      "address": "河南省郑州市",
+      "postal_code": "450000"
+    }
+  },
+  "financial_status": {
+    "status": "paid",
+    "payment_stage": "fully_paid",
+    "total_amount": "待确认",
+    "paid_amount": "待确认",
+    "outstanding_amount": 0,
+    "payment_terms": "full_payment",
+    "last_payment": {
+      "date": "2025-12-10",
+      "amount": "待确认",
+      "method": "未知",
+      "status": "confirmed"
+    },
+    "payment_history": [
+      {
+        "date": "2025-12-10",
+        "amount": "待确认",
+        "description": "专利申请费用（详见费用缴纳通知）",
+        "status": "confirmed",
+        "document": "费用缴纳通知（曹新乐2025.12.10）.docx"
+      }
+    ]
+  },
+  "business_progress": {
+    "status": "in_progress",
+    "services": [
+      "实用新型专利申请",
+      "专利文件撰写",
+      "技术方案分析"
+    ],
+    "completion_percentage": "30%",
+    "blocked_by_payment": false,
+    "estimated_completion": "申请提交后6-8个月"
+  },
+  "patent_projects": [
+    {
+      "project_id": "cxl_patent_001",
+      "title": "铜铝复合电解铝阳极母线连接结构",
+      "type": "utility_model",
+      "status": "preparation",
+      "application_field": "电解铝生产设备",
+      "technical_field": "阳极母线连接技术",
+
+      "technical_solution": {
+        "background": "电解铝生产过程中，现有铝-铝直接连接方式存在摩擦阻力大、产生拉痕、导电性能下降等问题",
+        "main_innovation_points": [
+          {
+            "innovation": "铜铝复合结构设计",
+            "description": "采用铜铝复合结构，结合铜的良好导电性和铝的经济性",
+            "advantages": "降低摩擦系数、提高导电效率、减少能耗损失"
+          },
+          {
+            "innovation": "表面处理工艺",
+            "description": "特殊的表面处理工艺，进一步降低摩擦系数",
+            "advantages": "延长使用寿命，降低维护成本"
+          }
+        ],
+        "key_parameters": [
+          "摩擦系数从μ=0.3-0.4降低到μ=0.1-0.2",
+          "接触电阻从25-40μΩ降低到10-20μΩ",
+          "槽电压降低0.1-0.3V",
+          "年电耗节约200-500万元"
+        ]
+      },
+
+      "application_status": {
+        "current_stage": "preparation",
+        "progress": 30,
+        "key_milestones": [
+          {
+            "milestone": "技术调研完成",
+            "status": "completed",
+            "completion_date": "2025-12-01"
+          },
+          {
+            "milestone": "技术方案确定",
+            "status": "completed",
+            "completion_date": "2025-12-08"
+          },
+          {
+            "milestone": "申请文件撰写",
+            "status": "in_progress",
+            "planned_date": "2025-12-20"
+          },
+          {
+            "milestone": "申请提交",
+            "status": "pending",
+            "planned_date": "2025-12-31"
+          }
+        ]
+      },
+
+      "fee_details": {
+        "agency_fee": "待确认",
+        "official_fee": "待确认",
+        "reduction": "未知",
+        "total": "待确认",
+        "payment_status": "paid",
+        "payment_date": "2025-12-10"
+      },
+
+      "documents": [
+        {
+          "document_name": "铜铝复合电解铝阳极母线连接结构_实用新型专利申请书.md",
+          "document_type": "patent_application_draft",
+          "file_path": "/Users/xujian/工作/01_客户管理/01_正式客户/曹新乐_20251217/03_技术资料/过程文件/铜铝复合电解铝阳极母线连接结构_实用新型专利申请书.md",
+          "creation_date": "2025-12-08"
+        },
+        {
+          "document_name": "一种铜铝复合阳极母线（申报稿12.17）.docx",
+          "document_type": "final_draft",
+          "file_path": "/Users/xujian/工作/01_客户管理/01_正式客户/曹新乐_20251217/02_专利申请/一种铜铝复合阳极母线（申报稿12.17）.docx",
+          "creation_date": "2025-12-17"
+        }
+      ],
+
+      "inventor_info": {
+        "name": "曹新乐",
+        "address": "河南省郑州市",
+        "postal_code": "450000"
+      },
+
+      "priority_analysis": {
+        "novelty_assessment": "medium_high",
+        "inventive_step": "medium",
+        "industrial_applicability": "high",
+        "estimated_success_rate": "85%",
+        "recommended_strategy": "重点强调复合结构的技术优势和经济价值"
+      }
+    }
+  ],
+
+  "document_management": {
+    "file_location": "/Users/xujian/工作/01_客户管理/01_正式客户/曹新乐_20251217",
+    "directory_structure": {
+      "01_基本信息": "客户档案和基本信息",
+      "02_专利申请": "专利申请相关文件（申报稿、确认表）",
+      "03_技术资料": "技术分析报告和过程文件",
+      "04_沟通记录": "与客户的沟通记录",
+      "05_财务档案": "财务缴费相关文件",
+      "06_审查答复": "审查意见答复文件",
+      "07_附图图纸": "技术附图和CAD图纸",
+      "08_合同协议": "合同协议文件"
+    },
+    "total_files": 36,
+    "file_categories": {
+      "专利申请文件": 3,
+      "技术资料": 18,
+      "附图图纸": 10,
+      "财务档案": 1,
+      "其他": 4
+    },
+    "last_updated": "2025-12-17 18:09:00"
+  },
+
+  "service_schedule": {
+    "current_stage": "文件整理完成",
+    "next_steps": [
+      {
+        "step": 1,
+        "action": "申请文件最终审核",
+        "deadline": "2025-12-20",
+        "responsible": "专利代理人",
+        "status": "pending"
+      },
+      {
+        "step": 2,
+        "action": "客户确认定稿",
+        "deadline": "2025-12-25",
+        "responsible": "客户 + 代理人",
+        "status": "pending"
+      },
+      {
+        "step": 3,
+        "action": "提交专利申请",
+        "deadline": "2025-12-31",
+        "responsible": "申请部",
+        "status": "pending"
+      }
+    ]
+  },
+
+  "contact_history": [
+    {
+      "date": "2025-12-10",
+      "type": "payment_confirmation",
+      "purpose": "缴费确认",
+      "status": "completed",
+      "notes": "客户完成专利申请费用缴费"
+    },
+    {
+      "date": "2025-12-17",
+      "type": "document_organization",
+      "purpose": "文件整理",
+      "status": "completed",
+      "notes": "完成客户文件标准化整理，建立完善的文档管理系统"
+    }
+  ],
+
+  "system_integration": {
+    "storage_system": "document_storage_system",
+    "database_linked": true,
+    "file_indexed": true,
+    "search_enabled": true,
+    "last_sync": "2025-12-17 20:30:00"
+  },
+
+  "risk_assessment": {
+    "technical_risk": "low",
+    "patentability_risk": "medium",
+    "timeline_risk": "low",
+    "concerns": [
+      "需要进一步确定缴费金额",
+      "需要收集更多客户联系信息",
+      "需要确认申请提交的具体时间安排"
+    ],
+    "mitigation_strategies": [
+      "尽快联系客户确认缴费详情",
+      "完善客户档案信息",
+      "制定详细的申请提交计划"
+    ]
+  },
+
+  "success_metrics": {
+    "payment_received": true,
+    "payment_date": "2025-12-10",
+    "documents_collected": true,
+    "documents_organized": true,
+    "patent_applications_prepared": true,
+    "applications_submitted": false,
+    "patents_granted": false
+  },
+
+  "system_info": {
+    "created_by": "xiaonuo_hybrid_system",
+    "created_at": "2025-12-17 20:30:00",
+    "last_updated": "2025-12-17 20:30:00",
+    "database": "postgresql_yunpat",
+    "customer_id_short": "b6f2c8d1"
+  },
+
+  "action_items": [
+    {
+      "action": "联系客户确认缴费详情",
+      "deadline": "2025-12-18",
+      "priority": "high",
+      "responsible": "客户经理",
+      "status": "pending"
+    },
+    {
+      "action": "完善客户联系信息",
+      "deadline": "2025-12-19",
+      "priority": "medium",
+      "responsible": "客户经理",
+      "status": "pending"
+    },
+    {
+      "action": "申请文件最终审核",
+      "deadline": "2025-12-20",
+      "priority": "high",
+      "responsible": "专利代理人",
+      "status": "pending"
+    }
+  ],
+
+  "tags": ["正式客户", "实用新型", "已缴费", "电解铝", "阳极母线", "铜铝复合", "文件已整理"],
+  "priority_score": 8
+}

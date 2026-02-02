@@ -1,0 +1,12 @@
+{
+  "version": "3.0.0-enhanced",
+  "training_phase": "BootstrapFewShot",
+  "timestamp": "20260104_171454",
+  "training_time_seconds": 0.046716,
+  "avg_score": 0.6075,
+  "num_samples": 80,
+  "config": {
+    "max_bootstrapped_demos": 5,
+    "max_labeled_demos": 10
+  }
+}

@@ -1,0 +1,153 @@
+// patent_landscape 知识图谱
+// 生成时间: 2025-12-14T20:52:46.916262
+
+// 创建 patents 节点
+g.addV('Patents').property('id', 'AI_patent_001')
+ .property('title', '深度学习专利分析方法')
+ .property('technology', '深度学习')
+ .property('industry', '人工智能')
+ .property('applicant', 'Athena AI公司')
+ .property('inventors', '[\'张教授\', \'李博士\', \'王工程师\']')
+ .property('priority', '高')
+ .property('market_potential', '巨大')
+;
+g.addV('Patents').property('id', 'legal_tech_001')
+ .property('title', '智能合同审查系统')
+ .property('technology', 'NLP')
+ .property('industry', '法律科技')
+ .property('applicant', 'LegalTech创新')
+ .property('inventors', '[\'赵律师\', \'钱算法专家\']')
+ .property('priority', '中')
+ .property('market_potential', '良好')
+;
+g.addV('Patents').property('id', 'blockchain_001')
+ .property('title', '专利区块链存证方法')
+ .property('technology', '区块链')
+ .property('industry', '金融科技')
+ .property('applicant', 'BlockPatent公司')
+ .property('inventors', '[\'孙架构师\', \'李开发者\']')
+ .property('priority', '高')
+ .property('market_potential', '巨大')
+;
+
+// 创建 technologies 节点
+g.addV('Technologies').property('id', 'deep_learning')
+ .property('name', '深度学习')
+ .property('category', '机器学习')
+ .property('maturity', '成熟')
+ .property('trend', '上升')
+ .property('applications', '[\'图像识别\', \'自然语言处理\', \'推荐系统\']')
+;
+g.addV('Technologies').property('id', 'nlp')
+ .property('name', '自然语言处理')
+ .property('category', '人工智能')
+ .property('maturity', '发展期')
+ .property('trend', '快速上升')
+ .property('applications', '[\'文本分析\', \'机器翻译\', \'问答系统\']')
+;
+g.addV('Technologies').property('id', 'blockchain')
+ .property('name', '区块链')
+ .property('category', '分布式技术')
+ .property('maturity', '成长期')
+ .property('trend', '稳定')
+ .property('applications', '[\'供应链\', \'金融服务\', \'知识产权\']')
+;
+
+// 创建 industries 节点
+g.addV('Industries').property('id', 'ai_industry')
+ .property('name', '人工智能产业')
+ .property('market_size', '万亿级')
+ .property('growth_rate', '30%+')
+ .property('key_players', '[\'Google\', \'Microsoft\', \'OpenAI\', \'Athena AI\']')
+;
+g.addV('Industries').property('id', 'legal_tech')
+ .property('name', '法律科技产业')
+ .property('market_size', '千亿级')
+ .property('growth_rate', '20%+')
+ .property('key_players', '[\'LegalTech创新\', \'LawGeex\', \'Kira Systems\']')
+;
+g.addV('Industries').property('id', 'fintech')
+ .property('name', '金融科技产业')
+ .property('market_size', '万亿级')
+ .property('growth_rate', '25%+')
+ .property('key_players', '[\'蚂蚁集团\', \'BlockPatent\', \'Stripe\']')
+;
+
+// 创建 companies 节点
+g.addV('Companies').property('id', 'athena_ai')
+ .property('name', 'Athena AI公司')
+ .property('type', 'AI企业')
+ .property('location', '北京')
+ .property('founded', '2018')
+ .property('focus_area', '专利分析、AI研发')
+ .property('market_cap', '10亿')
+ .property('competitiveness', '强')
+;
+g.addV('Companies').property('id', 'legaltech_innovation')
+ .property('name', 'LegalTech创新')
+ .property('type', '法律科技企业')
+ .property('location', '上海')
+ .property('founded', '2019')
+ .property('focus_area', '合同审查、法律AI')
+ .property('market_cap', '5亿')
+ .property('competitiveness', '中')
+;
+g.addV('Companies').property('id', 'blockpatent')
+ .property('name', 'BlockPatent公司')
+ .property('type', '区块链企业')
+ .property('location', '深圳')
+ .property('founded', '2020')
+ .property('focus_area', '专利保护、区块链存证')
+ .property('market_cap', '8亿')
+ .property('competitiveness', '强')
+;
+
+// 创建关系
+g.V('AI_patent_001').addE('IMPLEMENTS_TECHNOLOGY').to(g.V('deep_learning'))
+ .property('technology_level', '核心技术')
+ .property('innovation_degree', '高度创新')
+ .property('commercial_value', '高')
+;
+g.V('legal_tech_001').addE('IMPLEMENTS_TECHNOLOGY').to(g.V('nlp'))
+ .property('technology_level', '应用技术')
+ .property('innovation_degree', '中度创新')
+ .property('commercial_value', '中')
+;
+g.V('AI_patent_001').addE('BELONGS_TO_INDUSTRY').to(g.V('ai_industry'))
+ .property('industry_role', '技术引领者')
+ .property('market_position', '领先')
+ .property('competitive_advantage', '技术壁垒')
+;
+g.V('deep_learning').addE('SUPPORTS_INDUSTRY').to(g.V('ai_industry'))
+ .property('support_level', '关键技术')
+ .property('impact_scope', '全行业')
+ .property('future_potential', '巨大')
+;
+g.V('athena_ai').addE('OWNS_PATENT').to(g.V('AI_patent_001'))
+ .property('ownership_type', '全资拥有')
+ .property('protection_scope', '全球')
+ .property('licensing_model', '专有')
+;
+g.V('athena_ai').addE('COMPETES_IN').to(g.V('ai_industry'))
+ .property('market_share', '5%')
+ .property('competitive_strategy', '技术领先')
+ .property('growth_potential', '高')
+;
+g.V('AI_patent_001').addE('SYNERGY_WITH').to(g.V('blockchain_001'))
+ .property('synergy_type', '技术互补')
+ .property('cooperation_model', '专利交叉许可')
+ .property('joint_development', '可能')
+;
+
+// 查询示例
+// 1. 查看所有节点数量
+g.V().count()
+
+// 2. 查看所有关系数量
+g.E().count()
+
+// 3. 查看节点类型
+g.V().label().dedup()
+
+// 4. 查看关系类型
+g.E().label().dedup()

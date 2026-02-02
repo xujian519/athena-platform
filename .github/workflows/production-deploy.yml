@@ -1,0 +1,537 @@
+# Athena多模态文件系统生产环境CI/CD工作流
+# Production CI/CD Workflow for Athena Multimodal File System
+
+name: Production Deploy
+
+on:
+  push:
+    branches: [ main, production ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # 每天凌晨2点检查更新
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      deploy_environment:
+        description: '部署环境'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+        - staging
+        - production
+      force_deploy:
+        description: '强制部署'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  REGISTRY: registry.cn-hangzhou.aliyuncs.com/athena
+  PROJECT_NAME: athena-prod
+
+jobs:
+  # 代码质量检查
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    outputs:
+      should-deploy: ${{ steps.check.outputs.should-deploy }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 设置Python环境
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r services/requirements.txt
+          pip install flake8 black isort pylint bandit safety mypy
+
+      - name: 代码格式检查
+        run: |
+          black --check services/
+          isort --check-only services/
+
+      - name: 代码质量分析
+        run: |
+          flake8 services/ --count --select=E9,F63,F7,F82 --show-source --statistics
+          bandit -r services/ -f json -o bandit-report.json || true
+          safety check --json --output safety-report.json || true
+
+      - name: 上传质量报告
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: quality-reports
+          path: |
+            bandit-report.json
+            safety-report.json
+
+      - name: 检查是否应该部署
+        id: check
+        run: |
+          SHOULD_DEPLOY=false
+
+          # 如果是主分支且不是PR
+          if [[ "${{ github.ref }}" == "refs/heads/main" && "${{ github.event_name }}" != "pull_request" ]]; then
+            SHOULD_DEPLOY=true
+          fi
+
+          # 如果是生产分支
+          if [[ "${{ github.ref }}" == "refs/heads/production" ]]; then
+            SHOULD_DEPLOY=true
+          fi
+
+          # 如果是标签
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            SHOULD_DEPLOY=true
+          fi
+
+          # 如果是手动触发
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            SHOULD_DEPLOY=true
+          fi
+
+          echo "should-deploy=$SHOULD_DEPLOY" >> $GITHUB_OUTPUT
+
+      - name: 生成版本号
+        id: version
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          else
+            VERSION=$(date +"%Y%m%d_%H%M%S")-$(git rev-parse --short HEAD)
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "版本号: $VERSION"
+
+  # 构建Docker镜像
+  build-images:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+    needs: code-quality
+    if: needs.code-quality.outputs.should-deploy == 'true' || github.event_name == 'pull_request'
+    strategy:
+      matrix:
+        service:
+          - multimodal-api
+          - dolphin-parser
+          - glm-vision
+          - multimodal-processor
+          - xiao-nuo-control
+          - platform-manager
+          - platform-monitor
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 登录阿里云容器镜像服务
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.ALIYUN_DOCKER_USERNAME }}
+          password: ${{ secrets.ALIYUN_DOCKER_PASSWORD }}
+
+      - name: 构建并推送镜像
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.${{ matrix.service }}
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ matrix.service }}:${{ needs.code-quality.outputs.version }}
+            ${{ env.REGISTRY }}/${{ matrix.service }}:latest
+          labels: |
+            com.athena.version=${{ needs.code-quality.outputs.version }}
+            com.athena.build-date=${{ github.event.head_commit.timestamp }}
+            com.athena.git-commit=${{ github.sha }}
+            com.athena.github-workflow=${{ github.workflow }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
+
+      - name: 扫描镜像安全漏洞
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ matrix.service }}:${{ needs.code-quality.outputs.version }}
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: 上传Trivy扫描结果
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  # 运行测试
+  run-tests:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: code-quality
+    if: needs.code-quality.outputs.should-deploy == 'true' || github.event_name == 'pull_request'
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_USER: test_user
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python环境
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r services/requirements.txt
+          pip install pytest pytest-cov pytest-mock pytest-asyncio
+
+      - name: 运行单元测试
+        run: |
+          pytest services/tests/ -v --cov=services --cov-report=xml --cov-report=html
+
+      - name: 运行集成测试
+        run: |
+          pytest services/integration_tests/ -v --junitxml=test-results.xml
+
+      - name: 上传测试覆盖率
+        uses: codecov/codecov-action@v3
+        if: always()
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+
+      - name: 上传测试结果
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-results
+          path: |
+            test-results.xml
+            htmlcov/
+
+  # 安全扫描
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: code-quality
+    if: needs.code-quality.outputs.should-deploy == 'true'
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 运行Semgrep安全扫描
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: auto
+          generate-sarif: 1
+
+      - name: 上传Semgrep SARIF文件
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: semgrep.sarif
+
+      - name: 依赖安全扫描
+        run: |
+          pip install safety
+          safety check --json --output safety-report.json || true
+
+      - name: 上传安全报告
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: security-reports
+          path: safety-report.json
+
+  # 部署到预发布环境
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [code-quality, build-images, run-tests]
+    if: |
+      needs.code-quality.outputs.should-deploy == 'true' &&
+      (github.event_name == 'pull_request' ||
+       github.event.inputs.deploy_environment == 'staging')
+    environment:
+      name: staging
+      url: https://staging.athena.multimodal.ai
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置SSH密钥
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.STAGING_SSH_KEY }}
+
+      - name: 部署到预发布环境
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} << 'EOF'
+            cd /opt/athena
+            git pull origin main
+            docker-compose -f docker-compose.staging.yml down
+            docker-compose -f docker-compose.staging.yml pull
+            docker-compose -f docker-compose.staging.yml up -d
+            docker system prune -f
+          EOF
+
+      - name: 健康检查
+        run: |
+          sleep 30
+          curl -f https://staging.athena.multimodal.ai/health || exit 1
+
+  # 部署到生产环境
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [code-quality, build-images, run-tests, security-scan]
+    if: |
+      needs.code-quality.outputs.should-deploy == 'true' &&
+      (github.ref == 'refs/heads/production' ||
+       github.event_name == 'push' && github.ref == 'refs/heads/main' ||
+       github.ref == 'refs/tags/*' ||
+       github.event.inputs.deploy_environment == 'production')
+    environment:
+      name: production
+      url: https://athena.multimodal.ai
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 创建部署开始通知
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          custom_payload: |
+            {
+              text: "🚀 开始部署 Athena 到生产环境",
+              attachments: [{
+                color: "#36a64f",
+                fields: [
+                  { title: "分支", value: "${{ github.ref_name }}", short: true },
+                  { title: "提交", value: "${{ github.sha }}", short: true },
+                  { title: "版本", value: "${{ needs.code-quality.outputs.version }}", short: true },
+                  { title: "触发者", value: "${{ github.actor }}", short: true }
+                ]
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: 设置SSH密钥
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.PRODUCTION_SSH_KEY }}
+
+      - name: 蓝绿部署
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.PRODUCTION_USER }}@${{ secrets.PRODUCTION_HOST }} << 'EOF'
+            cd /opt/athena
+
+            # 创建备份
+            docker-compose -f docker-compose.prod.yml exec postgres-primary pg_dump -U athena_user athena_production > backup_$(date +%Y%m%d_%H%M%S).sql
+
+            # 蓝绿部署
+            if docker ps | grep -q "athena-blue"; then
+              TARGET_ENV="green"
+              CURRENT_ENV="blue"
+            else
+              TARGET_ENV="blue"
+              CURRENT_ENV="green"
+            fi
+
+            echo "部署到 $TARGET_ENV 环境"
+
+            # 更新目标环境配置
+            cp docker-compose.prod.yml docker-compose.${TARGET_ENV}.yml
+            sed -i "s/athena-prod/athena-${TARGET_ENV}/g" docker-compose.${TARGET_ENV}.yml
+
+            # 部署新版本
+            docker-compose -f docker-compose.${TARGET_ENV}.yml down
+            docker-compose -f docker-compose.${TARGET_ENV}.yml pull
+            docker-compose -f docker-compose.${TARGET_ENV}.yml up -d
+
+            # 等待服务就绪
+            sleep 60
+
+            # 健康检查
+            if curl -f http://localhost-${TARGET_ENV}/health; then
+              echo "$TARGET_ENV 环境部署成功"
+
+              # 切换流量
+              # 这里应该使用负载均衡器API切换流量
+              echo "切换流量到 $TARGET_ENV"
+
+              # 保留旧环境一段时间以便回滚
+              # docker-compose -f docker-compose.${CURRENT_ENV}.yml down
+            else
+              echo "$TARGET_ENV 环境部署失败"
+              docker-compose -f docker-compose.${TARGET_ENV}.yml down
+              exit 1
+            fi
+          EOF
+
+      - name: 生产环境健康检查
+        run: |
+          # 检查主域名
+          curl -f https://athena.multimodal.ai/health || exit 1
+          curl -f https://api.athena.multimodal.ai/health || exit 1
+          curl -f https://admin.athena.multimodal.ai/health || exit 1
+
+      - name: 运行烟雾测试
+        run: |
+          # 测试API端点
+          curl -X POST https://api.athena.multimodal.ai/analyze/health \
+            -H "Content-Type: application/json" \
+            -d '{"test": true}'
+
+      - name: 创建部署成功通知
+        uses: 8398a7/action-slack@v3
+        if: success()
+        with:
+          status: success
+          text: "✅ Athena 生产环境部署成功"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: 创建部署失败通知
+        uses: 8398a7/action-slack@v3
+        if: failure()
+        with:
+          status: failure
+          text: "❌ Athena 生产环境部署失败"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  # 性能测试
+  performance-test:
+    name: Performance Test
+    runs-on: ubuntu-latest
+    needs: deploy-production
+    if: github.ref == 'refs/heads/production' || github.ref == 'refs/tags/*'
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 运行性能测试
+        run: |
+          # 使用Artillery进行负载测试
+          npm install -g artillery@latest
+
+          cat > load-test.yml << EOF
+          config:
+            target: 'https://api.athena.multimodal.ai'
+            phases:
+              - duration: 60
+                arrivalRate: 10
+                name: "Warm up"
+              - duration: 120
+                arrivalRate: 50
+                name: "Ramp up load"
+              - duration: 300
+                arrivalRate: 100
+                name: "Sustained load"
+          scenarios:
+            - name: "API Health Check"
+              weight: 40
+              flow:
+                - get:
+                    url: "/health"
+            - name: "Document Analysis"
+              weight: 30
+              flow:
+                - post:
+                    url: "/analyze/health"
+                    json:
+                      test: true
+            - name: "System Metrics"
+              weight: 30
+              flow:
+                - get:
+                    url: "/metrics"
+          EOF
+
+          artillery run load-test.yml
+
+      - name: 上传性能测试报告
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: performance-report
+          path: artillery-report.html
+
+  # 清理
+  cleanup:
+    name: Cleanup
+    runs-on: ubuntu-latest
+    needs: [deploy-production]
+    if: always()
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置SSH密钥
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.PRODUCTION_SSH_KEY }}
+
+      - name: 清理Docker资源
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.PRODUCTION_USER }}@${{ secrets.PRODUCTION_HOST }} << 'EOF'
+            cd /opt/athena
+            docker system prune -f
+            docker volume prune -f
+          EOF
+
+  # 通知
+  notify:
+    name: Notify
+    runs-on: ubuntu-latest
+    needs: [deploy-production, performance-test]
+    if: always()
+    steps:
+      - name: 发送部署总结
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

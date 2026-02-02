@@ -1,0 +1,19 @@
+# Parallels Desktop 16 for Mac Standard 
+
+2021-6-29购买
+
+```
+JVNDMR-HA9PDR-MS4S4K-FW7Z9Z-B4RDFX
+```
+
+
+
+6H7DCD-CBDC9A-9CTPRA-2JMYFD-ASH7MC
+
+
+
+```
+F2Y3Y2-4ZPDNB-VYR44Q-TJAVKQ-5VHBZ3
+```
+
+![截屏2020-08-17 上午7.48.29](https://i.loli.net/2020/08/17/SwCKfVor1gPkI8z.png)

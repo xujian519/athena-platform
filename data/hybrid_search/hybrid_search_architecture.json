@@ -1,0 +1,105 @@
+{
+  "name": "Athena混合搜索引擎",
+  "components": {
+    "知识图谱层": {
+      "database": "JanusGraph",
+      "purpose": "存储实体关系和网络结构",
+      "query_types": [
+        "实体关系查询",
+        "路径发现",
+        "网络分析",
+        "子图匹配"
+      ],
+      "data_types": [
+        "专利节点",
+        "公司实体",
+        "发明人信息",
+        "技术分类",
+        "法律案例"
+      ]
+    },
+    "向量检索层": {
+      "database": "Qdrant",
+      "purpose": "语义相似度搜索",
+      "features": [
+        "1024维向量索引",
+        "余弦相似度",
+        "批量搜索",
+        "实时更新"
+      ],
+      "collections": [
+        "patent_vectors",
+        "company_vectors",
+        "technology_vectors",
+        "legal_vectors"
+      ]
+    },
+    "融合层": {
+      "purpose": "智能整合两种搜索结果",
+      "strategies": [
+        "加权融合",
+        "级联搜索",
+        "并行查询",
+        "结果重排"
+      ],
+      "ranking_factors": [
+        "语义相似度",
+        "关系强度",
+        "实体重要性",
+        "时效性"
+      ]
+    }
+  },
+  "workflows": {
+    "语义搜索": [
+      "1. 用户输入查询文本",
+      "2. 生成查询向量",
+      "3. Qdrant向量搜索",
+      "4. 返回相似实体",
+      "5. 获取实体关系"
+    ],
+    "混合搜索": [
+      "1. 用户输入查询+实体类型",
+      "2. 并行执行向量+图搜索",
+      "3. 融合搜索结果",
+      "4. 智能排序",
+      "5. 返回增强结果"
+    ],
+    "关系挖掘": [
+      "1. 指定起始实体",
+      "2. JanusGraph多跳查询",
+      "3. 计算关系权重",
+      "4. 发现隐藏模式",
+      "5. 可视化关系网络"
+    ]
+  },
+  "apis": {
+    "search": {
+      "endpoint": "/api/v2/hybrid/search",
+      "method": "POST",
+      "parameters": {
+        "query": "搜索文本",
+        "entity_type": "实体类型(可选)",
+        "limit": "返回数量",
+        "filters": "过滤条件"
+      }
+    },
+    "graph_query": {
+      "endpoint": "/api/v2/graph/query",
+      "method": "POST",
+      "parameters": {
+        "gremlin": "Gremlin查询语句",
+        "explain": "是否返回解释"
+      }
+    },
+    "relation_analysis": {
+      "endpoint": "/api/v2/analysis/relations",
+      "method": "POST",
+      "parameters": {
+        "entity_id": "起始实体ID",
+        "depth": "搜索深度",
+        "relation_types": "关系类型过滤"
+      }
+    }
+  }
+}

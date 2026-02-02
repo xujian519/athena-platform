@@ -1,0 +1,98 @@
+{
+  "knowledge_type": "autocad_mac_guide",
+  "added_date": "2025-12-24",
+  "father": "徐健",
+  "topics": [
+    {
+      "id": 1,
+      "title": "AutoCAD Mac 设置白色背景",
+      "keywords": ["白色背景", "背景颜色", "模型空间", "外观设置"],
+      "steps": [
+        "点击左上角 'AutoCAD' 菜单",
+        "选择 '首选项' (Preferences)",
+        "在左侧列中点击 '外观和特征' 或 '外观和风格' (Appearance)",
+        "找到 '界面主题' 下的 '模型' 框",
+        "选择颜色为 '白色'",
+        "设置完成，自动保存"
+      ],
+      "path": "AutoCAD菜单 → 首选项 → 外观和特征 → 界面主题 → 模型背景色 → 白色"
+    },
+    {
+      "id": 2,
+      "title": "AutoCAD Mac 导出图片格式",
+      "keywords": ["导出图片", "PNG", "JPG", "高清", "PDF转换"],
+      "methods": [
+        {
+          "name": "方法一：命令行快速导出",
+          "commands": ["PNGOUT", "JPGOUT", "BMPOUT"],
+          "description": "在命令行输入命令，选择保存位置和文件名，框选要导出的对象",
+          "quality": "中等分辨率，适合快速预览"
+        },
+        {
+          "name": "方法二：菜单导出",
+          "path": "文件 → 导出 → 其他格式 → 选择图片格式",
+          "quality": "中等质量，日常使用"
+        },
+        {
+          "name": "方法三：PDF转换（推荐高清）",
+          "steps": [
+            "文件 → 打印 → 选择 'DWG to PDF.pc3'",
+            "设置打印区域为'窗口'并框选范围",
+            "打印比例勾选'布满图纸'",
+            "选择大尺寸图纸（如ISO A0、A1）",
+            "打印为PDF",
+            "用Mac预览app打开PDF",
+            "文件 → 导出 → 选择PNG或JPEG",
+            "设置高质量/最佳质量",
+            "导出保存"
+          ],
+          "quality": "最高质量，适合正式出图",
+          "note": "Mac版没有PublishToWeb PNG.pc3打印机，PDF转图片是标准方案"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "AutoCAD Mac 设置矩形框选",
+      "keywords": ["矩形框选", "套索选择", "PICKAUTO", "窗口选择", "交叉选择"],
+      "methods": [
+        {
+          "name": "方法一：系统变量设置",
+          "command": "PICKAUTO",
+          "value": "3",
+          "steps": [
+            "命令行输入: PICKAUTO",
+            "按回车",
+            "输入: 3",
+            "按回车"
+          ]
+        },
+        {
+          "name": "方法二：首选项设置（推荐）",
+          "path": "右键绘图区域 → Preferences → Cursor and Selection",
+          "steps": [
+            "在绘图区域右键点击",
+            "选择 'Preferences' (首选项)",
+            "点击 'Cursor and Selection' (光标和选择) 选项卡",
+            "找到 'Allow press and drag for Lasso'",
+            "取消勾选此选项",
+            "点击 OK 保存"
+          ]
+        }
+      ],
+      "selection_modes": {
+        "window_selection": {
+          "direction": "从左到右",
+          "color": "蓝色实线框",
+          "rule": "只选中完全在框内的对象"
+        },
+        "crossing_selection": {
+          "direction": "从右到左",
+          "color": "绿色虚线框",
+          "rule": "选中与框相交或在框内的所有对象"
+        }
+      }
+    }
+  ],
+  "memory_note": "爸爸在2025年12月24日询问的三个AutoCAD Mac使用问题，已全部掌握！💖"
+}

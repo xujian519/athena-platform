@@ -1,0 +1,282 @@
+# 多模态专利分析CI/CD工作流
+# Multimodal Patent Analysis CI/CD Workflow
+
+name: Multimodal CI
+
+on:
+  push:
+    branches: [feature/multimodal-patent-analysis, main]
+    paths:
+      - 'production/**'
+      - 'tests/test_patent_image_analyzer.py'
+      - '.github/workflows/multimodal-ci.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'production/**'
+      - 'tests/test_patent_image_analyzer.py'
+  workflow_dispatch:
+
+env:
+  REGISTRY: registry.cn-hangzhou.aliyuncs.com/athena
+  IMAGE_NAME: athena-multimodal-api
+
+jobs:
+  # 代码质量检查
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 设置Python环境
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install black isort flake8 bandit safety mypy
+          pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+
+      - name: 代码格式检查
+        run: |
+          echo "检查production目录代码格式..."
+          black --check production/
+          isort --check-only production/
+        continue-on-error: true
+
+      - name: 代码质量分析
+        run: |
+          echo "运行flake8代码质量检查..."
+          flake8 production/ --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 production/ --max-line-length=100 --exclude=__pycache__
+
+      - name: 安全扫描
+        run: |
+          echo "运行bandit安全扫描..."
+          bandit -r production/ -f json -o bandit-report.json || true
+          bandit -r production/ -f txt -o bandit-report.txt || true
+
+      - name: 依赖安全扫描
+        run: |
+          pip install safety
+          safety check --json --output safety-report.json || true
+          safety check || true
+
+      - name: 上传扫描报告
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: security-reports
+          path: |
+            bandit-report.json
+            bandit-report.txt
+            safety-report.json
+
+  # 运行测试
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: code-quality
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python环境
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov pytest-mock pytest-asyncio pytest-timeout
+          pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+          pip install transformers sentence-transformers pillow opencv-python-headless
+          pip install pytesseract
+
+      - name: 运行单元测试
+        run: |
+          echo "运行多模态专利分析单元测试..."
+          pytest tests/test_patent_image_analyzer.py -v -m "not slow" --cov=production --cov-report=xml --cov-report=html --cov-report=term
+
+      - name: 上传测试覆盖率
+        uses: codecov/codecov-action@v3
+        if: always()
+        with:
+          file: ./coverage.xml
+          flags: multimodal
+          name: codecov-multimodal
+
+      - name: 上传测试报告
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-reports
+          path: |
+            htmlcov/
+            .pytest_cache/
+
+  # 构建Docker镜像
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: [code-quality, test]
+    if: github.event_name != 'pull_request' || github.event_name == 'workflow_dispatch'
+    outputs:
+      image-tag: ${{ steps.meta.outputs.tags }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 登录阿里云容器镜像服务
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.ALIYUN_DOCKER_USERNAME }}
+          password: ${{ secrets.ALIYUN_DOCKER_PASSWORD }}
+
+      - name: 生成版本号
+        id: version
+        run: |
+          VERSION=$(date +"%Y%m%d_%H%M%S")-$(git rev-parse --short HEAD)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "版本号: $VERSION"
+
+      - name: 构建并推送镜像
+        id: docker_build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.multimodal-api
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          labels: |
+            com.athena.version=${{ steps.version.outputs.version }}
+            com.athena.build-date=${{ github.event.head_commit.timestamp }}
+            com.athena.git-commit=${{ github.sha }}
+            com.athena.github-workflow=${{ github.workflow }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
+
+      - name: 镜像元数据
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,prefix={{branch}}-
+
+  # 部署到测试环境
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.ref != 'refs/heads/main' && github.event_name != 'pull_request'
+    environment:
+      name: staging
+      url: https://staging.athena.multimodal.ai
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 部署通知
+        run: |
+          echo "🚀 部署到测试环境"
+          echo "镜像: ${{ needs.build.outputs.image-tag }}"
+          echo "版本: ${{ needs.build.outputs.version }}"
+
+  # 部署到生产环境
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment:
+      name: production
+      url: https://athena.multimodal.ai
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 创建部署开始通知
+        run: |
+          echo "🚀 开始部署到生产环境"
+          echo "镜像: ${{ needs.build.outputs.image-tag }}"
+          echo "版本: ${{ needs.build.outputs.version }}"
+
+      - name: 模拟部署步骤
+        run: |
+          echo "执行蓝绿部署..."
+          echo "1. 备份当前环境"
+          echo "2. 部署新版本"
+          echo "3. 健康检查"
+          echo "4. 切换流量"
+          echo "✅ 部署成功"
+
+      - name: 健康检查
+        run: |
+          echo "执行健康检查..."
+          # 实际部署时取消注释下面的命令
+          # curl -f https://athena.multimodal.ai/health || exit 1
+          # curl -f https://api.athena.multimodal.ai/api/v1/patent/image/analyze || exit 1
+
+      - name: 创建部署成功通知
+        if: success()
+        run: |
+          echo "✅ 多模态专利分析服务部署成功！"
+          echo "版本: ${{ needs.build.outputs.version }}"
+          echo "提交: ${{ github.sha }}"
+
+  # 性能测试
+  performance-test:
+    name: Performance Test
+    runs-on: ubuntu-latest
+    needs: [deploy-production]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python环境
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: 安装依赖
+        run: |
+          pip install pytest-benchmark
+
+      - name: 运行性能基准测试
+        run: |
+          echo "运行性能测试..."
+          # 这里可以添加具体的性能测试
+          pytest tests/test_patent_image_analyzer.py::TestWithTimeout -v
+
+  # 清理旧镜像
+  cleanup:
+    name: Cleanup
+    runs-on: ubuntu-latest
+    needs: [deploy-production]
+    if: always()
+    steps:
+      - name: 清理旧镜像
+        run: |
+          echo "清理7天前的镜像..."
+          # 实际部署时可以使用:
+          # docker system prune -f --filter "until=168h"

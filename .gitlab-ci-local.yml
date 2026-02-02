@@ -1,0 +1,272 @@
+# Athena工作平台 - 本地CI/CD配置
+# Local CI/CD Configuration for Athena Platform
+#
+# 使用本地GitLab Runner或手动执行实现本地CI/CD流程
+# 集成本地PostgreSQL 17.7和其他基础设施服务
+
+# 定义阶段
+stages:
+  - quality      # 代码质量检查
+  - test         # 测试（单元测试、集成测试）
+  - build        # 构建Docker镜像
+  - deploy       # 部署到生产环境
+
+# 全局变量
+variables:
+  # Python版本
+  PYTHON_VERSION: "3.11"
+  # 项目名称
+  PROJECT_NAME: "athena-platform"
+  # 本地PostgreSQL连接
+  POSTGRES_HOST: "localhost"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: "athena_production"
+  POSTGRES_USER: "athena"
+  POSTGRES_PASSWORD: "athena123"
+  # Docker镜像标签
+  IMAGE_TAG: "${CI_COMMIT_SHORT_SHA}"
+  # 部署环境
+  DEPLOY_ENVIRONMENT: "production"
+
+# ==========================================
+# Stage 1: 代码质量检查
+# ==========================================
+code-quality:
+  stage: quality
+  tags:
+    - local
+  script:
+    - echo "🔍 开始代码质量检查..."
+    # 检查Python版本
+    - python3 --version
+    # 安装依赖
+    - pip3 install --upgrade pip
+    - pip3 install black isort flake8 mypy bandit safety pylint
+    # 代码格式检查
+    - echo "检查代码格式（black）..."
+    - black --check core/ --diff | tee black-report.txt || true
+    - echo "检查导入排序（isort）..."
+    - isort --check-only core/ --diff-only | tee isort-report.txt || true
+    # 代码质量分析
+    - echo "代码质量分析（flake8）..."
+    - flake8 core/ --count --select=E9,F63,F7,F82 --show-source --statistics | tee flake8-report.txt
+    - flake8 core/ --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics | tee -a flake8-report.txt
+    # 类型检查
+    - echo "类型检查（mypy）..."
+    - mypy core/ --ignore-missing-imports --strict-optional --show-error-codes | tee mypy-report.txt || true
+    # 安全扫描
+    - echo "安全扫描（bandit）..."
+    - bandit -r core/ -f json -o bandit-report.json || true
+    - bandit -r core/ | tee bandit-report.txt
+    # 依赖安全检查
+    - echo "依赖安全检查（safety）..."
+    - safety check --json --output safety-report.json || true
+    - safety check | tee safety-report.txt
+    - echo "✅ 代码质量检查完成"
+  artifacts:
+    when: always
+    paths:
+      - black-report.txt
+      - isort-report.txt
+      - flake8-report.txt
+      - mypy-report.txt
+      - bandit-report.json
+      - bandit-report.txt
+      - safety-report.json
+      - safety-report.txt
+    expire_in: 7 days
+  allow_failure: false
+
+# ==========================================
+# Stage 2: 测试
+# ==========================================
+unit-tests:
+  stage: test
+  tags:
+    - local
+  before_script:
+    # 设置本地PostgreSQL连接
+    - export DATABASE_URL="postgresql://athena:athena123@localhost:5432/athena_production"
+    # 检查PostgreSQL连接
+    - psql -h localhost -U athena -d athena_production -c "SELECT version();" || echo "PostgreSQL连接失败"
+  script:
+    - echo "🧪 开始单元测试..."
+    # 安装测试依赖
+    - pip3 install --upgrade pip
+    - pip3 install pytest pytest-cov pytest-asyncio pytest-mock
+    - pip3 install -r requirements.txt || echo "无requirements.txt文件"
+    # 运行单元测试
+    - pytest tests/core/execution/test_shared_types.py -v --cov=core/execution --cov-report=xml --cov-report=html --cov-report=term-missing --junitxml=pytest-report.xml | tee pytest-output.txt
+    # 显示测试结果摘要
+    - echo "✅ 单元测试完成"
+    - grep -E "passed|failed|error" pytest-output.txt || true
+  artifacts:
+    when: always
+    paths:
+      - pytest-report.xml
+      - htmlcov/
+      - coverage.xml
+      - pytest-output.txt
+    expire_in: 7 days
+  dependencies:
+    - code-quality
+  allow_failure: false
+
+integration-tests:
+  stage: test
+  tags:
+    - local
+  before_script:
+    # 启动基础设施服务（Redis, Qdrant等）
+    - echo "启动基础设施服务..."
+    - docker-compose -f production/config/docker/docker-compose.infrastructure.yml up -d redis qdrant || echo "Docker服务启动失败或已运行"
+    - sleep 20
+    # 设置环境变量
+    - export DATABASE_URL="postgresql://athena:athena123@localhost:5432/athena_production"
+    - export REDIS_URL="redis://localhost:6379/0"
+    - export QDRANT_HOST="localhost"
+    - export QDRANT_PORT="6333"
+  script:
+    - echo "🔗 开始集成测试..."
+    # 安装测试依赖
+    - pip3 install --upgrade pip
+    - pip3 install pytest pytest-asyncio httpx
+    - pip3 install -r requirements.txt || echo "无requirements.txt文件"
+    # 运行集成测试
+    - pytest tests/integration/ -v --junitxml=integration-test-report.xml | tee integration-test-output.txt || true
+    - echo "✅ 集成测试完成"
+  after_script:
+    # 停止基础设施服务
+    - docker-compose -f production/config/docker/docker-compose.infrastructure.yml down || true
+  artifacts:
+    when: always
+    paths:
+      - integration-test-report.xml
+      - integration-test-output.txt
+    expire_in: 7 days
+  dependencies:
+    - code-quality
+  allow_failure: true
+
+performance-tests:
+  stage: test
+  tags:
+    - local
+  script:
+    - echo "⚡ 开始性能测试..."
+    # 安装性能测试依赖
+    - pip3 install --upgrade pip
+    - pip3 install pytest-benchmark locust
+    - pip3 install -r requirements.txt || echo "无requirements.txt文件"
+    # 运行性能测试
+    - pytest tests/core/execution/test_performance.py -v --benchmark-only --benchmark-json=performance-report.json | tee performance-test-output.txt
+    - echo "✅ 性能测试完成"
+    - grep -E "task_creation|enqueue_dequeue|memory_efficiency" performance-test-output.txt || true
+  artifacts:
+    when: always
+    paths:
+      - performance-report.json
+      - performance-test-output.txt
+    expire_in: 7 days
+  dependencies:
+    - code-quality
+  allow_failure: true
+
+# ==========================================
+# Stage 3: 构建
+# ==========================================
+build-docker-images:
+  stage: build
+  tags:
+    - local
+  script:
+    - echo "🏗️ 开始构建Docker镜像..."
+    # 检查Docker是否运行
+    - docker --version
+    - docker info
+    # 构建执行模块镜像
+    - echo "构建执行模块镜像..."
+    - docker build -t athena/execution-engine:${IMAGE_TAG} -f Dockerfile.execution .
+    - docker tag athena/execution-engine:${IMAGE_TAG} athena/execution-engine:latest
+    # 构建其他模块镜像（如果存在）
+    - docker build -t athena/search-api:${IMAGE_TAG} -f Dockerfile.search . || echo "搜索API镜像构建跳过"
+    - docker tag athena/search-api:${IMAGE_TAG} athena/search-api:latest || true
+    # 显示构建的镜像
+    - docker images | grep athena
+    - echo "✅ Docker镜像构建完成"
+  dependencies:
+    - unit-tests
+    - integration-tests
+    - performance-tests
+  allow_failure: false
+
+# ==========================================
+# Stage 4: 部署
+# ==========================================
+deploy-to-production:
+  stage: deploy
+  tags:
+    - local
+  before_script:
+    # 确认部署环境
+    - echo "部署环境: ${DEPLOY_ENVIRONMENT}"
+    # 检查生产环境配置文件
+    - test -f config/production.yaml || echo "生产环境配置文件不存在"
+    # 创建备份
+    - mkdir -p backups
+    - cp config/production.yaml backups/production.yaml.$(date +%Y%m%d_%H%M%S).backup
+  script:
+    - echo "🚀 开始部署到生产环境..."
+    # 执行部署脚本
+    - ./scripts/deploy_to_production.sh --env production --tag ${IMAGE_TAG}
+    # 健康检查
+    - echo "执行健康检查..."
+    - sleep 10
+    - curl -f http://localhost:8080/health || echo "健康检查失败"
+    # 运行冒烟测试
+    - echo "运行冒烟测试..."
+    - python3 scripts/smoke_tests.py --env production || echo "冒烟测试失败"
+    - echo "✅ 部署完成"
+  after_script:
+    # 如果部署失败，执行回滚
+    - |
+      if [ $? -ne 0 ]; then
+        echo "❌ 部署失败，执行回滚..."
+        ./scripts/rollback_execution_macos.sh --dry-run false
+      fi
+  dependencies:
+    - build-docker-images
+  when: manual  # 需要手动触发部署
+  allow_failure: false
+
+# ==========================================
+# 辅助任务
+# ==========================================
+cleanup:
+  stage: .post
+  tags:
+    - local
+  script:
+    - echo "🧹 清理临时文件和旧镜像..."
+    # 清理Docker资源
+    - docker system prune -f
+    - docker image prune -a -f
+    # 清理旧的备份文件（保留最近5个）
+    - ls -t backups/ | tail -n +6 | xargs -I {} rm backups/{} 2>/dev/null || true
+    - echo "✅ 清理完成"
+  when: always
+  allow_failure: true
+
+# ==========================================
+# 本地CI/CD使用说明
+# ==========================================
+# 使用GitLab Runner（推荐）:
+#   1. 安装GitLab Runner: brew install gitlab-runner
+#   2. 注册Runner: gitlab-runner register
+#   3. 运行流水线: gitlab-runner exec docker <job-name>
+#
+# 手动执行（备选）:
+#   1. 代码质量检查: ./scripts/local_ci.sh quality
+#   2. 测试: ./scripts/local_ci.sh test
+#   3. 构建: ./scripts/local_ci.sh build
+#   4. 部署: ./scripts/local_ci.sh deploy

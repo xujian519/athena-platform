@@ -1,0 +1,254 @@
+# 系统文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 环境配置文件（保留模板文件）
+.env.production
+.env
+.env.local
+.env.*.local
+
+# 日志文件
+*.log
+logs/
+
+# 临时文件
+*.tmp
+*.temp
+temp/
+tmp/
+
+# 数据文件
+*.rdb
+*.db
+*.sqlite
+*.sqlite3
+
+# 缓存目录
+cache/
+test_cache/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE和编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 虚拟环境
+venv/
+env/
+.venv/
+.env/
+site-packages/
+**/env/
+**/venv/
+**/.env/
+
+# 测试和覆盖率
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.pytest_cache/
+.tox/
+.nox/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# 性能分析文件
+*.prof
+*.profraw
+
+# 监控数据
+monitoring_data/
+performance_monitoring/
+system_monitoring/
+
+# 备份文件
+*.bak
+*.backup
+security_backups/
+backup*/
+
+# Claude相关
+.claude/session*
+
+# 大文件和数据文件
+# 向量数据库
+**/*.db
+**/*.sqlite
+**/*.sqlite3
+**/vector_db/
+**/data/databases/
+
+# 模型文件
+**/*.bin
+**/*.pkl
+**/*.pth
+**/*.pt
+**/*.h5
+**/*.hdf5
+**/*.onnx
+**/*.tflite
+
+# 大型数据文件
+**/*.json.gz
+**/*.jsonl
+**/*.parquet
+**/*.hdf5
+**/*.h5
+**/*.feather
+**/*.pickle
+**/*.pkl
+
+# 文档和数据
+**/*.pdf
+**/*.docx
+**/*.xlsx
+**/*.pptx
+**/*.zip
+**/*.tar.gz
+**/*.rar
+**/*.7z
+
+# 媒体文件
+**/*.mp4
+**/*.avi
+**/*.mov
+**/*.mp3
+**/*.wav
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.gif
+**/*.bmp
+
+# AI/ML相关
+**/models/
+**/checkpoints/
+**/experiments/
+**/runs/
+**/logs/tensorboard/
+**/wandb/
+
+# 容器相关
+.dockerignore
+docker-compose.override.yml
+
+# CI/CD
+.github/workflows/*.tmp
+
+# 项目特定
+athena_logs/
+data/raw/
+data/processed/
+data/external/
+outputs/
+results/
+figures/
+plots/
+
+# 缓存和临时目录
+.cache/
+.mypy_cache/
+.bandit/
+.pyre/
+.tox/
+.coverage.*
+htmlcov/
+.nyc_output
+node_modules/
+.eslintcache
+
+# 操作系统生成文件
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# 编辑器和IDE
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+# 开发环境配置
+.envrc
+.env.development
+.env.test
+.env.staging
+
+# 密钥和证书
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+secrets/
+credentials/
+
+# 数据库转储
+*.sql
+*.dump
+*.backup
+
+# 配置文件中的敏感信息
+**/config/local.*
+**/config/production.*
+**/config/secrets.*
+
+# 临时构建文件
+build/
+dist/
+target/
+out/
+
+# 包管理器
+package-lock.json
+yarn.lock
+Pipfile.lock
+
+# 特定于平台的文件
+*.exe
+*.msi
+*.dmg
+*.app

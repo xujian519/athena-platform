@@ -1,0 +1,22 @@
+{
+  "标准会议": {
+    "type": "batch",
+    "items": [
+      {
+        "type": "reminder",
+        "title": "{meeting_title} - 准备",
+        "content": "会议准备事项：\n- 查看资料\n- 准备问题\n- 测试设备",
+        "list_name": "会议准备",
+        "priority": "high"
+      },
+      {
+        "type": "calendar",
+        "title": "{meeting_title}",
+        "description": "参会人：{participants}",
+        "duration": 60,
+        "calendar_name": "工作",
+        "alert_minutes": 30
+      }
+    ]
+  }
+}

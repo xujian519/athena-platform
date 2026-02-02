@@ -1,0 +1,71 @@
+{
+  "system": {
+    "name": "Athena统一记忆系统",
+    "version": "1.0.0",
+    "deploy_date": "2025-12-15T03:59:13Z"
+  },
+  "storage": {
+    "postgresql": {
+      "host": "localhost",
+      "port": "5438",
+      "database": "memory_module",
+      "pool_size": 10,
+      "max_overflow": 20
+    },
+    "qdrant": {
+      "host": "localhost",
+      "port": "6333",
+      "collection_name": "agent_memories",
+      "vector_size": 768
+    },
+    "knowledge_graph": {
+      "host": "localhost",
+      "port": "8002",
+      "endpoint": "/api/v1"
+    }
+  },
+  "memory": {
+    "tiers": {
+      "eternal": {"importance_threshold": 0.9, "retention_days": -1},
+      "hot": {"importance_threshold": 0.7, "retention_days": 365},
+      "warm": {"importance_threshold": 0.5, "retention_days": 90},
+      "cold": {"importance_threshold": 0.0, "retention_days": 30}
+    },
+    "auto_save": {
+      "enabled": true,
+      "threshold": 5,
+      "interval_seconds": 30
+    },
+    "compression": {
+      "enabled": true,
+      "threshold_days": 180
+    }
+  },
+  "agents": {
+    "athena": {
+      "id": "athena_wisdom",
+      "type": "wisdom_goddess",
+      "memory_types": ["knowledge", "conversation", "reflection"]
+    },
+    "xiaona": {
+      "id": "xiaona_libra",
+      "type": "emotional_companion",
+      "memory_types": ["family", "conversation", "preference"]
+    },
+    "xiaonuo": {
+      "id": "xiaonuo_pisces",
+      "type": "platform_coordinator",
+      "memory_types": ["family", "schedule", "knowledge"]
+    },
+    "yunxi": {
+      "id": "yunxi_vega",
+      "type": "ip_manager",
+      "memory_types": ["professional", "knowledge", "work"]
+    },
+    "xiaochen": {
+      "id": "xiaochen_sagittarius",
+      "type": "media_operator",
+      "memory_types": ["work", "learning", "creative"]
+    }
+  }
+}

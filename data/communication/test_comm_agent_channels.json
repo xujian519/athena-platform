@@ -1,0 +1,81 @@
+{
+  "system": {
+    "id": "system",
+    "name": "System Notifications",
+    "channel_type": "ChannelType.BROADCAST",
+    "participants": [],
+    "is_active": true,
+    "created_at": "2025-12-11 14:56:06.833541",
+    "last_activity": "2025-12-11 14:56:06.833550",
+    "config": {}
+  },
+  "api": {
+    "id": "api",
+    "name": "API Communication",
+    "channel_type": "ChannelType.API",
+    "participants": [],
+    "is_active": true,
+    "created_at": "2025-12-11 14:56:06.833606",
+    "last_activity": "2025-12-11 14:56:06.833606",
+    "config": {}
+  },
+  "bb234b55-b923-429c-adbf-d9f72ebf5119": {
+    "id": "bb234b55-b923-429c-adbf-d9f72ebf5119",
+    "name": "System Notifications",
+    "channel_type": "ChannelType.BROADCAST",
+    "participants": [],
+    "is_active": true,
+    "created_at": "2025-12-11 14:56:06.833737",
+    "last_activity": "2025-12-11 14:56:06.833743",
+    "config": {}
+  },
+  "99fff1e4-0d4b-4e9e-ab8b-91278f3f66b8": {
+    "id": "99fff1e4-0d4b-4e9e-ab8b-91278f3f66b8",
+    "name": "Private_test_comm_agent",
+    "channel_type": "ChannelType.DIRECT",
+    "participants": [],
+    "is_active": true,
+    "created_at": "2025-12-11 14:56:06.833801",
+    "last_activity": "2025-12-11 14:56:06.833802",
+    "config": {}
+  },
+  "18b1dcb9-a0b1-4cbd-8c3b-f29042424003": {
+    "id": "18b1dcb9-a0b1-4cbd-8c3b-f29042424003",
+    "name": "测试通道",
+    "channel_type": "ChannelType.DIRECT",
+    "participants": [
+      "user1",
+      "user2"
+    ],
+    "is_active": true,
+    "created_at": "2025-12-11 14:56:06.833883",
+    "last_activity": "2025-12-11 14:56:06.833884",
+    "config": {}
+  },
+  "direct_test_comm_agent_user1": {
+    "id": "direct_test_comm_agent_user1",
+    "name": "Direct Chat",
+    "channel_type": "ChannelType.DIRECT",
+    "participants": [
+      "test_comm_agent",
+      "user1"
+    ],
+    "is_active": true,
+    "created_at": "2025-12-11 14:56:06.833928",
+    "last_activity": "2025-12-11 14:56:06.833928",
+    "config": {}
+  },
+  "direct_test_comm_agent_user2": {
+    "id": "direct_test_comm_agent_user2",
+    "name": "Direct Chat",
+    "channel_type": "ChannelType.DIRECT",
+    "participants": [
+      "test_comm_agent",
+      "user2"
+    ],
+    "is_active": true,
+    "created_at": "2025-12-11 14:56:06.834072",
+    "last_activity": "2025-12-11 14:56:06.834074",
+    "config": {}
+  }
+}

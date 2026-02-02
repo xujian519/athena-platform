@@ -1,0 +1,831 @@
+{
+  "terms": {
+    "齿轮": {
+      "domain": "mechanical",
+      "category": "component",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "轴": {
+      "domain": "mechanical",
+      "category": "component",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "轴承": {
+      "domain": "mechanical",
+      "category": "component",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "传动": {
+      "domain": "mechanical",
+      "category": "action",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "机构": {
+      "domain": "mechanical",
+      "category": "structure",
+      "importance": "medium",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "装置": {
+      "domain": "mechanical",
+      "category": "structure",
+      "importance": "medium",
+      "synonyms": [
+        "设备",
+        "器械",
+        "器具"
+      ],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "设备": {
+      "domain": "mechanical",
+      "category": "structure",
+      "importance": "medium",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "离合器": {
+      "domain": "mechanical",
+      "category": "component",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "变速箱": {
+      "domain": "mechanical",
+      "category": "assembly",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "发动机": {
+      "domain": "mechanical",
+      "category": "assembly",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "芯片": {
+      "domain": "electronic",
+      "category": "component",
+      "importance": "high",
+      "synonyms": [
+        "集成电路",
+        "IC"
+      ],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "电路": {
+      "domain": "electronic",
+      "category": "component",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "传感器": {
+      "domain": "electronic",
+      "category": "component",
+      "importance": "high",
+      "synonyms": [
+        "感应器",
+        "探测器件"
+      ],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "控制器": {
+      "domain": "electronic",
+      "category": "component",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "处理器": {
+      "domain": "electronic",
+      "category": "component",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "模块": {
+      "domain": "electronic",
+      "category": "component",
+      "importance": "medium",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "单元": {
+      "domain": "electronic",
+      "category": "component",
+      "importance": "medium",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "集成电路": {
+      "domain": "electronic",
+      "category": "component",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "半导体": {
+      "domain": "electronic",
+      "category": "material",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "晶体管": {
+      "domain": "electronic",
+      "category": "component",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "算法": {
+      "domain": "software",
+      "category": "method",
+      "importance": "high",
+      "synonyms": [
+        "运算法则",
+        "计算方法"
+      ],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "模型": {
+      "domain": "software",
+      "category": "method",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "接口": {
+      "domain": "software",
+      "category": "component",
+      "importance": "medium",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "系统": {
+      "domain": "software",
+      "category": "structure",
+      "importance": "medium",
+      "synonyms": [
+        "体系",
+        "架构"
+      ],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "程序": {
+      "domain": "software",
+      "category": "software",
+      "importance": "medium",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "数据": {
+      "domain": "software",
+      "category": "resource",
+      "importance": "medium",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "深度学习": {
+      "domain": "software",
+      "category": "method",
+      "importance": "high",
+      "synonyms": [
+        "深度神经网络",
+        "DNN"
+      ],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "神经网络": {
+      "domain": "software",
+      "category": "method",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "卷积神经网络": {
+      "domain": "software",
+      "category": "method",
+      "importance": "high",
+      "synonyms": [
+        "CNN",
+        "卷积网络"
+      ],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "注意力机制": {
+      "domain": "software",
+      "category": "method",
+      "importance": "high",
+      "synonyms": [
+        "注意力",
+        "Attention机制"
+      ],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "机器学习": {
+      "domain": "software",
+      "category": "method",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "人工智能": {
+      "domain": "software",
+      "category": "field",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "化合物": {
+      "domain": "chemical",
+      "category": "substance",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "催化剂": {
+      "domain": "chemical",
+      "category": "substance",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "溶剂": {
+      "domain": "chemical",
+      "category": "substance",
+      "importance": "medium",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "反应器": {
+      "domain": "chemical",
+      "category": "equipment",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "分离": {
+      "domain": "chemical",
+      "category": "process",
+      "importance": "medium",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "纯化": {
+      "domain": "chemical",
+      "category": "process",
+      "importance": "medium",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "合成": {
+      "domain": "chemical",
+      "category": "process",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "聚合": {
+      "domain": "chemical",
+      "category": "process",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "组合物": {
+      "domain": "chemical",
+      "category": "mixture",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "混合物": {
+      "domain": "chemical",
+      "category": "mixture",
+      "importance": "medium",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "基因": {
+      "domain": "biotech",
+      "category": "molecule",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "蛋白质": {
+      "domain": "biotech",
+      "category": "molecule",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "抗体": {
+      "domain": "biotech",
+      "category": "molecule",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "细胞": {
+      "domain": "biotech",
+      "category": "organism",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "序列": {
+      "domain": "biotech",
+      "category": "structure",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "载体": {
+      "domain": "biotech",
+      "category": "vector",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "表达": {
+      "domain": "biotech",
+      "category": "process",
+      "importance": "medium",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "克隆": {
+      "domain": "biotech",
+      "category": "process",
+      "importance": "medium",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "突变": {
+      "domain": "biotech",
+      "category": "process",
+      "importance": "medium",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "诊断": {
+      "domain": "medical",
+      "category": "application",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "治疗": {
+      "domain": "medical",
+      "category": "application",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "药物": {
+      "domain": "medical",
+      "category": "substance",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "医疗器械": {
+      "domain": "medical",
+      "category": "device",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "医学影像": {
+      "domain": "medical",
+      "category": "method",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "CT": {
+      "domain": "medical",
+      "category": "equipment",
+      "importance": "medium",
+      "synonyms": [
+        "计算机断层扫描",
+        "CT扫描"
+      ],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "MRI": {
+      "domain": "medical",
+      "category": "equipment",
+      "importance": "medium",
+      "synonyms": [
+        "磁共振成像",
+        "核磁共振"
+      ],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "X光": {
+      "domain": "medical",
+      "category": "equipment",
+      "importance": "medium",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "超声": {
+      "domain": "medical",
+      "category": "equipment",
+      "importance": "medium",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "通信": {
+      "domain": "communication",
+      "category": "field",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "信号": {
+      "domain": "communication",
+      "category": "resource",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "网络": {
+      "domain": "communication",
+      "category": "structure",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "基站": {
+      "domain": "communication",
+      "category": "equipment",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "天线": {
+      "domain": "communication",
+      "category": "component",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "频谱": {
+      "domain": "communication",
+      "category": "resource",
+      "importance": "medium",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "协议": {
+      "domain": "communication",
+      "category": "standard",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "编码": {
+      "domain": "communication",
+      "category": "process",
+      "importance": "medium",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "调制": {
+      "domain": "communication",
+      "category": "process",
+      "importance": "medium",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    },
+    "5G": {
+      "domain": "communication",
+      "category": "standard",
+      "importance": "high",
+      "synonyms": [],
+      "related_terms": [],
+      "definition": null,
+      "features": [],
+      "frequency": 0,
+      "confidence": 1.0
+    }
+  },
+  "synonym_index": {
+    "深度神经网络": "深度学习",
+    "DNN": "深度学习",
+    "CNN": "卷积神经网络",
+    "卷积网络": "卷积神经网络",
+    "注意力": "注意力机制",
+    "Attention机制": "注意力机制",
+    "集成电路": "芯片",
+    "IC": "芯片",
+    "感应器": "传感器",
+    "探测器件": "传感器",
+    "运算法则": "算法",
+    "计算方法": "算法",
+    "设备": "装置",
+    "器械": "装置",
+    "器具": "装置",
+    "体系": "系统",
+    "架构": "系统",
+    "方式": "方法",
+    "途径": "方法",
+    "手段": "方法",
+    "计算机断层扫描": "CT",
+    "CT扫描": "CT",
+    "磁共振成像": "MRI",
+    "核磁共振": "MRI"
+  }
+}

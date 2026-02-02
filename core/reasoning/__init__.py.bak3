@@ -1,0 +1,815 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+推理引擎模块 - 统一架构版本
+Reasoning Engines Module - Unified Architecture
+
+包含Athena工作平台的所有推理引擎，采用统一编排架构。
+
+核心创新:
+- 统一推理引擎编排器 (UnifiedReasoningOrchestrator)
+- 自动识别任务类型
+- 智能选择最优引擎
+- 专业任务直接调用专业能力（绕过超级推理）
+
+核心框架:
+- 六步推理框架 (Six-Step Reasoning)
+- 七步推理框架 (Seven-Step Reasoning / Athena Super Reasoning)
+
+32模式超级推理:
+- Athena增强推理引擎 (32种推理模式)
+
+统一与高级推理:
+- 统一推理引擎
+- 双系统推理 (系统1+2)
+- 高级推理 (贝叶斯/模糊/模态/反事实)
+
+多模式推理系统:
+- Athena多模式推理系统 (Think Hard / Think Harder / Super Thinking)
+
+专利/法律推理:
+- 语义推理引擎 v1/v4
+- 法律推理引擎
+- 小娜超级推理引擎 (法律专家版)
+- 增强法律推理引擎
+- AI推理引擎 (无效宣告)
+- 合规判断引擎
+- 专家规则引擎
+- 专利规则链引擎
+- 现有技术分析器
+- 路线图生成器
+- LLM增强判断引擎
+
+清理状态:
+- ✅ 已删除重复文件 (athena_super_reasoning_original.py)
+- ✅ 已删除重复文件 (xiaonuo_super_reasoning_original.py)
+- ✅ 新增统一编排器 (unified_reasoning_orchestrator.py)
+
+作者: 小诺·双鱼座 v4.0.0
+创建: 2025-12-31
+版本: v4.0.0 (统一架构版)
+"""
+
+# 版本信息
+__version__ = '4.0.0'
+__author__ = '小诺·双鱼公主 v4.0.0'
+
+
+# =============================================================================
+# === 核心推理框架 ===
+# =============================================================================
+
+from typing import Any, Dict, List, Optional, Tuple, Callable, Union
+
+from .athena_super_reasoning import (
+    AthenaSuperReasoningEngine,
+    ThinkingPhase,
+    ConfidenceLevel,
+    ReasoningState,
+    RecursiveThinkingEngine
+)
+
+# LLM增强版本 (V2)
+try:
+    from .athena_super_reasoning_v2 import (
+        LLMEnhancedSuperReasoningEngine,
+        LLMEnhancedHypothesisManager
+    )
+except ImportError:
+    LLMEnhancedSuperReasoningEngine = None
+    LLMEnhancedHypothesisManager = None
+
+from .xiaonuo_six_step_reasoning import (
+    XiaonuoSixStepReasoningEngine,
+    SixStepPhase,
+    ReasoningMode
+)
+
+from .xiaonuo_reasoning_bridge import (
+    XiaonuoReasoningBridge,
+    get_reasoning_bridge,
+    reason,
+    ReasoningRequest,
+    ReasoningResponse
+)
+
+
+# =============================================================================
+# === 32模式超级推理 ===
+# =============================================================================
+
+try:
+    from .athena_enhanced_reasoning_32modes import (
+        AthenaReasoningEngine as Athena32ModesReasoningEngine,
+        ReasoningCategory,
+        ReasoningType as ReasoningType32,
+        ReasoningComplexity as ReasoningComplexity32,
+        ReasoningTask as ReasoningTask32,
+        ReasoningResult as ReasoningResult32,
+        ReasoningCapability,
+        ReasoningStrategySelector,
+        ReasoningPerformanceMonitor
+    )
+except ImportError:
+    Athena32ModesReasoningEngine = None
+    ReasoningCategory = None
+    ReasoningType32 = None
+    ReasoningComplexity32 = None
+    ReasoningTask32 = None
+    ReasoningResult32 = None
+    ReasoningCapability = None
+    ReasoningStrategySelector = None
+    ReasoningPerformanceMonitor = None
+
+
+# =============================================================================
+# === 统一与高级推理 ===
+# =============================================================================
+
+try:
+    from .unified_reasoning_engine import (
+        UnifiedReasoningEngine,
+        System1Reasoner as UnifiedSystem1Reasoner,
+        System2Reasoner as UnifiedSystem2Reasoner,
+        BayesianReasoner as UnifiedBayesianReasoner,
+        NeuroSymbolicReasoner,
+        DualSystemReasoner as UnifiedDualSystemReasoner,
+        BaseReasoner as UnifiedBaseReasoner,
+        ReasoningType as UnifiedReasoningType,
+        ReasoningContext as UnifiedReasoningContext,
+        ReasoningStep as UnifiedReasoningStep,
+        ReasoningChain as UnifiedReasoningChain,
+        ReasoningResult as UnifiedReasoningResult,
+        ReasoningComplexity as UnifiedReasoningComplexity
+    )
+except ImportError:
+    UnifiedReasoningEngine = None
+    UnifiedSystem1Reasoner = None
+    UnifiedSystem2Reasoner = None
+    UnifiedBayesianReasoner = None
+    NeuroSymbolicReasoner = None
+    UnifiedDualSystemReasoner = None
+    UnifiedBaseReasoner = None
+    UnifiedReasoningType = None
+    UnifiedReasoningContext = None
+    UnifiedReasoningStep = None
+    UnifiedReasoningChain = None
+    UnifiedReasoningResult = None
+    UnifiedReasoningComplexity = None
+
+try:
+    from .dual_system_reasoning import (
+        DualSystemReasoning as DualSystemReasoningEngine,
+        System1Reasoner as DualSystemSystem1Reasoner,
+        System2Reasoner as DualSystemSystem2Reasoner,
+        System1Profile,
+        System2Profile,
+        DualSystemInteraction
+    )
+except ImportError:
+    DualSystemReasoningEngine = None
+    DualSystemSystem1Reasoner = None
+    DualSystemSystem2Reasoner = None
+    System1Profile = None
+    System2Profile = None
+    DualSystemInteraction = None
+
+try:
+    from .advanced_reasoning_lingxi import (
+        BayesianReasoner as AdvancedBayesianReasoner,
+        FuzzyReasoner,
+        ModalReasoner,
+        CounterfactualReasoner
+    )
+except ImportError:
+    AdvancedBayesianReasoner = None
+    FuzzyReasoner = None
+    ModalReasoner = None
+    CounterfactualReasoner = None
+
+
+# =============================================================================
+# === 多模式推理系统 ===
+# =============================================================================
+
+try:
+    from .athena_multimodal_reasoning_system import (
+        AthenaMultimodalReasoningEngine,
+        ReasoningMode as MultimodalReasoningMode,
+        ThinkingComplexity,
+        AgentRole,
+        ThinkingTask,
+        ThinkingStep,
+        AIAgent,
+        AITeamCoordinator
+    )
+except ImportError:
+    AthenaMultimodalReasoningEngine = None
+    MultimodalReasoningMode = None
+    ThinkingComplexity = None
+    AgentRole = None
+    ThinkingTask = None
+    ThinkingStep = None
+    AIAgent = None
+    AITeamCoordinator = None
+
+
+# =============================================================================
+# === 专利/法律推理引擎 ===
+# =============================================================================
+
+# 语义推理引擎
+try:
+    from .semantic_reasoning_engine import (
+        SemanticReasoningEngine,
+        ReasoningType as SemanticReasoningType,
+        ReasoningResult as SemanticReasoningResult,
+        ReasoningRule as SemanticReasoningRule
+    )
+except ImportError:
+    SemanticReasoningEngine = None
+    SemanticReasoningType = None
+    SemanticReasoningResult = None
+    SemanticReasoningRule = None
+
+try:
+    from .semantic_reasoning_engine_v4 import (
+        SemanticReasoningEngineV4,
+        ReasoningResultV4,
+        ReasoningRule as SemanticReasoningRuleV4
+    )
+except Exception as e:
+    # 捕获所有异常，包括导入错误、模块依赖错误等
+    import logging
+    logging.getLogger(__name__).warning(f"semantic_reasoning_engine_v4 导入失败: {e}")
+    SemanticReasoningEngineV4 = None
+    ReasoningResultV4 = None
+    SemanticReasoningRuleV4 = None
+
+# 法律推理引擎
+try:
+    from .xiaona_super_reasoning_engine import (
+        XiaonaSuperReasoningEngine,
+        LegalReasoningMode,
+        LegalReasoningNode
+    )
+except ImportError:
+    XiaonaSuperReasoningEngine = None
+    LegalReasoningMode = None
+    LegalReasoningNode = None
+
+try:
+    from .enhanced_legal_reasoning_engine import (
+        EnhancedLegalReasoningEngine,
+        NoveltyConclusion,
+        InventivenessConclusion,
+        TechnicalFeature,
+        PriorArtReference,
+        NoveltyAnalysisResult,
+        InventivenessAnalysisResult
+    )
+except ImportError:
+    EnhancedLegalReasoningEngine = None
+    NoveltyConclusion = None
+    InventivenessConclusion = None
+    TechnicalFeature = None
+    PriorArtReference = None
+    NoveltyAnalysisResult = None
+    InventivenessAnalysisResult = None
+
+# AI推理引擎 (无效宣告)
+try:
+    from .ai_reasoning_engine_invalidity import (
+        AIReasoningEngine,
+        QueryResult,
+        ReasoningTask as AIReasoningTask
+    )
+except ImportError:
+    AIReasoningEngine = None
+    QueryResult = None
+    AIReasoningTask = None
+
+# 其他专业引擎
+try:
+    from .compliance_judge import ComplianceJudge
+except ImportError:
+    ComplianceJudge = None
+
+try:
+    from .expert_rule_engine import (
+        ExpertRuleEngine,
+        ReasoningRule as ExpertReasoningRule,
+        ReasoningChain as ExpertReasoningChain
+    )
+except ImportError:
+    ExpertRuleEngine = None
+    ExpertReasoningRule = None
+    ExpertReasoningChain = None
+
+try:
+    from .patent_rule_chain import PatentRuleChainEngine
+except ImportError:
+    PatentRuleChainEngine = None
+
+try:
+    from .prior_art_analyzer import PriorArtAnalyzer
+except ImportError:
+    PriorArtAnalyzer = None
+
+try:
+    from .roadmap_generator import RoadmapGenerator
+except ImportError:
+    RoadmapGenerator = None
+
+try:
+    from .llm_enhanced_judgment import LLMEnhancedJudgment
+except ImportError:
+    LLMEnhancedJudgment = None
+
+
+# =============================================================================
+# === 统一推理引擎编排器 ===
+# =============================================================================
+
+try:
+    from .unified_reasoning_orchestrator import (
+        UnifiedReasoningOrchestrator,
+        TaskDomain as OrchestratorTaskDomain,
+        TaskComplexity as OrchestratorTaskComplexity,
+        TaskType as OrchestratorTaskType,
+        TaskProfile as OrchestratorTaskProfile,
+        EngineRecommendation as OrchestratorEngineRecommendation,
+        get_orchestrator,
+        execute_reasoning as orchestrated_execute_reasoning
+    )
+except ImportError:
+    UnifiedReasoningOrchestrator = None
+    OrchestratorTaskDomain = None
+    OrchestratorTaskComplexity = None
+    OrchestratorTaskType = None
+    OrchestratorTaskProfile = None
+    OrchestratorEngineRecommendation = None
+    get_orchestrator = None
+    orchestrated_execute_reasoning = None
+
+
+# =============================================================================
+# === 基础模块 ===
+# =============================================================================
+
+try:
+    from .enhanced_reasoning_base import (
+        ReasoningType as BaseReasoningType,
+        ThinkingMode,
+        ReasoningComplexity as BaseReasoningComplexity,
+        MetacognitiveState,
+        ReasoningStep as BaseReasoningStep,
+        ReasoningContext as BaseReasoningContext,
+        ReasoningResult as BaseReasoningResult,
+        ReasoningChain as BaseReasoningChain,
+        BaseReasoner,
+        MetacognitiveMonitor,
+        ReasoningStrategySelector as BaseStrategySelector,
+        create_reasoning_step,
+        create_reasoning_context
+    )
+except ImportError:
+    BaseReasoningType = None
+    ThinkingMode = None
+    BaseReasoningComplexity = None
+    MetacognitiveState = None
+    BaseReasoningStep = None
+    BaseReasoningContext = None
+    BaseReasoningResult = None
+    BaseReasoningChain = None
+    BaseReasoner = None
+    MetacognitiveMonitor = None
+    BaseStrategySelector = None
+    create_reasoning_step = None
+    create_reasoning_context = None
+
+
+# =============================================================================
+# === 推理引擎选择器 ===
+# =============================================================================
+
+try:
+    from .engine_selector import (
+        TaskDomain,
+        TaskComplexity,
+        TaskType,
+        UrgencyLevel,
+        TaskProfile,
+        EngineRecommendation,
+        ReasoningEngineSelector,
+        get_selector,
+        select_reasoning_engine
+    )
+except ImportError:
+    TaskDomain = None
+    TaskComplexity = None
+    TaskType = None
+    UrgencyLevel = None
+    TaskProfile = None
+    EngineRecommendation = None
+    ReasoningEngineSelector = None
+    get_selector = None
+    select_reasoning_engine = None
+
+
+# =============================================================================
+# === 统一接口 ===
+# =============================================================================
+
+def get_reasoning_engine(mode: str = 'auto', task_description: str = None, **kwargs):
+    """获取推理引擎实例（支持自动选择）
+
+    Args:
+        mode: 推理模式，设置为 'auto' 时自动选择最合适的引擎
+        task_description: 任务描述（仅在 mode='auto' 时使用）
+        **kwargs: 额外参数（用于自动选择）
+
+    Returns:
+        推理引擎实例
+
+    Available modes:
+        - auto: 自动选择（推荐，需要 task_description）
+        - six_step: 六步推理
+        - seven_step: 七步推理
+        - 32modes: 32模式超级推理
+        - multimodal: 多模式推理系统
+        - unified: 统一推理引擎
+        - dual_system: 双系统推理
+        - semantic: 语义推理
+        - semantic_v4: 语义推理 v4
+        - legal: 法律推理
+        - enhanced_legal: 增强法律推理
+        - ai_invalidity: AI推理(无效宣告)
+        - compliance: 合规判断
+        - expert_rule: 专家规则
+        - patent_rule: 专利规则链
+        - prior_art: 现有技术分析
+        - roadmap: 路线图生成
+        - llm_judgment: LLM增强判断
+    """
+    # 自动选择模式
+    if mode == 'auto':
+        if select_reasoning_engine is not None and task_description:
+            mode = select_reasoning_engine(task_description, **kwargs)
+        else:
+            mode = 'seven_step'  # 默认使用七步推理
+
+    engine_map = {
+        # 核心框架
+        'six_step': XiaonuoSixStepReasoningEngine,
+        'seven_step': AthenaSuperReasoningEngine,
+
+        # 32模式超级推理
+        '32modes': Athena32ModesReasoningEngine,
+
+        # 统一与高级推理
+        'unified': UnifiedReasoningEngine,
+        'dual_system': DualSystemReasoningEngine,
+
+        # 多模式推理系统
+        'multimodal': AthenaMultimodalReasoningEngine,
+
+        # 专利/法律推理
+        'semantic': SemanticReasoningEngine,
+        'semantic_v4': SemanticReasoningEngineV4,
+        'legal': XiaonaSuperReasoningEngine,
+        'enhanced_legal': EnhancedLegalReasoningEngine,
+        'ai_invalidity': AIReasoningEngine,
+        'compliance': ComplianceJudge,
+        'expert_rule': ExpertRuleEngine,
+        'patent_rule': PatentRuleChainEngine,
+        'prior_art': PriorArtAnalyzer,
+        'roadmap': RoadmapGenerator,
+        'llm_judgment': LLMEnhancedJudgment,
+    }
+
+    engine_class = engine_map.get(mode)
+    if engine_class is None:
+        available_modes = [k for k, v in engine_map.items() if v is not None]
+        raise ValueError(f"未知的推理模式: {mode}，可用模式: {available_modes}")
+
+    return engine_class()
+
+
+async def execute_reasoning(
+    problem: str,
+    mode: str = 'seven_step',
+    context: dict = None
+):
+    """执行推理的便捷函数
+
+    Args:
+        problem: 待解决的问题
+        mode: 推理模式
+        context: 上下文信息
+
+    Returns:
+        推理结果
+    """
+    engine = get_reasoning_engine(mode)
+
+    # 根据不同引擎调用不同的方法
+    if mode == 'multimodal' and hasattr(engine, 'execute_reasoning'):
+        return await engine.execute_reasoning(problem, context or {})
+    elif mode == '32modes' and hasattr(engine, 'execute_reasoning'):
+        if ReasoningTask32 is not None:
+            from .athena_enhanced_reasoning_32modes import ReasoningTask, ReasoningComplexity
+            task = ReasoningTask(
+                query=problem,
+                domain="general",
+                complexity=ReasoningComplexity.MEDIUM,
+                context=context or {}
+            )
+            return await engine.execute_reasoning(task)
+        else:
+            return await engine.execute_super_reasoning(problem, context or {})
+    else:
+        # 默认调用 execute_super_reasoning 或 execute_reasoning
+        if hasattr(engine, 'execute_super_reasoning'):
+            return await engine.execute_super_reasoning(problem, context or {})
+        elif hasattr(engine, 'execute_reasoning'):
+            return await engine.execute_reasoning(problem, context or {})
+        else:
+            raise AttributeError(f"引擎 {mode} 没有可执行的推理方法")
+
+
+def get_all_reasoning_engines() -> dict:
+    """获取所有可用的推理引擎
+
+    Returns:
+        引擎名称到引擎类的映射
+    """
+    engines = {
+        # 核心框架
+        'six_step': XiaonuoSixStepReasoningEngine,
+        'seven_step': AthenaSuperReasoningEngine,
+
+        # 32模式超级推理
+        '32modes': Athena32ModesReasoningEngine,
+
+        # 统一与高级推理
+        'unified': UnifiedReasoningEngine,
+        'dual_system': DualSystemReasoningEngine,
+
+        # 多模式推理系统
+        'multimodal': AthenaMultimodalReasoningEngine,
+
+        # 专利/法律推理
+        'semantic': SemanticReasoningEngine,
+        'semantic_v4': SemanticReasoningEngineV4,
+        'legal': XiaonaSuperReasoningEngine,
+        'enhanced_legal': EnhancedLegalReasoningEngine,
+        'ai_invalidity': AIReasoningEngine,
+        'compliance': ComplianceJudge,
+        'expert_rule': ExpertRuleEngine,
+        'patent_rule': PatentRuleChainEngine,
+        'prior_art': PriorArtAnalyzer,
+        'roadmap': RoadmapGenerator,
+        'llm_judgment': LLMEnhancedJudgment,
+
+        # 统一编排器
+        'orchestrator': UnifiedReasoningOrchestrator,
+    }
+
+    # 过滤掉None值
+    return {k: v for k, v in engines.items() if v is not None}
+
+
+def list_available_engines() -> list:
+    """列出所有可用的推理引擎
+
+    Returns:
+        可用引擎的名称列表
+    """
+    engines = get_all_reasoning_engines()
+    return list(engines.keys())
+
+
+def get_engine_info(mode: str) -> dict:
+    """获取推理引擎的详细信息
+
+    Args:
+        mode: 推理模式
+
+    Returns:
+        引擎信息字典
+    """
+    engine_map = {
+        'six_step': {
+            'name': '六步推理框架',
+            'description': '问题分解→跨学科连接→抽象建模→递归分析→创新突破→综合验证',
+            'category': '核心框架',
+            'version': '1.0.0'
+        },
+        'seven_step': {
+            'name': '七步推理框架',
+            'description': '初始参与→问题分析→假设生成→自然发现→测试验证→错误修正→知识综合',
+            'category': '核心框架',
+            'version': '1.0.0'
+        },
+        '32modes': {
+            'name': 'Athena增强推理引擎',
+            'description': '32种推理模式，8大推理分类',
+            'category': '32模式超级推理',
+            'version': '1.0.0'
+        },
+        'multimodal': {
+            'name': 'Athena多模式推理系统',
+            'description': 'Think Hard / Think Harder / Super Thinking 三层推理',
+            'category': '多模式推理系统',
+            'version': '3.0.0'
+        },
+        'unified': {
+            'name': '统一推理引擎',
+            'description': '统一整合多种推理引擎的接口',
+            'category': '统一与高级推理',
+            'version': '1.0.0'
+        },
+        'dual_system': {
+            'name': '双系统推理引擎',
+            'description': '系统1(快思考)和系统2(慢思考)的协同推理',
+            'category': '统一与高级推理',
+            'version': '1.0.0'
+        },
+        'semantic': {
+            'name': '语义推理引擎',
+            'description': '基于语义理解的推理',
+            'category': '专利/法律推理',
+            'version': '1.0.0'
+        },
+        'semantic_v4': {
+            'name': '语义推理引擎 v4',
+            'description': '增强版语义推理',
+            'category': '专利/法律推理',
+            'version': '4.0.0'
+        },
+        'legal': {
+            'name': '小娜超级推理引擎',
+            'description': '法律专家版推理引擎',
+            'category': '专利/法律推理',
+            'version': '3.0.0'
+        },
+        'enhanced_legal': {
+            'name': '增强法律推理引擎',
+            'description': '专业法律分析引擎',
+            'category': '专利/法律推理',
+            'version': '2.0.0'
+        },
+    }
+
+    return engine_map.get(mode, {
+        'name': mode,
+        'description': '未知推理引擎',
+        'category': '未知',
+        'version': '未知'
+    })
+
+
+# =============================================================================
+# === __all__ 导出列表 ===
+# =============================================================================
+
+__all__ = [
+    # 版本信息
+    '__version__',
+    '__author__',
+
+    # === 核心框架 ===
+    'AthenaSuperReasoningEngine',
+    'ThinkingPhase',
+    'ConfidenceLevel',
+    'ReasoningState',
+    'RecursiveThinkingEngine',
+    'XiaonuoSixStepReasoningEngine',
+    'SixStepPhase',
+    'ReasoningMode',
+    'XiaonuoReasoningBridge',
+    'get_reasoning_bridge',
+    'reason',
+    'ReasoningRequest',
+    'ReasoningResponse',
+
+    # === 32模式超级推理 ===
+    'Athena32ModesReasoningEngine',
+    'ReasoningCategory',
+    'ReasoningType32',
+    'ReasoningComplexity32',
+    'ReasoningTask32',
+    'ReasoningResult32',
+    'ReasoningCapability',
+    'ReasoningStrategySelector',
+    'ReasoningPerformanceMonitor',
+
+    # === 统一与高级推理 ===
+    'UnifiedReasoningEngine',
+    'UnifiedSystem1Reasoner',
+    'UnifiedSystem2Reasoner',
+    'UnifiedBayesianReasoner',
+    'NeuroSymbolicReasoner',
+    'UnifiedDualSystemReasoner',
+    'UnifiedBaseReasoner',
+    'UnifiedReasoningType',
+    'UnifiedReasoningContext',
+    'UnifiedReasoningStep',
+    'UnifiedReasoningChain',
+    'UnifiedReasoningResult',
+    'UnifiedReasoningComplexity',
+    'DualSystemReasoningEngine',
+    'DualSystemSystem1Reasoner',
+    'DualSystemSystem2Reasoner',
+    'System1Profile',
+    'System2Profile',
+    'DualSystemInteraction',
+    'AdvancedBayesianReasoner',
+    'FuzzyReasoner',
+    'ModalReasoner',
+    'CounterfactualReasoner',
+
+    # === 多模式推理系统 ===
+    'AthenaMultimodalReasoningEngine',
+    'MultimodalReasoningMode',
+    'ThinkingComplexity',
+    'AgentRole',
+    'ThinkingTask',
+    'ThinkingStep',
+    'AIAgent',
+    'AITeamCoordinator',
+
+    # === 专利/法律推理 ===
+    'SemanticReasoningEngine',
+    'SemanticReasoningType',
+    'SemanticReasoningResult',
+    'SemanticReasoningRule',
+    'SemanticReasoningEngineV4',
+    'ReasoningResultV4',
+    'SemanticReasoningRuleV4',
+    'XiaonaSuperReasoningEngine',
+    'LegalReasoningMode',
+    'LegalReasoningNode',
+    'EnhancedLegalReasoningEngine',
+    'NoveltyConclusion',
+    'InventivenessConclusion',
+    'TechnicalFeature',
+    'PriorArtReference',
+    'NoveltyAnalysisResult',
+    'InventivenessAnalysisResult',
+    'AIReasoningEngine',
+    'QueryResult',
+    'AIReasoningTask',
+    'ComplianceJudge',
+    'ExpertRuleEngine',
+    'ExpertReasoningRule',
+    'ExpertReasoningChain',
+    'PatentRuleChainEngine',
+    'PriorArtAnalyzer',
+    'RoadmapGenerator',
+    'LLMEnhancedJudgment',
+
+    # === 统一推理引擎编排器 ===
+    'UnifiedReasoningOrchestrator',
+    'OrchestratorTaskDomain',
+    'OrchestratorTaskComplexity',
+    'OrchestratorTaskType',
+    'OrchestratorTaskProfile',
+    'OrchestratorEngineRecommendation',
+    'get_orchestrator',
+    'orchestrated_execute_reasoning',
+
+    # === 基础模块 ===
+    'BaseReasoningType',
+    'ThinkingMode',
+    'BaseReasoningComplexity',
+    'MetacognitiveState',
+    'BaseReasoningStep',
+    'BaseReasoningContext',
+    'BaseReasoningResult',
+    'BaseReasoningChain',
+    'BaseReasoner',
+    'MetacognitiveMonitor',
+    'BaseStrategySelector',
+    'create_reasoning_step',
+    'create_reasoning_context',
+
+    # === 推理引擎选择器 ===
+    'TaskDomain',
+    'TaskComplexity',
+    'TaskType',
+    'UrgencyLevel',
+    'TaskProfile',
+    'EngineRecommendation',
+    'ReasoningEngineSelector',
+    'get_selector',
+    'select_reasoning_engine',
+
+    # === 统一接口 ===
+    'get_reasoning_engine',
+    'execute_reasoning',
+    'get_all_reasoning_engines',
+    'list_available_engines',
+    'get_engine_info',
+]

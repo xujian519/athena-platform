@@ -1,0 +1,12 @@
+{
+  "startup_date": "2025-12-17T06:24:02.465810",
+  "action": "startup_guide_stored",
+  "files_created": [
+    "/Users/xujian/Athena工作平台/data/memory_storage/xiaonuo/startup_guide_20251217_062402.json",
+    "/Users/xujian/Athena工作平台/data/memory_storage/xiaonuo/memory_index.json",
+    "/Users/xujian/Athena工作平台/data/xiaonuo_quick_startup_reference.md"
+  ],
+  "memory_id": "startup_guide_20251217_062402",
+  "title": "Athena工作平台启动指南 2025-12-17",
+  "status": "success"
+}

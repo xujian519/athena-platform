@@ -1,0 +1,47 @@
+// 科研合作知识图谱导入脚本
+// Generated on 2025-12-14T21:05:36.943073
+
+// 1. 创建科研人员顶点
+researcher_researcher_zhang_001 = g.addV('Researcher').property('id', 'researcher_zhang_001')
+  .property('name', '张教授')
+  .property('institution', '清华大学')
+  .property('field', '人工智能')
+  .property('h_index', '85')
+;
+
+researcher_researcher_li_001 = g.addV('Researcher').property('id', 'researcher_li_001')
+  .property('name', '李研究员')
+  .property('institution', '中科院')
+  .property('field', '量子计算')
+  .property('h_index', '72')
+;
+
+// 2. 创建机构顶点
+institution_inst_tsinghua_001 = g.addV('Institution').property('id', 'inst_tsinghua_001')
+  .property('name', '清华大学')
+  .property('type', '综合性大学')
+;
+
+institution_inst_cas_001 = g.addV('Institution').property('id', 'inst_cas_001')
+  .property('name', '中科院计算所')
+  .property('type', '国家级研究机构')
+;
+
+// 3. 创建论文顶点
+paper_paper_attention_001 = g.addV('Paper').property('id', 'paper_attention_001')
+  .property('title', 'Attention Is All You Need')
+  .property('venue', 'NeurIPS')
+  .property('year', '2017')
+  .property('citations', '50000')
+;
+
+// 4. 创建关系边
+// 研究员与机构的关系
+researcher_researcher_zhang_001.addE('AFFILIATED_WITH').to(institution_inst_tsinghua_001)
+  .property('position', '教授')
+;
+
+researcher_researcher_li_001.addE('AFFILIATED_WITH').to(institution_inst_cas_001)
+  .property('position', '教授')
+;
+

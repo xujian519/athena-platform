@@ -1,0 +1,249 @@
+common_template:
+  app:
+    name: athena-work-platform
+    version: 2.0.0
+  ports:
+    athena_identity: 8010
+    athena_main: 8000
+    athena_memory: 8008
+    memory_integration: 8011
+    xiaonuo_memory: 8083
+environments:
+  development:
+    _config_file: /Users/xujian/Athena工作平台/config/environments/development/config.yaml
+    _environment: development
+    _loaded_at: '2025-12-08T22:54:49.043986'
+    api:
+      cors:
+        enabled: true
+        origins:
+        - http://localhost:3000
+        - http://localhost:8080
+        - http://127.0.0.1:3000
+      rate_limiting:
+        enabled: false
+    app:
+      debug: true
+      log_level: DEBUG
+      name: athena-work-platform
+      version: 2.0.0
+    cache:
+      debug: true
+      default_ttl: 1800
+      enabled: true
+    database:
+      host: localhost
+      name: athena_dev
+      password: ${DEV_DB_PASSWORD}
+      pool:
+        max_idle: 300
+        max_size: 10
+        min_size: 2
+        timeout: 30
+      port: 5432
+      sslmode: disable
+      user: dev_user
+    dev_tools:
+      debug:
+        profiler: true
+        request_debug: true
+        sql_debug: true
+      hot_reload:
+        enabled: true
+        watch_paths:
+        - src/
+        - config/
+    environment: development
+    logging:
+      console_output: true
+      file:
+        backup_count: 3
+        max_size: 50MB
+        path: documentation/logs/athena-dev.log
+      file_output: true
+      format: detailed
+      level: DEBUG
+    monitoring:
+      health_check:
+        enabled: true
+        interval: 30
+      performance_monitoring:
+        detailed_metrics: true
+        enabled: true
+    ports:
+      athena_identity: 8010
+      athena_main: 8000
+      athena_memory: 8008
+      memgpt_core: 8899
+      memgpt_gateway: 8901
+      memory_integration: 8011
+      paraformer_api: 8003
+      pdf_processing: 8090
+      vector_memory: 8004
+      web_crawler: 8902
+      web_crawler_alt: 8900
+      xiaonuo_memory: 8083
+    redis:
+      db: 1
+      host: localhost
+      password: ''
+      pool:
+        max_connections: 10
+        retry_on_timeout: true
+      port: 6379
+      ssl: false
+    security:
+      access_control:
+        audit_logging: true
+        ip_whitelist: false
+        rate_limiting: false
+      authentication:
+        jwt_expiry: 86400
+        refresh_token_expiry: 604800
+      encryption:
+        at_rest: false
+        key_rotation: false
+      force_https: false
+    testing:
+      mock_services:
+        enabled: true
+        external_apis: true
+      test_data:
+        auto_refresh: true
+        enabled: true
+  production:
+    _config_file: /Users/xujian/Athena工作平台/config/environments/production/config.yaml
+    _environment: production
+    _loaded_at: '2025-12-08T22:54:49.046583'
+    api:
+      cors:
+        enabled: true
+        origins:
+        - https://athena-platform.com
+        - https://app.athena-platform.com
+      rate_limiting:
+        burst_size: 100
+        enabled: true
+        requests_per_minute: 1000
+      security:
+        csrf_protection: true
+        force_https: true
+        helmet_headers: true
+    app:
+      debug: false
+      log_level: INFO
+      name: athena-work-platform
+      version: 2.0.0
+    backup:
+      enabled: true
+      encryption: true
+      retention_days: 30
+      schedule: 0 2 * * *
+    cache:
+      debug: false
+      default_ttl: 3600
+      enabled: true
+      performance:
+        cluster_mode: true
+        high_availability: true
+    database:
+      host: ${DATABASE_HOST}
+      name: ${DATABASE_NAME}
+      password: ${DATABASE_PASSWORD}
+      pool:
+        health_check_period: 30
+        max_idle: 300
+        max_size: 50
+        min_size: 10
+        timeout: 30
+      port: ${DATABASE_PORT:5432}
+      sslmode: require
+      user: ${DATABASE_USER}
+    environment: production
+    logging:
+      aggregation:
+        elasticsearch:
+          enabled: true
+          index: athena-logs
+        enabled: true
+      console_output: false
+      file:
+        backup_count: 10
+        max_size: 100MB
+        path: /var/log/athena/athena.log
+        rotation: daily
+      file_output: true
+      format: json
+      level: INFO
+    monitoring:
+      alerts:
+        channels:
+        - email
+        - slack
+        - webhook
+        enabled: true
+      health_check:
+        enabled: true
+        interval: 30
+        public_endpoint: true
+      performance_monitoring:
+        alert_thresholds:
+          cpu_usage: 80
+          disk_usage: 90
+          memory_usage: 85
+          response_time: 1000
+        detailed_metrics: true
+        enabled: true
+    performance:
+      caching:
+        aggressive: true
+        cdn_enabled: true
+      compression:
+        enabled: true
+        level: 6
+        types:
+        - text/html
+        - text/css
+        - application/javascript
+        - application/json
+      connection_pooling:
+        enabled: true
+        max_connections: 1000
+    ports:
+      athena_identity: ${ATHENA_IDENTITY_PORT:8010}
+      athena_main: ${ATHENA_PORT:8000}
+      athena_memory: ${ATHENA_MEMORY_PORT:8008}
+      memgpt_core: ${MEMGPT_CORE_PORT:8899}
+      memgpt_gateway: ${MEMGPT_GATEWAY_PORT:8901}
+      memory_integration: ${MEMORY_INTEGRATION_PORT:8011}
+      paraformer_api: ${PARAFORMER_API_PORT:8003}
+      pdf_processing: ${PDF_PROCESSING_PORT:8090}
+      vector_memory: ${VECTOR_MEMORY_PORT:8004}
+      web_crawler: ${WEB_CRAWLER_PORT:8902}
+      web_crawler_alt: ${WEB_CRAWLER_ALT_PORT:8900}
+      xiaonuo_memory: ${XIAONUO_MEMORY_PORT:8083}
+    redis:
+      db: ${REDIS_DB:0}
+      host: ${REDIS_HOST}
+      password: ${REDIS_PASSWORD}
+      pool:
+        max_connections: 100
+        retry_on_timeout: true
+      port: ${REDIS_PORT:6379}
+      ssl: true
+    security:
+      access_control:
+        audit_logging: true
+        ip_whitelist: true
+        rate_limiting: true
+      authentication:
+        jwt_expiry: 3600
+        refresh_token_expiry: 86400
+      encryption:
+        algorithm: AES-256-GCM
+        at_rest: true
+        key_rotation: true
+meta:
+  description: Athena工作平台统一配置文件
+  generated_at: '2025-12-08T22:54:49.041755'
+  version: 1.0.0
