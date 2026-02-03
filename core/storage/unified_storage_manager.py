@@ -430,7 +430,7 @@ class UnifiedStorageManager:
             if conn:
                 self.pg_pool.putconn(conn)
 
-    def _write_to_qdrant(self, doc_id: str, vectors: list[dict[str]:
+    def _write_to_qdrant(self, doc_id: str, vectors: list[dict[str, Any]]):
         """写入Qdrant"""
         # 确保集合存在
         self._ensure_qdrant_collection()
@@ -722,7 +722,7 @@ class UnifiedStorageManager:
             if conn:
                 self.pg_pool.putconn(conn)
 
-    def _fuse_results(self, results: dict[str, list[dict[str, Any]) -> list[dict[str, Any]]]:
+    def _fuse_results(self, results: dict[str, list[dict[str, Any]]]) -> list[dict[str, Any]]:
         """融合多源结果"""
         # 简单融合:合并所有结果并按分数排序
         all_results = []

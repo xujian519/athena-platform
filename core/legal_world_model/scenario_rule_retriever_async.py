@@ -98,7 +98,7 @@ class AsyncScenarioRuleRetriever:
         cache_ttl: int = 3600,
         enable_preload: bool = True,
         preload_on_init: bool = True,
-        preload_domains: set[str | None = None,
+        preload_domains: set[str] | None = None,
     ):
         """
         初始化异步规则检索器
@@ -328,7 +328,7 @@ class AsyncScenarioRuleRetriever:
             规则列表
         """
         # 并发执行所有查询
-        tasks = []
+        tasks = [
             self.retrieve_rule(domain, task_type, phase) for domain, task_type, phase in queries
         ]
         return await asyncio.gather(*tasks)
