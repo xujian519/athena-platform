@@ -808,9 +808,9 @@ window.location.href = 'http://localhost:8899';
 
         # ========== IPC分类服务 ==========
         try:
-            from core.api.ipc_routes import register_ipc_routes
+            from core.api.ipc_routes import router as ipc_router
 
-            register_ipc_routes(self.app)
+            self.app.include_router(ipc_router)
             logger.info("✅ IPC分类服务API已注册 (2026.01版)")
         except ImportError as e:
             logger.warning(f"⚠️  IPC分类服务未找到,跳过注册: {e}")
@@ -859,6 +859,7 @@ window.location.href = 'http://localhost:8899';
 
         # ========== 动态提示词系统 ==========
         try:
+            from core.api.prompt_system_routes import router as prompt_system_router
 
             self.app.include_router(prompt_system_router)
             logger.info("✅ 动态提示词系统API已注册 (v2.0.0)")

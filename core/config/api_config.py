@@ -363,3 +363,8 @@ def get_security_config() -> SecurityConfig:
 def get_monitoring_config() -> MonitoringConfig:
     """获取监控配置"""
     return get_config().monitoring
+
+
+def get_qdrant_config() -> QdrantConfig:
+    """获取Qdrant配置"""
+    return get_config().qdrant
