@@ -867,6 +867,17 @@ window.location.href = 'http://localhost:8899';
         except Exception as e:
             logger.error(f"❌ 动态提示词系统API注册失败: {e}")
 
+        # ========== 健康检查API ==========
+        try:
+            from core.api.health import router as health_router
+
+            self.app.include_router(health_router)
+            logger.info("✅ 健康检查API已注册")
+        except ImportError as e:
+            logger.warning(f"⚠️  健康检查API未找到,跳过注册: {e}")
+        except Exception as e:
+            logger.error(f"❌ 健康检查API注册失败: {e}")
+
     def _mount_static_files(self) -> Any:
         """挂载静态文件"""
         static_dir = Path(__file__).parent / "static"
