@@ -26,6 +26,36 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 logger = logging.getLogger(__name__)
 
 
+def _parse_json_field(value, default):
+    """
+    解析JSON字段,处理列表或字符串两种情况
+
+    Neo4j 可能返回:
+    - Python list/dict (当直接存储数组时)
+    - JSON string (当存储为字符串时)
+
+    Args:
+        value: 从 Neo4j 获取的值
+        default: 默认JSON字符串
+
+    Returns:
+        解析后的 Python 对象
+    """
+    if value is None:
+        return json.loads(default)
+    # 如果已经是列表或字典(从Neo4j数组直接返回),直接返回
+    if isinstance(value, (list, dict)):
+        return value
+    # 如果是字符串,尝试解析
+    if isinstance(value, str):
+        try:
+            return json.loads(value)
+        except json.JSONDecodeError:
+            return json.loads(default)
+    # 其他情况返回默认值
+    return json.loads(default)
+
+
 class ValidationError(Exception):
     """输入验证错误"""
 
@@ -374,16 +404,16 @@ class ScenarioRuleRetrieverOptimized:
 
                 sr_node = record["sr"]
 
-                # 解析JSON字段
+                # 解析JSON字段 - 处理 Neo4j 可能返回列表或字符串的情况
                 try:
-                    processing_rules = json.loads(sr_node.get("processing_rules", "[]"))
-                    workflow_steps = json.loads(sr_node.get("workflow_steps", "[]"))
-                    variables = json.loads(sr_node.get("variables", "{}"))
-                    legal_basis = json.loads(sr_node.get("legal_basis", "[]"))
-                    reference_cases = json.loads(sr_node.get("reference_cases", "[]"))
-                    expert_config = json.loads(sr_node.get("expert_config", "{}"))
-                    lyra_focus = json.loads(sr_node.get("lyra_focus", "[]"))
-                except json.JSONDecodeError as e:
+                    processing_rules = _parse_json_field(sr_node.get("processing_rules"), "[]")
+                    workflow_steps = _parse_json_field(sr_node.get("workflow_steps"), "[]")
+                    variables = _parse_json_field(sr_node.get("variables"), "{}")
+                    legal_basis = _parse_json_field(sr_node.get("legal_basis"), "[]")
+                    reference_cases = _parse_json_field(sr_node.get("reference_cases"), "[]")
+                    expert_config = _parse_json_field(sr_node.get("expert_config"), "{}")
+                    lyra_focus = _parse_json_field(sr_node.get("lyra_focus"), "[]")
+                except Exception as e:
                     logger.error(f"❌ 解析规则JSON失败: {e}")
                     self.metrics["error_count"] += 1
                     return None
@@ -470,19 +500,19 @@ class ScenarioRuleRetrieverOptimized:
                             phase=sr_node.get("phase", ""),
                             system_prompt_template=sr_node.get("system_prompt_template", ""),
                             user_prompt_template=sr_node.get("user_prompt_template", ""),
-                            processing_rules=json.loads(sr_node.get("processing_rules", "[]")),
-                            workflow_steps=json.loads(sr_node.get("workflow_steps", "[]")),
-                            variables=json.loads(sr_node.get("variables", "{}")),
-                            legal_basis=json.loads(sr_node.get("legal_basis", "[]")),
-                            reference_cases=json.loads(sr_node.get("reference_cases", "[]")),
-                            expert_config=json.loads(sr_node.get("expert_config", "{}")),
+                            processing_rules=_parse_json_field(sr_node.get("processing_rules"), "[]"),
+                            workflow_steps=_parse_json_field(sr_node.get("workflow_steps"), "[]"),
+                            variables=_parse_json_field(sr_node.get("variables"), "{}"),
+                            legal_basis=_parse_json_field(sr_node.get("legal_basis"), "[]"),
+                            reference_cases=_parse_json_field(sr_node.get("reference_cases"), "[]"),
+                            expert_config=_parse_json_field(sr_node.get("expert_config"), "{}"),
                             agent_level=sr_node.get("agent_level", "L2"),
                             lyra_optimization=sr_node.get("lyra_optimization", True),
-                            lyra_focus=json.loads(sr_node.get("lyra_focus", "[]")),
+                            lyra_focus=_parse_json_field(sr_node.get("lyra_focus"), "[]"),
                         )
 
                         rules.append(rule)
-                    except json.JSONDecodeError as e:
+                    except Exception as e:
                         logger.error(f"❌ 解析规则JSON失败: {e}")
                         self.metrics["error_count"] += 1
                         continue

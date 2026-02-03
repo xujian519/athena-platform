@@ -5,7 +5,7 @@
 
 import logging
 from contextlib import asynccontextmanager
-from typing import Any, Optional
+from typing import Any, Dict, Optional
 
 # 异步依赖 - 设为可选以支持同步脚本
 # 使用官方redis库的asyncio模块（替代已弃用的aioredis）
@@ -121,7 +121,7 @@ class DatabaseConnectionManager:
         try:
             # 使用redis.asyncio的ConnectionPool
             pool = aioredis.ConnectionPool.from_url(
-                f"redis://{config[{config['port']}'port']}/{config.get('db']}",
+                f"redis://{config.get('host', 'localhost')}:{config.get('port', 6379)}/{config.get('db', 0)}",
                 password=config.get("password"),
                 max_connections=config.get("max_connections", 50),
                 retry_on_timeout=True,
@@ -261,12 +261,22 @@ class DatabaseConnectionManager:
         async with self.connections["neo4j"].session() as session:
             yield session
 
-    async def get_elasticsearch(self) -> AsyncElasticsearch:
+    async def get_elasticsearch(self) -> Any:  # AsyncElasticsearch if available
         """获取Elasticsearch连接"""
         if "elasticsearch" not in self.connections:
             raise RuntimeError("Elasticsearch连接未初始化")
 
         return self.connections["elasticsearch"]
+
+    @asynccontextmanager
+    async def session(self):
+        """
+        获取Neo4j会话（同步兼容方法）
+
+        为了兼容scenario_rule_retriever_optimized.py中的同步调用
+        """
+        async with self.get_neo4j_session() as session:
+            yield session
 
     async def health_check(self) -> dict[str, Any]:
         """检查所有数据库连接的健康状态"""
@@ -279,7 +289,7 @@ class DatabaseConnectionManager:
                     await conn.fetchval("SELECT 1")
                 health_status["postgres"] = {"status": "healthy", "error": None}
             except Exception as e:
-                health_status["unhealthy"]}
+                health_status["postgres"] = {"status": "unhealthy", "error": str(e)}
 
         # Redis健康检查
         if "redis" in self.connections:
@@ -288,7 +298,7 @@ class DatabaseConnectionManager:
                 await redis.ping()
                 health_status["redis"] = {"status": "healthy", "error": None}
             except Exception as e:
-                health_status["unhealthy"]}
+                health_status["redis"] = {"status": "unhealthy", "error": str(e)}
 
         # MongoDB健康检查
         if "mongodb" in self.connections:
@@ -297,7 +307,7 @@ class DatabaseConnectionManager:
                 await mongodb.command("ping")
                 health_status["mongodb"] = {"status": "healthy", "error": None}
             except Exception as e:
-                health_status["unhealthy"]}
+                health_status["mongodb"] = {"status": "unhealthy", "error": str(e)}
 
         # Neo4j健康检查
         if "neo4j" in self.connections:
@@ -306,7 +316,7 @@ class DatabaseConnectionManager:
                     await session.run("RETURN 1")
                 health_status["neo4j"] = {"status": "healthy", "error": None}
             except Exception as e:
-                health_status["unhealthy"]}
+                health_status["neo4j"] = {"status": "unhealthy", "error": str(e)}
 
         # Elasticsearch健康检查
         if "elasticsearch" in self.connections:
@@ -315,7 +325,7 @@ class DatabaseConnectionManager:
                 await es.ping()
                 health_status["elasticsearch"] = {"status": "healthy", "error": None}
             except Exception as e:
-                health_status["unhealthy"]}
+                health_status["elasticsearch"] = {"status": "unhealthy", "error": str(e)}
 
         return health_status
 
@@ -378,7 +388,7 @@ db_manager = DatabaseConnectionManager()
 
 
 # 便捷函数
-async def get_db_manager(configs: Optional[dict[str | None = None, dict | None = None) -> DatabaseConnectionManager:
+async def get_db_manager(configs: Optional[Dict[str, Any]] = None) -> DatabaseConnectionManager:
     """获取数据库管理器实例"""
     global db_manager
 
@@ -417,7 +427,7 @@ async def neo4j_session():
         yield session
 
 
-async def elasticsearch_connection() -> AsyncElasticsearch:
+async def elasticsearch_connection() -> Any:  # AsyncElasticsearch if available
     """Elasticsearch连接函数"""
     return await db_manager.get_elasticsearch()
 
@@ -433,7 +443,22 @@ from contextlib import contextmanager
 import psycopg2
 from psycopg2.extras import execute_batch
 from qdrant_client import QdrantClient
-from neo4j import GraphDatabase as SyncGraphDatabase
+
+# 修复: core.neo4j 模块遮蔽了官方 neo4j 包
+# GraphDatabase 类在 neo4j 包的根级别,不是在 graph_database 子模块中
+import sys
+
+# 移除可能被遮蔽的 neo4j 模块引用
+if "neo4j" in sys.modules:
+    neo4j_mod = sys.modules.get("neo4j")
+    if neo4j_mod and "site-packages" not in getattr(neo4j_mod, "__file__", ""):
+        # 如果当前 neo4j 模块不是来自 site-packages,删除它
+        del sys.modules["neo4j"]
+
+# 现在导入 neo4j,应该会从 site-packages 找到官方包
+import neo4j
+SyncGraphDatabase = neo4j.GraphDatabase
+Neo4jSession = neo4j.Session
 
 from .config import DatabaseConfig
 from .constants import DEFAULT_BATCH_SIZE
@@ -530,7 +555,7 @@ class SyncDatabaseConnectionManager:
                     logger.debug("🔒 PostgreSQL游标已关闭")
 
     @contextmanager
-    def neo4j_session(self) -> Generator[SyncGraphDatabase.Session, None, None]:
+    def neo4j_session(self) -> Generator[Neo4jSession, None, None]:
         """
         Neo4j会话上下文管理器
 
@@ -561,6 +586,16 @@ class SyncDatabaseConnectionManager:
             if driver:
                 driver.close()
                 logger.debug("🔒 Neo4j驱动已关闭")
+
+    # 别名方法: 为了兼容 scenario_rule_retriever_optimized.py 的调用
+    def session(self):
+        """
+        session() 方法别名,指向 neo4j_session()
+
+        为了兼容 scenario_rule_retriever_optimized.py 中的调用:
+            with self.db_manager.session() as session:
+        """
+        return self.neo4j_session()
 
     def get_qdrant_client(self) -> QdrantClient:
         """
@@ -624,7 +659,7 @@ class SyncDatabaseConnectionManager:
                 cursor.close()
             health_status["postgresql"] = {"status": "healthy", "error": None}
         except Exception as e:
-            health_status["unhealthy"]}
+            health_status["postgresql"] = {"status": "unhealthy", "error": str(e)}
 
         # Neo4j健康检查
         try:
@@ -632,7 +667,7 @@ class SyncDatabaseConnectionManager:
                 session.run("RETURN 1")
             health_status["neo4j"] = {"status": "healthy", "error": None}
         except Exception as e:
-            health_status["unhealthy"]}
+            health_status["neo4j"] = {"status": "unhealthy", "error": str(e)}
 
         # Qdrant健康检查
         try:
@@ -640,7 +675,7 @@ class SyncDatabaseConnectionManager:
             client.get_collections()
             health_status["qdrant"] = {"status": "healthy", "error": None}
         except Exception as e:
-            health_status["unhealthy"]}
+            health_status["qdrant"] = {"status": "unhealthy", "error": str(e)}
 
         return health_status
 

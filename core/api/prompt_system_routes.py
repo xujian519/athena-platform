@@ -199,16 +199,17 @@ async def health_check():
 
     components = {}
 
-    # 检查Neo4j
+    # 检查Neo4j (使用 SyncDatabaseConnectionManager 避免 core.neo4j 模块冲突)
     try:
-        from neo4j import GraphDatabase
+        from core.database import get_sync_db_manager
 
-        driver = GraphDatabase.driver(
-            _db_config.neo4j_uri, auth=(_db_config.neo4j_user, _db_config.neo4j_password)
-        )
-        driver.verify_connectivity()
-        driver.close()
-        components["neo4j"] = "ok"
+        db = get_sync_db_manager()
+        # 使用 health_check 方法
+        health = db.health_check()
+        if "neo4j" in health and health["neo4j"]["status"] == "healthy":
+            components["neo4j"] = "ok"
+        else:
+            components["neo4j"] = f"error: {health.get('neo4j', {}).get('error', 'Unknown error')}"
     except Exception as e:
         components["neo4j"] = f"error: {e!s}"
 
