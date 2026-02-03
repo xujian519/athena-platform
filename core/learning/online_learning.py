@@ -642,3 +642,22 @@ if __name__ == "__main__":
         print("✅ 在线学习引擎测试完成")
 
     asyncio.run(main())
+
+
+# =============================================================================
+# === 别名和兼容性 ===
+# =============================================================================
+
+# 为保持兼容性，提供 OnlineLearningSystem 作为别名
+OnlineLearningSystem = OnlineLearningEngine
+
+
+__all__ = [
+    "ReplayStrategy",
+    "Experience",
+    "ExperienceReplayBuffer",
+    "ForgettingMonitor",
+    "ElasticWeightConsolidation",
+    "OnlineLearningEngine",
+    "OnlineLearningSystem",  # 别名
+]

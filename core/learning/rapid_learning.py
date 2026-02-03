@@ -45,21 +45,26 @@ warnings.warn(
 
 # 导出所有公共接口以保持向后兼容
 __all__ = [
-    "LearningType",
-    "LearningMode",
-    "AdaptationStrategy",
-    "LearningExperience",
-    "LearningTask",
-    "ModelSnapshot",
-    "RapidLearningEngine",
-    "PrioritizedReplayBuffer",
-    "MetaLearner",
-    "CurriculumScheduler",
     "ActiveLearner",
-    "rapid_learning_engine",
-    "learn_from_data",
+    "AdaptationStrategy",
+    "CurriculumScheduler",
+    "LearningExperience",
+    "LearningMode",
+    "LearningTask",
+    "LearningType",
+    "MetaLearner",
+    "ModelSnapshot",
+    "PrioritizedReplayBuffer",
+    "RapidLearner",  # 别名
+    "RapidLearningEngine",
+    "SKLEARN_AVAILABLE",
+    "TORCH_AVAILABLE",
     "create_learning_task",
     "get_learning_stats",
-    "TORCH_AVAILABLE",
-    "SKLEARN_AVAILABLE",
+    "learn_from_data",
+    "rapid_learning_engine",
 ]
+
+
+# 为保持兼容性，提供 RapidLearner 作为 RapidLearningEngine 的别名
+RapidLearner = RapidLearningEngine

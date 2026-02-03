@@ -721,3 +721,18 @@ if __name__ == "__main__":
 
     # 运行测试
     asyncio.run(test_meta_learning())
+
+
+# 为保持兼容性，提供 EnhancedMetaLearning 作为 EnhancedMetaLearningEngine 的别名
+EnhancedMetaLearning = EnhancedMetaLearningEngine
+
+
+# 导出公共接口
+__all__ = [
+    "LearningStrategy",
+    "StrategyPerformance",
+    "MetaLearningTask",
+    "LearningResult",
+    "EnhancedMetaLearningEngine",
+    "EnhancedMetaLearning",  # 别名
+]

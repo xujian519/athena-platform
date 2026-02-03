@@ -443,3 +443,76 @@ def get_rl_agent() -> ReinforcementLearningAgent:
     if _rl_agent is None:
         _rl_agent = ReinforcementLearningAgent()
     return _rl_agent
+
+
+# =============================================================================
+# === 策略类 ===
+# =============================================================================
+
+@dataclass
+class RLPolicy:
+    """强化学习策略"""
+
+    algorithm: RLAlgorithm
+    state_space_size: int
+    action_space_size: int
+    learning_rate: float = 0.001
+    discount_factor: float = 0.99
+    epsilon: float = 0.1
+    epsilon_decay: float = 0.995
+    exploration_strategy: ExplorationStrategy = ExplorationStrategy.EPSILON_GREEDY
+
+    def to_dict(self) -> dict[str, Any]:
+        """转换为字典"""
+        return {
+            "algorithm": self.algorithm.value,
+            "state_space_size": self.state_space_size,
+            "action_space_size": self.action_space_size,
+            "learning_rate": self.learning_rate,
+            "discount_factor": self.discount_factor,
+            "epsilon": self.epsilon,
+            "epsilon_decay": self.epsilon_decay,
+            "exploration_strategy": self.exploration_strategy.value,
+        }
+
+
+# 创建默认策略
+def create_default_policy(
+    state_space_size: int,
+    action_space_size: int,
+    algorithm: RLAlgorithm = RLAlgorithm.Q_LEARNING,
+) -> RLPolicy:
+    """创建默认强化学习策略"""
+    return RLPolicy(
+        algorithm=algorithm,
+        state_space_size=state_space_size,
+        action_space_size=action_space_size,
+    )
+
+
+@dataclass
+class RLTrainer:
+    """强化学习训练器"""
+
+    agent_id: str
+    algorithm: RLAlgorithm = RLAlgorithm.Q_LEARNING
+    learning_rate: float = 0.1
+    discount_factor: float = 0.95
+    epsilon_start: float = 1.0
+    epsilon_end: float = 0.01
+    epsilon_decay: float = 0.995
+    episodes: int = 1000
+    max_steps_per_episode: int = 100
+    eval_frequency: int = 100
+    save_frequency: int = 500
+
+
+__all__ = [
+    "RLAlgorithm",
+    "ExplorationStrategy",
+    "RLPolicy",
+    "RLTrainer",
+    "create_default_policy",
+    "ReinforcementLearningAgent",
+    "get_rl_agent",
+]

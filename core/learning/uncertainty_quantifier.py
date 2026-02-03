@@ -484,5 +484,25 @@ async def example_usage():
     print(f"\n统计信息: {json.dumps(stats, indent=2, ensure_ascii=False)}")
 
 
+@dataclass
+class UncertaintyEstimate:
+    """不确定性估计结果"""
+
+    claim: str
+    uncertainty_value: float
+    uncertainty_level: str
+    confidence_interval: tuple[float, float] | None = None
+    factors: list[str] | None = None
+
+
+__all__ = [
+    "UncertaintyLevel",
+    "Confidence",
+    "UncertaintyQuantifier",
+    "UncertaintyEstimate",
+    "get_uncertainty_quantifier",
+]
+
+
 if __name__ == "__main__":
     asyncio.run(example_usage())

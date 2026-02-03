@@ -431,4 +431,33 @@ async def general_exception_handler(request, exc):
 
 # ==================== 导出 ====================
 
-__all__ = ["app", "router"]
+
+class LearningAPI:
+    """学习API接口类 - 提供编程式访问"""
+
+    def __init__(self):
+        self.app = app
+        self.router = router
+
+    def get_app(self) -> FastAPI:
+        """获取FastAPI应用实例"""
+        return self.app
+
+    def get_router(self) -> APIRouter:
+        """获取API路由器"""
+        return self.router
+
+
+# 全局 API 实例
+_learning_api_instance: LearningAPI | None = None
+
+
+def get_learning_api() -> LearningAPI:
+    """获取学习API单例"""
+    global _learning_api_instance
+    if _learning_api_instance is None:
+        _learning_api_instance = LearningAPI()
+    return _learning_api_instance
+
+
+__all__ = ["app", "LearningAPI", "get_learning_api", "router"]

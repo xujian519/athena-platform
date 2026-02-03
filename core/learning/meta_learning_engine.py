@@ -527,3 +527,20 @@ if __name__ == "__main__":
         print(f"\n📊 统计信息: {stats}")
 
     asyncio.run(main())
+
+
+# =============================================================================
+# === 元学习引擎别名 ===
+# =============================================================================
+
+# 为保持兼容性，提供 MetaLearningEngine 作为 MAMLEngine 的别名
+MetaLearningEngine = MAMLEngine
+
+
+__all__ = [
+    "MetaAlgorithm",
+    "TaskType",
+    "MetaLearningResult",
+    "MAMLEngine",
+    "MetaLearningEngine",  # 别名
+]

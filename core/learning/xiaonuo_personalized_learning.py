@@ -427,4 +427,47 @@ class XiaonuoPersonalizedLearning:
 
 
 # 导出主类
-__all__ = ["CommunicationStyle", "DadPreference", "LearningInstance", "XiaonuoPersonalizedLearning"]
+__all__ = [
+    "CommunicationStyle",
+    "DadPreference",
+    "LearningInstance",
+    "LearningPath",
+    "PersonalizedLearningSystem",
+    "UserProfile",
+    "XiaonuoPersonalizedLearning",
+]
+
+
+# 为保持兼容性，提供 PersonalizedLearningSystem 作为 XiaonuoPersonalizedLearning 的别名
+PersonalizedLearningSystem = XiaonuoPersonalizedLearning
+
+
+@dataclass
+class UserProfile:
+    """用户画像"""
+
+    user_id: str
+    name: str = ""
+    interests: list[str] = field(default_factory=list)
+    expertise_level: str = "intermediate"
+    learning_style: str = "balanced"
+    preferred_response_length: str = "medium"
+    preferred_tone: str = "professional"
+    interaction_history: list[dict] = field(default_factory=list)
+    last_updated: datetime = field(default_factory=datetime.now)
+
+
+@dataclass
+class LearningPath:
+    """学习路径"""
+
+    path_id: str
+    user_id: str
+    skill_domain: str
+    current_level: str
+    target_level: str
+    milestones: list[dict] = field(default_factory=list)
+    estimated_duration: int = 0
+    resources: list[str] = field(default_factory=list)
+    progress: float = 0.0
+    created_at: datetime = field(default_factory=datetime.now)

@@ -524,6 +524,11 @@ __all__ = [
     "BenchmarkResult",
     "BenchmarkReport",
     "LearningBenchmark",
+    "LearningBenchmarks",  # 别名
     "create_benchmark",
     "DEFAULT_THRESHOLDS",
 ]
+
+
+# 为保持兼容性，提供 LearningBenchmarks 作为 LearningBenchmark 的别名
+LearningBenchmarks = LearningBenchmark

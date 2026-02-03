@@ -389,6 +389,29 @@ class DeepLearningEngine:
         }
 
 
+@dataclass
+class NeuralNetworkArchitecture:
+    """神经网络架构配置"""
+
+    name: str
+    layers: list[dict[str, Any]]
+    activation: str = "relu"
+    optimizer: str = "adam"
+    input_shape: tuple[int, ...] | None = None
+    output_shape: tuple[int, ...] | None = None
+
+
+__all__ = [
+    "DeepLearningModel",
+    "LearningTask",
+    "TrainingConfig",
+    "ModelPerformance",
+    "NeuralNetworkArchitecture",
+    "DeepLearningEngine",
+    "get_deep_learning_engine",
+]
+
+
 # 导出便捷函数
 _deep_learning_engine: DeepLearningEngine | None = None
 

@@ -496,8 +496,13 @@ class EnhancedMetaLearning:
         )
 
 
+# 为保持兼容性，提供别名
+MetaLearningImplementation = EnhancedMetaLearning
+
+
 __all__ = [
     "EnhancedMetaLearning",
+    "MetaLearningImplementation",  # 别名
     "MetaLearningAlgorithm",
     "MetaLearningResult",
     "TaskEmbedding",

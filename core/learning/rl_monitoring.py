@@ -18,6 +18,7 @@ import numpy as np
 import asyncio
 import contextlib
 import logging
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import Any
 
@@ -25,6 +26,20 @@ from typing import Any
 from .production_rl_integration import ProductionRLSystem, get_production_rl_system
 
 logger = logging.getLogger(__name__)
+
+
+@dataclass
+class RLTrainingMetrics:
+    """RL训练指标"""
+
+    episode: int
+    total_reward: float
+    average_reward: float
+    success_rate: float
+    exploration_rate: float
+    learning_rate: float
+    timestamp: datetime = field(default_factory=datetime.now)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 class RLMetricsCollector:
@@ -409,6 +424,16 @@ class RLMonitoringService:
 
 
 # 导出
+__all__ = [
+    "RLMetricsCollector",
+    "RLEvaluationReport",
+    "RLMonitor",
+    "RLMonitoringService",
+    "RLTrainingMetrics",
+    "get_monitoring_service",
+]
+
+
 _monitoring_service: RLMonitoringService | None = None
 
 
@@ -418,3 +443,7 @@ def get_monitoring_service() -> RLMonitoringService:
     if _monitoring_service is None:
         _monitoring_service = RLMonitoringService()
     return _monitoring_service
+
+
+# 为保持兼容性，提供 RLMonitor 作为 RLMonitoringService 的别名
+RLMonitor = RLMonitoringService

@@ -366,9 +366,48 @@ def get_input_validator() -> InputValidator:
     return _global_validator
 
 
+async def validate_channel(
+    channel: str, allowed_channels: list[str] | None = None
+) -> ValidationResult:
+    """
+    验证通信渠道
+
+    Args:
+        channel: 通信渠道名称
+        allowed_channels: 允许的渠道列表
+
+    Returns:
+        验证结果
+    """
+    result = ValidationResult(is_valid=True, errors=[], warnings=[], severity=ValidationSeverity.WARNING)
+
+    # 检查类型
+    if not isinstance(channel, str):
+        result.add_error(f"渠道必须是字符串类型，实际类型: {type(channel).__name__}")
+        return result
+
+    # 检查是否为空
+    if not channel.strip():
+        result.add_error("渠道名称不能为空")
+        return result
+
+    # 检查是否在允许列表中
+    if allowed_channels is not None:
+        if channel not in allowed_channels:
+            result.add_error(f"渠道 '{channel}' 不在允许列表中: {allowed_channels}")
+
+    # 默认允许的渠道
+    default_channels = ["api", "cli", "web", "websocket", "test"]
+    if channel not in default_channels:
+        result.add_warning(f"渠道 '{channel}' 不是标准渠道: {default_channels}")
+
+    return result
+
+
 __all__ = [
     "ValidationSeverity",
     "ValidationResult",
     "InputValidator",
     "get_input_validator",
+    "validate_channel",
 ]

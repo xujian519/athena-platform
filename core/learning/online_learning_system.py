@@ -544,3 +544,28 @@ def get_online_learning_system() -> OnlineLearningSystem:
     if _learning_system_instance is None:
         _learning_system_instance = OnlineLearningSystem()
     return _learning_system_instance
+
+
+@dataclass
+class IncrementalLearner:
+    """增量学习器"""
+
+    learner_id: str
+    model_type: str
+    learning_rate: float = 0.01
+    batch_size: int = 32
+    update_frequency: int = 100
+    min_samples: int = 10
+    max_samples: int = 10000
+    enable_performance_tracking: bool = True
+
+
+__all__ = [
+    "ABTestVariant",
+    "FeedbackType",
+    "IncrementalLearner",
+    "LearningUpdate",
+    "OnlineLearningSystem",
+    "UserFeedback",
+    "get_online_learning_system",
+]

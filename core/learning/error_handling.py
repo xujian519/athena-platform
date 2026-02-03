@@ -515,6 +515,10 @@ class ErrorHandlingMixin:
         }
 
 
+# 为保持兼容性，提供别名
+LearningErrorHandler = ErrorHandlingMixin
+
+
 __all__ = [
     # 异常类
     "LearningEngineError",
@@ -532,4 +536,5 @@ __all__ = [
     "CircuitBreaker",
     "FallbackHandler",
     "ErrorHandlingMixin",
+    "LearningErrorHandler",  # 别名
 ]

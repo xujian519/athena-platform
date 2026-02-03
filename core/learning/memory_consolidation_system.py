@@ -577,6 +577,32 @@ class PatternDetector:
         return patterns
 
 
+@dataclass
+class ConsolidationStrategy:
+    """整合策略配置"""
+
+    name: str
+    consolidation_threshold: float = 0.75
+    priority_weight: float = 0.5
+    temporal_weight: float = 0.3
+    access_weight: float = 0.2
+    enable_forgetting: bool = True
+    forgetting_threshold: float = 0.3
+    min_pattern_occurrences: int = 3
+
+
+__all__ = [
+    "ConsolidationCandidate",
+    "ConsolidationPriority",
+    "ConsolidationReport",
+    "ConsolidationStrategy",
+    "MemoryConsolidationSystem",
+    "PatternDetector",
+    "PatternInsight",
+    "test_consolidation_system",
+]
+
+
 # 测试和实用函数
 async def test_consolidation_system():
     """测试记忆整合系统"""

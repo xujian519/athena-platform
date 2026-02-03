@@ -626,10 +626,26 @@ class ModelFactory:
         return model
 
 
+@dataclass
+class EndToEndTrainer:
+    """端到端训练器配置"""
+
+    model: EndToEndModel
+    learning_rate: float = 1e-4
+    batch_size: int = 16
+    epochs: int = 10
+    warmup_steps: int = 1000
+    weight_decay: float = 0.01
+    grad_clip: float = 1.0
+    save_steps: int = 500
+    eval_steps: int = 100
+
+
 # 导出
 __all__ = [
     "CognitionEncoder",
     "EndToEndModel",
+    "EndToEndTrainer",
     "ExecutionDecoder",
     "ModelConfig",
     "ModelFactory",

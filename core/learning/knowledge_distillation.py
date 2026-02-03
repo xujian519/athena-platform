@@ -736,3 +736,67 @@ if __name__ == "__main__":
         print(f"   最终损失: {history['train_loss'][-1]:.4f}")
 
     asyncio.run(main())
+
+
+# =============================================================================
+# === 教师-学生模型类 ===
+# =============================================================================
+
+@dataclass
+class TeacherStudentModel:
+    """教师-学生模型"""
+
+    teacher_model: Any  # 教师模型
+    student_model: Any  # 学生模型
+    distillation_config: DistillationConfig | None = None
+
+    def train(
+        self,
+        train_data: Any,
+        validation_data: Any | None = None,
+    ) -> dict[str, Any]:
+        """
+        训练教师-学生模型
+
+        Args:
+            train_data: 训练数据
+            validation_data: 验证数据
+
+        Returns:
+            训练历史
+        """
+        distillation = KnowledgeDistillation(
+            self.teacher_model,
+            self.student_model,
+            self.distillation_config or DistillationConfig()
+        )
+        return distillation.train(train_data, validation_data)
+
+    def get_student_accuracy(self, test_data: Any) -> float:
+        """获取学生模型在测试数据上的准确率"""
+        return 0.0  # 简化实现
+
+
+# 创建便捷函数
+def create_teacher_student_model(
+    teacher_model: Any,
+    student_model: Any,
+    config: DistillationConfig | None = None,
+) -> TeacherStudentModel:
+    """创建教师-学生模型"""
+    return TeacherStudentModel(
+        teacher_model=teacher_model,
+        student_model=student_model,
+        distillation_config=config,
+    )
+
+
+__all__ = [
+    "DistillationMode",
+    "Rule",
+    "RuleDataset",
+    "DistillationConfig",
+    "KnowledgeDistillation",
+    "TeacherStudentModel",
+    "create_teacher_student_model",
+]

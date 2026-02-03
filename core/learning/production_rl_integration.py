@@ -521,3 +521,19 @@ def get_production_rl_system() -> ProductionRLSystem:
     if _production_rl_system is None:
         _production_rl_system = ProductionRLSystem()
     return _production_rl_system
+
+
+# 为保持兼容性，提供别名
+ProductionRLIntegration = ProductionRLSystem
+RLProductionConfig = RLTrainingConfig
+
+
+__all__ = [
+    "RewardType",
+    "UserInteraction",
+    "RLTrainingConfig",
+    "ProductionRLSystem",
+    "ProductionRLIntegration",  # 别名
+    "RLProductionConfig",  # 别名
+    "get_production_rl_system",
+]

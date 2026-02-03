@@ -808,3 +808,65 @@ async def transfer_from_similar(task_id: str, model: Any, top_k: int = 3) -> lis
 def get_transfer_stats() -> dict[str, Any]:
     """获取迁移统计"""
     return transfer_learning_framework.get_transfer_statistics()
+
+
+# =============================================================================
+# === 域适应类 ===
+# =============================================================================
+
+@dataclass
+class DomainAdaptation:
+    """域适应配置"""
+
+    source_domain: str
+    target_domain: str
+    adaptation_method: str = "fine_tuning"  # fine_tuning, feature_alignment, adversarial
+    adaptation_rate: float = 0.001
+    batch_size: int = 32
+    epochs: int = 10
+
+    def adapt_model(
+        self,
+        source_model: Any,
+        target_data: Any,
+    ) -> Any:
+        """
+        适应源模型到目标域
+
+        Args:
+            source_model: 源域模型
+            target_data: 目标域数据
+
+        Returns:
+            适应后的模型
+        """
+        # 简化实现：返回源模型（实际中应该进行微调）
+        return source_model
+
+
+# 创建便捷函数
+def create_domain_adaptation(
+    source_domain: str,
+    target_domain: str,
+    adaptation_method: str = "fine_tuning",
+) -> DomainAdaptation:
+    """创建域适应配置"""
+    return DomainAdaptation(
+        source_domain=source_domain,
+        target_domain=target_domain,
+        adaptation_method=adaptation_method,
+    )
+
+
+__all__ = [
+    "SourceTask",
+    "TransferResult",
+    "TransferStrategy",
+    "TransferLearningFramework",
+    "transfer_learning_framework",
+    "DomainAdaptation",
+    "create_domain_adaptation",
+    "register_model_for_transfer",
+    "transfer_from_similar",
+    "get_transfer_stats",
+]

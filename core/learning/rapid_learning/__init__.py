@@ -85,6 +85,7 @@ __all__ = [
     "ModelSnapshot",
     # 核心类
     "RapidLearningEngine",
+    "RapidLearner",  # 别名
     "PrioritizedReplayBuffer",
     "MetaLearner",
     "CurriculumScheduler",
@@ -98,3 +99,7 @@ __all__ = [
     "TORCH_AVAILABLE",
     "SKLEARN_AVAILABLE",
 ]
+
+
+# 为保持兼容性，提供 RapidLearner 作为 RapidLearningEngine 的别名
+RapidLearner = RapidLearningEngine

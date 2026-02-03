@@ -1056,5 +1056,38 @@ def main():
         asyncio.run(run_daemon(args.agent_id, args.config))
 
 
+# =============================================================================
+# === 别名和兼容性 ===
+# =============================================================================
+
+# 为保持兼容性，提供 LearningAutonomy 作为别名
+LearningAutonomy = AutonomousLearningSystem
+
+# SelfImprovementCycle 类（简单的包装类）
+class SelfImprovementCycle:
+    """自我改进周期"""
+
+    def __init__(self, autonomous_system: AutonomousLearningSystem | None = None):
+        self.autonomous_system = autonomous_system
+
+    async def run_cycle(self) -> Any:
+        """运行一个改进周期"""
+        if self.autonomous_system:
+            return await self.autonomous_system.optimize_learning()
+
+
 if __name__ == "__main__":
     main()
+
+
+__all__ = [
+    "LearningType",
+    "OptimizationTarget",
+    "LearningExperience",
+    "OptimizationProposal",
+    "ABTestVariant",
+    "ABTestExperiment",
+    "AutonomousLearningSystem",
+    "LearningAutonomy",  # 别名
+    "SelfImprovementCycle",
+]

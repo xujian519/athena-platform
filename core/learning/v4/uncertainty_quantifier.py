@@ -484,5 +484,29 @@ async def example_usage():
     print(f"\n统计信息: {json.dumps(stats, indent=2, ensure_ascii=False)}")
 
 
+class UncertaintyQuantifierV4(UncertaintyQuantifier):
+    """不确定性量化器 v4.0 版本别名，用于向后兼容"""
+
+    pass
+
+
+def get_uncertainty_quantifier_v4() -> UncertaintyQuantifierV4:
+    """获取不确定性量化器v4单例"""
+    global _uncertainty_quantifier
+    if _uncertainty_quantifier is None:
+        _uncertainty_quantifier = UncertaintyQuantifierV4()
+    return _uncertainty_quantifier
+
+
+__all__ = [
+    "UncertaintyLevel",
+    "Confidence",
+    "UncertaintyQuantifier",
+    "UncertaintyQuantifierV4",
+    "get_uncertainty_quantifier",
+    "get_uncertainty_quantifier_v4",
+]
+
+
 if __name__ == "__main__":
     asyncio.run(example_usage())

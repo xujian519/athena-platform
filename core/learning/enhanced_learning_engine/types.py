@@ -74,10 +74,23 @@ class LearningMetrics:
     last_update: datetime = field(default_factory=datetime.now)
 
 
+@dataclass
+class EvaluationScope:
+    """评估范围配置"""
+
+    include_metrics: list[str] = field(default_factory=lambda: ["accuracy", "precision", "recall", "f1"])
+    include_recent_only: bool = False
+    recent_count: int = 100
+    time_window_hours: int | None = None
+    min_samples: int = 10
+    confidence_level: float = 0.95
+
+
 __all__ = [
-    "LearningStrategy",
     "AdaptationMode",
+    "EvaluationScope",
     "Experience",
-    "LearningResult",
     "LearningMetrics",
+    "LearningResult",
+    "LearningStrategy",
 ]

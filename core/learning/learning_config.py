@@ -211,6 +211,8 @@ __all__ = [
     "BatchConfig",
     "CacheConfig",
     "DatabaseConfig",
+    "LearningConfig",
+    "LearningModuleConfig",  # 学习模块配置别名
     "MLModelConfig",  # v2.0新增
     "OptimizationStrategy",
     "PerformanceThresholds",
@@ -259,3 +261,7 @@ class LearningConfig:
             "ab_test": cls.ab_test.__dict__,
             "ml_model": cls.ml_model.__dict__,  # v2.0新增
         }
+
+
+# 为保持兼容性，提供 LearningModuleConfig 作为 LearningConfig 的别名
+LearningModuleConfig = LearningConfig
