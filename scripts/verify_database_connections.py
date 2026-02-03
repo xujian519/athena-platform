@@ -32,26 +32,55 @@ async def verify_all_connections():
     # 1. 验证Neo4j
     print("【1】验证Neo4j连接...")
     try:
-        from neo4j import GraphDatabase
         from dotenv import load_dotenv
+        import subprocess
         import os
 
         load_dotenv()
 
-        uri = os.getenv("NEO4J_URI", "bolt://localhost:7687")
         username = os.getenv("NEO4J_USERNAME", "neo4j")
         password = os.getenv("NEO4J_PASSWORD", "")
 
-        driver = GraphDatabase.driver(uri, auth=(username, password))
+        # 使用cypher-shell命令行工具（避免Python驱动兼容性问题）
+        cmd = ["cypher-shell", "-u", username, "-p", password,
+                "MATCH (n) RETURN count(n) as count"]
 
-        with driver.session() as session:
-            result = session.run("MATCH (n) RETURN count(n) as count")
-            count = result.single()["count"]
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
 
-        driver.close()
-
-        print(f"  ✅ Neo4j连接成功！节点数: {count:,}")
-        results["neo4j"] = True
+        if result.returncode == 0:
+            # 解析输出获取节点数
+            lines = result.stdout.strip().split('\n')
+            if len(lines) >= 2:
+                try:
+                    count = int(lines[1].strip().replace(',', ''))
+                    print(f"  ✅ Neo4j连接成功！节点数: {count:,}")
+                    results["neo4j"] = True
+                except ValueError:
+                    print(f"  ✅ Neo4j连接成功！")
+                    results["neo4j"] = True
+            else:
+                print(f"  ✅ Neo4j连接成功！")
+                results["neo4j"] = True
+        else:
+            # 尝试使用Python驱动作为备用方案
+            try:
+                from neo4j import GraphDatabase
+                uri = os.getenv("NEO4J_URI", "bolt://localhost:7687")
+                driver = GraphDatabase.driver(uri, auth=(username, password))
+                with driver.session() as session:
+                    result = session.run("MATCH (n) RETURN count(n) as count")
+                    count = result.single()["count"]
+                driver.close()
+                print(f"  ✅ Neo4j连接成功！节点数: {count:,}")
+                results["neo4j"] = True
+            except Exception as e2:
+                print(f"  ❌ Neo4j连接失败: {result.stderr}")
+                results["neo4j"] = False
 
     except Exception as e:
         print(f"  ❌ Neo4j连接失败: {e}")
@@ -75,7 +104,8 @@ async def verify_all_connections():
         )
 
         cur = conn.cursor()
-        cur.execute("SELECT COUNT(*) FROM patent_documents")
+        # 使用实际存在的表名（patent_law_documents或law_documents）
+        cur.execute("SELECT COUNT(*) FROM patent_law_documents")
         doc_count = cur.fetchone()[0]
 
         cur.close()
