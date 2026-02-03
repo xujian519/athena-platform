@@ -13,6 +13,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 from sentence_transformers import SentenceTransformer
 
 from core.logging_config import setup_logging

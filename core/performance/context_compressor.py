@@ -431,7 +431,7 @@ class ContextCompressor:
         else:
             print(f"无效的压缩策略: {strategy}")
 
-    def set_limits(self, max_history: int, = None, max_tokens: int | None = None) -> None:
+    def set_limits(self, max_history: int | None = None, max_tokens: int | None = None) -> None:
         """设置压缩限制"""
         if max_history is not None:
             self.max_history_length = max_history

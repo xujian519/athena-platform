@@ -31,6 +31,8 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+import numpy as np
+
 
 from core.logging_config import setup_logging
 
@@ -154,7 +156,7 @@ class PatentDocument:
     full_text: str | None = None
 
     # 向量表示
-    embedding: np.ndarray | None = None
+    embedding: "np.ndarray | None" = None
 
 
 @dataclass
@@ -430,7 +432,11 @@ class PatentDeepComparisonAnalyzer:
     def _extract_title(self, text: str) -> str:
         """提取发明名称"""
         # 简化实现,实际应该用更复杂的解析
-        patterns = []\s*([^\n]+)"]"]
+        patterns = [
+            r"【发明名称】\s*([^\n]+)",
+            r"发明名称[：:]\s*([^\n]+)",
+            r"标题[：:]\s*([^\n]+)",
+        ]
         for pattern in patterns:
             match = re.search(pattern, text)
             if match:
@@ -454,7 +460,7 @@ class PatentDeepComparisonAnalyzer:
         claims = []
 
         # 查找权利要求部分
-        claims_section = re.search(r"权利要求书[]\s*(.*?)(?=\n\s*说明书|$)", text]
+        claims_section = re.search(r"权利要求书[\s\S]*?(.*?)(?=\n\s*说明书|$)", text, re.DOTALL)
         if not claims_section:
             return claims
 
@@ -730,7 +736,7 @@ class PatentDeepComparisonAnalyzer:
                     )
 
             # 整体评估
-            missing_elements = []
+            missing_elements = [
                 ec.target_element.element_text for ec in element_comparisons if not ec.is_present
             ]
 
@@ -930,7 +936,7 @@ class PatentDeepComparisonAnalyzer:
 
     async def _extract_key_differences_similarities(
         self, patent1: PatentDocument, patent2: PatentDocument
-    ) -> tuple[list[str], list[str]:
+    ) -> tuple[list[str], list[str]]:
         """提取关键差异和相似点"""
         differences = []
         similarities = []
@@ -952,7 +958,7 @@ class PatentDeepComparisonAnalyzer:
 
         # 找出共有术语(相似)
         common_terms = set(terms1) & set(terms2)
-        similarities.extend([f"共有技术特征: {term}" for term in list(common_terms)[:5])
+        similarities.extend([f"共有技术特征: {term}" for term in list(common_terms)[:5]])
 
         return differences[:10], similarities[:10]
 
@@ -963,7 +969,7 @@ class PatentDeepComparisonAnalyzer:
 
         # 提取可能的术语(名词短语)
         # 简化实现,实际应该使用专业NER
-        terms = re.findall(r"([装置|系统|方法|设备|工艺|技术))"]
+        terms = re.findall(r"(装置|系统|方法|设备|工艺|技术)", text)
 
         # 去重并返回前20个
         return list(set(terms))[:20]
@@ -1219,7 +1225,7 @@ class PatentDeepComparisonAnalyzer:
                 )
             else:
                 # 检查要素相似度
-                low_similarity_elements = []
+                low_similarity_elements = [
                     ec for ec in comp.element_comparisons if ec.similarity_score < 0.7
                 ]
 
@@ -1567,7 +1573,7 @@ class PatentDeepComparisonAnalyzer:
 
         # 设置默认字体(中文支持)
         doc.styles["Normal"].font.name = "宋体"
-        doc.styles[east_asia")]
+        doc.styles["Normal"]._element.rPr.rFonts.set(qn("w:eastAsia"), "宋体")
 
         # 标题
         title = doc.add_heading("专利深度对比分析报告", 0)
@@ -1828,7 +1834,7 @@ class PatentDeepComparisonAnalyzer:
 
 # 便捷函数
 async def analyze_patent_for_office_action(
-    target_patent_text: str, reference_patents: list[str]], output_path: str | None = None
+    target_patent_text: str, reference_patents: list[str], output_path: str | None = None
 ) -> DeepComparisonReport:
     """
     便捷函数:分析专利用于审查意见答复
