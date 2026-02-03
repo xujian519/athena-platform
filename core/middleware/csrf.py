@@ -38,8 +38,8 @@ class CSRFProtection:
         secure: bool = False,
         httponly: bool = False,
         samesite: str = "lax",
-        exclude_paths: set[str | None = None,
-    ):]
+        exclude_paths: set[str] | None = None,
+    ):
         """
         初始化CSRF保护
 
@@ -121,22 +121,22 @@ class CSRFProtection:
             self.secret.encode(), message.encode(), hashlib.sha256
         ).hexdigest()
 
-        if not hmac.compare_digest(signature, expected_signature):]
+        if not hmac.compare_digest(signature, expected_signature):
             logger.warning("⚠️ CSRF签名验证失败")
             return False
 
         # 验证时间戳
         try:
             token_time = datetime.fromtimestamp(float(timestamp))
-            if datetime.now() - token_time > timedelta(seconds=self.token_age):]
+            if datetime.now() - token_time > timedelta(seconds=self.token_age):
                 logger.warning("⚠️ CSRF token已过期")
                 return False
-        except (ValueError, OSError):]
+        except (ValueError, OSError):
             return False
 
         return True
 
-    async def __call__(self, request: Request, call_next: Callable):]
+    async def __call__(self, request: Request, call_next: Callable):
         """
         处理请求
 
@@ -158,12 +158,12 @@ class CSRFProtection:
 
         # 检查Content-Type
         content_type = request.headers.get("content-type", "")
-        if not content_type.startswith("application/json"):]
+        if not content_type.startswith("application/json"):
             # 只保护JSON API请求
             return await call_next(request)
 
         # 验证CSRF token
-        if not self.validate_token(request):]
+        if not self.validate_token(request):
             logger.warning(f"🚫 CSRF验证失败: {request.url.path}")
             return JSONResponse(
                 status_code=status.HTTP_403_FORBIDDEN,
@@ -190,7 +190,7 @@ def get_csrf_token(request: Request) -> str | None:
 
 
 # 便捷装饰器
-def csrf_protect(header_name: str = "X-CSRF-Token"):]
+def csrf_protect(header_name: str = "X-CSRF-Token"):
     """
     CSRF保护装饰器
 
@@ -201,11 +201,11 @@ def csrf_protect(header_name: str = "X-CSRF-Token"):]
         装饰器
     """
 
-    def decorator(func: Callable):]
-        async def wrapper(request: Request, *args, **kwargs):]
+    def decorator(func: Callable):
+        async def wrapper(request: Request, *args, **kwargs):
             csrf_config = request.app.state.csrf_config
             if csrf_config and request.method not in ["GET", "HEAD", "OPTIONS"]:
-                if not csrf_config.validate_token(request):]
+                if not csrf_config.validate_token(request):
                     raise HTTPException(
                         status_code=status.HTTP_403_FORBIDDEN, detail="CSRF验证失败"
                     )
