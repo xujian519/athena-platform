@@ -56,11 +56,10 @@ services:
       - "7687:7687"  # Bolt
     volumes:
       - neo4j-data:/data
-      - neo4j-logs:/logs
     networks:
       - athena-network
     environment:
-      - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD:-athena123}
+      - NEO4J_AUTH=neo4j/athena_neo4j_2024
       - NEO4J_PLUGINS=["apoc"]
       - NEO4J_dbms_memory_heap_initial__size=512m
       - NEO4J_dbms_memory_heap_max__size=2G
@@ -172,8 +171,6 @@ volumes:
     name: athena-qdrant-data
   neo4j-data:
     name: athena-neo4j-data
-  neo4j-logs:
-    name: athena-neo4j-logs
   prometheus-data:
     name: athena-prometheus-data
   grafana-data:

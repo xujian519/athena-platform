@@ -173,8 +173,13 @@ class ErrorCodes:
     SIMILAR_CASE_NOT_FOUND = "FA-002"
 
 
+# 为保持兼容性，提供别名
+LearningException = LearningModuleError
+
+
 __all__ = [
     "LearningModuleError",
+    "LearningException",  # 别名
     "LearningEngineError",
     "ExperienceStoreError",
     "PatternRecognitionError",

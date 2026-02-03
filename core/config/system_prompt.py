@@ -470,5 +470,64 @@ class SystemPrompt:
         )
 
 
+# =============================================================================
+# 便捷函数
+# =============================================================================
+
+
+def get_system_prompt(prompt_type: str = "core") -> str:
+    """
+    获取系统提示词（便捷函数）
+
+    Args:
+        prompt_type: 提示词类型
+            - "core": 核心系统提示词
+            - "patent": 专利业务提示词
+            - "knowledge": 知识整合提示词
+            - "architectural": 架构指导提示词
+            - "quality": 质量控制提示词
+            - "comprehensive": 综合提示词
+
+    Returns:
+        系统提示词字符串
+    """
+    prompt_map = {
+        "core": SystemPrompt.get_core_system_prompt,
+        "patent": SystemPrompt.get_patent_business_prompt,
+        "knowledge": SystemPrompt.get_knowledge_integration_prompt,
+        "architectural": SystemPrompt.get_architectural_guidance_prompt,
+        "quality": SystemPrompt.get_quality_control_prompt,
+        "comprehensive": SystemPrompt.get_comprehensive_prompt,
+    }
+
+    func = prompt_map.get(prompt_type, SystemPrompt.get_core_system_prompt)
+    return func()
+
+
+def get_agent_prompt(agent_type: str = "default") -> str:
+    """
+    获取智能体提示词（便捷函数）
+
+    Args:
+        agent_type: 智能体类型
+            - "default": 默认智能体
+            - "patent": 专利专家智能体
+            - "legal": 法律专家智能体
+            - "analyst": 分析师智能体
+
+    Returns:
+        智能体提示词字符串
+    """
+    # 根据智能体类型返回相应的提示词
+    if agent_type == "patent":
+        return get_system_prompt("comprehensive")
+    elif agent_type == "legal":
+        return get_system_prompt("core") + "\n\n" + get_system_prompt("knowledge")
+    elif agent_type == "analyst":
+        return get_system_prompt("architectural")
+    else:
+        return get_system_prompt("core")
+
+
 # 导出类和常量
-__all__ = ["SystemPrompt"]
+__all__ = ["SystemPrompt", "get_system_prompt", "get_agent_prompt"]

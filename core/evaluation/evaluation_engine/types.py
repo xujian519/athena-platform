@@ -103,3 +103,43 @@ class ReflectionRecord:
     action_items: list[str] = field(default_factory=list)
     lessons_learned: list[str] = field(default_factory=list)
     timestamp: datetime = field(default_factory=datetime.now)
+
+
+# =============================================================================
+# === 别名和兼容性 ===
+# =============================================================================
+
+# 为保持兼容性，提供 AssessmentType 作为别名
+AssessmentType = EvaluationType
+
+
+class EvaluationScope(Enum):
+    """评估范围"""
+
+    # 系统级别
+    SYSTEM = "system"  # 系统整体评估
+    MODULE = "module"  # 模块级别评估
+    COMPONENT = "component"  # 组件级别评估
+    FUNCTION = "function"  # 函数级别评估
+
+    # 业务级别
+    WORKFLOW = "workflow"  # 工作流评估
+    TASK = "task"  # 任务评估
+    OPERATION = "operation"  # 操作评估
+
+    # 数据级别
+    DATA_QUALITY = "data_quality"  # 数据质量评估
+    DATA_INTEGRITY = "data_integrity"  # 数据完整性评估
+    DATA_SECURITY = "data_security"  # 数据安全评估
+
+
+__all__ = [
+    "EvaluationType",
+    "AssessmentType",  # 别名
+    "EvaluationLevel",
+    "EvaluationScope",
+    "ReflectionType",
+    "EvaluationCriteria",
+    "EvaluationResult",
+    "ReflectionRecord",
+]

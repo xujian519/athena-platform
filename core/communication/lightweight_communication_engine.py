@@ -244,3 +244,34 @@ class LightweightCommunicationEngine:
             "queue_size": len(self.message_queue),
             "statistics": self.statistics,
         }
+
+
+# =============================================================================
+# === 便捷函数 ===
+# =============================================================================
+
+# 全局引擎实例
+_global_lightweight_engine: LightweightCommunicationEngine | None = None
+
+
+def get_lightweight_engine() -> LightweightCommunicationEngine:
+    """
+    获取或创建轻量级通信引擎实例
+
+    Returns:
+        LightweightCommunicationEngine 实例
+    """
+    global _global_lightweight_engine
+
+    if _global_lightweight_engine is None:
+        _global_lightweight_engine = LightweightCommunicationEngine()
+
+    return _global_lightweight_engine
+
+
+__all__ = [
+    "MessageType",
+    "Message",
+    "LightweightCommunicationEngine",
+    "get_lightweight_engine",
+]

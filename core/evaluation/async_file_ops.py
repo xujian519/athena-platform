@@ -199,3 +199,20 @@ async def async_write_json(
     """快捷函数:异步写入JSON文件"""
     manager = get_async_file_manager()
     await manager.write_json(file_path, data, indent=indent)
+
+
+# =============================================================================
+# === 别名和兼容性 ===
+# =============================================================================
+
+# 为保持兼容性，提供 AsyncFileOperations 作为别名
+AsyncFileOperations = AsyncFileManager
+
+
+__all__ = [
+    "AsyncFileManager",
+    "AsyncFileOperations",  # 别名
+    "get_async_file_manager",
+    "async_read_json",
+    "async_write_json",
+]

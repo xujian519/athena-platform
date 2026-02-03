@@ -50,7 +50,7 @@ class MessageValidator:
     ]
 
     # ID格式验证
-    ID_PATTERN = re.compile(r"^[a-z_a-Z0-9_-]+$")
+    ID_PATTERN = re.compile(r"^[a-zA-Z0-9_-]+$")
 
     def __init__(
         self,
@@ -245,6 +245,35 @@ def validate_message(message: Message) -> tuple[bool, str | None]:
         (是否有效, 错误信息)元组
     """
     return get_default_validator().validate(message)
+
+
+def validate_channel(channel_id: str, channel_type: str = "default") -> tuple[bool, str | None]:
+    """
+    验证通道ID和类型
+
+    Args:
+        channel_id: 通道ID
+        channel_type: 通道类型
+
+    Returns:
+        (是否有效, 错误信息)元组
+    """
+    if not channel_id:
+        return False, "通道ID不能为空"
+
+    if not isinstance(channel_id, str):
+        return False, "通道ID必须是字符串"
+
+    # 验证通道ID格式
+    if not MessageValidator.ID_PATTERN.match(channel_id):
+        return False, f"无效的通道ID格式: {channel_id}"
+
+    # 验证通道类型
+    valid_types = ["default", "direct", "broadcast", "topic", "group", "system"]
+    if channel_type and channel_type not in valid_types:
+        return False, f"无效的通道类型: {channel_type}"
+
+    return True, None
 
 
 # =============================================================================

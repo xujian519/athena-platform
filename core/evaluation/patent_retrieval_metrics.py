@@ -619,3 +619,19 @@ class PatentRetrievalMetrics:
                 comparison["best_system"][metric] = scores[0][1]
 
         return comparison
+
+
+# =============================================================================
+# === 别名和兼容性 ===
+# =============================================================================
+
+# 为保持兼容性，提供 RetrievalQualityAssessor 作为别名
+RetrievalQualityAssessor = PatentRetrievalMetrics
+
+
+__all__ = [
+    "RelevanceJudgment",
+    "RetrievalResult",
+    "PatentRetrievalMetrics",
+    "RetrievalQualityAssessor",  # 别名
+]

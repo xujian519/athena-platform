@@ -17,7 +17,7 @@ import logging
 import statistics
 import uuid
 from collections import defaultdict
-from dataclasses import asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -560,3 +560,132 @@ class EvaluationEngine:
         # 限制记录数量
         if len(self.evaluation_records) > 100:
             self.evaluation_records = self.evaluation_records[-50:]
+
+
+# =============================================================================
+# === 批量评估器 ===
+# =============================================================================
+
+@dataclass
+class EvaluationContext:
+    """评估上下文"""
+    agent_id: str
+    session_id: str | None = None
+    metadata: dict[str, Any] | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "agent_id": self.agent_id,
+            "session_id": self.session_id,
+            "metadata": self.metadata or {},
+        }
+
+
+class BatchEvaluator:
+    """
+    批量评估器
+
+    支持批量评估多个项目，提高效率。
+    """
+
+    def __init__(self, agent_id: str, config: dict | None = None):
+        self.agent_id = agent_id
+        self.config = config or {}
+        self.engine = EvaluationEngine(agent_id, config)
+
+    async def initialize(self):
+        """初始化批量评估器"""
+        await self.engine.initialize()
+
+    async def evaluate_batch(
+        self,
+        items: list[dict[str, Any]],
+        criteria: EvaluationCriteria | None = None,
+        context: EvaluationContext | None = None,
+    ) -> list[EvaluationResult]:
+        """
+        批量评估多个项目
+
+        Args:
+            items: 待评估的项目列表
+            criteria: 评估标准
+            context: 评估上下文
+
+        Returns:
+            评估结果列表
+        """
+        results = []
+
+        for item in items:
+            result = await self.engine.evaluate(item, criteria, context)
+            results.append(result)
+
+        return results
+
+    async def shutdown(self):
+        """关闭批量评估器"""
+        await self.engine.shutdown()
+
+
+class SequentialEvaluator:
+    """
+    顺序评估器
+
+    按顺序依次评估多个项目，每个项目的评估可以依赖前一个项目的结果。
+    """
+
+    def __init__(self, agent_id: str, config: dict | None = None):
+        self.agent_id = agent_id
+        self.config = config or {}
+        self.engine = EvaluationEngine(agent_id, config)
+        self.previous_results: list[EvaluationResult] = []
+
+    async def initialize(self):
+        """初始化顺序评估器"""
+        await self.engine.initialize()
+
+    async def evaluate_sequential(
+        self,
+        items: list[dict[str, Any]],
+        criteria: EvaluationCriteria | None = None,
+        context: EvaluationContext | None = None,
+    ) -> list[EvaluationResult]:
+        """
+        顺序评估多个项目
+
+        Args:
+            items: 待评估的项目列表
+            criteria: 评估标准
+            context: 评估上下文
+
+        Returns:
+            评估结果列表
+        """
+        results = []
+
+        for i, item in enumerate(items):
+            # 使用之前的结果作为上下文
+            enhanced_context = context or EvaluationContext(self.agent_id)
+            if enhanced_context.metadata is None:
+                enhanced_context.metadata = {}
+            enhanced_context.metadata["previous_results"] = self.previous_results
+            enhanced_context.metadata["current_index"] = i
+
+            result = await self.engine.evaluate(item, criteria, enhanced_context)
+            results.append(result)
+            self.previous_results.append(result)
+
+        return results
+
+    async def shutdown(self):
+        """关闭顺序评估器"""
+        await self.engine.shutdown()
+        self.previous_results.clear()
+
+
+__all__ = [
+    "EvaluationEngine",
+    "EvaluationContext",
+    "BatchEvaluator",
+    "SequentialEvaluator",
+]

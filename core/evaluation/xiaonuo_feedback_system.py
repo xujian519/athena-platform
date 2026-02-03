@@ -510,4 +510,23 @@ class XiaonuoFeedbackSystem:
 
 
 # 导出主类
-__all__ = ["FeedbackItem", "QualityMetrics", "ServiceMetrics", "XiaonuoFeedbackSystem"]
+__all__ = [
+    "FeedbackItem",
+    "QualityMetrics",
+    "ServiceMetrics",
+    "XiaonuoFeedbackSystem",
+    # 别名
+    "FeedbackCollector",  # 别名
+    "FeedbackProcessor",  # 别名
+]
+
+
+# =============================================================================
+# === 别名和兼容性 ===
+# =============================================================================
+
+# 为保持兼容性，提供 FeedbackCollector 作为别名
+FeedbackCollector = XiaonuoFeedbackSystem
+
+# 为保持兼容性，提供 FeedbackProcessor 作为别名
+FeedbackProcessor = XiaonuoFeedbackSystem

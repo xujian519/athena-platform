@@ -444,8 +444,13 @@ if __name__ == "__main__":
 # 导出
 # =============================================================================
 
+# 为保持兼容性，提供 TaskManager 作为别名
+TaskManager = BackgroundTaskManager
+
+
 __all__ = [
     "BackgroundTaskManager",
+    "TaskManager",  # 别名
     "TaskInfo",
     "get_task_manager",
 ]

@@ -449,4 +449,15 @@ class RedisPersistence(BaseMessagePersistence):
             return 0
 
 
-__all__ = ["RedisPersistence"]
+# =============================================================================
+# === 别名和兼容性 ===
+# =============================================================================
+
+# 为保持兼容性，提供 RedisPersistenceBackend 作为别名
+RedisPersistenceBackend = RedisPersistence
+
+
+__all__ = [
+    "RedisPersistence",
+    "RedisPersistenceBackend",  # 别名
+]

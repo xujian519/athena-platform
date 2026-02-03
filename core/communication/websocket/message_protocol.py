@@ -126,7 +126,8 @@ class MessageProtocol:
     def create_message(
         self,
         message_type: WebSocketMessageType,
-        data: dict[str, Any],        message_id: str | None = None,
+        data: dict[str, Any],
+        message_id: str | None = None,
     ) -> str:
         """
         创建消息
@@ -223,7 +224,16 @@ class SystemNotificationType:
 
 __all__ = [
     "WebSocketMessageType",
+    "MessageType",  # 别名
     "WebSocketMessage",
     "MessageProtocol",
     "SystemNotificationType",
 ]
+
+
+# =============================================================================
+# === 别名和兼容性 ===
+# =============================================================================
+
+# 为保持兼容性，提供 MessageType 作为别名
+MessageType = WebSocketMessageType

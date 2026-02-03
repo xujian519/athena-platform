@@ -435,7 +435,7 @@ class UnifiedReasoningOrchestrator:
         return self._call_reasoning_engine(task_description, recommendation, **kwargs)
 
     def _call_direct_capability(
-        self, task_description: str, recommendation: EngineRecommending, **kwargs
+        self, task_description: str, recommendation: EngineRecommendation, **kwargs
     ) -> dict[str, Any]:
         """调用专业能力"""
         logger.info(f"调用专业能力: {recommendation.engine_name}")

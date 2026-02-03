@@ -419,6 +419,10 @@ def create_learning_engine(
     return engine
 
 
+# 为保持兼容性，提供别名
+BaseLearningInterface = BaseLearningEngine
+
+
 __all__ = [
     # 枚举
     "LearningStrategy",
@@ -429,6 +433,7 @@ __all__ = [
     "LearningMetrics",
     # 基类
     "BaseLearningEngine",
+    "BaseLearningInterface",  # 别名
     # 注册表
     "LearningEngineRegistry",
     "create_learning_engine",

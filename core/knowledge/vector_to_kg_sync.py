@@ -45,7 +45,7 @@ class SafeNebulaQueryBuilder:
     """
 
     # 允许的标识符格式:字母开头,只包含字母、数字、下划线
-    IDENTIFIER_PATTERN = re.compile(r"^[a-z_a-Z_][a-z_a-Z0-9_]*$")
+    IDENTIFIER_PATTERN = re.compile(r"^[a-zA-Z_][a-zA-Z0-9_]*$")
     # 最大字符串长度限制
     MAX_STRING_LENGTH = 1000
 

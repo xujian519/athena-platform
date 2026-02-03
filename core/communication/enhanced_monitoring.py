@@ -409,7 +409,43 @@ def track_websocket_message(message_type: str, direction: str = "sent"):
 __all__ = [
     "PROMETHEUS_AVAILABLE",
     "EnhancedCommunicationMetrics",
+    "CommunicationMonitor",  # 别名
+    "CommunicationMetrics",  # 别名
+    "MetricsCollector",  # 便捷函数
     "get_enhanced_metrics",
+    "get_monitor",  # 便捷函数
     "track_persistence_operation",
     "track_websocket_message",
 ]
+
+
+# =============================================================================
+# === 别名和便捷函数 ===
+# =============================================================================
+
+# 为保持兼容性，提供 CommunicationMonitor 作为别名
+CommunicationMonitor = EnhancedCommunicationMetrics
+
+# 为保持兼容性，提供 CommunicationMetrics 作为别名
+CommunicationMetrics = EnhancedCommunicationMetrics
+
+
+def get_monitor(
+    namespace: str = "athena_comm",
+    subsystem: str = "communication",
+) -> EnhancedCommunicationMetrics:
+    """
+    获取或创建监控指标实例
+
+    Args:
+        namespace: Prometheus 命名空间
+        subsystem: 子系统名称
+
+    Returns:
+        EnhancedCommunicationMetrics 实例
+    """
+    return get_enhanced_metrics(namespace, subsystem)
+
+
+# 为保持兼容性，提供 MetricsCollector 作为函数
+MetricsCollector = get_monitor

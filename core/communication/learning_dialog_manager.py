@@ -741,3 +741,46 @@ if __name__ == "__main__":
         print("=" * 80)
 
     asyncio.run(test_learning_dialog_manager())
+
+
+# =============================================================================
+# === 别名和便捷函数 ===
+# =============================================================================
+
+# 为保持兼容性，提供 DialogManager 作为 LearningDialogManager 的别名
+DialogManager = LearningDialogManager
+
+
+def get_dialog_manager(
+    enable_learning: bool = True,
+    auto_optimize: bool = True,
+) -> LearningDialogManager:
+    """
+    获取或创建对话管理器实例
+
+    Args:
+        enable_learning: 是否启用学习引擎
+        auto_optimize: 是否自动优化
+
+    Returns:
+        LearningDialogManager 实例
+    """
+    return LearningDialogManager(
+        enable_learning=enable_learning,
+        auto_optimize=auto_optimize,
+    )
+
+
+__all__ = [
+    # 原始类
+    "LearningDialogManager",
+    "DialogState",
+    "ResponseStrategy",
+    "DialogTurn",
+    "DialogContext",
+    "DialogResponse",
+    # 别名
+    "DialogManager",
+    # 便捷函数
+    "get_dialog_manager",
+]

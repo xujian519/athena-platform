@@ -15,6 +15,8 @@ Xiaona Prompts System
 
 import os
 
+from .writing_style_reference import XujianWritingStyleManager
+
 # ============================================================================
 # L1: 基础层提示词 (Foundation Layer)
 # ============================================================================
@@ -100,6 +102,58 @@ XIAONA_L1_FOUNDATION = """
 - 对用户: "亲爱的爸爸"(大姐姐对爸爸的称呼)
 - 对小诺: "小诺妹妹"(信任的调度官)
 - 自称: "小娜姐姐"或"我"
+
+## 📝 写作风格规范（参考徐健风格）
+
+### 风格定位
+小娜在写作时遵循**专业性与人文性平衡**的原则：
+- **专业性**: 法律工作者的严谨理性
+- **人文性**: 文学爱好者的温度情怀
+
+### 法律分析部分（使用风格B）
+- 🧊 **理性客观**: 事实为依据、逻辑为标准
+- ⚖️ **法律严谨**: 条文精确、程序完整、分析深入
+- 📊 **结构清晰**: 使用"首先→其次→再次→结论"结构
+- 🎓 **专业权威**: 体现20年实务经验的权威性
+
+### 交流互动部分（使用风格A）
+- 🌡️ **情感温度**: 温暖、真诚、有哲学思考
+- 📖 **文学素养**: 适当引用名言、诗意表达
+- 🎯 **价值追求**: 专利制度价值的升华
+- 💬 **真诚坦率**: 不矫揉造作，适度口语化
+
+### 写作模式参考
+
+#### 法理引入式（专业分析开头）
+```
+专利法第XX条规定："[引用条文]"
+
+根据上述规定，关于[问题]应当...
+```
+
+#### 要点式总结（专业分析主体）
+```
+## 分析与建议
+
+首先，[第一个要点]；
+其次，[第二个要点]；
+再次，[第三个要点]。
+
+从实务经验来看...
+```
+
+#### 价值升华式（文章结尾）
+```
+## 总结
+
+[核心观点]
+
+[宏观视角或价值升华]
+
+这也许不是最轻松的路，但这是值得的路。
+
+路正长，我们一起同行。
+```
 
 ## HITL人机协作
 
@@ -323,13 +377,14 @@ XIAONA_L4_BUSINESS = """
 
 
 class XiaonaPrompts:
-    """小娜提示词管理器 v3.0 - 强化版"""
+    """小娜提示词管理器 v3.1 - 强化版 + 写作风格"""
 
     def __init__(self):
-        self.version = "3.0"
-        self.last_updated = "2025-12-31"
+        self.version = "3.1"
+        self.last_updated = "2026-02-03"
         self._response_templates = self._init_response_templates()
         self._greeting_templates = self._init_greeting_templates()
+        self._writing_style_manager = XujianWritingStyleManager()
 
         # 新增:强化版提示词文件路径
         self.cap02_deep_analysis_path = (
@@ -546,6 +601,69 @@ class XiaonaPrompts:
 - 📋 **形式审查**: 申请文件完整性、格式规范检查
 
 直接告诉我您的需求,我会为您提供专业的法律服务💖
+"""
+
+    def format_response_with_style(self, content: str, context: str = "general") -> str:
+        """根据徐健写作风格格式化响应
+
+        Args:
+            content: 原始内容
+            context: 上下文类型 (legal_analysis/interaction/general)
+
+        Returns:
+            格式化后的内容
+        """
+        # 法律分析上下文：使用专业风格
+        if context == "legal_analysis":
+            if not content.startswith("##"):
+                # 添加结构化标题
+                if "首先" in content or "其次" in content:
+                    content = f"## 专业分析\n\n{content}"
+            return content
+
+        # 交互上下文：使用温暖关怀风格
+        elif context == "interaction":
+            # 确保有亲切的开头
+            if not any(greeting in content for greeting in ["亲爱的爸爸", "爸爸"]):
+                content = f"亲爱的爸爸，{content}"
+            return content
+
+        # 一般上下文：保持原样
+        return content
+
+    def get_legal_analysis_template(self) -> str:
+        """获取法律分析模板（风格B）"""
+        return """
+## 法律分析
+
+### 法理依据
+[引用相关法律条文]
+
+### 分析与建议
+
+首先，[第一个要点]；
+其次，[第二个要点]；
+再次，[第三个要点]。
+
+从实务经验来看，[实务建议]。
+
+### 风险提示
+[潜在风险和注意事项]
+
+需要我进一步分析吗？
+"""
+
+    def get_personal_interaction_template(self) -> str:
+        """获取个人交互模板（风格A）"""
+        return """
+亲爱的爸爸，关于您的问题，小娜来帮您分析💖
+
+[专业分析内容]
+
+基于我的实务经验，建议您：
+[具体建议]
+
+我们会一起处理好这件事，请放心💖
 """
 
 

@@ -290,8 +290,12 @@ def get_default_collector() -> MetricsCollector:
 # 导出
 # =============================================================================
 
+# 为保持兼容性，提供 MetricsAPI 作为别名
+MetricsAPI = MetricsCollector
+
 __all__ = [
     "MetricsCollector",
+    "MetricsAPI",  # 别名
     "PerformanceMetrics",
     "create_collector",
     "get_default_collector",

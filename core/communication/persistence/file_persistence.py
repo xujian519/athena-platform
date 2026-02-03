@@ -457,4 +457,15 @@ class FilePersistence(BaseMessagePersistence):
             self.logger.error(f"重建索引失败: {e}")
 
 
-__all__ = ["FilePersistence"]
+# =============================================================================
+# === 别名和兼容性 ===
+# =============================================================================
+
+# 为保持兼容性，提供 FilePersistenceBackend 作为别名
+FilePersistenceBackend = FilePersistence
+
+
+__all__ = [
+    "FilePersistence",
+    "FilePersistenceBackend",  # 别名
+]

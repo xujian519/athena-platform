@@ -107,3 +107,17 @@ class MetricsCalculator:
             trend = "declining_rapidly"
 
         return {"trend": trend, "slope": slope, "recent_avg": recent_avg, "older_avg": older_avg}
+
+
+# =============================================================================
+# === 别名和兼容性 ===
+# =============================================================================
+
+# 为保持兼容性，提供 EvaluationMetrics 作为别名
+EvaluationMetrics = MetricsCalculator
+
+
+__all__ = [
+    "MetricsCalculator",
+    "EvaluationMetrics",  # 别名
+]

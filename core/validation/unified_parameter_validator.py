@@ -389,7 +389,7 @@ class UnifiedParameterValidator:
             return False, f"期望字典类型,实际: {type(value).__name__}"
 
         elif expected_type == ParameterType.EMAIL:
-            pattern = r"^[a-z_a-Z0-9._%+-]+@[a-z_a-Z0-9.-]+\.[a-z_a-Z]{2,}$"
+            pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
             if re.match(pattern, str(value)):
                 return True, None
             return False, "邮箱格式不正确"

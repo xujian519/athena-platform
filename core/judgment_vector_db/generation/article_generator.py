@@ -171,7 +171,8 @@ class ArticleGenerator:
         self,
         topic: str,
         article_type: ArticleType,
-        analysis_report: dict[dict[str, Any]] -> list[ArticleSection]:
+        analysis_report: dict[str, Any]
+    ) -> list[ArticleSection]:
         """生成文章段落"""
         if article_type == ArticleType.REVIEW:
             return self._generate_review_sections(topic, analysis_report)
@@ -618,7 +619,9 @@ class ArticleGenerator:
 
 # 便捷函数
 def create_article_generator(
-    Optional[viewpoint_analyzer, hybrid_retriever, config: dict[str, Any] | None = None
+    viewpoint_analyzer = None,
+    hybrid_retriever = None,
+    config: dict[str, Any] | None = None
 ) -> ArticleGenerator:
     """
     创建文章生成器

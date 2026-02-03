@@ -290,7 +290,25 @@ async def recover_queue(
     return await recovery_manager.recover_all()
 
 
+def get_recovery_manager(
+    persistence: PersistenceManager | BaseMessagePersistence,
+    config: dict[str, Any] | None = None,
+) -> QueueRecoveryManager:
+    """
+    获取或创建队列恢复管理器实例
+
+    Args:
+        persistence: 持久化管理器或后端
+        config: 配置参数
+
+    Returns:
+        QueueRecoveryManager 实例
+    """
+    return QueueRecoveryManager(persistence, config)
+
+
 __all__ = [
     "QueueRecoveryManager",
     "recover_queue",
+    "get_recovery_manager",
 ]

@@ -155,8 +155,8 @@ class MessageTraceManager:
         return self._traces.get(message_id)
 
     def record_event(
-        self, message_id: str, event_type: MessageEventType, details: dict[str, Any]) | None = None
-    ):
+        self, message_id: str, event_type: MessageEventType, details: dict[str, Any]
+    ) -> None:
         """
         记录消息事件
 
@@ -254,11 +254,15 @@ def get_default_manager() -> MessageTraceManager:
 # 导出
 # =============================================================================
 
+# 为保持兼容性，提供 MessageTracker 作为别名
+MessageTracker = MessageTraceManager
+
 __all__ = [
     "MessageEventType",
     "MessageTrace",
     "MessageTraceEvent",
     "MessageTraceManager",
+    "MessageTracker",  # 别名
     "create_trace_manager",
     "get_default_manager",
 ]

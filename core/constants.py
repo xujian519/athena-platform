@@ -361,7 +361,7 @@ EMAIL_PATTERN: Final[re.Pattern] = re.compile(
 PHONE_PATTERN: Final[re.Pattern] = re.compile(r"^\+?[\d\s\-()]+$")
 URL_PATTERN: Final[re.Pattern] = re.compile(r"^https?://[^\s/$.?#].[^\s]*$")
 FILENAME_PATTERN: Final[re.Pattern] = re.compile(r"^[\w\-\.\u4e00-\u9fff]+$")
-SAFE_STRING_PATTERN: Final[re.Pattern] = re.compile(r"^[a-z_a-Z0-9_-]+$")
+SAFE_STRING_PATTERN: Final[re.Pattern] = re.compile(r"^[a-zA-Z0-9_-]+$")
 
 
 # ============================================================================

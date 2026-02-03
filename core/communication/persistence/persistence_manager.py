@@ -237,7 +237,12 @@ def create_persistence_manager(
     )
 
 
+# 为保持兼容性，提供 get_persistence_manager 作为别名
+get_persistence_manager = create_persistence_manager
+
+
 __all__ = [
     "PersistenceManager",
     "create_persistence_manager",
+    "get_persistence_manager",  # 别名
 ]

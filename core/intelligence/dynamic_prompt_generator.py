@@ -12,9 +12,9 @@ from datetime import datetime
 import requests
 from sentence_transformers import SentenceTransformer
 
-from core.knowledge.graph_manager import KnowledgeGraphManager
+from core.knowledge.unified_knowledge_graph import UnifiedKnowledgeGraph as KnowledgeGraphManager
 from core.logging_config import setup_logging
-from core.storage.vector_manager import VectorManager
+from core.storage.unified_storage_manager import UnifiedStorageManager as VectorManager
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

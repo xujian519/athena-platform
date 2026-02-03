@@ -365,7 +365,16 @@ async def create_persistent_engine(
     return engine
 
 
+# =============================================================================
+# === 便捷函数别名 ===
+# =============================================================================
+
+# 为保持兼容性，提供 get_persistent_engine 作为别名
+get_persistent_engine = create_persistent_engine
+
+
 __all__ = [
     "PersistentCommunicationEngine",
     "create_persistent_engine",
+    "get_persistent_engine",
 ]

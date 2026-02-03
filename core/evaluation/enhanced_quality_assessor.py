@@ -423,4 +423,105 @@ __all__ = [
     "EnhancedQualityAssessor",
     "QualityAssessmentResult",
     "SemanticAnalysisResult",
+    # 别名
+    "AssessmentCriteria",  # 别名
+    "AssessmentDimension",  # 别名
+    "AssessmentResult",  # 别名
+    "QualityMetrics",  # 别名
+    "QualityReport",  # 别名
 ]
+
+
+# =============================================================================
+# === 别名和兼容性 ===
+# =============================================================================
+
+from enum import Enum
+
+# 为保持兼容性，提供类别名
+AssessmentResult = QualityAssessmentResult
+
+
+class AssessmentDimension(str, Enum):
+    """评估维度"""
+    COMPLETENESS = "completeness"  # 完整性
+    CLARITY = "clarity"  # 清晰度
+    RELEVANCE = "relevance"  # 相关性
+    ACCURACY = "accuracy"  # 准确性
+    COHERENCE = "coherence"  # 连贯性
+    DEPTH = "depth"  # 深度
+
+
+@dataclass
+class AssessmentCriteria:
+    """评估标准"""
+    dimensions: list[AssessmentDimension] | None = None
+    weights: dict[str, float] | None = None
+    thresholds: dict[str, float] | None = None
+
+    def __post_init__(self):
+        if self.dimensions is None:
+            self.dimensions = [
+                AssessmentDimension.COMPLETENESS,
+                AssessmentDimension.CLARITY,
+                AssessmentDimension.RELEVANCE,
+            ]
+        if self.weights is None:
+            self.weights = {
+                AssessmentDimension.COMPLETENESS: 0.3,
+                AssessmentDimension.CLARITY: 0.3,
+                AssessmentDimension.RELEVANCE: 0.4,
+            }
+        if self.thresholds is None:
+            self.thresholds = {
+                "excellent": 0.85,
+                "good": 0.70,
+                "acceptable": 0.55,
+                "poor": 0.40,
+            }
+
+
+@dataclass
+class QualityMetrics:
+    """质量指标"""
+    completeness: float = 0.0
+    clarity: float = 0.0
+    relevance: float = 0.0
+    accuracy: float = 0.0
+    coherence: float = 0.0
+    depth: float = 0.0
+    overall: float = 0.0
+
+    def to_dict(self) -> dict[str, float]:
+        return {
+            "completeness": self.completeness,
+            "clarity": self.clarity,
+            "relevance": self.relevance,
+            "accuracy": self.accuracy,
+            "coherence": self.coherence,
+            "depth": self.depth,
+            "overall": self.overall,
+        }
+
+
+@dataclass
+class QualityReport:
+    """质量报告"""
+    result: QualityAssessmentResult
+    metrics: QualityMetrics
+    suggestions: list[str]
+    confidence: float
+
+    def to_dict(self) -> dict:
+        return {
+            "result": {
+                "score": self.result.score,
+                "dimension_scores": self.result.dimension_scores,
+                "strengths": self.result.strengths,
+                "weaknesses": self.result.weaknesses,
+                "suggestions": self.result.suggestions,
+            },
+            "metrics": self.metrics.to_dict(),
+            "suggestions": self.suggestions,
+            "confidence": self.confidence,
+        }

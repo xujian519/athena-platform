@@ -387,3 +387,35 @@ class LightweightEvaluationEngine:
             "performance_thresholds": self.performance_thresholds,
             "statistics": self.get_statistics(),
         }
+
+
+# =============================================================================
+# === 便捷函数 ===
+# =============================================================================
+
+# 全局引擎实例
+_global_lightweight_evaluator: LightweightEvaluationEngine | None = None
+
+
+def get_lightweight_evaluator() -> LightweightEvaluationEngine:
+    """
+    获取或创建轻量级评估引擎实例
+
+    Returns:
+        LightweightEvaluationEngine 实例
+    """
+    global _global_lightweight_evaluator
+
+    if _global_lightweight_evaluator is None:
+        _global_lightweight_evaluator = LightweightEvaluationEngine()
+
+    return _global_lightweight_evaluator
+
+
+__all__ = [
+    "EvaluationType",
+    "EvaluationGrade",
+    "EvaluationResult",
+    "LightweightEvaluationEngine",
+    "get_lightweight_evaluator",
+]

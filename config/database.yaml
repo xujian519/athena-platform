@@ -34,7 +34,7 @@ redis:
 neo4j:
   uri: bolt://localhost:7687
   user: neo4j
-  password: password
+  password: athena_neo4j_2024
   database: neo4j
 
 # 向量数据库配置

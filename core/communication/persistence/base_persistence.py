@@ -457,5 +457,30 @@ __all__ = [
     "MessageState",
     "PersistedMessage",
     "BaseMessagePersistence",
+    "BasePersistenceBackend",  # 别名
+    "PersistenceConfig",
     "InMemoryPersistence",
 ]
+
+
+# =============================================================================
+# === 别名和兼容性 ===
+# =============================================================================
+
+# 为保持兼容性，提供 BasePersistenceBackend 作为别名
+BasePersistenceBackend = BaseMessagePersistence
+
+
+# =============================================================================
+# === 配置类 ===
+# =============================================================================
+
+@dataclass
+class PersistenceConfig:
+    """持久化配置"""
+    backend: str = "memory"  # memory, redis, file
+    backend_config: dict[str, Any] = field(default_factory=dict)
+    max_size: int = 10000
+    enable_compression: bool = False
+    enable_encryption: bool = False
+    ttl: int | None = None  # 消息生存时间（秒）

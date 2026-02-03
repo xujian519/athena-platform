@@ -155,7 +155,7 @@ class ScenarioRuleRetrieverOptimized:
         enable_metrics: bool = True,
         enable_preload: bool = True,
         preload_on_init: bool = True,
-        preload_domains: set[str | None = None,
+        preload_domains: set[str] | None = None,
     ):
         """
         初始化规则检索器
@@ -340,7 +340,7 @@ class ScenarioRuleRetrieverOptimized:
                 return cached_rule
 
             # 从数据库查询
-            with self.db_manager.neo4j_session() as session:
+            with self.db_manager.session() as session:
                 # 构建安全的参数化查询(防止Cypher注入)
                 params = {"domain": domain, "task_type": task_type}
 
@@ -446,7 +446,7 @@ class ScenarioRuleRetrieverOptimized:
 
             logger.info(f"🔍 检索领域所有规则: {domain}")
 
-            with self.db_manager.neo4j_session() as session:
+            with self.db_manager.session() as session:
                 # 参数化查询
                 cypher = """
                     MATCH (sr:ScenarioRule)
@@ -521,7 +521,7 @@ class ScenarioRuleRetrieverOptimized:
 
             logger.info(f"🔍 检索法律依据: {rule_id}")
 
-            with self.db_manager.neo4j_session() as session:
+            with self.db_manager.session() as session:
                 # 参数化查询
                 cypher = """
                     MATCH (sr:ScenarioRule {rule_id: $rule_id})-[:HAS_LEGAL_BASIS]->(law)
@@ -583,7 +583,7 @@ class ScenarioRuleRetrieverOptimized:
 
             logger.info(f"🔍 检索参考案例: {rule_id}")
 
-            with self.db_manager.neo4j_session() as session:
+            with self.db_manager.session() as session:
                 # 参数化查询
                 cypher = """
                     MATCH (sr:ScenarioRule {rule_id: $rule_id})-[:HAS_REFERENCE_CASE]->(case)
@@ -803,7 +803,7 @@ class ScenarioRuleRetrieverOptimized:
 
 # 便捷函数
 def retrieve_scenario_rule(
-    db_manager | None = None, domain: str | None = None, task_type: str | None = None, phase: str | None = None
+    db_manager: Any | None = None, domain: str | None = None, task_type: str | None = None, phase: str | None = None
 ) -> ScenarioRule | None:
     """
     便捷函数:检索场景规则(优化版本)

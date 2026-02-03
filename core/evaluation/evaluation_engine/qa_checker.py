@@ -13,6 +13,7 @@ Evaluation Engine - Quality Assurance Checker
 
 import logging
 import statistics
+from dataclasses import dataclass
 from typing import Any
 
 from .metrics import MetricsCalculator
@@ -212,3 +213,36 @@ class QualityAssuranceChecker:
                 "使用多样化的证据来源",
             ],
         }
+
+
+# =============================================================================
+# === 别名和兼容性 ===
+# =============================================================================
+
+# 为保持兼容性，提供 QAChecker 作为别名
+QAChecker = QualityAssuranceChecker
+
+
+# QACheckResult 类
+@dataclass
+class QACheckResult:
+    """QA检查结果"""
+    passed: bool
+    score: float
+    issues: list[str]
+    recommendations: list[str]
+
+    def to_dict(self) -> dict:
+        return {
+            "passed": self.passed,
+            "score": self.score,
+            "issues": self.issues,
+            "recommendations": self.recommendations,
+        }
+
+
+__all__ = [
+    "QualityAssuranceChecker",
+    "QAChecker",  # 别名
+    "QACheckResult",
+]

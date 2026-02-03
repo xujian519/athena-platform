@@ -38,9 +38,9 @@ class DownloadResult:
 class BatchDownloadResult:
     """批量下载结果"""
 
-    total: int
-    successful: int
-    failed: int
+    total: int = 0
+    successful: int = 0
+    failed: int = 0
     results: list[DownloadResult] = field(default_factory=list)
 
     started_at: str = field(default_factory=lambda: datetime.now().isoformat())

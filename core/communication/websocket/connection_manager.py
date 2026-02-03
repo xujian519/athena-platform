@@ -398,4 +398,44 @@ class ConnectionManager:
         return count
 
 
-__all__ = ["ConnectionManager", "ConnectionInfo"]
+# =============================================================================
+# === 便捷函数 ===
+# =============================================================================
+
+# 全局连接管理器实例
+_global_connection_manager: ConnectionManager | None = None
+
+
+def get_connection_manager(
+    max_connections: int = 1000,
+    connection_timeout: float = 3600.0,
+    cleanup_interval: float = 300.0,
+) -> ConnectionManager:
+    """
+    获取或创建连接管理器实例
+
+    Args:
+        max_connections: 最大连接数
+        connection_timeout: 连接超时时间（秒）
+        cleanup_interval: 清理间隔时间（秒）
+
+    Returns:
+        ConnectionManager 实例
+    """
+    global _global_connection_manager
+
+    if _global_connection_manager is None:
+        _global_connection_manager = ConnectionManager(
+            max_connections=max_connections,
+            connection_timeout=connection_timeout,
+            cleanup_interval=cleanup_interval,
+        )
+
+    return _global_connection_manager
+
+
+__all__ = [
+    "ConnectionManager",
+    "ConnectionInfo",
+    "get_connection_manager",
+]

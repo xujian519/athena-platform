@@ -536,4 +536,61 @@ class WebSocketServer:
         }
 
 
-__all__ = ["WebSocketServer"]
+# =============================================================================
+# === 便捷函数 ===
+# =============================================================================
+
+# 全局WebSocket服务器实例
+_global_websocket_server: WebSocketServer | None = None
+
+
+def get_websocket_server(
+    host: str = "0.0.0.0",
+    port: int = 8765,
+    auth_config: WebSocketAuthConfig | None = None,
+) -> WebSocketServer:
+    """
+    获取或创建WebSocket服务器实例
+
+    Args:
+        host: 监听地址
+        port: 监听端口
+        auth_config: 认证配置
+
+    Returns:
+        WebSocketServer实例
+    """
+    global _global_websocket_server
+
+    if _global_websocket_server is None:
+        _global_websocket_server = WebSocketServer(
+            host=host,
+            port=port,
+            auth_config=auth_config,
+        )
+
+    return _global_websocket_server
+
+
+async def start_websocket_server(
+    host: str = "0.0.0.0",
+    port: int = 8765,
+    auth_config: WebSocketAuthConfig | None = None,
+) -> WebSocketServer:
+    """
+    启动WebSocket服务器
+
+    Args:
+        host: 监听地址
+        port: 监听端口
+        auth_config: 认证配置
+
+    Returns:
+        WebSocketServer实例
+    """
+    server = get_websocket_server(host, port, auth_config)
+    await server.start()
+    return server
+
+
+__all__ = ["WebSocketServer", "get_websocket_server", "start_websocket_server"]
