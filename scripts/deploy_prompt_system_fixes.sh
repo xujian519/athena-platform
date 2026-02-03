@@ -67,11 +67,20 @@ pre_deploy_checks() {
     CURRENT_BRANCH=$(git branch --show-current)
     log_info "当前分支: $CURRENT_BRANCH"
 
-    # 2. 检查未提交的修改
-    if [ -n "$(git status --porcelain)" ]; then
-        log_error "存在未提交的修改，请先提交或暂存："
-        git status --short
+    # 2. 检查核心代码的未提交修改（忽略未跟踪目录和子模块）
+    # 只检查已跟踪文件的修改
+    UNCOMMITTED_TRACKED=$(git diff --name-only HEAD)
+    if [ -n "$UNCOMMITTED_TRACKED" ]; then
+        log_error "存在未提交的核心代码修改："
+        echo "$UNCOMMITTED_TRACKED"
         exit 1
+    fi
+
+    # 显示未跟踪文件（仅供参考）
+    UNTRACKED_FILES=$(git status --porcelain | grep '^??')
+    if [ -n "$UNTRACKED_FILES" ]; then
+        log_info "未跟踪的文件（将忽略）："
+        echo "$UNTRACKED_FILES" | grep -v -E 'data/grafana|models/deepseek-ocr-2|mcp-servers' || true
     fi
 
     # 3. 检查最近的提交
