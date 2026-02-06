@@ -22,8 +22,9 @@ sys.path.insert(0, str(current_dir))
 sys.path.insert(0, str(current_dir.parent.parent.parent))
 
 from config import settings
+# 修复导入路径
 from core.writing_engine import ArticleWritingEngine, WritingRequest, write_article
-from openclaw import OpenClawHandover, ArticleContent, handover_to_openclaw
+from app.openclaw import OpenClawHandover, ArticleContent, handover_to_openclaw
 
 # 日志
 import logging

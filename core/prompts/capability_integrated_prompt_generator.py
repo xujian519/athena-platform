@@ -13,8 +13,8 @@ from jinja2 import Template
 
 from core.capabilities.capability_invoker import CapabilityInvoker
 from core.capabilities.capability_orchestrator import CapabilityOrchestrator
-from core.legal_world_model.scenario_identifier import ScenarioContext
-from core.legal_world_model.scenario_rule_retriever import ScenarioRule
+from core.legal_world_model.scenario_identifier_optimized import ScenarioContext
+from core.legal_world_model.scenario_rule_retriever_optimized import ScenarioRule
 from core.prompts.integrated_prompt_generator import IntegratedPrompt, IntegratedPromptGenerator
 
 logger = logging.getLogger(__name__)

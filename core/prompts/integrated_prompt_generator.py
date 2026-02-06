@@ -12,8 +12,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from core.legal_world_model.scenario_identifier import ScenarioContext
-from core.legal_world_model.scenario_rule_retriever import ScenarioRule
+from core.legal_world_model.scenario_identifier_optimized import ScenarioContext
+from core.legal_world_model.scenario_rule_retriever_optimized import ScenarioRule
 
 logger = logging.getLogger(__name__)
 

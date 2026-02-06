@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 def import_to_qdrant():
     """导入向量到Qdrant"""
-    client = QdrantClient(host="localhost", port=6333)
+    client = QdrantClient(host="localhost", port=6333, check_compatibility=False)
 
     collection_name = "patent_guideline"
 

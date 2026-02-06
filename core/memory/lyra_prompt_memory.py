@@ -178,11 +178,87 @@ Just share your rough prompt and I'll handle the optimization!""",
         """获取欢迎消息"""
         return self.memory.get("welcome_message", "")
 
+    async def apply_lyra_optimization_async(
+        self,
+        user_input: str,
+        target_ai: str = "Claude",
+        mode: str = "BASIC",
+        context: str | None = None,
+        output_format: str | None = None
+    ) -> dict[str, Any]:
+        """
+        应用Lyra优化方法（异步版本，使用真正的优化引擎）
+
+        Args:
+            user_input: 用户输入
+            target_ai: 目标AI平台
+            mode: 优化模式
+            context: 上下文信息
+            output_format: 输出格式
+
+        Returns:
+            包含优化结果的字典
+        """
+        try:
+            from core.memory.lyra_prompt_optimizer import (
+                get_lyra_optimizer,
+                OptimizationRequest,
+                OptimizationMode,
+                TargetAI
+            )
+
+            print(f"🔧 应用Lyra优化（目标AI: {target_ai}, 模式: {mode}）")
+
+            # 解析模式和目标AI
+            opt_mode = self._parse_mode(mode)
+            opt_ai = self._parse_target_ai(target_ai)
+
+            # 创建优化请求
+            request = OptimizationRequest(
+                user_input=user_input,
+                target_ai=opt_ai,
+                mode=opt_mode,
+                context=context,
+                output_format=output_format
+            )
+
+            # 获取优化器并执行优化
+            optimizer = get_lyra_optimizer()
+            result = await optimizer.optimize(request)
+
+            # 返回结果字典
+            return {
+                "success": True,
+                "optimized_prompt": result.optimized_prompt,
+                "improvements": result.improvements,
+                "reasoning": result.reasoning,
+                "score": result.score,
+                "suggestions": result.suggestions,
+                "target_ai": result.target_ai.value,
+                "mode": result.mode.value
+            }
+
+        except ImportError as e:
+            print(f"⚠️ 优化引擎不可用，使用简化模式: {e}")
+            # 降级到简化模式
+            return self._apply_simplified_optimization(user_input, target_ai, mode)
+        except Exception as e:
+            print(f"❌ 优化失败: {e}")
+            return {
+                "success": False,
+                "error": str(e),
+                "optimized_prompt": user_input  # 返回原始输入
+            }
+
     def apply_lyra_optimization(self, user_input: str, target_ai: str = "ChatGPT", mode: str = "BASIC") -> str:
-        """应用Lyra优化方法"""
+        """
+        应用Lyra优化方法（同步版本，向后兼容）
+
+        注意：此方法为简化版本，如需完整功能请使用 apply_lyra_optimization_async
+        """
         print(f"🔧 应用Lyra优化（目标AI: {target_ai}, 模式: {mode}）")
 
-        # 简化的优化逻辑
+        # 返回简化的优化提示（保持向后兼容）
         optimization_prompt = f"""Using Lyra's 4-D methodology, optimize this prompt for {target_ai}:
 
 1. DECONSTRUCT: Analyze the user's intent and requirements
@@ -195,6 +271,58 @@ Original input: "{user_input}"
 Provide the optimized prompt that will deliver better results:"""
 
         return optimization_prompt
+
+    def _parse_mode(self, mode_str: str):
+        """解析优化模式"""
+        from core.memory.lyra_prompt_optimizer import OptimizationMode
+
+        mode_map = {
+            "BASIC": OptimizationMode.BASIC,
+            "DETAIL": OptimizationMode.DETAIL,
+            "CREATIVE": OptimizationMode.CREATIVE,
+            "TECHNICAL": OptimizationMode.TECHNICAL
+        }
+        return mode_map.get(mode_str.upper(), OptimizationMode.BASIC)  # type: ignore
+
+    def _parse_target_ai(self, ai_str: str):
+        """解析目标AI"""
+        from core.memory.lyra_prompt_optimizer import TargetAI
+
+        ai_map = {
+            "ChatGPT": TargetAI.CHATGPT,
+            "Claude": TargetAI.CLAUDE,
+            "Gemini": TargetAI.GEMINI,
+            "DeepSeek": TargetAI.DEEPSEEK,
+            "Qwen": TargetAI.QWEN,
+            "Generic": TargetAI.GENERIC
+        }
+        return ai_map.get(ai_str, TargetAI.CLAUDE)  # type: ignore
+
+    def _apply_simplified_optimization(self, user_input: str, target_ai: str, mode: str) -> dict[str, Any]:
+        """应用简化的优化逻辑（降级方案）"""
+        improvements = []
+        optimized = user_input
+
+        # 添加角色（如果没有）
+        if not any(word in optimized.lower() for word in ["as", "you are", "扮演", "作为"]):
+            optimized = f"As an expert assistant, {optimized[0].lower()}{optimized[1:]}"
+            improvements.append("Added role definition")
+
+        # 添加输出格式（如果没有）
+        if not any(word in optimized.lower() for word in ["format", "output", "格式"]):
+            optimized += "\n\nPlease provide a clear, structured response."
+            improvements.append("Added output format specification")
+
+        return {
+            "success": True,
+            "optimized_prompt": optimized,
+            "improvements": improvements,
+            "reasoning": "Applied basic optimization rules",
+            "score": 0.6,
+            "suggestions": ["Try using async mode for better results"],
+            "target_ai": target_ai,
+            "mode": mode
+        }
 
     def check_reminder_needed(self) -> bool:
         """检查是否需要提醒"""
@@ -223,9 +351,45 @@ def get_lyra_methodology() -> dict[str, Any]:
     return memory.get_methodology()
 
 def apply_lyra_optimization(user_input: str, target_ai: str = "ChatGPT", mode: str = "BASIC") -> str:
-    """应用Lyra优化（供小诺使用）"""
+    """应用Lyra优化（供小诺使用，同步版本）"""
     memory = get_lyra_memory()
     return memory.apply_lyra_optimization(user_input, target_ai, mode)
+
+
+async def apply_lyra_optimization_async(
+    user_input: str,
+    target_ai: str = "Claude",
+    mode: str = "BASIC",
+    context: str | None = None,
+    output_format: str | None = None
+) -> dict[str, Any]:
+    """
+    应用Lyra优化（供小诺使用，异步版本，完整功能）
+
+    Args:
+        user_input: 用户输入的提示词
+        target_ai: 目标AI平台 (ChatGPT/Claude/Gemini/DeepSeek/Qwen)
+        mode: 优化模式 (BASIC/DETAIL/CREATIVE/TECHNICAL)
+        context: 可选的上下文信息
+        output_format: 可选的输出格式要求
+
+    Returns:
+        包含优化结果的字典:
+        {
+            "success": bool,
+            "optimized_prompt": str,
+            "improvements": list[str],
+            "reasoning": str,
+            "score": float,
+            "suggestions": list[str],
+            "target_ai": str,
+            "mode": str
+        }
+    """
+    memory = get_lyra_memory()
+    return await memory.apply_lyra_optimization_async(
+        user_input, target_ai, mode, context, output_format
+    )
 
 if __name__ == "__main__":
     # 测试Lyra记忆系统

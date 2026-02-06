@@ -532,7 +532,7 @@ class ReflectionEngine:
 
     def batch_reflect(
         self,
-        outputs: list[tuple[str, str, dict[str, Any],
+        outputs: list[tuple[str, str, dict[str, Any]]],
         level: ReflectionLevel = ReflectionLevel.BASIC,
     ) -> list[ReflectionResult]:
         """批量反思多个输出"""

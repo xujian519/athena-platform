@@ -339,13 +339,20 @@ class AgenticTaskPlanner:
         return self.execution_templates.get(goal_type)
 
     def _adapt_template(
-        self, template_name: str, goal: str, context: dict[str, Any]
+        self, template: list[TaskStep] | str, goal: str, context: dict[str, Any]
     ) -> list[TaskStep]:
         """适配模板"""
-        if template_name not in self.execution_templates:
+        # 如果template是字符串（模板名称），则查找模板
+        if isinstance(template, str):
+            if template not in self.execution_templates:
+                return []
+            template_steps = self.execution_templates[template]
+        # 如果template是列表（直接传入的模板步骤）
+        elif isinstance(template, list):
+            template_steps = template
+        else:
             return []
 
-        template_steps = self.execution_templates[template_name]
         adapted_steps = []
 
         for i, step in enumerate(template_steps):

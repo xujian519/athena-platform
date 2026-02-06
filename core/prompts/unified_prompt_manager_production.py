@@ -12,18 +12,45 @@ import time
 from collections import defaultdict
 from typing import Any, Dict, Optional
 
-from core.legal_world_model.scenario_identifier import (
+from core.legal_world_model.scenario_identifier_optimized import (
     Domain,
     Phase,
-    ScenarioContext,
-    ScenarioIdentifier,
+    ScenarioIdentifierOptimized as ScenarioIdentifier,
     TaskType,
 )
-from core.legal_world_model.scenario_rule_retriever import ScenarioRule, ScenarioRuleRetriever
+from core.legal_world_model.scenario_identifier_optimized import ScenarioContext
+from core.legal_world_model.scenario_rule_retriever_optimized import (
+    ScenarioRule,
+    ScenarioRuleRetrieverOptimized as ScenarioRuleRetriever,
+)
 from core.prompts.integrated_prompt_generator import IntegratedPromptGenerator
 from core.prompts.unified_prompt_manager import UnifiedPromptManager
 
 logger = logging.getLogger(__name__)
+
+
+class SimpleNeo4jManager:
+    """简单的Neo4j管理器,用于提示词管理器"""
+
+    def __init__(self):
+        from neo4j import GraphDatabase
+        self.driver = GraphDatabase.driver(
+            "bolt://localhost:7687",
+            auth=("neo4j", "athena_neo4j_2024")
+        )
+
+    def neo4j_session(self):
+        """返回Neo4j会话上下文管理器"""
+        return self.driver.session()
+
+    def session(self):
+        """返回Neo4j会话上下文管理器（兼容方法）"""
+        return self.driver.session()
+
+    def close(self):
+        """关闭连接"""
+        if self.driver:
+            self.driver.close()
 
 
 # 生产配置
@@ -170,6 +197,10 @@ class ProductionUnifiedPromptManager(UnifiedPromptManager):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # 初始化数据库管理器
+        if not hasattr(self, 'db_manager') or self.db_manager is None:
+            self.db_manager = SimpleNeo4jManager()
 
         # 初始化组件
         self.scenario_identifier = ScenarioIdentifier()

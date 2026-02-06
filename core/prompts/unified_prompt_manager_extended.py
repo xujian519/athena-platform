@@ -12,12 +12,36 @@ Extended Unified Prompt Manager - Integrated with Scenario Rules
 import logging
 from typing import Any, Dict, Optional
 
-from core.legal_world_model.scenario_identifier import ScenarioContext, ScenarioIdentifier
-from core.legal_world_model.scenario_rule_retriever import ScenarioRule, ScenarioRuleRetriever
+from core.legal_world_model.scenario_identifier_optimized import ScenarioContext, ScenarioIdentifierOptimized as ScenarioIdentifier
+from core.legal_world_model.scenario_rule_retriever_optimized import ScenarioRule, ScenarioRuleRetrieverOptimized as ScenarioRuleRetriever
 from core.prompts.integrated_prompt_generator import IntegratedPromptGenerator
 from core.prompts.unified_prompt_manager import UnifiedPromptManager
 
 logger = logging.getLogger(__name__)
+
+
+class SimpleNeo4jManager:
+    """简单的Neo4j管理器,用于提示词管理器"""
+
+    def __init__(self):
+        from neo4j import GraphDatabase
+        self.driver = GraphDatabase.driver(
+            "bolt://localhost:7687",
+            auth=("neo4j", "athena_neo4j_2024")
+        )
+
+    def neo4j_session(self):
+        """返回Neo4j会话上下文管理器"""
+        return self.driver.session()
+
+    def session(self):
+        """返回Neo4j会话上下文管理器（兼容方法）"""
+        return self.driver.session()
+
+    def close(self):
+        """关闭连接"""
+        if self.driver:
+            self.driver.close()
 
 
 class ExtendedUnifiedPromptManager(UnifiedPromptManager):
@@ -37,6 +61,10 @@ class ExtendedUnifiedPromptManager(UnifiedPromptManager):
         接受与UnifiedPromptManager相同的参数
         """
         super().__init__(*args, **kwargs)
+
+        # 初始化数据库管理器
+        if not hasattr(self, 'db_manager') or self.db_manager is None:
+            self.db_manager = SimpleNeo4jManager()
 
         # 初始化场景相关组件
         self.scenario_identifier = ScenarioIdentifier()

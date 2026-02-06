@@ -17,6 +17,8 @@ from pathlib import Path
 import logging
 from core.logging_config import setup_logging
 
+logger = logging.getLogger(__name__)
+
 class XiaonuoServiceController:
     """小诺服务控制器 - 平台总控制中心"""
 
@@ -276,13 +278,13 @@ class XiaonuoServiceController:
             if port:
                 for proc in psutil.process_iter(['pid', 'name', 'connections']):
                     try:
-                        connections = proc.info['connections'] or []
+                        connections = proc.info.get('connections') or []
                         for conn in connections:
                             if conn.laddr.port == port:
                                 psutil.Process(proc.info['pid']).terminate()
                                 terminated = True
                     except Exception as e:
-                    logger.error(f"Error occurred: {e}", exc_info=True)
+                        logger.error(f"Error occurred: {e}", exc_info=True)
 
             if terminated:
                 del self.running_services[service_id]
@@ -320,13 +322,18 @@ class XiaonuoServiceController:
         port = service.get("port")
 
         if port:
-            # 通过端口检查
+            # 通过端口检查（使用lsof避免权限问题）
             try:
-                for conn in psutil.net_connections():
-                    if conn.laddr.port == port and conn.status == 'LISTEN':
-                        return True
+                result = subprocess.run(
+                    ['lsof', '-i', f':{port}', '-sTCP:LISTEN'],
+                    capture_output=True,
+                    text=True,
+                    timeout=2
+                )
+                if result.returncode == 0:
+                    return True
             except Exception as e:
-                    logger.error(f"Error occurred: {e}", exc_info=True)
+                logger.warning(f"端口检查失败: {e}")
 
         # 通过进程检查
         if service_id in self.running_services:

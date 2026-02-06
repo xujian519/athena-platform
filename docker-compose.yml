@@ -64,10 +64,11 @@ services:
       - NEO4J_dbms_memory_heap_initial__size=512m
       - NEO4J_dbms_memory_heap_max__size=2G
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:7474"]
+      test: ["CMD-SHELL", "timeout 5s bash -c ':> /dev/tcp/127.0.0.1/7474' || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
+      start_period: 60s
 
   # Prometheus监控
   prometheus:
@@ -134,7 +135,7 @@ services:
 
   # ==================== MCP服务 ====================
 
-  # Open-WebSearch MCP - 免费搜索引擎 (无需API密钥)
+  # Open-WebSearch MCP - 多引擎并行搜索 (无需API密钥)
   open-websearch:
     image: ghcr.io/aas-ee/open-web-search:latest
     container_name: athena-open-websearch
@@ -144,13 +145,15 @@ services:
     environment:
       NODE_ENV: production
       MODE: both
-      DEFAULT_SEARCH_ENGINE: duckduckgo  # 可选: bing/duckduckgo/exa/brave/baidu
+      # 多引擎并行搜索配置
+      DEFAULT_SEARCH_ENGINE: duckduckgo  # 默认引擎
+      ALLOWED_SEARCH_ENGINES: "duckduckgo,bing,exa,baidu,csdn,juejin"  # 可用引擎列表
       ENABLE_CORS: "true"
       CORS_ORIGIN: "*"
-      # 频率限制配置
-      MAX_CONCURRENT_REQUESTS: "5"      # 最大并发请求数
-      REQUEST_TIMEOUT: "10000"           # 请求超时(毫秒)
-      RATE_LIMIT_DELAY: "1000"           # 请求间延迟(毫秒)
+      # 性能优化配置
+      MAX_CONCURRENT_REQUESTS: "10"     # 增加并发请求数 (原5→10)
+      REQUEST_TIMEOUT: "15000"          # 增加超时时间 (原10s→15s)
+      RATE_LIMIT_DELAY: "500"           # 减少请求延迟 (原1000ms→500ms)
     networks:
       - athena-network
 

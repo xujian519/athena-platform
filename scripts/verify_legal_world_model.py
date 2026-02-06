@@ -74,7 +74,7 @@ class LegalWorldModelVerifier:
 
         # 测试场景识别器导入
         try:
-            from core.legal_world_model.scenario_identifier import (
+            from core.legal_world_model.scenario_identifier_optimized import (
                 Domain,
                 Phase,
                 ScenarioContext,
@@ -87,9 +87,9 @@ class LegalWorldModelVerifier:
 
         # 测试场景规则检索器导入
         try:
-            from core.legal_world_model.scenario_rule_retriever import (
+            from core.legal_world_model.scenario_rule_retriever_optimized import (
                 ScenarioRule,
-                ScenarioRuleRetriever,
+                ScenarioRuleRetrieverOptimized as ScenarioRuleRetriever,
             )
             import_tests.append(("✅", "场景规则检索器导入成功", "scenario_rule_retriever.py"))
         except ImportError as e:
@@ -115,7 +115,7 @@ class LegalWorldModelVerifier:
 
         # 测试场景识别器
         try:
-            from core.legal_world_model.scenario_identifier import ScenarioIdentifier
+            from core.legal_world_model.scenario_identifier_optimized import ScenarioIdentifierOptimized as ScenarioIdentifier
 
             identifier = ScenarioIdentifier()
             test_input = "这个专利有创造性吗？"

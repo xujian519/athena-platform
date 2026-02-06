@@ -187,16 +187,23 @@ class XiaonuoMain:
         print("\n🌸 小诺已就绪，等待爸爸的指示...")
 
         # 检测是否为交互式环境
-        import sys
         is_interactive = sys.__stdin__.isatty() if hasattr(sys.__stdin__, 'isatty') else False
 
         if not is_interactive:
-            print("\n⚠️ 检测到非交互式环境，小诺将运行在演示模式...")
-            print("💡 如需交互模式，请在终端中直接运行此程序")
+            print("\n⚠️ 检测到非交互式环境，小诺将运行在后台服务模式...")
+            print("💡 小诺将持续运行，等待通过API调用")
 
-            # 非交互式模式：运行一次状态检查后退出
-            await self.handle_request("状态")
-            await self.shutdown()
+            # 后台服务模式：持续运行而不是退出
+            try:
+                while self.is_running:
+                    await asyncio.sleep(60)  # 每分钟检查一次状态
+                    # 可以在这里添加定期健康检查
+            except asyncio.CancelledError:
+                print("\n💖 小诺服务被取消...")
+            except Exception as e:
+                print(f"\n❌ 服务异常: {e}")
+            finally:
+                await self.shutdown()
             return
 
         while self.is_running:
@@ -221,7 +228,6 @@ class XiaonuoMain:
             except Exception as e:
                 print(f"\n❌ 诺诺遇到问题了：{e}")
                 # 避免在连续错误时无限循环
-                import asyncio
                 await asyncio.sleep(1)
 
     async def handle_request(self, user_input: str):
@@ -993,7 +999,6 @@ class XiaonuoMain:
         print("\n✨ 诺诺已关闭，爸爸晚安~ 🌙")
 
 # 主函数
-@async_main
 async def main():
     """启动小诺"""
     # 解析命令行参数

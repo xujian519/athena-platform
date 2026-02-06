@@ -169,7 +169,7 @@ class PlanningMonitor:
         )  # TODO: 确保除数不为零
         self.record_metric("process_cpu", process.cpu_percent(), "%")
 
-    def record_metric(self, name: str, value: float, unit: str, tags: dict[str | None = None, str | None = None) -> Any:
+    def record_metric(self, name: str, value: float, unit: str, tags: dict[str, str] | None = None) -> Any:
         """记录性能指标"""
         metric = PerformanceMetric(name=name, value=value, unit=unit, tags=tags or {})
         self.metrics_history[name].append(metric)

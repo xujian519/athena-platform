@@ -11,6 +11,7 @@ Task Classifier - 识别任务类型(专业任务 vs 通用任务)
 import logging
 from dataclasses import dataclass
 from enum import Enum
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 

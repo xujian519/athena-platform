@@ -17,6 +17,8 @@ import re
 
 import logging
 
+logger = logging.getLogger(__name__)
+
 class XiaonuoDevAssistant:
     """小诺开发助手 - 爸爸的专属开发伙伴"""
 
