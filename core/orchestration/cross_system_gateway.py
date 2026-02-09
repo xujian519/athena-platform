@@ -17,7 +17,7 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any
+from typing import Any, Optional
 
 import aiohttp
 
@@ -340,7 +340,7 @@ class CrossSystemGateway:
 
         # 使用熔断器
         circuit_breaker = self.circuit_breakers[endpoint_id]
-        request_id = hashlib.md5(f"{url}{time.time(, usedforsecurity=False)}".encode()).hexdigest()
+        request_id = hashlib.md5(f"{url}{time.time()}".encode(), usedforsecurity=False).hexdigest()
 
         try:
             response = await circuit_breaker.call(
@@ -581,7 +581,7 @@ class CrossSystemGateway:
             ],
         }
 
-    async def batch_request(self, requests: list[dict[str, Any]) -> list[dict[str, Any]]:
+    async def batch_request(self, requests: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """批量请求"""
         tasks = []
         for req in requests:

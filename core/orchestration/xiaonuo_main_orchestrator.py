@@ -53,7 +53,7 @@ class ExecutionResult:
     def __init__(self):
         self.success = False
         self.subtask_results: dict[str, Any] = {}
-        self.task_result: Optional[dict[str, Any] | None = None
+        self.task_result: Optional[dict[str, Any]] = None
         self.execution_time = 0.0
         self.error: str | None = None
         self.metrics: dict[str, Any] = {}
@@ -355,7 +355,7 @@ class XiaonuoMainOrchestrator:
 
         for i, subtask in enumerate(subtasks):
             if isinstance(results[i], Exception):
-                result.subtask_results[False]}
+                result.subtask_results[subtask.id] = False
             else:
                 result.subtask_results[subtask.id] = results[i]
 
@@ -596,7 +596,7 @@ class XiaonuoMainOrchestrator:
 
         # 计算吞吐量(最近1小时)
         now = datetime.now()
-        recent_reports = []
+        recent_reports = [
             r for r in self.task_reports.values() if (now - r.end_time).total_seconds() < 3600
         ]
         self.performance_metrics["system_throughput"] = len(recent_reports) / 3600.0

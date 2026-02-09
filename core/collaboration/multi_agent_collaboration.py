@@ -417,7 +417,7 @@ class ResourceManager:
             logger.info(f"资源 {resource_id} 已释放")
             return True
 
-    def _check_requirements(self, resource: dict[dict[str, str]] -> bool):
+    def _check_requirements(self, resource: dict[str, str]) -> bool:
         """检查资源是否满足要求"""
         for key, required_value in requirements.items():
             if key not in resource or resource[key] < required_value:
