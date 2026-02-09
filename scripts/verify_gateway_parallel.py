@@ -243,7 +243,7 @@ class GatewayParallelVerifier:
             if legacy_times:
                 avg_legacy = sum(legacy_times) / len(legacy_times)
                 result.details['legacy_avg_response_time'] = avg_legacy
-                logger.info(f"✓ Legacy平均响应时间: {avg_latency:.3f}秒")
+                logger.info(f"✓ Legacy平均响应时间: {avg_legacy:.3f}秒")
 
             result.passed = True
 
@@ -327,7 +327,7 @@ class GatewayParallelVerifier:
         }
 
         # 保存报告
-        report_path = Path("/var/log/xiaonuo/gateway_verification_report.json")
+        report_path = Path("logs/xiaonuo/gateway_verification_report.json")
         report_path.parent.mkdir(parents=True, exist_ok=True)
         with open(report_path, 'w') as f:
             json.dump(report, f, indent=2, ensure_ascii=False)
