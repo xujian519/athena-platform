@@ -18,9 +18,8 @@ Xiaonuo Prometheus Metrics Collector
 
 import time
 import psutil
-from typing import Dict, Any, Optional
+from typing import Any, Callable, Optional
 from functools import wraps
-from datetime import datetime
 
 try:
     from prometheus_client import (
@@ -137,7 +136,7 @@ if PROMETHEUS_AVAILABLE:
 
 else:
     # 如果Prometheus不可用，创建空函数
-    def _noop(*args, **kwargs):
+    def _noop(*args: Any, **kwargs: Any) -> None:
         pass
 
     request_count = request_duration = request_errors = _noop
@@ -155,7 +154,10 @@ else:
 class XiaonuoMetricsCollector:
     """小诺指标收集器"""
 
-    def __init__(self, enabled: bool = True):
+    enabled: bool
+    start_time: float
+
+    def __init__(self, enabled: bool = True) -> None:
         """
         初始化指标收集器
 
@@ -168,17 +170,17 @@ class XiaonuoMetricsCollector:
         if self.enabled:
             self._init_metrics()
 
-    def _init_metrics(self):
+    def _init_metrics(self) -> None:
         """初始化指标"""
         # 设置运行时间
         uptime.set(0)
 
-    def update_uptime(self):
+    def update_uptime(self) -> None:
         """更新运行时间"""
         if self.enabled:
             uptime.set(time.time() - self.start_time)
 
-    def update_resource_usage(self):
+    def update_resource_usage(self) -> None:
         """更新资源使用情况"""
         if not self.enabled:
             return
@@ -193,7 +195,7 @@ class XiaonuoMetricsCollector:
         # CPU使用
         cpu_usage.set(process.cpu_percent())
 
-    def record_request(self, method: str, endpoint: str, status: str, duration: float):
+    def record_request(self, method: str, endpoint: str, status: str, duration: float) -> None:
         """
         记录请求
 
@@ -207,7 +209,7 @@ class XiaonuoMetricsCollector:
             request_count.labels(method=method, endpoint=endpoint, status=status).inc()
             request_duration.labels(method=method, endpoint=endpoint).observe(duration)
 
-    def record_request_error(self, method: str, endpoint: str, error_type: str):
+    def record_request_error(self, method: str, endpoint: str, error_type: str) -> None:
         """
         记录请求错误
 
@@ -219,7 +221,7 @@ class XiaonuoMetricsCollector:
         if self.enabled:
             request_errors.labels(method=method, endpoint=endpoint, error_type=error_type).inc()
 
-    def record_task(self, task_type: str, status: str, duration: float):
+    def record_task(self, task_type: str, status: str, duration: float) -> None:
         """
         记录任务
 
@@ -232,7 +234,7 @@ class XiaonuoMetricsCollector:
             task_count.labels(task_type=task_type, status=status).inc()
             task_duration.labels(task_type=task_type).observe(duration)
 
-    def update_task_queue_size(self, queue_name: str, size: int):
+    def update_task_queue_size(self, queue_name: str, size: int) -> None:
         """
         更新任务队列大小
 
@@ -243,7 +245,7 @@ class XiaonuoMetricsCollector:
         if self.enabled:
             task_queue_size.labels(queue_name=queue_name).set(size)
 
-    def record_collaboration(self, agent: str, action: str, duration: float):
+    def record_collaboration(self, agent: str, action: str, duration: float) -> None:
         """
         记录协作请求
 
@@ -256,7 +258,7 @@ class XiaonuoMetricsCollector:
             collaboration_requests.labels(agent=agent, action=action).inc()
             collaboration_duration.labels(agent=agent).observe(duration)
 
-    def record_coordination(self, operation: str, result: str):
+    def record_coordination(self, operation: str, result: str) -> None:
         """
         记录协调操作
 
@@ -267,7 +269,7 @@ class XiaonuoMetricsCollector:
         if self.enabled:
             coordination_count.labels(operation=operation, result=result).inc()
 
-    def record_memory_operation(self, operation: str, memory_type: str):
+    def record_memory_operation(self, operation: str, memory_type: str) -> None:
         """
         记录记忆操作
 
@@ -278,7 +280,7 @@ class XiaonuoMetricsCollector:
         if self.enabled:
             memory_operations.labels(operation=operation, memory_type=memory_type).inc()
 
-    def update_active_connections(self, count: int):
+    def update_active_connections(self, count: int) -> None:
         """
         更新活跃连接数
 
@@ -310,16 +312,19 @@ class XiaonuoMetricsCollector:
 # 装饰器
 # =============================================================================
 
-def track_request(metric_collector: XiaonuoMetricsCollector):
+def track_request(metric_collector: XiaonuoMetricsCollector) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
     """
     请求追踪装饰器
 
     参数:
         metric_collector: 指标收集器实例
+
+    返回:
+        装饰器函数
     """
-    def decorator(func):
+    def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         @wraps(func)
-        async def wrapper(*args, **kwargs):
+        async def wrapper(*args: Any, **kwargs: Any) -> Any:
             if not metric_collector.enabled:
                 return await func(*args, **kwargs)
 
@@ -344,17 +349,20 @@ def track_request(metric_collector: XiaonuoMetricsCollector):
     return decorator
 
 
-def track_task(metric_collector: XiaonuoMetricsCollector, task_type: str):
+def track_task(metric_collector: XiaonuoMetricsCollector, task_type: str) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
     """
     任务追踪装饰器
 
     参数:
         metric_collector: 指标收集器实例
         task_type: 任务类型
+
+    返回:
+        装饰器函数
     """
-    def decorator(func):
+    def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         @wraps(func)
-        async def wrapper(*args, **kwargs):
+        async def wrapper(*args: Any, **kwargs: Any) -> Any:
             if not metric_collector.enabled:
                 return await func(*args, **kwargs)
 
@@ -364,7 +372,7 @@ def track_task(metric_collector: XiaonuoMetricsCollector, task_type: str):
                 result = await func(*args, **kwargs)
                 status = 'completed'
                 return result
-            except Exception as e:
+            except Exception:
                 status = 'failed'
                 raise
             finally:
