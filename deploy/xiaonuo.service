@@ -1,0 +1,82 @@
+# 小诺·双鱼座 - systemd服务配置
+# Xiaonuo Pisces - systemd Service Configuration
+#
+# 安装说明：
+# 1. 复制此文件到 /etc/systemd/system/xiaonuo.service
+# 2. 执行: sudo systemctl daemon-reload
+# 3. 执行: sudo systemctl enable xiaonuo
+# 4. 执行: sudo systemctl start xiaonuo
+#
+# 管理命令：
+# 启动: sudo systemctl start xiaonuo
+# 停止: sudo systemctl stop xiaonuo
+# 重启: sudo systemctl restart xiaonuo
+# 状态: sudo systemctl status xiaonuo
+# 日志: sudo journalctl -u xiaonuo -f
+#
+
+[Unit]
+Description=小诺·双鱼座 - Athena平台总调度官
+Documentation=https://github.com/athena-platform/xiaonuo
+After=network-online.target
+Wants=network-online.target
+
+# 依赖服务
+Requires=postgresql.service
+Requires=redis.service
+
+[Service]
+# 用户和组
+User=xiaonuo
+Group=xiaonuo
+
+# 工作目录
+WorkingDirectory=/opt/xiaonuo
+
+# 环境变量文件
+EnvironmentFile=-/etc/default/xiaonuo
+EnvironmentFile=-/etc/xiaonuo/xiaonuo.conf
+
+# 启动命令
+ExecStart=/opt/xiaonuo/venv/bin/python /opt/xiaonuo/production/services/xiaonuo_service.py
+
+# 停止命令（优雅关闭）
+ExecStop=/opt/xiaonuo/scripts/shutdown.sh
+
+# 重启命令
+ExecReload=/bin/kill -HUP $MAINPID
+
+# 重启策略
+Restart=always
+RestartSec=10
+StartLimitInterval=60
+StartLimitBurst=3
+
+# 进程管理
+PIDFile=/var/run/xiaonuo/xiaonuo.pid
+Type=simple
+
+# 资源限制
+LimitNOFILE=65536
+LimitNPROC=4096
+MemoryMax=512M
+CPUQuota=50%
+
+# 安全设置
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/xiaonuo /var/log/xiaonuo /var/run/xiaonuo
+
+# 日志
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=xiaonuo
+
+# 超时设置
+TimeoutStartSec=30
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target
