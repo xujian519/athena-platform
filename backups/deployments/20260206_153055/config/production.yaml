@@ -1,0 +1,304 @@
+# Athena工作平台 - 执行模块生产环境配置
+# Production Configuration for Execution Module
+# 版本: 2.0.0
+# 更新日期: 2026-01-27
+
+# =============================================================================
+# 执行引擎配置 (Execution Engine)
+# =============================================================================
+execution_engine:
+  # 基础配置
+  agent_id: "athena_production_agent"
+  
+  # 工作线程配置
+  max_workers: 20              # 最大工作线程数（生产环境建议：CPU核心数 * 2）
+  min_workers: 5               # 最小工作线程数
+  worker_idle_timeout: 300     # 工作线程空闲超时（秒）
+  
+  # 并发控制
+  max_concurrent_tasks: 100    # 最大并发任务数
+  queue_max_size: 10000        # 任务队列最大容量
+  
+  # 超时配置
+  task_timeout: 600.0          # 任务默认超时时间（秒，10分钟）
+  task_shutdown_timeout: 120.0 # 关闭时任务等待时间（秒，2分钟）
+  initialization_timeout: 30.0 # 初始化超时时间（秒）
+  
+  # 重试配置
+  max_retries: 3               # 默认最大重试次数
+  retry_backoff_base: 2.0      # 重试退避基数（秒）
+  retry_backoff_max: 60.0      # 重试退避最大时间（秒）
+  retry_jitter: true           # 启用重试抖动
+  
+  # 资源限制
+  enable_resource_monitoring: true
+  max_memory_mb: 4096          # 最大内存使用（MB）
+  max_cpu_percent: 80.0        # 最大CPU使用率（%）
+  gc_threshold: 0.8            # 触发GC的内存使用率阈值
+
+# =============================================================================
+# 并行执行器配置 (Parallel Executor)
+# =============================================================================
+parallel_executor:
+  # 线程池配置
+  max_workers: 20
+  min_workers: 5
+  thread_keepalive: 60         # 线程保活时间（秒）
+  
+  # 并发任务控制
+  max_concurrent_tasks: 100
+  queue_size: 10000
+  
+  # 超时配置
+  default_timeout: 600.0       # 默认任务超时（秒）
+  shutdown_timeout: 120.0      # 关闭超时（秒）
+  
+  # 错误处理
+  continue_on_error: true      # 单个任务失败时是否继续
+  error_threshold: 10          # 错误阈值（超过此值暂停）
+  error_window: 60             # 错误统计时间窗口（秒）
+
+# =============================================================================
+# 任务管理器配置 (Task Manager)
+# =============================================================================
+task_manager:
+  # 并发控制
+  max_concurrent_tasks: 50
+  max_pending_tasks: 1000
+  max_completed_tasks: 5000    # 最大保留完成任务数
+  
+  # 超时配置
+  default_timeout: 300.0       # 默认超时（秒，5分钟）
+  check_interval: 1.0          # 任务状态检查间隔（秒）
+  
+  # 清理配置
+  enable_auto_cleanup: true
+  cleanup_interval: 3600       # 清理间隔（秒，1小时）
+  completed_retention: 86400   # 完成任务保留时间（秒，24小时）
+  failed_retention: 604800     # 失败任务保留时间（秒，7天）
+  
+  # 持久化配置
+  enable_persistence: false    # 是否启用任务持久化
+  persistence_path: "/var/lib/athena/tasks"
+  persistence_interval: 60     # 持久化间隔（秒）
+
+# =============================================================================
+# 优先级配置 (Priority Configuration)
+# =============================================================================
+priority:
+  # 优先级权重（用于调度决策）
+  weights:
+    CRITICAL: 1000
+    HIGH: 100
+    NORMAL: 10
+    LOW: 1
+    BACKGROUND: 0.1
+  
+  # 优先级队列配置
+  queue_size_per_priority:
+    CRITICAL: 100
+    HIGH: 500
+    NORMAL: 2000
+    LOW: 1000
+    BACKGROUND: 500
+  
+  # 优先级提升配置
+  enable_aging: true           # 启用等待时间优先级提升
+  aging_threshold: 300         # 等待时间阈值（秒，5分钟）
+  aging_boost: 1               # 提升级别数
+
+# =============================================================================
+# 日志配置 (Logging Configuration)
+# =============================================================================
+logging:
+  # 日志级别
+  level: "INFO"                # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  executor_level: "WARNING"    # 执行器日志级别（减少噪音）
+  
+  # 日志格式
+  format: "%(asctime)s - %(name)s - %(levelname)s - [%(funcName)s:%(lineno)d] - %(message)s"
+  date_format: "%Y-%m-%d %H:%M:%S"
+  
+  # 日志文件
+  enable_file_logging: true
+  log_dir: "/var/log/athena/execution"
+  log_file: "execution.log"
+  max_bytes: 104857600         # 100MB
+  backup_count: 10             # 保留10个备份文件
+  
+  # 特殊日志
+  enable_task_logging: true    # 记录每个任务的详细信息
+  task_log_file: "tasks.log"
+  enable_error_log: true       # 单独的错误日志
+  error_log_file: "errors.log"
+  
+  # 性能日志
+  enable_performance_log: true
+  performance_log_file: "performance.log"
+  performance_log_interval: 60 # 性能日志间隔（秒）
+
+# =============================================================================
+# 监控配置 (Monitoring Configuration)
+# =============================================================================
+monitoring:
+  # 启用监控
+  enabled: true
+  
+  # 指标收集
+  metrics_collection_interval: 10  # 指标收集间隔（秒）
+  
+  # 性能指标
+  performance_metrics:
+    - "task_count"              # 任务总数
+    - "task_success_rate"       # 任务成功率
+    - "task_average_duration"   # 平均任务执行时间
+    - "queue_size"              # 队列大小
+    - "queue_wait_time"         # 队列等待时间
+    - "worker_utilization"      # 工作线程利用率
+    - "memory_usage"            # 内存使用
+    - "cpu_usage"               # CPU使用率
+  
+  # 告警阈值
+  alert_thresholds:
+    queue_size_critical: 9000   # 队列大小告警阈值
+    queue_size_warning: 7000
+    error_rate_critical: 0.1    # 错误率10%以上
+    error_rate_warning: 0.05    # 错误率5%以上
+    avg_duration_critical: 300  # 平均执行时间5分钟以上
+    avg_duration_warning: 180   # 平均执行时间3分钟以上
+    memory_usage_critical: 0.9  # 内存使用90%以上
+    memory_usage_warning: 0.8   # 内存使用80%以上
+  
+  # 监控端点
+  enable_metrics_endpoint: true
+  metrics_port: 9090            # Prometheus metrics端口
+  enable_health_endpoint: true
+  health_port: 8080             # Health check端口
+
+# =============================================================================
+# 安全配置 (Security Configuration)
+# =============================================================================
+security:
+  # 资源限制
+  enable_resource_limits: true
+  max_task_memory_mb: 512       # 单个任务最大内存
+  max_task_duration: 3600       # 单个任务最大时长（秒，1小时）
+  
+  # 任务隔离
+  enable_sandboxing: false      # 是否启用沙箱（需要额外配置）
+  
+  # 权限控制
+  enable_permission_check: true
+  default_permission: "execute"
+  
+  # 审计日志
+  enable_audit_log: true
+  audit_log_path: "/var/log/athena/audit.log"
+  audit_events:
+    - "task_created"
+    - "task_started"
+    - "task_completed"
+    - "task_failed"
+    - "task_cancelled"
+    - "system_started"
+    - "system_stopped"
+
+# =============================================================================
+# 健康检查配置 (Health Check Configuration)
+# =============================================================================
+health_check:
+  enabled: true
+  
+  # 检查间隔
+  interval: 30                  # 健康检查间隔（秒）
+  timeout: 10                   # 检查超时（秒）
+  
+  # 检查项
+  checks:
+    - name: "queue_health"
+      enabled: true
+      threshold: 0.9            # 队列使用率阈值
+    
+    - name: "worker_health"
+      enabled: true
+      min_active_workers: 1     # 最少活跃工作线程
+    
+    - name: "memory_health"
+      enabled: true
+      threshold: 0.9            # 内存使用率阈值
+    
+    - name: "error_rate_health"
+      enabled: true
+      threshold: 0.1            # 错误率阈值
+    
+    - name: "task_duration_health"
+      enabled: true
+      threshold: 300            # 任务执行时间阈值（秒）
+  
+  # 失败处理
+  failure_threshold: 3          # 连续失败次数阈值
+  recovery_threshold: 2         # 恢复判断次数
+
+# =============================================================================
+# 优雅关闭配置 (Graceful Shutdown Configuration)
+# =============================================================================
+shutdown:
+  # 超时配置
+  timeout: 120                  # 总关闭超时（秒）
+  task_wait_timeout: 60         # 等待任务完成的超时（秒）
+  force_kill_timeout: 30        # 强制终止超时（秒）
+  
+  # 关闭步骤
+  steps:
+    - name: "stop_accepting_new_tasks"
+      timeout: 10
+    - name: "wait_for_active_tasks"
+      timeout: 60
+    - name: "drain_queue"
+      timeout: 30
+    - name: "shutdown_workers"
+      timeout: 10
+    - name: "cleanup_resources"
+      timeout: 10
+  
+  # 状态保存
+  save_state: true
+  state_path: "/var/lib/athena/state/shutdown.json"
+
+# =============================================================================
+# 开发/调试配置 (Development/Debug Configuration)
+# =============================================================================
+# 注意：生产环境应该设置为 false
+development:
+  debug_mode: false
+  profile_performance: false
+  trace_memory: false
+  log_all_tasks: false          # 记录所有任务（可能影响性能）
+  
+  # 调试选项
+  enable_debug_endpoints: false
+  enable_pprof: false           # Go pprof兼容的性能分析
+
+# =============================================================================
+# 环境变量覆盖 (Environment Variable Overrides)
+# =============================================================================
+# 可以通过环境变量覆盖任何配置项
+# 格式：ATHENA_EXECUTION__SECTION__KEY
+# 例如：ATHENA_EXECUTION__EXECUTION_ENGINE__MAX_WORKERS=30
+
+# =============================================================================
+# 配置验证 (Configuration Validation)
+# =============================================================================
+# 启动时会验证所有配置项
+# 验证失败的配置会导致启动失败
+validation:
+  strict: true                  # 严格模式：任何验证失败都导致启动失败
+  warnings_as_errors: false     # 将警告视为错误
+
+# =============================================================================
+# 版本信息 (Version Information)
+# =============================================================================
+version:
+  config_version: "2.0.0"
+  min_compatible_version: "2.0.0"
+  max_compatible_version: "2.999.999"

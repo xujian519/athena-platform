@@ -1,0 +1,43 @@
+{
+  "services": {
+    "neo4j": {
+      "type": "local",
+      "host": "localhost",
+      "ports": {
+        "http": 7474,
+        "bolt": 7687
+      },
+      "health_check": {
+        "url": "http://localhost:7474",
+        "method": "GET"
+      },
+      "management": {
+        "command": "neo4j",
+        "start": "neo4j start",
+        "stop": "neo4j stop",
+        "restart": "neo4j restart",
+        "status": "neo4j status"
+      }
+    },
+    "docker_services": {
+      "postgres": {
+        "type": "docker",
+        "container": "athena_postgres",
+        "host": "localhost",
+        "port": 5432
+      },
+      "redis": {
+        "type": "docker",
+        "container": "athena_redis",
+        "host": "localhost",
+        "port": 6379
+      },
+      "qdrant": {
+        "type": "docker",
+        "container": "athena_qdrant",
+        "host": "localhost",
+        "port": 6333
+      }
+    }
+  }
+}

@@ -45,38 +45,38 @@ class OllamaNLPIntegration:
         self.version = "3.0.0"
         self.initialized = False
 
-        # 优化后的模型配置
+        # 优化后的模型配置 - 使用小诺作为默认模型
         self.model_configs = {
             "patent_analysis": NLPConfig(
-                model="qwen:7b",
+                model="qwen2.5-14b-local",  # 小娜·天秤女神 - 法律专家
                 temperature=0.1,  # 降低随机性,提高准确性
                 max_tokens=4096,
                 top_p=0.9,
                 repeat_penalty=1.1,
             ),
             "technical_reasoning": NLPConfig(
-                model="qwen:7b",
+                model="qwen2.5-14b-xiaonuo",  # 小诺·双鱼公主 - 调度官
                 temperature=0.2,
                 max_tokens=3072,
                 top_p=0.85,
                 repeat_penalty=1.05,
             ),
             "creative_writing": NLPConfig(
-                model="qwen:7b",
+                model="qwen2.5-14b-xiaonuo",
                 temperature=0.8,
                 max_tokens=2048,
                 top_p=0.95,
                 repeat_penalty=1.15,
             ),
             "emotional_analysis": NLPConfig(
-                model="qwen:7b",
+                model="qwen2.5-14b-local",
                 temperature=0.15,
                 max_tokens=1024,
                 top_p=0.9,
                 repeat_penalty=1.05,
             ),
             "conversation": NLPConfig(
-                model="qwen:7b",
+                model="qwen2.5-14b-xiaonuo",  # 默认使用小诺
                 temperature=0.6,
                 max_tokens=1536,
                 top_p=0.9,

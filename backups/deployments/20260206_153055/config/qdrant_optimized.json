@@ -1,0 +1,65 @@
+{
+  "qdrant_optimized": {
+    "collections": {
+      "patents": {
+        "collection_name": "patents_unified",
+        "vector_size": 1024,
+        "description": "统一存储所有专利相关向量",
+        "access_pattern": "high_frequency",
+        "cache_policy": "aggressive"
+      },
+      "legal": {
+        "collection_name": "legal_unified",
+        "vector_size": 1024,
+        "description": "统一存储所有法律文档向量",
+        "access_pattern": "medium_frequency",
+        "cache_policy": "moderate"
+      },
+      "technical": {
+        "collection_name": "technical_unified",
+        "vector_size": 768,
+        "description": "统一存储技术术语向量",
+        "access_pattern": "medium_frequency",
+        "cache_policy": "moderate"
+      },
+      "memory": {
+        "collection_name": "memory_unified",
+        "vector_size": 1024,
+        "description": "统一存储记忆向量",
+        "access_pattern": "low_frequency",
+        "cache_policy": "minimal"
+      }
+    },
+    "search_strategy": {
+      "patent_queries": [
+        "patents_unified"
+      ],
+      "legal_queries": [
+        "legal_unified",
+        "patents_unified"
+      ],
+      "technical_queries": [
+        "technical_unified"
+      ],
+      "memory_queries": [
+        "memory_unified"
+      ]
+    },
+    "optimization_settings": {
+      "hnsw": {
+        "m": 16,
+        "ef_construct": 100
+      },
+      "quantization": {
+        "enabled": true,
+        "scalar": {
+          "type": "int8"
+        }
+      },
+      "wal": {
+        "disabled": false,
+        "wal_capacity_mb": 32
+      }
+    }
+  }
+}

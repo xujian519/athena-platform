@@ -1,0 +1,369 @@
+# API网关配置文件
+# YunPat API Gateway Configuration
+
+# 基础配置
+version: "2.0.0"
+environment: "production"
+debug: false
+
+# 服务配置
+server:
+  host: "0.0.0.0"
+  port: 8080
+  workers: 1
+  loop: "uvloop"
+  http: "httptools"
+  access_log: true
+
+# 服务发现配置
+discovery:
+  type: "static"  # static, consul, etcd, kubernetes
+  static:
+    services:
+      - name: "patent-service"
+        instances:
+          - host: "localhost"
+            port: 8001
+            weight: 1
+            protocol: "http"
+          - host: "localhost"
+            port: 8002
+            weight: 1
+            protocol: "http"
+      - name: "user-service"
+        instances:
+          - host: "localhost"
+            port: 8003
+            weight: 1
+            protocol: "http"
+      - name: "search-service"
+        instances:
+          - host: "localhost"
+            port: 8004
+            weight: 1
+            protocol: "http"
+
+# 路由配置
+routes:
+  # 专利服务路由
+  - path: "/api/v1/patents/*"
+    service: "patent-service"
+    methods: ["GET", "POST", "PUT", "DELETE"]
+    strip_prefix: true
+    timeout: 30
+    retry: 3
+    circuit_breaker:
+      enabled: true
+      failure_threshold: 5
+      recovery_timeout: 60
+      monitor_window: 120
+    rate_limit:
+      enabled: true
+      requests_per_second: 100
+      burst: 200
+    auth:
+      required: true
+      methods: ["jwt", "api_key"]
+
+  # 用户服务路由
+  - path: "/api/v1/users/*"
+    service: "user-service"
+    methods: ["GET", "POST", "PUT", "DELETE"]
+    strip_prefix: true
+    timeout: 20
+    retry: 2
+    circuit_breaker:
+      enabled: true
+      failure_threshold: 3
+      recovery_timeout: 30
+      monitor_window: 60
+    rate_limit:
+      enabled: true
+      requests_per_second: 50
+      burst: 100
+    auth:
+      required: true
+      methods: ["jwt", "oauth"]
+
+  # 搜索服务路由
+  - path: "/api/v1/search/*"
+    service: "search-service"
+    methods: ["GET", "POST"]
+    strip_prefix: true
+    timeout: 60
+    retry: 1
+    circuit_breaker:
+      enabled: true
+      failure_threshold: 5
+      recovery_timeout: 60
+      monitor_window: 120
+    rate_limit:
+      enabled: true
+      requests_per_second: 200
+      burst: 400
+    auth:
+      required: false
+
+  # 健康检查路由（免认证）
+  - path: "/health"
+    service: "patent-service"
+    methods: ["GET"]
+    timeout: 5
+    retry: 1
+    auth:
+      required: false
+
+# 负载均衡配置
+load_balancer:
+  default_strategy: "round_robin"  # round_robin, weighted_round_robin, least_connections, random, consistent_hash
+  health_check:
+    enabled: true
+    interval: 30
+    timeout: 5
+    path: "/health"
+    expected_status: [200]
+    failure_threshold: 3
+    success_threshold: 2
+
+# 限流配置
+rate_limiting:
+  enabled: true
+  type: "redis"  # memory, redis
+  redis:
+    host: "localhost"
+    port: 6379
+    db: 0
+    prefix: "gateway:rate_limit:"
+  default_limits:
+    requests_per_second: 100
+    burst: 200
+    window_size: 60
+
+# 熔断器配置
+circuit_breaker:
+  enabled: true
+  default_config:
+    failure_threshold: 5
+    recovery_timeout: 60
+    monitor_window: 120
+    half_open_max_calls: 3
+    success_threshold: 2
+
+# 认证配置
+authentication:
+  # JWT认证
+  jwt:
+    enabled: true
+    secret_key: "${JWT_SECRET_KEY}"
+    algorithm: "HS256"
+    audience: "yunpat-platform"
+    issuer: "yunpat-gateway"
+    expires_in: 3600
+    refresh_token_expires_in: 86400
+
+  # API Key认证
+  api_key:
+    enabled: true
+    header_name: "X-API-Key"
+    query_param: "api_key"
+    keys:
+      - key: "test-api-key-1"
+        name: "Test API Key"
+        scopes: ["read", "write"]
+        expires: "2024-12-31"
+      - key: "test-api-key-2"
+        name: "ReadOnly API Key"
+        scopes: ["read"]
+        expires: "2024-12-31"
+
+  # OAuth2认证
+  oauth:
+    enabled: true
+    provider: "custom"
+    authorization_url: "https://auth.yunpat.com/oauth/authorize"
+    token_url: "https://auth.yunpat.com/oauth/token"
+    user_info_url: "https://auth.yunpat.com/oauth/userinfo"
+    client_id: "${OAUTH_CLIENT_ID}"
+    client_secret: "${OAUTH_CLIENT_SECRET}"
+    scopes: ["profile", "email", "openid"]
+
+  # Basic认证
+  basic:
+    enabled: true
+    users:
+      - username: "admin"
+        password: "admin123"
+        roles: ["admin"]
+      - username: "gateway"
+        password: "gateway123"
+        roles: ["gateway"]
+
+# CORS配置
+cors:
+  enabled: true
+  allow_origins:
+    - "http://localhost:3000"
+    - "https://yunpat.com"
+    - "https://app.yunpat.com"
+  allow_methods:
+    - "GET"
+    - "POST"
+    - "PUT"
+    - "DELETE"
+    - "OPTIONS"
+  allow_headers:
+    - "Content-Type"
+    - "Authorization"
+    - "X-API-Key"
+    - "X-Requested-With"
+  expose_headers:
+    - "X-Total-Count"
+    - "X-Rate-Limit-Remaining"
+    - "X-Request-ID"
+  allow_credentials: true
+  max_age: 86400
+
+# 压缩配置
+compression:
+  enabled: true
+  minimum_size: 1024
+  compressible_types:
+    - "application/json"
+    - "application/javascript"
+    - "text/css"
+    - "text/html"
+    - "text/plain"
+    - "text/xml"
+    - "application/xml"
+
+# 日志配置
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  log_headers: false
+  log_body: false
+  access_log:
+    enabled: true
+    format: "json"  # json, text
+  error_log:
+    enabled: true
+    format: "json"
+
+# 监控配置
+monitoring:
+  metrics:
+    enabled: true
+    type: "prometheus"  # prometheus, statsd
+    prometheus:
+      port: 9090
+      path: "/metrics"
+    statsd:
+      host: "localhost"
+      port: 8125
+      prefix: "yunpat.gateway"
+
+  tracing:
+    enabled: true
+    type: "jaeger"  # jaeger, zipkin
+    jaeger:
+      endpoint: "http://localhost:14268/api/traces"
+      service_name: "yunpat-gateway"
+      sampling_rate: 1.0
+
+  health_check:
+    enabled: true
+    endpoint: "/health"
+    detailed: true
+
+# Redis配置
+redis:
+  host: "localhost"
+  port: 6379
+  db: 0
+  password: "${REDIS_PASSWORD}"
+  pool_size: 10
+  max_connections: 100
+  timeout: 5
+
+# 数据库配置（如果需要持久化）
+database:
+  enabled: false
+  type: "postgresql"
+  host: "localhost"
+  port: 5432
+  name: "yunpat_gateway"
+  username: "${DB_USERNAME}"
+  password: "${DB_PASSWORD}"
+  pool_size: 10
+  max_connections: 100
+
+# 缓存配置
+cache:
+  enabled: true
+  type: "redis"  # memory, redis
+  redis:
+    host: "localhost"
+    port: 6379
+    db: 1
+    password: "${REDIS_PASSWORD}"
+  ttl: 300
+  max_size: 1000
+
+# 安全配置
+security:
+  # 请求大小限制
+  max_request_size: 10485760  # 10MB
+
+  # 响应大小限制
+  max_response_size: 104857600  # 100MB
+
+  # 超时配置
+  timeouts:
+    read: 60
+    write: 60
+    connect: 10
+
+  # 速率限制
+  rate_limits:
+    - name: "default"
+      requests_per_second: 100
+      burst: 200
+      window_size: 60
+    - name: "authenticated"
+      requests_per_second: 1000
+      burst: 2000
+      window_size: 60
+    - name: "admin"
+      requests_per_second: 5000
+      burst: 10000
+      window_size: 60
+
+# 插件配置
+plugins:
+  enabled: true
+  directory: "./plugins"
+  loaded:
+    - "ip_whitelist"
+    - "request_transformer"
+    - "response_transformer"
+    - "request_id_generator"
+
+# 开发配置
+development:
+  auto_reload: false
+  debug_toolbar: false
+  profiling: false
+
+# 生产配置
+production:
+  auto_reload: false
+  debug_toolbar: false
+  profiling: true
+  log_level: "INFO"
+
+# 测试配置
+testing:
+  auto_reload: true
+  debug_toolbar: true
+  profiling: false
+  log_level: "DEBUG"

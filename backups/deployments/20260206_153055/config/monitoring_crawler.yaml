@@ -1,0 +1,94 @@
+# Athena工作平台 - 爬虫系统监控配置
+# Platform Monitoring Configuration - Controlled by Athena & 小诺
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    platform: "Athena工作平台"
+    service: "hybrid-crawler"
+    owner: "Athena & 小诺"
+
+rule_files:
+  - "crawler_alert_rules.yml"
+
+scrape_configs:
+  # 爬虫服务监控
+  - job_name: 'platform-hybrid-crawler'
+    static_configs:
+      - targets: ['localhost:8300']
+        labels:
+          service: 'crawler-api'
+          environment: 'production'
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # 服务健康检查
+  - job_name: 'crawler-health-check'
+    static_configs:
+      - targets: ['localhost:8300']
+        labels:
+          service: 'crawler-health'
+    metrics_path: '/health'
+    scrape_interval: 60s
+
+  # 系统资源监控
+  - job_name: 'system-metrics'
+    static_configs:
+      - targets: ['localhost:9100']
+        labels:
+          service: 'system-metrics'
+    scrape_interval: 60s
+
+  # 网络监控
+  - job_name: 'network-metrics'
+    static_configs:
+      - targets: ['localhost:9115']
+        labels:
+          service: 'network-metrics'
+    scrape_interval: 60s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - localhost:9093
+
+receivers:
+  - name: 'web.hook'
+    webhook_configs:
+      - url: 'http://localhost:5001/'
+
+# 爬虫服务特定告警规则
+recording_rules:
+  - name: crawler_metrics
+    interval: 30s
+    rules:
+      # 请求率
+      - record: crawler:request_rate
+        expr: rate(http_requests_total{job="platform-hybrid-crawler"}[5m])
+
+      # 错误率
+      - record: crawler:error_rate
+        expr: rate(http_requests_total{job="platform-hybrid-crawler",status=~"5.."}[5m]) / rate(http_requests_total{job="platform-hybrid-crawler"}[5m])
+
+      # 平均响应时间
+      - record: crawler:avg_response_time
+        expr: histogram_quantile(0.50, rate(http_request_duration_seconds_bucket{job="platform-hybrid-crawler"}[5m]))
+
+      # P95响应时间
+      - record: crawler:p95_response_time
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="platform-hybrid-crawler"}[5m]))
+
+      # 成本追踪
+      - record: crawler:cost_rate
+        expr: increase(crawler_cost_total[5m])
+
+      # 爬虫工具使用分布
+      - record: crawler:tool_usage
+        expr: sum by (tool) (rate(crawler_requests_by_tool_total[5m]))
+
+      # 路由决策分布
+      - record: crawler:routing_decisions
+        expr: sum by (decision) (rate(crawler_routing_decisions_total[5m]))
