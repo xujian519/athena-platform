@@ -1,0 +1,218 @@
+# 小诺·双鱼座 - Prometheus告警规则
+# Xiaonuo Pisces - Prometheus Alert Rules
+
+groups:
+  - name: xiaonuo_alerts
+    interval: 30s
+    rules:
+      # =============================================================================
+      # 服务可用性告警
+      # =============================================================================
+
+      # 服务停止告警
+      - alert: XiaonuoServiceDown
+        expr: up{job="xiaonuo"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: xiaonuo
+        annotations:
+          summary: "小诺服务已停止"
+          description: "小诺服务已停止超过1分钟"
+          runbook_url: "https://docs.athena.platform/runbooks/xiaonuo/service-down"
+
+      # 服务重启告警
+      - alert: XiaonuoServiceRestarted
+        expr: xiaonuo_uptime_seconds < 300
+        labels:
+          severity: warning
+          service: xiaonuo
+        annotations:
+          summary: "小诺服务已重启"
+          description: "小诺服务在过去5分钟内重启了"
+
+      # =============================================================================
+      # 性能告警
+      # =============================================================================
+
+      # 高响应时间告警
+      - alert: XiaonuoHighResponseTime
+        expr: histogram_quantile(0.95, xiaonuo_request_duration_seconds_bucket) > 1
+        for: 5m
+        labels:
+          severity: warning
+          service: xiaonuo
+        annotations:
+          summary: "响应时间过高"
+          description: "P95响应时间超过1秒，当前值: {{ $value }}秒"
+
+      # 严重高响应时间告警
+      - alert: XiaonuoVeryHighResponseTime
+        expr: histogram_quantile(0.95, xiaonuo_request_duration_seconds_bucket) > 5
+        for: 2m
+        labels:
+          severity: critical
+          service: xiaonuo
+        annotations:
+          summary: "响应时间严重过高"
+          description: "P95响应时间超过5秒，当前值: {{ $value }}秒"
+
+      # 高错误率告警
+      - alert: XiaonuoHighErrorRate
+        expr: rate(xiaonuo_request_errors_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: xiaonuo
+        annotations:
+          summary: "错误率过高"
+          description: "错误率超过10%，当前值: {{ $value | humanizePercentage }}"
+
+      # 严重高错误率告警
+      - alert: XiaonuoVeryHighErrorRate
+        expr: rate(xiaonuo_request_errors_total[5m]) > 0.5
+        for: 2m
+        labels:
+          severity: critical
+          service: xiaonuo
+        annotations:
+          summary: "错误率严重过高"
+          description: "错误率超过50%，当前值: {{ $value | humanizePercentage }}"
+
+      # =============================================================================
+      # 资源告警
+      # =============================================================================
+
+      # 高内存使用告警
+      - alert: XiaonuoHighMemoryUsage
+        expr: xiaonuo_memory_usage_bytes{type="rss"} / 1024 / 1024 > 400
+        for: 10m
+        labels:
+          severity: warning
+          service: xiaonuo
+        annotations:
+          summary: "内存使用过高"
+          description: "内存使用超过400MB，当前值: {{ $value }}MB"
+
+      # 严重高内存使用告警
+      - alert: XiaonuoVeryHighMemoryUsage
+        expr: xiaonuo_memory_usage_bytes{type="rss"} / 1024 / 1024 > 500
+        for: 5m
+        labels:
+          severity: critical
+          service: xiaonuo
+        annotations:
+          summary: "内存使用严重过高"
+          description: "内存使用超过500MB，当前值: {{ $value }}MB"
+
+      # 高CPU使用告警
+      - alert: XiaonuoHighCPUUsage
+        expr: xiaonuo_cpu_usage_percent > 70
+        for: 10m
+        labels:
+          severity: warning
+          service: xiaonuo
+        annotations:
+          summary: "CPU使用过高"
+          description: "CPU使用率超过70%，当前值: {{ $value }}%"
+
+      # 严重高CPU使用告警
+      - alert: XiaonuoVeryHighCPUUsage
+        expr: xiaonuo_cpu_usage_percent > 90
+        for: 5m
+        labels:
+          severity: critical
+          service: xiaonuo
+        annotations:
+          summary: "CPU使用严重过高"
+          description: "CPU使用率超过90%，当前值: {{ $value }}%"
+
+      # =============================================================================
+      # 任务告警
+      # =============================================================================
+
+      # 任务失败率告警
+      - alert: XiaonuoHighTaskFailureRate
+        expr: rate(xiaonuo_tasks_total{status="failed"}[5m]) / rate(xiaonuo_tasks_total[5m]) > 0.1
+        for: 10m
+        labels:
+          severity: warning
+          service: xiaonuo
+        annotations:
+          summary: "任务失败率过高"
+          description: "任务失败率超过10%，当前值: {{ $value | humanizePercentage }}"
+
+      # 任务队列积压告警
+      - alert: XiaonuoTaskQueueBacklog
+        expr: xiaonuo_task_queue_size > 100
+        for: 10m
+        labels:
+          severity: warning
+          service: xiaonuo
+        annotations:
+          summary: "任务队列积压"
+          description: "任务队列大小超过100，当前值: {{ $value }}"
+
+      # 严重任务队列积压告警
+      - alert: XiaonuoSevereTaskQueueBacklog
+        expr: xiaonuo_task_queue_size > 500
+        for: 5m
+        labels:
+          severity: critical
+          service: xiaonuo
+        annotations:
+          summary: "任务队列严重积压"
+          description: "任务队列大小超过500，当前值: {{ $value }}"
+
+      # =============================================================================
+      # 协作告警
+      # =============================================================================
+
+      # 协作请求失败告警
+      - alert: XiaonuoCollaborationFailure
+        expr: rate(xiaonuo_collaboration_requests_total{status="failed"}[5m]) > 0.05
+        for: 10m
+        labels:
+          severity: warning
+          service: xiaonuo
+        annotations:
+          summary: "协作请求失败率过高"
+          description: "{{ $labels.agent }} 的协作请求失败率超过5%"
+
+      # =============================================================================
+      # 业务告警
+      # =============================================================================
+
+      # 记忆操作失败告警
+      - alert: XiaonuoMemoryOperationFailure
+        expr: rate(xiaonuo_memory_operations_total{status="failed"}[5m]) > 0.01
+        for: 10m
+        labels:
+          severity: warning
+          service: xiaonuo
+        annotations:
+          summary: "记忆操作失败率过高"
+          description: "记忆操作失败率超过1%，记忆类型: {{ $labels.memory_type }}"
+
+  - name: xiaonuo_recording_rules
+    interval: 30s
+    rules:
+      # 记录规则：计算请求速率
+      - record: xiaonuo:request_rate:5m
+        expr: rate(xiaonuo_requests_total[5m])
+
+      # 记录规则：计算错误率
+      - record: xiaonuo:error_rate:5m
+        expr: rate(xiaonuo_request_errors_total[5m]) / rate(xiaonuo_requests_total[5m])
+
+      # 记录规则：计算P95响应时间
+      - record: xiaonuo:response_time:p95
+        expr: histogram_quantile(0.95, xiaonuo_request_duration_seconds_bucket)
+
+      # 记录规则：计算P99响应时间
+      - record: xiaonuo:response_time:p99
+        expr: histogram_quantile(0.99, xiaonuo_request_duration_seconds_bucket)
+
+      # 记录规则：计算任务完成率
+      - record: xiaonuo:task_completion_rate:5m
+        expr: rate(xiaonuo_tasks_total{status="completed"}[5m]) / rate(xiaonuo_tasks_total[5m])
