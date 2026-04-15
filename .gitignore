@@ -114,3 +114,18 @@ mcp-servers/*/node_modules/
 mcp-servers/*/.env
 external_projects/claude-code/
 external_projects/claude-code/
+
+# 运行时生成的大数据文件
+production/data/
+data/reports/
+data/clause_level_vectors/
+data/prometheus.backup*/
+data/gateway.pid
+
+# 法律法规数据库（数据量大，应单独管理）
+tools/Laws-1.0.0/
+
+# 工具缓存
+.mypy_cache/
+.ruff_cache/
+.benchmarks/
