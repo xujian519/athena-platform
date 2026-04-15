@@ -1,0 +1,308 @@
+# Grafana Dashboard Variables Configuration
+# Grafana仪表板变量配置
+
+enabled: true
+editable: true
+
+# 变量定义
+variables:
+  # 1. 时间范围变量
+  - name: time_range
+    type: interval
+    label: 时间范围
+    query: 1h,6h,12h,24h,7d,30d
+    current: 24h
+    auto: false
+    options:
+      - value: 1h
+        label: 1小时
+      - value: 6h
+        label: 6小时
+      - value: 12h
+        label: 12小时
+      - value: 24h
+        label: 1天
+      - value: 7d
+        label: 7天
+      - value: 30d
+        label: 30天
+
+  # 2. 服务实例变量
+  - name: instance
+    type: query
+    label: 服务实例
+    query: label_values(up, instance)
+    regex: /.*"([^"]*).*/
+    multi: true
+    includeAll: true
+    allValue: ".*"
+    sort: 1
+
+  # 3. 业务类型变量
+  - name: analysis_type
+    type: custom
+    label: 分析类型
+    query: similarity,invalidation,comprehensive,batch,value_assessment
+    multi: true
+    includeAll: true
+    allValue: ".*"
+    options:
+      - value: similarity
+        label: 相似度分析
+      - value: invalidation
+        label: 无效性分析
+      - value: comprehensive
+        label: 综合分析
+      - value: batch
+        label: 批量分析
+      - value: value_assessment
+        label: 价值评估
+
+  # 4. 意图类型变量
+  - name: intent_type
+    type: query
+    label: 意图类型
+    query: label_values(intent_distribution_count, intent_type)
+    multi: true
+    includeAll: true
+    allValue: ".*"
+
+  # 5. 模型类型变量
+  - name: model_type
+    type: custom
+    label: 模型类型
+    query: bge-m3,bge-large,intent-classifier-v2,claude-3,gpt-4
+    multi: true
+    options:
+      - value: bge-m3
+        label: BGE-M3
+      - value: bge-large
+        label: BGE-Large
+      - value: intent-classifier-v2
+        label: 意图分类器V2
+      - value: claude-3
+        label: Claude 3
+      - value: gpt-4
+        label: GPT-4
+
+  # 6. 决策类型变量
+  - name: decision_type
+    type: query
+    label: 决策类型
+    query: label_values(decision_accuracy_percent, decision_type)
+    multi: true
+    includeAll: true
+
+  # 7. 严重级别变量
+  - name: severity
+    type: custom
+    label: 告警级别
+    query: warning,critical
+    multi: true
+    options:
+      - value: warning
+        label: 警告
+      - value: critical
+        label: 严重
+
+  # 8. 数据源变量
+  - name: datasource
+    type: datasource
+    label: 数据源
+    query: Prometheus
+    regex: /.*"([^"]*).*/
+    multi: false
+
+  # 9. 聚合方法变量
+  - name: agg_func
+    type: custom
+    label: 聚合方法
+    query: rate,irate,increase
+    options:
+      - value: rate
+        label: Rate (每秒速率)
+      - value: irate
+        label: IRate (瞬时速率)
+      - value: increase
+        label: Increase (增量)
+
+  # 10. 统计周期变量
+  - name: stat_period
+    type: interval
+    label: 统计周期
+    query: 1m,5m,15m,1h
+    current: 5m
+    options:
+      - value: 1m
+        label: 1分钟
+      - value: 5m
+        label: 5分钟
+      - value: 15m
+        label: 15分钟
+      - value: 1h
+        label: 1小时
+
+# 仪表板布局配置
+layout:
+  rows:
+    - title: 概览指标
+      height: 250px
+      panels:
+        - title: 总请求数
+          type: stat
+          gridPos: {h: 6, w: 4, x: 0, y: 0}
+          targets:
+            - expr: sum($agg_func(patent_analysis_requests_total[$stat_period]))
+              legendFormat: 总请求数
+
+        - title: 平均质量评分
+          type: stat
+          gridPos: {h: 6, w: 4, x: 4, y: 0}
+          targets:
+            - expr: avg(patent_analysis_quality_score)
+              legendFormat: 平均质量
+
+        - title: 意图识别准确率
+          type: stat
+          gridPos: {h: 6, w: 4, x: 8, y: 0}
+          targets:
+            - expr: avg(intent_accuracy_percent)
+              legendFormat: 准确率
+
+        - title: 决策准确率
+          type: stat
+          gridPos: {h: 6, w: 4, x: 12, y: 0}
+          targets:
+            - expr: avg(decision_accuracy_percent)
+              legendFormat: 决策准确率
+
+        - title: P95延迟
+          type: stat
+          gridPos: {h: 6, w: 4, x: 16, y: 0}
+          targets:
+            - expr: histogram_quantile(0.95, rate(patent_analysis_duration_seconds_bucket[5m]))
+              legendFormat: P95延迟
+
+        - title: 错误率
+          type: stat
+          gridPos: {h: 6, w: 4, x: 20, y: 0}
+          targets:
+            - expr: sum($agg_func(cognitive_errors_total[$stat_period])) / sum($agg_func(cognitive_requests_total[$stat_period])) * 100
+              legendFormat: 错误率%
+
+    - title: 业务指标趋势
+      height: 300px
+      panels:
+        - title: 专利分析请求速率
+          type: graph
+          gridPos: {h: 8, w: 12, x: 0, y: 6}
+          targets:
+            - expr: sum($agg_func(patent_analysis_requests_total{analysis_type=~"$analysis_type"}[$stat_period])) by (analysis_type)
+              legendFormat: "{{analysis_type}}"
+
+        - title: 专利分析质量趋势
+          type: graph
+          gridPos: {h: 8, w: 12, x: 12, y: 6}
+          targets:
+            - expr: avg(patent_analysis_quality_score{analysis_type=~"$analysis_type"}) by (analysis_type)
+              legendFormat: "{{analysis_type}}"
+
+    - title: 意图识别监控
+      height: 300px
+      panels:
+        - title: 意图分布
+          type: piechart
+          gridPos: {h: 8, w: 8, x: 0, y: 14}
+          targets:
+            - expr: sum(intent_distribution_count{intent_type=~"$intent_type"}) by (intent_type)
+              legendFormat: "{{intent_type}}"
+
+        - title: 意图识别准确率趋势
+          type: graph
+          gridPos: {h: 8, w: 8, x: 8, y: 14}
+          targets:
+            - expr: intent_accuracy_percent{intent_type=~"$intent_type"}
+              legendFormat: "{{intent_type}}"
+
+        - title: 意图识别延迟
+          type: graph
+          gridPos: {h: 8, w: 8, x: 16, y: 14}
+          targets:
+            - expr: histogram_quantile(0.95, rate(intent_recognition_duration_seconds_bucket{model_type=~"$model_type"}[5m]))
+              legendFormat: "{{model_type}} P95"
+
+    - title: 决策质量监控
+      height: 300px
+      panels:
+        - title: 决策准确率
+          type: graph
+          gridPos: {h: 8, w: 12, x: 0, y: 22}
+          targets:
+            - expr: decision_accuracy_percent{decision_type=~"$decision_type"}
+              legendFormat: "{{decision_type}}"
+
+        - title: 决策影响评分
+          type: graph
+          gridPos: {h: 8, w: 12, x: 12, y: 22}
+          targets:
+            - expr: decision_impact_score{decision_type=~"$decision_type"}
+              legendFormat: "{{decision_type}}"
+
+    - title: 性能监控
+      height: 300px
+      panels:
+        - title: 处理延迟分布
+          type: heatmap
+          gridPos: {h: 8, w: 12, x: 0, y: 30}
+          targets:
+            - expr: rate(patent_analysis_duration_seconds_bucket[5m])
+              legendFormat: 延迟分布
+
+        - title: 资源使用率
+          type: graph
+          gridPos: {h: 8, w: 12, x: 12, y: 30}
+          targets:
+            - expr: rate(process_cpu_seconds_total{job="cognitive_metrics"}[5m])
+              legendFormat: CPU使用率
+            - expr: process_resident_memory_bytes{job="cognitive_metrics"} / 1024 / 1024
+              legendFormat: 内存使用(MB)
+
+# 告警面板配置
+alerts:
+  - name: 当前告警
+    type: alertlist
+    gridPos: {h: 8, w: 24, x: 0, y: 38}
+    show: "alerting,pending"
+    limit: 10
+
+# 注释和文档
+annotations:
+  dashboard_description: |
+    Athena认知与决策模块增强监控仪表板
+
+    功能特性:
+    - 实时业务指标监控
+    - 多维度数据分析
+    - 智能告警通知
+    - 性能趋势追踪
+
+    使用指南:
+    1. 使用顶部变量筛选器筛选数据
+    2. 点击面板标题查看详细信息
+    3. 使用时间选择器查看历史数据
+    4. 告警状态实时更新
+
+  datasource_help: |
+    Prometheus数据源配置:
+    - URL: http://prometheus:9090
+    - 访问模式: 服务器(默认)
+    - 代理: 直接访问
+
+  variable_help: |
+    变量使用说明:
+    - 时间范围: 选择监控时间范围
+    - 服务实例: 选择特定实例或全部
+    - 分析类型: 按业务类型筛选
+    - 模型类型: 按模型筛选
+    - 聚合方法: 选择数据聚合方式
+    - 统计周期: 选择统计时间窗口

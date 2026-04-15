@@ -1,0 +1,67 @@
+{
+  "report_time": "2025-12-20T23:15:05.218063",
+  "overall_score": 30.416666666666664,
+  "grade": "F",
+  "components": {
+    "vector_store": {
+      "score": 0,
+      "grade": "F",
+      "total_rules": 5,
+      "passed_rules": 1,
+      "failed_rules": 4,
+      "warning_rules": 0,
+      "error_rules": 0,
+      "validation_time": 0.00017189979553222656,
+      "summary": "需要改进 - 4 个严重问题"
+    },
+    "entity_extraction": {
+      "score": 65.0,
+      "grade": "D",
+      "total_rules": 4,
+      "passed_rules": 3,
+      "failed_rules": 1,
+      "warning_rules": 0,
+      "error_rules": 0,
+      "validation_time": 0.00020503997802734375,
+      "summary": "一般 - 1 个规则失败"
+    },
+    "knowledge_graph": {
+      "score": 0,
+      "grade": "F",
+      "total_rules": 4,
+      "passed_rules": 0,
+      "failed_rules": 4,
+      "warning_rules": 0,
+      "error_rules": 0,
+      "validation_time": 6.008148193359375e-05,
+      "summary": "需要改进 - 4 个严重问题"
+    },
+    "data_consistency": {
+      "score": 56.66666666666666,
+      "grade": "F",
+      "total_rules": 3,
+      "passed_rules": 2,
+      "failed_rules": 1,
+      "warning_rules": 0,
+      "error_rules": 0,
+      "validation_time": 0.00013518333435058594,
+      "summary": "一般 - 1 个规则失败"
+    }
+  },
+  "critical_issues": [
+    {
+      "component": "vector_store",
+      "rule": "vector_dimension_check",
+      "message": "向量存储为空"
+    }
+  ],
+  "recommendations": [
+    "优先修复 vector_store 组件的问题",
+    "重新生成向量并确保归一化",
+    "优先修复 entity_extraction 组件的问题",
+    "调整实体提取模型参数",
+    "优先修复 knowledge_graph 组件的问题",
+    "增强图谱连通性，减少孤立节点",
+    "优先修复 data_consistency 组件的问题"
+  ]
+}

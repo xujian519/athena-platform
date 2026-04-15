@@ -1,0 +1,31 @@
+{
+  "cache": {
+    "enabled": true,
+    "max_memory_items": 1000,
+    "max_ttl_hours": 24,
+    "auto_cleanup": true,
+    "cleanup_interval_hours": 6
+  },
+  "preload": {
+    "enabled": true,
+    "preload_on_startup": true,
+    "models": [
+      "text_embedding",
+      "chat_gpt"
+    ],
+    "strategy": "parallel"
+  },
+  "context": {
+    "enabled": true,
+    "max_history_length": 10,
+    "max_tokens": 4000,
+    "compression_strategy": "smart"
+  },
+  "monitoring": {
+    "enabled": true,
+    "max_metrics_history": 10000,
+    "auto_save_interval": 300,
+    "performance_alerts": true,
+    "slow_response_threshold": 3.0
+  }
+}

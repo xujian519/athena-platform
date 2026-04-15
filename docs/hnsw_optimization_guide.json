@@ -1,0 +1,52 @@
+{
+  "hnsw_optimization_guide": {
+    "description": "HNSW参数优化指南",
+    "parameters": {
+      "m": {
+        "description": "每个节点的最大连接数",
+        "small_collections": "< 10K vectors: m=8",
+        "medium_collections": "10K-100K vectors: m=16",
+        "large_collections": "> 100K vectors: m=32",
+        "trade_off": "更大的m提高召回率但增加内存使用"
+      },
+      "ef_construct": {
+        "description": "构建时的动态候选列表大小",
+        "small_collections": "< 10K vectors: ef_construct=64",
+        "medium_collections": "10K-100K vectors: ef_construct=128",
+        "large_collections": "> 100K vectors: ef_construct=200",
+        "trade_off": "更大的ef_construct提高索引质量但增加构建时间"
+      },
+      "ef_search": {
+        "description": "搜索时的动态候选列表大小",
+        "recommended": "ef_search = ef_construct",
+        "performance_tip": "可以适当降低ef_search以提高查询速度"
+      }
+    },
+    "recommendations": [
+      {
+        "scenario": "高召回率要求",
+        "settings": "m=32, ef_construct=200, ef_search=256",
+        "use_case": "法律条款搜索、专利检索"
+      },
+      {
+        "scenario": "高速查询要求",
+        "settings": "m=16, ef_construct=128, ef_search=64",
+        "use_case": "实时推荐、快速预览"
+      },
+      {
+        "scenario": "平衡模式",
+        "settings": "m=24, ef_construct=150, ef_search=128",
+        "use_case": "通用搜索、混合查询"
+      }
+    ],
+    "infrastructure/infrastructure/monitoring": {
+      "metrics_to_track": [
+        "查询延迟(p95, p99)",
+        "召回率变化",
+        "内存使用",
+        "索引构建时间"
+      ],
+      "optimization_cycle": "每3-6个月根据查询模式调整"
+    }
+  }
+}

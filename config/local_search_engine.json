@@ -1,0 +1,25 @@
+{
+  "connection": {
+    "base_url": "http://lse-gateway:3001",
+    "external_url": "http://localhost:3003",
+    "use_docker_network": false,
+    "timeout": 30,
+    "connect_timeout": 5,
+    "max_retries": 2
+  },
+  "defaults": {
+    "max_results": 5,
+    "language": "zh-CN",
+    "categories": "general",
+    "scrape_format": "markdown"
+  },
+  "health_check": {
+    "enabled": true,
+    "interval": 30,
+    "timeout": 5
+  },
+  "integration": {
+    "enabled": true,
+    "set_as_default_web_engine": true
+  }
+}

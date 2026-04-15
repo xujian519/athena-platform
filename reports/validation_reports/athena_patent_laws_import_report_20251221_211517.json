@@ -1,0 +1,32 @@
+{
+  "import_time": "2025-12-21T21:15:17.312389",
+  "importer": "AthenaPatentLegalImporter",
+  "version": "2.0.0",
+  "nlp_backend": "Athena平台BGE服务",
+  "vector_dimension": 1024,
+  "collection_name": "patent_laws_athena_nlp",
+  "processing_stats": {
+    "total_files": 13,
+    "processed_files": 0,
+    "failed_files": 13,
+    "total_chunks": 0,
+    "total_entities": 0,
+    "total_relations": 0,
+    "processing_time": 6.941597938537598,
+    "embedding_time": 0,
+    "import_time": 0
+  },
+  "performance_metrics": {
+    "avg_processing_time_per_file": 6.941597938537598,
+    "avg_embedding_time_per_chunk": 0.0,
+    "avg_import_time_per_point": 0.0,
+    "overall_efficiency": 0.0
+  },
+  "quality_assurance": {
+    "processing_method": "athena_nlp",
+    "entity_extraction_enabled": true,
+    "smart_chunking_enabled": true,
+    "vector_quality": "bge_large_zh_v1.5",
+    "database_integration": "qdrant_cosine_similarity"
+  }
+}

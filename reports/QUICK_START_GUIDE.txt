@@ -1,0 +1,71 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║              Athena工作平台 - 快速启动指南                          ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+📱 核心服务访问地址
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Gateway API:      http://localhost:8005
+  API文档:          http://localhost:8005/docs
+  Neo4j浏览器:       http://localhost:7474
+  Qdrant控制台:      http://localhost:6333/dashboard
+  Grafana监控:       http://localhost:3000 (admin/admin123)
+
+🚀 快速启动命令
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # 启动所有服务
+  bash scripts/start_agents.sh
+
+  # 检查服务状态
+  curl http://localhost:8005/health
+  docker-compose ps
+
+  # 查看日志
+  tail -f logs/gateway.log
+  tail -f logs/xiaonuo.log
+
+🛑 停止服务命令
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # 停止智能体
+  kill $(pgrep -f xiaonuo_main.py)
+
+  # 停止Gateway
+  kill $(cat data/gateway.pid)
+
+  # 停止Docker服务
+  docker-compose stop
+
+📊 服务状态 (2026-03-17)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ✅ Gateway网关      PID: 54000   端口: 8005
+  ✅ 小诺智能体        PID: 54062   状态: 运行中
+  ✅ 自主学习系统      PID: 776     状态: 运行中
+  ✅ Neo4j图数据库                  端口: 7474, 7687
+  ✅ Qdrant向量库                   端口: 6333-6334
+  ✅ Redis缓存                      端口: 6379
+  ✅ PostgreSQL数据库               端口: 5432
+
+📝 日志文件位置
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Gateway:   logs/gateway.log
+  小诺:      logs/xiaonuo.log
+  小娜:      logs/xiaona.log
+
+⚠️  常见问题
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  1. PostgreSQL连接: psql未在PATH中
+     → 使用: /opt/homebrew/Cellar/postgresql@17/17.2/bin/psql
+
+  2. 小娜智能体未启动
+     → 功能已集成到小诺调度器中
+
+  3. Gateway路由未配置
+     → 需要在gateway-unified/config.yaml中配置
+
+📞 技术支持
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  负责人: 徐健
+  邮箱: xujian519@gmail.com
+  文档: PRODUCTION_SERVICES_STATUS.md
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+最后更新: 2026-03-17 | Athena工作平台 v2.0

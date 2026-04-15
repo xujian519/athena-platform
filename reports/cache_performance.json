@@ -1,0 +1,23 @@
+{
+  "hit_rate": {
+    "hit_rate": 84.0,
+    "hits": 840,
+    "misses": 160,
+    "avg_response_time_ms": 0.22483396530151367,
+    "throughput_ops": 4447.726564173477
+  },
+  "write_performance": {
+    "avg_write_time_ms": 0.21689605712890625,
+    "write_throughput_ops": 4610.50335924584
+  },
+  "batch_operations": {
+    "batch_write_time_ms": 0.6749629974365234,
+    "batch_read_time_ms": 0.3457069396972656,
+    "batch_size": 100
+  },
+  "concurrent_access": {
+    "concurrent_users": 10,
+    "total_requests": 2000,
+    "throughput_ops": 4678.153746629525
+  }
+}

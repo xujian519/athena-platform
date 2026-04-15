@@ -1,0 +1,118 @@
+version: '3.8'
+
+services:
+  # Qdrant向量数据库
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: athena-prod-qdrant
+    ports:
+      - "6335:6333"
+    volumes:
+      - ./data/qdrant:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    restart: unless-stopped
+    networks:
+      - athena-prod-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # NebulaGraph图数据库
+  nebula-metad:
+    image: vesoft/nebula-metad:v3.8.0
+    container_name: athena-prod-nebula-metad
+    environment:
+      - USER=root
+      - PASSWORD=nebula
+    volumes:
+      - ./data/nebula/meta:/data/meta
+    networks:
+      - athena-prod-network
+    restart: unless-stopped
+
+  nebula-graphd:
+    image: vesoft/nebula-graphd:v3.8.0
+    container_name: athena-prod-nebula-graphd
+    ports:
+      - "9670:9669"
+      - "19670:19669"
+    environment:
+      - USER=root
+      - PASSWORD=nebula
+    command:
+      - --meta_server_addrs=nebula-metad:9559
+    depends_on:
+      - nebula-metad
+    networks:
+      - athena-prod-network
+    restart: unless-stopped
+
+  nebula-storaged:
+    image: vesoft/nebula-storaged:v3.8.0
+    container_name: athena-prod-nebula-storaged
+    environment:
+      - USER=root
+      - PASSWORD=nebula
+    volumes:
+      - ./data/nebula/storage:/data/storage
+    command:
+      - --meta_server_addrs=nebula-metad:9559
+      - --root_path=data/storage
+    depends_on:
+      - nebula-metad
+    networks:
+      - athena-prod-network
+    restart: unless-stopped
+
+  # 智能路由API服务
+  intelligent-router:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    container_name: athena-prod-intelligent-router
+    ports:
+      - "8081:8080"
+    # 使用host网络模式以访问本地PostgreSQL
+    network_mode: host
+    environment:
+      - ENVIRONMENT=production
+      - ENABLE_AUTH=true
+      # 本地PostgreSQL 17.7配置
+      - POSTGRES_HOST=localhost
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=athena
+      - POSTGRES_PASSWORD=athena_password
+      - POSTGRES_DB=athena_prod
+      - DATABASE_URL=postgresql://athena:athena_password@localhost:5432/athena_prod
+      # Qdrant配置（host网络模式下直接用localhost）
+      - QDRANT_URL=http://localhost:6333
+      # NebulaGraph配置（host网络模式下直接用localhost）
+      - NEBULA_HOST=localhost
+      - NEBULA_PORT=9670
+      - API_KEY_PROD=74207bed56b28b4faa4a7981d4e0b783f14f2e8a000adae2aa41f56b8ee2f7d6
+      - CACHE_MAX_SIZE=1000
+      - CACHE_TTL=3600
+      - RATE_LIMIT_PER_MINUTE=100
+      - LOG_LEVEL=INFO
+      - LOG_MAX_BYTES=104857600
+      - LOG_BACKUP_COUNT=10
+    volumes:
+      - ./logs:/app/logs
+      - ./config:/app/config
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  athena-prod-network:
+    name: athena-prod-network
+    driver: bridge
+    external: true

@@ -1,0 +1,353 @@
+{
+  "query": "行政复议程序",
+  "timestamp": "2025-12-20T21:20:47.900791",
+  "total_results": 19,
+  "source_distribution": {
+    "vector": 18,
+    "knowledge_graph": 1
+  },
+  "weights": {
+    "vector": 0.5,
+    "text": 0.3,
+    "knowledge_graph": 0.2
+  },
+  "reports/reports/results": [
+    {
+      "id": "5b579ae1-c33a-f3b7-290c-5cc985a34b88",
+      "title": "# 中华人民共和国刑事诉讼法",
+      "score": 0.1301,
+      "source": "vector",
+      "metadata": {
+        "title": "# 中华人民共和国刑事诉讼法",
+        "doc_type": "诉讼与非诉讼程序法",
+        "category": "诉讼与非诉讼程序法",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/诉讼与非诉讼程序法/刑事诉讼法(2018-10-26).md",
+        "original_id": "61ca2bc279511f0a3ca61c323f7ba543271c0eb1acebb453f4be36c8d05473f5",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:17.248575",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "eda04d70-ab1e-7580-ad46-e7c7b6f5f4a4",
+      "title": "# 北京市安全生产条例",
+      "score": 0.1284,
+      "source": "vector",
+      "metadata": {
+        "title": "# 北京市安全生产条例",
+        "doc_type": "其他",
+        "category": "北京",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/地方性法规/北京/北京市安全生产条例.md",
+        "original_id": "708f86f96b822969f646b4bffefa38370388f3191cac4ecc318de6f713471a92",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:18.464512",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "d0ea5fe1-b465-b5f6-d605-c15e55761163",
+      "title": "# 道路交通安全违法行为记分管理办法",
+      "score": 0.1283,
+      "source": "vector",
+      "metadata": {
+        "title": "# 道路交通安全违法行为记分管理办法",
+        "doc_type": "其他",
+        "category": "公安部",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/部门规章/公安部/道路交通安全违法行为记分管理办法(2021-12-17).md",
+        "original_id": "ac6eedf94964e2344a9cf0369c5b962411a010da40786b2c109e12fb3567fcf0",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:18.223185",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "8da493ee-7914-5c32-e6b5-0fd0f5b83248",
+      "title": "# 中华人民共和国电信条例",
+      "score": 0.1281,
+      "source": "vector",
+      "metadata": {
+        "title": "# 中华人民共和国电信条例",
+        "doc_type": "行政法规",
+        "category": "行政法规",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/行政法规/电信条例(2016-02-06).md",
+        "original_id": "d3787c6c75b318d3f8e6f65005a9bb65c19fa1025de879233761404e524c450a",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:17.675367",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "61d4ec97-eb70-844b-d1a3-95222c970780",
+      "title": "# 中华人民共和国刑法",
+      "score": 0.1278,
+      "source": "vector",
+      "metadata": {
+        "title": "# 中华人民共和国刑法",
+        "doc_type": "刑法",
+        "category": "刑法",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/刑法/刑法.md",
+        "original_id": "0f94a21c2e86ede0a589250b4a2b92cc0f94bc20e91e634c1dbbe7a79dac48d2",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:17.292664",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "253033ab-9961-83b7-f404-51a467dd481e",
+      "title": "# 中华人民共和国合伙企业法",
+      "score": 0.1276,
+      "source": "vector",
+      "metadata": {
+        "title": "# 中华人民共和国合伙企业法",
+        "doc_type": "民法商法",
+        "category": "民法商法",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/民法商法/合伙企业法(2006-08-27).md",
+        "original_id": "02518693c0432c535d2446d865414598b94759927500533343d269e347696b32",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.811506",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "9fe09c5b-c95a-2560-138a-3e57913a09d7",
+      "title": "# 人民检察院刑事诉讼规则",
+      "score": 0.127,
+      "source": "vector",
+      "metadata": {
+        "title": "# 人民检察院刑事诉讼规则",
+        "doc_type": "司法解释",
+        "category": "司法解释",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/人民检察院刑事诉讼规则(2019-12-02).md",
+        "original_id": "f723c77c6a6a41491d77bd97c2385e5abf03170b75e68c7353aa792252f5b467",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.495194",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "95b8f155-c95b-c682-e6ca-ff89f5965d7f",
+      "title": "# 北京市轨道交通运营安全条例",
+      "score": 0.1256,
+      "source": "vector",
+      "metadata": {
+        "title": "# 北京市轨道交通运营安全条例",
+        "doc_type": "其他",
+        "category": "北京",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/地方性法规/北京/北京市轨道交通运营安全条例.md",
+        "original_id": "b5a34d51cbe463ddbefdd086beeee48c8d23820fd070067a28528fe74d29e518",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:17.749435",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "e5544652-1732-f68f-6674-1ec4944110fc",
+      "title": "# 湖州市物业管理条例",
+      "score": 0.1223,
+      "source": "vector",
+      "metadata": {
+        "title": "# 湖州市物业管理条例",
+        "doc_type": "其他",
+        "category": "浙江",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/地方性法规/浙江/湖州市物业管理条例(2021-04-06).md",
+        "original_id": "19dce98235b258674e8a09ea4bf4d20c673c2802bceef9b1d9cc33c243866e7b",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:18.401423",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "469da595-61d6-4df1-9f84-6eef8514ec1b",
+      "title": "# 河南省水污染防治条例",
+      "score": 0.1222,
+      "source": "vector",
+      "metadata": {
+        "title": "# 河南省水污染防治条例",
+        "doc_type": "其他",
+        "category": "河南",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/地方性法规/河南/河南省水污染防治条例(2019-06-05).md",
+        "original_id": "abbc18ff5180a9b517ddebe51e62e76e0cf2324a4cbfce28862722d6d3a962af",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:17.075665",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "d37f1a10-6997-c755-cf52-a680060e5450",
+      "title": "# 上海市市容环境卫生管理条例",
+      "score": 0.1218,
+      "source": "vector",
+      "metadata": {
+        "title": "# 上海市市容环境卫生管理条例",
+        "doc_type": "其他",
+        "category": "上海",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/地方性法规/上海/上海市市容环境卫生管理条例(2018-12-20).md",
+        "original_id": "a237aed319430decbb5c1b13e1bfc0fe31a6d36b86bde2db01da6d3129331020",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:18.253159",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "kg_001",
+      "title": "知识图谱相关文档",
+      "score": 0.12,
+      "source": "knowledge_graph",
+      "metadata": {
+        "type": "knowledge_graph",
+        "relations": [
+          "REFERENCES",
+          "AMENDS"
+        ]
+      }
+    },
+    {
+      "id": "b43d6e0c-d708-0fa9-8545-c814071642df",
+      "title": "# 人民检察院刑事诉讼规则（试行）",
+      "score": 0.119,
+      "source": "vector",
+      "metadata": {
+        "title": "# 人民检察院刑事诉讼规则（试行）",
+        "doc_type": "司法解释",
+        "category": "司法解释",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/人民检察院刑事诉讼规则（试行）(2012-11-22).md",
+        "original_id": "e07c4cc106e29019b2a9d2e56cb83443acedec0e788e6b088cf1d2e88f885737",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.520746",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "98acfdea-f3dd-7c48-f8c3-851bc9dabb4b",
+      "title": "# 最高人民法院关于适用《中华人民共和国民事诉讼法》的解释",
+      "score": 0.1165,
+      "source": "vector",
+      "metadata": {
+        "title": "# 最高人民法院关于适用《中华人民共和国民事诉讼法》的解释",
+        "doc_type": "司法解释",
+        "category": "司法解释",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院关于适用《民事诉讼法》的解释(2020-12-29).md",
+        "original_id": "54d160de0550ef6e1aa941d01b01de387214afe78b69beba7a5f87b05f9a3387",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.486201",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "48641698-ad5b-208e-7470-075de1da1ebf",
+      "title": "# 最高人民法院关于适用《中华人民共和国刑事诉讼法》的解释",
+      "score": 0.116,
+      "source": "vector",
+      "metadata": {
+        "title": "# 最高人民法院关于适用《中华人民共和国刑事诉讼法》的解释",
+        "doc_type": "司法解释",
+        "category": "司法解释",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院关于适用《刑事诉讼法》的解释(2021-01-26).md",
+        "original_id": "0bd07e22c463163ef24b40360ab83b71c2ab8cd167cf0f1be0ed0dcfba2af6d7",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.409855",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "73d974dc-34ca-d175-47d0-8a08a930c2f5",
+      "title": "# 最高人民法院关于修改《最高人民法院关于在民事审判工作中适用〈中华人民共和国工会法〉若干问题的解释》等二十七件民事类司法解释的决定",
+      "score": 0.1113,
+      "source": "vector",
+      "metadata": {
+        "title": "# 最高人民法院关于修改《最高人民法院关于在民事审判工作中适用〈中华人民共和国工会法〉若干问题的解释》等二十七件民事类司法解释的决定",
+        "doc_type": "司法解释",
+        "category": "司法解释",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院关于修改《最高人民法院关于在民事审判工作中适用〈工会法〉若干问题的解释》等二十七件民事类司法解释的决定.md",
+        "original_id": "c8c3b8c28b589de138cf86566633a70c6cde34fe4e965fe7016d39a8c746f288",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.454680",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "542efc1a-3f91-647e-f150-8382181837b9",
+      "title": "# 最高人民法院关于适用《中华人民共和国刑事诉讼法》的解释",
+      "score": 0.1094,
+      "source": "vector",
+      "metadata": {
+        "title": "# 最高人民法院关于适用《中华人民共和国刑事诉讼法》的解释",
+        "doc_type": "司法解释",
+        "category": "司法解释",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院关于适用《刑事诉讼法》的解释(2012-12-20).md",
+        "original_id": "2dad09c1ce4a1aefc8ed12ec349304dded820f1e4adbdc2dab2b66956e04c3a0",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.421242",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "4e7173bb-ae6c-e3cf-a970-197b0f26058d",
+      "title": "# 最高人民法院关于适用《中华人民共和国民事诉讼法》的解释",
+      "score": 0.1062,
+      "source": "vector",
+      "metadata": {
+        "title": "# 最高人民法院关于适用《中华人民共和国民事诉讼法》的解释",
+        "doc_type": "司法解释",
+        "category": "司法解释",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院关于适用《民事诉讼法》的解释(2022-04-02).md",
+        "original_id": "fd097e9b3dfd84fe00010901a453ebf267751fc2b6b921ec08a6b4337ad163f1",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.414341",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "ec1fd171-3be7-5ba1-3675-0018c86f5aa6",
+      "title": "# 最高人民法院、最高人民检察院关于办理危害生产安全刑事案件适用法律若干问题的解释",
+      "score": 0.1011,
+      "source": "vector",
+      "metadata": {
+        "title": "# 最高人民法院、最高人民检察院关于办理危害生产安全刑事案件适用法律若干问题的解释",
+        "doc_type": "司法解释",
+        "category": "司法解释",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院、最高人民检察院关于办理危害生产安全刑事案件适用法律若干问题的解释(2015-12-14).md",
+        "original_id": "e3a6eee3780bb3d1df49f77e32942a8981fb17af9d5ed295632bf957755fb27b",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.571317",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    }
+  ]
+}

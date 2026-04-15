@@ -1,0 +1,410 @@
+# ============================================================================
+# Athena学习模块 - CI/CD工作流
+# ============================================================================
+# 功能:
+#   1. 代码质量检查
+#   2. 运行完整测试套件
+#   3. 构建Docker镜像
+#   4. 部署到生产环境
+#
+# 触发条件:
+#   - Push到main分支
+#   - Pull Request
+#   - 手动触发
+# ============================================================================
+
+name: Learning Module CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'core/learning/**'
+      - 'tests/core/learning/**'
+      - 'docs/api/LEARNING_MODULE_API.md'
+      - 'docs/learning/**'
+      - '.github/workflows/learning-module-ci.yml'
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'core/learning/**'
+      - 'tests/core/learning/**'
+
+  workflow_dispatch:
+    inputs:
+      skip_tests:
+        description: '跳过测试'
+        required: false
+        type: boolean
+        default: false
+      deploy_environment:
+        description: '部署环境'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+        default: staging
+
+# 环境变量
+env:
+  PYTHON_VERSION: '3.11'
+  PROJECT_NAME: athena-learning-module
+  REGISTRY: ghcr.io
+
+# 权限
+permissions:
+  contents: read
+  packages: write
+
+# 并发控制
+concurrency:
+  group: learning-module-ci
+  cancel-in-progress: false
+
+jobs:
+  # ==========================================================================
+  # 代码质量检查
+  # ==========================================================================
+  code-quality:
+    name: 代码质量检查
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pylint black isort mypy
+
+      - name: 运行Flake8
+        run: |
+          flake8 core/learning/ tests/core/learning/ \
+            --max-line-length=120 \
+            --ignore=E203,E266,W503 \
+            --exclude=__pycache__
+
+      - name: 运行Black检查
+        run: |
+          black --check core/learning/ tests/core/learning/ --line-length=120
+
+      - name: 运行isort检查
+        run: |
+          isort --check-only core/learning/ tests/core/learning/
+
+  # ==========================================================================
+  # 单元测试
+  # ==========================================================================
+  unit-tests:
+    name: 单元测试
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov pytest-asyncio pytest-benchmark
+          pip install -r requirements.txt || true
+
+      - name: 运行单元测试
+        run: |
+          pytest tests/core/learning/test_*.py \
+            -v --tb=short \
+            --cov=core.learning \
+            --cov-report=xml \
+            --cov-report=term-missing
+
+      - name: 上传覆盖率报告
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage.xml
+          flags: learning-unit
+          name: learning-module-unit-coverage
+
+  # ==========================================================================
+  # 集成测试
+  # ==========================================================================
+  integration-tests:
+    name: 集成测试
+    runs-on: ubuntu-latest
+    needs: unit-tests
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: athena_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/athena_test
+      REDIS_URL: redis://localhost:6379
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov pytest-asyncio
+          pip install -r requirements.txt || true
+
+      - name: 运行集成测试
+        run: |
+          pytest tests/core/learning/integration/ \
+            -v --tb=short \
+            --cov=core.learning \
+            --cov-append \
+            --cov-report=xml
+
+      - name: 上传覆盖率报告
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage.xml
+          flags: learning-integration
+          name: learning-module-integration-coverage
+
+  # ==========================================================================
+  # 性能测试
+  # ==========================================================================
+  performance-tests:
+    name: 性能测试
+    runs-on: ubuntu-latest
+    needs: integration-tests
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-benchmark
+          pip install -r requirements.txt || true
+
+      - name: 运行性能测试
+        run: |
+          pytest tests/core/learning/integration/test_performance_stress.py \
+            -v --benchmark-only \
+            --benchmark-json=benchmark_results.json
+
+      - name: 存储基准测试结果
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          tool: 'pytest'
+          output-file-path: benchmark_results.json
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-push: false
+
+  # ==========================================================================
+  # 构建Docker镜像
+  # ==========================================================================
+  build:
+    name: 构建Docker镜像
+    runs-on: ubuntu-latest
+    needs: [code-quality, integration-tests]
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+
+    outputs:
+      image-tag: ${{ steps.meta.outputs.tags }}
+      image-digest: ${{ steps.build.outputs.digest }}
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 登录到Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 提取镜像元数据
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: 构建并推送镜像
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile.learning
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ==========================================================================
+  # 部署到Staging
+  # ==========================================================================
+  deploy-staging:
+    name: 部署到Staging
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: staging
+      url: https://staging.athena.example.com
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: 部署
+        run: |
+          echo "部署到Staging环境..."
+          # 这里添加实际的部署命令
+          # 例如: kubectl apply -f k8s/staging/
+          # 或者: ansible-playbook deploy-staging.yml
+
+      - name: 健康检查
+        run: |
+          echo "等待服务启动..."
+          sleep 30
+          curl -f https://staging.athena.example.com/health || exit 1
+
+  # ==========================================================================
+  # 部署到Production
+  # ==========================================================================
+  deploy-production:
+    name: 部署到Production
+    runs-on: ubuntu-latest
+    needs: [build, deploy-staging]
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.deploy_environment == 'production'
+    environment:
+      name: production
+      url: https://athena.example.com
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: 创建部署回滚
+        run: |
+          echo "保存当前版本用于回滚..."
+          echo "${{ needs.build.outputs.image-tag }}" > rollback_version.txt
+
+      - name: 部署
+        run: |
+          echo "部署到Production环境..."
+          # 这里添加实际的部署命令
+
+      - name: 健康检查
+        run: |
+          echo "等待服务启动..."
+          sleep 60
+          curl -f https://athena.example.com/health || exit 1
+
+      - name: 运行烟雾测试
+        run: |
+          python3 -c "
+import asyncio
+import sys
+sys.path.insert(0, '.')
+
+async def smoke_test():
+    from core.learning.autonomous_learning_system import AutonomousLearningSystem
+
+    system = AutonomousLearningSystem(agent_id='production_smoke_test')
+    await system.learn_from_experience(
+        context={'task': 'smoke_test'},
+        action='test',
+        result={'status': 'success'},
+        reward=0.8
+    )
+    print('✓ 生产环境烟雾测试通过')
+
+asyncio.run(smoke_test())
+          "
+
+  # ==========================================================================
+  # 通知
+  # ==========================================================================
+  notify:
+    name: 发送通知
+    runs-on: ubuntu-latest
+    needs: [build, deploy-staging, deploy-production]
+    if: always()
+
+    steps:
+      - name: 发送成功通知
+        if: ${{ needs.deploy-production.result == 'success' }}
+        run: |
+          echo "✅ 部署成功！"
+
+      - name: 发送失败通知
+        if: ${{ needs.deploy-production.result == 'failure' }}
+        run: |
+          echo "❌ 部署失败！"

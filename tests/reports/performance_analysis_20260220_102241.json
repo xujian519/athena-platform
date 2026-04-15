@@ -1,0 +1,86 @@
+{
+  "analysis_type": "comprehensive_performance_analysis",
+  "timestamp": "2026-02-20T10:22:41.981523",
+  "system_metrics": {
+    "timestamp": "2026-02-20T10:22:10.853818",
+    "cpu_percent": 5.4,
+    "memory_percent": 43.1,
+    "memory_available_gb": 27.292724609375,
+    "disk_usage_percent": 4.0,
+    "network_io": {
+      "bytes_sent": 6692926464,
+      "bytes_recv": 8032452608
+    }
+  },
+  "process_metrics": {
+    "timestamp": "2026-02-20T10:22:11.855422",
+    "memory_rss_mb": 43.6875,
+    "memory_vms_mb": 425090.765625,
+    "cpu_percent": 0.0,
+    "num_threads": 1,
+    "open_files": 0,
+    "connections": 0
+  },
+  "database_performance": {
+    "error": "未找到数据库文件"
+  },
+  "api_performance": {
+    "base_url": "http://localhost:8005",
+    "endpoints": {
+      "/": {
+        "error": "Cannot connect to host localhost:8005 ssl:default [Multiple exceptions: [Errno 61] Connect call failed ('::1', 8005, 0, 0), [Errno 61] Connect call failed ('127.0.0.1', 8005)]",
+        "success_rate": 0
+      },
+      "/api/health": {
+        "error": "Cannot connect to host localhost:8005 ssl:default [Multiple exceptions: [Errno 61] Connect call failed ('127.0.0.1', 8005), [Errno 61] Connect call failed ('::1', 8005, 0, 0)]",
+        "success_rate": 0
+      },
+      "/api/status": {
+        "error": "Cannot connect to host localhost:8005 ssl:default [Multiple exceptions: [Errno 61] Connect call failed ('::1', 8005, 0, 0), [Errno 61] Connect call failed ('127.0.0.1', 8005)]",
+        "success_rate": 0
+      },
+      "/api/agents": {
+        "error": "Cannot connect to host localhost:8005 ssl:default [Multiple exceptions: [Errno 61] Connect call failed ('127.0.0.1', 8005), [Errno 61] Connect call failed ('::1', 8005, 0, 0)]",
+        "success_rate": 0
+      }
+    }
+  },
+  "concurrent_performance": {
+    "total_time": 0.009624242782592773,
+    "num_concurrent": 50,
+    "successful_requests": 0,
+    "failed_requests": 50,
+    "success_rate": 0,
+    "error": "所有并发请求都失败了"
+  },
+  "memory_patterns": {
+    "duration_seconds": 30,
+    "samples_count": 30,
+    "memory": {
+      "initial_mb": 45.421875,
+      "final_mb": 45.421875,
+      "peak_mb": 45.421875,
+      "min_mb": 45.421875,
+      "avg_mb": 45.421875,
+      "std_dev_mb": 0.0,
+      "growth_mb": 0.0
+    },
+    "cpu": {
+      "avg_percent": 3.0,
+      "max_percent": 90.0,
+      "min_percent": 0.0
+    }
+  },
+  "performance_report": {
+    "report_metadata": {
+      "generated_at": "2026-02-20T10:22:41.966878",
+      "analysis_duration": "0:00:31.113072",
+      "system_info": {
+        "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+        "python_version": "3.14.3",
+        "cpu_count": 14,
+        "memory_total_gb": 48.0
+      }
+    }
+  }
+}

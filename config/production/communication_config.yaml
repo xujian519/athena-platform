@@ -1,0 +1,153 @@
+# Athena 通信模块 - 生产环境配置
+# Communication Module - Production Configuration
+
+# 服务器配置
+server:
+  host: "0.0.0.0"
+  port: 8765
+  max_connections: 10000
+  ping_interval: 20.0
+  ping_timeout: 20.0
+  max_message_size: 1048576  # 1MB
+
+# WebSocket 配置
+websocket:
+  enabled: true
+  compression: false  # 禁用压缩以提高性能
+  max_queue_size: 1000
+
+# 认证配置
+auth:
+  enabled: true
+  method: "jwt"
+  secret_key: "${JWT_SECRET_KEY}"  # 从环境变量读取
+  algorithm: "HS256"
+  token_expiration: 3600  # 1小时
+  refresh_token_expiration: 86400  # 24小时
+
+# 持久化配置
+persistence:
+  # 后端类型: memory, redis, file
+  backend: "redis"
+
+  # Redis 配置
+  redis:
+    host: "${REDIS_HOST:localhost}"
+    port: "${REDIS_PORT:6379}"
+    db: "${REDIS_DB:0}"
+    password: "${REDIS_PASSWORD:}"
+    pool_size: 50
+    socket_timeout: 5.0
+    socket_connect_timeout: 5.0
+    retry_on_timeout: true
+    max_connections: 100
+
+  # 文件持久化配置（备用）
+  file:
+    data_dir: "/var/lib/athena/messages"
+    index_file: "/var/lib/athena/messages/index.json"
+    max_file_size: 104857600  # 100MB
+    max_files: 100
+
+  # 消息保留策略
+  retention:
+    enabled: true
+    ttl: 604800  # 7天（秒）
+    cleanup_interval: 3600  # 1小时清理一次
+
+# 监控配置
+monitoring:
+  enabled: true
+  prometheus:
+    enabled: true
+    port: 9090
+    path: "/metrics"
+
+  # 日志配置
+  logging:
+    level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+    format: "json"  # json, text
+    output: "/var/log/athena/communication.log"
+    max_size: 104857600  # 100MB
+    max_backups: 10
+    rotation: "daily"
+
+# 性能配置
+performance:
+  # 批处理配置
+  batch:
+    enabled: true
+    max_size: 100
+    timeout: 0.1  # 100ms
+
+  # 连接池配置
+  pool:
+    min_size: 10
+    max_size: 100
+    max_idle_time: 300  # 5分钟
+    validation_interval: 60  # 1分钟
+
+  # 消息队列配置
+  queue:
+    max_size: 10000
+    max_priority_size: 1000
+    flush_interval: 0.05  # 50ms
+
+# 安全配置
+security:
+  # 速率限制
+  rate_limit:
+    enabled: true
+    requests_per_minute: 1000
+    burst: 100
+
+  # IP 白名单（可选）
+  ip_whitelist: []
+
+  # CORS 配置
+  cors:
+    enabled: true
+    origins: ["*"]  # 生产环境应限制具体域名
+    methods: ["GET", "POST", "OPTIONS"]
+    headers: ["Content-Type", "Authorization"]
+
+# 消息重试配置
+retry:
+  max_attempts: 3
+  backoff_base: 1.0  # 秒
+  backoff_multiplier: 2.0
+  max_backoff: 60.0  # 秒
+
+# 死信队列配置
+dead_letter:
+  enabled: true
+  max_size: 10000
+  ttl: 2592000  # 30天（秒）
+
+# 健康检查配置
+health_check:
+  enabled: true
+  endpoint: "/health"
+  interval: 30  # 秒
+  timeout: 5  # 秒
+
+  # 依赖服务检查
+  dependencies:
+    - name: "redis"
+      type: "redis"
+      required: true
+    - name: "database"
+      type: "database"
+      required: false
+
+# 优雅关闭配置
+graceful_shutdown:
+  timeout: 30  # 秒
+  drain_timeout: 10  # 秒
+
+# 部署环境标识
+environment:
+  name: "production"
+  region: "cn-north-1"
+  zone: "a"
+  instance_id: "${INSTANCE_ID:unknown}"

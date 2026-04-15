@@ -1,0 +1,130 @@
+repos:
+  # Go格式化和基本检查
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-toml
+      - id: check-xml
+      - id: check-shebang-scripts
+      - id: check-executables-have-shebangs
+      - id: mixed-line-ending
+
+  # Go特定的pre-commit钩子
+  - repo: https://github.com/pre-commit/pre-commit
+    rev: v3.2.4
+    hooks:
+      - id: go-mod-tidy
+      - id: go-fmt
+      - id: go-vet
+      - id: go-build
+
+  # golangci-lint
+  - repo: https://github.com/golangci/golangci-lint
+    rev: v1.54.2
+    hooks:
+      - id: golangci-lint
+        args: [--timeout=5m]
+        pass_filenames: false
+
+  # 安全扫描
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+
+  # 文档检查
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.36.0
+    hooks:
+      - id: markdownlint
+        args: [--fix]
+        exclude: 'vendor/|\.git/|\.github/'
+
+  # Docker文件检查
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.0
+    hooks:
+      - id: hadolint-docker
+        args: [--ignore, DL3008, --ignore, DL3009]
+
+  # YAML格式化
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.0.0
+    hooks:
+      - id: prettier
+        types: [yaml]
+        args: [--tab-width=2, --prose-wrap=preserve]
+
+  # Shell脚本检查
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.9.0.5
+    hooks:
+      - id: shellcheck
+        args: [--severity=warning]
+
+  # 提交信息检查
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: 3.5.2
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
+
+  # 自定义钩子：生成Swagger文档
+  - repo: local
+    hooks:
+      - id: swagger-gen
+        name: Generate Swagger docs
+        entry: bash -c 'swag init -g cmd/gateway/main.go -o docs'
+        language: system
+        files: ^.*\.(go|go.mod)$
+        pass_filenames: false
+        always_run: false
+
+  # 自定义钩子：运行测试
+  - repo: local
+    hooks:
+      - id: go-test
+        name: Go test
+        entry: go test
+        language: system
+        args: [-v, ./...]
+        pass_filenames: false
+        always_run: false
+
+  # 自定义钩子：构建检查
+  - repo: local
+    hooks:
+      - id: go-build-check
+        name: Go build check
+        entry: go build
+        language: system
+        args: [-o, /tmp/gateway-test, cmd/gateway/main.go]
+        pass_filenames: false
+        always_run: false
+
+# 全局配置
+default_stages: [commit]
+fail_fast: false
+
+# CI配置
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit.com hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ''
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false

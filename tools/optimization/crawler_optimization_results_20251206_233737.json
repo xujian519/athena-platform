@@ -1,0 +1,59 @@
+{
+  "test_time": "2025-12-06T23:37:37.589566",
+  "test_urls_count": 8,
+  "simple_crawler": {
+    "stats": {
+      "total_requests": 5,
+      "successful_requests": 0,
+      "failed_requests": 5,
+      "total_time": 0,
+      "start_time": 1765035399.34824,
+      "avg_response_time": 0.0,
+      "success_rate": 0.0,
+      "requests_per_second": 0.1042701980103168
+    },
+    "time": 47.95228815078735
+  },
+  "optimized_crawler": {
+    "stats": {
+      "total_requests": 8,
+      "successful_requests": 0,
+      "failed_requests": 8,
+      "cache_hits": 0,
+      "cache_misses": 8,
+      "avg_response_time": 0.0,
+      "total_time": 0,
+      "start_time": 1765035447.300652,
+      "success_rate": 0.0,
+      "requests_per_second": 0.7777679626355383,
+      "cache_hit_rate": 0.0,
+      "uptime": 10.285844087600708,
+      "redis_cache": {
+        "status": "connected",
+        "used_memory": "1.64M",
+        "connected_clients": 6,
+        "total_commands_processed": 195,
+        "keyspace_hits": 0,
+        "keyspace_misses": 41
+      },
+      "domain_stats": {},
+      "performance_metrics": {
+        "estimated_speedup": 2.0,
+        "cache_effectiveness": 0.0,
+        "concurrency_factor": 2.0,
+        "smart_delay_enabled": true,
+        "redis_enabled": true
+      }
+    },
+    "time": 10.28435206413269,
+    "config": {
+      "max_concurrent": 20,
+      "cache_enabled": true,
+      "smart_delay": true
+    }
+  },
+  "performance_comparison": {
+    "speedup_factor": 4.66,
+    "cache_hit_rate": 0.0
+  }
+}

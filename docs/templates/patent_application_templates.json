@@ -1,0 +1,466 @@
+{
+  "patent_application_templates": {
+    "metadata": {
+      "version": "1.0",
+      "created_date": "2025-12-12",
+      "description": "专利申请文件JSON结构模板，基于专利法及其实施细则制定",
+      "legal_basis": [
+        "《中华人民共和国专利法》",
+        "《中华人民共和国专利法实施细则》"
+      ]
+    },
+
+    "abstract_template": {
+      "name": "说明书摘要模板",
+      "description": "基于专利法实施细则第23条的摘要撰写要求",
+      "legal_reference": "专利法实施细则第23条",
+      "structure": {
+        "basic_info": {
+          "title": {
+            "type": "string",
+            "required": true,
+            "max_length": 25,
+            "description": "发明或实用新型的名称"
+          },
+          "technical_field": {
+            "type": "string",
+            "required": true,
+            "description": "所属技术领域"
+          }
+        },
+        "content": {
+          "technical_problem": {
+            "type": "string",
+            "required": true,
+            "description": "要解决的技术问题"
+          },
+          "technical_solution": {
+            "type": "string",
+            "required": true,
+            "description": "解决技术问题的技术方案要点"
+          },
+          "main_use": {
+            "type": "string",
+            "required": true,
+            "description": "主要用途"
+          }
+        },
+        "optional_elements": {
+          "chemical_formula": {
+            "type": "string",
+            "required": false,
+            "description": "最能说明发明的化学式（如有）"
+          },
+          "figure_reference": {
+            "type": "object",
+            "required": false,
+            "properties": {
+              "figure_number": {
+                "type": "string",
+                "description": "附图编号"
+              },
+              "figure_description": {
+                "type": "string",
+                "description": "附图简要说明"
+              }
+            },
+            "description": "最能说明技术特征的附图（如有）"
+          }
+        },
+        "constraints": {
+          "word_count": {
+            "max": 300,
+            "description": "摘要文字部分不得超过300字"
+          },
+          "prohibited_content": [
+            "商业性宣传用语"
+          ],
+          "figure_requirements": {
+            "min_size": "4厘米×6厘米时仍能清晰分辨",
+            "description": "附图应保证缩小到4×6厘米时仍清晰"
+          }
+        }
+      }
+    },
+
+    "claims_template": {
+      "name": "权利要求书模板",
+      "description": "基于专利法实施细则第19-22条的权利要求书撰写要求",
+      "legal_reference": "专利法实施细则第19-22条",
+      "structure": {
+        "basic_requirements": {
+          "technical_features": {
+            "type": "array",
+            "required": true,
+            "description": "记载发明或实用新型的技术特征"
+          },
+          "numbering": {
+            "type": "sequential",
+            "format": "arabic",
+            "description": "阿拉伯数字顺序编号"
+          },
+          "terminology_consistency": {
+            "description": "科技术语应与说明书一致"
+          }
+        },
+        "independent_claims": {
+          "type": "object",
+          "required": true,
+          "properties": {
+            "preamble": {
+              "type": "string",
+              "required": true,
+              "description": "技术方案的主题名称和与现有技术共有的必要技术特征"
+            },
+            "characterizing_part": {
+              "type": "string",
+              "required": true,
+              "description": "使用'其特征是……'等用语，写明区别于现有技术的技术特征"
+            }
+          },
+          "constraints": {
+            "quantity": {
+              "general": "一个发明或实用新型应当只有一个独立权利要求",
+              "exceptions": "特定情况下可以有多个"
+            },
+            "scope": "从整体上反映技术方案，记载解决技术问题的必要技术特征"
+          }
+        },
+        "dependent_claims": {
+          "type": "object",
+          "properties": {
+            "reference_part": {
+              "type": "string",
+              "required": true,
+              "description": "引用的权利要求的编号及其主题名称"
+            },
+            "limitation_part": {
+              "type": "string",
+              "required": true,
+              "description": "发明或实用新型附加的技术特征"
+            }
+          },
+          "constraints": {
+            "reference_rule": "只能引用在前的权利要求",
+            "multiple_reference": {
+              "allowed": true,
+              "format": "择一方式引用",
+              "restriction": "不得作为另一项多项从属权利要求的基础"
+            }
+          }
+        },
+        "prohibited_elements": [
+          "插图",
+          "除绝对必要外不得使用'如说明书……部分所述'或'如图……所示'的用语"
+        ],
+        "allowed_elements": [
+          "化学式",
+          "数学式",
+          "引用说明书附图中相应的标记（置于括号内）"
+        ]
+      }
+    },
+
+    "specification_template": {
+      "name": "专利说明书模板",
+      "description": "基于专利法实施细则第17条的说明书撰写要求",
+      "legal_reference": "专利法实施细则第17条",
+      "structure": {
+        "title": {
+          "type": "string",
+          "required": true,
+          "consistency": "应当与请求书中的名称一致"
+        },
+        "sections": {
+          "technical_field": {
+            "type": "string",
+            "required": true,
+            "description": "写明要求保护的技术方案所属的技术领域"
+          },
+          "background_art": {
+            "type": "object",
+            "required": true,
+            "properties": {
+              "description": {
+                "type": "string",
+                "required": true,
+                "description": "对发明或实用新型的理解、检索、审查有用的背景技术"
+              },
+              "references": {
+                "type": "array",
+                "description": "引证反映背景技术的文件（有可能的）"
+              }
+            }
+          },
+          "disclosure": {
+            "type": "object",
+            "required": true,
+            "properties": {
+              "technical_problem": {
+                "type": "string",
+                "required": true,
+                "description": "要解决的技术问题"
+              },
+              "technical_solution": {
+                "type": "string",
+                "required": true,
+                "description": "解决技术问题的技术方案"
+              },
+              "beneficial_effects": {
+                "type": "string",
+                "required": true,
+                "description": "对照现有技术写明的有益效果"
+              }
+            }
+          },
+          "brief_description_of_drawings": {
+            "type": "array",
+            "required": {
+              "condition": "说明书有附图时必需",
+              "description": "对各幅附图作简略说明"
+            },
+            "items": {
+              "figure_number": {
+                "type": "string",
+                "description": "附图编号"
+              },
+              "figure_description": {
+                "type": "string",
+                "description": "附图简要说明"
+              }
+            }
+          },
+          "detailed_description": {
+            "type": "object",
+            "required": true,
+            "properties": {
+              "implementation": {
+                "type": "string",
+                "required": true,
+                "description": "详细写明实现发明或实用新型的优选方式"
+              },
+              "dev/examples": {
+                "type": "array",
+                "description": "必要时举例说明"
+              },
+              "figure_reference": {
+                "type": "string",
+                "required": {
+                  "condition": "有附图时",
+                  "description": "对照附图进行说明"
+                }
+              }
+            }
+          }
+        },
+        "sequence_listing": {
+          "applicability": {
+            "condition": "包含核苷酸或者氨基酸序列时",
+            "requirement": "应当包括符合规定的序列表"
+          },
+          "submission": {
+            "separate_part": "作为说明书的一个单独部分提交",
+            "computer_readable": "提交计算机可读形式的副本"
+          }
+        },
+        "utility_model_requirements": {
+          "mandatory_drawings": {
+            "description": "实用新型专利申请说明书应当有表示要求保护的产品的形状、构造或者其结合的附图"
+          }
+        },
+        "writing_style": {
+          "language": "用词规范、语句清楚",
+          "prohibited_expressions": [
+            "如权利要求……所述的……一类的引用语",
+            "商业性宣传用语"
+          ],
+          "section_headers": {
+            "requirement": "在说明书每一部分前面写明标题",
+            "exception": "能节约篇幅并使他人能够准确理解时可用其他方式"
+          }
+        }
+      }
+    },
+
+    "drawings_template": {
+      "name": "说明书附图模板",
+      "description": "基于专利法实施细则第18条的附图要求",
+      "legal_reference": "专利法实施细则第18条",
+      "structure": {
+        "numbering": {
+          "format": "按'图1，图2，……'顺序编号排列",
+          "type": "sequential_arabic"
+        },
+        "consistency_requirements": {
+          "text_figure_reference": "说明书文字部分中未提及的附图标记不得在附图中出现",
+          "figure_text_reference": "附图中未出现的附图标记不得在说明书文字部分中提及",
+          "component_consistency": "表示同一组成部分的附图标记应当一致"
+        },
+        "content_restrictions": {
+          "annotations": "附图中除必需的词语外，不应当含有其他注释"
+        },
+        "referencing_in_claims": {
+          "allowed": true,
+          "format": "可以引用说明书附图中相应的标记",
+          "placement": "放在相应的技术特征后并置于括号内",
+          "limitation": "附图标记不得解释为对权利要求的限制"
+        },
+        "utility_model_requirement": {
+          "mandatory": "实用新型专利申请必须有附图",
+          "purpose": "表示要求保护的产品的形状、构造或者其结合"
+        },
+        "figure_types": {
+          "allowed": [
+            "结构示意图",
+            "流程图",
+            "框图",
+            "电路图",
+            "实物照片（必要时）"
+          ]
+        }
+      }
+    },
+
+    "request_form_template": {
+      "name": "请求书模板",
+      "description": "基于专利法实施细则第16条的请求书撰写要求",
+      "legal_reference": "专利法实施细则第16条",
+      "structure": {
+        "basic_information": {
+          "title": {
+            "type": "string",
+            "required": true,
+            "description": "发明、实用新型或者外观设计的名称"
+          },
+          "applicant_info": {
+            "type": "object",
+            "required": true,
+            "properties": {
+              "name": {
+                "type": "string",
+                "required": true
+              },
+              "address": {
+                "type": "string",
+                "required": true
+              },
+              "postal_code": {
+                "type": "string",
+                "required": true
+              },
+              "organization_code": {
+                "type": "string",
+                "description": "中国单位申请时"
+              },
+              "id_number": {
+                "type": "string",
+                "description": "个人申请时"
+              },
+              "nationality": {
+                "type": "string",
+                "description": "外国申请人"
+              }
+            }
+          },
+          "inventor_info": {
+            "type": "object",
+            "required": true,
+            "properties": {
+              "name": {
+                "type": "string",
+                "required": true
+              }
+            }
+          },
+          "patent_attorney": {
+            "type": "object",
+            "required": {
+              "condition": "委托专利代理机构时"
+            },
+            "properties": {
+              "agency_name": {
+                "type": "string",
+                "required": true
+              },
+              "agency_code": {
+                "type": "string",
+                "required": true
+              },
+              "attorney_name": {
+                "type": "string",
+                "required": true
+              },
+              "license_number": {
+                "type": "string",
+                "required": true
+              },
+              "contact_phone": {
+                "type": "string",
+                "required": true
+              }
+            }
+          }
+        },
+        "priority_claim": {
+          "type": "object",
+          "required": {
+            "condition": "要求优先权时"
+          },
+          "properties": {
+            "first_filing_date": {
+              "type": "date",
+              "required": true
+            },
+            "first_filing_number": {
+              "type": "string",
+              "required": true
+            },
+            "original_office": {
+              "type": "string",
+              "required": true,
+              "description": "原受理机构名称"
+            }
+          }
+        },
+        "additional_sections": {
+          "signature": {
+            "type": "signature",
+            "required": true
+          },
+          "document_list": {
+            "type": "array",
+            "required": true,
+            "description": "申请文件清单"
+          },
+          "additional_file_list": {
+            "type": "array",
+            "required": true,
+            "description": "附加文件清单"
+          }
+        }
+      }
+    },
+
+    "usage_instructions": {
+      "extraction_process": {
+        "step_1": "识别文档类型（摘要、权利要求书、说明书、附图、请求书）",
+        "step_2": "选择对应的JSON模板",
+        "step_3": "按照模板结构提取信息",
+        "step_4": "验证提取信息的完整性和合规性",
+        "step_5": "填充JSON结构"
+      },
+      "validation_rules": {
+        "required_fields": "确保所有必填字段都已填写",
+        "field_constraints": "检查字段长度、格式等约束条件",
+        "consistency_check": "确保各文档间的引用关系一致",
+        "legal_compliance": "验证符合专利法及实施细则的要求"
+      },
+      "data_quality": {
+        "accuracy": "确保提取的信息准确反映原文",
+        "completeness": "不要遗漏重要技术特征",
+        "consistency": "保持术语使用的一致性",
+        "clarity": "确保技术描述清晰明确"
+      }
+    }
+  }
+}

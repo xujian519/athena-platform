@@ -1,0 +1,208 @@
+{
+  "mcp_services": {
+    "gaode_maps": {
+      "name": "高德地图公共服务",
+      "description": "Athena工作平台集成的公共高德地图MCP服务，提供地理编码、路径规划、天气查询等完整地理空间智能功能",
+      "version": "1.0.0",
+      "status": "active",
+      "type": "geospatial",
+      "maintainer": "Athena Platform Team",
+      "contact": "athena-platform@example.com",
+
+      "startup": {
+        "command": "python3",
+        "args": ["src/amap_mcp_server/server.py"],
+        "working_directory": "/Users/xujian/Athena工作平台/mcp-servers/gaode-mcp-server",
+        "environment": {
+          "PYTHONPATH": "/Users/xujian/Athena工作平台/mcp-servers/gaode-mcp-server",
+          "AMAP_API_KEY": "4c98d375577d64cfce0d4d0dfee25fb9",
+          "AMAP_SECRET_KEY": "",
+          "MCP_LOG_LEVEL": "INFO"
+        },
+        "port": 8899,
+        "protocol": "stdio"
+      },
+
+      "tools": {
+        "gaode_geocode": {
+          "name": "地理编码工具",
+          "description": "提供地址到坐标、坐标到地址的双向转换功能",
+          "category": "geocoding",
+          "capabilities": [
+            "地址转坐标（地理编码）",
+            "坐标转地址（逆地理编码）",
+            "批量地理编码",
+            "结构化地址解析"
+          ],
+          "use_cases": [
+            "地址标准化处理",
+            "地图标注定位",
+            "位置数据分析",
+            "地理信息 enrichment"
+          ]
+        },
+
+        "gaode_poi_search": {
+          "name": "POI搜索工具",
+          "description": "强大的兴趣点搜索功能，支持多种搜索模式",
+          "category": "search",
+          "capabilities": [
+            "关键字POI搜索",
+            "周边POI搜索",
+            "多边形区域搜索",
+            "POI详细信息查询"
+          ],
+          "use_cases": [
+            "商家位置查找",
+            "服务网点分析",
+            "竞争对手分析",
+            "区域商业调查"
+          ]
+        },
+
+        "gaode_route_planning": {
+          "name": "路径规划工具",
+          "description": "多种出行方式的智能路径规划",
+          "category": "navigation",
+          "capabilities": [
+            "驾车路径规划",
+            "步行路径规划",
+            "骑行路径规划",
+            "公交路线规划",
+            "多种路径策略选择",
+            "避开特定道路或区域"
+          ],
+          "use_cases": [
+            "出行路线规划",
+            "物流配送优化",
+            "服务半径分析",
+            "可达性分析"
+          ]
+        },
+
+        "gaode_map_service": {
+          "name": "地图服务工具",
+          "description": "丰富的地图相关服务集合",
+          "category": "mapping",
+          "capabilities": [
+            "静态地图生成",
+            "实时天气查询",
+            "坐标系统转换",
+            "行政区划查询",
+            "IP地理位置定位"
+          ],
+          "use_cases": [
+            "地图图片生成",
+            "天气信息服务",
+            "坐标系统转换",
+            "区域信息查询"
+          ]
+        },
+
+        "gaode_traffic_service": {
+          "name": "交通服务工具",
+          "description": "实时交通信息查询和分析",
+          "category": "traffic",
+          "capabilities": [
+            "矩形区域交通态势",
+            "圆形区域交通态势",
+            "指定道路交通状况",
+            "交通拥堵指数分析"
+          ],
+          "use_cases": [
+            "实时路况查询",
+            "拥堵路段分析",
+            "出行时间预测",
+            "交通规划支持"
+          ]
+        },
+
+        "gaode_geofence": {
+          "name": "地理围栏工具",
+          "description": "地理围栏管理功能（需要企业级权限）",
+          "category": "geofence",
+          "capabilities": [
+            "创建地理围栏",
+            "查询地理围栏",
+            "更新围栏信息",
+            "删除地理围栏"
+          ],
+          "use_cases": [
+            "电子围栏监控",
+            "区域权限管理",
+            "位置触发服务",
+            "地理告警系统"
+          ],
+          "permissions": "enterprise_only",
+          "note": "需要高德地图企业级API权限"
+        }
+      },
+
+      "api_limits": {
+        "requests_per_minute": 100,
+        "requests_per_day": 30000,
+        "concurrent_requests": 10,
+        "rate_limiting": true,
+        "caching": true
+      },
+
+      "monitoring": {
+        "health_check_endpoint": "/health",
+        "metrics_enabled": true,
+        "log_level": "INFO",
+        "error_tracking": true
+      },
+
+      "integration": {
+        "supported_clients": [
+          "Claude Desktop",
+          "Cursor IDE",
+          "Continue.dev",
+          "其他MCP兼容客户端"
+        ],
+        "configuration_examples": {
+          "claude_desktop": {
+            "mcpServers": {
+              "gaode-maps": {
+                "command": "python3",
+                "args": ["-m", "amap_mcp_server.server"],
+                "cwd": "/Users/xujian/Athena工作平台/mcp-servers/gaode-mcp-server"
+              }
+            }
+          }
+        }
+      },
+
+      "documentation": {
+        "user_guide": "/docs/mcp/gaode-maps-user-guide.md",
+        "api_reference": "/docs/mcp/gaode-maps-api-reference.md",
+        "examples": "/docs/mcp/gaode-maps-examples.md",
+        "troubleshooting": "/docs/mcp/gaode-maps-troubleshooting.md"
+      },
+
+      "support": {
+        "service_status": "https://status.amap.com/",
+        "developer_documentation": "https://lbs.amap.com/api/",
+        "contact": {
+          "platform_team": "athena-platform@example.com",
+          "technical_support": "support@example.com"
+        }
+      }
+    }
+  },
+
+  "platform_integration": {
+    "auto_start": true,
+    "service_discovery": true,
+    "health_monitoring": true,
+    "log_aggregation": true,
+    "metrics_collection": true
+  },
+
+  "security": {
+    "api_key_rotation": "manual",
+    "access_logging": true,
+    "request_validation": true,
+    "error_sanitization": true
+  }
+}

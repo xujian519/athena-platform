@@ -1,0 +1,18 @@
+{
+  "mcp": {
+    "servers": {
+      "ip-agent": {
+        "command": "node",
+        "args": [
+          "/Users/xujian/Athena工作平台/services/ip-mcp-server/dist/index.js"
+        ],
+        "env": {
+          "MLX_BASE_URL": "http://127.0.0.1:8765",
+          "DEFAULT_MODEL": "deepseek-r1",
+          "KNOWLEDGE_BASE_PATH": "/Users/xujian/.openclaw/workspace/knowledge-base",
+          "LOG_LEVEL": "info"
+        }
+      }
+    }
+  }
+}

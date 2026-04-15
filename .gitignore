@@ -1,0 +1,116 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs & Runtime
+*.log
+logs/
+
+# Temporary / Cache
+*.tmp
+*.bak
+*.temp
+*.pid
+pids/
+htmlcov/
+coverage.xml
+
+# Environment
+.env.local
+.env.*.local
+
+# Archives
+*.gz
+*.tar
+*.zip
+*.rar
+
+# ============================================================
+# 大文件排除 - 防止仓库膨胀
+# ============================================================
+
+# AI 模型文件 (应使用外部存储或 Git LFS)
+models/
+*.pt
+*.onnx
+*.gguf
+*.safetensors
+*.bin
+*.h5
+*.pkl
+
+# 运行时数据库数据 (Docker 管理)
+data/neo4j/
+data/qdrant/
+data/postgres/
+data/prometheus/
+data/grafana/
+data/support_data/
+data/pids/
+data/logs/
+
+# 备份文件
+backups/
+backup/
+*.backup
+*.backup_*
+
+# 向量数据 (运行时生成)
+**/qdrant_storage/
+**/qdrant/
+*_vectors/
+*_embeddings/
+
+# Go 编译产物
+gateway-unified/gateway
+gateway-unified/bin/
+core/gateway/gateway
+api-gateway/athena-gateway
+*.exe
+
+# Node.js
+node_modules/
+
+# Coverage & Test 输出
+.coverage
+htmlcov/
+coverage.xml
+*.cover
+.pytest_cache/
+pytestdebug.log
+
+# 虚拟环境
+.venv/
+athena_env/
+athena_env_py311/
+venv/
+env/
+
+# Poetry
+poetry.toml
+
+# MCP 服务器依赖
+mcp-servers/*/node_modules/
+mcp-servers/*/.env
+external_projects/claude-code/
+external_projects/claude-code/

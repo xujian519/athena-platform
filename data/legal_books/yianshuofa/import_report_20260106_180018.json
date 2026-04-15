@@ -1,0 +1,28 @@
+{
+  "pdf_processing": {
+    "status": "success",
+    "stats": {
+      "total_pages": 461,
+      "text_pages": 0,
+      "ocr_pages": 461,
+      "total_chunks": 14,
+      "case_stories": 0,
+      "legal_rules": 0
+    },
+    "output_dir": "data/legal_books/yianshuofa",
+    "vector_docs_count": 14,
+    "graph_nodes_count": 1,
+    "graph_relations_count": 0
+  },
+  "vector_import": {
+    "status": "completed",
+    "success_count": 0,
+    "failed_count": 14,
+    "errors": [
+      "批次 1 导入失败: 'BGEEmbeddingService' object has no attribute 'get_embeddings'"
+    ],
+    "collection_name": "legal_books_yianshuofa"
+  },
+  "graph_import": null,
+  "total_time": 95.286347
+}

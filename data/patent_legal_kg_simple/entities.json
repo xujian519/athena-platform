@@ -1,0 +1,511 @@
+{
+  "entity_1": {
+    "id": "entity_1",
+    "name": "最高人民法院关于审理专利纠纷案件适用法律问题的若干规定_20201229",
+    "type": "law",
+    "description": "最高人民法院关于审理专利纠纷案件\n适用法律问题的若干规定\n（2001年6月19日最高人民法院审判委员会第1180次会议通过，根据2013年2月25日最高人民法院审判委员会第1570次会议通过的《最高人民法院关于修改〈最高人民法院关于审理专利纠纷案件适用法律问题的若干规定〉的决定》第一次修正，根据2015年1月19日最高人民法院审判委员会第1641次会议通过的《最高人民法院关于修改〈最高人民法院关于...",
+    "source": "/Users/xujian/学习资料/专利/专利法律法规/最高人民法院关于审理专利纠纷案件适用法律问题的若干规定_20201229.docx",
+    "properties": {
+      "file_type": "docx",
+      "content_length": 3603,
+      "created_at": "2025-12-15T00:17:21.515119"
+    }
+  },
+  "entity_2": {
+    "id": "entity_2",
+    "name": "国防专利条例_20040917",
+    "type": "law",
+    "description": "国防专利条例\n(2004年9月17日中华人民共和国国务院、中华人民共和国中央军事委员会令第418号公布　自2004年11月1日起施行)\n第一章　总则\n第一条　为了保护有关国防的发明专利权，确保国家秘密，便利发明创造的推广应用，促进国防科学技术的发展，适应国防现代化建设的需要，根据《中华人民共和国专利法》，制定本条例。\n第二条　国防专利是指涉及国防利益以及对国防建设具有潜在作用需要保密的发明专利。\n...",
+    "source": "/Users/xujian/学习资料/专利/专利法律法规/国防专利条例_20040917.docx",
+    "properties": {
+      "file_type": "docx",
+      "content_length": 4847,
+      "created_at": "2025-12-15T00:17:21.515131"
+    }
+  },
+  "entity_3": {
+    "id": "entity_3",
+    "name": "中华人民共和国专利法_20201017",
+    "type": "law",
+    "description": "中华人民共和国专利法\n（1984年3月12日第六届全国人民代表大会常务委员会第四次会议通过　根据1992年9月4日第七届全国人民代表大会常务委员会第二十七次会议《关于修改〈中华人民共和国专利法〉的决定》第一次修正　根据2000年8月25日第九届全国人民代表大会常务委员会第十七次会议《关于修改〈中华人民共和国专利法〉的决定》第二次修正　根据2008年12月27日第十一届全国人民代表大会常务委员会第六...",
+    "source": "/Users/xujian/学习资料/专利/专利法律法规/中华人民共和国专利法_20201017.docx",
+    "properties": {
+      "file_type": "docx",
+      "content_length": 11299,
+      "created_at": "2025-12-15T00:17:21.515134"
+    }
+  },
+  "entity_4": {
+    "id": "entity_4",
+    "name": "4-现有技术和现有设计（200408）",
+    "type": "law",
+    "description": "# 现有技术和现有设计\n\n\n## 基本概念\n\n\n### A23.5：现有技术是指申请日以前在国内外为公众所知的技术。现有技术包括在申请日(有优先权的，指优先权日) 以前在国内外出版物上公开发表、在国内外公开使用或者以其他方式为公众所知的技术。\n\n\n### A23.4:  本法所称现有设计，是指申请日以前在国内外为公众所知的设计。\n\n\n### 现有技术应当是在申请日以前公众能够得知的技术内容。换句话...",
+    "source": "/Users/xujian/学习资料/专利/专利法律法规/4-现有技术和现有设计（200408）.md",
+    "properties": {
+      "file_type": "md",
+      "content_length": 39617,
+      "created_at": "2025-12-15T00:17:21.515136"
+    }
+  },
+  "entity_5": {
+    "id": "entity_5",
+    "name": "专利代理条例_20181106",
+    "type": "law",
+    "description": "专利代理条例\n(1991年3月4日中华人民共和国国务院令第76号发布　2018年9月6日国务院第23次常务会议修订通过　2018年11月6日中华人民共和国国务院令第706号公布　自2019年3月1日起施行)\n第一章　总则\n第一条　为了规范专利代理行为，保障委托人、专利代理机构和专利代理师的合法权益，维护专利代理活动的正常秩序，促进专利代理行业健康发展，根据《中华人民共和国专利法》，制定本条例。\n第...",
+    "source": "/Users/xujian/学习资料/专利/专利法律法规/专利代理条例_20181106.docx",
+    "properties": {
+      "file_type": "docx",
+      "content_length": 3604,
+      "created_at": "2025-12-15T00:17:21.515138"
+    }
+  },
+  "entity_6": {
+    "id": "entity_6",
+    "name": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释（二）_20201229",
+    "type": "law",
+    "description": "最高人民法院\n关于审理侵犯专利权纠纷案件应用法律\n若干问题的解释（二）\n（2016年1月25日最高人民法院审判委员会\n第1676次会议通过，根据2020年12月23日最高人民法院\n审判委员会第1823次会议通过的《最高人民法院关于修改\n〈最高人民法院关于审理侵犯专利权纠纷案件应用法律若干\n问题的解释（二）〉等十八件知识产权类司法解释的决定》修正）\n　　为正确审理侵犯专利权纠纷案件，根据《中华人民共...",
+    "source": "/Users/xujian/学习资料/专利/专利法律法规/最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释（二）_20201229.docx",
+    "properties": {
+      "file_type": "docx",
+      "content_length": 4887,
+      "created_at": "2025-12-15T00:17:21.515140"
+    }
+  },
+  "entity_7": {
+    "id": "entity_7",
+    "name": "最高人民法院关于审理申请注册的药品相关的专利权纠纷民事案件适用法律若干问题的规定_20210704",
+    "type": "law",
+    "description": "最高人民法院关于审理\n申请注册的药品相关的专利权纠纷\n民事案件适用法律若干问题的规定\n法释〔2021〕13号\n（2021年5月24日最高人民法院审判委员会第1839次会议通过，自2021年7月5日起施行）\n为正确审理申请注册的药品相关的专利权纠纷民事案件，根据《中华人民共和国专利法》《中华人民共和国民事诉讼法》等有关法律规定，结合知识产权审判实际，制定本规定。\n第一条　当事人依据专利法第七十六条规...",
+    "source": "/Users/xujian/学习资料/专利/专利法律法规/最高人民法院关于审理申请注册的药品相关的专利权纠纷民事案件适用法律若干问题的规定_20210704.docx",
+    "properties": {
+      "file_type": "docx",
+      "content_length": 1733,
+      "created_at": "2025-12-15T00:17:21.515142"
+    }
+  },
+  "entity_8": {
+    "id": "entity_8",
+    "name": "专利审查指南（最新版）",
+    "type": "law",
+    "description": " \n \n \n专利审查指南  \n \n \n \n \n2023  \n \n国家知识产权局  制定 \n \n \n \n \n \n \n \n \n \n \n \n \n1  \n总 目 录 \n \n \n第一部分  初步审查  ................................ ................................ ................................ ........",
+    "source": "/Users/xujian/学习资料/专利/专利法律法规/专利审查指南（最新版）.pdf",
+    "properties": {
+      "file_type": "pdf",
+      "content_length": 599629,
+      "created_at": "2025-12-15T00:17:21.515143"
+    }
+  },
+  "entity_9": {
+    "id": "entity_9",
+    "name": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释_20091228",
+    "type": "law",
+    "description": "中华人民共和国最高人民法院\n公    告\n最高人民法院《关于审理侵犯专利权纠纷案件应用法律若干问题的解释》已于2009年12月21日由最高人民法院审判委员会第1480次会议通过，现予公布，自2010年1月1日起施行。\n2009年12月28日\n最高人民法院\n关于审理侵犯专利权纠纷案件\n应用法律若干问题的解释\n法释〔2009〕21号\n（2009年12月21日最高人民法院审判委员会第1480次会议通过　...",
+    "source": "/Users/xujian/学习资料/专利/专利法律法规/最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释_20091228.docx",
+    "properties": {
+      "file_type": "docx",
+      "content_length": 3089,
+      "created_at": "2025-12-15T00:17:21.515145"
+    }
+  },
+  "entity_10": {
+    "id": "entity_10",
+    "name": "权利要求的解释及原则",
+    "type": "procedure",
+    "description": "# 权利要求的解释及原则\n\n\n## 权利要求的解释与不清楚的关系\n\n\n### 一个常见的误解是，权利要求只有在不清楚时才需要解释。但权利要求的解释与权利要求是否清楚二者并没有必然的关系——虽然权利要求不清楚是解释的一种情况。《专利法》第26条第4款规定的权利要求清楚是指，在没有比对的情况下，权利要求本身是基于说明书且清楚的。但在现实中涉及到权利要求解释的情形往往是两造对专利与比对（例如对比文件、被...",
+    "source": "/Users/xujian/学习资料/专利/专利法律法规/权利要求的解释及原则.md",
+    "properties": {
+      "file_type": "md",
+      "content_length": 6775,
+      "created_at": "2025-12-15T00:17:21.515146"
+    }
+  },
+  "entity_11": {
+    "id": "entity_11",
+    "name": "最高人民法院关于审理涉专利权评价报告案件适用法律问题的批复_20250730",
+    "type": "law",
+    "description": "最高人民法院\n关于审理涉专利权评价报告案件适用法律\n问题的批复\n法释〔2025〕11号\n（2025年7月18日最高人民法院审判委员会第1953次会议通过，自2025年8月1日起施行）\n贵州省高级人民法院：\n你院《关于专利权评价报告法律适用问题的请示》（黔高法请〔2024〕1号）收悉。经研究，批复如下：\n根据《中华人民共和国专利法》第六十六条第二款的规定，国务院专利行政部门作出的专利权评价报告是人民...",
+    "source": "/Users/xujian/学习资料/专利/专利法律法规/最高人民法院关于审理涉专利权评价报告案件适用法律问题的批复_20250730.docx",
+    "properties": {
+      "file_type": "docx",
+      "content_length": 296,
+      "created_at": "2025-12-15T00:17:21.515147"
+    }
+  },
+  "entity_12": {
+    "id": "entity_12",
+    "name": "最高人民法院关于审理专利授权确权行政案件适用法律若干问题的规定（一）_20200910",
+    "type": "law",
+    "description": "最高人民法院\n关于审理专利授权确权行政案件\n适用法律若干问题的规定（一）\n法释〔2020〕8号\n（2020年8月24日最高人民法院审判委员会第1810次会议通过，自2020年9月12日起施行）\n为正确审理专利授权确权行政案件，根据《中华人民共和国专利法》《中华人民共和国行政诉讼法》等法律规定，结合审判实际，制定本规定。\n第一条  本规定所称专利授权行政案件，是指专利申请人因不服国务院专利行政部门作...",
+    "source": "/Users/xujian/学习资料/专利/专利法律法规/最高人民法院关于审理专利授权确权行政案件适用法律若干问题的规定（一）_20200910.docx",
+    "properties": {
+      "file_type": "docx",
+      "content_length": 4911,
+      "created_at": "2025-12-15T00:17:21.515149"
+    }
+  },
+  "entity_13": {
+    "id": "entity_13",
+    "name": "中华人民共和国专利法实施细则_20231211",
+    "type": "law",
+    "description": "中华人民共和国专利法实施细则\n（2001年6月15日中华人民共和国国务院令第306号公布　根据2002年12月28日《国务院关于修改〈中华人民共和国专利法实施细则〉的决定》第一次修订　根据2010年1月9日《国务院关于修改〈中华人民共和国专利法实施细则〉的决定》第二次修订　根据2023年12月11日《国务院关于修改〈中华人民共和国专利法实施细则〉的决定》第三次修订）\n第一章　总　　则\n第一条　根据...",
+    "source": "/Users/xujian/学习资料/专利/专利法律法规/中华人民共和国专利法实施细则_20231211.docx",
+    "properties": {
+      "file_type": "docx",
+      "content_length": 26355,
+      "created_at": "2025-12-15T00:17:21.515150"
+    }
+  },
+  "entity_14": {
+    "id": "entity_14",
+    "name": "3-说明书和权利要求书",
+    "type": "procedure",
+    "description": "# 说明书和权利要求书\n\n\n## 说明书应当充分公开\n\n\n### 说明书对发明作出的清楚、完整的说明，应当达到所属技术领域的技术人员能够实现的程度。说明书是否对请求保护的发明作出了清楚、完整的说明是以所属技术领域的技术人员能否实现该发明为判断标准的。\n\n\n#### 1，专利制度的一个重要特点是公开换保护，A26.3是专利制度的核心条款之一\n\n\n#### 2，专利法26.3的内在意涵是：即要获得专利...",
+    "source": "/Users/xujian/学习资料/专利/专利法律法规/3-说明书和权利要求书.md",
+    "properties": {
+      "file_type": "md",
+      "content_length": 74059,
+      "created_at": "2025-12-15T00:17:21.515151"
+    }
+  },
+  "entity_15": {
+    "id": "entity_15",
+    "name": "质押",
+    "type": "concept",
+    "description": "专利法律术语: 质押",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520458"
+    }
+  },
+  "entity_16": {
+    "id": "entity_16",
+    "name": "审查指南",
+    "type": "concept",
+    "description": "专利法律术语: 审查指南",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520460"
+    }
+  },
+  "entity_17": {
+    "id": "entity_17",
+    "name": "规范",
+    "type": "concept",
+    "description": "专利法律术语: 规范",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520461"
+    }
+  },
+  "entity_18": {
+    "id": "entity_18",
+    "name": "标准",
+    "type": "concept",
+    "description": "专利法律术语: 标准",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520461"
+    }
+  },
+  "entity_19": {
+    "id": "entity_19",
+    "name": "权利要求书",
+    "type": "concept",
+    "description": "专利法律术语: 权利要求书",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520462"
+    }
+  },
+  "entity_20": {
+    "id": "entity_20",
+    "name": "国防专利",
+    "type": "concept",
+    "description": "专利法律术语: 国防专利",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520463"
+    }
+  },
+  "entity_21": {
+    "id": "entity_21",
+    "name": "初步审查",
+    "type": "concept",
+    "description": "专利法律术语: 初步审查",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520464"
+    }
+  },
+  "entity_22": {
+    "id": "entity_22",
+    "name": "请求书",
+    "type": "concept",
+    "description": "专利法律术语: 请求书",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520465"
+    }
+  },
+  "entity_23": {
+    "id": "entity_23",
+    "name": "行政复议",
+    "type": "concept",
+    "description": "专利法律术语: 行政复议",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520465"
+    }
+  },
+  "entity_24": {
+    "id": "entity_24",
+    "name": "优先权",
+    "type": "concept",
+    "description": "专利法律术语: 优先权",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520466"
+    }
+  },
+  "entity_25": {
+    "id": "entity_25",
+    "name": "新颖性",
+    "type": "concept",
+    "description": "专利法律术语: 新颖性",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520467"
+    }
+  },
+  "entity_26": {
+    "id": "entity_26",
+    "name": "许可",
+    "type": "concept",
+    "description": "专利法律术语: 许可",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520468"
+    }
+  },
+  "entity_27": {
+    "id": "entity_27",
+    "name": "说明书",
+    "type": "concept",
+    "description": "专利法律术语: 说明书",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520468"
+    }
+  },
+  "entity_28": {
+    "id": "entity_28",
+    "name": "假冒",
+    "type": "concept",
+    "description": "专利法律术语: 假冒",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520469"
+    }
+  },
+  "entity_29": {
+    "id": "entity_29",
+    "name": "复审",
+    "type": "concept",
+    "description": "专利法律术语: 复审",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520470"
+    }
+  },
+  "entity_30": {
+    "id": "entity_30",
+    "name": "现有技术",
+    "type": "concept",
+    "description": "专利法律术语: 现有技术",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520471"
+    }
+  },
+  "entity_31": {
+    "id": "entity_31",
+    "name": "实施细则",
+    "type": "concept",
+    "description": "专利法律术语: 实施细则",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520471"
+    }
+  },
+  "entity_32": {
+    "id": "entity_32",
+    "name": "著作权法",
+    "type": "concept",
+    "description": "专利法律术语: 著作权法",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520472"
+    }
+  },
+  "entity_33": {
+    "id": "entity_33",
+    "name": "实质审查",
+    "type": "concept",
+    "description": "专利法律术语: 实质审查",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520473"
+    }
+  },
+  "entity_34": {
+    "id": "entity_34",
+    "name": "发明专利",
+    "type": "concept",
+    "description": "专利法律术语: 发明专利",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520474"
+    }
+  },
+  "entity_35": {
+    "id": "entity_35",
+    "name": "附图",
+    "type": "concept",
+    "description": "专利法律术语: 附图",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520474"
+    }
+  },
+  "entity_36": {
+    "id": "entity_36",
+    "name": "强制许可",
+    "type": "concept",
+    "description": "专利法律术语: 强制许可",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520475"
+    }
+  },
+  "entity_37": {
+    "id": "entity_37",
+    "name": "摘要",
+    "type": "concept",
+    "description": "专利法律术语: 摘要",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520476"
+    }
+  },
+  "entity_38": {
+    "id": "entity_38",
+    "name": "创造性",
+    "type": "concept",
+    "description": "专利法律术语: 创造性",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520476"
+    }
+  },
+  "entity_39": {
+    "id": "entity_39",
+    "name": "外观设计专利",
+    "type": "concept",
+    "description": "专利法律术语: 外观设计专利",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520477"
+    }
+  },
+  "entity_40": {
+    "id": "entity_40",
+    "name": "专利法",
+    "type": "concept",
+    "description": "专利法律术语: 专利法",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520478"
+    }
+  },
+  "entity_41": {
+    "id": "entity_41",
+    "name": "无效宣告",
+    "type": "concept",
+    "description": "专利法律术语: 无效宣告",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520479"
+    }
+  },
+  "entity_42": {
+    "id": "entity_42",
+    "name": "实用性",
+    "type": "concept",
+    "description": "专利法律术语: 实用性",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520479"
+    }
+  },
+  "entity_43": {
+    "id": "entity_43",
+    "name": "实用新型专利",
+    "type": "concept",
+    "description": "专利法律术语: 实用新型专利",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520480"
+    }
+  },
+  "entity_44": {
+    "id": "entity_44",
+    "name": "侵权",
+    "type": "concept",
+    "description": "专利法律术语: 侵权",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520481"
+    }
+  },
+  "entity_45": {
+    "id": "entity_45",
+    "name": "转让",
+    "type": "concept",
+    "description": "专利法律术语: 转让",
+    "source": "extracted",
+    "properties": {
+      "category": "legal_term",
+      "created_at": "2025-12-15T00:17:21.520482"
+    }
+  }
+}

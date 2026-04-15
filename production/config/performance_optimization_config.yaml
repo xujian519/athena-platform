@@ -1,0 +1,349 @@
+# 性能优化配置文件
+# Performance Optimization Configuration
+#
+# 此配置文件用于根据实际负载调整性能优化参数
+# 创建时间: 2026-01-11
+
+# =============================================================================
+# 全局配置
+# =============================================================================
+global:
+  # 环境标识: development, staging, production
+  environment: production
+
+  # 监控数据保留时间(天)
+  monitoring_retention_days: 7
+
+  # 是否启用自动调优
+  auto_tuning_enabled: true
+
+  # 性能指标采样间隔(秒)
+  metrics_sampling_interval: 60
+
+# =============================================================================
+# 并发控制配置
+# =============================================================================
+concurrency_control:
+  # API请求限流器
+  api_requests:
+    # 最大并发数
+    # 建议: 生产环境 100-500, 开发环境 20-50
+    max_concurrent: 100
+
+    # 获取信号量超时(秒)
+    # 超时后返回503错误
+    timeout: 30
+
+    # 是否启用拒绝策略
+    # true: 超过并发限制时立即拒绝, false: 等待超时
+    reject_on_limit: false
+
+  # 数据库查询限流器
+  db_queries:
+    # 最大并发数
+    # 建议: 根据数据库连接池大小设置,通常为连接池的70-80%
+    max_concurrent: 50
+
+    # 超时(秒)
+    timeout: 10
+
+    # 是否启用拒绝策略
+    reject_on_limit: false
+
+  # 外部API调用限流器
+  external_api:
+    # 速率限制
+    # 建议: 根据外部API的限流策略设置
+    rate: 100  # 请求数
+    per: 1.0   # 时间窗口(秒)
+
+    # 突发容量
+    # 允许的瞬时峰值
+    burst: 200
+
+# =============================================================================
+# 批处理配置
+# =============================================================================
+batch_processing:
+  # AI模型批处理器
+  ai_models:
+    # 默认批大小
+    # 建议: GPU=32-64, CPU=8-16
+    batch_size: 32
+
+    # 最小批大小
+    # 达到此大小时立即处理(不等待超时)
+    min_batch_size: 8
+
+    # 最大批大小
+    # 超过此大小时分批处理
+    max_batch_size: 64
+
+    # 批处理超时(毫秒)
+    # 等待更多请求的最长时间
+    timeout_ms: 100
+
+    # 是否启用自适应批大小
+    # 根据处理延迟动态调整批大小
+    adaptive_batching: true
+
+    # 推理设备
+    # mps: Apple Silicon GPU, cuda: NVIDIA GPU, cpu: CPU
+    device: mps
+
+# =============================================================================
+# 数据库连接池配置
+# =============================================================================
+database_pool:
+  # PostgreSQL连接池
+  postgresql:
+    # 连接池大小
+    # 建议: 生产环境 50-100, 开发环境 10-20
+    pool_size: 50
+
+    # 最大溢出连接数
+    # 峰值时允许的额外连接
+    max_overflow: 20
+
+    # 获取连接超时(秒)
+    # 超时后抛出异常
+    pool_timeout: 10
+
+    # 连接回收时间(秒)
+    # 超过此时间的空闲连接会被回收
+    pool_recycle: 1800
+
+    # 是否使用LIFO模式
+    # true: 后进先出,减少连接stale, false: 先进先出
+    pool_use_lifo: true
+
+    # 连接最大生命周期(秒)
+    # 强制关闭超过此时间的连接
+    pool_max_lifetime: 7200
+
+# =============================================================================
+# 任务队列配置
+# =============================================================================
+task_queue:
+  # 后台任务队列
+  background_tasks:
+    # 工作线程数
+    # 建议: CPU核心数 * 2
+    max_workers: 50
+
+    # 队列最大长度
+    # 超过此长度时拒绝新任务
+    max_queue_size: 1000
+
+    # 任务超时(秒)
+    task_timeout: 300
+
+    # 任务重试次数
+    max_retries: 3
+
+    # 重试延迟(秒)
+    retry_delay: 5
+
+# =============================================================================
+# 缓存配置
+# =============================================================================
+cache:
+  # L1内存缓存
+  l1_memory:
+    # 最大缓存项数
+    max_items: 10000
+
+    # 每项最大大小(MB)
+    max_item_size_mb: 1
+
+    # TTL(秒)
+    ttl: 3600
+
+  # L2 Redis缓存
+  l2_redis:
+    # 是否启用
+    enabled: true
+
+    # TTL(秒)
+    ttl: 86400
+
+    # 最大内存(MB)
+    max_memory_mb: 512
+
+    # 淘汰策略
+    # allkeys-lru, volatile-lru, allkeys-random等
+    eviction_policy: allkeys-lru
+
+# =============================================================================
+# 自适应控制配置
+# =============================================================================
+adaptive_control:
+  # 自适应并发控制
+  concurrency:
+    # 是否启用
+    enabled: true
+
+    # 目标延迟(毫秒)
+    # 系统试图维持的目标响应时间
+    target_latency_ms: 100
+
+    # 最小并发数
+    min_concurrent: 10
+
+    # 最大并发数
+    max_concurrent: 500
+
+    # 调整步进
+    # 每次调整的百分比
+    adjustment_rate: 0.1
+
+    # 采样窗口大小
+    # 用于计算平均延迟的样本数
+    sample_window: 100
+
+# =============================================================================
+# 监控和告警配置
+# =============================================================================
+monitoring:
+  # 性能指标收集
+  metrics:
+    # 是否启用
+    enabled: true
+
+    # 采集间隔(秒)
+    collection_interval: 60
+
+    # 历史数据保留条数
+    history_size: 1000
+
+  # 告警规则
+  alerts:
+    # 响应时间告警(毫秒)
+    response_time_threshold:
+      warning: 500
+      critical: 1000
+
+    # 错误率告警(%)
+    error_rate_threshold:
+      warning: 1
+      critical: 5
+
+    # CPU使用率告警(%)
+    cpu_threshold:
+      warning: 70
+      critical: 90
+
+    # 内存使用率告警(%)
+    memory_threshold:
+      warning: 70
+      critical: 85
+
+# =============================================================================
+# 场景化配置
+# =============================================================================
+scenarios:
+  # 低延迟场景
+  low_latency:
+    description: "追求最低延迟,适用于实时交互场景"
+
+    concurrency_control:
+      api_requests:
+        max_concurrent: 50
+        timeout: 5
+
+    batch_processing:
+      ai_models:
+        batch_size: 8
+        timeout_ms: 50
+
+    cache:
+      l1_memory:
+        ttl: 7200
+
+  # 高吞吐场景
+  high_throughput:
+    description: "追求最大吞吐量,适用于批处理场景"
+
+    concurrency_control:
+      api_requests:
+        max_concurrent: 500
+        timeout: 60
+
+    batch_processing:
+      ai_models:
+        batch_size: 64
+        min_batch_size: 32
+        timeout_ms: 200
+
+    database_pool:
+      postgresql:
+        pool_size: 100
+        max_overflow: 50
+
+  # 资源受限场景
+  resource_constrained:
+    description: "资源有限,需要精细控制"
+
+    concurrency_control:
+      api_requests:
+        max_concurrent: 20
+        timeout: 10
+
+    batch_processing:
+      ai_models:
+        batch_size: 16
+        timeout_ms: 100
+
+    database_pool:
+      postgresql:
+        pool_size: 20
+        max_overflow: 10
+
+# =============================================================================
+# 调优指南
+# =============================================================================
+tuning_guide:
+  # 如何判断需要调优
+  indicators:
+    - "CPU使用率持续超过70% → 减少并发数或增加资源"
+    - "响应时间P95超过目标值 → 减少批大小或并发数"
+    - "错误率上升 → 检查限流配置和超时设置"
+    - "内存使用率过高 → 减少缓存大小或连接池大小"
+    - "数据库连接池耗尽 → 增加连接池大小或减少查询并发"
+
+  # 调优步骤
+  steps:
+    1. "收集基准数据: 在当前配置下运行1-2天,收集性能指标"
+    2. "识别瓶颈: 分析指标,找出系统瓶颈"
+    3. "调整参数: 根据瓶颈调整相关配置参数"
+    4. "验证效果: 运行1-2天,验证改进效果"
+    5. "迭代优化: 根据结果继续调整或尝试其他参数"
+
+  # 常见问题
+  common_issues:
+    问题1_高延迟:
+     症状: "响应时间过长"
+     原因: "并发过高或批大小过大"
+     解决: "减少max_concurrent或batch_size"
+
+    问题2_低吞吐:
+      症状: "请求处理速度慢"
+      原因: "并发过低或批大小过小"
+      解决: "增加max_concurrent或batch_size"
+
+    问题3_连接池耗尽:
+      症状: "大量数据库连接超时"
+      原因: "连接池大小不足或连接泄漏"
+      解决: "增加pool_size,检查代码是否正确释放连接"
+
+    问题4_内存溢出:
+      症状: "OOM错误"
+      原因: "缓存过大或批处理内存占用过高"
+      解决: "减少缓存大小或batch_size,增加内存"
+
+# =============================================================================
+# 版本信息
+# =============================================================================
+version: "1.0.0"
+last_updated: "2026-01-11"
+maintainer: "Athena AI Team"

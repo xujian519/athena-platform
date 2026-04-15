@@ -1,0 +1,69 @@
+name: Python语法检查
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  syntax-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v3
+    
+    - name: 设置Python环境
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: 安装依赖
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 black isort mypy
+    
+    - name: 语法检查 - 编译验证
+      run: |
+        echo "🔍 检查Python文件语法..."
+        python -m compileall -q core/ || true
+        find core/ -name "*.py" -exec python -m py_compile {} \; 2>&1 | head -20
+    
+    - name: 代码检查 - Flake8
+      run: |
+        echo "🔍 运行Flake8代码检查..."
+        flake8 core/ --count --select=E9,F63,F7,F82 --show-source --statistics
+    
+    - name: 代码格式化检查
+      run: |
+        echo "🔍 检查代码格式..."
+        black --check core/ || echo "⚠️ 代码格式不符合Black标准"
+    
+    - name: 统计错误文件
+      run: |
+        echo "📊 统计语法错误..."
+        ERROR_COUNT=0
+        for f in $(find core/ -name "*.py"); do
+          if ! python -m py_compile "$f" 2>/dev/null; then
+            ERROR_COUNT=$((ERROR_COUNT + 1))
+          fi
+        done
+        echo "发现 $ERROR_COUNT 个文件存在语法错误"
+        
+  # 可选: 在PR时添加评论
+  comment-pr:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    steps:
+      - name: 评论PR
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ Python语法检查已完成！请查看检查结果。'
+            })

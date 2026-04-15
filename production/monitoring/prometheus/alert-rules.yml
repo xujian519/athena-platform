@@ -1,0 +1,210 @@
+# 生产环境告警规则
+groups:
+  # 系统可用性告警
+  - name: athena.system.availability
+    rules:
+      # 应用不可用告警
+      - alert: ApplicationDown
+        expr: up{job="athena-api"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          team: platform
+          service: athena-api
+        annotations:
+          summary: "Athena API应用不可用"
+          description: "Athena API应用已经{{ $value }}分钟不可用"
+          runbook_url: "https://runbooks.athena-patent.com/application-down"
+
+      # 高错误率告警
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+          team: platform
+          service: athena-api
+        annotations:
+          summary: "API错误率过高"
+          description: "API错误率为{{ $value | humanizePercentage }}，超过5%阈值"
+
+      # 高响应时间告警
+      - alert: HighResponseTime
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+          team: platform
+          service: athena-api
+        annotations:
+          summary: "API响应时间过长"
+          description: "95%分位响应时间为{{ $value }}秒，超过2秒阈值"
+
+  # 资源使用告警
+  - name: athena.system.resources
+    rules:
+      # CPU使用率过高
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 10m
+        labels:
+          severity: warning
+          team: platform
+          resource: cpu
+        annotations:
+          summary: "CPU使用率过高"
+          description: "节点 {{ $labels.instance }} CPU使用率为{{ $value }}%"
+
+      # 内存使用率过高
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 10m
+        labels:
+          severity: warning
+          team: platform
+          resource: memory
+        annotations:
+          summary: "内存使用率过高"
+          description: "节点 {{ $labels.instance }} 内存使用率为{{ $value }}%"
+
+      # 磁盘使用率过高
+      - alert: HighDiskUsage
+        expr: (1 - (node_filesystem_avail_bytes{fstype!="tmpfs"} / node_filesystem_size_bytes{fstype!="tmpfs"})) * 100 > 85
+        for: 5m
+        labels:
+          severity: critical
+          team: platform
+          resource: disk
+        annotations:
+          summary: "磁盘使用率过高"
+          description: "节点 {{ $labels.instance }} 磁盘 {{ $labels.mountpoint }} 使用率为{{ $value }}%"
+
+  # 数据库告警
+  - name: athena.database
+    rules:
+      # PostgreSQL连接数过多
+      - alert: PostgreSQLTooManyConnections
+        expr: pg_stat_database_numbackends / pg_settings_max_connections * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+          team: platform
+          service: postgresql
+        annotations:
+          summary: "PostgreSQL连接数过多"
+          description: "PostgreSQL连接数为{{ $value }}%的最大连接数"
+
+      # Redis内存使用率过高
+      - alert: RedisHighMemoryUsage
+        expr: redis_memory_used_bytes / redis_memory_max_bytes * 100 > 90
+        for: 5m
+        labels:
+          severity: critical
+          team: platform
+          service: redis
+        annotations:
+          summary: "Redis内存使用率过高"
+          description: "Redis内存使用率为{{ $value }}%"
+
+      # Qdrant服务不可用
+      - alert: QdrantDown
+        expr: up{job="qdrant"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          team: platform
+          service: qdrant
+        annotations:
+          summary: "Qdrant向量数据库不可用"
+          description: "Qdrant向量数据库已经{{ $value }}分钟不可用"
+
+  # 网络和性能告警
+  - name: athena.network.performance
+    rules:
+      # 网络流量异常
+      - alert: UnusualNetworkTraffic
+        expr: rate(node_network_receive_bytes_total[5m]) > 100000000  # 100MB/s
+        for: 10m
+        labels:
+          severity: warning
+          team: platform
+          resource: network
+        annotations:
+          summary: "网络流量异常"
+          description: "节点 {{ $labels.instance }} 网络接收流量为{{ $value | humanize1024 }}/s"
+
+      # 请求量突增
+      - alert: RequestSpike
+        expr: rate(http_requests_total[5m]) > 1000
+        for: 2m
+        labels:
+          severity: info
+          team: platform
+          service: athena-api
+        annotations:
+          summary: "API请求量突增"
+          description: "API请求量为{{ $value }}/秒，超过1000/秒阈值"
+
+  # 业务指标告警
+  - name: athena.business.metrics
+    rules:
+      # AI请求失败率过高
+      - alert: HighAIRequestFailureRate
+        expr: rate(ai_requests_failed_total[5m]) / rate(ai_requests_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          team: ai
+          service: ai-platform
+        annotations:
+          summary: "AI请求失败率过高"
+          description: "AI请求失败率为{{ $value | humanizePercentage }}，超过10%阈值"
+
+      # 向量搜索延迟过高
+      - alert: HighVectorSearchLatency
+        expr: histogram_quantile(0.95, rate(vector_search_duration_seconds_bucket[5m])) > 5
+        for: 5m
+        labels:
+          severity: warning
+          team: ai
+          service: vector-search
+        annotations:
+          summary: "向量搜索延迟过高"
+          description: "95%分位向量搜索延迟为{{ $value }}秒，超过5秒阈值"
+
+      # 记忆系统存储接近上限
+      - alert: MemorySystemNearLimit
+        expr: memory_system_usage_bytes / memory_system_limit_bytes * 100 > 90
+        for: 10m
+        labels:
+          severity: warning
+          team: platform
+          service: memory-system
+        annotations:
+          summary: "记忆系统存储接近上限"
+          description: "记忆系统使用率为{{ $value }}%，接近90%上限"
+
+  # 安全告警
+  - name: athena.security
+    rules:
+      # 异常登录尝试
+      - alert: UnusualLoginAttempts
+        expr: rate(login_failed_total[5m]) > 10
+        for: 2m
+        labels:
+          severity: warning
+          team: security
+        annotations:
+          summary: "异常登录尝试"
+          description: "5分钟内失败登录尝试为{{ $value }}/秒，超过10/秒阈值"
+
+      # API密钥使用异常
+      - alert: APIKeyUsageAnomaly
+        expr: rate(api_requests_by_key[5m]) > 1000
+        for: 2m
+        labels:
+          severity: warning
+          team: security
+        annotations:
+          summary: "API密钥使用异常"
+          description: "API密钥 {{ $labels.api_key }} 使用频率异常高：{{ $value }}/秒"

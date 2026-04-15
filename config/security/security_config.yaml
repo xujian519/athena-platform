@@ -1,0 +1,495 @@
+# Athena工作平台安全加固配置
+# 最后更新: 2025-12-13
+# 版本: 1.0
+
+# API安全配置
+api_security:
+  # JWT配置
+  jwt:
+    # 密钥配置
+    secret: ${JWT_SECRET}  # 从环境变量读取
+    algorithm: HS256
+    access_token_expire_minutes: 30    # 访问令牌30分钟
+    refresh_token_expire_days: 7      # 刷新令牌7天
+    issuer: "athena-platform"
+    audience: "athena-users"
+
+    # 黑名单配置
+    blacklist_enabled: true
+    blacklist_ttl: 86400  # 24小时
+
+  # API密钥管理
+  api_keys:
+    # 系统内部API密钥
+    internal_key: ${INTERNAL_API_KEY}
+    external_keys:
+      - key: "PARTNER_API_KEY_1"
+        name: "合作伙伴1"
+        permissions: ["read"]
+        rate_limit: 100  # 每分钟100次
+      - key: "PARTNER_API_KEY_2"
+        name: "合作伙伴2"
+        permissions: ["read", "write"]
+        rate_limit: 200
+
+  # 限流配置
+  rate_limiting:
+    enabled: true
+    # 全局限流
+    global:
+      requests_per_minute: 1000
+      burst: 100
+    # 用户级别限流
+    user:
+      requests_per_minute: 100
+      burst: 20
+    # IP级别限流
+    ip:
+      requests_per_minute: 50
+      burst: 10
+    # API密钥级别限流
+    api_key:
+      default: 1000
+      premium: 5000
+
+  # CORS配置
+  cors:
+    enabled: true
+    origins:
+      - "http://localhost:3000"
+      - "https://athena.platform.com"
+      - "https://admin.athena.platform.com"
+    methods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+      - "OPTIONS"
+    headers:
+      - "Content-Type"
+      - "Authorization"
+      - "X-API-Key"
+    credentials: true
+    max_age: 3600
+
+  # 输入验证
+  input_validation:
+    # SQL注入防护
+    sql_injection:
+      enabled: true
+      patterns:
+        - "(?i)(union|select|insert|update|delete|drop|create|alter|exec|execute)"
+        - "(?i)(--|#|/\\*|\\*/|xp_|sp_)"
+        - "(?i)(or|and)\\s+\\d+\\s*=\\s*\\d+"
+
+    # XSS防护
+    xss:
+      enabled: true
+      patterns:
+        - "<script[^>]*>.*?</script>"
+        - "javascript:"
+        - "on\\w+\\s*="
+        - "<iframe[^>]*>"
+
+    # 文件上传安全
+    file_upload:
+      allowed_extensions:
+        - pdf
+        - doc
+        - docx
+        - txt
+        - png
+        - jpg
+        - jpeg
+      max_file_size: 10485760  # 10MB
+      scan_viruses: true
+      quarantine_suspicious: true
+
+# 数据库安全配置
+database_security:
+  # PostgreSQL安全配置
+  postgresql:
+    # 连接安全
+    ssl_mode: "require"
+    ssl_cert: "/etc/ssl/certs/postgresql-client.crt"
+    ssl_key: "/etc/ssl/private/postgresql-client.key"
+    ssl_ca: "/etc/ssl/certs/postgresql-ca.crt"
+
+    # 用户权限
+    users:
+      # 应用用户
+      app_user:
+        privileges:
+          - SELECT
+          - INSERT
+          - UPDATE
+          - DELETE
+        tables:
+          - patents
+          - applications
+          - users
+      # 只读用户
+      readonly_user:
+        privileges:
+          - SELECT
+        tables:
+          - patents
+          - applications
+
+    # 审计日志
+    audit:
+      enabled: true
+      log_connections: true
+      log_disconnections: true
+      log_ddl: true
+      log_dml: true
+
+    # 数据加密
+    encryption:
+      # 静态数据加密
+      at_rest:
+        enabled: true
+        algorithm: "AES-256"
+        key_rotation_days: 90
+
+      # 传输中加密
+      in_transit:
+        enabled: true
+        tls_version: "1.3"
+
+  # Redis安全配置
+  redis:
+    # 认证
+    password: ${REDIS_PASSWORD}
+    username: "athena_redis"  # Redis 6.0+支持
+
+    # TLS配置
+    tls:
+      enabled: true
+      cert_file: "/etc/ssl/certs/redis-client.crt"
+      key_file: "/etc/ssl/private/redis-client.key"
+      ca_cert: "/etc/ssl/certs/redis-ca.crt"
+
+    # 访问控制
+    acl:
+      - user: "app_user"
+        patterns:
+          - "+get"
+          - "+set"
+          - "+del"
+          - "+exists"
+          - "+ttl"
+          - "+expire"
+          - "~*"
+      - user: "readonly_user"
+        patterns:
+          - "+get"
+          - "+exists"
+          - "+ttl"
+          - "~*"
+
+# 应用安全配置
+application_security:
+  # Session安全
+  session:
+    secure: true
+    httponly: true
+    samesite: "Strict"
+    max_age: 3600  # 1小时
+    domain: ".athena.platform.com"
+
+    # Session存储
+    storage: "redis"  # 存储在Redis中
+    redis:
+      key_prefix: "athena:session:"
+      ttl: 3600
+
+  # Cookie安全
+  cookies:
+    secure: true
+    httponly: true
+    samesite: "Strict"
+    max_age: 86400  # 24小时
+    domain: ".athena.platform.com"
+
+  # 密码策略
+  password_policy:
+    # 密码强度要求
+    min_length: 12
+    require_uppercase: true
+    require_lowercase: true
+    require_numbers: true
+    require_special_chars: true
+    forbidden_patterns:
+      - "password"
+      - "123456"
+      - "qwerty"
+
+    # 密码历史
+    history_count: 5  # 不能使用最近5个密码
+    max_age_days: 90  # 90天后必须更改密码
+
+    # 加密配置
+    encryption:
+      algorithm: "bcrypt"
+      rounds: 12
+
+  # MFA配置
+  mfa:
+    enabled: true
+    # 强制MFA的角色
+    enforced_roles:
+      - "admin"
+      - "super_admin"
+    # TOTP配置
+    totp:
+      issuer: "Athena Platform"
+      digits: 6
+      period: 30
+      algorithm: "SHA1"
+
+  # 权限控制
+  rbac:
+    # 角色定义
+    roles:
+      super_admin:
+        permissions:
+          - "*"
+      admin:
+        permissions:
+          - "users:*"
+          - "patents:*"
+          - "analytics:*"
+      analyst:
+        permissions:
+          - "patents:read"
+          - "analytics:read"
+          - "search:*"
+      user:
+        permissions:
+          - "patents:read"
+          - "search:*"
+          - "profile:*"
+
+    # 默认角色
+    default_role: "user"
+
+# 网络安全配置
+network_security:
+  # 防火墙配置
+  firewall:
+    # 允许的IP范围
+    allowed_ips:
+      - "0.0.0.0/0"  # 开发环境允许所有IP
+      # 生产环境应限制为特定IP范围
+      # - "192.168.1.0/24"
+      # - "10.0.0.0/8"
+
+    # 阻止的IP
+    blocked_ips:
+      # 可以添加恶意IP列表
+
+  # DDoS防护
+  ddos_protection:
+    enabled: true
+    # 请求频率限制
+    request_rate:
+      per_second: 100
+      burst: 200
+    # 连接限制
+    connection_limit:
+      per_ip: 50
+      timeout: 5  # 5秒
+
+  # SSL/TLS配置
+  ssl:
+    # 证书配置
+    cert_file: "/etc/ssl/certs/athena.crt"
+    key_file: "/etc/ssl/private/athena.key"
+    ca_cert: "/etc/ssl/certs/athena-ca.crt"
+
+    # SSL配置
+    protocols:
+      - "TLSv1.2"
+      - "TLSv1.3"
+    ciphers:
+      - "ECDHE-ECDSA-AES128-GCM-SHA256"
+      - "ECDHE-RSA-AES128-GCM-SHA256"
+      - "ECDHE-ECDSA-AES256-GCM-SHA384"
+      - "ECDHE-RSA-AES256-GCM-SHA384"
+    prefer_server_ciphers: true
+
+    # HSTS
+    hsts:
+      enabled: true
+      max_age: 31536000  # 1年
+      include_subdomains: true
+      preload: true
+
+# 日志和监控安全
+logging_security:
+  # 审计日志
+  audit_log:
+    enabled: true
+    file_path: "/var/log/athena/audit.log"
+    max_size: "100MB"
+    backup_count: 10
+    format: "json"
+
+    # 记录的事件
+    events:
+      - user_login
+      - user_logout
+      - failed_login
+      - password_change
+      - privilege_escalation
+      - data_export
+      - system_config_change
+
+  # 安全事件日志
+  security_log:
+    enabled: true
+    file_path: "/var/log/athena/security.log"
+    max_size: "100MB"
+    backup_count: 10
+    format: "json"
+
+    # 记录的事件
+    events:
+      - sql_injection_attempt
+      - xss_attempt
+      - rate_limit_exceeded
+      - unauthorized_access
+      - suspicious_activity
+
+# 密钥管理
+secrets_management:
+  # 密钥存储
+  storage: "hashicorp_vault"  # 或 "aws_secrets_manager", "azure_key_vault"
+
+  # HashiCorp Vault配置
+  vault:
+    address: "https://vault.athena-platform.com"
+    token: ${VAULT_TOKEN}
+    path: "secret/athena"
+
+  # 密钥轮换
+  rotation:
+    enabled: true
+    # 密钥轮换周期（天）
+    schedule:
+      database_password: 90
+      api_keys: 180
+      jwt_secret: 365
+      encryption_keys: 365
+
+# 数据保护
+data_protection:
+  # GDPR合规
+  gdpr:
+    enabled: true
+    # 数据主体权利
+    rights:
+      - "access"
+      - "rectification"
+      - "erasure"
+      - "portability"
+
+    # 数据保留策略
+    retention:
+      user_data: 2555  # 7年
+      search_logs: 90   # 90天
+      audit_logs: 2555  # 7年
+
+  # 数据脱敏
+  data_masking:
+    enabled: true
+    # 需要脱敏的字段
+    fields:
+      - "email"
+      - "phone"
+      - "identity_card"
+      - "bank_account"
+
+    # 脱敏规则
+    rules:
+      email: "show_first_two_hide_rest"
+      phone: "show_last_four"
+      identity_card: "mask_middle_eight"
+
+# 安全扫描配置
+security_scanning:
+  # 代码扫描
+  code_scan:
+    enabled: true
+    tools:
+      - "bandit"  # Python安全扫描
+      - "semgrep"  # 多语言安全扫描
+      - "snyk"  # 依赖漏洞扫描
+    schedule: "daily"
+
+  # 容器扫描
+  container_scan:
+    enabled: true
+    tools:
+      - "trivy"  # 容器漏洞扫描
+      - "clair"  # 容器安全扫描
+    schedule: "on_build"
+
+  # 网络扫描
+  network_scan:
+    enabled: true
+    tools:
+      - "nmap"  # 网络端口扫描
+      - "openvas"  # 漏洞扫描
+    schedule: "weekly"
+
+# 应急响应
+incident_response:
+  # 告警配置
+  alerts:
+    email:
+      - "security@athena-platform.com"
+    slack:
+      webhook_url: ${SLACK_SECURITY_WEBHOOK}
+      channel: "#security-alerts"
+
+  # 应急联系人
+  emergency_contacts:
+    - name: "安全团队负责人"
+      email: "security-lead@athena-platform.com"
+      phone: "+86-xxx-xxxx-xxxx"
+
+  # 响应流程
+  playbooks:
+    data_breach:
+      steps:
+        - "立即隔离受影响系统"
+        - "评估数据泄露范围"
+        - "通知相关方"
+        - "实施补救措施"
+        - "事后分析改进"
+
+# 合规性配置
+compliance:
+  # SOX合规
+  sox:
+    enabled: false  # 根据需求启用
+
+  # ISO 27001
+  iso27001:
+    enabled: true
+    controls:
+      - "A.9 Access Control"
+      - "A.12 Operations Security"
+      - "A.14 System Acquisition"
+
+  # 等保2.0
+  djcp:
+    enabled: true
+    level: 3  # 第三级
+    controls:
+      - "身份鉴别"
+      - "访问控制"
+      - "安全审计"
+      - "数据保密性"

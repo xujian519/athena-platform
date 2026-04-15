@@ -1,0 +1,15 @@
+{
+  "timestamp": "20251220_235301",
+  "source": "patent_documents_import",
+  "entities": {
+    "PATENT_TYPE": 2,
+    "LEGAL_TERM": 2,
+    "TIME_TERM": 2
+  },
+  "relations": {
+    "related_to": 2
+  },
+  "total_entities": 6,
+  "total_relations": 2,
+  "version": "v3.1.0"
+}

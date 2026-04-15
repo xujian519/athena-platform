@@ -1,0 +1,118 @@
+{
+  "processed_at": "2025-12-23T01:03:17.535190",
+  "total_documents": 14,
+  "documents": [
+    {
+      "doc_id": "doc_2811f8c60465",
+      "doc_type": "审查指南",
+      "title": "专利审查指南（最新版）",
+      "char_count": 586762,
+      "word_count": 541386,
+      "source_file": "/Volumes/AthenaData/语料/专利/专利法律法规/专利审查指南（最新版）.pdf"
+    },
+    {
+      "doc_id": "doc_8117e2b6b2db",
+      "doc_type": "其他",
+      "title": "4-现有技术和现有设计（200408）",
+      "char_count": 39617,
+      "word_count": 38025,
+      "source_file": "/Volumes/AthenaData/语料/专利/专利法律法规/4-现有技术和现有设计（200408）.md"
+    },
+    {
+      "doc_id": "doc_9d244efd4994",
+      "doc_type": "司法解释",
+      "title": "权利要求的解释及原则",
+      "char_count": 6775,
+      "word_count": 6422,
+      "source_file": "/Volumes/AthenaData/语料/专利/专利法律法规/权利要求的解释及原则.md"
+    },
+    {
+      "doc_id": "doc_79d206bfd5cd",
+      "doc_type": "其他",
+      "title": "3-说明书和权利要求书",
+      "char_count": 74059,
+      "word_count": 67382,
+      "source_file": "/Volumes/AthenaData/语料/专利/专利法律法规/3-说明书和权利要求书.md"
+    },
+    {
+      "doc_id": "doc_05563f3b8e55",
+      "doc_type": "部门规章",
+      "title": "最高人民法院关于审理专利纠纷案件适用法律问题的若干规定_20201229",
+      "char_count": 3603,
+      "word_count": 3523,
+      "source_file": "/Volumes/AthenaData/语料/专利/专利法律法规/最高人民法院关于审理专利纠纷案件适用法律问题的若干规定_20201229.docx"
+    },
+    {
+      "doc_id": "doc_1ca0e39d5535",
+      "doc_type": "行政法规",
+      "title": "国防专利条例_20040917",
+      "char_count": 4844,
+      "word_count": 4713,
+      "source_file": "/Volumes/AthenaData/语料/专利/专利法律法规/国防专利条例_20040917.docx"
+    },
+    {
+      "doc_id": "doc_ba21367b2a36",
+      "doc_type": "专利法",
+      "title": "中华人民共和国专利法_20201017",
+      "char_count": 11299,
+      "word_count": 10998,
+      "source_file": "/Volumes/AthenaData/语料/专利/专利法律法规/中华人民共和国专利法_20201017.docx"
+    },
+    {
+      "doc_id": "doc_a7ce62f9325a",
+      "doc_type": "行政法规",
+      "title": "专利代理条例_20181106",
+      "char_count": 3604,
+      "word_count": 3496,
+      "source_file": "/Volumes/AthenaData/语料/专利/专利法律法规/专利代理条例_20181106.docx"
+    },
+    {
+      "doc_id": "doc_c5aab8bf755e",
+      "doc_type": "司法解释",
+      "title": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释（二）_20201229",
+      "char_count": 4793,
+      "word_count": 4708,
+      "source_file": "/Volumes/AthenaData/语料/专利/专利法律法规/最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释（二）_20201229.docx"
+    },
+    {
+      "doc_id": "doc_f54718a31590",
+      "doc_type": "部门规章",
+      "title": "最高人民法院关于审理申请注册的药品相关的专利权纠纷民事案件适用法律若干问题的规定_20210704",
+      "char_count": 1733,
+      "word_count": 1695,
+      "source_file": "/Volumes/AthenaData/语料/专利/专利法律法规/最高人民法院关于审理申请注册的药品相关的专利权纠纷民事案件适用法律若干问题的规定_20210704.docx"
+    },
+    {
+      "doc_id": "doc_8edaeedcd3be",
+      "doc_type": "司法解释",
+      "title": "最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释_20091228",
+      "char_count": 3089,
+      "word_count": 3015,
+      "source_file": "/Volumes/AthenaData/语料/专利/专利法律法规/最高人民法院关于审理侵犯专利权纠纷案件应用法律若干问题的解释_20091228.docx"
+    },
+    {
+      "doc_id": "doc_b47c1615dd8e",
+      "doc_type": "其他",
+      "title": "最高人民法院关于审理涉专利权评价报告案件适用法律问题的批复_20250730",
+      "char_count": 296,
+      "word_count": 289,
+      "source_file": "/Volumes/AthenaData/语料/专利/专利法律法规/最高人民法院关于审理涉专利权评价报告案件适用法律问题的批复_20250730.docx"
+    },
+    {
+      "doc_id": "doc_983c371f637a",
+      "doc_type": "部门规章",
+      "title": "最高人民法院关于审理专利授权确权行政案件适用法律若干问题的规定（一）_20200910",
+      "char_count": 4911,
+      "word_count": 4760,
+      "source_file": "/Volumes/AthenaData/语料/专利/专利法律法规/最高人民法院关于审理专利授权确权行政案件适用法律若干问题的规定（一）_20200910.docx"
+    },
+    {
+      "doc_id": "doc_49110b563c94",
+      "doc_type": "实施细则",
+      "title": "中华人民共和国专利法实施细则_20231211",
+      "char_count": 26355,
+      "word_count": 25748,
+      "source_file": "/Volumes/AthenaData/语料/专利/专利法律法规/中华人民共和国专利法实施细则_20231211.docx"
+    }
+  ]
+}

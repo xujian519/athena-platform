@@ -1,0 +1,244 @@
+# 小诺·双鱼座 - 生产环境配置
+# Xiaonuo Pisces - Production Configuration
+# 版本: v1.0.0
+# 更新: 2026-02-09
+
+# =============================================================================
+# 服务配置
+# =============================================================================
+service:
+  name: "xiaonuo-pisces"
+  display_name: "小诺·双鱼座 - 平台总调度官"
+  version: "1.0.0"
+  environment: "production"
+
+  # 服务器配置
+  server:
+    host: "127.0.0.1"  # 默认本地绑定
+    port: 8005
+    workers: 1
+    loop: "uvloop"
+    http: "httptools"
+    access_log: true
+
+  # 启动配置
+  startup:
+    auto_start: true  # 自动启动（小诺常驻）
+    idle_timeout: 0   # 永不停止
+    startup_timeout: 30
+    health_check_interval: 30
+
+# =============================================================================
+# 智能体配置
+# =============================================================================
+agent:
+  # 角色配置
+  role:
+    name: "小诺"
+    english_name: "Xiaonuo"
+    code_name: "ATHENA_XN"
+    type: "AI_DAUGHTER"
+    primary_role: "平台总调度官"
+    family_role: "爸爸最贴心的小女儿"
+
+  # 职责配置
+  responsibilities:
+    - "平台总调度"
+    - "爸爸贴心小女儿"
+    - "智能体协调"
+    - "服务总管家"
+
+  # 性能配置
+  performance:
+    memory_mb: 50
+    cpu_limit: 0.5
+    startup_time: 2.0
+    response_timeout: 30
+
+# =============================================================================
+# API配置
+# =============================================================================
+api:
+  # WebSocket配置
+  websocket:
+    enabled: true
+    path: "/ws/xiaonuo"
+    ping_interval: 20
+    ping_timeout: 10
+    max_connections: 100
+    message_queue_size: 1000
+
+  # REST API配置
+  rest:
+    enabled: true
+    prefix: "/api/v1/xiaonuo"
+    cors_enabled: false  # 生产环境默认关闭
+    rate_limit:
+      enabled: true
+      requests_per_minute: 100
+
+  # 认证配置
+  auth:
+    enabled: true
+    api_key_header: "X-API-Key"
+    jwt_secret: "${XIAONUO_JWT_SECRET}"
+    jwt_expire_hours: 24
+
+# =============================================================================
+# 记忆系统配置
+# =============================================================================
+memory:
+  # 短期记忆
+  short_term:
+    enabled: true
+    capacity: 1000
+    ttl_seconds: 3600
+
+  # 长期记忆
+  long_term:
+    enabled: true
+    storage_path: "${XIAONUO_DATA_DIR}/memory"
+    max_size_mb: 100
+
+  # 永恒记忆（家庭记忆）
+  eternal:
+    enabled: true
+    storage_path: "${XIAONUO_DATA_DIR}/eternal_memory"
+    backup_enabled: true
+    backup_interval_hours: 24
+
+# =============================================================================
+# 协作配置
+# =============================================================================
+collaboration:
+  # 智能体发现
+  discovery:
+    enabled: true
+    registry_path: "${XIAONUO_DATA_DIR}/agent_registry.json"
+    refresh_interval: 60
+
+  # 任务调度
+  scheduling:
+    enabled: true
+    max_concurrent_tasks: 10
+    task_timeout: 300
+    retry_attempts: 3
+
+  # 按需启动配置
+  on_demand:
+    enabled: true
+    # 小诺常驻，其他按需启动
+    agents:
+      xiaonuo:
+        auto_stop: false
+        idle_timeout: 0
+      xiaona:
+        auto_stop: true
+        idle_timeout: 300
+      yunxi:
+        auto_stop: true
+        idle_timeout: 600
+      xiaochen:
+        auto_stop: true
+        idle_timeout: 900
+
+# =============================================================================
+# 日志配置
+# =============================================================================
+logging:
+  # 基础配置
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "json"  # json, text
+
+  # 文件日志
+  file:
+    enabled: true
+    path: "${XIAONUO_LOG_DIR}/xiaonuo.log"
+    max_size_mb: 100
+    backup_count: 10
+    rotation: "daily"
+
+  # 控制台日志
+  console:
+    enabled: true
+    level: "INFO"
+
+  # 结构化日志字段
+  fields:
+    service: "xiaonuo-pisces"
+    environment: "production"
+    version: "1.0.0"
+
+# =============================================================================
+# 监控配置
+# =============================================================================
+monitoring:
+  # Prometheus指标
+  metrics:
+    enabled: true
+    port: 9095
+    path: "/metrics"
+
+  # 健康检查
+  health_check:
+    enabled: true
+    endpoint: "/health"
+    detailed: false
+
+  # 性能监控
+  performance:
+    enabled: true
+    collect_interval: 60
+    metrics:
+      - "response_time"
+      - "request_count"
+      - "error_rate"
+      - "memory_usage"
+      - "cpu_usage"
+
+# =============================================================================
+# 安全配置
+# =============================================================================
+security:
+  # API密钥
+  api_keys:
+    - "${XIAONUO_API_KEY}"
+
+  # 限流
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 100
+    burst: 20
+
+  # CORS
+  cors:
+    enabled: false
+    allow_origins: []
+    allow_methods: ["GET", "POST"]
+    allow_headers: ["Content-Type", "Authorization"]
+
+# =============================================================================
+# 调试配置
+# =============================================================================
+debug:
+  enabled: false
+  profiling: false
+  trace_memory: false
+
+# =============================================================================
+# 备份配置
+# =============================================================================
+backup:
+  enabled: true
+  interval_hours: 24
+  retention_days: 30
+  path: "${XIAONUO_BACKUP_DIR}"
+
+# =============================================================================
+# 优雅关闭配置
+# =============================================================================
+shutdown:
+  timeout: 30
+  wait_for_tasks: true
+  save_state: true
+  notify_peers: true

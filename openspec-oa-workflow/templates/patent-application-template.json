@@ -1,0 +1,73 @@
+{
+  "application": {
+    "application_number": "",
+    "publication_number": "",
+    "invention_title": "",
+    "filing_date": "",
+    "applicant": "",
+    "inventors": [],
+    "technical_field": "",
+    "classification": {
+      "ipc": "",
+      "cpc": ""
+    }
+  },
+  "technical_solution": {
+    "technical_problem": "要解决的技术问题",
+    "technical_scheme": {
+      "core_features": ["核心技术特征"],
+      "optional_features": ["可选技术特征"],
+      "embodiments": ["实施例概述"]
+    },
+    "technical_effects": [
+      {
+        "feature": "技术特征",
+        "effect": "技术效果"
+      }
+    ]
+  },
+  "claims": [
+    {
+      "claim_number": 1,
+      "claim_type": "独立权利要求|从属权利要求",
+      "depends_on": null,
+      "claim_text": "权利要求原文",
+      "features": [
+        {
+          "feature_id": "F1",
+          "feature_text": "特征描述",
+          "feature_type": "结构特征|方法特征|参数特征|功能性特征"
+        }
+      ],
+      "protection_scope": "保护范围分析"
+    }
+  ],
+  "drawings": [
+    {
+      "figure_number": "图1",
+      "figure_title": "附图名称",
+      "key_elements": ["关键元素"],
+      "reference_numerals": {
+        "10": "部件名称"
+      }
+    }
+  ],
+  "embodiments": [
+    {
+      "embodiment_id": "实施例1",
+      "description": "实施例描述",
+      "parameters": {
+        "参数名": "参数值或范围"
+      }
+    }
+  ],
+  "inventive_contribution": {
+    "inventive_point": "发明点",
+    "advantages_over_prior_art": ["相对于现有技术的优势"],
+    "unexpected_effects": ["预料不到的技术效果"]
+  },
+  "metadata": {
+    "parsed_at": "",
+    "parser_version": "1.0"
+  }
+}

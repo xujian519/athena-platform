@@ -1,0 +1,88 @@
+{
+  "session_id": "search_1765200975_8b89200f",
+  "original_query": "人工智能 专利 搜索",
+  "refined_results": [
+    {
+      "id": "patent_001",
+      "title": "AI",
+      "abstract": "Short",
+      "publication_date": "invalid_date",
+      "relevance_score": 0.3,
+      "source": "Unknown",
+      "keywords": [
+        "tech"
+      ]
+    },
+    {
+      "id": "patent_002",
+      "title": "Technology Patent",
+      "authors": [
+        "John"
+      ],
+      "publication_date": "2020-01-01",
+      "relevance_score": 0.2,
+      "source": "USPTO",
+      "keywords": [
+        "innovation"
+      ]
+    },
+    {
+      "id": "patent_003",
+      "title": "Machine Learning System",
+      "abstract": "This patent describes a system...",
+      "authors": [
+        "Dr. Smith",
+        "Dr. Johnson",
+        "Prof. Lee"
+      ],
+      "publication_date": "2015-05-15",
+      "relevance_score": 0.4,
+      "source": "EPO",
+      "keywords": [
+        "machine",
+        "learning"
+      ]
+    },
+    {
+      "id": "patent_004",
+      "title": "Neural Network",
+      "abstract": "A neural network implementation...",
+      "authors": [
+        "Research Team"
+      ],
+      "publication_date": "2018-08-30",
+      "relevance_score": 0.5,
+      "source": "WIPO",
+      "keywords": [
+        "neural",
+        "network",
+        "ai"
+      ]
+    },
+    {
+      "id": "patent_005",
+      "title": "Artificial Intelligence Patent",
+      "abstract": "Comprehensive AI technology patent with detailed description of innovative machine learning algorithms and applications...",
+      "authors": [
+        "Dr. Alice Chen",
+        "Dr. Bob Wilson",
+        "Dr. Carol Davis"
+      ],
+      "publication_date": "2023-12-01",
+      "relevance_score": 0.8,
+      "source": "CNIPA",
+      "keywords": [
+        "artificial intelligence",
+        "machine learning",
+        "patent",
+        "innovation"
+      ]
+    }
+  ],
+  "final_quality": "SearchQualityMetrics(relevance_score=0.0, completeness_score=0.9, accuracy_score=0.82, diversity_score=1.0, novelty_score=0.6599999999999999, overall_score=0.601, feedback_count=0, success_rate=0.0)",
+  "iteration_history": [],
+  "total_iterations": 0,
+  "improvement_ratio": 1.0,
+  "duration": 0.00038504600524902344,
+  "status": "completed"
+}

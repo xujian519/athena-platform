@@ -1,0 +1,18 @@
+{
+  "summary": {
+    "total_files_analyzed": 1,
+    "total_bare_exceptions": 1,
+    "total_wide_exceptions": 1,
+    "total_specific_exceptions": 0,
+    "total_exceptions": 1
+  },
+  "details": {
+    "core/dependency_injection.py": {
+      "bare_exception": 1,
+      "wide_exception": 1,
+      "except_specific": 0,
+      "total_exceptions": 1
+    }
+  },
+  "recommendations": []
+}

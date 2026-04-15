@@ -1,0 +1,137 @@
+# 小诺优化配置 - 生产环境
+# Xiaonuo Optimization Configuration - Production
+# 
+# 分阶段部署策略：
+# 阶段1: 只启用参数验证（风险最低）
+# 阶段2: 启用工具发现
+# 阶段3: 启用错误预测
+
+# ============================================================
+# 阶段1: 初始部署（第1周）- 只启用参数验证
+# ============================================================
+
+optimizations:
+  enabled: true  # ✅ 启用优化
+  fallback_on_error: true  # ✅ 失败时自动降级
+
+# 工具发现模块 - 阶段1先关闭
+tool_discovery:
+  enabled: false  # ⚠️ 阶段1先观察
+  config:
+    enable_embedding: false  # 生产环境建议关闭（无需额外依赖）
+    coarse_threshold: 0.3
+    fine_threshold: 0.6
+
+# 参数验证模块 - 阶段1启用（风险最低）
+parameter_validation:
+  enabled: true  # ✅ 阶段1启用
+  config:
+    enable_cache: true
+    cache_max_size: 2000  # 生产环境更大的缓存
+    cache_ttl_seconds: 600  # 10分钟TTL
+    max_concurrent_validations: 20  # 支持更高并发
+
+# 错误预测模块 - 阶段1先关闭
+error_prediction:
+  enabled: false  # ⚠️ 阶段1先观察
+  config:
+    enable_online_learning: true
+    window_size: 500  # 生产环境减小窗口
+    prediction_horizon_minutes: 10
+
+# ============================================================
+# 监控配置
+# ============================================================
+
+monitoring:
+  enabled: true
+  stats_interval_seconds: 60
+  log_metrics: true
+  log_level: "INFO"  # 生产环境使用INFO级别
+
+# ============================================================
+# 告警阈值
+# ============================================================
+
+alerts:
+  # 优化失败率告警
+  optimization_failure_rate: 0.05  # 5%
+  
+  # 缓存命中率告警
+  cache_hit_rate_threshold: 0.5  # 50%
+  
+  # 响应时间告警
+  validation_response_time_ms: 500  # 500ms
+
+# ============================================================
+# 集成策略
+# ============================================================
+
+integration:
+  # 工具发现集成点
+  tool_selection:
+    enabled: false  # 阶段1先关闭
+    min_confidence: 0.5
+    max_tools: 5
+
+  # 参数验证集成点
+  validation:
+    enabled: true  # ✅ 阶段1启用
+    validate_before_execution: true
+    fail_on_invalid: false  # 生产环境不要因验证失败而拒绝
+
+  # 错误预测集成点
+  prediction:
+    enabled: false  # 阶段1先关闭
+    predict_before_execution: true
+    min_risk_level: "HIGH"  # 生产环境只关注高风险
+    auto_prevent: false  # 生产环境不自动阻止
+
+# ============================================================
+# 性能优化
+# ============================================================
+
+performance:
+  # 批处理大小
+  batch_size: 10
+  
+  # 超时设置
+  validation_timeout_seconds: 5
+  prediction_timeout_seconds: 2
+  
+  # 内存限制
+  max_history_size: 1000
+
+# ============================================================
+# 安全配置
+# ============================================================
+
+security:
+  # 参数限制
+  max_parameter_count: 50
+  max_parameter_size_kb: 10
+  
+  # 验证规则
+  strict_validation: false  # 生产环境先使用宽松模式
+  
+  # 敏感信息过滤
+  filter_sensitive_data: true
+
+# ============================================================
+# 日志配置
+# ============================================================
+
+logging:
+  # 日志级别
+  level: "INFO"
+  
+  # 日志格式
+  format: "json"  # 生产环境使用JSON格式
+  
+  # 日志输出
+  outputs:
+    - type: "console"
+    - type: "file"
+      path: "/var/log/xiaonuo/optimization.log"
+      max_size_mb: 100
+      max_backups: 10

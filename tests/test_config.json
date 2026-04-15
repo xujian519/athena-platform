@@ -1,0 +1,74 @@
+{
+  "test_environment": {
+    "mock_external_services": true,
+    "enable_performance_monitoring": true,
+    "log_level": "INFO",
+    "timeout": 30
+  },
+  "unit_tests": {
+    "enabled": true,
+    "modules": [
+      "tests.unit.test_agentic_task_planner",
+      "tests.unit.test_prompt_chain_processor",
+      "tests.unit.test_goal_management_system"
+    ],
+    "verbosity": 2,
+    "buffer": true
+  },
+  "integration_tests": {
+    "enabled": true,
+    "modules": [
+      "tests.integration.test_agent_integrations"
+    ],
+    "timeout": 60,
+    "parallel_execution": false
+  },
+  "performance_tests": {
+    "enabled": true,
+    "baseline_comparison": true,
+    "memory_monitoring": true,
+    "cpu_monitoring": true,
+    "generate_report": true
+  },
+  "reporting": {
+    "generate_html": true,
+    "generate_json": true,
+    "generate_markdown": true,
+    "include_charts": true,
+    "save_raw_data": true
+  },
+  "performance_baselines": {
+    "response_time": {
+      "excellent": 0.5,
+      "good": 1.0,
+    "acceptable": 2.0,
+    "poor": 5.0
+    },
+    "success_rate": {
+      "excellent": 0.99,
+      "good": 0.95,
+      "acceptable": 0.90,
+      "poor": 0.80
+    },
+    "memory_usage": {
+      "excellent": 50,
+      "good": 100,
+      "acceptable": 200,
+      "poor": 500
+    }
+  },
+  "notification": {
+    "email_on_failure": false,
+    "webhook_url": null,
+    "slack_channel": null
+  },
+  "ci_integration": {
+    "junit_xml_output": true,
+    "code_coverage": true,
+    "quality_gates": {
+      "min_success_rate": 0.90,
+      "max_avg_response_time": 2.0,
+      "max_memory_usage": 300
+    }
+  }
+}

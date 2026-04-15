@@ -1,0 +1,48 @@
+{
+  "task_1765958303": {
+    "id": "task_1765958303",
+    "title": "部署测试任务",
+    "description": "部署测试任务",
+    "priority": 3,
+    "status": "pending",
+    "created_at": "2025-12-17T15:58:23.566695",
+    "updated_at": "2025-12-17T15:58:23.566695",
+    "due_at": null,
+    "completed_at": null,
+    "assigned_to": "",
+    "tags": [
+      "测试",
+      "部署"
+    ],
+    "reminders": [],
+    "metadata": {}
+  },
+  "task_1765958423": {
+    "id": "task_1765958423",
+    "title": "明天上午给范文新的实用新型专利确定名称（3件）",
+    "description": "明天上午给范文新的实用新型专利确定名称（3件）",
+    "priority": 3,
+    "status": "pending",
+    "created_at": "2025-12-17T16:00:23.486081",
+    "updated_at": "2025-12-17T16:00:23.529868",
+    "due_at": "2025-12-18T12:00:00",
+    "completed_at": null,
+    "assigned_to": "",
+    "tags": [
+      "专利",
+      "范文新",
+      "重要"
+    ],
+    "reminders": [
+      {
+        "reminder_type": "notification",
+        "remind_before": 120,
+        "message": "任务提醒: 明天上午给范文新的实用新型专利确定名称（3件）",
+        "enabled": true,
+        "repeat": false,
+        "repeat_interval": 60
+      }
+    ],
+    "metadata": {}
+  }
+}

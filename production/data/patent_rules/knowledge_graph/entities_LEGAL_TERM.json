@@ -1,0 +1,123 @@
+[
+  {
+    "name": "专利法",
+    "type": "LEGAL_TERM",
+    "properties": {
+      "definition": "调整因发明创造而产生的各种社会关系的法律规范",
+      "category": "法律法规",
+      "confidence": 0.98,
+      "source": "全国人大",
+      "enacted_date": "1984-03-12"
+    }
+  },
+  {
+    "name": "专利法实施细则",
+    "type": "LEGAL_TERM",
+    "properties": {
+      "definition": "对专利法的具体规定进行细化的行政法规",
+      "category": "行政法规",
+      "confidence": 0.98,
+      "source": "国务院"
+    }
+  },
+  {
+    "name": "专利审查指南",
+    "type": "LEGAL_TERM",
+    "properties": {
+      "definition": "国家知识产权局制定的专利审查标准和程序",
+      "category": "部门规章",
+      "confidence": 0.95,
+      "source": "国家知识产权局"
+    }
+  },
+  {
+    "name": "新颖性",
+    "type": "LEGAL_TERM",
+    "properties": {
+      "definition": "该发明或者实用新型不属于现有技术",
+      "category": "专利授权条件",
+      "confidence": 0.95,
+      "source": "专利法第二十二条"
+    }
+  },
+  {
+    "name": "创造性",
+    "type": "LEGAL_TERM",
+    "properties": {
+      "definition": "与现有技术相比，该发明有突出的实质性特点和显著的进步",
+      "category": "专利授权条件",
+      "confidence": 0.95,
+      "source": "专利法第二十二条"
+    }
+  },
+  {
+    "name": "实用性",
+    "type": "LEGAL_TERM",
+    "properties": {
+      "definition": "该发明或者实用新型能够制造或者使用，并且能够产生积极效果",
+      "category": "专利授权条件",
+      "confidence": 0.95,
+      "source": "专利法第二十二条"
+    }
+  },
+  {
+    "name": "现有技术",
+    "type": "LEGAL_TERM",
+    "properties": {
+      "definition": "申请日以前在国内外为公众所知的技术",
+      "category": "专利术语",
+      "confidence": 0.95,
+      "source": "专利法第二十二条"
+    }
+  },
+  {
+    "name": "权利要求书",
+    "type": "LEGAL_TERM",
+    "properties": {
+      "definition": "说明要求专利保护范围的文件",
+      "category": "专利申请文件",
+      "confidence": 0.98,
+      "source": "专利法第二十六条"
+    }
+  },
+  {
+    "name": "说明书",
+    "type": "LEGAL_TERM",
+    "properties": {
+      "definition": "清楚、完整地描述发明或者实用新型的技术内容的文件",
+      "category": "专利申请文件",
+      "confidence": 0.98,
+      "source": "专利法第二十六条"
+    }
+  },
+  {
+    "name": "优先权",
+    "type": "LEGAL_TERM",
+    "properties": {
+      "definition": "申请人就其发明创造第一次在某国提出专利申请后，在法定期限内就相同主题在他国提出专利申请的权限",
+      "category": "专利制度",
+      "confidence": 0.95,
+      "source": "专利法第二十九条"
+    }
+  },
+  {
+    "name": "专利侵权",
+    "type": "LEGAL_TERM",
+    "properties": {
+      "definition": "未经专利权人许可，实施其专利的行为",
+      "category": "专利法律",
+      "confidence": 0.95,
+      "source": "专利法第十一条"
+    }
+  },
+  {
+    "name": "专利无效宣告",
+    "type": "LEGAL_TERM",
+    "properties": {
+      "definition": "自专利局公告授予专利权之日起，任何单位或者个人认为该专利权的授予不符合本法有关规定的，可以请求专利复审委员会宣告该专利权无效",
+      "category": "专利法律程序",
+      "confidence": 0.95,
+      "source": "专利法第四十五条"
+    }
+  }
+]

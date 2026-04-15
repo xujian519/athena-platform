@@ -1,0 +1,215 @@
+{
+  "check_time": "2025-12-21T19:10:14.732086",
+  "laws_folder_stats": {
+    "total_files": 3112,
+    "by_category": {
+      "根目录": 2,
+      "宪法相关法": 52,
+      "其他": 3,
+      "行政法": 103,
+      "民法商法": 25,
+      "社会法": 25,
+      "刑法": 13,
+      "经济法": 82,
+      "案例": 1,
+      "案例/劳动人事": 11,
+      "案例/消费购物": 19,
+      "案例/行政协议诉讼": 11,
+      "案例/民法典": 15,
+      "部门规章": 1,
+      "部门规章/人力资源社会保障部": 2,
+      "部门规章/公安部": 10,
+      "部门规章/国家安全部": 1,
+      "部门规章/市场监督管理总局": 18,
+      "诉讼与非诉讼程序法": 11,
+      "司法解释": 393,
+      "地方性法规": 1,
+      "地方性法规/上海": 207,
+      "地方性法规/浙江": 411,
+      "地方性法规/河南": 419,
+      "地方性法规/北京": 166,
+      "地方性法规/山东": 473,
+      "宪法": 7,
+      "民法典": 9,
+      "行政法规": 621
+    },
+    "by_extension": {
+      ".md": 3112
+    }
+  },
+  "vector_database_stats": {
+    "checked_collections": 5,
+    "total_vectors": 6457,
+    "total_laws_vectors": 3127,
+    "collection_details": [
+      {
+        "collection": "legal_articles_1024",
+        "total_points": 2693,
+        "laws_files_count": 2693,
+        "laws_files_sample": [
+          {
+            "id": "00007844-e1b5-81c9-9b32-4fe1de5d62f3",
+            "title": "# 使用有毒物品作业场所劳动保护条例",
+            "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/行政法规/使用有毒物品作业场所劳动保护条例(2002-05-12).md",
+            "category": "行政法规",
+            "doc_type": "行政法规"
+          },
+          {
+            "id": "00028cb4-492f-a215-6ffa-064a94ddc760",
+            "title": "# 浙江省职工基本养老保险条例",
+            "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/地方性法规/浙江/浙江省职工基本养老保险条例(2008-05-30).md",
+            "category": "浙江",
+            "doc_type": "其他"
+          },
+          {
+            "id": "000a9989-be3d-62fc-1832-cbf5a4bde301",
+            "title": "# 河南省计划免疫条例",
+            "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/地方性法规/河南/河南省计划免疫条例(2010-07-30).md",
+            "category": "河南",
+            "doc_type": "其他"
+          },
+          {
+            "id": "000de956-1012-2254-390d-c54dd7e00718",
+            "title": "# 舟山市物业管理条例",
+            "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/地方性法规/浙江/舟山市物业管理条例(2021-11-01).md",
+            "category": "浙江",
+            "doc_type": "其他"
+          },
+          {
+            "id": "000ff120-e11f-0f31-04e4-061ef5bb64df",
+            "title": "# 威海市城市风貌保护条例",
+            "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/地方性法规/山东/威海市城市风貌保护条例(2020-01-17).md",
+            "category": "山东",
+            "doc_type": "其他"
+          }
+        ],
+        "import_rate": 100.0
+      },
+      {
+        "collection": "legal_chunks_v2",
+        "total_points": 2008,
+        "laws_files_count": 0,
+        "laws_files_sample": [],
+        "import_rate": 0.0
+      },
+      {
+        "collection": "patent_rules_unified",
+        "total_points": 1322,
+        "laws_files_count": 0,
+        "laws_files_sample": [],
+        "import_rate": 0.0
+      },
+      {
+        "collection": "legal_judgments_1024",
+        "total_points": 392,
+        "laws_files_count": 392,
+        "laws_files_sample": [
+          {
+            "id": "00178a5d-ffaf-fae9-939e-f7c7f7d36093",
+            "title": "# 最高人民法院关于审理涉及农村土地承包经营纠纷调解仲裁案件适用法律若干问题的解释",
+            "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院关于审理涉及农村土地承包经营纠纷调解仲裁案件适用法律若干问题的解释(2020-12-29).md",
+            "category": "司法解释",
+            "doc_type": "司法解释"
+          },
+          {
+            "id": "01a9a2a9-eeae-6e5e-5dd5-3963bc4fb1a4",
+            "title": "# 最高人民法院关于减刑、假释案件审理程序的规定",
+            "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院关于减刑、假释案件审理程序的规定(2014-04-23).md",
+            "category": "司法解释",
+            "doc_type": "司法解释"
+          },
+          {
+            "id": "022fdeb3-7ef5-7355-644c-2fdadc257fa1",
+            "title": "# 最高人民法院关于审理倒卖车票刑事案件有关问题的解释",
+            "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院关于审理倒卖车票刑事案件有关问题的解释(1999-09-06).md",
+            "category": "司法解释",
+            "doc_type": "司法解释"
+          },
+          {
+            "id": "041cfb13-e646-2a50-0099-a93b9e0b8174",
+            "title": "# 最高人民检察院关于以检察专递方式邮寄送达有关检察法律文书的若干规定",
+            "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民检察院关于以检察专递方式邮寄送达有关检察法律文书的若干规定(2015-02-13).md",
+            "category": "司法解释",
+            "doc_type": "司法解释"
+          },
+          {
+            "id": "04519c8e-922d-2e75-dfd1-c0bca4262cca",
+            "title": "# 最高人民法院关于审查知识产权纠纷行为保全案件适用法律若干问题的规定",
+            "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院关于审查知识产权纠纷行为保全案件适用法律若干问题的规定(2018-12-12).md",
+            "category": "司法解释",
+            "doc_type": "司法解释"
+          }
+        ],
+        "import_rate": 100.0
+      },
+      {
+        "collection": "legal_articles_v3_1024",
+        "total_points": 42,
+        "laws_files_count": 42,
+        "laws_files_sample": [
+          {
+            "id": "0b10001d-9e6a-0576-b4ca-129fd9cb0b29",
+            "title": "立法应当遵循宪法的基本原则，以经济建设为中心，坚持社会主义道路、坚持人民民主专政、坚持中国共产党的领导、坚持马克思列宁主义毛泽东思想邓小平理论，坚持改革开放。",
+            "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/宪法相关法/立法法(2015-03-15).md",
+            "category": "",
+            "doc_type": ""
+          },
+          {
+            "id": "0ec18f1d-5f42-02c1-fd28-530c7444e040",
+            "title": "国家安全是指国家政权、主权、统一和领土完整、人民福祉、经济社会可持续发展和国家其他重大利益相对处于没有危险和不受内外威胁的状态，以及保障持续安全状态的能力。",
+            "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/宪法相关法/国家安全法(2015-07-01).md",
+            "category": "",
+            "doc_type": ""
+          },
+          {
+            "id": "1874ae5a-85d4-1de8-97fa-28e84d6735fb",
+            "title": "的规定，设立澳门特别行政区，并按照“一个国家，两种制度”的方针，不在澳门实行社会主义的制度和政策。国家对澳门的基本方针政策，已由中国政府在中葡联合声明中予以阐明。",
+            "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/宪法相关法/澳门特别行政区基本法(1993-03-31).md",
+            "category": "",
+            "doc_type": ""
+          },
+          {
+            "id": "18d84326-90c7-631d-263c-18dba2a80440",
+            "title": "xxxxx",
+            "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/法律法规模版.md",
+            "category": "",
+            "doc_type": ""
+          },
+          {
+            "id": "1e77dad3-bd7e-5874-5332-c4a2ed0ea54c",
+            "title": "中华人民共和国是统一的多民族的国家，各民族的人都具有中国国籍。",
+            "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/宪法相关法/国籍法(1980-09-10).md",
+            "category": "",
+            "doc_type": ""
+          }
+        ],
+        "import_rate": 100.0
+      }
+    ]
+  },
+  "import_analysis": {
+    "total_laws_files": 3112,
+    "imported_files": 15,
+    "missing_files": 3112,
+    "import_rate": 0.4820051413881748,
+    "missing_files_sample": [
+      "dev/tools/Laws-1.0.0/地方性法规/河南/洛阳市保护和奖励维护社会治安见义勇为人员条例(2002-12-23).md",
+      "dev/tools/Laws-1.0.0/地方性法规/山东/山东省节约能源条例(2017-09-30).md",
+      "dev/tools/Laws-1.0.0/地方性法规/浙江/温州市电梯安全条例(2018-04-09).md",
+      "dev/tools/Laws-1.0.0/宪法/宪法修正案（1993年）.md",
+      "dev/tools/Laws-1.0.0/司法解释/最高人民法院关于国家赔偿案件立案工作的规定(2012-01-13).md",
+      "dev/tools/Laws-1.0.0/民法商法/涉外民事关系法律适用法(2010-10-28).md",
+      "dev/tools/Laws-1.0.0/地方性法规/上海/上海市防汛条例(2021-11-25).md",
+      "dev/tools/Laws-1.0.0/地方性法规/浙江/温州市家政服务条例(2021-04-07).md",
+      "dev/tools/Laws-1.0.0/地方性法规/河南/安阳市中小学校幼儿园规划建设条例(2021-12-27).md",
+      "dev/tools/Laws-1.0.0/地方性法规/山东/青岛市价格条例(2018-11-30).md"
+    ]
+  },
+  "summary": {
+    "total_laws_files": 3112,
+    "total_vectors": 6457,
+    "imported_laws_files": 3127,
+    "import_rate": 0.4820051413881748,
+    "fully_imported": false
+  }
+}

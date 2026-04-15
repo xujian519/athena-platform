@@ -1,0 +1,166 @@
+{
+  "timestamp": "2026-03-06T09:55:11.896570",
+  "databases": [
+    {
+      "name": "PostgreSQL",
+      "type": "关系型数据库",
+      "host": "localhost:5432",
+      "connected": true,
+      "data_volume": 282418931369,
+      "collections": 19,
+      "error": "",
+      "details": {
+        "databases": [
+          {
+            "name": "patent_db",
+            "size": 273008823443
+          },
+          {
+            "name": "postgres",
+            "size": 8637533331
+          },
+          {
+            "name": "history_24",
+            "size": 380822031
+          },
+          {
+            "name": "athena",
+            "size": 164719763
+          },
+          {
+            "name": "patent_guidelines",
+            "size": 40690191
+          },
+          {
+            "name": "patent_rules",
+            "size": 36569615
+          },
+          {
+            "name": "yunpat",
+            "size": 21578255
+          },
+          {
+            "name": "athena_business",
+            "size": 21414415
+          },
+          {
+            "name": "athena_memory",
+            "size": 16712207
+          },
+          {
+            "name": "xiaonuo_db",
+            "size": 10920463
+          }
+        ],
+        "tables": [
+          {
+            "schema": "public",
+            "table": "crawling_test"
+          },
+          {
+            "schema": "public",
+            "table": "judgment_courts"
+          },
+          {
+            "schema": "public",
+            "table": "judgment_embeddings"
+          },
+          {
+            "schema": "public",
+            "table": "judgment_entities"
+          },
+          {
+            "schema": "public",
+            "table": "judgment_law_articles"
+          },
+          {
+            "schema": "public",
+            "table": "judgment_paragraphs"
+          },
+          {
+            "schema": "public",
+            "table": "judgment_patent_numbers"
+          },
+          {
+            "schema": "public",
+            "table": "judgment_relations"
+          },
+          {
+            "schema": "public",
+            "table": "judgment_vector_stats"
+          },
+          {
+            "schema": "public",
+            "table": "legal_articles_v2"
+          },
+          {
+            "schema": "public",
+            "table": "legal_articles_v2_embeddings"
+          },
+          {
+            "schema": "public",
+            "table": "legal_documents"
+          },
+          {
+            "schema": "public",
+            "table": "patent_decisions_v1"
+          },
+          {
+            "schema": "public",
+            "table": "patent_decisions_v2"
+          },
+          {
+            "schema": "public",
+            "table": "patent_invalid_decisions"
+          },
+          {
+            "schema": "public",
+            "table": "patent_invalid_embeddings"
+          },
+          {
+            "schema": "public",
+            "table": "patent_invalid_entities"
+          },
+          {
+            "schema": "public",
+            "table": "patent_judgment_cases"
+          },
+          {
+            "schema": "public",
+            "table": "patent_judgment_vectors"
+          },
+          {
+            "schema": "public",
+            "table": "patent_judgments"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Qdrant",
+      "type": "向量数据库",
+      "host": "localhost:6333",
+      "connected": false,
+      "data_volume": 0,
+      "collections": 0,
+      "error": "4 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.5/v/int_type\nobj.result.config.optimizer_config.prevent_unoptimized\n  Extra inputs are not permitted [type=extra_forbidden, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.5/v/extra_forbidden\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.5/v/extra_forbidden\nobj.result.update_queue\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'length': 0}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.5/v/extra_forbidden",
+      "details": {}
+    },
+    {
+      "name": "Neo4j",
+      "type": "图数据库",
+      "host": "localhost:7687",
+      "connected": false,
+      "data_volume": 0,
+      "collections": 0,
+      "error": "{code: Neo.ClientError.Statement.SyntaxError} {message: Variable `jmx` not defined (line 1, column 42 (offset: 41))\n\"CALL dbms.queryJmx('org.neo4j:*') RETURN jmx\"\n                                          ^}",
+      "details": {}
+    }
+  ],
+  "summary": {
+    "total_databases": 3,
+    "connected_databases": 1,
+    "total_data_volume": 282418931369,
+    "ready_for_legal_world": false
+  }
+}

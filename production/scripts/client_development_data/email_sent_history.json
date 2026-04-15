@@ -1,0 +1,56 @@
+[
+  {
+    "client_id": 1,
+    "company_name": "山东中科先进技术有限公司",
+    "email": "kyglb@sdiat.ac.cn",
+    "week": 1,
+    "subject": "【合作机会】关于山东中科先进技术有限公司专利价值提升方案（含行业数据）",
+    "sent_time": "2026-01-04 19:40:54",
+    "success": true
+  },
+  {
+    "client_id": 2,
+    "company_name": "济南晶正电子科技有限公司",
+    "email": "info@nanoln.com",
+    "week": 1,
+    "subject": "【合作机会】关于济南晶正电子科技有限公司专利价值提升方案（含行业数据）",
+    "sent_time": "2026-01-04 19:40:57",
+    "success": true
+  },
+  {
+    "client_id": 3,
+    "company_name": "智洋创新科技股份有限公司",
+    "email": "zhiyangchuangxin@zhiyang.com.cn",
+    "week": 1,
+    "subject": "【合作机会】关于智洋创新科技股份有限公司专利价值提升方案（含行业数据）",
+    "sent_time": "2026-01-04 19:40:59",
+    "success": true
+  },
+  {
+    "client_id": 4,
+    "company_name": "济南镭迈机械科技有限公司",
+    "email": "signcutokay@hotmail.com",
+    "week": 1,
+    "subject": "【合作机会】关于济南镭迈机械科技有限公司专利价值提升方案（含行业数据）",
+    "sent_time": "2026-01-04 19:41:02",
+    "success": true
+  },
+  {
+    "client_id": 5,
+    "company_name": "山东莱博生物科技有限公司",
+    "email": "labchina@126.com",
+    "week": 1,
+    "subject": "【合作机会】关于山东莱博生物科技有限公司专利价值提升方案（含行业数据）",
+    "sent_time": "2026-01-04 19:41:04",
+    "success": true
+  },
+  {
+    "client_id": 6,
+    "company_name": "济南沃茨数控机械有限公司",
+    "email": "546354649@qq.com",
+    "week": 1,
+    "subject": "【合作机会】关于济南沃茨数控机械有限公司专利价值提升方案（含行业数据）",
+    "sent_time": "2026-01-04 19:41:06",
+    "success": true
+  }
+]

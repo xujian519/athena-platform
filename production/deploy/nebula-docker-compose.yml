@@ -1,0 +1,129 @@
+version: '3.8'
+services:
+  # Nebula Graph 核心服务
+  nebula-metad:
+    image: vesoft/nebula-metad:v3.8.0
+    container_name: nebula-metad
+    environment:
+      USER: root
+      TZ: UTC
+    command:
+      - --meta_server_addrs=nebula-metad:9559
+      - --local_ip=nebula-metad
+      - --ws_ip=nebula-metad
+      - --port=9559
+      - --data_path=/data/meta
+      - --log_dir=/logs
+      - --v=0
+      - --minloglevel=0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://nebula-metad:19559/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "9559:9559"
+      - "19559:19559"
+    volumes:
+      - /Users/xujian/Athena工作平台/production/data/nebula/meta:/data/meta
+      - /Users/xujian/Athena工作平台/production/logs/nebula/meta:/logs
+    networks:
+      - nebula-net
+    restart: on-failure
+    cap_add:
+      - SYS_PTRACE
+
+  # Nebula Graph 存储服务
+  nebula-storaged:
+    image: vesoft/nebula-storaged:v3.8.0
+    container_name: nebula-storaged
+    environment:
+      USER: root
+      TZ: UTC
+    command:
+      - --meta_server_addrs=nebula-metad:9559
+      - --local_ip=nebula-storaged
+      - --ws_ip=nebula-storaged
+      - --port=9779
+      - --data_path=/data/storage
+      - --log_dir=/logs
+      - --v=0
+      - --minloglevel=0
+    depends_on:
+      nebula-metad:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://nebula-storaged:19779/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "9779:9779"
+      - "19779:19779"
+    volumes:
+      - /Users/xujian/Athena工作平台/production/data/nebula/storage:/data/storage
+      - /Users/xujian/Athena工作平台/production/logs/nebula/storage:/logs
+    networks:
+      - nebula-net
+    restart: on-failure
+    cap_add:
+      - SYS_PTRACE
+
+  # Nebula Graph 图服务
+  nebula-graphd:
+    image: vesoft/nebula-graphd:v3.8.0
+    container_name: nebula-graphd
+    environment:
+      USER: root
+      TZ: UTC
+    command:
+      - --meta_server_addrs=nebula-metad:9559
+      - --local_ip=nebula-graphd
+      - --ws_ip=nebula-graphd
+      - --port=9669
+      - --log_dir=/logs
+      - --v=0
+      - --minloglevel=0
+      - --disable_query_stats=false
+    depends_on:
+      nebula-metad:
+        condition: service_healthy
+      nebula-storaged:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://nebula-graphd:19669/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "9669:9669"
+      - "19669:19669"
+    volumes:
+      - /Users/xujian/Athena工作平台/production/logs/nebula/graph:/logs
+    networks:
+      - nebula-net
+    restart: on-failure
+    cap_add:
+      - SYS_PTRACE
+
+  # Nebula Studio (可选的Web界面)
+  nebula-studio:
+    image: vesoft/nebula-studio:v3.8.0
+    container_name: nebula-studio
+    environment:
+      USER: root
+    ports:
+      - "7001:7001"
+    depends_on:
+      - nebula-graphd
+    volumes:
+      - /Users/xujian/Athena工作平台/production/data/nebula/studio:/opt/app/.nebula-studio
+    networks:
+      - nebula-net
+    restart: on-failure
+
+networks:
+  nebula-net:

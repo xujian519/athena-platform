@@ -1,0 +1,44 @@
+# 记忆系统配置文件
+# Memory System Configuration File
+
+version: "1.0.0"
+created_at: "2025-12-11T14:10:00"
+updated_at: "2025-12-11T14:10:00"
+
+# 向量记忆配置
+vector_memory:
+  dimension: 1024                   # 向量维度（默认1024，支持768、512等）
+  max_vectors: 10000               # 最大向量数量
+  use_faiss: true                  # 是否使用FAISS
+  similarity_threshold: 0.3        # 相似度阈值
+  index_type: "composite"          # 索引类型: inverted, tf_idf, vector, lsh, hierarchical, composite
+
+# 增强记忆配置
+enhanced_memory:
+  enable_vector_memory: true       # 启用向量记忆
+  enable_knowledge_graph: false    # 启用知识图谱
+  auto_enhance_memories: true      # 自动增强记忆
+  knowledge_weight: 0.3           # 知识权重
+
+# 记忆处理器配置
+memory_processor:
+  working_memory_capacity: 100     # 工作记忆容量
+  short_term_capacity: 1000       # 短期记忆容量
+  consolidation_interval: 3600    # 记忆巩固间隔（秒）
+  forgetting_threshold: 0.1       # 遗忘阈值
+  storage_path: "memory_storage.db" # 存储路径
+
+# 性能配置
+performance:
+  monitoring_interval: 30         # 监控间隔（秒）
+  cache_max_size: 1000           # 缓存最大大小
+  max_concurrent_operations: 10   # 最大并发操作数
+  enable_performance_monitoring: true  # 启用性能监控
+
+# 日志配置
+logging:
+  level: "INFO"                   # 日志级别: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file_path: "logs/memory_system.log"  # 日志文件路径（可选）
+  max_file_size: 10485760        # 最大文件大小（10MB）
+  backup_count: 5                # 备份文件数量

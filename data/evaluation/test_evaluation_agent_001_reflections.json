@@ -1,0 +1,27 @@
+{
+  "5d06c064-fe22-4ec6-88e9-8806a3e45b4b": {
+    "id": "5d06c064-fe22-4ec6-88e9-8806a3e45b4b",
+    "evaluator_id": "test_evaluation_agent_001",
+    "target_evaluation_id": "db41aba9-64e9-41ee-9263-01ccbc23bbd4",
+    "reflection_type": "ReflectionType.SELF_REFLECTION",
+    "context": {
+      "focus": "improvement_areas"
+    },
+    "observations": "识别出1个强项",
+    "analysis": "平均得分为85.0，最低78.0，最高92.0",
+    "insights": [
+      "表现良好，可考虑进一步提升到卓越水平",
+      "强项可以作为其他领域的改进参考"
+    ],
+    "action_items": [
+      "深入探索: 表现良好，可考虑进一步提升到卓越水平",
+      "深入探索: 强项可以作为其他领域的改进参考"
+    ],
+    "lessons_learned": [
+      "保持优势同时持续寻找改进机会",
+      "质量保证需要制度化、标准化",
+      "提高评估的置信度需要更多证据支持"
+    ],
+    "timestamp": "2025-12-11 14:58:37.478896"
+  }
+}

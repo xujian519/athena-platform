@@ -1,0 +1,213 @@
+# Athena工作平台生产环境配置
+# Production Environment Configuration for Athena Platform
+
+environment:
+  name: "production"
+  debug: false
+  log_level: "INFO"
+
+paths:
+  # 使用环境变量的路径配置
+  athena_home: "${ATHENA_HOME}"
+  data_path: "${ATHENA_HOME}/data"
+  config_path: "${ATHENA_HOME}/config"
+  logs_path: "${ATHENA_HOME}/logs"
+  uploads_path: "${ATHENA_HOME}/uploads"
+  cache_path: "${ATHENA_HOME}/cache"
+  backup_path: "${ATHENA_HOME}/backups"
+
+database:
+  postgresql:
+    host: "${DB_HOST:localhost}"
+    port: "${DB_PORT:5432}"
+    name: "${DB_NAME:athena_db}"
+    user: "${DB_USER:athena_user}"
+    password: "${DB_PASSWORD}"
+    ssl_mode: "require"
+    pool_size: 20
+    max_overflow: 30
+    pool_timeout: 30
+
+  replication:
+    enabled: true
+    host: "${REPLICATION_HOST}"
+    port: "${REPLICATION_PORT:5432}"
+    user: "${REPLICATION_USER:replicator}"
+    password: "${REPLICATION_PASSWORD}"
+
+redis:
+  host: "${REDIS_HOST:localhost}"
+  port: "${REDIS_PORT:6379}"
+  password: "${REDIS_PASSWORD}"
+  db: "${REDIS_DB:0}"
+  ssl_enabled: true
+
+ai_models:
+  glm:
+    api_key: "${GLM_API_KEY}"
+    base_url: "${GLM_BASE_URL:https://open.bigmodel.cn/api/paas/v4}"
+    coding_base_url: "${GLM_CODING_BASE_URL:https://open.bigmodel.cn/api/coding/paas/v4}"
+    model: "glm-4.7"
+    plan: "GLM Coding Max 季度计划"
+    timeout: 30
+    context_window: "200K"
+    max_output: "128K"
+
+  local_models:
+    base_path: "${MODEL_PATH:${ATHENA_HOME}/models}"
+    bert_path: "${BERT_MODEL_PATH:${MODEL_PATH}/chinese_bert}"
+    bge_path: "${BGE_MODEL_PATH:${MODEL_PATH}/BAAI/bge-m3}"
+
+security:
+  jwt:
+    secret: "${JWT_SECRET}"
+    algorithm: "HS256"
+    expire_hours: 24
+
+  cors:
+    origins: ["${CORS_ORIGINS}"]
+    credentials: true
+
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 100
+
+  ssl:
+    enabled: true
+    cert_path: "${SSL_CERT_PATH}"
+    key_path: "${SSL_KEY_PATH}"
+
+services:
+  yunpat_agent:
+    host: "${YUNPAT_HOST:0.0.0.0}"
+    port: "${YUNPAT_PORT:8020}"
+    workers: 4
+
+  xiaonuo_princess:
+    host: "${XIANUO_HOST:0.0.0.0}"
+    port: "${XIANUO_PORT:8021}"
+    workers: 2
+
+  crawler_service:
+    host: "${CRAWLER_HOST:0.0.0.0}"
+    port: "${CRAWLER_PORT:8022}"
+    workers: 4
+
+monitoring:
+  prometheus:
+    enabled: true
+    port: "${PROMETHEUS_PORT:9090}"
+
+  grafana:
+    enabled: true
+    port: "${GRAFANA_PORT:3001}"
+    username: "${GRAFANA_USERNAME:admin}"
+    password: "${GRAFANA_PASSWORD}"
+
+  logging:
+    level: "${LOG_LEVEL:INFO}"
+    structured: true
+    json_format: true
+
+  alerts:
+    webhook_url: "${ALERT_WEBHOOK_URL}"
+    email: "${ALERT_EMAIL}"
+
+identity_system:
+  # 小诺·双鱼公主身份配置
+  xiaonuo_princess:
+    config_file: "${XIANUO_CONFIG_PATH:${ATHENA_HOME}/config/identity/xiaonuo_pisces_princess.json}"
+    storage_path: "${IDENTITY_STORAGE_PATH:${ATHENA_HOME}/data/identity_permanent_storage/xiaonuo}"
+    backup_enabled: true
+
+  # 身份记忆系统
+  memory_system:
+    enabled: true
+    persistent_storage: true
+    auto_backup: true
+    backup_interval_hours: 24
+
+performance:
+  optimization:
+    enabled: true
+    profiling_enabled: false
+
+  caching:
+    enabled: true
+    ttl_seconds: "${CACHE_TTL_SECONDS:3600}"
+    max_size: "${CACHE_MAX_SIZE:1000}"
+
+  concurrency:
+    max_workers: "${MAX_WORKERS:4}"
+    max_connections: "${MAX_CONNECTIONS:1000}"
+
+features:
+  knowledge_graph:
+    enabled: "${KNOWLEDGE_GRAPH_ENABLED:true}"
+    path: "${KNOWLEDGE_GRAPH_PATH:${ATHENA_HOME}/data/knowledge_graph}"
+
+  browser_automation:
+    enabled: "${BROWSER_AUTOMATION_ENABLED:true}"
+    headless: "${BROWSER_HEADLESS:true}"
+    timeout: "${BROWSER_TIMEOUT:30000}"
+
+  mcp_services:
+    enabled: "${MCP_ENABLED:true}"
+    servers_path: "${MCP_SERVERS_PATH:${ATHENA_HOME}/mcp-servers}"
+
+backup:
+  enabled: "${AUTO_BACKUP_ENABLED:true}"
+  interval_hours: "${BACKUP_INTERVAL_HOURS:24}"
+  retention_days: "${BACKUP_RETENTION_DAYS:30}"
+
+  databases:
+    - name: "postgresql"
+      enabled: true
+      compression: true
+
+  files:
+    - path: "${IDENTITY_STORAGE_PATH}"
+      enabled: true
+      compression: true
+
+    - path: "${UPLOAD_PATH}"
+      enabled: true
+      compression: false
+
+external_services:
+  smtp:
+    host: "${SMTP_HOST:smtp.gmail.com}"
+    port: "${SMTP_PORT:587}"
+    username: "${SMTP_USERNAME}"
+    password: "${SMTP_PASSWORD}"
+    tls_enabled: true
+
+  amap:
+    api_key: "${AMAP_API_KEY}"
+
+  message_queue:
+    type: "rabbitmq"
+    host: "${RABBITMQ_HOST:localhost}"
+    port: "${RABBITMQ_PORT:5672}"
+    username: "${RABBITMQ_USERNAME:guest}"
+    password: "${RABBITMQ_PASSWORD:guest}"
+
+deployment:
+  type: "infrastructure/infrastructure/docker"  # docker, kubernetes, baremetal
+
+  docker:
+    registry: "${DOCKER_REGISTRY}"
+    tag: "${DOCKER_TAG:latest}"
+    pull_policy: "always"
+
+  kubernetes:
+    namespace: "${K8S_NAMESPACE:athena}"
+    service_name: "${K8S_SERVICE_NAME:athena-platform}"
+    replicas: 3
+    resources:
+      requests:
+        memory: "1Gi"
+        cpu: "500m"
+      limits:
+        memory: "2Gi"
+        cpu: "1000m"

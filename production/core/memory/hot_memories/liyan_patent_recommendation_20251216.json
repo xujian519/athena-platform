@@ -1,0 +1,132 @@
+{
+  "timestamp": "2025-12-16",
+  "memory_type": "HOT",
+  "category": "patent_consultation",
+  "customer_info": {
+    "name": "李艳",
+    "goal": "晋升职称",
+    "field": "基层农业技术推广",
+    "need_count": "4个实用新型专利",
+    "urgency": "高（职称评审需求）"
+  },
+  "consultation_process": {
+    "step1_requirement_analysis": {
+      "status": "completed",
+      "findings": "通过外部搜索了解职称评审政策，专利发明是重要参考指标",
+      "policy_support": "技术创新、专利发明作为职称评审重要参考"
+    },
+    "step2_patent_generation": {
+      "status": "completed",
+      "total_generated": 20,
+      "method": "双推理引擎+发散性思维",
+      "categories": [
+        "智慧农业监测类(3个)",
+        "节水灌溉技术类(3个)",
+        "农机具改进类(3个)",
+        "温室大棚技术类(3个)",
+        "农技推广工具类(3个)",
+        "特色作物技术类(3个)",
+        "智慧养殖类(2个)"
+      ]
+    },
+    "step3_database_analysis": {
+      "status": "completed",
+      "database_size": "2800万+专利数据",
+      "analysis_method": "PostgreSQL专利数据库竞争分析",
+      "key_findings": {
+        "自清洁滴灌": "仅3个相关专利，竞争极低",
+        "中药材起垄器": "0个相关专利，零竞争蓝海",
+        "农业展示板": "17个专利，竞争较少",
+        "农产品晾晒架": "12个专利，竞争较少"
+      }
+    },
+    "step4_final_recommendation": {
+      "status": "completed",
+      "rejected_patents": [
+        "农技推广信息推送终端(过于软件化)",
+        "农作物生长状态智能监测标签(更适合发明专利)",
+        "农民培训用多功能教具箱(关联度不够)"
+      ],
+      "final_8_recommendations": [
+        {
+          "rank": 1,
+          "name": "滴灌带防堵塞自清洁装置",
+          "competition": "极低(3个专利)",
+          "prospect": "⭐⭐⭐⭐⭐",
+          "key_innovation": "水流驱动毛刷自清洁"
+        },
+        {
+          "rank": 2,
+          "name": "中药材种植用起垄器",
+          "competition": "零竞争(0个专利)",
+          "prospect": "⭐⭐⭐⭐⭐",
+          "key_innovation": "中药材专用可调节设计"
+        },
+        {
+          "rank": 3,
+          "name": "山地林果采摘辅助工具",
+          "competition": "较少",
+          "prospect": "⭐⭐⭐⭐",
+          "key_innovation": "防损伤柔性抓取"
+        },
+        {
+          "rank": 4,
+          "name": "农业废弃物堆肥加速器",
+          "competition": "中等偏少",
+          "prospect": "⭐⭐⭐⭐",
+          "key_innovation": "农村便携式模块化设计"
+        },
+        {
+          "rank": 5,
+          "name": "农业技术示范展示板",
+          "competition": "少(17个专利)",
+          "prospect": "⭐⭐⭐⭐",
+          "key_innovation": "可折叠移动式多媒体展示"
+        },
+        {
+          "rank": 6,
+          "name": "特色农产品晾晒架",
+          "competition": "少(12个专利)",
+          "prospect": "⭐⭐⭐⭐",
+          "key_innovation": "可调节角度多层设计"
+        },
+        {
+          "rank": 7,
+          "name": "农作物根部精准滴灌器",
+          "competition": "中等",
+          "prospect": "⭐⭐⭐",
+          "key_innovation": "可调节深度精准灌溉"
+        },
+        {
+          "rank": 8,
+          "name": "农田雨水收集再利用系统",
+          "competition": "中等",
+          "prospect": "⭐⭐⭐",
+          "key_innovation": "模块化雨水收集系统"
+        }
+      ]
+    }
+  },
+  "next_steps": {
+    "immediate": "等待客户李艳确认专利方案",
+    "after_confirmation": [
+      "协助准备专利申请材料",
+      "完善专利技术方案",
+      "联系专利代理机构",
+      "跟踪申请进度"
+    ]
+  },
+  "sisters_contribution": {
+    "xiaonuo": "需求分析、流程协调、记忆记录、任务调度",
+    "xiaona": "专利检索分析、技术创新设计、风险评估、专业建议",
+    "collaboration_effectiveness": "高效协同，发挥各自优势，为客户提供专业服务"
+  },
+  "consultation_value": {
+    "data_driven": "基于2800万专利数据精准分析",
+    "innovation_finding": "发现零竞争蓝海专利领域",
+    "practical_focus": "专注基层农业技术推广实际需求",
+    "success_rate": "推荐专利授权前景高，满足客户职称晋升需求"
+  },
+  "emotional_tags": ["🎯 专业精准", "💡 创新发现", "🤝 姐妹协作", "📊 数据驱动", "✨ 客户满意"],
+  "hot_memory_priority": "HIGH - 待客户确认后继续跟进"
+}

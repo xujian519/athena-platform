@@ -1,0 +1,160 @@
+name: Periodic Project Cleanup
+
+on:
+  schedule:
+    # 每周日上午2点自动运行清理
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+    # 手动触发
+    inputs:
+      cleanup_level:
+        description: '清理级别'
+        required: true
+        default: 'standard'
+        type: choice
+        options:
+          - light
+          - standard
+          - thorough
+      create_report:
+        description: '创建详细报告'
+        required: true
+        default: true
+        type: boolean
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Set up environment
+      run: |
+        echo "PROJECT_ROOT=$(pwd)" >> $GITHUB_ENV
+        echo "TIMESTAMP=$(date +'%Y%m%d_%H%M%S')" >> $GITHUB_ENV
+
+    - name: Run periodic cleanup
+      run: |
+        echo "🚀 开始自动清理..."
+
+        # 运行清理脚本
+        if [ -f "00-infrastructure/08-operations/scripts/periodic-cleanup.sh" ]; then
+          chmod +x 00-infrastructure/08-operations/scripts/periodic-cleanup.sh
+          ./00-infrastructure/08-operations/scripts/periodic-cleanup.sh
+        else
+          echo "❌ 清理脚本不存在"
+          exit 1
+        fi
+
+    - name: Check for issues
+      id: check_issues
+      run: |
+        # 检查是否有警告或错误
+        if [ -d "resources/cleanup" ]; then
+          latest_report=$(ls -t resources/cleanup/cleanup_report_*.md 2>/dev/null | head -1)
+          if [ -n "$latest_report" ]; then
+            warnings=$(grep -c "WARNING" "$latest_report" 2>/dev/null || echo "0")
+            errors=$(grep -c "ERROR" "$latest_report" 2>/dev/null || echo "0")
+            echo "warnings=$warnings" >> $GITHUB_OUTPUT
+            echo "errors=$errors" >> $GITHUB_OUTPUT
+            echo "report_file=$latest_report" >> $GITHUB_OUTPUT
+          fi
+        fi
+
+    - name: Upload cleanup report
+      if: steps.check_issues.outputs.report_file != ''
+      uses: actions/upload-artifact@v3
+      with:
+        name: cleanup-report-${{ env.TIMESTAMP }}
+        path: ${{ steps.check_issues.outputs.report_file }}
+        retention-days: 30
+
+    - name: Create issue for problems (if any)
+      if: steps.check_issues.outputs.errors > 0 || steps.check_issues.outputs.warnings > 0
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const warnings = `${{ steps.check_issues.outputs.warnings }}`;
+          const errors = `${{ steps.check_issues.outputs.errors }}`;
+          const reportFile = `${{ steps.check_issues.outputs.report_file }}`;
+
+          let reportContent = '';
+          if (fs.existsSync(reportFile)) {
+            reportContent = fs.readFileSync(reportFile, 'utf8');
+          }
+
+          const title = `🧹 项目清理发现问题 - ${new Date().toISOString().split('T')[0]}`;
+          const body = `
+## 自动清理报告
+
+**清理时间**: ${new Date().toLocaleString('zh-CN')}
+**错误数量**: ${errors}
+**警告数量**: ${warnings}
+
+### 问题摘要
+
+${errors > 0 ? '❌ 发现需要立即处理的错误问题' : ''}
+${warnings > 0 ? '⚠️ 发现需要关注的警告问题' : ''}
+
+### 详细报告
+
+<details>
+<summary>点击查看完整清理报告</summary>
+
+\`\`\`markdown
+${reportContent}
+\`\`\`
+
+</details>
+
+### 建议行动
+
+1. 查看详细的清理报告
+2. 修复标记为ERROR的问题
+3. 评估WARNING级别的问题是否需要处理
+4. 更新项目结构和文档
+
+---
+*此问题由自动清理工作流创建*
+          `;
+
+          github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: title,
+            body: body,
+            labels: ['maintenance', 'cleanup', 'automated']
+          });
+
+    - name: Summary
+      run: |
+        echo "## 🧹 清理任务完成" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        if [ -n "${{ steps.check_issues.outputs.report_file }}" ]; then
+          echo "📄 **清理报告**: [查看详细报告](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+        fi
+
+        if [ "${{ steps.check_issues.outputs.errors }}" -gt 0 ]; then
+          echo "❌ **错误数量**: ${{ steps.check_issues.outputs.errors }}" >> $GITHUB_STEP_SUMMARY
+        fi
+
+        if [ "${{ steps.check_issues.outputs.warnings }}" -gt 0 ]; then
+          echo "⚠️ **警告数量**: ${{ steps.check_issues.outputs.warnings }}" >> $GITHUB_STEP_SUMMARY
+        fi
+
+        if [ "${{ steps.check_issues.outputs.errors }}" -eq 0 ] && [ "${{ steps.check_issues.outputs.warnings }}" -eq 0 ]; then
+          echo "✅ **状态**: 无问题发现，项目结构良好" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "🔧 **建议**: 请查看报告并处理发现的问题" >> $GITHUB_STEP_SUMMARY
+        fi

@@ -1,0 +1,35 @@
+[
+  {
+    "name": "发明专利",
+    "type": "PATENT_TYPE",
+    "properties": {
+      "definition": "对产品、方法或者其改进所提出的新的技术方案",
+      "category": "专利类型",
+      "confidence": 0.95,
+      "source": "专利法第二条",
+      "protection_period": "20年"
+    }
+  },
+  {
+    "name": "实用新型专利",
+    "type": "PATENT_TYPE",
+    "properties": {
+      "definition": "对产品的形状、构造或者其结合所提出的适于实用的新的技术方案",
+      "category": "专利类型",
+      "confidence": 0.95,
+      "source": "专利法第二条",
+      "protection_period": "10年"
+    }
+  },
+  {
+    "name": "外观设计专利",
+    "type": "PATENT_TYPE",
+    "properties": {
+      "definition": "对产品的形状、图案或者其结合以及色彩与形状、图案的结合所作出的富有美感并适于工业应用的新设计",
+      "category": "专利类型",
+      "confidence": 0.95,
+      "source": "专利法第二条",
+      "protection_period": "15年"
+    }
+  }
+]

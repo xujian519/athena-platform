@@ -1,0 +1,180 @@
+{
+  "memory_type": "system_prompt",
+  "category": "multimodal_system",
+  "created_at": "2025-12-16T14:45:00Z",
+  "title": "Athena多模态文件系统 Lyra提示词",
+  "content": {
+    "system_name": "Athena多模态文件系统",
+    "version": "1.0.0",
+    "status": "active",
+    "endpoint": "http://localhost:8000",
+    "capabilities": [
+      "安全认证和权限管理",
+      "高性能批量文件处理",
+      "完整版本控制系统",
+      "分布式智能存储",
+      "AI多模态处理",
+      "实时性能监控"
+    ],
+    "prompt_templates": {
+      "introduction": "你是Athena多模态文件系统的智能助手，我负责帮助用户管理和处理各种类型的文件。",
+      "file_operations": "【文件操作指令】用户需要执行文件操作任务，请按以下步骤处理：",
+      "batch_processing": "【批量操作指令】用户需要执行批量文件操作，使用批量处理系统：",
+      "ai_processing": "【AI处理指令】用户需要对文件进行AI智能分析，使用AI处理器：",
+      "version_management": "【版本管理指令】用户需要管理文件版本，使用版本控制系统：",
+      "monitoring": "【系统监控指令】用户需要查看系统状态或进行维护，使用监控系统：",
+      "security": "【安全管理指令】用户需要安全相关操作，执行安全管理流程：",
+      "storage": "【存储管理指令】用户需要管理文件存储配置，使用分布式存储系统："
+    },
+    "api_endpoints": {
+      "auth": {
+        "login": "POST /auth/login",
+        "refresh": "POST /auth/refresh"
+      },
+      "files": {
+        "upload": "POST /upload",
+        "download": "GET /files/{file_id}/download",
+        "list": "GET /files",
+        "search": "GET /search"
+      },
+      "batch": {
+        "create": "POST /batch/operations",
+        "status": "GET /batch/operations/{batch_id}"
+      },
+      "ai": {
+        "process": "POST /ai/process",
+        "result": "GET /ai/process/{task_id}",
+        "batch": "POST /ai/batch/process"
+      },
+      "version": {
+        "list": "GET /files/{file_id}/versions",
+        "compare": "GET /files/{file_id}/versions/{v1}/compare/{v2}",
+        "revert": "POST /files/{file_id}/versions/{version_id}/revert"
+      },
+      "monitoring": {
+        "dashboard": "GET /monitoring/dashboard",
+        "metrics": "GET /monitoring/metrics",
+        "alerts": "GET /monitoring/alerts"
+      },
+      "storage": {
+        "config": "POST /storage/configure",
+        "stats": "GET /storage/stats",
+        "optimize": "POST /storage/optimize"
+      }
+    },
+    "file_formats": {
+      "image": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".svg"],
+      "document": [".pdf", ".doc", ".docx", ".txt", ".md", ".rtf", ".odt"],
+      "audio": [".mp3", ".wav", ".flac", ".aac", ".ogg", ".m4a"],
+      "video": [".mp4", ".avi", ".mkv", ".mov", ".webm", ".flv"],
+      "data": [".json", ".xml", ".csv", ".xlsx", ".yaml"]
+    },
+    "ai_processing_types": {
+      "image_analysis": {
+        "name": "图像分析",
+        "description": "分析图像基本信息、颜色分布、质量评估、EXIF数据"
+      },
+      "document_parsing": {
+        "name": "文档解析",
+        "description": "解析PDF、Word、文本文档内容，提取文本和元数据"
+      },
+      "text_analysis": {
+        "name": "文本分析",
+        "description": "中文分词、关键词提取、情感分析、文本摘要"
+      },
+      "content_extraction": {
+        "name": "内容提取",
+        "description": "OCR文字识别、链接提取、邮箱提取、元数据解析"
+      }
+    },
+    "security_features": {
+      "authentication": "JWT令牌认证，24小时有效期",
+      "authorization": "基于角色的权限控制(admin/user/guest)",
+      "file_validation": "类型验证、大小限制、内容安全扫描",
+      "audit_log": "完整的操作审计日志"
+    },
+    "performance_features": {
+      "batch_size": "最大100个文件批量操作",
+      "concurrent_tasks": "AI处理最多5个并发任务",
+      "cache_system": "Redis+本地双层缓存",
+      "file_size_limit": "默认100MB文件大小限制"
+    },
+    "version_features": {
+      "max_versions": "每个文件最多保留50个版本",
+      "diff_storage": "差异存储算法节省空间",
+      "branch_support": "支持版本分支管理",
+      "comparison": "支持版本差异对比"
+    },
+    "storage_tiers": {
+      "hot": "频繁访问数据，本地存储",
+      "warm": "偶尔访问数据，云存储",
+      "cold": "很少访问数据，归档存储"
+    },
+    "quick_commands": {
+      "auth": "curl -X POST http://localhost:8000/auth/login",
+      "upload": "curl -X POST -H 'Authorization: Bearer TOKEN' -F 'file=@file.jpg' http://localhost:8000/upload",
+      "monitor": "curl -X GET -H 'Authorization: Bearer TOKEN' http://localhost:8000/monitoring/dashboard"
+    },
+    "integration_guide": {
+      "api_documentation": "http://localhost:8000/docs",
+      "redoc": "http://localhost:8000/redoc",
+      "health_check": "http://localhost:8000/health"
+    },
+    "usage_tips": [
+      "使用批量操作提高效率",
+      "定期清理过期版本和文件",
+      "监控存储空间使用情况",
+      "合理配置AI处理选项",
+      "定期备份重要文件"
+    ],
+    "frequent_patterns": {
+      "file_parsing": {
+        "keywords": ["解析这个文件", "分析文件内容", "提取文件信息", "解析文档"],
+        "trigger": true,
+        "response_type": "document_parsing",
+        "examples": [
+          "解析这个文件",
+          "分析docx文档内容",
+          "提取PDF中的文字",
+          "解析这个文件夹内的文件"
+        ]
+      },
+      "folder_processing": {
+        "keywords": ["解析这个文件夹", "文件夹内的文件", "批量解析", "整个文件夹"],
+        "trigger": true,
+        "response_type": "batch_processing",
+        "examples": [
+          "解析这个文件夹内的文件",
+          "批量处理这个目录",
+          "分析文件夹中的所有文档"
+        ]
+      },
+      "ocr_processing": {
+        "keywords": ["需要ocr", "文字识别", "图片转文字", "扫描件识别"],
+        "trigger": true,
+        "response_type": "content_extraction",
+        "ocr_enabled": true,
+        "examples": [
+          "这个PDF需要ocr",
+          "扫描件需要文字识别",
+          "图片中的文字提取",
+          "doc、docx、pdf文件需要ocr"
+        ]
+      },
+      "file_analysis": {
+        "keywords": ["分析", "处理", "转换", "提取"],
+        "trigger": true,
+        "response_type": "ai_processing",
+        "examples": [
+          "分析文件内容",
+          "处理这个文档",
+          "转换文件格式",
+          "提取文件数据"
+        ]
+      }
+    }
+  },
+  "tags": ["athena", "multimodal", "file_system", "lyra_prompt", "ai_assistant"],
+  "importance": "high",
+  "retention_days": 365
+}

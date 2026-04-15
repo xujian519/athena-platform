@@ -1,0 +1,468 @@
+{
+  "56e0c85b-11aa-4cf4-9d1a-d1c010806734": {
+    "id": "56e0c85b-11aa-4cf4-9d1a-d1c010806734",
+    "evaluator_id": "scenario_test_agent",
+    "target_type": "excellent_system",
+    "target_id": "system_001",
+    "evaluation_type": "EvaluationType.PERFORMANCE",
+    "criteria_results": {
+      "speed": {
+        "id": "speed",
+        "name": "速度",
+        "description": "",
+        "weight": 1.0,
+        "min_value": 0.0,
+        "max_value": 100.0,
+        "target_value": 90,
+        "current_value": 95,
+        "score": 95.0,
+        "status": "pending",
+        "evidence": [],
+        "comments": ""
+      },
+      "accuracy": {
+        "id": "accuracy",
+        "name": "准确性",
+        "description": "",
+        "weight": 1.0,
+        "min_value": 0.0,
+        "max_value": 100.0,
+        "target_value": 85,
+        "current_value": 92,
+        "score": 92.0,
+        "status": "pending",
+        "evidence": [],
+        "comments": ""
+      }
+    },
+    "overall_score": 93.5,
+    "level": "EvaluationLevel.EXCELLENT",
+    "strengths": [
+      "速度 (95.0分)",
+      "准确性 (92.0分)"
+    ],
+    "weaknesses": [],
+    "recommendations": [],
+    "confidence": 0.0,
+    "timestamp": "2025-12-11 14:58:37.481690",
+    "metadata": {
+      "qa_check": {
+        "overall_quality": 82.5,
+        "passed_all": true,
+        "checks": {
+          "completeness": {
+            "passed": true,
+            "score": 70.0,
+            "issues": [
+              "缺少弱项分析",
+              "缺少改进建议"
+            ],
+            "recommendations": [
+              "确保所有评估要素都被考虑",
+              "提供详细的优缺点分析",
+              "给出具体的改进建议"
+            ]
+          },
+          "consistency": {
+            "passed": true,
+            "score": 100.0,
+            "issues": [],
+            "recommendations": [
+              "确保评分与评估等级一致",
+              "保持各评估标准间的一致性",
+              "使用统一的评估标准"
+            ]
+          },
+          "bias_detection": {
+            "passed": true,
+            "score": 80.0,
+            "issues": [
+              "2个标准缺少证据支持"
+            ],
+            "recommendations": [
+              "避免极端评分，提供更平衡的评估",
+              "为所有评估标准提供充分的证据",
+              "考虑使用多角度评估"
+            ]
+          },
+          "evidence_quality": {
+            "passed": true,
+            "score": 80.0,
+            "issues": [
+              "证据数量不足"
+            ],
+            "recommendations": [
+              "为每个评估标准提供充分的高质量证据",
+              "确保证据描述清晰、具体",
+              "使用多样化的证据来源"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "77793259-c0e5-4012-aecc-d40605cfd561": {
+    "id": "77793259-c0e5-4012-aecc-d40605cfd561",
+    "evaluator_id": "scenario_test_agent",
+    "target_type": "poor_system",
+    "target_id": "system_002",
+    "evaluation_type": "EvaluationType.QUALITY",
+    "criteria_results": {
+      "stability": {
+        "id": "stability",
+        "name": "稳定性",
+        "description": "",
+        "weight": 1.0,
+        "min_value": 0.0,
+        "max_value": 100.0,
+        "target_value": 80,
+        "current_value": 45,
+        "score": 45.0,
+        "status": "pending",
+        "evidence": [],
+        "comments": ""
+      },
+      "reliability": {
+        "id": "reliability",
+        "name": "可靠性",
+        "description": "",
+        "weight": 1.0,
+        "min_value": 0.0,
+        "max_value": 100.0,
+        "target_value": 85,
+        "current_value": 52,
+        "score": 52.0,
+        "status": "pending",
+        "evidence": [],
+        "comments": ""
+      }
+    },
+    "overall_score": 48.5,
+    "level": "EvaluationLevel.POOR",
+    "strengths": [],
+    "weaknesses": [
+      "稳定性 (45.0分)",
+      "可靠性 (52.0分)"
+    ],
+    "recommendations": [
+      "需要立即制定全面的改进计划",
+      "寻求外部支持和指导",
+      "提升稳定性的表现（当前45.0分）",
+      "提升可靠性的表现（当前52.0分）"
+    ],
+    "confidence": 0.0,
+    "timestamp": "2025-12-11 14:58:37.481837",
+    "metadata": {
+      "qa_check": {
+        "overall_quality": 87.5,
+        "passed_all": true,
+        "checks": {
+          "completeness": {
+            "passed": true,
+            "score": 90.0,
+            "issues": [
+              "缺少强项分析"
+            ],
+            "recommendations": [
+              "确保所有评估要素都被考虑",
+              "提供详细的优缺点分析",
+              "给出具体的改进建议"
+            ]
+          },
+          "consistency": {
+            "passed": true,
+            "score": 100.0,
+            "issues": [],
+            "recommendations": [
+              "确保评分与评估等级一致",
+              "保持各评估标准间的一致性",
+              "使用统一的评估标准"
+            ]
+          },
+          "bias_detection": {
+            "passed": true,
+            "score": 80.0,
+            "issues": [
+              "2个标准缺少证据支持"
+            ],
+            "recommendations": [
+              "避免极端评分，提供更平衡的评估",
+              "为所有评估标准提供充分的证据",
+              "考虑使用多角度评估"
+            ]
+          },
+          "evidence_quality": {
+            "passed": true,
+            "score": 80.0,
+            "issues": [
+              "证据数量不足"
+            ],
+            "recommendations": [
+              "为每个评估标准提供充分的高质量证据",
+              "确保证据描述清晰、具体",
+              "使用多样化的证据来源"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "0c67e719-16c1-4d32-bf98-b24a027091ed": {
+    "id": "0c67e719-16c1-4d32-bf98-b24a027091ed",
+    "evaluator_id": "scenario_test_agent",
+    "target_type": "module",
+    "target_id": "batch_target_1",
+    "evaluation_type": "EvaluationType.EFFICIENCY",
+    "criteria_results": {
+      "resource_usage": {
+        "id": "resource_usage",
+        "name": "资源使用",
+        "description": "",
+        "weight": 1.0,
+        "min_value": 0.0,
+        "max_value": 100.0,
+        "target_value": 80,
+        "current_value": 75,
+        "score": 75.0,
+        "status": "pending",
+        "evidence": [],
+        "comments": ""
+      }
+    },
+    "overall_score": 75.0,
+    "level": "EvaluationLevel.SATISFACTORY",
+    "strengths": [],
+    "weaknesses": [],
+    "recommendations": [],
+    "confidence": 0.0,
+    "timestamp": "2025-12-11 14:58:37.481982",
+    "metadata": {
+      "qa_check": {
+        "overall_quality": 80.0,
+        "passed_all": false,
+        "checks": {
+          "completeness": {
+            "passed": false,
+            "score": 60.0,
+            "issues": [
+              "缺少强项分析",
+              "缺少弱项分析",
+              "缺少改进建议"
+            ],
+            "recommendations": [
+              "确保所有评估要素都被考虑",
+              "提供详细的优缺点分析",
+              "给出具体的改进建议"
+            ]
+          },
+          "consistency": {
+            "passed": true,
+            "score": 100.0,
+            "issues": [],
+            "recommendations": [
+              "确保评分与评估等级一致",
+              "保持各评估标准间的一致性",
+              "使用统一的评估标准"
+            ]
+          },
+          "bias_detection": {
+            "passed": true,
+            "score": 80.0,
+            "issues": [
+              "1个标准缺少证据支持"
+            ],
+            "recommendations": [
+              "避免极端评分，提供更平衡的评估",
+              "为所有评估标准提供充分的证据",
+              "考虑使用多角度评估"
+            ]
+          },
+          "evidence_quality": {
+            "passed": true,
+            "score": 80.0,
+            "issues": [
+              "证据数量不足"
+            ],
+            "recommendations": [
+              "为每个评估标准提供充分的高质量证据",
+              "确保证据描述清晰、具体",
+              "使用多样化的证据来源"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "0b0ba7be-1792-4fba-aa44-8a2053a3f317": {
+    "id": "0b0ba7be-1792-4fba-aa44-8a2053a3f317",
+    "evaluator_id": "scenario_test_agent",
+    "target_type": "component",
+    "target_id": "batch_target_2",
+    "evaluation_type": "EvaluationType.EFFICIENCY",
+    "criteria_results": {
+      "resource_usage": {
+        "id": "resource_usage",
+        "name": "资源使用",
+        "description": "",
+        "weight": 1.0,
+        "min_value": 0.0,
+        "max_value": 100.0,
+        "target_value": 80,
+        "current_value": 75,
+        "score": 75.0,
+        "status": "pending",
+        "evidence": [],
+        "comments": ""
+      }
+    },
+    "overall_score": 75.0,
+    "level": "EvaluationLevel.SATISFACTORY",
+    "strengths": [],
+    "weaknesses": [],
+    "recommendations": [],
+    "confidence": 0.0,
+    "timestamp": "2025-12-11 14:58:37.482086",
+    "metadata": {
+      "qa_check": {
+        "overall_quality": 80.0,
+        "passed_all": false,
+        "checks": {
+          "completeness": {
+            "passed": false,
+            "score": 60.0,
+            "issues": [
+              "缺少强项分析",
+              "缺少弱项分析",
+              "缺少改进建议"
+            ],
+            "recommendations": [
+              "确保所有评估要素都被考虑",
+              "提供详细的优缺点分析",
+              "给出具体的改进建议"
+            ]
+          },
+          "consistency": {
+            "passed": true,
+            "score": 100.0,
+            "issues": [],
+            "recommendations": [
+              "确保评分与评估等级一致",
+              "保持各评估标准间的一致性",
+              "使用统一的评估标准"
+            ]
+          },
+          "bias_detection": {
+            "passed": true,
+            "score": 80.0,
+            "issues": [
+              "1个标准缺少证据支持"
+            ],
+            "recommendations": [
+              "避免极端评分，提供更平衡的评估",
+              "为所有评估标准提供充分的证据",
+              "考虑使用多角度评估"
+            ]
+          },
+          "evidence_quality": {
+            "passed": true,
+            "score": 80.0,
+            "issues": [
+              "证据数量不足"
+            ],
+            "recommendations": [
+              "为每个评估标准提供充分的高质量证据",
+              "确保证据描述清晰、具体",
+              "使用多样化的证据来源"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "3fef94ad-a717-4c19-bd66-3513097c5b06": {
+    "id": "3fef94ad-a717-4c19-bd66-3513097c5b06",
+    "evaluator_id": "scenario_test_agent",
+    "target_type": "service",
+    "target_id": "batch_target_3",
+    "evaluation_type": "EvaluationType.EFFICIENCY",
+    "criteria_results": {
+      "resource_usage": {
+        "id": "resource_usage",
+        "name": "资源使用",
+        "description": "",
+        "weight": 1.0,
+        "min_value": 0.0,
+        "max_value": 100.0,
+        "target_value": 80,
+        "current_value": 75,
+        "score": 75.0,
+        "status": "pending",
+        "evidence": [],
+        "comments": ""
+      }
+    },
+    "overall_score": 75.0,
+    "level": "EvaluationLevel.SATISFACTORY",
+    "strengths": [],
+    "weaknesses": [],
+    "recommendations": [],
+    "confidence": 0.0,
+    "timestamp": "2025-12-11 14:58:37.482178",
+    "metadata": {
+      "qa_check": {
+        "overall_quality": 80.0,
+        "passed_all": false,
+        "checks": {
+          "completeness": {
+            "passed": false,
+            "score": 60.0,
+            "issues": [
+              "缺少强项分析",
+              "缺少弱项分析",
+              "缺少改进建议"
+            ],
+            "recommendations": [
+              "确保所有评估要素都被考虑",
+              "提供详细的优缺点分析",
+              "给出具体的改进建议"
+            ]
+          },
+          "consistency": {
+            "passed": true,
+            "score": 100.0,
+            "issues": [],
+            "recommendations": [
+              "确保评分与评估等级一致",
+              "保持各评估标准间的一致性",
+              "使用统一的评估标准"
+            ]
+          },
+          "bias_detection": {
+            "passed": true,
+            "score": 80.0,
+            "issues": [
+              "1个标准缺少证据支持"
+            ],
+            "recommendations": [
+              "避免极端评分，提供更平衡的评估",
+              "为所有评估标准提供充分的证据",
+              "考虑使用多角度评估"
+            ]
+          },
+          "evidence_quality": {
+            "passed": true,
+            "score": 80.0,
+            "issues": [
+              "证据数量不足"
+            ],
+            "recommendations": [
+              "为每个评估标准提供充分的高质量证据",
+              "确保证据描述清晰、具体",
+              "使用多样化的证据来源"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

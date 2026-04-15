@@ -1,0 +1,29 @@
+# Athena浏览器自动化服务依赖包
+# Browser Automation Service Dependencies
+
+# Web框架
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+
+# 浏览器自动化
+playwright>=1.40.0
+
+# 数据验证
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+# HTTP客户端
+httpx>=0.25.0
+
+# 异步文件操作
+aiofiles>=23.2.1
+
+# 日志增强
+python-json-logger>=2.0.7
+
+# 环境变量加载
+python-dotenv>=1.0.0
+
+# JWT认证（可选，用于ENABLE_AUTH=true时）
+pyjwt>=2.8.0
+crypto>=1.4.1

@@ -1,0 +1,333 @@
+# 专利撰写应用 - 服务配置
+# Patent Writing Application - Service Configuration
+
+services:
+  # ==================== 基础设施（复用现有）====================
+
+  postgresql:
+    name: PostgreSQL数据库
+    layer: infrastructure
+    type: postgres
+    ports:
+      internal: 5432
+      external: 5432
+    environment:
+      POSTGRES_DB: patent_writing
+      POSTGRES_USER: patent_admin
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    health_check:
+      type: tcp
+      port: 5432
+      interval: 10
+    dependencies: []
+
+  redis:
+    name: Redis缓存
+    layer: infrastructure
+    type: redis
+    ports:
+      internal: 6379
+      external: 6379
+    health_check:
+      type: tcp
+      port: 6379
+      interval: 10
+    dependencies: []
+
+  qdrant:
+    name: Qdrant向量数据库
+    layer: infrastructure
+    type: qdrant
+    ports:
+      internal: 6333
+      external: 6333
+    health_check:
+      type: http
+      port: 6333
+      path: /health
+      interval: 30
+    dependencies: []
+
+  # ==================== 核心服务 ====================
+
+  requirement-analyzer:
+    name: 需求分析服务
+    layer: core_services
+    type: python
+    ports:
+      internal: 8501
+      external: 8501
+    working_dir: services/patent-writing/requirement-analyzer
+    command: python3 app.py
+    health_check:
+      type: http
+      port: 8501
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+    labels:
+      - patent-writing
+      - analysis
+
+  patent-search-service:
+    name: 专利检索服务
+    layer: core_services
+    type: python
+    ports:
+      internal: 8502
+      external: 8502
+    working_dir: services/patent-writing/patent-search
+    command: python3 app.py
+    health_check:
+      type: http
+      port: 8502
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+      - requirement-analyzer
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+    labels:
+      - patent-writing
+      - search
+
+  knowledge-graph-service:
+    name: 知识图谱服务
+    layer: core_services
+    type: python
+    ports:
+      internal: 8503
+      external: 8503
+    working_dir: services/patent-writing/knowledge-graph
+    command: python3 app.py
+    health_check:
+      type: http
+      port: 8503
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - nebula-graph
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+    labels:
+      - patent-writing
+      - knowledge
+
+  patent-evaluator:
+    name: 专利性评估服务
+    layer: core_services
+    type: python
+    ports:
+      internal: 8504
+      external: 8504
+    working_dir: services/patent-writing/patent-evaluator
+    command: python3 app.py
+    health_check:
+      type: http
+      port: 8504
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+      - patent-search-service
+      - knowledge-graph-service
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+    labels:
+      - patent-writing
+      - evaluation
+
+  patent-drafter:
+    name: AI撰写服务
+    layer: core_services
+    type: python
+    ports:
+      internal: 8505
+      external: 8505
+    working_dir: services/patent-writing/patent-drafter
+    command: python3 app.py
+    health_check:
+      type: http
+      port: 8505
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+      - knowledge-graph-service
+      - patent-evaluator
+    resource_limits:
+      cpus: "4.0"
+      memory: 8G
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      MODEL_TYPE: gpt-4
+    labels:
+      - patent-writing
+      - drafting
+
+  review-service:
+    name: 人工审核服务
+    layer: core_services
+    type: python
+    ports:
+      internal: 8506
+      external: 8506
+    working_dir: services/patent-writing/review-service
+    command: python3 app.py
+    health_check:
+      type: http
+      port: 8506
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+      - patent-drafter
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+    labels:
+      - patent-writing
+      - review
+
+  document-generator:
+    name: 文档生成服务
+    layer: core_services
+    type: python
+    ports:
+      internal: 8507
+      external: 8507
+    working_dir: services/patent-writing/document-generator
+    command: python3 app.py
+    health_check:
+      type: http
+      port: 8507
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - review-service
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+    labels:
+      - patent-writing
+      - generation
+
+  collab-service:
+    name: 协作决策服务
+    layer: core_services
+    type: python
+    ports:
+      internal: 8508
+      external: 8508
+    working_dir: services/patent-writing/collab-service
+    command: python3 app.py
+    health_check:
+      type: http
+      port: 8508
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+    labels:
+      - patent-writing
+      - collaboration
+
+  # ==================== 应用层 ====================
+
+  patent-writing-api:
+    name: 专利撰写API网关
+    layer: applications
+    type: python
+    ports:
+      internal: 8600
+      external: 8600
+    working_dir: apps/patent-writing
+    command: python3 main.py
+    health_check:
+      type: http
+      port: 8600
+      path: /health
+      interval: 15
+    dependencies:
+      - requirement-analyzer
+      - patent-search-service
+      - patent-evaluator
+      - patent-drafter
+      - review-service
+      - document-generator
+      - collab-service
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+    labels:
+      - patent-writing
+      - gateway
+
+  patent-writing-web:
+    name: 专利撰写Web界面
+    layer: applications
+    type: nodejs
+    ports:
+      internal: 3000
+      external: 3000
+    working_dir: apps/patent-writing/web
+    command: npm start
+    health_check:
+      type: http
+      port: 3000
+      path: /
+      interval: 15
+    dependencies:
+      - patent-writing-api
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+    labels:
+      - patent-writing
+      - frontend
+
+# 层级配置
+layers:
+  - name: infrastructure
+    order: 1
+    timeout: 120
+  - name: core_services
+    order: 2
+    timeout: 300
+  - name: applications
+    order: 3
+    timeout: 60
+
+# 全局配置
+global:
+  environment:
+    LOG_LEVEL: INFO
+    ENVIRONMENT: development
+  health_check:
+    interval: 30
+    timeout: 10
+  monitoring:
+    enabled: true
+    metrics_port: 9090

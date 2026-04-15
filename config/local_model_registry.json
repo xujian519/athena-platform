@@ -1,0 +1,594 @@
+{
+  "scan_time": "2025-12-16T00:42:38.862438",
+  "total_models": 22,
+  "models_by_provider": {
+    "mlx": [
+      "nomic-embed-text:latest",
+      "qwen:7b",
+      "qwen3-embedding:4b",
+      "qwen2.5vl:latest"
+    ],
+    "huggingface": [
+      "hfl/chinese-macbert-base",
+      "1_Pooling",
+      "/root/.cache/torch/sentence_transformers/BAAI_bge-large-zh/",
+      "1_Pooling",
+      "8f23c25b06e129b6c986331a13d8d025a92cf0ea",
+      "638100ab2773a8c3d0afceb9387eb88fe707fbe1",
+      "/root/.cache/torch/sentence_transformers/BAAI_bge-base-zh/",
+      "1_Pooling",
+      "ffd97a559532e03a0073d2cdfede81a8a7f6d361",
+      "/root/.cache/torch/sentence_transformers/BAAI_bge-small-zh/",
+      "/root/.cache/torch/sentence_transformers/BAAI_bge-small-zh/",
+      "1_Pooling",
+      "old_models/paraphrase-multilingual-MiniLM-L12-v2/0_Transformer",
+      "1_Pooling",
+      "nreimers/MiniLM-L6-H384-uncased",
+      "1_Pooling",
+      "xlm-roberta-large",
+      "cross-encoder/ms-marco-MiniLM-L-12-v2"
+    ]
+  },
+  "models_by_category": {
+    "embedding": [
+      "nomic-embed-text:latest",
+      "qwen3-embedding:4b",
+      "/root/.cache/torch/sentence_transformers/BAAI_bge-large-zh/",
+      "/root/.cache/torch/sentence_transformers/BAAI_bge-base-zh/",
+      "/root/.cache/torch/sentence_transformers/BAAI_bge-small-zh/",
+      "/root/.cache/torch/sentence_transformers/BAAI_bge-small-zh/"
+    ],
+    "other": [
+      "qwen:7b",
+      "qwen2.5vl:latest",
+      "hfl/chinese-macbert-base",
+      "1_Pooling",
+      "1_Pooling",
+      "8f23c25b06e129b6c986331a13d8d025a92cf0ea",
+      "638100ab2773a8c3d0afceb9387eb88fe707fbe1",
+      "1_Pooling",
+      "ffd97a559532e03a0073d2cdfede81a8a7f6d361",
+      "1_Pooling",
+      "old_models/paraphrase-multilingual-MiniLM-L12-v2/0_Transformer",
+      "1_Pooling",
+      "nreimers/MiniLM-L6-H384-uncased",
+      "1_Pooling",
+      "xlm-roberta-large",
+      "cross-encoder/ms-marco-MiniLM-L-12-v2"
+    ]
+  },
+  "models": {
+    "nomic-embed-text:latest": {
+      "name": "nomic-embed-text:latest",
+      "size": 274302450,
+      "modified_at": "2025-11-20T20:05:27.413588677+08:00",
+      "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "nomic-bert",
+        "families": [
+          "nomic-bert"
+        ],
+        "parameter_size": "137M",
+        "quantization_level": "F16"
+      },
+      "provider": "mlx",
+      "type": "embedding",
+      "category": "embedding"
+    },
+    "qwen:7b": {
+      "name": "qwen:7b",
+      "size": 4511914544,
+      "modified_at": "2025-11-12T02:39:40.374207634+08:00",
+      "digest": "2091ee8c8d8f27f790c298265b1353da099a276e6c612e3b4864e72f1993cc33",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "qwen2",
+        "families": [
+          "qwen2"
+        ],
+        "parameter_size": "8B",
+        "quantization_level": "Q4_0"
+      },
+      "provider": "mlx",
+      "type": "chat",
+      "category": "other"
+    },
+    "qwen3-embedding:4b": {
+      "name": "qwen3-embedding:4b",
+      "size": 2496704041,
+      "modified_at": "2025-11-04T07:52:10.25460367+08:00",
+      "digest": "df5bd2e3c74cd8d069d21dc038f1b359fcdc9458fce1c99bd43c9eb1518ff907",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "qwen3",
+        "families": [
+          "qwen3"
+        ],
+        "parameter_size": "4.0B",
+        "quantization_level": "Q4_K_M"
+      },
+      "provider": "mlx",
+      "type": "embedding",
+      "category": "embedding"
+    },
+    "qwen2.5vl:latest": {
+      "name": "qwen2.5vl:latest",
+      "size": 5969245856,
+      "modified_at": "2025-10-08T23:50:10.564833302+08:00",
+      "digest": "5ced39dfa4bac325dc183dd1e4febaa1c46b3ea28bce48896c8e69c1e79611cc",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "qwen25vl",
+        "families": [
+          "qwen25vl"
+        ],
+        "parameter_size": "8.3B",
+        "quantization_level": "Q4_K_M"
+      },
+      "provider": "mlx",
+      "type": "chat",
+      "category": "other"
+    },
+    "hfl/chinese-macbert-base": {
+      "name": "hfl/chinese-macbert-base",
+      "path": "/Users/xujian/.cache/huggingface/hub/models--shibing624--text2vec-base-chinese/snapshots/183bb99aa7af74355fb58d16edf8c13ae7c5433e",
+      "size": 0,
+      "provider": "huggingface",
+      "type": "bert",
+      "architecture": "BertModel",
+      "category": "other",
+      "config": {
+        "_name_or_path": "hfl/chinese-macbert-base",
+        "architectures": [
+          "BertModel"
+        ],
+        "attention_probs_dropout_prob": 0.1,
+        "classifier_dropout": null,
+        "directionality": "bidi",
+        "gradient_checkpointing": false,
+        "hidden_act": "gelu",
+        "hidden_dropout_prob": 0.1,
+        "hidden_size": 768,
+        "initializer_range": 0.02,
+        "intermediate_size": 3072,
+        "layer_norm_eps": 1e-12,
+        "max_position_embeddings": 512,
+        "model_type": "bert",
+        "num_attention_heads": 12,
+        "num_hidden_layers": 12,
+        "pad_token_id": 0,
+        "pooler_fc_size": 768,
+        "pooler_num_attention_heads": 12,
+        "pooler_num_fc_layers": 3,
+        "pooler_size_per_head": 128,
+        "pooler_type": "first_token_transform",
+        "position_embedding_type": "absolute",
+        "torch_dtype": "float32",
+        "transformers_version": "4.12.3",
+        "type_vocab_size": 2,
+        "use_cache": true,
+        "vocab_size": 21128
+      }
+    },
+    "1_Pooling": {
+      "name": "1_Pooling",
+      "path": "/Users/xujian/.cache/huggingface/hub/models--sentence-transformers--all-MiniLM-L6-v2/snapshots/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/1_Pooling",
+      "size": 0,
+      "provider": "huggingface",
+      "type": "unknown",
+      "architecture": "unknown",
+      "category": "other",
+      "config": {
+        "word_embedding_dimension": 384,
+        "pooling_mode_cls_token": false,
+        "pooling_mode_mean_tokens": true,
+        "pooling_mode_max_tokens": false,
+        "pooling_mode_mean_sqrt_len_tokens": false
+      }
+    },
+    "/root/.cache/torch/sentence_transformers/BAAI_bge-large-zh/": {
+      "name": "/root/.cache/torch/sentence_transformers/BAAI_bge-large-zh/",
+      "path": "/Users/xujian/.cache/huggingface/hub/models--BAAI--bge-large-zh-v1.5/snapshots/79e7739b6ab944e86d6171e44d24c997fc1e0116",
+      "size": 0,
+      "provider": "huggingface",
+      "type": "bert",
+      "architecture": "BertModel",
+      "category": "embedding",
+      "config": {
+        "_name_or_path": "/root/.cache/torch/sentence_transformers/BAAI_bge-large-zh/",
+        "architectures": [
+          "BertModel"
+        ],
+        "attention_probs_dropout_prob": 0.1,
+        "bos_token_id": 0,
+        "classifier_dropout": null,
+        "directionality": "bidi",
+        "eos_token_id": 2,
+        "hidden_act": "gelu",
+        "hidden_dropout_prob": 0.1,
+        "hidden_size": 1024,
+        "id2label": {
+          "0": "LABEL_0"
+        },
+        "initializer_range": 0.02,
+        "intermediate_size": 4096,
+        "label2id": {
+          "LABEL_0": 0
+        },
+        "layer_norm_eps": 1e-12,
+        "max_position_embeddings": 512,
+        "model_type": "bert",
+        "num_attention_heads": 16,
+        "num_hidden_layers": 24,
+        "output_past": true,
+        "pad_token_id": 0,
+        "pooler_fc_size": 768,
+        "pooler_num_attention_heads": 12,
+        "pooler_num_fc_layers": 3,
+        "pooler_size_per_head": 128,
+        "pooler_type": "first_token_transform",
+        "position_embedding_type": "absolute",
+        "torch_dtype": "float32",
+        "transformers_version": "4.30.0",
+        "type_vocab_size": 2,
+        "use_cache": true,
+        "vocab_size": 21128
+      }
+    },
+    "8f23c25b06e129b6c986331a13d8d025a92cf0ea": {
+      "name": "8f23c25b06e129b6c986331a13d8d025a92cf0ea",
+      "path": "/Users/xujian/.cache/huggingface/hub/models--bert-base-chinese/snapshots/8f23c25b06e129b6c986331a13d8d025a92cf0ea",
+      "size": 0,
+      "provider": "huggingface",
+      "type": "bert",
+      "architecture": "BertForMaskedLM",
+      "category": "other",
+      "config": {
+        "architectures": [
+          "BertForMaskedLM"
+        ],
+        "attention_probs_dropout_prob": 0.1,
+        "directionality": "bidi",
+        "hidden_act": "gelu",
+        "hidden_dropout_prob": 0.1,
+        "hidden_size": 768,
+        "initializer_range": 0.02,
+        "intermediate_size": 3072,
+        "layer_norm_eps": 1e-12,
+        "max_position_embeddings": 512,
+        "model_type": "bert",
+        "num_attention_heads": 12,
+        "num_hidden_layers": 12,
+        "pad_token_id": 0,
+        "pooler_fc_size": 768,
+        "pooler_num_attention_heads": 12,
+        "pooler_num_fc_layers": 3,
+        "pooler_size_per_head": 128,
+        "pooler_type": "first_token_transform",
+        "type_vocab_size": 2,
+        "vocab_size": 21128
+      }
+    },
+    "638100ab2773a8c3d0afceb9387eb88fe707fbe1": {
+      "name": "638100ab2773a8c3d0afceb9387eb88fe707fbe1",
+      "path": "/Users/xujian/.cache/huggingface/hub/models--uer--roberta-base-finetuned-chinanews-chinese/snapshots/638100ab2773a8c3d0afceb9387eb88fe707fbe1",
+      "size": 0,
+      "provider": "huggingface",
+      "type": "bert",
+      "architecture": "BertForSequenceClassification",
+      "category": "other",
+      "config": {
+        "architectures": [
+          "BertForSequenceClassification"
+        ],
+        "attention_probs_dropout_prob": 0.1,
+        "gradient_checkpointing": false,
+        "hidden_act": "gelu",
+        "hidden_dropout_prob": 0.1,
+        "hidden_size": 768,
+        "id2label": {
+          "0": "mainland China politics",
+          "1": "Hong Kong - Macau politics",
+          "2": "International news",
+          "3": "financial news",
+          "4": "culture",
+          "5": "entertainment",
+          "6": "sports"
+        },
+        "initializer_range": 0.02,
+        "intermediate_size": 3072,
+        "label2id": {
+          "mainland China politics": 0,
+          "Hong Kong - Macau politics": 1,
+          "International news": 2,
+          "financial news": 3,
+          "culture": 4,
+          "entertainment": 5,
+          "sports": 6
+        },
+        "layer_norm_eps": 1e-12,
+        "max_position_embeddings": 512,
+        "model_type": "bert",
+        "num_attention_heads": 12,
+        "num_hidden_layers": 12,
+        "pad_token_id": 0,
+        "vocab_size": 21128
+      }
+    },
+    "/root/.cache/torch/sentence_transformers/BAAI_bge-base-zh/": {
+      "name": "/root/.cache/torch/sentence_transformers/BAAI_bge-base-zh/",
+      "path": "/Users/xujian/.cache/huggingface/hub/models--BAAI--bge-base-zh-v1.5/snapshots/f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+      "size": 0,
+      "provider": "huggingface",
+      "type": "bert",
+      "architecture": "BertModel",
+      "category": "embedding",
+      "config": {
+        "_name_or_path": "/root/.cache/torch/sentence_transformers/BAAI_bge-base-zh/",
+        "architectures": [
+          "BertModel"
+        ],
+        "attention_probs_dropout_prob": 0.1,
+        "bos_token_id": 0,
+        "classifier_dropout": null,
+        "directionality": "bidi",
+        "eos_token_id": 2,
+        "hidden_act": "gelu",
+        "hidden_dropout_prob": 0.1,
+        "hidden_size": 768,
+        "id2label": {
+          "0": "LABEL_0"
+        },
+        "initializer_range": 0.02,
+        "intermediate_size": 3072,
+        "label2id": {
+          "LABEL_0": 0
+        },
+        "layer_norm_eps": 1e-12,
+        "max_position_embeddings": 512,
+        "model_type": "bert",
+        "num_attention_heads": 12,
+        "num_hidden_layers": 12,
+        "output_past": true,
+        "pad_token_id": 0,
+        "pooler_fc_size": 768,
+        "pooler_num_attention_heads": 12,
+        "pooler_num_fc_layers": 3,
+        "pooler_size_per_head": 128,
+        "pooler_type": "first_token_transform",
+        "position_embedding_type": "absolute",
+        "torch_dtype": "float32",
+        "transformers_version": "4.30.0",
+        "type_vocab_size": 2,
+        "use_cache": true,
+        "vocab_size": 21128
+      }
+    },
+    "ffd97a559532e03a0073d2cdfede81a8a7f6d361": {
+      "name": "ffd97a559532e03a0073d2cdfede81a8a7f6d361",
+      "path": "/Users/xujian/.cache/huggingface/hub/models--hfl--chinese-legal-electra-base-discriminator/snapshots/ffd97a559532e03a0073d2cdfede81a8a7f6d361",
+      "size": 0,
+      "provider": "huggingface",
+      "type": "electra",
+      "architecture": "unknown",
+      "category": "other",
+      "config": {
+        "attention_probs_dropout_prob": 0.1,
+        "directionality": "bidi",
+        "embedding_size": 768,
+        "hidden_act": "gelu",
+        "hidden_dropout_prob": 0.1,
+        "hidden_size": 768,
+        "initializer_range": 0.02,
+        "intermediate_size": 3072,
+        "layer_norm_eps": 1e-12,
+        "max_position_embeddings": 512,
+        "model_type": "electra",
+        "num_attention_heads": 12,
+        "num_hidden_layers": 12,
+        "pad_token_id": 0,
+        "summary_activation": "gelu",
+        "summary_last_dropout": 0.1,
+        "summary_type": "first",
+        "summary_use_proj": true,
+        "type_vocab_size": 2,
+        "vocab_size": 21128
+      }
+    },
+    "/root/.cache/torch/sentence_transformers/BAAI_bge-small-zh/": {
+      "name": "/root/.cache/torch/sentence_transformers/BAAI_bge-small-zh/",
+      "path": "/Users/xujian/.cache/huggingface/hub/models--BAAI--bge-small-zh-v1.5/snapshots/7999e1d3359715c523056ef9478215996d62a620",
+      "size": 0,
+      "provider": "huggingface",
+      "type": "bert",
+      "architecture": "BertModel",
+      "category": "embedding",
+      "config": {
+        "_name_or_path": "/root/.cache/torch/sentence_transformers/BAAI_bge-small-zh/",
+        "architectures": [
+          "BertModel"
+        ],
+        "attention_probs_dropout_prob": 0.1,
+        "classifier_dropout": null,
+        "gradient_checkpointing": false,
+        "hidden_act": "gelu",
+        "hidden_dropout_prob": 0.1,
+        "hidden_size": 512,
+        "id2label": {
+          "0": "LABEL_0"
+        },
+        "initializer_range": 0.02,
+        "intermediate_size": 2048,
+        "label2id": {
+          "LABEL_0": 0
+        },
+        "layer_norm_eps": 1e-12,
+        "max_position_embeddings": 512,
+        "model_type": "bert",
+        "num_attention_heads": 8,
+        "num_hidden_layers": 4,
+        "pad_token_id": 0,
+        "position_embedding_type": "absolute",
+        "torch_dtype": "float32",
+        "transformers_version": "4.30.0",
+        "type_vocab_size": 2,
+        "use_cache": true,
+        "vocab_size": 21128
+      }
+    },
+    "old_models/paraphrase-multilingual-MiniLM-L12-v2/0_Transformer": {
+      "name": "old_models/paraphrase-multilingual-MiniLM-L12-v2/0_Transformer",
+      "path": "/Users/xujian/.cache/huggingface/hub/models--sentence-transformers--paraphrase-multilingual-MiniLM-L12-v2/snapshots/86741b4e3f5cb7765a600d3a3d55a0f6a6cb443d",
+      "size": 0,
+      "provider": "huggingface",
+      "type": "bert",
+      "architecture": "BertModel",
+      "category": "other",
+      "config": {
+        "_name_or_path": "old_models/paraphrase-multilingual-MiniLM-L12-v2/0_Transformer",
+        "architectures": [
+          "BertModel"
+        ],
+        "attention_probs_dropout_prob": 0.1,
+        "gradient_checkpointing": false,
+        "hidden_act": "gelu",
+        "hidden_dropout_prob": 0.1,
+        "hidden_size": 384,
+        "initializer_range": 0.02,
+        "intermediate_size": 1536,
+        "layer_norm_eps": 1e-12,
+        "max_position_embeddings": 512,
+        "model_type": "bert",
+        "num_attention_heads": 12,
+        "num_hidden_layers": 12,
+        "pad_token_id": 0,
+        "position_embedding_type": "absolute",
+        "transformers_version": "4.7.0",
+        "type_vocab_size": 2,
+        "use_cache": true,
+        "vocab_size": 250037
+      }
+    },
+    "nreimers/MiniLM-L6-H384-uncased": {
+      "name": "nreimers/MiniLM-L6-H384-uncased",
+      "path": "/Users/xujian/.cache/huggingface/hub/models--sentence-transformers--all-MiniLM-L6-v2/snapshots/c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
+      "size": 0,
+      "provider": "huggingface",
+      "type": "bert",
+      "architecture": "BertModel",
+      "category": "other",
+      "config": {
+        "_name_or_path": "nreimers/MiniLM-L6-H384-uncased",
+        "architectures": [
+          "BertModel"
+        ],
+        "attention_probs_dropout_prob": 0.1,
+        "gradient_checkpointing": false,
+        "hidden_act": "gelu",
+        "hidden_dropout_prob": 0.1,
+        "hidden_size": 384,
+        "initializer_range": 0.02,
+        "intermediate_size": 1536,
+        "layer_norm_eps": 1e-12,
+        "max_position_embeddings": 512,
+        "model_type": "bert",
+        "num_attention_heads": 12,
+        "num_hidden_layers": 6,
+        "pad_token_id": 0,
+        "position_embedding_type": "absolute",
+        "transformers_version": "4.8.2",
+        "type_vocab_size": 2,
+        "use_cache": true,
+        "vocab_size": 30522
+      }
+    },
+    "xlm-roberta-large": {
+      "name": "xlm-roberta-large",
+      "path": "/Users/xujian/.cache/huggingface/hub/models--BAAI--bge-reranker-large/snapshots/55611d7bca2a7133960a6d3b71e083071bbfc312",
+      "size": 0,
+      "provider": "huggingface",
+      "type": "xlm-roberta",
+      "architecture": "XLMRobertaForSequenceClassification",
+      "category": "other",
+      "config": {
+        "_name_or_path": "xlm-roberta-large",
+        "architectures": [
+          "XLMRobertaForSequenceClassification"
+        ],
+        "attention_probs_dropout_prob": 0.1,
+        "bos_token_id": 0,
+        "classifier_dropout": null,
+        "eos_token_id": 2,
+        "hidden_act": "gelu",
+        "hidden_dropout_prob": 0.1,
+        "hidden_size": 1024,
+        "id2label": {
+          "0": "LABEL_0"
+        },
+        "initializer_range": 0.02,
+        "intermediate_size": 4096,
+        "label2id": {
+          "LABEL_0": 0
+        },
+        "layer_norm_eps": 1e-05,
+        "max_position_embeddings": 514,
+        "model_type": "xlm-roberta",
+        "num_attention_heads": 16,
+        "num_hidden_layers": 24,
+        "output_past": true,
+        "pad_token_id": 1,
+        "position_embedding_type": "absolute",
+        "torch_dtype": "float32",
+        "transformers_version": "4.30.0",
+        "type_vocab_size": 1,
+        "use_cache": true,
+        "vocab_size": 250002
+      }
+    },
+    "cross-encoder/ms-marco-MiniLM-L-12-v2": {
+      "name": "cross-encoder/ms-marco-MiniLM-L-12-v2",
+      "path": "/Users/xujian/.cache/huggingface/hub/models--cross-encoder--ms-marco-MiniLM-L-6-v2/snapshots/c5ee24cb16019beea0893ab7796b1df96625c6b8",
+      "size": 0,
+      "provider": "huggingface",
+      "type": "bert",
+      "architecture": "BertForSequenceClassification",
+      "category": "other",
+      "config": {
+        "_name_or_path": "cross-encoder/ms-marco-MiniLM-L-12-v2",
+        "architectures": [
+          "BertForSequenceClassification"
+        ],
+        "attention_probs_dropout_prob": 0.1,
+        "gradient_checkpointing": false,
+        "hidden_act": "gelu",
+        "hidden_dropout_prob": 0.1,
+        "hidden_size": 384,
+        "id2label": {
+          "0": "LABEL_0"
+        },
+        "initializer_range": 0.02,
+        "intermediate_size": 1536,
+        "label2id": {
+          "LABEL_0": 0
+        },
+        "layer_norm_eps": 1e-12,
+        "max_position_embeddings": 512,
+        "model_type": "bert",
+        "num_attention_heads": 12,
+        "num_hidden_layers": 6,
+        "pad_token_id": 0,
+        "position_embedding_type": "absolute",
+        "transformers_version": "4.4.2",
+        "type_vocab_size": 2,
+        "use_cache": true,
+        "vocab_size": 30522,
+        "sbert_ce_default_activation_function": "torch.nn.modules.linear.Identity"
+      }
+    }
+  }
+}

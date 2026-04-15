@@ -1,0 +1,295 @@
+# Alertmanager配置文件 - 生产环境
+# Alertmanager Configuration for Athena Platform - Production
+# 版本: 2.0.0
+# 更新: 2026-01-26
+
+global:
+  # 全局解析超时
+  resolve_timeout: 5m
+
+  # ================================
+  # SMTP配置（邮件告警）
+  # ================================
+  # 请根据您的邮件服务提供商配置以下参数
+  smtp_smarthost: '${SMTP_HOST:-smtp.gmail.com}:587'
+  smtp_from: '${SMTP_FROM:-alertmanager@athena-platform.com}'
+  smtp_auth_username: '${SMTP_USER:-alertmanager@athena-platform.com}'
+  smtp_auth_password: '${SMTP_PASSWORD}'
+  smtp_require_tls: true
+
+  # ================================
+  # 全局Slack配置
+  # ================================
+  slack_api_url: '${SLACK_WEBHOOK_URL}'
+
+  # ================================
+  # 全局企业微信配置
+  # ================================
+  wechat_api_url: 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${WECHAT_API_KEY}'
+
+  # ================================
+  # 全局钉钉配置
+  # ================================
+  dingtalk_api_url: '${DINGTALK_WEBHOOK_URL}'
+
+# ================================
+# 路由配置
+# ================================
+route:
+  # 默认接收器
+  receiver: 'default'
+
+  # 分组标签
+  group_by: ['alertname', 'cluster', 'service']
+
+  # 分组等待时间
+  group_wait: 10s
+
+  # 分组间隔时间
+  group_interval: 10s
+
+  # 重复发送间隔
+  repeat_interval: 12h
+
+  # 子路由规则
+  routes:
+    # ================================
+    # 关键告警路由
+    # ================================
+    - match:
+        severity: critical
+      receiver: 'critical-alerts'
+      continue: true
+      group_wait: 10s
+      repeat_interval: 5m
+
+    # ================================
+    # 警告告警路由
+    # ================================
+    - match:
+        severity: warning
+      receiver: 'warning-alerts'
+      continue: true
+      group_wait: 30s
+      repeat_interval: 1h
+
+    # ================================
+    # 数据库告警路由
+    # ================================
+    - match:
+        alertname: 'DatabaseDown'
+      receiver: 'database-team'
+      continue: true
+
+    # ================================
+    # 服务告警路由
+    # ================================
+    - match:
+        alertname: 'ServiceDown'
+      receiver: 'ops-team'
+      continue: true
+
+# ================================
+# 接收器配置
+# ================================
+receivers:
+  # ================================
+  # 默认接收器
+  # ================================
+  - name: 'default'
+    email_configs:
+      - to: '${DEFAULT_EMAIL:-team@athena-platform.com}'
+        headers:
+          Subject: '📊 [INFO] Athena平台通知'
+        html: true
+
+  # ================================
+  # 关键告警接收器
+  # ================================
+  - name: 'critical-alerts'
+    # 邮件配置
+    email_configs:
+      - to: '${CRITICAL_EMAIL:-oncall@athena-platform.com,ops@athena-platform.com}'
+        headers:
+          Subject: '🚨 [CRITICAL] Athena平台关键告警'
+        html: true
+        send_resolved: true
+
+    # Slack配置
+    slack_configs:
+      - channel: '${SLACK_CRITICAL_CHANNEL:-#athena-critical}'
+        title: '🚨 Athena Critical Alert'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+        send_resolved: true
+        color: '{{ if eq .Status "firing" }}danger{{ else }}good{{ end }}'
+        actions:
+          - type: button
+            text: '查看Grafana'
+            url: '{{ .ExternalURL }}'
+          - type: button
+            text: '查看Prometheus'
+            url: 'http://prometheus.athena-platform.com:9090'
+
+    # 企业微信配置
+    wechat_configs:
+      - corp_id: '${WECHAT_CORP_ID}'
+        agent_id: '${WECHAT_AGENT_ID}'
+        api_secret: '${WECHAT_API_SECRET}'
+        to_user: '@all'
+        message: |
+          告警: {{ .GroupLabels.alertname }}
+          状态: {{ .Status }}
+          描述: {{ range .Alerts }}{{ .Annotations.description }}{{ end }}
+          时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+        send_resolved: true
+
+    # 钉钉配置
+    dingtalk_configs:
+      - webhook: '${DINGTALK_WEBHOOK_URL}'
+        message:
+          title: '🚨 Athena Critical Alert'
+          text: |
+            ## 告警通知
+            **告警名称**: {{ .GroupLabels.alertname }}
+            **告警级别**: Critical
+            **告警状态**: {{ .Status }}
+            **告警描述**: {{ range .Alerts }}{{ .Annotations.description }}{{ end }}
+            **开始时间**: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+            ---
+            [查看详情]({{ .ExternalURL }})
+        send_resolved: true
+
+    # Webhook配置（自定义）
+    webhook_configs:
+      - url: '${WEBHOOK_CRITICAL_URL}'
+        send_resolved: true
+        http_config:
+          bearer_token: '${WEBHOOK_BEARER_TOKEN}'
+
+  # ================================
+  # 警告告警接收器
+  # ================================
+  - name: 'warning-alerts'
+    # 邮件配置
+    email_configs:
+      - to: '${WARNING_EMAIL:-ops@athena-platform.com}'
+        headers:
+          Subject: '⚠️ [WARNING] Athena平台警告'
+        html: true
+        send_resolved: true
+
+    # Slack配置
+    slack_configs:
+      - channel: '${SLACK_WARNING_CHANNEL:-#athena-ops}'
+        title: '⚠️ Athena Warning Alert'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+        send_resolved: true
+        color: 'warning'
+
+  # ================================
+  # 数据库团队接收器
+  # ================================
+  - name: 'database-team'
+    email_configs:
+      - to: '${DB_TEAM_EMAIL:-db-team@athena-platform.com}'
+        headers:
+          Subject: '🗄️ [DB] Athena数据库告警'
+        send_resolved: true
+
+  # ================================
+  # 运维团队接收器
+  # ================================
+  - name: 'ops-team'
+    email_configs:
+      - to: '${OPS_TEAM_EMAIL:-ops@athena-platform.com}'
+        headers:
+          Subject: '🔧 [OPS] Athena运维告警'
+        send_resolved: true
+
+# ================================
+# 抑制规则
+# ================================
+inhibit_rules:
+  # 如果有critical告警，抑制同一服务的warning告警
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'service', 'cluster']
+
+  # 如果服务完全不可用，抑制该服务的性能告警
+  - source_match:
+      alertname: 'ServiceDown'
+    target_match_re:
+      alertname: '.*Performance.*'
+    equal: ['service']
+
+  # 如果数据库不可用，抑制相关的应用错误
+  - source_match:
+      alertname: 'DatabaseDown'
+    target_match_re:
+      alertname: '.*ApplicationError.*'
+    equal: ['database']
+
+# ================================
+# 模板文件
+# ================================
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'
+
+# ================================
+# 配置说明
+# ================================
+#
+# 环境变量配置:
+#
+# 1. 邮件告警 (SMTP):
+#    export SMTP_HOST="smtp.gmail.com"
+#    export SMTP_PORT="587"
+#    export SMTP_USER="alertmanager@athena-platform.com"
+#    export SMTP_PASSWORD="your-app-specific-password"
+#    export SMTP_FROM="alertmanager@athena-platform.com"
+#
+# 2. Slack告警:
+#    export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+#    export SLACK_CRITICAL_CHANNEL="#athena-critical"
+#    export SLACK_WARNING_CHANNEL="#athena-ops"
+#
+# 3. 企业微信告警:
+#    export WECHAT_API_KEY="your-wechat-api-key"
+#    export WECHAT_CORP_ID="your-corp-id"
+#    export WECHAT_AGENT_ID="your-agent-id"
+#    export WECHAT_API_SECRET="your-api-secret"
+#
+# 4. 钉钉告警:
+#    export DINGTALK_WEBHOOK_URL="https://oapi.dingtalk.com/robot/send?access_token=YOUR_TOKEN"
+#
+# 5. 通用配置:
+#    export DEFAULT_EMAIL="team@athena-platform.com"
+#    export CRITICAL_EMAIL="oncall@athena-platform.com,ops@athena-platform.com"
+#    export WARNING_EMAIL="ops@athena-platform.com"
+#    export DB_TEAM_EMAIL="db-team@athena-platform.com"
+#    export OPS_TEAM_EMAIL="ops@athena-platform.com"
+#
+# ================================
+# 告警接收者配置
+# ================================
+#
+# 关键告警接收者 (Critical):
+#   - 邮件: oncall@athena-platform.com, ops@athena-platform.com
+#   - Slack: #athena-critical
+#   - 企业微信: @all
+#   - 钉钉: Athena Critical Alert 群
+#   - Webhook: 自定义webhook endpoint
+#
+# 警告告警接收者 (Warning):
+#   - 邮件: ops@athena-platform.com
+#   - Slack: #athena-ops
+#
+# 数据库告警接收者:
+#   - 邮件: db-team@athena-platform.com
+#
+# 运维告警接收者:
+#   - 邮件: ops@athena-platform.com
+#
+# ================================

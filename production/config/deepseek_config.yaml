@@ -1,0 +1,72 @@
+# DeepSeek-R1 配置文件
+# 用于数学推理交叉验证
+
+provider: deepseek
+api_key: sk-7f0fa1165de249d0a30b62a2584bd4c5
+base_url: https://api.deepseek.com/v1
+model: deepseek-chat  # 使用DeepSeek-V3（快速版）
+
+# 模型配置
+models:
+  reasoning:
+    name: deepseek-reasoner
+    type: reasoning
+    tier: flagship
+    context_window: 64000
+    max_output: 8000
+
+  chat:
+    name: deepseek-chat
+    type: chat
+    context_window: 64000
+    max_output: 8000
+
+# 交叉验证配置
+cross_validation:
+  enabled: true
+  role: cross_validator
+  trigger_conditions:
+    - task_type: math_reasoning
+      confidence_threshold: 0.8
+    - task_type: sequence_problems
+      always_validate: true
+    - task_type: complex_proof
+      always_validate: true
+
+  validation_strategy:
+    method: dual_verification
+    primary_engine: glm-4.7
+    validator_engine: deepseek-chat  # 使用DeepSeek-V3（快速版）
+    conflict_resolution: manual_review
+
+# 性能配置
+performance:
+  temperature: 0.1  # 推理任务使用低温度
+  max_tokens: 4000
+  top_p: 0.95
+  timeout: 60
+
+# 成本优化
+cost_optimization:
+  free_tier_available: true
+  pricing:
+    input_per_million: 1.0  # RMB
+    output_per_million: 2.0  # RMB
+  budget_alert:
+    enabled: true
+    threshold: 100  # RMB
+
+# 使用统计
+usage_stats:
+  total_calls: 0
+  math_reasoning_calls: 0
+  cross_validations: 0
+  discrepancies_found: 0
+
+# 集成状态
+integration:
+  status: active
+  primary_role: cross_validation
+  fallback_to_primary: true
+  auto_retry: true
+  max_retries: 3

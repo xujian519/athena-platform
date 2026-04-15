@@ -1,0 +1,147 @@
+{
+  "analysis_timestamp": "2026-02-20T10:24:21.374429",
+  "total_log_files": 148,
+  "file_analyses": {
+    "xiaona_api.log": {
+      "file_path": "/Users/xujian/Athena工作平台/data/logs/xiaona_api.log",
+      "total_lines_analyzed": 512,
+      "error_lines": 14,
+      "error_frequency": {
+        "database_error": 14
+      },
+      "hourly_errors": {},
+      "concurrent_patterns": {
+        "connection_issues": {},
+        "timing_patterns": {},
+        "error_sequences": {}
+      },
+      "recent_errors": [
+        {
+          "timestamp": null,
+          "error_types": [
+            "database_error"
+          ],
+          "error_level": "info",
+          "raw_line": "INFO:xiaona_data_service:✅ PostgreSQL连接成功",
+          "line_length": 41
+        },
+        {
+          "timestamp": null,
+          "error_types": [
+            "database_error"
+          ],
+          "error_level": "info",
+          "raw_line": "INFO:xiaona_data_service:✅ PostgreSQL连接成功",
+          "line_length": 41
+        },
+        {
+          "timestamp": null,
+          "error_types": [
+            "database_error"
+          ],
+          "error_level": "info",
+          "raw_line": "INFO:xiaona_data_service:✅ PostgreSQL连接成功",
+          "line_length": 41
+        },
+        {
+          "timestamp": null,
+          "error_types": [
+            "database_error"
+          ],
+          "error_level": "info",
+          "raw_line": "INFO:xiaona_data_service:✅ PostgreSQL连接成功",
+          "line_length": 41
+        },
+        {
+          "timestamp": null,
+          "error_types": [
+            "database_error"
+          ],
+          "error_level": "info",
+          "raw_line": "INFO:xiaona_data_service:✅ PostgreSQL连接成功",
+          "line_length": 41
+        },
+        {
+          "timestamp": null,
+          "error_types": [
+            "database_error"
+          ],
+          "error_level": "info",
+          "raw_line": "INFO:xiaona_data_service:✅ PostgreSQL连接成功",
+          "line_length": 41
+        },
+        {
+          "timestamp": null,
+          "error_types": [
+            "database_error"
+          ],
+          "error_level": "info",
+          "raw_line": "INFO:xiaona_data_service:✅ PostgreSQL连接成功",
+          "line_length": 41
+        },
+        {
+          "timestamp": null,
+          "error_types": [
+            "database_error"
+          ],
+          "error_level": "info",
+          "raw_line": "INFO:xiaona_data_service:✅ PostgreSQL连接成功",
+          "line_length": 41
+        },
+        {
+          "timestamp": null,
+          "error_types": [
+            "database_error"
+          ],
+          "error_level": "info",
+          "raw_line": "INFO:xiaona_data_service:✅ PostgreSQL连接成功",
+          "line_length": 41
+        },
+        {
+          "timestamp": null,
+          "error_types": [
+            "database_error"
+          ],
+          "error_level": "info",
+          "raw_line": "INFO:xiaona_data_service:✅ PostgreSQL连接成功",
+          "line_length": 41
+        }
+      ]
+    },
+    "athena_perception_api.log": {
+      "file_path": "/Users/xujian/Athena工作平台/data/logs/athena_perception_api.log",
+      "total_lines_analyzed": 55,
+      "error_lines": 0,
+      "error_frequency": {},
+      "hourly_errors": {},
+      "concurrent_patterns": {
+        "connection_issues": {},
+        "timing_patterns": {},
+        "error_sequences": {}
+      },
+      "recent_errors": []
+    },
+    "vectorize_v4_20260120_221848.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/vectorize_v4_20260120_221848.log",
+      "total_lines_analyzed": 73,
+      "error_lines": 1,
+      "error_frequency": {
+        "resource_exhaust": 1
+      },
+      "hourly_errors": {
+        "2026-01-20 22:00": 1
+      },
+      "concurrent_patterns": {
+        "connection_issues": {},
+        "timing_patterns": {},
+        "error_sequences": {},
+        "resource_contention": {
+          "total_occurrences": 1,
+          "patterns": [
+            "2026-01-20 22:26:44,305 - 批量编码失败: MPS backend out of memory (MPS allocated: 7.59 GiB, other allocations: 40.08 GiB, max allowed: 63.65 GiB). Tried to allocate 20.02 GiB on private pool. Use PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.0 to disable upper limit for memory allocations (may cause system failure)., 降级为单条处理"
+          ]
+        }
+      },
+      "recent_errors": [
+        {
+          "timestamp": 

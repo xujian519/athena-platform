@@ -1,0 +1,495 @@
+# Athena 工作平台配置文件
+# 平台核心配置设置
+
+# =================================
+# 平台基础信息
+# =================================
+platform:
+  name: "Athena 工作平台"
+  version: "1.0.0"
+  description: "智能协作平台，提升工作效率和创新能力"
+  author: "徐健"
+  contact: "xujian519@gmail.com"
+
+  # 运行环境
+  environment: "development"  # development, production, testing
+  debug: true
+
+  # 基础目录
+  base_dir: "."
+  data_dir: "./data"
+  temp_dir: "./temp"
+  logs_dir: "./logs"
+  config_dir: "./config"
+
+# =================================
+# 模块配置
+# =================================
+modules:
+  # 核心业务模块
+  core_business:
+    enabled: true
+    path: "01_核心业务"
+    priority: 1
+
+  # 技术系统模块
+  tech_system:
+    enabled: true
+    path: "02_技术系统"
+    priority: 2
+
+  # 内容创作模块
+  content_creation:
+    enabled: true
+    path: "03_内容创作"
+    priority: 3
+
+  # 项目管理模块
+  project_management:
+    enabled: true
+    path: "04_项目管理"
+    priority: 4
+
+  # 学习成长模块
+  learning_growth:
+    enabled: true
+    path: "05_学习成长"
+    priority: 5
+
+  # 配置资源模块
+  config_resources:
+    enabled: true
+    path: "06_配置资源"
+    priority: 6
+
+  # 交流协作模块
+  collaboration:
+    enabled: true
+    path: "07_交流协作"
+    priority: 7
+
+  # 存档备份模块
+  archive_backup:
+    enabled: true
+    path: "08_存档备份"
+    priority: 8
+
+  # 专业服务模块
+  professional_services:
+    enabled: true
+    path: "09_专业服务"
+    priority: 9
+
+  # 工具开发模块
+  tool_development:
+    enabled: true
+    path: "10_工具开发"
+    priority: 10
+
+# =================================
+# AI 服务配置
+# =================================
+ai_services:
+  # Claude API
+  claude:
+    enabled: true
+    model: "claude-3-sonnet-20240229"
+    max_tokens: 4096
+    temperature: 0.7
+
+  # OpenAI API (可选)
+  openai:
+    enabled: false
+    model: "gpt-4"
+    max_tokens: 4096
+    temperature: 0.7
+
+  # 百度千帆 (可选)
+  qianfan:
+    enabled: false
+    model: "ernie-bot-4"
+    max_tokens: 4096
+    temperature: 0.7
+
+# =================================
+# 数据库配置
+# =================================
+database:
+  # SQLite 主数据库
+  sqlite:
+    enabled: true
+    path: "${data_dir}/athena.db"
+
+  # Redis 缓存 (可选)
+  redis:
+    enabled: false
+    host: "localhost"
+    port: 6379
+    password: ""
+    db: 0
+
+  # 数据库连接池配置
+  pool:
+    max_connections: 20
+    min_connections: 5
+    connection_timeout: 30
+
+# =================================
+# 文件存储配置
+# =================================
+storage:
+  # 文件上传限制
+  upload:
+    max_file_size: 100  # MB
+    allowed_extensions:
+      - ".txt"
+      - ".md"
+      - ".pdf"
+      - ".docx"
+      - ".xlsx"
+      - ".pptx"
+      - ".png"
+      - ".jpg"
+      - ".jpeg"
+      - ".gif"
+
+  # 文件存储路径
+  paths:
+    documents: "${data_dir}/documents"
+    images: "${data_dir}/images"
+    videos: "${data_dir}/videos"
+    temp: "${temp_dir}"
+    backup: "${data_dir}/backup"
+
+# =================================
+# Web 服务配置
+# =================================
+web:
+  # 服务端口
+  port: 8080
+  host: "0.0.0.0"
+
+  # API 服务
+  api:
+    enabled: true
+    port: 8081
+    version: "v1"
+    prefix: "/api/v1"
+
+  # 跨域配置
+  cors:
+    enabled: true
+    origins:
+      - "http://localhost:3000"
+      - "http://localhost:8080"
+    methods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+      - "OPTIONS"
+    headers:
+      - "Content-Type"
+      - "Authorization"
+      - "X-Requested-With"
+
+# =================================
+# 安全配置
+# =================================
+security:
+  # JWT 配置
+  jwt:
+    secret_key: "your_jwt_secret_key_here"
+    algorithm: "HS256"
+    expire_hours: 24
+
+  # API 访问控制
+  api:
+    enable_auth: false  # 开发阶段暂时关闭
+    rate_limit:
+      enabled: false
+      requests_per_minute: 60
+
+  # 文件安全
+  file:
+    enable_virus_scan: false
+    quarantine_suspicious: true
+
+# =================================
+# 日志配置
+# =================================
+logging:
+  # 日志级别
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+
+  # 日志格式
+  format: "detailed"  # simple, detailed, json
+
+  # 日志文件配置
+  file:
+    enabled: true
+    max_size: "10MB"
+    backup_count: 5
+    rotation: "daily"
+
+  # 控制台日志
+  console:
+    enabled: true
+    colored: true
+
+  # 日志分类
+  categories:
+    app: "${logs_dir}/app.log"
+    access: "${logs_dir}/access.log"
+    error: "${logs_dir}/error.log"
+    audit: "${logs_dir}/audit.log"
+
+# =================================
+# 缓存配置
+# =================================
+cache:
+  # 缓存类型
+  type: "memory"  # memory, redis, file
+
+  # 内存缓存配置
+  memory:
+    max_size: 1000  # 最大条目数
+    expire_time: 3600  # 过期时间(秒)
+
+  # Redis 缓存配置
+  redis:
+    host: "localhost"
+    port: 6379
+    password: ""
+    db: 1
+    expire_time: 3600
+
+# =================================
+# 任务队列配置
+# =================================
+queue:
+  # 队列类型
+  type: "memory"  # memory, redis, rabbitmq
+
+  # 任务配置
+  task:
+    max_concurrent: 10  # 最大并发任务数
+    timeout: 300  # 超时时间(秒)
+    retry_attempts: 3  # 重试次数
+
+  # 队列分类
+  queues:
+    high_priority: "high"
+    normal_priority: "normal"
+    low_priority: "low"
+
+# =================================
+# 监控配置
+# =================================
+monitoring:
+  # 性能监控
+  performance:
+    enabled: true
+    collect_interval: 60  # 收集间隔(秒)
+    retention_days: 30
+
+  # 健康检查
+  health_check:
+    enabled: true
+    interval: 300  # 检查间隔(秒)
+    timeout: 10  # 超时时间(秒)
+
+  # 指标收集
+  metrics:
+    enabled: true
+    endpoint: "/metrics"
+    format: "prometheus"
+
+# =================================
+# 备份配置
+# =================================
+backup:
+  # 自动备份
+  auto_backup:
+    enabled: true
+    interval: 24  # 备份间隔(小时)
+    retention_days: 30
+    compression: true
+
+  # 备份路径
+  backup_path: "${data_dir}/backup"
+
+  # 备份内容
+  include:
+    - "00-infrastructure/root-config/"
+    - "03-tools/data/"
+    - "00-infrastructure/root-documentation/logs/"
+
+  # 排除内容
+  exclude:
+    - "05-data-storage/temp/"
+    - "__pycache__/"
+    - ".DS_Store"
+    - "*.pyc"
+
+# =================================
+# 通知配置
+# =================================
+notifications:
+  # 邮件通知
+  email:
+    enabled: false
+    smtp:
+      host: "smtp.gmail.com"
+      port: 587
+      username: "your_email@gmail.com"
+      password: "your_email_password"
+      use_tls: true
+
+  # 系统通知
+  system:
+    enabled: true
+    methods:
+      - "desktop"
+      - "console"
+
+  # 通知级别
+  levels:
+    - "ERROR"
+    - "CRITICAL"
+    - "WARNING"
+
+# =================================
+# 开发配置
+# =================================
+development:
+  # 热重载
+  hot_reload: true
+
+  # 开发工具
+  dev_tools:
+    enabled: true
+    api_docs: true
+    debug_toolbar: true
+
+  # 测试配置
+  testing:
+    enabled: true
+    coverage: true
+    auto_run: false
+
+# =================================
+# 性能优化配置
+# =================================
+performance:
+  # 线程池
+  thread_pool:
+    size: 10
+
+  # 连接池
+  connection_pool:
+    size: 20
+    timeout: 30
+
+  # 请求配置
+  request:
+    timeout: 30  # 超时时间(秒)
+    max_response_size: 10  # MB (优化：从50MB降低到10MB)
+
+  # 静态文件缓存
+  static_cache:
+    enabled: true
+    expire_time: 3600  # 秒
+
+# =================================
+# MCP优化配置
+# =================================
+mcp_optimization:
+  # 响应优化
+  response_config:
+    enabled: true
+    max_response_size: "10MB"
+    enable_compression: true
+    chunk_size: 1024
+    compression_threshold: "1MB"
+
+  # 分页配置
+  pagination:
+    enabled: true
+    default_page_size: 50
+    max_page_size: 200
+    force_pagination_over: 100
+
+  # 监控配置
+  monitoring:
+    enabled: true
+    alert_threshold_mb: 5
+    critical_threshold_mb: 15
+    check_interval: 60
+    log_file: "00-infrastructure/root-documentation/logs/mcp_monitor.log"
+
+  # 缓存优化
+  cache:
+    enabled: true
+    response_cache: true
+    cache_ttl: 3600
+    max_cache_entries: 1000
+    cleanup_interval: 300
+
+  # 搜索优化
+  search:
+    result_limit: 100
+    enable_filtering: true
+    truncate_long_results: true
+    max_result_length: 5000
+    auto_summarize_over: 1000
+
+# =================================
+# 实验性功能配置
+# =================================
+experimental:
+  # AI 代理协作
+  ai_agents:
+    enabled: true
+    max_agents: 9
+
+  # 知识图谱
+  knowledge_graph:
+    enabled: true
+    auto_update: true
+
+  # 智能会议
+  smart_meetings:
+    enabled: true
+    auto_record: false
+
+  # 多语言支持
+  multi_language:
+    enabled: false
+    default: "zh-CN"
+    supported:
+      - "zh-CN"
+      - "en-US"
+
+# =================================
+# 自定义配置
+# =================================
+custom:
+  # 平台个性化
+  branding:
+    logo_path: "assets/logo.png"
+    favicon_path: "assets/favicon.ico"
+    theme: "light"  # light, dark
+
+  # 本地化
+  localization:
+    timezone: "Asia/Shanghai"
+    language: "zh-CN"
+    date_format: "YYYY-MM-DD"
+    time_format: "HH:mm:ss"
+
+  # 用户偏好
+  preferences:
+    default_page_size: 20
+    enable_animations: true
+    show_tooltips: true

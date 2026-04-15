@@ -1,0 +1,99 @@
+{
+  "session_id": "search_1765200955_f37fed27",
+  "original_query": "计算机视觉 图像识别 专利",
+  "refined_results": [
+    {
+      "title": "Advanced Machine Learning Patent System for 计算机视觉 图像识别 专利",
+      "abstract": "A comprehensive patent describing advanced 计算机视觉 图像识别 专利 technology with innovative machine learning algorithms and real-world applications...",
+      "publication_date": "2023-05-15",
+      "authors": [
+        "Dr. John Smith",
+        "Dr. Jane Doe"
+      ],
+      "patent_number": "US20230123456",
+      "source": "USPTO",
+      "keywords": [
+        "计算机视觉",
+        "图像识别",
+        "专利",
+        "innovation",
+        "technology"
+      ],
+      "citations": 15,
+      "relevance_score": 0.9
+    },
+    {
+      "title": "Improved 计算机视觉 图像识别 专利 Method and Apparatus",
+      "abstract": "An improved method for implementing 计算机视觉 图像识别 专利 in real-world applications...",
+      "publication_date": "2022-11-20",
+      "authors": [
+        "Alice Johnson"
+      ],
+      "patent_number": "US20220198765",
+      "source": "EPO",
+      "keywords": [
+        "计算机视觉",
+        "图像识别",
+        "improvement"
+      ],
+      "citations": 8,
+      "relevance_score": 0.7200000000000001
+    },
+    {
+      "title": "Novel 计算机视觉 图像识别 专利 Framework Implementation",
+      "abstract": "A novel framework for 计算机视觉 图像识别 专利 that addresses existing limitations and provides better performance...",
+      "publication_date": "2024-01-10",
+      "authors": [
+        "Bob Wilson",
+        "Carol Davis"
+      ],
+      "patent_number": "US20240098765",
+      "source": "WIPO",
+      "keywords": [
+        "计算机视觉",
+        "图像识别",
+        "专利",
+        "framework",
+        "novel"
+      ],
+      "citations": 3,
+      "relevance_score": 0.54
+    },
+    {
+      "title": "计算机视觉 图像识别 专利 Related Technology",
+      "abstract": "A system that incorporates 计算机视觉 图像识别 专利...",
+      "publication_date": "2023-09-22",
+      "authors": [
+        "Research Group"
+      ],
+      "patent_number": "US20230345678",
+      "source": "CNIPA",
+      "keywords": [
+        "计算机视觉",
+        "system"
+      ],
+      "citations": 12,
+      "relevance_score": 0.36000000000000004
+    },
+    {
+      "title": "Technology Patent",
+      "abstract": "Short description...",
+      "authors": [
+        "Engineer"
+      ],
+      "patent_number": "US20210234567",
+      "source": "JPO",
+      "keywords": [
+        "tech"
+      ],
+      "citations": 25,
+      "relevance_score": 0.18000000000000002
+    }
+  ],
+  "final_quality": "SearchQualityMetrics(relevance_score=0.6799999999999999, completeness_score=0.95, accuracy_score=0.9199999999999999, diversity_score=0.8, novelty_score=0.72, overall_score=0.816, feedback_count=0, success_rate=0.0)",
+  "iteration_history": [],
+  "total_iterations": 0,
+  "improvement_ratio": 1.0,
+  "duration": 0.00012731552124023438,
+  "status": "completed"
+}

@@ -1,0 +1,434 @@
+{
+  "verification_time": "2025-12-21T19:00:27.434773",
+  "environment": "production",
+  "components": {
+    "legal_vector_collections": {
+      "available_collections": [
+        "patent_rules_unified",
+        "legal_cases_1024",
+        "legal_judgments_1024",
+        "legal_articles_1024",
+        "legal_chunks_v2",
+        "legal_clauses_1024",
+        "court_interpretations_comprehensive_md",
+        "court_interpretations_comprehensive_docx",
+        "court_interpretations_macos_optimized",
+        "examination_guidelines_comprehensive_pdf"
+      ],
+      "missing_collections": [],
+      "total_vectors": 6422,
+      "detailed_stats": {
+        "patent_rules_unified": {
+          "vectors": 1322,
+          "indexed": 0,
+          "segments": 7,
+          "status": "green",
+          "disk_usage": {}
+        },
+        "legal_cases_1024": {
+          "vectors": 0,
+          "indexed": 0,
+          "segments": 7,
+          "status": "green",
+          "disk_usage": {}
+        },
+        "legal_judgments_1024": {
+          "vectors": 392,
+          "indexed": 0,
+          "segments": 7,
+          "status": "green",
+          "disk_usage": {}
+        },
+        "legal_articles_1024": {
+          "vectors": 2693,
+          "indexed": 0,
+          "segments": 7,
+          "status": "green",
+          "disk_usage": {}
+        },
+        "legal_chunks_v2": {
+          "vectors": 2008,
+          "indexed": 0,
+          "segments": 7,
+          "status": "green",
+          "disk_usage": {}
+        },
+        "legal_clauses_1024": {
+          "vectors": 0,
+          "indexed": 0,
+          "segments": 7,
+          "status": "green",
+          "disk_usage": {}
+        },
+        "court_interpretations_comprehensive_md": {
+          "vectors": 1,
+          "indexed": 0,
+          "segments": 7,
+          "status": "green",
+          "disk_usage": {}
+        },
+        "court_interpretations_comprehensive_docx": {
+          "vectors": 5,
+          "indexed": 0,
+          "segments": 7,
+          "status": "green",
+          "disk_usage": {}
+        },
+        "court_interpretations_macos_optimized": {
+          "vectors": 1,
+          "indexed": 0,
+          "segments": 7,
+          "status": "green",
+          "disk_usage": {}
+        },
+        "examination_guidelines_comprehensive_pdf": {
+          "vectors": 0,
+          "indexed": 0,
+          "segments": 7,
+          "status": "green",
+          "disk_usage": {}
+        }
+      },
+      "coverage_score": 166.66666666666669
+    },
+    "legal_vector_search": {
+      "basic_search": [
+        {
+          "collection": "patent_rules_unified",
+          "query": "发明专利保护期限",
+          "category": "专利法基础",
+          "response_time_ms": 3.1249523162841797,
+          "result_count": 0,
+          "quality_score": 0,
+          "relevant_terms_found": []
+        },
+        {
+          "collection": "patent_rules_unified",
+          "query": "专利侵权认定标准",
+          "category": "专利侵权",
+          "response_time_ms": 2.4819374084472656,
+          "result_count": 0,
+          "quality_score": 0,
+          "relevant_terms_found": []
+        },
+        {
+          "collection": "patent_rules_unified",
+          "query": "专利无效宣告程序",
+          "category": "专利无效",
+          "response_time_ms": 2.0818710327148438,
+          "result_count": 0,
+          "quality_score": 0,
+          "relevant_terms_found": []
+        },
+        {
+          "collection": "patent_rules_unified",
+          "query": "商标注册条件",
+          "category": "商标法",
+          "response_time_ms": 1.7006397247314453,
+          "result_count": 0,
+          "quality_score": 0,
+          "relevant_terms_found": []
+        },
+        {
+          "collection": "patent_rules_unified",
+          "query": "著作权保护范围",
+          "category": "著作权法",
+          "response_time_ms": 2.1049976348876953,
+          "result_count": 0,
+          "quality_score": 0,
+          "relevant_terms_found": []
+        },
+        {
+          "collection": "legal_cases_1024",
+          "query": "发明专利保护期限",
+          "category": "专利法基础",
+          "response_time_ms": 1.7559528350830078,
+          "result_count": 0,
+          "quality_score": 0,
+          "relevant_terms_found": []
+        },
+        {
+          "collection": "legal_cases_1024",
+          "query": "专利侵权认定标准",
+          "category": "专利侵权",
+          "response_time_ms": 1.4989376068115234,
+          "result_count": 0,
+          "quality_score": 0,
+          "relevant_terms_found": []
+        },
+        {
+          "collection": "legal_cases_1024",
+          "query": "专利无效宣告程序",
+          "category": "专利无效",
+          "response_time_ms": 1.373291015625,
+          "result_count": 0,
+          "quality_score": 0,
+          "relevant_terms_found": []
+        },
+        {
+          "collection": "legal_cases_1024",
+          "query": "商标注册条件",
+          "category": "商标法",
+          "response_time_ms": 1.4581680297851562,
+          "result_count": 0,
+          "quality_score": 0,
+          "relevant_terms_found": []
+        },
+        {
+          "collection": "legal_cases_1024",
+          "query": "著作权保护范围",
+          "category": "著作权法",
+          "response_time_ms": 1.6269683837890625,
+          "result_count": 0,
+          "quality_score": 0,
+          "relevant_terms_found": []
+        },
+        {
+          "collection": "legal_articles_1024",
+          "query": "发明专利保护期限",
+          "category": "专利法基础",
+          "response_time_ms": 2.7871131896972656,
+          "result_count": 10,
+          "quality_score": 0.0,
+          "relevant_terms_found": []
+        },
+        {
+          "collection": "legal_articles_1024",
+          "query": "专利侵权认定标准",
+          "category": "专利侵权",
+          "response_time_ms": 1.6930103302001953,
+          "result_count": 10,
+          "quality_score": 0.0,
+          "relevant_terms_found": []
+        },
+        {
+          "collection": "legal_articles_1024",
+          "query": "专利无效宣告程序",
+          "category": "专利无效",
+          "response_time_ms": 1.9040107727050781,
+          "result_count": 10,
+          "quality_score": 0.0,
+          "relevant_terms_found": []
+        },
+        {
+          "collection": "legal_articles_1024",
+          "query": "商标注册条件",
+          "category": "商标法",
+          "response_time_ms": 2.130270004272461,
+          "result_count": 10,
+          "quality_score": 0.0,
+          "relevant_terms_found": []
+        },
+        {
+          "collection": "legal_articles_1024",
+          "query": "著作权保护范围",
+          "category": "著作权法",
+          "response_time_ms": 2.1750926971435547,
+          "result_count": 10,
+          "quality_score": 0.0,
+          "relevant_terms_found": []
+        }
+      ],
+      "domain_search": [],
+      "performance_metrics": {
+        "total_searches": 15,
+        "successful_searches": 15,
+        "success_rate": 100.0,
+        "avg_response_time": 1.9931475321451824,
+        "max_response_time": 3.1249523162841797,
+        "min_response_time": 1.373291015625,
+        "avg_result_count": 3.3333333333333335,
+        "avg_quality_score": 0.0
+      },
+      "legal_query_accuracy": []
+    },
+    "knowledge_graph": {
+      "connectivity": {
+        "status": "connected",
+        "port": 9669,
+        "accessible": true
+      },
+      "data_structure": {
+        "spaces": [
+          "patent_kg"
+        ],
+        "tags": [
+          "patent_rule",
+          "legal_concept",
+          "jurisdiction",
+          "case_type"
+        ],
+        "edges": [
+          "has_rule",
+          "refers_to",
+          "governs",
+          "cites"
+        ],
+        "space_status": "configured"
+      },
+      "legal_entities": {
+        "total_nodes": 1012,
+        "patent_rules": 1000,
+        "legal_concepts": 5,
+        "jurisdictions": 4
+      },
+      "relationships": {
+        "total_edges": 1010,
+        "edge_types": [
+          "contrasts_with",
+          "applies_to",
+          "enforced_by"
+        ]
+      },
+      "query_capability": {
+        "supported_queries": [
+          "专利规则检索",
+          "法律概念关联查询",
+          "司法管辖关系查询",
+          "案例类型分析",
+          "交叉引用查询"
+        ],
+        "query_languages": [
+          "Cypher",
+          "Gremlin",
+          "AQL"
+        ],
+        "api_endpoints": [
+          "REST API",
+          "Graph API",
+          "GraphQL"
+        ]
+      }
+    },
+    "legal_qa_capability": {
+      "semantic_search": [
+        {
+          "question": "发明专利的保护期限是多久？",
+          "domain": "专利法基础",
+          "difficulty": "easy",
+          "processing_time_ms": 235.0449562072754,
+          "retrieved_info_count": 15,
+          "answer_quality_score": 100,
+          "expected_keywords_matched": 5
+        },
+        {
+          "question": "如何判断发明是否具有创造性？",
+          "domain": "专利审查",
+          "difficulty": "medium",
+          "processing_time_ms": 245.06092071533203,
+          "retrieved_info_count": 12,
+          "answer_quality_score": 95,
+          "expected_keywords_matched": 4
+        },
+        {
+          "question": "专利侵权的法律责任有哪些？",
+          "domain": "专利侵权",
+          "difficulty": "hard",
+          "processing_time_ms": 234.2238426208496,
+          "retrieved_info_count": 10,
+          "answer_quality_score": 80,
+          "expected_keywords_matched": 4
+        },
+        {
+          "question": "商标注册需要满足哪些条件？",
+          "domain": "商标法",
+          "difficulty": "medium",
+          "processing_time_ms": 234.75885391235352,
+          "retrieved_info_count": 8,
+          "answer_quality_score": 89,
+          "expected_keywords_matched": 4
+        },
+        {
+          "question": "著作权保护的内容包括什么？",
+          "domain": "著作权法",
+          "difficulty": "medium",
+          "processing_time_ms": 232.39564895629883,
+          "retrieved_info_count": 8,
+          "answer_quality_score": 89,
+          "expected_keywords_matched": 4
+        }
+      ],
+      "domain_expertise": [],
+      "response_quality": [],
+      "performance_metrics": {
+        "total_questions": 5,
+        "successful_qa": 5,
+        "success_rate": 100.0,
+        "avg_processing_time": 236.29684448242188,
+        "max_processing_time": 245.06092071533203,
+        "min_processing_time": 232.39564895629883,
+        "avg_quality_score": 90.6,
+        "keyword_coverage": 140.0
+      }
+    },
+    "production_security": {
+      "api_security": {
+        "status": "open",
+        "requires_auth": false,
+        "risk_level": "high",
+        "recommendation": "在生产环境中应启用API密钥认证"
+      },
+      "data_encryption": {
+        "in_transit": {
+          "status": "check_required",
+          "https_enabled": false,
+          "recommendation": "启用HTTPS/TLS加密"
+        },
+        "at_rest": {
+          "status": "check_required",
+          "encryption_enabled": false,
+          "recommendation": "启用静态数据加密"
+        }
+      },
+      "access_control": {
+        "rbac_configured": false,
+        "user_roles": [
+          "admin",
+          "user",
+          "readonly"
+        ],
+        "fine_grained_permissions": false,
+        "recommendation": "实施基于角色的访问控制(RBAC)"
+      },
+      "audit_logging": {
+        "enabled": false,
+        "log_types": [
+          "access",
+          "modification",
+          "authentication"
+        ],
+        "retention_days": 90,
+        "recommendation": "启用完整的审计日志记录"
+      },
+      "compliance": {
+        "gdpr": {
+          "status": "check_required",
+          "data_minimization": false,
+          "right_to_be_forgotten": false
+        },
+        "data_protection": {
+          "status": "check_required",
+          "backup_encryption": false,
+          "access_logging": false
+        }
+      }
+    }
+  },
+  "overall_assessment": {
+    "overall_score": 53,
+    "readiness_level": "not_ready",
+    "critical_issues": [
+      "法律向量数量不足，需要增加3578条记录"
+    ],
+    "recommendations": [
+      "导入更多法律相关数据到向量库",
+      "启用API密钥认证",
+      "启用审计日志",
+      "系统未就绪，需要全面改进"
+    ],
+    "production_ready": false
+  },
+  "recommendations": [],
+  "production_ready": false,
+  "end_time": "2025-12-21T19:00:28.696789"
+}

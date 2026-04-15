@@ -1,0 +1,53 @@
+{
+  "import_time": "2025-12-24T09:21:38.525715",
+  "total_documents": 1330,
+  "total_articles": 53903,
+  "categories": {
+    "宪法": {
+      "docs": 6,
+      "articles": 193
+    },
+    "宪法相关法": {
+      "docs": 51,
+      "articles": 2459
+    },
+    "民法典": {
+      "docs": 8,
+      "articles": 1062
+    },
+    "民法商法": {
+      "docs": 24,
+      "articles": 2386
+    },
+    "刑法": {
+      "docs": 12,
+      "articles": 476
+    },
+    "行政法": {
+      "docs": 102,
+      "articles": 6818
+    },
+    "经济法": {
+      "docs": 81,
+      "articles": 4810
+    },
+    "社会法": {
+      "docs": 24,
+      "articles": 1736
+    },
+    "诉讼与非诉讼程序法": {
+      "docs": 10,
+      "articles": 1119
+    },
+    "行政法规": {
+      "docs": 620,
+      "articles": 22785
+    },
+    "司法解释": {
+      "docs": 392,
+      "articles": 10059
+    }
+  },
+  "qdrant_collection": "laws_articles",
+  "nebula_space": "legal_kg"
+}

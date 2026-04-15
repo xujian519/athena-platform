@@ -1,0 +1,60 @@
+{
+  "validation_time": 1766340320.1129642,
+  "validator": "Athena-LlamaIndex集成验证器",
+  "version": "1.0.0",
+  "integration_approach": "混合架构 (Athena核心 + LlamaIndex工具)",
+  "reports/reports/results": {
+    "文档处理集成": {
+      "status": "success",
+      "input_docs": 2,
+      "processed_docs": 2,
+      "processor_type": "athena_native",
+      "avg_chunk_size": 59.0,
+      "doc_types": [
+        "专利法律法规"
+      ]
+    },
+    "重排序算法集成": {
+      "status": "success",
+      "input_results": 3,
+      "methods": {
+        "hybrid": {
+          "status": "success",
+          "results_count": 3,
+          "top_score": 0.18,
+          "score_improvement": 0.0
+        },
+        "athena_optimized": {
+          "status": "success",
+          "results_count": 3,
+          "top_score": 0.054,
+          "score_improvement": 0.0
+        }
+      },
+      "llamaindex_available": false,
+      "improvement_detected": false
+    },
+    "RAG服务集成": {
+      "status": "success",
+      "tested_queries": 2,
+      "avg_processing_time": 4.4465065002441406e-05,
+      "avg_results_per_query": 0.0,
+      "cache_hits": 0,
+      "llamaindex_available": false
+    },
+    "性能验证": {
+      "status": "failed",
+      "error": "Object of type EvaluationMetrics is not JSON serializable"
+    }
+  },
+  "summary": {
+    "total_validations": 4,
+    "successful_validations": 3,
+    "failed_validations": 1,
+    "integration_ready": false
+  },
+  "recommendations": [
+    "✅ LlamaIndex集成成功，可以使用高级功能",
+    "⚠️ 集成需要进一步优化"
+  ]
+}

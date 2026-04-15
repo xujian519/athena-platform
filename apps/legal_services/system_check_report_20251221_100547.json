@@ -1,0 +1,225 @@
+{
+  "check_time": "2025-12-21T10:05:45.512766",
+  "file_system_status": {
+    "status": true,
+    "core_files": {
+      "apple_silicon_legal_intelligence.py": {
+        "exists": true,
+        "description": "Apple Silicon法律智能核心",
+        "path": "/Users/xujian/Athena工作平台/apps/apps/legal_services/apple_silicon_legal_intelligence.py"
+      },
+      "unified_legal_intelligence_hub.py": {
+        "exists": true,
+        "description": "统一法律智能中枢",
+        "path": "/Users/xujian/Athena工作平台/apps/apps/legal_services/unified_legal_intelligence_hub.py"
+      },
+      "enhanced_bge_embedding_service.py": {
+        "exists": true,
+        "description": "BGE嵌入服务",
+        "path": "/Users/xujian/Athena工作平台/apps/apps/legal_services/enhanced_bge_embedding_service.py"
+      },
+      "demo_legal_ai.py": {
+        "exists": true,
+        "description": "演示脚本",
+        "path": "/Users/xujian/Athena工作平台/apps/apps/legal_services/demo_legal_ai.py"
+      },
+      "start_services.sh": {
+        "exists": true,
+        "description": "启动脚本",
+        "path": "/Users/xujian/Athena工作平台/apps/apps/legal_services/start_services.sh"
+      },
+      "api/legal_qa/xiaonuo_legal_qa.py": {
+        "exists": true,
+        "description": "小诺问答API",
+        "path": "/Users/xujian/Athena工作平台/apps/apps/legal_services/api/legal_qa/xiaonuo_legal_qa.py"
+      },
+      "api/legal_analysis/xiaona_legal_processor.py": {
+        "exists": true,
+        "description": "小娜处理API",
+        "path": "/Users/xujian/Athena工作平台/apps/apps/legal_services/api/legal_analysis/xiaona_legal_processor.py"
+      }
+    },
+    "directory_structure": {
+      "api": {
+        "exists": true,
+        "path": "/Users/xujian/Athena工作平台/apps/apps/legal_services/api"
+      },
+      "data": {
+        "exists": true,
+        "path": "/Users/xujian/Athena工作平台/apps/apps/legal_services/data"
+      },
+      "services": {
+        "exists": true,
+        "path": "/Users/xujian/Athena工作平台/apps/apps/legal_services/services"
+      },
+      "config": {
+        "exists": true,
+        "path": "/Users/xujian/Athena工作平台/apps/apps/legal_services/config"
+      }
+    },
+    "file_integrity": {
+      "apple_silicon_legal_intelligence.py": {
+        "readable": true,
+        "size_bytes": 22791,
+        "line_count": 735,
+        "has_main_function": true,
+        "has_class_definition": true
+      },
+      "unified_legal_intelligence_hub.py": {
+        "readable": true,
+        "size_bytes": 18885,
+        "line_count": 595,
+        "has_main_function": true,
+        "has_class_definition": true
+      },
+      "enhanced_bge_embedding_service.py": {
+        "readable": true,
+        "size_bytes": 17805,
+        "line_count": 510,
+        "has_main_function": false,
+        "has_class_definition": true
+      },
+      "demo_legal_ai.py": {
+        "readable": true,
+        "size_bytes": 8491,
+        "line_count": 281,
+        "has_main_function": true,
+        "has_class_definition": false
+      },
+      "start_services.sh": {
+        "readable": true,
+        "size_bytes": 1026,
+        "line_count": 49,
+        "has_main_function": false,
+        "has_class_definition": false
+      }
+    }
+  },
+  "nlp_system_status": {
+    "status": true,
+    "components": {
+      "bge_embedding_service.py": {
+        "exists": true,
+        "description": "BGE嵌入服务",
+        "importable": true
+      },
+      "apple_silicon_optimizer.py": {
+        "exists": true,
+        "description": "Apple Silicon优化器",
+        "importable": true
+      },
+      "bert_service.py": {
+        "exists": true,
+        "description": "BERT服务",
+        "importable": false,
+        "error": "attempted relative import with no known parent package"
+      },
+      "bert_optimizer.py": {
+        "exists": true,
+        "description": "BERT优化器",
+        "importable": true
+      }
+    },
+    "apple_silicon_optimization": {
+      "available": true
+    },
+    "embedding_service": {
+      "available": true
+    }
+  },
+  "vector_database_status": {
+    "status": true,
+    "connection": {
+      "host": "localhost",
+      "port": 6333,
+      "status": "connected"
+    },
+    "collections": {
+      "total": 16,
+      "legal": 6,
+      "legal_list": [
+        "legal_articles_v3_1024",
+        "legal_cases_1024",
+        "legal_judgments_1024",
+        "legal_chunks_v2",
+        "legal_articles_1024",
+        "legal_clauses_1024"
+      ]
+    },
+    "data_volume": {
+      "legal_articles_v3_1024": {
+        "points": 42,
+        "vectors_size": 1024,
+        "distance": "Cosine"
+      },
+      "legal_cases_1024": {
+        "points": 0,
+        "vectors_size": 1024,
+        "distance": "Cosine"
+      },
+      "legal_judgments_1024": {
+        "points": 392,
+        "vectors_size": 1024,
+        "distance": "Cosine"
+      },
+      "legal_chunks_v2": {
+        "points": 2008,
+        "vectors_size": 384,
+        "distance": "Cosine"
+      },
+      "legal_articles_1024": {
+        "points": 2693,
+        "vectors_size": 1024,
+        "distance": "Cosine"
+      },
+      "total_legal_points": 5135,
+      "total_points": 5135
+    }
+  },
+  "api_services_status": {
+    "status": true,
+    "services": {
+      "AppleSiliconLegalIntelligence": {
+        "available": true,
+        "description": "Apple Silicon法律智能服务",
+        "error": null
+      },
+      "UnifiedLegalIntelligenceHub": {
+        "available": true,
+        "description": "统一法律智能中枢",
+        "error": null
+      },
+      "XiaoNuoIntelligentQA": {
+        "available": false,
+        "description": "小诺智能问答",
+        "error": "No module named 'xiaonuointelligentqa'"
+      },
+      "XiaoNaIntelligentProcessor": {
+        "available": false,
+        "description": "小娜智能处理",
+        "error": "No module named 'xiaonaintelligentprocessor'"
+      }
+    },
+    "import_status": {}
+  },
+  "integration_analysis": {
+    "level": "partial",
+    "nlp_integration": true,
+    "vector_db_integration": false,
+    "api_integration": true,
+    "optimization_level": "apple_silicon"
+  },
+  "overall_assessment": {
+    "overall_status": "ready",
+    "readiness_score": 100,
+    "strengths": [
+      "文件系统结构完整",
+      "NLP系统可用",
+      "向量数据库连接正常",
+      "API服务完整"
+    ],
+    "weaknesses": [],
+    "recommendations": [],
+    "deployment_readiness": true
+  }
+}

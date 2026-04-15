@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.athena.unified-memory</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/opt/homebrew/bin/python3</string>
+        <string>/Users/xujian/Athena工作平台/production/scripts/start_unified_memory_service.py</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/xujian/Athena工作平台</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>MEMORY_SERVICE_HOST</key>
+        <string>0.0.0.0</string>
+        <key>MEMORY_SERVICE_PORT</key>
+        <string>8900</string>
+        <key>MEMORY_DB_HOST</key>
+        <string>localhost</string>
+        <key>MEMORY_DB_PORT</key>
+        <string>5432</string>
+        <key>MEMORY_DB_NAME</key>
+        <string>memory_module</string>
+        <key>MEMORY_DB_USER</key>
+        <string>xujian</string>
+        <key>QDRANT_HOST</key>
+        <string>localhost</string>
+        <key>QDRANT_PORT</key>
+        <string>6333</string>
+        <key>REDIS_HOST</key>
+        <string>localhost</string>
+        <key>REDIS_PORT</key>
+        <string>6379</string>
+        <key>PYTHONPATH</key>
+        <string>/Users/xujian/Athena工作平台</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/xujian/Athena工作平台/production/logs/unified_memory.stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/xujian/Athena工作平台/production/logs/unified_memory.stderr.log</string>
+
+    <key>UserName</key>
+    <string>xujian</string>
+
+    <key>ProcessType</key>
+    <string>Interactive</string>
+</dict>
+</plist>

@@ -1,0 +1,9 @@
+
+[0;36m========== Athena平台链接完整性检查 ==========[0m
+
+[0;34m[INFO][0m 项目根目录: /Users/xujian/Athena工作平台
+[0;34m[INFO][0m 检查时间: 2026-01-02 09:19:55
+[0;34m[INFO][0m 报告文件: /Users/xujian/Athena工作平台/production/reports/link_check_20260102_091955.txt
+
+[0;36m========== 检查符号链接完整性 ==========[0m
+

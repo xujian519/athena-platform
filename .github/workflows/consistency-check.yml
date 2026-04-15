@@ -1,0 +1,272 @@
+name: Athena Consistency Check
+
+on:
+  push:
+    branches: [ main, develop, consistency-fix-* ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # 每天凌晨2点运行全量检查
+    - cron: '0 2 * * *'
+
+jobs:
+  consistency-check:
+    runs-on: ubuntu-latest
+    name: Athena项目一致性检查
+
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v3
+
+    - name: 设置Python环境
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: 安装依赖
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests fastapi uvicorn python-multipart
+
+    - name: 运行Athena环境检查
+      run: |
+        echo "🔍 开始Athena项目一致性检查..."
+
+        # 设置项目根目录
+        export ATHENA_ROOT=$GITHUB_WORKSPACE
+
+        # 运行路径管理器验证
+        python 00-基础设施/08-运维基础设施/core/athena_path_manager.py --validate
+
+        # 运行一致性检查（只检查严重问题）
+        python 00-基础设施/08-运维基础设施/tools/consistency_checker.py \
+          --path $ATHENA_ROOT \
+          --severity critical \
+          --report consistency_check_report.json
+
+    - name: 分析检查结果
+      id: analyze
+      run: |
+        if [ -f "consistency_check_report.json" ]; then
+          critical_count=$(python -c "
+          import json
+          with open('consistency_check_report.json') as f:
+              report = json.load(f)
+          critical = report['issues_by_severity'].get('critical', 0)
+          print(critical)
+          ")
+
+          echo "critical_issues=$critical_count" >> $GITHUB_OUTPUT
+          echo "🚨 发现 $critical_count 个严重问题"
+        else
+          echo "critical_issues=0" >> $GITHUB_OUTPUT
+          echo "✅ 未发现严重问题"
+        fi
+
+    - name: 上传检查报告
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: consistency-check-report
+        path: |
+          consistency_check_report.json
+          path_fix_report.json
+        retention-days: 30
+
+    - name: 自动修复可修复问题
+      if: steps.analyze.outputs.critical_issues != '0'
+      run: |
+        echo "🔧 尝试自动修复问题..."
+
+        # 运行自动修复（只修复critical问题）
+        python 00-基础设施/08-运维基础设施/tools/path_fixer.py \
+          --path $ATHENA_ROOT \
+          --types python shell \
+          --no-backup
+
+        echo "📝 自动修复完成，检查结果..."
+
+    - name: 修复后验证
+      if: steps.analyze.outputs.critical_issues != '0'
+      run: |
+        echo "🔍 验证修复结果..."
+
+        python 00-基础设施/08-运维基础设施/tools/consistency_checker.py \
+          --path $ATHENA_ROOT \
+          --severity critical \
+          --report consistency_check_fixed_report.json
+
+    - name: 质量门禁检查
+      if: steps.analyze.outputs.critical_issues != '0'
+      run: |
+        if [ -f "consistency_check_fixed_report.json" ]; then
+          remaining_critical=$(python -c "
+          import json
+          with open('consistency_check_fixed_report.json') as f:
+              report = json.load(f)
+          critical = report['issues_by_severity'].get('critical', 0)
+          print(critical)
+          ")
+
+          if [ "$remaining_critical" -gt 0 ]; then
+            echo "❌ 质量门禁失败：修复后仍有 $remaining_critical 个严重问题"
+            echo "📋 请手动修复以下问题："
+            python 00-基础设施/08-运维基础设施/tools/consistency_checker.py --severity critical --path $ATHENA_ROOT
+            exit 1
+          else
+            echo "✅ 质量门禁通过：所有严重问题已修复"
+          fi
+        fi
+
+    - name: 发送通知
+      if: failure()
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const issueNumber = context.issue.number;
+          const repository = context.repo.repo;
+
+          if (issueNumber) {
+            // 这是一个Pull Request
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: repository,
+              issue_number: issueNumber,
+              body: `🚨 **Athena一致性检查失败**
+
+              在代码提交中发现严重的一致性问题，请及时修复。
+
+              **检查报告**: 请查看Actions中的检查报告artifact。
+
+              **修复建议**:
+              1. 本地运行 \`python 00-基础设施/08-运维基础设施/tools/consistency_checker.py\` 查看详细问题
+              2. 使用 \`python 00-基础设施/08-运维基础设施/tools/path_fixer.py\` 自动修复
+              3. 手动修复无法自动处理的问题
+
+              ---
+              🤖 由Athena一致性检查系统自动生成`
+            });
+          }
+
+  documentation-check:
+    runs-on: ubuntu-latest
+    name: 文档一致性检查
+
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v3
+
+    - name: 检查文档一致性
+      run: |
+        echo "📚 检查文档中的路径引用..."
+
+        # 查找包含旧路径引用的文档
+        find . -name "*.md" -type f -exec grep -l "02-项目核心\|00-项目核心" {} \; > old_docs.txt
+
+        if [ -s old_docs.txt ]; then
+          echo "❌ 发现包含旧路径引用的文档："
+          cat old_docs.txt
+          echo ""
+          echo "📋 需要更新的文档："
+          while read file; do
+            echo "  📄 $file"
+          done < old_docs.txt
+
+          # 创建修复建议
+          cat > docs_fix_suggestion.md << EOF
+          # 文档修复建议
+
+          发现以下文档包含过时的路径引用，请更新为新的六层架构：
+
+          $(cat old_docs.txt)
+
+          ## 建议的更新内容：
+          - 将 "02-项目核心" 更新为相应的新层级目录
+          - 将 "03-文档资源" 更新为相应的新层级目录
+          - 更新架构图和目录结构说明
+
+          EOF
+
+          echo "📄 已创建修复建议文档: docs_fix_suggestion.md"
+          exit 1
+        else
+          echo "✅ 所有文档路径引用都是最新的"
+        fi
+
+  performance-check:
+    runs-on: ubuntu-latest
+    name: 性能和资源检查
+
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v3
+
+    - name: 路径一致性检查
+      run: |
+        echo "🔍 执行路径一致性检查..."
+
+        # 运行路径一致性检查器
+        python3 00-infrastructure/08-operations/scripts/path_consistency_checker.py --project-root . --output ci_path_consistency_report
+
+        # 检查是否有问题
+        if [ $? -ne 0 ]; then
+          echo "❌ 发现路径一致性问题，请查看详细报告"
+          cat ci_path_consistency_report.md
+          exit 1
+        else
+          echo "✅ 路径一致性检查通过"
+        fi
+
+  - name: 检查代码重复
+      run: |
+        echo "🔄 检查代码重复情况..."
+
+        # 检查ai-agent-team重复
+        ai_team_count=$(find . -name "*ai-agent-team*" -type d | grep -v "07-archive" | wc -l)
+
+        if [ "$ai_team_count" -gt 1 ]; then
+          echo "❌ 发现 $ai_team_count 个ai-agent-team目录（可能存在重复）"
+          find . -name "*ai-agent-team*" -type d | grep -v "07-archive"
+          exit 1
+        else
+          echo "✅ ai-agent-team代码无重复"
+        fi
+
+    - name: 检查文件大小
+      run: |
+        echo "📊 检查异常大文件..."
+
+        # 查找大于10MB的文件
+        find . -type f -size +10M -not -path "./07-存档备份/*" -not -path "./.git/*" | while read file; do
+          echo "⚠️ 发现大文件: $(du -h "$file" | cut -f1) $file"
+        done
+
+  notification:
+    runs-on: ubuntu-latest
+    name: 结果通知
+    if: always()
+    needs: [consistency-check, documentation-check, performance-check]
+
+    steps:
+    - name: 检查结果汇总
+      run: |
+        echo "📋 Athena一致性检查结果汇总:"
+        echo "=================================="
+
+        # 获取各job的状态
+        consistency_status="${{ needs.consistency-check.result }}"
+        docs_status="${{ needs.documentation-check.result }}"
+        performance_status="${{ needs.performance-check.result }}"
+
+        echo "🔍 一致性检查: $consistency_status"
+        echo "📚 文档检查: $docs_status"
+        echo "📊 性能检查: $performance_status"
+
+        if [[ "$consistency_status" == "success" && "$docs_status" == "success" && "$performance_status" == "success" ]]; then
+          echo ""
+          echo "🎉 所有检查通过！Athena项目质量良好。"
+        else
+          echo ""
+          echo "⚠️ 部分检查失败，请查看详细信息。"
+          exit 1
+        fi

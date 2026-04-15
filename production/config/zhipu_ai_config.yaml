@@ -1,0 +1,82 @@
+# 智谱AI服务配置
+# Zhipu AI Service Configuration
+
+# API密钥（安全要求：请使用环境变量设置，不要在此硬编码）
+# 设置方法: export ZHIPU_API_KEY="your_api_key_here"
+# 获取密钥: https://open.bigmodel.cn/
+api_key: ""  # 从环境变量 ZHIPU_API_KEY 读取
+
+# 基础URL
+base_url: "https://open.bigmodel.cn/api/paas/v4"
+
+# 模型配置
+models:
+  # 文本生成模型
+  text:
+    default: "glm-4"
+    available:
+      - "glm-4"           # 通用模型
+      - "glm-4-plus"      # 增强版
+      - "glm-4-flash"     # 快速版
+      - "glm-4.7"         # 4.7版本
+      - "glm-4.7-flash"   # 4.7快速版 (30B级SOTA, Agentic Coding优化)
+      - "glm-3-turbo"     # 高性能版
+
+  # 视觉理解模型
+  vision:
+    default: "glm-4v"
+    available:
+      - "glm-4v"          # 图像理解
+      - "glm-4v-plus"     # 增强版
+
+  # 图像生成模型
+  image_generation:
+    default: "cogview-4"
+    available:
+      - "cogview-4"       # 图像生成
+      - "cogview-4-plus"  # 增强版
+
+  # 视频生成模型
+  video_generation:
+    default: "cogvideox-3"
+    available:
+      - "cogvideox-3"     # 视频生成
+      - "cogvideox-3-plus" # 增强版
+
+# 服务参数
+parameters:
+  # 通用参数
+  temperature: 0.7          # 温度参数 (0-1)
+  top_p: 0.9                # 核采样参数
+  max_tokens: 4096          # 最大令牌数
+
+  # 图像生成参数
+  image:
+    size: "1024x1024"       # 图像尺寸
+    quality: "high"         # 图像质量
+    style: "vivid"          # 图像风格
+    num_images: 1           # 生成数量
+
+  # 视频生成参数
+  video:
+    duration: 6             # 视频时长(秒)
+    resolution: "4K"        # 分辨率
+    fps: 60                 # 帧率
+
+# 超时配置
+timeout:
+  default: 30               # 默认超时(秒)
+  text: 30                  # 文本生成超时
+  image: 60                 # 图像生成超时
+  video: 300                # 视频生成超时(5分钟)
+
+# 重试配置
+retry:
+  max_attempts: 3           # 最大重试次数
+  backoff_factor: 2         # 退避因子
+  initial_delay: 1          # 初始延迟(秒)
+
+# 并发配置
+concurrency:
+  max_concurrent_requests: 5 # 最大并发请求数
+  rate_limit: 50            # 速率限制(请求/分钟)

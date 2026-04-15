@@ -1,0 +1,26 @@
+{
+  "import_time": "2025-12-20T23:50:57.660508",
+  "metrics": {
+    "total_documents": 14,
+    "processed_documents": 14,
+    "total_chunks": 0,
+    "successful_embeddings": 0,
+    "failed_embeddings": 0,
+    "duplicate_chunks": 0,
+    "total_entities": 0,
+    "total_relations": 0,
+    "processing_time": 0.000804,
+    "quality_score": 0.0
+  },
+  "quality_settings": {
+    "min_chunk_length": 50,
+    "max_chunk_length": 2000,
+    "min_entity_confidence": 0.7,
+    "duplicate_threshold": 0.95
+  },
+  "data_sources": {
+    "patent_documents": "/Volumes/AthenaData/语料/专利/专利法律法规",
+    "backup_data": "/Volumes/AthenaData/backup_legal_data/backup_20251220_215415"
+  },
+  "version": "v3.0.0"
+}

@@ -1,0 +1,31 @@
+{
+  "task_management": {
+    "enabled": true,
+    "auto_save_interval": 60,
+    "reminder_check_interval": 300,
+    "notification_enabled": true,
+    "persist_to_disk": true,
+    "backup_enabled": true,
+    "backup_interval": 3600
+  },
+  "notification": {
+    "enabled": true,
+    "sound_enabled": false,
+    "popup_enabled": true,
+    "auto_dismiss": true,
+    "dismiss_timeout": 5
+  },
+  "reminders": {
+    "default_remind_before": 120,
+    "max_reminders": 3,
+    "reminder_types": [
+      "notification"
+    ],
+    "repeat_reminders": false
+  },
+  "system": {
+    "max_tasks": 10000,
+    "cleanup_interval": 86400,
+    "log_level": "INFO"
+  }
+}

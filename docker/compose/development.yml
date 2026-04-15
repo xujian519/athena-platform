@@ -1,0 +1,153 @@
+# Athena工作平台 - 开发环境配置
+# 继承base.yml，添加开发特定服务
+
+version: '3.8'
+
+services:
+  # Athena主应用（开发模式）
+  athena:
+    build:
+      context: ../..
+      dockerfile: Dockerfile.dev
+    container_name: athena_dev
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - LOG_LEVEL=DEBUG
+      - PYTHONPATH=/app
+    ports:
+      - "${ATHENA_PORT:-8000}:8000"
+      - "5678:5678"  # debugpy
+    volumes:
+      - ../..:/app:cached  # 源代码映射
+      - pip_cache:/root/.cache/pip  # pip缓存
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+    command: >
+      bash -c "python -m debugpy --listen 0.0.0.0:5678 --wait-for-client
+               -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+    networks:
+      - athena_network
+    profiles:
+      - dev
+
+  # API网关（开发模式）
+  api_gateway:
+    build:
+      context: ../..
+      dockerfile: services/api-gateway/Dockerfile.dev
+    container_name: athena_api_gateway_dev
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=true
+    ports:
+      - "${API_GATEWAY_PORT:-8080}:8080"
+    volumes:
+      - ../..:/app:cached
+      - nginx_cache:/var/cache/nginx
+    depends_on:
+      - athena
+    networks:
+      - athena_network
+    profiles:
+      - dev
+
+  # 爬虫服务（开发模式）
+  crawler:
+    build:
+      context: ../..
+      dockerfile: services/crawler/Dockerfile.dev
+    container_name: athena_crawler_dev
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=development
+      - CRAWLER_SERVICE_PORT=8300
+      - CRAWLER_WORKERS=2  # 开发环境减少worker数量
+    ports:
+      - "${CRAWLER_PORT:-8300}:8300"
+    volumes:
+      - ../..:/app:cached
+      - crawler_cache:/app/cache
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - athena_network
+    profiles:
+      - dev
+
+  # Jupyter Notebook（开发工具）
+  jupyter:
+    image: jupyter/datascience-notebook:latest
+    container_name: athena_jupyter
+    restart: unless-stopped
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - JUPYTER_TOKEN=${JUPYTER_TOKEN:-athena}
+    ports:
+      - "${JUPYTER_PORT:-8888}:8888"
+    volumes:
+      - ../../notebooks:/home/jovyan/work
+      - jupyter_data:/home/jovyan/.local
+    networks:
+      - athena_network
+    profiles:
+      - tools
+
+  # pgAdmin（PostgreSQL管理工具）
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: athena_pgadmin
+    restart: unless-stopped
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL:-admin@athena.com}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD:-admin}
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - athena_network
+    profiles:
+      - tools
+
+  # Redis Commander（Redis管理工具）
+  redis_commander:
+    image: rediscommander/redis-commander:latest
+    container_name: athena_redis_commander
+    restart: unless-stopped
+    environment:
+      - REDIS_HOSTS=local:redis:6379:0:${REDIS_PASSWORD:-}
+    ports:
+      - "${REDIS_COMMANDER_PORT:-8081}:8081"
+    depends_on:
+      - redis
+    networks:
+      - athena_network
+    profiles:
+      - tools
+
+volumes:
+  pip_cache:
+    driver: local
+  nginx_cache:
+    driver: local
+  crawler_cache:
+    driver: local
+  jupyter_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  athena_network:
+    external: true

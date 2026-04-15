@@ -1,0 +1,13 @@
+{
+  "timestamp": "20251220_235114",
+  "source": "patent_documents_import",
+  "entities": {},
+  "relations": {},
+  "total_entities": 0,
+  "total_relations": 0,
+  "quality_metrics": {
+    "min_entity_confidence": 0.7,
+    "duplicate_threshold": 0.95,
+    "processing_version": "v3.0.0"
+  }
+}

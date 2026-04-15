@@ -1,0 +1,246 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "小诺·双鱼座 - 监控仪表板",
+    "tags": ["xiaonuo", "athena", "ai"],
+    "timezone": "browser",
+    "refresh": "10s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "服务状态",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "xiaonuo_uptime_seconds",
+            "refId": "A",
+            "legendFormat": "运行时间"
+          }
+        ],
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 0,
+          "y": 0
+        },
+        "options": {
+          "graphMode": "area",
+          "colorMode": "value"
+        }
+      },
+      {
+        "id": 2,
+        "title": "请求速率",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(xiaonuo_requests_total[5m])",
+            "refId": "A",
+            "legendFormat": "{{method}} {{endpoint}}"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 6,
+          "y": 0
+        },
+        "yAxes": [
+          {
+            "label": "请求/秒"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "响应时间",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, xiaonuo_request_duration_seconds_bucket)",
+            "refId": "A",
+            "legendFormat": "P95"
+          },
+          {
+            "expr": "histogram_quantile(0.99, xiaonuo_request_duration_seconds_bucket)",
+            "refId": "B",
+            "legendFormat": "P99"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 4
+        },
+        "yAxes": [
+          {
+            "label": "秒"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "错误率",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(xiaonuo_request_errors_total[5m])",
+            "refId": "A",
+            "legendFormat": "{{error_type}}"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 4
+        },
+        "yAxes": [
+          {
+            "label": "错误/秒"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "CPU使用率",
+        "type": "gauge",
+        "targets": [
+          {
+            "expr": "xiaonuo_cpu_usage_percent",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 0,
+          "y": 8
+        },
+        "max": 100,
+        "min": 0
+      },
+      {
+        "id": 6,
+        "title": "内存使用",
+        "type": "gauge",
+        "targets": [
+          {
+            "expr": "xiaonuo_memory_usage_bytes{type=\"rss\"} / 1024 / 1024",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 6,
+          "y": 8
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "decmbytes"
+          }
+        }
+      },
+      {
+        "id": 7,
+        "title": "任务执行时间",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(xiaonuo_task_duration_seconds_sum[5m]) / rate(xiaonuo_task_duration_seconds_count[5m])",
+            "refId": "A",
+            "legendFormat": "{{task_type}}"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 12
+        },
+        "yAxes": [
+          {
+            "label": "秒"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "协作请求",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(xiaonuo_collaboration_requests_total[5m])",
+            "refId": "A",
+            "legendFormat": "{{agent}} {{action}}"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 12
+        }
+      },
+      {
+        "id": 9,
+        "title": "活跃连接",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "xiaonuo_active_connections",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 12,
+          "y": 8
+        }
+      },
+      {
+        "id": 10,
+        "title": "任务队列大小",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "xiaonuo_task_queue_size",
+            "refId": "A",
+            "legendFormat": "{{queue_name}}"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 20
+        }
+      },
+      {
+        "id": 11,
+        "title": "协调操作",
+        "type": "piechart",
+        "targets": [
+          {
+            "expr": "sum by (result) (xiaonuo_coordination_total)",
+            "refId": "A",
+            "legendFormat": "{{result}}"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 20
+        }
+      }
+    ]
+  }
+}

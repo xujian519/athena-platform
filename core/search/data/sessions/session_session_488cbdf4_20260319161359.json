@@ -1,0 +1,25 @@
+{
+  "session_id": "session_488cbdf4_20260319161359",
+  "name": "测试会话",
+  "created_at": "2026-03-19T16:13:59.575605",
+  "updated_at": "2026-03-19T16:13:59.575775",
+  "messages": [
+    {
+      "message_id": "msg_2bfe461a",
+      "role": "user",
+      "content": "什么是专利检索?",
+      "timestamp": "2026-03-19T16:13:59.575699",
+      "session_id": "session_488cbdf4_20260319161359",
+      "metadata": {}
+    },
+    {
+      "message_id": "msg_2601b622",
+      "role": "assistant",
+      "content": "专利检索是指在专利数据库中查找相关专利文献的过程。",
+      "timestamp": "2026-03-19T16:13:59.575775",
+      "session_id": "session_488cbdf4_20260319161359",
+      "metadata": {}
+    }
+  ],
+  "metadata": {}
+}

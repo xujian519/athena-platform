@@ -1,0 +1,10 @@
+# 文章撰写服务依赖
+fastapi==0.104.0
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+
+# 现有模块依赖（从根目录导入）
+# 这些已经在项目根目录安装
+# - core/llm/writing_materials_manager.py
+# - core/judgment_vector_db/generation/article_generator.py
+# - services/self-media-agent/app/core/enhanced_content_styles.py

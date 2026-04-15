@@ -1,0 +1,204 @@
+# Prometheus告警规则
+# Alert Rules for Athena Platform
+
+groups:
+  # 服务可用性告警
+  - name: service_availability
+    rules:
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "服务 {{ $labels.job }} 已停止"
+          description: "服务 {{ $labels.job }} 在 {{ $labels.instance }} 已经宕机超过1分钟"
+
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "服务错误率过高"
+          description: "服务 {{ $labels.job }} 错误率已达到 {{ $value | humanizePercentage }}"
+
+      - alert: HighResponseTime
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "服务响应时间过长"
+          description: "服务 {{ $labels.job }} P95响应时间已达到 {{ $value }}秒"
+
+  # 系统资源告警
+  - name: system_resources
+    rules:
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "CPU使用率过高"
+          description: "主机 {{ $labels.instance }} CPU使用率已达到 {{ $value }}%"
+
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "内存使用率过高"
+          description: "主机 {{ $labels.instance }} 内存使用率已达到 {{ $value }}%"
+
+      - alert: DiskSpaceLow
+        expr: (1 - (node_filesystem_avail_bytes{fstype!="tmpfs"} / node_filesystem_size_bytes{fstype!="tmpfs"})) * 100 > 90
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "磁盘空间不足"
+          description: "主机 {{ $labels.instance }} 磁盘 {{ $labels.mountpoint }} 使用率已达到 {{ $value }}%"
+
+  # 数据库告警
+  - name: database
+    rules:
+      - alert: PostgreSQLDown
+        expr: up{job="postgres"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "PostgreSQL数据库已停止"
+          description: "PostgreSQL在 {{ $labels.instance }} 已经宕机"
+
+      - alert: PostgreSQLTooManyConnections
+        expr: pg_stat_database_numbackends / pg_settings_max_connections * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "PostgreSQL连接数过多"
+          description: "PostgreSQL连接数使用率已达到 {{ $value }}%"
+
+      - alert: RedisDown
+        expr: up{job="redis"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Redis缓存已停止"
+          description: "Redis在 {{ $labels.instance }} 已经宕机"
+
+      - alert: RedisMemoryHigh
+        expr: redis_memory_used_bytes / redis_memory_max_bytes * 100 > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Redis内存使用率过高"
+          description: "Redis内存使用率已达到 {{ $value }}%"
+
+  # 业务指标告警
+  - name: business_metrics
+    rules:
+      - alert: LowPatentProcessingRate
+        expr: rate(patent_processed_total[5m]) < 1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "专利处理速率过低"
+          description: "专利处理速率低于1个/分钟"
+
+      - alert: HighCrawlFailureRate
+        expr: rate(crawl_requests_failed_total[5m]) / rate(crawl_requests_total[5m]) > 0.2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "爬虫失败率过高"
+          description: "爬虫失败率已达到 {{ $value | humanizePercentage }}"
+
+      - alert: SearchLatencyHigh
+        expr: histogram_quantile(0.95, rate(search_request_duration_seconds_bucket[5m])) > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "搜索延迟过高"
+          description: "搜索P95延迟已达到 {{ $value }}秒"
+
+  # 网关告警
+  - name: gateway
+    rules:
+      - alert: GatewayHighRequestRate
+        expr: rate(gateway_requests_total[5m]) > 1000
+        for: 5m
+        labels:
+          severity: info
+        annotations:
+          summary: "网关请求量激增"
+          description: "API网关请求速率已达到 {{ $value }} 请求/秒"
+
+      - alert: GatewayHighErrorRate
+        expr: rate(gateway_requests_total{status=~"5.."}[5m]) / rate(gateway_requests_total[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "网关错误率过高"
+          description: "API网关错误率已达到 {{ $value | humanizePercentage }}"
+
+      - alert: GatewayRateLimitExceeded
+        expr: increase(gateway_rate_limit_exceeded_total[5m]) > 100
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "网关限流触发频繁"
+          description: "API网关在5分钟内限流触发次数已超过100"
+
+  # 容器告警
+  - name: containers
+    rules:
+      - alert: ContainerOOMKilled
+        expr: increase(container_oom_events_total[5m]) > 0
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: "容器内存溢出被杀死"
+          description: "容器 {{ $labels.name }} 因内存溢出被杀死"
+
+      - alert: ContainerRestarting
+        expr: increase(container_start_time_seconds[5m]) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "容器频繁重启"
+          description: "容器 {{ $labels.name }} 在5分钟内重启超过2次"
+
+  # 队列告警
+  - name: queues
+    rules:
+      - alert: QueueBacklog
+        expr: rabbitmq_queue_messages > 1000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "消息队列积压"
+          description: "队列 {{ $labels.queue }} 消息积压已达到 {{ $value }} 条"
+
+      - alert: QueueUnprocessed
+        expr: redis_list_length > 5000
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Redis队列积压"
+          description: "Redis队列 {{ $labels.key }} 长度已达到 {{ $value }}"

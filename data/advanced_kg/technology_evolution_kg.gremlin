@@ -1,0 +1,89 @@
+// technology_evolution 知识图谱
+// 生成时间: 2025-12-14T20:52:46.916696
+
+// 创建 technologies 节点
+g.addV('Technologies').property('id', 'traditional_search')
+ .property('name', '传统专利检索')
+ .property('period', '1990-2010')
+ .property('characteristics', '[\'关键词匹配\', \'布尔逻辑\', \'人工筛选\']')
+ .property('efficiency', '低')
+ .property('accuracy', '中等')
+;
+g.addV('Technologies').property('id', 'machine_learning_search')
+ .property('name', '机器学习专利检索')
+ .property('period', '2010-2018')
+ .property('characteristics', '[\'文本分类\', \'相似度计算\', \'自动标注\']')
+ .property('efficiency', '中等')
+ .property('accuracy', '较高')
+;
+g.addV('Technologies').property('id', 'ai_powered_search')
+ .property('name', 'AI智能专利分析')
+ .property('period', '2018-现在')
+ .property('characteristics', '[\'深度学习\', \'语义理解\', \'预测分析\']')
+ .property('efficiency', '高')
+ .property('accuracy', '很高')
+;
+
+// 创建 milestones 节点
+g.addV('Milestones').property('id', 'patent_databases')
+ .property('name', '专利数据库建立')
+ .property('year', '1995')
+ .property('impact', '数字化基础')
+ .property('technology', 'traditional_search')
+;
+g.addV('Milestones').property('id', 'google_patents')
+ .property('name', 'Google Patents上线')
+ .property('year', '2006')
+ .property('impact', '开放访问')
+ .property('technology', 'traditional_search')
+;
+g.addV('Milestones').property('id', 'deep_learning_breakthrough')
+ .property('name', '深度学习突破')
+ .property('year', '2018')
+ .property('impact', '范式转变')
+ .property('technology', 'ai_powered_search')
+;
+
+// 创建 companies 节点
+g.addV('Companies').property('id', 'search_pioneers')
+ .property('name', '检索先驱公司')
+ .property('era', '1990-2010')
+ .property('technology', 'traditional_search')
+ .property('success_factors', '[\'数据积累\', \'用户习惯\']')
+;
+g.addV('Companies').property('id', 'ai_leaders')
+ .property('name', 'AI领导者公司')
+ .property('era', '2018-现在')
+ .property('technology', 'ai_powered_search')
+ .property('success_factors', '[\'算法创新\', \'算力提升\']')
+;
+
+// 创建关系
+g.V('traditional_search').addE('EVOLVED_TO').to(g.V('machine_learning_search'))
+ .property('evolution_driver', '技术进步')
+ .property('improvement_area', '[\'效率\', \'准确率\']')
+ .property('transition_period', '5-8年')
+;
+g.V('machine_learning_search').addE('EVOLVED_TO').to(g.V('ai_powered_search'))
+ .property('evolution_driver', '算法突破')
+ .property('improvement_area', '[\'智能化\', \'预测能力\']')
+ .property('transition_period', '3-5年')
+;
+g.V('deep_learning_breakthrough').addE('ENABLED').to(g.V('ai_powered_search'))
+ .property('contribution', '核心技术')
+ .property('time_lag', '1-2年')
+ .property('impact_level', '革命性')
+;
+
+// 查询示例
+// 1. 查看所有节点数量
+g.V().count()
+
+// 2. 查看所有关系数量
+g.E().count()
+
+// 3. 查看节点类型
+g.V().label().dedup()
+
+// 4. 查看关系类型
+g.E().label().dedup()

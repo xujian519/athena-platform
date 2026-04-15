@@ -1,0 +1,18 @@
+{
+  "accuracy": 0.9642857142857143,
+  "classification_report": "               precision    recall  f1-score   support\n\n    TECHNICAL     1.0000    1.0000    1.0000         2\n    EMOTIONAL     1.0000    1.0000    1.0000         2\n       FAMILY     0.8000    1.0000    0.8889         4\n     LEARNING     1.0000    1.0000    1.0000         2\n COORDINATION     1.0000    1.0000    1.0000         3\nENTERTAINMENT     1.0000    1.0000    1.0000         2\n       HEALTH     1.0000    1.0000    1.0000         3\n         WORK     1.0000    1.0000    1.0000         2\n        QUERY     1.0000    1.0000    1.0000         5\n      COMMAND     1.0000    0.6667    0.8000         3\n\n     accuracy                         0.9643        28\n    macro avg     0.9800    0.9667    0.9689        28\n weighted avg     0.9714    0.9643    0.9627        28\n",
+  "timestamp": "20251230_174628",
+  "intent_labels": [
+    "TECHNICAL",
+    "EMOTIONAL",
+    "FAMILY",
+    "LEARNING",
+    "COORDINATION",
+    "ENTERTAINMENT",
+    "HEALTH",
+    "WORK",
+    "QUERY",
+    "COMMAND"
+  ],
+  "model_type": "Enhanced Intent Classifier"
+}

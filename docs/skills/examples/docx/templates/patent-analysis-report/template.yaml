@@ -1,0 +1,403 @@
+# 专利分析报告模板配置
+# 版本: 1.0.0
+# 更新日期: 2026-03-31
+
+# ===========================================
+# 模板基本信息
+# ===========================================
+name: "专利分析报告"
+template_id: "patent-analysis-report"
+version: "1.0.0"
+description: |
+  用于专利技术分析和侵权评估的专业报告模板。
+  包含技术特征对比、新颖性分析、创造性评估等核心章节。
+  适用于专利申请前的可行性评估和侵权风险分析。
+
+author: "Athena平台"
+category: "legal"
+tags:
+  - "专利"
+  - "分析报告"
+  - "侵权分析"
+  - "技术对比"
+
+# ===========================================
+# 模板变量定义
+# ===========================================
+variables:
+  # 基本信息变量
+  - name: "report_title"
+    description: "报告标题"
+    type: "string"
+    required: true
+    default: "专利分析与申请可行性综合报告"
+    example: "CN109459075A专利分析与申请可行性综合报告"
+
+  - name: "patent_number"
+    description: "被分析专利号"
+    type: "string"
+    required: true
+    example: "CN109459075A"
+
+  - name: "patent_name"
+    description: "被分析专利名称"
+    type: "string"
+    required: true
+    example: "一种分布式通信人/手井勘察工具"
+
+  - name: "client_name"
+    description: "客户名称"
+    type: "string"
+    required: true
+    example: "济南东盛热电有限公司"
+
+  - name: "project_name"
+    description: "项目名称"
+    type: "string"
+    required: false
+    example: "\"井鹰眼-I型\"便携式有限空间检查工具"
+
+  - name: "analysis_date"
+    description: "分析日期"
+    type: "date"
+    required: true
+    default: "{{today}}"
+    format: "YYYY-MM-DD"
+
+  - name: "analyst"
+    description: "分析人员"
+    type: "string"
+    required: true
+    example: "徐健"
+
+  # 技术分析变量
+  - name: "technology_field"
+    description: "技术领域"
+    type: "string"
+    required: true
+    example: "有限空间检测设备"
+
+  - name: "technical_problem"
+    description: "解决的技术问题"
+    type: "text"
+    required: true
+    example: "有限空间（如阀门井）检查作业的安全风险和效率问题"
+
+  - name: "technical_solution"
+    description: "技术方案概述"
+    type: "text"
+    required: true
+
+  # 评估结论变量
+  - name: "novelty_assessment"
+    description: "新颖性评估结论"
+    type: "enum"
+    required: true
+    options:
+      - value: "positive"
+        label: "✅ 具备新颖性"
+      - value: "negative"
+        label: "❌ 不具备新颖性"
+      - value: "risk"
+        label: "⚠️ 存在风险"
+      - value: "pending"
+        label: "🔄 需要进一步分析"
+    default: "pending"
+
+  - name: "creativity_assessment"
+    description: "创造性评估结论"
+    type: "enum"
+    required: true
+    options:
+      - value: "positive"
+        label: "✅ 具备创造性"
+      - value: "negative"
+        label: "❌ 不具备创造性"
+      - value: "risk"
+        label: "⚠️ 存在风险"
+      - value: "pending"
+        label: "🔄 需要进一步分析"
+    default: "pending"
+
+  - name: "utility_assessment"
+    description: "实用性评估结论"
+    type: "enum"
+    required: true
+    options:
+      - value: "positive"
+        label: "✅ 具备实用性"
+      - value: "negative"
+        label: "❌ 不具备实用性"
+      - value: "pending"
+        label: "🔄 需要进一步分析"
+    default: "positive"
+
+  - name: "overall_risk_level"
+    description: "整体风险等级"
+    type: "enum"
+    required: true
+    options:
+      - value: "low"
+        label: "🟢 低风险"
+      - value: "medium"
+        label: "🟡 中等风险"
+      - value: "high"
+        label: "🔴 高风险"
+    default: "medium"
+
+  # 详细分析内容（复杂类型）
+  - name: "prior_art_list"
+    description: "对比文件列表"
+    type: "list"
+    required: true
+    item_schema:
+      patent_number: "string"
+      patent_name: "string"
+      relevance: "string"
+
+  - name: "technical_features_table"
+    description: "技术特征对比表"
+    type: "table"
+    required: true
+    columns:
+      - name: "feature"
+        description: "技术特征"
+      - name: "target"
+        description: "本案技术特征"
+      - name: "reference"
+        description: "对比文件特征"
+      - name: "difference"
+        description: "差异分析"
+
+  - name: "key_findings"
+    description: "核心发现"
+    type: "list"
+    required: true
+    item_schema:
+      title: "string"
+      description: "string"
+      evidence: "string"
+
+  - name: "recommendations"
+    description: "建议措施"
+    type: "list"
+    required: true
+    item_schema:
+      priority: "enum(high,medium,low)"
+      action: "string"
+      rationale: "string"
+
+  - name: "risk_warnings"
+    description: "风险提示"
+    type: "list"
+    required: false
+    item_schema:
+      level: "enum(high,medium,low)"
+      description: "string"
+      mitigation: "string"
+
+# ===========================================
+# 章节配置
+# ===========================================
+sections:
+  - id: "cover"
+    title: "封面"
+    required: true
+    order: 1
+    content:
+      - type: "title"
+        value: "{{report_title}}"
+      - type: "subtitle"
+        value: "客户：{{client_name}}"
+      - type: "metadata"
+        items:
+          - "分析日期：{{analysis_date}}"
+          - "分析人员：{{analyst}}"
+          - "项目名称：{{project_name}}"
+
+  - id: "summary"
+    title: "执行摘要"
+    required: true
+    order: 2
+    max_length: 500
+    content:
+      - type: "text"
+        value: "本报告对{{patent_number}}（{{patent_name}}）进行专利分析和申请可行性评估..."
+
+  - id: "background"
+    title: "技术背景"
+    required: true
+    order: 3
+    subsections:
+      - id: "tech_field"
+        title: "技术领域"
+      - id: "tech_problem"
+        title: "技术问题"
+      - id: "existing_solutions"
+        title: "现有技术"
+
+  - id: "prior_art"
+    title: "对比文件分析"
+    required: true
+    order: 4
+    subsections:
+      - id: "search_methodology"
+        title: "检索方法"
+      - id: "prior_art_list"
+        title: "对比文件列表"
+      - id: "closest_prior_art"
+        title: "最接近的现有技术"
+
+  - id: "technical_comparison"
+    title: "技术特征对比分析"
+    required: true
+    order: 5
+    subsections:
+      - id: "feature_matrix"
+        title: "技术特征矩阵"
+      - id: "difference_analysis"
+        title: "区别特征分析"
+
+  - id: "patentability"
+    title: "专利性评估"
+    required: true
+    order: 6
+    subsections:
+      - id: "novelty"
+        title: "新颖性评估"
+        conclusion_variable: "novelty_assessment"
+      - id: "creativity"
+        title: "创造性评估"
+        conclusion_variable: "creativity_assessment"
+      - id: "utility"
+        title: "实用性评估"
+        conclusion_variable: "utility_assessment"
+
+  - id: "risk_assessment"
+    title: "风险评估"
+    required: true
+    order: 7
+    subsections:
+      - id: "overall_risk"
+        title: "整体风险等级"
+        conclusion_variable: "overall_risk_level"
+      - id: "specific_risks"
+        title: "具体风险"
+      - id: "mitigation_strategies"
+        title: "风险规避策略"
+
+  - id: "recommendations"
+    title: "结论与建议"
+    required: true
+    order: 8
+
+  - id: "appendix"
+    title: "附录"
+    required: false
+    order: 9
+
+# ===========================================
+# 输出配置
+# ===========================================
+output:
+  filename_pattern: "{{patent_number}}_专利分析报告_{{analysis_date}}.docx"
+
+  format:
+    page_size: "A4"
+    orientation: "portrait"
+    margins:
+      top: "2.5cm"
+      bottom: "2.5cm"
+      left: "2.5cm"
+      right: "2.5cm"
+
+    fonts:
+      title:
+        family: "SimHei"
+        size: "18pt"
+        bold: true
+      heading1:
+        family: "SimHei"
+        size: "14pt"
+        bold: true
+      heading2:
+        family: "SimHei"
+        size: "12pt"
+        bold: true
+      body:
+        family: "SimSun"
+        size: "10.5pt"
+      caption:
+        family: "SimSun"
+        size: "9pt"
+
+    styles:
+      table:
+        style: "Table Grid"
+        header_row:
+          bold: true
+          background_color: "#E6E6E6"
+      warning_box:
+        border_color: "#FF6600"
+        background_color: "#FFF5E6"
+        icon: "⚠️"
+
+# ===========================================
+# 验证规则
+# ===========================================
+validation:
+  must_contain:
+    - "技术特征对比"
+    - "新颖性评估"
+    - "创造性评估"
+    - "风险评估"
+    - "结论与建议"
+
+  quality_checks:
+    - id: "completeness"
+      description: "完整性检查"
+      rules:
+        - "所有required变量必须填写"
+        - "技术特征对比表至少包含3行"
+        - "核心发现至少包含3条"
+
+    - id: "consistency"
+      description: "一致性检查"
+      rules:
+        - "结论与评估结果一致"
+        - "风险等级与具体风险匹配"
+
+    - id: "format"
+      description: "格式检查"
+      rules:
+        - "专利号格式正确"
+        - "日期格式正确"
+        - "表格格式完整"
+
+# ===========================================
+# 使用示例
+# ===========================================
+examples:
+  - name: "基础使用"
+    input:
+      patent_number: "CN109459075A"
+      client_name: "济南东盛热电有限公司"
+      project_name: "井鹰眼-I型便携式有限空间检查工具"
+      analysis_date: "2026-03-27"
+      analyst: "徐健"
+    output:
+      filename: "CN109459075A_专利分析报告_2026-03-27.docx"
+
+  - name: "完整使用"
+    input:
+      patent_number: "CN109459075A"
+      patent_name: "一种分布式通信人/手井勘察工具"
+      client_name: "济南东盛热电有限公司"
+      project_name: "井鹰眼-I型便携式有限空间检查工具"
+      technology_field: "有限空间检测设备"
+      analysis_date: "2026-03-27"
+      analyst: "徐健"
+      novelty_assessment: "risk"
+      creativity_assessment: "risk"
+      utility_assessment: "positive"
+      overall_risk_level: "medium"

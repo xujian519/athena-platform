@@ -1,0 +1,193 @@
+# Athena工作平台 - 主Docker Compose配置
+# Main Docker Compose Configuration
+#
+# 统一管理所有层级的Docker服务，整合到7个统一配置文件
+
+# 使用Docker Compose的include功能（需要Docker Compose v2.0+）
+include:
+  # 基础设施层 - 数据库、缓存、向量数据库、图数据库
+  - docker-compose.infrastructure.yml
+  
+  # 核心服务层 - API网关、专利分析、知识图谱等
+  - docker-compose.core-services.yml
+  
+  # MCP服务器层 - 8个专业MCP服务器
+  - docker-compose.mcp-servers.yml
+  
+  # 应用层 - XiaoNuo网关、意图识别、可视化工具
+  - docker-compose.applications.yml
+  
+  # 监控层 - Prometheus、Grafana、告警
+  - docker-compose.monitoring.yml
+
+# ==================== 网络配置 ====================
+networks:
+  # 统一网络（供所有服务使用）
+  athena-network:
+    name: athena-network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+    labels:
+      - "com.athena.network=unified"
+
+  # 基础设施网络
+  athena-infrastructure:
+    name: athena-infrastructure
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+    labels:
+      - "com.athena.network=infrastructure"
+
+  # 核心服务网络
+  athena-core-services:
+    name: athena-core-services
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+    labels:
+      - "com.athena.network=core-services"
+
+  # MCP服务器网络
+  athena-mcp-servers:
+    name: athena-mcp-servers
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16
+    labels:
+      - "com.athena.network=mcp-servers"
+
+  # 应用层网络
+  athena-applications:
+    name: athena-applications
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.23.0.0/16
+    labels:
+      - "com.athena.network=applications"
+
+  # 监控网络
+  athena-monitoring:
+    name: athena-monitoring
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.24.0.0/16
+    labels:
+      - "com.athena.network=monitoring"
+
+# ==================== 卷配置 ====================
+volumes:
+  # Redis数据
+  redis-data:
+    driver: local
+    name: athena-redis-data
+  
+  # Qdrant向量数据
+  qdrant-data:
+    driver: local
+    name: athena-qdrant-data
+  
+  # NebulaGraph数据
+  nebula-meta-data:
+    driver: local
+    name: athena-nebula-meta-data
+  nebula-storage-data:
+    driver: local
+    name: athena-nebula-storage-data
+  nebula-graph-data:
+    driver: local
+    name: athena-nebula-graph-data
+  
+  # Prometheus数据
+  prometheus-data:
+    driver: local
+    name: athena-prometheus-data
+  
+  # Grafana数据
+  grafana-data:
+    driver: local
+    name: athena-grafana-data
+  
+  # AlertManager数据
+  alertmanager-data:
+    driver: local
+    name: athena-alertmanager-data
+
+# ==================== 使用说明 ====================
+#
+# 启动所有服务：
+#   docker-compose up -d
+#
+# 按层启动：
+#   # 仅基础设施层
+#   docker-compose -f docker-compose.infrastructure.yml up -d
+#
+#   # 基础设施 + 核心服务
+#   docker-compose -f docker-compose.infrastructure.yml \
+#                  -f docker-compose.core-services.yml up -d
+#
+# 停止所有服务：
+#   docker-compose down
+#
+# 查看服务状态：
+#   docker-compose ps
+#
+# 查看日志：
+#   docker-compose logs -f [service_name]
+#
+# 重启服务：
+#   docker-compose restart [service_name]
+#
+# 扩展服务：
+#   docker-compose up -d --scale [service_name]=3
+#
+# ==================== 环境变量 ====================
+#
+# 复制 .env.example 到 .env 并配置以下变量：
+#
+# # PostgreSQL配置（注意：使用本地PostgreSQL 17.7，容器内通过host.docker.internal访问）
+# DB_PASSWORD=athena123
+#
+# # Redis配置
+# REDIS_PASSWORD=redis123
+#
+# # JWT密钥
+# JWT_SECRET=your-secret-key-here
+#
+# # API密钥（可选）
+# SEMANTIC_SCHOLAR_API_KEY=your-api-key
+# JINA_API_KEY=your-api-key
+# GAODE_API_KEY=your-api-key
+# GITHUB_TOKEN=your-token
+#
+# # Grafana配置
+# GRAFANA_ADMIN_USER=admin
+# GRAFANA_ADMIN_PASSWORD=admin123
+# GRAFANA_ROOT_URL=http://localhost:3000
+#
+# ==================== 注意事项 ====================
+#
+# 1. PostgreSQL使用本地版本17.7，不使用Docker容器
+#    - 容器通过 host.docker.internal:5432 连接
+#    - 确保本地PostgreSQL服务已启动
+#    - 确保数据库用户和密码配置正确
+#
+# 2. 端口占用检查
+#    - 如遇端口冲突，请检查 services.yml 中的端口配置
+#    - 或在 .env 文件中覆盖默认端口
+#
+# 3. 资源限制
+#    - 每个服务都有CPU和内存限制
+#    - 根据实际硬件资源调整 limits 和 reservations
+#
+# 4. 数据持久化
+#    - 数据存储在 ../../data/ 目录下
+#    - 日志存储在 ../../logs/ 目录下
+#    - 请确保这些目录有足够的磁盘空间

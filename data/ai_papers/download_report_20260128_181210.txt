@@ -1,0 +1,30 @@
+======================================================================
+论文下载报告
+======================================================================
+
+下载时间: 2026-01-28 18:12:10
+下载目录: /Users/xujian/Athena工作平台/data/ai_papers
+
+统计信息:
+  总数: 7
+  成功: 7
+  跳过: 0
+  失败: 0
+
+下载详情:
+  ✓ A Survey on Patent Analysis: From NLP to Multimodal AI
+    路径: /Users/xujian/Athena工作平台/data/ai_papers/arxiv/patent_analysis_survey_nlp_multimodal_ai.pdf
+  ✓ Can AI Examine Novelty of Patents?
+    路径: /Users/xujian/Athena工作平台/data/ai_papers/arxiv/ai_examine_patent_novelty.pdf
+  ✓ A Large-scale Integrated Multimodal Patent Analysis (NeurIPS 2024)
+    路径: /Users/xujian/Athena工作平台/data/ai_papers/arxiv/multimodal_patent_analysis_neurips2024.pdf
+  ✓ 2024年度专利全景分析：深度学习领域
+    路径: /Users/xujian/Athena工作平台/data/ai_papers/chinese/2024深度学习专利全景分析.pdf
+  ✓ WIPO Patent Landscape Report: Generative AI
+    路径: /Users/xujian/Athena工作平台/data/ai_papers/reports/WIPO_Generative_AI_Patent_Landscape.pdf
+  ✓ OECD: Identifying emerging AI technologies using patent data
+    路径: /Users/xujian/Athena工作平台/data/ai_papers/reports/OECD_emerging_ai_patents_2025.pdf
+  ✓ Stanford HAI 2025 AI Index Report
+    路径: /Users/xujian/Athena工作平台/data/ai_papers/reports/Stanford_AI_Index_2025.pdf
+
+======================================================================

@@ -1,0 +1,133 @@
+# ⚠️ 此配置文件已迁移到 mlx.yaml，请使用 config/mlx.yaml 作为主配置文件。
+# 本文件仅作历史参考保留。
+#
+# Athena工作平台 - 本地模型配置
+# 通过 MLX 推理服务提供 (统一脚本: ~/scripts/mlx-server.sh)
+# LLM 服务: http://127.0.0.1:8765/v1  (mlx_lm / mlx_vlm)
+# Embedding: http://127.0.0.1:8766/v1  (BGE-M3 MLX 4bit, 1024维)
+
+# 服务器配置 (MLX LLM 服务)
+server:
+  host: "127.0.0.1"
+  port: 8765
+  timeout: 300
+  retries: 3
+
+# LLM 模型配置
+models:
+  # 默认模型
+  default: "glm47flash"
+
+  # 可用模型列表 (通过 mlx-server.sh switch 切换)
+  available:
+    - name: "glm47flash"
+      description: "GLM-4.7-Flash 30B MoE (3B活跃) (MLX 4bit, 默认)"
+      type: "chat"
+      context_length: 131072
+      embedding: false
+
+# 专利分析专用配置
+patent_analysis:
+  # 摘要生成模型
+  summarization:
+    model: "qwen2.5-14b-local"
+    max_tokens: 500
+    temperature: 0.3
+    system_prompt: |
+      你是一个专利技术专家，请为给定的专利内容生成简洁准确的技术摘要。
+      摘要应包括：
+      1. 技术领域
+      2. 核心创新点
+      3. 主要应用场景
+      4. 技术优势
+
+  # 技术分析模型
+  technical_analysis:
+    model: "qwen2.5-14b-local"
+    max_tokens: 1000
+    temperature: 0.2
+    system_prompt: |
+      你是一个资深专利分析师，请对专利技术进行深入分析。
+      分析应包括：
+      1. 技术背景和问题
+      2. 解决方案的核心思想
+      3. 技术实现的关键点
+      4. 与现有技术的对比
+      5. 潜在的技术风险和改进空间
+
+  # 侵权风险分析模型
+  infringement_analysis:
+    model: "qwen2.5-14b-local"
+    max_tokens: 800
+    temperature: 0.1
+    system_prompt: |
+      你是一个专利法律专家，请分析专利的侵权风险。
+      分析应包括：
+      1. 权利要求保护范围
+      2. 可能的侵权场景
+      3. 风险等级评估
+      4. 规避建议
+
+# 向量嵌入配置 (MLX Embedding 服务)
+embedding:
+  # BGE-M3 MLX 4-bit 量化
+  service_url: "http://127.0.0.1:8766"
+  text_model: "bge-m3-mlx-4bit"
+  dimensions: 1024
+  model_path: "/Users/xujian/.models/bge-m3-mlx-4bit"
+
+  # 批量处理配置
+  batch:
+    size: 32
+    overlap: 0.1
+
+  # 文本预处理
+  preprocessing:
+    chunk_size: 512
+    chunk_overlap: 50
+    normalize: true
+
+# 性能配置
+performance:
+  # 并发配置
+  concurrency:
+    max_concurrent_requests: 5
+    queue_size: 100
+
+  # 缓存配置
+  cache:
+    enabled: true
+    ttl: 3600  # 1小时
+    max_size: 1000
+
+  # 资源限制
+  resources:
+    max_memory_usage: "8GB"
+    max_gpu_usage: "80%"
+
+# 监控配置
+monitoring:
+  # 指标收集
+  metrics:
+    enabled: true
+    interval: 30
+
+  # 性能监控
+  performance:
+    response_time_threshold: 5000  # 毫秒
+    error_rate_threshold: 0.05      # 5%
+
+# 安全配置
+security:
+  # API密钥
+  api_key: null
+
+  # 访问控制
+  access_control:
+    enabled: false
+    allowed_ips: []
+
+  # 内容过滤
+  content_filter:
+    enabled: true
+    sensitive_words: ["机密", "内部", "秘密"]

@@ -1,0 +1,189 @@
+{
+  "consolidation_id": "qdrant_consolidation_20251212_140929",
+  "start_time": "2025-12-12T14:09:29.859252",
+  "steps": {
+    "analysis": {
+      "total_collections": 13,
+      "collections": {
+        "patent_judgment_db": {
+          "error": "2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+        },
+        "legal_vector_db": {
+          "error": "2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+        },
+        "legal_clauses_shard_1": {
+          "error": "1 validation error for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+        },
+        "legal_documents": {
+          "error": "2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+        },
+        "legal_laws_comprehensive": {
+          "error": "2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+        },
+        "legal_clauses": {
+          "error": "2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+        },
+        "legal_clauses_shard_0": {
+          "error": "1 validation error for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+        },
+        "ai_technical_terms_vector_db": {
+          "error": "2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+        },
+        "patent_invalid_db": {
+          "error": "2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+        },
+        "patent_rules_unified_1024": {
+          "error": "2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+        },
+        "legal_patent_vectors": {
+          "error": "2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+        },
+        "general_memory_db": {
+          "error": "1 validation error for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+        },
+        "patent_review_db": {
+          "error": "2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+        }
+      },
+      "total_vectors": 0
+    },
+    "create_collections": {
+      "patents_unified": true,
+      "legal_unified": true,
+      "technical_unified": true,
+      "memory_unified": true
+    },
+    "patent_consolidation": {
+      "total_migrated": 0,
+      "collections_processed": 0,
+      "errors": [
+        "处理集合 patent_judgment_db 失败: 2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden",
+        "处理集合 patent_invalid_db 失败: 2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden",
+        "处理集合 patent_rules_unified_1024 失败: 2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden",
+        "处理集合 patent_review_db 失败: 2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+      ]
+    },
+    "legal_consolidation": {
+      "total_migrated": 0,
+      "collections_processed": 0,
+      "errors": [
+        "处理集合 legal_vector_db 失败: 2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden",
+        "处理集合 legal_clauses 失败: 2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden",
+        "处理集合 legal_clauses_shard_0 失败: 1 validation error for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden",
+        "处理集合 legal_clauses_shard_1 失败: 1 validation error for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden",
+        "处理集合 legal_laws_comprehensive 失败: 2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden",
+        "处理集合 legal_documents 失败: 2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden",
+        "处理集合 legal_patent_vectors 失败: 2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+      ]
+    },
+    "other_consolidation": {
+      "technical": {
+        "source": "ai_technical_terms_vector_db",
+        "target": "technical_unified",
+        "total_migrated": 0,
+        "errors": [
+          "2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+        ]
+      },
+      "modules/modules/modules/memory/memory/modules/memory/memory/modules/modules/memory/memory/memory": {
+        "source": "general_memory_db",
+        "target": "memory_unified",
+        "total_migrated": 0,
+        "errors": [
+          "1 validation error for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+        ]
+      }
+    },
+    "verification": {
+      "target_collections": {
+        "patents_unified": {
+          "error": "2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+        },
+        "legal_unified": {
+          "error": "2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+        },
+        "technical_unified": {
+          "error": "2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+        },
+        "memory_unified": {
+          "error": "2 validation errors for ParsingModel[InlineResponse2005] (for parse_as_type)\nobj.result.config.optimizer_config.max_optimization_threads\n  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/int_type\nobj.result.config.wal_config.wal_retain_closed\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+        }
+      },
+      "total_vectors": 0
+    },
+    "config": {
+      "qdrant_optimized": {
+        "collections": {
+          "apps/apps/patents": {
+            "collection_name": "patents_unified",
+            "vector_size": 1024,
+            "description": "统一存储所有专利相关向量",
+            "access_pattern": "high_frequency",
+            "cache_policy": "aggressive"
+          },
+          "legal": {
+            "collection_name": "legal_unified",
+            "vector_size": 1024,
+            "description": "统一存储所有法律文档向量",
+            "access_pattern": "medium_frequency",
+            "cache_policy": "moderate"
+          },
+          "technical": {
+            "collection_name": "technical_unified",
+            "vector_size": 768,
+            "description": "统一存储技术术语向量",
+            "access_pattern": "medium_frequency",
+            "cache_policy": "moderate"
+          },
+          "modules/modules/modules/memory/memory/modules/memory/memory/modules/modules/memory/memory/memory": {
+            "collection_name": "memory_unified",
+            "vector_size": 1024,
+            "description": "统一存储记忆向量",
+            "access_pattern": "low_frequency",
+            "cache_policy": "minimal"
+          }
+        },
+        "search_strategy": {
+          "patent_queries": [
+            "patents_unified"
+          ],
+          "legal_queries": [
+            "legal_unified",
+            "patents_unified"
+          ],
+          "technical_queries": [
+            "technical_unified"
+          ],
+          "memory_queries": [
+            "memory_unified"
+          ]
+        },
+        "optimization_settings": {
+          "hnsw": {
+            "m": 16,
+            "ef_construct": 100
+          },
+          "quantization": {
+            "enabled": true,
+            "scalar": {
+              "type": "int8"
+            }
+          },
+          "wal": {
+            "disabled": false,
+            "wal_capacity_mb": 32
+          }
+        }
+      }
+    }
+  },
+  "end_time": "2025-12-12T14:09:30.180072",
+  "duration_seconds": 0.32082,
+  "summary": {
+    "total_collections_analyzed": 13,
+    "total_vectors_before": 0,
+    "total_vectors_migrated": 0,
+    "total_vectors_after": 0,
+    "target_collections_created": 4
+  }
+}

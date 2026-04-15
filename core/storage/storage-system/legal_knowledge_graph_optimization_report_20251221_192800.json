@@ -1,0 +1,839 @@
+{
+  "metadata": {
+    "report_title": "法律知识图谱优化建议报告",
+    "generation_time": "2025-12-21T19:28:00.125771",
+    "data_source": "3086个法律文档处理结果",
+    "version": "1.0"
+  },
+  "executive_summary": {
+    "current_status": "基础建设完成，智能化程度有待提升",
+    "key_findings": [
+      "文档覆盖面广但实体识别精度不足",
+      "向量化基础良好但条目级处理需要改进",
+      "需要建立专业的法律推理机制"
+    ],
+    "recommendations": [
+      "优先实现实体识别和关系抽取增强",
+      "构建法律专业推理引擎",
+      "建立智能问答系统"
+    ]
+  },
+  "current_state_analysis": {
+    "total_documents_processed": 3086,
+    "vectors_created": 669,
+    "document_types": {
+      "法律法规": 41,
+      "案例文档": 9,
+      "其他": 12
+    },
+    "complexity_distribution": {
+      "简单": 61,
+      "复杂": 1
+    },
+    "current_issues": [
+      "实体识别不够精细",
+      "关系类型单一",
+      "缺乏法律专业推理",
+      "条目级向量化失败率高"
+    ],
+    "strengths": [
+      "文档覆盖面广",
+      "向量化基础良好",
+      "分类体系清晰",
+      "处理速度快"
+    ]
+  },
+  "enhanced_ontology": {
+    "entity_types": {
+      "LegalConcept": {
+        "type_name": "LegalConcept",
+        "category": "概念",
+        "description": "法律领域的基本概念和术语",
+        "dev/examples": [
+          "合同履行",
+          "侵权行为",
+          "正当防卫",
+          "紧急避险"
+        ],
+        "relationships": [
+          "is_a",
+          "part_of",
+          "related_to",
+          "opposite_of"
+        ],
+        "attributes": [
+          "定义",
+          "构成要件",
+          "法律依据",
+          "适用范围"
+        ]
+      },
+      "LegalRule": {
+        "type_name": "LegalRule",
+        "category": "规则",
+        "description": "具体的法律条文和规则",
+        "dev/examples": [
+          "《合同法》第107条",
+          "《刑法》第232条",
+          "《民法典》第186条"
+        ],
+        "relationships": [
+          "governs",
+          "applies_to",
+          "exempts",
+          "modifies"
+        ],
+        "attributes": [
+          "条文内容",
+          "生效时间",
+          "效力级别",
+          "适用条件"
+        ]
+      },
+      "LegalSubject": {
+        "type_name": "LegalSubject",
+        "category": "主体",
+        "description": "法律关系的参与者",
+        "dev/examples": [
+          "自然人",
+          "法人",
+          "行政机关",
+          "司法机关"
+        ],
+        "relationships": [
+          "has_rights",
+          "has_obligations",
+          "can_sue",
+          "can_be_sued"
+        ],
+        "attributes": [
+          "主体类型",
+          "权利能力",
+          "行为能力",
+          "法律责任"
+        ]
+      },
+      "LegalObject": {
+        "type_name": "LegalObject",
+        "category": "客体",
+        "description": "法律关系指向的对象",
+        "dev/examples": [
+          "财产",
+          "人身权利",
+          "知识产权",
+          "债权"
+        ],
+        "relationships": [
+          "owned_by",
+          "protected_by",
+          "transferred_to"
+        ],
+        "attributes": [
+          "客体类型",
+          "价值评估",
+          "权利归属",
+          "保护期限"
+        ]
+      },
+      "LegalAction": {
+        "type_name": "LegalAction",
+        "category": "行为",
+        "description": "产生法律后果的行为",
+        "dev/examples": [
+          "签订合同",
+          "提起诉讼",
+          "申请仲裁",
+          "履行义务"
+        ],
+        "relationships": [
+          "performed_by",
+          "results_in",
+          "requires",
+          "prohibited_by"
+        ],
+        "attributes": [
+          "行为性质",
+          "法律效果",
+          "生效条件",
+          "失效原因"
+        ]
+      },
+      "LegalConsequence": {
+        "type_name": "LegalConsequence",
+        "category": "后果",
+        "description": "法律行为导致的结果",
+        "dev/examples": [
+          "民事赔偿",
+          "刑事责任",
+          "行政处罚",
+          "合同无效"
+        ],
+        "relationships": [
+          "caused_by",
+          "applies_to",
+          "mitigated_by"
+        ],
+        "attributes": [
+          "后果类型",
+          "责任范围",
+          "执行方式",
+          "救济途径"
+        ]
+      },
+      "LegalCase": {
+        "type_name": "LegalCase",
+        "category": "案例",
+        "description": "具体的司法裁判案例",
+        "dev/examples": [
+          "(2020)京01民终1234号",
+          "指导案例75号",
+          "公报案例"
+        ],
+        "relationships": [
+          "applies_rule",
+          "interprets_concept",
+          "cites_precedent"
+        ],
+        "attributes": [
+          "案号",
+          "当事人",
+          "争议焦点",
+          "裁判要点"
+        ]
+      },
+      "JudicialAuthority": {
+        "type_name": "JudicialAuthority",
+        "category": "机关",
+        "description": "行使司法权的国家机关",
+        "dev/examples": [
+          "最高人民法院",
+          "北京市第一中级人民法院",
+          "海淀区法院"
+        ],
+        "relationships": [
+          "has_jurisdiction",
+          "issues_judgment",
+          "oversees_case"
+        ],
+        "attributes": [
+          "机关层级",
+          "管辖范围",
+          "职能权限",
+          "组织结构"
+        ]
+      },
+      "LegalDocument": {
+        "type_name": "LegalDocument",
+        "category": "文书",
+        "description": "各类法律文书文件",
+        "dev/examples": [
+          "起诉状",
+          "判决书",
+          "仲裁裁决",
+          "法律意见书"
+        ],
+        "relationships": [
+          "created_by",
+          "filed_in",
+          "evidences",
+          "enforces"
+        ],
+        "attributes": [
+          "文书类型",
+          "制作机关",
+          "法律效力",
+          "格式要求"
+        ]
+      },
+      "TimeLimit": {
+        "type_name": "TimeLimit",
+        "category": "时效",
+        "description": "法律规定的各种时间期限",
+        "dev/examples": [
+          "诉讼时效",
+          "上诉期",
+          "申请执行期",
+          "除斥期间"
+        ],
+        "relationships": [
+          "applies_to",
+          "calculated_from",
+          "extended_by",
+          "tolled_by"
+        ],
+        "attributes": [
+          "期限长度",
+          "起算点",
+          "中断情形",
+          "延长条件"
+        ]
+      }
+    },
+    "relationship_types": {
+      "is_subclass_of": {
+        "relation_name": "is_subclass_of",
+        "description": "表示概念之间的从属关系",
+        "domain_types": [
+          "LegalConcept"
+        ],
+        "range_types": [
+          "LegalConcept"
+        ],
+        "properties": {
+          "transitive": true,
+          "irreflexive": true
+        },
+        "dev/examples": [
+          "买卖合同 is_subclass_of 合同",
+          "故意伤害 is_subclass_of 侵权行为"
+        ]
+      },
+      "has_provision": {
+        "relation_name": "has_provision",
+        "description": "表示法律法规包含具体条文",
+        "domain_types": [
+          "LegalDocument"
+        ],
+        "range_types": [
+          "LegalRule"
+        ],
+        "properties": {
+          "functional": false,
+          "inverse": "part_of_document"
+        },
+        "dev/examples": [
+          "《合同法》 has_provision 第107条",
+          "《民法典》 has_provision 第186条"
+        ]
+      },
+      "applies_to": {
+        "relation_name": "applies_to",
+        "description": "表示规则适用的主体或情形",
+        "domain_types": [
+          "LegalRule",
+          "TimeLimit"
+        ],
+        "range_types": [
+          "LegalSubject",
+          "LegalAction",
+          "LegalCase"
+        ],
+        "properties": {
+          "context_dependent": true
+        },
+        "dev/examples": [
+          "《劳动合同法》 applies_to 劳动者",
+          "诉讼时效 applies_to 民事权利"
+        ]
+      },
+      "has_right": {
+        "relation_name": "has_right",
+        "description": "表示主体享有的法定权利",
+        "domain_types": [
+          "LegalSubject"
+        ],
+        "range_types": [
+          "LegalConcept"
+        ],
+        "properties": {
+          "can_be_waived": true,
+          "can_be_transferred": true
+        },
+        "dev/examples": [
+          "债权人 has_right 债权请求权",
+          "作者 has_right 著作权"
+        ]
+      },
+      "has_obligation": {
+        "relation_name": "has_obligation",
+        "description": "表示主体承担的法定义务",
+        "domain_types": [
+          "LegalSubject"
+        ],
+        "range_types": [
+          "LegalConcept"
+        ],
+        "properties": {
+          "cannot_be_waived": true,
+          "enforceable": true
+        },
+        "dev/examples": [
+          "债务人 has_obligation 还款义务",
+          "用人单位 has_obligation 缴纳社保"
+        ]
+      },
+      "causes": {
+        "relation_name": "causes",
+        "description": "表示行为与后果之间的因果关系",
+        "domain_types": [
+          "LegalAction",
+          "LegalRule"
+        ],
+        "range_types": [
+          "LegalConsequence"
+        ],
+        "properties": {
+          "causal_strength": "variable"
+        },
+        "dev/examples": [
+          "违约行为 causes 违约责任",
+          "犯罪行为 causes 刑事处罚"
+        ]
+      },
+      "cites": {
+        "relation_name": "cites",
+        "description": "表示案例或文书之间的引用关系",
+        "domain_types": [
+          "LegalCase",
+          "LegalDocument"
+        ],
+        "range_types": [
+          "LegalCase",
+          "LegalRule",
+          "LegalDocument"
+        ],
+        "properties": {
+          "citation_weight": "variable"
+        },
+        "dev/examples": [
+          "(2020)京01民终1234号 cites 指导案例75号",
+          "判决书 cites 《合同法》第107条"
+        ]
+      },
+      "interprets": {
+        "relation_name": "interprets",
+        "description": "表示对法律概念或规则的解释",
+        "domain_types": [
+          "LegalCase",
+          "JudicialAuthority"
+        ],
+        "range_types": [
+          "LegalConcept",
+          "LegalRule"
+        ],
+        "properties": {
+          "authoritative": true
+        },
+        "dev/examples": [
+          "最高人民法院 interprets 不可抗力",
+          "指导案例 interprets 表见代理"
+        ]
+      },
+      "subject_to_limitation": {
+        "relation_name": "subject_to_limitation",
+        "description": "表示权利或义务受时效限制",
+        "domain_types": [
+          "LegalConcept",
+          "LegalRight"
+        ],
+        "range_types": [
+          "TimeLimit"
+        ],
+        "properties": {
+          "tolerable": true,
+          "extendable": true
+        },
+        "dev/examples": [
+          "债权请求权 subject_to_limitation 3年诉讼时效",
+          "撤销权 subject_to_limitation 1年除斥期间"
+        ]
+      },
+      "has_jurisdiction_over": {
+        "relation_name": "has_jurisdiction_over",
+        "description": "表示司法机关对案件的管辖权",
+        "domain_types": [
+          "JudicialAuthority"
+        ],
+        "range_types": [
+          "LegalCase",
+          "LegalSubject"
+        ],
+        "properties": {
+          "exclusive": "variable",
+          "territorial": true
+        },
+        "dev/examples": [
+          "海淀区法院 has_jurisdiction_over (2020)京0108民初1234号",
+          "证监会 has_jurisdiction_over 证券纠纷"
+        ]
+      }
+    }
+  },
+  "intelligence_enhancement": {
+    "inference_rules": [
+      {
+        "rule_id": "LR001",
+        "name": "权利义务对应规则",
+        "description": "有权利必有对应义务",
+        "condition": [
+          "?subject has_right ?right"
+        ],
+        "conclusion": [
+          "?other_subject has_obligation ?corresponding_obligation"
+        ],
+        "variables": {
+          "?subject": "LegalSubject",
+          "?right": "LegalConcept",
+          "?other_subject": "LegalSubject",
+          "?corresponding_obligation": "LegalConcept"
+        },
+        "confidence": 0.9
+      },
+      {
+        "rule_id": "LR002",
+        "name": "特殊法优于一般法规则",
+        "description": "特殊规定优先于一般规定适用",
+        "condition": [
+          "?special_rule governs ?situation",
+          "?general_rule governs ?situation",
+          "?special_rule is_subclass_of ?general_rule"
+        ],
+        "conclusion": [
+          "优先适用(?special_rule, ?general_rule)"
+        ],
+        "variables": {
+          "?special_rule": "LegalRule",
+          "?general_rule": "LegalRule",
+          "?situation": "LegalConcept"
+        },
+        "confidence": 0.95
+      },
+      {
+        "rule_id": "LR003",
+        "name": "新法优于旧法规则",
+        "description": "新法规定优于旧法规定",
+        "condition": [
+          "?new_rule governs ?situation",
+          "?old_rule governs ?situation",
+          "effective_time(?new_rule) > effective_time(?old_rule)"
+        ],
+        "conclusion": [
+          "优先适用(?new_rule, ?old_rule)"
+        ],
+        "variables": {
+          "?new_rule": "LegalRule",
+          "?old_rule": "LegalRule",
+          "?situation": "LegalConcept"
+        },
+        "confidence": 0.9
+      },
+      {
+        "rule_id": "LR004",
+        "name": "上位法优于下位法规则",
+        "description": "效力层级高的法律优于效力层级低的法律",
+        "condition": [
+          "?higher_rule governs ?situation",
+          "?lower_rule governs ?situation",
+          "legal_hierarchy(?higher_rule) > legal_hierarchy(?lower_rule)"
+        ],
+        "conclusion": [
+          "优先适用(?higher_rule, ?lower_rule)"
+        ],
+        "variables": {
+          "?higher_rule": "LegalRule",
+          "?lower_rule": "LegalRule",
+          "?situation": "LegalConcept"
+        },
+        "confidence": 0.95
+      },
+      {
+        "rule_id": "LR005",
+        "name": "因果关系推定规则",
+        "description": "特定行为通常导致的法律后果",
+        "condition": [
+          "?action performed_by ?subject",
+          "?action is_instance_of ?action_type",
+          "?action_type normally_causes ?consequence"
+        ],
+        "conclusion": [
+          "?subject legally_responsible_for ?consequence"
+        ],
+        "variables": {
+          "?action": "LegalAction",
+          "?subject": "LegalSubject",
+          "?action_type": "LegalConcept",
+          "?consequence": "LegalConsequence"
+        },
+        "confidence": 0.8
+      }
+    ],
+    "qa_patterns": [
+      {
+        "pattern_id": "QA001",
+        "question_type": "权利查询",
+        "intent_template": "{主体}在{情形}下享有什么权利",
+        "query_template": "\n                MATCH (subject:LegalSubject)-[r:has_right]->(right:LegalConcept)\n                WHERE subject.name = $主体\n                MATCH (right)-[:applies_to]->(situation:LegalConcept)\n                WHERE situation.name = $情形\n                RETURN subject.name, right.name, right.定义, right.法律依据\n                ",
+        "answer_template": "{主体}在{情形}下享有{权利}，具体包括：{权利说明}"
+      },
+      {
+        "pattern_id": "QA002",
+        "question_type": "义务查询",
+        "intent_template": "{主体}需要承担什么义务",
+        "query_template": "\n                MATCH (subject:LegalSubject)-[r:has_obligation]->(obligation:LegalConcept)\n                WHERE subject.name = $主体\n                RETURN subject.name, obligation.name, obligation.构成要件, obligation.法律后果\n                ",
+        "answer_template": "{主体}需要承担{义务}，具体要求是：{义务说明}"
+      },
+      {
+        "pattern_id": "QA003",
+        "question_type": "法律后果查询",
+        "intent_template": "{行为}会导致什么法律后果",
+        "query_template": "\n                MATCH (action:LegalAction)-[:causes]->(consequence:LegalConsequence)\n                WHERE action.name = $行为\n                RETURN action.name, consequence.name, consequence.责任范围, consequence.救济途径\n                ",
+        "answer_template": "{行为}可能导致{后果}，责任范围包括{责任说明}"
+      },
+      {
+        "pattern_id": "QA004",
+        "question_type": "时效查询",
+        "intent_template": "{权利}的诉讼时效是多久",
+        "query_template": "\n                MATCH (right:LegalConcept)-[:subject_to_limitation]->(limit:TimeLimit)\n                WHERE right.name = $权利\n                RETURN right.name, limit.期限长度, limit.起算点, limit.中断情形\n                ",
+        "answer_template": "{权利}的诉讼时效为{期限长度}，从{起算点}开始计算"
+      },
+      {
+        "pattern_id": "QA005",
+        "question_type": "案例查询",
+        "intent_template": "关于{法律问题}的相关案例",
+        "query_template": "\n                MATCH (case:LegalCase)-[:applies_rule]->(rule:LegalRule)\n                MATCH (rule)-[:governs]->(concept:LegalConcept)\n                WHERE concept.name = $法律问题\n                RETURN case.案号, case.争议焦点, case.裁判要点\n                ORDER BY case.裁判日期 DESC\n                LIMIT 5\n                ",
+        "answer_template": "关于{法律问题}的相关案例包括：{案例摘要}"
+      },
+      {
+        "pattern_id": "QA006",
+        "question_type": "管辖查询",
+        "intent_template": "{案件}应该由哪个法院管辖",
+        "query_template": "\n                MATCH (court:JudicialAuthority)-[:has_jurisdiction_over]->(case:LegalCase)\n                WHERE case.案号 = $案件 OR case.争议焦点 CONTAINS $案件关键词\n                RETURN court.name, court.机关层级, court.管辖范围\n                ",
+        "answer_template": "{案件}应由{法院}管辖，该法院具有{管辖权说明}"
+      }
+    ]
+  },
+  "optimization_strategies": [
+    {
+      "name": "实体识别增强",
+      "description": "引入预训练法律NER模型，提高实体识别精度",
+      "priority": "高",
+      "estimated_improvement": "实体识别准确率提升30-40%",
+      "implementation_complexity": "中",
+      "required_resources": [
+        "GPU服务器",
+        "法律标注数据",
+        "NLP工程师"
+      ]
+    },
+    {
+      "name": "关系抽取优化",
+      "description": "基于BERT的关系抽取模型，识别更丰富的法律关系",
+      "priority": "高",
+      "estimated_improvement": "关系抽取覆盖率提升50%",
+      "implementation_complexity": "高",
+      "required_resources": [
+        "深度学习框架",
+        "标注工具",
+        "领域专家"
+      ]
+    },
+    {
+      "name": "语义推理引擎",
+      "description": "构建基于规则和机器学习的混合推理引擎",
+      "priority": "中",
+      "estimated_improvement": "推理准确性提升25%",
+      "implementation_complexity": "高",
+      "required_resources": [
+        "推理引擎",
+        "规则库",
+        "知识图谱数据库"
+      ]
+    },
+    {
+      "name": "时序知识图谱",
+      "description": "引入时间维度，支持法律演变和案例分析",
+      "priority": "中",
+      "estimated_improvement": "时序查询准确率提升40%",
+      "implementation_complexity": "中",
+      "required_resources": [
+        "时序数据库",
+        "版本控制",
+        "时间抽取工具"
+      ]
+    },
+    {
+      "name": "多模态融合",
+      "description": "融合文本、表格、图像等多种法律文书格式",
+      "priority": "低",
+      "estimated_improvement": "信息覆盖率提升15%",
+      "implementation_complexity": "高",
+      "required_resources": [
+        "OCR工具",
+        "多模态模型",
+        "存储系统"
+      ]
+    },
+    {
+      "name": "知识图谱质量控制",
+      "description": "建立质量评估和修复机制",
+      "priority": "高",
+      "estimated_improvement": "数据质量提升35%",
+      "implementation_complexity": "中",
+      "required_resources": [
+        "质量评估工具",
+        "专家审核",
+        "自动化修复"
+      ]
+    },
+    {
+      "name": "增量更新机制",
+      "description": "支持新法律法规的实时增量更新",
+      "priority": "中",
+      "estimated_improvement": "更新效率提升60%",
+      "implementation_complexity": "中",
+      "required_resources": [
+        "增量抽取",
+        "版本管理",
+        "更新调度"
+      ]
+    }
+  ],
+  "implementation_plan": {
+    "phase_1": {
+      "name": "基础优化阶段（1-3个月）",
+      "objectives": [
+        "完善实体和关系类型定义",
+        "建立质量控制机制",
+        "优化向量索引和检索"
+      ],
+      "deliverables": [
+        "完整的实体关系本体",
+        "质量评估报告",
+        "性能基准测试"
+      ],
+      "success_metrics": {
+        "实体识别准确率": ">85%",
+        "关系抽取覆盖率": ">70%",
+        "查询响应时间": "<100ms"
+      }
+    },
+    "phase_2": {
+      "name": "智能增强阶段（4-6个月）",
+      "objectives": [
+        "部署深度学习模型",
+        "实现自动推理功能",
+        "构建智能问答系统"
+      ],
+      "deliverables": [
+        "NER和RE模型",
+        "推理引擎",
+        "QA系统原型"
+      ],
+      "success_metrics": {
+        "模型准确率": ">90%",
+        "推理准确率": ">85%",
+        "问答满意度": ">80%"
+      }
+    },
+    "phase_3": {
+      "name": "系统完善阶段（7-9个月）",
+      "objectives": [
+        "实现增量更新",
+        "完善多模态支持",
+        "优化用户体验"
+      ],
+      "deliverables": [
+        "增量更新系统",
+        "多模态处理工具",
+        "用户界面优化"
+      ],
+      "success_metrics": {
+        "更新时效性": "<24小时",
+        "多模态覆盖": ">60%",
+        "用户满意度": ">85%"
+      }
+    }
+  },
+  "technical_specifications": {
+    "knowledge_graph_database": {
+      "recommended": "Neo4j 5.x 或 NebulaGraph 3.x",
+      "storage_capacity": "预计1000万实体，5000万关系",
+      "query_performance": "复杂查询<500ms",
+      "scaling": "支持水平扩展"
+    },
+    "vector_database": {
+      "recommended": "Qdrant 或 Milvus",
+      "dimensions": "768-1536维",
+      "index_type": "HNSW",
+      "similarity": "余弦相似度",
+      "storage": "分布式存储"
+    },
+    "nlp_models": {
+      "entity_recognition": "LegalBERT-NER",
+      "relation_extraction": "LegalBERT-RE",
+      "text_embedding": "bge-large-zh",
+      "question_answering": "LegalBERT-QA"
+    },
+    "inference_engine": {
+      "rule_based": "Drools 或 Jena",
+      "machine_learning": "TensorFlow/PyTorch",
+      "neural_symbolic": "NeuralLP"
+    },
+    "infrastructure/infrastructure/deployment": {
+      "containerization": "Docker + Kubernetes",
+      "infrastructure/infrastructure/monitoring": "Prometheus + Grafana",
+      "logging": "ELK Stack",
+      "api_gateway": "Kong 或 Traefik"
+    }
+  },
+  "roi_analysis": {
+    "development_costs": {
+      "人力成本": {
+        "算法工程师": "3人×6个月×3万/月 = 54万",
+        "开发工程师": "2人×6个月×2万/月 = 24万",
+        "法律专家": "1人×6个月×4万/月 = 24万",
+        "项目经理": "1人×6个月×2.5万/月 = 15万"
+      },
+      "硬件成本": {
+        "GPU服务器": "2台×20万 = 40万",
+        "存储服务器": "3台×10万 = 30万",
+        "网络设备": "10万"
+      },
+      "软件许可": {
+        "商业软件": "20万",
+        "开源支持": "10万"
+      },
+      "total_cost": "约223万"
+    },
+    "expected_benefits": {
+      "效率提升": {
+        "法律检索效率": "提升70%",
+        "案件分析速度": "提升60%",
+        "文档处理能力": "提升80%"
+      },
+      "质量改进": {
+        "判决一致性": "提升40%",
+        "法律适用准确性": "提升35%",
+        "漏判错判率": "降低50%"
+      },
+      "成本节约": {
+        "人力成本": "年节约200万",
+        "时间成本": "年节约150万",
+        "错误成本": "年节约100万"
+      },
+      "annual_benefit": "约450万"
+    },
+    "roi_metrics": {
+      "payback_period": "约6个月",
+      "three_year_roi": "506%",
+      "annual_roi": "169%"
+    }
+  },
+  "next_steps": {
+    "immediate_actions": [
+      "成立优化项目组",
+      "确定技术选型",
+      "制定详细实施计划"
+    ],
+    "short_term_goals": [
+      "完成实体关系本体设计",
+      "实现基础质量控制",
+      "优化向量检索性能"
+    ],
+    "long_term_vision": [
+      "构建完整的法律AI助手",
+      "实现真正的智能法律推理",
+      "打造行业领先的法律知识平台"
+    ]
+  }
+}

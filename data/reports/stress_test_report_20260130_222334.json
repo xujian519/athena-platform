@@ -1,0 +1,41 @@
+{
+  "timestamp": "2026-01-30T22:23:34.628346",
+  "base_url": "http://localhost:9000",
+  "total_requests": 1430,
+  "successful_requests": 1300,
+  "overall_success_rate": 90.9090909090909,
+  "results": [
+    {
+      "endpoint": "/health",
+      "total_requests": 1000,
+      "success_rate": 100.0,
+      "avg_response_time_ms": 28.23504236509325,
+      "p95_response_time_ms": 74.98995799687691,
+      "requests_per_second": 1500.677275923291
+    },
+    {
+      "endpoint": "/docs",
+      "total_requests": 300,
+      "success_rate": 100.0,
+      "avg_response_time_ms": 23.866624996783987,
+      "p95_response_time_ms": 172.11720799969044,
+      "requests_per_second": 1030.1208787440676
+    },
+    {
+      "endpoint": "/api/v2/search",
+      "total_requests": 100,
+      "success_rate": 0.0,
+      "avg_response_time_ms": 15.477696680318331,
+      "p95_response_time_ms": 60.833540992462076,
+      "requests_per_second": 904.6826372701423
+    },
+    {
+      "endpoint": "/api/v2/reason",
+      "total_requests": 30,
+      "success_rate": 0.0,
+      "avg_response_time_ms": 7.99984573435116,
+      "p95_response_time_ms": 28.731666010571644,
+      "requests_per_second": 732.6014840184168
+    }
+  ]
+}

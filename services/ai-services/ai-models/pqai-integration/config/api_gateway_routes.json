@@ -1,0 +1,188 @@
+{
+  "service_name": "PQAI专利检索服务",
+  "service_version": "1.0.0",
+  "routes": [
+    {
+      "path": "/api/patent/search",
+      "methods": ["POST"],
+      "target": "http://localhost:8030/search",
+      "description": "增强专利检索接口",
+      "timeout": 30000,
+      "retries": 3,
+      "auth_required": false,
+      "rate_limit": {
+        "requests_per_minute": 100,
+        "burst_size": 20
+      },
+      "parameters": {
+        "query": {
+          "type": "string",
+          "required": true,
+          "description": "专利检索查询词"
+        },
+        "top_k": {
+          "type": "integer",
+          "default": 20,
+          "min": 1,
+          "max": 100,
+          "description": "返回结果数量"
+        },
+        "search_type": {
+          "type": "string",
+          "enum": ["semantic", "keyword", "hybrid"],
+          "default": "hybrid",
+          "description": "检索类型"
+        },
+        "min_similarity": {
+          "type": "float",
+          "default": 0.7,
+          "min": 0.0,
+          "max": 1.0,
+          "description": "最小相似度阈值"
+        }
+      }
+    },
+    {
+      "path": "/api/patent/similar/{patent_id}",
+      "methods": ["GET"],
+      "target": "http://localhost:8030/search/similar/{patent_id}",
+      "description": "查找相似专利接口",
+      "timeout": 30000,
+      "retries": 3,
+      "auth_required": false,
+      "rate_limit": {
+        "requests_per_minute": 60,
+        "burst_size": 10
+      },
+      "parameters": {
+        "patent_id": {
+          "type": "string",
+          "required": true,
+          "description": "专利ID"
+        },
+        "top_k": {
+          "type": "integer",
+          "default": 10,
+          "min": 1,
+          "max": 50,
+          "description": "返回相似专利数量"
+        },
+        "similarity_threshold": {
+          "type": "float",
+          "default": 0.7,
+          "min": 0.0,
+          "max": 1.0,
+          "description": "相似度阈值"
+        }
+      }
+    },
+    {
+      "path": "/api/patent/index/build",
+      "methods": ["POST"],
+      "target": "http://localhost:8030/index/build",
+      "description": "构建专利索引接口",
+      "timeout": 300000,
+      "retries": 1,
+      "auth_required": true,
+      "rate_limit": {
+        "requests_per_minute": 5,
+        "burst_size": 1
+      },
+      "parameters": {
+        "patents": {
+          "type": "array",
+          "required": true,
+          "description": "专利数据列表"
+        },
+        "rebuild": {
+          "type": "boolean",
+          "default": false,
+          "description": "是否重建索引"
+        }
+      }
+    },
+    {
+      "path": "/api/patent/health",
+      "methods": ["GET"],
+      "target": "http://localhost:8030/health",
+      "description": "PQAI服务健康检查",
+      "timeout": 5000,
+      "retries": 2,
+      "auth_required": false,
+      "rate_limit": {
+        "requests_per_minute": 30,
+        "burst_size": 5
+      }
+    },
+    {
+      "path": "/api/patent/status",
+      "methods": ["GET"],
+      "target": "http://localhost:8030/status",
+      "description": "PQAI服务状态查询",
+      "timeout": 10000,
+      "retries": 2,
+      "auth_required": false,
+      "rate_limit": {
+        "requests_per_minute": 30,
+        "burst_size": 5
+      }
+    },
+    {
+      "path": "/api/patent/analytics/statistics",
+      "methods": ["GET"],
+      "target": "http://localhost:8030/analytics/statistics",
+      "description": "PQAI检索分析统计",
+      "timeout": 15000,
+      "retries": 2,
+      "auth_required": true,
+      "rate_limit": {
+        "requests_per_minute": 20,
+        "burst_size": 3
+      }
+    }
+  ],
+  "service_health": {
+    "endpoint": "http://localhost:8030/health",
+    "check_interval": 30,
+    "timeout": 5000,
+    "unhealthy_threshold": 3,
+    "healthy_threshold": 2
+  },
+  "load_balancing": {
+    "strategy": "round_robin",
+    "targets": [
+      {
+        "host": "localhost",
+        "port": 8030,
+        "weight": 1
+      }
+    ]
+  },
+  "monitoring": {
+    "metrics_enabled": true,
+    "logging_enabled": true,
+    "trace_enabled": true,
+    "alert_endpoints": [
+      "/api/patent/search",
+      "/api/patent/index/build"
+    ]
+  },
+  "security": {
+    "cors_enabled": true,
+    "cors_origins": ["*"],
+    "cors_methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    "cors_headers": ["*"],
+    "request_validation": true,
+    "response_sanitization": true
+  },
+  "caching": {
+    "enabled": true,
+    "ttl": 300,
+    "cacheable_endpoints": [
+      "/api/patent/health",
+      "/api/patent/status",
+      "/api/patent/analytics/statistics"
+    ],
+    "cache_strategy": "lru"
+  }
+}

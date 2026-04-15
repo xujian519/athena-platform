@@ -1,0 +1,55 @@
+# 监控告警配置
+# Monitoring Alerts Configuration
+
+alerts:
+  # 磁盘空间告警
+  disk_usage:
+    warning_threshold: 80
+    critical_threshold: 90
+    check_interval: "5m"
+
+  # 内存使用告警
+  memory_usage:
+    warning_threshold: 75
+    critical_threshold: 85
+    check_interval: "5m"
+
+  # 连接失败告警
+  connection_failures:
+    threshold: 3
+    check_interval: "1m"
+
+  # 响应时间告警
+  response_time:
+    warning_threshold: 2.0  # 秒
+    critical_threshold: 5.0
+    check_interval: "5m"
+
+notification:
+  # 邮件通知
+  email:
+    enabled: false
+    smtp_server: "smtp.gmail.com"
+    smtp_port: 587
+    username: "your-email@gmail.com"
+    password: "your-password"
+    recipients: ["admin@example.com"]
+
+  # 系统通知
+  system:
+    enabled: true
+    command: "osascript -e 'display notification \"Athena Alert\" with message \"%s\"'"
+
+# 告警级别
+levels:
+  info:
+    color: "\033[0;32m"  # 绿色
+    icon: "ℹ️"
+
+  warning:
+    color: "\033[1;33m"  # 黄色
+    icon: "⚠️"
+
+  critical:
+    color: "\033[0;31m"  # 红色
+    icon: "🚨"

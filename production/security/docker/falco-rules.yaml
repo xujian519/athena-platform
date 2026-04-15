@@ -1,0 +1,262 @@
+# Falco安全监控规则
+# 用于容器运行时安全监控
+
+# 自定义规则集
+custom_rules:
+  # 检测容器内的反向Shell
+  - rule: Detect Reverse Shell in Container
+    desc: 检测可能的反向Shell连接
+    condition: >
+      spawned_process and
+      container and
+      proc.pname in (bash, sh, zsh) and
+      proc.args contains "/dev/tcp" or
+      proc.args contains "/dev/udp"
+    output: >
+      Reverse shell detected (user=%user.name container=%container.name
+      command=%proc.cmdline parent=%proc.pname cmdline=%proc.cmdline)
+    priority: Critical
+    tags: [container, shell, network]
+
+  # 检测可疑的文件下载
+  - rule: Suspicious File Download in Container
+    desc: 检测容器内可疑的文件下载
+    condition: >
+      spawned_process and
+      container and
+      proc.name in (curl, wget, nc) and
+      (proc.args contains "http" or proc.args contains "ftp") and
+      not proc.args contains "api.openai.com"
+    output: >
+      Suspicious file download detected (user=%user.name container=%container.name
+      command=%proc.cmdline file=%proc.args)
+    priority: High
+    tags: [container, network, file]
+
+  # 检测容器内特权提升尝试
+  - rule: Privilege Escalation Attempt in Container
+    desc: 检测容器内的特权提升尝试
+    condition: >
+      spawned_process and
+      container and
+      (
+        proc.name in (sudo, su) or
+        proc.args contains "chmod +s" or
+        proc.args contains "setuid" or
+        proc.args contains "/etc/passwd" or
+        proc.args contains "/etc/shadow"
+      )
+    output: >
+      Privilege escalation attempt detected (user=%user.name container=%container.name
+      command=%proc.cmdline)
+    priority: Critical
+    tags: [container, privilege]
+
+  # 检测可疑的系统调用
+  - rule: Suspicious System Call in Container
+    desc: 检测容器内的可疑系统调用
+    condition: >
+      spawned_process and
+      container and
+      (
+        (proc.name in (strace, gdb) and proc.args contains "-p") or
+        proc.name in (ptrace, process_vm_readv, process_vm_writev) or
+        proc.args contains "memfd_create"
+      )
+    output: >
+      Suspicious system call detected (user=%user.name container=%container.name
+      command=%proc.cmdline syscall=%evt.type)
+    priority: High
+    tags: [container, system]
+
+  # 检测未授权的容器执行
+  - rule: Unauthorized Container Execution
+    desc: 检测未授权的容器执行
+    condition: >
+      spawned_process and
+      proc.name in (docker, podman, runc, containerd) and
+      not user.name in (root, docker, kubelet)
+    output: >
+      Unauthorized container execution detected (user=%user.name command=%proc.cmdline)
+    priority: High
+    tags: [container, execution]
+
+  # 检测敏感文件访问
+  - rule: Sensitive File Access in Container
+    desc: 检测对敏感文件的访问
+    condition: >
+      (open_read or open_write) and
+      container and
+      fd.name in (/etc/passwd, /etc/shadow, /etc/sudoers, /root/.ssh/,
+      /etc/ssh/, /home/*/.ssh/, /etc/cron.*, /var/spool/cron/)
+    output: >
+      Sensitive file access detected (user=%user.name container=%container.name
+      file=%fd.name operation=%evt.type)
+    priority: Medium
+    tags: [container, file]
+
+  # 检测容器内网络扫描
+  - rule: Network Scanning in Container
+    desc: 检测容器内的网络扫描行为
+    condition: >
+      spawned_process and
+      container and
+      proc.name in (nmap, netcat, nc, masscan, zmap) and
+      proc.args contains "-p"
+    output: >
+      Network scanning detected (user=%user.name container=%container.name
+      command=%proc.cmdline)
+    priority: High
+    tags: [container, network]
+
+  # 检测容器内加密货币挖矿
+  - rule: Cryptocurrency Mining in Container
+    desc: 检测容器内的加密货币挖矿行为
+    condition: >
+      spawned_process and
+      container and
+      (
+        proc.name in (xmrig, cgminer, bfgminer, cpuminer) or
+        proc.args contains "stratum+tcp" or
+        proc.args contains "mining" or
+        proc.args contains "-o stratum"
+      )
+    output: >
+      Cryptocurrency mining detected (user=%user.name container=%container.name
+      command=%proc.cmdline)
+    priority: Critical
+    tags: [container, mining]
+
+  # 检测异常的网络连接
+  - rule: Unexpected Network Connection
+    desc: 检测容器内异常的网络连接
+    condition: >
+      spawned_process and
+      container and
+      (
+        (proc.name in (nc, netcat) and proc.args contains "-l") or
+        (proc.name = python and proc.args contains "socket.socket") or
+        (proc.name = telnet)
+      )
+    output: >
+      Unexpected network connection detected (user=%user.name container=%container.name
+      command=%proc.cmdline)
+    priority: Medium
+    tags: [container, network]
+
+  # 检测包嗅探
+  - rule: Packet Sniffing in Container
+    desc: 检测容器内的包嗅探行为
+    condition: >
+      spawned_process and
+      container and
+      proc.name in (tcpdump, wireshark, tshark, ngrep, mitmproxy)
+    output: >
+      Packet sniffing detected (user=%user.name container=%container.name
+      command=%proc.cmdline)
+    priority: High
+    tags: [container, network]
+
+  # 检测文件完整性修改
+  - rule: File Integrity Violation
+    desc: 检测关键文件的完整性修改
+    condition: >
+      (open_write or rename) and
+      container and
+      (
+        fd.name in (/app/*.py, /app/*.js, /app/*.config) or
+        fd.name contains "/etc/" or
+        fd.name contains "/usr/bin/" or
+        fd.name contains "/usr/sbin/"
+      )
+    output: >
+      File integrity violation detected (user=%user.name container=%container.name
+      file=%fd.name operation=%evt.type)
+    priority: Medium
+    tags: [container, file]
+
+# 规则增强
+rule_enhancements:
+  # 增强默认的容器规则
+  - name: Terminal shell in container
+    enhancements:
+      # 添加更多shell程序
+      additional_patterns:
+        - proc.name in (zsh, ksh, csh, tcsh, fish)
+        - proc.args contains "ipython"
+        - proc.args contains "python -c"
+      # 排除合法的shell使用
+      exceptions:
+        - container.image contains "athena/platform"
+        - user.name in (athena, app)
+
+  # 增强容器挂载敏感目录的检测
+  - name: Mount sensitive host directory
+    enhancements:
+      additional_patterns:
+        - mount.dest contains "/etc/ssh"
+        - mount.dest contains "/root/.ssh"
+        - mount.dest contains "/var/log"
+        - mount.dest contains "/proc/sys"
+      # 更详细的输出
+      output_template: >
+        Sensitive host directory mounted (user=%user.name container=%container.name
+        mount.source=%mount.source mount.dest=%mount.dest command=%proc.cmdline)
+
+# 宏定义
+macros:
+  # 可疑网络连接宏
+  - name: suspicious_network_activity
+    condition: >
+      (proc.name in (curl, wget, nc, netcat) and
+       (proc.args contains "http://" or proc.args contains "https://")) and
+      not proc.args contains "api.openai.com" and
+      not proc.args contains "api.github.com" and
+      not container.image contains "monitoring"
+
+  # 可疑进程执行宏
+  - name: suspicious_process_execution
+    condition: >
+      spawned_process and
+      container and
+      (
+        proc.name in (bash, sh, zsh, python, perl) and
+        (proc.args contains "eval" or proc.args contains "exec" or proc.args contains "$(")
+      )
+
+# 告警输出格式
+output_formats:
+  # Slack格式
+  - name: slack
+    template: |
+      :warning: *Falco Alert*
+      *Rule*: %rule.desc
+      *Priority*: %priority
+      *Container*: %container.name
+      *User*: %user.name
+      *Command*: %proc.cmdline
+      *Time*: %evt.time
+
+  # ELK格式
+  - name: elk
+    template: |
+      {
+        "@timestamp": "%evt.time",
+        "falco": {
+          "rule": "%rule.name",
+          "priority": "%priority",
+          "output": "%output"
+        },
+        "container": {
+          "name": "%container.name",
+          "image": "%container.image"
+        },
+        "process": {
+          "name": "%proc.name",
+          "cmdline": "%proc.cmdline"
+        },
+        "user": {
+          "name": "%user.name",
+          "uid": "%user.uid"
+        }
+      }

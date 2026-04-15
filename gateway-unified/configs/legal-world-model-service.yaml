@@ -1,0 +1,111 @@
+# 法律世界模型服务 - Gateway注册配置
+# Legal World Model Service - Gateway Registration Configuration
+
+# 服务实例配置
+service_instances:
+  - name: "legal-world-model"
+    id: "legal-world-model-1"
+    host: "localhost"
+    port: 8020
+    weight: 100
+    metadata:
+      version: "1.0.0"
+      description: "法律世界模型API服务 - 提供法律知识检索、场景规则查询、动态提示词生成"
+      environment: "production"
+      dependencies:
+        - neo4j
+        - postgresql
+      capabilities:
+        - dynamic_prompt_generation
+        - scenario_rules_retrieval
+        - legal_knowledge_graph
+        - health_check
+
+# 路由规则配置
+routes:
+  # 动态提示词生成路由
+  - id: "route-legal-world-model-generate-prompt"
+    path: "/api/legal-world-model/v1/generate-prompt"
+    target_service: "legal-world-model"
+    methods: ["POST"]
+    strip_path: false
+    metadata:
+      description: "生成动态提示词"
+      capability: "dynamic_prompt_generation"
+
+  # 场景规则检索路由
+  - id: "route-legal-world-model-retrieve-rules"
+    path: "/api/legal-world-model/v1/retrieve-rules"
+    target_service: "legal-world-model"
+    methods: ["POST"]
+    strip_path: false
+    metadata:
+      description: "检索场景规则"
+      capability: "scenario_rules_retrieval"
+
+  # 场景列表路由
+  - id: "route-legal-world-model-scenarios"
+    path: "/api/legal-world-model/v1/scenarios"
+    target_service: "legal-world-model"
+    methods: ["GET"]
+    strip_path: false
+    metadata:
+      description: "列出所有可用场景"
+
+  # 层级信息路由
+  - id: "route-legal-world-model-layers"
+    path: "/api/legal-world-model/v1/layers"
+    target_service: "legal-world-model"
+    methods: ["GET"]
+    strip_path: false
+    metadata:
+      description: "列出法律世界模型层级"
+
+  # 统计信息路由
+  - id: "route-legal-world-model-stats"
+    path: "/api/legal-world-model/v1/stats"
+    target_service: "legal-world-model"
+    methods: ["GET"]
+    strip_path: false
+    metadata:
+      description: "获取统计信息"
+
+  # 健康检查路由
+  - id: "route-legal-world-model-health"
+    path: "/api/legal-world-model/health"
+    target_service: "legal-world-model"
+    methods: ["GET"]
+    strip_path: false
+    metadata:
+      description: "健康检查"
+
+  # 根路径路由（服务信息）
+  - id: "route-legal-world-model-root"
+    path: "/api/legal-world-model"
+    target_service: "legal-world-model"
+    methods: ["GET"]
+    strip_path: false
+    metadata:
+      description: "服务信息"
+
+# 服务依赖配置
+dependencies:
+  - service: "legal-world-model"
+    depends_on:
+      - "neo4j"
+      - "postgresql"
+
+# 健康检查配置
+health_check:
+  enabled: true
+  interval: 30  # 每30秒检查一次
+  timeout: 5
+  endpoint: "/health"
+  expected_status: 200
+  failure_threshold: 3
+  success_threshold: 2
+
+# 负载均衡配置
+load_balancing:
+  algorithm: "round_robin"
+  session_affinity: false

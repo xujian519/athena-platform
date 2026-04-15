@@ -1,0 +1,117 @@
+# Athena服务自动释放配置文件
+# Service Auto-Release Configuration
+
+# 全局配置
+global:
+  # 是否启用自动释放功能
+  enabled: true
+
+  # 默认空闲超时时间（秒）
+  # 3600 = 60分钟
+  # 1800 = 30分钟
+  # 7200 = 2小时
+  idle_timeout: 3600
+
+  # 清理检查间隔（秒）
+  # 300 = 5分钟检查一次
+  cleanup_interval: 300
+
+# 服务级别配置
+services:
+  # 核心服务（永不停止）
+  gateway:
+    service_name: "Gateway网关服务"
+    service_type: "gateway"
+    auto_stop: false
+    idle_timeout: null  # null表示使用全局配置
+
+  xiaonuo:
+    service_name: "小诺调度中心"
+    service_type: "xiaonuo"
+    auto_stop: false
+    idle_timeout: null
+
+  # 业务服务（自动停止）
+  xiaona:
+    service_name: "小娜法律专家"
+    service_type: "xiaona"
+    auto_stop: true
+    idle_timeout: 3600  # 60分钟
+
+  yunxi:
+    service_name: "云熙IP管理"
+    service_type: "yunxi"
+    auto_stop: true
+    idle_timeout: 3600
+
+  xiaochen:
+    service_name: "小宸自媒体"
+    service_type: "xiaochen"
+    auto_stop: true
+    idle_timeout: 1800  # 30分钟
+
+  # API服务
+  api:
+    service_name: "API主服务"
+    service_type: "api"
+    auto_stop: false
+    idle_timeout: null
+
+  # 支撑服务
+  cache:
+    service_name: "缓存服务"
+    service_type: "cache"
+    auto_stop: true
+    idle_timeout: 3600
+
+  nlp:
+    service_name: "NLP服务"
+    service_type: "nlp"
+    auto_stop: true
+    idle_timeout: 3600
+
+  monitor:
+    service_name: "监控系统"
+    service_type: "monitor"
+    auto_stop: true
+    idle_timeout: 3600
+
+  optimization:
+    service_name: "优化服务"
+    service_type: "optimization"
+    auto_stop: true
+    idle_timeout: 1800  # 30分钟
+
+  memory:
+    service_name: "统一记忆系统"
+    service_type: "api"
+    auto_stop: true
+    idle_timeout: 3600
+
+  agent:
+    service_name: "Athena智能体"
+    service_type: "agent"
+    auto_stop: true
+    idle_timeout: 3600
+
+# 预设配置
+presets:
+  # 开发环境：较短的超时时间
+  development:
+    idle_timeout: 600     # 10分钟
+    cleanup_interval: 60  # 1分钟检查一次
+
+  # 测试环境：较短的超时时间
+  testing:
+    idle_timeout: 300     # 5分钟
+    cleanup_interval: 30  # 30秒检查一次
+
+  # 生产环境：标准的超时时间
+  production:
+    idle_timeout: 3600    # 60分钟
+    cleanup_interval: 300 # 5分钟检查一次
+
+  # 长时间运行：更长的超时时间
+  long_running:
+    idle_timeout: 7200    # 2小时
+    cleanup_interval: 600 # 10分钟检查一次

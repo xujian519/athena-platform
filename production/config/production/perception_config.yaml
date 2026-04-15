@@ -1,0 +1,218 @@
+# Athena 感知模块 - 生产环境配置
+# 最后更新: 2026-01-26
+
+# 服务配置
+service:
+  name: "athena-perception"
+  version: "1.0.0"
+  environment: "production"
+  debug: false
+  log_level: "INFO"  # 生产环境使用INFO级别
+
+# OCR配置
+ocr:
+  engine: "tesseract"
+  tesseract_path: "/usr/local/bin/tesseract"
+  tesseract_data_path: "/usr/local/share/tessdata"
+
+  # 支持的语言
+  languages:
+    - chinese    # 简体中文
+    - english    # 英文
+
+  # 图像预处理配置
+  preprocessing:
+    enabled: true
+    denoise: true
+    binarize: true
+    contrast_enhancement: true
+    resize_max_dimension: 2000  # 最大尺寸限制
+
+  # 性能配置
+  performance:
+    max_image_size_mb: 10      # 最大图像大小10MB
+    timeout_seconds: 30         # 单次OCR超时30秒
+    concurrent_limit: 20        # 最大并发数20
+
+# 图像处理配置
+image_processing:
+  max_resolution: 4096         # 最大分辨率
+  supported_formats:
+    - png
+    - jpg
+    - jpeg
+    - bmp
+    - tiff
+  default_dpi: 300
+
+# Redis缓存配置
+redis:
+  host: "localhost"
+  port: 6379
+  db: 0
+  password: null  # 生产环境应设置密码
+
+  # 缓存策略
+  cache_ttl:
+    ocr_result: 900          # OCR结果缓存15分钟
+    image_features: 1800     # 图像特征缓存30分钟
+    preprocessing_result: 600 # 预处理结果缓存10分钟
+
+  # 连接池配置
+  pool:
+    max_connections: 50
+    timeout: 5
+    retry_on_timeout: true
+    max_retries: 3
+
+# 任务队列配置
+task_queue:
+  max_concurrent_tasks: 20    # 最大并发任务数
+  max_queue_size: 1000        # 队列最大长度
+  task_timeout: 60            # 任务超时时间(秒)
+
+  # 优先级配置
+  priority:
+    high: 1     # 高优先级权重
+    normal: 2   # 普通优先级权重
+    low: 3      # 低优先级权重
+
+# 错误处理配置
+error_handling:
+  # 重试策略
+  retry:
+    max_attempts: 3
+    strategy: "exponential"  # exponential, linear, adaptive
+    base_delay: 0.5
+    max_delay: 10.0
+    jitter: true
+
+  # 错误分类阈值
+  thresholds:
+    validation_error_rate: 5      # 验证错误率阈值5%
+    processing_error_rate: 10     # 处理错误率阈值10%
+    timeout_error_rate: 5         # 超时错误率阈值5%
+    external_error_rate: 15       # 外部错误率阈值15%
+
+# 熔断器配置
+circuit_breaker:
+  # 失败阈值
+  failure_threshold: 5
+  success_threshold: 2
+
+  # 超时配置
+  timeout: 60           # 熔断超时(秒)
+  rolling_window: 60    # 滚动窗口(秒)
+
+  # 服务降级
+  degradation:
+    enabled: true
+    fallback_timeout: 10
+
+# 监控配置
+monitoring:
+  # 性能指标
+  metrics:
+    enabled: true
+    collect_interval: 60  # 收集间隔(秒)
+
+  # 告警阈值
+  alerts:
+    response_time_p95_ms: 500      # P95响应时间告警
+    response_time_p99_ms: 1000     # P99响应时间告警
+    error_rate_percent: 5          # 错误率告警
+    memory_usage_percent: 80       # 内存使用率告警
+    cpu_usage_percent: 85          # CPU使用率告警
+
+  # 资源限制
+  resource_limits:
+    max_memory_mb: 2048      # 最大内存2GB
+    max_cpu_percent: 90      # 最大CPU使用率
+    max_open_files: 1000     # 最大文件描述符数
+    gc_threshold: 0.8        # GC触发阈值
+
+# 日志配置
+logging:
+  level: "INFO"
+  format: "json"  # 生产环境使用JSON格式日志
+
+  # 日志文件
+  file:
+    enabled: true
+    path: "/var/log/athena/perception.log"
+    max_size_mb: 100
+    backup_count: 10
+
+  # 日志轮转
+  rotation:
+    when: "midnight"
+    interval: 1
+    backupCount: 30
+
+# API配置（如果提供API服务）
+api:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4  # uvicorn worker进程数
+
+  # 限流配置
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 600
+    burst: 100
+
+  # CORS配置
+  cors:
+    enabled: true
+    origins:
+      - "https://athena.example.com"
+    methods:
+      - GET
+      - POST
+    headers:
+      - Content-Type
+      - Authorization
+
+# 健康检查配置
+health_check:
+  enabled: true
+  endpoint: "/health"
+  interval: 30  # 检查间隔(秒)
+  timeout: 10   # 检查超时(秒)
+
+  # 检查项
+  checks:
+    redis: true
+    tesseract: true
+    disk_space: true
+    memory: true
+
+# 备份配置
+backup:
+  enabled: true
+  schedule: "0 2 * * *"  # 每天凌晨2点
+  retention_days: 30
+
+  paths:
+    - "/var/cache/athena/perception"
+    - "/var/log/athena"
+
+# 安全配置
+security:
+  # 输入验证
+  validation:
+    max_request_size_mb: 20
+    allowed_content_types:
+      - "image/png"
+      - "image/jpeg"
+      - "image/bmp"
+
+  # 速率限制
+  rate_limits:
+    per_ip: 100          # 每IP每分钟请求数
+    per_user: 200        # 每用户每分钟请求数
+
+  # 超时配置
+  timeouts:
+    read: 30
+    connect: 10

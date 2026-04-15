@@ -1,0 +1,96 @@
+# ========================================
+# Athena平台 - 开发环境配置
+# Development Environment Configuration
+# ========================================
+# 说明: 开发环境专用配置，覆盖base.yaml中的值
+# 创建时间: 2025-12-29
+# ========================================
+
+# ========== 环境标识 ==========
+platform:
+  environment: "development"
+  debug: true
+
+# ========== 日志配置 ==========
+logging:
+  level: "DEBUG"
+  format: "text"  # 开发环境使用文本格式，便于阅读
+  output:
+    - type: "console"
+      level: "DEBUG"
+    - type: "file"
+      level: "DEBUG"
+      path: "./logs/athena_dev.log"
+
+# ========== API服务配置 ==========
+api:
+  host: "127.0.0.1"  # 开发环境只监听本地
+  port: 8000
+  workers: 1
+  reload: true  # 开发环境自动重载
+  
+  cors:
+    origins: "*"  # 开发环境允许所有来源
+
+# ========== 数据库配置 ==========
+database:
+  postgres:
+    host: "localhost"
+    port: 5432
+    user: "athena_dev"
+    password: "dev_password"
+    database: "athena_dev"
+    pool_size: 5
+    max_overflow: 10
+    
+  sqlite:
+    path: "./data/knowledge_graph_sqlite/athena_dev.db"
+    
+  qdrant:
+    host: "localhost"
+    port: 6333
+    collection: "athena_vectors_dev"
+
+# ========== Redis配置 ==========
+redis:
+  host: "localhost"
+  port: 6379
+  db: 0
+  password: ""
+  
+  cache:
+    default_ttl: 300  # 开发环境5分钟缓存
+
+# ========== AI模型配置 ==========
+models:
+  embedding:
+    model: "bge-m3"  # 统一使用BGE-M3
+    device: "cpu"
+    batch_size: 16
+    dimension: 1024
+    max_seq_length: 8192
+    
+  llm:
+    provider: "openai"
+    model: "gpt-3.5-turbo"  # 开发环境使用更便宜的模型
+    temperature: 0.7
+    
+  nlp:
+    device: "cpu"
+
+# ========== 调试配置 ==========
+debug:
+  enabled: true
+  sql_echo: true  # 打印SQL语句
+  profiling: false  # 性能分析
+  slow_query_threshold: 0.1  # 慢查询阈值（秒）
+
+# ========== 开发工具配置 ==========
+development:
+  hot_reload: true
+  auto_restart: true
+  test_mode: false
+  
+  # 开发时显示详细错误
+  show_traceback: true
+  detailed_errors: true

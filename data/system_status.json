@@ -1,0 +1,17 @@
+{
+  "infrastructure": {
+    "postgresql": "healthy",
+    "neo4j": "healthy",
+    "qdrant": "healthy",
+    "redis": "error"
+  },
+  "services": {
+    "gateway": "healthy",
+    "legal_world_model": "stopped"
+  },
+  "agents": {
+    "xiaonuo": "running",
+    "xiaona": "running"
+  },
+  "overall_health": false
+}

@@ -1,0 +1,62 @@
+{
+  "timestamp": "20251221_103028",
+  "reports/reports/results": {
+    "apple_silicon": {
+      "status": "success",
+      "device": "mps",
+      "performance": {
+        "batch_1": {
+          "avg_time_ms": 1.0131359100341797,
+          "throughput": 987.0344048571563
+        },
+        "batch_8": {
+          "avg_time_ms": 2.1543025970458984,
+          "throughput": 3713.498749418978
+        },
+        "batch_16": {
+          "avg_time_ms": 2.7147531509399414,
+          "throughput": 5893.721863610416
+        },
+        "batch_32": {
+          "avg_time_ms": 3.884553909301758,
+          "throughput": 8237.754127539434
+        },
+        "batch_64": {
+          "avg_time_ms": 6.941342353820801,
+          "throughput": 9220.118636674326
+        }
+      },
+      "optimization_status": {
+        "mps_gpu": "✅ 已启用",
+        "mixed_precision": "✅ 已启用",
+        "async_processing": "✅ 已启用"
+      }
+    },
+    "intelligent_cache": {
+      "status": "failed",
+      "error": "no running event loop"
+    },
+    "precision": {
+      "status": "failed",
+      "error": "mat1 and mat2 shapes cannot be multiplied (16x100 and 1000x100)"
+    },
+    "parallel": {
+      "status": "success",
+      "performance": {
+        "serial_time": 0.06493091583251953,
+        "parallel_time": 0.00982809066772461,
+        "speedup": 6.606666343214788,
+        "results_match": false
+      }
+    },
+    "modules/modules/modules/memory/memory/modules/memory/memory/modules/modules/memory/memory/memory": {
+      "status": "failed",
+      "error": "cannot create weak reference to 'dict' object"
+    }
+  },
+  "summary": {
+    "total_tests": 5,
+    "passed_tests": 2,
+    "success_rate": 0.4
+  }
+}

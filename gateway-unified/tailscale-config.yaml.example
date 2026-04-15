@@ -1,0 +1,85 @@
+# Athena Gateway - Tailscale配置示例
+# 复制此文件为 gateway-config.yaml 并根据需要修改
+
+# 服务器配置
+server:
+  # 监听端口 (默认: 8005)
+  port: 8005
+  # 生产模式 (默认: false)
+  production: false
+  # 读取超时（秒）(默认: 30)
+  read_timeout: 30
+  # 写入超时（秒）(默认: 30)
+  write_timeout: 30
+  # 空闲超时（秒）(默认: 120)
+  idle_timeout: 120
+
+# 日志配置
+logging:
+  # 日志级别: debug, info, warn, error (默认: info)
+  level: info
+  # 日志格式: json, text (默认: json)
+  format: json
+  # 输出目标: stdout, stderr, 或文件路径 (默认: stdout)
+  output: stdout
+
+# 监控配置
+monitoring:
+  # 启用Prometheus指标 (默认: false)
+  enabled: false
+  # 指标服务端口 (默认: 9090)
+  port: 9090
+  # 指标路径 (默认: /metrics)
+  path: /metrics
+
+# ========================================
+# Tailscale配置 - Tailnet内部访问 (推荐)
+# ========================================
+# 此模式仅允许Tailnet内部设备访问Gateway
+# 使用Tailscale提供的HTTPS证书
+
+tailscale:
+  # 模式: off, serve, funnel
+  # - off: 默认，不使用Tailscale
+  # - serve: Tailnet内部访问，通过tailscale serve
+  # - funnel: 公共HTTPS访问，通过tailscale funnel
+  mode: serve
+
+  # 退出时重置Tailscale配置 (默认: true)
+  reset_on_exit: true
+
+  # 是否允许Tailscale身份认证 (默认: true)
+  # 当启用时，可以通过Tailscale身份头进行无密码认证
+  allow_tailscale_auth: true
+
+# 认证配置 (可选)
+# 如果需要额外的认证层，可以配置token或password
+auth:
+  # 认证模式: token, password, 或留空表示不认证
+  # serve模式下可以使用Tailscale身份认证，无需额外配置
+  mode: ""
+
+  # Token认证（也可以通过环境变量GATEWAY_AUTH_TOKEN设置）
+  # token: "your-secure-token"
+
+  # 密码认证（也可以通过环境变量GATEWAY_AUTH_PASSWORD设置）
+  # password: "your-secure-password"
+
+# ========================================
+# 访问方式说明
+# ========================================
+# 1. 启动Gateway后，自动配置Tailscale Serve
+# 2. 访问地址: https://<hostname>.<tailnet>.ts.net/
+# 3. 仅Tailnet内设备可访问
+# 4. 使用Tailscale提供的HTTPS证书，无需手动配置TLS
+
+# ========================================
+# 环境变量支持
+# ========================================
+# 也可以通过环境变量配置:
+# - GATEWAY_TAILSCALE_MODE=serve
+# - GATEWAY_TAILSCALE_RESET_ON_EXIT=true
+# - GATEWAY_TAILSCALE_ALLOW_AUTH=true
+# - GATEWAY_AUTH_MODE=token
+# - GATEWAY_AUTH_TOKEN=your-token
+# - OPENCLAW_GATEWAY_TOKEN=your-token (兼容OpenClaw格式)

@@ -1,0 +1,77 @@
+# Athena工作平台 - PostgreSQL 数据库配置
+
+# 生产环境配置
+production:
+  host: "localhost"
+  port: 5432
+  database: "athena_legal"
+  username: "athena_user"
+  password: "${DB_PASSWORD}"  # 使用环境变量
+  pool_size: 20
+  max_overflow: 30
+  pool_timeout: 30
+  pool_recycle: 3600
+  echo: false
+  ssl_mode: "prefer"
+
+  # 连接池配置
+  pool:
+    size: 20
+    max_overflow: 30
+    timeout: 30
+    recycle: 3600
+    pre_ping: true
+
+  # 性能配置
+  performance:
+    query_timeout: 30
+    connection_timeout: 10
+    statement_timeout: 30000
+    idle_in_transaction_session_timeout: 60000
+
+# 开发环境配置
+development:
+  host: "localhost"
+  port: 5432
+  database: "athena_dev"
+  username: "dev_user"
+  password: "${DEV_DB_PASSWORD}"
+  pool_size: 5
+  max_overflow: 10
+  echo: true  # 开发环境启用SQL日志
+  ssl_mode: "disable"
+
+# 测试环境配置
+testing:
+  host: "localhost"
+  port: 5432
+  database: "athena_test"
+  username: "test_user"
+  password: "${TEST_DB_PASSWORD}"
+  pool_size: 3
+  max_overflow: 5
+  echo: false
+  ssl_mode: "disable"
+
+# 备份配置
+backup:
+  enabled: true
+  schedule: "0 2 * * *"  # 每天凌晨2点
+  retention_days: 30
+  backup_path: "/var/backups/athena/db"
+  compression: true
+  encryption: true
+
+# 监控配置
+monitoring:
+  enabled: true
+  metrics_interval: 60
+  slow_query_threshold: 1000  # 毫秒
+  connection_pool_monitoring: true
+
+# 健康检查
+health_check:
+  enabled: true
+  interval: 30
+  timeout: 5
+  retry_attempts: 3

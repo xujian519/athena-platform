@@ -1,0 +1,28 @@
+{
+  "import_time": "2025-12-20T23:38:43.014020",
+  "statistics": {
+    "mode": "simulation",
+    "entities": {
+      "PATENT": 3,
+      "LEGAL": 12
+    },
+    "relations": {
+      "related": 1,
+      "granted": 1,
+      "requires": 3,
+      "regulates": 3,
+      "implements": 1,
+      "provided": 1,
+      "interprets": 1,
+      "governed": 1,
+      "determines": 1,
+      "defines": 3
+    },
+    "total_entities": 15,
+    "total_relations": 16
+  },
+  "entities_count": 15,
+  "relations_count": 16,
+  "data_source": "专利法律法规",
+  "version": "v1.0.0"
+}

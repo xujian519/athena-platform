@@ -1,0 +1,143 @@
+{
+  "timestamp": "2026-03-06T09:59:46.121063",
+  "postgresql": {
+    "host": "localhost",
+    "port": 5432,
+    "database": "postgres",
+    "total_size": "8237 MB (8.04 GB)",
+    "total_size_bytes": 8637533311
+  },
+  "qdrant": {
+    "host": "localhost",
+    "port": 6333,
+    "collections_count": 23,
+    "status": "connected"
+  },
+  "neo4j": {
+    "host": "localhost",
+    "port": 7687,
+    "nodes": 397064,
+    "relationships": 64607,
+    "labels": 11,
+    "status": "connected"
+  },
+  "data_layers": {
+    "postgresql": {
+      "layer_name": "法律文档层",
+      "tables": [
+        {
+          "table": "legal_articles_v2_embeddings",
+          "size": "4041 MB",
+          "size_bytes": 4237049856
+        },
+        {
+          "table": "patent_invalid_embeddings",
+          "size": "1777 MB",
+          "size_bytes": 1863827456
+        },
+        {
+          "table": "patent_invalid_decisions",
+          "size": "898 MB",
+          "size_bytes": 941178880
+        },
+        {
+          "table": "legal_articles_v2",
+          "size": "323 MB",
+          "size_bytes": 338739200
+        },
+        {
+          "table": "patent_invalid_entities",
+          "size": "320 MB",
+          "size_bytes": 335249408
+        },
+        {
+          "table": "judgment_embeddings",
+          "size": "273 MB",
+          "size_bytes": 285745152
+        },
+        {
+          "table": "patent_judgment_vectors",
+          "size": "231 MB",
+          "size_bytes": 242253824
+        },
+        {
+          "table": "judgment_entities",
+          "size": "147 MB",
+          "size_bytes": 153952256
+        },
+        {
+          "table": "patent_decisions_v2",
+          "size": "93 MB",
+          "size_bytes": 97017856
+        },
+        {
+          "table": "patent_decisions_v1",
+          "size": "65 MB",
+          "size_bytes": 68075520
+        },
+        {
+          "table": "patent_judgment_cases",
+          "size": "28 MB",
+          "size_bytes": 29769728
+        },
+        {
+          "table": "judgment_relations",
+          "size": "11 MB",
+          "size_bytes": 11583488
+        },
+        {
+          "table": "patent_judgments",
+          "size": "11 MB",
+          "size_bytes": 11010048
+        },
+        {
+          "table": "judgment_law_articles",
+          "size": "4640 kB",
+          "size_bytes": 4751360
+        },
+        {
+          "table": "patent_rules_unified",
+          "size": "4192 kB",
+          "size_bytes": 4292608
+        },
+        {
+          "table": "judgment_courts",
+          "size": "2432 kB",
+          "size_bytes": 2490368
+        },
+        {
+          "table": "judgment_patent_numbers",
+          "size": "904 kB",
+          "size_bytes": 925696
+        },
+        {
+          "table": "judgment_vector_stats",
+          "size": "656 kB",
+          "size_bytes": 671744
+        },
+        {
+          "table": "legal_documents",
+          "size": "368 kB",
+          "size_bytes": 376832
+        },
+        {
+          "table": "patent_rules_unified_embeddings",
+          "size": "40 kB",
+          "size_bytes": 40960
+        },
+        {
+          "table": "judgment_paragraphs",
+          "size": "32 kB",
+          "size_bytes": 32768
+        }
+      ],
+      "total_size_gb": 8.036415100097656
+    }
+  },
+  "data_categories": {
+    "legal_documents": "4369 MB",
+    "judgments": "709 MB",
+    "patent_invalid": "2995 MB",
+    "embeddings": "6091 MB"
+  }
+}

@@ -1,0 +1,192 @@
+# 小诺优化配置 - 生产环境阶段3 (完整功能)
+# Xiaonuo Optimization Configuration - Production Stage 3 (Full Feature Set)
+#
+# 阶段3: 完整优化功能（第4周及以后）
+# 所有优化模块全部启用
+
+# ============================================================
+# 阶段3: 完整优化功能
+# ============================================================
+
+optimizations:
+  enabled: true  # ✅ 启用优化
+  fallback_on_error: true  # ✅ 失败时自动降级
+
+# 工具发现模块 - 启用
+tool_discovery:
+  enabled: true  # ✅ 阶段3继续启用
+  config:
+    enable_embedding: false  # 不使用语义嵌入（保持轻量级）
+    coarse_threshold: 0.3
+    fine_threshold: 0.6
+    max_tools: 5
+    enable_cache: true
+    cache_ttl_seconds: 300
+
+# 参数验证模块 - 启用
+parameter_validation:
+  enabled: true  # ✅ 继续启用
+  config:
+    enable_cache: true
+    cache_max_size: 2000
+    cache_ttl_seconds: 600
+    max_concurrent_validations: 20
+
+# 错误预测模块 - 阶段3启用 ✨ NEW!
+error_prediction:
+  enabled: true  # ✅ 阶段3启用
+  config:
+    enable_online_learning: true  # 在线学习
+    window_size: 500  # 滑动窗口大小
+    prediction_horizon_minutes: 10  # 预测时间范围
+    min_confidence: 0.3  # 最小置信度
+    ensemble_models: true  # 使用集成模型
+
+# ============================================================
+# 监控配置
+# ============================================================
+
+monitoring:
+  enabled: true
+  stats_interval_seconds: 60
+  log_metrics: true
+  log_level: "INFO"
+
+# ============================================================
+# 告警阈值（阶段3调整）
+# ============================================================
+
+alerts:
+  # 优化失败率告警
+  optimization_failure_rate: 0.05  # 5%
+
+  # 缓存命中率告警
+  cache_hit_rate_threshold: 0.5  # 50%
+
+  # 响应时间告警（阶段3完整响应）
+  validation_response_time_ms: 1000  # 1000ms (包含所有模块)
+
+  # 工具发现准确率告警
+  tool_discovery_accuracy: 0.90  # 90%
+
+  # 错误预测准确率告警（新增）
+  error_prediction_accuracy: 0.70  # 70%
+
+  # 错误预防率告警（新增）
+  error_prevention_rate: 0.50  # 50%
+
+# ============================================================
+# 集成策略
+# ============================================================
+
+integration:
+  # 工具发现集成点
+  tool_selection:
+    enabled: true
+    min_confidence: 0.5
+    max_tools: 5
+
+  # 参数验证集成点
+  validation:
+    enabled: true
+    validate_before_execution: true
+    fail_on_invalid: false
+
+  # 错误预测集成点 - 阶段3启用 ✨
+  prediction:
+    enabled: true  # ✅ 阶段3启用
+    predict_before_execution: true
+    min_risk_level: "MEDIUM"  # MEDIUM及以上才告警
+    auto_prevent: false  # 不自动阻止（仅警告）
+
+# ============================================================
+# 性能优化
+# ============================================================
+
+performance:
+  batch_size: 10
+
+  # 超时设置（阶段3完整）
+  validation_timeout_seconds: 5
+  tool_discovery_timeout_seconds: 3
+  prediction_timeout_seconds: 2  # 错误预测超时
+
+  # 内存限制
+  max_history_size: 1000
+
+# ============================================================
+# 错误预测配置（新增）
+# ============================================================
+
+error_prediction_config:
+  # 预测模型
+  models:
+    - name: "resource_exhaustion"
+      weight: 0.3
+    - name: "parameter_mismatch"
+      weight: 0.25
+    - name: "permission_denied"
+      weight: 0.2
+    - name: "timeout_risk"
+      weight: 0.15
+    - name: "dependency_failure"
+      weight: 0.1
+
+  # 学习策略
+  learning:
+    strategy: "sliding_window"  # 滑动窗口
+    update_frequency: 100  # 每100次预测更新一次
+    decay_factor: 0.95  # 历史数据衰减因子
+
+  # 告警级别
+  risk_levels:
+    LOW: 0.3
+    MEDIUM: 0.5
+    HIGH: 0.7
+    CRITICAL: 0.9
+
+# ============================================================
+# 安全配置
+# ============================================================
+
+security:
+  max_parameter_count: 50
+  max_parameter_size_kb: 10
+  strict_validation: false
+  filter_sensitive_data: true
+
+# ============================================================
+# 日志配置
+# ============================================================
+
+logging:
+  level: "INFO"
+  format: "json"
+  outputs:
+    - type: "console"
+    - type: "file"
+      path: "/var/log/xiaonuo/optimization.log"
+      max_size_mb: 100
+      max_backups: 10
+
+# ============================================================
+# 高级配置
+# ============================================================
+
+advanced:
+  # 优化流程顺序
+  pipeline:
+    1: "error_prediction"  # 先预测错误
+    2: "tool_discovery"    # 再发现工具
+    3: "parameter_validation"  # 最后验证参数
+
+  # 降级策略
+  fallback:
+    strategy: "graceful"  # 优雅降级
+    max_retries: 3
+    retry_delay_ms: 100
+
+  # 性能优化
+  optimization:
+    enable_parallel_processing: true  # 并行处理
+    max_parallel_tasks: 3  # 最多3个并行任务

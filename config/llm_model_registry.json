@@ -1,0 +1,353 @@
+{
+  "version": "2.1.0",
+  "last_updated": "2026-03-22",
+  "description": "Athena平台LLM模型注册表 - 云端模型 + 本地模型",
+  "models": [
+    {
+      "model_id": "litert-lm-gemma4-e4b",
+      "provider": "litert",
+      "model_type": "multimodal",
+      "quality_score": 0.85,
+      "cost_per_1k_tokens": 0.0,
+      "max_context": 4096,
+      "supports_streaming": true,
+      "supports_function_call": true,
+      "supports_vision": true,
+      "supports_thinking": false,
+      "deployment": "local",
+      "base_url": "http://127.0.0.1:8767",
+      "suitable_tasks": [
+        "image_analysis",
+        "multimodal",
+        "chart_analysis",
+        "document_analysis",
+        "ocr",
+        "visual_reasoning",
+        "chat",
+        "general_chat",
+        "chinese"
+      ],
+      "unsuitable_tasks": [
+        "novelty_analysis",
+        "creativity_analysis",
+        "invalidation_analysis",
+        "long_document",
+        "complex_reasoning"
+      ]
+    },
+    {
+      "model_id": "gemma-4-e2b-it-4bit",
+      "provider": "local",
+      "model_type": "multimodal",
+      "quality_score": 0.90,
+      "cost_per_1k_tokens": 0.0,
+      "max_context": 131072,
+      "supports_streaming": true,
+      "supports_function_call": true,
+      "supports_vision": true,
+      "supports_thinking": true,
+      "deployment": "local",
+      "base_url": "http://127.0.0.1:8009",
+      "api_key_env": "MULTIMODAL_API_KEY",
+      "suitable_tasks": [
+        "image_analysis",
+        "multimodal",
+        "chart_analysis",
+        "document_analysis",
+        "ocr",
+        "visual_reasoning",
+        "chat",
+        "general_chat",
+        "chinese",
+        "conversation",
+        "simple_chat",
+        "qa",
+        "simple_qa",
+        "fast_analysis"
+      ],
+      "unsuitable_tasks": [
+        "novelty_analysis",
+        "creativity_analysis",
+        "invalidation_analysis",
+        "complex_reasoning"
+      ]
+    },
+    {
+      "model_id": "qwen3.5",
+      "provider": "mlx",
+      "model_type": "multimodal",
+      "quality_score": 0.88,
+      "cost_per_1k_tokens": 0.0,
+      "max_context": 262144,
+      "supports_streaming": true,
+      "supports_function_call": true,
+      "supports_vision": true,
+      "supports_thinking": true,
+      "deployment": "local",
+      "base_url": "http://127.0.0.1:8765",
+      "suitable_tasks": [
+        "general_chat",
+        "conversation",
+        "simple_chat",
+        "qa",
+        "simple_qa",
+        "reasoning",
+        "tech_analysis",
+        "patent_search",
+        "fast_analysis",
+        "image_analysis",
+        "multimodal",
+        "chart_analysis",
+        "document_analysis",
+        "ocr",
+        "visual_reasoning",
+        "chinese",
+        "code_generation",
+        "code_explanation"
+      ],
+      "unsuitable_tasks": [
+        "novelty_analysis",
+        "creativity_analysis",
+        "invalidation_analysis",
+        "oa_response",
+        "complex_reasoning",
+        "math_reasoning"
+      ]
+    },
+    {
+      "model_id": "glm-4-plus",
+      "provider": "zhipuai",
+      "model_type": "reasoning",
+      "quality_score": 0.95,
+      "cost_per_1k_tokens": 0.05,
+      "max_context": 128000,
+      "supports_streaming": true,
+      "supports_function_call": true,
+      "supports_thinking": true,
+      "deployment": "cloud",
+      "api_key_env": "ZHIPUAI_API_KEY",
+      "base_url": "https://open.bigmodel.cn/api/paas/v4",
+      "suitable_tasks": [
+        "novelty_analysis",
+        "creativity_analysis",
+        "invalidation_analysis",
+        "oa_response",
+        "complex_reasoning"
+      ],
+      "unsuitable_tasks": []
+    },
+    {
+      "model_id": "glm-4-flash",
+      "provider": "zhipuai",
+      "model_type": "reasoning",
+      "quality_score": 0.90,
+      "cost_per_1k_tokens": 0.01,
+      "max_context": 128000,
+      "supports_streaming": true,
+      "supports_function_call": true,
+      "supports_thinking": true,
+      "deployment": "cloud",
+      "api_key_env": "ZHIPUAI_API_KEY",
+      "base_url": "https://open.bigmodel.cn/api/paas/v4",
+      "suitable_tasks": [
+        "fast_analysis",
+        "general_chat",
+        "simple_qa"
+      ],
+      "unsuitable_tasks": []
+    },
+    {
+      "model_id": "deepseek-chat",
+      "provider": "deepseek",
+      "model_type": "chat",
+      "quality_score": 0.85,
+      "cost_per_1k_tokens": 0.014,
+      "max_context": 64000,
+      "supports_streaming": true,
+      "supports_function_call": true,
+      "supports_thinking": false,
+      "deployment": "cloud",
+      "api_key_env": "DEEPSEEK_API_KEY",
+      "base_url": "https://api.deepseek.com/v1",
+      "suitable_tasks": [
+        "general_chat",
+        "conversation",
+        "qa",
+        "simple_chat"
+      ],
+      "unsuitable_tasks": []
+    },
+    {
+      "model_id": "deepseek-reasoner",
+      "provider": "deepseek",
+      "model_type": "reasoning",
+      "quality_score": 0.92,
+      "cost_per_1k_tokens": 0.055,
+      "max_context": 64000,
+      "supports_streaming": true,
+      "supports_function_call": true,
+      "supports_thinking": true,
+      "deployment": "cloud",
+      "api_key_env": "DEEPSEEK_API_KEY",
+      "base_url": "https://api.deepseek.com/v1",
+      "suitable_tasks": [
+        "novelty_analysis",
+        "creativity_analysis",
+        "invalidation_analysis",
+        "complex_reasoning"
+      ],
+      "unsuitable_tasks": []
+    },
+    {
+      "model_id": "deepseek-coder-v2",
+      "provider": "deepseek",
+      "model_type": "specialized",
+      "quality_score": 0.92,
+      "cost_per_1k_tokens": 0.014,
+      "max_context": 128000,
+      "supports_streaming": true,
+      "supports_function_call": true,
+      "supports_thinking": false,
+      "deployment": "cloud",
+      "api_key_env": "DEEPSEEK_API_KEY",
+      "base_url": "https://api.deepseek.com/v1",
+      "suitable_tasks": [
+        "code_generation",
+        "code_review",
+        "code_refactoring",
+        "debugging",
+        "code_explanation"
+      ],
+      "unsuitable_tasks": []
+    },
+    {
+      "model_id": "qwen-vl-max",
+      "provider": "qwen",
+      "model_type": "multimodal",
+      "quality_score": 0.94,
+      "cost_per_1k_tokens": 0.02,
+      "max_context": 30000,
+      "supports_streaming": true,
+      "supports_function_call": true,
+      "supports_vision": true,
+      "supports_thinking": false,
+      "deployment": "cloud",
+      "api_key_env": "DASHSCOPE_API_KEY",
+      "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "suitable_tasks": [
+        "image_analysis",
+        "multimodal",
+        "chart_analysis",
+        "document_analysis"
+      ],
+      "unsuitable_tasks": []
+    },
+    {
+      "model_id": "jina-reranker-v3-mlx",
+      "provider": "local",
+      "model_type": "rerank",
+      "quality_score": 0.92,
+      "cost_per_1k_tokens": 0.0,
+      "max_context": 8192,
+      "supports_streaming": false,
+      "supports_function_call": false,
+      "supports_vision": false,
+      "supports_thinking": false,
+      "deployment": "local",
+      "base_url": "http://127.0.0.1:8009",
+      "api_key_env": "RERANK_API_KEY",
+      "suitable_tasks": [
+        "rerank",
+        "relevance_scoring",
+        "document_ranking",
+        "search_reranking",
+        "patent_reranking"
+      ],
+      "unsuitable_tasks": [
+        "chat",
+        "generation",
+        "reasoning",
+        "code_generation"
+      ]
+    },
+    {
+      "model_id": "qwen-vl-plus",
+      "provider": "qwen",
+      "model_type": "multimodal",
+      "quality_score": 0.90,
+      "cost_per_1k_tokens": 0.008,
+      "max_context": 30000,
+      "supports_streaming": true,
+      "supports_function_call": true,
+      "supports_vision": true,
+      "supports_thinking": false,
+      "deployment": "cloud",
+      "api_key_env": "DASHSCOPE_API_KEY",
+      "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "suitable_tasks": [
+        "image_analysis",
+        "multimodal",
+        "simple_visual_qa"
+      ],
+      "unsuitable_tasks": []
+    }
+  ],
+  "default_models": {
+    "reasoning": "qwen3.5",
+    "chat": "qwen3.5",
+    "code": "deepseek-coder-v2",
+    "multimodal": "gemma-4-e2b-it-4bit",
+    "rerank": "jina-reranker-v3-mlx"
+  },
+  "complex_reasoning_models": {
+    "novelty_analysis": "deepseek-reasoner",
+    "creativity_analysis": "deepseek-reasoner",
+    "invalidation_analysis": "deepseek-reasoner",
+    "oa_response": "deepseek-reasoner",
+    "complex_reasoning": "deepseek-reasoner",
+    "math_reasoning": "deepseek-reasoner"
+  },
+  "selection_strategies": {
+    "cost_optimized": {
+      "description": "成本优化 - 优先使用低成本模型",
+      "weights": {
+        "cost": 0.40,
+        "quality": 0.30,
+        "performance": 0.30
+      }
+    },
+    "performance_optimized": {
+      "description": "性能优化 - 优先使用低延迟模型",
+      "weights": {
+        "cost": 0.20,
+        "quality": 0.30,
+        "performance": 0.50
+      }
+    },
+    "quality_optimized": {
+      "description": "质量优化 - 优先使用高质量模型",
+      "weights": {
+        "cost": 0.15,
+        "quality": 0.60,
+        "performance": 0.25
+      }
+    },
+    "balanced": {
+      "description": "平衡策略 - 综合考虑成本、性能、质量",
+      "weights": {
+        "cost": 0.30,
+        "quality": 0.35,
+        "performance": 0.35
+      }
+    },
+    "local_first": {
+      "description": "本地优先 - 优先使用本地模型",
+      "weights": {
+        "cost": 0.20,
+        "quality": 0.30,
+        "performance": 0.20,
+        "local_bonus": 0.30
+      }
+    }
+  }
+}

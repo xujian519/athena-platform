@@ -1,0 +1,206 @@
+[tool.poetry]
+name = "athena-intelligent-workplatform"
+version = "1.0.0"
+description = "Athena智能工作平台 - 企业级AI智能平台"
+authors = ["Athena Team"]
+readme = "README.md"
+packages = [{include = "core"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.104.0"
+uvicorn = {extras = ["standard"], version = "^0.24.0"}
+pydantic = "^2.0"
+asyncpg = "^0.29.0"
+redis = "^5.0.0"
+python-multipart = "^0.0.6"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+aiofiles = "^23.2.1"
+numpy = "^1.24.0"
+pandas = "^2.0.0"
+# AI/ML依赖
+scikit-learn = "^1.3.0"
+# 向量数据库
+qdrant-client = "^1.7.0"
+# 图数据库
+neo4j = "^5.15.0"
+# NLP/文本处理
+jieba = "^0.42.1"
+# HTTP客户端
+httpx = "^0.25.0"
+aiohttp = "^3.9.0"
+# 任务队列
+celery = "^5.3.0"
+# 图像处理
+pillow = "^10.1.0"
+# 数据验证
+pydantic-settings = "^2.0.0"
+# 日志
+loguru = "^0.7.0"
+# 工具库
+click = "^8.1.0"
+python-dotenv = "^1.0.0"
+tenacity = "^8.2.0"
+requests = "^2.33.1"
+psycopg2-binary = "^2.9.11"
+prometheus-client = "^0.24.1"
+psutil = "^7.2.2"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-cov = "^4.1.0"
+pytest-asyncio = "^0.21.0"
+pytest-mock = "^3.12.0"
+pytest-xdist = "^3.5.0"
+pytest-timeout = "^2.2.0"
+pytest-benchmark = "^4.0.0"
+black = "^23.12.0"
+ruff = "^0.1.0"
+mypy = "^1.7.0"
+pre-commit = "^3.6.0"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+pythonpath = [".", "production"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--strict-markers",
+    "--tb=short",
+    "--strict-config",
+    # 默认不启用覆盖率（在CI中单独启用）
+    # "--cov=core",
+    # "--cov-report=term-missing",
+    # "--cov-report=html:htmlcov",
+    # "--cov-report=xml:coverage.xml",
+    "--asyncio-mode=auto",
+]
+markers = [
+    # 测试类型标记
+    "unit: 单元测试（快速、无外部依赖）",
+    "integration: 集成测试（需要外部服务）",
+    "e2e: 端到端测试（完整流程）",
+    "performance: 性能测试（需要基准）",
+    "stress: 压力测试（高负载）",
+    "security: 安全测试（漏洞扫描）",
+    # 依赖标记
+    "slow: 慢速测试（执行时间>5秒）",
+    "fast: 快速测试（执行时间<1秒）",
+    "network: 需要网络连接",
+    "database: 需要数据库连接",
+    "docker: 需要Docker容器",
+    "gpu: 需要GPU支持",
+    "redis: 需要Redis服务",
+    # 功能标记
+    "cache: 缓存相关测试",
+    "agents: 智能体相关测试",
+    "perception: 感知模块测试",
+    "memory: 记忆系统测试",
+    "nlp: NLP模块测试",
+    # 回归标记
+    "regression: 回归测试（已知问题）",
+    "flaky: 不稳定测试（间歇性失败）",
+    # benchmark标记（兼容性）
+    "benchmark: 基准测试",
+]
+asyncio_mode = "auto"
+# 并行测试配置
+# 在命令行使用: pytest -n auto (自动检测CPU核心数)
+# 或: pytest -n 4 (使用4个worker)
+
+[tool.coverage.run]
+source = ["core"]
+omit = [
+    "*/tests/*",
+    "*/test_*.py",
+    "*/__pycache__/*",
+    "*/venv/*",
+    "*/athena_env/*",
+    "*/site-packages/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "@abstractmethod",
+    "@abc.abstractmethod",
+]
+precision = 2
+show_missing = true
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+  | athena_env
+)/
+'''
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # Pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+]
+ignore = [
+    "E501",  # line too long (handled by black)
+    "E402",  # module import not at top (intentional for lazy/conditional imports)
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]  # unused imports
+"tests/*" = ["S101"]      # assert allowed in tests
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+follow_imports = "normal"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

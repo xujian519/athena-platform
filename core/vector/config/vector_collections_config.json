@@ -1,0 +1,42 @@
+{
+  "legal_collections": {
+    "legal_main": {
+      "size": 1536,
+      "description": "法律主向量库",
+      "priority": "high",
+      "update_strategy": "incremental"
+    },
+    "legal_contracts": {
+      "size": 1024,
+      "description": "法律合同条款向量库",
+      "priority": "high",
+      "update_strategy": "batch"
+    },
+    "legal_ip": {
+      "size": 1024,
+      "description": "知识产权法向量库",
+      "priority": "high",
+      "update_strategy": "incremental"
+    }
+  },
+  "patent_collections": {
+    "patent_rules": {
+      "size": 1024,
+      "description": "专利规则向量库",
+      "priority": "high",
+      "update_strategy": "real_time"
+    },
+    "patent_applications": {
+      "size": 1536,
+      "description": "专利申请向量库",
+      "priority": "medium",
+      "update_strategy": "batch"
+    },
+    "patent_legal": {
+      "size": 1024,
+      "description": "专利法律向量库",
+      "priority": "high",
+      "update_strategy": "real_time"
+    }
+  }
+}

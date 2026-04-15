@@ -1,0 +1,79 @@
+# Athena工作平台Redis配置
+# Redis Configuration
+
+# 基本连接配置
+connection:
+  host: localhost
+  port: 6379
+  db: 0
+  password: null
+  encoding: utf-8
+  decode_responses: true
+
+# 连接池配置
+pool:
+  max_connections: 50
+  retry_on_timeout: true
+  socket_timeout: 30
+  socket_connect_timeout: 5
+
+# 缓存配置
+cache:
+  # 专利搜索缓存
+  patent_search:
+    ttl: 3600  # 1小时
+    prefix: "patent:search:"
+    max_entries: 10000
+
+  # 向量搜索缓存
+  vector_search:
+    ttl: 7200  # 2小时
+    prefix: "vector:search:"
+    max_entries: 5000
+
+  # 用户会话缓存
+  user_session:
+    ttl: 86400  # 24小时
+    prefix: "session:"
+    max_entries: 1000
+
+  # 分析结果缓存
+  analysis_result:
+    ttl: 1800  # 30分钟
+    prefix: "analysis:"
+    max_entries: 2000
+
+# 高可用配置
+high_availability:
+  enabled: false
+  sentinel_hosts:
+    - host: localhost
+      port: 26379
+  master_name: "mymaster"
+
+# 性能优化配置
+performance:
+  # 内存策略
+  maxmemory_policy: "allkeys-lru"
+
+  # 持久化配置
+  save:
+    - 900 1    # 900秒内有1个key变化就保存
+    - 300 10   # 300秒内有10个key变化就保存
+    - 60 10000 # 60秒内有10000个key变化就保存
+
+  # AOF配置
+  appendonly: true
+  appendfsync: "everysec"
+
+# 监控配置
+monitoring:
+  slowlog_log_slower_than: 10000  # 微秒
+  slowlog_max_len: 128
+
+# 集群配置
+cluster:
+  enabled: false
+  nodes:
+    - host: localhost
+      port: 7000

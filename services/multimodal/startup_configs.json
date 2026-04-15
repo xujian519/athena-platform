@@ -1,0 +1,113 @@
+{
+  "default_mode": "minimal",
+  "component_configs": {
+    "core": {
+      "enabled": true,
+      "description": "核心文件管理功能 - 基础必需"
+    },
+    "monitoring": {
+      "enabled": true,
+      "description": "性能监控 - 推荐启用",
+      "auto_start": true
+    },
+    "batch": {
+      "enabled": false,
+      "description": "批量处理 - 按需启动",
+      "auto_start": false,
+      "threshold": 5
+    },
+    "versioning": {
+      "enabled": false,
+      "description": "版本管理 - 重要文档推荐",
+      "auto_start": false
+    },
+    "ai": {
+      "enabled": false,
+      "description": "AI处理 - OCR/分析需要时启动",
+      "auto_start": false,
+      "trigger": true
+    },
+    "distributed_storage": {
+      "enabled": false,
+      "description": "云存储 - 大数据量时启用",
+      "auto_start": false
+    }
+  },
+  "startup_scenarios": {
+    "development": {
+      "mode": "full",
+      "description": "开发环境 - 启动所有功能",
+      "components": {
+        "monitoring": true,
+        "batch": true,
+        "versioning": true,
+        "ai": true
+      }
+    },
+    "production": {
+      "mode": "minimal",
+      "description": "生产环境 - 基础功能+监控",
+      "components": {
+        "monitoring": true,
+        "batch": false,
+        "versioning": true,
+        "ai": false
+      }
+    },
+    "testing": {
+      "mode": "custom",
+      "description": "测试环境 - 按测试需求启动",
+      "components": {
+        "monitoring": false,
+        "batch": true,
+        "versioning": false,
+        "ai": true
+      }
+    },
+    "document_processing": {
+      "mode": "custom",
+      "description": "文档处理场景 - OCR+版本管理",
+      "components": {
+        "monitoring": true,
+        "batch": true,
+        "versioning": true,
+        "ai": true
+      }
+    },
+    "file_sharing": {
+      "mode": "core",
+      "description": "文件共享场景 - 基础+监控",
+      "components": {
+        "monitoring": true,
+        "batch": false,
+        "versioning": false,
+        "ai": false
+      }
+    }
+  },
+  "auto_detection": {
+    "file_count_threshold": {
+      "batch": 5,
+      "versioning": 10,
+      "distributed_storage": 1000
+    },
+    "schedule_rules": [
+      {
+        "time": "09:00",
+        "days": ["monday", "wednesday", "friday"],
+        "components": ["monitoring", "batch"]
+      },
+      {
+        "time": "14:00",
+        "days": ["daily"],
+        "components": ["monitoring", "versioning"]
+      }
+    ]
+  },
+  "resource_limits": {
+    "memory_warning": 500,
+    "memory_critical": 1000,
+    "cpu_warning": 70,
+    "cpu_critical": 90
+  }
+}

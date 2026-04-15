@@ -1,0 +1,64 @@
+{
+  "timestamp": "2025-12-25T09:13:21.765490",
+  "total": 8,
+  "success": 8,
+  "failed": 0,
+  "reports/reports/results": [
+    {
+      "patent_number": "US8460931B2",
+      "status": "success",
+      "text_length": 223458,
+      "output_file": "/Users/xujian/Athena工作平台/apps/apps/patents/processed/US8460931B2.json",
+      "method": "direct_extraction"
+    },
+    {
+      "patent_number": "CN112233445A",
+      "status": "success",
+      "text_length": 10105,
+      "output_file": "/Users/xujian/Athena工作平台/apps/apps/patents/processed/CN112233445A.json",
+      "method": "direct_extraction"
+    },
+    {
+      "patent_number": "CN207305556U",
+      "status": "success",
+      "text_length": 101,
+      "output_file": "/Users/xujian/Athena工作平台/apps/apps/patents/processed/CN207305556U.json",
+      "method": "high_res_extraction"
+    },
+    {
+      "patent_number": "CN205249962U",
+      "status": "success",
+      "text_length": 86,
+      "output_file": "/Users/xujian/Athena工作平台/apps/apps/patents/processed/CN205249962U.json",
+      "method": "high_res_extraction"
+    },
+    {
+      "patent_number": "CN205124552U",
+      "status": "success",
+      "text_length": 101,
+      "output_file": "/Users/xujian/Athena工作平台/apps/apps/patents/processed/CN205124552U.json",
+      "method": "high_res_extraction"
+    },
+    {
+      "patent_number": "CN111436315A",
+      "status": "success",
+      "text_length": 15168,
+      "output_file": "/Users/xujian/Athena工作平台/apps/apps/patents/processed/CN111436315A.json",
+      "method": "direct_extraction"
+    },
+    {
+      "patent_number": "CN2418669Y",
+      "status": "success",
+      "text_length": 101,
+      "output_file": "/Users/xujian/Athena工作平台/apps/apps/patents/processed/CN2418669Y.json",
+      "method": "high_res_extraction"
+    },
+    {
+      "patent_number": "WO2013078254A1",
+      "status": "success",
+      "text_length": 0,
+      "output_file": "/Users/xujian/Athena工作平台/apps/apps/patents/processed/WO2013078254A1.json",
+      "method": "direct_extraction"
+    }
+  ]
+}

@@ -1,0 +1,193 @@
+{
+  "registry": {
+    "storage": {
+      "type": "redis",
+      "redis_url": "redis://localhost:6379",
+      "key_prefix": "athena:service_discovery:",
+      "ttl": 3600
+    }
+  },
+  "health_check": {
+    "default_interval": 30,
+    "default_timeout": 5,
+    "failure_threshold": 3,
+    "success_threshold": 2,
+    "deregister_after": 300
+  },
+  "load_balancing": {
+    "default_algorithm": "response_time_based",
+    "adaptive_enabled": true,
+    "evaluation_interval": 60,
+    "metrics_retention": 1000
+  },
+  "api": {
+    "host": "0.0.0.0",
+    "port": 8080,
+    "cors_enabled": true,
+    "cors_origins": [
+      "*"
+    ],
+    "rate_limiting": {
+      "enabled": true,
+      "requests_per_minute": 1000,
+      "burst_size": 100
+    }
+  },
+  "services": [
+    {
+      "name": "xiaonuo-calendar-assistant",
+      "type": "mcp",
+      "provider": "python",
+      "protocol": "stdio",
+      "enabled": false,
+      "description": "小诺日历助手服务"
+    },
+    {
+      "name": "imsg-mcp-server",
+      "type": "mcp",
+      "provider": "nodejs",
+      "protocol": "stdio",
+      "enabled": false,
+      "description": "iMessage集成服务"
+    },
+    {
+      "name": "github-mcp-server",
+      "type": "mcp",
+      "provider": "nodejs",
+      "protocol": "stdio",
+      "enabled": false,
+      "description": "GitHub API集成服务"
+    },
+    {
+      "name": "google-patents-meta-server",
+      "type": "mcp",
+      "provider": "nodejs",
+      "protocol": "stdio",
+      "enabled": false,
+      "description": "Google专利元数据服务"
+    },
+    {
+      "name": "patent_downloader",
+      "type": "script",
+      "enabled": false,
+      "description": "专利PDF下载服务"
+    },
+    {
+      "name": "academic-search-mcp-server",
+      "type": "mcp",
+      "provider": "nodejs",
+      "protocol": "http",
+      "port": 8080,
+      "description": "学术搜索服务"
+    },
+    {
+      "name": "patent-search-mcp-server",
+      "type": "mcp",
+      "provider": "nodejs",
+      "protocol": "stdio",
+      "enabled": false,
+      "description": "专利搜索服务"
+    },
+    {
+      "name": "jina-ai-mcp-server",
+      "type": "mcp",
+      "provider": "nodejs",
+      "protocol": "http",
+      "port": 8080,
+      "description": "Jina AI搜索和嵌入服务"
+    },
+    {
+      "name": "chrome-mcp-server",
+      "type": "mcp",
+      "provider": "nodejs",
+      "protocol": "stdio",
+      "enabled": false,
+      "description": "浏览器自动化服务"
+    },
+    {
+      "name": "gaode-mcp-server",
+      "type": "mcp",
+      "provider": "mlx",
+      "protocol": "http",
+      "port": 8080,
+      "description": "高德地图API服务"
+    },
+    {
+      "name": "local-search-engine",
+      "type": "mcp",
+      "provider": "go",
+      "protocol": "http",
+      "enabled": true,
+      "port": 3003,
+      "description": "SearXNG+Firecrawl本地搜索引擎"
+    },
+    {
+      "name": "mineru-document-parser",
+      "type": "api",
+      "provider": "python",
+      "protocol": "http",
+      "enabled": true,
+      "port": 7860,
+      "base_url": "http://127.0.0.1:7860",
+      "health_endpoint": "/docs",
+      "description": "MinerU文档解析服务 - 高质量PDF/图片OCR和结构化解析"
+    }
+  ],
+  "plugins": {
+    "mcp": {
+      "type": "mcp",
+      "enabled": true,
+      "priority": 1,
+      "config": {
+        "mcp_config_path": "/Users/xujian/Athena工作平台/config/athena_mcp_config.json",
+        "auto_discover": true,
+        "health_check_enabled": true
+      }
+    },
+    "kubernetes": {
+      "type": "kubernetes",
+      "enabled": false,
+      "priority": 2,
+      "config": {
+        "namespace": "athena",
+        "label_selector": "athena-service-discovery=enabled",
+        "annotation_prefix": "athena-service-discovery",
+        "watch_services": true,
+        "health_check_port": 8080
+      }
+    }
+  },
+  "monitoring": {
+    "metrics_enabled": true,
+    "tracing_enabled": false,
+    "logging": {
+      "level": "INFO",
+      "format": "json",
+      "file": "/var/log/athena/service_discovery.log",
+      "max_size": "100MB",
+      "backup_count": 5
+    }
+  },
+  "security": {
+    "authentication": {
+      "enabled": false,
+      "type": "jwt",
+      "secret": "your-secret-key",
+      "expiry": 3600
+    },
+    "authorization": {
+      "enabled": false,
+      "roles": [
+        "admin",
+        "operator",
+        "viewer"
+      ]
+    }
+  },
+  "statistics": {
+    "total": 11,
+    "enabled": 4,
+    "last_scan": "",
+    "scan_timestamp": null
+  }
+}

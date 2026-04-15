@@ -1,0 +1,9 @@
+{
+  "zhipu_api_key": "54a69837dfd643d8ab7a7a72756ef837.uWBCuChZSM4aDRyq",
+  "openai_api_key": "",
+  "anthropic_api_key": "",
+  "provider": "zhipu",
+  "model": "glm-4",
+  "configured_at": "2025-12-11T00:00:00Z",
+  "status": "active"
+}

@@ -1,0 +1,55 @@
+# Athena工作平台数据库配置
+# Database Configuration
+
+# PostgreSQL主数据库配置
+postgres:
+  host: localhost
+  port: 5432
+  user: postgres
+  password: postgres
+  database: patent_db
+  pool_size: 20
+  max_overflow: 30
+  pool_timeout: 30
+  pool_recycle: 3600
+
+# 原始专利数据库（只读）
+patents_original:
+  host: localhost
+  port: 5432
+  user: postgres
+  password: postgres
+  database: patents_original
+  readonly: true
+
+# Redis缓存配置
+redis:
+  host: localhost
+  port: 6379
+  db: 0
+  password: null
+  max_connections: 20
+
+# Neo4j图数据库配置
+neo4j:
+  uri: bolt://localhost:7687
+  user: neo4j
+  password: athena_neo4j_2024
+  database: neo4j
+
+# 向量数据库配置
+vector_db:
+  embedding_dimension: 768
+  index_type: hnsw
+  distance_metric: cosine
+  m_parameter: 16
+  ef_construction: 64
+  ef_search: 64
+
+# 数据库连接池配置
+connection_pool:
+  min_size: 5
+  max_size: 50
+  timeout: 30
+  idle_timeout: 300
+  max_lifetime: 3600

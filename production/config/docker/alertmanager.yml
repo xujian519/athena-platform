@@ -1,0 +1,66 @@
+# Alertmanager配置文件
+# Alertmanager Configuration for Athena Platform
+
+global:
+  resolve_timeout: 5m
+  # SMTP配置 (用于邮件告警)
+  # smtp_smarthost: 'smtp.gmail.com:587'
+  # smtp_from: 'alertmanager@athena-platform.com'
+  # smtp_auth_username: 'your-email@gmail.com'
+  # smtp_auth_password: 'your-app-password'
+
+# 路由配置
+route:
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 12h
+  receiver: 'default'
+
+  # 子路由配置
+  routes:
+    # 认知决策模块告警
+    - match:
+        severity: critical
+      receiver: 'critical-alerts'
+      continue: true
+
+    # 高优先级告警
+    - match:
+        severity: warning
+      receiver: 'warning-alerts'
+      continue: true
+
+# 接收器配置
+receivers:
+  # 默认接收器
+  - name: 'default'
+    # webhook_configs:
+    #   - url: 'http://localhost:5001/webhook'
+
+  # 关键告警接收器
+  - name: 'critical-alerts'
+    # email_configs:
+    #   - to: 'team@athena-platform.com'
+    #     headers:
+    #       Subject: '🚨 [CRITICAL] Athena平台告警'
+    # webhook_configs:
+    #   - url: 'http://localhost:5001/webhook/critical'
+
+  # 警告接收器
+  - name: 'warning-alerts'
+    # email_configs:
+    #   - to: 'team@athena-platform.com'
+    #     headers:
+    #       Subject: '⚠️ [WARNING] Athena平台告警'
+    # webhook_configs:
+    #   - url: 'http://localhost:5001/webhook/warning'
+
+# 抑制规则
+inhibit_rules:
+  # 如果有critical告警，抑制同一服务的warning告警
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'service']

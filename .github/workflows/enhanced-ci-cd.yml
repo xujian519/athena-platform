@@ -1,0 +1,478 @@
+name: Athena AI Platform Enhanced CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop, feature/* ]
+  pull_request:
+    branches: [ main, develop ]
+  release:
+    types: [ published ]
+  schedule:
+    # 每日自动构建和测试
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Test type to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - unit
+          - integration
+          - e2e
+          - performance
+          - security
+      deploy_environment:
+        description: 'Deploy to environment'
+        required: false
+        default: 'none'
+        type: choice
+        options:
+          - none
+          - staging
+          - production
+
+env:
+  PYTHON_VERSION: "3.11"
+  NODE_VERSION: "18"
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # 环境准备和依赖缓存
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      cache-key: ${{ steps.cache-key.outputs.key }}
+      should-build: ${{ steps.should-build.outputs.value }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Generate cache key
+        id: cache-key
+        run: |
+          KEY="${{ runner.os }}-${{ env.PYTHON_VERSION }}-$(hashFiles('**/requirements*.txt', '**/poetry.lock', '**/pyproject.toml')"
+          echo "key=$KEY" >> $GITHUB_OUTPUT
+
+      - name: Check if build is needed
+        id: should-build
+        run: |
+          if [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "value=true" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event_name }}" == "release" ]]; then
+            echo "value=true" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event.inputs.deploy_environment }}" != "none" ]]; then
+            echo "value=true" >> $GITHUB_OUTPUT
+          else
+            echo "value=false" >> $GITHUB_OUTPUT
+          fi
+
+  # 代码质量和安全检查
+  code-quality:
+    runs-on: ubuntu-latest
+    needs: prepare
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ needs.prepare.outputs.cache-key }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 black isort mypy bandit pylint safety
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: Code formatting check
+        run: |
+          black --check src/ --diff
+          isort --check-only src/ --diff-only
+
+      - name: Type checking
+        run: |
+          mypy src/ --ignore-missing-imports --strict-optional --show-error-codes
+
+      - name: Code quality analysis
+        run: |
+          flake8 src/ --max-line-length=100 --ignore=E203,W503 --exclude=tests/ --format=json --output=flake8-report.json
+          bandit -r src/ -f json -o bandit-report.json
+          pylint src/ --output-format=json --output=pylint-report.json || true
+
+      - name: Security dependency check
+        run: |
+          safety check --json --output safety-report.json || true
+
+      - name: Upload quality reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: quality-reports
+          path: |
+            bandit-report.json
+            pylint-report.json
+            flake8-report.json
+            safety-report.json
+
+      - name: Security scan upload
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: bandit-report.json
+
+  # 自动化测试套件
+  automated-tests:
+    runs-on: ubuntu-latest
+    needs: [prepare, code-quality]
+    strategy:
+      matrix:
+        test-type: [unit, integration, security]
+        python-version: ["3.11", "3.12"]
+      fail-fast: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ needs.prepare.outputs.cache-key }}-${{ matrix.python-version }}
+          restore-keys: |
+            ${{ runner.os }}-pip-${{ matrix.python-version }}-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+          pip install pytest-xvfb  # for GUI tests
+
+      - name: Start services for integration tests
+        if: matrix.test-type == 'integration'
+        run: |
+          docker-compose -f deployment/docker/docker-compose.test.yml up -d
+          sleep 30
+
+      - name: Run tests
+        run: |
+          python tests/run_all_tests.py \
+            --type ${{ matrix.test-type }} \
+            --parallel
+
+      - name: Stop services
+        if: matrix.test-type == 'integration'
+        if: always()
+        run: |
+          docker-compose -f deployment/docker/docker-compose.test.yml down
+
+      - name: Upload test reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-reports-${{ matrix.test-type }}-${{ matrix.python-version }}
+          path: test_reports/
+
+  # 性能和端到端测试
+  advanced-tests:
+    runs-on: ubuntu-latest
+    needs: [prepare, code-quality]
+    if: github.ref == 'refs/heads/main' || github.event_name == 'release'
+    strategy:
+      matrix:
+        test-type: [e2e, performance]
+      fail-fast: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ needs.prepare.outputs.cache-key }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+          pip install playwright
+          playwright install
+
+      - name: Build Docker images for E2E tests
+        if: matrix.test-type == 'e2e'
+        run: |
+          docker build -f deployment/docker/Dockerfile.optimized -t athena-test .
+
+      - name: Start services for E2E tests
+        if: matrix.test-type == 'e2e'
+        run: |
+          docker-compose -f deployment/docker/docker-compose.production.yml up -d
+          sleep 60
+
+      - name: Run advanced tests
+        run: |
+          python tests/run_all_tests.py \
+            --type ${{ matrix.test-type }}
+
+      - name: Stop services
+        if: matrix.test-type == 'e2e'
+        if: always()
+        run: |
+          docker-compose -f deployment/docker/docker-compose.production.yml down
+
+      - name: Upload test reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: advanced-test-reports-${{ matrix.test-type }}
+          path: test_reports/
+
+  # 容器安全扫描
+  container-security:
+    runs-on: ubuntu-latest
+    needs: [prepare, code-quality]
+    if: needs.prepare.outputs.should-build == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: deployment/docker/Dockerfile.optimized
+          push: false
+          load: true
+          tags: athena-test:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'athena-test:latest'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  # 构建和发布Docker镜像
+  build-and-publish:
+    runs-on: ubuntu-latest
+    needs: [prepare, code-quality, automated-tests, container-security]
+    if: needs.prepare.outputs.should-build == 'true'
+    strategy:
+      matrix:
+        target: [base, production]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: deployment/docker/Dockerfile.optimized
+          target: ${{ matrix.target }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
+
+  # 部署到staging环境
+  deploy-staging:
+    runs-on: ubuntu-latest
+    needs: [build-and-publish]
+    if: github.ref == 'refs/heads/develop' || github.event.inputs.deploy_environment == 'staging'
+    environment: staging
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to staging
+        run: |
+          echo "Deploying to staging environment..."
+          # 这里添加实际的部署脚本
+          # ./scripts/deploy_to_staging.sh
+
+      - name: Run health check
+        run: |
+          # 等待部署完成
+          sleep 60
+          # 健康检查
+          curl -f https://staging.athena-ai.com/health || exit 1
+
+      - name: Run smoke tests
+        run: |
+          python tests/run_smoke_tests.py --environment staging
+
+  # 部署到生产环境
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: [build-and-publish]
+    if: github.ref == 'refs/heads/main' || github.event_name == 'release' || github.event.inputs.deploy_environment == 'production'
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to production
+        run: |
+          echo "Deploying to production environment..."
+          # 这里添加实际的部署脚本
+          # ./scripts/deploy_to_production.sh
+
+      - name: Run production health check
+        run: |
+          # 等待部署完成
+          sleep 120
+          # 健康检查
+          curl -f https://athena-ai.com/health || exit 1
+
+      - name: Run production smoke tests
+        run: |
+          python tests/run_smoke_tests.py --environment production
+
+      - name: Send deployment notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          channel: '#deployments'
+          text: '🚀 Athena AI Platform Production Deployment'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  # 清理任务
+  cleanup:
+    runs-on: ubuntu-latest
+    needs: [deploy-staging, deploy-production]
+    if: always()
+    steps:
+      - name: Clean up old artifacts
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId,
+            });
+
+            // 删除超过30天的artifact
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+            for (const artifact of artifacts.data.artifacts) {
+              const createdDate = new Date(artifact.created_at);
+              if (createdDate < thirtyDaysAgo) {
+                await github.rest.actions.deleteArtifact({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  artifact_id: artifact.id,
+                });
+                console.log(`Deleted old artifact: ${artifact.name}`);
+              }
+            }
+
+  # 生成测试报告
+  test-report:
+    runs-on: ubuntu-latest
+    needs: [automated-tests, advanced-tests]
+    if: always()
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+
+      - name: Generate comprehensive test report
+        run: |
+          python scripts/generate_test_report.py \
+            --input-dir . \
+            --output test_report.html
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v3
+        with:
+          name: comprehensive-test-report
+          path: test_report.html
+
+      - name: Comment PR with test results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+
+            // 读取测试报告
+            let reportContent = '';
+            if (fs.existsSync('test_report.html')) {
+              reportContent = fs.readFileSync('test_report.html', 'utf8');
+            }
+
+            // 发送PR评论
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🧪 测试报告\n\n${reportContent.substring(0, 5000)}...`
+            });

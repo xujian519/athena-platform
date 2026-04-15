@@ -1,0 +1,407 @@
+# ============================================
+# Athena 服务配置模板
+# Athena Service Configuration Template
+# ============================================
+#
+# 使用说明 / Usage Instructions:
+# 1. 复制此文件: cp config/templates/service-template.yaml config/services/{service-name}.yaml
+# 2. 替换 {service_name} 为实际服务名
+# 3. 或使用自动化脚本: ./scripts/create-new-service.sh
+#
+# 作者: 徐健 (xujian519@gmail.com)
+# 更新日期: 2025-01-15
+# 版本: 1.0.0
+
+# ============================================
+# 服务基本信息 / Service Basic Information
+# ============================================
+service:
+  name: "{service_name}"                    # 服务名称 (小写，用连字符分隔)
+  display_name: "{Service Display Name}"    # 服务显示名称
+  version: "1.0.0"                          # 服务版本
+  description: "{服务描述，说明服务功能和用途}"
+  type: "microservice"                      # 服务类型: microservice, worker, gateway
+  language: "python"                        # 编程语言: python, node, go
+
+  # 服务标签 (用于服务发现和分类)
+  tags:
+    - "athena"
+    - "{service_type}"
+    - "{domain}"
+
+  # 所有者信息
+  owner:
+    team: "团队名称"
+    contact: "负责人邮箱"
+
+# ============================================
+# 服务端口配置 / Service Port Configuration
+# ============================================
+server:
+  # HTTP 服务端口
+  http:
+    host: "${HOST:0.0.0.0}"
+    port: "${PORT:8080}"                    # 默认端口，根据服务类型调整
+    workers: "${WORKERS:1}"                 # 工作进程数
+
+  # 健康检查端口（可选，用于独立监控）
+  health_check:
+    enabled: true
+    port: "${HEALTH_CHECK_PORT:}"           # 留空表示与 HTTP 相同
+    endpoint: "/health"
+
+# ============================================
+# 服务发现配置 / Service Discovery Configuration
+# ============================================
+service_discovery:
+  enabled: "${SERVICE_DISCOVERY_ENABLED:true}"
+  registry:
+    type: "consul"                          # consul, etcd, zookeeper
+    host: "${CONSUL_HOST:localhost}"
+    port: "${CONSUL_PORT:8500}"
+
+  # 服务注册信息
+  registration:
+    check_interval: 10                      # 健康检查间隔(秒)
+    timeout: 5                              # 健康检查超时(秒)
+    deregister_critical_service_after: 30   # 失败多久后注销服务
+
+# ============================================
+# 数据库配置 / Database Configuration
+# ============================================
+database:
+  # PostgreSQL (如果服务需要)
+  postgres:
+    enabled: "${POSTGRES_ENABLED:false}"
+    host: "${POSTGRES_HOST:localhost}"
+    port: "${POSTGRES_PORT:5432}"
+    user: "${POSTGRES_USER:postgres}"
+    password: "${POSTGRES_PASSWORD:}"
+    database: "${POSTGRES_DB:athena_db}"
+    pool_size: 10
+    max_overflow: 20
+
+  # Redis (如果服务需要)
+  redis:
+    enabled: "${REDIS_ENABLED:false}"
+    host: "${REDIS_HOST:localhost}"
+    port: "${REDIS_PORT:6379}"
+    db: 0
+    password: "${REDIS_PASSWORD:}"
+    max_connections: 50
+    decode_responses: true
+
+  # Qdrant (如果服务需要向量搜索)
+  qdrant:
+    enabled: "${QDRANT_ENABLED:false}"
+    host: "${QDRANT_HOST:localhost}"
+    port: "${QDRANT_PORT:6333}"
+    api_key: "${QDRANT_API_KEY:}"
+    collection: "${QDRANT_COLLECTION:athena_vectors}"
+    timeout: 30
+
+  # Neo4j (如果服务需要图数据库)
+  neo4j:
+    enabled: "${NEO4J_ENABLED:false}"
+    uri: "${NEO4J_URI:bolt://localhost:7687}"
+    user: "${NEO4J_USER:neo4j}"
+    password: "${NEO4J_PASSWORD:neo4j}"
+
+# ============================================
+# AI 模型配置 / AI Model Configuration
+# ============================================
+ai:
+  # OpenAI 配置
+  openai:
+    enabled: "${OPENAI_ENABLED:false}"
+    api_key: "${OPENAI_API_KEY:}"
+    model: "${OPENAI_MODEL:gpt-3.5-turbo}"
+    max_tokens: 2000
+    temperature: 0.7
+    timeout: 30
+
+  # Anthropic Claude 配置
+  anthropic:
+    enabled: "${ANTHROPIC_ENABLED:false}"
+    api_key: "${ANTHROPIC_API_KEY:}"
+    model: "${ANTHROPIC_MODEL:claude-3-sonnet-20240229}"
+    max_tokens: 2000
+    timeout: 30
+
+  # 本地模型配置
+  local_model:
+    enabled: "${LOCAL_MODEL_ENABLED:false}"
+    model_path: "${LOCAL_MODEL_PATH:./models}"
+    device: "${LOCAL_MODEL_DEVICE:cpu}"     # cpu, cuda, mps
+
+# ============================================
+# API 配置 / API Configuration
+# ============================================
+api:
+  # API 版本
+  versioning:
+    enabled: true
+    default_version: "v1"
+    prefix: "/api"
+
+  # CORS 配置
+  cors:
+    enabled: true
+    origins:
+      - "${FRONTEND_URL:http://localhost:3000}"
+      - "${ADMIN_URL:http://localhost:8001}"
+    credentials: true
+    methods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+      - "OPTIONS"
+    headers:
+      - "Content-Type"
+      - "Authorization"
+
+  # 限流配置
+  rate_limiting:
+    enabled: "${RATE_LIMITING_ENABLED:true}"
+    requests_per_minute: 100
+    burst_size: 20
+
+  # 请求超时
+  timeout:
+    default: 30                             # 默认超时(秒)
+    upload: 300                             # 上传超时(秒)
+    download: 60                            # 下载超时(秒)
+
+# ============================================
+# 缓存配置 / Cache Configuration
+# ============================================
+cache:
+  # 应用层缓存
+  application:
+    enabled: "${APP_CACHE_ENABLED:true}"
+    backend: "redis"                        # redis, memory, memcached
+    ttl: 3600                               # 默认缓存过期时间(秒)
+    max_size: 1000                          # 最大缓存条目数
+
+  # 查询结果缓存
+  query:
+    enabled: "${QUERY_CACHE_ENABLED:true}"
+    ttl: 1800                               # 30分钟
+    key_prefix: "query:"
+
+# ============================================
+# 消息队列配置 / Message Queue Configuration
+# ============================================
+messaging:
+  # 消息队列类型
+  provider: "${MESSAGING_PROVIDER:redis}"   # redis, rabbitmq, kafka
+
+  # Redis 发布/订阅
+  redis_pubsub:
+    enabled: "${REDIS_PUBSUB_ENABLED:false}"
+    channels:
+      - "{service_name}:events"
+      - "athena:events"
+
+  # 任务队列
+  task_queue:
+    enabled: "${TASK_QUEUE_ENABLED:false}"
+    broker_url: "${TASK_BROKER_URL:redis://localhost:6379/1}"
+    result_backend: "${TASK_RESULT_BACKEND:redis://localhost:6379/2}"
+    worker_concurrency: 4
+
+# ============================================
+# 日志配置 / Logging Configuration
+# ============================================
+logging:
+  level: "${LOG_LEVEL:INFO}"                # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "json"                            # json, text
+
+  # 日志输出
+  handlers:
+    console:
+      enabled: true
+      level: "INFO"
+
+    file:
+      enabled: "${LOG_FILE_ENABLED:true}"
+      path: "${LOG_FILE_PATH:./logs/{service_name}.log}"
+      max_size: "100MB"
+      backup_count: 5
+      rotation: "daily"
+
+  # 日志结构化字段
+  fields:
+    service: "{service_name}"
+    version: "1.0.0"
+    environment: "${ENVIRONMENT:development}"
+
+# ============================================
+# 监控配置 / Monitoring Configuration
+# ============================================
+monitoring:
+  # Prometheus 指标
+  prometheus:
+    enabled: "${PROMETHEUS_ENABLED:false}"
+    port: "${PROMETHEUS_PORT:9090}"
+    path: "/metrics"
+
+  # 分布式追踪
+  tracing:
+    enabled: "${TRACING_ENABLED:false}"
+    provider: "jaeger"                      # jaeger, zipkin
+    host: "${JAEGER_HOST:localhost}"
+    port: "${JAEGER_PORT:6831}"
+    sample_rate: 0.1                        # 采样率
+
+  # 性能监控
+  performance:
+    slow_query_threshold: 1.0               # 慢查询阈值(秒)
+    memory_threshold: 0.8                   # 内存使用阈值
+    cpu_threshold: 0.8                      # CPU使用阈值
+
+# ============================================
+# 安全配置 / Security Configuration
+# ============================================
+security:
+  # JWT 认证
+  jwt:
+    enabled: "${JWT_ENABLED:false}"
+    secret_key: "${JWT_SECRET_KEY:}"
+    algorithm: "HS256"
+    access_token_expire_minutes: 30
+    refresh_token_expire_days: 7
+
+  # API 密钥
+  api_key:
+    enabled: "${API_KEY_ENABLED:false}"
+    header_name: "X-API-Key"
+    keys:
+      - "${API_KEY_DEV:dev-key}"
+      - "${API_KEY_PROD:}"
+
+  # 加密配置
+  encryption:
+    key: "${ENCRYPTION_KEY:}"
+    algorithm: "AES-256-GCM"
+
+# ============================================
+# 资源限制 / Resource Limits
+# ============================================
+resources:
+  # 内存限制
+  memory:
+    limit: "${MEMORY_LIMIT:2Gi}"            # 最大内存使用
+    reservation: "${MEMORY_RESERVATION:512Mi}"  # 预留内存
+
+  # CPU 限制
+  cpu:
+    limit: "${CPU_LIMIT:2}"                 # 最大 CPU 核心数
+    reservation: "${CPU_RESERVATION:0.5}"   # 预留 CPU
+
+  # 请求超时
+  timeout:
+    startup: 60                             # 启动超时(秒)
+    shutdown: 30                            # 关闭超时(秒)
+
+# ============================================
+# 健康检查配置 / Health Check Configuration
+# ============================================
+health_check:
+  enabled: true
+  endpoint: "/health"
+
+  # 检查项
+  checks:
+    - name: "liveness"
+      path: "/health/live"
+      interval: 10
+      timeout: 5
+      failure_threshold: 3
+
+    - name: "readiness"
+      path: "/health/ready"
+      interval: 5
+      timeout: 3
+      failure_threshold: 3
+
+  # 依赖检查
+  dependencies:
+    - name: "postgres"
+      type: "database"
+      required: false
+
+    - name: "redis"
+      type: "cache"
+      required: false
+
+# ============================================
+# 功能开关 / Feature Flags
+# ============================================
+features:
+  # 实验性功能
+  experimental:
+    feature_a: false
+    feature_b: false
+
+  # 可选模块
+  modules:
+    module_a: true
+    module_b: false
+
+# ============================================
+# 环境特定配置 / Environment-Specific Configuration
+# ============================================
+environments:
+  development:
+    debug: true
+    log_level: "DEBUG"
+    auto_reload: true
+
+  staging:
+    debug: false
+    log_level: "INFO"
+    auto_reload: false
+
+  production:
+    debug: false
+    log_level: "WARNING"
+    auto_reload: false
+    ssl_enabled: true
+
+# ============================================
+# Docker 配置 / Docker Configuration
+# ============================================
+docker:
+  image:
+    repository: "athena/{service_name}"
+    tag: "${IMAGE_TAG:latest}"
+    pull_policy: "IfNotPresent"
+
+  # 容器配置
+  container:
+    port: 8080
+    replicas: 1
+    restart_policy: "always"
+
+  # 环境变量 (从 .env 注入)
+  env_file: ".env"
+  env_from:
+    - "config/{service_name}.env"
+
+# ============================================
+# 依赖服务 / Service Dependencies
+# ============================================
+dependencies:
+  # 启动依赖 (服务启动前必须就绪)
+  startup:
+    - "postgres"
+    - "redis"
+
+  # 服务依赖 (运行时依赖)
+  runtime:
+    - name: "api-gateway"
+      required: true
+    - name: "auth-service"
+      required: false

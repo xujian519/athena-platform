@@ -1,0 +1,44 @@
+[
+  {
+    "timestamp": "2025-12-08T21:40:28.990097",
+    "query": "人工智能 专利",
+    "results_count": 0,
+    "quality_improvement": 0.0,
+    "refinement_applied": true
+  },
+  {
+    "timestamp": "2025-12-08T21:40:28.990518",
+    "query": "机器学习 深度学习",
+    "results_count": 1,
+    "quality_improvement": 0.0,
+    "refinement_applied": false
+  },
+  {
+    "timestamp": "2025-12-08T21:40:28.990696",
+    "query": "自然语言处理 NLP",
+    "results_count": 2,
+    "quality_improvement": 0.0,
+    "refinement_applied": false
+  },
+  {
+    "timestamp": "2025-12-08T21:40:28.990904",
+    "query": "计算机视觉 图像识别",
+    "results_count": 1,
+    "quality_improvement": 0.766,
+    "refinement_applied": true
+  },
+  {
+    "timestamp": "2025-12-08T21:40:28.991141",
+    "query": "区块链 知识产权",
+    "results_count": 0,
+    "quality_improvement": 0.0,
+    "refinement_applied": true
+  },
+  {
+    "timestamp": "2025-12-08T21:42:20.814552",
+    "query": "机器学习",
+    "results_count": 1,
+    "quality_improvement": 0.776,
+    "refinement_applied": true
+  }
+]

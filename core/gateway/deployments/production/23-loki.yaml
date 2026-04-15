@@ -1,0 +1,523 @@
+# ================================
+# Loki 日志聚合系统
+# ================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loki
+  namespace: observability
+  labels:
+    app: loki
+    tier: logging
+    environment: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki
+      tier: logging
+  template:
+    metadata:
+      labels:
+        app: loki
+        tier: logging
+    spec:
+      securityContext:
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+      serviceAccountName: loki
+      containers:
+      - name: loki
+        image: grafana/loki:2.8.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: loki
+          containerPort: 3100
+          protocol: TCP
+        - name: grpc
+          containerPort: 9095
+          protocol: TCP
+        args:
+        - "--config.file=/etc/loki/local-config.yaml"
+        - "--config.expand-env=true"
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        volumeMounts:
+        - name: loki-config
+          mountPath: /etc/loki
+          readOnly: true
+        - name: loki-data
+          mountPath: /loki
+        livenessProbe:
+          httpGet:
+            path: /ready
+            port: loki
+          initialDelaySeconds: 45
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: loki
+          initialDelaySeconds: 30
+          periodSeconds: 10
+      volumes:
+      - name: loki-config
+        configMap:
+          name: loki-config
+      - name: loki-data
+        persistentVolumeClaim:
+          claimName: loki-data
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki
+  namespace: observability
+  labels:
+    app: loki
+    tier: logging
+spec:
+  type: ClusterIP
+  ports:
+  - name: loki
+    port: 3100
+    targetPort: 3100
+    protocol: TCP
+  - name: grpc
+    port: 9095
+    targetPort: 9095
+    protocol: TCP
+  selector:
+    app: loki
+    tier: logging
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: loki-data
+  namespace: observability
+  labels:
+    app: loki
+    tier: logging
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: ssd-storage
+  resources:
+    requests:
+      storage: 100Gi
+
+---
+# ================================
+# Loki 配置
+# ================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: loki-config
+  namespace: observability
+  labels:
+    app: loki
+    tier: logging
+data:
+  local-config.yaml: |
+    auth_enabled: false
+    
+    server:
+      http_listen_port: 3100
+      grpc_listen_port: 9095
+      
+    ingester:
+      lifecycler:
+        address: 127.0.0.1
+        ring:
+          kvstore:
+            store: inmemory
+            replication_factor: 1
+        final_sleep: 0s
+      chunk_idle_period: 1h
+      max_chunk_age: 1h
+      chunk_target_size: 1048576
+      chunk_retain_period: 30s
+      max_transfer_retries: 0
+      
+    schema_config:
+      configs:
+      - from: 2020-10-24
+        store: boltdb-shipper
+        object_store: filesystem
+        schema: v11
+        index:
+          prefix: index_
+          period: 24h
+          
+    storage_config:
+      boltdb_shipper:
+        active_index_directory: /loki/boltdb-shipper-active
+        cache_location: /loki/boltdb-shipper-cache
+        shared_store: filesystem
+      filesystem:
+        directory: /loki/chunks
+        
+    limits_config:
+      enforce_metric_name: false
+      reject_old_samples: true
+      reject_old_samples_max_age: 168h
+      ingestion_rate_mb: 16
+      ingestion_burst_size_mb: 32
+      
+    chunk_store_config:
+      max_look_back_period: 0s
+      
+    table_manager:
+      retention_deletes_enabled: false
+      retention_period: 0s
+      
+    query_range:
+      parallel_query_shards: 4
+      cache_results: true
+      max_retries: 5
+      
+    frontend:
+      max_outstanding_per_tenant: 2048
+      
+    query_scheduler:
+      max_outstanding_requests_per_tenant: 2048
+      
+    ruler:
+      storage:
+        type: local
+        local:
+          directory: /loki/rules
+      rule_path: /loki/rules-temp
+      alertmanager_url: http://alertmanager:9093
+      ring:
+        kvstore:
+          store: inmemory
+      enable_api: true
+      enable_alertmanager_v2: true
+
+---
+# ================================
+# Promtail 日志收集器
+# ================================
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: promtail
+  namespace: observability
+  labels:
+    app: promtail
+    tier: logging
+spec:
+  selector:
+    matchLabels:
+      app: promtail
+      tier: logging
+  template:
+    metadata:
+      labels:
+        app: promtail
+        tier: logging
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      serviceAccountName: promtail
+      containers:
+      - name: promtail
+        image: grafana/promtail:2.8.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http-metrics
+          containerPort: 9080
+          protocol: TCP
+        args:
+        - "--config.file=/etc/promtail/config.yml"
+        - "--config.expand-env=true"
+        env:
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        volumeMounts:
+        - name: promtail-config
+          mountPath: /etc/promtail
+          readOnly: true
+        - name: var-logs
+          mountPath: /var/log
+          readOnly: true
+        - name: var-lib-docker-containers
+          mountPath: /var/lib/docker/containers
+          readOnly: true
+        - name: var-lib-kubelet-pods
+          mountPath: /var/lib/kubelet/pods
+          readOnly: true
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: http-metrics
+          initialDelaySeconds: 30
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: http-metrics
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      volumes:
+      - name: promtail-config
+        configMap:
+          name: promtail-config
+      - name: var-logs
+        hostPath:
+          path: /var/log
+      - name: var-lib-docker-containers
+        hostPath:
+          path: /var/lib/docker/containers
+      - name: var-lib-kubelet-pods
+        hostPath:
+          path: /var/lib/kubelet/pods
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: promtail
+  namespace: observability
+  labels:
+    app: promtail
+    tier: logging
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9080"
+    prometheus.io/path: "/metrics"
+spec:
+  type: ClusterIP
+  ports:
+  - name: http-metrics
+    port: 9080
+    targetPort: 9080
+    protocol: TCP
+  selector:
+    app: promtail
+    tier: logging
+
+---
+# ================================
+# Promtail 配置
+# ================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: promtail-config
+  namespace: observability
+  labels:
+    app: promtail
+    tier: logging
+data:
+  config.yml: |
+    server:
+      http_listen_port: 9080
+      grpc_listen_port: 0
+      
+    positions:
+      filename: /tmp/positions.yaml
+      
+    clients:
+      - url: http://loki:3100/loki/api/v1/push
+        tenant_id: "athena-gateway"
+        
+    scrape_configs:
+    # Kubernetes Pod 日志收集
+    - job_name: kubernetes-pods
+      kubernetes_sd_configs:
+      - role: pod
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
+      - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+        action: replace
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        replacement: $1:$2
+        target_label: __address__
+      - action: labelmap
+        regex: __meta_kubernetes_pod_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        action: replace
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_pod_name]
+        action: replace
+        target_label: kubernetes_pod_name
+      - source_labels: [__meta_kubernetes_pod_container_name]
+        action: replace
+        target_label: kubernetes_container_name
+      - source_labels: [__meta_kubernetes_pod_uid]
+        action: replace
+        target_label: kubernetes_pod_uid
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        action: replace
+        target_label: app
+      - source_labels: [__meta_kubernetes_pod_label_tier]
+        action: replace
+        target_label: tier
+        
+    # Athena Gateway 专用日志收集
+    - job_name: athena-gateway-logs
+      kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+          - athena-gateway
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        action: keep
+        regex: athena-gateway
+      - source_labels: [__meta_kubernetes_pod_container_name]
+        action: keep
+        regex: athena-gateway|log-collector
+      - action: replace
+        source_labels: [__meta_kubernetes_pod_name]
+        target_label: pod
+      - action: replace
+        source_labels: [__meta_kubernetes_namespace]
+        target_label: namespace
+      - action: replace
+        source_labels: [__meta_kubernetes_pod_container_name]
+        target_label: container
+      - action: replace
+        replacement: /var/log/pods/*log/*.log
+        source_labels: [__meta_kubernetes_pod_uid, __meta_kubernetes_pod_container_name]
+        separator: /
+        target_label: __path__
+        
+    # 系统日志收集
+    - job_name: system-logs
+      static_configs:
+      - targets:
+        - localhost
+        labels:
+          job: syslog
+          host: ${HOSTNAME}
+          __path__: /var/log/syslog
+          
+    # Docker 容器日志收集
+    - job_name: docker-containers
+      docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+        refresh_interval: 5s
+      relabel_configs:
+      - source_labels: [__meta_docker_container_name]
+        action: replace
+        target_label: container_name
+      - source_labels: [__meta_docker_container_id]
+        action: replace
+        target_label: container_id
+      - source_labels: [__meta_docker_container_log_stream]
+        action: replace
+        target_label: stream
+      - source_labels: [__meta_docker_container_name]
+        action: replace
+        replacement: /var/lib/docker/containers/*log
+        target_label: __path__
+        
+    # 解析器配置
+    pipeline_stages:
+    # JSON 格式日志解析
+    - json:
+        expressions:
+          level: level
+          time: timestamp
+          message: message
+          request_id: request_id
+          user_id: user_id
+          method: method
+          path: path
+          status: status
+          duration: duration
+          
+    # 时间戳解析
+    - timestamp:
+        source: time
+        format: RFC3339
+        
+    # 日志级别规范化
+    - labels:
+        level:
+          
+    # 清理字段
+    - labeldrop:
+        - __meta_kubernetes_pod_label_app
+        - __meta_kubernetes_pod_label_tier
+        - __meta_kubernetes_pod_label_environment
+        
+    # Athena Gateway 特殊解析
+    - match:
+        selector: '{app="athena-gateway"}'
+        stages:
+        - regex:
+            expression: '.*level=(?P<level>\w+).*request_id=(?P<request_id>[^ ]*).*status=(?P<status>\d+).*'
+        - labels:
+            level:
+            request_id:
+            status:
+        - timestamp:
+            source: timestamp
+            format: RFC3339
+            
+    # PostgreSQL 日志解析
+    - match:
+        selector: '{app="postgres-exporter"}'
+        stages:
+        - regex:
+            expression: '.*ERROR:.*(?P<error_message>.*?)$'
+        - labels:
+            error_level: error
+            error_message:
+        - timestamp:
+            source: timestamp
+            format: RFC3339
+            
+    # Redis 日志解析
+    - match:
+        selector: '{service="redis"}'
+        stages:
+        - regex:
+            expression: '(?P<level>\d+):(?P<message>.*)'
+        - labels:
+            level:
+        - template:
+            source: level
+            template: '{{ if eq .Value "6" }}ERROR{{ else if eq .Value "5" }}WARN{{ else if eq .Value "4" }}INFO{{ else }}DEBUG{{ end }}'
+        - labels:
+            level:
+        - timestamp:
+            source: timestamp
+            format: RFC3339

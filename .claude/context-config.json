@@ -1,0 +1,32 @@
+{
+  "version": "1.0",
+  "context_window": {
+    "max_tokens": 128000,
+    "auto_prune": true,
+    "prune_strategy": "recent",
+    "preserve_system": true,
+    "preserve_important": true,
+    "importance_keywords": ["patent", "ai", "ml", "search", "database", "vector"]
+  },
+  "history_management": {
+    "max_entries": 800,
+    "compress_after": 30,
+    "archive_days": 7,
+    "keep_patterns": ["patent", "检索", "向量", "分析", "数据库"]
+  },
+  "debug_management": {
+    "max_sessions": 5,
+    "cleanup_interval_hours": 12,
+    "keep_recent_hours": 24
+  },
+  "todos_management": {
+    "auto_archive": true,
+    "cleanup_completed": false,
+    "keep_active_days": 14
+  },
+  "optimization": {
+    "enabled": true,
+    "schedule": "daily",
+    "auto_cleanup": true
+  }
+}

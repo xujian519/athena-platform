@@ -1,0 +1,22 @@
+{
+  "name": "github-mcp-server",
+  "version": "1.0.0",
+  "description": "GitHub MCP服务器 - 用于代码仓库管理",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "node test.js"
+  },
+  "keywords": ["mcp", "github", "git", "athena"],
+  "author": "Athena & 小诺",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.24.3",
+    "@octokit/rest": "^21.0.2",
+    "dotenv": "^16.4.5"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

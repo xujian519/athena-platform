@@ -1,0 +1,33 @@
+# Athena Gateway 统一网关配置文件
+# 复制此文件为 gateway-config.yaml 并根据需要修改
+
+# 服务器配置
+server:
+  # 监听端口 (默认: 8005)
+  port: 8005
+  # 生产模式 (默认: false)
+  production: true
+  # 读取超时（秒） (默认: 30)
+  read_timeout: 30
+  # 写入超时（秒） (默认: 30)
+  write_timeout: 30
+  # 空闲超时（秒） (默认: 120)
+  idle_timeout: 120
+
+# 日志配置
+logging:
+  # 日志级别: debug, info, warn, error (默认: info)
+  level: info
+  # 日志格式: json, text (默认: json)
+  format: json
+  # 输出目标: stdout, stderr, 或文件路径 (默认: stdout)
+  output: stdout
+
+# 监控配置
+monitoring:
+  # 启用Prometheus指标 (默认: false)
+  enabled: true
+  # 指标服务端口 (默认: 9090)
+  port: 9090
+  # 指标路径 (默认: /metrics)
+  path: /metrics

@@ -1,0 +1,82 @@
+# Prometheus告警规则 - Athena伦理框架
+# Prometheus Alert Rules for Athena Ethics Framework
+
+groups:
+  - name: ethics_framework_alerts
+    interval: 30s
+    rules:
+      # 高违规率告警
+      - alert: HighViolationRate
+        expr: |
+          sum(rate(ethics_violation_total[5m])) /
+          sum(rate(ethics_evaluation_total[5m])) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          component: ethics-framework
+        annotations:
+          summary: "伦理框架违规率过高"
+          description: "过去5分钟内违规率超过10% (当前值: {{ $value | humanizePercentage }})"
+
+      # 关键违规告警
+      - alert: CriticalViolationDetected
+        expr: |
+          sum(rate(ethics_violation_total{severity="10"}[1m])) > 0
+        for: 1m
+        labels:
+          severity: critical
+          component: ethics-framework
+        annotations:
+          summary: "检测到关键违规"
+          description: "在过去1分钟内检测到关键级别违规"
+
+      # 评估延迟告警
+      - alert: HighEvaluationLatency
+        expr: |
+          histogram_quantile(0.95,
+            rate(ethics_evaluation_duration_seconds_bucket[5m])
+          ) > 1.0
+        for: 5m
+        labels:
+          severity: warning
+          component: ethics-framework
+        annotations:
+          summary: "伦理评估延迟过高"
+          description: "P95评估延迟超过1秒 (当前值: {{ $value }}s)"
+
+      # 低合规评分告警
+      - alert: LowComplianceScore
+        expr: |
+          avg(ethics_compliance_score) < 0.7
+        for: 10m
+        labels:
+          severity: warning
+          component: ethics-framework
+        annotations:
+          summary: "平均合规评分过低"
+          description: "平均合规评分低于0.7 (当前值: {{ $value }})"
+
+      # 智能体无响应告警
+      - alert: AgentInactive
+        expr: |
+          ethics_active_agents == 0
+        for: 15m
+        labels:
+          severity: info
+          component: ethics-framework
+        annotations:
+          summary: "没有活跃的智能体"
+          description: "过去15分钟内没有检测到活跃的智能体"
+
+      # 评估错误率告警
+      - alert: HighErrorRate
+        expr: |
+          sum(rate(ethics_evaluation_total{status="error"}[5m])) /
+          sum(rate(ethics_evaluation_total[5m])) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+          component: ethics-framework
+        annotations:
+          summary: "评估错误率过高"
+          description: "评估错误率超过5% (当前值: {{ $value | humanizePercentage }})"

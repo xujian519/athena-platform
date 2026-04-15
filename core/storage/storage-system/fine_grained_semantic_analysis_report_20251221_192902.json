@@ -1,0 +1,86 @@
+{
+  "metadata": {
+    "report_title": "细粒度语义分析报告",
+    "generation_time": "2025-12-21T19:29:02.108584",
+    "total_analyses": 5,
+    "analyzer_version": "1.0"
+  },
+  "summary_statistics": {
+    "total_text_segments": 5,
+    "total_entities_extracted": 33,
+    "total_relations_extracted": 0,
+    "total_concepts_found": 17,
+    "average_entities_per_text": 6.6,
+    "average_relations_per_text": 0.0,
+    "average_concepts_per_text": 3.4,
+    "average_complexity": 0.06948333333333334
+  },
+  "distribution_analysis": {
+    "entity_type_distribution": {
+      "法律主体": 4,
+      "法律行为": 10,
+      "金钱数额": 1,
+      "法律概念": 18
+    },
+    "relation_type_distribution": {},
+    "sentiment_distribution": {
+      "中性": 5
+    }
+  },
+  "concept_analysis": {
+    "top_concepts": [
+      [
+        "合同",
+        4
+      ],
+      [
+        "履行",
+        2
+      ],
+      [
+        "责任",
+        2
+      ],
+      [
+        "义务",
+        2
+      ],
+      [
+        "赔偿损失",
+        1
+      ],
+      [
+        "继续履行",
+        1
+      ],
+      [
+        "违约",
+        1
+      ],
+      [
+        "采取补救措施",
+        1
+      ],
+      [
+        "违约责任",
+        1
+      ],
+      [
+        "终止",
+        1
+      ],
+      [
+        "变更",
+        1
+      ]
+    ],
+    "total_unique_concepts": 11
+  },
+  "quality_metrics": {
+    "high_confidence_entities": 33,
+    "high_confidence_relations": 0
+  },
+  "recommendations": [
+    "关系抽取数量不足，建议增强关系抽取模式"
+  ]
+}
