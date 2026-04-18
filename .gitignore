@@ -129,3 +129,11 @@ tools/Laws-1.0.0/
 .mypy_cache/
 .ruff_cache/
 .benchmarks/
+# Virtual environments (新增)
+venv_perception/
+venv_*/
+# Rust build artifacts (新增)
+rust-core/target/
+**/target/
+*.rlib
+*.rmeta
