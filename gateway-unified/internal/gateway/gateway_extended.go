@@ -1,6 +1,7 @@
 package gateway
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"net/http"
@@ -8,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/athena-workspace/gateway-unified/internal/config"
+	"github.com/athena-workspace/gateway-unified/internal/pool"
 )
 
 // ExtendedGateway 扩展的网关结构，包含所有模块化组件
@@ -22,6 +24,10 @@ type ExtendedGateway struct {
 	degradationManager     *DegradationManager
 	pluginManager          *PluginManager
 	configManager          ConfigManager
+
+	// +++ 新增: 连接池 +++
+	connectionPool         *pool.ConnectionPool
+	// ++++++++++++++++++++
 
 	done                   chan struct{}
 }
@@ -61,6 +67,48 @@ func NewExtendedGateway(cfg *config.Config) (*ExtendedGateway, error) {
 
 // initModularComponents 初始化模块化组件
 func (g *ExtendedGateway) initModularComponents() error {
+	// +++ 新增: 初始化连接池 +++
+	poolConfig := &pool.PoolConfig{
+		// 基础连接配置
+		MaxIdleConns:        200,
+		MaxIdleConnsPerHost: 50,
+		MaxConnsPerHost:     0, // 0表示无限制
+		IdleConnTimeout:     120 * time.Second, // 从90s增加到120s
+
+		// 超时配置（优化）
+		DialTimeout:           5 * time.Second,  // 从10s降低
+		ResponseHeaderTimeout: 10 * time.Second,
+		RequestTimeout:        30 * time.Second,
+		TLSHandshakeTimeout:   5 * time.Second,
+
+		// 保持连接配置
+		KeepAlive:           30 * time.Second,
+		MaxIdleConnsHR:      100,
+		DisableCompression:  false,
+		ForceAttemptHTTP2:   true, // 启用HTTP/2
+
+		// 健康检查配置
+		HealthCheckInterval: 30 * time.Second,
+		HealthCheckTimeout:  5 * time.Second,
+		EnableHealthCheck:   true,
+
+		// 连接重试配置（降低重试次数）
+		MaxRetries:    2, // 从3降低
+		RetryDelay:    100 * time.Millisecond,
+		RetryMaxDelay: 1 * time.Second,
+	}
+
+	var err error
+	g.connectionPool, err = pool.NewConnectionPool(poolConfig)
+	if err != nil {
+		return fmt.Errorf("创建连接池失败: %w", err)
+	}
+
+	// 启动健康检查
+	ctx := context.Background()
+	g.connectionPool.StartHealthCheck(ctx)
+	// +++++++++++++++++++++++++++++++
+
 	// 1. 初始化负载均衡器
 	lbConfig := LoadBalancerConfig{
 		Strategy:          WeightedRoundRobin,
@@ -103,10 +151,11 @@ func (g *ExtendedGateway) registerDefaultPlugins() {
 	authPlugin.Init(authConfig)
 	g.pluginManager.Register(authPlugin)
 
-	// 注册限流插件（可选）
-	rateLimitPlugin := NewRateLimitPlugin(100) // 每个IP每分钟100次请求
+	// 注册限流插件（可选）- 使用增强的滑动窗口限流
+	rateLimitPlugin := NewEnhancedRateLimitPlugin(100, 1*time.Minute) // 每个IP每分钟100次请求
 	rateLimitConfig := map[string]interface{}{
 		"max_requests": 100,
+		"window_seconds": 60,
 	}
 	rateLimitPlugin.Init(rateLimitConfig)
 	g.pluginManager.Register(rateLimitPlugin)
@@ -221,13 +270,20 @@ func (g *ExtendedGateway) ServiceCallWithProtection(serviceName, path string, me
 	return resp, nil
 }
 
-// sendRequest 实际发送HTTP请求
+// sendRequest 实际发送HTTP请求（使用连接池）
 func (g *ExtendedGateway) sendRequest(instance *ServiceInstance, path string, method string, headers map[string]string, body []byte) (*http.Response, error) {
 	// 构造目标URL
 	url := fmt.Sprintf("http://%s:%d%s", instance.Host, instance.Port, path)
 
-	// 创建请求
-	req, err := http.NewRequest(method, url, nil)
+	// 创建请求体
+	var bodyReader *bytes.Reader
+	if len(body) > 0 {
+		bodyReader = bytes.NewReader(body)
+	} else {
+		bodyReader = bytes.NewReader([]byte{})
+	}
+
+	req, err := http.NewRequest(method, url, bodyReader)
 	if err != nil {
 		return nil, err
 	}
@@ -237,15 +293,16 @@ func (g *ExtendedGateway) sendRequest(instance *ServiceInstance, path string, me
 		req.Header.Set(k, v)
 	}
 
-	// 发送请求
-	client := &http.Client{
-		Timeout: 30 * time.Second,
-		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			return http.ErrUseLastResponse
-		},
+	// +++ 修改: 使用连接池而非简单http.Client +++
+	// 新代码: 使用连接池
+	client := g.connectionPool.Client()
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
 	}
 
-	return client.Do(req)
+	return resp, nil
+	// +++++++++++++++++++++++++++++++++++++++++++++
 }
 
 // ProxyRequestWithDegradation 带降级保护的请求代理
@@ -457,6 +514,15 @@ func (g *ExtendedGateway) Close() error {
 
 	// 关闭配置管理器
 	g.configManager.Close()
+
+	// +++ 新增: 关闭连接池 +++
+	if g.connectionPool != nil {
+		if err := g.connectionPool.Close(); err != nil {
+			// 记录错误但继续关闭流程
+			fmt.Printf("关闭连接池失败: %v\n", err)
+		}
+	}
+	// +++++++++++++++++++++++++++
 
 	// 关闭原有资源
 	close(g.done)
