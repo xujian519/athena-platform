@@ -29,58 +29,109 @@ python3 scripts/xiaonuo_system_checker.py
 ```
 Athena工作平台/
 ├── 📄 README.md                           # 项目说明文档
-├── 📄 .gitignore                          # Git忽略文件
+├── 📄 CLAUDE.md                           # Claude Code项目指南
 ├── 📁 scripts/                            # 脚本工具
 │   ├── 🌸 xiaonuo_unified_startup.py     # 小诺统一启动管理器
 │   ├── 🔍 xiaonuo_system_checker.py       # 系统状态检查器
-│   ├── 🚀 xiaonuo_quick_start.sh         # 快速启动脚本
-│   └── 📁 docker/                         # Docker初始化脚本
-├── 📁 configs/                            # 配置文件
-│   ├── 🐳 docker-compose.xiaonuo-optimized.yml  # 优化版Docker配置
-│   └── ⚙️ .env.memory                    # 记忆系统环境配置
-├── 📁 services/                           # 服务模块
-│   ├── 🎮 intelligent-collaboration/     # 小诺智能协作服务
-│   ├── 🤖 autonomous-control/            # 自主控制系统
-│   └── 📄 yunpat-agent/                  # 云熙专利代理
+│   └── 🚀 xiaonuo_quick_start.sh         # 快速启动脚本
+├── 📁 config/                             # 配置文件
+│   ├── 🐳 docker-compose.yml              # Docker编排配置
+│   └── ⚙️ service_discovery.json         # 服务注册与发现
 ├── 📁 core/                              # 核心系统
+│   ├── 🤖 agents/                         # 智能体实现（小娜、小诺、云熙）
 │   ├── 🧠 memory/                         # 四层记忆系统
 │   ├── 🤔 cognition/                      # 认知系统
-│   ├── 🔍 embedding/                      # 向量嵌入系统
-│   └── ⚡ cache/                          # 缓存系统
-├── 📁 data/                              # 数据目录
-│   └── 💖 identity_permanent_storage/     # 永久身份存储
-├── 📁 examples/                           # 示例和演示
-│   └── 🎭 demos/                          # 演示脚本
-├── 📁 tests/                              # 测试文件
-│   └── 🔗 integration/                    # 集成测试
-├── 📁 utils/                              # 工具和实用程序
-│   └── 🧹 cleanup/                        # 清理工具
+│   ├── 🔍 embedding/                      # 向量嵌入系统（BGE-M3）
+│   ├── ⚡ llm/                            # LLM适配器和管理
+│   ├── 🔧 tools/                          # 工具系统（权限/管理/调用）
+│   ├── ⚖️ legal_world_model/              # 法律世界模型
+│   ├── 🕸️ knowledge_graph/                # 知识图谱引擎
+│   └── 🤝 collaboration/                  # 智能体协作模式
+├── 📁 services/                           # 服务模块
+│   ├── 🎮 intelligent-collaboration/     # 小诺智能协作服务
+│   ├── 🌐 athena-unified/                 # 统一Athena服务
+│   └── 📦 multimodal/                     # 多模态处理服务
+├── 📁 gateway-unified/                    # 统一Go网关（Port 8005）
+│   ├── 🚀 cmd/gateway/                    # 网关入口
+│   ├── ⚙️ internal/                       # 内部实现
+│   └── 📄 config.yaml                     # 网关配置
+├── 📁 mcp-servers/                        # MCP服务器
+│   ├── 🗺️ gaode-mcp-server/              # 高德地图服务
+│   ├── 📚 academic-search/                # 学术搜索服务
+│   ├── 🤖 jina-ai-mcp-server/            # Jina AI服务
+│   └── 🧠 memory/                         # 知识图谱内存系统
+├── 📁 patent-platform/                    # 专利平台应用
+├── 📁 patent-retrieval-webui/             # 专利检索前端（Vue/TS）
+├── 📁 openspec-oa-workflow/               # 审查意见工作流
+├── 📁 production/                         # 生产环境配置
+│   ├── 📋 scripts/                        # 部署脚本
+│   └── ⚙️ core/                           # 生产环境核心代码
+├── 📁 prompts/                            # 提示词模板（v4架构）
+├── 📁 tools/                              # 工具集
+├── 📁 tests/                              # 测试套件
+│   ├── 🔬 unit/                           # 单元测试
+│   ├── 🔗 integration/                    # 集成测试
+│   └── 🎯 e2e/                            # 端到端测试
 ├── 📁 docs/                               # 文档
-│   └── 📊 reports/                        # 报告文件
-└── 📁 storage-system/                     # 存储系统
-    └── 🐳 docker-compose.yml              # 存储系统Docker配置
+│   ├── 📋 api/                            # API文档
+│   ├── 📊 reports/                        # 报告文件
+│   └── 📘 guides/                         # 开发指南
+├── 📁 domains/                            # 业务领域模块
+│   ├── ⚖️ legal-ai/                       # 法律AI模块
+│   ├── 🎨 ai-art/                         # AI艺术模块
+│   └── 📚 legal-knowledge/                # 法律知识模块
+├── 📁 data/                               # 运行时数据
+├── 📁 models/                             # AI模型文件
+└── 📁 logs/                               # 日志文件
 ```
 
 ## 🎯 核心功能
 
-### 1. **小诺超级推理引擎**
-- ✅ **六步推理框架**: 问题分解 → 跨学科连接 → 抽象建模 → 递归分析 → 创新突破 → 综合验证
-- ✅ **七步推理框架**: 初始参与 → 问题分析 → 多假设生成 → 自然发现流 → 测试验证 → 错误纠正 → 知识合成
-- ✅ **混合推理模式**: 双框架智能融合，提供最优质推理服务
+### 1. **Gateway-Centralized 架构**
+- 🌐 **统一网关**: Go语言高性能网关（Port 8005）
+- 🔌 **服务注册**: 自动服务发现与健康检查
+- 🔄 **智能路由**: 负载均衡与动态路由
+- 🎭 **Canvas渲染**: UI渲染服务
+- 📊 **监控集成**: Prometheus + Grafana
 
-### 2. **四层记忆架构**
+### 2. **多智能体协作**
+- 👩‍💼 **小娜**: 专利法律专家（天秤女神）
+- 👧 **小诺**: 平台总调度官（双鱼座公主）
+- 🏢 **云熙**: IP管理系统
+- 🤖 **协作模式**: Sequential, Parallel, Hierarchical, Consensus
+
+### 3. **四层记忆架构**
 - 🔥 **热层 (HOT)**: 内存存储，100MB限制，快速访问
 - 🌡️ **温层 (WARM)**: Redis缓存，500MB限制，自动TTL管理
 - ❄️ **冷层 (COLD)**: SQLite持久化，10GB限制，压缩存储
 - 📦 **归档 (ARCHIVE)**: 长期存储，无限制，分层归档
 
-### 3. **智能体管理**
-- 👩‍💼 **小娜**: 专利法律专家 (天秤女神)
-- 👧 **小诺**: 平台总调度官 (双鱼座公主)
-- 🏢 **云熙**: IP管理系统
-- 🤖 更多智能体按需调度
+### 4. **提示词工程 v4.0**
+- 🏗️ **四层架构**: L1基础层 + L2数据层 + L3能力层 + L4业务层
+- ⚡ **并行工具调用**: Turn-based并行处理，性能提升75%
+- 🎯 **whenToUse触发**: 自动识别用户意图
+- 🧠 **Scratchpad推理**: 私下推理机制
 
-### 4. **存储系统**
+### 5. **工具系统 v1.0**
+- 🔧 **工具分组管理**: 按领域和功能分组
+- 🔒 **权限控制**: 三种权限模式（DEFAULT/AUTO/BYPASS）
+- 🎯 **智能选择**: 基于任务类型自动选择最佳工具
+- 📊 **性能监控**: 实时跟踪工具执行统计
+
+### 6. **MCP服务器系统**
+- 🗺️ **高德地图**: 地理编码、路径规划
+- 📚 **学术搜索**: 论文检索、Semantic Scholar
+- 🤖 **Jina AI**: 网页抓取、向量搜索、重排序
+- 🧠 **知识图谱**: 实体、关系、观察存储
+- 🔍 **本地搜索引擎**: SearXNG + Firecrawl
+
+### 7. **法律世界模型**
+- ⚖️ **场景识别**: 自动识别专利法律场景
+- 🕸️ **知识图谱**: 法律概念和案例图表示
+- 🤔 **推理引擎**: 基于法律知识的推理分析
+- 📄 **文档生成**: 自动生成法律文档
+
+### 8. **存储系统**
 - 🗄️ **PostgreSQL**: 主数据库
 - 🔴 **Redis**: 缓存系统
 - 🔍 **Qdrant**: 向量数据库
@@ -89,11 +140,13 @@ Athena工作平台/
 
 ## 🔧 系统要求
 
-- **操作系统**: macOS (推荐)
-- **Python**: 3.8+
-- **Docker**: 20.10+
+- **操作系统**: macOS (推荐) / Linux
+- **Python**: 3.11+ (使用现代类型注解)
+- **Go**: 1.21+ (Gateway网关)
+- **Docker**: 20.10+ & Docker Compose
 - **内存**: 8GB+ (推荐16GB+)
 - **磁盘**: 20GB+ 可用空间
+- **Node.js**: 18+ (专利检索前端)
 
 ## 💡 使用方法
 
@@ -104,6 +157,37 @@ Athena工作平台/
 
 # 方式2: 详细启动
 python3 scripts/xiaonuo_unified_startup.py 启动平台
+
+# 方式3: Docker启动
+docker-compose up -d
+```
+
+### Gateway网关部署
+```bash
+# macOS - 快速部署
+cd gateway-unified
+sudo bash quick-deploy-macos.sh
+
+# Linux - 快速部署
+sudo bash quick-deploy.sh
+
+# 检查状态
+sudo /usr/local/athena-gateway/status.sh
+
+# 查看日志
+sudo journalctl -u athena-gateway -f
+```
+
+### MCP服务器管理
+```bash
+# 启动所有MCP服务器
+docker-compose up -d gaode-mcp-server academic-search jina-ai-mcp-server
+
+# 查看MCP服务器状态
+docker-compose ps | grep mcp
+
+# 查看MCP服务器日志
+docker-compose logs -f gaode-mcp-server
 ```
 
 ### 检查状态
@@ -113,6 +197,12 @@ python3 scripts/xiaonuo_unified_startup.py 启动平台
 
 # 详细检查
 python3 scripts/xiaonuo_system_checker.py
+
+# 查看Gateway状态
+curl http://localhost:8005/health
+
+# 查看监控仪表板
+open http://localhost:3000  # Grafana
 ```
 
 ### 与小诺交互
@@ -121,6 +211,7 @@ python3 scripts/xiaonuo_system_checker.py
 - 🎮 平台控制: "启动/停止服务 X"
 - 🤖 智能体调度: "调用小娜分析专利"
 - 📊 系统监控: "显示平台状态"
+- 🔧 工具调用: 使用专利检索、学术搜索等工具
 
 ## 🌟 小诺Slogan
 

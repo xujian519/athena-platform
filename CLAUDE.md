@@ -471,6 +471,204 @@ class CustomAgent(BaseAgent):
 - LLM responses cached when appropriate
 - Async operations for I/O-bound tasks
 
+## 工具系统 (Tool System v1.0)
+
+Athena平台使用**增强版工具管理系统**，支持工具分组、权限控制、智能选择和性能监控。
+
+### 核心特性
+
+- 🔧 **工具分组管理**: 按领域和功能分组，支持动态激活
+- 🔒 **权限控制**: 三种权限模式（DEFAULT/AUTO/BYPASS）+ 规则匹配
+- 🎯 **智能选择**: 基于任务类型自动选择最佳工具
+- 📊 **性能监控**: 实时跟踪工具执行统计和成功率
+- 🚦 **速率限制**: 防止工具调用过于频繁
+- 🧩 **可扩展架构**: 支持自定义工具开发和注册
+
+### 工具权限系统
+
+**权限模式**：
+- `DEFAULT`: 默认模式，未匹配规则时需要用户确认
+- `AUTO`: 自动模式，未匹配规则时自动拒绝
+- `BYPASS`: 绕过模式，允许所有调用（谨慎使用）
+
+**权限规则**：
+- 支持通配符模式匹配（如 `bash:*` 或 `*search`）
+- 基于优先级的冲突解决
+- 运行时权限检查
+
+**使用示例**：
+```python
+from core.tools.permissions import (
+    ToolPermissionContext,
+    PermissionMode,
+    PermissionRule
+)
+
+# 创建权限上下文
+ctx = ToolPermissionContext(mode=PermissionMode.AUTO)
+
+# 添加允许规则
+ctx.add_rule("allow", PermissionRule(
+    rule_id="safe-read",
+    pattern="*:read",
+    description="允许所有读操作",
+    priority=10
+))
+
+# 添加拒绝规则
+ctx.add_rule("deny", PermissionRule(
+    rule_id="dangerous-rm",
+    pattern="bash:*rm*",
+    description="拒绝包含rm的bash命令",
+    priority=100
+))
+
+# 检查权限
+decision = ctx.check_permission("file:read", parameters={"path": "/tmp/file.txt"})
+print(f"允许: {decision.allowed}, 原因: {decision.reason}")
+```
+
+### 工具分组系统
+
+**工具组类型**：
+- `patent`: 专利检索、分析、翻译
+- `legal`: 法律分析、案例检索
+- `academic`: 学术搜索、论文分析
+- `general`: 通用工具（文件操作、网络搜索等）
+
+**使用示例**：
+```python
+from core.tools.tool_manager import ToolManager
+
+# 获取工具管理器
+manager = ToolManager()
+
+# 激活工具组
+manager.activate_group("patent")
+
+# 自动选择工具组
+await manager.auto_activate_group_for_task(
+    task_description="分析专利CN123456789A的创造性",
+    task_type="patent_analysis",
+    domain="patent"
+)
+
+# 获取最佳工具
+result = await manager.select_best_tool(
+    task_description="检索相关专利",
+    task_type="patent_search"
+)
+```
+
+### 工具调用管理
+
+**核心功能**：
+- 统一调用接口
+- 调用日志记录
+- 错误处理和重试
+- 结果验证
+- 性能监控
+
+**使用示例**：
+```python
+from core.tools.tool_call_manager import get_tool_manager, call_tool
+
+# 获取管理器
+manager = get_tool_manager()
+
+# 调用工具
+result = await call_tool(
+    "patent_analyzer",
+    parameters={
+        "patent_id": "CN123456789A",
+        "analysis_type": "creativity"
+    }
+)
+
+print(f"状态: {result.status.value}")
+print(f"结果: {result.result}")
+print(f"执行时间: {result.execution_time:.2f}秒")
+```
+
+### 文档位置
+
+- **权限系统API**: `docs/api/PERMISSION_SYSTEM_API.md`
+- **工具管理API**: `docs/api/TOOL_MANAGER_API.md`
+- **使用示例**: `examples/tools/permission_examples.py`
+- **开发指南**: `docs/guides/TOOL_SYSTEM_GUIDE.md`
+
+---
+
+## 提示词工程系统 (v4.0)
+
+Athena平台使用**四层提示词架构**，基于Claude Code Playbook设计模式。
+
+### 核心特性
+
+- 🏗️ **四层架构**: L1基础层 + L2数据层 + L3能力层 + L4业务层
+- ⚡ **并行工具调用**: Turn-based并行处理，性能提升75%
+- 🎯 **whenToUse触发**: 自动识别用户意图，智能加载模块
+- 🧠 **Scratchpad推理**: 私下推理机制，仅保留摘要给用户
+- 🔒 **约束重复**: 关键规则在开头和结尾重复强调
+
+### 文档位置
+
+- **系统架构**: `prompts/README.md`
+- **v4架构设计**: `prompts/README_V4_ARCHITECTURE.md`
+- **实施报告**: `docs/reports/PROMPT_ENGINE_V4_IMPLEMENTATION_REPORT_20260419.md`
+- **代码质量报告**: `docs/reports/CODE_QUALITY_FIX_COMPLETE_REPORT_20260419.md`
+- **质量标准**: `docs/development/CODE_QUALITY_STANDARDS.md`
+
+### 使用Scratchpad代理
+
+```python
+from core.agents.xiaona_agent_with_scratchpad import XiaonaAgentWithScratchpad
+
+# 创建带Scratchpad的代理
+agent = XiaonaAgentWithScratchpad()
+
+# 处理任务
+result_json = agent.process("帮我分析专利CN123456789A的创造性")
+result = json.loads(result_json)
+
+# 输出包含：
+# - output: 用户看到的内容
+# - reasoning_summary: 推理摘要
+# - scratchpad_available: 是否可查看完整Scratchpad
+```
+
+### 提示词加载
+
+```python
+from production.services.unified_prompt_loader_v4 import UnifiedPromptLoaderV4
+
+# 初始化v4加载器
+loader = UnifiedPromptLoaderV4()
+
+# 加载提示词（静态/动态分离）
+system_prompt = loader.load_system_prompt(
+    agent_type="xiaona",
+    session_context={
+        "session_id": "SESSION_001",
+        "cwd": "/Users/xujian/Athena工作平台"
+    }
+)
+```
+
+### 代码质量要求
+
+所有Python代码必须遵循：
+
+1. **类型注解**: 使用`Dict[str, Any]`而非`dict`
+2. **异步规范**: 只在真正需要异步I/O时使用`async`
+3. **错误处理**: JSON解析必须有try-except
+4. **事件循环**: 检测并处理嵌套事件循环
+5. **Python版本**: 兼容Python 3.9+
+
+详见: `docs/development/CODE_QUALITY_STANDARDS.md`
+
+---
+
 ## Troubleshooting
 
 ### Common Issues
@@ -552,6 +750,11 @@ docker-compose exec redis redis-cli ping
 | `core/embedding/unified_embedding_service.py` | Embedding service |
 | `core/memory/` | Memory system implementation |
 | `core/legal_world_model/` | Legal world model for patent analysis |
+| `core/tools/` | Tool system (permissions, manager, registry) |
+| `core/tools/permissions.py` | Tool permission system |
+| `core/tools/tool_manager.py` | Tool group management |
+| `core/tools/tool_call_manager.py` | Tool call orchestration |
+| `core/tools/base.py` | Tool definitions and registry |
 | `services/api-gateway/` | API Gateway (Go) |
 | `gateway-unified/` | Unified Go gateway system |
 | `mcp-servers/` | MCP servers (gaode, academic-search, jina-ai, etc.) |

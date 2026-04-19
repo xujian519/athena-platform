@@ -465,7 +465,6 @@ class ToolsetManager:
                     # 这些工具ID需要在实际注册时匹配
                     "enhanced_patent_search",
                     "web_search",
-                    "google_scholar_search",
                     "pdf_patent_parser",
                 ],
                 activation_keywords=[
@@ -676,8 +675,8 @@ class ToolsetManager:
                 domains=["academic"],
                 task_types=["research", "analysis"],
                 tools=[
-                    "google_scholar_search",
-                    "semantic_scholar_search",
+                    "web_search",  # 使用本地搜索
+                    "academic-search",  # MCP学术搜索
                     "paper_summarizer",
                     "citation_analyzer",
                 ],

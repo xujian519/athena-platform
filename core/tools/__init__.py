@@ -22,6 +22,9 @@ from .selector import SelectionScore, SelectionStrategy, ToolSelector
 from .tool_group import GroupActivationRule, ToolGroup, ToolGroupDef
 from .tool_manager import ToolManager, ToolSelectionResult, get_tool_manager
 
+# 导入自动注册模块（触发生产工具自动注册）
+from . import auto_register  # noqa: F401
+
 __all__ = [
     "ActivationRule",
     # 工具分组 (Phase 1)

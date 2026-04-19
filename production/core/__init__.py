@@ -30,10 +30,53 @@ if TYPE_CHECKING:
 
 
 # 核心模块导入
-from .agent import BaseAgent
+try:
+    from .agent import BaseAgent
+except ImportError:
+    BaseAgent = None
 
-# 基础模块导入
-from .base_module import BaseModule, HealthStatus, ModuleStatus
+# 基础模块导入 (已废弃，提供向后兼容)
+# 为了避免循环导入，仅在运行时动态导入
+BaseModule = None
+HealthStatus = None
+ModuleStatus = None
+
+def _get_deprecated_symbols():
+    """延迟导入已废弃的符号"""
+    global BaseModule, HealthStatus, ModuleStatus
+    if BaseModule is not None:
+        return  # 已经导入过了
+
+    try:
+        from .base_module import BaseModule as _BaseModule
+        from .base_module import HealthStatus as _HealthStatus
+        from .base_module import ModuleStatus as _ModuleStatus
+        import warnings
+        warnings.warn(
+            "core.base_module已废弃，请迁移到core.agents架构",
+            DeprecationWarning,
+            stacklevel=2
+        )
+        BaseModule = _BaseModule
+        HealthStatus = _HealthStatus
+        ModuleStatus = _ModuleStatus
+    except ImportError:
+        # 创建兼容的枚举类
+        class _HealthStatus:
+            HEALTHY = 'healthy'
+            DEGRADED = 'degraded'
+            UNHEALTHY = 'unhealthy'
+
+        class _ModuleStatus:
+            ACTIVE = 'active'
+            INACTIVE = 'inactive'
+            ERROR = 'error'
+
+        HealthStatus = _HealthStatus
+        ModuleStatus = _ModuleStatus
+        # BaseAgent作为BaseModule的替代
+        if BaseAgent is not None:
+            BaseModule = BaseAgent
 
 # 任务模型导入
 from .task_models import (

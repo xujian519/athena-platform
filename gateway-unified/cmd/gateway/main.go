@@ -43,6 +43,17 @@ func main() {
 	}
 	defer logging.Sync()
 
+	// 初始化OpenTelemetry（如果启用监控）
+	if cfg.Monitoring.Enabled {
+		tracer, err := monitoring.InitOpenTelemetry(cfg.Monitoring)
+		if err != nil {
+			logging.LogWarn("OpenTelemetry初始化失败，将不启用链路追踪", logging.Err(err))
+		} else {
+			logging.LogInfo("OpenTelemetry链路追踪已启用")
+			_ = tracer // 记录tracer供后续使用
+		}
+	}
+
 	logging.LogInfo("启动Athena Gateway",
 		logging.String("version", Version),
 		logging.String("build_time", BuildTime),
@@ -198,4 +209,13 @@ func main() {
 	}
 
 	logging.LogInfo("Athena Gateway已关闭")
+
+	// 关闭OpenTelemetry
+	if cfg.Monitoring.Enabled {
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		if err := monitoring.ShutdownOpenTelemetry(ctx); err != nil {
+			logging.LogError("OpenTelemetry关闭失败", logging.Err(err))
+		}
+	}
 }

@@ -540,7 +540,9 @@ class ReflectionEngineV5:
     def _generate_loop_id(self) -> str:
         """生成反思循环ID"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        hash_part = hashlib.md5(f"{timestamp}_{id(self, usedforsecurity=False)}".encode()).hexdigest()[:8]
+        # 修复: id() 不接受关键字参数,应该先获取 id,然后再进行 md5 哈希
+        unique_id = id(self)
+        hash_part = hashlib.md5(f"{timestamp}_{unique_id}".encode(), usedforsecurity=False).hexdigest()[:8]
         return f"loop_{timestamp}_{hash_part}"
 
     async def _assess_accuracy(self, output: str, context: dict[str, Any]) -> float:

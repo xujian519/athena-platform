@@ -22,7 +22,7 @@ import re
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any
+from typing import Any, Tuple, Dict
 
 logger = logging.getLogger(__name__)
 
@@ -226,7 +226,7 @@ class ScenarioIdentifierOptimized:
         return cleaned
 
     def identify_scenario(
-        self, user_input: str, additional_context: dict[str, Any] | None = None
+        self, user_input: str, additional_context: Optional[Dict[str, Any]] = None
     ) -> ScenarioContext:
         """
         识别用户输入的场景
@@ -627,7 +627,7 @@ class ScenarioIdentifierOptimized:
 
 # 便捷函数
 def identify_scenario_from_input(
-    user_input: str, additional_context: dict[str, Any] | None = None
+    user_input: str, additional_context: Optional[Dict[str, Any]] = None
 ) -> ScenarioContext:
     """
     便捷函数:从用户输入识别场景(优化版本)
