@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-04-19",
+  "dimension": 1024,
+  "summary": {
+    "dimension_config_ok": true,
+    "model_output_ok": false,
+    "collections_ok": false,
+    "manager_ok": false,
+    "overall_ready": false
+  },
+  "details": {
+    "dimension_config": {
+      "expected": 1024,
+      "status": "✅ 正确"
+    },
+    "model_output": {
+      "expected_dimension": 1024,
+      "status": "❌ 错误"
+    },
+    "collections": {
+      "expected_dimension": 1024,
+      "status": "❌ 错误"
+    },
+    "manager": {
+      "status": "❌ 不可用"
+    }
+  },
+  "recommendations": [
+    "❌ BGE-M3模型输出维度不是1024，请检查core/embedding/bge_m3_embedder.py",
+    "⚠️ 部分Qdrant集合维度不是1024，需要重建集合"
+  ]
+}
