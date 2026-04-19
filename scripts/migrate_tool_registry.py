@@ -21,7 +21,7 @@ import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, Optional
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -164,7 +164,7 @@ class ToolRegistryMigrator:
 
         return tools
 
-    def _extract_tool_definition(self, call_node: ast.Call) -> dict[str, Any] | None:
+    def _extract_tool_definition(self, call_node: ast.Call) -> Optional[Dict[str, Any]]:
         """
         提取ToolDefinition参数
 
