@@ -580,8 +580,58 @@ _global_registry = ToolRegistry()
 
 
 def get_global_registry() -> ToolRegistry:
-    """获取全局工具注册中心"""
+    """
+    获取全局工具注册中心
+
+    注意: 此函数已弃用，请使用 get_unified_registry() 代替。
+    为了向后兼容，此函数将继续可用。
+
+    Returns:
+        ToolRegistry: 全局工具注册中心实例
+
+    Deprecated:
+        使用 get_unified_registry() 替代
+    """
+    import warnings
+
+    warnings.warn(
+        "get_global_registry() 已弃用，请使用 get_unified_registry() 代替",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+
     return _global_registry
+
+
+# ================================
+# 向后兼容Shim (v2.0.0)
+# ================================
+
+
+def get_unified_registry():
+    """
+    获取统一工具注册表（新接口）
+
+    这是推荐使用的工具注册表访问方式。
+
+    Returns:
+        UnifiedToolRegistry: 统一工具注册表实例
+
+    Example:
+        >>> from core.tools.base import get_unified_registry
+        >>> registry = get_unified_registry()
+        >>> tools = registry.find_by_category(ToolCategory.PATENT_SEARCH)
+    """
+    try:
+        # 动态导入避免循环依赖
+        from core.tools.unified_registry import UnifiedToolRegistry
+
+        return UnifiedToolRegistry.get_instance()
+
+    except Exception as e:
+        # 回退到旧注册表
+        logger.warning(f"⚠️ 无法加载统一注册表，回退到旧注册表: {e}")
+        return _global_registry
 
 
 __all__ = [
@@ -592,4 +642,5 @@ __all__ = [
     "ToolPriority",
     "ToolRegistry",
     "get_global_registry",
+    "get_unified_registry",  # 新增
 ]
