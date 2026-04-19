@@ -1,5 +1,9 @@
 # 专利检索工具集审计报告
 
+
+> **注意**: patent-retrieval-webui已于2026-04-19备份到移动硬盘AthenaData，暂时不使用。
+> 备份路径: /Volumes/AthenaData/Athena平台备份/patent-retrieval-webui/
+> 恢复方法: 见备份目录中的BACKUP_INFO.txt
 > **审计日期**: 2026-04-19
 > **审计范围**: Athena平台所有专利检索相关工具和模块
 > **审计状态**: ✅ 完成

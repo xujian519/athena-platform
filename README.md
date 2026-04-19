@@ -61,7 +61,7 @@ Athena工作平台/
 │   ├── 🤖 jina-ai-mcp-server/            # Jina AI服务
 │   └── 🧠 memory/                         # 知识图谱内存系统
 ├── 📁 patent-platform/                    # 专利平台应用
-├── 📁 patent-retrieval-webui/             # 专利检索前端（Vue/TS）
+├── 📁 patent-retrieval-webui (已备份到移动硬盘)/             # 专利检索前端（Vue/TS）
 ├── 📁 openspec-oa-workflow/               # 审查意见工作流
 ├── 📁 production/                         # 生产环境配置
 │   ├── 📋 scripts/                        # 部署脚本

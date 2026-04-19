@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """
+
+> **注意**: patent-retrieval-webui已于2026-04-19备份到移动硬盘AthenaData，暂时不使用。
+> 备份路径: /Volumes/AthenaData/Athena平台备份/patent-retrieval-webui/
+> 恢复方法: 见备份目录中的BACKUP_INFO.txt
 专利检索工具集全面分析脚本
 
 分析项目中所有专利检索相关的工具和模块

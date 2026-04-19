@@ -1,5 +1,9 @@
 # Athena工作平台清理报告
 
+
+> **注意**: patent-retrieval-webui已于2026-04-19备份到移动硬盘AthenaData，暂时不使用。
+> 备份路径: /Volumes/AthenaData/Athena平台备份/patent-retrieval-webui/
+> 恢复方法: 见备份目录中的BACKUP_INFO.txt
 > 清理日期: 2026-04-19
 > 清理策略: 安全清理（推荐）
 
