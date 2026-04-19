@@ -1,0 +1,44 @@
+{
+  "golden_queries": [
+    {
+      "id": "GQ-001",
+      "query": "发明专利创造性判断标准",
+      "expected_top_entities": ["创造性", "突出实质性特点", "显著进步"],
+      "expected_collections": ["patent_rules_1024", "legal_main"],
+      "min_relevance_score": 0.75
+    },
+    {
+      "id": "GQ-002",
+      "query": "专利申请驳回后复审流程",
+      "expected_top_entities": ["复审请求", "专利复审委员会", "复审通知书"],
+      "expected_collections": ["patent_rules_1024", "patent_legal"],
+      "min_relevance_score": 0.70
+    },
+    {
+      "id": "GQ-003",
+      "query": "人工智能相关专利的审查指南",
+      "expected_top_entities": ["人工智能", "算法", "计算机实施的发明"],
+      "expected_collections": ["patent_rules_1024", "technical_terms_1024"],
+      "min_relevance_score": 0.72
+    },
+    {
+      "id": "GQ-004",
+      "query": "实用新型专利授权条件",
+      "expected_top_entities": ["实用新型", "新颖性", "创造性", "实用性"],
+      "expected_collections": ["patent_rules_1024", "legal_main"],
+      "min_relevance_score": 0.68
+    },
+    {
+      "id": "GQ-005",
+      "query": "专利侵权损害赔偿计算",
+      "expected_top_entities": ["侵权赔偿", "损失计算", "侵权获利"],
+      "expected_collections": ["patent_legal", "legal_main"],
+      "min_relevance_score": 0.70
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "created_date": "2026-04-18",
+    "description": "Golden Query Set for Athena Knowledge Base Accuracy Verification"
+  }
+}

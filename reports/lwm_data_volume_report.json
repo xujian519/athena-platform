@@ -1,0 +1,95 @@
+{
+  "timestamp": "2026-04-18T23:31:16.476281",
+  "results": {
+    "Neo4j": {
+      "status": "✅ 正常",
+      "nodes": 0,
+      "relationships": 0,
+      "has_data": false
+    },
+    "Qdrant": {
+      "status": "✅ 正常",
+      "collections": 13,
+      "total_points": 63139,
+      "details": [
+        {
+          "name": "case_analysis",
+          "points": 10,
+          "vector_size": 1024
+        },
+        {
+          "name": "legal_knowledge",
+          "points": 40050,
+          "vector_size": 1024
+        },
+        {
+          "name": "agent_memory_vectors",
+          "points": 2197,
+          "vector_size": 1024
+        },
+        {
+          "name": "patent_legal",
+          "points": 10,
+          "vector_size": 1024
+        },
+        {
+          "name": "knowledge_vectors",
+          "points": 0,
+          "vector_size": 1024
+        },
+        {
+          "name": "conversation_vectors",
+          "points": 0,
+          "vector_size": 1024
+        },
+        {
+          "name": "patent_rules_1024",
+          "points": 10,
+          "vector_size": 1024
+        },
+        {
+          "name": "legal_main",
+          "points": 10,
+          "vector_size": 1024
+        },
+        {
+          "name": "technical_terms_1024",
+          "points": 10,
+          "vector_size": 1024
+        },
+        {
+          "name": "baochen_wiki",
+          "points": 3788,
+          "vector_size": 1024
+        },
+        {
+          "name": "patent_fulltext",
+          "points": 10,
+          "vector_size": 768
+        },
+        {
+          "name": "legal_qa",
+          "points": 10,
+          "vector_size": 768
+        },
+        {
+          "name": "invalidation_decisions",
+          "points": 17034,
+          "vector_size": 1024
+        }
+      ],
+      "has_data": true
+    },
+    "PostgreSQL": {
+      "status": "⚠️  未配置",
+      "error": "permission denied for table agent_conversations\n",
+      "has_data": false
+    },
+    "本地文件": {
+      "status": "⚠️  无数据",
+      "files": 0,
+      "size_mb": 0.0,
+      "has_data": false
+    }
+  }
+}

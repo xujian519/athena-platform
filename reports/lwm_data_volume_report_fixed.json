@@ -1,0 +1,143 @@
+{
+  "timestamp": "2026-04-18T23:33:52.827122",
+  "completeness": "基本完整",
+  "results": {
+    "Neo4j": {
+      "status": "❌ 失败",
+      "error": "{code: Neo.ClientError.Database.DatabaseNotFound} {message: Database does not exist. Database name: 'legal_world'.}",
+      "has_data": false
+    },
+    "Qdrant": {
+      "status": "✅ 正常",
+      "collections": 13,
+      "total_points": 63142,
+      "total_vectors": 63142,
+      "details": [
+        {
+          "name": "case_analysis",
+          "points": 10,
+          "vectors": 10,
+          "vector_size": 1024
+        },
+        {
+          "name": "legal_knowledge",
+          "points": 40050,
+          "vectors": 40050,
+          "vector_size": 1024
+        },
+        {
+          "name": "agent_memory_vectors",
+          "points": 2200,
+          "vectors": 2200,
+          "vector_size": 1024
+        },
+        {
+          "name": "patent_legal",
+          "points": 10,
+          "vectors": 10,
+          "vector_size": 1024
+        },
+        {
+          "name": "knowledge_vectors",
+          "points": 0,
+          "vectors": 0,
+          "vector_size": 1024
+        },
+        {
+          "name": "conversation_vectors",
+          "points": 0,
+          "vectors": 0,
+          "vector_size": 1024
+        },
+        {
+          "name": "patent_rules_1024",
+          "points": 10,
+          "vectors": 10,
+          "vector_size": 1024
+        },
+        {
+          "name": "legal_main",
+          "points": 10,
+          "vectors": 10,
+          "vector_size": 1024
+        },
+        {
+          "name": "technical_terms_1024",
+          "points": 10,
+          "vectors": 10,
+          "vector_size": 1024
+        },
+        {
+          "name": "baochen_wiki",
+          "points": 3788,
+          "vectors": 3788,
+          "vector_size": 1024
+        },
+        {
+          "name": "patent_fulltext",
+          "points": 10,
+          "vectors": 10,
+          "vector_size": 768
+        },
+        {
+          "name": "legal_qa",
+          "points": 10,
+          "vectors": 10,
+          "vector_size": 768
+        },
+        {
+          "name": "invalidation_decisions",
+          "points": 17034,
+          "vectors": 17034,
+          "vector_size": 1024
+        }
+      ],
+      "has_data": true
+    },
+    "PostgreSQL": {
+      "status": "✅ 正常",
+      "database": "athena",
+      "tables": 9,
+      "total_rows": 20618,
+      "table_details": [
+        {
+          "name": "agent_conversations",
+          "rows": 0
+        },
+        {
+          "name": "agent_memories",
+          "rows": 20573
+        },
+        {
+          "name": "agent_memory_relations",
+          "rows": 0
+        },
+        {
+          "name": "gateway_roles",
+          "rows": 4
+        },
+        {
+          "name": "gateway_users",
+          "rows": 1
+        },
+        {
+          "name": "import_logs",
+          "rows": 2
+        },
+        {
+          "name": "learning_performance_metrics",
+          "rows": 2
+        },
+        {
+          "name": "xiaonuo_calendar_events",
+          "rows": 2
+        },
+        {
+          "name": "xiaonuo_reminders",
+          "rows": 34
+        }
+      ],
+      "has_data": true
+    }
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "report_date": "2026-04-18",
+  "test_executor": "Agent 2 (验证测试执行者)",
+  "environment": {
+    "platform": "macOS Darwin 25.5.0",
+    "python_version": "3.11.15",
+    "pytest_version": "7.4.4"
+  },
+  "summary": {
+    "total_tests": 41,
+    "passed": 16,
+    "failed": 18,
+    "skipped": 7,
+    "pass_rate": 39.0
+  },
+  "test_suites": {
+    "knowledge_base_connectivity": {
+      "total": 8,
+      "passed": 4,
+      "failed": 3,
+      "skipped": 1,
+      "pass_rate": 50.0
+    },
+    "knowledge_base_accuracy": {
+      "total": 5,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 5,
+      "pass_rate": 0.0
+    },
+    "tool_connectivity": {
+      "total": 7,
+      "passed": 4,
+      "failed": 2,
+      "skipped": 1,
+      "pass_rate": 57.1
+    },
+    "gateway_routes": {
+      "total": 10,
+      "passed": 6,
+      "failed": 4,
+      "skipped": 0,
+      "pass_rate": 60.0
+    },
+    "gateway_auth": {
+      "total": 6,
+      "passed": 1,
+      "failed": 5,
+      "skipped": 0,
+      "pass_rate": 16.7
+    },
+    "gateway_middleware": {
+      "total": 5,
+      "passed": 1,
+      "failed": 4,
+      "skipped": 0,
+      "pass_rate": 20.0
+    }
+  },
+  "issues": {
+    "p0": [
+      {
+        "id": "P0-001",
+        "description": "Qdrant向量库无集合",
+        "impact": "所有向量搜索、RAG功能不可用",
+        "test_reference": "test_qdrant_collections_count"
+      },
+      {
+        "id": "P0-002",
+        "description": "Gateway返回400而非200/404",
+        "impact": "监控系统误报、健康检查失败",
+        "test_reference": "test_health_endpoint, test_ready_endpoint, test_live_endpoint"
+      }
+    ],
+    "p1": [
+      {
+        "id": "P1-001",
+        "description": "Redis需认证",
+        "impact": "缓存服务不可用",
+        "test_reference": "test_redis_connectivity"
+      },
+      {
+        "id": "P1-002",
+        "description": "Neo4j需认证",
+        "impact": "知识图谱服务不可用",
+        "test_reference": "test_neo4j_kg_service"
+      },
+      {
+        "id": "P1-003",
+        "description": "认证中间件未启用",
+        "impact": "安全风险",
+        "test_reference": "test_bearer_token_auth, test_api_key_auth"
+      }
+    ],
+    "p2": [
+      {
+        "id": "P2-001",
+        "description": "请求ID中间件缺失",
+        "impact": "无法追踪请求链路",
+        "test_reference": "test_request_id_header"
+      },
+      {
+        "id": "P2-002",
+        "description": "限流机制失效",
+        "impact": "无过载保护",
+        "test_reference": "test_rate_limiting"
+      }
+    ]
+  },
+  "configuration_fixes": [
+    "Redis端口: 6379 → 16379 (Docker映射)",
+    "PostgreSQL端口: 5432 → 15432 (Docker映射)",
+    "Qdrant端口: 6333 → 16333 (Docker映射)",
+    "Gateway协议: HTTP → HTTPS (自签名证书)",
+    "添加verify=False禁用SSL验证"
+  ],
+  "next_actions": {
+    "immediate": [
+      "初始化Qdrant向量库集合",
+      "修复Gateway健康检查端点",
+      "配置Redis/Neo4j认证"
+    ],
+    "short_term": [
+      "完善监控端点",
+      "启用认证中间件",
+      "导入基准测试数据"
+    ],
+    "long_term": [
+      "自动化测试CI/CD",
+      "性能基准测试",
+      "监控告警规则"
+    ]
+  },
+  "log_files": [
+    "tests/verification/logs/knowledge_base_connectivity_20260418_213612.log",
+    "tests/verification/logs/knowledge_base_accuracy_20260418_213645.log",
+    "tests/verification/logs/tool_connectivity_20260418_213652.log",
+    "tests/verification/logs/gateway_routes_20260418_213655.log",
+    "tests/verification/logs/gateway_auth_20260418_213657.log",
+    "tests/verification/logs/gateway_middleware_20260418_213659.log",
+    "tests/verification/logs/full_test_run_20260418_213705.log"
+  ]
+}
