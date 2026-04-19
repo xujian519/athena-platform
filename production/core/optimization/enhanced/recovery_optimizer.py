@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强错误恢复优化器 (Enhanced Recovery Optimizer)
 智能错误处理和快速恢复机制
@@ -8,7 +9,6 @@
 优化目标: 错误恢复率 75% → 85%, 恢复时间 3-5s → 1-2s
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from collections import defaultdict

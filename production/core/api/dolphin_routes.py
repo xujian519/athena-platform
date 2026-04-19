@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Dolphin文档解析API路由
 Dolphin Document Parsing API Routes for Athena
 """
 
-from __future__ import annotations
 import logging
 import os
 from pathlib import Path

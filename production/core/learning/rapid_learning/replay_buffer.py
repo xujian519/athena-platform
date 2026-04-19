@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 快速学习机制 - 优先级经验回放缓冲区
 Rapid Learning - Prioritized Replay Buffer
@@ -9,7 +10,6 @@ Rapid Learning - Prioritized Replay Buffer
 版本: 2.0.0
 """
 
-from __future__ import annotations
 import logging
 
 from config.numpy_compatibility import np

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 语义推理引擎
 Semantic Reasoning Engine
@@ -6,7 +7,6 @@ Semantic Reasoning Engine
 为法律和专利知识图谱提供高级语义推理和逻辑分析能力
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

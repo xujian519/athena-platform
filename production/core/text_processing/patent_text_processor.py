@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利文本预处理器
 Patent Text Preprocessor
@@ -6,7 +7,6 @@ Patent Text Preprocessor
 专门处理专利领域的中文分词、文本清洗和特征提取
 """
 
-from __future__ import annotations
 import logging
 import re
 from collections import Counter

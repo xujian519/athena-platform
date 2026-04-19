@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 参数提取预训练模型
 Parameter Extraction Pre-trained Model
@@ -16,7 +17,6 @@ Parameter Extraction Pre-trained Model
 版本: v1.0.0 "参数提取模型"
 """
 
-from __future__ import annotations
 import json
 import logging
 import re

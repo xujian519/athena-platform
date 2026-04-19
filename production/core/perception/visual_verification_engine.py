@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 视觉验证引擎
 Visual Verification Engine
@@ -14,7 +15,6 @@ Visual Verification Engine
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import os

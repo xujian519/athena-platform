@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜优化通信模块 - 健康度99分版本
 Xiaona Optimized Communication Module - 99 Health Score Version
@@ -16,7 +17,6 @@ Xiaona Optimized Communication Module - 99 Health Score Version
 版本: v2.1.0 "99分健康度 + 资源管理修复"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import sys

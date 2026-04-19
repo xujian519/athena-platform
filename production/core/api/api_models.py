@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 API请求/响应模型
 
 定义所有API使用的请求和响应模型
 """
 
-from __future__ import annotations
 from enum import Enum
 from typing import Any
 

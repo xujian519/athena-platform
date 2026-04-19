@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 核心管理模块
 智能体管理组件
 """
 
-from __future__ import annotations
 from .goal_management_system import (
     Goal,
     GoalManagementSystem,

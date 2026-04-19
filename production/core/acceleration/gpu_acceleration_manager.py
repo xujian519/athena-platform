@@ -1,8 +1,8 @@
+from __future__ import annotations
 """
 GPU加速管理器
 支持Apple Silicon M4的GPU加速功能
 """
-from __future__ import annotations
 import asyncio
 import logging
 import time

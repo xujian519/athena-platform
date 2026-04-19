@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 模型蒸馏系统 (Model Distillation System)
 知识蒸馏,将大模型知识迁移到小模型
@@ -8,7 +9,6 @@
 优化目标: 小模型达到大模型 95%+ 性能,模型大小减少 70%+
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass

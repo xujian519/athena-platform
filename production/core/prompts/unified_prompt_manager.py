@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一提示词管理器 - Lyra与L1-L4系统的统一管理
 Unified Prompt Manager - Unified Management for Lyra and L1-L4 Systems
@@ -17,7 +18,6 @@ Unified Prompt Manager - Unified Management for Lyra and L1-L4 Systems
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 from dataclasses import dataclass, field

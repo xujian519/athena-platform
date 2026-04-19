@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 向量记忆系统
 Vector Memory System
@@ -12,7 +13,6 @@ Vector Memory System
 """
 
 # Numpy兼容性导入
-from __future__ import annotations
 import logging
 import time
 from datetime import datetime

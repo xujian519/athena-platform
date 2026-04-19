@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena工作平台 - 专利无效向量库构建器
 构建专业专利无效分析向量库
 """
 
 # Numpy兼容性导入
-from __future__ import annotations
 import logging
 import os
 

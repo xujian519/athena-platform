@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 《以案说法》书籍导入管道
 Legal Case Book Import Pipeline
@@ -14,7 +15,6 @@ Legal Case Book Import Pipeline
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import hashlib
 import io
 import json

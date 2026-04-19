@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺噪声和异常字符处理器
 Xiaonuo Noise and Anomaly Character Processor
@@ -15,7 +16,6 @@ Xiaonuo Noise and Anomaly Character Processor
 日期: 2025-12-18
 """
 
-from __future__ import annotations
 import base64
 import html
 import os

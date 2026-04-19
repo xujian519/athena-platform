@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 LLM调用缓存管理器
 LLM Call Cache Manager for Athena Platform
@@ -9,7 +10,6 @@ LLM Call Cache Manager for Athena Platform
 创建时间: 2025-12-16
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import json

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 双层级架构系统
 Dual-Layer Architecture System - Work Level + Task Level两层架构
@@ -19,7 +20,6 @@ Dual-Layer Architecture System - Work Level + Task Level两层架构
         - 处理数据和生成结果
 """
 
-from __future__ import annotations
 import logging
 import sys
 from collections.abc import Callable

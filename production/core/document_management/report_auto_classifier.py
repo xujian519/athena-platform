@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 报告自动分类集成器
 
@@ -9,7 +10,6 @@ Version: 1.0.0
 Created: 2026-01-07
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass

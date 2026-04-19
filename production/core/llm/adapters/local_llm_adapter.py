@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - 本地LLM适配器
 适配本地GGUF模型(Qwen2.5-7B-Instruct-GGUF等)
@@ -6,7 +7,6 @@
 日期: 2026-01-23
 """
 
-from __future__ import annotations
 import logging
 import time
 from typing import Any

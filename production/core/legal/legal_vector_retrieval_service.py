@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律向量检索服务 - 生产环境版本
 Legal Vector Retrieval Service - Production Version
@@ -14,7 +15,6 @@ Legal Vector Retrieval Service - Production Version
 版本: v1.0.0-production
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

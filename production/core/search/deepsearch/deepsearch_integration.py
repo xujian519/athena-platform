@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 DeepResearch深度搜索系统集成
 集成Jina AI的Node.js DeepResearch作为Athena的深度搜索工具
@@ -7,7 +8,6 @@ DeepResearch深度搜索系统集成
 创建时间: 2025-12-04
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import subprocess

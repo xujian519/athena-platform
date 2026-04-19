@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能优先级系统
 Intelligent Prioritization System
@@ -15,7 +16,6 @@ Intelligent Prioritization System
 创建时间: 2025-01-05
 """
 
-from __future__ import annotations
 import heapq
 import logging
 import sys

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协作协议 - 协调协议实现
 Collaboration Protocols - Coordination Protocol Implementation
@@ -11,7 +12,6 @@ Collaboration Protocols - Coordination Protocol Implementation
 版本: 2.1.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from datetime import datetime, timedelta

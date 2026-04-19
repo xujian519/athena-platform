@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Phase 2: 本地BERT增强意图识别系统
 Local BERT-Enhanced Intent Recognition System
@@ -18,7 +19,6 @@ Local BERT-Enhanced Intent Recognition System
 版本: v2.0.0
 创建: 2025-12-29
 """
-from __future__ import annotations
 import json
 import os
 import sys

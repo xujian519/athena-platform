@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 llm - LLM集成模块
 
@@ -16,7 +17,6 @@ llm - LLM集成模块
 """
 
 
-from __future__ import annotations
 __all__ = [
     # GLM-4.7
     "GLM47Client",

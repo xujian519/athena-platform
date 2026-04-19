@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 基于生产环境设施的DSPy训练数据提取器
 Production-based DSPy Training Data Extractor
@@ -11,7 +12,6 @@ Production-based DSPy Training Data Extractor
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 import random

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 通用装饰器模块
 """
-from __future__ import annotations
 import functools
 import logging
 import time

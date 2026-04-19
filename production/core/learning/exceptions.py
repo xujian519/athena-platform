@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习模块自定义异常
 Learning Module Custom Exceptions
@@ -11,7 +12,6 @@ Learning Module Custom Exceptions
 """
 
 
-from __future__ import annotations
 class LearningModuleError(Exception):
     """学习模块基础异常类
 

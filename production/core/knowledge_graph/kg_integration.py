@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 知识图谱增强模块 - Knowledge Graph Enhancement
 
@@ -10,7 +11,6 @@
 注意:此模块是对现有知识图谱系统的集成层
 """
 
-from __future__ import annotations
 import logging
 import time
 from abc import ABC, abstractmethod

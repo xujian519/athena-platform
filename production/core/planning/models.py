@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 规划系统数据模型
 Planning System Data Models
@@ -14,7 +15,6 @@ Planning System Data Models
 版本: v1.0.0 "Phase 2"
 """
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

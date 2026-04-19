@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 异步任务队列
 支持任务优先级、并发控制、状态跟踪
 最后更新: 2026-01-26
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import uuid

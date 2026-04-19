@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 常见工具函数集合 - 减少代码重复
 """
 
-from __future__ import annotations
 import json
 import logging
 from datetime import datetime

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 人机协作框架
 Human-AI Collaboration Framework
@@ -11,7 +12,6 @@ Human-AI Collaboration Framework
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field

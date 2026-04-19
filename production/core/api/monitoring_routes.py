@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 监控和健康检查API路由
 Monitoring and Health Check API Routes
@@ -6,7 +7,6 @@ Monitoring and Health Check API Routes
 提供Prometheus监控指标和健康检查端点
 """
 
-from __future__ import annotations
 import logging
 from typing import Any
 

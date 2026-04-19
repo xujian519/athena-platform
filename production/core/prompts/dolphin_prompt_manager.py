@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Dolphin提示词管理器
 
@@ -8,7 +9,6 @@ Author: Athena工作平台
 Date: 2026-01-16
 """
 
-from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 

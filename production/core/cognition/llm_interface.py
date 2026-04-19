@@ -1,3 +1,4 @@
+from __future__ import annotations
 # pyright: ignore
 # !/usr/bin/env python3
 """
@@ -12,7 +13,6 @@ LLM Interface Module
 版本: v3.0 GLM-First Integration
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import os

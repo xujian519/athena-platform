@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一MCP管理器
 Unified MCP Manager
@@ -9,7 +10,6 @@ Unified MCP Manager
 创建时间: 2025-12-14
 """
 
-from __future__ import annotations
 import asyncio
 import os
 import subprocess

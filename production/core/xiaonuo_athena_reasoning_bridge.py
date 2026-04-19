@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺-Athena超级推理桥接器
 Xiaonuo-Athena Super Reasoning Bridge
@@ -10,7 +11,6 @@ Xiaonuo-Athena Super Reasoning Bridge
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field

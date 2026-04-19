@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 感知模块统一接口定义
 Perception Module Unified Interface Definitions
@@ -10,7 +11,6 @@ Perception Module Unified Interface Definitions
 版本: 1.0.0
 """
 
-from __future__ import annotations
 from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator
 from typing import Any

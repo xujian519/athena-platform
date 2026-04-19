@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena三级缓存系统
 实现L1内存 + L2 Redis + L3磁盘的多级缓存架构
@@ -17,7 +18,6 @@ Athena三级缓存系统
 - 缓存雪崩保护: 随机过期时间
 """
 
-from __future__ import annotations
 import fcntl
 import hashlib
 import logging

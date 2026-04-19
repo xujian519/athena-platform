@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 推理引擎性能监控系统
 Reasoning Engine Performance Monitoring System
@@ -15,7 +16,6 @@ Reasoning Engine Performance Monitoring System
 5. 优化建议生成
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import statistics

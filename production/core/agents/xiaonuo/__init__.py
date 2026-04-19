@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 XiaonuoAgent统一智能体模块
 XiaonuoAgent Unified Agent Module
@@ -11,5 +12,4 @@ XiaonuoAgent Unified Agent Module
 """
 
 
-from __future__ import annotations
 __all__ = ["MediaOperationsModule", "XiaonuoUnifiedAgent"]

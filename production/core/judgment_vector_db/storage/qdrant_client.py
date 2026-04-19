@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Qdrant向量数据库客户端
 Qdrant Vector Database Client for Patent Judgments
@@ -9,7 +10,6 @@ Qdrant Vector Database Client for Patent Judgments
 - 批量操作支持
 """
 
-from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:

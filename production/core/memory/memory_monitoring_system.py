@@ -1,5 +1,6 @@
 
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena记忆系统性能监控和告警系统
 Memory System Performance Monitoring and Alerting
@@ -18,7 +19,6 @@ Memory System Performance Monitoring and Alerting
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import email
 import gc

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 领域专用NLP预处理器
 Domain-Specific NLP Preprocessor
@@ -6,7 +7,6 @@ Domain-Specific NLP Preprocessor
 为法律和专利领域提供专业的文本预处理、实体识别和语义分析
 """
 
-from __future__ import annotations
 import json
 import logging
 import re

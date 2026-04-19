@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 伦理评估器 - 评估AI行动是否符合宪法
 Ethics Evaluator - Evaluate AI Actions Against Constitution
@@ -9,7 +10,6 @@ Ethics Evaluator - Evaluate AI Actions Against Constitution
 4. 记录评估日志
 """
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

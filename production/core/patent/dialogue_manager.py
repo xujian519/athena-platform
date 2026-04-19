@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多轮对话管理器
 Dialogue Manager
@@ -10,7 +11,6 @@ Created: 2026-01-26
 Version: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 from datetime import datetime
 from pathlib import Path

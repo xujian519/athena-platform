@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena工作平台 - API标准化模块
 API Standards Module
@@ -5,7 +6,6 @@ API Standards Module
 提供统一的错误处理、响应格式和API版本控制
 """
 
-from __future__ import annotations
 import logging
 from datetime import datetime
 from typing import Any

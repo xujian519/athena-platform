@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 推理模式库分析器 - Pattern Library Analyzer
 分析和可视化推理模式库
@@ -14,7 +15,6 @@
 创建时间: 2026-01-23
 """
 
-from __future__ import annotations
 import json
 import sys
 from collections import Counter, defaultdict

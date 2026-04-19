@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 生产级API服务 v3.0
 集成Redis缓存、异步任务队列、批处理优化
 最后更新: 2026-01-26
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import os

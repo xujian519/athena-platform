@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强记忆管理系统 (Memory Management Pattern)
 基于《智能体设计》记忆管理模式的实现
@@ -20,7 +21,6 @@
 预期收益: 持续优化和个性化服务
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import json

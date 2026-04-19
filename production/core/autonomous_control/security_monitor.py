@@ -12,13 +12,12 @@ Security Monitor - Backward Compatibility Redirect
 此文件仅用于向后兼容,将在未来版本中移除。
 """
 
-from __future__ import annotations
 import warnings
 
 from .security_monitor import (
     AccessPattern,
-    ActionType,
     AlertType,
+    ActionType,
     BehaviorProfile,
     SecurityEvent,
     SecurityLevel,

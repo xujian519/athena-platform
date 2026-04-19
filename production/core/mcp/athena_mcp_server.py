@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台MCP服务器
 Athena Platform MCP Server
@@ -17,7 +18,6 @@ Athena Platform MCP Server
 创建时间: 2025-01-05
 """
 
-from __future__ import annotations
 import json
 from pathlib import Path
 from typing import Any

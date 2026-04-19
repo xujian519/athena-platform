@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 MCP服务集成模块
 
@@ -9,7 +10,6 @@ Created: 2026-01-20
 Version: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field

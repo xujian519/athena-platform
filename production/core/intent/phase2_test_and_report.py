@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Phase 2 测试和报告生成
 Phase 2 Testing and Report Generation
@@ -10,7 +11,6 @@ Phase 2 Testing and Report Generation
 创建: 2025-12-29
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import sys

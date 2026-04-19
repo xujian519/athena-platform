@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜·天秤女神 - 专利专家执行引擎
 Xiaona Libra Patent Execution Engine
@@ -15,7 +16,6 @@ Xiaona Libra Patent Execution Engine
 版本: v1.0.0 "专利专业执行"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from collections import deque

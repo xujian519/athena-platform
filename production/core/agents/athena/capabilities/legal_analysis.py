@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena法律分析能力模块
 Athena Legal Analysis Capability Module
@@ -10,7 +11,6 @@ Athena Legal Analysis Capability Module
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 from typing import Any
 

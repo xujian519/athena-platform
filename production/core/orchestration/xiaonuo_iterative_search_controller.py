@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺迭代式搜索控制器
 Xiaonuo Iterative Search Controller
@@ -9,7 +10,6 @@ Xiaonuo Iterative Search Controller
 创建时间: 2025-12-14
 """
 
-from __future__ import annotations
 import logging
 import sys
 from datetime import datetime, timedelta

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 缓存预热模块
 Cache Warmer Module
@@ -16,7 +17,6 @@ Cache Warmer Module
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import logging

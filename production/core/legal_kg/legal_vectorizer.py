@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律文档向量化工具 - 使用BGE-M3模型
 将法律文档向量化并存储到Qdrant向量数据库
 """
 
-from __future__ import annotations
 import sys
 from collections import defaultdict
 from dataclasses import dataclass

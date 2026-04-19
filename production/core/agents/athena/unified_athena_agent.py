@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena统一智能体 - 整合Xiaona能力
 Athena Unified Agent - Integrated with Xiaona Capabilities
@@ -13,7 +14,6 @@ Athena Unified Agent - Integrated with Xiaona Capabilities
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from typing import Any

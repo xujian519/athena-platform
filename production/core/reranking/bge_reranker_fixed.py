@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BGE重排序引擎 - 修复版
 BGE Reranker Engine - Fixed Version
@@ -9,7 +10,6 @@ BGE Reranker Engine - Fixed Version
 版本: v2.0.0 "完整实现"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import os

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 动态提示词Prometheus监控指标
 Dynamic Prompt Performance Metrics for Prometheus
@@ -17,7 +18,6 @@ Dynamic Prompt Performance Metrics for Prometheus
 版本: v0.1.0
 """
 
-from __future__ import annotations
 import time
 from typing import Any
 

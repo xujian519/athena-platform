@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Prometheus监控指标
 Prometheus Metrics for Search Engine
@@ -6,7 +7,6 @@ Prometheus Metrics for Search Engine
 提供搜索引擎的Prometheus监控指标收集和健康检查功能
 """
 
-from __future__ import annotations
 import logging
 import time
 from collections.abc import Callable

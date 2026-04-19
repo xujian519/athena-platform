@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一数据库连接管理模块
 Unified Database Connection Manager
@@ -9,7 +10,6 @@ Unified Database Connection Manager
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 from contextlib import asynccontextmanager, contextmanager
 from pathlib import Path

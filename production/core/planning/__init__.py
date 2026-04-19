@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 planning - 规划引擎模块
 
@@ -20,7 +21,6 @@ planning - 规划引擎模块
 版本: v2.0.0 "Phase 2"
 """
 
-from __future__ import annotations
 from .adaptive_meta_planner import (
     AdaptiveMetaPlanner,
     PerformanceTracker,

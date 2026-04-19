@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 搜索引擎数据类型定义
 """
 
 # Numpy兼容性导入
-from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 from enum import Enum

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 上下文模块
 Context Module
@@ -11,7 +12,6 @@ Context Module
 """
 
 
-from __future__ import annotations
 from .context_manager import (
     ContextManager,
     get_context_manager,

@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 metrics
 """
-from __future__ import annotations

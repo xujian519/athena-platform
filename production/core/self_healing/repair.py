@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 自动修复引擎 (Auto Repair Engine)
 执行各种自动修复策略
@@ -7,7 +8,6 @@
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import gc
 import logging

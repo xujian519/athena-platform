@@ -1,5 +1,6 @@
 
 #!/usr/bin/env python3
+from __future__ import annotations
 # pyright: ignore
 """
 小娜专利分析工作流
@@ -12,7 +13,6 @@ Xiaona Patent Analysis Workflow
 版本: v1.0 Patent Workflow
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

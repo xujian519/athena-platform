@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 场景规则检索器 - 从Neo4j检索场景规则
 Scenario Rule Retriever - Retrieve scenario rules from Neo4j
@@ -7,7 +8,6 @@ Scenario Rule Retriever - Retrieve scenario rules from Neo4j
 创建时间: 2026-01-23
 """
 
-from __future__ import annotations
 import json
 import logging
 from dataclasses import dataclass, field

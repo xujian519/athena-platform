@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena多模式推理系统 (Athena Multimodal Reasoning System)
 从灵动系统中提取的Athena核心能力模块
@@ -9,7 +10,6 @@ Athena多模式推理系统 (Athena Multimodal Reasoning System)
 功能: 实现Athena的三层推理模式和AI代理团队协作
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

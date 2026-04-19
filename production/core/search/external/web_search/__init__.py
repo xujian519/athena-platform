@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 联网搜索引擎 - 公共接口
 Web Search Engines - Public Interface
@@ -13,7 +14,6 @@ Web Search Engines - Public Interface
 
 # 数据模型
 # API密钥管理器
-from __future__ import annotations
 from core.search.external.web_search.api_key_manager import APIKeyManager
 
 # 基类

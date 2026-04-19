@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 意图识别数据收集管道
 Intent Recognition Data Collection Pipeline
@@ -16,7 +17,6 @@ Intent Recognition Data Collection Pipeline
 创建: 2025-12-29
 """
 
-from __future__ import annotations
 import json
 import sqlite3
 import sys

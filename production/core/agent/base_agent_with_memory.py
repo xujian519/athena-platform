@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能体基类 - 集成统一记忆系统
 Base Agent Class with Integrated Memory System
@@ -14,7 +15,6 @@ Base Agent Class with Integrated Memory System
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from datetime import datetime

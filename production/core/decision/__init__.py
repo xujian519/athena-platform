@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 综合决策模块
 Integrated Decision Module
@@ -5,7 +6,6 @@ Integrated Decision Module
 基于钱学森系统工程思想的综合决策系统
 """
 
-from __future__ import annotations
 from .integrated_decision_engine import (
     AgentOpinion,
     ConsensusLevel,

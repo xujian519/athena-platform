@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena通信系统 - 消息验证器
 Message Validator for Communication System
@@ -17,7 +18,6 @@ Message Validator for Communication System
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 import re
 

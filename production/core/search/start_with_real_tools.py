@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 集成真实搜索工具的启动脚本
 Real Search Tools Integration Startup Script
@@ -10,7 +11,6 @@ Real Search Tools Integration Startup Script
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import sys
 from pathlib import Path

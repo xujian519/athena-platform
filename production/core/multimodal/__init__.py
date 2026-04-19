@@ -1,10 +1,10 @@
+from __future__ import annotations
 """
 多模态理解模块 - Multimodal Understanding Module
 
 提供图片OCR、文档解析、多模态融合理解等功能
 """
 
-from __future__ import annotations
 from core.multimodal.multimodal_integration import (
     DocumentParseResult,
     ImageFormat,

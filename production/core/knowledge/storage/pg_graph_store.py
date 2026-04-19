@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 PostgreSQL Graph Store Adapter
 Provides persistence for Knowledge Graph Nodes and Relations in PostgreSQL
 """
 
-from __future__ import annotations
 import json
 import logging
 from typing import Any

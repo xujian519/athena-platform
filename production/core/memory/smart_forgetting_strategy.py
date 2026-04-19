@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 智能遗忘策略
 基于重要性、时效性和访问频率的智能记忆管理
 """
 
-from __future__ import annotations
 import logging
 import math
 import time

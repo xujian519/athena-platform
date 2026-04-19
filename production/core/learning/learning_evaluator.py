@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习效果评估器
 Learning Effectiveness Evaluator
@@ -7,7 +8,6 @@ Learning Effectiveness Evaluator
 生成学习报告和改进建议
 """
 
-from __future__ import annotations
 import json
 import logging
 from dataclasses import dataclass, field

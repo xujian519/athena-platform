@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多模态真实服务客户端 v2
 Multimodal Real Service Client v2
@@ -10,7 +11,6 @@ Multimodal Real Service Client v2
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 import os
 from dataclasses import dataclass

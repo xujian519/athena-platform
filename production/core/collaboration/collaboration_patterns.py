@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协作模式实现
 Collaboration Patterns Implementation
@@ -6,7 +7,6 @@ Collaboration Patterns Implementation
 实现各种多智能体协作模式的具体逻辑
 """
 
-from __future__ import annotations
 import logging
 import uuid
 from abc import ABC, abstractmethod

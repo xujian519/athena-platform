@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 批量数据加载器
 Batch Data Loader
@@ -9,7 +10,6 @@ Batch Data Loader
 版本: v1.0.0 "批量导入"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field

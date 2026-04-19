@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
-BGE 嵌入服务（默认 bge-m3 API 模式）
+BGE Large ZH v1.5 嵌入服务
 BGE Embedding Service for Athena Platform
 
-默认通过 OpenAI 兼容 API 调用 bge-m3 (localhost:8766)，
-可降级到本地 SentenceTransformer 加载 bge-large-zh-v1.5。
+提供高性能的中文文本嵌入服务,专门优化专利和法律领域
 
 作者: 小诺·双鱼座
 创建时间: 2025-12-16
-更新: 2026-04-14 - 切换默认为 bge-m3 API
 """
-from __future__ import annotations
 import asyncio
 import logging
 import os
@@ -21,7 +19,6 @@ from dataclasses import dataclass
 from typing import Any
 
 import numpy as np
-import requests
 
 # 添加路径
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
@@ -40,42 +37,23 @@ class EmbeddingResult:
 
 
 class BGEEmbeddingService:
-    """BGE嵌入服务 - 默认使用 bge-m3 API"""
-
-    # 默认配置: bge-m3 API 优先
-    DEFAULT_API_CONFIG = {
-        "mode": "api",
-        "api_url": "http://127.0.0.1:8766/v1",
-        "api_model": "bge-m3",
-        "device": "api",
-        "batch_size": 8,
-        "max_length": 8192,
-        "normalize_embeddings": True,
-        "cache_enabled": True,
-        "preload": False,  # API 模式不需要预加载
-    }
-
-    DEFAULT_LOCAL_CONFIG = {
-        "mode": "local",
-        "model_path": "/Users/xujian/.cache/huggingface/hub/models--BAAI--bge-large-zh-v1.5/snapshots/79e7739b6ab944e86d6171e44d24c997fc1e0116",
-        "device": "cpu",
-        "batch_size": 32,
-        "max_length": 512,
-        "normalize_embeddings": True,
-        "cache_enabled": True,
-        "preload": True,
-    }
+    """BGE嵌入服务"""
 
     def __init__(self, config: dict[str, Any] | None = None):
         self.name = "BGE嵌入服务"
-        self.version = "2.0.0"
+        self.version = "1.0.0"
         self.logger = logging.getLogger(self.name)
 
-        # 配置：默认 API 模式，可通过 config["mode"]="local" 降级
-        if config and config.get("mode") == "local":
-            self.config = {**self.DEFAULT_LOCAL_CONFIG, **config}
-        else:
-            self.config = {**self.DEFAULT_API_CONFIG, **(config or {})}
+        # 配置
+        self.config = config or {
+            "model_path": "/Users/xujian/.cache/huggingface/hub/models--BAAI--bge-large-zh-v1.5/snapshots/79e7739b6ab944e86d6171e44d24c997fc1e0116",
+            "device": "cpu",  # 使用CPU(避免auto错误)
+            "batch_size": 32,
+            "max_length": 512,
+            "normalize_embeddings": True,
+            "cache_enabled": True,
+            "preload": True,
+        }
 
         # 模型状态
         self.model = None
@@ -83,13 +61,10 @@ class BGEEmbeddingService:
         self.is_loaded = False
         self.load_lock = threading.Lock()
 
-        # API 健康状态
-        self._api_available: bool | None = None
-
         # 缓存
         self.embedding_cache: dict[str, Any] = {}
         self.cache_lock = threading.Lock()
-        self.redis_cache = None
+        self.redis_cache = None  # Redis持久化缓存
 
         # 统计信息
         self.stats = {
@@ -100,49 +75,10 @@ class BGEEmbeddingService:
             "avg_batch_size": 0.0,
         }
 
-        mode = self.config["mode"]
-        self.logger.info(f"🚀 {self.name} v{self.version} 初始化 (模式: {mode})")
-
-    @property
-    def is_api_mode(self) -> bool:
-        return self.config.get("mode") == "api"
-
-    def _check_api_health(self) -> bool:
-        """检查 API 服务是否可用"""
-        try:
-            api_url = self.config["api_url"]
-            resp = requests.post(
-                f"{api_url}/embeddings",
-                json={"model": self.config.get("api_model", "bge-m3"), "input": ["health"]},
-                timeout=10,
-            )
-            return resp.status_code == 200
-        except Exception:
-            return False
-
-    def _encode_via_api(self, texts: list[str], batch_size: int) -> list[list[float]]:
-        """通过 OpenAI 兼容 API 进行嵌入"""
-        api_url = self.config["api_url"]
-        model = self.config.get("api_model", "bge-m3")
-        all_embeddings = []
-
-        for i in range(0, len(texts), batch_size):
-            batch = texts[i:i + batch_size]
-            resp = requests.post(
-                f"{api_url}/embeddings",
-                json={"model": model, "input": batch},
-                timeout=120,
-            )
-            resp.raise_for_status()
-            data = resp.json()
-            sorted_data = sorted(data["data"], key=lambda x: x["index"])
-            for item in sorted_data:
-                all_embeddings.append(item["embedding"])
-
-        return all_embeddings
+        print(f"🚀 {self.name} 初始化完成")
 
     def _load_model(self) -> Any:
-        """加载本地BGE模型（降级模式）"""
+        """加载BGE模型"""
         with self.load_lock:
             if self.is_loaded:
                 return
@@ -150,43 +86,47 @@ class BGEEmbeddingService:
             try:
                 from sentence_transformers import SentenceTransformer
 
-                print("📦 正在加载 BGE Large ZH v1.5 本地模型...")
+                print("📦 正在加载BGE Large ZH v1.5模型...")
                 start_time = time.time()
 
+                # 加载模型
                 self.model = SentenceTransformer(
                     self.config["model_path"], device=self.config["device"]
                 )
 
+                # 验证模型
                 test_embedding = self.model.encode("测试", convert_to_numpy=True)
                 assert len(test_embedding) == 1024, "向量维度应为1024"
 
                 load_time = time.time() - start_time
                 self.is_loaded = True
 
-                print(f"✅ BGE本地模型加载成功 ({load_time:.2f}s)")
+                print("✅ BGE模型加载成功!")
+                print(f"   - 加载时间: {load_time:.2f}秒")
+                print(f"   - 向量维度: {len(test_embedding)}")
+                print(f"   - 设备: {self.model.device}")
 
             except Exception as e:
-                self.logger.error(f"本地模型加载失败: {e}")
+                self.logger.error(f"BGE模型加载失败: {e}")
                 raise e
 
     async def initialize(self):
         """异步初始化"""
-        if self.is_api_mode:
-            # API 模式：检查服务可用性
-            self._api_available = await asyncio.get_event_loop().run_in_executor(
-                None, self._check_api_health
-            )
-            if self._api_available:
-                self.logger.info("✅ bge-m3 API 服务可用")
-            else:
-                self.logger.warning("⚠️ bge-m3 API 不可用，将降级到本地模型")
-                self.config["mode"] = "local"
-                self.config.update(self.DEFAULT_LOCAL_CONFIG)
-        else:
-            # 本地模式：预加载模型
-            if self.config.get("preload", True):
-                loop = asyncio.get_event_loop()
-                await loop.run_in_executor(None, self._load_model)
+        # 初始化Redis缓存
+        if self.config.get("cache_enabled", True):
+            try:
+                from ..cache.bge_redis_cache import get_bge_redis_cache
+
+                self.redis_cache = await get_bge_redis_cache()
+                self.logger.info("BGE Redis缓存已连接")
+            except Exception as e:
+                self.logger.warning(f"Redis缓存初始化失败: {e}")
+
+        # 预加载模型
+        if self.config.get("preload", True):
+            # 在线程池中加载模型
+            loop = asyncio.get_event_loop()
+            await loop.run_in_executor(None, self._load_model)
 
     def _get_cache_key(self, texts: list[str]) -> str:
         """生成缓存键"""
@@ -226,7 +166,9 @@ class BGEEmbeddingService:
 
         cache_key = self._get_cache_key(texts)
         with self.cache_lock:
+            # 限制缓存大小
             if len(self.embedding_cache) >= 1000:
+                # 删除最旧的一半
                 items = list(self.embedding_cache.items())
                 self.embedding_cache = dict(items[len(items) // 2 :])
 
@@ -249,20 +191,27 @@ class BGEEmbeddingService:
         Returns:
             EmbeddingResult: 嵌入结果
         """
-        # 标准化输入：始终转为列表处理
+        # 确保模型已加载
+        if not self.is_loaded:
+            loop = asyncio.get_event_loop()
+            await loop.run_in_executor(None, self._load_model)
+
+        # 标准化输入
         if isinstance(texts, str):
             texts = [texts]
+            single_text = True
+        else:
+            single_text = False
 
         # 检查缓存
         cached_embeddings = await self._check_cache(texts, task_type)
         if cached_embeddings is not None and (
             not isinstance(cached_embeddings, list) or len(cached_embeddings) > 0
         ):
-            model_name = "bge-m3" if self.is_api_mode else "bge-large-zh-v1.5"
             return EmbeddingResult(
-                embeddings=cached_embeddings,
+                embeddings=cached_embeddings[0] if single_text else cached_embeddings,
                 dimension=1024,
-                model_name=model_name,
+                model_name="bge-large-zh-v1.5",
                 processing_time=0.001,
                 batch_size=len(texts),
                 metadata={"cache_hit": True, "task_type": task_type},
@@ -270,26 +219,13 @@ class BGEEmbeddingService:
 
         # 编码处理
         start_time = time.time()
-        bs = batch_size or self.config.get("batch_size", 8)
 
         try:
+            # 在线程池中执行编码
             loop = asyncio.get_event_loop()
-
-            if self.is_api_mode:
-                # API 模式
-                embeddings = await loop.run_in_executor(
-                    None, self._encode_via_api, texts, bs
-                )
-            else:
-                # 本地模式
-                if not self.is_loaded:
-                    await loop.run_in_executor(None, self._load_model)
-                raw = await loop.run_in_executor(
-                    None, self._encode_batch_local, texts, bs
-                )
-                embeddings = [
-                    emb.tolist() if isinstance(emb, np.ndarray) else emb for emb in raw
-                ]
+            embeddings = await loop.run_in_executor(
+                None, self._encode_batch, texts, batch_size or self.config["batch_size"]
+            )
 
             processing_time = time.time() - start_time
 
@@ -304,19 +240,21 @@ class BGEEmbeddingService:
             # 保存到缓存
             self._save_to_cache(texts, embeddings)
 
-            model_name = "bge-m3" if self.is_api_mode else "bge-large-zh-v1.5"
-            device_info = "api" if self.is_api_mode else str(self.model.device)
+            # 转换为列表格式
+            embedding_list = [
+                emb.tolist() if isinstance(emb, np.ndarray) else emb for emb in embeddings
+            ]
 
             return EmbeddingResult(
-                embeddings=embeddings,
+                embeddings=embedding_list[0] if single_text else embedding_list,
                 dimension=1024,
-                model_name=model_name,
+                model_name="bge-large-zh-v1.5",
                 processing_time=processing_time,
                 batch_size=len(texts),
                 metadata={
                     "cache_hit": False,
                     "task_type": task_type,
-                    "device": device_info,
+                    "device": str(self.model.device),
                 },
             )
 
@@ -324,10 +262,13 @@ class BGEEmbeddingService:
             self.logger.error(f"编码失败: {e}")
             raise e
 
-    def _encode_batch_local(self, texts: list[str], batch_size: int) -> list[np.ndarray]:
-        """本地批量编码"""
+    def _encode_batch(self, texts: list[str], batch_size: int) -> list[np.ndarray]:
+        """批量编码(在线程池中执行)"""
+        # 根据任务类型优化提示
         if self.config.get("normalize_embeddings", True):
+            # BGE v1.5 的提示优化
             if texts and len(texts) == 1:
+                # 单个文本的提示优化
                 text = texts[0]
                 if "专利" in text or "权利要求" in text:
                     text = f"为这个专利生成向量用于语义检索:{text}"
@@ -335,30 +276,31 @@ class BGEEmbeddingService:
                     text = f"为这个法律文本生成向量用于分析:{text}"
                 texts = [text]
 
+        # 执行编码
         embeddings = self.model.encode(
             texts,
             batch_size=batch_size,
             normalize_embeddings=self.config.get("normalize_embeddings", True),
             show_progress_bar=False,
         )
+
         return embeddings
 
     async def encode_with_cache(
         self, texts: str | list[str] | None, cache_key: str | None = None
     ) -> EmbeddingResult:
-        """带缓存键的编码"""
+        """带缓存键的编码(用于持久化缓存)"""
+        # TODO: 集成Redis缓存
         return await self.encode(texts)
 
     def get_model_info(self) -> dict[str, Any]:
         """获取模型信息"""
-        model_name = "bge-m3" if self.is_api_mode else "bge-large-zh-v1.5"
         return {
-            "name": model_name,
-            "mode": self.config.get("mode", "api"),
+            "name": "BGE Large ZH v1.5",
             "dimension": 1024,
-            "max_length": self.config.get("max_length", 8192),
-            "device": "api" if self.is_api_mode else (str(self.model.device) if self.model else "not_loaded"),
-            "batch_size": self.config.get("batch_size", 8),
+            "max_length": self.config.get("max_length", 512),
+            "device": str(self.model.device) if self.model else "not_loaded",
+            "batch_size": self.config.get("batch_size", 32),
             "normalize_embeddings": self.config.get("normalize_embeddings", True),
             "cache_enabled": self.config.get("cache_enabled", True),
             "cache_size": len(self.embedding_cache),
@@ -398,13 +340,13 @@ class BGEEmbeddingService:
     async def health_check(self) -> dict[str, Any]:
         """健康检查"""
         try:
+            # 测试编码
             test_result = await self.encode("健康检查测试")
 
             return {
                 "status": "healthy",
-                "model_loaded": self.is_loaded or self.is_api_mode,
+                "model_loaded": self.is_loaded,
                 "test_encoding": True,
-                "mode": "api" if self.is_api_mode else "local",
                 "dimension": (
                     len(test_result.embeddings)
                     if isinstance(test_result.embeddings, list)

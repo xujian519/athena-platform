@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 混合精度推理管理器
 Mixed Precision Inference Manager
@@ -9,7 +10,6 @@ Mixed Precision Inference Manager
 版本: v1.0.0 "AMP优化"
 """
 
-from __future__ import annotations
 import gc
 import logging
 import time

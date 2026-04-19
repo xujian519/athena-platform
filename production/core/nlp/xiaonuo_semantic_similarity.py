@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺语义相似度匹配算法
 Xiaonuo Semantic Similarity Matching Algorithm
@@ -10,7 +11,6 @@ Xiaonuo Semantic Similarity Matching Algorithm
 版本: v1.0.0 "高精度语义匹配"
 """
 
-from __future__ import annotations
 import os
 from collections.abc import Callable
 from dataclasses import dataclass

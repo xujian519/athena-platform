@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 现有技术图谱分析引擎
 Prior Art Knowledge Graph Analyzer
@@ -9,7 +10,6 @@ Prior Art Knowledge Graph Analyzer
 版本: v1.0.0 "技术图谱分析"
 """
 
-from __future__ import annotations
 import logging
 from collections import defaultdict
 from dataclasses import asdict, dataclass, field

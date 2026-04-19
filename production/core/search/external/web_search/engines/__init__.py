@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 联网搜索引擎 - 搜索引擎实现
 Web Search Engines - Search Engine Implementations
@@ -12,7 +13,6 @@ Web Search Engines - Search Engine Implementations
 """
 
 # 导出所有搜索引擎实现
-from __future__ import annotations
 from core.search.external.web_search.engines.all import (
     BochaSearchEngine,
     GoogleCustomSearchEngine,

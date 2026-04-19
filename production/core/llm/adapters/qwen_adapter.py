@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - Qwen模型适配器
 适配Qwen-Plus和Qwen-Max云端模型
@@ -6,7 +7,6 @@
 日期: 2026-01-23
 """
 
-from __future__ import annotations
 import logging
 import time
 from typing import Any

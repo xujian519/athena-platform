@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 性能分析工具 - Performance Monitoring
 
@@ -9,7 +10,6 @@
 5. 趋势分析
 """
 
-from __future__ import annotations
 import json
 import logging
 import os

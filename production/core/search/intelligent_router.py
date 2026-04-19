@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 ⚠️  DEPRECATED - 此文件包含已废弃的NebulaGraph架构代码
 DEPRECATED - This file contains deprecated NebulaGraph architecture code
@@ -25,7 +26,6 @@ Intelligent Retrieval Router System
 创建时间: 2025-01-09
 """
 
-from __future__ import annotations
 import time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field

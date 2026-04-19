@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 自适应限流器
 Adaptive Rate Limiter
@@ -23,7 +24,6 @@ Adaptive Rate Limiter
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import logging

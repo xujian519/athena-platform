@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能搜索路由器
 Intelligent Search Router
@@ -9,7 +10,6 @@ Intelligent Search Router
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 import re
 import time

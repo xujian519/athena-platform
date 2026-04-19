@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 提示词参数优化器
 Prompt Parameter Optimizer
@@ -19,7 +20,6 @@ Prompt Parameter Optimizer
 创建时间: 2025-01-04
 """
 
-from __future__ import annotations
 import logging
 from typing import Any
 

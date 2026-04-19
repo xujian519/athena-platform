@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 记忆时间线查看器
 Memory Timeline Viewer
@@ -11,7 +12,6 @@ Memory Timeline Viewer
 """
 
 
-from __future__ import annotations
 from datetime import datetime
 from typing import Any
 

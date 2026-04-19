@@ -19,23 +19,16 @@ NebulaGraph Graph Database Client (Compatibility Layer)
 更新时间: 2026-01-25 (TD-001: 迁移到Neo4j)
 """
 
-from __future__ import annotations
 import logging
-import os
-import warnings
 from dataclasses import dataclass
-from typing import Any
-
-warnings.warn(
-    "NebulaGraph客户端已废弃(TD-001)，请使用 core.neo4j.neo4j_graph_client",
-    DeprecationWarning,
-    stacklevel=2,
-)
+from typing import Any, Dict, List, Optional
 
 # 从Neo4j模块导入实际实现
 from core.neo4j.neo4j_graph_client import (
+    GraphClient as Neo4jGraphClient,
     Neo4jClient,
     Neo4jConfig,
+    get_neo4j_client as _get_neo4j_client_impl,
 )
 
 logger = logging.getLogger(__name__)
@@ -56,7 +49,7 @@ class NebulaGraphConfig:
     host: str = "127.0.0.1"
     port: int = 9669
     username: str = "root"
-    password: str = os.getenv("NEBULA_PASSWORD", "nebula")
+    password: str = "nebula"
     space_name: str = "patent_kg"
     pool_size: int = 10
 

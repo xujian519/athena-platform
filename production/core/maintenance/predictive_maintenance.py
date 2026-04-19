@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 预测性维护和自动修复系统
 Predictive Maintenance and Auto-Recovery System
@@ -16,7 +17,6 @@ Predictive Maintenance and Auto-Recovery System
 版本: v1.0.0 "预测性维护"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import statistics

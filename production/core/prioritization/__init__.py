@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优先级与排序模块
 Prioritization & Ordering Module
@@ -10,7 +11,6 @@ Prioritization & Ordering Module
 版本: v1.0.0 "智能调度"
 """
 
-from __future__ import annotations
 from .intelligent_prioritization import (
     IntelligentPrioritizationSystem,
     PrioritizedTask,

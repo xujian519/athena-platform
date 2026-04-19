@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 日志工具模块
 Logging Utilities Module
@@ -5,7 +6,6 @@ Logging Utilities Module
 提供结构化日志和日志增强功能
 """
 
-from __future__ import annotations
 import json
 import logging
 from contextlib import contextmanager

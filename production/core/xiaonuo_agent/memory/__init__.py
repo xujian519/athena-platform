@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 记忆模块 (Memory Module)
 三层记忆系统
@@ -8,7 +9,6 @@
 版本: v2.0.0
 """
 
-from __future__ import annotations
 from core.xiaonuo_agent.memory.episodic_memory import (
     EpisodicMemory,
     EpisodicMemoryItem,

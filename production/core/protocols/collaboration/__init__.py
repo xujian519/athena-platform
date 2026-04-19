@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协作协议 - 统一接口
 Collaboration Protocols - Unified Interface
@@ -34,7 +35,6 @@ Collaboration Protocols - Unified Interface
 
 # 数据模型
 # 基础类
-from __future__ import annotations
 from .base import BaseProtocol
 
 # 管理器和工具

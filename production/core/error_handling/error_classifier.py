@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 错误分类器
 Error Classifier
@@ -13,7 +14,6 @@ Error Classifier
 - 提供重试延迟建议
 """
 
-from __future__ import annotations
 import logging
 from enum import Enum
 

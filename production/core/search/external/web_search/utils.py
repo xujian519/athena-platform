@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 联网搜索引擎 - 便捷工具
 Web Search Engines - Utility Functions
@@ -11,7 +12,6 @@ Web Search Engines - Utility Functions
 版本: 2.1.0
 """
 
-from __future__ import annotations
 from typing import Any
 
 from core.logging_config import setup_logging

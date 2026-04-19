@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协作协议 - 基础协议类
 Collaboration Protocols - Base Protocol Class
@@ -11,7 +12,6 @@ Collaboration Protocols - Base Protocol Class
 版本: 2.1.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from abc import ABC, abstractmethod

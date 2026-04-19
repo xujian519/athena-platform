@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 Athena自主决策引擎
 基于论文中的LLM Agent方法论实现智能决策
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

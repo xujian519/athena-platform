@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 反馈数据收集脚本
 Feedback Data Collection Script
@@ -9,7 +10,6 @@ Feedback Data Collection Script
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import time
 from typing import Any
 

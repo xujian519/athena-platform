@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 极端场景测试
 测试系统在异常和极端情况下的行为
 最后更新: 2026-01-26
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import os

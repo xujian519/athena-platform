@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 DSPy混合提示词生成器
 DSPy Hybrid Prompt Generator for Athena Platform
@@ -5,7 +6,6 @@ DSPy Hybrid Prompt Generator for Athena Platform
 融合Athena现有提示词系统和DSPy优化能力
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 

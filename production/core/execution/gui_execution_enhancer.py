@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 GUI执行增强器
 GUI Execution Enhancer
@@ -14,7 +15,6 @@ GUI Execution Enhancer
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field

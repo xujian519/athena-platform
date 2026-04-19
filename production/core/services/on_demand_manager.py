@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 按需服务管理器
 On-demand Service Manager for Athena Platform
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import subprocess

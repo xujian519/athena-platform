@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 模型量化引擎 (Model Quantization Engine) - Stub实现
 模型量化和压缩以提升推理速度
@@ -7,7 +8,6 @@
 版本: v2.0.0 (Stub)
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 元学习引擎
 Meta Learning Engine
@@ -12,7 +13,6 @@ Meta Learning Engine
 创建时间: 2026-01-01
 版本: 1.0.0
 """
-from __future__ import annotations
 import asyncio
 import logging
 import random

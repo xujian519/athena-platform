@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多模态意图理解系统 v2.0
 Multi-Modal Intent Understanding System Enhanced
@@ -19,7 +20,6 @@ Multi-Modal Intent Understanding System Enhanced
 版本: v2.0.0 "增强多模态理解"
 """
 
-from __future__ import annotations
 import logging
 from collections import defaultdict
 from dataclasses import dataclass, field

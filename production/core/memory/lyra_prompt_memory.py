@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Lyra提示词记忆模块
 Lyra Prompt Memory Module for Athena Platform
 """
 
-from __future__ import annotations
 import json
 from datetime import datetime
 from pathlib import Path

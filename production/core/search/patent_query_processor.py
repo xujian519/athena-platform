@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利查询处理器
 Patent Query Processor
@@ -6,7 +7,6 @@ Patent Query Processor
 实现查询扩展、意图识别和查询优化
 """
 
-from __future__ import annotations
 import logging
 import re
 from collections import defaultdict

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 规划引擎API服务
 Planning Engine API Service
@@ -10,7 +11,6 @@ Planning Engine API Service
 创建时间: 2025-01-05
 """
 
-from __future__ import annotations
 import logging
 import sys
 from datetime import datetime

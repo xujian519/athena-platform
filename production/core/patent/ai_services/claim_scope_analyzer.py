@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 权利要求保护范围测量系统 v1.0
 
@@ -20,7 +21,6 @@ probabilities obtained from (large) language models"(2023)
 日期: 2026-03-23
 """
 
-from __future__ import annotations
 import json
 import logging
 import math

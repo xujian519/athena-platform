@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 专利知识图谱分析器 - 集成增强检索模块
 结合知识图谱技术和专利检索,实现高质量的专利分析
@@ -13,7 +14,6 @@
 日期:2026-01-07
 """
 
-from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass

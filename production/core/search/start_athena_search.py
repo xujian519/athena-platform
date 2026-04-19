@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 分散式智能搜索架构 - 快速启动脚本
 Decentralized Intelligent Search Architecture - Quick Start Script
@@ -10,7 +11,6 @@ Decentralized Intelligent Search Architecture - Quick Start Script
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import json
 import sys
 from datetime import datetime
@@ -28,12 +28,11 @@ sys.path.append(str(project_root))
 logger = setup_logging()
 
 # 导入系统组件
-from core.search.tools.adapted_patent_retriever import AdaptedPatentRetriever
-
 from core.search.athena.athena_smart_search import (
     SearchRequest,
     initialize_athena_smart_search,
 )
+from core.search.tools.adapted_patent_retriever import AdaptedPatentRetriever
 from core.search.tools.adapted_web_search_manager import AdaptedWebSearchManager
 
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 轻量级评估引擎
 Lightweight Evaluation Engine
@@ -7,7 +8,6 @@ Lightweight Evaluation Engine
 提供基础的评估和反思能力
 """
 
-from __future__ import annotations
 import logging
 import statistics
 from dataclasses import asdict, dataclass

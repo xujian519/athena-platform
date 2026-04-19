@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Agent服务健康检查和故障转移系统
 Health Check and Failover System for Agent Services
@@ -14,7 +15,6 @@ Health Check and Failover System for Agent Services
 创建时间: 2026-01-18
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import logging

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 企业级重试管理器
 支持指数退避、智能重试、重试限制
 最后更新: 2026-01-26
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import random

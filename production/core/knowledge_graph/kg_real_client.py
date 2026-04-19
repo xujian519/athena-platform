@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 知识图谱真实客户端
 
 连接到现有的知识图谱服务 (http://localhost:PORT)
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from typing import Any

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena增强推理引擎 - 借鉴Athena工作平台的32种推理模式集成架构
 
@@ -12,7 +13,6 @@ Athena Enhanced Reasoning Engine - Integrating 32 Reasoning Patterns from Athena
 - 与记忆系统深度集成
 """
 
-from __future__ import annotations
 import logging
 import random
 import time

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一Agent记忆系统 - 工具函数
 Unified Agent Memory System - Utility Functions
@@ -9,7 +10,6 @@ Unified Agent Memory System - Utility Functions
 版本: 2.1.0
 """
 
-from __future__ import annotations
 import asyncio
 import functools
 import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 NLP服务向量化适配器
 NLP Service Vectorization Adapter
@@ -11,7 +12,6 @@ NLP Service Vectorization Adapter
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 

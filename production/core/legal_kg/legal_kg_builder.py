@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律知识图谱构建工具 - 使用BERT-NER提取实体和关系 (NebulaGraph版本)
 
@@ -16,7 +17,6 @@
 更新时间: 2026-01-25 (TD-001: 标记为迁移)
 """
 
-from __future__ import annotations
 import re
 
 # 添加项目路径

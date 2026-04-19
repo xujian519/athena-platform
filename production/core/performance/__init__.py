@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 性能优化模块 - Performance Optimization Module
 
@@ -5,7 +6,6 @@
 """
 
 # 性能监控(原有)
-from __future__ import annotations
 from core.performance.monitor import (
     Alert,
     AlertLevel,

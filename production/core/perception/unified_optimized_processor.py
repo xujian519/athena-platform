@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一优化感知模块
 Unified Optimized Perception Module
@@ -17,7 +18,6 @@ Unified Optimized Perception Module
 版本: 3.0.0-unified
 """
 
-from __future__ import annotations
 import asyncio
 import gc
 import hashlib

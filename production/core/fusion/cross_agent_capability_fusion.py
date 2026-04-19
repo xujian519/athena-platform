@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 跨智能体能力融合系统 v2.0
 Cross-Agent Capability Fusion System Enhanced
@@ -21,7 +22,6 @@ Cross-Agent Capability Fusion System Enhanced
 版本: v2.0.0 "增强协作融合"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from collections import defaultdict

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能向量管理器
 Intelligent Vector Manager
@@ -6,7 +7,6 @@ Intelligent Vector Manager
 统一管理法律和专利知识图谱的向量存储、检索和优化
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

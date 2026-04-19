@@ -20,17 +20,15 @@ Vector to Knowledge Graph Data Synchronization Tool
 更新时间: 2026-01-26 (TD-001: 标记废弃)
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import re
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any
+from typing import Any, Dict, List, Optional, Set
 
 import requests
 from nebula3.Config import SessionPoolConfig
-from nebula3.gclient.net.ConnectionPool import ConnectionPool
 from nebula3.gclient.net.SessionPool import SessionPool
 
 from core.logging_config import setup_logging

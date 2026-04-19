@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺集成增强版 - 整合所有核心功能
 Xiaonuo Integrated Enhanced Version - All Core Features Integrated
 """
 
-from __future__ import annotations
 import logging
 from datetime import datetime
 from typing import Any

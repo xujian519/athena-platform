@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 情感系统 (Emotional System)
 基于PAD三维情感模型的情感状态管理系统
@@ -14,7 +15,6 @@
 版本: v2.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 import math

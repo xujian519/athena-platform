@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 感知模块错误处理器
 Perception Module Error Handler
@@ -10,7 +11,6 @@ Perception Module Error Handler
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import inspect
 import logging

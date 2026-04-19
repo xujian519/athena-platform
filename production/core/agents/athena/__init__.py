@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena统一智能体模块
 Athena Unified Agent Module
@@ -11,5 +12,4 @@ Athena Unified Agent Module
 """
 
 
-from __future__ import annotations
 __all__ = ["AthenaUnifiedAgent", "IPManagementModule", "LegalAnalysisModule"]

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena增强平台控制器
 Enhanced Platform Controller - 小诺的完整平台控制能力
@@ -14,7 +15,6 @@ Enhanced Platform Controller - 小诺的完整平台控制能力
 4. 自动重启和故障恢复
 """
 
-from __future__ import annotations
 import json
 import logging
 import os

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 专利AI服务模块
 Patent AI Services Module
@@ -16,7 +17,6 @@ Patent AI Services Module
 - 综合质量评估增强 (基于专利质量评估论文)
 """
 
-from __future__ import annotations
 from .autospec_drafter import (
     AutoSpecDrafter,
     DraftPhase,

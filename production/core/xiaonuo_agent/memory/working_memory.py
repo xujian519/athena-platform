@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 工作记忆 (Working Memory)
 基于Redis的短期记忆系统
@@ -14,7 +15,6 @@
 版本: v2.0.0
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 决策服务 - Decision Service
 统一的人机协作决策服务,集成到小诺平台
@@ -8,7 +9,6 @@
 创建时间: 2025-12-17
 """
 
-from __future__ import annotations
 import json
 import logging
 import sys

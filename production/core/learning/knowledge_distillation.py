@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 知识蒸馏引擎
 Knowledge Distillation Engine
@@ -13,7 +14,6 @@ Knowledge Distillation Engine
 创建时间: 2026-01-01
 版本: 1.0.0
 """
-from __future__ import annotations
 import asyncio
 import json
 import logging

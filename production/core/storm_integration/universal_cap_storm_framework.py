@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 通用 STORM-CAP 集成框架
 
@@ -20,7 +21,6 @@
 创建时间: 2026-01-03
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import sys

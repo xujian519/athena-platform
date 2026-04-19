@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 混沌工程实践
 Chaos Engineering
@@ -16,7 +17,6 @@ Chaos Engineering
 版本: v1.0.0 "混沌工程"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import random

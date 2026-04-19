@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协作协议 - 通信协议实现
 Collaboration Protocols - Communication Protocol Implementation
@@ -11,7 +12,6 @@ Collaboration Protocols - Communication Protocol Implementation
 版本: 2.1.0
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

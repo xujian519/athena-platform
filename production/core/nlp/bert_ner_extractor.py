@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BERT命名实体识别模块
 BERT Named Entity Recognition Module
@@ -7,7 +8,6 @@ BERT Named Entity Recognition Module
 支持MPS加速
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import re

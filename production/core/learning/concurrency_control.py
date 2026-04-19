@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习引擎并发控制模块
 Concurrency Control for Learning Engines
@@ -13,7 +14,6 @@ Concurrency Control for Learning Engines
 创建时间: 2026-01-28
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

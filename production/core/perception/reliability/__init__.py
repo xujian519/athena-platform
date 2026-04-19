@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 感知模块可靠性包
 包含错误处理、重试管理、降级管理、熔断器
 """
 
-from __future__ import annotations
 from .degradation import (
     CircuitBreaker,
     CircuitBreakerConfig,

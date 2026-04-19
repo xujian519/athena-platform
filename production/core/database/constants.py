@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 常量定义模块
 集中管理所有魔法数字和字符串
 """
 
-from __future__ import annotations
 import uuid
 from enum import Enum
 from typing import Final

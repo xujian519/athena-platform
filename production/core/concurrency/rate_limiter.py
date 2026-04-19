@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 并发控制和资源管理模块
 Concurrency Control and Resource Management Module
@@ -10,7 +11,6 @@ Concurrency Control and Resource Management Module
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 中文OCR优化引擎
 Chinese OCR Optimization Engine
@@ -13,7 +14,6 @@ Chinese OCR Optimization Engine
 创建时间: 2026-01-01
 版本: 1.0.0
 """
-from __future__ import annotations
 import asyncio
 import logging
 import re

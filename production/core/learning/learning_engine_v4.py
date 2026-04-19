@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习引擎 v4.0 - 维特根斯坦版
 Learning Engine v4.0 - Wittgenstein Edition
@@ -20,7 +21,6 @@ v4.0核心特性:
 版本: v4.0.0 "逻辑之光"
 """
 
-from __future__ import annotations
 import json
 import logging
 import sys

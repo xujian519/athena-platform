@@ -1,9 +1,9 @@
+from __future__ import annotations
 # ============================================================
 # AI伦理框架 - 健康检查API
 # AI Ethics Framework - Health Check API
 # ============================================================
 
-from __future__ import annotations
 import logging
 from datetime import datetime
 from typing import Any

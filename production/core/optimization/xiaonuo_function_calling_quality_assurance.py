@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主Function Calling质量保障系统
 Xiaonuo·Pisces Princess Function Calling Quality Assurance System
@@ -10,7 +11,6 @@ Xiaonuo·Pisces Princess Function Calling Quality Assurance System
 版本: v1.0.0 "质量守护"
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 services
 """
-from __future__ import annotations

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 意图置信度评分器
 Intent Confidence Scorer
@@ -15,7 +16,6 @@ Intent Confidence Scorer
 版本: v1.0.0 "置信度增强"
 """
 
-from __future__ import annotations
 import logging
 from collections import deque
 from dataclasses import dataclass, field

@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 模型预加载策略 - 启动时加载常用模型
 用于减少首次调用延迟,提升响应速度
 """
 
-from __future__ import annotations
 import json
 import subprocess
 import threading

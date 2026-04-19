@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 记忆管理器
 Memory Manager
 """
 
-from __future__ import annotations
 import json
 import logging
 from datetime import datetime

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强的时间线记忆系统 - 集成向量存储
 Timeline Memory System with Vector Integration
@@ -14,7 +15,6 @@ Timeline Memory System with Vector Integration
 """
 
 
-from __future__ import annotations
 import json
 import logging
 from datetime import datetime

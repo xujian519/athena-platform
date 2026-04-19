@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 审查意见文档完整性检查器
 Office Action Document Completeness Checker
@@ -10,7 +11,6 @@ Office Action Document Completeness Checker
 版本: v0.1.2 "晨星初现"
 """
 
-from __future__ import annotations
 import asyncio
 from dataclasses import dataclass, field
 from datetime import datetime

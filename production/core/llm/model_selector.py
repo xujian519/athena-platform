@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - 智能模型选择器
 基于任务类型、成本、性能等因素自动选择最合适的模型
@@ -6,7 +7,6 @@
 日期: 2026-01-23
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from datetime import datetime

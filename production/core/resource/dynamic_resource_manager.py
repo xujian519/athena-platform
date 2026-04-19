@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 动态资源管理器
 Dynamic Resource Manager
@@ -7,7 +8,6 @@ Dynamic Resource Manager
 实现资源错误恢复和负载均衡
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import threading

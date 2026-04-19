@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 API密钥配置向导
 API Key Configuration Wizard
@@ -10,7 +11,6 @@ API Key Configuration Wizard
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import logging
 import sys
 from pathlib import Path

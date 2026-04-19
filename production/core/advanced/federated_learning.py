@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 联邦学习系统
 Federated Learning System
@@ -16,7 +17,6 @@ Federated Learning System
 版本: v1.0.0 "隐私保护"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import random

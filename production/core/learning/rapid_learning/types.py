@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 快速学习机制 - 类型定义
 Rapid Learning - Type Definitions
@@ -9,7 +10,6 @@ Rapid Learning - Type Definitions
 版本: 2.0.0
 """
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

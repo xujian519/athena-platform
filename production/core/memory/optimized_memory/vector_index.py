@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化记忆系统 - 向量索引
 Optimized Memory System - Vector Index
@@ -11,7 +12,6 @@ Optimized Memory System - Vector Index
 版本: 2.1.0
 """
 
-from __future__ import annotations
 import time
 import uuid
 from typing import Any

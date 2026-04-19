@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 向量-图融合API扩展
 Fusion API Extension for Memory System
@@ -9,7 +10,6 @@ Fusion API Extension for Memory System
 创建时间: 2025-12-28
 """
 
-from __future__ import annotations
 import logging
 from typing import Any
 

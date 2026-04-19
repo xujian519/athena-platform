@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Agent通信系统配置
 Communication System Configuration
@@ -14,7 +15,6 @@ Communication System Configuration
 创建时间: 2026-01-18
 """
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 

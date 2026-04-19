@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一调度器 - Unified Scheduler
 整合任务调度和日历调度功能
@@ -8,7 +9,6 @@
 创建时间: 2025-12-17
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

@@ -1,3 +1,4 @@
+from __future__ import annotations
 # pyright: ignore
 # !/usr/bin/env python3
 """
@@ -11,7 +12,6 @@ Deploy Performance Optimizations
 版本: v1.0 Deployment Script
 """
 
-from __future__ import annotations
 from pathlib import Path
 
 from core.logging_config import setup_logging

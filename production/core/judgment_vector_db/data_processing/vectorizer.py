@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 判决书向量化模块
 Judgment Vectorizer
@@ -9,7 +10,6 @@ Judgment Vectorizer
 - MPS加速支持
 """
 
-from __future__ import annotations
 import json
 import pickle
 from dataclasses import asdict, dataclass

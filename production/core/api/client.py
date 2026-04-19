@@ -1,10 +1,10 @@
+from __future__ import annotations
 """
 客户端注册和管理API
 
 支持Athena客户端(opencode/iflow cli)的注册和能力管理
 """
 
-from __future__ import annotations
 from datetime import datetime
 
 from fastapi import APIRouter, HTTPException, status

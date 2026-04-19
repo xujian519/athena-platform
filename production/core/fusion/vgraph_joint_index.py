@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 向量-图联合索引策略
 Joint Index Strategy for Vector + Graph Fusion
@@ -7,7 +8,6 @@ Joint Index Strategy for Vector + Graph Fusion
 创建时间: 2025-12-28
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass

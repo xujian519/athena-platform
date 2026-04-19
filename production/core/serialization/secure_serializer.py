@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 安全序列化工具模块
 
@@ -8,7 +9,6 @@
 日期: 2025-12-29
 """
 
-from __future__ import annotations
 import json
 import logging
 from datetime import datetime

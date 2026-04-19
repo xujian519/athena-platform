@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台LlamaIndex重排序器集成
 Athena Platform LlamaIndex Reranker Integration
@@ -6,7 +7,6 @@ Athena Platform LlamaIndex Reranker Integration
 结合Athena检索结果 + LlamaIndex重排序算法
 """
 
-from __future__ import annotations
 import logging
 import sys
 from dataclasses import dataclass

@@ -1,8 +1,8 @@
+from __future__ import annotations
 """
 消息序列化器
 提供高性能的消息序列化和压缩功能
 """
-from __future__ import annotations
 import gzip
 import json
 import logging

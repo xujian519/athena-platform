@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 执行引擎 - 向后兼容重定向
 Execution Engine - Backward Compatibility Redirect
@@ -8,7 +9,6 @@ Execution Engine - Backward Compatibility Redirect
 新位置: core.execution.execution_engine (模块化目录)
 """
 
-from __future__ import annotations
 import warnings
 
 from .execution_engine import (

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一推理引擎编排器
 Unified Reasoning Orchestrator
@@ -19,7 +20,6 @@ Unified Reasoning Orchestrator
 - 语义分析任务 → 语义推理引擎
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

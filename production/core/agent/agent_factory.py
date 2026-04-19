@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Agent工厂类
 Agent Factory
@@ -10,7 +11,6 @@ Agent Factory
 版本: 3.0.0
 """
 
-from __future__ import annotations
 import logging
 from datetime import datetime
 from typing import Any

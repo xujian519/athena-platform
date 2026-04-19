@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺知识库管理器
 Xiaonuo Knowledge Manager
@@ -9,7 +10,6 @@ Xiaonuo Knowledge Manager
 创建时间: 2025-12-14
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import os

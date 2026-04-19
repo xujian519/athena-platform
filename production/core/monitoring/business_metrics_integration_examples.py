@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 业务指标集成示例 - Business Metrics Integration Examples
 展示如何在认知与决策模块中集成业务指标装饰器
@@ -7,7 +8,6 @@
 版本: v1.0
 """
 
-from __future__ import annotations
 import sys
 from pathlib import Path
 

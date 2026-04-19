@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能体性能监控包装器
 Agent Performance Monitoring Wrapper
@@ -6,7 +7,6 @@ Agent Performance Monitoring Wrapper
 为小诺、小娜等智能体服务提供统一的性能监控功能
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import logging

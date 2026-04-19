@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 serialization
 """
-from __future__ import annotations

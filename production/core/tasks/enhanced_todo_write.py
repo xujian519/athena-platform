@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强的TodoWrite工具 - 持久化版本
 Enhanced TodoWrite Tool - Persistent Version
@@ -10,7 +11,6 @@ Enhanced TodoWrite Tool - Persistent Version
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import contextlib
 import json
 import threading

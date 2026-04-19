@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 integration - 系统集成模块
 
@@ -10,7 +11,6 @@ integration - 系统集成模块
 版本: v1.0.0
 """
 
-from __future__ import annotations
 from .planning_gateway_integration import (
     PlanningGatewayIntegration,
     get_planning_gateway_integration,

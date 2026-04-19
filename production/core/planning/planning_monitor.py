@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 规划系统性能监控
 Planning System Performance Monitor
@@ -10,7 +11,6 @@ Planning System Performance Monitor
 创建时间: 2025-12-17
 """
 
-from __future__ import annotations
 import json
 import logging
 import threading

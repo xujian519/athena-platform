@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 analysis
 """
-from __future__ import annotations

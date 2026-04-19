@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Neo4j监控配置
 Neo4j Monitoring Configuration
@@ -18,7 +19,6 @@ Neo4j Monitoring Configuration
 版本: v1.0.0
 """
 
-from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 

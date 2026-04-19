@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 爬虫系统完整性验证脚本
 Crawler System Integrity Verification Script
@@ -9,7 +10,6 @@ Crawler System Integrity Verification Script
 创建时间: 2025-12-14
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import os

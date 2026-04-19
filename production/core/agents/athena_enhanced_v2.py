@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena.智慧女神 - 增强版 v2.0 (独立版)
 Athena Wisdom Goddess - Enhanced Edition v2.0 (Standalone)
@@ -10,7 +11,6 @@ Athena Wisdom Goddess - Enhanced Edition v2.0 (Standalone)
 版本: v2.0.0 "全能智慧"
 """
 
-from __future__ import annotations
 import logging
 from typing import Any
 

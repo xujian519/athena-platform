@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能体标准化接口协议
 Agent Standard Interface Protocol
@@ -10,7 +11,6 @@ Agent Standard Interface Protocol
 创建: 2025-01-12
 """
 
-from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field

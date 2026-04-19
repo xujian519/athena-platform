@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化系统配置常量
 Optimization System Configuration Constants
@@ -9,7 +10,6 @@ Optimization System Configuration Constants
 将硬编码的魔法数字提取为命名常量
 """
 
-from __future__ import annotations
 from typing import Final
 
 # ==================== 延迟相关常量 ====================

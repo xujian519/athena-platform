@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律数据库数据模型
 Legal Database Models
@@ -6,7 +7,6 @@ Legal Database Models
 遵循 ChatGLM 专家建议的高质量表结构设计
 """
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

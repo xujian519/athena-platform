@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Agent基类
 Base Agent Class
@@ -6,7 +7,6 @@ Base Agent Class
 所有专业化Agent的基类,定义通用接口和行为
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

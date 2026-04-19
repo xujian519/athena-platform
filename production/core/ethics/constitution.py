@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena平台宪法 - AI伦理原则定义
 Athena Platform Constitution - AI Ethical Principles
@@ -5,7 +6,6 @@ Athena Platform Constitution - AI Ethical Principles
 基于Anthropic Constitutional AI + 维特根斯坦逻辑哲学 + 东方智慧
 """
 
-from __future__ import annotations
 import json
 from dataclasses import dataclass, field
 from datetime import datetime

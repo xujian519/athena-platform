@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena工具评估框架
 Tool Evaluation Framework for Athena Platform
@@ -20,7 +21,6 @@ Tool Evaluation Framework for Athena Platform
     report = await framework.generate_evaluation_report([result])
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

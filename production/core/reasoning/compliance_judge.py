@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专家级合规性审查预判系统
 Expert Compliance Review & Prediction System
@@ -9,7 +10,6 @@ Expert Compliance Review & Prediction System
 版本: v1.0.0 "专家审查"
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass, field

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Phase 2 快速验证脚本
 Quick Phase 2 Verification
@@ -10,7 +11,6 @@ Quick Phase 2 Verification
 创建: 2025-12-29
 """
 
-from __future__ import annotations
 import sys
 import time
 from pathlib import Path

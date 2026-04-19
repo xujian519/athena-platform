@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台FastAPI应用程序模板
 FastAPI Application Template for Athena Platform
@@ -10,7 +11,6 @@ FastAPI Application Template for Athena Platform
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 import uuid
 from typing import Any

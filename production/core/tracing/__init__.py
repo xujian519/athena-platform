@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 tracing
 """
-from __future__ import annotations

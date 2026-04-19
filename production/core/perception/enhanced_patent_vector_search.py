@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强专利向量检索系统
 Enhanced Patent Vector Search System
@@ -9,7 +10,6 @@ Enhanced Patent Vector Search System
 创建时间: 2025-12-07
 版本: 1.0.0
 """
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass, field

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主性能指标收集器
 Xiaonuo Pisces Princess Metrics Collector
@@ -10,7 +11,6 @@ Xiaonuo Pisces Princess Metrics Collector
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 联邦学习系统 (Federated Learning System)
 分布式隐私保护机器学习
@@ -8,7 +9,6 @@
 优化目标: 隐私保护下的协同学习,模型性能提升
 """
 
-from __future__ import annotations
 import logging
 from collections import deque
 from dataclasses import dataclass

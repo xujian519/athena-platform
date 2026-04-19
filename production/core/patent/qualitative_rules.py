@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利定性规则库
 Patent Qualitative Rules Library
@@ -15,7 +16,6 @@ Patent Qualitative Rules Library
 版本: v0.1.2 "晨星初现"
 """
 
-from __future__ import annotations
 import json
 import logging
 from collections import defaultdict

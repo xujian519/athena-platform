@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 监控模块
 Monitoring Module
 """
 
-from __future__ import annotations
 import logging
 from typing import Any, Dict, Optional
 

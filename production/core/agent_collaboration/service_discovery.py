@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 服务发现与负载均衡模块
 Service Discovery and Load Balancing Module
@@ -10,7 +11,6 @@ Service Discovery and Load Balancing Module
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import logging

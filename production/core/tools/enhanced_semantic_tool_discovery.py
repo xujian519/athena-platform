@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强语义工具发现引擎
 Enhanced Semantic Tool Discovery Engine
@@ -15,7 +16,6 @@ Enhanced Semantic Tool Discovery Engine
 版本: v2.0.0 "深度语义理解"
 """
 
-from __future__ import annotations
 import logging
 from collections import defaultdict, deque
 from dataclasses import dataclass, field

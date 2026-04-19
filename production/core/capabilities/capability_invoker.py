@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 能力调用器
 Capability Invoker
@@ -6,7 +7,6 @@ Capability Invoker
 负责调用各种类型的原子化能力
 """
 
-from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from typing import Any

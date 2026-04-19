@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台配置验证器
 Configuration Validator for Athena Platform
@@ -7,7 +8,6 @@ Configuration Validator for Athena Platform
 功能: 验证配置的完整性和正确性
 """
 
-from __future__ import annotations
 import os
 import re
 import socket

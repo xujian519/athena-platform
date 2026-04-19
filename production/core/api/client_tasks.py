@@ -1,10 +1,10 @@
+from __future__ import annotations
 """
 客户端任务处理API
 
 处理来自客户端的任务请求,路由到合适的智能体
 """
 
-from __future__ import annotations
 import logging
 from typing import Any
 

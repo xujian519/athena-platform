@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 AI家族统一记忆接口
 Unified Family Memory Interface
@@ -11,7 +12,6 @@ Unified Family Memory Interface
 版本: v1.0.0 "统一记忆"
 """
 
-from __future__ import annotations
 import logging
 import uuid
 from dataclasses import dataclass, field

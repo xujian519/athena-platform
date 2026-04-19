@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能响应缓存系统
 Intelligent Response Cache System
@@ -6,7 +7,6 @@ Intelligent Response Cache System
 避免重复的AI模型调用,提升响应速度
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import time

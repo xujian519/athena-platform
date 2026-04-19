@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 边缘场景测试
 测试各种边界条件和边缘情况
 最后更新: 2026-01-26
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import os

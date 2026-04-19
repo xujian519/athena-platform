@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 基础参数优化器
 Base Parameter Optimizer
@@ -14,7 +15,6 @@ Heretic的核心思路:
 创建时间: 2025-01-04
 """
 
-from __future__ import annotations
 import abc
 import asyncio
 import logging

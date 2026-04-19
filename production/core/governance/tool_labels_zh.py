@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 工具中文标签映射
 Tool Chinese Labels Mapping
@@ -16,7 +17,6 @@ Tool Chinese Labels Mapping
 # 工具中文标签映射表
 # 格式: {tool_id: [中文标签列表]}
 
-from __future__ import annotations
 TOOL_LABELS_ZH = {
     # ==================== 专利相关工具 ====================
     "service.IntegratedPatentService": ["专利", "搜索", "集成", "服务", "知识产权"],

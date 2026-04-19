@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 轻量级通信引擎
 Lightweight Communication Engine
@@ -7,7 +8,6 @@ Lightweight Communication Engine
 提供基础的消息传递和通信能力
 """
 
-from __future__ import annotations
 import logging
 import uuid
 from collections import defaultdict, deque

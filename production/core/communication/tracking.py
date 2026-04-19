@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena通信系统 - 消息追踪模块
 Message Tracking for Communication System
@@ -17,7 +18,6 @@ Message Tracking for Communication System
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

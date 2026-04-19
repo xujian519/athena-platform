@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强缓存管理器
 Advanced Cache Manager
@@ -6,7 +7,6 @@ Advanced Cache Manager
 提供多级缓存、TTL管理、缓存预热等功能
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import logging

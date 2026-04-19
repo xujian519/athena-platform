@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 IPC技术领域智能匹配系统
 IPC Technical Domain Matching System
@@ -14,7 +15,6 @@ IPC Technical Domain Matching System
 版本: v0.1.2 "晨星初现"
 """
 
-from __future__ import annotations
 import logging
 
 # 导入相关模块

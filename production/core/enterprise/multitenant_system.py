@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 企业级多租户系统
 Enterprise Multi-Tenant System
@@ -16,7 +17,6 @@ Enterprise Multi-Tenant System
 版本: v1.0.0 "企业级"
 """
 
-from __future__ import annotations
 import hashlib
 import logging
 from collections import defaultdict

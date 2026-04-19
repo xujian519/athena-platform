@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 状态模块基类
 State Module Base Class
@@ -13,7 +14,6 @@ State Module Base Class
 版本: v1.0.0 "Phase 1"
 """
 
-from __future__ import annotations
 import json
 import logging
 from abc import ABC

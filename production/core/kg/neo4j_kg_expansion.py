@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 知识图谱扩展检索 - Neo4j版
 Knowledge Graph Expansion Retrieval - Neo4j Edition
@@ -19,7 +20,6 @@ Knowledge Graph Expansion Retrieval - Neo4j Edition
 更新时间: 2026-01-25 (TD-001: 迁移到Neo4j)
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from typing import Any

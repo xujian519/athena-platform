@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 技术路线图自动生成系统
 Technology Roadmap Auto-Generation System
@@ -9,7 +10,6 @@ Technology Roadmap Auto-Generation System
 版本: v1.0.0 "智能路线图"
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta

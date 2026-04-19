@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 通讯引擎 - 完整实现
 Communication Engine - Complete Implementation
@@ -9,7 +10,6 @@ Communication Engine - Complete Implementation
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

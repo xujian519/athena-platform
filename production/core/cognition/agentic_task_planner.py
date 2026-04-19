@@ -1,3 +1,4 @@
+from __future__ import annotations
 # pyright: ignore
 # !/usr/bin/env python3
 """
@@ -14,7 +15,6 @@
 预期收益: 显著提升智能体执行效率和质量
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import sys

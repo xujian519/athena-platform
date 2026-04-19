@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 稳定语义相似度匹配算法
 Stable Semantic Similarity Matching Algorithm
@@ -10,7 +11,6 @@ Stable Semantic Similarity Matching Algorithm
 版本: v3.0.0 "稳定语义计算"
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from typing import Any

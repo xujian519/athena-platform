@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 联网搜索引擎 - 基类
 Web Search Engines - Base Classes
@@ -11,7 +12,6 @@ Web Search Engines - Base Classes
 版本: 2.1.0
 """
 
-from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Any
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 视觉Agent增强模块
 Visual Agent Enhancement Module
@@ -15,7 +16,6 @@ Visual Agent Enhancement Module
 版本: v1.0.0 "Phase 3"
 """
 
-from __future__ import annotations
 import asyncio
 import base64
 import logging

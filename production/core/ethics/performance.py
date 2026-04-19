@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 伦理框架性能监控模块
 Ethics Framework Performance Monitoring
@@ -5,7 +6,6 @@ Ethics Framework Performance Monitoring
 提供性能指标收集、分析和报告功能
 """
 
-from __future__ import annotations
 import threading
 import time
 from collections.abc import Callable

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习与适应模块 API 接口
 Learning & Adaptation Module API
@@ -15,7 +16,6 @@ Learning & Adaptation Module API
 创建时间: 2026-01-24
 """
 
-from __future__ import annotations
 import logging
 from datetime import datetime
 from enum import Enum

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强性能监控告警系统
 Enhanced Performance Monitoring and Alerting System
@@ -16,7 +17,6 @@ Enhanced Performance Monitoring and Alerting System
 创建时间: 2025-01-09
 """
 
-from __future__ import annotations
 import json
 import logging
 import smtplib

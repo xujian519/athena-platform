@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 NebulaGraph知识图谱Schema定义
 Legal Knowledge Graph Schema for NebulaGraph
@@ -6,7 +7,6 @@ Legal Knowledge Graph Schema for NebulaGraph
 遵循ChatGLM专家建议的法律知识图谱设计
 """
 
-from __future__ import annotations
 from enum import Enum
 from typing import Any
 

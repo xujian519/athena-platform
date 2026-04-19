@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BERT意图分类器
 BERT Intent Classifier
@@ -16,7 +17,6 @@ BERT Intent Classifier
 版本: v1.0.0 "BERT分类"
 """
 
-from __future__ import annotations
 import logging
 from collections import defaultdict
 from dataclasses import dataclass

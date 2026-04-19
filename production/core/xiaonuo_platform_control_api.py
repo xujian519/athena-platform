@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺平台控制API服务
 Xiaonuo Platform Control API Service
@@ -6,7 +7,6 @@ Xiaonuo Platform Control API Service
 提供RESTful API接口控制整个平台
 """
 
-from __future__ import annotations
 import sys
 from datetime import datetime
 from pathlib import Path

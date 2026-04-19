@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 OCR性能监控模块
 OCR Performance Monitoring Module
@@ -9,7 +10,6 @@ OCR Performance Monitoring Module
 创建时间: 2026-01-01
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import json

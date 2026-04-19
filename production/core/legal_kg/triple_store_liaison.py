@@ -18,16 +18,16 @@ Triple Store Liaison System for Legal Knowledge
 更新时间: 2026-01-25 (TD-001: 标记为迁移)
 """
 
-from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Dict, List, Optional, Tuple
 
 import psycopg2
 from nebula3.Config import Config
 from nebula3.gclient.net import ConnectionPool
 from qdrant_client import QdrantClient
+
 
 # 配置
 POSTGRES_CONFIG = {

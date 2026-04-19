@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺统一NLP接口
 整合Phase 1-3的所有模块,提供统一的调用接口和数据流优化
@@ -25,7 +26,6 @@
 日期: 2025-12-18
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import os

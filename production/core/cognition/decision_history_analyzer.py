@@ -1,10 +1,10 @@
+from __future__ import annotations
 
 # pyright: ignore
 """
 决策历史分析器
 分析决策模式,提供改进建议
 """
-from __future__ import annotations
 import json
 import logging
 from collections import defaultdict, deque

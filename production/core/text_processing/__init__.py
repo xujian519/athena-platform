@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 text_processing
 """
-from __future__ import annotations

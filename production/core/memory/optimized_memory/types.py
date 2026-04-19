@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化记忆系统 - 数据模型
 Optimized Memory System - Data Models
@@ -11,7 +12,6 @@ Optimized Memory System - Data Models
 版本: 2.1.0
 """
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

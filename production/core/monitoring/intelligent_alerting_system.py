@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能告警系统
 Intelligent Alerting System
@@ -8,7 +9,6 @@ Intelligent Alerting System
 创建时间: 2025-12-11
 版本: 2.0.0
 """
-from __future__ import annotations
 import asyncio
 import logging
 

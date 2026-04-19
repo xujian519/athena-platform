@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺六步推理引擎
 Xiaonuo Six-Step Reasoning Engine
@@ -16,7 +17,6 @@ Xiaonuo Six-Step Reasoning Engine
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import uuid

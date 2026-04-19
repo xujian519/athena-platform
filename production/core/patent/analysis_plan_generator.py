@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 分析计划生成器
 Analysis Plan Generator
@@ -10,7 +11,6 @@ Analysis Plan Generator
 版本: v0.1.2 "晨星初现"
 """
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any

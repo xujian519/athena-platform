@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 AI家族共享记忆向量库
 Family Shared Memory Vector Database
@@ -13,7 +14,6 @@ Family Shared Memory Vector Database
 4. 高性能 - 基于Qdrant HNSW索引,毫秒级响应
 5. 可扩展 - 轻松支持未来更多智能体加入
 """
-from __future__ import annotations
 import builtins
 import collections
 import contextlib

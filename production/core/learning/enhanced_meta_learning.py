@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 元学习引擎增强版 - Enhanced Meta-Learning Engine
 实现"如何学习"的学习能力
@@ -14,7 +15,6 @@
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 from collections import defaultdict
 from dataclasses import dataclass, field

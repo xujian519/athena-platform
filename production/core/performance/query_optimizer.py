@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 综合性能优化模块
 Performance Optimization Module - 综合优化查询性能和响应速度
@@ -15,7 +16,6 @@ Performance Optimization Module - 综合优化查询性能和响应速度
 版本: v1.0.0 "Performance Optimization"
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import json

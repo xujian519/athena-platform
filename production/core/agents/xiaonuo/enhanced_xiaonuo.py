@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺增强智能体 - Enhanced Xiaonuo
 整合改进后的学习和反思能力
@@ -13,7 +14,6 @@
 版本: v2.0.0 "智慧进化"
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import sys
@@ -31,29 +31,54 @@ sys.path.insert(0, str(project_root))
 # 导入基础智能体
 from core.agents.xiaonuo.unified_xiaonuo_agent import XiaonuoUnifiedAgent
 
-# 导入记忆系统
+# 导入记忆系统（带错误处理）
 try:
     from core.memory.unified_agent_memory_system import (
         MemoryTier,
         MemoryType,
         UnifiedAgentMemorySystem,
     )
+    MEMORY_SYSTEM_AVAILABLE = True
 except ImportError:
-    # 如果导入失败,使用备用导入
+    # 如果导入失败，标记为不可用
     UnifiedAgentMemorySystem = None
+    MemoryTier = None
+    MemoryType = None
+    MEMORY_SYSTEM_AVAILABLE = False
+    logger.warning("⚠️  统一记忆系统不可用，将使用简化实现")
 
-# 导入改进模块
-from core.intelligence.reflection_engine_v5 import (
-    ActionStatus,
-    ReflectionEngineV5,
-    ReflectionType,
-    ThoughtStep,
-)
-from core.learning.enhanced_meta_learning import (
-    EnhancedMetaLearningEngine,
-    MetaLearningTask,
-)
-from core.learning.memory_consolidation_system import MemoryConsolidationSystem
+# 导入改进模块（带错误处理）
+try:
+    from core.intelligence.reflection_engine_v5 import (
+        ActionStatus,
+        ReflectionEngineV5,
+        ReflectionType,
+        ThoughtStep,
+    )
+    REFLECTION_ENGINE_AVAILABLE = True
+except ImportError:
+    REFLECTION_ENGINE_AVAILABLE = False
+    logger.error("❌ 反思引擎v5不可用，这是核心依赖，程序可能无法正常运行")
+
+try:
+    from core.learning.enhanced_meta_learning import (
+        EnhancedMetaLearningEngine,
+        MetaLearningTask,
+    )
+    META_LEARNING_AVAILABLE = True
+except ImportError:
+    EnhancedMetaLearningEngine = None
+    MetaLearningTask = None
+    META_LEARNING_AVAILABLE = False
+    logger.warning("⚠️  元学习引擎不可用，将跳过元学习功能")
+
+try:
+    from core.learning.memory_consolidation_system import MemoryConsolidationSystem
+    MEMORY_CONSOLIDATION_AVAILABLE = True
+except ImportError:
+    MemoryConsolidationSystem = None
+    MEMORY_CONSOLIDATION_AVAILABLE = False
+    logger.warning("⚠️  记忆整合系统不可用，将跳过记忆整合功能")
 
 logger = setup_logging()
 
@@ -75,23 +100,41 @@ class EnhancedXiaonuo(XiaonuoUnifiedAgent):
         self.version = "v2.0.0_enhanced"
         self.agent_id = "xiaonuo_enhanced"
 
-        # 记忆整合系统
-        self.memory_consolidation = MemoryConsolidationSystem(agent_id=self.agent_id)
+        # 记忆整合系统（仅当可用时）
+        if MEMORY_CONSOLIDATION_AVAILABLE and MemoryConsolidationSystem is not None:
+            self.memory_consolidation = MemoryConsolidationSystem(agent_id=self.agent_id)
+            logger.info("✅ 记忆整合系统已启用")
+        else:
+            self.memory_consolidation = None
+            logger.info("⚠️  记忆整合系统未启用")
 
-        # 元学习引擎
-        self.meta_learning = EnhancedMetaLearningEngine(agent_id=self.agent_id)
+        # 元学习引擎（仅当可用时）
+        if META_LEARNING_AVAILABLE and EnhancedMetaLearningEngine is not None:
+            self.meta_learning = EnhancedMetaLearningEngine(agent_id=self.agent_id)
+            logger.info("✅ 元学习引擎已启用")
+        else:
+            self.meta_learning = None
+            logger.info("⚠️  元学习引擎未启用")
 
-        # v5.0反思引擎
-        self.reflection_engine_v5 = ReflectionEngineV5(agent_id=self.agent_id)
+        # v5.0反思引擎（核心功能，必须可用）
+        if REFLECTION_ENGINE_AVAILABLE:
+            self.reflection_engine_v5 = ReflectionEngineV5(agent_id=self.agent_id)
+            logger.info("✅ 反思引擎v5已启用")
+        else:
+            logger.error("❌ 反思引擎v5不可用，这是核心依赖！")
+            raise RuntimeError("反思引擎v5是必需的，请确保模块可用")
 
-        # 增强能力列表
-        self.enhanced_capabilities = [
-            "记忆整合",
-            "元学习优化",
-            "因果推理",
-            "自我反思循环",
-            "自适应改进",
-        ]
+        # 增强能力列表（根据可用模块动态生成）
+        self.enhanced_capabilities = []
+
+        if self.memory_consolidation is not None:
+            self.enhanced_capabilities.append("记忆整合")
+
+        if self.meta_learning is not None:
+            self.enhanced_capabilities.extend(["元学习优化", "自适应改进"])
+
+        # 反思引擎总是可用的
+        self.enhanced_capabilities.extend(["因果推理", "自我反思循环"])
 
         # 性能追踪
         self.performance_tracker = {
@@ -102,17 +145,18 @@ class EnhancedXiaonuo(XiaonuoUnifiedAgent):
             "memory_consolidations": 0,
         }
 
-        # 配置
+        # 配置（根据可用模块动态调整）
         self.config = {
-            "enable_reflection": True,
-            "enable_learning": True,
-            "enable_consolidation": True,
+            "enable_reflection": REFLECTION_ENGINE_AVAILABLE,
+            "enable_learning": META_LEARNING_AVAILABLE,
+            "enable_consolidation": MEMORY_CONSOLIDATION_AVAILABLE,
             "consolidation_interval_hours": 6,
             "reflection_threshold": 0.8,
             "learning_sample_size": 5,
         }
 
-        logger.info("🚀 小诺增强智能体v2.0初始化完成")
+        logger.info(f"🚀 小诺增强智能体v2.0初始化完成")
+        logger.info(f"📋 可用能力: {', '.join(self.enhanced_capabilities)}")
 
     async def initialize(self, memory_system=None):
         """初始化增强小诺"""
@@ -122,17 +166,22 @@ class EnhancedXiaonuo(XiaonuoUnifiedAgent):
         except Exception as e:
             logger.warning(f"父类初始化失败: {e}")
 
-        # 初始化记忆整合系统(连接到记忆系统)
-        self.memory_consolidation.memory_system = memory_system
+        # 初始化记忆整合系统(如果可用)
+        if self.memory_consolidation is not None:
+            self.memory_consolidation.memory_system = memory_system
+            logger.info("✅ 记忆整合系统已连接")
 
-        # 执行初始记忆整合
-        if self.config["enable_consolidation"]:
+        # 执行初始记忆整合（如果启用）
+        if self.config["enable_consolidation"] and self.memory_consolidation is not None:
             try:
                 await self._perform_initial_consolidation()
             except Exception as e:
                 logger.warning(f"初始记忆整合失败: {e}")
 
-        logger.info("✅ 增强小诺初始化完成,新增记忆整合和元学习能力")
+        logger.info(f"✅ 增强小诺初始化完成")
+        logger.info(f"📊 已启用功能: 反思={self.config['enable_reflection']}, "
+                   f"学习={self.config['enable_learning']}, "
+                   f"整合={self.config['enable_consolidation']}")
 
     async def process_input(
         self,
@@ -254,6 +303,11 @@ class EnhancedXiaonuo(XiaonuoUnifiedAgent):
         self, user_input: str, response: str, context: dict[str, Any]
     ):
         """从交互中学习"""
+        # 检查元学习引擎是否可用
+        if not META_LEARNING_AVAILABLE or self.meta_learning is None:
+            logger.debug("⚠️  元学习引擎不可用，跳过学习步骤")
+            return
+
         try:
             # 创建学习经验
             task = MetaLearningTask(
@@ -285,6 +339,11 @@ class EnhancedXiaonuo(XiaonuoUnifiedAgent):
 
     async def _perform_initial_consolidation(self):
         """执行初始记忆整合"""
+        # 检查记忆整合系统是否可用
+        if not MEMORY_CONSOLIDATION_AVAILABLE or self.memory_consolidation is None:
+            logger.debug("⚠️  记忆整合系统不可用，跳过初始整合")
+            return
+
         try:
             report = await self.memory_consolidation.consolidate_memories(force=True)
             if report.get("status") == "completed":
@@ -294,6 +353,11 @@ class EnhancedXiaonuo(XiaonuoUnifiedAgent):
 
     async def _schedule_memory_consolidation(self):
         """调度记忆整合(每6小时执行一次)"""
+        # 检查记忆整合系统是否可用
+        if not MEMORY_CONSOLIDATION_AVAILABLE or self.memory_consolidation is None:
+            logger.debug("⚠️  记忆整合系统不可用，跳过调度")
+            return
+
         # 检查是否需要执行整合
         if self.memory_consolidation._should_consolidate():
             try:

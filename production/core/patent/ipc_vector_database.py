@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 IPC分类向量数据库
 IPC Classification Vector Database
@@ -14,7 +15,6 @@ IPC Classification Vector Database
 版本: v0.1.2 "晨星初现"
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import logging

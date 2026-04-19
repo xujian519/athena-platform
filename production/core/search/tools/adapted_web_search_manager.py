@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 分散式智能搜索架构 - 适配版Web搜索管理器
 Decentralized Intelligent Search Architecture - Adapted Web Search Manager
@@ -10,7 +11,6 @@ Decentralized Intelligent Search Architecture - Adapted Web Search Manager
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

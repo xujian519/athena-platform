@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺平台总调度核心模块
 Xiaonuo Platform Coordinator Core Module
 """
 
-from __future__ import annotations
 from datetime import datetime
 from enum import Enum
 from typing import Any

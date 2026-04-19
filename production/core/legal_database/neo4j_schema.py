@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Neo4j知识图谱Schema定义
 Legal Knowledge Graph Schema for Neo4j
@@ -8,7 +9,6 @@ Legal Knowledge Graph Schema for Neo4j
 技术决策: TD-001 - 统一图数据库选择为Neo4j
 """
 
-from __future__ import annotations
 from enum import Enum
 from typing import Any
 

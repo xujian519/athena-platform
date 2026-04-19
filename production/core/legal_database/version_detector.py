@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法规版本变更检测器
 Legal Norm Version Change Detector
@@ -6,7 +7,6 @@ Legal Norm Version Change Detector
 检测法规的修订、废止、代替等版本变更信息
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass

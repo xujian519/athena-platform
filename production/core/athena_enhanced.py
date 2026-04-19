@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 兼容层: 旧athena_enhanced的迁移桥接
 
@@ -6,7 +7,6 @@
 请使用新的core/agents/athena_advisor模块。
 """
 
-from __future__ import annotations
 import warnings
 
 # 发出deprecation警告

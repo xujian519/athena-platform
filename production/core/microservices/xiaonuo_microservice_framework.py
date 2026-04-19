@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主微服务架构框架
 Xiaonuo Pisces Princess Microservice Framework
@@ -11,7 +12,6 @@ Xiaonuo Pisces Princess Microservice Framework
 版本: v2.0.0 "双鱼公主微服务框架"
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import logging

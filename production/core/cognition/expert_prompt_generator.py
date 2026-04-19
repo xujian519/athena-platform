@@ -1,3 +1,4 @@
+from __future__ import annotations
 # pyright: ignore
 # !/usr/bin/env python3
 """
@@ -11,7 +12,6 @@ Expert Prompt Dynamic Generator
 版本: v1.0 Expert Prompt Generator
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from datetime import datetime

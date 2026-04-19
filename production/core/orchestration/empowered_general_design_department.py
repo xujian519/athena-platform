@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 赋能的总体设计部
 Empowered General Design Department
@@ -13,7 +14,6 @@ Empowered General Design Department
 版本: v2.0.0 "赋能版"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 

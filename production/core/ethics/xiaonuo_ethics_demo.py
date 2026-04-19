@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺伦理框架演示程序
 Xiaonuo Ethics Framework Demo
@@ -6,7 +7,6 @@ Xiaonuo Ethics Framework Demo
 展示伦理框架如何保护小诺在实际场景中的行为
 """
 
-from __future__ import annotations
 import sys
 from pathlib import Path
 from typing import Any

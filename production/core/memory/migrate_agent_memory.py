@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 记忆数据迁移脚本
 将旧的agent_memory表数据迁移到新的agent_memories统一结构
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import sys

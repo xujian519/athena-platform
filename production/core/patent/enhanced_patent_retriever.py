@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强型专利检索模块 - 返回完整专利信息(包括公开号、公告号等)
 
@@ -7,7 +8,6 @@
 创建时间: 2026-01-07
 """
 
-from __future__ import annotations
 import json
 from dataclasses import asdict, dataclass
 from typing import Any

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 双系统推理引擎
 
@@ -11,7 +12,6 @@ Dual System Reasoning Engine
 结合最新认知科学研究,实现智能的双系统协同推理。
 """
 
-from __future__ import annotations
 import asyncio
 import time
 import uuid

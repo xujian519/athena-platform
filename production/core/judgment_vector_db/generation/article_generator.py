@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 文章生成引擎
 Article Generation Engine for Patent Judgment Analysis
@@ -10,7 +11,6 @@ Article Generation Engine for Patent Judgment Analysis
 - 多格式导出
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass

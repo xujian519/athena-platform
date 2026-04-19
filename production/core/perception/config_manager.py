@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 感知模块配置管理器
 Perception Module Configuration Manager
@@ -10,7 +11,6 @@ Perception Module Configuration Manager
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 import os

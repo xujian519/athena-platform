@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜提示词系统 v2.1
 Xiaona Prompts System
@@ -13,7 +14,6 @@ Xiaona Prompts System
 4. 优化HITL人机协作交互
 """
 
-from __future__ import annotations
 import os
 from dataclasses import dataclass
 from enum import Enum

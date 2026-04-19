@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 情景记忆 (Episodic Memory)
 基于PostgreSQL的长期经历记忆系统
@@ -14,7 +15,6 @@
 版本: v2.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 from dataclasses import asdict, dataclass

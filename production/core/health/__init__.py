@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 health
 """
-from __future__ import annotations

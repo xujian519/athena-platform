@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 数据库连接池管理器
 Database Connection Pool Manager
@@ -6,7 +7,6 @@ Database Connection Pool Manager
 提供高效的PostgreSQL连接池管理,支持连接复用、健康检查和自动恢复
 """
 
-from __future__ import annotations
 import logging
 import threading
 import time

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺智能体主类 (XiaonuoAgent)
 整合所有子系统的完整AI智能体
@@ -16,7 +17,6 @@
 版本: v2.0.0
 """
 
-from __future__ import annotations
 import hashlib
 import logging
 import time

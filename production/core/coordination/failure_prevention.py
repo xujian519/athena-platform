@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 失败模式防护系统 - 系统性防护多智能体常见失败模式
 Failure Prevention System - Systematic Prevention of Multi-Agent Failure Modes
@@ -14,7 +15,6 @@ Failure Prevention System - Systematic Prevention of Multi-Agent Failure Modes
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import logging

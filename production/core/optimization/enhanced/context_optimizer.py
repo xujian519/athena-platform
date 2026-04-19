@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 上下文优化器 (Context Optimizer)
 智能上下文管理和压缩,最大化上下文利用率
@@ -8,7 +9,6 @@
 优化目标: 上下文利用率 78% → 88%
 """
 
-from __future__ import annotations
 import logging
 import re
 from collections import deque

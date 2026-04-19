@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 connection_pool
 """
-from __future__ import annotations

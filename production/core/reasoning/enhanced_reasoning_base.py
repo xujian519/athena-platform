@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强推理基础模块
 Enhanced Reasoning Base Module
@@ -6,7 +7,6 @@ Enhanced Reasoning Base Module
 提供双系统推理和高级推理所需的基础类型和类。
 """
 
-from __future__ import annotations
 import logging
 import time
 import uuid

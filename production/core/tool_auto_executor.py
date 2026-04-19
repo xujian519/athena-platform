@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能工具自动执行引擎
 Smart Tool Auto-Execution Engine
@@ -10,7 +11,6 @@ Smart Tool Auto-Execution Engine
 版本: 2.0.0 (修复版)
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import uuid

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主爬虫控制系统演示
 Xiaonuo·Pisces Princess Crawler Control System Demo
@@ -9,7 +10,6 @@ Xiaonuo·Pisces Princess Crawler Control System Demo
 创建时间: 2025-12-14
 """
 
-from __future__ import annotations
 import asyncio
 from datetime import datetime
 

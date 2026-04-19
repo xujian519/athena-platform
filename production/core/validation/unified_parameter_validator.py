@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一参数验证框架
 Unified Parameter Validation Framework
@@ -16,7 +17,6 @@ Unified Parameter Validation Framework
 版本: v1.0.0 "统一验证"
 """
 
-from __future__ import annotations
 import logging
 import re
 from collections.abc import Callable

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Agent通信系统
 Communication System for Multi-Agent Collaboration
@@ -6,7 +7,6 @@ Communication System for Multi-Agent Collaboration
 负责Agent间的消息传递和协调通信
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import uuid

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 技术本体管理器 - Technical Ontology Manager
 从专利文档构建技术概念知识图谱
@@ -14,7 +15,6 @@
 创建时间: 2026-01-23
 """
 
-from __future__ import annotations
 import logging
 import re
 from collections import defaultdict

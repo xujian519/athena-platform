@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 基于BGE-M3模型的高质量向量化模块(MPS优化版)
 High-Quality Embedding Module Based on BGE-M3 Model (MPS Optimized)
@@ -8,7 +9,6 @@ High-Quality Embedding Module Based on BGE-M3 Model (MPS Optimized)
 支持MPS(Apple Silicon GPU)、CUDA、CPU设备
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from pathlib import Path

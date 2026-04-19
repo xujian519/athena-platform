@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强工具发现模块
 Enhanced Tool Discovery Module
@@ -16,7 +17,6 @@ Enhanced Tool Discovery Module
     results = await discovery.discover_tools("搜索专利", limit=10)
 """
 
-from __future__ import annotations
 import logging
 import re
 from collections import defaultdict

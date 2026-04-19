@@ -1,10 +1,10 @@
+from __future__ import annotations
 """
 知识图谱模块 - Knowledge Graph Module
 
 提供知识图谱集成、检索、推理等功能
 """
 
-from __future__ import annotations
 from core.knowledge_graph.kg_integration import (
     # 数据类
     Entity,

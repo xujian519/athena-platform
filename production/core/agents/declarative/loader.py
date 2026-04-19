@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 声明式 Agent 加载器
 
@@ -6,8 +7,6 @@
 
 Author: Athena Team
 """
-
-from __future__ import annotations
 
 import logging
 import threading
@@ -162,62 +161,6 @@ class AgentLoader:
         if not self._loaded:
             self.load_all()
         return self._agents.copy()
-
-    # 子代理禁止使用的工具列表（借鉴 kode-agent 的 SUBAGENT_DISALLOWED_TOOL_NAMES）
-    SUBAGENT_DISALLOWED_TOOLS = {
-        'Task', 'TaskOutput', 'KillShell',
-        'EnterPlanMode', 'ExitPlanMode', 'AskUserQuestion',
-    }
-
-    def get_tools_for_agent(self, agent_name: str, available_tools: list) -> list:
-        """
-        获取指定Agent过滤后的工具列表
-
-        参考 kode-agent TaskTool 的工具过滤机制:
-        1. 应用 Agent 定义的 tools 白名单
-        2. 应用 disallowed_tools 黑名单
-        3. 过滤掉子代理禁止工具
-
-        Args:
-            agent_name: Agent名称
-            available_tools: 可用工具列表（Tool对象或工具名称字符串）
-
-        Returns:
-            过滤后的工具列表
-        """
-        definition = self.get(agent_name)
-        if not definition:
-            return list(available_tools)
-
-        def get_tool_name(tool):
-            """从工具对象或字符串获取工具名"""
-            if isinstance(tool, str):
-                return tool
-            return getattr(tool, 'name', str(tool))
-
-        # 开始过滤
-        filtered = list(available_tools)
-
-        # 1. 应用白名单（如果定义了具体工具）
-        if definition.tools:
-            allowed_names = set(definition.tools)
-            filtered = [t for t in filtered if get_tool_name(t) in allowed_names]
-
-        # 2. 应用黑名单
-        if definition.disallowed_tools:
-            disallowed = set(definition.disallowed_tools)
-            filtered = [t for t in filtered if get_tool_name(t) not in disallowed]
-
-        # 3. 过滤子代理禁止工具
-        filtered = [t for t in filtered if get_tool_name(t) not in self.SUBAGENT_DISALLOWED_TOOLS]
-
-        return filtered
-
-    def get_available_agent_types(self) -> list[str]:
-        """获取所有可用的Agent类型名称列表"""
-        if not self._loaded:
-            self.load_all()
-        return list(self._agents.keys())
 
 
 # 模块级便捷函数

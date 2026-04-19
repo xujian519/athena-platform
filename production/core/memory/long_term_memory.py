@@ -1,10 +1,10 @@
+from __future__ import annotations
 """
 长记忆系统
 
 实现跨会话的用户偏好和历史记忆功能
 """
 
-from __future__ import annotations
 import json
 import logging
 import sqlite3

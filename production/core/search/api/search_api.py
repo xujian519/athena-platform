@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 搜索API
 Search API
@@ -9,7 +10,6 @@ Search API
 创建时间: 2025-12-04
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from datetime import datetime

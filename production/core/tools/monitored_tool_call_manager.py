@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena增强工具调用管理器 - 集成全链路监控
 Enhanced Tool Call Manager with Full-Link Monitoring
@@ -15,7 +16,6 @@ Enhanced Tool Call Manager with Full-Link Monitoring
 版本: v2.0.0
 """
 
-from __future__ import annotations
 import asyncio
 from dataclasses import dataclass, field
 from datetime import datetime

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台统一向量管理系统
 Unified Vector Management System for Athena Platform
@@ -7,7 +8,6 @@ Unified Vector Management System for Athena Platform
 功能: 统一管理向量存储、检索、语义路由和Qdrant适配
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

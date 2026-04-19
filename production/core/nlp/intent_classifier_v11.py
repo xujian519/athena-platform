@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 意图识别模型V11分类器
 Intent Recognition Model V11 Classifier
@@ -6,7 +7,6 @@ Intent Recognition Model V11 Classifier
 使用改进的集成学习模型
 """
 
-from __future__ import annotations
 import json
 import logging
 import pickle

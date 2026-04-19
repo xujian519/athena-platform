@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena通信系统 - 速率限制器
 Rate Limiter for Communication System
@@ -17,7 +18,6 @@ Rate Limiter for Communication System
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 import time
 from collections import defaultdict, deque

@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 # pyright: ignore
 # !/usr/bin/env python3
@@ -12,7 +13,6 @@ Knowledge Base Connector
 版本: v1.0 Knowledge Connector
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import re

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 企业级OpenCV图像处理器
 支持场景识别、目标检测、图像预处理、特征提取
 最后更新: 2026-01-26
 """
 
-from __future__ import annotations
 import hashlib
 import logging
 import os

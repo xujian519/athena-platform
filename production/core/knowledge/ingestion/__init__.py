@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 ingestion
 """
-from __future__ import annotations

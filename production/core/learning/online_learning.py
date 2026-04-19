@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 在线学习引擎
 Online Learning Engine
@@ -13,7 +14,6 @@ Online Learning Engine
 创建时间: 2026-01-01
 版本: 1.0.0
 """
-from __future__ import annotations
 import asyncio
 import json
 import logging

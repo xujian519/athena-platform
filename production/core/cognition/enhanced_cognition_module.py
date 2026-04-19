@@ -1,3 +1,4 @@
+from __future__ import annotations
 # pyright: ignore
 # !/usr/bin/env python3
 """
@@ -10,7 +11,6 @@ Enhanced Cognition Module - BaseModule Compatible Version
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import logging
 import sys
 from dataclasses import dataclass, field

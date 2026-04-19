@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 替代方案探索器
 Alternative Solution Explorer
@@ -10,7 +11,6 @@ Alternative Solution Explorer
 创建时间: 2025-01-05
 """
 
-from __future__ import annotations
 import logging
 import sys
 from dataclasses import dataclass, field

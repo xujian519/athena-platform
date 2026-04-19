@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习引擎 - 公共接口
 Learning Engine - Public Interface
@@ -12,7 +13,6 @@ Learning Engine - Public Interface
 """
 
 # 导入异常
-from __future__ import annotations
 from ..exceptions import (
     AdaptationError,
     ConfigurationError,

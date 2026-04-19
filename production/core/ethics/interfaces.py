@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 伦理框架接口抽象层
 Ethics Framework Interface Abstraction Layer
@@ -12,7 +13,6 @@ Ethics Framework Interface Abstraction Layer
 - ISensitiveDataFilter: 敏感信息过滤器接口
 """
 
-from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Any, Protocol
 

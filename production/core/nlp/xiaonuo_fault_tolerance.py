@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺容错机制和降级策略
 Xiaonuo Fault Tolerance and Degradation Strategies
@@ -16,7 +17,6 @@ Xiaonuo Fault Tolerance and Degradation Strategies
 日期: 2025-12-18
 """
 
-from __future__ import annotations
 import os
 import random
 import sys

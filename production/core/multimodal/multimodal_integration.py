@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 多模态理解模块 - Multimodal Understanding
 
@@ -10,7 +11,6 @@
 注意:此模块是对现有多模态文件系统的集成层
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import os

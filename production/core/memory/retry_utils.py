@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 重试机制工具
 
@@ -9,7 +10,6 @@ Created: 2026-01-20
 Version: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import random

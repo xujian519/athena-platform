@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 错误恢复时间优化器
 Error Recovery Time Optimizer
@@ -7,7 +8,6 @@ Error Recovery Time Optimizer
 将错误恢复时间从3-5秒降低到1-2秒
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import random

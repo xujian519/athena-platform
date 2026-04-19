@@ -1,10 +1,10 @@
+from __future__ import annotations
 """
 Athena智能路由系统
 
 支持客户端本地预处理数据的分析和任务路由到合适的智能体
 """
 
-from __future__ import annotations
 import logging
 from enum import Enum
 from typing import Any

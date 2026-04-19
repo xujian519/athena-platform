@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 跨模态检索系统
 Cross-Modal Retrieval System
@@ -10,7 +11,6 @@ Cross-Modal Retrieval System
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

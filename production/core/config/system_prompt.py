@@ -1,6 +1,7 @@
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 Athena工作平台系统级提示词配置
 System-Level Prompt Configuration for Athena Work Platform
@@ -14,7 +15,6 @@ System-Level Prompt Configuration for Athena Work Platform
 """
 
 
-from __future__ import annotations
 class SystemPrompt:
     """系统级提示词类"""
 

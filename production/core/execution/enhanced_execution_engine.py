@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强执行引擎
 Enhanced Execution Engine
@@ -12,7 +13,6 @@ Enhanced Execution Engine
 更新时间: 2026-01-27
 """
 
-from __future__ import annotations
 import asyncio
 import inspect
 import logging

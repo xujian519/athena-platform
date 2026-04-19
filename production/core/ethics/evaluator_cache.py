@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 伦理评估器优化版本 - 添加缓存和性能优化
 Optimized Ethics Evaluator with Caching and Performance Improvements
@@ -9,7 +10,6 @@ Optimized Ethics Evaluator with Caching and Performance Improvements
 4. 添加性能监控
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import time

@@ -1,10 +1,10 @@
+from __future__ import annotations
 """
 智能拒绝处理器
 
 将"拒绝"转化为"询问",提升用户体验和请求成功率。
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass

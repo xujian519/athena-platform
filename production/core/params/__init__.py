@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 参数验证和收集模块
 
@@ -8,7 +9,6 @@
 - ConversationalCollector: 对话式参数收集器
 """
 
-from __future__ import annotations
 from .parameter_validator import (
     ParameterDefinition,
     ParameterValidator,

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 P99延迟优化器
 P99 Latency Optimizer
@@ -7,7 +8,6 @@ P99 Latency Optimizer
 包括请求调度、资源预分配、快速路径等优化技术
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import threading

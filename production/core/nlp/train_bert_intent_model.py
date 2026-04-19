@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 基于BERT的意图识别模型训练脚本
 BERT-based Intent Recognition Model Training Script
@@ -6,7 +7,6 @@ BERT-based Intent Recognition Model Training Script
 使用预训练BERT模型进行迁移学习
 """
 
-from __future__ import annotations
 import json
 import os
 from datetime import datetime

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 工具性能跟踪和优化建议系统
 Tool Performance Tracker and Optimization Advisor
@@ -10,7 +11,6 @@ Tool Performance Tracker and Optimization Advisor
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

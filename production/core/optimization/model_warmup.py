@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 模型预热优化器
 Model Warmup Optimizer
@@ -7,7 +8,6 @@ Model Warmup Optimizer
 将冷启动延迟从500ms降低到100ms
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

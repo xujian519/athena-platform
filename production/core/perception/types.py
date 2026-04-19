@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 感知模块统一类型定义
 Unified Perception Module Type Definitions
@@ -10,7 +11,6 @@ Unified Perception Module Type Definitions
 版本: 1.0.0
 """
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum

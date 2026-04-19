@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 情感模块 (Emotion Module)
 基于PAD模型的情感管理系统
@@ -8,7 +9,6 @@
 版本: v2.0.0
 """
 
-from __future__ import annotations
 from core.xiaonuo_agent.emotion.emotional_system import (
     EmotionalState,
     EmotionalSystem,

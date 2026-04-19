@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 数据库配置管理模块
 提供统一的数据库配置,从环境变量读取
 """
 
-from __future__ import annotations
 import os
 from typing import Any
 

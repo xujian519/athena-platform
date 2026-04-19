@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 高质量法律数据库系统
 Athena High-Quality Legal Database System
@@ -18,7 +19,6 @@ Athena High-Quality Legal Database System
 
 # Neo4j核心导出 (TD-001)
 # 其他模块导出
-from __future__ import annotations
 from core.legal_database.importer import LegalDatabaseImporter
 from core.legal_database.models import (
     ArticleClause,

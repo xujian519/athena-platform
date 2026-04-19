@@ -1,10 +1,10 @@
+from __future__ import annotations
 """
 安全序列化工具
 
 使用JSON或MessagePack替代不安全的pickle,防止反序列化漏洞
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import logging

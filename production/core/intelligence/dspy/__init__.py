@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 DSPy集成模块 - Athena平台
 DSPy Integration Module for Athena Platform
@@ -13,7 +14,6 @@ DSPy Integration Module for Athena Platform
 创建时间: 2025-12-29
 """
 
-from __future__ import annotations
 from .llm_backend import (
     ATHENA_LLM_AVAILABLE,
     AthenaLLMDirect,

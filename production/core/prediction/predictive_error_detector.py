@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 预测性错误检测器
 Predictive Error Detector
@@ -16,7 +17,6 @@ Predictive Error Detector
 版本: v2.0.0 "智能预测"
 """
 
-from __future__ import annotations
 import logging
 from collections import defaultdict, deque
 from collections.abc import Callable

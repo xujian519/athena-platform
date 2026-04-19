@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 未知错误处理器
 Unknown Error Handler
@@ -7,7 +8,6 @@ Unknown Error Handler
 通过错误模式分析和自动恢复策略提高系统韧性
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import inspect

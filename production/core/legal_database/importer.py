@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律数据库导入器
 Legal Database Importer
@@ -12,7 +13,6 @@ Legal Database Importer
 3. Neo4j: 在 DB 基础之上叠加实体关系和推理路径 (TD-001: 从NebulaGraph迁移)
 """
 
-from __future__ import annotations
 import logging
 import uuid
 from pathlib import Path

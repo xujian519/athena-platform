@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 意图识别服务 - 依赖注入容器
 
@@ -8,7 +9,6 @@ Created: 2025-01-17
 Version: 1.0.0
 """
 
-from __future__ import annotations
 import logging
 from collections.abc import Callable
 from functools import wraps

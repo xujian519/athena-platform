@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 知识图谱空白分析器
 Knowledge Graph Gap Analyzer
@@ -10,7 +11,6 @@ Knowledge Graph Gap Analyzer
 创建时间: 2025-01-05
 """
 
-from __future__ import annotations
 import logging
 import sys
 from dataclasses import dataclass, field

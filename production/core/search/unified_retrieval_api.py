@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一检索API服务
 Unified Retrieval API Service
@@ -15,7 +16,6 @@ Unified Retrieval API Service
 创建时间: 2025-01-09
 """
 
-from __future__ import annotations
 import logging
 import os
 import sys

@@ -3,29 +3,18 @@
 动态提示词生成器
 根据专利业务场景,从专利规则向量库和知识图谱中提取相关规则和知识,动态生成提示词
 """
+import numpy as np
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from datetime import datetime
 
 import requests
+from sentence_transformers import SentenceTransformer
 
-# SentenceTransformer条件导入
-try:
-    from sentence_transformers import SentenceTransformer
-except ImportError:
-    SentenceTransformer = None
-
-# numpy条件导入
-try:
-    import numpy as np
-except ImportError:
-    np = None
-
-from core.knowledge.graph_manager import KnowledgeGraphManager
+from core.knowledge.unified_knowledge_graph import UnifiedKnowledgeGraph as KnowledgeGraphManager
 from core.logging_config import setup_logging
-from core.storage.vector_manager import VectorManager
+from core.storage.unified_storage_manager import UnifiedStorageManager as VectorManager
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -60,42 +49,11 @@ class DynamicPrompt:
 class DynamicPromptGenerator:
     """动态提示词生成器"""
 
-    def __init__(self, use_offline_mode: bool = True):
-        """
-        初始化动态提示词生成器
-
-        Args:
-            use_offline_mode: 是否使用离线模式（不下载远程模型）
-        """
+    def __init__(self):
+        """初始化动态提示词生成器"""
         self.vector_manager = VectorManager()
         self.graph_manager = KnowledgeGraphManager()
-        self.use_offline_mode = use_offline_mode
-
-        # 初始化编码器（使用项目已有的BGE-M3模型）
-        if use_offline_mode:
-            try:
-                from core.embedding.bge_m3_embedder import BGE_M3Embedder
-                embedder = BGE_M3Embedder()
-                self.encoder = embedder
-                logger.info("使用BGE-M3嵌入模型（离线模式）")
-            except ImportError:
-                logger.warning("BGE-M3不可用，编码器功能将被禁用")
-                self.encoder = None
-        else:
-            try:
-                self.encoder = SentenceTransformer("shibing624/text2vec-base-chinese")
-                logger.info("使用SentenceTransformer（在线模式）")
-            except Exception as e:
-                logger.warning(f"SentenceTransformer加载失败: {e}")
-                logger.info("尝试切换到BGE-M3...")
-                try:
-                    from core.embedding.bge_m3_embedder import BGE_M3Embedder
-                    embedder = BGE_M3Embedder()
-                    self.encoder = embedder
-                    logger.info("已切换到BGE-M3嵌入模型")
-                except ImportError:
-                    logger.warning("BGE-M3不可用，编码器功能将被禁用")
-                    self.encoder = None
+        self.encoder = SentenceTransformer("shibing624/text2vec-base-chinese")
 
         # API服务端点
         self.api_base = "http://localhost:8085/api/v2"

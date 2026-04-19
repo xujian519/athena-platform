@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 因果推理系统 (Causal Reasoning System)
 提供因果推断、反事实解释和归因分析能力
@@ -9,7 +10,6 @@
 """
 
 
-from __future__ import annotations
 __all__ = [
     "CausalAttributor",
     "CausalGraph",

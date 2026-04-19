@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 上下文管理器
 Context Manager
@@ -10,7 +11,6 @@ Context Manager
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from collections import defaultdict

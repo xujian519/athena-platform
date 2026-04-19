@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 真实专利数据连接器 - 仅支持Google Patents
 Real Patent Data Connector - Google Patents Only
@@ -6,7 +7,6 @@ Real Patent Data Connector - Google Patents Only
 专注于Google Patents数据源的专利检索系统
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

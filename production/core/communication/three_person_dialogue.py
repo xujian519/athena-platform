@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 三人对话管理系统
 Three-Person Dialogue Management System
@@ -11,7 +12,6 @@ Three-Person Dialogue Management System
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import logging
 from datetime import datetime
 from enum import Enum

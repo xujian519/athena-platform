@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena统一工具注册中心
 Unified Tool Registry for Athena Platform
@@ -25,7 +26,6 @@ Unified Tool Registry for Athena Platform
     result = await registry.execute_tool(tools[0]['tool_id'], {...})
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 步骤2智能分析执行器
 Step 2 Intelligent Analysis Executor
@@ -15,7 +16,6 @@ Step 2 Intelligent Analysis Executor
 版本: v0.2.0 "智能增强"
 """
 
-from __future__ import annotations
 import asyncio
 from dataclasses import dataclass, field
 from datetime import datetime

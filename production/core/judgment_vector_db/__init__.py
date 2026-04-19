@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利判决文档向量库系统
 Patent Judgment Vector Database System
@@ -11,6 +12,5 @@ Patent Judgment Vector Database System
 - 文章自动生成
 """
 
-from __future__ import annotations
 __version__ = "1.0.0"
 __author__ = "Athena Platform"

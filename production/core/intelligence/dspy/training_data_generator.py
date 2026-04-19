@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 DSPy训练数据生成器
 DSPy Training Data Generator for Athena Platform
@@ -10,7 +11,6 @@ DSPy Training Data Generator for Athena Platform
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 import random

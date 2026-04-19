@@ -25,7 +25,6 @@ Optimized Perception Module with Incremental OCR and Document Chunking
 版本: 2.0.0-optimized
 """
 
-from __future__ import annotations
 import warnings
 
 # 发出弃用警告
@@ -777,7 +776,7 @@ class OptimizedPerceptionModule(BaseModule):
 
     async def _detect_document_changes(
         self, file_path: str, processing_id: str
-    ) -> tuple[DocumentMetadata, dict[str, Any]]:
+    ) -> tuple[DocumentMetadata, dict[str, Any]:
         """
         检测文档变更
 

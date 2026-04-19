@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺性能监控集成
 Xiaonuo Performance Monitoring Integration
@@ -15,7 +16,6 @@ Xiaonuo Performance Monitoring Integration
 日期: 2025-12-18
 """
 
-from __future__ import annotations
 import json
 import os
 import sys

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼座 - 集成记忆系统
 Xiaonuo Pisces with Integrated Memory
@@ -10,7 +11,6 @@ Xiaonuo Pisces with Integrated Memory
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from datetime import datetime

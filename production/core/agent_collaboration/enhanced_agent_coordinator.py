@@ -1,8 +1,8 @@
+from __future__ import annotations
 """
 增强版Agent协调器 - 集成智能工具路由引擎
 """
 
-from __future__ import annotations
 from typing import Any
 
 from loguru import logger

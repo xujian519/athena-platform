@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 论点提取模块
 Argument Extractor for Patent Judgments
@@ -10,7 +11,6 @@ Argument Extractor for Patent Judgments
 - 构建三层粒度结构(L1法条→L2焦点→L3论点)
 """
 
-from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 from pathlib import Path

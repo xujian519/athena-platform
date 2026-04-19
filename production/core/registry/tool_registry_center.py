@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena工具注册中心
 负责管理、注册和调度所有可用工具
 """
 
-from __future__ import annotations
 import importlib
 import json
 from dataclasses import asdict, dataclass
@@ -233,7 +233,7 @@ class ToolRegistryCenter:
             service_map = {
                 "browser": "browser_automation_service",
                 "patent": "yunpat_agent",
-                "legal": "legal-support",  # 更新: laws_knowledge_base已废弃
+                "legal": "laws_knowledge_base",
             }
             service_dir = service_map.get(category_parts[1], category_parts[1])
             return f"services/{service_dir}/{tool_name.lower()}.py"

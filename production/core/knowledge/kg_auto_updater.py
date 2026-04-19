@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 知识图谱自动更新引擎
 Knowledge Graph Auto-Update Engine
@@ -16,7 +17,6 @@ Knowledge Graph Auto-Update Engine
 版本: v1.0.0 "自动更新"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import uuid

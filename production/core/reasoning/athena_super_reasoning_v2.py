@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena超级推理引擎 V2 - 集成真实LLM调用
 作者: Athena AI团队
@@ -6,7 +7,6 @@ Athena超级推理引擎 V2 - 集成真实LLM调用
 功能: 实现基于真实LLM的多阶段、多层次的超级推理能力
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from datetime import datetime

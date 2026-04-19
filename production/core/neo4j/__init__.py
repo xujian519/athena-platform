@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Neo4j图数据库模块
 Neo4j Graph Database Module
@@ -10,7 +11,6 @@ Neo4j Graph Database Module
 版本: v2.0.0
 """
 
-from __future__ import annotations
 from core.neo4j.neo4j_graph_client import (
     GraphClient,
     Neo4jClient,

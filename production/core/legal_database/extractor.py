@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律实体抽取器
 Legal Entity Extractor
@@ -14,7 +15,6 @@ Legal Entity Extractor
 - 云端LLM仅处理5%高难度复杂条款
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass

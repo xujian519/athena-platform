@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 实时执行监控系统 - 向后兼容重定向
 Real-time Execution Monitoring System - Backward Compatibility Redirect
@@ -57,7 +58,6 @@ Real-time Execution Monitoring System - Backward Compatibility Redirect
 完整的迁移指南请参考: MIGRATION_GUIDE.md
 """
 
-from __future__ import annotations
 import warnings
 
 # 导入重构后的模块

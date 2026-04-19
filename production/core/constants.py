@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 常量定义 - Athena平台全局常量
 Constants - Athena Platform Global Constants
@@ -10,7 +11,6 @@ Constants - Athena Platform Global Constants
 版本: 1.0.0
 """
 
-from __future__ import annotations
 from enum import IntEnum
 from typing import Final
 

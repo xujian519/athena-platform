@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利领域专家 Agent 系统
 
@@ -13,7 +14,6 @@ Agent 类型:
 创建时间: 2025-01-02
 """
 
-from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主全量爬虫控制系统
 Xiaonuo·Pisces Princess Universal Crawler Control System
@@ -10,7 +11,6 @@ Xiaonuo·Pisces Princess Universal Crawler Control System
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import os

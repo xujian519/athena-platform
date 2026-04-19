@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主智能爬虫路由器
 Xiaonuo·Pisces Princess Intelligent Crawler Router
@@ -10,7 +11,6 @@ Xiaonuo·Pisces Princess Intelligent Crawler Router
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass

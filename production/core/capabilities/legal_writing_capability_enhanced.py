@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专业法律写作能力 - 增强版
 Professional Legal Writing Capability - Enhanced
@@ -6,7 +7,6 @@ Professional Legal Writing Capability - Enhanced
 集成LLM客户端和RAG检索,实现真正的智能法律文档生成。
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 熔断器模块
 Circuit Breaker for Athena Intelligent Router
@@ -9,7 +10,6 @@ Circuit Breaker for Athena Intelligent Router
 创建时间: 2025-01-09
 """
 
-from __future__ import annotations
 import logging
 import time
 from collections.abc import Callable

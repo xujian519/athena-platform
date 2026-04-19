@@ -19,7 +19,6 @@ NebulaGraph Graph Database Module (Compatibility Layer)
 """
 
 # 从Neo4j模块重新导出所有类和函数
-from __future__ import annotations
 from core.neo4j.neo4j_graph_client import (
     GraphClient,
     Neo4jClient,

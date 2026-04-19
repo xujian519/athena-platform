@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强学习引擎 - 主引擎
 Enhanced Learning Engine - Main Engine
@@ -11,7 +12,6 @@ Enhanced Learning Engine - Main Engine
 基于BaseModule的标准化学习引擎,支持统一接口和学习模型
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from collections import defaultdict, deque

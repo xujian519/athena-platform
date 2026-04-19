@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # ============================================================
 # AI伦理框架 - 容器健康检查脚本
 # AI Ethics Framework - Container Health Check
 # ============================================================
 
-from __future__ import annotations
 import json
 import os
 import sys

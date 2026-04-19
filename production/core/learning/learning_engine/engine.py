@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习引擎 - 主引擎
 Learning Engine - Main Engine
@@ -11,7 +12,6 @@ Learning Engine - Main Engine
 支持机器学习、经验积累、模式识别和自适应调整
 """
 
-from __future__ import annotations
 import inspect
 import logging
 from collections import defaultdict

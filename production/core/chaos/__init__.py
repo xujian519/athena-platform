@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 chaos
 """
-from __future__ import annotations

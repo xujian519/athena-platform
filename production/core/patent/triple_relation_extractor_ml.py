@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 三元关系提取机器学习模型
 Triple Relation Extraction Machine Learning Model
@@ -15,7 +16,6 @@ Triple Relation Extraction Machine Learning Model
 版本: v0.1.0 "智能提取"
 """
 
-from __future__ import annotations
 import json
 from dataclasses import dataclass, field
 from pathlib import Path

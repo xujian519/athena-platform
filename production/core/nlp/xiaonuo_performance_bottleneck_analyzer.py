@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺性能瓶颈分析器
 Xiaonuo Performance Bottleneck Analyzer
@@ -16,7 +17,6 @@ Xiaonuo Performance Bottleneck Analyzer
 日期: 2025-12-18
 """
 
-from __future__ import annotations
 import json
 import os
 import threading

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律知识图谱推理增强器
 Legal Knowledge Graph Reasoning Enhancer
@@ -10,7 +11,6 @@ Legal Knowledge Graph Reasoning Enhancer
 创建: 2026-01-22
 """
 
-from __future__ import annotations
 import json
 import logging
 from dataclasses import dataclass, field

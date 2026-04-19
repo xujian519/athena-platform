@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Apple M4 Pro 统一内存池管理器 - 方案A(保守型)
 智能管理48GB统一内存,优先保证办公流畅度
@@ -8,7 +9,6 @@ Apple M4 Pro 统一内存池管理器 - 方案A(保守型)
 版本: v1.0.0 "办公优先版"
 """
 
-from __future__ import annotations
 import logging
 import threading
 import time

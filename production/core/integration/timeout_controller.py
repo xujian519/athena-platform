@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 外部服务超时控制器
 External Service Timeout Controller
@@ -7,7 +8,6 @@ External Service Timeout Controller
 优化外部服务调用延迟,目标减少40%
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import statistics

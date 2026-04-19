@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 API辅助工具
 API Helper Utilities
@@ -11,7 +12,6 @@ API Helper Utilities
 - 减少重复代码
 """
 
-from __future__ import annotations
 import logging
 import traceback
 from collections.abc import Callable

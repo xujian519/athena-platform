@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 完整性能监控体系
 Comprehensive Performance Monitoring System
@@ -16,7 +17,6 @@ Comprehensive Performance Monitoring System
 版本: v1.0.0 "完整监控"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

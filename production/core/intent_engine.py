@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能意图识别引擎
 Smart Intent Recognition Engine
@@ -10,7 +11,6 @@ Smart Intent Recognition Engine
 版本: 2.0.0 (修复版)
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass, field

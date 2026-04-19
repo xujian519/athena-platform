@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺本地BERT模型管理器
 使用本地缓存的高质量中文模型来升级NLP系统
@@ -17,7 +18,6 @@
 日期: 2025-12-18
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import os

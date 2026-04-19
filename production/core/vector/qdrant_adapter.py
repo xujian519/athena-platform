@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Qdrant向量搜索适配器
 Qdrant Vector Search Adapter
@@ -11,7 +12,6 @@ Qdrant Vector Search Adapter
 版本: v2.0.0 "HNSW优化版"
 """
 
-from __future__ import annotations
 import logging
 import sys
 import time

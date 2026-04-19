@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 会话记忆管理器
 
@@ -10,7 +11,6 @@
 - 自动过期清理
 """
 
-from __future__ import annotations
 import json
 import logging
 import sqlite3

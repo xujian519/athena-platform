@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺轻量级意图分类器
 Xiaonuo Lightweight Intent Classifier
@@ -10,7 +11,6 @@ Xiaonuo Lightweight Intent Classifier
 版本: v1.0.0 "轻量级95%目标版"
 """
 
-from __future__ import annotations
 import json
 import os
 from dataclasses import dataclass

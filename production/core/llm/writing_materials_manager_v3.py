@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律写作素材库管理器 - 增强版
 Legal Writing Materials Manager - Enhanced Version
@@ -10,7 +11,6 @@ Legal Writing Materials Manager - Enhanced Version
 4. 支持多种文档格式
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

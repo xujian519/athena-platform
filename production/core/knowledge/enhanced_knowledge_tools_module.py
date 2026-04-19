@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强知识库与工具库模块 - BaseModule标准接口兼容版本
 Enhanced Knowledge & Tools Module - BaseModule Compatible Version
@@ -9,7 +10,6 @@ Enhanced Knowledge & Tools Module - BaseModule Compatible Version
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import logging
 import sys
 import uuid

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台环境变量管理器
 Environment Manager for Athena Platform
@@ -10,7 +11,6 @@ Environment Manager for Athena Platform
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 import os
 from dataclasses import dataclass

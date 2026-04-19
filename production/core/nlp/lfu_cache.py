@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 LFU缓存实现
 Least Frequently Used Cache Implementation
@@ -10,7 +11,6 @@ LFU(最不经常使用)缓存策略,基于访问频率淘汰缓存条目
 创建时间: 2026-01-25
 """
 
-from __future__ import annotations
 import heapq
 import logging
 import threading

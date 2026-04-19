@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 性能监控系统
 实时监控Athena优化系统的性能指标
@@ -11,7 +12,6 @@
 - 性能报告生成
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import logging

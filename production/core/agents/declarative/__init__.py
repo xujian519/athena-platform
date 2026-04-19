@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 声明式 Agent 定义系统
 
@@ -27,7 +28,6 @@
 Author: Athena Team
 """
 
-from __future__ import annotations
 from .loader import AgentLoader, get_agent, get_loader, load_all_agents
 from .models import AgentDefinition, AgentPermissionMode, AgentSource
 from .output_styles import (

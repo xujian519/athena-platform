@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 文件验证器 - 多模态文件系统安全验证
 File Validator - Multimodal File System Security Validation
@@ -10,7 +11,6 @@ File Validator - Multimodal File System Security Validation
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import logging
 import re
 from pathlib import Path

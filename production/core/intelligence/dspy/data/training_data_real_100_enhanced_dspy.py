@@ -1,8 +1,8 @@
+from __future__ import annotations
 # DSPy Training Data - Enhanced Real Patent Cases
 # Source: Qdrant patent_decisions collection (308,888 records)
 # Generated: 100 cases
 
-from __future__ import annotations
 import dspy
 
 training_data = [

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强降级恢复系统 - 第一阶段优化版本
 Enhanced Fallback Recovery System - Phase 1 Optimization
@@ -15,7 +16,6 @@ Enhanced Fallback Recovery System - Phase 1 Optimization
 版本: 1.2.0 "监控增强版"
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

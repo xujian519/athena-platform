@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 DSPy训练数据 - 从笔记提取的清楚性和充分公开案例
 生成时间: 2025-12-29T23:43:21.816219
@@ -7,7 +8,6 @@ DSPy训练数据 - 从笔记提取的清楚性和充分公开案例
 """
 
 
-from __future__ import annotations
 import dspy
 
 # DSPy训练数据集

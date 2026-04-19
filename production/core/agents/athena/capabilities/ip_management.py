@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena IP管理能力模块
 Athena IP Management Capability Module
@@ -8,7 +9,6 @@ Athena IP Management Capability Module
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 from typing import Any
 

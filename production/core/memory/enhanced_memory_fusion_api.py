@@ -1,5 +1,6 @@
 
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强记忆API服务器 - 集成向量-图融合
 Enhanced Memory API Server with Vector-Graph Fusion
@@ -12,7 +13,6 @@ Enhanced Memory API Server with Vector-Graph Fusion
 
 
 # 导入融合服务
-from __future__ import annotations
 import sys
 from contextlib import asynccontextmanager
 from pathlib import Path

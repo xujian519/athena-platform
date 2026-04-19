@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 模型量化压缩系统 (Model Quantization & Compression System)
 减小模型大小和推理延迟
@@ -8,7 +9,6 @@
 优化目标: 模型大小减少 75%+, 推理速度提升 3x+
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from enum import Enum

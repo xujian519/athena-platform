@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 访问控制系统
 Access Control System
@@ -11,7 +12,6 @@ Access Control System
 版本: 3.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field

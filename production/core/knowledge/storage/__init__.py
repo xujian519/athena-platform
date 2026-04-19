@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 storage
 """
-from __future__ import annotations

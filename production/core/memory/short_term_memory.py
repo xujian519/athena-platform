@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 短期记忆
 Short Term Memory
 """
 
-from __future__ import annotations
 import logging
 from datetime import datetime
 from typing import Any

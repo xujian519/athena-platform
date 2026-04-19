@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - Prometheus监控指标导出
 提供标准化的metrics导出接口,支持Prometheus监控
@@ -6,7 +7,6 @@
 日期: 2026-01-23
 """
 
-from __future__ import annotations
 import logging
 import time
 

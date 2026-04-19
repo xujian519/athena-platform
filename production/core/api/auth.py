@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 API认证和安全模块
 API Authentication and Security Module
@@ -10,7 +11,6 @@ API Authentication and Security Module
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import hashlib
 import hmac
 import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 双层级架构模块
 Dual-Layer Architecture Module - Work Level + Task Level两层架构
@@ -12,7 +13,6 @@ Dual-Layer Architecture Module - Work Level + Task Level两层架构
 版本: v1.0.0 "Phase 1"
 """
 
-from __future__ import annotations
 from .architecture import (
     DualLayerCoordinator,
     LayerType,

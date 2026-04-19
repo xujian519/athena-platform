@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 轻量级错误预测模块
 Lightweight Error Predictor Module
@@ -17,7 +18,6 @@ Lightweight Error Predictor Module
 版本: v1.0.0 "轻量级集成版"
 """
 
-from __future__ import annotations
 import contextlib
 import logging
 from collections import defaultdict, deque

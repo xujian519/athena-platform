@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Apple Silicon优化的参数提取模型
 Optimized Parameter Extraction for Apple Silicon
@@ -14,7 +15,6 @@ Optimized Parameter Extraction for Apple Silicon
 版本: v1.1.0 "Apple Silicon优化"
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

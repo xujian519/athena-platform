@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 无状态MCP客户端
 Stateless MCP Client
@@ -17,7 +18,6 @@ Stateless MCP Client
 版本: v2.0.0 "Phase 2 - 动态连接池集成"
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

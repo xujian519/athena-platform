@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 请求合并器
 Request Merger
@@ -22,7 +23,6 @@ Request Merger
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import hashlib

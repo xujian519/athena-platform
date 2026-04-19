@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena平台AI伦理框架
 Athena Platform AI Ethics Framework
@@ -30,7 +31,6 @@ Athena Platform AI Ethics Framework
     )
 """
 
-from __future__ import annotations
 from .constitution import AthenaConstitution, EthicalPrinciple, PrinciplePriority, PrincipleSource
 from .container import (
     EthicsContainer,

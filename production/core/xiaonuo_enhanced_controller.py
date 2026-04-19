@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺增强控制器 - 集成提示词系统优化
 Xiaonuo Enhanced Controller with Prompt System Optimization
@@ -16,7 +17,6 @@ Xiaonuo Enhanced Controller with Prompt System Optimization
 更新时间: 2026-01-07
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from datetime import datetime

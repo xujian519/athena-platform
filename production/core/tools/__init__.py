@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena工具分组管理系统
 
@@ -8,7 +9,6 @@ Created: 2026-01-20
 Version: v1.1.0 "Phase 1 - Tool Groups"
 """
 
-from __future__ import annotations
 from .base import (
     ToolCapability,
     ToolCategory,
@@ -21,6 +21,9 @@ from .base import (
 from .selector import SelectionScore, SelectionStrategy, ToolSelector
 from .tool_group import GroupActivationRule, ToolGroup, ToolGroupDef
 from .tool_manager import ToolManager, ToolSelectionResult, get_tool_manager
+
+# 导入自动注册模块（触发生产工具自动注册）
+from . import auto_register  # noqa: F401
 
 __all__ = [
     "ActivationRule",

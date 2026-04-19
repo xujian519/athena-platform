@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 从笔记目录提取清楚性和充分公开相关训练数据
 Extract Clarity and Disclosure Training Data from Notes
@@ -11,7 +12,6 @@ Extract Clarity and Disclosure Training Data from Notes
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 import random

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 内存泄漏修复补丁
 Memory Leak Fix Patch for Athena Platform
@@ -10,7 +11,6 @@ Memory Leak Fix Patch for Athena Platform
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import gc
 import logging

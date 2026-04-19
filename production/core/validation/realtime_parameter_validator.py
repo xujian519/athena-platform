@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 实时参数验证器
 Real-time Parameter Validator
@@ -16,7 +17,6 @@ Real-time Parameter Validator
 版本: v2.0.0 "实时验证"
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import json

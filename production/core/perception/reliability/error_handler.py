@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 企业级错误处理框架
 支持错误分类、日志记录、恢复策略
 最后更新: 2026-01-26
 """
 
-from __future__ import annotations
 import asyncio
 import functools
 import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 告警模块
 Alert Module
@@ -8,7 +9,6 @@ Alert Module
 创建: 2025-12-30
 """
 
-from __future__ import annotations
 from .alert_manager import (
     Alert,
     AlertChannel,

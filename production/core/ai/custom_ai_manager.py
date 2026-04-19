@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 自定义AI角色管理器
 支持动态创建、配置和管理自定义AI角色
 """
 
-from __future__ import annotations
 import logging
 from collections.abc import Callable
 from dataclasses import asdict, dataclass, field

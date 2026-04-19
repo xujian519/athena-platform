@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 强化学习工具路由器 (RL Tool Router)
 基于强化学习的智能工具选择和路由决策
@@ -8,7 +9,6 @@
 优化目标: 工具选择准确率 94% → 97%
 """
 
-from __future__ import annotations
 import logging
 from collections import defaultdict
 from dataclasses import dataclass, field

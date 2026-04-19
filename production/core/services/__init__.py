@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 核心服务层
 Core Services Layer
@@ -11,7 +12,6 @@ Core Services Layer
 """
 
 
-from __future__ import annotations
 __all__ = [
     "CacheService",
     "EmbeddingService",

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 纯对话交互接口
 Pure Dialogue Interface for Patent Judgment Vector Database
@@ -9,8 +10,6 @@ Pure Dialogue Interface for Patent Judgment Vector Database
 - 任务编排协调
 - 主动建议系统
 """
-
-from __future__ import annotations
 
 import logging
 import re

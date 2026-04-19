@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 跨系统接口网关 - 统一对外服务接口
 Cross System Gateway - Unified External Service Interface
@@ -9,7 +10,6 @@ Cross System Gateway - Unified External Service Interface
 创建时间: 2025-12-14
 """
 
-from __future__ import annotations
 import asyncio
 import base64
 import hashlib

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 协作协议 - 工具函数
 Collaboration Protocols - Utility Functions
@@ -10,7 +11,6 @@ Collaboration Protocols - Utility Functions
 该模块提供协作协议的便捷工具函数，简化协议会话的创建和管理。
 """
 
-from __future__ import annotations
 import logging
 from typing import Any
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 知识图谱监控仪表板API
 Knowledge Graph Monitoring Dashboard API
@@ -6,7 +7,6 @@ Knowledge Graph Monitoring Dashboard API
 提供Web界面和REST API来展示系统性能监控数据
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import sys

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 任务调度器 - 完整的任务管理系统
 Task Scheduler - Complete Task Management System
@@ -10,7 +11,6 @@ Task Scheduler - Complete Task Management System
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import json
 import platform
 import subprocess

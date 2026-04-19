@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 系统适配器 - 连接优化模块与现有系统
 提供统一的接口和向后兼容性
 """
 
-from __future__ import annotations
 import logging
 from datetime import datetime
 from typing import Any

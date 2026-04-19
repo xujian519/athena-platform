@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺BERT意图分类器
 Xiaonuo BERT Intent Classifier
@@ -10,7 +11,6 @@ Xiaonuo BERT Intent Classifier
 版本: v2.0.0 "95%目标版"
 """
 
-from __future__ import annotations
 import json
 import os
 from dataclasses import dataclass

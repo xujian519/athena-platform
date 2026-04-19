@@ -1,8 +1,8 @@
+from __future__ import annotations
 """
 高级自主决策引擎
 基于论文中的先进方法实现增强的决策能力
 """
-from __future__ import annotations
 import logging
 import uuid
 from collections import deque

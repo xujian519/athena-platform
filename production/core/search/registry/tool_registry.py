@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 分散式智能搜索架构 - 工具注册中心
 Decentralized Intelligent Search Architecture - Tool Registry
@@ -14,7 +15,6 @@ Decentralized Intelligent Search Architecture - Tool Registry
 4. 轻量协调 - 配置同步和指标收集
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import logging

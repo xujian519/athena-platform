@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # pyright: ignore
 """
 NLP适配器 - 连接认知引擎与各种NLP服务
 NLP Adapter - Connects cognition engine with various NLP services
 """
 
-from __future__ import annotations
 import logging
 from typing import Any
 
@@ -199,22 +199,22 @@ class NLPAdapter:
         return {"status": "no_service", "service_available": False, "message": "没有可用的NLP服务"}
 
 
-# 兼容MLX接口的包装器
-class MLXNLPWrapper:
-    """MLX NLP接口包装器 - 让通用NLP服务兼容MLX接口"""
+# 兼容Ollama接口的包装器
+class OllamaNLPWrapper:
+    """Ollama NLP接口包装器 - 让通用NLP服务兼容Ollama接口"""
 
     def __init__(self, universal_nlp_service):  # type: ignore
         self.universal_nlp = universal_nlp_service
 
     async def analyze_patent(self, text: str) -> dict[str, Any]:
-        """专利分析(兼容MLX接口)"""
+        """专利分析(兼容Ollama接口)"""
         from ..nlp.universal_nlp_provider import TaskType
 
         result = await self.universal_nlp.process(text, TaskType.PATENT_ANALYSIS)
         return result.get("content", result)
 
     async def technical_reasoning(self, text: str, context: str = "") -> dict[str, Any]:
-        """技术推理(兼容MLX接口)"""
+        """技术推理(兼容Ollama接口)"""
         from ..nlp.universal_nlp_provider import TaskType
 
         full_text = f"{context}\n\n{text}" if context else text
@@ -222,14 +222,14 @@ class MLXNLPWrapper:
         return result.get("content", result)
 
     async def emotional_analysis(self, text: str) -> dict[str, Any]:
-        """情感分析(兼容MLX接口)"""
+        """情感分析(兼容Ollama接口)"""
         from ..nlp.universal_nlp_provider import TaskType
 
         result = await self.universal_nlp.process(text, TaskType.EMOTIONAL_ANALYSIS)
         return result.get("content", result)
 
     async def conversation_response(self, text: str, context: dict | None = None) -> dict[str, Any]:  # type: ignore
-        """对话响应(兼容MLX接口)"""
+        """对话响应(兼容Ollama接口)"""
         from ..nlp.universal_nlp_provider import TaskType
 
         result = await self.universal_nlp.process(
@@ -238,7 +238,7 @@ class MLXNLPWrapper:
         return result.get("content", result)
 
     async def creative_writing(self, text: str, style: str = "story") -> dict[str, Any]:
-        """创意写作(兼容MLX接口)"""
+        """创意写作(兼容Ollama接口)"""
         from ..nlp.universal_nlp_provider import TaskType
 
         result = await self.universal_nlp.process(text, TaskType.CREATIVE_WRITING, style=style)
@@ -246,4 +246,4 @@ class MLXNLPWrapper:
 
 
 # 导出适配器
-__all__ = ["NLPAdapter", "MLXNLPWrapper"]
+__all__ = ["NLPAdapter", "OllamaNLPWrapper"]

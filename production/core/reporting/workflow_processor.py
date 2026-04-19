@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 混合工作流处理器 (Hybrid Workflow Processor)
 
@@ -9,7 +10,6 @@ Author: Athena工作平台
 Date: 2026-01-16
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from collections.abc import Callable

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 感知模块三层架构集成配置
 Perception Module Three-Layer Architecture Integration Configuration
@@ -6,7 +7,6 @@ Perception Module Three-Layer Architecture Integration Configuration
 提供感知模块与法律世界模型三层架构的集成接口
 """
 
-from __future__ import annotations
 import os
 from dataclasses import dataclass
 from pathlib import Path

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 数据库优化器
 Database Optimizer for Production
@@ -6,7 +7,6 @@ Database Optimizer for Production
 提供SQLite数据库的性能优化功能,包括索引创建、查询优化和数据清理。
 """
 
-from __future__ import annotations
 import logging
 import os
 import sqlite3

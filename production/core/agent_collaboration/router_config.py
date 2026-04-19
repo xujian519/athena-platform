@@ -1,8 +1,8 @@
+from __future__ import annotations
 """
 智能路由引擎配置管理
 """
 
-from __future__ import annotations
 import hashlib
 import random
 from dataclasses import dataclass, field

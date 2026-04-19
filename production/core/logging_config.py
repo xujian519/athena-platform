@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一日志配置模块
 Unified Logging Configuration
@@ -9,7 +10,6 @@ Unified Logging Configuration
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 import sys
 from pathlib import Path

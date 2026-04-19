@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主智能模型路由器
 Xiaonuo Intelligent Model Router
@@ -11,7 +12,6 @@ Xiaonuo Intelligent Model Router
 更新时间: 2025-12-16 (集成缓存系统)
 """
 
-from __future__ import annotations
 import json
 import logging
 import time
@@ -170,7 +170,7 @@ class XiaonuoModelRouter:
         # 备用模型
         models["qwen:7b"] = ModelConfig(
             name="qwen:7b",
-            provider="mlx",
+            provider="ollama",
             priority=2,
             monthly_cost=0.0,
             capabilities=["chat", "reasoning"],
@@ -178,7 +178,7 @@ class XiaonuoModelRouter:
 
         models["qwen2.5vl:latest"] = ModelConfig(
             name="qwen2.5vl:latest",
-            provider="mlx",
+            provider="ollama",
             priority=3,
             capabilities=["chat", "multimodal", "reasoning"],
         )
@@ -191,10 +191,10 @@ class XiaonuoModelRouter:
             capabilities=["embedding", "chinese", "patent", "legal"],
         )
 
-        # MLX嵌入模型(快速响应)
+        # Ollama嵌入模型(快速响应)
         models["nomic-embed-text"] = ModelConfig(
             name="nomic-embed-text",
-            provider="mlx",
+            provider="ollama",
             priority=2,
             capabilities=["embedding", "fast"],
         )
@@ -295,7 +295,7 @@ class XiaonuoModelRouter:
         if model_name == "glm-4":
             return await self._call_glm4_api(prompt, temperature, max_tokens)
         elif model_name.startswith(("qwen", "nomic", "llama")):
-            return await self._call_mlx_api(model_name, prompt, temperature, max_tokens)
+            return await self._call_ollama_api(model_name, prompt, temperature, max_tokens)
         else:
             self.logger.warning(f"未知模型: {model_name}")
             return None
@@ -323,7 +323,7 @@ class XiaonuoModelRouter:
             ]:
                 model_name = "bge-large-zh-v1.5"  # 高质量任务使用BGE
             elif task_type in ["simple_chat", "quick_match"]:
-                model_name = "nomic-embed-text"  # 快速任务使用MLX
+                model_name = "nomic-embed-text"  # 快速任务使用Ollama
             else:
                 model_name = "bge-large-zh-v1.5"  # 默认使用BGE
 
@@ -335,9 +335,9 @@ class XiaonuoModelRouter:
                 result = await bge_service.encode(texts, task_type=task_type)
                 return result.embeddings
 
-            # 使用MLX嵌入
+            # 使用Ollama嵌入
             elif model_name == "nomic-embed-text":
-                return await self._get_mlx_embedding(texts)
+                return await self._get_ollama_embedding(texts)
 
             return None
 
@@ -345,29 +345,29 @@ class XiaonuoModelRouter:
             self.logger.error(f"获取嵌入失败: {e}")
             return None
 
-    async def _get_mlx_embedding(self, texts: str | list[str]) -> list[float]:
-        """获取MLX嵌入向量"""
+    async def _get_ollama_embedding(self, texts: str | list[str]) -> list[float]:
+        """获取Ollama嵌入向量"""
         import requests
 
         if isinstance(texts, list):
-            texts = texts[0]  # MLX API一次只处理一个文本
+            texts = texts[0]  # Ollama API一次只能处理一个文本
 
         try:
             response = requests.post(
-                "http://127.0.0.1:8766/v1/embeddings",
-                json={"model": "nomic-embed-text", "input": texts},
+                "http://localhost:11434/api/embeddings",
+                json={"model": "nomic-embed-text", "prompt": texts},
                 timeout=30,
             )
 
             if response.status_code == 200:
                 result = response.json()
-                return result["data"][0]["embedding"]
+                return result["embedding"]
             else:
-                self.logger.error(f"MLX嵌入API错误: {response.status_code}")
+                self.logger.error(f"Ollama嵌入API错误: {response.status_code}")
                 return None
 
         except Exception as e:
-            self.logger.error(f"MLX嵌入调用失败: {e}")
+            self.logger.error(f"Ollama嵌入调用失败: {e}")
             return None
 
     async def _call_glm4_api(
@@ -405,32 +405,31 @@ class XiaonuoModelRouter:
             self.logger.error(f"GLM-4调用失败: {e}")
             return None
 
-    async def _call_mlx_api(
+    async def _call_ollama_api(
         self, model_name: str, prompt: str, temperature: float, max_tokens: int
     ) -> str | None:
-        """调用MLX本地API (OpenAI兼容格式)"""
+        """调用Ollama本地API"""
         try:
             import requests
 
-            url = "http://127.0.0.1:8765/v1/chat/completions"
+            url = "http://localhost:11434/api/generate"
             data = {
                 "model": model_name,
-                "messages": [{"role": "user", "content": prompt}],
-                "temperature": temperature,
-                "max_tokens": max_tokens,
+                "prompt": prompt,
                 "stream": False,
+                "options": {"temperature": temperature, "num_predict": max_tokens},
             }
 
             response = requests.post(url, json=data, timeout=60)
             if response.status_code == 200:
                 result = response.json()
-                return result["choices"][0]["message"]["content"]
+                return result.get("response", "")
             else:
-                self.logger.error(f"MLX API错误: {response.status_code}")
+                self.logger.error(f"Ollama API错误: {response.status_code}")
                 return None
 
         except Exception as e:
-            self.logger.error(f"MLX调用失败: {e}")
+            self.logger.error(f"Ollama调用失败: {e}")
             return None
 
     def select_model(self, task_type: str, fallback_allowed: bool = True) -> ModelConfig:

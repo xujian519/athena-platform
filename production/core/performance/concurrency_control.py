@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 并发控制机制
 Concurrency Control Mechanisms
@@ -17,7 +18,6 @@ Concurrency Control Mechanisms
 - 优先级调度
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

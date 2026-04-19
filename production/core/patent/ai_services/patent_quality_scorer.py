@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 增强版专利质量评分器 - 综合质量评估和风险预警
 
@@ -16,7 +17,6 @@
 创建时间: 2026-03-20
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

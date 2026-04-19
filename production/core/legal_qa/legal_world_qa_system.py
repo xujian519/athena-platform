@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律世界模型 - 智能问答系统
 Legal World Model - Intelligent Q&A System
@@ -19,7 +20,6 @@ Legal World Model - Intelligent Q&A System
 创建时间: 2026-01-23
 """
 
-from __future__ import annotations
 import uuid
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager

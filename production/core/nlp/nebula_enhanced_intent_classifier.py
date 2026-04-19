@@ -14,7 +14,6 @@ NebulaGraph增强的意图识别器
 结合知识图谱的高精度意图识别系统
 """
 
-from __future__ import annotations
 import asyncio
 import json
 from dataclasses import dataclass
@@ -24,8 +23,8 @@ from typing import TYPE_CHECKING
 
 # 安全修复: 使用joblib替代pickle序列化scikit-learn模型
 import joblib
-import numpy as np
 import torch
+from nebula3.common import *
 from nebula3.Config import Config
 from nebula3.gclient.net import ConnectionPool
 from sklearn.decomposition import TruncatedSVD

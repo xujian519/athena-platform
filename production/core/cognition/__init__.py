@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 认知与决策层模块
 Cognition & Decision Module
@@ -8,7 +9,6 @@ Cognition & Decision Module
 版本: 3.0.0
 """
 
-from __future__ import annotations
 import logging
 from datetime import datetime
 from typing import Any
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 class CognitiveEngine:
-    """认知引擎 - 集成MLX NLP能力"""
+    """认知引擎 - 集成Ollama NLP能力"""
 
     def __init__(self, agent_id: str, config: dict | None = None):
         self.agent_id = agent_id
@@ -42,7 +42,7 @@ class CognitiveEngine:
                 from .ollama_integration import get_ollama_nlp_instance
 
                 self.nlp_service = await get_ollama_nlp_instance(self.config.get("nlp", {}))
-                logger.info(f"✅ MLX NLP服务集成完成: {self.agent_id}")
+                logger.info(f"✅ Ollama NLP服务集成完成: {self.agent_id}")
             except Exception as e2:
                 logger.warning(f"⚠️ 所有NLP服务初始化失败,使用基础认知功能: {e2}")
                 self.nlp_service = None

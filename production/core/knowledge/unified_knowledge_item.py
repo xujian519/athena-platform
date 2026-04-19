@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一知识条目数据模型
 Unified Knowledge Item Data Model
@@ -13,7 +14,6 @@ Unified Knowledge Item Data Model
 版本: v1.0.0 "质量控制"
 """
 
-from __future__ import annotations
 import hashlib
 import json
 from dataclasses import dataclass, field

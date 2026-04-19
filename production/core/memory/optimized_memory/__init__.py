@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化记忆系统 - 公共接口
 Optimized Memory System - Public Interface
@@ -13,7 +14,6 @@ Optimized Memory System - Public Interface
 
 # 数据模型
 # 核心系统
-from __future__ import annotations
 from core.memory.optimized_memory.core import OptimizedMemorySystem
 
 # 迁移执行器

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 AI模型抽象层
 AI Model Abstraction Layer
@@ -24,7 +25,6 @@ AI Model Abstraction Layer
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from abc import ABC, abstractmethod

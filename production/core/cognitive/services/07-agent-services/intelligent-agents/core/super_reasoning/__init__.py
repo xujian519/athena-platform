@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena超级推理模块
 Super Reasoning Module for Athena
@@ -9,7 +10,6 @@ Super Reasoning Module for Athena
 版本: v1.0.0
 """
 
-from __future__ import annotations
 from .athena_super_reasoning import (
     AthenaSuperReasoningEngine,
     ConfidenceLevel,

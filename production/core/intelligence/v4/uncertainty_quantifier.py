@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 不确定性量化器 v4.0
 Uncertainty Quantifier v4.0
@@ -13,7 +14,6 @@ Uncertainty Quantifier v4.0
 版本: v4.0.0
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

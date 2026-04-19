@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 真实专利搜索适配器
 Real Patent Search Adapter
@@ -10,7 +11,6 @@ Real Patent Search Adapter
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

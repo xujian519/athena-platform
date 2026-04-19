@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BGE增强的知识图谱
 BGE Enhanced Knowledge Graph for Athena Platform
@@ -8,7 +9,6 @@ BGE Enhanced Knowledge Graph for Athena Platform
 作者: 小诺·双鱼座
 创建时间: 2025-12-16
 """
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from typing import Any

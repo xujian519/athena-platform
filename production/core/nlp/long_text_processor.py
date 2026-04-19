@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BGE-M3长文本处理器
 Long Text Processor for BGE-M3
@@ -6,7 +7,6 @@ Long Text Processor for BGE-M3
 利用BGE-M3的8192 token能力处理长文档,无需分段
 """
 
-from __future__ import annotations
 import re
 from dataclasses import dataclass
 from typing import Any, Protocol

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一环境变量加载器
 Unified Environment Variable Loader
@@ -11,7 +12,6 @@ Unified Environment Variable Loader
 5. 开发/生产环境切换
 """
 
-from __future__ import annotations
 import json
 import logging
 import os

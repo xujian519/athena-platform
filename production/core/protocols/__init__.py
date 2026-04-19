@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多智能体协作协议模块
 Multi-Agent Collaboration Protocols Module
@@ -12,7 +13,6 @@ Multi-Agent Collaboration Protocols Module
 - 冲突解决协议 (Conflict Resolution Protocol)
 """
 
-from __future__ import annotations
 from datetime import timedelta
 
 from .collaboration import (

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 神经架构搜索系统 (Neural Architecture Search System)
 自动搜索最优神经网络架构
@@ -8,7 +9,6 @@
 优化目标: 自动发现高性能架构,搜索效率提升
 """
 
-from __future__ import annotations
 import logging
 from collections import deque
 from dataclasses import dataclass, field

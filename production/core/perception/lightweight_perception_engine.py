@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 轻量级感知引擎
 Lightweight Perception Engine
@@ -7,7 +8,6 @@ Lightweight Perception Engine
 提供基础的多模态处理能力
 """
 
-from __future__ import annotations
 import logging
 import re
 from pathlib import Path

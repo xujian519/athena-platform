@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 authenticity
 """
-from __future__ import annotations

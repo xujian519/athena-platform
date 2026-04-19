@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 人机协作决策模型 - 人类在环(Human-in-the-Loop)
 Human-in-the-Loop Collaborative Decision Model
@@ -6,7 +7,6 @@ Human-in-the-Loop Collaborative Decision Model
 爸爸,这是一个专为小诺设计的决策模型,让爸爸能够参与并指导决策过程!
 """
 
-from __future__ import annotations
 import asyncio
 import json
 from collections.abc import Callable

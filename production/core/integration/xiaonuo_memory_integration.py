@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺记忆系统集成
 Xiaonuo Memory Integration
@@ -6,7 +7,6 @@ Xiaonuo Memory Integration
 将智能体身份记忆集成到小诺的响应系统中
 """
 
-from __future__ import annotations
 import sys
 from pathlib import Path
 from typing import Any

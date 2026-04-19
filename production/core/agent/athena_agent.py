@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena Agent实现
 Athena Agent Implementation
@@ -15,7 +16,6 @@ Athena是Athena工作平台的智慧女神,具有以下特点:
 版本: 3.0.0
 """
 
-from __future__ import annotations
 import logging
 from datetime import datetime
 from typing import Any

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 决策可视化器
 Decision Visualizer
@@ -7,7 +8,6 @@ Decision Visualizer
 支持多种输出格式(HTML, JSON, 文本)
 """
 
-from __future__ import annotations
 import json
 import logging
 from dataclasses import dataclass, field

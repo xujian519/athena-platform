@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 审查意见答复集成服务
 Office Action Response Integration Service
@@ -14,7 +15,6 @@ Office Action Response Integration Service
 版本: v0.1.2 "晨星初现"
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

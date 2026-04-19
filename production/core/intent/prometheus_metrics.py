@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 意图识别服务 - Prometheus监控集成
 
@@ -8,7 +9,6 @@ Created: 2025-01-17
 Version: 1.0.0
 """
 
-from __future__ import annotations
 import logging
 import time
 from collections.abc import Callable

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 混合模式能力调用器
 Hybrid Capability Invoker
@@ -6,7 +7,6 @@ Hybrid Capability Invoker
 支持真实MCP连接和模拟数据的混合模式
 """
 
-from __future__ import annotations
 import logging
 from datetime import datetime
 from typing import Any

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 查询分类器
 Query Classifier for Patent Judgment Retrieval
@@ -10,7 +11,6 @@ Query Classifier for Patent Judgment Retrieval
 - 推荐检索策略
 """
 
-from __future__ import annotations
 import re
 from dataclasses import dataclass
 from enum import Enum

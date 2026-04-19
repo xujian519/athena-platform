@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Markdown Plan文档生成器
 Plan Document Generator - 生成和管理plan.md文档
@@ -8,7 +9,6 @@ Plan Document Generator - 生成和管理plan.md文档
 版本: v1.0.0 "Phase 1"
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from datetime import datetime

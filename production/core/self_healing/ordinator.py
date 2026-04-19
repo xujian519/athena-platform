@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 自愈编排器 (Self-healing Orchestrator)
 协调自愈流程,整合故障预测和自动修复
@@ -7,7 +8,6 @@
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field

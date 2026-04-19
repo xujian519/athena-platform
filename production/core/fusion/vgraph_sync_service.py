@@ -17,16 +17,14 @@ Real-time Sync Service for pgvector + NebulaGraph Integration
 更新时间: 2026-01-26 (TD-001: 标记需要更新)
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import traceback
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any
+from typing import Any, Dict, List, Optional, Set
 
-import asyncpg
 from nebula3.gclient.net.SessionPool import SessionPool
 
 from core.async_main import async_main

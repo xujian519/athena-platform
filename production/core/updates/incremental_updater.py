@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增量更新机制
 Incremental Update Mechanism
@@ -9,7 +10,6 @@ Incremental Update Mechanism
 版本: v1.0.0 "实时同步"
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import json

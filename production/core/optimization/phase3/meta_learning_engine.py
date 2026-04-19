@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 元学习引擎 (Meta-Learning Engine)
 学会如何学习,快速适应新任务
@@ -8,7 +9,6 @@
 优化目标: 少样本学习能力,新任务快速适应
 """
 
-from __future__ import annotations
 import logging
 from collections import deque
 from dataclasses import dataclass, field

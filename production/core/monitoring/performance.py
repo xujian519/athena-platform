@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 性能监控模块
 Performance Monitoring Module
@@ -5,7 +6,6 @@ Performance Monitoring Module
 提供性能监控装饰器和工具函数
 """
 
-from __future__ import annotations
 import functools
 import logging
 import threading

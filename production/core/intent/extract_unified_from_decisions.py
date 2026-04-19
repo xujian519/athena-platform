@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 从无效决定书双向提取统一训练样本
 Bidirectional Extraction from Invalidation Decisions
@@ -10,7 +11,6 @@ Bidirectional Extraction from Invalidation Decisions
 创建: 2026-01-13
 """
 
-from __future__ import annotations
 import json
 import re
 from datetime import datetime

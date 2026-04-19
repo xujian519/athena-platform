@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 安全的数据库查询工具模块
 提供防止SQL注入的数据库访问方法
@@ -6,7 +7,6 @@
 日期: 2026-01-25
 """
 
-from __future__ import annotations
 import logging
 from contextlib import contextmanager
 

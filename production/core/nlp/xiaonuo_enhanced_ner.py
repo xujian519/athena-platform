@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺增强NER模块 - 集成BERT模型和专利实体识别
 Enhanced NER Module with BERT and Patent Entity Support
@@ -13,7 +14,6 @@ Enhanced NER Module with BERT and Patent Entity Support
 日期: 2025-12-28
 """
 
-from __future__ import annotations
 import os
 import re
 import threading

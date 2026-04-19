@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 动态连接池
 Dynamic Connection Pool
@@ -10,7 +11,6 @@ Dynamic Connection Pool
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import logging

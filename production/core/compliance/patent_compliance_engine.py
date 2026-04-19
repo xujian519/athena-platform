@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利合规性检查引擎
 Patent Compliance Engine
@@ -9,7 +10,6 @@ Patent Compliance Engine
 版本: v1.0.0 "智能合规"
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

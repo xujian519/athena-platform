@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 认知与决策模块监控指标导出器
 Metrics Exporter for Cognitive & Decision Module
@@ -9,7 +10,6 @@ Metrics Exporter for Cognitive & Decision Module
 版本: v1.0
 """
 
-from __future__ import annotations
 import logging
 import time
 from collections.abc import Callable

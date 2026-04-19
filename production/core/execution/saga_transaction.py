@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Saga事务处理器
 Saga Transaction Coordinator
@@ -7,7 +8,6 @@ Saga Transaction Coordinator
 目标将分布式事务成功率提升到95%以上
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import uuid

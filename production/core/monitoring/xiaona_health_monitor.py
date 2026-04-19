@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜智能体健康度监控系统
 Xiaona Health Score Monitoring System
@@ -9,7 +10,6 @@ Xiaona Health Score Monitoring System
 版本: v2.0.0 "99分健康度"
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

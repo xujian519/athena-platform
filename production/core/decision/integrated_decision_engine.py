@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 综合集成决策引擎
 Integrated Decision Engine
@@ -17,7 +18,6 @@ Integrated Decision Engine
 版本: v1.0.0 "综合集成"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field

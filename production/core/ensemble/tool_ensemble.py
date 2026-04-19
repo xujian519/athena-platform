@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 工具调用集成器 - 第二阶段
 Tool Call Ensemble - Phase 2
@@ -14,7 +15,6 @@ Tool Call Ensemble - Phase 2
 创建: 2026-01-12
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from collections import defaultdict

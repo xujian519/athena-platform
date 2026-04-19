@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena反思引擎
 Reflection Engine for Athena Platform
@@ -23,7 +24,6 @@ Reflection Engine for Athena Platform
     )
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

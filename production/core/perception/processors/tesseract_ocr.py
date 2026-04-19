@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 企业级Tesseract OCR处理器
 支持中英文混合识别、表格识别、版面分析
 最后更新: 2026-01-26
 """
 
-from __future__ import annotations
 import hashlib
 import logging
 import os

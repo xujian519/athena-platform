@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一错误处理框架
 Unified Error Handling Framework
@@ -16,7 +17,6 @@ Unified Error Handling Framework
 版本: v1.0.0 "统一错误处理"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import traceback

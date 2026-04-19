@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 元认知模块 (Metacognition Module)
 关于认知的认知系统
@@ -8,7 +9,6 @@
 版本: v2.0.0
 """
 
-from __future__ import annotations
 from core.xiaonuo_agent.metacognition.metacognition_system import (
     CognitiveState,
     ConfidenceLevel,

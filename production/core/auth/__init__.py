@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 auth
 """
-from __future__ import annotations

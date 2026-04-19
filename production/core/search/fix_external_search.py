@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 修复外部搜索引擎问题脚本
 Fix External Search Engine Issues
@@ -10,7 +11,6 @@ Fix External Search Engine Issues
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 import sys

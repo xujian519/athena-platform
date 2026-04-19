@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一意图识别服务
 Unified Intent Recognition Service
@@ -11,7 +12,6 @@ Unified Intent Recognition Service
 版本: 2.0.0
 """
 
-from __future__ import annotations
 from typing import Any, Optional
 
 from core.intent.base_engine import (

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强多模态处理器
 Enhanced Multimodal Processor
@@ -11,7 +12,6 @@ Enhanced Multimodal Processor
 """
 
 # Numpy兼容性导入
-from __future__ import annotations
 import hashlib
 import logging
 import time

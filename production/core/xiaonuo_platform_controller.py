@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena全平台控制器
 Athena Platform Controller - 小诺的平台总控制接口
@@ -10,7 +11,6 @@ Athena Platform Controller - 小诺的平台总控制接口
 这是小诺控制整个平台的核心系统
 """
 
-from __future__ import annotations
 import json
 import os
 import signal

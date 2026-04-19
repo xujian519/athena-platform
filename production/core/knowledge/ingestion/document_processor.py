@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 文档智能处理器
 Intelligent Document Processor
@@ -9,7 +10,6 @@ Intelligent Document Processor
 版本: v1.0.0 "智能切分"
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass, field

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 演化式专利撰写系统
 Evolutionary Patent Drafting System
@@ -14,7 +15,6 @@ Evolutionary Patent Drafting System
 版本: v0.1.2 "晨星初现"
 """
 
-from __future__ import annotations
 import logging
 
 # 导入生物学模块

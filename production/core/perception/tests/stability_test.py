@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 稳定性测试
 长时间运行测试，检测内存泄漏、资源泄漏等问题
 最后更新: 2026-01-26
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

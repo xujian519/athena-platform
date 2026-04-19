@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利检索评估指标
 Patent Retrieval Evaluation Metrics
@@ -6,7 +7,6 @@ Patent Retrieval Evaluation Metrics
 提供专利检索系统的各种评估指标计算方法
 """
 
-from __future__ import annotations
 import logging
 import math
 from collections import defaultdict

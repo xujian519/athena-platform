@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # ruff: noqa: E402 - Module level imports placed after class definitions to avoid circular dependencies
 """
 感知模块
@@ -12,7 +13,6 @@ Perception Module
 版本: 3.0.0
 """
 
-from __future__ import annotations
 import inspect
 import logging
 from abc import ABC, abstractmethod

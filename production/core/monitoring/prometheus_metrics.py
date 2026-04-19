@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 Prometheus监控指标
 提供全面的性能和业务指标收集
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

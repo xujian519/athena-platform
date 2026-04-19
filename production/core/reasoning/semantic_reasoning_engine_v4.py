@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 语义推理引擎 v4.0 - 维特根斯坦版
 Semantic Reasoning Engine v4.0 - Wittgenstein Edition
@@ -10,7 +11,6 @@ Semantic Reasoning Engine v4.0 - Wittgenstein Edition
 - 命题:推理结果都是逻辑命题
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import sys

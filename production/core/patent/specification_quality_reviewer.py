@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 说明书质量审查器 (Specification Quality Reviewer)
 
@@ -17,7 +18,6 @@
   - 本模块: 撰写阶段，提交前自我质量检查
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

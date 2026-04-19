@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一异常体系
 Unified Exception System
@@ -10,7 +11,6 @@ Unified Exception System
 版本: 1.0.0
 """
 
-from __future__ import annotations
 from datetime import datetime
 from typing import Any
 

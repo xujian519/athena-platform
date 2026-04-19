@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Apple Silicon专用优化器
 Apple Silicon Specialized Optimizer
@@ -10,7 +11,6 @@ Apple Silicon Specialized Optimizer
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 import time

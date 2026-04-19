@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台统一配置管理器
 Unified Configuration Manager for Athena Platform
@@ -9,7 +10,6 @@ Unified Configuration Manager for Athena Platform
 技术决策: TD-001 - 统一图数据库选择为Neo4j
 """
 
-from __future__ import annotations
 import os
 import re
 from dataclasses import dataclass, field
@@ -67,7 +67,7 @@ class AthenaConfig:
 
     # AI模型配置
     embedding_model: str = "bge-m3"
-    embedding_device: str = "api"  # 通过 API 服务 (localhost:8766)
+    embedding_device: str = "cpu"
 
     llm_provider: str = "openai"
     llm_model: str = "gpt-4"

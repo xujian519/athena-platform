@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 对比学习模块 (Contrastive Learning Module)
 学习相似和不相似的样本表示
@@ -8,7 +9,6 @@
 优化目标: 表征学习质量提升,迁移性能增强
 """
 
-from __future__ import annotations
 import logging
 from collections import deque
 from dataclasses import dataclass, field

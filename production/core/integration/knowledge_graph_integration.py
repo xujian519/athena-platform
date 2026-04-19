@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台知识图谱集成模块
 将知识图谱功能集成到现有平台中
 """
 
-from __future__ import annotations
 import asyncio
 import json
 from pathlib import Path

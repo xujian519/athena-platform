@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 服务抽象层
 Service Abstraction Layer
@@ -6,7 +7,6 @@ Service Abstraction Layer
 提供统一的服务接口,实现解耦和可替换性
 """
 
-from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from typing import Any

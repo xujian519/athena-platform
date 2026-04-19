@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 意图识别服务 - 基础引擎抽象类
 
@@ -8,7 +9,6 @@ Created: 2025-01-17
 Version: 1.0.0
 """
 
-from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from datetime import datetime

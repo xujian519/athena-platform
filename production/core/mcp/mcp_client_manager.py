@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 MCP客户端管理器
 MCP Client Manager
@@ -10,7 +11,6 @@ MCP Client Manager
 版本: v1.0.0 "Phase 1"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field

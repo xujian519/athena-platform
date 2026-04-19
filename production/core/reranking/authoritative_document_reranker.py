@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 权威文档专用Reranker
 Authoritative Document Reranker
@@ -9,7 +10,6 @@ Authoritative Document Reranker
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from enum import Enum

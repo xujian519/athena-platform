@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 审查意见答复输入验证模型
 Office Action Response Input Validation Models
@@ -16,7 +17,6 @@ Office Action Response Input Validation Models
 版本: v1.0.0
 """
 
-from __future__ import annotations
 from datetime import datetime
 from enum import Enum
 from typing import Any

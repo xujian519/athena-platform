@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 NebulaGraph知识图谱构建器
 Legal Knowledge Graph Builder for NebulaGraph
@@ -6,7 +7,6 @@ Legal Knowledge Graph Builder for NebulaGraph
 从PostgreSQL读取法规数据,抽取实体和关系,构建NebulaGraph知识图谱
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from typing import Any

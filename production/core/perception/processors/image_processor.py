@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 图像处理器
 Image Processor
@@ -10,7 +11,6 @@ Image Processor
 版本: 3.0.0
 """
 
-from __future__ import annotations
 import base64
 import logging
 from datetime import datetime

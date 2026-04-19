@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 知识激活诊断系统 v1.0
 
@@ -21,7 +22,6 @@
 日期: 2026-03-23
 """
 
-from __future__ import annotations
 import logging
 import time
 from dataclasses import dataclass, field
@@ -211,7 +211,7 @@ class KnowledgeActivationDiagnoser:
         },
         "clarification": {
             "model": "qwen3.5",
-            "provider": "mlx",
+            "provider": "ollama",
             "temperature": 0.3,
             "max_tokens": 1500
         },

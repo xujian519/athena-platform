@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律文档专用实体关系提取器
 Legal Document Entity and Relation Extractor
@@ -6,7 +7,6 @@ Legal Document Entity and Relation Extractor
 专门针对专利法律文档的实体和关系提取
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass

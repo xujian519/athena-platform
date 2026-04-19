@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺网关规划引擎集成模块
 Xiaonuo Gateway Planning Integration
@@ -14,7 +15,6 @@ Xiaonuo Gateway Planning Integration
 创建时间: 2025-01-05
 """
 
-from __future__ import annotations
 import logging
 
 # 添加项目路径

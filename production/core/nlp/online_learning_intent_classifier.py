@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 在线学习意图识别系统
 Online Learning Intent Recognition System
 实时学习和优化意图识别模型
 """
 
-from __future__ import annotations
 import json
 import pickle
 import sqlite3

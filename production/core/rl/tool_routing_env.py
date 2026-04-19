@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 工具路由强化学习环境 - 第二阶段
 Tool Routing Reinforcement Learning Environment - Phase 2
@@ -17,7 +18,6 @@ Tool Routing Reinforcement Learning Environment - Phase 2
 创建: 2026-01-12
 """
 
-from __future__ import annotations
 import logging
 import random
 from dataclasses import dataclass, field

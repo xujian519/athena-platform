@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Apple Silicon优化的BERT意图分类器
 Optimized BERT Intent Classifier for Apple Silicon
@@ -14,7 +15,6 @@ Optimized BERT Intent Classifier for Apple Silicon
 版本: v1.0.0 "Apple Silicon优化"
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import logging

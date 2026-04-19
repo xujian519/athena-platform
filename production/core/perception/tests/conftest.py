@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 测试配置文件
 Test Configuration
@@ -6,7 +7,6 @@ Test Configuration
 负责设置测试环境，包括Python路径、共享fixtures等
 """
 
-from __future__ import annotations
 import sys
 from pathlib import Path
 

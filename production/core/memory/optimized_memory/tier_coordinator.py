@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化记忆系统 - 分层协调器
 Optimized Memory System - Tier Coordinator
@@ -11,7 +12,6 @@ Optimized Memory System - Tier Coordinator
 版本: 2.1.0
 """
 
-from __future__ import annotations
 import time
 from collections import defaultdict
 from datetime import datetime, timedelta

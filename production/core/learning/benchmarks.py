@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习模块性能基准测试框架
 Learning Module Performance Benchmark Framework
@@ -10,7 +11,6 @@ Learning Module Performance Benchmark Framework
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 import time
 from dataclasses import dataclass, field

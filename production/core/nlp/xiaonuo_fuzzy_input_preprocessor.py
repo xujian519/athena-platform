@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺模糊输入预处理器
 Xiaonuo Fuzzy Input Preprocessor
@@ -15,7 +16,6 @@ Xiaonuo Fuzzy Input Preprocessor
 日期: 2025-12-18
 """
 
-from __future__ import annotations
 import base64
 import hashlib
 import html

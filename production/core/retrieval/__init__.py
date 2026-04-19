@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 retrieval
 """
-from __future__ import annotations

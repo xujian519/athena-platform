@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 OpenTelemetry分布式追踪配置
 OpenTelemetry Distributed Tracing Setup
@@ -6,7 +7,6 @@ OpenTelemetry Distributed Tracing Setup
 集成Jaeger分布式追踪到FastAPI应用
 """
 
-from __future__ import annotations
 import logging
 from contextlib import asynccontextmanager
 

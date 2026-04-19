@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 负熵优化系统
 Negentropy Optimization System
@@ -13,7 +14,6 @@ Negentropy Optimization System
 版本: v0.1.2 "晨星初现"
 """
 
-from __future__ import annotations
 import json
 import logging
 import math

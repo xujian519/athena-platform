@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Google Scholar 搜索工具
 Google Scholar Search Tool
@@ -10,7 +11,6 @@ Google Scholar Search Tool
 创建: 2025-12-31
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

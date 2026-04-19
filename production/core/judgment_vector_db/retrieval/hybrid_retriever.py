@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 混合检索引擎
 Hybrid Retrieval Engine for Patent Judgments
@@ -10,7 +11,6 @@ Hybrid Retrieval Engine for Patent Judgments
 - 结果融合与排序
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from enum import Enum

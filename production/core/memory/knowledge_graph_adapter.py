@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 记忆系统-知识图谱适配器
 Memory-Knowledge Graph Adapter
@@ -6,7 +7,6 @@ Memory-Knowledge Graph Adapter
 将知识图谱集成到记忆系统中，提供增强的记忆检索和上下文理解
 """
 
-from __future__ import annotations
 import contextlib
 import json
 import logging

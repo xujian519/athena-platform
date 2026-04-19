@@ -1,8 +1,8 @@
+from __future__ import annotations
 """
 Apple Silicon M4 专用优化器
 充分利用M4芯片的MPS、Neural Engine和Unified Memory架构
 """
-from __future__ import annotations
 import logging
 import os
 import sys

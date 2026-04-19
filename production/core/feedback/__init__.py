@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 反馈闭环模块
 System Feedback Loop Module
@@ -5,7 +6,6 @@ System Feedback Loop Module
 实现"实践-认识-再实践"的持续优化循环
 """
 
-from __future__ import annotations
 from .system_feedback_loop import (
     EffectivenessAssessment,
     EffectivenessLevel,

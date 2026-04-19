@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 LLM增强的向量搜索引擎
 LLM Enhanced Vector Search with GLM-4.7 Cloud
@@ -12,7 +13,6 @@ LLM Enhanced Vector Search with GLM-4.7 Cloud
 更新: 2026-01-15
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

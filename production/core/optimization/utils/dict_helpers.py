@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 字典工具函数 - 安全的字典访问和操作
 Dict Helpers - Safe Dictionary Access and Operations
@@ -7,7 +8,6 @@ Dict Helpers - Safe Dictionary Access and Operations
 版本: v1.0.0
 """
 
-from __future__ import annotations
 from collections.abc import Callable
 from typing import TypeVar
 

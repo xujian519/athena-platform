@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺用户偏好学习系统
 Xiaonuo User Preference Learning System
@@ -10,7 +11,6 @@ Xiaonuo User Preference Learning System
 版本: v1.0.0 "智能用户偏好学习"
 """
 
-from __future__ import annotations
 import os
 from collections import defaultdict
 from dataclasses import dataclass, field

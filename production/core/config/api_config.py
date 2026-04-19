@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 API配置管理模块
 API Configuration Management
@@ -11,7 +12,6 @@ API Configuration Management
 - 支持配置热更新
 """
 
-from __future__ import annotations
 import logging
 import os
 from dataclasses import dataclass, field

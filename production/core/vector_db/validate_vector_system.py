@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena工作平台 - 向量库完整验证器
 验证所有向量库是否已正确构建和集成
 """
 
 # Numpy兼容性导入
-from __future__ import annotations
 import logging
 import os
 import sys

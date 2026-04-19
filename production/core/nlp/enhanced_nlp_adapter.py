@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强型NLP适配器 - 优化认知引擎与GLM-4.6的交互
 Enhanced NLP Adapter - Optimizes interaction between cognition engine and GLM-4.6
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

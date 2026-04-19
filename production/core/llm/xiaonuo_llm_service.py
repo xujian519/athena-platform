@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主 GLM-4.7 LLM服务
 Xiaonuo Pisces GLM-4.7 LLM Service
@@ -11,7 +12,6 @@ Xiaonuo Pisces GLM-4.7 LLM Service
 创建: 2026-01-23
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import os

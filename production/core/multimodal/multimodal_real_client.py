@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多模态文件系统真实客户端
 
 连接到现有的多模态文件系统服务
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from pathlib import Path

@@ -25,7 +25,6 @@ Enhanced Perception Module - BaseModule Compatible Version
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import warnings
 
 # 发出弃用警告
@@ -48,6 +47,7 @@ from core.logging_config import setup_logging
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent / "patent-platform" / "workspace" / "src"))
 
 # 导入BaseModule
 from core.base_module import BaseModule

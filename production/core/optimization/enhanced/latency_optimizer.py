@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 P99延迟优化器 (P99 Latency Optimizer)
 专注于减少长尾延迟,优化P99性能指标
@@ -8,7 +9,6 @@ P99延迟优化器 (P99 Latency Optimizer)
 优化目标: P99延迟 250ms → 175ms
 """
 
-from __future__ import annotations
 import asyncio
 import heapq
 import logging

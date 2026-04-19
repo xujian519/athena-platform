@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Neo4j图数据库客户端
 Neo4j Graph Database Client
@@ -11,7 +12,6 @@ Neo4j Graph Database Client
 版本: v2.0.1 - 修复循环导入问题
 """
 
-from __future__ import annotations
 import logging
 import os
 from contextlib import contextmanager

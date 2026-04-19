@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 意图识别服务 - 公共工具函数模块
 
@@ -8,7 +9,6 @@ Created: 2025-01-17
 Version: 1.0.0
 """
 
-from __future__ import annotations
 import re
 import string
 from typing import Any

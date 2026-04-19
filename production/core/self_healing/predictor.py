@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 故障预测器 (Failure Predictor)
 基于系统指标进行预测性故障检测
@@ -7,7 +8,6 @@
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 import statistics
 from collections import deque

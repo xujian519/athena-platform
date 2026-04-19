@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 API限流控制模块
 Rate Limiter for API Calls
@@ -6,7 +7,6 @@ Rate Limiter for API Calls
 提供请求重试、并发控制、速率限制等功能
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import os

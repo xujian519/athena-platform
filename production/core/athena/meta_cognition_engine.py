@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena元认知引擎
 Meta-Cognition Engine for Athena
@@ -15,7 +16,6 @@ Meta-Cognition Engine for Athena
 版本: v1.0.0 "元认知之光"
 """
 
-from __future__ import annotations
 import logging
 from collections import defaultdict, deque
 from dataclasses import dataclass, field

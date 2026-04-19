@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 思维协议驱动的意图分析器
 Thinking Protocol-Driven Intent Analyzer
@@ -17,7 +18,6 @@ Thinking Protocol-Driven Intent Analyzer
 创建: 2026-01-23
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass

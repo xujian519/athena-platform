@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 异步NLP处理器
 Asynchronous NLP Processor
@@ -14,7 +15,6 @@ Asynchronous NLP Processor
 创建时间: 2026-01-25
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from collections.abc import Awaitable, Callable

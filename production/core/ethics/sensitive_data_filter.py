@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 敏感信息过滤器 - 防止敏感数据泄露到日志
 Sensitive Information Filter - Prevent Sensitive Data Leakage in Logs
@@ -9,7 +10,6 @@ Sensitive Information Filter - Prevent Sensitive Data Leakage in Logs
 4. 可扩展的敏感模式匹配
 """
 
-from __future__ import annotations
 import re
 from collections.abc import Sequence
 from dataclasses import dataclass

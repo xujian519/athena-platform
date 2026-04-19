@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强记忆系统
 Enhanced Memory System
@@ -6,7 +7,6 @@ Enhanced Memory System
 集成知识图谱的智能记忆系统
 """
 
-from __future__ import annotations
 import contextlib
 import logging
 from enum import Enum

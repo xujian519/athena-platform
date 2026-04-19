@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena治理模块
 Athena Governance Module
@@ -37,7 +38,6 @@ Athena Governance Module
     evaluation = await evaluator.evaluate_tool(tool_id)
 """
 
-from __future__ import annotations
 __version__ = "1.0.0"
 __author__ = "Athena Team"
 

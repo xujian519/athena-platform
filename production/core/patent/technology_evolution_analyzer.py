@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 技术演化路径分析器
 Technology Evolution Path Analyzer
@@ -16,7 +17,6 @@ Technology Evolution Path Analyzer
 版本: v0.1.0 "演化分析"
 """
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any

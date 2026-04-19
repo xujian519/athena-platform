@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习引擎 - 知识图谱更新器
 Learning Engine - Knowledge Graph Updater
@@ -9,7 +10,6 @@ Learning Engine - Knowledge Graph Updater
 版本: 2.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import logging

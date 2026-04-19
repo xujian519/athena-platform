@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 DSPy模型加载器
 DSPy Model Loader for Patent Analysis
@@ -10,7 +11,6 @@ DSPy Model Loader for Patent Analysis
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 from datetime import datetime

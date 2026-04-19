@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena LLM后端适配器
 Athena LLM Backend Adapter for DSPy
@@ -9,7 +10,6 @@ DSPy使用LiteLLM作为统一后端,因此我们提供两种集成方式:
 2. 使用自定义Adapter包装Athena LLM服务
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from pathlib import Path

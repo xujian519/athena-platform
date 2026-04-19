@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 向量集合配置优化
 Vector Collection Configuration Optimization
@@ -9,7 +10,6 @@ Vector Collection Configuration Optimization
 版本: v1.0.0 "集合重构"
 """
 
-from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 

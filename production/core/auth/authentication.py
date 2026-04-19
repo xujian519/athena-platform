@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 API认证系统
 提供JWT认证、API密钥管理和访问控制
 """
 
-from __future__ import annotations
 import hashlib
 import logging
 import secrets

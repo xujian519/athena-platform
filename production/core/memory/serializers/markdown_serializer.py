@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Markdown序列化器
 
@@ -9,7 +10,6 @@ Created: 2026-01-20
 Version: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 from pathlib import Path
 from typing import Any

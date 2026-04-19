@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 带统一记忆系统的智能体基类
 Base Agent with Unified Memory System
 """
 
-from __future__ import annotations
 import json
 import os
 from datetime import datetime

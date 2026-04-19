@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 GLM-4.7 API客户端
 用于主推理引擎
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

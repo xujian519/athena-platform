@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 OpenAPI文档配置模块
 
 为小诺统一网关提供完整的OpenAPI/Swagger文档配置
 """
 
-from __future__ import annotations
 import logging
 from typing import Any
 

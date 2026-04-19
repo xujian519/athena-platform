@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 生产环境强化学习集成系统
 Production Reinforcement Learning Integration System
@@ -14,7 +15,6 @@ Production Reinforcement Learning Integration System
 版本: v1.0.0 "生产就绪"
 创建: 2025-01-08
 """
-from __future__ import annotations
 import json
 import logging
 import pickle

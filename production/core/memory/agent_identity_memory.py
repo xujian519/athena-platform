@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能体身份记忆系统
 Agent Identity Memory System for Athena Platform
@@ -6,7 +7,6 @@ Agent Identity Memory System for Athena Platform
 确保小诺记住所有智能体的正确身份和名称
 """
 
-from __future__ import annotations
 import json
 import logging
 from datetime import datetime

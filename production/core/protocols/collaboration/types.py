@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协作协议 - 数据模型
 Collaboration Protocols - Data Models
@@ -11,7 +12,6 @@ Collaboration Protocols - Data Models
 版本: 2.1.0
 """
 
-from __future__ import annotations
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta

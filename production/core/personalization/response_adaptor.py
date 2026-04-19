@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 个性化响应模块 - Personalized Response
 
@@ -9,7 +10,6 @@
 5. 用户偏好学习
 """
 
-from __future__ import annotations
 import json
 import logging
 import sqlite3

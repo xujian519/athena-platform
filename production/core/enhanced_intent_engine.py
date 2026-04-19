@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 超级思维链增强意图识别引擎
 Super Thinking Chain Enhanced Intent Recognition Engine
@@ -10,7 +11,6 @@ Super Thinking Chain Enhanced Intent Recognition Engine
 版本: 3.0.0 (超级思维链版)
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass

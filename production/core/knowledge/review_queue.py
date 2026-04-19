@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 知识审核队列管理系统
 Knowledge Review Queue Management System
@@ -13,7 +14,6 @@ Knowledge Review Queue Management System
 版本: v1.0.0 "审核队列"
 """
 
-from __future__ import annotations
 import json
 import logging
 from collections import deque

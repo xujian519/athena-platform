@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利智能关联分析系统
 Patent Intelligent Correlation Analysis System
@@ -6,7 +7,6 @@ Patent Intelligent Correlation Analysis System
 分析法律法规与决定书案例之间的关联关系,构建智能关联网络
 """
 
-from __future__ import annotations
 import json
 import re
 import sys

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 DSPy高质量训练数据 - 精选100条
 Quality Training Data - Selected 100 Samples
@@ -10,7 +11,6 @@ Quality Training Data - Selected 100 Samples
 """
 
 
-from __future__ import annotations
 import dspy
 
 # DSPy高质量训练数据集 - 精选100条

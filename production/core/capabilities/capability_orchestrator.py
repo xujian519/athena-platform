@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 能力编排器
 Capability Orchestrator
@@ -6,7 +7,6 @@ Capability Orchestrator
 负责编排多个能力调用,实现复杂工作流
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass

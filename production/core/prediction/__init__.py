@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 预测模块
 Prediction Module
@@ -15,7 +16,6 @@ Prediction Module
 
 # 原有预测器(基础版)
 # 增强错误预测器
-from __future__ import annotations
 from .enhanced_error_predictor import (
     EnhancedErrorPredictor,
     FeatureVector,

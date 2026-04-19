@@ -1,3 +1,4 @@
+from __future__ import annotations
 # pyright: ignore
 # !/usr/bin/env python3
 """
@@ -11,7 +12,6 @@ Quick Deployment
 版本: v1.0 Quick Deploy
 """
 
-from __future__ import annotations
 import logging
 from pathlib import Path
 

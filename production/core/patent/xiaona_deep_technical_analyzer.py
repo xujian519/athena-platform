@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜深度技术分析器 (增强版)
 Xiaona Deep Technical Analyzer (Enhanced)
@@ -17,7 +18,6 @@ Xiaona Deep Technical Analyzer (Enhanced)
 版本: v0.2.0 "图谱增强"
 """
 
-from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass, field

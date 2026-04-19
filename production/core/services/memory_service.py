@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一记忆服务
 Unified Memory Service
@@ -10,7 +11,6 @@ Unified Memory Service
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from datetime import datetime

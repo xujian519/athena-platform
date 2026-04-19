@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 小诺伦理约束补丁
 Xiaonuo Ethics Constraint Patch
@@ -5,7 +6,6 @@ Xiaonuo Ethics Constraint Patch
 为小诺主程序添加伦理约束,防止幻觉并确保合规行为
 """
 
-from __future__ import annotations
 import os
 import sys
 from pathlib import Path

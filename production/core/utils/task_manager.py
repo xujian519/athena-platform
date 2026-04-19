@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 任务管理器
 Task Manager
@@ -16,7 +17,6 @@ Task Manager
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from collections.abc import Callable, Coroutine

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一嵌入服务
 Unified Embedding Service
@@ -10,7 +11,6 @@ Unified Embedding Service
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 

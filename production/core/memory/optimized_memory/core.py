@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化记忆系统 - 核心模块
 Optimized Memory System - Core Module
@@ -11,7 +12,6 @@ Optimized Memory System - Core Module
 版本: 2.1.0
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

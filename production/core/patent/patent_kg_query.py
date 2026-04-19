@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利知识图谱查询接口
 Patent Knowledge Graph Query Interface
@@ -10,7 +11,6 @@ Created: 2026-01-26
 Version: v1.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 from pathlib import Path

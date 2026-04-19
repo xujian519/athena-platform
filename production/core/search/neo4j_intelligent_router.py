@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Neo4j智能检索路由系统
 Neo4j Intelligent Retrieval Router System
@@ -20,7 +21,6 @@ Neo4j Intelligent Retrieval Router System
 更新时间: 2026-01-25 (TD-001: 迁移到Neo4j)
 """
 
-from __future__ import annotations
 import time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 轻量级工具发现模块
 Lightweight Tool Discovery Module
@@ -16,7 +17,6 @@ Lightweight Tool Discovery Module
 版本: v1.0.0 "轻量级集成版"
 """
 
-from __future__ import annotations
 import logging
 from collections import defaultdict, deque
 from dataclasses import dataclass, field

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小宸·星河射手 - 增强版(集成协作功能)
 Xiaochen Sagittarius Agent Enhanced - with Collaboration Integration
@@ -10,7 +11,6 @@ Xiaochen Sagittarius Agent Enhanced - with Collaboration Integration
 版本: v2.1.0
 """
 
-from __future__ import annotations
 import json
 import logging
 from datetime import datetime

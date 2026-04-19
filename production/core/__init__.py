@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺和Athena核心模块
 Xiaonuo and Athena Core Modules
@@ -18,7 +19,6 @@ Xiaonuo and Athena Core Modules
 版本: 3.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from typing import TYPE_CHECKING, Any, cast
@@ -30,53 +30,10 @@ if TYPE_CHECKING:
 
 
 # 核心模块导入
-try:
-    from .agent import BaseAgent
-except ImportError:
-    BaseAgent = None
+from .agent import BaseAgent
 
-# 基础模块导入 (已废弃，提供向后兼容)
-# 为了避免循环导入，仅在运行时动态导入
-BaseModule = None
-HealthStatus = None
-ModuleStatus = None
-
-def _get_deprecated_symbols():
-    """延迟导入已废弃的符号"""
-    global BaseModule, HealthStatus, ModuleStatus
-    if BaseModule is not None:
-        return  # 已经导入过了
-
-    try:
-        from .base_module import BaseModule as _BaseModule
-        from .base_module import HealthStatus as _HealthStatus
-        from .base_module import ModuleStatus as _ModuleStatus
-        import warnings
-        warnings.warn(
-            "core.base_module已废弃，请迁移到core.agents架构",
-            DeprecationWarning,
-            stacklevel=2
-        )
-        BaseModule = _BaseModule
-        HealthStatus = _HealthStatus
-        ModuleStatus = _ModuleStatus
-    except ImportError:
-        # 创建兼容的枚举类
-        class _HealthStatus:
-            HEALTHY = 'healthy'
-            DEGRADED = 'degraded'
-            UNHEALTHY = 'unhealthy'
-
-        class _ModuleStatus:
-            ACTIVE = 'active'
-            INACTIVE = 'inactive'
-            ERROR = 'error'
-
-        HealthStatus = _HealthStatus
-        ModuleStatus = _ModuleStatus
-        # BaseAgent作为BaseModule的替代
-        if BaseAgent is not None:
-            BaseModule = BaseAgent
+# 基础模块导入
+from .base_module import BaseModule, HealthStatus, ModuleStatus
 
 # 任务模型导入
 from .task_models import (
@@ -136,7 +93,16 @@ except ImportError:
 # 创建一个临时占位符
 class PerceptionEngine:
     """临时占位符类，待perception模块修复后恢复"""
-    pass
+
+    @staticmethod
+    async def initialize_global() -> None:
+        """初始化全局实例（占位符实现）"""
+        logger.warning("⚠️ PerceptionEngine 使用占位符实现")
+
+    @staticmethod
+    async def shutdown_global() -> None:
+        """关闭全局实例（占位符实现）"""
+        logger.warning("⚠️ PerceptionEngine 使用占位符实现")
 
 # 版本信息
 __version__ = "3.0.0"
@@ -177,18 +143,27 @@ async def initialize_core_system(config: dict[str, Any] | None = None):
     logger.info("🚀 初始化小诺和Athena核心系统...")
 
     try:
-        # 初始化各模块
-        await PerceptionEngine.initialize_global()
-        await CognitiveEngine.initialize_global()
-        await MemorySystem.initialize_global()
-        await ExecutionEngine.initialize_global()
-        await LearningEngine.initialize_global()
-        await CommunicationEngine.initialize_global()
-        await EvaluationEngine.initialize_global()
+        # 初始化各模块（添加None检查）
+        if PerceptionEngine is not None:
+            await PerceptionEngine.initialize_global()
+        if CognitiveEngine is not None:
+            await CognitiveEngine.initialize_global()
+        if MemorySystem is not None:
+            await MemorySystem.initialize_global()
+        if ExecutionEngine is not None:
+            await ExecutionEngine.initialize_global()
+        if LearningEngine is not None:
+            await LearningEngine.initialize_global()
+        if CommunicationEngine is not None:
+            await CommunicationEngine.initialize_global()
+        if EvaluationEngine is not None:
+            await EvaluationEngine.initialize_global()
         # KnowledgeManager暂时注释掉（类不存在）
         # await KnowledgeManager.initialize_global()
-        await MonitoringEngine.initialize_global()
-        await SecurityEngine.initialize_global()
+        if MonitoringEngine is not None:
+            await MonitoringEngine.initialize_global()
+        if SecurityEngine is not None:
+            await SecurityEngine.initialize_global()
 
         logger.info("✅ 核心系统初始化完成")
 
@@ -202,18 +177,27 @@ async def shutdown_core_system():
     logger.info("🔄 关闭小诺和Athena核心系统...")
 
     try:
-        # 关闭各模块
-        await PerceptionEngine.shutdown_global()
-        await CognitiveEngine.shutdown_global()
-        await MemorySystem.shutdown_global()
-        await ExecutionEngine.shutdown_global()
-        await LearningEngine.shutdown_global()
-        await CommunicationEngine.shutdown_global()
-        await EvaluationEngine.shutdown_global()
+        # 关闭各模块（添加None检查）
+        if PerceptionEngine is not None:
+            await PerceptionEngine.shutdown_global()
+        if CognitiveEngine is not None:
+            await CognitiveEngine.shutdown_global()
+        if MemorySystem is not None:
+            await MemorySystem.shutdown_global()
+        if ExecutionEngine is not None:
+            await ExecutionEngine.shutdown_global()
+        if LearningEngine is not None:
+            await LearningEngine.shutdown_global()
+        if CommunicationEngine is not None:
+            await CommunicationEngine.shutdown_global()
+        if EvaluationEngine is not None:
+            await EvaluationEngine.shutdown_global()
         # KnowledgeManager暂时注释掉（类不存在）
         # await KnowledgeManager.shutdown_global()
-        await MonitoringEngine.shutdown_global()
-        await SecurityEngine.shutdown_global()
+        if MonitoringEngine is not None:
+            await MonitoringEngine.shutdown_global()
+        if SecurityEngine is not None:
+            await SecurityEngine.shutdown_global()
 
         logger.info("✅ 核心系统已关闭")
 

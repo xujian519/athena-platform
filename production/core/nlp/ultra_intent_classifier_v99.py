@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 超高性能意图识别系统 v99
 Ultra High Performance Intent Recognition v99
 目标:99%准确率
 """
 
-from __future__ import annotations
 import asyncio
 import json
 from datetime import datetime

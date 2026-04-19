@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 预处理模块
 Preprocessing Module
@@ -10,7 +11,6 @@ Preprocessing Module
 版本: 1.0.0
 """
 
-from __future__ import annotations
 from .fuzzy_input_v2 import (
     FuzzyInputPreprocessor,
     InputAnalysisResult,

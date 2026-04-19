@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 异步场景规则检索器
 Async Scenario Rule Retriever
@@ -11,7 +12,6 @@ Async Scenario Rule Retriever
 - 优化N+1查询问题
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

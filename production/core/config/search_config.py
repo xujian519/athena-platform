@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 搜索引擎配置管理
 统一管理所有搜索引擎相关的配置
@@ -10,7 +11,6 @@
 - 密码安全存储
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from typing import Any

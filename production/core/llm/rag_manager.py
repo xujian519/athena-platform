@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 RAG管理器 - 统一检索增强生成架构
 RAG Manager - Unified Retrieval Augmented Generation Architecture
@@ -14,7 +15,6 @@ RAG Manager - Unified Retrieval Augmented Generation Architecture
 日期: 2026-01-23
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

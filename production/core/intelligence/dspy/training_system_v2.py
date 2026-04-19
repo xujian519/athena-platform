@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 DSPy专利案例分析训练系统 V2 - 改进版
 DSPy Patent Case Analysis Training System V2 - Enhanced
@@ -14,7 +15,6 @@ DSPy Patent Case Analysis Training System V2 - Enhanced
 版本: 2.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 import pickle

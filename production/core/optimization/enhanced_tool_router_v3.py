@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强工具路由器 - 第一阶段优化版本
 Enhanced Tool Router - Phase 1 Optimization
@@ -16,7 +17,6 @@ Enhanced Tool Router - Phase 1 Optimization
 基于: v2.0.0
 """
 
-from __future__ import annotations
 import logging
 from collections import defaultdict
 from dataclasses import dataclass, field

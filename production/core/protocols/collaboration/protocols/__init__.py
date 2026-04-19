@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协作协议 - 协议实现包
 Collaboration Protocols - Protocol Implementations Package
@@ -10,7 +11,6 @@ Collaboration Protocols - Protocol Implementations Package
 版本: 2.1.0
 """
 
-from __future__ import annotations
 from .communication import CommunicationProtocol
 from .coordination import CoordinationProtocol
 from .decision import DecisionProtocol

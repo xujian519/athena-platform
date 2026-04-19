@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 伦理约束执行器 - 执行伦理决策
 Ethical Constraints Enforcer - Execute Ethical Decisions
@@ -8,7 +9,6 @@ Ethical Constraints Enforcer - Execute Ethical Decisions
 3. 提供装饰器模式简化集成
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from enum import Enum

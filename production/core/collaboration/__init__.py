@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多智能体协作框架模块
 Multi-Agent Collaboration Framework Module
@@ -11,7 +12,6 @@ Multi-Agent Collaboration Framework Module
 - 资源管理和调度
 """
 
-from __future__ import annotations
 from .collaboration_manager import (
     CollaborationOrchestrator,
     # 协作管理相关类

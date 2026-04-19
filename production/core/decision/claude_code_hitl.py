@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Claude Code环境人机协作决策系统
 专门优化用于Claude Code环境的HITL实现
@@ -8,7 +9,6 @@ Claude Code环境人机协作决策系统
 创建时间: 2025-12-17
 """
 
-from __future__ import annotations
 import asyncio
 from dataclasses import dataclass
 from datetime import datetime

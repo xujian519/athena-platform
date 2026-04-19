@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 生产级OCR处理器
 集成真实的Tesseract OCR引擎
 """
 
-from __future__ import annotations
 import logging
 import os
 import subprocess

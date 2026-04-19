@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Neo4j知识图谱构建器
 Legal Knowledge Graph Builder for Neo4j
@@ -19,7 +20,6 @@ Legal Knowledge Graph Builder for Neo4j
 更新时间: 2026-01-25 (TD-001: 迁移到Neo4j)
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from typing import Any

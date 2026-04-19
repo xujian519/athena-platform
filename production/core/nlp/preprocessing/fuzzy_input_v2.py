@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺模糊输入预处理器(重构版)
 Xiaonuo Fuzzy Input Preprocessor (Refactored)
@@ -15,7 +16,6 @@ Xiaonuo Fuzzy Input Preprocessor (Refactored)
 版本: 2.0.0 (重构版)
 """
 
-from __future__ import annotations
 import hashlib
 import logging
 import threading

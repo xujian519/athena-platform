@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena工作平台 - 共用向量库构建器
 构建用于Athena和小诺的通用记忆向量库
 """
 
 # Numpy兼容性导入
-from __future__ import annotations
 import logging
 import os
 

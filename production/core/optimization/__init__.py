@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化模块
 Optimization Module
@@ -10,7 +11,6 @@ Optimization Module
 版本: v1.0.0
 """
 
-from __future__ import annotations
 from .xiaonuo_optimization_manager import (
     OptimizationConfig,
     OptimizationResult,

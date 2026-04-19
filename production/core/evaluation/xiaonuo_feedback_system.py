@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺评估反馈系统
 Xiaonuo Evaluation & Feedback System
@@ -9,7 +10,6 @@ Xiaonuo Evaluation & Feedback System
 创建时间: 2025-12-14
 """
 
-from __future__ import annotations
 import json
 import logging
 import os

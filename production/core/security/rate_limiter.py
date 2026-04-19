@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 API限流器模块
 Rate Limiter for Athena API
 """
 
-from __future__ import annotations
 import os
 import time
 from collections import defaultdict

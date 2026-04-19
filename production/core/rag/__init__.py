@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 rag
 """
-from __future__ import annotations

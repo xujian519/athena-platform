@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 重型依赖懒加载管理器
 Heavy Dependencies Lazy Loader
@@ -10,7 +11,6 @@ Heavy Dependencies Lazy Loader
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import importlib
 import logging
 from typing import Any

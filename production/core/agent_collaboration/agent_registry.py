@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Agent注册发现系统
 Agent Registry and Discovery System
@@ -6,7 +7,6 @@ Agent Registry and Discovery System
 负责Agent的注册、发现和管理
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

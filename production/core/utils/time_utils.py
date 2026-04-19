@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 时间处理工具模块
 """
 
-from __future__ import annotations
 import logging
 from datetime import datetime, timedelta
 

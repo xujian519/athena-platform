@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺智能工具选择系统
 Xiaonuo Intelligent Tool Selection System
@@ -10,7 +11,6 @@ Xiaonuo Intelligent Tool Selection System
 版本: v1.0.0 "智能工具选择95%+"
 """
 
-from __future__ import annotations
 import os
 from dataclasses import dataclass, field
 from datetime import datetime

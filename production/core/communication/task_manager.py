@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena通信系统 - 后台任务管理器
 Background Task Manager for Communication System
@@ -17,7 +18,6 @@ Background Task Manager for Communication System
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from collections.abc import Callable

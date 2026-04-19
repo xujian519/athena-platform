@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 输入安全验证器
 Input Security Validator
@@ -16,7 +17,6 @@ Input Security Validator
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import html
 import logging
 import math

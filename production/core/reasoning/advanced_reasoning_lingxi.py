@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 高级推理算法
 
@@ -13,7 +14,6 @@ Advanced Reasoning Algorithms
 - 反事实推理 (Counterfactual Reasoning)
 """
 
-from __future__ import annotations
 import math
 import time
 from dataclasses import dataclass, field

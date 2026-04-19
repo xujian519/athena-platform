@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 雅典娜知识图谱系统生产环境API主程序
 Production API Main Entry Point for Athena Knowledge Graph System
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import os

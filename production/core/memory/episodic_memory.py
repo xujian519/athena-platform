@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 情节记忆
 Episodic Memory
 """
 
-from __future__ import annotations
 import json
 from datetime import datetime
 from pathlib import Path

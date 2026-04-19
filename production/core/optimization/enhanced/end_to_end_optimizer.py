@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 端到端优化器 (End-to-End Optimizer)
 全链路性能优化,最大化端到端成功率
@@ -8,7 +9,6 @@
 优化目标: 端到端成功率 82% → 90%
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

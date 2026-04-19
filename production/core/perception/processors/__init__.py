@@ -1,10 +1,10 @@
+from __future__ import annotations
 """
 感知模块处理器包
 包含OCR、图像处理、文件处理等
 """
 
 # 导入实际存在的处理器
-from __future__ import annotations
 from .audio_processor import AudioProcessor
 from .enhanced_multimodal_processor import EnhancedMultiModalProcessor
 from .image_processor import ImageProcessor

@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 Athena自主控制系统主控制器
 整合平台管理、决策引擎和Agent协调
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from collections.abc import Callable

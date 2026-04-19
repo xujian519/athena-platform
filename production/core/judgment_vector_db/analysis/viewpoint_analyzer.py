@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 观点聚合分析器
 Viewpoint Aggregation Analyzer for Patent Judgments
@@ -10,7 +11,6 @@ Viewpoint Aggregation Analyzer for Patent Judgments
 - 生成观点分布报告
 """
 
-from __future__ import annotations
 import logging
 import re
 from collections import Counter, defaultdict

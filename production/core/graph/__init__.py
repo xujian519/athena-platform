@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 图和网络分析模块
 Graph and Network Analysis Module
@@ -6,7 +7,6 @@ Graph and Network Analysis Module
 提供NetworkX图操作工具,支持推理引擎、知识图谱、专利分析等场景
 """
 
-from __future__ import annotations
 from .networkx_utils import (
     CentralityMetric,
     EdgeInfo,

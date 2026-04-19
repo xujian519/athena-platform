@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺伦理框架生产集成脚本
 Production Integration Script for Xiaonuo Ethics Framework
@@ -6,7 +7,6 @@ Production Integration Script for Xiaonuo Ethics Framework
 此脚本为小诺主程序添加伦理约束,确保所有行动符合宪法原则
 """
 
-from __future__ import annotations
 import os
 import sys
 from pathlib import Path

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena通信系统 - Agent协作兼容层
 Agent Collaboration Compatibility Layer
@@ -15,7 +16,6 @@ Agent Collaboration Compatibility Layer
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import inspect
 import logging
 from collections.abc import Callable

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 向量检索器
 Vector Retriever for Athena Platform
@@ -6,7 +7,6 @@ Vector Retriever for Athena Platform
 整合BGE嵌入和向量数据库,提供完整的向量检索功能
 """
 
-from __future__ import annotations
 import os
 from typing import Any
 

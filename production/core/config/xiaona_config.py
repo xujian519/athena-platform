@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜智能体统一配置管理系统
 Xiaona Unified Configuration Management System
@@ -9,7 +10,6 @@ Xiaona Unified Configuration Management System
 版本: v2.0.0 "99分健康度"
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

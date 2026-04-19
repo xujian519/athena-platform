@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 流式处理器
 Stream Processor
@@ -22,7 +23,6 @@ Stream Processor
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import inspect
 import logging

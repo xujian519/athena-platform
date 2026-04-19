@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 # pyright: ignore
 # !/usr/bin/env python3
@@ -12,7 +13,6 @@ Cache Manager
 版本: v1.0 Cache Manager
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import hashlib

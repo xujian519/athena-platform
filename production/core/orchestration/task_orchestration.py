@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 任务编排引擎 - Task Orchestration Engine
 
@@ -9,7 +10,6 @@
 5. 错误处理和重试 - 容错机制
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import threading

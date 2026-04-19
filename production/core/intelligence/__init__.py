@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 智能决策模块
 
@@ -7,7 +8,6 @@
 - SmartRejectionHandler: 智能拒绝处理器
 """
 
-from __future__ import annotations
 from .smart_rejection import (
     RejectionDecision,
     RejectionReason,

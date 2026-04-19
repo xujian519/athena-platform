@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 上下文冲突检测器 - 第二阶段
 Context Conflict Detector - Phase 2
@@ -14,7 +15,6 @@ Context Conflict Detector - Phase 2
 创建: 2026-01-12
 """
 
-from __future__ import annotations
 import logging
 from collections import defaultdict
 from dataclasses import dataclass, field

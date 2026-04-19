@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - 统一LLM管理器
 核心协调者,管理所有模型适配器,提供统一的调用接口
@@ -6,7 +7,6 @@
 日期: 2026-01-23
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from datetime import datetime
@@ -19,8 +19,6 @@ from core.llm.base import (
 )
 from core.llm.cache_warmer import get_cache_warmer
 from core.llm.cost_monitor import get_cost_monitor
-from core.llm.model_api_capabilities import get_model_api_capabilities
-from core.llm.model_pointers import ModelPointers, get_model_pointers
 from core.llm.model_registry import ModelCapabilityRegistry, get_model_registry
 from core.llm.model_selector import IntelligentModelSelector
 from core.llm.prometheus_metrics import get_metrics
@@ -60,9 +58,6 @@ class UnifiedLLMManager:
         self.registry = registry or get_model_registry()
         self.selector = IntelligentModelSelector(self.registry)
         self.adapters: dict[str, BaseLLMAdapter] = {}
-
-        # 模型指针系统（语义化模型路由）
-        self.model_pointers: ModelPointers = get_model_pointers()
 
         # 提示词管理器(可选)
         self.prompt_manager = None
@@ -154,8 +149,8 @@ class UnifiedLLMManager:
 
     async def _load_adapters(self):
         """加载所有模型适配器"""
-        # 加载MLX适配器(优先本地模型)
-        await self._load_mlx_adapters()
+        # 加载Ollama适配器(优先本地模型)
+        await self._load_ollama_adapters()
 
         # 加载GLM适配器
         await self._load_glm_adapters()
@@ -217,32 +212,15 @@ class UnifiedLLMManager:
             except Exception as e:
                 logger.warning(f"⚠️ 本地模型 {model_id} 适配器加载失败: {e}")
 
-    async def _load_mlx_adapters(self):
-        """加载本地MLX模型适配器 (通过 OpenAI 兼容 API 连接 MLX 推理服务)"""
-        from core.llm.adapters.mlx_adapter import MLXAdapter, MLX_LLM_BASE_URL
+    async def _load_ollama_adapters(self):
+        """加载Ollama模型适配器"""
+        # Ollama模型列表(本地模型优先)
+        ollama_models = ["glm-4.7-flash:q4_K_M", "glm-4.7-flash", "qwen2.5-14b", "qwen2.5-7b"]
 
-        # 从 MLX 服务获取可用模型
-        mlx_models = ["glm47flash"]  # 默认模型
-
-        # 尝试从服务动态获取模型列表
-        try:
-            import aiohttp
-            async with aiohttp.ClientSession() as session:
-                async with session.get(
-                    f"{MLX_LLM_BASE_URL}/v1/models",
-                    timeout=aiohttp.ClientTimeout(total=5),
-                ) as resp:
-                    if resp.status == 200:
-                        data = await resp.json()
-                        remote_models = [m["id"] for m in data.get("data", [])]
-                        if remote_models:
-                            mlx_models = remote_models
-                            logger.info(f"📋 MLX 服务可用模型: {remote_models}")
-        except Exception as e:
-            logger.warning(f"⚠️ 无法连接 MLX 服务 ({MLX_LLM_BASE_URL}): {e}")
-
-        for model_id in mlx_models:
+        for model_id in ollama_models:
             try:
+                from core.llm.adapters.ollama_adapter import OllamaAdapter
+
                 # 先尝试从registry获取
                 capability = self.registry.get_capability(model_id)
 
@@ -253,18 +231,18 @@ class UnifiedLLMManager:
                         model_id=model_id,
                         model_type=ModelType.CHAT,
                         deployment=DeploymentType.LOCAL,
-                        max_context=32768,
+                        max_context=128000,
                         supports_streaming=True,
                         cost_per_1k_tokens=0.0,
                         quality_score=0.90,
                     )
 
-                adapter = MLXAdapter(model_id, capability, base_url=MLX_LLM_BASE_URL)
+                adapter = OllamaAdapter(model_id, capability)
                 if await adapter.initialize():
                     self.adapters[model_id] = adapter
-                    logger.info(f"✅ MLX模型加载成功: {model_id}")
+                    logger.info(f"✅ Ollama模型加载成功: {model_id}")
             except Exception as e:
-                logger.warning(f"⚠️ MLX模型 {model_id} 适配器加载失败: {e}")
+                logger.warning(f"⚠️ Ollama模型 {model_id} 适配器加载失败: {e}")
 
     async def _load_qwen_adapters(self):
         """加载Qwen云端模型适配器"""
@@ -380,23 +358,7 @@ class UnifiedLLMManager:
             )
 
             # 2. 智能选择模型
-            # 2.1 如果指定了 model_pointer（语义指针），优先解析
-            model_pointer = kwargs.pop('model_pointer', None)
-            if model_pointer:
-                available = list(self.adapters.keys())
-                model_id = self.model_pointers.resolve(model_pointer, available)
-                logger.info(f"📍 模型指针解析: {model_pointer} → {model_id}")
-                # 验证指针解析出的模型有对应适配器
-                if model_id not in self.adapters:
-                    logger.warning(
-                        f"⚠️ 指针解析的模型 {model_id} 无适配器，回退到智能选择"
-                    )
-                    model_id = None
-
-            # 2.2 常规智能选择
-            if not model_id:
-                model_id = await self.selector.select_model(request)
-
+            model_id = await self.selector.select_model(request)
             if not model_id:
                 logger.error("❌ 没有可用的模型")
                 return LLMResponse(
@@ -408,14 +370,6 @@ class UnifiedLLMManager:
             if not adapter:
                 logger.error(f"❌ 模型适配器不存在: {model_id}")
                 return LLMResponse(content=f"模型 {model_id} 不可用。", model_used=model_id)
-
-            # 3.1 基于 API 能力矩阵自动适配请求参数
-            api_caps = get_model_api_capabilities(model_id)
-            if api_caps:
-                # 推理模型不支持自定义温度时，清除 temperature 设置
-                if api_caps.temperature_mode == 'fixed_one' and 'temperature' in kwargs:
-                    kwargs.pop('temperature')
-                    logger.debug(f"模型 {model_id} 固定温度模式，忽略 temperature 参数")
 
             # 4. 应用提示词系统
             if self.prompt_manager:
@@ -575,7 +529,6 @@ class UnifiedLLMManager:
             **self.stats,
             "available_models": list(self.adapters.keys()),
             "total_models": len(self.adapters),
-            "model_pointers": self.model_pointers.to_dict(),
             "success_rate": (
                 self.stats["successful_requests"] / self.stats["total_requests"]
                 if self.stats["total_requests"] > 0

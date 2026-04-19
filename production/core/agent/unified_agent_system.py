@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一智能体系统
 Unified Agent System
@@ -10,7 +11,6 @@ Unified Agent System
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass

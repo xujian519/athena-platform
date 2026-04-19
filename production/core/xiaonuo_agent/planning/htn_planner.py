@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 HTN层次规划器 (Hierarchical Task Network Planner)
 实现分层任务网络规划算法
@@ -14,7 +15,6 @@ HTN层次规划器 (Hierarchical Task Network Planner)
 版本: v2.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import logging

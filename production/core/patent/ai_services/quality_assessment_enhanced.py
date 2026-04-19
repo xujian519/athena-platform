@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 P2-3: 综合质量评估增强系统
 
@@ -15,8 +16,6 @@ P2-3: 综合质量评估增强系统
 - "Patent Quality Assessment: A Machine Learning Approach" (2024)
 - "Evaluating Patent Quality: A Comprehensive Framework"
 """
-
-from __future__ import annotations
 
 import logging
 import time

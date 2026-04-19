@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能体提示词系统
 Agent Prompts System
@@ -12,7 +13,6 @@ Agent Prompts System
 - 小宸写作风格提示词
 """
 
-from __future__ import annotations
 from .writing_style_reference import XujianWritingStyleManager
 from .xiaochen_prompts import XiaochenPrompts
 from .xiaona_prompts import XiaonaPrompts

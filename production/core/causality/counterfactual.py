@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 反事实解释器 (Counterfactual Explainer)
 生成"如果...会怎样"的解释
@@ -7,7 +8,6 @@
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from datetime import datetime

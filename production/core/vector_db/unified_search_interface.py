@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena工作平台 - 统一向量检索接口
 Unified Vector Search Interface for Athena Platform
@@ -8,7 +9,6 @@ Unified Vector Search Interface for Athena Platform
 """
 
 # Numpy兼容性导入
-from __future__ import annotations
 import logging
 import os
 import sys

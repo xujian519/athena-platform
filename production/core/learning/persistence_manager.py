@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习数据持久化管理器
 Learning Data Persistence Manager
@@ -14,7 +15,6 @@ Learning Data Persistence Manager
 创建时间: 2026-01-28
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

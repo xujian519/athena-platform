@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 分析Agent (AnalysisAgent) - 技术分析专家
 
@@ -20,7 +21,6 @@
 - white_space_analysis: 空白领域分析
 """
 
-from __future__ import annotations
 import logging
 from datetime import datetime
 from typing import Any

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺增强意图分类器
 Xiaonuo Enhanced Intent Classifier
@@ -10,7 +11,6 @@ Xiaonuo Enhanced Intent Classifier
 版本: v2.0.0 "95%增强版"
 """
 
-from __future__ import annotations
 import functools
 import json
 import operator

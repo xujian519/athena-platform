@@ -1,10 +1,10 @@
+from __future__ import annotations
 """
 对话式参数收集器
 
 通过多轮对话收集缺失的参数,提升参数填充有效性。
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from datetime import datetime

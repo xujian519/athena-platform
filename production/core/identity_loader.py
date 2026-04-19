@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 身份信息加载模块
 确保Athena和小诺能够正确加载和使用永久存储的身份信息
 """
 
-from __future__ import annotations
 import json
 from pathlib import Path
 from typing import Any

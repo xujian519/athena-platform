@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多智能体协作框架核心模块
 Multi-Agent Collaboration Framework Core Module
@@ -6,7 +7,6 @@ Multi-Agent Collaboration Framework Core Module
 实现智能体间的协作机制,包括任务分配、通信协调、资源共享等功能
 """
 
-from __future__ import annotations
 import logging
 import threading
 import uuid

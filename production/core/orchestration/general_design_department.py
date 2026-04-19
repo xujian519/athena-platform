@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena总体设计部
 General Design Department for Athena Platform
@@ -14,7 +15,6 @@ General Design Department for Athena Platform
 版本: v1.0.0 "总体设计部"
 """
 
-from __future__ import annotations
 import json
 import logging
 from dataclasses import dataclass, field

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 文件缓存管理器 - Athena平台缓存系统
 File Cache Manager - Athena Platform Cache System
@@ -10,7 +11,6 @@ File Cache Manager - Athena Platform Cache System
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import json

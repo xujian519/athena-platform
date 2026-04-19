@@ -15,22 +15,19 @@ Xiaona Libra Goddess v4.0 - Professional Enhanced
 版本: v4.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any
+from typing import Any, Dict, List, Optional
 
-# 初始化日志
-logger = logging.getLogger(__name__)
 
 # 导入基础智能体
 from .athena_xiaona_with_memory import AthenaXiaonaAgent
 
 # 导入统一推理引擎编排器
 try:
-    from core.reasoning.unified_reasoning_orchestrator import (
+    from ..reasoning.unified_reasoning_orchestrator import (
         EngineRecommendation,
         TaskComplexity,
         TaskDomain,
@@ -40,79 +37,23 @@ try:
     )
 
     REASONING_AVAILABLE = True
-    logger.info("✅ 统一推理引擎编排器已加载")
 except ImportError:
-    try:
-        # 尝试相对导入
-        from ..reasoning.unified_reasoning_orchestrator import (
-            EngineRecommendation,
-            TaskComplexity,
-            TaskDomain,
-            TaskType,
-            UnifiedReasoningOrchestrator,
-            get_orchestrator,
-        )
-
-        REASONING_AVAILABLE = True
-        logger.info("✅ 统一推理引擎编排器已加载(相对导入)")
-    except ImportError:
-        REASONING_AVAILABLE = False
-        logger.warning("⚠️ 统一推理引擎编排器不可用,将使用基础推理")
-        # 创建占位符类
-        class UnifiedReasoningOrchestrator:
-            pass
-        class EngineRecommendation:
-            pass
-        class TaskComplexity(Enum):
-            LOW = "low"
-            MEDIUM = "medium"
-            HIGH = "high"
-        class TaskDomain(Enum):
-            PATENT_LAW = "patent_law"
-            GENERAL_ANALYSIS = "general_analysis"
-        class TaskType(Enum):
-            GENERAL_REASONING = "general_reasoning"
-        def get_orchestrator():
-            return None
+    REASONING_AVAILABLE = False
+    logging.warning("统一推理引擎编排器不可用,将使用基础推理")
 
 # 导入专业意见答复服务
 try:
-    # 尝试绝对导入(从production.services导入)
-    from production.services.office_action_response.src.professional_oa_responder import (
+    from services.office_action_response.src.professional_oa_responder import (
         ProfessionalOAResponder,
         respond_to_office_action,
     )
 
     OA_RESPONDER_AVAILABLE = True
-    logger.info("✅ 专业意见答复服务已加载(绝对导入)")
 except ImportError:
-    try:
-        # 尝试相对导入(添加services目录到路径)
-        import sys
-        from pathlib import Path
-        # 添加services目录到路径(路径: production/services)
-        services_path = str(Path(__file__).parent.parent.parent / "services")
-        if services_path not in sys.path:
-            sys.path.insert(0, services_path)
+    OA_RESPONDER_AVAILABLE = False
+    logging.warning("专业意见答复服务不可用")
 
-        from office_action_response.src.professional_oa_responder import (
-            ProfessionalOAResponder,
-            respond_to_office_action,
-        )
-
-        OA_RESPONDER_AVAILABLE = True
-        logger.info("✅ 专业意见答复服务已加载(相对导入)")
-    except ImportError:
-        OA_RESPONDER_AVAILABLE = False
-        logger.warning("⚠️ 专业意见答复服务不可用,将使用LLM直接生成答复")
-        # 创建占位符类
-        class ProfessionalOAResponder:
-            """专业意见答复器(占位符实现)"""
-            async def respond(self, oa_text, context):
-                return "专业意见答复功能需要配置服务"
-
-        async def respond_to_office_action(oa_text, context=None):
-            return "专业意见答复功能需要配置服务"
+logger = logging.getLogger(__name__)
 
 
 class ProfessionalTaskType(Enum):
@@ -138,7 +79,7 @@ class TaskContext:
     description: str
     requires_hitl: bool = False
     priority: int = 5
-    metadata: dict[str, Any] = None
+    metadata: dict[str, Any] | None = None
 
     def __post_init__(self):
         if self.metadata is None:

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 评估指标系统
 Evaluation Metrics System
@@ -10,7 +11,6 @@ Evaluation Metrics System
 创建时间: 2025-01-04
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from typing import Any

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 全链路追踪系统
 
@@ -9,7 +10,6 @@
 5. 分布式追踪支持
 """
 
-from __future__ import annotations
 import contextvars
 import logging
 import threading

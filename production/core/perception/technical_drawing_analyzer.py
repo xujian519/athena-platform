@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 技术图纸智能分析器
 Technical Drawing Intelligent Analyzer
@@ -10,7 +11,6 @@ Technical Drawing Intelligent Analyzer
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import base64
 import io
 import json

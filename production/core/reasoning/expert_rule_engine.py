@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专家级规则推理引擎
 Expert Rule Reasoning Engine
@@ -9,7 +10,6 @@ Expert Rule Reasoning Engine
 版本: v1.0.0 "专家推理"
 """
 
-from __future__ import annotations
 import json
 import logging
 from dataclasses import dataclass, field

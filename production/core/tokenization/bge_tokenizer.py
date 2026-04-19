@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BGE-M3 Tokenizer - 中文分词和文本预处理
 
@@ -10,7 +11,6 @@ BGE-M3 Tokenizer - 中文分词和文本预处理
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass

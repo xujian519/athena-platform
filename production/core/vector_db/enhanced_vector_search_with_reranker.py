@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Reranker增强的向量搜索引擎
 Enhanced Vector Search with Reranker
@@ -9,7 +10,6 @@ Enhanced Vector Search with Reranker
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 import time
 from dataclasses import dataclass, field

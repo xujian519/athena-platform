@@ -1,10 +1,10 @@
+from __future__ import annotations
 """
 database模块
 
 提供统一的数据库连接管理和常量定义
 """
 
-from __future__ import annotations
 from .connection_manager import (
     # 异步版本
     DatabaseConnectionManager,

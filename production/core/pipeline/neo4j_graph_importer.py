@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Neo4j知识图谱导入模块
 Neo4j Knowledge Graph Importer
@@ -19,7 +20,6 @@ Neo4j Knowledge Graph Importer
 更新时间: 2026-01-25 (TD-001: 迁移到Neo4j)
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena状态持久化模块
 
@@ -9,5 +10,4 @@ Version: v1.0.0
 """
 
 
-from __future__ import annotations
 __all__ = ["CheckpointMetadata", "StatePersistenceManager"]

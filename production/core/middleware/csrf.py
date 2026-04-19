@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 CSRF保护中间件
 CSRF Protection Middleware
@@ -11,7 +12,6 @@ CSRF Protection Middleware
 - 安全配置
 """
 
-from __future__ import annotations
 import logging
 import secrets
 from collections.abc import Callable

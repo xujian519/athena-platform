@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专业化Agent实现 - 向后兼容重定向
 Specialized Agents Implementation - Backward Compatibility Redirect
@@ -43,7 +44,6 @@ from core.agent_collaboration.specialized_agents import (
 
 """
 
-from __future__ import annotations
 import logging
 import warnings
 

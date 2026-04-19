@@ -1,3 +1,4 @@
+from __future__ import annotations
 # pyright: ignore
 """
 高级决策模型集合
@@ -9,7 +10,6 @@ Author: Athena AI Team
 Version: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field

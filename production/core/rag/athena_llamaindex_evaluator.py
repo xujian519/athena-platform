@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台LlamaIndex评估框架集成
 Athena Platform LlamaIndex Evaluation Framework Integration
@@ -6,7 +7,6 @@ Athena Platform LlamaIndex Evaluation Framework Integration
 结合Athena业务逻辑 + LlamaIndex标准化评估
 """
 
-from __future__ import annotations
 import json
 import logging
 import sys

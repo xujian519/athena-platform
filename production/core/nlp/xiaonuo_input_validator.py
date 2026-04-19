@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺输入验证和安全检查器
 Xiaonuo Input Validator and Security Checker
@@ -16,7 +17,6 @@ Xiaonuo Input Validator and Security Checker
 日期: 2025-12-18
 """
 
-from __future__ import annotations
 import ast
 import base64
 import hashlib

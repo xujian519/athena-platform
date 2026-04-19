@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 审查意见答复模式提取器
 Office Action Response Pattern Extractor
@@ -16,7 +17,6 @@ Office Action Response Pattern Extractor
 版本: v1.0.0
 """
 
-from __future__ import annotations
 from datetime import datetime
 from typing import Any
 

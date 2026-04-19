@@ -1,41 +1,21 @@
 #!/usr/bin/env python3
 """
-融合查询引擎 (NebulaGraph版本 - 已废弃)
+融合查询引擎
 Fusion Query Engine for pgvector + NebulaGraph Deep Integration
-
-⚠️ DEPRECATED (TD-001): 系统已迁移到Neo4j，此文件依赖NebulaGraph，不再维护。
-废弃日期: 2026-04-03
-建议替代: 使用 core/fusion/vector_graph_fusion_service.py (Neo4j后端)
 
 作者: 小诺·双鱼公主
 创建时间: 2025-12-28
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import json
 import logging
-import warnings
 from dataclasses import dataclass, field
 from datetime import datetime
-
-import asyncpg
-import numpy as np
-
-warnings.warn(
-    "vgraph_fusion_query_engine 依赖已废弃的NebulaGraph(TD-001)，请迁移到Neo4j版本",
-    DeprecationWarning,
-    stacklevel=2,
-)
 from enum import Enum
-from typing import Any
+from typing import Any, Dict, List, Optional, Tuple
 
-# NebulaGraph SessionPool type stub (deprecated)
-try:
-    from nebula3.gclient.net.SessionPool import SessionPool as SessionPool
-except ImportError:
-    SessionPool = Any  # type: ignore
 
 from core.async_main import async_main
 from core.config.secure_config import get_config
@@ -163,11 +143,11 @@ class FusionQueryEngine:
         self,
         query_text: str,
         query_vector: list[float],
-        entity_types: list[str] | None = None,
+        entity_types: list["key"] = None,
         limit: int = 10,
         filters: dict[str, Any] | None = None,
         strategy: str = "balanced",
-    ) -> tuple[list[QueryResult], dict[str, Any]]:
+    ]) -> tuple[list[QueryResult], dict[str, Any]]:
         """
         执行融合查询
 
@@ -690,7 +670,7 @@ async def main():
     nebula_config = config.get_nebula_config()
 
     # 创建连接池
-    pg_pool = await get_postgres_pool(
+    await get_postgres_pool(
         host=pg_config.get("host", "localhost"),
         port=pg_config.get("port", 5438),
         user=pg_config.get("user", "postgres"),

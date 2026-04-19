@@ -10,7 +10,6 @@ IP管理系统,知识产权全生命周期管理专家
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from typing import Any

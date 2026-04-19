@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 coordinator
 """
-from __future__ import annotations

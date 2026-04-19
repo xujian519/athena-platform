@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 性能监控仪表板
 Performance Monitoring Dashboard
@@ -9,7 +10,6 @@ Performance Monitoring Dashboard
 创建时间: 2026-01-11
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

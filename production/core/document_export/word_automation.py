@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Word/WPS自动化接口 - Athena平台深度集成版
 Word/WPS Automation Interface - Deep Integration for Athena Platform
@@ -13,7 +14,6 @@ Word/WPS Automation Interface - Deep Integration for Athena Platform
 版本: v1.0.0 "深度集成"
 """
 
-from __future__ import annotations
 import logging
 import os
 import platform

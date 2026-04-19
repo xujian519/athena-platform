@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 动态提示词系统API路由
 Dynamic Prompt System API Routes
@@ -6,7 +7,6 @@ Dynamic Prompt System API Routes
 提供优化后的动态提示词系统的API端点
 """
 
-from __future__ import annotations
 import logging
 from datetime import datetime
 from typing import Any

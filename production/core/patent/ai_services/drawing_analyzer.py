@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 专利附图智能分析系统 v1.0
 
@@ -16,7 +17,6 @@
 日期: 2026-03-23
 """
 
-from __future__ import annotations
 import base64
 import json
 import logging
@@ -152,7 +152,7 @@ class PatentDrawingAnalyzer:
     # 模型配置
     MODEL_CONFIG = {
         "model": "qwen3.5",  # 本地多模态模型
-        "provider": "mlx",
+        "provider": "ollama",
         "temperature": 0.2,
         "max_tokens": 2000
     }

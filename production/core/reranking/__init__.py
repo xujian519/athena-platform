@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 reranking
 """
-from __future__ import annotations

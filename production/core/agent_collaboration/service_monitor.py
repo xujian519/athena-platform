@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 服务监控仪表板
 Service Monitoring Dashboard
@@ -10,7 +11,6 @@ Service Monitoring Dashboard
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import logging

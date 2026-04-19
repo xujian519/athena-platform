@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 推理历史分析和增量学习系统
 Reasoning History Analysis and Incremental Learning System
@@ -15,7 +16,6 @@ Reasoning History Analysis and Incremental Learning System
 5. 预测性引擎选择
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import json

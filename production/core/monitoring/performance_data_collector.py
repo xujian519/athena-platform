@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 性能数据收集系统
 Performance Data Collection System
@@ -15,7 +16,6 @@ Performance Data Collection System
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 import sqlite3

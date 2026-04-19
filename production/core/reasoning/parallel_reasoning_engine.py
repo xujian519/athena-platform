@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 并行推理引擎和结果融合系统
 Parallel Reasoning Engine and Result Fusion System
@@ -15,7 +16,6 @@ Parallel Reasoning Engine and Result Fusion System
 5. 提升推理准确率20-30%
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field

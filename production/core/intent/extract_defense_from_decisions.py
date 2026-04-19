@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 从专利无效决定书中提取成功辩护样本
 Extract Successful Defense Samples from Patent Invalidation Decisions
@@ -14,7 +15,6 @@ Extract Successful Defense Samples from Patent Invalidation Decisions
 创建: 2026-01-13
 """
 
-from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass, field

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一配置管理
 Unified Configuration Management
@@ -10,7 +11,6 @@ Unified Configuration Management
 版本: 1.0.1
 """
 
-from __future__ import annotations
 from enum import Enum
 from pathlib import Path
 from typing import Any
@@ -266,6 +266,11 @@ class MultimodalConfig(BaseSettings):
     username: str = Field("athena_platform", description="认证用户名")
     password: str = Field("", description="认证密码")
 
+    # 多模态模型配置 (8009端口常驻)
+    model_url: str = Field("http://127.0.0.1:8009", description="多模态模型服务URL")
+    model_name: str = Field("gemma-4-e2b-it-4bit", description="多模态模型名称")
+    api_key: str = Field("xj781102@", description="多模态模型服务API密钥")
+
     # 安全配置
     max_upload_size: int = Field(100 * 1024 * 1024, gt=0, description="最大上传文件大小(字节)")
     max_filename_length: int = Field(255, gt=0, description="最大文件名长度")
@@ -293,6 +298,66 @@ class MultimodalConfig(BaseSettings):
         extra = "ignore"
 
 
+class RerankConfig(BaseSettings):
+    """Rerank模型配置"""
+
+    # 服务配置 (8009端口常驻)
+    model_url: str = Field("http://127.0.0.1:8009", description="Rerank模型服务URL")
+    model_name: str = Field("jina-reranker-v3-mlx", description="Rerank模型名称")
+    api_key: str = Field("xj781102@", description="Rerank模型服务API密钥")
+
+    # 性能配置
+    top_k: int = Field(100, gt=0, description="重排序前的Top-K数量")
+    final_top_k: int = Field(10, gt=0, description="最终返回的Top-K数量")
+    threshold: float = Field(0.2, gt=0, le=1, description="重排序阈值")
+    batch_size: int = Field(16, gt=0, description="批处理大小")
+
+    # 超时配置
+    request_timeout: int = Field(30, gt=0, description="请求超时时间(秒)")
+
+    # 缓存配置
+    cache_enabled: bool = True
+    cache_ttl: int = Field(300, gt=0, description="缓存生存时间(秒)")
+
+    class Config:
+        env_prefix = "RERANK_"
+        env_file = ".env"
+        extra = "ignore"
+
+
+class MinerUConfig(BaseSettings):
+    """MinerU文档解析服务配置"""
+
+    # 服务配置 (本地部署，端口7860)
+    base_url: str = Field("http://127.0.0.1:7860", description="MinerU服务URL")
+    backend: str = Field("pipeline", description="解析后端: pipeline/hybrid-auto-engine")
+    parse_method: str = Field("auto", description="解析方法: auto/txt/ocr")
+    default_language: str = Field("ch", description="默认语言")
+
+    # 功能开关
+    table_enable: bool = True
+    formula_enable: bool = True
+    return_md: bool = True
+
+    # 超时配置
+    request_timeout: int = Field(300, gt=0, description="同步请求超时(秒)")
+    async_poll_interval: float = Field(2.0, gt=0, description="异步轮询间隔(秒)")
+    async_max_wait: int = Field(600, gt=0, description="异步最大等待(秒)")
+
+    # 降级策略
+    auto_fallback_enabled: bool = True
+    fallback_to_tesseract: bool = True
+
+    # 缓存配置
+    cache_enabled: bool = True
+    cache_ttl: int = Field(3600, gt=0, description="解析结果缓存TTL(秒)")
+
+    class Config:
+        env_prefix = "MINERU_"
+        env_file = ".env"
+        extra = "ignore"
+
+
 class ApplicationConfig(BaseSettings):
     """应用主配置"""
 
@@ -314,6 +379,8 @@ class ApplicationConfig(BaseSettings):
     database: DatabaseConfig = Field(default_factory=DatabaseConfig)
     service: ServiceConfig = Field(default_factory=ServiceConfig)
     multimodal: MultimodalConfig = Field(default_factory=MultimodalConfig)
+    rerank: RerankConfig = Field(default_factory=RerankConfig)
+    mineru: MinerUConfig = Field(default_factory=MinerUConfig)
 
     class Config:
         env_file = ".env"
@@ -448,3 +515,13 @@ def get_service_config() -> ServiceConfig:
 def get_multimodal_config() -> MultimodalConfig:
     """获取多模态文件系统配置"""
     return get_config().multimodal
+
+
+def get_rerank_config() -> RerankConfig:
+    """获取Rerank模型配置"""
+    return get_config().rerank
+
+
+def get_mineru_config() -> MinerUConfig:
+    """获取MinerU文档解析配置"""
+    return get_config().mineru

@@ -14,12 +14,8 @@ NebulaGraph Enhanced Intent Recognition System
 利用知识图谱提升意图识别准确率
 """
 
-from __future__ import annotations
 import json
-import random
 from pathlib import Path
-
-import numpy as np
 
 from core.logging_config import setup_logging
 
@@ -46,6 +42,7 @@ config = get_config()
 
 # NebulaGraph导入
 try:
+    from nebula3.common import *
     from nebula3.Config import Config
     from nebula3.gclient.net import ConnectionPool
 except ImportError:

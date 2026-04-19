@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律引用关系抽取器
 Legal Citation Relation Extractor
@@ -6,7 +7,6 @@ Legal Citation Relation Extractor
 从法律条款中抽取法规之间的引用关系
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass

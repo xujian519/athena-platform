@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 CAP05 创造性分析 + STORM 集成
 
@@ -15,7 +16,6 @@ CAP05 创造性分析 + STORM 集成
 创建时间: 2026-01-02
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利分析模块
 Patent Analysis Module
@@ -11,7 +12,6 @@ Patent Analysis Module
 版本: 3.0.0
 """
 
-from __future__ import annotations
 from .analyzer import PatentAnalyzer
 from .evaluator import PatentEvaluator
 from .knowledge_graph import PatentKnowledgeGraph

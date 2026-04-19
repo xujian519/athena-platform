@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协议错误处理增强模块
 Protocol Error Handling Enhancement
@@ -6,7 +7,6 @@ Protocol Error Handling Enhancement
 提供统一的错误处理、重试机制、降级策略和恢复功能
 """
 
-from __future__ import annotations
 import asyncio
 import functools
 import logging

@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 数据库连接管理器
 统一管理所有数据库连接池和连接配置
 """
 
-from __future__ import annotations
 import logging
 from contextlib import asynccontextmanager
 from typing import Any

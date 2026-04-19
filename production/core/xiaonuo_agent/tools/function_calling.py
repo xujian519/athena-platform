@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Function Calling工具调用系统
 支持工具定义、注册、调用和结果处理
@@ -15,7 +16,6 @@ Function Calling工具调用系统
 版本: v2.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import inspect

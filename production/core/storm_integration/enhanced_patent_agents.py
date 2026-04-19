@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强的专利专家 Agent 系统
 
@@ -14,7 +15,6 @@
 创建时间: 2026-01-02
 """
 
-from __future__ import annotations
 import logging
 from typing import Any
 

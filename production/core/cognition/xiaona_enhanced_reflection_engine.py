@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # pyright: ignore
 """
 小娜增强反思引擎
@@ -12,7 +13,6 @@ Xiaona Enhanced Reflection Engine
 版本: v2.0.0 Professional
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import re

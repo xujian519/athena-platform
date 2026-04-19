@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Neo4j优化的真实数据库连接器
 Neo4j Optimized Real Database Connectors
@@ -22,7 +23,6 @@ Neo4j Optimized Real Database Connectors
 更新时间: 2026-01-25 (TD-001: 从NebulaGraph迁移到Neo4j)
 """
 
-from __future__ import annotations
 import asyncio
 import os
 import re

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 健康检查模块
 Health Check Module
@@ -5,7 +6,6 @@ Health Check Module
 提供系统健康检查和状态报告功能
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field

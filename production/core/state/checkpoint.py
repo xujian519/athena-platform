@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 检查点管理器
 Checkpoint Manager
@@ -13,7 +14,6 @@ Checkpoint Manager
 版本: v1.0.0 "Phase 1"
 """
 
-from __future__ import annotations
 import json
 import logging
 from dataclasses import dataclass

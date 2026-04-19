@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜搜索模块
 Xiaona Search Module
@@ -10,7 +11,6 @@ Xiaona Search Module
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from typing import Any, Dict, List, Optional, Union

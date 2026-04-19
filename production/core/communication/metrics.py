@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena通信系统 - 性能指标收集
 Performance Metrics for Communication System
@@ -17,7 +18,6 @@ Performance Metrics for Communication System
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 from collections import deque
 from dataclasses import dataclass, field

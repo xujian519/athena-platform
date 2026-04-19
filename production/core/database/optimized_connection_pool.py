@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化的数据库连接池管理器
 支持PostgreSQL、Redis等多数据库的连接池优化和监控
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import time

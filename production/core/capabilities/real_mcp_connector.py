@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 真实MCP服务器连接器
 Real MCP Server Connector
@@ -6,7 +7,6 @@ Real MCP Server Connector
 实现与实际MCP服务器的连接和通信
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能工具路由系统
 Intelligent Tool Router
@@ -10,7 +11,6 @@ Intelligent Tool Router
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

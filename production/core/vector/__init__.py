@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台向量管理模块
 Vector Management Module for Athena Platform
@@ -13,7 +14,6 @@ Vector Management Module for Athena Platform
 """
 
 # 导入统一向量管理器
-from __future__ import annotations
 from .unified_vector_manager import (
     UnifiedVectorManager,
     VectorDomain,

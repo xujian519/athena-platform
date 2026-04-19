@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 轻量级实时参数验证模块
 Lightweight Realtime Parameter Validator Module
@@ -17,7 +18,6 @@ Lightweight Realtime Parameter Validator Module
 版本: v1.0.0 "轻量级集成版"
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import json

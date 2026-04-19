@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Agent核心模块
 Agent Core Module
@@ -10,7 +11,6 @@ Agent Core Module
 版本: 3.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import uuid

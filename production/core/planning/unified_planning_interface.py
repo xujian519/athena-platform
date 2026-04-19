@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一规划器接口
 Unified Planner Interface
@@ -11,7 +12,6 @@ Unified Planner Interface
 版本: v1.0.0 "统一接口"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import uuid

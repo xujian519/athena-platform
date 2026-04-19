@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 工具模块 (Tools Module)
 Function Calling工具调用系统
@@ -8,7 +9,6 @@ Function Calling工具调用系统
 版本: v2.0.0
 """
 
-from __future__ import annotations
 from core.xiaonuo_agent.tools.function_calling import (
     FunctionCallingSystem,
     ToolCallRecord,

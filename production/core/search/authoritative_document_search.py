@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 权威文档检索系统
 Authoritative Document Search System
@@ -9,7 +10,6 @@ Authoritative Document Search System
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 import time
 from dataclasses import dataclass

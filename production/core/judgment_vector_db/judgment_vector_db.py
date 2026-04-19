@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利判决向量数据库系统
 Patent Judgment Vector Database System
@@ -6,7 +7,6 @@ Patent Judgment Vector Database System
 统一的系统入口,整合所有功能模块
 """
 
-from __future__ import annotations
 from typing import Any
 
 from core.logging_config import setup_logging

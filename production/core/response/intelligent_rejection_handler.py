@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能拒绝处理器
 Intelligent Rejection Handler
@@ -16,7 +17,6 @@ Intelligent Rejection Handler
 版本: v1.0.0 "智能拒绝"
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

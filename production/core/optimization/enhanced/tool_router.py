@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强工具路由器 (Enhanced Tool Router)
 基于多因素评分和竞争决策的智能工具选择
@@ -8,7 +9,6 @@
 优化目标: 工具选择准确率 89% → 94%
 """
 
-from __future__ import annotations
 import heapq
 import logging
 from dataclasses import dataclass, field

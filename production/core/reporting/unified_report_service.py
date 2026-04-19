@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一报告服务 (Unified Report Service)
 
@@ -13,8 +14,6 @@
 Author: Athena工作平台
 Date: 2026-01-16
 """
-
-from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field

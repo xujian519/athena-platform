@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺全量平台控制器 v3.0
 Xiaonuo Full Platform Controller v3.0
@@ -14,7 +15,6 @@ Xiaonuo Full Platform Controller v3.0
 创建: 2025-12-30
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import subprocess

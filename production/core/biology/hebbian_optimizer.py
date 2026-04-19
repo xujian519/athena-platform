@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 赫布定律优化系统
 Hebbian Learning Optimizer
@@ -16,7 +17,6 @@ Hebbian Learning Optimizer
 版本: v0.1.2 "晨星初现"
 """
 
-from __future__ import annotations
 import heapq
 import json
 import logging

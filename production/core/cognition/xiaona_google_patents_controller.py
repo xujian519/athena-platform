@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 # pyright: ignore
 # !/usr/bin/env python3
@@ -13,7 +14,6 @@ Xiaona Google Patents Full Text Retrieval Control System
 版本: v1.0.0 Patent Intelligence Control
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

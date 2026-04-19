@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 持续性能基准测试系统 - 阶段5优化
 自动化基准测试、性能回归检测、优化建议生成
@@ -8,7 +9,6 @@
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import json
 import time
 from collections.abc import Callable

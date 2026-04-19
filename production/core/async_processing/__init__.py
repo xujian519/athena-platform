@@ -1,10 +1,10 @@
+from __future__ import annotations
 """
 异步处理模块 - Async Processing Module
 
 提供异步任务执行、数据库异步化、BERT异步化、API异步调用等功能
 """
 
-from __future__ import annotations
 from core.async_processing.async_engine import (
     AsyncAPIClient,
     AsyncBERTClassifier,

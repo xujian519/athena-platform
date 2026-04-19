@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 CLI人机交互专利分析系统
 CLI-based Human-in-the-Loop Patent Analysis System
@@ -15,7 +16,6 @@ CLI-based Human-in-the-Loop Patent Analysis System
 5. 延迟决策 (save for later)
 """
 
-from __future__ import annotations
 import json
 import random
 import subprocess

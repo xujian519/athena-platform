@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BGE-M3意图分类器
 BGE-M3 Intent Classifier
@@ -15,7 +16,6 @@ BGE-M3 Intent Classifier
 版本: v1.0.0
 创建: 2026-01-13
 """
-from __future__ import annotations
 import json
 import sys
 import time

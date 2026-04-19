@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习引擎统一接口
 Learning Engine Unified Interface
@@ -13,7 +14,6 @@ Learning Engine Unified Interface
 创建时间: 2026-01-28
 """
 
-from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field

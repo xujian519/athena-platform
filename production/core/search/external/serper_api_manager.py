@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Serper API 管理器
 Serper API Manager
@@ -10,7 +11,6 @@ Serper API Manager
 创建: 2025-12-31
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能体身份信息管理器
 Agent Identity Manager
@@ -6,7 +7,6 @@ Agent Identity Manager
 负责统一管理所有智能体的身份信息和展示功能
 """
 
-from __future__ import annotations
 import json
 from pathlib import Path
 from typing import Any

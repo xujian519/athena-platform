@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 tools
 """
-from __future__ import annotations

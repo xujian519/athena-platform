@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 动态批处理优化器 - 阶段3优化
 根据GPU内存实时调整批处理大小,最大化吞吐量
@@ -8,7 +9,6 @@
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 import threading
 import time

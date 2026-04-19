@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺平台控制API扩展
 Xiaonuo Platform Control API Extension
@@ -11,7 +12,6 @@ Xiaonuo Platform Control API Extension
 """
 
 # 导入平台控制器
-from __future__ import annotations
 import sys
 from pathlib import Path
 

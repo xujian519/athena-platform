@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 身份认证和授权模块
 Authentication and Authorization Module
@@ -6,7 +7,6 @@ Authentication and Authorization Module
 提供JWT令牌认证和API Key认证功能
 """
 
-from __future__ import annotations
 import logging
 import secrets
 import time

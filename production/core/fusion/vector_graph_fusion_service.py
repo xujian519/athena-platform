@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 向量-图融合记忆服务
 Vector-Graph Fusion Memory Service
@@ -16,7 +17,6 @@ Vector-Graph Fusion Memory Service
 版本: v3.0.0 (TD-001: 统一图数据库选择为Neo4j)
 """
 
-from __future__ import annotations
 import json
 import logging
 import os

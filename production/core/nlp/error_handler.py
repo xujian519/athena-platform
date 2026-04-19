@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 NLP系统错误处理和重试机制
 NLP System Error Handler and Retry Mechanism
@@ -10,7 +11,6 @@ NLP System Error Handler and Retry Mechanism
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 import random

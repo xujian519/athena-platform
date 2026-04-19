@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BGE-M3模型优化加载器
 Optimized BGE-M3 Model Loader
@@ -8,7 +9,6 @@ Optimized BGE-M3 Model Loader
 版本: v1.1.0
 """
 
-from __future__ import annotations
 import os
 import threading
 import time
@@ -28,10 +28,6 @@ class BGEM3ModelLoader:
         "bge-m3": {
             "dimension": 1024,
             "max_seq_length": 8192,
-            "mode": "api",  # 默认使用 API 模式
-            "api_url": "http://127.0.0.1:8766/v1",
-            "api_model": "bge-m3",
-            # 本地加载路径（降级备用）
             "model_path": "/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3/",
             "fallback_paths": [
                 "/Users/xujian/Athena工作平台/models/converted/bge-m3",
@@ -39,7 +35,7 @@ class BGEM3ModelLoader:
             ],
             "supported_formats": ["pytorch_model.bin", "model.safetensors"],
             "device_priority": ["mps", "cuda", "cpu"],
-            "batch_size": 8,
+            "batch_size": 32,
             "normalize_embeddings": True,
         }
     }
@@ -61,7 +57,6 @@ class BGEM3ModelLoader:
         self.is_loaded = False
         self.load_lock = threading.Lock()
         self.load_time = 0.0
-        self._api_mode = self.config.get("mode", "api") == "api"
 
         # 性能统计
         self.stats = {
@@ -174,18 +169,7 @@ class BGEM3ModelLoader:
             self.stats["load_attempts"] += 1
 
             try:
-                # API 模式：检查 API 服务可用性
-                if self._api_mode:
-                    if self._check_api_available():
-                        self.device = "api"
-                        self.is_loaded = True
-                        logger.info(f"✅ {self.model_name} API 模式就绪 ({self.config['api_url']})")
-                        return True
-                    else:
-                        logger.warning("⚠️ API 不可用，降级到本地加载")
-                        self._api_mode = False
-
-                # 本地模式：查找模型路径并加载
+                # 查找模型路径
                 model_path = self._find_model_path()
                 if not model_path:
                     error_msg = f"❌ 未找到有效的{self.model_name}模型路径"
@@ -196,9 +180,13 @@ class BGEM3ModelLoader:
                 # 检测设备
                 device = self._detect_device()
 
+                # 记录开始时间
+                time.time()
+
                 # 检查是否启用simple_backend模式
                 use_simple_backend = self.config.get("simple_backend", False)
 
+                # 如果启用simple_backend，使用内置简单加载器
                 if use_simple_backend:
                     import numpy as np
                     np.random.seed(42)
@@ -220,12 +208,13 @@ class BGEM3ModelLoader:
                         SENTENCE_TRANSFORMERS_AVAILABLE = False
                         logger.warning("⚠️ sentence_transformers不可用，将使用内置加载器")
 
+                    # 如果sentence_transformers不可用，使用内置简单加载器
                     if not SENTENCE_TRANSFORMERS_AVAILABLE:
                         import numpy as np
                         np.random.seed(42)
                         dummy_vector = np.random.randn(self.config["dimension"]).astype(np.float32)
 
-                        logger.info("🔧 使用内置简单加载器（sentence_transformers不可用）")
+                        logger.info("🔧 使用内置简单加载器（simple_backend或sentence_transformers不可用）")
                         self.model = type('SimpleModel', (), {
                             'encode': lambda texts: [dummy_vector for _ in texts]
                         })
@@ -251,16 +240,6 @@ class BGEM3ModelLoader:
                 self.stats["load_failures"] += 1
                 return False
 
-    def _check_api_available(self) -> bool:
-        """检查 API 嵌入服务是否可用"""
-        try:
-            import requests
-            api_url = self.config.get("api_url", "http://127.0.0.1:8766/v1")
-            resp = requests.get(f"{api_url}/models", timeout=5)
-            return resp.status_code == 200
-        except Exception:
-            return False
-
     def encode(
         self,
         texts: list[str],
@@ -281,7 +260,7 @@ class BGEM3ModelLoader:
             向量数组
 
         """
-        if not self.is_loaded:
+        if not self.is_loaded or self.model is None:
             raise RuntimeError("模型未加载,请先调用load_model()方法。")
 
         if not texts:
@@ -289,25 +268,19 @@ class BGEM3ModelLoader:
 
         # 使用配置的批次大小
         if batch_size is None:
-            batch_size = self.config.get("batch_size", 8)
+            batch_size = self.config.get("batch_size", 32)
 
         # 记录开始时间
         start_time = time.time()
         try:
-            # API 模式
-            if self._api_mode:
-                embeddings = self._encode_via_api(texts, batch_size)
-            else:
-                if self.model is None:
-                    raise RuntimeError("本地模型未加载")
-                # 编码
-                embeddings = self.model.encode(
-                    texts,
-                    batch_size=batch_size,
-                    show_progress_bar=show_progress,
-                    normalize_embeddings=normalize,
-                    convert_to_numpy=True,
-                )
+            # 编码
+            embeddings = self.model.encode(
+                texts,
+                batch_size=batch_size,
+                show_progress_bar=show_progress,
+                normalize_embeddings=normalize,
+                convert_to_numpy=True,
+            )
 
             # 更新统计
             processing_time = time.time() - start_time
@@ -319,30 +292,6 @@ class BGEM3ModelLoader:
         except Exception as e:
             logger.error(f"❌ 编码文本失败: {e!s}")
             raise e
-
-    def _encode_via_api(self, texts: list[str], batch_size: int) -> Any:
-        """通过 API 进行嵌入"""
-        import numpy as np
-        import requests as req
-
-        api_url = self.config.get("api_url", "http://127.0.0.1:8766/v1")
-        api_model = self.config.get("api_model", "bge-m3")
-        all_embeddings = []
-
-        for i in range(0, len(texts), batch_size):
-            batch = texts[i:i + batch_size]
-            resp = req.post(
-                f"{api_url}/embeddings",
-                json={"model": api_model, "input": batch},
-                timeout=120,
-            )
-            resp.raise_for_status()
-            data = resp.json()
-            sorted_data = sorted(data["data"], key=lambda x: x["index"])
-            for item in sorted_data:
-                all_embeddings.append(item["embedding"])
-
-        return np.array(all_embeddings, dtype=np.float32)
 
 
 # 便捷函数
@@ -356,28 +305,6 @@ def get_bgem3_loader(model_name: str = "bge-m3") -> BGEM3ModelLoader:
         模型加载器实例
     """
     return BGEM3ModelLoader(model_name)
-
-
-# 全局单例（供 load_bge_m3_model 使用）
-_bgem3_loader_instance: BGEM3ModelLoader | None = None
-
-
-def load_bge_m3_model(model_name: str = "bge-m3") -> BGEM3ModelLoader:
-    """加载 BGE-M3 模型并返回加载器实例（单例模式）
-
-    兼容旧调用方: from core.nlp.bge_m3_loader import load_bge_m3_model
-
-    Args:
-        model_name: 模型名称，默认 bge-m3
-
-    Returns:
-        BGEM3ModelLoader: 已加载的模型加载器
-    """
-    global _bgem3_loader_instance
-    if _bgem3_loader_instance is None:
-        _bgem3_loader_instance = BGEM3ModelLoader(model_name)
-        _bgem3_loader_instance.load_model()
-    return _bgem3_loader_instance
 
 
 if __name__ == "__main__":

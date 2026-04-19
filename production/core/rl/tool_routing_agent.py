@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 RL智能体实现
 RL Tool Routing Agent
@@ -7,7 +8,6 @@ RL Tool Routing Agent
 通过训练优化工具选择策略,目标将工具选择准确率从96%提升到97%
 """
 
-from __future__ import annotations
 import logging
 import random
 from collections import deque

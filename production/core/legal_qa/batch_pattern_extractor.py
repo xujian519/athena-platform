@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 批处理推理模式提取器 - Batch Pattern Extractor
 从实际无效决定文档中大规模提取推理模式
@@ -15,7 +16,6 @@
 创建时间: 2026-01-23
 """
 
-from __future__ import annotations
 import json
 import logging
 import os

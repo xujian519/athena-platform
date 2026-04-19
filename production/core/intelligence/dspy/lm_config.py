@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 DSPy LM后端配置
 DSPy Language Model Backend Configuration
@@ -11,7 +12,6 @@ Supports GLM-4 series and DeepSeek series models
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import logging
 import os
 from typing import Any

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 合并所有训练数据集,生成最终的超大训练集
 Merge all training datasets into final comprehensive set
@@ -15,7 +16,6 @@ Merge all training datasets into final comprehensive set
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 import random

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena通信系统 - 统一配置管理
 Unified Configuration Management for Communication System
@@ -14,7 +15,6 @@ Unified Configuration Management for Communication System
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 import os

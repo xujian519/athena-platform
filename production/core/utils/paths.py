@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台路径工具模块
 Platform Path Utilities
@@ -16,7 +17,6 @@ Platform Path Utilities
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import os
 import sys
 from pathlib import Path

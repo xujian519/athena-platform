@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强版真实专利案例提取器
 Enhanced Real Patent Case Extractor for DSPy Training Data
@@ -11,7 +12,6 @@ Enhanced Real Patent Case Extractor for DSPy Training Data
 版本: 2.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 import random

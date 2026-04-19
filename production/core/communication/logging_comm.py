@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena通信系统 - 结构化日志
 Structured Logging for Communication System
@@ -17,7 +18,6 @@ Structured Logging for Communication System
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 import sys

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 扩展的统一提示词管理器 - 集成场景规则
 Extended Unified Prompt Manager - Integrated with Scenario Rules
@@ -9,7 +10,6 @@ Extended Unified Prompt Manager - Integrated with Scenario Rules
 这个模块扩展了原有的UnifiedPromptManager,添加了场景感知的提示词生成能力。
 """
 
-from __future__ import annotations
 import logging
 from typing import Any
 

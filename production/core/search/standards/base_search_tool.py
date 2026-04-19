@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 分散式智能搜索架构 - 工具标准化接口
 Decentralized Intelligent Search Architecture - Tool Standardization Interface
@@ -14,7 +15,6 @@ Decentralized Intelligent Search Architecture - Tool Standardization Interface
 4. 统一监控 - 支持轻量级协调和监控
 """
 
-from __future__ import annotations
 import logging
 import time
 from abc import ABC, abstractmethod

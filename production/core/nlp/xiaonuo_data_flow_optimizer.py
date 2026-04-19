@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺数据流优化器
 Xiaonuo Data Flow Optimizer
@@ -14,7 +15,6 @@ Xiaonuo Data Flow Optimizer
 日期: 2025-12-18
 """
 
-from __future__ import annotations
 import asyncio
 import gc
 import json

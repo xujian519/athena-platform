@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 在线学习系统 - 第二阶段
 Online Learning System - Phase 2
@@ -14,7 +15,6 @@ Online Learning System - Phase 2
 创建: 2026-01-12
 """
 
-from __future__ import annotations
 import logging
 import queue
 import random

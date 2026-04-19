@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 PostgreSQL元数据存储客户端
 PostgreSQL Metadata Storage for Patent Judgments
@@ -10,7 +11,6 @@ PostgreSQL Metadata Storage for Patent Judgments
 - 支持全文检索
 """
 
-from __future__ import annotations
 import json
 from typing import Any
 

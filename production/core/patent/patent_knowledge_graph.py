@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 专利技术知识图谱模块
 使用NetworkX构建专利技术分析的知识图谱
@@ -13,7 +14,6 @@
 日期:2026-01-07
 """
 
-from __future__ import annotations
 import json
 from dataclasses import dataclass, field
 from enum import Enum
@@ -24,8 +24,8 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 # 设置中文字体支持
-matplotlib.rcParams["font.sans-serif"] = ["Arial Unicode MS", "SimHei", "STHeiti"]
-matplotlib.rcParams["axes.unicode_minus"] = False
+matplotlib.rc_params["font.sans-serif"] = ["Arial Unicode MS", "SimHei", "STHeiti"]
+matplotlib.rc_params["axes.unicode_minus"] = False
 
 
 class NodeType(Enum):

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利视角发现器 (Patent Perspective Discoverer)
 
@@ -15,7 +16,6 @@
 创建时间: 2025-01-02
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from enum import Enum

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 自主学习和自我优化系统
 Autonomous Learning and Self-Optimization System
@@ -16,7 +17,6 @@ Autonomous Learning and Self-Optimization System
 版本: v1.0.0 "自主学习"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import statistics

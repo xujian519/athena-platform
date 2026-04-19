@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺多轮对话参数澄清机制
 实现智能参数缺失检测、提问生成和多轮对话管理
@@ -15,7 +16,6 @@
 日期: 2025-12-18
 """
 
-from __future__ import annotations
 import os
 import re
 

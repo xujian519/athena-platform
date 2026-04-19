@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 依赖注入容器
 Dependency Injection Container
@@ -13,7 +14,6 @@ Dependency Injection Container
 - 生命周期管理
 """
 
-from __future__ import annotations
 import threading
 from abc import ABC, abstractmethod
 from collections.abc import Callable

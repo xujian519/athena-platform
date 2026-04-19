@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 examples
 """
-from __future__ import annotations

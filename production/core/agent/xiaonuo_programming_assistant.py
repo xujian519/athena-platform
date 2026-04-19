@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺编程辅助模块
 Xiaonuo Programming Assistant Module
 """
 
-from __future__ import annotations
 import ast
 from typing import Any
 

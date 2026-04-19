@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强版动态提示词生成器
 Enhanced Dynamic Prompt Generator
 
 集成专利规则向量库 + AI术语知识图谱,为专利检索和分析提供全方位支持
 """
-from __future__ import annotations
 import json
 import logging
 import os

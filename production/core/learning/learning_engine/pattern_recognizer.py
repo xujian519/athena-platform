@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习引擎 - 模式识别器
 Learning Engine - Pattern Recognizer
@@ -9,7 +10,6 @@ Learning Engine - Pattern Recognizer
 版本: 2.0.0
 """
 
-from __future__ import annotations
 import logging
 from collections import Counter
 from datetime import datetime

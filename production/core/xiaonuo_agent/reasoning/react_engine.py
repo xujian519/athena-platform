@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 ReAct推理引擎
 实现Think-Act-Observe推理循环
@@ -14,7 +15,6 @@ ReAct推理引擎
 版本: v2.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

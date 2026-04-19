@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 提示工程优化器 (Prompt Engineering Optimizer)
 智能优化提示词,提升LLM输出质量
@@ -8,7 +9,6 @@
 优化目标: 提示词效果提升 30%+, 输出质量提升 25%+
 """
 
-from __future__ import annotations
 import logging
 from collections import defaultdict, deque
 from dataclasses import dataclass

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 层次接口模块
 Layer Interface Module
@@ -5,7 +6,6 @@ Layer Interface Module
 定义Athena平台各层次之间的标准通信接口
 """
 
-from __future__ import annotations
 from .layer_interface import (
     ApplicationLayerInterface,
     DecisionLayerInterface,

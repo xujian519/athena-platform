@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺主编排中枢 - 系统级智能编排核心
 Xiaonuo Main Orchestrator - System-Level Intelligent Orchestration Core
@@ -9,7 +10,6 @@ Xiaonuo Main Orchestrator - System-Level Intelligent Orchestration Core
 创建时间: 2025-12-14
 版本: v1.0.0
 """
-from __future__ import annotations
 import asyncio
 import logging
 import time

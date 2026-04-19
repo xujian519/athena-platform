@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 状态持久化模块
 State Persistence Module
@@ -13,7 +14,6 @@ State Persistence Module
 """
 
 
-from __future__ import annotations
 __all__ = ["CheckpointManager", "PersistenceStrategy", "StateModule", "StatePersistenceManager"]
 
 __version__ = "1.0.0"

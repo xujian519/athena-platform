@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 冲突检测与拍卖管理器
 Conflict Detection and Auction Manager
@@ -9,7 +10,6 @@ Conflict Detection and Auction Manager
 创建时间: 2025-12-14
 """
 
-from __future__ import annotations
 import math
 import time
 from collections import defaultdict

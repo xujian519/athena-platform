@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律知识三库联动系统 - Docker版本
 通过Docker exec访问PostgreSQL
 """
 
-from __future__ import annotations
 import re
 import subprocess
 from dataclasses import dataclass

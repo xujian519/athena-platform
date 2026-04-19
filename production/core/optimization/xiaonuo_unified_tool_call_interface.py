@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主统一工具调用接口
 Xiaonuo·Pisces Princess Unified Tool Call Interface (UTCI)
@@ -10,7 +11,6 @@ Xiaonuo·Pisces Princess Unified Tool Call Interface (UTCI)
 版本: v1.0.0 "智能调用"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

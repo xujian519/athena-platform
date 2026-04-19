@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律条文精确解析器
 Legal Article Precise Parser
@@ -6,7 +7,6 @@ Legal Article Precise Parser
 将法律文档精确拆分为:条-款-项
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass

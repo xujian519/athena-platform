@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 代码执行沙箱模块
 Code Execution Sandbox Module
@@ -16,7 +17,6 @@ Code Execution Sandbox Module
 版本: v1.0.0 "Phase 3"
 """
 
-from __future__ import annotations
 import io
 import logging
 import time

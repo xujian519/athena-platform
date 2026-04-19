@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 XiaonuoAgent统一智能体 - 整合Xiaochen能力
 XiaonuoAgent Unified - Integrated with Xiaochen Capabilities
@@ -13,7 +14,6 @@ XiaonuoAgent Unified - Integrated with Xiaochen Capabilities
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from typing import Any

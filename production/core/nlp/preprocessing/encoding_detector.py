@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 输入编码检测器
 Input Encoding Detector
@@ -10,7 +11,6 @@ Input Encoding Detector
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import base64
 import html
 import logging

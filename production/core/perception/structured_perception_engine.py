@@ -25,7 +25,6 @@ Structured Perception Engine - Compatibility Implementation
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import warnings
 
 # 发出弃用警告

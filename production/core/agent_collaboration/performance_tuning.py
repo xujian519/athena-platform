@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Agent通信系统性能调优配置
 Performance Tuning Configuration for Agent Communication System
@@ -14,7 +15,6 @@ Performance Tuning Configuration for Agent Communication System
 创建时间: 2026-01-18
 """
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any

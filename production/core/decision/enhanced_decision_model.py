@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强决策模型
 Enhanced Decision Model
@@ -12,7 +13,6 @@ Enhanced Decision Model
 实现智能化的多维度决策
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 生物学思维引擎
 Biological Thinking Engine
@@ -14,7 +15,6 @@ Biological Thinking Engine
 版本: v0.1.2 "晨星初现"
 """
 
-from __future__ import annotations
 import json
 import logging
 

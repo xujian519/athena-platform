@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能工具发现引擎
 Intelligent Tool Discovery Engine
@@ -16,7 +17,6 @@ Intelligent Tool Discovery Engine
 版本: v1.0.0 "智能发现"
 """
 
-from __future__ import annotations
 import logging
 from collections import defaultdict, deque
 from dataclasses import dataclass, field

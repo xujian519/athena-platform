@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 GPU加速向量嵌入工具发现模块
 GPU-Accelerated Vector Embedding Tool Discovery Module
@@ -16,7 +17,6 @@ GPU-Accelerated Vector Embedding Tool Discovery Module
     results = await discovery.discover_tools("搜索专利相关文档", limit=10)
 """
 
-from __future__ import annotations
 import logging
 import time
 from datetime import datetime

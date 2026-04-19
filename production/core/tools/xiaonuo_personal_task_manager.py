@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺个人任务管理器
 Xiaonuo Personal Task Manager
@@ -10,7 +11,6 @@ Xiaonuo Personal Task Manager
 4. 拖延症对抗机制
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import os

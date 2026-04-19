@@ -1,3 +1,4 @@
+from __future__ import annotations
 # pyright: ignore
 # !/usr/bin/env python3
 """
@@ -11,7 +12,6 @@ Xiaona Super Reasoning Engine - Legal Expert Enhanced Version
 版本: v3.0 Super Legal Expert
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

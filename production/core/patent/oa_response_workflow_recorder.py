@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 审查意见答复工作流记录器
 Office Action Response Workflow Recorder
@@ -16,7 +17,6 @@ Office Action Response Workflow Recorder
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import json
 from dataclasses import dataclass, field
 from datetime import datetime

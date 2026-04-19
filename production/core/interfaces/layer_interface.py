@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 层次接口标准
 Layer Interface Standard
@@ -14,7 +15,6 @@ Layer Interface Standard
 版本: v1.0.0 "接口标准"
 """
 
-from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass

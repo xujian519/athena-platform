@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 认证管理器
 Authentication Manager
@@ -11,7 +12,6 @@ Authentication Manager
 版本: 3.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import hashlib

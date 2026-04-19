@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能语义路由器
 Intelligent Semantic Router
@@ -6,7 +7,6 @@ Intelligent Semantic Router
 基于查询内容智能路由到最适合的知识图谱和向量集合
 """
 
-from __future__ import annotations
 import logging
 import re
 import sys

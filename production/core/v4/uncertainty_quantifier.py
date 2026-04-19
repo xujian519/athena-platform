@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 不确定性量化模块
 Uncertainty Quantifier Module
@@ -7,7 +8,6 @@ Uncertainty Quantifier Module
 为每个响应提供精确的置信度评估
 """
 
-from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 

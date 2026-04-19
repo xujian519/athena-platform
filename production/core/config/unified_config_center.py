@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一配置中心
 Unified Configuration Center
@@ -17,7 +18,6 @@ Unified Configuration Center
 版本: v1.0.0 "统一配置"
 """
 
-from __future__ import annotations
 import json
 import logging
 import os

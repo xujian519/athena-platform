@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 GUI操作类型扩展
 GUI Action Type Extensions
@@ -16,7 +17,6 @@ GUI Action Type Extensions
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import os

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺优化监控模块
 Xiaonuo Optimization Monitoring Module
@@ -9,7 +10,6 @@ Xiaonuo Optimization Monitoring Module
 创建时间: 2025-12-27
 """
 
-from __future__ import annotations
 import json
 import logging
 import time

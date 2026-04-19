@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 混合专利RAG服务 - 法规与决定书融合检索
 Hybrid Patent RAG Service - Regulations & Decisions Integration
@@ -6,7 +7,6 @@ Hybrid Patent RAG Service - Regulations & Decisions Integration
 统一处理专利法律法规和决定书案例的检索需求
 """
 
-from __future__ import annotations
 import asyncio
 import sys
 import time

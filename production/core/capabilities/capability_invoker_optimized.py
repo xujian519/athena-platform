@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 能力调用器 - 生产优化版本
 Capability Invoker - Production Optimized Version
@@ -12,7 +13,6 @@ Capability Invoker - Production Optimized Version
 - P2: 性能指标收集
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from abc import ABC, abstractmethod

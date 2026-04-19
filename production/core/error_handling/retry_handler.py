@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 重试处理器
 Retry Handler
@@ -13,7 +14,6 @@ Retry Handler
 - 重试日志记录
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from collections.abc import Callable

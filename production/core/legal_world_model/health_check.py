@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律世界模型健康检查
 Legal World Model Health Check
@@ -10,7 +11,6 @@ Legal World Model Health Check
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field

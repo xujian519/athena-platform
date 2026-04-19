@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 模型量化与优化系统
 Model Quantization and Optimization System
@@ -16,7 +17,6 @@ Model Quantization and Optimization System
 版本: v1.0.0 "极致性能"
 """
 
-from __future__ import annotations
 import logging
 import time
 from dataclasses import dataclass

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 执行模块 - 统一导出接口
 Execution Module - Unified Export Interface
@@ -11,7 +12,6 @@ Execution Module - Unified Export Interface
 更新时间: 2026-01-27
 """
 
-from __future__ import annotations
 import logging
 
 # 从统一的 shared_types.py 导入所有类型定义

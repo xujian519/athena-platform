@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 声明式 Agent 定义数据模型
 
@@ -7,8 +8,6 @@
 Author: Athena Team
 """
 
-from __future__ import annotations
-
 import logging
 from dataclasses import dataclass, field
 from enum import Enum
@@ -16,8 +15,8 @@ from typing import Any
 
 logger = logging.getLogger("agent.declarative.models")
 
-# 允许的模型指针名称（映射到 model_pointers 的语义指针）
-ALLOWED_MODELS = {"default", "haiku", "sonnet", "opus", "main", "task", "reasoning", "quick"}
+# 允许的模型名称
+ALLOWED_MODELS = {"default", "haiku", "sonnet", "opus"}
 
 
 class AgentSource(Enum):
@@ -70,11 +69,6 @@ class AgentDefinition:
     # 系统提示词（从 .md 正文加载）
     system_prompt: str = ""
 
-    # 子代理行为
-    fork_context: bool = False            # 是否继承父对话上下文
-    color: str = ""                       # 终端显示颜色（如 "#4A90D9"）
-    skills: list[str] = field(default_factory=list)  # 关联技能列表
-
     # 元数据
     source: AgentSource = AgentSource.BUILTIN
     filename: str = ""
@@ -96,9 +90,6 @@ class AgentDefinition:
             "disallowed_tools": self.disallowed_tools,
             "model": self.model,
             "permission_mode": self.permission_mode.value,
-            "fork_context": self.fork_context,
-            "color": self.color,
-            "skills": self.skills,
             "source": self.source.value,
             "filename": self.filename,
             "is_readonly": self.is_readonly,
@@ -129,7 +120,6 @@ class AgentDefinition:
         known_keys = {
             "name", "description", "tools", "disallowed_tools",
             "model", "permission_mode",
-            "fork_context", "color", "skills",
         }
 
         name = metadata.get("name", filename.replace(".md", ""))
@@ -145,15 +135,6 @@ class AgentDefinition:
         if not isinstance(disallowed_tools, list):
             logger.warning(f"Agent '{name}': disallowed_tools 应为列表，已自动修正")
             disallowed_tools = []
-
-        # 解析新增字段
-        fork_context = bool(metadata.get("fork_context", False))
-        color = str(metadata.get("color", ""))
-        skills = metadata.get("skills", [])
-        if not isinstance(skills, list):
-            logger.warning(f"Agent '{name}': skills 应为列表，已自动修正")
-            skills = []
-        skills = [str(s) for s in skills]
 
         # Schema 验证: model 必须在允许范围内
         if model not in ALLOWED_MODELS:
@@ -192,9 +173,6 @@ class AgentDefinition:
             disallowed_tools=disallowed_tools,
             model=model,
             permission_mode=permission_mode,
-            fork_context=fork_context,
-            color=color,
-            skills=skills,
             system_prompt=content.strip(),
             source=source,
             filename=filename,

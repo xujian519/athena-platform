@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 搜索Agent (SearchAgent) - 专利检索专家
 
@@ -20,7 +21,6 @@
 - quality_assessment: 质量评估
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from datetime import datetime, timedelta

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 有状态MCP客户端
 Stateful MCP Client
@@ -17,7 +18,6 @@ Stateful MCP Client
 版本: v1.0.0 "Phase 1"
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

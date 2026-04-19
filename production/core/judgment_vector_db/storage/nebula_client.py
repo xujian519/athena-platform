@@ -18,9 +18,8 @@ NebulaGraph Knowledge Graph Client for Patent Judgments
 - 图谱遍历和推理
 """
 
-from __future__ import annotations
 import re
-from typing import Any
+from typing import Any, Dict, List, Optional, Tuple
 
 from core.config.secure_config import get_config
 from core.logging_config import setup_logging

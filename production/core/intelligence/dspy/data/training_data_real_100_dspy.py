@@ -1,7 +1,7 @@
+from __future__ import annotations
 # DSPy Training Data - Real Patent Cases
 # Generated from Qdrant patent_decisions collection
 
-from __future__ import annotations
 import dspy
 
 training_data = [

@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 embedding
 """
-from __future__ import annotations

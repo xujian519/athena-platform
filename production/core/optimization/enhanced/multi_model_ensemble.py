@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多模型集成系统 (Multi-Model Ensemble System)
 智能集成多个模型,提升整体预测准确性和鲁棒性
@@ -8,7 +9,6 @@
 优化目标: 集成准确率 92% → 96%
 """
 
-from __future__ import annotations
 import logging
 import statistics
 from collections import defaultdict

@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 告警系统
 提供智能告警、通知发送和告警管理功能
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

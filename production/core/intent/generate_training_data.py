@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 快速训练数据生成器
 Quick Training Data Generator
@@ -10,7 +11,6 @@ Quick Training Data Generator
 创建: 2025-12-29
 """
 
-from __future__ import annotations
 import json
 import random
 from datetime import datetime

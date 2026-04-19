@@ -1,10 +1,10 @@
+from __future__ import annotations
 """
 参数验证器
 
 验证用户输入参数的完整性、类型和条件。
 """
 
-from __future__ import annotations
 import re
 from dataclasses import dataclass
 from enum import Enum

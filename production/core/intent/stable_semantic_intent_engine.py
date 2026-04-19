@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 第三阶段优化:稳定语义增强意图识别引擎
 Phase 3 Optimization: Stable Semantic-Enhanced Intent Recognition Engine
@@ -16,7 +17,6 @@ Phase 3 Optimization: Stable Semantic-Enhanced Intent Recognition Engine
 版本: v3.0.0 "稳定语义增强"
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

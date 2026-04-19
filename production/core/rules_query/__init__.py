@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 规则查询模块
 Rules Query Module - 三库联动规则查询系统
@@ -18,7 +19,6 @@ Rules Query Module - 三库联动规则查询系统
 
 # 模拟实现(用于测试和开发)
 # 真实实现(连接实际数据库)
-from __future__ import annotations
 from .real_database_query import (
     QueryCache,
     QueryResult,

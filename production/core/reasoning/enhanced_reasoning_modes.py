@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强的32模式推理引擎实现 - 补充模块
 Enhanced 32-Modes Reasoning Engine Implementation - Supplement Module
@@ -22,7 +23,6 @@ Enhanced 32-Modes Reasoning Engine Implementation - Supplement Module
 12. 元认知推理
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import re

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena事件中间件系统
 
@@ -11,7 +12,6 @@ Athena事件中间件系统
 - 自定义中间件支持
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

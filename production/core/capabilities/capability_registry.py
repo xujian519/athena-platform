@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 能力注册中心
 Capability Registry
@@ -6,7 +7,6 @@ Capability Registry
 管理平台所有原子化能力的注册、发现和调用
 """
 
-from __future__ import annotations
 import logging
 from collections.abc import Callable
 from dataclasses import dataclass, field

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强版统一推理引擎编排器 v2.0
 Enhanced Unified Reasoning Orchestrator v2.0
@@ -20,7 +21,6 @@ Enhanced Unified Reasoning Orchestrator v2.0
 4. 监控性能,持续优化路由策略
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import json

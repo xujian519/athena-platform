@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 专利AI服务API路由
 Patent AI Services API Routes
@@ -23,7 +24,6 @@ OpenClaw集成 (v2.1.0):
 更新时间: 2026-03-27 (OpenClaw集成)
 """
 
-from __future__ import annotations
 import logging
 
 from fastapi import APIRouter, HTTPException, Query

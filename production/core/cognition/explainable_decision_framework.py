@@ -1,9 +1,9 @@
+from __future__ import annotations
 # pyright: ignore
 """
 可解释决策框架
 实现AI决策过程的可解释性和透明度
 """
-from __future__ import annotations
 import hashlib
 import json
 import logging

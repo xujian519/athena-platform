@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 Athena和小诺协调器
 实现两个Agent的协作和情感智能交互
 """
 
-from __future__ import annotations
 import logging
 import uuid
 from dataclasses import dataclass, field

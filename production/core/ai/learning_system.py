@@ -1,8 +1,8 @@
+from __future__ import annotations
 """
 AI学习系统
 实现AI角色的持续学习和能力提升
 """
-from __future__ import annotations
 import asyncio
 import hashlib
 import logging

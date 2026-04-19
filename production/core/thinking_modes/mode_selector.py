@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 思考模式选择器
 Thinking Mode Selector - 自动选择最适合的思考模式
@@ -15,7 +16,6 @@ Thinking Mode Selector - 自动选择最适合的思考模式
 版本: v1.0.0 "Phase 1"
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from enum import Enum

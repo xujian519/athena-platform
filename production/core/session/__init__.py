@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 会话记忆模块
 
@@ -7,7 +8,6 @@
 - SessionMemoryManager: 会话记忆管理器
 """
 
-from __future__ import annotations
 from .session_memory import (
     SessionContext,
     SessionMemoryManager,

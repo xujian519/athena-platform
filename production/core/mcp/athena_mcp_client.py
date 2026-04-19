@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台MCP客户端
 Athena Platform MCP Client
@@ -16,7 +17,6 @@ Athena Platform MCP Client
 创建时间: 2025-01-05
 """
 
-from __future__ import annotations
 import json
 import logging
 from typing import Any

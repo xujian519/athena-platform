@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena工作平台 - 向量数据库管理器
 Vector Database Manager for Athena Platform
@@ -8,7 +9,6 @@ Vector Database Manager for Athena Platform
 """
 
 # Numpy兼容性导入
-from __future__ import annotations
 import logging
 from enum import Enum
 from typing import Any

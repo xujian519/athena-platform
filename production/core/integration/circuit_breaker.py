@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 断路器
 Circuit Breaker
@@ -7,7 +8,6 @@ Circuit Breaker
 目标将外部服务故障率控制在5%以下
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

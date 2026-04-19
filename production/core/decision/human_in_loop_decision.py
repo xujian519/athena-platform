@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 人机协作决策系统 - Human-in-the-Loop Decision System
 在终端和Claude Code环境下实现的人机协作决策框架
@@ -8,7 +9,6 @@
 创建时间: 2025-12-17
 """
 
-from __future__ import annotations
 import asyncio
 import time
 from dataclasses import dataclass, field

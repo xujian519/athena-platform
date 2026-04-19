@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 三阶段优化系统生产监控指标采集
 Production Metrics Collector for Three-Phase Optimization System
@@ -14,7 +15,6 @@ Production Metrics Collector for Three-Phase Optimization System
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import logging

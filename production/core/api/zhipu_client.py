@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智谱AI客户端(带限流控制)
 Zhipu AI Client with Rate Limiting
@@ -10,7 +11,6 @@ Zhipu AI Client with Rate Limiting
 - 错误处理
 """
 
-from __future__ import annotations
 import asyncio
 import os
 from collections.abc import Callable

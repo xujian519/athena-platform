@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺高德地图MCP集成
 Xiaonuo Gaode Maps MCP Integration
@@ -9,7 +10,6 @@ Xiaonuo Gaode Maps MCP Integration
 创建时间: 2025-12-14
 """
 
-from __future__ import annotations
 import logging
 import os
 from dataclasses import dataclass

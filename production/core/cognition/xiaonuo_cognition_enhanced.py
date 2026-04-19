@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 # pyright: ignore
 # !/usr/bin/env python3
@@ -12,7 +13,6 @@ Xiaonuo Enhanced Cognition System
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from datetime import datetime

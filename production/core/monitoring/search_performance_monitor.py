@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 搜索性能监控系统
 Search Performance Monitoring System
@@ -9,7 +10,6 @@ Search Performance Monitoring System
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import json

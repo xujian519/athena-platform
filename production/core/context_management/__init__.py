@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 上下文管理模块
 Context Management Module - 任务上下文的持久化和恢复
@@ -14,7 +15,6 @@ Context Management Module - 任务上下文的持久化和恢复
 版本: v1.0.0 "Phase 1"
 """
 
-from __future__ import annotations
 from .task_context_manager import (
     ContextStatus,
     StepContext,

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 RAG能力适配器 - 将RAG管理器包装为能力调用接口
 RAG Capability Adapter - Wrap RAG Manager as Capability Invocation Interface
@@ -13,7 +14,6 @@ RAG Capability Adapter - Wrap RAG Manager as Capability Invocation Interface
 日期: 2026-01-23
 """
 
-from __future__ import annotations
 import logging
 from typing import Any
 

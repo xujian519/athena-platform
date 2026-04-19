@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 安全配置加载器
 Secure Configuration Loader
@@ -11,7 +12,6 @@ Secure Configuration Loader
 版本: v2.0.0
 """
 
-from __future__ import annotations
 import logging
 import os
 from pathlib import Path

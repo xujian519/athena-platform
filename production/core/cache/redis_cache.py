@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 Redis缓存实现
 使用Redis作为分布式缓存存储
 """
 
-from __future__ import annotations
 import json
 import logging
 from typing import Any

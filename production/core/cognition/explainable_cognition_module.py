@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 可解释认知模块 - 向后兼容重定向
 Explainable Cognition Module - Backward Compatibility Redirect
@@ -49,7 +50,6 @@ from core.cognition.explainable import ExplainableCognitionModule
 
 """
 
-from __future__ import annotations
 import logging
 import warnings
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 配置热更新系统
 Hot Configuration Reload System
@@ -11,7 +12,6 @@ Hot Configuration Reload System
 - 回滚支持
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import logging

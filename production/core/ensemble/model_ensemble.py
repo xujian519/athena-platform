@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多模型集成系统 - 第二阶段
 Multi-Model Ensemble System - Phase 2
@@ -14,7 +15,6 @@ Multi-Model Ensemble System - Phase 2
 创建: 2026-01-12
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

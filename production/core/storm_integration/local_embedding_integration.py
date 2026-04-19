@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 本地 Embedding 模型集成
 
@@ -11,7 +12,6 @@
 创建时间: 2026-01-02
 """
 
-from __future__ import annotations
 import asyncio
 from pathlib import Path
 from typing import Any

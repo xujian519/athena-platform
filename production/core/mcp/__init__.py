@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 mcp - MCP标准集成模块
 
@@ -21,7 +22,6 @@ mcp - MCP标准集成模块
 版本: v1.1.0 "Phase 1"
 """
 
-from __future__ import annotations
 from .mcp_client_manager import (
     ClientConfig,
     ClientInfo,

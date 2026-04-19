@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 任务复杂度分析器
 Task Complexity Analyzer
@@ -20,7 +21,6 @@ Task Complexity Analyzer
 版本: v1.0.0 "Phase 2"
 """
 
-from __future__ import annotations
 import logging
 
 from .models import ComplexityAnalysis, ComplexityFactors, ComplexityLevel, StrategyType, Task

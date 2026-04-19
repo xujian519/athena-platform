@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena智能体生产级工具实现集
 Production Tool Implementations
@@ -10,7 +11,6 @@ Production Tool Implementations
 版本: v1.1.0 (安全增强版)
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import mimetypes

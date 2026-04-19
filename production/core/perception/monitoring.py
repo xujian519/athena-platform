@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 感知模块性能监控
 Perception Module Performance Monitoring
@@ -10,7 +11,6 @@ Perception Module Performance Monitoring
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import logging

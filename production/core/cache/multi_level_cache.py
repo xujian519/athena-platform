@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 多级缓存策略
 
@@ -17,7 +18,6 @@ L3: 数据库缓存 - 较慢,容量最大
 - 只能缓存可JSON序列化的数据(基本类型、dict、list等)
 """
 
-from __future__ import annotations
 import json
 import logging
 import threading

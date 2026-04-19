@@ -1,5 +1,6 @@
 
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 向量-图融合记忆API服务器(简化版)
 Vector-Graph Fusion Memory API Server (Simplified)
@@ -10,7 +11,6 @@ Vector-Graph Fusion Memory API Server (Simplified)
 创建时间: 2025-12-28
 """
 
-from __future__ import annotations
 import asyncio
 import sys
 from datetime import datetime

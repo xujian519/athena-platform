@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena专利检索引擎
 Athena Patent Retrieval Engine
@@ -7,7 +8,6 @@ Athena Patent Retrieval Engine
 集成BGE Large ZH v1.5提升检索质量
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

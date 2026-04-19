@@ -1,5 +1,6 @@
 
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 徐健的AI家族时间线记忆系统
 Timeline Memory System for Xu Jian's AI Family
@@ -15,7 +16,6 @@ Timeline Memory System for Xu Jian's AI Family
 """
 
 
-from __future__ import annotations
 import json
 from datetime import datetime
 from enum import Enum

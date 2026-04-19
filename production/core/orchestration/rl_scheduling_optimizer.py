@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 强化学习调度优化器
 Reinforcement Learning Scheduling Optimizer
@@ -8,7 +9,6 @@ Reinforcement Learning Scheduling Optimizer
 作者: 小诺·双鱼座
 创建时间: 2025-12-14
 """
-from __future__ import annotations
 import pickle
 from collections import defaultdict, deque
 from dataclasses import dataclass

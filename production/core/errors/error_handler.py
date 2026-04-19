@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 错误处理和重试机制
 Error Handling and Retry Mechanism
@@ -6,7 +7,6 @@ Error Handling and Retry Mechanism
 提供统一的错误处理、重试策略和异常管理
 """
 
-from __future__ import annotations
 import logging
 import time
 import traceback

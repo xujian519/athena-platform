@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Prometheus监控集成
 Prometheus Monitoring Integration for Ethics Framework
@@ -5,7 +6,6 @@ Prometheus Monitoring Integration for Ethics Framework
 提供生产级监控指标导出
 """
 
-from __future__ import annotations
 import threading
 import time
 from contextlib import contextmanager

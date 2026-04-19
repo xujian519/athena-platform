@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Agent通信系统Prometheus监控指标
 Communication Metrics for Prometheus
@@ -14,7 +15,6 @@ Communication Metrics for Prometheus
 创建时间: 2026-01-18
 """
 
-from __future__ import annotations
 import logging
 import time
 from collections.abc import Callable

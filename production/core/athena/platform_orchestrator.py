@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台编排器
 Platform Orchestrator for Athena
@@ -16,7 +17,6 @@ Platform Orchestrator for Athena
 版本: v1.0.0 "平台指挥家"
 """
 
-from __future__ import annotations
 import logging
 from collections import defaultdict, deque
 from dataclasses import dataclass, field

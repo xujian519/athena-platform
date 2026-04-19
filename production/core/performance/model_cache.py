@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 三级模型缓存系统
 L1内存 + L2Redis + L3磁盘
@@ -9,7 +10,6 @@ L1内存 + L2Redis + L3磁盘
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import logging

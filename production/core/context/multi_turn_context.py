@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 多轮对话上下文管理器
 
@@ -8,7 +9,6 @@
 4. 上下文窗口管理
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass, field

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 请求重试和熔断机制
 Request Retry and Circuit Breaker Mechanism
@@ -29,7 +30,6 @@ Request Retry and Circuit Breaker Mechanism
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import inspect
 import logging

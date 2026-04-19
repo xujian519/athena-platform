@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Supervisor编排器 - 多智能体Supervisor模式实现
 Supervisor Orchestrator - Multi-Agent Supervisor Pattern Implementation
@@ -12,7 +13,6 @@ Supervisor Orchestrator - Multi-Agent Supervisor Pattern Implementation
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field

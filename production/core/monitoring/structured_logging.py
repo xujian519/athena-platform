@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 结构化日志系统
 Structured Logging System
@@ -12,7 +13,6 @@ Structured Logging System
 - 上下文信息记录
 """
 
-from __future__ import annotations
 import json
 import logging
 import sys

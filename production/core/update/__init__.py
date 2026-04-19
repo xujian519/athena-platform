@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 update
 """
-from __future__ import annotations

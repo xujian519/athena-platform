@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 性能监控和指标收集系统
 Performance Monitoring and Metrics Collection System
@@ -11,7 +12,6 @@ Performance Monitoring and Metrics Collection System
 - 实时监控面板数据
 """
 
-from __future__ import annotations
 import logging
 import threading
 import time

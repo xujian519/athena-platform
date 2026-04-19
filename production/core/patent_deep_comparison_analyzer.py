@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利深度对比分析系统 - 用于审查意见答复
 Patent Deep Comparison Analyzer for Office Action Response
@@ -21,7 +22,6 @@ Patent Deep Comparison Analyzer for Office Action Response
 版本: v1.2.0 - 添加DOCX格式输出
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import re

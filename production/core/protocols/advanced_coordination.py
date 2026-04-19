@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 高级协调机制
 Advanced Coordination Mechanisms
@@ -11,7 +12,6 @@ Advanced Coordination Mechanisms
 - 性能监控
 """
 
-from __future__ import annotations
 import asyncio
 import heapq
 import itertools

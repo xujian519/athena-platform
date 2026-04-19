@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一Agent记忆系统 - 核心实现
 Unified Agent Memory System - Core Implementation
@@ -15,7 +16,6 @@ Unified Agent Memory System - Core Implementation
 - 完整的生命周期管理
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import json

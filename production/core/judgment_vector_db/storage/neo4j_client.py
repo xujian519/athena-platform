@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Neo4j知识图谱客户端
 Neo4j Knowledge Graph Client for Patent Judgments
@@ -11,7 +12,6 @@ Neo4j Knowledge Graph Client for Patent Judgments
 技术决策: TD-001 - 统一图数据库选择为Neo4j
 """
 
-from __future__ import annotations
 import re
 from typing import Any
 

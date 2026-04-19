@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 NLP性能监控系统
 NLP Performance Monitor
@@ -10,7 +11,6 @@ NLP Performance Monitor
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import json
 import statistics
 import threading

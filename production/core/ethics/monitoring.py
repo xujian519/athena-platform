@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 伦理监控系统 - 实时监控AI系统的伦理合规性
 Ethics Monitoring System - Real-time Ethics Compliance Monitoring
@@ -10,7 +11,6 @@ Ethics Monitoring System - Real-time Ethics Compliance Monitoring
 5. 敏感信息过滤保护
 """
 
-from __future__ import annotations
 import logging
 import os
 from collections.abc import Callable

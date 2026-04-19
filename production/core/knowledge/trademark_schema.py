@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 Trademark Knowledge Graph Schema
 商标知识图谱模式定义
 """
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

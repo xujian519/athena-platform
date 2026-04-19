@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Study管理器
 Study Manager
@@ -12,7 +13,6 @@ Study Manager
 创建时间: 2025-01-04
 """
 
-from __future__ import annotations
 import logging
 from datetime import datetime
 from pathlib import Path

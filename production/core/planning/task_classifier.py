@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 任务分类器
 Task Classifier - 识别任务类型(专业任务 vs 通用任务)
@@ -8,7 +9,6 @@ Task Classifier - 识别任务类型(专业任务 vs 通用任务)
 版本: v1.0.0 "Phase 1"
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from enum import Enum

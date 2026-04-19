@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 网关能力选择器训练脚本
 Gateway Capability Selector Training Script
@@ -10,7 +11,6 @@ Gateway Capability Selector Training Script
 版本: v2.0.0 "网关能力选择器"
 """
 
-from __future__ import annotations
 import os
 from datetime import datetime
 from typing import Any

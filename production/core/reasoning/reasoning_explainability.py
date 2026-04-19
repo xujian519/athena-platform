@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 推理结果可解释性增强系统
 Reasoning Result Explainability Enhancement System
@@ -15,7 +16,6 @@ Reasoning Result Explainability Enhancement System
 5. 推理质量评估
 """
 
-from __future__ import annotations
 import json
 import logging
 from dataclasses import asdict, dataclass, field

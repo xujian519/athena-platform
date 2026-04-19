@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 告警管理器
 Alert Manager
@@ -13,7 +14,6 @@ Alert Manager
 - 支持多种通知渠道
 """
 
-from __future__ import annotations
 import logging
 import smtplib
 from datetime import datetime

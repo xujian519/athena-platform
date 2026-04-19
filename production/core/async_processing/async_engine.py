@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 异步处理引擎 - Async Processing Engine
 
@@ -9,7 +10,6 @@
 5. 并发控制和限流
 """
 
-from __future__ import annotations
 import asyncio
 import functools
 import logging

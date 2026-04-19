@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利下载管理器
 Patent Download Manager
@@ -10,7 +11,6 @@ Patent Download Manager
 版本: v0.1.2 "晨星初现"
 """
 
-from __future__ import annotations
 import sys
 from dataclasses import dataclass, field
 from datetime import datetime

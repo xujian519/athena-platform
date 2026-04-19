@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺工具适用性评分系统
 Xiaonuo Tool Suitability Scoring System
@@ -10,7 +11,6 @@ Xiaonuo Tool Suitability Scoring System
 版本: v1.0.0 "智能评分系统"
 """
 
-from __future__ import annotations
 import os
 from collections import defaultdict
 from dataclasses import dataclass, field

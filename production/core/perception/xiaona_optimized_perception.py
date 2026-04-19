@@ -31,8 +31,8 @@ Xiaona Optimized Perception Module - 99 Health Score Version
 版本: v2.0.0 "99分健康度"
 """
 
-from __future__ import annotations
 import warnings
+
 
 # 发出弃用警告
 warnings.warn(

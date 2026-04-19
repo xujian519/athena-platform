@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 生成统一专利无效训练数据
 Generate Unified Patent Invalidation Training Data
@@ -10,7 +11,6 @@ Generate Unified Patent Invalidation Training Data
 创建: 2026-01-13
 """
 
-from __future__ import annotations
 import json
 from datetime import datetime
 from pathlib import Path

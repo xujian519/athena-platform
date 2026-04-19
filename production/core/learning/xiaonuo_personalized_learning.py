@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺个性化学习系统
 Xiaonuo Personalized Learning System
@@ -9,7 +10,6 @@ Xiaonuo Personalized Learning System
 创建时间: 2025-12-14
 """
 
-from __future__ import annotations
 import json
 import os
 import pickle

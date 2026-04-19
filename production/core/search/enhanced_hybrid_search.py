@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强混合检索算法
 结合向量搜索、知识图谱推理和关键词检索的智能搜索系统
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import re

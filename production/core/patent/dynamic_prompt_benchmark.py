@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 动态提示词效果基准测试框架
 Dynamic Prompt Effectiveness Benchmark Framework
@@ -16,7 +17,6 @@ Dynamic Prompt Effectiveness Benchmark Framework
 版本: v0.1.0
 """
 
-from __future__ import annotations
 import asyncio
 import json
 from dataclasses import dataclass, field

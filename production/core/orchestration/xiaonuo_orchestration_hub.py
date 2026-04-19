@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺编排中枢 - 系统级智能编排引擎
 Xiaonuo Orchestration Hub - System-Level Intelligent Orchestration Engine
@@ -9,7 +10,6 @@ Xiaonuo Orchestration Hub - System-Level Intelligent Orchestration Engine
 创建时间: 2025-12-14
 版本: v1.0.0
 """
-from __future__ import annotations
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime

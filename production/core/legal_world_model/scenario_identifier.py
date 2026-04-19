@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 场景识别器 - 识别用户输入的业务场景
 Scenario Identifier - Identify business scenarios from user input
@@ -7,12 +8,11 @@ Scenario Identifier - Identify business scenarios from user input
 创建时间: 2026-01-23
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
+from typing import Any, Tuple, Dict
 
 logger = logging.getLogger(__name__)
 
@@ -80,6 +80,14 @@ class ScenarioIdentifier:
                 "技术贡献",
                 "突出的实质性特点",
                 "显著的进步",
+                "用途发明",
+                "反向教导",
+                "技术启示",
+                "预料不到",
+                "事后诸葛亮",
+                "技术偏见",
+                "复审请求",
+                "驳回复审",
             ],
             TaskType.NOVELTY_ANALYSIS: ["新颖性", "现有技术", "公开", "在先技术", "不属于现有技术"],
             TaskType.INFRINGEMENT: ["侵权", "落入保护范围", "等同", "相同", "保护范围"],
@@ -118,7 +126,7 @@ class ScenarioIdentifier:
         self.enable_llm_fallback = enable_llm_fallback
 
     def identify_scenario(
-        self, user_input: str, additional_context: dict[str, Any] | None = None
+        self, user_input: str, additional_context: Optional[Dict[str, Any]] = None
     ) -> ScenarioContext:
         """
         识别用户输入的场景
@@ -358,7 +366,7 @@ class ScenarioIdentifier:
         return variables
 
     async def identify_scenario_with_llm(
-        self, user_input: str, additional_context: dict[str, Any] | None = None
+        self, user_input: str, additional_context: Optional[Dict[str, Any]] = None
     ) -> ScenarioContext:
         """
         使用LLM辅助识别场景(当规则匹配置信度较低时)
@@ -501,7 +509,7 @@ class ScenarioIdentifier:
 
 # 便捷函数
 def identify_scenario_from_input(
-    user_input: str, additional_context: dict[str, Any] | None = None
+    user_input: str, additional_context: Optional[Dict[str, Any]] = None
 ) -> ScenarioContext:
     """
     便捷函数:从用户输入识别场景

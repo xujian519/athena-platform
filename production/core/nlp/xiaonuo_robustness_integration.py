@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺鲁棒性模块集成器
 Xiaonuo Robustness Module Integration
@@ -16,7 +17,6 @@ Xiaonuo Robustness Module Integration
 日期: 2025-12-18
 """
 
-from __future__ import annotations
 import json
 import os
 import sys

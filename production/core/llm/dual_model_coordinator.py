@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 双模型协同推理系统
 
@@ -7,7 +8,6 @@
 用于数学、物理、化学、生物等理科推理任务的质量保证
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass

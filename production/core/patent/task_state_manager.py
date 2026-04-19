@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利撰写任务状态管理器 (Patent Drafting Task State Manager)
 
@@ -14,7 +15,6 @@
 - OpenClaw patent-drafting skill task_state.yaml
 """
 
-from __future__ import annotations
 import json
 import logging
 from dataclasses import asdict, dataclass, field

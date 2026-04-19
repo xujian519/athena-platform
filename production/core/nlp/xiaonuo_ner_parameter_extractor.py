@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺命名实体识别(NER)参数提取系统
 集成深度学习NER技术,实现高精度参数提取和实体识别
@@ -15,7 +16,6 @@
 日期: 2025-12-18
 """
 
-from __future__ import annotations
 import os
 import re
 from dataclasses import dataclass, field

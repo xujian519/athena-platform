@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 向量库导入模块
 Vector Database Importer
@@ -10,7 +11,6 @@ Vector Database Importer
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 from pathlib import Path

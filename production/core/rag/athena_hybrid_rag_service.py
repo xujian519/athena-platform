@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台混合架构RAG服务
 Athena Platform Hybrid RAG Service
@@ -6,7 +7,6 @@ Athena Platform Hybrid RAG Service
 统一入口:Athena核心能力 + LlamaIndex工具
 """
 
-from __future__ import annotations
 import sys
 import time
 from dataclasses import dataclass

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 查询缓存模块
 Query Cache for Athena Intelligent Router
 """
 
-from __future__ import annotations
 import hashlib
 import os
 import time

@@ -1,11 +1,10 @@
+from nebula3.gclient.net import GraphDatabase
+from nebula3.gclient.net import GraphDatabase as session
+from qdrant_client import QdrantClient
+
+# pyright: ignore
+# !/usr/bin/env python3
 """
-⚠️  DEPRECATED - NebulaGraph依赖已废弃
-NebulaGraph imports deprecated (TD-001: 迁移到Neo4j)
-
-废弃日期: 2026-04-03
-建议替代: 使用 core/neo4j/neo4j_graph_client.py
-
-原功能说明:
 专利知识库连接器
 Patent Knowledge Base Connector
 
@@ -16,30 +15,11 @@ Patent Knowledge Base Connector
 版本: v1.0 Knowledge Connector
 """
 
-from __future__ import annotations
-import warnings
-
-warnings.warn(
-    "patent_knowledge_connector 依赖已废弃的NebulaGraph(TD-001)，请迁移到Neo4j",
-    DeprecationWarning,
-    stacklevel=2,
-)
-
-try:
-    from nebula3.gclient.net import GraphDatabase
-    from nebula3.gclient.net import GraphDatabase as session
-    NEBULA_AVAILABLE = True
-except ImportError:
-    NEBULA_AVAILABLE = False
-    GraphDatabase = None
-    session = None
 import asyncio
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
-
-from qdrant_client import QdrantClient
 
 from core.logging_config import setup_logging
 
@@ -132,37 +112,7 @@ class PatentKnowledgeConnector:
             return await self._mock_similar_patents(query)
 
         logger.info(f"🔍 搜索相似专利: {query.query_text[:50]}...")
-        start_time = datetime.now()
-
-        try:
-            # 生成查询向量
-            query_vector = await self._generate_embedding(query.query_text)
-
-            # 执行Qdrant向量检索
-            if self.qdrant_client:
-                vector_results = await self._qdrant_search(query_vector, query)
-            else:
-                vector_results = await self._mock_qdrant_search(query)
-
-            # 处理向量检索结果
-            processed_results = await self._process_vector_results(vector_results, query)
-
-            query_time = (datetime.now() - start_time).total_seconds()
-
-            result = KnowledgeResult(
-                query_id=f"vec_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
-                results=processed_results,
-                confidence_scores=[r.get("score", 0.0) for r in processed_results],
-                query_time=query_time,
-                source_type="vector_database",
-                metadata={"vector_dimension": len(query_vector), "search_method": "cosine_similarity"},
-            )
-
-            logger.info(f"✅ 向量检索完成,找到 {len(processed_results)} 个相似专利")
-            return result
-
-        except Exception:
-            return await self._mock_similar_patents(query)
+        datetime.now()
 
     async def search_patent_relationships(self, query: KnowledgeQuery) -> KnowledgeResult:
         """搜索专利关系(知识图谱)"""
@@ -291,7 +241,7 @@ class PatentKnowledgeConnector:
 
             logger.info("✅ Qdrant连接成功")
 
-        except ImportError as e:
+        except ImportError:
             logger.warning(f"可选模块导入失败，使用降级方案: {e}")
         except Exception:
             self.qdrant_client = None
@@ -314,7 +264,7 @@ class PatentKnowledgeConnector:
                 else:
                     raise Exception("Neo4j连接测试失败")
 
-        except ImportError as e:
+        except ImportError:
             logger.warning(f"可选模块导入失败，使用降级方案: {e}")
         except Exception:
             self.neo4j_driver = None
@@ -340,42 +290,6 @@ class PatentKnowledgeConnector:
 
     async def _qdrant_search(self, query_vector: list[float], query: KnowledgeQuery) -> list[dict]:  # type: ignore
         """Qdrant向量检索"""
-        try:
-            from qdrant_client.http.models import FieldCondition, Filter, MatchValue, SearchParams
-
-            # 构建搜索参数
-            SearchParams(
-                filter=Filter(
-                    must=[
-                        FieldCondition(
-                            key="technology_field",
-                            match=MatchValue(value=query.technology_field)
-                        )
-                    ]
-                ),
-            )
-
-            # 执行搜索
-            results = self.qdrant_client.search(
-                collection_name=self.qdrant_config.get("collection_name"),
-                query_vector=query_vector,
-                limit=query.limit,
-                with_payload=True,
-            )
-
-            # 格式化结果
-            formatted_results = []
-            for hit in results:
-                formatted_results.append({
-                    "id": hit.id,
-                    "score": hit.score,
-                    "payload": hit.payload,
-                })
-
-            return formatted_results
-
-        except Exception:
-            return await self._mock_qdrant_search(query)
 
     async def _neo4j_search(self, cypher_query: str, query: KnowledgeQuery) -> list[dict]:  # type: ignore
         """Neo4j图检索"""

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena记忆模块 - 生产环境配置加载器
 Production Environment Configuration Loader
@@ -14,7 +15,6 @@ Production Environment Configuration Loader
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import logging
 import os
 from dataclasses import dataclass, field

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律规则引擎 - Legal Rule Engine
 Legal Rule Engine for Patent Law
@@ -18,7 +19,6 @@ Legal Rule Engine for Patent Law
 更新时间: 2026-01-23
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass, field

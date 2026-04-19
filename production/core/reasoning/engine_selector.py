@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 推理引擎自动选择器
 Reasoning Engine Auto Selector
@@ -10,7 +11,6 @@ Reasoning Engine Auto Selector
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from enum import Enum

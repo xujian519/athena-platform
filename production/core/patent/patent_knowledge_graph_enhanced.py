@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 增强型专利知识图谱分析器
 支持PDF、数据库、文本等多种输入格式
@@ -14,7 +15,6 @@
 日期:2026年1月7日
 """
 
-from __future__ import annotations
 import json
 import re
 from abc import ABC, abstractmethod

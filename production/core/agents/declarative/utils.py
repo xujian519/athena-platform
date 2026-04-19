@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Frontmatter 解析工具
 
@@ -5,8 +6,6 @@ Frontmatter 解析工具
 
 Author: Athena Team
 """
-
-from __future__ import annotations
 
 import logging
 from typing import Any

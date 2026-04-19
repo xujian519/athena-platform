@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 端到端神经网络模型
 End-to-End Neural Network Model
@@ -14,7 +15,6 @@ End-to-End Neural Network Model
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field

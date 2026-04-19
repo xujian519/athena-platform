@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 DSPy 500个全面覆盖训练数据提取器
 Comprehensive DSPy Training Data Extractor (500 cases)
@@ -19,7 +20,6 @@ Comprehensive DSPy Training Data Extractor (500 cases)
 版本: 2.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 import random

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专业化Agent模块
 
@@ -8,7 +9,6 @@
 - CreativeAgent: 创新思维专家
 """
 
-from __future__ import annotations
 from .analysis_agent import AnalysisAgent
 from .creative_agent import CreativeAgent
 from .search_agent import SearchAgent

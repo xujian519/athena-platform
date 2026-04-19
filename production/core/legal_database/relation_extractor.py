@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律关系抽取器
 Legal Relation Extractor
@@ -6,7 +7,6 @@ Legal Relation Extractor
 从法律条款中抽取实体之间的关系(如主体-义务、主体-权利等)
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass

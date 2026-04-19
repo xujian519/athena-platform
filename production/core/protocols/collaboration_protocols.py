@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协作协议 - 向后兼容重定向
 Collaboration Protocols - Backward Compatibility Redirect
@@ -73,7 +74,6 @@ protocol_id = create_protocol_session(
 
 """
 
-from __future__ import annotations
 import logging
 import warnings
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 三库联动规则查询系统 - 实际数据库接入版本
 Three-Database Rule Query System - Real Database Integration
@@ -10,7 +11,6 @@ Three-Database Rule Query System - Real Database Integration
 版本: v2.0.0 "Real Integration"
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import logging

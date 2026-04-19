@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 审查意见答复反馈闭环管理器
 Office Action Response Feedback Loop Manager
@@ -17,7 +18,6 @@ Office Action Response Feedback Loop Manager
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import json
 from dataclasses import dataclass, field

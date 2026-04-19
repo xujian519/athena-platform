@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主增强决策引擎
 Xiaonuo Pisces Princess Enhanced Decision Engine
@@ -12,7 +13,6 @@ Xiaonuo Pisces Princess Enhanced Decision Engine
 更新: v2.1.0 - 添加配置类支持
 """
 
-from __future__ import annotations
 import json
 import logging
 import uuid

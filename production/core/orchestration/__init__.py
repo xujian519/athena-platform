@@ -1,10 +1,10 @@
+from __future__ import annotations
 """
 任务编排模块 - Task Orchestration Module
 
 提供DAG任务编排、智能体路由、结果聚合等功能
 """
 
-from __future__ import annotations
 from core.orchestration.task_orchestration import (
     # 核心类
     AgentRouter,

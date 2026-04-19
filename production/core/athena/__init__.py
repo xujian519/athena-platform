@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena核心模块初始化
 Athena Core Module Initialization
@@ -11,7 +12,6 @@ Athena Core Module Initialization
 """
 
 
-from __future__ import annotations
 __all__ = [
     "AgentCoordinator",
     "MetaCognitionEngine",

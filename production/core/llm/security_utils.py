@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - 安全工具
 敏感信息脱敏和安全检查工具
@@ -6,7 +7,6 @@
 日期: 2026-01-23
 """
 
-from __future__ import annotations
 import logging
 import re
 from typing import Any

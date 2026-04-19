@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 通信模块监控指标
 Communication Module Monitoring Metrics
@@ -10,7 +11,6 @@ Communication Module Monitoring Metrics
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import logging
 import time
 from collections.abc import Callable

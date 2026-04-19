@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 生产验证测试运行器
 统一运行所有生产验证测试并生成报告
 最后更新: 2026-01-26
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

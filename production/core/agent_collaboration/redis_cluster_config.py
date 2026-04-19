@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Redis集群配置支持
 Redis Cluster Configuration for Production
@@ -12,7 +13,6 @@ Redis Cluster Configuration for Production
 创建时间: 2026-01-18
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field

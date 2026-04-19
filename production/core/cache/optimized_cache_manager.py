@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化缓存管理器
 Optimized Cache Manager
@@ -9,7 +10,6 @@ Optimized Cache Manager
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import logging

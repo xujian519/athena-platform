@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 PDF判决书文本提取模块
 Patent Judgment PDF Text Extractor
@@ -9,7 +10,6 @@ Patent Judgment PDF Text Extractor
 - 分段识别判决书结构
 """
 
-from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 from datetime import datetime

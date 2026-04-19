@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 上下文压缩器 - Token Sprawl防护机制
 Context Compressor - Token Sprawl Prevention
@@ -16,7 +17,6 @@ Context Compressor - Token Sprawl Prevention
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 from collections import deque
 from dataclasses import dataclass, field

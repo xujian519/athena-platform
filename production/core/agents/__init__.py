@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena智能体模块
 
@@ -8,7 +9,6 @@ Author: Athena Team
 """
 
 # ============ 新版统一接口 (v2.0.0) ============
-from __future__ import annotations
 from .base import (
     # 数据模型
     AgentCapability,

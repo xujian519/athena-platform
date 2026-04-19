@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BM25稀疏检索模块
 BM25 Sparse Retriever Module
@@ -23,7 +24,6 @@ score(D,Q) = Σ IDF(qi) * (f(qi,D) * (k1 + 1)) / (f(qi,D) + k1 * (1 - b + b * |D
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import logging
 import math
 import re

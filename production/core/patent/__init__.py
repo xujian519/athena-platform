@@ -1,10 +1,10 @@
+from __future__ import annotations
 """
 patent module - 专利处理核心模块
 
 提供专利分析、检索、法律研究等完整工作流实现。
 """
 
-from __future__ import annotations
 from core.patent.workflows import (
     AnalysisWorkflow,
     AnalysisWorkflowInput,

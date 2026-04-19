@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主增强智能工具路由系统
 Xiaonuo·Pisces Princess Enhanced Intelligent Tool Router
@@ -10,7 +11,6 @@ Xiaonuo·Pisces Princess Enhanced Intelligent Tool Router
 版本: v2.0.0 "智能路由+"
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import logging

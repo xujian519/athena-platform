@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 # pyright: ignore
 # !/usr/bin/env python3
@@ -12,7 +13,6 @@ Xiaona Patent Expert System - Lyra Enhanced Version
 版本: v1.0 Patent Expert System
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from datetime import datetime

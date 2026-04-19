@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 任务模型标准化
 Task Models Standardization
@@ -10,7 +11,6 @@ Task Models Standardization
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

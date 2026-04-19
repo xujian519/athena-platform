@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 自然语言解释器
 Natural Language Explainer
@@ -7,7 +8,6 @@ Natural Language Explainer
 目标实现>90%的决策解释覆盖率
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from datetime import datetime

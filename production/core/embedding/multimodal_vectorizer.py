@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多模态向量化模块
 Multimodal Vectorization Module
@@ -11,7 +12,6 @@ Multimodal Vectorization Module
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import logging

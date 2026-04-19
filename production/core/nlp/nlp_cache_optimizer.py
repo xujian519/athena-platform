@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 NLP缓存优化器 - 提升NLP处理性能(增强版 v2.0)
 NLP Cache Optimizer - Boost NLP Processing Performance
@@ -22,7 +23,6 @@ NLP Cache Optimizer - Boost NLP Processing Performance
 更新时间: 2026-01-25(升级LFU缓存策略)
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import logging

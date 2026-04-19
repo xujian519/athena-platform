@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 任务管理器
 Task Manager
@@ -6,7 +7,6 @@ Task Manager
 管理多Agent协作系统的任务调度和生命周期
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field

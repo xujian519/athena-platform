@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 提示词模板缓存管理器
 Prompt Template Cache Manager
@@ -11,7 +12,6 @@ Prompt Template Cache Manager
 - 缓存统计和监控
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import logging

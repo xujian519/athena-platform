@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 GLM-4.7 RAG增强服务(云端版)
 GLM-4.7 RAG Enhanced Service (Cloud)
@@ -15,7 +16,6 @@ GLM-4.7 RAG Enhanced Service (Cloud)
 版本: v1.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass

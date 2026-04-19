@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena.智慧女神 - 优化版 v3.0
 Athena Wisdom Goddess - Optimized Edition v3.0
@@ -13,7 +14,6 @@ Athena Wisdom Goddess - Optimized Edition v3.0
 版本: v3.0.0 "性能优化"
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta

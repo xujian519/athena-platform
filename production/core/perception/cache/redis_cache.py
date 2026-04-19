@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 企业级Redis缓存管理器
 支持OCR结果缓存、图像特征缓存、向量缓存
 最后更新: 2026-01-26
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import json

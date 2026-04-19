@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 平台管理器 - Athena和小诺控制平台的核心接口
 提供对平台所有服务的统一管理和控制能力
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 搜索API模块
 Search API Module
@@ -11,5 +12,4 @@ Search API Module
 
 
 
-from __future__ import annotations
 __all__ = ["SearchAPI", "SearchRequest", "SearchResponse"]

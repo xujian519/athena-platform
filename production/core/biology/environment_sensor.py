@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 环境感知系统
 Environment Perception System
@@ -13,7 +14,6 @@ Environment Perception System
 版本: v0.1.2 "晨星初现"
 """
 
-from __future__ import annotations
 import json
 import logging
 from collections import Counter, defaultdict, deque

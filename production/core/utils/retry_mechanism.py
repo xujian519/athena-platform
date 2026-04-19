@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 OA答复系统重试机制
 Office Action Response System Retry Mechanism
@@ -17,7 +18,6 @@ Office Action Response System Retry Mechanism
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 from collections.abc import Callable
 from functools import wraps

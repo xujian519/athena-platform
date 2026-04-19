@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 大规模图谱优化模块
 Large-Scale Graph Optimization Module
@@ -16,7 +17,6 @@ Large-Scale Graph Optimization Module
 版本: v0.1.0 "高性能"
 """
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 

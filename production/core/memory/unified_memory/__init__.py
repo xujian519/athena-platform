@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一Agent记忆系统 - 统一接口
 Unified Agent Memory System - Unified Interface
@@ -33,7 +34,6 @@ Unified Agent Memory System - Unified Interface
 
 # 数据模型
 # 核心类
-from __future__ import annotations
 from .core import UnifiedAgentMemorySystem
 from .types import (
     AGENT_REGISTRY,

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强参数澄清系统 - 第一阶段优化版本
 Enhanced Parameter Clarification - Phase 1 Optimization
@@ -14,7 +15,6 @@ Enhanced Parameter Clarification - Phase 1 Optimization
 版本: 1.1.0 "第一阶段优化"
 """
 
-from __future__ import annotations
 import re
 from collections import defaultdict, deque
 from dataclasses import dataclass, field

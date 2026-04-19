@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一知识图谱管理器
 支持PostgreSQL和Neo4j双后端
@@ -6,7 +7,6 @@
 v3.0.0: 统一使用Neo4j作为图数据库 (技术决策: TD-001)
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import os

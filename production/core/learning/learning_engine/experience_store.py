@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习引擎 - 经验存储器
 Learning Engine - Experience Store
@@ -9,7 +10,6 @@ Learning Engine - Experience Store
 版本: 2.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 from collections import deque

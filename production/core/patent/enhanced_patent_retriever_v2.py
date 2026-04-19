@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强型专利检索模块 v2.0 - 修正版
 
@@ -12,7 +13,6 @@
 创建时间: 2026-01-07
 """
 
-from __future__ import annotations
 import csv
 import json
 from dataclasses import asdict, dataclass

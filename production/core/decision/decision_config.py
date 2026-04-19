@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 决策引擎配置类
 Decision Engine Configuration
@@ -10,7 +11,6 @@ Decision Engine Configuration
 版本: 1.0.0
 """
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any

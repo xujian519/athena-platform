@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 compliance
 """
-from __future__ import annotations

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 MPS性能监控器 - 阶段5优化
 实时监控GPU利用率、内存使用、温度和功耗
@@ -8,7 +9,6 @@ MPS性能监控器 - 阶段5优化
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import json

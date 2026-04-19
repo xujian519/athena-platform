@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 意图识别集成器 - 第二阶段
 Intent Recognition Ensemble - Phase 2
@@ -14,7 +15,6 @@ Intent Recognition Ensemble - Phase 2
 创建: 2026-01-12
 """
 
-from __future__ import annotations
 import logging
 from collections import defaultdict
 from dataclasses import dataclass, field

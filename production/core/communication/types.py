@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena通信系统 - 统一类型定义
 Unified Type Definitions for Communication System
@@ -11,7 +12,6 @@ Unified Type Definitions for Communication System
 版本: v1.0.0
 """
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

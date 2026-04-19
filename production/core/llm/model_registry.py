@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - 模型能力注册表
 管理所有模型的元数据和能力定义
@@ -6,7 +7,6 @@
 日期: 2026-01-23
 """
 
-from __future__ import annotations
 import json
 import logging
 import os

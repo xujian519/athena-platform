@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 语义增强意图识别引擎
 Semantic-Enhanced Intent Recognition Engine
@@ -14,7 +15,6 @@ Semantic-Enhanced Intent Recognition Engine
 作者: Athena AI系统
 版本: 2.0.0
 """
-from __future__ import annotations
 import asyncio
 import json
 import logging

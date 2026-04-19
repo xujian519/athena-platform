@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利申请信息管理系统
 Patent Application Information Management System
@@ -11,7 +12,6 @@ Patent Application Information Management System
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import json
 import sqlite3
 import uuid

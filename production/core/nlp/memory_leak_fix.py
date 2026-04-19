@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 NLP内存泄漏修复补丁
 NLP Memory Leak Fix Patch
@@ -14,7 +15,6 @@ NLP Memory Leak Fix Patch
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import gc
 import logging
 import os

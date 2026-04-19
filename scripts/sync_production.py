@@ -23,7 +23,7 @@ import shutil
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -295,7 +295,7 @@ class ProductionSyncer:
 
         self.save_version(version_info)
 
-    def rollback(self, version: str | None = None) -> bool:
+    def rollback(self, version: Optional[str] = None) -> bool:
         """
         回滚到指定版本
 
@@ -353,10 +353,24 @@ class ProductionSyncer:
 
 async def main():
     """主函数"""
+    import argparse
+
     print("=" * 80)
     print("🔄 生产环境同步脚本")
     print("=" * 80)
     print()
+
+    # 解析命令行参数
+    parser = argparse.ArgumentParser(description="生产环境同步脚本")
+    parser.add_argument("--dry-run", action="store_true", help="演练模式（不实际修改文件）")
+    parser.add_argument("--no-dry-run", action="store_true", help="实际执行同步")
+    args = parser.parse_args()
+
+    # 默认为演练模式，除非明确指定 --no-dry-run
+    dry_run = not args.no_dry_run
+
+    if args.dry_run:
+        dry_run = True
 
     # 项目根目录
     project_root = Path("/Users/xujian/Athena工作平台")
@@ -364,8 +378,8 @@ async def main():
     # 创建同步器
     syncer = ProductionSyncer(project_root)
 
-    # 执行同步（演练模式）
-    result = syncer.sync(dry_run=True)
+    # 执行同步
+    result = syncer.sync(dry_run=dry_run)
 
     # 生成报告
     report_path = project_root / "reports" / "production_sync_report.json"

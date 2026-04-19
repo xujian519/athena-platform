@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 注意力可视化器
 Attention Visualizer
@@ -7,7 +8,6 @@ Attention Visualizer
 帮助理解模型关注的关键信息
 """
 
-from __future__ import annotations
 import html
 import logging
 from dataclasses import dataclass, field

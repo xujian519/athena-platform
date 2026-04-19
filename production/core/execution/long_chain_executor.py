@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 长链执行器
 Long Chain Executor
@@ -7,7 +8,6 @@ Long Chain Executor
 支持检查点、恢复和容错,目标将长链成功率从65%提升到80%
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from collections.abc import Callable

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强记忆系统模块 - BaseModule标准接口兼容版本
 Enhanced Memory Module - BaseModule Compatible Version
@@ -9,7 +10,6 @@ Enhanced Memory Module - BaseModule Compatible Version
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import logging
 import sys
 from dataclasses import dataclass

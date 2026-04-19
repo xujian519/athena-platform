@@ -1,5 +1,6 @@
 
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena记忆系统安全加固措施
 Memory System Security Hardening
@@ -18,7 +19,6 @@ Memory System Security Hardening
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

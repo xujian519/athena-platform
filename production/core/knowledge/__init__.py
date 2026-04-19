@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 系统知识库模块
 System Knowledge Base Module
 """
 
-from __future__ import annotations
 from .knowledge_manager import KnowledgeManager
 from .system_knowledge_base import (
     KnowledgeCategory,

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 负熵优化的专利检索系统
 Negentropy-Optimized Patent Retrieval System
@@ -14,7 +15,6 @@ Negentropy-Optimized Patent Retrieval System
 版本: v0.1.2 "晨星初现"
 """
 
-from __future__ import annotations
 import json
 import logging
 

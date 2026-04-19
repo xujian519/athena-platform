@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 感知模块权限控制系统
 Perception Module Access Control System
@@ -10,7 +11,6 @@ Perception Module Access Control System
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from enum import Enum

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一异常定义 - Athena平台异常体系
 Unified Exception Definitions - Athena Platform Exception Hierarchy
@@ -10,7 +11,6 @@ Unified Exception Definitions - Athena Platform Exception Hierarchy
 版本: 1.0.0
 """
 
-from __future__ import annotations
 from datetime import datetime
 from typing import Any
 

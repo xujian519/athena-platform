@@ -1,3 +1,4 @@
+from __future__ import annotations
 # pyright: ignore
 # !/usr/bin/env python3
 """
@@ -11,7 +12,6 @@ Xiaona Patent Analysis System - Integrated Main System
 版本: v1.0 Integrated System
 """
 
-from __future__ import annotations
 import json
 import logging
 from dataclasses import dataclass, field

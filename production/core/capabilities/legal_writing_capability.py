@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专业法律写作能力
 Professional Legal Writing Capability
@@ -6,7 +7,6 @@ Professional Legal Writing Capability
 提供高质量的法律文档生成服务,支持研究报告、法律文书、意见书等多种类型。
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from datetime import datetime

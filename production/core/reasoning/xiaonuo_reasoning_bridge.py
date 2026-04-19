@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺推理引擎桥接器(新版)
 Xiaonuo Reasoning Bridge v2.0
@@ -10,7 +11,6 @@ Xiaonuo Reasoning Bridge v2.0
 版本: v2.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field

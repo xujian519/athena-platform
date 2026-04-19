@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena法律世界模型 - 核心模块
 Athena Legal World Model - Core Module
@@ -15,7 +16,6 @@ Athena Legal World Model - Core Module
 更新: 2026-03-06(添加数据库管理器)
 """
 
-from __future__ import annotations
 from .constitution import (
     CONSTITUTION_LAST_AMENDED,
     CONSTITUTION_RATIFICATION_DATE,

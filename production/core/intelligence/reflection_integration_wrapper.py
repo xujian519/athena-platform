@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 反思引擎集成包装器
 Reflection Engine Integration Wrapper
@@ -16,7 +17,6 @@ Reflection Engine Integration Wrapper
 版本: v1.0.0 "智能升级"
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

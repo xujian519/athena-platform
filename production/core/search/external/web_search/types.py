@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 联网搜索引擎 - 数据模型
 Web Search Engines - Data Models
@@ -11,7 +12,6 @@ Web Search Engines - Data Models
 版本: 2.1.0
 """
 
-from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum

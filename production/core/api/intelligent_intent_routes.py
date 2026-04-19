@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能意图识别API路由
 Intelligent Intent Recognition API Routes
@@ -14,7 +15,6 @@ Intelligent Intent Recognition API Routes
 创建: 2026-01-23
 """
 
-from __future__ import annotations
 import logging
 import time
 from typing import Any

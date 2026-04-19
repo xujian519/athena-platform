@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台全智能体记忆导入工具
 Import All Platform Agent Memories to Unified Memory System
@@ -6,7 +7,6 @@ Import All Platform Agent Memories to Unified Memory System
 扫描并导入平台所有智能体的记忆数据到统一记忆系统
 """
 
-from __future__ import annotations
 import json
 import sqlite3
 import sys

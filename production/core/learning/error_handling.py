@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习引擎错误处理和重试机制
 Error Handling and Retry Mechanism for Learning Engines
@@ -14,7 +15,6 @@ Error Handling and Retry Mechanism for Learning Engines
 创建时间: 2026-01-28
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from collections.abc import Awaitable, Callable

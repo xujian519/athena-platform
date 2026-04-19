@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 平台统一健康检查服务
 Unified Health Check Service for Athena Platform
@@ -10,7 +11,6 @@ Unified Health Check Service for Athena Platform
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

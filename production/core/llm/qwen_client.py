@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - Qwen(通义千问)云端模型客户端
 支持Qwen-Max、Qwen-Plus、Qwen-Turbo等模型
@@ -6,7 +7,6 @@
 日期: 2026-01-23
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from typing import Any

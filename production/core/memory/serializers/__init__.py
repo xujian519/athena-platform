@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Markdown序列化器
 
@@ -9,5 +10,4 @@ Version: v1.0.0
 """
 
 
-from __future__ import annotations
 __all__ = ["PatternMarkdownSerializer"]

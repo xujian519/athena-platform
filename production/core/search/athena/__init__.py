@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 athena
 """
-from __future__ import annotations

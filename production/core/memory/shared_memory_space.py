@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 共享记忆空间
 Shared Memory Space
@@ -16,7 +17,6 @@ Shared Memory Space
 版本: v1.0.0 "共享记忆"
 """
 
-from __future__ import annotations
 import logging
 import uuid
 from collections import defaultdict

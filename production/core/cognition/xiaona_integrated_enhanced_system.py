@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 # pyright: ignore
 # !/usr/bin/env python3
@@ -13,7 +14,6 @@ Xiaona Integrated Enhanced System
 版本: v2.0.0 Integrated
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

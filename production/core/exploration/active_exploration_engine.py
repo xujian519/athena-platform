@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 主动探索引擎
 Active Exploration Engine
@@ -16,7 +17,6 @@ Active Exploration Engine
 创建时间: 2025-01-05
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import sys

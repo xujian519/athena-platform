@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 exploration - 主动探索模块
 
@@ -13,7 +14,6 @@ exploration - 主动探索模块
 版本: v1.0.0
 """
 
-from __future__ import annotations
 from .active_exploration_engine import (
     ActiveExplorationEngine,
     ExplorationResult,

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena Hook系统
 
@@ -9,5 +10,4 @@ Version: v1.0.0
 """
 
 
-from __future__ import annotations
 __all__ = ["HookContext", "HookFunction", "HookRegistry", "HookType", "WorkflowMemoryHooks"]

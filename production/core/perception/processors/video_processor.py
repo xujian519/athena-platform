@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 视频处理器
 Video Processor
@@ -8,7 +9,6 @@ Video Processor
 版本: 3.0.0
 """
 
-from __future__ import annotations
 import logging
 from datetime import datetime
 from typing import Any

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 向量-图融合架构
 Vector-Graph Fusion Architecture
@@ -8,7 +9,6 @@ Vector-Graph Fusion Architecture
 作者: 小诺·双鱼公主
 创建时间: 2025-12-28
 """
-from __future__ import annotations
 import numpy as np
 
 from core.database.unified_connection import get_postgres_pool

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能体协同机制
 Agent Collaboration Mechanism
@@ -14,7 +15,6 @@ Agent Collaboration Mechanism
 版本: v1.0.0 "智能体协同"
 """
 
-from __future__ import annotations
 import asyncio
 import concurrent.futures
 import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 API认证和安全模块
 API Authentication and Security Module for Athena Platform
@@ -9,7 +10,6 @@ API Authentication and Security Module for Athena Platform
 创建时间: 2025-01-09
 """
 
-from __future__ import annotations
 import logging
 import os
 import re

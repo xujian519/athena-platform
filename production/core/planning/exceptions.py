@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 规划系统异常定义
 Planning System Exceptions
@@ -10,7 +11,6 @@ Planning System Exceptions
 版本: v1.1.0 "Phase 2 Enhanced"
 """
 
-from __future__ import annotations
 from typing import Any
 
 # ============================================================================

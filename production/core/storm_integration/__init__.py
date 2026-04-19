@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Co-STORM 与 Athena 平台深度集成
 
@@ -16,7 +17,6 @@ Co-STORM 与 Athena 平台深度集成
 创建时间: 2025-01-02
 """
 
-from __future__ import annotations
 from core.storm_integration.patent_agents import (
     PatentAttorneyAgent,
     PatentExaminerAgent,

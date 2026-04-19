@@ -1,5 +1,5 @@
-"""执行模块共享类型定义"""
 from __future__ import annotations
+"""执行模块共享类型定义"""
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any

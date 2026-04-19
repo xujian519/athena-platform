@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 MCP客户端管理器
 MCP Client Manager - 真实MCP服务器连接
@@ -11,7 +12,6 @@ MCP Client Manager - 真实MCP服务器连接
 - 连接复用和自动清理
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

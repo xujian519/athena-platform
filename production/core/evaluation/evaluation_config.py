@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 评估与反思模块配置常量
 Evaluation & Reflection Module Configuration Constants
@@ -10,7 +11,6 @@ Evaluation & Reflection Module Configuration Constants
 版本: 1.0.0
 """
 
-from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 

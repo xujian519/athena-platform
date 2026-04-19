@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 DSPy专利案例分析训练系统
 DSPy Patent Case Analysis Training System
@@ -15,7 +16,6 @@ DSPy Patent Case Analysis Training System
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 from datetime import datetime

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺智能体模块 (XiaonuoAgent Module)
 完整的AI智能体实现
@@ -18,7 +19,6 @@
 版本: v2.0.0
 """
 
-from __future__ import annotations
 from core.xiaonuo_agent.xiaonuo_agent import (
     AgentProfile,
     AgentResponse,

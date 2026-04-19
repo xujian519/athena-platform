@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺BERT模型管理器
 使用本地已有的中文模型来增强NLP能力
@@ -11,7 +12,6 @@
 日期: 2025-12-18
 """
 
-from __future__ import annotations
 import os
 from typing import Any
 

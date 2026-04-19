@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 伦理框架配置模块
 Ethics Framework Configuration Module
 """
 
-from __future__ import annotations
 from .config_loader import (
     ConfigLoader,
     EthicsConfig,

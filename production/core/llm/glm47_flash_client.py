@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 GLM-4.7-Flash LLM客户端
 智谱AI GLM-4.7-Flash 模型集成
@@ -16,7 +17,6 @@ GLM-4.7-Flash LLM客户端
 创建时间: 2026-01-21
 """
 
-from __future__ import annotations
 import json
 import logging
 import os

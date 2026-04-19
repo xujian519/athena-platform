@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 任务上下文持久化管理器
 Task Context Persistence Manager - 任务执行上下文的持久化和恢复
@@ -8,7 +9,6 @@ Task Context Persistence Manager - 任务执行上下文的持久化和恢复
 版本: v1.0.0 "Phase 1"
 """
 
-from __future__ import annotations
 import json
 import logging
 import threading

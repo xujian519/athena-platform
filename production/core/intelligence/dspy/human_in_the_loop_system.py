@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 人机协作专利分析系统 - 原型实现
 Human-in-the-Loop Patent Analysis System - Prototype
@@ -10,7 +11,6 @@ Human-in-the-Loop Patent Analysis System - Prototype
 本系统实现任务分解、AI自动执行、人类决策验证的完整工作流
 """
 
-from __future__ import annotations
 import json
 import logging
 from dataclasses import dataclass, field

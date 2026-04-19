@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能模型管理器
 Intelligent Model Manager
@@ -10,7 +11,6 @@ Intelligent Model Manager
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import gc
 import threading
 import time

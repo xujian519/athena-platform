@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena增强监控告警系统
 提供多渠道告警通知、Web仪表板、历史数据查询等功能
@@ -17,7 +18,6 @@ Athena增强监控告警系统
 - 性能报告: 自动生成报告
 """
 
-from __future__ import annotations
 import json
 import logging
 import smtplib

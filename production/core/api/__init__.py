@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena工作平台 - API模块
 API Module for Athena Platform
@@ -10,7 +11,6 @@ API Module for Athena Platform
 - 限流控制和AI客户端
 """
 
-from __future__ import annotations
 from .api_models import (
     AlertChannelEnum,
     # 告警模型

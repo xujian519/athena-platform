@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 定性定量结合分析器
 Qualitative-Quantitative Integrated Analyzer
@@ -13,7 +14,6 @@ Qualitative-Quantitative Integrated Analyzer
 版本: v1.0.0 "定性定量结合"
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from enum import Enum

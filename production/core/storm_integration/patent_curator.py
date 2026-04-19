@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利信息策展器 (Patent Information Curator)
 
@@ -16,7 +17,6 @@
 更新时间: 2026-01-25 (TD-001: 迁移到Neo4j)
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from abc import ABC, abstractmethod

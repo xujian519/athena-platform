@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena全链路监控系统
 Full-Link Monitoring System
@@ -15,7 +16,6 @@ Full-Link Monitoring System
 版本: v2.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import threading

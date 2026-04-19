@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 工具知识图谱
 Tool Knowledge Graph
@@ -16,7 +17,6 @@ Tool Knowledge Graph
 版本: v1.0.0 "工具图谱"
 """
 
-from __future__ import annotations
 import logging
 from collections import defaultdict
 from dataclasses import dataclass, field

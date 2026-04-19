@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 快速学习机制 - 公共接口
 Rapid Learning - Public Interface
@@ -11,7 +12,6 @@ Rapid Learning - Public Interface
 支持在线学习、增量学习和元学习的智能体快速适应系统。
 """
 
-from __future__ import annotations
 from typing import Any
 
 from .engine import SKLEARN_AVAILABLE, TORCH_AVAILABLE, RapidLearningEngine

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - 缓存预热器
 在系统启动时预加载常用数据,提升首次请求性能
@@ -6,7 +7,6 @@
 日期: 2026-01-23
 """
 
-from __future__ import annotations
 import logging
 from datetime import datetime
 

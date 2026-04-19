@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增量更新系统
 Incremental Update System
@@ -14,7 +15,6 @@ Incremental Update System
 - 异步并行处理 (高效并发)
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import json

@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 搜索模块基础定义
 定义搜索接口和基础数据结构
 """
 
-from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum

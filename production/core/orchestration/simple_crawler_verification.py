@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 简化版爬虫系统验证脚本
 Simplified Crawler System Verification Script
@@ -9,7 +10,6 @@ Simplified Crawler System Verification Script
 创建时间: 2025-12-14
 """
 
-from __future__ import annotations
 import asyncio
 import json
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 系统演化记忆系统
 Evolutionary Memory System
@@ -14,7 +15,6 @@ Evolutionary Memory System
 版本: v0.1.2 "晨星初现"
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import logging

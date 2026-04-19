@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 时间线记忆系统 v4.0 - 维特根斯坦版
 Timeline Memory System v4.0 - Wittgenstein Edition
@@ -19,7 +20,6 @@ v4.0核心特性:
 版本: v4.0.0 "逻辑之光"
 """
 
-from __future__ import annotations
 import json
 import sys
 from dataclasses import dataclass, field

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 在线学习引擎 (Online Learning Engine)
 实时学习和适应系统,持续优化性能
@@ -8,7 +9,6 @@
 优化目标: 持续提升性能,适应环境变化
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import logging

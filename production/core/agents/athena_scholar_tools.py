@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜 Google Scholar 集成工具
 Athena Google Scholar Integration Tools
@@ -10,7 +11,6 @@ Athena Google Scholar Integration Tools
 创建: 2025-12-31
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from typing import Any

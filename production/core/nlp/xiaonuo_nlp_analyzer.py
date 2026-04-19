@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺NLP能力分析器
 Xiaonuo NLP Capability Analyzer
@@ -10,7 +11,6 @@ Xiaonuo NLP Capability Analyzer
 版本: v1.0.0 "小诺NLP专业分析"
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import logging

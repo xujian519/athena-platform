@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强的法律专家推理引擎
 基于对比分析结果,重点改进法律适用准确性问题
@@ -8,7 +9,6 @@
 日期:2025-11-05
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

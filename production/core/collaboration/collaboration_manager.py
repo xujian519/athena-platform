@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协作管理器
 Collaboration Manager
@@ -6,7 +7,6 @@ Collaboration Manager
 负责管理多智能体协作的工作流程,包括任务分解、协调策略、冲突解决等
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import uuid

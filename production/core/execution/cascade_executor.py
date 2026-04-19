@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 级联调用执行器 - 第一阶段优化
 Cascade Executor - Phase 1 Optimization
@@ -14,7 +15,6 @@ Cascade Executor - Phase 1 Optimization
 创建: 2026-01-12
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

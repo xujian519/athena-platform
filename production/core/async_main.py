@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 异步入口统一模块
 Async Main Entry Point Module
@@ -9,7 +10,6 @@ Async Main Entry Point Module
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import functools
 import logging

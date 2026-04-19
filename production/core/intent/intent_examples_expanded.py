@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 扩充意图示例库 - 150+示例
 Expanded Intent Examples Library - 150+ Examples
@@ -11,7 +12,6 @@ Expanded Intent Examples Library - 150+ Examples
 """
 
 # 扩充意图示例库 - 总计185个示例
-from __future__ import annotations
 EXPANDED_INTENT_EXAMPLES = {
     # 专利专业类 (40个示例)
     "patent_search": [

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 动态负载均衡器
 Dynamic Load Balancer
@@ -25,7 +26,6 @@ Dynamic Load Balancer
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import contextlib
 import hashlib

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 AutoSpec专利说明书自动撰写框架 v2.0
 
@@ -27,7 +28,6 @@ AutoSpec专利说明书自动撰写框架 v2.0
 更新: 集成OpenClaw 9阶段流程、任务状态管理、P0/P1/P2问题优先级
 """
 
-from __future__ import annotations
 import logging
 import time
 from dataclasses import dataclass, field
@@ -373,7 +373,7 @@ class AutoSpecDrafter:
     MODEL_CONFIG = {
         "understanding": {
             "model": "qwen3.5",
-            "provider": "mlx",
+            "provider": "ollama",
             "temperature": 0.3,
             "max_tokens": 2000
         },
@@ -391,7 +391,7 @@ class AutoSpecDrafter:
         },
         "quality_check": {
             "model": "qwen3.5",
-            "provider": "mlx",
+            "provider": "ollama",
             "temperature": 0.2,
             "max_tokens": 2000
         }

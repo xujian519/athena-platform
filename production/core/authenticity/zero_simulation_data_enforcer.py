@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena工作平台 - 零模拟数据执行器
 强制执行绝对真实性原则,彻底杜绝模拟数据生成
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass

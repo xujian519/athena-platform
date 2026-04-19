@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 创意Agent (CreativeAgent) - 创新思维专家
 
@@ -20,7 +21,6 @@
 - brainstorming: 头脑风暴
 """
 
-from __future__ import annotations
 import logging
 from datetime import datetime
 from typing import Any

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜自适应学习系统
 Xiaona Adaptive Learning System
@@ -11,7 +12,6 @@ Xiaona Adaptive Learning System
 版本: v2.0.0 Adaptive
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import json

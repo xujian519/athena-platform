@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 本地LLM封装器 - 支持GGUF量化模型
 Local LLM Wrapper - Supporting GGUF Quantized Models
@@ -6,7 +7,6 @@ Local LLM Wrapper - Supporting GGUF Quantized Models
 使用Qwen2.5-7B-Instruct-GGUF进行智能摘要和问答
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from pathlib import Path

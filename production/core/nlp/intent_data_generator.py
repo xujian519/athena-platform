@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 意图识别数据生成器
 Intent Recognition Data Generator
 大规模生成高质量训练数据
 """
 
-from __future__ import annotations
 import json
 import random
 import re

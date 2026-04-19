@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台LlamaIndex混合架构集成
 Athena Platform LlamaIndex Hybrid Architecture Integration
@@ -6,7 +7,6 @@ Athena Platform LlamaIndex Hybrid Architecture Integration
 保持Athena核心优势 + 选择性引入LlamaIndex工具
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import sys

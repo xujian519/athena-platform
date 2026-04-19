@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 记忆系统 (Memory System)
 统一的三层记忆管理接口
@@ -13,7 +14,6 @@
 版本: v2.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from enum import Enum

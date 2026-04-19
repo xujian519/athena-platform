@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺多语言处理器
 Xiaonuo Multilingual Processor
@@ -15,7 +16,6 @@ Xiaonuo Multilingual Processor
 日期: 2025-12-18
 """
 
-from __future__ import annotations
 import os
 import re
 import sys

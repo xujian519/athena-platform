@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化数据库连接池
 Optimized Database Connection Pool
@@ -10,7 +11,6 @@ Optimized Database Connection Pool
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import logging
 from contextlib import asynccontextmanager
 

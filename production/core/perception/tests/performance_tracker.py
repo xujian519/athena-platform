@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 性能基准跟踪系统
 跟踪性能指标变化，检测性能回归
 最后更新: 2026-01-26
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

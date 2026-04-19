@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 集成提示词生成器 - 整合场景规则与现有提示词系统
 Integrated Prompt Generator - Integrate scenario rules with existing prompt system
@@ -7,7 +8,6 @@ Integrated Prompt Generator - Integrate scenario rules with existing prompt syst
 创建时间: 2026-01-23
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

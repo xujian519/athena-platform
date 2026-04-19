@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 P2-4: 多模态检索增强系统
 
@@ -14,8 +15,6 @@ P2-4: 多模态检索增强系统
 - "A Survey on Multimodal Patent Retrieval" (2024)
 - "Vision-Language Models for Patent Image Understanding"
 """
-
-from __future__ import annotations
 
 import hashlib
 import logging

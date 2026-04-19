@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 因果归因分析器 (Causal Attribution)
 分析决策因果链和责任归因
@@ -7,7 +8,6 @@
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

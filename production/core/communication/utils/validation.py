@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 输入验证模块
 Input Validation Module
@@ -10,7 +11,6 @@ Input Validation Module
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 import re

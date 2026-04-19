@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 小诺自主执行引擎
 实现情感驱动的任务执行和用户交互能力
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from collections import deque

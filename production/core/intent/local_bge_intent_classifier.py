@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Phase 2: 本地BGE增强意图识别系统(使用项目本地模型)
 Local BGE-Enhanced Intent Recognition System
@@ -20,7 +21,6 @@ Local BGE-Enhanced Intent Recognition System
 创建: 2025-12-29
 更新: 2026-01-13 (升级到BGE-M3)
 """
-from __future__ import annotations
 import json
 import sys
 import time

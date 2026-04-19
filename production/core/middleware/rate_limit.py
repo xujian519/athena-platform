@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 速率限制中间件
 Rate Limiting Middleware
@@ -11,7 +12,6 @@ Rate Limiting Middleware
 - 分布式支持(Redis)
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import logging

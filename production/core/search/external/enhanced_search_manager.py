@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强外部搜索引擎管理器
 Enhanced External Search Engine Manager
@@ -9,7 +10,6 @@ Enhanced External Search Engine Manager
 创建时间: 2025-12-04
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import logging

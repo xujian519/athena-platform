@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 知识图谱导入模块
 Knowledge Graph Importer
@@ -10,7 +11,6 @@ Knowledge Graph Importer
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

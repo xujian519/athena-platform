@@ -1,10 +1,10 @@
+from __future__ import annotations
 """
 服务能力注册配置
 定义平台所有80个微服务的能力描述
 """
 
 # 避免循环导入
-from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:

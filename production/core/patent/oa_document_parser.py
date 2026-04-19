@@ -14,8 +14,8 @@ Office Action Document Parser
 创建时间: 2025-12-24
 版本: v0.1.2 "晨星初现"
 """
-
 from __future__ import annotations
+
 import json
 import logging
 import re
@@ -141,6 +141,9 @@ class ParsedOfficeAction:
     # 原始文本
     raw_text: str = ""
 
+    # 结构化表格数据
+    tables: list[dict[str, Any]] = field(default_factory=list)
+
     def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
@@ -160,6 +163,7 @@ class ParsedOfficeAction:
             "response_deadline": self.response_deadline,
             "parsed_at": self.parsed_at,
             "confidence": self.confidence,
+            "tables": self.tables,
         }
 
     def to_json(self, indent: int = 2) -> str:
@@ -245,6 +249,28 @@ class ParsedOfficeAction:
             md.append("*未提取到技术特征*")
         md.append("")
 
+        # 结构化表格
+        md.append("## 📊 提取的表格")
+        if self.tables:
+            for table in self.tables:
+                idx = table.get("table_index", "?")
+                md.append(f"### 表格 {idx}")
+                md.append(
+                    f"- **来源**: {table.get('source', 'unknown')}, "
+                    f"**行数**: {table.get('row_count', 0)}, "
+                    f"**列数**: {table.get('col_count', 0)}"
+                )
+                if table.get("page_number", 0) > 0:
+                    md.append(f"- **所在页**: {table['page_number']}")
+                rows = table.get("rows", [])
+                if rows:
+                    md.append("")
+                    md.append(self._render_table_as_markdown(rows))
+                md.append("")
+        else:
+            md.append("*未提取到表格*")
+        md.append("")
+
         # 原始文本预览
         md.append("## 📄 原始文本预览")
         preview = self.raw_text[:500] if self.raw_text else "无"
@@ -263,6 +289,22 @@ class ParsedOfficeAction:
         md.append("")
 
         return "\n".join(md)
+
+    @staticmethod
+    def _render_table_as_markdown(rows: list[list[str]]) -> str:
+        """将二维行数据渲染为Markdown表格"""
+        if not rows:
+            return ""
+        col_count = max(len(r) for r in rows)
+        lines = []
+        for i, row in enumerate(rows):
+            padded = [(cell or "").replace("|", "\\|") for cell in row]
+            while len(padded) < col_count:
+                padded.append("")
+            lines.append("| " + " | ".join(padded) + " |")
+            if i == 0:
+                lines.append("| " + " | ".join(["---"] * col_count) + " |")
+        return "\n".join(lines)
 
     def _format_rejection_type(self) -> str:
         """格式化驳回类型"""
@@ -288,10 +330,17 @@ class OfficeActionParser:
     4. Markdown确认模板
     """
 
-    def __init__(self):
-        """初始化解析器"""
+    def __init__(self, parser_factory=None):
+        """初始化解析器
+
+        Args:
+            parser_factory: 可选的DocumentParserFactory实例，
+                           传入后对扫描型PDF自动使用MinerU解析。
+                           不传时行为与原来完全一致。
+        """
         self.name = "审查意见文档解析器"
         self.version = "v0.1.2"
+        self._parser_factory = parser_factory
 
         # 检查依赖
         self.capabilities = {
@@ -350,10 +399,12 @@ class OfficeActionParser:
         logger.info(f"📄 开始解析: {file_path} (类型: {doc_type.value})")
 
         # 根据类型选择解析方法
+        tables: list[dict[str, Any]] = []
+
         if doc_type == DocumentType.PDF:
-            text = self._parse_pdf(file_path)
+            text, tables = self._parse_pdf(file_path)
         elif doc_type == DocumentType.WORD:
-            text = self._parse_word(file_path)
+            text, tables = self._parse_word(file_path)
         elif doc_type == DocumentType.IMAGE:
             text = self._parse_image(file_path)
         elif doc_type == DocumentType.TEXT:
@@ -363,8 +414,11 @@ class OfficeActionParser:
 
         # 提取结构化信息
         parsed = self._extract_structured_info(text, file_path)
+        parsed.tables = tables
 
-        logger.info(f"✅ 解析完成 (置信度: {parsed.confidence:.1%})")
+        logger.info(
+            f"✅ 解析完成 (置信度: {parsed.confidence:.1%}, 表格数: {len(tables)})"
+        )
 
         return parsed
 
@@ -388,57 +442,141 @@ class OfficeActionParser:
             "technical_feature": re.compile(r"区别技术特征|区别在于|未公开|未披露"),
         }
 
-    def _parse_pdf(self, file_path: str) -> str:
+    def _parse_pdf(self, file_path: str) -> tuple[str, list[dict[str, Any]]]:
         """
-        解析PDF文档（使用平台已有的pdfplumber）
+        解析PDF文档，提取文本和结构化表格
         参考: core/judgment_vector_db/data_processing/pdf_extractor.py
+
+        当文本层不足（扫描型PDF）且有parser_factory时，自动调用文档解析服务。
         """
         if not HAS_PDF:
             raise RuntimeError("未安装pdfplumber库，请运行: pip install pdfplumber")
 
         text = ""
+        tables: list[dict[str, Any]] = []
         try:
             with pdfplumber.open(file_path) as pdf:
-                for page in pdf.pages:
+                for page_num, page in enumerate(pdf.pages, 1):
                     page_text = page.extract_text()
                     if page_text:
                         text += page_text + "\n"
+                    # 提取结构化表格
+                    page_tables = page.extract_tables()
+                    for table_data in page_tables:
+                        if not table_data:
+                            continue
+                        # 过滤空表格
+                        has_content = any(
+                            any(cell and cell.strip() for cell in row)
+                            for row in table_data
+                        )
+                        if not has_content:
+                            continue
+                        tables.append({
+                            "table_index": len(tables) + 1,
+                            "page_number": page_num,
+                            "rows": [
+                                [cell.strip() if cell else "" for cell in row]
+                                for row in table_data
+                            ],
+                            "header": (
+                                [cell.strip() if cell else "" for cell in table_data[0]]
+                                if table_data
+                                else None
+                            ),
+                            "row_count": len(table_data),
+                            "col_count": max(len(row) for row in table_data) if table_data else 0,
+                            "source": "pdf",
+                        })
         except Exception as e:
             logger.error(f"PDF解析失败: {e}")
             raise
 
-        return text
+        # 文本层不足 + 有parser_factory → 尝试MinerU/Tesseract
+        if len(text.strip()) < 100 and self._parser_factory:
+            logger.info("PDF文本层不足(%d字符)，尝试文档解析服务", len(text.strip()))
+            try:
+                from core.document_parser.base import ParseRequest
+                from core.document_parser.parser_factory import run_async_safe
 
-    def _parse_word(self, file_path: str) -> str:
+                factory = self._parser_factory
+                request = ParseRequest(file_path=file_path)
+                result = run_async_safe(factory.parse(request))
+                if result.content and not result.error:
+                    logger.info("文档解析服务成功: backend=%s", result.backend_used)
+                    text = result.content
+                    # 如果pdfplumber没提取到表格，使用解析服务的表格
+                    if not tables and result.tables:
+                        tables = result.tables
+                else:
+                    logger.warning("文档解析服务失败: %s", result.error)
+            except Exception as e:
+                logger.warning("文档解析服务异常: %s", e)
+
+        return text, tables
+
+    def _parse_word(self, file_path: str) -> tuple[str, list[dict[str, Any]]]:
         """
-        解析Word文档（使用平台已有的python-docx）
+        解析Word文档，提取文本和结构化表格
         参考: core/intelligence/dspy/production_docx_extractor.py
         """
         if not HAS_DOCX:
             raise RuntimeError("未安装python-docx库，请运行: pip install python-docx")
 
         text = ""
+        tables: list[dict[str, Any]] = []
         try:
             doc = Document(file_path)
             for paragraph in doc.paragraphs:
                 text += paragraph.text + "\n"
-            # 同时提取表格内容
+            # 提取结构化表格（同时保留文本兼容性）
             for table in doc.tables:
+                table_rows: list[list[str]] = []
                 for row in table.rows:
-                    for cell in row.cells:
-                        text += cell.text + " "
+                    row_data = [cell.text.strip() for cell in row.cells]
+                    table_rows.append(row_data)
+                    # 向后兼容：表格文本仍拼入text供正则提取
+                    text += " ".join(row_data) + " "
                 text += "\n"
+                if table_rows:
+                    tables.append({
+                        "table_index": len(tables) + 1,
+                        "page_number": 0,
+                        "rows": table_rows,
+                        "header": table_rows[0] if table_rows else None,
+                        "row_count": len(table_rows),
+                        "col_count": max(len(r) for r in table_rows),
+                        "source": "word",
+                    })
         except Exception as e:
             logger.error(f"Word解析失败: {e}")
             raise
 
-        return text
+        return text, tables
 
     def _parse_image(self, file_path: str) -> str:
         """
-        解析图片（使用平台已有的OCR优化器）
+        解析图片（使用平台已有的OCR优化器或文档解析服务）
         参考: core/perception/chinese_ocr_optimizer.py
+
+        优先使用parser_factory（MinerU），不可用时降级到本地OCR。
         """
+        # 优先尝试parser_factory（MinerU）
+        if self._parser_factory:
+            try:
+                from core.document_parser.base import ParseRequest
+                from core.document_parser.parser_factory import run_async_safe
+
+                factory = self._parser_factory
+                request = ParseRequest(file_path=file_path)
+                result = run_async_safe(factory.parse(request))
+                if result.content and not result.error:
+                    logger.info("图片解析服务成功: backend=%s", result.backend_used)
+                    return result.content
+            except Exception as e:
+                logger.warning("图片解析服务异常，降级到本地OCR: %s", e)
+
+        # 降级到本地OCR
         if not HAS_OCR or not self.ocr_optimizer:
             raise RuntimeError("OCR功能不可用，请检查ChineseOCROptimizer配置")
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 内部搜索引擎管理器
 Internal Search Engine Manager
@@ -9,7 +10,6 @@ Internal Search Engine Manager
 创建时间: 2025-12-04
 """
 
-from __future__ import annotations
 import json
 import logging
 import sqlite3

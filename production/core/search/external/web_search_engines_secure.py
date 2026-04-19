@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 安全版本的外部搜索引擎实现
 Secure Version of External Search Engines
@@ -10,7 +11,6 @@ Secure Version of External Search Engines
 版本: 2.0.0 (安全版)
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import ssl

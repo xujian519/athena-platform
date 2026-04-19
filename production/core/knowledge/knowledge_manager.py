@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 知识管理器
 Knowledge Manager
@@ -6,7 +7,6 @@ Knowledge Manager
 管理Agent的知识库和学习内容
 """
 
-from __future__ import annotations
 import logging
 from typing import Any
 

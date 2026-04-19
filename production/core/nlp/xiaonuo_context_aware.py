@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺上下文理解机制
 Xiaonuo Context-Aware Understanding System
@@ -10,7 +11,6 @@ Xiaonuo Context-Aware Understanding System
 版本: v1.0.0 "智能上下文理解"
 """
 
-from __future__ import annotations
 import os
 from collections import deque
 from dataclasses import dataclass, field

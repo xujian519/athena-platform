@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 语义记忆 (Semantic Memory)
 基于Neo4j + Qdrant的长期语义知识记忆
@@ -14,7 +15,6 @@
 版本: v2.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 from dataclasses import asdict, dataclass

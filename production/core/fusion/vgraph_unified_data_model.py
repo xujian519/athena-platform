@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一数据模型 - Vector-Graph Unified Schema
 为 NebulaGraph + pgvector 深度融合提供统一的数据抽象
@@ -7,7 +8,6 @@
 创建时间: 2025-12-28
 """
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

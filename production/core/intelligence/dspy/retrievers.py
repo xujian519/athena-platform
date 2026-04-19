@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena数据源检索器适配器
 Athena Data Source Retrievers for DSPy
@@ -5,7 +6,6 @@ Athena Data Source Retrievers for DSPy
 将Athena平台的向量库和知识图谱适配为DSPy可用的检索器
 """
 
-from __future__ import annotations
 from typing import Any
 
 import dspy

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺拖延症对抗助手
 Xiaonuo Procrastination Fighter
@@ -6,7 +7,6 @@ Xiaonuo Procrastination Fighter
 专门帮助爸爸战胜拖延症的智能助手
 """
 
-from __future__ import annotations
 import asyncio
 import random
 from datetime import datetime, timedelta

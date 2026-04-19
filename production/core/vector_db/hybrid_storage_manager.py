@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena工作平台 - 混合存储管理器
 Hybrid Storage Manager for Athena Platform
@@ -10,7 +11,6 @@ Hybrid Storage Manager for Athena Platform
 """
 
 # Numpy兼容性导入
-from __future__ import annotations
 import os
 import sqlite3
 import sys

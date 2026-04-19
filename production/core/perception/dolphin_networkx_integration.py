@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Dolphin + NetworkX 深度技术分析集成
 Dolphin Document Parsing + NetworkX Graph Analysis Integration
@@ -7,7 +8,6 @@ Dolphin Document Parsing + NetworkX Graph Analysis Integration
 创建强大的专利技术深度分析系统。
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 反思模式引擎 (Reflection Pattern)
 基于《智能体设计》反思模式的实现
@@ -19,7 +20,6 @@
 预期收益: 显著提升输出质量和可靠性
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

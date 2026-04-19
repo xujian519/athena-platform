@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 权利要求修订器 - 基于审查意见的智能修订
 
@@ -10,7 +11,6 @@
 创建时间: 2026-03-20
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

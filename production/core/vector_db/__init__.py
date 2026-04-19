@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 vector_db
 """
-from __future__ import annotations

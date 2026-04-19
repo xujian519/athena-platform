@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 统一Web搜索模块
 Unified Web Search Module
 """
 
-from __future__ import annotations
 from typing import Any
 
 

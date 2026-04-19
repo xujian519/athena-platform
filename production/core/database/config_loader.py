@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 数据库配置加载器
 统一管理所有数据库配置
 """
 
-from __future__ import annotations
 import os
 from dataclasses import dataclass
 from typing import Any

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 任务管理器 - 兼容性实现
 Task Manager - Compatibility Implementation
@@ -12,7 +13,6 @@ Task Manager - Compatibility Implementation
 更新时间: 2026-01-27
 """
 
-from __future__ import annotations
 import asyncio
 import inspect
 import logging

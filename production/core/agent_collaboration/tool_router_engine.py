@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 智能工具路由引擎
 负责智能体的工具选择和路由决策
 """
 
-from __future__ import annotations
 import re
 import time
 from dataclasses import dataclass, field

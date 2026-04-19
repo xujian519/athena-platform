@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # pyright: ignore
 """
 小娜专利撰写助手
@@ -11,7 +12,6 @@ Xiaona Patent Drafting Assistant
 版本: v1.0 Patent Writing
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass, field

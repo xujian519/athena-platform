@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 认知与决策模块业务指标扩展
 Business Metrics Extension for Cognitive & Decision Module
@@ -14,7 +15,6 @@ Business Metrics Extension for Cognitive & Decision Module
 版本: v1.0
 """
 
-from __future__ import annotations
 import time
 from functools import wraps
 from typing import Any

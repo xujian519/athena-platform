@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena ReAct执行引擎
 ReAct Executor for Athena Platform
@@ -22,7 +23,6 @@ ReAct Executor for Athena Platform
     )
 """
 
-from __future__ import annotations
 import json
 import logging
 from dataclasses import dataclass, field

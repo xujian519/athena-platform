@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 系统知识库建设
 System Knowledge Base Builder
@@ -14,7 +15,6 @@ System Knowledge Base Builder
 版本: v1.0.0 "知识库建设"
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import logging

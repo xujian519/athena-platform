@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一推理引擎 - 集成所有推理模式
 
@@ -15,7 +16,6 @@ Unified Reasoning Engine - Integrating All Reasoning Patterns
 - 异步并行推理支持
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import random

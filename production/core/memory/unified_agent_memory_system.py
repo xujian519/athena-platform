@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一Agent记忆系统 - 向后兼容重定向
 Unified Agent Memory System - Backward Compatibility Redirect
@@ -65,7 +66,6 @@ memories = await memory_system.retrieve_memories(
 
 """
 
-from __future__ import annotations
 import logging
 import warnings
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利复审决定深度处理器
 Patent Re-examination Decision Deep Processor
@@ -10,7 +11,6 @@ Patent Re-examination Decision Deep Processor
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import os
 import re
 from dataclasses import dataclass, field

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 系统反馈闭环
 System Feedback Loop
@@ -15,7 +16,6 @@ System Feedback Loop
 版本: v1.0.0 "反馈闭环"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 

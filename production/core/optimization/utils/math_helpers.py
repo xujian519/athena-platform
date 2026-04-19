@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 数学工具函数 - 安全的数学运算
 Math Helpers - Safe Mathematical Operations
@@ -7,7 +8,6 @@ Math Helpers - Safe Mathematical Operations
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import numbers
 from typing import TypeVar
 

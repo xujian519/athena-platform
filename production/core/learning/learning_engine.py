@@ -12,7 +12,6 @@ Learning Engine - Backward Compatibility Redirect
 此文件仅用于向后兼容,将在未来版本中移除。
 """
 
-from __future__ import annotations
 import warnings
 
 from .learning_engine import (

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 意图识别适配器
 Intent Recognition Adapter
@@ -15,7 +16,6 @@ Intent Recognition Adapter
 更新: 2026-01-20 (重构为继承BaseIntentEngine)
 """
 
-from __future__ import annotations
 import logging
 import sys
 import time

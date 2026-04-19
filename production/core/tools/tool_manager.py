@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强版工具管理器
 Enhanced Tool Manager
@@ -10,7 +11,6 @@ Enhanced Tool Manager
 版本: v1.0.0 "Phase 1"
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from typing import Any

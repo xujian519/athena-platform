@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 感知模块自定义异常类体系
 Perception Module Custom Exception Hierarchy
@@ -10,7 +11,6 @@ Perception Module Custom Exception Hierarchy
 版本: 1.0.0
 """
 
-from __future__ import annotations
 from typing import Any
 
 

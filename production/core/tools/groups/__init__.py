@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 工具组定义模块
 Tool Group Definitions
@@ -10,7 +11,6 @@ Tool Group Definitions
 版本: v1.0.0 "Phase 1"
 """
 
-from __future__ import annotations
 from ..base import ToolCategory
 from ..tool_group import ActivationRule, GroupActivationRule, ToolGroupDef
 

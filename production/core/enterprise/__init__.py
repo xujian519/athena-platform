@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 enterprise
 """
-from __future__ import annotations

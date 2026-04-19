@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 NetworkX图分析工具模块
 NetworkX Graph Analysis Utilities
@@ -6,7 +7,6 @@ NetworkX Graph Analysis Utilities
 提供统一的图操作接口,支持推理引擎、知识图谱、专利分析等场景
 """
 
-from __future__ import annotations
 import json
 import logging
 from dataclasses import dataclass, field

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 依赖注入容器
 Dependency Injection Container
@@ -11,7 +12,6 @@ Dependency Injection Container
 - 替代全局单例模式
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from collections.abc import Callable

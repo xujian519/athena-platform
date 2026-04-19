@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 日志脱敏器
 Log Sanitizer
@@ -11,7 +12,6 @@ Log Sanitizer
 - 保留数据格式用于调试
 """
 
-from __future__ import annotations
 import json
 import logging
 import re

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 消息处理器 - 兼容性实现
 Message Handler - Compatibility Implementation
@@ -9,7 +10,6 @@ Message Handler - Compatibility Implementation
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import uuid

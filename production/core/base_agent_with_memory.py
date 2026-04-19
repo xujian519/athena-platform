@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 兼容层: 旧base_agent_with_memory的迁移桥接
 
@@ -10,7 +11,6 @@
 - 新: from core.agents.base import BaseAgent
 """
 
-from __future__ import annotations
 import warnings
 
 # 发出deprecation警告

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主MCP工具适配器
 Xiaonuo MCP Tool Adapter
@@ -9,7 +10,6 @@ Xiaonuo MCP Tool Adapter
 创建时间: 2025-12-14
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

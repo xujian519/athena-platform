@@ -12,12 +12,9 @@ Rapid Learning - Backward Compatibility Redirect
 此文件仅用于向后兼容,将在未来版本中移除。
 """
 
-from __future__ import annotations
 import warnings
 
 from .rapid_learning import (
-    SKLEARN_AVAILABLE,
-    TORCH_AVAILABLE,
     ActiveLearner,
     AdaptationStrategy,
     CurriculumScheduler,
@@ -29,6 +26,8 @@ from .rapid_learning import (
     ModelSnapshot,
     PrioritizedReplayBuffer,
     RapidLearningEngine,
+    SKLEARN_AVAILABLE,
+    TORCH_AVAILABLE,
     create_learning_task,
     get_learning_stats,
     learn_from_data,

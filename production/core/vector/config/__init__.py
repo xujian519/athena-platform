@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 config
 """
-from __future__ import annotations

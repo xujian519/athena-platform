@@ -1,3 +1,4 @@
+from __future__ import annotations
 # pyright: ignore
 # !/usr/bin/env python3
 """
@@ -38,7 +39,6 @@ Athena Super Reasoning Engine - Backward Compatibility Redirect
 完整的迁移指南请参考: MIGRATION_GUIDE.md
 """
 
-from __future__ import annotations
 import warnings
 
 # 导入重构后的模块

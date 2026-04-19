@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 高级参数提取器 (Advanced Parameter Extractor)
 提取复杂参数结构、嵌套参数和隐式参数
@@ -8,7 +9,6 @@
 优化目标: 参数填充有效性 85% → 93%
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass, field

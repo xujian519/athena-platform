@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜专利命名系统 - 向后兼容重定向
 Xiaona Patent Naming System - Backward Compatibility Redirect
@@ -30,7 +31,6 @@ Xiaona Patent Naming System - Backward Compatibility Redirect
 完整的迁移指南请参考: MIGRATION_GUIDE.md
 """
 
-from __future__ import annotations
 import warnings
 
 # 导入重构后的模块

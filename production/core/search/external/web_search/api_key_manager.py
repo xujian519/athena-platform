@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 联网搜索引擎 - API密钥管理器
 Web Search Engines - API Key Manager
@@ -11,7 +12,6 @@ Web Search Engines - API Key Manager
 版本: 2.1.0
 """
 
-from __future__ import annotations
 from datetime import datetime
 from typing import Any
 

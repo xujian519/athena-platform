@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强协作协议
 Enhanced Collaboration Protocol
@@ -16,7 +17,6 @@ Enhanced Collaboration Protocol
 版本: v2.0.0 "协议升级"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import uuid

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一Agent记忆系统 - 数据模型
 Unified Agent Memory System - Data Models
@@ -18,7 +19,6 @@ Unified Agent Memory System - Data Models
 - AGENT_REGISTRY: 智能体注册表
 """
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

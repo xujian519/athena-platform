@@ -15,7 +15,6 @@
 更新时间: 2026-01-25 (TD-001: 标记为迁移)
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging
@@ -32,6 +31,7 @@ from core.logging_config import setup_logging
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
 try:
+    from nebula3.common import *
     from nebula3.Config import Config
     from nebula3.gclient.net import ConnectionPool
 
@@ -39,8 +39,6 @@ try:
 except ImportError:
     print("⚠️ NebulaGraph库未安装")
     NEBULA_AVAILABLE = False
-
-import numpy as np
 
 try:
     from sentence_transformers import SentenceTransformer

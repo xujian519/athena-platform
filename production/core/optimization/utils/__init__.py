@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化工具模块
 Optimization Utils Module
@@ -6,7 +7,6 @@ Optimization Utils Module
 提供通用的工具函数和辅助类
 """
 
-from __future__ import annotations
 from .dict_helpers import (
     ensure_nested_dict,
     filter_dict_by_keys,

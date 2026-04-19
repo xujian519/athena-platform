@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 权威文档检索系统 - 修复版 v1.1
 P1-6修复: 实现完整的L1向量搜索功能
@@ -7,7 +8,6 @@ P1-6修复: 实现完整的L1向量搜索功能
 版本: v1.1.0
 """
 
-from __future__ import annotations
 import logging
 import time
 from dataclasses import dataclass

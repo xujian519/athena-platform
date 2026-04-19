@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Neo4j增强的意图识别器
 Neo4j Enhanced Intent Classifier
@@ -8,7 +9,6 @@ Neo4j Enhanced Intent Classifier
 技术决策: TD-001 - 统一图数据库选择为Neo4j
 """
 
-from __future__ import annotations
 import asyncio
 import json
 from dataclasses import dataclass

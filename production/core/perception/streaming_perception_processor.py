@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 流式感知处理器
 支持实时流式数据处理,优化M4芯片性能
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

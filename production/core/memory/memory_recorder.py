@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 记忆记录器 - 自动记录每次对话
 Memory Recorder - Auto-record Every Conversation
@@ -11,7 +12,6 @@ Memory Recorder - Auto-record Every Conversation
 """
 
 
-from __future__ import annotations
 from datetime import datetime
 from typing import Any
 

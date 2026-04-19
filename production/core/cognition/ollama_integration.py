@@ -1,3 +1,4 @@
+from __future__ import annotations
 # pyright: ignore
 # !/usr/bin/env python3
 """
@@ -12,7 +13,6 @@ Ollama NLP Integration Service
 版本: 3.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 from dataclasses import dataclass

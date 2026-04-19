@@ -23,12 +23,10 @@
 更新时间: 2026-01-25 (TD-001: 标记为废弃)
 """
 
-from __future__ import annotations
 import asyncio
-import os
 import re
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, List, Optional
 
 from core.logging_config import setup_logging
 
@@ -48,7 +46,7 @@ class OptimizedPostgreSQLRetriever:
         port: int = 5432,
         user: str = "postgres",
         password: str = "",  # PostgreSQL 通常使用 peer 认证
-        database: str = "legal_world_model",  # 默认数据库 (原athena_db)
+        database: str = "athena_db",  # 默认数据库
     ):
         """
         初始化 PostgreSQL 检索器
@@ -237,7 +235,7 @@ class OptimizedNebulaGraphRetriever:
         port: int = 9669,
         space: str = "patent_kg",  # 使用实际存在的空间
         username: str = "root",
-        password: str = os.getenv("NEBULA_PASSWORD", "nebula"),
+        password: str = "nebula",
     ):
         """
         初始化 NebulaGraph 检索器
@@ -597,7 +595,7 @@ class OptimizedDataManager:
 
     def __init__(
         self,
-        pg_database: str = "legal_world_model",  # 原athena_db
+        pg_database: str = "athena_db",
         nebula_space: str = "patent_graph",
         qdrant_collection: str = "legal_knowledge",
     ):
@@ -646,7 +644,7 @@ class OptimizedDataManager:
 
     async def search_all(
         self, query: str, limit_per_source: int = 5
-    ) -> dict[str, list[dict[str, Any]]]:
+    ) -> dict[str, list[dict[str, Any]]:
         """并行检索所有数据源"""
         import asyncio
 

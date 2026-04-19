@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Excel表格解析和导出模块 - Athena平台集成版
 Excel Table Parser and Export Module - Athena Platform Integration
@@ -12,7 +13,6 @@ Excel Table Parser and Export Module - Athena Platform Integration
 版本: v1.0.0 "深度集成"
 """
 
-from __future__ import annotations
 import json
 import logging
 from datetime import datetime

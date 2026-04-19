@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主Browser-Use全量控制系统
 Xiaonuo·Pisces Princess Browser-Use Universal Control System
@@ -10,7 +11,6 @@ Xiaonuo·Pisces Princess Browser-Use Universal Control System
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import os
@@ -69,7 +69,7 @@ class BrowserUseAgent:
     """Browser-Use代理配置"""
     agent_id: str
     name: str
-    model_provider: str  # openai, anthropic, google, mlx
+    model_provider: str  # openai, anthropic, google, ollama
     model_name: str
     api_key: str | None = None
     temperature: float = 0.7

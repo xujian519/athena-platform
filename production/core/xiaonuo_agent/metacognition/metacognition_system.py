@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 元认知系统 (Metacognition System)
 关于认知的认知,实现自我监控、评估和调节
@@ -15,7 +16,6 @@
 版本: v2.0.0
 """
 
-from __future__ import annotations
 import logging
 import time
 from dataclasses import dataclass, field

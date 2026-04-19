@@ -1,4 +1,4 @@
+from __future__ import annotations
 """
 cache
 """
-from __future__ import annotations

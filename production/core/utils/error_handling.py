@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强的异常处理和超时控制工具
 Enhanced Exception Handling and Timeout Control Utilities
@@ -16,7 +17,6 @@ Enhanced Exception Handling and Timeout Control Utilities
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import functools
 import inspect

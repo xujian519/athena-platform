@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 DSPy训练数据 - 500个全面覆盖案例
 生成时间: 2025-12-29T23:39:04.998931
@@ -7,7 +8,6 @@ DSPy训练数据 - 500个全面覆盖案例
 """
 
 
-from __future__ import annotations
 import dspy
 
 # DSPy训练数据集

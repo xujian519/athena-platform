@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺生活助手模块
 Xiaonuo Life Assistant Module
 """
 
-from __future__ import annotations
 from datetime import datetime
 from typing import Any
 

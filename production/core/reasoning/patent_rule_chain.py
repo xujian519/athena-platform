@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利规则链推理系统
 Patent Rule Chain Reasoning System
@@ -9,7 +10,6 @@ Patent Rule Chain Reasoning System
 版本: v1.0.0 "规则链推理"
 """
 
-from __future__ import annotations
 import logging
 import re
 from collections import defaultdict

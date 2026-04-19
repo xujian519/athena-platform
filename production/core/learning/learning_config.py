@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习与适应模块配置常量
 Learning and Adaptation Module Configuration Constants
@@ -8,7 +9,6 @@ Learning and Adaptation Module Configuration Constants
 v2.0: 添加机器学习模型配置 (TF-IDF, KMeans等)
 """
 
-from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 

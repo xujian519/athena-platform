@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 IPC分类API路由
 IPC Classification API Routes
@@ -6,7 +7,6 @@ IPC Classification API Routes
 提供IPC分类相关的RESTful API接口
 """
 
-from __future__ import annotations
 import logging
 import sys
 from pathlib import Path

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 无效性风险预测器 - 预测专利被无效的概率
 
@@ -10,7 +11,6 @@
 创建时间: 2026-03-20
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

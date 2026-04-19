@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习引擎 (Learning Engine)
 基于经验强化和知识迁移的学习系统
@@ -15,7 +16,6 @@
 版本: v2.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import json

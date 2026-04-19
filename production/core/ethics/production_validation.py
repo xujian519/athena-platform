@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 生产验证测试 - Production Validation Tests
 全面验证伦理框架在生产环境中的表现
 """
 
-from __future__ import annotations
 import os
 import sys
 from pathlib import Path

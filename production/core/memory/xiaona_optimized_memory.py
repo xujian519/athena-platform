@@ -1,5 +1,6 @@
 
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜优化记忆系统 - 健康度99分版本
 Xiaona Optimized Memory System - 99 Health Score Version
@@ -17,7 +18,6 @@ Xiaona Optimized Memory System - 99 Health Score Version
 """
 
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律写作素材库管理器 - 数据库版本
 Legal Writing Materials Manager - Database Version
@@ -13,7 +14,6 @@ Legal Writing Materials Manager - Database Version
 4. 返回写作示例供LLM参考
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

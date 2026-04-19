@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 本地高性能 PostgreSQL 连接池管理器
 针对本地使用场景优化,提供更快的连接和查询速度
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

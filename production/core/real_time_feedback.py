@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 即时反馈系统
 Real-time Feedback System - 实时展示智能体思考和执行过程
@@ -8,7 +9,6 @@ Real-time Feedback System - 实时展示智能体思考和执行过程
 版本: v1.0.0 "Phase 1"
 """
 
-from __future__ import annotations
 import asyncio
 import inspect
 import json

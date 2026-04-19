@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一存储管理器
 Unified Storage Manager for Qdrant + Neo4j + PostgreSQL
@@ -17,7 +18,6 @@ Unified Storage Manager for Qdrant + Neo4j + PostgreSQL
 技术决策: TD-001 - 统一图数据库选择为Neo4j
 """
 
-from __future__ import annotations
 import logging
 import uuid
 from dataclasses import dataclass

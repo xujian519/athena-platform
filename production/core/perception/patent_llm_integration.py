@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利大模型集成服务
 Patent LLM Integration Service
@@ -10,7 +11,6 @@ Patent LLM Integration Service
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import time

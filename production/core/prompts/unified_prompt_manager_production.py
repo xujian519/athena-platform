@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 生产就绪的统一提示词管理器
 Production-Ready Unified Prompt Manager
@@ -6,7 +7,6 @@ Production-Ready Unified Prompt Manager
 修复了关键问题,添加了错误处理、缓存、监控等生产功能
 """
 
-from __future__ import annotations
 import functools
 import logging
 import time

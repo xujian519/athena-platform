@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 服务能力知识图谱 (ServiceKG)
 用于智能体精确匹配和调用微服务
 """
 
-from __future__ import annotations
 import json
 from dataclasses import dataclass, field, fields
 from enum import Enum

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多模态输入处理模块
 Multimodal Input Processing Module
@@ -17,7 +18,6 @@ Multimodal Input Processing Module
 版本: v1.0.0 "Phase 3"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field

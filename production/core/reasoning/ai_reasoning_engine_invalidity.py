@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 AI推理引擎模块
 AI Reasoning Engine Module for Patent Invalidity System
@@ -6,7 +7,6 @@ AI Reasoning Engine Module for Patent Invalidity System
 集成大模型API,提供智能专利分析和推理能力,包括RAG问答系统
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import logging

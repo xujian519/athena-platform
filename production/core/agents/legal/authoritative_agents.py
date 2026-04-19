@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 权威文档专业Agent系统
 针对专利、商标、法律等领域的专业AI Agent
@@ -7,7 +8,6 @@
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 import time
 from dataclasses import dataclass

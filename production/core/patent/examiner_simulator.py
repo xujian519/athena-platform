@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 审查员模拟器
 Examiner Simulator
@@ -10,7 +11,6 @@ Created: 2026-01-26
 Version: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 from enum import Enum
 from typing import Any

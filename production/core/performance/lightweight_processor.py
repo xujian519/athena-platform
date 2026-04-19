@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 轻量级请求处理器
 Lightweight Request Processor
@@ -6,7 +7,6 @@ Lightweight Request Processor
 处理简单任务,避免使用重型AI模型
 """
 
-from __future__ import annotations
 import json
 import re
 import time

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 网关能力选择器
 Gateway Capability Selector
@@ -10,7 +11,6 @@ Gateway Capability Selector
 版本: v2.1.0
 """
 
-from __future__ import annotations
 import logging
 import os
 import threading

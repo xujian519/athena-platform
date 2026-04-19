@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 DSPy配置管理
 DSPy Configuration Management for Athena Platform
 """
 
-from __future__ import annotations
 import os
 from dataclasses import dataclass, field
 from pathlib import Path

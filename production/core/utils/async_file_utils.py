@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 异步文件操作工具 - Athena平台工具集
 Async File Utilities - Athena Platform Toolkit
@@ -10,7 +11,6 @@ Async File Utilities - Athena Platform Toolkit
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import logging

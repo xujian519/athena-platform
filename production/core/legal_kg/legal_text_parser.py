@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律文本解析器 - 精细化解析法律条、款、项
 用于法律文档的深度处理和知识图谱构建
 """
 
-from __future__ import annotations
 import json
 import logging
 import re

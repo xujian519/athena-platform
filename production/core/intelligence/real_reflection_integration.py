@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 真实反思引擎集成
 将反思引擎连接到实际AI系统,实现真正的质量提升
 """
 
-from __future__ import annotations
 import asyncio
 import json
 from datetime import datetime

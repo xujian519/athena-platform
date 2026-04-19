@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强评估模块 - BaseModule标准接口兼容版本
 Enhanced Evaluation Module - BaseModule Compatible Version
@@ -9,7 +10,6 @@ Enhanced Evaluation Module - BaseModule Compatible Version
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import sys

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强专利感知模块
 Enhanced Patent Perception Module
@@ -10,7 +11,6 @@ Enhanced Patent Perception Module
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import base64
 import json
 import logging

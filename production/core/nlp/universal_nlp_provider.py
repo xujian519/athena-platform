@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 通用NLP服务提供者
 支持多种NLP后端:GLM-4.7、本地模型、OpenAI等
@@ -9,7 +10,6 @@
 - 请求超时和重试机制
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import os
@@ -30,7 +30,7 @@ class NLPProviderType(Enum):
     GLM47 = "glm-4.7"  # 升级到GLM-4.7
     LOCAL_BERT = "local-bert"
     OPENAI = "openai"
-    MLX = "mlx"
+    OLLAMA = "ollama"
     BASIC = "basic"
 
 
@@ -330,17 +330,17 @@ class BasicNLPProvider(BaseNLPProvider):
         return True
 
 
-class MLXProvider(BaseNLPProvider):
-    """MLX本地模型提供者(支持Qwen3.5等模型)"""
+class OllamaProvider(BaseNLPProvider):
+    """Ollama本地模型提供者(支持Qwen3.5等模型)"""
 
     def __init__(self, config: dict[str, Any] | None = None):
         super().__init__(config)
-        self.base_url = self.config.get("base_url", "http://127.0.0.1:8765")
+        self.base_url = self.config.get("base_url", "http://localhost:11434")
         self.model = self.config.get("model", "qwen3.5")
         self.client: aiohttp.ClientSession | None = None
 
     async def initialize(self) -> None:
-        """初始化MLX服务"""
+        """初始化Ollama服务"""
         try:
             timeout = aiohttp.ClientTimeout(total=120, connect=10.0, sock_read=60.0)
             self.client = aiohttp.ClientSession(timeout=timeout)
@@ -349,17 +349,17 @@ class MLXProvider(BaseNLPProvider):
             is_healthy = await self.health_check()
             if is_healthy:
                 self.is_initialized = True
-                logger.info(f"✅ MLX NLP服务初始化完成: {self.model}")
+                logger.info(f"✅ Ollama NLP服务初始化完成: {self.model}")
             else:
-                logger.warning(f"⚠️ MLX服务不可用: {self.base_url}")
+                logger.warning(f"⚠️ Ollama服务不可用: {self.base_url}")
                 self.is_initialized = False
 
         except Exception as e:
-            logger.warning(f"⚠️ MLX初始化失败: {e}")
+            logger.warning(f"⚠️ Ollama初始化失败: {e}")
             self.is_initialized = False
 
     async def process(self, text: str, task_type: TaskType, **kwargs: Any) -> dict[str, Any]:
-        """使用MLX处理NLP任务"""
+        """使用Ollama处理NLP任务"""
         if not self.is_initialized:
             await self.initialize()
 
@@ -392,7 +392,7 @@ class MLXProvider(BaseNLPProvider):
             ) as response:
                 if response.status != 200:
                     error_text = await response.text()
-                    logger.error(f"MLX API错误: {response.status} - {error_text}")
+                    logger.error(f"Ollama API错误: {response.status} - {error_text}")
                     return await self._fallback_response(text, task_type)
 
                 data = await response.json()
@@ -404,25 +404,25 @@ class MLXProvider(BaseNLPProvider):
             return {
                 "success": True,
                 "content": content,
-                "provider": f"MLX-{self.model}",
+                "provider": f"Ollama-{self.model}",
                 "task_type": task_type.value,
                 "usage": data.get("usage", {}),
                 "timestamp": datetime.now().isoformat(),
             }
 
         except asyncio.TimeoutError:
-            logger.error("MLX请求超时")
+            logger.error("Ollama请求超时")
             return await self._fallback_response(text, task_type)
         except Exception as e:
-            logger.error(f"MLX处理失败: {e}")
+            logger.error(f"Ollama处理失败: {e}")
             return await self._fallback_response(text, task_type)
 
     async def _fallback_response(self, text: str, task_type: TaskType) -> dict[str, Any]:
         """降级响应"""
         return {
             "success": False,
-            "content": "MLX服务暂时不可用",
-            "provider": f"MLX-{self.model}",
+            "content": "Ollama服务暂时不可用",
+            "provider": f"Ollama-{self.model}",
             "task_type": task_type.value,
             "fallback": True,
             "timestamp": datetime.now().isoformat(),
@@ -434,13 +434,13 @@ class MLXProvider(BaseNLPProvider):
             return False
 
         try:
-            async with self.client.get(f"{self.base_url}/v1/models") as response:
+            async with self.client.get(f"{self.base_url}/api/tags") as response:
                 if response.status != 200:
                     return False
 
                 data = await response.json()
-                models = data.get("data", [])
-                model_names = [m["id"] for m in models]
+                models = data.get("models", [])
+                model_names = [m["name"] for m in models]
 
                 # 检查模型是否存在
                 if self.model in model_names:
@@ -451,7 +451,7 @@ class MLXProvider(BaseNLPProvider):
                 return any(m.startswith(short_name) for m in model_names)
 
         except Exception as e:
-            logger.warning(f"MLX健康检查失败: {e}")
+            logger.warning(f"Ollama健康检查失败: {e}")
             return False
 
     async def close(self) -> None:
@@ -472,20 +472,20 @@ class UniversalNLPService:
 
     async def initialize(self):
         """初始化所有NLP提供者"""
-        # 优先使用MLX本地模型（支持Qwen3.5）
-        if self.config.get("enable_mlx", True):
+        # 优先使用Ollama本地模型（支持Qwen3.5）
+        if self.config.get("enable_ollama", True):
             try:
-                mlx_model = self.config.get("mlx_model", "qwen3.5")
-                mlx_provider = MLXProvider({
-                    "model": mlx_model,
-                    "base_url": self.config.get("mlx_base_url", "http://127.0.0.1:8765"),
+                ollama_model = self.config.get("ollama_model", "qwen3.5")
+                ollama_provider = OllamaProvider({
+                    "model": ollama_model,
+                    "base_url": self.config.get("ollama_base_url", "http://localhost:11434"),
                 })
-                await mlx_provider.initialize()
-                self.providers[f"mlx-{mlx_model}"] = mlx_provider
-                self.primary_provider = mlx_provider
-                logger.info(f"✅ MLX {mlx_model}已启用并设为主要提供者")
+                await ollama_provider.initialize()
+                self.providers[f"ollama-{ollama_model}"] = ollama_provider
+                self.primary_provider = ollama_provider
+                logger.info(f"✅ Ollama {ollama_model}已启用并设为主要提供者")
             except Exception as e:
-                logger.warning(f"⚠️ MLX初始化失败: {e}")
+                logger.warning(f"⚠️ Ollama初始化失败: {e}")
 
         # 启用GLM-4.7作为备用提供者
         if self.config.get("enable_glm", False) and not self.primary_provider:

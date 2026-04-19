@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小宸·星河射手 - 协作执行引擎
 Xiaochen Sagittarius Collaboration Execution Engine
@@ -15,7 +16,6 @@ Xiaochen Sagittarius Collaboration Execution Engine
 版本: v1.0.0 "协作之星"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import uuid

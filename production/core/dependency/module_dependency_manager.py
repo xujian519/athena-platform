@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 模块依赖管理系统
 Module Dependency Management System
@@ -9,7 +10,6 @@ Module Dependency Management System
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import sys

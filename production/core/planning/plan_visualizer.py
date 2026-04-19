@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 计划可视化器 - Plan Visualizer
 为执行计划提供多种可视化方式
@@ -14,7 +15,6 @@
 创建时间: 2025-01-05
 """
 
-from __future__ import annotations
 import json
 from datetime import timedelta
 from typing import Any

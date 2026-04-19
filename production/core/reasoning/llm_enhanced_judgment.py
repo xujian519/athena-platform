@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 LLM增强智能判断系统
 LLM Enhanced Intelligent Judgment System
@@ -9,7 +10,6 @@ LLM Enhanced Intelligent Judgment System
 版本: v1.0.0 "智能判断"
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能缓存淘汰策略
 Intelligent Cache Eviction Policy
@@ -26,7 +27,6 @@ Intelligent Cache Eviction Policy
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import heapq
 import logging
 import time

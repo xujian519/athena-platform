@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 真实数据源和 Embedding 模型集成 (NebulaGraph版本 - 已废弃)
 
@@ -20,12 +21,12 @@
 更新时间: 2026-01-25 (TD-001: 标记为废弃)
 """
 
-from __future__ import annotations
 import asyncio
-from pathlib import Path
-from typing import Any
-
+from core.async_main import async_main
+import logging
 from core.logging_config import setup_logging
+from typing import List, Dict, Any, Optional
+from pathlib import Path
 
 logger = setup_logging()
 
@@ -219,8 +220,8 @@ class RealPostgreSQLRetriever:
             self._connected = True
 
             # 测试查询
-            await self._connection.fetchval('SELECT version()')
-            logger.info("✅ PostgreSQL 连接成功")
+            version = await self._connection.fetchval('SELECT version()')
+            logger.info(f"✅ PostgreSQL 连接成功")
 
             # 获取专利数量
             tables = await self._connection.fetch("""
@@ -347,7 +348,7 @@ class RealNebulaGraphRetriever:
             self._connected = True
 
             # 测试查询
-            self._session.execute(f"USE {self.space};")
+            result = self._session.execute(f"USE {self.space};")
             logger.info(f"✅ NebulaGraph 连接成功,使用空间: {self.space}")
 
         except Exception as e:
@@ -452,7 +453,7 @@ class RealQdrantRetriever:
             collections = self._client.get_collections()
             collection_names = [c.name for c in collections.collections]
 
-            logger.info("✅ Qdrant 连接成功")
+            logger.info(f"✅ Qdrant 连接成功")
             logger.info(f"📊 可用集合: {collection_names}")
 
             # 检查目标集合
@@ -479,6 +480,7 @@ class RealQdrantRetriever:
             query_vector = self.embedding_model.encode_single(query)
 
             # 执行检索
+            from qdrant_client.models import PointStruct
 
             # 尝试搜索
             try:
@@ -587,7 +589,7 @@ class RealDataManager:
         self,
         query: str,
         limit_per_source: int = 5
-    ) -> dict[str, list[dict[str, Any]]]:
+    ) -> dict[str, list[dict[str, Any]]:
         """并行检索所有数据源"""
         import asyncio
 
@@ -604,7 +606,7 @@ class RealDataManager:
 
         # 组装结果
         final_results = {}
-        for key, result in zip(tasks.keys(), results, strict=False):
+        for key, result in zip(tasks.keys(), results):
             if isinstance(result, Exception):
                 logger.error(f"{key} 检索失败: {result}")
                 final_results[key] = []

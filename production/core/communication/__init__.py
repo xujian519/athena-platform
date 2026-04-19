@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 通信模块 - 统一导出接口
 Communication Module - Unified Export Interface
@@ -15,7 +16,6 @@ Communication Module - Unified Export Interface
 更新时间: 2026-01-30
 """
 
-from __future__ import annotations
 import logging
 
 logger = logging.getLogger(__name__)

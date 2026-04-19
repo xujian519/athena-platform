@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 因果图 (Causal Graph)
 构建和管理因果关系图
@@ -7,7 +8,6 @@
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import json
 import logging
 from dataclasses import dataclass, field

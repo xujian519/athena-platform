@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 改进的专利决定信息提取器
 Improved Patent Decision Information Extractor
@@ -6,7 +7,6 @@ Improved Patent Decision Information Extractor
 基于实际文档结构优化提取算法
 """
 
-from __future__ import annotations
 import re
 from dataclasses import dataclass
 from pathlib import Path

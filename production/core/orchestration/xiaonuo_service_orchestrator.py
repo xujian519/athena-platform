@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主服务编排器 - 智能服务启动管理
 Xiaonuo Service Orchestrator - Intelligent Service Startup Management
@@ -9,7 +10,6 @@ Xiaonuo Service Orchestrator - Intelligent Service Startup Management
 创建时间: 2025-12-14
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import subprocess

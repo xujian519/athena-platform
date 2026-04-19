@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 维特根斯坦逻辑哲学守护 - AI防幻觉核心模块
 Wittgensteinian Logic Philosophy Guardian - Anti-Hallucination Core
@@ -9,7 +10,6 @@ Wittgensteinian Logic Philosophy Guardian - Anti-Hallucination Core
 - 私人语言不可能性 (Impossibility of Private Language, PI §§243-315)
 """
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any

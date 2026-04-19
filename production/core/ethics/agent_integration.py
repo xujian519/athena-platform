@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 智能体伦理集成示例
 Agent Ethics Integration Example
@@ -5,7 +6,6 @@ Agent Ethics Integration Example
 展示如何将伦理框架集成到现有智能体中
 """
 
-from __future__ import annotations
 import logging
 from typing import Any
 

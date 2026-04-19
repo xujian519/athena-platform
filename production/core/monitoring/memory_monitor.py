@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 内存监控工具
 Memory Monitor
@@ -10,7 +11,6 @@ Memory Monitor
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import gc
 import logging

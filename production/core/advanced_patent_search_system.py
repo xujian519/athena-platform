@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 高级专利检索系统 - 提升检索准确性和覆盖范围
 Advanced Patent Search System - Enhanced Accuracy and Coverage
@@ -11,7 +12,6 @@ Advanced Patent Search System - Enhanced Accuracy and Coverage
 5. 专利分类系统匹配
 """
 
-from __future__ import annotations
 import logging
 import re
 import time

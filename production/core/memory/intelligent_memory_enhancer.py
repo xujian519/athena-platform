@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能记忆增强器
 Intelligent Memory Enhancer
@@ -14,7 +15,6 @@ Intelligent Memory Enhancer
 """
 
 
-from __future__ import annotations
 import logging
 
 # 导入基础记忆系统

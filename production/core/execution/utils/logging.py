@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena执行系统 - 日志工具和装饰器
 Logging Utilities and Decorators for Execution System
@@ -14,7 +15,6 @@ Logging Utilities and Decorators for Execution System
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import functools
 import inspect
 import logging

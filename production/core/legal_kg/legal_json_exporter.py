@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律文档JSON导出工具
 将PostgreSQL中的法律文档解析为结构化JSON并导出到文件系统
 """
 
-from __future__ import annotations
 import hashlib
 import json
 

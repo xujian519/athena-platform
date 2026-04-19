@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 MPS并行推理引擎 - 阶段3优化
 实现GPU异步并行推理,大幅提升吞吐量
@@ -8,7 +9,6 @@ MPS并行推理引擎 - 阶段3优化
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import threading
 import time

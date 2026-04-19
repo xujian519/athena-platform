@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 错误处理器 - Athena平台统一错误处理
 Error Handlers - Athena Platform Unified Error Handling
@@ -10,7 +11,6 @@ Error Handlers - Athena Platform Unified Error Handling
 版本: 1.0.0
 """
 
-from __future__ import annotations
 import logging
 import traceback
 from datetime import datetime

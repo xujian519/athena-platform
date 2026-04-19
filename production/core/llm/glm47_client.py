@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 GLM-4.7 LLM客户端
 集成GLM-4.7作为Athena平台的大语言模型
@@ -13,7 +14,6 @@ GLM-4.7 LLM客户端
 创建时间: 2025-01-05
 """
 
-from __future__ import annotations
 import json
 import logging
 from typing import Any

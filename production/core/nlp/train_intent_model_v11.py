@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 改进版意图识别模型训练脚本
 Enhanced Intent Recognition Model Training Script
@@ -6,7 +7,6 @@ Enhanced Intent Recognition Model Training Script
 使用平台所有可用训练数据,采用更优的算法
 """
 
-from __future__ import annotations
 import json
 import pickle
 from datetime import datetime

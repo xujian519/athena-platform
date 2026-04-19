@@ -1,10 +1,10 @@
+from __future__ import annotations
 """
 个性化响应模块 - Personalization Module
 
 提供用户偏好管理和响应个性化功能
 """
 
-from __future__ import annotations
 from core.personalization.response_adaptor import (
     LanguageStyle,
     OutputFormat,

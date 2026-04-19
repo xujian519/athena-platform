@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺工具效果反馈循环系统
 Xiaonuo Tool Effect Feedback Loop System
@@ -10,7 +11,6 @@ Xiaonuo Tool Effect Feedback Loop System
 版本: v1.0.0 "智能反馈循环95%+"
 """
 
-from __future__ import annotations
 import json
 import os
 from collections import defaultdict

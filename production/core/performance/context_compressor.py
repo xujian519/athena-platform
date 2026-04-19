@@ -1,9 +1,9 @@
+from __future__ import annotations
 """
 上下文压缩机制 - 限制对话历史长度
 用于提升AI模型处理效率,减少token消耗
 """
 
-from __future__ import annotations
 import re
 import time
 from dataclasses import dataclass

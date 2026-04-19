@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 路径处理工具模块
 """
 
-from __future__ import annotations
 import logging
 from pathlib import Path
 

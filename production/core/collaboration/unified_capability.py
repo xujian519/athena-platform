@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一智能体能力接口
 Unified Agent Capability Interface
@@ -7,7 +8,6 @@ Unified Agent Capability Interface
 提供统一的接口和适配器
 """
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import timedelta
 from enum import Enum

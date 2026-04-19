@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena BERT语义增强意图分类器
 BERT Semantic Enhanced Intent Classifier
@@ -19,7 +20,6 @@ BERT Semantic Enhanced Intent Classifier
 版本: v2.1.0
 """
 
-from __future__ import annotations
 import json
 import os
 import threading

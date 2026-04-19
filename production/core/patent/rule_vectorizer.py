@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利规则向量化器
 Patent Rule Vectorizer
@@ -6,7 +7,6 @@ Patent Rule Vectorizer
 为专利规则知识图谱提供专业的向量化、存储和检索能力
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 推理模式提取器 - Reasoning Pattern Extractor
 从无效决定中提取三步法推理模式
@@ -14,7 +15,6 @@
 创建时间: 2026-01-23
 """
 
-from __future__ import annotations
 import logging
 import re
 from collections import defaultdict

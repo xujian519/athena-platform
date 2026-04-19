@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺主编排器 - 优化增强版
 Xiaonuo Main Orchestrator - Optimization Enhanced
@@ -15,7 +16,6 @@ Xiaonuo Main Orchestrator - Optimization Enhanced
 版本: v1.1.0 "优化增强版"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 import uuid

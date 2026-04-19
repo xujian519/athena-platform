@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena智能体协调器
 Agent Coordinator for Athena
@@ -16,7 +17,6 @@ Agent Coordinator for Athena
 版本: v1.0.0 "智能协奏曲"
 """
 
-from __future__ import annotations
 import asyncio
 import logging
 from collections import defaultdict, deque

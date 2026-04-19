@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习与适应模块 - 统一导出接口
 Learning & Adaptation Module - Unified Export Interface
@@ -19,7 +20,6 @@ Learning & Adaptation Module - Unified Export Interface
 更新时间: 2026-01-30
 """
 
-from __future__ import annotations
 import logging
 
 logger = logging.getLogger(__name__)

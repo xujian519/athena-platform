@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台API版本控制系统
 API Versioning System for Athena Platform
@@ -7,7 +8,6 @@ API Versioning System for Athena Platform
 功能: 提供完整的API版本控制、路由、兼容性管理
 """
 
-from __future__ import annotations
 import logging
 import re
 from collections.abc import Callable

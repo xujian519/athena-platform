@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena法律世界模型宪法 - 核心定义
 Constitution of Athena Legal World Model
@@ -17,7 +18,6 @@ Constitution of Athena Legal World Model
 """
 
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

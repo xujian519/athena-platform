@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 v4.0反思引擎模块
 Reflection Engine v4.0 Module
@@ -10,7 +11,6 @@ Reflection Engine v4.0 Module
 版本: v4.0.0 "逻辑之光"
 """
 
-from __future__ import annotations
 from .uncertainty_quantifier import (
     CertaintyLevel,
     Confidence,

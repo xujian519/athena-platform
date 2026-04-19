@@ -1,6 +1,7 @@
 # ⚠️ SECURITY WARNING: This file uses eval/exec. Review needed!
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 Athena智能体工具实现集
 Tool Implementations
@@ -12,7 +13,6 @@ Tool Implementations
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import asyncio
 import subprocess
 from datetime import datetime

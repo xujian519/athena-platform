@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 生产级API服务 v2.0
 完整集成真实OCR、图像处理、数据库持久化、缓存
 最后更新: 2026-01-26
 """
 
-from __future__ import annotations
 import logging
 import sys
 from datetime import datetime

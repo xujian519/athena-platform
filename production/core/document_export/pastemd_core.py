@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 PasteMD核心模块 - Athena平台深度集成版
 PasteMD Core Module - Deep Integration for Athena Platform
@@ -15,7 +16,6 @@ Athena平台集成: 小诺·双鱼公主
 版本: v1.0.0 "深度集成"
 """
 
-from __future__ import annotations
 import json
 import logging
 import subprocess

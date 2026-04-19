@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能意见答复系统
 Smart Office Action Response System
@@ -21,7 +22,6 @@ v0.2.0 增强版特性:
 版本: v0.2.0 "智能增强"
 """
 
-from __future__ import annotations
 import json
 import logging
 

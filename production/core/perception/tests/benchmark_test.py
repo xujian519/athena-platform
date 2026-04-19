@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 性能基准测试
 建立性能基线，对比不同配置的性能表现
 最后更新: 2026-01-26
 """
 
-from __future__ import annotations
 import asyncio
 import json
 import logging

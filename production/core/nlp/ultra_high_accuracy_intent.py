@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 超高精度意图识别引擎 - 99%准确率目标
 Ultra-High Accuracy Intent Recognition Engine
 结合多种先进技术的混合识别系统
 """
 
-from __future__ import annotations
 import asyncio
 import json
 from dataclasses import dataclass

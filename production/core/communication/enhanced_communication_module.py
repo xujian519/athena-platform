@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强通信模块 - BaseModule标准接口兼容版本 (修复版)
 Enhanced Communication Module - BaseModule Compatible Version (Fixed)
@@ -9,7 +10,6 @@ Enhanced Communication Module - BaseModule Compatible Version (Fixed)
 版本: 1.1.0
 """
 
-from __future__ import annotations
 import logging
 import sys
 import time

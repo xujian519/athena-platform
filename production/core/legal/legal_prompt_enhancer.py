@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律提示词增强服务 - 基于向量检索的提示词动态生成
 Legal Prompt Enhancer - Dynamic Prompt Generation Based on Vector Retrieval
@@ -10,7 +11,6 @@ Legal Prompt Enhancer - Dynamic Prompt Generation Based on Vector Retrieval
 版本: v1.0.0-production
 """
 
-from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

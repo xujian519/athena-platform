@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BGE-M3性能监控系统
 Performance Monitor for BGE-M3
@@ -6,7 +7,6 @@ Performance Monitor for BGE-M3
 监控BGE-M3模型的性能指标,包括吞吐量、延迟、资源使用等
 """
 
-from __future__ import annotations
 import threading
 import time
 from collections import deque

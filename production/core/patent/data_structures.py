@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利撰写结构化数据定义（简化版）
 
@@ -12,7 +13,6 @@ from data_structures import (
 )
 """
 
-from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum
 

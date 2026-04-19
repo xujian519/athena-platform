@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 浏览器自动化工具 - 小诺集成
 Browser Automation Tool for Xiaonuo
@@ -9,7 +10,6 @@ Browser Automation Tool for Xiaonuo
 版本: v1.0.0
 """
 
-from __future__ import annotations
 import logging
 from typing import Any
 

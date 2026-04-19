@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多轮对话参数收集器
 Multi-turn Dialogue Parameter Collector
@@ -7,7 +8,6 @@ Multi-turn Dialogue Parameter Collector
 实现高完成率的参数收集功能
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass, field

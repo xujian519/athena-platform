@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利审查意见解析器
 Patent Examination Opinion Parser
@@ -14,7 +15,6 @@ Patent Examination Opinion Parser
 版本: v0.1.2 "晨星初现"
 """
 
-from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass, field

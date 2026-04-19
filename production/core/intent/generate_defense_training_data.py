@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 从专利判决书中提取无效辩护样本并生成训练数据
 Generate Invalidation Defense Training Data from Patent Judgments
@@ -10,7 +11,6 @@ Generate Invalidation Defense Training Data from Patent Judgments
 创建: 2026-01-13
 """
 
-from __future__ import annotations
 import json
 import re
 from datetime import datetime

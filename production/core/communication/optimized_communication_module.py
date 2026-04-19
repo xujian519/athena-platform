@@ -12,23 +12,22 @@ Optimized Communication Module - Backward Compatibility Redirect
 此文件仅用于向后兼容,将在未来版本中移除。
 """
 
-from __future__ import annotations
 import warnings
 
 from .optimized_communication_module import (
-    LZ4_AVAILABLE,
-    ZSTD_AVAILABLE,
     BatchMessage,
     BatchProcessor,
     CommunicationStats,
     CompressionResult,
     CompressionType,
     DeliveryMode,
+    LZ4_AVAILABLE,
     Message,
     MessageCompressor,
     MessagePriority,
     MessageRouter,
     OptimizedCommunicationModule,
+    ZSTD_AVAILABLE,
 )
 
 # 触发弃用警告
