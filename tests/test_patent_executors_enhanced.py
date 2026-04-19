@@ -24,7 +24,6 @@ import pytest
 
 # 添加项目路径
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../patent-platform/workspace/src/action'))
 
 from patent_executors_enhanced import (
     AnalysisType,

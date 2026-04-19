@@ -80,7 +80,6 @@ class HybridStorageManager:
             project_root, "data/support_data/databases/databases/memory_system/athena_memory.db"
         )
         self.metadata_db_path = os.path.join(
-            project_root, "patent-platform/workspace/data/vector_metadata.db"
         )
 
         # 存储策略配置

@@ -46,8 +46,6 @@ class PatentSearchToolAnalyzer:
                 ],
                 "status": "unknown",
             },
-            "patent-platform": {
-                "path": "patent-platform",
                 "description": "专利平台 - 基于浏览器的检索系统",
                 "main_files": [
                     "core/core_programs/enhanced_patent_search.py",
@@ -213,8 +211,6 @@ class PatentSearchToolAnalyzer:
         duplicates = {
             "专利检索": [
                 "patent_hybrid_retrieval/patent_hybrid_retrieval.py",
-                "patent-platform/core/core_programs/enhanced_patent_search.py",
-                "patent-platform/core/core_programs/deepseek_direct_patent_search.py",
                 "tools/search/athena_search_platform.py",
                 "tools/patent_search_schemes_flexible.py",
             ],

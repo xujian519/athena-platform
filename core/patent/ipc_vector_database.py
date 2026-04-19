@@ -129,7 +129,6 @@ class IPCVectorDatabase:
 
         # 数据路径
         self.ipc_data_path = ipc_data_path or (
-            "/Users/xujian/Athena工作平台/apps/patent-platform/workspace/data/ipc_classification_knowledge.json"
         )
 
         # IPC存储

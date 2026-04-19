@@ -25,7 +25,6 @@ files_to_check = [
     ("专利下载接口", "core/tools/patent_download.py"),
     ("工具自动注册", "core/tools/auto_register.py"),
     ("本地检索器", "patent_hybrid_retrieval/real_patent_hybrid_retrieval.py"),
-    ("Google检索器", "patent-platform/core/core_programs/google_patents_retriever.py"),
     ("下载器", "tools/google_patents_downloader.py"),
 ]
 

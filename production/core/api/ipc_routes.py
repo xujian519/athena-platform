@@ -58,7 +58,6 @@ def get_ipc_vector_db():
             from core.patent.ipc_vector_database import IPCVectorDatabase
 
             # 使用更完整的IPC定义文件
-            data_path = "/Users/xujian/Athena工作平台/apps/patent-platform/workspace/data/cnipa_ipc_chinese_definitions.json"
             _ipc_vector_db = IPCVectorDatabase(ipc_data_path=data_path)
             _ipc_vector_db.load_ipc_data()
             logger.info("✅ IPC向量数据库已初始化")

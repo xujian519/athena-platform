@@ -144,7 +144,6 @@ class IntelligentToolRouter:
                 "success_rate": 0.91,
             },
             "chemical_analyzer": {
-                "file_path": "patent-platform/workspace/src/cognition/chemical_formula_analyzer.py",
                 "category": "chemical_analysis",
                 "priority": ToolPriority.OPTIONAL,
                 "estimated_time": 15,

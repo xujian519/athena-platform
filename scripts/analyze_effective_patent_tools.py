@@ -63,7 +63,6 @@ class EffectivePatentToolAnalyzer:
         # 搜索可能包含PostgreSQL检索的文件
         search_paths = [
             "patent_hybrid_retrieval",
-            "patent-platform",
             "tools"
         ]
 
@@ -126,7 +125,6 @@ class EffectivePatentToolAnalyzer:
         ]
 
         search_paths = [
-            "patent-platform",
             "tools"
         ]
 
@@ -199,10 +197,6 @@ class EffectivePatentToolAnalyzer:
             "tools/search/search_biomass_gasification.py",
             "tools/patent_search_schemes_flexible.py",
             "tools/patent_search_schemes_analyzer.py",
-            "patent-platform/core/core_programs/enhanced_patent_search.py",
-            "patent-platform/core/core_programs/deepseek_direct_patent_search.py",
-            "patent-platform/core/core_programs/selenium_patent_search.py",
-            "patent-platform/core/core_programs/browser_patent_search_system.py",
             "patent_hybrid_retrieval/patent_hybrid_retrieval.py",
             "patent_hybrid_retrieval/hybrid_retrieval_system.py",
         ]

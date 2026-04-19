@@ -129,7 +129,6 @@ print()
 
 data_dirs = [
     "data/patents",
-    "patent-platform/data",
     "patent_hybrid_retrieval/data"
 ]
 

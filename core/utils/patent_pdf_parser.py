@@ -205,7 +205,6 @@ if __name__ == '__main__':
     parser = PatentPDFParser()
 
     # 解析测试专利
-    pdf_path = '/Users/xujian/Athena工作平台/patent-platform/workspace/data/raw/disclosures/CN201815134U.pdf'
 
     logger.info(f"\n📄 开始解析专利PDF: {pdf_path}")
     result = parser.parse_patent_pdf(pdf_path)

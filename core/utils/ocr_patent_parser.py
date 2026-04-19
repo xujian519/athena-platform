@@ -181,7 +181,6 @@ class OCRPatentParser:
 if __name__ == '__main__':
     parser = OCRPatentParser()
 
-    pdf_path = '/Users/xujian/Athena工作平台/patent-platform/workspace/data/raw/disclosures/CN201815134U.pdf'
     output_path = '/tmp/patent_claims.json'
 
     logger.info(f"\n🔍 开始OCR解析专利: {pdf_path}")

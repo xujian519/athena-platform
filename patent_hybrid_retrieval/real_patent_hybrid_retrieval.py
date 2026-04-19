@@ -26,7 +26,6 @@ from psycopg2.extras import RealDictCursor
 sys.path.append(
     os.path.join(
         os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-        "patent-platform",
         "workspace",
         "src",
     )

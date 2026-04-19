@@ -100,12 +100,6 @@ class UnifiedPatentRetriever:
             try:
                 import sys
                 from pathlib import Path
-                # 添加patent-platform到Python路径
-                project_root = Path(__file__).parent.parent.parent
-                patent_platform_path = project_root / "patent-platform"
-                sys.path.insert(0, str(patent_platform_path))
-
-                from core.core_programs.google_patents_retriever import GooglePatentsRetriever
                 self._google_retriever = GooglePatentsRetriever()
                 logger.info("✅ Google Patents检索器已初始化")
             except Exception as e:

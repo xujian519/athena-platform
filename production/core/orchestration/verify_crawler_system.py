@@ -75,7 +75,6 @@ class CrawlerSystemVerifier:
         crawler_files = {
             "universal_crawler": "/Users/xujian/Athena工作平台/services/crawler-service/core/universal_crawler.py",
             "hybrid_crawler_manager": "/Users/xujian/Athena工作平台/services/crawler-service/core/hybrid_crawler_manager.py",
-            "enhanced_patent_crawler": "/Users/xujian/Athena工作平台/patent-platform/workspace/enhanced_patent_crawler.py",
             "distributed_crawler": "/Users/xujian/Athena工作平台/tools/advanced/distributed_crawler.py",
             "browser_automation": "/Users/xujian/Athena工作平台/services/browser-automation-service/browser_automation_server.py",
             "douyin_scraper": "/Users/xujian/Athena工作平台/services/browser-automation-service/douyin_scraper.py",
