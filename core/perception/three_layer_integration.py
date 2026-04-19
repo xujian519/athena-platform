@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 感知模块三层架构集成配置
 Perception Module Three-Layer Architecture Integration Configuration
@@ -9,7 +10,7 @@ Perception Module Three-Layer Architecture Integration Configuration
 import os
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 from dotenv import load_dotenv
 

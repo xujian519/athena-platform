@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 多级缓存策略
 
@@ -25,7 +26,7 @@ from collections import OrderedDict
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -466,7 +467,7 @@ class MultiLevelCacheManager:
         key: str,
         value: Any,
         ttl: int | None = None,
-        levels: list["key"] = None,
+        levels: list[str] = None,
     ) -> bool:
         """
         设置缓存值(可指定缓存级别)
@@ -558,7 +559,7 @@ class MultiLevelCacheManager:
 
         return cleaned
 
-    def warmup(self, keys: list[Callable[[str]] -> Any]):
+    def warmup(self, keys: list[str], func: Callable[[str], Any]):
         """
         缓存预热
 

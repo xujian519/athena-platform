@@ -3,9 +3,13 @@
 测试专利检索、网络搜索和智能路由功能
 """
 
+import sys
+from pathlib import Path
+
 import pytest
-from typing import Dict, Any, List, Optional
-from unittest.mock import MagicMock
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 
 
 class TestSearchModule:
@@ -188,7 +192,6 @@ class TestSemanticSearch:
     def test_vector_ranking(self):
         """测试向量排序"""
         # 文档和查询
-        query = [0.1, 0.2, 0.3]
         documents = [
             {"id": "1", "vector": [0.1, 0.2, 0.3], "score": 0.95},
             {"id": "2", "vector": [0.5, 0.5, 0.5], "score": 0.75},
@@ -223,7 +226,7 @@ class TestSearchRouter:
         # 选择路由
         query = "检索关于机器学习的专利"
         selected_route = None
-        for route_name, route_config in routes.items():
+        for _route_name, route_config in routes.items():
             if route_config["condition"](query):
                 selected_route = route_config["engine"]
                 break
@@ -404,7 +407,7 @@ class TestSearchPerformance:
         start_time = time.time()
 
         # 模拟搜索
-        for i in range(num_searches):
+        for _i in range(num_searches):
             pass  # 模拟搜索操作
 
         end_time = time.time()
@@ -452,7 +455,7 @@ class TestSearchErrorHandling:
 
         # 重试搜索
         result = None
-        for i in range(max_retries):
+        for _i in range(max_retries):
             try:
                 result = search_with_retry()
                 break

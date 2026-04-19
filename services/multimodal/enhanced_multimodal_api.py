@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 增强的多模态文件系统API
 Enhanced Multimodal File System API
@@ -7,33 +6,32 @@ Enhanced Multimodal File System API
 新增功能：文件下载、基础搜索、缓存优化
 """
 
-import sys
-from core.async_main import async_main
-import os
-from pathlib import Path
-from datetime import datetime
-import asyncio
-import json
 import hashlib
-import uuid
-import time
-from typing import Dict, List, Any, Optional
+import json
 import logging
+import os
+import sys
+import time
+import uuid
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
 from core.logging_config import setup_logging
 
 # 添加项目路径
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from fastapi import FastAPI, File, UploadFile, HTTPException, Form, Query
+
+import aiofiles
+import uvicorn
+from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from PIL import Image
+from pydantic import BaseModel
 
 from core.security.auth import ALLOWED_ORIGINS
-from fastapi.responses import FileResponse, StreamingResponse
-from pydantic import BaseModel
-import uvicorn
-import aiofiles
-from PIL import Image
-import io
 
 # 日志配置
 logging.basicConfig(level=logging.INFO)
@@ -145,13 +143,13 @@ class FileInfo(BaseModel):
     upload_time: str
     file_hash: str
     thumbnail_url: str | None = None
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
 
 class SearchResponse(BaseModel):
     success: bool
     message: str
     total_count: int
-    files: List[FileInfo]
+    files: list[FileInfo]
 
 # 存储管理器
 class EnhancedStorageManager:
@@ -161,7 +159,7 @@ class EnhancedStorageManager:
         self.thumbnail_root = Path(THUMBNAIL_ROOT)
 
     async def save_file(self, file_content: bytes, filename: str,
-                       metadata: Dict[str, Any] = None) -> Dict[str, Any]:
+                       metadata: dict[str, Any] = None) -> dict[str, Any]:
         """保存文件并生成元数据"""
         try:
             file_hash = calculate_file_hash(file_content)
@@ -218,7 +216,7 @@ class EnhancedStorageManager:
             logger.error(f"保存文件失败: {e}")
             return {"success": False, "error": str(e)}
 
-    async def get_file_info(self, file_id: str) -> Dict[str, Any | None]:
+    async def get_file_info(self, file_id: str) -> dict[str, Any | None]:
         """获取文件信息"""
         # 先检查缓存
         cached = cache.get(f"file:{file_id}")
@@ -228,7 +226,7 @@ class EnhancedStorageManager:
         try:
             metadata_file = self.metadata_root / f"{file_id}.json"
             if metadata_file.exists():
-                async with aiofiles.open(metadata_file, 'r', encoding='utf-8') as f:
+                async with aiofiles.open(metadata_file, encoding='utf-8') as f:
                     content = await f.read()
                     file_info = json.loads(content)
                     # 更新缓存
@@ -247,7 +245,7 @@ class EnhancedStorageManager:
         return None
 
     async def search_files(self, query: str = None, file_type: str = None,
-                          limit: int = 20, offset: int = 0) -> List[Dict[str, Any]]:
+                          limit: int = 20, offset: int = 0) -> list[dict[str, Any]]:
         """搜索文件"""
         search_key = f"search:{query}:{file_type}:{limit}:{offset}"
         cached = cache.get(search_key)
@@ -261,7 +259,7 @@ class EnhancedStorageManager:
 
             for metadata_file in metadata_files:
                 try:
-                    async with aiofiles.open(metadata_file, 'r', encoding='utf-8') as f:
+                    async with aiofiles.open(metadata_file, encoding='utf-8') as f:
                         content = await f.read()
                         file_info = json.loads(content)
 
@@ -361,7 +359,7 @@ async def download_file(file_id: str):
 
     except Exception as e:
         logger.error(f"下载文件失败: {e}")
-        raise HTTPException(status_code=500, detail=f"下载失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"下载失败: {str(e)}") from e
 
 @app.get("/info/{file_id}", response_model=FileInfo)
 async def get_file_info(file_id: str):
@@ -384,7 +382,7 @@ async def get_file_info(file_id: str):
 
     except Exception as e:
         logger.error(f"获取文件信息失败: {e}")
-        raise HTTPException(status_code=500, detail=f"获取信息失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"获取信息失败: {str(e)}") from e
 
 @app.get("/search", response_model=SearchResponse)
 async def search_files(
@@ -478,7 +476,7 @@ async def get_thumbnail(thumbnail_name: str):
 
     except Exception as e:
         logger.error(f"获取缩略图失败: {e}")
-        raise HTTPException(status_code=500, detail=f"获取缩略图失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"获取缩略图失败: {str(e)}") from e
 
 if __name__ == "__main__":
     uvicorn.run(

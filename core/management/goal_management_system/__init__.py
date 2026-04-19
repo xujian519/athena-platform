@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 目标管理系统 - 公共接口
 Goal Management System - Public Interface
@@ -53,7 +53,7 @@ async def main():
     print("示例2: 更新目标进度")
     print("=" * 50)
 
-    progress_update1 = goal_manager.update_goal_progress(goal1.id, {
+    goal_manager.update_goal_progress(goal1.id, {
         'subgoal_updates': {
             goal1.subgoals[0].id: {
                 'status': 'completed',
@@ -81,7 +81,7 @@ async def main():
     print("=" * 50)
 
     dashboard = goal_manager.get_goal_dashboard()
-    print(f"📊 总体统计:")
+    print("📊 总体统计:")
     print(f"   总目标数: {dashboard['summary']['total_goals']}")
     print(f"   进行中: {dashboard['summary']['in_progress_goals']}")
     print(f"   已完成: {dashboard['summary']['completed_goals']}")
@@ -92,7 +92,7 @@ async def main():
     print("=" * 50)
 
     insights = goal_manager.generate_goal_insights()
-    print(f"💡 智能洞察:")
+    print("💡 智能洞察:")
     for recommendation in insights['recommendations']:
         print(f"   - {recommendation}")
 

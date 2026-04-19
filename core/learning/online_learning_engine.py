@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 在线学习引擎
 Online Learning Engine
@@ -24,8 +25,6 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any
-
-
 
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))

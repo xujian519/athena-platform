@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 从笔记目录提取清楚性和充分公开相关训练数据
 Extract Clarity and Disclosure Training Data from Notes
@@ -17,7 +18,7 @@ import random
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 

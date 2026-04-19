@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增量更新机制
 Incremental Update Mechanism
@@ -261,11 +262,11 @@ class IncrementalUpdater:
             batch.failed_count = failed_count
 
             self.logger.info(
-                f"✅ 批次处理完成: {batch_id} ({processed_count} 成功, {failed_count} 失败)"
+                f"✅ 批次处理完成: {batch.batch_id} ({processed_count} 成功, {failed_count} 失败)"
             )
 
         except Exception as e:
-            self.logger.error(f"❌ 批次处理失败 {batch_id}: {e}")
+            self.logger.error(f"❌ 批次处理失败 {batch.batch_id}: {e}")
             batch.status = UpdateStatus.FAILED
 
     async def _process_single_update(self, update: UpdateRecord):

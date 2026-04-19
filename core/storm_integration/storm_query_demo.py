@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 使用 STORM 查询: AI在专利代理行业的应用前景
 

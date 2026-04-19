@@ -5,15 +5,15 @@ LangExtract平台集成服务
 """
 
 import asyncio
-import json
 import logging
-from core.logging_config import setup_logging
 import sys
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent.parent
@@ -41,11 +41,11 @@ class ExtractionRequest:
     request_id: str
     mode: IntegrationMode
     user_input: str
-    text_or_documents: Optional[Union[str, List[str]]] = None
+    text_or_documents: str | list[str] | None = None
     scenario: str | None = None
     custom_prompt: str | None = None
-    config: Dict[str, Any] = field(default_factory=dict)
-    context: Dict[str, Any] = field(default_factory=dict)
+    config: dict[str, Any] = field(default_factory=dict)
+    context: dict[str, Any] = field(default_factory=dict)
     callback_url: str | None = None
     priority: int = 1
 
@@ -55,11 +55,11 @@ class ExtractionResponse:
     request_id: str
     success: bool
     mode: IntegrationMode
-    result: Optional[Dict[str, Any]] = None
+    result: dict[str, Any] | None = None
     error: str | None = None
     execution_time: float = 0.0
     timestamp: datetime = field(default_factory=datetime.now)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 class LangExtractIntegrationService:
     """LangExtract集成服务"""
@@ -86,7 +86,7 @@ class LangExtractIntegrationService:
 
         logger.info('LangExtract集成服务初始化完成')
 
-    def _load_business_integrations(self) -> Dict[str, Any]:
+    def _load_business_integrations(self) -> dict[str, Any]:
         """加载业务集成配置"""
         return {
             'patent_business': {
@@ -247,7 +247,7 @@ class LangExtractIntegrationService:
                 execution_time=execution_time
             )
 
-    async def _process_xiaonuo_auto(self, request: ExtractionRequest) -> Dict[str, Any]:
+    async def _process_xiaonuo_auto(self, request: ExtractionRequest) -> dict[str, Any]:
         """处理小诺全自动模式"""
         try:
             # 1. 小诺智能分析
@@ -260,7 +260,7 @@ class LangExtractIntegrationService:
                     'suggestion': '请提供需要提取的文本或文档'
                 }
 
-            analysis = await self.xiaonuo_controller.analyze_request(
+            await self.xiaonuo_controller.analyze_request(
                 request.user_input,
                 request.context
             )
@@ -288,7 +288,7 @@ class LangExtractIntegrationService:
                 'steps': ['xiaonuo_analysis']
             }
 
-    async def _process_xiaonuo_semi(self, request: ExtractionRequest) -> Dict[str, Any]:
+    async def _process_xiaonuo_semi(self, request: ExtractionRequest) -> dict[str, Any]:
         """处理小诺半自动模式"""
         try:
             # 1. 小诺分析提供建议
@@ -342,7 +342,7 @@ class LangExtractIntegrationService:
                 'steps': ['xiaonuo_analysis']
             }
 
-    async def _process_direct_api(self, request: ExtractionRequest) -> Dict[str, Any]:
+    async def _process_direct_api(self, request: ExtractionRequest) -> dict[str, Any]:
         """处理直接API调用模式"""
         try:
             if not request.text_or_documents:
@@ -392,7 +392,7 @@ class LangExtractIntegrationService:
                 'steps': ['parameter_validation', 'extraction_execution']
             }
 
-    async def _process_crawler_enhanced(self, request: ExtractionRequest) -> Dict[str, Any]:
+    async def _process_crawler_enhanced(self, request: ExtractionRequest) -> dict[str, Any]:
         """处理爬虫增强模式"""
         try:
             # 1. 使用爬虫获取数据
@@ -468,7 +468,7 @@ class LangExtractIntegrationService:
                 'steps': ['url_extraction', 'web_crawling', 'extraction_execution']
             }
 
-    async def _process_batch_processing(self, request: ExtractionRequest) -> Dict[str, Any]:
+    async def _process_batch_processing(self, request: ExtractionRequest) -> dict[str, Any]:
         """处理批量处理模式"""
         try:
             if not request.text_or_documents:
@@ -542,14 +542,14 @@ class LangExtractIntegrationService:
                 'steps': ['batch_validation', 'parallel_processing']
             }
 
-    def _extract_urls_from_text(self, text: str) -> List[str]:
+    def _extract_urls_from_text(self, text: str) -> list[str]:
         """从文本中提取URL"""
         import re
         url_pattern = r'https?://[^\s<>"{}|\\^`\[\]]+'
         urls = re.findall(url_pattern, text)
         return urls
 
-    async def get_service_status(self) -> Dict[str, Any]:
+    async def get_service_status(self) -> dict[str, Any]:
         """获取服务状态"""
         return {
             'service': 'LangExtract集成服务',
@@ -578,9 +578,9 @@ class LangExtractIntegrationService:
 
     async def batch_process(
         self,
-        requests: List[ExtractionRequest],
+        requests: list[ExtractionRequest],
         max_concurrent: int = 5
-    ) -> List[ExtractionResponse]:
+    ) -> list[ExtractionResponse]:
         """批量处理请求"""
         try:
             logger.info(f"开始批量处理 {len(requests)} 个请求")
@@ -628,7 +628,7 @@ class LangExtractIntegrationService:
                 for req in requests
             ]
 
-    async def get_business_integrations(self) -> Dict[str, Any]:
+    async def get_business_integrations(self) -> dict[str, Any]:
         """获取业务集成信息"""
         return {
             'total_integrations': len(self.business_integrations),
@@ -643,7 +643,7 @@ class LangExtractIntegrationService:
         self,
         patent_text: str,
         analysis_type: str = 'full'
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """专利业务增强功能"""
         try:
             logger.info(f"开始专利业务增强分析: {analysis_type}")
@@ -688,7 +688,7 @@ class LangExtractIntegrationService:
                 'error': f"专利分析失败: {str(e)}"
             }
 
-    def _analyze_claims_structure(self, extractions: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def _analyze_claims_structure(self, extractions: list[dict[str, Any]]) -> dict[str, Any]:
         """分析权利要求结构"""
         claims = [ext for ext in extractions if ext.get('extraction_class') == 'claim']
         return {
@@ -697,17 +697,17 @@ class LangExtractIntegrationService:
             'dependent_claims': len([c for c in claims if 'dependent' in c.get('attributes', {})])
         }
 
-    def _extract_technical_features(self, extractions: List[Dict[str, Any]]) -> List[str]:
+    def _extract_technical_features(self, extractions: list[dict[str, Any]]) -> list[str]:
         """提取技术特征"""
         features = [ext for ext in extractions if ext.get('extraction_class') == 'technical_feature']
         return [feature['extraction_text'] for feature in features]
 
-    def _identify_innovation_highlights(self, extractions: List[Dict[str, Any]]) -> List[str]:
+    def _identify_innovation_highlights(self, extractions: list[dict[str, Any]]) -> list[str]:
         """识别创新亮点"""
         innovations = [ext for ext in extractions if ext.get('extraction_class') == 'innovation']
         return [innovation['extraction_text'] for innovation in innovations]
 
-    def _assess_patent_business_value(self, extractions: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def _assess_patent_business_value(self, extractions: list[dict[str, Any]]) -> dict[str, Any]:
         """评估专利商业价值"""
         # 简化的商业价值评估
         return {

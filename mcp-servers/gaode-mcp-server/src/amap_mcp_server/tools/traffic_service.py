@@ -3,11 +3,9 @@
 Traffic Service Tool
 """
 
-import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import structlog
-from mcp.types import Tool
 
 from ..api.extended_gaode_client import ExtendedAmapApiClient
 
@@ -22,7 +20,7 @@ class TrafficServiceTool:
     def __init__(self, api_client: ExtendedAmapApiClient):
         self.api_client = api_client
 
-    async def call(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
+    async def call(self, arguments: dict[str, Any]) -> dict[str, Any]:
         """
         交通服务处理
 
@@ -50,7 +48,7 @@ class TrafficServiceTool:
         else:
             raise ValueError(f"不支持的服务类型: {service}")
 
-    async def _handle_rectangle_traffic(self, args: Dict[str, Any]) -> Dict[str, Any]:
+    async def _handle_rectangle_traffic(self, args: dict[str, Any]) -> dict[str, Any]:
         """处理矩形区域交通态势"""
         rectangle = args.get('rectangle')
         if not rectangle:
@@ -129,7 +127,7 @@ class TrafficServiceTool:
                 'service': 'rectangle_traffic'
             }
 
-    async def _handle_circle_traffic(self, args: Dict[str, Any]) -> Dict[str, Any]:
+    async def _handle_circle_traffic(self, args: dict[str, Any]) -> dict[str, Any]:
         """处理圆形区域交通态势"""
         location = args.get('location')
         if not location:
@@ -214,7 +212,7 @@ class TrafficServiceTool:
                 'service': 'circle_traffic'
             }
 
-    async def _handle_road_traffic(self, args: Dict[str, Any]) -> Dict[str, Any]:
+    async def _handle_road_traffic(self, args: dict[str, Any]) -> dict[str, Any]:
         """处理指定线路交通态势"""
         road_name = args.get('road_name')
         if not road_name:
@@ -296,7 +294,7 @@ class TrafficServiceTool:
                 'service': 'road_traffic'
             }
 
-    def get_input_schema(self) -> Dict[str, Any]:
+    def get_input_schema(self) -> dict[str, Any]:
         """获取输入参数模式"""
         return {
             'type': 'object',
@@ -339,7 +337,7 @@ class TrafficServiceTool:
             'required': ['service']
         }
 
-    def get_output_schema(self) -> Dict[str, Any]:
+    def get_output_schema(self) -> dict[str, Any]:
         """获取输出结果模式"""
         return {
             'type': 'object',

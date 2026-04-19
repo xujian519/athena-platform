@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - 模型能力注册表
 管理所有模型的元数据和能力定义
@@ -14,7 +15,6 @@ from datetime import datetime
 from pathlib import Path
 
 from core.llm.base import DeploymentType, ModelCapability, ModelType
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -195,9 +195,60 @@ class ModelCapabilityRegistry:
             unsuitable_tasks=["simple_chat"],
         )
 
-        # ==================== 多模态模型 (国内) ====================
+        # ==================== 本地模型 (Ollama) ====================
 
-        # Qwen-VL-Max (通义千问视觉模型)
+        # Qwen3.5 (本地Ollama - 默认推理/对话/多模态模型)
+        # 2026-03-22 更新: 提升为默认推理模型，复杂推理任务仍用云端
+        self.capabilities["qwen3.5"] = ModelCapability(
+            model_id="qwen3.5",
+            model_type=ModelType.MULTIMODAL,  # 多模态类型，但支持推理和对话
+            deployment=DeploymentType.LOCAL,
+            max_context=262144,  # 256K 上下文
+            supports_streaming=True,
+            supports_function_call=True,
+            supports_vision=True,
+            supports_thinking=True,  # 支持思考模式
+            avg_latency_ms=1000,
+            throughput_tps=40,
+            cost_per_1k_tokens=0.0,  # 本地免费
+            quality_score=0.88,  # 7B模型，推理能力略低于云端大模型
+            suitable_tasks=[
+                # 多模态任务
+                "image_analysis",
+                "multimodal",
+                "chart_analysis",
+                "document_analysis",
+                "ocr",
+                "visual_reasoning",
+                # 对话任务
+                "general_chat",
+                "conversation",
+                "simple_chat",
+                "qa",
+                "simple_qa",
+                # 日常推理任务 (非高复杂度)
+                "reasoning",
+                "tech_analysis",
+                "patent_search",
+                "fast_analysis",
+                "step_by_step_reasoning",
+                # 其他
+                "chinese",
+                "code_generation",
+                "code_explanation",
+            ],
+            unsuitable_tasks=[
+                # 高复杂度推理任务建议使用云端模型
+                "novelty_analysis",       # 新颖性分析
+                "creativity_analysis",    # 创造性判断
+                "invalidation_analysis",  # 无效宣告
+                "oa_response",            # 审查意见答复
+                "complex_reasoning",      # 复杂推理
+                "math_reasoning",         # 数学推理
+            ],
+        )
+
+        # Qwen-VL-Max (通义千问视觉模型 - 云端备选)
         self.capabilities["qwen-vl-max"] = ModelCapability(
             model_id="qwen-vl-max",
             model_type=ModelType.MULTIMODAL,

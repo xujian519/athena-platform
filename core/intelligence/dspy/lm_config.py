@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 DSPy LM后端配置
 DSPy Language Model Backend Configuration
@@ -13,10 +14,9 @@ Supports GLM-4 series and DeepSeek series models
 
 import logging
 import os
-from typing import Any, Dict, Optional
+from typing import Any
 
 import dspy
-
 
 logger = logging.getLogger(__name__)
 

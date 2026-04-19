@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 输入验证工具函数
 Input Validation Helpers
@@ -8,7 +9,7 @@ Input Validation Helpers
 """
 
 import re
-from typing import Any, Dict, List, Optional, TypeVar
+from typing import Any, TypeVar
 
 T = TypeVar("T")
 

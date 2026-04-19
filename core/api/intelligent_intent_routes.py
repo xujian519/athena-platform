@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能意图识别API路由
 Intelligent Intent Recognition API Routes
@@ -16,15 +17,13 @@ Intelligent Intent Recognition API Routes
 
 import logging
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from fastapi import APIRouter, BackgroundTasks, HTTPException, status
+from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel, Field
 
 # 导入智能意图识别服务
 from core.intent.intelligent_intent_service import (
-    IntelligentIntentRecognitionService,
-    IntentCategory,
     IntentRecognitionResult,
     get_intelligent_intent_service,
 )
@@ -186,7 +185,7 @@ async def recognize_intent(request: IntentRecognitionRequest):
         logger.error(f"意图识别失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"意图识别失败: {e!s}"
-        )
+        ) from e
 
 
 @router.post("/recognize-batch", response_model=BatchIntentResponse)
@@ -232,7 +231,7 @@ async def recognize_intent_batch(request: IntentBatchRecognitionRequest):
         logger.error(f"批量意图识别失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"批量识别失败: {e!s}"
-        )
+        ) from e
 
 
 @router.get("/categories", response_model=dict[str, str])
@@ -291,7 +290,7 @@ async def get_service_statistics():
         logger.error(f"获取统计信息失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"获取统计信息失败: {e!s}"
-        )
+        ) from e
 
 
 @router.get("/health")

@@ -1,10 +1,14 @@
+from __future__ import annotations
 """
 短期记忆
 Short Term Memory
 """
 
+import logging
 from datetime import datetime
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 
 class ShortTermMemory:

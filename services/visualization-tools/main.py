@@ -3,13 +3,14 @@
 visualization-tools - 服务描述
 """
 
-import os
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
+import os
 from datetime import datetime
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from core.logging_config import setup_logging
 from core.security.auth import ALLOWED_ORIGINS
 
 # 配置日志

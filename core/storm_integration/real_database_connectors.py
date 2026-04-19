@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 真实数据库连接器 (修复版)
 
@@ -19,7 +20,7 @@
 
 import asyncio
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -107,7 +108,7 @@ class QdrantVectorRetriever:
             # 实际应该使用 embedding 模型生成
 
             # 执行检索 - 使用正确的 API
-            from qdrant_client.models import FieldCondition, Filter, MatchValue
+            from qdrant_client.models import Filter
 
             # 使用查询过滤(推荐的方式)
             search_result = self._client.query_points(

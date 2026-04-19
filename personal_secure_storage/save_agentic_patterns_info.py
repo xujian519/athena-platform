@@ -3,11 +3,11 @@
 保存智能体设计模式信息到个人数据库
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-from pathlib import Path
+import sqlite3
 from datetime import datetime
+from pathlib import Path
+
 
 def save_agentic_patterns_info() -> None:
     """保存智能体设计模式信息"""

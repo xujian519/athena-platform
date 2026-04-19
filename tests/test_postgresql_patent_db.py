@@ -1,23 +1,24 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 测试PostgreSQL中国专利数据库连接和搜索功能
 Test PostgreSQL Chinese Patent Database Connection and Search
 """
 
-import sys
 import logging
+import sys
 
 logger = logging.getLogger(__name__)
 import os
+
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
 import asyncio
 import json
 from datetime import datetime
+
 import psycopg2
-from psycopg2 import sql, Error
-from typing import Dict, List, Any, Optional
+from psycopg2 import sql
+
 
 class PostgreSQLPatentDBTester:
     """PostgreSQL专利数据库测试器"""
@@ -406,7 +407,7 @@ class PostgreSQLPatentDBTester:
                     print(f"   ✅ {func['type']}: '{func['keyword']}' ({func['results_count']} 结果)")
 
         if self.test_results['sample_queries']:
-            print(f"\n📝 示例查询结果:")
+            print("\n📝 示例查询结果:")
             for i, sample in enumerate(self.test_results['sample_queries'][:3], 1):
                 print(f"\n   示例 {i}:")
                 print(f"   📋 标题: {sample['title']}")
@@ -436,7 +437,7 @@ class PostgreSQLPatentDBTester:
         with open('/Users/xujian/postgresql_patent_db_test_report.json', 'w', encoding='utf-8') as f:
             json.dump(report, f, ensure_ascii=False, indent=2)
 
-        print(f"\n💾 测试报告已保存至: /Users/xujian/postgresql_patent_db_test_report.json")
+        print("\n💾 测试报告已保存至: /Users/xujian/postgresql_patent_db_test_report.json")
 
         # 关闭连接
         if self.connection:

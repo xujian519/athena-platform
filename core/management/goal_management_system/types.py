@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 目标管理系统 - 类型定义
 Goal Management System - Type Definitions
@@ -13,7 +13,7 @@ Goal Management System - Type Definitions
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 
 class GoalStatus(Enum):

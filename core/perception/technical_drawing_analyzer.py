@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 技术图纸智能分析器
 Technical Drawing Intelligent Analyzer

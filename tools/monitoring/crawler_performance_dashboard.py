@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 爬虫性能监控仪表板
 Crawler Performance Monitor Dashboard
@@ -17,9 +16,8 @@ import logging
 import threading
 import time
 from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+from datetime import datetime
+from typing import Any
 
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
@@ -35,7 +33,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(f'crawler_dashboard_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log'),
+        logging.FileHandler(f"crawler_dashboard_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"),
         logging.StreamHandler()
     ]
 )
@@ -56,7 +54,7 @@ class PerformanceMetrics:
     cache_hit_rate: float
     cpu_usage: float
     memory_usage: float
-    network_io: Dict[str, int]
+    network_io: dict[str, int]
 
 class CrawlerPerformanceDashboard:
     """爬虫性能监控仪表板"""
@@ -89,7 +87,7 @@ class CrawlerPerformanceDashboard:
         logger.info(f"   Redis: {'启用' if self.config.redis_enabled else '禁用'}")
         logger.info(f"   智能延迟: {'启用' if self.config.adaptive_delay else '禁用'}")
 
-    def collect_system_metrics(self) -> Dict[str, Any]:
+    def collect_system_metrics(self) -> dict[str, Any]:
         """收集系统性能指标"""
         # CPU使用率
         cpu_usage = psutil.cpu_percent(interval=1)

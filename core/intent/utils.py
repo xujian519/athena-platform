@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 意图识别服务 - 公共工具函数模块
 

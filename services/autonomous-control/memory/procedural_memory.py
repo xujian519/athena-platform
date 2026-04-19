@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 程序记忆库
 Procedural Memory Library
@@ -11,13 +10,12 @@ Procedural Memory Library
 """
 
 import json
-from core.async_main import async_main
 import logging
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass, asdict
-from datetime import datetime
-import pickle
 import os
+import pickle
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -28,14 +26,14 @@ class LegalProcedure:
     name: str
     category: str  # patent, trademark, copyright, contract
     description: str
-    steps: List[Dict[str, Any]]
-    required_documents: List[str]
-    timeline: Dict[str, str]
-    costs: Dict[str, float]
-    risks: List[Dict[str, str]]
+    steps: list[dict[str, Any]]
+    required_documents: list[str]
+    timeline: dict[str, str]
+    costs: dict[str, float]
+    risks: list[dict[str, str]]
     success_rate: float
     last_updated: str
-    tags: List[str]
+    tags: list[str]
 
 class ProceduralMemory:
     """程序记忆系统"""
@@ -77,7 +75,7 @@ class ProceduralMemory:
         """加载程序模板"""
         try:
             if os.path.exists(self.templates_file):
-                with open(self.templates_file, 'r', encoding='utf-8') as f:
+                with open(self.templates_file, encoding='utf-8') as f:
                     self.templates = json.load(f)
                 logger.info(f"✅ 已加载 {len(self.templates)} 个模板")
             else:
@@ -365,7 +363,7 @@ class ProceduralMemory:
         return self.procedures.get(procedure_id)
 
     def search_procedures(self, category: str = None,
-                          tags: List[str] = None) -> List[LegalProcedure]:
+                          tags: list[str] = None) -> list[LegalProcedure]:
         """搜索程序"""
         results = []
         for procedure in self.procedures.values():
@@ -401,7 +399,7 @@ class ProceduralMemory:
         return None
 
     def adapt_procedure(self, procedure_id: str,
-                       adaptations: Dict[str, Any]) -> LegalProcedure:
+                       adaptations: dict[str, Any]) -> LegalProcedure:
         """调整程序"""
         base_procedure = self.get_procedure(procedure_id)
         if not base_procedure:
@@ -427,7 +425,7 @@ class ProceduralMemory:
         self.add_procedure(adapted_procedure)
         return adapted_procedure
 
-    def get_procedure_template(self, category: str) -> Dict[str, Any]:
+    def get_procedure_template(self, category: str) -> dict[str, Any]:
         """获取程序模板"""
         template = self.templates.get(category, {})
         if not template:
@@ -457,7 +455,7 @@ class ProceduralMemory:
             }
         return template
 
-    def generate_custom_procedure(self, requirements: Dict[str, Any]) -> LegalProcedure:
+    def generate_custom_procedure(self, requirements: dict[str, Any]) -> LegalProcedure:
         """生成定制程序"""
         category = requirements.get("category", "legal_advice")
         template = self.get_procedure_template(category)
@@ -497,7 +495,7 @@ class ProceduralMemory:
             self.procedures[procedure_id] = procedure
             self.save_procedures()
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """获取统计信息"""
         stats = {
             "total_procedures": len(self.procedures),

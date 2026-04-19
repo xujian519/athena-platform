@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化版执行模块 - 负载均衡器
 Optimized Execution Module - Load Balancer

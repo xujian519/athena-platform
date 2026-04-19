@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能批处理器
 实现高效的批量推理,提升吞吐量5-10倍
@@ -14,7 +15,7 @@ import logging
 import time
 from collections import defaultdict
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -156,7 +157,7 @@ class BatchProcessor:
         except asyncio.TimeoutError:
             # 超时处理
             self.pending_requests[priority].remove(request)
-            raise asyncio.TimeoutError(f"请求超时: {request.request_id}")
+            raise asyncio.TimeoutError(f"请求超时: {request.request_id}") from None
 
     async def _process_loop(self):
         """批处理主循环"""

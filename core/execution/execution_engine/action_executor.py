@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 执行引擎 - 动作执行器
 Execution Engine - Action Executor

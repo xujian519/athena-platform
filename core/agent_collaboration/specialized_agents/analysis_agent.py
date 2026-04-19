@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 分析Agent (AnalysisAgent) - 技术分析专家
 

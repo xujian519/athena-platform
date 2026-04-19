@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺增强控制器 - 集成提示词系统优化
 Xiaonuo Enhanced Controller with Prompt System Optimization
@@ -17,10 +18,10 @@ Xiaonuo Enhanced Controller with Prompt System Optimization
 """
 
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.context.context_compressor import (
     ContextCompressor,
@@ -32,25 +33,18 @@ from core.context.dynamic_context_selector import (
     ContextLayer,
     DynamicContextSelector,
 )
-from core.context.dynamic_context_selector import (
-    TaskComplexity as SelectorTaskComplexity,
-)
-from core.coordination.failure_prevention import FailureMode, FailurePreventionSystem
+from core.coordination.failure_prevention import FailurePreventionSystem
 from core.logging_config import setup_logging
 
 # 导入优化系统
 from core.orchestration.supervisor_orchestrator import (
-    AgentCapability,
     SupervisorOrchestrator,
-    TaskComplexity,
     orchestrate_task,
 )
 
 # 导入统一提示词管理器
 from core.prompts.unified_prompt_manager import (
     PromptFormat,
-    PromptType,
-    UnifiedPromptManager,
     get_unified_prompt_manager,
 )
 

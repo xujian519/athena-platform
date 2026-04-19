@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 极端场景测试
 测试系统在异常和极端情况下的行为
@@ -6,13 +7,12 @@ Athena 感知模块 - 极端场景测试
 """
 
 import asyncio
-import time
+import logging
 import os
 import tempfile
 from datetime import datetime
-from typing import Dict, Any, List
 from pathlib import Path
-import logging
+from typing import Any
 
 # 配置日志
 logging.basicConfig(
@@ -29,9 +29,9 @@ class ExtremeTestResult:
         self.test_name = test_name
         self.start_time = datetime.now()
         self.end_time = None
-        self.scenarios_tested: List[str] = []
-        self.scenarios_passed: List[str] = []
-        self.scenarios_failed: List[Dict[str, Any]] = []
+        self.scenarios_tested: list[str] = []
+        self.scenarios_passed: list[str] = []
+        self.scenarios_failed: list[dict[str, Any]] = []
         self.resilience_score: float = 0.0
 
     def add_scenario(self, scenario: str, passed: bool, details: str = ""):
@@ -54,7 +54,7 @@ class ExtremeTestResult:
         else:
             self.resilience_score = (len(self.scenarios_passed) / len(self.scenarios_tested)) * 100
 
-    def get_summary(self) -> Dict[str, Any]:
+    def get_summary(self) -> dict[str, Any]:
         """获取测试摘要"""
         self.end_time = datetime.now()
         self.calculate_resilience_score()
@@ -86,7 +86,7 @@ class ExtremeTester:
 
     def __init__(self):
         """初始化极端场景测试器"""
-        self.test_results: Dict[str, ExtremeTestResult] = {}
+        self.test_results: dict[str, ExtremeTestResult] = {}
 
     async def test_invalid_inputs(self) -> ExtremeTestResult:
         """
@@ -105,8 +105,8 @@ class ExtremeTester:
             if core_dir not in sys.path:
                 sys.path.insert(0, core_dir)
 
-            from core.perception.processors.tesseract_ocr import TesseractOCRProcessor
             from core.perception.processors.opencv_image_processor import OpenCVImageProcessor
+            from core.perception.processors.tesseract_ocr import TesseractOCRProcessor
 
             ocr_processor = TesseractOCRProcessor()
             image_processor = OpenCVImageProcessor()
@@ -197,7 +197,7 @@ class ExtremeTester:
             result.add_scenario("超大尺寸参数", False, f"测试失败: {e}")
 
         # 记录结果
-        summary = result.get_summary()
+        result.get_summary()
         self._print_extreme_test_summary(result)
         self.test_results["invalid_inputs"] = result
 
@@ -221,7 +221,11 @@ class ExtremeTester:
                 sys.path.insert(0, core_dir)
 
             from core.perception.cache.redis_cache import RedisCacheManager
-            from core.perception.reliability.retry_manager import RetryManager, RetryConfig, RetryStrategy
+            from core.perception.reliability.retry_manager import (
+                RetryConfig,
+                RetryManager,
+                RetryStrategy,
+            )
         except ImportError as e:
             logger.error(f"导入失败: {e}")
             result.add_scenario("导入模块", False, str(e))
@@ -285,7 +289,7 @@ class ExtremeTester:
             result.add_scenario("超时处理", False, f"测试失败: {e}")
 
         # 记录结果
-        summary = result.get_summary()
+        result.get_summary()
         self._print_extreme_test_summary(result)
         self.test_results["network_interruption"] = result
 
@@ -363,7 +367,6 @@ class ExtremeTester:
         # 场景3: 内存限制模拟
         try:
             # 创建大列表模拟内存压力
-            large_data = []
 
             async def memory_intensive_operation():
                 # 模拟内存密集操作
@@ -383,7 +386,7 @@ class ExtremeTester:
             result.add_scenario("内存压力处理", False, f"测试失败: {e}")
 
         # 记录结果
-        summary = result.get_summary()
+        result.get_summary()
         self._print_extreme_test_summary(result)
         self.test_results["resource_exhaustion"] = result
 
@@ -406,7 +409,10 @@ class ExtremeTester:
             if core_dir not in sys.path:
                 sys.path.insert(0, core_dir)
 
-            from core.perception.reliability.degradation import DegradationManager, CircuitBreakerConfig
+            from core.perception.reliability.degradation import (
+                CircuitBreakerConfig,
+                DegradationManager,
+            )
         except ImportError as e:
             logger.error(f"导入失败: {e}")
             result.add_scenario("导入模块", False, str(e))
@@ -573,7 +579,7 @@ class ExtremeTester:
             result.add_scenario("熔断器恢复", False, f"测试失败: {e}")
 
         # 记录结果
-        summary = result.get_summary()
+        result.get_summary()
         self._print_extreme_test_summary(result)
         self.test_results["circuit_breaker"] = result
 
@@ -581,8 +587,8 @@ class ExtremeTester:
 
     def _create_test_image(self) -> str:
         """创建测试图像"""
-        import numpy as np
         import cv2
+        import numpy as np
 
         test_image = "/tmp/extreme_test_image.png"
         img = np.ones((100, 200, 3), dtype=np.uint8) * 255
@@ -602,14 +608,14 @@ class ExtremeTester:
         logger.info(f"弹性得分:         {summary['resilience_score']:.1f}%")
 
         if summary['failed_scenarios']:
-            logger.info(f"\n失败场景详情:")
+            logger.info("\n失败场景详情:")
             for failed in summary['failed_scenarios']:
                 logger.info(f"  - {failed['scenario']}: {failed['details']}")
 
         logger.info(f"\n总体评估:         {'✅ 优秀' if summary['resilience_score'] >= 80 else '⚠️ 需要改进' if summary['resilience_score'] >= 60 else '❌ 不合格'}")
         logger.info(f"{'='*60}\n")
 
-    def get_all_results(self) -> Dict[str, Dict[str, Any]]:
+    def get_all_results(self) -> dict[str, dict[str, Any]]:
         """获取所有测试结果"""
         return {
             test_name: result.get_summary()

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 真实专利数据连接器 - 仅支持Google Patents
 Real Patent Data Connector - Google Patents Only
@@ -12,7 +12,7 @@ import json
 import logging
 import re
 from datetime import datetime, timedelta
-from typing import Any, Dict
+from typing import Any
 
 import aiohttp
 
@@ -117,15 +117,6 @@ class GooglePatentsConnector:
         try:
             # 查找专利结果模式
             # Google Patents页面中的专利信息通常在特定的HTML结构中
-            patent_patterns = [
-                r'<a[^>]+href="/patent/([^"]+)"[^>]*>([^<]+)</a>',
-                r'publication_number[^>]*>([^<]+)',
-                r'inventor[^>]*>([^<]+)',
-                r'assignee[^>]*>([^<]+)',
-                r'filing_date[^>]*>([^<]+)',
-                r'publication_date[^>]*>([^<]+)',
-                r'abstract[^>]*>([^<]+)',
-            ]
 
             # 简化的专利提取逻辑
             lines = html.split('\n')
@@ -212,7 +203,7 @@ class GooglePatentsConnector:
 
         return text
 
-    def _parse_google_results(self, data: Dict) -> list[dict[str, Any]]:
+    def _parse_google_results(self, data: dict) -> list[dict[str, Any]]:
         """解析Google Patents结果"""
         patents = []
 
@@ -264,7 +255,7 @@ class GooglePatentsConnector:
 
         return patents[:min(len(patents), 10)]
 
-    def _extract_title(self, patent_info: Dict) -> str:
+    def _extract_title(self, patent_info: dict) -> str:
         """提取专利标题"""
         title = patent_info.get('title', '')
         if title:
@@ -275,7 +266,7 @@ class GooglePatentsConnector:
             title = 'AI-based Patent System'
         return title
 
-    def _extract_inventors(self, patent_info: Dict) -> list[str]:
+    def _extract_inventors(self, patent_info: dict) -> list[str]:
         """提取发明人"""
         inventors = []
         try:
@@ -296,7 +287,7 @@ class GooglePatentsConnector:
 
         return inventors[:5]
 
-    def _extract_applicant(self, patent_info: Dict) -> str:
+    def _extract_applicant(self, patent_info: dict) -> str:
         """提取申请人"""
         applicant = ''
         try:
@@ -319,7 +310,7 @@ class GooglePatentsConnector:
 
         return applicant
 
-    def _extract_application_date(self, patent_info: Dict) -> str:
+    def _extract_application_date(self, patent_info: dict) -> str:
         """提取申请日期"""
         try:
             family = patent_info.get('family', [])
@@ -336,7 +327,7 @@ class GooglePatentsConnector:
         app_date = (datetime.now() - timedelta(days=days_ago)).strftime('%Y-%m-%d')
         return app_date
 
-    def _extract_publication_date(self, patent_info: Dict) -> str:
+    def _extract_publication_date(self, patent_info: dict) -> str:
         """提取公开日期"""
         try:
             pub_date = patent_info.get('publication_date', '')
@@ -351,10 +342,10 @@ class GooglePatentsConnector:
             app_date = datetime.strptime(app_date_str, '%Y-%m-%d')
             pub_date = (app_date + timedelta(days=365)).strftime('%Y-%m-%d')
             return pub_date
-        except Exception as e:  # TODO
+        except Exception:  # TODO
             return '2024-06-15'
 
-    def _extract_ipc_classes(self, patent_info: Dict) -> list[str]:
+    def _extract_ipc_classes(self, patent_info: dict) -> list[str]:
         """提取IPC分类号"""
         ipc_classes = []
         try:
@@ -372,7 +363,7 @@ class GooglePatentsConnector:
 
         return ipc_classes[:5]
 
-    def _extract_abstract(self, patent_info: Dict) -> str:
+    def _extract_abstract(self, patent_info: dict) -> str:
         """提取摘要"""
         abstract = ''
         try:

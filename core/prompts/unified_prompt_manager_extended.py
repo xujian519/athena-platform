@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 扩展的统一提示词管理器 - 集成场景规则
 Extended Unified Prompt Manager - Integrated with Scenario Rules
@@ -10,10 +11,16 @@ Extended Unified Prompt Manager - Integrated with Scenario Rules
 """
 
 import logging
-from typing import Any, Dict, Optional
+from typing import Any
 
-from core.legal_world_model.scenario_identifier_optimized import ScenarioContext, ScenarioIdentifierOptimized as ScenarioIdentifier
-from core.legal_world_model.scenario_rule_retriever_optimized import ScenarioRule, ScenarioRuleRetrieverOptimized as ScenarioRuleRetriever
+from core.legal_world_model.scenario_identifier_optimized import ScenarioContext
+from core.legal_world_model.scenario_identifier_optimized import (
+    ScenarioIdentifierOptimized as ScenarioIdentifier,
+)
+from core.legal_world_model.scenario_rule_retriever_optimized import ScenarioRule
+from core.legal_world_model.scenario_rule_retriever_optimized import (
+    ScenarioRuleRetrieverOptimized as ScenarioRuleRetriever,
+)
 from core.prompts.integrated_prompt_generator import IntegratedPromptGenerator
 from core.prompts.unified_prompt_manager import UnifiedPromptManager
 

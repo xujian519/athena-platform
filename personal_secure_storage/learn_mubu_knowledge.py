@@ -3,11 +3,12 @@
 深入学习幕布知识库 - 提升小诺的知识产权专业能力
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-from pathlib import Path
+import sqlite3
 from datetime import datetime
+from pathlib import Path
+from typing import Any
+
 
 def learn_mubu_knowledge() -> Any:
     """深入学习和整理幕布知识库"""
@@ -163,29 +164,6 @@ def learn_mubu_knowledge() -> Any:
     }
 
     # 小诺的学习笔记和感悟
-    learning_notes = {
-        'core_concepts': {
-            '新颖性': '指申请日前没有被国内外公开过，没有被公众所知',
-            '创造性': '指同申请日以前已有的技术相比，有突出的实质性特点和显著的进步',
-            '实用性': '指能够制造或者使用，并且能够产生积极效果'
-        },
-        'writing_principles': {
-            '清楚': '技术方案描述清楚，不产生歧义',
-            '完整': '包含解决技术问题的全部技术特征',
-            '支持': '权利要求得到说明书的支持'
-        },
-        'infringement_analysis': {
-            '全面覆盖原则': '被控侵权技术方案包含权利要求全部技术特征',
-            '等同原则': '以基本相同的手段，实现基本相同的功能，达到基本相同的效果',
-            '禁止反悔原则': '禁止专利权人反悔其在申请时承诺放弃的内容'
-        },
-        'service_essentials': {
-            '专业能力': '深厚的法律和技术知识储备',
-            '服务意识': '以客户需求为中心，提供专业服务',
-            '质量控制': '建立严格的质量管理体系',
-            '持续学习': '跟踪最新的法律法规和案例'
-        }
-    }
 
     # 保存学习计划
     cursor.execute("""
@@ -360,7 +338,7 @@ def learn_mubu_knowledge() -> Any:
     """, (
         'xiaona_insights',
         '小诺学习幕布知识心得体会',
-        f"""# 小诺学习幕布知识心得体会
+        """# 小诺学习幕布知识心得体会
 
 ## 🌟 学习感悟
 
@@ -444,7 +422,7 @@ def learn_mubu_knowledge() -> Any:
     print(f'✅ 涵盖 {total_materials} 个专业材料')
 
     print('\n📚 主要学习内容：')
-    for category, info in knowledge_categories.items():
+    for _category, info in knowledge_categories.items():
         print(f'  - {info["name"]}: {len(info["materials"])}个材料')
 
     print('\n💡 小诺的学习收获：')

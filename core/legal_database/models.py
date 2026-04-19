@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律数据库数据模型
 Legal Database Models
@@ -9,7 +10,7 @@ Legal Database Models
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 class LegalStatus(str, Enum):

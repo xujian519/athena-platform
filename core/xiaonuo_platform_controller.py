@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena全平台控制器
 Athena Platform Controller - 小诺的平台总控制接口
@@ -15,12 +16,11 @@ import os
 import signal
 import subprocess
 import sys
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 
 class ServiceStatus(Enum):
@@ -39,11 +39,11 @@ class ServiceInfo:
     name: str
     category: str
     path: str
-    entry_file: Optional[str]
-    port: Optional[int]
+    entry_file: str | None
+    port: int | None
     status: ServiceStatus
-    pid: Optional[int]
-    health_url: Optional[str]
+    pid: int | None
+    health_url: str | None
     dependencies: list[str]
     description: str
 

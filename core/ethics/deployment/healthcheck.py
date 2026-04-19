@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # ============================================================
 # AI伦理框架 - 容器健康检查脚本
 # AI Ethics Framework - Container Health Check
@@ -8,7 +9,6 @@ import json
 import os
 import sys
 import urllib.request
-
 
 # 健康检查配置
 HEALTH_CHECK_URL = os.getenv(
@@ -37,7 +37,7 @@ def check_api_health() -> bool:
 def check_evaluator() -> bool:
     """检查评估器是否正常工作"""
     try:
-        from core.ethics import ComplianceStatus, get_container
+        from core.ethics import get_container
 
         container = get_container()
         evaluator = container.create_evaluator()

@@ -1,3 +1,4 @@
+from __future__ import annotations
 # ============================================================
 # AI伦理框架 - 健康检查API
 # AI Ethics Framework - Health Check API
@@ -5,7 +6,7 @@
 
 import logging
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any
 
 from fastapi import FastAPI, HTTPException, status
 from fastapi.responses import JSONResponse, Response
@@ -97,7 +98,7 @@ async def health_check():
         logger.error(f"健康检查失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=f"健康检查失败: {e!s}"
-        )
+        ) from e
 
 
 @app.get("/health/evaluator")
@@ -205,18 +206,10 @@ async def metrics():
         from prometheus_client import (
             CONTENT_TYPE_LATEST,
             REGISTRY,
-            CollectorRegistry,
             generate_latest,
         )
 
         # 获取Prometheus指标
-        from core.ethics.monitoring_prometheus import (
-            ETHICS_ACTIVE_AGENTS,
-            ETHICS_COMPLIANCE_SCORE,
-            ETHICS_EVALUATION_DURATION,
-            ETHICS_EVALUATION_TOTAL,
-            ETHICS_VIOLATION_TOTAL,
-        )
 
         output = generate_latest(REGISTRY)
 
@@ -226,7 +219,7 @@ async def metrics():
         logger.error(f"获取指标失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"获取指标失败: {e!s}"
-        )
+        ) from e
 
 
 @app.get("/status")
@@ -251,7 +244,7 @@ async def get_status():
         logger.error(f"获取状态失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"获取状态失败: {e!s}"
-        )
+        ) from e
 
 
 # ============================================================

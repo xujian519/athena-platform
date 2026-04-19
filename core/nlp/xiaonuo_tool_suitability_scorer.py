@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺工具适用性评分系统
 Xiaonuo Tool Suitability Scoring System
@@ -15,12 +16,13 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 import jieba
 
 # 安全修复: 使用joblib替代pickle序列化scikit-learn模型
 import joblib
+import numpy as np
 from sklearn.ensemble import (
     GradientBoostingRegressor,
     RandomForestClassifier,

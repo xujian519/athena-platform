@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena通信系统 - 统一类型定义
 Unified Type Definitions for Communication System
@@ -375,7 +376,7 @@ def convert_priority(value: Any) -> MessagePriority:
         try:
             return MessagePriority(value)
         except ValueError:
-            raise ValueError(f"无效的优先级整数: {value},必须在0-4范围内")
+            raise ValueError(f"无效的优先级整数: {value},必须在0-4范围内") from None
 
     if isinstance(value, str):
         value_map = {
@@ -424,7 +425,7 @@ def convert_message_type(value: Any) -> MessageType:
             value_lower = value.lower()
             if value_lower in alias_map:
                 return alias_map[value_lower]
-            raise ValueError(f"无效的消息类型字符串: {value}")
+            raise ValueError(f"无效的消息类型字符串: {value}") from None
 
     raise ValueError(f"无法转换消息类型: {type(value)}")
 

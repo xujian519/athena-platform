@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Serper API 管理器
 Serper API Manager
@@ -14,14 +15,13 @@ import asyncio
 import hashlib
 import logging
 import os
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Literal, Optional
+from typing import Any
 
 import aiohttp
-
 
 logger = logging.getLogger(__name__)
 

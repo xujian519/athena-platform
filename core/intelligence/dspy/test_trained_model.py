@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 测试已训练的DSPy模型
 Test the trained DSPy model
@@ -11,7 +12,7 @@ Test the trained DSPy model
 import logging
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 import dspy
 
@@ -25,7 +26,6 @@ logger = logging.getLogger(__name__)
 # 导入训练好的模型
 from core.intelligence.dspy.training_system_v3_enhanced import (
     EnhancedPatentAnalyzer,
-    StructuredPatentCaseAnalysis,
 )
 
 

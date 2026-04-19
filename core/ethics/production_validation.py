@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 生产验证测试 - Production Validation Tests
 全面验证伦理框架在生产环境中的表现
@@ -7,8 +8,7 @@
 import os
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
-
+from typing import Any
 
 # 确保项目路径
 project_root = Path(__file__).parent.parent.parent
@@ -17,7 +17,12 @@ if str(project_root) not in sys.path:
 
 os.environ.setdefault("ATHENA_PROJECT_ROOT", str(project_root))
 
-from core.ethics import AthenaConstitution, WittgensteinGuard, create_ethics_evaluator
+from core.ethics import (
+    AthenaConstitution,
+    EthicsEvaluator,
+    WittgensteinGuard,
+    create_ethics_evaluator,
+)
 
 
 def print_test_header(test_name) -> None:
@@ -179,7 +184,7 @@ def test_4_performance() -> Any:
     guard = WittgensteinGuard()
 
 
-    evaluator = CachedEvaluator(constitution, guard)
+    evaluator = EthicsEvaluator(constitution, guard)
 
     # 预热
     for _ in range(100):

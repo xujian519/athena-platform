@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 从无效决定书双向提取统一训练样本
 Bidirectional Extraction from Invalidation Decisions
@@ -15,7 +16,6 @@ import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
 
 
 class BidirectionalInvalidationExtractor:

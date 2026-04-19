@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺增强记忆处理器
 Xiaonuo Enhanced Memory Processor
@@ -16,7 +17,7 @@ import sqlite3
 import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Any, Optional
+from typing import Any
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

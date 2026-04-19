@@ -1,0 +1,16 @@
+# ================================
+# Athena API Gateway - 生产环境命名空间
+# ================================
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: athena-gateway
+  labels:
+    name: athena-gateway
+    environment: production
+    security-level: high
+    managed-by: athena-platform
+  annotations:
+    description: "Athena API Gateway 生产环境命名空间"
+    contact: "athena-platform-team@company.com"
+    created-by: "athena-deployment-system"

@@ -4,20 +4,17 @@
 Personal Information Collection and Protection System
 """
 
-import os
-from core.async_main import async_main
-import sys
 import json
 import logging
-from core.logging_config import setup_logging
-from pathlib import Path
-from datetime import datetime
-import hashlib
-import base64
-from cryptography.fernet import Fernet
-from typing import Dict, List, Any
-import sqlite3
 import shutil
+import sqlite3
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+from cryptography.fernet import Fernet
+
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -147,16 +144,16 @@ class PersonalInfoCollector:
     def read_file_content(self, file_path: Path) -> str:
         """读取文件内容"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 return f.read()
         except UnicodeDecodeError:
             try:
-                with open(file_path, 'r', encoding='gbk') as f:
+                with open(file_path, encoding='gbk') as f:
                     return f.read()
             except (FileNotFoundError, PermissionError, OSError):
                 return ""
 
-    def process_and_store(self, collected_info: Dict) -> Any | None:
+    def process_and_store(self, collected_info: dict) -> Any | None:
         """处理并存储信息"""
         logger.info("🔒 开始处理和存储个人信息...")
 
@@ -186,7 +183,7 @@ class PersonalInfoCollector:
 
         logger.info(f"✅ 处理完成 {processed_count} 条记录")
 
-    def process_password_info(self, cursor, info: Dict, path: str) -> None:
+    def process_password_info(self, cursor, info: dict, path: str) -> None:
         """处理密码信息"""
         sensitivity = 3  # 高度敏感
 
@@ -223,7 +220,7 @@ class PersonalInfoCollector:
 
         logger.info(f"  🔐 处理密码文件: {info['file_name']} (找到 {len(passwords)} 条)")
 
-    def process_serial_info(self, cursor, info: Dict, path: str) -> None:
+    def process_serial_info(self, cursor, info: dict, path: str) -> None:
         """处理SN信息"""
         sensitivity = 2  # 敏感
 
@@ -259,7 +256,7 @@ class PersonalInfoCollector:
 
         logger.info(f"  🔢 处理SN文件: {info['file_name']} (找到 {len(serials)} 个)")
 
-    def process_banking_info(self, cursor, info: Dict, path: str) -> None:
+    def process_banking_info(self, cursor, info: dict, path: str) -> None:
         """处理银行信息"""
         sensitivity = 3  # 高度敏感
 
@@ -281,7 +278,7 @@ class PersonalInfoCollector:
 
         logger.info(f"  🏦 处理银行文件: {info['file_name']}")
 
-    def process_general_info(self, cursor, info: Dict, path: str) -> None:
+    def process_general_info(self, cursor, info: dict, path: str) -> None:
         """处理一般信息"""
         sensitivity = 1  # 普通
 

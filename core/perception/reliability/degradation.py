@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 降级管理和熔断器
 支持服务降级、功能降级、熔断器模式
@@ -8,10 +9,10 @@ Athena 感知模块 - 降级管理和熔断器
 import asyncio
 import logging
 import time
-from datetime import datetime, timedelta
-from typing import Optional, Dict, Any, List, Callable
-from enum import Enum
+from collections.abc import Callable
 from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +48,7 @@ class CircuitBreakerState:
     success_count: int = 0
     last_failure_time: float | None = None
     last_state_change: float = field(default_factory=time.time)
-    rolling_failures: List[float] = field(default_factory=list)
+    rolling_failures: list[float] = field(default_factory=list)
 
 
 class CircuitBreaker:
@@ -174,7 +175,7 @@ class CircuitBreaker:
             if t > cutoff_time
         ]
 
-    def get_state(self) -> Dict[str, Any]:
+    def get_state(self) -> dict[str, Any]:
         """
         获取熔断器状态
 
@@ -212,9 +213,9 @@ class DegradationManager:
     def __init__(self):
         """初始化降级管理器"""
         self.current_level = DegradationLevel.NONE
-        self.degraded_services: Dict[str, DegradationLevel] = {}
-        self.fallbacks: Dict[str, Callable] = {}
-        self.circuit_breakers: Dict[str, CircuitBreaker] = {}
+        self.degraded_services: dict[str, DegradationLevel] = {}
+        self.fallbacks: dict[str, Callable] = {}
+        self.circuit_breakers: dict[str, CircuitBreaker] = {}
 
         logger.info("✓ 降级管理器已初始化")
 
@@ -349,7 +350,7 @@ class DegradationManager:
             return service_name in self.degraded_services
         return len(self.degraded_services) > 0
 
-    def get_degradation_status(self) -> Dict[str, Any]:
+    def get_degradation_status(self) -> dict[str, Any]:
         """
         获取降级状态
 

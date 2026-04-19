@@ -6,11 +6,10 @@ Xiaochen Core Engine
 """
 
 import asyncio
-from core.async_main import async_main
 import json
 import random
 from datetime import datetime
-from typing import Dict, List, Optional, Any
+from typing import Any
 
 from utils.logger import logger
 
@@ -70,7 +69,7 @@ class XiaochenEngine:
     async def initialize(self):
         """初始化引擎"""
         logger.info("🌱 小宸核心引擎初始化中...")
-        logger.info(f"📚 加载知识库：历史、文学、哲学、IP专业知识")
+        logger.info("📚 加载知识库：历史、文学、哲学、IP专业知识")
         logger.info("🎭 初始化山东话风趣表达库")
         logger.info("✅ 小宸核心引擎初始化完成！")
 
@@ -83,7 +82,7 @@ class XiaochenEngine:
             logger.error(f"健康检查失败: {str(e)}")
             return False
 
-    async def chat(self, message: str, context: str = "general") -> Dict[str, Any]:
+    async def chat(self, message: str, context: str = "general") -> dict[str, Any]:
         """
         与小宸智能对话
 
@@ -187,7 +186,7 @@ class XiaochenEngine:
 
     async def _handle_content_creation(self, message: str) -> str:
         """处理内容创作请求"""
-        return f"内容创作？包在我身上！咱山东人说话实在，做内容也得实在。您说具体点，是想写科普文章呢，还是想拍视频？我给您琢磨琢磨，保准做出有味道的内容！"
+        return "内容创作？包在我身上！咱山东人说话实在，做内容也得实在。您说具体点，是想写科普文章呢，还是想拍视频？我给您琢磨琢磨，保准做出有味道的内容！"
 
     async def _handle_analytics_request(self, message: str) -> str:
         """处理数据分析请求"""
@@ -231,19 +230,13 @@ class XiaochenEngine:
         ]
         return random.choice(tips)
 
-    def _get_active_traits(self) -> List[str]:
+    def _get_active_traits(self) -> list[str]:
         """获取当前活跃的性格特质"""
         return list(self.personality.keys())
 
-    async def create_content_with_personality(self, topic: str, content_type: str, platform: str) -> Dict[str, Any]:
+    async def create_content_with_personality(self, topic: str, content_type: str, platform: str) -> dict[str, Any]:
         """基于人格化特质创作内容"""
         # 根据平台调整风格
-        platform_styles = {
-            "小红书": "轻松活泼，多用emoji",
-            "知乎": "专业深入，逻辑清晰",
-            "抖音": "简短有力，节奏明快",
-            "B站": "内容丰富，互动性强"
-        }
 
         # 基础内容框架
         content = {
@@ -313,13 +306,13 @@ class XiaochenEngine:
         """生成通用内容"""
         return f"关于{topic}，咱山东人有自己的理解..."
 
-    async def _generate_tags(self, topic: str) -> List[str]:
+    async def _generate_tags(self, topic: str) -> list[str]:
         """生成标签"""
         base_tags = [topic, "知识产权", "AI", "科技"]
         personality_tags = ["山东话", "实在人", "干货分享"]
         return base_tags + personality_tags
 
-    async def _add_humor_elements(self, topic: str) -> List[str]:
+    async def _add_humor_elements(self, topic: str) -> list[str]:
         """添加幽默元素"""
         return [
             "这事儿跟煎饼果子似的，得摊开了说！",
@@ -327,7 +320,7 @@ class XiaochenEngine:
             "泰山不是堆的，牛皮不是吹的！"
         ]
 
-    async def _add_professional_insights(self, topic: str) -> List[str]:
+    async def _add_professional_insights(self, topic: str) -> list[str]:
         """添加专业见解"""
         return [
             "根据最新数据显示...",
@@ -335,7 +328,7 @@ class XiaochenEngine:
             "实践经验告诉我们..."
         ]
 
-    async def _add_cultural_references(self, topic: str) -> List[str]:
+    async def _add_cultural_references(self, topic: str) -> list[str]:
         """添加文化引用"""
         return [
             "古人云：知者不惑，仁者不忧",

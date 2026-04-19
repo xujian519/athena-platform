@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强参数澄清系统 - 第一阶段优化版本
 Enhanced Parameter Clarification - Phase 1 Optimization
@@ -848,7 +849,7 @@ if __name__ == "__main__":
     missing, inferred = clarification.detect_missing_parameters(intent, collected, user_input)
     print(f"缺失参数: {missing}")
     print(
-        f"推断参数: {key:.2f}"
+        f"推断参数: {inferred}"
     )
 
     # 测试2:生成澄清问题

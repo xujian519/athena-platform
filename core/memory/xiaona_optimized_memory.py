@@ -1,5 +1,6 @@
 
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜优化记忆系统 - 健康度99分版本
 Xiaona Optimized Memory System - 99 Health Score Version
@@ -29,6 +30,8 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
+import asyncpg
+
 # 添加项目路径
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
@@ -47,7 +50,6 @@ class AgentType(Enum):
 
     ATHENA = "athena"
     XIAONA = "xiaona"
-    YUNXI = "yunxi"
     XIAOCHEN = "xiaochen"
     XIAONUO = "apps/apps/xiaonuo"
 
@@ -554,9 +556,6 @@ class XiaonaOptimizedMemory:
         except Exception as e:
             logger.error(f"操作失败: {e}", exc_info=True)
             raise
-        except Exception as e:
-            logger.error(f"操作失败: {e}", exc_info=True)
-            raise
 
     async def retrieve_memories(
         self,
@@ -571,6 +570,7 @@ class XiaonaOptimizedMemory:
 
         try:
             sources = []
+            items = []
 
             # 1. 搜索热缓存
             if tier is None or tier == MemoryTier.HOT:
@@ -615,9 +615,6 @@ class XiaonaOptimizedMemory:
                 has_more=len(items) > limit,
             )
 
-        except Exception as e:
-            logger.error(f"操作失败: {e}", exc_info=True)
-            raise
         except Exception as e:
             logger.error(f"操作失败: {e}", exc_info=True)
             raise

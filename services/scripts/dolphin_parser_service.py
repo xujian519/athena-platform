@@ -1,25 +1,19 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Dolphin文档解析服务
 ByteDance Dolphin Document Parser Service for Athena Platform
 集成ByteDance Dolphin文档图像解析能力，提供专业文档版面分析和OCR功能
 """
 
-import asyncio
-from core.async_main import async_main
 import json
 import logging
-from core.logging_config import setup_logging
 import os
-import sys
 import tempfile
 import time
-import traceback
 import uuid
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import cv2
 import fitz  # PyMuPDF
@@ -27,10 +21,11 @@ import fitz  # PyMuPDF
 # 文档处理库
 import layoutparser as lp
 import numpy as np
-import pdfplumber
 import yaml
 from paddleocr import PaddleOCR
-from PIL import Image
+
+# 配置日志 - 必须在导入检查之前
+logger = logging.getLogger('DolphinParser')
 
 # DOC文件处理
 try:
@@ -44,13 +39,10 @@ import aiofiles
 
 # FastAPI相关
 import uvicorn
-from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel, Field
 
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -85,7 +77,7 @@ def load_config():
     """加载配置文件"""
     config_path = os.path.join(os.path.dirname(__file__), 'dolphin_config.yaml')
     if os.path.exists(config_path):
-        with open(config_path, 'r', encoding='utf-8') as f:
+        with open(config_path, encoding='utf-8') as f:
             return yaml.safe_load(f)
     return {}
 
@@ -145,7 +137,7 @@ class DolphinDocumentParser:
         ext = Path(file_path).suffix.lower()
         return ext in self.supported_formats
 
-    async def parse_document(self, file_path: str, options: Dict[str, Any] = None) -> Dict[str, Any]:
+    async def parse_document(self, file_path: str, options: dict[str, Any] = None) -> dict[str, Any]:
         """
         解析文档，提取版面信息和文本内容
 
@@ -186,7 +178,7 @@ class DolphinDocumentParser:
                 'processing_time': time.time() - start_time
             }
 
-    async def _parse_pdf(self, pdf_path: str, options: Dict[str, Any] = None) -> Dict[str, Any]:
+    async def _parse_pdf(self, pdf_path: str, options: dict[str, Any] = None) -> dict[str, Any]:
         """解析PDF文档"""
         results = []
         try:
@@ -231,7 +223,7 @@ class DolphinDocumentParser:
             logger.error(f"PDF解析失败: {e}")
             return {'success': False, 'error': str(e)}
 
-    async def _parse_image(self, image_path: str, options: Dict[str, Any] = None) -> Dict[str, Any]:
+    async def _parse_image(self, image_path: str, options: dict[str, Any] = None) -> dict[str, Any]:
         """解析图像文档"""
         try:
             # 读取图像
@@ -267,7 +259,7 @@ class DolphinDocumentParser:
             logger.error(f"图像解析失败: {e}")
             return {'success': False, 'error': str(e)}
 
-    async def _parse_docx(self, docx_path: str, options: Dict[str, Any] = None) -> Dict[str, Any]:
+    async def _parse_docx(self, docx_path: str, options: dict[str, Any] = None) -> dict[str, Any]:
         """解析Word文档"""
         try:
             import docx
@@ -305,7 +297,7 @@ class DolphinDocumentParser:
             logger.error(f"DOCX解析失败: {e}")
             return {'success': False, 'error': str(e)}
 
-    async def _analyze_layout(self, image: np.ndarray) -> Dict[str, Any]:
+    async def _analyze_layout(self, image: np.ndarray) -> dict[str, Any]:
         """分析文档版面布局"""
         try:
             # 使用Layout Parser进行版面分析
@@ -323,14 +315,14 @@ class DolphinDocumentParser:
             return {
                 'blocks': layout_blocks,
                 'total_blocks': len(layout_blocks),
-                'block_types': list(set(block['type'] for block in layout_blocks))
+                'block_types': list({block['type'] for block in layout_blocks})
             }
 
         except Exception as e:
             logger.error(f"版面分析失败: {e}")
             return None
 
-    async def _extract_text_with_ocr(self, image_path: str) -> Dict[str, Any]:
+    async def _extract_text_with_ocr(self, image_path: str) -> dict[str, Any]:
         """使用OCR提取文本"""
         try:
             # 使用PaddleOCR进行文本识别
@@ -365,7 +357,7 @@ class DolphinDocumentParser:
             logger.error(f"OCR文本提取失败: {e}")
             return None
 
-    def _merge_layout_and_ocr(self, layout_result: Dict, ocr_result: Dict, options: Dict) -> Dict[str, Any]:
+    def _merge_layout_and_ocr(self, layout_result: dict, ocr_result: dict, options: dict) -> dict[str, Any]:
         """合并版面分析和OCR结果"""
         if not layout_result or not ocr_result:
             return {}
@@ -402,7 +394,7 @@ class DolphinDocumentParser:
             'structured_text': self._generate_structured_text(categorized_content)
         }
 
-    def _is_bbox_overlap(self, bbox1: List, bbox2: List, threshold: float = 0.5) -> bool:
+    def _is_bbox_overlap(self, bbox1: list, bbox2: list, threshold: float = 0.5) -> bool:
         """判断两个边界框是否重叠"""
         # 计算交集面积
         x_left = max(bbox1[0], bbox2[0])
@@ -425,7 +417,7 @@ class DolphinDocumentParser:
 
         return (intersection_area / union_area) >= threshold
 
-    def _generate_structured_text(self, categorized_content: Dict) -> str:
+    def _generate_structured_text(self, categorized_content: dict) -> str:
         """生成结构化文本"""
         structured_text = ''
 
@@ -453,7 +445,7 @@ class DolphinDocumentParser:
 
         return structured_text.strip()
 
-    async def _parse_doc(self, doc_path: str, options: Dict[str, Any] = None) -> Dict[str, Any]:
+    async def _parse_doc(self, doc_path: str, options: dict[str, Any] = None) -> dict[str, Any]:
         """解析DOC文件"""
         try:
             if not self.doc_handler:
@@ -507,7 +499,7 @@ class DolphinDocumentParser:
                 'file_path': doc_path
             }
 
-    async def _fallback_doc_processing(self, doc_path: str, options: Dict[str, Any] = None) -> Dict[str, Any]:
+    async def _fallback_doc_processing(self, doc_path: str, options: dict[str, Any] = None) -> dict[str, Any]:
         """备用DOC处理方法"""
         try:
             # 尝试将DOC转换为DOCX
@@ -550,7 +542,7 @@ class DolphinDocumentParser:
                 ]
             }
 
-    def _analyze_doc_content(self, paragraphs: List[str], tables: List[str]) -> Dict[str, Any]:
+    def _analyze_doc_content(self, paragraphs: list[str], tables: list[str]) -> dict[str, Any]:
         """分析DOC内容"""
         analysis = {
             'content_summary': {
@@ -571,7 +563,7 @@ class DolphinDocumentParser:
 
         return analysis
 
-    def _simulate_layout_analysis(self, paragraphs: List[str], tables: List[str]) -> Dict[str, Any]:
+    def _simulate_layout_analysis(self, paragraphs: list[str], tables: list[str]) -> dict[str, Any]:
         """模拟版面分析（基于文本内容）"""
         # 简单的版面分析模拟
         layout_blocks = []
@@ -607,7 +599,7 @@ class DolphinDocumentParser:
         return {
             'blocks': layout_blocks,
             'total_blocks': len(layout_blocks),
-            'block_types': list(set(block['type'] for block in layout_blocks)),
+            'block_types': list({block['type'] for block in layout_blocks}),
             'note': '这是基于文本内容的模拟版面分析，不是真正的版面检测'
         }
 
@@ -618,13 +610,13 @@ dolphin_parser = DolphinDocumentParser()
 class ParseRequest(BaseModel):
     """解析请求模型"""
     file_path: str | None = None
-    options: Dict[str, Any] = Field(default_factory=dict)
+    options: dict[str, Any] = Field(default_factory=dict)
 
 class ParseResponse(BaseModel):
     """解析响应模型"""
     success: bool
     message: str
-    result: Optional[Dict[str, Any]] = None
+    result: dict[str, Any] | None = None
     timestamp: datetime
 
 # API端点
@@ -709,7 +701,7 @@ async def parse_document(
 
     except Exception as e:
         logger.error(f"文档解析异常: {e}")
-        raise HTTPException(status_code=500, detail=f"文档解析失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"文档解析失败: {str(e)}") from e
 
     finally:
         # 清理临时文件
@@ -717,7 +709,7 @@ async def parse_document(
             try:
                 os.unlink(temp_file_path)
             except Exception as e:
-            logger.error(f"Error: {e}", exc_info=True)
+                logger.error(f"Error: {e}", exc_info=True)
 
 @app.post('/parse-url')
 async def parse_document_from_url(
@@ -757,7 +749,7 @@ async def parse_document_from_url(
 
     except Exception as e:
         logger.error(f"URL文档解析异常: {e}")
-        raise HTTPException(status_code=500, detail=f"URL文档解析失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"URL文档解析失败: {str(e)}") from e
 
 @app.get('/formats')
 async def get_supported_formats():

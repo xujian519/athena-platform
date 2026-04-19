@@ -1,0 +1,152 @@
+{
+  "timestamp": "2025-12-18T15:21:05.016384",
+  "checker": {
+    "name": "小诺系统检查器",
+    "version": "v1.0.0"
+  },
+  "summary": {
+    "total_services": 11,
+    "healthy_services": 3,
+    "essential_services": 6
+  },
+  "services": {
+    "PostgreSQL": {
+      "port": 5432,
+      "port_status": true,
+      "detailed_status": {
+        "healthy": false,
+        "error": "connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  role \"athena\" does not exist\n"
+      },
+      "type": "infrastructure/infrastructure/database",
+      "essential": true,
+      "status": "unhealthy"
+    },
+    "Redis": {
+      "port": 6379,
+      "port_status": true,
+      "detailed_status": {
+        "healthy": true,
+        "version": "7.4.7",
+        "used_memory": "1.07M",
+        "connected_clients": 1
+      },
+      "type": "cache",
+      "essential": true,
+      "status": "healthy"
+    },
+    "Qdrant": {
+      "port": 6333,
+      "port_status": false,
+      "detailed_status": {
+        "healthy": false,
+        "error": "HTTPConnectionPool(host='localhost', port=6333): Max retries exceeded with url: /health (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=6333): Failed to establish a new connection: [Errno 61] Connection refused\"))"
+      },
+      "type": "vector_db",
+      "essential": true,
+      "status": "unhealthy"
+    },
+    "Neo4j": {
+      "port": 7474,
+      "port_status": false,
+      "detailed_status": {
+        "healthy": false,
+        "error": "HTTPConnectionPool(host='localhost', port=7474): Max retries exceeded with url: / (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=7474): Failed to establish a new connection: [Errno 61] Connection refused\"))"
+      },
+      "type": "graph_db",
+      "essential": true,
+      "status": "unhealthy"
+    },
+    "Neo4j-Bolt": {
+      "port": 7687,
+      "port_status": false,
+      "detailed_status": {
+        "healthy": false,
+        "error": "neo4j或requests未安装"
+      },
+      "type": "graph_db",
+      "essential": false,
+      "status": "unhealthy"
+    },
+    "Elasticsearch": {
+      "port": 9200,
+      "port_status": true,
+      "detailed_status": {
+        "healthy": true,
+        "status": "green",
+        "nodes": 1
+      },
+      "type": "search",
+      "essential": false,
+      "status": "healthy"
+    },
+    "小诺记忆系统": {
+      "port": 8083,
+      "port_status": false,
+      "detailed_status": {
+        "healthy": false,
+        "error": "健康检查失败"
+      },
+      "type": "service",
+      "essential": true,
+      "status": "unhealthy"
+    },
+    "小诺控制中心": {
+      "port": 8005,
+      "port_status": false,
+      "detailed_status": {
+        "healthy": false,
+        "error": "健康检查失败"
+      },
+      "type": "service",
+      "essential": true,
+      "status": "unhealthy"
+    },
+    "小娜智能体": {
+      "port": 8001,
+      "port_status": true,
+      "detailed_status": {
+        "healthy": true,
+        "health_url": "http://localhost:8001/",
+        "message": "Athena多模态文件系统",
+        "version": "1.0.0",
+        "status": "running",
+        "features": [
+          "文件管理",
+          "安全认证",
+          "AI处理"
+        ],
+        "statistics": {
+          "total_uploads": 1,
+          "total_downloads": 0,
+          "total_size": 1238821,
+          "start_time": "2025-12-18T10:27:57.641718"
+        }
+      },
+      "type": "service",
+      "essential": false,
+      "status": "healthy"
+    },
+    "云熙系统": {
+      "port": 8087,
+      "port_status": false,
+      "detailed_status": {
+        "healthy": false,
+        "error": "健康检查失败"
+      },
+      "type": "service",
+      "essential": false,
+      "status": "unhealthy"
+    },
+    "Nginx": {
+      "port": 80,
+      "port_status": false,
+      "detailed_status": {
+        "healthy": false,
+        "error": "HTTPConnectionPool(host='localhost', port=80): Max retries exceeded with url: / (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=80): Failed to establish a new connection: [Errno 61] Connection refused\"))"
+      },
+      "type": "proxy",
+      "essential": false,
+      "status": "unhealthy"
+    }
+  }
+}

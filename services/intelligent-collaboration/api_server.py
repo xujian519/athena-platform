@@ -4,27 +4,22 @@
 """
 
 import logging
-from core.async_main import async_main
 
-from fastapi import BackgroundTasks, FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException
 
 logger = logging.getLogger(__name__)
 
-import asyncio
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import uvicorn
 from collaboration_controller import (
-    CollaborationController,
     TaskStatus,
     collaboration_controller,
 )
-from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 # FastAPI应用
 app = FastAPI(
@@ -42,7 +37,7 @@ class TaskRequest(BaseModel):
     description: str
     complexity: float = 0.5
     priority: int = 1
-    requirements: Optional[Dict[str, Any]] = {}
+    requirements: dict[str, Any] | None = {}
     deadline: str | None = None
 
 class TaskResponse(BaseModel):
@@ -56,8 +51,8 @@ class TaskStatusResponse(BaseModel):
     task_id: str
     status: str
     created_at: str
-    results: List[Dict[str, Any]]
-    execution_summary: Optional[Dict[str, Any]] = None
+    results: list[dict[str, Any]]
+    execution_summary: dict[str, Any] | None = None
 
 class CollaborationInsight(BaseModel):
     """协作洞察模型"""
@@ -65,8 +60,8 @@ class CollaborationInsight(BaseModel):
     active_tasks: int
     completed_tasks: int
     failed_tasks: int
-    average_execution_time: Optional[float]
-    ai_utilization: Dict[str, float]
+    average_execution_time: float | None
+    ai_utilization: dict[str, float]
 
 # API端点
 @app.get('/')
@@ -89,7 +84,7 @@ async def submit_task(task_request: TaskRequest):
             message='任务已成功提交，正在处理中'
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"任务提交失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"任务提交失败: {str(e)}") from e
 
 @app.get('/api/v1/tasks/{task_id}', response_model=TaskStatusResponse)
 async def get_task_status(task_id: str):
@@ -112,7 +107,7 @@ async def get_task_status(task_id: str):
                 'total_executions': len(completed_results),
                 'total_execution_time': total_time,
                 'average_execution_time': total_time / len(completed_results),
-                'ai_participants': list(set(r['executor'] for r in completed_results)),
+                'ai_participants': list({r['executor'] for r in completed_results}),
                 'confidence_scores': [r.get('confidence') for r in completed_results if r.get('confidence')]
             }
 
@@ -137,7 +132,7 @@ async def cancel_task(task_id: str):
         'task_id': task_id
     }
 
-@app.get('/api/v1/tasks', response_model=List[str])
+@app.get('/api/v1/tasks', response_model=list[str])
 async def get_active_tasks():
     """获取活跃任务列表"""
     return collaboration_controller.get_active_tasks()
@@ -199,9 +194,9 @@ async def cleanup_old_tasks(older_than_hours: int = 24):
     }
 
 @app.post('/api/v1/collaboration/suggest')
-async def suggest_collaboration_mode(task_info: Dict[str, Any]):
+async def suggest_collaboration_mode(task_info: dict[str, Any]):
     """建议协作模式"""
-    task_type = task_info.get('type', '')
+    task_info.get('type', '')
     description = task_info.get('description', '')
     complexity = task_info.get('complexity', 0.5)
 

@@ -1,0 +1,47 @@
+# 外部存储配置
+# External Storage Configuration
+
+external_storage:
+  path: "/Volumes/AthenaData"
+  status: "mounted"
+  last_updated: "2025年12月20日 星期六 20时02分58秒 CST"
+
+  directories:
+    databases: "/Volumes/AthenaData/databases"
+    backups: "/Volumes/AthenaData/backups"
+    cache: "/Volumes/AthenaData/cache"
+    logs: "/Volumes/AthenaData/logs"
+    temp: "/Volumes/AthenaData/temp"
+
+  database_instances:
+    patent_full:
+      port: 5450
+      data_path: "/Volumes/AthenaData/databases/patent_full"
+      size: "400GB"
+
+    invalidation:
+      port: 5451
+      data_path: "/Volumes/AthenaData/databases/invalidation"
+      size: "300GB"
+
+    judgments:
+      port: 5452
+      data_path: "/Volumes/AthenaData/databases/judgments"
+      size: "800GB"
+
+  backup_schedule:
+    daily:
+      time: "02:00"
+      retention: "7 days"
+    weekly:
+      day: "sunday"
+      time: "03:00"
+      retention: "4 weeks"
+    monthly:
+      date: "1"
+      time: "04:00"
+      retention: "12 months"
+
+  monitoring:
+    check_interval: "5 minutes"
+    alert_threshold: "90%"

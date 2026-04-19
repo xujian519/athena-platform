@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 目标管理系统 - 分析器类
 Goal Management System - Analyzer Classes
@@ -10,8 +10,8 @@ Goal Management System - Analyzer Classes
 版本: 2.0.0
 """
 
-from datetime import datetime, timedelta
-from typing import Any, Optional
+from datetime import datetime
+from typing import Any
 
 from .types import Goal, GoalPriority, GoalStatus, ProgressReport
 

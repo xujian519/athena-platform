@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 审查意见答复模式提取器
 Office Action Response Pattern Extractor
@@ -293,7 +294,7 @@ class OAResponsePatternExtractor:
         md_path = f"data/oa_responses/patterns/{pattern.pattern_id}.md"
         try:
             await self.serializer.save_to_file(pattern, md_path)
-        except (OSError, IOError) as e:
+        except OSError as e:
             error = PatternExtractionError(
                 message=f"保存模式Markdown文件失败: {md_path}",
                 context={"pattern_id": pattern.pattern_id, "md_path": md_path}

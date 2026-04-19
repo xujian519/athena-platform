@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 敏感信息过滤器 - 防止敏感数据泄露到日志
 Sensitive Information Filter - Prevent Sensitive Data Leakage in Logs
@@ -11,9 +12,9 @@ Sensitive Information Filter - Prevent Sensitive Data Leakage in Logs
 
 import re
 from collections.abc import Sequence
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from re import Pattern
-from typing import Any, Dict, List, Optional, Set, Union
+from typing import Any
 
 
 @dataclass
@@ -103,8 +104,8 @@ class SensitiveDataFilter:
 
     def __init__(
         self,
-        sensitive_fields: set[str | None = None,
-        custom_patterns: list["key"] = None,
+        sensitive_fields: set[str] | None = None,
+        custom_patterns: list[dict] | None = None,
         enabled: bool = True,
     ):
         """初始化敏感数据过滤器
@@ -287,8 +288,8 @@ def get_sensitive_data_filter() -> SensitiveDataFilter:
 
 
 def create_sensitive_data_filter(
-    sensitive_fields: set[str | None = None,
-    custom_patterns: list["key"] = None,
+    sensitive_fields: set[str] | None = None,
+    custom_patterns: list[dict] | None = None,
 ) -> SensitiveDataFilter:
     """创建敏感数据过滤器
 

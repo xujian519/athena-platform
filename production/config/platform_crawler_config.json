@@ -1,0 +1,190 @@
+{
+  "platform": {
+    "name": "Athena工作平台",
+    "version": "2.0.0",
+    "environment": "production",
+    "owner": "Athena & 小诺",
+    "description": "平台级混合爬虫服务，由Athena和小诺全量控制"
+  },
+  "service": {
+    "name": "platform-hybrid-crawler",
+    "port": 8002,
+    "host": "0.0.0.0",
+    "workers": 4,
+    "timeout": 60,
+    "max_concurrent_requests": 100,
+    "enable_cors": true,
+    "cors_origins": ["*"],
+    "enable_metrics": true,
+    "enable_health_check": true
+  },
+  "cost_limits": {
+    "monthly_limit": 500.0,
+    "daily_limit": 50.0,
+    "per_request_limit": 0.02,
+    "enable_cost_control": true,
+    "alert_threshold": 0.8
+  },
+  "routing": {
+    "strategy": "auto",
+    "confidence_threshold": 0.75,
+    "enable_smart_routing": true,
+    "prefer_internal_for": [
+      "github.com",
+      "stackoverflow.com",
+      "wikipedia.org",
+      "docs.python.org",
+      "developer.mozilla.org",
+      "crates.io",
+      "npmjs.com",
+      "pypi.org",
+      "gitlab.com",
+      "bitbucket.org"
+    ],
+    "force_external_for": [
+      "linkedin.com",
+      "twitter.com",
+      "facebook.com",
+      "instagram.com",
+      "medium.com",
+      "www.reddit.com",
+      "tumblr.com",
+      "pinterest.com"
+    ],
+    "ai_extraction_domains": [
+      "amazon.com",
+      "taobao.com",
+      "tmall.com",
+      "jd.com",
+      "suning.com",
+      "gome.com.cn",
+      "dangdang.com"
+    ]
+  },
+  "crawl4ai": {
+    "enabled": true,
+    "mode": "ai_enhanced",
+    "use_browser": true,
+    "headless": true,
+    "delay_before_return_html": 1.0,
+    "js_code": null,
+    "wait_for": "body",
+    "css_selector": null,
+    "llm_extraction_prompt": "请从网页中提取核心信息，包括标题、主要内容、关键数据、联系方式等，以JSON格式返回。",
+    "similarity_threshold": 0.75,
+    "chunk_size": 1500,
+    "overlap": 150,
+    "max_concurrent": 5,
+    "llm_provider": "openai",
+    "llm_model": "deepseek-chat",
+    "llm_base_url": "https://api.deepseek.com",
+    "llm_api_key": "${CRAWL4AI_LLM_API_KEY}",
+    "enable_cache": true,
+    "cache_ttl": 3600
+  },
+  "firecrawl": {
+    "enabled": true,
+    "api_key": "${FIRECRAWL_API_KEY}",
+    "base_url": "https://api.firecrawl.dev/v1",
+    "mode": "scrape",
+    "timeout": 45,
+    "max_pages": 200,
+    "include_paths": [],
+    "exclude_paths": [
+      "*/admin/*",
+      "*/login/*",
+      "*/logout/*",
+      "*/auth/*"
+    ],
+    "allow_backlinks": false,
+    "ignore_sitemap": false,
+    "max_concurrent": 8,
+    "formats": ["markdown", "html", "raw"],
+    "only_main_content": true,
+    "wait_for": 2000,
+    "screenshot": false,
+    "remove_base64_images": true,
+    "enable_cache": true,
+    "cache_ttl": 7200
+  },
+  "internal": {
+    "enabled": true,
+    "max_concurrent": 10,
+    "rate_limit": 2.0,
+    "timeout": 15,
+    "max_retries": 3,
+    "retry_delay": 1.0,
+    "cache_enabled": true,
+    "cache_ttl": 1800,
+    "user_agent": "Athena-Crawler/2.0 (Platform Managed; https://athena-platform.com)",
+    "respect_robots_txt": true,
+    "headers": {
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+      "Accept-Encoding": "gzip, deflate, br",
+      "DNT": "1",
+      "Connection": "keep-alive",
+      "Upgrade-Insecure-Requests": "1",
+      "Sec-Fetch-Dest": "document",
+      "Sec-Fetch-Mode": "navigate",
+      "Sec-Fetch-Site": "none"
+    },
+    "proxy": {
+      "enabled": false,
+      "rotate_proxy": false,
+      "proxy_list": []
+    }
+  },
+  "monitoring": {
+    "enable_logging": true,
+    "log_level": "INFO",
+    "log_format": "json",
+    "enable_metrics": true,
+    "metrics_port": 9090,
+    "enable_tracing": true,
+    "enable_profiling": false,
+    "alert_webhook": "${ALERT_WEBHOOK_URL}"
+  },
+  "security": {
+    "enable_rate_limiting": true,
+    "rate_limit_requests": 1000,
+    "rate_limit_window": 3600,
+    "enable_api_key_auth": false,
+    "api_keys": [],
+    "enable_ip_whitelist": false,
+    "ip_whitelist": [],
+    "enable_request_validation": true,
+    "max_request_size": 10485760,
+    "allowed_domains": []
+  },
+  "storage": {
+    "cache_dir": "./cache/crawler",
+    "temp_dir": "./temp/crawler",
+    "result_dir": "./data/crawler/results",
+    "log_dir": "./logs/crawler",
+    "max_storage_size": "10GB",
+    "cleanup_interval": 86400,
+    "retention_days": 30
+  },
+  "integration": {
+    "api_gateway": {
+      "enabled": true,
+      "route_prefix": "/api/v2/crawler",
+      "enable_load_balancing": false,
+      "health_check_path": "/health"
+    },
+    "message_queue": {
+      "enabled": false,
+      "provider": "redis",
+      "host": "localhost",
+      "port": 6379,
+      "queue_name": "crawler_tasks"
+    },
+    "database": {
+      "enabled": false,
+      "provider": "postgresql",
+      "connection_string": "${DATABASE_URL}",
+      "table_name": "crawler_results"
+    }
+  }
+}

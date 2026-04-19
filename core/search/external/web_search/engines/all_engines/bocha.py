@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 博查搜索引擎 - AI优化的中文搜索引擎
 Bocha Search Engine - AI-Optimized Chinese Search Engine
@@ -50,10 +51,12 @@ class BochaSearchEngine(BaseSearchEngine):
             max_retries: 最大重试次数
         """
         super().__init__(
-            name="Bocha",
-            base_url="https://api.bocha.cn/api/web/search",
-            timeout=timeout,
-            max_retries=max_retries,
+            api_keys,
+            config={
+                "base_url": "https://api.bocha.cn/api/web/search",
+                "timeout": timeout,
+                "max_retries": max_retries,
+            }
         )
         self.api_keys = api_keys
         self._last_key_index = 0

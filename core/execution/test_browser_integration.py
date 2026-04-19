@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 浏览器自动化集成测试
 Browser Automation Integration Test
@@ -14,7 +15,7 @@ import asyncio
 import logging
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent.parent

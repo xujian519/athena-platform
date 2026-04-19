@@ -5,20 +5,17 @@ Athena平台浏览器自动化API服务
 """
 
 import asyncio
-from core.async_main import async_main
-import logging
-from core.logging_config import setup_logging
+import json
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import uvicorn
 from browser_integration_service import get_integration_service
-from fastapi import BackgroundTasks, FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -38,19 +35,19 @@ class TaskRequest(BaseModel):
     """任务请求模型"""
     user_input: str
     mode: str = 'auto'  # auto, xiaonuo, athena, direct
-    context: Optional[Dict[str, Any]] = None
+    context: dict[str, Any] | None = None
     scenario: str | None = None
     priority: str = 'normal'  # low, normal, high, urgent
 
 class BatchTaskRequest(BaseModel):
     """批量任务请求模型"""
-    requests: List[TaskRequest]
+    requests: list[TaskRequest]
     max_concurrent: int = 5
 
 class ConfigUpdateRequest(BaseModel):
     """配置更新请求模型"""
-    service_config: Optional[Dict[str, Any]] = None
-    xiaonuo_config: Optional[Dict[str, Any]] = None
+    service_config: dict[str, Any] | None = None
+    xiaonuo_config: dict[str, Any] | None = None
 
 # 初始化集成服务
 integration_service = None
@@ -112,7 +109,7 @@ async def execute_task(request: TaskRequest):
 
     except Exception as e:
         logger.error(f"执行任务失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/tasks/batch')
 async def execute_batch_tasks(request: BatchTaskRequest):
@@ -146,7 +143,7 @@ async def execute_batch_tasks(request: BatchTaskRequest):
 
     except Exception as e:
         logger.error(f"批量执行任务失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/scenarios')
 async def get_available_scenarios():
@@ -162,7 +159,7 @@ async def get_available_scenarios():
 
     except Exception as e:
         logger.error(f"获取场景列表失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/status')
 async def get_service_status():
@@ -178,7 +175,7 @@ async def get_service_status():
 
     except Exception as e:
         logger.error(f"获取服务状态失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/config')
 async def update_config(request: ConfigUpdateRequest):
@@ -200,7 +197,7 @@ async def update_config(request: ConfigUpdateRequest):
 
     except Exception as e:
         logger.error(f"更新配置失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/metrics/reset')
 async def reset_metrics():
@@ -216,7 +213,7 @@ async def reset_metrics():
 
     except Exception as e:
         logger.error(f"重置指标失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/xiaonuo/analyze')
 async def xiaonuo_analyze(user_input: str, context: str | None = None):
@@ -243,7 +240,7 @@ async def xiaonuo_analyze(user_input: str, context: str | None = None):
 
     except Exception as e:
         logger.error(f"小诺分析失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/health')
 async def health_check():
@@ -267,7 +264,7 @@ async def health_check():
 
 # 专用的小诺接口
 @app.post('/api/v1/xiaonuo/chat')
-async def xiaonuo_chat(user_input: str, context: Optional[Dict[str, Any]] = None):
+async def xiaonuo_chat(user_input: str, context: dict[str, Any] | None = None):
     """小诺聊天接口 - 智能决策是否使用浏览器自动化"""
     try:
         # 小诺智能执行
@@ -283,7 +280,7 @@ async def xiaonuo_chat(user_input: str, context: Optional[Dict[str, Any]] = None
 
     except Exception as e:
         logger.error(f"小诺聊天失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 # 专利检索专用接口
 @app.post('/api/v1/patent/search')
@@ -310,11 +307,11 @@ async def patent_search(query: str, database: str = 'cnipa', max_results: int = 
 
     except Exception as e:
         logger.error(f"专利检索失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 # 竞品监控专用接口
 @app.post('/api/v1/competitor/monitor')
-async def competitor_monitor(competitor_name: str, monitoring_items: List[str]):
+async def competitor_monitor(competitor_name: str, monitoring_items: list[str]):
     """竞品监控接口"""
     try:
         # 构建监控任务
@@ -338,7 +335,7 @@ async def competitor_monitor(competitor_name: str, monitoring_items: List[str]):
 
     except Exception as e:
         logger.error(f"竞品监控失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 if __name__ == '__main__':
     # 直接运行服务

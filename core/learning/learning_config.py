@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习与适应模块配置常量
 Learning and Adaptation Module Configuration Constants

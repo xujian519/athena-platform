@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Phase 3完整集成测试脚本
 Complete Phase 3 Integration Testing

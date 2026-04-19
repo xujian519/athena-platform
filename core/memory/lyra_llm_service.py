@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Lyra LLM服务集成
 Lyra LLM Service Integration for Athena Platform
@@ -17,7 +18,7 @@ import os
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import aiohttp
 
@@ -37,7 +38,7 @@ class LLMProvider(Enum):
 class LLMRequest:
     """LLM请求"""
     prompt: str
-    system_message: Optional[str] = None
+    system_message: str | None = None
     temperature: float = 0.3
     max_tokens: int = 2000
     top_p: float = 0.9
@@ -54,7 +55,7 @@ class LLMResponse:
     response_time: float = 0.0
     cached: bool = False
     success: bool = True
-    error: Optional[str] = None
+    error: str | None = None
 
 
 class LyraLLMConfig:
@@ -162,7 +163,7 @@ class LyraLLMConfig:
 class LyraLLMService:
     """Lyra LLM服务 - 统一的LLM调用接口"""
 
-    def __init__(self, config: Optional[LyraLLMConfig] = None):
+    def __init__(self, config: LyraLLMConfig | None = None):
         """初始化LLM服务"""
         self.config = config or LyraLLMConfig()
         self.default_provider = self.config.get_default_provider()
@@ -170,7 +171,7 @@ class LyraLLMService:
         self._cache: dict[str, LLMResponse] = {}
         logger.info(f"✅ Lyra LLM服务初始化完成 (默认: {self.default_provider.value})")
 
-    async def generate(self, request: LLMRequest, provider: Optional[LLMProvider] = None) -> LLMResponse:
+    async def generate(self, request: LLMRequest, provider: LLMProvider | None = None) -> LLMResponse:
         """
         生成LLM响应
 
@@ -222,7 +223,7 @@ class LyraLLMService:
         if self.config.is_fallback_enabled():
             logger.warning("🔄 所有LLM提供者失败，返回错误响应")
             return LLMResponse(
-                content=f"LLM服务暂时不可用",
+                content="LLM服务暂时不可用",
                 provider="none",
                 model="fallback",
                 success=False,
@@ -461,7 +462,7 @@ class LyraLLMService:
                         raise Exception(f"{provider_name.upper()} API错误 {response.status}: {error_text}")
         except aiohttp.ClientError as e:
             logger.error(f"❌ {provider_name} 网络错误: {e}")
-            raise Exception(f"{provider_name.upper()} 网络错误: {e}")
+            raise Exception(f"{provider_name.upper()} 网络错误: {e}") from e
         except Exception as e:
             logger.error(f"❌ {provider_name} 未知错误: {e}")
             raise
@@ -488,7 +489,7 @@ class LyraLLMService:
 
 
 # 全局实例
-_lyra_llm_service: Optional[LyraLLMService] = None
+_lyra_llm_service: LyraLLMService | None = None
 
 
 def get_lyra_llm_service() -> LyraLLMService:
@@ -524,7 +525,7 @@ if __name__ == "__main__":
         try:
             response = await service.generate(request)
             if response.success:
-                print(f"✅ 调用成功")
+                print("✅ 调用成功")
                 print(f"提供者: {response.provider}")
                 print(f"模型: {response.model}")
                 print(f"响应: {response.content[:100]}...")

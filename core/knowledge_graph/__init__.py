@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 知识图谱模块 - Knowledge Graph Module
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena全链路监控系统
 Full-Link Monitoring System
@@ -23,11 +24,11 @@ import uuid
 from collections import defaultdict, deque
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import asdict, dataclass, field
-from datetime import datetime, timedelta
+from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import psutil
 
@@ -883,7 +884,7 @@ def get_monitoring_system() -> FullLinkMonitoringSystem:
 
 
 # 便捷装饰器
-def trace_operation(operation: str | None = None, tags: Optional[dict[str, str]] | None = None) -> Any:
+def trace_operation(operation: str | None = None, tags: dict[str, str] | None | None = None) -> Any:
     """追踪操作的装饰器"""
     monitor = get_monitoring_system()
 

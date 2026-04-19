@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 高级协调机制
 Advanced Coordination Mechanisms
@@ -183,7 +184,7 @@ class ResourcePool:
 
     def __init__(self):
         self.resources: dict[str, dict[str, Any]] = {}
-        self.allocations: dict[str, list[dict[str, Any]] = defaultdict(
+        self.allocations: dict[str, list[dict[str, Any]]] = defaultdict(
             list
         )  # resource_type -> allocations
         self.reservation_queue: list[dict[str, Any]] = []
@@ -301,7 +302,7 @@ class ResourcePool:
         return True
 
     def _select_best_resource(
-        self, suitable_resources: list[tuple[str, dict[str, Any], requirement: ResourceRequirement
+        self, suitable_resources: list[tuple[str, dict[str, Any]]], requirement: ResourceRequirement
     ) -> str:
         """选择最优资源"""
         best_resource_id = None

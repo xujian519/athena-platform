@@ -1,7 +1,8 @@
 # 小娜 L2 数据层提示词 - 知识图谱使用指南
 
-> **版本**: v1.0
+> **版本**: v1.1
 > **创建时间**: 2025-12-26
+> **更新时间**: 2026-03-20
 > **设计者**: 小诺·双鱼公主 v4.0.0
 > **适用域**: 专利法律 (PATENT_LEGAL)
 
@@ -9,48 +10,52 @@
 
 ## 【知识图谱数据源】
 
-### NebulaGraph 图数据库 (127.0.0.1:9669)
+### Neo4j 图数据库 (localhost:7474 HTTP / localhost:7687 Bolt)
 
-| 空间名称 | 节点类型 | 边类型 | 节点数 | 边数 | 业务领域 | 状态 |
-|---------|---------|--------|--------|------|----------|------|
-| **patent_rules** | 决策块、法律引用 | cites, decides, refers_to | - | - | 专利规则 | 🟡 待导入 |
-| **legal_kg** | 法律实体 | 法律关系 | 22,372 | 71,314 | 法律知识 | ✅ 已导入 |
-| **patent_kg** | 专利实体 | 专利关系 | 部分导入 | 部分导入 | 专利知识 | 🟡 部分导入 |
+> **版本**: Neo4j 5.15.0 Community
+> **连接方式**: bolt://localhost:7687 或 http://localhost:7474
+> **认证**: 需要用户名密码认证
+
+| 图名称 | 节点标签 | 关系类型 | 节点数 | 关系数 | 业务领域 | 状态 |
+|---------|---------|----------|--------|--------|----------|------|
+| **patent_rules** | DecisionBlock, LegalCitation | CITES, DECIDES, REFERS_TO | - | - | 专利规则 | 🟡 待导入 |
+| **legal_kg** | Law, Article, JudicialInterpretation, Case | SUPERIOR_LAW, REFINES, CITES, SUPPORTS | 22,372 | 71,314 | 法律知识 | ✅ 已导入 |
+| **patent_kg** | Patent, Applicant, Inventor, TechField | APPLIES, INVENTS, BELONGS_TO, CITES, FAMILY | 部分导入 | 部分导入 | 专利知识 | 🟡 部分导入 |
 | **patent_kg_extended** | 扩展专利实体 | 扩展关系 | - | - | 专利扩展 | 🔄 规划中 |
 | **patent_full_text** | 全文实体 | 全文关系 | - | - | 专利全文 | 🔄 规划中 |
 
-**知识图谱当前状态**: legal_kg已可用 (22,372节点 + 71,314边)
+**知识图谱当前状态**: legal_kg已可用 (22,372节点 + 71,314关系)
 
 ---
 
 ## 【知识图谱使用规范】
 
-### 1. patent_rules 空间 (专利规则图谱) 🟡 待导入
+### 1. patent_rules 图 (专利规则图谱) 🟡 待导入
 
-> ⚠️ **重要提示**: patent_rules图空间目前正在导入准备中，预计2025年1月完成。
+> ⚠️ **重要提示**: patent_rules图目前正在导入准备中。
 >
 > **临时替代方案**:
 > - 使用向量库 `patent_rules_complete` 进行法条检索
-> - 使用 `legal_kg` 图空间进行法律关系查询
+> - 使用 `legal_kg` 图进行法律关系查询
 >
 > **导入完成后将提供**: 法条关联推理、审查倾向分析、类似案例推荐
 
-#### 节点类型
-- **decision_block**: 决策块 (决定书的逻辑单元)
-- **legal_citation**: 法律引用 (法条、指南、案例引用)
+#### 节点标签 (Labels)
+- **DecisionBlock**: 决策块 (决定书的逻辑单元)
+- **LegalCitation**: 法律引用 (法条、指南、案例引用)
 
-#### 边类型
-- **cites**: 引用关系 (决策块引用法律)
-- **decides**: 决定关系 (决策块之间的层级/顺序)
-- **refers_to**: 证据引用 (引用其他决定书或证据)
-- **precedes**: 先例关系 (在先决定书与在后决定书)
+#### 关系类型 (Relationship Types)
+- **CITES**: 引用关系 (决策块引用法律)
+- **DECIDES**: 决定关系 (决策块之间的层级/顺序)
+- **REFERS_TO**: 证据引用 (引用其他决定书或证据)
+- **PRECEDES**: 先例关系 (在先决定书与在后决定书)
 
 #### 使用场景
 
 **场景1: 法条关联查询**
 ```cypher
-# 查询某条法条被哪些决定书引用
-MATCH (lc:legal_citation {law_name: "专利法第22条"})<-[:cites]-(db:decision_block)
+// 查询某条法条被哪些决定书引用
+MATCH (lc:LegalCitation {law_name: "专利法第22条"})<-[:CITES]-(db:DecisionBlock)
 RETURN db.doc_id, db.decision_date, db.block_type
 ORDER BY db.decision_date DESC
 LIMIT 10
@@ -58,16 +63,16 @@ LIMIT 10
 
 **场景2: 追溯上位法依据**
 ```cypher
-# 查询某条法条的上位法
-MATCH (lc:legal_citation {law_name: "专利法实施细则第20条"})-[:cites]->(upper:legal_citation)
+// 查询某条法条的上位法
+MATCH (lc:LegalCitation {law_name: "专利法实施细则第20条"})-[:CITES]->(upper:LegalCitation)
 RETURN upper.law_name, upper.reference_type
 ```
 
 **场景3: 查找类似决定书**
 ```cypher
-# 查找引用相同法条组合的决定书
-MATCH (db1:decision_block)-[:cites]->(lc:legal_citation {law_name: "专利法第22条"})
-MATCH (db2:decision_block)-[:cites]->(lc)
+// 查找引用相同法条组合的决定书
+MATCH (db1:DecisionBlock)-[:CITES]->(lc:LegalCitation {law_name: "专利法第22条"})
+MATCH (db2:DecisionBlock)-[:CITES]->(lc)
 WHERE db1.doc_id = "目标决定书编号" AND db1.doc_id <> db2.doc_id
 RETURN db2.doc_id, db2.decision_date
 ORDER BY db2.decision_date DESC
@@ -76,10 +81,10 @@ LIMIT 5
 
 **场景4: 分析审查倾向**
 ```cypher
-# 统计某条法条的引用结果倾向
-MATCH (db:decision_block)-[:cites]->(lc:legal_citation {law_name: "专利法第22条第3款"})
+// 统计某条法条的引用结果倾向
+MATCH (db:DecisionBlock)-[:CITES]->(lc:LegalCitation {law_name: "专利法第22条第3款"})
 RETURN db.decision_type, count(*) as count
-# decision_type: 支持/驳回/部分支持
+// decision_type: 支持/驳回/部分支持
 ```
 
 #### 输出格式要求
@@ -104,50 +109,50 @@ RETURN db.decision_type, count(*) as count
 
 ---
 
-### 2. legal_kg 空间 (法律知识图谱)
+### 2. legal_kg 图 (法律知识图谱)
 
-#### 节点类型
-- **法律**: 法律、法规、规章
-- **法条**: 具体条文
-- **司法解释**: 最高人民法院司法解释
-- **案例**: 典型案例
+#### 节点标签 (Labels)
+- **Law**: 法律、法规、规章
+- **Article**: 具体条文
+- **JudicialInterpretation**: 最高人民法院司法解释
+- **Case**: 典型案例
 
-#### 边类型
-- **上位法**: 法律之间的层级关系
-- **细化**: 细化规定关系
-- **引用**: 相互引用关系
-- **配套**: 配套规定关系
+#### 关系类型 (Relationship Types)
+- **SUPERIOR_LAW**: 法律之间的层级关系
+- **REFINES**: 细化规定关系
+- **CITES**: 相互引用关系
+- **SUPPORTS**: 配套规定关系
 
 #### 使用场景
 
 **场景1: 追溯法律层级**
 ```cypher
-# 查询某条法条的法律层级路径
-MATCH path = (lower:法条)-[:上位法*]->(upper:法律)
+// 查询某条法条的法律层级路径
+MATCH path = (lower:Article)-[:SUPERIOR_LAW*]->(upper:Law)
 WHERE lower.name = "专利法实施细则第20条"
 RETURN [node in nodes(path) | node.name] as 法律层级
 ```
 
 **场景2: 查找配套规定**
 ```cypher
-# 查找某条法条的所有配套规定
-MATCH (law:法条 {name: "专利法第22条"})-[:配套]->(regulation)
+// 查找某条法条的所有配套规定
+MATCH (law:Article {name: "专利法第22条"})-[:SUPPORTS]->(regulation)
 RETURN regulation.name, regulation.type
 ```
 
 **场景3: 查找司法解释**
 ```cypher
-# 查找某条法条相关的司法解释
-MATCH (law:法条 {name: "专利法第22条"})-[:引用]->(interp:司法解释)
-RETURN interp.name, interp.发布日期
+// 查找某条法条相关的司法解释
+MATCH (law:Article {name: "专利法第22条"})-[:CITES]->(interp:JudicialInterpretation)
+RETURN interp.name, interp.publish_date
 ```
 
 **场景4: 典型案例关联**
 ```cypher
-# 查找适用某条法条的典型案例
-MATCH (law:法条 {name: "专利法第22条"})<-[:适用]-(case:案例)
-RETURN case.案号, case.裁判要旨
-ORDER BY case.裁判日期 DESC
+// 查找适用某条法条的典型案例
+MATCH (law:Article {name: "专利法第22条"})<-[:APPLIES]-(case:Case)
+RETURN case.case_number, case.judgment_summary
+ORDER BY case.judgment_date DESC
 LIMIT 5
 ```
 
@@ -171,47 +176,47 @@ LIMIT 5
 
 ---
 
-### 3. patent_kg 空间 (专利知识图谱)
+### 3. patent_kg 图 (专利知识图谱)
 
-#### 节点类型
-- **专利**: 具体专利
-- **申请人**: 申请人/专利权人
-- **发明人**: 发明人
-- **技术领域**: IPC分类号
+#### 节点标签 (Labels)
+- **Patent**: 具体专利
+- **Applicant**: 申请人/专利权人
+- **Inventor**: 发明人
+- **TechField**: IPC分类号/技术领域
 
-#### 边类型
-- **申请**: 申请关系
-- **发明**: 发明关系
-- **属于**: 技术领域分类
-- **引用**: 专利引用关系
-- **家族**: 同族专利关系
+#### 关系类型 (Relationship Types)
+- **APPLIES**: 申请关系
+- **INVENTS**: 发明关系
+- **BELONGS_TO**: 技术领域分类
+- **CITES**: 专利引用关系
+- **FAMILY**: 同族专利关系
 
 #### 使用场景
 
 **场景1: 查找同类专利**
 ```cypher
-# 查找同一技术领域的专利
-MATCH (p:专利)-[:属于]->(tech:技术领域 {ipc_code: "H04L"})
-RETURN p.专利号, p.申请日, p.标题
-ORDER BY p.申请日 DESC
+// 查找同一技术领域的专利
+MATCH (p:Patent)-[:BELONGS_TO]->(tech:TechField {ipc_code: "H04L"})
+RETURN p.patent_number, p.application_date, p.title
+ORDER BY p.application_date DESC
 LIMIT 10
 ```
 
 **场景2: 分析申请人专利布局**
 ```cypher
-# 查找某申请人的所有专利
-MATCH (app:申请人 {name: "华为技术有限公司"})<-[:申请]-(p:专利)
-RETURN p.专利号, p.技术领域, p.申请日
-ORDER BY p.申请日 DESC
+// 查找某申请人的所有专利
+MATCH (app:Applicant {name: "华为技术有限公司"})<-[:APPLIES]-(p:Patent)
+RETURN p.patent_number, p.tech_field, p.application_date
+ORDER BY p.application_date DESC
 ```
 
 **场景3: 查找专利引用链**
 ```cypher
-# 查找专利的前向引用和后向引用
-MATCH (p:专利 {专利号: "CNXXXXXXX"})
-OPTIONAL MATCH (p)-[:引用]->(forward:专利)
-OPTIONAL MATCH (p)<-[:引用]-(backward:专利)
-RETURN forward.专利号, backward.专利号
+// 查找专利的前向引用和后向引用
+MATCH (p:Patent {patent_number: "CNXXXXXXX"})
+OPTIONAL MATCH (p)-[:CITES]->(forward:Patent)
+OPTIONAL MATCH (p)<-[:CITES]-(backward:Patent)
+RETURN forward.patent_number, backward.patent_number
 ```
 
 #### 输出格式要求
@@ -276,15 +281,15 @@ RETURN forward.专利号, backward.专利号
 ## 【数据质量认知】
 
 ### 当前图谱质量
-- **patent_rules空间**: 🟡 待导入 (脚本已准备，数据清洗中，预计2025年1月完成)
-- **legal_kg空间**: ✅ 22,372个节点 + 71,314条边 (已可用)
-- **patent_kg空间**: 🟡 部分导入 (持续扩充中)
+- **patent_rules图**: 🟡 待导入 (脚本已准备，数据清洗中)
+- **legal_kg图**: ✅ 22,372个节点 + 71,314条关系 (已可用)
+- **patent_kg图**: 🟡 部分导入 (持续扩充中)
 - **覆盖范围**: legal_kg核心法条关联覆盖率 90%+
 - **关系准确度**: 基于真实数据提取，准确度 95%+
 
 ### 持续改进
 - **节点扩充**: 持续新增决定书节点
-- **关系优化**: 细化边类型和权重
+- **关系优化**: 细化关系类型和权重
 - **质量清洗**: 定期清理错误关系
 
 ### 局限性

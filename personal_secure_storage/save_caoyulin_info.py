@@ -3,11 +3,11 @@
 保存曹玉琳信息到小娜记忆系统
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-from pathlib import Path
+import sqlite3
 from datetime import datetime
+from pathlib import Path
+
 
 def save_caoyulin_info() -> None:
     """保存曹玉琳信息"""

@@ -1,31 +1,25 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PQAI专利检索服务API
 为Athena平台提供增强的专利检索API接口
 """
 
-import asyncio
-from core.async_main import async_main
-import logging
-from core.logging_config import setup_logging
 import os
 import sys
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 添加项目根目录到Python路径
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import uvicorn
+from core.pqai_search import PQAIEnhancedPatentSearcher
 from fastapi import BackgroundTasks, FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from core.pqai_search import PQAIEnhancedPatentSearcher, SearchResult
-
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 logger = setup_logging()
 
@@ -60,7 +54,7 @@ class SearchRequest(BaseModel):
 
 class SearchResponse(BaseModel):
     """检索响应模型"""
-    results: List[Dict[str, Any]]
+    results: list[dict[str, Any]]
     total_found: int
     query: str
     search_type: str
@@ -69,7 +63,7 @@ class SearchResponse(BaseModel):
 
 class IndexRequest(BaseModel):
     """索引构建请求模型"""
-    patents: List[PatentData]
+    patents: list[PatentData]
     rebuild: bool = False
 
 @app.on_event('startup')
@@ -147,9 +141,9 @@ async def build_index(request: IndexRequest, background_tasks: BackgroundTasks):
 
     except Exception as e:
         logger.error(f"索引构建失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
-async def build_index_background(patent_data: List[Dict], rebuild: bool):
+async def build_index_background(patent_data: list[dict], rebuild: bool):
     """后台构建索引任务"""
     global index_built
 
@@ -220,7 +214,7 @@ async def search_patents(request: SearchRequest):
 
     except Exception as e:
         logger.error(f"检索失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/search/similar/{patent_id}')
 async def find_similar_patents(
@@ -284,7 +278,7 @@ async def find_similar_patents(
 
     except Exception as e:
         logger.error(f"相似专利查找失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/analytics/statistics')
 async def get_analytics():

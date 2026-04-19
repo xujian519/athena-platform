@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 系统集成测试
 验证所有优化模式的集成效果
 """
 
 import asyncio
-import unittest
 import sys
+import unittest
 from pathlib import Path
 
 # 添加项目根目录到路径

@@ -1,0 +1,163 @@
+{
+  "timestamp": "2025-12-27T13:26:04.376650",
+  "qdrant_status": {
+    "legal_knowledge": {
+      "points_count": 396,
+      "status": "green"
+    },
+    "patent_decisions": {
+      "points_count": 308888,
+      "status": "green"
+    },
+    "laws_articles": {
+      "points_count": 53903,
+      "status": "green"
+    },
+    "ai_family_shared_memory": {
+      "points_count": 21,
+      "status": "green"
+    },
+    "multimodal_vectors": {
+      "points_count": 3,
+      "status": "green"
+    },
+    "test_storage_verification": {
+      "points_count": 1,
+      "status": "green"
+    },
+    "patent_full_text_v2": {
+      "points_count": 0,
+      "status": "green"
+    },
+    "patent_guidelines": {
+      "points_count": 376,
+      "status": "green"
+    },
+    "patent_full_text": {
+      "points_count": 13,
+      "status": "green"
+    },
+    "patent_rules_complete": {
+      "points_count": 2694,
+      "status": "green"
+    }
+  },
+  "nebula_status": {
+    "legal_kg": {
+      "status": "exists",
+      "tags": 4
+    },
+    "patent_full_text": {
+      "status": "exists",
+      "tags": 4
+    },
+    "patent_kg": {
+      "status": "exists",
+      "tags": 12
+    },
+    "patent_kg_extended": {
+      "status": "exists",
+      "tags": 5
+    },
+    "patent_rules": {
+      "status": "exists",
+      "tags": 4
+    }
+  },
+  "deletable_files": [
+    "production/data/laws_processed/laws_import_report_20251223_093455.json",
+    "production/data/laws_processed/laws_import_report_20251224_092138.json",
+    "production/data/patent_rules/patent_kg_import_report_20251220_233843.json",
+    "production/data/patent_rules/qdrant_store/test_vector_gen.json",
+    "production/data/patent_rules/qdrant_store/test_vector_gen_config.json",
+    "production/data/patent_rules/knowledge_graph/import_stats_20251220_235140.json",
+    "production/data/patent_rules/knowledge_graph/subgraph_example.json",
+    "production/data/patent_rules/knowledge_graph/relations_related_to.json",
+    "production/data/patent_rules/knowledge_graph/relations_granted_by.json",
+    "production/data/patent_rules/knowledge_graph/entities_PATENT_TYPE.json",
+    "production/data/patent_rules/knowledge_graph/import_stats_20251220_235120.json",
+    "production/data/patent_rules/knowledge_graph/import_stats_20251220_235301.json",
+    "production/data/patent_rules/knowledge_graph/import_stats_20251220_235351.json",
+    "production/data/patent_rules/knowledge_graph/guideline_entities_20251223_054048.json",
+    "production/data/patent_rules/knowledge_graph/relations_requires.json",
+    "production/data/patent_rules/knowledge_graph/entities_TIME_TERM_20251220_235351.json",
+    "production/data/patent_rules/knowledge_graph/relations_regulates.json",
+    "production/data/patent_rules/knowledge_graph/relations_implements.json",
+    "production/data/patent_rules/knowledge_graph/entities_PATENT_TYPE_20251220_235351.json",
+    "production/data/patent_rules/knowledge_graph/entities_LEGAL_TERM_20251220_235301.json",
+    "production/data/patent_rules/knowledge_graph/relations_related_to_20251220_235301.json",
+    "production/data/patent_rules/knowledge_graph/import_stats_20251220_235057.json",
+    "production/data/patent_rules/knowledge_graph/relations_provided_by.json",
+    "production/data/patent_rules/knowledge_graph/relations_related_to_20251220_235351.json",
+    "production/data/patent_rules/knowledge_graph/entities_LEGAL_TERM.json",
+    "production/data/patent_rules/knowledge_graph/guideline_kg_structure_20251223_054048.json",
+    "production/data/patent_rules/knowledge_graph/entities_PATENT_TYPE_20251220_235301.json",
+    "production/data/patent_rules/knowledge_graph/nebula_schema.json",
+    "production/data/patent_rules/knowledge_graph/relations_interprets.json",
+    "production/data/patent_rules/knowledge_graph/entities_TIME_TERM_20251220_235301.json",
+    "production/data/patent_rules/knowledge_graph/relations_governed_by.json",
+    "production/data/patent_rules/knowledge_graph/relations_determines.json",
+    "production/data/patent_rules/knowledge_graph/relations_defines.json",
+    "production/data/patent_rules/knowledge_graph/import_stats_20251220_235114.json",
+    "production/data/patent_rules/knowledge_graph/entities_LEGAL_TERM_20251220_235351.json",
+    "production/data/patent_rules/vectors/guideline_bge_vectors_20251223_054048.json",
+    "production/data/patent_rules/legal_documents/guideline_vectors_input_20251223_003233.json",
+    "production/data/patent_rules/processed/legal_documents_20251223_045218.json",
+    "production/data/patent_rules/processed/workflow_test_report.json",
+    "production/data/patent_rules/processed/legal_documents_20251223_010317.json",
+    "production/data/patent_rules/processed/legal_chunks_20251223_005301.json",
+    "production/data/patent_rules/processed/legal_chunks_20251223_010317.json",
+    "production/data/patent_rules/processed/legal_documents_20251223_005301.json",
+    "production/data/patent_rules/processed/legal_chunks_20251223_045218.json",
+    "production/data/patent_decisions/vectors/review_sample_100_vectors_20251223_055725.json",
+    "production/data/patent_decisions/processed/review_sample_100_chunks_20251223_055725.json",
+    "production/data/patent_decisions/processed/sample_10_chunks_20251223_055442.json"
+  ],
+  "keep_files": [
+    "production/data/exports/unified_legal_dataset_20251220_211550.json",
+    "production/data/patent_decisions/dedup_report.json",
+    "production/data/patent_rules/import_report_20251220_235057.json",
+    "production/data/patent_rules/quality_report.json",
+    "production/data/patent_rules/full_pipeline_report_20251223_054048.json",
+    "production/data/patent_rules/import_report_20251220_235114.json",
+    "production/data/patent_rules/build_report_20251220_232639.json",
+    "production/data/patent_rules/test_image_data.json",
+    "production/data/patent_rules/bert_extraction_example.json",
+    "production/data/patent_rules/import_report_20251220_235120.json",
+    "production/data/patent_rules/import_report_20251220_235301.json",
+    "production/data/patent_rules/import_report_20251220_235140.json",
+    "production/data/patent_rules/import_report_20251220_235351.json",
+    "production/data/patent_rules/qdrant_store/test_rerank.json",
+    "production/data/patent_rules/qdrant_store/test_stats_config.json",
+    "production/data/patent_rules/qdrant_store/test_patent_rules_config.json",
+    "production/data/patent_rules/qdrant_store/test_batch_config.json",
+    "production/data/patent_rules/qdrant_store/test_patent_rules.json",
+    "production/data/patent_rules/qdrant_store/test_search.json",
+    "production/data/patent_rules/qdrant_store/test_rag_demo_config.json",
+    "production/data/patent_rules/qdrant_store/perf_test_config.json",
+    "production/data/patent_rules/qdrant_store/test_rerank_config.json",
+    "production/data/patent_rules/qdrant_store/test_indexing_config.json",
+    "production/data/patent_rules/qdrant_store/test_indexing.json",
+    "production/data/patent_rules/qdrant_store/test_batch.json",
+    "production/data/patent_rules/qdrant_store/patent_rules.json",
+    "production/data/patent_rules/qdrant_store/test_search_config.json",
+    "production/data/patent_rules/qdrant_store/test_rag_demo.json",
+    "production/data/patent_rules/qdrant_store/perf_test.json",
+    "production/data/patent_rules/qdrant_store/patent_rules_config.json",
+    "production/data/patent_rules/qdrant_store/test_stats.json",
+    "production/data/patent_rules/legal_documents/guideline_stats_v2_20251223_003233.json",
+    "production/data/patent_rules/legal_documents/guideline_stats_20251223_003033.json",
+    "production/data/patent_rules/legal_documents/test_legal_document.json",
+    "production/data/patent_rules/legal_documents/guideline_subsections_v2_20251223_003233.json",
+    "production/data/patent_rules/legal_documents/guideline_subsections_20251223_003033.json",
+    "production/data/patent_decisions/checkpoints/nebula_import.json",
+    "production/data/patent_decisions/checkpoints/progress.json",
+    "production/data/patent_decisions/batches/batch_0001_20251223_061737.json"
+  ],
+  "statistics": {
+    "deletable_count": 47,
+    "deletable_size_mb": 52.87405014038086,
+    "keep_count": 39,
+    "keep_size_mb": 23.222097396850586
+  }
+}

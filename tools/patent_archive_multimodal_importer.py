@@ -1,24 +1,20 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 多模态+Dolphin+Ollama专利档案导入工具
 结合多模态文件系统、Dolphin解析和Ollama大模型进行智能导入
 """
 
 import json
-import pandas as pd
-import requests
-import psycopg2
-from psycopg2.extras import execute_values, RealDictCursor
+import logging
+import sys
+import uuid
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple
-import os
-import sys
-import logging
-import uuid
-import base64
-from io import BytesIO
+
+import pandas as pd
+import psycopg2
+import requests
+from psycopg2.extras import execute_values
 
 # 配置日志
 logging.basicConfig(
@@ -34,7 +30,7 @@ class MultimodalPatentImporter:
         # 服务配置
         self.multimodal_url = "http://localhost:8001"
         self.dolphin_url = "http://localhost:8013"
-        self.ollama_url = "http://localhost:11434/api"
+        self.ollama_url = "http://127.0.0.1:8765/v1"
         self.ollama_model = "qwen:7b"
 
         # 数据库配置
@@ -130,7 +126,7 @@ class MultimodalPatentImporter:
             if conn:
                 conn.close()
 
-    async def upload_and_analyze_excel(self, excel_path: str) -> Dict:
+    async def upload_and_analyze_excel(self, excel_path: str) -> dict:
         """上传Excel到多模态系统并分析"""
         logger.info("📤 上传Excel到多模态系统...")
 
@@ -170,7 +166,7 @@ class MultimodalPatentImporter:
             logger.warning(f"⚠️ 多模态处理失败: {str(e)}，使用本地分析")
             return await self._local_excel_analysis(excel_path)
 
-    async def _get_file_analysis(self, file_id: str) -> Dict:
+    async def _get_file_analysis(self, file_id: str) -> dict:
         """获取多模态系统的文件分析结果"""
         try:
             headers = {"Authorization": f"Bearer {self.multimodal_token}"}
@@ -206,7 +202,7 @@ class MultimodalPatentImporter:
 
         return None
 
-    async def _local_excel_analysis(self, excel_path: str) -> Dict:
+    async def _local_excel_analysis(self, excel_path: str) -> dict:
         """本地Excel分析（备用方案）"""
         logger.info("📊 使用本地方式分析Excel...")
 
@@ -239,7 +235,7 @@ class MultimodalPatentImporter:
             logger.error(f"❌ 本地分析失败: {str(e)}")
             return None
 
-    async def _analyze_structure_with_ollama(self, columns: List, sample_data: List[Dict]) -> Dict:
+    async def _analyze_structure_with_ollama(self, columns: list, sample_data: list[dict]) -> dict:
         """使用Ollama分析Excel结构"""
         try:
             columns_text = "\n".join([f"{i+1}. {col}" for i, col in enumerate(columns)])
@@ -281,15 +277,15 @@ class MultimodalPatentImporter:
 
             payload = {
                 "model": self.ollama_model,
-                "prompt": prompt,
+                "messages": [{"role": "user", "content": prompt}],
                 "stream": False
             }
 
-            response = requests.post(f"{self.ollama_url}/generate", json=payload, timeout=30)
+            response = requests.post(f"{self.ollama_url}/chat/completions", json=payload, timeout=30)
 
             if response.status_code == 200:
                 result = response.json()
-                ai_response = result.get("response", "")
+                ai_response = result.get("choices", [{}])[0].get("message", {}).get("content", "")
 
                 # 解析JSON
                 if "```json" in ai_response:
@@ -317,7 +313,7 @@ class MultimodalPatentImporter:
             logger.warning(f"⚠️ Ollama分析失败: {str(e)}")
             return self._get_default_mapping(columns)
 
-    def _get_default_mapping(self, columns: List) -> Dict:
+    def _get_default_mapping(self, columns: list) -> dict:
         """获取默认列映射"""
         mapping = {}
         for col in columns:
@@ -348,7 +344,7 @@ class MultimodalPatentImporter:
             }
         }
 
-    async def process_patent_data(self, excel_path: str, analysis_result: Dict) -> Dict:
+    async def process_patent_data(self, excel_path: str, analysis_result: dict) -> dict:
         """处理专利数据"""
         logger.info("🔄 开始处理专利数据...")
 
@@ -445,7 +441,7 @@ class MultimodalPatentImporter:
             "processing_time": datetime.now().isoformat()
         }
 
-        logger.info(f"\n📈 处理结果:")
+        logger.info("\n📈 处理结果:")
         logger.info(f"  新专利: {result['new_patents']}")
         logger.info(f"  新客户: {result['new_clients']}")
 
@@ -482,7 +478,7 @@ class MultimodalPatentImporter:
 
         return title
 
-    async def save_to_database(self, processed_data: List[Dict]):
+    async def save_to_database(self, processed_data: list[dict]):
         """保存到数据库"""
         logger.info("💾 保存数据到数据库...")
 
@@ -503,10 +499,9 @@ class MultimodalPatentImporter:
                     existing_num = int(result[0][1:])
                     client_code_counter = existing_num + 1
                 except Exception as e:
-
                     # 记录异常但不中断流程
-
                     logger.debug(f"[patent_archive_multimodal_importer] Exception: {e}")
+
             for record in processed_data:
                 client_name = record.get('client_name', '').strip()
                 if client_name and client_name not in self.existing_clients and client_name not in clients_to_add:
@@ -536,7 +531,7 @@ class MultimodalPatentImporter:
             patent_records = []
             for record in processed_data:
                 client_name = record.get('client_name', '').strip()
-                client_id = self.client_map.get(client_name)
+                self.client_map.get(client_name)
 
                 patent_record = {
                     'patent_id': str(uuid.uuid4()),
@@ -583,7 +578,7 @@ class MultimodalPatentImporter:
             if conn:
                 conn.close()
 
-    async def export_results(self, result: Dict):
+    async def export_results(self, result: dict):
         """导出结果"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -677,11 +672,5 @@ async def main():
 
 if __name__ == "__main__":
     import asyncio
-
-# 导入安全配置
-import sys
-from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent / "core"))
-from security.env_config import get_env_var, get_database_url, get_jwt_secret
     success = asyncio.run(main())
     sys.exit(0 if success else 1)

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 IPC分类向量数据库
 IPC Classification Vector Database
@@ -128,7 +129,6 @@ class IPCVectorDatabase:
 
         # 数据路径
         self.ipc_data_path = ipc_data_path or (
-            "/Users/xujian/Athena工作平台/apps/patent-platform/workspace/data/ipc_classification_knowledge.json"
         )
 
         # IPC存储

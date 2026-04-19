@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 专利知识图谱分析器 - 集成增强检索模块
 结合知识图谱技术和专利检索,实现高质量的专利分析
@@ -17,8 +18,7 @@ import json
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-
+from typing import Any
 
 # 导入增强检索模块
 from core.patent.enhanced_patent_retriever_v2 import EnhancedPatentRetriever, PatentInfo
@@ -26,11 +26,9 @@ from core.patent.enhanced_patent_retriever_v2 import EnhancedPatentRetriever, Pa
 # 导入知识图谱模块
 from core.patent.patent_knowledge_graph import (
     FeatureRelation,
-    NodeType,
     PatentKnowledgeGraph,
     RelationType,
     TechnicalTriple,
-    create_triple_from_text,
 )
 
 

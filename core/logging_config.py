@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一日志配置模块
 Unified Logging Configuration
@@ -9,7 +10,6 @@ Unified Logging Configuration
 版本: v1.0.0
 """
 
-from typing import Optional
 import logging
 import sys
 from pathlib import Path
@@ -98,7 +98,7 @@ def setup_logging(
     return logger
 
 
-def get_logger(name: Optional[str] = None) -> logging.Logger:
+def get_logger(name: str | None = None) -> logging.Logger:
     """
     获取logger实例(快捷方法)
 

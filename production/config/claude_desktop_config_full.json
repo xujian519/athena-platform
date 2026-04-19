@@ -1,0 +1,95 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "node",
+      "args": ["/Users/xujian/.npm-global/lib/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js"],
+      "env": {
+        "FILESYSTEM_ROOT": "/Users/xujian/Athena工作平台"
+      }
+    },
+    "memory": {
+      "command": "node",
+      "args": ["/Users/xujian/.npm-global/lib/node_modules/@modelcontextprotocol/server-memory/dist/index.js"]
+    },
+    "sequential-thinking": {
+      "command": "node",
+      "args": ["/Users/xujian/.npm-global/lib/node_modules/@modelcontextprotocol/server-sequential-thinking/dist/index.js"]
+    },
+    "bing-cn": {
+      "command": "node",
+      "args": ["/Users/xujian/Athena工作平台/mcp-servers/bing-cn-mcp-server/index.js"],
+      "cwd": "/Users/xujian/Athena工作平台/mcp-servers/bing-cn-mcp-server"
+    },
+    "academic-search": {
+      "command": "node",
+      "args": ["/Users/xujian/Athena工作平台/mcp-servers/academic-search-mcp-server/index.js"],
+      "cwd": "/Users/xujian/Athena工作平台/mcp-servers/academic-search-mcp-server"
+    },
+    "jina-ai": {
+      "command": "node",
+      "args": ["/Users/xujian/Athena工作平台/mcp-servers/jina-ai-mcp-server/index.js"],
+      "cwd": "/Users/xujian/Athena工作平台/mcp-servers/jina-ai-mcp-server",
+      "env": {
+        "JINA_API_KEY": "jina_105bd89b0a3b4ac79e5879d7177ed5e7vKow46ADR-Kvz7GRheO8Sj8pGEL4"
+      }
+    },
+    "patent-search": {
+      "command": "node",
+      "args": ["/Users/xujian/Athena工作平台/mcp-servers/patent-search-mcp-server/index.js"],
+      "cwd": "/Users/xujian/Athena工作平台/mcp-servers/patent-search-mcp-server",
+      "env": {
+        "POSTGRES_CONNECTION_STRING": "postgresql://postgres@localhost:5432/patent_db"
+      }
+    },
+    "postgres": {
+      "command": "node",
+      "args": ["/Users/xujian/Athena工作平台/mcp-servers/postgres-mcp-server/index.js"],
+      "cwd": "/Users/xujian/Athena工作平台/mcp-servers/postgres-mcp-server",
+      "env": {
+        "POSTGRES_CONNECTION_STRING": "postgresql://user:password@localhost:5432/dbname"
+      }
+    },
+    "github": {
+      "command": "node",
+      "args": ["/Users/xujian/Athena工作平台/mcp-servers/github-mcp-server/index.js"],
+      "cwd": "/Users/xujian/Athena工作平台/mcp-servers/github-mcp-server",
+      "env": {
+        "GITHUB_TOKEN": "YOUR_GITHUB_TOKEN_HERE"
+      }
+    },
+    "patent-downloader": {
+      "command": "/Users/xujian/知识库/patent_downloader/start_mcp.sh",
+      "cwd": "/Users/xujian/知识库/patent_downloader",
+      "env": {
+        "OUTPUT_DIR": "/Users/xujian/知识库/downloads"
+      }
+    },
+    "chrome": {
+      "command": "node",
+      "args": ["/Users/xujian/Athena工作平台/mcp-servers/chrome-mcp-server/src/index.js"],
+      "cwd": "/Users/xujian/Athena工作平台/mcp-servers/chrome-mcp-server",
+      "env": {
+        "CHROME_HEADLESS": "true"
+      }
+    },
+    "google-patents": {
+      "command": "node",
+      "args": ["/Users/xujian/Athena工作平台/mcp-servers/google-patents-meta-server/index.js"],
+      "cwd": "/Users/xujian/Athena工作平台/mcp-servers/google-patents-meta-server"
+    },
+    "patent-pdf-downloader": {
+      "command": "node",
+      "args": ["/Users/xujian/Athena工作平台/mcp-servers/patent-downloader-mcp-server/server.js"],
+      "cwd": "/Users/xujian/Athena工作平台/mcp-servers/patent-downloader-mcp-server"
+    },
+    "gaode": {
+      "command": "python3",
+      "args": ["/Users/xujian/Athena工作平台/mcp-servers/gaode-mcp-server/run_server.py"],
+      "cwd": "/Users/xujian/Athena工作平台/mcp-servers/gaode-mcp-server",
+      "env": {
+        "AMAP_API_KEY": "your_amap_api_key_here",
+        "AMAP_SECRET_KEY": "your_amap_secret_key_here"
+      }
+    }
+  }
+}

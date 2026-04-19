@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 Athena智能搜索选择器 - 向后兼容重定向
 Athena Search Selector - Backward Compatibility Redirect
@@ -43,11 +43,11 @@ import warnings
 # 导入重构后的模块
 from .athena_search_selector import (
     AthenaSearchSelector,
-    QueryIntent,
     DomainType,
     QueryAnalysis,
-    ToolRecommendation,
+    QueryIntent,
     SelectionStrategy,
+    ToolRecommendation,
     get_search_selector,
     initialize_search_selector,
 )

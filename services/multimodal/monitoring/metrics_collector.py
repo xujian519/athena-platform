@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 指标收集器
 Metrics Collector
@@ -7,17 +6,15 @@ Metrics Collector
 收集和聚合各种性能指标，提供指标查询和导出功能
 """
 
-import time
-from core.async_main import async_main
 import json
-import sqlite3
-import threading
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional, Tuple
-from pathlib import Path
 import logging
-from dataclasses import dataclass, asdict
+import sqlite3
 import statistics
+import threading
+import time
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +23,7 @@ class MetricPoint:
     """指标数据点"""
     timestamp: datetime
     value: float
-    tags: Dict[str, str]
+    tags: dict[str, str]
     metric_type: str = 'gauge'  # gauge, counter, histogram
 
 @dataclass
@@ -93,7 +90,7 @@ class MetricsStorage:
         conn.close()
 
     def store_metric(self, metric_name: str, value: float,
-                    tags: Dict[str, str] = None, metric_type: str = 'gauge'):
+                    tags: dict[str, str] = None, metric_type: str = 'gauge'):
         """存储指标"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
@@ -109,7 +106,7 @@ class MetricsStorage:
         conn.close()
 
     def get_metrics(self, metric_name: str, start_time: datetime,
-                   end_time: datetime, tags: Dict[str, str] = None) -> List[MetricPoint]:
+                   end_time: datetime, tags: dict[str, str] = None) -> list[MetricPoint]:
         """查询指标"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
@@ -123,7 +120,7 @@ class MetricsStorage:
 
         if tags:
             for key, value in tags.items():
-                query += f' AND tags LIKE ?'
+                query += ' AND tags LIKE ?'
                 params.append(f'%"{key}": "{value}"%')
 
         query += ' ORDER BY timestamp'
@@ -147,7 +144,7 @@ class MetricsStorage:
         return metrics
 
     def aggregate_metrics(self, metric_name: str, start_time: datetime,
-                         end_time: datetime, bucket_size: str = '5m') -> List[AggregatedMetric]:
+                         end_time: datetime, bucket_size: str = '5m') -> list[AggregatedMetric]:
         """聚合指标"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
@@ -312,11 +309,11 @@ class MetricsCollector:
                 time.sleep(self.collection_interval)
 
     def collect_metric(self, metric_name: str, value: float,
-                      tags: Dict[str, str] = None, metric_type: str = 'gauge'):
+                      tags: dict[str, str] = None, metric_type: str = 'gauge'):
         """手动收集指标"""
         self.storage.store_metric(metric_name, value, tags, metric_type)
 
-    def get_metric_summary(self, metric_name: str, hours: int = 1) -> Dict[str, Any]:
+    def get_metric_summary(self, metric_name: str, hours: int = 1) -> dict[str, Any]:
         """获取指标摘要"""
         end_time = datetime.now()
         start_time = end_time - timedelta(hours=hours)
@@ -357,7 +354,7 @@ class MetricsCollector:
 
         return summary
 
-    def _calculate_trend(self, values: List[float]) -> str:
+    def _calculate_trend(self, values: list[float]) -> str:
         """计算趋势"""
         if len(values) < 2:
             return "stable"
@@ -379,7 +376,7 @@ class MetricsCollector:
         else:
             return "stable"
 
-    def export_metrics(self, metric_names: List[str] = None,
+    def export_metrics(self, metric_names: list[str] = None,
                       start_time: datetime = None,
                       end_time: datetime = None,
                       format: str = 'json') -> str:
@@ -427,7 +424,7 @@ class MetricsCollector:
         else:
             raise ValueError(f"不支持的导出格式: {format}")
 
-    def get_system_overview(self) -> Dict[str, Any]:
+    def get_system_overview(self) -> dict[str, Any]:
         """获取系统概览"""
         overview = {
             'timestamp': datetime.now().isoformat(),
@@ -465,7 +462,7 @@ class MetricsCollector:
 metrics_collector = MetricsCollector()
 
 # 内置收集器
-def system_metrics_collector() -> Dict[str, float]:
+def system_metrics_collector() -> dict[str, float]:
     """系统指标收集器"""
     import psutil
 
@@ -478,7 +475,7 @@ def system_metrics_collector() -> Dict[str, float]:
         'process.count': len(psutil.pids())
     }
 
-def cache_metrics_collector() -> Dict[str, float]:
+def cache_metrics_collector() -> dict[str, float]:
     """缓存指标收集器"""
     try:
         from .cache_manager import cache_manager

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多轮对话管理器
 Dialogue Manager
@@ -11,12 +12,11 @@ Version: v1.0.0
 """
 
 import logging
-import json
-from typing import Any, Dict, List, Optional
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
-from core.patent.examiner_simulator import get_examiner_simulator, RejectionType
+from core.patent.examiner_simulator import get_examiner_simulator
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ class DialogueTurn:
         turn_number: int,
         role: str,
         content: str,
-        metadata: Dict | None = None
+        metadata: dict | None = None
     ):
         self.turn_number = turn_number
         self.role = role  # "applicant" or "examiner"
@@ -37,7 +37,7 @@ class DialogueTurn:
         self.metadata = metadata or {}
         self.timestamp = datetime.now()
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         """转换为字典"""
         return {
             "turn_number": self.turn_number,
@@ -55,19 +55,19 @@ class DialogueSession:
         self,
         session_id: str,
         oa_text: str,
-        claims: List[str],
-        prior_art_analysis: Dict
+        claims: list[str],
+        prior_art_analysis: dict
     ):
         self.session_id = session_id
         self.oa_text = oa_text
         self.claims = claims
         self.prior_art_analysis = prior_art_analysis
-        self.turns: List[DialogueTurn] = []
+        self.turns: list[DialogueTurn] = []
         self.status = "in_progress"  # in_progress, completed, terminated
         self.start_time = datetime.now()
         self.end_time: datetime | None = None
 
-    def add_turn(self, role: str, content: str, metadata: Dict | None = None):
+    def add_turn(self, role: str, content: str, metadata: dict | None = None):
         """添加对话轮次"""
         turn_number = len(self.turns) + 1
         turn = DialogueTurn(
@@ -83,7 +83,7 @@ class DialogueSession:
         self.status = "completed"
         self.end_time = datetime.now()
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         """转换为字典"""
         return {
             "session_id": self.session_id,
@@ -124,7 +124,7 @@ class DialogueManager:
         """初始化对话管理器"""
         self.examiner_simulator = get_examiner_simulator()
         self.current_session: DialogueSession | None = None
-        self.session_history: List[DialogueSession] = []
+        self.session_history: list[DialogueSession] = []
 
         logger.info("✅ 多轮对话管理器初始化完成")
 
@@ -132,8 +132,8 @@ class DialogueManager:
         self,
         session_id: str,
         oa_text: str,
-        claims: List[str],
-        prior_art_analysis: Dict
+        claims: list[str],
+        prior_art_analysis: dict
     ) -> DialogueSession:
         """
         开始新的对话会话
@@ -187,7 +187,7 @@ class DialogueManager:
         self,
         applicant_response: str,
         session_id: str | None = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         处理申请人的答复
 
@@ -269,7 +269,7 @@ class DialogueManager:
     def get_dialogue_summary(
         self,
         session_id: str | None = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         获取对话摘要
 
@@ -335,7 +335,7 @@ class DialogueManager:
 
         return output_path
 
-    def _get_session(self, session_id: Optional[str]) -> DialogueSession | None:
+    def _get_session(self, session_id: str | None) -> DialogueSession | None:
         """获取会话"""
         if session_id:
             # 从历史记录中查找
@@ -347,11 +347,11 @@ class DialogueManager:
             # 返回当前会话
             return self.current_session
 
-    def _format_initial_review(self, initial_review: Dict) -> str:
+    def _format_initial_review(self, initial_review: dict) -> str:
         """格式化初始审查意见"""
         content = []
 
-        content.append(f"# 审查意见\n")
+        content.append("# 审查意见\n")
         content.append(f"**驳回类型**: {initial_review['rejection_type']}\n")
         content.append(f"**论证策略**: {initial_review['strategy']}\n\n")
 
@@ -366,12 +366,12 @@ class DialogueManager:
 
             content.append(f"\n**结论**: {objection['conclusion']}\n\n")
 
-        content.append(f"## 总体结论\n")
+        content.append("## 总体结论\n")
         content.append(initial_review["overall_conclusion"])
 
         return "\n".join(content)
 
-    def _format_examiner_response(self, response: Dict) -> str:
+    def _format_examiner_response(self, response: dict) -> str:
         """格式化审查员回应"""
         content = []
 
@@ -401,7 +401,7 @@ class DialogueManager:
 
         return "\n".join(content)
 
-    def _check_termination_conditions(self, session: DialogueSession) -> Dict[str, Any]:
+    def _check_termination_conditions(self, session: DialogueSession) -> dict[str, Any]:
         """检查终止条件"""
         # 条件1: 达到最大轮次
         if len([t for t in session.turns if t.role == "applicant"]) >= self.MAX_ROUNDS:
@@ -467,8 +467,8 @@ class DialogueManager:
     def _evaluate_final_response(
         self,
         applicant_response: str,
-        dialogue_history: List[DialogueTurn]
-    ) -> Dict:
+        dialogue_history: list[DialogueTurn]
+    ) -> dict:
         """评估最终答复"""
         return self.examiner_simulator.evaluate_final_response(
             applicant_response=applicant_response,
@@ -478,8 +478,8 @@ class DialogueManager:
     def _generate_suggestions(
         self,
         session: DialogueSession,
-        examiner_response: Dict
-    ) -> List[str]:
+        examiner_response: dict
+    ) -> list[str]:
         """生成改进建议"""
         suggestions = []
 
@@ -524,7 +524,7 @@ class DialogueManager:
             delta = datetime.now() - session.start_time
             return delta.total_seconds() / 60
 
-    def _extract_key_topics(self, session: DialogueSession) -> List[str]:
+    def _extract_key_topics(self, session: DialogueSession) -> list[str]:
         """提取关键话题"""
         topics = set()
 
@@ -543,7 +543,7 @@ class DialogueManager:
 
         return list(topics)
 
-    def _calculate_progress_indicators(self, session: DialogueSession) -> Dict[str, Any]:
+    def _calculate_progress_indicators(self, session: DialogueSession) -> dict[str, Any]:
         """计算进展指标"""
         applicant_turns = [t for t in session.turns if t.role == "applicant"]
 
@@ -580,7 +580,7 @@ class DialogueManager:
         """生成对话记录文本"""
         lines = []
 
-        lines.append(f"# 审查意见答复对话记录\n")
+        lines.append("# 审查意见答复对话记录\n")
         lines.append(f"**会话ID**: {session.session_id}\n")
         lines.append(f"**状态**: {session.status}\n")
         lines.append(f"**开始时间**: {session.start_time.strftime('%Y-%m-%d %H:%M:%S')}\n")
@@ -638,7 +638,7 @@ if __name__ == "__main__":
 
     result = manager.process_applicant_response(applicant_response)
 
-    print(f"\n=== 审查员回应 ===")
+    print("\n=== 审查员回应 ===")
     print(f"操作: {result['action']}")
     print(f"轮次: {result.get('round_number', 'N/A')}")
     if result['action'] == 'continue':

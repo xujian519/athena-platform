@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 企业级Redis缓存管理器
 支持OCR结果缓存、图像特征缓存、向量缓存
 最后更新: 2026-01-26
 """
 
-import json
-import hashlib
-import logging
-from datetime import datetime, timedelta
-from typing import Optional, Dict, Any, List, Union
 import asyncio
+import hashlib
+import json
+import logging
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -106,7 +106,7 @@ class RedisCacheManager:
         self,
         prefix: str,
         identifier: str,
-        params: Optional[Dict[str, Any] | None = None
+        params: dict[str, Any] | None = None
     ) -> str:
         """
         生成缓存键
@@ -240,7 +240,7 @@ class RedisCacheManager:
         image_path: str,
         language: str,
         preprocess: bool
-    ) -> Dict[str, Any] | None]:
+    ) -> dict[str, Any] | None:
         """
         获取OCR结果缓存
 
@@ -264,7 +264,7 @@ class RedisCacheManager:
         image_path: str,
         language: str,
         preprocess: bool,
-        result: Dict[str, Any],
+        result: dict[str, Any],
         ttl: int = 86400  # 24小时
     ) -> bool:
         """
@@ -293,8 +293,8 @@ class RedisCacheManager:
         self,
         image_path: str,
         operation: str,
-        parameters: Optional[Dict[str, Any] | None = None
-    ) -> Dict[str, Any] | None]:
+        parameters: dict[str, Any] | None = None
+    ) -> dict[str, Any] | None:
         """
         获取图像特征缓存
 
@@ -313,9 +313,9 @@ class RedisCacheManager:
         self,
         image_path: str,
         operation: str,
-        features: Dict[str, Any],
-        parameters: Optional[Dict[str, Any] | None = None,
-        ttl: int = 7200  # 2小时
+        features: dict[str, Any],
+        parameters: dict[str, Any] | None = None,
+        ttl: int = 7200,  # 2小时
     ) -> bool:
         """
         设置图像特征缓存
@@ -339,7 +339,7 @@ class RedisCacheManager:
         self,
         text: str,
         model: str = "default"
-    ) -> List[float] | None]:
+    ) -> list[float] | None:
         """
         获取向量嵌入缓存
 
@@ -358,7 +358,7 @@ class RedisCacheManager:
     async def set_vector_embedding(
         self,
         text: str,
-        embedding: List[float],
+        embedding: list[float],
         model: str = "default",
         ttl: int = 604800  # 7天
     ) -> bool:
@@ -380,7 +380,7 @@ class RedisCacheManager:
 
     # ==================== 批量操作 ====================
 
-    async def get_many(self, keys: List[str]) -> Dict[str, Any]:
+    async def get_many(self, keys: list[str]) -> dict[str, Any]:
         """
         批量获取缓存
 
@@ -396,7 +396,7 @@ class RedisCacheManager:
         try:
             values = await self._redis_client.mget(keys)
             result = {}
-            for key, value in zip(keys, values):
+            for key, value in zip(keys, values, strict=False):
                 if value is not None:
                     result[key] = json.loads(value)
                     self.stats["hits"] += 1
@@ -410,7 +410,7 @@ class RedisCacheManager:
 
     async def set_many(
         self,
-        mapping: Dict[str, Any],
+        mapping: dict[str, Any],
         ttl: int | None = None
     ) -> int:
         """
@@ -494,7 +494,7 @@ class RedisCacheManager:
 
     # ==================== 缓存统计 ====================
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """
         获取缓存统计信息
 
@@ -529,7 +529,7 @@ class RedisCacheManager:
 
     async def warmup(
         self,
-        data: List[Dict[str, Any]],
+        data: list[dict[str, Any]],
         ttl: int = 86400
     ) -> int:
         """
@@ -565,7 +565,7 @@ class RedisCacheManager:
 
     # ==================== 健康检查 ====================
 
-    async def health_check(self) -> Dict[str, Any]:
+    async def health_check(self) -> dict[str, Any]:
         """
         健康检查
 

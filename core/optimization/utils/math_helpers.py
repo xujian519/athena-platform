@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 数学工具函数 - 安全的数学运算
 Math Helpers - Safe Mathematical Operations
@@ -8,7 +9,7 @@ Math Helpers - Safe Mathematical Operations
 """
 
 import numbers
-from typing import List, Optional, TypeVar, Union
+from typing import TypeVar
 
 # 支持的数值类型
 T = TypeVar("T", int, float)
@@ -44,7 +45,7 @@ def safe_divide(a: T, b: T, default: T | None = None) -> T | float:
     return a / b
 
 
-def safe_mean(values: list[float) -> float:
+def safe_mean(values: list[float]) -> float:
     """
     计算平均值,处理空列表
 

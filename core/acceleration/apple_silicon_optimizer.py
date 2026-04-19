@@ -1,9 +1,8 @@
+from __future__ import annotations
 """
 Apple Silicon M4 专用优化器
 充分利用M4芯片的MPS、Neural Engine和Unified Memory架构
 """
-import numpy as np
-
 import logging
 import os
 import sys
@@ -11,6 +10,7 @@ import time
 from dataclasses import dataclass
 from typing import Any
 
+import numpy as np
 
 # 初始化日志(必须在导入失败之前)
 logger = logging.getLogger(__name__)
@@ -227,7 +227,7 @@ class AppleSiliconOptimizer:
             model = model.to("mps")
 
             # 启用编译(PyTorch 2.0+)
-            if hasattr(torch, "compile") and sys.version_info >= (3, 10):
+            if hasattr(torch, "compile"):
                 logger.info("使用torch.compile优化")
                 compiled = torch.compile(model, mode="max-autotune")
                 if compiled is not None:

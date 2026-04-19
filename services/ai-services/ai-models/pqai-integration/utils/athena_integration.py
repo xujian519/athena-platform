@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena平台PQAI集成工具
 将PQAI专利检索服务集成到Athena平台的统一架构中
 """
 
-import asyncio
-from core.async_main import async_main
 import json
 import logging
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import requests
 
@@ -28,20 +25,6 @@ class AthenaPQAIIntegration:
         """将PQAI服务注册到Athena API网关"""
         try:
             # 更新API网关配置，添加PQAI路由
-            gateway_config = {
-                'routes': [
-                    {
-                        'path': '/api/patent/search/*',
-                        'target': 'http://localhost:8030',
-                        'description': 'PQAI增强专利检索服务'
-                    },
-                    {
-                        'path': '/api/patent/similar/*',
-                        'target': 'http://localhost:8030',
-                        'description': 'PQAI相似专利查找服务'
-                    }
-                ]
-            }
 
             # 通知网关更新配置（这里需要实际的API调用）
             logger.info('PQAI服务已注册到Athena API网关')
@@ -51,7 +34,7 @@ class AthenaPQAIIntegration:
             logger.error(f"注册PQAI服务失败: {e}")
             return False
 
-    async def load_patent_data_from_kg(self) -> List[Dict[str, Any]]:
+    async def load_patent_data_from_kg(self) -> list[dict[str, Any]]:
         """从Athena知识图谱加载专利数据"""
         try:
             # 从Athena知识图谱服务获取专利数据
@@ -86,7 +69,7 @@ class AthenaPQAIIntegration:
             logger.error(f"从知识图谱加载专利数据失败: {e}")
             return []
 
-    async def build_pqai_index(self, patent_data: List[Dict[str, Any]] = None):
+    async def build_pqai_index(self, patent_data: list[dict[str, Any]] = None):
         """构建PQAI专利索引"""
         try:
             if not patent_data:
@@ -118,7 +101,7 @@ class AthenaPQAIIntegration:
             logger.error(f"构建PQAI索引失败: {e}")
             return False
 
-    async def test_pqai_integration(self) -> Dict[str, Any]:
+    async def test_pqai_integration(self) -> dict[str, Any]:
         """测试PQAI集成效果"""
         try:
             # 测试查询
@@ -187,7 +170,7 @@ class AthenaPQAIIntegration:
             logger.error(f"PQAI集成测试失败: {e}")
             return {'error': str(e)}
 
-    async def monitor_pqai_service(self) -> Dict[str, Any]:
+    async def monitor_pqai_service(self) -> dict[str, Any]:
         """监控PQAI服务状态"""
         try:
             # 检查服务健康状态
@@ -196,7 +179,7 @@ class AthenaPQAIIntegration:
             # 检查服务统计信息
             stats_response = requests.get(f"{self.pqai_service_url}/status", timeout=10)
 
-            health_status = health_response.json() if health_response.status_code == 200 else None
+            health_response.json() if health_response.status_code == 200 else None
             service_stats = stats_response.json() if stats_response.status_code == 200 else None
 
             monitoring_data = {
@@ -220,7 +203,7 @@ class AthenaPQAIIntegration:
                 'monitoring_timestamp': datetime.now().isoformat()
             }
 
-    async def generate_integration_report(self) -> Dict[str, Any]:
+    async def generate_integration_report(self) -> dict[str, Any]:
         """生成集成报告"""
         try:
             # 收集集成信息
@@ -284,7 +267,7 @@ async def main():
 
     # 4. 生成报告
     logger.info('步骤4: 生成集成报告')
-    report = await integration.generate_integration_report()
+    await integration.generate_integration_report()
 
     logger.info('PQAI集成完成!')
     logger.info(f"集成测试成功率: {test_result.get('success_rate', 0):.1f}%")

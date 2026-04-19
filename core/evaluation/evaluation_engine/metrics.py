@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 评估引擎 - 指标计算器
 Evaluation Engine - Metrics Calculator

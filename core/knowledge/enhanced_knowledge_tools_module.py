@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强知识库与工具库模块 - BaseModule标准接口兼容版本
 Enhanced Knowledge & Tools Module - BaseModule Compatible Version
@@ -770,7 +771,7 @@ class EnhancedKnowledgeToolsModule(BaseModule):
         for query in warmup_queries:
             try:
                 await self.query_knowledge(query, cache_only=True)
-            except Exception:
+            except Exception as e:
                 logger.error(f"捕获异常: {e}", exc_info=True)
 
     async def _save_cache_state(self):
@@ -780,7 +781,7 @@ class EnhancedKnowledgeToolsModule(BaseModule):
     # 备用实现方法
     async def _fallback_query(
         self, query: str, service_type: str, context: dict[str, Any]
-    ) -> tuple[list[dict[str, Any], float]:
+    ) -> tuple[list[dict[str, Any]], float]:
         """备用知识查询"""
         # 简化的备用查询实现
         results = [

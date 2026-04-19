@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 自适应元规划器 - 向后兼容重定向
 Adaptive Meta Planner - Backward Compatibility Redirect

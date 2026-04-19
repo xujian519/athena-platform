@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 自适应元规划器 - 工作流复用管理器
 Adaptive Meta Planner - Workflow Reuse Manager
@@ -11,12 +12,11 @@ Adaptive Meta Planner - Workflow Reuse Manager
 
 import logging
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 from ..models import ComplexityLevel, ExecutionPlan, StrategyType, Task
 from .constants import DEFAULT_SIMILARITY_THRESHOLD, MAX_WORKFLOW_PATTERNS
 from .types import WorkflowPattern
-
 
 logger = logging.getLogger(__name__)
 

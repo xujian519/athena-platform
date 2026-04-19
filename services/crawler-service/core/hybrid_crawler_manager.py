@@ -1,24 +1,20 @@
-# -*- coding: utf-8 -*-
 """
 混合爬虫管理器
 智能路由选择和统一管理内部爬虫、Crawl4AI、FireCrawl
 """
 
 import asyncio
-import json
 import logging
 import re
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-from urllib.parse import urljoin, urlparse
+from typing import Any
+from urllib.parse import urlparse
 
 from adapters.crawl4ai_adapter import (
-    Crawl4AIAdapter,
     Crawl4AIAdapterFactory,
-    ExtractionMode,
 )
-from adapters.firecrawl_adapter import FireCrawlAdapter, FireCrawlAdapterFactory
+from adapters.firecrawl_adapter import FireCrawlAdapterFactory
 
 # 导入内部爬虫
 from .universal_crawler import CrawlerConfig, UniversalCrawler
@@ -41,7 +37,7 @@ class RoutingDecision:
     confidence: float  # 决策置信度 0-1
     estimated_cost: float
     estimated_time: float
-    config_overrides: Dict[str, Any] = None
+    config_overrides: dict[str, Any] = None
 
 
 @dataclass
@@ -50,7 +46,7 @@ class HybridCrawlResult:
     url: str
     success: bool
     content: str
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
     crawler_used: CrawlerType
     routing_decision: RoutingDecision
     processing_time: float
@@ -58,10 +54,10 @@ class HybridCrawlResult:
     error_message: str | None = None
 
     # 增强结果
-    extracted_data: Optional[Dict[str, Any]] = None
+    extracted_data: dict[str, Any] | None = None
     markdown_content: str | None = None
-    links: Optional[List[Dict[str, str]]] = None
-    images: Optional[List[Dict[str, str]]] = None
+    links: list[dict[str, str]] | None = None
+    images: list[dict[str, str]] | None = None
 
 
 class CostLimiter:
@@ -90,7 +86,7 @@ class CostLimiter:
                 'timestamp': asyncio.get_event_loop().time()
             })
 
-    def get_usage_stats(self) -> Dict[str, Any]:
+    def get_usage_stats(self) -> dict[str, Any]:
         """获取使用统计"""
         return {
             'monthly_spent': self.monthly_spent,
@@ -108,9 +104,9 @@ class HybridCrawlerManager:
 
     def __init__(self,
                  internal_config: CrawlerConfig | None = None,
-                 crawl4ai_config: Dict | None = None,
-                 firecrawl_config: Dict | None = None,
-                 cost_limits: Dict | None = None):
+                 crawl4ai_config: dict | None = None,
+                 firecrawl_config: dict | None = None,
+                 cost_limits: dict | None = None):
 
         # 初始化爬虫配置
         self.internal_config = internal_config or CrawlerConfig(
@@ -146,7 +142,7 @@ class HybridCrawlerManager:
             'routing_decisions': []
         }
 
-    def _init_routing_rules(self) -> Dict[str, Any]:
+    def _init_routing_rules(self) -> dict[str, Any]:
         """初始化路由规则"""
         return {
             # JavaScript网站特征
@@ -232,7 +228,7 @@ class HybridCrawlerManager:
 
         logger.info('混合爬虫管理器已关闭')
 
-    def _analyze_url(self, url: str) -> Dict[str, bool]:
+    def _analyze_url(self, url: str) -> dict[str, bool]:
         """分析URL特征"""
         parsed = urlparse(url)
         domain = parsed.netloc.lower()
@@ -517,7 +513,7 @@ class HybridCrawlerManager:
                 error_message=error_message
             )
 
-    async def batch_crawl(self, urls: List[str], strategy: str = 'auto', max_concurrent: int = 5) -> List[HybridCrawlResult]:
+    async def batch_crawl(self, urls: list[str], strategy: str = 'auto', max_concurrent: int = 5) -> list[HybridCrawlResult]:
         """批量智能路由爬取"""
         semaphore = asyncio.Semaphore(max_concurrent)
 
@@ -530,7 +526,7 @@ class HybridCrawlerManager:
 
         # 处理异常结果
         processed_results = []
-        for url, result in zip(urls, results):
+        for url, result in zip(urls, results, strict=False):
             if isinstance(result, Exception):
                 processed_results.append(HybridCrawlResult(
                     url=url,
@@ -554,7 +550,7 @@ class HybridCrawlerManager:
 
         return processed_results
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
         return {
             'routing_stats': self.stats.copy(),

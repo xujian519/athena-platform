@@ -10,16 +10,17 @@ Unit Tests for Constitutional Validator
 版本: v1.0.0
 """
 
-import pytest
+import sys
 from datetime import datetime
+from pathlib import Path
+
+import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.legal_world_model.constitution import (
     Case,
-    CitationReference,
     ConstitutionalValidator,
-    DocumentSource,
-    DocumentType,
-    InvalidationDecision,
     Judgment,
     LayerType,
     LegalEntity,
@@ -29,9 +30,6 @@ from core.legal_world_model.constitution import (
     Patent,
     PatentEntityType,
     PatentRelationType,
-    Principle,
-    ProceduralRelationType,
-    SubjectEntityType,
 )
 
 

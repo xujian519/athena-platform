@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化记忆系统 - 分层协调器
 Optimized Memory System - Tier Coordinator

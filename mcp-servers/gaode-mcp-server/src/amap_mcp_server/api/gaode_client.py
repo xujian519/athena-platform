@@ -5,10 +5,8 @@ Gaode Maps API Client
 
 import asyncio
 import hashlib
-import logging
 import time
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import httpx
 import structlog
@@ -50,7 +48,7 @@ class AmapApiClient:
         if hasattr(self.client, 'aclose'):
             await self.client.aclose()
 
-    def _generate_signature(self, params: Dict[str, Any]) -> str:
+    def _generate_signature(self, params: dict[str, Any]) -> str:
         """生成API签名"""
         # 如果没有secret key，不生成签名
         if not self.secret_key:
@@ -65,7 +63,7 @@ class AmapApiClient:
 
         # 生成签名
         signature = hashlib.md5(
-            f"{query_string}{self.secret_key}'.encode('utf-8", usedforsecurity=False)
+            f"{query_string}{self.secret_key}".encode(), usedforsecurity=False
         ).hexdigest()
 
         return signature
@@ -73,9 +71,9 @@ class AmapApiClient:
     async def _make_request(
         self,
         endpoint: str,
-        params: Dict[str, Any],
+        params: dict[str, Any],
         method: str = 'GET'
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """发起API请求"""
         # 限流
         await self.rate_limiter.acquire()
@@ -157,7 +155,7 @@ class AmapApiClient:
         address: str,
         city: str | None = None,
         district: str | None = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """地址转坐标"""
         params = {
             'address': address,
@@ -175,7 +173,7 @@ class AmapApiClient:
         location: str,  # 经纬度 'longitude,latitude'
         radius: int = 1000,
         extensions: str = 'all'
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """坐标转地址"""
         params = {
             'location': location,
@@ -196,7 +194,7 @@ class AmapApiClient:
         children: int = 1,
         offset: int = 20,
         page: int = 1
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """关键字搜索POI"""
         params = {
             'keywords': keywords,
@@ -222,7 +220,7 @@ class AmapApiClient:
         types: str | None = None,
         offset: int = 20,
         page: int = 1
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """周边搜索POI"""
         params = {
             'location': location,
@@ -246,7 +244,7 @@ class AmapApiClient:
         strategy: int = 0,
         avoidpolygons: str | None = None,
         avoidroad: str | None = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """驾车路径规划"""
         params = {
             'origin': origin,
@@ -266,7 +264,7 @@ class AmapApiClient:
         self,
         origin: str,
         destination: str
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """步行路径规划"""
         params = {
             'origin': origin,
@@ -282,7 +280,7 @@ class AmapApiClient:
         destination: str,
         city: str,
         cityd: str | None = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """公交路径规划"""
         params = {
             'origin': origin,
@@ -329,7 +327,7 @@ class AmapApiClient:
         self,
         city: str,
         extensions: str = 'base'
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """天气信息"""
         params = {
             'city': city,

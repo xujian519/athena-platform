@@ -16,16 +16,17 @@ Tests for Tool Group Management
 版本: v1.0.0 "Phase 1"
 """
 
+import sys
+from pathlib import Path
+
 import pytest
-from core.tools.tool_group import (
-    ToolGroup,
-    ToolGroupDef,
-    ActivationRule,
-    GroupActivationRule
-)
-from core.tools.tool_manager import ToolManager, get_tool_manager, ToolSelectionResult
-from core.tools.base import ToolCategory, ToolDefinition, ToolCapability, ToolPriority
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 from core.tools import groups
+from core.tools.base import ToolCapability, ToolCategory, ToolDefinition, ToolPriority
+from core.tools.tool_group import ActivationRule, GroupActivationRule, ToolGroup, ToolGroupDef
+from core.tools.tool_manager import ToolManager, get_tool_manager
 
 
 @pytest.fixture

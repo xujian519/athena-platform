@@ -1,26 +1,20 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 增强文件格式支持模块
 Enhanced File Format Support Module for Athena Multimodal System
 """
 
 import csv
-from core.async_main import async_main
-import gzip
 import json
 import logging
-from core.logging_config import setup_logging
 import mimetypes
-import os
 import subprocess
-import sys
-import tarfile
-import tempfile
 import xml.etree.ElementTree as ET
 import zipfile
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 专业库导入
 try:
@@ -158,7 +152,6 @@ class EnhancedFileFormatSupport:
             '.odt': 'application/vnd.oasis.opendocument.text',
             '.ods': 'application/vnd.oasis.opendocument.spreadsheet',
             '.odp': 'application/vnd.oasis.opendocument.presentation',
-            '.pages': 'application/x-iwork-pages-sffpages',
             '.abw': 'application/x-abiword',
             '.zim': 'application/x-zim',
             '.chm': 'application/x-chm',
@@ -215,7 +208,7 @@ class EnhancedFileFormatSupport:
         for ext, mime in custom_mimes.items():
             mimetypes.add_type(mime, ext)
 
-    def _get_comprehensive_format_list(self) -> Dict[str, Dict[str, Any]]:
+    def _get_comprehensive_format_list(self) -> dict[str, dict[str, Any]]:
         """获取全面的文件格式支持列表"""
         return {
             # 文档类
@@ -559,7 +552,7 @@ class EnhancedFileFormatSupport:
             }
         }
 
-    def _initialize_format_handlers(self) -> Dict[str, Any]:
+    def _initialize_format_handlers(self) -> dict[str, Any]:
         """初始化格式处理器"""
         handlers = {
             # 文本处理器
@@ -630,7 +623,7 @@ class EnhancedFileFormatSupport:
 
         return handlers
 
-    def detect_format(self, file_path: str) -> Dict[str, Any | None]:
+    def detect_format(self, file_path: str) -> dict[str, Any | None]:
         """检测文件格式"""
         path = Path(file_path)
 
@@ -652,7 +645,7 @@ class EnhancedFileFormatSupport:
 
         return None
 
-    def get_file_info(self, file_path: str) -> Dict[str, Any]:
+    def get_file_info(self, file_path: str) -> dict[str, Any]:
         """获取文件信息"""
         path = Path(file_path)
 
@@ -711,7 +704,7 @@ class EnhancedFileFormatSupport:
     def _is_text_file(self, file_path: str) -> bool:
         """检查是否为文本文件"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 f.read(1024)
                 return True
         except UnicodeDecodeError:
@@ -768,10 +761,10 @@ class EnhancedFileFormatSupport:
             return False
 
     # 格式处理器方法
-    async def handle_text(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_text(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理文本文件"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 content = f.read()
 
             return {
@@ -787,13 +780,13 @@ class EnhancedFileFormatSupport:
         except Exception as e:
             return {'status': 'error', 'error': str(e), 'handler': 'text_handler'}
 
-    async def handle_markdown(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_markdown(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理Markdown文件"""
         try:
             if not MARKDOWN_AVAILABLE:
                 return await self.handle_text(file_path, options)
 
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 content = f.read()
 
             # 解析Markdown
@@ -810,7 +803,7 @@ class EnhancedFileFormatSupport:
         except Exception as e:
             return {'status': 'error', 'error': str(e), 'handler': 'markdown_handler'}
 
-    async def handle_csv(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_csv(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理CSV文件"""
         try:
             if PANDAS_AVAILABLE:
@@ -830,7 +823,7 @@ class EnhancedFileFormatSupport:
                 }
             else:
                 # 纯Python CSV处理
-                with open(file_path, 'r', encoding='utf-8') as f:
+                with open(file_path, encoding='utf-8') as f:
                     reader = csv.DictReader(f)
                     rows = list(reader)
 
@@ -845,10 +838,10 @@ class EnhancedFileFormatSupport:
         except Exception as e:
             return {'status': 'error', 'error': str(e), 'handler': 'csv_handler'}
 
-    async def handle_json(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_json(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理JSON文件"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 data = json.load(f)
 
             return {
@@ -861,7 +854,7 @@ class EnhancedFileFormatSupport:
         except Exception as e:
             return {'status': 'error', 'error': str(e), 'handler': 'json_handler'}
 
-    async def handle_xml(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_xml(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理XML文件"""
         try:
             tree = ET.parse(file_path)
@@ -892,7 +885,7 @@ class EnhancedFileFormatSupport:
         except Exception as e:
             return {'status': 'error', 'error': str(e), 'handler': 'xml_handler'}
 
-    async def handle_image(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_image(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理图像文件"""
         try:
             if PIL_AVAILABLE:
@@ -924,7 +917,7 @@ class EnhancedFileFormatSupport:
         except Exception as e:
             return {'status': 'error', 'error': str(e), 'handler': 'image_handler'}
 
-    async def handle_pdf(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_pdf(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理PDF文件"""
         try:
             if PDF_AVAILABLE and pdfplumber:
@@ -983,7 +976,7 @@ class EnhancedFileFormatSupport:
         except Exception as e:
             return {'status': 'error', 'error': str(e), 'handler': 'pdf_handler'}
 
-    async def handle_xlsx(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_xlsx(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理Excel XLSX文件"""
         try:
             if PANDAS_AVAILABLE and OPENPYXL_AVAILABLE:
@@ -1004,7 +997,7 @@ class EnhancedFileFormatSupport:
         except Exception as e:
             return {'status': 'error', 'error': str(e), 'handler': 'xlsx_handler'}
 
-    async def handle_audio(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_audio(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理音频文件"""
         try:
             if LIBROSA_AVAILABLE:
@@ -1025,7 +1018,7 @@ class EnhancedFileFormatSupport:
         except Exception as e:
             return {'status': 'error', 'error': str(e), 'handler': 'audio_handler'}
 
-    async def handle_video(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_video(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理视频文件"""
         try:
             # 使用ffprobe获取视频信息
@@ -1057,7 +1050,7 @@ class EnhancedFileFormatSupport:
         except Exception as e:
             return {'status': 'error', 'error': str(e), 'handler': 'video_handler'}
 
-    async def handle_zip(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_zip(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理ZIP压缩文件"""
         try:
             with zipfile.ZipFile(file_path, 'r') as zip_file:
@@ -1086,7 +1079,7 @@ class EnhancedFileFormatSupport:
         except Exception as e:
             return {'status': 'error', 'error': str(e), 'handler': 'zip_handler'}
 
-    async def handle_default(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_default(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """默认处理器"""
         try:
             path = Path(file_path)
@@ -1104,27 +1097,27 @@ class EnhancedFileFormatSupport:
             return {'status': 'error', 'error': str(e), 'handler': 'default_handler'}
 
     # 其他处理器的占位符方法
-    async def handle_latex(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_latex(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理LaTeX文件"""
         return await self.handle_text(file_path, options)
 
-    async def handle_yaml(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_yaml(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理YAML文件"""
         return await self.handle_text(file_path, options)
 
-    async def handle_toml(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_toml(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理TOML文件"""
         return await self.handle_text(file_path, options)
 
-    async def handle_code(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_code(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理代码文件"""
         return await self.handle_text(file_path, options)
 
-    async def handle_jupyter(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_jupyter(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理Jupyter Notebook"""
         try:
             import nbformat
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 notebook = nbformat.read(f, as_version=4)
 
             return {
@@ -1135,10 +1128,10 @@ class EnhancedFileFormatSupport:
                 'metadata': notebook.metadata,
                 'handler': 'jupyter_handler'
             }
-        except Exception as e:
+        except Exception:
             return await self.handle_text(file_path, options)
 
-    async def handle_docx(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_docx(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理Word DOCX文件"""
         try:
             if DOCX_AVAILABLE:
@@ -1158,11 +1151,11 @@ class EnhancedFileFormatSupport:
         except Exception as e:
             return {'status': 'error', 'error': str(e), 'handler': 'docx_handler'}
 
-    async def handle_doc(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_doc(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理Word DOC文件"""
         return await self.handle_default(file_path, options)
 
-    async def handle_xls(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_xls(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理Excel XLS文件"""
         try:
             if PANDAS_AVAILABLE and XLDR_AVAILABLE:
@@ -1180,18 +1173,18 @@ class EnhancedFileFormatSupport:
         except Exception as e:
             return {'status': 'error', 'error': str(e), 'handler': 'xls_handler'}
 
-    async def handle_pptx(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_pptx(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理PowerPoint PPTX文件"""
         return await self.handle_default(file_path, options)
 
-    async def handle_ppt(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_ppt(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理PowerPoint PPT文件"""
         return await self.handle_default(file_path, options)
 
-    async def handle_svg(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_svg(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理SVG矢量图"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 content = f.read()
 
             return {
@@ -1203,51 +1196,51 @@ class EnhancedFileFormatSupport:
         except Exception as e:
             return {'status': 'error', 'error': str(e), 'handler': 'svg_handler'}
 
-    async def handle_ai(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_ai(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理Adobe Illustrator文件"""
         return await self.handle_default(file_path, options)
 
-    async def handle_eps(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_eps(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理PostScript文件"""
         return await self.handle_default(file_path, options)
 
-    async def handle_ps(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_ps(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理PostScript文件"""
         return await self.handle_default(file_path, options)
 
-    async def handle_psd(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_psd(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理Photoshop文件"""
         return await self.handle_default(file_path, options)
 
-    async def handle_dxf(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_dxf(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理DXF文件"""
         return await self.handle_default(file_path, options)
 
-    async def handle_dwg(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_dwg(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理DWG文件"""
         return await self.handle_default(file_path, options)
 
-    async def handle_midi(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_midi(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理MIDI文件"""
         return await self.handle_default(file_path, options)
 
-    async def handle_stl(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_stl(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理STL 3D模型"""
         return await self.handle_default(file_path, options)
 
-    async def handle_obj(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_obj(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理OBJ 3D模型"""
         return await self.handle_default(file_path, options)
 
-    async def handle_ply(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_ply(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理PLY 3D模型"""
         return await self.handle_default(file_path, options)
 
-    async def handle_fbx(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_fbx(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理FBX 3D模型"""
         return await self.handle_default(file_path, options)
 
-    async def handle_hdf5(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_hdf5(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理HDF5文件"""
         try:
             if H5PY_AVAILABLE:
@@ -1263,7 +1256,7 @@ class EnhancedFileFormatSupport:
         except Exception as e:
             return {'status': 'error', 'error': str(e), 'handler': 'hdf5_handler'}
 
-    async def handle_netcdf(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_netcdf(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理NetCDF文件"""
         try:
             if NETCDF4_AVAILABLE:
@@ -1281,11 +1274,11 @@ class EnhancedFileFormatSupport:
         except Exception as e:
             return {'status': 'error', 'error': str(e), 'handler': 'netcdf_handler'}
 
-    async def handle_mat(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_mat(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理MATLAB文件"""
         return await self.handle_default(file_path, options)
 
-    async def handle_parquet(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_parquet(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理Parquet文件"""
         try:
             if PYARROW_AVAILABLE:
@@ -1303,7 +1296,7 @@ class EnhancedFileFormatSupport:
         except Exception as e:
             return {'status': 'error', 'error': str(e), 'handler': 'parquet_handler'}
 
-    async def handle_arrow(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_arrow(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理Arrow文件"""
         try:
             if PYARROW_AVAILABLE:
@@ -1322,52 +1315,52 @@ class EnhancedFileFormatSupport:
         except Exception as e:
             return {'status': 'error', 'error': str(e), 'handler': 'arrow_handler'}
 
-    async def handle_tar(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_tar(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理TAR文件"""
         return await self.handle_default(file_path, options)
 
-    async def handle_gzip(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_gzip(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理GZIP文件"""
         return await self.handle_default(file_path, options)
 
-    async def handle_rar(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_rar(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理RAR文件"""
         return await self.handle_default(file_path, options)
 
-    async def handle_sevenz(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_sevenz(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理7Z文件"""
         return await self.handle_default(file_path, options)
 
-    async def handle_executable(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_executable(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理可执行文件"""
         return await self.handle_default(file_path, options)
 
-    async def handle_library(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_library(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理库文件"""
         return await self.handle_default(file_path, options)
 
-    async def handle_object(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def handle_object(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理目标文件"""
         return await self.handle_default(file_path, options)
 
-    def get_supported_extensions(self) -> Dict[str, List[str]]:
+    def get_supported_extensions(self) -> dict[str, list[str]]:
         """获取所有支持的文件扩展名"""
         extensions = {}
 
         for category, formats in self.supported_formats.items():
             category_extensions = []
-            for subcategory, format_dict in formats.items():
+            for _subcategory, format_dict in formats.items():
                 category_extensions.extend(format_dict.keys())
             extensions[category] = category_extensions
 
         return extensions
 
-    def get_handler(self, format_info: Dict[str, Any]) -> callable:
+    def get_handler(self, format_info: dict[str, Any]) -> callable:
         """获取格式处理器"""
         handler_name = format_info.get('handler', 'default_handler')
         return self.format_handlers.get(handler_name, self.format_handlers['default_handler'])
 
-    async def process_file(self, file_path: str, options: Dict = None) -> Dict[str, Any]:
+    async def process_file(self, file_path: str, options: dict = None) -> dict[str, Any]:
         """处理文件"""
         # 获取文件格式信息
         format_info = self.detect_format(file_path)
@@ -1414,7 +1407,7 @@ def demo_enhanced_support() -> Any:
             for ext, info in format_dict.items():
                 logger.info(f"    .{ext} - {info['name']} ({info.get('mime', 'unknown')})")
 
-    logger.info(f"\n💡 可用处理器:")
+    logger.info("\n💡 可用处理器:")
     available_handlers = []
     for name, handler in support.format_handlers.items():
         if handler != support.format_handlers['default_handler']:
@@ -1423,7 +1416,7 @@ def demo_enhanced_support() -> Any:
     if available_handlers:
         logger.info(f"   {', '.join(available_handlers)}")
 
-    logger.info(f"\n📋 库依赖状态:")
+    logger.info("\n📋 库依赖状态:")
     dependencies = {
         'Pandas': PANDAS_AVAILABLE,
         'PIL': PIL_AVAILABLE,

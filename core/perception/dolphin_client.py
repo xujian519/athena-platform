@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Dolphin文档解析客户端
 Dolphin Document Parser Client for Athena

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 综合测试PostgreSQL中国专利数据库
 Comprehensive Test for PostgreSQL Chinese Patent Database
@@ -7,15 +6,28 @@ Comprehensive Test for PostgreSQL Chinese Patent Database
 基于平台现有成功经验的专利搜索测试程序
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
 import asyncio
-from datetime import datetime
 import json
-from database.db_config import get_patent_db_connection
-from typing import Dict, List, Any
+from datetime import datetime
+
+import psycopg2
+
+
+def get_patent_db_connection():
+    """获取专利数据库连接"""
+    return psycopg2.connect(
+        host="localhost",
+        port=5432,
+        database="patent_db",
+        user="postgres",
+        password="postgres"
+    )
+
 
 class PatentDBTester:
     """专利数据库综合测试器"""
@@ -77,7 +89,7 @@ class PatentDBTester:
             # 获取版本信息
             cursor.execute("SELECT version();")
             version = cursor.fetchone()[0]
-            print(f"✅ 数据库连接成功")
+            print("✅ 数据库连接成功")
             print(f"📋 版本信息: {version[:80]}...")
 
             # 获取数据库信息
@@ -144,7 +156,7 @@ class PatentDBTester:
                 """)
                 year_stats = cursor.fetchall()
                 if year_stats:
-                    print(f"\n📅 年份分布 (最近10年):")
+                    print("\n📅 年份分布 (最近10年):")
                     for year, count in year_stats:
                         print(f"  {year:.0f}: {count:,} 项")
 
@@ -232,7 +244,7 @@ class PatentDBTester:
                     """, (f'%{keyword}%',))
 
                     examples = cursor.fetchall()
-                    print(f"   📋 示例专利:")
+                    print("   📋 示例专利:")
                     for i, example in enumerate(examples[:2], 1):
                         name, applicant, date = example
                         print(f"     {i}. {name[:50]}...")
@@ -295,7 +307,7 @@ class PatentDBTester:
                     result = cursor.fetchone()
                     if result:
                         name, applicant, abstract, ipc = result
-                        print(f"   📄 示例:")
+                        print("   📄 示例:")
                         print(f"      名称: {name[:60]}...")
                         print(f"      申请人: {applicant[:40]}")
                         print(f"      IPC分类: {ipc}")
@@ -415,14 +427,14 @@ class PatentDBTester:
         print("=" * 60)
 
         # 基础测试结果
-        print(f"\n✅ 基础功能:")
+        print("\n✅ 基础功能:")
         print(f"   • 数据库连接: {'✅ 成功' if self.test_results['connection'] else '❌ 失败'}")
         print(f"   • 搜索测试: {len(self.test_results['search_tests'])} 项")
         print(f"   • 性能测试: {len(self.test_results['performance_stats'])} 项")
 
         # 搜索结果统计
         if self.test_results['search_tests']:
-            print(f"\n🔍 搜索能力统计:")
+            print("\n🔍 搜索能力统计:")
             total_searches = len(self.test_results['search_tests'])
             successful_searches = sum(1 for test in self.test_results['search_tests']
                                     if test['title_count'] > 0 or test['abstract_count'] > 0)
@@ -439,7 +451,7 @@ class PatentDBTester:
 
         # 性能统计
         if self.test_results['performance_stats']:
-            print(f"\n⚡ 性能指标:")
+            print("\n⚡ 性能指标:")
             avg_query_time = sum(self.test_results['performance_stats'].values()) / len(self.test_results['performance_stats'])
             print(f"   • 平均查询时间: {avg_query_time:.3f}s")
             fastest = min(self.test_results['performance_stats'].items(), key=lambda x: x[1])
@@ -468,15 +480,15 @@ class PatentDBTester:
         with open('/Users/xujian/patent_database_comprehensive_test_report.json', 'w', encoding='utf-8') as f:
             json.dump(report, f, ensure_ascii=False, indent=2)
 
-        print(f"\n💾 详细测试报告已保存至: /Users/xujian/patent_database_comprehensive_test_report.json")
+        print("\n💾 详细测试报告已保存至: /Users/xujian/patent_database_comprehensive_test_report.json")
 
         # 总结
-        print(f"\n🎉 测试总结:")
-        print(f"   🗄️ 数据库连接: 正常")
-        print(f"   📊 数据规模: 超过2800万项专利")
-        print(f"   🔍 搜索功能: 关键词、全文、复合搜索均可用")
-        print(f"   ⚡ 查询性能: 平均响应时间优秀")
-        print(f"   🎯 结论: PostgreSQL中国专利数据库完全可用！")
+        print("\n🎉 测试总结:")
+        print("   🗄️ 数据库连接: 正常")
+        print("   📊 数据规模: 超过2800万项专利")
+        print("   🔍 搜索功能: 关键词、全文、复合搜索均可用")
+        print("   ⚡ 查询性能: 平均响应时间优秀")
+        print("   🎯 结论: PostgreSQL中国专利数据库完全可用！")
 
 async def main():
     """主函数"""

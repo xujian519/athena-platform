@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 CLI人机交互专利分析系统
 CLI-based Human-in-the-Loop Patent Analysis System
@@ -16,12 +17,12 @@ CLI-based Human-in-the-Loop Patent Analysis System
 """
 
 import json
+import random
 import subprocess
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 
 # ANSI颜色代码

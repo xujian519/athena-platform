@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 基于BGE-M3模型的高质量向量化模块(MPS优化版)
 High-Quality Embedding Module Based on BGE-M3 Model (MPS Optimized)
@@ -11,8 +12,9 @@ High-Quality Embedding Module Based on BGE-M3 Model (MPS Optimized)
 import asyncio
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
+import numpy as np
 
 from core.logging_config import setup_logging
 
@@ -99,7 +101,7 @@ class BGE_M3_Embedder:
 
             # 确定模型路径
             if not self.model_path:
-                self.model_path = "/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3"
+                self.model_path = "/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3/"
 
             # 确定设备
             if self.device_preference == "auto":

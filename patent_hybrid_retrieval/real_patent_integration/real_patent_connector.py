@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 真实专利数据库连接器
 Real Patent Database Connector
@@ -9,15 +8,11 @@ Real Patent Database Connector
 
 import logging
 from contextlib import contextmanager
-from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
-import pandas as pd
 import psycopg2
-from psycopg2.extras import execute_values
 
 # 导入标准化数据库工具
-from shared.database.db_utils import DatabaseManager, build_safe_query
 
 # 配置日志
 logger = logging.getLogger(__name__)
@@ -81,7 +76,7 @@ class RealPatentConnector:
             logger.error(f"数据库连接失败: {e}")
             return False
 
-    def get_patent_statistics(self) -> Dict[str, Any]:
+    def get_patent_statistics(self) -> dict[str, Any]:
         """获取专利数据库统计信息"""
         stats = {}
 
@@ -143,8 +138,8 @@ class RealPatentConnector:
         limit: int = 10000,
         include_abstract: bool = True,
         include_claims: bool = True,
-        filters: Optional[Dict[str, Any]] = None
-    ) -> List[Dict[str, Any]]:
+        filters: dict[str, Any] | None = None
+    ) -> list[dict[str, Any]]:
         """加载专利数据
 
         Args:
@@ -204,7 +199,7 @@ class RealPatentConnector:
 
                 # 转换为字典列表
                 for row in rows:
-                    patent = dict(zip(columns, row))
+                    patent = dict(zip(columns, row, strict=False))
                     patents.append(patent)
 
                 logger.info(f"成功加载 {len(patents)} 条专利数据")
@@ -214,7 +209,7 @@ class RealPatentConnector:
 
         return patents
 
-    def load_patent_with_details(self, patent_id: str) -> Dict[str, Any | None]:
+    def load_patent_with_details(self, patent_id: str) -> dict[str, Any | None]:
         """加载单个专利的详细信息
 
         Args:
@@ -243,7 +238,7 @@ class RealPatentConnector:
                 row = cursor.fetchone()
                 if row:
                     columns = [desc[0] for desc in cursor.description]
-                    patent_detail = dict(zip(columns, row))
+                    patent_detail = dict(zip(columns, row, strict=False))
 
                     # 获取分类号
                     cursor.execute("""
@@ -276,7 +271,7 @@ class RealPatentConnector:
 
         return patent_detail
 
-    def search_patents_by_ipc(self, ipc_codes: List[str], limit: int = 100) -> List[Dict[str, Any]]:
+    def search_patents_by_ipc(self, ipc_codes: list[str], limit: int = 100) -> list[dict[str, Any]]:
         """根据IPC分类号搜索专利
 
         Args:
@@ -294,7 +289,7 @@ class RealPatentConnector:
                 ipc_conditions = ' OR '.join([f"ipc_code LIKE '{code}%'" for code in ipc_codes])
 
         # TODO: 检查SQL注入风险 - cursor.execute(f"""
-                        cursor.execute(f"""
+                cursor.execute(f"""
                     SELECT DISTINCT p.patent_id, p.title, p.publication_number,
                            p.publication_date, p.patent_type, p.abstract
                     FROM patents p
@@ -308,7 +303,7 @@ class RealPatentConnector:
                 rows = cursor.fetchall()
 
                 for row in rows:
-                    patent = dict(zip(columns, row))
+                    patent = dict(zip(columns, row, strict=False))
                     patents.append(patent)
 
                 logger.info(f"通过IPC分类找到 {len(patents)} 条专利")
@@ -318,7 +313,7 @@ class RealPatentConnector:
 
         return patents
 
-    def get_patents_for_vectorization(self, batch_size: int = 1000) -> List[Dict[str, Any]]:
+    def get_patents_for_vectorization(self, batch_size: int = 1000) -> list[dict[str, Any]]:
         """获取需要向量化的专利数据
 
         Args:
@@ -332,7 +327,7 @@ class RealPatentConnector:
         try:
             with self.get_cursor() as cursor:
         # TODO: 检查SQL注入风险 - cursor.execute(f"""
-                        cursor.execute(f"""
+                cursor.execute(f"""
                     SELECT p.patent_id, p.title, p.abstract, p.claims, p.description,
                            p.publication_date, p.patent_type,
                            STRING_AGG(pic.ipc_code, ', ') as ipc_codes
@@ -349,7 +344,7 @@ class RealPatentConnector:
                 rows = cursor.fetchall()
 
                 for row in rows:
-                    patent = dict(zip(columns, row))
+                    patent = dict(zip(columns, row, strict=False))
                     # 合并文本内容用于向量化
                     text_parts = []
                     if patent.get('title'):

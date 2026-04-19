@@ -1,0 +1,169 @@
+# 专利判决文档向量库系统配置
+# Patent Judgment Vector Database Configuration
+
+# ========== 数据路径配置 ==========
+data_paths:
+  # 原始PDF文件路径
+  raw_pdf_path: "/Volumes/AthenaData/07_Corpus_Data/语料/专利判决案件"
+
+  # 处理后数据路径
+  processed_data_path: "/Users/xujian/Athena工作平台/data/patent_judgments/processed"
+
+  # 向量文件路径
+  vectors_path: "/Users/xujian/Athena工作平台/data/patent_judgments/vectors"
+
+  # 元数据路径
+  metadata_path: "/Users/xujian/Athena工作平台/data/patent_judgments/metadata"
+
+  # 备份路径
+  backup_path: "/Users/xujian/Athena工作平台/data/patent_judgments/backup"
+
+# ========== BGE-M3模型配置 ==========
+bge_m3_model:
+  model_path: "/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3"
+  dimension: 1024
+  max_seq_length: 8192
+  device: "mps"  # mps/cuda/cpu
+  batch_size: 32
+  normalize_embeddings: true
+
+# ========== 向量化配置 ==========
+vectorization:
+  # L1层: 法条层
+  layer1:
+    enabled: true
+    collection_name: "patent_judgments_L1"
+    description: "法律条文层向量"
+
+  # L2层: 争议焦点层
+  layer2:
+    enabled: true
+    collection_name: "patent_judgments_L2"
+    description: "争议焦点层向量"
+
+  # L3层: 论证逻辑层
+  layer3:
+    enabled: true
+    collection_name: "patent_judgments_L3"
+    description: "论证逻辑层向量"
+
+# ========== Qdrant配置 ==========
+qdrant:
+  host: "localhost"
+  port: 6333
+  grpc_port: 6334
+  # 如果使用远程Qdrant
+  # api_key: "your-api-key"
+  # url: "https://your-qdrant-instance"
+
+# ========== PostgreSQL配置 ==========
+postgresql:
+  host: "localhost"
+  port: 5432
+  database: "athena_platform"
+  user: "athena_user"
+  password: "your_password"
+
+# ========== NebulaGraph配置 ==========
+nebula_graph:
+  host: "127.0.0.1"
+  port: 19669  # 实际运行的端口
+  space_name: "patent_judgments"
+  user: "root"
+  password: "nebula"
+
+# ========== 检索配置 ==========
+retrieval:
+  # 混合检索策略
+  strategy: "hybrid"  # hybrid/kg_guided/vector_first
+
+  # 向量检索参数
+  vector_search:
+    limit: 50
+    score_threshold: 0.7
+
+  # 知识图谱检索参数
+  kg_search:
+    max_depth: 3
+    limit: 100
+
+  # 结果融合参数
+  fusion:
+    method: "rrf"  # Reciprocal Rank Fusion
+    k: 60
+
+# ========== 分析配置 ==========
+analysis:
+  # 观点聚类参数
+  clustering:
+    algorithm: "DBSCAN"
+    eps: 0.3
+    min_samples: 3
+
+  # 观点分类阈值
+  viewpoint_classification:
+    same_threshold: 0.9
+    similar_threshold: 0.7
+    different_threshold: 0.5
+
+# ========== 文章生成配置 ==========
+article_generation:
+  # 文章结构
+  structure:
+    - "引言"
+    - "法律依据"
+    - "裁判规则分析"
+    - "观点分类与辨析"
+    - "裁判规则的演变趋势"
+    - "结论与建议"
+
+  # 质量标准
+  quality_standards:
+    min_word_count: 5000
+    max_word_count: 15000
+    min_citations: 10
+    citation_format: "footnote"
+
+  # 导出格式
+  export_formats:
+    - "pdf"
+    - "docx"
+    - "markdown"
+
+# ========== 更新策略配置 ==========
+update_strategy:
+  # 更新模式
+  mode: "on_demand"  # on_demand/scheduled/batch
+
+  # 定期更新间隔（天）
+  scheduled_interval: 90
+
+  # 按需更新配置
+  on_demand:
+    notify_on_query: true
+    batch_size: 10
+
+# ========== 日志配置 ==========
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "/Users/xujian/Athena工作平台/logs/judgment_vector_db.log"
+  max_bytes: 10485760  # 10MB
+  backup_count: 5
+
+# ========== 性能配置 ==========
+performance:
+  # 并行处理数
+  max_workers: 4
+
+  # 缓存配置
+  cache:
+    enabled: true
+    ttl: 3600  # 秒
+    max_size: 1000
+
+  # 批处理大小
+  batch_size:
+    pdf_extraction: 10
+    vectorization: 50
+    knowledge_graph: 20

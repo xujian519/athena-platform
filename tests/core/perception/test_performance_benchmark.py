@@ -20,13 +20,18 @@ import gc
 import logging
 import random
 import string
+
+# 导入感知模块
+import sys
 import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
+from pathlib import Path
 
 import pytest
 
-# 导入感知模块
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 from core.perception import (
     PerceptionEngine,
     TextProcessor,

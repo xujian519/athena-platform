@@ -4,27 +4,21 @@ Athena迭代式搜索系统API服务
 提供RESTful API接口用于智能专利搜索和技术分析
 """
 
-import asyncio
-from core.async_main import async_main
-import os
 import sys
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # 设置Python路径
 sys.path.append('/Users/xujian/Athena工作平台')
 
-import logging
-from core.logging_config import setup_logging
-
 import uvicorn
 from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
+from core.logging_config import setup_logging
+
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -55,7 +49,7 @@ class IterativeSearchRequest(BaseModel):
     research_topic: str = Field(..., description='研究主题')
     max_iterations: int = Field(5, description='最大迭代次数')
     depth: str = Field('comprehensive', description='搜索深度')
-    focus_areas: List[str] = Field([], description='关注领域')
+    focus_areas: list[str] = Field([], description='关注领域')
     progress_callback: bool = Field(False, description='是否启用进度回调')
 
 class PatentAnalysisRequest(BaseModel):
@@ -68,21 +62,21 @@ class SearchResult(BaseModel):
     title: str
     abstract: str
     relevance_score: float
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
 
 class IterativeSearchResponse(BaseModel):
     session_id: str
     total_iterations: int
     total_patents_found: int
     unique_patents: int
-    research_summary: Dict[str, Any]
-    iterations: List[Dict[str, Any]]
+    research_summary: dict[str, Any]
+    iterations: list[dict[str, Any]]
     timestamp: str
 
 class HealthResponse(BaseModel):
     status: str
     timestamp: str
-    services: Dict[str, str]
+    services: dict[str, str]
     version: str
 
 # 启动时初始化
@@ -117,7 +111,7 @@ async def get_search_agent():
     return search_agent
 
 # API端点
-@app.get('/', response_model=Dict[str, Any])
+@app.get('/', response_model=dict[str, Any])
 async def root():
     """根端点"""
     return {
@@ -187,7 +181,7 @@ async def health_check():
         version='1.0.0'
     )
 
-@app.post('/search', response_model=List[SearchResult])
+@app.post('/search', response_model=list[SearchResult])
 async def search_patents(
     request: SearchRequest,
     agent = Depends(get_search_agent)
@@ -216,7 +210,7 @@ async def search_patents(
 
     except Exception as e:
         logger.error(f"搜索请求失败: {e}")
-        raise HTTPException(status_code=500, detail=f"搜索失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"搜索失败: {str(e)}") from e
 
 @app.post('/iterative_search', response_model=IterativeSearchResponse)
 async def iterative_search(
@@ -273,7 +267,7 @@ async def iterative_search(
 
     except Exception as e:
         logger.error(f"迭代搜索失败: {e}")
-        raise HTTPException(status_code=500, detail=f"迭代搜索失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"迭代搜索失败: {str(e)}") from e
 
 @app.post('/analyze_patent')
 async def analyze_patent(
@@ -307,7 +301,7 @@ async def analyze_patent(
 
     except Exception as e:
         logger.error(f"专利分析失败: {e}")
-        raise HTTPException(status_code=500, detail=f"专利分析失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"专利分析失败: {str(e)}") from e
 
 @app.get('/search_sessions')
 async def list_search_sessions():
@@ -328,7 +322,7 @@ async def list_search_sessions():
 
     except Exception as e:
         logger.error(f"获取会话列表失败: {e}")
-        raise HTTPException(status_code=500, detail=f"获取会话列表失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"获取会话列表失败: {str(e)}") from e
 
 @app.get('/statistics')
 async def get_statistics():
@@ -347,7 +341,7 @@ async def get_statistics():
 
     except Exception as e:
         logger.error(f"获取统计信息失败: {e}")
-        raise HTTPException(status_code=500, detail=f"获取统计信息失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"获取统计信息失败: {str(e)}") from e
 
 # 异常处理
 @app.exception_handler(Exception)

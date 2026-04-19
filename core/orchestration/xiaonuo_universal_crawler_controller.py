@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主全量爬虫控制系统
 Xiaonuo·Pisces Princess Universal Crawler Control System
@@ -170,8 +171,6 @@ class XiaonuoUniversalCrawlerController:
             id="patent_crawler",
             name="专利爬虫服务",
             type=CrawlerType.PATENT,
-            script_path="/Users/xujian/Athena工作平台/patent-platform/workspace/enhanced_patent_crawler.py",
-            working_dir="/Users/xujian/Athena工作平台/patent-platform/workspace",
             health_check_url="http://localhost:8004/health",
             auto_start=True,
             max_instances=2,

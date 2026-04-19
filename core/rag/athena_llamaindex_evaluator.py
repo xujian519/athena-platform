@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台LlamaIndex评估框架集成
 Athena Platform LlamaIndex Evaluation Framework Integration
@@ -13,6 +14,8 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+
+import numpy as np
 
 from core.logging_config import setup_logging
 

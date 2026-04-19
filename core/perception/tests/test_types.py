@@ -1,27 +1,27 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 测试：感知模块类型定义
 Test: Perception Module Type Definitions
 """
 
-import pytest
 import sys
 from pathlib import Path
+
+import pytest
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.perception.types import (
-    InputType,
-    PerceptionResult,
-    PerceptionConfig,
+    CacheConfig,
     ConfidenceLevel,
+    InputType,
+    PerceptionConfig,
+    PerceptionResult,
     ProcessingMode,
-    ProcessingResult,
     StreamConfig,
     StreamType,
-    CacheConfig,
 )
 
 
@@ -99,7 +99,7 @@ class TestConfidenceLevel:
 
     def test_confidence_levels(self):
         """测试置信度级别"""
-        levels = [level for level in ConfidenceLevel]
+        levels = list(ConfidenceLevel)
         assert len(levels) > 0
         # 检查有多个级别
         assert len(levels) >= 3
@@ -110,7 +110,7 @@ class TestProcessingMode:
 
     def test_processing_modes(self):
         """测试处理模式"""
-        modes = [mode for mode in ProcessingMode]
+        modes = list(ProcessingMode)
         assert len(modes) > 0
 
 
@@ -119,7 +119,7 @@ class TestStreamType:
 
     def test_stream_types(self):
         """测试流类型"""
-        types = [t for t in StreamType]
+        types = list(StreamType)
         assert len(types) > 0
 
 

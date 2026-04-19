@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 法律NLP处理器
 Legal NLP Processor
@@ -10,12 +9,14 @@ Legal NLP Processor
 创建时间: 2024年12月15日
 """
 
+import logging
 import re
-from core.async_main import async_main
+from typing import Any
+
 import jieba
 import jieba.posseg as pseg
-from typing import Dict, List, Any, Tuple
-import logging
+
+from core.async_main import async_main
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +28,7 @@ class LegalNLPProcessor:
         self._load_legal_dict()
         self._init_patterns()
 
-    def _load_legal_dict(self) -> Dict[str, Any]:
+    def _load_legal_dict(self) -> dict[str, Any]:
         """加载法律词典"""
         # 法律专业术语
         self.legal_terms = {
@@ -86,7 +87,7 @@ class LegalNLPProcessor:
             'ipc': re.compile(r'[A-H]\d{2}[A-Z]\d{1,4}\/\d{2,6}')
         }
 
-    async def parse(self, text: str) -> Dict[str, Any]:
+    async def parse(self, text: str) -> dict[str, Any]:
         """
         解析法律文本
 
@@ -127,7 +128,7 @@ class LegalNLPProcessor:
             logger.error(f"法律NLP解析失败: {str(e)}")
             return {'error': str(e)}
 
-    async def _extract_entities(self, text: str) -> List[Dict[str, Any]]:
+    async def _extract_entities(self, text: str) -> list[dict[str, Any]]:
         """提取法律实体"""
         entities = []
 
@@ -152,7 +153,7 @@ class LegalNLPProcessor:
 
         return entities
 
-    async def _extract_relations(self, text: str, entities: List[Dict]) -> List[Dict[str, Any]]:
+    async def _extract_relations(self, text: str, entities: list[dict]) -> list[dict[str, Any]]:
         """提取实体关系"""
         relations = []
 
@@ -171,7 +172,7 @@ class LegalNLPProcessor:
 
         return relations
 
-    async def _extract_structured_info(self, text: str) -> Dict[str, Any]:
+    async def _extract_structured_info(self, text: str) -> dict[str, Any]:
         """提取结构化信息"""
         info = {}
 
@@ -192,7 +193,7 @@ class LegalNLPProcessor:
 
         return info
 
-    async def _analyze_legal_sentiment(self, text: str) -> Dict[str, Any]:
+    async def _analyze_legal_sentiment(self, text: str) -> dict[str, Any]:
         """分析法律文本情感倾向"""
         # 法律场景的特殊情感分析
         positive_words = ['授权', '有效', '保护', '支持', '批准']
@@ -222,7 +223,7 @@ class LegalNLPProcessor:
         pos2 = text.find(word2)
         return abs(pos1 - pos2) < 200  # 200个字符内认为是同一句子
 
-    def _infer_relation(self, entity1: Dict, entity2: Dict, text: str) -> str:
+    def _infer_relation(self, entity1: dict, entity2: dict, text: str) -> str:
         """推断实体关系"""
         # 简化的关系推断
         if entity1['type'] == 'application_number' and entity2['type'] == 'patent_right':
@@ -232,7 +233,7 @@ class LegalNLPProcessor:
         else:
             return 'related_to'
 
-    def _calculate_confidence(self, entities: List[Dict]) -> float:
+    def _calculate_confidence(self, entities: list[dict]) -> float:
         """计算解析置信度"""
         if not entities:
             return 0.0

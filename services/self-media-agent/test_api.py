@@ -3,9 +3,9 @@
 测试小宸智能体API功能
 """
 
+from typing import Any
+
 import requests
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import json
 
 # API基础URL
 BASE_URL = "http://localhost:8030"
@@ -33,7 +33,7 @@ def test_content_creation() -> Any:
 
         if response.status_code == 200:
             result = response.json()
-            print(f"✅ 内容创作成功！")
+            print("✅ 内容创作成功！")
             print(f"内容标题: {result['content']['title']}")
             print(f"内容长度: {len(result['content']['body'])} 字")
             print(f"标签: {', '.join(result['content']['tags'])}")
@@ -63,7 +63,7 @@ def test_chat() -> Any:
 
         if response.status_code == 200:
             result = response.json()
-            print(f"✅ 对话成功！")
+            print("✅ 对话成功！")
             print(f"小宸回复: {result['response'][:200]}...")
         else:
             print(f"❌ 请求失败: {response.text}")
@@ -82,7 +82,7 @@ def test_analytics() -> Any:
 
         if response.status_code == 200:
             result = response.json()
-            print(f"✅ 数据分析成功！")
+            print("✅ 数据分析成功！")
             print(f"总发布数: {result['total_posts']}")
             print(f"总互动数: {result['total_engagement']}")
             print(f"热门话题: {', '.join(result['trending_topics'])}")

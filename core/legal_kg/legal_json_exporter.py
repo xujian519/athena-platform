@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律文档JSON导出工具
 将PostgreSQL中的法律文档解析为结构化JSON并导出到文件系统
@@ -11,14 +12,13 @@ import json
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
-
 sys.path.append(str(Path(__file__).parent.parent))
-from legal_kg.legal_text_parser import LawImportance, LegalTextParser
+from legal_kg.legal_text_parser import LegalTextParser
 
 # ==================== 配置 ====================
 # PostgreSQL配置
@@ -169,7 +169,7 @@ class LegalDocumentExporter:
         safe_title = "".join(c for c in safe_title if c.isalnum() or c in " -_()()[][]《》")
 
         # 生成哈希后缀(避免重名)
-        hash_suffix = hashlib.md5(f"{doc_id}_{title}".encode('utf-8'), usedforsecurity=False).hexdigest()[:8]
+        hash_suffix = hashlib.md5(f"{doc_id}_{title}".encode(), usedforsecurity=False).hexdigest()[:8]
 
         return f"{doc_id:05d}_{safe_title}_{hash_suffix}.json"
 

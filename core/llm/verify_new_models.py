@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 LLM模型验证脚本（国内模型版）
 验证所有国内模型适配器是否正确集成
@@ -12,14 +13,13 @@ import asyncio
 import json
 import logging
 import sys
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 # 添加项目根目录到路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.llm.model_registry import get_model_registry
-from core.llm.unified_llm_manager import get_unified_llm_manager
 
 # 配置日志
 logging.basicConfig(
@@ -98,7 +98,7 @@ class ModelIntegrationVerifier:
             "starcoder2-15b",
         ]
 
-        logger.info(f"\n✅ 国内模型检查:")
+        logger.info("\n✅ 国内模型检查:")
         for model_id in domestic_models:
             cap = self.registry.get_capability(model_id)
             if cap:

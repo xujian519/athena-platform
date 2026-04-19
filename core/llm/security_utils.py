@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - 安全工具
 敏感信息脱敏和安全检查工具
@@ -8,7 +9,7 @@
 
 import logging
 import re
-from typing import Any, Dict, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +43,7 @@ def mask_api_key(api_key: str, visible_chars: int = 8) -> str:
     return f"{visible_start}{'*' * masked_length}{visible_end}"
 
 
-def mask_sensitive_data(data: str | None = None, patterns: Optional[dict[str | None = None, str | None = None) -> str:
+def mask_sensitive_data(data: str | None = None, patterns: dict[str, str] | None = None) -> str:
     """
     脱敏敏感数据
 
@@ -82,7 +83,7 @@ def mask_sensitive_data(data: str | None = None, patterns: Optional[dict[str | N
 
 
 def safe_log_request(
-    message: str, request_data: dict[str, Any, exclude_fields: list | None = None
+    message: str, request_data: dict[str, Any], exclude_fields: list | None = None
 ) -> str:
     """
     安全地记录请求数据(脱敏敏感信息)

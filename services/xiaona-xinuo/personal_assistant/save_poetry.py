@@ -3,11 +3,10 @@
 保存爸爸的诗歌到数据库
 """
 
-import sqlite3
-from core.async_main import async_main
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
+import sqlite3
 from pathlib import Path
+
 
 def save_poems() -> None:
     """保存诗歌到数据库"""

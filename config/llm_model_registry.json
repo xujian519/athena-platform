@@ -1,8 +1,119 @@
 {
-  "version": "2.0.0",
-  "last_updated": "2026-01-27",
-  "description": "Athena平台LLM模型注册表 - 仅包含国内云端模型",
+  "version": "2.1.0",
+  "last_updated": "2026-03-22",
+  "description": "Athena平台LLM模型注册表 - 云端模型 + 本地模型",
   "models": [
+    {
+      "model_id": "litert-lm-gemma4-e4b",
+      "provider": "litert",
+      "model_type": "multimodal",
+      "quality_score": 0.85,
+      "cost_per_1k_tokens": 0.0,
+      "max_context": 4096,
+      "supports_streaming": true,
+      "supports_function_call": true,
+      "supports_vision": true,
+      "supports_thinking": false,
+      "deployment": "local",
+      "base_url": "http://127.0.0.1:8767",
+      "suitable_tasks": [
+        "image_analysis",
+        "multimodal",
+        "chart_analysis",
+        "document_analysis",
+        "ocr",
+        "visual_reasoning",
+        "chat",
+        "general_chat",
+        "chinese"
+      ],
+      "unsuitable_tasks": [
+        "novelty_analysis",
+        "creativity_analysis",
+        "invalidation_analysis",
+        "long_document",
+        "complex_reasoning"
+      ]
+    },
+    {
+      "model_id": "gemma-4-e2b-it-4bit",
+      "provider": "local",
+      "model_type": "multimodal",
+      "quality_score": 0.90,
+      "cost_per_1k_tokens": 0.0,
+      "max_context": 131072,
+      "supports_streaming": true,
+      "supports_function_call": true,
+      "supports_vision": true,
+      "supports_thinking": true,
+      "deployment": "local",
+      "base_url": "http://127.0.0.1:8009",
+      "api_key_env": "MULTIMODAL_API_KEY",
+      "suitable_tasks": [
+        "image_analysis",
+        "multimodal",
+        "chart_analysis",
+        "document_analysis",
+        "ocr",
+        "visual_reasoning",
+        "chat",
+        "general_chat",
+        "chinese",
+        "conversation",
+        "simple_chat",
+        "qa",
+        "simple_qa",
+        "fast_analysis"
+      ],
+      "unsuitable_tasks": [
+        "novelty_analysis",
+        "creativity_analysis",
+        "invalidation_analysis",
+        "complex_reasoning"
+      ]
+    },
+    {
+      "model_id": "qwen3.5",
+      "provider": "mlx",
+      "model_type": "multimodal",
+      "quality_score": 0.88,
+      "cost_per_1k_tokens": 0.0,
+      "max_context": 262144,
+      "supports_streaming": true,
+      "supports_function_call": true,
+      "supports_vision": true,
+      "supports_thinking": true,
+      "deployment": "local",
+      "base_url": "http://127.0.0.1:8765",
+      "suitable_tasks": [
+        "general_chat",
+        "conversation",
+        "simple_chat",
+        "qa",
+        "simple_qa",
+        "reasoning",
+        "tech_analysis",
+        "patent_search",
+        "fast_analysis",
+        "image_analysis",
+        "multimodal",
+        "chart_analysis",
+        "document_analysis",
+        "ocr",
+        "visual_reasoning",
+        "chinese",
+        "code_generation",
+        "code_explanation"
+      ],
+      "unsuitable_tasks": [
+        "novelty_analysis",
+        "creativity_analysis",
+        "invalidation_analysis",
+        "oa_response",
+        "complex_reasoning",
+        "math_reasoning"
+      ]
+    },
     {
       "model_id": "glm-4-plus",
       "provider": "zhipuai",
@@ -132,6 +243,34 @@
       "unsuitable_tasks": []
     },
     {
+      "model_id": "jina-reranker-v3-mlx",
+      "provider": "local",
+      "model_type": "rerank",
+      "quality_score": 0.92,
+      "cost_per_1k_tokens": 0.0,
+      "max_context": 8192,
+      "supports_streaming": false,
+      "supports_function_call": false,
+      "supports_vision": false,
+      "supports_thinking": false,
+      "deployment": "local",
+      "base_url": "http://127.0.0.1:8009",
+      "api_key_env": "RERANK_API_KEY",
+      "suitable_tasks": [
+        "rerank",
+        "relevance_scoring",
+        "document_ranking",
+        "search_reranking",
+        "patent_reranking"
+      ],
+      "unsuitable_tasks": [
+        "chat",
+        "generation",
+        "reasoning",
+        "code_generation"
+      ]
+    },
+    {
       "model_id": "qwen-vl-plus",
       "provider": "qwen",
       "model_type": "multimodal",
@@ -154,10 +293,19 @@
     }
   ],
   "default_models": {
-    "reasoning": "glm-4-plus",
-    "chat": "deepseek-chat",
+    "reasoning": "qwen3.5",
+    "chat": "qwen3.5",
     "code": "deepseek-coder-v2",
-    "multimodal": "qwen-vl-max"
+    "multimodal": "gemma-4-e2b-it-4bit",
+    "rerank": "jina-reranker-v3-mlx"
+  },
+  "complex_reasoning_models": {
+    "novelty_analysis": "deepseek-reasoner",
+    "creativity_analysis": "deepseek-reasoner",
+    "invalidation_analysis": "deepseek-reasoner",
+    "oa_response": "deepseek-reasoner",
+    "complex_reasoning": "deepseek-reasoner",
+    "math_reasoning": "deepseek-reasoner"
   },
   "selection_strategies": {
     "cost_optimized": {

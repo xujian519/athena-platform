@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 记忆系统-知识图谱适配器
 Memory-Knowledge Graph Adapter
@@ -43,7 +44,7 @@ class KnowledgeGraphAdapter:
         except Exception as e:
             logger.error(f"❌ 知识图谱适配器初始化失败: {e}")
 
-    async def search_related_entities(self, query: str, entity_types: list["key"] = None) -> list[dict]:
+    async def search_related_entities(self, query: str, entity_types: list[str] = None) -> list[dict]:
         """搜索与查询相关的实体"""
         if not self.initialized:
             await self.initialize()
@@ -129,7 +130,7 @@ class KnowledgeGraphAdapter:
             if entity.get('properties'):
                 try:
                     entity['properties'] = json.loads(entity['properties'])
-                except:
+                except Exception:
                     entity['properties'] = {}
 
             # 获取相关关系
@@ -149,7 +150,7 @@ class KnowledgeGraphAdapter:
                 if relation.get('properties'):
                     try:
                         relation['properties'] = json.loads(relation['properties'])
-                    except:
+                    except Exception:
                         relation['properties'] = {}
                 relations.append(relation)
 
@@ -287,7 +288,7 @@ class KnowledgeGraphAdapter:
                 try:
                     entities = json.loads(row['path_entities']) if isinstance(row['path_entities'], str) else row['path_entities']
                     relations = json.loads(row['path_relations']) if isinstance(row['path_relations'], str) else row['path_relations']
-                except:
+                except Exception:
                     entities = [row['from_entity'], row['to_entity']]
                     relations = [row['relation_type']]
 
@@ -330,7 +331,7 @@ class KnowledgeGraphAdapter:
                 if entity.get('properties'):
                     try:
                         entity['properties'] = json.loads(entity['properties'])
-                    except:
+                    except Exception:
                         entity['properties'] = {}
                 entities.append(entity)
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BERT命名实体识别模块
 BERT Named Entity Recognition Module
@@ -10,8 +11,7 @@ BERT Named Entity Recognition Module
 import asyncio
 import logging
 import re
-from typing import Any, Dict, List, Optional, Set
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -108,7 +108,7 @@ class BertNERExtractor:
         self._initialized = True
 
     async def extract_entities(
-        self, text: str, entity_types: list["key"] = None
+        self, text: str, entity_types: list[str] = None
     ) -> list[dict[str, Any]]:
         """
         从文本中抽取实体
@@ -136,8 +136,8 @@ class BertNERExtractor:
         return self._extract_entities_rule_based(text, entity_types)
 
     async def extract_entities_batch(
-        self, texts: list[str], entity_types: list["key"] = None
-    ) -> list[list[dict[str, Any]]:
+        self, texts: list[str], entity_types: list[str] | None = None
+    ) -> list[list[dict[str, Any]]]:
         """
         批量从多个文本中抽取实体
 
@@ -159,7 +159,7 @@ class BertNERExtractor:
         return results
 
     def _extract_entities_rule_based(
-        self, text: str, entity_types: list["key"] = None
+        self, text: str, entity_types: list[str] = None
     ) -> list[dict[str, Any]]:
         """基于规则的实体抽取(后备方案)"""
         entities = []
@@ -249,7 +249,7 @@ class BertNERExtractor:
         return entities
 
     async def extract_relations(
-        self, text: str, entities: list[dict[str, Any]) -> list[dict[str, Any]]:
+        self, text: str, entities: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """
         抽取实体间的关系
 

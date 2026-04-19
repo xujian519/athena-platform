@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小宸·星河射手 - 集成记忆系统
 Xiaochen Sagittarius with Integrated Memory

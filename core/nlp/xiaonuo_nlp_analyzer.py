@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺NLP能力分析器
 Xiaonuo NLP Capability Analyzer
@@ -18,7 +19,7 @@ import statistics
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # NLP库
 import jieba
@@ -118,8 +119,8 @@ class RobustnessAnalysis:
     text: str
     clarity_score: float
     ambiguity_level: int
-    rejection_reason: Optional[str]
-    fallback_response: Optional[str]
+    rejection_reason: str | None
+    fallback_response: str | None
     recovery_success: bool
 
 

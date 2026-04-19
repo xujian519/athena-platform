@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 混合多模态API网关
 Hybrid Multimodal API Gateway
@@ -7,44 +6,39 @@ Hybrid Multimodal API Gateway
 提供统一的API接口，智能路由到MCP或本地系统
 """
 
-import sys
-from core.async_main import async_main
-import os
-from pathlib import Path
-from datetime import datetime
 import asyncio
-import json
+import os
+import sys
 import uuid
-from typing import Dict, List, Any, Optional
+from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 # 添加项目路径
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from fastapi import FastAPI, File, UploadFile, HTTPException, Form, BackgroundTasks
-from fastapi.middleware.cors import CORSMiddleware
+# 导入安全配置
+import sys
+from pathlib import Path
 
-from core.security.auth import ALLOWED_ORIGINS
-from pydantic import BaseModel
-import uvicorn
 import aiofiles
+import uvicorn
+from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 
 # 导入智能路由器
 from intelligent_router import (
     get_intelligent_router,
     process_file_intelligently,
-    ProcessingRequest,
-    ProcessingPriority,
-    DataSensitivity
 )
+from pydantic import BaseModel
 
 # 数据库连接
 from sqlalchemy import create_engine, text
 
-# 导入安全配置
-import sys
-from pathlib import Path
+from core.security.auth import ALLOWED_ORIGINS
+
 sys.path.append(str(Path(__file__).parent.parent / "core"))
-from security.env_config import get_env_var, get_database_url, get_jwt_secret
 
 # 数据库配置
 DB_CONFIG = {
@@ -56,7 +50,7 @@ DB_CONFIG = {
 }
 
 sync_engine = create_engine(
-    fget_database_url()username']}:{DB_CONFIG['password']}@{DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['database']}"
+    f"{DB_CONFIG['username']}:{DB_CONFIG['password']}@{DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['database']}"
 )
 
 # 存储配置
@@ -86,7 +80,7 @@ class HybridProcessingResponse(BaseModel):
     processing_time: float
     cost: float
     quality_score: float
-    result: Optional[Dict[str, Any]] = None
+    result: dict[str, Any] | None = None
     error: str | None = None
 
 class BatchProcessingResponse(BaseModel):
@@ -97,7 +91,7 @@ class BatchProcessingResponse(BaseModel):
     failed_files: int
     total_cost: float
     total_time: float
-    results: List[Dict[str, Any]]
+    results: list[dict[str, Any]]
 
 # 存储文件
 async def save_uploaded_file(file: UploadFile) -> str:
@@ -204,12 +198,12 @@ async def process_file_hybrid(
         )
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"处理失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"处理失败: {str(e)}") from e
 
 @app.post("/api/batch-process", response_model=BatchProcessingResponse)
 async def process_files_batch(
     background_tasks: BackgroundTasks,
-    files: List[UploadFile] = File(...),
+    files: list[UploadFile] = File(...),
     priority: str = Form("normal"),
     sensitivity: str = Form("public"),
     high_quality: bool = Form(False),
@@ -309,7 +303,7 @@ async def process_files_batch(
         )
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"批量处理失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"批量处理失败: {str(e)}") from e
 
 @app.get("/api/statistics")
 async def get_statistics():
@@ -398,7 +392,7 @@ def _check_database() -> bool:
     except (KeyError, TypeError, IndexError, ValueError):
         return False
 
-def _generate_recommendations(stats: Dict) -> List[str]:
+def _generate_recommendations(stats: dict) -> list[str]:
     """生成优化建议"""
     recommendations = []
 
@@ -419,19 +413,19 @@ def _generate_recommendations(stats: Dict) -> List[str]:
     return recommendations
 
 # 后台任务
-async def save_processing_result(file_id: str, filename: str, result: Dict):
+async def save_processing_result(file_id: str, filename: str, result: dict):
     """保存处理结果到数据库"""
     try:
-        with sync_engine.connect() as conn:
+        with sync_engine.connect():
             # 这里可以保存到处理结果表
             pass
     except Exception as e:
         print(f"保存结果失败: {e}")
 
-async def save_batch_results(batch_id: str, results: List[Dict]):
+async def save_batch_results(batch_id: str, results: list[dict]):
     """保存批量处理结果"""
     try:
-        with sync_engine.connect() as conn:
+        with sync_engine.connect():
             # 这里可以保存到批量处理结果表
             pass
     except Exception as e:

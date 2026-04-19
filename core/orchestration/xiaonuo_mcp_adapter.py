@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 小诺·双鱼公主MCP工具适配器
 Xiaonuo MCP Tool Adapter
@@ -10,13 +10,16 @@ Xiaonuo MCP Tool Adapter
 创建时间: 2025-12-14
 """
 
-import os
-import json
 import asyncio
-import subprocess
-from typing import Any, Optional
-from dataclasses import dataclass
+import json
 import logging
+import os
+import subprocess
+from dataclasses import dataclass
+from typing import Any
+
+logger = logging.getLogger(__name__)
+
 
 @dataclass
 class MCPTool:
@@ -346,11 +349,11 @@ class XiaonuoMCPAdapter:
 
     async def shutdown(self):
         """关闭所有MCP服务"""
-        for service_name, client in self.mcp_clients.items():
+        for _service_name, client in self.mcp_clients.items():
             try:
                 client.terminate()
                 client.wait(timeout=5)
-            except:
+            except Exception as e:
                 try:
                     client.kill()
                 except (Exception):

@@ -5,14 +5,12 @@
 """
 
 import asyncio
-from core.async_main import async_main
-import httpx
 import json
-import logging
-from core.logging_config import setup_logging
 from datetime import datetime
-from pathlib import Path
-from typing import Dict, List, Optional
+
+import httpx
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -55,14 +53,6 @@ class AgentManager:
                 "pid": None,
                 "health_url": "http://localhost:9005/health"
             },
-            "yunpat": {
-                "name": "云熙专利智能体",
-                "port": 8020,
-                "path": "../yunpat-agent",
-                "status": "stopped",
-                "pid": None,
-                "health_url": "http://localhost:8020/api/v1/health"
-            }
         }
 
     async def start_service(self, service_id: str) -> bool:
@@ -152,7 +142,7 @@ class AgentManager:
             service["status"] = "error"
             return False
 
-    async def start_all(self) -> Dict[str, bool]:
+    async def start_all(self) -> dict[str, bool]:
         """启动所有服务"""
         results = {}
 
@@ -163,7 +153,7 @@ class AgentManager:
 
         return results
 
-    async def stop_all(self) -> Dict[str, bool]:
+    async def stop_all(self) -> dict[str, bool]:
         """停止所有服务"""
         results = {}
 
@@ -174,7 +164,7 @@ class AgentManager:
 
         return results
 
-    async def get_status(self) -> Dict:
+    async def get_status(self) -> dict:
         """获取所有服务状态"""
         status = {
             "timestamp": datetime.now().isoformat(),
@@ -203,7 +193,7 @@ class AgentManager:
 
         return status
 
-    async def communicate(self, from_agent: str, to_agent: str, message: Dict) -> Dict | None:
+    async def communicate(self, from_agent: str, to_agent: str, message: dict) -> dict | None:
         """智能体间通信"""
         if to_agent not in self.services:
             logger.error(f"目标智能体 {to_agent} 不存在")
@@ -216,7 +206,7 @@ class AgentManager:
             return None
 
         # 构建通信消息
-        comm_message = {
+        {
             "from": from_agent,
             "to": to_agent,
             "timestamp": datetime.now().isoformat(),

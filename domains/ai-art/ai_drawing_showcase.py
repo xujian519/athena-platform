@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 AI绘图功能展示
 AI Drawing Showcase
@@ -11,12 +10,10 @@ AI Drawing Showcase
 版本: 1.0.0
 """
 
-import json
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import logging
-import sys
 import time
 from pathlib import Path
+from typing import Any
 
 import requests
 
@@ -90,10 +87,10 @@ def create_sample_drawing(description, filename) -> Any:
             logger.info(f"   ✅ 已保存: {output_path}")
             return str(output_path)
         else:
-            logger.info(f"   ❌ SVG格式错误")
+            logger.info("   ❌ SVG格式错误")
             return None
     else:
-        logger.info(f"   ❌ 生成失败")
+        logger.info("   ❌ 生成失败")
         return None
 
 def main() -> None:
@@ -166,7 +163,7 @@ def main() -> None:
     recent_files = [f for f in svg_files if f.stat().st_mtime > time.time() - 300]  # 最近5分钟
 
     logger.info(f"   📊 生成图纸数: {len(recent_files)}")
-    logger.info(f"   💾 保存路径: /tmp/")
+    logger.info("   💾 保存路径: /tmp/")
 
     logger.info("\n💡 使用方法")
     logger.info(str('-' * 30))
@@ -182,7 +179,7 @@ def main() -> None:
     logger.info('   📏 上下文: 128K tokens')
     logger.info('   🔒 数据安全: 本地部署')
 
-    logger.info(f"\n🎉 演示完成！")
+    logger.info("\n🎉 演示完成！")
     logger.info(str('=' * 50))
 
 if __name__ == '__main__':

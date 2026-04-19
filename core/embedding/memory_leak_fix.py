@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 内存泄漏修复补丁
 Memory Leak Fix Patch for Athena Platform
@@ -13,13 +14,12 @@ Memory Leak Fix Patch for Athena Platform
 import asyncio
 import gc
 import logging
-import sys
 import threading
 import weakref
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
-
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +64,6 @@ class FixedLocalEmbeddingModel:
             def _load_sync():
                 """同步加载模型"""
                 try:
-                    import torch
                     from sentence_transformers import SentenceTransformer
 
                     if not self.model_path.exists():

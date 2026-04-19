@@ -5,29 +5,25 @@ Athena Crawler Service
 统一的多引擎爬虫服务，支持智能路由和成本控制
 """
 
-import logging
-from core.async_main import async_main
-from core.logging_config import setup_logging
-import os
 import asyncio
-from datetime import datetime
-from typing import Dict, Any, Optional, List
 from contextlib import asynccontextmanager
+from datetime import datetime
+from typing import Any
 
-from fastapi import FastAPI, HTTPException, BackgroundTasks
-from fastapi.middleware.cors import CORSMiddleware
-
-from core.security.auth import ALLOWED_ORIGINS
-from pydantic import BaseModel, Field, BaseSettings
-import uvicorn
 import httpx
+import uvicorn
 
 # 导入爬虫核心组件
 from config.hybrid_config import HybridCrawlerConfig
 from core.hybrid_crawler_manager import HybridCrawlerManager
-from core.universal_crawler import UniversalCrawler
+from fastapi import BackgroundTasks, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, BaseSettings, Field
 from storage.data_storage_manager import DataStorageManager
 from utils.data_processor import DataProcessor
+
+from core.logging_config import setup_logging
+from core.security.auth import ALLOWED_ORIGINS
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -58,7 +54,7 @@ class Settings(BaseSettings):
 
     # 代理配置
     enable_proxy: bool = False
-    proxy_list: List[str] = []
+    proxy_list: list[str] = []
 
     class Config:
         env_file = ".env"
@@ -73,16 +69,16 @@ data_processor: DataProcessor | None = None
 class CrawlRequest(BaseModel):
     """爬取请求模型"""
     url: str = Field(..., description="要爬取的URL")
-    engine: Optional[str] = Field(None, description="指定爬虫引擎：auto, internal, crawl4ai, firecrawl")
-    options: Dict[str, Any] = Field(default_factory=dict, description="爬取选项")
+    engine: str | None = Field(None, description="指定爬虫引擎：auto, internal, crawl4ai, firecrawl")
+    options: dict[str, Any] = Field(default_factory=dict, description="爬取选项")
     priority: int = Field(1, description="优先级 1-5")
-    callback_url: Optional[str] = Field(None, description="完成后的回调URL")
+    callback_url: str | None = Field(None, description="完成后的回调URL")
 
 class BatchCrawlRequest(BaseModel):
     """批量爬取请求"""
-    urls: List[str] = Field(..., description="URL列表")
-    engine: Optional[str] = Field(None, description="指定爬虫引擎")
-    options: Dict[str, Any] = Field(default_factory=dict)
+    urls: list[str] = Field(..., description="URL列表")
+    engine: str | None = Field(None, description="指定爬虫引擎")
+    options: dict[str, Any] = Field(default_factory=dict)
     max_concurrent: int = Field(5, description="最大并发数")
 
 class CrawlResponse(BaseModel):
@@ -90,9 +86,9 @@ class CrawlResponse(BaseModel):
     task_id: str
     url: str
     status: str
-    result: Optional[Dict[str, Any]] = None
+    result: dict[str, Any] | None = None
     error: str | None = None
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    metadata: dict[str, Any] = Field(default_factory=dict)
     timestamp: str
 
 # 应用生命周期管理
@@ -300,8 +296,8 @@ async def get_task_status(task_id: str):
     try:
         status = await crawler_manager.get_task_status(task_id)
         return status
-    except Exception as e:
-        raise HTTPException(status_code=404, detail=f"任务不存在: {task_id}")
+    except Exception:
+        raise HTTPException(status_code=404, detail=f"任务不存在: {task_id}") from None
 
 @app.post("/api/v2/batch/crawl")
 async def batch_crawl(request: BatchCrawlRequest):
@@ -343,8 +339,8 @@ async def get_batch_status(batch_id: str):
     try:
         status = await crawler_manager.get_batch_status(batch_id)
         return status
-    except Exception as e:
-        raise HTTPException(status_code=404, detail=f"批量任务不存在: {batch_id}")
+    except Exception:
+        raise HTTPException(status_code=404, detail=f"批量任务不存在: {batch_id}") from None
 
 @app.get("/api/v2/stats")
 async def get_statistics():
@@ -380,7 +376,7 @@ async def get_statistics():
 
     except Exception as e:
         logger.error(f"获取统计信息失败: {e}")
-        raise HTTPException(status_code=500, detail="获取统计信息失败")
+        raise HTTPException(status_code=500, detail="获取统计信息失败") from e
 
 @app.get("/api/v2/config")
 async def get_config():
@@ -397,7 +393,7 @@ async def get_config():
     }
 
 @app.post("/api/v2/config")
-async def update_config(config: Dict[str, Any]):
+async def update_config(config: dict[str, Any]):
     """更新配置（仅限运行时配置）"""
     try:
         # 更新允许的配置项
@@ -416,7 +412,7 @@ async def update_config(config: Dict[str, Any]):
 
     except Exception as e:
         logger.error(f"配置更新失败: {e}")
-        raise HTTPException(status_code=400, detail=f"配置更新失败: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"配置更新失败: {str(e)}") from e
 
 # 辅助函数
 async def execute_callback(task_id: str, callback_url: str):

@@ -3,19 +3,19 @@
 Configuration Management
 """
 
-import logging
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 from pydantic import Field
 from pydantic_settings import BaseSettings
+
 
 class AmapApiConfig(BaseSettings):
     """高德地图API配置"""
 
     # API基础配置
     api_key: str = Field(..., env='AMAP_API_KEY')
-    secret_key: Optional[str] = Field(default='', env='AMAP_SECRET_KEY')
+    secret_key: str | None = Field(default='', env='AMAP_SECRET_KEY')
     base_url: str = Field(default='https://restapi.amap.com', env='AMAP_BASE_URL')
 
     # 性能配置
@@ -50,7 +50,7 @@ class McpServerConfig(BaseSettings):
 
     # 日志配置
     log_level: str = Field(default='INFO', env='MCP_LOG_LEVEL')
-    log_file: Optional[str] = Field(default=None, env='MCP_LOG_FILE')
+    log_file: str | None = Field(default=None, env='MCP_LOG_FILE')
 
     # 服务器配置
     host: str = Field(default='localhost', env='MCP_HOST')
@@ -72,7 +72,7 @@ class CacheConfig(BaseSettings):
     redis_host: str = Field(default='localhost', env='REDIS_HOST')
     redis_port: int = Field(default=6379, env='REDIS_PORT')
     redis_db: int = Field(default=0, env='REDIS_DB')
-    redis_password: Optional[str] = Field(default=None, env='REDIS_PASSWORD')
+    redis_password: str | None = Field(default=None, env='REDIS_PASSWORD')
 
     # 缓存策略
     cache_strategy: str = Field(default='redis', env='CACHE_STRATEGY')  # redis, memory
@@ -109,7 +109,7 @@ class AppConfig:
 
         return True
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典格式"""
         return {
             'amap': self.amap.dict(),

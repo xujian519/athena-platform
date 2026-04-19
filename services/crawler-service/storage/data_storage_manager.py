@@ -1,29 +1,26 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 数据存储管理器 - 支持多种存储后端和数据格式
 Data Storage Manager - Support for multiple storage backends and data formats
 控制者: Athena & 小诺
 """
 
-import asyncio
 import gzip
 import hashlib
 import json
 import logging
-from core.logging_config import setup_logging
-import pickle
-import sqlite3
 from abc import ABC, abstractmethod
 from contextlib import asynccontextmanager
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 import aiofiles
 import aiosqlite
+
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -63,7 +60,7 @@ class StoredData:
     id: str
     url: str
     content: str
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
     crawler_type: str
     timestamp: datetime
     content_hash: str
@@ -90,7 +87,7 @@ class StorageBackend(ABC):
         pass
 
     @abstractmethod
-    async def search(self, query: Dict[str, Any], limit: int = 100) -> List[StoredData]:
+    async def search(self, query: dict[str, Any], limit: int = 100) -> list[StoredData]:
         """搜索数据"""
         pass
 
@@ -105,7 +102,7 @@ class StorageBackend(ABC):
         pass
 
     @abstractmethod
-    async def get_stats(self) -> Dict[str, Any]:
+    async def get_stats(self) -> dict[str, Any]:
         """获取存储统计信息"""
         pass
 
@@ -211,7 +208,7 @@ class SQLiteStorageBackend(StorageBackend):
             logger.error(f"检索数据失败: {e}")
             return None
 
-    async def search(self, query: Dict[str, Any], limit: int = 100) -> List[StoredData]:
+    async def search(self, query: dict[str, Any], limit: int = 100) -> list[StoredData]:
         """搜索数据"""
         try:
             async with aiosqlite.connect(self.db_path) as db:
@@ -308,7 +305,7 @@ class SQLiteStorageBackend(StorageBackend):
             logger.error(f"清理旧数据失败: {e}")
             return 0
 
-    async def get_stats(self) -> Dict[str, Any]:
+    async def get_stats(self) -> dict[str, Any]:
         """获取存储统计信息"""
         try:
             async with aiosqlite.connect(self.db_path) as db:
@@ -370,7 +367,7 @@ class SQLiteStorageBackend(StorageBackend):
         if self.config.compression == CompressionType.GZIP:
             try:
                 return gzip.decompress(content.encode('latin-1')).decode('utf-8')
-            except Exception  # TODO: 指定具体异常类型:
+            except Exception:  # TODO: 指定具体异常类型
                 return content
         return content
 
@@ -418,7 +415,7 @@ class JSONStorageBackend(StorageBackend):
                 if date_dir.is_dir():
                     file_path = date_dir / f"{data_id}.json"
                     if file_path.exists():
-                        async with aiofiles.open(file_path, 'r', encoding='utf-8') as f:
+                        async with aiofiles.open(file_path, encoding='utf-8') as f:
                             content = await f.read()
                             data_dict = json.loads(content)
                             data_dict['timestamp'] = datetime.fromisoformat(data_dict['timestamp'])
@@ -430,7 +427,7 @@ class JSONStorageBackend(StorageBackend):
             logger.error(f"检索JSON数据失败: {e}")
             return None
 
-    async def search(self, query: Dict[str, Any], limit: int = 100) -> List[StoredData]:
+    async def search(self, query: dict[str, Any], limit: int = 100) -> list[StoredData]:
         """搜索数据"""
         results = []
         processed = 0
@@ -446,7 +443,7 @@ class JSONStorageBackend(StorageBackend):
                         break
 
                     try:
-                        async with aiofiles.open(file_path, 'r', encoding='utf-8') as f:
+                        async with aiofiles.open(file_path, encoding='utf-8') as f:
                             content = await f.read()
                             data_dict = json.loads(content)
 
@@ -506,7 +503,7 @@ class JSONStorageBackend(StorageBackend):
             logger.error(f"清理JSON数据失败: {e}")
             return 0
 
-    async def get_stats(self) -> Dict[str, Any]:
+    async def get_stats(self) -> dict[str, Any]:
         """获取存储统计信息"""
         try:
             total_files = 0
@@ -526,13 +523,13 @@ class JSONStorageBackend(StorageBackend):
 
                     # 读取文件获取类型信息
                     try:
-                        async with aiofiles.open(file_path, 'r', encoding='utf-8') as f:
+                        async with aiofiles.open(file_path, encoding='utf-8') as f:
                             content = await f.read()
                             data_dict = json.loads(content)
                             crawler_type = data_dict.get('crawler_type', 'unknown')
                             type_counts[crawler_type] = type_counts.get(crawler_type, 0) + 1
                     except Exception as e:
-                    logger.error(f"Error: {e}", exc_info=True)
+                        logger.error(f"Error: {e}", exc_info=True)
 
                 daily_counts[date_dir.name] = daily_count
 
@@ -547,7 +544,7 @@ class JSONStorageBackend(StorageBackend):
             logger.error(f"获取JSON存储统计失败: {e}")
             return {}
 
-    def _match_query(self, data_dict: Dict[str, Any], query: Dict[str, Any]) -> bool:
+    def _match_query(self, data_dict: dict[str, Any], query: dict[str, Any]) -> bool:
         """匹配查询条件"""
         if 'url' in query and query['url'] not in data_dict.get('url', ''):
             return False
@@ -561,7 +558,7 @@ class JSONStorageBackend(StorageBackend):
                 if timestamp < datetime.fromisoformat(query['start_time']):
                     return False
             except Exception as e:
-            logger.error(f"Error: {e}", exc_info=True)
+                logger.error(f"Error: {e}", exc_info=True)
 
         if 'end_time' in query:
             try:
@@ -569,7 +566,7 @@ class JSONStorageBackend(StorageBackend):
                 if timestamp > datetime.fromisoformat(query['end_time']):
                     return False
             except Exception as e:
-            logger.error(f"Error: {e}", exc_info=True)
+                logger.error(f"Error: {e}", exc_info=True)
 
         return True
 
@@ -593,7 +590,7 @@ class DataStorageManager:
 
         logger.info(f"数据存储管理器已初始化: {self.config.storage_type.value}")
 
-    async def store_crawl_result(self, crawl_result: Dict[str, Any]) -> str:
+    async def store_crawl_result(self, crawl_result: dict[str, Any]) -> str:
         """存储爬取结果"""
         data = StoredData(
             id=crawl_result.get('task_id', str(uuid.uuid4())),
@@ -620,7 +617,7 @@ class DataStorageManager:
         else:
             raise Exception('存储爬取结果失败')
 
-    async def retrieve_data(self, data_id: str) -> Dict[str, Any | None]:
+    async def retrieve_data(self, data_id: str) -> dict[str, Any | None]:
         """检索数据"""
         data = await self.backend.retrieve(data_id)
         if data:
@@ -636,7 +633,7 @@ class DataStorageManager:
             }
         return None
 
-    async def search_data(self, query: Dict[str, Any], limit: int = 100) -> List[Dict[str, Any]]:
+    async def search_data(self, query: dict[str, Any], limit: int = 100) -> list[dict[str, Any]]:
         """搜索数据"""
         results = await self.backend.search(query, limit)
         return [
@@ -660,7 +657,7 @@ class DataStorageManager:
         days = days or self.config.retention_days
         return await self.backend.cleanup_old_data(days)
 
-    async def get_storage_stats(self) -> Dict[str, Any]:
+    async def get_storage_stats(self) -> dict[str, Any]:
         """获取存储统计信息"""
         stats = await self.backend.get_stats()
         stats['config'] = {
@@ -671,7 +668,7 @@ class DataStorageManager:
         }
         return stats
 
-    async def export_data(self, query: Dict[str, Any], format: str = 'json') -> str:
+    async def export_data(self, query: dict[str, Any], format: str = 'json') -> str:
         """导出数据"""
         results = await self.search_data(query, limit=10000)  # 最大导出1万条
 

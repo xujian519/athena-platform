@@ -3,9 +3,8 @@
 测试小宸不同内容风格
 """
 
+
 import requests
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import json
 
 # API基础URL
 BASE_URL = "http://localhost:8030"

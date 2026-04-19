@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena爬虫自动触发器
 当外部搜索引擎或MCP无法获取重要论文或网页时，自动启动爬虫尝试爬取
@@ -8,12 +7,11 @@ Athena爬虫自动触发器
 """
 
 import asyncio
-import json
 import logging
 import time
 from datetime import datetime
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -44,7 +42,7 @@ class CrawlerAutoTrigger:
 
         logger.info('🚀 爬虫自动触发器初始化完成')
 
-    def _load_trigger_rules(self) -> Dict[str, Any]:
+    def _load_trigger_rules(self) -> dict[str, Any]:
         """加载触发规则"""
         return {
             'patent_search': {
@@ -77,7 +75,7 @@ class CrawlerAutoTrigger:
             }
         }
 
-    async def check_and_trigger(self, search_result: Dict[str, Any]) -> Dict[str, Any | None]:
+    async def check_and_trigger(self, search_result: dict[str, Any]) -> dict[str, Any | None]:
         """
         检查搜索结果并决定是否触发爬虫
 
@@ -89,7 +87,7 @@ class CrawlerAutoTrigger:
         """
         content_type = search_result.get('content_type', '')
         search_status = search_result.get('status', '')
-        error_type = search_result.get('error_type', '')
+        search_result.get('error_type', '')
         query = search_result.get('query', '')
 
         logger.info(f"🔍 检查搜索结果: {content_type} - {search_status}")
@@ -114,7 +112,7 @@ class CrawlerAutoTrigger:
 
         return None
 
-    def _determine_trigger_condition(self, search_result: Dict[str, Any]) -> TriggerCondition | None:
+    def _determine_trigger_condition(self, search_result: dict[str, Any]) -> TriggerCondition | None:
         """确定触发条件"""
         status = search_result.get('status', '')
         error_type = search_result.get('error_type', '')
@@ -137,7 +135,7 @@ class CrawlerAutoTrigger:
 
         return None
 
-    def _find_crawler_rule(self, content_type: str, condition: TriggerCondition) -> Dict[str, Any | None]:
+    def _find_crawler_rule(self, content_type: str, condition: TriggerCondition) -> dict[str, Any | None]:
         """查找匹配的爬虫规则"""
         # 映射内容类型到爬虫类型
         type_mapping = {
@@ -160,8 +158,8 @@ class CrawlerAutoTrigger:
 
         return None
 
-    async def _create_crawler_task(self, query: str, rule: Dict[str, Any],
-                                 search_result: Dict[str, Any]) -> Dict[str, Any | None]:
+    async def _create_crawler_task(self, query: str, rule: dict[str, Any],
+                                 search_result: dict[str, Any]) -> dict[str, Any | None]:
         """创建爬虫任务"""
         task_id = f"crawler_{int(time.time())}_{hash(query) % 10000}"
 
@@ -187,7 +185,7 @@ class CrawlerAutoTrigger:
 
         return task
 
-    async def execute_crawler_task(self, task_id: str) -> Dict[str, Any]:
+    async def execute_crawler_task(self, task_id: str) -> dict[str, Any]:
         """
         执行爬虫任务
 
@@ -249,7 +247,7 @@ class CrawlerAutoTrigger:
                 'error': str(e)
             }
 
-    async def _run_crawler(self, task: Dict[str, Any]) -> Dict[str, Any]:
+    async def _run_crawler(self, task: dict[str, Any]) -> dict[str, Any]:
         """运行爬虫（模拟实现）"""
         start_time = time.time()
 
@@ -289,15 +287,15 @@ class CrawlerAutoTrigger:
             'timestamp': datetime.now().isoformat()
         }
 
-    def get_task_status(self, task_id: str) -> Dict[str, Any | None]:
+    def get_task_status(self, task_id: str) -> dict[str, Any | None]:
         """获取任务状态"""
         return self.crawler_tasks.get(task_id)
 
-    def get_execution_history(self, limit: int = 10) -> List[Dict[str, Any]]:
+    def get_execution_history(self, limit: int = 10) -> list[dict[str, Any]]:
         """获取执行历史"""
         return self.execution_history[-limit:]
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """获取统计信息"""
         total_tasks = len(self.crawler_tasks)
         completed_tasks = sum(1 for task in self.crawler_tasks.values() if task['status'] == 'completed')
@@ -324,7 +322,7 @@ def get_crawler_trigger() -> CrawlerAutoTrigger:
     return _crawler_trigger
 
 
-async def auto_trigger_crawler(search_result: Dict[str, Any]) -> Dict[str, Any | None]:
+async def auto_trigger_crawler(search_result: dict[str, Any]) -> dict[str, Any | None]:
     """
     自动触发爬虫的便捷函数
 
@@ -364,7 +362,7 @@ async def test_auto_trigger():
         # 执行任务
         result = await trigger.execute_crawler_task(task['task_id'])
         if result['success']:
-            logger.info(f"✅ 爬虫任务执行成功")
+            logger.info("✅ 爬虫任务执行成功")
             items = result['result']['items']
             logger.info(f"   找到 {len(items)} 个结果")
         else:

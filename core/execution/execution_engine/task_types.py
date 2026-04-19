@@ -14,7 +14,7 @@ Execution Engine - Task Type Definitions
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 from ..types import ActionType, Task, TaskStatus
 
@@ -27,7 +27,7 @@ class EngineTask(Task):
     """
 
     # 执行引擎特有属性(使用不同的字段名避免类型冲突)
-    _action_type_enum: Optional[ActionType] = field(default=None, init=False, compare=False)
+    _action_type_enum: ActionType | None = field(default=None, init=False, compare=False)
     action_data: dict[str, Any] = field(default_factory=dict)
     scheduled_at: datetime | None = None
 

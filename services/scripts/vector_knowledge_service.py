@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 向量检索和知识图谱API服务
 Vector Retrieval and Knowledge Graph API Service
@@ -8,26 +7,21 @@ Vector Retrieval and Knowledge Graph API Service
 """
 
 # Numpy兼容性导入
-from config.numpy_compatibility import array, zeros, ones, random, mean, sum, dot
-import asyncio
-from core.async_main import async_main
-import json
-import logging
-from core.logging_config import setup_logging
 import os
 
 # 添加项目路径
 import sys
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+from config.numpy_compatibility import random
+from core.logging_config import setup_logging
+
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
@@ -58,26 +52,26 @@ class VectorSearchRequest(BaseModel):
 
 class VectorSearchResponse(BaseModel):
     status: str
-    results: List[Dict[str, Any]]
+    results: list[dict[str, Any]]
     query_time: float
     total_results: int
 
 class HealthResponse(BaseModel):
     status: str
     service: str
-    collections: List[str]
+    collections: list[str]
     qdrant_status: str
 
 # 初始化
 async def initialize_services():
     """初始化服务"""
     global vector_adapter
-    
+
     try:
         # 初始化Qdrant适配器
         vector_adapter = QdrantVectorAdapter()
         logger.info('✅ Qdrant适配器初始化成功')
-        
+
     except Exception as e:
         logger.error(f"❌ 服务初始化失败: {e}")
         raise
@@ -94,7 +88,7 @@ async def shutdown_event():
     """应用关闭事件"""
     logger.info('🔄 正在关闭服务...')
 
-@app.get('/', response_model=Dict[str, Any])
+@app.get('/', response_model=dict[str, Any])
 async def root():
     """根路径"""
     return {
@@ -117,7 +111,7 @@ async def health_check():
         # 检查Qdrant连接
         collections = vector_adapter.client.get_collections().collections
         collection_names = [col.name for col in collections]
-        
+
         return HealthResponse(
             status='healthy',
             service='vector-knowledge-api',
@@ -126,14 +120,14 @@ async def health_check():
         )
     except Exception as e:
         logger.error(f"健康检查失败: {e}")
-        raise HTTPException(status_code=503, detail='服务不可用')
+        raise HTTPException(status_code=503, detail='服务不可用') from e
 
-@app.get('/api/v1/collections', response_model=Dict[str, Any])
+@app.get('/api/v1/collections', response_model=dict[str, Any])
 async def list_collections():
     """列出所有向量集合"""
     try:
         collections = vector_adapter.client.get_collections().collections
-        
+
         collection_info = []
         for col in collections:
             try:
@@ -148,7 +142,7 @@ async def list_collections():
                     'name': col.name,
                     'status': f"error: {str(e)}"
                 })
-        
+
         return {
             'status': 'success',
             'collections': collection_info,
@@ -156,14 +150,14 @@ async def list_collections():
         }
     except Exception as e:
         logger.error(f"获取集合列表失败: {e}")
-        raise HTTPException(status_code=500, detail='获取集合列表失败')
+        raise HTTPException(status_code=500, detail='获取集合列表失败') from e
 
 @app.get('/api/v1/collections/{collection_name}')
 async def get_collection_info(collection_name: str):
     """获取指定集合信息"""
     try:
         collection = vector_adapter.client.get_collection(collection_name)
-        
+
         return {
             'status': 'success',
             'collection': {
@@ -177,18 +171,17 @@ async def get_collection_info(collection_name: str):
         }
     except Exception as e:
         logger.error(f"获取集合信息失败: {e}")
-        raise HTTPException(status_code=404, detail='集合不存在')
+        raise HTTPException(status_code=404, detail='集合不存在') from e
 
 @app.post('/api/v1/vector/search', response_model=VectorSearchResponse)
 async def search_vectors(request: VectorSearchRequest):
     """向量搜索"""
     start_time = datetime.now()
-    
+
     try:
         # 简单的文本到向量转换（这里应该使用实际的嵌入模型）
-        import numpy as np
-        query_vector = random((1024)).tolist()
-        
+        query_vector = random(1024).tolist()
+
         # 执行搜索
         results = await vector_adapter.search_vectors(
             collection_type=request.collection_type,
@@ -196,27 +189,27 @@ async def search_vectors(request: VectorSearchRequest):
             limit=request.limit,
             threshold=request.threshold
         )
-        
+
         # 计算查询时间
         query_time = (datetime.now() - start_time).total_seconds()
-        
+
         return VectorSearchResponse(
             status='success',
             results=results,
             query_time=query_time,
             total_results=len(results)
         )
-        
+
     except Exception as e:
         logger.error(f"向量搜索失败: {e}")
-        raise HTTPException(status_code=500, detail='搜索失败')
+        raise HTTPException(status_code=500, detail='搜索失败') from e
 
 @app.post('/api/v1/vector/add')
-async def add_vectors(collection_type: str, vectors: List[Dict[str, Any]]):
+async def add_vectors(collection_type: str, vectors: list[dict[str, Any]]):
     """添加向量"""
     try:
         success = await vector_adapter.add_vectors(collection_type, vectors)
-        
+
         if success:
             return {
                 'status': 'success',
@@ -224,10 +217,10 @@ async def add_vectors(collection_type: str, vectors: List[Dict[str, Any]]):
             }
         else:
             raise HTTPException(status_code=500, detail='添加向量失败')
-            
+
     except Exception as e:
         logger.error(f"添加向量失败: {e}")
-        raise HTTPException(status_code=500, detail='添加向量失败')
+        raise HTTPException(status_code=500, detail='添加向量失败') from e
 
 @app.get('/api/v1/knowledge/graph/status')
 async def knowledge_graph_status():
@@ -243,14 +236,14 @@ async def knowledge_graph_status():
         }
     except Exception as e:
         logger.error(f"知识图谱状态检查失败: {e}")
-        raise HTTPException(status_code=500, detail='知识图谱状态检查失败')
+        raise HTTPException(status_code=500, detail='知识图谱状态检查失败') from e
 
 @app.get('/api/v1/stats')
 async def get_service_stats():
     """获取服务统计信息"""
     try:
         collections = vector_adapter.client.get_collections().collections
-        
+
         stats = {
             'service': 'vector-knowledge-api',
             'uptime': '运行中',
@@ -259,12 +252,12 @@ async def get_service_stats():
             'qdrant_connection': '正常',
             'timestamp': datetime.now().isoformat()
         }
-        
+
         return stats
-        
+
     except Exception as e:
         logger.error(f"获取统计信息失败: {e}")
-        raise HTTPException(status_code=500, detail='获取统计信息失败')
+        raise HTTPException(status_code=500, detail='获取统计信息失败') from e
 
 if __name__ == '__main__':
     logger.info('🚀 启动向量和知识图谱API服务...')

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 LFU缓存实现
 Least Frequently Used Cache Implementation
@@ -15,8 +16,7 @@ import logging
 import threading
 import time
 from collections import OrderedDict
-from typing import Any, Dict, List, Optional, Tuple
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

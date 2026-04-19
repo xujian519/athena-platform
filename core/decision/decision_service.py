@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 决策服务 - Decision Service
 统一的人机协作决策服务,集成到小诺平台
@@ -9,11 +10,14 @@
 """
 
 import json
+import logging
 import sys
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 # 添加路径
 sys.path.append(str(Path(__file__).parent))

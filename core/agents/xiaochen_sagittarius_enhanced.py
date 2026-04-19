@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小宸·星河射手 - 增强版(集成协作功能)
 Xiaochen Sagittarius Agent Enhanced - with Collaboration Integration
@@ -12,18 +13,15 @@ Xiaochen Sagittarius Agent Enhanced - with Collaboration Integration
 
 import json
 import logging
-from pathlib import Path
-from typing import Dict, Any, Optional, List
 from datetime import datetime
+from pathlib import Path
+from typing import Any
+
 import aiohttp
 
 # 导入统一记忆系统
 try:
-    from ..base_agent_with_memory import (
-        AgentRole,
-        MemoryEnabledAgent,
-        MemoryType
-    )
+    from ..base_agent_with_memory import AgentRole, MemoryEnabledAgent, MemoryType
     from ..memory.unified_agent_memory_system import AgentType, MemoryTier
 except ImportError:
     # 如果导入失败,使用基础类
@@ -106,7 +104,7 @@ class XiaochenSagittariusEnhanced(MemoryEnabledAgent):
         try:
             config_path = Path(__file__).parent.parent.parent / "config" / "identity" / "xiaochen.json"
             if config_path.exists():
-                with open(config_path, 'r', encoding='utf-8') as f:
+                with open(config_path, encoding='utf-8') as f:
                     config = json.load(f)
 
                 # 更新身份信息
@@ -154,7 +152,7 @@ class XiaochenSagittariusEnhanced(MemoryEnabledAgent):
         }
 
         # 检查协作智能体健康状态
-        for agent_id, agent_info in self.collaborators.items():
+        for _agent_id, agent_info in self.collaborators.items():
             try:
                 health_status = await self._check_collaborator_health(agent_info)
                 agent_info["status"] = "available" if health_status else "unavailable"

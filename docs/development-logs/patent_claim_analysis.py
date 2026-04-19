@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利权利要求书专业分析报告
 使用Athena专利分析系统
 """
 
 import json
-from typing import Dict, List, Any
 from datetime import datetime
+from typing import Any
 
 
 class PatentClaimProfessionalAnalyzer:
@@ -17,7 +16,7 @@ class PatentClaimProfessionalAnalyzer:
         self.analysis_timestamp = datetime.now().isoformat()
         self.analyzer = "Athena AI System - 专利分析专家"
 
-    def analyze_patent_claims(self, patent_data: Dict[str, Any]) -> Dict[str, Any]:
+    def analyze_patent_claims(self, patent_data: dict[str, Any]) -> dict[str, Any]:
         """
         对专利权利要求书进行全面分析
 
@@ -42,7 +41,7 @@ class PatentClaimProfessionalAnalyzer:
         }
         return report
 
-    def _overall_assessment(self, patent_data: Dict[str, Any]) -> Dict[str, Any]:
+    def _overall_assessment(self, patent_data: dict[str, Any]) -> dict[str, Any]:
         """总体评估"""
         claims = patent_data.get("claims", {})
 
@@ -64,13 +63,13 @@ class PatentClaimProfessionalAnalyzer:
             "summary": self._generate_summary(scores, overall_score)
         }
 
-    def _score_structure_completeness(self, patent_data: Dict[str, Any]) -> float:
+    def _score_structure_completeness(self, patent_data: dict[str, Any]) -> float:
         """结构完整性评分"""
         required_sections = ["technical_field", "background_art", "invention_content", "claims", "embodiments"]
         present_sections = sum(1 for section in required_sections if section in patent_data and patent_data[section])
         return (present_sections / len(required_sections)) * 100
 
-    def _score_technical_clarity(self, claims: Dict[str, Any]) -> float:
+    def _score_technical_clarity(self, claims: dict[str, Any]) -> float:
         """技术清晰度评分"""
         independent_claim = claims.get("independent", "")
         dependent_claims = claims.get("dependent", [])
@@ -94,7 +93,7 @@ class PatentClaimProfessionalAnalyzer:
 
         return min(score, 100)
 
-    def _score_innovation_level(self, patent_data: Dict[str, Any]) -> float:
+    def _score_innovation_level(self, patent_data: dict[str, Any]) -> float:
         """创新性评分"""
         background = patent_data.get("background_art", "")
         invention_content = patent_data.get("invention_content", "")
@@ -119,7 +118,7 @@ class PatentClaimProfessionalAnalyzer:
 
         return min(score, 100)
 
-    def _score_claim_quality(self, claims: Dict[str, Any]) -> float:
+    def _score_claim_quality(self, claims: dict[str, Any]) -> float:
         """权利要求质量评分"""
         independent_claim = claims.get("independent", "")
         dependent_claims = claims.get("dependent", [])
@@ -147,7 +146,7 @@ class PatentClaimProfessionalAnalyzer:
 
         return min(score, 100)
 
-    def _score_protection_scope(self, claims: Dict[str, Any]) -> float:
+    def _score_protection_scope(self, claims: dict[str, Any]) -> float:
         """保护范围合理性评分"""
         independent_claim = claims.get("independent", "")
 
@@ -184,9 +183,9 @@ class PatentClaimProfessionalAnalyzer:
         else:
             return "不及格 (E)"
 
-    def _generate_summary(self, scores: Dict[str, float], overall: float) -> str:
+    def _generate_summary(self, scores: dict[str, float], overall: float) -> str:
         """生成总体评述"""
-        summary = f"### 总体评估\n\n"
+        summary = "### 总体评估\n\n"
         summary += f"**综合得分**: {overall:.1f}/100 ({self._determine_grade(overall)})\n\n"
 
         summary += "#### 分项得分:\n"
@@ -212,7 +211,7 @@ class PatentClaimProfessionalAnalyzer:
 
         return summary
 
-    def _analyze_all_claims(self, claims: Dict[str, Any]) -> Dict[str, Any]:
+    def _analyze_all_claims(self, claims: dict[str, Any]) -> dict[str, Any]:
         """分析所有权利要求"""
         independent = claims.get("independent", "")
         dependent = claims.get("dependent", [])
@@ -225,7 +224,7 @@ class PatentClaimProfessionalAnalyzer:
         }
         return analysis
 
-    def _analyze_independent_claim(self, claim: str) -> Dict[str, Any]:
+    def _analyze_independent_claim(self, claim: str) -> dict[str, Any]:
         """分析独立权利要求"""
         return {
             "claim_text": claim,
@@ -237,7 +236,7 @@ class PatentClaimProfessionalAnalyzer:
             "clarity_assessment": self._assess_clarity(claim)
         }
 
-    def _analyze_dependent_claim(self, claim_num: int, claim: str) -> Dict[str, Any]:
+    def _analyze_dependent_claim(self, claim_num: int, claim: str) -> dict[str, Any]:
         """分析从属权利要求"""
         return {
             "claim_number": claim_num,
@@ -260,7 +259,7 @@ class PatentClaimProfessionalAnalyzer:
             return claim.split("其特征在于")[1]
         return claim
 
-    def _extract_essential_features(self, claim: str) -> List[str]:
+    def _extract_essential_features(self, claim: str) -> list[str]:
         """提取必要技术特征"""
         features = []
         if "获取待处理数据" in claim:
@@ -271,7 +270,7 @@ class PatentClaimProfessionalAnalyzer:
             features.append("基于策略进行处理")
         return features
 
-    def _analyze_technical_features(self, claim: str) -> Dict[str, Any]:
+    def _analyze_technical_features(self, claim: str) -> dict[str, Any]:
         """分析技术特征"""
         return {
             "feature_count": len([f for f in ["获取", "确定", "处理"] if f in claim]),
@@ -301,7 +300,7 @@ class PatentClaimProfessionalAnalyzer:
             return "存在清晰度问题: " + "; ".join(issues)
         return "清晰"
 
-    def _analyze_dependency(self, claim: str) -> Dict[str, Any]:
+    def _analyze_dependency(self, claim: str) -> dict[str, Any]:
         """分析依赖关系"""
         if "根据权利要求" in claim:
             # 提取引用的权利要求号
@@ -314,7 +313,7 @@ class PatentClaimProfessionalAnalyzer:
             }
         return {"has_dependency": False, "referenced_claims": []}
 
-    def _extract_additional_features(self, claim: str) -> List[str]:
+    def _extract_additional_features(self, claim: str) -> list[str]:
         """提取附加技术特征"""
         features = []
         if "目标数据类型" in claim:
@@ -333,7 +332,7 @@ class PatentClaimProfessionalAnalyzer:
         """检查说明书支持"""
         return "需要在说明书中充分支持"  # 简化判断
 
-    def _analyze_claim_hierarchy(self, independent: str, dependent: List[str]) -> Dict[str, Any]:
+    def _analyze_claim_hierarchy(self, independent: str, dependent: list[str]) -> dict[str, Any]:
         """分析权利要求层次结构"""
         return {
             "total_claims": 1 + len(dependent),
@@ -342,7 +341,7 @@ class PatentClaimProfessionalAnalyzer:
             "suggestions": "建议增加更多层次的从属权利要求以形成保护梯度" if len(dependent) < 6 else "层次结构合理"
         }
 
-    def _identify_drafting_issues(self, independent: str, dependent: List[str]) -> List[Dict[str, str]]:
+    def _identify_drafting_issues(self, independent: str, dependent: list[str]) -> list[dict[str, str]]:
         """识别撰写问题"""
         issues = []
 
@@ -369,7 +368,7 @@ class PatentClaimProfessionalAnalyzer:
 
         return issues
 
-    def _technical_analysis(self, patent_data: Dict[str, Any]) -> Dict[str, Any]:
+    def _technical_analysis(self, patent_data: dict[str, Any]) -> dict[str, Any]:
         """技术分析"""
         return {
             "technical_field_analysis": self._analyze_technical_field(patent_data.get("technical_field", "")),
@@ -379,7 +378,7 @@ class PatentClaimProfessionalAnalyzer:
             "technical_effect_analysis": self._analyze_technical_effect(patent_data)
         }
 
-    def _analyze_technical_field(self, field: str) -> Dict[str, Any]:
+    def _analyze_technical_field(self, field: str) -> dict[str, Any]:
         """分析技术领域"""
         return {
             "field_classification": "数据处理技术",
@@ -387,7 +386,7 @@ class PatentClaimProfessionalAnalyzer:
             "suggestions": "技术领域描述合理，符合专利撰写要求"
         }
 
-    def _analyze_background(self, background: str) -> Dict[str, Any]:
+    def _analyze_background(self, background: str) -> dict[str, Any]:
         """分析背景技术"""
         return {
             "problem_identification": "明确" if "现有技术" in background else "不明确",
@@ -401,16 +400,16 @@ class PatentClaimProfessionalAnalyzer:
             return "描述了大数据处理的基本问题"
         return "问题描述不够具体"
 
-    def _analyze_technical_problem(self, patent_data: Dict[str, Any]) -> Dict[str, Any]:
+    def _analyze_technical_problem(self, patent_data: dict[str, Any]) -> dict[str, Any]:
         """分析技术问题"""
-        invention = patent_data.get("invention_content", "")
+        patent_data.get("invention_content", "")
         return {
             "problem_clarity": "中等",
             "problem_specificity": "需要更具体",
             "suggestions": "建议明确指出要解决的具体技术问题，而不是笼统的业务问题"
         }
 
-    def _analyze_technical_solution(self, patent_data: Dict[str, Any]) -> Dict[str, Any]:
+    def _analyze_technical_solution(self, patent_data: dict[str, Any]) -> dict[str, Any]:
         """分析技术方案"""
         claims = patent_data.get("claims", {})
         independent = claims.get("independent", "")
@@ -442,7 +441,7 @@ class PatentClaimProfessionalAnalyzer:
             return "存在问题: " + "; ".join(clarity_issues)
         return "清晰"
 
-    def _identify_technical_means(self, claim: str) -> List[Dict[str, str]]:
+    def _identify_technical_means(self, claim: str) -> list[dict[str, str]]:
         """识别技术手段"""
         means = []
         if "获取" in claim:
@@ -453,7 +452,7 @@ class PatentClaimProfessionalAnalyzer:
             means.append({"means": "数据处理", "concreteness": "低"})
         return means
 
-    def _identify_innovation_points(self, patent_data: Dict[str, Any]) -> List[str]:
+    def _identify_innovation_points(self, patent_data: dict[str, Any]) -> list[str]:
         """识别创新点"""
         invention = patent_data.get("invention_content", "")
         points = []
@@ -467,7 +466,7 @@ class PatentClaimProfessionalAnalyzer:
 
         return points if points else ["创新点不够明确"]
 
-    def _analyze_technical_effect(self, patent_data: Dict[str, Any]) -> Dict[str, Any]:
+    def _analyze_technical_effect(self, patent_data: dict[str, Any]) -> dict[str, Any]:
         """分析技术效果"""
         invention = patent_data.get("invention_content", "")
 
@@ -477,7 +476,7 @@ class PatentClaimProfessionalAnalyzer:
             "suggestions": "建议补充具体的性能指标，如处理效率提升百分比、资源利用率改善等"
         }
 
-    def _legal_analysis(self, patent_data: Dict[str, Any]) -> Dict[str, Any]:
+    def _legal_analysis(self, patent_data: dict[str, Any]) -> dict[str, Any]:
         """法律分析"""
         claims = patent_data.get("claims", {})
 
@@ -488,7 +487,7 @@ class PatentClaimProfessionalAnalyzer:
             "claim_interpretation_analysis": self._analyze_claim_interpretation(claims)
         }
 
-    def _analyze_patentability(self, patent_data: Dict[str, Any]) -> Dict[str, Any]:
+    def _analyze_patentability(self, patent_data: dict[str, Any]) -> dict[str, Any]:
         """分析可专利性"""
         return {
             "novelty_assessment": {
@@ -508,7 +507,7 @@ class PatentClaimProfessionalAnalyzer:
             }
         }
 
-    def _analyze_infringement_risk(self, claims: Dict[str, Any]) -> Dict[str, Any]:
+    def _analyze_infringement_risk(self, claims: dict[str, Any]) -> dict[str, Any]:
         """分析侵权风险"""
         return {
             "detection_difficulty": "高",
@@ -519,7 +518,7 @@ class PatentClaimProfessionalAnalyzer:
             ]
         }
 
-    def _analyze_validity_risk(self, claims: Dict[str, Any]) -> Dict[str, Any]:
+    def _analyze_validity_risk(self, claims: dict[str, Any]) -> dict[str, Any]:
         """分析有效性风险"""
         return {
             "invalidation_risk": "中等偏高",
@@ -535,7 +534,7 @@ class PatentClaimProfessionalAnalyzer:
             ]
         }
 
-    def _analyze_claim_interpretation(self, claims: Dict[str, Any]) -> Dict[str, Any]:
+    def _analyze_claim_interpretation(self, claims: dict[str, Any]) -> dict[str, Any]:
         """分析权利要求解释"""
         independent = claims.get("independent", "")
 
@@ -545,7 +544,7 @@ class PatentClaimProfessionalAnalyzer:
             "interpretation_risks": self._assess_interpretation_risks(independent)
         }
 
-    def _identify_ambiguous_terms(self, claim: str) -> List[str]:
+    def _identify_ambiguous_terms(self, claim: str) -> list[str]:
         """识别模糊术语"""
         ambiguous = []
         if "待处理数据" in claim:
@@ -554,7 +553,7 @@ class PatentClaimProfessionalAnalyzer:
             ambiguous.append("目标处理策略（需要说明具体包含哪些策略）")
         return ambiguous
 
-    def _identify_functional_limitations(self, claim: str) -> List[str]:
+    def _identify_functional_limitations(self, claim: str) -> list[str]:
         """识别功能性限定"""
         functional = []
         if "延迟处理" in claim:
@@ -563,7 +562,7 @@ class PatentClaimProfessionalAnalyzer:
             functional.append("立即处理（功能性限定，缺乏具体实现方式）")
         return functional
 
-    def _assess_interpretation_risks(self, claim: str) -> List[str]:
+    def _assess_interpretation_risks(self, claim: str) -> list[str]:
         """评估解释风险"""
         risks = []
         if "包括以下至少一项" in claim:
@@ -572,7 +571,7 @@ class PatentClaimProfessionalAnalyzer:
             risks.append("权利要求过短，技术特征不够具体，可能被认定为缺乏创造性")
         return risks
 
-    def _generate_improvements(self, patent_data: Dict[str, Any]) -> Dict[str, Any]:
+    def _generate_improvements(self, patent_data: dict[str, Any]) -> dict[str, Any]:
         """生成改进建议"""
         return {
             "critical_improvements": self._generate_critical_improvements(patent_data),
@@ -581,7 +580,7 @@ class PatentClaimProfessionalAnalyzer:
             "rewriting_suggestions": self._generate_rewriting_suggestions(patent_data)
         }
 
-    def _generate_critical_improvements(self, patent_data: Dict[str, Any]) -> List[Dict[str, str]]:
+    def _generate_critical_improvements(self, patent_data: dict[str, Any]) -> list[dict[str, str]]:
         """生成关键改进建议"""
         return [
             {
@@ -600,7 +599,7 @@ class PatentClaimProfessionalAnalyzer:
             }
         ]
 
-    def _generate_important_improvements(self, patent_data: Dict[str, Any]) -> List[Dict[str, str]]:
+    def _generate_important_improvements(self, patent_data: dict[str, Any]) -> list[dict[str, str]]:
         """生成重要改进建议"""
         return [
             {
@@ -619,7 +618,7 @@ class PatentClaimProfessionalAnalyzer:
             }
         ]
 
-    def _generate_suggested_improvements(self, patent_data: Dict[str, Any]) -> List[Dict[str, str]]:
+    def _generate_suggested_improvements(self, patent_data: dict[str, Any]) -> list[dict[str, str]]:
         """生成建议性改进"""
         return [
             {
@@ -638,7 +637,7 @@ class PatentClaimProfessionalAnalyzer:
             }
         ]
 
-    def _generate_rewriting_suggestions(self, patent_data: Dict[str, Any]) -> Dict[str, Any]:
+    def _generate_rewriting_suggestions(self, patent_data: dict[str, Any]) -> dict[str, Any]:
         """生成重写建议"""
         independent_claim = patent_data.get("claims", {}).get("independent", "")
 
@@ -663,7 +662,7 @@ class PatentClaimProfessionalAnalyzer:
 
         return improved
 
-    def _generate_conclusion(self, patent_data: Dict[str, Any]) -> Dict[str, Any]:
+    def _generate_conclusion(self, patent_data: dict[str, Any]) -> dict[str, Any]:
         """生成结论"""
         overall = self._overall_assessment(patent_data)
 
@@ -687,7 +686,7 @@ class PatentClaimProfessionalAnalyzer:
         else:
             return "低 (<40%)"
 
-    def _identify_strengths(self, patent_data: Dict[str, Any]) -> List[str]:
+    def _identify_strengths(self, patent_data: dict[str, Any]) -> list[str]:
         """识别优势"""
         strengths = []
         claims = patent_data.get("claims", {})
@@ -701,7 +700,7 @@ class PatentClaimProfessionalAnalyzer:
 
         return strengths if strengths else ["暂无明显优势"]
 
-    def _identify_weaknesses(self, patent_data: Dict[str, Any]) -> List[str]:
+    def _identify_weaknesses(self, patent_data: dict[str, Any]) -> list[str]:
         """识别劣势"""
         weaknesses = []
         claims = patent_data.get("claims", {})
@@ -725,7 +724,7 @@ class PatentClaimProfessionalAnalyzer:
         else:
             return "该专利申请文件存在严重问题，不建议直接提交。建议重新撰写或寻求专业专利代理人的帮助。"
 
-    def _suggest_next_steps(self, patent_data: Dict[str, Any]) -> List[str]:
+    def _suggest_next_steps(self, patent_data: dict[str, Any]) -> list[str]:
         """建议后续步骤"""
         return [
             "1. 根据关键改进建议修改独立权利要求，补充具体技术特征",

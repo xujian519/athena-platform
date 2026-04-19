@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台环境变量管理器
 Environment Manager for Athena Platform
@@ -16,7 +17,6 @@ from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 from typing import Any
-
 
 logger = logging.getLogger(__name__)
 

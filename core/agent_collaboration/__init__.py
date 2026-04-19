@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena多Agent协作系统
 Multi-Agent Collaboration System

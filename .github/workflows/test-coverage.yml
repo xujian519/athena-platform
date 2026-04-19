@@ -1,0 +1,58 @@
+# 测试覆盖率工作流
+# Test Coverage Workflow
+# 在PR和main分支上运行，确保代码质量
+
+name: Test Coverage
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    types: [ opened, synchronize ]
+
+jobs:
+  test-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install poetry
+          poetry install --no-interaction
+
+
+      - name: Run tests with coverage
+        run: |
+          poetry run pytest --cov=core --cov=services --cov-report=xml --cov-report=term-missing --cov-fail-under=70
+          COVERAGE_THRESHOLD= 70
+        env:
+          COVERAGE_THRESHOLD: 70
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage.xml
+          retention-days: 30
+
+      - name: Coverage comment
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            if [ "${{ steps.test-coverage.outputs.coverage }}" -lt 70 ]; then
+              echo "::warning:: Coverage is below 70%"
+              exit 1
+            fi
+            echo "::info:: Coverage check passed!"
+          env:
+            COVERAGE: ${{ steps.test-coverage.outputs.coverage }}
+

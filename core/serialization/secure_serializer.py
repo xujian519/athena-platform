@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 安全序列化工具模块
 
@@ -12,7 +13,7 @@ import json
 import logging
 from datetime import datetime
 from decimal import Decimal
-from typing import Any, Optional
+from typing import Any
 
 try:
     import msgpack
@@ -93,7 +94,7 @@ class SecureSerializer:
                 raise SerializationError(f"不支持的序列化格式: {self.format}")
         except Exception as e:
             logger.error(f"序列化失败: {e}")
-            raise SerializationError(f"序列化失败: {e}")
+            raise SerializationError(f"序列化失败: {e}") from e
 
     def deserialize(self, data: bytes) -> Any:
         """
@@ -119,7 +120,7 @@ class SecureSerializer:
                 raise DeserializationError(f"不支持的序列化格式: {self.format}")
         except Exception as e:
             logger.error(f"反序列化失败: {e}")
-            raise DeserializationError(f"反序列化失败: {e}")
+            raise DeserializationError(f"反序列化失败: {e}") from e
 
     def _serialize_json(self, obj: Any) -> bytes:
         """使用JSON序列化"""

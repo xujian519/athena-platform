@@ -4,26 +4,23 @@
 性能优化版本 - 支持连接池、缓存、负载均衡
 """
 
-import logging
-from core.async_main import async_main
-from core.logging_config import setup_logging
-import time
-import asyncio
 import json
-from typing import Any, Dict, Optional, List
-from functools import lru_cache
+import logging
+import time
 from dataclasses import dataclass
+from functools import lru_cache
 
 import httpx
+import redis.asyncio as redis
 import uvicorn
-from fastapi import FastAPI, HTTPException, Request, Response
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
-import redis.asyncio as redis
 from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
+
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -48,7 +45,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 class ServiceConfig:
     name: str
     prefix: str
-    urls: List[str]  # 支持多个URL用于负载均衡
+    urls: list[str]  # 支持多个URL用于负载均衡
     timeout: float = 30.0
     retries: int = 3
     circuit_breaker_threshold: int = 5
@@ -89,10 +86,10 @@ SERVICE_ROUTES = {
 # 服务健康状态
 class ServiceHealth:
     def __init__(self):
-        self._healthy_urls: Dict[str, List[str]] = {}
-        self._circuit_breakers: Dict[str, float] = {}
+        self._healthy_urls: dict[str, list[str]] = {}
+        self._circuit_breakers: dict[str, float] = {}
 
-    def get_healthy_urls(self, service_name: str) -> List[str]:
+    def get_healthy_urls(self, service_name: str) -> list[str]:
         """获取健康的URL列表"""
         return self._healthy_urls.get(service_name, SERVICE_ROUTES[service_name].urls)
 
@@ -126,7 +123,7 @@ service_health = ServiceHealth()
 # 连接池管理
 class ConnectionPoolManager:
     def __init__(self):
-        self._pools: Dict[str, httpx.AsyncClient] = {}
+        self._pools: dict[str, httpx.AsyncClient] = {}
 
     async def get_client(self, base_url: str, timeout: float = 30.0) -> httpx.AsyncClient:
         """获取连接池客户端"""
@@ -164,7 +161,7 @@ class CacheManager:
             logger.warning(f"Redis连接失败: {e}，将禁用缓存")
             self.redis_client = None
 
-    async def get(self, key: str) -> Dict | None:
+    async def get(self, key: str) -> dict | None:
         """获取缓存"""
         if not self.redis_client:
             return None
@@ -176,7 +173,7 @@ class CacheManager:
             logger.warning(f"缓存读取失败: {e}")
         return None
 
-    async def set(self, key: str, data: Dict, ttl: int = 300):
+    async def set(self, key: str, data: dict, ttl: int = 300):
         """设置缓存"""
         if not self.redis_client:
             return
@@ -197,7 +194,7 @@ async def shutdown_event():
     await pool_manager.close_all()
 
 # 负载均衡选择器
-def select_url(urls: List[str]) -> str:
+def select_url(urls: list[str]) -> str:
     """简单的轮询负载均衡"""
     if not urls:
         return None
@@ -227,7 +224,7 @@ async def root(request: Request):
 async def health_check():
     """健康检查端点"""
     services_status = {}
-    for name, config in SERVICE_ROUTES.items():
+    for name, _config in SERVICE_ROUTES.items():
         healthy_urls = service_health.get_healthy_urls(name)
         services_status[name] = {
             'status': 'healthy' if healthy_urls else 'unhealthy',
@@ -316,7 +313,7 @@ async def proxy_request(request: Request, path: str):
                         'headers': dict(response.headers)
                     }, ttl=300)  # 5分钟缓存
                 except Exception as e:
-                logger.error(f"Error: {e}", exc_info=True)
+                    logger.error(f"Error: {e}", exc_info=True)
 
             return JSONResponse(
                 content=response.json() if response.headers.get('content-type', '').startswith('application/json') else response.text,

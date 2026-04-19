@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律世界模型 - 智能问答系统
 Legal World Model - Intelligent Q&A System
@@ -25,8 +26,7 @@ from contextlib import asynccontextmanager
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-
+from typing import Any
 
 # 数据库连接管理
 from core.database import SyncDatabaseConnectionManager, get_sync_db_manager
@@ -369,9 +369,9 @@ class LegalWorldQAEngine:
 
         # 技术领域(简单提取)
         tech_fields = ["机械", "电子", "化学", "医药", "生物", "软件", "通信"]
-        for field in tech_fields:
-            if field in question:
-                entities["technology_field"] = field
+        for field_name in tech_fields:
+            if field_name in question:
+                entities["technology_field"] = field_name
                 break
 
         return entities
@@ -1448,7 +1448,7 @@ class LegalWorldQAEngine:
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
-from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi import Limiter
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
 
@@ -1652,7 +1652,7 @@ def create_qa_app() -> FastAPI:
 
         except Exception as e:
             logger.error(f"问答处理失败: {e}")
-            raise HTTPException(status_code=500, detail=str(e))
+            raise HTTPException(status_code=500, detail=str(e)) from e
 
     @app.get("/api/v1/qa/stats")
     @limiter.limit("30/minute")  # 每分钟30次请求

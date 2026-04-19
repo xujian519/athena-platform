@@ -5,12 +5,13 @@ Athena Iterative Search Service (Simplified)
 """
 
 import logging
-from core.async_main import async_main
-from core.logging_config import setup_logging
 from datetime import datetime
-from typing import Dict, Any
-from fastapi import FastAPI
+from typing import Any
+
 import uvicorn
+from fastapi import FastAPI
+
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -44,7 +45,7 @@ async def health():
     }
 
 @app.post("/api/v1/search")
-async def search(request: Dict[str, Any]):
+async def search(request: dict[str, Any]):
     """搜索接口"""
     query = request.get("query", "")
 

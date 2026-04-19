@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强的元学习实现
 Enhanced Meta-Learning Implementation
@@ -15,15 +16,13 @@ Enhanced Meta-Learning Implementation
 """
 
 import logging
-import math
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
 
 import numpy as np
-from sklearn.cluster import KMeans
-from sklearn.metrics.pairwise import cosine_similarity, euclidean_distances
+from sklearn.metrics.pairwise import euclidean_distances
 
 logger = logging.getLogger(__name__)
 
@@ -131,7 +130,7 @@ class EnhancedMetaLearning:
         total_loss = 0.0
         total_accuracy = 0.0
 
-        for episode in range(num_episodes):
+        for _episode in range(num_episodes):
             episode_loss = 0.0
             episode_accuracy = 0.0
 
@@ -200,7 +199,7 @@ class EnhancedMetaLearning:
 
         total_meta_loss = 0.0
 
-        for episode in range(num_episodes):
+        for _episode in range(num_episodes):
             meta_gradient = np.zeros_like(self.maml_theta)
 
             for task in tasks:
@@ -252,7 +251,7 @@ class EnhancedMetaLearning:
         parameters = np.random.randn(self.embedding_dim) * 0.01
         total_loss = 0.0
 
-        for episode in range(num_episodes):
+        for _episode in range(num_episodes):
             gradient = np.zeros_like(parameters)
 
             for task in tasks:
@@ -361,7 +360,7 @@ class EnhancedMetaLearning:
 
         for sample in dataset:
             embedding = self._get_embedding(sample)
-            label = sample.get("label", 0)
+            sample.get("label", 0)
 
             # 简化的梯度：embedding - parameters
             sample_grad = embedding - parameters
@@ -409,7 +408,7 @@ class EnhancedMetaLearning:
 
         # 从features构建向量
         embedding = np.zeros(self.embedding_dim)
-        for i, (key, value) in enumerate(features.items()):
+        for i, (_key, value) in enumerate(features.items()):
             if i >= self.embedding_dim:
                 break
             if isinstance(value, (int, float)):

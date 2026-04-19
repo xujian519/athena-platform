@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律文档专用实体关系提取器
 Legal Document Entity and Relation Extractor
@@ -9,8 +10,7 @@ Legal Document Entity and Relation Extractor
 import logging
 import re
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Set
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -171,7 +171,7 @@ class LegalEntityRelationExtractor:
         ]
 
     def extract_entities(
-        self, text: str, entity_types: list["key"] = None
+        self, text: str, entity_types: list[str] = None
     ) -> list[dict[str, Any]]:
         """
         提取法律文档实体
@@ -324,7 +324,7 @@ class LegalEntityRelationExtractor:
 
         return entities
 
-    def extract_relations(self, text: str, entities: list[dict[str, Any]) -> list[dict[str, Any]]:
+    def extract_relations(self, text: str, entities: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """
         提取实体间的关系
 
@@ -351,7 +351,7 @@ class LegalEntityRelationExtractor:
                 # 查找同一句子或邻近句子中的法条引用
                 context_start = max(0, law_ref["start"] - 100)
                 context_end = min(len(text), law_ref["end"] + 100)
-                context = text[context_start: context_end,
+                context = text[context_start:context_end]
 
                 for art_ref in entities_by_type["ARTICLE_REFERENCE"]:
                     if law_ref["start"] <= art_ref["start"] <= law_ref["end"] + 200:
@@ -465,7 +465,7 @@ class LegalEntityRelationExtractor:
         return relations
 
     def extract_entities_and_relations(
-        self, text: str, entity_types: list["key"] = None
+        self, text: str, entity_types: list[str] = None
     ) -> dict[str, Any]:
         """
         同时提取实体和关系

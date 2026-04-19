@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 任务分类器
 Task Classifier - 识别任务类型(专业任务 vs 通用任务)
@@ -11,7 +12,6 @@ Task Classifier - 识别任务类型(专业任务 vs 通用任务)
 import logging
 from dataclasses import dataclass
 from enum import Enum
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -43,10 +43,10 @@ class TaskClassification:
     """任务分类结果"""
 
     category: TaskCategory  # 分类:专业/通用
-    domain: Optional[TaskDomain]  # 领域
+    domain: TaskDomain | None  # 领域
     confidence: float  # 置信度 (0-1)
     reasoning: str  # 分类理由
-    suggested_agent: Optional[str]  # 建议的Agent
+    suggested_agent: str | None  # 建议的Agent
     requires_rules: bool  # 是否需要查询规则
 
 

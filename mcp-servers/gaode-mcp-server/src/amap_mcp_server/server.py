@@ -7,13 +7,13 @@ import asyncio
 import logging
 import signal
 import sys
-from typing import Any, Dict, Optional
+from typing import Any
 
 import structlog
 from mcp.server import Server
 from mcp.server.models import InitializationOptions
 from mcp.server.stdio import stdio_server
-from mcp.types import EmbeddedResource, ImageContent, TextContent, Tool
+from mcp.types import TextContent, Tool
 
 from .api.extended_gaode_client import ExtendedAmapApiClient
 from .api.gaode_client import AmapApiClient
@@ -42,7 +42,7 @@ class AmapMcpServer:
     def __init__(self):
         self.server = Server(config.mcp_server.name)
         self.api_client: AmapApiClient | None = None
-        self.tools: Dict[str, Tool] = {}
+        self.tools: dict[str, Tool] = {}
         self._setup_handlers()
 
     def _setup_handlers(self) -> Any:
@@ -64,7 +64,7 @@ class AmapMcpServer:
             return tools
 
         @self.server.call_tool()
-        async def handle_call_tool(name: str, arguments: Dict[str, Any]) -> list[TextContent]:
+        async def handle_call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
             """调用工具"""
             if not self.api_client:
                 await self._initialize_client()
@@ -137,9 +137,8 @@ class AmapMcpServer:
                 api_key_prefix=config.amap.api_key[:8] + '...'
             )
 
-    def _format_result(self, result: Dict[str, Any]) -> str:
+    def _format_result(self, result: dict[str, Any]) -> str:
         """格式化结果为易读的文本"""
-        import json
 
         # 提取关键信息用于快速概览
         if result.get('success'):

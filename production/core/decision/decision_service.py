@@ -1,0 +1,416 @@
+#!/usr/bin/env python3
+"""
+决策服务 - Decision Service
+统一的人机协作决策服务,集成到小诺平台
+
+作者: 小诺·双鱼座
+版本: v1.0.0 "决策服务"
+创建时间: 2025-12-17
+"""
+
+from __future__ import annotations
+import json
+import logging
+import sys
+from dataclasses import dataclass, field
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+logger = logging.getLogger(__name__)
+
+# 添加路径
+sys.path.append(str(Path(__file__).parent))
+
+from claude_code_hitl import (
+    ClaudeCodeHITLDecisionEngine,
+    DecisionCategory,
+    DecisionRequest,
+    DecisionUrgency,
+)
+from human_in_loop_decision import (
+    DecisionContext,
+    DecisionOption,
+    HumanFeedback,
+    HumanInLoopDecisionEngine,
+)
+
+
+@dataclass
+class DecisionRecord:
+    """决策记录"""
+
+    id: str
+    problem: str
+    category: str
+    result: Any
+    timestamp: datetime = field(default_factory=datetime.now)
+    feedback: HumanFeedback | None = None
+    ai_confidence: float = 0.0
+    human_involved: bool = False
+
+
+class DecisionService:
+    """决策服务 - 小诺平台的核心决策服务"""
+
+    def __init__(self):
+        # 初始化决策引擎
+        self.terminal_engine = HumanInLoopDecisionEngine(mode="terminal")
+        self.claude_code_engine = ClaudeCodeHITLDecisionEngine()
+
+        # 决策历史
+        self.decision_history = []
+
+        # 决策模板
+        self.decision_templates = self._load_templates()
+
+        print("🎯 小诺决策服务已初始化")
+
+    def _load_templates(self) -> dict[str, dict[str, Any]]:
+        """加载决策模板"""
+        return {
+            "技术决策": {
+                "category": "technical",
+                "questions": ["技术选型", "架构设计", "性能优化", "技术方案"],
+            },
+            "产品决策": {
+                "category": "product",
+                "questions": ["功能优先级", "产品路线", "用户反馈处理", "版本发布"],
+            },
+            "运营决策": {
+                "category": "operational",
+                "questions": ["资源分配", "任务安排", "团队管理", "流程优化"],
+            },
+            "战略决策": {
+                "category": "strategic",
+                "questions": ["市场策略", "发展规划", "合作伙伴", "投资决策"],
+            },
+        }
+
+    async def make_decision(
+        self,
+        problem: str,
+        options: list[dict[str, Any]],        category: str = "general",
+        context: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """执行决策"""
+        print(f"\n🎯 决策服务: {problem}")
+
+        # 创建决策选项
+        decision_options = []
+        for opt in options:
+            decision_opt = DecisionOption(
+                id=opt.get("id", f"opt_{len(decision_options)}"),
+                title=opt.get("title", "未命名选项"),
+                description=opt.get("description", ""),
+                confidence=opt.get("confidence", 0.5),
+                risk_level=opt.get("risk_level", "medium"),
+                estimated_cost=opt.get("estimated_cost"),
+                expected_outcome=opt.get("expected_outcome"),
+            )
+            decision_options.append(decision_opt)
+
+        # 创建决策上下文
+        decision_context = DecisionContext(
+            problem=problem, options=decision_options, context=context or {}
+        )
+
+        # 检测环境并选择引擎
+        is_claude_code = self._detect_claude_code()
+
+        if is_claude_code:
+            print("🤖 使用Claude Code决策引擎")
+            result = await self._claude_code_decision(decision_context, category)
+        else:
+            print("💻 使用终端决策引擎")
+            result = await self._terminal_decision(decision_context, category)
+
+        # 记录决策
+        self._record_decision(problem, category, result)
+
+        return result
+
+    def _detect_claude_code(self) -> bool:
+        """检测是否在Claude Code环境"""
+        try:
+            # 尝试使用AskUserQuestion
+            return True
+        except (ValueError, KeyError, ConnectionError):  # TODO: 根据上下文指定具体异常类型
+            return False
+
+    async def _claude_code_decision(
+        self, context: DecisionContext, category: str
+    ) -> dict[str, Any]:
+        """Claude Code环境决策"""
+        # 转换决策请求
+        urgency_map = {
+            "strategic": DecisionUrgency.HIGH,
+            "critical": DecisionUrgency.CRITICAL,
+            "urgent": DecisionUrgency.HIGH,
+            "normal": DecisionUrgency.MEDIUM,
+            "low": DecisionUrgency.LOW,
+        }
+
+        category_map = {
+            "technical": DecisionCategory.TECHNICAL,
+            "product": DecisionCategory.BUSINESS,
+            "operational": DecisionCategory.OPERATIONAL,
+            "strategic": DecisionCategory.STRATEGIC,
+        }
+
+        # 创建请求
+        request = DecisionRequest(
+            title=context.problem,
+            description=context.problem,
+            options=[
+                {
+                    "id": opt.id,
+                    "title": opt.title,
+                    "description": opt.description,
+                    "confidence": opt.confidence,
+                    "risk_level": opt.risk_level,
+                }
+                for opt in context.options
+            ],
+            category=category_map.get(category, DecisionCategory.OPERATIONAL),
+            urgency=urgency_map.get(
+                context.context.get("urgency", "normal"), DecisionUrgency.MEDIUM
+            ),
+            context=context.context,
+        )
+
+        # 执行决策
+        result = await self.claude_code_engine.make_decision(request)
+
+        return {
+            "success": True,
+            "chosen_option": result.chosen_option,
+            "confidence": result.confidence,
+            "human_feedback": result.human_feedback,
+            "rationale": result.rationale,
+            "engine": "claude_code",
+        }
+
+    async def _terminal_decision(self, context: DecisionContext, category: str) -> dict[str, Any]:
+        """终端环境决策"""
+        # 直接使用终端引擎
+        chosen = await self.terminal_engine.make_decision(context)
+
+        return {
+            "success": True,
+            "chosen_option": chosen.id,
+            "confidence": 0.8,  # 终端模式默认置信度
+            "human_feedback": None,
+            "rationale": "终端模式决策",
+            "engine": "terminal",
+        }
+
+    def _record_decision(self, problem: str, category: str, result: dict[str, Any]) -> Any:
+        """记录决策"""
+        record = DecisionRecord(
+            id=f"decision_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+            problem=problem,
+            category=category,
+            result=result,
+            human_involved=result.get("human_feedback") is not None,
+            ai_confidence=result.get("confidence", 0.0),
+        )
+
+        self.decision_history.append(record)
+
+        # 保存到文件
+        self._save_decision_to_file(record)
+
+    def _save_decision_to_file(self, record: DecisionRecord) -> Any:
+        """保存决策到文件"""
+        try:
+            decision_dir = Path(
+                "/Users/xujian/Athena工作平台/data/decisions"
+            )  # TODO: 确保除数不为零
+            decision_dir.mkdir(parents=True, exist_ok=True)
+
+            filename = f"{record.id}.json"
+            filepath = decision_dir / filename
+
+            data = {
+                "id": record.id,
+                "problem": record.problem,
+                "category": record.category,
+                "result": record.result,
+                "timestamp": record.timestamp.isoformat(),
+                "human_involved": record.human_involved,
+                "ai_confidence": record.ai_confidence,
+            }
+
+            with open(filepath, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+
+        except Exception as e:
+            logger.error(f"保存决策历史失败: {e}")
+            # TODO: 添加适当的错误处理和重试机制
+
+    async def quick_decision(self, prompt: str) -> str:
+        """快速决策接口"""
+        print(f"\n💭 快速决策: {prompt}")
+
+        # 解析提示词
+        decision_type = self._parse_decision_type(prompt)
+
+        # 使用模板
+        if decision_type in self.decision_templates:
+            return await self._template_decision(prompt, decision_type)
+        else:
+            return await self._free_form_decision(prompt)
+
+    def _parse_decision_type(self, prompt: str) -> str | None:
+        """解析决策类型"""
+        for template_name, template_info in self.decision_templates.items():
+            for keyword in template_info.get("questions"):
+                if keyword in prompt:
+                    return template_name
+        return None
+
+    async def _template_decision(self, prompt: str, decision_type: str) -> str:
+        """模板决策"""
+        print(f"   📋 使用{decision_type}决策模板")
+
+        # 根据类型生成建议
+        suggestions = self._generate_suggestions(decision_type, prompt)
+
+        if suggestions:
+            print("\n💡 建议:")
+            for i, suggestion in enumerate(suggestions, 1):
+                print(f"   {i}. {suggestion}")
+
+        # 引导用户做选择
+        return f"基于{decision_type}的分析,建议您:\n" + "\n".join(
+            [f"{i}. {s}" for i, s in enumerate(suggestions, 1)]
+        )
+
+    def _generate_suggestions(self, decision_type: str, prompt: str) -> list[str]:
+        """生成决策建议"""
+        generators = {
+            "技术决策": self._tech_suggestions,
+            "产品决策": self._product_suggestions,
+            "运营决策": self._operational_suggestions,
+            "战略决策": self._strategic_suggestions,
+        }
+
+        generator = generators.get(decision_type, lambda _: ["需要更多信息"])
+        return generator(prompt)
+
+    def _tech_suggestions(self, prompt: str) -> list[str]:
+        """技术决策建议"""
+        suggestions = [
+            "评估技术栈的成熟度和团队熟悉度",
+            "考虑长期维护成本和学习曲线",
+            "测试方案的可行性和风险",
+            "对比技术指标:性能、扩展性、安全性",
+        ]
+
+        if "性能" in prompt:
+            suggestions.insert(0, "优先考虑性能瓶颈和优化空间")
+        if "成本" in prompt:
+            suggestions.insert(0, "计算总拥有成本(TCO)")
+
+        return suggestions
+
+    def _product_suggestions(self, prompt: str) -> list[str]:
+        """产品决策建议"""
+        return [
+            "分析用户需求和痛点",
+            "评估市场潜力和竞争情况",
+            "考虑开发和维护成本",
+            "制定分阶段上线计划",
+            "收集用户反馈并持续优化",
+        ]
+
+    def _operational_suggestions(self, prompt: str) -> list[str]:
+        """运营决策建议"""
+        return [
+            "评估所需资源和时间",
+            "分析对现有流程的影响",
+            "考虑团队工作量分配",
+            "制定风险评估和缓解措施",
+            "设置关键绩效指标(KPIs)",
+        ]
+
+    def _strategic_suggestions(self, prompt: str) -> list[str]:
+        """战略决策建议"""
+        return [
+            "分析市场趋势和发展方向",
+            "评估竞争对手情况",
+            "考虑资源配置和投资回报",
+            "制定长期发展路线图",
+            "建立评估和调整机制",
+        ]
+
+    async def _free_form_decision(self, prompt: str) -> str:
+        """自由形式决策"""
+        print(f"   🤔 自由分析: {prompt}")
+
+        return """
+对于这个决策,我建议您考虑以下几个维度:
+
+1️⃣ **目标明确性**
+   - 决策要解决的核心问题是什么?
+   - 期望达到什么目标?
+
+2️⃣ **资源评估**
+   - 需要多少时间、人力、资金?
+   - 是否有足够的资源支持?
+
+3️⃣ **风险分析**
+   - 可能遇到哪些风险?
+   - 如何规避或缓解?
+
+4️⃣ **长期影响**
+   - 这个决策对未来有什么影响?
+   - 是否有后悔的风险?
+
+需要我帮您详细分析吗?请提供更多背景信息。
+        """
+
+    def get_decision_stats(self) -> dict[str, Any]:
+        """获取决策统计"""
+        if not self.decision_history:
+            return {"message": "暂无决策记录"}
+
+        total = len(self.decision_history)
+        human_involved = sum(1 for d in self.decision_history if d.human_involved)
+
+        categories = {}
+        for record in self.decision_history:
+            cat = record.category
+            categories[cat] = categories.get(cat, 0) + 1
+
+        avg_confidence = sum(d.ai_confidence for d in self.decision_history) / total
+
+        return {
+            "total_decisions": total,
+            "human_involved": human_involved,
+            "auto_decisions": total - human_involved,
+            "human_involvement_rate": f"{((human_involved/total*100) if total > 0 else 0):.1f}%",  # TODO: 确保除数不为零
+            "average_confidence": f"{avg_confidence:.2f}",
+            "categories": categories,
+            "recent_decisions": [
+                {
+                    "id": d.id,
+                    "problem": d.problem,
+                    "timestamp": d.timestamp.strftime("%Y-%m-%d %H:%M"),
+                }
+                for d in self.decision_history[-5:]
+            ],
+        }
+
+    def list_templates(self) -> str:
+        """列出所有决策模板"""
+        return f"""
+📋 小诺决策模板
+
+{chr(10).join([f'• {name}: {info.get("category")}' for name, info in self.decision_templates.items()])}
+
+使用方法:
+1. 告诉我"使用XX决策模板"
+2. 或者在问题中包含相关关键词
+        """

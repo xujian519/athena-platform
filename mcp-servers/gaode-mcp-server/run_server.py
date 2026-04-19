@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 高德地图MCP服务器启动文件
 Gaode Maps MCP Server Launcher

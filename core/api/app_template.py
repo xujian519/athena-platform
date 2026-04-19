@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台FastAPI应用程序模板
 FastAPI Application Template for Athena Platform
@@ -12,14 +13,14 @@ FastAPI Application Template for Athena Platform
 
 import logging
 import uuid
-from typing import Any, Optional
+from typing import Any
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-
-from core.security.auth import ALLOWED_ORIGINS
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
+
+from core.security.auth import ALLOWED_ORIGINS
 
 from .standards import (
     APIError,
@@ -249,7 +250,7 @@ class AppFactory:
     """应用程序工厂"""
 
     @staticmethod
-    def create_app(config: dict[str, Any) -> FastAPI:
+    def create_app(config: dict[str, Any]) -> FastAPI:
         """创建应用实例"""
         return create_athena_app(
             title=config.get("title", "Athena Platform API"),

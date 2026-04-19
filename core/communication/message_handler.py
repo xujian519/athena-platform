@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 消息处理器 - 兼容性实现
 Message Handler - Compatibility Implementation
@@ -14,9 +15,9 @@ import logging
 import uuid
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -158,7 +159,7 @@ class MessageHandler:
         message_type: MessageType = MessageType.TEXT,
         priority: MessagePriority = MessagePriority.NORMAL,
         sender: str = "",
-        receivers: list["key"] = None,
+        receivers: list[str] = None,
         metadata: dict[str, Any] | None = None,
     ) -> list[str]:
         """
@@ -238,7 +239,7 @@ class MessageHandler:
                 except asyncio.TimeoutError:
                     break
 
-        except asyncio.TimeoutError:
+        except asyncio.TimeoutError as e:
             logger.warning(f"连接或超时错误: {e}")
 
         return messages

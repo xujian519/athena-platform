@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化版监控告警模块 - 系统指标收集器
 Optimized Monitoring and Alerting Module - System Metrics Collector
@@ -13,6 +14,7 @@ import asyncio
 import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
+from typing import Any
 
 import psutil
 

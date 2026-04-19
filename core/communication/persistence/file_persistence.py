@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 文件系统消息持久化实现
 File System Message Persistence Implementation
@@ -24,6 +25,7 @@ from pathlib import Path
 from typing import Any
 
 from core.communication.types import Message
+
 from .base_persistence import (
     BaseMessagePersistence,
     MessageState,
@@ -156,7 +158,7 @@ class FilePersistence(BaseMessagePersistence):
             if not file_path.exists():
                 return None
 
-            with open(file_path, "r") as f:
+            with open(file_path) as f:
                 fcntl.flock(f.fileno(), fcntl.LOCK_SH)
                 data = json.load(f)
                 fcntl.flock(f.fileno(), fcntl.LOCK_UN)
@@ -184,7 +186,7 @@ class FilePersistence(BaseMessagePersistence):
                 return False
 
             # 读取当前消息
-            with open(old_path, "r") as f:
+            with open(old_path) as f:
                 fcntl.flock(f.fileno(), fcntl.LOCK_SH)
                 data = json.load(f)
                 fcntl.flock(f.fileno(), fcntl.LOCK_UN)
@@ -275,7 +277,7 @@ class FilePersistence(BaseMessagePersistence):
 
             for file_path in sorted(state_dir.glob("*.json"))[:limit]:
                 try:
-                    with open(file_path, "r") as f:
+                    with open(file_path) as f:
                         fcntl.flock(f.fileno(), fcntl.LOCK_SH)
                         data = json.load(f)
                         fcntl.flock(f.fileno(), fcntl.LOCK_UN)
@@ -327,7 +329,7 @@ class FilePersistence(BaseMessagePersistence):
                 return False
 
             # 读取消息
-            with open(old_path, "r") as f:
+            with open(old_path) as f:
                 fcntl.flock(f.fileno(), fcntl.LOCK_SH)
                 data = json.load(f)
                 fcntl.flock(f.fileno(), fcntl.LOCK_UN)
@@ -364,7 +366,7 @@ class FilePersistence(BaseMessagePersistence):
 
             for file_path in sorted(self.dead_letter_dir.glob("*.json")):
                 try:
-                    with open(file_path, "r") as f:
+                    with open(file_path) as f:
                         fcntl.flock(f.fileno(), fcntl.LOCK_SH)
                         data = json.load(f)
                         fcntl.flock(f.fileno(), fcntl.LOCK_UN)
@@ -420,7 +422,7 @@ class FilePersistence(BaseMessagePersistence):
         """加载索引"""
         try:
             if self.index_file.exists():
-                with open(self.index_file, "r") as f:
+                with open(self.index_file) as f:
                     self._index = json.load(f)
             else:
                 self._index = {}

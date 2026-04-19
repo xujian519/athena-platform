@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律写作素材库管理器 - 增强版
 Legal Writing Materials Manager - Enhanced Version
@@ -17,8 +18,7 @@ import re
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

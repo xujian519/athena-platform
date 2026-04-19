@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 爬虫性能优化器 - Phase 1
 Crawler Performance Optimizer
@@ -13,7 +12,6 @@ Crawler Performance Optimizer
 
 import asyncio
 import hashlib
-import json
 import logging
 import pickle
 import random
@@ -22,9 +20,8 @@ import ssl
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
-from urllib.parse import urljoin, urlparse
+from typing import Any
+from urllib.parse import urlparse
 
 import aiohttp
 import redis
@@ -34,7 +31,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(f'crawler_optimization_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log'),
+        logging.FileHandler(f"crawler_optimization_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"),
         logging.StreamHandler()
     ]
 )
@@ -71,7 +68,7 @@ class CrawlerConfig:
 
     # 智能延迟配置
     adaptive_delay: bool = True
-    domain_specific_delays: Dict[str, Dict[str, float]] = field(default_factory=dict)
+    domain_specific_delays: dict[str, dict[str, float]] = field(default_factory=dict)
     machine_learning_enabled: bool = False  # 预留ML优化接口
 
     # 重试配置
@@ -174,7 +171,7 @@ class RedisCacheManager:
             logger.warning(f"Redis删除缓存失败: {e}")
             return False
 
-    def get_cache_stats(self) -> Dict[str, Any]:
+    def get_cache_stats(self) -> dict[str, Any]:
         """获取缓存统计信息"""
         if not self.redis_client:
             return {'status': 'disabled'}
@@ -314,7 +311,7 @@ class SmartDelayManager:
         # 限制在合理范围内
         return max(self.config.min_delay, min(max_delay, final_delay))
 
-    def get_domain_stats(self) -> Dict[str, Any]:
+    def get_domain_stats(self) -> dict[str, Any]:
         """获取域名统计信息"""
         return self.domain_stats.copy()
 
@@ -372,7 +369,7 @@ class OptimizedAsyncCrawler:
         logger.info(f"   最大并发: {self.config.max_concurrent}")
         logger.info(f"   连接池大小: {self.config.connection_pool_size}")
 
-    def _get_default_headers(self) -> Dict[str, str]:
+    def _get_default_headers(self) -> dict[str, str]:
         """获取默认请求头"""
         return {
             'User-Agent': self._get_random_user_agent(),
@@ -402,7 +399,7 @@ class OptimizedAsyncCrawler:
     def _get_cache_key(self, url: str, method: str = 'GET') -> str:
         """生成缓存键"""
         content = f"{method}:{url}"
-        return hashlib.md5(content.encode('utf-8', usedforsecurity=False), usedforsecurity=False, usedforsecurity=False).hexdigest()
+        return hashlib.md5(content.encode('utf-8'), usedforsecurity=False).hexdigest()
 
     def _get_from_cache(self, cache_key: str) -> Any | None:
         """从缓存获取数据（支持Redis + 内存缓存）"""
@@ -459,7 +456,7 @@ class OptimizedAsyncCrawler:
         return delay
 
     async def fetch_url(self, url: str, method: str = 'GET',
-                     data: Dict = None, headers: Dict = None) -> Dict[str, Any]:
+                     data: dict = None, headers: dict = None) -> dict[str, Any]:
         """获取单个URL"""
         start_time = time.time()
 
@@ -534,7 +531,7 @@ class OptimizedAsyncCrawler:
         finally:
             self.stats['total_requests'] += 1
 
-    async def batch_fetch(self, urls: List[str], batch_size: int = None) -> List[Dict[str, Any]]:
+    async def batch_fetch(self, urls: list[str], batch_size: int = None) -> list[dict[str, Any]]:
         """批量获取URLs"""
         batch_size = batch_size or self.config.batch_size
         results = []
@@ -542,7 +539,7 @@ class OptimizedAsyncCrawler:
         # 创建信号量控制并发
         semaphore = asyncio.Semaphore(self.config.max_concurrent)
 
-        async def fetch_with_semaphore(url: str) -> Dict[str, Any]:
+        async def fetch_with_semaphore(url: str) -> dict[str, Any]:
             async with semaphore:
                 return await self.fetch_url(url)
 
@@ -576,14 +573,14 @@ class OptimizedAsyncCrawler:
         total_time = time.time() - start_time
         successful_count = sum(1 for r in results if r.get('success', False))
 
-        logger.info(f"✅ 批量获取完成")
+        logger.info("✅ 批量获取完成")
         logger.info(f"   成功: {successful_count}/{len(urls)}")
         logger.info(f"   总耗时: {total_time:.2f}秒")
         logger.info(f"   平均速度: {len(urls)/total_time:.1f} URLs/秒")
 
         return results
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取增强的爬虫统计信息"""
         current_time = time.time()
 
@@ -667,7 +664,7 @@ async def demo_optimized_crawler():
     test_urls.extend(test_urls[:2])
 
     # 批量获取
-    results = await crawler.batch_fetch(test_urls)
+    await crawler.batch_fetch(test_urls)
 
     # 显示统计
     stats = crawler.get_stats()
@@ -682,7 +679,7 @@ async def demo_optimized_crawler():
     logger.info(f"总运行时间: {stats['uptime']:.2f}秒")
 
     # 缓存效果
-    logger.info(f"\n💾 缓存效果")
+    logger.info("\n💾 缓存效果")
     logger.info(str('-' * 30))
     logger.info(f"缓存命中: {stats['cache_hits']}")
     logger.info(f"缓存未命中: {stats['cache_misses']}")

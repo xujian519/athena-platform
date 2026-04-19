@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 HTN层次规划器 (Hierarchical Task Network Planner)
 实现分层任务网络规划算法
@@ -21,7 +22,7 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -217,7 +218,7 @@ class HierarchicalPlanner:
 
         # 第6步:计算总时间
         total_duration = sum(
-            task.estimated_duration for task_id in execution_order if task_id in tasks
+            tasks[task_id].estimated_duration for task_id in execution_order if task_id in tasks
         )
 
         plan = ExecutionPlan(

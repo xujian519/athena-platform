@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 搜索引擎数据类型定义
 """
@@ -8,8 +9,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
-
-from config.numpy_compatibility import zeros
+from config.numpy_compatibility import np, zeros
 
 
 class SearchType(Enum):

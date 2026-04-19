@@ -9,9 +9,13 @@ Unit Tests for Persistence Manager
 """
 
 import asyncio
+import sys
 from datetime import datetime
+from pathlib import Path
 
 import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.learning.persistence_manager import (
     FileStorageBackend,

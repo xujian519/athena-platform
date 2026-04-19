@@ -1,9 +1,8 @@
+from __future__ import annotations
 """
 高级自主决策引擎
 基于论文中的先进方法实现增强的决策能力
 """
-import networkx as nx
-
 import logging
 import uuid
 from collections import deque
@@ -12,6 +11,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any
 
+import networkx as nx
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 from core.logging_config import setup_logging

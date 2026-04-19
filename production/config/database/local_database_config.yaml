@@ -1,0 +1,117 @@
+# Athena平台 - 本地PostgreSQL数据库配置
+# Local PostgreSQL Database Configuration
+#
+# 此配置文件用于连接本地运行的PostgreSQL服务器
+# 所有数据库连接都指向 localhost:5433
+#
+# 使用方法:
+#   source config/database/local_database_config.sh
+#   或在Python中读取此YAML文件
+
+version: "1.0"
+environment: "local"
+
+# PostgreSQL连接配置
+postgresql:
+  # 主数据库连接
+  primary:
+    host: "localhost"
+    port: 5432
+    user: "xujian"
+    password: ""
+    database: "postgres"
+    encoding: "UTF8"
+    locale: "C"
+
+  # 业务数据库列表
+  databases:
+    # 专利法律数据库
+    patent_legal_db:
+      host: "localhost"
+      port: 5432
+      user: "xujian"
+      database: "patent_legal_db"
+      pool_size: 10
+      max_overflow: 20
+      description: "专利无效复审决定和法律文档数据库"
+
+    # 专利规则数据库
+    patent_rules:
+      host: "localhost"
+      port: 5432
+      user: "xujian"
+      database: "patent_rules"
+      pool_size: 5
+      max_overflow: 10
+      description: "专利规则审查指南数据库"
+
+    # Agent记忆数据库（如需要）
+    agent_memory_db:
+      host: "localhost"
+      port: 5432
+      user: "xujian"
+      database: "agent_memory_db"
+      pool_size: 5
+      max_overflow: 10
+      description: "AI Agent长期记忆存储"
+
+  # 连接池配置
+  pool:
+    min_connections: 2
+    max_connections: 50
+    connection_timeout: 30
+    idle_timeout: 600
+    max_lifetime: 3600
+
+# Qdrant向量数据库（本地实例）
+qdrant:
+  url: "http://localhost:6333"
+  timeout: 60
+  api_key: null
+
+# Redis缓存（本地实例）
+redis:
+  host: "localhost"
+  port: 6379
+  db: 0
+  password: null
+  socket_timeout: 5
+  socket_connect_timeout: 5
+  max_connections: 50
+
+# NebulaGraph图数据库（本地实例）
+nebula:
+  host: "127.0.0.1"
+  port: 9669
+  user: "root"
+  password: "nebula"
+  space: "patent_kg"
+
+# 环境变量导出（供Shell脚本使用）
+env_vars:
+  DATABASE_URL: "postgresql://xujian@localhost:5432/patent_legal_db"
+  DB_LEGAL_URL: "postgresql://xujian@localhost:5432/patent_legal_db"
+  DB_RULES_URL: "postgresql://xujian@localhost:5432/patent_rules"
+  DB_MEMORY_URL: "postgresql://xujian@localhost:5432/agent_memory_db"
+  QDRANT_URL: "http://localhost:6333"
+  REDIS_URL: "redis://localhost:6379/0"
+  NEBULA_URI: "127.0.0.1:9669"
+
+# Python连接字符串（供Python代码使用）
+python:
+  patent_legal_db: "postgresql://xujian@localhost:5432/patent_legal_db"
+  patent_rules: "postgresql://xujian@localhost:5432/patent_rules"
+  agent_memory_db: "postgresql://xujian@localhost:5432/agent_memory_db"
+
+# psycopg2连接参数（供Python代码使用）
+psycopg2:
+  patent_legal_db:
+    host: "localhost"
+    port: 5432
+    user: "xujian"
+    database: "patent_legal_db"
+  patent_rules:
+    host: "localhost"
+    port: 5432
+    user: "xujian"
+    database: "patent_rules"

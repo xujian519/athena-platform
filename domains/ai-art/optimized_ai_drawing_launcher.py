@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 优化版AI绘图启动器
 Optimized AI Drawing Launcher
@@ -11,14 +10,11 @@ Optimized AI Drawing Launcher
 版本: 2.0.0
 """
 
-import json
 import logging
-import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
-import requests
 from enhanced_ai_drawing_engine import EnhancedAIDrawingEngine
 
 logger = logging.getLogger(__name__)
@@ -33,7 +29,7 @@ class OptimizedAIDrawingLauncher:
         self.engine = EnhancedAIDrawingEngine()
         self.demo_scenes = self._load_demo_scenes()
 
-    def _load_demo_scenes(self) -> List[Dict[str, Any]]:
+    def _load_demo_scenes(self) -> list[dict[str, Any]]:
         """加载演示场景"""
         return [
             # 专利技术图纸
@@ -188,13 +184,13 @@ class OptimizedAIDrawingLauncher:
         processing_time = time.time() - start_time
 
         if result['success']:
-            logger.info(f"✅ 生成成功!")
+            logger.info("✅ 生成成功!")
             logger.info(f"   📏 图纸大小: {len(result['svg_content'])}字符")
             logger.info(f"   ⏱️ 处理时间: {processing_time:.2f}秒")
             logger.info(f"   💾 保存路径: {result['file_path']}")
 
             if result.get('fallback'):
-                logger.info(f"   ⚠️ 使用模板生成（API超时）")
+                logger.info("   ⚠️ 使用模板生成（API超时）")
 
             return True
         else:
@@ -220,7 +216,7 @@ class OptimizedAIDrawingLauncher:
 
             # 自动生成文件名
             import hashlib
-            filename_hash = hashlib.md5(description.encode(), usedforsecurity=False), usedforsecurity=False).hexdigest()[:8]
+            filename_hash = hashlib.md5(description.encode(), usedforsecurity=False).hexdigest()[:8]
             filename = f"custom_optimized_{filename_hash}.svg"
 
             self.generate_drawing_with_stats(description, filename)
@@ -253,7 +249,7 @@ class OptimizedAIDrawingLauncher:
                 total_time += time.time() - start_time
 
             # 批量生成统计
-            logger.info(f"\n📊 批量生成完成")
+            logger.info("\n📊 批量生成完成")
             logger.info(str('-' * 30))
             logger.info(f"   成功生成: {success_count}/{len(all_items)}")
             logger.info(f"   成功率: {(success_count/len(all_items))*100:.1f}%")
@@ -267,7 +263,7 @@ class OptimizedAIDrawingLauncher:
 
         stats = self.engine.get_stats()
 
-        logger.info(f"📊 调用统计:")
+        logger.info("📊 调用统计:")
         logger.info(f"   总调用次数: {stats['total_calls']}")
         logger.info(f"   成功次数: {stats['successful_calls']}")
         logger.info(f"   失败次数: {stats['failed_calls']}")
@@ -277,7 +273,7 @@ class OptimizedAIDrawingLauncher:
         svg_files = list(Path('/tmp').glob('*.svg'))
         recent_files = [f for f in svg_files if f.stat().st_mtime > time.time() - 3600]
 
-        logger.info(f"\n📁 文件统计:")
+        logger.info("\n📁 文件统计:")
         logger.info(f"   SVG文件总数: {len(svg_files)}")
         logger.info(f"   最近1小时: {len(recent_files)}")
 

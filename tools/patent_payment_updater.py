@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利缴费信息解析与更新
 Patent Payment Information Parser and Updater
@@ -7,16 +6,19 @@ Patent Payment Information Parser and Updater
 解析缴费表格，更新数据库中的缴费信息和专利状态
 """
 
-import psycopg2
 import logging
+
+import psycopg2
 
 logger = logging.getLogger(__name__)
 
-import pandas as pd
 import json
 import os
-from datetime import datetime
 import re
+from datetime import datetime
+
+import pandas as pd
+
 
 class PatentPaymentUpdater:
     """专利缴费信息更新器"""
@@ -66,7 +68,7 @@ class PatentPaymentUpdater:
             # 提取缴费记录
             payment_records = []
 
-            for index, row in df.iterrows():
+            for _index, row in df.iterrows():
                 # 跳过空行
                 if row.empty or all(pd.isna(row.values)):
                     continue
@@ -159,7 +161,7 @@ class PatentPaymentUpdater:
         if len(payment_number) == 13:
             # 提取各部分
             year = payment_number[:4]
-            type_code = payment_number[4:5]
+            payment_number[4:5]
             serial = payment_number[5:12]
             check = payment_number[12:13]
 
@@ -350,7 +352,7 @@ class PatentPaymentUpdater:
 
             conn.commit()
 
-            print(f"\n✅ 数据库更新完成:")
+            print("\n✅ 数据库更新完成:")
             print(f"   新增缴费记录: {inserted_count} 条")
             print(f"   更新缴费记录: {updated_count} 条")
             print(f"   标记为'有效'的专利: {inserted_count + updated_count} 个")
@@ -375,7 +377,7 @@ class PatentPaymentUpdater:
         total_records = len(all_payment_records)
         total_amount = sum(r["payment_amount"] for r in all_payment_records if r["payment_amount"])
 
-        print(f"\n1. 处理统计:")
+        print("\n1. 处理统计:")
         print(f"   总缴费记录数: {total_records}")
         print(f"   总缴费金额: ¥{total_amount:,.2f}")
 
@@ -389,7 +391,7 @@ class PatentPaymentUpdater:
             if record["payment_amount"]:
                 file_stats[file_name]["amount"] += record["payment_amount"]
 
-        print(f"\n2. 文件统计:")
+        print("\n2. 文件统计:")
         for file_name, stats in file_stats.items():
             print(f"   {file_name}:")
             print(f"     记录数: {stats['count']}")
@@ -406,7 +408,7 @@ class PatentPaymentUpdater:
                 type_stats[payment_type]["amount"] += record["payment_amount"]
 
         if type_stats:
-            print(f"\n3. 缴费类型统计:")
+            print("\n3. 缴费类型统计:")
             for payment_type, stats in type_stats.items():
                 print(f"   {payment_type}: {stats['count']}条, ¥{stats['amount']:,.2f}")
 
@@ -425,7 +427,7 @@ class PatentPaymentUpdater:
         with open("patent_payment_report.json", "w", encoding="utf-8") as f:
             json.dump(report_data, f, ensure_ascii=False, indent=2)
 
-        print(f"\n✅ 详细报告已保存到: patent_payment_report.json")
+        print("\n✅ 详细报告已保存到: patent_payment_report.json")
 
     def process_all_files(self):
         """处理所有缴费文件"""

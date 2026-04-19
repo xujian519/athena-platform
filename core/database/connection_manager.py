@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 数据库连接管理器
 统一管理所有数据库连接池和连接配置
@@ -5,7 +6,7 @@
 
 import logging
 from contextlib import asynccontextmanager
-from typing import Any, Dict, Optional
+from typing import Any
 
 # 异步依赖 - 设为可选以支持同步脚本
 # 使用官方redis库的asyncio模块（替代已弃用的aioredis）
@@ -98,7 +99,7 @@ class DatabaseConnectionManager:
                 f"@{config['host']}:{config['port']}/{config['database']}"
             )
 
-            await get_postgres_pool(
+            pool = await get_postgres_pool(
                 dsn,
                 min_size=config.get("min_size", 5),
                 max_size=config.get("max_size", 20),
@@ -388,7 +389,7 @@ db_manager = DatabaseConnectionManager()
 
 
 # 便捷函数
-async def get_db_manager(configs: Optional[Dict[str, Any]] = None) -> DatabaseConnectionManager:
+async def get_db_manager(configs: dict[str, Any] | None = None) -> DatabaseConnectionManager:
     """获取数据库管理器实例"""
     global db_manager
 
@@ -437,16 +438,16 @@ async def elasticsearch_connection() -> Any:  # AsyncElasticsearch if available
 # =============================================================================
 
 import logging
+
+# 修复: core.neo4j 模块遮蔽了官方 neo4j 包
+# GraphDatabase 类在 neo4j 包的根级别,不是在 graph_database 子模块中
+import sys
 from collections.abc import Generator
 from contextlib import contextmanager
 
 import psycopg2
 from psycopg2.extras import execute_batch
 from qdrant_client import QdrantClient
-
-# 修复: core.neo4j 模块遮蔽了官方 neo4j 包
-# GraphDatabase 类在 neo4j 包的根级别,不是在 graph_database 子模块中
-import sys
 
 # 移除可能被遮蔽的 neo4j 模块引用
 if "neo4j" in sys.modules:
@@ -457,6 +458,7 @@ if "neo4j" in sys.modules:
 
 # 现在导入 neo4j,应该会从 site-packages 找到官方包
 import neo4j
+
 SyncGraphDatabase = neo4j.GraphDatabase
 Neo4jSession = neo4j.Session
 

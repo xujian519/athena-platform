@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺全量平台控制器 v3.0
 Xiaonuo Full Platform Controller v3.0
@@ -21,7 +22,7 @@ import sys
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Any
 
 import requests
 from pydantic import BaseModel

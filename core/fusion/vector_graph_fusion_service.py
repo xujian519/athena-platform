@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 向量-图融合记忆服务
 Vector-Graph Fusion Memory Service
@@ -18,11 +19,12 @@ Vector-Graph Fusion Memory Service
 
 import json
 import logging
+import os
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
-from uuid import UUID, uuid4
+from typing import Any
+from uuid import uuid4
 
 from core.config.unified_config import get_database_config
 from core.logging_config import setup_logging
@@ -245,9 +247,9 @@ class VectorGraphFusionService:
             raise RuntimeError("BGE 模型未加载,请先调用 _load_bge_model()")
 
         try:
+            import numpy as np
             import torch
             import torch.nn.functional as F
-            import numpy as np
 
             inputs = self.bge_tokenizer(
                 text, padding=True, truncation=True, max_length=512, return_tensors="pt"
@@ -595,7 +597,7 @@ class LegacyFusionConfig:
     nebula_address: str = "127.0.0.1:9669"
     nebula_space: str = "athena_memory"
     nebula_user: str = "root"
-    nebula_password: str = "nebula"
+    nebula_password: str = os.getenv("NEBULA_PASSWORD", "nebula")
 
     @staticmethod
     def migrate_to_v3() -> FusionConfig:

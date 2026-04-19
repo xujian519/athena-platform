@@ -5,14 +5,12 @@
 """
 
 import glob
-from core.async_main import async_main
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import logging
 import os
 import sqlite3
-import sys
 import time
 from pathlib import Path
+from typing import Any
 
 import pandas as pd
 
@@ -75,7 +73,7 @@ def process_year_file(csv_path, db_path) -> None:
     ''')
 
     # 准备数据
-    logger.info(f"📝 准备数据...")
+    logger.info("📝 准备数据...")
     data = []
     invalid_count = 0
 
@@ -110,7 +108,7 @@ def process_year_file(csv_path, db_path) -> None:
     logger.info(f"✓ 有效记录: {len(data):,} 条")
 
     # 插入数据
-    logger.info(f"💾 插入数据库...")
+    logger.info("💾 插入数据库...")
     batch_size = 5000
     inserted = 0
 
@@ -130,7 +128,7 @@ def process_year_file(csv_path, db_path) -> None:
         logger.info(f"  进度: {inserted:,}/{len(data):,}")
 
     # 创建索引
-    logger.info(f"🔨 创建索引...")
+    logger.info("🔨 创建索引...")
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_year ON patents(source_year)')
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_applicant ON patents(applicant)')
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_patent_name ON patents(patent_name)')
@@ -188,13 +186,13 @@ def verify_database(db_path, year) -> None:
         LIMIT 3
     """, (int(year),))
 
-    logger.info(f"\n示例专利:")
-    for i, (title, applicant, date) in enumerate(cursor.fetchall(), 1):
+    logger.info("\n示例专利:")
+    for i, (title, applicant, _date) in enumerate(cursor.fetchall(), 1):
         logger.info(f"  {i}. {title[:50]}... ({applicant})")
 
     # 测试搜索
     test_keywords = ['装置', '方法', '系统']
-    logger.info(f"\n测试搜索:")
+    logger.info("\n测试搜索:")
     for keyword in test_keywords:
         cursor.execute("""
             SELECT COUNT(*)
@@ -307,11 +305,11 @@ def interactive_process() -> Any:
         create_search_script(str(db_path))
 
         # 提供使用说明
-        logger.info(f"\n📝 使用说明:")
+        logger.info("\n📝 使用说明:")
         logger.info(f"1. 搜索专利: python3 {output_dir}/search.py 关键词")
-        logger.info(f"2. 查询特定年份:")
+        logger.info("2. 查询特定年份:")
         logger.info(f"   sqlite3 {db_path}")
-        logger.info(f"   SELECT patent_name, applicant FROM patents WHERE source_year = 2025 LIMIT 10;")
+        logger.info("   SELECT patent_name, applicant FROM patents WHERE source_year = 2025 LIMIT 10;")
 
 def create_search_script(db_path) -> None:
     """创建搜索脚本"""

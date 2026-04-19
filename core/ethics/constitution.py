@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena平台宪法 - AI伦理原则定义
 Athena Platform Constitution - AI Ethical Principles
@@ -9,7 +10,7 @@ import json
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 class PrincipleSource(Enum):

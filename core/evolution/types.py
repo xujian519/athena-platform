@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 自动进化系统类型定义
 Auto-Evolution System Type Definitions
@@ -7,7 +8,7 @@ Auto-Evolution System Type Definitions
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 
 class EvolutionPhase(Enum):
@@ -96,11 +97,11 @@ class EvolutionResult:
 
     # 状态信息
     status: EvolutionStatus = EvolutionStatus.COMPLETED
-    error: Optional[str] = None
+    error: str | None = None
 
     # 时间信息
     started_at: datetime = field(default_factory=datetime.now)
-    completed_at: Optional[datetime] = None
+    completed_at: datetime | None = None
     duration: float = 0.0  # 秒
 
     # 元数据

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 导入解析后的审查指南数据到Neo4j
 Import parsed guideline data to Neo4j
@@ -9,12 +8,11 @@ import json
 import logging
 import os
 import sys
-from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any
 
 # 添加项目路径
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from src.models.graph_schema import Neo4jSchemaManager, NodeType, RelationshipType
+from src.models.graph_schema import Neo4jSchemaManager
 
 # 配置日志
 logging.basicConfig(
@@ -43,7 +41,7 @@ class GuidelineImporter:
         logger.info(f"开始导入审查指南数据: {json_path}")
 
         # 加载JSON数据
-        with open(json_path, 'r', encoding='utf-8') as f:
+        with open(json_path, encoding='utf-8') as f:
             data = json.load(f)
 
         # 创建约束和索引
@@ -65,7 +63,7 @@ class GuidelineImporter:
 
         logger.info('✅ 导入完成！')
 
-    def _import_document(self, doc_info: Dict[str, Any]):
+    def _import_document(self, doc_info: dict[str, Any]):
         """导入文档节点
 
         Args:
@@ -83,7 +81,7 @@ class GuidelineImporter:
 
         self.schema_manager.create_document_node(doc_node)
 
-    def _import_sections(self, sections: List[Dict[str, Any]]):
+    def _import_sections(self, sections: list[dict[str, Any]]):
         """导入章节节点
 
         Args:
@@ -98,7 +96,7 @@ class GuidelineImporter:
 
         for section in sections:
             section_type = section['type']
-            level = section['level']
+            section['level']
 
             # 构建层级路径
             hierarchy_path = self._build_hierarchy_path(section, sections)
@@ -160,7 +158,7 @@ class GuidelineImporter:
             # 提取并导入概念
             self._extract_and_import_concepts(section)
 
-    def _build_hierarchy_path(self, section: Dict, all_sections: List) -> List[str]:
+    def _build_hierarchy_path(self, section: dict, all_sections: list) -> list[str]:
         """构建层级路径
 
         Args:
@@ -184,7 +182,7 @@ class GuidelineImporter:
 
         return path
 
-    def _find_parent(self, section: Dict, potential_parents: List[Dict]) -> str:
+    def _find_parent(self, section: dict, potential_parents: list[dict]) -> str:
         """查找父节点ID
 
         Args:
@@ -235,7 +233,7 @@ class GuidelineImporter:
         else:
             return mapping.get(chinese_num, 0)
 
-    def _extract_and_import_concepts(self, section: Dict[str, Any]):
+    def _extract_and_import_concepts(self, section: dict[str, Any]):
         """提取并导入概念
 
         Args:
@@ -290,7 +288,7 @@ class GuidelineImporter:
             reference_type='DEFINES'
         )
 
-    def _import_references(self, references: List[Dict[str, Any]]):
+    def _import_references(self, references: list[dict[str, Any]]):
         """导入引用关系
 
         Args:

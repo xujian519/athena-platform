@@ -4,14 +4,11 @@ Redis缓存服务
 为Athena平台提供缓存功能
 """
 
-import json
-from core.async_main import async_main
 import logging
-import os
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
@@ -98,7 +95,7 @@ async def set_cache(request: CacheRequest) -> CacheResponse:
                 message=f"缓存设置失败: {request.key}"
             )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/cache/get/{key}')
 async def get_cache(key: str):
@@ -124,7 +121,7 @@ async def get_cache(key: str):
                 'cached': False
             }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.delete('/cache/delete/{key}')
 async def delete_cache(key: str) -> CacheResponse:
@@ -135,10 +132,10 @@ async def delete_cache(key: str) -> CacheResponse:
 
         return CacheResponse(
             success=success,
-            message=f"缓存删除: {key}' + ('成功' if success else '失败")
+            message=f"缓存删除: {key}" + ('成功' if success else '失败')
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/cache/stats')
 async def get_cache_stats():
@@ -157,7 +154,7 @@ async def get_cache_stats():
             'stats': stats
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/cache/clear')
 async def clear_cache(pattern: str = '*') -> CacheResponse:
@@ -166,11 +163,11 @@ async def clear_cache(pattern: str = '*') -> CacheResponse:
         deleted_count = cache_manager.clear(pattern)
         return CacheResponse(
             success=True,
-            message=f"缓存清理完成",
+            message="缓存清理完成",
             data={'deleted_count': deleted_count, 'pattern': pattern}
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/service/cache/{service_name}')
 async def cache_service_data(service_name: str, data: dict, ttl: int = 300):
@@ -184,7 +181,7 @@ async def cache_service_data(service_name: str, data: dict, ttl: int = 300):
             'message': '服务数据缓存' + ('成功' if success else '失败')
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/service/cache/{service_name}')
 async def get_service_cache(service_name: str):
@@ -198,10 +195,10 @@ async def get_service_cache(service_name: str):
             'cached': bool(data)
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 if __name__ == '__main__':
     logger.info('⚡ 启动Redis缓存服务...')
-    logger.info(f"📊 端口: 6001")
-    logger.info(f"🔗 Redis: 127.0.0.1:6379")
+    logger.info("📊 端口: 6001")
+    logger.info("🔗 Redis: 127.0.0.1:6379")
     uvicorn.run(app, host='0.0.0.0', port=6001)

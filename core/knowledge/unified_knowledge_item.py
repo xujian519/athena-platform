@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一知识条目数据模型
 Unified Knowledge Item Data Model
@@ -19,7 +20,6 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
-
 
 
 class QualityLevel(Enum):

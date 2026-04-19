@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强的本地NLP提供者
 提供更强大的本地处理能力,替代GLM-4.6

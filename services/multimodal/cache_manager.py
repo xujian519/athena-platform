@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 缓存管理器 - 支持Redis和本地缓存
 Cache Manager - Redis and Local Cache Support
 """
 
 import json
-from core.async_main import async_main
-import time
 import logging
-from typing import Any, Dict, Optional, List
-from pathlib import Path
+import time
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -128,7 +125,7 @@ class CacheManager:
         except Exception as e:
             logger.error(f"清空缓存失败: {e}")
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取缓存统计信息"""
         try:
             stats = {
@@ -185,23 +182,23 @@ class FileCacheManager:
     """文件专用缓存管理"""
 
     @staticmethod
-    def cache_file_info(file_id: str, file_info: Dict[str, Any], timeout: int = 3600) -> Any:
+    def cache_file_info(file_id: str, file_info: dict[str, Any], timeout: int = 3600) -> Any:
         """缓存文件信息"""
         cache_manager.set(f"file_info:{file_id}", file_info, timeout)
 
     @staticmethod
-    def get_cached_file_info(file_id: str) -> Dict[str, Any | None]:
+    def get_cached_file_info(file_id: str) -> dict[str, Any | None]:
         """获取缓存的文件信息"""
         return cache_manager.get(f"file_info:{file_id}")
 
     @staticmethod
-    def cache_search_results(query: str, file_type: str, results: List[Dict[str, Any]], timeout: int = 300) -> Any:
+    def cache_search_results(query: str, file_type: str, results: list[dict[str, Any]], timeout: int = 300) -> Any:
         """缓存搜索结果"""
         cache_key = f"search:{query}:{file_type}"
         cache_manager.set(cache_key, results, timeout)
 
     @staticmethod
-    def get_cached_search_results(query: str, file_type: str) -> List[Dict[str, Any | None]]:
+    def get_cached_search_results(query: str, file_type: str) -> list[dict[str, Any | None]]:
         """获取缓存的搜索结果"""
         cache_key = f"search:{query}:{file_type}"
         return cache_manager.get(cache_key)

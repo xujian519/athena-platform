@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主增强智能工具路由系统
 Xiaonuo·Pisces Princess Enhanced Intelligent Tool Router
@@ -155,7 +156,7 @@ class XiaonuoEnhancedToolRouter:
     async def route_tools(
         self,
         intent: str,
-        context: dict[str, Any],        available_tools: list["key"] = None,
+        context: dict[str, Any],        available_tools: list[str] = None,
         strategy: RoutingStrategy = RoutingStrategy.HYBRID_INTELLIGENT,
     ) -> list[ToolRecommendation]:
         """
@@ -698,7 +699,7 @@ xiaonuo_enhanced_router = XiaonuoEnhancedToolRouter()
 
 # 便捷函数
 async def smart_route(
-    intent: str, context: dict[str, Any, tools: list["key"] = None
+    intent: str, context: dict[str, Any], tools: list[str] | None = None
 ) -> list[ToolRecommendation]:
     """便捷的智能路由函数"""
     return await xiaonuo_enhanced_router.route_tools(intent, context, tools)

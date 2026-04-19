@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强外部搜索引擎管理器
 Enhanced External Search Engine Manager

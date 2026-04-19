@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 OA答复系统重试机制
 Office Action Response System Retry Mechanism
@@ -18,18 +19,18 @@ Office Action Response System Retry Mechanism
 """
 
 import logging
-import random
+from collections.abc import Callable
 from functools import wraps
-from typing import Any, Callable, TypeVar
+from typing import Any, TypeVar
 
 from tenacity import (
     Retrying,
     before_sleep_log,
+    retry_if_exception_message,
     retry_if_exception_type,
     stop_after_attempt,
     wait_exponential,
     wait_random_exponential,
-    retry_if_exception_message,
 )
 
 from core.logging_config import setup_logging

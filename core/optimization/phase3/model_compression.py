@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 模型量化压缩系统 (Model Quantization & Compression System)
 减小模型大小和推理延迟
@@ -11,8 +12,9 @@
 import logging
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -116,7 +118,7 @@ class ModelCompressionSystem:
         logger.info(f"📦 模型已加载 (大小: {original_size:.2f}MB)")
 
     async def quantize(
-        self, config: QuantizationConfig, validation_data: np.ndarray] | None = None
+        self, config: QuantizationConfig, validation_data: np.ndarray | None = None
     ) -> CompressionResult:
         """
         量化模型

@@ -9,8 +9,12 @@ Integration Tests for Autonomous Learning System
 """
 
 import asyncio
+import sys
 from datetime import datetime
-from unittest.mock import AsyncMock
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 
 import pytest
 
@@ -232,7 +236,7 @@ class TestAutonomousLearningSystem:
     async def test_performance_history_limits(self, learning_system):
         """测试性能历史记录限制"""
         # 添加超过限制的记录（deque最大1000）
-        for i in range(1500):
+        for _i in range(1500):
             await learning_system.learn_from_experience(
                 context={},
                 action="test",

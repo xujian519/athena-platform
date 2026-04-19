@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺增强版Agent - 集成GLM-4.6的智能情感精灵
 Enhanced Xiaonuo Agent - Intelligent Emotional Sprite with GLM-4.6 Integration

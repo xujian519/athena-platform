@@ -5,14 +5,14 @@ Athena Service Message Bus
 """
 
 import asyncio
-import json
 import logging
-from datetime import datetime
-from typing import Dict, Any, Optional, Callable, List, Set
-from dataclasses import dataclass, asdict
-from enum import Enum
 import uuid
 from collections import defaultdict
+from collections.abc import Callable
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any
 
 # 配置日志
 logger = logging.getLogger(__name__)
@@ -38,8 +38,8 @@ class Message:
     id: str
     event_type: str
     source_service: str
-    target_service: Optional[str]  # None表示广播
-    data: Dict[str, Any]
+    target_service: str | None  # None表示广播
+    data: dict[str, Any]
     priority: MessagePriority = MessagePriority.NORMAL
     status: MessageStatus = MessageStatus.PENDING
     created_at: datetime = None
@@ -56,7 +56,7 @@ class Message:
 class Subscription:
     """订阅信息"""
     service_name: str
-    event_types: Set[str]
+    event_types: set[str]
     handler: Callable
     filter_func: Callable | None = None
 
@@ -64,19 +64,19 @@ class MessageBus:
     """消息总线实现"""
 
     def __init__(self):
-        self.subscribers: Dict[str, List[Subscription]] = defaultdict(list)
+        self.subscribers: dict[str, list[Subscription]] = defaultdict(list)
         self.message_queue: asyncio.Queue = asyncio.Queue(maxsize=10000)
-        self.processing_messages: Dict[str, Message] = {}
-        self.message_history: List[Message] = []
+        self.processing_messages: dict[str, Message] = {}
+        self.message_history: list[Message] = []
         self.max_history = 10000
         self.is_running = False
-        self.worker_tasks: List[asyncio.Task] = []
+        self.worker_tasks: list[asyncio.Task] = []
         self.num_workers = 5
 
     def subscribe(
         self,
         service_name: str,
-        event_types: List[str],
+        event_types: list[str],
         handler: Callable,
         filter_func: Callable | None = None
     ) -> str:
@@ -109,7 +109,7 @@ class MessageBus:
         self,
         event_type: str,
         source_service: str,
-        data: Dict[str, Any],
+        data: dict[str, Any],
         target_service: str | None = None,
         priority: MessagePriority = MessagePriority.NORMAL,
         max_retries: int = 3
@@ -317,7 +317,7 @@ class MessageBus:
 
         return sum(len(subs) for subs in self.subscribers.values())
 
-    def get_message_stats(self) -> Dict[str, Any]:
+    def get_message_stats(self) -> dict[str, Any]:
         """获取消息统计"""
         status_counts = defaultdict(int)
         priority_counts = defaultdict(int)
@@ -373,7 +373,7 @@ def publish_event(event_type: str, priority: MessagePriority = MessagePriority.N
     return decorator
 
 # 装饰器：事件订阅
-def subscribe_event(event_types: List[str], filter_func: Callable | None = None) -> Any:
+def subscribe_event(event_types: list[str], filter_func: Callable | None = None) -> Any:
     """事件订阅装饰器"""
     def decorator(func) -> None:
         # 获取服务名称

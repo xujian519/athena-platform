@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 学习数据持久化管理器单元测试
 Persistence Manager Unit Tests
@@ -15,14 +14,14 @@ Persistence Manager Unit Tests
 创建时间: 2026-01-28
 """
 
-import asyncio
-import json
-import os
+import sys
 import tempfile
 from datetime import datetime
 from pathlib import Path
 
 import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.learning.persistence_manager import (
     FileStorageBackend,

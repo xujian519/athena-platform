@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 GLM-4.7-Flash LLM客户端
 智谱AI GLM-4.7-Flash 模型集成
@@ -20,10 +21,9 @@ import json
 import logging
 import os
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import httpx
-
 
 logger = logging.getLogger(__name__)
 

@@ -3,12 +3,12 @@
 Athena迭代式搜索系统数据类型定义
 """
 
-import logging
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
+
 
 class SearchEngineType(Enum):
     """搜索引擎类型"""
@@ -72,16 +72,16 @@ class SearchResult:
     score: float = 0.0
     relevance: ResultRelevance = ResultRelevance.UNKNOWN
     engine_type: SearchEngineType = SearchEngineType.ELASTICSEARCH
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
     created_at: datetime = field(default_factory=datetime.now)
 
 @dataclass
 class PatentSearchResult(SearchResult):
     """专利搜索结果"""
     patent_metadata: PatentMetadata | None = None
-    ipc_matches: List[str] = field(default_factory=list)
-    applicant_matches: List[str] = field(default_factory=list)
-    keyword_matches: List[str] = field(default_factory=list)
+    ipc_matches: list[str] = field(default_factory=list)
+    applicant_matches: list[str] = field(default_factory=list)
+    keyword_matches: list[str] = field(default_factory=list)
     similarity_score: float = 0.0  # 语义相似度分数
     text_match_score: float = 0.0   # 文本匹配分数
     combined_score: float = 0.0     # 综合分数
@@ -113,8 +113,8 @@ class SearchQuery:
     text: str = ''
     original_text: str = ''
     query_type: str = 'text'  # text, ipc, applicant, etc.
-    filters: Dict[str, Any] = field(default_factory=dict)
-    expansion_terms: List[str] = field(default_factory=list)
+    filters: dict[str, Any] = field(default_factory=dict)
+    expansion_terms: list[str] = field(default_factory=list)
     generated_at: datetime = field(default_factory=datetime.now)
     similarity_to_previous: float = 1.0
 
@@ -123,23 +123,23 @@ class SearchIteration:
     """搜索迭代记录"""
     iteration_number: int
     query: SearchQuery
-    results: List[PatentSearchResult]
+    results: list[PatentSearchResult]
     search_time: float
     total_results: int
     quality_score: float
-    insights: List[str] = field(default_factory=list)
+    insights: list[str] = field(default_factory=list)
     next_query_suggestion: str | None = None
 
 @dataclass
 class ResearchSummary:
     """研究摘要"""
     topic: str = ''
-    key_findings: List[str] = field(default_factory=list)
-    main_patents: List[str] = field(default_factory=list)
-    technological_trends: List[str] = field(default_factory=list)
-    competing_applicants: List[str] = field(default_factory=list)
-    innovation_insights: List[str] = field(default_factory=list)
-    recommendations: List[str] = field(default_factory=list)
+    key_findings: list[str] = field(default_factory=list)
+    main_patents: list[str] = field(default_factory=list)
+    technological_trends: list[str] = field(default_factory=list)
+    competing_applicants: list[str] = field(default_factory=list)
+    innovation_insights: list[str] = field(default_factory=list)
+    recommendations: list[str] = field(default_factory=list)
     confidence_level: float = 0.0
     completeness_score: float = 0.0
 
@@ -152,14 +152,14 @@ class SearchSession:
     strategy: str = 'hybrid'
     max_iterations: int = 3
     current_iteration: int = 0
-    iterations: List[SearchIteration] = field(default_factory=list)
+    iterations: list[SearchIteration] = field(default_factory=list)
     research_summary: ResearchSummary | None = None
     status: SearchStatus = SearchStatus.PENDING
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
     total_patents_found: int = 0
     unique_patents: int = 0
-    search_config: Dict[str, Any] = field(default_factory=dict)
+    search_config: dict[str, Any] = field(default_factory=dict)
 
     def update_status(self, status: SearchStatus) -> None:
         """更新搜索状态"""
@@ -180,17 +180,17 @@ class SearchStatistics:
     failed_searches: int = 0
     average_response_time: float = 0.0
     average_results_per_search: float = 0.0
-    most_common_queries: List[str] = field(default_factory=list)
-    engine_performance: Dict[str, Dict[str, float]] = field(default_factory=dict)
-    patent_type_distribution: Dict[str, int] = field(default_factory=dict)
-    ipc_distribution: Dict[str, int] = field(default_factory=dict)
-    applicant_distribution: Dict[str, int] = field(default_factory=dict)
+    most_common_queries: list[str] = field(default_factory=list)
+    engine_performance: dict[str, dict[str, float]] = field(default_factory=dict)
+    patent_type_distribution: dict[str, int] = field(default_factory=dict)
+    ipc_distribution: dict[str, int] = field(default_factory=dict)
+    applicant_distribution: dict[str, int] = field(default_factory=dict)
 
 @dataclass
 class SearchCache:
     """搜索缓存项"""
     query_hash: str
-    results: List[PatentSearchResult]
+    results: list[PatentSearchResult]
     search_time: float
     total_results: int
     created_at: datetime = field(default_factory=datetime.now)
@@ -201,11 +201,11 @@ class SearchCache:
 class QueryExpansion:
     """查询扩展"""
     original_query: str
-    expanded_terms: List[str]
-    synonyms: List[str]
-    related_concepts: List[str]
-    ipc_suggestions: List[str]
-    applicant_suggestions: List[str]
+    expanded_terms: list[str]
+    synonyms: list[str]
+    related_concepts: list[str]
+    ipc_suggestions: list[str]
+    applicant_suggestions: list[str]
     expansion_method: str  # llm, thesaurus, embedding, etc.
     confidence: float = 0.0
 
@@ -228,21 +228,21 @@ class SearchError:
     stack_trace: str | None = None
 
 # 类型别名
-PatentResults = List[PatentSearchResult]
-SearchResults = List[SearchResult]
-ExternalResults = List[ExternalSearchResult]
-SearchQueries = List[SearchQuery]
-SearchFilters = List[SearchFilter]
-SearchErrors = List[SearchError]
+PatentResults = list[PatentSearchResult]
+SearchResults = list[SearchResult]
+ExternalResults = list[ExternalSearchResult]
+SearchQueries = list[SearchQuery]
+SearchFilters = list[SearchFilter]
+SearchErrors = list[SearchError]
 
 # 回调函数类型
-from typing import Callable
+from collections.abc import Callable
 
 SearchCallback = Callable[[SearchSession], None]
 ProgressCallback = Callable[[int, int, str], None]  # current, total, message
 ErrorCallback = Callable[[SearchError], None]
 
 # 配置类型
-EngineConfig = Dict[str, Any]
-SearchConfig = Dict[str, Any]
-FilterConfig = Dict[str, Any]
+EngineConfig = dict[str, Any]
+SearchConfig = dict[str, Any]
+FilterConfig = dict[str, Any]

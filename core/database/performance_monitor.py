@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 数据库性能监控和调优工具
 提供实时监控、性能分析和自动调优功能

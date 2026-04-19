@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺模糊输入预处理器(重构版)
 Xiaonuo Fuzzy Input Preprocessor (Refactored)
@@ -21,7 +22,7 @@ import threading
 from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 # 集成安全检查
 from ...security.input_validator import SecurityLevel, get_input_validator

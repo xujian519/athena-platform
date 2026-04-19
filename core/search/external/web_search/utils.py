@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 联网搜索引擎 - 便捷工具
 Web Search Engines - Utility Functions
@@ -62,7 +63,7 @@ async def test_web_search():
         )
 
         if tavily_result.success:
-            logger.info(f"✅ Tavily搜索成功")
+            logger.info("✅ Tavily搜索成功")
             logger.info(f"   查询: {tavily_result.query}")
             logger.info(f"   结果数量: {tavily_result.total_results}")
             logger.info(f"   搜索时间: {tavily_result.search_time:.2f}秒")

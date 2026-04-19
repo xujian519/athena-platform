@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 NLP服务向量化适配器
 NLP Service Vectorization Adapter
@@ -15,7 +16,7 @@ import asyncio
 import logging
 
 import httpx
-
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

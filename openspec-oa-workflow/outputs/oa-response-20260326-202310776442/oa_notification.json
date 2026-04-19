@@ -1,0 +1,70 @@
+{
+  "notification_info": {
+    "notification_number": "2026020302354840",
+    "mail_date": "2026-02-03",
+    "deadline": "收到之日起2个月内",
+    "notification_type": "第二次审查意见通知书"
+  },
+  "application_info": {
+    "application_number": "202310776442.4",
+    "publication_number": "",
+    "applicant": "上海福睦液压科技有限公司",
+    "inventors": [],
+    "invention_title": "一种闭式回路冲洗旁通阀、阀组",
+    "filing_date": "",
+    "classification": {
+      "ipc": "",
+      "cpc": ""
+    }
+  },
+  "examination_opinions": [
+    {
+      "opinion_id": "1",
+      "opinion_type": "同样的发明创造",
+      "claims_affected": ["1", "2", "3", "4", "5", "6", "7"],
+      "legal_basis": {
+        "article": "专利法第9条第1款",
+        "rule": "专利法实施细则第47条"
+      },
+      "examiner_reasoning": {
+        "core_argument": "本发明专利申请的原始权利要求1-7的保护范围与已授权实用新型专利ZL2023216673538的原始权利要求1-7的保护范围相同，两者构成同样的发明创造。申请人在申请时未分别说明对同样的发明创造已申请了另一专利。",
+        "detailed_analysis": "根据专利法实施细则第四十七条的规定，未作说明的，依照专利法第九条第一款关于同样的发明创造只能授予一项专利权的规定处理。由于同日提出的实用新型专利申请已经获得授权，因此，该发明专利申请不符合专利法第九条的规定。",
+        "conclusion": "本申请不能被授予专利权，如申请人答复但未提出有说服力的意见陈述和/或证据，该发明专利申请将被驳回"
+      },
+      "cited_references": [
+        {
+          "reference_id": "D3",
+          "document_type": "实用新型专利",
+          "document_number": "ZL2023216673538",
+          "title": "（同本发明）",
+          "authors": "",
+          "publication_date": "",
+          "relevant_paragraphs": ["原始权利要求1-7"],
+          "disclosed_features": ["与本发明权利要求1-7保护范围相同"]
+        }
+      ],
+      "closest_prior_art": "ZL2023216673538（同日申请的实用新型）",
+      "distinguishing_features": [],
+      "technical_problem_solved": "",
+      "combination_suggestion": ""
+    }
+  ],
+  "examiner_suggestions": {
+    "modification_suggested": false,
+    "specific_suggestions": [],
+    "authorization_prospects": "无授权前景"
+  },
+  "special_notes": {
+    "issue_type": "双重申请未说明",
+    "utility_model_granted": true,
+    "utility_model_number": "ZL2023216673538",
+    "same_filing_date": true,
+    "key_question": "申请人是否在同日申请时说明了已申请另一专利"
+  },
+  "other_issues": [],
+  "metadata": {
+    "parsed_at": "2026-03-26T18:12:00",
+    "parser_version": "1.0",
+    "confidence_score": 0.99
+  }
+}

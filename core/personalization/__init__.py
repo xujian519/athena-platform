@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 个性化响应模块 - Personalization Module
 

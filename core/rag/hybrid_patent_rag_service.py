@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 混合专利RAG服务 - 法规与决定书融合检索
 Hybrid Patent RAG Service - Regulations & Decisions Integration
@@ -7,6 +8,7 @@ Hybrid Patent RAG Service - Regulations & Decisions Integration
 """
 
 import asyncio
+import sys
 import time
 from dataclasses import dataclass, field
 from enum import Enum
@@ -59,9 +61,9 @@ class PatentRAGQuery:
     include_metadata: bool = True
     filters: dict[str, Any] | None = None
     # 决定书特有参数
-    decision_date_range: tuple[str, str | None = None  # 开始日期,结束日期
-    patent_numbers: list["key"] = None  # 特定专利号
-    case_types: list["key"] = None  # 案件类型
+    decision_date_range: tuple[str, str | None] | None = None  # 开始日期,结束日期
+    patent_numbers: list[str] | None = None  # 特定专利号
+    case_types: list[str] | None = None  # 案件类型
 
 
 @dataclass

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺工具效果反馈循环系统
 Xiaonuo Tool Effect Feedback Loop System
@@ -16,7 +17,9 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
+
+import numpy as np
 
 from core.logging_config import setup_logging
 

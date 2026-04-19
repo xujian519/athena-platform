@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena平台监控系统
 Platform Monitoring System for Athena Multimodal File System
@@ -7,18 +6,15 @@ Platform Monitoring System for Athena Multimodal File System
 """
 
 import asyncio
-from core.async_main import async_main
 import json
 import logging
-from core.logging_config import setup_logging
 import os
-import sys
 import time
 from collections import defaultdict, deque
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import psutil
 import requests
@@ -27,10 +23,8 @@ import yaml
 
 # FastAPI相关
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
-from fastapi.middleware.cors import CORSMiddleware
 
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 # 监控相关
 try:
@@ -186,10 +180,10 @@ class PlatformMonitor:
 
         logger.info('平台监控系统初始化完成')
 
-    def _load_config(self) -> Dict[str, Any]:
+    def _load_config(self) -> dict[str, Any]:
         """加载配置文件"""
         try:
-            with open(self.config_path, 'r', encoding='utf-8') as f:
+            with open(self.config_path, encoding='utf-8') as f:
                 return yaml.safe_load(f)
         except Exception as e:
             logger.error(f"配置文件加载失败: {e}")
@@ -272,7 +266,7 @@ class PlatformMonitor:
         """检查告警"""
         while self.monitoring_active:
             try:
-                current_time = datetime.now()
+                datetime.now()
 
                 # 检查服务告警
                 for service_name, metrics in self.metrics_history.items():
@@ -342,7 +336,7 @@ class PlatformMonitor:
                 # 清理超过24小时的数据
                 cutoff_time = datetime.now() - timedelta(hours=24)
 
-                for service_name, metrics in self.metrics_history.items():
+                for _service_name, metrics in self.metrics_history.items():
                     while metrics and metrics[0].timestamp < cutoff_time:
                         metrics.popleft()
 
@@ -485,7 +479,7 @@ class PlatformMonitor:
         # 实现Webhook通知逻辑
         logger.info(f"发送Webhook告警: {alert.message}")
 
-    async def _notify_websocket_clients(self, message: Dict):
+    async def _notify_websocket_clients(self, message: dict):
         """通知WebSocket客户端"""
         if not self.websocket_connections:
             return
@@ -503,7 +497,7 @@ class PlatformMonitor:
         for client in disconnected_clients:
             self.websocket_connections.remove(client)
 
-    def get_metrics_summary(self, hours: int = 1) -> Dict[str, Any]:
+    def get_metrics_summary(self, hours: int = 1) -> dict[str, Any]:
         """获取指标摘要"""
         cutoff_time = datetime.now() - timedelta(hours=hours)
         summary = {}
@@ -555,7 +549,7 @@ class PlatformMonitor:
 
         return summary
 
-    def get_active_alerts(self) -> List[Dict[str, Any]]:
+    def get_active_alerts(self) -> list[dict[str, Any]]:
         """获取活跃告警"""
         return [
             {
@@ -711,7 +705,7 @@ async def get_services_status():
     monitor_instance = create_monitor()
     services_status = {}
 
-    for service_name, service_config in monitor_instance.services.items():
+    for service_name, _service_config in monitor_instance.services.items():
         if service_name == 'athena_platform_manager':
             continue
 

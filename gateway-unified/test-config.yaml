@@ -1,0 +1,9 @@
+server:
+  port: 8888
+  production: false
+logging:
+  level: debug
+  format: text
+monitoring:
+  enabled: true
+  port: 9090

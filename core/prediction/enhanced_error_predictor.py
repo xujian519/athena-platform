@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强错误预测器
 Enhanced Error Predictor
@@ -22,9 +23,9 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
-
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -123,7 +124,7 @@ class PredictionResult:
     probability: float  # 发生概率
     confidence: float  # 置信度
     risk_level: RiskLevel
-    predicted_time: Optional[datetime]
+    predicted_time: datetime | None
     feature_importance: dict[str, float] = field(default_factory=dict)
     model_used: PredictionModel = PredictionModel.ENSEMBLE
     prevention_suggestions: list[str] = field(default_factory=list)

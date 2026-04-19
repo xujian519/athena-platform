@@ -1,0 +1,211 @@
+# 专利工具生产环境配置
+# Patent Tools Production Configuration
+
+# ============================================
+# 专利检索配置
+# ============================================
+patent_search:
+  enabled: true
+
+  # 默认检索渠道
+  default_channel: "google_patents"  # local_postgres | google_patents | both
+
+  # 默认最大结果数
+  default_max_results: 10
+
+  # 检索超时（秒）
+  timeout: 60
+
+  # 本地PostgreSQL配置
+  local_postgres:
+    enabled: true
+    database: "patent_db"
+    host: "localhost"
+    port: 15432
+    user: "athena"
+    password: ""
+    # 连接池配置
+    pool_size: 5
+    max_overflow: 10
+    pool_timeout: 30
+    pool_recycle: 3600
+
+  # Google Patents配置
+  google_patents:
+    enabled: true
+    # 浏览器配置
+    browser_type: "chromium"  # chromium | firefox | webkit
+    headless: true
+    # 超时配置
+    page_timeout: 30000
+    navigation_timeout: 30000
+    # 重试配置
+    max_retries: 3
+    retry_delay: 2
+    # 并发配置
+    max_concurrent: 3
+
+# ============================================
+# 专利下载配置
+# ============================================
+patent_download:
+  enabled: true
+
+  # 默认输出目录
+  default_output_dir: "/tmp/patents"
+
+  # 下载超时（秒）
+  timeout: 300
+
+  # Google Patents下载配置
+  google_patents:
+    enabled: true
+    base_url: "https://patents.google.com"
+    user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+    # 下载配置
+    download_timeout: 60
+    chunk_size: 8192
+    # 重试配置
+    max_retries: 3
+    retry_delay: 5
+    # 并发配置
+    max_concurrent_downloads: 3
+    download_delay: 1  # 下载间隔（秒）
+
+  # 文件管理配置
+  file_management:
+    # 是否按日期创建子目录
+    organize_by_date: true
+    # 是否自动清理重复文件
+    remove_duplicates: true
+    # 最大磁盘使用（MB）
+    max_disk_usage: 10240
+    # 自动清理天数
+    auto_cleanup_days: 30
+
+# ============================================
+# 缓存配置
+# ============================================
+cache:
+  enabled: true
+
+  # Redis缓存配置
+  redis:
+    enabled: true
+    host: "localhost"
+    port: 6379
+    db: 0
+    password: null
+    # 缓存过期时间（秒）
+    ttl: 3600  # 1小时
+    # 缓存键前缀
+    key_prefix: "patent:"
+
+  # 内存缓存配置
+  memory:
+    enabled: true
+    max_size: 1000  # 最大缓存条目数
+    ttl: 1800  # 30分钟
+
+# ============================================
+# 日志配置
+# ============================================
+logging:
+  level: "INFO"  # DEBUG | INFO | WARNING | ERROR
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+  # 文件日志
+  file:
+    enabled: true
+    path: "/var/log/athena/patent_tools.log"
+    max_size: "100MB"
+    backup_count: 5
+
+  # 审计日志（记录所有检索和下载）
+  audit:
+    enabled: true
+    path: "/var/log/athena/patent_audit.log"
+    format: "json"  # json | text
+
+# ============================================
+# 性能监控配置
+# ============================================
+monitoring:
+  enabled: true
+
+  # Prometheus指标
+  prometheus:
+    enabled: true
+    port: 9091
+    path: "/metrics"
+
+  # 统计收集
+  statistics:
+    enabled: true
+    # 统计保留天数
+    retention_days: 30
+    # 采样率（0-1）
+    sample_rate: 1.0
+
+# ============================================
+# 安全配置
+# ============================================
+security:
+  # API密钥验证
+  api_key_required: false
+
+  # 速率限制
+  rate_limiting:
+    enabled: true
+    # 每分钟请求数
+    requests_per_minute: 60
+    # 每小时请求数
+    requests_per_hour: 1000
+
+  # IP白名单
+  ip_whitelist:
+    enabled: false
+    allowed_ips: []
+
+# ============================================
+# 功能开关
+# ============================================
+features:
+  # 是否启用自动重试
+  auto_retry: true
+
+  # 是否启用缓存
+  cache_enabled: true
+
+  # 是否启用日志记录
+  logging_enabled: true
+
+  # 是否启用监控
+  monitoring_enabled: true
+
+  # 是否启用审计
+  audit_enabled: true
+
+# ============================================
+# 环境变量覆盖
+# ============================================
+# 可以通过环境变量覆盖配置
+# 例如: PATENT_SEARCH_DEFAULT_CHANNEL=google_patents
+#      PATENT_DOWNLOAD_OUTPUT_DIR=/data/patents
+
+env_overrides:
+  patent_search:
+    default_channel: "PATENT_SEARCH_DEFAULT_CHANNEL"
+    timeout: "PATENT_SEARCH_TIMEOUT"
+
+  patent_download:
+    default_output_dir: "PATENT_DOWNLOAD_OUTPUT_DIR"
+    timeout: "PATENT_DOWNLOAD_TIMEOUT"
+
+  cache:
+    redis_host: "PATENT_CACHE_REDIS_HOST"
+    redis_port: "PATENT_CACHE_REDIS_PORT"
+
+  logging:
+    level: "PATENT_LOG_LEVEL"
+    file_path: "PATENT_LOG_FILE_PATH"

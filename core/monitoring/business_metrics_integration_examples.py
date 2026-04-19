@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 业务指标集成示例 - Business Metrics Integration Examples
 展示如何在认知与决策模块中集成业务指标装饰器
@@ -15,14 +15,13 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
 from core.monitoring.business_metrics import (
-    track_patent_analysis,
-    track_intent_recognition,
-    track_user_interaction,
-    track_reasoning_quality,
     business_metrics,
-    update_business_metrics
+    track_intent_recognition,
+    track_patent_analysis,
+    track_reasoning_quality,
+    track_user_interaction,
+    update_business_metrics,
 )
-
 
 # ============== 示例1: 专利分析服务集成 ==============
 
@@ -100,7 +99,7 @@ def classify_user_query(query: str):
     print(f"🤔 分类查询: {query}")
 
     # 简单的规则分类（实际应使用模型）
-    query_lower = query.lower()
+    query.lower()
 
     if '专利' in query or '检索' in query:
         intent = 'patent_search'
@@ -272,11 +271,11 @@ class PatentAnalysisService:
         value_result = self._analyze_value(patent_id)
 
         # 计算综合质量评分
-        quality_score = int((
+        quality_score = int(
             similarity_result['score'] * 0.4 +
             invalidation_result['score'] * 0.3 +
             value_result['score'] * 0.3
-        ))
+        )
 
         return {
             'patent_id': patent_id,

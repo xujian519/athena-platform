@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律条文精确解析器
 Legal Article Precise Parser
@@ -10,8 +11,7 @@ import logging
 import re
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -34,8 +34,8 @@ class LawArticle:
     full_path: str  # 如 "第一章 > 第二十六条 > 第1款"
     level: ArticleLevel
     article_number: str  # 如 "26"
-    paragraph_number: Optional[int]  # 如 1, 2, 3
-    item_number: Optional[str]  # 如 "(一)", "1"
+    paragraph_number: int | None  # 如 1, 2, 3
+    item_number: str | None  # 如 "(一)", "1"
     title: str  # 如 "第1款" 或 "(一)"
     content: str  # 条文内容
     parent_id: str | None = None  # 父级ID

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 搜索引擎配置管理
 统一管理所有搜索引擎相关的配置
@@ -12,11 +13,10 @@
 
 import logging
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # 导入统一环境变量加载器
 from .env_loader import (
-    EnvLoader,
     get_env_bool,
     get_env_float,
     get_env_int,

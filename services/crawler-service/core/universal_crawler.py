@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 通用爬虫核心框架
 Universal Crawler Core Framework
@@ -10,20 +9,20 @@ Athena工作平台公共爬虫工具，支持多种网站的数据抓取
 import asyncio
 import hashlib
 import json
-import logging
-from core.logging_config import setup_logging
 import pickle
 import re
 import time
+from collections.abc import Callable
 from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Union
-from urllib.parse import urljoin, urlparse
+from typing import Any
+from urllib.parse import urljoin
 
 import aiohttp
-import pandas as pd
 from bs4 import BeautifulSoup
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -34,16 +33,16 @@ class CrawlerConfig:
     """爬虫配置"""
     name: str
     base_url: str
-    headers: Dict[str, str] = None
+    headers: dict[str, str] = None
     timeout: int = 30
     max_retries: int = 3
     retry_delay: float = 1.0
     rate_limit: float = 1.0  # 每秒请求数
     use_proxy: bool = False
-    proxy_list: List[str] = None
+    proxy_list: list[str] = None
     cache_enabled: bool = True
     cache_ttl: int = 3600  # 缓存时间(秒)
-    user_agents: List[str] = None
+    user_agents: list[str] = None
 
     def __post_init__(self):
         if self.headers is None:
@@ -64,17 +63,17 @@ class CrawlerRequest:
     """爬虫请求"""
     url: str
     method: str = 'GET'
-    params: Dict[str, Any] = None
-    data: Dict[str, Any] = None
-    headers: Dict[str, str] = None
-    cookies: Dict[str, str] = None
+    params: dict[str, Any] = None
+    data: dict[str, Any] = None
+    headers: dict[str, str] = None
+    cookies: dict[str, str] = None
 
 @dataclass
 class CrawlerResponse:
     """爬虫响应"""
     url: str
     status_code: int
-    headers: Dict[str, str]
+    headers: dict[str, str]
     content: str
     encoding: str
     request_time: float
@@ -315,7 +314,7 @@ class UniversalCrawler:
         request = CrawlerRequest(url=url, **kwargs)
         return await self.fetch(request)
 
-    async def get_json(self, url: str, **kwargs) -> Dict[str, Any]:
+    async def get_json(self, url: str, **kwargs) -> dict[str, Any]:
         """
         获取JSON数据
 
@@ -331,7 +330,7 @@ class UniversalCrawler:
         try:
             return json.loads(response.content)
         except json.JSONDecodeError as e:
-            raise ValueError(f"JSON解析失败: {e}, 内容: {response.content[:500]}")
+            raise ValueError(f"JSON解析失败: {e}, 内容: {response.content[:500]}") from e
 
     def parse_html(self, content: str, parser: str = 'html.parser') -> BeautifulSoup:
         """
@@ -346,7 +345,7 @@ class UniversalCrawler:
         """
         return BeautifulSoup(content, parser)
 
-    async def extract_links(self, url: str, pattern: str = None) -> List[str]:
+    async def extract_links(self, url: str, pattern: str = None) -> list[str]:
         """
         提取页面链接
 
@@ -373,7 +372,7 @@ class UniversalCrawler:
 
         return list(set(links))  # 去重
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取爬虫统计信息"""
         success_rate = (self.success_count / self.request_count * 100) if self.request_count > 0 else 0
 
@@ -394,8 +393,8 @@ class UniversalCrawler:
         logger.info('缓存已清空')
 
 # 便捷函数
-async def crawl_urls(urls: List[str], config: CrawlerConfig,
-                      processor: Callable[[CrawlerResponse], Any] = None) -> List[Any]:
+async def crawl_urls(urls: list[str], config: CrawlerConfig,
+                      processor: Callable[[CrawlerResponse], Any] = None) -> list[Any]:
     """
     批量爬取URL列表
 

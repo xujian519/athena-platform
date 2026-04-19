@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 客户端任务处理API
 
@@ -5,7 +6,7 @@
 """
 
 import logging
-from typing import Any, Dict
+from typing import Any
 
 from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel
@@ -372,7 +373,7 @@ async def analyze_task(request: TaskAnalysisRequest):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"处理任务失败: {e!s}",
-        )
+        ) from e
 
 
 # =============================================================================

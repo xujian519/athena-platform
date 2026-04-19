@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 执行模块告警通知系统
 Execution Module Alert Notification System
@@ -86,14 +87,14 @@ class NotificationConfig:
 class AlertManager:
     """
     告警管理器
-    
+
     管理告警规则、触发告警和发送通知。
     """
 
     def __init__(self, config: NotificationConfig):
         """
         初始化告警管理器
-        
+
         Args:
             config: 通知配置
         """
@@ -105,7 +106,7 @@ class AlertManager:
     def add_handler(self, handler: Callable[[Alert], None]):
         """
         添加自定义告警处理器
-        
+
         Args:
             handler: 处理函数，接收Alert对象
         """
@@ -114,7 +115,7 @@ class AlertManager:
     async def trigger_alert(self, alert: Alert):
         """
         触发告警
-        
+
         Args:
             alert: 告警对象
         """
@@ -144,10 +145,10 @@ class AlertManager:
     def _should_send_alert(self, alert: Alert) -> bool:
         """
         判断是否应该发送告警
-        
+
         Args:
             alert: 告警对象
-        
+
         Returns:
             bool: 是否应该发送
         """
@@ -175,7 +176,7 @@ class AlertManager:
     async def _send_notifications(self, alert: Alert):
         """
         发送通知到所有配置的渠道
-        
+
         Args:
             alert: 告警对象
         """
@@ -201,14 +202,14 @@ class AlertManager:
         if tasks:
             results = await asyncio.gather(*tasks, return_exceptions=True)
 
-            for i, result in enumerate(results):
+            for _i, result in enumerate(results):
                 if isinstance(result, Exception):
                     logger.error(f"通知发送失败: {result}")
 
     async def _send_webhook(self, alert: Alert):
         """
         发送Webhook通知
-        
+
         Args:
             alert: 告警对象
         """
@@ -235,10 +236,10 @@ class AlertManager:
     def _format_webhook_payload(self, alert: Alert) -> dict[str, Any]:
         """
         格式化Webhook负载
-        
+
         Args:
             alert: 告警对象
-        
+
         Returns:
             Dict: Webhook负载
         """
@@ -259,7 +260,7 @@ class AlertManager:
     async def _send_email(self, alert: Alert):
         """
         发送邮件通知
-        
+
         Args:
             alert: 告警对象
         """
@@ -351,7 +352,7 @@ Athena执行模块告警通知
     async def _send_sms(self, alert: Alert):
         """
         发送短信通知
-        
+
         Args:
             alert: 告警对象
         """
@@ -391,7 +392,7 @@ Athena执行模块告警通知
 class ThresholdChecker:
     """
     阈值检查器
-    
+
     定期检查指标是否超过阈值并触发告警。
     """
 
@@ -402,7 +403,7 @@ class ThresholdChecker:
     ):
         """
         初始化阈值检查器
-        
+
         Args:
             alert_manager: 告警管理器
             check_interval: 检查间隔（秒）
@@ -415,7 +416,7 @@ class ThresholdChecker:
     def add_check(self, check_func: Callable[[], Alert]):
         """
         添加检查函数
-        
+
         Args:
             check_func: 检查函数，返回Alert对象或None
         """
@@ -462,17 +463,17 @@ def create_queue_size_check(
     warning_threshold: float = 0.7,
     critical_threshold: float = 0.9,
     instance: str = "default"
-) -> Callable[[ | None, Alert]]:
+) -> Callable[[str | None, Alert]]:
     """
     创建队列大小检查函数
-    
+
     Args:
         get_queue_size_func: 获取当前队列大小的函数
         get_max_size_func: 获取最大队列大小的函数
         warning_threshold: 警告阈值（比例）
         critical_threshold: 严重阈值（比例）
         instance: 实例ID
-    
+
     Returns:
         Callable: 检查函数
     """
@@ -521,17 +522,17 @@ def create_error_rate_check(
     warning_threshold: float = 0.05,
     critical_threshold: float = 0.1,
     instance: str = "default"
-) -> Callable[[ | None, Alert]]:
+) -> Callable[[str | None, Alert]]:
     """
     创建错误率检查函数
-    
+
     Args:
         get_total_tasks_func: 获取总任务数的函数
         get_failed_tasks_func: 获取失败任务数的函数
         warning_threshold: 警告阈值（比例）
         critical_threshold: 严重阈值（比例）
         instance: 实例ID
-    
+
     Returns:
         Callable: 检查函数
     """

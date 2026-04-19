@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 迭代专利搜索服务部署脚本
 Deploy Iterative Patent Search Service
@@ -12,16 +11,12 @@ Deploy Iterative Patent Search Service
 """
 
 import asyncio
-import hashlib
 import json
 import logging
-import os
-import random
 import sys
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
 
 # 添加项目路径
 project_root = Path(__file__).parent
@@ -43,7 +38,7 @@ class SearchQualityMetrics:
         self.diversity_score = 0.0
         self.novelty_score = 0.0
         self.overall_score = 0.0
-    
+
     def calculate_overall(self):
         """计算综合评分"""
         weights = {'relevance': 0.3, 'completeness': 0.2, 'accuracy': 0.25, 'diversity': 0.15, 'novelty': 0.1}
@@ -58,16 +53,16 @@ class SearchQualityMetrics:
 
 class StandaloneIterativeSearch:
     """独立迭代搜索服务"""
-    
+
     def __init__(self):
         self.max_iterations = 3
         self.quality_threshold = 0.7
         self.search_history = []
         self.patent_database = self._create_patent_database()
-        
+
         logger.info('🚀 独立迭代搜索服务初始化完成')
-    
-    def _create_patent_database(self) -> List[Dict]:
+
+    def _create_patent_database(self) -> list[dict]:
         """创建模拟专利数据库"""
         patents = [
             {
@@ -175,23 +170,23 @@ class StandaloneIterativeSearch:
                 'citations': 25
             }
         ]
-        
+
         logger.info(f"📚 专利数据库加载完成，共 {len(patents)} 条专利")
         return patents
-    
-    async def search_patents(self, query: str, enable_refinement: bool = True, max_results: int = 10) -> Dict:
+
+    async def search_patents(self, query: str, enable_refinement: bool = True, max_results: int = 10) -> dict:
         """搜索专利"""
         logger.info(f"🔍 开始搜索: {query}")
         start_time = time.time()
-        
+
         # 1. 初始搜索
         initial_results = await self._initial_search(query, max_results)
         logger.info(f"📊 初始搜索返回 {len(initial_results)} 条结果")
-        
+
         # 2. 评估初始质量
         initial_quality = self._evaluate_quality(query, initial_results)
         logger.info(f"📈 初始质量评分: {initial_quality.overall_score:.3f}")
-        
+
         # 3. 迭代改进（如果启用）
         if enable_refinement and initial_quality.overall_score < self.quality_threshold:
             logger.info('🔄 启动迭代改进...')
@@ -201,7 +196,7 @@ class StandaloneIterativeSearch:
             refined_results = initial_results
             final_quality = initial_quality
             logger.info('⚡ 跳过迭代改进')
-        
+
         # 4. 构建结果
         search_time = time.time() - start_time
         result = {
@@ -215,61 +210,61 @@ class StandaloneIterativeSearch:
             'quality_improvement': final_quality.overall_score - initial_quality.overall_score,
             'timestamp': datetime.now().isoformat()
         }
-        
+
         logger.info(f"✅ 搜索完成，耗时 {search_time:.2f}s，最终质量: {final_quality.overall_score:.3f}")
-        
+
         # 保存搜索历史
         self._save_search_history(result)
-        
+
         return result
-    
-    async def _initial_search(self, query: str, max_results: int) -> List[Dict]:
+
+    async def _initial_search(self, query: str, max_results: int) -> list[dict]:
         """执行初始搜索"""
         query_terms = set(query.lower().split())
         scored_results = []
-        
+
         for patent in self.patent_database:
             score = self._calculate_relevance(query_terms, patent)
             if score > 0:
                 patent_copy = patent.copy()
                 patent_copy['relevance_score'] = score
                 scored_results.append(patent_copy)
-        
+
         # 按相关性排序并限制结果数量
         scored_results.sort(key=lambda x: x['relevance_score'], reverse=True)
         return scored_results[:max_results]
-    
-    def _calculate_relevance(self, query_terms: set, patent: Dict) -> float:
+
+    def _calculate_relevance(self, query_terms: set, patent: dict) -> float:
         """计算专利与查询的相关性"""
         score = 0.0
-        
+
         # 标题匹配
         title_words = set(patent['title'].lower().split())
         title_matches = len(query_terms.intersection(title_words))
         score += (title_matches / len(query_terms)) * 0.5
-        
+
         # 摘要匹配
         abstract_words = set(patent['abstract'].lower().split())
         abstract_matches = len(query_terms.intersection(abstract_words))
         score += min(1.0, abstract_matches / len(query_terms)) * 0.3
-        
+
         # 关键词匹配
         keywords = [k.lower() for k in patent.get('keywords', [])]
         keyword_matches = len(query_terms.intersection(set(keywords)))
         score += (keyword_matches / len(query_terms)) * 0.2
-        
+
         return min(1.0, score)
-    
-    def _evaluate_quality(self, query: str, results: List[Dict]) -> SearchQualityMetrics:
+
+    def _evaluate_quality(self, query: str, results: list[dict]) -> SearchQualityMetrics:
         """评估搜索结果质量"""
         metrics = SearchQualityMetrics()
-        
+
         if not results:
             return metrics
-        
+
         # 相关性评分
         metrics.relevance_score = sum(r['relevance_score'] for r in results) / len(results)
-        
+
         # 完整性评分
         completeness_scores = []
         for result in results:
@@ -277,7 +272,7 @@ class StandaloneIterativeSearch:
             present_fields = sum(1 for field in required_fields if field in result and result[field])
             completeness_scores.append(present_fields / len(required_fields))
         metrics.completeness_score = sum(completeness_scores) / len(completeness_scores)
-        
+
         # 准确性评分
         accuracy_scores = []
         for result in results:
@@ -290,12 +285,12 @@ class StandaloneIterativeSearch:
                 score -= 0.2
             accuracy_scores.append(max(0.0, score))
         metrics.accuracy_score = sum(accuracy_scores) / len(accuracy_scores)
-        
+
         # 多样性评分
         sources = [r.get('source') for r in results]
-        unique_sources = len(set(s for s in sources if s))
+        unique_sources = len({s for s in sources if s})
         metrics.diversity_score = unique_sources / len(sources) if sources else 0.0
-        
+
         # 新颖性评分
         current_year = datetime.now().year
         novelty_scores = []
@@ -306,51 +301,51 @@ class StandaloneIterativeSearch:
                     year = int(pub_date[:4])
                     novelty_score = max(0.0, 1.0 - (current_year - year) / 10)
                     novelty_scores.append(novelty_score)
-                except:
+                except Exception:
                     novelty_scores.append(0.5)
             else:
                 novelty_scores.append(0.0)
         metrics.novelty_score = sum(novelty_scores) / len(novelty_scores)
-        
+
         metrics.calculate_overall()
         return metrics
-    
-    async def _iterative_refine(self, query: str, results: List[Dict]) -> List[Dict]:
+
+    async def _iterative_refine(self, query: str, results: list[dict]) -> list[dict]:
         """执行迭代改进"""
         current_results = results.copy()
         query_terms = set(query.lower().split())
-        
+
         for iteration in range(self.max_iterations):
             logger.info(f"🔄 第 {iteration + 1} 轮迭代改进...")
-            
+
             # 评估当前质量
             quality = self._evaluate_quality(query, current_results)
             logger.info(f"   当前质量: {quality.overall_score:.3f}")
-            
+
             if quality.overall_score >= self.quality_threshold:
-                logger.info(f"✅ 质量达标，停止迭代")
+                logger.info("✅ 质量达标，停止迭代")
                 break
-            
+
             # 应用改进策略
             if quality.relevance_score < 0.6:
                 # 查询扩展
                 expanded_terms = self._expand_query(query_terms)
                 expanded_results = await self._search_with_expanded_terms(expanded_terms)
                 current_results = self._merge_results(current_results, expanded_results)
-            
+
             if quality.completeness_score < 0.7:
                 # 过滤低质量结果
                 current_results = [r for r in current_results if self._is_high_quality(r)]
-            
+
             if quality.diversity_score < 0.5:
                 # 重新排序以增加多样性
                 current_results = self._rerank_for_diversity(current_results)
-            
+
             # 限制结果数量
             current_results = current_results[:10]
-        
+
         return current_results
-    
+
     def _expand_query(self, query_terms: set) -> set:
         """扩展查询词"""
         # 简单的同义词扩展
@@ -363,75 +358,75 @@ class StandaloneIterativeSearch:
             '计算机视觉': ['computer vision', 'CV', '图像识别'],
             '区块链': ['blockchain', 'distributed ledger', '分布式账本']
         }
-        
+
         expanded_terms = set(query_terms)
         for term in query_terms:
             for key, values in synonyms.items():
                 if term in key or key in term:
                     expanded_terms.update(values)
-        
+
         return expanded_terms
-    
-    async def _search_with_expanded_terms(self, expanded_terms: set) -> List[Dict]:
+
+    async def _search_with_expanded_terms(self, expanded_terms: set) -> list[dict]:
         """使用扩展词搜索"""
         return await self._initial_search(' '.join(expanded_terms), 10)
-    
-    def _merge_results(self, results1: List[Dict], results2: List[Dict]) -> List[Dict]:
+
+    def _merge_results(self, results1: list[dict], results2: list[dict]) -> list[dict]:
         """合并搜索结果"""
         seen_ids = set()
         merged = []
-        
+
         for result in results1 + results2:
             if result['id'] not in seen_ids:
                 seen_ids.add(result['id'])
                 merged.append(result)
-        
+
         return merged
-    
-    def _is_high_quality(self, result: Dict) -> bool:
+
+    def _is_high_quality(self, result: dict) -> bool:
         """判断是否为高质量结果"""
         return (
             result.get('relevance_score', 0) > 0.3 and
             len(result.get('title', '')) > 5 and
             len(result.get('abstract', '')) > 50
         )
-    
-    def _rerank_for_diversity(self, results: List[Dict]) -> List[Dict]:
+
+    def _rerank_for_diversity(self, results: list[dict]) -> list[dict]:
         """为多样性重新排序"""
         # 简单的多样性重排序：交替不同来源的专利
         sources = ['CNIPA', 'USPTO', 'EPO', 'WIPO']
         source_groups = {source: [] for source in sources}
-        
+
         for result in results:
             source = result.get('source')
             if source in source_groups:
                 source_groups[source].append(result)
             else:
                 source_groups['USPTO'].append(result)
-        
+
         # 交替选择不同来源的结果
         reranked = []
         for _ in range(len(results)):
             for source in sources:
                 if source_groups[source]:
                     reranked.append(source_groups[source].pop(0))
-        
+
         return reranked
-    
-    def _save_search_history(self, result: Dict):
+
+    def _save_search_history(self, result: dict):
         """保存搜索历史"""
         try:
             history_file = Path('/Users/xujian/Athena工作平台/data/search_history.json')
-            
+
             # 加载现有历史
             history = []
             if history_file.exists():
-                with open(history_file, 'r', encoding='utf-8') as f:
+                with open(history_file, encoding='utf-8') as f:
                     try:
                         history = json.load(f)
-                    except:
+                    except Exception:
                         history = []
-            
+
             # 添加新记录
             history.append({
                 'timestamp': result['timestamp'],
@@ -440,38 +435,38 @@ class StandaloneIterativeSearch:
                 'quality_improvement': result['quality_improvement'],
                 'refinement_applied': result['refinement_applied']
             })
-            
+
             # 限制历史记录数量
             history = history[-100:]
-            
+
             # 保存历史
             with open(history_file, 'w', encoding='utf-8') as f:
                 json.dump(history, f, ensure_ascii=False, indent=2)
-                
+
         except Exception as e:
             logger.warning(f"保存搜索历史失败: {e}")
-    
-    def get_statistics(self) -> Dict:
+
+    def get_statistics(self) -> dict:
         """获取搜索统计"""
         try:
             history_file = Path('/Users/xujian/Athena工作平台/data/search_history.json')
             if history_file.exists():
-                with open(history_file, 'r', encoding='utf-8') as f:
+                with open(history_file, encoding='utf-8') as f:
                     history = json.load(f)
-                
+
                 total_searches = len(history)
                 refinement_applied = sum(1 for h in history if h.get('refinement_applied'))
                 avg_improvement = sum(h.get('quality_improvement', 0) for h in history) / max(1, total_searches)
-                
+
                 return {
                     'total_searches': total_searches,
                     'refinement_rate': refinement_applied / max(1, total_searches),
                     'average_improvement': avg_improvement,
                     'patent_database_size': len(self.patent_database)
                 }
-        except:
+        except Exception:
             pass
-        
+
         return {
             'total_searches': 0,
             'refinement_rate': 0.0,
@@ -483,10 +478,10 @@ async def main():
     """主函数 - 演示部署和使用"""
     logger.info('🚀 迭代专利搜索服务部署演示')
     logger.info(str('=' * 60))
-    
+
     # 创建服务实例
     search_service = StandaloneIterativeSearch()
-    
+
     # 演示查询
     demo_queries = [
         '人工智能 专利',
@@ -495,22 +490,22 @@ async def main():
         '计算机视觉 图像识别',
         '区块链 知识产权'
     ]
-    
+
     logger.info('🔍 开始演示搜索功能...')
     print()
-    
+
     all_results = []
-    
+
     for i, query in enumerate(demo_queries, 1):
         logger.info(f"📋 演示 {i}: {query}")
-        
+
         # 搜索专利
         result = await search_service.search_patents(
             query=query,
             enable_refinement=True,
             max_results=5
         )
-        
+
         # 显示结果
         logger.info(f"   📊 找到 {result['total_count']} 条专利")
         logger.info(f"   📈 初始质量: {result['initial_quality']:.3f}")
@@ -518,16 +513,16 @@ async def main():
         logger.info(f"   📊 质量提升: +{result['quality_improvement']:.3f}")
         logger.info(f"   🔄 迭代改进: {'是' if result['refinement_applied'] else '否'}")
         logger.info(f"   ⏱️ 搜索耗时: {result['search_time']:.2f}s")
-        
+
         # 显示前3个结果
         logger.info('   📋 搜索结果预览:')
         for j, patent in enumerate(result['results'][:3], 1):
             logger.info(f"      {j}. {patent['title']}")
             logger.info(f"         相关性: {patent['relevance_score']:.3f}")
-        
+
         print()
         all_results.append(result)
-    
+
     # 显示总体统计
     stats = search_service.get_statistics()
     logger.info('📊 服务统计信息:')
@@ -536,24 +531,24 @@ async def main():
     logger.info(f"   平均质量提升: +{stats['average_improvement']:.3f}")
     logger.info(f"   专利数据库规模: {stats['patent_database_size']} 条")
     print()
-    
+
     # 计算演示效果
     total_improvement = sum(r['quality_improvement'] for r in all_results)
     avg_improvement = total_improvement / len(all_results)
     refinement_count = sum(1 for r in all_results if r['refinement_applied'])
-    
+
     logger.info('🎯 演示效果评估:')
     logger.info(f"   平均质量提升: +{avg_improvement:.3f}")
     logger.info(f"   迭代改进使用率: {refinement_count}/{len(all_results)} ({refinement_count/len(all_results):.1%})")
     print()
-    
+
     if avg_improvement > 0.05:
         logger.info('🎉 迭代改进机制效果显著!')
         logger.info('✅ 系统可以正式部署使用')
     else:
         logger.info('⚠️ 迭代改进效果有限')
         logger.info('📝 建议进一步优化算法')
-    
+
     logger.info("\n💡 使用说明:")
     logger.info('1. 导入: from deploy_iterative_search import StandaloneIterativeSearch')
     logger.info('2. 创建: service = StandaloneIterativeSearch()')

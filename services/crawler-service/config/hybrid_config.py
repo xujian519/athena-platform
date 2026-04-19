@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 混合爬虫统一配置管理
 """
@@ -8,7 +7,7 @@ import logging
 import os
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -185,7 +184,7 @@ class HybridConfigManager:
         """加载配置"""
         try:
             if os.path.exists(self.config_path):
-                with open(self.config_path, 'r', encoding='utf-8') as f:
+                with open(self.config_path, encoding='utf-8') as f:
                     config_data = json.load(f)
                 self.config = self._parse_config(config_data)
                 logger.info(f"配置已从 {self.config_path} 加载")
@@ -197,7 +196,7 @@ class HybridConfigManager:
             logger.error(f"配置加载失败: {e}")
             self.config = self._create_default_config()
 
-    def _parse_config(self, config_data: Dict[str, Any]) -> HybridCrawlerConfig:
+    def _parse_config(self, config_data: dict[str, Any]) -> HybridCrawlerConfig:
         """解析配置数据"""
         return HybridCrawlerConfig(
             cost_limits=CostLimits(**config_data.get('cost_limits', {})),
@@ -236,7 +235,7 @@ class HybridConfigManager:
         """获取配置"""
         return self.config
 
-    def update_config(self, updates: Dict[str, Any]) -> None:
+    def update_config(self, updates: dict[str, Any]) -> None:
         """更新配置"""
         try:
             config_dict = asdict(self.config)
@@ -254,7 +253,7 @@ class HybridConfigManager:
             else:
                 target[key] = value
 
-    def get_crawler_config(self, crawler_type: str) -> Dict[str, Any]:
+    def get_crawler_config(self, crawler_type: str) -> dict[str, Any]:
         """获取特定爬虫的配置"""
         if crawler_type == 'internal':
             return asdict(self.config.internal)
@@ -318,7 +317,7 @@ class HybridConfigManager:
 
         return errors
 
-    def get_env_overrides(self) -> Dict[str, Any]:
+    def get_env_overrides(self) -> dict[str, Any]:
         """获取环境变量覆盖"""
         overrides = {}
 
@@ -337,14 +336,14 @@ class HybridConfigManager:
         if monthly_limit:
             try:
                 overrides.setdefault('cost_limits', {})['monthly_limit'] = float(monthly_limit)
-            except ValueError:
+            except ValueError as e:
                 logger.error(f"Error: {e}", exc_info=True)
 
         daily_limit = os.getenv('CRAWLER_DAILY_LIMIT')
         if daily_limit:
             try:
                 overrides.setdefault('cost_limits', {})['daily_limit'] = float(daily_limit)
-            except ValueError:
+            except ValueError as e:
                 logger.error(f"Error: {e}", exc_info=True)
 
         return overrides

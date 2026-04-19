@@ -4,19 +4,16 @@
 Personal Information Security Manager
 """
 
-import os
-from core.async_main import async_main
-import sys
-import json
-import logging
-from core.logging_config import setup_logging
-import hashlib
 import getpass
-from pathlib import Path
-from datetime import datetime, timedelta
+import hashlib
+import logging
 import sqlite3
+from datetime import datetime
+from pathlib import Path
+
 from cryptography.fernet import Fernet
-import base64
+
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -301,14 +298,14 @@ class PersonalSecurityManager:
 
         # 检查最近访问
         try:
-            with open(self.access_log_path, 'r', encoding='utf-8') as f:
+            with open(self.access_log_path, encoding='utf-8') as f:
                 lines = f.readlines()
                 if lines:
                     print("🕒 最近访问记录:")
                     for line in lines[-5:]:  # 显示最后5条
                         print(f"  {line.strip()}")
         except Exception as e:
-        logger.error(f"Error: {e}", exc_info=True)
+            logger.error(f"Error: {e}", exc_info=True)
 
         print("")
         print("📍 数据位置:")

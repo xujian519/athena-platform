@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主统一工具调用接口
 Xiaonuo·Pisces Princess Unified Tool Call Interface (UTCI)
@@ -168,7 +169,7 @@ class XiaonuoUnifiedToolCallInterface:
     async def smart_function_call(
         self,
         intent: str,
-        context: dict[str, Any],        tools: list["key"] = None,
+        context: dict[str, Any],        tools: list[str] = None,
         strategy: CallStrategy = CallStrategy.ADAPTIVE,
     ) -> list[ToolCallResult]:
         """
@@ -216,7 +217,7 @@ class XiaonuoUnifiedToolCallInterface:
             ]
 
     async def _analyze_intent_and_select_tools(
-        self, intent: str, context: dict[str, Any], preferred_tools: list["key"] = None
+        self, intent: str, context: dict[str, Any], preferred_tools: list[str] = None
     ) -> list[ToolCall]:
         """分析意图并选择工具"""
         selected_tools = []
@@ -526,7 +527,7 @@ xiaonuo_utci = XiaonuoUnifiedToolCallInterface()
 
 # 便捷函数
 async def smart_call(
-    intent: str, context: dict[str, Any, tools: list["key"] = None
+    intent: str, context: dict[str, Any], tools: list[str] | None = None
 ) -> list[ToolCallResult]:
     """便捷的智能调用函数"""
     return await xiaonuo_utci.smart_function_call(intent, context, tools)

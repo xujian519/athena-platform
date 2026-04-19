@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强的集成提示词生成器(支持能力调用)
 Enhanced Integrated Prompt Generator with Capability Invocation
@@ -7,7 +8,7 @@ Enhanced Integrated Prompt Generator with Capability Invocation
 """
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from jinja2 import Template
 

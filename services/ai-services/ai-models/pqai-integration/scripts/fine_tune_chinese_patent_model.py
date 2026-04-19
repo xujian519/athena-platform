@@ -1,18 +1,15 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 中文专利语义模型微调脚本
 使用专利数据微调中文语义模型，提升检索质量
 """
 
 import json
-from core.async_main import async_main
-import logging
-from core.logging_config import setup_logging
 import os
 import sys
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 添加项目路径
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -44,7 +41,7 @@ class ChinesePatentModelFineTuner:
             self.model = SentenceTransformer(self.model_name)
             self.model.to(self.device)
 
-            logger.info(f"✅ 模型加载成功!")
+            logger.info("✅ 模型加载成功!")
             logger.info(f"📱 设备: {self.device}")
             logger.info(f"📏 向量维度: {self.model.get_sentence_embedding_dimension()}")
             return True
@@ -53,10 +50,10 @@ class ChinesePatentModelFineTuner:
             logger.error(f"❌ 模型加载失败: {e}")
             return False
 
-    def load_patent_data(self, data_path: str) -> List[Dict]:
+    def load_patent_data(self, data_path: str) -> list[dict]:
         """加载专利数据"""
         try:
-            with open(data_path, 'r', encoding='utf-8') as f:
+            with open(data_path, encoding='utf-8') as f:
                 patents = json.load(f).get('patents', [])
 
             logger.info(f"✅ 成功加载 {len(patents)} 个专利")
@@ -66,7 +63,7 @@ class ChinesePatentModelFineTuner:
             logger.error(f"❌ 专利数据加载失败: {e}")
             return []
 
-    def prepare_training_examples(self, patents: List[Dict]) -> List[InputExample]:
+    def prepare_training_examples(self, patents: list[dict]) -> list[InputExample]:
         """准备训练样本"""
         logger.info('🔄 准备训练样本...')
         examples = []
@@ -113,8 +110,8 @@ class ChinesePatentModelFineTuner:
         }
         return category_descriptions.get(category, '')
 
-    def create_negative_samples(self, positive_examples: List[InputExample],
-                               negative_ratio: float = 0.3) -> List[InputExample]:
+    def create_negative_samples(self, positive_examples: list[InputExample],
+                               negative_ratio: float = 0.3) -> list[InputExample]:
         """创建负样本"""
         logger.info(f"🔄 创建负样本 (比率: {negative_ratio})...")
         negative_examples = []
@@ -132,7 +129,7 @@ class ChinesePatentModelFineTuner:
         logger.info(f"✅ 生成 {len(negative_examples)} 个负样本")
         return negative_examples
 
-    def prepare_validation_data(self, patents: List[Dict]) -> List[Tuple[str, str, float]]:
+    def prepare_validation_data(self, patents: list[dict]) -> list[tuple[str, str, float]]:
         """准备验证数据"""
         validation_pairs = []
 
@@ -162,8 +159,8 @@ class ChinesePatentModelFineTuner:
         logger.info(f"✅ 准备 {len(validation_pairs)} 个验证样本")
         return validation_pairs
 
-    def fine_tune_model(self, training_examples: List[InputExample],
-                       validation_examples: List[Tuple[str, str, float]] = None,
+    def fine_tune_model(self, training_examples: list[InputExample],
+                       validation_examples: list[tuple[str, str, float]] = None,
                        epochs: int = 3, batch_size: int = 16, warmup_steps: int = 100,
                        output_path: str = './fine_tuned_chinese_patent_model'):
         """微调模型"""
@@ -202,8 +199,8 @@ class ChinesePatentModelFineTuner:
 
         logger.info(f"✅ 模型微调完成! 模型已保存到: {output_path}")
 
-    def evaluate_model(self, test_patents: List[Dict],
-                       original_model_path: str = None) -> Dict:
+    def evaluate_model(self, test_patents: list[dict],
+                       original_model_path: str = None) -> dict:
         """评估微调效果"""
         logger.info('📊 评估模型微调效果...')
 
@@ -256,7 +253,7 @@ class ChinesePatentModelFineTuner:
 
         return results
 
-    def save_evaluation_results(self, results: Dict, output_path: str) -> None:
+    def save_evaluation_results(self, results: dict, output_path: str) -> None:
         """保存评估结果"""
         results_path = os.path.join(output_path, 'fine_tuning_evaluation.json')
 

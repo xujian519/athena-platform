@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 WebSocket通信模块
 WebSocket Communication Module
@@ -14,9 +15,9 @@ WebSocket Communication Module
 创建时间: 2026-01-28
 """
 
-from .websocket_server import WebSocketServer
 from .connection_manager import ConnectionManager
 from .message_protocol import MessageProtocol, WebSocketMessageType
+from .websocket_server import WebSocketServer
 
 __all__ = [
     "WebSocketServer",

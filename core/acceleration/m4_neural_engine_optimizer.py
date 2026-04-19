@@ -1,15 +1,17 @@
+from __future__ import annotations
 """
 Apple M4 Neural Engine 专用优化器
 充分利用M4的16核Neural Engine和增强的GPU架构
 """
-import os
-
 # Numpy兼容性导入
 import logging
+import os
 import time
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any
 
+import coremltools as ct
+import numpy as np
 
 from config.numpy_compatibility import random
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 神经架构搜索系统 (Neural Architecture Search System)
 自动搜索最优神经网络架构
@@ -9,12 +10,13 @@
 """
 
 import logging
-from collections import defaultdict, deque
+from collections import deque
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

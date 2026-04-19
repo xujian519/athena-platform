@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 知识库管理器
 Knowledge Base Manager
@@ -11,18 +10,18 @@ Knowledge Base Manager
 """
 
 import asyncio
-from core.async_main import async_main
+import hashlib
+import json
 import logging
-from typing import Dict, List, Any, Optional, Union, Callable
+import pickle
+from collections.abc import Callable
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import json
 from pathlib import Path
-import aiofiles
+from typing import Any
+
 import aiohttp
-from dataclasses import dataclass, field
-import hashlib
-import pickle
 
 logger = logging.getLogger(__name__)
 
@@ -54,8 +53,8 @@ class KnowledgeItem:
     type: KnowledgeType
     title: str
     content: str
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    tags: List[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
+    tags: list[str] = field(default_factory=list)
     source: str = ""
     confidence: float = 1.0
     last_updated: datetime = field(default_factory=datetime.now)
@@ -70,7 +69,7 @@ class Tool:
     type: ToolType
     description: str
     function: Callable
-    parameters: Dict[str, Any] = field(default_factory=dict)
+    parameters: dict[str, Any] = field(default_factory=dict)
     enabled: bool = True
     usage_count: int = 0
 
@@ -143,7 +142,7 @@ class KnowledgeBaseManager:
             logger.error(f"❌ 知识库管理器初始化失败: {str(e)}")
             self.initialized = True  # 使用默认配置
 
-    async def add_knowledge(self, knowledge_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def add_knowledge(self, knowledge_data: dict[str, Any]) -> dict[str, Any]:
         """
         添加知识
 
@@ -204,8 +203,8 @@ class KnowledgeBaseManager:
             }
 
     async def search_knowledge(self, query: str, knowledge_type: str | None = None,
-                             filters: Optional[Dict[str, Any]] = None,
-                             limit: int = 10) -> List[Dict[str, Any]]:
+                             filters: dict[str, Any] | None = None,
+                             limit: int = 10) -> list[dict[str, Any]]:
         """
         搜索知识
 
@@ -249,8 +248,8 @@ class KnowledgeBaseManager:
             logger.error(f"❌ 搜索知识失败: {str(e)}")
             return []
 
-    async def _perform_search(self, query: str, knowledge_type: Optional[str],
-                            filters: Optional[Dict[str, Any]], limit: int) -> List[Dict[str, Any]]:
+    async def _perform_search(self, query: str, knowledge_type: str | None,
+                            filters: dict[str, Any] | None, limit: int) -> list[dict[str, Any]]:
         """执行搜索"""
         results = []
 
@@ -269,8 +268,8 @@ class KnowledgeBaseManager:
 
         return results[:limit]
 
-    async def _text_search(self, query: str, knowledge_type: Optional[str],
-                         filters: Optional[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    async def _text_search(self, query: str, knowledge_type: str | None,
+                         filters: dict[str, Any] | None) -> list[dict[str, Any]]:
         """文本搜索"""
         results = []
         query_lower = query.lower()
@@ -308,7 +307,7 @@ class KnowledgeBaseManager:
 
         return results
 
-    async def _semantic_search(self, query: str, knowledge_type: Optional[str]) -> List[Dict[str, Any]]:
+    async def _semantic_search(self, query: str, knowledge_type: str | None) -> list[dict[str, Any]]:
         """语义搜索"""
         try:
             # 调用外部向量库
@@ -343,13 +342,13 @@ class KnowledgeBaseManager:
 
         return []
 
-    async def _merge_results(self, results1: List[Dict[str, Any]],
-                          results2: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    async def _merge_results(self, results1: list[dict[str, Any]],
+                          results2: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """合并搜索结果"""
         # 简单合并，实际应该去重
         return results1 + results2
 
-    async def _rank_results(self, results: List[Dict[str, Any]], query: str) -> List[Dict[str, Any]]:
+    async def _rank_results(self, results: list[dict[str, Any]], query: str) -> list[dict[str, Any]]:
         """排序结果"""
         # 按分数和置信度综合排序
         for result in results:
@@ -357,7 +356,7 @@ class KnowledgeBaseManager:
 
         return sorted(results, key=lambda x: x["final_score"], reverse=True)
 
-    async def register_tool(self, tool_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def register_tool(self, tool_data: dict[str, Any]) -> dict[str, Any]:
         """
         注册工具
 
@@ -405,7 +404,7 @@ class KnowledgeBaseManager:
                 "error": str(e)
             }
 
-    async def use_tool(self, tool_id: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    async def use_tool(self, tool_id: str, parameters: dict[str, Any]) -> dict[str, Any]:
         """
         使用工具
 
@@ -466,7 +465,7 @@ class KnowledgeBaseManager:
                 "error": str(e)
             }
 
-    async def get_knowledge_statistics(self) -> Dict[str, Any]:
+    async def get_knowledge_statistics(self) -> dict[str, Any]:
         """获取知识库统计"""
         try:
             stats = {
@@ -493,7 +492,7 @@ class KnowledgeBaseManager:
             logger.error(f"获取统计失败: {str(e)}")
             return {}
 
-    async def update_knowledge(self, item_id: str, updates: Dict[str, Any]) -> Dict[str, Any]:
+    async def update_knowledge(self, item_id: str, updates: dict[str, Any]) -> dict[str, Any]:
         """更新知识"""
         try:
             if item_id not in self.knowledge_store:
@@ -537,7 +536,7 @@ class KnowledgeBaseManager:
                 "error": str(e)
             }
 
-    async def delete_knowledge(self, item_id: str) -> Dict[str, Any]:
+    async def delete_knowledge(self, item_id: str) -> dict[str, Any]:
         """删除知识"""
         try:
             if item_id not in self.knowledge_store:
@@ -596,7 +595,7 @@ class KnowledgeBaseManager:
         """构建索引"""
         try:
             if self.index_file.exists():
-                with open(self.index_file, 'r', encoding='utf-8') as f:
+                with open(self.index_file, encoding='utf-8') as f:
                     self.knowledge_index = json.load(f)
 
             # 重建缺失的索引
@@ -641,7 +640,7 @@ class KnowledgeBaseManager:
         """加载工具"""
         try:
             if self.tools_file.exists():
-                with open(self.tools_file, 'r', encoding='utf-8') as f:
+                with open(self.tools_file, encoding='utf-8') as f:
                     tools_data = json.load(f)
                     # 注意：function 无法序列化，需要重新注册
                     logger.info(f"工具配置已加载，需重新注册 {len(tools_data)} 个工具")
@@ -724,7 +723,7 @@ class KnowledgeBaseManager:
                 except Exception as e:
                     logger.warning(f"⚠️ 无法连接外部数据源: {source_name} - {str(e)}")
 
-    async def _generate_document(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    async def _generate_document(self, parameters: dict[str, Any]) -> dict[str, Any]:
         """生成文档（内置工具）"""
         template = parameters.get("template", "default")
         data = parameters.get("data", {})
@@ -737,7 +736,7 @@ class KnowledgeBaseManager:
             "format": "text"
         }
 
-    async def _calculate_legal_dates(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    async def _calculate_legal_dates(self, parameters: dict[str, Any]) -> dict[str, Any]:
         """计算法律日期（内置工具）"""
         start_date = parameters.get("start_date", datetime.now().isoformat())
         duration = parameters.get("duration", 30)  # 天
@@ -751,7 +750,7 @@ class KnowledgeBaseManager:
             "duration_days": duration
         }
 
-    async def _estimate_patent_costs(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    async def _estimate_patent_costs(self, parameters: dict[str, Any]) -> dict[str, Any]:
         """估算专利费用（内置工具）"""
         patent_type = parameters.get("patent_type", "invention")
         complexity = parameters.get("complexity", "medium")
@@ -771,7 +770,7 @@ class KnowledgeBaseManager:
             "complexity": complexity
         }
 
-    async def _extract_keywords(self, text: str) -> List[str]:
+    async def _extract_keywords(self, text: str) -> list[str]:
         """提取关键词"""
         # 简化的关键词提取
         stop_words = ["的", "了", "是", "在", "和", "与", "或"]
@@ -784,8 +783,8 @@ class KnowledgeBaseManager:
 
         return list(set(keywords))
 
-    async def _generate_cache_key(self, query: str, knowledge_type: Optional[str],
-                                filters: Optional[Dict[str, Any]]) -> str:
+    async def _generate_cache_key(self, query: str, knowledge_type: str | None,
+                                filters: dict[str, Any] | None) -> str:
         """生成缓存键"""
         key_data = f"{query}_{knowledge_type}_{filters or {}}"
         return hashlib.md5(key_data.encode(), usedforsecurity=False).hexdigest()
@@ -800,7 +799,7 @@ class KnowledgeBaseManager:
         for key in keys_to_remove:
             del self.cache[key]
 
-    async def _log_usage(self, usage_type: str, data: Dict[str, Any]):
+    async def _log_usage(self, usage_type: str, data: dict[str, Any]):
         """记录使用日志"""
         log_entry = {
             "type": usage_type,

@@ -4,25 +4,18 @@ LLM集成模块
 支持Qwen推理模型进行智能查询生成、结果分析和专利洞察
 """
 
-import asyncio
 import json
 import logging
 import time
-from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
-import aiohttp
-import openai
 from openai import AsyncOpenAI
 
 from .types import (
-    PatentMetadata,
     PatentSearchResult,
-    PatentType,
     QueryExpansion,
     ResearchSummary,
     SearchIteration,
-    SearchQuery,
     SearchSession,
 )
 
@@ -31,7 +24,7 @@ logger = logging.getLogger(__name__)
 class QwenLLMIntegration:
     """Qwen推理模型集成"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         self.config = config
         self.api_key = config.get('api_key')
         self.base_url = config.get('base_url', 'https://dashscope.aliyuncs.com/compatible-mode/v1')
@@ -51,7 +44,7 @@ class QwenLLMIntegration:
         self.cache_ttl = config.get('cache_ttl', 3600)  # 1小时
         self.response_cache = {}
 
-    async def generate_query_expansion(self, original_query: str, context: Dict | None = None) -> QueryExpansion:
+    async def generate_query_expansion(self, original_query: str, context: dict | None = None) -> QueryExpansion:
         """生成查询扩展"""
         cache_key = f"query_expansion_{hash(original_query)}"
         cached_result = self._get_from_cache(cache_key)
@@ -120,7 +113,7 @@ class QwenLLMIntegration:
                 confidence=0.0
             )
 
-    async def analyze_search_results(self, query: str, results: List[PatentSearchResult]) -> List[str]:
+    async def analyze_search_results(self, query: str, results: list[PatentSearchResult]) -> list[str]:
         """分析搜索结果并生成洞察"""
         if not results:
             return ['未找到相关专利结果']
@@ -277,7 +270,7 @@ class QwenLLMIntegration:
             logger.error(f"生成下一轮查询建议失败: {e}")
             return None
 
-    async def _identify_technological_trends(self, session: SearchSession, results: List[PatentSearchResult]) -> List[str]:
+    async def _identify_technological_trends(self, session: SearchSession, results: list[PatentSearchResult]) -> list[str]:
         """识别技术趋势"""
         try:
             # 按年份分析专利分布
@@ -315,7 +308,7 @@ class QwenLLMIntegration:
             logger.error(f"识别技术趋势失败: {e}")
             return []
 
-    async def _generate_innovation_insights(self, session: SearchSession, results: List[PatentSearchResult]) -> List[str]:
+    async def _generate_innovation_insights(self, session: SearchSession, results: list[PatentSearchResult]) -> list[str]:
         """生成创新洞察"""
         try:
             system_prompt = """你是一个技术创新分析专家，请基于专利搜索结果，识别技术创新的关键洞察。
@@ -343,7 +336,7 @@ class QwenLLMIntegration:
             logger.error(f"生成创新洞察失败: {e}")
             return []
 
-    async def _generate_recommendations(self, session: SearchSession, results: List[PatentSearchResult], competitors: List[str]) -> List[str]:
+    async def _generate_recommendations(self, session: SearchSession, results: list[PatentSearchResult], competitors: list[str]) -> list[str]:
         """生成建议"""
         try:
             system_prompt = """你是一个专利战略顾问，请基于专利搜索分析，为企业或研发团队提供战略建议。
@@ -393,7 +386,7 @@ class QwenLLMIntegration:
             logger.error(f"LLM调用失败: {e}")
             raise
 
-    def _parse_insights(self, response: str) -> List[str]:
+    def _parse_insights(self, response: str) -> list[str]:
         """解析LLM返回的洞察"""
         try:
             # 尝试解析JSON
@@ -447,10 +440,10 @@ class QwenLLMIntegration:
 class MockLLMIntegration:
     """Mock LLM集成，用于测试和演示"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         self.config = config
 
-    async def generate_query_expansion(self, original_query: str, context: Dict | None = None) -> QueryExpansion:
+    async def generate_query_expansion(self, original_query: str, context: dict | None = None) -> QueryExpansion:
         """生成查询扩展（Mock版本）"""
         return QueryExpansion(
             original_query=original_query,
@@ -463,7 +456,7 @@ class MockLLMIntegration:
             confidence=0.7
         )
 
-    async def analyze_search_results(self, query: str, results: List[PatentSearchResult]) -> List[str]:
+    async def analyze_search_results(self, query: str, results: list[PatentSearchResult]) -> list[str]:
         """分析搜索结果（Mock版本）"""
         if not results:
             return ['未找到相关专利结果']

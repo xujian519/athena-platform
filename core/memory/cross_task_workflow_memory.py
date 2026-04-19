@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 import numpy as np
 
@@ -171,12 +172,10 @@ class CrossTaskWorkflowMemory:
             SecurityError: 如果pattern_id格式无效
         """
         # 安全验证: pattern_id格式
+        validated_id = self.input_validator.validate_file_name(pattern.pattern_id)
         try:
             if validated_id != pattern.pattern_id:
                 logger.warning(f"pattern_id已规范化: {pattern.pattern_id} -> {validated_id}")
-        except SecurityError as e:
-            logger.error(f"操作失败: {e}", exc_info=True)
-            raise
         except SecurityError as e:
             logger.error(f"操作失败: {e}", exc_info=True)
             raise
@@ -315,7 +314,7 @@ class CrossTaskWorkflowMemory:
             logger.debug(f"✅ 使用sentence-transformers生成embedding: {embedding.shape}")
             return embedding
 
-        except ImportError:
+        except ImportError as e:
             logger.error(f"操作失败: {e}", exc_info=True)
             raise
 
@@ -337,7 +336,7 @@ class CrossTaskWorkflowMemory:
             logger.debug(f"✅ 使用transformers生成embedding: {embedding.shape}")
             return embedding
 
-        except ImportError:
+        except ImportError as e:
             logger.error(f"操作失败: {e}", exc_info=True)
             raise
 
@@ -463,14 +462,11 @@ class CrossTaskWorkflowMemory:
 
         # 验证文件名安全性
         safe_filename = self.input_validator.validate_file_name(f"{pattern.pattern_id}.json")
-        patterns_dir / safe_filename
+        validated_path = patterns_dir / safe_filename
 
         # 验证路径安全性
         try:
-            pass
-        except SecurityError as e:
-            logger.error(f"操作失败: {e}", exc_info=True)
-            raise
+            self.input_validator.validate_path(validated_path)
         except SecurityError as e:
             logger.error(f"操作失败: {e}", exc_info=True)
             raise
@@ -582,7 +578,7 @@ class CrossTaskWorkflowMemory:
         success_count = 0
         error_count = 0
 
-        for i, pattern in enumerate(patterns):
+        for i, _pattern in enumerate(patterns):
             try:
                 success_count += 1
 

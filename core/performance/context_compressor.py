@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 上下文压缩机制 - 限制对话历史长度
 用于提升AI模型处理效率,减少token消耗
@@ -6,7 +7,6 @@
 import re
 import time
 from dataclasses import dataclass
-
 
 
 @dataclass
@@ -18,7 +18,7 @@ class Message:
     timestamp: float
     message_id: str
     importance: float = 1.0  # 重要性评分 0-1
-    keywords: list["key"] = None
+    keywords: list[str] = None
     summary: str = ""
     token_count: int = 0
 

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 意图识别服务 - Prometheus监控集成
 

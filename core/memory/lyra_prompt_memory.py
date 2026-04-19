@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Lyra提示词记忆模块
 Lyra Prompt Memory Module for Athena Platform
@@ -201,10 +202,10 @@ Just share your rough prompt and I'll handle the optimization!""",
         """
         try:
             from core.memory.lyra_prompt_optimizer import (
-                get_lyra_optimizer,
-                OptimizationRequest,
                 OptimizationMode,
-                TargetAI
+                OptimizationRequest,
+                TargetAI,
+                get_lyra_optimizer,
             )
 
             print(f"🔧 应用Lyra优化（目标AI: {target_ai}, 模式: {mode}）")

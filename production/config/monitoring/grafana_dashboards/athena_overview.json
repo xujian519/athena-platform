@@ -1,0 +1,51 @@
+{
+  "dashboard": {
+    "title": "Athena平台概览",
+    "panels": [
+      {
+        "id": 1,
+        "title": "查询性能",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(athena_query_duration_seconds_sum[5m])",
+            "legendFormat": "查询速率"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "缓存命中率",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "athena_cache_hit_rate",
+            "legendFormat": "缓存命中率"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "数据库连接池",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "athena_db_pool_active_connections",
+            "legendFormat": "活跃连接"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "查询QPS",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(athena_queries_total[1m])",
+            "legendFormat": "QPS"
+          }
+        ]
+      }
+    ]
+  }
+}

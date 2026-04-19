@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 意图识别服务 - 配置加载器
 
@@ -62,9 +63,9 @@ class IntentConfig:
                 self._config = {}
 
         except yaml.YAMLError as e:
-            raise ConfigurationError(config_key=str(self.config_path), reason=f"YAML解析失败: {e}")
+            raise ConfigurationError(config_key=str(self.config_path), reason=f"YAML解析失败: {e}") from e
         except Exception as e:
-            raise ConfigurationError(config_key=str(self.config_path), reason=f"加载失败: {e}")
+            raise ConfigurationError(config_key=str(self.config_path), reason=f"加载失败: {e}") from e
 
     def _resolve_env_variables(self, config: Any) -> Any:
         """

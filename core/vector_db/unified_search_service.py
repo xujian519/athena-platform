@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一搜索服务入口
 Unified Search Service Entry Point
@@ -14,29 +15,23 @@ Athena平台的统一搜索接口,集成智能路由、Reranker和LLM增强
 import asyncio
 import logging
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
-from core.cache.optimized_cache_manager import CacheLevel, OptimizedCacheManager, get_cache_manager
+from core.cache.optimized_cache_manager import CacheLevel, get_cache_manager
 from core.monitoring.search_performance_monitor import (
-    PerformanceMonitor,
     SearchRecord,
     get_performance_monitor,
 )
 from core.vector_db.enhanced_vector_search_with_reranker import (
     EnhancedSearchResult,
-    EnhancedVectorSearchWithReranker,
-    SearchMode,
 )
 from core.vector_db.intelligent_search_router import (
-    IntelligentSearchRouter,
     RouteDecision,
     RoutingAnalysis,
     get_intelligent_router,
 )
 from core.vector_db.llm_enhanced_vector_search import (
     LLMEnhancedSearchResult,
-    LLMEnhancedVectorSearch,
-    LLMOperation,
 )
 
 logger = logging.getLogger(__name__)

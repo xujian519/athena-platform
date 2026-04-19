@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 性能监控系统
 实时监控Athena优化系统的性能指标
@@ -20,7 +21,6 @@ from datetime import datetime
 from typing import Any
 
 import psutil
-
 
 logger = logging.getLogger(__name__)
 

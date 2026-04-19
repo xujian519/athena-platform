@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一智能体能力接口
 Unified Agent Capability Interface
@@ -12,6 +13,7 @@ from datetime import timedelta
 from enum import Enum
 from typing import Any
 
+from core.protocols.advanced_coordination import AgentCapability
 
 
 class CapabilityType(Enum):
@@ -314,7 +316,7 @@ class CapabilityAdapter:
         """转换为高级协调引擎的AgentCapability格式"""
         try:
 
-            return CoordCapability(
+            return AgentCapability(
                 capability_name=cap.name,
                 proficiency=cap.proficiency,
                 availability=cap.availability,

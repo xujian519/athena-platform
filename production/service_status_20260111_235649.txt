@@ -1,0 +1,73 @@
+╔═══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║        🎉 Athena生产环境服务启动报告 🎉                        ║
+║                                                               ║
+║        启动时间: $(date '+%Y-%m-%d %H:%M:%S')                    ║
+║                                                               ║
+╚═══════════════════════════════════════════════════════════════╝
+
+📊 服务状态概览
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ 监控系统 (athena-monitoring)
+   PID: 41143
+   状态: 运行中
+   功能: 全链路监控和告警系统
+   日志: production/logs/athena-monitoring.log
+
+✅ NLP服务 (athena-nlp)
+   PID: 41183
+   状态: 运行中
+   功能: 自然语言处理、命名实体识别、意图分类
+   日志: production/logs/athena-nlp.log
+
+✅ 缓存服务 (athena-cache)
+   PID: 41214
+   状态: 运行中
+   功能: 三级缓存系统(内存+Redis+数据库)
+   日志: production/logs/athena-cache.log
+
+✅ 小诺统一网关 (xiaonuo_unified_v5)
+   PID: 34205
+   端口: 8100
+   状态: 运行中
+   版本: v5.0.0-merged
+   运行时间: 0h 28m 50s
+   健康状态: healthy
+   访问地址: http://localhost:8100
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 服务管理命令
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+查看服务状态:
+  ps aux | grep -E "athena-monitoring|athena-nlp|athena-cache|xiaonuo" | grep -v grep
+
+查看实时日志:
+  tail -f production/logs/athena-monitoring.log
+  tail -f production/logs/athena-nlp.log
+  tail -f production/logs/athena-cache.log
+
+停止服务:
+  kill $(cat production/pids/athena-monitoring.pid)
+  kill $(cat production/pids/athena-nlp.pid)
+  kill $(cat production/pids/athena-cache.pid)
+  kill $(lsof -ti:8100)  # 停止小诺
+
+重启服务:
+  cd /Users/xujian/athena工作平台
+  bash production/scripts/start_athena_services.sh restart
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 小诺API端点
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+健康检查:  GET http://localhost:8100/health
+聊天接口:   POST http://localhost:8100/api/chat
+状态查询:   GET http://localhost:8100/api/status
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ 所有核心服务已成功启动并运行正常！

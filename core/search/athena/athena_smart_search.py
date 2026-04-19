@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 分散式智能搜索架构 - Athena智能搜索系统
 Decentralized Intelligent Search Architecture - Athena Smart Search System
@@ -16,7 +17,6 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
-
 
 from ..coordinator.lightweight_coordinator import (
     LightweightCoordinator,

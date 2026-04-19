@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 NLP缓存优化器 - 提升NLP处理性能(增强版 v2.0)
 NLP Cache Optimizer - Boost NLP Processing Performance
@@ -31,7 +32,7 @@ import time
 from collections import OrderedDict
 from collections.abc import Callable
 from functools import wraps
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

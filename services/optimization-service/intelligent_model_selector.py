@@ -5,17 +5,13 @@ Athena平台智能模型选择器
 """
 
 import asyncio
-from core.async_main import async_main
-import json
-import logging
-from core.logging_config import setup_logging
-import math
 import statistics
-import time
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -29,7 +25,7 @@ class GLMModelType(Enum):
     CHATGLM3_6B = 'chatglm3-6b'
 
     @classmethod
-    def get_all_models(cls) -> List[str]:
+    def get_all_models(cls) -> list[str]:
         return [model.value for model in cls]
 
 class TaskComplexity(Enum):
@@ -59,7 +55,7 @@ class TaskRequirement:
     concurrency_requirement: int = 1
     priority: int = 1
     context_window: int | None = None
-    special_features: List[str] = field(default_factory=list)
+    special_features: list[str] = field(default_factory=list)
 
 @dataclass
 class ModelCapability:
@@ -71,18 +67,18 @@ class ModelCapability:
     complexity_handling: TaskComplexity
     max_tokens: int
     concurrency_support: int
-    special_features: List[str] = field(default_factory=list)
+    special_features: list[str] = field(default_factory=list)
 
 @dataclass
 class SelectionResult:
     """模型选择结果"""
     selected_model: GLMModelType
     confidence: float
-    reasoning: List[str]
+    reasoning: list[str]
     expected_cost: float
     expected_latency: float
     expected_accuracy: float
-    alternatives: List[Tuple[GLMModelType, float]] = field(default_factory=list)
+    alternatives: list[tuple[GLMModelType, float]] = field(default_factory=list)
 
 class ModelPerformanceTracker:
     """模型性能跟踪器"""
@@ -119,7 +115,7 @@ class ModelPerformanceTracker:
 
         history['last_update'] = datetime.now()
 
-    def get_performance_stats(self, model: GLMModelType) -> Dict[str, Any]:
+    def get_performance_stats(self, model: GLMModelType) -> dict[str, Any]:
         """获取模型性能统计"""
         history = self.performance_history.get(model.value, {})
 
@@ -162,7 +158,7 @@ class IntelligentModelSelector:
         }
         self.adaptation_history = []
 
-    def _initialize_model_capabilities(self) -> Dict[GLMModelType, ModelCapability]:
+    def _initialize_model_capabilities(self) -> dict[GLMModelType, ModelCapability]:
         """初始化模型能力评估"""
         return {
             GLMModelType.GLM_4_FLASH: ModelCapability(
@@ -210,7 +206,7 @@ class IntelligentModelSelector:
             )
         }
 
-    def _initialize_selection_rules(self) -> Dict[str, Dict]:
+    def _initialize_selection_rules(self) -> dict[str, dict]:
         """初始化选择规则"""
         return {
             TaskComplexity.SIMPLE.value: {
@@ -301,7 +297,7 @@ class IntelligentModelSelector:
         logger.info(f"选择模型 {selected_model.value}，置信度 {confidence:.2f}")
         return result
 
-    def _filter_candidates(self, requirement: TaskRequirement) -> List[GLMModelType]:
+    def _filter_candidates(self, requirement: TaskRequirement) -> list[GLMModelType]:
         """过滤满足基本要求的候选模型"""
         candidates = []
 
@@ -318,7 +314,7 @@ class IntelligentModelSelector:
 
         return candidates
 
-    def _relax_requirements(self, requirement: TaskRequirement) -> List[GLMModelType]:
+    def _relax_requirements(self, requirement: TaskRequirement) -> list[GLMModelType]:
         """放宽要求以获得候选模型"""
         candidates = []
 
@@ -340,7 +336,7 @@ class IntelligentModelSelector:
         }
         return complexity_levels[capable] >= complexity_levels[required]
 
-    def _check_special_features(self, required: List[str], available: List[str]) -> bool:
+    def _check_special_features(self, required: list[str], available: list[str]) -> bool:
         """检查特殊功能要求"""
         if not required:
             return True
@@ -450,7 +446,7 @@ class IntelligentModelSelector:
 
         return base_latency * multiplier * concurrency_impact
 
-    def _calculate_confidence(self, model_scores: List[Tuple[GLMModelType, float]],
+    def _calculate_confidence(self, model_scores: list[tuple[GLMModelType, float]],
                             requirement: TaskRequirement) -> float:
         """计算选择置信度"""
         if len(model_scores) < 2:
@@ -476,7 +472,7 @@ class IntelligentModelSelector:
         return confidence
 
     def _generate_reasoning(self, selected_model: GLMModelType, requirement: TaskRequirement,
-                          model_scores: List[Tuple[GLMModelType, float]]) -> List[str]:
+                          model_scores: list[tuple[GLMModelType, float]]) -> list[str]:
         """生成选择理由"""
         capability = self.model_capabilities[selected_model]
         reasoning = []
@@ -518,7 +514,7 @@ class IntelligentModelSelector:
 
         return reasoning
 
-    def _estimate_performance(self, model: GLMModelType, requirement: TaskRequirement) -> Tuple[float, float, float]:
+    def _estimate_performance(self, model: GLMModelType, requirement: TaskRequirement) -> tuple[float, float, float]:
         """估算性能指标"""
         capability = self.model_capabilities[model]
 
@@ -575,7 +571,7 @@ class IntelligentModelSelector:
                 record['accuracy'] = accuracy
                 break
 
-    def get_model_recommendations(self, task_type: str, count: int = 3) -> List[Dict[str, Any]]:
+    def get_model_recommendations(self, task_type: str, count: int = 3) -> list[dict[str, Any]]:
         """获取模型推荐"""
         recommendations = []
 
@@ -653,7 +649,7 @@ class IntelligentModelSelector:
 
         return recommendations
 
-    def get_performance_report(self) -> Dict[str, Any]:
+    def get_performance_report(self) -> dict[str, Any]:
         """获取性能报告"""
         report = {
             'timestamp': datetime.now().isoformat(),
@@ -690,7 +686,7 @@ class IntelligentModelSelector:
 
         return report
 
-    def _generate_optimization_recommendations(self) -> List[str]:
+    def _generate_optimization_recommendations(self) -> list[str]:
         """生成优化建议"""
         recommendations = []
 
@@ -808,7 +804,7 @@ if __name__ == '__main__':
 
         # 获取性能报告
         report = selector.get_performance_report()
-        logger.info(f"\n性能报告:")
+        logger.info("\n性能报告:")
         logger.info(f"  总选择次数: {report['total_selections']}")
         logger.info(f"  模型性能: {report['model_performance']}")
 

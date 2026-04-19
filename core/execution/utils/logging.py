@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena执行系统 - 日志工具和装饰器
 Logging Utilities and Decorators for Execution System
@@ -387,4 +388,4 @@ __all__ = [
     "log_exceptions",
     "log_execution",
     "log_performance",
-
+]

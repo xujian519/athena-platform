@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利判决文档向量库系统
 Patent Judgment Vector Database System

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena智能搜索选择器 - 主选择器
 Athena Search Selector - Main Selector
@@ -13,19 +14,16 @@ Athena Search Selector - Main Selector
 
 import logging
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 from ...registry.tool_registry import ToolRegistry, get_tool_registry
-from ...standards.base_search_tool import QueryComplexity
-from .types import (
-    QueryAnalysis,
-    ToolRecommendation,
-    SelectionStrategy,
-    QueryIntent,
-    DomainType,
-)
 from .query_analyzer import QueryAnalyzer
 from .tool_evaluator import ToolEvaluator
+from .types import (
+    QueryAnalysis,
+    SelectionStrategy,
+    ToolRecommendation,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +40,7 @@ class AthenaSearchSelector:
     """
 
     def __init__(
-        self, registry: ToolRegistry | None = None, config: Optional[dict[str, Any] | None = None
+        self, registry: ToolRegistry | None = None, config: dict[str, Any] | None = None
     ):
         """
         初始化智能选择器
@@ -134,7 +132,7 @@ class AthenaSearchSelector:
         analysis: QueryAnalysis,
         strategy: SelectionStrategy | None = None,
         max_tools: int | None = None,
-        exclude_tools: Optional[list["key"] = None,
+        exclude_tools: list[str] | None = None,
     ) -> list[ToolRecommendation]:
         """
         选择最佳搜索工具
@@ -194,7 +192,7 @@ class AthenaSearchSelector:
 
             # 更新统计
             selection_time = (datetime.now() - start_time).total_seconds()
-            self._update_stats(len(final_recommendations), selection_time)
+            self._update_stats(len(final_recommendations), selection_time, final_recommendations)
 
             logger.info(
                 f"✅ 选择了 {len(final_recommendations)} 个工具,耗时 {selection_time:.3f}s"
@@ -217,7 +215,7 @@ class AthenaSearchSelector:
         limited_recommendations = recommendations[:max_tools]
 
         # 确保包含主要推荐
-        primary_recommendations = []
+        primary_recommendations = [
             r for r in limited_recommendations if r.recommendation_type == "primary"
         ]
         if not primary_recommendations and limited_recommendations:
@@ -255,7 +253,7 @@ class AthenaSearchSelector:
         if len(self.query_history) > 1000:
             self.query_history = self.query_history[-500:]
 
-    def _update_stats(self, num_recommendations: int, selection_time: float):
+    def _update_stats(self, num_recommendations: int, selection_time: float, recommendations: list | None = None):
         """更新统计信息"""
         self.stats["total_selections"] += 1
         if num_recommendations > 0:
@@ -269,11 +267,12 @@ class AthenaSearchSelector:
         ) / total
 
         # 更新最常用工具统计
-        for recommendation in recommendations[:3]:  # 只统计前3个
-            tool_name = recommendation.tool_name
-            self.stats["most_selected_tools"][tool_name] = (
-                self.stats["most_selected_tools"].get(tool_name, 0) + 1
-            )
+        if recommendations:
+            for recommendation in recommendations[:3]:  # 只统计前3个
+                tool_name = recommendation.tool_name
+                self.stats["most_selected_tools"][tool_name] = (
+                    self.stats["most_selected_tools"].get(tool_name, 0) + 1
+                )
 
     # 公共接口
     async def search_and_select(

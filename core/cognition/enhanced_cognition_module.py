@@ -1,3 +1,4 @@
+from __future__ import annotations
 # pyright: ignore
 # !/usr/bin/env python3
 """
@@ -15,7 +16,7 @@ import sys
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -224,7 +225,7 @@ class EnhancedCognitionModule(BaseModule):
             raise
 
     async def decide(
-        self, options: list[str] | Optional[dict[str, Any]], criteria: dict[str, Any] | None = None
+        self, options: list[str] | dict[str, Any] | None, criteria: dict[str, Any] | None = None
     ) -> dict[str, Any]:
         """决策方法 - 智能决策"""
         try:

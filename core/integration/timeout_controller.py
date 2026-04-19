@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 外部服务超时控制器
 External Service Timeout Controller
@@ -11,12 +12,11 @@ import asyncio
 import logging
 import statistics
 import time
-from collections.abc import Awaitable, Callable
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -474,7 +474,7 @@ async def main():
     # 显示统计
     stats = controller.get_stats()
     print("\n=== 全局统计 ===")
-    print(f"总服务数: {stats['total_services'}")
+    print(f"总服务数: {stats['total_services']}")
     print(f"活跃服务: {stats['active_services']}")
     print(f"断路打开次数: {stats['circuit_opened_count']}")
     print(f"超时减少率: {stats['timeout_reduction_rate']:.1%}")

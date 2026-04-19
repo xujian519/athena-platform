@@ -4,13 +4,9 @@ Athena迭代式搜索系统验证脚本
 验证系统各个组件是否正常工作
 """
 
-import asyncio
-from core.async_main import async_main
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import logging
 import os
 import sys
-import time
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
@@ -91,50 +87,28 @@ async def verify_system_components():
 
     try:
         # 验证类型定义
-        from services.athena_iterative_search.config import SearchDepth, SearchStrategy
-        from services.athena_iterative_search.types import (
-            PatentSearchResult,
-            SearchSession,
-        )
         print_success('类型定义模块')
 
         # 验证配置系统
         from services.athena_iterative_search.config_enhanced import (
-            AthenaEnhancedSearchConfig,
             get_config_by_environment,
         )
-        config = get_config_by_environment()
+        get_config_by_environment()
         print_success('配置系统')
 
         # 验证LLM集成
-        from services.athena_iterative_search.llm_integration import (
-            MockLLMIntegration,
-            QwenLLMIntegration,
-        )
         print_success('LLM集成模块')
 
         # 验证外部搜索引擎
-        from services.athena_iterative_search.external_search_engines import (
-            ExternalSearchEngineManager,
-        )
         print_success('外部搜索引擎模块')
 
         # 验证向量搜索
-        from services.athena_iterative_search.enhanced_vector_search import (
-            EnhancedVectorSearch,
-        )
         print_success('向量搜索模块')
 
         # 验证性能优化器
-        from services.athena_iterative_search.performance_optimizer import (
-            PerformanceOptimizer,
-        )
         print_success('性能优化器模块')
 
         # 验证增强核心引擎
-        from services.athena_iterative_search.enhanced_core import (
-            AthenaEnhancedIterativeSearchEngine,
-        )
         print_success('增强核心搜索引擎')
 
         return True
@@ -229,7 +203,7 @@ async def test_basic_functionality():
             depth='standard'
         )
 
-        print_success(f"迭代搜索完成")
+        print_success("迭代搜索完成")
         print_info(f"  - 会话ID: {session.id}")
         print_info(f"  - 总迭代轮数: {session.current_iteration}")
         print_info(f"  - 发现专利总数: {session.total_patents_found}")
@@ -259,7 +233,7 @@ async def check_environment_file():
         print_success('环境配置文件存在')
 
         # 检查关键配置
-        with open(env_file, 'r') as f:
+        with open(env_file) as f:
             content = f.read()
 
         if 'QWEN_API_KEY=' in content and len(content.split('QWEN_API_KEY=')[1].split('\n')[0]) > 10:
@@ -315,7 +289,7 @@ async def main():
     print_header('验证报告')
 
     logger.info(f"依赖包: {'✅ 全部通过' if all_passed else '❌ 存在问题'}")
-    logger.info(f"系统组件: ✅ 正常")
+    logger.info("系统组件: ✅ 正常")
     logger.info(f"PostgreSQL: {'✅ 连接正常' if services_status.get('postgresql') else '❌ 连接失败'}")
     logger.info(f"Redis: {'✅ 连接正常' if services_status.get('redis') else '❌ 连接失败'}")
     logger.info(f"Elasticsearch: {'✅ 连接正常' if services_status.get('elasticsearch') else '❌ 连接失败'}")

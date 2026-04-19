@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 异步处理引擎 - Async Processing Engine
 
@@ -11,17 +12,16 @@
 
 import asyncio
 import functools
-import json
 import logging
 import queue
 import threading
 import time
 import uuid
 from collections.abc import Callable
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, Generic, List, Optional, Tuple, TypeVar
+from typing import Any, TypeVar
 
 logger = logging.getLogger(__name__)
 

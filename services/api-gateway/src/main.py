@@ -5,19 +5,15 @@ Enterprise API Gateway
 """
 
 import logging
-from core.async_main import async_main
-from core.logging_config import setup_logging
 import time
-from typing import Any, Dict
 
 import httpx
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -122,10 +118,10 @@ async def proxy_request(request: Request, path: str):
 
     except httpx.TimeoutException:
         logger.error(f"请求超时: {target_service}")
-        raise HTTPException(status_code=504, detail='服务响应超时')
+        raise HTTPException(status_code=504, detail='服务响应超时') from None
     except Exception as e:
         logger.error(f"请求转发失败: {e}")
-        raise HTTPException(status_code=502, detail='服务不可用')
+        raise HTTPException(status_code=502, detail='服务不可用') from e
 
 
 @app.get('/services')

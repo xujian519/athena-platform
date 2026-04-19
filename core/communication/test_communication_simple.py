@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 简化的通信模块测试脚本
 Simple Communication Module Test Script

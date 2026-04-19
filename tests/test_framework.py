@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 智能体设计模式测试框架
 Agentic Design Patterns Test Framework
@@ -9,18 +8,18 @@ Agentic Design Patterns Test Framework
 
 import asyncio
 import json
-import time
 import logging
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Union, Callable
-from dataclasses import dataclass, field
-from abc import ABC, abstractmethod
-import unittest
-from unittest.mock import Mock, patch, AsyncMock
 
 # 添加项目路径
 import sys
+import time
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+from unittest.mock import AsyncMock
+
 sys.path.append('/Users/xujian/Athena工作平台')
 
 logger = logging.getLogger(__name__)
@@ -33,9 +32,9 @@ class TestCase:
     test_function: Callable
     expected_result: Any
     timeout: int = 30
-    setup_data: Dict[str, Any] = field(default_factory=dict)
-    cleanup_data: Dict[str, Any] = field(default_factory=dict)
-    tags: List[str] = field(default_factory=list)
+    setup_data: dict[str, Any] = field(default_factory=dict)
+    cleanup_data: dict[str, Any] = field(default_factory=dict)
+    tags: list[str] = field(default_factory=list)
 
 @dataclass
 class TestResult:
@@ -46,17 +45,17 @@ class TestResult:
     error_message: str | None = None
     actual_result: Any = None
     expected_result: Any = None
-    performance_metrics: Dict[str, float] = field(default_factory=dict)
+    performance_metrics: dict[str, float] = field(default_factory=dict)
 
 @dataclass
 class TestSuite:
     """测试套件"""
     name: str
     description: str
-    test_cases: List[TestCase] = field(default_factory=list)
+    test_cases: list[TestCase] = field(default_factory=list)
     setup_function: Callable | None = None
     teardown_function: Callable | None = None
-    environment_config: Dict[str, Any] = field(default_factory=dict)
+    environment_config: dict[str, Any] = field(default_factory=dict)
 
 class TestEnvironment:
     """测试环境管理器"""
@@ -66,7 +65,7 @@ class TestEnvironment:
         self.mock_services = {}
         self.performance_baseline = {}
 
-    async def setup(self, config: Dict[str, Any]):
+    async def setup(self, config: dict[str, Any]):
         """设置测试环境"""
         self.config = config
 
@@ -120,7 +119,7 @@ class TestEnvironment:
         """加载性能基准"""
         baseline_file = Path('/Users/xujian/Athena工作平台/tests/data/performance_baseline.json')
         if baseline_file.exists():
-            with open(baseline_file, 'r', encoding='utf-8') as f:
+            with open(baseline_file, encoding='utf-8') as f:
                 self.performance_baseline = json.load(f)
         else:
             # 默认性能基准
@@ -136,11 +135,11 @@ class TestRunner:
 
     def __init__(self, environment: TestEnvironment):
         self.environment = environment
-        self.results: List[TestResult] = []
+        self.results: list[TestResult] = []
         self.start_time = None
         self.end_time = None
 
-    async def run_test_suite(self, test_suite: TestSuite) -> List[TestResult]:
+    async def run_test_suite(self, test_suite: TestSuite) -> list[TestResult]:
         """运行测试套件"""
         logger.info(f"🚀 开始运行测试套件: {test_suite.name}")
         suite_start_time = time.time()
@@ -230,14 +229,14 @@ class TestRunner:
             # 简单值比较
             return actual == expected
 
-    async def _record_performance_metrics(self, test_name: str, metrics: Dict[str, float]):
+    async def _record_performance_metrics(self, test_name: str, metrics: dict[str, float]):
         """记录性能指标"""
         # 这里可以记录到数据库或文件
         performance_file = Path('/Users/xujian/Athena工作平台/tests/reports/performance_metrics.json')
 
         # 读取现有数据
         if performance_file.exists():
-            with open(performance_file, 'r', encoding='utf-8') as f:
+            with open(performance_file, encoding='utf-8') as f:
                 existing_data = json.load(f)
         else:
             existing_data = {}
@@ -267,7 +266,7 @@ class TestReporter:
         self.output_dir = output_dir
         self.output_dir.mkdir(exist_ok=True)
 
-    def generate_report(self, test_results: List[TestResult], suite_name: str) -> str:
+    def generate_report(self, test_results: list[TestResult], suite_name: str) -> str:
         """生成测试报告"""
         report_data = {
             'suite_name': suite_name,
@@ -297,7 +296,7 @@ class TestReporter:
 
         return str(html_file)
 
-    def _generate_summary(self, results: List[TestResult]) -> Dict[str, Any]:
+    def _generate_summary(self, results: list[TestResult]) -> dict[str, Any]:
         """生成测试摘要"""
         total_tests = len(results)
         passed_tests = sum(1 for r in results if r.success)
@@ -314,7 +313,7 @@ class TestReporter:
             'average_execution_time': avg_time
         }
 
-    def _format_results(self, results: List[TestResult]) -> List[Dict[str, Any]]:
+    def _format_results(self, results: list[TestResult]) -> list[dict[str, Any]]:
         """格式化测试结果"""
         formatted_results = []
 
@@ -337,7 +336,7 @@ class TestReporter:
 
         return formatted_results
 
-    def _analyze_performance(self, results: List[TestResult]) -> Dict[str, Any]:
+    def _analyze_performance(self, results: list[TestResult]) -> dict[str, Any]:
         """分析性能数据"""
         performance_data = []
 
@@ -361,7 +360,7 @@ class TestReporter:
             }
         }
 
-    def _generate_html_report(self, report_data: Dict[str, Any]) -> str:
+    def _generate_html_report(self, report_data: dict[str, Any]) -> str:
         """生成HTML格式的报告"""
         html_template = """
 <!DOCTYPE html>
@@ -492,7 +491,7 @@ class TestDataGenerator:
     """测试数据生成器"""
 
     @staticmethod
-    def generate_planning_test_data() -> Dict[str, Any]:
+    def generate_planning_test_data() -> dict[str, Any]:
         """生成规划测试数据"""
         return {
             'simple_task': {
@@ -513,7 +512,7 @@ class TestDataGenerator:
         }
 
     @staticmethod
-    def generate_chain_test_data() -> Dict[str, Any]:
+    def generate_chain_test_data() -> dict[str, Any]:
         """生成提示链测试数据"""
         return {
             'patent_analysis': {
@@ -529,7 +528,7 @@ class TestDataGenerator:
         }
 
     @staticmethod
-    def generate_goal_test_data() -> Dict[str, Any]:
+    def generate_goal_test_data() -> dict[str, Any]:
         """生成目标管理测试数据"""
         return {
             'learning_goal': {
@@ -547,7 +546,7 @@ class TestDataGenerator:
         }
 
     @staticmethod
-    def generate_collaboration_test_data() -> Dict[str, Any]:
+    def generate_collaboration_test_data() -> dict[str, Any]:
         """生成协作测试数据"""
         return {
             'multi_agent_project': {

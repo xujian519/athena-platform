@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强版Athena代理 - 集成智能路由系统
 Enhanced Athena Agent with Smart Routing Integration
@@ -9,16 +10,14 @@ Athena + 智能路由 = 专业高效的问题解决能力
 创建时间: 2025-12-08
 版本: 1.0.0
 """
-import json
-
 import asyncio
+import json
 import logging
 import os
 import sys
 import time
 from datetime import datetime
 from typing import Any
-
 
 # 添加项目路径
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))

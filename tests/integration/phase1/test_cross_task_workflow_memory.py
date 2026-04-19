@@ -10,21 +10,22 @@ Created: 2026-01-20
 
 import asyncio
 import sys
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+
 import pytest
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
+from core.memory.cross_task_workflow_memory import CrossTaskWorkflowMemory
 from core.memory.workflow_pattern import (
+    StepType,
+    TaskDomain,
+    TaskTrajectory,
     WorkflowPattern,
     WorkflowStep,
-    TaskTrajectory,
-    TaskDomain,
-    StepType
 )
-from core.memory.cross_task_workflow_memory import CrossTaskWorkflowMemory
 
 
 @pytest.mark.asyncio
@@ -237,7 +238,7 @@ async def test_workflow_memory():
             results[0].pattern,
             task
         )
-        print(f"\n✅ 模式应用成功:")
+        print("\n✅ 模式应用成功:")
         print(f"   模式名称: {execution_plan['pattern_name']}")
         print(f"   步骤数: {len(execution_plan['steps'])}")
         print(f"   预估成功率: {execution_plan['estimated_success_rate']:.2%}")
@@ -245,7 +246,7 @@ async def test_workflow_memory():
 
     # 获取统计信息
     stats = await memory.get_pattern_statistics()
-    print(f"\n📊 记忆系统统计:")
+    print("\n📊 记忆系统统计:")
     print(f"   总模式数: {stats['total_patterns']}")
     print(f"   平均成功率: {stats['avg_success_rate']:.2%}")
     print(f"   总使用次数: {stats['total_usage']}")

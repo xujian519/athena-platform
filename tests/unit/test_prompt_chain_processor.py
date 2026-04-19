@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 提示链处理器单元测试
 Unit Tests for Prompt Chain Processor
 """
 
 import asyncio
-import unittest
-from unittest.mock import Mock, patch, AsyncMock
-from datetime import datetime
 
 # 添加项目路径
 import sys
+import unittest
+
 sys.path.append('/Users/xujian/Athena工作平台')
 
-from core.cognition.prompt_chain_processor import (
-    PromptChainProcessor, ChainStep, ChainExecution, ChainStatus
-)
-from tests.test_framework import test_environment, test_data_generator
+from core.cognition.prompt_chain_processor import ChainStatus, ChainStep, PromptChainProcessor
+
 
 class TestPromptChainProcessor(unittest.TestCase):
     """提示链处理器测试类"""
@@ -219,7 +215,7 @@ class TestPromptChainProcessor(unittest.TestCase):
         self.assertTrue(len(templates) > 0)
 
         # 检查模板结构
-        for template_name, template_data in templates.items():
+        for _template_name, template_data in templates.items():
             self.assertIn("name", template_data)
             self.assertIn("description", template_data)
             self.assertIn("steps", template_data)
@@ -282,7 +278,7 @@ class TestChainExecution(unittest.TestCase):
 
     def test_chain_execution_statistics(self):
         """测试链执行统计"""
-        chain_id = self.processor.create_chain("test_chain", {})
+        self.processor.create_chain("test_chain", {})
 
         # 模拟执行统计
         stats = {
@@ -457,12 +453,12 @@ class TestChainOptimization(unittest.TestCase):
     def test_caching_optimization(self):
         """测试缓存优化"""
         # 创建相似的步骤
-        step1 = ChainStep(
+        ChainStep(
             id="step1",
             prompt_template="分析：{query}",
             cache_key_template="analysis_{query}"
         )
-        step2 = ChainStep(
+        ChainStep(
             id="step2",
             prompt_template="分析：{query}",
             cache_key_template="analysis_{query}"

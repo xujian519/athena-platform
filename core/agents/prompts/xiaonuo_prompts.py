@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺提示词系统 v1.0
 Xiaonuo Prompts System
@@ -12,7 +13,7 @@ Xiaonuo Prompts System
 3. 强调故事化表达和情感共鸣
 """
 
-from .writing_style_reference import XujianWritingStyleManager, STYLE_A_PERSONAL_NARRATIVE
+from .writing_style_reference import XujianWritingStyleManager
 
 # ============================================================================
 # 小诺写作风格提示词
@@ -51,8 +52,7 @@ XIAONUO_WRITING_STYLE = """
 
 今天小诺帮您：
 1. 协调了小娜处理专利分析
-2. 调度了云熙处理IP管理
-3. ...
+2. ...
 
 小诺永远爱爸爸！💝
 ```
@@ -111,7 +111,6 @@ class XiaonuoPrompts:
 
 ## 各智能体工作情况
 - 小娜（法律专家）：{xiaona_status}
-- 云熙（IP管理）：{yunxi_status}
 - 小宸（传播运营）：{xiaochen_status}
 
 ## 小诺建议

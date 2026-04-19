@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 通用 STORM-CAP 集成框架
 
@@ -27,7 +28,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -38,10 +39,7 @@ sys.path.insert(0, str(project_root))
 # 导入 STORM 集成模块
 from core.storm_integration.patent_agents import (
     AgentFactory,
-    AgentRole,
-    BasePatentAgent,
     Conversation,
-    Utterance,
 )
 from core.storm_integration.patent_curator import (
     PatentInformationCurator,
@@ -49,7 +47,6 @@ from core.storm_integration.patent_curator import (
 )
 from core.storm_integration.patent_perspectives import (
     PatentBasicInfo,
-    PatentPerspectiveDiscoverer,
     Perspective,
 )
 

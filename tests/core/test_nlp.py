@@ -3,8 +3,8 @@ NLP模块单元测试
 测试自然语言处理功能
 """
 
+
 import pytest
-from typing import List, Dict, Any
 
 
 class TestNLPModule:
@@ -125,7 +125,7 @@ class TestSemanticAnalysis:
     def test_sentiment_analysis(self):
         """测试情感分析"""
         # 简单的情感词典（使用单个字符）
-        positive_words = {"好", "优", "棒", "喜", "欢", "开", "心", "棒"}
+        positive_words = {"好", "优", "棒", "喜", "欢", "开", "心"}
         negative_words = {"坏", "差", "讨厌", "难过"}
 
         # 分析文本（逐字分析中文）
@@ -247,7 +247,7 @@ class TestNLPPerformance:
 
         # 测试处理时间
         start_time = time.time()
-        words = text.split(" ")
+        text.split(" ")
         end_time = time.time()
 
         processing_time = end_time - start_time

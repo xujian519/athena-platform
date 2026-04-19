@@ -1,0 +1,222 @@
+# Prometheus告警规则配置
+# 文档: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
+
+groups:
+  - name: athena_gateway_alerts
+    interval: 30s
+    rules:
+      # ==================== 网关级别告警 ====================
+
+      - alert: GatewayHighErrorRate
+        expr: |
+          rate(athena_gateway_http_errors_total[5m]) /
+          rate(athena_gateway_proxy_requests_total[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: critical
+          service: gateway-unified
+        annotations:
+          summary: "网关错误率超过5%"
+          description: "网关 {{ $labels.instance }} 错误率为 {{ $value | humanizePercentage }}，超过5%阈值"
+
+      - alert: GatewayLatencyHigh
+        expr: |
+          histogram_quantile(0.95,
+            rate(athena_gateway_proxy_duration_seconds_bucket[5m])
+          ) > 1.0
+        for: 5m
+        labels:
+          severity: warning
+          service: gateway-unified
+        annotations:
+          summary: "网关P95延迟超过1秒"
+          description: "网关 {{ $labels.instance }} P95延迟为 {{ $value }}s"
+
+      # ==================== 认证告警 ====================
+
+      - alert: AuthFailureRateHigh
+        expr: |
+          rate(athena_gateway_auth_requests_total{status="failed"}[5m]) /
+          rate(athena_gateway_auth_requests_total[5m]) > 0.1
+        for: 3m
+        labels:
+          severity: warning
+          service: gateway-unified
+        annotations:
+          summary: "认证失败率超过10%"
+          description: "认证失败率为 {{ $value | humanizePercentage }}"
+
+      # ==================== 限流告警 ====================
+
+      - alert: RateLimitSpike
+        expr: |
+          rate(athena_gateway_ratelimit_checks_total{status="rejected"}[1m]) > 100
+        for: 1m
+        labels:
+          severity: info
+          service: gateway-unified
+        annotations:
+          summary: "限流拒绝请求激增"
+          description: "每秒限流拒绝 {{ $value }} 个请求"
+
+      # ==================== 熔断器告警 ====================
+
+      - alert: CircuitBreakerOpen
+        expr: |
+          athena_gateway_circuitbreaker_state{state="open"} == 1
+        for: 0m
+        labels:
+          severity: critical
+          service: gateway-unified
+        annotations:
+          summary: "熔断器已打开"
+          description: "服务 {{ $labels.service }} 的熔断器 {{ $labels.breaker_name }} 已打开"
+
+      - alert: CircuitBreakerHighFailureRate
+        expr: |
+          rate(athena_gateway_circuitbreaker_requests_total{result="failure"}[5m]) /
+          rate(athena_gateway_circuitbreaker_requests_total[5m]) > 0.5
+        for: 3m
+        labels:
+          severity: warning
+          service: gateway-unified
+        annotations:
+          summary: "熔断器失败率超过50%"
+          description: "服务 {{ $labels.service }} 熔断器失败率为 {{ $value | humanizePercentage }}"
+
+      # ==================== 缓存告警 ====================
+
+      - alert: CacheHitRateLow
+        expr: |
+          rate(athena_gateway_cache_hits_total[10m]) /
+          (rate(athena_gateway_cache_hits_total[10m]) + rate(athena_gateway_cache_misses_total[10m])) < 0.6
+        for: 10m
+        labels:
+          severity: warning
+          service: gateway-unified
+        annotations:
+          summary: "缓存命中率低于60%"
+          description: "缓存 {{ $labels.cache_type }} 命中率为 {{ $value | humanizePercentage }}"
+
+      # ==================== 负载均衡告警 ====================
+
+      - alert: LoadBalancerUnhealthyInstance
+        expr: |
+          athena_gateway_loadbalancer_instance_health == 0
+        for: 2m
+        labels:
+          severity: warning
+          service: gateway-unified
+        annotations:
+          summary: "负载均衡实例不健康"
+          description: "服务 {{ $labels.service }} 实例 {{ $labels.instance_id }} 不健康"
+
+  - name: athena_knowledge_base_alerts
+    interval: 30s
+    rules:
+      # ==================== 知识库告警 ====================
+
+      - alert: KnowledgeBaseHighLatency
+        expr: |
+          histogram_quantile(0.95,
+            sum(rate(athena_gateway_proxy_duration_seconds_bucket{service=~"knowledge.*|vector.*|kg.*"}[5m])) by (le)
+          ) > 1.0
+        for: 5m
+        labels:
+          severity: warning
+          service: knowledge-base
+        annotations:
+          summary: "知识库P95延迟超过1秒"
+          description: "知识库服务 P95延迟为 {{ $value }}s"
+
+      - alert: VectorSearchSlowQuery
+        expr: |
+          histogram_quantile(0.99,
+            rate(athena_gateway_proxy_duration_seconds_bucket{service="vector-search"}[5m])
+          ) > 2.0
+        for: 3m
+        labels:
+          severity: warning
+          service: vector-search
+        annotations:
+          summary: "向量搜索P99延迟超过2秒"
+          description: "向量搜索 P99延迟为 {{ $value }}s"
+
+      - alert: KnowledgeGraphQuerySlow
+        expr: |
+          histogram_quantile(0.95,
+            rate(athena_gateway_proxy_duration_seconds_bucket{service="knowledge-graph"}[5m])
+          ) > 1.5
+        for: 5m
+        labels:
+          severity: warning
+          service: knowledge-graph
+        annotations:
+          summary: "知识图谱查询P95延迟超过1.5秒"
+          description: "知识图谱 P95延迟为 {{ $value }}s"
+
+  - name: athena_tool_library_alerts
+    interval: 30s
+    rules:
+      # ==================== 工具库告警 ====================
+
+      - alert: ToolCallFailureSpike
+        expr: |
+          rate(athena_gateway_proxy_requests_total{service=~"tool.*|mcp.*",status=~"5.."}[5m]) /
+          rate(athena_gateway_proxy_requests_total{service=~"tool.*|mcp.*"}[5m]) > 0.1
+        for: 3m
+        labels:
+          severity: warning
+          service: tool-library
+        annotations:
+          summary: "工具调用错误率超过10%"
+          description: "工具 {{ $labels.service }} 错误率为 {{ $value | humanizePercentage }}"
+
+      - alert: MCPServerDown
+        expr: |
+          up{job="mcp_servers"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: mcp-server
+        annotations:
+          summary: "MCP服务器不可达"
+          description: "MCP服务器 {{ $labels.instance }} 已离线超过1分钟"
+
+      - alert: ToolCallLatencyHigh
+        expr: |
+          histogram_quantile(0.95,
+            rate(athena_gateway_proxy_duration_seconds_bucket{service=~"tool.*|mcp.*"}[5m])
+          ) > 5.0
+        for: 5m
+        labels:
+          severity: warning
+          service: tool-library
+        annotations:
+          summary: "工具调用P95延迟超过5秒"
+          description: "工具 {{ $labels.service }} P95延迟为 {{ $value }}s"
+
+  - name: athena_infrastructure_alerts
+    interval: 30s
+    rules:
+      # ==================== 基础设施告警 ====================
+
+      - alert: GatewayDown
+        expr: up{job="gateway-unified"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: gateway-unified
+        annotations:
+          summary: "网关服务已下线"
+          description: "网关实例 {{ $labels.instance }} 已离线"
+
+      - alert: MonitoringServerDown
+        expr: up{job="gateway-monitoring"} == 0
+        for: 2m
+        labels:
+          severity: warning
+          service: gateway-unified
+        annotations:
+          summary: "监控服务器已下线"
+          description: "Prometheus metrics端点不可用"

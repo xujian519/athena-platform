@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 人机协作专利分析系统 - 原型实现
 Human-in-the-Loop Patent Analysis System - Prototype
@@ -16,7 +17,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 

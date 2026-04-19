@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 诊断专利申请号匹配问题
 Diagnose Patent Number Matching Issues
 """
 
-import psycopg2
 import os
+
+import psycopg2
 
 # PostgreSQL配置
 db_config = {
@@ -91,7 +91,7 @@ for payment_num in payment_patents:
             break
 
     if not found:
-        print(f"   ❌ 未找到")
+        print("   ❌ 未找到")
         not_found.append(payment_num)
 
 print("\n" + "="*80)

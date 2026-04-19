@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 NLP内存泄漏修复补丁
 NLP Memory Leak Fix Patch
@@ -22,8 +23,8 @@ import threading
 import time
 from collections import OrderedDict
 from dataclasses import dataclass
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from datetime import datetime
+from typing import Any
 
 # 添加路径
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
@@ -246,7 +247,7 @@ class BGEEmbeddingServiceFixed:
         self.stats["cache_misses"] += 1
         return None
 
-    def _save_to_cache(self, texts: list[str], embeddings: list[list[float]) -> None:
+    def _save_to_cache(self, texts: list[str], embeddings: list[list[float]]) -> None:
         """保存到缓存(使用LRU缓存)"""
         if not self.config.get("cache_enabled", True):
             return
@@ -293,7 +294,7 @@ class BERTServiceFixed:
         self.memory_config = MemoryConfig()
 
         # 模型存储(使用LRU缓存)
-        self.models: OrderedDict[str, dict[str, Any] = OrderedDict()
+        self.models: OrderedDict[str, dict[str, Any]] = OrderedDict()
         self.model_locks: dict[str, threading.Lock] = {}
         self.global_lock = threading.Lock()
 

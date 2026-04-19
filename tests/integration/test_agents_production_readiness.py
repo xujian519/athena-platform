@@ -10,11 +10,11 @@ Agent Production Readiness Check
 """
 
 import asyncio
-import sys
-from pathlib import Path
-from datetime import datetime
-from typing import Any, Dict, List
 import logging
+import sys
+from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
@@ -34,7 +34,7 @@ class AgentProductionChecker:
         self.check_results = {}
         self.services_status = {}
 
-    async def check_database_services(self) -> Dict[str, bool]:
+    async def check_database_services(self) -> dict[str, bool]:
         """检查数据库服务"""
         logger.info("🔍 检查数据库服务...")
 
@@ -100,7 +100,7 @@ class AgentProductionChecker:
         self.services_status["databases"] = results
         return results
 
-    async def check_monitoring_services(self) -> Dict[str, bool]:
+    async def check_monitoring_services(self) -> dict[str, bool]:
         """检查监控服务"""
         logger.info("📊 检查监控服务...")
 
@@ -138,7 +138,7 @@ class AgentProductionChecker:
         self.services_status["monitoring"] = results
         return results
 
-    async def check_core_modules(self) -> Dict[str, bool]:
+    async def check_core_modules(self) -> dict[str, bool]:
         """检查核心模块"""
         logger.info("🧩 检查核心模块...")
 
@@ -167,7 +167,7 @@ class AgentProductionChecker:
         self.services_status["modules"] = results
         return results
 
-    async def check_agents(self) -> Dict[str, Any]:
+    async def check_agents(self) -> dict[str, Any]:
         """检查智能体"""
         logger.info("🤖 检查智能体...")
 
@@ -244,7 +244,6 @@ class AgentProductionChecker:
             try:
                 # 尝试导入和创建智能体
                 if agent_type in ["athena", "xiaonuo"]:
-                    from core.agent import AgentType
                     from core.agent.agent_factory import AgentFactory
 
                     factory = AgentFactory()

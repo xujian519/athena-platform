@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BGE增强的记忆系统
 BGE Enhanced Memory System for Athena Platform
@@ -12,7 +13,7 @@ BGE Enhanced Memory System for Athena Platform
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 import numpy as np
 
@@ -25,7 +26,7 @@ class MemoryItem:
     """记忆项"""
     id: str
     content: str
-    embedding: list["key"] = None
+    embedding: list[str] = None
     memory_type: str = "episodic"  # episodic, semantic, procedural
     importance: float = 1.0
     tags: list[str] = field(default_factory=list)
@@ -42,7 +43,7 @@ class MemoryQuery:
     memory_type: str | None = None
     min_importance: float = 0.0
     time_range: tuple[datetime, datetime] | None = None
-    tags: list["key"] = None
+    tags: list[str] = None
     top_k: int = 10
 
 class BGEEnhancedMemorySystem:
@@ -83,8 +84,8 @@ class BGEEnhancedMemorySystem:
                         content: str,
                         memory_type: str = "episodic",
                         importance: float = 1.0,
-                        tags: list["key"] = None,
-                        memory_id: Optional[str | None = None) -> str:
+                        tags: list[str] = None,
+                        memory_id: str | None | None = None) -> str:
         """
         添加记忆项
 
@@ -430,7 +431,7 @@ async def create_episodic_memory(content: str, importance: float = 1.0) -> str:
     system = BGEEnhancedMemorySystem()
     return await system.add_memory(content, "episodic", importance)
 
-async def create_semantic_memory(content: str | None = None, tags: list["key"] = None) -> str:
+async def create_semantic_memory(content: str | None = None, tags: list[str] = None) -> str:
     """创建语义记忆"""
     system = BGEEnhancedMemorySystem()
     return await system.add_memory(content, "semantic", importance=2.0, tags=tags)

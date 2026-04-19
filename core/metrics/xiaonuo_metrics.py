@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主性能指标收集器
 Xiaonuo Pisces Princess Metrics Collector
@@ -19,7 +20,6 @@ from collections import defaultdict, deque
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
-
 
 if TYPE_CHECKING:
     from pathlib import Path

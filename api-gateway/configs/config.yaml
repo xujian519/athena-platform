@@ -1,0 +1,131 @@
+# Athena API Gateway 配置文件
+# 版本: 1.0.0
+
+# 服务器配置
+server:
+  host: "0.0.0.0"              # 监听地址
+  port: 8080                    # 监听端口
+  read_timeout: 30               # 读取超时（秒）
+  write_timeout: 30              # 写入超时（秒）
+  idle_timeout: 60               # 空闲超时（秒）
+  grace_timeout: 30              # 优雅关闭超时（秒）
+
+# 认证配置
+auth:
+  jwt_secret: "your-super-secret-jwt-key-change-in-production"  # JWT密钥（生产环境必须修改）
+  access_token_exp: 60           # 访问令牌过期时间（分钟）
+  refresh_token_exp: 24          # 刷新令牌过期时间（小时）
+  issuer: "athena-gateway"       # JWT发行者
+  skip_auth_paths:               # 跳过认证的路径
+    - "/health"
+    - "/health/ready"
+    - "/health/live"
+    - "/api/v1/auth/login"
+    - "/api/v1/auth/refresh"
+  admin_users:                  # 管理员用户列表
+    - "admin"
+
+# 日志配置
+logging:
+  level: "info"                 # 日志级别 (debug, info, warn, error)
+  format: "json"                # 日志格式 (json, text)
+  output: "stdout"              # 输出 (stdout, file)
+  file_path: "/var/log/athena-gateway/app.log"  # 日志文件路径（output=file时需要）
+  max_size: 100                 # 单个日志文件最大大小（MB）
+  max_backups: 3                # 保留的旧日志文件数量
+  max_age: 28                   # 保留日志文件的最大天数
+  compress: true                # 是否压缩旧日志文件
+
+# 上游服务配置
+upstream:
+  timeout: 30                   # 上游请求超时（秒）
+  services:
+    # 示例：用户服务
+    user_service:
+      url: "http://localhost:8001"
+      weight: 1
+      headers:
+        X-Service-Name: "user-service"
+        X-API-Version: "v1"
+    
+    # 示例：订单服务
+    order_service:
+      url: "http://localhost:8002"
+      weight: 1
+      headers:
+        X-Service-Name: "order-service"
+        X-API-Version: "v1"
+    
+    # 示例：支付服务
+    payment_service:
+      url: "http://localhost:8003"
+      weight: 1
+      headers:
+        X-Service-Name: "payment-service"
+        X-API-Version: "v1"
+
+# 数据库配置（预留）
+database:
+  host: "localhost"
+  port: 5432
+  username: "athena"
+  password: "password"
+  database: "athena_gateway"
+  max_open_conns: 25
+  max_idle_conns: 5
+  conn_max_lifetime: 300
+
+# Redis配置（预留）
+redis:
+  host: "localhost"
+  port: 6379
+  password: ""
+  database: 0
+  pool_size: 10
+
+# 数据库配置
+database:
+  host: "localhost"
+  port: 5432
+  username: "athena"
+  password: "password"
+  database: "athena_gateway"
+  max_open_conns: 25
+  max_idle_conns: 5
+  conn_max_lifetime: 300
+
+# Redis配置
+redis:
+  host: "localhost"
+  port: 6379
+  password: ""
+  database: 0
+  pool_size: 10
+  min_idle_conns: 5
+
+# HTTP客户端配置
+http_client:
+  request_timeout: 30
+  max_idle_conns: 100
+  max_idle_conns_per_host: 10
+  idle_conn_timeout: 90
+
+# 限流器配置
+rate_limit:
+  default_limit: 1000
+  default_burst: 100
+  window: 60
+  adaptive_mode: true
+  min_limit: 10
+  max_limit: 10000
+  adjustment_factor: 0.1
+  stats_window: 300
+
+# 性能配置
+performance:
+  enable_pprof: true
+  pprof_path: "/debug/pprof"
+  enable_metrics: true
+  metrics_path: "/metrics"
+  gc_percent: 100
+  max_goroutines: 1000

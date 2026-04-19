@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 RAG管理器 - 统一检索增强生成架构
 RAG Manager - Unified Retrieval Augmented Generation Architecture
@@ -17,7 +18,7 @@ RAG Manager - Unified Retrieval Augmented Generation Architecture
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

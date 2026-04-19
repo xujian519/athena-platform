@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协作协议 - 协议实现包
 Collaboration Protocols - Protocol Implementations Package

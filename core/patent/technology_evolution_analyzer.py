@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 技术演化路径分析器
 Technology Evolution Path Analyzer
@@ -16,10 +17,8 @@ Technology Evolution Path Analyzer
 版本: v0.1.0 "演化分析"
 """
 
-import logging
 from dataclasses import dataclass, field
 from datetime import datetime
-from pathlib import Path
 from typing import Any
 
 from core.logging_config import setup_logging
@@ -303,8 +302,8 @@ class TechnologyEvolutionAnalyzer:
             output_path: 输出文件路径
         """
         try:
-            import matplotlib.pyplot as plt
             import matplotlib
+            import matplotlib.pyplot as plt
             matplotlib.use('Agg')
 
             # 创建图形
@@ -315,7 +314,7 @@ class TechnologyEvolutionAnalyzer:
             ax.scatter(positions, [1] * len(positions), s=200, alpha=0.6)
 
             # 添加标签
-            for i, node_id in enumerate(evolution_path.evolution_chain):
+            for i, _node_id in enumerate(evolution_path.evolution_chain):
                 ax.annotate(
                     f"专利{i+1}",
                     (i, 1),

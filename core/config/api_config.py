@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 API配置管理模块
 API Configuration Management
@@ -13,9 +14,8 @@ API Configuration Management
 
 import logging
 import os
-import secrets
 from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

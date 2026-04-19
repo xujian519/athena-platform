@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Agent通信系统性能调优配置
 Performance Tuning Configuration for Agent Communication System
@@ -16,7 +17,7 @@ Performance Tuning Configuration for Agent Communication System
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # =============================================================================
 # 性能配置文件

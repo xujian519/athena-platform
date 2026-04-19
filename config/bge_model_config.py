@@ -1,21 +1,40 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-BGE Large ZH v1.5 向量模型主配置文件
-主要向量模型配置：BAAI/bge-large-zh-v1.5
+BGE 向量模型主配置文件
+默认使用 bge-m3 (MLX 量化版) 通过 OpenAI 兼容 API 服务
+备用: bge-large-zh-v1.5 (SentenceTransformer 本地加载)
 """
 
 import logging
 import os
-from typing import Any, Dict, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
-# BGE模型路径配置
+# BGE-M3 API 服务配置 (默认)
+BGE_M3_API_URL = os.getenv("MLX_EMBEDDING_URL", "http://127.0.0.1:8766/v1/embeddings")
+BGE_M3_BASE_URL = BGE_M3_API_URL.rsplit("/embeddings", 1)[0] if "/embeddings" in BGE_M3_API_URL else "http://127.0.0.1:8766/v1"
+BGE_M3_MODEL_NAME = os.getenv("BGE_M3_MODEL_NAME", "bge-m3-mlx-4bit")
+
+# BGE-Large-ZH 本地路径 (备用)
 BGE_MODEL_PATH = '/Users/xujian/Athena工作平台/models/pretrained/bge-large-zh-v1.5'
 
-# 主要向量模型配置
+# 主要向量模型配置 (默认: bge-m3 API)
 PRIMARY_MODEL_CONFIG = {
+    'model_name': BGE_M3_MODEL_NAME,
+    'model_type': 'api',  # 使用 OpenAI 兼容 API
+    'api_url': BGE_M3_BASE_URL,
+    'api_model': 'bge-m3',
+    'dimension': 1024,
+    'max_length': 8192,
+    'similarity_fn': 'cosine',
+    'normalize_embeddings': True,
+    'batch_size': 8,
+    'device': 'api',  # 通过 API 服务，不需要本地设备
+}
+
+# 备用模型配置 (bge-large-zh-v1.5 本地加载)
+FALLBACK_MODEL_CONFIG = {
     'model_name': 'bge-large-zh-v1.5',
     'model_path': BGE_MODEL_PATH,
     'model_type': 'SentenceTransformer',
@@ -24,7 +43,7 @@ PRIMARY_MODEL_CONFIG = {
     'similarity_fn': 'cosine',
     'normalize_embeddings': True,
     'batch_size': 32,
-    'device': 'auto'  # 自动选择GPU或CPU
+    'device': 'auto'
 }
 
 # 模型详细参数
@@ -109,11 +128,11 @@ APPLICATION_CONFIGS = {
     }
 }
 
-class BGELargeZHConfig:
-    """BGE Large ZH v1.5 模型配置类"""
+class BGEConfig:
+    """BGE 嵌入模型配置类（默认 bge-m3 API）"""
 
     def __init__(self):
-        self.model_path = BGE_MODEL_PATH
+        self.model_path = BGE_MODEL_PATH  # 备用本地路径
         self.config = PRIMARY_MODEL_CONFIG
         self.params = BGE_MODEL_PARAMS
         self.db_config = VECTOR_DB_CONFIG
@@ -124,24 +143,32 @@ class BGELargeZHConfig:
         """获取模型路径"""
         return self.model_path
 
-    def get_model_config(self) -> Dict[str, Any]:
+    def get_api_url(self) -> str:
+        """获取 API 服务地址"""
+        return self.config.get('api_url', BGE_M3_BASE_URL)
+
+    def is_api_mode(self) -> bool:
+        """是否使用 API 模式"""
+        return self.config.get('model_type') == 'api'
+
+    def get_model_config(self) -> dict[str, Any]:
         """获取模型配置"""
         return self.config
 
-    def get_model_params(self) -> Dict[str, Any]:
+    def get_model_params(self) -> dict[str, Any]:
         """获取模型参数"""
         return self.params
 
-    def get_db_config(self, db_type: str = 'qdrant') -> Dict[str, Any]:
+    def get_db_config(self, db_type: str = 'qdrant') -> dict[str, Any]:
         """获取数据库配置"""
         return self.db_config.get(db_type, {})
 
-    def get_collection_config(self, db_type: str = 'qdrant', collection_name: str = 'patents') -> Dict[str, Any]:
+    def get_collection_config(self, db_type: str = 'qdrant', collection_name: str = 'patents') -> dict[str, Any]:
         """获取集合配置"""
         db_config = self.get_db_config(db_type)
         return db_config.get('collections', {}).get(collection_name, {})
 
-    def get_app_config(self, app_name: str) -> Dict[str, Any]:
+    def get_app_config(self, app_name: str) -> dict[str, Any]:
         """获取应用场景配置"""
         return self.app_configs.get(app_name, {})
 
@@ -149,7 +176,7 @@ class BGELargeZHConfig:
         """检查模型是否可用"""
         return os.path.exists(self.model_path) and os.path.isdir(self.model_path)
 
-    def validate_model_files(self) -> Dict[str, bool]:
+    def validate_model_files(self) -> dict[str, bool]:
         """验证模型文件完整性"""
         required_files = [
             'config.json',
@@ -167,18 +194,29 @@ class BGELargeZHConfig:
         return status
 
 # 全局配置实例
-bge_config = BGELargeZHConfig()
+bge_config = BGEConfig()
+
+# 向后兼容别名
+BGELargeZHConfig = BGEConfig
 
 # 便捷函数
 def get_bge_model_path() -> str:
     """获取BGE模型路径"""
     return bge_config.get_model_path()
 
-def get_bge_config() -> Dict[str, Any]:
+def get_bge_api_url() -> str:
+    """获取 BGE-M3 API 服务地址"""
+    return bge_config.get_api_url()
+
+def is_bge_api_mode() -> bool:
+    """是否使用 API 模式"""
+    return bge_config.is_api_mode()
+
+def get_bge_config() -> dict[str, Any]:
     """获取BGE模型配置"""
     return bge_config.get_model_config()
 
-def get_bge_params() -> Dict[str, Any]:
+def get_bge_params() -> dict[str, Any]:
     """获取BGE模型参数"""
     return bge_config.get_model_params()
 
@@ -186,7 +224,7 @@ def is_bge_ready() -> bool:
     """检查BGE模型是否就绪"""
     return bge_config.is_model_available()
 
-def validate_bge_model() -> Dict[str, bool]:
+def validate_bge_model() -> dict[str, bool]:
     """验证BGE模型文件"""
     return bge_config.validate_model_files()
 

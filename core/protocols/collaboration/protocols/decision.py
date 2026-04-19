@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协作协议 - 决策协议实现
 Collaboration Protocols - Decision Protocol Implementation
@@ -20,10 +21,8 @@ from typing import Any
 # 从本地模块导入
 from core.protocols.collaboration.base import BaseProtocol
 from core.protocols.collaboration.types import (
-    ProtocolContext,
     ProtocolMessage,
     ProtocolPhase,
-    ProtocolStatus,
     ProtocolType,
 )
 
@@ -154,7 +153,7 @@ class DecisionProtocol(BaseProtocol):
             return {"decision": "error", "reason": str(e)}
 
     async def _tally_consensus_votes(
-        self, votes: dict[str, dict[str, Any]) -> dict[str, Any]:
+        self, votes: dict[str, dict[str, Any]]) -> dict[str, Any]:
         """统计共识投票"""
         agree_votes = sum(
             1 for vote in votes.values() if vote.get("decision") == "agree"
@@ -181,7 +180,7 @@ class DecisionProtocol(BaseProtocol):
             }
 
     async def _tally_majority_votes(
-        self, votes: dict[str, dict[str, Any]) -> dict[str, Any]:
+        self, votes: dict[str, dict[str, Any]]) -> dict[str, Any]:
         """统计多数投票"""
         agree_votes = sum(
             1 for vote in votes.values() if vote.get("decision") == "agree"
@@ -206,7 +205,7 @@ class DecisionProtocol(BaseProtocol):
             }
 
     async def _tally_weighted_votes(
-        self, votes: dict[str, dict[str, Any], proposal: dict[str, Any]
+        self, votes: dict[str, dict[str, Any]], proposal: dict[str, Any]
     ) -> dict[str, Any]:
         """统计加权投票"""
         # 获取参与者权重
@@ -242,7 +241,7 @@ class DecisionProtocol(BaseProtocol):
             }
 
     async def _tally_delegated_votes(
-        self, votes: dict[str, dict[str, Any], proposal: dict[str, Any]
+        self, votes: dict[str, dict[str, Any]], proposal: dict[str, Any]
     ) -> dict[str, Any]:
         """统计委托投票"""
         # 实现委托投票统计逻辑

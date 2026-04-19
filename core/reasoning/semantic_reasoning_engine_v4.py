@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 语义推理引擎 v4.0 - 维特根斯坦版
 Semantic Reasoning Engine v4.0 - Wittgenstein Edition
@@ -17,7 +18,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
+
+import numpy as np
 
 from core.async_main import async_main
 from core.logging_config import setup_logging
@@ -73,6 +76,7 @@ except ImportError:
     TRANSFORMERS_AVAILABLE = False
 
 try:
+    import networkx as nx
 
     NETWORKX_AVAILABLE = True
 except ImportError:
@@ -182,7 +186,7 @@ class SemanticReasoningEngineV4:
                 self.embedding_model = SentenceTransformer("BAAI/bge-m3", device=device)
                 logger.info(f"✅ BGE-M3远程模型加载成功,设备: {device}")
 
-        except Exception as e:
+        except Exception:
             self.embedding_model = None
 
     def _load_reasoning_rules(self) -> Any:
@@ -317,9 +321,11 @@ class SemanticReasoningEngineV4:
     async def reason(
         self,
         query: str,
-        str | None = None,
-        Optional[list["key"] = None,
-        str | None = None,
+        context: str | None = None,
+        keys: list[str] | None = None,
+        constraints: str | None = None,
+        reasoning_types: list[ReasoningType] | None = None,
+        domain: str | None = None,
     ) -> list[ReasoningResultV4]:
         """
         执行推理 - v4.0版本
@@ -392,7 +398,7 @@ class SemanticReasoningEngineV4:
             return SimpleConfidence(value=confidence_value)
 
     async def _rule_based_reasoning_v4(
-        self, query: str, context: Optional[str, str]
+        self, query: str, context: str | None, domain: str | None = None
     ) -> list[ReasoningResultV4]:
         """基于规则的推理 - v4.0版本"""
         results = []
@@ -557,7 +563,7 @@ class SemanticReasoningEngineV4:
         return conclusion
 
     async def _semantic_reasoning_v4(
-        self, query: str, context: Optional[str, str]
+        self, query: str, context: str | None, domain: str | None = None
     ) -> list[ReasoningResultV4]:
         """语义推理 - v4.0版本"""
         results = []
@@ -663,11 +669,11 @@ class SemanticReasoningEngineV4:
             vector2 = self.embedding_model.encode([text2])
             similarity = np.dot(vector1, vector2.T)[0][0]
             return float(similarity)
-        except Exception as e:
+        except Exception:
             return 0.0
 
     async def _case_based_reasoning_v4(
-        self, query: str, context: Optional[str, str]
+        self, query: str, context: str | None, domain: str | None = None
     ) -> list[ReasoningResultV4]:
         """基于案例的推理 - v4.0版本"""
         results = []
@@ -746,11 +752,11 @@ class SemanticReasoningEngineV4:
 
             return combined_similarity
 
-        except Exception as e:
+        except Exception:
             return 0.0
 
     async def _causal_reasoning_v4(
-        self, query: str, context: Optional[str, str]
+        self, query: str, context: str | None, domain: str | None = None
     ) -> list[ReasoningResultV4]:
         """因果推理 - v4.0版本"""
         results = []
@@ -806,7 +812,7 @@ class SemanticReasoningEngineV4:
         return results
 
     async def _hybrid_reasoning_v4(
-        self, initial_results: list[ReasoningResultV4], query: str, context: Optional[str]
+        self, initial_results: list[ReasoningResultV4], query: str, context: str | None
     ) -> list[ReasoningResultV4]:
         """混合推理 - v4.0版本"""
         results = []
@@ -984,7 +990,7 @@ async def main():
         print("✨ 核心特性:诚实(明确不确定性)、精确(证据支持)、敬畏(承认局限)")
         return 0
 
-    except Exception as e:
+    except Exception:
         import traceback
 
         traceback.print_exc()

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import json
 import logging
 import os
@@ -7,10 +6,12 @@ import re
 import subprocess
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Any
+
+logger = logging.getLogger(__name__)
 
 
-def load_neo4j_config() -> Dict[str, str]:
+def load_neo4j_config() -> dict[str, str]:
     base_dir = Path(__file__).resolve().parents[2]
     cfg_path = (
         base_dir
@@ -25,22 +26,22 @@ def load_neo4j_config() -> Dict[str, str]:
     database = os.getenv('KNOWLEDGE_GRAPH_NEO4J_DATABASE', 'neo4j')
     if cfg_path.exists():
         try:
-            with open(cfg_path, 'r', encoding='utf-8') as f:
+            with open(cfg_path, encoding='utf-8') as f:
                 cfg = json.load(f)
                 neo = cfg.get('knowledge_graph', {}).get('neo4j', {})
                 uri = neo.get('uri', uri)
                 user = neo.get('user', user)
                 password = neo.get('password', password)
                 database = neo.get('database', database)
-8except Exception as e:
-8    # 记录异常但不中断流程
-8    logger.debug(f"[patent_invalidation_importer] Exception: {e}")
+        except Exception as e:
+            # 记录异常但不中断流程
+            logger.debug(f"[patent_invalidation_importer] Exception: {e}")
     return {'uri': uri, 'user': user, 'password': password, 'database': database}
 
 
 CHN_NUMS = '一二三四五六七八九十零百千万1234567890'
 DATE_CN_RE = re.compile(r"(\d{4})年(\d{1,2})月(\d{1,2})日")
-CLAIM_RE = re.compile(r"权利要求第([\d%s]+)项" % CHN_NUMS)
+CLAIM_RE = re.compile(rf"权利要求第([\d{CHN_NUMS}]+)项")
 INVALID_RE = re.compile(r"(宣告|决定).*无效")
 MAINTAIN_RE = re.compile(r"(维持|有效)")
 PATENT_NO_RE = re.compile(
@@ -53,17 +54,17 @@ CASE_NO_RE = re.compile(r"(案件编号|案号)[：:]?\s*([A-Za-z0-9\-]+)")
 PETITIONER_RE = re.compile(r"(请求人|无效宣告请求人|申请人)[：:]?\s*(.+)")
 RESPONDENT_RE = re.compile(r"(专利权人|被请求人)[：:]?\s*(.+)")
 LAW_CITE_RE = re.compile(
-    r"(专利法|专利审查指南|实施细则)[（(]?(?:第([%s]+)条)?[）)]?" % CHN_NUMS
+    rf"(专利法|专利审查指南|实施细则)[（(]?(?:第([{CHN_NUMS}]+)条)?[）)]?"
 )
 
 
-def read_docx_text(path: Path) -> List[str]:
+def read_docx_text(path: Path) -> list[str]:
     try:
         from docx import Document
     except Exception as e:
         raise RuntimeError('python-docx 未安装') from e
     doc = Document(str(path))
-    lines: List[str] = []
+    lines: list[str] = []
     for p in doc.paragraphs:
         t = p.text.strip()
         if t:
@@ -76,9 +77,9 @@ def read_docx_text(path: Path) -> List[str]:
                         t = p.text.strip()
                         if t:
                             lines.append(t)
-4except Exception as e:
-4    # 记录异常但不中断流程
-4    logger.debug(f"[patent_invalidation_importer] Exception: {e}")
+    except Exception as e:
+        # 记录异常但不中断流程
+        logger.debug(f"[patent_invalidation_importer] Exception: {e}")
     try:
         for sec in doc.sections:
             for p in sec.header.paragraphs:
@@ -89,9 +90,9 @@ def read_docx_text(path: Path) -> List[str]:
                 t = p.text.strip()
                 if t:
                     lines.append(t)
-4except Exception as e:
-4    # 记录异常但不中断流程
-4    logger.debug(f"[patent_invalidation_importer] Exception: {e}")
+    except Exception as e:
+        # 记录异常但不中断流程
+        logger.debug(f"[patent_invalidation_importer] Exception: {e}")
     return lines
 
 
@@ -132,20 +133,20 @@ def cn_num_to_int(s: str) -> int | None:
             return mapping.get(s[0], 0) * 10
         if len(s) == 2 and s[1] in mapping and s[0] in mapping:
             return mapping[s[0]] * 10 + mapping[s[1]]
-4except Exception as e:
-4    # 记录异常但不中断流程
-4    logger.debug(f"[patent_invalidation_importer] Exception: {e}")
+    except Exception as e:
+        # 记录异常但不中断流程
+        logger.debug(f"[patent_invalidation_importer] Exception: {e}")
     return None
 
 
 def clean_number(s: str) -> str:
     s = s.replace('FORMTEXT', '')
-    s = re.sub(r"[_\s]+', '", s)
-    s = re.sub(r"[^A-Za-z0-9\.\-]', '", s)
+    s = re.sub(r"[_\s]+", '', s)
+    s = re.sub(r"[^A-Za-z0-9\.\-]", '', s)
     return s
 
 
-def extract_sections(lines: List[str]) -> Dict[str, str]:
+def extract_sections(lines: list[str]) -> dict[str, str]:
     heads = {
         'request': re.compile(
             r"^(?:[（(]?[一二三四五六七八九十]+[、\.．)]\s*)?请求事项[:：]?$"
@@ -160,7 +161,7 @@ def extract_sections(lines: List[str]) -> Dict[str, str]:
             r"^(?:[（(]?[一二三四五六七八九十]+[、\.．)]\s*)?(结论|决定|审查结论|处理意见)[:：]?$"
         ),
     }
-    idxs: Dict[str, int] = {}
+    idxs: dict[str, int] = {}
     for i, ln in enumerate(lines):
         t = ln.strip()
         for k, r in heads.items():
@@ -170,7 +171,7 @@ def extract_sections(lines: List[str]) -> Dict[str, str]:
                 ):
                     idxs[k] = i
     order = [k for k in ['request', 'review', 'evidence', 'conclusion'] if k in idxs]
-    ret: Dict[str, str] = {}
+    ret: dict[str, str] = {}
     for n, k in enumerate(order):
         start = idxs[k] + 1
         end = len(lines) if n == len(order) - 1 else idxs[order[n + 1]]
@@ -180,7 +181,7 @@ def extract_sections(lines: List[str]) -> Dict[str, str]:
     return ret
 
 
-def extract_fields(lines: List[str], filename: str | None = None) -> Dict[str, any]:
+def extract_fields(lines: list[str], filename: str | None = None) -> dict[str, any]:
     fields = {
         'case_number': None,
         'decision_date': None,
@@ -255,7 +256,7 @@ def extract_fields(lines: List[str], filename: str | None = None) -> Dict[str, a
 
 
 def upsert_case(
-    session, case_id: str, title: str, fields: Dict[str, any], source_path: str
+    session, case_id: str, title: str, fields: dict[str, any], source_path: str
 ):
     props = {
         'id': case_id,
@@ -281,7 +282,7 @@ def upsert_case(
     )
 
 
-def link_entities(session, case_id: str, fields: Dict[str, any]) -> None:
+def link_entities(session, case_id: str, fields: dict[str, any]) -> None:
     primary = fields.get('patent_number')
     if primary:
         aliases = []
@@ -393,7 +394,7 @@ def import_invalidation_kg(base_dir: str, limit: int = 500) -> Any:
     converted_dir = Path(
         Path(__file__).resolve().parents[2] / 'data' / 'patent_invalidation_docx'
     )
-    files: List[Path] = []
+    files: list[Path] = []
     for p in src.rglob('*'):
         if p.is_file() and (p.suffix.lower() in ('.doc', '.docx')):
             files.append(p)
@@ -405,29 +406,29 @@ def import_invalidation_kg(base_dir: str, limit: int = 500) -> Any:
         'processed': 0,
         'failures': {'conversion_failed': 0, 'read_failed': 0, 'no_structure': 0},
     }
-    failed_samples: List[Dict[str, str]] = []
+    failed_samples: list[dict[str, str]] = []
     with driver.session(database=cfg['database']) as session:
         try:
             session.run(
                 'CREATE CONSTRAINT entity_id_unique IF NOT EXISTS FOR (n:Entity) REQUIRE n.id IS UNIQUE'
             )
-8except Exception as e:
-8    # 记录异常但不中断流程
-8    logger.debug(f"[patent_invalidation_importer] Exception: {e}")
+        except Exception as e:
+            # 记录异常但不中断流程
+            logger.debug(f"[patent_invalidation_importer] Exception: {e}")
         try:
             session.run(
                 'CREATE INDEX entity_type_index IF NOT EXISTS FOR (n:Entity) ON (n.entity_type)'
             )
-8except Exception as e:
-8    # 记录异常但不中断流程
-8    logger.debug(f"[patent_invalidation_importer] Exception: {e}")
+        except Exception as e:
+            # 记录异常但不中断流程
+            logger.debug(f"[patent_invalidation_importer] Exception: {e}")
         try:
             session.run(
                 'CREATE INDEX entity_title_index IF NOT EXISTS FOR (n:Entity) ON (n.title)'
             )
-8except Exception as e:
-8    # 记录异常但不中断流程
-8    logger.debug(f"[patent_invalidation_importer] Exception: {e}")
+        except Exception as e:
+            # 记录异常但不中断流程
+            logger.debug(f"[patent_invalidation_importer] Exception: {e}")
         stats['total'] = len(files)
         for f in files:
             docx_path = (
@@ -511,9 +512,9 @@ def merge_patent_aliases(limit: int = 10000) -> Any:
             try:
                 if aliases_raw:
                     alias_set.update(json.loads(aliases_raw))
-12except Exception as e:
-12    # 记录异常但不中断流程
-12    logger.debug(f"[patent_invalidation_importer] Exception: {e}")
+            except Exception as e:
+                # 记录异常但不中断流程
+                logger.debug(f"[patent_invalidation_importer] Exception: {e}")
             for v in (app, pub, grant):
                 if v:
                     alias_set.add(v)
@@ -560,7 +561,7 @@ def merge_patent_aliases(limit: int = 10000) -> Any:
                         """,
                         alias_claim_id=alias_claim_id,
                         main_claim_id=main_claim_id,
-                        title=f"权利要求第{num}项' if num else '权利要求",
+                        title=f"权利要求第{num}项" if num else "权利要求",
                         num=num,
                         now=datetime.now().isoformat(),
                     )
@@ -581,12 +582,12 @@ def merge_patent_aliases(limit: int = 10000) -> Any:
 def normalize_patent_number(s: str) -> str:
     s = (s or '').strip()
     s = s.replace('FORMTEXT', '')
-    s = re.sub(r"[_\s]', '", s)
+    s = re.sub(r"[_\s]", '', s)
     s = s.upper()
     s = s.replace('ZL', '')
-    s = re.sub(r"[()（）]', '", s)
-    s = re.sub(r"\.(\d)$', '", s)
-    s = re.sub(r"[^A-Z0-9]', '", s)
+    s = re.sub(r"[()（）]", '', s)
+    s = re.sub(r"\.(\d)$", r'\1', s)
+    s = re.sub(r"[^A-Z0-9]", '', s)
     return s
 
 
@@ -671,7 +672,7 @@ def heuristic_merge_old_nodes(limit: int = 50000) -> Any:
                         """,
                         alias_claim_id=alias_claim_id,
                         main_claim_id=main_claim_id,
-                        title=f"权利要求第{num}项' if num else '权利要求",
+                        title=f"权利要求第{num}项" if num else "权利要求",
                         num=num,
                         now=datetime.now().isoformat(),
                     )

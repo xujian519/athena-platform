@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 性能基准测试运行器
 Performance Benchmark Runner
@@ -8,16 +7,17 @@ Performance Benchmark Runner
 """
 
 import asyncio
-import time
-import psutil
-import sys
-import os
 import json
 import statistics
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
+import sys
+import time
 from dataclasses import dataclass, field
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+import psutil
+
 # import matplotlib.pyplot as plt  # 可选依赖
 # import numpy as np
 
@@ -30,7 +30,7 @@ class BenchmarkResult:
     test_name: str
     component: str
     metric_type: str  # response_time, memory_usage, throughput, etc.
-    values: List[float] = field(default_factory=list)
+    values: list[float] = field(default_factory=list)
     unit: str = "ms"
     timestamp: datetime = field(default_factory=datetime.now)
 
@@ -54,7 +54,7 @@ class PerformanceBenchmarkRunner:
     """性能基准测试运行器"""
 
     def __init__(self):
-        self.results: List[BenchmarkResult] = []
+        self.results: list[BenchmarkResult] = []
         self.process = psutil.Process()
         self.baseline_file = Path('/Users/xujian/Athena工作平台/tests/data/performance_baseline.json')
         self.baseline = self._load_baseline()
@@ -62,14 +62,14 @@ class PerformanceBenchmarkRunner:
         self.reports_dir = Path('/Users/xujian/Athena工作平台/tests/reports')
         self.reports_dir.mkdir(exist_ok=True)
 
-    def _load_baseline(self) -> Dict[str, Any]:
+    def _load_baseline(self) -> dict[str, Any]:
         """加载性能基准"""
         if self.baseline_file.exists():
-            with open(self.baseline_file, 'r', encoding='utf-8') as f:
+            with open(self.baseline_file, encoding='utf-8') as f:
                 return json.load(f)
         return {}
 
-    def run_all_benchmarks(self) -> Dict[str, Any]:
+    def run_all_benchmarks(self) -> dict[str, Any]:
         """运行所有性能基准测试"""
         print("🚀 开始性能基准测试")
         print("=" * 60)
@@ -113,7 +113,7 @@ class PerformanceBenchmarkRunner:
             # 生成文本报告
             self._generate_text_report(benchmark_results)
 
-            print(f"\n🎉 性能基准测试完成！")
+            print("\n🎉 性能基准测试完成！")
             print(f"📄 详细报告: {self.reports_dir}/performance_benchmark_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json")
 
             return benchmark_results
@@ -123,7 +123,7 @@ class PerformanceBenchmarkRunner:
             benchmark_results['error'] = str(e)
             return benchmark_results
 
-    def _benchmark_core_components(self) -> Dict[str, Any]:
+    def _benchmark_core_components(self) -> dict[str, Any]:
         """核心组件性能基准测试"""
         results = {}
 
@@ -149,7 +149,7 @@ class PerformanceBenchmarkRunner:
 
         return results
 
-    def _benchmark_planner_performance(self, planner) -> Dict[str, Any]:
+    def _benchmark_planner_performance(self, planner) -> dict[str, Any]:
         """任务规划器性能基准"""
         results = {}
 
@@ -157,7 +157,7 @@ class PerformanceBenchmarkRunner:
         create_times = []
         for i in range(20):  # 20次测试
             start_time = time.perf_counter()
-            plan = planner.create_execution_plan(f"性能测试任务 {i}", {})
+            planner.create_execution_plan(f"性能测试任务 {i}", {})
             end_time = time.perf_counter()
             create_times.append((end_time - start_time) * 1000)  # 转换为毫秒
 
@@ -211,7 +211,7 @@ class PerformanceBenchmarkRunner:
 
         return results
 
-    def _benchmark_chain_performance(self, processor) -> Dict[str, Any]:
+    def _benchmark_chain_performance(self, processor) -> dict[str, Any]:
         """提示链处理器性能基准"""
         results = {}
 
@@ -220,10 +220,10 @@ class PerformanceBenchmarkRunner:
         for i in range(15):  # 15次测试
             start_time = time.perf_counter()
             try:
-                chain_id = processor.create_chain("simple_test", {"query": f"测试查询 {i}"})
+                processor.create_chain("simple_test", {"query": f"测试查询 {i}"})
                 end_time = time.perf_counter()
                 create_times.append((end_time - start_time) * 1000)
-            except:
+            except Exception:
                 create_times.append(0)  # 失败时记为0
 
         result = BenchmarkResult(
@@ -249,7 +249,7 @@ class PerformanceBenchmarkRunner:
             start_time = time.perf_counter()
 
             # 模拟链步骤执行
-            for step in range(length):
+            for _step in range(length):
                 time.sleep(0.001)  # 模拟1ms处理时间
 
             end_time = time.perf_counter()
@@ -264,7 +264,7 @@ class PerformanceBenchmarkRunner:
 
         return results
 
-    def _benchmark_goal_performance(self, goal_manager) -> Dict[str, Any]:
+    def _benchmark_goal_performance(self, goal_manager) -> dict[str, Any]:
         """目标管理系统性能基准"""
         results = {}
 
@@ -279,7 +279,7 @@ class PerformanceBenchmarkRunner:
             }
 
             start_time = time.perf_counter()
-            goal = goal_manager.create_goal(goal_data)
+            goal_manager.create_goal(goal_data)
             end_time = time.perf_counter()
             create_times.append((end_time - start_time) * 1000)
 
@@ -309,9 +309,9 @@ class PerformanceBenchmarkRunner:
                 start_time = time.perf_counter()
                 try:
                     # 模拟进度更新
-                    progress = goal_manager.calculate_goal_progress(goal_id)
-                except:
-                    progress = 0
+                    goal_manager.calculate_goal_progress(goal_id)
+                except Exception:
+                    pass
                 end_time = time.perf_counter()
                 update_times.append((end_time - start_time) * 1000)
 
@@ -335,16 +335,16 @@ class PerformanceBenchmarkRunner:
 
         return results
 
-    async def _benchmark_agent_integrations(self) -> Dict[str, Any]:
+    async def _benchmark_agent_integrations(self) -> dict[str, Any]:
         """智能体集成性能基准测试"""
         results = {}
 
         try:
             # 导入智能体
-            from integration.xiaonuo_planning_integration import XiaonuoEnhancedAgent
-            from integration.xiaona_chain_integration import XiaonaEnhancedAgent
-            from integration.yunxi_goal_integration import YunxiEnhancedAgent
             from integration.xiaochen_collaboration_integration import XiaochenEnhancedAgent
+            from integration.xiaona_chain_integration import XiaonaEnhancedAgent
+            from integration.xiaonuo_planning_integration import XiaonuoEnhancedAgent
+            from integration.yunxi_goal_integration import YunxiEnhancedAgent
 
             agents = {
                 'xiaonuo': XiaonuoEnhancedAgent({'agent_id': 'perf_xiaonuo'}),
@@ -366,7 +366,7 @@ class PerformanceBenchmarkRunner:
                 response_times = []
                 success_count = 0
 
-                for i in range(10):  # 10次测试
+                for _i in range(10):  # 10次测试
                     try:
                         start_time = time.perf_counter()
 
@@ -385,7 +385,7 @@ class PerformanceBenchmarkRunner:
                             success_count += 1
                             response_times.append((end_time - start_time) * 1000)
 
-                    except Exception as e:
+                    except Exception:
                         # 记录失败但不中断测试
                         continue
 
@@ -414,7 +414,7 @@ class PerformanceBenchmarkRunner:
 
         return results
 
-    async def _benchmark_concurrency(self) -> Dict[str, Any]:
+    async def _benchmark_concurrency(self) -> dict[str, Any]:
         """并发性能基准测试"""
         results = {}
 
@@ -430,7 +430,7 @@ class PerformanceBenchmarkRunner:
 
         return results
 
-    async def _benchmark_planner_concurrency(self) -> Dict[str, Any]:
+    async def _benchmark_planner_concurrency(self) -> dict[str, Any]:
         """任务规划器并发测试"""
         from core.cognition.agentic_task_planner import AgenticTaskPlanner
 
@@ -473,7 +473,7 @@ class PerformanceBenchmarkRunner:
 
         return results
 
-    async def _benchmark_agent_concurrency(self) -> Dict[str, Any]:
+    async def _benchmark_agent_concurrency(self) -> dict[str, Any]:
         """智能体并发测试"""
         try:
             from integration.xiaonuo_planning_integration import XiaonuoEnhancedAgent
@@ -519,7 +519,7 @@ class PerformanceBenchmarkRunner:
             print(f"      ⚠️ 智能体并发测试跳过: {e}")
             return {'error': str(e)}
 
-    def _benchmark_memory_usage(self) -> Dict[str, Any]:
+    def _benchmark_memory_usage(self) -> dict[str, Any]:
         """内存使用基准测试"""
         results = {}
 
@@ -544,8 +544,8 @@ class PerformanceBenchmarkRunner:
             components.extend([planner, goal_manager])
 
             # 创建一些数据
-            plan = planner.create_execution_plan(f"内存测试任务 {i}", {})
-            goal = goal_manager.create_goal({
+            planner.create_execution_plan(f"内存测试任务 {i}", {})
+            goal_manager.create_goal({
                 'title': f'内存测试目标 {i}',
                 'description': f'描述 {i} ' * 20,
                 'priority': (i % 3) + 1
@@ -590,7 +590,7 @@ class PerformanceBenchmarkRunner:
 
         return results
 
-    def _benchmark_throughput(self) -> Dict[str, Any]:
+    def _benchmark_throughput(self) -> dict[str, Any]:
         """吞吐量基准测试"""
         results = {}
 
@@ -644,7 +644,7 @@ class PerformanceBenchmarkRunner:
 
         return results
 
-    def _generate_summary(self) -> Dict[str, Any]:
+    def _generate_summary(self) -> dict[str, Any]:
         """生成性能测试总结"""
         summary = {
             'total_tests': len(self.results),
@@ -684,7 +684,7 @@ class PerformanceBenchmarkRunner:
 
         return summary
 
-    def _generate_recommendations(self) -> List[str]:
+    def _generate_recommendations(self) -> list[str]:
         """生成性能优化建议"""
         recommendations = []
 
@@ -707,7 +707,7 @@ class PerformanceBenchmarkRunner:
 
         return recommendations
 
-    def _save_results(self, results: Dict[str, Any]):
+    def _save_results(self, results: dict[str, Any]):
         """保存测试结果"""
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
 
@@ -726,7 +726,7 @@ class PerformanceBenchmarkRunner:
 
         return json_file
 
-    def _generate_text_report(self, results: Dict[str, Any]):
+    def _generate_text_report(self, results: dict[str, Any]):
         """生成文本报告"""
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
 
@@ -759,7 +759,7 @@ class PerformanceBenchmarkRunner:
                 ])
 
             # 组件性能对比
-            components = set(r.component for r in self.results)
+            components = {r.component for r in self.results}
             component_performance = {}
 
             for component in components:
@@ -817,7 +817,7 @@ async def main():
                     print(f"📈 平均吞吐量: {metrics['avg_throughput']:.1f} 任务/秒")
 
         if 'recommendations' in results:
-            print(f"\n💡 优化建议:")
+            print("\n💡 优化建议:")
             for i, recommendation in enumerate(results['recommendations'], 1):
                 print(f"   {i}. {recommendation}")
 

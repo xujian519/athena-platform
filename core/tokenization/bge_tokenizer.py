@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BGE-M3 Tokenizer - 中文分词和文本预处理
 
@@ -13,9 +14,9 @@ BGE-M3 Tokenizer - 中文分词和文本预处理
 import logging
 import re
 from dataclasses import dataclass
+from typing import Any
 
 from sentence_transformers import SentenceTransformer
-
 
 logger = logging.getLogger(__name__)
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 综合集成决策引擎
 Integrated Decision Engine
@@ -22,7 +23,7 @@ import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -546,7 +547,7 @@ if __name__ == "__main__":
                 reasoning="基于专利检索的专业需求,Qdrant更适合",
             ),
             AgentOpinion(
-                agent_name="云熙",
+                agent_name="Athena",
                 opinion="建议使用PostgreSQL+pgvector,因为技术栈统一",
                 confidence=0.75,
                 evidence=["减少技术栈复杂度", "维护成本更低"],

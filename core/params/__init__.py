@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 参数验证和收集模块
 

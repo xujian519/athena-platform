@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 意图识别服务 - 模型池管理器
 
@@ -7,12 +8,11 @@ Author: Xiaonuo
 Created: 2025-01-17
 Version: 1.0.0
 """
-
 import logging
 import threading
 import time
 from collections.abc import Callable
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import Future, ThreadPoolExecutor
 from enum import Enum
 from pathlib import Path
 from typing import Any
@@ -286,7 +286,7 @@ class ModelPool:
 
             return metadata.model_instance, metadata.tokenizer_instance
 
-    def load_model_async(self, name: str) -> concurrent.futures.Future:
+    def load_model_async(self, name: str) -> Future:
         """
         异步加载模型
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 错误恢复时间优化器
 Error Recovery Time Optimizer
@@ -14,8 +15,7 @@ import time
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, TypeVar
-
+from typing import Any, TypeVar
 
 logger = logging.getLogger(__name__)
 
@@ -77,7 +77,7 @@ class RecoveryMetrics:
     failed_recoveries: int = 0  # 失败恢复次数
     avg_recovery_time: float = 0.0  # 平均恢复时间
     avg_attempts: float = 0.0  # 平均尝试次数
-    recovery_by_strategy: dict[str, int | None = None  # 按策略统计
+    recovery_by_strategy: dict[str, int] | None = None  # 按策略统计
 
     def __post_init__(self):
         if self.recovery_by_strategy is None:

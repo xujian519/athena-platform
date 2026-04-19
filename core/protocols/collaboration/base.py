@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协作协议 - 基础协议类
 Collaboration Protocols - Base Protocol Class

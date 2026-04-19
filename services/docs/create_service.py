@@ -3,13 +3,10 @@
 创建标准化的服务模板
 """
 
-import os
-from core.async_main import async_main
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import sys
 import argparse
 from pathlib import Path
-from datetime import datetime
+from typing import Any
+
 
 def create_python_service(service_name: str, path: Path) -> Any:
     """创建Python服务模板"""
@@ -193,7 +190,7 @@ settings = Settings()
     (service_path / "config" / "settings.py").write_text(config_py_content)
 
     # 创建Dockerfile
-    dockerfile_content = f"""FROM python:3.11-slim
+    dockerfile_content = """FROM python:3.11-slim
 
 WORKDIR /app
 

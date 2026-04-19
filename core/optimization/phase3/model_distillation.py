@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 模型蒸馏系统 (Model Distillation System)
 知识蒸馏,将大模型知识迁移到小模型
@@ -13,8 +14,9 @@ import logging
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -462,8 +464,7 @@ class ModelDistillationSystem:
                 {
                     "model_id": model_id,
                     "type": "teacher" if model_id in self.teacher_models else "student",
-                    "size": f"{model.model_size/1e6:.1f}M",
-                    "accuracy": f"{model.accuracy:.1%}",
+                    "model": self.teacher_models.get(model_id) or self.student_models.get(model_id),
                 }
                 for model_id in list(self.teacher_models.keys()) + list(self.student_models.keys())
             ],

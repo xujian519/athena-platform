@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 边缘场景测试
 测试各种边界条件和边缘情况
@@ -6,14 +7,12 @@ Athena 感知模块 - 边缘场景测试
 """
 
 import asyncio
-import time
+import logging
 import os
 import tempfile
 from datetime import datetime
-from typing import Dict, Any, List
 from pathlib import Path
-import logging
-import json
+from typing import Any
 
 # 配置日志
 logging.basicConfig(
@@ -30,9 +29,9 @@ class EdgeCaseTestResult:
         self.test_name = test_name
         self.start_time = datetime.now()
         self.end_time = None
-        self.scenarios_tested: List[str] = []
-        self.scenarios_passed: List[str] = []
-        self.scenarios_failed: List[Dict[str, Any]] = []
+        self.scenarios_tested: list[str] = []
+        self.scenarios_passed: list[str] = []
+        self.scenarios_failed: list[dict[str, Any]] = []
         self.resilience_score: float = 0.0
 
     def add_scenario(self, scenario: str, passed: bool, details: str = ""):
@@ -55,7 +54,7 @@ class EdgeCaseTestResult:
         else:
             self.resilience_score = (len(self.scenarios_passed) / len(self.scenarios_tested)) * 100
 
-    def get_summary(self) -> Dict[str, Any]:
+    def get_summary(self) -> dict[str, Any]:
         """获取测试摘要"""
         self.end_time = datetime.now()
         self.calculate_resilience_score()
@@ -89,7 +88,7 @@ class EdgeCaseTester:
 
     def __init__(self):
         """初始化边缘场景测试器"""
-        self.test_results: Dict[str, EdgeCaseTestResult] = {}
+        self.test_results: dict[str, EdgeCaseTestResult] = {}
 
     async def test_concurrent_race_conditions(self) -> EdgeCaseTestResult:
         """
@@ -205,7 +204,7 @@ class EdgeCaseTester:
                     else:  # 奇数读
                         await cache_manager.get(f"rw_key_{op_id % 10}")
                         read_count[0] += 1
-                except Exception as e:
+                except Exception:
                     errors[0] += 1
 
             tasks = [cache_rw_operation(i) for i in range(200)]
@@ -228,7 +227,7 @@ class EdgeCaseTester:
             result.add_scenario("缓存同时读写", False, f"测试失败: {e}")
 
         # 记录结果
-        summary = result.get_summary()
+        result.get_summary()
         self._print_edge_case_summary(result)
         self.test_results["concurrent_race_conditions"] = result
 
@@ -251,8 +250,9 @@ class EdgeCaseTester:
             if core_dir not in sys.path:
                 sys.path.insert(0, core_dir)
 
-            from core.perception.queue.async_task_queue import AsyncTaskQueue, TaskPriority
             import psutil
+
+            from core.perception.queue.async_task_queue import AsyncTaskQueue, TaskPriority
         except ImportError as e:
             logger.error(f"导入失败: {e}")
             result.add_scenario("导入模块", False, str(e))
@@ -272,7 +272,7 @@ class EdgeCaseTester:
                 return len(data)
 
             tasks = [memory_intensive_task() for _ in range(50)]
-            results = await asyncio.gather(*tasks)
+            await asyncio.gather(*tasks)
 
             peak_memory = process.memory_info().rss / 1024 / 1024
             memory_growth = peak_memory - initial_memory
@@ -299,8 +299,8 @@ class EdgeCaseTester:
                     temp_path = f.name
 
                 try:
-                    with open(temp_path, 'r') as f:
-                        content = f.read()
+                    with open(temp_path) as f:
+                        f.read()
                     await asyncio.sleep(0.001)
                 finally:
                     os.unlink(temp_path)
@@ -308,7 +308,7 @@ class EdgeCaseTester:
                 return True
 
             tasks = [file_operation() for _ in range(100)]
-            results = await asyncio.gather(*tasks)
+            await asyncio.gather(*tasks)
 
             final_fds = len(process.open_files())
             fd_leak = final_fds - initial_fds
@@ -338,7 +338,7 @@ class EdgeCaseTester:
                         priority=TaskPriority.LOW
                     )
                     submitted += 1
-                except Exception as e:
+                except Exception:
                     rejected += 1
                     if rejected >= 5:  # 已经有足够多的拒绝
                         break
@@ -352,7 +352,7 @@ class EdgeCaseTester:
             result.add_scenario("任务队列满载", False, f"测试失败: {e}")
 
         # 记录结果
-        summary = result.get_summary()
+        result.get_summary()
         self._print_edge_case_summary(result)
         self.test_results["resource_limits"] = result
 
@@ -377,7 +377,7 @@ class EdgeCaseTester:
 
             # 测试刚好在超时边缘的任务
             try:
-                result_async = await asyncio.wait_for(
+                await asyncio.wait_for(
                     precise_timeout_task(0.5),
                     timeout=0.6  # 略长于任务时间
                 )
@@ -387,7 +387,7 @@ class EdgeCaseTester:
 
             # 测试刚好超时的任务
             try:
-                result_async = await asyncio.wait_for(
+                await asyncio.wait_for(
                     precise_timeout_task(1.0),
                     timeout=0.5  # 短于任务时间
                 )
@@ -405,7 +405,7 @@ class EdgeCaseTester:
 
             # 1微秒超时
             try:
-                result_async = await asyncio.wait_for(quick_task(), timeout=0.000001)
+                await asyncio.wait_for(quick_task(), timeout=0.000001)
                 result.add_scenario("极短超时", True, "极短超时成功")
             except asyncio.TimeoutError:
                 result.add_scenario("极短超时", False, "极短超时不应该失败")
@@ -419,7 +419,7 @@ class EdgeCaseTester:
                 return "instant"
 
             try:
-                result_async = await asyncio.wait_for(instant_task(), timeout=0)
+                await asyncio.wait_for(instant_task(), timeout=0)
                 result.add_scenario("零超时", True, "零超时成功")
             except asyncio.TimeoutError:
                 # 零超时在某些asyncio版本中会立即超时，这是正常的
@@ -429,7 +429,7 @@ class EdgeCaseTester:
             result.add_scenario("零超时", False, f"测试失败: {e}")
 
         # 记录结果
-        summary = result.get_summary()
+        result.get_summary()
         self._print_edge_case_summary(result)
         self.test_results["timeout_boundaries"] = result
 
@@ -511,7 +511,7 @@ class EdgeCaseTester:
                 result.add_scenario(f"特殊字符-{name}", False, f"处理失败: {e}")
 
         # 记录结果
-        summary = result.get_summary()
+        result.get_summary()
         self._print_edge_case_summary(result)
         self.test_results["special_characters"] = result
 
@@ -530,14 +530,14 @@ class EdgeCaseTester:
         logger.info(f"弹性得分:         {summary['resilience_score']:.1f}%")
 
         if summary['failed_scenarios']:
-            logger.info(f"\n失败场景详情:")
+            logger.info("\n失败场景详情:")
             for failed in summary['failed_scenarios']:
                 logger.info(f"  - {failed['scenario']}: {failed['details']}")
 
         logger.info(f"\n总体评估:         {'✅ 优秀' if summary['resilience_score'] >= 80 else '⚠️ 需要改进' if summary['resilience_score'] >= 60 else '❌ 不合格'}")
         logger.info(f"{'='*60}\n")
 
-    def get_all_results(self) -> Dict[str, Dict[str, Any]]:
+    def get_all_results(self) -> dict[str, dict[str, Any]]:
         """获取所有测试结果"""
         return {
             test_name: result.get_summary()

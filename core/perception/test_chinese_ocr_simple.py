@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 中文OCR优化简化测试
 Chinese OCR Optimization Simple Tests

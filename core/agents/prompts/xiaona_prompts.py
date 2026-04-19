@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜提示词系统 v2.1
 Xiaona Prompts System
@@ -14,6 +15,8 @@ Xiaona Prompts System
 """
 
 import os
+from dataclasses import dataclass
+from enum import Enum
 
 from .writing_style_reference import XujianWritingStyleManager
 
@@ -187,7 +190,7 @@ XIAONA_L2_DATA = """
    - laws_articles: 53,903条
    - patent_guidelines: 376条
 
-2. **NebulaGraph知识图谱** (87,285节点)
+2. **Neo4j知识图谱** (87,285节点)
    - patent_rules: 64,913节点
    - legal_kg: 22,372节点
    - 专利知识图谱: 全覆盖
@@ -203,7 +206,7 @@ XIAONA_L2_DATA = """
    - 实时技术信息
 
 ### 数据源决策规则
-- **法律问题** → Qdrant向量库 + NebulaGraph知识图谱
+- **法律问题** → Qdrant向量库 + Neo4j知识图谱
 - **专利检索** → PostgreSQL + Google Patents
 - **技术理解** → 搜索引擎
 - **综合分析** → 多源协同
@@ -488,7 +491,7 @@ class XiaonaPrompts:
 {XIAONA_L4_BUSINESS}
 """
 
-    def load_enhanced_prompts(self) -> dict[str, str]:
+    def load_enhanced_prompts(self) -> dict[str, str | None]:
         """加载强化版提示词文件"""
 
         enhanced_prompts = {}
@@ -668,6 +671,287 @@ class XiaonaPrompts:
 
 
 # ============================================================================
+# 条件化提示词组装系统
+# 借鉴 kode-agent 的 getSystemPrompt() 设计模式
+# ============================================================================
+
+
+class TaskType(Enum):
+    """任务类型"""
+    LEGAL_CONSULTATION = "legal_consultation"    # 法律咨询
+    PATENT_ANALYSIS = "patent_analysis"          # 专利分析
+    PATENT_DRAFTING = "patent_drafting"          # 专利撰写
+    OA_RESPONSE = "oa_response"                  # 审查意见答复
+    LEGAL_RESEARCH = "legal_research"            # 法律研究
+    GENERAL = "general"                          # 通用
+
+
+class OutputStyleType(Enum):
+    """输出风格类型"""
+    DEFAULT = "default"          # 默认风格（大姐姐角色）
+    PROFESSIONAL = "professional"  # 法律专业风格
+    EDUCATIONAL = "educational"    # 教学风格
+    CONCISE = "concise"          # 极简风格
+
+
+@dataclass
+class PromptOptions:
+    """
+    提示词组装选项
+
+    控制系统提示词的条件化组装，按需选择各层提示词。
+
+    Attributes:
+        output_style: 输出风格，影响语气和详细程度
+        task_type: 任务类型，影响注入的任务特定指令
+        model_name: 模型名称（影响模型特定的适配指令）
+        is_readonly: 是否为只读模式（影响工具相关指令）
+        include_data_layer: 是否包含数据层（L2）提示词
+        include_capability_layer: 是否包含能力层（L3）提示词
+        include_business_layer: 是否包含业务层（L4）提示词
+    """
+    output_style: OutputStyleType = OutputStyleType.DEFAULT
+    task_type: TaskType = TaskType.GENERAL
+    model_name: str = "default"
+    is_readonly: bool = False
+    include_data_layer: bool = True
+    include_capability_layer: bool = True
+    include_business_layer: bool = True
+
+
+def get_security_section() -> str:
+    """
+    安全策略提示词片段
+
+    Returns:
+        安全相关的指令文本
+    """
+    return """
+## 安全策略
+
+- 绝不编造法律条文或案例引用
+- 所有法律结论必须标注来源
+- 涉及重要法律决策时必须触发 HITL 确认
+- 不处理与专利法律无关的请求（转交小诺）
+"""
+
+
+def get_verbosity_section(style: OutputStyleType = OutputStyleType.DEFAULT) -> str:
+    """
+    输出详细度提示词片段
+
+    Args:
+        style: 输出风格
+
+    Returns:
+        控制输出详细程度的指令文本
+    """
+    if style == OutputStyleType.CONCISE:
+        return """
+## 输出要求（极简模式）
+
+- 回答不超过4行
+- 只给出核心结论和关键依据
+- 使用列表而非段落
+- 省略问候和过渡语
+"""
+    elif style == OutputStyleType.EDUCATIONAL:
+        return """
+## 输出要求（教学模式）
+
+- 在回答中附上法律知识讲解
+- 解释法律概念时使用通俗语言
+- 适当使用类比帮助理解
+- 标注相关法条的学习建议
+"""
+    elif style == OutputStyleType.PROFESSIONAL:
+        return """
+## 输出要求（专业模式）
+
+- 使用正式法律文书风格
+- 严格引用法条全文
+- 采用法理分析的严谨表述
+- 省略角色化互动，保持专业中立
+"""
+    else:
+        # DEFAULT: 保持大姐姐角色
+        return """
+## 输出要求（默认模式）
+
+- 使用大姐姐的亲切语气
+- 称呼用户为"亲爱的爸爸"
+- 在专业分析外包裹温暖关怀
+- 适当使用表情符号表达情感
+"""
+
+
+def get_model_adaptation_section(model_name: str) -> str:
+    """
+    模型特定适配提示词片段
+
+    Args:
+        model_name: 模型名称
+
+    Returns:
+        模型特定的适配指令
+    """
+    adaptations = {
+        "haiku": """
+## 模型适配（Haiku）
+
+- 使用简洁指令，避免复杂嵌套
+- 一次只处理一个核心任务
+- 提供明确的输出格式示例
+""",
+        "sonnet": """
+## 模型适配（Sonnet）
+
+- 可以处理复杂的多步推理
+- 支持长上下文分析
+- 适当使用思维链提示
+""",
+        "opus": """
+## 模型适配（Opus）
+
+- 充分利用深度推理能力
+- 可以处理高度复杂的法律分析
+- 支持多维度交叉验证
+""",
+    }
+    return adaptations.get(model_name.lower(), "")
+
+
+def get_task_section(task_type: TaskType) -> str:
+    """
+    任务类型相关提示词片段
+
+    Args:
+        task_type: 任务类型
+
+    Returns:
+        任务特定的指令文本
+    """
+    task_instructions = {
+        TaskType.LEGAL_CONSULTATION: """
+## 当前任务：法律咨询
+
+- 先确认用户的具体法律问题
+- 检索相关法条和案例
+- 提供结构化的法律分析
+- 明确标注风险和建议
+""",
+        TaskType.PATENT_ANALYSIS: """
+## 当前任务：专利分析
+
+- 使用 CAP02 三级技术分析框架
+- 特征 → 手段 → 效果 分析
+- 7维度深度解析
+- 区别特征4层次识别
+""",
+        TaskType.PATENT_DRAFTING: """
+## 当前任务：专利撰写
+
+- 强制 HITL 模式
+- 按 5 个任务步骤执行
+- 每个步骤需要用户确认
+- 确保充分公开和支持关系
+""",
+        TaskType.OA_RESPONSE: """
+## 当前任务：审查意见答复
+
+- 🔴 强制 HITL 协议 v3.0
+- 解读审查意见 → 分析驳回理由 → 制定策略 → 撰写答复
+- 5个强制确认点不可跳过
+""",
+        TaskType.LEGAL_RESEARCH: """
+## 当前任务：法律研究
+
+- 从多数据源检索资料
+- 建立法规之间的关联
+- 整理研究摘要
+- 所有引用标注来源
+""",
+    }
+    return task_instructions.get(task_type, "")
+
+
+
+def get_system_prompt(options: PromptOptions | None = None) -> list[str]:
+    """
+    条件化组装系统提示词
+
+    参考 kode-agent 的 getSystemPrompt() 设计，根据选项按需组装各层提示词，
+    并支持输出风格注入。
+
+    Args:
+        options: 提示词组装选项，None 时使用默认值
+
+    Returns:
+        提示词片段列表（按顺序拼接即为完整系统提示词）
+    """
+    if options is None:
+        options = PromptOptions()
+
+    sections = []
+
+    # L1 基础层 - 始终包含
+    sections.append(XIAONA_L1_FOUNDATION)
+
+    # 安全策略 - 始终包含
+    sections.append(get_security_section())
+
+    # 输出风格 - 替换默认的语气风格
+    sections.append(get_verbosity_section(options.output_style))
+
+    # 注入 OutputStyleManager 添加的风格
+    try:
+        from core.prompts.output_styles import get_style_manager
+        style_mgr = get_style_manager()
+        style_additions = style_mgr.get_style_prompt_additions()
+        if style_additions:
+            sections.extend(style_additions)
+    except ImportError:
+        pass  # output_styles 模块不可用，正常降级
+    except Exception as e:
+        import logging
+        logging.getLogger("prompts.xiaona").warning(f"OutputStyleManager 加载失败: {e}")
+
+    # L2 数据层 - 可选
+    if options.include_data_layer:
+        sections.append(XIAONA_L2_DATA)
+
+    # L3 能力层 - 可选
+    if options.include_capability_layer:
+        sections.append(XIAONA_L3_CAPABILITY)
+
+    # L4 业务层 - 可选
+    if options.include_business_layer:
+        sections.append(XIAONA_L4_BUSINESS)
+
+    # 任务特定指令
+    task_section = get_task_section(options.task_type)
+    if task_section:
+        sections.append(task_section)
+
+    # 模型适配
+    model_section = get_model_adaptation_section(options.model_name)
+    if model_section:
+        sections.append(model_section)
+
+    # 只读模式指令
+    if options.is_readonly:
+        sections.append("""
+## 只读模式
+
+当前为只读模式，你只能：
+- 读取和检索信息
+- 提供分析和建议
+- 不能执行任何写入或修改操作
+""")
+
+    return sections
+
+# ============================================================================
 # 导出
 # ============================================================================
 
@@ -677,4 +961,13 @@ __all__ = [
     "XIAONA_L3_CAPABILITY",
     "XIAONA_L4_BUSINESS",
     "XiaonaPrompts",
+    # 条件化提示词组装
+    "PromptOptions",
+    "TaskType",
+    "OutputStyleType",
+    "get_system_prompt",
+    "get_security_section",
+    "get_verbosity_section",
+    "get_model_adaptation_section",
+    "get_task_section",
 ]

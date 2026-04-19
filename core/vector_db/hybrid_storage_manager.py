@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena工作平台 - 混合存储管理器
 Hybrid Storage Manager for Athena Platform
@@ -18,6 +19,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any
 
+import numpy as np
 
 from config.numpy_compatibility import random
 from core.logging_config import setup_logging
@@ -29,6 +31,11 @@ sys.path.insert(0, project_root)
 from core.vector_db.vector_db_manager import (
     VectorQuery,
 )
+
+try:
+    from services.agent_services.vector_db.optimized_qdrant_client import OptimizedQdrantClient
+except ImportError:
+    OptimizedQdrantClient = None
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -66,14 +73,13 @@ class HybridStorageManager:
     def __init__(self):
         self.project_root = project_root
 
-        self.qdrant_manager = OptimizedOptimizedQdrantClient()
+        self.qdrant_manager = OptimizedQdrantClient() if OptimizedQdrantClient else None
 
         # SQLite数据库路径
         self.memory_db_path = os.path.join(
             project_root, "data/support_data/databases/databases/memory_system/athena_memory.db"
         )
         self.metadata_db_path = os.path.join(
-            project_root, "patent-platform/workspace/data/vector_metadata.db"
         )
 
         # 存储策略配置

@@ -1,0 +1,153 @@
+# 动态提示词系统告警规则
+# Dynamic Prompt System Alert Rules
+
+groups:
+  - name: prompt_system_alerts
+    interval: 30s
+    rules:
+      # ==================== API性能告警 ====================
+
+      # API响应时间告警
+      - alert: PromptSystemHighLatency
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="prompt-system-api"}[5m])) > 1
+        for: 2m
+        labels:
+          severity: warning
+          service: prompt-system
+        annotations:
+          summary: "提示词系统API响应时间过长"
+          description: "P95响应时间超过1秒，当前值: {{ $value }}秒"
+          runbook_url: "https://docs.athena.example.com/runbooks/high-latency"
+
+      # API错误率告警
+      - alert: PromptSystemHighErrorRate
+        expr: rate(http_requests_total{job="prompt-system-api",status=~"5.."}[5m]) / rate(http_requests_total{job="prompt-system-api"}[5m]) > 0.05
+        for: 1m
+        labels:
+          severity: critical
+          service: prompt-system
+        annotations:
+          summary: "提示词系统API错误率过高"
+          description: "5xx错误率超过5%，当前值: {{ $value | humanizePercentage }}"
+          runbook_url: "https://docs.athena.example.com/runbooks/high-error-rate"
+
+      # ==================== 资源使用告警 ====================
+
+      # CPU使用率告警
+      - alert: PromptSystemHighCPU
+        expr: rate(process_cpu_seconds_total{job="prompt-system-api"}[5m]) * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+          service: prompt-system
+        annotations:
+          summary: "提示词系统CPU使用率过高"
+          description: "CPU使用率超过80%，当前值: {{ $value }}%"
+          runbook_url: "https://docs.athena.example.com/runbooks/high-cpu"
+
+      # 内存使用率告警
+      - alert: PromptSystemHighMemory
+        expr: process_resident_memory_bytes{job="prompt-system-api"} / 1073741824 > 2
+        for: 5m
+        labels:
+          severity: warning
+          service: prompt-system
+        annotations:
+          summary: "提示词系统内存使用过高"
+          description: "内存使用超过2GB，当前值: {{ $value }}GB"
+          runbook_url: "https://docs.athena.example.com/runbooks/high-memory"
+
+      # ==================== 业务指标告警 ====================
+
+      # 场景识别失败率告警
+      - alert: ScenarioIdentificationFailure
+        expr: rate(prompt_system_scenario_identification_errors_total[5m]) / rate(prompt_system_scenario_identification_total[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+          service: prompt-system
+        annotations:
+          summary: "场景识别失败率过高"
+          description: "场景识别失败率超过10%，当前值: {{ $value | humanizePercentage }}"
+          runbook_url: "https://docs.athena.example.com/runbooks/scenario-failure"
+
+      # 能力调用失败率告警
+      - alert: CapabilityInvocationFailure
+        expr: rate(prompt_system_capability_invocation_errors_total[5m]) / rate(prompt_system_capability_invocation_total[5m]) > 0.15
+        for: 2m
+        labels:
+          severity: warning
+          service: prompt-system
+        annotations:
+          summary: "能力调用失败率过高"
+          description: "能力调用失败率超过15%，当前值: {{ $value | humanizePercentage }}"
+          runbook_url: "https://docs.athena.example.com/runbooks/capability-failure"
+
+      # 数据库连接失败告警
+      - alert: DatabaseConnectionFailure
+        expr: up{job="prompt-system-db"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: prompt-system
+        annotations:
+          summary: "数据库连接失败"
+          description: "无法连接到数据库，请检查数据库服务状态"
+          runbook_url: "https://docs.athena.example.com/runbooks/db-connection"
+
+      # ==================== 缓存性能告警 ====================
+
+      # 缓存命中率低告警
+      - alert: LowCacheHitRate
+        expr: rate(prompt_system_cache_hits_total[5m]) / (rate(prompt_system_cache_hits_total[5m]) + rate(prompt_system_cache_misses_total[5m])) < 0.5
+        for: 10m
+        labels:
+          severity: info
+          service: prompt-system
+        annotations:
+          summary: "缓存命中率较低"
+          description: "缓存命中率低于50%，当前值: {{ $value | humanizePercentage }}"
+          runbook_url: "https://docs.athena.example.com/runbooks/low-cache-hit"
+
+      # ==================== 服务可用性告警 ====================
+
+      # 服务下线告警
+      - alert: PromptSystemDown
+        expr: up{job="prompt-system-api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: prompt-system
+        annotations:
+          summary: "提示词系统服务下线"
+          description: "提示词系统API服务已停止响应，请立即检查"
+          runbook_url: "https://docs.athena.example.com/runbooks/service-down"
+
+  - name: prompt_system_capacity_alerts
+    interval: 1m
+    rules:
+      # ==================== 容量规划告警 ====================
+
+      # 请求量突增告警
+      - alert: SuddenRequestSpike
+        expr: rate(http_requests_total{job="prompt-system-api"}[5m]) > 1000
+        for: 2m
+        labels:
+          severity: warning
+          service: prompt-system
+        annotations:
+          summary: "请求量突增"
+          description: "当前请求速率: {{ $value }} req/s，超过正常范围"
+          runbook_url: "https://docs.athena.example.com/runbooks/request-spike"
+
+      # 队列堆积告警
+      - alert: RequestQueueBacklog
+        expr: prompt_system_request_queue_length > 100
+        for: 5m
+        labels:
+          severity: warning
+          service: prompt-system
+        annotations:
+          summary: "请求队列堆积"
+          description: "请求队列长度超过100，当前值: {{ $value }}"
+          runbook_url: "https://docs.athena.example.com/runbooks/queue-backlog"

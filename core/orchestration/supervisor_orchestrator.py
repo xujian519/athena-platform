@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Supervisor编排器 - 多智能体Supervisor模式实现
 Supervisor Orchestrator - Multi-Agent Supervisor Pattern Implementation
@@ -17,7 +18,7 @@ import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -80,7 +81,7 @@ class TaskDecomposition:
     original_task: str  # 原始任务
     complexity: TaskComplexity  # 任务复杂度
     subtasks: list[SubTask]  # 子任务列表
-    execution_order: list[list[str]  # 执行顺序(可并行的分组)
+    execution_order: list[list[str]]  # 执行顺序(可并行的分组)
     estimated_total_time: float  # 预计总耗时
 
 
@@ -166,16 +167,6 @@ class SupervisorOrchestrator:
             )
         )
 
-        # 云熙 - IP管理系统
-        self.register_agent(
-            AgentInfo(
-                name="云熙",
-                agent_id="yunxi_ip_manager",
-                capabilities=[AgentCapability.IP_MANAGEMENT, AgentCapability.DATA_PROCESSING],
-                avg_response_time=2.0,
-                success_rate=0.96,
-            )
-        )
 
         # 小宸 - 自媒体运营
         self.register_agent(
@@ -421,7 +412,7 @@ class SupervisorOrchestrator:
             for i in range(1, 4)
         ]
 
-    def _determine_execution_order(self, subtasks: list[SubTask]) -> list[list[str]:
+    def _determine_execution_order(self, subtasks: list[SubTask]) -> list[list[str]]:
         """
         确定执行顺序 - 支持并行执行
 
@@ -863,7 +854,7 @@ def get_supervisor_orchestrator() -> SupervisorOrchestrator:
     return _supervisor_instance
 
 
-async def orchestrate_task(user_request: str, context: dict | None = None) -> dict[str, Any:
+async def orchestrate_task(user_request: str, context: dict | None = None) -> dict[str, Any]:
     """便捷函数: 编排任务"""
     supervisor = get_supervisor_orchestrator()
     return await supervisor.orchestrate_task(user_request, context)

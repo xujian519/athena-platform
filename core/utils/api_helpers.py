@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 API辅助工具
 API Helper Utilities
@@ -14,10 +14,12 @@ API Helper Utilities
 
 import logging
 import traceback
-from typing import Dict, Any, Optional, Callable, TypeVar, Union
-from functools import wraps
+from collections.abc import Callable
 from datetime import datetime
-from fastapi import HTTPException, status, Request
+from functools import wraps
+from typing import Any, TypeVar
+
+from fastapi import HTTPException, Request, status
 from fastapi.responses import JSONResponse
 
 logger = logging.getLogger(__name__)
@@ -61,7 +63,7 @@ class APIResponse:
     def error(
         message: str,
         code: int = 500,
-        details: Optional[dict[str, Any] | None = None
+        details: dict[str, Any] | None = None
     ) -> dict[str, Any]:
         """
         错误响应
@@ -92,7 +94,7 @@ class APIResponse:
 # ============================================================================
 
 def handle_api_errors(
-    error_map: Optional[dict[type, tuple[int, str]]] | None = None,
+    error_map: dict[type, tuple[int, str]] | None | None = None,
     default_message: str = "操作失败",
     log_error: bool = True
 ):
@@ -132,7 +134,7 @@ def handle_api_errors(
                 raise HTTPException(
                     status_code=status_code,
                     detail=message or str(e)
-                )
+                ) from e
 
         @wraps(func)
         def sync_wrapper(*args, **kwargs) -> T:
@@ -158,7 +160,7 @@ def handle_api_errors(
                 raise HTTPException(
                     status_code=status_code,
                     detail=message or str(e)
-                )
+                ) from e
 
         # 根据函数类型返回对应的包装器
         import asyncio

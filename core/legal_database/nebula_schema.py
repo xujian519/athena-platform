@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 NebulaGraph知识图谱Schema定义
 Legal Knowledge Graph Schema for NebulaGraph
@@ -7,7 +8,7 @@ Legal Knowledge Graph Schema for NebulaGraph
 """
 
 from enum import Enum
-from typing import Any, Dict
+from typing import Any
 
 
 class NebulaSchema:
@@ -287,12 +288,18 @@ class NebulaQueryBuilder:
     def insert_vertex(vertex_id: str, tag: str, props: dict[str, Any]) -> str:
         """构建插入顶点的语句"""
         ", ".join([f"{k}: {v}" for k, v in props.items()])
-        return f'INSERT VERTEX {tag}({", ".join(props.keys())}) VALUES "{vertex_id}": ({", ".join([f'"{v}"' for v in props.values()])});'
+        # 使用外部变量避免 f-string 嵌套问题
+        keys_str = ', '.join(props.keys())
+        values_str = ', '.join([f'"{v}"' for v in props.values()])
+        return f'INSERT VERTEX {tag}({keys_str}) VALUES "{vertex_id}": ({values_str});'
 
     @staticmethod
     def insert_edge(src_id: str, dst_id: str, edge_type: str, props: dict[str, Any]) -> str:
         """构建插入边的语句"""
-        return f'INSERT EDGE {edge_type}({", ".join(props.keys())}) VALUES "{src_id}"->"{dst_id}": ({", ".join([f'"{v}"' for v in props.values()])});'
+        # 使用外部变量避免 f-string 嵌套问题
+        keys_str = ', '.join(props.keys())
+        values_str = ', '.join([f'"{v}"' for v in props.values()])
+        return f'INSERT EDGE {edge_type}({keys_str}) VALUES "{src_id}"->"{dst_id}": ({values_str});'
 
     @staticmethod
     def find_subjects_by_name(subject_name: str) -> str:

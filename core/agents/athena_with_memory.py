@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena.智慧女神 - 集成记忆系统
 Athena Wisdom Goddess with Integrated Memory

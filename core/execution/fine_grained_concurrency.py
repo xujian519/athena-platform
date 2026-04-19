@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 细粒度并发控制器
 支持任务级、资源级和操作级的精细化并发控制

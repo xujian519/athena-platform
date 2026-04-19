@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 执行模块 - 统一导出接口
 Execution Module - Unified Export Interface
@@ -15,23 +16,9 @@ import logging
 
 # 从统一的 shared_types.py 导入所有类型定义
 from .shared_types import (
-    ActionType,
-    DeadlockDetectedError,
-    DependencyCycleError,
-    ExecutionError,
-    ResourceRequirement,
-    ResourceType,
-    ResourceUsage,
-    Task,
-    TaskExecutionError,
-    TaskPriority,
-    TaskQueue,
+    PerformanceMetrics,
     TaskResult,
     TaskStatus,
-    TaskTimeoutError,
-    TaskType,
-    TaskValidationError,
-    Workflow,
 )
 
 logger = logging.getLogger(__name__)
@@ -108,26 +95,21 @@ class ExecutionEngine:
             del cls.global_instance
 
 
-__all__ = [
-    # 类型定义
-    "ActionType",
-    "TaskStatus",
-    "TaskPriority",
-    "TaskType",
-    "ResourceType",
-    # 核心类
-    "Task",
-    "TaskQueue",
-    "TaskResult",
-    "ResourceRequirement",
-    "ResourceUsage",
-    "Workflow",
-    "ExecutionEngine",
-    # 异常
-    "ExecutionError",
-    "TaskExecutionError",
-    "TaskTimeoutError",
-    "DeadlockDetectedError",
-    "DependencyCycleError",
-    "TaskValidationError",
-]
+    @classmethod
+    def get_status(cls) -> TaskStatus:
+        """获取任务状态"""
+        return TaskStatus
+
+
+    @classmethod
+    def get_result(cls) -> TaskResult:
+        """获取任务结果"""
+        return TaskResult
+
+
+    @classmethod
+    def get_metrics(cls) -> PerformanceMetrics:
+        """获取性能指标"""
+        return PerformanceMetrics
+
+

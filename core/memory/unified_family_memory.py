@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 AI家族统一记忆接口
 Unified Family Memory Interface
@@ -154,10 +155,6 @@ class UnifiedFamilyMemory:
         try:
             return await self._add_to_primary(memory)
         except Exception as e:
-            logger.error(f"操作失败: {e}", exc_info=True)
-            raise
-        except Exception as e:
-
             logger.error(f"操作失败: {e}", exc_info=True)
             raise
 

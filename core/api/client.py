@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 客户端注册和管理API
 
@@ -142,7 +143,7 @@ async def register_client(request: ClientRegistrationRequest):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"注册失败: {e!s}",
-        )
+        ) from e
 
 
 @router.get("/{client_id}", response_model=ClientInfo)

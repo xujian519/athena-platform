@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 智能体身份系统
 Agent Identity System
@@ -9,15 +8,15 @@ created: 2024年12月15日
 """
 
 from .core import (
+    IDENTITY_DISPLAY_TEMPLATES,
     AgentIdentity,
-    AgentType,
     AgentIdentityManager,
-    identity_manager,
-    get_agent_identity,
+    AgentType,
     display_agent_identity,
-    register_agent_identity,
     format_identity_display,
-    IDENTITY_DISPLAY_TEMPLATES
+    get_agent_identity,
+    identity_manager,
+    register_agent_identity,
 )
 
 __all__ = [

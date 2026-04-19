@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 高级参数提取器 (Advanced Parameter Extractor)
 提取复杂参数结构、嵌套参数和隐式参数
@@ -12,7 +13,7 @@ import logging
 import re
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +39,7 @@ class ParameterSchema:
     param_type: ParameterType
     required: bool = True
     default: Any = None
-    enum_values: list["key"] = None
+    enum_values: list[str] = None
     format: str | None = None  # 如 email, url, date
     min_value: float | None = None
     max_value: float | None = None
@@ -110,7 +111,7 @@ class AdvancedParameterExtractor:
         query: str,
         intent: str,
         context: dict[str, Any] | None = None,
-        conversation_history: list[dict[str, Any] | None = None,
+        conversation_history: list[dict[str, Any]] | None = None,
     ) -> list[ExtractedParameter]:
         """
         提取参数
@@ -277,7 +278,9 @@ class AdvancedParameterExtractor:
         query: str,
         schema: list[ParameterSchema],
         explicit_params: list[ExtractedParameter],
-        context: dict[list[dict[str, Any]]] -> list[ExtractedParameter]:
+        context: dict[str, list[dict[str, Any]]],
+        conversation_history: list[dict[str, Any]] | None = None,
+    ) -> list[ExtractedParameter]:
         """推理隐式参数"""
         implicit_params = []
 
@@ -346,7 +349,7 @@ class AdvancedParameterExtractor:
         return None
 
     def _infer_from_history(
-        self, schema: ParameterSchema, history: list[dict[str, Any]) -> Any | None:
+        self, schema: ParameterSchema, history: list[dict[str, Any]]) -> Any | None:
         """从历史对话中推理参数"""
         # 搜索最近的值
         for turn in reversed(history[-5:]):  # 查看最近5轮

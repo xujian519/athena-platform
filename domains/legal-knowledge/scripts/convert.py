@@ -3,9 +3,8 @@
 """
 
 import json
-import logging
 import re
-from typing import List
+from typing import Any
 from uuid import uuid4
 
 section = [
@@ -33,7 +32,7 @@ title_matcher = f"((?:^{zh_nums}、)|(?:^案例{zh_nums}))"
 def is_section(line) -> bool:
     line = line.strip()
     for pattern in section:
-        flag = re.search("^[【\(（]{0,1}" + pattern + "[】\)）]{0,1}$", line)
+        flag = re.search(r"^[【\(（]{0,1}" + pattern + r"[】\)）]{0,1}$", line)
         if flag:
             return True
     return False
@@ -45,12 +44,12 @@ def is_title(line) -> str:
     return None
 
 
-class Case(object):
+class Case:
 
     def __init__(self) -> None:
         self.title = None
         self.subtitle = None
-        self.content: List[str] = []
+        self.content: list[str] = []
 
     @property
     def filename(self) -> str:
@@ -62,12 +61,12 @@ class Case(object):
     __str__ = __repr__
 
 
-class CasesParser(object):
+class CasesParser:
 
     def __init__(self) -> None:
         self.filename = './__cache__/案例.txt'
 
-    def __slice_content(self, content: str) -> List[str]:
+    def __slice_content(self, content: str) -> list[str]:
         ret = []
 
         for line in content.split('。'):
@@ -82,17 +81,14 @@ class CasesParser(object):
 
         return ret
 
-    def parse(self) -> List[Case]:
-        with open(self.filename, 'r') as f:
+    def parse(self) -> list[Case]:
+        with open(self.filename) as f:
             data = filter(
                 lambda x: x,
-                map(
-                    lambda x: x.strip(),
-                    f.readlines()
-                )
+                (x.strip() for x in f.readlines())
             )
 
-        cases: List[Case] = []
+        cases: list[Case] = []
         title_at = 0
         for no, line in enumerate(data):
             new_case = is_title(line)
@@ -113,7 +109,7 @@ class CasesParser(object):
                 case.content += self.__slice_content(line)
         return cases
 
-    def write(self, cases: List[Case]) -> Any:
+    def write(self, cases: list[Case]) -> Any:
         ret_json = []
         for case in cases:
             case_json = {

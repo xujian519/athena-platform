@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 高级推理算法
 
@@ -16,8 +17,9 @@ Advanced Reasoning Algorithms
 import math
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any
 
+import numpy as np
 
 from .enhanced_reasoning_base import (
     BaseReasoner,
@@ -26,7 +28,6 @@ from .enhanced_reasoning_base import (
     ReasoningResult,
     ReasoningStep,
     ReasoningType,
-    create_reasoning_step,
 )
 
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智谱GLM MCP服务集成适配器
 Zhipu GLM MCP Services Integration Adapter
@@ -13,7 +14,7 @@ Zhipu GLM MCP Services Integration Adapter
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import httpx
 import yaml

@@ -1,18 +1,14 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Numpy版本管理工具
 Numpy Version Management Tool
 """
 
-import os
 import sys
-import json
-import subprocess
-import requests
-from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional
+
+import requests
+
 
 class NumpyVersionManager:
     """Numpy版本管理器"""
@@ -30,7 +26,7 @@ class NumpyVersionManager:
         except ImportError:
             return None
 
-    def _load_compatibility_matrix(self) -> Dict:
+    def _load_compatibility_matrix(self) -> dict:
         """加载Python-numpy兼容性矩阵"""
         return {
             "3.11": {
@@ -59,7 +55,7 @@ class NumpyVersionManager:
             }
         }
 
-    def check_compatibility(self) -> Dict:
+    def check_compatibility(self) -> dict:
         """检查当前兼容性状态"""
         python_info = self.compatibility_matrix.get(self.python_version, {})
 
@@ -126,7 +122,7 @@ class NumpyVersionManager:
             print(f"获取最新版本失败: {e}")
             return None
 
-    def recommend_upgrade(self) -> Dict:
+    def recommend_upgrade(self) -> dict:
         """推荐升级方案"""
         compat = self.check_compatibility()
         latest = self.get_latest_numpy_version()
@@ -146,7 +142,7 @@ class NumpyVersionManager:
         if compat["status"] == "error":
             # 需要升级
             recommendation["steps"] = [
-                f"1. 卸载当前版本: pip uninstall numpy",
+                "1. 卸载当前版本: pip uninstall numpy",
                 f"2. 安装推荐版本: pip install numpy=={recommended}",
                 "3. 运行兼容性测试: python3 test_numpy_compatibility.py"
             ]
@@ -156,7 +152,7 @@ class NumpyVersionManager:
             # 可选升级
             if self._version_compare(latest or "0", recommended) > 0:
                 recommendation["steps"] = [
-                    f"1. 备份当前环境",
+                    "1. 备份当前环境",
                     f"2. 升级到最新版本: pip install numpy=={latest}",
                     "3. 测试所有功能",
                     "4. 如有问题回退到: pip install numpy=={recommended}"
@@ -165,7 +161,7 @@ class NumpyVersionManager:
 
         return recommendation
 
-    def update_requirements(self, dry_run: bool = True) -> List[str]:
+    def update_requirements(self, dry_run: bool = True) -> list[str]:
         """更新requirements文件"""
         updated_files = []
 
@@ -385,7 +381,7 @@ def main():
 
     if args.recommend:
         rec = manager.recommend_upgrade()
-        print(f"\n💡 升级建议:")
+        print("\n💡 升级建议:")
         print(f"   当前版本: {rec['current']}")
         print(f"   推荐版本: {rec['recommended']}")
         print(f"   最新版本: {rec['latest']}")
@@ -395,12 +391,12 @@ def main():
             print(f"   升级命令: {rec['upgrade_command']}")
 
         if rec['steps']:
-            print(f"\n📋 操作步骤:")
+            print("\n📋 操作步骤:")
             for step in rec['steps']:
                 print(f"   {step}")
 
     if args.update_requirements:
-        print(f"\n🔄 更新requirements文件...")
+        print("\n🔄 更新requirements文件...")
         updated = manager.update_requirements(dry_run=args.dry_run)
 
         if updated:
@@ -409,7 +405,7 @@ def main():
             print("   没有需要更新的文件")
 
     if args.create_test:
-        print(f"\n🧪 创建兼容性测试套件...")
+        print("\n🧪 创建兼容性测试套件...")
         test_content = manager.create_test_suite()
 
         test_file = Path("test_numpy_version_compatibility.py")

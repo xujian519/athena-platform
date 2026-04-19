@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 并发控制模块单元测试
 Concurrency Control Unit Tests
@@ -15,9 +14,12 @@ Concurrency Control Unit Tests
 """
 
 import asyncio
-from datetime import datetime
+import sys
+from pathlib import Path
 
 import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.learning.concurrency_control import (
     AsyncSemaphore,

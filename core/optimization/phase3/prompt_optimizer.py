@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 提示工程优化器 (Prompt Engineering Optimizer)
 智能优化提示词,提升LLM输出质量
@@ -13,7 +14,7 @@ from collections import defaultdict, deque
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

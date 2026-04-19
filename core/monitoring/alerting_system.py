@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 告警系统
 提供智能告警、通知发送和告警管理功能
@@ -6,17 +7,18 @@
 import asyncio
 import json
 import logging
-from core.logging_config import setup_logging
 import smtplib
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from email.mime.multipart import MimeMultipart
 from email.mime.text import MimeText
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 import aiohttp
 import websockets
+
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -55,8 +57,8 @@ class Alert:
     service: str
     created_at: datetime
     resolved_at: datetime | None = None
-    labels: dict[str, str | None = None
-    annotations: dict[str, str | None = None
+    labels: dict[str, str] | None = None
+    annotations: dict[str, str] | None = None
     fingerprint: str | None = None
 
 @dataclass
@@ -192,7 +194,7 @@ class WebhookNotifier:
     def __init__(self, timeout: int = 30):
         self.timeout = timeout
 
-    async def send(self, alert: Alert, webhook_url: str, headers: dict[str | None = None, str | None = None):
+    async def send(self, alert: Alert, webhook_url: str, headers: dict[str, str] | None = None):
         """发送Webhook通知"""
         try:
             payload = {
@@ -509,7 +511,7 @@ class AlertManager:
 
     async def _send_notifications(self, alert: Alert):
         """发送通知"""
-        for name, config in self.notifications.items():
+        for _name, config in self.notifications.items():
             if not config.enabled:
                 continue
 
@@ -542,7 +544,7 @@ class AlertManager:
                 except Exception as e:
                     logger.error(f"发送通知失败 {config.channel.value}: {e}")
 
-    def _passes_filters(self, alert: Alert, filters: dict[str, Any] | None -> bool:
+    def _passes_filters(self, alert: Alert, filters: dict[str, Any] | None = None) -> bool:
         """检查是否通过过滤条件"""
         if not filters:
             return True

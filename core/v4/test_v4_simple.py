@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺v4.0简化测试
 Simple test for v4.0 modules

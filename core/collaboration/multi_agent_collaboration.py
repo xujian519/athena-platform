@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多智能体协作框架核心模块
 Multi-Agent Collaboration Framework Core Module
@@ -419,7 +420,8 @@ class ResourceManager:
 
     def _check_requirements(self, resource: dict[str, str]) -> bool:
         """检查资源是否满足要求"""
-        for key, required_value in requirements.items():
+        # 从self获取已分配的资源的需求参数
+        for key, required_value in self.resources.items():
             if key not in resource or resource[key] < required_value:
                 return False
         return True

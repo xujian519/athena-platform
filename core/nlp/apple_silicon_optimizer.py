@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Apple Silicon专用优化器
 Apple Silicon Specialized Optimizer
@@ -15,7 +16,7 @@ import logging
 import time
 from typing import Any
 
-
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

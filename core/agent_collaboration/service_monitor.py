@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 服务监控仪表板
 Service Monitoring Dashboard
@@ -15,11 +16,9 @@ import contextlib
 import logging
 from collections import defaultdict
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 from .service_discovery import (
-    ServiceInstance,
     get_service_discovery,
     get_service_registry,
     initialize_default_services,

@@ -5,13 +5,11 @@
 """
 
 import asyncio
-from core.async_main import async_main
-import json
 import logging
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from browser_integration_service import get_integration_service
 
@@ -34,8 +32,8 @@ class ScenarioType(Enum):
 class ScenarioTrigger:
     """场景触发器"""
     scenario_type: ScenarioType
-    keywords: List[str]
-    patterns: List[str]
+    keywords: list[str]
+    patterns: list[str]
     confidence_threshold: float
     priority: int
     description: str
@@ -46,7 +44,7 @@ class ExecutionPlan:
     scenario_type: ScenarioType
     confidence: float
     execution_mode: str  # xiaonuo, athena, direct
-    parameters: Dict[str, Any]
+    parameters: dict[str, Any]
     estimated_time: int  # 预估执行时间(秒)
     risk_level: str  # low, medium, high
 
@@ -68,7 +66,7 @@ class ScenarioLauncher:
             'accuracy_rate': 0.0
         }
 
-    def _initialize_trigger_rules(self) -> List[ScenarioTrigger]:
+    def _initialize_trigger_rules(self) -> list[ScenarioTrigger]:
         """初始化触发规则"""
         return [
             ScenarioTrigger(
@@ -153,7 +151,7 @@ class ScenarioLauncher:
             )
         ]
 
-    async def recognize_scenario(self, user_input: str, context: Optional[Dict[str, Any]] = None) -> List[ExecutionPlan]:
+    async def recognize_scenario(self, user_input: str, context: dict[str, Any] | None = None) -> list[ExecutionPlan]:
         """识别场景并生成执行计划
 
         Args:
@@ -236,7 +234,7 @@ class ScenarioLauncher:
         trigger: ScenarioTrigger,
         confidence: float,
         user_input: str,
-        context: Optional[Dict[str, Any]]
+        context: dict[str, Any] | None
     ) -> ExecutionPlan:
         """创建执行计划"""
         # 根据场景类型确定执行模式
@@ -281,7 +279,7 @@ class ScenarioLauncher:
         # 默认使用小诺
         return 'xiaonuo'
 
-    def _extract_parameters(self, user_input: str, scenario_type: ScenarioType, context: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    def _extract_parameters(self, user_input: str, scenario_type: ScenarioType, context: dict[str, Any] | None) -> dict[str, Any]:
         """提取场景参数"""
         parameters = {'user_input': user_input}
 
@@ -306,7 +304,7 @@ class ScenarioLauncher:
 
         return parameters
 
-    def _extract_products(self, text: str) -> List[str]:
+    def _extract_products(self, text: str) -> list[str]:
         """提取商品名称"""
         # 简单的商品名称提取逻辑
         common_products = ['i_phone', '华为', '小米', '三星', 'MacBook', '戴尔', '联想']
@@ -316,7 +314,7 @@ class ScenarioLauncher:
                 found.append(product)
         return found or ['通用商品']
 
-    def _extract_competitors(self, text: str) -> List[str]:
+    def _extract_competitors(self, text: str) -> list[str]:
         """提取竞争对手名称"""
         common_companies = ['阿里巴巴', '腾讯', '百度', '字节跳动', '京东', '美团']
         found = []
@@ -325,7 +323,7 @@ class ScenarioLauncher:
                 found.append(company)
         return found or ['主要竞争对手']
 
-    def _extract_patent_keywords(self, text: str) -> List[str]:
+    def _extract_patent_keywords(self, text: str) -> list[str]:
         """提取专利关键词"""
         # 简单的关键词提取
         keywords = []
@@ -337,7 +335,7 @@ class ScenarioLauncher:
             keywords.append('深度学习')
         return keywords or ['技术创新']
 
-    def _estimate_execution_time(self, scenario_type: ScenarioType, parameters: Dict[str, Any]) -> int:
+    def _estimate_execution_time(self, scenario_type: ScenarioType, parameters: dict[str, Any]) -> int:
         """估算执行时间"""
         base_times = {
             ScenarioType.PRICE_MONITOR: 30,
@@ -377,7 +375,7 @@ class ScenarioLauncher:
 
         return 'low'
 
-    async def auto_launch(self, user_input: str, context: Optional[Dict[str, Any]] = None, auto_confirm: bool = False) -> Dict[str, Any]:
+    async def auto_launch(self, user_input: str, context: dict[str, Any] | None = None, auto_confirm: bool = False) -> dict[str, Any]:
         """自动识别并启动场景
 
         Args:
@@ -450,7 +448,7 @@ class ScenarioLauncher:
                 'plan': best_plan
             }
 
-    async def _execute_plan(self, plan: ExecutionPlan) -> Dict[str, Any]:
+    async def _execute_plan(self, plan: ExecutionPlan) -> dict[str, Any]:
         """执行计划"""
         request_params = {
             'user_input': plan.parameters.get('user_input', ''),
@@ -462,7 +460,7 @@ class ScenarioLauncher:
         result = await self.integration_service.process_request(request_params)
         return result
 
-    def _record_recognition(self, user_input: str, plans: List[ExecutionPlan]) -> Any:
+    def _record_recognition(self, user_input: str, plans: list[ExecutionPlan]) -> Any:
         """记录识别结果"""
         record = {
             'input': user_input,
@@ -506,7 +504,7 @@ class ScenarioLauncher:
         if self.metrics['total_recognitions'] > 0:
             self.metrics['accuracy_rate'] = self.metrics['successful_launches'] / self.metrics['total_recognitions']
 
-    def get_metrics(self) -> Dict[str, Any]:
+    def get_metrics(self) -> dict[str, Any]:
         """获取性能指标"""
         return {
             'metrics': self.metrics,
@@ -515,7 +513,7 @@ class ScenarioLauncher:
             'learning_enabled': self.learning_enabled
         }
 
-    def get_available_scenarios(self) -> Dict[str, Any]:
+    def get_available_scenarios(self) -> dict[str, Any]:
         """获取可用场景列表"""
         return {
             'scenarios': [
@@ -581,7 +579,7 @@ async def test_scenario_launcher():
 
     # 显示指标
     metrics = launcher.get_metrics()
-    logger.info(f"\n📊 性能指标:")
+    logger.info("\n📊 性能指标:")
     logger.info(f"   总识别次数: {metrics['metrics']['total_recognitions']}")
     logger.info(f"   成功启动次数: {metrics['metrics']['successful_launches']}")
     logger.info(f"   准确率: {metrics['metrics']['accuracy_rate']:.2f}")

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 分析计划生成器
 Analysis Plan Generator
@@ -194,8 +195,8 @@ class AnalysisPlanGenerator:
             target_application_number=target_application_number,
             target_patent_title=target_patent_title,
             examination_opinions=examination_opinions,
-            legal_articles=sorted(list(legal_articles)),
-            target_claims=sorted(list(target_claims)),
+            legal_articles=sorted(legal_articles),
+            target_claims=sorted(target_claims),
             prior_art_count=prior_art_count,
             analysis_steps=analysis_steps,
             expected_outcomes=expected_outcomes,

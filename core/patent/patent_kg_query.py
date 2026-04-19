@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利知识图谱查询接口
 Patent Knowledge Graph Query Interface
@@ -10,10 +11,10 @@ Created: 2026-01-26
 Version: v1.0.0
 """
 
-import logging
 import json
-from typing import Any, Dict, List, Optional
+import logging
 from pathlib import Path
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -35,9 +36,9 @@ class PatentKGQueryInterface:
         self.data_path = data_path or "data/knowledge_graph/patent_kg_data.json"
         self.kg_data = self._load_kg_data()
 
-        logger.info(f"✅ 专利知识图谱查询接口初始化完成")
+        logger.info("✅ 专利知识图谱查询接口初始化完成")
 
-    def _load_kg_data(self) -> Dict:
+    def _load_kg_data(self) -> dict:
         """加载知识图谱数据"""
         # 如果文件不存在，返回默认数据
         if not Path(self.data_path).exists():
@@ -45,7 +46,7 @@ class PatentKGQueryInterface:
             return self._get_builtin_data()
 
         try:
-            with open(self.data_path, 'r', encoding='utf-8') as f:
+            with open(self.data_path, encoding='utf-8') as f:
                 data = json.load(f)
             logger.info(f"✅ 已加载知识图谱数据: {len(data.get('terms', []))}个术语")
             return data
@@ -53,7 +54,7 @@ class PatentKGQueryInterface:
             logger.error(f"❌ 加载知识图谱数据失败: {e}")
             return self._get_builtin_data()
 
-    def _get_builtin_data(self) -> Dict:
+    def _get_builtin_data(self) -> dict:
         """获取内置的默认数据"""
         return {
             "terms": self._get_ai_terms(),
@@ -63,7 +64,7 @@ class PatentKGQueryInterface:
             "argumentation_templates": self._get_argumentation_templates()
         }
 
-    def _get_ai_terms(self) -> List[Dict]:
+    def _get_ai_terms(self) -> list[dict]:
         """获取AI相关术语（2442个术语的简化版本）"""
         return [
             {"term": "创造性", "definition": "专利法第22条第3款规定的发明创造性，指同现有技术相比，该发明有突出的实质性特点和显著的进步。", "related_concepts": ["显而易见性", "技术启示", "预料不到的技术效果"]},
@@ -76,7 +77,7 @@ class PatentKGQueryInterface:
             {"term": "参数选择", "definition": "指对技术参数进行特定范围内的选择，以达到意想不到的技术效果。", "related_concepts": ["技术参数", "优化"]},
         ]
 
-    def _get_legal_articles(self) -> List[Dict]:
+    def _get_legal_articles(self) -> list[dict]:
         """获取法律条文"""
         return [
             {
@@ -101,7 +102,7 @@ class PatentKGQueryInterface:
             }
         ]
 
-    def _get_response_strategies(self) -> List[Dict]:
+    def _get_response_strategies(self) -> list[dict]:
         """获取答复策略"""
         return [
             {
@@ -146,7 +147,7 @@ class PatentKGQueryInterface:
             }
         ]
 
-    def _get_technical_effects(self) -> List[Dict]:
+    def _get_technical_effects(self) -> list[dict]:
         """获取技术效果描述模板"""
         return [
             {
@@ -175,7 +176,7 @@ class PatentKGQueryInterface:
             }
         ]
 
-    def _get_argumentation_templates(self) -> List[Dict]:
+    def _get_argumentation_templates(self) -> list[dict]:
         """获取论证模板"""
         return [
             {
@@ -241,7 +242,7 @@ class PatentKGQueryInterface:
             }
         ]
 
-    def query_term_definition(self, term: str) -> Dict | None:
+    def query_term_definition(self, term: str) -> dict | None:
         """
         查询术语定义
 
@@ -262,7 +263,7 @@ class PatentKGQueryInterface:
 
         return None
 
-    def query_legal_article(self, article_name: str) -> Dict | None:
+    def query_legal_article(self, article_name: str) -> dict | None:
         """
         查询法律条文
 
@@ -278,7 +279,7 @@ class PatentKGQueryInterface:
 
         return None
 
-    def query_response_strategy(self, strategy_name: str) -> Dict | None:
+    def query_response_strategy(self, strategy_name: str) -> dict | None:
         """
         查询答复策略
 
@@ -294,7 +295,7 @@ class PatentKGQueryInterface:
 
         return None
 
-    def query_technical_effect(self, effect_type: str) -> Dict | None:
+    def query_technical_effect(self, effect_type: str) -> dict | None:
         """
         查询技术效果信息
 
@@ -310,7 +311,7 @@ class PatentKGQueryInterface:
 
         return None
 
-    def query_argumentation_template(self, template_name: str) -> Dict | None:
+    def query_argumentation_template(self, template_name: str) -> dict | None:
         """
         查询论证模板
 
@@ -326,7 +327,7 @@ class PatentKGQueryInterface:
 
         return None
 
-    def search_related_concepts(self, concept: str, limit: int = 5) -> List[str]:
+    def search_related_concepts(self, concept: str, limit: int = 5) -> list[str]:
         """
         搜索相关概念
 
@@ -354,9 +355,9 @@ class PatentKGQueryInterface:
     def get_context_for_prompt(
         self,
         rejection_type: str,
-        claims: List[str],
-        prior_art_analysis: Dict
-    ) -> Dict[str, Any]:
+        claims: list[str],
+        prior_art_analysis: dict
+    ) -> dict[str, Any]:
         """
         为动态提示词生成获取上下文信息
 
@@ -387,7 +388,7 @@ class PatentKGQueryInterface:
         else:
             return "专利法相关规定"
 
-    def _extract_key_terms(self, claims: List[str]) -> List[str]:
+    def _extract_key_terms(self, claims: list[str]) -> list[str]:
         """从权利要求中提取关键术语"""
         key_terms = []
 
@@ -409,9 +410,9 @@ class PatentKGQueryInterface:
 
     def _suggest_strategies(
         self,
-        claims: List[str],
-        prior_art_analysis: Dict
-    ) -> List[Dict]:
+        claims: list[str],
+        prior_art_analysis: dict
+    ) -> list[dict]:
         """建议答复策略"""
         strategies = []
 
@@ -429,7 +430,7 @@ class PatentKGQueryInterface:
 
         return strategies[:2]  # 最多2个策略
 
-    def _get_suitable_templates(self, rejection_type: str) -> List[Dict]:
+    def _get_suitable_templates(self, rejection_type: str) -> list[dict]:
         """获取合适的论证模板"""
         templates = []
 
@@ -439,7 +440,7 @@ class PatentKGQueryInterface:
 
         return templates
 
-    def _get_technical_knowledge(self, claims: List[str]) -> List[Dict]:
+    def _get_technical_knowledge(self, claims: list[str]) -> list[dict]:
         """获取技术知识"""
         knowledge = []
 
@@ -455,7 +456,7 @@ class PatentKGQueryInterface:
     def enhance_prompt_with_kg(
         self,
         base_prompt: str,
-        context: Dict[str, Any]
+        context: dict[str, Any]
     ) -> str:
         """
         使用知识图谱增强提示词
@@ -551,7 +552,7 @@ if __name__ == "__main__":
     if strategy:
         print(f"策略: {strategy['strategy']}")
         print(f"描述: {strategy['description']}")
-        print(f"关键要点:")
+        print("关键要点:")
         for point in strategy['key_points']:
             print(f"  - {point}")
 

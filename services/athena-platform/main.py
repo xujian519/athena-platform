@@ -3,17 +3,14 @@
 Athena Platform - 智能工作平台核心管理系统
 """
 
-import os
-from core.async_main import async_main
-import logging
-from core.logging_config import setup_logging
 from datetime import datetime
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-
-from core.security.auth import ALLOWED_ORIGINS
 from pydantic_settings import BaseSettings
-from typing import Dict, Any
+
+from core.logging_config import setup_logging
+from core.security.auth import ALLOWED_ORIGINS
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入

@@ -1,0 +1,89 @@
+groups:
+  - name: athena_router_alerts
+    interval: 30s
+    rules:
+      # 路由准确率告警
+      - alert: RouterAccuracyLow
+        expr: router_accuracy_score < 70
+        for: 5m
+        labels:
+          severity: warning
+          service: router
+        annotations:
+          summary: "路由准确率过低"
+          description: "路由准确率为 {{ $value }}%，低于70%阈值"
+      
+      # 响应时间告警
+      - alert: RouterResponseTimeHigh
+        expr: |
+          histogram_quantile(0.95, 
+            rate(router_response_time_seconds_bucket[5m])
+          ) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+          service: router
+        annotations:
+          summary: "路由响应时间过高"
+          description: "P95响应时间为 {{ $value }}s，超过500ms阈值"
+      
+      # 降级率告警
+      - alert: RouterFallbackRateHigh
+        expr: |
+          sum(rate(router_fallback_total[5m])) 
+          / sum(rate(router_requests_total[5m])) * 100 > 10
+        for: 5m
+        labels:
+          severity: warning
+          service: router
+        annotations:
+          summary: "路由降级率过高"
+          description: "降级率为 {{ $value }}%，超过10%阈值"
+      
+      # 错误率告警
+      - alert: RouterErrorRateHigh
+        expr: |
+          sum(rate(router_errors_total[5m])) 
+          / sum(rate(router_requests_total[5m])) * 100 > 1
+        for: 3m
+        labels:
+          severity: critical
+          service: router
+        annotations:
+          summary: "路由错误率过高"
+          description: "错误率为 {{ $value }}%，超过1%阈值"
+      
+      # 服务不可用告警
+      - alert: RouterServiceDown
+        expr: up{job="athena-router"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: router
+        annotations:
+          summary: "路由服务不可用"
+          description: "路由服务已下线超过1分钟"
+      
+      # 知识图谱异常告警
+      - alert: ServiceKGCorrupted
+        expr: router_service_kg_health < 1
+        for: 5m
+        labels:
+          severity: critical
+          service: router
+        annotations:
+          summary: "服务知识图谱异常"
+          description: "服务知识图谱健康检查失败"
+      
+      # 缓存命中率告警
+      - alert: RouterCacheHitRateLow
+        expr: |
+          sum(rate(router_cache_hits_total[5m])) 
+          / (sum(rate(router_cache_hits_total[5m])) + sum(rate(router_cache_misses_total[5m]))) * 100 < 80
+        for: 10m
+        labels:
+          severity: info
+          service: router
+        annotations:
+          summary: "路由缓存命中率低"
+          description: "缓存命中率为 {{ $value }}%，考虑优化缓存策略"

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 联网搜索引擎命令行工具
 Web Search Engine CLI Tool
@@ -48,7 +47,7 @@ async def search_command(query: str, engine: str = 'tavily', max_results: int = 
             result = await quick_search(query, engine, max_results=max_results)
 
         if result.success:
-            logger.info(f"✅ 搜索成功!")
+            logger.info("✅ 搜索成功!")
             logger.info(f"⏱️  搜索耗时: {result.search_time:.2f}秒")
             logger.info(f"🔑 API密钥: {result.api_key_used}")
             logger.info(f"📈 结果数量: {result.total_results}")
@@ -136,7 +135,7 @@ async def stats_command():
         stats = manager.get_engine_stats()
 
         logger.info(f"🔧 可用引擎数量: {len(stats['available_engines'])}")
-        logger.info(f"🌐 已配置引擎:")
+        logger.info("🌐 已配置引擎:")
         for engine_type in stats['available_engines']:
             engine_info = stats.get(engine_type.value, {})
             if engine_info:
@@ -144,7 +143,7 @@ async def stats_command():
             else:
                 logger.info(f"  ⚠️  {engine_type.value:20} | 未配置")
 
-        logger.info(f"\n🔑 API密钥统计:")
+        logger.info("\n🔑 API密钥统计:")
         api_stats = stats.get('api_key_stats', {})
         for engine_name, engine_stats in api_stats.items():
             if engine_stats and engine_stats.get('usage_stats'):
@@ -164,7 +163,7 @@ async def stats_command():
 
 async def test_api_rotation_command(query: str, count: int = 5):
     """测试API密钥轮换"""
-    logger.info(f"🔄 测试API密钥轮换")
+    logger.info("🔄 测试API密钥轮换")
     logger.info(f"🔍 测试查询: {query}")
     logger.info(f"🔢 测试次数: {count}")
     logger.info(str('=' * 60))
@@ -191,14 +190,14 @@ async def test_api_rotation_command(query: str, count: int = 5):
             logger.info(f"❌ 异常: {e}")
 
     # 显示轮换统计
-    logger.info(f"\n📊 API密钥轮换统计:")
+    logger.info("\n📊 API密钥轮换统计:")
     for api_key, times in api_keys_used.items():
         logger.info(f"  🔑 {api_key}: {times} 次")
 
     if len(api_keys_used) > 1:
-        logger.info(f"✅ API密钥轮换正常工作!")
+        logger.info("✅ API密钥轮换正常工作!")
     else:
-        logger.info(f"⚠️  只使用了1个API密钥，轮换可能未生效")
+        logger.info("⚠️  只使用了1个API密钥，轮换可能未生效")
 
 def create_sample_config():
     """创建示例配置文件"""
@@ -249,7 +248,7 @@ def create_sample_config():
         json.dump(sample_config, f, indent=2, ensure_ascii=False)
 
     logger.info(f"✅ 示例配置文件已创建: {config_file}")
-    logger.info(f"📝 请编辑配置文件，添加您的API密钥")
+    logger.info("📝 请编辑配置文件，添加您的API密钥")
 
 def main():
     """主函数"""

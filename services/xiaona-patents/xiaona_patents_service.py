@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小娜专利服务API
 Xiaona Patents Service API
@@ -12,29 +11,23 @@ Xiaona Patents Service API
 版本: v1.0.0
 """
 
-import asyncio
-from core.async_main import async_main
-import json
 import logging
-from core.logging_config import setup_logging
 from datetime import datetime
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from fastapi import FastAPI, HTTPException, BackgroundTasks, Query, Body
+import uvicorn
+from fastapi import BackgroundTasks, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-
-from core.security.auth import ALLOWED_ORIGINS
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
-import uvicorn
 
 # 导入小娜Google专利控制系统
 from core.cognition.xiaona_google_patents_controller import (
-    XiaonaGooglePatentsController,
     PatentRetrievalRequest,
-    PatentRetrievalResult
+    XiaonaGooglePatentsController,
 )
+from core.logging_config import setup_logging
+from core.security.auth import ALLOWED_ORIGINS
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -68,19 +61,19 @@ class PatentRetrievalRequestModel(BaseModel):
     retrieval_type: str = Field("full_text", description="获取类型: full_text, metadata, claims_only, summary")
     priority: str = Field("medium", description="优先级: high, medium, low")
     user_request: str = Field("", description="用户请求描述")
-    output_format: List[str] = Field(["json", "structured"], description="输出格式")
+    output_format: list[str] = Field(["json", "structured"], description="输出格式")
     language_preference: str = Field("zh", description="语言偏好")
 
 class BatchRetrievalRequestModel(BaseModel):
     """批量获取请求模型"""
-    patents: List[PatentRetrievalRequestModel] = Field(..., description="专利列表")
+    patents: list[PatentRetrievalRequestModel] = Field(..., description="专利列表")
     batch_name: str = Field("", description="批次名称")
 
 class PatentAnalysisRequestModel(BaseModel):
     """专利分析请求模型"""
-    patent_data: Dict[str, Any] = Field(..., description="专利数据")
+    patent_data: dict[str, Any] = Field(..., description="专利数据")
     analysis_type: str = Field("legal", description="分析类型: legal, technical, commercial")
-    focus_areas: List[str] = Field([], description="重点关注领域")
+    focus_areas: list[str] = Field([], description="重点关注领域")
 
 # 启动事件
 @app.on_event("startup")
@@ -190,7 +183,7 @@ async def retrieve_single_patent(request: PatentRetrievalRequestModel):
 
     except Exception as e:
         logger.error(f"❌ 获取单个专利失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get("/patent/{patent_number}")
 async def get_patent_by_number(
@@ -223,7 +216,7 @@ async def get_patent_by_number(
 
     except Exception as e:
         logger.error(f"❌ 获取专利失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post("/patents/batch")
 async def batch_retrieve_patents(request: BatchRetrievalRequestModel, background_tasks: BackgroundTasks):
@@ -263,7 +256,7 @@ async def batch_retrieve_patents(request: BatchRetrievalRequestModel, background
 
     except Exception as e:
         logger.error(f"❌ 批量获取专利失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post("/patent/analyze")
 async def analyze_patent(request: PatentAnalysisRequestModel):
@@ -291,7 +284,7 @@ async def analyze_patent(request: PatentAnalysisRequestModel):
 
     except Exception as e:
         logger.error(f"❌ 专利分析失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get("/statistics")
 async def get_patent_statistics():
@@ -325,7 +318,7 @@ async def get_patent_statistics():
 
     except Exception as e:
         logger.error(f"❌ 获取统计信息失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 # 错误处理
 @app.exception_handler(HTTPException)

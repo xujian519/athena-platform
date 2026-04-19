@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 动态提示词Prometheus监控指标
 Dynamic Prompt Performance Metrics for Prometheus
@@ -18,7 +19,6 @@ Dynamic Prompt Performance Metrics for Prometheus
 """
 
 import time
-from collections import defaultdict
 from typing import Any
 
 from prometheus_client import Counter, Gauge, Histogram

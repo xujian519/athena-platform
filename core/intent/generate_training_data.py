@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 快速训练数据生成器
 Quick Training Data Generator
@@ -15,7 +16,6 @@ import random
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
 
 
 def generate_intent_dataset() -> Any:

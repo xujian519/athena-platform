@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena状态持久化模块
 

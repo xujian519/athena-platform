@@ -1,0 +1,27 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: athena-control-center
+  labels:
+    name: athena-control-center
+    environment: production
+    project: athena-platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: athena-services
+  labels:
+    name: athena-services
+    environment: production
+    project: athena-platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: athena-monitoring
+  labels:
+    name: athena-monitoring
+    environment: production
+    project: athena-platform

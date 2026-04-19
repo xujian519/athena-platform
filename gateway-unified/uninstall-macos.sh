@@ -1,0 +1,105 @@
+#!/bin/bash
+# Athena Gateway macOS 卸载脚本
+# 用途: 从macOS卸载网关
+# 使用: sudo bash uninstall-macos.sh
+
+set -e
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+APP_NAME="athena-gateway"
+APP_USER="_athena"
+APP_DIR="/usr/local/${APP_NAME}"
+SERVICE_NAME="com.athena.gateway"
+
+echo -e "${YELLOW}========================================${NC}"
+echo -e "${YELLOW}  Athena Gateway 卸载程序 (macOS)${NC}"
+echo -e "${YELLOW}========================================${NC}"
+echo ""
+
+# 检查root权限
+if [ "$EUID" -ne 0 ]; then
+    echo -e "${RED}错误: 请使用root权限运行此脚本 (sudo ./uninstall-macos.sh)${NC}"
+    exit 1
+fi
+
+# 确认卸载
+echo -e "${RED}警告: 此操作将卸载 Athena Gateway！${NC}"
+echo -n "确定要继续吗? (yes/no): "
+read -r response
+if [ "$response" != "yes" ]; then
+    echo "取消卸载"
+    exit 0
+fi
+
+# 第一步: 停止服务
+echo -e "${GREEN}[1/5] 停止服务...${NC}"
+
+if launchctl list | grep -q "$SERVICE_NAME"; then
+    launchctl unload -w "/Library/LaunchDaemons/${SERVICE_NAME}.plist" 2>/dev/null || true
+    echo -e "${GREEN}✓ 服务已停止${NC}"
+else
+    echo -e "${YELLOW}服务未运行${NC}"
+fi
+
+# 第二步: 备份配置
+echo -e "${GREEN}[2/5] 备份配置...${NC}"
+
+BACKUP_DIR="/tmp/athena-gateway-backup-$(date +%Y%m%d_%H%M%S)"
+mkdir -p "$BACKUP_DIR"
+
+if [ -d "$APP_DIR" ]; then
+    cp -r "$APP_DIR/config" "$BACKUP_DIR/" 2>/dev/null || true
+    cp -r "$APP_DIR/certs" "$BACKUP_DIR/" 2>/dev/null || true
+    echo -e "${GREEN}✓ 配置已备份到: $BACKUP_DIR${NC}"
+fi
+
+# 第三步: 删除应用文件
+echo -e "${GREEN}[3/5] 删除应用文件...${NC}"
+
+rm -rf "$APP_DIR"
+echo -e "${GREEN}✓ 应用目录已删除${NC}"
+
+# 第四步: 删除服务配置
+echo -e "${GREEN}[4/5] 删除服务配置...${NC}"
+
+rm -f "/Library/LaunchDaemons/${SERVICE_NAME}.plist"
+echo -e "${GREEN}✓ launchd服务配置已删除${NC}"
+
+# 删除日志轮转配置
+rm -f "/etc/newsyslog.d/${APP_NAME}.conf"
+echo -e "${GREEN}✓ 日志轮转配置已删除${NC}"
+
+# 删除备份服务配置
+rm -f "/Library/LaunchDaemons/com.athena.gateway.backup.plist"
+echo -e "${GREEN}✓ 备份服务配置已删除${NC}"
+
+# 删除pf锚点
+rm -f "/etc/pf.anchors/com.athena.gateway"
+echo -e "${GREEN}✓ pf防火墙规则已删除${NC}"
+
+# 第五步: 删除用户（可选）
+echo -e "${GREEN}[5/5] 删除应用用户...${NC}"
+
+if id "$APP_USER" &>/dev/null; then
+    dscl . -delete "/Users/${APP_USER}" 2>/dev/null || true
+    echo -e "${GREEN}✓ 用户 ${APP_USER} 已删除${NC}"
+else
+    echo -e "${YELLOW}用户 ${APP_USER} 不存在${NC}"
+fi
+
+# 删除备份目录
+rm -rf /backup/athena-gateway 2>/dev/null || true
+
+# 完成
+echo ""
+echo -e "${GREEN}========================================${NC}"
+echo -e "${GREEN}  卸载完成！${NC}"
+echo -e "${GREEN}========================================${NC}"
+echo ""
+echo "备份位置: $BACKUP_DIR"
+echo ""

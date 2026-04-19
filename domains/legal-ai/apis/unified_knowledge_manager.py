@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 统一知识图谱管理系统
 Unified Knowledge Graph Management System
@@ -7,24 +6,19 @@ Unified Knowledge Graph Management System
 实现专业知识图谱统一管理 + 记忆模块分布式管理
 """
 
-import asyncio
 import json
 import logging
-import os
 import sqlite3
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import uvicorn
-from fastapi import BackgroundTasks, FastAPI, HTTPException, Query
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
-from starlette.responses import JSONResponse
 
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 # 配置日志
 logging.basicConfig(
@@ -52,7 +46,7 @@ class GraphNode(BaseModel):
     id: str
     type: str
     name: str
-    properties: Optional[Dict[str, Any]] = None
+    properties: dict[str, Any] | None = None
     description: str | None = None
 
 class GraphRelation(BaseModel):
@@ -61,14 +55,14 @@ class GraphRelation(BaseModel):
     source_id: str
     target_id: str
     type: str
-    properties: Optional[Dict[str, Any]] = None
+    properties: dict[str, Any] | None = None
     weight: float = 1.0
 
 class UnifiedQuery(BaseModel):
     """统一查询"""
     query: str
-    kg_types: Optional[List[str] = None
-    categories: Optional[List[str] = None
+    kg_types: list[str] | None = None
+    categories: list[str] | None = None
     limit: int = 100
     offset: int = 0
 
@@ -173,7 +167,7 @@ class UnifiedKnowledgeManager:
                     result = cursor.fetchone()
                     if result:
                         description = result[0]
-                except:
+                except Exception:
                     pass
 
             conn.close()
@@ -222,7 +216,7 @@ class UnifiedKnowledgeManager:
             logger.error(f"连接数据库失败 {kg_type}: {e}")
             return None
 
-    def search_across_kgs(self, query: str, kg_types: Optional[List[str] = None, limit: int = 100) -> List[Dict[str, Any]]:
+    def search_across_kgs(self, query: str, kg_types: list[str] | None = None, limit: int = 100) -> list[dict[str, Any]]:
         """跨知识图谱搜索"""
         results = []
 
@@ -252,7 +246,7 @@ class UnifiedKnowledgeManager:
 
                 columns = [desc[0] for desc in cursor.description]
                 for row in cursor.fetchall():
-                    result = dict(zip(columns, row))
+                    result = dict(zip(columns, row, strict=False))
                     if result['properties']:
                         result['properties'] = json.loads(result['properties'])
                     results.append(result)
@@ -262,7 +256,7 @@ class UnifiedKnowledgeManager:
 
         return results
 
-    def get_kg_statistics(self, kg_type: str = None) -> Dict[str, Any]:
+    def get_kg_statistics(self, kg_type: str = None) -> dict[str, Any]:
         """获取知识图谱统计信息"""
         if kg_type:
             # 单个图谱统计
@@ -422,7 +416,7 @@ async def get_graph_nodes(
         nodes = []
 
         for row in cursor.fetchall():
-            node_dict = dict(zip(columns, row))
+            node_dict = dict(zip(columns, row, strict=False))
             if node_dict['properties']:
                 node_dict['properties'] = json.loads(node_dict['properties'])
             nodes.append(node_dict)
@@ -435,7 +429,7 @@ async def get_graph_nodes(
 
     except Exception as e:
         logger.error(f"获取节点失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/graphs/{kg_type}/relations')
 async def get_graph_relations(
@@ -470,7 +464,7 @@ async def get_graph_relations(
         relations = []
 
         for row in cursor.fetchall():
-            relation_dict = dict(zip(columns, row))
+            relation_dict = dict(zip(columns, row, strict=False))
             if relation_dict['properties']:
                 relation_dict['properties'] = json.loads(relation_dict['properties'])
             relations.append(relation_dict)
@@ -483,7 +477,7 @@ async def get_graph_relations(
 
     except Exception as e:
         logger.error(f"获取关系失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/graphs/{kg_type}/metadata')
 async def get_graph_metadata(kg_type: str):
@@ -511,7 +505,7 @@ async def get_graph_metadata(kg_type: str):
 
     except Exception as e:
         logger.error(f"获取元数据失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/graphs/{kg_type}/node')
 async def create_node(kg_type: str, node: GraphNode):
@@ -548,7 +542,7 @@ async def create_node(kg_type: str, node: GraphNode):
 
     except Exception as e:
         logger.error(f"创建节点失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/graphs/{kg_type}/relation')
 async def create_relation(kg_type: str, relation: GraphRelation):
@@ -586,7 +580,7 @@ async def create_relation(kg_type: str, relation: GraphRelation):
 
     except Exception as e:
         logger.error(f"创建关系失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/categories')
 async def get_categories():
@@ -621,7 +615,7 @@ async def reload_registry():
         }
     except Exception as e:
         logger.error(f"重新加载失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 if __name__ == '__main__':
     logger.info('🚀 启动Athena统一知识图谱管理系统')

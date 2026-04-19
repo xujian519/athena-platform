@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 测试Ollama响应格式
 """
 
-import requests
 import json
+
+import requests
+
 
 def test_ollama_response():
     """测试ollama响应"""
-    ollama_url = "http://localhost:11434/api"
+    ollama_url = "http://127.0.0.1:8765/v1"
     model_name = "qwen:7b"
 
     # 测试简单的JSON响应
@@ -36,18 +37,20 @@ def test_ollama_response():
 
     payload = {
         "model": model_name,
-        "prompt": prompt,
-        "system": system_prompt,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": prompt}
+        ],
         "stream": False
     }
 
     try:
         print("🔍 测试Ollama响应...")
-        response = requests.post(f"{ollama_url}/generate", json=payload, timeout=30)
+        response = requests.post(f"{ollama_url}/chat/completions", json=payload, timeout=30)
 
         if response.status_code == 200:
             result = response.json()
-            ai_response = result.get("response", "")
+            ai_response = result.get("choices", [{}])[0].get("message", {}).get("content", "")
 
             print("\n📝 AI原始响应:")
             print(ai_response)

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Redis消息持久化实现
 Redis Message Persistence Implementation
@@ -23,6 +24,7 @@ from datetime import datetime
 from typing import Any
 
 from core.communication.types import Message
+
 from .base_persistence import (
     BaseMessagePersistence,
     InMemoryPersistence,

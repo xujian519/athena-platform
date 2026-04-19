@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 混合工作流处理器 (Hybrid Workflow Processor)
 
@@ -16,10 +17,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.reporting.unified_report_service import (
-    ReportConfig,
     ReportResult,
     ReportType,
     UnifiedReportService,
@@ -146,7 +146,7 @@ class HybridWorkflowProcessor:
 
     async def process_all(
         self,
-        progress_callback: Callable[[str, WorkflowStatus, float, None]] | None = None,
+        progress_callback: Callable[[str, WorkflowStatus, float], None] | None = None,
     ) -> WorkflowStatistics:
         """
         处理所有任务
@@ -178,7 +178,7 @@ class HybridWorkflowProcessor:
 
     async def _worker(
         self,
-        progress_callback: Callable[[str, WorkflowStatus, float, None]] | None = None,
+        progress_callback: Callable[[str, WorkflowStatus, float], None] | None = None,
     ):
         """工作线程"""
         while True:
@@ -201,7 +201,7 @@ class HybridWorkflowProcessor:
     async def _process_task(
         self,
         task: WorkflowTask,
-        progress_callback: Callable[[str, WorkflowStatus, float, None]] | None = None,
+        progress_callback: Callable[[str, WorkflowStatus, float], None] | None = None,
     ):
         """处理单个任务"""
         async with self.semaphore:  # 控制并发数
@@ -298,7 +298,7 @@ class HybridWorkflowProcessor:
 
     async def retry_failed_tasks(
         self,
-        progress_callback: Callable[[str, WorkflowStatus, float, None]] | None = None,
+        progress_callback: Callable[[str, WorkflowStatus, float], None] | None = None,
     ) -> WorkflowStatistics:
         """重试失败的任务"""
         failed_tasks = self.get_failed_tasks()

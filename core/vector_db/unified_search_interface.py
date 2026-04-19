@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena工作平台 - 统一向量检索接口
 Unified Vector Search Interface for Athena Platform
@@ -14,7 +15,6 @@ import sys
 from datetime import datetime
 from enum import Enum
 from typing import Any
-
 
 from config.numpy_compatibility import random
 from core.logging_config import setup_logging

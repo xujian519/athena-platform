@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺优化管理器
 Xiaonuo Optimization Manager
@@ -21,10 +22,9 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import yaml
-
 
 logger = logging.getLogger(__name__)
 
@@ -142,14 +142,14 @@ class OptimizationResult:
     message: str
 
     # 工具发现结果
-    selected_tools: list["key"] = None
-    tool_matches: list["key"] = None
+    selected_tools: list[str] = None
+    tool_matches: list[str] = None
 
     # 参数验证结果
     validation_results: dict[str, ValidationResult] | None = None
 
     # 错误预测结果
-    error_predictions: list["key"] = None
+    error_predictions: list[str] = None
 
     # 性能指标
     processing_time: float = 0.0
@@ -266,7 +266,7 @@ class XiaonuoOptimizationManager:
     async def optimize_task_execution(
         self,
         task_description: str,
-        parameters: dict[str, Any],        available_tools: list["key"] = None,
+        parameters: dict[str, Any],        available_tools: list[str] = None,
         context: dict[str, Any] | None = None,
     ) -> OptimizationResult:
         """
@@ -654,7 +654,7 @@ _manager_instance: XiaonuoOptimizationManager | None = None
 
 
 def get_optimization_manager(
-    config: OptimizationConfig = None | None = None, config_path: str | None = None
+    config: OptimizationConfig | None = None, config_path: str | None = None
 ) -> XiaonuoOptimizationManager:
     """
     获取优化管理器单例

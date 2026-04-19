@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 技术路线图自动生成系统
 Technology Roadmap Auto-Generation System
@@ -14,7 +15,6 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any
-
 
 from .llm_enhanced_judgment import JudgmentContext, LLMEnhancedJudgment
 from .prior_art_analyzer import PriorArtAnalyzer, TechEvolution
@@ -142,7 +142,7 @@ class RoadmapGenerator:
         self.llm_judgment: LLMEnhancedJudgment | None = None
 
         # 模板库
-        self.roadmap_templates: dict[RoadmapType, dict[str, Any] = {}
+        self.roadmap_templates: dict[RoadmapType, dict[str, Any]] = {}
 
         # 生成缓存
         self.generation_cache: dict[str, TechnologyRoadmap] = {}
@@ -185,7 +185,7 @@ class RoadmapGenerator:
             self.logger.info("✅ RoadmapGenerator 初始化完成")
             return True
 
-        except Exception as e:
+        except Exception:
             return False
 
     async def _load_roadmap_templates(self):
@@ -224,6 +224,7 @@ class RoadmapGenerator:
             self.logger.info("✅ 路线图模板加载完成")
 
         except Exception as e:
+            self.logger.error(f"路线图模板加载失败: {e}")
 
     async def generate_roadmap(
         self,
@@ -337,7 +338,7 @@ class RoadmapGenerator:
             self.logger.info(f"✅ 技术路线图生成完成: {roadmap_id}, 耗时: {generation_time:.2f}秒")
             return roadmap
 
-        except Exception as e:
+        except Exception:
             raise
 
     async def _generate_development_phases(
@@ -417,6 +418,7 @@ class RoadmapGenerator:
                 current_date = phase_end
 
         except Exception as e:
+            self.logger.error(f"阶段生成失败: {e}")
 
         return phases
 
@@ -440,6 +442,7 @@ class RoadmapGenerator:
                 )
 
         except Exception as e:
+            self.logger.warning(f"阶段目标增强失败: {e}")
 
         return enhanced_objectives
 
@@ -476,6 +479,7 @@ class RoadmapGenerator:
                     activities.append("合作伙伴开发")
 
         except Exception as e:
+            self.logger.warning(f"活动生成失败: {e}")
 
         return list(set(activities))  # 去重
 
@@ -502,6 +506,7 @@ class RoadmapGenerator:
                     break
 
         except Exception as e:
+            self.logger.warning(f"交付物定义失败: {e}")
 
         return deliverables
 
@@ -530,7 +535,7 @@ class RoadmapGenerator:
 
             return total_budget
 
-        except Exception as e:
+        except Exception:
             return 0.0
 
     async def _estimate_team_requirements(
@@ -568,6 +573,7 @@ class RoadmapGenerator:
                     team_requirements["international_specialist"] = 1
 
         except Exception as e:
+            self.logger.warning(f"团队需求估算失败: {e}")
 
         return team_requirements
 
@@ -601,6 +607,7 @@ class RoadmapGenerator:
             milestones.sort(key=lambda m: m.target_date)
 
         except Exception as e:
+            self.logger.warning(f"里程碑生成失败: {e}")
 
         return milestones
 
@@ -660,6 +667,7 @@ class RoadmapGenerator:
             phase_milestones.append(end_milestone)
 
         except Exception as e:
+            self.logger.warning(f"阶段里程碑生成失败: {e}")
 
         return phase_milestones
 
@@ -702,6 +710,7 @@ class RoadmapGenerator:
             global_milestones.append(investment_milestone)
 
         except Exception as e:
+            self.logger.warning(f"全局里程碑生成失败: {e}")
 
         return global_milestones
 
@@ -727,6 +736,7 @@ class RoadmapGenerator:
                 opportunities.append(opportunity)
 
         except Exception as e:
+            self.logger.warning(f"市场机会分析失败: {e}")
 
         return opportunities
 
@@ -772,6 +782,7 @@ class RoadmapGenerator:
                 intelligence.append(intel)
 
         except Exception as e:
+            self.logger.warning(f"竞争情报收集失败: {e}")
 
         return intelligence
 
@@ -817,6 +828,7 @@ class RoadmapGenerator:
             ]
 
         except Exception as e:
+            self.logger.warning(f"风险评估失败: {e}")
 
         return risk_assessment
 
@@ -859,6 +871,7 @@ class RoadmapGenerator:
                 metrics.extend(type_metrics[roadmap_type])
 
         except Exception as e:
+            self.logger.warning(f"成功指标定义失败: {e}")
 
         return metrics
 
@@ -883,6 +896,7 @@ class RoadmapGenerator:
             investment_requirements["operating"] = total_budget * 0.3  # 运营资金
 
         except Exception as e:
+            self.logger.warning(f"投资需求估算失败: {e}")
 
         return investment_requirements
 
@@ -927,6 +941,7 @@ class RoadmapGenerator:
             milestones.append(llm_milestone)
 
         except Exception as e:
+            self.logger.warning(f"LLM路线图增强失败: {e}")
 
     def get_statistics(self) -> dict[str, Any]:
         """获取统计信息"""

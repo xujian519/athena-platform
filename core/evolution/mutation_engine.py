@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 突变引擎
 Mutation Engine
@@ -22,15 +23,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
-from core.logging_config import setup_logging
-from .types import (
-    EvolutionStrategy,
-    Mutation,
-    MutationType,
-    PerformanceMetrics
-)
+from .types import EvolutionStrategy, Mutation, MutationType, PerformanceMetrics
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +43,7 @@ class MutationResult:
     success: bool
     mutation: Mutation
     actual_improvement: float = 0.0
-    error: Optional[str] = None
+    error: str | None = None
     timestamp: datetime = field(default_factory=datetime.now)
 
 
@@ -77,7 +72,7 @@ class MutationEngine:
     async def generate_mutation(
         self,
         mutation_type: MutationType,
-        current_metrics: Optional[PerformanceMetrics] = None,
+        current_metrics: PerformanceMetrics | None = None,
         strategy: EvolutionStrategy = EvolutionStrategy.GRADIENT,
         intensity: MutationIntensity = MutationIntensity.MODERATE
     ) -> Mutation:
@@ -109,7 +104,7 @@ class MutationEngine:
 
     async def _generate_parameter_mutation(
         self,
-        metrics: Optional[PerformanceMetrics],
+        metrics: PerformanceMetrics | None,
         intensity: MutationIntensity
     ) -> Mutation:
         """生成参数突变"""
@@ -180,7 +175,7 @@ class MutationEngine:
 
     async def _generate_config_mutation(
         self,
-        metrics: Optional[PerformanceMetrics],
+        metrics: PerformanceMetrics | None,
         intensity: MutationIntensity
     ) -> Mutation:
         """生成配置突变"""
@@ -224,7 +219,7 @@ class MutationEngine:
 
     async def _generate_model_selection_mutation(
         self,
-        metrics: Optional[PerformanceMetrics],
+        metrics: PerformanceMetrics | None,
         intensity: MutationIntensity
     ) -> Mutation:
         """生成模型选择突变"""
@@ -251,7 +246,7 @@ class MutationEngine:
 
     async def _generate_strategy_mutation(
         self,
-        metrics: Optional[PerformanceMetrics],
+        metrics: PerformanceMetrics | None,
         intensity: MutationIntensity
     ) -> Mutation:
         """生成策略突变"""
@@ -304,14 +299,14 @@ class MutationEngine:
                     mutation=mutation,
                     actual_improvement=mutation.expected_improvement
                 )
-                logger.info(f"✅ 突变应用成功")
+                logger.info("✅ 突变应用成功")
             else:
                 result = MutationResult(
                     success=False,
                     mutation=mutation,
                     error="应用失败"
                 )
-                logger.warning(f"⚠️ 突变应用失败")
+                logger.warning("⚠️ 突变应用失败")
 
             self.mutation_history.append(result)
             return result
@@ -394,8 +389,8 @@ class MutationEngine:
     async def batch_mutate(
         self,
         count: int = 3,
-        mutation_types: Optional[list[MutationType]] = None,
-        metrics: Optional[PerformanceMetrics] = None
+        mutation_types: list[MutationType] | None = None,
+        metrics: PerformanceMetrics | None = None
     ) -> list[MutationResult]:
         """
         批量生成和应用突变
@@ -417,7 +412,7 @@ class MutationEngine:
             ]
 
         results = []
-        for i in range(count):
+        for _i in range(count):
             # 选择突变类型
             mutation_type = random.choice(mutation_types)
 
@@ -456,7 +451,7 @@ class MutationEngine:
 
 
 # 全局实例
-_mutation_engine: Optional[MutationEngine] = None
+_mutation_engine: MutationEngine | None = None
 
 
 def get_mutation_engine() -> MutationEngine:
@@ -488,10 +483,10 @@ if __name__ == "__main__":
 
         # 测试批量突变
         print("\n🧬 执行批量突变...")
-        results = await engine.batch_mutate(count=3)
+        await engine.batch_mutate(count=3)
 
         stats = engine.get_mutation_stats()
-        print(f"\n📊 统计:")
+        print("\n📊 统计:")
         print(f"  总突变数: {stats['total_mutations']}")
         print(f"  成功率: {stats['success_rate']:.1%}")
 

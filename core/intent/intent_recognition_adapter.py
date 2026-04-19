@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 意图识别适配器
 Intent Recognition Adapter
@@ -20,7 +21,6 @@ import sys
 import time
 from pathlib import Path
 from typing import Any
-
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent.parent

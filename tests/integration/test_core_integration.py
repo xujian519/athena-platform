@@ -3,9 +3,8 @@
 测试多个模块之间的协作
 """
 
+
 import pytest
-import asyncio
-from typing import Dict, Any, List
 
 
 class TestCacheVectorIntegration:
@@ -14,8 +13,9 @@ class TestCacheVectorIntegration:
     def test_cache_vector_data_storage(self):
         """测试在缓存中存储向量数据"""
         try:
-            from core.cache.memory_cache import MemoryCache
             import numpy as np
+
+            from core.cache.memory_cache import MemoryCache
 
             # 创建缓存实例
             cache = MemoryCache()
@@ -44,8 +44,9 @@ class TestCacheVectorIntegration:
     def test_cache_vector_similarity_search(self):
         """测试基于缓存的向量相似度搜索"""
         try:
-            from core.cache.memory_cache import MemoryCache
             import numpy as np
+
+            from core.cache.memory_cache import MemoryCache
 
             # 创建缓存
             cache = MemoryCache()
@@ -150,11 +151,6 @@ class TestMultiAgentCollaboration:
     def test_agent_communication_flow(self):
         """测试智能体通信流程"""
         # 模拟三个智能体
-        agents = {
-            "agent1": {"role": "协调者", "status": "active"},
-            "agent2": {"role": "研究者", "status": "active"},
-            "agent3": {"role": "写作者", "status": "active"},
-        }
 
         # 消息队列
         message_queue = []
@@ -295,8 +291,9 @@ class TestSystemIntegration:
     def test_end_to_end_workflow(self):
         """测试端到端工作流"""
         try:
-            from core.cache.memory_cache import MemoryCache
             import numpy as np
+
+            from core.cache.memory_cache import MemoryCache
 
             # 1. 初始化缓存
             cache = MemoryCache()
@@ -383,8 +380,9 @@ class TestPerformanceIntegration:
     def test_cache_memory_efficiency(self):
         """测试缓存内存效率"""
         try:
-            from core.cache.memory_cache import MemoryCache
             import sys
+
+            from core.cache.memory_cache import MemoryCache
 
             # 创建缓存
             cache = MemoryCache()

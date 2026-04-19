@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Neo4j知识图谱Schema定义
 Legal Knowledge Graph Schema for Neo4j
@@ -9,7 +10,7 @@ Legal Knowledge Graph Schema for Neo4j
 """
 
 from enum import Enum
-from typing import Any, Dict
+from typing import Any
 
 
 class Neo4jSchema:
@@ -195,7 +196,7 @@ class Neo4jQueryBuilder:
             Cypher语句
         """
         props_str = ", ".join([f"n.{k} = ${k}" for k in props.keys()])
-        param_str = ", ".join([f"{k}: ${k}" for k in props.keys()])
+        ", ".join([f"{k}: ${k}" for k in props.keys()])
         return f"""
             MERGE (n:{label} {{id: $id}})
             SET {props_str}
@@ -334,31 +335,31 @@ class NebulaSchema(Neo4jSchema):
     """
 
     # 映射旧属性名到新实现
-    SPACE_NAME = DATABASE_NAME  # 映射 space_name 到 database_name
+    SPACE_NAME = Neo4jSchema.DATABASE_NAME  # 映射 space_name 到 database_name
     REPLICA_FACTOR = 1
     VID_TYPE = "FIXED_STRING(128)"
     PARTITION_NUM = 1
 
     # Tag定义映射到Label定义
-    TAG_NORM = f"-- {LABEL_NORM} ( migrated to Neo4j Label )"
-    TAG_ARTICLE = f"-- {LABEL_ARTICLE} ( migrated to Neo4j Label )"
-    TAG_SUBJECT = f"-- {LABEL_SUBJECT} ( migrated to Neo4j Label )"
-    TAG_ACTION = f"-- {LABEL_ACTION} ( migrated to Neo4j Label )"
-    TAG_RIGHT = f"-- {LABEL_RIGHT} ( migrated to Neo4j Label )"
-    TAG_OBLIGATION = f"-- {LABEL_OBLIGATION} ( migrated to Neo4j Label )"
-    TAG_LIABILITY = f"-- {LABEL_LIABILITY} ( migrated to Neo4j Label )"
+    TAG_NORM = "-- Neo4jSchema.LABEL_NORM ( migrated to Neo4j Label )"
+    TAG_ARTICLE = "-- Neo4jSchema.LABEL_ARTICLE ( migrated to Neo4j Label )"
+    TAG_SUBJECT = "-- Neo4jSchema.LABEL_SUBJECT ( migrated to Neo4j Label )"
+    TAG_ACTION = "-- Neo4jSchema.LABEL_ACTION ( migrated to Neo4j Label )"
+    TAG_RIGHT = "-- Neo4jSchema.LABEL_RIGHT ( migrated to Neo4j Label )"
+    TAG_OBLIGATION = "-- Neo4jSchema.LABEL_OBLIGATION ( migrated to Neo4j Label )"
+    TAG_LIABILITY = "-- Neo4jSchema.LABEL_LIABILITY ( migrated to Neo4j Label )"
 
     # Edge定义映射到Relationship定义
-    EDGE_CONTAINS = f"-- {RELATIONSHIP_CONTAINS} ( migrated to Neo4j Relationship )"
-    EDGE_CITES = f"-- {RELATIONSHIP_CITES} ( migrated to Neo4j Relationship )"
-    EDGE_IMPOSES_ON = f"-- {RELATIONSHIP_IMPOSES_ON} ( migrated to Neo4j Relationship )"
-    EDGE_GRANTS_TO = f"-- {RELATIONSHIP_GRANTS_TO} ( migrated to Neo4j Relationship )"
-    EDGE_REGULATES = f"-- {RELATIONSHIP_REGULATES} ( migrated to Neo4j Relationship )"
-    EDGE_HAS_CONSEQUENCE = f"-- {RELATIONSHIP_HAS_CONSEQUENCE} ( migrated to Neo4j Relationship )"
-    EDGE_SUBJECT_TO = f"-- {RELATIONSHIP_SUBJECT_TO} ( migrated to Neo4j Relationship )"
-    EDGE_REPEALED_BY = f"-- {RELATIONSHIP_REPEALED_BY} ( migrated to Neo4j Relationship )"
-    EDGE_AMENDED_BY = f"-- {RELATIONSHIP_AMENDED_BY} ( migrated to Neo4j Relationship )"
-    EDGE_CONFLICTS_WITH = f"-- {RELATIONSHIP_CONFLICTS_WITH} ( migrated to Neo4j Relationship )"
+    EDGE_CONTAINS = "-- Neo4jSchema.RELATIONSHIP_CONTAINS ( migrated to Neo4j Relationship )"
+    EDGE_CITES = "-- Neo4jSchema.RELATIONSHIP_CITES ( migrated to Neo4j Relationship )"
+    EDGE_IMPOSES_ON = "-- Neo4jSchema.RELATIONSHIP_IMPOSES_ON ( migrated to Neo4j Relationship )"
+    EDGE_GRANTS_TO = "-- Neo4jSchema.RELATIONSHIP_GRANTS_TO ( migrated to Neo4j Relationship )"
+    EDGE_REGULATES = "-- Neo4jSchema.RELATIONSHIP_REGULATES ( migrated to Neo4j Relationship )"
+    EDGE_HAS_CONSEQUENCE = "-- Neo4jSchema.RELATIONSHIP_HAS_CONSEQUENCE ( migrated to Neo4j Relationship )"
+    EDGE_SUBJECT_TO = "-- Neo4jSchema.RELATIONSHIP_SUBJECT_TO ( migrated to Neo4j Relationship )"
+    EDGE_REPEALED_BY = "-- Neo4jSchema.RELATIONSHIP_REPEALED_BY ( migrated to Neo4j Relationship )"
+    EDGE_AMENDED_BY = "-- Neo4jSchema.RELATIONSHIP_AMENDED_BY ( migrated to Neo4j Relationship )"
+    EDGE_CONFLICTS_WITH = "-- Neo4jSchema.RELATIONSHIP_CONFLICTS_WITH ( migrated to Neo4j Relationship )"
 
 
 class NebulaQueryBuilder(Neo4jQueryBuilder):

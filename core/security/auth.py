@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 API认证和安全模块
 API Authentication and Security Module for Athena Platform
@@ -213,7 +214,7 @@ async def verify_api_key(
             logger.error(f"验证API Key过期时间时发生错误: {e}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="验证API Key时发生错误"
-            )
+            ) from e
 
     return APIKeyInfo(
         key=api_key[:8] + "...",  # 只返回前8位

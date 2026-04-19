@@ -12,16 +12,19 @@ Unified Knowledge Graph Service
 创建时间: 2024年12月15日
 """
 
-import sqlite3
-from core.async_main import async_main
+import asyncio
 import json
 import logging
-from core.logging_config import setup_logging
-import networkx as nx
-from typing import List, Dict, Any, Optional, Tuple
-from datetime import datetime
+
+logger = logging.getLogger(__name__)
+import sqlite3
 from pathlib import Path
-import asyncio
+from typing import Any
+
+import networkx as nx
+
+from core.logging_config import setup_logging
+
 try:
     from qdrant_client import QdrantClient
     HAS_QDRANT = True
@@ -88,9 +91,9 @@ class UnifiedKnowledgeService:
             entities_path = Path(self.legal_kg_path) / "entities.json"
             relations_path = Path(self.legal_kg_path) / "relationships.json"
 
-            with open(entities_path, 'r', encoding='utf-8') as f:
+            with open(entities_path, encoding='utf-8') as f:
                 entities = json.load(f)
-            with open(relations_path, 'r', encoding='utf-8') as f:
+            with open(relations_path, encoding='utf-8') as f:
                 relations = json.load(f)
 
             for entity in entities.values():
@@ -109,9 +112,9 @@ class UnifiedKnowledgeService:
                     description=rel.get('description', '')
                 )
 
-    async def generate_dynamic_prompts(self, patent_text: str, context: str = "") -> Dict[str, Any]:
+    async def generate_dynamic_prompts(self, patent_text: str, context: str = "") -> dict[str, Any]:
         """生成动态提示词"""
-        logger.info(f"为专利文本生成动态提示词...")
+        logger.info("为专利文本生成动态提示词...")
 
         # 1. 分析专利文本关键词
         keywords = self._extract_keywords(patent_text)
@@ -136,7 +139,7 @@ class UnifiedKnowledgeService:
 
         return dynamic_prompts
 
-    def _extract_keywords(self, text: str) -> List[str]:
+    def _extract_keywords(self, text: str) -> list[str]:
         """提取关键词"""
         # 使用jieba提取关键词
         keywords = jieba.analyse.extract_tags(text, top_k=20, with_weight=True)
@@ -155,7 +158,7 @@ class UnifiedKnowledgeService:
 
         return all_keywords[:20]  # 限制关键词数量
 
-    async def _extract_novelty_rules(self, keywords: List[str]) -> List[Dict]:
+    async def _extract_novelty_rules(self, keywords: list[str]) -> list[dict]:
         """提取新颖性规则"""
         rules = []
 
@@ -169,7 +172,7 @@ class UnifiedKnowledgeService:
 
         return self._deduplicate_rules(rules)
 
-    def _extract_sqlite_novelty_rules(self, keywords: List[str]) -> List[Dict]:
+    def _extract_sqlite_novelty_rules(self, keywords: list[str]) -> list[dict]:
         """从SQLite提取新颖性规则"""
         rules = []
 
@@ -209,7 +212,7 @@ class UnifiedKnowledgeService:
 
         return rules
 
-    def _extract_legal_novelty_rules(self, keywords: List[str]) -> List[Dict]:
+    def _extract_legal_novelty_rules(self, keywords: list[str]) -> list[dict]:
         """从法律知识图谱提取新颖性规则"""
         rules = []
 
@@ -233,7 +236,7 @@ class UnifiedKnowledgeService:
 
         return rules
 
-    async def _extract_creativity_rules(self, keywords: List[str]) -> List[Dict]:
+    async def _extract_creativity_rules(self, keywords: list[str]) -> list[dict]:
         """提取创造性规则"""
         rules = []
 
@@ -266,14 +269,14 @@ class UnifiedKnowledgeService:
 
         return rules
 
-    async def _extract_procedure_rules(self, keywords: List[str]) -> List[Dict]:
+    async def _extract_procedure_rules(self, keywords: list[str]) -> list[dict]:
         """提取程序规则"""
         rules = []
 
         procedure_keywords = ["审查", "流程", "程序", "申请", "答复", "修改"]
 
         # 从法律知识图谱提取
-        for node_id, data in self.legal_graph.nodes(data=True):
+        for _node_id, data in self.legal_graph.nodes(data=True):
             if data.get('type') == 'procedure' or any(kw in data.get('name', '') for kw in procedure_keywords):
                 rules.append({
                     'source': '法律法规知识图谱',
@@ -285,7 +288,7 @@ class UnifiedKnowledgeService:
 
         return rules
 
-    async def _search_guidelines(self, patent_text: str, keywords: List[str]) -> List[Dict]:
+    async def _search_guidelines(self, patent_text: str, keywords: list[str]) -> list[dict]:
         """搜索审查指南"""
         try:
             # 使用Qdrant搜索审查指南
@@ -313,19 +316,19 @@ class UnifiedKnowledgeService:
             logger.error(f"搜索审查指南失败: {e}")
             return []
 
-    def _text_to_vector(self, text: str) -> List[float]:
+    def _text_to_vector(self, text: str) -> list[float]:
         """文本转向量（简化版）"""
         # 这里应该使用实际的embedding模型
         # 简化起见，返回固定长度的随机向量
         import hashlib
-        hash_obj = hashlib.md5(text.encode('utf-8', usedforsecurity=False)
+        hash_obj = hashlib.md5(text.encode('utf-8'), usedforsecurity=False)
         vector = []
         for i in range(768):  # 假设768维
             byte_idx = i % 16
             vector.append(ord(hash_obj.digest()[byte_idx]) / 255.0)
         return vector
 
-    def _deduplicate_rules(self, rules: List[Dict]) -> List[Dict]:
+    def _deduplicate_rules(self, rules: list[dict]) -> list[dict]:
         """去重规则"""
         seen = set()
         unique_rules = []
@@ -338,7 +341,7 @@ class UnifiedKnowledgeService:
 
         return unique_rules
 
-    def _build_analysis_prompt(self, patent_text: str, keywords: List[str]) -> str:
+    def _build_analysis_prompt(self, patent_text: str, keywords: list[str]) -> str:
         """构建分析提示词"""
         prompt = f"""
 ## 专利分析提示词
@@ -367,7 +370,7 @@ class UnifiedKnowledgeService:
 """
         return prompt
 
-    def _build_novelty_prompt(self, novelty_rules: List[Dict]) -> str:
+    def _build_novelty_prompt(self, novelty_rules: list[dict]) -> str:
         """构建新颖性评估提示词"""
         prompt = """
 ## 新颖性评估提示词
@@ -388,7 +391,7 @@ class UnifiedKnowledgeService:
 
         return prompt
 
-    def _build_creativity_prompt(self, creativity_rules: List[Dict]) -> str:
+    def _build_creativity_prompt(self, creativity_rules: list[dict]) -> str:
         """构建创造性评估提示词"""
         prompt = """
 ## 创造性评估提示词
@@ -406,7 +409,7 @@ class UnifiedKnowledgeService:
 
         return prompt
 
-    def _build_procedure_prompt(self, procedure_rules: List[Dict]) -> str:
+    def _build_procedure_prompt(self, procedure_rules: list[dict]) -> str:
         """构建程序指导提示词"""
         prompt = """
 ## 专利申请程序指导
@@ -425,7 +428,7 @@ class UnifiedKnowledgeService:
 
         return prompt
 
-    def _build_guideline_prompt(self, guideline_content: List[Dict]) -> str:
+    def _build_guideline_prompt(self, guideline_content: list[dict]) -> str:
         """构建审查指南提示词"""
         prompt = "## 审查指南参考\n\n"
 
@@ -435,7 +438,7 @@ class UnifiedKnowledgeService:
 
         return prompt
 
-    def _build_decision_support_prompt(self, keywords: List[str], context: str) -> str:
+    def _build_decision_support_prompt(self, keywords: list[str], context: str) -> str:
         """构建决策支持提示词"""
         prompt = f"""
 ## 智能决策支持
@@ -459,7 +462,7 @@ class UnifiedKnowledgeService:
 """
         return prompt
 
-    async def get_comprehensive_rules(self, query: str) -> Dict[str, List[Dict]]:
+    async def get_comprehensive_rules(self, query: str) -> dict[str, list[dict]]:
         """获取综合规则"""
         keywords = self._extract_keywords(query)
 

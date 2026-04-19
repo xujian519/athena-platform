@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜深度技术分析器 (增强版)
 Xiaona Deep Technical Analyzer (Enhanced)
@@ -45,8 +46,8 @@ except ImportError as e:
 
 # 可选导入：可视化库
 try:
-    import matplotlib.pyplot as plt
     import matplotlib
+    import matplotlib.pyplot as plt
     matplotlib.use('Agg')  # 非交互式后端
     MATPLOTLIB_AVAILABLE = True
     logger.info("✅ Matplotlib可视化可用")
@@ -428,7 +429,7 @@ class PatentAnalysis:
         md.append("## 📊 技术复杂度\n")
         md.append(f"- **复杂度评分**: {self.complexity_score:.1%}\n")
         if self.complexity_factors:
-            md.append(f"- **复杂因素**:\n")
+            md.append("- **复杂因素**:\n")
             for factor in self.complexity_factors:
                 md.append(f"  - {factor}\n")
         md.append("")
@@ -448,7 +449,7 @@ class PatentAnalysis:
         if self.missing_info:
             md.append(f"- **缺失信息**: {', '.join(self.missing_info)}\n")
         if self.analysis_notes:
-            md.append(f"- **分析备注**:\n")
+            md.append("- **分析备注**:\n")
             for note in self.analysis_notes:
                 md.append(f"  - {note}\n")
         md.append("")
@@ -643,7 +644,7 @@ class XiaonaDeepTechnicalAnalyzer:
 
         start_time = time.time()
 
-        logger.info(f"🔬 开始深度技术分析")
+        logger.info("🔬 开始深度技术分析")
         logger.info(f"   目标专利: {target_patent_info.get('application_number', 'N/A')}")
         logger.info(f"   对比文件: {len(prior_art_references)}个")
 
@@ -731,7 +732,7 @@ class XiaonaDeepTechnicalAnalyzer:
         use_dolphin = self.dolphin_analyzer is not None and patent_pdf_path
 
         if use_dolphin:
-            logger.info(f"   使用Dolphin高精度解析")
+            logger.info("   使用Dolphin高精度解析")
             try:
                 # 使用Dolphin解析PDF文档
                 dolphin_result = await self.dolphin_analyzer.analyze_patent_technical_depth(
@@ -870,8 +871,16 @@ class XiaonaDeepTechnicalAnalyzer:
 
     def _extract_technical_field(self, text: str) -> str:
         """提取技术领域"""
-        # 简化实现，实际应使用NLP
+        # 医疗领域技术交底书的技术领域提取
         keywords = {
+            "医疗": "医疗器械",
+            "医学": "医疗器械",
+            "训练模型": "医疗器械",
+            "骨髓腔": "医疗器械",
+            "输液": "医疗器械",
+            "穿刺": "医疗器械",
+            "解剖": "医疗器械",
+            "教学": "医疗器械",
             "计算机": "计算机科学",
             "软件": "计算机科学",
             "算法": "计算机科学",
@@ -880,9 +889,9 @@ class XiaonaDeepTechnicalAnalyzer:
             "电路": "电子工程",
             "通信": "通信技术",
         }
-        for keyword, field in keywords.items():
+        for keyword, field_name in keywords.items():
             if keyword in text:
-                return field
+                return field_name
         return "未分类"
 
     def _extract_field_keywords(self, text: str) -> list[str]:
@@ -892,9 +901,34 @@ class XiaonaDeepTechnicalAnalyzer:
 
     def _extract_technical_problem(self, text: str) -> str:
         """提取技术问题"""
-        # 简化实现
-        if "技术问题" in text or "背景技术" in text:
-            return "待从文本中提取"
+        # 提取医疗领域技术交底书的技术问题
+        if "技术问题" in text or "背景技术" in text or "背景" in text:
+            # 查找背景技术部分
+            if "背景" in text and "技术" in text:
+                start_idx = text.find("背景")
+                end_idx = text.find("三、技术介绍")
+                if start_idx != -1 and end_idx != -1:
+                    return text[start_idx:end_idx].strip()
+            # 如果没有明确的"三、技术介绍"，则返回背景部分
+            if "背景" in text:
+                start_idx = text.find("背景")
+                if start_idx != -1:
+                    end_idx = start_idx + 300
+                    if end_idx > len(text):
+                        end_idx = len(text)
+                    return text[start_idx:end_idx].strip()
+        # 从文本中寻找问题描述
+        problem_keywords = [
+            "问题", "挑战", "不足", "缺陷", "需要", "需求", "未解决",
+            "漏液", "使用寿命", "训练效率", "遗留针孔", "清理时间"
+        ]
+        for keyword in problem_keywords:
+            if keyword in text:
+                # 查找包含问题描述的句子
+                sentences = text.split("。")
+                for sentence in sentences:
+                    if keyword in sentence:
+                        return sentence.strip() + "。"
         return "未明确描述"
 
     def _extract_keywords(self, text: str) -> list[str]:
@@ -904,9 +938,26 @@ class XiaonaDeepTechnicalAnalyzer:
 
     def _extract_technical_solution(self, text: str) -> str:
         """提取技术方案"""
-        # 简化实现
-        if "技术方案" in text or "发明内容" in text:
-            return "待从文本中提取"
+        # 提取医疗领域技术交底书的技术方案
+        if "技术方案" in text or "发明内容" in text or "技术介绍" in text:
+            # 查找技术介绍部分
+            if "技术介绍" in text:
+                start_idx = text.find("技术介绍")
+                end_idx = text.find("五、技术优势")
+                if start_idx != -1 and end_idx != -1:
+                    return text[start_idx:end_idx].strip()
+        # 从文本中寻找方案描述
+        solution_keywords = [
+            "改进", "增加", "设计", "具备", "解决", "实现",
+            "自修复", "防漏液", "限位器", "匹配座", "橡胶软管", "高分子密封胶"
+        ]
+        for keyword in solution_keywords:
+            if keyword in text:
+                # 查找包含方案描述的段落
+                paragraphs = text.split("\n")
+                for paragraph in paragraphs:
+                    if keyword in paragraph and len(paragraph.strip()) > 20:
+                        return paragraph.strip()
         return "未明确描述"
 
     def _extract_technical_effects(self, text: str) -> list[str]:
@@ -921,10 +972,20 @@ class XiaonaDeepTechnicalAnalyzer:
 
         # 技术特征关键词模式
         feature_patterns = {
-            "结构": [r"包括.*?模块", r"设置.*?单元", r"具有.*?装置", r"包含.*?组件"],
-            "方法": [r".*?步骤", r".*?方法", r".*?算法", r".*?流程"],
-            "参数": [r".*?参数为", r".*?阈值", r".*?系数"],
-            "效果": [r".*?效果", r".*?性能", r".*?效率"],
+            "结构": [
+                r"包括.*?模型", r"设置.*?器", r"具有.*?架", r"包含.*?套件",
+                r"由.*?组成", r"主体.*?功能", r"多层.*?结构", r"模拟.*?特性"
+            ],
+            "方法": [r".*?步骤", r".*?方法", r".*?流程", r".*?操作"],
+            "参数": [
+                r".*?厚度.*?在.*?之间", r".*?孔径.*?在.*?之间", r".*?高度.*?变化",
+                r"厚度t1.*?mm", r"厚度t2.*?mm", r"厚度t3.*?mm", r"厚度t4.*?mm",
+                r"长度L1.*?mm", r"长度L2.*?mm", r"深度h.*?mm"
+            ],
+            "效果": [
+                r".*?效果", r".*?性能", r".*?效率", r".*?解决.*?问题",
+                r"显著提高.*?使用寿命", r"缩短.*?时间", r"提高.*?效率"
+            ],
         }
 
         feature_id = 0
@@ -948,17 +1009,56 @@ class XiaonaDeepTechnicalAnalyzer:
                         )
                         feature_id += 1
 
+        # 提取权利要求中的特征
+        if "权利要求" in text:
+            claims_start = text.find("权利要求：")
+            if claims_start != -1:
+                claims_text = text[claims_start:].split("\n")
+                for line in claims_text:
+                    if line.startswith("权利要求") and len(line.strip()) > 10:
+                        feature_name = line.strip()
+                        if feature_name not in [f.feature_name for f in features]:
+                            features.append(
+                                TechnicalFeature(
+                                    feature_id=f"F{feature_id:03d}",
+                                    feature_name=feature_name,
+                                    feature_type="权利要求",
+                                    description=feature_name,
+                                    importance=0.8,
+                                    novelty_level="高",
+                                    claimed=True,
+                                    source_section="权利要求",
+                                )
+                            )
+                            feature_id += 1
+
         logger.info(f"   提取到 {len(features)} 个技术特征")
         return features
 
     def _analyze_claims(self, text: str) -> dict[str, Any]:
         """分析权利要求"""
-        # 简化实现
+        independent = 0
+        dependent = 0
+        hierarchy = {}
+
+        if "权利要求" in text:
+            claims_start = text.find("权利要求：")
+            if claims_start != -1:
+                claims_text = text[claims_start:].split("\n")
+                claim_count = 0
+                for line in claims_text:
+                    if line.strip().startswith("权利要求"):
+                        claim_count += 1
+                        # 判断是独立权利要求还是从属权利要求
+                        if "权利要求1" in line or "独立权利要求" in line:
+                            independent += 1
+                        elif "权利要求" in line and len(line.strip()) > 10:
+                            dependent += 1
         return {
-            "independent": 0,
-            "dependent": 0,
-            "total": 0,
-            "hierarchy": {},
+            "independent": independent,
+            "dependent": dependent,
+            "total": independent + dependent,
+            "hierarchy": hierarchy,
         }
 
     def _identify_key_points(self, text: str) -> list[str]:
@@ -1031,7 +1131,7 @@ class XiaonaDeepTechnicalAnalyzer:
     def _extract_key_differences(self, analysis: ComparisonAnalysis) -> list[str]:
         """提取关键差异"""
         differences = []
-        for diff_result in analysis.difference_analysis.values():
+        for _diff_result in analysis.difference_analysis.values():
             # 简化实现
             pass
         return differences
@@ -1181,7 +1281,7 @@ class XiaonaDeepTechnicalAnalyzer:
                 for relation_type, keywords in relation_patterns.items():
                     # 简单文本匹配检测关系
                     text_a = feature_a.description.lower()
-                    text_b = feature_b.description.lower()
+                    feature_b.description.lower()
 
                     for keyword in keywords:
                         if keyword in text_a and feature_b.feature_name[:10] in text_a:
@@ -1352,7 +1452,6 @@ class XiaonaDeepTechnicalAnalyzer:
 
         try:
             import matplotlib.pyplot as plt
-            from matplotlib.font_manager import FontProperties
 
             # 创建输出目录
             output_dir.mkdir(parents=True, exist_ok=True)

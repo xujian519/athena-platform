@@ -1,28 +1,19 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 增强多模态处理器 - 集成Dolphin文档解析能力
 Enhanced Multimodal Processor with Dolphin Document Parsing Integration
 """
 
-import asyncio
-import base64
-import io
-import json
-import logging
-from core.logging_config import setup_logging
 import os
 import tempfile
 import time
 import uuid
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
-from enum import Enum
 from pathlib import Path
-from typing import Any, BinaryIO, Dict, List, Optional, Set, Tuple, Union
+from typing import Any
 
 # AI和HTTP客户端
-import aiofiles
 import aiohttp
 import requests
 
@@ -34,6 +25,8 @@ from multimodal_processor import (
     ProcessingTask,
     get_multimodal_processor,
 )
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -72,7 +65,7 @@ class EnhancedMultimodalProcessor:
         self.glm_vision_endpoint = 'http://localhost:8091'
         self.glm_vision_available = self._check_glm_vision_service()
 
-        logger.info(f"Enhanced Multimodal Processor initialized:")
+        logger.info("Enhanced Multimodal Processor initialized:")
         logger.info(f"  - Base Processor: {'✓' if self.base_processor else '✗'}")
         logger.info(f"  - Dolphin Service: {'✓' if self.dolphin_available else '✗'}")
         logger.info(f"  - GLM Vision Service: {'✓' if self.glm_vision_available else '✗'}")
@@ -95,8 +88,8 @@ class EnhancedMultimodalProcessor:
             logger.warning(f"GLM视觉服务不可用: {e}")
             return False
 
-    async def process_media(self, media_item: MediaItem, tasks: List[ProcessingTask],
-                          options: Optional[Dict[str, Any]] = None) -> List[ProcessingResult]:
+    async def process_media(self, media_item: MediaItem, tasks: list[ProcessingTask],
+                          options: dict[str, Any] | None = None) -> list[ProcessingResult]:
         """
         处理媒体文件，集成Dolphin文档解析能力
 
@@ -157,7 +150,7 @@ class EnhancedMultimodalProcessor:
         return results
 
     async def _process_with_dolphin(self, media_item: MediaItem,
-                                  options: Optional[Dict[str, Any]] = None) -> ProcessingResult:
+                                  options: dict[str, Any] | None = None) -> ProcessingResult:
         """使用Dolphin处理文档"""
         if not self.dolphin_available:
             raise Exception('Dolphin服务不可用')
@@ -217,7 +210,7 @@ class EnhancedMultimodalProcessor:
                 os.unlink(file_path)
 
     async def _analyze_document_layout(self, media_item: MediaItem,
-                                     options: Optional[Dict[str, Any]] = None) -> ProcessingResult:
+                                     options: dict[str, Any] | None = None) -> ProcessingResult:
         """分析文档版面"""
         if not self.dolphin_available:
             # 使用基础版面分析
@@ -256,7 +249,7 @@ class EnhancedMultimodalProcessor:
             return await self._fallback_layout_analysis(media_item, options)
 
     async def _professional_ocr(self, media_item: MediaItem,
-                               options: Optional[Dict[str, Any]] = None) -> ProcessingResult:
+                               options: dict[str, Any] | None = None) -> ProcessingResult:
         """专业OCR文字识别"""
         if not self.dolphin_available:
             # 使用GLM视觉作为备选
@@ -297,7 +290,7 @@ class EnhancedMultimodalProcessor:
             return await self._fallback_ocr(media_item, options)
 
     async def _structured_extraction(self, media_item: MediaItem,
-                                    options: Optional[Dict[str, Any]] = None) -> ProcessingResult:
+                                    options: dict[str, Any] | None = None) -> ProcessingResult:
         """结构化内容提取"""
         try:
             # 组合使用Dolphin和GLM视觉
@@ -358,7 +351,7 @@ class EnhancedMultimodalProcessor:
         else:
             raise ValueError('媒体项目没有有效的文件数据')
 
-    def _enhance_dolphin_result(self, dolphin_result: Dict, media_item: MediaItem) -> Dict:
+    def _enhance_dolphin_result(self, dolphin_result: dict, media_item: MediaItem) -> dict:
         """增强Dolphin结果"""
         enhanced = dolphin_result.copy()
 
@@ -381,7 +374,7 @@ class EnhancedMultimodalProcessor:
 
         return enhanced
 
-    def _generate_analysis_summary(self, result: Dict) -> Dict:
+    def _generate_analysis_summary(self, result: dict) -> dict:
         """生成分析摘要"""
         summary = {
             'content_types': [],
@@ -415,7 +408,7 @@ class EnhancedMultimodalProcessor:
 
         return summary
 
-    def _assess_extraction_quality(self, result: Dict) -> Dict:
+    def _assess_extraction_quality(self, result: dict) -> dict:
         """评估提取质量"""
         assessment = {
             'overall_score': 0.0,
@@ -455,7 +448,7 @@ class EnhancedMultimodalProcessor:
 
         return assessment
 
-    def _generate_layout_summary(self, layout_data: Dict) -> str:
+    def _generate_layout_summary(self, layout_data: dict) -> str:
         """生成版面摘要"""
         if not layout_data or 'blocks' not in layout_data:
             return '未检测到版面结构'
@@ -485,7 +478,7 @@ class EnhancedMultimodalProcessor:
             return '检测到版面元素但无法分类'
 
     async def _fallback_layout_analysis(self, media_item: MediaItem,
-                                      options: Optional[Dict[str, Any]] = None) -> ProcessingResult:
+                                      options: dict[str, Any] | None = None) -> ProcessingResult:
         """备用版面分析"""
         # 使用基础处理器进行分析
         if self.base_processor:
@@ -503,7 +496,7 @@ class EnhancedMultimodalProcessor:
             )
 
     async def _fallback_ocr(self, media_item: MediaItem,
-                           options: Optional[Dict[str, Any]] = None) -> ProcessingResult:
+                           options: dict[str, Any] | None = None) -> ProcessingResult:
         """备用OCR识别"""
         # 使用GLM视觉进行OCR
         if self.glm_vision_available:
@@ -519,7 +512,7 @@ class EnhancedMultimodalProcessor:
             )
 
     async def _analyze_with_glm_vision(self, media_item: MediaItem,
-                                     options: Optional[Dict[str, Any]] = None) -> ProcessingResult:
+                                     options: dict[str, Any] | None = None) -> ProcessingResult:
         """使用GLM视觉进行分析"""
         try:
             # 准备文件
@@ -567,7 +560,7 @@ class EnhancedMultimodalProcessor:
                 os.unlink(file_path)
 
     def _merge_structured_results(self, dolphin_result: ProcessingResult,
-                                glm_result: ProcessingResult) -> Dict[str, Any]:
+                                glm_result: ProcessingResult) -> dict[str, Any]:
         """融合结构化结果"""
         merged = {
             'dolphin_analysis': None,
@@ -596,7 +589,7 @@ class EnhancedMultimodalProcessor:
         return merged
 
     async def cross_modal_search(self, query: str, modality_filter: ModalityType | None = None,
-                               limit: int = 10) -> List[Dict[str, Any]]:
+                               limit: int = 10) -> list[dict[str, Any]]:
         """跨模态搜索（继承原有功能）"""
         if self.base_processor:
             return await self.base_processor.cross_modal_search(query, modality_filter, limit)

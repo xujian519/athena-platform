@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 混合条款检索系统
 结合精确匹配和语义搜索，支持条款级别的精确检索
@@ -8,7 +7,6 @@
 import logging
 import re
 import time
-from typing import Dict, List, Optional, Tuple
 
 # 设置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -60,7 +58,7 @@ class HybridClauseSearch:
             re.compile(r'article\s+(\d+)', re.IGNORECASE),
         ]
 
-    def extract_clause_number(self, query: str) -> Tuple[str, str | None]:
+    def extract_clause_number(self, query: str) -> tuple[str, str | None]:
         """从查询中提取条款号
 
         Returns:
@@ -92,7 +90,7 @@ class HybridClauseSearch:
 
                 return f"第{chinese_num}{clause_type}", clause_type
 
-        return None
+        return None, None
 
     def _arabic_to_chinese(self, num: int) -> str:
         """将阿拉伯数字转换为中文数字"""
@@ -120,7 +118,7 @@ class HybridClauseSearch:
         else:
             return str(num)  # 对于更大的数字，直接返回字符串
 
-    def exact_clause_search(self, clause_number: str, law_name: str | None = None) -> List[Dict]:
+    def exact_clause_search(self, clause_number: str, law_name: str | None = None) -> list[dict]:
         """精确条款搜索"""
         try:
             # 构建过滤条件
@@ -146,7 +144,7 @@ class HybridClauseSearch:
             logger.error(f"❌ 精确条款搜索失败: {e}")
             return []
 
-    def semantic_clause_search(self, query: str, limit: int = 5) -> List[Dict]:
+    def semantic_clause_search(self, query: str, limit: int = 5) -> list[dict]:
         """语义条款搜索"""
         try:
             # 生成查询向量
@@ -167,7 +165,7 @@ class HybridClauseSearch:
             logger.error(f"❌ 语义条款搜索失败: {e}")
             return []
 
-    def semantic_document_search(self, query: str, limit: int = 3) -> List[Dict]:
+    def semantic_document_search(self, query: str, limit: int = 3) -> list[dict]:
         """语义文档搜索（备选方案）"""
         try:
             # 生成查询向量
@@ -188,7 +186,7 @@ class HybridClauseSearch:
             logger.error(f"❌ 语义文档搜索失败: {e}")
             return []
 
-    def hybrid_search(self, query: str, limit: int = 5) -> Dict:
+    def hybrid_search(self, query: str, limit: int = 5) -> dict:
         """混合搜索主函数"""
         logger.info(f"🔍 执行混合搜索: '{query}'")
         start_time = time.time()
@@ -242,7 +240,7 @@ class HybridClauseSearch:
 
         return results
 
-    def _format_results(self, results: List, result_type: str) -> List[Dict]:
+    def _format_results(self, results: list, result_type: str) -> list[dict]:
         """格式化搜索结果"""
         formatted = []
 
@@ -284,7 +282,7 @@ class HybridClauseSearch:
 
         return formatted
 
-    def print_search_results(self, results: Dict):
+    def print_search_results(self, results: dict):
         """打印搜索结果"""
         logger.info(f"\n{'='*80}")
         logger.info(f"🔍 搜索查询: {results['query']}")
@@ -292,13 +290,13 @@ class HybridClauseSearch:
         logger.info(f"📊 结果统计: 共找到 {results['total_results']} 个结果")
 
         if results['clause_extracted']:
-            logger.info(f"🎯 条款检测: 已识别具体条款号")
+            logger.info("🎯 条款检测: 已识别具体条款号")
 
         logger.info(f"\n{'='*80}")
 
         # 1. 精确匹配
         if results['exact_matches']:
-            logger.info(f"\n🎯 【精确匹配】 ({len(results['exact_matches']} 个结果)")
+            logger.info(f"\n🎯 【精确匹配】 ({len(results['exact_matches'])} 个结果)")
             logger.info(str('-' * 60))
 
             for result in results['exact_matches']:
@@ -311,7 +309,7 @@ class HybridClauseSearch:
 
         # 2. 语义匹配
         if results['semantic_matches']:
-            logger.info(f"\n🔍 【语义匹配】 ({len(results['semantic_matches']} 个结果)")
+            logger.info(f"\n🔍 【语义匹配】 ({len(results['semantic_matches'])} 个结果)")
             logger.info(str('-' * 60))
 
             for result in results['semantic_matches']:
@@ -324,14 +322,14 @@ class HybridClauseSearch:
 
         # 3. 文档匹配
         if results['document_matches']:
-            logger.info(f"\n📄 【文档匹配】 ({len(results['document_matches']} 个结果)")
+            logger.info(f"\n📄 【文档匹配】 ({len(results['document_matches'])} 个结果)")
             logger.info(str('-' * 60))
 
             for result in results['document_matches']:
                 logger.info(f"\n📜 文档: {result['law_name']}")
                 logger.info(f"📊 相似度: {result['score']:.4f}")
                 logger.info(f"📁 来源: {result['file_path']}")
-                logger.info(f"💡 提示: 这是一整个文档，请使用全文搜索功能查找具体条款")
+                logger.info("💡 提示: 这是一整个文档，请使用全文搜索功能查找具体条款")
 
 
 def main():

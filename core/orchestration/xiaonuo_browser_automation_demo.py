@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主浏览器自动化控制演示
 Xiaonuo·Pisces Princess Browser Automation Control Demo
@@ -10,7 +11,6 @@ Xiaonuo·Pisces Princess Browser Automation Control Demo
 """
 
 import asyncio
-
 
 # 导入控制器
 try:

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化的数据库连接池管理器
 支持PostgreSQL、Redis等多数据库的连接池优化和监控
@@ -10,8 +11,9 @@ import time
 from contextlib import asynccontextmanager, suppress
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
+import asyncpg
 import redis.asyncio as redis
 from redis.asyncio import ConnectionPool
 
@@ -413,10 +415,10 @@ class OptimizedConnectionManager:
                         "user": "postgres",
                         "password": "password",
                     },
-                    "athena_db": {
+                    "legal_world_model": {
                         "host": "localhost",
                         "port": 5432,
-                        "infrastructure/infrastructure/database": "athena_db",
+                        "infrastructure/infrastructure/database": "legal_world_model",
                         "user": "postgres",
                         "password": "password",
                     },
@@ -593,9 +595,15 @@ async def get_patent_legal_db():
     return await connection_manager.get_postgres_pool("patent_legal_db")
 
 
+async def get_legal_world_model_db():
+    """获取法律世界模型数据库连接池 (原athena_db)"""
+    return await connection_manager.get_postgres_pool("legal_world_model")
+
+
+# 兼容性别名
 async def get_athena_db():
-    """获取Athena数据库连接池"""
-    return await connection_manager.get_postgres_pool("athena_db")
+    """获取Athena数据库连接池 (兼容性别名，已更改为legal_world_model)"""
+    return await get_legal_world_model_db()
 
 
 async def get_default_redis():

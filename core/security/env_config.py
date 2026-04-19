@@ -1,10 +1,10 @@
+from __future__ import annotations
 """
 Athena统一环境变量配置管理模块
 提供安全的环境变量获取和验证机制
 """
 import os
 import secrets
-from typing import Optional
 
 
 class SecurityConfigError(Exception):

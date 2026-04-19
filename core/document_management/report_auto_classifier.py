@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 报告自动分类集成器
 
@@ -14,8 +15,7 @@ import re
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Optional, Union
-
+from typing import Any
 
 # 导入自动文档分类器
 from core.document_management.auto_document_classifier import (

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 向量-图联合索引策略
 Joint Index Strategy for Vector + Graph Fusion
@@ -12,8 +13,10 @@ import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
+import asyncpg
+import numpy as np
 
 from core.async_main import async_main
 from core.config.secure_config import get_config
@@ -666,7 +669,7 @@ async def main():
     pg_config = config.get_postgres_config()
 
     # 创建连接池
-    await get_postgres_pool(
+    pg_pool = await get_postgres_pool(
         host=pg_config.get("host", "localhost"),
         port=pg_config.get("port", 5438),
         user=pg_config.get("user", "postgres"),

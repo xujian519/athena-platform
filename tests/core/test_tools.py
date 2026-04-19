@@ -3,9 +3,13 @@
 测试工具系统、工具调用和工具管理功能
 """
 
+import sys
+from pathlib import Path
+
 import pytest
-from typing import Dict, Any, List, Optional
-from unittest.mock import MagicMock, AsyncMock
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 
 
 class TestToolsModule:
@@ -54,10 +58,6 @@ class TestToolDefinition:
     def test_tool_parameter_validation(self):
         """测试工具参数验证"""
         # 参数定义
-        parameters = {
-            "query": {"type": "string", "required": True},
-            "limit": {"type": "integer", "required": False, "default": 10},
-        }
 
         # 有效参数
         valid_params = {"query": "test", "limit": 5}
@@ -214,14 +214,6 @@ class TestToolValidation:
     def test_tool_input_validation(self):
         """测试工具输入验证"""
         # 输入schema
-        schema = {
-            "type": "object",
-            "properties": {
-                "query": {"type": "string"},
-                "limit": {"type": "integer", "minimum": 1, "maximum": 100},
-            },
-            "required": ["query"],
-        }
 
         # 有效输入
         valid_input = {"query": "test", "limit": 10}
@@ -235,15 +227,6 @@ class TestToolValidation:
     def test_tool_output_validation(self):
         """测试工具输出验证"""
         # 输出schema
-        output_schema = {
-            "type": "object",
-            "properties": {
-                "success": {"type": "boolean"},
-                "data": {"type": "array"},
-                "error": {"type": "string"},
-            },
-            "required": ["success"],
-        }
 
         # 工具输出
         output = {
@@ -363,7 +346,7 @@ class TestToolErrorHandling:
         # 测试错误检测
         try:
             failing_tool(-1)
-            assert False, "Should have raised error"
+            raise AssertionError("Should have raised error")
         except ValueError as e:
             assert "Negative value" in str(e)
 
@@ -385,7 +368,6 @@ class TestToolErrorHandling:
 
     def test_tool_retry_logic(self):
         """测试工具重试逻辑"""
-        import time
 
         # 带重试的工具
         call_count = 0
@@ -399,7 +381,7 @@ class TestToolErrorHandling:
 
         # 执行重试
         result = None
-        for attempt in range(3):
+        for _attempt in range(3):
             try:
                 result = retry_tool()
                 break

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习引擎错误处理和重试机制
 Error Handling and Retry Mechanism for Learning Engines

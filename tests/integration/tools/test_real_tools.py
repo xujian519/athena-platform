@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 真实工具实现测试
 
@@ -9,23 +8,24 @@
 创建时间: 2026-01-25
 """
 
-import pytest
 import asyncio
-from pathlib import Path
 import sys
+from pathlib import Path
+
+import pytest
 
 # 添加项目根目录到路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
-from core.tools.tool_call_manager import ToolCallManager, CallStatus
 from core.tools.real_tool_implementations import (
-    register_real_tools,
+    real_chat_companion_handler,
     real_code_analyzer_handler,
+    real_knowledge_graph_handler,
     real_system_monitor_handler,
     real_web_search_handler,
-    real_knowledge_graph_handler,
-    real_chat_companion_handler
+    register_real_tools,
 )
+from core.tools.tool_call_manager import CallStatus, ToolCallManager
 
 
 @pytest.mark.integration

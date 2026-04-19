@@ -5,17 +5,14 @@
 """
 
 import asyncio
-from core.async_main import async_main
-import aiohttp
-import subprocess
-import psutil
-import json
-import os
-from datetime import datetime
-from typing import Dict, List, Optional, Tuple
-from pathlib import Path
 import logging
-from core.logging_config import setup_logging
+import os
+import subprocess
+from datetime import datetime
+from pathlib import Path
+
+import aiohttp
+import psutil
 
 logger = logging.getLogger(__name__)
 
@@ -43,15 +40,6 @@ class XiaonuoServiceController:
                 "priority": "high",
                 "type": "professional",
                 "trigger_words": ["写专利", "专利分析", "审查意见", "专利撰写", "答复"]
-            },
-            # 云熙管理系统
-            "yunpat_management": {
-                "name": "云熙管理系统",
-                "port": 8087,
-                "path": "services/yunpat-agent/main.py",
-                "auto_start": False,  # 测试期按需启动
-                "priority": "medium",
-                "type": "management"
             },
             # 自媒体智能体
             "media_agent": {
@@ -204,7 +192,7 @@ class XiaonuoServiceController:
 
         try:
             # 使用subprocess在后台启动
-            process = subprocess.Popen(
+            subprocess.Popen(
                 command.split(),
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL
@@ -291,7 +279,7 @@ class XiaonuoServiceController:
                 print(f"  ✅ {service['name']} 已停止")
                 return True
             else:
-                print(f"  ⚠️ 未找到运行中的进程")
+                print("  ⚠️ 未找到运行中的进程")
                 return True
 
         except Exception as e:
@@ -299,7 +287,7 @@ class XiaonuoServiceController:
             print(f"  ❌ 停止失败: {e}")
             return False
 
-    async def on_demand_start(self, trigger: str) -> List[str]:
+    async def on_demand_start(self, trigger: str) -> list[str]:
         """根据触发词按需启动服务"""
         started_services = []
 
@@ -401,7 +389,7 @@ class XiaonuoServiceController:
         memory = psutil.virtual_memory()
         disk = psutil.disk_usage('/')
 
-        print(f"\n资源使用情况:")
+        print("\n资源使用情况:")
         print(f"  • CPU使用率: {cpu_usage}%")
         print(f"  • 内存使用: {memory.percent}% ({memory.used//1024//1024}MB/{memory.total//1024//1024}MB)")
         print(f"  • 磁盘使用: {disk.percent}%")
@@ -424,7 +412,7 @@ class XiaonuoServiceController:
                 idle_time = datetime.now() - started_at
                 # 如果服务运行超过1小时且是按需启动类型
                 if idle_time.total_seconds() > 3600 and self.services[service_id]["type"] != "infrastructure":
-                    idle_services.append(service["name"])
+                    idle_services.append(self.services[service_id]["name"])
 
         if idle_services:
             print("\n💡 发现空闲服务:")

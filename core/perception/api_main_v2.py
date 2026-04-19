@@ -1,28 +1,28 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 生产级API服务 v2.0
 完整集成真实OCR、图像处理、数据库持久化、缓存
 最后更新: 2026-01-26
 """
 
-from fastapi import FastAPI, HTTPException, Depends, Header, BackgroundTasks
+import logging
+import sys
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+import uvicorn
+from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
-from typing import Optional, List, Dict, Any
-import uvicorn
-import asyncio
-import logging
-from datetime import datetime
-import os
-import sys
-from pathlib import Path
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 # 导入处理器
-from core.perception.processors.tesseract_ocr import TesseractOCRProcessor
 from core.perception.processors.opencv_image_processor import OpenCVImageProcessor
+from core.perception.processors.tesseract_ocr import TesseractOCRProcessor
 
 # 配置日志
 logging.basicConfig(
@@ -68,7 +68,7 @@ class ImageProcessRequest(BaseModel):
     """图像处理请求"""
     image_path: str = Field(..., description="图像文件路径")
     operation: str = Field(..., description="操作类型")
-    parameters: Dict[str, Any] = Field(default_factory=dict, description="操作参数")
+    parameters: dict[str, Any] = Field(default_factory=dict, description="操作参数")
 
 class ImageProcessResponse(BaseModel):
     """图像处理响应"""
@@ -76,15 +76,15 @@ class ImageProcessResponse(BaseModel):
     task_id: str | None = None
     agent_id: str
     operation: str
-    result: Optional[Dict[str, Any]] | None = None
+    result: dict[str, Any] | None | None = None
     processing_time: float | None = None
     error: str | None = None
 
 class BatchProcessRequest(BaseModel):
     """批量处理请求"""
-    image_paths: List[str] = Field(..., description="图像文件路径列表")
+    image_paths: list[str] = Field(..., description="图像文件路径列表")
     operation: str = Field(..., description="操作类型")
-    parameters: Dict[str, Any] = Field(default_factory=dict)
+    parameters: dict[str, Any] = Field(default_factory=dict)
 
 # ========================================
 # 全局处理器实例
@@ -107,6 +107,7 @@ app = FastAPI(
 
 # 记录启动时间
 import time
+
 app.state.start_time = time.time()
 
 # ========================================
@@ -130,8 +131,8 @@ async def startup_event():
     logger.info("✓ 图像处理器已初始化")
 
     logger.info("✓ 感知模块服务启动完成")
-    logger.info(f"✓ API地址: http://localhost:8070")
-    logger.info(f"✓ API文档: http://localhost:8070/docs")
+    logger.info("✓ API地址: http://localhost:8070")
+    logger.info("✓ API文档: http://localhost:8070/docs")
 
 @app.on_event("shutdown")
 async def shutdown_event():
@@ -379,7 +380,7 @@ async def batch_process(
 
     except Exception as e:
         logger.error(f"[{agent_id}] 批量处理失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 # ========================================
 # v1 API端点（保持兼容）

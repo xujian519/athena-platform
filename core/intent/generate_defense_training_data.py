@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 从专利判决书中提取无效辩护样本并生成训练数据
 Generate Invalidation Defense Training Data from Patent Judgments
@@ -15,7 +16,6 @@ import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
 
 
 def extract_text_from_json(data: Any) -> str:

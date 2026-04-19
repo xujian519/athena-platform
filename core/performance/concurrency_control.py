@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 并发控制机制
 Concurrency Control Mechanisms
@@ -23,10 +24,9 @@ import time
 from collections import deque
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, TypeVar
-
+from typing import Any, TypeVar
 
 logger = logging.getLogger(__name__)
 

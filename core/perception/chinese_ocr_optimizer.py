@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 中文OCR优化引擎
 Chinese OCR Optimization Engine
@@ -13,8 +14,6 @@ Chinese OCR Optimization Engine
 创建时间: 2026-01-01
 版本: 1.0.0
 """
-import numpy as np
-
 import asyncio
 import logging
 import re
@@ -22,7 +21,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 
 import cv2
-
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

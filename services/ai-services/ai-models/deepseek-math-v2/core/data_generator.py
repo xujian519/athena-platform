@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 大规模专利数据生成与质量优化器
 基于DeepSeekMath V2论文的数据生成策略
@@ -11,22 +10,17 @@ Athena智能工作平台专利分析专用数据处理系统
 """
 
 import concurrent.futures
-from core.async_main import async_main
 import hashlib
 import json
 import logging
-from core.logging_config import setup_logging
-import pickle
 import random
-import re
 import sqlite3
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
-import numpy as np
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -39,9 +33,9 @@ class DataGenerationConfig:
 
     # 生成参数
     num_samples_per_input: int = 8  # 每个输入生成的样本数
-    temperature_range: Tuple[float, float] = (0.6, 1.2)
-    top_p_range: Tuple[float, float] = (0.8, 0.95)
-    max_length_range: Tuple[int, int] = (256, 1024)
+    temperature_range: tuple[float, float] = (0.6, 1.2)
+    top_p_range: tuple[float, float] = (0.8, 0.95)
+    max_length_range: tuple[int, int] = (256, 1024)
 
     # 质量筛选参数
     min_solution_length: int = 50
@@ -80,8 +74,8 @@ class PatentDataGenerator:
         }
 
     def generate_from_patent_corpus(
-        self, patent_corpus: List[Dict], output_dir: str = './generated_data'
-    ) -> Dict[str, Any]:
+        self, patent_corpus: list[dict], output_dir: str = './generated_data'
+    ) -> dict[str, Any]:
         """从专利语料库生成训练数据"""
         start_time = datetime.now()
 
@@ -157,7 +151,7 @@ class PatentDataGenerator:
         # 保存统计信息
         self._save_generation_stats(output_path)
 
-        logger.info(f"数据生成完成!")
+        logger.info("数据生成完成!")
         logger.info(f"总输入: {self.generation_stats['total_inputs']}")
         logger.info(f"生成样本: {self.generation_stats['total_generated']}")
         logger.info(f"质量通过: {self.generation_stats['quality_passed']}")
@@ -171,7 +165,7 @@ class PatentDataGenerator:
             'output_path': str(output_path),
         }
 
-    def _generate_single_sample(self, task: Dict) -> Dict | None:
+    def _generate_single_sample(self, task: dict) -> dict | None:
         """生成单个样本"""
         try:
             patent = task['patent_data']
@@ -252,8 +246,8 @@ class PatentDataGenerator:
             return None
 
     def _generate_patent_summary(
-        self, patent: Dict, temperature: float, top_p: float, max_length: int
-    ) -> Dict:
+        self, patent: dict, temperature: float, top_p: float, max_length: int
+    ) -> dict:
         """生成专利摘要"""
         title = patent.get('title', '未知标题')
         abstract = patent.get('abstract', '无摘要')
@@ -288,8 +282,8 @@ class PatentDataGenerator:
         }
 
     def _generate_novelty_analysis(
-        self, patent: Dict, temperature: float, top_p: float, max_length: int
-    ) -> Dict:
+        self, patent: dict, temperature: float, top_p: float, max_length: int
+    ) -> dict:
         """生成新颖性分析"""
         title = patent.get('title', '未知标题')
         claims = patent.get('claims', [])
@@ -326,8 +320,8 @@ class PatentDataGenerator:
         }
 
     def _generate_inventive_step_analysis(
-        self, patent: Dict, temperature: float, top_p: float, max_length: int
-    ) -> Dict:
+        self, patent: dict, temperature: float, top_p: float, max_length: int
+    ) -> dict:
         """生成创造性分析"""
         question = (
             f"分析以下专利的创造性步骤：\n{patent.get('title', '')}\n{patent.get('abstract', '')}"
@@ -358,8 +352,8 @@ class PatentDataGenerator:
         }
 
     def _generate_technical_features_analysis(
-        self, patent: Dict, temperature: float, top_p: float, max_length: int
-    ) -> Dict:
+        self, patent: dict, temperature: float, top_p: float, max_length: int
+    ) -> dict:
         """生成技术特征分析"""
         question = f"分析以下专利的技术特征：\n{patent.get('description', patent.get('abstract', ''))[:500]}..."
 
@@ -388,8 +382,8 @@ class PatentDataGenerator:
         }
 
     def _generate_claim_analysis(
-        self, patent: Dict, temperature: float, top_p: float, max_length: int
-    ) -> Dict:
+        self, patent: dict, temperature: float, top_p: float, max_length: int
+    ) -> dict:
         """生成权利要求分析"""
         claims = patent.get('claims', [])
         question = f"分析以下专利的权利要求：\n{claims[:2] if claims else '无权利要求信息'}"
@@ -418,8 +412,8 @@ class PatentDataGenerator:
         }
 
     def _generate_prior_art_search(
-        self, patent: Dict, temperature: float, top_p: float, max_length: int
-    ) -> Dict:
+        self, patent: dict, temperature: float, top_p: float, max_length: int
+    ) -> dict:
         """生成现有技术检索分析"""
         question = (
             f"为以下专利进行现有技术检索分析：\n{patent.get('title', '')}\n{patent.get('abstract', '')}"
@@ -450,8 +444,8 @@ class PatentDataGenerator:
         }
 
     def _generate_infringement_assessment(
-        self, patent: Dict, temperature: float, top_p: float, max_length: int
-    ) -> Dict:
+        self, patent: dict, temperature: float, top_p: float, max_length: int
+    ) -> dict:
         """生成侵权评估分析"""
         question = f"进行专利侵权风险评估：\n{patent.get('title', '')}\n权利要求: {patent.get('claims', [])[:2]}"
 
@@ -479,8 +473,8 @@ class PatentDataGenerator:
         }
 
     def _generate_licensing_strategy(
-        self, patent: Dict, temperature: float, top_p: float, max_length: int
-    ) -> Dict:
+        self, patent: dict, temperature: float, top_p: float, max_length: int
+    ) -> dict:
         """生成许可策略分析"""
         question = f"制定专利许可策略：\n{patent.get('title', '')}\n技术领域: {patent.get('technical_field', '')}"
 
@@ -507,7 +501,7 @@ class PatentDataGenerator:
             'expected_output_type': 'licensing_strategy',
         }
 
-    def _quality_filter(self, data: List[Dict]) -> List[Dict]:
+    def _quality_filter(self, data: list[dict]) -> list[dict]:
         """质量筛选"""
         quality_passed = []
 
@@ -532,7 +526,7 @@ class PatentDataGenerator:
         logger.info(f"质量筛选: {len(data)} -> {len(quality_passed)}")
         return quality_passed
 
-    def _diversity_filter(self, data: List[Dict]) -> List[Dict]:
+    def _diversity_filter(self, data: list[dict]) -> list[dict]:
         """多样性筛选"""
         if len(data) <= 10:  # 数据量少时跳过多样性筛选
             return data
@@ -570,12 +564,12 @@ class PatentDataGenerator:
         logger.info(f"多样性筛选: {len(data)} -> {len(diversity_passed)}")
         return diversity_passed
 
-    def _calculate_content_hash(self, item: Dict) -> str:
+    def _calculate_content_hash(self, item: dict) -> str:
         """计算内容哈希"""
         content = f"{item.get('question', '')}{item.get('answer', '')}{item.get('task_type', '')}"
         return hashlib.md5(content.encode(), usedforsecurity=False).hexdigest()
 
-    def _augment_data(self, data: List[Dict]) -> List[Dict]:
+    def _augment_data(self, data: list[dict]) -> list[dict]:
         """数据增强"""
         augmented_data = data.copy()
 
@@ -601,12 +595,12 @@ class PatentDataGenerator:
         logger.info(f"数据增强: {len(data)} -> {len(augmented_data)}")
         return augmented_data
 
-    def _final_selection(self, data: List[Dict]) -> List[Dict]:
+    def _final_selection(self, data: list[dict]) -> list[dict]:
         """最终选择"""
         # 按难度平衡选择
-        easy_count = sum(1 for item in data if item.get('difficulty') == 'easy')
-        medium_count = sum(1 for item in data if item.get('difficulty') == 'medium')
-        hard_count = sum(1 for item in data if item.get('difficulty') == 'hard')
+        sum(1 for item in data if item.get('difficulty') == 'easy')
+        sum(1 for item in data if item.get('difficulty') == 'medium')
+        sum(1 for item in data if item.get('difficulty') == 'hard')
 
         # 计算目标比例
         total_count = len(data)
@@ -643,7 +637,7 @@ class PatentDataGenerator:
         logger.info(f"最终选择: 简单{easy_selected}, 中等{medium_selected}, 困难{hard_selected}")
         return final_data
 
-    def _save_generated_data(self, data: List[Dict], output_path: Path):
+    def _save_generated_data(self, data: list[dict], output_path: Path):
         """保存生成的数据"""
         # 保存为JSONL格式
         jsonl_path = output_path / 'generated_patent_data.jsonl'
@@ -662,7 +656,7 @@ class PatentDataGenerator:
 
         logger.info(f"数据已保存到: {output_path}")
 
-    def _save_to_sqlite(self, data: List[Dict], db_path: Path):
+    def _save_to_sqlite(self, data: list[dict], db_path: Path):
         """保存到SQLite数据库"""
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
@@ -724,7 +718,7 @@ class PatentDataGenerator:
 class PatentQualityScorer:
     """专利质量评分器"""
 
-    def calculate_scores(self, item: Dict) -> Dict[str, float]:
+    def calculate_scores(self, item: dict) -> dict[str, float]:
         """计算质量分数"""
         question = item.get('question', '')
         answer = item.get('answer', '')
@@ -789,7 +783,7 @@ class PatentQualityScorer:
 
         return min(1.0, coverage * 2)  # 给予一定的容错
 
-    def _extract_keywords(self, text: str) -> List[str]:
+    def _extract_keywords(self, text: str) -> list[str]:
         """提取关键词"""
         # 简化的关键词提取
         import re
@@ -827,7 +821,7 @@ class DiversityCalculator:
             return 1.0
 
         # 计算哈希差异
-        diff = sum(c1 != c2 for c1, c2 in zip(hash1, hash2))
+        diff = sum(c1 != c2 for c1, c2 in zip(hash1, hash2, strict=False))
         max_len = max(len(hash1), len(hash2))
 
         similarity = 1 - (diff / max_len)
@@ -837,7 +831,7 @@ class DiversityCalculator:
 class PatentDataAugmenter:
     """专利数据增强器"""
 
-    def paraphrase(self, item: Dict) -> Dict | None:
+    def paraphrase(self, item: dict) -> dict | None:
         """改写增强"""
         try:
             # 简化的改写实现
@@ -870,7 +864,7 @@ class PatentDataAugmenter:
             logger.warning(f"改写增强失败: {e}")
             return None
 
-    def replace_synonyms(self, item: Dict) -> Dict | None:
+    def replace_synonyms(self, item: dict) -> dict | None:
         """同义词替换增强"""
         try:
             answer = item.get('answer', '')
@@ -897,7 +891,7 @@ class PatentDataAugmenter:
 
         return None
 
-    def adjust_difficulty(self, item: Dict) -> Dict | None:
+    def adjust_difficulty(self, item: dict) -> dict | None:
         """难度调整增强"""
         try:
             current_difficulty = item.get('difficulty', 'medium')
@@ -972,6 +966,6 @@ if __name__ == '__main__':
         patent_corpus=patent_corpus, output_dir='./generated_patent_data'
     )
 
-    logger.info(f"数据生成完成!")
+    logger.info("数据生成完成!")
     logger.info(f"最终样本数: {len(results['final_data'])}")
     logger.info(f"输出路径: {results['output_path']}")

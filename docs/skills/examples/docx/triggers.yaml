@@ -1,0 +1,205 @@
+# DOCX技能触发器配置
+# 版本: 1.0.0
+# 更新日期: 2026-03-31
+
+version: 1.0.0
+
+# ===========================================
+# 关键词触发
+# ===========================================
+keywords:
+  # 高置信度关键词（直接触发技能）
+  high_confidence:
+    - "创建Word文档"
+    - "编辑docx"
+    - "编辑Word"
+    - "docx文件"
+    - "追踪修改"
+    - "文档批注"
+    - "Word文档"
+    - "生成文档"
+    - "修改文档"
+
+  # 中置信度关键词（需要上下文确认）
+  medium_confidence:
+    - "合同"
+    - "报告"
+    - "提案"
+    - "文档"
+    - "协议"
+    - "方案"
+    - "说明书"
+    - "技术文档"
+
+  # 低置信度关键词（需要更多上下文）
+  low_confidence:
+    - "文件"
+    - "写"
+    - "制作"
+
+# ===========================================
+# 正则模式触发
+# ===========================================
+patterns:
+  # 创建模式
+  - pattern: "(创建|生成|新建|制作|写).*(文档|合同|报告|提案|协议|方案)"
+    confidence: 0.9
+    pipeline: create
+    examples:
+      - "创建一份合同"
+      - "生成技术报告"
+      - "新建提案文档"
+
+  # 编辑模式
+  - pattern: "(修改|编辑|更新|修订|调整).*.docx"
+    confidence: 0.95
+    pipeline: edit
+    examples:
+      - "修改report.docx"
+      - "编辑合同.docx文件"
+
+  # 模板模式
+  - pattern: "(应用|使用|套用).*模板"
+    confidence: 0.85
+    pipeline: apply_template
+    examples:
+      - "应用法律合同模板"
+      - "使用专利报告模板"
+
+  # 特定文档类型
+  - pattern: "(NDA|保密协议|劳动合同|采购合同|销售合同)"
+    confidence: 0.9
+    pipeline: apply_template
+    template: legal-contract
+
+  - pattern: "(专利分析|技术分析|侵权分析).*报告"
+    confidence: 0.9
+    pipeline: apply_template
+    template: patent-analysis-report
+
+# ===========================================
+# 文件扩展名触发
+# ===========================================
+file_extensions:
+  - extension: ".docx"
+    action: auto_detect_pipeline
+    description: "Word文档（自动检测操作类型）"
+
+  - extension: ".docm"
+    action: warn_macros
+    description: "启用宏的Word文档（警告宏限制）"
+
+  - extension: ".dotx"
+    action: suggest_template_usage
+    description: "Word模板（建议作为模板使用）"
+
+  - extension: ".doc"
+    action: suggest_conversion
+    description: "旧版Word格式（建议转换）"
+
+# ===========================================
+# 上下文触发
+# ===========================================
+context_triggers:
+  # 合同相关
+  - condition: "用户提到'合同'且需要文档"
+    suggest_skill: docx
+    suggest_pipeline: apply_template
+    suggest_template: legal-contract
+    confidence_boost: 0.2
+
+  - condition: "用户提到'NDA'或'保密协议'"
+    suggest_skill: docx
+    suggest_pipeline: apply_template
+    suggest_template: nda-agreement
+    confidence_boost: 0.3
+
+  # 专利分析
+  - condition: "用户提到'专利分析报告'"
+    suggest_skill: docx
+    suggest_pipeline: apply_template
+    suggest_template: patent-analysis-report
+    confidence_boost: 0.3
+
+  - condition: "用户提到'侵权分析'或'技术对比'"
+    suggest_skill: docx
+    suggest_pipeline: apply_template
+    suggest_template: patent-analysis-report
+    confidence_boost: 0.25
+
+  # 技术文档
+  - condition: "用户提到'技术报告'或'技术文档'"
+    suggest_skill: docx
+    suggest_pipeline: apply_template
+    suggest_template: technical-report
+    confidence_boost: 0.2
+
+  # 商业文档
+  - condition: "用户提到'商业提案'或'项目提案'"
+    suggest_skill: docx
+    suggest_pipeline: apply_template
+    suggest_template: business-proposal
+    confidence_boost: 0.2
+
+  # 编辑模式
+  - condition: "用户提到现有文件且需要修改"
+    suggest_skill: docx
+    suggest_pipeline: edit
+    confidence_boost: 0.2
+
+# ===========================================
+# 负向触发（不应触发技能的情况）
+# ===========================================
+negative_triggers:
+  - condition: "用户只提到'文件'但没有文档相关上下文"
+    action: ignore
+
+  - condition: "用户在讨论代码或编程"
+    action: ignore
+
+  - condition: "用户在讨论图片或媒体文件"
+    action: ignore
+
+# ===========================================
+# 优先级配置
+# ===========================================
+priority:
+  # 管道优先级（数字越小优先级越高）
+  pipelines:
+    apply_template: 1    # 模板优先（最可能满足需求）
+    create: 2            # 创建次之
+    edit: 3              # 编辑最后（需要文件输入）
+
+  # 触发源优先级
+  sources:
+    file_extension: 1    # 文件扩展名最可靠
+    pattern: 2           # 正则模式次之
+    context: 3           # 上下文推断
+    keyword: 4           # 关键词最不可靠
+
+# ===========================================
+# 置信度阈值
+# ===========================================
+thresholds:
+  # 自动触发技能的最低置信度
+  auto_trigger: 0.8
+
+  # 建议技能的最低置信度
+  suggest_trigger: 0.6
+
+  # 需要用户确认的置信度范围
+  confirm_range: [0.5, 0.8]
+
+# ===========================================
+# 多技能冲突解决
+# ===========================================
+conflict_resolution:
+  # 当多个技能同时触发时
+  strategy: "highest_confidence"  # 选择置信度最高的
+
+  # 技能权重（用于调整置信度）
+  weights:
+    docx: 1.0
+    xlsx: 0.9
+    pdf: 0.85
+    pptx: 0.8

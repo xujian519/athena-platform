@@ -4,16 +4,14 @@ AI推理服务
 AI Inference Service
 """
 
-import logging
-from core.async_main import async_main
-from core.logging_config import setup_logging
-import os
 from datetime import datetime
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
 
-from core.security.auth import ALLOWED_ORIGINS
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseSettings
+
+from core.logging_config import setup_logging
+from core.security.auth import ALLOWED_ORIGINS
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入

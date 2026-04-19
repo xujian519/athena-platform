@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena多模式推理系统 (Athena Multimodal Reasoning System)
 从灵动系统中提取的Athena核心能力模块
@@ -14,9 +15,9 @@ import logging
 import time
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -219,7 +220,7 @@ class AITeamCoordinator:
             print(f"✅ AI团队初始化完成,共{len(self.available_agents)}个专业代理")
             return True
 
-        except Exception as e:
+        except Exception:
             return False
 
     def assemble_expert_team(
@@ -299,7 +300,7 @@ class AthenaMultimodalReasoningEngine:
 
             return True
 
-        except Exception as e:
+        except Exception:
             return False
 
     def _load_reasoning_configurations(self) -> Any:
@@ -447,7 +448,7 @@ class AthenaMultimodalReasoningEngine:
                 recommendations=recommendations,
             )
 
-        except Exception as e:
+        except Exception:
             return None
 
     async def _conduct_team_reasoning(

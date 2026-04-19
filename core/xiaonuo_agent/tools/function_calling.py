@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Function Calling工具调用系统
 支持工具定义、注册、调用和结果处理
@@ -25,7 +26,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union, get_type_hints
+from typing import Any, Union, get_type_hints
 
 logger = logging.getLogger(__name__)
 

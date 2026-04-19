@@ -5,11 +5,13 @@ Google Patents PDF Downloader
 支持单个和批量下载
 """
 
-import requests
 import argparse
 import sys
 import time
 from urllib.parse import quote
+
+import requests
+
 
 def download_patent_pdf(patent_number, output_path=None, verbose=True):
     """
@@ -86,7 +88,7 @@ def download_patent_pdf(patent_number, output_path=None, verbose=True):
 
         else:
             if verbose:
-                print(f"❌ 未找到PDF下载链接")
+                print("❌ 未找到PDF下载链接")
                 print("提示: 可能是专利号格式不正确，或者该专利没有PDF版本")
             return None
 
@@ -117,7 +119,7 @@ def batch_download(patent_numbers, output_dir=None, delay=1.0):
     # 处理专利号列表
     # 如果是文件路径，读取文件
     if len(patent_numbers) == 1 and patent_numbers[0].endswith('.txt'):
-        with open(patent_numbers[0], 'r') as f:
+        with open(patent_numbers[0]) as f:
             patent_numbers = [line.strip() for line in f if line.strip()]
 
     # 过滤空行和注释
@@ -152,7 +154,7 @@ def batch_download(patent_numbers, output_dir=None, delay=1.0):
         else:
             failed_count += 1
             failed_patents.append(patent_number)
-            print(f"  ❌ 失败")
+            print("  ❌ 失败")
 
         # 延迟，避免被封
         if i < len(patent_numbers) and delay > 0:
@@ -160,12 +162,12 @@ def batch_download(patent_numbers, output_dir=None, delay=1.0):
 
     # 汇总
     print("\n" + "=" * 60)
-    print(f"📊 下载完成！")
+    print("📊 下载完成！")
     print(f"  ✅ 成功: {success_count}")
     print(f"  ❌ 失败: {failed_count}")
 
     if failed_patents:
-        print(f"\n失败的专利号:")
+        print("\n失败的专利号:")
         for p in failed_patents:
             print(f"  - {p}")
 

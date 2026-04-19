@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena平台 - 多模态文件系统集成
 Platform Integration with Multimodal File System
 """
 
-import os
-import sys
 import json
-import asyncio
 import logging
-from core.logging_config import setup_logging
+import sys
 from datetime import datetime
 from pathlib import Path
+
+from core.logging_config import setup_logging
 
 # 添加路径
 sys.path.append(str(Path(__file__).parent.parent.parent / "core"))
@@ -229,7 +227,7 @@ class PlatformMultimodalIntegration:
 
         return {
             "success": True,
-            "message": f"文档处理任务已创建",
+            "message": "文档处理任务已创建",
             "task_id": task_id,
             "file_id": file_id,
             "process_type": process_type,

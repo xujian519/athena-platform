@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能推荐系统
 Intelligent Recommender System
@@ -10,14 +11,13 @@ Intelligent Recommender System
 创建时间: 2025-12-04
 版本: 3.0.0
 """
-import numpy as np
-
 import logging
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

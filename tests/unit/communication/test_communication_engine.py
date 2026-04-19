@@ -8,19 +8,23 @@ Unit Tests for Communication Engine
 版本: 1.0.0
 """
 
+import sys
+from datetime import datetime
+from pathlib import Path
+
 import pytest
-import asyncio
-from datetime import datetime, timedelta
-from unittest.mock import AsyncMock, MagicMock, patch
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 
 from core.communication.communication_engine import (
-    MessageType,
-    ChannelType,
-    MessageStatus,
-    ProtocolType,
-    Message,
     Channel,
-    CommunicationEngine
+    ChannelType,
+    CommunicationEngine,
+    Message,
+    MessageStatus,
+    MessageType,
+    ProtocolType,
 )
 
 

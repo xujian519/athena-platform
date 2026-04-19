@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 安全监控 - 数据类型定义
 Security Monitor - Data Types

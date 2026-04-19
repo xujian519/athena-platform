@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 IPC技术领域智能匹配系统
 IPC Technical Domain Matching System

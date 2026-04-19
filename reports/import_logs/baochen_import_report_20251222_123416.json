@@ -1,0 +1,25 @@
+{
+  "import_info": {
+    "importer": "宝宸专利档案高质量导入器",
+    "version": "v2.0.0 智能增强版",
+    "timestamp": "20251222_123416",
+    "source_file": "/Users/xujian/工作/10_归档文件/专利档案表（2016---) .xlsx"
+  },
+  "data_analysis": {
+    "total_rows": 5003,
+    "processed_rows": 0,
+    "quality_threshold": 0.7,
+    "data_quality_score": 0.3583888527617264
+  },
+  "import_results": {
+    "new_clients": 0,
+    "new_projects": 0,
+    "new_cases": 0,
+    "quality_issues": 0
+  },
+  "system_info": {
+    "multimodal_available": true,
+    "ollama_available": true,
+    "infrastructure/infrastructure/database": "athena_db"
+  }
+}

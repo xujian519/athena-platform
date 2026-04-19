@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多智能体协作框架模块
 Multi-Agent Collaboration Framework Module

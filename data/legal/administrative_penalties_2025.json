@@ -1,0 +1,212 @@
+{
+  "metadata": {
+    "created_date": "2026-01-07",
+    "source": "国家知识产权局",
+    "data_type": "行政处罚决定书",
+    "batch": "第二批",
+    "year": "2025"
+  },
+  "penalty_decisions": [
+    {
+      "sequence": 1,
+      "decision_number": "国知处函运字〔2025〕45号",
+      "decision_date": "2025-12-31",
+      "publication_date": "2026-01-06",
+      "party_type": "个人",
+      "party_name": "刘丹",
+      "license_number": "3651033",
+      "filing_number": "3327151033.0",
+      "organization": "杭州寒武纪知识产权代理有限公司",
+      "position": "南昌分公司负责人",
+      "illegal_facts": [
+        "擅自伪造申请人电子公章",
+        "使用伪造的电子公章提交4件专利申请",
+        "使用伪造的公章将3件专利转让牟利"
+      ],
+      "illegal_period": "2023年9月至2024年12月",
+      "evidence": [
+        "伪造申请人电子公章",
+        "冒用申请人名义提交专利申请",
+        "授权后转让专利牟利"
+      ],
+      "penalty_type": "吊销资格证",
+      "specific_penalty": "吊销专利代理师资格证",
+      "legal_basis": [
+        "《专利代理条例》第二十六条第二款",
+        "《治安管理处罚法》第五十二条第(一)项"
+      ],
+      "additional_penalty": "列入市场监督管理严重违法失信名单",
+      "credit_list_period": "2025-12-31至2028-12-30",
+      "administrative_penalties": [
+        "南昌市公安局高新技术开发区分局行政拘留十日"
+      ],
+      "hearing": "当事人要求听证，国知局部分采纳意见但未减轻处罚",
+      "source_url": "https://www.cnipa.gov.cn/art/2026/1/6/art_547_203527.html"
+    },
+    {
+      "sequence": 2,
+      "decision_number": "国知处函运字〔2025〕71号",
+      "decision_date": "2025-12-31",
+      "publication_date": "2026-01-06",
+      "party_type": "机构",
+      "party_name": "北京众泽信达知识产权代理事务所(普通合伙)",
+      "unified_social_credit_code": "91110108MA01A8AT57",
+      "executive_partner": "周振",
+      "partners": ["周振", "张艳萍"],
+      "address": "北京市海淀区北三环中路31号凯奇大厦5层502",
+      "illegal_facts": [
+        "代理不以保护创新为目的的非正常专利申请"
+      ],
+      "illegal_period": "2022年7月至2023年12月",
+      "abnormal_applications": {
+        "total": 3610,
+        "notified_sept_2022": 1713,
+        "notified_june_2023": 520
+      },
+      "penalty_type": "停业整顿",
+      "specific_penalty": "停止承接新的专利代理业务6个月",
+      "legal_basis": [
+        "《专利代理管理办法》第五十一条第(二)项、第(四)项",
+        "《专利代理条例》第二十五条第一款第(五)项"
+      ],
+      "violation_category": "疏于管理，造成严重后果",
+      "severity": "情节严重",
+      "additional_penalty": "列入市场监督管理严重违法失信名单",
+      "credit_list_period": "2025-12-31至2028-12-30",
+      "source_url": "https://www.cnipa.gov.cn/art/2026/1/6/art_547_203525.html"
+    },
+    {
+      "sequence": 3,
+      "decision_number": "国知处函运字〔2025〕69号",
+      "decision_date": "2025-12-31",
+      "publication_date": "2026-01-06",
+      "party_type": "机构",
+      "party_name": "北京国坤专利代理事务所(普通合伙)",
+      "unified_social_credit_code": "9111010530659178XN",
+      "executive_partner": "张国栋",
+      "partners": ["张国栋", "马雯"],
+      "address": "北京市朝阳区五里桥二街2号院10号楼11层1105",
+      "illegal_facts": [
+        "代理不以保护创新为目的的非正常专利申请"
+      ],
+      "illegal_period": "2022年7月至2023年12月",
+      "abnormal_applications": {
+        "total": 3691,
+        "notified_sept_2022": 1232,
+        "notified_june_2023": 1023
+      },
+      "penalty_type": "停业整顿",
+      "specific_penalty": "停止承接新的专利代理业务6个月",
+      "legal_basis": [
+        "《专利代理管理办法》第五十一条第(二)项、第(四)项",
+        "《专利代理条例》第二十五条第一款第(五)项"
+      ],
+      "violation_category": "疏于管理，造成严重后果",
+      "severity": "情节严重",
+      "additional_penalty": "列入市场监督管理严重违法失信名单",
+      "credit_list_period": "2025-12-31至2028-12-30",
+      "source_url": "https://www.cnipa.gov.cn/art/2026/1/6/art_547_203521.html"
+    },
+    {
+      "sequence": 4,
+      "decision_number": "国知处函运字〔2025〕65号",
+      "decision_date": "2025-12-31",
+      "publication_date": "2026-01-06",
+      "party_type": "机构",
+      "party_name": "宿迁优鸣专利代理事务所(普通合伙)",
+      "unified_social_credit_code": "91321322MA22NYQF93",
+      "executive_partner": "张丽敏",
+      "partners": ["张丽敏", "周莉莉"],
+      "address": "宿迁市沭阳县苏州路南侧、永康路西侧金融保险大厦2101-12室",
+      "illegal_facts": [
+        "出租专利代理机构执业许可证",
+        "代为提交利用犯罪人员非法出售的涉案信息虚构申请人的专利申请",
+        "通过'挂证'方式虚构专利代理师执业",
+        "署名专利代理师未实际参与专利申请撰写或审核"
+      ],
+      "illegal_period": "2022年7月至2025年6月",
+      "related_case": {
+        "case_name": "徐某侵犯公民个人信息罪",
+        "court": "山西省岢岚县人民法院",
+        "judgment": "有期徒刑三年零六个月",
+        "judgment_date": "2025-05"
+      },
+      "fake_applications": 223,
+      "abnormal_applications_withdrawn": 137,
+      "penalty_type": "吊销许可证",
+      "specific_penalty": "吊销专利代理机构执业许可证",
+      "legal_basis": [
+        "《专利代理管理办法》第五十一条第(八)项、第(九)项",
+        "《专利代理条例》第二十五条第一款第(五)项"
+      ],
+      "violation_category": "疏于管理，造成严重后果",
+      "severity": "情节严重",
+      "additional_penalty": "列入市场监督管理严重违法失信名单",
+      "credit_list_period": "2025-12-31至2028-12-30",
+      "source_url": "https://www.cnipa.gov.cn/art/2026/1/6/art_547_203530.html"
+    },
+    {
+      "sequence": 5,
+      "decision_number": "国知处函运字〔2025〕78号",
+      "decision_date": "2025-12-31",
+      "publication_date": "2026-01-06",
+      "party_type": "机构",
+      "party_name": "武汉舜明知识产权代理事务所(普通合伙)",
+      "unified_social_credit_code": "91420100MAD8XW945M",
+      "executive_partner": "聂颖",
+      "partners": ["聂颖", "田兴中"],
+      "address": "湖北省武汉市东湖新技术开发区汤逊湖北路33号华工科技园·创新基地18栋8层B1020",
+      "illegal_facts": [
+        "出租专利代理机构执业许可证",
+        "代为提交利用犯罪人员非法出售的涉案信息虚构申请人的专利申请",
+        "通过'挂证'方式虚构专利代理师执业",
+        "署名专利代理师未实际参与专利申请撰写或审核"
+      ],
+      "illegal_period": "2024年1月至2025年6月",
+      "related_case": {
+        "case_name": "徐某侵犯公民个人信息罪",
+        "court": "山西省岢岚县人民法院",
+        "judgment": "有期徒刑三年零六个月",
+        "judgment_date": "2025-05"
+      },
+      "fake_applications": 392,
+      "abnormal_applications_withdrawn": 785,
+      "penalty_type": "吊销许可证",
+      "specific_penalty": "吊销专利代理机构执业许可证",
+      "legal_basis": [
+        "《专利代理管理办法》第五十一条第(八)项、第(九)项",
+        "《专利代理条例》第二十五条第一款第(五)项"
+      ],
+      "violation_category": "疏于管理，造成严重后果",
+      "severity": "情节严重",
+      "additional_penalty": "列入市场监督管理严重违法失信名单",
+      "credit_list_period": "2025-12-31至2028-12-30",
+      "source_url": "https://www.cnipa.gov.cn/art/2026/1/6/art_547_203529.html"
+    }
+  ],
+  "analysis_summary": {
+    "total_cases": 5,
+    "penalty_types_distribution": {
+      "吊销执业许可证": 3,
+      "停业整顿": 2,
+      "吊销资格证": 1
+    },
+    "violation_types": {
+      "非正常专利申请": 2,
+      "伪造印章": 1,
+      "出租许可证+挂证": 2
+    },
+    "common_patterns": [
+      "疏于管理，造成严重后果",
+      "情节严重",
+      "列入市场监督管理严重违法失信名单(3年)",
+      "均涉及专利代理违法违规行为"
+    ],
+    "legal_references": [
+      "《专利代理条例》第二十五条第一款",
+      "《专利代理条例》第二十六条第二款",
+      "《专利代理管理办法》第五十一条",
+      "《市场监督管理严重违法失信名单管理办法》"
+    ]
+  }
+}

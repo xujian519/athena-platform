@@ -1,26 +1,28 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PQAI专利检索测试服务
 Test Service for Patent Search with PostgreSQL
 """
 
-from fastapi import FastAPI, HTTPException
-from contextlib import asynccontextmanager
-import uvicorn
-from datetime import datetime, timedelta
 import asyncio
 import sys
-import os
-import json
-from typing import Dict, List, Optional, Any, Tuple
+from contextlib import asynccontextmanager
+from datetime import datetime
+from typing import Any
+
 import psycopg2
+import uvicorn
+from fastapi import FastAPI, HTTPException
 from psycopg2.extras import RealDictCursor
-import re
 
 # 添加路径
 sys.path.append('/Users/xujian/Athena工作平台/services/autonomous-control')
-from agent_identity import AgentIdentity, AgentType, register_agent_identity, format_identity_display
+from agent_identity import (
+    AgentIdentity,
+    AgentType,
+    format_identity_display,
+    register_agent_identity,
+)
 
 # 数据库配置
 PATENT_DB_CONFIG = {
@@ -43,7 +45,7 @@ async def lifespan(app: FastAPI):
         count = cursor.fetchone()[0]
         cursor.close()
         conn.close()
-        print(f"✅ PostgreSQL专利数据库连接成功!")
+        print("✅ PostgreSQL专利数据库连接成功!")
         print(f"📊 专利数据库总量: {count:,} 件")
         app.state.db_available = True
     except Exception as e:
@@ -88,7 +90,7 @@ async def display_startup_identity():
 
         print("\n" + "="*60)
         print(identity_display)
-        print(f"\n🔍 PQAI专利检索专家 (测试版) 启动成功！")
+        print("\n🔍 PQAI专利检索专家 (测试版) 启动成功！")
         print("📍 服务端口: 8032")
         print("🗄️ 数据源: PostgreSQL专利数据库")
         print("="*60 + "\n")
@@ -105,7 +107,7 @@ def get_db_connection() -> Any | None:
         print(f"数据库连接失败: {str(e)}")
         return None
 
-def search_patents_simple(query_text: str, limit: int = 10) -> List[Dict]:
+def search_patents_simple(query_text: str, limit: int = 10) -> list[dict]:
     """简单的专利检索"""
     conn = get_db_connection()
     if not conn:
@@ -159,7 +161,7 @@ def search_patents_simple(query_text: str, limit: int = 10) -> List[Dict]:
         print(f"专利检索错误: {str(e)}")
         return []
 
-def calculate_simple_patentability(search_results: List[Dict], query_text: str) -> Tuple[float, Dict[str, float]]:
+def calculate_simple_patentability(search_results: list[dict], query_text: str) -> tuple[float, dict[str, float]]:
     """简单的可申请性计算"""
 
     if not search_results:
@@ -307,7 +309,7 @@ async def analyze(request: dict):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"分析失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"分析失败: {str(e)}") from e
 
 @app.post("/search")
 async def patent_search(request: dict):
@@ -334,7 +336,7 @@ async def patent_search(request: dict):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"检索失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"检索失败: {str(e)}") from e
 
 @app.get("/test/sample")
 async def get_sample_patents():
@@ -384,7 +386,7 @@ async def get_sample_patents():
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"获取样本失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"获取样本失败: {str(e)}") from e
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8032)

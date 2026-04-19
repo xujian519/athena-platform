@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 跨会话记忆管理器 - 第二阶段
 Cross-Session Memory Manager - Phase 2

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺六步推理引擎
 Xiaonuo Six-Step Reasoning Engine
@@ -22,8 +23,9 @@ import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
+import numpy as np
 
 from core.logging_config import setup_logging
 

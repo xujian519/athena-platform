@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 任务编排引擎 - Task Orchestration Engine
 
@@ -14,11 +15,11 @@ import logging
 import threading
 import time
 import uuid
-from collections import defaultdict, deque
+from collections import defaultdict
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +41,6 @@ class AgentType(Enum):
 
     XIAONUO = "xiaonuo"  # 小诺 - 平台调度官
     XIANA = "xiana"  # 小娜 - 专利法律专家
-    YUNXI = "yunxi"  # 云熙 - IP管理专家
     XIAOCHEN = "xiaochen"  # 小宸 - 自媒体专家
     ATHENA = "athena"  # Athena - 核心智能体
 
@@ -243,11 +243,6 @@ class AgentRouter:
             Capability.PATENT_WRITING,
             Capability.LEGAL_CONSULTING,
             Capability.DOCUMENT_REVIEW,
-        },
-        AgentType.YUNXI: {
-            Capability.IP_MANAGEMENT,
-            Capability.DOCUMENT_REVIEW,
-            Capability.PATENT_SEARCH,
         },
         AgentType.XIAOCHEN: {Capability.CONTENT_CREATION, Capability.GENERAL_CHAT},
         AgentType.XIAONUO: {Capability.GENERAL_CHAT, Capability.CODING, Capability.DATA_ANALYSIS},

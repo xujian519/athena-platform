@@ -9,13 +9,17 @@ Unit Tests for Concurrency Control Module
 """
 
 import asyncio
+import sys
+from pathlib import Path
+
 import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.learning.concurrency_control import (
     AsyncSemaphore,
     ConcurrencyConfig,
     ConcurrencyController,
-    LearningEngineConcurrencyMixin,
     RateLimiter,
 )
 

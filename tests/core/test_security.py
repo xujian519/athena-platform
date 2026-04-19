@@ -3,9 +3,13 @@
 测试认证、授权和安全相关功能
 """
 
+import sys
+from pathlib import Path
+
 import pytest
-from unittest.mock import Mock, patch
-from typing import Dict, Any
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 
 
 class TestSecurityModule:
@@ -179,10 +183,10 @@ class TestDataSecurity:
             return True
 
         # 测试验证
-        assert validate_username("testuser") == True
-        assert validate_username("ab") == False  # 太短
-        assert validate_username("a" * 25) == False  # 太长
-        assert validate_username("user@name") == False  # 包含特殊字符
+        assert validate_username("testuser")
+        assert not validate_username("ab")  # 太短
+        assert not validate_username("a" * 25)  # 太长
+        assert not validate_username("user@name")  # 包含特殊字符
 
     def test_email_validation(self):
         """测试邮箱验证"""
@@ -299,9 +303,9 @@ class TestRateLimiting:
             return count < limit
 
         # 验证
-        assert check_rate_limit("default") == True  # 50 < 100
-        assert check_rate_limit("auth") == True      # 5 < 10
-        assert check_rate_limit("search") == True    # 15 < 20
+        assert check_rate_limit("default")  # 50 < 100
+        assert check_rate_limit("auth")      # 5 < 10
+        assert check_rate_limit("search")    # 15 < 20
 
     def test_rate_limit_exceeded(self):
         """测试速率限制超出"""

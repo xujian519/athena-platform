@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 《以案说法》书籍导入管道
 Legal Case Book Import Pipeline
@@ -21,10 +22,16 @@ import os
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 # 第三方库
 from PIL import Image
+
+# 条件导入PyMuPDF (fitz)
+try:
+    import fitz
+except ImportError:
+    fitz = None
 
 from core.logging_config import setup_logging
 
@@ -219,7 +226,7 @@ class LegalBookPipeline:
             return ""
 
     async def _extract_knowledge(
-        self, pages_content: list[dict[str, Any]) -> tuple[list[dict[str, Any], list[dict[str, Any]]:
+        self, pages_content: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
         """
         从文本中抽取案例和法律规则
 
@@ -290,7 +297,7 @@ class LegalBookPipeline:
 
         return case_stories, legal_rules
 
-    async def _chunk_text(self, pages_content: list[dict[str, Any]) -> list[dict[str, Any]]:
+    async def _chunk_text(self, pages_content: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """
         将文本分块
 
@@ -347,7 +354,10 @@ class LegalBookPipeline:
 
     async def _prepare_vector_docs(
         self,
-        chunks: list[list[dict[str, Any]]] -> list[dict[str, Any]]:
+        chunks: list[dict[str, Any]],
+        case_stories: list[dict[str, Any]],
+        legal_rules: list[dict[str, Any]],
+    ) -> list[dict[str, Any]]:
         """
         准备向量化文档
 
@@ -421,7 +431,7 @@ class LegalBookPipeline:
         return vector_docs
 
     async def _build_knowledge_graph(
-        self, case_stories: list[dict[str, Any]], legal_rules: list[dict[str, Any]) -> dict[str, Any]:
+        self, case_stories: list[dict[str, Any]], legal_rules: list[dict[str, Any]]) -> dict[str, Any]:
         """
         构建知识图谱
 
@@ -514,7 +524,12 @@ class LegalBookPipeline:
 
     async def _save_results(
         self,
-        text_content: list[dict[str, Any]]:
+        text_content: list[dict[str, Any]],
+        case_stories: list[dict[str, Any]],
+        legal_rules: list[dict[str, Any]],
+        vector_docs: list[dict[str, Any]],
+        graph_data: dict[str, Any],
+    ):
         """保存处理结果到文件"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -557,7 +572,6 @@ class LegalBookPipeline:
 
 async def main():
     """主函数 - 使用示例"""
-    import io
 
     # 配置管道
     config = {

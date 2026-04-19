@@ -15,12 +15,11 @@ Communication Module Tests
 创建时间: 2026-01-30
 """
 
-import asyncio
-import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
-
 import sys
 from pathlib import Path
+from unittest.mock import MagicMock
+
+import pytest
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
@@ -125,7 +124,7 @@ class TestWebSocketCommunication:
         """测试WebSocket导入"""
         if not websocket_available:
             pytest.skip("WebSocket not available")
-        from core.communication import WebSocketServer, ConnectionManager
+        from core.communication import ConnectionManager, WebSocketServer
         assert WebSocketServer is not None
         assert ConnectionManager is not None
 
@@ -159,8 +158,8 @@ class TestPersistentEngine:
         if not persistent_engine_available:
             pytest.skip("PersistentCommunicationEngine not available")
         from core.communication import (
-            PersistentCommunicationEngine,
             FilePersistenceBackend,
+            PersistentCommunicationEngine,
             RedisPersistenceBackend,
         )
         assert PersistentCommunicationEngine is not None
@@ -209,9 +208,9 @@ class TestLearningDialogManager:
         if not dialog_manager_available:
             pytest.skip("LearningDialogManager not available")
         from core.communication import (
-            LearningDialogManager,
             DialogContext,
             DialogTurn,
+            LearningDialogManager,
         )
         assert LearningDialogManager is not None
         assert DialogContext is not None
@@ -247,8 +246,8 @@ class TestEnhancedMonitoring:
         if not monitoring_available:
             pytest.skip("CommunicationMonitor not available")
         from core.communication import (
-            CommunicationMonitor,
             CommunicationMetrics,
+            CommunicationMonitor,
             MetricsCollector,
         )
         assert CommunicationMonitor is not None

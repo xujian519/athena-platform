@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺评估反馈系统
 Xiaonuo Evaluation & Feedback System
@@ -10,6 +11,7 @@ Xiaonuo Evaluation & Feedback System
 """
 
 import json
+import logging
 import os
 import statistics
 import time
@@ -17,7 +19,7 @@ from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any
-import logging
+
 logger = logging.getLogger(__name__)
 
 

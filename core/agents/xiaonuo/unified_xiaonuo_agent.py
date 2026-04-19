@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 XiaonuoAgent统一智能体 - 整合Xiaochen能力
 XiaonuoAgent Unified - Integrated with Xiaochen Capabilities
@@ -15,7 +16,7 @@ XiaonuoAgent Unified - Integrated with Xiaochen Capabilities
 
 import asyncio
 import logging
-from typing import Any, Dict, Optional
+from typing import Any
 
 from core.agent.base_agent_with_memory import AgentRole, MemoryEnabledAgent
 from core.logging_config import setup_logging

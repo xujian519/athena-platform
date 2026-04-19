@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 并行化模式执行器 (Parallelization Pattern)
 基于《智能体设计》并行化模式的实现

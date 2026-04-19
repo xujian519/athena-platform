@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena事件中间件系统
 
@@ -22,7 +23,6 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
-
 
 logger = logging.getLogger(__name__)
 

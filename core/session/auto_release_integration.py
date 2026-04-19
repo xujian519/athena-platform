@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 服务自动释放集成工具
 Service Auto-Release Integration Utilities
@@ -11,16 +11,14 @@ Service Auto-Release Integration Utilities
 创建时间: 2026-02-09
 """
 
-import asyncio
 import logging
 import os
-from typing import Optional
 
 from core.session.service_session_manager import (
-    ServiceType,
     ServiceSession,
+    ServiceType,
+    auto_register_current_process,
     get_service_session_manager,
-    auto_register_current_process
 )
 
 logger = logging.getLogger(__name__)
@@ -38,7 +36,7 @@ class ServiceAutoReleaseMixin:
         service_name: str,
         service_type: ServiceType,
         auto_stop: bool = True,
-        idle_timeout: Optional[int] = None
+        idle_timeout: int | None = None
     ):
         """
         初始化自动释放功能
@@ -55,7 +53,7 @@ class ServiceAutoReleaseMixin:
         self.idle_timeout = idle_timeout
 
         # 会话对象
-        self._session: Optional[ServiceSession] = None
+        self._session: ServiceSession | None = None
         self._manager = None
         self._auto_release_enabled = False
 
@@ -110,7 +108,7 @@ class ServiceAutoReleaseMixin:
             logger.error(f"❌ 更新活动时间失败: {e}")
             return False
 
-    def get_session_info(self) -> Optional[ServiceSession]:
+    def get_session_info(self) -> ServiceSession | None:
         """
         获取会话信息
 
@@ -152,7 +150,7 @@ class FastAPIAutoReleaseMixin:
         service_name: str,
         service_type: ServiceType,
         auto_stop: bool = True,
-        idle_timeout: Optional[int] = None
+        idle_timeout: int | None = None
     ):
         """
         初始化FastAPI自动释放功能
@@ -169,7 +167,7 @@ class FastAPIAutoReleaseMixin:
         self.idle_timeout = idle_timeout
 
         # 会话对象
-        self._session: Optional[ServiceSession] = None
+        self._session: ServiceSession | None = None
         self._manager = None
         self._auto_release_enabled = False
 
@@ -247,7 +245,7 @@ class FastAPIAutoReleaseMixin:
         logger.info(f"✅ 活动更新中间件已添加: {self.service_name}")
         return activity_update_middleware
 
-    def get_session_info(self) -> Optional[ServiceSession]:
+    def get_session_info(self) -> ServiceSession | None:
         """
         获取会话信息
 
@@ -324,8 +322,8 @@ def get_service_auto_stop_config(service_name: str) -> bool:
 def with_auto_release(
     service_name: str,
     service_type: ServiceType,
-    auto_stop: Optional[bool] = None,
-    idle_timeout: Optional[int] = None
+    auto_stop: bool | None = None,
+    idle_timeout: int | None = None
 ):
     """
     自动释放装饰器

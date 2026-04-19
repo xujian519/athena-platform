@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PQAI专利检索算法集成模块
 基于PQAI项目核心算法，为Athena平台提供增强的专利检索能力
@@ -7,13 +6,12 @@ PQAI专利检索算法集成模块
 
 import logging
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import faiss
 import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import normalize
 
 logger = logging.getLogger(__name__)
@@ -26,7 +24,7 @@ class SearchResult:
     abstract: str
     score: float
     similarity_type: str
-    highlight_spans: List[str] = None
+    highlight_spans: list[str] = None
     explanation: str = ''
 
 class PQAIEnhancedPatentSearcher:
@@ -37,7 +35,7 @@ class PQAIEnhancedPatentSearcher:
         # - 专门优化中文文本理解
         # - 适合专利、法律等专业领域
         # - 在中文相似度计算任务上表现优异
-    
+
     """
     PQAI增强专利检索器
 
@@ -78,7 +76,7 @@ class PQAIEnhancedPatentSearcher:
             logger.error(f"模型加载失败: {e}")
             raise
 
-    def build_index(self, patent_texts: List[Dict[str, Any]]) -> Any:
+    def build_index(self, patent_texts: list[dict[str, Any]]) -> Any:
         """
         构建专利检索索引
 
@@ -93,7 +91,7 @@ class PQAIEnhancedPatentSearcher:
         # 多向量表示（标题 + 摘要）
         title_texts = [p.get('title', '') for p in patent_texts]
         abstract_texts = [p.get('abstract', '') for p in patent_texts]
-        combined_texts = [f"{title} {abstract}" for title, abstract in zip(title_texts, abstract_texts)]
+        combined_texts = [f"{title} {abstract}" for title, abstract in zip(title_texts, abstract_texts, strict=False)]
 
         logger.info(f"开始构建索引，专利数量: {len(patent_texts)}")
 
@@ -120,7 +118,7 @@ class PQAIEnhancedPatentSearcher:
 
         logger.info(f"索引构建完成，维度: {dimension}")
 
-    def search(self, query: str, top_k: int = 20, search_type: str = 'hybrid') -> List[SearchResult]:
+    def search(self, query: str, top_k: int = 20, search_type: str = 'hybrid') -> list[SearchResult]:
         """
         执行专利检索
 
@@ -158,12 +156,12 @@ class PQAIEnhancedPatentSearcher:
         logger.info(f"检索完成，返回{len(results)}个结果")
         return results
 
-    def _semantic_search(self, query_embedding: np.ndarray, top_k: int) -> List[SearchResult]:
+    def _semantic_search(self, query_embedding: np.ndarray, top_k: int) -> list[SearchResult]:
         """语义检索"""
         scores, indices = self.index.search(query_embedding, min(self.retrieval_top_k, len(self.combined_embeddings)))
 
         results = []
-        for i, (score, idx) in enumerate(zip(scores[0], indices[0])):
+        for i, (score, idx) in enumerate(zip(scores[0], indices[0], strict=False)):
             if i >= top_k or score < self.similarity_threshold:
                 break
 
@@ -179,7 +177,7 @@ class PQAIEnhancedPatentSearcher:
 
         return results
 
-    def _keyword_search(self, query: str, top_k: int) -> List[SearchResult]:
+    def _keyword_search(self, query: str, top_k: int) -> list[SearchResult]:
         """关键词检索（简化版）"""
         query_terms = query.lower().split()
         results = []
@@ -212,7 +210,7 @@ class PQAIEnhancedPatentSearcher:
         results.sort(key=lambda x: x.score, reverse=True)
         return results[:top_k]
 
-    def _hybrid_search(self, query: str, query_embedding: np.ndarray, top_k: int) -> List[SearchResult]:
+    def _hybrid_search(self, query: str, query_embedding: np.ndarray, top_k: int) -> list[SearchResult]:
         """混合检索：语义 + 关键词"""
         # 获取语义检索结果
         semantic_results = self._semantic_search(query_embedding, self.retrieval_top_k)
@@ -244,7 +242,7 @@ class PQAIEnhancedPatentSearcher:
 
         return results[:top_k]
 
-    def _rerank_results(self, query: str, results: List[SearchResult]) -> List[SearchResult]:
+    def _rerank_results(self, query: str, results: list[SearchResult]) -> list[SearchResult]:
         """
         重排序检索结果
 
@@ -284,7 +282,7 @@ class PQAIEnhancedPatentSearcher:
 
         return final_results
 
-    def _enhance_results(self, query: str, results: List[SearchResult]) -> List[SearchResult]:
+    def _enhance_results(self, query: str, results: list[SearchResult]) -> list[SearchResult]:
         """
         增强检索结果：生成高亮和解释
         """
@@ -297,7 +295,7 @@ class PQAIEnhancedPatentSearcher:
 
         return results
 
-    def _extract_highlights(self, query: str, text: str, max_spans: int = 3) -> List[str]:
+    def _extract_highlights(self, query: str, text: str, max_spans: int = 3) -> list[str]:
         """提取高亮片段"""
         if not text:
             return []
@@ -344,7 +342,7 @@ class PQAIEnhancedPatentSearcher:
 
         return ' | '.join(explanation_parts)
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """获取检索器统计信息"""
         stats = {
             'total_patents': len(self.patent_data),

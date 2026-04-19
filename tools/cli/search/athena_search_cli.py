@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena搜索平台命令行工具
 Athena Search Platform CLI Tool
@@ -13,11 +12,10 @@ Athena Search Platform CLI Tool
 
 import argparse
 import asyncio
-import json
 import logging
 import sys
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +24,6 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 from tools.search.athena_search_platform import (
-    AthenaSearchPlatform,
     analyze_competitor,
     get_search_platform,
     patent_research,
@@ -69,7 +66,7 @@ def print_error(message: str):
 def print_result(message: str):
     logger.info(f"{CYAN}📊 {message}{END}")
 
-def format_search_results(results: Dict[str, Any], show_details: bool = False):
+def format_search_results(results: dict[str, Any], show_details: bool = False):
     """格式化搜索结果显示"""
     if results.get('status') == 'error':
         print_error(f"搜索失败: {results.get('error', '未知错误')}")
@@ -108,7 +105,7 @@ def format_search_results(results: Dict[str, Any], show_details: bool = False):
 
         print()
 
-def format_research_results(results: Dict[str, Any], show_details: bool = False):
+def format_research_results(results: dict[str, Any], show_details: bool = False):
     """格式化研究结果显示"""
     if results.get('status') == 'error':
         print_error(f"研究失败: {results.get('error', '未知错误')}")
@@ -156,7 +153,7 @@ def format_research_results(results: Dict[str, Any], show_details: bool = False)
             for trend in trends[:3]:  # 显示前3个
                 logger.info(f"     • {trend}")
 
-def format_analysis_results(results: Dict[str, Any], show_details: bool = False):
+def format_analysis_results(results: dict[str, Any], show_details: bool = False):
     """格式化竞争分析结果显示"""
     if results.get('status') == 'error':
         print_error(f"分析失败: {results.get('error', '未知错误')}")
@@ -291,7 +288,7 @@ async def handle_manual_command(args):
         logger.info(str('-' * 40))
 
         quick_start = manual.get('quick_start', {})
-        for key, info in quick_start.items():
+        for _key, info in quick_start.items():
             logger.info(f"\n{info['description']}:")
             logger.info(f"  用法: {info['usage']}")
             if 'example' in info:
@@ -387,10 +384,10 @@ def create_parser():
     analysis_parser.add_argument('--domain', help='技术领域')
 
     # 状态命令
-    status_parser = subparsers.add_parser('status', help='显示平台状态')
+    subparsers.add_parser('status', help='显示平台状态')
 
     # 手册命令
-    manual_parser = subparsers.add_parser('manual', help='显示用户手册')
+    subparsers.add_parser('manual', help='显示用户手册')
 
     return parser
 

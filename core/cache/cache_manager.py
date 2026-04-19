@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 缓存管理器
 统一的缓存管理接口，支持多级缓存

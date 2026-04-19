@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 查询客户孙俊霞的信息
 Query Customer Sun Junxia's Information
 """
 
-import psycopg2
-import os
 import json
-from datetime import datetime
 import logging
+import os
+
+import psycopg2
 
 logger = logging.getLogger(__name__)
 
@@ -112,7 +111,7 @@ print("-" * 80)
 
 # 查找可能的客户档案文件
 customer_files = []
-for root, dirs, files in os.walk("/Users/xujian/Athena工作平台"):
+for root, _dirs, files in os.walk("/Users/xujian/Athena工作平台"):
     for file in files:
         if "孙俊霞" in file:
             if file.endswith('.json'):
@@ -125,7 +124,7 @@ if customer_files:
 
         # 尝试读取文件内容
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 data = json.load(f)
 
                 # 查找关键信息
@@ -145,7 +144,7 @@ if customer_files:
 
                     if 'patent_cases' in data:
                         cases = data['patent_cases']
-                        print(f"\n   专利名称：")
+                        print("\n   专利名称：")
                         for i, case in enumerate(cases, 1):
                             title = case.get('title', '未知')
                             status = case.get('application_status', {}).get('current_stage', '未知')
@@ -154,9 +153,9 @@ if customer_files:
 
                             # 查看是否已确定名称
                             if 'title' in case and case['title'] != 'TBD':
-                                print(f"      ✅ 专利名称已确定")
+                                print("      ✅ 专利名称已确定")
                             else:
-                                print(f"      ⚠️ 专利名称待确定")
+                                print("      ⚠️ 专利名称待确定")
 
         except Exception as e:
             print(f"   ❌ 读取文件失败：{str(e)}")
@@ -185,7 +184,7 @@ for pattern in task_files:
 
 for task_file in found_tasks[:5]:  # 只查看前5个
     try:
-        with open(task_file, 'r', encoding='utf-8') as f:
+        with open(task_file, encoding='utf-8') as f:
             tasks = json.load(f)
 
             # 检查是否包含孙俊霞的任务

@@ -1,36 +1,23 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena工作平台 - GLM-4.6 API服务器
 提供智能体协调、专利分析、长文本处理等强大能力
 """
 
-import asyncio
-from core.async_main import async_main
-import json
 import logging
-from core.logging_config import setup_logging
-import os
-from dataclasses import asdict
 from datetime import datetime
-from typing import Any, Dict, List, Optional
 
 import uvicorn
-from fastapi import BackgroundTasks, FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from glm_4_6_service import (
     GLM46APIClient,
     GLMModelType,
     GLMRequest,
-    GLMResponse,
-    TaskType,
-    get_glm_client,
 )
 from pydantic import BaseModel, Field
 
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -58,7 +45,7 @@ class PatentAnalysisRequest(BaseModel):
 
 class AgentCoordinationRequest(BaseModel):
     task: str = Field(..., description='需要协调的任务', min_length=1, max_length=2000)
-    available_tools: List[str] = Field(..., description='可用工具列表')
+    available_tools: list[str] = Field(..., description='可用工具列表')
     thinking_mode: bool = Field(default=True, description='是否启用思考模式')
 
 class LongTextRequest(BaseModel):
@@ -76,8 +63,8 @@ class GLMResponseModel(BaseModel):
     success: bool
     content: str
     thinking_process: str | None = None
-    tool_calls: Optional[List[Dict]] = None
-    usage: Dict = {}
+    tool_calls: list[dict] | None = None
+    usage: dict = {}
     model: str = ''
     finish_reason: str = ''
     response_time: float
@@ -97,7 +84,7 @@ class HealthResponseModel(BaseModel):
     timestamp: str
     glm_connected: bool
     model_version: str
-    capabilities: List[str]
+    capabilities: list[str]
 
 # 全局变量
 server_start_time = datetime.now()
@@ -136,7 +123,7 @@ async def shutdown_event():
         await _glm_client.__aexit__(None, None, None)
         logger.info('🛑 Athena GLM-4.6 API服务器已关闭')
 
-@app.get('/', response_model=Dict[str, str])
+@app.get('/', response_model=dict[str, str])
 async def root():
     """根路径"""
     return {
@@ -175,7 +162,7 @@ async def health_check():
                 '200k_context'
             ]
         )
-    except Exception as e:
+    except Exception:
         return HealthResponseModel(
             status='unhealthy',
             timestamp=datetime.now().isoformat(),
@@ -216,7 +203,7 @@ async def analyze_patent(request: PatentAnalysisRequest):
 
     except Exception as e:
         logger.error(f"专利分析失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/agent-coordination', response_model=GLMResponseModel)
 async def coordinate_agents(request: AgentCoordinationRequest):
@@ -241,7 +228,7 @@ async def coordinate_agents(request: AgentCoordinationRequest):
 
     except Exception as e:
         logger.error(f"智能体协调失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/long-text-processing', response_model=GLMResponseModel)
 async def process_long_text(request: LongTextRequest):
@@ -266,7 +253,7 @@ async def process_long_text(request: LongTextRequest):
 
     except Exception as e:
         logger.error(f"长文本处理失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/generate-code-with-thinking', response_model=GLMResponseModel)
 async def generate_code_with_thinking(request: CodeGenerationRequest):
@@ -291,7 +278,7 @@ async def generate_code_with_thinking(request: CodeGenerationRequest):
 
     except Exception as e:
         logger.error(f"代码生成失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/thinking-mode')
 async def thinking_mode_chat(
@@ -347,7 +334,7 @@ async def get_usage_statistics():
 
     except Exception as e:
         logger.error(f"获取统计信息失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/model-info')
 async def get_model_info():
@@ -400,7 +387,7 @@ async def reset_statistics():
 
     except Exception as e:
         logger.error(f"重置统计信息失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 # 错误处理
 @app.exception_handler(Exception)

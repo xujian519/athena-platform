@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强学习引擎 - 数据类型
 Enhanced Learning Engine - Data Types

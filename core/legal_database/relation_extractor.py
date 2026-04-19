@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律关系抽取器
 Legal Relation Extractor
@@ -9,7 +10,7 @@ Legal Relation Extractor
 import logging
 import re
 from dataclasses import dataclass
-from typing import Any, List, Tuple
+from typing import Any
 
 from core.legal_database.extractor import ExtractedEntity
 

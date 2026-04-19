@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺用户偏好学习系统
 Xiaonuo User Preference Learning System
@@ -15,12 +16,13 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 import jieba
 
 # 安全修复: 使用joblib替代pickle序列化scikit-learn模型
 import joblib
+import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 
 # 机器学习库
@@ -109,7 +111,7 @@ class XiaonuoUserPreferenceLearner:
         # 用户数据存储
         self.user_profiles: dict[str, UserProfile] = {}
         self.interaction_history: dict[str, list[UserInteraction]] = defaultdict(list)
-        self.persona_templates: dict[UserPersona, dict[str, Any] = {}
+        self.persona_templates: dict[UserPersona, dict[str, Any]] = {}
 
         # 机器学习模型
         self.preference_classifier = None

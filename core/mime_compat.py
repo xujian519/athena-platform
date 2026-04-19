@@ -1,9 +1,10 @@
+from __future__ import annotations
 """
 MimeMultipart兼容层
 Compatibility layer for MimeMultipart
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 class MimeMultipart:

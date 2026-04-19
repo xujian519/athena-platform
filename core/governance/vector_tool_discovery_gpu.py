@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 GPU加速向量嵌入工具发现模块
 GPU-Accelerated Vector Embedding Tool Discovery Module
@@ -20,19 +21,21 @@ import logging
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
 # 🆕 导入M4 Pro优化组件
 try:
-    from core.acceleration.dynamic_batch_optimizer import get_batch_optimizer
-    from core.memory.layered_model_loader import ModelTier, get_model_loader
-    from core.memory.m4_unified_memory_pool import get_memory_pool
     from modules.nlp.xiaonuo_nlp_deployment.apple_silicon_optimizer_fixed import (
         get_apple_silicon_optimizer_fixed,
     )
+
+    from core.acceleration.dynamic_batch_optimizer import get_batch_optimizer
+    from core.memory.layered_model_loader import ModelTier, get_model_loader
+    from core.memory.m4_unified_memory_pool import get_memory_pool
 
     M4_OPTIMIZATION_AVAILABLE = True
     logger.info("✅ M4 Pro优化组件已导入")
@@ -248,7 +251,6 @@ class GPUVectorEmbedder:
         start_time = time.time()
 
         try:
-            import torch
 
             # 🆕 M4 Pro动态批处理优化
             if self.m4_optimization_enabled and batch_size is None:

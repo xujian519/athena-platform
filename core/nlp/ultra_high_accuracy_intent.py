@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 超高精度意图识别引擎 - 99%准确率目标
 Ultra-High Accuracy Intent Recognition Engine
@@ -6,10 +7,7 @@ Ultra-High Accuracy Intent Recognition Engine
 """
 
 import asyncio
-from core.async_main import async_main
 import json
-import logging
-from core.logging_config import setup_logging
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -23,6 +21,8 @@ from transformers import (
     AutoModel,
     AutoTokenizer,
 )
+
+from core.logging_config import setup_logging
 
 from .nebula_enhanced_intent_classifier import NebulaEnhancedIntentClassifier
 
@@ -42,7 +42,7 @@ class IntentPrediction:
 class MultiModelIntentEnsemble(nn.Module):
     """多模型集成网络"""
 
-    def __init__(self, num_classes: int, hidden_dims: list["key"] = None):
+    def __init__(self, num_classes: int, hidden_dims: list[str] = None):
         if hidden_dims is None:
             hidden_dims = [768, 512, 256]
         super().__init__()
@@ -497,10 +497,10 @@ class UltraHighAccuracyIntentEngine:
                 prediction = await self.classify_intent(text)
                 if prediction.intent == true_label:
                     correct += 1
-        except (TypeError, ZeroDivisionError) as e:
-            logger.warning(f'计算时发生错误: {e}')
-        except Exception as e:
-            logger.error(f'未预期的错误: {e}')
+            except (TypeError, ZeroDivisionError) as e:
+                logger.warning(f'计算时发生错误: {e}')
+            except Exception as e:
+                logger.error(f'未预期的错误: {e}')
 
         return correct / total if total > 0 else 0.0
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 反思引擎 v4.0 - 维特根斯坦版
 Reflection Engine v4.0 - Wittgenstein Edition
@@ -27,14 +28,12 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Optional
-
+from typing import Any
 
 sys.path.append(str(Path(__file__).parent.parent))
 
 # 导入v4.0模块 - 修正导入路径
 from core.intelligence.v4.uncertainty_quantifier import (
-    CertaintyLevel,
     Confidence,
     PropositionalResponse,
     UncertaintyQuantifier,

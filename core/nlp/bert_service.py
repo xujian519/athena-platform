@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BERT服务管理器
 BERT Service Manager for Athena Platform
@@ -16,6 +17,7 @@ import os
 from dataclasses import dataclass
 from typing import Any
 
+import numpy as np
 import torch
 from transformers import AutoModel, AutoModelForSequenceClassification, AutoTokenizer
 

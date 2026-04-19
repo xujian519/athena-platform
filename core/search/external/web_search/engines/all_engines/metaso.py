@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 秘塔搜索引擎 - 中国版Perplexity,智能AI搜索
 Metaso Search Engine - Chinese Perplexity-like AI Search
@@ -50,10 +51,12 @@ class MetasoSearchEngine(BaseSearchEngine):
             max_retries: 最大重试次数
         """
         super().__init__(
-            name="Metaso",
-            base_url="https://api.metaso.cn/v1/chat/completions",
-            timeout=timeout,
-            max_retries=max_retries,
+            api_keys,
+            config={
+                "base_url": "https://api.metaso.cn/v1/chat/completions",
+                "timeout": timeout,
+                "max_retries": max_retries,
+            }
         )
         self.api_keys = api_keys
         self._last_key_index = 0

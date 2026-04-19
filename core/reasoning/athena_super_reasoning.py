@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena超级推理引擎 - 基于超级思维链协议的高级推理系统
 作者: Athena AI团队
@@ -15,6 +16,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
+import numpy as np
 
 from core.logging_config import setup_logging
 

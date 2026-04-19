@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - 智能模型选择器
 基于任务类型、成本、性能等因素自动选择最合适的模型
@@ -9,9 +10,9 @@
 import logging
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from core.llm.base import DeploymentType, LLMRequest, ModelCapability, ModelType, SelectionStrategy
+from core.llm.base import DeploymentType, LLMRequest, ModelType, SelectionStrategy
 
 logger = logging.getLogger(__name__)
 
@@ -56,8 +57,9 @@ class IntelligentModelSelector:
         self.selection_history: list[dict[str, Any]] = []
 
         # 任务类型到模型类型的映射
+        # 2026-03-22 更新: 本地 qwen3.5 作为默认模型，支持多种任务类型
         self.task_to_model_type = {
-            # 推理类任务
+            # 推理类任务 (日常推理用本地，复杂推理走 complex_reasoning_models)
             "novelty_analysis": ModelType.REASONING,
             "creativity_analysis": ModelType.REASONING,
             "invalidation_analysis": ModelType.REASONING,
@@ -66,13 +68,13 @@ class IntelligentModelSelector:
             "complex_reasoning": ModelType.REASONING,
             "tech_analysis": ModelType.REASONING,
             "step_by_step_reasoning": ModelType.REASONING,
-            # 对话类任务
-            "general_chat": ModelType.CHAT,
-            "conversation": ModelType.CHAT,
-            "qa": ModelType.CHAT,
-            "simple_chat": ModelType.CHAT,
-            "simple_qa": ModelType.CHAT,
-            "fast_analysis": ModelType.CHAT,
+            # 对话类任务 (优先使用本地多模态模型 qwen3.5)
+            "general_chat": ModelType.MULTIMODAL,  # 改为 MULTIMODAL 以支持 qwen3.5
+            "conversation": ModelType.MULTIMODAL,
+            "qa": ModelType.MULTIMODAL,
+            "simple_chat": ModelType.MULTIMODAL,
+            "simple_qa": ModelType.MULTIMODAL,
+            "fast_analysis": ModelType.MULTIMODAL,
             # 专用任务
             "patent_search": ModelType.SPECIALIZED,
             "math_reasoning": ModelType.SPECIALIZED,
@@ -94,6 +96,28 @@ class IntelligentModelSelector:
             "visual_reasoning": ModelType.MULTIMODAL,
             "simple_visual_qa": ModelType.MULTIMODAL,
             "ocr": ModelType.MULTIMODAL,
+        }
+
+        # 默认模型映射 (任务类型 -> 默认模型ID)
+        # 2026-03-22 更新: 本地优先策略，复杂推理使用 DeepSeek
+        self.default_models = {
+            # 多模态任务默认使用本地 qwen3.5
+            ModelType.MULTIMODAL: "qwen3.5",
+            # 推理任务默认使用本地 qwen3.5 (日常推理)
+            ModelType.REASONING: "qwen3.5",
+            # 对话任务默认使用本地 qwen3.5
+            ModelType.CHAT: "qwen3.5",
+        }
+
+        # 高复杂度推理任务专用映射 (强制使用云端高质量模型)
+        # 这些任务需要深度法律推理，本地7B模型不够准确
+        self.complex_reasoning_models = {
+            "novelty_analysis": "deepseek-reasoner",       # 新颖性分析
+            "creativity_analysis": "deepseek-reasoner",    # 创造性判断
+            "invalidation_analysis": "deepseek-reasoner",  # 无效宣告
+            "oa_response": "deepseek-reasoner",            # 审查意见答复
+            "complex_reasoning": "deepseek-reasoner",      # 复杂推理
+            "math_reasoning": "deepseek-reasoner",         # 数学推理
         }
 
         # 策略权重配置
@@ -198,6 +222,12 @@ class IntelligentModelSelector:
         complexity = self._assess_complexity(request)
         logger.debug(f"📊 请求复杂度评估: {complexity:.2f} (任务: {task_type})")
 
+        # 🎯 优先检查: 高复杂度推理任务专用模型
+        if task_type in self.complex_reasoning_models:
+            dedicated_model = self.complex_reasoning_models[task_type]
+            logger.info(f"🎯 高复杂度推理任务 [{task_type}] → 强制使用 {dedicated_model}")
+            return [dedicated_model]
+
         # 根据任务类型确定模型类型
         model_type = self.task_to_model_type.get(task_type, ModelType.CHAT)  # 默认使用对话模型
 
@@ -215,6 +245,13 @@ class IntelligentModelSelector:
         if request.preferred_model and request.preferred_model in suitable_candidates:
             suitable_candidates.remove(request.preferred_model)
             suitable_candidates.insert(0, request.preferred_model)
+        else:
+            # 将默认模型排在首位（如果存在）
+            default_model = self.default_models.get(model_type)
+            if default_model and default_model in suitable_candidates:
+                suitable_candidates.remove(default_model)
+                suitable_candidates.insert(0, default_model)
+                logger.debug(f"🎯 使用默认模型: {default_model} (任务类型: {model_type.value})")
 
         # 基于复杂度进行智能排序
         suitable_candidates = self._sort_by_complexity(suitable_candidates, complexity, task_type)
@@ -313,21 +350,24 @@ class IntelligentModelSelector:
         Returns:
             list[str]: 排序后的候选模型列表
         """
-        # 定义高复杂度偏好模型(高质量推理模型)
+        # 定义高复杂度偏好模型(高质量推理模型 - 云端)
+        # 注意: 复杂推理任务已在 _get_candidates 中通过 complex_reasoning_models 强制路由
         high_complex_models = [
-            "glm-4-plus",
-            "deepseek-reasoner",
-            "qwen-vl-max",
+            "deepseek-reasoner",  # DeepSeek 推理模型 (首选)
+            "glm-4-plus",         # 智谱高级推理
+            "qwen-vl-max",        # 高级多模态
         ]
         # 定义中等复杂度偏好模型(平衡模型)
         medium_complex_models = [
-            "glm-4-flash",
-            "deepseek-coder-v2",
-            "qwen-vl-plus",
+            "qwen3.5",            # 本地多模态/推理 (本地首选)
+            "glm-4-flash",        # 智谱快速推理
+            "deepseek-coder-v2",  # 代码专用
+            "qwen-vl-plus",       # 云端多模态
         ]
         # 定义低复杂度偏好模型(快速/成本优化模型)
         low_complex_models = [
-            "deepseek-chat",
+            "qwen3.5",            # 本地首选 (免费)
+            "deepseek-chat",      # 云端低成本
             "qwen2.5-7b-instruct-gguf",
         ]
 
@@ -476,6 +516,8 @@ class IntelligentModelSelector:
             "creativity_analysis",
             "invalidation_analysis",
             "oa_response",
+            "reflection",  # 反思任务需要高质量评估
+            "quality_evaluation",  # 质量评估任务
         ]:
             return SelectionStrategy.QUALITY_OPTIMIZED
 

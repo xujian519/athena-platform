@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法规版本变更检测器
 Legal Norm Version Change Detector
@@ -10,7 +11,7 @@ import logging
 import re
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -31,8 +32,8 @@ class NormChange:
 
     norm_id: str
     change_type: ChangeType
-    target_norm_id: Optional[str]  # 目标法规ID(如有)
-    change_date: Optional[str]
+    target_norm_id: str | None  # 目标法规ID(如有)
+    change_date: str | None
     change_basis: str  # 变更依据(文号等)
     confidence: float
 

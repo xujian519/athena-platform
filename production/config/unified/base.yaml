@@ -1,0 +1,241 @@
+# ========================================
+# Athena平台 - 基础配置
+# Base Configuration
+# ========================================
+# 说明: 所有环境共享的基础配置
+# 创建时间: 2025-12-29
+# ========================================
+
+# ========== 平台信息 ==========
+platform:
+  name: "Athena工作平台"
+  version: "3.0.0"
+  environment: "${ENVIRONMENT:development}"
+
+# ========== 日志配置 ==========
+logging:
+  level: "${LOG_LEVEL:INFO}"
+  format: "structured"  # structured or text
+  output:
+    - type: "console"
+      level: "INFO"
+    - type: "file"
+      level: "DEBUG"
+      path: "${LOG_PATH:./logs}/athena.log"
+      max_size: "100MB"
+      backup_count: 10
+
+# ========== API服务配置 ==========
+api:
+  host: "${API_HOST:0.0.0.0}"
+  port: "${API_PORT:8000}"
+  workers: "${API_WORKERS:4}"
+  reload: "${API_RELOAD:false}"
+  
+  # CORS配置
+  cors:
+    enabled: true
+    origins: "${CORS_ORIGINS:*}"
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    headers: ["*"]
+  
+  # 中间件
+  middleware:
+    - "core.middleware.logging.LoggingMiddleware"
+    - "core.middleware.error_handling.ErrorHandler"
+    - "core.middleware.timing.TimingMiddleware"
+
+# ========== 数据库配置 ==========
+database:
+  # PostgreSQL
+  postgres:
+    host: "${POSTGRES_HOST:localhost}"
+    port: "${POSTGRES_PORT:5432}"
+    user: "${POSTGRES_USER:athena}"
+    password: "${POSTGRES_PASSWORD:changeme}"
+    database: "${POSTGRES_DB:athena}"
+    pool_size: "${POSTGRES_POOL_SIZE:10}"
+    max_overflow: "${POSTGRES_MAX_OVERFLOW:20}"
+    pool_pre_ping: true
+    pool_recycle: 3600
+  
+  # SQLite (知识图谱)
+  sqlite:
+    path: "${SQLITE_PATH:./data/knowledge_graph_sqlite/athena.db}"
+    
+  # Qdrant向量数据库
+  qdrant:
+    host: "${QDRANT_HOST:localhost}"
+    port: "${QDRANT_PORT:6333}"
+    collection: "${QDRANT_COLLECTION:athena_vectors}"
+    timeout: 10
+    prefer_grpc: true
+
+# ========== Redis缓存配置 ==========
+redis:
+  host: "${REDIS_HOST:localhost}"
+  port: "${REDIS_PORT:6379}"
+  db: "${REDIS_DB:0}"
+  password: "${REDIS_PASSWORD:}"
+  max_connections: "${REDIS_MAX_CONNECTIONS:50}"
+  socket_timeout: 5
+  socket_connect_timeout: 5
+  
+  # 缓存配置
+  cache:
+    default_ttl: 3600  # 1小时
+    key_prefix: "athena:"
+
+# ========== Neo4j图数据库配置 ==========
+# TD-001: 从NebulaGraph迁移到Neo4j
+# 版本: v3.0.0 (2026-01-26)
+neo4j:
+  uri: "${NEO4J_URI:bolt://localhost:7687}"
+  username: "${NEO4J_USERNAME:neo4j}"
+  password: "${NEO4J_PASSWORD:athena_neo4j_2024}"  # ⚠️ 生产环境请修改此密码
+  database: "${NEO4J_DATABASE:athena_graph}"
+
+  # 连接池配置
+  pool:
+    max_size: "${NEO4J_MAX_SIZE:50}"
+    connection_timeout: "${NEO4J_CONNECTION_TIMEOUT:30}"
+    acquisition_timeout: "${NEO4J_ACQUISITION_TIMEOUT:60}"
+
+# ========== NebulaGraph配置 (已废弃) ==========
+# TD-001: NebulaGraph已废弃,请使用neo4j配置
+# 以下配置仅为兼容性保留,将在v4.0.0移除
+# nebula:
+#   host: "${NEBULA_HOST:localhost}"
+#   port: "${NEBULA_PORT:19669}"
+#   user: "${NEBULA_USER:root}"
+#   password: "${NEBULA_PASSWORD:nebula}"
+#   space: "${NEBULA_SPACE:athena_graph}"
+
+# ========== AI模型配置 ==========
+models:
+  # 嵌入模型 - 统一使用BGE-M3
+  embedding:
+    model: "${EMBEDDING_MODEL:bge-m3}"
+    device: "${EMBEDDING_DEVICE:cpu}"  # cpu, cuda, mps
+    batch_size: "${EMBEDDING_BATCH_SIZE:32}"
+    normalize: true
+    dimension: "${EMBEDDING_DIMENSION:1024}"  # BGE-M3向量维度
+    max_seq_length: "${EMBEDDING_MAX_SEQ_LENGTH:8192}"  # BGE-M3最大序列长度
+  
+  # LLM模型
+  llm:
+    provider: "${LLM_PROVIDER:openai}"  # openai, anthropic, local
+    model: "${LLM_MODEL:gpt-4}"
+    api_key: "${LLM_API_KEY:}"
+    temperature: "${LLM_TEMPERATURE:0.7}"
+    max_tokens: "${LLM_MAX_TOKENS:2000}"
+    timeout: 30
+  
+  # NLP模型
+  nlp:
+    device: "${NLP_DEVICE:cpu}"
+    models_path: "${MODELS_PATH:./models}"
+    cache_enabled: true
+
+# ========== 任务队列配置 ==========
+tasks:
+  # Celery配置
+  celery:
+    broker_url: "${CELERY_BROKER_URL:redis://localhost:6379/0}"
+    result_backend: "${CELERY_RESULT_BACKEND:redis://localhost:6379/1}"
+    worker_prefetch_multiplier: 4
+    worker_max_tasks_per_child: 1000
+    task_acks_late: true
+    task_reject_on_worker_lost: true
+  
+  # 任务超时
+  timeouts:
+    soft: "${TASK_SOFT_TIMEOUT:300}"  # 5分钟
+    hard: "${TASK_HARD_TIMEOUT:600}"  # 10分钟
+
+# ========== 存储配置 ==========
+storage:
+  # 本地存储
+  local:
+    data_path: "${STORAGE_LOCAL_PATH:./data}"
+    temp_path: "${STORAGE_TEMP_PATH:./temp}"
+    
+  # 外部存储
+  external:
+    enabled: "${EXTERNAL_STORAGE_ENABLED:false}"
+    provider: "${EXTERNAL_STORAGE_PROVIDER:s3}"  # s3, oss, cos
+    endpoint: "${EXTERNAL_STORAGE_ENDPOINT:}"
+    access_key: "${EXTERNAL_STORAGE_ACCESS_KEY:}"
+    secret_key: "${EXTERNAL_STORAGE_SECRET_KEY:}"
+    bucket: "${EXTERNAL_STORAGE_BUCKET:athena}"
+
+# ========== 安全配置 ==========
+security:
+  # JWT配置
+  jwt:
+    secret: "${JWT_SECRET:changeme-secret-key}"
+    algorithm: "${JWT_ALGORITHM:HS256}"
+    expire_minutes: "${JWT_EXPIRE_MINUTES:1440}"  # 24小时
+  
+  # 密码策略
+  password:
+    min_length: 8
+    require_uppercase: true
+    require_lowercase: true
+    require_digit: true
+    require_special: false
+  
+  # API限流
+  rate_limit:
+    enabled: true
+    requests_per_minute: "${RATE_LIMIT_RPM:60}"
+    burst: "${RATE_LIMIT_BURST:10}"
+
+# ========== 监控配置 ==========
+monitoring:
+  # Prometheus
+  prometheus:
+    enabled: "${PROMETHEUS_ENABLED:true}"
+    port: "${PROMETHEUS_PORT:9090}"
+    path: "${PROMETHEUS_PATH:/metrics}"
+  
+  # 性能监控
+  performance:
+    enabled: true
+    sample_rate: "${PERFORMANCE_SAMPLE_RATE:0.1}"  # 10%采样
+    trace_timeout: 10
+    
+  # 健康检查
+  health_check:
+    enabled: true
+    interval: 30  # 秒
+    timeout: 5
+    endpoints:
+      - "/health"
+      - "/health/db"
+      - "/health/redis"
+      - "/health/qdrant"
+
+# ========== 文档配置 ==========
+documentation:
+  enabled: true
+  swagger_ui: "/docs"
+  redoc: "/redoc"
+  openapi_url: "/openapi.json"
+
+# ========== 功能开关 ==========
+features:
+  # 启用的功能模块
+  enabled_modules:
+    - "core.agent"
+    - "core.nlp"
+    - "core.search"
+    - "core.vector"
+    - "services.patent"
+    - "services.legal"
+  
+  # 实验性功能
+  experimental:
+    new_search_algorithm: false
+    ai_optimization: true
+    auto_scaling: false

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律知识三库联动系统 - Docker版本
 通过Docker exec访问PostgreSQL
@@ -7,12 +8,11 @@
 import re
 import subprocess
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from nebula3.Config import Config
 from nebula3.gclient.net import ConnectionPool
 from qdrant_client import QdrantClient
-
 
 # 验证space名称(防止nGQL注入)
 _SPACE_NAME = "legal_kg"

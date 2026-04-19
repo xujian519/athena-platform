@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 API密钥配置向导
 API Key Configuration Wizard

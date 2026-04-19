@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena统一智能搜索API
 Unified Intelligent Search API
@@ -9,9 +8,7 @@ Unified Intelligent Search API
 """
 
 # Numpy兼容性导入
-from config.numpy_compatibility import array, zeros, ones, random, mean, sum, dot
 import asyncio
-import json
 import logging
 import os
 
@@ -19,18 +16,16 @@ import os
 import sys
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import aiohttp
-import numpy as np
 import uvicorn
-from fastapi import BackgroundTasks, FastAPI, HTTPException, Query
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
-from starlette.responses import JSONResponse
+
+from config.numpy_compatibility import random
 
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -71,12 +66,12 @@ class QueryIntent(Enum):
 class SearchRequest(BaseModel):
     """搜索请求模型"""
     query: str
-    search_type: Optional[SearchType] = SearchType.HYBRID
-    intent: Optional[QueryIntent] = QueryIntent.FACT_SEARCH
-    context: Dict[str, Any] = Field(default_factory=dict)
-    filters: Dict[str, Any] = Field(default_factory=dict)
-    limit: Optional[int] = 20
-    include_reasoning: Optional[bool] = True
+    search_type: SearchType | None = SearchType.HYBRID
+    intent: QueryIntent | None = QueryIntent.FACT_SEARCH
+    context: dict[str, Any] = Field(default_factory=dict)
+    filters: dict[str, Any] = Field(default_factory=dict)
+    limit: int | None = 20
+    include_reasoning: bool | None = True
 
 class SearchResult(BaseModel):
     """搜索结果模型"""
@@ -87,7 +82,7 @@ class SearchResult(BaseModel):
     source_type: str  # vector, knowledge_graph, external
     score: float
     relevance: float
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    metadata: dict[str, Any] = Field(default_factory=dict)
     reasoning: str | None = None
 
 class SearchResponse(BaseModel):
@@ -98,10 +93,10 @@ class SearchResponse(BaseModel):
     intent: str
     total_results: int
     processing_time: float
-    results: List[SearchResult]
-    aggregation: Dict[str, Any] = Field(default_factory=dict)
+    results: list[SearchResult]
+    aggregation: dict[str, Any] = Field(default_factory=dict)
     reasoning: str | None = None
-    suggestions: List[str] = Field(default_factory=list)
+    suggestions: list[str] = Field(default_factory=list)
 
 class UnifiedSearchEngine:
     """统一搜索引擎"""
@@ -174,7 +169,6 @@ class UnifiedSearchEngine:
     async def search(self, request: SearchRequest) -> SearchResponse:
         """执行搜索"""
         start_time = datetime.now()
-        all_results = []
 
         try:
             # 根据搜索类型执行不同的搜索策略
@@ -230,7 +224,7 @@ class UnifiedSearchEngine:
                 reasoning=f"搜索失败: {str(e)}"
             )
 
-    async def semantic_search(self, request: SearchRequest) -> List[SearchResult]:
+    async def semantic_search(self, request: SearchRequest) -> list[SearchResult]:
         """语义搜索（向量搜索）"""
         try:
             if not self.vector_client:
@@ -270,7 +264,7 @@ class UnifiedSearchEngine:
             logger.error(f"语义搜索失败: {e}")
             return []
 
-    async def knowledge_graph_search(self, request: SearchRequest) -> List[SearchResult]:
+    async def knowledge_graph_search(self, request: SearchRequest) -> list[SearchResult]:
         """知识图谱搜索"""
         try:
             if not self.kg_client:
@@ -284,7 +278,7 @@ class UnifiedSearchEngine:
             }
 
             async with self.kg_client.post(
-                f"http://localhost:9030/graphs/sqlite_main/search",
+                "http://localhost:9030/graphs/sqlite_main/search",
                 json=search_data,
                 timeout=10
             ) as response:
@@ -316,7 +310,7 @@ class UnifiedSearchEngine:
             logger.error(f"知识图谱搜索失败: {e}")
             return []
 
-    async def external_search(self, request: SearchRequest) -> List[SearchResult]:
+    async def external_search(self, request: SearchRequest) -> list[SearchResult]:
         """外部搜索引擎"""
         try:
             if not self.external_client:
@@ -360,7 +354,7 @@ class UnifiedSearchEngine:
             logger.error(f"外部搜索失败: {e}")
             return []
 
-    async def hybrid_search(self, request: SearchRequest) -> List[SearchResult]:
+    async def hybrid_search(self, request: SearchRequest) -> list[SearchResult]:
         """混合搜索"""
         try:
             # 并行执行多种搜索
@@ -397,7 +391,7 @@ class UnifiedSearchEngine:
             logger.error(f"混合搜索失败: {e}")
             return []
 
-    async def comprehensive_search(self, request: SearchRequest) -> List[SearchResult]:
+    async def comprehensive_search(self, request: SearchRequest) -> list[SearchResult]:
         """全面搜索"""
         try:
             # 执行混合搜索
@@ -436,7 +430,7 @@ class UnifiedSearchEngine:
             logger.error(f"全面搜索失败: {e}")
             return []
 
-    async def process_results(self, results: List[SearchResult], request: SearchRequest) -> List[SearchResult]:
+    async def process_results(self, results: list[SearchResult], request: SearchRequest) -> list[SearchResult]:
         """处理和优化搜索结果"""
         try:
             # 应用过滤器
@@ -455,7 +449,7 @@ class UnifiedSearchEngine:
             logger.error(f"结果处理失败: {e}")
             return results
 
-    async def generate_reasoning(self, request: SearchRequest, results: List[SearchResult]) -> str:
+    async def generate_reasoning(self, request: SearchRequest, results: list[SearchResult]) -> str:
         """生成搜索推理"""
         try:
             if not results:
@@ -484,7 +478,7 @@ class UnifiedSearchEngine:
             logger.error(f"推理生成失败: {e}")
             return '搜索推理生成失败'
 
-    async def generate_suggestions(self, request: SearchRequest, results: List[SearchResult]) -> List[str]:
+    async def generate_suggestions(self, request: SearchRequest, results: list[SearchResult]) -> list[str]:
         """生成搜索建议"""
         try:
             suggestions = []
@@ -532,7 +526,7 @@ class UnifiedSearchEngine:
             logger.error(f"查询扩展失败: {e}")
             return query
 
-    def apply_filters(self, results: List[SearchResult], filters: Dict[str, Any]) -> List[SearchResult]:
+    def apply_filters(self, results: list[SearchResult], filters: dict[str, Any]) -> list[SearchResult]:
         """应用过滤器"""
         try:
             filtered_results = []
@@ -568,7 +562,7 @@ class UnifiedSearchEngine:
             logger.error(f"过滤器应用失败: {e}")
             return results
 
-    def recalculate_relevance(self, results: List[SearchResult], request: SearchRequest) -> List[SearchResult]:
+    def recalculate_relevance(self, results: list[SearchResult], request: SearchRequest) -> list[SearchResult]:
         """重新计算相关性分数"""
         try:
             # 基于搜索类型调整权重
@@ -662,7 +656,7 @@ async def search(request: SearchRequest):
         return response
     except Exception as e:
         logger.error(f"搜索请求失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/search/types')
 async def get_search_types():

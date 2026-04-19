@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台混合架构RAG服务
 Athena Platform Hybrid RAG Service

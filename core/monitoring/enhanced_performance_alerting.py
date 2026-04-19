@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强性能监控告警系统
 Enhanced Performance Monitoring and Alerting System
@@ -28,8 +29,7 @@ from datetime import datetime, timedelta
 from email.mime.text import MIMEText
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

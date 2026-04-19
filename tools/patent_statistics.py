@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利统计分析
 Patent Statistics Analysis
 """
 
-import psycopg2
 import json
 import os
 from datetime import datetime
+
+import psycopg2
+
 
 def analyze_patent_statistics():
     """分析专利统计数据"""
@@ -37,18 +38,18 @@ def analyze_patent_statistics():
     # 1. 总体统计
     cursor.execute("SELECT COUNT(*) FROM patents")
     total_patents = cursor.fetchone()[0]
-    print(f"\n1. 总体统计")
+    print("\n1. 总体统计")
     print(f"   总专利数（案卷）: {total_patents:,} 件")
 
     # 2. 检查申请号提取情况
     cursor.execute("SELECT COUNT(*) FROM patents WHERE patent_number IS NOT NULL")
     patents_with_number = cursor.fetchone()[0]
-    print(f"\n2. 申请号提取情况")
+    print("\n2. 申请号提取情况")
     print(f"   有申请号的专利: {patents_with_number:,} 件")
     print(f"   申请号提取率: {(patents_with_number/total_patents*100):.1f}%")
 
     # 3. 年份分布统计
-    print(f"\n3. 年份分布统计（2016-2025）")
+    print("\n3. 年份分布统计（2016-2025）")
     cursor.execute("""
         SELECT
             EXTRACT(YEAR FROM application_date) as year,
@@ -80,13 +81,13 @@ def analyze_patent_statistics():
                 granted_2024_2025 += granted
 
     # 4. 2024-2025年详细统计
-    print(f"\n4. 2024-2025年详细统计")
+    print("\n4. 2024-2025年详细统计")
     print(f"{'总计 ({total_2024_2025:,}件)':<20} {total_2024_2025:>8}")
     print(f"{'已授权 ({granted_2024_2025:,}件)':<20} {granted_2024_2025:>8}")
     print(f"{'授权率':<20} {(granted_2024_2025/total_2024_2025*100):.1f}%")
 
     # 5. 查询2024年和2025年的具体数据
-    print(f"\n5. 2024年与2025年对比")
+    print("\n5. 2024年与2025年对比")
 
     # 2024年数据
     cursor.execute("""
@@ -149,7 +150,7 @@ def analyze_patent_statistics():
         print(f"{item:<10} {val_2024:<10} {val_2025:<10} {growth}")
 
     # 6. 近期趋势（2022-2025）
-    print(f"\n6. 近期趋势（2022-2025）")
+    print("\n6. 近期趋势（2022-2025）")
     cursor.execute("""
         SELECT
             EXTRACT(YEAR FROM application_date) as year,

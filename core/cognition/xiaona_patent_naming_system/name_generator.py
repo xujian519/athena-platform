@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜专利命名系统 - 名称生成器
 Xiaona Patent Naming System - Name Generator

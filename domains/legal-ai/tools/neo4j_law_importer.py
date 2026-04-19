@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import hashlib
 import json
 import logging
@@ -7,10 +6,12 @@ import os
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Any
+
+logger = logging.getLogger(__name__)
 
 
-def load_neo4j_config() -> Dict[str, str]:
+def load_neo4j_config() -> dict[str, str]:
     base_dir = Path(__file__).resolve().parents[2]
     cfg_path = (
         base_dir
@@ -25,16 +26,16 @@ def load_neo4j_config() -> Dict[str, str]:
     database = os.getenv('KNOWLEDGE_GRAPH_NEO4J_DATABASE', 'neo4j')
     if cfg_path.exists():
         try:
-            with open(cfg_path, 'r', encoding='utf-8') as f:
+            with open(cfg_path, encoding='utf-8') as f:
                 cfg = json.load(f)
                 neo = cfg.get('knowledge_graph', {}).get('neo4j', {})
                 uri = neo.get('uri', uri)
                 user = neo.get('user', user)
                 password = neo.get('password', password)
                 database = neo.get('database', database)
-8except Exception as e:
-8    # 记录异常但不中断流程
-8    logger.debug(f"[neo4j_law_importer] Exception: {e}")
+        except Exception as e:
+            # 记录异常但不中断流程
+            logger.debug(f"[neo4j_law_importer] Exception: {e}")
     return {'uri': uri, 'user': user, 'password': password, 'database': database}
 
 
@@ -53,10 +54,10 @@ def get_level_by_folder(rel_path: Path) -> str:
     return '法律'
 
 
-def normalize_title_from_filename(name: str) -> Tuple[str, Optional[str]]:
+def normalize_title_from_filename(name: str) -> tuple[str, str | None]:
     m = re.search(r"\((\d{4}-\d{2}-\d{2})\)", name)
     pub = m.group(1) if m else None
-    title = re.sub(r"\(\d{4}-\d{2}-\d{2}\)', '", name).strip()
+    title = re.sub(r"\(\d{4}-\d{2}-\d{2}\)", '', name).strip()
     return title, pub
 
 
@@ -64,15 +65,14 @@ def hash_id(s: str) -> str:
     return hashlib.sha1(s.encode('utf-8')).hexdigest()[:16]
 
 
-def parse_markdown_file(path: Path) -> Dict[str, any]:
+def parse_markdown_file(path: Path) -> dict[str, any]:
     lines = []
-    with open(path, 'r', encoding='utf-8') as f:
+    with open(path, encoding='utf-8') as f:
         for line in f.readlines():
             lines.append(line.rstrip("\n"))
     title = None
     publish_date = None
     valid_from = None
-    info_done = False
     body_start_idx = 0
     for i, line in enumerate(lines[:50]):
         if not title and line.startswith('# '):
@@ -85,7 +85,6 @@ def parse_markdown_file(path: Path) -> Dict[str, any]:
             else:
                 publish_date = publish_date or dt
         if line.strip() == '<!-- INFO END -->':
-            info_done = True
             body_start_idx = i + 1
             break
     if not title:
@@ -115,8 +114,8 @@ def parse_markdown_file(path: Path) -> Dict[str, any]:
 
 
 def make_ids(
-    rel_path: Path, parsed: Dict[str, any]
-) -> Tuple[str, List[Tuple[str, Dict[str, any]]]]:
+    rel_path: Path, parsed: dict[str, any]
+) -> tuple[str, list[tuple[str, dict[str, any]]]]:
     law_key = (
         f"LAW::{str(rel_path)}::{parsed['title']}::{parsed.get('publish_date') or ''}"
     )
@@ -139,24 +138,23 @@ def import_to_neo4j(base_dir: str) -> Any:
             session.run(
                 'CREATE CONSTRAINT entity_id_unique IF NOT EXISTS FOR (n:Entity) REQUIRE n.id IS UNIQUE'
             )
-8except Exception as e:
-8    # 记录异常但不中断流程
-8    logger.debug(f"[neo4j_law_importer] Exception: {e}")
+        except Exception as e:
+            # 记录异常但不中断流程
+            logger.debug(f"[neo4j_law_importer] Exception: {e}")
         try:
             session.run(
                 'CREATE INDEX entity_type_index IF NOT EXISTS FOR (n:Entity) ON (n.entity_type)'
             )
-8except Exception as e:
-8    # 记录异常但不中断流程
-8    logger.debug(f"[neo4j_law_importer] Exception: {e}")
+        except Exception as e:
+            # 记录异常但不中断流程
+            logger.debug(f"[neo4j_law_importer] Exception: {e}")
         try:
             session.run(
                 'CREATE INDEX entity_title_index IF NOT EXISTS FOR (n:Entity) ON (n.title)'
             )
-8except Exception as e:
-8    # 记录异常但不中断流程
-8    logger.debug(f"[neo4j_law_importer] Exception: {e}")
-        files = []
+        except Exception as e:
+            # 记录异常但不中断流程
+            logger.debug(f"[neo4j_law_importer] Exception: {e}")
         for p in project_root.glob('**/*.md'):
             if p.name == '_index.md':
                 continue
@@ -206,7 +204,7 @@ def import_to_neo4j(base_dir: str) -> Any:
     driver.close()
 
 
-def summarize(cfg: Dict[str, str]) -> Dict[str, any]:
+def summarize(cfg: dict[str, str]) -> dict[str, any]:
     from neo4j import GraphDatabase
 
     driver = GraphDatabase.driver(cfg['uri'], auth=(cfg['user'], cfg['password']))

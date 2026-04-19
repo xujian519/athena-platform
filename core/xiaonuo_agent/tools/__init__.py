@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 工具模块 (Tools Module)
 Function Calling工具调用系统

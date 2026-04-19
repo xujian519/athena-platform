@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 性能数据收集系统
 Performance Data Collection System
@@ -18,13 +19,12 @@ Performance Data Collection System
 import json
 import logging
 import sqlite3
-from collections import defaultdict, deque
+from collections import deque
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -378,15 +378,9 @@ class PerformanceDataCollector:
         self, time_range: timedelta = timedelta(days=1)
     ) -> dict[str, Any]:
         """生成性能报告"""
-        # 获取统计数据
-        stats = await self.get_statistics(time_range)
-
-        # 获取趋势数据
-        accuracy_trend = await self.get_trends("tool_selection_accuracy", time_range)
-        processing_time_trend = await self.get_trends("total_processing_time", time_range)
 
         # 分析趋势
-        def analyze_trend(trend_data) -> None:
+        def analyze_trend(trend_data, metric_name) -> str:
             if len(trend_data) < 2:
                 return "stable"
 
@@ -417,9 +411,12 @@ class PerformanceDataCollector:
             else:
                 return "stable"
 
+        # 获取统计数据
+        stats = await self.get_statistics(time_range)
+
         # 分析各项趋势
-        accuracy_trend = analyze_trend(accuracy_trend)
-        processing_time_trend = analyze_trend(processing_time_trend)
+        accuracy_trend = analyze_trend(await self.get_trends("tool_selection_accuracy", time_range), "tool_selection_accuracy")
+        processing_time_trend = analyze_trend(await self.get_trends("total_processing_time", time_range), "total_processing_time")
 
         # 生成建议
         suggestions = []

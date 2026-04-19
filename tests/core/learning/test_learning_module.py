@@ -17,12 +17,11 @@ Learning Module Tests
 创建时间: 2026-01-30
 """
 
-import asyncio
-import pytest
-from unittest.mock import AsyncMock, MagicMock
-
 import sys
 from pathlib import Path
+from unittest.mock import MagicMock
+
+import pytest
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
@@ -103,10 +102,10 @@ class TestModularLearningEngine:
         if not modular_engine_available:
             pytest.skip("ModularLearningEngine not available")
         from core.learning import (
-            ModularLearningEngine,
             AdaptiveOptimizer,
             ExperienceStore,
             KnowledgeGraphUpdater,
+            ModularLearningEngine,
             PatternRecognizer,
         )
         assert ModularLearningEngine is not None
@@ -244,9 +243,9 @@ class TestOnlineLearning:
         if not online_learning_available:
             pytest.skip("OnlineLearningEngine not available")
         from core.learning import (
-            OnlineLearningSystem,
-            OnlineLearningEngine,
             IncrementalLearner,
+            OnlineLearningEngine,
+            OnlineLearningSystem,
         )
         assert OnlineLearningSystem is not None
         assert OnlineLearningEngine is not None
@@ -300,10 +299,10 @@ class TestReinforcementLearning:
         if not rl_available:
             pytest.skip("ReinforcementLearningAgent not available")
         from core.learning import (
+            ProductionRLIntegration,
             ReinforcementLearningAgent,
             RLPolicy,
             RLTrainer,
-            ProductionRLIntegration,
         )
         assert ReinforcementLearningAgent is not None
         assert RLPolicy is not None
@@ -359,8 +358,8 @@ class TestMetaLearning:
         if not meta_learning_available:
             pytest.skip("MetaLearningEngine not available")
         from core.learning import (
-            MetaLearningEngine,
             EnhancedMetaLearning,
+            MetaLearningEngine,
             MetaLearningImplementation,
         )
         assert MetaLearningEngine is not None
@@ -388,8 +387,8 @@ class TestUncertaintyQuantification:
         if not uncertainty_available:
             pytest.skip("UncertaintyQuantifier not available")
         from core.learning import (
-            UncertaintyQuantifier,
             UncertaintyEstimate,
+            UncertaintyQuantifier,
         )
         assert UncertaintyQuantifier is not None
         assert UncertaintyEstimate is not None

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 轻量协调器 - 健康监控模块
 Lightweight Coordinator - Health Monitor
@@ -13,9 +14,10 @@ import asyncio
 import logging
 from typing import Any
 
-from core.search.standards.base_search_tool import BaseSearchTool
 from core.search.registry.tool_registry import ToolRegistry
-from .types import HealthStatus, MetricPoint, MetricType
+from core.search.standards.base_search_tool import BaseSearchTool
+
+from .types import HealthStatus, MetricType
 
 logger = logging.getLogger(__name__)
 

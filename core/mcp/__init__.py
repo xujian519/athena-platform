@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 mcp - MCP标准集成模块
 

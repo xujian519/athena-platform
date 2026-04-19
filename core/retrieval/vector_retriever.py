@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 向量检索器
 Vector Retriever for Athena Platform
@@ -9,6 +10,7 @@ Vector Retriever for Athena Platform
 import os
 from typing import Any
 
+import numpy as np
 
 from core.embedding.bge_embedding_service import (
     get_bge_service,
@@ -83,8 +85,8 @@ class VectorRetriever:
     def add(
         self,
         texts: str | list[str],
-        payloads: list[dict[str, Any] | None = None,
-        ids: list["key"] = None,
+        payloads: list[dict[str, Any]] | None = None,
+        ids: list[str] | None = None,
     ) -> list[str]:
         """
         添加文本向量到存储
@@ -105,7 +107,7 @@ class VectorRetriever:
 
         # 生成ID
         if ids is None:
-            ids = [07d}" for i]]
+            ids = [f"{i:07d}" for i in range(len(texts))]
 
         # 准备payload
         if payloads is None:
@@ -170,7 +172,7 @@ class VectorRetriever:
 
         return results
 
-    def _match_filters(self, payload: dict[dict[str, str]] -> bool:
+    def _match_filters(self, payload: dict[str, Any], filters: dict[str, Any]) -> bool:
         """检查payload是否匹配过滤条件"""
         if not filters:
             return True
@@ -272,7 +274,7 @@ class PatentVectorRetriever(VectorRetriever):
         for result in results:
             payload = result["payload"].copy()
             payload.pop("_text_field", None)
-            clean_results.append({"id": result[result["score"]]
+            clean_results.append({"id": result["id"], "score": result["score"], "payload": payload})
 
         return clean_results
 

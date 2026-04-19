@@ -5,21 +5,20 @@ Athena平台性能优化系统
 """
 
 import asyncio
-from core.async_main import async_main
-import gc
 import json
-import logging
-from core.logging_config import setup_logging
 import statistics
 import threading
 import time
-from collections import defaultdict, deque
+from collections import deque
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any
 
 import psutil
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -52,7 +51,7 @@ class MetricPoint:
     metric_type: PerformanceMetric
     value: float
     unit: str
-    tags: Dict[str, str] = field(default_factory=dict)
+    tags: dict[str, str] = field(default_factory=dict)
 
 @dataclass
 class PerformanceAlert:
@@ -76,8 +75,8 @@ class OptimizationSuggestion:
     expected_improvement: float
     implementation_cost: str  # low, medium, high
     priority: int
-    steps: List[str]
-    code_snippets: Dict[str, str] = field(default_factory=dict)
+    steps: list[str]
+    code_snippets: dict[str, str] = field(default_factory=dict)
 
 class PerformanceCollector:
     """性能数据收集器"""
@@ -157,7 +156,7 @@ class PerformanceCollector:
                 logger.error(f"自定义收集器 {collector_name} 异常: {e}")
 
     def _add_metric(self, metric_type: PerformanceMetric, value: float, unit: str,
-                   timestamp: datetime, tags: Dict[str, str] = None):
+                   timestamp: datetime, tags: dict[str, str] = None):
         """添加性能数据点"""
         metric_point = MetricPoint(
             timestamp=timestamp,
@@ -175,7 +174,7 @@ class PerformanceCollector:
 
     def get_metrics(self, metric_type: PerformanceMetric,
                    start_time: datetime | None = None,
-                   end_time: datetime | None = None) -> List[MetricPoint]:
+                   end_time: datetime | None = None) -> list[MetricPoint]:
         """获取指定类型的性能指标"""
         metrics = []
 
@@ -193,7 +192,7 @@ class PerformanceCollector:
 
         return metrics
 
-    def get_recent_metrics(self, metric_type: PerformanceMetric, minutes: int = 60) -> List[MetricPoint]:
+    def get_recent_metrics(self, metric_type: PerformanceMetric, minutes: int = 60) -> list[MetricPoint]:
         """获取最近指定时间的性能指标"""
         start_time = datetime.now() - timedelta(minutes=minutes)
         return self.get_metrics(metric_type, start_time=start_time)
@@ -219,7 +218,7 @@ class PerformanceAnalyzer:
         }
         logger.info(f"添加告警规则: {rule_id}")
 
-    def check_alerts(self) -> List[PerformanceAlert]:
+    def check_alerts(self) -> list[PerformanceAlert]:
         """检查性能告警"""
         alerts = []
 
@@ -248,7 +247,7 @@ class PerformanceAnalyzer:
 
         return alerts
 
-    def analyze_trend(self, metric_type: PerformanceMetric, hours: int = 24) -> Dict[str, Any]:
+    def analyze_trend(self, metric_type: PerformanceMetric, hours: int = 24) -> dict[str, Any]:
         """分析性能趋势"""
         # 获取指定时间范围内的指标
         start_time = datetime.now() - timedelta(hours=hours)
@@ -351,7 +350,7 @@ class PerformanceAnalyzer:
 
         return f"{metric_type.value} 性能评级: {grade}，趋势: {trend}"
 
-    def _generate_trend_recommendations(self, trend: str, grade: str, metric_type: PerformanceMetric) -> List[str]:
+    def _generate_trend_recommendations(self, trend: str, grade: str, metric_type: PerformanceMetric) -> list[str]:
         """生成优化建议"""
         recommendations = []
 
@@ -392,7 +391,7 @@ class PerformanceOptimizer:
         self.optimization_history = []
         self.active_optimizations = {}
 
-    def generate_optimization_suggestions(self) -> List[OptimizationSuggestion]:
+    def generate_optimization_suggestions(self) -> list[OptimizationSuggestion]:
         """生成优化建议"""
         suggestions = []
 
@@ -416,7 +415,7 @@ class PerformanceOptimizer:
 
         return suggestions[:10]  # 返回前10个最重要的建议
 
-    def _generate_metric_suggestions(self, metric: PerformanceMetric, analysis: Dict[str, Any]) -> List[OptimizationSuggestion]:
+    def _generate_metric_suggestions(self, metric: PerformanceMetric, analysis: dict[str, Any]) -> list[OptimizationSuggestion]:
         """为特定指标生成建议"""
         suggestions = []
         grade = analysis.get('performance_grade', 'C')
@@ -549,7 +548,7 @@ class CacheManager:
 
         return suggestions
 
-    def apply_optimization(self, suggestion_id: str) -> Dict[str, Any]:
+    def apply_optimization(self, suggestion_id: str) -> dict[str, Any]:
         """应用优化建议"""
         # 这里应该实现具体的优化逻辑
         # 由于优化需要根据具体情况执行，这里提供框架
@@ -644,7 +643,7 @@ class PerformanceMonitor:
         """添加告警处理器"""
         self.alert_handlers.append(handler)
 
-    def get_performance_report(self, hours: int = 24) -> Dict[str, Any]:
+    def get_performance_report(self, hours: int = 24) -> dict[str, Any]:
         """获取性能报告"""
         report = {
             'timestamp': datetime.now().isoformat(),
@@ -680,7 +679,7 @@ class PerformanceMonitor:
 
         return report
 
-    def _generate_performance_summary(self, metrics_analysis: Dict[str, Any]) -> Dict[str, Any]:
+    def _generate_performance_summary(self, metrics_analysis: dict[str, Any]) -> dict[str, Any]:
         """生成性能总结"""
         summary = {
             'overall_grade': 'C',

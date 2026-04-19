@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BM25稀疏检索模块
 BM25 Sparse Retriever Module
@@ -29,7 +30,7 @@ import re
 from collections import Counter
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

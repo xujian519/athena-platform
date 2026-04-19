@@ -4,11 +4,11 @@
 作为平台的学习资料使用
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-from pathlib import Path
+import sqlite3
 from datetime import datetime
+from pathlib import Path
+
 
 def save_trade_secrets_materials() -> None:
     """保存商业秘密学习资料到数据库"""
@@ -243,7 +243,7 @@ def save_trade_secrets_materials() -> None:
         ))
 
     # 保存学习指南
-    learning_guide = f"""# 商业秘密保护学习指南
+    learning_guide = """# 商业秘密保护学习指南
 
 ## 🎯 学习目标
 

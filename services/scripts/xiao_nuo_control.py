@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺智能控制中心
 Xiao Nuo Intelligent Control Center for Athena Multimodal System
@@ -7,17 +6,12 @@ Xiao Nuo Intelligent Control Center for Athena Multimodal System
 """
 
 import asyncio
-from core.async_main import async_main
 import json
 import logging
-from core.logging_config import setup_logging
-import os
-import sys
-import time
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any
 
 import psutil
 import requests
@@ -26,17 +20,14 @@ import yaml
 
 # FastAPI相关
 from fastapi import (
-    BackgroundTasks,
     FastAPI,
     HTTPException,
     WebSocket,
     WebSocketDisconnect,
 )
-from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 # AI决策相关
 try:
@@ -79,7 +70,7 @@ class ServiceInfo:
     error_count: int = 0
     uptime: float = 0.0
     last_health_check: datetime | None = None
-    config: Dict[str, Any] = field(default_factory=dict)
+    config: dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class ControlDecision:
@@ -88,7 +79,7 @@ class ControlDecision:
     target_service: str
     reason: str
     confidence: float
-    parameters: Dict[str, Any] = field(default_factory=dict)
+    parameters: dict[str, Any] = field(default_factory=dict)
     timestamp: datetime = field(default_factory=datetime.now)
 
 # Pydantic模型
@@ -96,21 +87,21 @@ class ServiceControlRequest(BaseModel):
     """服务控制请求"""
     service_name: str
     action: str
-    parameters: Dict[str, Any] = {}
+    parameters: dict[str, Any] = {}
 
 class ConfigUpdateRequest(BaseModel):
     """配置更新请求"""
     service_name: str
-    config_updates: Dict[str, Any]
+    config_updates: dict[str, Any]
 
 class SystemMetrics(BaseModel):
     """系统指标"""
     cpu_usage: float
     memory_usage: float
     disk_usage: float
-    network_io: Dict[str, float]
+    network_io: dict[str, float]
     service_count: int
-    active_services: List[str]
+    active_services: list[str]
     timestamp: datetime
 
 class XiaoNuoControlCenter:
@@ -121,25 +112,25 @@ class XiaoNuoControlCenter:
         self.config = self._load_config()
 
         # 服务管理
-        self.services: Dict[str, ServiceInfo] = {}
-        self.control_history: List[ControlDecision] = []
+        self.services: dict[str, ServiceInfo] = {}
+        self.control_history: list[ControlDecision] = []
 
         # AI决策
         self.ai_enabled = AI_AVAILABLE and self.config.get('xiao_nuo', {}).get('ai_decision', {}).get('enabled', False)
 
         # WebSocket连接
-        self.websocket_connections: List[WebSocket] = []
+        self.websocket_connections: list[WebSocket] = []
 
         # 初始化服务监控
         self._initialize_services()
 
-        logger.info(f"小诺智能控制中心初始化完成")
+        logger.info("小诺智能控制中心初始化完成")
         logger.info(f"AI决策: {'启用' if self.ai_enabled else '禁用'}")
 
-    def _load_config(self) -> Dict[str, Any]:
+    def _load_config(self) -> dict[str, Any]:
         """加载配置文件"""
         try:
-            with open(self.config_path, 'r', encoding='utf-8') as f:
+            with open(self.config_path, encoding='utf-8') as f:
                 return yaml.safe_load(f)
         except Exception as e:
             logger.error(f"配置文件加载失败: {e}")
@@ -158,7 +149,7 @@ class XiaoNuoControlCenter:
             )
             self.services[service_name] = service_info
 
-    async def start_service(self, service_name: str) -> Dict[str, Any]:
+    async def start_service(self, service_name: str) -> dict[str, Any]:
         """启动服务"""
         if service_name not in self.services:
             return {'success': False, 'error': f"服务不存在: {service_name}"}
@@ -200,7 +191,7 @@ class XiaoNuoControlCenter:
             service_info.status = ServiceStatus.ERROR
             return {'success': False, 'error': str(e)}
 
-    async def stop_service(self, service_name: str) -> Dict[str, Any]:
+    async def stop_service(self, service_name: str) -> dict[str, Any]:
         """停止服务"""
         if service_name not in self.services:
             return {'success': False, 'error': f"服务不存在: {service_name}"}
@@ -241,7 +232,7 @@ class XiaoNuoControlCenter:
             service_info.status = ServiceStatus.ERROR
             return {'success': False, 'error': str(e)}
 
-    async def restart_service(self, service_name: str) -> Dict[str, Any]:
+    async def restart_service(self, service_name: str) -> dict[str, Any]:
         """重启服务"""
         # 先停止
         stop_result = await self.stop_service(service_name)
@@ -256,7 +247,7 @@ class XiaoNuoControlCenter:
 
         return start_result
 
-    async def scale_service(self, service_name: str, replicas: int) -> Dict[str, Any]:
+    async def scale_service(self, service_name: str, replicas: int) -> dict[str, Any]:
         """扩展服务实例"""
         if service_name not in self.services:
             return {'success': False, 'error': f"服务不存在: {service_name}"}
@@ -287,7 +278,7 @@ class XiaoNuoControlCenter:
             logger.error(f"扩展服务失败 {service_name}: {e}")
             return {'success': False, 'error': str(e)}
 
-    async def update_service_config(self, service_name: str, config_updates: Dict[str, Any]) -> Dict[str, Any]:
+    async def update_service_config(self, service_name: str, config_updates: dict[str, Any]) -> dict[str, Any]:
         """更新服务配置"""
         if service_name not in self.services:
             return {'success': False, 'error': f"服务不存在: {service_name}"}
@@ -306,7 +297,7 @@ class XiaoNuoControlCenter:
                     ControlAction.UPDATE_CONFIG, service_name, '配置更新', 0.8,
                     {'config_updates': config_updates}
                 )
-                return {'success': True, 'message': f"服务配置已更新"}
+                return {'success': True, 'message': "服务配置已更新"}
             else:
                 return restart_result
 
@@ -314,7 +305,7 @@ class XiaoNuoControlCenter:
             logger.error(f"更新配置失败 {service_name}: {e}")
             return {'success': False, 'error': str(e)}
 
-    async def health_check_all_services(self) -> Dict[str, Any]:
+    async def health_check_all_services(self) -> dict[str, Any]:
         """检查所有服务健康状态"""
         health_results = {}
 
@@ -334,7 +325,7 @@ class XiaoNuoControlCenter:
             'timestamp': datetime.now().isoformat()
         }
 
-    async def _health_check_service(self, service_name: str) -> Dict[str, Any]:
+    async def _health_check_service(self, service_name: str) -> dict[str, Any]:
         """检查单个服务健康状态"""
         service_info = self.services[service_name]
 
@@ -381,7 +372,7 @@ class XiaoNuoControlCenter:
             timestamp=datetime.now()
         )
 
-    async def ai_optimize_system(self) -> Dict[str, Any]:
+    async def ai_optimize_system(self) -> dict[str, Any]:
         """AI优化系统"""
         if not self.ai_enabled:
             return {'success': False, 'error': 'AI决策未启用'}
@@ -428,7 +419,7 @@ class XiaoNuoControlCenter:
                     decision = ControlDecision(
                         action=ControlAction.RESTART,
                         target_service=service,
-                        reason=f"服务不健康，自动重启",
+                        reason="服务不健康，自动重启",
                         confidence=0.9
                     )
                     decisions.append(decision)
@@ -471,7 +462,7 @@ class XiaoNuoControlCenter:
 
         return high_load_service
 
-    async def _execute_control_decision(self, decision: ControlDecision) -> Dict[str, Any]:
+    async def _execute_control_decision(self, decision: ControlDecision) -> dict[str, Any]:
         """执行控制决策"""
         await self._record_control_decision(
             decision.action, decision.target_service,
@@ -495,7 +486,7 @@ class XiaoNuoControlCenter:
             return {'success': False, 'error': f"未知控制动作: {decision.action}"}
 
     async def _record_control_decision(self, action: ControlAction, target: str,
-                                     reason: str, confidence: float, parameters: Dict = None):
+                                     reason: str, confidence: float, parameters: dict = None):
         """记录控制决策"""
         decision = ControlDecision(
             action=action,
@@ -524,7 +515,7 @@ class XiaoNuoControlCenter:
         })
 
     # 具体服务启动/停止方法
-    async def _start_dolphin_service(self) -> Dict[str, Any]:
+    async def _start_dolphin_service(self) -> dict[str, Any]:
         """启动Dolphin服务"""
         try:
             cmd = ['bash', '/Users/xujian/Athena工作平台/scripts/startup/start_dolphin_service.sh']
@@ -533,7 +524,7 @@ class XiaoNuoControlCenter:
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
-    async def _stop_dolphin_service(self) -> Dict[str, Any]:
+    async def _stop_dolphin_service(self) -> dict[str, Any]:
         """停止Dolphin服务"""
         try:
             cmd = ['bash', '/Users/xujian/Athena工作平台/scripts/shutdown_dolphin_service.sh']
@@ -542,7 +533,7 @@ class XiaoNuoControlCenter:
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
-    async def _start_glm_vision_service(self) -> Dict[str, Any]:
+    async def _start_glm_vision_service(self) -> dict[str, Any]:
         """启动GLM视觉服务"""
         try:
             cmd = ['cd', '/Users/xujian/Athena工作平台/services/ai-models/glm-full-suite', '&&',
@@ -553,7 +544,7 @@ class XiaoNuoControlCenter:
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
-    async def _stop_glm_vision_service(self) -> Dict[str, Any]:
+    async def _stop_glm_vision_service(self) -> dict[str, Any]:
         """停止GLM视觉服务"""
         try:
             # 查找并杀掉进程
@@ -563,7 +554,7 @@ class XiaoNuoControlCenter:
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
-    async def _start_multimodal_processor(self) -> Dict[str, Any]:
+    async def _start_multimodal_processor(self) -> dict[str, Any]:
         """启动多模态处理器"""
         try:
             cmd = ['cd', '/Users/xujian/Athena工作平台/services', '&&',
@@ -574,7 +565,7 @@ class XiaoNuoControlCenter:
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
-    async def _stop_multimodal_processor(self) -> Dict[str, Any]:
+    async def _stop_multimodal_processor(self) -> dict[str, Any]:
         """停止多模态处理器"""
         try:
             cmd = ['pkill', '-f', 'multimodal_processing_service.py']
@@ -583,7 +574,7 @@ class XiaoNuoControlCenter:
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
-    async def _start_api_gateway(self) -> Dict[str, Any]:
+    async def _start_api_gateway(self) -> dict[str, Any]:
         """启动API网关"""
         try:
             cmd = ['cd', '/Users/xujian/Athena工作平台/services', '&&',
@@ -594,7 +585,7 @@ class XiaoNuoControlCenter:
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
-    async def _stop_api_gateway(self) -> Dict[str, Any]:
+    async def _stop_api_gateway(self) -> dict[str, Any]:
         """停止API网关"""
         try:
             cmd = ['pkill', '-f', 'unified_multimodal_api.py']
@@ -603,7 +594,7 @@ class XiaoNuoControlCenter:
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
-    async def _start_custom_service(self, service_name: str, config: Dict) -> Dict[str, Any]:
+    async def _start_custom_service(self, service_name: str, config: dict) -> dict[str, Any]:
         """启动自定义服务"""
         try:
             # 这里可以根据配置启动自定义服务
@@ -611,7 +602,7 @@ class XiaoNuoControlCenter:
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
-    async def _stop_custom_service(self, service_name: str) -> Dict[str, Any]:
+    async def _stop_custom_service(self, service_name: str) -> dict[str, Any]:
         """停止自定义服务"""
         try:
             # 这里可以根据配置停止自定义服务
@@ -619,7 +610,7 @@ class XiaoNuoControlCenter:
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
-    async def _execute_command(self, cmd: List[str]) -> Dict[str, Any]:
+    async def _execute_command(self, cmd: list[str]) -> dict[str, Any]:
         """执行系统命令"""
         try:
             import subprocess
@@ -633,7 +624,7 @@ class XiaoNuoControlCenter:
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
-    async def _notify_websocket_clients(self, message: Dict):
+    async def _notify_websocket_clients(self, message: dict):
         """通知所有WebSocket客户端"""
         if not self.websocket_connections:
             return
@@ -687,7 +678,7 @@ class XiaoNuoControlCenter:
             'event': event
         }, ensure_ascii=False))
 
-    async def _handle_control_command(self, message: Dict) -> Dict:
+    async def _handle_control_command(self, message: dict) -> dict:
         """处理控制命令"""
         command_type = message.get('command')
 

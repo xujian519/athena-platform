@@ -1,0 +1,20 @@
+{
+  "vector_database": {
+    "client_type": "optimized",
+    "use_cache": true,
+    "cache_ttl": 3600,
+    "cache_similarity_threshold": 0.95,
+    "collection_mappings": {
+      "ai_technical_terms_vector_db": "ai_technical_terms_1024",
+      "legal_laws_comprehensive": "legal_laws_1024",
+      "legal_clauses": "legal_clauses",
+      "legal_documents": "legal_documents",
+      "patent_rules_unified_1024": "patent_rules_unified_1024",
+      "legal_patent_vectors": "legal_patent_vectors",
+      "patent_invalid_db": "patent_invalid_db",
+      "patent_judgment_db": "patent_judgment_db",
+      "patent_review_db": "patent_review_db",
+      "general_memory_db": "general_memory_db"
+    }
+  }
+}

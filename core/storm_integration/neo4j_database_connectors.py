@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Neo4j优化的真实数据库连接器
 Neo4j Optimized Real Database Connectors
@@ -23,9 +24,9 @@ Neo4j Optimized Real Database Connectors
 """
 
 import asyncio
+import os
 import re
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -45,7 +46,7 @@ class OptimizedPostgreSQLRetriever:
         port: int = 5432,
         user: str = "postgres",
         password: str = "",  # PostgreSQL 通常使用 peer 认证
-        database: str = "athena_db",  # 默认数据库
+        database: str = "legal_world_model",  # 默认数据库 (原athena_db)
     ):
         """
         初始化 PostgreSQL 检索器
@@ -235,7 +236,7 @@ class OptimizedNeo4jRetriever:
         uri: str = "bolt://127.0.0.1:7687",
         database: str = "patent_kg",  # 使用实际存在的数据库
         username: str = "neo4j",
-        password: str = "password",
+        password: str = os.getenv("NEO4J_PASSWORD", "password"),
     ):
         """
         初始化 Neo4j 检索器 (TD-001: 从NebulaGraph迁移)
@@ -486,7 +487,7 @@ class OptimizedQdrantRetriever:
 
         try:
             # 执行检索
-            from qdrant_client.models import FieldCondition, Filter, MatchValue
+            from qdrant_client.models import Filter
 
             search_result = self._client.query_points(
                 collection_name=self.collection_name,

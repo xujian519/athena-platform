@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BERT优化器
 BERT Optimizer for Athena Platform

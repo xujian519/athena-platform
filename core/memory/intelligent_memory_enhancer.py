@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能记忆增强器
 Intelligent Memory Enhancer
@@ -135,6 +136,9 @@ class PreferenceExtractor:
     def _extract_direct_preference(self, text: str, indicator: str) -> UserPreference | None:
         """提取直接偏好"""
         try:
+            start = text.find(indicator)
+            if start == -1:
+                return None
             content = text[start + len(indicator) :].strip()
 
             # 提取具体偏好内容
@@ -160,6 +164,7 @@ class PreferenceExtractor:
         # 简化实现:假设评价词前面的内容是被评价对象
         words = text.split()
         try:
+            idx = text.find(indicator)
             if idx > 0:
                 evaluated = words[idx - 1]
 
@@ -170,7 +175,7 @@ class PreferenceExtractor:
                     confidence=0.6,
                     context={"evaluated": evaluated},
                 )
-        except (ValueError, IndexError):
+        except (ValueError, IndexError) as e:
             logger.error(f"捕获(ValueError, IndexError)异常: {e}", exc_info=True)
 
         return None
@@ -316,6 +321,7 @@ class PersonalizedRecommender:
     def _load_preferences(self) -> None:
         """从记忆中加载用户偏好"""
         try:
+            semantic_memories = self.memory.get_memories_by_type("semantic")
             for mem in semantic_memories:
                 if mem.get("type") == "semantic":
                     category = mem.get("category", "")

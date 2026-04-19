@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利业务知识库系统
 基于专利知识图谱提取的规则和提示词，支持专利撰写、分析等全部专利业务
@@ -9,11 +8,10 @@
 """
 
 import json
-from core.async_main import async_main
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +34,7 @@ class PatentBusinessKnowledgeBase:
         # 专利案例库
         self.case_law = self._load_case_law()
 
-    def _load_business_rules(self) -> Dict:
+    def _load_business_rules(self) -> dict:
         """加载专利业务规则"""
         return {
             '专利撰写': {
@@ -155,7 +153,7 @@ class PatentBusinessKnowledgeBase:
             }
         }
 
-    def _load_prompt_templates(self) -> Dict:
+    def _load_prompt_templates(self) -> dict:
         """加载提示词模板"""
         return {
             '专利撰写': {
@@ -347,7 +345,7 @@ class PatentBusinessKnowledgeBase:
             }
         }
 
-    def _load_writing_templates(self) -> Dict:
+    def _load_writing_templates(self) -> dict:
         """加载专利撰写模板"""
         return {
             '发明': {
@@ -384,7 +382,7 @@ class PatentBusinessKnowledgeBase:
             }
         }
 
-    def _load_examination_standards(self) -> Dict:
+    def _load_examination_standards(self) -> dict:
         """加载审查标准"""
         return {
             '发明审查': {
@@ -409,7 +407,7 @@ class PatentBusinessKnowledgeBase:
             }
         }
 
-    def _load_case_law(self) -> List[Dict]:
+    def _load_case_law(self) -> list[dict]:
         """加载案例法"""
         return [
             {
@@ -432,7 +430,7 @@ class PatentBusinessKnowledgeBase:
             }
         ]
 
-    def get_writing_assistant(self, patent_type: str, tech_info: Dict) -> Dict:
+    def get_writing_assistant(self, patent_type: str, tech_info: dict) -> dict:
         """获取撰写助手"""
         return {
             '模板': self.templates.get(patent_type, {}),
@@ -441,7 +439,7 @@ class PatentBusinessKnowledgeBase:
             '建议': self._generate_writing_suggestions(tech_info)
         }
 
-    def get_analysis_assistant(self, analysis_type: str) -> Dict:
+    def get_analysis_assistant(self, analysis_type: str) -> dict:
         """获取分析助手"""
         return {
             '规则': self.rules.get(analysis_type, {}),
@@ -449,7 +447,7 @@ class PatentBusinessKnowledgeBase:
             '案例参考': self.case_law
         }
 
-    def get_search_assistant(self, search_type: str) -> Dict:
+    def get_search_assistant(self, search_type: str) -> dict:
         """获取检索助手"""
         return {
             '提示词': self.prompts['专利检索'].get(search_type, ''),
@@ -457,7 +455,7 @@ class PatentBusinessKnowledgeBase:
             '注意事项': self._get_search_notes(search_type)
         }
 
-    def get_evaluation_assistant(self, eval_type: str) -> Dict:
+    def get_evaluation_assistant(self, eval_type: str) -> dict:
         """获取评估助手"""
         return {
             '提示词': self.prompts['专利评估'].get(eval_type, ''),
@@ -465,7 +463,7 @@ class PatentBusinessKnowledgeBase:
             '参考指标': self._get_evaluation_metrics(eval_type)
         }
 
-    def _generate_writing_suggestions(self, tech_info: Dict) -> List[str]:
+    def _generate_writing_suggestions(self, tech_info: dict) -> list[str]:
         """生成撰写建议"""
         suggestions = []
         field = tech_info.get('tech_field', '').lower()
@@ -497,7 +495,7 @@ class PatentBusinessKnowledgeBase:
 
         return suggestions
 
-    def _get_search_strategy(self, search_type: str) -> List[str]:
+    def _get_search_strategy(self, search_type: str) -> list[str]:
         """获取检索策略"""
         strategies = {
             '查新检索': [
@@ -521,7 +519,7 @@ class PatentBusinessKnowledgeBase:
         }
         return strategies.get(search_type, [])
 
-    def _get_search_notes(self, search_type: str) -> List[str]:
+    def _get_search_notes(self, search_type: str) -> list[str]:
         """获取检索注意事项"""
         notes = {
             '查新检索': [
@@ -545,7 +543,7 @@ class PatentBusinessKnowledgeBase:
         }
         return notes.get(search_type, [])
 
-    def _get_evaluation_standards(self, eval_type: str) -> Dict:
+    def _get_evaluation_standards(self, eval_type: str) -> dict:
         """获取评估标准"""
         standards = {
             '技术价值': {
@@ -563,7 +561,7 @@ class PatentBusinessKnowledgeBase:
         }
         return standards.get(eval_type, {})
 
-    def _get_evaluation_metrics(self, eval_type: str) -> List[str]:
+    def _get_evaluation_metrics(self, eval_type: str) -> list[str]:
         """获取评估指标"""
         metrics = {
             '技术价值': [

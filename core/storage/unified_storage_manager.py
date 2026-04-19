@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一存储管理器
 Unified Storage Manager for Qdrant + Neo4j + PostgreSQL
@@ -21,24 +22,23 @@ import logging
 import uuid
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 # PostgreSQL
 import psycopg2
 import psycopg2.pool
-from psycopg2 import sql as psycopg2_sql
-from psycopg2.extras import Json, RealDictCursor
 
 # Neo4j - 统一图数据库 (TD-001)
 from neo4j import GraphDatabase
+from psycopg2 import sql as psycopg2_sql
+from psycopg2.extras import Json, RealDictCursor
 
 # Qdrant
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, PointStruct, VectorParams
 
-
 # 导入配置管理
-from core.config.settings import get_config, get_database_config
+from core.config.settings import get_database_config
 from core.logging_config import setup_logging
 
 # 配置日志
@@ -430,7 +430,7 @@ class UnifiedStorageManager:
             if conn:
                 self.pg_pool.putconn(conn)
 
-    def _write_to_qdrant(self, doc_id: str, vectors: list[dict[str, Any]]):
+    def _write_to_qdrant(self, doc_id: str, vectors: list[dict[str, Any]], payload: dict[str, Any] | None = None):
         """写入Qdrant"""
         # 确保集合存在
         self._ensure_qdrant_collection()
@@ -438,7 +438,7 @@ class UnifiedStorageManager:
         # 写入向量
         self.qdrant_client.upsert(
             collection_name=self.config.qdrant_collection,
-            points=[PointStruct(id=doc_id, vector=vectors, payload=payload)],
+            points=[PointStruct(id=doc_id, vector=vectors, payload=payload or {})],
         )
 
     def _write_to_neo4j(
@@ -506,7 +506,7 @@ class UnifiedStorageManager:
     def search(
         self,
         query_text: str,
-        query_vector: list["key"] = None,
+        query_vector: list[str] = None,
         domain: str | None = None,
         document_type: str | None = None,
         limit: int = 10,
@@ -603,8 +603,8 @@ class UnifiedStorageManager:
             limit = int(limit)
             if limit <= 0 or limit > 1000:
                 raise ValueError(f"limit参数超出有效范围: {limit}")
-        except (ValueError, TypeError):
-            raise ValueError(f"limit参数必须是正整数: {limit}")
+        except (ValueError, TypeError) as e:
+            raise ValueError(f"limit参数必须是正整数: {limit}") from e
 
         try:
             with self.neo4j_driver.session(database=self.config.neo4j_database) as session:
@@ -664,8 +664,8 @@ class UnifiedStorageManager:
             limit = int(limit)
             if limit <= 0 or limit > 1000:
                 raise ValueError(f"limit参数超出有效范围: {limit}")
-        except (ValueError, TypeError):
-            raise ValueError(f"limit参数必须是正整数: {limit}")
+        except (ValueError, TypeError) as e:
+            raise ValueError(f"limit参数必须是正整数: {limit}") from e
 
         conn = None
         try:

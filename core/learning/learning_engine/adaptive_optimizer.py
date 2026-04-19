@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习引擎 - 自适应优化器
 Learning Engine - Adaptive Optimizer

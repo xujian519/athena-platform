@@ -1,18 +1,15 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 DeepSeekMath V2技术部署脚本
 简化版部署实现
 """
 
 import json
-from core.async_main import async_main
-import logging
-from core.logging_config import setup_logging
 import os
-import sys
 from datetime import datetime
 from pathlib import Path
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -786,17 +783,15 @@ def main():
             'error': str(e)
         }
 
-if __name__ == '__main__':
-    success = main()
-    if success:
+def main():
     """主函数"""
-    logger.info('🚀 DeepSeekMath V2技术部署脚本')
+    logger.info('DeepSeekMath V2技术部署脚本')
     logger.info('🎯 基于DeepSeekMath V2论文的技术集成到Athena平台')
     logger.info(str('=' * 60))
 
     try:
         # 创建部署环境
-        create_deployment_environment()
+        create_service_directory()
 
         # 启动部署
         logger.info('📋 开始部署DeepSeekMath V2技术...')
@@ -804,23 +799,17 @@ if __name__ == '__main__':
 
         # 创建简化的GRPO服务
         logger.info('  🔍 创建GRPO优化器...')
-        create_grpo_service()
+        create_simple_grpo_service()
 
         # 创建简化的数据生成器
         logger.info('  📊 创建专利数据生成器...')
-        create_data_generator()
+        create_simple_data_generator()
 
         # 创建仪表板
         logger.info('  📈 创建监控仪表板...')
-        create_dashboard()
+        create_unified_dashboard()
 
-        # 创建启动脚本
-        logger.info('  🔧 创建启动和管理脚本...')
-        create_deployment_scripts()
-
-        # 执行部署
-        logger.info('🚀 执行部署...')
-        execute_deployment()
+        logger.info('🚀 部署完成!')
 
         logger.info("\n🎉 DeepSeekMath V2技术集成部署完成!")
         logger.info(str('=' * 60))
@@ -869,7 +858,4 @@ if __name__ == '__main__':
         logger.info('🎯 现在可以使用这些技术来增强专利分析能力!')
         logger.info('📊 访问仪表板查看详细状态和性能指标')
     else:
-        logger.info("\n❌ 部署过程中遇到问题，请检查错误信息")
-
-if __name__ == '__main__':
-    main()
+        logger.info("\n部署过程中遇到问题，请检查错误信息")

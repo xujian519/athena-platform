@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一意图识别服务
 Unified Intent Recognition Service

@@ -13,21 +13,24 @@ Edge Case Tests for Memory Module - Phase 3
 版本: v3.0.0 (Phase 3)
 """
 
-import pytest
 import asyncio
+import sys
 import time
-import json
-from unittest.mock import AsyncMock, MagicMock, patch
-from datetime import datetime
-from typing import Any
+from pathlib import Path
+
+import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+from unittest.mock import MagicMock, patch
 
 from core.memory.unified_memory import (
-    UnifiedAgentMemorySystem,
     AgentType,
-    MemoryType,
-    MemoryTier,
+    CacheStatistics,
     MemoryItem,
-    CacheStatistics
+    MemoryTier,
+    MemoryType,
+    UnifiedAgentMemorySystem,
 )
 
 
@@ -445,7 +448,7 @@ class TestMemoryLifecycle:
 
     async def test_memory_aging(self):
         """测试记忆老化"""
-        system = UnifiedAgentMemorySystem()
+        UnifiedAgentMemorySystem()
 
         # 创建不同层级的记忆
         memories = [
@@ -468,7 +471,7 @@ class TestMemoryLifecycle:
 
     async def test_memory_promotion(self):
         """测试记忆升级"""
-        system = UnifiedAgentMemorySystem()
+        UnifiedAgentMemorySystem()
 
         # 创建冷记忆
         memory = MemoryItem(
@@ -491,7 +494,7 @@ class TestMemoryLifecycle:
 
     async def test_memory_importance(self):
         """测试记忆重要性"""
-        system = UnifiedAgentMemorySystem()
+        UnifiedAgentMemorySystem()
 
         # 不同重要性的记忆
         memories = [

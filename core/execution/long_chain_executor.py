@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 长链执行器
 Long Chain Executor
@@ -13,8 +14,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

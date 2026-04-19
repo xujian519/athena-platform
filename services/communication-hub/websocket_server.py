@@ -4,23 +4,24 @@ WebSocket服务器
 """
 
 import asyncio
-from core.async_main import async_main
 import json
 import logging
-from core.logging_config import setup_logging
 from datetime import datetime
-from typing import Dict, Set
 
 import websockets
 from message_bus import (
     Message,
     MessageType,
-    Priority,
     message_bus,
     request_collaboration,
     send_task_update,
 )
-from websockets.server import WebSocketServerProtocol
+from websockets.asyncio.server import ServerConnection
+
+from core.logging_config import setup_logging
+
+# 类型别名，保持向后兼容
+WebSocketServerProtocol = ServerConnection
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -30,9 +31,9 @@ class WebSocketManager:
     """WebSocket连接管理器"""
 
     def __init__(self):
-        self.connections: Dict[str, WebSocketServerProtocol] = {}
-        self.ai_connections: Dict[str, str] = {}  # AI名称 -> 连接ID
-        self.client_info: Dict[str, Dict] = {}
+        self.connections: dict[str, WebSocketServerProtocol] = {}
+        self.ai_connections: dict[str, str] = {}  # AI名称 -> 连接ID
+        self.client_info: dict[str, dict] = {}
 
     async def register(self, websocket: WebSocketServerProtocol, connection_id: str,
                       client_type: str = 'client', ai_name: str = None) -> str:
@@ -285,8 +286,8 @@ if __name__ == '__main__':
     logger.info(str('='*60))
     logger.info('📍 服务器地址: ws://localhost:8092')
     logger.info("\n📋 连接认证格式:")
-    logger.info('  {'type': 'auth', 'client_type': 'ai', 'ai_name': 'athena'}')
-    logger.info('  {'type': 'auth', 'client_type': 'client'}')
+    logger.info("  {'type': 'auth', 'client_type': 'ai', 'ai_name': 'athena'}")
+    logger.info("  {'type': 'auth', 'client_type': 'client'}")
     logger.info("\n💬 支持的消息类型:")
     logger.info('  • ping - 心跳检测')
     logger.info('  • task_update - 任务更新')

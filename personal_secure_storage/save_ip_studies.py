@@ -4,11 +4,30 @@
 包含最高院知识产权审判案例指导的学习笔记
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-from pathlib import Path
+import sqlite3
 from datetime import datetime
+from pathlib import Path
+
+
+def _build_case_section(cases, start_idx):
+    """构建案例部分的字符串"""
+    lines = []
+    for i, case in enumerate(cases):
+        lines.append(f"#### 案例{start_idx + i}: {case.get('reference', '')} - {case.get('title', '')}")
+        key_points = case.get('key_points', [])
+        if key_points:
+            points_str = "; ".join(key_points[:3])
+            lines.append(f"- **要点**: {points_str}")
+        if case.get('insights'):
+            lines.append(f"- **启示**: {case['insights'][0] if case['insights'] else ''}")
+    return chr(10).join(lines)
+
+
+def _build_list_section(items):
+    """构建列表部分的字符串"""
+    return chr(10).join([f"- {item}" for item in items])
+
 
 def save_ip_studies() -> None:
     """保存知识产权学习笔记到数据库"""
@@ -146,6 +165,24 @@ def save_ip_studies() -> None:
     }
 
     # 保存主要学习记录
+    # 预构建案例部分字符串，避免 f-string 嵌套导致的 Python 3.10 兼容性问题
+    _civil_cases = chr(10).join([
+        f'#### 案例{i+1}: {case.get("reference", "")} - {case.get("title", "")}\n'
+        f'- **要点**: {"; ".join(case.get("key_points", [])[:3])}\n'
+        f'- **启示**: {case.get("insights", [""])[0] if case.get("insights") else ""}'
+        for i, case in enumerate(volume_10_cases[:5])
+    ])
+    _admin_cases = chr(10).join([
+        f'#### 案例{i+6}: {case.get("reference", "")} - {case.get("title", "")}\n'
+        f'- **要点**: {"; ".join(case.get("key_points", [])[:3])}'
+        for i, case in enumerate(volume_10_cases[5:9])
+    ])
+    _procedure_cases = chr(10).join([
+        f'#### 案例{i+10}: {case.get("reference", "")} - {case.get("title", "")}\n'
+        f'- **要点**: {"; ".join(case.get("key_points", [])[:3])}'
+        for i, case in enumerate(volume_10_cases[9:])
+    ])
+
     cursor.execute("""
         INSERT OR REPLACE INTO personal_info
         (category, title, content, content_type, sensitivity_level, tags, metadata, created_at)
@@ -167,23 +204,13 @@ def save_ip_studies() -> None:
 ## 📋 第10辑核心案例精选
 
 ### 专利民事案件
-{chr(10).join([f"""
-#### 案例{i+1}: {case['reference']} - {case['title']}
-- **要点**: {'; '.join(case['key_points'][:3])}
-- **启示**: {case.get('insights', [''])[0] if case.get('insights') else ''}
-""" for i, case in enumerate(volume_10_cases[:5])])}
+{_civil_cases}
 
 ### 专利行政案件
-{chr(10).join([f"""
-#### 案例{i+6}: {case['reference']} - {case['title']}
-- **要点**: {'; '.join(case['key_points'][:3])}
-""" for i, case in enumerate(volume_10_cases[5:9])])}
+{_admin_cases}
 
 ### 程序与证据
-{chr(10).join([f"""
-#### 案例{i+10}: {case['reference']} - {case['title']}
-- **要点**: {'; '.join(case['key_points'][:3])}
-""" for i, case in enumerate(volume_10_cases[9:])])}
+{_procedure_cases}
 
 ## 💡 学习心得
 
@@ -229,11 +256,11 @@ def save_ip_studies() -> None:
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             'case_study',
-            f"{case['reference']} - {case['title']}",
-            f"""# {case['reference']}
+            f"{case.get('reference', '')} - {case.get('title', '')}",
+            f"""# {case.get('reference', '')}
 
 ## 案件标题
-{case['title']}
+{case.get('title', '')}
 
 ## 案件编号
 {case['case_number']}
@@ -256,7 +283,7 @@ def save_ip_studies() -> None:
             2,
             json.dumps({
                 '类型': '案例学习',
-                '编号': case['reference'],
+                '编号': case.get("reference", ""),
                 '标签': ['案例', '知识产权', '专业学习']
             }),
             json.dumps({
@@ -267,7 +294,7 @@ def save_ip_studies() -> None:
         ))
 
     # 创建专业成长记录
-    professional_growth = f"""# 徐健知识产权专业成长记录
+    professional_growth = """# 徐健知识产权专业成长记录
 
 ## 📈 专业学习轨迹
 

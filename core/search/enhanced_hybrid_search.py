@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强混合检索算法
 结合向量搜索、知识图谱推理和关键词检索的智能搜索系统
@@ -12,8 +13,9 @@ from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
+import networkx as nx
 
 # 导入数据库连接池(替代直接使用psycopg2)
 # 始终导入psycopg2作为回退
@@ -22,7 +24,6 @@ from psycopg2.extras import RealDictCursor
 from qdrant_client import QdrantClient
 from qdrant_client.models import FieldCondition, Filter, MatchValue
 from sentence_transformers import SentenceTransformer
-
 
 # 尝试使用连接池
 try:

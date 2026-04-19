@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 联网搜索引擎 - 基类
 Web Search Engines - Base Classes
@@ -65,3 +66,11 @@ class BaseSearchEngine(ABC):
             params["file_Type"] = query.file_type
 
         return params
+
+    def _record_success(self, results_count: int = 0):
+        """记录成功搜索"""
+        pass
+
+    def _record_failure(self, error_message: str):
+        """记录失败搜索"""
+        pass

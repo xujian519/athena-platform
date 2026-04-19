@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 小诺个人任务管理器
 Xiaonuo Personal Task Manager
@@ -11,13 +11,12 @@ Xiaonuo Personal Task Manager
 4. 拖延症对抗机制
 """
 
+import asyncio
 import json
-from core.async_main import async_main
 import os
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Tuple
 from enum import Enum
-import asyncio
+
 
 class TaskPriority(Enum):
     """任务优先级"""
@@ -142,7 +141,7 @@ class XiaonuoPersonalTaskManager:
 
         self.tasks: dict[str, Task] = {}
         self.daily_notes: dict[str, list[str]] = {}  # 每日笔记
-        self.habits: list[Dict] = []  # 习惯追踪
+        self.habits: list[dict] = []  # 习惯追踪
 
         # 加载已有任务
         asyncio.run(self._load_tasks())
@@ -152,7 +151,7 @@ class XiaonuoPersonalTaskManager:
         try:
             task_file = os.path.join(self.storage_path, "tasks.json")
             if os.path.exists(task_file):
-                with open(task_file, 'r', encoding='utf-8') as f:
+                with open(task_file, encoding='utf-8') as f:
                     data = json.load(f)
                     for task_data in data.get("tasks", []):
                         task = Task.from_dict(task_data)
@@ -161,13 +160,13 @@ class XiaonuoPersonalTaskManager:
                 # 加载每日笔记
                 notes_file = os.path.join(self.storage_path, "daily_notes.json")
                 if os.path.exists(notes_file):
-                    with open(notes_file, 'r', encoding='utf-8') as f:
+                    with open(notes_file, encoding='utf-8') as f:
                         self.daily_notes = json.load(f)
 
                 # 加载习惯数据
                 habits_file = os.path.join(self.storage_path, "habits.json")
                 if os.path.exists(habits_file):
-                    with open(habits_file, 'r', encoding='utf-8') as f:
+                    with open(habits_file, encoding='utf-8') as f:
                         self.habits = json.load(f)
 
                 print(f"✅ 成功加载 {len(self.tasks)} 个任务")

@@ -5,23 +5,20 @@ AI Models Service Unified Gateway
 提供所有AI模型的统一访问接口和智能路由
 """
 
-import logging
-from core.async_main import async_main
-from core.logging_config import setup_logging
-import os
 import asyncio
 from datetime import datetime
-from typing import Dict, Any, Optional, List
 from enum import Enum
+from typing import Any
 
-from fastapi import FastAPI, HTTPException, BackgroundTasks
-from fastapi.middleware.cors import CORSMiddleware
-
-from core.security.auth import ALLOWED_ORIGINS
-from pydantic import BaseModel, Field
-from pydantic_settings import BaseSettings
 import httpx
 import uvicorn
+from fastapi import BackgroundTasks, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+from pydantic_settings import BaseSettings
+
+from core.logging_config import setup_logging
+from core.security.auth import ALLOWED_ORIGINS
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -48,17 +45,17 @@ class TaskType(str, Enum):
 # 请求模型
 class ModelRequest(BaseModel):
     task_type: TaskType = Field(..., description="任务类型")
-    model_type: Optional[ModelType] = Field(None, description="指定模型类型，None表示自动选择")
-    input: Dict[str, Any] = Field(..., description="输入参数")
+    model_type: ModelType | None = Field(None, description="指定模型类型，None表示自动选择")
+    input: dict[str, Any] = Field(..., description="输入参数")
     priority: int = Field(1, description="优先级，1-5")
-    timeout: Optional[int] = Field(60, description="超时时间（秒）")
+    timeout: int | None = Field(60, description="超时时间（秒）")
 
 # 响应模型
 class ModelResponse(BaseModel):
     task_id: str
     model_used: str
     result: Any
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
     timestamp: str
 
 # 配置管理
@@ -197,7 +194,7 @@ class ModelServiceManager:
             import random
             return random.choice(healthy_candidates)
 
-    async def call_model(self, model_type: ModelType, task_type: TaskType, input_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def call_model(self, model_type: ModelType, task_type: TaskType, input_data: dict[str, Any]) -> dict[str, Any]:
         """调用指定的模型服务"""
         service = self.services[model_type]
 
@@ -228,7 +225,7 @@ class ModelServiceManager:
 
         except Exception as e:
             logger.error(f"调用模型 {model_type} 失败: {e}")
-            raise HTTPException(status_code=500, detail=f"模型调用失败: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"模型调用失败: {str(e)}") from e
 
         finally:
             # 减少负载
@@ -357,10 +354,10 @@ async def inference(request: ModelRequest, background_tasks: BackgroundTasks):
 
     except Exception as e:
         logger.error(f"任务 {task_id} 失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post("/api/v1/batch")
-async def batch_inference(requests: List[ModelRequest]):
+async def batch_inference(requests: list[ModelRequest]):
     """批量推理接口"""
     tasks = []
     for req in requests:
@@ -388,7 +385,7 @@ async def batch_inference(requests: List[ModelRequest]):
             })
 
     return {
-        "batch_id": str(uuid.uuid4()),
+        "batch_id": str(__import__('uuid').uuid4()),
         "total": len(requests),
         "success": sum(1 for r in responses if r["status"] == "success"),
         "results": responses,

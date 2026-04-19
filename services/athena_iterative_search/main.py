@@ -5,31 +5,28 @@ Athena Iterative Search Service
 提供智能化的迭代搜索和查询优化功能
 """
 
-import logging
-from core.async_main import async_main
-from core.logging_config import setup_logging
-import os
-import sys
 import asyncio
+import sys
 from datetime import datetime
-from typing import Dict, Any, Optional, List
 from pathlib import Path
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 添加当前目录到Python路径
 sys.path.append(str(Path(__file__).parent))
 
-from fastapi import FastAPI, HTTPException, BackgroundTasks
+# 导入核心模块
+from enhanced_core import AthenaSearchEngine
+from external_search_engines import ExternalSearchEngines
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-
-from core.security.auth import ALLOWED_ORIGINS
+from llm_integration import LLMIntegration
+from performance_optimizer import PerformanceOptimizer
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings
 
-# 导入核心模块
-from enhanced_core import AthenaSearchEngine
-from llm_integration import LLMIntegration
-from external_search_engines import ExternalSearchEngines
-from performance_optimizer import PerformanceOptimizer
+from core.security.auth import ALLOWED_ORIGINS
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -86,15 +83,15 @@ class SearchRequest(BaseModel):
     query: str = Field(..., description="搜索查询")
     search_type: str = Field("web", description="搜索类型: web, patent, academic")
     max_results: int = Field(10, description="最大结果数")
-    iteration_config: Dict[str, Any] = Field(default_factory=dict, description="迭代配置")
+    iteration_config: dict[str, Any] = Field(default_factory=dict, description="迭代配置")
 
 class IterativeSearchResponse(BaseModel):
     """迭代搜索响应"""
     query_id: str
     original_query: str
-    optimized_queries: List[str]
-    results: List[Dict[str, Any]]
-    metadata: Dict[str, Any]
+    optimized_queries: list[str]
+    results: list[dict[str, Any]]
+    metadata: dict[str, Any]
     timestamp: str
 
 # 服务实例管理
@@ -227,7 +224,6 @@ async def iterative_search(request: SearchRequest):
 
         # 3. 执行搜索
         all_results = []
-        search_metadata = {}
 
         # 并行执行搜索
         if settings.parallel_search:
@@ -286,7 +282,7 @@ async def iterative_search(request: SearchRequest):
 
     except Exception as e:
         logger.error(f"迭代搜索失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post("/api/v2/search/enhanced")
 async def enhanced_search(
@@ -333,7 +329,7 @@ async def get_query_suggestions(query: str, limit: int = 5):
             }
     except Exception as e:
         logger.error(f"获取查询建议失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get("/api/v2/search/history")
 async def get_search_history(limit: int = 50):
@@ -406,7 +402,7 @@ async def get_config():
     }
 
 @app.post("/api/v2/config")
-async def update_config(config_updates: Dict[str, Any]):
+async def update_config(config_updates: dict[str, Any]):
     """更新配置"""
     try:
         # 更新允许的配置项
@@ -427,7 +423,7 @@ async def update_config(config_updates: Dict[str, Any]):
         }
     except Exception as e:
         logger.error(f"配置更新失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 if __name__ == "__main__":
     import uvicorn

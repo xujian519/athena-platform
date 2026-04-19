@@ -4,16 +4,21 @@
 Tests for Performance Optimizer
 """
 
+import sys
+from pathlib import Path
+
 import pytest
-from unittest.mock import Mock, patch, AsyncMock, MagicMock
-from datetime import datetime, timedelta
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 import asyncio
 import time
+from unittest.mock import patch
 
 from core.perception.performance_optimizer import (
+    CacheManager,
     PerformanceMetrics,
     PerformanceOptimizer,
-    CacheManager,
     get_global_optimizer,
     optimize_performance,
 )
@@ -363,7 +368,7 @@ class TestPerformanceIntegration:
         # 首次访问
         start = time.time()
         optimizer.cache_result("key", "value", 3600)
-        first_access = time.time() - start
+        time.time() - start
 
         # 缓存访问
         start = time.time()

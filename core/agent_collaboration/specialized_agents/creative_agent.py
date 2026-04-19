@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 创意Agent (CreativeAgent) - 创新思维专家
 

@@ -7,10 +7,8 @@ Extended Gaode Maps API Client
 
 import asyncio
 import hashlib
-import logging
 import time
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import httpx
 import structlog
@@ -52,7 +50,7 @@ class ExtendedAmapApiClient:
         if hasattr(self.client, 'aclose'):
             await self.client.aclose()
 
-    def _generate_signature(self, params: Dict[str, Any]) -> str:
+    def _generate_signature(self, params: dict[str, Any]) -> str:
         """生成API签名"""
         # 如果没有secret key，不生成签名
         if not self.secret_key:
@@ -75,10 +73,10 @@ class ExtendedAmapApiClient:
     async def _make_request(
         self,
         endpoint: str,
-        params: Dict[str, Any],
+        params: dict[str, Any],
         method: str = 'GET',
         return_url: bool = False
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """发起API请求"""
         # 限流
         await self.rate_limiter.acquire()
@@ -167,7 +165,7 @@ class ExtendedAmapApiClient:
         address: str,
         city: str | None = None,
         district: str | None = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """地址转坐标"""
         params = {
             'address': address,
@@ -185,7 +183,7 @@ class ExtendedAmapApiClient:
         location: str,  # 经纬度 'longitude,latitude'
         radius: int = 1000,
         extensions: str = 'all'
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """坐标转地址"""
         params = {
             'location': location,
@@ -207,7 +205,7 @@ class ExtendedAmapApiClient:
         children: int = 1,
         offset: int = 20,
         page: int = 1
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """关键字搜索POI"""
         params = {
             'keywords': keywords,
@@ -233,7 +231,7 @@ class ExtendedAmapApiClient:
         types: str | None = None,
         offset: int = 20,
         page: int = 1
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """周边搜索POI"""
         params = {
             'location': location,
@@ -254,7 +252,7 @@ class ExtendedAmapApiClient:
         polygon: str,
         keywords: str,
         types: str | None = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """多边形搜索POI"""
         params = {
             'polygon': polygon,
@@ -271,7 +269,7 @@ class ExtendedAmapApiClient:
         self,
         id: str,
         extensions: str = 'all'
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """POI详情查询"""
         params = {
             'id': id,
@@ -287,7 +285,7 @@ class ExtendedAmapApiClient:
         city: str | None = None,
         type_: str | None = None,
         datatype: str = 'all'
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """输入提示"""
         params = {
             'keywords': keywords,
@@ -338,16 +336,16 @@ class ExtendedAmapApiClient:
         strategy: int = 0,
         avoidpolygons: str | None = None,
         avoidroad: str | None = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """驾车路径规划"""
         # 如果origin和destination是地址，先进行地理编码
         if ',' not in origin and not origin.replace('.', '').isdigit():
             # 如果是地址，转换为坐标（这里简化处理，实际应该先调用地理编码）
-            logger.warning(f"驾车路径建议使用坐标格式，地址格式可能导致错误: {origin=origin}")
+            logger.warning(f"驾车路径建议使用坐标格式，地址格式可能导致错误: origin={origin}")
 
         if ',' not in destination and not destination.replace('.', '').isdigit():
             # 如果是地址，转换为坐标（这里简化处理，实际应该先调用地理编码）
-            logger.warning(f"驾车路径建议使用坐标格式，地址格式可能导致错误: {destination=destination}")
+            logger.warning(f"驾车路径建议使用坐标格式，地址格式可能导致错误: destination={destination}")
 
         params = {
             'origin': origin,
@@ -367,7 +365,7 @@ class ExtendedAmapApiClient:
         self,
         origin: str,
         destination: str
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """步行路径规划"""
         params = {
             'origin': origin,
@@ -381,7 +379,7 @@ class ExtendedAmapApiClient:
         self,
         origin: str,
         destination: str
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """骑行路径规划"""
         params = {
             'origin': origin,
@@ -397,7 +395,7 @@ class ExtendedAmapApiClient:
         destination: str,
         city: str,
         cityd: str | None = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """公交路径规划"""
         params = {
             'origin': origin,
@@ -417,7 +415,7 @@ class ExtendedAmapApiClient:
         self,
         locations: str,
         coordsys: str = 'gps'
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """坐标转换"""
         params = {
             'locations': locations,
@@ -434,7 +432,7 @@ class ExtendedAmapApiClient:
         keywords: str,
         subdistrict: int = 1,
         extensions: str = 'base'
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """行政区划查询"""
         params = {
             'keywords': keywords,
@@ -450,7 +448,7 @@ class ExtendedAmapApiClient:
     async def ip_location(
         self,
         ip: str | None = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """IP定位"""
         params = {
             'output': 'JSON'
@@ -467,7 +465,7 @@ class ExtendedAmapApiClient:
         self,
         city: str,
         extensions: str = 'base'
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """天气信息"""
         params = {
             'city': city,
@@ -484,7 +482,7 @@ class ExtendedAmapApiClient:
         rectangle: str,
         level: int = 5,
         extensions: str = 'base'
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """矩形区域交通态势"""
         params = {
             'rectangle': rectangle,
@@ -501,7 +499,7 @@ class ExtendedAmapApiClient:
         radius: int = 1000,
         level: int = 5,
         extensions: str = 'base'
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """圆形区域交通态势"""
         params = {
             'location': location,
@@ -518,7 +516,7 @@ class ExtendedAmapApiClient:
         road_name: str,
         level: int = 5,
         extensions: str = 'base'
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """指定线路交通态势"""
         params = {
             'name': road_name,
@@ -537,7 +535,7 @@ class ExtendedAmapApiClient:
         center: str,
         radius: int,
         enable: str = 'true'
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """创建地理围栏"""
         params = {
             'name': name,
@@ -555,7 +553,7 @@ class ExtendedAmapApiClient:
         radius: int = 500,
         page: int = 1,
         size: int = 20
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """查询地理围栏"""
         params = {
             'center': center,
@@ -573,7 +571,7 @@ class ExtendedAmapApiClient:
         name: str | None = None,
         center: str | None = None,
         radius: int | None = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """更新地理围栏"""
         params = {
             'id': id,
@@ -592,7 +590,7 @@ class ExtendedAmapApiClient:
     async def delete_geofence(
         self,
         id: str
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """删除地理围栏"""
         params = {
             'id': id,

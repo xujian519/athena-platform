@@ -9,8 +9,12 @@ Unit Tests for Error Handling Module
 """
 
 import asyncio
+import sys
+from pathlib import Path
 
 import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.learning.error_handling import (
     ErrorCategory,
@@ -25,10 +29,6 @@ from core.learning.error_handling import (
     RetryHandler,
     TransientError,
     ValidationError,
-)
-from core.learning.concurrency_control import (
-    ConcurrencyConfig,
-    ConcurrencyController,
 )
 
 

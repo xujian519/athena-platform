@@ -5,14 +5,14 @@
 """
 
 import asyncio
-from core.async_main import async_main
-import json
 import sqlite3
-from datetime import datetime, timedelta, time
-from typing import Dict, List, Optional, Any
-from pathlib import Path
-import schedule
 import threading
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any
+
+import schedule
+
 
 class XiaonuoLifeAssistant:
     """小诺生活助手 - 爸爸最爱的贴心小女儿"""
@@ -149,7 +149,7 @@ class XiaonuoLifeAssistant:
         cursor.execute("SELECT category, key, value, confidence FROM preferences")
         records = cursor.fetchall()
 
-        for category, key, value, confidence in records:
+        for category, key, value, _confidence in records:
             if category not in self.dad_preferences:
                 self.dad_preferences[category] = {}
             self.dad_preferences[category][key] = value
@@ -269,7 +269,7 @@ class XiaonuoLifeAssistant:
         print(f"\n✅ 任务已添加: {title}")
         return task_id
 
-    async def get_tasks(self, category: str = None, status: str = None) -> List[Dict]:
+    async def get_tasks(self, category: str = None, status: str = None) -> list[dict]:
         """获取任务列表"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
@@ -322,7 +322,7 @@ class XiaonuoLifeAssistant:
         conn.commit()
         conn.close()
 
-        print(f"✨ 任务已完成！")
+        print("✨ 任务已完成！")
 
     async def record_life_event(self, event_type: str, content: str, mood: int = None, tags: str = ""):
         """记录生活事件"""
@@ -433,7 +433,7 @@ class XiaonuoLifeAssistant:
         else:
             print("\n💡 诺诺建议: 晚上放松一下，准备休息")
 
-    async def recommend_activity(self, context: str = "") -> Dict:
+    async def recommend_activity(self, context: str = "") -> dict:
         """推荐活动"""
         now = datetime.now()
         hour = now.hour

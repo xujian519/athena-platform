@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一Agent记忆系统 - 核心实现
 Unified Agent Memory System - Core Implementation

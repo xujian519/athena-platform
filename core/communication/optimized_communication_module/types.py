@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化版通信模块 - 类型定义
 Optimized Communication Module - Type Definitions

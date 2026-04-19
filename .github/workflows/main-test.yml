@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.12", "3.13", "3.14"]
+        python-version: ["3.11", "3.12"]
 
     services:
       postgres:
@@ -82,7 +82,7 @@ jobs:
 
       - name: 上传覆盖率到Codecov
         uses: codecov/codecov-action@v4
-        if: matrix.python-version == '3.14'
+        if: matrix.python-version == '3.11'
         with:
           file: ./coverage.xml
           flags: unittests
@@ -90,7 +90,7 @@ jobs:
           fail_ci_if_error: false
 
       - name: 归档测试报告
-        if: matrix.python-version == '3.14'
+        if: matrix.python-version == '3.11'
         uses: actions/upload-artifact@v4
         with:
           name: test-reports
@@ -99,7 +99,7 @@ jobs:
             coverage.xml
 
       - name: 测试摘要
-        if: matrix.python-version == '3.14'
+        if: matrix.python-version == '3.11'
         run: |
           echo "## 测试结果摘要" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -120,7 +120,7 @@ jobs:
       - name: 设置Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.14"
+          python-version: "3.11"
 
       - name: 安装依赖
         run: |
@@ -148,7 +148,7 @@ jobs:
       - name: 设置Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.14"
+          python-version: "3.11"
 
       - name: 安装lint工具
         run: |

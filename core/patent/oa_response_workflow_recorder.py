@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 审查意见答复工作流记录器
 Office Action Response Workflow Recorder
@@ -26,7 +27,6 @@ from typing import Any
 from core.logging_config import setup_logging
 from core.utils.error_handling import (
     ConfigurationError,
-    PatternExtractionError,
     WorkflowRecordError,
 )
 
@@ -215,7 +215,7 @@ class OAResponseWorkflowRecorder:
             self.storage_path = Path(storage_path)
             self.storage_path.mkdir(parents=True, exist_ok=True)
             self.current_trajectory: OAResponseTrajectory | None = None
-            logger.info(f"📝 OA答复工作流记录器初始化完成")
+            logger.info("📝 OA答复工作流记录器初始化完成")
         except (OSError, PermissionError) as e:
             error = ConfigurationError(
                 message=f"创建存储路径失败: {storage_path}",
@@ -405,7 +405,7 @@ class OAResponseWorkflowRecorder:
             with open(filepath, "w", encoding="utf-8") as f:
                 json.dump(trajectory.to_dict(), f, ensure_ascii=False, indent=2)
             logger.info(f"💾 轨迹已保存: {filepath}")
-        except (OSError, IOError) as e:
+        except OSError as e:
             error = WorkflowRecordError(
                 message=f"保存轨迹文件失败: {filepath}",
                 context={"trajectory_id": trajectory.trajectory_id, "filepath": str(filepath)}
@@ -524,7 +524,7 @@ class OAResponseWorkflowRecorder:
             with open(filepath, "w", encoding="utf-8") as f:
                 f.write("\n".join(md_lines))
             logger.info(f"📄 Markdown轨迹已保存: {filepath}")
-        except (OSError, IOError) as e:
+        except OSError as e:
             error = WorkflowRecordError(
                 message=f"保存Markdown轨迹文件失败: {filepath}",
                 context={"trajectory_id": trajectory.trajectory_id, "filepath": str(filepath)}
@@ -533,7 +533,7 @@ class OAResponseWorkflowRecorder:
             raise error from e
         except Exception as e:
             error = WorkflowRecordError(
-                message=f"生成Markdown轨迹时发生未知错误",
+                message="生成Markdown轨迹时发生未知错误",
                 context={"trajectory_id": trajectory.trajectory_id}
             )
             logger.error(f"{error.message}: {e}")

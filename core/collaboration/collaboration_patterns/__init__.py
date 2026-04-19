@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协作模式实现 - 公共接口
 Collaboration Patterns Implementation - Public Interface
@@ -14,6 +15,9 @@ Collaboration Patterns Implementation - Public Interface
 # 导入基础类
 from .base import CollaborationPattern
 
+# 导入工厂类
+from .factory import CollaborationPatternFactory
+
 # 导入具体模式实现
 from .patterns import (
     ConsensusCollaborationPattern,
@@ -21,9 +25,6 @@ from .patterns import (
     ParallelCollaborationPattern,
     SequentialCollaborationPattern,
 )
-
-# 导入工厂类
-from .factory import CollaborationPatternFactory
 
 # 导出公共接口
 __all__ = [

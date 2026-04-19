@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强降级恢复系统 - 第一阶段优化版本
 Enhanced Fallback Recovery System - Phase 1 Optimization
@@ -8,26 +9,32 @@ Enhanced Fallback Recovery System - Phase 1 Optimization
 2. 多层降级策略
 3. 自动恢复机制
 4. 降级决策优化
+5. 性能监控集成
 
 作者: Athena AI系统
 创建时间: 2025-12-23
-版本: 1.1.0 "第一阶段优化"
+版本: 1.2.0 "监控增强版"
 """
 
 import asyncio
-from core.async_main import async_main
 import json
 import logging
 from collections import deque
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
+
+# 导入监控和特性开关
+import sys
+
+sys.path.insert(0, '/Users/xujian/Athena工作平台')
+from config.feature_flags import is_feature_enabled
 
 
 class FailureSeverity(Enum):
@@ -74,7 +81,7 @@ class FallbackResult:
 
 
 class EnhancedFallbackRecovery:
-    """增强降级恢复系统"""
+    """增强降级恢复系统（带监控）"""
 
     def __init__(self):
         # 失败历史记录
@@ -94,10 +101,94 @@ class EnhancedFallbackRecovery:
             'total_failures': 0,
             'recoveries': 0,
             'recovery_rate': 0.0,
-            'strategy_usage': {strategy.value: 0 for strategy in FallbackStrategy}
+            'strategy_usage': {strategy.value: 0 for strategy in FallbackStrategy},
+            'avg_recovery_time': 0.0,
+            'recovery_times': deque(maxlen=100),  # 最近100次恢复时间
         }
 
-        logger.info("🛡️ 增强降级恢复系统初始化完成 (v1.1.0)")
+        # 监控系统（如果启用）
+        self.monitoring_system = None
+        self.enable_monitoring = is_feature_enabled("enable_recovery_monitoring")
+        if self.enable_monitoring:
+            try:
+                from core.monitoring.performance_monitoring_system import (
+                    PerformanceMonitoringSystem,
+                )
+                self.monitoring_system = PerformanceMonitoringSystem()
+                self._setup_recovery_metrics()
+                logger.info("✅ 错误恢复监控已启用")
+            except Exception as e:
+                logger.warning(f"⚠️  监控系统初始化失败: {e}")
+                self.enable_monitoring = False
+
+        logger.info("🛡️ 增强降级恢复系统初始化完成 (v1.2.0)")
+
+    def _setup_recovery_metrics(self):
+        """设置恢复监控指标"""
+        if not self.monitoring_system:
+            return
+
+        try:
+            from core.monitoring.performance_monitoring_system import (
+                AlertRule,
+                AlertSeverity,
+                MetricCategory,
+            )
+
+            # 注册恢复率监控指标
+            self.monitoring_system.register_metric(
+                name="recovery_rate",
+                category=MetricCategory.QUALITY,
+                description="错误恢复成功率",
+            )
+
+            # 注册平均恢复时间
+            self.monitoring_system.register_metric(
+                name="avg_recovery_time",
+                category=MetricCategory.PERFORMANCE,
+                description="平均恢复时间(秒)",
+            )
+
+            # 添加告警规则
+            # 恢复率过低告警
+            self.monitoring_system.add_alert_rule(
+                AlertRule(
+                    rule_id="low_recovery_rate",
+                    name="恢复率过低",
+                    metric_name="recovery_rate",
+                    condition=lambda x: x < 0.85,
+                    severity=AlertSeverity.WARNING,
+                    message_template="错误恢复率低于85%: {value:.2%}",
+                )
+            )
+
+            # 恢复率严重过低告警
+            self.monitoring_system.add_alert_rule(
+                AlertRule(
+                    rule_id="critical_recovery_rate",
+                    name="恢复率严重过低",
+                    metric_name="recovery_rate",
+                    condition=lambda x: x < 0.70,
+                    severity=AlertSeverity.CRITICAL,
+                    message_template="错误恢复率严重低于70%: {value:.2%}",
+                )
+            )
+
+            # 恢复时间过长告警
+            self.monitoring_system.add_alert_rule(
+                AlertRule(
+                    rule_id="slow_recovery",
+                    name="恢复时间过长",
+                    metric_name="avg_recovery_time",
+                    condition=lambda x: x > 5.0,  # 超过5秒
+                    severity=AlertSeverity.WARNING,
+                    message_template="平均恢复时间过长: {value:.2f}秒",
+                )
+            )
+
+            logger.info("✅ 恢复监控指标和告警规则已设置")
+        except Exception as e:
+            logger.warning(f"⚠️  设置监控指标失败: {e}")
 
     def _initialize_strategy_config(self) -> dict[str, dict]:
         """初始化降级策略配置"""
@@ -281,10 +372,10 @@ class EnhancedFallbackRecovery:
                     result=result,
                     message=f"重试成功 (第{failure.attempt}次)"
                 )
-        except (TypeError, ZeroDivisionError) as e:
-            logger.warning(f'计算时发生错误: {e}')
-        except Exception as e:
-            logger.error(f'未预期的错误: {e}')
+            except (TypeError, ZeroDivisionError) as e:
+                logger.warning(f'计算时发生错误: {e}')
+            except Exception as e:
+                logger.error(f'未预期的错误: {e}')
                 # 更新失败上下文,增加尝试次数
                 failure.attempt += 1
                 return await self.handle_failure(failure, recovery_func)

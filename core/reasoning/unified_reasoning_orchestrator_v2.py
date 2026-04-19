@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强版统一推理引擎编排器 v2.0
 Enhanced Unified Reasoning Orchestrator v2.0
@@ -27,10 +28,9 @@ import logging
 import time
 from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from functools import lru_cache
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 # 尝试导入缓存库
 try:
@@ -806,7 +806,6 @@ class UnifiedReasoningOrchestratorV2:
         profile = self.analyze_task(task_description, task_type, metadata)
 
         # 2. 检查缓存
-        cache_hit = False
         cached_result = None
 
         if self.enable_cache and use_cache and not metadata.get("bypass_cache"):
@@ -816,7 +815,6 @@ class UnifiedReasoningOrchestratorV2:
             cached_result = self.cache.get(cache_key)
 
             if cached_result:
-                cache_hit = True
                 profile.cache_hit = True
                 self._statistics["cache_hits"] += 1
 

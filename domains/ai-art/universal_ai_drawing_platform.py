@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 通用AI绘图平台
 Universal AI Drawing Platform
@@ -13,20 +12,15 @@ Universal AI Drawing Platform
 """
 
 import base64
-import io
-import json
 import logging
-import os
 import sys
 import time
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import requests
-from PIL import Image
 
 # 设置日志
 logging.basicConfig(level=logging.INFO)
@@ -67,7 +61,7 @@ class UniversalDrawingRequest:
     # 输入内容
     text_description: str = ''
     hand_drawn_sketch: bytes | None = None
-    reference_images: Optional[List[bytes] = None
+    reference_images: list[bytes] | None = None
 
     # 风格和格式
     style: str = 'modern'           # modern, classic, minimalist, colorful
@@ -79,13 +73,13 @@ class UniversalDrawingRequest:
     detail_level: str = 'medium'    # low, medium, high
 
     # 特殊要求
-    size: Optional[Tuple[int, int]] = None  # (width, height)
-    constraints: Optional[List[str] = None  # 特殊约束条件
+    size: tuple[int, int] | None = None  # (width, height)
+    constraints: list[str] | None = None  # 特殊约束条件
 
     # 元数据
     title: str = ''
     description: str = ''
-    tags: Optional[List[str] = None
+    tags: list[str] | None = None
 
 @dataclass
 class UniversalDrawingResult:
@@ -93,7 +87,7 @@ class UniversalDrawingResult:
     success: bool
     request_id: str
     drawing_data: bytes
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
 
     # 质量指标
     confidence: float = 0.0
@@ -102,7 +96,7 @@ class UniversalDrawingResult:
 
     # 错误信息
     error_message: str | None = None
-    warnings: Optional[List[str] = None
+    warnings: list[str] | None = None
 
 class UniversalDrawingEngine:
     """通用AI绘图引擎"""
@@ -221,7 +215,7 @@ class UniversalDrawingEngine:
         else:
             return 'general_purpose_generation'
 
-    def _execute_drawing_strategy(self, strategy: str, request: UniversalDrawingRequest) -> Dict[str, Any]:
+    def _execute_drawing_strategy(self, strategy: str, request: UniversalDrawingRequest) -> dict[str, Any]:
         """执行绘图策略"""
 
         if strategy == 'patent_sketch_enhancement':
@@ -237,7 +231,7 @@ class UniversalDrawingEngine:
         else:
             return self._execute_general_purpose_generation(request)
 
-    def _execute_general_diagram_generation(self, request: UniversalDrawingRequest) -> Dict[str, Any]:
+    def _execute_general_diagram_generation(self, request: UniversalDrawingRequest) -> dict[str, Any]:
         """通用图表生成"""
         logger.info('📊 执行通用图表生成...')
 
@@ -259,7 +253,7 @@ class UniversalDrawingEngine:
             logger.warning(f"⚠️ SketchAgent调用失败，使用本地生成: {e}")
             return self._generate_fallback_drawing(request)
 
-    def _execute_sketch_enhancement(self, request: UniversalDrawingRequest) -> Dict[str, Any]:
+    def _execute_sketch_enhancement(self, request: UniversalDrawingRequest) -> dict[str, Any]:
         """草图增强"""
         logger.info('🖼️ 执行草图增强...')
 
@@ -283,7 +277,7 @@ class UniversalDrawingEngine:
             logger.warning(f"⚠️ next-ai-draw-io调用失败，使用基础增强: {e}")
             return self._basic_sketch_enhancement(request)
 
-    def _execute_patent_compliant_generation(self, request: UniversalDrawingRequest) -> Dict[str, Any]:
+    def _execute_patent_compliant_generation(self, request: UniversalDrawingRequest) -> dict[str, Any]:
         """专利合规生成"""
         logger.info('⚖️ 执行专利合规生成...')
 
@@ -295,7 +289,7 @@ class UniversalDrawingEngine:
 
         return compliant_result
 
-    def _execute_patent_sketch_enhancement(self, request: UniversalDrawingRequest) -> Dict[str, Any]:
+    def _execute_patent_sketch_enhancement(self, request: UniversalDrawingRequest) -> dict[str, Any]:
         """专利草图增强"""
         logger.info('⚖️ 执行专利草图增强...')
 
@@ -307,7 +301,7 @@ class UniversalDrawingEngine:
 
         return patent_compliant_result
 
-    def _apply_patent_compliance(self, drawing_result: Dict[str, Any], request: UniversalDrawingRequest) -> Dict[str, Any]:
+    def _apply_patent_compliance(self, drawing_result: dict[str, Any], request: UniversalDrawingRequest) -> dict[str, Any]:
         """应用专利合规性约束"""
         logger.info('📋 应用专利合规性约束...')
 
@@ -328,7 +322,7 @@ class UniversalDrawingEngine:
             'warnings': compliance_issues
         }
 
-    def _postprocess_drawing(self, drawing_result: Dict[str, Any], request: UniversalDrawingRequest) -> Dict[str, Any]:
+    def _postprocess_drawing(self, drawing_result: dict[str, Any], request: UniversalDrawingRequest) -> dict[str, Any]:
         """后处理图纸"""
         logger.info('🔧 后处理图纸...')
 
@@ -359,16 +353,16 @@ class UniversalDrawingEngine:
             'warnings': drawing_result.get('warnings', [])
         }
 
-    def _generate_fallback_drawing(self, request: UniversalDrawingRequest) -> Dict[str, Any]:
+    def _generate_fallback_drawing(self, request: UniversalDrawingRequest) -> dict[str, Any]:
         """生成备用图纸（当外部服务不可用时）"""
         logger.info('🔄 生成备用图纸...')
 
         # 简单的SVG模板生成
         svg_template = (
-            '<svg width='{width}' height='{height}' xmlns='http://www.w3.org/2000/svg'>'
-            '<rect x='50' y='50' width='{box_w}' height='{box_h}' fill='none' stroke='black' stroke-width='2'/>'
-            '<text x='{text_x}' y='{text_y}' text-anchor='middle' font-family='Arial' font-size='14'>{title}</text>'
-            '</svg>'
+            "<svg width='{width}' height='{height}' xmlns='http://www.w3.org/2000/svg'>"
+            "<rect x='50' y='50' width='{box_w}' height='{box_h}' fill='none' stroke='black' stroke-width='2'/>"
+            "<text x='{text_x}' y='{text_y}' text-anchor='middle' font-family='Arial' font-size='14'>{title}</text>"
+            "</svg>"
         )
 
         width, height = request.size or (800, 600)
@@ -388,7 +382,7 @@ class UniversalDrawingEngine:
             'warnings': ['使用备用绘图引擎']
         }
 
-    def _basic_sketch_enhancement(self, request: UniversalDrawingRequest) -> Dict[str, Any]:
+    def _basic_sketch_enhancement(self, request: UniversalDrawingRequest) -> dict[str, Any]:
         """基础草图增强"""
         logger.info('🔧 执行基础草图增强...')
 
@@ -461,7 +455,7 @@ class UniversalDrawingEngine:
 
         return min(1.0, max(0.0, base_score))
 
-    def _load_style_templates(self) -> Dict[str, Any]:
+    def _load_style_templates(self) -> dict[str, Any]:
         """加载样式模板"""
         return {
             'modern': {
@@ -481,7 +475,7 @@ class UniversalDrawingEngine:
             }
         }
 
-    def _load_drawing_constraints(self) -> Dict[str, Any]:
+    def _load_drawing_constraints(self) -> dict[str, Any]:
         """加载绘图约束"""
         return {
             'patent': {
@@ -497,7 +491,7 @@ class UniversalDrawingEngine:
             }
         }
 
-    def _load_use_case_configs(self) -> Dict[UseCase, Dict[str, Any]]:
+    def _load_use_case_configs(self) -> dict[UseCase, dict[str, Any]]:
         """加载使用场景配置"""
         return {
             UseCase.PATENT_APPLICATION: {
@@ -551,7 +545,7 @@ def main():
 
     result1 = engine.generate_drawing(request1)
     if result1.success:
-        logger.info(f"✅ 生成成功")
+        logger.info("✅ 生成成功")
         logger.info(f"   置信度: {result1.confidence:.2f}")
         logger.info(f"   质量分数: {result1.quality_score:.2f}")
         logger.info(f"   处理时间: {result1.processing_time:.2f}秒")
@@ -575,7 +569,7 @@ def main():
 
     result2 = engine.generate_drawing(request2)
     if result2.success:
-        logger.info(f"✅ 生成成功")
+        logger.info("✅ 生成成功")
         logger.info(f"   置信度: {result2.confidence:.2f}")
         logger.info(f"   质量分数: {result2.quality_score:.2f}")
         logger.info(f"   处理时间: {result2.processing_time:.2f}秒")
@@ -597,7 +591,7 @@ def main():
 
     result3 = engine.generate_drawing(request3)
     if result3.success:
-        logger.info(f"✅ 生成成功")
+        logger.info("✅ 生成成功")
         logger.info(f"   置信度: {result3.confidence:.2f}")
         logger.info(f"   质量分数: {result3.quality_score:.2f}")
         logger.info(f"   处理时间: {result3.processing_time:.2f}秒")
@@ -608,17 +602,17 @@ def main():
     else:
         logger.info(f"❌ 生成失败: {result3.error_message}")
 
-    logger.info(f"\n💡 平台演进路径:")
-    logger.info(f"   1. 当前：通用AI绘图平台，支持多种场景")
-    logger.info(f"   2. 优化：根据使用反馈，增强特定场景功能")
-    logger.info(f"   3. 专业化：逐步发展为专利专用绘图工具")
-    logger.info(f"   4. 集成：与专利知识图谱深度集成")
+    logger.info("\n💡 平台演进路径:")
+    logger.info("   1. 当前：通用AI绘图平台，支持多种场景")
+    logger.info("   2. 优化：根据使用反馈，增强特定场景功能")
+    logger.info("   3. 专业化：逐步发展为专利专用绘图工具")
+    logger.info("   4. 集成：与专利知识图谱深度集成")
 
-    logger.info(f"\n🎯 下一步建议:")
-    logger.info(f"   1. 部署通用平台，收集用户反馈")
-    logger.info(f"   2. 分析最常用的绘图类型和场景")
-    logger.info(f"   3. 逐步优化专利绘图功能")
-    logger.info(f"   4. 建立用户培训和支持体系")
+    logger.info("\n🎯 下一步建议:")
+    logger.info("   1. 部署通用平台，收集用户反馈")
+    logger.info("   2. 分析最常用的绘图类型和场景")
+    logger.info("   3. 逐步优化专利绘图功能")
+    logger.info("   4. 建立用户培训和支持体系")
 
     return 0
 

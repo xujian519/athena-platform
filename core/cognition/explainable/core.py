@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 可解释认知模块 - 核心功能
 Explainable Cognition Module - Core Functionality
@@ -16,7 +17,6 @@ from datetime import datetime
 from typing import Any
 
 from core.base_module import BaseModule
-from core.logging_config import setup_logging
 from core.cognition.explainable.types import (
     DecisionFactor,
     FactorImportance,
@@ -25,6 +25,7 @@ from core.cognition.explainable.types import (
     ReasoningStepType,
 )
 from core.cognition.explainable.visualizer import ReasoningPathVisualizer
+from core.logging_config import setup_logging
 
 logger = setup_logging()
 

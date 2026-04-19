@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 任务编排模块 - Task Orchestration Module
 

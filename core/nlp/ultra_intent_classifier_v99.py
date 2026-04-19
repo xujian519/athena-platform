@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 超高性能意图识别系统 v99
 Ultra High Performance Intent Recognition v99
@@ -9,6 +10,8 @@ import asyncio
 import json
 from datetime import datetime
 from pathlib import Path
+
+import numpy as np
 
 from core.logging_config import setup_logging
 

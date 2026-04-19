@@ -26,14 +26,14 @@ async def test_bert_service():
 
         # 显示可用模型
         model_info = bert_service.get_model_info()
-        print(f"\n📋 可用模型:")
+        print("\n📋 可用模型:")
         for model_key, info in model_info.items():
             if isinstance(info, dict) and "name" in info:
                 print(f"   - {model_key}: {info['name']}")
                 if info.get("loaded"):
-                    print(f"     状态: ✅ 已加载")
+                    print("     状态: ✅ 已加载")
                 else:
-                    print(f"     状态: ⏳ 待加载")
+                    print("     状态: ⏳ 待加载")
 
         # 测试编码（通用BERT）
         print("\n🔹 测试通用BERT编码...")
@@ -82,7 +82,7 @@ async def test_bert_service():
             batch_time = time.time() - start_time
 
             if result.embeddings is not None:
-                print(f"   - 批量编码成功")
+                print("   - 批量编码成功")
                 print(f"   - 文本数量: {len(batch_texts)}")
                 print(f"   - 批量处理时间: {batch_time:.3f}秒")
                 print(f"   - 平均每文本: {batch_time/len(batch_texts):.3f}秒")
@@ -100,14 +100,14 @@ async def test_bert_service():
             )
 
             if features.size > 0:
-                print(f"   - 特征提取成功")
+                print("   - 特征提取成功")
                 print(f"   - 特征维度: {features.shape}")
         except Exception as e:
             print(f"   - 特征提取失败: {e}")
 
         # 获取统计信息
         stats = bert_service.get_statistics()
-        print(f"\n📊 使用统计:")
+        print("\n📊 使用统计:")
         print(f"   - 总请求数: {stats['total_requests']}")
         print(f"   - 平均处理时间: {stats['avg_processing_time']:.3f}秒")
         print(f"   - 已加载模型: {stats['loaded_models']}")
@@ -169,7 +169,7 @@ async def test_model_comparison():
 
         # 向量相似度计算
         if len(results) > 1:
-            print(f"\n🔗 模型间向量相似度:")
+            print("\n🔗 模型间向量相似度:")
             model_keys = list(results.keys())
             for i in range(len(model_keys)):
                 for j in range(i+1, len(model_keys)):
@@ -198,8 +198,8 @@ async def test_integration_with_existing_modules():
 
     # 测试与BGE的协同使用
     try:
-        from core.nlp.bert_service import encode_with_general_bert
         from core.embedding.unified_embedding_service import encode_for_document
+        from core.nlp.bert_service import encode_with_general_bert
 
         test_text = "这份专利文件描述了一种新型的机器学习算法。"
 

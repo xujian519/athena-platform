@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena多模态文件系统API服务器（集成版）
 Multimodal File System API Server - Integrated Version
@@ -7,36 +6,31 @@ Multimodal File System API Server - Integrated Version
 使用Athena统一存储系统
 """
 
-import sys
-from core.async_main import async_main
-import os
-from pathlib import Path
-from datetime import datetime
-import asyncio
-import json
 import hashlib
+import os
+import sys
 import uuid
-from typing import Dict, List, Any, Optional
+from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 # 添加项目路径
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from fastapi import FastAPI, File, UploadFile, HTTPException, Form
-from fastapi.middleware.cors import CORSMiddleware
-
-from core.security.auth import ALLOWED_ORIGINS
-from pydantic import BaseModel
-import uvicorn
-import aiofiles
-from sqlalchemy import create_engine, text
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker
-
 # 导入安全配置
 import sys
 from pathlib import Path
+
+import aiofiles
+import uvicorn
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from sqlalchemy import create_engine, text
+
+from core.security.auth import ALLOWED_ORIGINS
+
 sys.path.append(str(Path(__file__).parent.parent / "core"))
-from security.env_config import get_env_var, get_database_url, get_jwt_secret
 
 # 创建FastAPI应用
 app = FastAPI(
@@ -65,7 +59,7 @@ DB_CONFIG = {
 
 # 同步引擎用于初始化
 sync_engine = create_engine(
-    fget_database_url()username']}:{DB_CONFIG['password']}@{DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['database']}"
+    f"{DB_CONFIG['username']}:{DB_CONFIG['password']}@{DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['database']}"
 )
 
 # 存储配置
@@ -107,7 +101,7 @@ class FileUploadResponse(BaseModel):
 
 class FileListResponse(BaseModel):
     success: bool
-    files: List[Dict[str, Any]]
+    files: list[dict[str, Any]]
     total: int
 
 @app.get("/")
@@ -138,7 +132,7 @@ async def health():
     try:
         # 检查数据库连接
         with sync_engine.connect() as conn:
-            result = conn.execute(text("SELECT 1"))
+            conn.execute(text("SELECT 1"))
 
         # 检查存储目录
         storage_accessible = os.path.exists(STORAGE_ROOT)
@@ -159,8 +153,8 @@ async def health():
 @app.post("/api/files/upload", response_model=FileUploadResponse)
 async def upload_file(
     file: UploadFile = File(...),
-    tags: Optional[str] = Form(None),
-    category: Optional[str] = Form(None)
+    tags: str | None = Form(None),
+    category: str | None = Form(None)
 ):
     """上传文件"""
     try:
@@ -227,7 +221,7 @@ async def upload_file(
         )
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"文件上传失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"文件上传失败: {str(e)}") from e
 
 @app.get("/api/files/list", response_model=FileListResponse)
 async def list_files(
@@ -286,7 +280,7 @@ async def list_files(
             )
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"获取文件列表失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"获取文件列表失败: {str(e)}") from e
 
 @app.get("/api/stats")
 async def get_stats():
@@ -335,7 +329,7 @@ async def get_stats():
             return stats
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"获取统计信息失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"获取统计信息失败: {str(e)}") from e
 
 @app.get("/api/files/{file_id}")
 async def get_file_info(file_id: str):
@@ -387,7 +381,7 @@ async def get_file_info(file_id: str):
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"获取文件信息失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"获取文件信息失败: {str(e)}") from e
 
 if __name__ == "__main__":
     # 显示启动信息

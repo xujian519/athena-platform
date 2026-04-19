@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 # pyright: ignore
 # !/usr/bin/env python3
@@ -367,7 +368,7 @@ class CacheManager:
                 except Exception as e:
                     # 清理任务执行失败，记录错误并继续
                     logger.error(f"缓存清理任务失败: {e}", exc_info=True)
-        except asyncio.CancelledError:
+        except asyncio.CancelledError as e:
             logger.info("🧹 清理任务收到取消信号")
             logger.error(f"操作失败: {e}", exc_info=True)
             raise
@@ -403,7 +404,7 @@ class CacheManager:
             if hasattr(self, '_cleanup_task'):
                 if self._cleanup_task and not self._cleanup_task.done():
                     self._cleanup_task.cancel()
-        except Exception:
+        except Exception as e:
             logger.error(f"捕获异常: {e}", exc_info=True)
 
 

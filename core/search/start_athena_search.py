@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 分散式智能搜索架构 - 快速启动脚本
 Decentralized Intelligent Search Architecture - Quick Start Script

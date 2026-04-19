@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 AI家族共享记忆向量库
 Family Shared Memory Vector Database

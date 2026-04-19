@@ -1,0 +1,493 @@
+---
+# 业务场景服务部署配置
+# Business Services Deployment Configuration
+
+# 专利法律服务 - 小娜服务
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xiaona-patent-service
+  namespace: athena-services
+  labels:
+    app: xiaona-patent-service
+    ai-agent: xiaona
+    scenario: patent-legal
+    version: v1.0.0
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: xiaona-patent-service
+      ai-agent: xiaona
+  template:
+    metadata:
+      labels:
+        app: xiaona-patent-service
+        ai-agent: xiaona
+        scenario: patent-legal
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+      - name: patent-analysis
+        image: athena/patent-analysis-service:v1.0.0
+        imagePullPolicy: Always
+        env:
+        - name: AI_AGENT
+          value: "xiaona"
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: athena-secrets
+              key: redis-url
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: athena-secrets
+              key: database-url
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8010
+          initialDelaySeconds: 45
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8010
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        volumeMounts:
+        - name: patent-data
+          mountPath: /data/patents
+        - name: models-volume
+          mountPath: /app/models
+      - name: legal-document-parser
+        image: athena/legal-document-parser:v1.0.0
+        imagePullPolicy: Always
+        env:
+        - name: AI_AGENT
+          value: "xiaona"
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: athena-secrets
+              key: redis-url
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8011
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8011
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        volumeMounts:
+        - name: legal-docs
+          mountPath: /data/legal-docs
+      volumes:
+      - name: patent-data
+        persistentVolumeClaim:
+          claimName: patent-data-pvc
+      - name: legal-docs
+        persistentVolumeClaim:
+          claimName: legal-docs-pvc
+      - name: models-volume
+        persistentVolumeClaim:
+          claimName: ai-models-pvc
+      restartPolicy: Always
+
+---
+# 宝宸公司事务 - 云熙服务
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yunxi-baochen-service
+  namespace: athena-services
+  labels:
+    app: yunxi-baochen-service
+    ai-agent: yunxi
+    scenario: baochen-business
+    version: v1.0.0
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: yunxi-baochen-service
+      ai-agent: yunxi
+  template:
+    metadata:
+      labels:
+        app: yunxi-baochen-service
+        ai-agent: yunxi
+        scenario: baochen-business
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+      - name: yunxi-agent
+        image: athena/yunxi-agent:v1.0.0
+        imagePullPolicy: Always
+        env:
+        - name: AI_AGENT
+          value: "yunxi"
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: athena-secrets
+              key: redis-url
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: athena-secrets
+              key: database-url
+        - name: QDRANT_URL
+          value: "http://qdrant.athena-services.svc.cluster.local:6333"
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8087
+          initialDelaySeconds: 45
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8087
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        volumeMounts:
+        - name: baochen-data
+          mountPath: /data/baochen
+      - name: patent-retrieval
+        image: athena/patent-retrieval-engine:v1.0.0
+        imagePullPolicy: Always
+        env:
+        - name: AI_AGENT
+          value: "yunxi"
+        - name: QDRANT_URL
+          value: "http://qdrant.athena-services.svc.cluster.local:6333"
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: athena-secrets
+              key: redis-url
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "1000m"
+          limits:
+            memory: "4Gi"
+            cpu: "2000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8020
+          initialDelaySeconds: 60
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8020
+          initialDelaySeconds: 20
+          periodSeconds: 5
+        volumeMounts:
+        - name: retrieval-cache
+          mountPath: /app/cache
+      volumes:
+      - name: baochen-data
+        persistentVolumeClaim:
+          claimName: baochen-data-pvc
+      - name: retrieval-cache
+        emptyDir: {}
+      restartPolicy: Always
+
+---
+# 自媒体运营 - 小宸服务
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xiaochen-media-service
+  namespace: athena-services
+  labels:
+    app: xiaochen-media-service
+    ai-agent: xiaochen
+    scenario: media-operations
+    version: v1.0.0
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: xiaochen-media-service
+      ai-agent: xiaochen
+  template:
+    metadata:
+      labels:
+        app: xiaochen-media-service
+        ai-agent: xiaochen
+        scenario: media-operations
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+      - name: xiaochen-agent
+        image: athena/xiaochen-agent:v1.0.0
+        imagePullPolicy: Always
+        env:
+        - name: AI_AGENT
+          value: "xiaochen"
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: athena-secrets
+              key: redis-url
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8090
+          initialDelaySeconds: 45
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8090
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        volumeMounts:
+        - name: media-content
+          mountPath: /data/media
+      - name: content-creation
+        image: athena/content-creation-service:v1.0.0
+        imagePullPolicy: Always
+        env:
+        - name: AI_AGENT
+          value: "xiaochen"
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: athena-secrets
+              key: redis-url
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8030
+          initialDelaySeconds: 45
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8030
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        volumeMounts:
+        - name: creation-assets
+          mountPath: /app/assets
+      volumes:
+      - name: media-content
+        persistentVolumeClaim:
+          claimName: media-content-pvc
+      - name: creation-assets
+        persistentVolumeClaim:
+          claimName: creation-assets-pvc
+      restartPolicy: Always
+
+---
+# 服务发现配置
+apiVersion: v1
+kind: Service
+metadata:
+  name: xiaona-patent-service
+  namespace: athena-services
+  labels:
+    app: xiaona-patent-service
+    ai-agent: xiaona
+spec:
+  type: ClusterIP
+  ports:
+  - name: patent-analysis
+    port: 8010
+    targetPort: 8010
+  - name: legal-parser
+    port: 8011
+    targetPort: 8011
+  selector:
+    app: xiaona-patent-service
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: yunxi-baochen-service
+  namespace: athena-services
+  labels:
+    app: yunxi-baochen-service
+    ai-agent: yunxi
+spec:
+  type: ClusterIP
+  ports:
+  - name: yunxi-agent
+    port: 8087
+    targetPort: 8087
+  - name: patent-retrieval
+    port: 8020
+    targetPort: 8020
+  selector:
+    app: yunxi-baochen-service
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xiaochen-media-service
+  namespace: athena-services
+  labels:
+    app: xiaochen-media-service
+    ai-agent: xiaochen
+spec:
+  type: ClusterIP
+  ports:
+  - name: xiaochen-agent
+    port: 8090
+    targetPort: 8090
+  - name: content-creation
+    port: 8030
+    targetPort: 8030
+  selector:
+    app: xiaochen-media-service
+
+---
+# Ingress - 外部访问配置
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: athena-services-ingress
+  namespace: athena-services
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+spec:
+  tls:
+  - hosts:
+    - api.athena-platform.com
+    secretName: athena-tls
+  rules:
+  - host: api.athena-platform.com
+    http:
+      paths:
+      - path: /api/v1/control-center
+        pathType: Prefix
+        backend:
+          service:
+            name: xiaonuo-control-center-service
+            port:
+              number: 9002
+      - path: /patent-legal
+        pathType: Prefix
+        backend:
+          service:
+            name: xiaona-patent-service
+            port:
+              number: 8010
+      - path: /baochen-business
+        pathType: Prefix
+        backend:
+          service:
+            name: yunxi-baochen-service
+            port:
+              number: 8087
+      - path: /media-operations
+        pathType: Prefix
+        backend:
+          service:
+            name: xiaochen-media-service
+            port:
+              number: 8090
+
+---
+# 资源配额
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: athena-services-quota
+  namespace: athena-services
+spec:
+  hard:
+    requests.cpu: "20"
+    requests.memory: 40Gi
+    limits.cpu: "40"
+    limits.memory: 80Gi
+    persistentvolumeclaims: "10"
+    pods: "30"
+    services: "20"
+    secrets: "10"
+    configmaps: "20"
+
+---
+# 限制范围
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: athena-services-limits
+  namespace: athena-services
+spec:
+  limits:
+  - default:
+      cpu: "2000m"
+      memory: "4Gi"
+    defaultRequest:
+      cpu: "500m"
+      memory: "1Gi"
+  - type: Container
+    max:
+      cpu: "4000m"
+      memory: "8Gi"
+    min:
+      cpu: "100m"
+      memory: "128Mi"

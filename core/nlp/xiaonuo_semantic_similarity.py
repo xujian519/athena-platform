@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺语义相似度匹配算法
 Xiaonuo Semantic Similarity Matching Algorithm
@@ -14,7 +15,9 @@ import os
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
+
+import numpy as np
 
 from core.logging_config import setup_logging
 

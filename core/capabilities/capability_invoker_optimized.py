@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 能力调用器 - 生产优化版本
 Capability Invoker - Production Optimized Version
@@ -17,7 +18,7 @@ import logging
 from abc import ABC, abstractmethod
 from datetime import datetime
 from functools import wraps
-from typing import Any, Dict, Optional
+from typing import Any
 
 import httpx
 
@@ -65,7 +66,7 @@ def retry_on_failure(max_retries: int = 3, base_delay: float = 1.0):
                         logger.error(f"❌ 达到最大重试次数: {e}")
                 except Exception as e:
                     # 非RetryableError直接抛出
-                    raise CapabilityError(f"能力调用失败: {e}")
+                    raise CapabilityError(f"能力调用失败: {e}") from e
 
             # 所有重试都失败
             raise CapabilityError(f"能力调用失败(重试{max_retries}次后): {last_exception}")
@@ -172,7 +173,7 @@ class MCPCapabilityInvokerOptimized(BaseCapabilityInvokerOptimized):
                 self._update_metrics(False, response_time)
 
                 logger.error(f"❌ MCP调用失败: {e}")
-                raise RetryableError(f"MCP调用失败: {e}")
+                raise RetryableError(f"MCP调用失败: {e}") from e
 
     async def _invoke_real_mcp(
         self, endpoint: str, method: str, parameters: dict[str, Any], timeout: int
@@ -333,7 +334,7 @@ class RestfulCapabilityInvokerOptimized(BaseCapabilityInvokerOptimized):
             response_time = (datetime.now() - start_time).total_seconds() * 1000
             self._update_metrics(False, response_time)
             logger.error(f"❌ RESTful调用超时: {e}")
-            raise RetryableError(f"RESTful调用超时: {e}")
+            raise RetryableError(f"RESTful调用超时: {e}") from e
 
         except httpx.HTTPStatusError as e:
             response_time = (datetime.now() - start_time).total_seconds() * 1000
@@ -342,16 +343,16 @@ class RestfulCapabilityInvokerOptimized(BaseCapabilityInvokerOptimized):
             # 5xx错误可重试,4xx错误不可重试
             if e.response.status_code >= 500:
                 logger.error(f"❌ RESTful调用服务器错误: {e}")
-                raise RetryableError(f"RESTful调用服务器错误: {e}")
+                raise RetryableError(f"RESTful调用服务器错误: {e}") from e
             else:
                 logger.error(f"❌ RESTful调用客户端错误: {e}")
-                raise CapabilityError(f"RESTful调用客户端错误: {e}")
+                raise CapabilityError(f"RESTful调用客户端错误: {e}") from e
 
         except Exception as e:
             response_time = (datetime.now() - start_time).total_seconds() * 1000
             self._update_metrics(False, response_time)
             logger.error(f"❌ RESTful调用失败: {e}")
-            raise RetryableError(f"RESTful调用失败: {e}")
+            raise RetryableError(f"RESTful调用失败: {e}") from e
 
     async def close(self):
         """关闭HTTP客户端"""
@@ -423,7 +424,7 @@ class InternalCapabilityInvokerOptimized(BaseCapabilityInvokerOptimized):
             response_time = (datetime.now() - start_time).total_seconds() * 1000
             self._update_metrics(False, response_time)
             logger.error(f"❌ 内部调用失败: {e}")
-            raise CapabilityError(f"内部调用失败: {e}")
+            raise CapabilityError(f"内部调用失败: {e}") from e
 
     async def _invoke_vector_search(self, parameters: dict[str, Any]) -> dict[str, Any]:
         """
@@ -529,7 +530,7 @@ class WebSocketCapabilityInvokerOptimized(BaseCapabilityInvokerOptimized):
                 response_time = (datetime.now() - start_time).total_seconds() * 1000
                 self._update_metrics(False, response_time)
                 logger.error(f"❌ WebSocket调用失败: {e}")
-                raise RetryableError(f"WebSocket调用失败: {e}")
+                raise RetryableError(f"WebSocket调用失败: {e}") from e
 
     async def close(self):
         """关闭所有WebSocket连接"""
@@ -620,7 +621,7 @@ class CapabilityInvokerOptimized:
             raise
         except Exception as e:
             logger.error(f"❌ 能力调用失败: {capability_id} - {e}")
-            raise CapabilityError(f"能力调用失败: {e}")
+            raise CapabilityError(f"能力调用失败: {e}") from e
 
     async def close(self):
         """关闭所有连接"""

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena超级推理引擎 - 基于超级思维链协议的高级推理系统
 作者: Athena AI团队
 创建时间: 2025-12-04
 功能: 实现多阶段、多层次的超级推理能力
 """
-import numpy as np
-
 import asyncio
 import logging
 import uuid
@@ -16,6 +15,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
+import numpy as np
 
 from core.logging_config import setup_logging
 

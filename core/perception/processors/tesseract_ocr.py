@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 企业级Tesseract OCR处理器
 支持中英文混合识别、表格识别、版面分析
 最后更新: 2026-01-26
 """
 
-import subprocess
-import tempfile
-import os
-from pathlib import Path
-from typing import Optional, Dict, Any, List
-import logging
-import re
-from datetime import datetime
 import hashlib
+import logging
+import os
+import re
+import subprocess
+from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +56,7 @@ class TesseractOCRProcessor:
             )
             if result.returncode == 0:
                 return result.stdout.strip()
-        except:
+        except Exception:
             pass
 
         # 常见安装路径
@@ -85,7 +85,7 @@ class TesseractOCRProcessor:
                 timeout=5
             )
             return result.returncode == 0
-        except:
+        except Exception:
             return False
 
     def get_version(self) -> str | None:
@@ -99,7 +99,7 @@ class TesseractOCRProcessor:
             )
             if result.returncode == 0:
                 return result.stdout.strip()
-        except:
+        except Exception:
             pass
         return None
 
@@ -110,7 +110,7 @@ class TesseractOCRProcessor:
         preprocess: bool = True,
         extract_tables: bool = False,
         enhance_contrast: bool = False
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         处理OCR请求
 
@@ -183,14 +183,14 @@ class TesseractOCRProcessor:
             }
 
         except subprocess.TimeoutExpired:
-            raise RuntimeError(f"OCR处理超时: {image_path}")
+            raise RuntimeError(f"OCR处理超时: {image_path}") from None
         except subprocess.CalledProcessError as e:
-            raise RuntimeError(f"OCR处理失败: {e.stderr}")
+            raise RuntimeError(f"OCR处理失败: {e.stderr}") from e
         except Exception as e:
             logger.error(f"OCR处理异常: {e}")
             raise
 
-    def _validate_input(self, image_path: str) -> Dict[str, Any]:
+    def _validate_input(self, image_path: str) -> dict[str, Any]:
         """验证输入文件"""
         result = {"valid": True, "error": None}
 
@@ -232,7 +232,6 @@ class TesseractOCRProcessor:
             处理后的图像路径
         """
         import cv2
-        import numpy as np
 
         # 读取图像
         img = cv2.imread(image_path)
@@ -271,7 +270,7 @@ class TesseractOCRProcessor:
 
         # 验证文件是否真的保存成功
         if not os.path.exists(temp_path_real):
-            logger.warning(f"预处理图像文件不存在，使用原始图像")
+            logger.warning("预处理图像文件不存在，使用原始图像")
             return image_path
 
         logger.info(f"✓ 预处理图像已保存: {temp_path_real}")
@@ -294,7 +293,7 @@ class TesseractOCRProcessor:
         image_path: str,
         lang_code: str,
         extract_tables: bool = False
-    ) -> List[str]:
+    ) -> list[str]:
         """构建Tesseract命令"""
         cmd = [
             self.tesseract_path,
@@ -310,7 +309,7 @@ class TesseractOCRProcessor:
 
         return cmd
 
-    async def _execute_ocr(self, cmd: List[str]) -> str:
+    async def _execute_ocr(self, cmd: list[str]) -> str:
         """执行OCR命令"""
         result = subprocess.run(
             cmd,
@@ -322,7 +321,7 @@ class TesseractOCRProcessor:
         )
         return result.stdout.strip()
 
-    def _postprocess_result(self, text: str, image_path: str) -> Dict[str, Any]:
+    def _postprocess_result(self, text: str, image_path: str) -> dict[str, Any]:
         """后处理OCR结果"""
         # 清理文本
         cleaned_text = self._clean_text(text)
@@ -399,10 +398,10 @@ class TesseractOCRProcessor:
 
     async def batch_process(
         self,
-        image_paths: List[str],
+        image_paths: list[str],
         language: str = "chinese",
         **kwargs
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         批量处理OCR
 
@@ -431,11 +430,11 @@ class TesseractOCRProcessor:
 
         return results
 
-    def get_supported_formats(self) -> List[str]:
+    def get_supported_formats(self) -> list[str]:
         """获取支持的图像格式"""
         return list(self.supported_formats)
 
-    def get_supported_languages(self) -> List[str]:
+    def get_supported_languages(self) -> list[str]:
         """获取支持的语言"""
         return ['chinese', 'english', 'mixed', 'traditional']
 
@@ -461,7 +460,7 @@ if __name__ == "__main__":
         test_image = "/tmp/test_ocr.png"
         if os.path.exists(test_image):
             result = await processor.process_ocr(test_image, "chinese")
-            print(f"\n✅ OCR测试成功:")
+            print("\n✅ OCR测试成功:")
             print(f"文本: {result['text'][:100]}...")
             print(f"置信度: {result['confidence']}")
             print(f"处理时间: {result['processing_time']:.2f}秒")

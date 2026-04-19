@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena总体设计部
 General Design Department for Athena Platform
@@ -54,7 +55,6 @@ class AgentRole(Enum):
 
     XIAONUO = "小诺"  # 总调度官
     XIANA = "小娜"  # 专利法律专家
-    YUNXI = "云熙"  # IP管理系统
     XIAOCHEN = "小宸"  # 自媒体运营
 
 
@@ -108,7 +108,6 @@ class GeneralDesignDepartment:
         self.agents = {
             AgentRole.XIAONUO: None,  # 延迟初始化
             AgentRole.XIANA: None,
-            AgentRole.YUNXI: None,
             AgentRole.XIAOCHEN: None,
         }
 
@@ -120,9 +119,9 @@ class GeneralDesignDepartment:
     def _init_routing_rules(self) -> dict[TaskType, list[AgentRole]]:
         """初始化任务路由规则"""
         return {
-            TaskType.PATENT_ANALYSIS: [AgentRole.XIANA, AgentRole.YUNXI],
+            TaskType.PATENT_ANALYSIS: [AgentRole.XIANA],
             TaskType.LEGAL_RESEARCH: [AgentRole.XIANA],
-            TaskType.IP_MANAGEMENT: [AgentRole.YUNXI],
+            TaskType.IP_MANAGEMENT: [AgentRole.XIANA],
             TaskType.MEDIA_OPERATION: [AgentRole.XIAOCHEN],
             TaskType.GENERAL_QUERY: [AgentRole.XIAONUO],
             TaskType.DECISION_SUPPORT: [AgentRole.XIANA, AgentRole.XIAONUO],
@@ -238,8 +237,6 @@ class GeneralDesignDepartment:
             return await self._xiaonuo_process(task)
         elif agent_role == AgentRole.XIANA:
             return await self._xiana_process(task)
-        elif agent_role == AgentRole.YUNXI:
-            return await self._yunxi_process(task)
         elif agent_role == AgentRole.XIAOCHEN:
             return await self._xiaochen_process(task)
         else:
@@ -295,21 +292,6 @@ class GeneralDesignDepartment:
                 reasoning="小娜为您提供专业法律支持",
             )
 
-    async def _yunxi_process(self, task: Task) -> TaskResult:
-        """云熙处理任务"""
-        # 云熙负责IP管理
-        return TaskResult(
-            task_id=task.task_id,
-            agent=AgentRole.YUNXI,
-            success=True,
-            data={
-                "ip_management": "IP数据已整理和管理",
-                "case_tracking": "案件进度已更新",
-                "database_status": "数据库运行正常",
-            },
-            confidence=0.9,
-            reasoning="云熙管理系统数据和案件信息",
-        )
 
     async def _xiaochen_process(self, task: Task) -> TaskResult:
         """小宸处理任务"""

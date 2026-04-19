@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 改进的专利决定信息提取器
 Improved Patent Decision Information Extractor
@@ -9,8 +10,7 @@ Improved Patent Decision Information Extractor
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 
 @dataclass
@@ -80,7 +80,7 @@ class ImprovedPatentExtractor:
         try:
             from docx import Document
         except ImportError:
-            raise ImportError("需要安装 python-docx: pip install python-docx")
+            raise ImportError("需要安装 python-docx: pip install python-docx") from None
 
         doc = Document(file_path)
         paragraphs = [p.text.strip() for p in doc.paragraphs if p.text.strip()]

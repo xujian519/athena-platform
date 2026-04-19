@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena通信系统 - 后台任务管理器
 Background Task Manager for Communication System
@@ -23,7 +24,6 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
-
 
 logger = logging.getLogger(__name__)
 

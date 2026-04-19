@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利合规性检查引擎
 Patent Compliance Engine

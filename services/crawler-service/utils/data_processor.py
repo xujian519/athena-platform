@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 数据处理器
 Data Processor for Universal Crawler
@@ -9,7 +8,7 @@ import json
 import logging
 import re
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import pandas as pd
 from bs4 import BeautifulSoup
@@ -72,7 +71,7 @@ class DataProcessor:
 
     @staticmethod
     def extract_attributes(soup: BeautifulSoup, selector: str,
-                          attributes: List[str]) -> Dict[str, str]:
+                          attributes: list[str]) -> dict[str, str]:
         """
         提取元素属性
 
@@ -152,7 +151,7 @@ class DataProcessor:
         return pd.DataFrame()
 
     @staticmethod
-    def extract_json_data(text: str) -> Dict[str, Any | None]:
+    def extract_json_data(text: str) -> dict[str, Any | None]:
         """
         从文本中提取JSON数据
 
@@ -180,7 +179,7 @@ class DataProcessor:
 
     @staticmethod
     def extract_links(soup: BeautifulSoup, base_url: str = None,
-                      pattern: str = None) -> List[Dict[str, str]]:
+                      pattern: str = None) -> list[dict[str, str]]:
         """
         提取链接信息
 
@@ -219,7 +218,7 @@ class DataProcessor:
         return links
 
     @staticmethod
-    def extract_images(soup: BeautifulSoup, base_url: str = None) -> List[Dict[str, str]]:
+    def extract_images(soup: BeautifulSoup, base_url: str = None) -> list[dict[str, str]]:
         """
         提取图片信息
 
@@ -253,7 +252,7 @@ class DataProcessor:
         return images
 
     @staticmethod
-    def extract_meta_tags(soup: BeautifulSoup) -> Dict[str, str]:
+    def extract_meta_tags(soup: BeautifulSoup) -> dict[str, str]:
         """
         提取meta标签信息
 
@@ -275,7 +274,7 @@ class DataProcessor:
         return meta_info
 
     @staticmethod
-    def save_to_csv(data: Union[List[Dict], pd.DataFrame], filename: str,
+    def save_to_csv(data: list[dict] | pd.DataFrame, filename: str,
                     index: bool = False):
         """
         保存数据到CSV文件
@@ -308,7 +307,7 @@ class DataProcessor:
         logger.info(f"数据已保存到: {filename}")
 
     @staticmethod
-    def parse_date(date_str: str, formats: List[str] = None) -> datetime | None:
+    def parse_date(date_str: str, formats: list[str] = None) -> datetime | None:
         """
         解析日期字符串
 

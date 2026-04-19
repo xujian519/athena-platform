@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜超级推理引擎 - 法律专家增强版
 Xiaona Super Reasoning Engine - Legal Expert Enhanced Version

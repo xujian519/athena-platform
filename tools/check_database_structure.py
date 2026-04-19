@@ -3,14 +3,14 @@
 检查专利档案数据库结构
 """
 
-import psycopg2
-from psycopg2.extras import RealDictCursor
-
 # 导入安全配置
 import sys
 from pathlib import Path
+
+import psycopg2
+from psycopg2.extras import RealDictCursor
+
 sys.path.append(str(Path(__file__).parent.parent / "core"))
-from security.env_config import get_env_var, get_database_url, get_jwt_secret
 
 def check_database():
     """检查数据库结构"""

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化版监控告警模块 - 向后兼容重定向
 Optimized Monitoring and Alerting Module - Backward Compatibility Redirect
@@ -58,9 +59,9 @@ from .optimized_monitoring_module import (
     AlertManager,
     AlertRule,
     AlertStatus,
+    MetricsCollector,
     MetricType,
     MetricValue,
-    MetricsCollector,
     OptimizedMonitoringModule,
     PerformanceAnalyzer,
     SystemMetricsCollector,

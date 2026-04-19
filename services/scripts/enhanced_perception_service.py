@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 增强感知服务
 Enhanced Perception Service
@@ -12,28 +11,22 @@ Enhanced Perception Service
 """
 
 import asyncio
-from core.async_main import async_main
-import json
-import logging
-from core.logging_config import setup_logging
-import os
 import sys
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 添加项目路径
 sys.path.insert(0, '/Users/xujian/Athena工作平台')
 
 import uvicorn
-from fastapi import BackgroundTasks, FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
-# 感知模块导入
-from core.perception import InputType, PerceptionEngine, PerceptionResult
-
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
+# 感知模块导入
+from core.perception import InputType, PerceptionEngine
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -56,31 +49,31 @@ perception_engine: PerceptionEngine | None = None
 # 请求模型
 class TextInputRequest(BaseModel):
     text: str = Field(..., description='输入文本')
-    options: Optional[Dict[str, Any]] = Field(default={}, description='处理选项')
+    options: dict[str, Any] | None = Field(default={}, description='处理选项')
 
 class MultimodalInputRequest(BaseModel):
-    data: Dict[str, Any] = Field(..., description='多模态数据')
-    options: Optional[Dict[str, Any]] = Field(default={}, description='处理选项')
+    data: dict[str, Any] = Field(..., description='多模态数据')
+    options: dict[str, Any] | None = Field(default={}, description='处理选项')
 
 class BatchProcessRequest(BaseModel):
-    items: List[Dict[str, Any]] = Field(..., description='批量处理项目')
-    options: Optional[Dict[str, Any]] = Field(default={}, description='处理选项')
+    items: list[dict[str, Any]] = Field(..., description='批量处理项目')
+    options: dict[str, Any] | None = Field(default={}, description='处理选项')
 
 # 响应模型
 class PerceptionResponse(BaseModel):
     success: bool
     input_type: str
     confidence: float
-    processed_content: Optional[Any]
-    features: Dict[str, Any]
-    metadata: Dict[str, Any]
+    processed_content: Any | None
+    features: dict[str, Any]
+    metadata: dict[str, Any]
     processing_time: float
     timestamp: str
 
 class StatusResponse(BaseModel):
     status: str
     processor_count: int
-    available_processors: List[str]
+    available_processors: list[str]
     engine_initialized: bool
     optimization_enabled: bool
     monitoring_enabled: bool
@@ -164,12 +157,12 @@ async def get_status():
             processor_count=status['processor_count'],
             available_processors=[p.value for p in status['available_processors']],
             engine_initialized=status['initialized'],
-            optimization_enabled=getattr(perception_engine, 'optimizer') is not None,
-            monitoring_enabled=getattr(perception_engine, 'monitor') is not None
+            optimization_enabled=perception_engine.optimizer is not None,
+            monitoring_enabled=perception_engine.monitor is not None
         )
     except Exception as e:
         logger.error(f"获取状态失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/process/text', response_model=PerceptionResponse)
 async def process_text(request: TextInputRequest):
@@ -249,7 +242,7 @@ async def process_multimodal(request: MultimodalInputRequest):
             timestamp=datetime.now().isoformat()
         )
 
-@app.post('/process/batch', response_model=List[PerceptionResponse])
+@app.post('/process/batch', response_model=list[PerceptionResponse])
 async def process_batch(request: BatchProcessRequest):
     """批量处理"""
     if not perception_engine:
@@ -299,7 +292,7 @@ async def process_batch(request: BatchProcessRequest):
 
     except Exception as e:
         logger.error(f"批量处理失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/performance/dashboard')
 async def get_performance_dashboard():
@@ -312,7 +305,7 @@ async def get_performance_dashboard():
         return dashboard
     except Exception as e:
         logger.error(f"获取性能仪表板失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/performance/report')
 async def get_performance_report(time_range: int = 3600):
@@ -325,7 +318,7 @@ async def get_performance_report(time_range: int = 3600):
         return report
     except Exception as e:
         logger.error(f"获取性能报告失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/processors')
 async def get_processors():
@@ -348,14 +341,14 @@ async def get_processors():
         return {'processors': processors}
     except Exception as e:
         logger.error(f"获取处理器列表失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 if __name__ == '__main__':
     # 服务配置
     HOST = '0.0.0.0'
     PORT = 8009
 
-    logger.info(f"🌟 启动Athena增强感知服务...")
+    logger.info("🌟 启动Athena增强感知服务...")
     logger.info(f"📊 服务地址: http://{HOST}:{PORT}")
     logger.info(f"📚 API文档: http://{HOST}:{PORT}/docs")
 

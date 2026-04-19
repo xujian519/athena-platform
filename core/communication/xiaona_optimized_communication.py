@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜优化通信模块 - 健康度99分版本
 Xiaona Optimized Communication Module - 99 Health Score Version
@@ -25,7 +26,6 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
-
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent.parent
@@ -455,7 +455,7 @@ class XiaonaOptimizedCommunication:
             return None
 
     async def create_channel(
-        self, channel_id: str, channel_type: ChannelType, participants: list[str]) | None = None
+        self, channel_id: str, channel_type: ChannelType, participants: list[str] | None = None
     ) -> bool:
         """创建通道"""
         if channel_id in self.channels:

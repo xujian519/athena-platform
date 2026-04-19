@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PatentImageAnalyzer 单元测试
 
@@ -17,11 +16,11 @@ import sys
 import tempfile
 import time
 from pathlib import Path
-from unittest.mock import Mock, MagicMock, patch, PropertyMock
+from unittest.mock import patch
 
+import numpy as np
 import pytest
 import torch
-import numpy as np
 from PIL import Image
 
 # 添加项目根目录到路径
@@ -29,15 +28,14 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 from production.core.perception.processors.patent_image_analyzer import (
-    PatentImageAnalyzer,
-    ImageType,
     BLIPConfig,
-    ModelPaths,
+    ImageType,
     ImageValidation,
     ModelLoading,
-    with_timeout
+    ModelPaths,
+    PatentImageAnalyzer,
+    with_timeout,
 )
-
 
 # ============================================================================
 # 测试配置类
@@ -68,6 +66,7 @@ class TestModelPaths:
         monkeypatch.setenv("MODELSCOPE_BLIP_PATH", "/custom/path/to/blip")
         # 重新导入以获取环境变量
         import importlib
+
         import production.core.perception.processors.patent_image_analyzer as pia
         importlib.reload(pia)
         assert "/custom/path/to/blip" in pia.ModelPaths.MODELSCOPE_BLIP
@@ -248,7 +247,7 @@ class TestImageValidation:
 
     def test_validate_extensions(self):
         """测试所有支持的扩展名"""
-        analyzer = PatentImageAnalyzer()
+        PatentImageAnalyzer()
 
         supported_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff', '.webp']
         for ext in supported_extensions:

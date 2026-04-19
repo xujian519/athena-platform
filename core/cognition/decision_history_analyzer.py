@@ -1,11 +1,10 @@
+from __future__ import annotations
 
 # pyright: ignore
 """
 决策历史分析器
 分析决策模式,提供改进建议
 """
-import numpy as np
-
 import json
 import logging
 from collections import defaultdict, deque
@@ -14,6 +13,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any
 
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

@@ -1,0 +1,37 @@
+{
+  "enabled": true,
+  "metrics": [
+    {
+      "name": "response_time",
+      "description": "API响应时间",
+      "threshold": 200,
+      "unit": "milliseconds"
+    },
+    {
+      "name": "request_rate",
+      "description": "请求频率",
+      "threshold": 100,
+      "unit": "requests_per_second"
+    },
+    {
+      "name": "error_rate",
+      "description": "错误率",
+      "threshold": 5,
+      "unit": "percentage"
+    },
+    {
+      "name": "cache_hit_rate",
+      "description": "缓存命中率",
+      "threshold": 80,
+      "unit": "percentage"
+    }
+  ],
+  "alert_thresholds": {
+    "response_time_warning": 300,
+    "response_time_critical": 1000,
+    "error_rate_warning": 10,
+    "error_rate_critical": 25
+  },
+  "sampling_interval": 60,
+  "retention_period": 7
+}

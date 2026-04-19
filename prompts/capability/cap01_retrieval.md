@@ -61,12 +61,13 @@ def parallel_vector_retrieval(user_query):
 - **引用案例**: 引用本条法的案例
 
 ```cypher
-// 知识图谱查询示例
-MATCH (law:legal_citation {law_name: "专利法第22条"})
-OPTIONAL MATCH (law)<-[:cites]-(case:decision_block)
-OPTIONAL MATCH (law)-[:上位法]->(upper:legal_citation)
-OPTIONAL MATCH (law)-[:配套]->(guide:legal_citation)
-RETURN law, upper, guide, collect(case)[0:5] as top_cases
+// 知识图谱查询示例 (Neo4j Cypher)
+MATCH (law:Article {name: "专利法第22条"})
+OPTIONAL MATCH (law)<-[:CITES]-(case:Case)
+OPTIONAL MATCH (law)-[:SUPERIOR_LAW]->(upper:Law)
+OPTIONAL MATCH (law)-[:SUPPORTS]->(guide:JudicialInterpretation)
+RETURN law.name, upper.name as superior_law, guide.name as support_guide,
+       collect(case.case_number)[0:5] as top_cases
 ```
 
 ### 步骤4: 调用法条画像

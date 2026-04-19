@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多模态向量化模块
 Multimodal Vectorization Module
@@ -14,11 +15,12 @@ Multimodal Vectorization Module
 import asyncio
 import hashlib
 import logging
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
+import numpy as np
 
 from core.embedding.nlp_service_adapter import NLPServiceAdapter, get_nlp_adapter
 
@@ -297,9 +299,6 @@ class MultimodalVectorizer:
                         TAGS.get(tag, tag)
             except Exception as e:
                 logger.debug(f"空except块已触发: {e}")
-            except Exception as e:
-                logger.debug(f"空except块已触发: {e}")
-                pass
 
             return metadata
         except Exception as e:

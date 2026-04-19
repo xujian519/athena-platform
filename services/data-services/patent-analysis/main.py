@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利分析服务
 Patent Analysis Service
 """
 
 import logging
-from core.async_main import async_main
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import os
-import sys
 from datetime import datetime
+from typing import Any
 
 from flask import Flask, jsonify, request
 

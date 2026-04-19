@@ -4,17 +4,16 @@ Athena平台通用工具 - LangExtract智能信息提取系统
 可由小诺和小娜完全控制的企业级结构化信息提取工具
 """
 
-import asyncio
 import hashlib
-import json
 import logging
-from core.logging_config import setup_logging
 import sys
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any
+
+from core.logging_config import setup_logging  # type: ignore
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent.parent
@@ -58,16 +57,16 @@ class ExtractionTask:
     """信息提取任务定义"""
     task_id: str
     scenario: ExtractionScenario
-    text_or_documents: Union[str, List[str]]
+    text_or_documents: str | list[str]
     prompt_description: str | None = None
-    examples: Optional[List[Any]] = None
+    examples: list[Any] | None = None
     model_id: str = 'gemini-2.5-flash'
-    config: Dict[str, Any] = field(default_factory=dict)
+    config: dict[str, Any] = field(default_factory=dict)
     priority: int = 1
     max_retries: int = 3
     timeout: int = 300
     callback_url: str | None = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -75,10 +74,10 @@ class ExtractionResult:
     """信息提取结果"""
     task_id: str
     success: bool
-    data: Dict[str, Any] = field(default_factory=dict)
-    extractions: List[Any] = field(default_factory=list)
+    data: dict[str, Any] = field(default_factory=dict)
+    extractions: list[Any] = field(default_factory=list)
     error: str | None = None
-    stats: Dict[str, Any] = field(default_factory=dict)
+    stats: dict[str, Any] = field(default_factory=dict)
     execution_time: float = 0.0
     timestamp: datetime = field(default_factory=datetime.now)
 
@@ -144,7 +143,7 @@ class LangExtractTool:
                 }
             ]
         },
-        
+
         ExtractionScenario.CONTRACT_REVIEW: {
             'name': '合同审查',
             'description': '从合同文档中提取关键条款、当事人信息、权利义务等',
@@ -310,7 +309,7 @@ class LangExtractTool:
             'last_used': None
         }
         self.active_tasks = {}
-        
+
         logger.info(f"LangExtract工具初始化完成，可用性: {self.is_available}")
 
     async def initialize(self) -> bool:
@@ -319,10 +318,9 @@ class LangExtractTool:
             if not self.is_available:
                 logger.warning('LangExtract未安装，使用模拟模式')
                 return True
-            
+
             # 测试LangExtract是否正常工作
-            test_text = '这是一个测试文本，用于验证LangExtract功能。'
-            test_examples = [
+            [
                 data.ExampleData(
                     text='测试文本',
                     extractions=[
@@ -334,16 +332,16 @@ class LangExtractTool:
                     ]
                 )
             ]
-            
+
             # 这里只是验证模块可用，不实际执行提取
             logger.info('LangExtract工具初始化成功')
             return True
-            
+
         except Exception as e:
             logger.error(f"LangExtract工具初始化失败: {e}")
             return False
 
-    def get_status(self) -> Dict[str, Any]:
+    def get_status(self) -> dict[str, Any]:
         """获取工具状态"""
         return {
             'tool': {
@@ -363,7 +361,7 @@ class LangExtractTool:
             'active_tasks': len(self.active_tasks)
         }
 
-    async def list_scenarios(self) -> Dict[str, Any]:
+    async def list_scenarios(self) -> dict[str, Any]:
         """列出可用的提取场景"""
         scenarios_info = {}
         for scenario, config in self.SCENARIOS.items():
@@ -372,29 +370,29 @@ class LangExtractTool:
                 'description': config['description'],
                 'capabilities': config.get('capabilities', [])
             }
-        
+
         return {
             'total_scenarios': len(self.SCENARIOS),
             'scenarios': scenarios_info
         }
 
     async def execute_scenario(
-        self, 
-        scenario: str, 
-        text_or_documents: Union[str, List[str]], 
-        config: Optional[Dict[str, Any]] = None
+        self,
+        scenario: str,
+        text_or_documents: str | list[str],
+        config: dict[str, Any] | None = None
     ) -> ExtractionResult:
         """执行预定义场景的信息提取"""
         start_time = datetime.now()
-        
+
         try:
             # 验证场景
             if scenario not in [s.value for s in ExtractionScenario]:
                 raise ValueError(f"不支持的场景: {scenario}")
-            
+
             scenario_enum = ExtractionScenario(scenario)
             scenario_config = self.SCENARIOS[scenario_enum]
-            
+
             # 创建任务
             task = ExtractionTask(
                 task_id=self._generate_task_id(),
@@ -404,28 +402,28 @@ class LangExtractTool:
                 examples=scenario_config['examples'],
                 config=config or {}
             )
-            
+
             # 执行提取
             result = await self._execute_extraction(task)
-            
+
             # 更新统计
             execution_time = (datetime.now() - start_time).total_seconds()
             result.execution_time = execution_time
-            
+
             if result.success:
                 self.usage_stats['successful_extractions'] += 1
             else:
                 self.usage_stats['failed_extractions'] += 1
-            
+
             self.usage_stats['total_extractions'] += 1
             self.usage_stats['last_used'] = datetime.now().isoformat()
-            
+
             # 更新工具定义
             self.TOOL_DEFINITION['last_used'] = datetime.now().isoformat()
             self.TOOL_DEFINITION['usage_count'] += 1
-            
+
             return result
-            
+
         except Exception as e:
             logger.error(f"场景执行失败: {e}")
             execution_time = (datetime.now() - start_time).total_seconds()
@@ -438,15 +436,15 @@ class LangExtractTool:
 
     async def execute_custom_extraction(
         self,
-        text_or_documents: Union[str, List[str]],
+        text_or_documents: str | list[str],
         prompt_description: str,
-        examples: Optional[List[Any]] = None,
+        examples: list[Any] | None = None,
         model_id: str = 'gemini-2.5-flash',
-        config: Optional[Dict[str, Any]] = None
+        config: dict[str, Any] | None = None
     ) -> ExtractionResult:
         """执行自定义信息提取"""
         start_time = datetime.now()
-        
+
         try:
             # 创建任务
             task = ExtractionTask(
@@ -458,24 +456,24 @@ class LangExtractTool:
                 model_id=model_id,
                 config=config or {}
             )
-            
+
             # 执行提取
             result = await self._execute_extraction(task)
-            
+
             # 更新统计
             execution_time = (datetime.now() - start_time).total_seconds()
             result.execution_time = execution_time
-            
+
             if result.success:
                 self.usage_stats['successful_extractions'] += 1
             else:
                 self.usage_stats['failed_extractions'] += 1
-            
+
             self.usage_stats['total_extractions'] += 1
             self.usage_stats['last_used'] = datetime.now().isoformat()
-            
+
             return result
-            
+
         except Exception as e:
             logger.error(f"自定义提取失败: {e}")
             execution_time = (datetime.now() - start_time).total_seconds()
@@ -491,7 +489,7 @@ class LangExtractTool:
         if not self.is_available:
             # 模拟模式
             return self._simulate_extraction(task)
-        
+
         try:
             # 准备示例数据
             examples = []
@@ -507,14 +505,14 @@ class LangExtractTool:
                                 attributes=ext.get('attributes', {})
                             )
                         )
-                    
+
                     examples.append(
                         data.ExampleData(
                             text=example['text'],
                             extractions=extractions
                         )
                     )
-            
+
             # 如果没有提供示例，创建一个默认示例
             if not examples:
                 examples = [
@@ -529,10 +527,10 @@ class LangExtractTool:
                         ]
                     )
                 ]
-            
+
             # 执行LangExtract
             logger.info(f"开始执行信息提取任务: {task.task_id}")
-            
+
             result = lx.extract(
                 text_or_documents=task.text_or_documents,
                 prompt_description=task.prompt_description,
@@ -540,7 +538,7 @@ class LangExtractTool:
                 model_id=task.model_id,
                 **task.config
             )
-            
+
             # 处理结果
             if hasattr(result, 'extractions'):
                 extractions = [
@@ -555,23 +553,23 @@ class LangExtractTool:
                 ]
             else:
                 extractions = []
-            
+
             # 构建返回数据
             result_data = {
                 'text_length': len(str(task.text_or_documents)),
                 'extraction_count': len(extractions),
-                'extraction_types': list(set(ext['extraction_class'] for ext in extractions))
+                'extraction_types': list({ext['extraction_class'] for ext in extractions})
             }
-            
+
             stats = {
                 'model_used': task.model_id,
                 'text_length': len(str(task.text_or_documents)),
                 'extraction_count': len(extractions),
                 'processing_time': datetime.now().isoformat()
             }
-            
+
             logger.info(f"信息提取完成: {len(extractions)}个实体提取成功")
-            
+
             return ExtractionResult(
                 task_id=task.task_id,
                 success=True,
@@ -579,7 +577,7 @@ class LangExtractTool:
                 extractions=extractions,
                 stats=stats
             )
-            
+
         except Exception as e:
             logger.error(f"信息提取执行失败: {e}")
             return ExtractionResult(
@@ -591,7 +589,7 @@ class LangExtractTool:
     def _simulate_extraction(self, task: ExtractionTask) -> ExtractionResult:
         """模拟信息提取（当LangExtract不可用时）"""
         logger.info(f"使用模拟模式执行提取任务: {task.task_id}")
-        
+
         # 模拟一些提取结果
         simulated_extractions = [
             {
@@ -600,21 +598,21 @@ class LangExtractTool:
                 'attributes': {'source': 'simulation', 'confidence': 0.95}
             }
         ]
-        
+
         result_data = {
             'text_length': len(str(task.text_or_documents)),
             'extraction_count': len(simulated_extractions),
             'extraction_types': ['simulated_entity'],
             'mode': 'simulation'
         }
-        
+
         stats = {
             'model_used': 'simulation',
             'text_length': len(str(task.text_or_documents)),
             'extraction_count': len(simulated_extractions),
             'processing_time': datetime.now().isoformat()
         }
-        
+
         return ExtractionResult(
             task_id=task.task_id,
             success=True,
@@ -626,10 +624,10 @@ class LangExtractTool:
     def _generate_task_id(self) -> str:
         """生成任务ID"""
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        hash_obj = hashlib.md5(timestamp.encode(), usedforsecurity=False))
+        hash_obj = hashlib.md5(timestamp.encode(), usedforsecurity=False)
         return f"langextract_{hash_obj.hexdigest()[:8]}_{timestamp}"
 
-    async def visualize_results(self, extractions: List[Dict[str, Any]], output_path: str = None) -> str:
+    async def visualize_results(self, extractions: list[dict[str, Any]], output_path: str = None) -> str:
         """生成交互式可视化结果"""
         try:
             if not self.is_available:
@@ -639,17 +637,17 @@ class LangExtractTool:
                     with open(output_path, 'w', encoding='utf-8') as f:
                         f.write(html_content)
                 return html_content
-            
+
             # 转换为LangExtract格式进行可视化
             # 这里需要根据实际LangExtract的可视化功能实现
             logger.info('生成可视化结果')
             return '<html><body><h1>LangExtract可视化</h1><p>功能开发中...</p></body></html>'
-            
+
         except Exception as e:
             logger.error(f"可视化生成失败: {e}")
             return f"<html><body><h1>可视化生成失败</h1><p>{str(e)}</p></body></html>"
 
-    def _generate_simple_visualization(self, extractions: List[Dict[str, Any]]) -> str:
+    def _generate_simple_visualization(self, extractions: list[dict[str, Any]]) -> str:
         """生成简单的HTML可视化"""
         html = """
         <!DOCTYPE html>
@@ -670,29 +668,29 @@ class LangExtractTool:
             <h1>LangExtract信息提取结果</h1>
             <p>共提取了 """ + str(len(extractions)) + """ 个实体</p>
         """
-        
-        for i, ext in enumerate(extractions):
+
+        for _i, ext in enumerate(extractions):
             html += f"""
             <div class='extraction'>
                 <div class='extraction-class'>{ext.get('extraction_class', 'Unknown')}</div>
                 <div class='extraction-text'>"{ext.get('extraction_text', '')}"</div>
                 <div class='attributes'>
             """
-            
+
             attributes = ext.get('attributes', {})
             for key, value in attributes.items():
-                html += f'<span class='attribute'>{key}: {value}</span> '
-            
+                html += f'<span class="attribute">{key}: {value}</span> '
+
             html += """
                 </div>
             </div>
             """
-        
+
         html += """
         </body>
         </html>
         """
-        
+
         return html
 
 

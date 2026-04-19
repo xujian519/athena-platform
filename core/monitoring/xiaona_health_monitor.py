@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜智能体健康度监控系统
 Xiaona Health Score Monitoring System
@@ -20,7 +21,6 @@ from enum import Enum
 from typing import Any
 
 import psutil
-
 
 logger = logging.getLogger(__name__)
 

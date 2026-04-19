@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 系统管理器 - 服务注册表
 System Manager - Service Registry
@@ -12,7 +13,6 @@ System Manager - Service Registry
 import logging
 from threading import Lock
 from typing import Any
-
 
 logger = logging.getLogger(__name__)
 

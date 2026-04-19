@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 外部搜索与爬虫集成系统
 当外部搜索引擎或MCP失败时，自动启动爬虫进行补充搜索
@@ -8,14 +7,14 @@
 """
 
 import asyncio
-import json
 import logging
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any
 
-from crawler_auto_trigger import auto_trigger_crawler, get_crawler_trigger
+from crawler_auto_trigger import get_crawler_trigger
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -28,7 +27,7 @@ class SearchResult:
     content_type: str
     query: str
     result_count: int = 0
-    items: Optional[List[Dict] = None
+    items: list[dict] | None = None
     error_type: str = ''
     response_time: float = 0.0
     source: str = ''
@@ -47,7 +46,7 @@ class SearchConfig:
     crawler_timeout: int = 300
     max_crawler_retries: int = 2
     crawler_priority_threshold: float = 0.7
-    search_sources: Optional[List[str] = None
+    search_sources: list[str] | None = None
 
     def __post_init__(self):
         if self.search_sources is None:
@@ -228,7 +227,7 @@ class SearchCrawlerIntegration:
         return False
 
     async def _trigger_crawler_fallback(self, query: str, content_type: str,
-                                       original_result: SearchResult) -> Dict[str, Any]:
+                                       original_result: SearchResult) -> dict[str, Any]:
         """触发爬虫回退"""
         self.fallback_stats['crawler_triggers'] += 1
 
@@ -281,7 +280,7 @@ class SearchCrawlerIntegration:
         if len(self.search_history) > 1000:
             self.search_history = self.search_history[-500:]
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """获取统计信息"""
         total_searches = self.fallback_stats['total_searches']
         success_rate = self.fallback_stats['successful_searches'] / total_searches if total_searches > 0 else 0
@@ -306,7 +305,7 @@ class SearchCrawlerIntegration:
             'last_updated': datetime.now().isoformat()
         }
 
-    def get_recent_searches(self, limit: int = 10) -> List[Dict[str, Any]]:
+    def get_recent_searches(self, limit: int = 10) -> list[dict[str, Any]]:
         """获取最近的搜索记录"""
         return self.search_history[-limit:]
 
@@ -391,7 +390,7 @@ async def test_integration():
     # 显示统计信息
     integration = SearchCrawlerIntegration()
     stats = integration.get_statistics()
-    logger.info(f"\n📊 统计信息:")
+    logger.info("\n📊 统计信息:")
     logger.info(f"   总搜索次数: {stats['search_stats']['total_searches']}")
     logger.info(f"   搜索成功率: {stats['search_stats']['success_rate']}")
     logger.info(f"   爬虫触发次数: {stats['crawler_stats']['triggers']}")

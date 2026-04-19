@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 文件版本管理器
 File Version Manager
@@ -7,20 +6,19 @@ File Version Manager
 支持文件的版本控制、历史记录、差异对比和回滚功能
 """
 
-import os
-from core.async_main import async_main
-import json
 import asyncio
-import hashlib
-import logging
-import aiofiles
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional, Tuple, BinaryIO
-from pathlib import Path
-from dataclasses import dataclass, asdict
-from enum import Enum
 import difflib
+import hashlib
+import json
+import logging
 import uuid
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
+from pathlib import Path
+from typing import Any
+
+import aiofiles
 
 logger = logging.getLogger(__name__)
 
@@ -47,10 +45,10 @@ class FileVersion:
     file_size: int
     file_hash: str
     mime_type: str | None = None
-    metadata: Dict[str, Any] = None
+    metadata: dict[str, Any] = None
     parent_version_id: str | None = None
     branch_name: str | None = None
-    tags: List[str] = None
+    tags: list[str] = None
     comment: str | None = None
     storage_path: str | None = None
 
@@ -66,7 +64,7 @@ class VersionDiff:
     old_version_id: str
     new_version_id: str
     diff_type: str  # text, binary, metadata
-    changes: List[Dict[str, Any]]
+    changes: list[dict[str, Any]]
     summary: str
 
 class FileVersionManager:
@@ -81,8 +79,8 @@ class FileVersionManager:
         self.versions_path.mkdir(exist_ok=True)
 
         # 版本数据库
-        self.versions_db: Dict[str, List[FileVersion]] = {}  # file_id -> versions
-        self.version_index: Dict[str, FileVersion] = {}  # version_id -> version
+        self.versions_db: dict[str, list[FileVersion]] = {}  # file_id -> versions
+        self.version_index: dict[str, FileVersion] = {}  # version_id -> version
 
         # 版本策略配置
         self.max_versions_per_file = 50
@@ -96,7 +94,7 @@ class FileVersionManager:
                            parent_version_id: str = None,
                            branch_name: str = None,
                            comment: str = None,
-                           metadata: Dict[str, Any] = None) -> FileVersion:
+                           metadata: dict[str, Any] = None) -> FileVersion:
         """创建文件版本"""
         try:
             # 生成版本信息
@@ -250,7 +248,7 @@ class FileVersionManager:
         old_blocks = [old_content[i:i+block_size] for i in range(0, len(old_content), block_size)]
         new_blocks = [new_content[i:i+block_size] for i in range(0, len(new_content), block_size)]
 
-        for i, (old_block, new_block) in enumerate(zip(old_blocks, new_blocks)):
+        for i, (old_block, new_block) in enumerate(zip(old_blocks, new_blocks, strict=False)):
             if old_block != new_block:
                 diff_data["changes"].append({
                     "block_index": i,
@@ -289,7 +287,7 @@ class FileVersionManager:
 
         # 读取现有元数据
         if metadata_file.exists():
-            async with aiofiles.open(metadata_file, 'r', encoding='utf-8') as f:
+            async with aiofiles.open(metadata_file, encoding='utf-8') as f:
                 metadata = json.loads(await f.read())
         else:
             metadata = {"file_id": version.file_id, "versions": []}
@@ -321,7 +319,7 @@ class FileVersionManager:
         # 更新版本索引
         self.version_index[version_id] = version
 
-    async def get_file_versions(self, file_id: str, limit: int = None) -> List[FileVersion]:
+    async def get_file_versions(self, file_id: str, limit: int = None) -> list[FileVersion]:
         """获取文件的所有版本"""
         versions = self.versions_db.get(file_id, [])
         versions.sort(key=lambda v: v.version_number, reverse=True)
@@ -378,7 +376,7 @@ class FileVersionManager:
             summary=summary
         )
 
-    def _compare_text_content(self, text1: str, text2: str) -> List[Dict[str, Any]]:
+    def _compare_text_content(self, text1: str, text2: str) -> list[dict[str, Any]]:
         """比较文本内容"""
         lines1 = text1.splitlines(keepends=True)
         lines2 = text2.splitlines(keepends=True)
@@ -399,7 +397,7 @@ class FileVersionManager:
             for idx, line in enumerate(diff)
         ]
 
-    def _compare_binary_content(self, content1: bytes, content2: bytes) -> List[Dict[str, Any]]:
+    def _compare_binary_content(self, content1: bytes, content2: bytes) -> list[dict[str, Any]]:
         """比较二进制内容"""
         changes = []
 
@@ -440,7 +438,7 @@ class FileVersionManager:
         return changes
 
     def _generate_diff_summary(self, version1: FileVersion, version2: FileVersion,
-                             changes: List[Dict[str, Any]]) -> str:
+                             changes: list[dict[str, Any]]) -> str:
         """生成差异摘要"""
         summary_parts = []
 
@@ -556,7 +554,7 @@ class FileVersionManager:
             # 更新元数据文件
             metadata_file = self.metadata_path / f"{version.file_id}.json"
             if metadata_file.exists():
-                async with aiofiles.open(metadata_file, 'r', encoding='utf-8') as f:
+                async with aiofiles.open(metadata_file, encoding='utf-8') as f:
                     metadata = json.loads(await f.read())
 
                 metadata["versions"] = [
@@ -579,10 +577,10 @@ class FileVersionManager:
         cutoff_time = datetime.now() - timedelta(days=days or self.max_storage_days)
         deleted_count = 0
 
-        for file_id, versions in self.versions_db.items():
+        for _file_id, versions in self.versions_db.items():
             # 保留最新版本
             versions.sort(key=lambda v: v.version_number, reverse=True)
-            versions_to_keep = versions[:1]  # 保留最新版本
+            versions[:1]  # 保留最新版本
 
             # 检查其他版本
             for version in versions[1:]:
@@ -593,7 +591,7 @@ class FileVersionManager:
         logger.info(f"清理了 {deleted_count} 个旧版本")
         return deleted_count
 
-    async def get_file_history(self, file_id: str) -> Dict[str, Any]:
+    async def get_file_history(self, file_id: str) -> dict[str, Any]:
         """获取文件历史信息"""
         versions = await self.get_file_versions(file_id)
 
@@ -603,7 +601,7 @@ class FileVersionManager:
         # 统计信息
         total_versions = len(versions)
         total_size = sum(v.file_size for v in versions)
-        creators = list(set(v.created_by for v in versions))
+        creators = list({v.created_by for v in versions})
 
         # 构建历史树
         history_tree = self._build_history_tree(versions)
@@ -616,10 +614,10 @@ class FileVersionManager:
             "first_version": versions[-1].created_at.isoformat(),
             "last_version": versions[0].created_at.isoformat(),
             "history_tree": history_tree,
-            "branches": list(set(v.branch_name for v in versions if v.branch_name))
+            "branches": list({v.branch_name for v in versions if v.branch_name})
         }
 
-    def _build_history_tree(self, versions: List[FileVersion]) -> List[Dict[str, Any]]:
+    def _build_history_tree(self, versions: list[FileVersion]) -> list[dict[str, Any]]:
         """构建版本历史树"""
         version_map = {v.version_id: v for v in versions}
         tree = []
@@ -630,7 +628,7 @@ class FileVersionManager:
             if not v.parent_version_id or v.parent_version_id not in version_map
         ]
 
-        def build_node(version: FileVersion) -> Dict[str, Any]:
+        def build_node(version: FileVersion) -> dict[str, Any]:
             node = {
                 "version_id": version.version_id,
                 "version_number": version.version_number,
@@ -656,7 +654,7 @@ class FileVersionManager:
 
         return tree
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """获取版本管理统计信息"""
         total_files = len(self.versions_db)
         total_versions = len(self.version_index)

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 GraphRAG检索器
 GraphRAG Retriever
@@ -8,7 +7,12 @@ GraphRAG Retriever
 """
 
 import logging
-from typing import Any, Dict, List, Optional, Tuple
+import os
+
+# 导入安全配置
+import sys
+from pathlib import Path
+from typing import Any
 
 import jieba
 import numpy as np
@@ -17,11 +21,7 @@ from qdrant_client import QdrantClient
 from rank_bm25 import BM25Okapi
 from sentence_transformers import SentenceTransformer
 
-# 导入安全配置
-import sys
-from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent / "core"))
-from security.env_config import get_env_var, get_database_url, get_jwt_secret
 
 # 配置日志
 logger = logging.getLogger(__name__)
@@ -100,7 +100,7 @@ class GraphRAGRetriever:
         use_graph: bool = True,
         use_bm25: bool = True,
         alpha: float = 0.5
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """执行GraphRAG检索
 
         Args:
@@ -154,7 +154,7 @@ class GraphRAGRetriever:
 
         return results
 
-    def _vector_search(self, query: str, top_k: int) -> List[Dict]:
+    def _vector_search(self, query: str, top_k: int) -> list[dict]:
         """执行向量搜索
 
         Args:
@@ -188,7 +188,7 @@ class GraphRAGRetriever:
 
         return results
 
-    def _graph_search(self, query: str, top_k: int) -> List[Dict]:
+    def _graph_search(self, query: str, top_k: int) -> list[dict]:
         """执行图搜索
 
         Args:
@@ -220,7 +220,7 @@ class GraphRAGRetriever:
                 for record in concept_results:
                     concept = record['c']
                     section = record['s']
-                    relation = record['r']
+                    record['r']
 
                     if concept:
                         results.append({
@@ -264,7 +264,7 @@ class GraphRAGRetriever:
 
         return unique_results[:top_k]
 
-    def _bm25_search(self, query: str, top_k: int) -> List[Dict]:
+    def _bm25_search(self, query: str, top_k: int) -> list[dict]:
         """执行BM25搜索
 
         Args:
@@ -300,11 +300,11 @@ class GraphRAGRetriever:
 
     def _combine_results(
         self,
-        vector_results: List[Dict],
-        graph_results: List[Dict],
-        bm25_results: List[Dict],
+        vector_results: list[dict],
+        graph_results: list[dict],
+        bm25_results: list[dict],
         alpha: float
-    ) -> List[Dict]:
+    ) -> list[dict]:
         """融合多种搜索结果
 
         Args:
@@ -317,7 +317,6 @@ class GraphRAGRetriever:
             融合后的结果
         """
         # 收集所有结果
-        all_results = []
 
         # 归一化分数
         def normalize_scores(results, max_score=1.0):
@@ -410,7 +409,7 @@ class GraphRAGRetriever:
 
         return final_results
 
-    def _extract_keywords(self, text: str) -> List[str]:
+    def _extract_keywords(self, text: str) -> list[str]:
         """提取关键词
 
         Args:
@@ -457,7 +456,7 @@ class GraphRAGRetriever:
             self.bm25_index = BM25Okapi(tokenized_corpus)
             logger.info(f"BM25语料库加载完成，共 {len(self.bm25_corpus)} 个文档")
 
-    def get_explanation(self, query: str, result: Dict) -> str:
+    def get_explanation(self, query: str, result: dict) -> str:
         """获取检索结果解释
 
         Args:

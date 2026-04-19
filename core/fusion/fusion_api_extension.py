@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 向量-图融合API扩展
 Fusion API Extension for Memory System
@@ -10,13 +11,11 @@ Fusion API Extension for Memory System
 """
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field
 
 from .vector_graph_fusion_service import (
-    FusionConfig,
-    FusionQueryResult,
     QueryStrategy,
     VectorGraphFusionService,
     get_fusion_service,

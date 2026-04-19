@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena智能搜索选择器 - 全局函数
 Athena Search Selector - Global Functions
@@ -11,7 +12,7 @@ Athena Search Selector - Global Functions
 提供全局实例管理和初始化函数。
 """
 
-from typing import Any, Optional
+from typing import Any
 
 from ...registry.tool_registry import ToolRegistry
 from .selector import AthenaSearchSelector
@@ -29,7 +30,7 @@ def get_search_selector() -> AthenaSearchSelector:
 
 
 async def initialize_search_selector(
-    registry: ToolRegistry | None = None, config: Optional[dict[str, Any] | None = None
+    registry: ToolRegistry | None = None, config: dict[str, Any] | None = None
 ) -> AthenaSearchSelector:
     """初始化全局搜索选择器"""
     selector = get_search_selector()

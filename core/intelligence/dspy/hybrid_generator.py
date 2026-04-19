@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 DSPy混合提示词生成器
 DSPy Hybrid Prompt Generator for Athena Platform
@@ -8,10 +9,9 @@ DSPy Hybrid Prompt Generator for Athena Platform
 import logging
 from dataclasses import dataclass
 
-
-from .config import configure_dspy, get_config
+from .config import configure_dspy
 from .llm_backend import ATHENA_LLM_AVAILABLE, get_athena_llm_client
-from .retrievers import AthenaGraphRetriever, AthenaHybridRetriever, AthenaVectorRetriever
+from .retrievers import AthenaGraphRetriever, AthenaVectorRetriever
 
 logger = logging.getLogger(__name__)
 

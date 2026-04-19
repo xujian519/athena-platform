@@ -3,9 +3,10 @@
 测试配置加载和管理功能
 """
 
-import pytest
 import os
 from pathlib import Path
+
+import pytest
 
 
 class TestConfigModule:
@@ -73,9 +74,9 @@ class TestSystemPromptConfig:
         """测试系统提示词可以导入"""
         try:
             from core.config.system_prompt import (
-                get_system_prompt,
                 get_agent_prompt,
-                get_tool_prompt
+                get_system_prompt,
+                get_tool_prompt,
             )
             assert callable(get_system_prompt)
             assert callable(get_agent_prompt)

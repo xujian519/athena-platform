@@ -5,13 +5,10 @@
 """
 
 import hashlib
-from core.async_main import async_main
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import logging
 import os
 import shutil
 import sqlite3
-import sys
 import time
 from pathlib import Path
 
@@ -48,7 +45,7 @@ class SafeYearlyProcessor:
 
     def verify_file_integrity(self, csv_path) -> None:
         """验证文件完整性"""
-        logger.info(f"  🔍 验证文件完整性...")
+        logger.info("  🔍 验证文件完整性...")
 
         # 计算文件哈希
         hash_md5 = hashlib.md5()
@@ -68,7 +65,7 @@ class SafeYearlyProcessor:
             # 读取前100行验证格式
             sample_df = pd.read_csv(csv_path, encoding='utf-8', nrows=100)
             logger.info(f"  ✓ 列数: {len(sample_df.columns)}")
-            logger.info(f"  ✓ 采样数据验证通过")
+            logger.info("  ✓ 采样数据验证通过")
             return True, file_hash
         except Exception as e:
             logger.info(f"  ❌ 文件验证失败: {e}")
@@ -93,7 +90,7 @@ class SafeYearlyProcessor:
         # 2. 验证文件完整性
         valid, file_hash = self.verify_file_integrity(csv_path)
         if not valid:
-            logger.info(f"❌ 文件验证失败，停止处理")
+            logger.info("❌ 文件验证失败，停止处理")
             return False, 0
 
         start_time = time.time()
@@ -148,7 +145,7 @@ class SafeYearlyProcessor:
         ''')
 
         # 5. 分块读取和处理
-        logger.info(f"📝 开始分块处理数据...")
+        logger.info("📝 开始分块处理数据...")
         total_processed = 0
         chunk_count = 0
 
@@ -194,7 +191,7 @@ class SafeYearlyProcessor:
                                 file_hash
                             ))
                             valid_count += 1
-                    except Exception as e:
+                    except Exception:
                         continue
 
                 if batch_data:
@@ -218,7 +215,7 @@ class SafeYearlyProcessor:
                 # 定期创建检查点
                 if chunk_count % 10 == 0:
                     cursor.execute('PRAGMA wal_checkpoint(TRUNCATE);')
-                    logger.info(f"    💾 创建检查点")
+                    logger.info("    💾 创建检查点")
 
         except Exception as e:
             logger.info(f"❌ 处理过程中出错: {e}")
@@ -229,7 +226,7 @@ class SafeYearlyProcessor:
             return False, 0
 
         # 6. 创建索引
-        logger.info(f"🔨 创建索引...")
+        logger.info("🔨 创建索引...")
         index_start = time.time()
 
         indexes = [
@@ -255,7 +252,7 @@ class SafeYearlyProcessor:
         total_time = time.time() - start_time
 
         # 8. 验证结果
-        logger.info(f"\n📊 处理完成统计:")
+        logger.info("\n📊 处理完成统计:")
         logger.info(f"  总记录数: {total_processed:,}")
         logger.info(f"  处理批次: {chunk_count}")
         logger.info(f"  总用时: {total_time:.1f}秒")
@@ -319,8 +316,8 @@ class SafeYearlyProcessor:
                 LIMIT 3
             """, (int(year),))
 
-            logger.info(f"\n示例专利:")
-            for i, (title, applicant, date) in enumerate(cursor.fetchall(), 1):
+            logger.info("\n示例专利:")
+            for i, (title, applicant, _date) in enumerate(cursor.fetchall(), 1):
                 logger.info(f"  {i}. {title[:50]}... ({applicant})")
 
             conn.close()
@@ -346,6 +343,6 @@ if __name__ == '__main__':
             processor.verify_database(str(db_path), year)
             logger.info(f"\n✅ 处理完成! 共处理 {count:,} 条专利")
         else:
-            logger.info(f"\n❌ 处理失败")
+            logger.info("\n❌ 处理失败")
     else:
         logger.info(f"❌ 文件不存在: {csv_path}")

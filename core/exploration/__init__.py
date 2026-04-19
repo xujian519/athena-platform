@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 exploration - 主动探索模块
 

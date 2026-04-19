@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena.智慧女神 - 增强版 v2.0 (独立版)
 Athena Wisdom Goddess - Enhanced Edition v2.0 (Standalone)
@@ -11,7 +12,7 @@ Athena Wisdom Goddess - Enhanced Edition v2.0 (Standalone)
 """
 
 import logging
-from typing import Any, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -28,8 +29,6 @@ from ..athena.platform_orchestrator import (
 )
 from ..learning.deep_learning_engine import (
     DeepLearningEngine,
-    DeepLearningModel,
-    LearningTask,
     get_deep_learning_engine,
 )
 from ..learning.reinforcement_learning_agent import ReinforcementLearningAgent, get_rl_agent
@@ -250,7 +249,7 @@ class AthenaWisdomAgentEnhanced:
             # 智能体协调模式
             result = await self.coordinate_agents(
                 task=user_input,
-                agent_ids=["xiaonuo_pisces", "yunxi_vega"],
+                agent_ids=["xiaonuo_pisces"],
                 mode=CollaborationMode.PEER,
             )
             return self._format_coordination_result(result)

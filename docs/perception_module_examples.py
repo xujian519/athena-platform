@@ -6,10 +6,11 @@ Athena 感知模块多智能体访问示例
 """
 
 import asyncio
-import aiohttp
-from typing import Dict, Any, Optional
-from datetime import datetime
 import json
+from datetime import datetime
+from typing import Any
+
+import aiohttp
 
 
 class PerceptionClient:
@@ -50,7 +51,7 @@ class PerceptionClient:
         if self.session:
             await self.session.close()
 
-    async def health_check(self) -> Dict[str, Any]:
+    async def health_check(self) -> dict[str, Any]:
         """
         健康检查
 
@@ -68,7 +69,7 @@ class PerceptionClient:
         image_path: str,
         operation: str = "extract_text",
         **kwargs
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         图像处理
 
@@ -101,7 +102,7 @@ class PerceptionClient:
         image_path: str,
         language: str = "chinese",
         **kwargs
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         OCR文字识别
 
@@ -134,7 +135,7 @@ class PerceptionClient:
         audio_path: str,
         operation: str = "transcribe",
         **kwargs
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         音频处理
 
@@ -167,7 +168,7 @@ class PerceptionClient:
         video_path: str,
         operation: str = "extract_frames",
         **kwargs
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         视频处理
 

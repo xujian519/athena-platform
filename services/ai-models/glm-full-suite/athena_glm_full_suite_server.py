@@ -1,36 +1,26 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena工作平台 - GLM全系列模型API服务器
 提供智谱AI全系列模型的统一接入服务
 """
 
-import asyncio
-from core.async_main import async_main
 import base64
-import json
 import logging
-from core.logging_config import setup_logging
-import os
-from dataclasses import asdict
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import uvicorn
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from glm_unified_client import (
     GLMModel,
     GLMRequest,
-    GLMResponse,
     ModalityType,
     ZhipuAIUnifiedClient,
 )
 from pydantic import BaseModel, Field
 
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -49,12 +39,12 @@ app = FastAPI(
 
 # Pydantic模型
 class TextRequest(BaseModel):
-    messages: List[Dict[str, str]] = Field(..., description='对话消息')
+    messages: list[dict[str, str]] = Field(..., description='对话消息')
     model: str = Field(default='glm-4.6', description='指定模型')
     max_tokens: int = Field(default=4000, description='最大生成tokens')
     temperature: float = Field(default=0.3, description='生成温度')
     enable_thinking: bool = Field(default=False, description='是否启用思考模式')
-    thinking_type: Optional[str] = Field(default=None, description='思考类型')
+    thinking_type: str | None = Field(default=None, description='思考类型')
 
 class PatentAnalysisRequest(BaseModel):
     title: str = Field(..., description='专利标题')
@@ -96,26 +86,26 @@ class GLMResponseModel(BaseModel):
     thinking_process: str | None = None
     modality: str
     model: str
-    usage: Dict = {}
+    usage: dict = {}
     response_time: float
     timestamp: str
-    images: Optional[List[str]] = None
-    videos: Optional[List[str]] = None
+    images: list[str] | None = None
+    videos: list[str] | None = None
     error: str | None = None
 
 class ModelCapabilitiesResponse(BaseModel):
     model: str
-    modalities: List[str]
-    specialties: List[str]
+    modalities: list[str]
+    specialties: list[str]
     context_length: int
     cost_per_1k: float
-    recommended_for: List[str]
+    recommended_for: list[str]
 
 class StatisticsResponse(BaseModel):
     total_requests: int
     total_cost: float
-    model_usage: Dict[str, int]
-    modality_usage: Dict[str, int]
+    model_usage: dict[str, int]
+    modality_usage: dict[str, int]
     success_rate: float
 
 # 全局变量
@@ -160,7 +150,7 @@ async def shutdown_event():
         await _glm_client.__aexit__(None, None, None)
         logger.info('🛑 Athena GLM全系列模型API服务器已关闭')
 
-@app.get('/', response_model=Dict[str, Any])
+@app.get('/', response_model=dict[str, Any])
 async def root():
     """根路径"""
     return {
@@ -188,7 +178,7 @@ async def root():
         'docs': '/docs'
     }
 
-@app.get('/health', response_model=Dict[str, Any])
+@app.get('/health', response_model=dict[str, Any])
 async def health_check():
     """健康检查"""
     try:
@@ -220,7 +210,7 @@ async def chat_completion(request: TextRequest):
         try:
             model = GLMModel(request.model)
         except ValueError:
-            raise HTTPException(status_code=400, detail=f"不支持的模型: {request.model}")
+            raise HTTPException(status_code=400, detail=f"不支持的模型: {request.model}") from None
 
         glm_request = GLMRequest(
             model=model,
@@ -247,7 +237,7 @@ async def chat_completion(request: TextRequest):
 
     except Exception as e:
         logger.error(f"对话请求失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/patent-analysis', response_model=GLMResponseModel)
 async def patent_analysis(request: PatentAnalysisRequest):
@@ -312,7 +302,7 @@ async def patent_analysis(request: PatentAnalysisRequest):
 
     except Exception as e:
         logger.error(f"专利分析失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/code-generation', response_model=GLMResponseModel)
 async def code_generation(request: CodeGenerationRequest):
@@ -372,7 +362,7 @@ async def code_generation(request: CodeGenerationRequest):
 
     except Exception as e:
         logger.error(f"代码生成失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/generate-image', response_model=GLMResponseModel)
 async def generate_image(request: ImageGenerationRequest):
@@ -411,7 +401,7 @@ async def generate_image(request: ImageGenerationRequest):
 
     except Exception as e:
         logger.error(f"图像生成失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/generate-video', response_model=GLMResponseModel)
 async def generate_video(request: VideoGenerationRequest):
@@ -453,7 +443,7 @@ async def generate_video(request: VideoGenerationRequest):
 
     except Exception as e:
         logger.error(f"视频生成失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/analyze-image', response_model=GLMResponseModel)
 async def analyze_image_with_text(
@@ -520,9 +510,9 @@ async def analyze_image_with_text(
 
     except Exception as e:
         logger.error(f"图像分析失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
-@app.post('/patent-workflow', response_model=Dict[str, Any])
+@app.post('/patent-workflow', response_model=dict[str, Any])
 async def patent_workflow(
     title: str = Form(...),
     abstract: str = Form(...),
@@ -532,17 +522,10 @@ async def patent_workflow(
 ):
     """专利完整工作流"""
     try:
-        client = await get_glm_service()
+        await get_glm_service()
         results = {}
 
         # 1. 专利分析
-        patent_info = {
-            'title': title,
-            'abstract': abstract,
-            'technical_field': '',
-            'background': '',
-            'invention': ''
-        }
 
         analysis_request = PatentAnalysisRequest(
             title=title,
@@ -625,9 +608,9 @@ async def patent_workflow(
 
     except Exception as e:
         logger.error(f"专利工作流失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
-@app.get('/models/capabilities', response_model=List[ModelCapabilitiesResponse])
+@app.get('/models/capabilities', response_model=list[ModelCapabilitiesResponse])
 async def get_model_capabilities():
     """获取所有模型能力信息"""
     try:
@@ -649,7 +632,7 @@ async def get_model_capabilities():
 
     except Exception as e:
         logger.error(f"获取模型能力失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/statistics', response_model=StatisticsResponse)
 async def get_statistics():
@@ -662,7 +645,7 @@ async def get_statistics():
 
     except Exception as e:
         logger.error(f"获取统计信息失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/smart-completion')
 async def smart_completion(

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 通信引擎核心模块
 Communication Engine Core Module

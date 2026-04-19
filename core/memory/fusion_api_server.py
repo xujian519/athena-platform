@@ -1,5 +1,6 @@
 
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 向量-图融合记忆API服务器(简化版)
 Vector-Graph Fusion Memory API Server (Simplified)
@@ -60,6 +61,7 @@ async def health_check(request: web.Request) -> web.Response:
 async def store_memory(request: web.Request) -> web.Response:
     """存储记忆"""
     try:
+        data = await request.json()
         result = await fusion_api.store_memory(
             agent_id=data["agent_id"],
             content=data["content"],
@@ -77,6 +79,7 @@ async def store_memory(request: web.Request) -> web.Response:
 async def search_memories(request: web.Request) -> web.Response:
     """搜索记忆"""
     try:
+        data = await request.json()
         results = await fusion_api.search_memories(
             query=data["query"],
             agent_id=data.get("agent_id"),
@@ -100,7 +103,11 @@ async def search_memories(request: web.Request) -> web.Response:
 async def get_statistics(request: web.Request) -> web.Response:
     """获取统计信息"""
     try:
-        return web.json_response(stats)
+        if fusion_api:
+            statistics = await fusion_api.get_statistics()
+        else:
+            statistics = {"total_memories": 0, "status": "uninitialized"}
+        return web.json_response(statistics)
     except Exception:
         logger.error("操作失败: e", exc_info=True)
         raise

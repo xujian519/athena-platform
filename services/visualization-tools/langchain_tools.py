@@ -3,24 +3,18 @@ LangChain可视化工具封装
 将draw.io、ECharts和Excalidraw封装为LangChain工具
 """
 
-import asyncio
 import json
-import logging
-import os
-import subprocess
 import tempfile
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Type
+from typing import Any
 
 try:
-from langchain.tools import BaseTool
-    pass  # 实际导入在下面
+    from langchain.tools import BaseTool
 except ImportError:
-    langchain.tools = None  # 可选依赖未安装
-from pydantic import Field
+    BaseTool = None  # type: ignore[assignment,misc]  # 可选依赖未安装
 
 # 导入分析器
-from visualization_insights import VisualizationAnalyzer, VisualizationType
+from visualization_insights import VisualizationAnalyzer
 
 
 class DrawIOTool(BaseTool):
@@ -80,7 +74,7 @@ class DrawIOTool(BaseTool):
         """异步执行"""
         return self._run(query)
 
-    def _parse_query(self, query: str) -> Dict[str, Any]:
+    def _parse_query(self, query: str) -> dict[str, Any]:
         """解析查询参数"""
         # 简化的参数解析（实际实现中可以使用NLP）
         params = {
@@ -100,7 +94,7 @@ class DrawIOTool(BaseTool):
 
         return params
 
-    def _generate_diagram_xml(self, params: Dict[str, Any]) -> str:
+    def _generate_diagram_xml(self, params: dict[str, Any]) -> str:
         """生成draw.io XML格式的图表"""
         # 简化的XML生成（实际实现中需要更复杂的逻辑）
         diagram_type = params.get('diagram_type', 'flowchart')
@@ -141,7 +135,7 @@ class DrawIOTool(BaseTool):
 
     def _create_architecture_xml(self, content: str) -> str:
         """创建架构图XML"""
-        return f'''<?xml version="1.0" encoding="UTF-8"?>
+        return '''<?xml version="1.0" encoding="UTF-8"?>
 <mxfile host='app.diagrams.net'>
   <diagram name='Architecture' id='arch-page'>
     <mx_graph_model dx='1422' dy='762' grid='1' grid_size='10' guides='1' tooltips='1' connect='1' arrows='1' fold='1' page='1' page_scale='1' page_width='827' page_height='1169'>
@@ -167,7 +161,7 @@ class DrawIOTool(BaseTool):
 
     def _create_uml_xml(self, content: str) -> str:
         """创建UML图XML"""
-        return f'''<?xml version="1.0" encoding="UTF-8"?>
+        return '''<?xml version="1.0" encoding="UTF-8"?>
 <mxfile host='app.diagrams.net'>
   <diagram name='UML' id='uml-page'>
     <mx_graph_model dx='1422' dy='762' grid='1' grid_size='10' guides='1' tooltips='1' connect='1' arrows='1' fold='1' page='1' page_scale='1' page_width='827' page_height='1169'>
@@ -266,7 +260,7 @@ class EChartsTool(BaseTool):
         """异步执行"""
         return self._run(query)
 
-    def _parse_query(self, query: str) -> Dict[str, Any]:
+    def _parse_query(self, query: str) -> dict[str, Any]:
         """解析查询参数"""
         params = {
             'chart_type': 'line',
@@ -294,7 +288,7 @@ class EChartsTool(BaseTool):
 
         return params
 
-    def _extract_data_from_query(self, query: str) -> List[Dict[str, Any]]:
+    def _extract_data_from_query(self, query: str) -> list[dict[str, Any]]:
         """从查询中提取数据"""
         # 简化的数据提取（实际实现中需要NLP）
         if 'sales' in query.lower() or '销售' in query:
@@ -319,7 +313,7 @@ class EChartsTool(BaseTool):
                 {'name': 'D', 'value': 40}
             ]
 
-    def _generate_chart_config(self, params: Dict[str, Any]) -> Dict[str, Any]:
+    def _generate_chart_config(self, params: dict[str, Any]) -> dict[str, Any]:
         """生成ECharts配置"""
         chart_type = params.get('chart_type', 'line')
         data = params.get('data', [])
@@ -378,7 +372,7 @@ class EChartsTool(BaseTool):
 
         return config
 
-    def _create_html_chart(self, config: Dict[str, Any], params: Dict[str, Any]) -> str:
+    def _create_html_chart(self, config: dict[str, Any], params: dict[str, Any]) -> str:
         """创建HTML图表文件"""
         html_content = f'''<!DOCTYPE html>
 <html>
@@ -475,7 +469,7 @@ class ExcalidrawTool(BaseTool):
         """异步执行"""
         return self._run(query)
 
-    def _parse_query(self, query: str) -> Dict[str, Any]:
+    def _parse_query(self, query: str) -> dict[str, Any]:
         """解析查询参数"""
         params = {
             'sketch_type': 'whiteboard',
@@ -493,7 +487,7 @@ class ExcalidrawTool(BaseTool):
 
         return params
 
-    def _generate_excalidraw_json(self, params: Dict[str, Any]) -> Dict[str, Any]:
+    def _generate_excalidraw_json(self, params: dict[str, Any]) -> dict[str, Any]:
         """生成Excalidraw JSON格式"""
         sketch_type = params.get('sketch_type', 'whiteboard')
         content = params.get('content', '')
@@ -507,7 +501,7 @@ class ExcalidrawTool(BaseTool):
         else:
             return self._create_whiteboard_json(content)
 
-    def _create_mindmap_json(self, content: str) -> Dict[str, Any]:
+    def _create_mindmap_json(self, content: str) -> dict[str, Any]:
         """创建思维导图JSON"""
         return {
             'type': 'excalidraw',
@@ -550,7 +544,7 @@ class ExcalidrawTool(BaseTool):
             ]
         }
 
-    def _create_wireframe_json(self, content: str) -> Dict[str, Any]:
+    def _create_wireframe_json(self, content: str) -> dict[str, Any]:
         """创建线框图JSON"""
         return {
             'type': 'excalidraw',
@@ -593,11 +587,11 @@ class ExcalidrawTool(BaseTool):
             ]
         }
 
-    def _create_ui_mockup_json(self, content: str) -> Dict[str, Any]:
+    def _create_ui_mockup_json(self, content: str) -> dict[str, Any]:
         """创建UI原型JSON"""
         return self._create_wireframe_json(content)
 
-    def _create_whiteboard_json(self, content: str) -> Dict[str, Any]:
+    def _create_whiteboard_json(self, content: str) -> dict[str, Any]:
         """创建白板JSON"""
         return {
             'type': 'excalidraw',
@@ -629,7 +623,7 @@ class ExcalidrawTool(BaseTool):
             ]
         }
 
-    def _save_excalidraw_json(self, json_data: Dict[str, Any]) -> str:
+    def _save_excalidraw_json(self, json_data: dict[str, Any]) -> str:
         """保存Excalidraw JSON文件"""
         temp_file = tempfile.NamedTemporaryFile(
             suffix='.json',
@@ -641,7 +635,7 @@ class ExcalidrawTool(BaseTool):
         temp_file.close()
         return temp_file.name
 
-    def _generate_collaboration_link(self, json_data: Dict[str, Any]) -> str:
+    def _generate_collaboration_link(self, json_data: dict[str, Any]) -> str:
         """生成协作链接"""
         # 实际实现中需要将JSON编码并生成Excalidraw链接
         json_str = json.dumps(json_data)
@@ -660,7 +654,7 @@ class VisualizationToolManager:
         ]
         self.analyzer = VisualizationAnalyzer()
 
-    def get_all_tools(self) -> List[BaseTool]:
+    def get_all_tools(self) -> list[BaseTool]:
         """获取所有工具"""
         return self.tools
 

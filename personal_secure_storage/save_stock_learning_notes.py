@@ -3,10 +3,10 @@
 保存爸爸的股票理论学习笔记到数据库
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
+import sqlite3
 from pathlib import Path
+
 
 def save_stock_learning_notes() -> None:
     """保存股票理论学习笔记到数据库"""

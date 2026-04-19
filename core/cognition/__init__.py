@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 认知与决策层模块
 Cognition & Decision Module
@@ -342,6 +343,27 @@ try:
         "XiaonuoSuperReasoningEngine",
         "XiaonuoThinkingMode",
     ]
+
+    # Minitap式进度追踪 - Phase 1新增
+    try:
+        from .plan_executor import (
+            ExecutionResult,
+            PlanExecutor,
+            StepResult,
+            StepStatus,
+            TaskStatus,
+            create_executor,
+        )
+        __all__.extend([
+            "PlanExecutor",
+            "StepStatus",
+            "TaskStatus",
+            "StepResult",
+            "ExecutionResult",
+            "create_executor",
+        ])
+    except ImportError:
+        logger.warning("⚠️ PlanExecutor 模块未加载")
 
 except ImportError:
     # 导入原有组件作为后备

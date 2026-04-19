@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 三元关系提取机器学习模型
 Triple Relation Extraction Machine Learning Model
@@ -16,10 +17,8 @@ Triple Relation Extraction Machine Learning Model
 """
 
 import json
-import logging
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -266,7 +265,7 @@ class TripleRelationExtractorML:
                 labels = classification["labels"]
                 scores = classification["scores"]
 
-                for label, score in zip(labels, scores):
+                for label, score in zip(labels, scores, strict=False):
                     if score > 0.7:  # 置信度阈值
                         if label == "技术问题":
                             # 存储问题

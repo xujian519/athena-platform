@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 监控和健康检查API路由
 Monitoring and Health Check API Routes
@@ -7,9 +8,9 @@ Monitoring and Health Check API Routes
 """
 
 import logging
-from typing import Any, Dict
+from typing import Any
 
-from fastapi import APIRouter, Response
+from fastapi import APIRouter
 
 # 导入监控模块
 from core.monitoring.metrics import (
@@ -19,7 +20,6 @@ from core.monitoring.metrics import (
     liveness_endpoint,
     metrics_endpoint,
     readiness_endpoint,
-    update_app_info,
 )
 
 logger = logging.getLogger(__name__)

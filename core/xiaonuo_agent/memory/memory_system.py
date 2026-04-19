@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 记忆系统 (Memory System)
 统一的三层记忆管理接口
@@ -16,7 +17,7 @@
 import asyncio
 import logging
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 from core.xiaonuo_agent.memory.episodic_memory import (
     EpisodicMemory,

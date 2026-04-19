@@ -3,9 +3,13 @@ API模块单元测试
 测试API接口和请求处理功能
 """
 
+import sys
+from pathlib import Path
+
 import pytest
-from typing import Dict, Any, List
-from unittest.mock import MagicMock, AsyncMock
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 
 
 class TestAPIModule:

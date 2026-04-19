@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强的32模式推理引擎实现 - 补充模块
 Enhanced 32-Modes Reasoning Engine Implementation - Supplement Module
@@ -27,9 +28,8 @@ import logging
 import re
 import time
 from dataclasses import dataclass, field
-from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -258,9 +258,11 @@ class AbductiveReasoner:
             confidence = 0.0
 
         # 生成备选解释
-        alternatives = [item["explanation"] for item in sorted(
-            scored_explanations, key=lambda x: x["score"], reverse=True
-        )[1:3] if len(scored_explanations) > 1 else []
+        if len(scored_explanations) > 1:
+            sorted_items = sorted(scored_explanations, key=lambda x: x["score"], reverse=True)[:3]
+            alternatives = [item["explanation"] for item in sorted_items]
+        else:
+            alternatives = []
 
         return EnhancedReasoningResult(
             reasoning_type=EnhancedReasoningType.ABDUCTIVE,
@@ -285,7 +287,7 @@ class AnalogicalReasoner:
     """类比推理器 - 基于相似性"""
 
     async def reason(
-        self, source_case: str, target_case: str, known_analogies: list["key"] = None,
+        self, source_case: str, target_case: str, known_analogies: list[str] = None,
         context: dict | None = None
     ) -> EnhancedReasoningResult:
         """执行类比推理"""
@@ -373,7 +375,7 @@ class CausalReasoner:
             conclusion = f"因果推理结论: 识别到{len(causal_chains) + len(detected_causes)}个因果关系"
             confidence = 0.75
         else:
-            conclusion = f"因果推理结论: 未能从提供的信息中识别出明确的因果关系"
+            conclusion = "因果推理结论: 未能从提供的信息中识别出明确的因果关系"
             confidence = 0.3
 
         return EnhancedReasoningResult(

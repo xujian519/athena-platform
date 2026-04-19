@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 法律推理引擎
 Legal Reasoning Engine
@@ -11,15 +10,16 @@ Legal Reasoning Engine
 """
 
 import asyncio
-from core.async_main import async_main
 import logging
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass
-from enum import Enum
-import json
 import re
 import sys
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum
 from pathlib import Path
+from typing import Any
+
+from core.async_main import async_main
 
 # 添加路径
 sys.path.append(str(Path(__file__).parent.parent))
@@ -48,17 +48,17 @@ class LegalConclusion:
     """法律结论"""
     conclusion: str
     confidence: float  # 置信度 0-1
-    supporting_premises: List[str]
-    reasoning_path: List[str]
-    caveats: List[str]
+    supporting_premises: list[str]
+    reasoning_path: list[str]
+    caveats: list[str]
 
 @dataclass
 class LegalReasoningResult:
     """法律推理结果"""
     reasoning_type: ReasoningType
-    premises: List[LegalPremise]
+    premises: list[LegalPremise]
     conclusion: LegalConclusion
-    reasoning_steps: List[str]
+    reasoning_steps: list[str]
     evidence_strength: float
     legal_weight: float
 
@@ -82,7 +82,7 @@ class LegalReasoningEngine:
         except Exception as e:
             logger.error(f"法律推理引擎初始化失败: {str(e)}")
 
-    def _load_reasoning_rules(self) -> Dict[str, Any]:
+    def _load_reasoning_rules(self) -> dict[str, Any]:
         """加载推理规则"""
         return {
             "patent_rules": {
@@ -162,7 +162,7 @@ class LegalReasoningEngine:
         except Exception as e:
             logger.error(f"加载法律知识失败: {str(e)}")
 
-    async def analyze_case(self, case_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def analyze_case(self, case_data: dict[str, Any]) -> dict[str, Any]:
         """
         分析法律案例
 
@@ -237,7 +237,7 @@ class LegalReasoningEngine:
             logger.error(f"案例分析失败: {str(e)}")
             return {"error": str(e)}
 
-    async def _construct_premises(self, case_data: Dict[str, Any]) -> List[LegalPremise]:
+    async def _construct_premises(self, case_data: dict[str, Any]) -> list[LegalPremise]:
         """构建法律前提"""
         premises = []
         case_text = case_data.get("case_text", "")
@@ -269,7 +269,7 @@ class LegalReasoningEngine:
 
         return premises
 
-    def _extract_patent_premises(self, text: str) -> List[LegalPremise]:
+    def _extract_patent_premises(self, text: str) -> list[LegalPremise]:
         """提取专利相关前提"""
         premises = []
 
@@ -307,7 +307,7 @@ class LegalReasoningEngine:
 
         return premises
 
-    def _extract_trademark_premises(self, text: str) -> List[LegalPremise]:
+    def _extract_trademark_premises(self, text: str) -> list[LegalPremise]:
         """提取商标相关前提"""
         premises = []
 
@@ -343,7 +343,7 @@ class LegalReasoningEngine:
 
         return premises
 
-    def _extract_contract_premises(self, text: str) -> List[LegalPremise]:
+    def _extract_contract_premises(self, text: str) -> list[LegalPremise]:
         """提取合同相关前提"""
         premises = []
 
@@ -379,7 +379,7 @@ class LegalReasoningEngine:
 
         return premises
 
-    def _get_legal_basis_for_entity(self, entity: Dict) -> str:
+    def _get_legal_basis_for_entity(self, entity: dict) -> str:
         """获取实体的法律依据"""
         entity_type = entity.get("type", "")
         if entity_type in ["申请号", "公开号"]:
@@ -391,7 +391,7 @@ class LegalReasoningEngine:
         else:
             return "相关法律条文"
 
-    async def _retrieve_similar_cases(self, case_text: str, case_type: str, limit: int) -> List[Dict]:
+    async def _retrieve_similar_cases(self, case_text: str, case_type: str, limit: int) -> list[dict]:
         """检索相似案例"""
         try:
             # 使用语义记忆搜索相似案例
@@ -418,7 +418,7 @@ class LegalReasoningEngine:
             logger.error(f"检索相似案例失败: {str(e)}")
             return []
 
-    async def _apply_reasoning_rules(self, premises: List[LegalPremise], case_type: str) -> Dict[str, Any]:
+    async def _apply_reasoning_rules(self, premises: list[LegalPremise], case_type: str) -> dict[str, Any]:
         """应用推理规则"""
         reasoning_result = {
             "type": "rule_based",
@@ -429,7 +429,7 @@ class LegalReasoningEngine:
 
         rules = self.reasoning_rules.get(f"{case_type}_rules", {})
 
-        for rule_category, rule_list in rules.items():
+        for _rule_category, rule_list in rules.items():
             for rule in rule_list:
                 condition = rule["condition"]
                 if await self._evaluate_condition(premises, condition):
@@ -443,7 +443,7 @@ class LegalReasoningEngine:
 
         return reasoning_result
 
-    async def _perform_analogical_reasoning(self, case_data: Dict, similar_cases: List[Dict]) -> Dict[str, Any]:
+    async def _perform_analogical_reasoning(self, case_data: dict, similar_cases: list[dict]) -> dict[str, Any]:
         """执行类比推理"""
         reasoning_result = {
             "type": "analogical",
@@ -471,7 +471,7 @@ class LegalReasoningEngine:
 
         return reasoning_result
 
-    async def _comprehensive_reasoning(self, premises: List[LegalPremise], similar_cases: List[Dict], case_type: str) -> Dict[str, Any]:
+    async def _comprehensive_reasoning(self, premises: list[LegalPremise], similar_cases: list[dict], case_type: str) -> dict[str, Any]:
         """综合推理"""
         reasoning_result = {
             "type": "comprehensive",
@@ -492,7 +492,7 @@ class LegalReasoningEngine:
 
         return reasoning_result
 
-    def _analyze_premises(self, premises: List[LegalPremise]) -> Dict[str, Any]:
+    def _analyze_premises(self, premises: list[LegalPremise]) -> dict[str, Any]:
         """分析前提"""
         if not premises:
             return {"score": 0, "count": 0, "reliability": "low"}
@@ -520,7 +520,7 @@ class LegalReasoningEngine:
             "key_premises": [p.content for p in premises if p.certainty > 0.7]
         }
 
-    def _analyze_case_patterns(self, premises: List[LegalPremise], similar_cases: List[Dict]) -> Dict[str, Any]:
+    def _analyze_case_patterns(self, premises: list[LegalPremise], similar_cases: list[dict]) -> dict[str, Any]:
         """分析案例模式"""
         pattern_score = 0.0
         identified_patterns = []
@@ -548,13 +548,13 @@ class LegalReasoningEngine:
             "case_density": min(1.0, len(similar_cases) / 3)
         }
 
-    def _identify_legal_framework(self, premises: List[LegalPremise], case_type: str) -> Dict[str, Any]:
+    def _identify_legal_framework(self, premises: list[LegalPremise], case_type: str) -> dict[str, Any]:
         """识别法律框架"""
         framework_score = 0.0
         applicable_laws = []
 
         # 统计法律依据
-        legal_bases = list(set(p.legal_basis for p in premises if p.legal_basis))
+        legal_bases = list({p.legal_basis for p in premises if p.legal_basis})
         framework_score = min(1.0, len(legal_bases) / 5)  # 最多5个法条
         applicable_laws = legal_bases
 
@@ -578,7 +578,7 @@ class LegalReasoningEngine:
             "framework_completeness": min(1.0, len(applicable_laws) / 3)
         }
 
-    def _check_logical_consistency(self, premises: List[LegalPremise]) -> Dict[str, Any]:
+    def _check_logical_consistency(self, premises: list[LegalPremise]) -> dict[str, Any]:
         """检查逻辑一致性"""
         consistency_score = 1.0
         inconsistencies = []
@@ -599,7 +599,7 @@ class LegalReasoningEngine:
             "consistency_level": "high" if consistency_score > 0.8 else "medium" if consistency_score > 0.6 else "low"
         }
 
-    def _calculate_evidence_weight(self, premises: List[LegalPremise], similar_cases: List[Dict]) -> Dict[str, Any]:
+    def _calculate_evidence_weight(self, premises: list[LegalPremise], similar_cases: list[dict]) -> dict[str, Any]:
         """计算证据权重"""
         # 前提权重
         premise_weight = sum(p.certainty for p in premises) * 0.6
@@ -616,7 +616,7 @@ class LegalReasoningEngine:
             "evidence_strength": min(1.0, total_weight / (len(premises) + len(similar_cases)))
         }
 
-    def _generate_conclusion(self, rule_reasoning: Dict, analogical_reasoning: Dict, comprehensive_reasoning: Dict, risk_assessment: Dict) -> LegalConclusion:
+    def _generate_conclusion(self, rule_reasoning: dict, analogical_reasoning: dict, comprehensive_reasoning: dict, risk_assessment: dict) -> LegalConclusion:
         """生成结论"""
         # 计算综合置信度
         rule_confidence = rule_reasoning.get("confidence", 0)
@@ -632,7 +632,7 @@ class LegalReasoningEngine:
 
         # 收集所有支持的前提
         supporting_premises = [
-            f"规则推理: {reasoning_reasoning.get('deductions', [])}",
+            f"规则推理: {rule_reasoning.get('deductions', [])}",
             f"类比参考: {analogical_reasoning.get('analogous_cases', [])}",
             f"综合分析: {comprehensive_reasoning.get('key_premises', [])}"
         ]
@@ -667,7 +667,7 @@ class LegalReasoningEngine:
             caveats=caveats
         )
 
-    def _generate_conclusion_text(self, rule_reasoning: Dict, analogical_reasoning: Dict, risk_assessment: Dict) -> str:
+    def _generate_conclusion_text(self, rule_reasoning: dict, analogical_reasoning: dict, risk_assessment: dict) -> str:
         """生成结论文本"""
         conclusions = []
 
@@ -689,7 +689,7 @@ class LegalReasoningEngine:
 
         return "。".join(conclusions)
 
-    async def _evaluate_condition(self, premises: List[LegalPremise], condition: str) -> bool:
+    async def _evaluate_condition(self, premises: list[LegalPremise], condition: str) -> bool:
         """评估条件"""
         # 简化的条件评估
         return condition in [" ".join([p.content for p in premises]), condition]
@@ -697,7 +697,7 @@ class LegalReasoningEngine:
 class CaseAnalyzer:
     """案例分析器"""
 
-    def analyze_case_complexity(self, case_text: str) -> Dict[str, Any]:
+    def analyze_case_complexity(self, case_text: str) -> dict[str, Any]:
         """分析案例复杂度"""
         # 计算文本长度
         text_length = len(case_text)
@@ -760,7 +760,7 @@ class RiskAssessor:
             }
         }
 
-    async def assess_risks(self, case_data: Dict, reasoning_result: Dict) -> Dict[str, Any]:
+    async def assess_risks(self, case_data: dict, reasoning_result: dict) -> dict[str, Any]:
         """评估风险"""
         case_type = case_data.get("case_type", "patent")
         comprehensive_reasoning = reasoning_result.get("comprehensive_reasoning", {})
@@ -809,7 +809,7 @@ class RiskAssessor:
             "mitigation_suggestions": self._generate_mitigation_suggestions(risk_level)
         }
 
-    def _generate_mitigation_suggestions(self, risk_level: str) -> List[str]:
+    def _generate_mitigation_suggestions(self, risk_level: str) -> list[str]:
         """生成风险缓解建议"""
         if risk_level == "high":
             return [

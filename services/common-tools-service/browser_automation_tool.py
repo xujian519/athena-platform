@@ -4,27 +4,26 @@ Athena平台通用工具 - 浏览器自动化
 可由小诺智能控制的browser-use集成工具
 """
 
-import asyncio
-import json
 import logging
-from core.logging_config import setup_logging
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent.parent
 sys.path.append(str(project_root))
 sys.path.append(str(project_root / 'services' / 'browser-automation'))
 
-from athena_browser_glm import AthenaBrowserGLMAgent
-
 # 导入安全配置
 import sys
 from pathlib import Path
+
+from athena_browser_glm import AthenaBrowserGLMAgent
+
 sys.path.append(str(Path(__file__).parent.parent / "core"))
-from security.env_config import get_env_var, get_database_url, get_jwt_secret
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -33,7 +32,7 @@ logger = setup_logging()
 
 class BrowserAutomationTool:
     """浏览器自动化通用工具类"""
-    
+
     # 工具定义
     TOOL_DEFINITION = {
         'name': 'browser_automation',
@@ -54,7 +53,7 @@ class BrowserAutomationTool:
         'last_used': None,
         'usage_count': 0
     }
-    
+
     # 预定义场景模板
     SCENARIOS = {
         'competitor_monitor': {
@@ -100,7 +99,7 @@ class BrowserAutomationTool:
             'suitable_sites': ['新闻网站', '媒体门户', '搜索引擎']
         }
     }
-    
+
     def __init__(self):
         """初始化工具"""
         self.tool_info = self.TOOL_DEFINITION.copy()
@@ -108,32 +107,32 @@ class BrowserAutomationTool:
         self.is_active = False
         self.current_task = None
         self.task_history = []
-        
-    async def initialize(self) -> Dict[str, Any]:
+
+    async def initialize(self) -> dict[str, Any]:
         """初始化工具"""
         try:
             logger.info('初始化浏览器自动化工具...')
-            
+
             # 创建代理实例
             self.agent = AthenaBrowserGLMAgent(
                 api_key='9efe5766a7cd4bb687e40082ee4032b6.0mYTotbC7aRmoNCe'
             )
-            
+
             # 启动会话
             await self.agent.start_session()
-            
+
             self.is_active = True
             self.tool_info['status'] = 'active'
-            
+
             logger.info('浏览器自动化工具初始化成功')
-            
+
             return {
                 'success': True,
                 'message': '浏览器自动化工具已启动',
                 'tool_info': self.tool_info,
                 'available_scenarios': list(self.SCENARIOS.keys())
             }
-            
+
         except Exception as e:
             logger.error(f"工具初始化失败: {e}")
             return {
@@ -141,22 +140,22 @@ class BrowserAutomationTool:
                 'error': str(e),
                 'message': '工具启动失败'
             }
-    
-    async def shutdown(self) -> Dict[str, Any]:
+
+    async def shutdown(self) -> dict[str, Any]:
         """关闭工具"""
         try:
             logger.info('关闭浏览器自动化工具...')
-            
+
             if self.agent:
                 await self.agent.stop_session()
                 self.agent = None
-            
+
             self.is_active = False
             self.tool_info['status'] = 'inactive'
             self.current_task = None
-            
+
             logger.info('浏览器自动化工具已关闭')
-            
+
             return {
                 'success': True,
                 'message': '工具已关闭',
@@ -165,15 +164,15 @@ class BrowserAutomationTool:
                     'session_duration': self.tool_info.get('session_duration', 'unknown')
                 }
             }
-            
+
         except Exception as e:
             logger.error(f"工具关闭失败: {e}")
             return {
                 'success': False,
                 'error': str(e)
             }
-    
-    def get_status(self) -> Dict[str, Any]:
+
+    def get_status(self) -> dict[str, Any]:
         """获取工具状态"""
         return {
             'tool': self.tool_info['name'],
@@ -184,8 +183,8 @@ class BrowserAutomationTool:
             'task_count': len(self.task_history),
             'last_used': self.tool_info['last_used']
         }
-    
-    def get_scenarios(self) -> List[Dict[str, Any]]:
+
+    def get_scenarios(self) -> list[dict[str, Any]]:
         """获取可用场景"""
         scenarios = []
         for key, scenario in self.SCENARIOS.items():
@@ -196,8 +195,8 @@ class BrowserAutomationTool:
                 'suitable_sites': scenario.get('suitable_sites', [])
             })
         return scenarios
-    
-    async def execute_scenario(self, scenario_id: str, params: Dict[str, Any]) -> Dict[str, Any]:
+
+    async def execute_scenario(self, scenario_id: str, params: dict[str, Any]) -> dict[str, Any]:
         """执行预定义场景"""
         if scenario_id not in self.SCENARIOS:
             return {
@@ -205,15 +204,15 @@ class BrowserAutomationTool:
                 'error': f"未知场景: {scenario_id}",
                 'available_scenarios': list(self.SCENARIOS.keys())
             }
-        
+
         if not self.is_active:
             await self.initialize()
-        
+
         scenario = self.SCENARIOS[scenario_id]
-        
+
         # 构建任务
         task = scenario['task_template'].format(**params)
-        
+
         # 记录任务开始
         self.current_task = {
             'scenario': scenario_id,
@@ -222,31 +221,31 @@ class BrowserAutomationTool:
             'start_time': datetime.now().isoformat(),
             'status': 'executing'
         }
-        
+
         logger.info(f"执行场景: {scenario['name']}")
         logger.info(f"任务: {task}")
-        
+
         try:
             # 执行任务
             result = await self.agent.execute_task(task)
-            
+
             # 更新任务状态
             self.current_task['status'] = 'completed'
             self.current_task['end_time'] = datetime.now().isoformat()
             self.current_task['result'] = result
-            
+
             # 添加到历史记录
             self.task_history.append(self.current_task.copy())
-            
+
             # 更新工具信息
             self.tool_info['last_used'] = datetime.now().isoformat()
             self.tool_info['usage_count'] += 1
             self.tool_info['session_duration'] = (
                 datetime.now() - datetime.fromisoformat(self.current_task['start_time'])
             ).total_seconds()
-            
+
             logger.info(f"场景执行成功: {scenario['name']}")
-            
+
             return {
                 'success': True,
                 'scenario': scenario_id,
@@ -254,29 +253,29 @@ class BrowserAutomationTool:
                 'result': result,
                 'execution_time': self.current_task['end_time']
             }
-            
+
         except Exception as e:
             # 更新任务状态为失败
             self.current_task['status'] = 'failed'
             self.current_task['error'] = str(e)
             self.current_task['end_time'] = datetime.now().isoformat()
-            
+
             logger.error(f"场景执行失败: {e}")
-            
+
             return {
                 'success': False,
                 'scenario': scenario_id,
                 'error': str(e),
                 'task': task
             }
-    
-    async def execute_custom_task(self, task: str, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+
+    async def execute_custom_task(self, task: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
         """执行自定义任务"""
         if not self.is_active:
             await self.initialize()
-        
+
         logger.info(f"执行自定义任务: {task}")
-        
+
         # 记录任务
         self.current_task = {
             'type': 'custom',
@@ -285,46 +284,46 @@ class BrowserAutomationTool:
             'start_time': datetime.now().isoformat(),
             'status': 'executing'
         }
-        
+
         try:
             result = await self.agent.execute_task(task)
-            
+
             self.current_task['status'] = 'completed'
             self.current_task['end_time'] = datetime.now().isoformat()
             self.current_task['result'] = result
-            
+
             self.task_history.append(self.current_task.copy())
-            
+
             self.tool_info['last_used'] = datetime.now().isoformat()
             self.tool_info['usage_count'] += 1
-            
+
             logger.info('自定义任务执行成功')
-            
+
             return {
                 'success': True,
                 'task': task,
                 'result': result,
                 'context': context
             }
-            
+
         except Exception as e:
             self.current_task['status'] = 'failed'
             self.current_task['error'] = str(e)
             self.current_task['end_time'] = datetime.now().isoformat()
-            
+
             logger.error(f"自定义任务执行失败: {e}")
-            
+
             return {
                 'success': False,
                 'error': str(e),
                 'task': task
             }
-    
-    def get_task_history(self, limit: int = 10) -> List[Dict[str, Any]]:
+
+    def get_task_history(self, limit: int = 10) -> list[dict[str, Any]]:
         """获取任务历史"""
         return self.task_history[-limit:]
-    
-    def analyze_usage(self) -> Dict[str, Any]:
+
+    def analyze_usage(self) -> dict[str, Any]:
         """分析使用情况"""
         if not self.task_history:
             return {
@@ -333,16 +332,16 @@ class BrowserAutomationTool:
                 'average_execution_time': 0,
                 'success_rate': 0
             }
-        
+
         total_tasks = len(self.task_history)
         successful_tasks = len([t for t in self.task_history if t.get('status') == 'completed'])
-        
+
         # 统计场景使用情况
         scenarios_used = {}
         for task in self.task_history:
             scenario = task.get('scenario', 'custom')
             scenarios_used[scenario] = scenarios_used.get(scenario, 0) + 1
-        
+
         # 计算平均执行时间
         execution_times = []
         for task in self.task_history:
@@ -350,9 +349,9 @@ class BrowserAutomationTool:
                 start = datetime.fromisoformat(task['start_time'])
                 end = datetime.fromisoformat(task['end_time'])
                 execution_times.append((end - start).total_seconds())
-        
+
         avg_time = sum(execution_times) / len(execution_times) if execution_times else 0
-        
+
         return {
             'total_tasks': total_tasks,
             'successful_tasks': successful_tasks,
@@ -367,20 +366,20 @@ class BrowserAutomationTool:
 # 工具管理器
 class BrowserToolManager:
     """浏览器自动化工具管理器"""
-    
+
     def __init__(self):
         self.tools = {}
         self.default_tool = BrowserAutomationTool()
-    
+
     def get_tool(self, tool_id: str = 'default') -> BrowserAutomationTool:
         """获取工具实例"""
         if tool_id not in self.tools:
             self.tools[tool_id] = BrowserAutomationTool()
         return self.tools[tool_id]
-    
+
     async def initialize_all(self):
         """初始化所有工具"""
-        for tool_id, tool in self.tools.items():
+        for _tool_id, tool in self.tools.items():
             await tool.initialize()
 
 

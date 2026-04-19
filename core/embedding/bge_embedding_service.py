@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BGE向量嵌入服务
 BGE Vector Embedding Service for Athena Platform

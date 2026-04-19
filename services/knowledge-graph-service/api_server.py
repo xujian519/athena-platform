@@ -1,30 +1,25 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 知识图谱服务 - 混合搜索API
 结合JanusGraph和Qdrant的智能搜索服务
 """
 
 import asyncio
-from core.async_main import async_main
-import json
-import logging
-from core.logging_config import setup_logging
-import uvicorn
 from datetime import datetime
-from typing import Dict, List, Any, Optional
-from pathlib import Path
+from typing import Any
 
-# FastAPI imports
-from fastapi import FastAPI, HTTPException, Query, Body, BackgroundTasks
-from fastapi.middleware.cors import CORSMiddleware
-
-from core.security.auth import ALLOWED_ORIGINS
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
+import uvicorn
 
 # 导入审查指南集成模块
 from api.guideline_integration import GuidelineIntegration, add_guideline_routes
+
+# FastAPI imports
+from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+
+from core.logging_config import setup_logging
+from core.security.auth import ALLOWED_ORIGINS
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -57,9 +52,9 @@ add_guideline_routes(app)
 # 数据模型
 class SearchRequest(BaseModel):
     query: str = Field(..., description="搜索查询文本")
-    entity_type: Optional[str] = Field(None, description="实体类型过滤")
+    entity_type: str | None = Field(None, description="实体类型过滤")
     limit: int = Field(10, ge=1, le=100, description="返回结果数量")
-    filters: Optional[Dict[str, Any]] = Field(None, description="额外过滤条件")
+    filters: dict[str, Any] | None = Field(None, description="额外过滤条件")
 
 class GraphQueryRequest(BaseModel):
     gremlin: str = Field(..., description="Gremlin查询语句")
@@ -68,7 +63,7 @@ class GraphQueryRequest(BaseModel):
 class RelationAnalysisRequest(BaseModel):
     entity_id: str = Field(..., description="起始实体ID")
     depth: int = Field(2, ge=1, le=5, description="搜索深度")
-    relation_types: Optional[List[str]] = Field(None, description="关系类型过滤")
+    relation_types: list[str] | None = Field(None, description="关系类型过滤")
 
 # 服务状态
 service_status = {
@@ -99,7 +94,7 @@ class HybridSearchEngine:
             "entities": "knowledge_graph_entities"
         }
 
-    async def health_check(self) -> Dict:
+    async def health_check(self) -> dict:
         """健康检查"""
         health = {
             "status": "healthy",
@@ -133,7 +128,7 @@ class HybridSearchEngine:
 
         return health
 
-    async def hybrid_search(self, request: SearchRequest) -> Dict:
+    async def hybrid_search(self, request: SearchRequest) -> dict:
         """混合搜索"""
         try:
             # 1. 向量搜索
@@ -162,9 +157,9 @@ class HybridSearchEngine:
 
         except Exception as e:
             logger.error(f"混合搜索失败: {e}")
-            raise HTTPException(status_code=500, detail=str(e))
+            raise HTTPException(status_code=500, detail=str(e)) from e
 
-    async def _vector_search(self, query: str, limit: int) -> List[Dict]:
+    async def _vector_search(self, query: str, limit: int) -> list[dict]:
         """执行向量搜索（模拟实现）"""
         # 这里应该连接到真实的Qdrant
         # 返回模拟结果用于演示
@@ -191,7 +186,7 @@ class HybridSearchEngine:
             }
         ][:limit]
 
-    async def _graph_search(self, entity_type: str) -> List[Dict]:
+    async def _graph_search(self, entity_type: str) -> list[dict]:
         """执行图搜索（模拟实现）"""
         # 这里应该连接到真实的JanusGraph
         # 返回模拟结果用于演示
@@ -215,13 +210,13 @@ class HybridSearchEngine:
             }
         ]
 
-    def _merge_results(self, vector_results: List[Dict], graph_results: List[Dict]) -> List[Dict]:
+    def _merge_results(self, vector_results: list[dict], graph_results: list[dict]) -> list[dict]:
         """融合向量搜索和图搜索结果"""
         merged = []
 
         # 合并逻辑
         vector_ids = {r["id"] for r in vector_results}
-        graph_ids = {r["id"] for r in graph_results}
+        {r["id"] for r in graph_results}
 
         # 添加向量结果
         for result in vector_results:
@@ -252,7 +247,7 @@ class HybridSearchEngine:
 
         return merged
 
-    async def execute_graph_query(self, request: GraphQueryRequest) -> Dict:
+    async def execute_graph_query(self, request: GraphQueryRequest) -> dict:
         """执行Gremlin查询"""
         try:
             # 这里应该连接到真实的JanusGraph执行Gremlin查询
@@ -282,9 +277,9 @@ class HybridSearchEngine:
 
         except Exception as e:
             logger.error(f"图查询失败: {e}")
-            raise HTTPException(status_code=500, detail=str(e))
+            raise HTTPException(status_code=500, detail=str(e)) from e
 
-    async def analyze_relations(self, request: RelationAnalysisRequest) -> Dict:
+    async def analyze_relations(self, request: RelationAnalysisRequest) -> dict:
         """分析实体关系"""
         try:
             # 这里应该执行真正的关系分析
@@ -318,7 +313,7 @@ class HybridSearchEngine:
 
         except Exception as e:
             logger.error(f"关系分析失败: {e}")
-            raise HTTPException(status_code=500, detail=str(e))
+            raise HTTPException(status_code=500, detail=str(e)) from e
 
 # API路由
 @app.get("/")
@@ -344,7 +339,7 @@ async def vector_search(
     limit: int = Query(10, ge=1, le=100, description="返回数量")
 ):
     """纯向量搜索"""
-    request = SearchRequest(query=query, limit=limit)
+    SearchRequest(query=query, limit=limit)
     search_engine = HybridSearchEngine()
 
     # 只返回向量搜索结果

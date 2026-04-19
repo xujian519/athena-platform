@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专家级合规性审查预判系统
 Expert Compliance Review & Prediction System
@@ -15,7 +16,6 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
-
 
 from ..knowledge.patent_analysis.enhanced_knowledge_graph import EnhancedPatentKnowledgeGraph
 from .expert_rule_engine import ExpertRuleEngine
@@ -147,7 +147,7 @@ class ComplianceJudge:
         self.knowledge_graph: EnhancedPatentKnowledgeGraph | None = None
 
         # 合规性标准库
-        self.compliance_standards: dict[ComplianceCategory, dict[str, Any] = {}
+        self.compliance_standards: dict[ComplianceCategory, dict[str, Any]] = {}
 
         # 审查模板
         self.review_templates: dict[str, dict[str, Any]] = {}
@@ -208,7 +208,7 @@ class ComplianceJudge:
             self.logger.info("✅ ComplianceJudge 初始化完成")
             return True
 
-        except Exception as e:
+        except Exception:
             return False
 
     async def _load_compliance_standards(self):
@@ -275,6 +275,7 @@ class ComplianceJudge:
             self.logger.info("✅ 合规性标准加载完成")
 
         except Exception as e:
+            self.logger.error(f"合规性标准加载失败: {e}")
 
     async def _build_review_templates(self):
         """构建审查模板"""
@@ -309,6 +310,7 @@ class ComplianceJudge:
             }
 
         except Exception as e:
+            self.logger.error(f"审查模板构建失败: {e}")
 
     async def comprehensive_compliance_review(
         self,
@@ -397,7 +399,7 @@ class ComplianceJudge:
             self.logger.info(f"✅ 合规性审查完成: {review_id}, 整体评分: {overall_score:.1f}")
             return review
 
-        except Exception as e:
+        except Exception:
             raise
 
     async def _review_category(
@@ -419,6 +421,7 @@ class ComplianceJudge:
                         patent_data, [category]
                     )
                 except Exception as e:
+                    self.logger.warning(f"规则链检查失败({category}): {e}")
 
             # 提取问题
             issues = []
@@ -594,6 +597,7 @@ class ComplianceJudge:
                             )
 
         except Exception as e:
+            self.logger.warning(f"问题识别失败: {e}")
 
         return issues
 
@@ -652,14 +656,14 @@ class ComplianceJudge:
                 detailed_analysis=judgment.supporting_reasoning,
                 recommendations=judgment.recommendations,
                 concerns=judgment.risk_factors,
-                supporting_evidence=[e.content for e in judgment.evidence_items: 5,
+                supporting_evidence=[e.content for e in judgment.evidence_items[:5]],
                 timestamp=datetime.now(),
             )
 
             self.stats["auto_reviews"] += 1
             return review
 
-        except Exception as e:
+        except Exception:
             # 返回默认审查意见
             return ExpertReview(
                 review_id=f"ai_expert_error_{datetime.now().strftime('%H%M%S')}",
@@ -724,7 +728,7 @@ class ComplianceJudge:
             self.stats["human_simulated_reviews"] += 1
             return review
 
-        except Exception as e:
+        except Exception:
             return ExpertReview(
                 review_id=f"human_expert_error_{datetime.now().strftime('%H%M%S')}",
                 reviewer_type="human_simulated",
@@ -797,7 +801,7 @@ class ComplianceJudge:
 
             return prediction
 
-        except Exception as e:
+        except Exception:
             return CompliancePrediction(
                 prediction_id=f"prediction_error_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
                 success_probability=0.5,

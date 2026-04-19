@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 存储策略管理器
 Storage Policy Manager
@@ -7,16 +6,16 @@ Storage Policy Manager
 定义和管理文件的存储策略、生命周期规则、迁移策略等
 """
 
-import json
-from core.async_main import async_main
-import logging
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional, Callable
-from dataclasses import dataclass, asdict
-from enum import Enum
 import asyncio
+import json
+import logging
+from collections.abc import Callable
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any
 
-from .distributed_storage import StorageType, StorageTier, FileLocation
+from .distributed_storage import StorageTier, StorageType
 
 logger = logging.getLogger(__name__)
 
@@ -46,9 +45,9 @@ class LifecycleRule:
     trigger_value: int = 30  # 触发值
     target_tier: StorageTier | None = None
     action: LifecycleAction = LifecycleAction.TRANSITION
-    conditions: Dict[str, Any] = None
-    file_type_filters: List[str] = None  # 文件类型过滤
-    size_filters: Dict[str, int] = None   # 大小过滤 (min_size, max_size)
+    conditions: dict[str, Any] = None
+    file_type_filters: list[str] = None  # 文件类型过滤
+    size_filters: dict[str, int] = None   # 大小过滤 (min_size, max_size)
     custom_handler: Callable | None = None
 
     def __post_init__(self):
@@ -70,8 +69,8 @@ class StoragePolicy:
     compression_enabled: bool = False
     encryption_enabled: bool = False
     backup_enabled: bool = True
-    lifecycle_rules: List[LifecycleRule] = None
-    storage_preferences: Dict[StorageTier, List[StorageType]] = None
+    lifecycle_rules: list[LifecycleRule] = None
+    storage_preferences: dict[StorageTier, list[StorageType]] = None
 
     def __post_init__(self):
         if self.lifecycle_rules is None:
@@ -83,8 +82,8 @@ class StoragePolicyManager:
     """存储策略管理器"""
 
     def __init__(self):
-        self.policies: Dict[str, StoragePolicy] = {}
-        self.file_policy_mapping: Dict[str, str] = {}  # file_id -> policy_id
+        self.policies: dict[str, StoragePolicy] = {}
+        self.file_policy_mapping: dict[str, str] = {}  # file_id -> policy_id
         self.default_policy_id: str | None = None
         self.lifecycle_task: asyncio.Task | None = None
         self.running = False
@@ -203,7 +202,7 @@ class StoragePolicyManager:
             self.lifecycle_task.cancel()
             try:
                 await self.lifecycle_task
-            except asyncio.CancelledError:
+            except asyncio.CancelledError as e:
                 logger.error(f"Error: {e}", exc_info=True)
         logger.info("生命周期管理已停止")
 
@@ -225,7 +224,7 @@ class StoragePolicyManager:
         # 实际实现时需要从数据库或存储中获取文件列表
         pass
 
-    async def evaluate_file_lifecycle(self, file_id: str, file_info: Dict[str, Any]) -> List[Dict[str, Any]]:
+    async def evaluate_file_lifecycle(self, file_id: str, file_info: dict[str, Any]) -> list[dict[str, Any]]:
         """评估单个文件的生命周期"""
         policy = self.get_file_policy(file_id)
         if not policy:
@@ -269,7 +268,7 @@ class StoragePolicyManager:
         return actions
 
     async def _evaluate_trigger_condition(self, rule: LifecycleRule,
-                                        file_info: Dict[str, Any],
+                                        file_info: dict[str, Any],
                                         current_time: datetime) -> bool:
         """评估触发条件"""
         if rule.trigger_type == TriggerType.AGE_DAYS:
@@ -362,7 +361,7 @@ class StoragePolicyManager:
 
         return self.create_policy(policy)
 
-    def get_policy_summary(self, policy_id: str) -> Dict[str, Any]:
+    def get_policy_summary(self, policy_id: str) -> dict[str, Any]:
         """获取策略摘要"""
         policy = self.get_policy(policy_id)
         if not policy:
@@ -461,7 +460,7 @@ if __name__ == "__main__":
     async def example_usage():
         """使用示例"""
         # 创建默认策略
-        default_policy_id = storage_policy_manager.create_default_policy()
+        storage_policy_manager.create_default_policy()
 
         # 创建自定义策略
         custom_policy = StoragePolicy(

@@ -5,22 +5,17 @@ API网关主程序 - 增强版本
 """
 
 import asyncio
-import json
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
 import time
 from datetime import datetime, timedelta
-from typing import Any, Dict, List
 
 import httpx
 import uvicorn
-from fastapi import BackgroundTasks, FastAPI, HTTPException, Request
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -214,7 +209,7 @@ async def family_collaborate(request: Request):
 
     except Exception as e:
         logger.error(f"AI家庭协作失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"协作请求失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"协作请求失败: {str(e)}") from e
 
 @app.get('/api/v1/family/{task_id}/status')
 async def get_family_task_status(task_id: str):
@@ -232,7 +227,7 @@ async def get_family_task_status(task_id: str):
                 raise HTTPException(status_code=404, detail='任务未找到')
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"获取任务状态失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"获取任务状态失败: {str(e)}") from e
 
 # 统一服务接口
 @app.post('/api/v1/unified/process')
@@ -259,9 +254,9 @@ async def unified_process(request: Request):
 
     except Exception as e:
         logger.error(f"统一处理失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"处理失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"处理失败: {str(e)}") from e
 
-async def analyze_task_type(request_data: Dict) -> str:
+async def analyze_task_type(request_data: dict) -> str:
     """分析任务类型"""
     content = request_data.get('content', '').lower()
 
@@ -272,7 +267,7 @@ async def analyze_task_type(request_data: Dict) -> str:
     else:
         return 'collaborative'
 
-async def route_to_service(request_data: Dict, service_name: str) -> Dict:
+async def route_to_service(request_data: dict, service_name: str) -> dict:
     """路由到特定服务"""
     service_config = SERVICE_ROUTES.get(service_name)
     if not service_config:
@@ -287,9 +282,9 @@ async def route_to_service(request_data: Dict, service_name: str) -> Dict:
             )
             return response.json()
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"服务调用失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"服务调用失败: {str(e)}") from e
 
-async def route_to_collaboration(request_data: Dict) -> Dict:
+async def route_to_collaboration(request_data: dict) -> dict:
     """路由到协作服务"""
     try:
         async with httpx.AsyncClient() as client:
@@ -314,7 +309,7 @@ async def route_to_collaboration(request_data: Dict) -> Dict:
                 raise HTTPException(status_code=500, detail='创建协作任务失败')
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"协作路由失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"协作路由失败: {str(e)}") from e
 
 # 通用代理处理函数
 @app.api_route('/{path:path}', methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH'])
@@ -333,9 +328,9 @@ async def proxy_request(request: Request, path: str):
     # 未找到匹配的路由
     raise HTTPException(status_code=404, detail='服务未找到')
 
-async def proxy_to_service(request: Request, service_name: str, config: Dict):
+async def proxy_to_service(request: Request, service_name: str, config: dict):
     """代理到具体服务"""
-    target_url = f"{config['url']}/{path.lstrip(config['prefix'].lstrip('/'))}"
+    target_url = f"{config['url']}/{request.url.path.lstrip('/').lstrip(config['prefix'].lstrip('/'))}"
 
     # 转发查询参数
     query_params = str(request.url.query) if request.url.query else ''
@@ -361,12 +356,12 @@ async def proxy_to_service(request: Request, service_name: str, config: Dict):
             )
 
     except httpx.TimeoutException:
-        raise HTTPException(status_code=504, detail='服务超时')
+        raise HTTPException(status_code=504, detail='服务超时') from None
     except Exception as e:
         logger.error(f"代理请求失败 {service_name}: {str(e)}")
-        raise HTTPException(status_code=502, detail='服务错误')
+        raise HTTPException(status_code=502, detail='服务错误') from e
 
-async def handle_intelligent_route(request: Request, path: str, config: Dict):
+async def handle_intelligent_route(request: Request, path: str, config: dict):
     """处理智能路由"""
     # 这里可以实现更复杂的智能路由逻辑
     # 例如基于请求内容、AI负载、服务健康状况等
@@ -408,7 +403,7 @@ async def check_service_health(service_name: str, service_config: dict) -> bool:
         }
         return False
 
-async def check_all_services_health() -> Dict[str, bool]:
+async def check_all_services_health() -> dict[str, bool]:
     """检查所有服务健康状态"""
     global last_health_check
 

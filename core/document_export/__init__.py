@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 文档导出模块 - Athena平台深度集成版
 Document Export Module - Athena Platform Integration

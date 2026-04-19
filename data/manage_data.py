@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 Athena工作平台 - 数据管理工具
@@ -18,12 +17,11 @@ import csv
 import hashlib
 import json
 import logging
-import os
 import shutil
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 import humanize
 from neo4j import GraphDatabase
@@ -51,9 +49,9 @@ class DataStats:
 
     total_files: int = 0
     total_size: int = 0
-    file_types: Dict[str, int] = field(default_factory=dict)
-    large_files: List[FileInfo] = field(default_factory=list)
-    duplicate_files: Dict[str, List[FileInfo]] = field(default_factory=dict)
+    file_types: dict[str, int] = field(default_factory=dict)
+    large_files: list[FileInfo] = field(default_factory=list)
+    duplicate_files: dict[str, list[FileInfo]] = field(default_factory=dict)
 
 
 class DataManager:
@@ -115,7 +113,7 @@ class DataManager:
 
         return self.stats
 
-    def find_duplicates(self) -> Dict[str, List[FileInfo]]:
+    def find_duplicates(self) -> dict[str, list[FileInfo]]:
         """查找重复文件"""
         logger.info('🔍 查找重复文件...')
 
@@ -145,7 +143,7 @@ class DataManager:
                 for file_path in files:
                     try:
                         with open(file_path, 'rb') as f:
-                            full_hash = hashlib.md5(f.read(, usedforsecurity=False).hexdigest()
+                            full_hash = hashlib.md5(f.read(), usedforsecurity=False).hexdigest()
                         if full_hash not in full_hashes:
                             full_hashes[full_hash] = []
                         full_hashes[full_hash].append(file_path)
@@ -167,7 +165,7 @@ class DataManager:
         self.stats.duplicate_files = duplicates
         return duplicates
 
-    def analyze_storage(self) -> Dict[str, Any]:
+    def analyze_storage(self) -> dict[str, Any]:
         """分析存储使用情况"""
         logger.info('📊 分析存储使用情况...')
 
@@ -227,7 +225,7 @@ class DataManager:
         # 重复文件
         if self.stats.duplicate_files:
             report_lines.extend(['', '## 🔄 重复文件', ''])
-            for hash_val, files in self.stats.duplicate_files.items():
+            for _hash_val, files in self.stats.duplicate_files.items():
                 total_size = sum(f.size for f in files)
                 report_lines.append(
                     f"\n### 重复组 (总计: {humanize.naturalsize(total_size)})"
@@ -342,8 +340,8 @@ class DataManager:
             logger.info("\n✅ 没有发现需要归档的文件")
 
     def unify_patent_kg(
-        self, source_dirs: List[Path], output_dir: Path
-    ) -> Dict[str, int]:
+        self, source_dirs: list[Path], output_dir: Path
+    ) -> dict[str, int]:
         merged_patents = {}
         seen_patent_numbers = {}
         relations = set()
@@ -351,8 +349,8 @@ class DataManager:
             patents_csv = src / 'patents.csv'
             relations_csv = src / 'relations.csv'
             if patents_csv.exists():
-                with open(patents_csv, 'r', encoding='utf-8') as f:
-                    header = f.readline()
+                with open(patents_csv, encoding='utf-8') as f:
+                    f.readline()
                     for line in f:
                         parts = [p.strip() for p in line.split(',')]
                         if len(parts) < 8:
@@ -404,8 +402,8 @@ class DataManager:
                             else:
                                 seen_patent_numbers[patent_number] = pid
             if relations_csv.exists():
-                with open(relations_csv, 'r', encoding='utf-8') as f:
-                    header = f.readline()
+                with open(relations_csv, encoding='utf-8') as f:
+                    f.readline()
                     for line in f:
                         parts = [p.strip() for p in line.split(',')]
                         if len(parts) < 4:
@@ -419,7 +417,7 @@ class DataManager:
             batch_jsons = list(src.glob('batch_*.json'))
             for bf in batch_jsons:
                 try:
-                    with open(bf, 'r', encoding='utf-8') as jf:
+                    with open(bf, encoding='utf-8') as jf:
                         data = json.load(jf)
                     for patent in data.get('patents', []):
                         pid = patent.get('id')
@@ -474,7 +472,7 @@ class DataManager:
                         if subject and predicate and obj and subject in merged_patents:
                             if predicate == 'has_type':
                                 relations.add(
-                                    (subject, 'HAS_TYPE', f"TYPE_{obj}', 'Type")
+                                    (subject, 'HAS_TYPE', f"TYPE_{obj}")
                                 )
                             elif predicate == 'from_source':
                                 relations.add(
@@ -531,14 +529,14 @@ class DataManager:
 
     def import_unified_patent_kg_to_neo4j(
         self, unified_dir: Path, uri: str, user: str, password: str
-    ) -> Dict[str, int]:
+    ) -> dict[str, int]:
         driver = GraphDatabase.driver(uri, auth=(user, password))
         patents_file = unified_dir / 'patents_unified.csv'
         relations_file = unified_dir / 'relations_unified.csv'
         patents_rows = []
         relations_has_type = []
         relations_from_source = []
-        with open(patents_file, 'r', encoding='utf-8') as f:
+        with open(patents_file, encoding='utf-8') as f:
             reader = csv.DictReader(f)
             for row in reader:
                 patents_rows.append(
@@ -552,7 +550,7 @@ class DataManager:
                         'type': row['type'],
                     }
                 )
-        with open(relations_file, 'r', encoding='utf-8') as f:
+        with open(relations_file, encoding='utf-8') as f:
             reader = csv.DictReader(f)
             for row in reader:
                 if row['relationship_type'] == 'HAS_TYPE':
@@ -657,7 +655,7 @@ def main():
         # 扫描数据目录
         stats = data_manager.scan_directory(args.min_size)
 
-        logger.info(f"\n📊 扫描完成:")
+        logger.info("\n📊 扫描完成:")
         logger.info(f"  总文件数: {stats.total_files:,}")
         logger.info(f"  总大小: {humanize.naturalsize(stats.total_size)}")
         logger.info(f"  大文件(>{args.min_size}MB): {len(stats.large_files)}")

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 PasteMD核心模块 - Athena平台深度集成版
 PasteMD Core Module - Deep Integration for Athena Platform
@@ -21,7 +22,9 @@ import subprocess
 import tempfile
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
+
+import pandas as pd
 
 from core.logging_config import setup_logging
 
@@ -222,7 +225,7 @@ class PasteMDCore:
             生成的Excel文件路径,失败返回None
         """
         try:
-
+            pass
         except ImportError:
             logger.error("❌ 需要安装pandas和openpyxl: pip install pandas openpyxl")
             return None
@@ -410,7 +413,7 @@ class AthenaDocumentExporter:
         return doc_path
 
     def _build_conversation_content(
-        self, conversation_id: str, messages: list[dict[str, str]) -> str:
+        self, conversation_id: str, messages: list[dict[str, str]]) -> str:
         """构建对话内容"""
         content = []
         content.append("# 对话记录")
@@ -452,6 +455,7 @@ class AthenaDocumentExporter:
             导出的Excel文件路径
         """
         try:
+            pass
         except ImportError:
             logger.error("❌ 需要安装pandas: pip install pandas")
             return None
@@ -490,7 +494,7 @@ class AthenaDocumentExporter:
 _exporter_instance = None
 
 
-def get_document_exporter(config: Optional[dict | None = None) -> AthenaDocumentExporter:
+def get_document_exporter(config: dict | None | None = None) -> AthenaDocumentExporter:
     """获取文档导出服务单例"""
     global _exporter_instance
     if _exporter_instance is None:

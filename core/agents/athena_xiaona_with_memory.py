@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena.小娜·天秤女神 - 集成记忆系统
 Athena Xiaona Libra with Integrated Memory

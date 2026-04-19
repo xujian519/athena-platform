@@ -1,9 +1,8 @@
+from __future__ import annotations
 """
 AI学习系统
 实现AI角色的持续学习和能力提升
 """
-import numpy as np
-
 import asyncio
 import hashlib
 import logging
@@ -14,6 +13,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
+import numpy as np
 
 from core.logging_config import setup_logging
 

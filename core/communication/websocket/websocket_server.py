@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 WebSocket服务器实现
 WebSocket Server Implementation
@@ -18,16 +19,20 @@ WebSocket Server Implementation
 import asyncio
 import json
 import logging
+from collections.abc import Callable
 from datetime import datetime
-from typing import Any, Callable, Dict, Set
+from typing import Any
 
-from websockets.server import WebSocketServerProtocol, serve
+from websockets.asyncio.server import ServerConnection, serve
+
+# 类型别名，保持向后兼容
+WebSocketServerProtocol = ServerConnection
 
 from core.communication.websocket.connection_manager import ConnectionManager
 from core.communication.websocket.message_protocol import (
     MessageProtocol,
-    WebSocketMessageType,
     WebSocketMessage,
+    WebSocketMessageType,
 )
 from core.communication.websocket_auth import (
     WebSocketAuthConfig,
@@ -77,7 +82,7 @@ class WebSocketServer:
         self.protocol = MessageProtocol()
 
         # 事件处理器
-        self._message_handlers: Dict[WebSocketMessageType, list[Callable]] = {}
+        self._message_handlers: dict[WebSocketMessageType, list[Callable]] = {}
         self._connection_handlers: list[Callable] = []
         self._disconnection_handlers: list[Callable] = []
 
@@ -364,7 +369,7 @@ class WebSocketServer:
         )
         await websocket.send(error_msg)
 
-    def _parse_query_params(self, path: str) -> Dict[str, list[str]]:
+    def _parse_query_params(self, path: str) -> dict[str, list[str]]:
         """解析查询参数"""
         if "?" not in path:
             return {}
@@ -451,7 +456,7 @@ class WebSocketServer:
     # 公共API
 
     async def broadcast(
-        self, message: WebSocketMessage, exclude: Set[str] | None = None
+        self, message: WebSocketMessage, exclude: set[str] | None = None
     ) -> int:
         """
         广播消息到所有连接
@@ -506,7 +511,7 @@ class WebSocketServer:
             发送成功的连接数
         """
         subscribers = await self.connection_manager.get_channel_subscribers(channel)
-        message_data = self.protocol.serialize(message)
+        self.protocol.serialize(message)
 
         count = 0
         for connection_id in subscribers:
@@ -515,7 +520,7 @@ class WebSocketServer:
 
         return count
 
-    async def get_stats(self) -> Dict[str, Any]:
+    async def get_stats(self) -> dict[str, Any]:
         """
         获取服务器统计信息
 

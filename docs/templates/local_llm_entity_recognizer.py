@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 基于本地大模型的专利实体识别器
 Local LLM-based Patent Entity Recognizer
@@ -15,8 +14,7 @@ import logging
 import os
 import re
 from dataclasses import dataclass
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import requests
 
@@ -33,7 +31,7 @@ class Entity:
     end: int
     confidence: float
     source: str  # 'rule' 或 'llm'
-    attributes: Dict[str, Any] = None
+    attributes: dict[str, Any] = None
 
 class LocalLLMEntityRecognizer:
     """基于本地LLM的专利实体识别器"""
@@ -54,11 +52,11 @@ class LocalLLMEntityRecognizer:
         # 验证LLM连接
         self.llm_available = self._test_llm_connection()
 
-        logger.info(f"实体识别器初始化完成")
-        logger.info(f"规则模式: ✓")
+        logger.info("实体识别器初始化完成")
+        logger.info("规则模式: ✓")
         logger.info(f"LLM模式: {'✓' if self.llm_available else '✗'}")
 
-    def _load_llm_config(self) -> Dict[str, Any]:
+    def _load_llm_config(self) -> dict[str, Any]:
         """从环境变量加载LLM配置"""
         config = {
             'api_url': os.getenv('LLM_API_URL', ''),
@@ -85,7 +83,7 @@ class LocalLLMEntityRecognizer:
                     if response.status_code == 200:
                         config['api_url'] = service
                         break
-                except:
+                except Exception:
                     continue
 
             if not config['api_url']:
@@ -118,7 +116,7 @@ class LocalLLMEntityRecognizer:
             return False
 
         try:
-            test_url = f"{self.llm_config['api_url']}'.replace('/chat/completions', '/models")
+            test_url = f"{self.llm_config['api_url']}".replace('/chat/completions', '/models')
             response = requests.get(test_url, timeout=5)
             return response.status_code == 200
         except Exception as e:
@@ -263,7 +261,7 @@ class LocalLLMEntityRecognizer:
             ]
         }
 
-    def recognize_entities(self, text: str, use_llm: bool = None) -> List[Entity]:
+    def recognize_entities(self, text: str, use_llm: bool = None) -> list[Entity]:
         """
         识别文本中的实体
 
@@ -296,7 +294,7 @@ class LocalLLMEntityRecognizer:
 
         return merged_entities
 
-    def _recognize_by_rules(self, text: str) -> List[Entity]:
+    def _recognize_by_rules(self, text: str) -> list[Entity]:
         """基于规则识别实体"""
         entities = []
 
@@ -336,7 +334,7 @@ class LocalLLMEntityRecognizer:
 
         return entities
 
-    def _recognize_by_llm(self, text: str) -> List[Entity]:
+    def _recognize_by_llm(self, text: str) -> list[Entity]:
         """使用LLM识别实体"""
         entities = []
 
@@ -429,7 +427,7 @@ class LocalLLMEntityRecognizer:
             logger.error(f"LLM API调用失败: {response.status_code}")
             return None
 
-    def _parse_llm_response(self, response: str, original_text: str) -> List[Entity]:
+    def _parse_llm_response(self, response: str, original_text: str) -> list[Entity]:
         """解析LLM响应"""
         entities = []
 
@@ -469,7 +467,7 @@ class LocalLLMEntityRecognizer:
 
         return entities
 
-    def _extract_attributes(self, text: str, label: str) -> Dict[str, Any]:
+    def _extract_attributes(self, text: str, label: str) -> dict[str, Any]:
         """提取实体属性"""
         attributes = {}
 
@@ -500,7 +498,7 @@ class LocalLLMEntityRecognizer:
 
         return attributes
 
-    def _merge_entities(self, entities: List[Entity]) -> List[Entity]:
+    def _merge_entities(self, entities: list[Entity]) -> list[Entity]:
         """合并多个识别器的结果"""
         if not entities:
             return []
@@ -533,7 +531,7 @@ class LocalLLMEntityRecognizer:
         """检查两个实体是否重叠"""
         return not (e1.end <= e2.start or e2.end <= e1.start)
 
-    def get_config_status(self) -> Dict[str, Any]:
+    def get_config_status(self) -> dict[str, Any]:
         """获取配置状态"""
         status = {
             'llm_available': self.llm_available,

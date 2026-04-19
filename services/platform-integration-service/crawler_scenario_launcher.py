@@ -5,16 +5,13 @@
 """
 
 import asyncio
-from core.async_main import async_main
-import json
 import logging
 import re
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
-from common_tools.crawler_tool import CrawlerScenario
 from crawler_integration_service import get_crawler_integration_service
 
 logger = logging.getLogger(__name__)
@@ -36,13 +33,13 @@ class CrawlerScenarioType(Enum):
 class CrawlerScenarioTrigger:
     """爬虫场景触发器"""
     scenario_type: CrawlerScenarioType
-    keywords: List[str]
-    patterns: List[str]
-    url_patterns: List[str]
+    keywords: list[str]
+    patterns: list[str]
+    url_patterns: list[str]
     confidence_threshold: float
     priority: int
     description: str
-    data_sources: List[str]
+    data_sources: list[str]
 
 @dataclass
 class CrawlerExecutionPlan:
@@ -50,11 +47,11 @@ class CrawlerExecutionPlan:
     scenario_type: CrawlerScenarioType
     confidence: float
     execution_mode: str  # xiaonuo, direct, scheduled
-    parameters: Dict[str, Any]
+    parameters: dict[str, Any]
     estimated_time: int  # 预估执行时间(秒)
     estimated_data_size: int  # 预估数据条数
     risk_level: str  # low, medium, high
-    resource_requirements: Dict[str, Any]
+    resource_requirements: dict[str, Any]
 
 class CrawlerScenarioLauncher:
     """爬虫场景启动器"""
@@ -75,7 +72,7 @@ class CrawlerScenarioLauncher:
             'avg_confidence': 0.0
         }
 
-    def _initialize_trigger_rules(self) -> List[CrawlerScenarioTrigger]:
+    def _initialize_trigger_rules(self) -> list[CrawlerScenarioTrigger]:
         """初始化爬虫触发规则"""
         return [
             CrawlerScenarioTrigger(
@@ -237,7 +234,7 @@ class CrawlerScenarioLauncher:
             )
         ]
 
-    async def recognize_scenario(self, user_input: str, context: Optional[Dict[str, Any]] = None) -> List[CrawlerExecutionPlan]:
+    async def recognize_scenario(self, user_input: str, context: dict[str, Any] | None = None) -> list[CrawlerExecutionPlan]:
         """识别爬虫场景并生成执行计划
 
         Args:
@@ -273,7 +270,7 @@ class CrawlerScenarioLauncher:
         return plans
 
     def _calculate_confidence(self, user_input: str, trigger: CrawlerScenarioTrigger,
-                            context: Optional[Dict[str, Any]]) -> float:
+                            context: dict[str, Any] | None) -> float:
         """计算匹配置信度"""
         input_lower = user_input.lower()
 
@@ -315,13 +312,13 @@ class CrawlerScenarioLauncher:
 
         return keyword_score + pattern_score + url_score + context_score + experience_score
 
-    def _extract_urls(self, text: str) -> List[str]:
+    def _extract_urls(self, text: str) -> list[str]:
         """提取URL"""
         url_pattern = r'https?://[^\s<>"{}|\\^`\[\]]+'
         return re.findall(url_pattern, text)
 
     def _calculate_context_score(self, user_input: str, trigger: CrawlerScenarioTrigger,
-                                context: Optional[Dict[str, Any]]) -> float:
+                                context: dict[str, Any] | None) -> float:
         """计算上下文相关性得分"""
         if not context:
             return 0.5
@@ -370,7 +367,7 @@ class CrawlerScenarioLauncher:
         trigger: CrawlerScenarioTrigger,
         confidence: float,
         user_input: str,
-        context: Optional[Dict[str, Any]]
+        context: dict[str, Any] | None
     ) -> CrawlerExecutionPlan:
         """创建爬虫执行计划"""
         # 根据场景类型确定执行模式
@@ -425,7 +422,7 @@ class CrawlerScenarioLauncher:
         return 'xiaonuo'
 
     def _extract_crawler_parameters(self, user_input: str, scenario_type: CrawlerScenarioType,
-                                   context: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+                                   context: dict[str, Any] | None) -> dict[str, Any]:
         """提取爬虫参数"""
         parameters = {'user_input': user_input}
 
@@ -450,7 +447,7 @@ class CrawlerScenarioLauncher:
 
         return parameters
 
-    def _extract_patent_params(self, text: str) -> Dict[str, Any]:
+    def _extract_patent_params(self, text: str) -> dict[str, Any]:
         """提取专利检索参数"""
         params = {}
 
@@ -474,7 +471,7 @@ class CrawlerScenarioLauncher:
 
         return params
 
-    def _extract_news_params(self, text: str) -> Dict[str, Any]:
+    def _extract_news_params(self, text: str) -> dict[str, Any]:
         """提取新闻监控参数"""
         params = {}
 
@@ -494,7 +491,7 @@ class CrawlerScenarioLauncher:
 
         return params
 
-    def _extract_price_params(self, text: str) -> Dict[str, Any]:
+    def _extract_price_params(self, text: str) -> dict[str, Any]:
         """提取价格追踪参数"""
         params = {}
 
@@ -512,7 +509,7 @@ class CrawlerScenarioLauncher:
 
         return params
 
-    def _extract_competitor_params(self, text: str) -> Dict[str, Any]:
+    def _extract_competitor_params(self, text: str) -> dict[str, Any]:
         """提取竞品分析参数"""
         params = {}
 
@@ -530,7 +527,7 @@ class CrawlerScenarioLauncher:
 
         return params
 
-    def _estimate_execution_time(self, scenario_type: CrawlerScenarioType, parameters: Dict[str, Any]) -> int:
+    def _estimate_execution_time(self, scenario_type: CrawlerScenarioType, parameters: dict[str, Any]) -> int:
         """估算执行时间"""
         base_times = {
             CrawlerScenarioType.PATENT_SEARCH: 120,
@@ -556,7 +553,7 @@ class CrawlerScenarioLauncher:
 
         return int(base_time)
 
-    def _estimate_data_size(self, scenario_type: CrawlerScenarioType, parameters: Dict[str, Any], user_input: str) -> int:
+    def _estimate_data_size(self, scenario_type: CrawlerScenarioType, parameters: dict[str, Any], user_input: str) -> int:
         """估算数据规模"""
         base_sizes = {
             CrawlerScenarioType.PATENT_SEARCH: 50,
@@ -588,7 +585,7 @@ class CrawlerScenarioLauncher:
 
         return int(base_size)
 
-    def _assess_resource_requirements(self, scenario_type: CrawlerScenarioType, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    def _assess_resource_requirements(self, scenario_type: CrawlerScenarioType, parameters: dict[str, Any]) -> dict[str, Any]:
         """评估资源需求"""
         requirements = {
             'cpu': 'medium',
@@ -619,7 +616,7 @@ class CrawlerScenarioLauncher:
 
         return requirements
 
-    def _assess_risk_level(self, scenario_type: CrawlerScenarioType, user_input: str, parameters: Dict[str, Any]) -> str:
+    def _assess_risk_level(self, scenario_type: CrawlerScenarioType, user_input: str, parameters: dict[str, Any]) -> str:
         """评估风险级别"""
         # 检查敏感词
         sensitive_words = ['破解', '攻击', '侵入', '非法', '未授权', '私密', '隐私']
@@ -637,7 +634,7 @@ class CrawlerScenarioLauncher:
 
         return 'low'
 
-    def _record_recognition(self, user_input: str, plans: List[CrawlerExecutionPlan]) -> Any:
+    def _record_recognition(self, user_input: str, plans: list[CrawlerExecutionPlan]) -> Any:
         """记录识别结果"""
         record = {
             'input': user_input,
@@ -657,7 +654,7 @@ class CrawlerScenarioLauncher:
         if len(self.execution_history) > 1000:
             self.execution_history = self.execution_history[-500:]
 
-    async def auto_launch(self, user_input: str, context: Optional[Dict[str, Any]] = None, auto_confirm: bool = False) -> Dict[str, Any]:
+    async def auto_launch(self, user_input: str, context: dict[str, Any] | None = None, auto_confirm: bool = False) -> dict[str, Any]:
         """自动识别并启动爬虫场景
 
         Args:
@@ -729,7 +726,7 @@ class CrawlerScenarioLauncher:
                 'plan': best_plan
             }
 
-    async def _execute_plan(self, plan: CrawlerExecutionPlan) -> Dict[str, Any]:
+    async def _execute_plan(self, plan: CrawlerExecutionPlan) -> dict[str, Any]:
         """执行爬虫计划"""
         request_params = {
             'user_input': plan.parameters.get('user_input', ''),
@@ -743,13 +740,13 @@ class CrawlerScenarioLauncher:
         result = await self.crawler_service.process_request(request_params)
         return result
 
-    async def _learn_from_execution(self, plan: CrawlerExecutionPlan, execution_result: Dict[str, Any]):
+    async def _learn_from_execution(self, plan: CrawlerExecutionPlan, execution_result: dict[str, Any]):
         """从执行结果中学习"""
         # 简单的学习机制：根据执行结果调整决策权重
         success = execution_result.get('success', False)
 
         # 记录学习结果
-        learning_record = {
+        {
             'scenario_type': plan.scenario_type.value,
             'confidence': plan.confidence,
             'execution_mode': plan.execution_mode,
@@ -787,7 +784,7 @@ class CrawlerScenarioLauncher:
                 usage['avg_confidence'] for usage in self.metrics['scenario_usage'].values()
             ) / max(len(self.metrics['scenario_usage']), 1)
 
-    def get_metrics(self) -> Dict[str, Any]:
+    def get_metrics(self) -> dict[str, Any]:
         """获取性能指标"""
         return {
             'metrics': self.metrics,
@@ -796,7 +793,7 @@ class CrawlerScenarioLauncher:
             'learning_enabled': self.learning_enabled
         }
 
-    def get_available_scenarios(self) -> Dict[str, Any]:
+    def get_available_scenarios(self) -> dict[str, Any]:
         """获取可用场景列表"""
         return {
             'scenarios': [
@@ -864,7 +861,7 @@ async def test_crawler_scenario_launcher():
 
     # 显示指标
     metrics = launcher.get_metrics()
-    logger.info(f"\n📊 性能指标:")
+    logger.info("\n📊 性能指标:")
     logger.info(f"   总识别次数: {metrics['metrics']['total_recognitions']}")
     logger.info(f"   成功启动次数: {metrics['metrics']['successful_launches']}")
     logger.info(f"   准确率: {metrics['metrics']['accuracy_rate']:.2f}")

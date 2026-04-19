@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 批量操作管理器
 Batch Operations Manager
@@ -8,20 +7,14 @@ Batch Operations Manager
 """
 
 import asyncio
-from core.async_main import async_main
-import uuid
-import time
-import hashlib
-import json
 import logging
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional, Callable
-from pathlib import Path
-from dataclasses import dataclass, asdict
-from enum import Enum
-import aiofiles
+import uuid
+from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
-import threading
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +32,7 @@ class BatchOperation:
     operation_id: str
     operation_type: str  # upload, download, process, analyze, delete
     user_id: str
-    files: List[Dict[str, Any]]
+    files: list[dict[str, Any]]
     status: BatchOperationStatus
     progress: float = 0.0
     total_files: int = 0
@@ -50,8 +43,8 @@ class BatchOperation:
     started_at: datetime = None
     completed_at: datetime = None
     error_message: str | None = None
-    results: List[Dict[str, Any]] = None
-    config: Dict[str, Any] = None
+    results: list[dict[str, Any]] = None
+    config: dict[str, Any] = None
 
     def __post_init__(self):
         if self.created_at is None:
@@ -67,14 +60,14 @@ class BatchOperationManager:
     def __init__(self, max_concurrent_operations: int = 10, max_workers: int = 4):
         self.max_concurrent_operations = max_concurrent_operations
         self.max_workers = max_workers
-        self.operations: Dict[str, BatchOperation] = {}
-        self.active_operations: Dict[str, asyncio.Task] = {}
+        self.operations: dict[str, BatchOperation] = {}
+        self.active_operations: dict[str, asyncio.Task] = {}
         self.operation_queue: asyncio.Queue = asyncio.Queue()
         self.semaphore = asyncio.Semaphore(max_concurrent_operations)
         self.thread_pool = ThreadPoolExecutor(max_workers=max_workers)
         self.running = False
         self.worker_task = None
-        self.progress_callbacks: Dict[str, List[Callable]] = {}
+        self.progress_callbacks: dict[str, list[Callable]] = {}
 
     async def start(self):
         """启动批量操作管理器"""
@@ -98,7 +91,7 @@ class BatchOperationManager:
             self.worker_task.cancel()
             try:
                 await self.worker_task
-            except asyncio.CancelledError:
+            except asyncio.CancelledError as e:
                 logger.error(f"Error: {e}", exc_info=True)
 
         # 关闭线程池
@@ -148,8 +141,8 @@ class BatchOperationManager:
                 await asyncio.sleep(1)
 
     async def create_batch_operation(self, operation_type: str, user_id: str,
-                                   files: List[Dict[str, Any]],
-                                   config: Dict[str, Any] = None) -> str:
+                                   files: list[dict[str, Any]],
+                                   config: dict[str, Any] = None) -> str:
         """创建批量操作"""
         operation_id = str(uuid.uuid4())
 
@@ -436,7 +429,7 @@ class BatchOperationManager:
         """获取操作状态"""
         return self.operations.get(operation_id)
 
-    def get_user_operations(self, user_id: str, status: BatchOperationStatus | None = None) -> List[BatchOperation]:
+    def get_user_operations(self, user_id: str, status: BatchOperationStatus | None = None) -> list[BatchOperation]:
         """获取用户的操作列表"""
         operations = [
             op for op in self.operations.values()
@@ -486,7 +479,7 @@ class BatchOperationManager:
 
         logger.info(f"清理了 {len(old_operations)} 个旧操作记录")
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """获取统计信息"""
         total_operations = len(self.operations)
         active_operations = len(self.active_operations)

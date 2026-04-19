@@ -1,0 +1,267 @@
+# 生产环境Athena API服务
+apiVersion: v1
+kind: Service
+metadata:
+  name: athena-api-service
+  namespace: athena-production
+  labels:
+    app: athena-platform
+    component: api
+    service-type: application
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+    prometheus.io/path: "/metrics"
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+    service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 8005
+    targetPort: 8005
+    protocol: TCP
+  - name: metrics
+    port: 9090
+    targetPort: 9090
+    protocol: TCP
+  selector:
+    app: athena-platform
+    component: api
+---
+# 生产环境Redis服务
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+  namespace: athena-production
+  labels:
+    app: athena-platform
+    component: redis
+    service-type: cache
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+spec:
+  type: ClusterIP
+  ports:
+  - name: redis
+    port: 6379
+    targetPort: 6379
+    protocol: TCP
+  selector:
+    app: athena-platform
+    component: redis
+---
+# 生产环境PostgreSQL服务
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  namespace: athena-production
+  labels:
+    app: athena-platform
+    component: postgres
+    service-type: database
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+spec:
+  type: ClusterIP
+  ports:
+  - name: postgres
+    port: 5432
+    targetPort: 5432
+    protocol: TCP
+  selector:
+    app: athena-platform
+    component: postgres
+---
+# 生产环境Qdrant向量数据库服务
+apiVersion: v1
+kind: Service
+metadata:
+  name: qdrant-service
+  namespace: athena-production
+  labels:
+    app: athena-platform
+    component: qdrant
+    service-type: vector-db
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 6333
+    targetPort: 6333
+    protocol: TCP
+  - name: grpc
+    port: 6334
+    targetPort: 6334
+    protocol: TCP
+  selector:
+    app: athena-platform
+    component: qdrant
+---
+# 生产环境Nginx服务
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  namespace: athena-production
+  labels:
+    app: athena-platform
+    component: nginx
+    service-type: ingress
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+    service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+    protocol: TCP
+  - name: https
+    port: 443
+    targetPort: 443
+    protocol: TCP
+  selector:
+    app: athena-platform
+    component: nginx
+---
+# 生产环境Prometheus服务
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-service
+  namespace: athena-monitoring
+  labels:
+    app: athena-platform
+    component: prometheus
+    service-type: monitoring
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+spec:
+  type: ClusterIP
+  ports:
+  - name: web
+    port: 9090
+    targetPort: 9090
+    protocol: TCP
+  selector:
+    app: athena-platform
+    component: prometheus
+---
+# 生产环境Grafana服务
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-service
+  namespace: athena-monitoring
+  labels:
+    app: athena-platform
+    component: grafana
+    service-type: monitoring
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
+  - name: https
+    port: 443
+    targetPort: 3000
+    protocol: TCP
+  selector:
+    app: athena-platform
+    component: grafana
+---
+# 生产环境AlertManager服务
+apiVersion: v1
+kind: Service
+metadata:
+  name: alertmanager-service
+  namespace: athena-monitoring
+  labels:
+    app: athena-platform
+    component: alertmanager
+    service-type: monitoring
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+spec:
+  type: ClusterIP
+  ports:
+  - name: web
+    port: 9093
+    targetPort: 9093
+    protocol: TCP
+  selector:
+    app: athena-platform
+    component: alertmanager
+---
+# 生产环境Elasticsearch服务
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch-service
+  namespace: athena-logging
+  labels:
+    app: athena-platform
+    component: elasticsearch
+    service-type: logging
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 9200
+    targetPort: 9200
+    protocol: TCP
+  - name: transport
+    port: 9300
+    targetPort: 9300
+    protocol: TCP
+  selector:
+    app: athena-platform
+    component: elasticsearch
+---
+# 生产环境Kibana服务
+apiVersion: v1
+kind: Service
+metadata:
+  name: kibana-service
+  namespace: athena-logging
+  labels:
+    app: athena-platform
+    component: kibana
+    service-type: logging
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 5601
+    targetPort: 5601
+    protocol: TCP
+  - name: https
+    port: 443
+    targetPort: 5601
+    protocol: TCP
+  selector:
+    app: athena-platform
+    component: kibana

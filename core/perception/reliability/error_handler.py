@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 企业级错误处理框架
 支持错误分类、日志记录、恢复策略
 最后更新: 2026-01-26
 """
 
+import asyncio
+import functools
 import logging
 import traceback
-import asyncio
-from datetime import datetime
-from typing import Optional, Dict, Any, List, Callable, Type
-from enum import Enum
+from collections.abc import Callable
 from dataclasses import dataclass, field
-import functools
+from datetime import datetime
+from enum import Enum
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +47,7 @@ class ErrorInfo:
     message: str
     timestamp: datetime = field(default_factory=datetime.now)
     traceback_str: str | None = None
-    context: Dict[str, Any] = field(default_factory=dict)
+    context: dict[str, Any] = field(default_factory=dict)
     recovery_suggestion: str | None = None
     retry_able: bool = False
 
@@ -65,17 +67,17 @@ class ErrorHandler:
     def __init__(self):
         """初始化错误处理器"""
         # 错误统计
-        self.error_counts: Dict[str, int] = {}
-        self.error_history: List[ErrorInfo] = []
+        self.error_counts: dict[str, int] = {}
+        self.error_history: list[ErrorInfo] = []
         self.max_history = 1000
 
         # 错误处理器映射
-        self.error_handlers: Dict[ErrorCategory, List[Callable]] = {
+        self.error_handlers: dict[ErrorCategory, list[Callable]] = {
             category: [] for category in ErrorCategory
         }
 
         # 告警回调
-        self.alert_callbacks: List[Callable] = []
+        self.alert_callbacks: list[Callable] = []
 
         logger.info("✓ 错误处理框架已初始化")
 
@@ -116,7 +118,7 @@ class ErrorHandler:
 
     def _determine_category(self, error: Exception) -> ErrorCategory:
         """确定错误类别"""
-        error_type = type(error).__name__
+        type(error).__name__
         error_message = str(error).lower()
 
         # 根据异常类型判断
@@ -174,7 +176,7 @@ class ErrorHandler:
     async def handle_error(
         self,
         error: Exception,
-        context: Optional[Dict[str, Any]] | None = None
+        context: dict[str, Any] | None | None = None
     ) -> ErrorInfo:
         """
         处理错误
@@ -293,7 +295,7 @@ class ErrorHandler:
         self.alert_callbacks.append(callback)
         logger.info("✓ 已注册告警回调")
 
-    def get_error_stats(self) -> Dict[str, Any]:
+    def get_error_stats(self) -> dict[str, Any]:
         """
         获取错误统计
 

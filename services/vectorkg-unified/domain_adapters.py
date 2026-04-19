@@ -9,10 +9,11 @@ Domain Adapters
 创建时间: 2024年12月15日
 """
 
-from abc import ABC, abstractmethod
-from typing import Dict, List, Any, Optional
-from enum import Enum
 import logging
+from abc import ABC, abstractmethod
+from enum import Enum
+from typing import Any
+
 from core.async_main import async_main
 
 logger = logging.getLogger(__name__)
@@ -36,25 +37,25 @@ class DomainAdapter(ABC):
         self.domain_config = self._get_domain_config()
 
     @abstractmethod
-    def _get_domain_config(self) -> Dict[str, Any]:
+    def _get_domain_config(self) -> dict[str, Any]:
         """获取领域特定配置"""
         pass
 
     @abstractmethod
-    async def process_query(self, query: str, context: dict) -> Dict[str, Any]:
+    async def process_query(self, query: str, context: dict) -> dict[str, Any]:
         """处理领域特定查询"""
         pass
 
     @abstractmethod
-    def extract_domain_rules(self, text: str, rule_types: List[str]) -> Dict[str, Any]:
+    def extract_domain_rules(self, text: str, rule_types: list[str]) -> dict[str, Any]:
         """提取领域规则"""
         pass
 
-    def _get_relevant_collections(self) -> List[str]:
+    def _get_relevant_collections(self) -> list[str]:
         """获取相关的向量集合"""
         return self.domain_config.get("vector_collections", [])
 
-    def _get_relevant_knowledge_graphs(self) -> List[str]:
+    def _get_relevant_knowledge_graphs(self) -> list[str]:
         """获取相关的知识图谱"""
         return self.domain_config.get("knowledge_graphs", [])
 
@@ -64,7 +65,7 @@ class PatentDomainAdapter(DomainAdapter):
     def __init__(self, infrastructure):
         super().__init__(DomainType.PATENT, infrastructure)
 
-    def _get_domain_config(self) -> Dict[str, Any]:
+    def _get_domain_config(self) -> dict[str, Any]:
         return {
             "vector_collections": [
                 "patent_legal_vectors_1024",
@@ -86,7 +87,7 @@ class PatentDomainAdapter(DomainAdapter):
             }
         }
 
-    async def process_query(self, query: str, context: dict) -> Dict[str, Any]:
+    async def process_query(self, query: str, context: dict) -> dict[str, Any]:
         """处理专利领域查询"""
         # 意图识别
         intent = self._classify_intent(query)
@@ -109,7 +110,7 @@ class PatentDomainAdapter(DomainAdapter):
 
         return response
 
-    def extract_domain_rules(self, text: str, rule_types: List[str]) -> Dict[str, Any]:
+    def extract_domain_rules(self, text: str, rule_types: list[str]) -> dict[str, Any]:
         """提取专利规则"""
         extracted_rules = {}
 
@@ -138,7 +139,7 @@ class PatentDomainAdapter(DomainAdapter):
         return "general"
 
     def _generate_patent_response(self, query: str, intent: str,
-                                 search_results: dict, context: dict) -> Dict[str, Any]:
+                                 search_results: dict, context: dict) -> dict[str, Any]:
         """生成专利特定响应"""
         return {
             "domain": "patent",
@@ -213,7 +214,7 @@ class PatentDomainAdapter(DomainAdapter):
         }
         return formats.get(intent, "## 分析报告\n### 要点分析\n### 结论建议")
 
-    def _get_suggested_actions(self, intent: str) -> List[Dict[str, str]]:
+    def _get_suggested_actions(self, intent: str) -> list[dict[str, str]]:
         """获取建议操作"""
         actions = {
             "novelty": [
@@ -244,8 +245,8 @@ class PatentDomainAdapter(DomainAdapter):
 
         return round(confidence, 2)
 
-    def _extract_rules_by_keywords(self, text: str, keywords: List[str],
-                                  rule_type: str) -> List[Dict[str, Any]]:
+    def _extract_rules_by_keywords(self, text: str, keywords: list[str],
+                                  rule_type: str) -> list[dict[str, Any]]:
         """根据关键词提取规则"""
         # 这里应该调用知识图谱进行规则提取
         # 简化实现，返回模拟规则
@@ -266,7 +267,7 @@ class LegalDomainAdapter(DomainAdapter):
     def __init__(self, infrastructure):
         super().__init__(DomainType.LEGAL, infrastructure)
 
-    def _get_domain_config(self) -> Dict[str, Any]:
+    def _get_domain_config(self) -> dict[str, Any]:
         return {
             "vector_collections": [
                 "patent_legal_vectors_1024",
@@ -286,7 +287,7 @@ class LegalDomainAdapter(DomainAdapter):
             }
         }
 
-    async def process_query(self, query: str, context: dict) -> Dict[str, Any]:
+    async def process_query(self, query: str, context: dict) -> dict[str, Any]:
         """处理法律领域查询"""
         # 类似专利领域的实现
         return {
@@ -295,7 +296,7 @@ class LegalDomainAdapter(DomainAdapter):
             "response": "法律领域查询处理中..."
         }
 
-    def extract_domain_rules(self, text: str, rule_types: List[str]) -> Dict[str, Any]:
+    def extract_domain_rules(self, text: str, rule_types: list[str]) -> dict[str, Any]:
         """提取法律规则"""
         return {
             "domain": "legal",
@@ -308,7 +309,7 @@ class MedicalDomainAdapter(DomainAdapter):
     def __init__(self, infrastructure):
         super().__init__(DomainType.MEDICAL, infrastructure)
 
-    def _get_domain_config(self) -> Dict[str, Any]:
+    def _get_domain_config(self) -> dict[str, Any]:
         return {
             "vector_collections": [
                 "medical_literature_vectors",
@@ -327,7 +328,7 @@ class MedicalDomainAdapter(DomainAdapter):
             }
         }
 
-    async def process_query(self, query: str, context: dict) -> Dict[str, Any]:
+    async def process_query(self, query: str, context: dict) -> dict[str, Any]:
         """处理医疗领域查询"""
         return {
             "domain": "medical",
@@ -335,7 +336,7 @@ class MedicalDomainAdapter(DomainAdapter):
             "response": "医疗领域查询处理中..."
         }
 
-    def extract_domain_rules(self, text: str, rule_types: List[str]) -> Dict[str, Any]:
+    def extract_domain_rules(self, text: str, rule_types: list[str]) -> dict[str, Any]:
         """提取医疗规则"""
         return {
             "domain": "medical",
@@ -358,7 +359,7 @@ class DomainAdapterFactory:
         return adapter_class(infrastructure)
 
     @staticmethod
-    def get_supported_domains() -> List[DomainType]:
+    def get_supported_domains() -> list[DomainType]:
         """获取支持的领域列表"""
         return [DomainType.PATENT, DomainType.LEGAL, DomainType.MEDICAL]
 

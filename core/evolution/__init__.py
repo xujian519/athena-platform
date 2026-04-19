@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena自动进化系统
 Athena Auto-Evolution System
@@ -16,11 +17,11 @@ Athena Auto-Evolution System
 from .evolution_coordinator import EvolutionCoordinator, get_evolution_coordinator
 from .types import (
     EvolutionConfig,
-    EvolutionResult,
     EvolutionPhase,
+    EvolutionResult,
     EvolutionStatus,
+    EvolutionStrategy,
     MutationType,
-    EvolutionStrategy
 )
 
 __all__ = [

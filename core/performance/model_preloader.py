@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 模型预加载策略 - 启动时加载常用模型
 用于减少首次调用延迟,提升响应速度
@@ -11,7 +12,6 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
 
 
 class ModelPreloader:
@@ -301,7 +301,7 @@ class ModelPreloader:
 
         except subprocess.TimeoutExpired:
             process.kill()
-            raise Exception("模型加载超时")
+            raise Exception("模型加载超时") from None
         except Exception as e:
             print(f"❌ 模型 {model_name} 加载失败: {e}")
             raise

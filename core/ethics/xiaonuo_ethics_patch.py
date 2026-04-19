@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 小诺伦理约束补丁
 Xiaonuo Ethics Constraint Patch
@@ -8,8 +9,7 @@ Xiaonuo Ethics Constraint Patch
 import os
 import sys
 from pathlib import Path
-from typing import Any, Dict
-
+from typing import Any
 
 # 添加伦理模块路径 - 使用环境变量或智能检测
 if "ATHENA_PROJECT_ROOT" in os.environ:

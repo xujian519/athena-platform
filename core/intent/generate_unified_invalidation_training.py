@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 生成统一专利无效训练数据
 Generate Unified Patent Invalidation Training Data
@@ -14,7 +15,6 @@ import json
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
 
 # 14个场景的专家级查询模板
 UNIFIED_INVALIDATION_SCENARIOS = {

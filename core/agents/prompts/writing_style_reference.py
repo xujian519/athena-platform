@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 徐健写作风格参考配置
 Xujian Writing Style Reference Configuration
@@ -374,7 +375,7 @@ class XujianWritingStyleManager:
         Returns:
             格式化后的内容
         """
-        style_guide = self.get_style_guide(agent_name)
+        self.get_style_guide(agent_name)
 
         # 根据不同智能体应用不同的风格特征
         if agent_name.lower() in ["xiaonuo", "小诺"]:

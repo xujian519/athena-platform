@@ -3,8 +3,8 @@
 测试AI智能体的基础功能
 """
 
+
 import pytest
-from typing import Dict, Any, List, Optional
 
 
 class TestAgentModule:
@@ -228,7 +228,6 @@ class TestAgentPerformance:
         start_time = time.time()
 
         # 模拟处理
-        result = "处理结果"
         time.sleep(0.01)  # 模拟10ms处理时间
 
         response_time = time.time() - start_time

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 批量处理系统 - 支持大规模爬虫任务的队列管理和并发处理
 Batch Processing System - Queue Management and Concurrent Processing for Large-Scale Crawling
@@ -7,26 +6,22 @@ Batch Processing System - Queue Management and Concurrent Processing for Large-S
 """
 
 import asyncio
-from core.async_main import async_main
 import json
 import logging
-from core.logging_config import setup_logging
 import sqlite3
-import time
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any
 
-import aiofiles
+from core.logging_config import setup_logging
 
 from ..config.platform_crawler_config import platform_config
 from .hybrid_crawler_manager import HybridCrawlerManager
-from .universal_crawler import UniversalCrawler
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -56,9 +51,9 @@ class BatchTask:
     """批量任务数据类"""
     id: str
     name: str
-    urls: List[str]
+    urls: list[str]
     crawler_type: str  # 'hybrid', 'custom', 'crawl4ai', 'firecrawl'
-    options: Dict[str, Any]
+    options: dict[str, Any]
     priority: TaskPriority
     status: TaskStatus
     created_at: datetime
@@ -68,7 +63,7 @@ class BatchTask:
     retry_count: int = 0
     max_retries: int = 3
     progress: int = 0  # 0-100
-    results: List[Dict[str, Any]] = None
+    results: list[dict[str, Any]] = None
     cost: float = 0.0
 
     def __post_init__(self):
@@ -177,7 +172,7 @@ class DatabaseManager:
             logger.error(f"获取任务失败: {e}")
             return None
 
-    async def get_tasks_by_status(self, status: TaskStatus, limit: int = 10) -> List[BatchTask]:
+    async def get_tasks_by_status(self, status: TaskStatus, limit: int = 10) -> list[BatchTask]:
         """根据状态获取任务"""
         try:
             with sqlite3.connect(self.db_path) as conn:
@@ -230,7 +225,7 @@ class DatabaseManager:
             return False
 
     async def update_task_progress(self, task_id: str, progress: int,
-                                  results: List[Dict[str, Any]] = None,
+                                  results: list[dict[str, Any]] = None,
                                   cost: float = 0.0) -> bool:
         """更新任务进度"""
         try:
@@ -279,7 +274,7 @@ class TaskQueue:
         self.db_manager = db_manager
         self._queue = asyncio.PriorityQueue()
         self._running = False
-        self._workers: List[asyncio.Task] = []
+        self._workers: list[asyncio.Task] = []
 
     async def start(self, num_workers: int = 3):
         """启动队列工作器"""
@@ -427,9 +422,9 @@ class BatchProcessor:
 
         logger.info('批量处理器已停止')
 
-    async def create_batch_task(self, name: str, urls: List[str],
+    async def create_batch_task(self, name: str, urls: list[str],
                               crawler_type: str = 'hybrid',
-                              options: Dict[str, Any] = None,
+                              options: dict[str, Any] = None,
                               priority: TaskPriority = TaskPriority.NORMAL) -> str:
         """创建批量任务"""
         task_id = str(uuid.uuid4())
@@ -454,7 +449,7 @@ class BatchProcessor:
         else:
             raise Exception('创建批量任务失败')
 
-    async def get_task_status(self, task_id: str) -> Dict[str, Any | None]:
+    async def get_task_status(self, task_id: str) -> dict[str, Any | None]:
         """获取任务状态"""
         task = await self.db_manager.get_task(task_id)
         if not task:
@@ -475,7 +470,7 @@ class BatchProcessor:
             'retry_count': task.retry_count
         }
 
-    async def get_task_results(self, task_id: str) -> Dict[str, Any | None]:
+    async def get_task_results(self, task_id: str) -> dict[str, Any | None]:
         """获取任务结果"""
         task = await self.db_manager.get_task(task_id)
         if not task:
@@ -523,7 +518,7 @@ class BatchProcessor:
         # 重新添加到队列
         return await self.task_queue.add_task(task)
 
-    async def get_batch_stats(self) -> Dict[str, Any]:
+    async def get_batch_stats(self) -> dict[str, Any]:
         """获取批量处理统计信息"""
         # 从数据库获取实时统计
         with sqlite3.connect(self.db_manager.db_path) as conn:
@@ -644,8 +639,8 @@ class BatchProcessor:
                 await asyncio.sleep(2 ** task.retry_count)  # 指数退避
                 await self.retry_task(task.id)
 
-    def _process_url_batch(self, urls: List[str], crawler_type: str,
-                          options: Dict[str, Any]) -> tuple:
+    def _process_url_batch(self, urls: list[str], crawler_type: str,
+                          options: dict[str, Any]) -> tuple:
         """处理URL批次（在线程池中执行）"""
         results = []
         total_cost = 0.0
@@ -676,7 +671,7 @@ class BatchProcessor:
 
         return results, total_cost
 
-    def _crawl_with_hybrid(self, url: str, options: Dict[str, Any]) -> tuple:
+    def _crawl_with_hybrid(self, url: str, options: dict[str, Any]) -> tuple:
         """使用混合爬虫"""
         # 这里应该调用实际的爬虫管理器
         # 简化实现，返回模拟结果
@@ -688,7 +683,7 @@ class BatchProcessor:
             'crawler_type': 'hybrid'
         }, 0.001
 
-    def _crawl_with_custom(self, url: str, options: Dict[str, Any]) -> tuple:
+    def _crawl_with_custom(self, url: str, options: dict[str, Any]) -> tuple:
         """使用自定义爬虫"""
         return {
             'success': True,
@@ -698,7 +693,7 @@ class BatchProcessor:
             'crawler_type': 'custom'
         }, 0.0005
 
-    def _crawl_with_crawl4ai(self, url: str, options: Dict[str, Any]) -> tuple:
+    def _crawl_with_crawl4ai(self, url: str, options: dict[str, Any]) -> tuple:
         """使用Crawl4AI"""
         return {
             'success': True,
@@ -708,7 +703,7 @@ class BatchProcessor:
             'crawler_type': 'crawl4ai'
         }, 0.002
 
-    def _crawl_with_firecrawl(self, url: str, options: Dict[str, Any]) -> tuple:
+    def _crawl_with_firecrawl(self, url: str, options: dict[str, Any]) -> tuple:
         """使用FireCrawl"""
         return {
             'success': True,

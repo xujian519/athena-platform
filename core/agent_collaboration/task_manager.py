@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 任务管理器
 Task Manager
@@ -10,7 +11,7 @@ import asyncio
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Any, Optional
+from typing import Any
 
 from .agent_coordinator import AgentCoordinator, get_agent_coordinator
 from .agent_registry import AgentRegistry, get_agent_registry

@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 生产级OCR处理器
 集成真实的Tesseract OCR引擎
 """
 
-import subprocess
-import tempfile
-import os
-from pathlib import Path
-from typing import Optional, Dict, Any
 import logging
+import os
+import subprocess
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +29,7 @@ class ProductionOCRProcessor:
             )
             if result.returncode == 0:
                 return result.stdout.strip()
-        except:
+        except Exception:
             pass
 
         # 常见路径
@@ -58,7 +57,7 @@ class ProductionOCRProcessor:
                 timeout=5
             )
             return result.returncode == 0
-        except:
+        except Exception:
             return False
 
     async def process_ocr(
@@ -67,7 +66,7 @@ class ProductionOCRProcessor:
         language: str = "chinese",
         preprocess: bool = True,
         extract_tables: bool = False
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         处理OCR请求
 
@@ -128,9 +127,9 @@ class ProductionOCRProcessor:
             }
 
         except subprocess.TimeoutExpired:
-            raise RuntimeError(f"OCR处理超时: {image_path}")
+            raise RuntimeError(f"OCR处理超时: {image_path}") from None
         except subprocess.CalledProcessError as e:
-            raise RuntimeError(f"OCR处理失败: {e.stderr}")
+            raise RuntimeError(f"OCR处理失败: {e.stderr}") from e
         except Exception as e:
             logger.error(f"OCR处理异常: {e}")
             raise

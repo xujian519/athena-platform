@@ -1,37 +1,30 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena平台管理中心
 Athena Platform Management Center
 提供平台级的用户管理、资源监控、安全管理和合规监控
 """
 
-import asyncio
-from core.async_main import async_main
 import hashlib
 import json
 import logging
-from core.logging_config import setup_logging
 import os
-import sys
 import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import jwt
 import uvicorn
 import yaml
 
 # FastAPI相关
-from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Security
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import Depends, FastAPI, HTTPException, Security
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, EmailStr
 
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 # 数据库相关
 try:
@@ -85,8 +78,8 @@ class User:
     status: UserStatus
     created_at: datetime
     last_login: datetime | None = None
-    permissions: List[str] = field(default_factory=list)
-    api_keys: List[str] = field(default_factory=list)
+    permissions: list[str] = field(default_factory=list)
+    api_keys: list[str] = field(default_factory=list)
 
 @dataclass
 class ResourceAccess:
@@ -118,7 +111,7 @@ class UserUpdate(BaseModel):
     email: EmailStr | None = None
     role: UserRole | None = None
     status: UserStatus | None = None
-    permissions: Optional[List[str]] = None
+    permissions: list[str] | None = None
 
 class APIKeyRequest(BaseModel):
     """API密钥请求"""
@@ -142,7 +135,7 @@ class SystemMetrics(BaseModel):
     total_requests: int
     error_rate: float
     average_response_time: float
-    resource_usage: Dict[str, float]
+    resource_usage: dict[str, float]
     timestamp: datetime
 
 class AthenaPlatformManager:
@@ -163,14 +156,14 @@ class AthenaPlatformManager:
         self.jwt_secret = self.config.get('security', {}).get('authentication', {}).get('jwt_secret', 'athena_secret_key')
 
         # 用户管理
-        self.users: Dict[str, User] = {}
-        self.sessions: Dict[str, Dict[str, Any]] = {}
+        self.users: dict[str, User] = {}
+        self.sessions: dict[str, dict[str, Any]] = {}
 
         # 访问日志
-        self.access_logs: List[ResourceAccess] = []
+        self.access_logs: list[ResourceAccess] = []
 
         # API密钥管理
-        self.api_keys: Dict[str, Dict[str, Any]] = {}
+        self.api_keys: dict[str, dict[str, Any]] = {}
 
         # 权限定义
         self.role_permissions = self._define_role_permissions()
@@ -180,10 +173,10 @@ class AthenaPlatformManager:
 
         logger.info('Athena平台管理器初始化完成')
 
-    def _load_config(self) -> Dict[str, Any]:
+    def _load_config(self) -> dict[str, Any]:
         """加载配置文件"""
         try:
-            with open(self.config_path, 'r', encoding='utf-8') as f:
+            with open(self.config_path, encoding='utf-8') as f:
                 return yaml.safe_load(f)
         except Exception as e:
             logger.error(f"配置文件加载失败: {e}")
@@ -283,7 +276,7 @@ class AthenaPlatformManager:
         else:
             return b"default_encryption_key"
 
-    def _define_role_permissions(self) -> Dict[UserRole, List[str]]:
+    def _define_role_permissions(self) -> dict[UserRole, list[str]]:
         """定义角色权限"""
         return {
             UserRole.ADMIN: [
@@ -342,12 +335,12 @@ class AthenaPlatformManager:
             try:
                 decrypted_password = key.decrypt(hashed_password.encode())
                 return decrypted_password.decode() == password
-            except Exception  # TODO: 指定具体异常类型:
+            except Exception:  # TODO: 指定具体异常类型
                 return False
         else:
             return hashlib.sha256(password.encode()).hexdigest() == hashed_password
 
-    def create_user(self, user_data: UserCreate) -> Dict[str, Any]:
+    def create_user(self, user_data: UserCreate) -> dict[str, Any]:
         """创建用户"""
         # 检查用户名是否已存在
         for user in self.users.values():
@@ -390,7 +383,7 @@ class AthenaPlatformManager:
         self.users[user_id] = new_user
         return {'success': True, 'user_id': user_id}
 
-    def authenticate_user(self, username: str, password: str) -> Dict[str, Any | None]:
+    def authenticate_user(self, username: str, password: str) -> dict[str, Any | None]:
         """用户认证"""
         for user in self.users.values():
             if user.username == username and user.status == UserStatus.ACTIVE:
@@ -431,7 +424,7 @@ class AthenaPlatformManager:
 
         return None
 
-    def generate_jwt_token(self, user_info: Dict[str, Any]) -> str:
+    def generate_jwt_token(self, user_info: dict[str, Any]) -> str:
         """生成JWT令牌"""
         payload = {
             'user_id': user_info['user_id'],
@@ -444,7 +437,7 @@ class AthenaPlatformManager:
 
         return jwt.encode(payload, self.jwt_secret, algorithm='HS256')
 
-    def verify_jwt_token(self, token: str) -> Dict[str, Any | None]:
+    def verify_jwt_token(self, token: str) -> dict[str, Any | None]:
         """验证JWT令牌"""
         try:
             payload = jwt.decode(token, self.jwt_secret, algorithms=['HS256'])
@@ -454,12 +447,12 @@ class AthenaPlatformManager:
         except jwt.InvalidTokenError:
             return None
 
-    def check_permission(self, user_info: Dict[str, Any], required_permission: str) -> bool:
+    def check_permission(self, user_info: dict[str, Any], required_permission: str) -> bool:
         """检查用户权限"""
         user_permissions = user_info.get('permissions', [])
         return required_permission in user_permissions
 
-    def log_access(self, user_info: Dict[str, Any], resource_type: str, resource_id: str,
+    def log_access(self, user_info: dict[str, Any], resource_type: str, resource_id: str,
                    action: str, ip_address: str, user_agent: str, success: bool = True):
         """记录访问日志"""
         access_log = ResourceAccess(
@@ -528,7 +521,7 @@ class AthenaPlatformManager:
 
         return api_key
 
-    def validate_api_key(self, api_key: str) -> Dict[str, Any | None]:
+    def validate_api_key(self, api_key: str) -> dict[str, Any | None]:
         """验证API密钥"""
         key_info = self.api_keys.get(api_key)
         if key_info and key_info['is_active']:

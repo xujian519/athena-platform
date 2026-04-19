@@ -4,16 +4,14 @@
 Analyze images using multimodal API
 """
 
-import os
-from core.async_main import async_main
-import sys
-import json
-import requests
 import logging
-from core.logging_config import setup_logging
-from pathlib import Path
 from datetime import datetime
-from typing import List, Dict, Any
+from pathlib import Path
+from typing import Any
+
+import requests
+
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -30,7 +28,7 @@ class ImageAnalyzer:
         self.api_url = MULTIMODAL_API_URL
         self.target_folder = Path(TARGET_FOLDER)
 
-    def scan_images(self) -> List[Path]:
+    def scan_images(self) -> list[Path]:
         """扫描文件夹中的图片"""
         logger.info(f"扫描文件夹: {self.target_folder}")
 
@@ -52,7 +50,7 @@ class ImageAnalyzer:
         image_files.sort(key=lambda x: x.name)
         return image_files
 
-    def analyze_image(self, image_path: Path) -> Dict[str, Any]:
+    def analyze_image(self, image_path: Path) -> dict[str, Any]:
         """分析单个图片"""
         try:
             # 上传文件
@@ -122,7 +120,7 @@ class ImageAnalyzer:
             logger.error(f"OCR识别失败 {image_path}: {e}")
             return ""
 
-    def analyze_financial_content(self, texts: List[str]) -> Dict[str, Any]:
+    def analyze_financial_content(self, texts: list[str]) -> dict[str, Any]:
         """分析财务内容"""
         financial_data = {
             "amounts": [],
@@ -186,7 +184,7 @@ class ImageAnalyzer:
 
         return financial_data
 
-    def get_legal_advice(self, financial_data: Dict) -> List[str]:
+    def get_legal_advice(self, financial_data: dict) -> list[str]:
         """获取法律建议"""
         advice = []
 
@@ -215,7 +213,7 @@ class ImageAnalyzer:
 
         return advice
 
-    def generate_report(self, image_analyses: List[Dict], financial_data: Dict) -> str:
+    def generate_report(self, image_analyses: list[dict], financial_data: dict) -> str:
         """生成分析报告"""
         report = []
         report.append("=" * 60)
@@ -344,7 +342,7 @@ def main() -> None:
     with open(report_path, 'w', encoding='utf-8') as f:
         f.write(report)
 
-    print(f"\n✅ 分析完成！")
+    print("\n✅ 分析完成！")
     print(f"📄 报告已保存: {report_path}")
     print("\n" + report)
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化记忆系统 - 迁移执行器
 Optimized Memory System - Migration Executor

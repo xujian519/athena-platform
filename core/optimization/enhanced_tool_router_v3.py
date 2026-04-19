@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强工具路由器 - 第一阶段优化版本
 Enhanced Tool Router - Phase 1 Optimization
@@ -21,7 +22,7 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -217,13 +218,6 @@ class EnhancedToolRouter:
                 "cost": 0.4,
                 "reliability": 0.95,
                 "capabilities": ["专利法律", "案例分析", "专业咨询"],
-            },
-            "yunxi": {
-                "category": "expert",
-                "priority": 8,
-                "cost": 0.4,
-                "reliability": 0.92,
-                "capabilities": ["IP管理", "案卷跟踪", "数据分析"],
             },
             "xiaochen": {
                 "category": "expert",

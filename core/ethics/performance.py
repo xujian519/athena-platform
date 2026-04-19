@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 伦理框架性能监控模块
 Ethics Framework Performance Monitoring
@@ -9,9 +10,9 @@ import threading
 import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from functools import wraps
-from typing import Any, Dict, Optional
+from typing import Any
 
 from .evaluator import EthicsEvaluator, EvaluationResult
 

@@ -1,24 +1,18 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena多模态文件系统统一API服务
 Unified Multimodal File System API for Athena Platform
 """
 
-import asyncio
-from core.async_main import async_main
-import json
 import logging
-from core.logging_config import setup_logging
 import os
 import sys
 import tempfile
 import time
-import traceback
 import uuid
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import aiofiles
 import requests
@@ -30,18 +24,17 @@ from fastapi import (
     File,
     Form,
     HTTPException,
-    Query,
     UploadFile,
 )
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, Field
 
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 # 导入多模态处理功能
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+# 配置日志 - 必须在导入检查之前
+logger = logging.getLogger('AthenaMultimodalAPI')
 
 try:
     from optimization.enhanced_multimodal_processor import (
@@ -100,10 +93,6 @@ except ImportError:
     CHEMICAL_ANALYZER_AVAILABLE = False
     logger.info('警告: 化学分析器导入失败')
 
-# 配置日志
-# setup_logging()  # 日志配置已移至模块导入
-logger = logging.getLogger('AthenaMultimodalAPI')
-
 # 创建FastAPI应用
 app = FastAPI(
     title='Athena多模态文件系统API',
@@ -120,7 +109,7 @@ def load_config():
     """加载系统配置"""
     config_path = os.path.join(os.path.dirname(__file__), 'multimodal_system_config.yaml')
     if os.path.exists(config_path):
-        with open(config_path, 'r', encoding='utf-8') as f:
+        with open(config_path, encoding='utf-8') as f:
             return yaml.safe_load(f)
     return {}
 
@@ -194,12 +183,12 @@ class AnalysisRequest(BaseModel):
     """分析请求模型"""
     text: str | None = None
     analysis_type: str = Field(..., description='分析类型')
-    options: Dict[str, Any] = Field(default_factory=dict)
+    options: dict[str, Any] = Field(default_factory=dict)
 
 class SearchRequest(BaseModel):
     """搜索请求模型"""
     query: str = Field(..., description='搜索关键词')
-    modality: Optional[str] = Field(None, description='模态类型过滤')
+    modality: str | None = Field(None, description='模态类型过滤')
     limit: int = Field(default=10, ge=1, le=100, description='返回结果数量')
 
 # API端点
@@ -265,7 +254,7 @@ async def health_check():
 @app.post('/upload')
 async def upload_files(
     background_tasks: BackgroundTasks,
-    files: List[UploadFile] = File(...),
+    files: list[UploadFile] = File(...),
     analysis_type: str = Form(default='comprehensive'),
     use_glm_vision: bool = Form(default=True)
 ):
@@ -453,7 +442,7 @@ async def analyze_image(
         try:
             os.unlink(temp_file_path)
         except Exception as e:
-        logger.error(f"Error: {e}", exc_info=True)
+            logger.error(f"Error: {e}", exc_info=True)
 
 @app.post('/analyze/chemical')
 async def analyze_chemical_content(
@@ -480,7 +469,7 @@ async def analyze_chemical_content(
 
     except Exception as e:
         logger.error(f"化学分析失败: {e}")
-        raise HTTPException(status_code=500, detail=f"化学分析失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"化学分析失败: {str(e)}") from e
 
 @app.post('/search')
 async def search_content(request: SearchRequest):
@@ -516,7 +505,7 @@ async def search_content(request: SearchRequest):
 
     except Exception as e:
         logger.error(f"搜索失败: {e}")
-        raise HTTPException(status_code=500, detail=f"搜索失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"搜索失败: {str(e)}") from e
 
 @app.post('/analyze/document')
 async def analyze_document(
@@ -637,7 +626,7 @@ async def analyze_document(
         try:
             os.unlink(temp_file_path)
         except Exception as e:
-        logger.error(f"Error: {e}", exc_info=True)
+            logger.error(f"Error: {e}", exc_info=True)
 
         # 返回结果
         return {
@@ -666,7 +655,7 @@ async def analyze_document(
 
     except Exception as e:
         logger.error(f"文档分析失败: {e}")
-        raise HTTPException(status_code=500, detail=f"文档分析失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"文档分析失败: {str(e)}") from e
 
 @app.get('/formats/dolphin')
 async def get_dolphin_supported_formats():
@@ -706,7 +695,7 @@ async def get_dolphin_supported_formats():
         }
 
 # 后台任务函数
-async def process_uploaded_files(task_id: str, files: List[Dict], analysis_type: str, use_glm_vision: bool):
+async def process_uploaded_files(task_id: str, files: list[dict], analysis_type: str, use_glm_vision: bool):
     """处理上传的文件"""
     try:
         task_info = processing_tasks[task_id]

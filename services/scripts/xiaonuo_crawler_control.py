@@ -5,16 +5,13 @@
 """
 
 import asyncio
-from core.async_main import async_main
-import json
 import logging
 import re
 from datetime import datetime
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 # 导入爬虫工具
-from common_tools.crawler_tool import CrawlerScenario, CrawlerTool, get_crawler_tool
+from common_tools.crawler_tool import CrawlerScenario, get_crawler_tool
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +49,7 @@ class XiaoNuoCrawlerController:
         except Exception as e:
             logger.error(f"初始化爬虫工具失败: {e}")
 
-    def _initialize_trigger_rules(self) -> Dict[str, Any]:
+    def _initialize_trigger_rules(self) -> dict[str, Any]:
         """初始化爬虫触发规则"""
         return {
             # 数据获取类
@@ -136,7 +133,7 @@ class XiaoNuoCrawlerController:
             }
         }
 
-    async def analyze_request(self, user_input: str, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    async def analyze_request(self, user_input: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
         """分析用户请求，判断是否需要使用爬虫
 
         Args:
@@ -205,7 +202,7 @@ class XiaoNuoCrawlerController:
 
         return result
 
-    def _match_keywords(self, text: str) -> Dict[str, int]:
+    def _match_keywords(self, text: str) -> dict[str, int]:
         """匹配关键词"""
         matches = {}
         text_lower = text.lower()
@@ -220,7 +217,7 @@ class XiaoNuoCrawlerController:
 
         return matches
 
-    def _match_patterns(self, text: str) -> List[str]:
+    def _match_patterns(self, text: str) -> list[str]:
         """匹配模式"""
         matches = []
 
@@ -232,7 +229,7 @@ class XiaoNuoCrawlerController:
 
         return matches
 
-    def _extract_urls(self, text: str) -> List[str]:
+    def _extract_urls(self, text: str) -> list[str]:
         """提取URL"""
         # 简单的URL正则表达式
         url_pattern = r'https?://[^\s<>"{}|\\^`\[\]]+'
@@ -269,7 +266,7 @@ class XiaoNuoCrawlerController:
 
         return min(score, 1.0)
 
-    def _analyze_context(self, user_input: str, context: Optional[Dict[str, Any]]) -> float:
+    def _analyze_context(self, user_input: str, context: dict[str, Any] | None) -> float:
         """上下文分析"""
         if not context:
             return 0.5
@@ -308,8 +305,8 @@ class XiaoNuoCrawlerController:
 
         return 0.5
 
-    def _calculate_confidence(self, trigger_matches: Dict, pattern_matches: List,
-                            url_matches: List, semantic_score: float,
+    def _calculate_confidence(self, trigger_matches: dict, pattern_matches: list,
+                            url_matches: list, semantic_score: float,
                             context_score: float, experience_score: float) -> float:
         """计算综合置信度"""
         # 关键词匹配权重: 30%
@@ -332,7 +329,7 @@ class XiaoNuoCrawlerController:
 
         return keyword_score + pattern_score + url_score + semantic_weighted + context_weighted + experience_weighted
 
-    def _recommend_scenario(self, user_input: str, trigger_matches: Dict[str, int]) -> str | None:
+    def _recommend_scenario(self, user_input: str, trigger_matches: dict[str, int]) -> str | None:
         """推荐场景"""
         if not trigger_matches:
             return None
@@ -344,7 +341,7 @@ class XiaoNuoCrawlerController:
         scenarios = self.crawler_trigger_rules[best_category]['scenarios']
         return scenarios[0].value if scenarios else None
 
-    def _estimate_data_scale(self, user_input: str, url_matches: List[str]) -> Dict[str, Any]:
+    def _estimate_data_scale(self, user_input: str, url_matches: list[str]) -> dict[str, Any]:
         """预估数据规模"""
         # 基础规模
         base_scale = len(url_matches) * 10 if url_matches else 50
@@ -365,7 +362,7 @@ class XiaoNuoCrawlerController:
             'processing_time_minutes': base_scale * 0.02  # 估算处理时间
         }
 
-    def _assess_risk(self, user_input: str, scenario: Optional[str], data_estimate: Dict[str, Any]) -> Dict[str, Any]:
+    def _assess_risk(self, user_input: str, scenario: str | None, data_estimate: dict[str, Any]) -> dict[str, Any]:
         """风险评估"""
         risk_level = 'low'
         risk_factors = []
@@ -399,7 +396,7 @@ class XiaoNuoCrawlerController:
             'recommendations': self._get_risk_recommendations(risk_level)
         }
 
-    def _get_risk_recommendations(self, risk_level: str) -> List[str]:
+    def _get_risk_recommendations(self, risk_level: str) -> list[str]:
         """获取风险建议"""
         recommendations = {
             'low': ['可以安全执行爬虫任务'],
@@ -408,7 +405,7 @@ class XiaoNuoCrawlerController:
         }
         return recommendations.get(risk_level, ['谨慎执行'])
 
-    async def smart_crawler_execution(self, user_input: str, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    async def smart_crawler_execution(self, user_input: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
         """智能执行爬虫任务
 
         Args:
@@ -500,7 +497,7 @@ class XiaoNuoCrawlerController:
                 'error_details': str(e)
             }
 
-    def _generate_default_urls(self, user_input: str, scenario: Optional[str]) -> List[str]:
+    def _generate_default_urls(self, user_input: str, scenario: str | None) -> list[str]:
         """根据场景生成默认URL"""
         url_templates = {
             'patent_search': [
@@ -526,7 +523,7 @@ class XiaoNuoCrawlerController:
 
         return url_templates.get(scenario, ['https://example.com'])
 
-    def _build_crawler_config(self, user_input: str, scenario: Optional[str], analysis: Dict[str, Any]) -> Dict[str, Any]:
+    def _build_crawler_config(self, user_input: str, scenario: str | None, analysis: dict[str, Any]) -> dict[str, Any]:
         """构建爬虫配置"""
         config = {}
 
@@ -561,7 +558,7 @@ class XiaoNuoCrawlerController:
 
         return config
 
-    def _generate_alternative_suggestions(self, user_input: str) -> List[str]:
+    def _generate_alternative_suggestions(self, user_input: str) -> list[str]:
         """生成替代建议"""
         suggestions = [
             '我可以帮您分析如何获取这些信息',
@@ -570,13 +567,13 @@ class XiaoNuoCrawlerController:
         ]
         return suggestions[:2]
 
-    async def _learn_from_execution(self, analysis: Dict[str, Any], execution_result: Any):
+    async def _learn_from_execution(self, analysis: dict[str, Any], execution_result: Any):
         """从执行结果中学习"""
         # 简单的学习机制：根据执行结果调整决策权重
         success = execution_result.success if hasattr(execution_result, 'success') else False
 
         # 记录学习结果
-        learning_record = {
+        {
             'analysis': analysis,
             'execution_success': success,
             'confidence': analysis['confidence_score'],
@@ -586,7 +583,7 @@ class XiaoNuoCrawlerController:
         # 这里可以实现更复杂的学习算法
         logger.info(f"学习记录: 成功={success}, 置信度={analysis['confidence_score']:.2f}")
 
-    def get_status(self) -> Dict[str, Any]:
+    def get_status(self) -> dict[str, Any]:
         """获取控制器状态"""
         return {
             'controller': 'XiaoNuoCrawlerController',
@@ -607,7 +604,7 @@ class XiaoNuoCrawlerController:
         successful = sum(1 for d in self.decision_history if d.get('should_use_crawler', False))
         return successful / len(self.decision_history)
 
-    def update_config(self, new_config: Dict[str, Any]) -> None:
+    def update_config(self, new_config: dict[str, Any]) -> None:
         """更新配置"""
         self.decision_config.update(new_config)
         logger.info(f"小诺爬虫控制器配置已更新: {new_config}")
@@ -679,7 +676,7 @@ async def test_xiaonuo_crawler_controller():
 
     # 显示状态
     status = controller.get_status()
-    logger.info(f"\n📊 控制器状态:")
+    logger.info("\n📊 控制器状态:")
     logger.info(f"   决策次数: {status['decision_count']}")
     logger.info(f"   成功率: {status['success_rate']:.2f}")
 

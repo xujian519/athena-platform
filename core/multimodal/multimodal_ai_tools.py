@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多模态AI工具接口
 Multimodal AI Tools Interface
@@ -18,10 +19,9 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from types import TracebackType
-from typing import Any, Dict, List, Optional, Type, Union
+from typing import Any
 
 import aiohttp
-
 
 
 class ModalityType(Enum):

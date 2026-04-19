@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 错误处理器 - Athena平台统一错误处理
 Error Handlers - Athena Platform Unified Error Handling
@@ -13,7 +14,7 @@ Error Handlers - Athena Platform Unified Error Handling
 import logging
 import traceback
 from datetime import datetime
-from typing import Any, Dict, Optional, Union
+from typing import Any
 
 from fastapi import HTTPException, Request
 from fastapi.exceptions import RequestValidationError
@@ -22,12 +23,6 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from .exceptions import (
     AthenaException,
-    BusinessException,
-    CacheException,
-    FileException,
-    NetworkException,
-    StorageException,
-    ValidationException,
 )
 
 logger = logging.getLogger(__name__)
@@ -381,7 +376,7 @@ def handle_exceptions(
                     raise
                 raise AthenaException(
                     message=default_message, code=error_code, details={"original_error": str(e)}
-                )
+                ) from e
 
         return wrapper
 

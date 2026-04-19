@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Agent协调器 - 工作流模板
 Agent Coordinator - Workflow Templates

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 简化的向量化服务
 """
@@ -7,7 +6,6 @@
 import json
 import logging
 import os
-from typing import Any, Dict, List
 
 import numpy as np
 import torch
@@ -38,7 +36,7 @@ class SimplePatentGuidelineEmbedder:
         )
         logger.info(f"模型加载成功，设备: {self.device}")
 
-    def encode_texts(self, texts: List[str], batch_size: int = 32) -> np.ndarray:
+    def encode_texts(self, texts: list[str], batch_size: int = 32) -> np.ndarray:
         """批量编码文本"""
         logger.info(f"开始编码 {len(texts)} 个文本")
         embeddings = self.model.encode(
@@ -58,7 +56,7 @@ def main():
     # 加载解析数据
     data_path = '/Users/xujian/Athena工作平台/patent-guideline-system/data/processed/test_parse_result.json'
     logger.info(f"加载数据: {data_path}")
-    with open(data_path, 'r', encoding='utf-8') as f:
+    with open(data_path, encoding='utf-8') as f:
         data = json.load(f)
 
     # 提取文本内容
@@ -91,7 +89,7 @@ def main():
 
     # 准备保存数据
     results = []
-    for i, (text, embedding) in enumerate(zip(texts, embeddings)):
+    for i, (text, embedding) in enumerate(zip(texts, embeddings, strict=False)):
         results.append({
             'id': metadata_list[i]['id'],
             'text': text,
@@ -120,7 +118,7 @@ def main():
     # 保存样本到Qdrant
     try:
         from qdrant_client import QdrantClient
-        from qdrant_client.models import Distance, VectorParams, PointStruct
+        from qdrant_client.models import Distance, PointStruct, VectorParams
 
         client = QdrantClient(host='localhost', port=6333)
         collection_name = 'patent_guidelines'

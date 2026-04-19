@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 通信模块 - 统一导出接口
 Communication Module - Unified Export Interface
@@ -92,19 +93,19 @@ except ImportError as e:
 # =============================================================================
 
 try:
-    from .websocket.websocket_server import (
-        WebSocketServer,
-        get_websocket_server,
-        start_websocket_server,
-    )
     from .websocket.connection_manager import (
         ConnectionManager,
         get_connection_manager,
     )
     from .websocket.message_protocol import (
         MessageProtocol,
-        WebSocketMessage,
         MessageType,
+        WebSocketMessage,
+    )
+    from .websocket.websocket_server import (
+        WebSocketServer,
+        get_websocket_server,
+        start_websocket_server,
     )
 
     WEBSOCKET_AVAILABLE = True
@@ -145,7 +146,6 @@ try:
         PersistenceConfig,
     )
     from .persistence.file_persistence import FilePersistenceBackend
-    from .persistence.redis_persistence import RedisPersistenceBackend
     from .persistence.persistence_manager import (
         PersistenceManager,
         get_persistence_manager,
@@ -154,6 +154,7 @@ try:
         QueueRecoveryManager,
         get_recovery_manager,
     )
+    from .persistence.redis_persistence import RedisPersistenceBackend
 
     PERSISTENCE_AVAILABLE = True
 except ImportError as e:
@@ -219,11 +220,15 @@ try:
     from .communication_engine import (
         Channel,
         ChannelType,
-        CommunicationEngine as FullCommunicationEngine,
         Message,
         MessageStatus,
-        MessageType as EngineMessageType,
         ProtocolType,
+    )
+    from .communication_engine import (
+        CommunicationEngine as FullCommunicationEngine,
+    )
+    from .communication_engine import (
+        MessageType as EngineMessageType,
     )
 
     FULL_ENGINE_AVAILABLE = True
@@ -278,12 +283,12 @@ except ImportError as e:
 # =============================================================================
 
 try:
-    from .task_manager import TaskManager
     from .message_handler import MessageHandler
-    from .rate_limit import RateLimiter
-    from .tracking import MessageTracker
     from .metrics import MetricsAPI
-    from .validation import validate_message, validate_channel
+    from .rate_limit import RateLimiter
+    from .task_manager import TaskManager
+    from .tracking import MessageTracker
+    from .validation import validate_channel, validate_message
 except ImportError as e:
     logger.warning(f"其他组件导入失败: {e}")
     TaskManager = None

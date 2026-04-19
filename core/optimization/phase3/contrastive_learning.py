@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 对比学习模块 (Contrastive Learning Module)
 学习相似和不相似的样本表示
@@ -12,8 +13,9 @@ import logging
 from collections import deque
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
+import numpy as np
 
 from ..optimization_constants import ContrastiveLearningConfig
 

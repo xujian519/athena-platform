@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多轮对话参数收集器
 Multi-turn Dialogue Parameter Collector
@@ -12,8 +13,7 @@ import re
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

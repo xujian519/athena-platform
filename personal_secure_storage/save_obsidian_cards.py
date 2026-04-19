@@ -4,17 +4,18 @@
 包含历史人物、历史事件、法律条文等知识卡片
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
 import re
-from pathlib import Path
+import sqlite3
 from datetime import datetime
+from pathlib import Path
+from typing import Any
+
 
 def extract_content_from_card(file_path) -> Any:
     """从卡片文件中提取内容"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         # 提取标题（第一行非空内容）

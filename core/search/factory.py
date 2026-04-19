@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 搜索引擎工厂
 使用工厂模式创建和管理搜索引擎实例

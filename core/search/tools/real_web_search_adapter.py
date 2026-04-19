@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 真实Web搜索引擎适配器
 Real Web Search Engine Adapter
@@ -14,8 +15,7 @@ import asyncio
 import logging
 import time
 from datetime import datetime
-from typing import Any, Optional
-
+from typing import Any
 
 from ..standards.base_search_tool import (
     BaseSearchTool,

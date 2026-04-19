@@ -4,23 +4,22 @@ Athena和小诺的智能可视化工具控制接口
 """
 
 import asyncio
-from core.async_main import async_main
 import json
 import logging
-from core.logging_config import setup_logging
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import BackgroundTasks, FastAPI, HTTPException
 from intelligent_caller import intelligent_caller
 
 # 导入工具系统
 from langchain_tools import visualization_tool_manager
 from pydantic import BaseModel, Field
 from visualization_insights import visualization_analyzer
+
+from core.logging_config import setup_logging
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent.parent
@@ -29,7 +28,6 @@ sys.path.append(str(project_root))
 # 导入统一认证模块
 from shared.auth.auth_middleware import (
     create_auth_middleware,
-    get_current_user,
     setup_cors,
 )
 
@@ -57,14 +55,14 @@ app.add_middleware(
 class VisualizationRequest(BaseModel):
     """可视化请求"""
     query: str = Field(..., description='用户请求描述')
-    user_context: Optional[Dict[str, Any]] = Field(default_factory=dict, description='用户上下文信息')
-    preferences: Optional[Dict[str, Any]] = Field(default_factory=dict, description='偏好设置')
+    user_context: dict[str, Any] | None = Field(default_factory=dict, description='用户上下文信息')
+    preferences: dict[str, Any] | None = Field(default_factory=dict, description='偏好设置')
 
 class ToolCallRequest(BaseModel):
     """工具调用请求"""
     tool_name: str = Field(..., description='工具名称')
-    parameters: Dict[str, Any] = Field(..., description='调用参数')
-    strategy: Optional[str] = Field(default='single', description='调用策略')
+    parameters: dict[str, Any] = Field(..., description='调用参数')
+    strategy: str | None = Field(default='single', description='调用策略')
 
 class AnalysisRequest(BaseModel):
     """分析请求"""

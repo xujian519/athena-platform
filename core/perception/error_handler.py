@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 感知模块错误处理器
 Perception Module Error Handler
@@ -20,7 +21,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from functools import wraps
-from typing import Any, Optional
+from typing import Any
 
 from . import BaseProcessor, InputType, PerceptionResult
 

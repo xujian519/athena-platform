@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 规划系统性能监控
 Planning System Performance Monitor
@@ -11,6 +12,7 @@ Planning System Performance Monitor
 """
 
 import json
+import logging
 import threading
 import time
 from collections import defaultdict, deque
@@ -21,6 +23,8 @@ from pathlib import Path
 from typing import Any
 
 import psutil
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -247,7 +251,7 @@ class PlanningMonitor:
             )
 
             return duration
-        except Exception as e:
+        except Exception:
             return 0.0
 
     def _check_alerts(self) -> Any:

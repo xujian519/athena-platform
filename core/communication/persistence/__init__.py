@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 通信模块 - 消息持久化
 Communication Module - Message Persistence

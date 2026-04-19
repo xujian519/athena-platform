@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 层次接口标准
 Layer Interface Standard
@@ -18,8 +19,7 @@ import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Optional
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

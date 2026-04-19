@@ -1,5 +1,5 @@
-import pytest
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
+from typing import Any
+
 from fastapi.testclient import TestClient
 from main import app
 

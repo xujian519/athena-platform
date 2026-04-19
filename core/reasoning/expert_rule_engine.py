@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专家级规则推理引擎
 Expert Rule Reasoning Engine
@@ -16,7 +17,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
-
+import networkx as nx
 
 from ..knowledge.patent_analysis.enhanced_knowledge_graph import EnhancedPatentKnowledgeGraph
 
@@ -180,7 +181,7 @@ class ExpertRuleEngine:
             self.logger.info("✅ ExpertRuleEngine 初始化完成")
             return True
 
-        except Exception as e:
+        except Exception:
             return False
 
     async def _load_rule_library(self):
@@ -201,6 +202,7 @@ class ExpertRuleEngine:
             self.logger.info(f"✅ 规则库加载完成: {len(self.rules)} 条规则")
 
         except Exception as e:
+            self.logger.error(f"规则库加载失败: {e}")
 
     async def _generate_patent_rules(self) -> dict[str, ReasoningRule]:
         """生成专利审查规则"""
@@ -421,6 +423,7 @@ class ExpertRuleEngine:
             )
 
         except Exception as e:
+            self.logger.error(f"规则依赖图构建失败: {e}")
 
     def _condition_matches_conclusion(
         self, condition: RuleCondition, conclusion: RuleConclusion
@@ -447,6 +450,7 @@ class ExpertRuleEngine:
             self.llm_service = "mock_llm_service"  # 占位符
             self.logger.info("✅ LLM服务初始化完成")
         except Exception as e:
+            self.logger.error(f"LLM服务初始化失败: {e}")
 
     async def reason(
         self,
@@ -505,7 +509,7 @@ class ExpertRuleEngine:
             )
             return reasoning_chain
 
-        except Exception as e:
+        except Exception:
             raise
 
     async def _execute_reasoning(

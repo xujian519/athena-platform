@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Lyra提示词优化引擎
 Lyra Prompt Optimizer Engine for Athena Platform
@@ -16,7 +17,7 @@ import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -45,9 +46,9 @@ class OptimizationRequest:
     user_input: str
     target_ai: TargetAI = TargetAI.CLAUDE
     mode: OptimizationMode = OptimizationMode.BASIC
-    context: Optional[str] = None
-    constraints: Optional[list[str]] = None
-    output_format: Optional[str] = None
+    context: str | None = None
+    constraints: list[str] | None = None
+    output_format: str | None = None
 
 
 @dataclass
@@ -182,7 +183,8 @@ Output format (JSON):
         # 优先使用Lyra专用LLM服务
         if self.use_lyra_llm:
             try:
-                from core.memory.lyra_llm_service import get_lyra_llm_service, LLMRequest as LyraLLMRequest
+                from core.memory.lyra_llm_service import LLMRequest as LyraLLMRequest
+                from core.memory.lyra_llm_service import get_lyra_llm_service
                 self.llm_service = get_lyra_llm_service()
                 self.LLMRequest = LyraLLMRequest
                 self.is_lyra_llm = True
@@ -194,7 +196,11 @@ Output format (JSON):
 
         # 降级到Athena LLM服务
         try:
-            from core.models.athena_llm_service import get_athena_llm_service, LLMProvider, LLMRequest
+            from core.models.athena_llm_service import (
+                LLMProvider,
+                LLMRequest,
+                get_athena_llm_service,
+            )
             self.llm_service = get_athena_llm_service()
             self.LLMProvider = LLMProvider
             self.LLMRequest = LLMRequest
@@ -287,7 +293,7 @@ Output format (JSON):
             if role:
                 optimized = f"As {role}, {optimized[0].lower()}{optimized[1:]}"
                 improvements.append(f"Added role: {role}")
-                reasoning_parts.append(f"Added role definition for clarity")
+                reasoning_parts.append("Added role definition for clarity")
 
         # 2. 检查是否需要输出格式
         if not any(word in optimized.lower() for word in ["format", "output", "return", "格式"]):
@@ -300,9 +306,9 @@ Output format (JSON):
         # 3. 检查是否需要约束条件
         constraints = request.constraints or []
         if constraints:
-            optimized += f"\n\nConstraints:\n" + "\n".join(f"- {c}" for c in constraints)
+            optimized += "\n\nConstraints:\n" + "\n".join(f"- {c}" for c in constraints)
             improvements.append(f"Added {len(constraints)} constraints")
-            reasoning_parts.append(f"Incorporated user-specified constraints")
+            reasoning_parts.append("Incorporated user-specified constraints")
 
         # 4. 添加上下文
         if request.context:
@@ -421,7 +427,7 @@ Focus on clear specifications, constraints, and technical requirements.
                 score=0.7
             )
 
-    def _suggest_role(self, user_input: str) -> Optional[str]:
+    def _suggest_role(self, user_input: str) -> str | None:
         """建议角色"""
         input_lower = user_input.lower()
 
@@ -445,7 +451,7 @@ Focus on clear specifications, constraints, and technical requirements.
 
         return "an expert assistant"
 
-    def _suggest_output_format(self, user_input: str) -> Optional[str]:
+    def _suggest_output_format(self, user_input: str) -> str | None:
         """建议输出格式"""
         input_lower = user_input.lower()
 
@@ -502,7 +508,7 @@ Focus on clear specifications, constraints, and technical requirements.
 
 
 # 全局实例
-_optimizer: Optional[LyraPromptOptimizer] = None
+_optimizer: LyraPromptOptimizer | None = None
 
 
 def get_lyra_optimizer() -> LyraPromptOptimizer:

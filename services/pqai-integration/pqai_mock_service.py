@@ -1,22 +1,26 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PQAI专利分析模拟服务
 Mock service for PQAI Patent Analysis
 """
 
-from fastapi import FastAPI
-from contextlib import asynccontextmanager
-import uvicorn
-from core.async_main import async_main
-from datetime import datetime
 import asyncio
 import sys
-import os
+from contextlib import asynccontextmanager
+from datetime import datetime
+
+import uvicorn
+from fastapi import FastAPI
 
 # 添加路径
 sys.path.append('/Users/xujian/Athena工作平台/services/autonomous-control')
-from agent_identity import AgentIdentity, AgentType, register_agent_identity, format_identity_display
+from agent_identity import (
+    AgentIdentity,
+    AgentType,
+    format_identity_display,
+    register_agent_identity,
+)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -59,7 +63,7 @@ async def display_startup_identity():
 
         print("\n" + "="*50)
         print(identity_display)
-        print(f"\n📊 PQAI专利分析师 启动成功！")
+        print("\n📊 PQAI专利分析师 启动成功！")
         print("📍 服务端口: 8030")
         print("="*50 + "\n")
 
@@ -72,7 +76,7 @@ async def status():
 
 @app.post("/analyze")
 async def analyze(request: dict):
-    text = request.get("text", "")
+    request.get("text", "")
 
     return {
         "patentability": 0.82,

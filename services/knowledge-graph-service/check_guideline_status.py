@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 检查审查指南集成状态
 """
 
-import requests
-from core.async_main import async_main
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
+
+import requests
+
 
 def check_qdrant() -> bool:
     """检查Qdrant服务"""
@@ -25,7 +24,7 @@ def check_qdrant() -> bool:
 def check_graph_data() -> bool:
     """检查知识图谱数据"""
     try:
-        with open("/Users/xujian/Athena工作平台/data/guideline_graph/patent_guideline_graph.json", "r") as f:
+        with open("/Users/xujian/Athena工作平台/data/guideline_graph/patent_guideline_graph.json") as f:
             data = json.load(f)
             nodes = len(data.get("nodes", []))
             rels = len(data.get("relationships", []))

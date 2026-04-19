@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习引擎 - 主引擎
 Learning Engine - Main Engine
@@ -12,18 +13,17 @@ Learning Engine - Main Engine
 """
 
 import inspect
-import json
 import logging
 from collections import defaultdict
 from datetime import datetime
-from pathlib import Path
 from typing import Any
+
+from core.learning.persistence_manager import get_persistence_manager
 
 from .adaptive_optimizer import AdaptiveOptimizer
 from .experience_store import ExperienceStore
 from .knowledge_updater import KnowledgeGraphUpdater
 from .pattern_recognizer import PatternRecognizer
-from core.learning.persistence_manager import get_persistence_manager, StorageBackend
 
 logger = logging.getLogger(__name__)
 

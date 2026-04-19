@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利规则向量化器
 Patent Rule Vectorizer
@@ -7,14 +8,15 @@ Patent Rule Vectorizer
 """
 
 import asyncio
-from core.async_main import async_main
 import json
 import logging
-from core.logging_config import setup_logging
 import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+from core.async_main import async_main
+from core.logging_config import setup_logging
 
 # 添加项目路径
 sys.path.append(str(Path(__file__).parent.parent.parent))
@@ -216,8 +218,8 @@ class PatentRuleVectorizer:
                 self.qdrant_client.get_collection(collection_name)
                 logger.info(f"📊 集合 {collection_name} 已存在")
                 return
-        except Exception as e:
-            logger.warning(f'操作失败: {e}')
+            except Exception as e:
+                logger.warning(f'操作失败: {e}')
 
             # 创建新集合
             self.qdrant_client.create_collection(
@@ -511,7 +513,7 @@ class PatentRuleVectorizer:
 
             # 按相似度排序并过滤
             search_results.sort(key=lambda x: x["score"], reverse=True)
-            filtered_results = []
+            filtered_results = [
                 result for result in search_results
                 if result["score"] >= score_threshold
             ]
@@ -531,7 +533,7 @@ class PatentRuleVectorizer:
             logger.error(f"❌ 相似规则搜索失败: {e}")
             return []
 
-    async def batch_vectorize_rules(self, rules_data: list[dict[str, Any]) -> dict[str, Any]:
+    async def batch_vectorize_rules(self, rules_data: list[dict[str, Any]]) -> dict[str, Any]:
         """批量向量化专利规则"""
         results = {
             "success": [],

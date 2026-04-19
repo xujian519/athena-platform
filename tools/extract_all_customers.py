@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 提取所有客户（申请人）名称
 Extract All Patent Customers
@@ -7,12 +6,14 @@ Extract All Patent Customers
 遍历整个专利表，提取所有客户名称并标准化
 """
 
-import psycopg2
 import json
-import re
-from collections import defaultdict, Counter
 import os
+import re
+from collections import defaultdict
 from datetime import datetime
+
+import psycopg2
+
 
 class CustomerExtractor:
     """客户提取器"""
@@ -191,7 +192,7 @@ class CustomerExtractor:
                 print(f"... 还有 {len(other_customers) - 20} 个其他客户")
 
             # 显示有联系信息的客户示例
-            print(f"\n📞 有联系信息的客户示例：")
+            print("\n📞 有联系信息的客户示例：")
             print("-" * 120)
             contact_customers = [c for c in customer_details if c['联系人'] or c['电话']]
             for i, customer in enumerate(contact_customers[:10], 1):
@@ -305,7 +306,7 @@ class CustomerExtractor:
             with open("customer_name_changes.json", "w", encoding="utf-8") as f:
                 json.dump(name_changes, f, ensure_ascii=False, indent=2)
 
-            print(f"\n名称变更关系已保存到：customer_name_changes.json")
+            print("\n名称变更关系已保存到：customer_name_changes.json")
 
         cursor.close()
         conn.close()
@@ -384,7 +385,7 @@ class CustomerExtractor:
         print("-" * 60)
         sorted_regions = sorted(region_stats.items(), key=lambda x: x[1], reverse=True)
         for region, count in sorted_regions:
-            print(f"{region:<10} {count:>6} 件专利 ({count/sum([c for c in region_stats.values()])*100:.1f}%)")
+            print(f"{region:<10} {count:>6} 件专利 ({count/sum(list(region_stats.values()))*100:.1f}%)")
 
         if other_count > 0:
             total = sum(region_stats.values())
@@ -400,7 +401,7 @@ class CustomerExtractor:
         with open("customer_regional_distribution.json", "w", encoding="utf-8") as f:
             json.dump(regional_data, f, ensure_ascii=False, indent=2)
 
-        print(f"\n地域分布已保存到：customer_regional_distribution.json")
+        print("\n地域分布已保存到：customer_regional_distribution.json")
 
         cursor.close()
         conn.close()
@@ -434,7 +435,7 @@ class CustomerExtractor:
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_customers_region ON patent_customers(region);")
 
             # 读取客户数据
-            with open("all_customers.json", "r", encoding="utf-8") as f:
+            with open("all_customers.json", encoding="utf-8") as f:
                 customers_data = json.load(f)
 
             # 插入数据

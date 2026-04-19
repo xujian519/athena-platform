@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主智能模型路由器
 Xiaonuo Intelligent Model Router
@@ -564,7 +565,7 @@ class XiaonuoModelRouter:
             reasoning=rule.get("description", "规则匹配"),
         )
 
-    def _select_fallback_model(self, task: TaskTask) -> RoutingDecision:
+    def _select_fallback_model(self, task: TaskRequest) -> RoutingDecision:
         """选择备用模型"""
         self.usage_stats["fallback_count"] += 1
 

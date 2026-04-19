@@ -1,0 +1,72 @@
+{
+  "debate_summary": {
+    "case_id": "202310776442.4",
+    "debate_date": "2026-03-26",
+    "total_rounds": 4,
+    "final_result": "接受",
+    "success": true
+  },
+  "round_progression": [
+    {
+      "round": 1,
+      "attorney_core": "法不溯及既往原则",
+      "examiner_attitude": "质疑",
+      "conclusion": "部分接受"
+    },
+    {
+      "round": 2,
+      "attorney_core": "补充行政诉讼法、行政许可法",
+      "examiner_attitude": "强硬",
+      "conclusion": "不接受"
+    },
+    {
+      "round": 3,
+      "attorney_core": "审查指南过渡安排",
+      "examiner_attitude": "松动",
+      "conclusion": "部分接受"
+    },
+    {
+      "round": 4,
+      "attorney_core": "提供证据+实体从旧原则",
+      "examiner_attitude": "最终接受",
+      "conclusion": "接受"
+    }
+  ],
+  "key_turning_point": {
+    "round": 3,
+    "argument": "审查指南过渡安排",
+    "examiner_statement": "争议焦点已从'是否违反规定'转向'应该适用哪版规定'"
+  },
+  "effective_strategies": [
+    {
+      "strategy": "法不溯及既往原则",
+      "effectiveness": 5,
+      "note": "有明确法律依据"
+    },
+    {
+      "strategy": "审查指南过渡安排",
+      "effectiveness": 5,
+      "note": "关键突破口"
+    },
+    {
+      "strategy": "信赖利益保护原则",
+      "effectiveness": 4,
+      "note": "双重支撑"
+    },
+    {
+      "strategy": "类案适用问题",
+      "effectiveness": 4,
+      "note": "增加说服力"
+    }
+  ],
+  "response_improvements": [
+    "加强审查指南过渡条款的具体引用",
+    "补充申请日与过渡期的对照说明",
+    "提供审查指南原文及公告作为附件"
+  ],
+  "next_steps": [
+    "3个工作日内提交证据材料",
+    "准备修改后的权利要求书",
+    "等待审查员重新审查"
+  ]
+}

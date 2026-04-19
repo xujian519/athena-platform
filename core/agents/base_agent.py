@@ -1,10 +1,11 @@
+from __future__ import annotations
 """
 基础智能体类
 提供所有智能体的基础功能
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Optional
+from typing import Any
 
 
 class BaseAgent(ABC):
@@ -262,7 +263,7 @@ class AgentUtils:
 class AgentResponse:
     """智能体响应类"""
 
-    def __init__(self, content: str, success: bool | None = None, metadata: Optional[dict[str, Any]] | None = None):
+    def __init__(self, content: str, success: bool | None = None, metadata: dict[str, Any] | None | None = None):
         """
         初始化响应
 

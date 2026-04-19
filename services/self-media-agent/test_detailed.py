@@ -5,9 +5,11 @@
 
 import asyncio
 import sys
+
 sys.path.insert(0, '/Users/xujian/Athena工作平台/services/self-media-agent/app')
 
 from app.core.content_creator import ContentCreator
+
 
 async def test_content_creator():
     """测试内容创作模块"""

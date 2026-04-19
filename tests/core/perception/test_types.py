@@ -1,30 +1,32 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 感知模块类型系统测试
 Tests for Perception Module Type System
 """
 
-import pytest
-from datetime import datetime, timedelta
+import sys
+from datetime import datetime
 from pathlib import Path
 
+import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 from core.perception.types import (
+    AgentStatus,
+    ConfidenceLevel,
+    DocumentChangeType,
+    DocumentGraph,
+    DocumentType,
     # 枚举类型
     InputType,
-    DocumentType,
     ModalityType,
-    ConfidenceLevel,
-    ProcessingMode,
-    StreamType,
-    DocumentChangeType,
-    AgentStatus,
-
+    PatentDocumentStructure,
+    PatentPerceptionResult,
     # 数据类
     PerceptionResult,
-    PatentPerceptionResult,
-    DocumentGraph,
-    PatentDocumentStructure,
+    ProcessingMode,
+    StreamType,
 )
 
 

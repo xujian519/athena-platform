@@ -1,0 +1,375 @@
+{
+  "query": "合同纠纷处理",
+  "timestamp": "2025-12-20T21:20:47.882538",
+  "total_results": 20,
+  "source_distribution": {
+    "vector": 20
+  },
+  "weights": {
+    "vector": 0.5,
+    "text": 0.3,
+    "knowledge_graph": 0.2
+  },
+  "reports/reports/results": [
+    {
+      "id": "23d16d44-065f-9c48-26e9-4004cd8eda8c",
+      "title": "# 中华人民共和国民法典",
+      "score": 0.1935,
+      "source": "vector",
+      "metadata": {
+        "title": "# 中华人民共和国民法典",
+        "doc_type": "民法典",
+        "category": "民法典",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/民法典/附则.md",
+        "original_id": "b401a971f916cd8891642171b4772062e0c7c95c027dbc171a6ad01ddf8875bc",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.803555",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "7d017d9c-6327-0e46-3768-4c876210c409",
+      "title": "# 成年人国家监护的法律适用与监护主体的“后监护义务”",
+      "score": 0.1674,
+      "source": "vector",
+      "metadata": {
+        "title": "# 成年人国家监护的法律适用与监护主体的“后监护义务”",
+        "doc_type": "民法典",
+        "category": "民法典",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/案例/民法典/张甲诉上海市闵行区民政局法定继承案.md",
+        "original_id": "315b8a4b7ec71efb8dd1857ef64e1731a9810e29ec40a3fb01be0b2d72fe0c0f",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:17.530089",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "a7d7e858-5bbc-ad9e-1d9e-7bf781152f7b",
+      "title": "# 居住权制度在执行程序中的适用",
+      "score": 0.1637,
+      "source": "vector",
+      "metadata": {
+        "title": "# 居住权制度在执行程序中的适用",
+        "doc_type": "民法典",
+        "category": "民法典",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/案例/民法典/某某公司申请执行李某某承揽合同案.md",
+        "original_id": "fd86c409882d9e2cebcdb8742dd7f7371291c999dad6cb0da1e26d90898ad38b",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:17.897261",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "4c4c8a86-4a48-6a6e-4aff-1f50120cb4f0",
+      "title": "# 高空坠物由侵权人承担赔偿责任",
+      "score": 0.1594,
+      "source": "vector",
+      "metadata": {
+        "title": "# 高空坠物由侵权人承担赔偿责任",
+        "doc_type": "民法典",
+        "category": "民法典",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/案例/民法典/张某某诉某物业公司等财产损害赔偿案.md",
+        "original_id": "1e780d81489565d980d52d986b61aa0bd95c92f629696cac9a7d69822cb6444b",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:17.117232",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "7ccca32a-ff85-6a9d-104a-0e40684a1538",
+      "title": "# 中华人民共和国涉外民事关系法律适用法",
+      "score": 0.1574,
+      "source": "vector",
+      "metadata": {
+        "title": "# 中华人民共和国涉外民事关系法律适用法",
+        "doc_type": "民法商法",
+        "category": "民法商法",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/民法商法/涉外民事关系法律适用法(2010-10-28).md",
+        "original_id": "7d212eea19ceef15523275a55da1b00537a3bdd63d8cac7c989b61f872b77dc0",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:17.528177",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "4ba401b7-e8ae-9de8-200d-1f0a91b064ad",
+      "title": "# 最高人民法院关于适用《中华人民共和国民法典》时间效力的若干规定",
+      "score": 0.1568,
+      "source": "vector",
+      "metadata": {
+        "title": "# 最高人民法院关于适用《中华人民共和国民法典》时间效力的若干规定",
+        "doc_type": "司法解释",
+        "category": "司法解释",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院关于适用《民法典》时间效力的若干规定(2020-12-29).md",
+        "original_id": "39b333443cda2bcd64488a4ae596a0c15e8b93b21c1f1fe3723a3e348f44b626",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.410944",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "936633be-a227-9a83-6ac3-2e78a5f9055f",
+      "title": "# 中华人民共和国民法典",
+      "score": 0.1535,
+      "source": "vector",
+      "metadata": {
+        "title": "# 中华人民共和国民法典",
+        "doc_type": "民法典",
+        "category": "民法典",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/民法典/总则.md",
+        "original_id": "d93d5d4fac20133712a4e86814c38c43c78326fddc9d1eba3aec390a3b680d6f",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:17.719778",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "78b2e9aa-ccf3-30a8-bbb6-2ff74ca50ad1",
+      "title": "# 最高人民法院、最高人民检察院关于办理虚假诉讼刑事案件适用法律若干问题的解释",
+      "score": 0.1522,
+      "source": "vector",
+      "metadata": {
+        "title": "# 最高人民法院、最高人民检察院关于办理虚假诉讼刑事案件适用法律若干问题的解释",
+        "doc_type": "司法解释",
+        "category": "司法解释",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院、最高人民检察院关于办理虚假诉讼刑事案件适用法律若干问题的解释(2018-09-26).md",
+        "original_id": "bafa1dfb80708cbb005cf61c24708de685fad4abca0697738f66f4a8ec20cb23",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.456400",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "622887d5-4cbb-3310-6861-e782eb439948",
+      "title": "# 最高人民法院关于适用《中华人民共和国民法典》物权编的解释（一）",
+      "score": 0.1511,
+      "source": "vector",
+      "metadata": {
+        "title": "# 最高人民法院关于适用《中华人民共和国民法典》物权编的解释（一）",
+        "doc_type": "司法解释",
+        "category": "司法解释",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院关于适用《民法典》物权编的解释（一）(2020-12-29).md",
+        "original_id": "4ff3e9fc871fff48ca53bfac63c1449214fb5642a0999c9687d096d2e0990f1c",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.426053",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "c3280caa-bace-a205-1ae0-ac3f2d7d8840",
+      "title": "# 中华人民共和国民法典",
+      "score": 0.1497,
+      "source": "vector",
+      "metadata": {
+        "title": "# 中华人民共和国民法典",
+        "doc_type": "民法典",
+        "category": "民法典",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/民法典/物权编.md",
+        "original_id": "fc5f03015c707be7400c51936329e6b91f16b67f35b2ea1b3f5e645968adaba9",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:18.128889",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "d87fb50a-0e26-ed29-624d-060551dacd83",
+      "title": "# 最高人民法院关于适用《中华人民共和国民法典》继承编的解释（一）",
+      "score": 0.1488,
+      "source": "vector",
+      "metadata": {
+        "title": "# 最高人民法院关于适用《中华人民共和国民法典》继承编的解释（一）",
+        "doc_type": "司法解释",
+        "category": "司法解释",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院关于适用《民法典》继承编的解释（一）(2020-12-29).md",
+        "original_id": "2342d0c3eeb2b5f64c17c47154a222a6a8288439fa0d30298314e7a9f3f79d65",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.549901",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "a9997ef5-1415-0c5f-2698-6ee1358feed7",
+      "title": "# 作出人格权保护禁令应将程序审查与实体判断相结合",
+      "score": 0.1479,
+      "source": "vector",
+      "metadata": {
+        "title": "# 作出人格权保护禁令应将程序审查与实体判断相结合",
+        "doc_type": "民法典",
+        "category": "民法典",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/案例/民法典/某海外代购公司诉某商业通讯报社、某门户网站侵犯名誉权案.md",
+        "original_id": "b770bf76aaccf219a88dd4f73cf0e496d7e4b6221a1313df61d1e74c6626c3b6",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:17.906397",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "cfee3466-7fd8-3dda-8664-6c5ac474925c",
+      "title": "# 中华人民共和国保险法",
+      "score": 0.1478,
+      "source": "vector",
+      "metadata": {
+        "title": "# 中华人民共和国保险法",
+        "doc_type": "民法商法",
+        "category": "民法商法",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/民法商法/保险法(2015-04-24).md",
+        "original_id": "9d4c7924df942ec36c892a98bec0efe61a5fa25edd8da1d32131a549ca5ddbfe",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:18.216848",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "ff1db8ac-eba2-7298-c14c-c1173daa1c05",
+      "title": "# 最高人民法院关于审理侵害植物新品种权纠纷案件具体应用法律问题的若干规定",
+      "score": 0.1456,
+      "source": "vector",
+      "metadata": {
+        "title": "# 最高人民法院关于审理侵害植物新品种权纠纷案件具体应用法律问题的若干规定",
+        "doc_type": "司法解释",
+        "category": "司法解释",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院关于审理侵害植物新品种权纠纷案件具体应用法律问题的若干规定(2020-12-29).md",
+        "original_id": "bce747a8a3ce598f2a3a314d3e56837d4b49414ac96e6950aab5f4344f7c2563",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.578811",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "4ad369d2-e544-5b61-5dc6-b265cd5bf0db",
+      "title": "# 最高人民法院关于人民法院民事执行中查封、扣押、冻结财产的规定",
+      "score": 0.1456,
+      "source": "vector",
+      "metadata": {
+        "title": "# 最高人民法院关于人民法院民事执行中查封、扣押、冻结财产的规定",
+        "doc_type": "司法解释",
+        "category": "司法解释",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院关于人民法院民事执行中查封、扣押、冻结财产的规定(2020-12-29).md",
+        "original_id": "42a4496507ea02edb56ec1e95283c3ed8563eb7b524a94696526b95332b65b6c",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.410701",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "2ce36fab-f330-f752-eefe-6f6d45ca49ec",
+      "title": "# 保理合同中基础合同的有效性辨析",
+      "score": 0.1443,
+      "source": "vector",
+      "metadata": {
+        "title": "# 保理合同中基础合同的有效性辨析",
+        "doc_type": "民法典",
+        "category": "民法典",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/案例/民法典/株洲工商银行某支行诉株洲某金属材料公司等金融借款合同案.md",
+        "original_id": "8a348af19c28e4fdce997b2183c985e50fb37cf10f5181cdef97b3dcad95563a",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.873949",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "e0940a20-6d3c-afe9-0a95-fce259098e6d",
+      "title": "# 最高人民法院关于铁路运输法院案件管辖范围的若干规定",
+      "score": 0.1415,
+      "source": "vector",
+      "metadata": {
+        "title": "# 最高人民法院关于铁路运输法院案件管辖范围的若干规定",
+        "doc_type": "司法解释",
+        "category": "司法解释",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院关于铁路运输法院案件管辖范围的若干规定(2012-07-17).md",
+        "original_id": "6635090dd381dc6099e83b4a3531990b45f14f8fc8e4eb0233c71b6ef4190c6f",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.551829",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "9edb2998-5dc7-81c5-eaf2-99aaf43f0231",
+      "title": "# 最高人民法院关于审理涉及公证活动相关民事案件的若干规定",
+      "score": 0.1404,
+      "source": "vector",
+      "metadata": {
+        "title": "# 最高人民法院关于审理涉及公证活动相关民事案件的若干规定",
+        "doc_type": "司法解释",
+        "category": "司法解释",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院关于审理涉及公证活动相关民事案件的若干规定(2020-12-29).md",
+        "original_id": "21dfc930925577c4efd13693df2f2f556928ab6d6a96e04b0b47b76f9b1d8e74",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.490057",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "c8521be0-8531-b690-0406-d787f3f1995d",
+      "title": "# 最高人民法院关于审理房屋登记案件若干问题的规定",
+      "score": 0.1386,
+      "source": "vector",
+      "metadata": {
+        "title": "# 最高人民法院关于审理房屋登记案件若干问题的规定",
+        "doc_type": "司法解释",
+        "category": "司法解释",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院关于审理房屋登记案件若干问题的规定(2010-11-05).md",
+        "original_id": "296a6a350322fa0fcc750c154f562b3b193abd3a72539a02658c73f3413d4fe0",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.526906",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    },
+    {
+      "id": "e567617c-ee3a-1aa3-c462-0059be4c90a0",
+      "title": "# 最高人民法院关于审理使用人脸识别技术处理个人信息相关民事案件适用法律若干问题的规定",
+      "score": 0.138,
+      "source": "vector",
+      "metadata": {
+        "title": "# 最高人民法院关于审理使用人脸识别技术处理个人信息相关民事案件适用法律若干问题的规定",
+        "doc_type": "司法解释",
+        "category": "司法解释",
+        "file_path": "/Users/xujian/Athena工作平台/dev/tools/Laws-1.0.0/司法解释/最高人民法院关于审理使用人脸识别技术处理个人信息相关民事案件适用法律若干问题的规定(2021-07-27).md",
+        "original_id": "b314a4520847bee5c10e3f8da1f7ed1eaf3fc460f49615269465042c254d28cd",
+        "metadata": {},
+        "enhanced": true,
+        "enhancement_version": "v3.0",
+        "enhanced_at": "2025-12-20T21:20:16.554364",
+        "enhancement_method": "comprehensive_legal_domain"
+      }
+    }
+  ]
+}

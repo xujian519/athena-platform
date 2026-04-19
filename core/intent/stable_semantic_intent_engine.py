@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 第三阶段优化:稳定语义增强意图识别引擎
 Phase 3 Optimization: Stable Semantic-Enhanced Intent Recognition Engine
@@ -23,7 +24,6 @@ import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent.parent.parent

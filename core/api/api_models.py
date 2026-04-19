@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 API请求/响应模型
 
@@ -6,7 +7,7 @@ API请求/响应模型
 """
 
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -38,9 +39,9 @@ class ErrorResponse(BaseModel):
     success: bool = Field(False, description="请求是否成功")
     message: str = Field(..., description="错误消息")
     error_code: str = Field(..., description="错误代码")
-    details: Optional[dict[str, Any]] = Field(None, description="错误详情")
+    details: dict[str, Any] | None = Field(None, description="错误详情")
     timestamp: str = Field(..., description="时间戳")
-    path: Optional[str] = Field(None, description="请求路径")
+    path: str | None = Field(None, description="请求路径")
 
     class Config:
         json_schema_extra = {
@@ -59,7 +60,7 @@ class SuccessResponse(BaseModel):
 
     success: bool = Field(True, description="请求是否成功")
     message: str = Field(..., description="成功消息")
-    data: Optional[Any] = Field(None, description="响应数据")
+    data: Any | None = Field(None, description="响应数据")
     timestamp: str = Field(..., description="时间戳")
 
     class Config:
@@ -128,8 +129,8 @@ class UserPreferenceRequest(BaseModel):
         LanguageStyleEnum.PROFESSIONAL, description="语言风格"
     )
     output_format: OutputFormatEnum = Field(OutputFormatEnum.TEXT, description="输出格式")
-    preferred_agent: Optional[str] = Field(None, description="首选智能体")
-    avoid_topics: Optional[list[str]] = Field(None, description="避免的话题")
+    preferred_agent: str | None = Field(None, description="首选智能体")
+    avoid_topics: list[str] | None = Field(None, description="避免的话题")
 
     class Config:
         json_schema_extra = {
@@ -168,7 +169,7 @@ class WorkflowTaskDefinition(BaseModel):
     capability: str = Field(..., description="使用的能力")
     input: dict[str, Any] = Field(default_factory=dict, description="任务输入")
     depends_on: list[str] = Field(default_factory=list, description="依赖的任务ID列表")
-    timeout: Optional[float] = Field(None, description="超时时间(秒)")
+    timeout: float | None = Field(None, description="超时时间(秒)")
     retry: int = Field(0, description="重试次数")
 
     class Config:
@@ -191,7 +192,7 @@ class WorkflowRequest(BaseModel):
     description: str = Field(..., description="工作流描述")
     tasks: list[WorkflowTaskDefinition] = Field(..., description="任务列表")
     stop_on_failure: bool = Field(True, description="失败时是否停止")
-    timeout: Optional[float] = Field(None, description="总超时时间(秒)")
+    timeout: float | None = Field(None, description="总超时时间(秒)")
 
     class Config:
         json_schema_extra = {
@@ -216,11 +217,11 @@ class TaskResult(BaseModel):
     task_id: str = Field(..., description="任务ID")
     task_name: str = Field(..., description="任务名称")
     status: str = Field(..., description="任务状态: pending/running/success/failed")
-    result: Optional[Any] = Field(None, description="任务结果")
-    error: Optional[str] = Field(None, description="错误信息")
+    result: Any | None = Field(None, description="任务结果")
+    error: str | None = Field(None, description="错误信息")
     start_time: float = Field(..., description="开始时间")
-    end_time: Optional[float] = Field(None, description="结束时间")
-    duration: Optional[float] = Field(None, description="执行时长(秒)")
+    end_time: float | None = Field(None, description="结束时间")
+    duration: float | None = Field(None, description="执行时长(秒)")
 
 
 class WorkflowResponse(BaseModel):
@@ -232,7 +233,7 @@ class WorkflowResponse(BaseModel):
     status: str = Field(..., description="工作流状态")
     results: list[TaskResult] = Field(..., description="任务结果列表")
     total_duration: float = Field(..., description="总执行时长(秒)")
-    error: Optional[str] = Field(None, description="错误信息")
+    error: str | None = Field(None, description="错误信息")
 
     class Config:
         json_schema_extra = {
@@ -269,7 +270,7 @@ class KnowledgeSearchRequest(BaseModel):
     """知识图谱搜索请求"""
 
     query: str = Field(..., description="搜索关键词")
-    entity_type: Optional[EntityTypeEnum] = Field(None, description="实体类型过滤")
+    entity_type: EntityTypeEnum | None = Field(None, description="实体类型过滤")
     limit: int = Field(10, ge=1, le=100, description="返回数量限制")
     include_relations: bool = Field(True, description="是否包含关系")
     relation_direction: RelationDirectionEnum = Field(

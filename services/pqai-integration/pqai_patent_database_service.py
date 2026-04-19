@@ -1,26 +1,27 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PQAI专利分析服务 - 接入PostgreSQL专利数据库
 Real Patent Analysis Service with PostgreSQL Integration
 """
 
-from fastapi import FastAPI, HTTPException
-from contextlib import asynccontextmanager
-import uvicorn
-from core.async_main import async_main
-from datetime import datetime, timedelta
 import asyncio
 import sys
-import os
-import json
+from contextlib import asynccontextmanager
+from datetime import datetime, timedelta
+
+import uvicorn
+from fastapi import FastAPI, HTTPException
+
 from core.database.unified_connection import get_postgres_pool
-from typing import Dict, List, Optional, Any, Tuple
-import re
 
 # 添加路径
 sys.path.append('/Users/xujian/Athena工作平台/services/autonomous-control')
-from agent_identity import AgentIdentity, AgentType, register_agent_identity, format_identity_display
+from agent_identity import (
+    AgentIdentity,
+    AgentType,
+    format_identity_display,
+    register_agent_identity,
+)
 
 # 数据库配置
 PATENT_DB_CONFIG = {
@@ -93,7 +94,7 @@ async def display_startup_identity():
 
         print("\n" + "="*60)
         print(identity_display)
-        print(f"\n🔍 PQAI专利检索专家 (PostgreSQL版) 启动成功！")
+        print("\n🔍 PQAI专利检索专家 (PostgreSQL版) 启动成功！")
         print("📍 服务端口: 8031")
         print("🗄️ 数据源: PostgreSQL专利数据库")
         print("="*60 + "\n")
@@ -174,7 +175,7 @@ async def status():
             "error": str(e)
         }
 
-async def search_similar_patents(db_pool, query_text: str, limit: int = 10) -> List[Dict]:
+async def search_similar_patents(db_pool, query_text: str, limit: int = 10) -> list[dict]:
     """执行相似专利检索"""
     try:
         async with db_pool.acquire() as conn:
@@ -221,7 +222,7 @@ async def search_similar_patents(db_pool, query_text: str, limit: int = 10) -> L
         print(f"专利检索错误: {str(e)}")
         return []
 
-def calculate_patentability(similar_patents: List[Dict]) -> Tuple[float, Dict[str, float]]:
+def calculate_patentability(similar_patents: list[dict]) -> tuple[float, dict[str, float]]:
     """基于相似专利计算可申请性"""
 
     if not similar_patents:
@@ -258,22 +259,10 @@ def calculate_patentability(similar_patents: List[Dict]) -> Tuple[float, Dict[st
         "utility": utility_score
     }
 
-def extract_technical_field(text: str, ipc_classes: List[str]) -> str:
+def extract_technical_field(text: str, ipc_classes: list[str]) -> str:
     """基于IPC分类和关键词提取技术领域"""
 
     # IPC分类映射
-    ipc_mapping = {
-        'G06K': '图像识别/字符识别',
-        'G06F': '数据处理/计算',
-        'G06N': '人工智能/神经网络',
-        'H04L': '通信网络/数据传输',
-        'H04N': '图像通信/电视',
-        'A61B': '医疗诊断/设备',
-        'C07D': '有机化学/医药',
-        'G01N': '测量/测试',
-        'B23Q': '机床/加工',
-        'H01L': '半导体/集成电路'
-    }
 
     # 关键词检测
     keywords_lower = text.lower()
@@ -332,7 +321,7 @@ async def analyze(request: dict):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"分析失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"分析失败: {str(e)}") from e
 
 @app.post("/search")
 async def patent_search(request: dict):
@@ -358,7 +347,7 @@ async def patent_search(request: dict):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"检索失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"检索失败: {str(e)}") from e
 
 @app.get("/database/stats")
 async def database_statistics():
@@ -398,7 +387,7 @@ async def database_statistics():
             }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"统计失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"统计失败: {str(e)}") from e
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8031)

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # pyright: ignore
 """
 小娜专利撰写助手

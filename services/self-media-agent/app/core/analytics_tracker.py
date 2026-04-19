@@ -6,15 +6,12 @@ Analytics Tracker
 """
 
 import asyncio
-from core.async_main import async_main
 import json
-import time
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any, Tuple
-from dataclasses import dataclass, field
-from enum import Enum
-import logging
 import random
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any
 
 from utils.logger import logger
 
@@ -114,10 +111,10 @@ class ContentMetrics:
 @dataclass
 class AudienceAnalysis:
     """受众分析"""
-    demographics: Dict[str, Any] = field(default_factory=dict)
-    interests: List[str] = field(default_factory=list)
-    behavior_patterns: Dict[str, Any] = field(default_factory=dict)
-    geographic_distribution: Dict[str, int] = field(default_factory=dict)
+    demographics: dict[str, Any] = field(default_factory=dict)
+    interests: list[str] = field(default_factory=list)
+    behavior_patterns: dict[str, Any] = field(default_factory=dict)
+    geographic_distribution: dict[str, int] = field(default_factory=dict)
 
 
 @dataclass
@@ -128,7 +125,7 @@ class PerformanceMetrics:
     avg_engagement_rate: float
     total_conversions: int
     total_business_value: float
-    best_performing_content: List[str]
+    best_performing_content: list[str]
     audience_growth_rate: float
 
 
@@ -136,9 +133,9 @@ class XiaochenAnalyticsTracker:
     """小宸数据分析追踪器 - 传承小溪设计，体现专业特色"""
 
     def __init__(self):
-        self.metrics_history: List[ContentMetrics] = []
+        self.metrics_history: list[ContentMetrics] = []
         self.audience_analysis = AudienceAnalysis()
-        self.performance_metrics: Dict[str, PerformanceMetrics] = {}
+        self.performance_metrics: dict[str, PerformanceMetrics] = {}
 
         # 小宸特有的KPI
         self.professional_kpi = {
@@ -302,7 +299,7 @@ class XiaochenAnalyticsTracker:
 
         return analysis
 
-    async def generate_performance_report(self, period: str = "7_days") -> Dict[str, Any]:
+    async def generate_performance_report(self, period: str = "7_days") -> dict[str, Any]:
         """生成绩效报告"""
         # 计算周期
         days = 7 if period == "7_days" else 30
@@ -380,7 +377,7 @@ class XiaochenAnalyticsTracker:
             "recommendations": await self._generate_performance_recommendations(period_metrics)
         }
 
-    async def _calculate_growth_rates(self, current_metrics: List[ContentMetrics]) -> Dict[str, float]:
+    async def _calculate_growth_rates(self, current_metrics: list[ContentMetrics]) -> dict[str, float]:
         """计算增长率"""
         if len(current_metrics) < 2:
             return {"audience_growth": 0, "ip_knowledge_growth": 0, "cultural_trend": 0}
@@ -402,7 +399,7 @@ class XiaochenAnalyticsTracker:
             "cultural_trend": growth_rate * 1.2   # 文化内容增长趋势更明显
         }
 
-    async def _analyze_platform_performance(self, metrics: List[ContentMetrics]) -> Dict[str, Any]:
+    async def _analyze_platform_performance(self, metrics: list[ContentMetrics]) -> dict[str, Any]:
         """分析平台表现"""
         platform_stats = {}
 
@@ -431,7 +428,7 @@ class XiaochenAnalyticsTracker:
 
         return platform_stats
 
-    async def _analyze_content_type_performance(self, metrics: List[ContentMetrics]) -> Dict[str, Any]:
+    async def _analyze_content_type_performance(self, metrics: list[ContentMetrics]) -> dict[str, Any]:
         """分析内容类型表现"""
         type_stats = {}
 
@@ -458,7 +455,7 @@ class XiaochenAnalyticsTracker:
 
         return type_stats
 
-    async def _generate_performance_recommendations(self, metrics: List[ContentMetrics]) -> List[str]:
+    async def _generate_performance_recommendations(self, metrics: list[ContentMetrics]) -> list[str]:
         """生成性能优化建议"""
         recommendations = []
 

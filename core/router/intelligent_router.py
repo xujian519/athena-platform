@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena智能路由系统
 
@@ -6,7 +7,7 @@ Athena智能路由系统
 
 import logging
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from pydantic import BaseModel
 

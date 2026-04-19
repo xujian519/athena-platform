@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 断路器
 Circuit Breaker
@@ -10,12 +11,11 @@ Circuit Breaker
 import asyncio
 import logging
 import time
-from collections.abc import Awaitable, Callable
-from dataclasses import dataclass, field
+from collections.abc import Callable
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -356,7 +356,7 @@ def get_circuit_breaker_sync(
     return registry.get_breaker(service_id, config)
 
 
-def with_circuit_breaker(service_id: Optional[str]
+def with_circuit_breaker(service_id: str | None,
     config: CircuitBreakerConfig | None = None):
     """
     断路器装饰器

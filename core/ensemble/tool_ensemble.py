@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 工具调用集成器 - 第二阶段
 Tool Call Ensemble - Phase 2
@@ -20,8 +21,7 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

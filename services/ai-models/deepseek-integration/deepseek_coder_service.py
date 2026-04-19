@@ -1,27 +1,26 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 DeepSeek-Coder 集成服务
 为Athena工作平台提供智能代码生成能力
 """
 
-import asyncio
-from core.async_main import async_main
 import json
 import logging
 import os
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
-from typing import Any, Dict, List, Optional
-
-import aiohttp
 
 # 导入安全配置
 import sys
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
 from pathlib import Path
+from typing import Any
+
+import aiohttp
+
+logger = logging.getLogger(__name__)
+
 sys.path.append(str(Path(__file__).parent.parent / "core"))
-from security.env_config import get_env_var, get_database_url, get_jwt_secret
 
 
 class ProgrammingLanguage(Enum):
@@ -162,7 +161,7 @@ class DeepSeekCoderAPI:
 - 遵循相应语言的最佳实践
         """)
 
-    def _create_patent_context_prompt(self, patent_info: Dict = None) -> str:
+    def _create_patent_context_prompt(self, patent_info: dict = None) -> str:
         """创建专利相关的上下文提示"""
         if not patent_info:
             return ''
@@ -331,7 +330,7 @@ class DeepSeekCoderAPI:
 
         return code, explanation
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """获取使用统计信息"""
         return {
             'total_requests': self.total_requests,
@@ -386,20 +385,20 @@ async def main():
 
             response = await client.generate_code(request)
 
-            logger.info(f"\n📊 生成统计:")
+            logger.info("\n📊 生成统计:")
             logger.info(f"- 语言: {response.language}")
             logger.info(f"- 耗时: {response.response_time:.2f}秒")
             logger.info(f"- Tokens: {response.tokens_used}")
 
-            logger.info(f"\n💻 生成的代码:")
+            logger.info("\n💻 生成的代码:")
             logger.info(str(response.code))
 
-            logger.info(f"\n📝 代码说明:")
+            logger.info("\n📝 代码说明:")
             logger.info(str(response.explanation))
 
             # 显示统计信息
             stats = client.get_statistics()
-            logger.info(f"\n📈 使用统计:")
+            logger.info("\n📈 使用统计:")
             print(json.dumps(stats, indent=2, ensure_ascii=False))
         else:
             logger.info('❌ DeepSeek-Coder API连接失败!')

@@ -14,18 +14,17 @@ Core Tests for Memory Module - Phase 2
 版本: v2.0.0 (Phase 2)
 """
 
-import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
-from datetime import datetime
+import sys
+from pathlib import Path
 
-from core.memory.unified_memory import (
-    UnifiedAgentMemorySystem,
-    AgentType,
-    MemoryType,
-    MemoryTier,
-    CacheStatistics
-)
-import json
+import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+from datetime import datetime
+from unittest.mock import patch
+
+from core.memory.unified_memory import AgentType, MemoryTier, MemoryType, UnifiedAgentMemorySystem
 
 
 @pytest.mark.asyncio

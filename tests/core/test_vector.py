@@ -3,9 +3,9 @@
 测试向量管理和向量数据库功能
 """
 
-import pytest
+
 import numpy as np
-from typing import List, Dict, Any
+import pytest
 
 
 class TestVectorModule:
@@ -218,7 +218,7 @@ class TestVectorPerformance:
         # 测试批量归一化
         start_time = time.time()
         norms = np.linalg.norm(vectors, axis=1, keepdims=True)
-        normalized = vectors / norms
+        vectors / norms
         norm_time = time.time() - start_time
 
         assert norm_time < 0.5, f"归一化{num_vectors}个向量应该在0.5秒内完成，实际: {norm_time:.2f}秒"

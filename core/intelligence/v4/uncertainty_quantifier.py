@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 不确定性量化器 v4.0
 Uncertainty Quantifier v4.0
@@ -334,7 +335,7 @@ class UncertaintyQuantifier:
             max_substring_match = 0.0
             for i in range(len(claim_lower)):
                 for j in range(i + 1, min(i + 11, len(claim_lower) + 1)):  # 检查最多10字符的子串
-                    substring = claim_lower[i: j,
+                    substring = claim_lower[i:j]
                     if substring in ev_lower:
                         max_substring_match = max(
                             max_substring_match, len(substring) / len(claim_lower)
@@ -420,7 +421,7 @@ class UncertaintyQuantifier:
         return limitations if limitations else ["无明显局限性"]
 
     def batch_quantify(
-        self, claims: list[tuple[str, list[str]], information_completeness: float = 0.8
+        self, claims: list[tuple[str, list[str]]], information_completeness: float = 0.8
     ) -> list[Confidence]:
         """
         批量量化多个命题

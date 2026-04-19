@@ -1,0 +1,39 @@
+{
+  "step": "Step 2: 材料收集",
+  "executed_at": "2026-03-26T18:23:00",
+  "status": "部分完成",
+  "materials": {
+    "oa_notification": {
+      "status": "✅ 已收集",
+      "path": "oa_notification.json"
+    },
+    "application_file": {
+      "status": "❌ 缺失",
+      "action": "需要用户提供或通过公开号下载",
+      "note": "已修改的权利要求书在第一次答复中"
+    },
+    "utility_model_ZL2023216673538": {
+      "status": "⚠️ 未获取到全文",
+      "action": "需要手动下载或用户提供",
+      "known_info": {
+        "document_number": "ZL2023216673538",
+        "type": "实用新型专利",
+        "authorization_date": "2023-11-14",
+        "title": "一种闭式回路冲洗旁通阀、阀组（与本发明相同）"
+      }
+    },
+    "draft_response": {
+      "status": "✅ 已有",
+      "path": "/Users/xujian/Desktop/于刚审查意见/202310776442.4-意见陈述书-法律适用抗辩-v2.md"
+    }
+  },
+  "missing_materials_action": "继续执行流程，在分析中标注信息缺失",
+  "workflow_adjustment": {
+    "reason": "本案为法律适用抗辩，无需对比文件技术分析",
+    "adjusted_steps": [
+      "Step 3: 分析审查意见 + 分析已有答复",
+      "Step 4: 验证法律论证策略",
+      "Step 6: 辩论验证法律论证强度"
+    ]
+  }
+}

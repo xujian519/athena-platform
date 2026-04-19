@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena项目基础设置管理器
 Base Settings Manager for Athena Project
@@ -7,13 +6,12 @@ Base Settings Manager for Athena Project
 统一管理所有多模态文件处理功能
 """
 
-import os
-from core.async_main import async_main
 import json
 import logging
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+import os
 from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -30,11 +28,11 @@ class BaseSettingsManager:
         # 加载设置
         self.settings = self._load_settings()
 
-    def _load_settings(self) -> Dict[str, Any]:
+    def _load_settings(self) -> dict[str, Any]:
         """加载设置"""
         try:
             if self.settings_file.exists():
-                with open(self.settings_file, 'r', encoding='utf-8') as f:
+                with open(self.settings_file, encoding='utf-8') as f:
                     return json.load(f)
             else:
                 return self._get_default_settings()
@@ -42,7 +40,7 @@ class BaseSettingsManager:
             logger.error(f"加载设置失败: {e}")
             return self._get_default_settings()
 
-    def _get_default_settings(self) -> Dict[str, Any]:
+    def _get_default_settings(self) -> dict[str, Any]:
         """获取默认设置"""
         return {
             "version": "1.0.0",
@@ -170,27 +168,27 @@ class BaseSettingsManager:
         # 保存设置
         return self.save_settings()
 
-    def get_storage_config(self) -> Dict[str, Any]:
+    def get_storage_config(self) -> dict[str, Any]:
         """获取存储配置"""
         return self.get_setting("storage", {})
 
-    def get_processing_config(self) -> Dict[str, Any]:
+    def get_processing_config(self) -> dict[str, Any]:
         """获取处理配置"""
         return self.get_setting("processing", {})
 
-    def get_cache_config(self) -> Dict[str, Any]:
+    def get_cache_config(self) -> dict[str, Any]:
         """获取缓存配置"""
         return self.get_setting("cache", {})
 
-    def get_ai_config(self) -> Dict[str, Any]:
+    def get_ai_config(self) -> dict[str, Any]:
         """获取AI处理配置"""
         return self.get_setting("ai_processing", {})
 
-    def get_api_config(self) -> Dict[str, Any]:
+    def get_api_config(self) -> dict[str, Any]:
         """获取API配置"""
         return self.get_setting("api", {})
 
-    def get_security_config(self) -> Dict[str, Any]:
+    def get_security_config(self) -> dict[str, Any]:
         """获取安全配置"""
         return self.get_setting("security", {})
 
@@ -199,7 +197,7 @@ class BaseSettingsManager:
         file_ext = Path(file_path).suffix.lower()
         allowed_types = self.get_setting("storage.allowed_types", {})
 
-        for file_type, extensions in allowed_types.items():
+        for _file_type, extensions in allowed_types.items():
             if file_ext in extensions:
                 return True
 
@@ -209,7 +207,7 @@ class BaseSettingsManager:
         """获取最大文件大小"""
         return self.get_setting("storage.max_file_size", 100 * 1024 * 1024)
 
-    def validate_file(self, file_path: str, file_size: int) -> Dict[str, Any]:
+    def validate_file(self, file_path: str, file_size: int) -> dict[str, Any]:
         """验证文件"""
         validation_result = {
             "valid": True,
@@ -219,7 +217,7 @@ class BaseSettingsManager:
         # 检查文件类型
         if not self.is_file_type_allowed(file_path):
             validation_result["valid"] = False
-            validation_result["errors"].append(f"不支持的文件类型")
+            validation_result["errors"].append("不支持的文件类型")
 
         # 检查文件大小
         max_size = self.get_max_file_size()
@@ -229,7 +227,7 @@ class BaseSettingsManager:
 
         return validation_result
 
-    def get_service_status(self) -> Dict[str, Any]:
+    def get_service_status(self) -> dict[str, Any]:
         """获取服务状态"""
         try:
             # 检查存储路径
@@ -293,7 +291,7 @@ class BaseSettingsManager:
     def import_settings(self, import_path: str) -> bool:
         """导入设置"""
         try:
-            with open(import_path, 'r', encoding='utf-8') as f:
+            with open(import_path, encoding='utf-8') as f:
                 imported_settings = json.load(f)
 
             # 合并设置，保留当前版本信息
@@ -327,7 +325,7 @@ if __name__ == "__main__":
         print(f"{key}: {value}")
 
     # 显示一些配置
-    print(f"\n=== 配置信息 ===")
+    print("\n=== 配置信息 ===")
     print(f"最大文件大小: {manager.get_max_file_size() / (1024*1024):.1f}MB")
     print(f"自动生成缩略图: {manager.get_setting('processing.auto_generate_thumbnails')}")
     print(f"Redis缓存: {manager.get_setting('cache.enable_redis')}")

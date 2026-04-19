@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena超级推理引擎 - 推理阶段
 Athena Super Reasoning Engine - Reasoning Phases

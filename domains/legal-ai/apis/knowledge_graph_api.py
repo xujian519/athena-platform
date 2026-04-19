@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena知识图谱统一API服务
 Unified Knowledge Graph API Service
@@ -8,32 +7,24 @@ Unified Knowledge Graph API Service
 支持SQLite和Neo4j图数据库后端
 """
 
-import asyncio
 import json
 import logging
 import os
 
 # 添加项目路径
 import sys
-from dataclasses import asdict
 from datetime import datetime
-from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
-import aiohttp
 import uvicorn
-from fastapi import BackgroundTasks, FastAPI, HTTPException, Query
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
-from starlette.responses import JSONResponse
 
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.knowledge.patent_analysis.knowledge_graph import (
-    KnowledgeNode,
     NodeType,
     RelationType,
 )
@@ -62,7 +53,7 @@ class GraphNode(BaseModel):
 
     id: str
     type: str
-    properties: Dict[str, Any]
+    properties: dict[str, Any]
     created_at: datetime | None = None
 
 
@@ -73,8 +64,8 @@ class GraphEdge(BaseModel):
     source: str
     target: str
     type: str
-    properties: Dict[str, Any]
-    weight: Optional[float] = 1.0
+    properties: dict[str, Any]
+    weight: float | None = 1.0
     created_at: datetime | None = None
 
 
@@ -82,9 +73,9 @@ class GraphQuery(BaseModel):
     """图查询模型"""
 
     query: str
-    parameters: Optional[Dict[str, Any]] = None
-    limit: Optional[int] = 100
-    offset: Optional[int] = 0
+    parameters: dict[str, Any] | None = None
+    limit: int | None = 100
+    offset: int | None = 0
 
 
 class GraphSearch(BaseModel):
@@ -92,8 +83,8 @@ class GraphSearch(BaseModel):
 
     node_type: str | None = None
     domain: str | None = None
-    properties: Optional[Dict[str, Any]] = None
-    limit: Optional[int] = 100
+    properties: dict[str, Any] | None = None
+    limit: int | None = 100
 
 
 class PathQuery(BaseModel):
@@ -101,26 +92,26 @@ class PathQuery(BaseModel):
 
     source: str
     target: str
-    max_depth: Optional[int] = 5
-    relationship_types: Optional[List[str] = None
+    max_depth: int | None = 5
+    relationship_types: list[str] | None = None
 
 
 class IndexInitRequest(BaseModel):
-    create_constraints: Optional[bool] = True
-    create_indexes: Optional[bool] = True
-    create_fulltext: Optional[bool] = True
+    create_constraints: bool | None = True
+    create_indexes: bool | None = True
+    create_fulltext: bool | None = True
 
 
 class NeighborsQuery(BaseModel):
     id: str
-    max_depth: Optional[int] = 2
-    relation_types: Optional[List[str] = None
+    max_depth: int | None = 2
+    relation_types: list[str] | None = None
     node_type_filter: str | None = None
 
 
 class FullTextSearchRequest(BaseModel):
     q: str
-    limit: Optional[int] = 20
+    limit: int | None = 20
 
 
 # 全局变量
@@ -164,15 +155,15 @@ class KnowledgeGraphManager:
                 'knowledge_graph_config.json',
             )
             if os.path.exists(cfg_path):
-                with open(cfg_path, 'r', encoding='utf-8') as f:
+                with open(cfg_path, encoding='utf-8') as f:
                     cfg = json.load(f)
                     neo = cfg.get('knowledge_graph', {}).get('neo4j', {})
                     self.neo4j_uri = neo.get('uri', self.neo4j_uri)
                     self.neo4j_user = neo.get('user', self.neo4j_user)
                     self.neo4j_database = neo.get('database', self.neo4j_database)
-8except Exception as e:
-8    # 记录异常但不中断流程
-8    logger.debug(f"[knowledge_graph_api] Exception: {e}")
+        except Exception as e:
+            # 记录异常但不中断流程
+            logger.debug(f"[knowledge_graph_api] Exception: {e}")
 
     async def connect_neo4j(self):
         """连接Neo4j图数据库"""
@@ -340,7 +331,7 @@ async def list_graphs():
 
     except Exception as e:
         logger.error(f"获取图列表失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.post('/graphs/{graph_id}/indexes/init')
@@ -355,38 +346,38 @@ async def init_indexes(graph_id: str, req: IndexInitRequest):
                     session.run(
                         'CREATE CONSTRAINT entity_id_unique IF NOT EXISTS FOR (n:Entity) REQUIRE n.id IS UNIQUE'
                     )
-16except Exception as e:
-16    # 记录异常但不中断流程
-16    logger.debug(f"[knowledge_graph_api] Exception: {e}")
+                except Exception as e:
+                    # 记录异常但不中断流程
+                    logger.debug(f"[knowledge_graph_api] Exception: {e}")
             if req.create_indexes:
                 try:
                     session.run(
                         'CREATE INDEX entity_type_index IF NOT EXISTS FOR (n:Entity) ON (n.entity_type)'
                     )
-16except Exception as e:
-16    # 记录异常但不中断流程
-16    logger.debug(f"[knowledge_graph_api] Exception: {e}")
+                except Exception as e:
+                    # 记录异常但不中断流程
+                    logger.debug(f"[knowledge_graph_api] Exception: {e}")
                 try:
                     session.run(
                         'CREATE INDEX entity_title_index IF NOT EXISTS FOR (n:Entity) ON (n.title)'
                     )
-16except Exception as e:
-16    # 记录异常但不中断流程
-16    logger.debug(f"[knowledge_graph_api] Exception: {e}")
+                except Exception as e:
+                    # 记录异常但不中断流程
+                    logger.debug(f"[knowledge_graph_api] Exception: {e}")
             if req.create_fulltext:
                 try:
                     session.run(
                         "CALL db.index.fulltext.create_node_index('entity_text_index', ['Entity'], ['title','description'])"
                     )
-16except Exception as e:
-16    # 记录异常但不中断流程
-16    logger.debug(f"[knowledge_graph_api] Exception: {e}")
+                except Exception as e:
+                    # 记录异常但不中断流程
+                    logger.debug(f"[knowledge_graph_api] Exception: {e}")
         return {'success': True}
     except HTTPException:
         raise
     except Exception as e:
         logger.error(f"初始化索引失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.get('/graphs/{graph_id}/indexes')
@@ -403,7 +394,7 @@ async def list_indexes(graph_id: str):
         raise
     except Exception as e:
         logger.error(f"获取索引失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.get('/graphs/{graph_id}/schema/constraints')
@@ -420,7 +411,7 @@ async def list_constraints(graph_id: str):
         raise
     except Exception as e:
         logger.error(f"获取约束失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.get('/graphs/{graph_id}/nodes')
@@ -441,7 +432,7 @@ async def get_nodes(
             nodes = []
             with driver.session(database=kg_manager.neo4j_database) as session:
                 where_clauses = []
-                params: Dict[str, Any] = {'limit': limit, 'offset': offset}
+                params: dict[str, Any] = {'limit': limit, 'offset': offset}
                 if graph_id == 'neo4j_memory':
                     where_clauses.append(
                         "coalesce(n.kg_domain,'professional') = 'memory'"
@@ -479,7 +470,7 @@ async def get_nodes(
 
     except Exception as e:
         logger.error(f"获取节点失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.get('/graphs/{graph_id}/edges')
@@ -500,7 +491,7 @@ async def get_edges(
             edges = []
             with driver.session(database=kg_manager.neo4j_database) as session:
                 where_clauses = []
-                params: Dict[str, Any] = {'limit': limit, 'offset': offset}
+                params: dict[str, Any] = {'limit': limit, 'offset': offset}
                 if graph_id == 'neo4j_memory':
                     where_clauses.append(
                         "coalesce(a.kg_domain,'professional') = 'memory'"
@@ -549,7 +540,7 @@ async def get_edges(
 
     except Exception as e:
         logger.error(f"获取边失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.post('/graphs/{graph_id}/search')
@@ -564,7 +555,7 @@ async def search_graph(graph_id: str, search: GraphSearch):
             results = []
             with driver.session(database=kg_manager.neo4j_database) as session:
                 where_clauses = []
-                params: Dict[str, Any] = {'limit': search.limit}
+                params: dict[str, Any] = {'limit': search.limit}
                 if graph_id == 'neo4j_memory':
                     where_clauses.append(
                         "coalesce(n.kg_domain,'professional') = 'memory'"
@@ -618,7 +609,7 @@ async def search_graph(graph_id: str, search: GraphSearch):
                     query_parts.append('properties LIKE ?')
                     params.append(f"%{key}%{value}%")
 
-            query_parts.append(f"LIMIT ?")
+            query_parts.append("LIMIT ?")
             params.append(search.limit)
 
             query = ' AND '.join(query_parts)
@@ -628,7 +619,7 @@ async def search_graph(graph_id: str, search: GraphSearch):
             results = []
 
             for row in cursor.fetchall():
-                result_dict = dict(zip(columns, row))
+                result_dict = dict(zip(columns, row, strict=False))
                 results.append(
                     {
                         'id': result_dict.get('id'),
@@ -659,7 +650,7 @@ async def search_graph(graph_id: str, search: GraphSearch):
 
     except Exception as e:
         logger.error(f"图谱搜索失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.post('/graphs/{graph_id}/query')
@@ -691,7 +682,7 @@ async def execute_query(graph_id: str, query: GraphQuery):
                 results = []
 
                 for row in cursor.fetchall():
-                    result_dict = dict(zip(columns, row))
+                    result_dict = dict(zip(columns, row, strict=False))
                     results.append(result_dict)
 
                 return {
@@ -721,7 +712,7 @@ async def execute_query(graph_id: str, query: GraphQuery):
 
     except Exception as e:
         logger.error(f"执行查询失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.get('/graphs/{graph_id}/statistics')
@@ -784,7 +775,7 @@ async def get_graph_statistics(graph_id: str):
 
     except Exception as e:
         logger.error(f"获取统计信息失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.get('/node-types')
@@ -849,7 +840,7 @@ async def find_path(graph_id: str, pq: PathQuery):
         raise
     except Exception as e:
         logger.error(f"路径查询失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.post('/graphs/{graph_id}/neighbors')
@@ -889,7 +880,7 @@ async def neighbors(graph_id: str, nq: NeighborsQuery):
         raise
     except Exception as e:
         logger.error(f"邻居查询失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.post('/graphs/{graph_id}/search/fulltext')
@@ -920,7 +911,7 @@ async def fulltext_search(graph_id: str, req: FullTextSearchRequest):
         raise
     except Exception as e:
         logger.error(f"全文检索失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.post('/graphs/{graph_id}/node')
@@ -979,7 +970,7 @@ async def create_node(graph_id: str, node: GraphNode):
 
     except Exception as e:
         logger.error(f"创建节点失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.post('/graphs/{graph_id}/edge')
@@ -1042,7 +1033,7 @@ async def create_edge(graph_id: str, edge: GraphEdge):
 
     except Exception as e:
         logger.error(f"创建边失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 if __name__ == '__main__':

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习增强对话管理器
 Learning-Enhanced Dialog Manager
@@ -14,28 +15,27 @@ Learning-Enhanced Dialog Manager
 """
 
 import asyncio
-import logging
-import random
+
+# 添加项目路径
+import sys
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-# 添加项目路径
-import sys
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
+from core.logging_config import setup_logging
 from production.core.learning import (
     ModuleType,
-    get_learning_interface,
     OptimizationReport,
     # 公共工具函数（v2.1新增）
     epsilon_greedy_select,
+    get_learning_interface,
     get_q_values_from_orchestrator,
 )
-from core.logging_config import setup_logging
 
 logger = setup_logging()
 
@@ -75,10 +75,10 @@ class DialogTurn:
     response_strategy: ResponseStrategy
     assistant_response: str
     confidence: float
-    user_satisfaction: Optional[float] = None
-    user_feedback: Optional[str] = None
+    user_satisfaction: float | None = None
+    user_feedback: str | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "turn_id": self.turn_id,
             "timestamp": self.timestamp.isoformat(),
@@ -96,11 +96,11 @@ class DialogTurn:
 class DialogContext:
     """对话上下文"""
     session_id: str
-    user_id: Optional[str]
+    user_id: str | None
     start_time: datetime
-    topic: Optional[str] = None
-    history: List[DialogTurn] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    topic: str | None = None
+    history: list[DialogTurn] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     def add_turn(self, turn: DialogTurn):
         """添加对话轮次"""
@@ -116,7 +116,7 @@ class DialogResponse:
     dialog_state: DialogState
     reasoning: str
     should_clarify: bool = False
-    suggested_actions: List[str] = field(default_factory=list)
+    suggested_actions: list[str] = field(default_factory=list)
 
 
 # =============================================================================
@@ -146,13 +146,13 @@ class LearningDialogManager:
         self.auto_optimize = auto_optimize
 
         # 学习接口
-        self.learning_interface: Optional[Any] = None
+        self.learning_interface: Any | None = None
 
         # 对话历史
-        self.dialog_sessions: Dict[str, DialogContext] = {}
+        self.dialog_sessions: dict[str, DialogContext] = {}
 
         # 策略性能统计
-        self.strategy_stats: Dict[str, Dict[str, Any]] = {
+        self.strategy_stats: dict[str, dict[str, Any]] = {
             strategy.value: {
                 "total_uses": 0,
                 "successes": 0,
@@ -194,7 +194,7 @@ class LearningDialogManager:
         self,
         user_message: str,
         session_id: str,
-        user_id: Optional[str] = None,
+        user_id: str | None = None,
         use_learning: bool = True,
     ) -> DialogResponse:
         """
@@ -265,7 +265,7 @@ class LearningDialogManager:
         if len(context.history) == 0:
             return DialogState.GREETING
 
-        last_turn = context.history[-1]
+        context.history[-1]
 
         # 如果用户在询问细节
         if any(keyword in user_message for keyword in ["什么", "如何", "怎么", "为什么"]):
@@ -379,7 +379,7 @@ class LearningDialogManager:
     def _generate_suggested_actions(
         self,
         strategy: ResponseStrategy,
-    ) -> List[str]:
+    ) -> list[str]:
         """生成建议操作"""
         actions_map = {
             ResponseStrategy.CLARIFY: ["提供更多细节", "举例说明"],
@@ -392,7 +392,7 @@ class LearningDialogManager:
     def _get_or_create_context(
         self,
         session_id: str,
-        user_id: Optional[str],
+        user_id: str | None,
     ) -> DialogContext:
         """获取或创建对话上下文"""
         if session_id not in self.dialog_sessions:
@@ -412,7 +412,7 @@ class LearningDialogManager:
         session_id: str,
         turn_id: str,
         user_satisfaction: float,
-        user_feedback: Optional[str] = None,
+        user_feedback: str | None = None,
     ):
         """
         从对话反馈中学习
@@ -575,7 +575,7 @@ class LearningDialogManager:
     # 统计和优化
     # ==============================================================================
 
-    def get_dialog_statistics(self) -> Dict[str, Any]:
+    def get_dialog_statistics(self) -> dict[str, Any]:
         """获取对话统计"""
         return {
             "total_sessions": len(self.dialog_sessions),
@@ -583,7 +583,7 @@ class LearningDialogManager:
             "strategy_stats": self.strategy_stats.copy(),
         }
 
-    def get_strategy_performance(self) -> List[Dict[str, Any]]:
+    def get_strategy_performance(self) -> list[dict[str, Any]]:
         """获取策略性能对比"""
         performance = []
 
@@ -621,7 +621,7 @@ class LearningDialogManager:
 
         return report
 
-    async def export_learning_data(self, filepath: Optional[str] = None) -> Optional[str]:
+    async def export_learning_data(self, filepath: str | None = None) -> str | None:
         """导出学习数据"""
         if not self.enable_learning or not self.learning_interface:
             return None
@@ -674,7 +674,7 @@ if __name__ == "__main__":
             use_learning=True,
         )
 
-        print(f"用户: 我想了解专利申请的流程")
+        print("用户: 我想了解专利申请的流程")
         print(f"策略: {response1.strategy_used.value}")
         print(f"回应: {response1.response_text}")
         print(f"置信度: {response1.confidence:.2f}")
@@ -696,7 +696,7 @@ if __name__ == "__main__":
             use_learning=True,
         )
 
-        print(f"用户: 具体需要哪些材料？")
+        print("用户: 具体需要哪些材料？")
         print(f"策略: {response2.strategy_used.value}")
         print(f"回应: {response2.response_text}")
 

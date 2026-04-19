@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 检查数据完整性和去重情况
 Check Data Integrity and Deduplication
 """
 
-import psycopg2
 import json
 import os
-from collections import Counter
+
+import psycopg2
+
 
 def check_data_integrity():
     """检查数据完整性"""

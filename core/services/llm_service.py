@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一LLM服务
 Unified LLM Service
@@ -13,8 +14,7 @@ Unified LLM Service
 import asyncio
 import logging
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

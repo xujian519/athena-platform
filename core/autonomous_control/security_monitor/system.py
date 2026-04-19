@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 安全监控 - 主系统
 Security Monitor - Main System
@@ -21,9 +22,9 @@ from typing import Any
 from core.logging_config import setup_logging
 
 from .types import (
+    AccessPattern,
     ActionType,
     AlertType,
-    AccessPattern,
     BehaviorProfile,
     SecurityEvent,
     SecurityLevel,

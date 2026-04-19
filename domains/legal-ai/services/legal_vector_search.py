@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 法律向量库查询服务
 基于BGE模型和FAISS索引的法律文档检索服务
@@ -10,18 +9,21 @@
 
 import json
 import logging
-import os
-import pickle
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-
-import numpy as np
+from typing import Any
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent
 sys.path.append(str(project_root))
+
+# 配置日志 - 必须在导入检查之前
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 try:
     import faiss
@@ -31,14 +33,6 @@ except ImportError as e:
     logger.info(f"❌ 缺少依赖库: {e}")
     logger.info('请运行: pip install sentence-transformers faiss-cpu torch')
     sys.exit(1)
-
-
-# 配置日志
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -53,8 +47,8 @@ class SearchResult:
     score: float
     file_path: str
     effective_date: str | None = None
-    keywords: Optional[List[str] = None
-    metadata: Dict[str, Any] = None
+    keywords: list[str] | None = None
+    metadata: dict[str, Any] = None
 
 
 class LegalVectorSearch:
@@ -101,17 +95,17 @@ class LegalVectorSearch:
 
         # 加载文档存储
         doc_store_path = Path(self.vector_db_path) / 'doc_store.json'
-        with open(doc_store_path, 'r', encoding='utf-8') as f:
+        with open(doc_store_path, encoding='utf-8') as f:
             self.doc_store = json.load(f)
         logger.info(f"✅ 文档存储加载成功，包含 {len(self.doc_store)} 个文档")
 
         # 加载元数据
         metadata_path = Path(self.vector_db_path) / 'metadata.json'
-        with open(metadata_path, 'r', encoding='utf-8') as f:
+        with open(metadata_path, encoding='utf-8') as f:
             self.metadata = json.load(f)
         logger.info('✅ 元数据加载成功')
 
-    def search(self, query: str, top_k: int = 10, category_filter: str | None = None) -> List[SearchResult]:
+    def search(self, query: str, top_k: int = 10, category_filter: str | None = None) -> list[SearchResult]:
         """搜索法律文档"""
         logger.info(f"🔍 搜索查询: {query[:50]}...")
         logger.info(f"🎯 返回数量: {top_k}")
@@ -125,7 +119,7 @@ class LegalVectorSearch:
 
         # 处理结果
         results = []
-        for score, idx in zip(scores[0], indices[0]):
+        for score, idx in zip(scores[0], indices[0], strict=False):
             if idx < 0:  # FAISS可能返回无效索引
                 continue
 
@@ -155,19 +149,19 @@ class LegalVectorSearch:
         logger.info(f"✅ 搜索完成，返回 {len(results)} 个结果")
         return results
 
-    def search_by_category(self, query: str, category: str, top_k: int = 10) -> List[SearchResult]:
+    def search_by_category(self, query: str, category: str, top_k: int = 10) -> list[SearchResult]:
         """按分类搜索"""
         return self.search(query, top_k=top_k, category_filter=category)
 
-    def get_categories(self) -> Dict[str, int]:
+    def get_categories(self) -> dict[str, int]:
         """获取所有分类和文档数量"""
         categories = {}
-        for doc_id, doc_data in self.doc_store.items():
+        for _doc_id, doc_data in self.doc_store.items():
             category = doc_data.get('category', '其他')
             categories[category] = categories.get(category, 0) + 1
         return categories
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """获取向量库统计信息"""
         return {
             'total_docs': self.metadata.get('total_docs', 0),
@@ -225,7 +219,7 @@ def demo_search() -> Any:
             logger.info('   ❌ 未找到相关文档')
 
     # 按分类搜索演示
-    logger.info(f"\n📂 按分类搜索演示:")
+    logger.info("\n📂 按分类搜索演示:")
     logger.info(str('=' * 60))
 
     category_query = '合同'

@@ -1,0 +1,123 @@
+# ================================
+# Athena API Gateway - 生产配置
+# ================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: athena-gateway-config
+  namespace: athena-gateway
+  labels:
+    app: athena-gateway
+    tier: frontend
+    environment: production
+data:
+  # 生产环境配置
+  production.yaml: |
+    server:
+      host: "0.0.0.0"
+      port: 8080
+      read_timeout: 30s
+      write_timeout: 30s
+      idle_timeout: 60s
+      max_header_bytes: 1048576
+    
+    gin:
+      mode: "release"
+      trusted_proxies: ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
+    
+    logging:
+      level: "info"
+      format: "json"
+      output: "stdout"
+      enable_color: false
+    
+    metrics:
+      enabled: true
+      path: "/metrics"
+      port: 9090
+    
+    tracing:
+      enabled: true
+      service_name: "athena-gateway"
+      endpoint: "http://jaeger-collector.observability.svc.cluster.local:14268/api/traces"
+      sampler_ratio: 0.1
+    
+    auth:
+      jwt:
+        secret_key: "${JWT_SECRET_KEY}"
+        expire_hours: 24
+        issuer: "athena-platform"
+        algorithm: "HS256"
+      
+      rbac:
+        enabled: true
+        default_role: "viewer"
+      
+      rate_limit:
+        enabled: true
+        requests_per_minute: 1000
+        burst: 100
+    
+    redis:
+      host: "redis-master.cache.svc.cluster.local"
+      port: 6379
+      password: "${REDIS_PASSWORD}"
+      db: 0
+      pool_size: 50
+      min_idle_conns: 10
+      
+    database:
+      host: "${POSTGRES_HOST:-your-postgres-host.local}"
+      port: 5432
+      name: "athena_gateway"
+      user: "athena_user"
+      password: "${DB_PASSWORD}"
+      ssl_mode: "prefer"
+      max_open_conns: 50
+      max_idle_conns: 25
+      conn_max_lifetime: "5m"
+      # PostgreSQL 17.7 特定配置
+      timezone: "UTC"
+      application_name: "athena_gateway"
+      connect_timeout: "10s"
+      read_timeout: "30s"
+      write_timeout: "30s"
+    
+    security:
+      cors:
+        enabled: true
+        allowed_origins: ["https://api.company.com", "https://admin.company.com"]
+        allowed_methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+        allowed_headers: ["*"]
+        exposed_headers: ["X-Total-Count"]
+        allow_credentials: true
+        max_age: "12h"
+      
+      https:
+        enabled: true
+        redirect_http: true
+        min_tls_version: "1.2"
+      
+      headers:
+        x_frame_options: "DENY"
+        x_content_type_options: "nosniff"
+        x_xss_protection: "1; mode=block"
+        strict_transport_security: "max-age=31536000; includeSubDomains"
+        content_security_policy: "default-src 'self'"
+    
+    plugins:
+      enabled: true
+      directory: "/app/plugins"
+      auto_reload: false
+      
+    monitoring:
+      health_check:
+        enabled: true
+        path: "/health"
+        interval: "30s"
+        timeout: "10s"
+      
+      prometheus:
+        enabled: true
+        metrics_path: "/metrics"
+        port: 9090

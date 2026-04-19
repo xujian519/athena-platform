@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习引擎并发控制模块
 Concurrency Control for Learning Engines

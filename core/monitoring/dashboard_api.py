@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 知识图谱监控仪表板API
 Knowledge Graph Monitoring Dashboard API
@@ -11,7 +12,7 @@ import logging
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -22,9 +23,9 @@ try:
     import uvicorn
     from fastapi import BackgroundTasks, FastAPI, HTTPException, Query
     from fastapi.middleware.cors import CORSMiddleware
-
-from core.security.auth import ALLOWED_ORIGINS
     from fastapi.responses import HTMLResponse, JSONResponse
+
+    from core.security.auth import ALLOWED_ORIGINS
 
     FASTAPI_AVAILABLE = True
 except ImportError:
@@ -92,7 +93,7 @@ class DashboardAPI:
                 return monitor.get_dashboard_data()
             except Exception as e:
                 logger.error(f"❌ 获取仪表板数据失败: {e}")
-                raise HTTPException(status_code=500, detail=str(e))
+                raise HTTPException(status_code=500, detail=str(e)) from e
 
         @self.app.get("/api/metrics")
         async def get_metrics(
@@ -116,7 +117,7 @@ class DashboardAPI:
 
             except Exception as e:
                 logger.error(f"❌ 获取指标数据失败: {e}")
-                raise HTTPException(status_code=500, detail=str(e))
+                raise HTTPException(status_code=500, detail=str(e)) from e
 
         @self.app.get("/api/alerts")
         async def get_alerts(
@@ -135,7 +136,7 @@ class DashboardAPI:
 
             except Exception as e:
                 logger.error(f"❌ 获取告警信息失败: {e}")
-                raise HTTPException(status_code=500, detail=str(e))
+                raise HTTPException(status_code=500, detail=str(e)) from e
 
         @self.app.get("/api/system")
         async def get_system_status():
@@ -151,7 +152,7 @@ class DashboardAPI:
 
             except Exception as e:
                 logger.error(f"❌ 获取系统状态失败: {e}")
-                raise HTTPException(status_code=500, detail=str(e))
+                raise HTTPException(status_code=500, detail=str(e)) from e
 
         @self.app.post("/api/record/search")
         async def record_search(
@@ -164,7 +165,7 @@ class DashboardAPI:
 
             except Exception as e:
                 logger.error(f"❌ 记录搜索性能失败: {e}")
-                raise HTTPException(status_code=500, detail=str(e))
+                raise HTTPException(status_code=500, detail=str(e)) from e
 
         @self.app.post("/api/record/cache")
         async def record_cache(
@@ -177,7 +178,7 @@ class DashboardAPI:
 
             except Exception as e:
                 logger.error(f"❌ 记录缓存性能失败: {e}")
-                raise HTTPException(status_code=500, detail=str(e))
+                raise HTTPException(status_code=500, detail=str(e)) from e
 
         @self.app.post("/api/alerts/{alert_id}/resolve")
         async def resolve_alert(alert_id: str):
@@ -193,7 +194,7 @@ class DashboardAPI:
 
             except Exception as e:
                 logger.error(f"❌ 解决告警失败: {e}")
-                raise HTTPException(status_code=500, detail=str(e))
+                raise HTTPException(status_code=500, detail=str(e)) from e
 
         @self.app.get("/api/export")
         async def export_data(
@@ -217,7 +218,7 @@ class DashboardAPI:
 
             except Exception as e:
                 logger.error(f"❌ 导出数据失败: {e}")
-                raise HTTPException(status_code=500, detail=str(e))
+                raise HTTPException(status_code=500, detail=str(e)) from e
 
         @self.app.get("/health")
         async def health_check():

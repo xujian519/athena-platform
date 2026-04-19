@@ -1,17 +1,17 @@
+from __future__ import annotations
 """
 GPU加速管理器
 支持Apple Silicon M4的GPU加速功能
 """
-import numpy as np
-
 import asyncio
 import logging
 import time
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
+import numpy as np
 
 # GPU相关导入
 try:
@@ -25,13 +25,13 @@ except ImportError:
     TORCH_AVAILABLE = False
 
 try:
-
+    import mlx.core as mx
     MLX_AVAILABLE = True
 except ImportError:
     MLX_AVAILABLE = False
 
 try:
-
+    import jax
     JAX_AVAILABLE = True
 except ImportError:
     JAX_AVAILABLE = False
@@ -503,7 +503,7 @@ async def initialize_gpu_acceleration(config: GPUConfig | None = None):
     await gpu_acceleration_manager.initialize(config)
 
 
-def optimize_model_for_gpu(model: Optional[Any],
+def optimize_model_for_gpu(model: Any | None,
     backend: GPUBackend | None = None) -> Any:
     """为GPU优化模型"""
     return asyncio.run(gpu_acceleration_manager.optimize_model(model, backend))

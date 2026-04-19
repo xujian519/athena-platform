@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 GRPO (Group Relative Policy Optimization) 核心实现
 基于DeepSeekMath V2论文的无奖励强化学习算法
@@ -11,20 +10,18 @@ Athena智能工作平台专利分析专用优化器
 """
 
 # Numpy兼容性导入
-from config.numpy_compatibility import array, zeros, ones, random, mean, sum, dot
-import json
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
+
+from config.numpy_compatibility import random
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -56,7 +53,7 @@ class ReferenceGroup:
         self.policies = []
         self.rewards_history = []
 
-    def create_reference_group(self, base_policy: nn.Module) -> List[nn.Module]:
+    def create_reference_group(self, base_policy: nn.Module) -> list[nn.Module]:
         """创建参考组策略"""
         reference_policies = []
 
@@ -81,8 +78,8 @@ class ReferenceGroup:
                 param.data.add_(noise)
 
     def calculate_relative_advantages(
-        self, current_rewards: List[float], reference_rewards: List[List[float]]
-    ) -> List[float]:
+        self, current_rewards: list[float], reference_rewards: list[list[float]]
+    ) -> list[float]:
         """计算相对优势估计 - GRPO的核心"""
         if not reference_rewards:
             return [0.0] * len(current_rewards)
@@ -120,12 +117,12 @@ class PatentGRPOOptimizer:
 
     def optimize_step(
         self,
-        states: List[Dict],
-        actions: List[int],
-        rewards: List[float],
-        next_states: List[Dict] = None,
-        dones: List[bool] = None,
-    ) -> Dict[str, float]:
+        states: list[dict],
+        actions: list[int],
+        rewards: list[float],
+        next_states: list[dict] = None,
+        dones: list[bool] = None,
+    ) -> dict[str, float]:
         """执行一次GRPO优化步骤"""
 
         # 1. 生成参考组策略的响应
@@ -142,8 +139,8 @@ class PatentGRPOOptimizer:
         return metrics
 
     def _generate_reference_responses(
-        self, states: List[Dict], actions: List[int]
-    ) -> List[List[float]]:
+        self, states: list[dict], actions: list[int]
+    ) -> list[list[float]]:
         """生成参考组策略的奖励"""
         reference_rewards = []
 
@@ -152,7 +149,7 @@ class PatentGRPOOptimizer:
             rewards = []
 
             with torch.no_grad():
-                for state, action in zip(states, actions):
+                for state, action in zip(states, actions, strict=False):
                     # 使用参考策略计算奖励
                     state_tensor = self._state_to_tensor(state)
                     action_probs = ref_policy(state_tensor)
@@ -164,8 +161,8 @@ class PatentGRPOOptimizer:
         return reference_rewards
 
     def _ppo_update(
-        self, states: List[Dict], actions: List[int], advantages: List[float]
-    ) -> Dict[str, float]:
+        self, states: list[dict], actions: list[int], advantages: list[float]
+    ) -> dict[str, float]:
         """PPO算法更新"""
         self.policy_model.train()
 
@@ -229,13 +226,13 @@ class PatentGRPOOptimizer:
             'avg_advantage': torch.mean(advantages_tensor).item(),
         }
 
-    def _state_to_tensor(self, state: Dict) -> torch.Tensor:
+    def _state_to_tensor(self, state: dict) -> torch.Tensor:
         """将状态转换为张量"""
         # 这里需要根据具体的状态表示来实现
         # 示例实现：假设状态是专利特征向量
         if isinstance(state, dict):
             features = []
-            for key, value in state.items():
+            for _key, value in state.items():
                 if isinstance(value, (int, float)):
                     features.append(value)
                 elif isinstance(value, str):
@@ -301,7 +298,7 @@ class PatentPolicyNetwork(nn.Module):
         layers = []
         current_dim = input_dim
 
-        for i in range(num_layers):
+        for _i in range(num_layers):
             layers.extend(
                 [nn.Linear(current_dim, hidden_dim), nn.ReLU(), nn.Dropout(0.1)]
             )
@@ -330,7 +327,7 @@ if __name__ == '__main__':
 
     # 模拟训练数据
     states = [
-        {'patent_id': i, 'features': random((100)).tolist()} for i in range(10)
+        {'patent_id': i, 'features': random(100).tolist()} for i in range(10)
     ]
     actions = [np.random.randint(0, 100) for _ in range(10)]
     rewards = [np.random.random() for _ in range(10)]

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化记忆系统 - 向后兼容重定向
 Optimized Memory System - Backward Compatibility Redirect

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 简化的专利AI分析器
 Simplified Patent AI Analyzer
@@ -7,11 +6,10 @@ Simplified Patent AI Analyzer
 直接查询数据并使用Ollama分析
 """
 
-import json
+
 import psycopg2
 import requests
-import os
-from datetime import datetime
+
 
 class PatentAIAnalyzerSimple:
     """简化的专利AI分析器"""
@@ -27,26 +25,28 @@ class PatentAIAnalyzerSimple:
         }
 
         # Ollama配置
-        self.ollama_url = "http://localhost:11434/api"
+        self.ollama_url = "http://127.0.0.1:8765/v1"
         self.model_name = "qwen:7b"
 
     def query_ollama(self, prompt: str, system_prompt: str = None) -> str:
         """查询Ollama模型"""
         try:
+            messages = []
+            if system_prompt:
+                messages.append({"role": "system", "content": system_prompt})
+            messages.append({"role": "user", "content": prompt})
+
             payload = {
                 "model": self.model_name,
-                "prompt": prompt,
+                "messages": messages,
                 "stream": False
             }
 
-            if system_prompt:
-                payload["system"] = system_prompt
-
-            response = requests.post(f"{self.ollama_url}/generate", json=payload, timeout=60)
+            response = requests.post(f"{self.ollama_url}/chat/completions", json=payload, timeout=60)
 
             if response.status_code == 200:
                 result = response.json()
-                return result.get("response", "")
+                return result.get("choices", [{}])[0].get("message", {}).get("content", "")
             else:
                 print(f"Ollama请求失败: {response.status_code}")
                 return ""

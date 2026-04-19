@@ -1,358 +1,345 @@
 # Athena API Gateway
 
-**服务类型**: Node.js + Express.js
-**版本**: 1.0.0
+🏛️ **统一微服务接入和API管理平台**
+
+**服务类型**: Python + FastAPI  
+**版本**: 1.0.0  
 **端口**: 8080
 
 ## 简介
 
-Athena API网关是整个Athena智能工作平台的统一入口，负责请求路由、认证授权、限流控制等核心功能。
+Athena API Gateway 是一个功能完整的微服务网关系统，提供统一的服务注册、路由管理、负载均衡和API代理功能。
 
-## 技术栈
+## 🚀 核心特性
 
-- **Node.js** 18+
-- **Express.js** 4.18.2
-- **TypeScript** (支持类型检查)
-- **JWT** 身份认证
-- **Redis** 缓存和会话存储
+### 📋 服务管理
+- **自动服务发现**: 微服务自动注册和发现
+- **健康检查**: 定期健康检查和故障自动恢复
+- **负载均衡**: 支持轮询和随机负载均衡策略
+- **服务生命周期**: 完整的服务注册、更新、注销流程
 
-## 快速开始
+### 🛣️ 路由管理
+- **动态路由**: 支持运行时路由配置更新
+- **路径匹配**: 灵活的路径匹配和前缀处理
+- **HTTP方法支持**: 支持所有HTTP方法的路由
+- **路由策略**: 超时控制、重试机制、速率限制
 
-### 1. 安装依赖
+### 🔄 API代理
+- **透明代理**: 透明的HTTP请求转发
+- **请求/响应处理**: 完整的请求头和响应体处理
+- **错误处理**: 统一的错误处理和响应
+- **CORS支持**: 跨域资源共享支持
 
+## 🛠️ 快速开始
+
+### 1. 环境要求
+- Python 3.8+
+- pip (Python包管理器)
+- curl (用于测试和健康检查)
+
+### 2. 安装依赖
 ```bash
-# 安装Node.js依赖
-npm install
-
-# 或使用yarn
-yarn install
+cd services/api-gateway
+pip3 install -r requirements.txt
 ```
 
-### 2. 配置环境变量
-
+### 3. 启动完整演示
 ```bash
-# 复制环境变量模板
-cp .env.example .env
+# 启动网关和示例服务
+./demo.sh start
 
-# 编辑配置文件
-vim .env
+# 查看服务状态
+./demo.sh status
+
+# 运行功能测试
+./demo.sh test
+
+# 停止所有服务
+./demo.sh stop
 ```
 
-### 3. 启动服务
-
+### 4. 手动启动
 ```bash
-# 生产模式启动
-npm start
+# 启动网关
+./start_gateway.sh start
 
-# 开发模式启动（自动重启）
-npm run dev
+# 启动示例服务
+python3 examples/user_service.py &
+python3 examples/product_service.py &
 
-# 构建生产版本
-npm run build
+# 配置路由
+python3 configure_routes.py
 ```
 
 服务将在 `http://localhost:8080` 启动
 
-## 环境变量配置
+## 📁 项目结构
 
-| 变量名 | 默认值 | 说明 |
-|--------|--------|------|
-| NODE_ENV | development | 运行环境 |
-| PORT | 8080 | 服务端口 |
-| JWT_SECRET | - | JWT签名密钥（必需） |
-| REDIS_URL | redis://localhost:6379 | Redis连接地址 |
-| API_TIMEOUT | 30000 | API超时时间(ms) |
-| RATE_LIMIT_WINDOW | 15 | 限流时间窗口(分钟) |
-| RATE_LIMIT_MAX | 100 | 窗口内最大请求数 |
-
-## API路由
-
-### 核心路由
-
-```javascript
-// 健康检查
-GET /health
-
-// 网关信息
-GET /gateway/info
-
-// 路由列表
-GET /gateway/routes
+```
+services/api-gateway/
+├── athena_gateway.py          # 核心网关服务
+├── start_gateway.sh            # 网关启动脚本
+├── configure_routes.py        # 路由配置脚本
+├── test_gateway.py            # 功能测试脚本
+├── demo.sh                   # 完整演示脚本
+├── requirements.txt           # Python依赖
+├── README.md                 # 项目文档
+└── examples/                 # 示例微服务
+    ├── user_service.py        # 用户服务示例
+    └── product_service.py     # 产品服务示例
 ```
 
-### 后端服务代理
+## 📊 服务端点
 
-```javascript
-// AI服务代理
-/api/v1/ai/* -> http://localhost:9001
+### Gateway管理API
+- `GET /` - 根端点
+- `GET /health` - 健康检查
+- `GET /docs` - API文档
 
-// 智能体服务代理
-/api/v1/agents/* -> http://localhost:9002
+### 认证管理API
+- `POST /api/v1/auth/login` - 用户登录
+- `POST /api/v1/auth/refresh` - 刷新令牌
+- `POST /api/v1/auth/logout` - 用户登出
+- `GET /api/v1/auth/me` - 获取当前用户信息
+- `GET /api/v1/auth/users` - 获取用户列表 (管理员)
+- `POST /api/v1/auth/users` - 创建用户 (管理员)
+- `GET /api/v1/auth/api-keys` - 获取API密钥列表
+- `POST /api/v1/auth/api-keys` - 创建API密钥
+- `DELETE /api/v1/auth/api-keys/{id}` - 删除API密钥
+- `GET /api/v1/auth/roles` - 获取角色列表
+- `GET /api/v1/auth/permissions` - 获取权限列表
 
-// 数据服务代理
-/api/v1/data/* -> http://localhost:9003
+### 服务管理API
+- `POST /api/v1/services/register` - 注册服务
+- `GET /api/v1/services` - 获取所有服务
+- `DELETE /api/v1/services/{service}/instances/{id}` - 注销服务
+
+### 路由管理API
+- `POST /api/v1/routes` - 添加路由
+- `GET /api/v1/routes` - 获取所有路由
+
+### 示例服务API (通过网关访问)
+- `GET /api/users` - 获取所有用户
+- `GET /api/users/{id}` - 获取指定用户
+- `POST /api/users` - 创建用户
+- `GET /api/products` - 获取所有产品
+- `GET /api/products/{id}` - 获取指定产品
+- `GET /api/categories` - 获取产品分类
+
+## 🔧 配置说明
+
+### 服务注册
+```python
+registration_data = {
+    "service_name": "user-service",
+    "instance_id": "unique-instance-id",
+    "host": "localhost",
+    "port": 8001,
+    "protocol": "http",
+    "health_endpoint": "/health",
+    "metadata": {
+        "version": "1.0.0",
+        "description": "用户管理服务"
+    },
+    "tags": ["user", "management"]
+}
 ```
-
-### 认证相关
-
-```javascript
-// 登录
-POST /auth/login
-
-// 刷新Token
-POST /auth/refresh
-
-// 登出
-POST /auth/logout
-```
-
-## 中间件
-
-### 1. 认证中间件
-- JWT Token验证
-- 用户身份提取
-- 权限检查
-
-### 2. 限流中间件
-- 基于IP的限流
-- 基于用户的限流
-- 动态限流策略
-
-### 3. 日志中间件
-- 请求日志记录
-- 响应时间统计
-- 错误日志追踪
-
-### 4. 安全中间件
-- CORS配置
-- 安全头设置
-- XSS防护
-
-## 配置管理
 
 ### 路由配置
-路由配置在 `config/routes.json`:
-
-```json
-{
-  "routes": [
-    {
-      "path": "/api/v1/ai",
-      "target": "http://localhost:9001",
-      "methods": ["GET", "POST", "PUT", "DELETE"],
-      "auth": true,
-      "rateLimit": {
-        "window": 15,
-        "max": 100
-      }
-    }
-  ]
+```python
+route_config = {
+    "path": "/api/users/*",
+    "service_name": "user-service",
+    "methods": ["GET", "POST", "PUT", "DELETE"],
+    "strip_prefix": True,
+    "timeout": 30,
+    "retries": 3,
+    "rate_limit": {"requests_per_minute": 100},
+    "auth_required": False,
+    "cors_enabled": True
 }
 ```
 
-### 白名单配置
-IP白名单在 `config/whitelist.json`:
+## 📈 监控和日志
 
-```json
-{
-  "ips": ["127.0.0.1", "::1"],
-  "ranges": ["192.168.0.0/16"]
-}
-```
-
-## 监控和日志
+### 日志文件
+- `logs/gateway.log` - 网关运行日志
+- `logs/gateway_stdout.log` - 标准输出日志
+- `logs/gateway_stderr.log` - 错误输出日志
 
 ### 健康检查
 ```bash
+# Gateway健康状态
 curl http://localhost:8080/health
+
+# 服务注册状态
+curl http://localhost:8080/api/v1/services
+
+# 路由配置状态
+curl http://localhost:8080/api/v1/routes
 ```
 
-响应：
-```json
-{
-  "status": "healthy",
-  "timestamp": "2023-12-13T23:06:00.000Z",
-  "uptime": 3600,
-  "version": "1.0.0"
-}
-```
+## 🧪 测试
 
-### Prometheus指标
-- `/metrics` 端点暴露Prometheus格式的指标
-- 包含请求数、响应时间、错误率等
-
-### 日志格式
-```json
-{
-  "timestamp": "2023-12-13T23:06:00.000Z",
-  "level": "info",
-  "message": "Request processed",
-  "method": "GET",
-  "url": "/api/v1/test",
-  "status": 200,
-  "duration": 45,
-  "ip": "127.0.0.1",
-  "user": "user123"
-}
-```
-
-## 开发指南
-
-### 添加新路由
-
-1. 在 `src/routes/` 目录下创建路由文件
-2. 在 `config/routes.json` 中添加路由配置
-3. 重启服务
-
-```javascript
-// src/routes/example.js
-const express = require('express');
-const router = express.Router();
-
-router.get('/example', (req, res) => {
-  res.json({ message: 'Example route' });
-});
-
-module.exports = router;
-```
-
-### 添加中间件
-
-```javascript
-// src/middleware/custom.js
-const customMiddleware = (req, res, next) => {
-  // 自定义逻辑
-  next();
-};
-
-module.exports = customMiddleware;
-```
-
-## 测试
-
-### 运行测试
+### 运行完整测试套件
 ```bash
+# 基础功能测试
+python3 test_gateway.py
+
+# 认证功能测试
+python3 test_auth.py
+
 # 运行所有测试
-npm test
-
-# 监视模式
-npm run test:watch
-
-# 生成覆盖率报告
-npm run test:coverage
+./demo.sh test
 ```
 
-### API测试
+### 认证测试示例
 ```bash
-# 健康检查
-curl http://localhost:8080/health
+# 用户登录
+curl -X POST http://localhost:8080/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "admin123"}'
 
-# 带认证的请求
-curl -H "Authorization: Bearer <token>" \
-     http://localhost:8080/api/v1/protected
+# 使用JWT令牌访问API
+TOKEN=$(curl -s -X POST http://localhost:8080/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "admin123"}' | jq -r '.access_token')
+
+curl -H "Authorization: Bearer $TOKEN" \
+  http://localhost:8080/api/v1/auth/me
+
+# 使用API密钥访问API
+curl -H "X-API-Key: athena-test-key-12345" \
+  http://localhost:8080/api/users
 ```
 
-## 部署
-
-### Docker部署
-
+### 手动测试示例
 ```bash
-# 构建镜像
-docker build -t athena-api-gateway .
+# 测试用户服务 (需要认证)
+curl -H "X-API-Key: athena-test-key-12345" http://localhost:8080/api/users
 
-# 运行容器
-docker run -d \
-  -p 8080:8080 \
-  -e NODE_ENV=production \
-  -e JWT_SECRET=your-secret \
-  --name athena-gateway \
-  athena-api-gateway
+# 测试产品服务 (需要认证)
+curl -H "X-API-Key: athena-test-key-12345" http://localhost:8080/api/products
+
+# 测试错误处理
+curl http://localhost:8080/api/nonexistent
 ```
 
-### Docker Compose
+## 🔄 部署模式
 
-```yaml
-version: '3.8'
-services:
-  api-gateway:
-    build: .
-    ports:
-      - "8080:8080"
-    environment:
-      - NODE_ENV=production
-      - JWT_SECRET=${JWT_SECRET}
-      - REDIS_URL=redis://redis:6379
-    depends_on:
-      - redis
-    restart: unless-stopped
-
-  redis:
-    image: redis:7-alpine
-    restart: unless-stopped
-```
-
-### PM2部署
-
+### 开发环境
 ```bash
-# 安装PM2
-npm install -g pm2
+./demo.sh start
+```
+
+### 生产环境
+```bash
+# 使用环境变量配置
+export GATEWAY_PORT=8080
+export LOG_LEVEL=INFO
 
 # 启动服务
-pm2 start src/index.js --name "athena-gateway"
-
-# 查看状态
-pm2 status
-
-# 查看日志
-pm2 logs athena-gateway
+./start_gateway.sh start
 ```
 
-## 故障排除
-
-### 常见问题
-
-1. **端口被占用**
-   ```bash
-   # 查看端口占用
-   lsof -i :8080
-
-   # 杀死进程
-   kill -9 <PID>
-   ```
-
-2. **Redis连接失败**
-   - 检查Redis是否运行
-   - 验证REDIS_URL配置
-
-3. **JWT无效**
-   - 检查JWT_SECRET配置
-   - 确保Token未过期
-
-### 调试模式
-
+### Docker部署 (规划中)
 ```bash
-# 启用调试日志
-DEBUG=athena:* npm start
+# 构建镜像
+docker build -t athena-gateway .
+
+# 运行容器
+docker run -p 8080:8080 athena-gateway
 ```
 
-## 贡献指南
+## 🔒 安全特性
 
-1. Fork项目
-2. 创建功能分支
-3. 提交变更
-4. 推送到分支
-5. 创建Pull Request
+### 认证和授权
+- ✅ JWT令牌验证
+- ✅ API密钥管理
+- ✅ 基于角色的访问控制 (RBAC)
+- ✅ 权限精细化控制
+- ✅ 用户管理界面
 
-## 许可证
+### 安全中间件
+- ✅ 双重认证机制 (JWT + API Key)
+- ✅ 权限检查中间件
+- ✅ CORS跨域控制
+- ✅ 安全头设置
+- 请求速率限制 (计划中)
+- 请求大小限制 (计划中)
 
-MIT License
+## 📈 性能特性
 
-## 联系方式
+### 负载均衡
+- 轮询策略 (Round Robin)
+- 随机策略 (Random)
+- 最少连接策略 (Least Connections - 计划中)
 
-- 团队：Athena AI Team
-- 邮箱：athena@example.com
-- 文档：[Athena Platform Docs](https://docs.athena.com)
+### 缓存机制
+- 路由配置缓存
+- 服务实例缓存
+- 响应缓存 (计划中)
+
+## 🛠️ 扩展功能
+
+### 已实现
+- ✅ 服务注册和发现
+- ✅ 动态路由配置
+- ✅ 健康检查和负载均衡
+- ✅ 请求代理和转发
+- ✅ 错误处理和日志
+- ✅ 配置持久化
+
+### 已实现
+- ✅ JWT认证中间件
+- ✅ API密钥管理
+- ✅ 用户和角色管理
+- ✅ 权限控制系统
+
+### 开发中
+- 🔄 请求速率限制
+- 🔄 监控指标收集
+- 🔄 集群模式支持
+
+### 计划中
+- 📋 服务网格集成
+- 📋 分布式配置管理
+- 📋 链路追踪支持
+- 📋 优雅关闭和重启
+- 📋 API版本管理
+
+## 🤝 贡献指南
+
+1. Fork 项目
+2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 创建 Pull Request
+
+## 📄 许可证
+
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情
+
+## 📞 支持
+
+如有问题或建议，请通过以下方式联系：
+
+- 📧 邮箱: athena@example.com
+- 🐛 问题反馈: [GitHub Issues](https://github.com/athena/api-gateway/issues)
+- 📖 文档: [Athena文档中心](https://docs.athena.example.com)
 
 ---
 
-**注意**: 这是Node.js项目，不需要Python的requirements.txt文件。依赖管理通过package.json和package-lock.json进行。
+**🏛️ Athena API Gateway** - 让微服务管理变得简单高效!
+
+## 📞 支持
+
+如有问题或建议，请通过以下方式联系：
+
+- 📧 邮箱: athena@example.com
+- 🐛 问题反馈: [GitHub Issues](https://github.com/athena/api-gateway/issues)
+- 📖 文档: [Athena文档中心](https://docs.athena.example.com)
+
+---
+
+**🏛️ Athena API Gateway** - 让微服务管理变得简单高效!

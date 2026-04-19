@@ -3,11 +3,22 @@
 保存Obsidian中的读书笔记
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-from pathlib import Path
+import sqlite3
 from datetime import datetime
+from pathlib import Path
+
+
+def _build_reading_category_section(cat):
+    """构建读书分类部分的字符串"""
+    lines = [f"### {cat.get('name', '')} ({len(cat.get('books', []))}本)"]
+    for book in cat.get('books', []):
+        lines.append(f"- **{book.get('title', '')}**")
+        lines.append(f"  作者: {book.get('author', '未知')}")
+        lines.append(f"  类型: {book.get('type', '')}")
+        lines.append(f"  {book.get('note', '')}")
+    return chr(10).join(lines)
+
 
 def save_obsidian_reading_notes() -> None:
     """保存Obsidian中的读书笔记"""
@@ -225,7 +236,7 @@ def save_obsidian_reading_notes() -> None:
 
 ## 📊 分类统计
 
-{chr(10).join([f"### {cat['name']} ({len(cat['books'])}本){chr(10)}{chr(10).join([f"- **{book['title']}**{chr(10)}  作者: {book.get('author', '未知')}{chr(10)}  类型: {book['type']}{chr(10)}  {book['note']}" for book in cat['books']])}" for cat in reading_categories.values()])}
+{chr(10).join([_build_reading_category_section(cat) for cat in reading_categories.values()])}
 
 ## 🌟 读书特点
 
@@ -328,7 +339,7 @@ def save_obsidian_reading_notes() -> None:
         ))
 
     # 保存读书方法和心得
-    reading_insights = f"""# 读书方法与心得
+    reading_insights = """# 读书方法与心得
 
 ## 🎯 个人阅读特色
 

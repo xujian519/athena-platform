@@ -4,28 +4,24 @@
 """
 
 import logging
-from core.async_main import async_main
 
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException
 
 logger = logging.getLogger(__name__)
 
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import uvicorn
-from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+
+# 导入统一认证模块
 from unified_identity_manager import (
     AIIdentity,
     RoleType,
     TaskType,
-    UnifiedIdentityManager,
     identity_manager,
 )
-
-# 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 # FastAPI应用
 app = FastAPI(
@@ -43,9 +39,9 @@ class IdentityResponse(BaseModel):
     english_name: str
     role_type: str
     role_description: str
-    expertise: List[str]
-    capabilities: Dict[str, Any]
-    personality: Dict[str, Any]
+    expertise: list[str]
+    capabilities: dict[str, Any]
+    personality: dict[str, Any]
     collaboration_style: str
 
 class CollaborationRequest(BaseModel):
@@ -57,10 +53,10 @@ class CollaborationRequest(BaseModel):
 
 class CollaborationResponse(BaseModel):
     """协作响应模型"""
-    participants: List[str]
+    participants: list[str]
     mode: str
     primary_role: str
-    secondary_role: Optional[str]
+    secondary_role: str | None
     collaborative_identity: IdentityResponse
     estimated_efficiency: float
 
@@ -88,7 +84,7 @@ async def root():
         'timestamp': datetime.now().isoformat()
     }
 
-@app.get('/api/v1/identities', response_model=List[IdentityResponse])
+@app.get('/api/v1/identities', response_model=list[IdentityResponse])
 async def get_all_identities():
     """获取所有身份"""
     identities = identity_manager.get_all_identities()
@@ -104,7 +100,7 @@ async def get_identity(role_name: str):
             raise HTTPException(status_code=404, detail='身份未找到')
         return identity_to_response(identity)
     except ValueError:
-        raise HTTPException(status_code=400, detail='无效的角色名称')
+        raise HTTPException(status_code=400, detail='无效的角色名称') from None
 
 @app.get('/api/v1/identities/athena', response_model=IdentityResponse)
 async def get_athena_identity():
@@ -156,7 +152,7 @@ async def create_collaboration(request: CollaborationRequest):
         )
 
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=f"无效的输入: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"无效的输入: {str(e)}") from e
 
 @app.get('/api/v1/collaboration/configs')
 async def get_collaboration_configs():
@@ -167,7 +163,7 @@ async def get_collaboration_configs():
     }
 
 @app.post('/api/v1/identity/optimize')
-async def optimize_task_routing(task_info: Dict[str, Any]):
+async def optimize_task_routing(task_info: dict[str, Any]):
     """优化任务路由"""
     task_type = task_info.get('task_type', 'technical').lower()
     complexity = task_info.get('complexity', 0.5)
@@ -202,7 +198,7 @@ async def optimize_task_routing(task_info: Dict[str, Any]):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"路由优化失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"路由优化失败: {str(e)}") from e
 
 @app.post('/api/v1/identity/sync')
 async def sync_identities():
@@ -215,7 +211,7 @@ async def sync_identities():
             'timestamp': datetime.now().isoformat()
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"同步失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"同步失败: {str(e)}") from e
 
 @app.get('/api/v1/health')
 async def health_check():

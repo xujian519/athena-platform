@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强错误恢复优化器 (Enhanced Recovery Optimizer)
 智能错误处理和快速恢复机制
@@ -11,10 +12,10 @@
 import asyncio
 import logging
 from collections import defaultdict
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Type
+from typing import Any
 
 import psutil
 

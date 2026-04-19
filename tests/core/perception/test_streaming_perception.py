@@ -4,23 +4,28 @@
 Tests for Streaming Perception Processor
 """
 
+import sys
+from pathlib import Path
+
 import pytest
-from unittest.mock import Mock, patch, AsyncMock, MagicMock
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 from datetime import datetime
-import asyncio
+from unittest.mock import MagicMock, patch
 
 from core.perception.streaming_perception_processor import (
-    StreamType,
-    ProcessingMode,
-    StreamConfig,
-    StreamChunk,
-    ProcessingResult,
-    StreamingBuffer,
-    StreamProcessor,
-    TextStreamProcessor,
     ImageStreamProcessor,
     MultimodalStreamProcessor,
+    ProcessingMode,
+    ProcessingResult,
+    StreamChunk,
+    StreamConfig,
+    StreamingBuffer,
     StreamingPerceptionEngine,
+    StreamProcessor,
+    StreamType,
+    TextStreamProcessor,
 )
 
 
@@ -553,7 +558,7 @@ class TestStreamingIntegration:
     def test_error_recovery(self, engine):
         """测试错误恢复"""
         # 模拟处理错误
-        chunk = StreamChunk(
+        StreamChunk(
             chunk_id="error_chunk",
             sequence=0,
             data=None,  # 无效数据

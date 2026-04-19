@@ -1,24 +1,25 @@
 """Main patent downloader implementation."""
 
-import os
-import requests
-from pathlib import Path
-from typing import Dict, List, Optional, Callable
-from bs4 import BeautifulSoup
-import logging
 import concurrent.futures
+import logging
+import os
 import threading
 import time
+from collections.abc import Callable
 from functools import wraps
+from pathlib import Path
 
-from .file_utils import read_patent_numbers_from_file
+import requests
+from bs4 import BeautifulSoup
+
 from .exceptions import (
+    DownloadFailedError,
+    InvalidPatentNumberError,
+    NetworkError,
     PatentDownloadError,
     PatentNotFoundError,
-    DownloadFailedError,
-    NetworkError,
-    InvalidPatentNumberError,
 )
+from .file_utils import read_patent_numbers_from_file
 from .models import PatentInfo
 
 logger = logging.getLogger(__name__)
@@ -74,7 +75,7 @@ def retry_on_network_error(max_retries: int = 3, backoff_factor: float = 1.0):
 class PatentDownloader:
     """Main class for downloading patents from Google Patents."""
 
-    def __init__(self, timeout: int = 30, user_agent: Optional[str] = None, max_retries: int = 3, progress_logger=None):
+    def __init__(self, timeout: int = 30, user_agent: str | None = None, max_retries: int = 3, progress_logger=None):
         """
         Initialize the patent downloader.
 
@@ -158,10 +159,10 @@ class PatentDownloader:
 
     def download_patents(
         self,
-        patent_numbers: List[str],
+        patent_numbers: list[str],
         output_dir: str = ".",
-        progress_callback: Optional[Callable[[int, int, str, bool], None]] = None,
-    ) -> Dict[str, bool]:
+        progress_callback: Callable[[int, int, str, bool], None] | None = None,
+    ) -> dict[str, bool]:
         """
         Download multiple patents using thread-based concurrency.
 
@@ -212,8 +213,8 @@ class PatentDownloader:
         file_path: str,
         has_header: bool = False,
         output_dir: str = ".",
-        progress_callback: Optional[Callable[[int, int, str, bool], None]] = None,
-    ) -> Dict[str, bool]:
+        progress_callback: Callable[[int, int, str, bool], None] | None = None,
+    ) -> dict[str, bool]:
         """
         Download patents from a file (txt or csv).
 
@@ -315,7 +316,7 @@ class PatentDownloader:
         except Exception as e:
             raise DownloadFailedError(f"Unexpected error: {e}") from e
 
-    def _find_pdf_link(self, content: bytes, patent_number: str) -> Optional[str]:
+    def _find_pdf_link(self, content: bytes, patent_number: str) -> str | None:
         """Find PDF download link in the patent page."""
         soup = BeautifulSoup(content, "html.parser")
 
@@ -451,7 +452,7 @@ class PatentDownloader:
 
         return "Unknown Title"
 
-    def _extract_inventors(self, soup: BeautifulSoup) -> List[str]:
+    def _extract_inventors(self, soup: BeautifulSoup) -> list[str]:
         """Extract inventor names."""
         inventors = []
         inventor_elems = soup.find_all("span", itemprop="inventor")

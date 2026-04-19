@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 不确定性量化器 v4.0
 Uncertainty Quantifier
@@ -405,7 +406,7 @@ class UncertaintyQuantifier:
             weights = [w / total_weight for w in weights]
 
         # 计算加权平均置信度
-        weighted_value = sum(c.value * w for c, w in zip(confidences, weights))
+        weighted_value = sum(c.value * w for c, w in zip(confidences, weights, strict=False))
 
         # 创建联合置信度
         joint_confidence = Confidence(value=weighted_value)

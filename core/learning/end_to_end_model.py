@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 端到端神经网络模型
 End-to-End Neural Network Model
@@ -27,7 +28,6 @@ from transformers import (
     BertModel,
     ViTModel,
 )
-
 
 logger = logging.getLogger(__name__)
 

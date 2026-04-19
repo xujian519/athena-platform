@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 FireCrawl适配器
 提供FireCrawl API的统一接口封装
@@ -11,7 +10,7 @@ import os
 import time
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import aiohttp
 
@@ -34,11 +33,11 @@ class FireCrawlConfig:
     mode: FireCrawlMode = FireCrawlMode.SCRAPE     # 默认模式
     timeout: int = 30          # 超时时间（秒）
     max_pages: int = 100       # 最大页面数（用于CRAWL模式）
-    include_paths: List[str] = None  # 包含路径
-    exclude_paths: List[str] = None  # 排除路径
+    include_paths: list[str] = None  # 包含路径
+    exclude_paths: list[str] = None  # 排除路径
     allow_backlinks: bool = False     # 允许反向链接
     ignore_sitemap: bool = False      # 忽略网站地图
-    scrape_options: Dict[str, Any] = None  # 爬取选项
+    scrape_options: dict[str, Any] = None  # 爬取选项
 
     # 成本控制
     max_cost_per_request: float = 0.01  # 每次请求最大成本
@@ -65,14 +64,14 @@ class FireCrawlResult:
     content: str
     markdown_content: str | None = None
     html_content: str | None = None
-    metadata: Dict[str, Any] = None
+    metadata: dict[str, Any] = None
     processing_time: float = 0.0
     cost: float = 0.0
     error_message: str | None = None
 
     # 爬取特有字段
-    links: List[Dict[str, str]] = None
-    images: List[Dict[str, str]] = None
+    links: list[dict[str, str]] = None
+    images: list[dict[str, str]] = None
     screenshot: str | None = None
     total_pages: int = 0
     crawl_id: str | None = None
@@ -123,7 +122,7 @@ class FireCrawlAdapter:
             await self.session.close()
             logger.info(f"FireCrawl适配器已关闭，总成本: ${self.total_cost:.4f}")
 
-    def _estimate_cost(self, response_data: Dict[str, Any]) -> float:
+    def _estimate_cost(self, response_data: dict[str, Any]) -> float:
         """估算请求成本"""
         # FireCrawl定价（估算）
         # 基础爬取：$0.001-0.01/页
@@ -141,7 +140,7 @@ class FireCrawlAdapter:
 
         return min(base_cost, self.config.max_cost_per_request)
 
-    async def _make_request(self, method: str, endpoint: str, data: Dict | None = None) -> Dict[str, Any]:
+    async def _make_request(self, method: str, endpoint: str, data: dict | None = None) -> dict[str, Any]:
         """发起HTTP请求"""
         if not self.session:
             await self.initialize()
@@ -317,7 +316,7 @@ class FireCrawlAdapter:
                 error_message=error_message
             )
 
-    async def check_crawl_status(self, crawl_id: str) -> Dict[str, Any]:
+    async def check_crawl_status(self, crawl_id: str) -> dict[str, Any]:
         """检查爬取任务状态"""
         if not self.config.api_key:
             raise ValueError('需要提供FireCrawl API密钥')
@@ -363,7 +362,7 @@ class FireCrawlAdapter:
                 error_message=error_message
             )
 
-    async def batch_scrape(self, urls: List[str], max_concurrent: int = 3) -> List[FireCrawlResult]:
+    async def batch_scrape(self, urls: list[str], max_concurrent: int = 3) -> list[FireCrawlResult]:
         """批量单页爬取"""
         semaphore = asyncio.Semaphore(max_concurrent)
 
@@ -376,7 +375,7 @@ class FireCrawlAdapter:
 
         # 处理异常结果
         processed_results = []
-        for url, result in zip(urls, results):
+        for url, result in zip(urls, results, strict=False):
             if isinstance(result, Exception):
                 processed_results.append(FireCrawlResult(
                     url=url,
@@ -391,7 +390,7 @@ class FireCrawlAdapter:
 
         return processed_results
 
-    def get_usage_stats(self) -> Dict[str, Any]:
+    def get_usage_stats(self) -> dict[str, Any]:
         """获取使用统计"""
         return {
             'total_requests': self.request_count,

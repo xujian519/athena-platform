@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小宸提示词系统 v1.0
 Xiaochen Prompts System
@@ -12,7 +13,11 @@ Xiaochen Prompts System
 3. 强调故事化表达和平台适配
 """
 
-from .writing_style_reference import XujianWritingStyleManager, STYLE_A_PERSONAL_NARRATIVE, PLATFORM_WECHAT_TEMPLATE, PLATFORM_ZHIHU_TEMPLATE
+from .writing_style_reference import (
+    PLATFORM_WECHAT_TEMPLATE,
+    PLATFORM_ZHIHU_TEMPLATE,
+    XujianWritingStyleManager,
+)
 
 # ============================================================================
 # 小宸写作风格提示词

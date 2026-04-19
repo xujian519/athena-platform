@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 安全验证和权限管理
 Security Authentication and Authorization Manager
@@ -7,17 +6,14 @@ Security Authentication and Authorization Manager
 提供JWT认证、权限控制、文件安全验证等功能
 """
 
-import os
-from core.async_main import async_main
-import hashlib
 import logging
-import mimetypes
-import time
+import os
+import secrets
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any
+
 import jwt
-import secrets
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +26,7 @@ class AuthManager:
         self.token_expire_hours = 24
         self.refresh_token_expire_days = 7
 
-    def generate_tokens(self, user_id: str, user_data: Dict[str, Any]) -> Dict[str, str]:
+    def generate_tokens(self, user_id: str, user_data: dict[str, Any]) -> dict[str, str]:
         """生成访问令牌和刷新令牌"""
         try:
             # 生成访问令牌
@@ -64,7 +60,7 @@ class AuthManager:
             logger.error(f"生成令牌失败: {e}")
             return {}
 
-    def verify_token(self, token: str) -> Dict[str, Any | None]:
+    def verify_token(self, token: str) -> dict[str, Any | None]:
         """验证访问令牌"""
         try:
             payload = jwt.decode(token, self.secret_key, algorithms=[self.algorithm])
@@ -82,7 +78,7 @@ class AuthManager:
             logger.warning("无效令牌")
             return None
 
-    def refresh_access_token(self, refresh_token: str) -> Dict[str, str | None]:
+    def refresh_access_token(self, refresh_token: str) -> dict[str, str | None]:
         """刷新访问令牌"""
         try:
             payload = jwt.decode(refresh_token, self.secret_key, algorithms=[self.algorithm])
@@ -114,7 +110,7 @@ class FileSecurityValidator:
         self.max_file_size = 100 * 1024 * 1024  # 100MB
         self.scanned_files_cache = {}
 
-    def validate_file_type(self, filename: str, content_type: str) -> Dict[str, Any]:
+    def validate_file_type(self, filename: str, content_type: str) -> dict[str, Any]:
         """验证文件类型"""
         result = {
             "valid": True,
@@ -144,7 +140,7 @@ class FileSecurityValidator:
 
         return result
 
-    def validate_file_size(self, file_size: int) -> Dict[str, Any]:
+    def validate_file_size(self, file_size: int) -> dict[str, Any]:
         """验证文件大小"""
         result = {
             "valid": True,
@@ -159,7 +155,7 @@ class FileSecurityValidator:
 
         return result
 
-    def scan_file_content(self, content: bytes, filename: str) -> Dict[str, Any]:
+    def scan_file_content(self, content: bytes, filename: str) -> dict[str, Any]:
         """扫描文件内容"""
         result = {
             "safe": True,
@@ -213,7 +209,7 @@ class FileSecurityValidator:
         """检查文件是否已扫描"""
         return file_hash in self.scanned_files_cache
 
-    def mark_file_scanned(self, file_hash: str, scan_result: Dict[str, Any]) -> Any:
+    def mark_file_scanned(self, file_hash: str, scan_result: dict[str, Any]) -> Any:
         """标记文件已扫描"""
         self.scanned_files_cache[file_hash] = {
             "scanned_at": datetime.now().isoformat(),
@@ -235,7 +231,7 @@ class PermissionManager:
         return permission in self.role_permissions.get(user_role, [])
 
     def check_file_access(self, user_id: str, file_id: str, action: str,
-                           file_info: Dict[str, Any] = None) -> Dict[str, Any]:
+                           file_info: dict[str, Any] = None) -> dict[str, Any]:
         """检查文件访问权限"""
         result = {
             "allowed": True,
@@ -289,17 +285,16 @@ def test_security() -> Any:
 
     # 测试危险文件
     dangerous_file = "test.exe"
-    content = b"MZ\x90\x00"
-    result = file_validator.validate_file_type(dangerous_file, "application/x-executable")
+    file_validator.validate_file_type(dangerous_file, "application/x-executable")
     print(f"危险文件验证: {'blocked': result['blocked'], 'warnings': result['warnings']}")
 
     # 测试文件大小
     large_file_size = 200 * 1024 * 1024  # 200MB
-    size_result = file_validator.validate_file_size(large_file_size)
+    file_validator.validate_file_size(large_file_size)
     print(f"大文件验证: {'blocked': size_result['blocked'], 'warnings': size_result['warnings']}")
 
     # 测试内容扫描
-    scan_result = file_validator.scan_file_content(b"eval('malicious code')", "test.py")
+    file_validator.scan_file_content(b"eval('malicious code')", "test.py")
     print(f"内容扫描: {'safe': scan_result['safe'], 'warnings': scan_result['warnings']}")
 
 if __name__ == "__main__":

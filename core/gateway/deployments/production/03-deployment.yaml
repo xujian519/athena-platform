@@ -1,0 +1,287 @@
+# ================================
+# Athena API Gateway - 生产环境部署
+# ================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: athena-gateway
+  namespace: athena-gateway
+  labels:
+    app: athena-gateway
+    tier: frontend
+    environment: production
+    version: v2.0.0
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    kubernetes.io/description: "Athena API Gateway - 企业级API网关"
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: athena-gateway
+      tier: frontend
+      environment: production
+  template:
+    metadata:
+      labels:
+        app: athena-gateway
+        tier: frontend
+        environment: production
+        version: v2.0.0
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+        sidecar.istio.io/inject: "false"
+    spec:
+      # 安全配置
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
+      
+      # 服务账户
+      serviceAccountName: athena-gateway
+      serviceAccount: athena-gateway
+      
+      # 节点选择和容忍度
+      nodeSelector:
+        node-type: application
+        environment: production
+      tolerations:
+      - key: "dedicated"
+        operator: "Equal"
+        value: "athena-gateway"
+        effect: "NoSchedule"
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - athena-gateway
+              topologyKey: kubernetes.io/hostname
+      
+      # 初始化容器
+      initContainers:
+      - name: config-check
+        image: busybox:1.36
+        command: ['sh', '-c']
+        args:
+        - |
+          echo "检查配置文件..."
+          if [ ! -f /app/configs/production.yaml ]; then
+            echo "错误: 配置文件不存在"
+            exit 1
+          fi
+          echo "配置文件检查完成"
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/configs
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "10m"
+          limits:
+            memory: "64Mi"
+            cpu: "50m"
+      
+      # 主容器
+      containers:
+      - name: athena-gateway
+        image: your-registry.com/athena-gateway:v2.0.0
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        - name: metrics
+          containerPort: 9090
+          protocol: TCP
+        - name: health
+          containerPort: 8081
+          protocol: TCP
+        
+        # 启动探测
+        startupProbe:
+          httpGet:
+            path: /health/startup
+            port: health
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+        
+        # 存活性探测
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: health
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+        
+        # 就绪性探测
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: health
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+          successThreshold: 1
+        
+        # 资源配置
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        
+        # 环境变量
+        env:
+        - name: GIN_MODE
+          value: "release"
+        - name: LOG_LEVEL
+          value: "info"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        # 密钥注入
+        - name: JWT_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: athena-gateway-secrets
+              key: jwt-secret-key
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: athena-gateway-secrets
+              key: redis-password
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: athena-gateway-secrets
+              key: db-password
+        - name: ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: athena-gateway-secrets
+              key: encryption-key
+        
+        # 卷挂载
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/configs
+          readOnly: true
+        - name: tls-certs
+          mountPath: /app/certs
+          readOnly: true
+        - name: tmp
+          mountPath: /tmp
+        - name: logs
+          mountPath: /app/logs
+        
+        # 安全配置
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+      
+      # 日志收集容器
+      - name: log-collector
+        image: fluent/fluent-bit:2.2.0
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+          readOnly: true
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc
+        env:
+        - name: FLUENT_BIT_HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+      
+      # 卷配置
+      volumes:
+      - name: config-volume
+        configMap:
+          name: athena-gateway-config
+      - name: tls-certs
+        secret:
+          secretName: athena-gateway-secrets
+          items:
+          - key: tls-crt
+            path: server.crt
+          - key: tls-key
+            path: server.key
+      - name: fluent-bit-config
+        configMap:
+          name: fluent-bit-config
+      - name: tmp
+        emptyDir: {}
+      - name: logs
+        emptyDir: {}
+      
+      # 镜像拉取密钥
+      imagePullSecrets:
+      - name: registry-secret
+      
+      # 重启策略
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
+      
+      # DNS 配置
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        options:
+        - name: ndots
+          value: "2"
+        - name: edns0

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 强化学习智能体
 Reinforcement Learning Agent
@@ -14,8 +15,6 @@ Reinforcement Learning Agent
 创建时间: 2025-12-26
 版本: v1.0.0 "强化探索"
 """
-import numpy as np
-
 import logging
 from collections import defaultdict, deque
 from collections.abc import Callable
@@ -24,6 +23,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

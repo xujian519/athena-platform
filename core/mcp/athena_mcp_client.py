@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台MCP客户端
 Athena Platform MCP Client
@@ -18,7 +19,7 @@ Athena Platform MCP Client
 
 import json
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from mcp.client.session import ClientSession
 from mcp.client.stdio import stdio_client

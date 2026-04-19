@@ -5,15 +5,13 @@
 """
 
 import asyncio
-from core.async_main import async_main
-import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # 导入浏览器自动化工具
-from common_tools.browser_automation_tool import BrowserAutomationTool, get_browser_tool
+from common_tools.browser_automation_tool import get_browser_tool
 
 try:
     from .browser_automation.athena_browser_glm import AthenaBrowserGLMAgent
@@ -27,8 +25,8 @@ except ImportError:
 # 导入安全配置
 import sys
 from pathlib import Path
+
 sys.path.append(str(Path(__file__).parent.parent / "core"))
-from security.env_config import get_env_var, get_database_url, get_jwt_secret
 
 logger = logging.getLogger(__name__)
 
@@ -69,7 +67,7 @@ class XiaoNuoBrowserController:
         except Exception as e:
             logger.error(f"初始化Athena代理失败: {e}")
 
-    async def analyze_request(self, user_input: str, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    async def analyze_request(self, user_input: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
         """分析用户请求，判断是否需要浏览器自动化
 
         Args:
@@ -126,7 +124,7 @@ class XiaoNuoBrowserController:
 
         return result
 
-    async def smart_task_execution(self, user_input: str, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    async def smart_task_execution(self, user_input: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
         """智能任务执行
 
         Args:
@@ -205,7 +203,7 @@ class XiaoNuoBrowserController:
                 'error_details': str(e)
             }
 
-    def _get_trigger_keywords(self) -> Dict[str, List[str]]:
+    def _get_trigger_keywords(self) -> dict[str, list[str]]:
         """获取触发关键词"""
         return {
             'price_monitor': ['价格', '多少钱', '费用', '成本', '优惠', '折扣', '比价'],
@@ -216,7 +214,7 @@ class XiaoNuoBrowserController:
             'monitor': ['监控', '关注', '留意', '通知', '提醒']
         }
 
-    def _match_keywords(self, text: str, keywords: Dict[str, List[str]]) -> Dict[str, int]:
+    def _match_keywords(self, text: str, keywords: dict[str, list[str]]) -> dict[str, int]:
         """匹配关键词"""
         matches = {}
         text_lower = text.lower()
@@ -241,13 +239,13 @@ class XiaoNuoBrowserController:
         }
 
         score = 0.0
-        for pattern, words in semantic_patterns.items():
+        for _pattern, words in semantic_patterns.items():
             if any(word in user_input for word in words):
                 score += 0.2
 
         return min(score, 1.0)
 
-    def _analyze_context(self, user_input: str, context: Optional[Dict[str, Any]]) -> float:
+    def _analyze_context(self, user_input: str, context: dict[str, Any] | None) -> float:
         """上下文分析"""
         if not context:
             return 0.5  # 默认分数
@@ -286,7 +284,7 @@ class XiaoNuoBrowserController:
 
         return 0.5
 
-    def _calculate_confidence(self, keyword_matches: Dict, semantic_score: float,
+    def _calculate_confidence(self, keyword_matches: dict, semantic_score: float,
                             context_score: float, experience_score: float) -> float:
         """计算综合置信度"""
         # 关键词匹配权重: 40%
@@ -303,7 +301,7 @@ class XiaoNuoBrowserController:
 
         return keyword_score + semantic_weighted + context_weighted + experience_weighted
 
-    def _recommend_scenario(self, user_input: str, keyword_matches: Dict[str, int]) -> str | None:
+    def _recommend_scenario(self, user_input: str, keyword_matches: dict[str, int]) -> str | None:
         """推荐场景"""
         if not keyword_matches:
             return None
@@ -311,7 +309,7 @@ class XiaoNuoBrowserController:
         # 返回匹配度最高的场景
         return max(keyword_matches.items(), key=lambda x: x[1])[0]
 
-    def _assess_risk(self, user_input: str, scenario: Optional[str]) -> Dict[str, Any]:
+    def _assess_risk(self, user_input: str, scenario: str | None) -> dict[str, Any]:
         """风险评估"""
         risk_level = 'low'
         risk_factors = []
@@ -338,7 +336,7 @@ class XiaoNuoBrowserController:
             'recommendations': self._get_risk_recommendations(risk_level)
         }
 
-    def _get_risk_recommendations(self, risk_level: str) -> List[str]:
+    def _get_risk_recommendations(self, risk_level: str) -> list[str]:
         """获取风险建议"""
         recommendations = {
             'low': ['可以安全执行'],
@@ -347,7 +345,7 @@ class XiaoNuoBrowserController:
         }
         return recommendations.get(risk_level, [])
 
-    def _generate_alternative_suggestions(self, user_input: str) -> List[str]:
+    def _generate_alternative_suggestions(self, user_input: str) -> list[str]:
         """生成替代建议"""
         suggestions = [
             '您可以手动访问相关网站',
@@ -356,13 +354,13 @@ class XiaoNuoBrowserController:
         ]
         return suggestions[:2]  # 返回前2个建议
 
-    async def _learn_from_execution(self, analysis: Dict[str, Any], execution_result: Dict[str, Any]):
+    async def _learn_from_execution(self, analysis: dict[str, Any], execution_result: dict[str, Any]):
         """从执行结果中学习"""
         # 简单的学习机制：根据执行结果调整决策权重
         success = execution_result.get('success', False)
 
         # 记录学习结果
-        learning_record = {
+        {
             'analysis': analysis,
             'execution_result': execution_result,
             'success': success,
@@ -372,7 +370,7 @@ class XiaoNuoBrowserController:
         # 这里可以实现更复杂的学习算法
         logger.info(f"学习记录: {success}")
 
-    def get_status(self) -> Dict[str, Any]:
+    def get_status(self) -> dict[str, Any]:
         """获取控制器状态"""
         return {
             'controller': 'XiaoNuoBrowserController',
@@ -392,7 +390,7 @@ class XiaoNuoBrowserController:
         successful = sum(1 for d in self.decision_history if d.get('success', False))
         return successful / len(self.decision_history)
 
-    def update_config(self, new_config: Dict[str, Any]) -> None:
+    def update_config(self, new_config: dict[str, Any]) -> None:
         """更新配置"""
         self.decision_config.update(new_config)
         logger.info(f"配置已更新: {new_config}")
@@ -457,7 +455,7 @@ async def test_xiaonuo_controller():
 
     # 显示状态
     status = controller.get_status()
-    logger.info(f"\n📊 控制器状态:")
+    logger.info("\n📊 控制器状态:")
     logger.info(f"   决策次数: {status['decision_count']}")
     logger.info(f"   成功率: {status['success_rate']:.2f}")
 

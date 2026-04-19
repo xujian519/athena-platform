@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 DeepResearch深度搜索系统集成
 集成Jina AI的Node.js DeepResearch作为Athena的深度搜索工具
@@ -16,7 +17,7 @@ from collections.abc import AsyncGenerator
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -56,7 +57,7 @@ class DeepSearchStep:
     think: str
     content: str
     timestamp: float
-    references: list[dict[str, str] | None = None
+    references: list[dict[str, str]] | None = None
 
 
 @dataclass
@@ -125,7 +126,7 @@ class DeepSearchIntegration:
 
         return env
 
-    async def start_server(self, port: int = 3000, secret: Optional[str | None = None) -> bool:
+    async def start_server(self, port: int = 3000, secret: str | None = None) -> bool:
         """
         启动DeepResearch服务器
 
@@ -415,7 +416,7 @@ class DeepSearchIntegration:
 class DeepSearchEngine(BaseSearchEngine):
     """DeepResearch搜索引擎适配器"""
 
-    def __init__(self, api_keys: list["key"] = None, config: dict[str, Any] | None):
+    def __init__(self, api_keys: list[str] | None = None, config: dict[str, Any] | None = None):
         """初始化DeepResearch搜索引擎"""
         super().__init__(api_keys or ["integrated"], config)
         self.deepsearch = DeepSearchIntegration()

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 离线版本的法律条款向量化系统
 绕过Qdrant连接问题，专注于条款识别和向量化
@@ -7,15 +6,12 @@
 
 import json
 import logging
-import os
 import pickle
 import re
 import time
-import uuid
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
 
 import numpy as np
 from sentence_transformers import SentenceTransformer
@@ -34,7 +30,7 @@ class LegalClause:
     law_category: str              # 法律分类
     file_path: str                 # 文件路径
     line_number: int               # 行号
-    vector: Optional[List[float] = None  # 向量表示
+    vector: list[float] | None = None  # 向量表示
 
 class OfflineLegalClauseBuilder:
     """离线版本的法律条款向量构建器"""
@@ -74,7 +70,7 @@ class OfflineLegalClauseBuilder:
             'vector_generation_time': 0.0
         }
 
-    def extract_clauses_from_text(self, text: str, file_path: str) -> List[LegalClause]:
+    def extract_clauses_from_text(self, text: str, file_path: str) -> list[LegalClause]:
         """从文本中提取法律条款"""
         clauses = []
         law_name = Path(file_path).parent.name
@@ -155,12 +151,12 @@ class OfflineLegalClauseBuilder:
         logger.info(f"=== 测试文件: {test_file} ===")
 
         try:
-            with open(test_file, 'r', encoding='utf-8') as f:
+            with open(test_file, encoding='utf-8') as f:
                 content = f.read()
 
             clauses = self.extract_clauses_from_text(content, test_file)
 
-            logger.info(f"提取结果:")
+            logger.info("提取结果:")
             logger.info(f"  总条款数: {len(clauses)}")
 
             # 按类型统计
@@ -168,12 +164,12 @@ class OfflineLegalClauseBuilder:
             for clause in clauses:
                 type_stats[clause.clause_type] = type_stats.get(clause.clause_type, 0) + 1
 
-            logger.info(f"  条款类型分布:")
+            logger.info("  条款类型分布:")
             for clause_type, count in sorted(type_stats.items()):
                 logger.info(f"    {clause_type}: {count}")
 
             # 显示前10个条款示例
-            logger.info(f"  条款示例:")
+            logger.info("  条款示例:")
             for i, clause in enumerate(clauses[:10]):
                 logger.info(f"    {i+1}. [{clause.clause_type}] {clause.clause_number}: {clause.content[:60]}...")
 
@@ -183,7 +179,7 @@ class OfflineLegalClauseBuilder:
             logger.error(f"测试失败: {e}")
             return []
 
-    def generate_vectors_for_clauses(self, clauses: List[LegalClause], batch_size: int = 32):
+    def generate_vectors_for_clauses(self, clauses: list[LegalClause], batch_size: int = 32):
         """为条款批量生成向量"""
         logger.info(f"开始为 {len(clauses)} 个条款生成向量（批次大小: {batch_size}）")
         start_time = time.time()
@@ -196,7 +192,7 @@ class OfflineLegalClauseBuilder:
             vectors = self.embedding_model.encode(texts)
 
             # 将向量赋值给条款对象
-            for j, (clause, vector) in enumerate(zip(batch_clauses, vectors)):
+            for _j, (clause, vector) in enumerate(zip(batch_clauses, vectors, strict=False)):
                 clause.vector = vector.tolist()
 
             if (i // batch_size + 1) % 10 == 0:
@@ -218,7 +214,7 @@ class OfflineLegalClauseBuilder:
 
         for file_path in markdown_files:
             try:
-                with open(file_path, 'r', encoding='utf-8') as f:
+                with open(file_path, encoding='utf-8') as f:
                     content = f.read()
 
                 clauses = self.extract_clauses_from_text(content, str(file_path))
@@ -249,7 +245,7 @@ class OfflineLegalClauseBuilder:
         self._save_metadata()
 
         elapsed_time = time.time() - start_time
-        logger.info(f"=== 离线处理完成 ===")
+        logger.info("=== 离线处理完成 ===")
         logger.info(f"总耗时: {elapsed_time:.2f} 秒")
         logger.info(f"处理文件数: {self.stats['total_files']}")
         logger.info(f"总条款数: {self.stats['total_clauses']}")
@@ -259,7 +255,7 @@ class OfflineLegalClauseBuilder:
 
         return all_clauses
 
-    def _save_clauses_to_files(self, clauses: List[LegalClause]):
+    def _save_clauses_to_files(self, clauses: list[LegalClause]):
         """保存条款数据到文件"""
         logger.info('保存条款数据到文件...')
 

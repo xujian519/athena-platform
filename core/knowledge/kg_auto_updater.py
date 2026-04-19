@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 知识图谱自动更新引擎
 Knowledge Graph Auto-Update Engine
@@ -139,7 +140,7 @@ class KnowledgeGraphAutoUpdater:
         self.current_version = 0
 
         # 数据源监控
-        self.monitored_sources: dict[DataSource, dict[str, Any] = {}
+        self.monitored_sources: dict[DataSource, dict[str, Any]] = {}
 
         # 更新策略
         self.update_interval = 3600  # 1小时
@@ -213,7 +214,7 @@ class KnowledgeGraphAutoUpdater:
     async def create_update_job(
         self,
         update_type: UpdateType = UpdateType.INCREMENTAL,
-        sources: list["key"] = None,
+        sources: list[str] = None,
     ) -> str:
         """创建更新任务"""
         job = UpdateJob(

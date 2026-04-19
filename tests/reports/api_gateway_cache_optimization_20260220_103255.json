@@ -1,0 +1,202 @@
+{
+  "plan_metadata": {
+    "generated_at": "2026-02-20T10:32:55.608445",
+    "version": "1.0",
+    "author": "Athena Performance Team"
+  },
+  "recommendations": [
+    {
+      "priority": "high",
+      "category": "http_caching",
+      "title": "优化HTTP缓存头策略",
+      "description": "实现智能HTTP缓存头配置，提升浏览器缓存效率",
+      "implementation": {
+        "cache_control_headers": {
+          "public_resources": "max-age=31536000, immutable",
+          "api_responses": "max-age=300, must-revalidate",
+          "dynamic_content": "max-age=60, private, must-revalidate"
+        },
+        "etag_strategy": {
+          "strong_etag": "为静态资源生成强ETag",
+          "weak_etag": "为动态内容生成弱ETag",
+          "conditional_requests": "支持If-None-Match和If-Modified-Since"
+        },
+        "vary_headers": {
+          "content_negotiation": "基于Accept-Encoding和Accept-Language",
+          "user_context": "基于用户代理和地理位置",
+          "version_control": "基于API版本"
+        }
+      },
+      "expected_improvement": {
+        "cache_hit_rate": "+25%",
+        "bandwidth_savings": "+30%",
+        "server_load_reduction": "-20%"
+      },
+      "implementation_complexity": "low",
+      "estimated_effort": "1-2天"
+    },
+    {
+      "priority": "medium",
+      "category": "cdn_integration",
+      "title": "CDN集成和边缘缓存",
+      "description": "集成CDN服务，实现全球边缘缓存",
+      "implementation": {
+        "cdn_provider": {
+          "cloudflare": "推荐用于全球分发",
+          "fastly": "企业级解决方案",
+          "cloudfront": "AWS集成方案"
+        },
+        "cache_rules": {
+          "static_assets": "长期缓存(1年+)",
+          "api_responses": "短期缓存(5-15分钟)",
+          "dynamic_content": "极短期缓存(1-5分钟)或no-cache"
+        },
+        "invalidation_strategy": {
+          "manual_invalidation": "手动缓存清理API",
+          "automatic_invalidation": "基于内容更新自动清理",
+          "version_based": "基于URL版本控制缓存失效"
+        }
+      },
+      "expected_improvement": {
+        "global_response_time": "-50%",
+        "availability": "99.9%",
+        "bandwidth_cost_reduction": "-40%"
+      },
+      "implementation_complexity": "medium",
+      "estimated_effort": "1-2周"
+    },
+    {
+      "priority": "medium",
+      "category": "reverse_proxy",
+      "title": "反向代理缓存优化",
+      "description": "优化API网关的反向代理缓存配置",
+      "implementation": {
+        "proxy_cache": {
+          "nginx_config": "配置proxy_cache_path和proxy_cache_valid",
+          "haproxy_config": "配置http-request和http-response规则",
+          "varnish_config": "配置VCL缓存规则"
+        },
+        "cache_key_optimization": {
+          "request_method": "包含HTTP方法区分",
+          "request_headers": "包含关键请求头",
+          "query_parameters": "智能查询参数处理",
+          "response_codes": "基于响应码差异化缓存"
+        }
+      },
+      "expected_improvement": {
+        "backend_load_reduction": "-35%",
+        "response_time_improvement": "-40%",
+        "cache_efficiency": "+45%"
+      },
+      "implementation_complexity": "medium",
+      "estimated_effort": "3-5天"
+    },
+    {
+      "priority": "high",
+      "category": "api_response_caching",
+      "title": "API响应缓存策略",
+      "description": "实现智能API响应缓存，减少重复计算",
+      "implementation": {
+        "caching_strategy": {
+          "read_heavy": "缓存读密集型API响应",
+          "write_heavy": "谨慎缓存写操作API",
+          "user_specific": "基于用户上下文差异化缓存",
+          "rate_limited": "为频率限制API实现特殊缓存"
+        },
+        "cache_invalidation": {
+          "time_based": "基于TTL自动失效",
+          "event_based": "基于数据变更事件失效",
+          "manual_invalidation": "提供手动清理接口",
+          "tag_based": "基于标签的批量失效"
+        }
+      },
+      "expected_improvement": {
+        "api_response_time": "-60%",
+        "database_load_reduction": "-50%",
+        "concurrent_capacity": "+100%"
+      },
+      "implementation_complexity": "high",
+      "estimated_effort": "1-2周"
+    },
+    {
+      "priority": "low",
+      "category": "browser_caching",
+      "title": "浏览器缓存优化",
+      "description": "优化前端资源的浏览器缓存策略",
+      "implementation": {
+        "service_worker": {
+          "cache_strategy": "实现智能缓存策略",
+          "background_sync": "后台数据同步",
+          "offline_support": "离线访问支持"
+        },
+        "resource_optimization": {
+          "file_versioning": "文件版本控制",
+          "compression": "资源压缩优化",
+          "lazy_loading": "延迟加载策略"
+        }
+      },
+      "expected_improvement": {
+        "page_load_time": "-30%",
+        "bandwidth_usage": "-25%",
+        "user_experience": "显著提升"
+      },
+      "implementation_complexity": "medium",
+      "estimated_effort": "1周"
+    }
+  ],
+  "implementation_configs": {
+    "nginx_config": "\n# API网关缓存优化配置 - Nginx\nproxy_cache_path /var/cache/nginx/api_cache levels=1:2 keys_zone=api_cache:100m inactive=60m;\nproxy_cache_key \"$scheme$proxy_host$request_uri$is_args$args\";\nproxy_cache_methods GET HEAD;\nproxy_cache_valid 200 302 5m;\n\nupstream api_backend {\n    server 127.0.0.1:8005;\n    keepalive 32;\n}\n\nserver {\n    listen 80;\n    server_name api.athena.local;\n    \n    # 静态资源长期缓存\n    location ~* \\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2)$ {\n        expires 1y;\n        add_header Cache-Control \"public, max-age=31536000, immutable\";\n        add_header X-Content-Type-Options nosniff;\n        access_log off;\n    }\n    \n    # API响应缓存\n    location /api/ {\n        proxy_pass http://api_backend;\n        proxy_cache api_cache;\n        proxy_cache_valid 200 5m;\n        \n        # 缓存头处理\n        proxy_ignore_headers Set-Cookie;\n        proxy_hide_header Set-Cookie;\n        proxy_ignore_headers Authorization;\n        proxy_hide_header Authorization;\n        \n        # 压缩\n        gzip on;\n        gzip_types text/plain application/json application/xml text/css application/javascript;\n        \n        # 安全头\n        add_header X-Frame-Options DENY;\n        add_header X-Content-Type-Options nosniff;\n        add_header X-XSS-Protection \"1; mode=block\";\n    }\n    \n    # 动态内容不缓存\n    location /api/auth/ {\n        proxy_pass http://api_backend;\n        proxy_no_cache 1;\n        add_header Cache-Control \"no-cache, no-store, must-revalidate\";\n        add_header Pragma no-cache;\n        add_header Expires 0;\n    }\n}\n        ",
+    "haproxy_config": "\n# API网关缓存优化配置 - HAProxy\nglobal\n    maxconn 4096\n    daemon\n    \ndefaults\n    mode http\n    timeout connect 5000ms\n    timeout client 50000ms\n    timeout server 50000ms\n    timeout http-request 10s\n    timeout http-keep-alive 10s\n    \nfrontend http_front\n    bind *:80\n    default_backend api_backend\n    \n    # 静态资源缓存\n    acl static_resources path_end -i .css .js .png .jpg .jpeg .gif .ico .svg .woff .woff2\n    http-response set-header Cache-Control:\\ public,max-age=31536000,immutable if static_resources\n    http-response set-header Expires:\\ 1y if static_resources\n    \n    # API缓存\n    acl api_requests path_beg /api/\n    http-request set-header Cache-Control:\\ public,max-age=300,must-revalidate if api_requests\n    \n    # 认证请求不缓存\n    acl auth_requests path_beg /api/auth/\n    http-request set-header Cache-Control:\\ no-cache,no-store,must-revalidate if auth_requests\n    http-request set-header Pragma:\\ no-cache if auth_requests\n    http-request set-header Expires:\\ 0 if auth_requests\n    \nbackend api_backend\n    balance roundrobin\n    option httpchk\n    server api1 127.0.0.1:8005 check\n    server api2 127.0.0.1:8006 check\n    server api3 127.0.0.1:8007 check\n    \n    # 健康检查\n    option httpchk GET /api/health\n    http-check expect status 200\n        ",
+    "varnish_config": "\n# API网关缓存优化配置 - Varnish\nvcl 4.0;\n\nbackend api_backend {\n    .host = \"127.0.0.1\";\n    .port = \"8005\";\n    .probe = {\n        .url = \"/api/health\";\n        .timeout = 2s;\n        .interval = 5s;\n        .window = 5;\n        .threshold = 3;\n    }\n}\n\nsub vcl_recv {\n    # 静态资源长期缓存\n    if (req.url ~ \"\\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2)$\") {\n        set req.http.Cache-Control = \"public, max-age=31536000, immutable\";\n        set req.http.Expires = \"1y\";\n        return (hash);\n    }\n    \n    # API请求处理\n    if (req.url ~ \"^/api/\") {\n        # 不缓存认证请求\n        if (req.url ~ \"^/api/auth/\") {\n            set req.http.Cache-Control = \"no-cache, no-store, must-revalidate\";\n            set req.http.Pragma = \"no-cache\";\n            unset req.http.Expires;\n            return (pass);\n        }\n        \n        # 设置API缓存\n        set req.http.Cache-Control = \"public, max-age=300, must-revalidate\";\n        \n        # 标准化缓存键\n        set req.hash = req.url + req.http.Authorization;\n        \n        return (hash);\n    }\n    \n    return (hash);\n}\n\nsub vcl_backend_response {\n    # 设置响应头\n    if (obj.uncachable) {\n        set resp.http.Cache-Control = \"no-cache, no-store, must-revalidate\";\n        set resp.http.Pragma = \"no-cache\";\n        unset resp.http.Expires;\n        return (deliver);\n    }\n    \n    if (obj.ttl > 0s) {\n        if (resp.http.Cache-Control !~ \"no-cache\") {\n            set resp.http.Age = obj.age;\n        }\n    }\n    \n    return (deliver);\n}\n\nsub vcl_deliver {\n    return (deliver);\n}\n        ",
+    "cloudflare_config": {
+      "page_rules": [
+        {
+          "name": "静态资源缓存",
+          "targets": [
+            "*athena.local/static/*"
+          ],
+          "settings": {
+            "cache_level": "cache_everything",
+            "edge_cache_ttl": 31536000,
+            "browser_cache_ttl": 31536000
+          }
+        },
+        {
+          "name": "API响应缓存",
+          "targets": [
+            "*athena.local/api/*"
+          ],
+          "settings": {
+            "cache_level": "cache_everything",
+            "edge_cache_ttl": 300,
+            "browser_cache_ttl": 60,
+            "bypass_cache_on_cookie": true
+          }
+        },
+        {
+          "name": "认证请求绕过",
+          "targets": [
+            "*athena.local/api/auth/*"
+          ],
+          "settings": {
+            "cache_level": "bypass",
+            "edge_cache_ttl": 0,
+            "browser_cache_ttl": 0
+          }
+        }
+      ],
+      "worker_routes": [
+        {
+          "pattern": "/api/cache/*",
+          "script_name": "cache-management-worker.js"
+        }
+      ]
+    }
+  },
+  "summary": {
+    "total_recommendations": 5,
+    "high_priority_items": 2,
+    "estimated_improvement": "响应时间降低60%，缓存命中率提升35%",
+    "implementation_timeline": "高优先级1-2周，全部完成2-4周"
+  }
+}

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 伦理监控系统 - 实时监控AI系统的伦理合规性
 Ethics Monitoring System - Real-time Ethics Compliance Monitoring
@@ -17,12 +18,12 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 from core.logging_config import setup_logging
 
 from .evaluator import ActionSeverity, ComplianceStatus, EthicsEvaluator, EvaluationResult
-from .sensitive_data_filter import filter_log, get_sensitive_data_filter
+from .sensitive_data_filter import filter_log
 
 logger = setup_logging()
 

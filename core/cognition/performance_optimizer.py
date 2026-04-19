@@ -1,6 +1,6 @@
+from __future__ import annotations
 
 import gc
-
 
 # pyright: ignore
 # !/usr/bin/env python3

@@ -1,0 +1,140 @@
+{
+  "dashboard": {
+    "title": "Athena Gateway Monitor",
+    "tags": ["athena", "gateway", "api"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 0,
+    "refresh": "10s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "服务健康状态",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "up{job=\"athena-gateway\"}"
+          }
+        ],
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "type": "value",
+                "options": {
+                  "0": {
+                    "color": "red",
+                    "text": "DOWN"
+                  },
+                  "1": {
+                    "color": "green",
+                    "text": "UP"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "HTTP请求速率 (QPS)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(gateway_http_requests_total[5m])"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "QPS"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "P95 请求延迟",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(gateway_http_request_duration_seconds_bucket[5m]))"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "延迟 (秒)"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "错误率",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(rate(gateway_http_requests_total{status=~\"5..\"}[5m])) / sum(rate(gateway_requests_total[5m]))"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "错误率",
+            "format": "percentunit",
+            "max": 0.1,
+            "min": 0
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "健康实例数",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(gateway_healthy_services)"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "不健康实例数",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(gateway_unhealthy_services)"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "活动连接数",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "gateway_active_connections"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "请求按状态码分布",
+        "type": "piechart",
+        "targets": [
+          {
+            "expr": "sum by (status_code) (rate(gateway_http_requests_total[5m]))"
+          }
+        ],
+        "options": {
+          "legend": {
+            "displayMode": "table",
+            "placement": "right"
+          }
+        }
+      }
+    ]
+  }
+}

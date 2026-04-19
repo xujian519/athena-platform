@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena智能搜索选择器 - 查询分析器
 Athena Search Selector - Query Analyzer
@@ -13,13 +14,13 @@ Athena Search Selector - Query Analyzer
 
 import logging
 import re
-from typing import Any, Optional
+from typing import Any
 
 from ...standards.base_search_tool import QueryComplexity
 from .types import (
-    QueryIntent,
     DomainType,
     QueryAnalysis,
+    QueryIntent,
 )
 
 logger = logging.getLogger(__name__)

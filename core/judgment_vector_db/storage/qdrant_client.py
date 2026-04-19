@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Qdrant向量数据库客户端
 Qdrant Vector Database Client for Patent Judgments
@@ -9,7 +10,10 @@ Qdrant Vector Database Client for Patent Judgments
 - 批量操作支持
 """
 
-from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from core.judgment_vector_db.data_processing.vectorizer import VectorizedData
 
 from core.logging_config import setup_logging
 
@@ -91,7 +95,7 @@ class QdrantClient:
             logger.error("❌ 未连接到Qdrant")
             return False
 
-        from qdrant_client.models import Distance, PointStruct, VectorParams
+        from qdrant_client.models import Distance, VectorParams
 
         success = True
 
@@ -123,7 +127,7 @@ class QdrantClient:
 
         return success
 
-    def insert_vectors(self, layer: str, vectors: list["VectorizedData"]) -> bool:
+    def insert_vectors(self, layer: str, vectors: list[VectorizedData]) -> bool:
         """
         批量插入向量
 

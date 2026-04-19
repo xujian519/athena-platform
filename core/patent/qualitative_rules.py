@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利定性规则库
 Patent Qualitative Rules Library

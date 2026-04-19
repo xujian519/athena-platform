@@ -3,7 +3,6 @@
 BGE-M3 Apple Silicon MPS优化配置
 自动检测并使用最优设备加载BGE-M3模型
 """
-import os
 import sys
 
 # 添加项目路径
@@ -18,9 +17,9 @@ def get_optimal_bge_m3_model():
     try:
         import torch
         mps_available = torch.backends.mps.is_available()
-    except:
+    except Exception:
         mps_available = False
-    
+
     # 模型配置
     config = {
         'model_name': 'BAAI/bge-m3',
@@ -34,7 +33,7 @@ def get_optimal_bge_m3_model():
         'normalize_embeddings': True,
         'mps_optimized': mps_available
     }
-    
+
     return config
 
 def load_bge_m3_model():
@@ -42,36 +41,36 @@ def load_bge_m3_model():
     加载BGE-M3模型（Apple Silicon优化）
     """
     config = get_optimal_bge_m3_model()
-    
+
     print('=' * 70)
     print('🍎 BGE-M3 Apple Silicon优化加载器')
     print('=' * 70)
-    print(f'\n📋 配置信息:')
+    print('\n📋 配置信息:')
     print(f'   设备: {config["device"]} {"🔥 MPS加速" if config["mps_optimized"] else "💻 CPU"}')
     print(f'   向量维度: {config["dimension"]}')
     print(f'   最大序列长度: {config["max_seq_length"]}')
-    
+
     try:
         from sentence_transformers import SentenceTransformer
-        
+
         # 尝试加载模型
-        print(f'\n📦 加载BGE-M3模型...')
+        print('\n📦 加载BGE-M3模型...')
         model = SentenceTransformer(
             config['model_path'],
             device=config['device'],
             trust_remote_code=config['trust_remote_code']
         )
-        
+
         print('✅ 模型加载成功!')
         print(f'   实际设备: {model.device}')
         print(f'   向量维度: {model.get_sentence_embedding_dimension()}')
-        
+
         return model, config
-        
+
     except Exception as e:
         print(f'⚠️ 主路径加载失败: {e}')
         print(f'📦 尝试备用路径: {config["fallback_path"]}')
-        
+
         try:
             model = SentenceTransformer(
                 config['fallback_path'],
@@ -87,17 +86,17 @@ def load_bge_m3_model():
 # 测试代码
 if __name__ == '__main__':
     model, config = load_bge_m3_model()
-    
+
     if model:
         print('\n' + '=' * 70)
         print('🎉 BGE-M3模型可用!')
         print('=' * 70)
-        
+
         # 测试编码
         test_text = '测试Apple Silicon MPS加速的BGE-M3模型'
         embedding = model.encode(test_text)
-        
-        print(f'\n✅ 测试编码成功!')
+
+        print('\n✅ 测试编码成功!')
         print(f'   输入: "{test_text}"')
         print(f'   输出形状: {embedding.shape}')
         print(f'   数据类型: {embedding.dtype}')

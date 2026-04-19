@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 深度学习引擎
 Deep Learning Engine
@@ -14,8 +15,6 @@ Deep Learning Engine
 创建时间: 2025-12-26
 版本: v1.0.0 "深度智能"
 """
-import numpy as np
-
 import asyncio
 import logging
 from collections import deque
@@ -24,6 +23,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

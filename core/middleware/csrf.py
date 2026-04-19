@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 CSRF保护中间件
 CSRF Protection Middleware

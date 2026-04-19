@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一搜索管理器
 解决循环依赖问题,提供统一的搜索接口

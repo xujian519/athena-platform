@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 负熵优化的专利检索系统
 Negentropy-Optimized Patent Retrieval System
@@ -93,7 +94,7 @@ class RetrievalQuery:
 
     # 约束条件
     legal_status_filter: list[LegalStatus] = field(default_factory=list)
-    date_range: tuple[str, str | None = None  # (start_date, end_date)
+    date_range: tuple[str, str] | None = None  # (start_date, end_date)
 
     # 权重配置
     weight_relevance: float = 0.4

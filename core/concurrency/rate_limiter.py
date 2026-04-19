@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 并发控制和资源管理模块
 Concurrency Control and Resource Management Module
@@ -16,8 +17,8 @@ import time
 from collections import deque
 from collections.abc import Awaitable, Callable
 from contextlib import asynccontextmanager
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set, TypeVar
+from dataclasses import dataclass
+from typing import Any, TypeVar
 
 logger = logging.getLogger(__name__)
 

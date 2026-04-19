@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 输入验证模块
 Input Validation Module
@@ -251,7 +252,7 @@ class InputValidator:
                         ValidationErrorCode.INVALID_FORMAT,
                         f"消息内容无法序列化为JSON: {e}",
                     )
-                )
+                ) from e
 
         # 二进制内容验证
         if isinstance(content, bytes):
@@ -269,7 +270,7 @@ class InputValidator:
         return content
 
     @staticmethod
-    def validate_metadata(metadata: Any) -> dict[str, Any:
+    def validate_metadata(metadata: Any) -> dict[str, Any]:
         """
         验证元数据
 
@@ -310,7 +311,7 @@ class InputValidator:
                 ValidationError(
                     "metadata", ValidationErrorCode.INVALID_FORMAT, f"元数据无法序列化为JSON: {e}"
                 )
-            )
+            ) from e
 
         return metadata
 
@@ -532,7 +533,7 @@ def validate_channel_id(func):
                 if args:
                     channel_id = args[0]
                     validated_id = InputValidator.validate_channel_id(channel_id)
-                    return await func(validated_id, *args]
+                    return await func(validated_id, *args)
         return await func(*args, **kwargs)
 
     return wrapper
@@ -568,7 +569,7 @@ def validate_agent_id(func):
                     self = args[0]
                     agent_id = args[1]
                     validated_id = InputValidator.validate_agent_id(agent_id)
-                    return await func(self, validated_id, *args]
+                    return await func(self, validated_id, *args)
                 else:
                     raise TypeError(f"{func.__name__} missing required positional argument")
             else:
@@ -576,7 +577,7 @@ def validate_agent_id(func):
                 if args:
                     agent_id = args[0]
                     validated_id = InputValidator.validate_agent_id(agent_id)
-                    return await func(validated_id, *args]
+                    return await func(validated_id, *args)
         return await func(*args, **kwargs)
 
     return wrapper

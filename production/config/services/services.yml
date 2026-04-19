@@ -1,0 +1,551 @@
+# Athena工作平台 - 服务元数据配置
+# Services Metadata Configuration
+#
+# 定义所有59个微服务的元数据，包括：
+# - 服务名称和层级
+# - 端口配置
+# - 依赖关系
+# - 健康检查配置
+
+services:
+  # ==================== 基础设施层服务 ====================
+
+  postgresql:
+    name: PostgreSQL数据库
+    layer: infrastructure
+    image: postgres:15-alpine
+    ports:
+      internal: 5432
+      external: 5432
+    environment:
+      POSTGRES_DB: athena
+      POSTGRES_USER: athena
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-athena123}
+    volumes:
+      - ../../data/postgres:/var/lib/postgresql/data
+    health_check:
+      type: tcp
+      port: 5432
+      interval: 10
+      timeout: 5
+    dependencies: []
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+    labels:
+      - database
+      - primary
+
+  redis:
+    name: Redis缓存
+    layer: infrastructure
+    image: redis:7-alpine
+    ports:
+      internal: 6379
+      external: 6379
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis123}
+    volumes:
+      - ../../data/redis:/data
+    health_check:
+      type: tcp
+      port: 6379
+      interval: 10
+      timeout: 5
+    dependencies: []
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  qdrant:
+    name: Qdrant向量数据库
+    layer: infrastructure
+    image: qdrant/qdrant:v1.7.4
+    ports:
+      internal: 6333
+      external: 6333
+    environment:
+      QDRANT__SERVICE__HTTP_PORT: 6333
+      QDRANT__SERVICE__GRPC_PORT: 6334
+    volumes:
+      - ../../data/qdrant:/qdrant/storage
+    health_check:
+      type: http
+      port: 6333
+      path: /health
+      interval: 30
+      timeout: 10
+    dependencies: []
+    resource_limits:
+      cpus: "4.0"
+      memory: 16G
+
+  nebula-graph:
+    name: NebulaGraph图数据库
+    layer: infrastructure
+    image: vesoft/nebula-graph:v3.6.0
+    ports:
+      internal: 9669
+      external: 9669
+    health_check:
+      type: tcp
+      port: 9669
+      interval: 15
+      timeout: 10
+    dependencies:
+      - nebula-metad
+      - nebula-storaged
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+
+  nebula-metad:
+    name: NebulaGraph Meta服务
+    layer: infrastructure
+    image: vesoft/nebula-metad:v3.6.0
+    ports:
+      internal: 9559
+      external: 9559
+    dependencies: []
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  nebula-storaged:
+    name: NebulaGraph Storage服务
+    layer: infrastructure
+    image: vesoft/nebula-storaged:v3.6.0
+    ports:
+      internal: 9779
+      external: 9779
+    dependencies:
+      - nebula-metad
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+
+  # ==================== 核心服务层服务 ====================
+
+  api-gateway:
+    name: API网关
+    layer: core_services
+    type: nodejs
+    ports:
+      internal: 8080
+      external: 8080
+    working_dir: services/api-gateway
+    health_check:
+      type: http
+      port: 8080
+      path: /health
+      interval: 20
+      timeout: 5
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  unified-identity:
+    name: 统一身份认证
+    layer: core_services
+    type: python
+    ports:
+      internal: 8010
+      external: 8010
+    working_dir: services/unified-identity
+    health_check:
+      type: http
+      port: 8010
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  yunpat-agent:
+    name: YunPat专利代理
+    layer: core_services
+    type: python
+    ports:
+      internal: 8020
+      external: 8020
+    working_dir: services/yunpat-agent
+    health_check:
+      type: http
+      port: 8020
+      path: /api/health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  browser-automation:
+    name: 浏览器自动化
+    layer: core_services
+    type: python
+    ports:
+      internal: 8030
+      external: 8030
+    working_dir: services/browser-automation-service
+    health_check:
+      type: http
+      port: 8030
+      path: /health
+      interval: 30
+    dependencies:
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  autonomous-control:
+    name: 自主控制
+    layer: core_services
+    type: python
+    ports:
+      internal: 8040
+      external: 8040
+    working_dir: services/autonomous-control
+    health_check:
+      type: http
+      port: 8040
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  patent-analysis:
+    name: 专利分析
+    layer: core_services
+    type: python
+    ports:
+      internal: 8050
+      external: 8050
+    working_dir: services/patent-analysis
+    health_check:
+      type: http
+      port: 8050
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - qdrant
+      - nebula-graph
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+
+  patent-search:
+    name: 专利搜索
+    layer: core_services
+    type: python
+    ports:
+      internal: 8060
+      external: 8060
+    working_dir: services/patent-search
+    health_check:
+      type: http
+      port: 8060
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  xiaonuo-orchestrator:
+    name: 小诺服务编排器
+    layer: core_services
+    type: python
+    ports:
+      internal: 8200
+      external: 8200
+    working_dir: apps/xiaonuo/orchestrator
+    command: python3 run.py
+    health_check:
+      type: http
+      port: 8200
+      path: /health
+      interval: 30
+      timeout: 5
+    dependencies: []
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+    labels:
+      - orchestration
+      - management
+
+  knowledge-graph-service:
+    name: 知识图谱服务
+    layer: core_services
+    type: python
+    ports:
+      internal: 8070
+      external: 8070
+    working_dir: services/knowledge-graph-service
+    health_check:
+      type: http
+      port: 8070
+      path: /health
+      interval: 20
+    dependencies:
+      - nebula-graph
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+
+  joyagent-optimization:
+    name: JoyAgent优化服务
+    layer: core_services
+    type: python
+    ports:
+      internal: 8035
+      external: 8035
+    working_dir: services/joyagent-optimization-service
+    health_check:
+      type: http
+      port: 8035
+      path: /api/v1/health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  # ==================== MCP服务器层服务 ====================
+
+  academic-search-mcp:
+    name: 学术搜索MCP服务器
+    layer: mcp_servers
+    type: python
+    ports:
+      internal: 8200
+      external: 8200
+    working_dir: mcp-servers/academic-search-mcp-server
+    health_check:
+      type: tcp
+      port: 8200
+      interval: 30
+    dependencies:
+      - api-gateway
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  patent-search-mcp:
+    name: 专利搜索MCP服务器
+    layer: mcp_servers
+    type: python
+    ports:
+      internal: 8201
+      external: 8201
+    working_dir: mcp-servers/patent-search-mcp-server
+    health_check:
+      type: tcp
+      port: 8201
+      interval: 30
+    dependencies:
+      - postgresql
+      - api-gateway
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  patent-downloader-mcp:
+    name: 专利下载MCP服务器
+    layer: mcp_servers
+    type: python
+    ports:
+      internal: 8202
+      external: 8202
+    working_dir: mcp-servers/patent-downloader-mcp-server
+    health_check:
+      type: tcp
+      port: 8202
+      interval: 30
+    dependencies:
+      - postgresql
+      - redis
+      - api-gateway
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  jina-ai-mcp:
+    name: Jina AI MCP服务器
+    layer: mcp_servers
+    type: python
+    ports:
+      internal: 8203
+      external: 8203
+    working_dir: mcp-servers/jina-ai-mcp-server
+    health_check:
+      type: tcp
+      port: 8203
+      interval: 30
+    dependencies:
+      - api-gateway
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  gaode-mcp:
+    name: 高德地图MCP服务器
+    layer: mcp_servers
+    type: python
+    ports:
+      internal: 8206
+      external: 8206
+    working_dir: mcp-servers/gaode-mcp-server
+    health_check:
+      type: tcp
+      port: 8206
+      interval: 30
+    dependencies:
+      - api-gateway
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  chrome-mcp:
+    name: Chrome MCP服务器
+    layer: mcp_servers
+    type: python
+    ports:
+      internal: 8205
+      external: 8205
+    working_dir: mcp-servers/chrome-mcp-server
+    health_check:
+      type: tcp
+      port: 8205
+      interval: 30
+    dependencies:
+      - browser-automation
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  github-mcp:
+    name: GitHub MCP服务器
+    layer: mcp_servers
+    type: typescript
+    ports:
+      internal: 8207
+      external: 8207
+    working_dir: mcp-servers/github-mcp-server
+    health_check:
+      type: tcp
+      port: 8207
+      interval: 30
+    dependencies:
+      - api-gateway
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  google-patents-meta-mcp:
+    name: 谷歌专利元数据MCP服务器
+    layer: mcp_servers
+    type: python
+    ports:
+      internal: 8208
+      external: 8208
+    working_dir: mcp-servers/google-patents-meta-server
+    health_check:
+      type: tcp
+      port: 8208
+      interval: 30
+    dependencies:
+      - api-gateway
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  # ==================== 应用层服务 ====================
+
+  xiaonuo-gateway:
+    name: XiaoNuo统一网关
+    layer: applications
+    type: python
+    ports:
+      internal: 8100
+      external: 8100
+    working_dir: apps/xiaonuo
+    command: python start_gateway.py
+    health_check:
+      type: http
+      port: 8100
+      path: /health
+      interval: 15
+    dependencies:
+      - api-gateway
+      - academic-search-mcp
+      - patent-search-mcp
+      - jina-ai-mcp
+      - joyagent-optimization
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+
+  intent-recognition:
+    name: 意图识别服务
+    layer: applications
+    type: python
+    ports:
+      internal: 8002
+      external: 8002
+    working_dir: api
+    command: python -m uvicorn intent_recognition_api_v11:app --host 0.0.0.0 --port 8002
+    health_check:
+      type: http
+      port: 8002
+      path: /health
+      interval: 15
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  visualization-tools:
+    name: 可视化工具
+    layer: applications
+    type: python
+    ports:
+      internal: 8091
+      external: 8091
+    working_dir: services/visualization-tools
+    health_check:
+      type: http
+      port: 8091
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - qdrant
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G

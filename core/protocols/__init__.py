@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多智能体协作协议模块
 Multi-Agent Collaboration Protocols Module
@@ -22,16 +23,13 @@ from .collaboration import (
     CoordinationProtocol,
     DecisionProtocol,
     ProtocolContext,
+    ProtocolManager,
     # 核心数据类
     ProtocolMessage,
     ProtocolPhase,
     ProtocolStatus,
     # 核心枚举类
     ProtocolType,
-)
-
-from .collaboration import (
-    ProtocolManager,
     protocol_manager,
 )
 from .collaboration.utils import (

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利缴费信息最终处理版本
 Final Patent Payment Processing Version
@@ -7,13 +6,12 @@ Final Patent Payment Processing Version
 考虑各种专利申请号格式，包括带点号和不带点号的格式
 """
 
-import psycopg2
-import pandas as pd
-import json
-import os
-from datetime import datetime
-import re
 import logging
+import os
+import re
+
+import pandas as pd
+import psycopg2
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +64,7 @@ class PatentPaymentFinalUpdater:
             # 提取缴费记录
             payment_records = []
 
-            for index, row in df.iterrows():
+            for _index, row in df.iterrows():
                 # 跳过空行
                 if row.empty or all(pd.isna(row.values)):
                     continue
@@ -164,7 +162,7 @@ class PatentPaymentFinalUpdater:
         # 2. 如果是13位数字（新格式）
         if len(payment_number) == 13 and payment_number.isdigit():
             year = payment_number[:4]
-            type_code = payment_number[4]
+            payment_number[4]
             serial = payment_number[5:12]
             check = payment_number[12]
 
@@ -375,7 +373,7 @@ class PatentPaymentFinalUpdater:
 
             conn.commit()
 
-            print(f"\n✅ 数据库更新完成:")
+            print("\n✅ 数据库更新完成:")
             print(f"   新增缴费记录: {inserted_count} 条")
             print(f"   更新缴费记录: {updated_count} 条")
             print(f"   更新为'有效'状态: {status_updated} 个")

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - 通义千问视觉语言模型适配器
 支持Qwen-VL-Max、Qwen-VL-Plus等视觉模型
@@ -9,7 +10,6 @@
 import base64
 import logging
 import os
-from typing import Optional
 
 from core.llm.base import DeploymentType, LLMRequest, LLMResponse, ModelCapability, ModelType
 
@@ -268,8 +268,8 @@ QWEN_VL_MODELS = {
 }
 
 
-def create_qwen_vl_adapter(model_id: Optional[str]
-    api_key: Optional[str | None = None) -> QwenVLAdapter:
+def create_qwen_vl_adapter(model_id: str | None = None,
+    api_key: str | None = None) -> QwenVLAdapter:
     """
     创建Qwen-VL适配器的便捷函数
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 模块集成测试系统
 Module Integration Test System
@@ -14,9 +15,8 @@ import logging
 import sys
 import time
 from dataclasses import dataclass, field
-from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -392,7 +392,7 @@ class ModuleIntegrationTester:
                     result = await module.process({'operation': 'invalid_operation'})
                     error_handling_results[f"{module_id}_invalid_input"] = not result.get('success', True)
                     logger.info(f"   ✅ {module_id} 无效输入处理: 正常")
-                except Exception as e:
+                except Exception:
                     error_handling_results[f"{module_id}_invalid_input"] = True
                     logger.info(f"   ✅ {module_id} 异常捕获: 正常")
 
@@ -444,7 +444,7 @@ class ModuleIntegrationTester:
 
                         # 测试响应时间
                         response_start = time.time()
-                        status = module.get_status()
+                        module.get_status()
                         response_time = time.time() - response_start
 
                         performance_results[module_id]['response_time'] = response_time

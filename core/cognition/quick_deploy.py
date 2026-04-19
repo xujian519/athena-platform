@@ -1,3 +1,4 @@
+from __future__ import annotations
 # pyright: ignore
 # !/usr/bin/env python3
 """
@@ -11,8 +12,9 @@ Quick Deployment
 版本: v1.0 Quick Deploy
 """
 
-from pathlib import Path
 import logging
+from pathlib import Path
+
 logger = logging.getLogger(__name__)
 
 print("🚀 小娜专利系统 - 部署状态检查")
@@ -66,7 +68,7 @@ try:
     success = asyncio.run(test_init())
     print(f"   ✅ LLM接口初始化: {'成功' if success else '失败'}")
 
-except Exception:
+except Exception as e:
     logger.error(f"捕获异常: {e}", exc_info=True)
 # 检查性能监控
 print("\n📊 性能监控状态:")
@@ -76,7 +78,7 @@ try:
     print("   ✅ 性能监控器可导入")
     print(f"   📈 监控间隔: {performance_optimizer.monitoring_interval}秒")
     print(f"   📚 历史大小: {performance_optimizer.history_size}")
-except Exception:
+except Exception as e:
     logger.error(f"捕获异常: {e}", exc_info=True)
 # 检查缓存管理器
 print("\n💾 缓存管理器状态:")
@@ -88,7 +90,7 @@ try:
     print(f"   📦 最大大小: {cache_manager.max_size_mb}MB")
     print(f"   ⏰ 默认TTL: {cache_manager.default_ttl}秒")
     print(f"   📊 当前条目: {stats.total_entries}")
-except Exception:
+except Exception as e:
     logger.error(f"捕获异常: {e}", exc_info=True)
 # 生成部署报告
 print("\n📋 部署状态总结:")

@@ -1,0 +1,119 @@
+{
+  "postgresql": {
+    "status": "✅ 成功",
+    "database": "athena",
+    "data": {
+      "patent_law_documents": {
+        "description": "专利法律文档",
+        "count": 32720,
+        "status": "✅"
+      },
+      "law_documents": {
+        "description": "法律文档",
+        "count": 1364,
+        "status": "✅"
+      },
+      "patent_rules_unified": {
+        "description": "统一专利规则",
+        "count": 9956,
+        "status": "✅"
+      },
+      "patent_rules_unified_embeddings": {
+        "description": "规则向量嵌入",
+        "count": 384,
+        "status": "✅"
+      },
+      "legal_concepts": {
+        "description": "法律概念",
+        "count": 0,
+        "status": "⚠️"
+      },
+      "patent_guidelines": {
+        "description": "专利指南",
+        "count": 0,
+        "status": "⚠️"
+      }
+    }
+  },
+  "neo4j": {
+    "status": "✅ 成功",
+    "data": {
+      "ScenarioRule": {
+        "description": "场景规则",
+        "count": 29,
+        "status": "✅"
+      },
+      "LegalDocument": {
+        "description": "法律文档",
+        "count": 0,
+        "status": "⚠️"
+      },
+      "LegalConcept": {
+        "description": "法律概念",
+        "count": 0,
+        "status": "⚠️"
+      },
+      "Case": {
+        "description": "案例",
+        "count": 0,
+        "status": "⚠️"
+      },
+      "LegalEntity": {
+        "description": "法律实体",
+        "count": 0,
+        "status": "⚠️"
+      },
+      "Article": {
+        "description": "法条",
+        "count": 0,
+        "status": "⚠️"
+      },
+      "Rule": {
+        "description": "规则",
+        "count": 0,
+        "status": "⚠️"
+      },
+      "_relations": {
+        "count": 64607
+      },
+      "_total_nodes": {
+        "count": 397064
+      }
+    }
+  },
+  "qdrant": {
+    "status": "✅ 成功",
+    "data": {
+      "legal_documents": {
+        "description": "法律文档向量",
+        "points_count": 0,
+        "status": "❌",
+        "error": "Unexpected Response: 404 (Not Found)\nRaw response content:\nb'{\"status\":{\"error\":\"Not found: Collection `legal_documents` doesn\\'t exist!\"},\"time\":4.084e-6}'"
+      },
+      "legal_knowledge": {
+        "description": "法律知识向量",
+        "points_count": 0,
+        "status": "❌",
+        "error": "Unexpected Response: 404 (Not Found)\nRaw response content:\nb'{\"status\":{\"error\":\"Not found: Collection `legal_knowledge` doesn\\'t exist!\"},\"time\":1.625e-6}'"
+      },
+      "patent_embeddings": {
+        "description": "专利嵌入向量",
+        "points_count": 0,
+        "status": "❌",
+        "error": "Unexpected Response: 404 (Not Found)\nRaw response content:\nb'{\"status\":{\"error\":\"Not found: Collection `patent_embeddings` doesn\\'t exist!\"},\"time\":1.25e-6}'"
+      },
+      "case_embeddings": {
+        "description": "案例嵌入向量",
+        "points_count": 0,
+        "status": "❌",
+        "error": "Unexpected Response: 404 (Not Found)\nRaw response content:\nb'{\"status\":{\"error\":\"Not found: Collection `case_embeddings` doesn\\'t exist!\"},\"time\":1.208e-6}'"
+      },
+      "legal_concepts": {
+        "description": "法律概念向量",
+        "points_count": 0,
+        "status": "❌",
+        "error": "Unexpected Response: 404 (Not Found)\nRaw response content:\nb'{\"status\":{\"error\":\"Not found: Collection `legal_concepts` doesn\\'t exist!\"},\"time\":1.125e-6}'"
+      }
+    }
+  }
+}

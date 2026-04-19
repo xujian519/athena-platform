@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利业务智能系统
 基于知识图谱提取动态提示词和规则，支持专利撰写、分析等全部专利业务
@@ -9,23 +8,19 @@
 """
 
 import json
-from core.async_main import async_main
-import logging
-from core.logging_config import setup_logging
-import re
-from datetime import datetime
-from pathlib import Path
-from typing import Any, Dict, List, Tuple
-
-import jieba
-import jieba.analyse
-from neo4j import GraphDatabase
+import os
 
 # 导入安全配置
 import sys
+from datetime import datetime
 from pathlib import Path
+from typing import Any
+
+from neo4j import GraphDatabase
+
+from core.logging_config import setup_logging
+
 sys.path.append(str(Path(__file__).parent.parent / "core"))
-from security.env_config import get_env_var, get_database_url, get_jwt_secret
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -73,7 +68,7 @@ class PatentBusinessIntelligence:
             logger.error(f"连接Neo4j失败: {e}")
             return False
 
-    def _extract_patent_writing_rules(self) -> Dict:
+    def _extract_patent_writing_rules(self) -> dict:
         """从知识图谱提取专利撰写规则"""
         rules = {
             '技术方案描述': {
@@ -126,7 +121,7 @@ class PatentBusinessIntelligence:
 
         return rules
 
-    def _extract_patent_analysis_rules(self) -> Dict:
+    def _extract_patent_analysis_rules(self) -> dict:
         """提取专利分析规则"""
         return {
             '技术分析': {
@@ -155,7 +150,7 @@ class PatentBusinessIntelligence:
             }
         }
 
-    def _extract_patent_examination_rules(self) -> Dict:
+    def _extract_patent_examination_rules(self) -> dict:
         """提取专利审查规则"""
         return {
             '新颖性审查': {
@@ -177,7 +172,7 @@ class PatentBusinessIntelligence:
             }
         }
 
-    def _extract_patent_invalid_rules(self) -> Dict:
+    def _extract_patent_invalid_rules(self) -> dict:
         """提取专利无效宣告规则"""
         return {
             '无效理由': {
@@ -196,7 +191,7 @@ class PatentBusinessIntelligence:
             }
         }
 
-    def _extract_patent_litigation_rules(self) -> Dict:
+    def _extract_patent_litigation_rules(self) -> dict:
         """提取专利诉讼规则"""
         return {
             '侵权判定': {
@@ -210,7 +205,7 @@ class PatentBusinessIntelligence:
             }
         }
 
-    def _generate_writing_prompts(self) -> Dict:
+    def _generate_writing_prompts(self) -> dict:
         """生成专利撰写动态提示词"""
         prompts = {
             "技术方案": """
@@ -262,7 +257,7 @@ class PatentBusinessIntelligence:
 
         return prompts
 
-    def _generate_analysis_prompts(self) -> Dict:
+    def _generate_analysis_prompts(self) -> dict:
         """生成专利分析动态提示词"""
         return {
             "专利性分析": """
@@ -312,7 +307,7 @@ class PatentBusinessIntelligence:
             """.strip()
         }
 
-    def _generate_search_prompts(self) -> Dict:
+    def _generate_search_prompts(self) -> dict:
         """生成专利检索动态提示词"""
         return {
             "查新检索": """
@@ -372,7 +367,7 @@ class PatentBusinessIntelligence:
             """.strip()
         }
 
-    def _generate_evaluation_prompts(self) -> Dict:
+    def _generate_evaluation_prompts(self) -> dict:
         """生成专利评估动态提示词"""
         return {
             "技术价值评估": """
@@ -426,7 +421,7 @@ class PatentBusinessIntelligence:
             """.strip()
         }
 
-    def _generate_warning_prompts(self) -> Dict:
+    def _generate_warning_prompts(self) -> dict:
         """生成专利预警动态提示词"""
         return {
             "侵权监控": """
@@ -480,7 +475,7 @@ class PatentBusinessIntelligence:
             """.strip()
         }
 
-    def get_patent_writing_assistant(self, tech_info: Dict) -> Dict:
+    def get_patent_writing_assistant(self, tech_info: dict) -> dict:
         """获取专利撰写助手"""
         return {
             '规则指引': self.rules['专利撰写规则'],
@@ -488,7 +483,7 @@ class PatentBusinessIntelligence:
             '建议': self._generate_writing_suggestions(tech_info)
         }
 
-    def get_patent_analysis_assistant(self, patent_info: Dict) -> Dict:
+    def get_patent_analysis_assistant(self, patent_info: dict) -> dict:
         """获取专利分析助手"""
         return {
             '分析规则': self.rules['专利分析规则'],
@@ -496,7 +491,7 @@ class PatentBusinessIntelligence:
             '知识支持': self._get_relevant_case_law(patent_info)
         }
 
-    def get_patent_strategy_assistant(self, business_goal: str) -> Dict:
+    def get_patent_strategy_assistant(self, business_goal: str) -> dict:
         """获取专利策略助手"""
         strategy_map = {
             '防御型布局': {
@@ -518,7 +513,7 @@ class PatentBusinessIntelligence:
 
         return strategy_map.get(business_goal, {})
 
-    def _generate_writing_suggestions(self, tech_info: Dict) -> List[str]:
+    def _generate_writing_suggestions(self, tech_info: dict) -> list[str]:
         """生成撰写建议"""
         suggestions = []
 
@@ -538,7 +533,7 @@ class PatentBusinessIntelligence:
 
         return suggestions
 
-    def _get_relevant_case_law(self, patent_info: Dict) -> List[Dict]:
+    def _get_relevant_case_law(self, patent_info: dict) -> list[dict]:
         """获取相关判例"""
         relevant_cases = []
 

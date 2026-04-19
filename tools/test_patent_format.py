@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 测试专利申请号格式转换
 Test Patent Number Format Conversion
 """
 
-import psycopg2
 import os
+
+import psycopg2
 
 # PostgreSQL配置
 db_config = {
@@ -49,7 +49,7 @@ def convert_patent_number_format(payment_number):
         db_format2 = f"{year}{serial}{check}"
         db_format3 = f"{year}{serial[:6]}.{check}"  # 有时序号少一位
 
-        print(f"\n尝试的格式:")
+        print("\n尝试的格式:")
         print(f"  1. {db_format1}")
         print(f"  2. {db_format2}")
         print(f"  3. {db_format3}")
@@ -87,7 +87,7 @@ for num in test_numbers:
 
 # 查看数据库中实际的格式样本
 print("\n\n数据库中的申请号样本:")
-cursor.execute("""
+cursor.execute(r"""
     SELECT patent_number, patent_name
     FROM patents
     WHERE patent_number IS NOT NULL

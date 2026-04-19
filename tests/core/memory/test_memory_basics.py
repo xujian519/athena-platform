@@ -13,15 +13,19 @@ Basic Tests for Memory Module
 版本: v1.0.0
 """
 
-import pytest
+import sys
 from datetime import datetime
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 from core.memory.unified_memory.types import (
-    CacheStatistics,
-    AgentType,
-    MemoryType,
-    MemoryTier,
     AgentIdentity,
-    MemoryItem
+    AgentType,
+    CacheStatistics,
+    MemoryItem,
+    MemoryTier,
+    MemoryType,
 )
 
 

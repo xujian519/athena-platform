@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Neo4j增强的意图识别系统
 Neo4j Enhanced Intent Recognition System
@@ -299,7 +300,6 @@ class GraphEnhancedIntentClassifier:
 
     def _calculate_graph_scores(self, text: str, entities: dict) -> dict:
         """计算图谱分数"""
-        import numpy as np
 
         scores = {}
         intent_classes = self.label_encoder.classes_
@@ -472,7 +472,6 @@ NebulaGraphConnection = Neo4jGraphConnection
 
 # 保持与旧模块导入的兼容性
 try:
-    from nebula3.common import *  # noqa: F401
     from nebula3.Config import Config  # noqa: F401
     from nebula3.gclient.net import ConnectionPool  # noqa: F401
     NEBULA_AVAILABLE = True

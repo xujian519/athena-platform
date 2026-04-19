@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Numpy兼容性统一配置模块
 Numpy Compatibility Unified Configuration
 """
 
+import logging
 import os
 import sys
 import warnings
-import logging
-from typing import Any, Union, List, Dict
+from typing import Any
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -77,7 +76,7 @@ class NumpyCompatibilityManager:
 
         self.compatibility_mode = "legacy"
 
-    def get_safe_array(self, data: Any, dtype: Union[str, type] = None) -> "np.ndarray":
+    def get_safe_array(self, data: Any, dtype: str | type = None) -> "np.ndarray":
         """创建安全的numpy数组"""
         import numpy as np
 
@@ -101,7 +100,7 @@ class NumpyCompatibilityManager:
             # 备用方案：转换为列表再创建数组
             return np.array(list(data), dtype=np.object_)
 
-    def safe_random(self, size: Union[int, tuple], dtype: type = None) -> "np.ndarray":
+    def safe_random(self, size: int | tuple, dtype: type = None) -> "np.ndarray":
         """安全的随机数生成"""
         import numpy as np
 
@@ -128,7 +127,7 @@ class NumpyCompatibilityManager:
                 data = [random.random() for _ in range(flat_size)]
                 return np.array(data).reshape(size).astype(dtype)
 
-    def get_compatibility_info(self) -> Dict[str, Any]:
+    def get_compatibility_info(self) -> dict[str, Any]:
         """获取兼容性信息"""
         return {
             "python_version": f"{self.python_version.major}.{self.python_version.minor}",
@@ -137,7 +136,7 @@ class NumpyCompatibilityManager:
             "recommendations": self._get_recommendations()
         }
 
-    def _get_recommendations(self) -> List[str]:
+    def _get_recommendations(self) -> list[str]:
         """获取优化建议"""
         recommendations = []
 

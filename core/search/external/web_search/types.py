@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 联网搜索引擎 - 数据模型
 Web Search Engines - Data Models
@@ -14,7 +15,7 @@ Web Search Engines - Data Models
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 
 class SearchEngineType(Enum):
@@ -42,10 +43,11 @@ class SearchQuery:
     region: str = "CN"
     safe_search: str = "moderate"
     time_range: str = ""  # y=year, m=month, w=week, d=day
-    domains: Optional[list["key"] = None
-    exclude_domains: Optional[list["key"] = None
-    include_domains: Optional[list["key"] = None
+    domains: list[str] | None = None
+    exclude_domains: list[str] | None = None
+    include_domains: list[str] | None = None
     file_type: str = ""  # pdf, doc, docx, etc.
+    advanced: bool = False  # 高级搜索模式
 
 
 @dataclass
@@ -59,7 +61,7 @@ class SearchResult:
     engine: str
     relevance_score: float = 0.0
     timestamp: str = ""
-    metadata: Optional[dict[str, Any] | None = None
+    metadata: dict[str, Any] | None = None
 
     def __post_init__(self):
         if not self.timestamp:
@@ -81,7 +83,7 @@ class SearchResponse:
     api_key_used: str = ""
     error_message: str = ""
     timestamp: str = ""
-    metadata: Optional[dict[str, Any] | None = None
+    metadata: dict[str, Any] | None = None
 
     def __post_init__(self):
         if not self.timestamp:

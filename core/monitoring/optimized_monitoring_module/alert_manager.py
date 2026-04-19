@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化版监控告警模块 - 告警管理器
 Optimized Monitoring and Alerting Module - Alert Manager
@@ -13,7 +14,7 @@ import asyncio
 import logging
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any
 
 from .collector import MetricsCollector

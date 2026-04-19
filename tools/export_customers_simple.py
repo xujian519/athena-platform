@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 导出客户信息简化版
 Export Customer Information - Simple Version
 """
 
-import psycopg2
 import json
 import os
+
+import psycopg2
+
 
 def export_customers():
     """导出所有客户信息"""

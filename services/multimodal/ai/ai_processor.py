@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 AI处理器
 AI Processor
@@ -7,19 +6,15 @@ AI Processor
 提供多模态文件的AI处理功能，包括图像识别、文档解析、文本分析等
 """
 
-import os
-from core.async_main import async_main
 import asyncio
-import logging
-import json
 import hashlib
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional, Union, Tuple
-from pathlib import Path
-from dataclasses import dataclass, asdict
+import logging
+import os
+from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
-import io
-import base64
+from pathlib import Path
+from typing import Any
 
 # AI处理库（可选依赖）
 try:
@@ -86,11 +81,11 @@ class ProcessingResult:
     created_at: datetime
     started_at: datetime | None = None
     completed_at: datetime | None = None
-    result: Dict[str, Any] = None
+    result: dict[str, Any] = None
     confidence: float = 0.0
     error_message: str | None = None
     processing_time: float = 0.0
-    metadata: Dict[str, Any] = None
+    metadata: dict[str, Any] = None
 
     def __post_init__(self):
         if self.result is None:
@@ -103,8 +98,8 @@ class AIProcessor:
 
     def __init__(self):
         self.processing_queue: asyncio.Queue = asyncio.Queue()
-        self.processing_tasks: Dict[str, asyncio.Task] = {}
-        self.results_cache: Dict[str, ProcessingResult] = {}
+        self.processing_tasks: dict[str, asyncio.Task] = {}
+        self.results_cache: dict[str, ProcessingResult] = {}
         self.max_concurrent_tasks = 5
         self.default_timeout = 300  # 5分钟
         self.supported_formats = {
@@ -141,7 +136,7 @@ class AIProcessor:
     async def stop(self):
         """停止AI处理器"""
         # 取消所有处理任务
-        for task_id, task in self.processing_tasks.items():
+        for _task_id, task in self.processing_tasks.items():
             task.cancel()
 
         # 等待任务结束
@@ -153,10 +148,10 @@ class AIProcessor:
 
     async def submit_processing_task(self, file_id: str, file_path: str,
                                    processing_type: ProcessingType,
-                                   options: Dict[str, Any] = None) -> str:
+                                   options: dict[str, Any] = None) -> str:
         """提交处理任务"""
         task_id = hashlib.md5(
-            f"{file_id}_{processing_type.value}_{datetime.now(), usedforsecurity=False.isoformat()}".encode()
+            f"{file_id}_{processing_type.value}_{datetime.now().isoformat()}".encode()
         ).hexdigest()
 
         # 创建处理结果对象
@@ -183,7 +178,7 @@ class AIProcessor:
 
     async def _execute_processing(self, task_id: str, file_path: str,
                                 processing_type: ProcessingType,
-                                options: Dict[str, Any] = None):
+                                options: dict[str, Any] = None):
         """执行处理任务"""
         result = self.results_cache[task_id]
         result.status = ProcessingStatus.PROCESSING
@@ -241,7 +236,7 @@ class AIProcessor:
         return False
 
     async def _process_image_analysis(self, file_path: str,
-                                    options: Dict[str, Any] = None) -> Dict[str, Any]:
+                                    options: dict[str, Any] = None) -> dict[str, Any]:
         """图像分析处理"""
         if not PIL_AVAILABLE:
             raise ImportError("PIL库未安装，无法进行图像分析")
@@ -296,7 +291,7 @@ class AIProcessor:
 
         return result
 
-    def _analyze_colors(self, img: Image.Image) -> Dict[str, Any]:
+    def _analyze_colors(self, img: Image.Image) -> dict[str, Any]:
         """分析图像颜色"""
         # 转换为RGB模式
         if img.mode != 'RGB':
@@ -323,7 +318,7 @@ class AIProcessor:
             'color_palette': [color['hex'] for color in dominant_colors[:5]]
         }
 
-    def _analyze_image_quality(self, img: Image.Image) -> Dict[str, Any]:
+    def _analyze_image_quality(self, img: Image.Image) -> dict[str, Any]:
         """分析图像质量"""
         quality_metrics = {}
 
@@ -343,7 +338,7 @@ class AIProcessor:
         return quality_metrics
 
     async def _process_document_parsing(self, file_path: str,
-                                     options: Dict[str, Any] = None) -> Dict[str, Any]:
+                                     options: dict[str, Any] = None) -> dict[str, Any]:
         """文档解析处理"""
         result = {}
         options = options or {}
@@ -369,7 +364,7 @@ class AIProcessor:
         return result
 
     async def _parse_pdf(self, file_path: str,
-                        options: Dict[str, Any] = None) -> Dict[str, Any]:
+                        options: dict[str, Any] = None) -> dict[str, Any]:
         """解析PDF文档"""
         # 这里需要使用PDF解析库，如PyPDF2或pdfplumber
         # 简化实现，只返回基本信息
@@ -385,7 +380,7 @@ class AIProcessor:
         }
 
     async def _parse_word(self, file_path: str,
-                         options: Dict[str, Any] = None) -> Dict[str, Any]:
+                         options: dict[str, Any] = None) -> dict[str, Any]:
         """解析Word文档"""
         # 这里需要使用python-docx库
         # 简化实现
@@ -399,11 +394,11 @@ class AIProcessor:
         }
 
     async def _parse_text(self, file_path: str,
-                        options: Dict[str, Any] = None) -> Dict[str, Any]:
+                        options: dict[str, Any] = None) -> dict[str, Any]:
         """解析纯文本文档"""
         encoding = options.get('encoding', 'utf-8')
 
-        with open(file_path, 'r', encoding=encoding) as f:
+        with open(file_path, encoding=encoding) as f:
             content = f.read()
 
         return {
@@ -416,14 +411,14 @@ class AIProcessor:
         }
 
     async def _process_text_analysis(self, file_path: str,
-                                   options: Dict[str, Any] = None) -> Dict[str, Any]:
+                                   options: dict[str, Any] = None) -> dict[str, Any]:
         """文本分析处理"""
         if not JIEBA_AVAILABLE:
             raise ImportError("jieba库未安装，无法进行中文文本分析")
 
         # 读取文本内容
         encoding = options.get('encoding', 'utf-8')
-        with open(file_path, 'r', encoding=encoding) as f:
+        with open(file_path, encoding=encoding) as f:
             text = f.read()
 
         result = {}
@@ -475,7 +470,7 @@ class AIProcessor:
 
         return result
 
-    def _analyze_sentiment(self, text: str) -> Dict[str, Any]:
+    def _analyze_sentiment(self, text: str) -> dict[str, Any]:
         """简单的情感分析"""
         # 这里使用简化的情感词典方法
         positive_words = ['好', '棒', '优秀', '喜欢', '满意', '赞']
@@ -504,7 +499,7 @@ class AIProcessor:
         }
 
     async def _process_content_extraction(self, file_path: str,
-                                        options: Dict[str, Any] = None) -> Dict[str, Any]:
+                                        options: dict[str, Any] = None) -> dict[str, Any]:
         """内容提取处理"""
         file_ext = Path(file_path).suffix.lower()
 
@@ -516,7 +511,7 @@ class AIProcessor:
             raise ValueError(f"不支持的文件格式: {file_ext}")
 
     async def _extract_image_content(self, file_path: str,
-                                   options: Dict[str, Any] = None) -> Dict[str, Any]:
+                                   options: dict[str, Any] = None) -> dict[str, Any]:
         """提取图像内容"""
         result = {}
 
@@ -545,14 +540,14 @@ class AIProcessor:
 
         return result
 
-    def _detect_objects(self, file_path: str) -> List[Dict[str, Any]]:
+    def _detect_objects(self, file_path: str) -> list[dict[str, Any]]:
         """物体检测（简化实现）"""
         # 这里应该使用训练好的物体检测模型
         # 简化实现，返回空列表
         return []
 
     async def _extract_document_content(self, file_path: str,
-                                      options: Dict[str, Any] = None) -> Dict[str, Any]:
+                                      options: dict[str, Any] = None) -> dict[str, Any]:
         """提取文档内容"""
         # 调用文档解析
         parse_result = await self._process_document_parsing(file_path, options)
@@ -571,20 +566,20 @@ class AIProcessor:
 
         return result
 
-    def _extract_links(self, text: str) -> List[str]:
+    def _extract_links(self, text: str) -> list[str]:
         """提取链接"""
         import re
         url_pattern = r'http[s]?://(?:[a-z_a-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-f_a-F][0-9a-f_a-F]))+'
         return re.findall(url_pattern, text)
 
-    def _extract_emails(self, text: str) -> List[str]:
+    def _extract_emails(self, text: str) -> list[str]:
         """提取邮箱"""
         import re
         email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
         return re.findall(email_pattern, text)
 
     async def _process_object_detection(self, file_path: str,
-                                     options: Dict[str, Any] = None) -> Dict[str, Any]:
+                                     options: dict[str, Any] = None) -> dict[str, Any]:
         """物体检测处理"""
         # 实现物体检测逻辑
         return {
@@ -594,7 +589,7 @@ class AIProcessor:
         }
 
     async def _process_face_recognition(self, file_path: str,
-                                     options: Dict[str, Any] = None) -> Dict[str, Any]:
+                                     options: dict[str, Any] = None) -> dict[str, Any]:
         """人脸识别处理"""
         # 实现人脸识别逻辑
         return {
@@ -604,7 +599,7 @@ class AIProcessor:
         }
 
     async def _process_scene_understanding(self, file_path: str,
-                                         options: Dict[str, Any] = None) -> Dict[str, Any]:
+                                         options: dict[str, Any] = None) -> dict[str, Any]:
         """场景理解处理"""
         # 实现场景理解逻辑
         return {
@@ -615,7 +610,7 @@ class AIProcessor:
         }
 
     async def _process_language_detection(self, file_path: str,
-                                         options: Dict[str, Any] = None) -> Dict[str, Any]:
+                                         options: dict[str, Any] = None) -> dict[str, Any]:
         """语言检测处理"""
         # 实现语言检测逻辑
         return {
@@ -624,7 +619,7 @@ class AIProcessor:
             'message': '语言检测功能暂未实现'
         }
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """获取处理统计信息"""
         total_tasks = len(self.results_cache)
         completed_tasks = sum(

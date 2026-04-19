@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena工作平台 - 零模拟数据执行器
 强制执行绝对真实性原则,彻底杜绝模拟数据生成
@@ -10,7 +11,6 @@ from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from typing import Any
-
 
 
 class ViolationType(Enum):
@@ -400,6 +400,10 @@ class ZeroSimulationDataEnforcer:
 
 # 使用示例和测试
 if __name__ == "__main__":
+    # 初始化 logger
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+
     # 创建执行器
     enforcer = ZeroSimulationDataEnforcer()
 

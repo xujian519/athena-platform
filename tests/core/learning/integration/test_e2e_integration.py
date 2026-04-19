@@ -16,6 +16,7 @@ End-to-End Integration Tests for Learning Module
 """
 
 import asyncio
+import sys
 import tempfile
 from dataclasses import asdict
 from datetime import datetime
@@ -24,10 +25,11 @@ from typing import Any
 
 import pytest
 
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 from core.learning.autonomous_learning_system import (
     AutonomousLearningSystem,
     LearningExperience,
-    LearningType,
 )
 from core.learning.concurrency_control import (
     ConcurrencyConfig,
@@ -35,7 +37,6 @@ from core.learning.concurrency_control import (
 )
 from core.learning.enhanced_meta_learning import (
     EnhancedMetaLearningEngine,
-    LearningStrategy,
     MetaLearningTask,
 )
 from core.learning.error_handling import (
@@ -140,7 +141,7 @@ class TestLearningSystemIntegration:
         retry_handler = RetryHandler(retry_config)
 
         # 创建降级处理器
-        fallback_handler = FallbackHandler()
+        FallbackHandler()
 
         # 创建学习系统
         learning_system = AutonomousLearningSystem(agent_id="resilient_agent")
@@ -242,7 +243,7 @@ class TestLearningSystemIntegration:
 
         # 通过断路器执行学习
         results = []
-        for i in range(6):
+        for _i in range(6):
             try:
                 result = await circuit_breaker.call(failing_learning)
                 results.append(("success", result))
@@ -251,7 +252,7 @@ class TestLearningSystemIntegration:
 
         # 验证断路器行为
         error_count = sum(1 for r in results if r[0] == "error")
-        success_count = sum(1 for r in results if r[0] == "success")
+        sum(1 for r in results if r[0] == "success")
 
         # 前几次应该失败，触发断路器打开
         assert error_count >= 3
@@ -314,7 +315,7 @@ class TestLearningSystemIntegration:
         config = ConcurrencyConfig(max_concurrent_tasks=10)
         controller = ConcurrencyController(config)
         retry_handler = RetryHandler(RetryConfig(max_attempts=2))
-        fallback_handler = FallbackHandler()
+        FallbackHandler()
 
         # 临时目录用于持久化
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -539,7 +540,7 @@ class TestLearningSystemPerformanceIntegration:
 
         successful = sum(1 for r in results if not isinstance(r, Exception))
 
-        print(f"\n高吞吐量学习管道 (100任务):")
+        print("\n高吞吐量学习管道 (100任务):")
         print(f"  耗时: {elapsed*1000:.2f}ms")
         print(f"  吞吐量: {successful/elapsed:.0f} tasks/sec")
         print(f"  成功: {successful}/100")
@@ -575,7 +576,7 @@ class TestLearningSystemPerformanceIntegration:
 
         elapsed = time.perf_counter() - start_time
 
-        print(f"\n多智能体扩展性测试 (10智能体 x 20任务):")
+        print("\n多智能体扩展性测试 (10智能体 x 20任务):")
         print(f"  耗时: {elapsed*1000:.2f}ms")
         print(f"  吞吐量: {len(results)/elapsed:.0f} tasks/sec")
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 权威文档专用Reranker
 Authoritative Document Reranker
@@ -12,10 +13,9 @@ Authoritative Document Reranker
 import logging
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-
-from core.reranking.bge_reranker import BGEReranker, RerankConfig, RerankMode
+from core.reranking.bge_reranker import BGEReranker
 
 logger = logging.getLogger(__name__)
 

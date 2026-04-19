@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 增强版法律专利分析器
 专门支持实体关系提取和法律场景分析
@@ -13,7 +12,7 @@ import uuid
 from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -49,9 +48,9 @@ class Entity:
     name: str
     type: str
     reference_number: str | None = None
-    attributes: Dict[str, Any] = None
-    synonyms: Optional[List[str] = None
-    source_features: Optional[List[str] = None
+    attributes: dict[str, Any] = None
+    synonyms: list[str] | None = None
+    source_features: list[str] | None = None
 
     def __post_init__(self):
         if self.attributes is None:
@@ -71,8 +70,8 @@ class Relationship:
     description: str
     confidence: float = 1.0
     strength: str = 'medium'
-    source_features: Optional[List[str] = None
-    legal_implications: Dict[str, Any] = None
+    source_features: list[str] | None = None
+    legal_implications: dict[str, Any] = None
 
     def __post_init__(self):
         if self.source_features is None:
@@ -143,33 +142,33 @@ class EnhancedLegalPatentAnalyzer:
             ],
             RelationshipType.CONNECTION: [
                 r"([^，。；:]+?)连接([^，。；:]+?)",
-                r"([^，。；:]+?]固定([^，。；:]+?)",
-                r"([^，。；:]+?]安装([^，。；:]+?)",
-                r"([^，。；:]+?]装配([^，。；:]+?)"
+                r"([^，。；:]+?)固定([^，。；:]+?)",
+                r"([^，。；:]+?)安装([^，。；:]+?)",
+                r"([^，。；:]+?)装配([^，。；:]+?)"
             ],
             RelationshipType.CONTACT: [
                 r"([^，。；:]+?)接触([^，。；:]+?)",
-                r"([^，。；:]+?]与([^，。；:]+?)接触",
-                r"([^，。；:]+?]贴合([^，。；:]+?)",
-                r"([^，。；:]+?]紧贴([^，。；:]+?)"
+                r"([^，。；:]+?)与([^，。；:]+?)接触",
+                r"([^，。；:]+?)贴合([^，。；:]+?)",
+                r"([^，。；:]+?)紧贴([^，。；:]+?)"
             ],
             RelationshipType.SPATIAL: [
-                r"([^，。；:]+?]位于([^，。；:]+?)",
-                r"([^，。；:]+?]设置于([^，。；:]+?)",
-                r"([^，。；:]+?]布置在([^，。；:]+?)",
-                r"([^，。；:]+?]形成于([^，。；:]+?)"
+                r"([^，。；:]+?)位于([^，。；:]+?)",
+                r"([^，。；:]+?)设置于([^，。；:]+?)",
+                r"([^，。；:]+?)布置在([^，。；:]+?)",
+                r"([^，。；:]+?)形成于([^，。；:]+?)"
             ],
             RelationshipType.DIMENSIONAL: [
                 r"([^，。；:]+?)(大于|小于|等于|宽于|窄于|高于|低于)([^，。；:]+?)",
-                r"([^，。；:]+?]宽度(.+)([^，。；:]+?]宽度",
-                r"([^，。；:]+?]长度(.+)([^，。；:]+?]长度",
-                r"([^，。；:]+?]厚度(.+)([^，。；:]+?]厚度"
+                r"([^，。；:]+?)宽度(.+)([^，。；:]+?)宽度",
+                r"([^，。；:]+?)长度(.+)([^，。；:]+?)长度",
+                r"([^，。；:]+?)厚度(.+)([^，。；:]+?)厚度"
             ],
             RelationshipType.MATERIAL: [
-                r"([^，。；:]+?]由([^，。；:]+?]制成",
-                r"([^，。；:]+?]采用([^，。；:]+?]材料",
-                r"([^，。；:]+?]材质为([^，。；:]+?)",
-                r"([^，。；:]+?]为([^，。；:]+?]材质"
+                r"([^，。；:]+?)由([^，。；:]+?)制成",
+                r"([^，。；:]+?)采用([^，。；:]+?)材料",
+                r"([^，。；:]+?)材质为([^，。；:]+?)",
+                r"([^，。；:]+?)为([^，。；:]+?)材质"
             ]
         }
 
@@ -182,7 +181,7 @@ class EnhancedLegalPatentAnalyzer:
             LegalScenario.FTO: self._analyze_for_fto
         }
 
-    def extract_entities_and_relationships(self, claim_text: str, claim_number: int = 1) -> Dict[str, Any]:
+    def extract_entities_and_relationships(self, claim_text: str, claim_number: int = 1) -> dict[str, Any]:
         """
         提取实体和关系的核心方法
 
@@ -221,10 +220,10 @@ class EnhancedLegalPatentAnalyzer:
             'extraction_statistics': self._calculate_statistics(entities, relationships)
         }
 
-    def _extract_technical_features(self, claim_text: str) -> List[Dict[str, Any]]:
+    def _extract_technical_features(self, claim_text: str) -> list[dict[str, Any]]:
         """提取技术特征"""
         # 去除权利要求编号
-        clean_text = re.sub(r"^\d+[、.]\s*', '", claim_text)
+        clean_text = re.sub(r"^\d+[、.]\s*", '', claim_text)
 
         # 按标点符号分割
         features = []
@@ -244,7 +243,7 @@ class EnhancedLegalPatentAnalyzer:
 
         return features
 
-    def _split_by_punctuation(self, text: str) -> List[str]:
+    def _split_by_punctuation(self, text: str) -> list[str]:
         """按标点符号分割文本"""
         splitters = ['。', '，', '：', '；']
         segments = [text]
@@ -265,7 +264,7 @@ class EnhancedLegalPatentAnalyzer:
 
         return segments
 
-    def _identify_punctuation(self, segment: str, all_segments: List[str], index: int) -> str:
+    def _identify_punctuation(self, segment: str, all_segments: list[str], index: int) -> str:
         """识别分割标点"""
         if segment.endswith(('。', '，', '：', '；')):
             return segment[-1]
@@ -291,7 +290,7 @@ class EnhancedLegalPatentAnalyzer:
                 return category
         return '其他特征'
 
-    def _assess_importance(self, feature_text: str, index: int, segments: List[str]) -> str:
+    def _assess_importance(self, feature_text: str, index: int, segments: list[str]) -> str:
         """评估特征重要性"""
         if index == 0:
             return '核心特征'
@@ -301,7 +300,7 @@ class EnhancedLegalPatentAnalyzer:
             return '重要特征'
         return '一般特征'
 
-    def _extract_entities_from_features(self, features: List[Dict[str, Any]]) -> List[Entity]:
+    def _extract_entities_from_features(self, features: list[dict[str, Any]]) -> list[Entity]:
         """从特征中提取实体"""
         entities = []
         entity_map = {}  # 名称到实体的映射
@@ -348,7 +347,7 @@ class EnhancedLegalPatentAnalyzer:
 
         return entities
 
-    def _extract_entity_attributes(self, text: str, entity_name: str) -> Dict[str, str]:
+    def _extract_entity_attributes(self, text: str, entity_name: str) -> dict[str, str]:
         """提取实体属性"""
         attributes = {}
 
@@ -379,7 +378,7 @@ class EnhancedLegalPatentAnalyzer:
 
         return attributes
 
-    def _analyze_relationships_from_features(self, features: List[Dict[str, Any]], entities: List[Entity]) -> List[Relationship]:
+    def _analyze_relationships_from_features(self, features: list[dict[str, Any]], entities: list[Entity]) -> list[Relationship]:
         """分析实体间关系"""
         relationships = []
         entity_name_to_id = {e.name: e.id for e in entities}
@@ -438,7 +437,7 @@ class EnhancedLegalPatentAnalyzer:
 
         return '中等关系'
 
-    def _generate_legal_implications(self, rel_type: RelationshipType, text: str) -> Dict[str, Any]:
+    def _generate_legal_implications(self, rel_type: RelationshipType, text: str) -> dict[str, Any]:
         """生成关系的法律含义"""
         implications = {
             'essential_for_patentability': False,
@@ -475,7 +474,7 @@ class EnhancedLegalPatentAnalyzer:
 
         return implications
 
-    def _build_relationship_network(self, entities: List[Entity], relationships: List[Relationship]) -> Dict[str, Any]:
+    def _build_relationship_network(self, entities: list[Entity], relationships: list[Relationship]) -> dict[str, Any]:
         """构建关系网络"""
         nodes = []
         edges = []
@@ -519,7 +518,7 @@ class EnhancedLegalPatentAnalyzer:
             }
         }
 
-    def _calculate_network_centrality(self, nodes: List[Dict], edges: List[Dict]) -> Dict[str, Any]:
+    def _calculate_network_centrality(self, nodes: list[dict], edges: list[dict]) -> dict[str, Any]:
         """计算网络中心性"""
         degree_count = defaultdict(int)
 
@@ -543,7 +542,7 @@ class EnhancedLegalPatentAnalyzer:
             'key_nodes': [{'id': nid, 'centrality': score} for nid, score in key_nodes]
         }
 
-    def _perform_legal_scenarios_analysis(self, entities: List[Entity], relationships: List[Relationship]) -> Dict[str, Any]:
+    def _perform_legal_scenarios_analysis(self, entities: list[Entity], relationships: list[Relationship]) -> dict[str, Any]:
         """执行法律场景分析"""
         analysis_results = {}
 
@@ -553,7 +552,7 @@ class EnhancedLegalPatentAnalyzer:
 
         return analysis_results
 
-    def _analyze_for_invalidity(self, entities: List[Entity], relationships: List[Relationship]) -> Dict[str, Any]:
+    def _analyze_for_invalidity(self, entities: list[Entity], relationships: list[Relationship]) -> dict[str, Any]:
         """无效宣告场景分析"""
         # 识别核心要素
         core_entities = [e for e in entities if len(e.source_features) > 1]
@@ -580,7 +579,7 @@ class EnhancedLegalPatentAnalyzer:
             ]
         }
 
-    def _analyze_for_infringement(self, entities: List[Entity], relationships: List[Relationship]) -> Dict[str, Any]:
+    def _analyze_for_infringement(self, entities: list[Entity], relationships: list[Relationship]) -> dict[str, Any]:
         """侵权诉讼场景分析"""
         # 识别侵权关键要素
         infringement_key_elements = []
@@ -614,7 +613,7 @@ class EnhancedLegalPatentAnalyzer:
             ]
         }
 
-    def _analyze_for_novelty(self, entities: List[Entity], relationships: List[Relationship]) -> Dict[str, Any]:
+    def _analyze_for_novelty(self, entities: list[Entity], relationships: list[Relationship]) -> dict[str, Any]:
         """新颖性分析场景"""
         # 识别独特技术特征
         unique_combinations = []
@@ -640,7 +639,7 @@ class EnhancedLegalPatentAnalyzer:
             ]
         }
 
-    def _analyze_for_creativity(self, entities: List[Entity], relationships: List[Relationship]) -> Dict[str, Any]:
+    def _analyze_for_creativity(self, entities: list[Entity], relationships: list[Relationship]) -> dict[str, Any]:
         """创造性分析场景"""
         # 识别突出的实质性特点
         substantive_features = []
@@ -665,7 +664,7 @@ class EnhancedLegalPatentAnalyzer:
             ]
         }
 
-    def _analyze_for_fto(self, entities: List[Entity], relationships: List[Relationship]) -> Dict[str, Any]:
+    def _analyze_for_fto(self, entities: list[Entity], relationships: list[Relationship]) -> dict[str, Any]:
         """FTO分析场景"""
         # 识别高风险要素
         high_risk_entities = [e for e in entities if e.type in ['部件', '结构']]
@@ -697,7 +696,7 @@ class EnhancedLegalPatentAnalyzer:
             ]
         }
 
-    def _entity_to_dict(self, entity: Entity) -> Dict[str, Any]:
+    def _entity_to_dict(self, entity: Entity) -> dict[str, Any]:
         """实体转字典"""
         return {
             'id': entity.id,
@@ -709,7 +708,7 @@ class EnhancedLegalPatentAnalyzer:
             'source_features': entity.source_features
         }
 
-    def _relationship_to_dict(self, relationship: Relationship) -> Dict[str, Any]:
+    def _relationship_to_dict(self, relationship: Relationship) -> dict[str, Any]:
         """关系转字典"""
         return {
             'id': relationship.id,
@@ -723,7 +722,7 @@ class EnhancedLegalPatentAnalyzer:
             'legal_implications': relationship.legal_implications
         }
 
-    def _calculate_statistics(self, entities: List[Entity], relationships: List[Relationship]) -> Dict[str, Any]:
+    def _calculate_statistics(self, entities: list[Entity], relationships: list[Relationship]) -> dict[str, Any]:
         """计算统计信息"""
         entity_type_counts = defaultdict(int)
         for entity in entities:

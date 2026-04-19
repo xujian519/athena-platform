@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 评估指标系统
 Evaluation Metrics System
@@ -12,7 +13,7 @@ Evaluation Metrics System
 
 import logging
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from sklearn.metrics import precision_recall_fscore_support
 
@@ -37,7 +38,7 @@ class EvaluationMetrics:
     - 我们: 质量评分 + 相关性 + 完整性
     """
 
-    def __init__(self, weights: dict[str | None = None, float | None = None):
+    def __init__(self, weights: dict[str, float] | None = None):
         """
         初始化评估指标
 
@@ -200,7 +201,7 @@ class EvaluationMetrics:
             return 0.5  # 太长
 
     async def evaluate_batch(
-        self, responses: list[str], expecteds: list[str], input_texts: list["key"] = None
+        self, responses: list[str], expecteds: list[str], input_texts: list[str] = None
     ) -> EvaluationResult:
         """
         批量评估
@@ -235,7 +236,7 @@ class EvaluationMetrics:
         )
 
     def compute_retrieval_metrics(
-        self, retrieved_ids: list[str], relevant_ids: list[str], k_values: list["key"] = None
+        self, retrieved_ids: list[str], relevant_ids: list[str], k_values: list[str] = None
     ) -> dict[str, float]:
         """
         计算检索指标

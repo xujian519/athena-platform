@@ -3,9 +3,9 @@
 测试系统监控、指标收集和性能分析功能
 """
 
-import pytest
 import time
-from typing import Dict, Any, List
+
+import pytest
 
 
 class TestMonitoringModule:

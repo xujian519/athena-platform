@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena专利检索引擎
 Athena Patent Retrieval Engine
@@ -15,7 +16,6 @@ from datetime import datetime
 from typing import Any
 
 # BGE嵌入服务
-
 # Athena现有组件
 from core.vector.qdrant_adapter import QdrantVectorAdapter
 from patent_hybrid_retrieval.fulltext_adapter import FullTextSearchAdapter

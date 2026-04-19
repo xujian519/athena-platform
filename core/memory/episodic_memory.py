@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 情节记忆
 Episodic Memory

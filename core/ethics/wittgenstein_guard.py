@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 维特根斯坦逻辑哲学守护 - AI防幻觉核心模块
 Wittgensteinian Logic Philosophy Guardian - Anti-Hallucination Core
@@ -11,7 +12,7 @@ Wittgensteinian Logic Philosophy Guardian - Anti-Hallucination Core
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 
 class ConfidenceLevel(Enum):

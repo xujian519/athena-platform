@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 推理结果可解释性增强系统
 Reasoning Result Explainability Enhancement System
@@ -15,14 +16,12 @@ Reasoning Result Explainability Enhancement System
 5. 推理质量评估
 """
 
-import asyncio
 import json
 import logging
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
-import re
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -308,7 +307,7 @@ class ReasoningExplainer:
         lines.append(chain.final_conclusion)
 
         if chain.final_confidence > 0:
-            lines.append(f"")
+            lines.append("")
             lines.append(f"**置信度**: {chain.final_confidence:.2%}")
 
         # 质量评估
@@ -713,7 +712,7 @@ class ReasoningQualityAssessor:
         """评估创新性"""
         # 简化的创新性评估
         # 检查是否使用了多样化的推理类型
-        reasoning_types = set(s.reasoning_type for s in chain.steps)
+        reasoning_types = {s.reasoning_type for s in chain.steps}
         diversity_score = min(len(reasoning_types) / 5, 1.0)  # 最多5种类型
 
         return diversity_score
@@ -896,7 +895,7 @@ if __name__ == "__main__":
 
     # 分析影响
     impact = editor.analyze_impact("test_chain", "step_1")
-    print(f"\n影响分析:")
+    print("\n影响分析:")
     print(f"  受影响步骤: {impact['affected_steps']}")
     print(f"  建议: {impact['recommendation']}")
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 服务会话管理器 - 60分钟不使用自动释放
 Service Session Manager - Auto-release after 60 minutes of inactivity
@@ -17,12 +17,14 @@ Service Session Manager - Auto-release after 60 minutes of inactivity
 
 import asyncio
 import logging
-from datetime import datetime
-from typing import Any, Callable, Dict, Optional, Set
-from dataclasses import dataclass
-from enum import Enum
-import psutil
 import os
+from collections.abc import Callable
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any
+
+import psutil
 
 # 导入配置管理器
 try:
@@ -49,7 +51,6 @@ class ServiceType(Enum):
     # 智能体
     XIAONUO = "xiaonuo"           # 小诺 - 调度官
     XIAONA = "xiaona"             # 小娜 - 法律专家
-    YUNXI = "yunxi"               # 云熙 - IP管理
     XIAOCHEN = "xiaochen"         # 小宸 - 自媒体
 
     # 支撑服务
@@ -72,7 +73,7 @@ class ServiceSession:
     last_activity: datetime
     memory_mb: float = 0.0
     auto_stop: bool = True
-    custom_timeout: Optional[int] = None  # 自定义超时时间（秒），None使用默认60分钟
+    custom_timeout: int | None = None  # 自定义超时时间（秒），None使用默认60分钟
 
     @property
     def idle_time_seconds(self) -> float:
@@ -132,10 +133,10 @@ class ServiceSessionManager:
 
     def __init__(
         self,
-        idle_timeout: Optional[int] = None,
-        cleanup_interval: Optional[int] = None,
-        config_file: Optional[str] = None,
-        preset: Optional[str] = None
+        idle_timeout: int | None = None,
+        cleanup_interval: int | None = None,
+        config_file: str | None = None,
+        preset: str | None = None
     ):
         """
         初始化服务会话管理器
@@ -164,14 +165,14 @@ class ServiceSessionManager:
         self.cleanup_interval = cleanup_interval
 
         # 会话存储
-        self._sessions: Dict[int, ServiceSession] = {}  # pid -> session
-        self._service_names: Dict[str, Set[int]] = {}   # service_name -> set of pids
+        self._sessions: dict[int, ServiceSession] = {}  # pid -> session
+        self._service_names: dict[str, set[int]] = {}   # service_name -> set of pids
 
         # 回调函数
-        self._on_session_expire: Optional[Callable[[ServiceSession], None]] = None
+        self._on_session_expire: Callable[[ServiceSession], None] | None = None
 
         # 后台任务
-        self._cleanup_task: Optional[asyncio.Task] = None
+        self._cleanup_task: asyncio.Task | None = None
         self._running = False
 
         # 统计信息
@@ -193,7 +194,7 @@ class ServiceSessionManager:
         service_type: ServiceType,
         service_name: str,
         auto_stop: bool = True,
-        custom_timeout: Optional[int] = None
+        custom_timeout: int | None = None
     ) -> ServiceSession:
         """
         注册服务会话
@@ -257,7 +258,7 @@ class ServiceSessionManager:
             return True
         return False
 
-    def get_session(self, process_id: int) -> Optional[ServiceSession]:
+    def get_session(self, process_id: int) -> ServiceSession | None:
         """
         获取会话信息
 
@@ -438,7 +439,7 @@ class ServiceSessionManager:
         self._on_session_expire = callback
         logger.info("📞 会话过期回调函数已设置")
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """
         获取统计信息
 
@@ -486,7 +487,7 @@ class ServiceSessionManager:
 # === 全局实例和便捷函数 ===
 # =============================================================================
 
-_global_manager: Optional[ServiceSessionManager] = None
+_global_manager: ServiceSessionManager | None = None
 
 
 def get_service_session_manager(
@@ -518,7 +519,7 @@ async def auto_register_current_process(
     service_type: ServiceType,
     service_name: str,
     auto_stop: bool = True,
-    custom_timeout: Optional[int] = None
+    custom_timeout: int | None = None
 ) -> ServiceSession:
     """
     自动注册当前进程

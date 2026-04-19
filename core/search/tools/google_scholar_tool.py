@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Google Scholar 搜索工具
 Google Scholar Search Tool
@@ -14,8 +15,7 @@ import asyncio
 import logging
 import time
 from datetime import datetime
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 from ..external.serper_api_manager import (
     SerperAPIManager,

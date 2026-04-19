@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 NLP模块
 Natural Language Processing Module
@@ -7,6 +8,7 @@ Natural Language Processing Module
 
 from .universal_nlp_provider import (
     NLPProviderType,
+    OllamaProvider,
     TaskType,
     UniversalNLPService,
     analyze_patent,
@@ -21,6 +23,7 @@ __all__ = [
     "NLPProviderType",
     "TaskType",
     "UniversalNLPService",
+    "OllamaProvider",
     "analyze_patent",
     "conversation_response",
     "creative_writing",

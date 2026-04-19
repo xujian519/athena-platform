@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 任务调度器 - 完整的任务管理系统
 Task Scheduler - Complete Task Management System
@@ -20,8 +21,6 @@ from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
 from typing import Any
-
-
 
 
 class TaskPriority(Enum):

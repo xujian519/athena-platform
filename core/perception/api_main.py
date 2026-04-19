@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 生产级API服务
 支持多模态处理、多智能体接入、数据库持久化
 最后更新: 2026-01-26
 """
 
-from fastapi import FastAPI, HTTPException, Depends, Header, BackgroundTasks
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
-from typing import Optional, List, Dict, Any
-import uvicorn
 import asyncio
 import logging
-from datetime import datetime
 import os
 import sys
+from datetime import datetime
 from pathlib import Path
+from typing import Any
+
+import uvicorn
+from fastapi import BackgroundTasks, Depends, FastAPI, Header, HTTPException
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
@@ -58,20 +60,20 @@ class ImageProcessRequest(BaseModel):
     """图像处理请求"""
     image_path: str = Field(..., description="图像文件路径")
     operation: str = Field(..., description="操作类型")
-    parameters: Dict[str, Any] = Field(default_factory=dict)
+    parameters: dict[str, Any] = Field(default_factory=dict)
 
 class ImageProcessResponse(BaseModel):
     """图像处理响应"""
     task_id: str
     agent_id: str
     status: str
-    result: Optional[Dict[str, Any]] | None = None
+    result: dict[str, Any] | None | None = None
     processing_time: float | None = None
 
 class TaskListResponse(BaseModel):
     """任务列表响应"""
     agent_id: str
-    tasks: List[Dict[str, Any]]
+    tasks: list[dict[str, Any]]
     total: int
     pending: int
     processing: int
@@ -128,7 +130,7 @@ class DatabaseManager:
             logger.error(f"保存任务失败: {e}")
             return None
 
-    async def get_agent_tasks(self, agent_id: str) -> List[dict]:
+    async def get_agent_tasks(self, agent_id: str) -> list[dict]:
         """获取智能体的任务列表"""
         if not self.connection:
             return []
@@ -160,8 +162,8 @@ class OCRProcessor:
     @staticmethod
     async def process_ocr(request: OCRRequest, agent_id: str) -> OCRResponse:
         """处理OCR请求"""
-        import uuid
         import time
+        import uuid
 
         task_id = str(uuid.uuid4())
         start_time = time.time()
@@ -387,8 +389,8 @@ async def process_image(
 
     支持场景识别、目标检测、图像分类等操作
     """
-    import uuid
     import time
+    import uuid
 
     task_id = str(uuid.uuid4())
     start_time = time.time()
@@ -427,7 +429,7 @@ async def process_image(
 
     except Exception as e:
         logger.error(f"[{agent_id}] 图像处理失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get("/api/v1/perception/tasks", response_model=TaskListResponse, tags=["任务管理"])
 async def get_tasks(

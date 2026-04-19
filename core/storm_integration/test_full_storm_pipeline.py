@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 完整 STORM 流程测试 (Phase 3) - 简化版
 
@@ -37,7 +38,7 @@ async def test_full_storm_pipeline():
 
     # 创建数据管理器
     data_manager = OptimizedDataManager(
-        pg_database="athena_db", nebula_space="patent_kg", qdrant_collection="legal_knowledge"
+        pg_database="legal_world_model", nebula_space="patent_kg", qdrant_collection="legal_knowledge"
     )
 
     # 连接所有数据源

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 服务能力知识图谱 (ServiceKG)
 用于智能体精确匹配和调用微服务
@@ -7,7 +8,7 @@ import json
 from dataclasses import dataclass, field, fields
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from loguru import logger
 

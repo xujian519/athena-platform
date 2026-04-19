@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 GLM-4.7 RAG增强服务(云端版)
 GLM-4.7 RAG Enhanced Service (Cloud)
@@ -18,11 +19,10 @@ GLM-4.7 RAG Enhanced Service (Cloud)
 import asyncio
 import logging
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 # 导入GLM接口
-from core.cognition.llm_interface import LLMInterface, LLMRequest, LLMResponse
+from core.cognition.llm_interface import LLMInterface, LLMRequest
 from core.logging_config import setup_logging
 
 logger = setup_logging()

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 数据库连接池管理器
 Database Connection Pool Manager
@@ -8,16 +8,15 @@ Database Connection Pool Manager
 """
 
 import logging
-import time
 import threading
+import time
+from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Optional, Dict, Any, Generator
-from queue import Queue, Empty, Full
+from queue import Empty
+from typing import Any
 
-import psycopg2
 from psycopg2 import pool
 from psycopg2.extensions import connection
-from psycopg2.extras import RealDictCursor
 
 from core.config.search_config import get_search_config
 
@@ -295,7 +294,7 @@ class ConnectionPoolManager:
                     raise Exception(
                         f"无法从连接池获取连接 "
                         f"(超时: {self.config.connection_timeout}s)"
-                    )
+                    ) from None
 
             except Exception as e:
                 if conn:
@@ -309,10 +308,6 @@ class ConnectionPoolManager:
                 else:
                     logger.error(f"获取连接失败: {e}")
                     raise
-
-        finally:
-            if conn:
-                self.return_connection(conn)
 
     def return_connection(self, conn: PooledConnection):
         """

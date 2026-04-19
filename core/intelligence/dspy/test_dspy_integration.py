@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 DSPy集成测试脚本
 DSPy Integration Test Script for Athena Platform
@@ -17,7 +18,7 @@ DSPy Integration Test Script for Athena Platform
 import logging
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 # 添加项目路径
 project_root = Path("/Users/xujian/Athena工作平台")
@@ -57,7 +58,6 @@ def test_llm_backend() -> Any:
     try:
         from core.intelligence.dspy.llm_backend import (
             ATHENA_LLM_AVAILABLE,
-            AthenaLLMDirect,
             get_athena_llm_client,
         )
 
@@ -235,7 +235,7 @@ def test_dspy_with_retrieval() -> Any:
     try:
         import dspy
 
-        from core.intelligence.dspy.llm_backend import create_athena_module, get_athena_llm_client
+        from core.intelligence.dspy.llm_backend import create_athena_module
         from core.intelligence.dspy.retrievers import AthenaVectorRetriever
 
         # 定义RAG Signature

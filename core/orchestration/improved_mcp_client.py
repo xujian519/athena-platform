@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 改进的MCP客户端
 Improved MCP Client

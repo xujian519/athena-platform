@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 通用爬虫API服务
 Universal Crawler API Service
@@ -7,11 +6,8 @@ Universal Crawler API Service
 Athena工作平台公共爬虫API，提供HTTP接口调用爬虫功能
 """
 
-import asyncio
-from core.async_main import async_main
 import json
 import logging
-from core.logging_config import setup_logging
 import os
 
 # 导入爬虫核心模块
@@ -19,18 +15,17 @@ import sys
 import uuid
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi import BackgroundTasks, FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
+from core.logging_config import setup_logging
+
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from core.universal_crawler import CrawlerConfig, CrawlerRequest, UniversalCrawler
+from core.universal_crawler import CrawlerConfig, UniversalCrawler
 from utils.data_processor import DataProcessor
 
 # 配置日志
@@ -55,31 +50,31 @@ class CrawlerConfigModel(BaseModel):
     """爬虫配置模型"""
     name: str = Field(..., description='爬虫名称')
     base_url: str = Field(..., description='基础URL')
-    headers: Optional[Dict[str, str]] = Field(None, description='请求头')
-    timeout: Optional[int] = Field(30, description='超时时间(秒)')
-    max_retries: Optional[int] = Field(3, description='最大重试次数')
-    retry_delay: Optional[float] = Field(1.0, description='重试延迟(秒)')
-    rate_limit: Optional[float] = Field(1.0, description='速率限制(请求/秒)')
-    use_proxy: Optional[bool] = Field(False, description='是否使用代理')
-    proxy_list: Optional[List[str]] = Field(None, description='代理列表')
-    cache_enabled: Optional[bool] = Field(True, description='是否启用缓存')
-    cache_ttl: Optional[int] = Field(3600, description='缓存时间(秒)')
+    headers: dict[str, str] | None = Field(None, description='请求头')
+    timeout: int | None = Field(30, description='超时时间(秒)')
+    max_retries: int | None = Field(3, description='最大重试次数')
+    retry_delay: float | None = Field(1.0, description='重试延迟(秒)')
+    rate_limit: float | None = Field(1.0, description='速率限制(请求/秒)')
+    use_proxy: bool | None = Field(False, description='是否使用代理')
+    proxy_list: list[str] | None = Field(None, description='代理列表')
+    cache_enabled: bool | None = Field(True, description='是否启用缓存')
+    cache_ttl: int | None = Field(3600, description='缓存时间(秒)')
 
 class CrawlRequest(BaseModel):
     """爬取请求模型"""
-    urls: List[str] = Field(..., description='要爬取的URL列表')
+    urls: list[str] = Field(..., description='要爬取的URL列表')
     config: CrawlerConfigModel = Field(..., description='爬虫配置')
-    extract_selector: Optional[str] = Field(None, description='CSS选择器')
-    extract_attributes: Optional[List[str]] = Field(None, description='要提取的属性')
-    save_format: Optional[str] = Field('json', description='保存格式(json/csv)')
-    background: Optional[bool] = Field(False, description='是否后台运行')
+    extract_selector: str | None = Field(None, description='CSS选择器')
+    extract_attributes: list[str] | None = Field(None, description='要提取的属性')
+    save_format: str | None = Field('json', description='保存格式(json/csv)')
+    background: bool | None = Field(False, description='是否后台运行')
 
 class CrawlResponse(BaseModel):
     """爬取响应模型"""
     task_id: str
     status: str
-    results: List[Dict[str, Any]]
-    stats: Dict[str, Any]
+    results: list[dict[str, Any]]
+    stats: dict[str, Any]
     message: str | None = None
 
 # 配置文件路径
@@ -150,7 +145,7 @@ async def crawl_urls(request: CrawlRequest, background_tasks: BackgroundTasks):
 
     except Exception as e:
         logger.error(f"爬取任务失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"爬取失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"爬取失败: {str(e)}") from e
 
 async def crawl_urls_sync(urls, config, extract_selector, extract_attributes):
     """同步爬取URL"""
@@ -255,7 +250,7 @@ async def list_tasks():
     }
 
 @app.post('/extract/{task_id}')
-async def extract_data_from_crawled_page(task_id: str, selector: str, attributes: List[str] = None):
+async def extract_data_from_crawled_page(task_id: str, selector: str, attributes: list[str] = None):
     """从已爬取的页面中提取数据"""
     if task_id not in task_results:
         raise HTTPException(status_code=404, detail='任务不存在')
@@ -270,7 +265,7 @@ async def extract_data_from_crawled_page(task_id: str, selector: str, attributes
         if not result_file.exists():
             raise HTTPException(status_code=404, detail='结果文件不存在')
 
-        with open(result_file, 'r', encoding='utf-8') as f:
+        with open(result_file, encoding='utf-8') as f:
             data = json.load(f)
 
         # 提取数据
@@ -299,7 +294,7 @@ async def extract_data_from_crawled_page(task_id: str, selector: str, attributes
 
     except Exception as e:
         logger.error(f"数据提取失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"数据提取失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"数据提取失败: {str(e)}") from e
 
 @app.get('/stats')
 async def get_crawler_stats():

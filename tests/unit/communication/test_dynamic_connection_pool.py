@@ -8,15 +8,20 @@ Unit Tests for Dynamic Connection Pool
 版本: 1.0.0
 """
 
-import pytest
 import asyncio
-from datetime import datetime
-from unittest.mock import AsyncMock, MagicMock
+import sys
+from pathlib import Path
+
+import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+from unittest.mock import MagicMock
 
 from core.communication.engine.dynamic_connection_pool import (
-    DynamicConnectionPool,
     ConnectionConfig,
-    PooledConnection
+    DynamicConnectionPool,
+    PooledConnection,
 )
 
 
@@ -110,7 +115,7 @@ class TestDynamicConnectionPool:
         """测试最大连接数限制"""
         # 尝试获取超过最大连接数的连接
         connections = []
-        for i in range(15):  # max_size=10
+        for _i in range(15):  # max_size=10
             try:
                 conn = await asyncio.wait_for(
                     connection_pool.acquire(timeout=1.0),
@@ -169,12 +174,12 @@ class TestDynamicConnectionPool:
         """测试连接复用"""
         # 获取并释放连接
         conn1 = await connection_pool.acquire(timeout=5.0)
-        conn1_id = id(conn1)
+        id(conn1)
         await connection_pool.release(conn1)
 
         # 再次获取连接，应该复用之前的连接
         conn2 = await connection_pool.acquire(timeout=5.0)
-        conn2_id = id(conn2)
+        id(conn2)
         await connection_pool.release(conn2)
 
         # 验证连接被复用（至少有时）

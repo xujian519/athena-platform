@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 扩充意图示例库 - 150+示例
 Expanded Intent Examples Library - 150+ Examples

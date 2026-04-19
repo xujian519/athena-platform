@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利档案表更新分析工具
 分析新的专利档案表并检查与数据库的重复情况
 """
 
-import pandas as pd
-import json
 import hashlib
+import json
+import logging
+import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple
-import sys
-import logging
+
+import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +22,18 @@ sys.path.append(str(Path(__file__).parent))
 try:
     import asyncpg
     import sqlalchemy
-    from sqlalchemy import create_engine, Column, Integer, String, Date, Text, Boolean, DateTime, Numeric, ForeignKey
+    from sqlalchemy import (
+        Boolean,
+        Column,
+        Date,
+        DateTime,
+        ForeignKey,
+        Integer,
+        Numeric,
+        String,
+        Text,
+        create_engine,
+    )
     from sqlalchemy.orm import sessionmaker
     from sqlalchemy.sql import func
     DB_AVAILABLE = True
@@ -67,12 +77,12 @@ class PatentArchiveAnalyzer:
 
             self.new_data = df
 
-            print(f"\n📊 数据概览:")
+            print("\n📊 数据概览:")
             print(f"  总行数: {len(df)}")
             print(f"  总列数: {len(df.columns)}")
 
             # 显示示例数据
-            print(f"\n📝 前3行数据示例:")
+            print("\n📝 前3行数据示例:")
             for idx, row in df.head(3).iterrows():
                 print(f"  行{idx+1}:")
                 for col in df.columns[:5]:  # 只显示前5列
@@ -133,7 +143,7 @@ class PatentArchiveAnalyzer:
             print(f"❌ 连接数据库失败: {str(e)}")
             return False
 
-    def identify_columns(self) -> Dict[str, str]:
+    def identify_columns(self) -> dict[str, str]:
         """智能识别关键列"""
         columns = {}
 
@@ -170,7 +180,7 @@ class PatentArchiveAnalyzer:
 
         return columns
 
-    def extract_patent_data(self, row, columns: Dict) -> Dict | None:
+    def extract_patent_data(self, row, columns: dict) -> dict | None:
         """提取单行专利数据"""
         # 获取申请号作为去重关键字段
         app_num_col = columns.get('application_number')
@@ -262,7 +272,7 @@ class PatentArchiveAnalyzer:
             logger.debug(f"[patent_archive_updater] Exception: {e}")
         return str(date_value)
 
-    def analyze_duplicates(self) -> Dict:
+    def analyze_duplicates(self) -> dict:
         """分析重复数据"""
         if self.new_data is None:
             return {"error": "Excel数据未加载"}
@@ -324,7 +334,7 @@ class PatentArchiveAnalyzer:
             }
         }
 
-        print(f"\n📊 分析结果:")
+        print("\n📊 分析结果:")
         print(f"  总行数: {analysis_result['total_rows']}")
         print(f"  处理行数: {analysis_result['processed_rows']}")
         print(f"  重复专利: {duplicate_count}")
@@ -334,7 +344,7 @@ class PatentArchiveAnalyzer:
 
         return analysis_result
 
-    def save_analysis(self, analysis_result: Dict):
+    def save_analysis(self, analysis_result: dict):
         """保存分析结果"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"patent_archive_analysis_{timestamp}.json"

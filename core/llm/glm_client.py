@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 GLM-4.7 API客户端
 用于主推理引擎
@@ -7,7 +8,7 @@ import asyncio
 import json
 import logging
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 try:
     from openai import AsyncOpenAI

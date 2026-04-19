@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协作模式实现
 Collaboration Patterns Implementation
@@ -9,17 +10,15 @@ Collaboration Patterns Implementation
 import logging
 import uuid
 from abc import ABC, abstractmethod
+from collections import defaultdict
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any
 
-from .collaboration_manager import CollaborationOrchestrator, Conflict
+from .collaboration_manager import Conflict
 from .multi_agent_collaboration import (
-    Agent,
-    AgentStatus,
     Message,
     MessageType,
     MultiAgentCollaborationFramework,
-    Priority,
     Task,
     TaskStatus,
 )

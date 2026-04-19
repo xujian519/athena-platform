@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺统一NLP接口
 整合Phase 1-3的所有模块,提供统一的调用接口和数据流优化
@@ -28,7 +29,9 @@
 import hashlib
 import json
 import os
-from typing import Any, Dict, Optional
+from typing import Any
+
+import numpy as np
 
 from core.logging_config import setup_logging
 
@@ -53,7 +56,6 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
-
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 

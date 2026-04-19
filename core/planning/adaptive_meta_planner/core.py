@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 自适应元规划器 - 核心类
 Adaptive Meta Planner - Core Class
@@ -14,7 +15,6 @@ from datetime import datetime
 from typing import Any
 
 from ..exceptions import (
-    ConfigurationError,
     PerformanceTrackingError,
     StrategySelectionError,
     TaskExecutionError,
@@ -32,7 +32,6 @@ from ..task_complexity_analyzer import TaskComplexityAnalyzer
 from .constants import DEFAULT_SIMILARITY_THRESHOLD
 from .performance import PerformanceTracker
 from .workflow_reuse import WorkflowReuseManager
-
 
 logger = logging.getLogger(__name__)
 
@@ -133,7 +132,7 @@ class AdaptiveMetaPlanner:
                         message=f"工作流复用失败: {e!s}",
                         workflow_id=similar_workflow.pattern_id,
                         cause=e,
-                    )
+                    ) from e
 
             # 步骤3: 查询历史性能
             best_strategy = self.performance_tracker.get_best_strategy(
@@ -162,7 +161,7 @@ class AdaptiveMetaPlanner:
                     message=f"生成执行计划失败: {e!s}",
                     task_id=task.task_id,
                     cause=e
-                )
+                ) from e
 
             # 步骤6: 保存规划指标
             plan.metadata["complexity_analysis"] = complexity_analysis.to_dict()
@@ -182,7 +181,7 @@ class AdaptiveMetaPlanner:
             raise
         except Exception as e:
             logger.error(f"❌ 规划过程中发生未知错误: {e}")
-            raise TaskExecutionError(message=f"规划失败: {e!s}", task_id=task.task_id, cause=e)
+            raise TaskExecutionError(message=f"规划失败: {e!s}", task_id=task.task_id, cause=e) from e
 
     def _select_strategy(
         self, complexity: ComplexityLevel, task: Task, best_strategy: StrategyType,
@@ -424,13 +423,13 @@ class AdaptiveMetaPlanner:
         except ValueError as e:
             raise PerformanceTrackingError(
                 message=f"性能参数验证失败: {e!s}", metric_name="performance_record"
-            )
+            ) from e
         except Exception as e:
             raise PerformanceTrackingError(
                 message=f"记录性能失败: {e!s}",
                 metric_name="performance_record",
                 operation="record_performance",
-            )
+            ) from e
 
     def get_statistics(self) -> dict[str, Any]:
         """获取统计信息"""

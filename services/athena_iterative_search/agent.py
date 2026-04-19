@@ -4,17 +4,13 @@ Athena迭代式搜索智能代理
 基于LLM的智能查询生成和结果分析
 """
 
-import asyncio
 import logging
-from datetime import datetime
-from typing import Dict, List, Optional, Tuple
 
 from .config import AthenaSearchConfig, SearchDepth
 from .core import AthenaIterativeSearchEngine
 from .types import (
     PatentMetadata,
     PatentSearchResult,
-    QueryExpansion,
     ResearchSummary,
     SearchQuery,
     SearchSession,
@@ -43,7 +39,7 @@ class AthenaIterativeSearchAgent:
         research_topic: str,
         max_iterations: int = 5,
         depth: SearchDepth = SearchDepth.DEEP,
-        focus_areas: Optional[List[str]] = None,
+        focus_areas: list[str] | None = None,
         progress_callback: callable | None = None
     ) -> SearchSession:
         """
@@ -86,7 +82,7 @@ class AthenaIterativeSearchAgent:
         self,
         company_name: str,
         technology_domain: str | None = None,
-        time_range: Optional[Tuple[str, str]] = None
+        time_range: tuple[str, str] | None = None
     ) -> SearchSession:
         """
         执行专利竞争分析
@@ -159,7 +155,7 @@ class AthenaIterativeSearchAgent:
     async def patent_infringement_risk_assessment(
         self,
         target_patent_id: str,
-            technology_keywords: List[str]
+            technology_keywords: list[str]
     ) -> SearchSession:
         """
         执行专利侵权风险评估
@@ -198,8 +194,8 @@ class AthenaIterativeSearchAgent:
     async def _generate_initial_queries(
         self,
         research_topic: str,
-        focus_areas: Optional[List[str]] = None
-    ) -> List[str]:
+        focus_areas: list[str] | None = None
+    ) -> list[str]:
         """生成初始查询列表"""
         queries = []
 
@@ -228,7 +224,7 @@ class AthenaIterativeSearchAgent:
 
     async def _select_best_initial_query(
         self,
-        queries: List[str],
+        queries: list[str],
         research_topic: str
     ) -> str:
         """选择最佳初始查询"""
@@ -250,7 +246,7 @@ class AthenaIterativeSearchAgent:
     ) -> SearchSession:
         """智能分析搜索结果"""
         # 聚类分析专利
-        clustered_patents = await self._cluster_patents(session.iterations[-1].results)
+        await self._cluster_patents(session.iterations[-1].results)
 
         # 识别关键技术趋势
         tech_trends = await self._identify_technology_trends(session.iterations)
@@ -273,8 +269,8 @@ class AthenaIterativeSearchAgent:
 
     async def _cluster_patents(
         self,
-        patents: List[PatentSearchResult]
-    ) -> Dict[str, List[PatentSearchResult]]:
+        patents: list[PatentSearchResult]
+    ) -> dict[str, list[PatentSearchResult]]:
         """聚类专利结果"""
         clusters = {}
 
@@ -302,8 +298,8 @@ class AthenaIterativeSearchAgent:
 
     async def _identify_technology_trends(
         self,
-        iterations: List[SearchQuery]
-    ) -> List[str]:
+        iterations: list[SearchQuery]
+    ) -> list[str]:
         """识别技术趋势"""
         trends = []
 
@@ -321,7 +317,7 @@ class AthenaIterativeSearchAgent:
     async def _analyze_competitive_landscape(
         self,
         session: SearchSession
-    ) -> List[str]:
+    ) -> list[str]:
         """分析竞争格局"""
         landscape = []
 
@@ -345,7 +341,7 @@ class AthenaIterativeSearchAgent:
         self,
         session: SearchSession,
         research_topic: str
-    ) -> List[str]:
+    ) -> list[str]:
         """生成战略建议"""
         recommendations = []
 
@@ -437,7 +433,7 @@ class AthenaIterativeSearchAgent:
         self,
         session: SearchSession,
         target_patent: PatentMetadata,
-        technology_keywords: List[str]
+        technology_keywords: list[str]
     ) -> ResearchSummary:
         """生成侵权风险评估报告"""
         summary = ResearchSummary(
@@ -466,7 +462,7 @@ class AthenaIterativeSearchAgent:
         # 这里可以集成数据库查询来获取专利信息
         return None
 
-    def _extract_top_competitors(self, patents: List[PatentSearchResult]) -> List[str]:
+    def _extract_top_competitors(self, patents: list[PatentSearchResult]) -> list[str]:
         """提取主要竞争对手"""
         competitor_counts = {}
         for patent in patents:
@@ -478,7 +474,7 @@ class AthenaIterativeSearchAgent:
         top_competitors = sorted(competitor_counts.items(), key=lambda x: x[1], reverse=True)[:5]
         return [f"{competitor} ({count}项专利)" for competitor, count in top_competitors]
 
-    def _extract_technology_trends(self, patents: List[PatentSearchResult]) -> List[str]:
+    def _extract_technology_trends(self, patents: list[PatentSearchResult]) -> list[str]:
         """提取技术趋势"""
         trends = []
 
@@ -512,7 +508,7 @@ class AthenaIterativeSearchAgent:
         max_results: int = 10,
         strategy: str = 'hybrid',
         use_cache: bool = True
-    ) -> List[PatentSearchResult]:
+    ) -> list[PatentSearchResult]:
         """
         执行单次专利搜索
 

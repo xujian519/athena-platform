@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 健康检查API端点
 Health Check API Endpoint
@@ -14,12 +15,8 @@ from datetime import datetime
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
-from fastapi.responses import JSONResponse
 
 from core.legal_world_model.health_check import (
-    ComponentHealth,
-    HealthStatus,
-    SystemHealthReport,
     check_health,
 )
 
@@ -46,7 +43,7 @@ async def get_health_root():
             },
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"健康检查失败: {e}")
+        raise HTTPException(status_code=500, detail=f"健康检查失败: {e}") from e
 
 
 @router.get("/detailed", response_model=dict[str, Any])
@@ -61,7 +58,7 @@ async def get_health_detailed():
         report = await check_health()
         return report.to_dict()
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"健康检查失败: {e}")
+        raise HTTPException(status_code=500, detail=f"健康检查失败: {e}") from e
 
 
 @router.get("/components")
@@ -93,7 +90,7 @@ async def get_components_health():
             "unhealthy": report.unhealthy_components,
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"获取组件状态失败: {e}")
+        raise HTTPException(status_code=500, detail=f"获取组件状态失败: {e}") from e
 
 
 @router.get("/ping")
@@ -150,7 +147,7 @@ async def test_component(component_name: str):
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"测试组件失败: {e}")
+        raise HTTPException(status_code=500, detail=f"测试组件失败: {e}") from e
 
 
 # 便捷函数：创建路由

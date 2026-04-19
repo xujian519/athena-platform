@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 联网搜索引擎 - API密钥管理器
 Web Search Engines - API Key Manager
@@ -12,7 +13,7 @@ Web Search Engines - API Key Manager
 """
 
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 from core.search.external.web_search.types import SearchEngineType
@@ -31,7 +32,7 @@ class APIKeyManager:
             api_keys: {engine_type: [api_key1, api_key2, ...]}
         """
         self.api_keys = api_keys
-        self.key_indices = {engine: 0 for engine in api_keys}
+        self.key_indices = dict.fromkeys(api_keys, 0)
         self.key_usage_stats: dict[str, dict[str, int]] = {
             engine: {} for engine in api_keys
         }

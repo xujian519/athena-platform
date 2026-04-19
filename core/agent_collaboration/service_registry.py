@@ -1,17 +1,14 @@
+from __future__ import annotations
 """
 服务能力注册配置
 定义平台所有80个微服务的能力描述
 """
 
 # 避免循环导入
-from typing import TYPE_CHECKING, Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from core.agent_collaboration.service_kg import (
-        ServiceCapability,
-        ServiceCategory,
-        ServiceKnowledgeGraph,
-    )
+    pass
 
 
 # 核心专利服务

@@ -1,26 +1,25 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 智能体设计模式综合测试运行器
 Comprehensive Test Runner for Agentic Design Patterns
 """
 
 import asyncio
-import sys
+import json
+import logging
 import os
+import sys
 import time
 import unittest
-import logging
-from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Any, Optional
-import json
+from pathlib import Path
+from typing import Any
 
 # 添加项目路径
 sys.path.append('/Users/xujian/Athena工作平台')
 
-from tests.test_framework import test_environment, test_runner, test_reporter
 from tests.performance.test_performance_benchmarks import PerformanceTestRunner
+from tests.test_framework import test_environment
 
 # 配置日志
 logging.basicConfig(
@@ -202,7 +201,7 @@ class ComprehensiveTestRunner:
                 'error_details': [str(e)]
             }
 
-        logger.info(f"📊 集成测试完成")
+        logger.info("📊 集成测试完成")
 
     async def _run_performance_tests(self):
         """运行性能测试"""
@@ -245,7 +244,7 @@ class ComprehensiveTestRunner:
                 'error_details': [str(e)]
             }
 
-        logger.info(f"📊 性能测试完成")
+        logger.info("📊 性能测试完成")
 
     async def _generate_comprehensive_report(self):
         """生成综合报告"""
@@ -258,7 +257,7 @@ class ComprehensiveTestRunner:
         total_errors = 0
         total_execution_time = 0
 
-        for test_type, results in self.test_results.items():
+        for _test_type, results in self.test_results.items():
             if isinstance(results.get('tests_run'), int):
                 total_tests += results['tests_run']
                 total_failures += results['failures']
@@ -306,7 +305,7 @@ class ComprehensiveTestRunner:
         logger.info(f"📊 JSON报告: {json_report_file}")
         logger.info(f"📄 Markdown报告: {markdown_report_file}")
 
-    def _generate_recommendations(self) -> List[str]:
+    def _generate_recommendations(self) -> list[str]:
         """生成改进建议"""
         recommendations = []
 
@@ -332,7 +331,7 @@ class ComprehensiveTestRunner:
 
         return recommendations
 
-    def _generate_markdown_report(self, report: Dict[str, Any]) -> str:
+    def _generate_markdown_report(self, report: dict[str, Any]) -> str:
         """生成Markdown格式的报告"""
         lines = [
             "# 智能体设计模式综合测试报告",
@@ -424,7 +423,7 @@ class ComprehensiveTestRunner:
         success_tests = total_tests - total_failures - total_errors
         success_rate = success_tests / total_tests if total_tests > 0 else 0
 
-        logger.info(f"📊 测试统计:")
+        logger.info("📊 测试统计:")
         logger.info(f"   总测试数: {total_tests}")
         logger.info(f"   成功测试: {success_tests}")
         logger.info(f"   失败测试: {total_failures}")
@@ -438,7 +437,7 @@ class ComprehensiveTestRunner:
         elif total_failures > 0 or total_errors > 0:
             logger.warning(f"\n⚠️ 有 {total_failures + total_errors} 个测试需要修复")
 
-        logger.info(f"\n📄 详细报告已保存到 tests/reports/ 目录")
+        logger.info("\n📄 详细报告已保存到 tests/reports/ 目录")
 
 # 主函数
 async def main():

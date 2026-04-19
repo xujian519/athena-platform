@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 通信系统适配器层
 Adapters Layer for Communication System

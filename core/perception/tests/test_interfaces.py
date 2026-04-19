@@ -1,32 +1,31 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 测试：感知模块接口定义
 Test: Perception Module Interface Definitions
 """
 
-import pytest
 import sys
-from pathlib import Path
 from abc import ABC
 from datetime import datetime
+from pathlib import Path
+
+import pytest
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.perception.interfaces import (
-    IProcessor,
-    IStreamProcessor,
-    IPerceptionEngine,
     ICache,
     IMonitor,
+    IPerceptionEngine,
+    IProcessor,
     IProcessorFactory,
+    IStreamProcessor,
 )
 from core.perception.types import (
-    InputType,
     PerceptionResult,
     ProcessingMode,
-    StreamConfig,
 )
 
 
@@ -194,7 +193,6 @@ class TestInterfaceImplementation:
 
     def test_concrete_stream_processor_implementation(self):
         """测试具体的流处理器实现"""
-        from collections.abc import AsyncIterator
 
         class ConcreteStreamProcessor(IStreamProcessor):
             def __init__(self):

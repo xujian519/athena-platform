@@ -5,13 +5,8 @@ Athena Examination Response Tool
 帮助爸爸处理专利审查意见
 """
 
-import asyncio
-from core.async_main import async_main
-import json
 import re
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Tuple
-from pathlib import Path
+from datetime import datetime
 
 
 class AthenaExaminationResponseTool:
@@ -22,7 +17,7 @@ class AthenaExaminationResponseTool:
         self.common_rejections = self._load_common_rejections()
         self.argument_strategies = self._load_argument_strategies()
 
-    def _load_response_templates(self) -> Dict:
+    def _load_response_templates(self) -> dict:
         """加载答复模板"""
         return {
             "新颖性答复": {
@@ -55,7 +50,7 @@ class AthenaExaminationResponseTool:
             }
         }
 
-    def _load_common_rejections(self) -> Dict:
+    def _load_common_rejections(self) -> dict:
         """加载常见驳回理由"""
         return {
             "新颖性": {
@@ -112,7 +107,7 @@ class AthenaExaminationResponseTool:
             }
         }
 
-    def _load_argument_strategies(self) -> Dict:
+    def _load_argument_strategies(self) -> dict:
         """加载论证策略"""
         return {
             "区别特征论证": {
@@ -138,7 +133,7 @@ class AthenaExaminationResponseTool:
             }
         }
 
-    def analyze_examination_opinion(self, opinion_text: str) -> Dict:
+    def analyze_examination_opinion(self, opinion_text: str) -> dict:
         """分析审查意见"""
         analysis = {
             "审查类型": [],
@@ -196,7 +191,7 @@ class AthenaExaminationResponseTool:
 
         return analysis
 
-    def generate_response_outline(self, analysis: Dict) -> Dict:
+    def generate_response_outline(self, analysis: dict) -> dict:
         """生成答复提纲"""
         outline = {
             "答复标题": "关于申请号{application_no}的审查意见答复",
@@ -244,7 +239,7 @@ class AthenaExaminationResponseTool:
 
         return outline
 
-    def draft_response(self, analysis: Dict, patent_info: Dict) -> str:
+    def draft_response(self, analysis: dict, patent_info: dict) -> str:
         """起草答复文书"""
         response_parts = []
 
@@ -273,14 +268,14 @@ class AthenaExaminationResponseTool:
                     response_parts.append(template["模板开头"].format(claim_no=claim_no, file_no="1") + "\n")
 
                 # 添加具体论据（占位符）
-                response_parts.append(f"（1）区别特征分析\n")
+                response_parts.append("（1）区别特征分析\n")
                 response_parts.append(f"权利要求{claim_no}与对比文件相比，至少具有以下区别技术特征：\n")
                 response_parts.append("• [区别特征1]\n")
                 response_parts.append("• [区别特征2]\n")
                 response_parts.append("• [区别特征3]\n\n")
 
-                response_parts.append(f"（2）技术效果分析\n")
-                response_parts.append(f"由于采用了上述区别技术特征，本发明能够实现以下技术效果：\n")
+                response_parts.append("（2）技术效果分析\n")
+                response_parts.append("由于采用了上述区别技术特征，本发明能够实现以下技术效果：\n")
                 response_parts.append("• [技术效果1]\n")
                 response_parts.append("• [技术效果2]\n\n")
 
@@ -303,7 +298,7 @@ class AthenaExaminationResponseTool:
 
         return '\n'.join(response_parts)
 
-    def generate_amendment_suggestions(self, analysis: Dict) -> List[Dict]:
+    def generate_amendment_suggestions(self, analysis: dict) -> list[dict]:
         """生成修改建议"""
         suggestions = []
 
@@ -337,7 +332,7 @@ class AthenaExaminationResponseTool:
 
         return suggestions
 
-    def check_response_completeness(self, response_text: str) -> Dict:
+    def check_response_completeness(self, response_text: str) -> dict:
         """检查答复完整性"""
         checks = {
             "格式检查": {

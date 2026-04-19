@@ -1,18 +1,15 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PQAI专利检索服务启动脚本
 简化的服务启动程序，用于测试和部署
 """
 
 import asyncio
-from core.async_main import async_main
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import logging
-from core.logging_config import setup_logging
 import os
 import sys
 from pathlib import Path
+
+from core.logging_config import setup_logging
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent

@@ -1,31 +1,27 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 法律向量数据库API服务
 提供RESTful接口，支持法律文档的智能检索和分析
 """
 
-import asyncio
-import json
 import logging
 import os
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 try:
-    from fastapi import BackgroundTasks, FastAPI, HTTPException, Query
     # 导入统一认证模块
     import uvicorn
+    from fastapi import BackgroundTasks, FastAPI, HTTPException, Query
     from fastapi.middleware.cors import CORSMiddleware
     from fastapi.responses import JSONResponse
     from pydantic import BaseModel, Field
-
     from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 except ImportError as e:
@@ -73,9 +69,9 @@ service_status = {
 class SearchRequest(BaseModel):
     query: str = Field(..., description='搜索查询文本', min_length=1, max_length=1000)
     limit: int = Field(default=10, ge=1, le=100, description='返回结果数量限制')
-    filters: Optional[Dict[str, Any]] = Field(default=None, description='过滤条件')
+    filters: dict[str, Any] | None = Field(default=None, description='过滤条件')
     use_rerank: bool = Field(default=True, description='是否使用重排序')
-    category: Optional[str] = Field(default=None, description='法律类别过滤')
+    category: str | None = Field(default=None, description='法律类别过滤')
     similarity_threshold: float = Field(
         default=0.7, ge=0.0, le=1.0, description='相似度阈值'
     )
@@ -96,15 +92,15 @@ class SearchResponse(BaseModel):
     query: str
     total_results: int
     processing_time_ms: float
-    results: List[SearchResult]
-    suggested_queries: List[str] = Field(default_factory=list)
+    results: list[SearchResult]
+    suggested_queries: list[str] = Field(default_factory=list)
 
 
 class LegalStats(BaseModel):
     total_documents: int
     total_vectors: int
-    collections: Dict[str, int]
-    categories: Dict[str, int]
+    collections: dict[str, int]
+    categories: dict[str, int]
     last_updated: str
 
 
@@ -123,8 +119,8 @@ LEGAL_DATABASE = {'documents': [], 'vectors': [], 'metadata': {}}
 
 # 模拟的搜索结果
 def simulate_legal_search(
-    query: str, limit: int = 10, filters: Dict[str, Any] = None
-) -> List[Dict[str, Any]]:
+    query: str, limit: int = 10, filters: dict[str, Any] = None
+) -> list[dict[str, Any]]:
     """模拟法律搜索结果"""
     import random
 
@@ -225,7 +221,6 @@ async def root():
 @app.get('/health')
 async def health_check():
     """健康检查端点"""
-    import os
 
     import psutil
 
@@ -240,7 +235,7 @@ async def health_check():
     try:
         process = psutil.Process(os.getpid())
         memory_usage = process.memory_info().rss / 1024 / 1024  # MB
-    except:
+    except Exception:
         memory_usage = 0.0
 
     health_status = {
@@ -343,7 +338,7 @@ async def search_legal_documents(request: SearchRequest):
     except Exception as e:
         service_status['error_requests'] += 1
         logger.error(f"搜索失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.get('/api/v1/legal/categories')
@@ -398,7 +393,6 @@ async def get_legal_categories():
 @app.get('/api/v1/legal/suggestions')
 async def get_search_suggestions(query: str = Query(..., description='查询文本')):
     """获取搜索建议"""
-    import re
 
     suggestions = []
 
@@ -470,7 +464,7 @@ async def analyze_legal_text(
 
 
 # 辅助函数
-def extract_legal_terms(text: str) -> List[str]:
+def extract_legal_terms(text: str) -> list[str]:
     """提取法律术语"""
     legal_terms = [
         '合同',
@@ -498,7 +492,7 @@ def extract_legal_terms(text: str) -> List[str]:
     return found_terms
 
 
-def detect_legal_issues(text: str) -> List[str]:
+def detect_legal_issues(text: str) -> list[str]:
     """检测潜在法律问题"""
     issues = []
 
@@ -512,7 +506,7 @@ def detect_legal_issues(text: str) -> List[str]:
     return issues
 
 
-def generate_suggestions(text: str) -> List[str]:
+def generate_suggestions(text: str) -> list[str]:
     """生成改进建议"""
     suggestions = []
 
@@ -539,7 +533,7 @@ def assess_risk_level(text: str) -> str:
         return '低风险'
 
 
-def identify_risk_factors(text: str) -> List[str]:
+def identify_risk_factors(text: str) -> list[str]:
     """识别风险因素"""
     factors = []
 
@@ -552,7 +546,7 @@ def identify_risk_factors(text: str) -> List[str]:
     return factors
 
 
-def suggest_mitigation(text: str) -> List[str]:
+def suggest_mitigation(text: str) -> list[str]:
     """建议风险缓解措施"""
     return [
         '明确约定各方的权利义务',
@@ -568,7 +562,7 @@ def check_compliance(text: str) -> bool:
     return len(text) > 50 and '合同' in text or '协议' in text
 
 
-def identify_clause_types(text: str) -> List[str]:
+def identify_clause_types(text: str) -> list[str]:
     """识别条款类型"""
     clause_types = []
 
@@ -584,7 +578,7 @@ def identify_clause_types(text: str) -> List[str]:
     return clause_types
 
 
-def check_missing_elements(text: str) -> List[str]:
+def check_missing_elements(text: str) -> list[str]:
     """检查缺失要素"""
     missing = []
 
@@ -597,7 +591,7 @@ def check_missing_elements(text: str) -> List[str]:
     return missing
 
 
-def suggest_improvements(text: str) -> List[str]:
+def suggest_improvements(text: str) -> list[str]:
     """建议改进方向"""
     improvements = []
 

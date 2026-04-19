@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 雅典娜知识图谱系统生产环境API主程序
 Production API Main Entry Point for Athena Knowledge Graph System
@@ -9,7 +10,7 @@ import logging
 import os
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 from core.async_main import async_main
 from core.logging_config import setup_logging
@@ -829,17 +830,19 @@ window.location.href = 'http://localhost:8899';
             logger.error(f"❌ 智能意图识别API注册失败: {e}")
 
         # ========== 意图识别服务 ==========
-        if INTENT_SERVICE_AVAILABLE:
-            try:
-                self.app.include_router(intent_router)
-                logger.info("✅ 意图识别服务API已注册 (v1.0.0)")
-            except Exception as e:
-                logger.error(f"❌ 意图识别服务API注册失败: {e}")
-        else:
-            logger.warning("⚠️  意图识别服务未启用,跳过注册")
+        try:
+            from core.api.intent_routes import router as intent_router
+
+            self.app.include_router(intent_router)
+            logger.info("✅ 意图识别服务API已注册 (v1.0.0)")
+        except ImportError as e:
+            logger.warning(f"⚠️  意图识别服务未找到,跳过注册: {e}")
+        except Exception as e:
+            logger.error(f"❌ 意图识别服务API注册失败: {e}")
 
         # ========== Athena客户端支持 ==========
         try:
+            from core.api.client_routes import router as client_router
 
             self.app.include_router(client_router)
             logger.info("✅ Athena客户端注册API已启用")
@@ -849,6 +852,7 @@ window.location.href = 'http://localhost:8899';
             logger.error(f"❌ 客户端注册API注册失败: {e}")
 
         try:
+            from core.api.client_task_routes import router as client_tasks_router
 
             self.app.include_router(client_tasks_router)
             logger.info("✅ Athena客户端任务API已启用")
@@ -878,6 +882,17 @@ window.location.href = 'http://localhost:8899';
             logger.warning(f"⚠️  健康检查API未找到,跳过注册: {e}")
         except Exception as e:
             logger.error(f"❌ 健康检查API注册失败: {e}")
+
+        # ========== 专利AI服务API ==========
+        try:
+            from core.api.patent_ai_routes import register_patent_ai_routes
+
+            register_patent_ai_routes(self.app)
+            logger.info("✅ 专利AI服务API已注册 (分类/修订/无效性预测/质量评分)")
+        except ImportError as e:
+            logger.warning(f"⚠️  专利AI服务未找到,跳过注册: {e}")
+        except Exception as e:
+            logger.error(f"❌ 专利AI服务API注册失败: {e}")
 
     def _mount_static_files(self) -> Any:
         """挂载静态文件"""

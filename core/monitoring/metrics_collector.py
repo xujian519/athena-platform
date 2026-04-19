@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 性能监控和指标收集系统
 Performance Monitoring and Metrics Collection System
@@ -19,7 +20,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from functools import wraps
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -89,7 +90,7 @@ class MetricsCollector:
 
         logger.info("✅ 指标收集器初始化完成")
 
-    def inc_counter(self, name: str, value: float = 1.0, labels: Optional[dict[str | None = None, str | None = None):
+    def inc_counter(self, name: str, value: float = 1.0, labels: dict[str, str] | None = None):
         """
         增加计数器
 
@@ -102,7 +103,7 @@ class MetricsCollector:
         self._counters[key] += value
         self._update_labels(key, labels)
 
-    def set_gauge(self, name: str, value: float, labels: dict[str | None = None, str | None = None):
+    def set_gauge(self, name: str, value: float, labels: dict[str, str] | None = None):
         """
         设置仪表值
 
@@ -115,7 +116,7 @@ class MetricsCollector:
         self._gauges[key] = value
         self._update_labels(key, labels)
 
-    def observe_histogram(self, name: str, value: float, labels: dict[str | None = None, str | None = None):
+    def observe_histogram(self, name: str, value: float, labels: dict[str, str] | None = None):
         """
         观察直方图值
 
@@ -128,7 +129,7 @@ class MetricsCollector:
         self._histograms[key].append({"value": value, "timestamp": datetime.now()})
         self._update_labels(key, labels)
 
-    def observe_summary(self, name: str, value: float, labels: dict[str | None = None, str | None = None):
+    def observe_summary(self, name: str, value: float, labels: dict[str, str] | None = None):
         """
         观察摘要值(用于计算统计量)
 
@@ -160,18 +161,18 @@ class MetricsCollector:
         if labels:
             self._metric_labels[key] = labels
 
-    def get_counter(self, name: str, labels: dict[str | None = None, str | None = None) -> float:
+    def get_counter(self, name: str, labels: dict[str, str] | None = None) -> float:
         """获取计数器值"""
         key = self._make_key(name, labels)
         return self._counters.get(key, 0.0)
 
-    def get_gauge(self, name: str, labels: dict[str | None = None, str | None = None) -> float:
+    def get_gauge(self, name: str, labels: dict[str, str] | None = None) -> float:
         """获取仪表值"""
         key = self._make_key(name, labels)
         return self._gauges.get(key, 0.0)
 
     def get_histogram_stats(
-        self, name: str, labels: dict[str, str | None = None
+        self, name: str, labels: dict[str, str] | None = None
     ) -> dict[str, float]:
         """
         获取直方图统计
@@ -202,7 +203,7 @@ class MetricsCollector:
         }
 
     def get_summary_stats(
-        self, name: str, labels: dict[str, str | None = None
+        self, name: str, labels: dict[str, str] | None = None
     ) -> dict[str, float]:
         """获取摘要统计"""
         key = self._make_key(name, labels)
@@ -238,7 +239,7 @@ class MetricsCollector:
         return sorted_data[f]
 
     def get_rate(
-        self, name: str, window: str = "1m", labels: dict[str, str | None = None
+        self, name: str, window: str = "1m", labels: dict[str, str] | None = None
     ) -> float:
         """
         计算速率(每秒)
@@ -259,7 +260,7 @@ class MetricsCollector:
         cutoff_time = datetime.now() - window_delta
 
         # 计算窗口内的数据点
-        values_in_window = []
+        values_in_window = [
             item for item in self._histograms[key] if item["timestamp"] >= cutoff_time
         ]
 

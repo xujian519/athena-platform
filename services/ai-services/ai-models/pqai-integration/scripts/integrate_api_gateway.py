@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PQAI服务API网关集成脚本
 将PQAI专利检索服务路由集成到Athena API网关
 """
 
 import json
-from core.async_main import async_main
-import logging
-from core.logging_config import setup_logging
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import requests
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -26,10 +24,10 @@ class APIGatewayIntegrator:
         self.pqai_service_url = 'http://localhost:8030'
         self.config_path = Path(__file__).parent.parent / 'config' / 'api_gateway_routes.json'
 
-    def load_pqai_config(self) -> Dict[str, Any]:
+    def load_pqai_config(self) -> dict[str, Any]:
         """加载PQAI服务配置"""
         try:
-            with open(self.config_path, 'r', encoding='utf-8') as f:
+            with open(self.config_path, encoding='utf-8') as f:
                 config = json.load(f)
             logger.info(f"✅ 成功加载PQAI配置: {config['service_name']}")
             return config
@@ -52,7 +50,7 @@ class APIGatewayIntegrator:
             logger.error(f"❌ PQAI服务连接失败: {e}")
             return False
 
-    def register_routes_with_gateway(self, config: Dict[str, Any]) -> bool:
+    def register_routes_with_gateway(self, config: dict[str, Any]) -> bool:
         """向API网关注册路由"""
         try:
             # 这里应该调用实际的网关API来注册路由
@@ -84,7 +82,7 @@ class APIGatewayIntegrator:
             logger.error(f"❌ 路由注册失败: {e}")
             return False
 
-    def create_service_discovery_entry(self, config: Dict[str, Any]) -> bool:
+    def create_service_discovery_entry(self, config: dict[str, Any]) -> bool:
         """创建服务发现条目"""
         try:
             service_info = {
@@ -111,7 +109,7 @@ class APIGatewayIntegrator:
             logger.error(f"❌ 服务发现条目创建失败: {e}")
             return False
 
-    def generate_integration_report(self, config: Dict[str, Any]) -> Dict[str, Any]:
+    def generate_integration_report(self, config: dict[str, Any]) -> dict[str, Any]:
         """生成集成报告"""
         report = {
             'integration_timestamp': '2025-12-01T16:20:00Z',

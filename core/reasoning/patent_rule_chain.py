@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利规则链推理系统
 Patent Rule Chain Reasoning System
@@ -16,7 +17,6 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
-
 
 from ..knowledge.patent_analysis.enhanced_knowledge_graph import EnhancedPatentKnowledgeGraph
 from .expert_rule_engine import ExpertRuleEngine, ReasoningChain, ReasoningRule
@@ -157,7 +157,7 @@ class PatentRuleChainEngine:
             self.logger.info("✅ PatentRuleChainEngine 初始化完成")
             return True
 
-        except Exception as e:
+        except Exception:
             return False
 
     async def _build_patent_rule_chains(self):
@@ -187,6 +187,7 @@ class PatentRuleChainEngine:
             self.logger.info(f"✅ 专利规则链构建完成: {total_chains} 条规则链")
 
         except Exception as e:
+            self.logger.error(f"规则链构建失败: {e}")
 
     async def _build_novelty_chains(self) -> list[RuleChain]:
         """构建新颖性审查规则链"""
@@ -310,7 +311,7 @@ class PatentRuleChainEngine:
 
     async def analyze_patent(
         self,
-        patent_data: dict[str, Any],        analysis_types: list["key"] = None,
+        patent_data: dict[str, Any],        analysis_types: list[str] = None,
         context: dict[str, Any] | None = None,
     ) -> PatentAnalysis:
         """
@@ -371,7 +372,7 @@ class PatentRuleChainEngine:
                         overall_assessment[rule_type.value] = assessment
                         recommendations.extend(recs)
 
-                except Exception as e:
+                except Exception:
                     continue
 
             # 计算整体置信度
@@ -402,7 +403,7 @@ class PatentRuleChainEngine:
             self.logger.info(f"✅ 专利分析完成: {patent_id}, 置信度: {overall_confidence:.3f}")
             return analysis
 
-        except Exception as e:
+        except Exception:
             raise
 
     async def _parse_patent_elements(
@@ -551,7 +552,7 @@ class PatentRuleChainEngine:
 
     async def _extract_assessment_and_recommendations(
         self, reasoning_result: ReasoningChain, rule_type: PatentRuleType
-    ) -> tuple[dict[str, Any], list[str]:
+    ) -> tuple[dict[str, Any], list[str]]:
         """提取评估结果和建议"""
         assessment = {"passed": False, "score": 0.0, "key_issues": [], "strengths": []}
 
@@ -597,7 +598,7 @@ class PatentRuleChainEngine:
         return sum(confidences) / len(confidences)
 
     async def check_compliance(
-        self, patent_data: dict[str, Any], rule_types: list["key"] = None
+        self, patent_data: dict[str, Any], rule_types: list[str] = None
     ) -> list[ComplianceCheck]:
         """
         执行合规性检查
@@ -627,12 +628,13 @@ class PatentRuleChainEngine:
 
                     compliance_checks.append(check)
 
-                except Exception as e:
+                except Exception:
                     continue
 
             self.stats["compliance_checks"] += len(compliance_checks)
 
         except Exception as e:
+            self.logger.error(f"合规性检查失败: {e}")
 
         return compliance_checks
 
@@ -706,7 +708,7 @@ async def get_patent_rule_chain_engine() -> PatentRuleChainEngine:
 
 
 async def check_patent_compliance(
-    patent_data: dict[str, Any, check_types: list["key"] = None
+    patent_data: dict[str, Any], check_types: list[str] | None = None
 ) -> list[ComplianceCheck]:
     """便捷函数:检查专利合规性"""
     engine = await get_patent_rule_chain_engine()

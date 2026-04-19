@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一Agent记忆系统 - 统一接口
 Unified Agent Memory System - Unified Interface

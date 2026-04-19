@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 提示词模板缓存管理器
 Prompt Template Cache Manager
@@ -17,8 +18,8 @@ import logging
 import threading
 from collections import OrderedDict
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from typing import Any, Dict, Optional, Tuple
+from datetime import datetime
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

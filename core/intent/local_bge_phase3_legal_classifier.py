@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Phase 3: 本地BGE意图识别系统 - 专利代理大规模增强版
 Local BGE Intent Recognition System - Patent Agent Large-Scale Enhanced (Phase 3)
@@ -14,8 +15,6 @@ Local BGE Intent Recognition System - Patent Agent Large-Scale Enhanced (Phase 3
 创建: 2026-01-13
 更新: 2026-01-13 (切换到大规模生产模型)
 """
-import numpy as np
-
 import json
 import sys
 import time
@@ -23,6 +22,7 @@ from pathlib import Path
 from typing import Any
 
 import joblib
+import numpy as np
 import torch
 from transformers import AutoModel, AutoTokenizer
 

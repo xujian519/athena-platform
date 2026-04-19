@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 审查员模拟器
 Examiner Simulator
@@ -11,9 +12,8 @@ Version: v1.0.0
 """
 
 import logging
-import random
-from typing import Any, Dict, List, Optional
 from enum import Enum
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -97,9 +97,9 @@ class ExaminerSimulator:
     def simulate_initial_review(
         self,
         oa_text: str,
-        claims: List[str],
-        prior_art_analysis: Dict
-    ) -> Dict[str, Any]:
+        claims: list[str],
+        prior_art_analysis: dict
+    ) -> dict[str, Any]:
         """
         模拟初次审查意见
 
@@ -158,9 +158,9 @@ class ExaminerSimulator:
     def respond_to_applicant_argument(
         self,
         applicant_argument: str,
-        prior_art_analysis: Dict,
+        prior_art_analysis: dict,
         round_number: int = 1
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         模拟审查员对申请人答复的回应
 
@@ -215,8 +215,8 @@ class ExaminerSimulator:
     def evaluate_final_response(
         self,
         applicant_response: str,
-        dialogue_history: List[Dict]
-    ) -> Dict[str, Any]:
+        dialogue_history: list[dict]
+    ) -> dict[str, Any]:
         """
         评估申请人最终答复的质量
 
@@ -263,7 +263,7 @@ class ExaminerSimulator:
 
     def _detect_rejection_type(self, oa_text: str) -> RejectionType:
         """检测驳回类型"""
-        text_lower = oa_text.lower()
+        oa_text.lower()
 
         # 优先级顺序检测
         keywords = {
@@ -283,8 +283,8 @@ class ExaminerSimulator:
 
     def _select_strategy(
         self,
-        claims: List[str],
-        prior_art_analysis: Dict
+        claims: list[str],
+        prior_art_analysis: dict
     ) -> ArgumentationStrategy:
         """选择论证策略"""
         # 基于对比文件数量和权利要求数量选择策略
@@ -301,8 +301,8 @@ class ExaminerSimulator:
         self,
         claim_number: int,
         claim_text: str,
-        prior_art_analysis: Dict
-    ) -> Dict[str, Any]:
+        prior_art_analysis: dict
+    ) -> dict[str, Any]:
         """为特定权利要求生成质疑"""
         # 提取权利要求中的技术特征
         features = self._extract_features_from_claim(claim_text)
@@ -342,7 +342,7 @@ class ExaminerSimulator:
     def _generate_disclosure_objection(
         self,
         feature: str,
-        disclosure_info: Dict
+        disclosure_info: dict
     ) -> str:
         """生成公开性质疑"""
         # 只使用第一个模板（最简单的一个，只有{d}和{feature}占位符）
@@ -357,7 +357,7 @@ class ExaminerSimulator:
     def _generate_obviousness_objection(
         self,
         feature: str,
-        prior_art_analysis: Dict
+        prior_art_analysis: dict
     ) -> str:
         """生成显而易见性质疑"""
         # 查找最相似的特征
@@ -372,7 +372,7 @@ class ExaminerSimulator:
         else:
             return f"{feature}属于本领域的公知常识或常规技术手段。"
 
-    def _extract_features_from_claim(self, claim_text: str) -> List[str]:
+    def _extract_features_from_claim(self, claim_text: str) -> list[str]:
         """从权利要求中提取技术特征"""
         import re
 
@@ -393,8 +393,8 @@ class ExaminerSimulator:
     def _check_disclosure(
         self,
         feature: str,
-        prior_art_analysis: Dict
-    ) -> tuple[bool, Optional[Dict]]:
+        prior_art_analysis: dict
+    ) -> tuple[bool, dict | None]:
         """检查特征是否在对比文件中公开"""
         # 简化实现：检查undisclosed_features列表
         for key, value in prior_art_analysis.items():
@@ -413,7 +413,7 @@ class ExaminerSimulator:
     def _find_most_similar_feature(
         self,
         feature: str,
-        prior_art_analysis: Dict
+        prior_art_analysis: dict
     ) -> str | None:
         """查找最相似的特征"""
         from difflib import SequenceMatcher
@@ -434,7 +434,7 @@ class ExaminerSimulator:
 
         return best_match
 
-    def _generate_claim_conclusion(self, feature_objections: List[str]) -> str:
+    def _generate_claim_conclusion(self, feature_objections: list[str]) -> str:
         """生成权利要求结论"""
         if len(feature_objections) >= 3:
             return "因此，权利要求的技术方案不具备突出的实质性特点和显著的进步，不具备创造性。"
@@ -444,7 +444,7 @@ class ExaminerSimulator:
     def _generate_overall_conclusion(
         self,
         rejection_type: RejectionType,
-        objections: List[Dict]
+        objections: list[dict]
     ) -> str:
         """生成总体结论"""
         if rejection_type == RejectionType.INVENTIVENESS:
@@ -456,7 +456,7 @@ class ExaminerSimulator:
         else:
             return "综上所述，本申请存在上述驳回问题。"
 
-    def _analyze_applicant_argument(self, argument: str) -> Dict[str, Any]:
+    def _analyze_applicant_argument(self, argument: str) -> dict[str, Any]:
         """分析申请人答复的策略和论据"""
         # 提取关键论点
         key_points = []
@@ -484,7 +484,7 @@ class ExaminerSimulator:
 
     def _determine_response_strategy(
         self,
-        argument_analysis: Dict,
+        argument_analysis: dict,
         round_number: int
     ) -> str:
         """确定审查员的回应策略"""
@@ -504,10 +504,10 @@ class ExaminerSimulator:
     def _generate_rebuttal(
         self,
         applicant_argument: str,
-        argument_analysis: Dict,
-        prior_art_analysis: Dict,
+        argument_analysis: dict,
+        prior_art_analysis: dict,
         strategy: str
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """生成具体反驳"""
         rebuttal_points = []
 
@@ -582,12 +582,6 @@ class ExaminerSimulator:
     def _evaluate_persuasiveness(self, response: str) -> float:
         """评估说服力"""
         # 检查论证元素
-        persuasive_elements = [
-            ("数据支撑", 25),
-            ("逻辑清晰", 25),
-            ("案例引用", 20),
-            ("法理结合", 30)
-        ]
 
         score = 0.0
 
@@ -653,7 +647,7 @@ class ExaminerSimulator:
 
         return min(score, 100.0)
 
-    def _identify_strengths(self, response: str) -> List[str]:
+    def _identify_strengths(self, response: str) -> list[str]:
         """识别优势"""
         strengths = []
 
@@ -668,7 +662,7 @@ class ExaminerSimulator:
 
         return strengths if strengths else ["答复结构完整"]
 
-    def _identify_weaknesses(self, response: str) -> List[str]:
+    def _identify_weaknesses(self, response: str) -> list[str]:
         """识别不足"""
         weaknesses = []
 
@@ -683,7 +677,7 @@ class ExaminerSimulator:
 
         return weaknesses if weaknesses else ["无明显不足"]
 
-    def _generate_recommendations(self, score: float) -> List[str]:
+    def _generate_recommendations(self, score: float) -> list[str]:
         """生成改进建议"""
         if score >= 85:
             return [

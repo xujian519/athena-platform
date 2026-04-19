@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 时间处理工具模块
 """
 
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
 

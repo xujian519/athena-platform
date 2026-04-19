@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜专利命名系统 - 规范性检查器
 Xiaona Patent Naming System - Compliance Checker

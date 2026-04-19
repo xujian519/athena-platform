@@ -4,18 +4,18 @@ DeepSeek Math V2 GPU优化器 - Apple Silicon MPS优化
 """
 
 import asyncio
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
 import platform
 import time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import numpy as np
 import torch
 import torch.nn as nn
+
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -65,7 +65,7 @@ class MPSDeviceManager:
 
         return device
 
-    def _get_device_info(self) -> Dict[str, Any]:
+    def _get_device_info(self) -> dict[str, Any]:
         """获取设备详细信息"""
         info = {
             'device_type': str(self.device),
@@ -239,7 +239,7 @@ class BatchProcessor:
 
         self.is_processing = False
 
-    async def _process_batch_requests(self, requests: List[InferenceRequest]):
+    async def _process_batch_requests(self, requests: list[InferenceRequest]):
         """处理一批请求"""
         try:
             # 准备批量输入
@@ -250,7 +250,7 @@ class BatchProcessor:
 
             # 分发结果
             for i, request in enumerate(requests):
-                result = InferenceResult(
+                InferenceResult(
                     request_id=request.request_id,
                     output_data=batch_results[i],
                     inference_time=0.0,  # 批量处理时间单独计算
@@ -261,9 +261,9 @@ class BatchProcessor:
         except Exception as e:
             logger.error(f"批量处理失败: {e}")
 
-    async def _batch_infer(self, batch_inputs: torch.Tensor) -> List[np.ndarray]:
+    async def _batch_infer(self, batch_inputs: torch.Tensor) -> list[np.ndarray]:
         """执行批量推理"""
-        start_time = time.time()
+        time.time()
 
         device = self.mps_model.device_manager.device
 
@@ -328,7 +328,7 @@ class GPUAccelerationProfiler:
 
         return wrapper
 
-    def get_performance_report(self) -> Dict[str, Any]:
+    def get_performance_report(self) -> dict[str, Any]:
         """获取性能报告"""
         if not self.metrics['inference_times']:
             return {'status': 'no_data'}
@@ -380,7 +380,7 @@ async def test_mps_optimization():
     device_manager = MPSDeviceManager()
     base_model = TestModel()
     mps_model = MPSOptimizedModel(base_model, device_manager)
-    batch_processor = BatchProcessor(mps_model)
+    BatchProcessor(mps_model)
     profiler = GPUAccelerationProfiler()
 
     logger.info(f"📱 设备信息: {device_manager.device_info}")

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺调用链路监控系统
 Xiaonuo Call Chain Monitoring System
@@ -24,7 +25,9 @@ from collections import defaultdict, deque
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
+
+import numpy as np
 
 from core.logging_config import setup_logging
 
@@ -301,7 +304,7 @@ class CallChainMonitor:
 
         return span
 
-    def record_function_call(self, operation_name: str, tags: dict[str | None = None, str | None = None) -> Any:
+    def record_function_call(self, operation_name: str, tags: dict[str, str] | None = None) -> Any:
         """记录函数调用的装饰器"""
 
         def decorator(func: Callable) -> Any:
@@ -777,7 +780,7 @@ def get_call_chain_monitor() -> CallChainMonitor:
 
 
 # 便捷装饰器
-def trace_operation(operation_name: str | None = None, tags: Optional[dict[str | None = None, str | None = None) -> Any:
+def trace_operation(operation_name: str | None = None, tags: dict[str, str] | None = None) -> Any:
     """追踪操作的便捷装饰器"""
     monitor = get_call_chain_monitor()
     return monitor.record_function_call(operation_name, tags)

@@ -1,0 +1,241 @@
+{
+  "timestamp": "2025-12-27T13:24:52.163971",
+  "statistics": {
+    "processed": {
+      "count": 11,
+      "size_bytes": 9188024,
+      "size_mb": 8.762382507324219,
+      "description": "已处理数据"
+    },
+    "other": {
+      "count": 8,
+      "size_bytes": 9645140,
+      "size_mb": 9.198322296142578,
+      "description": "其他"
+    },
+    "report": {
+      "count": 53,
+      "size_bytes": 10779828,
+      "size_mb": 10.280445098876953,
+      "description": "报告文件"
+    },
+    "knowledge_graph": {
+      "count": 32,
+      "size_bytes": 169092,
+      "size_mb": 0.16125869750976562,
+      "description": "知识图谱"
+    },
+    "test": {
+      "count": 10,
+      "size_bytes": 1604828,
+      "size_mb": 1.5304832458496094,
+      "description": "测试文件"
+    },
+    "vectors": {
+      "count": 5,
+      "size_bytes": 46085691,
+      "size_mb": 43.95073986053467,
+      "description": "向量数据"
+    },
+    "config": {
+      "count": 9,
+      "size_bytes": 1380,
+      "size_mb": 0.001316070556640625,
+      "description": "配置文件"
+    },
+    "checkpoint": {
+      "count": 3,
+      "size_bytes": 2820869,
+      "size_mb": 2.690190315246582,
+      "description": "检查点"
+    },
+    "log": {
+      "count": 3,
+      "size_bytes": 9509,
+      "size_mb": 0.009068489074707031,
+      "description": "日志文件"
+    },
+    "total": {
+      "count": 134,
+      "size_bytes": 80304361,
+      "size_mb": 76.58420658111572,
+      "size_gb": 0.07478926423937082
+    }
+  },
+  "categories": {
+    "processed": {
+      "description": "已处理数据",
+      "count": 11,
+      "files": [
+        "production/data/laws_processed/laws_import_report_20251223_093455.json",
+        "production/data/laws_processed/laws_import_report_20251224_092138.json",
+        "production/data/patent_rules/processed/legal_documents_20251223_045218.json",
+        "production/data/patent_rules/processed/workflow_test_report.json",
+        "production/data/patent_rules/processed/legal_documents_20251223_010317.json",
+        "production/data/patent_rules/processed/legal_chunks_20251223_005301.json",
+        "production/data/patent_rules/processed/legal_chunks_20251223_010317.json",
+        "production/data/patent_rules/processed/legal_documents_20251223_005301.json",
+        "production/data/patent_rules/processed/legal_chunks_20251223_045218.json",
+        "production/data/patent_decisions/processed/review_sample_100_chunks_20251223_055725.json"
+      ]
+    },
+    "other": {
+      "description": "其他",
+      "count": 8,
+      "files": [
+        "production/data/exports/unified_legal_dataset_20251220_211550.json",
+        "production/data/patent_rules/bert_extraction_example.json",
+        "production/data/patent_rules/qdrant_store/patent_rules.json",
+        "production/data/patent_rules/legal_documents/guideline_stats_v2_20251223_003233.json",
+        "production/data/patent_rules/legal_documents/guideline_stats_20251223_003033.json",
+        "production/data/patent_rules/legal_documents/guideline_subsections_v2_20251223_003233.json",
+        "production/data/patent_rules/legal_documents/guideline_subsections_20251223_003033.json",
+        "production/data/patent_decisions/batches/batch_0001_20251223_061737.json"
+      ]
+    },
+    "report": {
+      "description": "报告文件",
+      "count": 53,
+      "files": [
+        "production/data/patent_decisions/dedup_report.json",
+        "production/data/patent_rules/import_report_20251220_235057.json",
+        "production/data/patent_rules/quality_report.json",
+        "production/data/patent_rules/full_pipeline_report_20251223_054048.json",
+        "production/data/patent_rules/import_report_20251220_235114.json",
+        "production/data/patent_rules/build_report_20251220_232639.json",
+        "production/data/patent_rules/import_report_20251220_235120.json",
+        "production/data/patent_rules/import_report_20251220_235301.json",
+        "production/data/patent_rules/import_report_20251220_235140.json",
+        "production/data/patent_rules/import_report_20251220_235351.json"
+      ]
+    },
+    "knowledge_graph": {
+      "description": "知识图谱",
+      "count": 32,
+      "files": [
+        "production/data/patent_rules/patent_kg_import_report_20251220_233843.json",
+        "production/data/patent_rules/knowledge_graph/import_stats_20251220_235140.json",
+        "production/data/patent_rules/knowledge_graph/subgraph_example.json",
+        "production/data/patent_rules/knowledge_graph/relations_related_to.json",
+        "production/data/patent_rules/knowledge_graph/relations_granted_by.json",
+        "production/data/patent_rules/knowledge_graph/entities_PATENT_TYPE.json",
+        "production/data/patent_rules/knowledge_graph/import_stats_20251220_235120.json",
+        "production/data/patent_rules/knowledge_graph/import_stats_20251220_235301.json",
+        "production/data/patent_rules/knowledge_graph/import_stats_20251220_235351.json",
+        "production/data/patent_rules/knowledge_graph/guideline_entities_20251223_054048.json"
+      ]
+    },
+    "test": {
+      "description": "测试文件",
+      "count": 10,
+      "files": [
+        "production/data/patent_rules/test_image_data.json",
+        "production/data/patent_rules/qdrant_store/test_rerank.json",
+        "production/data/patent_rules/qdrant_store/test_patent_rules.json",
+        "production/data/patent_rules/qdrant_store/test_search.json",
+        "production/data/patent_rules/qdrant_store/test_indexing.json",
+        "production/data/patent_rules/qdrant_store/test_batch.json",
+        "production/data/patent_rules/qdrant_store/test_rag_demo.json",
+        "production/data/patent_rules/qdrant_store/perf_test.json",
+        "production/data/patent_rules/qdrant_store/test_stats.json",
+        "production/data/patent_rules/legal_documents/test_legal_document.json"
+      ]
+    },
+    "vectors": {
+      "description": "向量数据",
+      "count": 5,
+      "files": [
+        "production/data/patent_rules/qdrant_store/test_vector_gen.json",
+        "production/data/patent_rules/qdrant_store/test_vector_gen_config.json",
+        "production/data/patent_rules/vectors/guideline_bge_vectors_20251223_054048.json",
+        "production/data/patent_rules/legal_documents/guideline_vectors_input_20251223_003233.json",
+        "production/data/patent_decisions/vectors/review_sample_100_vectors_20251223_055725.json"
+      ]
+    },
+    "config": {
+      "description": "配置文件",
+      "count": 9,
+      "files": [
+        "production/data/patent_rules/qdrant_store/test_stats_config.json",
+        "production/data/patent_rules/qdrant_store/test_patent_rules_config.json",
+        "production/data/patent_rules/qdrant_store/test_batch_config.json",
+        "production/data/patent_rules/qdrant_store/test_rag_demo_config.json",
+        "production/data/patent_rules/qdrant_store/perf_test_config.json",
+        "production/data/patent_rules/qdrant_store/test_rerank_config.json",
+        "production/data/patent_rules/qdrant_store/test_indexing_config.json",
+        "production/data/patent_rules/qdrant_store/test_search_config.json",
+        "production/data/patent_rules/qdrant_store/patent_rules_config.json"
+      ]
+    },
+    "checkpoint": {
+      "description": "检查点",
+      "count": 3,
+      "files": [
+        "production/data/patent_decisions/checkpoints/nebula_import.json",
+        "production/data/patent_decisions/checkpoints/progress.json",
+        "reports/patent_decisions_processing_progress.json"
+      ]
+    },
+    "log": {
+      "description": "日志文件",
+      "count": 3,
+      "files": [
+        "logs/xiaonuo_production_status_20251225.json",
+        "logs/production_100_percent_confirmation.json",
+        "logs/network_port_verification.json"
+      ]
+    }
+  },
+  "large_files": [
+    {
+      "path": "production/data/patent_decisions/vectors/review_sample_100_vectors_20251223_055725.json",
+      "size_mb": 31.52653694152832,
+      "modified": "2025-12-25T22:44:12.004501"
+    },
+    {
+      "path": "production/data/patent_rules/vectors/guideline_bge_vectors_20251223_054048.json",
+      "size_mb": 11.730500221252441,
+      "modified": "2025-12-25T22:44:12.353444"
+    },
+    {
+      "path": "production/data/patent_decisions/dedup_report.json",
+      "size_mb": 9.800599098205566,
+      "modified": "2025-12-25T22:44:11.772346"
+    },
+    {
+      "path": "production/data/patent_rules/qdrant_store/patent_rules.json",
+      "size_mb": 8.377527236938477,
+      "modified": "2025-12-25T22:44:12.171244"
+    },
+    {
+      "path": "production/data/patent_decisions/checkpoints/progress.json",
+      "size_mb": 2.6439037322998047,
+      "modified": "2025-12-25T22:44:11.799021"
+    },
+    {
+      "path": "production/data/patent_rules/processed/legal_chunks_20251223_005301.json",
+      "size_mb": 2.147690773010254,
+      "modified": "2025-12-25T22:44:12.408297"
+    },
+    {
+      "path": "production/data/patent_rules/processed/legal_chunks_20251223_010317.json",
+      "size_mb": 2.147690773010254,
+      "modified": "2025-12-25T22:44:12.426574"
+    },
+    {
+      "path": "production/data/patent_rules/processed/legal_chunks_20251223_045218.json",
+      "size_mb": 2.147690773010254,
+      "modified": "2025-12-25T22:44:12.444022"
+    },
+    {
+      "path": "production/data/patent_decisions/processed/review_sample_100_chunks_20251223_055725.json",
+      "size_mb": 2.0587549209594727,
+      "modified": "2025-12-25T22:44:12.025579"
+    },
+    {
+      "path": "production/data/patent_rules/qdrant_store/perf_test.json",
+      "size_mb": 1.1279840469360352,
+      "modified": "2025-12-25T22:44:12.198593"
+    }
+  ]
+}

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 混合多模态API网关 - 集成版本
 Hybrid Multimodal API Gateway - Integrated Version
@@ -8,43 +7,38 @@ Hybrid Multimodal API Gateway - Integrated Version
 Integrated with Athena unified storage architecture for intelligent multimodal processing
 """
 
-import sys
-from core.async_main import async_main
+import logging
 import os
-from pathlib import Path
-from datetime import datetime
-import asyncio
-import json
+import sys
 import uuid
-from typing import Dict, List, Any, Optional
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+logger = logging.getLogger(__name__)
 
 # 添加项目路径
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from fastapi import FastAPI, File, UploadFile, HTTPException, Form, BackgroundTasks
-from fastapi.middleware.cors import CORSMiddleware
-
-from core.security.auth import ALLOWED_ORIGINS
-from pydantic import BaseModel
-import uvicorn
 import aiofiles
-
-# 导入存储管理器
-from storage_manager import (
-    MultimodalStorageManager,
-    ProcessingStatus,
-    ProcessingMethod,
-    FileType
-)
+import uvicorn
+from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 
 # 导入智能路由器
 from intelligent_router import (
+    DataSensitivity,
+    ProcessingPriority,
+    ProcessingRequest,
     get_intelligent_router,
     process_file_intelligently,
-    ProcessingRequest,
-    ProcessingPriority,
-    DataSensitivity
 )
+from pydantic import BaseModel
+
+# 导入存储管理器
+from storage_manager import FileType, MultimodalStorageManager, ProcessingMethod, ProcessingStatus
+
+from core.security.auth import ALLOWED_ORIGINS
 
 # 创建FastAPI应用
 app = FastAPI(
@@ -81,7 +75,7 @@ class HybridProcessingResponse(BaseModel):
     processing_time: float
     cost: float
     quality_score: float
-    result: Optional[Dict[str, Any]] = None
+    result: dict[str, Any] | None = None
     error: str | None = None
 
 class BatchProcessingResponse(BaseModel):
@@ -92,18 +86,18 @@ class BatchProcessingResponse(BaseModel):
     failed_files: int
     total_cost: float
     total_time: float
-    results: List[Dict[str, Any]]
+    results: list[dict[str, Any]]
 
 class FileInfo(BaseModel):
     id: int
     original_filename: str
     file_type: str
     file_size: int
-    mime_type: Optional[str]
+    mime_type: str | None
     processing_status: str
-    processing_method: Optional[str]
-    created_at: Optional[str]
-    processed_at: Optional[str]
+    processing_method: str | None
+    created_at: str | None
+    processed_at: str | None
 
 # 后台处理任务
 async def process_file_background(
@@ -349,7 +343,7 @@ async def process_file_hybrid(
 @app.post("/api/batch-process", response_model=BatchProcessingResponse)
 async def process_batch_files(
     background_tasks: BackgroundTasks,
-    files: List[UploadFile] = File(...),
+    files: list[UploadFile] = File(...),
     priority: str = Form("normal"),
     sensitivity: str = Form("public"),
     max_concurrent: int = Form(3)
@@ -447,7 +441,7 @@ async def process_batch_files(
         total_time = (datetime.now() - start_time).total_seconds()
 
         # 预估总成本
-        router = get_intelligent_router()
+        get_intelligent_router()
         estimated_cost = processed_files * 0.01  # 简化成本计算
 
         return BatchProcessingResponse(
@@ -487,7 +481,7 @@ async def get_file_info(file_id: int):
         return file_info
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get("/api/search/vector")
 async def search_by_vector(
@@ -507,7 +501,7 @@ async def search_by_vector(
         if file_type:
             try:
                 file_type_enum = FileType(file_type.lower())
-            except ValueError:
+            except ValueError as e:
                 logger.error(f"Error: {e}", exc_info=True)
 
         storage = await get_storage_manager()
@@ -560,7 +554,7 @@ async def list_files(
 ):
     """列出文件"""
     try:
-        storage = await get_storage_manager()
+        await get_storage_manager()
         # 这里需要实现分页查询逻辑
         # 由于我们使用的是简单的存储管理器，这里返回空列表
         # 在实际项目中，应该从数据库查询
@@ -615,7 +609,7 @@ async def delete_file(file_id: int):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post("/api/cleanup")
 async def cleanup_old_files(days: int = 30):

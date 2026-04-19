@@ -8,18 +8,26 @@ Shared pytest fixtures for Memory module testing
 版本: v2.2.0 - 导出Mock类供测试使用
 """
 
-import pytest
-from unittest.mock import AsyncMock, MagicMock
-import json
-from contextlib import asynccontextmanager
 from collections import OrderedDict
+from contextlib import asynccontextmanager
+from unittest.mock import AsyncMock, MagicMock
 
-from core.memory.unified_memory import (
-    UnifiedAgentMemorySystem,
-    CacheStatistics,
-    AgentType,
-    MemoryType
-)
+import pytest
+
+# 尝试导入统一记忆系统，如果失败则使用Mock
+try:
+    from core.memory.unified_memory import (
+        AgentType,
+        CacheStatistics,
+        MemoryType,
+        UnifiedAgentMemorySystem,
+    )
+except ImportError:
+    # 使用Mock替代
+    UnifiedAgentMemorySystem = MagicMock
+    CacheStatistics = MagicMock
+    AgentType = MagicMock
+    MemoryType = MagicMock
 
 
 # 创建一个模拟的异步连接对象

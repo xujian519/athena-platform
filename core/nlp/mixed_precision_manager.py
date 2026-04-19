@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 混合精度推理管理器
 Mixed Precision Inference Manager
@@ -10,16 +11,17 @@ Mixed Precision Inference Manager
 """
 
 import gc
-from core.async_main import async_main
 import logging
 import time
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 import psutil
 import torch
 import torch.nn as nn
+
+logger = logging.getLogger(__name__)
 
 
 class PrecisionMode(Enum):
@@ -296,8 +298,8 @@ class MixedPrecisionManager:
                 if hasattr(model, 'gradient_checkpointing_enable'):
                     model.gradient_checkpointing_enable()
                     self._log("启用梯度检查点")
-        except Exception as e:
-            logger.warning(f'操作失败: {e}')
+            except Exception as e:
+                logger.warning(f'操作失败: {e}')
 
         # 设置优化后端
         if self.device.type == "cuda":
@@ -307,8 +309,8 @@ class MixedPrecisionManager:
                     torch.backends.cuda.matmul.allow_tf32 = True
                     torch.backends.cudnn.allow_tf32 = True
                     self._log("启用TF32加速")
-        except Exception as e:
-            logger.warning(f'操作失败: {e}')
+            except Exception as e:
+                logger.warning(f'操作失败: {e}')
 
         return model
 
@@ -394,7 +396,7 @@ class MixedPrecisionManager:
                    targets: torch.Tensor,
                    optimizer: torch.optim.Optimizer,
                    criterion: nn.Module,
-                   clip_grad_norm: Optional[bool | None = None) -> dict[str, float]:
+                   clip_grad_norm: float | None = None) -> dict[str, float]:
         """执行混合精度训练步骤"""
         if not self.scaler:
             # 非AMP训练

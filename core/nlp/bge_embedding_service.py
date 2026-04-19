@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BGE Large ZH v1.5 嵌入服务
 BGE Embedding Service for Athena Platform
@@ -8,8 +9,6 @@ BGE Embedding Service for Athena Platform
 作者: 小诺·双鱼座
 创建时间: 2025-12-16
 """
-import numpy as np
-
 import asyncio
 import logging
 import os
@@ -17,8 +16,9 @@ import sys
 import threading
 import time
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any
 
+import numpy as np
 
 # 添加路径
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
@@ -159,7 +159,7 @@ class BGEEmbeddingService:
 
         return None
 
-    def _save_to_cache(self, texts: list[str], embeddings: list[list[float]) -> Any:
+    def _save_to_cache(self, texts: list[str], embeddings: list[list[float]]) -> Any:
         """保存到缓存"""
         if not self.config.get("cache_enabled", True):
             return
@@ -241,7 +241,7 @@ class BGEEmbeddingService:
             self._save_to_cache(texts, embeddings)
 
             # 转换为列表格式
-            embedding_list = []
+            embedding_list = [
                 emb.tolist() if isinstance(emb, np.ndarray) else emb for emb in embeddings
             ]
 
@@ -287,7 +287,7 @@ class BGEEmbeddingService:
         return embeddings
 
     async def encode_with_cache(
-        self, texts: str | Optional[list[str], cache_key: str | None = None
+        self, texts: str | list[str] | None, cache_key: str | None = None
     ) -> EmbeddingResult:
         """带缓存键的编码(用于持久化缓存)"""
         # TODO: 集成Redis缓存

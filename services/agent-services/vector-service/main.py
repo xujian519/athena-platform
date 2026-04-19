@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 向量服务
 Vector Service
 """
 
 import logging
-from core.async_main import async_main
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import os
-import sys
 from datetime import datetime
+from typing import Any
 
 from flask import Flask, jsonify, request
 
@@ -40,7 +37,7 @@ def create_embedding() -> Any:
 
         # 简化的向量生成模拟 (768维)
         import hashlib
-        hash_object = hashlib.md5(text.encode(), usedforsecurity=False))
+        hash_object = hashlib.md5(text.encode(), usedforsecurity=False)
         hash_hex = hash_object.hexdigest()
 
         # 基于哈希生成模拟向量

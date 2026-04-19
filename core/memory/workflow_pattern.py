@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 工作流模式数据结构
 
@@ -12,7 +13,7 @@ Version: v1.0.0
 import logging
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 import numpy as np
 from pydantic import BaseModel, Field
@@ -48,7 +49,7 @@ class WorkflowStep(BaseModel):
     description: str = Field(description="步骤描述")
 
     # 工具调用相关
-    action: Optional[str] = Field(default=None, description="工具名称或动作")
+    action: str | None = Field(default=None, description="工具名称或动作")
     input_schema: dict[str, Any] = Field(default_factory=dict, description="输入schema")
     output_schema: dict[str, Any] = Field(default_factory=dict, description="输出schema")
 
@@ -95,12 +96,12 @@ class WorkflowPattern(BaseModel):
     max_execution_time: float = Field(default=0.0, ge=0.0, description="最大执行时间")
 
     # 向量表示 (用于相似度检索)
-    embedding: Optional[np.ndarray] = Field(default=None, description="模式向量表示")
+    embedding: np.ndarray | None = Field(default=None, description="模式向量表示")
 
     # 时间戳
     created_at: datetime = Field(default_factory=datetime.now, description="创建时间")
     updated_at: datetime = Field(default_factory=datetime.now, description="更新时间")
-    last_used_at: Optional[datetime] = Field(default=None, description="最后使用时间")
+    last_used_at: datetime | None = Field(default=None, description="最后使用时间")
 
     # 变体和适应
     variations: dict[str, Any] = Field(default_factory=dict, description="模式变体")
@@ -318,11 +319,11 @@ class TaskTrajectory(BaseModel):
     )
 
     # 最终结果
-    final_result: Optional[dict[str, Any]] = Field(default=None, description="最终结果")
+    final_result: dict[str, Any] | None = Field(default=None, description="最终结果")
 
     # 执行统计
     start_time: datetime = Field(description="开始时间")
-    end_time: Optional[datetime] = Field(default=None, description="结束时间")
+    end_time: datetime | None = Field(default=None, description="结束时间")
     total_steps: int = Field(default=0, description="总步数")
     execution_time: float = Field(default=0.0, description="执行时间(秒)")
 

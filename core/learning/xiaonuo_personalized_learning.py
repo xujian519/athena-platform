@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺个性化学习系统
 Xiaonuo Personalized Learning System

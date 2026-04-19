@@ -4,11 +4,11 @@
 包括半文半白风格的书信、小说等创作
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-from pathlib import Path
+import sqlite3
 from datetime import datetime
+from pathlib import Path
+
 
 def save_writing_works() -> None:
     """保存写作作品到数据库"""

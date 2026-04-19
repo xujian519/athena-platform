@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 冲突仲裁器
 Conflict Resolver
@@ -16,7 +17,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
-from .integrated_decision_engine import AgentOpinion, ConflictAnalysis, ConsensusLevel
+from .integrated_decision_engine import AgentOpinion, ConflictAnalysis
 
 logger = logging.getLogger(__name__)
 

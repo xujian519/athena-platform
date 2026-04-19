@@ -1,21 +1,15 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 DeepSeekMath V2技术启动器
 为Athena智能工作平台提供专利分析AI增强能力
 """
 
-import json
-from core.async_main import async_main
-import logging
-from core.logging_config import setup_logging
-import os
 import subprocess
 import sys
-import threading
 import time
-from datetime import datetime
 from pathlib import Path
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -427,143 +421,143 @@ if __name__ == '__main__':
             f.write(data_code)
 
         # 创建监控仪表板
-        dashboard_html = f"""<!DOCTYPE html>
+        dashboard_html = """<!DOCTYPE html>
 <html lang='zh-CN'>
 <head>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>DeepSeekMath V2技术监控仪表板</title>
     <style>
-        body {{
+        body {
             font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
             padding: 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #333;
-        }}
+        }
 
-        .container {{
+        .container {
             max-width: 1200px;
             margin: 0 auto;
             background: white;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             overflow: hidden;
-        }}
+        }
 
-        .header {{
+        .header {
             background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
             color: white;
             padding: 30px;
             text-align: center;
-        }}
+        }
 
-        .header h1 {{
+        .header h1 {
             margin: 0;
             font-size: 2.5em;
             font-weight: 300;
-        }}
+        }
 
-        .header p {{
+        .header p {
             margin: 10px 0 0 0;
             opacity: 0.9;
             font-size: 1.1em;
-        }}
+        }
 
-        .services {{
+        .services {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
             padding: 30px;
-        }}
+        }
 
-        .service-card {{
+        .service-card {
             background: #f8f9fa;
             border-radius: 10px;
             padding: 25px;
             border-left: 5px solid #3498db;
             transition: all 0.3s ease;
-        }}
+        }
 
-        .service-card:hover {{
+        .service-card:hover {
             transform: translate_y(-5px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }}
+        }
 
-        .service-title {{
+        .service-title {
             font-size: 1.4em;
             font-weight: 600;
             color: #2c3e50;
             margin: 0 0 15px 0;
-        }}
+        }
 
-        .service-status {{
+        .service-status {
             display: inline-block;
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 0.9em;
             font-weight: 600;
             margin-bottom: 15px;
-        }}
+        }
 
-        .status-running {{
+        .status-running {
             background: #d4edda;
             color: #155724;
-        }}
+        }
 
-        .status-stopped {{
+        .status-stopped {
             background: #f8d7da;
             color: #721c24;
-        }}
+        }
 
-        .service-url {{
+        .service-url {
             background: #e9ecef;
             padding: 10px;
             border-radius: 5px;
             font-family: monospace;
             margin: 10px 0;
             word-break: break-all;
-        }}
+        }
 
-        .features {{
+        .features {
             margin-top: 15px;
-        }}
+        }
 
-        .feature-item {{
+        .feature-item {
             background: white;
             padding: 8px 12px;
             margin: 5px 0;
             border-radius: 5px;
             border-left: 3px solid #28a745;
-        }}
+        }
 
-        .tech-section {{
+        .tech-section {
             background: #f1f3f4;
             padding: 30px;
             margin: 30px;
             border-radius: 10px;
-        }}
+        }
 
-        .tech-grid {{
+        .tech-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin-top: 20px;
-        }}
+        }
 
-        .tech-card {{
+        .tech-card {
             background: white;
             padding: 20px;
             border-radius: 8px;
             text-align: center;
-        }}
+        }
 
-        .tech-icon {{
+        .tech-icon {
             font-size: 2em;
             margin-bottom: 10px;
-        }}
+        }
 
-        .refresh-btn {{
+        .refresh-btn {
             background: #3498db;
             color: white;
             border: none;
@@ -573,11 +567,11 @@ if __name__ == '__main__':
             font-size: 1em;
             margin: 20px;
             transition: background 0.3s ease;
-        }}
+        }
 
-        .refresh-btn:hover {{
+        .refresh-btn:hover {
             background: #2980b9;
-        }}
+        }
     </style>
 </head>
 <body>
@@ -640,33 +634,33 @@ if __name__ == '__main__':
     </div>
 
     <script>
-        async function check_service(service_url, status_id) {{
-            try {{
+        async function check_service(service_url, status_id) {
+            try {
                 const response = await fetch(service_url + '/health');
-                if (response.ok) {{
+                if (response.ok) {
                     document.get_element_by_id(status_id).text_content = '✅ 运行中';
                     document.get_element_by_id(status_id).class_name = 'service-status status-running';
-                }} else {{
+                } else {
                     document.get_element_by_id(status_id).text_content = '❌ 服务异常';
                     document.get_element_by_id(status_id).class_name = 'service-status status-stopped';
-                }}
-            }} catch (error) {{
+                }
+            } catch (error) {
                 document.get_element_by_id(status_id).text_content = '❌ 未启动';
                 document.get_element_by_id(status_id).class_name = 'service-status status-stopped';
-            }}
-        }}
+            }
+        }
 
-        function check_all_services() {{
+        function check_all_services() {
             check_service('http://localhost:8020', 'grpo-status');
             check_service('http://localhost:8022', 'data-status');
-        }}
+        }
 
         // 页面加载时检查服务状态
-        window.onload = function() {{
+        window.onload = function() {
             check_all_services();
             // 每30秒自动刷新状态
             set_interval(check_all_services, 30000);
-        }};
+        };
     </script>
 </body>
 </html>"""
@@ -732,8 +726,8 @@ if __name__ == '__main__':
         logger.info('🎉 DeepSeekMath V2技术集成部署完成!')
         logger.info(str('=' * 60))
         logger.info('📍 服务地址:')
-        logger.info(f"  🔍 GRPO优化器:     http://localhost:8020")
-        logger.info(f"  📊 专利数据生成器: http://localhost:8022")
+        logger.info("  🔍 GRPO优化器:     http://localhost:8020")
+        logger.info("  📊 专利数据生成器: http://localhost:8022")
         logger.info(f"  📈 监控仪表板:     file://{self.dashboard_path}")
         logger.info('')
         logger.info('🏆 技术特性:')
@@ -776,7 +770,7 @@ def main():
         launcher.display_status()
 
         # 打开仪表板
-        logger.info(str('📊 是否打开监控仪表板? (y/n)): ', end='')
+        logger.info('是否打开监控仪表板? (y/n): ')
         choice = input().strip().lower()
         if choice in ['y', 'yes', '是']:
             launcher.open_dashboard()

@@ -1,4 +1,4 @@
-
+from __future__ import annotations
 # pyright: ignore
 # !/usr/bin/env python3
 """
@@ -16,6 +16,7 @@
 """
 
 import asyncio
+import logging
 import sys
 import time
 from pathlib import Path
@@ -29,6 +30,8 @@ from typing import Any
 
 # 导入性能监控
 from planning.planning_monitor import monitor
+
+logger = logging.getLogger(__name__)
 
 
 class TaskStatus(Enum):
@@ -102,12 +105,6 @@ class AgenticTaskPlanner:
                 "specialties": ["专利检索", "法律分析", "文档处理", "智能对话"],
                 "max_concurrent_tasks": 2,
                 "preferred_task_types": ["research", "analysis", "legal"],
-            },
-            "yunxi": {
-                "name": "云熙·IP守护神",
-                "specialties": ["IP管理", "数据管理", "流程优化", "质量控制"],
-                "max_concurrent_tasks": 2,
-                "preferred_task_types": ["management", "optimization", "quality"],
             },
             "xiaochen": {
                 "name": "小宸·运营星",
@@ -224,10 +221,15 @@ class AgenticTaskPlanner:
         if "priority" not in context:
             context["priority"] = TaskPriority.MEDIUM
 
-        # 开始性能监控计时
-        timer_id = monitor.start_planning_timer("AgenticTaskPlanner", f"plan_{int(time.time())}")
+            # 开始性能监控计时
+            timer_id = (
+                monitor.start_planning_timer("AgenticTaskPlanner", f"plan_{int(time.time())}")
+                if monitor
+                else None
+            )
 
         try:
+            # 创建执行计划
             plan = self.create_execution_plan(goal, context)
 
             # 记录规划历史
@@ -562,7 +564,6 @@ class AgenticTaskPlanner:
         }
 
         try:
-
             for step in plan.steps:
                 print(f"   📋 执行步骤: {step.description} ({step.agent})")
 

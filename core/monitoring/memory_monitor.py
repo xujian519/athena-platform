@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 内存监控工具
 Memory Monitor
@@ -14,12 +15,14 @@ import asyncio
 import gc
 import logging
 import os
-import psutil
 import threading
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from typing import Any, Callable, Dict, List, Optional
+from datetime import datetime
+from typing import Any
+
+import psutil
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +65,7 @@ class MemoryAlert:
     timestamp: float
     current_snapshot: MemorySnapshot
     baseline_snapshot: MemorySnapshot | None = None
-    recommendations: List[str] = field(default_factory=list)
+    recommendations: list[str] = field(default_factory=list)
 
     @property
     def timestamp_str(self) -> str:
@@ -102,7 +105,7 @@ class MemoryMonitor:
         gc_objects_threshold: int = 100000,  # GC对象告警阈值
         snapshot_history_size: int = 100,  # 快照历史大小
         auto_gc: bool = True,  # 自动垃圾回收
-        alert_callback: Optional[Callable[[MemoryAlert], None] | None = None,
+        alert_callback: Callable[[MemoryAlert], None] | None = None,
     ):
         """
         初始化内存监控器
@@ -125,10 +128,10 @@ class MemoryMonitor:
         self.alert_callback = alert_callback
 
         # 快照历史
-        self.snapshots: List[MemorySnapshot] = []
+        self.snapshots: list[MemorySnapshot] = []
 
         # 告警历史
-        self.alerts: List[MemoryAlert] = []
+        self.alerts: list[MemoryAlert] = []
 
         # 监控状态
         self._monitoring = False
@@ -197,7 +200,7 @@ class MemoryMonitor:
             "gc_objects_growth_percent": gc_objects_growth_percent,
         }
 
-    def check_memory_leak(self) -> List[MemoryAlert]:
+    def check_memory_leak(self) -> list[MemoryAlert]:
         """检查内存泄漏"""
         alerts = []
 
@@ -401,7 +404,7 @@ class MemoryMonitor:
 
         return stats
 
-    def get_recent_alerts(self, limit: int = 10) -> List[dict[str, Any]:
+    def get_recent_alerts(self, limit: int = 10) -> list[dict[str, Any]]:
         """获取最近的告警"""
         return [alert.to_dict() for alert in self.alerts[-limit:]]
 
@@ -441,7 +444,7 @@ def check_memory_now() -> dict[str, Any]:
     return snapshot.to_dict()
 
 
-def analyze_memory_leaks() -> List[dict[str, Any]:
+def analyze_memory_leaks() -> list[dict[str, Any]]:
     """分析内存泄漏"""
     monitor = get_memory_monitor()
 

@@ -1,20 +1,20 @@
+from __future__ import annotations
 """
 增强版Agent协调器 - 集成智能工具路由引擎
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from loguru import logger
 
 from core.agent_collaboration.router_config import RouterConfig, get_config
 from core.agent_collaboration.tool_router_engine import (
     RoutingDecision,
-    ToolRouterEngine,
     get_tool_router,
 )
 
 
-class EnhancedAgentCoordinator(BaseAgentCoordinator):
+class EnhancedAgentCoordinator:
     """
     增强版Agent协调器
 
@@ -22,9 +22,6 @@ class EnhancedAgentCoordinator(BaseAgentCoordinator):
     """
 
     def __init__(self, config: RouterConfig | None = None):
-        # 初始化基类
-        super().__init__(config=None)
-
         # 加载配置
         self.config = config or get_config()
 
@@ -133,16 +130,16 @@ class EnhancedAgentCoordinator(BaseAgentCoordinator):
         """传统路由方式(降级方案)"""
         # 简单的硬编码映射作为降级方案
         task_agent_map = {
-            "patent_search": "yunpat-agent",
+            "patent_search": "patent-analysis",
             "patent_analysis": "patent-analysis",
-            "patent_download": "yunpat-agent",
+            "patent_download": "patent-analysis",
             "knowledge_graph": "knowledge-graph-service",
             "browser_control": "browser-automation",
             "autonomous_control": "autonomous-control",
             "academic_search": "academic-search-mcp",
             "map_service": "gaode-mcp",
         }
-        return task_agent_map.get(task_type, "yunpat-agent")
+        return task_agent_map.get(task_type, "patent-analysis")
 
     async def coordinate_task_execution(
         self,

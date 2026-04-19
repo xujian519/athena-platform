@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BGE重排序引擎 - 修复版
 BGE Reranker Engine - Fixed Version
@@ -16,9 +17,9 @@ import threading
 import time
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, List, Optional, Tuple
+from typing import Any
 
-
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -125,7 +126,7 @@ class BGEReranker:
                     return False
 
                 # 测试模型
-                test_scores = self.model.predict([["测试查询", "测试文档"])
+                test_scores = self.model.predict([["测试查询", "测试文档"]])
                 self.logger.info(f"✅ 模型测试通过,测试分数: {test_scores}")
 
                 self._initialized = True
@@ -266,7 +267,7 @@ class BGEReranker:
 
     def _full_rerank(
         self, query: str, items: list[dict[str, Any]], contents: list[str]
-    ) -> tuple[list[dict[str, Any], list[float]]:
+    ) -> tuple[list[dict[str, Any]], list[float]]:
         """全量重排序"""
         self.logger.debug("🔄 执行全量重排序")
 
@@ -285,7 +286,7 @@ class BGEReranker:
 
     def _top_k_rerank(
         self, query: str, items: list[dict[str, Any]], contents: list[str], config: RerankConfig
-    ) -> tuple[list[dict[str, Any], list[float]]:
+    ) -> tuple[list[dict[str, Any]], list[float]]:
         """Top-K重排序(推荐)"""
         self.logger.debug(
             f"🔄 执行Top-K重排序: top_k={config.top_k}, final_top_k={config.final_top_k}"
@@ -311,7 +312,7 @@ class BGEReranker:
 
     def _threshold_rerank(
         self, query: str, items: list[dict[str, Any]], contents: list[str], config: RerankConfig
-    ) -> tuple[list[dict[str, Any], list[float]]:
+    ) -> tuple[list[dict[str, Any]], list[float]]:
         """阈值重排序"""
         self.logger.debug(f"🔄 执行阈值重排序: threshold={config.threshold}")
 
@@ -319,7 +320,7 @@ class BGEReranker:
         scores = self._batch_rerank_scores(query, contents)
 
         # 过滤低于阈值的结果
-        filtered_items = []
+        filtered_items = [
             (item, score) for item, score in zip(items, scores, strict=False) if score >= config.threshold
         ]
 
@@ -337,7 +338,7 @@ class BGEReranker:
 
     def _adaptive_rerank(
         self, query: str, items: list[dict[str, Any]], contents: list[str], config: RerankConfig
-    ) -> tuple[list[dict[str, Any], list[float]]:
+    ) -> tuple[list[dict[str, Any]], list[float]]:
         """自适应重排序"""
         self.logger.debug("🔄 执行自适应重排序")
 

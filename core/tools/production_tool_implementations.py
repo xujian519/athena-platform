@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena智能体生产级工具实现集
 Production Tool Implementations
@@ -14,9 +15,9 @@ import asyncio
 import hashlib
 import mimetypes
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Union
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -46,7 +47,7 @@ def get_allowed_dirs() -> list[str]:
     return DEFAULT_ALLOWED_DIRS
 
 
-def validate_file_path(file_path: str | None = None, allowed_dirs: list["key"] = None) -> Path:
+def validate_file_path(file_path: str | None = None, allowed_dirs: list[str] = None) -> Path:
     """
     验证文件路径是否在允许的目录内(防止路径遍历攻击)
 
@@ -118,7 +119,7 @@ def sanitize_input(text: str, max_length: int = 10000) -> str:
 
 
 async def text_embedding_handler(
-    params: dict[str, Any, context: dict[str, Any]
+    params: dict[str, Any], context: dict[str, Any]
 ) -> dict[str, Any]:
     """
     文本向量化处理器 - 真实实现
@@ -213,7 +214,7 @@ def _create_hash_vector(text: str, dim: int = 768) -> list[float]:
 
 
 async def api_tester_handler(
-    params: dict[str, Any, context: dict[str, Any]
+    params: dict[str, Any], context: dict[str, Any]
 ) -> dict[str, Any]:
     """
     API测试处理器 - 真实实现
@@ -327,7 +328,7 @@ async def api_tester_handler(
 
 
 async def document_parser_handler(
-    params: dict[str, Any, context: dict[str, Any]
+    params: dict[str, Any], context: dict[str, Any]
 ) -> dict[str, Any]:
     """
     文档解析处理器 - 真实实现(安全增强版)
@@ -443,7 +444,7 @@ async def document_parser_handler(
 
 
 async def emotional_support_handler(
-    params: dict[str, Any, context: dict[str, Any]
+    params: dict[str, Any], context: dict[str, Any]
 ) -> dict[str, Any]:
     """
     情感支持处理器 - 真实实现
@@ -547,7 +548,7 @@ async def emotional_support_handler(
     }
 
     # 获取支持策略
-    strategy = support_strategies.get(detected_emotion, support_strategies["一般")
+    strategy = support_strategies.get(detected_emotion, support_strategies["一般"])
 
     # 根据强度调整回应
     if intensity >= 8:
@@ -563,7 +564,7 @@ async def emotional_support_handler(
     # 选择合适的回应
     import random
 
-    selected_response = random.choice(strategy["responses")
+    selected_response = random.choice(strategy["responses"])
 
     return {
         "success": True,
@@ -584,7 +585,7 @@ async def emotional_support_handler(
 
 
 async def decision_engine_handler(
-    params: dict[str, Any, context: dict[str, Any]
+    params: dict[str, Any], context: dict[str, Any]
 ) -> dict[str, Any]:
     """
     决策引擎处理器 - 真实实现
@@ -608,7 +609,7 @@ async def decision_engine_handler(
         决策结果
     """
     decision_context = params.get("context", "")
-    options = params.get("options", [)
+    options = params.get("options", [])
     criteria = params.get("criteria", {})
     scores = params.get("scores", {})
 
@@ -686,8 +687,8 @@ async def decision_engine_handler(
             "total_options": len(options),
             "criteria_used": list(criteria.keys()),
             "score_range": (
-                min(r["score"] for r in result["ranking"),
-                max(r["score"] for r in result["ranking"),
+                min(r["score"] for r in result["ranking"]),
+                max(r["score"] for r in result["ranking"]),
             ),
             "confidence": "高" if len(options) >= 3 else "中",
         }
@@ -706,7 +707,7 @@ async def decision_engine_handler(
 
 
 async def risk_analyzer_handler(
-    params: dict[str, Any, context: dict[str, Any]
+    params: dict[str, Any], context: dict[str, Any]
 ) -> dict[str, Any]:
     """
     风险分析处理器 - 真实实现
@@ -728,7 +729,7 @@ async def risk_analyzer_handler(
         风险分析结果
     """
     scenario = params.get("scenario", "")
-    risk_factors = params.get("risk_factors", [)
+    risk_factors = params.get("risk_factors", [])
 
     # 默认风险因子
     default_risk_factors = [
@@ -786,7 +787,7 @@ async def risk_analyzer_handler(
     result["overall_score"] = round(avg_score, 2)
 
     # 生成总体缓解策略
-    top_risks = sorted(result[x["score"]][:3]
+    top_risks = sorted(result["risks"], key=lambda x: x["score"])[:3]
     result["mitigation_strategies"] = [
         f"重点关注: {risk['name']} - {risk['mitigation']}" for risk in top_risks
     ]

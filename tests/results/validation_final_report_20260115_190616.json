@@ -1,0 +1,246 @@
+{
+  "intent_accuracy": {
+    "total": 38,
+    "correct": 0,
+    "accuracy": 0.0,
+    "pass": false,
+    "threshold": 0.85
+  },
+  "tool_selection": {
+    "total": 28,
+    "correct": 0,
+    "accuracy": 0.0,
+    "pass": false
+  },
+  "argument_validity": {
+    "total": 3,
+    "valid": 0,
+    "validity_rate": 0.0,
+    "pass": false
+  },
+  "end_to_end": {
+    "total_conversations": 3,
+    "successful_conversations": 3,
+    "conversation_success_rate": 1.0,
+    "total_turns": 9,
+    "successful_turns": 9,
+    "turn_success_rate": 1.0,
+    "pass": true
+  },
+  "robustness": {
+    "total_tests": 8,
+    "handled_gracefully": 8,
+    "robustness_score": 1.0,
+    "rejected": 1,
+    "rejection_rate": 0,
+    "pass": true
+  },
+  "latency": {
+    "total_requests": 30,
+    "percentiles": {
+      "min": 0.033759117126464844,
+      "p50": 0.037840843200683594,
+      "p75": 0.03905463218688965,
+      "p90": 0.04798007011413574,
+      "p95": 0.05090188980102539,
+      "p99": 0.062319040298461914,
+      "max": 0.062319040298461914,
+      "mean": 0.03922397295633952,
+      "std": 0.005984791921866819
+    },
+    "p50_pass": true,
+    "p95_pass": true,
+    "pass": true
+  },
+  "cost_efficiency": {
+    "results": [
+      {
+        "capability": "daily_chat",
+        "latency": 0.043064117431640625,
+        "cpu_delta": 0.0,
+        "memory_delta_mb": 0.0,
+        "efficiency_score": 22.694202409735347
+      },
+      {
+        "capability": "patent_search",
+        "latency": 0.05835700035095215,
+        "cpu_delta": 0.0,
+        "memory_delta_mb": 0.0,
+        "efficiency_score": 16.84721252906034
+      },
+      {
+        "capability": "coding_assistant",
+        "latency": 0.07541012763977051,
+        "cpu_delta": 0.0,
+        "memory_delta_mb": 0.0,
+        "efficiency_score": 13.087270377487403
+      }
+    ],
+    "average_efficiency": 17.542895105427696,
+    "pass": true
+  },
+  "explainability": {
+    "total": 3,
+    "explainable": 0,
+    "explainability_rate": 0.0,
+    "pass": false
+  },
+  "context_utilization": {
+    "total_turns": 3,
+    "context_used": 3,
+    "utilization_rate": 1.0,
+    "pass": true
+  },
+  "error_recovery": {
+    "total_scenarios": 3,
+    "recovered": 3,
+    "recovery_rate": 1.0,
+    "pass": true
+  },
+  "resource_utilization": {
+    "stats": {
+      "cpu": {
+        "avg": 0.060000000000000005,
+        "max": 0.1,
+        "min": 0.0
+      },
+      "memory_mb": {
+        "avg": 58.48359375,
+        "max": 58.5,
+        "min": 58.4375
+      },
+      "samples": [
+        {
+          "cpu_percent": 0.1,
+          "memory_mb": 58.4375,
+          "memory_percent": 0.11889139811197917,
+          "threads": 3
+        },
+        {
+          "cpu_percent": 0.1,
+          "memory_mb": 58.4375,
+          "memory_percent": 0.11889139811197917,
+          "threads": 3
+        },
+        {
+          "cpu_percent": 0.0,
+          "memory_mb": 58.453125,
+          "memory_percent": 0.11892318725585938,
+          "threads": 3
+        },
+        {
+          "cpu_percent": 0.0,
+          "memory_mb": 58.453125,
+          "memory_percent": 0.11892318725585938,
+          "threads": 3
+        },
+        {
+          "cpu_percent": 0.0,
+          "memory_mb": 58.46875,
+          "memory_percent": 0.11895497639973958,
+          "threads": 3
+        },
+        {
+          "cpu_percent": 0.1,
+          "memory_mb": 58.46875,
+          "memory_percent": 0.11895497639973958,
+          "threads": 3
+        },
+        {
+          "cpu_percent": 0.1,
+          "memory_mb": 58.484375,
+          "memory_percent": 0.1189867655436198,
+          "threads": 3
+        },
+        {
+          "cpu_percent": 0.0,
+          "memory_mb": 58.484375,
+          "memory_percent": 0.1189867655436198,
+          "threads": 3
+        },
+        {
+          "cpu_percent": 0.0,
+          "memory_mb": 58.484375,
+          "memory_percent": 0.1189867655436198,
+          "threads": 3
+        },
+        {
+          "cpu_percent": 0.1,
+          "memory_mb": 58.5,
+          "memory_percent": 0.1190185546875,
+          "threads": 3
+        },
+        {
+          "cpu_percent": 0.1,
+          "memory_mb": 58.5,
+          "memory_percent": 0.1190185546875,
+          "threads": 3
+        },
+        {
+          "cpu_percent": 0.1,
+          "memory_mb": 58.5,
+          "memory_percent": 0.1190185546875,
+          "threads": 3
+        },
+        {
+          "cpu_percent": 0.1,
+          "memory_mb": 58.5,
+          "memory_percent": 0.1190185546875,
+          "threads": 3
+        },
+        {
+          "cpu_percent": 0.1,
+          "memory_mb": 58.5,
+          "memory_percent": 0.1190185546875,
+          "threads": 3
+        },
+        {
+          "cpu_percent": 0.0,
+          "memory_mb": 58.5,
+          "memory_percent": 0.1190185546875,
+          "threads": 3
+        },
+        {
+          "cpu_percent": 0.1,
+          "memory_mb": 58.5,
+          "memory_percent": 0.1190185546875,
+          "threads": 3
+        },
+        {
+          "cpu_percent": 0.1,
+          "memory_mb": 58.5,
+          "memory_percent": 0.1190185546875,
+          "threads": 3
+        },
+        {
+          "cpu_percent": 0.0,
+          "memory_mb": 58.5,
+          "memory_percent": 0.1190185546875,
+          "threads": 3
+        },
+        {
+          "cpu_percent": 0.0,
+          "memory_mb": 58.5,
+          "memory_percent": 0.1190185546875,
+          "threads": 3
+        },
+        {
+          "cpu_percent": 0.1,
+          "memory_mb": 58.5,
+          "memory_percent": 0.1190185546875,
+          "threads": 3
+        }
+      ]
+    },
+    "overall_efficiency": 62.9541796875,
+    "pass": true
+  },
+  "summary": {
+    "total_tests": 11,
+    "passed_tests": 7,
+    "failed_tests": 4,
+    "pass_rate": 0.6363636363636364,
+    "total_time_seconds": 9.460478782653809,
+    "timestamp": "2026-01-15T19:06:25.924142"
+  }
+}

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 性能压力测试套件
 Performance and Stress Test Suite

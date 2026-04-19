@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 系统反馈闭环
 System Feedback Loop
@@ -21,10 +22,10 @@ import logging
 # 添加项目路径
 import sys
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -542,7 +543,6 @@ if __name__ == "__main__":
 
         # 创建测试决策
         from core.decision.integrated_decision_engine import (
-            AgentOpinion,
             ConsensusLevel,
             Decision,
             DirectionType,

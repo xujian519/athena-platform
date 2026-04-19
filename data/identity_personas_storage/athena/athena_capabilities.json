@@ -1,0 +1,132 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2025-02-13",
+  "capabilities": {
+    "legal_world_model": {
+      "id": "legal_world_model",
+      "name": "法律世界模型",
+      "skill_path": "skills/legal-world-model/SKILL.md",
+      "description": "基于三层架构的法律知识智能问答系统，提供法律条文检索、案例查询、语义分析等能力",
+      "api_endpoint": "http://localhost:8000/api/v1/qa/ask",
+      "health_endpoint": "http://localhost:8000/health",
+      "enabled": true,
+      "category": "knowledge",
+      "parameters": {
+        "max_evidence": {
+          "type": "integer",
+          "default": 10,
+          "min": 1,
+          "max": 50,
+          "description": "最大证据数量"
+        },
+        "target_layers": {
+          "type": "array",
+          "items": {"type": "string", "enum": ["layer1", "layer2", "layer3"]},
+          "description": "目标数据层 (layer1:基础法律, layer2:专利专业, layer3:司法案例)"
+        },
+        "enable_reasoning": {
+          "type": "boolean",
+          "default": true,
+          "description": "启用推理链"
+        },
+        "query_type": {
+          "type": "string",
+          "enum": [
+            "concept",
+            "statute_query",
+            "case_query",
+            "comparison",
+            "liability",
+            "procedure",
+            "creativity",
+            "novelty",
+            "semantic_qa"
+          ],
+          "default": "semantic_qa",
+          "description": "查询类型"
+        }
+      },
+      "performance": {
+        "avg_response_time_ms": 150,
+        "success_rate": 0.95,
+        "cache_hit_rate": 0.85
+      }
+    },
+    "patent_retrieval": {
+      "id": "patent_retrieval",
+      "name": "专利检索",
+      "skill_path": "skills/patent-retrieval/SKILL.md",
+      "description": "从7500万+专利数据库中检索专利信息",
+      "enabled": true,
+      "category": "retrieval"
+    },
+    "prompt_system": {
+      "id": "prompt_system",
+      "name": "动态提示词系统",
+      "description": "L1-L4智能体角色定义和Lyra提示词优化系统",
+      "enabled": true,
+      "category": "system"
+    },
+    "scenario_planner": {
+      "id": "scenario_planner",
+      "name": "场景规划器",
+      "description": "显式规划、自适应元规划、强化学习优化规划",
+      "enabled": true,
+      "category": "planning"
+    }
+  },
+  "agent_mappings": {
+    "xiaonuo": {
+      "name": "小诺",
+      "capabilities": [
+        "legal_world_model",
+        "patent_retrieval",
+        "scenario_planner"
+      ],
+      "priority_capabilities": [
+        "legal_world_model",
+        "scenario_planner"
+      ],
+      "config": {
+        "legal_world_model": {
+          "default_query_type": "semantic_qa",
+          "max_evidence": 15,
+          "enable_reasoning": true
+        }
+      }
+    },
+    "xiaona": {
+      "name": "小娜",
+      "capabilities": [
+        "legal_world_model",
+        "patent_retrieval"
+      ],
+      "priority_capabilities": [
+        "legal_world_model"
+      ],
+      "config": {
+        "legal_world_model": {
+          "default_query_type": "case_query",
+          "max_evidence": 20,
+          "target_layers": ["layer2", "layer3"],
+          "enable_reasoning": true
+        }
+      }
+    },
+    "xiaochen": {
+      "name": "小宸",
+      "capabilities": [
+        "prompt_system"
+      ],
+      "priority_capabilities": [
+        "prompt_system"
+      ],
+      "config": {
+        "prompt_system": {
+          "default_system": "lyra"
+        }
+      }
+    },
+    }
+  }
+}

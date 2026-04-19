@@ -26,7 +26,7 @@ async def test_bge_service():
 
         # 获取模型信息
         model_info = bge_service.get_model_info()
-        print(f"\n📊 模型信息:")
+        print("\n📊 模型信息:")
         print(f"   - 名称: {model_info['name']}")
         print(f"   - 维度: {model_info['dimension']}")
         print(f"   - 设备: {model_info['device']}")
@@ -36,7 +36,7 @@ async def test_bge_service():
         test_text = "本发明涉及一种新型的专利检索方法，利用深度学习技术提高检索精度。"
         result = await bge_service.encode(test_text, task_type="patent_search")
 
-        print(f"\n📝 测试编码结果:")
+        print("\n📝 测试编码结果:")
         print(f"   - 处理时间: {result.processing_time:.3f}秒")
         print(f"   - 向量维度: {result.dimension}")
         print(f"   - 向量前5位: {[f'{x:.4f}' for x in result.embeddings[:5]]}")
@@ -50,7 +50,7 @@ async def test_bge_service():
         ]
 
         batch_result = await bge_service.encode(test_texts, task_type="patent_analysis")
-        print(f"\n📚 批量编码测试:")
+        print("\n📚 批量编码测试:")
         print(f"   - 文本数量: {batch_result.batch_size}")
         print(f"   - 处理时间: {batch_result.processing_time:.3f}秒")
         print(f"   - 平均每文本: {batch_result.processing_time/batch_result.batch_size:.3f}秒")
@@ -58,14 +58,14 @@ async def test_bge_service():
         # 缓存测试
         print("\n💾 缓存测试...")
         start_time = time.time()
-        cached_result = await bge_service.encode(test_text, task_type="patent_search")
+        await bge_service.encode(test_text, task_type="patent_search")
         cache_time = time.time() - start_time
         print(f"   - 缓存命中时间: {cache_time:.6f}秒")
         print(f"   - 性能提升: {result.processing_time/cache_time:.0f}倍")
 
         # 健康检查
         health = await bge_service.health_check()
-        print(f"\n🏥 健康检查:")
+        print("\n🏥 健康检查:")
         print(f"   - 状态: {health['status']}")
         print(f"   - 模型加载: {health['model_loaded']}")
         print(f"   - 测试编码: {health.get('test_encoding', 'N/A')}")
@@ -103,17 +103,17 @@ async def test_model_router():
             elapsed = time.time() - start_time
 
             if embedding:
-                print(f"   ✅ 成功获取嵌入向量")
+                print("   ✅ 成功获取嵌入向量")
                 print(f"   - 维度: {len(embedding)}")
                 print(f"   - 用时: {elapsed:.3f}秒")
 
                 # 分析使用的模型
                 if len(embedding) == 1024:
-                    print(f"   - 使用模型: BGE Large ZH v1.5")
+                    print("   - 使用模型: BGE Large ZH v1.5")
                 else:
-                    print(f"   - 使用模型: Ollama nomic-embed-text")
+                    print("   - 使用模型: Ollama nomic-embed-text")
             else:
-                print(f"   ❌ 获取嵌入失败")
+                print("   ❌ 获取嵌入失败")
 
         return True
 
@@ -172,7 +172,7 @@ async def test_redis_cache():
 
         # 获取缓存统计
         stats = cache.get_stats()
-        print(f"\n📊 缓存统计:")
+        print("\n📊 缓存统计:")
         print(f"   - 连接状态: {'已连接' if stats['connected'] else '未连接'}")
         print(f"   - 缓存前缀: {stats['prefix']}")
         print(f"   - TTL: {stats['ttl']}秒")
@@ -181,7 +181,7 @@ async def test_redis_cache():
 
         # 健康检查
         health = await cache.health_check()
-        print(f"\n🏥 健康检查:")
+        print("\n🏥 健康检查:")
         print(f"   - 状态: {health['status']}")
         print(f"   - Redis测试: {health.get('redis_test', 'N/A')}")
         if 'memory_test' in health:
@@ -239,7 +239,7 @@ async def performance_benchmark():
 
     # 性能对比
     if router_time > 0:
-        print(f"\n📈 性能对比:")
+        print("\n📈 性能对比:")
         print(f"   - BGE直接调用: {bge_time:.2f}秒")
         print(f"   - 路由器调用: {router_time:.2f}秒")
         print(f"   - 路由开销: {((router_time - bge_time) / bge_time * 100):.1f}%")

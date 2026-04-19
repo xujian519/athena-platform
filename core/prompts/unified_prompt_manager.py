@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一提示词管理器 - Lyra与L1-L4系统的统一管理
 Unified Prompt Manager - Unified Management for Lyra and L1-L4 Systems
@@ -22,7 +23,7 @@ import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -544,7 +545,7 @@ def get_unified_prompt_manager() -> UnifiedPromptManager:
     return _manager_instance
 
 
-async def load_agent_prompt(agent: str | None = None, layers: Optional[list[str]] | None = None) -> str:
+async def load_agent_prompt(agent: str | None = None, layers: list[str] | None | None = None) -> str:
     """便捷函数: 加载智能体提示词"""
     manager = get_unified_prompt_manager()
     result = await manager.load_prompt(agent, layers)

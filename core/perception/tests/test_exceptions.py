@@ -1,34 +1,28 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 测试：自定义异常类
 Test: Custom Exception Classes
 """
 
-import pytest
 import sys
 from pathlib import Path
+
+import pytest
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.perception.exceptions import (
+    FileReadError,
+    ImageFormatError,
+    ModelLoadError,
+    NetworkError,
     PerceptionError,
     ProcessingError,
-    ValidationError,
-    InitializationError,
-    ConfigurationError,
-    ResourceError,
-    ModelLoadError,
-    FileReadError,
-    NetworkError,
-    TimeoutError,
     RateLimitError,
-    MemoryError,
-    ConcurrencyError,
-    CacheError,
-    FormatError,
-    ImageFormatError,
+    TimeoutError,
+    ValidationError,
 )
 
 

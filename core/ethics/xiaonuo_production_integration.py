@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺伦理框架生产集成脚本
 Production Integration Script for Xiaonuo Ethics Framework
@@ -9,8 +10,7 @@ Production Integration Script for Xiaonuo Ethics Framework
 import os
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
-
+from typing import Any
 
 # 确保项目根目录在sys.path中
 project_root = Path(__file__).parent.parent.parent
@@ -20,7 +20,7 @@ if str(project_root) not in sys.path:
 # 设置环境变量
 os.environ.setdefault("ATHENA_PROJECT_ROOT", str(project_root))
 
-from core.ethics.xiaonuo_ethics_patch import XiaonuoEthicsWrapper, patch_xiaonuo
+from core.ethics.xiaonuo_ethics_patch import patch_xiaonuo
 
 
 def apply_ethics_to_xiaonuo(xiaonuo_instance, methods_to_wrap=None) -> None:

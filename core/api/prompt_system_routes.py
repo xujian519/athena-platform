@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 动态提示词系统API路由
 Dynamic Prompt System API Routes
@@ -8,9 +9,9 @@ Dynamic Prompt System API Routes
 
 import logging
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from fastapi import APIRouter, HTTPException, Request, status
+from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)
@@ -20,8 +21,6 @@ from core.config.api_config import (
     get_config,
     get_database_config,
     get_llm_config,
-    get_qdrant_config,
-    get_security_config,
 )
 
 # 创建路由器
@@ -247,11 +246,6 @@ async def health_check():
 
     # 检查优化模块
     try:
-        from core.capabilities.capability_invoker_optimized import CapabilityInvokerOptimized
-        from core.legal_world_model.scenario_identifier_optimized import ScenarioIdentifierOptimized
-        from core.legal_world_model.scenario_rule_retriever_optimized import (
-            ScenarioRuleRetrieverOptimized,
-        )
 
         components["optimized_modules"] = "ok"
     except Exception as e:
@@ -299,7 +293,7 @@ async def identify_scenario(request: ScenarioIdentifyRequest):
         logger.error(f"❌ 场景识别失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"场景识别失败: {e!s}"
-        )
+        ) from e
 
 
 @router.post("/rules/retrieve", response_model=RuleRetrieveResponse)
@@ -343,7 +337,7 @@ async def retrieve_rule(request: RuleRetrieveRequest):
         logger.error(f"❌ 规则检索失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"规则检索失败: {e!s}"
-        )
+        ) from e
 
 
 @router.post("/capabilities/invoke", response_model=CapabilityInvokeResponse)
@@ -509,7 +503,7 @@ async def generate_prompt(request: PromptGenerateRequest):
         logger.error(f"❌ 提示词生成失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"提示词生成失败: {e!s}"
-        )
+        ) from e
 
 
 @router.get("/capabilities/list")
@@ -544,7 +538,7 @@ async def list_capabilities():
         logger.error(f"❌ 获取能力列表失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"获取能力列表失败: {e!s}"
-        )
+        ) from e
 
 
 @router.get("/metrics")
@@ -578,7 +572,7 @@ async def get_metrics():
         logger.error(f"❌ 获取性能指标失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"获取性能指标失败: {e!s}"
-        )
+        ) from e
 
 
 @router.get("/cache/stats")
@@ -601,7 +595,7 @@ async def get_cache_stats():
         logger.error(f"❌ 获取缓存统计失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"获取缓存统计失败: {e!s}"
-        )
+        ) from e
 
 
 @router.post("/cache/clear")
@@ -624,7 +618,7 @@ async def clear_cache():
         logger.error(f"❌ 清除缓存失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"清除缓存失败: {e!s}"
-        )
+        ) from e
 
 
 # 注意: 异常处理器需要在FastAPI app级别注册,而不是router级别
@@ -666,7 +660,7 @@ async def get_monitoring_metrics():
         logger.error(f"❌ 获取性能指标失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"获取性能指标失败: {e!s}"
-        )
+        ) from e
 
 
 @router.post("/monitoring/metrics/reset")
@@ -677,7 +671,7 @@ async def reset_metrics():
     P2优化:支持手动重置指标计数器
     """
     try:
-        from core.monitoring.metrics_collector import get_metrics_collector, reset_metrics_collector
+        from core.monitoring.metrics_collector import reset_metrics_collector
 
         reset_metrics_collector()
 
@@ -688,7 +682,7 @@ async def reset_metrics():
         logger.error(f"❌ 重置指标失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"重置指标失败: {e!s}"
-        )
+        ) from e
 
 
 @router.get("/monitoring/performance")
@@ -723,7 +717,7 @@ async def get_performance_snapshot():
         logger.error(f"❌ 获取性能快照失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"获取性能快照失败: {e!s}"
-        )
+        ) from e
 
 
 @router.get("/config/status")
@@ -758,7 +752,7 @@ async def get_config_status():
         logger.error(f"❌ 获取配置状态失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"获取配置状态失败: {e!s}"
-        )
+        ) from e
 
 
 @router.post("/config/reload")
@@ -788,7 +782,7 @@ async def reload_config():
         logger.error(f"❌ 重载配置失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"重载配置失败: {e!s}"
-        )
+        ) from e
 
 
 @router.get("/health/extended")

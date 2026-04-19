@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 两阶段渐进式学习系统
 基于DeepSeekMath V2论文的两阶段训练范式
@@ -11,22 +10,18 @@ Athena智能工作平台专利分析专用学习框架
 """
 
 import json
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
-import pickle
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
-import numpy as np
 import torch
-import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, Dataset
 from transformers import AutoModelForCausalLM, AutoTokenizer
+
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -81,15 +76,15 @@ class PatentDataset(Dataset):
         self.max_length = max_length
         self.data = self._load_data()
 
-    def _load_data(self) -> List[Dict]:
+    def _load_data(self) -> list[dict]:
         """加载数据"""
         data = []
 
         if self.data_path.suffix == '.json':
-            with open(self.data_path, 'r', encoding='utf-8') as f:
+            with open(self.data_path, encoding='utf-8') as f:
                 raw_data = json.load(f)
         elif self.data_path.suffix == '.jsonl':
-            with open(self.data_path, 'r', encoding='utf-8') as f:
+            with open(self.data_path, encoding='utf-8') as f:
                 raw_data = [json.loads(line) for line in f]
         else:
             raise ValueError(f"不支持的文件格式: {self.data_path.suffix}")
@@ -102,7 +97,7 @@ class PatentDataset(Dataset):
         logger.info(f"阶段{self.stage}加载数据: {len(data)}条")
         return data
 
-    def _should_include_item(self, item: Dict) -> bool:
+    def _should_include_item(self, item: dict) -> bool:
         """判断是否应该包含该数据项"""
         if self.stage == 1:
             # 第一阶段：基础专利知识
@@ -120,7 +115,7 @@ class PatentDataset(Dataset):
     def __len__(self) -> int:
         return len(self.data)
 
-    def __getitem__(self, idx: int) -> Dict[str, torch.Tensor]:
+    def __getitem__(self, idx: int) -> dict[str, torch.Tensor]:
         item = self.data[idx]
 
         # 构建输入文本
@@ -223,7 +218,7 @@ class TwoStageLearningFramework:
         train_data_path: str,
         eval_data_path: str = None,
         output_dir: str = './stage1_output',
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """执行第一阶段训练"""
 
         logger.info('开始第一阶段训练...')
@@ -343,7 +338,7 @@ class TwoStageLearningFramework:
         eval_data_path: str = None,
         output_dir: str = './stage2_output',
         stage1_checkpoint: str = None,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """执行第二阶段训练"""
 
         logger.info('开始第二阶段训练...')

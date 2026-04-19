@@ -1,5 +1,6 @@
 
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强记忆API服务器 - 集成向量-图融合
 Enhanced Memory API Server with Vector-Graph Fusion
@@ -110,8 +111,7 @@ async def store_memory(request: FusionStoreRequest):
     try:
         pass
 
-        req = Req(**request.dict())
-        result = await fusion_api.store_memory(req)
+        result = await fusion_api.store_memory(request)
         return result
     except Exception:
         logger.error("操作失败: e", exc_info=True)
@@ -125,8 +125,7 @@ async def search_memories(request: FusionSearchRequest):
     try:
         pass
 
-        req = Req(**request.dict())
-        results = await fusion_api.search_memories(req)
+        results = await fusion_api.search_memories(request)
         return results
     except Exception:
         logger.error("操作失败: e", exc_info=True)
@@ -138,9 +137,10 @@ async def search_memories(request: FusionSearchRequest):
 async def get_memory(memory_id: str):
     """获取单个记忆"""
     try:
-        if not memory:
-            raise HTTPException(status_code=404, detail="记忆不存在")
-        return memory
+        if not memory_id:
+            raise HTTPException(status_code=404, detail="记忆ID不存在")
+        # TODO: 从存储中获取记忆
+        raise NotImplementedError("待实现")
     except HTTPException:
         logger.error("操作失败", exc_info=True)
         raise
@@ -154,7 +154,9 @@ async def get_memory(memory_id: str):
 async def get_statistics():
     """获取统计信息"""
     try:
-        return stats
+        if fusion_api:
+            return await fusion_api.get_statistics()
+        return {"total_memories": 0, "status": "uninitialized"}
     except Exception:
         logger.error("操作失败: e", exc_info=True)
         raise
@@ -165,6 +167,7 @@ async def get_statistics():
 async def batch_store_memories(requests: list[FusionStoreRequest]):
     """批量存储记忆"""
     try:
+        results = []
         for req in requests:
             result = await fusion_api.store_memory(req)
             results.append(result)

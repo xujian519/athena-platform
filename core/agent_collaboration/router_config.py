@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 智能路由引擎配置管理
 """
@@ -7,7 +8,7 @@ import random
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 import yaml
 from loguru import logger

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena法律世界模型 - 核心模块
 Athena Legal World Model - Core Module
@@ -7,11 +8,12 @@ Athena Legal World Model - Core Module
 - 核心实体类型
 - 核心关系类型
 - 宪法验证器
+- 数据库管理器
 
 作者: Athena平台团队
-版本: v1.1.0
+版本: v1.2.0
 创建: 2026-01-22
-更新: 2026-01-23(明确三层架构详细内容)
+更新: 2026-03-06(添加数据库管理器)
 """
 
 from .constitution import (
@@ -45,8 +47,12 @@ from .constitution import (
     ProceduralRelationType,
     SubjectEntityType,
 )
+from .db_manager import (
+    LegalWorldDBManager,
+    create_db_manager,
+)
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 __author__ = "Athena Platform Team"
 __all__ = [
     "CONSTITUTION_LAST_AMENDED",
@@ -78,4 +84,7 @@ __all__ = [
     "Principle",
     "ProceduralRelationType",
     "SubjectEntityType",
+    # 数据库管理
+    "LegalWorldDBManager",
+    "create_db_manager",
 ]

@@ -2,10 +2,9 @@
 自主控制系统配置
 """
 
-import logging
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List
+from typing import Any
 
 
 class LogLevel(Enum):
@@ -37,7 +36,7 @@ class SecurityConfig:
     enable_authentication: bool = True  # 生产环境设为True
 
     # IP白名单
-    allowed_ips: List[str] = None
+    allowed_ips: list[str] = None
 
     # API访问限制
     rate_limit_per_minute: int = 100
@@ -64,7 +63,7 @@ class DecisionEngineConfig:
     experience_decay_days: int = 30
 
     # 决策类型权重
-    decision_weights: Dict[str, float] = None
+    decision_weights: dict[str, float] = None
 
 @dataclass
 class PlatformConfig:
@@ -90,7 +89,7 @@ class MonitoringConfig:
     enable_metrics: bool = True
     metrics_port: int = 9095
     health_check_interval_seconds: int = 60
-    alert_thresholds: Dict[str, float] = None
+    alert_thresholds: dict[str, float] = None
 
 class AutonomousControlConfig:
     """自主控制系统总配置"""
@@ -138,7 +137,7 @@ class AutonomousControlConfig:
             }
 
     @classmethod
-    def from_dict(cls, config_dict: Dict[str, Any]) -> 'AutonomousControlConfig':
+    def from_dict(cls, config_dict: dict[str, Any]) -> 'AutonomousControlConfig':
         """从字典创建配置"""
         config = cls()
 
@@ -159,7 +158,7 @@ class AutonomousControlConfig:
 
         return config
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             'service': {
@@ -220,7 +219,7 @@ class AutonomousControlConfig:
             }
         }
 
-    def validate(self) -> List[str]:
+    def validate(self) -> list[str]:
         """验证配置的有效性"""
         errors = []
 

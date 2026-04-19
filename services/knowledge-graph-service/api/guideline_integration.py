@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利审查指南集成模块
 为知识图谱API服务添加审查指南查询功能
 """
 
-import requests
-from core.async_main import async_main
 import json
-import logging
-from core.logging_config import setup_logging
-from typing import List, Dict, Any, Optional
+from typing import Any
+
+import requests
 from fastapi import HTTPException
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -29,16 +28,16 @@ class GuidelineIntegration:
         # 加载知识图谱数据
         self.graph_data = self._load_graph_data()
 
-    def _load_graph_data(self) -> Dict[str, Any]:
+    def _load_graph_data(self) -> dict[str, Any]:
         """加载知识图谱数据"""
         try:
-            with open("/Users/xujian/Athena工作平台/data/guideline_graph/patent_guideline_graph.json", 'r', encoding='utf-8') as f:
+            with open("/Users/xujian/Athena工作平台/data/guideline_graph/patent_guideline_graph.json", encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
             logger.error(f"加载知识图谱数据失败: {e}")
             return {"nodes": [], "relationships": [], "metadata": {}}
 
-    def search_guidelines(self, query: str, limit: int = 5, threshold: float = 0.7) -> List[Dict]:
+    def search_guidelines(self, query: str, limit: int = 5, threshold: float = 0.7) -> list[dict]:
         """
         搜索相关的审查指南内容
 
@@ -86,14 +85,15 @@ class GuidelineIntegration:
 
         except Exception as e:
             logger.error(f"搜索审查指南失败: {e}")
-            raise HTTPException(status_code=500, detail=f"搜索失败: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"搜索失败: {str(e)}") from e
 
-    def _generate_query_vector(self, text: str) -> List[float]:
+    def _generate_query_vector(self, text: str) -> list[float]:
         """
         生成查询向量（简化版本）
         实际应用中应使用BERT等预训练模型
         """
         import hashlib
+
         import numpy as np
 
         # 基于文本hash生成伪向量（仅用于演示）
@@ -106,7 +106,7 @@ class GuidelineIntegration:
 
         return vector.tolist()
 
-    def get_related_rules(self, node_id: str) -> List[Dict]:
+    def get_related_rules(self, node_id: str) -> list[dict]:
         """
         获取相关的审查规则
 
@@ -130,7 +130,7 @@ class GuidelineIntegration:
 
         return rules
 
-    def get_section_details(self, section_id: str) -> Dict[str, Any]:
+    def get_section_details(self, section_id: str) -> dict[str, Any]:
         """
         获取章节详细信息
 
@@ -152,7 +152,7 @@ class GuidelineIntegration:
 
         return {}
 
-    def get_guideline_structure(self) -> Dict[str, Any]:
+    def get_guideline_structure(self) -> dict[str, Any]:
         """
         获取审查指南结构
 
@@ -185,7 +185,7 @@ class GuidelineIntegration:
 
         return structure
 
-    def extract_rules_by_topic(self, topic: str, limit: int = 10) -> List[Dict]:
+    def extract_rules_by_topic(self, topic: str, limit: int = 10) -> list[dict]:
         """
         根据主题提取相关规则
 

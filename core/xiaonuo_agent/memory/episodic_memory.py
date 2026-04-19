@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 情景记忆 (Episodic Memory)
 基于PostgreSQL的长期经历记忆系统
@@ -19,7 +20,9 @@ import logging
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
+
+import asyncpg
 
 from core.config.xiaona_config import get_config
 from core.database.unified_connection import get_postgres_pool

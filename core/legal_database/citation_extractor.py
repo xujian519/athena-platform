@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律引用关系抽取器
 Legal Citation Relation Extractor
@@ -9,7 +10,7 @@ Legal Citation Relation Extractor
 import logging
 import re
 from dataclasses import dataclass
-from typing import Any, List, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

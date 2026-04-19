@@ -1,27 +1,27 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena平台知识图谱性能监控和告警系统
 实时监控系统性能、服务状态，并在异常时发送告警
 """
 
 import asyncio
-from core.async_main import async_main
 import json
 import logging
-from core.logging_config import setup_logging
-import psutil
-import time
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional, Callable
-from pathlib import Path
-import aiohttp
-import aiofiles
 import smtplib
-from email.mime.text import MimeText
+import time
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
 from email.mime.multipart import MimeMultipart
+from email.mime.text import MimeText
+from pathlib import Path
+from typing import Any
+
+import aiofiles
+import aiohttp
+import psutil
 import websockets
-from dataclasses import dataclass, asdict
+
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(
@@ -41,7 +41,7 @@ class MetricData:
     value: float
     unit: str
     timestamp: datetime
-    tags: Dict[str, str] = None
+    tags: dict[str, str] = None
 
 @dataclass
 class AlertRule:
@@ -66,10 +66,10 @@ class KnowledgeGraphMonitoringSystem:
 
         # 监控状态
         self.is_running = False
-        self.metrics_store: List[MetricData] = []
-        self.alert_rules: List[AlertRule] = []
-        self.alert_history: List[Dict] = []
-        self.last_alert_time: Dict[str, datetime] = {}
+        self.metrics_store: list[MetricData] = []
+        self.alert_rules: list[AlertRule] = []
+        self.alert_history: list[dict] = []
+        self.last_alert_time: dict[str, datetime] = {}
 
         # 服务配置
         self.services = {
@@ -122,7 +122,7 @@ class KnowledgeGraphMonitoringSystem:
 
         try:
             if self.config_path.exists():
-                with open(self.config_path, 'r', encoding='utf-8') as f:
+                with open(self.config_path, encoding='utf-8') as f:
                     loaded_config = json.load(f)
                     self.config = {**default_config, **loaded_config}
             else:
@@ -130,7 +130,7 @@ class KnowledgeGraphMonitoringSystem:
                 # 创建配置文件
                 with open(self.config_path, 'w', encoding='utf-8') as f:
                     json.dump(self.config, f, ensure_ascii=False, indent=2)
-        except (json.JSONDecodeError, IOError) as e:
+        except (OSError, json.JSONDecodeError) as e:
             logger.error(f"配置文件加载失败: {e}，使用默认配置")
             self.config = default_config
 
@@ -299,7 +299,7 @@ class KnowledgeGraphMonitoringSystem:
             {"services": ",".join(services_down)}
         )
 
-    async def _check_service_health(self, service_config: Dict) -> bool:
+    async def _check_service_health(self, service_config: dict) -> bool:
         """检查单个服务健康状态"""
         try:
             import socket
@@ -431,7 +431,7 @@ class KnowledgeGraphMonitoringSystem:
         # 记录日志
         logger.warning(f"🚨 告警: {rule.name} - {rule.message}")
 
-    async def _broadcast_alert(self, alert_data: Dict):
+    async def _broadcast_alert(self, alert_data: dict):
         """广播告警到WebSocket客户端"""
         if not self.websocket_clients:
             return
@@ -450,7 +450,7 @@ class KnowledgeGraphMonitoringSystem:
 
         self.websocket_clients -= disconnected
 
-    async def _send_email_alert(self, alert_data: Dict):
+    async def _send_email_alert(self, alert_data: dict):
         """发送邮件告警"""
         try:
             email_config = self.config["alerts"]["email"]
@@ -483,7 +483,7 @@ class KnowledgeGraphMonitoringSystem:
         except Exception as e:
             logger.error(f"❌ 发送邮件告警失败: {e}")
 
-    async def _send_webhook_alert(self, alert_data: Dict):
+    async def _send_webhook_alert(self, alert_data: dict):
         """发送Webhook告警"""
         try:
             webhook_config = self.config["alerts"]["webhook"]
@@ -500,7 +500,7 @@ class KnowledgeGraphMonitoringSystem:
         except Exception as e:
             logger.error(f"❌ 发送Webhook告警失败: {e}")
 
-    def _add_metric(self, name: str, value: float, unit: str, tags: Dict[str, str] = None) -> Any:
+    def _add_metric(self, name: str, value: float, unit: str, tags: dict[str, str] = None) -> Any:
         """添加指标数据"""
         metric = MetricData(
             name=name,
@@ -607,7 +607,7 @@ class KnowledgeGraphMonitoringSystem:
                             "data": metrics_data
                         }))
 
-            except websockets.exceptions.ConnectionClosed:
+            except websockets.exceptions.ConnectionClosed as e:
                 logger.error(f"Error: {e}", exc_info=True)
             finally:
                 self.websocket_clients.discard(websocket)
@@ -617,7 +617,7 @@ class KnowledgeGraphMonitoringSystem:
         async with websockets.serve(handle_client, "localhost", port):
             await asyncio.Future()  # 保持服务器运行
 
-    async def get_metrics_summary(self) -> Dict:
+    async def get_metrics_summary(self) -> dict:
         """获取指标摘要"""
         if not self.metrics_store:
             return {"total": 0, "by_name": {}}

@@ -1,0 +1,200 @@
+# Athena平台数据库配置
+# Database Configuration for Athena Platform
+
+# 数据库类型
+database_types:
+  postgresql:
+    bin_path: "/Applications/Postgres.app/Contents/Versions/latest/bin"
+    default_user: "postgres"
+
+  arangodb:
+    url: "http://localhost:8529"
+    user: "root"
+    password: "athena123"
+
+  qdrant:
+    host: "localhost"
+    port: 6333
+
+# 本机数据库（PostgreSQL多实例）
+local_databases:
+  # 业务数据库
+  patent_business:
+    type: postgresql
+    port: 5432
+    description: "专利申请业务流程"
+    size_estimate: "20GB"
+
+  trademark_business:
+    type: postgresql
+    port: 5433
+    description: "商标申请业务流程"
+    size_estimate: "10GB"
+
+  copyright_business:
+    type: postgresql
+    port: 5434
+    description: "版权申请业务流程"
+    size_estimate: "5GB"
+
+  finance_management:
+    type: postgresql
+    port: 5435
+    description: "财务管理"
+    size_estimate: "5GB"
+
+  task_management:
+    type: postgresql
+    port: 5436
+    description: "任务管理"
+    size_estimate: "3GB"
+
+  project_management:
+    type: postgresql
+    port: 5437
+    description: "项目管理"
+    size_estimate: "5GB"
+
+  # 支持服务数据库
+  memory_module:
+    type: postgresql
+    port: 5438
+    description: "记忆模块数据"
+    size_estimate: "15GB"
+
+  law_database:
+    type: postgresql
+    port: 5439
+    description: "法律数据库（活跃）"
+    size_estimate: "10GB"
+
+  patent_database:
+    type: postgresql
+    port: 5440
+    description: "专利数据库（活跃部分）"
+    size_estimate: "20GB"
+
+  trademark_database:
+    type: postgresql
+    port: 5441
+    description: "商标数据库"
+    size_estimate: "5GB"
+
+  # 图数据库
+  arangodb:
+    type: arangodb
+    port: 8529
+    description: "知识图谱数据库"
+    databases:
+      - patent_graph
+      - knowledge_graph
+      - legal_graph
+
+# Docker容器数据库
+docker_databases:
+  qdrant:
+    type: qdrant
+    compose_file: "docker-compose.qdrant.yml"
+    description: "向量数据库"
+    size_estimate: "10GB"
+    collections:
+      - patent_vectors
+      - document_vectors
+      - memory_vectors
+
+# 外部存储数据库（移动硬盘）
+external_databases:
+  patent_full:
+    type: postgresql
+    port: 5450
+    mount_point: "/Volumes/AthenaData"
+    path: "databases/patent_full"
+    description: "完整中国专利数据库"
+    size_estimate: "400GB"
+    update_frequency: "monthly"
+
+  invalidation:
+    type: postgresql
+    port: 5451
+    mount_point: "/Volumes/AthenaData"
+    path: "databases/invalidation"
+    description: "专利复审无效案例库"
+    size_estimate: "300GB"
+    update_frequency: "weekly"
+
+  judgments:
+    type: postgresql
+    port: 5452
+    mount_point: "/Volumes/AthenaData"
+    path: "databases/judgments"
+    description: "专利判决文书库"
+    size_estimate: "800GB"
+    update_frequency: "monthly"
+
+# 存储配置
+storage:
+  local:
+    path: "/Users/xujian/Athena工作平台/data/local"
+    total_size_gb: 1000
+    free_size_gb: 480  # 迁移后预估
+
+  external:
+    mount_point: "/Volumes/AthenaData"
+    total_size_gb: 2000
+    databases_path: "databases"
+
+  document_storage:
+    local_path: "/Users/xujian/Athena工作平台/data/local/documents"
+    upload_path: "uploads"      # 云熙上传
+    processed_path: "processed"  # 处理后
+    active_path: "active"       # 活跃文档
+    size_limit_gb: 100
+
+# 连接池配置
+connection_pools:
+  default:
+    min_connections: 2
+    max_connections: 20
+    connection_timeout: 30
+    idle_timeout: 600
+
+  high_frequency:
+    min_connections: 5
+    max_connections: 50
+    connection_timeout: 10
+    idle_timeout: 300
+
+# 监控配置
+monitoring:
+  metrics:
+    - database_size
+    - connection_count
+    - query_performance
+    - disk_usage
+
+  alerts:
+    disk_usage_threshold: 85  # 85%时告警
+    connection_threshold: 80   # 80%连接数时告警
+
+  backup:
+    local_retention_days: 7
+    external_retention_days: 30
+    backup_time: "02:00"
+
+# 应用配置映射
+application_databases:
+  yunpat_agent:
+    main: "patent_business"
+    support: ["patent_database", "qdrant"]
+
+  memory_module:
+    main: "memory_module"
+    support: ["qdrant"]
+
+  legal_ai:
+    main: "law_database"
+    support: ["arangodb", "external_databases.patent_full", "external_databases.judgments"]
+
+  knowledge_graph:
+    main: "arangodb"
+    support: ["patent_database", "law_database"]

@@ -4,19 +4,15 @@ Athena和小诺协作决策最佳可视化工具
 """
 
 import asyncio
-import json
 import logging
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
-from langchain.agents import AgentExecutor, create_structured_chat_agent
-from langchain.memory import ConversationBufferMemory
-from langchain.prompts import ChatPromptTemplate
 from langchain.tools import BaseTool
 from langchain_tools import visualization_tool_manager
-from visualization_insights import VisualizationAnalyzer, VisualizationType
+from visualization_insights import VisualizationAnalyzer
 
 logger = logging.getLogger(__name__)
 
@@ -32,8 +28,8 @@ class ScenarioContext:
     """场景上下文"""
     user_request: str
     intent: str                           # 用户意图
-    data_type: Optional[str]             # 数据类型
-    audience: Optional[str]              # 目标受众
+    data_type: str | None             # 数据类型
+    audience: str | None              # 目标受众
     urgency: str                         # 紧急程度
     collaboration_needed: bool           # 是否需要协作
     aesthetic_preference: str            # 美学偏好
@@ -42,7 +38,7 @@ class ScenarioContext:
 class ToolSelection:
     """工具选择结果"""
     primary_tool: BaseTool
-    secondary_tools: List[BaseTool] = None
+    secondary_tools: list[BaseTool] = None
     strategy: CallStrategy = CallStrategy.SINGLE_TOOL
     confidence: float = 0.0
     reasoning: str = ''
@@ -72,7 +68,7 @@ class IntelligentVisualizationCaller:
             }
         }
 
-    def _initialize_scenario_patterns(self) -> Dict[str, Dict[str, Any]]:
+    def _initialize_scenario_patterns(self) -> dict[str, dict[str, Any]]:
         """初始化场景模式"""
         return {
             'data_analysis': {
@@ -252,7 +248,7 @@ class IntelligentVisualizationCaller:
             refined_selection = self._refine_selection(context, primary_recommendation)
 
             # 确定调用策略
-            strategy = self._determine_strategy(context, refined_selection)
+            self._determine_strategy(context, refined_selection)
 
             return refined_selection
 
@@ -273,7 +269,7 @@ class IntelligentVisualizationCaller:
         best_match = 'drawio'  # 默认推荐
         best_score = 0
 
-        for scenario, pattern in self.scenario_patterns.items():
+        for _scenario, pattern in self.scenario_patterns.items():
             score = 0
             for keyword in pattern['keywords']:
                 if keyword in request_lower:
@@ -332,7 +328,7 @@ class IntelligentVisualizationCaller:
         else:
             return selection.strategy
 
-    def _generate_reasoning(self, context: ScenarioContext, primary_tool: BaseTool, secondary_tools: List[BaseTool]) -> str:
+    def _generate_reasoning(self, context: ScenarioContext, primary_tool: BaseTool, secondary_tools: list[BaseTool]) -> str:
         """生成选择推理"""
         reasoning_parts = [
             f"基于用户意图 '{context.intent}' 选择 {primary_tool.name}",
@@ -347,7 +343,7 @@ class IntelligentVisualizationCaller:
 
         return '; '.join(reasoning_parts)
 
-    async def execute_with_strategy(self, selection: ToolSelection, query: str) -> Dict[str, Any]:
+    async def execute_with_strategy(self, selection: ToolSelection, query: str) -> dict[str, Any]:
         """根据策略执行工具调用"""
         try:
             execution_start = datetime.now()
@@ -393,7 +389,7 @@ class IntelligentVisualizationCaller:
             logger.error(f"工具 {tool.name} 执行失败: {e}")
             raise
 
-    async def _execute_collaborative(self, primary_tool: BaseTool, secondary_tools: List[BaseTool], query: str) -> Dict[str, Any]:
+    async def _execute_collaborative(self, primary_tool: BaseTool, secondary_tools: list[BaseTool], query: str) -> dict[str, Any]:
         """执行协作调用"""
         # 并行执行所有工具
         tasks = [self._execute_single_tool(primary_tool, query)]
@@ -410,7 +406,7 @@ class IntelligentVisualizationCaller:
             ]
         }
 
-    async def _execute_sequential(self, primary_tool: BaseTool, secondary_tools: List[BaseTool], query: str) -> Dict[str, Any]:
+    async def _execute_sequential(self, primary_tool: BaseTool, secondary_tools: list[BaseTool], query: str) -> dict[str, Any]:
         """执行顺序调用"""
         results = []
 
@@ -423,7 +419,7 @@ class IntelligentVisualizationCaller:
             results.append(str(e))
 
         # 依次执行辅助工具
-        for i, tool in enumerate(secondary_tools):
+        for _i, tool in enumerate(secondary_tools):
             try:
                 # 基于前面结果调整查询
                 enhanced_query = f"基于前序结果优化: {query}"
@@ -437,7 +433,7 @@ class IntelligentVisualizationCaller:
             'sequential_results': results
         }
 
-    async def learn_from_execution(self, execution_result: Dict[str, Any], user_feedback: Optional[Dict[str, Any]] = None):
+    async def learn_from_execution(self, execution_result: dict[str, Any], user_feedback: dict[str, Any] | None = None):
         """从执行结果中学习"""
         try:
             # 记录执行历史
@@ -459,7 +455,7 @@ class IntelligentVisualizationCaller:
         except Exception as e:
             logger.error(f"学习过程失败: {e}")
 
-    def get_performance_summary(self) -> Dict[str, Any]:
+    def get_performance_summary(self) -> dict[str, Any]:
         """获取性能摘要"""
         if not self.call_history:
             return {'message': '暂无执行历史'}

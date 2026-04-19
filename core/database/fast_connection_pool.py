@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 本地高性能 PostgreSQL 连接池管理器
 针对本地使用场景优化,提供更快的连接和查询速度
@@ -9,7 +10,9 @@ import logging
 import time
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any
+
+import asyncpg
 
 from core.database.unified_connection import get_postgres_pool
 
@@ -127,20 +130,21 @@ class FastPostgreSQLPool:
         async with self.pool.acquire() as connection:
             yield connection
 
-    async def fetch(self, query: str, *args | None = None, timeout: float | None = None) -> list:
+    async def fetch(self, query: str, *args: Any, timeout: float | None = None) -> list:
         """执行查询并返回所有结果"""
         start_time = time.time()
 
         async with self.acquire() as conn:
             try:
-                result = await conn.fetch(query | None = None, *args | None = None, timeout=timeout)
+                result = await conn.fetch(query, *args, timeout=timeout)
                 self._track_query(start_time)
                 return result
-            except Exception as e: logger.error(f"查询执行失败: {e}")
+            except Exception as e:
+                logger.error(f"查询执行失败: {e}")
                 raise
 
     async def fetchrow(
-        self | None = None, query: str | None = None, *args, timeout: float | None = None
+        self, query: str | None = None, *args, timeout: float | None = None
     ) -> asyncpg.Record | None:
         """执行查询并返回一行结果"""
         start_time = time.time()

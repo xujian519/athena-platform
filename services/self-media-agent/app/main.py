@@ -8,21 +8,17 @@ Xiaochen Self-Media Agent
 """
 
 import os
-from core.async_main import async_main
 import sys
-import asyncio
-import json
+from contextlib import asynccontextmanager
 from datetime import datetime
 from pathlib import Path
-from contextlib import asynccontextmanager
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from core.security.auth import ALLOWED_ORIGINS
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel
 
 # 添加项目路径
 current_dir = Path(__file__).parent
@@ -31,13 +27,11 @@ sys.path.insert(0, str(current_dir))
 sys.path.insert(0, str(project_root))
 
 # 导入配置
-from config import settings
-from core.xiaochen_engine import XiaochenEngine
+from core.analytics_tracker import XiaochenAnalyticsTracker
 from core.content_creator import ContentCreator
 from core.platform_manager import PlatformManager
-from core.enhanced_content_styles import ContentStyle, ContentPurpose
-from core.smart_publish_scheduler import XiaochenSmartScheduler, PublishTask, PublishStrategy
-from core.analytics_tracker import XiaochenAnalyticsTracker
+from core.smart_publish_scheduler import XiaochenSmartScheduler
+from core.xiaochen_engine import XiaochenEngine
 from utils.logger import logger
 
 # 全局变量
@@ -247,7 +241,7 @@ async def create_content(request: dict):
 
     except Exception as e:
         logger.error(f"内容创作失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 # 内容发布接口
@@ -280,7 +274,7 @@ async def publish_content(request: dict):
 
     except Exception as e:
         logger.error(f"内容发布失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 # 数据分析接口
@@ -311,7 +305,7 @@ async def get_analytics_overview():
         }
     except Exception as e:
         logger.error(f"数据分析失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 # 智能对话接口
@@ -342,7 +336,7 @@ async def chat_with_xiaochen(request: dict):
 
     except Exception as e:
         logger.error(f"智能对话失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 # 全局异常处理

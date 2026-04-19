@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 本地LLM封装器 - 支持GGUF量化模型
 Local LLM Wrapper - Supporting GGUF Quantized Models
@@ -9,8 +10,7 @@ Local LLM Wrapper - Supporting GGUF Quantized Models
 import asyncio
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 感知模块配置管理器
 Perception Module Configuration Manager
@@ -33,7 +34,7 @@ class PerceptionConfigManager:
     """
 
     # 单例实例
-    _instance: "Optional[PerceptionConfigManager]" = None
+    _instance: "PerceptionConfigManager | None" = None
     _initialized: bool = False
 
     def __new__(cls):
@@ -171,7 +172,6 @@ class PerceptionConfigManager:
         Returns:
             可序列化的字典
         """
-        import copy
         from datetime import timedelta
 
         config_dict = asdict(config_obj) if config_obj else {}

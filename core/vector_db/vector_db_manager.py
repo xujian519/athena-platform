@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena工作平台 - 向量数据库管理器
 Vector Database Manager for Athena Platform

@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小宸自媒体运营API服务（简化版）
 Xiaochen Media Operations API (Simple Version)
 """
 
-from fastapi import FastAPI
 from datetime import datetime
-from typing import Dict, List, Any
+
 import uvicorn
-from core.async_main import async_main
+from fastapi import FastAPI
 
 app = FastAPI(
     title="小宸自媒体运营API",
@@ -93,7 +91,7 @@ if __name__ == "__main__":
     print("=" * 50)
     print(f"📋 角色：{xiaochen_identity['role']}")
     print(f"🏷️  称号：{xiaochen_identity['title']}")
-    print(f"📍 端口：8006")
+    print("📍 端口：8006")
     print(f"💫 Slogan：{xiaochen_identity['slogan']}")
     print(f"✨ 座右铭：{xiaochen_identity['motto']}")
     print("")
@@ -101,5 +99,5 @@ if __name__ == "__main__":
     print("")
 
     # 启动服务
-    print(f"🚀 小宸自媒体运营API启动中...")
+    print("🚀 小宸自媒体运营API启动中...")
     uvicorn.run(app, host="0.0.0.0", port=8006)

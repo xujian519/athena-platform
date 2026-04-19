@@ -4,9 +4,8 @@
 Start Athena Development Assistant
 """
 
-import sys
-from core.async_main import async_main
 import os
+import sys
 from pathlib import Path
 
 # 添加路径

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺拖延症对抗助手
 Xiaonuo Procrastination Fighter
@@ -9,7 +10,6 @@ Xiaonuo Procrastination Fighter
 import asyncio
 import random
 from datetime import datetime, timedelta
-
 
 
 class ProcrastinationFighter:

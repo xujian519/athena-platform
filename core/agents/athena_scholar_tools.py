@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜 Google Scholar 集成工具
 Athena Google Scholar Integration Tools
@@ -12,8 +13,7 @@ Athena Google Scholar Integration Tools
 
 import asyncio
 import logging
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

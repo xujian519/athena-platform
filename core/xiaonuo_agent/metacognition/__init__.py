@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 元认知模块 (Metacognition Module)
 关于认知的认知系统

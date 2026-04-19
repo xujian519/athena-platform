@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena智慧女神 - 集成统一记忆系统
 Athena Wisdom Agent with Unified Memory System
@@ -12,7 +13,7 @@ Athena Wisdom Agent with Unified Memory System
 
 import logging
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # 导入统一记忆系统
 from ..base_agent_with_memory import AgentRole, MemoryEnabledAgent, MemoryType

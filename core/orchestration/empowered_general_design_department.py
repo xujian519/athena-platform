@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 赋能的总体设计部
 Empowered General Design Department
@@ -22,17 +23,16 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.decision.conflict_resolver import ArbitrationDecision, ConflictResolver
+from core.decision.conflict_resolver import ConflictResolver
 from core.decision.integrated_decision_engine import (
     AgentOpinion,
     Decision,
-    IntegratedDecisionEngine,
     get_decision_engine,
 )
 
@@ -67,7 +67,6 @@ class AgentRole(Enum):
 
     XIAONUO = "小诺"
     XIANA = "小娜"
-    YUNXI = "云熙"
     XIAOCHEN = "小宸"
 
 
@@ -134,9 +133,9 @@ class EmpoweredGeneralDesignDepartment:
     def _init_routing_rules(self) -> dict[TaskType, list[AgentRole]]:
         """初始化任务路由规则"""
         return {
-            TaskType.PATENT_ANALYSIS: [AgentRole.XIANA, AgentRole.YUNXI],
+            TaskType.PATENT_ANALYSIS: [AgentRole.XIANA],
             TaskType.LEGAL_RESEARCH: [AgentRole.XIANA],
-            TaskType.IP_MANAGEMENT: [AgentRole.YUNXI],
+            TaskType.IP_MANAGEMENT: [AgentRole.XIANA],
             TaskType.MEDIA_OPERATION: [AgentRole.XIAOCHEN],
             TaskType.GENERAL_QUERY: [AgentRole.XIAONUO],
             TaskType.DECISION_SUPPORT: [AgentRole.XIANA, AgentRole.XIAONUO],
@@ -314,14 +313,6 @@ class EmpoweredGeneralDesignDepartment:
                 confidence=0.85,
                 evidence=["专利法第25条", "审查指南相关规定"],
                 reasoning="基于专利法律专业知识进行分析",
-            )
-        elif agent_role == AgentRole.YUNXI:
-            return AgentOpinion(
-                agent_name="云熙",
-                opinion=f"从数据管理角度,'{task.description}'需要考虑系统架构和存储方案。",
-                confidence=0.75,
-                evidence=["现有系统架构", "数据量预估"],
-                reasoning="基于IP管理系统数据进行分析",
             )
         elif agent_role == AgentRole.XIAOCHEN:
             return AgentOpinion(

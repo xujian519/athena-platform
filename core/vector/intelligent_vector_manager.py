@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能向量管理器
 Intelligent Vector Manager
@@ -7,16 +8,17 @@ Intelligent Vector Manager
 """
 
 import asyncio
-from core.async_main import async_main
 import json
 import logging
-from core.logging_config import setup_logging
 import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 import numpy as np
+
+from core.async_main import async_main
+from core.logging_config import setup_logging
 
 # 添加项目路径
 sys.path.append(str(Path(__file__).parent.parent))
@@ -171,8 +173,8 @@ class IntelligentVectorManager:
                 self.qdrant_client.get_collection(collection_name)
                 logger.info(f"📊 集合 {collection_name} 已存在")
                 return
-        except Exception as e:
-            logger.warning(f'操作失败: {e}')
+            except Exception:
+                pass  # 集合不存在，继续创建
 
             # 创建新集合
             vector_size = config.get('size', 1024)

@@ -4,12 +4,11 @@ BGE Large ZH v1.5 性能测试和分析
 Test BGE Performance Impact Analysis
 """
 
-import os
 import sys
 import time
-import psutil
-import numpy as np
 from pathlib import Path
+
+import psutil
 
 # 添加路径
 sys.path.append(str(Path(__file__).parent))
@@ -34,7 +33,7 @@ def test_bge_loading_time():
         mem_after = psutil.Process().memory_info().rss / 1024 / 1024  # MB
         mem_increase = mem_after - mem_before
 
-        print(f"✅ BGE Large ZH v1.5 加载成功")
+        print("✅ BGE Large ZH v1.5 加载成功")
         print(f"   - 模型加载时间: {load_time:.2f}秒")
         print(f"   - 内存增加: {mem_increase:.0f} MB")
         print(f"   - 向量维度: {model.get_sentence_embedding_dimension()}")
@@ -62,21 +61,21 @@ def test_bge_encoding_performance(model):
     # 单个编码测试
     start_time = time.time()
     for text in test_texts[:10]:
-        embedding = model.encode(text)
+        model.encode(text)
     single_time = time.time() - start_time
     avg_single = single_time / 10
 
-    print(f"单个文本编码:")
+    print("单个文本编码:")
     print(f"   - 10个文本总时间: {single_time:.3f}秒")
     print(f"   - 平均每个文本: {avg_single:.3f}秒")
 
     # 批量编码测试
     start_time = time.time()
-    embeddings = model.encode(test_texts, batch_size=32, show_progress_bar=True)
+    model.encode(test_texts, batch_size=32, show_progress_bar=True)
     batch_time = time.time() - start_time
     avg_batch = batch_time / len(test_texts)
 
-    print(f"\n批量文本编码:")
+    print("\n批量文本编码:")
     print(f"   - {len(test_texts)}个文本总时间: {batch_time:.3f}秒")
     print(f"   - 平均每个文本: {avg_batch:.3f}秒")
     print(f"   - 吞吐量: {len(test_texts)/batch_time:.1f} 文本/秒")
@@ -103,7 +102,7 @@ def compare_with_ollama():
 
         if response.status_code == 200:
             ollama_embedding = response.json()['embedding']
-            print(f"Ollama nomic-embed-text:")
+            print("Ollama nomic-embed-text:")
             print(f"   - 响应时间: {ollama_time:.3f}秒")
             print(f"   - 向量维度: {len(ollama_embedding)}")
         else:

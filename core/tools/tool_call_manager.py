@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena智能体工具调用管理器
 Agent Tool Call Manager
@@ -27,12 +28,14 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 from core.logging_config import setup_logging
 
 # 导入统一的工具定义
 from .base import ToolCategory, ToolDefinition
+from .hooks import HookContext, HookEvent, HookRegistry, register_default_hooks
+from .feature_gates import feature  # P2-2: 导入功能门控
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -48,21 +51,6 @@ class CallStatus(Enum):
     FAILED = "failed"  # 失败
     TIMEOUT = "timeout"  # 超时
     CANCELLED = "cancelled"  # 已取消
-
-
-class ToolCategory(Enum):
-    """工具类别"""
-
-    CODE_ANALYSIS = "code_analysis"
-    KNOWLEDGE_GRAPH = "knowledge_graph"
-    DECISION_ENGINE = "decision_engine"
-    MICROSERVICE = "microservice"
-    EMBEDDING = "embedding"
-    CHAT_COMPLETION = "chat_completion"
-    DOCUMENT_PROCESSING = "document_processing"
-    WEB_SEARCH = "web_search"
-    COORDINATION = "coordination"
-    MONITORING = "monitoring"
 
 
 @dataclass
@@ -113,6 +101,7 @@ class ToolCallManager:
         max_history: int = 1000,
         enable_rate_limit: bool = True,
         max_calls_per_minute: int = 100,
+        enable_hooks: bool = True,
     ):
         """
         初始化工具调用管理器
@@ -122,6 +111,7 @@ class ToolCallManager:
             max_history: 最大历史记录数(防止内存泄漏)
             enable_rate_limit: 是否启用速率限制
             max_calls_per_minute: 每分钟最大调用次数
+            enable_hooks: 是否启用Hook系统
         """
         self.tools: dict[str, ToolDefinition] = {}
         self.log_dir = Path(log_dir)
@@ -146,6 +136,15 @@ class ToolCallManager:
         else:
             self.rate_limiter = None
 
+        # 🎣 Hook系统
+        self.enable_hooks = enable_hooks
+        self.hook_registry: HookRegistry | None = None
+        if enable_hooks:
+            self.hook_registry = HookRegistry()
+            # 注册默认Hook
+            register_default_hooks(self.hook_registry)
+            logger.info("✅ Hook系统已启用")
+
         # 统计信息
         self.stats = {
             "total_calls": 0,
@@ -153,13 +152,14 @@ class ToolCallManager:
             "failed_calls": 0,
             "timeout_calls": 0,
             "avg_execution_time": 0.0,
-            "rate_limited_calls": 0,  # 新增:被速率限制的调用次数
+            "rate_limited_calls": 0,  # 被速率限制的调用次数
+            "hook_blocked_calls": 0,  # 被Hook阻止的调用次数
         }
 
         # 工具性能统计
         self.tool_stats: dict[str, dict[str, Any]] = {}
 
-        logger.info("🔧 工具调用管理器初始化完成(增强版)")
+        logger.info("🔧 工具调用管理器初始化完成(增强版+Hook系统)")
 
     def register_tool(self, tool: ToolDefinition) -> Any:
         """注册工具"""
@@ -249,6 +249,46 @@ class ToolCallManager:
         # 设置超时
         effective_timeout = timeout or tool.timeout
 
+        # 🎣 执行Pre-tool-use Hooks
+        if self.enable_hooks and self.hook_registry:
+            hook_context = HookContext(
+                tool_name=tool_name,
+                parameters=parameters,
+                context=context,
+                request_id=request_id,
+            )
+
+            try:
+                hook_result = await self.hook_registry.execute_hooks(
+                    HookEvent.PRE_TOOL_USE, hook_context
+                )
+
+                # Hook阻止调用
+                if not hook_result.should_proceed:
+                    logger.warning(
+                        f"🚫 工具调用被Hook阻止: {tool_name} - {hook_result.error_message}"
+                    )
+                    result = ToolCallResult(
+                        request_id=request_id,
+                        tool_name=tool_name,
+                        status=CallStatus.FAILED,
+                        error=hook_result.error_message or "Hook阻止调用",
+                        execution_time=0.0,
+                        metadata=hook_result.metadata,
+                    )
+                    self.stats["hook_blocked_calls"] += 1
+                    self._record_result(result)
+                    return result
+
+                # 应用修改后的参数
+                if hook_result.modified_parameters:
+                    parameters = hook_result.modified_parameters
+                    logger.info(f"🔧 Hook修改参数: {tool_name}")
+
+            except Exception as e:
+                logger.error(f"❌ Pre-tool-use Hook执行失败: {e}")
+                # Hook错误不应阻止主流程
+
         # 执行调用
         start_time = time.time()
         try:
@@ -280,6 +320,28 @@ class ToolCallManager:
 
         # 记录结果
         self._record_result(result)
+
+        # 🎣 执行Post-tool-use或Tool-failure Hooks
+        if self.enable_hooks and self.hook_registry:
+            hook_context = HookContext(
+                tool_name=tool_name,
+                parameters=parameters,
+                context=context,
+                request_id=request_id,
+                metadata=result.metadata,
+            )
+
+            try:
+                if result.status == CallStatus.SUCCESS:
+                    await self.hook_registry.execute_hooks(
+                        HookEvent.POST_TOOL_USE, hook_context
+                    )
+                else:
+                    await self.hook_registry.execute_hooks(
+                        HookEvent.TOOL_FAILURE, hook_context
+                    )
+            except Exception as e:
+                logger.error(f"❌ Post-tool-use Hook执行失败: {e}")
 
         # 记录日志
         self._write_log(request, result)
@@ -389,12 +451,18 @@ class ToolCallManager:
             else 0
         )
 
-        return {
+        stats_dict = {
             **self.stats,
             "success_rate": success_rate,
             "tool_count": len(self.tools),
             "tool_stats": self.tool_stats,
         }
+
+        # 添加Hook统计
+        if self.enable_hooks and self.hook_registry:
+            stats_dict["hook_stats"] = self.hook_registry.get_stats()
+
+        return stats_dict
 
     def get_tool_performance(self, tool_name: str) -> dict[str, Any] | None:
         """获取工具性能统计"""
@@ -403,6 +471,255 @@ class ToolCallManager:
     def get_recent_calls(self, limit: int = 10) -> list[ToolCallResult]:
         """获取最近的调用记录"""
         return self.call_history[-limit:]
+
+    # ========================================
+    # P2-2: 并行工具执行
+    # ========================================
+
+    async def call_tools_parallel(
+        self,
+        tool_calls: list[dict[str, Any]],
+        max_concurrency: int = 10,
+        context: dict[str, Any] | None = None,
+    ) -> list[ToolCallResult]:
+        """
+        并行调用多个工具 (P2-2)
+
+        支持依赖分析和错误隔离，无依赖的工具并行执行，有依赖的串行执行。
+
+        Args:
+            tool_calls: 工具调用列表，每个元素为 {"tool_name": str, "parameters": dict, "depends_on": list[str]}
+            max_concurrency: 最大并发数
+            context: 上下文信息
+
+        Returns:
+            list[ToolCallResult]: 调用结果列表
+
+        Example:
+            >>> results = await manager.call_tools_parallel([
+            ...     {"tool_name": "tool1", "parameters": {"arg1": "value1"}},
+            ...     {"tool_name": "tool2", "parameters": {"arg2": "value2"}, "depends_on": ["tool1"]},
+            ... ])
+        """
+        # 🚦 检查功能门控
+        if not feature("parallel_tool_execution"):
+            logger.warning("⚠️ 并行工具执行功能未启用，回退到串行执行")
+            return await self._call_tools_serial(tool_calls, context)
+
+        logger.info(f"🚀 开始并行执行 {len(tool_calls)} 个工具调用")
+
+        # 构建依赖图
+        dependency_graph = self._build_dependency_graph(tool_calls)
+
+        # 分析执行批次（无依赖的可以并行）
+        execution_batches = self._analyze_execution_batches(dependency_graph)
+
+        logger.info(f"📊 分为 {len(execution_batches)} 个执行批次")
+
+        # 按批次执行
+        all_results: list[ToolCallResult] = []
+
+        for batch_idx, batch in enumerate(execution_batches):
+            logger.info(f"⚡ 执行批次 {batch_idx + 1}/{len(execution_batches)} ({len(batch)} 个工具)")
+
+            # 并行执行当前批次
+            batch_results = await self._execute_batch(
+                batch,
+                tool_calls,
+                max_concurrency,
+                context,
+            )
+
+            all_results.extend(batch_results)
+
+            # 检查批次是否全部成功
+            batch_failures = [r for r in batch_results if r.status != CallStatus.SUCCESS]
+            if batch_failures:
+                logger.warning(
+                    f"⚠️ 批次 {batch_idx + 1} 有 {len(batch_failures)} 个失败，继续执行后续批次"
+                )
+
+        logger.info(f"✅ 并行执行完成: {len(all_results)} 个结果")
+        return all_results
+
+    def _build_dependency_graph(self, tool_calls: list[dict[str, Any]]) -> dict[str, set[str]]:
+        """
+        构建依赖图
+
+        Args:
+            tool_calls: 工具调用列表
+
+        Returns:
+            dict: 依赖图 {tool_name: set[dependent_tool_names]}
+        """
+        graph: dict[str, set[str]] = {}
+
+        for call in tool_calls:
+            tool_name = call.get("tool_name", "")
+            depends_on = call.get("depends_on", [])
+
+            if tool_name not in graph:
+                graph[tool_name] = set()
+
+            for dep in depends_on:
+                if dep not in graph:
+                    graph[dep] = set()
+                graph[dep].add(tool_name)
+
+        return graph
+
+    def _analyze_execution_batches(
+        self, dependency_graph: dict[str, set[str]]
+    ) -> list[list[str]]:
+        """
+        分析执行批次（拓扑排序）
+
+        Args:
+            dependency_graph: 依赖图
+
+        Returns:
+            list[list[str]]: 批次列表，每个批次包含可并行执行的工具名称
+        """
+        # 计算入度
+        in_degree: dict[str, int] = {node: 0 for node in dependency_graph}
+        for node in dependency_graph:
+            for dependent in dependency_graph[node]:
+                in_degree[dependent] += 1
+
+        # 拓扑排序
+        batches: list[list[str]] = []
+        remaining = set(dependency_graph.keys())
+
+        while remaining:
+            # 找出所有入度为0的节点
+            current_batch = [node for node in remaining if in_degree[node] == 0]
+
+            if not current_batch:
+                # 循环依赖，打破
+                logger.warning("⚠️ 检测到循环依赖，打破循环")
+                current_batch = [list(remaining)[0]]
+
+            batches.append(current_batch)
+
+            # 移除当前批次
+            for node in current_batch:
+                remaining.remove(node)
+                for dependent in dependency_graph[node]:
+                    in_degree[dependent] -= 1
+
+        return batches
+
+    async def _execute_batch(
+        self,
+        batch: list[str],
+        tool_calls: list[dict[str, Any]],
+        max_concurrency: int,
+        context: dict[str, Any] | None,
+    ) -> list[ToolCallResult]:
+        """
+        执行一个批次（并行）
+
+        Args:
+            batch: 批次工具名称列表
+            tool_calls: 原始工具调用列表
+            max_concurrency: 最大并发数
+            context: 上下文
+
+        Returns:
+            list[ToolCallResult]: 批次执行结果
+        """
+        # 创建任务列表
+        tasks = []
+        for tool_name in batch:
+            # 查找对应的工具调用
+            call = next((c for c in tool_calls if c.get("tool_name") == tool_name), None)
+            if call:
+                task = self._execute_single_tool_safe(call, context)
+                tasks.append(task)
+
+        # 并发控制：使用信号量
+        semaphore = asyncio.Semaphore(max_concurrency)
+
+        async def execute_with_semaphore(task: asyncio.Task) -> ToolCallResult:
+            async with semaphore:
+                return await task
+
+        # 并行执行
+        try:
+            results = await asyncio.gather(
+                *[execute_with_semaphore(asyncio.create_task(task)) for task in tasks],
+                return_exceptions=True,  # 不因单个失败中断全部
+            )
+        except Exception as e:
+            logger.error(f"❌ 批次执行异常: {e}")
+            results = []
+
+        # 处理结果（异常转换为失败结果）
+        final_results = []
+        for i, result in enumerate(results):
+            if isinstance(result, Exception):
+                tool_name = batch[i] if i < len(batch) else "unknown"
+                final_results.append(
+                    ToolCallResult(
+                        request_id=str(uuid.uuid4()),
+                        tool_name=tool_name,
+                        status=CallStatus.FAILED,
+                        error=str(result),
+                        execution_time=0.0,
+                    )
+                )
+            else:
+                final_results.append(result)
+
+        return final_results
+
+    async def _execute_single_tool_safe(
+        self, call: dict[str, Any], context: dict[str, Any] | None
+    ) -> ToolCallResult:
+        """
+        安全执行单个工具（带异常捕获）
+
+        Args:
+            call: 工具调用
+            context: 上下文
+
+        Returns:
+            ToolCallResult: 执行结果
+        """
+        try:
+            return await self.call_tool(
+                tool_name=call.get("tool_name", ""),
+                parameters=call.get("parameters", {}),
+                context=context,
+            )
+        except Exception as e:
+            logger.error(f"❌ 工具执行异常: {call.get('tool_name')} - {e}")
+            return ToolCallResult(
+                request_id=str(uuid.uuid4()),
+                tool_name=call.get("tool_name", ""),
+                status=CallStatus.FAILED,
+                error=str(e),
+                execution_time=0.0,
+            )
+
+    async def _call_tools_serial(
+        self, tool_calls: list[dict[str, Any]], context: dict[str, Any] | None
+    ) -> list[ToolCallResult]:
+        """
+        串行执行工具（回退方案）
+
+        Args:
+            tool_calls: 工具调用列表
+            context: 上下文
+
+        Returns:
+            list[ToolCallResult]: 执行结果
+        """
+        results = []
+        for call in tool_calls:
+            result = await self._execute_single_tool_safe(call, context)
+            results.append(result)
+        return results
 
 
 # 全局单例

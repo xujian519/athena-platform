@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一异常体系
 Unified Exception System
@@ -11,7 +12,7 @@ Unified Exception System
 """
 
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any
 
 
 class AthenaError(Exception):

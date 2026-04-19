@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 反馈数据收集脚本
 Feedback Data Collection Script
@@ -10,10 +11,9 @@ Feedback Data Collection Script
 """
 
 import time
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 import requests
-
 
 # 配置
 GATEWAY_URL = "http://localhost:8100"
@@ -45,7 +45,6 @@ TEST_QUERIES = [
     {"message": "模型量化优化", "expected": "quantization", "category": "Phase 4能力"},
     {"message": "联邦学习训练", "expected": "federated", "category": "Phase 4能力"},
     # 智能体能力
-    {"message": "云溪智能体服务", "expected": "yunxi", "category": "智能体能力"},
     {"message": "小晨智能体对话", "expected": "xiaochen", "category": "智能体能力"},
 ]
 
@@ -70,7 +69,7 @@ def set_ab_test_config(enabled: bool, ratio: float = 0.5) -> bool:
 
 def send_chat_request(
     message: str, user_id: str, selector_type: str
-) -> tuple[bool, dict[str, Any]:
+) -> tuple[bool, dict[str, Any]]:
     """
     发送聊天请求
 
@@ -170,7 +169,7 @@ def evaluate_result(expected: str, actual: str) -> tuple[bool, float]:
             "高级": ["nlp", "knowledge_graph", "memory", "optimization"],
             "Phase3": ["multimodal", "agent_fusion", "autonomous"],
             "Phase4": ["enterprise", "quantization", "federated"],
-            "智能体": ["yunxi", "xiaochen"],
+            "智能体": ["xiaochen"],
         }
 
         # 检查是否在同一组
@@ -181,7 +180,7 @@ def evaluate_result(expected: str, actual: str) -> tuple[bool, float]:
         return False, 0.0
 
 
-def run_test_batch(selector_type: str, test_queries: list[dict[str, str]) -> dict[str, Any]:
+def run_test_batch(selector_type: str, test_queries: list[dict[str, str]]) -> dict[str, Any]:
     """
     运行一批测试
 
@@ -277,7 +276,7 @@ def print_statistics(stats: dict[str, Any], selector_type: str) -> Any:
         print("无测试数据")
 
 
-def compare_statistics(smart_stats: dict[dict[str] -> Any:
+def compare_statistics(smart_stats: dict[str, Any], simple_stats: dict[str, Any]) -> None:
     """对比两种选择器的统计"""
     print(f"\n{'=' * 60}")
     print("📈 A/B测试对比分析")

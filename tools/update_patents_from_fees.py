@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 基于官费缴费记录更新专利状态
 将已缴费的专利标记为有效专利
 """
 
-import psycopg2
-from psycopg2.extras import execute_values, RealDictCursor
-from datetime import datetime
-from typing import Dict, List, Optional, Tuple
-import logging
 import json
+import logging
+import sys
 import uuid
+from datetime import datetime
+
+import psycopg2
+from psycopg2.extras import execute_values
 
 # 配置日志
 logging.basicConfig(
@@ -33,7 +33,7 @@ class PatentFeeUpdater:
             "password": "xj781102"
         }
 
-    def update_existing_patents(self) -> Dict:
+    def update_existing_patents(self) -> dict:
         """更新现有专利状态"""
         logger.info("🔄 更新现有专利状态...")
 
@@ -55,7 +55,7 @@ class PatentFeeUpdater:
                         patent_num = metadata.get('patent_number', '')
                         if patent_num:
                             patent_numbers.add(patent_num)
-                    except:
+                    except Exception:
                         continue
 
             logger.info(f"  从缴费记录中提取到 {len(patent_numbers)} 个唯一专利号")
@@ -116,7 +116,7 @@ class PatentFeeUpdater:
             if conn:
                 conn.close()
 
-    def create_missing_patents(self) -> Dict:
+    def create_missing_patents(self) -> dict:
         """为未匹配的专利创建新记录"""
         logger.info("🆕 创建缺失的专利记录...")
 
@@ -138,7 +138,7 @@ class PatentFeeUpdater:
                         patent_num = metadata.get('patent_number', '')
                         if patent_num:
                             patent_numbers.add(patent_num)
-                    except:
+                    except Exception:
                         continue
 
             logger.info(f"  从缴费记录中提取到 {len(patent_numbers)} 个唯一专利号")
@@ -242,7 +242,7 @@ class PatentFeeUpdater:
             if conn:
                 conn.close()
 
-    def update_financial_records_patent_id(self, conn, patents_to_insert: List[Dict]):
+    def update_financial_records_patent_id(self, conn, patents_to_insert: list[dict]):
         """更新财务记录中的专利ID"""
         logger.info("🔗 更新财务记录中的专利ID...")
 
@@ -267,7 +267,7 @@ class PatentFeeUpdater:
         conn.commit()
         logger.info(f"  更新了 {updated_count} 个专利对应的财务记录")
 
-    def get_final_statistics(self) -> Dict:
+    def get_final_statistics(self) -> dict:
         """获取最终统计信息"""
         logger.info("📊 获取最终统计信息...")
 
@@ -331,16 +331,16 @@ def main():
         stats = updater.get_final_statistics()
 
         print("\n✨ 更新完成！")
-        print(f"📈 更新现有专利:")
+        print("📈 更新现有专利:")
         print(f"  总缴费专利数: {update_result['total_fee_patents']}")
         print(f"  匹配到现有专利: {update_result['matched_patents']}")
         print(f"  更新专利状态: {update_result['updated_patents']}")
 
-        print(f"\n🆕 创建新专利记录:")
+        print("\n🆕 创建新专利记录:")
         print(f"  未匹配专利数: {create_result['unmatched_patents']}")
         print(f"  创建新专利数: {create_result['created_patents']}")
 
-        print(f"\n📊 最终统计:")
+        print("\n📊 最终统计:")
         print(f"  专利总数: {stats.get('total_patents', 0)}")
         print(f"  有效专利数: {stats.get('active_patents', 0)}")
         print(f"  待审核专利数: {stats.get('pending_patents', 0)}")
@@ -353,12 +353,6 @@ def main():
     except Exception as e:
         logger.error(f"❌ 更新失败: {str(e)}")
         import traceback
-
-# 导入安全配置
-import sys
-from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent / "core"))
-from security.env_config import get_env_var, get_database_url, get_jwt_secret
         traceback.print_exc()
         return False
 

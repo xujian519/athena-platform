@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺生活助手模块
 Xiaonuo Life Assistant Module
@@ -6,7 +7,6 @@ Xiaonuo Life Assistant Module
 
 from datetime import datetime
 from typing import Any
-
 
 
 class XiaonuoLifeAssistant:

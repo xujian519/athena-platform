@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 共识协作模式
 Consensus Collaboration Pattern
@@ -16,7 +17,6 @@ import uuid
 from collections import defaultdict
 from typing import Any
 
-from ..base import CollaborationPattern
 from ...collaboration_manager import Conflict
 from ...multi_agent_collaboration import (
     Message,
@@ -25,6 +25,7 @@ from ...multi_agent_collaboration import (
     Task,
     TaskStatus,
 )
+from ..base import CollaborationPattern
 
 logger = logging.getLogger(__name__)
 

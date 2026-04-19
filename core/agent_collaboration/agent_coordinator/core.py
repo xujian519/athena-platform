@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Agent协调器 - 核心类
 Agent Coordinator - Core Class
@@ -12,7 +13,7 @@ Agent Coordinator - Core Class
 import asyncio
 import logging
 from datetime import datetime, timedelta
-from typing import Any, Optional
+from typing import Any
 
 from ..agent_registry import AgentType
 from ..agents import AnalysisAgent, CreativeAgent, SearchAgent  # type: ignore[attr-defined]
@@ -21,7 +22,6 @@ from ..communication import ResponseMessage, TaskMessage
 from .strategies import CoordinationStrategies
 from .templates import initialize_workflow_templates
 from .types import TaskDefinition, TaskExecution, TaskStatus, WorkflowType
-
 
 logger = logging.getLogger(__name__)
 

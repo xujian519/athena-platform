@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 模块依赖管理系统
 Module Dependency Management System
@@ -11,15 +12,16 @@ Module Dependency Management System
 
 import asyncio
 import logging
-from core.logging_config import setup_logging
 import sys
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import networkx as nx
+
+from core.logging_config import setup_logging
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -72,7 +74,7 @@ class ModuleInfo:
 class StartupPlan:
     """启动计划"""
     startup_order: list[str]
-    parallel_groups: list[list[str]
+    parallel_groups: list[list[str]]
     total_estimated_time: float
     critical_path: list[str]
 
@@ -170,7 +172,7 @@ class ModuleDependencyManager:
             startup_order = list(nx.topological_sort(self.dependency_graph))
 
             # 过滤出需要自动启动的模块
-            startup_order = [mid for mid in startup_order]
+            startup_order = [mid for mid in startup_order
                            if mid in self.modules and self.modules[mid].auto_start]
 
             # 创建并行启动组
@@ -192,7 +194,7 @@ class ModuleDependencyManager:
                 critical_path=critical_path
             )
 
-            logger.info(f"📋 启动计划创建完成:")
+            logger.info("📋 启动计划创建完成:")
             logger.info(f"   - 启动顺序: {len(startup_order)} 个模块")
             logger.info(f"   - 并行组数: {len(parallel_groups)}")
             logger.info(f"   - 预估时间: {total_time:.1f}s")
@@ -260,7 +262,7 @@ class ModuleDependencyManager:
             # 记录启动历史
             self._record_startup_history(startup_results)
 
-            logger.info(f"✅ 启动计划执行完成:")
+            logger.info("✅ 启动计划执行完成:")
             logger.info(f"   - 成功: {len(startup_results['started_modules'])}")
             logger.info(f"   - 失败: {len(startup_results['failed_modules'])}")
             logger.info(f"   - 总时间: {startup_results['total_time']:.1f}s")
@@ -288,7 +290,7 @@ class ModuleDependencyManager:
             logger.error(f"模块未注册: {module_id}")
             return False
 
-        module_info = self.modules[module_id]
+        self.modules[module_id]
         result = await self._startup_single_module(module_id, config)
 
         return result['success']
@@ -327,7 +329,7 @@ class ModuleDependencyManager:
 
             shutdown_results['total_time'] = (datetime.now() - start_time).total_seconds()
 
-            logger.info(f"✅ 所有模块关闭完成")
+            logger.info("✅ 所有模块关闭完成")
             return shutdown_results
 
         except Exception as e:
@@ -395,7 +397,7 @@ class ModuleDependencyManager:
         }
 
     # 私有方法
-    def _create_parallel_groups(self, startup_order: list[str]) -> list[list[str]:
+    def _create_parallel_groups(self, startup_order: list[str]) -> list[list[str]]:
         """创建并行启动组"""
         groups = []
         current_group = []
@@ -450,7 +452,7 @@ class ModuleDependencyManager:
             # 计算最长路径
             longest_path = nx.dag_longest_path(self.dependency_graph)
             return longest_path if longest_path else []
-        except Exception as e:  # TODO
+        except Exception:  # TODO
             return []
 
     async def _startup_group_parallel(self, module_ids: list[str]) -> dict[str, Any]:

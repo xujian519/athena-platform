@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 集成提示词生成器 - 整合场景规则与现有提示词系统
 Integrated Prompt Generator - Integrate scenario rules with existing prompt system
@@ -10,7 +11,7 @@ Integrated Prompt Generator - Integrate scenario rules with existing prompt syst
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.legal_world_model.scenario_identifier_optimized import ScenarioContext
 from core.legal_world_model.scenario_rule_retriever_optimized import ScenarioRule

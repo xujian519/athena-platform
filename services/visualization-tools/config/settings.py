@@ -1,6 +1,6 @@
 # 配置管理
-import os
 from pydantic import BaseSettings
+
 
 class Settings(BaseSettings):
     service_name: str = "default"

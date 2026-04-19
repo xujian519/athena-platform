@@ -1,0 +1,289 @@
+# 生产环境配置
+server:
+  host: "0.0.0.0"
+  port: 8080
+  read_timeout: 30s
+  write_timeout: 30s
+  max_header_bytes: 1048576  # 1MB
+
+# 日志配置 - 生产模式
+logging:
+  level: "info"
+  format: "json"
+  output: "stdout"
+
+# Redis配置 - 生产环境
+redis:
+  host: "redis-cluster.production.svc.cluster.local"
+  port: 6379
+  password: "${REDIS_PASSWORD}"  # 从环境变量获取
+  db: 0
+  pool_size: 200
+  min_idle_conns: 20
+  max_retries: 3
+  dial_timeout: 5s
+  read_timeout: 3s
+  write_timeout: 3s
+
+# 认证配置 - 生产环境
+auth:
+  jwt_secret: "${JWT_SECRET}"  # 从环境变量获取
+  token_expire: 8h
+  refresh_expire: 168h  # 7 days
+  issuer: "athena-gateway-prod"
+  skip_paths:
+    - "/health"
+    - "/metrics"
+    - "/ready"
+  required_scopes:
+    - "read"
+    - "write"
+    - "admin"
+
+# 限流配置 - 生产环境严格
+limiter:
+  enabled: true
+  requests_per_minute: 1000
+  burst: 100
+  strategies:
+    - type: "ip"
+      limit: 100
+      match: ""
+    - type: "user"
+      limit: 50
+      match: ""
+    - type: "api_key"
+      limit: 200
+      match: "X-API-Key"
+  distributed_enabled: true
+  redis_key_prefix: "gateway:prod:limiter:"
+
+# 代理配置 - 生产环境
+proxy:
+  timeout: 30s
+  retry_attempts: 3
+  retry_delay: 1s
+  circuit_breaker:
+    enabled: true
+    failure_threshold: 5
+    recovery_timeout: 30s
+    success_threshold: 3
+    timeout: 60s
+  load_balancer:
+    strategy: "weighted"
+    nodes:
+      - url: "http://user-service-1:8001"
+        weight: 3
+        healthy: true
+      - url: "http://user-service-2:8001"
+        weight: 2
+        healthy: true
+      - url: "http://user-service-3:8001"
+        weight: 1
+        healthy: true
+  health_check:
+    enabled: true
+    path: "/health"
+    interval: 30s
+    timeout: 5s
+    unhealthy_threshold: 3
+    healthy_threshold: 2
+
+# 监控配置 - 生产环境
+monitoring:
+  prometheus:
+    enabled: true
+    path: "/metrics"
+    port: 9090
+  tracing:
+    enabled: true
+    provider: "jaeger"
+    jaeger_endpoint: "http://jaeger-production:14268/api/traces"
+    service_name: "athena-gateway-prod"
+    sample_rate: 0.1  # 生产环境10%采样
+  health_check:
+    enabled: true
+    path: "/health"
+    interval: 30s
+    timeout: 5s
+    unhealthy_threshold: 3
+    healthy_threshold: 2
+
+# 安全配置 - 生产环境严格
+security:
+  cors:
+    enabled: true
+    allowed_origins:
+      - "https://app.athena.com"
+      - "https://admin.athena.com"
+      - "https://api.athena.com"
+    allowed_methods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+      - "OPTIONS"
+    allowed_headers:
+      - "Authorization"
+      - "Content-Type"
+      - "X-API-Key"
+      - "X-Request-ID"
+    exposed_headers:
+      - "Content-Length"
+      - "X-Total-Count"
+      - "X-Request-ID"
+    allow_credentials: true
+    max_age: 12
+  csrf:
+    enabled: true
+    secret: "${CSRF_SECRET}"  # 从环境变量获取
+    cookie_name: "_csrf"
+    domain: ".athena.com"
+    path: "/"
+    max_age: 86400
+    secure: true
+    http_only: true
+  rate_limit:
+    enabled: true
+    limit: 1000
+  ip_whitelist:
+    enabled: true
+    ips:
+      - "10.0.0.0/8"
+      - "172.16.0.0/12"
+      - "192.168.0.0/16"
+
+# 服务配置 - 生产环境服务
+services:
+  - name: "user-service"
+    url: "http://user-service-production:8001"
+    health_check: "/health"
+    timeout: 30s
+    retries: 3
+    circuit_breaker:
+      enabled: true
+      failure_threshold: 5
+      recovery_timeout: 30s
+      success_threshold: 3
+      timeout: 60s
+    load_balancer:
+      strategy: "weighted"
+      nodes:
+        - url: "http://user-service-1.production.svc.cluster.local:8001"
+          weight: 3
+          healthy: true
+        - url: "http://user-service-2.production.svc.cluster.local:8001"
+          weight: 2
+          healthy: true
+        - url: "http://user-service-3.production.svc.cluster.local:8001"
+          weight: 1
+          healthy: true
+    metadata:
+      description: "用户管理服务 - 生产环境"
+      version: "2.1.0"
+      env: "production"
+      sla: "99.9%"
+  
+  - name: "order-service"
+    url: "http://order-service-production:8002"
+    health_check: "/health"
+    timeout: 30s
+    retries: 3
+    circuit_breaker:
+      enabled: true
+      failure_threshold: 5
+      recovery_timeout: 30s
+      success_threshold: 3
+      timeout: 60s
+    load_balancer:
+      strategy: "weighted"
+      nodes:
+        - url: "http://order-service-1.production.svc.cluster.local:8002"
+          weight: 3
+          healthy: true
+        - url: "http://order-service-2.production.svc.cluster.local:8002"
+          weight: 2
+          healthy: true
+    metadata:
+      description: "订单管理服务 - 生产环境"
+      version: "3.2.1"
+      env: "production"
+      sla: "99.9%"
+
+  - name: "payment-service"
+    url: "http://payment-service-production:8003"
+    health_check: "/health"
+    timeout: 60s
+    retries: 5
+    circuit_breaker:
+      enabled: true
+      failure_threshold: 3  # 支付服务更严格
+      recovery_timeout: 60s
+      success_threshold: 5
+      timeout: 120s
+    load_balancer:
+      strategy: "least_connections"
+      nodes:
+        - url: "http://payment-service-1.production.svc.cluster.local:8003"
+          weight: 2
+          healthy: true
+        - url: "http://payment-service-2.production.svc.cluster.local:8003"
+          weight: 1
+          healthy: true
+    metadata:
+      description: "支付服务 - 生产环境"
+      version: "1.8.3"
+      env: "production"
+      sla: "99.99%"
+
+  - name: "notification-service"
+    url: "http://notification-service-production:8004"
+    health_check: "/health"
+    timeout: 15s
+    retries: 2
+    circuit_breaker:
+      enabled: true
+      failure_threshold: 5
+      recovery_timeout: 30s
+      success_threshold: 3
+      timeout: 45s
+    load_balancer:
+      strategy: "round_robin"
+      nodes:
+        - url: "http://notification-service-1.production.svc.cluster.local:8004"
+          weight: 2
+          healthy: true
+        - url: "http://notification-service-2.production.svc.cluster.local:8004"
+          weight: 1
+          healthy: true
+    metadata:
+      description: "通知服务 - 生产环境"
+      version: "2.4.0"
+      env: "production"
+      sla: "99.5%"
+
+  - name: "analytics-service"
+    url: "http://analytics-service-production:8005"
+    health_check: "/health"
+    timeout: 45s
+    retries: 3
+    circuit_breaker:
+      enabled: true
+      failure_threshold: 8
+      recovery_timeout: 60s
+      success_threshold: 3
+      timeout: 90s
+    load_balancer:
+      strategy: "weighted"
+      nodes:
+        - url: "http://analytics-service-1.production.svc.cluster.local:8005"
+          weight: 3
+          healthy: true
+    metadata:
+      description: "分析服务 - 生产环境"
+      version: "1.2.7"
+      env: "production"
+      sla: "99.0%"
+
+# 环境配置
+environment: "production"

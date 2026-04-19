@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 统一专利智能服务
 Unified Patent Intelligence Service
@@ -7,22 +6,18 @@ Unified Patent Intelligence Service
 集成向量数据库(Qdrant)和知识图谱(Neo4j)，提供综合专利分析功能
 """
 
-import asyncio
-from core.async_main import async_main
 import json
-import logging
-from core.logging_config import setup_logging
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import requests
-from fastapi import BackgroundTasks, FastAPI, HTTPException, Query
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, HTTPException
 from neo4j import GraphDatabase
 from pydantic import BaseModel, Field
 
+from core.logging_config import setup_logging
+
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -50,12 +45,12 @@ class SearchRequest(BaseModel):
     query: str = Field(..., description='搜索查询')
     search_type: str = Field('hybrid', regex='^(vector|graph|hybrid)$', description='搜索类型')
     limit: int = Field(10, ge=1, le=100, description='结果数量限制')
-    filters: Optional[Dict[str, Any]] = Field(None, description='过滤条件')
+    filters: dict[str, Any] | None = Field(None, description='过滤条件')
 
 class SearchResponse(BaseModel):
     query: str
     search_type: str
-    results: List[Dict[str, Any]]
+    results: list[dict[str, Any]]
     execution_time: float
     vector_results: int | None = None
     graph_results: int | None = None
@@ -65,8 +60,8 @@ class PatentInsight(BaseModel):
     title: str
     abstract: str
     vector_similarity: float | None = None
-    graph_relationships: List[Dict[str, Any]] = []
-    insights: List[str] = []
+    graph_relationships: list[dict[str, Any]] = []
+    insights: list[str] = []
 
 @app.on_event('startup')
 async def startup_event():
@@ -141,7 +136,7 @@ async def health_check():
     if neo4j_driver:
         try:
             with neo4j_driver.session() as session:
-                result = session.run('RETURN 1')
+                session.run('RETURN 1')
                 health_status['services']['neo4j'] = {'status': 'healthy'}
         except (ConnectionError, OSError, TimeoutError):
             health_status['services']['neo4j'] = {'status': 'error'}
@@ -192,9 +187,9 @@ async def search_patents(request: SearchRequest):
 
     except Exception as e:
         logger.error(f"搜索失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Search failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Search failed: {str(e)}") from e
 
-async def vector_search(query: str, limit: int) -> List[Dict]:
+async def vector_search(query: str, limit: int) -> list[dict]:
     """向量搜索"""
     try:
         # 获取集合列表
@@ -254,7 +249,7 @@ async def vector_search(query: str, limit: int) -> List[Dict]:
         logger.error(f"向量搜索失败: {str(e)}")
         return []
 
-async def graph_search(query: str, limit: int) -> List[Dict]:
+async def graph_search(query: str, limit: int) -> list[dict]:
     """知识图谱搜索"""
     try:
         with neo4j_driver.session() as session:
@@ -310,7 +305,7 @@ async def graph_search(query: str, limit: int) -> List[Dict]:
         logger.error(f"知识图谱搜索失败: {str(e)}")
         return []
 
-def merge_search_results(vector_results: List[Dict], graph_results: List[Dict]) -> List[Dict]:
+def merge_search_results(vector_results: list[dict], graph_results: list[dict]) -> list[dict]:
     """合并搜索结果"""
     # 简单的合并策略，按相关性排序
     merged = []
@@ -372,13 +367,13 @@ async def get_patent_insights(patent_id: str):
 
     return insights
 
-async def find_similar_patents_vector(patent_id: str, limit: int = 10) -> List[Dict]:
+async def find_similar_patents_vector(patent_id: str, limit: int = 10) -> list[dict]:
     """在向量空间中查找相似专利"""
     # 这里需要实现具体的向量相似度查找逻辑
     # 暂时返回空列表
     return []
 
-async def get_patent_graph_insights(patent_id: str) -> Dict:
+async def get_patent_graph_insights(patent_id: str) -> dict:
     """获取专利在知识图谱中的洞察"""
     try:
         with neo4j_driver.session() as session:
@@ -421,7 +416,7 @@ async def get_patent_graph_insights(patent_id: str) -> Dict:
         logger.error(f"获取图洞察失败: {str(e)}")
         return {}
 
-def generate_combined_insights(insights: Dict) -> List[str]:
+def generate_combined_insights(insights: dict) -> list[str]:
     """生成综合洞察"""
     combined_insights = []
 
@@ -469,7 +464,7 @@ async def get_statistics():
                     vectors_count = coll_info.json().get('result', {}).get('vectors_count', 0)
                     total_vectors += vectors_count
                 except Exception as e:
-                logger.error(f"Error: {e}", exc_info=True)
+                    logger.error(f"Error: {e}", exc_info=True)
 
             stats['qdrant'] = {
                 'collections': len(collections),

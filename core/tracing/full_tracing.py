@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 全链路追踪系统
 
@@ -19,7 +20,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from functools import wraps
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

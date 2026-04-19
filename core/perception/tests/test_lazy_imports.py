@@ -1,26 +1,27 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 测试：重型依赖懒加载
 Test: Heavy Dependencies Lazy Loading
 """
 
-import pytest
 import sys
 from pathlib import Path
+
+import pytest
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.perception.lazy_imports import (
+    PIL,
     LazyLoader,
+    cv2,
+    cv2_extended,
     lazy_import,
     numpy,
-    cv2,
     torch,
     torchvision,
-    PIL,
-    cv2_extended,
 )
 
 

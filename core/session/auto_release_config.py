@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 服务自动释放配置管理器
 Service Auto-Release Configuration Manager
@@ -11,10 +11,10 @@ Service Auto-Release Configuration Manager
 创建时间: 2026-02-09
 """
 
-import os
 import logging
+import os
 from pathlib import Path
-from typing import Any, Dict, Optional, Union
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -67,8 +67,8 @@ class AutoReleaseConfig:
 
     def __init__(
         self,
-        config_file: Optional[Union[str, Path]] = None,
-        preset: Optional[str] = None
+        config_file: str | Path | None = None,
+        preset: str | None = None
     ):
         """
         初始化配置管理器
@@ -77,16 +77,16 @@ class AutoReleaseConfig:
             config_file: YAML配置文件路径
             preset: 预设配置名称（development/testing/production/long_running）
         """
-        self._config: Dict[str, Any] = {}
-        self._service_configs: Dict[str, Dict[str, Any]] = {}
+        self._config: dict[str, Any] = {}
+        self._service_configs: dict[str, dict[str, Any]] = {}
 
         # 加载配置
         self._load_config(config_file, preset)
 
     def _load_config(
         self,
-        config_file: Optional[Union[str, Path]],
-        preset: Optional[str]
+        config_file: str | Path | None,
+        preset: str | None
     ):
         """加载配置"""
         # 1. 从默认值开始
@@ -112,8 +112,8 @@ class AutoReleaseConfig:
 
     def _load_yaml_config(
         self,
-        config_file: Union[str, Path]
-    ) -> Optional[Dict[str, Any]]:
+        config_file: str | Path
+    ) -> dict[str, Any] | None:
         """从YAML文件加载配置"""
         try:
             import yaml
@@ -132,7 +132,7 @@ class AutoReleaseConfig:
             return None
 
         try:
-            with open(config_path, 'r', encoding='utf-8') as f:
+            with open(config_path, encoding='utf-8') as f:
                 return yaml.safe_load(f)
         except Exception as e:
             logger.error(f"❌ 加载配置文件失败: {e}")
@@ -211,7 +211,7 @@ class AutoReleaseConfig:
         """检查是否启用自动释放"""
         return self._config.get('enabled', True)
 
-    def get_idle_timeout(self, service_name: Optional[str] = None) -> int:
+    def get_idle_timeout(self, service_name: str | None = None) -> int:
         """
         获取空闲超时时间
 
@@ -249,7 +249,7 @@ class AutoReleaseConfig:
         # 默认行为
         return True
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """返回配置字典"""
         return {
             'global': self._config.copy(),
@@ -261,12 +261,12 @@ class AutoReleaseConfig:
 # === 全局实例 ===
 # =============================================================================
 
-_global_config: Optional[AutoReleaseConfig] = None
+_global_config: AutoReleaseConfig | None = None
 
 
 def get_auto_release_config(
-    config_file: Optional[Union[str, Path]] = None,
-    preset: Optional[str] = None,
+    config_file: str | Path | None = None,
+    preset: str | None = None,
     reload: bool = False
 ) -> AutoReleaseConfig:
     """
@@ -288,7 +288,7 @@ def get_auto_release_config(
     return _global_config
 
 
-def load_config_from_env() -> Dict[str, Any]:
+def load_config_from_env() -> dict[str, Any]:
     """
     从环境变量加载配置（便捷函数）
 

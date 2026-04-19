@@ -5,29 +5,25 @@
 """
 
 import asyncio
-from core.async_main import async_main
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import sys
 import os
-from pathlib import Path
+import sys
 from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 # 添加项目路径
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
 # 导入小诺的各个能力模块
-from xiaonuo_service_controller import XiaonuoServiceController
 from xiaonuo_development_assistant import XiaonuoDevAssistant
-from xiaonuo_life_assistant import XiaonuoLifeAssistant
 from xiaonuo_knowledge_base import XiaonuoKnowledgeBase
+from xiaonuo_life_assistant import XiaonuoLifeAssistant
+from xiaonuo_service_controller import XiaonuoServiceController
 
 # 导入优化后的规划器
-from core.cognition.agentic_task_planner import AgenticTaskPlanner
-from core.planning.unified_scheduler import UnifiedScheduler, register_unified_scheduler
-from core.planning.planning_monitor import monitor, start_monitoring
-
 # 导入决策服务
-from core.decision.decision_service import DecisionService
+from core.planning.planning_monitor import monitor
+
 
 class XiaonuoMain:
     """小诺主程序 - 爸爸的贴心小女儿"""
@@ -67,7 +63,7 @@ class XiaonuoMain:
             import json
             identity_path = Path(__file__).parent.parent.parent / "config" / "identity" / "xiaonuo.json"
             if identity_path.exists():
-                with open(identity_path, 'r', encoding='utf-8') as f:
+                with open(identity_path, encoding='utf-8') as f:
                     data = json.load(f)
                     # 格式化输出身份信息
                     identity_info = f"""
@@ -112,8 +108,8 @@ class XiaonuoMain:
                 print("✅ 任务规划器已加载")
 
             if self.unified_scheduler is None:
-                from core.planning.unified_scheduler import UnifiedScheduler
                 from core.planning.unified_planning_interface import get_planner_registry
+                from core.planning.unified_scheduler import UnifiedScheduler
                 self.unified_scheduler = UnifiedScheduler()
 
                 # 手动注册到规划器系统
@@ -286,16 +282,12 @@ class XiaonuoMain:
         if "启动" in request:
             if "athena" in request.lower():
                 await self.service_controller.start_service("athena_patent")
-            elif "yunpat" in request.lower() or "云熙" in request:
-                await self.service_controller.start_service("yunpat_management")
             else:
                 await self.service_controller.show_service_status()
 
         elif "停止" in request:
             if "athena" in request.lower():
                 await self.service_controller.stop_service("athena_patent")
-            elif "yunpat" in request.lower() or "云熙" in request:
-                await self.service_controller.stop_service("yunpat_management")
 
         elif "状态" in request:
             await self.service_controller.show_service_status()
@@ -363,7 +355,7 @@ class XiaonuoMain:
 
         # 知识库统计
         summary = self.knowledge_base.get_knowledge_summary()
-        print(f"\n📚 知识库统计:")
+        print("\n📚 知识库统计:")
         print(f"  • 总条目: {summary['total_items']}")
         print(f"  • 平均重要度: {summary['average_importance']}")
 
@@ -638,7 +630,7 @@ class XiaonuoMain:
             from core.planning.planning_monitor import get_monitor
             summary = get_monitor().get_performance_summary()
 
-            print(f"\n📈 统计信息:")
+            print("\n📈 统计信息:")
             print(f"  总规划数: {summary['statistics']['total_plans']}")
             print(f"  成功规划: {summary['statistics']['successful_plans']}")
             print(f"  失败规划: {summary['statistics']['failed_plans']}")
@@ -647,7 +639,7 @@ class XiaonuoMain:
 
             # 获取规划器性能
             if 'planner_performance' in summary:
-                print(f"\n🎯 规划器性能:")
+                print("\n🎯 规划器性能:")
                 for planner_id, stats in summary['planner_performance'].items():
                     print(f"\n  {planner_id}:")
                     print(f"    创建计划: {stats['plans_created']}个")
@@ -656,7 +648,7 @@ class XiaonuoMain:
 
             # 最近指标
             if 'recent_metrics' in summary:
-                print(f"\n📊 最近性能指标:")
+                print("\n📊 最近性能指标:")
                 for metric_name, metric_data in summary['recent_metrics'].items():
                     print(f"\n  {metric_name}:")
                     print(f"    当前值: {metric_data['current']:.2f}{metric_data['unit']}")
@@ -664,7 +656,7 @@ class XiaonuoMain:
 
             # 活跃告警
             if monitor.active_alerts:
-                print(f"\n🚨 活跃告警:")
+                print("\n🚨 活跃告警:")
                 for alert in monitor.active_alerts:
                     print(f"\n  {alert.severity.upper()}: {alert.message}")
                     if alert.suggestions:
@@ -810,7 +802,7 @@ class XiaonuoMain:
         prompt = f"产品功能优先级决策：{features_text}"
         result = await self.decision_service.quick_decision(prompt)
 
-        print(f"\n🎯 诺诺的建议:")
+        print("\n🎯 诺诺的建议:")
         print(result)
 
     async def _handle_operational_decision(self):
@@ -838,7 +830,7 @@ class XiaonuoMain:
         else:
             # 自定义决策
             result = await self.decision_service.quick_decision(choice)
-            print(f"\n🎯 诺诺的建议:")
+            print("\n🎯 诺诺的建议:")
             print(result)
 
     async def _resource_allocation_decision(self):
@@ -850,7 +842,7 @@ class XiaonuoMain:
         prompt = f"资源分配决策：预算{budget}，团队{teams}，时间{timeline}"
         result = await self.decision_service.quick_decision(prompt)
 
-        print(f"\n💡 资源分配建议:")
+        print("\n💡 资源分配建议:")
         print(result)
 
     async def _task_priority_decision(self):
@@ -874,7 +866,7 @@ class XiaonuoMain:
         prompt = f"任务优先级决策：{tasks_text}"
         result = await self.decision_service.quick_decision(prompt)
 
-        print(f"\n📋 优先级建议:")
+        print("\n📋 优先级建议:")
         print(result)
 
     async def _handle_strategic_decision(self):
@@ -894,7 +886,7 @@ class XiaonuoMain:
             return
 
         result = await self.decision_service.quick_decision(f"战略决策：{problem}")
-        print(f"\n🎯 战略建议:")
+        print("\n🎯 战略建议:")
         print(result)
 
     async def _handle_quick_decision(self):
@@ -908,7 +900,7 @@ class XiaonuoMain:
             return
 
         result = await self.decision_service.quick_decision(prompt)
-        print(f"\n🎯 诺诺的快速建议:")
+        print("\n🎯 诺诺的快速建议:")
         print(result)
 
     async def _show_decision_stats(self):
@@ -922,7 +914,7 @@ class XiaonuoMain:
             print(stats["message"])
             return
 
-        print(f"\n📈 统计信息:")
+        print("\n📈 统计信息:")
         print(f"   总决策数: {stats['total_decisions']}")
         print(f"   人类参与: {stats['human_involved']}")
         print(f"   自动决策: {stats['auto_decisions']}")
@@ -930,12 +922,12 @@ class XiaonuoMain:
         print(f"   平均置信度: {stats['average_confidence']}")
 
         if "categories" in stats:
-            print(f"\n📊 分类统计:")
+            print("\n📊 分类统计:")
             for category, count in stats["categories"].items():
                 print(f"   {category}: {count} 个")
 
         if "recent_decisions" in stats:
-            print(f"\n📝 最近决策:")
+            print("\n📝 最近决策:")
             for decision in stats["recent_decisions"]:
                 print(f"   {decision['timestamp']}: {decision['problem'][:50]}")
 
@@ -949,7 +941,7 @@ class XiaonuoMain:
         if any(keyword in request for keyword in decision_keywords):
             print("\n💡 诺诺检测到决策需求，自动启动决策服务")
             result = await self.decision_service.quick_decision(request)
-            print(f"\n🎯 诺诺的决策建议:")
+            print("\n🎯 诺诺的决策建议:")
             print(result)
             return
 
@@ -958,14 +950,14 @@ class XiaonuoMain:
 
         if knowledge:
             item = knowledge[0]
-            print(f"\n💡 诺诺想到相关的知识:")
+            print("\n💡 诺诺想到相关的知识:")
             print(f"   {item['title']}")
             print(f"   {item['content']}")
 
             # 获取相关知识
             related = self.knowledge_base.get_related_knowledge(item['id'])
             if related:
-                print(f"\n📚 相关内容:")
+                print("\n📚 相关内容:")
                 for rel in related[:2]:
                     print(f"   • {rel['title']}")
 

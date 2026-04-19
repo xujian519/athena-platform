@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 DeepSeekMath V2技术集成测试与性能评估系统
 Athena智能工作平台专利分析模块性能评估框架
@@ -10,31 +9,24 @@ Athena智能工作平台专利分析模块性能评估框架
 """
 
 # Numpy兼容性导入
-from config.numpy_compatibility import array, zeros, ones, random, mean, sum, dot
 import json
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
-import pickle
-import sqlite3
 import time
-from abc import ABC, abstractmethod
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-import seaborn as sns
-import torch
 from data_generator import DataGenerationConfig, PatentDataGenerator
 
 # 导入我们的模块
 from grpo_optimizer import GRPOConfig, PatentGRPOOptimizer, PatentPolicyNetwork
 from two_stage_learning import Stage1Config, Stage2Config, TwoStageLearningFramework
+
+from config.numpy_compatibility import random, sum
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -83,17 +75,17 @@ class PatentAnalysisEvaluator:
         test_path = Path(test_data_path)
 
         if test_path.suffix == '.json':
-            with open(test_path, 'r', encoding='utf-8') as f:
+            with open(test_path, encoding='utf-8') as f:
                 self.test_data = json.load(f)
         elif test_path.suffix == '.jsonl':
-            with open(test_path, 'r', encoding='utf-8') as f:
+            with open(test_path, encoding='utf-8') as f:
                 self.test_data = [json.loads(line) for line in f]
         else:
             raise ValueError(f"不支持的测试数据格式: {test_path.suffix}")
 
         logger.info(f"加载测试数据: {len(self.test_data)}条")
 
-    def evaluate_grpo_performance(self, config: GRPOConfig = None) -> Dict[str, Any]:
+    def evaluate_grpo_performance(self, config: GRPOConfig = None) -> dict[str, Any]:
         """评估GRPO性能"""
         logger.info('开始GRPO性能评估...')
 
@@ -108,7 +100,7 @@ class PatentAnalysisEvaluator:
 
         # 模拟训练数据
         train_states = [
-            {'patent_id': i, 'features': random((100)).tolist()}
+            {'patent_id': i, 'features': random(100).tolist()}
             for i in range(50)
         ]
         train_actions = [np.random.randint(0, 100) for _ in range(50)]
@@ -155,7 +147,7 @@ class PatentAnalysisEvaluator:
 
     def evaluate_two_stage_learning(
         self, stage1_data_path: str, stage2_data_path: str
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """评估两阶段学习性能"""
         logger.info('开始两阶段学习性能评估...')
 
@@ -219,7 +211,7 @@ class PatentAnalysisEvaluator:
         )
         return results
 
-    def evaluate_data_generation(self, patent_corpus: List[Dict]) -> Dict[str, Any]:
+    def evaluate_data_generation(self, patent_corpus: list[dict]) -> dict[str, Any]:
         """评估数据生成性能"""
         logger.info('开始数据生成性能评估...')
 
@@ -268,7 +260,7 @@ class PatentAnalysisEvaluator:
         )
         return eval_results
 
-    def evaluate_inference_performance(self, model_path: str = None) -> Dict[str, Any]:
+    def evaluate_inference_performance(self, model_path: str = None) -> dict[str, Any]:
         """评估推理性能"""
         logger.info('开始推理性能评估...')
 
@@ -281,7 +273,7 @@ class PatentAnalysisEvaluator:
         response_times = []
         accuracy_scores = []
 
-        for i, sample in enumerate(test_samples):
+        for _i, sample in enumerate(test_samples):
             # 模拟推理时间
             start_time = time.time()
             time.sleep(0.01)  # 模拟计算延迟
@@ -411,7 +403,7 @@ class PatentAnalysisEvaluator:
 
         return overall_score
 
-    def _generate_text_report(self, report_data: Dict) -> str:
+    def _generate_text_report(self, report_data: dict) -> str:
         """生成文本格式报告"""
         report = f"""
 DeepSeekMath V2技术集成性能评估报告
@@ -472,7 +464,7 @@ DeepSeekMath V2技术集成性能评估报告
         else:
             return '需要改进 (D)'
 
-    def _generate_recommendations(self, report_data: Dict) -> str:
+    def _generate_recommendations(self, report_data: dict) -> str:
         """生成优化建议"""
         recommendations = []
 
@@ -498,7 +490,7 @@ DeepSeekMath V2技术集成性能评估报告
 
         return "\n".join(recommendations) if recommendations else '- 当前配置表现良好，继续保持'
 
-    def _generate_performance_charts(self, report_data: Dict, output_path: Path) -> Any:
+    def _generate_performance_charts(self, report_data: dict, output_path: Path) -> Any:
         """生成性能图表"""
         try:
             # 创建图表目录
@@ -576,7 +568,7 @@ class ComprehensiveEvaluator:
         test_data_path: str,
         patent_corpus_path: str = None,
         output_dir: str = './comprehensive_evaluation',
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """运行综合评估"""
         logger.info('开始DeepSeekMath V2技术综合评估...')
 
@@ -587,7 +579,7 @@ class ComprehensiveEvaluator:
         # 加载专利语料库
         patent_corpus = []
         if patent_corpus_path:
-            with open(patent_corpus_path, 'r', encoding='utf-8') as f:
+            with open(patent_corpus_path, encoding='utf-8') as f:
                 patent_corpus = json.load(f)
 
         # 执行各项评估
@@ -647,7 +639,7 @@ class ComprehensiveEvaluator:
         with open(results_path, 'w', encoding='utf-8') as f:
             json.dump(results, f, indent=2, ensure_ascii=False)
 
-        logger.info(f"综合评估完成!")
+        logger.info("综合评估完成!")
         logger.info(f"总体性能评分: {results['overall_performance']:.3f}")
         logger.info(f"评估耗时: {evaluation_time:.2f}秒")
         logger.info(f"报告路径: {report_path}")

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 异步场景规则检索器
 Async Scenario Rule Retriever
@@ -18,7 +19,7 @@ from collections import OrderedDict
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -368,7 +369,7 @@ class AsyncScenarioRuleRetriever:
         return await asyncio.gather(*tasks)
 
     async def preload_common_rules_async(
-        self, domains: set["key"] = None, force: bool = False
+        self, domains: set[str] = None, force: bool = False
     ) -> dict[str, Any]:
         """
         异步预加载常用规则

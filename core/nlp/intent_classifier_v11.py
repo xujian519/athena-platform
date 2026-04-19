@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 意图识别模型V11分类器
 Intent Recognition Model V11 Classifier
@@ -10,7 +11,7 @@ import json
 import logging
 import pickle
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

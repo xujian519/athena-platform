@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 工作文件夹整理工具
 Organize Work Folder Tool
@@ -7,12 +6,12 @@ Organize Work Folder Tool
 自动整理'/Users/xujian/工作'文件夹中的文件和目录
 """
 
-import os
-import shutil
-from pathlib import Path
-import re
-from datetime import datetime
 import json
+import re
+import shutil
+from datetime import datetime
+from pathlib import Path
+
 
 class WorkFolderOrganizer:
     """工作文件夹整理器"""
@@ -66,7 +65,7 @@ class WorkFolderOrganizer:
 
     def classify_folder(self, folder_name):
         """分类文件夹"""
-        folder_name_lower = folder_name.lower()
+        folder_name.lower()
 
         # 直接匹配
         for target_folder, keywords in self.organized_folders.items():
@@ -188,9 +187,9 @@ class WorkFolderOrganizer:
         logs = []
         if log_file.exists():
             try:
-                with open(log_file, 'r', encoding='utf-8') as f:
+                with open(log_file, encoding='utf-8') as f:
                     logs = json.load(f)
-            except:
+            except Exception:
                 logs = []
 
         logs.append(log_entry)

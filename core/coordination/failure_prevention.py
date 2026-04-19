@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 失败模式防护系统 - 系统性防护多智能体常见失败模式
 Failure Prevention System - Systematic Prevention of Multi-Agent Failure Modes
@@ -19,9 +20,9 @@ import contextlib
 import logging
 from collections import deque
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from core.logging_config import setup_logging
 

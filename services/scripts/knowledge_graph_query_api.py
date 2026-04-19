@@ -1,24 +1,21 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 知识图谱查询API服务
 作者：小娜
 日期：2025-12-07
 """
 
-import logging
-from core.async_main import async_main
-from core.logging_config import setup_logging
 import os
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-import neo4j
 import uvicorn
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import JSONResponse
 from neo4j import GraphDatabase
 from pydantic import BaseModel
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -57,7 +54,7 @@ class KnowledgeGraphService:
         if self.driver:
             self.driver.close()
 
-    def execute_query(self, query: str, parameters: Dict = None) -> List[Dict]:
+    def execute_query(self, query: str, parameters: dict = None) -> list[dict]:
         """执行查询"""
         try:
             with self.driver.session() as session:
@@ -74,13 +71,13 @@ kg_service = KnowledgeGraphService()
 class QueryRequest(BaseModel):
     """查询请求模型"""
     query: str
-    parameters: Optional[Dict[str, Any]] = {}
+    parameters: dict[str, Any] | None = {}
 
 class NodeResponse(BaseModel):
     """节点响应模型"""
     id: str
-    labels: List[str]
-    properties: Dict[str, Any]
+    labels: list[str]
+    properties: dict[str, Any]
 
 class RelationshipResponse(BaseModel):
     """关系响应模型"""
@@ -88,12 +85,12 @@ class RelationshipResponse(BaseModel):
     type: str
     start_node: str
     end_node: str
-    properties: Dict[str, Any]
+    properties: dict[str, Any]
 
 class GraphResponse(BaseModel):
     """图响应模型"""
-    nodes: List[NodeResponse]
-    relationships: List[RelationshipResponse]
+    nodes: list[NodeResponse]
+    relationships: list[RelationshipResponse]
 
 # API路由
 @app.on_event('shutdown')
@@ -166,7 +163,7 @@ async def get_statistics():
 
     except Exception as e:
         logger.error(f"获取统计信息失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/query')
 async def execute_query(request: QueryRequest):
@@ -186,13 +183,13 @@ async def execute_query(request: QueryRequest):
 
     except Exception as e:
         logger.error(f"查询执行失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/search/nodes')
 async def search_nodes(
-    label: Optional[str] = Query(None, description='节点标签'),
-    property_key: Optional[str] = Query(None, description='属性键'),
-    property_value: Optional[str] = Query(None, description='属性值'),
+    label: str | None = Query(None, description='节点标签'),
+    property_key: str | None = Query(None, description='属性键'),
+    property_value: str | None = Query(None, description='属性值'),
     limit: int = Query(10, le=100, description='返回数量限制')
 ):
     """搜索节点"""
@@ -230,7 +227,7 @@ async def search_nodes(
 
     except Exception as e:
         logger.error(f"搜索节点失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/search/path')
 async def find_path(
@@ -277,7 +274,7 @@ async def find_path(
 
     except Exception as e:
         logger.error(f"查找路径失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/memory/entities')
 async def get_memory_entities():
@@ -304,7 +301,7 @@ async def get_memory_entities():
 
     except Exception as e:
         logger.error(f"获取记忆实体失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/memory/relations')
 async def get_memory_relations():
@@ -328,7 +325,7 @@ async def get_memory_relations():
 
     except Exception as e:
         logger.error(f"获取记忆关系失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 if __name__ == '__main__':
     uvicorn.run(

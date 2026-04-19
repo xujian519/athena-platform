@@ -1,3 +1,4 @@
+from __future__ import annotations
 # pyright: ignore
 # !/usr/bin/env python3
 """
@@ -16,7 +17,7 @@ import json
 import logging
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 import requests
 
@@ -113,6 +114,8 @@ class OllamaNLPIntegration:
     async def _load_available_models(self):
         """加载可用模型"""
         try:
+            import requests as req
+            response = req.get(f"{self.base_url}/api/tags", timeout=5)
             if response.status_code == 200:
                 data = response.json()
                 self.available_models = [model["name"] for model in data.get("models", [])]
@@ -120,8 +123,10 @@ class OllamaNLPIntegration:
             else:
                 self.available_models = []
                 logger.warning("⚠️ 无法获取可用模型列表")
-        except (json.JSONDecodeError, TypeError, ValueError):
+        except (json.JSONDecodeError, TypeError, ValueError) as e:
             logger.error(f"捕获(json.JSONDecodeError, TypeError, ValueError)异常: {e}", exc_info=True)
+        except Exception as e:
+            logger.warning(f"⚠️ 无法连接Ollama服务: {e}")
 
     async def analyze_patent(self, patent_text: str, analysis_type: str = "full") -> dict[str, Any]:
         """专利分析"""

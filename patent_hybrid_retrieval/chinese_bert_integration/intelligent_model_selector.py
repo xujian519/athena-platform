@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 智能模型选择器
 Intelligent Model Selector
@@ -9,8 +8,7 @@ Intelligent Model Selector
 
 import logging
 import re
-from collections import Counter
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 import jieba
 from model_manager import ChineseBERTModelManager
@@ -96,7 +94,7 @@ class IntelligentModelSelector:
             }
         }
 
-    def analyze_query(self, query: str) -> Dict[str, Any]:
+    def analyze_query(self, query: str) -> dict[str, Any]:
         """分析查询特征
 
         Args:
@@ -166,9 +164,9 @@ class IntelligentModelSelector:
     def select_model(
         self,
         query: str,
-        preferred_models: Optional[List[str] = None,
+        preferred_models: list[str] | None = None,
         speed_preference: str = 'medium'
-    ) -> Tuple[str, Dict[str, Any]]:
+    ) -> tuple[str, dict[str, Any]]:
         """智能选择最适合的模型
 
         Args:
@@ -243,7 +241,7 @@ class IntelligentModelSelector:
         self,
         query: str,
         max_models: int = 3
-    ) -> List[Tuple[str, float, str]]:
+    ) -> list[tuple[str, float, str]]:
         """选择多个模型用于集成
 
         Args:
@@ -259,7 +257,7 @@ class IntelligentModelSelector:
         model_scores = {}
 
         # 领域匹配评分
-        for domain, config in self.keyword_patterns.items():
+        for domain, _config in self.keyword_patterns.items():
             score = analysis['domain_scores'][domain]['score']
             if score > 0:
                 domain_models = {
@@ -312,7 +310,7 @@ class IntelligentModelSelector:
 
         return selected
 
-    def explain_selection(self, query: str) -> Dict[str, Any]:
+    def explain_selection(self, query: str) -> dict[str, Any]:
         """解释模型选择原因
 
         Args:
@@ -390,12 +388,12 @@ def test_intelligent_selector():
             # 显示分析结果
             if 'analysis' in reason:
                 analysis = reason['analysis']
-                logger.info(f"\n   查询分析:")
+                logger.info("\n   查询分析:")
                 logger.info(f"   - 长度: {analysis['length']} 字符")
                 logger.info(f"   - 词汇数: {analysis['term_count']}")
                 logger.info(f"   - 复杂度: {analysis['complexity']}")
 
-                logger.info(f"\n   领域评分:")
+                logger.info("\n   领域评分:")
                 for domain, score_info in analysis['domain_scores'].items():
                     if score_info['score'] > 0:
                         logger.info(f"   - {domain}: {score_info['score']:.2f}")
@@ -405,7 +403,7 @@ def test_intelligent_selector():
             # 集成模型选择
             ensemble_models = selector.select_models_for_ensemble(test_case['query'], max_models=3)
             if ensemble_models:
-                logger.info(f"\n   推荐的集成模型:")
+                logger.info("\n   推荐的集成模型:")
                 for model, weight, reason in ensemble_models:
                     logger.info(f"   - {model}: 权重 {weight:.3f} ({reason})")
 

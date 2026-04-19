@@ -1,0 +1,696 @@
+# 专利代理类型配置文件
+# Patent Agent Types Configuration
+#
+# 定义4种专利领域特定代理类型的配置
+#
+# 版本: v1.0.0
+# 创建日期: 2026-04-05
+# 作者: Agent-3 (domain-adapter-tester)
+
+# ========== 专利代理类型定义 ==========
+
+patent_agent_types:
+  # ----- 专利分析师 -----
+  patent-analyst:
+    # 基本信息
+    name: "专利分析师"
+    description: "深度分析专利技术方案和创新点"
+    version: "1.0.0"
+    author: "Athena Team"
+
+    # 模型配置
+    model:
+      # 使用的LLM模型 (haiku/sonnet/opus)
+      # haiku: 快速模型 (Claude 3.5 Haiku)
+      # sonnet: 任务模型 (Claude 3.5 Sonnet)
+      # opus: 主模型 (Claude 3.5 Opus)
+      primary: "sonnet"
+      fallback: "haiku"
+
+    # 工具配置
+    tools:
+      # 核心工具 - 必须实现
+      required:
+        - name: "patent-search"
+          description: "专利检索和获取"
+          version: "1.0.0"
+          priority: "P0"
+          input_schema:
+            type: "object"
+            properties:
+              patent_number:
+                type: "string"
+                description: "专利号"
+              source:
+                type: "string"
+                enum: ["local", "online", "all"]
+                description: "数据源"
+          output_schema:
+            type: "object"
+            properties:
+              patent_data:
+                type: "object"
+                description: "专利文档数据"
+
+        - name: "patent-analysis"
+          description: "技术方案分析"
+          version: "1.0.0"
+          priority: "P0"
+          input_schema:
+            type: "object"
+            properties:
+              patent_data:
+                type: "object"
+                description: "专利文档数据"
+              analysis_type:
+                type: "string"
+                enum: ["technical", "innovation", "comparative"]
+                description: "分析类型"
+          output_schema:
+            type: "object"
+            properties:
+              analysis_result:
+                type: "object"
+                description: "分析结果"
+
+        - name: "knowledge-graph-query"
+          description: "知识图谱查询"
+          version: "1.0.0"
+          priority: "P0"
+          input_schema:
+            type: "object"
+            properties:
+              query:
+                type: "string"
+                description: "查询语句"
+              query_type:
+                type: "string"
+                enum: ["cypher", "natural"]
+                description: "查询类型"
+          output_schema:
+            type: "object"
+            properties:
+              nodes:
+                type: "array"
+                description: "节点集合"
+              relationships:
+                type: "array"
+                description: "关系集合"
+
+        - name: "embedding-search"
+          description: "向量相似度检索"
+          version: "1.0.0"
+          priority: "P0"
+          input_schema:
+            type: "object"
+            properties:
+              query_vector:
+                type: "array"
+                description: "查询向量"
+              top_k:
+                type: "integer"
+                default: 10
+                description: "返回结果数"
+          output_schema:
+            type: "object"
+            properties:
+              results:
+                type: "array"
+                description: "相似度检索结果"
+
+      # 扩展工具 - 建议实现
+      optional:
+        - name: "patent-compare"
+          description: "专利对比分析"
+          version: "1.0.0"
+          priority: "P1"
+
+        - name: "innovation-assess"
+          description: "创新点评估"
+          version: "1.0.0"
+          priority: "P1"
+
+    # 能力配置
+    capabilities:
+      - name: "patent-technical-analysis"
+        description: "专利技术方案分析"
+        complexity: "high"
+        reliability: 0.9
+
+      - name: "patent-innovation-assessment"
+        description: "创新点评估"
+        complexity: "high"
+        reliability: 0.85
+
+      - name: "patent-comparative-analysis"
+        description: "专利对比分析"
+        complexity: "high"
+        reliability: 0.85
+
+    # 工作流配置
+    workflows:
+      - name: "patent-analysis-workflow"
+        description: "专利分析完整工作流"
+        steps:
+          - step: 1
+            name: "专利检索"
+            tool: "patent-search"
+            parallel: false
+          - step: 2
+            name: "技术方案分析"
+            tool: "patent-analysis"
+            parallel: false
+          - step: 3
+            name: "创新点识别"
+            tool: "knowledge-graph-query"
+            parallel: false
+          - step: 4
+            name: "对比分析"
+            tool: "patent-compare"
+            parallel: false
+          - step: 5
+            name: "报告生成"
+            tool: "report-generator"
+            parallel: false
+
+    # 性能配置
+    performance:
+      max_execution_time: 120  # 最大执行时间 (秒)
+      max_tool_calls: 20      # 最大工具调用次数
+      max_retries: 3         # 最大重试次数
+
+  # ----- 专利检索专家 -----
+  patent-searcher:
+    # 基本信息
+    name: "专利检索专家"
+    description: "执行专利检索和筛选"
+    version: "1.0.0"
+    author: "Athena Team"
+
+    # 模型配置
+    model:
+      primary: "haiku"
+      fallback: "sonnet"
+
+    # 工具配置
+    tools:
+      required:
+        - name: "patent-search"
+          description: "专利检索"
+          version: "1.0.0"
+          priority: "P0"
+
+        - name: "patent-filter"
+          description: "专利筛选"
+          version: "1.0.0"
+          priority: "P0"
+          input_schema:
+            type: "object"
+            properties:
+              patents:
+                type: "array"
+                description: "专利列表"
+              filters:
+                type: "object"
+                properties:
+                  date_range:
+                    type: "object"
+                    properties:
+                      start:
+                        type: "string"
+                      end:
+                        type: "string"
+                  country:
+                    type: "array"
+                    items:
+                      type: "string"
+                  technology_field:
+                    type: "string"
+                  relevance_threshold:
+                    type: "number"
+          output_schema:
+            type: "object"
+            properties:
+              filtered_patents:
+                type: "array"
+                description: "筛选后的专利列表"
+
+        - name: "patent-export"
+          description: "专利导出"
+          version: "1.0.0"
+          priority: "P0"
+          input_schema:
+            type: "object"
+            properties:
+              patents:
+                type: "array"
+                description: "专利列表"
+              format:
+                type: "string"
+                enum: ["csv", "json", "xml", "pdf"]
+                description: "导出格式"
+              fields:
+                type: "array"
+                items:
+                  type: "string"
+                description: "导出字段"
+          output_schema:
+            type: "object"
+            properties:
+              export_file:
+                type: "string"
+                description: "导出文件路径"
+
+      optional:
+        - name: "search-strategy-builder"
+          description: "检索策略构建"
+          version: "1.0.0"
+          priority: "P0"
+
+        - name: "result-ranker"
+          description: "结果排序"
+          version: "1.0.0"
+          priority: "P0"
+
+        - name: "result-deduplicator"
+          description: "结果去重"
+          version: "1.0.0"
+          priority: "P0"
+
+    # 能力配置
+    capabilities:
+      - name: "patent-bibliographic-search"
+        description: "专利书目检索"
+        complexity: "medium"
+        reliability: 0.95
+
+      - name: "patent-semantic-search"
+        description: "专利语义检索"
+        complexity: "medium"
+        reliability: 0.9
+
+      - name: "patent-facet-search"
+        description: "专利分面检索"
+        complexity: "medium"
+        reliability: 0.9
+
+    # 工作流配置
+    workflows:
+      - name: "patent-search-workflow"
+        description: "专利检索完整工作流"
+        steps:
+          - step: 1
+            name: "检索策略构建"
+            tool: "search-strategy-builder"
+            parallel: false
+          - step: 2
+            name: "多源检索执行"
+            tool: "patent-search"
+            parallel: true
+            data_sources: ["local", "online"]
+          - step: 3
+            name: "结果去重和排序"
+            tool: "result-ranker"
+            parallel: false
+          - step: 4
+            name: "相关性过滤"
+            tool: "patent-filter"
+            parallel: false
+          - step: 5
+            name: "结果导出"
+            tool: "patent-export"
+            parallel: false
+
+    # 性能配置
+    performance:
+      max_execution_time: 180  # 最大执行时间 (秒)
+      max_tool_calls: 30
+      max_retries: 3
+      run_in_background: true  # 支持后台运行
+
+  # ----- 法律研究员 -----
+  legal-researcher:
+    # 基本信息
+    name: "法律研究员"
+    description: "研究专利法律法规和案例"
+    version: "1.0.0"
+    author: "Athena Team"
+
+    # 模型配置
+    model:
+      primary: "opus"
+      fallback: "sonnet"
+
+    # 工具配置
+    tools:
+      required:
+        - name: "legal-knowledge-query"
+          description: "法律知识查询"
+          version: "1.0.0"
+          priority: "P0"
+          input_schema:
+            type: "object"
+            properties:
+              query:
+                type: "string"
+                description: "法律查询"
+              query_type:
+                type: "string"
+                enum: ["statute", "case", "interpretation"]
+                description: "查询类型"
+          output_schema:
+            type: "object"
+            properties:
+              knowledge:
+                type: "object"
+                description: "法律知识"
+
+        - name: "case-law-search"
+          description: "案例法检索"
+          version: "1.0.0"
+          priority: "P0"
+          input_schema:
+            type: "object"
+            properties:
+              query:
+                type: "string"
+                description: "案例查询"
+              case_type:
+                type: "string"
+                enum: ["infringement", "invalidation", "administrative"]
+                description: "案例类型"
+              time_range:
+                type: "object"
+                properties:
+                  start:
+                    type: "string"
+                  end:
+                    type: "string"
+          output_schema:
+            type: "object"
+            properties:
+              cases:
+                type: "array"
+                description: "案例列表"
+
+        - name: "statute-lookup"
+          description: "法规查询"
+          version: "1.0.0"
+          priority: "P0"
+          input_schema:
+            type: "object"
+            properties:
+              statute_id:
+                type: "string"
+                description: "法规ID"
+              article:
+                type: "string"
+                description: "条款"
+          output_schema:
+            type: "object"
+            properties:
+              statute_text:
+                type: "string"
+                description: "法规文本"
+
+      optional:
+        - name: "legal-reasoning"
+          description: "法律推理"
+          version: "1.0.0"
+          priority: "P0"
+
+        - name: "case-summarizer"
+          description: "案例摘要"
+          version: "1.0.0"
+          priority: "P1"
+
+        - name: "trend-analyzer"
+          description: "法律趋势分析"
+          version: "1.0.0"
+          priority: "P1"
+
+    # 能力配置
+    capabilities:
+      - name: "legal-knowledge-retrieval"
+        description: "法律知识检索"
+        complexity: "high"
+        reliability: 0.9
+
+      - name: "case-law-analysis"
+        description: "案例法分析"
+        complexity: "high"
+        reliability: 0.85
+
+      - name: "statute-interpretation"
+        description: "法规解释"
+        complexity: "high"
+        reliability: 0.9
+
+    # 工作流配置
+    workflows:
+      - name: "legal-research-workflow"
+        description: "法律研究完整工作流"
+        steps:
+          - step: 1
+            name: "法律问题解析"
+            tool: "legal-query-parser"
+            parallel: false
+          - step: 2
+            name: "法规检索"
+            tool: "statute-lookup"
+            parallel: false
+          - step: 3
+            name: "案例检索"
+            tool: "case-law-search"
+            parallel: false
+          - step: 4
+            name: "法理分析"
+            tool: "legal-reasoning"
+            parallel: false
+          - step: 5
+            name: "法律意见生成"
+            tool: "opinion-generator"
+            parallel: false
+
+    # 性能配置
+    performance:
+      max_execution_time: 180  # 最大执行时间 (秒)
+      max_tool_calls: 25
+      max_retries: 3
+
+  # ----- 专利撰写专家 -----
+  patent-drafter:
+    # 基本信息
+    name: "专利撰写专家"
+    description: "撰写专利申请文件"
+    version: "1.0.0"
+    author: "Athena Team"
+
+    # 模型配置
+    model:
+      primary: "opus"
+      fallback: "sonnet"
+
+    # 工具配置
+    tools:
+      required:
+        - name: "patent-drafting"
+          description: "专利撰写"
+          version: "1.0.0"
+          priority: "P0"
+          input_schema:
+            type: "object"
+            properties:
+              technology_description:
+                type: "string"
+                description: "技术方案描述"
+              drafting_type:
+                type: "string"
+                enum: ["full", "claims", "specification"]
+                description: "撰写类型"
+              patent_type:
+                type: "string"
+                enum: ["invention", "utility", "design"]
+                description: "专利类型"
+          output_schema:
+            type: "object"
+            properties:
+              drafted_content:
+                type: "string"
+                description: "撰写的内容"
+
+        - name: "patent-review"
+          description: "专利审查"
+          version: "1.0.0"
+          priority: "P0"
+          input_schema:
+            type: "object"
+            properties:
+              patent_content:
+                type: "string"
+                description: "专利内容"
+              review_type:
+                type: "string"
+                enum: ["formal", "substantive", "full"]
+                description: "审查类型"
+          output_schema:
+            type: "object"
+            properties:
+              review_result:
+                type: "object"
+                description: "审查结果"
+
+        - name: "patent-formatting"
+          description: "专利格式化"
+          version: "1.0.0"
+          priority: "P0"
+          input_schema:
+            type: "object"
+            properties:
+              patent_content:
+                type: "string"
+                description: "专利内容"
+              format_type:
+                type: "string"
+                enum: ["cnipa", "uspto", "epo"]
+                description: "格式类型"
+          output_schema:
+            type: "object"
+            properties:
+              formatted_content:
+                type: "string"
+                description: "格式化后的内容"
+
+      optional:
+        - name: "claims-analyzer"
+          description: "权利要求分析"
+          version: "1.0.0"
+          priority: "P1"
+
+        - name: "specification-builder"
+          description: "说明书构建"
+          version: "1.0.0"
+          priority: "P1"
+
+        - name: "drawing-generator"
+          description: "附图生成"
+          version: "1.0.0"
+          priority: "P2"
+
+    # 能力配置
+    capabilities:
+      - name: "patent-claims-drafting"
+        description: "权利要求撰写"
+        complexity: "high"
+        reliability: 0.85
+
+      - name: "patent-description-writing"
+        description: "说明书撰写"
+        complexity: "high"
+        reliability: 0.85
+
+      - name: "patent-specification-review"
+        description: "规格审查"
+        complexity: "medium"
+        reliability: 0.9
+
+    # 工作流配置
+    workflows:
+      - name: "patent-drafting-workflow"
+        description: "专利撰写完整工作流"
+        steps:
+          - step: 1
+            name: "技术方案分析"
+            tool: "patent-analysis"
+            parallel: false
+          - step: 2
+            name: "权利要求构建"
+            tool: "claims-analyzer"
+            parallel: false
+          - step: 3
+            name: "说明书撰写"
+            tool: "specification-builder"
+            parallel: false
+          - step: 4
+            name: "附图生成"
+            tool: "drawing-generator"
+            parallel: false
+          - step: 5
+            name: "格式化输出"
+            tool: "patent-formatting"
+            parallel: false
+          - step: 6
+            name: "内部审查"
+            tool: "patent-review"
+            parallel: false
+
+    # 性能配置
+    performance:
+      max_execution_time: 300  # 最大执行时间 (秒)
+      max_tool_calls: 30
+      max_retries: 3
+
+# ========== 全局配置 ==========
+
+global:
+  # 工具映射 - 将工具名称映射到实际实现
+  tool_mappings:
+    # 专利分析工具
+    patent-search: "patent_hybrid_retrieval.hybrid_retrieval_system"
+    patent-analysis: "core.cognition.xiaona_patent_analyzer"
+    knowledge-graph-query: "core.patent.knowledge_graph"
+    embedding-search: "core.embedding.unified_embedding_service"
+    patent-compare: "core.analysis.patent_correlation_analyzer"
+    innovation-assess: "core.cognition.xiaona_patent_expert_system"
+
+    # 专利检索工具
+    search-strategy-builder: "core.tools.search_strategy_builder"
+    patent-filter: "core.tools.patent_filter"
+    patent-export: "core.tools.patent_export"
+    result-ranker: "core.tools.result_ranker"
+    result-deduplicator: "core.tools.result_deduplicator"
+
+    # 法律研究工具
+    legal-knowledge-query: "core.legal_world_model"
+    case-law-search: "core.legal_case_database"
+    statute-lookup: "core.legal_statute_database"
+    legal-reasoning: "core.legal_reasoning_engine"
+    case-summarizer: "core.legal_case_summarizer"
+    trend-analyzer: "core.legal_trend_analyzer"
+
+    # 专利撰写工具
+    patent-drafting: "core.cognition.xiaona_patent_drafter"
+    claims-analyzer: "core.patent.claims_analyzer"
+    specification-builder: "core.patent.specification_builder"
+    drawing-generator: "core.patent.drawing_generator"
+    patent-review: "core.patent.patent_reviewer"
+    patent-formatting: "core.patent.patent_formatter"
+    report-generator: "core.tools.report_generator"
+
+  # 模型映射 - 将模型名称映射到实际LLM
+  model_mappings:
+    haiku: "claude-3-5-haiku"
+    sonnet: "claude-3-5-sonnet"
+    opus: "claude-3-5-opus"
+
+  # 默认配置
+  defaults:
+    # 默认超时时间 (秒)
+    timeout: 60
+
+    # 默认重试次数
+    max_retries: 3
+
+    # 默认并发限制
+    max_concurrent_tasks: 10
+
+    # 默认缓存时间 (秒)
+    cache_ttl: 3600
+
+# ========== 版本信息 ==========
+
+version: "1.0.0"
+created_at: "2026-04-05T00:00:00Z"
+updated_at: "2026-04-05T00:00:00Z"
+author: "Agent-3 (domain-adapter-tester)"
+description: "Athena平台专利代理类型配置文件"

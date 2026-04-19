@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 联邦记忆系统
 支持多智能体之间的记忆共享、整合和协同学习

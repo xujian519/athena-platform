@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 意图识别服务 - 基础引擎抽象类
 
@@ -13,7 +14,7 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from enum import Enum
 from types import TracebackType
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field
 

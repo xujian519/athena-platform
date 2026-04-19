@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 知识图谱增强模块 - Knowledge Graph Enhancement
 
@@ -15,7 +16,7 @@ import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

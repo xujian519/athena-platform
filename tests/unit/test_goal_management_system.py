@@ -1,23 +1,28 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 目标管理系统单元测试
 Unit Tests for Goal Management System
 """
 
 import asyncio
-import unittest
-from unittest.mock import Mock, patch, AsyncMock
-from datetime import datetime, timedelta
 
 # 添加项目路径
 import sys
+import unittest
+from datetime import datetime, timedelta
+
 sys.path.append('/Users/xujian/Athena工作平台')
 
 from core.management.goal_management_system import (
-    GoalManagementSystem, Goal, SubGoal, ProgressReport, GoalStatus, GoalPriority, ProgressMetric
+    Goal,
+    GoalManagementSystem,
+    GoalPriority,
+    GoalStatus,
+    ProgressMetric,
+    ProgressReport,
+    SubGoal,
 )
-from tests.test_framework import test_environment, test_data_generator
+
 
 class TestGoalManagementSystem(unittest.TestCase):
     """目标管理系统测试类"""
@@ -151,7 +156,7 @@ class TestGoalManagementSystem(unittest.TestCase):
         }
 
         goal = self.goal_manager.create_goal(goal_definition)
-        original_subgoals_count = len(goal.subgoals)
+        len(goal.subgoals)
 
         # 完成第一个子目标
         first_subgoal = goal.subgoals[0]
@@ -218,7 +223,7 @@ class TestGoalManagementSystem(unittest.TestCase):
     def test_goal_deadline_tracking(self):
         """测试目标截止时间跟踪"""
         future_deadline = datetime.now() + timedelta(days=30)
-        past_deadline = datetime.now() - timedelta(days=1)
+        datetime.now() - timedelta(days=1)
 
         goal_definition = {
             'title': '未来目标',
@@ -393,7 +398,7 @@ class TestGoalReminders(unittest.TestCase):
             'deadline': near_deadline
         }
 
-        goal = self.goal_manager.create_goal(goal_definition)
+        self.goal_manager.create_goal(goal_definition)
 
         # 检查提醒
         reminders = self.goal_manager.check_deadline_reminders()

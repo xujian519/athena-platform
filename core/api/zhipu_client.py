@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智谱AI客户端(带限流控制)
 Zhipu AI Client with Rate Limiting
@@ -16,7 +17,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -33,8 +34,6 @@ from .rate_limiter import (
     BackoffStrategy,
     RateLimitConfig,
     RetryConfig,
-    get_default_limiter,
-    rate_limited,
 )
 
 logger = setup_logging()

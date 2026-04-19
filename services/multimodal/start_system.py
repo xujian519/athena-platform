@@ -1,17 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 多模态文件系统启动脚本
 Multimodal File System Startup Script
 """
 
-import os
-from core.async_main import async_main
 import sys
-import asyncio
-import logging
-from core.logging_config import setup_logging
 from pathlib import Path
+
+from core.logging_config import setup_logging
 
 # 添加路径
 sys.path.append(str(Path(__file__).parent))

@@ -309,9 +309,9 @@ def formal_examination_workflow(application):
         "cases": vector_search("第26条相关案例")
     }
 
-    # 步骤2: 查询知识图谱
+    # 步骤2: 查询知识图谱 (Neo4j Cypher)
     kg_relations = graph_query(
-        "MATCH (law:法条 {name: '专利法第26条'})-[:细化]->(guide)"
+        "MATCH (law:Article {name: '专利法第26条'})-[:REFINES]->(guide:JudicialInterpretation)"
         "RETURN guide"
     )
 
@@ -462,13 +462,13 @@ cases = vector_search("patent_decisions", "专利法第26条第3款 充分公开
 
 **查询示例**:
 ```cypher
-// 查询专利法第26条的配套规定
-MATCH (law:法条 {name: "专利法第26条"})-[:细化]->(guide:审查指南)
-RETURN law.name, guide.章节, guide.内容
+// 查询专利法第26条的配套规定 (Neo4j Cypher)
+MATCH (law:Article {name: "专利法第26条"})-[:REFINES]->(guide:JudicialInterpretation)
+RETURN law.name, guide.chapter, guide.content
 
 // 查询引用第26条第3款的案例
-MATCH (case:决定书)-[:引用]->(law:法条 {name: "专利法第26条第3款"})
-RETURN case.决定书编号, case.争议焦点, case.裁判要旨
+MATCH (c:Case)-[:APPLIES]->(law:Article {name: "专利法第26条第3款"})
+RETURN c.case_number, c.focus_point, c.judgment_summary
 ```
 
 ---

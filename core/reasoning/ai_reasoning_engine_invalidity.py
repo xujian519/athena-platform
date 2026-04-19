@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 AI推理引擎模块
 AI Reasoning Engine Module for Patent Invalidity System
@@ -13,8 +14,7 @@ import time
 from collections import defaultdict
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
-
+from typing import Any
 
 # API客户端导入
 try:
@@ -154,7 +154,7 @@ class AIReasoningEngine:
                 # 创建FAISS索引
                 self.vector_index = faiss.IndexFlatIP(768)  # 假设使用1024维向量(BGE-M3)
                 logger.info("向量数据库初始化完成")
-            except Exception as e:
+            except Exception:
                 self.vector_index = None
         else:
             logger.warning("FAISS不可用,将使用基础检索")
@@ -170,7 +170,7 @@ class AIReasoningEngine:
             try:
                 with open(cache_file, encoding="utf-8") as f:
                     return json.load(f)
-            except Exception as e:
+            except Exception:
                 pass  # TODO: 处理异常
         return None
 
@@ -259,7 +259,7 @@ class AIReasoningEngine:
 
             return answer, processing_time
 
-        except Exception as e:
+        except Exception:
             pass  # TODO: 处理异常
             return self._mock_openai_response(prompt, context), 0.5
 
@@ -282,7 +282,7 @@ class AIReasoningEngine:
 
             return enhanced_context
 
-        except Exception as e:
+        except Exception:
             pass  # TODO: 处理异常
             return text
 
@@ -311,7 +311,7 @@ class AIReasoningEngine:
             relevant_docs.sort(key=lambda x: x[1], reverse=True)
             return [doc[0] for doc in relevant_docs[:top_k]]
 
-        except Exception as e:
+        except Exception:
             pass  # TODO: 处理异常
             return []
 

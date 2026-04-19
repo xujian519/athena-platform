@@ -1,13 +1,11 @@
-# -*- coding: utf-8 -*-
 """
 DeepSeek LLM配置 - 用于Crawl4AI AI增强功能
 DeepSeek LLM Configuration - 由Athena和小诺控制
 """
 
-import logging
 import os
 from dataclasses import dataclass
-from typing import Any, Dict, Optional
+from typing import Any
 
 
 @dataclass
@@ -43,7 +41,7 @@ class DeepSeekManager:
             model=model
         )
 
-    def get_openai_config(self) -> Dict[str, Any]:
+    def get_openai_config(self) -> dict[str, Any]:
         """获取OpenAI兼容格式的配置"""
         return {
             'provider': 'openai',

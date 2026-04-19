@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 结构化日志系统
 Structured Logging System
@@ -19,7 +20,9 @@ import uuid
 from contextlib import contextmanager
 from contextvars import ContextVar
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any
+
+logger = logging.getLogger(__name__)
 
 # 请求ID上下文变量
 REQUEST_ID_CTX: ContextVar[str] = ContextVar("request_id", default=None)

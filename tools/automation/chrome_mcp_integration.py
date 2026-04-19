@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Chrome MCP集成工具
 基于Playwright的智能浏览器自动化和MCP集成
@@ -8,16 +7,14 @@ Chrome MCP集成工具
 """
 
 import asyncio
-import json
 import logging
-import os
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 # Playwright相关
-from playwright.async_api import Browser, BrowserContext, Page, async_playwright
+from playwright.async_api import async_playwright
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -109,7 +106,7 @@ class ChromeMCPIntegration:
         self.is_initialized = False
         logger.info('🔄 Chrome MCP集成系统已关闭')
 
-    async def navigate_to(self, url: str) -> Dict[str, Any]:
+    async def navigate_to(self, url: str) -> dict[str, Any]:
         """
         导航到指定URL
 
@@ -157,7 +154,7 @@ class ChromeMCPIntegration:
                 'timestamp': datetime.now().isoformat()
             }
 
-    async def extract_content(self, selectors: Dict[str, str] = None) -> Dict[str, Any]:
+    async def extract_content(self, selectors: dict[str, str] = None) -> dict[str, Any]:
         """
         提取页面内容
 
@@ -232,7 +229,7 @@ class ChromeMCPIntegration:
                 'timestamp': datetime.now().isoformat()
             }
 
-    async def take_screenshot(self, filename: str = None, full_page: bool = True) -> Dict[str, Any]:
+    async def take_screenshot(self, filename: str = None, full_page: bool = True) -> dict[str, Any]:
         """
         截取页面截图
 
@@ -277,7 +274,7 @@ class ChromeMCPIntegration:
                 'timestamp': datetime.now().isoformat()
             }
 
-    async def execute_script(self, script: str) -> Dict[str, Any]:
+    async def execute_script(self, script: str) -> dict[str, Any]:
         """
         执行JavaScript脚本
 
@@ -307,7 +304,7 @@ class ChromeMCPIntegration:
                 'timestamp': datetime.now().isoformat()
             }
 
-    async def search_patents(self, query: str, source: str = 'google_patents') -> Dict[str, Any]:
+    async def search_patents(self, query: str, source: str = 'google_patents') -> dict[str, Any]:
         """
         搜索专利
 
@@ -334,7 +331,7 @@ class ChromeMCPIntegration:
         # 等待搜索结果加载
         try:
             await self.page.wait_for_selector('.search-result, .result-item, .patent-result', timeout=10000)
-        except:
+        except Exception:
             logger.warning('⚠️ 搜索结果选择器未找到，尝试提取内容')
 
         # 提取搜索结果
@@ -356,7 +353,7 @@ class ChromeMCPIntegration:
             'timestamp': datetime.now().isoformat()
         }
 
-    async def wait_and_click(self, selector: str, timeout: int = 5000) -> Dict[str, Any]:
+    async def wait_and_click(self, selector: str, timeout: int = 5000) -> dict[str, Any]:
         """
         等待并点击元素
 
@@ -395,7 +392,7 @@ class ChromeMCPIntegration:
                 'timestamp': datetime.now().isoformat()
             }
 
-    async def fill_form(self, form_data: Dict[str, str]) -> Dict[str, Any]:
+    async def fill_form(self, form_data: dict[str, str]) -> dict[str, Any]:
         """
         填充表单
 
@@ -453,19 +450,19 @@ def get_chrome_mcp() -> ChromeMCPIntegration:
 
 
 # 便捷函数
-async def quick_navigate(url: str) -> Dict[str, Any]:
+async def quick_navigate(url: str) -> dict[str, Any]:
     """快速导航"""
     chrome = get_chrome_mcp()
     return await chrome.navigate_to(url)
 
 
-async def quick_extract(selectors: Dict[str, str] = None) -> Dict[str, Any]:
+async def quick_extract(selectors: dict[str, str] = None) -> dict[str, Any]:
     """快速提取内容"""
     chrome = get_chrome_mcp()
     return await chrome.extract_content(selectors)
 
 
-async def quick_screenshot(filename: str = None) -> Dict[str, Any]:
+async def quick_screenshot(filename: str = None) -> dict[str, Any]:
     """快速截图"""
     chrome = get_chrome_mcp()
     return await chrome.take_screenshot(filename)

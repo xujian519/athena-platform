@@ -3,11 +3,11 @@
 保存爸爸的演讲稿到数据库
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-from pathlib import Path
+import sqlite3
 from datetime import datetime
+from pathlib import Path
+
 
 def save_speeches() -> None:
     """保存演讲稿到数据库"""
@@ -202,7 +202,7 @@ def save_speeches() -> None:
     ))
 
     # 创建演讲合集
-    speech_collection = f"""# 徐健演讲稿合集
+    speech_collection = """# 徐健演讲稿合集
 
 ## 📚 演讲主题概述
 

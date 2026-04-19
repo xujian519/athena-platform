@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 integration - 系统集成模块
 

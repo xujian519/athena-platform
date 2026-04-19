@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 GUI执行增强器
 GUI Execution Enhancer
@@ -20,10 +21,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import httpx
-
 
 logger = logging.getLogger(__name__)
 
@@ -316,7 +316,7 @@ class GUIExecutionEnhancer:
         if not self.visual_engine or not after_screenshot:
             return None
 
-        from core.perception.visual_verification_engine import GUIAction, VerificationStatus
+        from core.perception.visual_verification_engine import GUIAction
 
         gui_action = GUIAction(action_type="browser_task", description=action.task)
 

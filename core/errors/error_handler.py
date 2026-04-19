@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 错误处理和重试机制
 Error Handling and Retry Mechanism
@@ -13,7 +14,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
 from functools import wraps
-from typing import Any, Dict, List, Optional, Tuple, Type
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -285,7 +286,7 @@ class RetryManager:
         self,
         func: Callable,
         *args: Any,
-        on_retry: Callable[[int, Exception, None] | None = None,
+        on_retry: Callable[[int, Exception], None] | None = None,
         **kwargs: Any,
     ) -> Any:
         """

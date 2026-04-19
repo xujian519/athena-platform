@@ -1,6 +1,7 @@
 # ⚠️ SECURITY WARNING: This file uses eval/exec. Review needed!
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 Athena智能体工具实现集
 Tool Implementations
@@ -16,7 +17,7 @@ import asyncio
 import subprocess
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -30,7 +31,7 @@ logger = setup_logging()
 
 
 async def code_analyzer_handler(
-    params: dict[str, Any, context: dict[str, Any]
+    params: dict[str, Any], context: dict[str, Any]
 ) -> dict[str, Any]:
     """
     代码分析处理器 - 真实实现
@@ -173,7 +174,7 @@ async def code_analyzer_handler(
 
 
 async def system_monitor_handler(
-    params: dict[str, Any, context: dict[str, Any]
+    params: dict[str, Any], context: dict[str, Any]
 ) -> dict[str, Any]:
     """
     系统监控处理器 - 真实实现
@@ -208,7 +209,7 @@ async def system_monitor_handler(
             if target == "system":
                 # mac_OS CPU使用率
                 cpu_output = subprocess.check_output(["ps", "-A", "-o", "%cpu"], text=True)
-                cpu_values = []
+                cpu_values = [
                     float(line.strip()) for line in cpu_output.split("\n")[1:] if line.strip()
                 ]
                 avg_cpu = sum(cpu_values) / len(cpu_values) if cpu_values else 0
@@ -286,7 +287,7 @@ async def system_monitor_handler(
 
 
 async def file_operator_handler(
-    params: dict[str, Any, context: dict[str, Any]
+    params: dict[str, Any], context: dict[str, Any]
 ) -> dict[str, Any]:
     """
     文件操作处理器 - 真实实现
@@ -354,7 +355,7 @@ async def file_operator_handler(
                     )
                 result["success"] = True
                 result["message"] = f"成功列出目录: {path_str}"
-                result[items]}
+                result["items"] = items
             else:
                 result["message"] = f"目录不存在: {path_str}"
 
@@ -382,7 +383,7 @@ async def file_operator_handler(
 
 
 async def code_executor_handler(
-    params: dict[str, Any, context: dict[str, Any]
+    params: dict[str, Any], context: dict[str, Any]
 ) -> dict[str, Any]:
     """
     代码执行处理器 - 安全实现

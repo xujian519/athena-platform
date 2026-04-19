@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 系统管理器 - 公共接口
 System Manager - Public Interface

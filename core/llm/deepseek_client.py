@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 DeepSeek-R1 API客户端
 用于交叉验证引擎
@@ -6,7 +7,7 @@ DeepSeek-R1 API客户端
 import json
 import logging
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 try:
     from openai import AsyncOpenAI

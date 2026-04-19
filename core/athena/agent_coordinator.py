@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena智能体协调器
 Agent Coordinator for Athena
@@ -22,8 +23,9 @@ from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

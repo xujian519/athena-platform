@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 评估与反思模块 - 统一导出接口
 Evaluation & Reflection Module - Unified Export Interface
@@ -117,10 +118,12 @@ except ImportError as e:
 try:
     from .evaluation_engine import (
         EvaluationCriteria,
-        EvaluationEngine as FullEvaluationEngine,
         EvaluationLevel,
         EvaluationResult,
         EvaluationType,
+    )
+    from .evaluation_engine import (
+        EvaluationEngine as FullEvaluationEngine,
     )
 
     FULL_ENGINE_AVAILABLE = True
@@ -238,8 +241,8 @@ except ImportError as e:
 # =============================================================================
 
 try:
-    from .evaluation_config import EvaluationConfig
     from .async_file_ops import AsyncFileOperations
+    from .evaluation_config import EvaluationConfig
 except ImportError as e:
     logger.warning(f"其他组件导入失败: {e}")
     EvaluationConfig = None

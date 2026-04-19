@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 批处理推理模式提取器 - Batch Pattern Extractor
 从实际无效决定文档中大规模提取推理模式
@@ -22,7 +23,7 @@ import sys
 from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from tqdm import tqdm
 
@@ -32,11 +33,8 @@ from core.logging_config import setup_logging
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from core.legal_qa.pattern_extractor import (
-    CreativityLevel,
-    InvalidDecision,
     PatternExtractor,
     ReasoningPattern,
-    SectionType,
 )
 
 # 配置日志
@@ -269,10 +267,10 @@ class BatchPatternExtractor:
         }
 
         scores = {}
-        for field, keywords in field_keywords.items():
+        for field_name, keywords in field_keywords.items():
             score = sum(1 for keyword in keywords if keyword in text)
             if score > 0:
-                scores[field] = score
+                scores[field_name] = score
 
         if scores:
             return max(scores, key=scores.get)

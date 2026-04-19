@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 感知模块处理器包
 包含OCR、图像处理、文件处理等

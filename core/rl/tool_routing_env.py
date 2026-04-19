@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 工具路由强化学习环境 - 第二阶段
 Tool Routing Reinforcement Learning Environment - Phase 2
@@ -21,8 +22,9 @@ import logging
 import random
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -243,7 +245,7 @@ class ToolRoutingEnv:
             tool_speed={t: random.uniform(0.5, 1.0) for t in available_tools},
         )
 
-    def step(self, action: RoutingAction) -> tuple[RoutingState, float, bool, dict[str, Any]:
+    def step(self, action: RoutingAction) -> tuple[RoutingState, float, bool, dict[str, Any]]:
         """
         执行一步
 
@@ -377,7 +379,7 @@ class ToolRoutingEnv:
 _env_instance: ToolRoutingEnv | None = None
 
 
-def get_tool_routing_env(config: Optional[dict | None = None) -> ToolRoutingEnv:
+def get_tool_routing_env(config: dict | None = None) -> ToolRoutingEnv:
     """获取工具路由RL环境单例"""
     global _env_instance
     if _env_instance is None:

@@ -5,23 +5,21 @@
 """
 
 import asyncio
-import concurrent.futures
 import hashlib
 import json
 import logging
 import threading
 import time
 from collections import defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from functools import lru_cache, wraps
-from typing import Any, Callable, Dict, List, Optional, Union
+from collections.abc import Callable
+from dataclasses import dataclass
+from functools import wraps
+from typing import Any
 
 import aiohttp
 import aioredis
 import psutil
 import redis
-from aioredis import ConnectionPool
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +50,7 @@ class PerformanceMetrics:
             return 0.0
         return self.cache_hits / total
 
-    def to_dict(self) -> Dict[str, float]:
+    def to_dict(self) -> dict[str, float]:
         """转换为字典"""
         return {
             'request_count': self.request_count,
@@ -213,7 +211,7 @@ class AdvancedCacheManager:
                 self.cache_timestamps.clear()
                 self.cache_access_count.clear()
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取缓存统计"""
         total = self.stats['hits'] + self.stats['misses']
         return {
@@ -228,7 +226,7 @@ class AdvancedCacheManager:
 class ConnectionPoolManager:
     """连接池管理器"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         self.config = config
         self.http_pools = {}
         self.redis_pool = None
@@ -341,7 +339,7 @@ class AsyncTaskQueue:
 class PerformanceOptimizer:
     """性能优化器"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         self.config = config
         self.metrics = PerformanceMetrics()
         self.cache_manager = AdvancedCacheManager(
@@ -450,11 +448,11 @@ class PerformanceOptimizer:
 
     async def batch_process(
         self,
-        items: List[Any],
+        items: list[Any],
         process_func: Callable,
         batch_size: int = 10,
         max_concurrent: int = 5
-    ) -> List[Any]:
+    ) -> list[Any]:
         """批量处理"""
         if not items:
             return []
@@ -499,7 +497,7 @@ class PerformanceOptimizer:
                 logger.error(f"系统资源监控失败: {e}")
                 await asyncio.sleep(self.monitor_interval)
 
-    def get_metrics(self) -> Dict[str, Any]:
+    def get_metrics(self) -> dict[str, Any]:
         """获取性能指标"""
         return {
             'performance': self.metrics.to_dict(),
@@ -551,7 +549,7 @@ def get_global_optimizer() -> PerformanceOptimizer | None:
     """获取全局性能优化器"""
     return _global_optimizer
 
-async def initialize_global_optimizer(config: Dict[str, Any]):
+async def initialize_global_optimizer(config: dict[str, Any]):
     """初始化全局性能优化器"""
     global _global_optimizer
     _global_optimizer = PerformanceOptimizer(config)

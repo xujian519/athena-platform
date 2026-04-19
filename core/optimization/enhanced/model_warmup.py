@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 模型预热管理器 (Model Warmup Manager) - Stub实现
 管理模型预热过程,提升初始性能
@@ -10,7 +11,7 @@
 import logging
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
-from typing import Any, Dict
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 意图识别服务 - API数据模型
 
@@ -9,9 +10,9 @@ Version: 1.0.0
 """
 
 from datetime import datetime
-from typing import Any, List, Optional
+from typing import Any
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 
 # ========================================================================
 # 请求模型
@@ -22,11 +23,12 @@ class IntentRecognitionRequest(BaseModel):
     """意图识别请求"""
 
     text: str = Field(..., description="待识别的文本", min_length=1, max_length=10000)
-    context: Optional[dict[str, Any]] = Field(default=None, description="上下文信息")
-    engine: Optional[str] = Field(default="keyword", description="引擎类型")
+    context: dict[str, Any] | None = Field(default=None, description="上下文信息")
+    engine: str | None = Field(default="keyword", description="引擎类型")
 
-    @validator("text")
-    def validate_text(self, v) -> None:
+    @field_validator("text")
+    @classmethod
+    def validate_text(cls, v) -> str:
         """验证文本不为空且仅包含空白字符"""
         if not v or not v.strip():
             raise ValueError("文本不能为空")
@@ -37,10 +39,11 @@ class BatchIntentRecognitionRequest(BaseModel):
     """批量意图识别请求"""
 
     texts: list[str] = Field(..., description="待识别的文本列表", min_items=1, max_items=100)
-    engine: Optional[str] = Field(default="keyword", description="引擎类型")
+    engine: str | None = Field(default="keyword", description="引擎类型")
 
-    @validator("texts")
-    def validate_texts(self, v) -> None:
+    @field_validator("texts")
+    @classmethod
+    def validate_texts(cls, v) -> list[str]:
         """验证文本列表"""
         if not v:
             raise ValueError("文本列表不能为空")
@@ -56,7 +59,7 @@ class BatchIntentRecognitionRequest(BaseModel):
 class ModelLoadRequest(BaseModel):
     """模型加载请求"""
 
-    device: Optional[str] = Field(default="auto", description="设备类型")
+    device: str | None = Field(default="auto", description="设备类型")
 
 
 # ========================================================================
@@ -116,11 +119,11 @@ class ModelInfo(BaseModel):
     name: str = Field(description="模型名称")
     type: str = Field(description="模型类型")
     status: str = Field(description="模型状态")
-    device: Optional[str] = Field(description="设备类型")
-    load_time: Optional[datetime] = Field(description="加载时间")
-    last_access: Optional[datetime] = Field(description="最后访问时间")
+    device: str | None = Field(description="设备类型")
+    load_time: datetime | None = Field(description="加载时间")
+    last_access: datetime | None = Field(description="最后访问时间")
     access_count: int = Field(description="访问次数")
-    memory_usage_mb: Optional[float] = Field(description="内存使用(MB)")
+    memory_usage_mb: float | None = Field(description="内存使用(MB)")
 
 
 class ModelsListResponse(BaseModel):
@@ -136,7 +139,7 @@ class ModelLoadResponse(BaseModel):
 
     message: str = Field(description="响应消息")
     model_name: str = Field(description="模型名称")
-    load_time: Optional[datetime] = Field(description="加载时间")
+    load_time: datetime | None = Field(description="加载时间")
     duration_ms: float = Field(description="加载耗时(毫秒)")
 
 
@@ -145,7 +148,7 @@ class ModelUnloadResponse(BaseModel):
 
     message: str = Field(description="响应消息")
     model_name: str = Field(description="模型名称")
-    memory_freed_mb: Optional[float] = Field(description="释放的内存(MB)")
+    memory_freed_mb: float | None = Field(description="释放的内存(MB)")
 
 
 # ========================================================================
@@ -174,7 +177,7 @@ class ErrorResponse(BaseModel):
 
     error: str = Field(description="错误类型")
     message: str = Field(description="错误消息")
-    details: Optional[dict[str, Any]] = Field(default=None, description="错误详情")
+    details: dict[str, Any] | None = Field(default=None, description="错误详情")
     timestamp: datetime = Field(description="错误时间")
 
 
@@ -213,7 +216,7 @@ class APIKeyResponse(BaseModel):
 
     api_key: str = Field(description="API密钥")
     created_at: datetime = Field(description="创建时间")
-    expires_at: Optional[datetime] = Field(description="过期时间")
+    expires_at: datetime | None = Field(description="过期时间")
 
 
 # ========================================================================

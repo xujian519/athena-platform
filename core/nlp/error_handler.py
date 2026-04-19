@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 NLP系统错误处理和重试机制
 NLP System Error Handler and Retry Mechanism
@@ -17,8 +18,9 @@ import threading
 import time
 from enum import Enum
 from functools import wraps
-from typing import TYPE_CHECKING, Any, Dict
+from typing import TYPE_CHECKING, Any
 
+import numpy as np
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -287,7 +289,7 @@ def robust_retry(
                             return handler.handle_error(e, context)
                         except Exception as fallback_error:
                             logger.error(f"降级策略也失败: {fallback_error}")
-                            raise last_error
+                            raise last_error from fallback_error
 
                     # 计算延迟时间(指数退避 + 抖动)
                     current_delay = min(
@@ -350,7 +352,7 @@ def with_fallback(
                 return handler.handle_error(e, context)
             except Exception:
                 logger.error("所有降级策略都失败")
-                raise e
+                raise e from None
 
     return wrapper
 

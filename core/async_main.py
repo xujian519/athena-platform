@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 异步入口统一模块
 Async Main Entry Point Module
@@ -15,7 +16,7 @@ import logging
 import signal
 import sys
 from collections.abc import Callable, Coroutine
-from typing import Any, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 OCR性能监控模块
 OCR Performance Monitoring Module

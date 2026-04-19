@@ -4,11 +4,11 @@
 这个对云熙和小宸的未来工作很有帮助
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-from pathlib import Path
+import sqlite3
 from datetime import datetime
+from pathlib import Path
+
 
 def save_baochen_product_system() -> None:
     """保存宝宸专利事务所产品体系到企业知识管理"""
@@ -264,7 +264,7 @@ def save_baochen_product_system() -> None:
     ))
 
     # 保存详细的业务操作指南
-    operation_guide = f"""# 宝宸专利业务操作指南
+    operation_guide = """# 宝宸专利业务操作指南
 
 ## 📝 业务流程标准
 
@@ -374,7 +374,7 @@ def save_baochen_product_system() -> None:
     ))
 
     # 保存创新发展建议
-    innovation_suggestions = f"""# 宝宸专利创新发展建议
+    innovation_suggestions = """# 宝宸专利创新发展建议
 
 ## 🔮 发展趋势分析
 

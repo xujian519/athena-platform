@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 记忆检索参数优化器
 Memory Retrieval Parameter Optimizer
@@ -18,7 +19,7 @@ Memory Retrieval Parameter Optimizer
 """
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from .base_optimizer import BaseParameterOptimizer, OptimizationConfig
 from .evaluation_metrics import EvaluationMetrics

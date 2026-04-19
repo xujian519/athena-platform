@@ -1,0 +1,96 @@
+# AppArmor安全配置文件
+# 用于容器运行时安全加固
+
+# 这是一个AppArmor配置文件模板
+# 需要部署到目标系统并加载
+
+#include <tunables/global>
+
+profile athena-container flags=(attach_disconnected,mediate_deleted) {
+  #include <abstractions/base>
+  #include <abstractions/python>
+  #include <abstractions/nameservice>
+  #include <abstractions/openssl>
+
+  # 网络访问
+  network inet tcp,
+  network inet udp,
+  network inet6 tcp,
+  network inet6 udp,
+
+  # 文件系统访问
+  # 应用程序文件
+  /app/** r,
+  /app/lib/** r,
+  /app/static/** r,
+  /app/templates/** r,
+
+  # Python和系统库
+  /usr/bin/python ix,
+  /usr/lib/python3.11/** r,
+  /lib/x86_64-linux-gnu/** r,
+  /usr/lib/x86_64-linux-gnu/** r,
+
+  # 临时文件
+  /tmp/** rw,
+  /var/tmp/** rw,
+
+  # 日志文件
+  /var/log/athena/** w,
+  /dev/log w,
+
+  # 配置文件（只读）
+  /etc/passwd r,
+  /etc/group r,
+  /etc/nsswitch.conf r,
+  /etc/resolv.conf r,
+  /etc/hosts r,
+  /etc/localtime r,
+  /etc/timezone r,
+
+  # 设备文件
+  /dev/null rw,
+  /dev/zero r,
+  /dev/random r,
+  /dev/urandom r,
+  /dev/tty rw,
+
+  # 进程相关
+  /proc/*/status r,
+  /proc/*/stat r,
+  /proc/*/cmdline r,
+  /proc/sys/kernel/version r,
+
+  # 拒绝危险操作
+  deny /proc/sys/** w,
+  deny /sys/** w,
+  deny capability sys_admin,
+  deny capability sys_ptrace,
+  deny capability sys_module,
+  deny capability sys_rawio,
+  deny capability sys_time,
+  deny capability mac_admin,
+  deny capability mac_override,
+
+  # 拒绝mount操作
+  deny mount,
+  deny umount,
+
+  # 拒绝访问敏感文件
+  deny /etc/shadow r,
+  deny /etc/sudoers r,
+  deny /etc/ssh/** r,
+  deny /root/** r,
+  deny /home/** r,
+
+  # 拒绝执行系统命令
+  deny /bin/** x,
+  deny /sbin/** x,
+  deny /usr/bin/** x,
+  deny /usr/sbin/** x,
+
+  # 特殊规则：允许写入特定位置
+  /app/logs/** w,
+  /app/uploads/** w,
+  /app/cache/** w,
+}

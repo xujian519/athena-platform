@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 领域专用NLP预处理器
 Domain-Specific NLP Preprocessor
@@ -12,7 +13,7 @@ import re
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 

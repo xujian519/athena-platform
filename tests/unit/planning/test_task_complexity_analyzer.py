@@ -16,12 +16,15 @@ Tests for TaskComplexityAnalyzer
 版本: v1.0.0 "Phase 2"
 """
 
+import sys
+from pathlib import Path
+
 import pytest
-from core.planning.models import Task, ComplexityLevel, StrategyType
-from core.planning.task_complexity_analyzer import (
-    TaskComplexityAnalyzer,
-    analyze_task_complexity
-)
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+from core.planning.models import ComplexityLevel, StrategyType, Task
+from core.planning.task_complexity_analyzer import TaskComplexityAnalyzer, analyze_task_complexity
 
 
 class TestTaskComplexityAnalyzer:
@@ -92,8 +95,8 @@ class TestTaskComplexityAnalyzer:
             StrategyType.WORKFLOW_REUSE,
             StrategyType.ADAPTIVE
         ]
-        assert result.factors.requires_creative_reasoning == True
-        assert result.factors.requires_multi_source == True
+        assert result.factors.requires_creative_reasoning
+        assert result.factors.requires_multi_source
 
     @pytest.mark.asyncio
     async def test_professional_task_bonus(self, analyzer):
@@ -134,7 +137,7 @@ class TestTaskComplexityAnalyzer:
         parallel_result = await analyzer.analyze(parallel_task)
 
         # 验证可并行化属性
-        assert parallel_result.factors.parallelizable == True
+        assert parallel_result.factors.parallelizable
         # 可并行化任务的复杂度应该更低
 
     @pytest.mark.asyncio
@@ -146,7 +149,7 @@ class TestTaskComplexityAnalyzer:
 
         result = await analyzer.analyze(task)
 
-        assert result.factors.requires_multi_source == True
+        assert result.factors.requires_multi_source
 
     @pytest.mark.asyncio
     async def test_creative_reasoning_detection(self, analyzer):
@@ -157,7 +160,7 @@ class TestTaskComplexityAnalyzer:
 
         result = await analyzer.analyze(task)
 
-        assert result.factors.requires_creative_reasoning == True
+        assert result.factors.requires_creative_reasoning
 
     @pytest.mark.asyncio
     async def test_tool_estimation(self, analyzer):

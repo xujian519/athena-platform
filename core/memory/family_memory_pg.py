@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 AI家族共享记忆 - PostgreSQL版本
 Family Shared Memory with PostgreSQL + pgvector

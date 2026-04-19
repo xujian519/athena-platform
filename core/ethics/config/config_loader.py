@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 伦理框架配置加载器
 Ethics Framework Configuration Loader
@@ -8,7 +9,7 @@ Ethics Framework Configuration Loader
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Any
 
 import yaml
 

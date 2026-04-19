@@ -10,17 +10,15 @@ import json
 import logging
 import time
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 from .config import AthenaSearchConfig, SearchDepth, SearchStrategy
 from .types import (
     PatentMetadata,
     PatentSearchResult,
     PatentType,
-    QueryExpansion,
     ResultRelevance,
     SearchCache,
-    SearchError,
     SearchFilter,
     SearchIteration,
     SearchQuery,
@@ -123,9 +121,9 @@ class AthenaIterativeSearchEngine:
         query: str,
         strategy: SearchStrategy = SearchStrategy.HYBRID,
         max_results: int = 10,
-        filters: Optional[List[SearchFilter]] = None,
+        filters: list[SearchFilter] | None = None,
         use_cache: bool = True
-    ) -> List[PatentSearchResult]:
+    ) -> list[PatentSearchResult]:
         """
         执行单次搜索
 
@@ -278,8 +276,8 @@ class AthenaIterativeSearchEngine:
         self,
         query: str,
         max_results: int,
-        filters: Optional[List[SearchFilter]] = None
-    ) -> List[PatentSearchResult]:
+        filters: list[SearchFilter] | None = None
+    ) -> list[PatentSearchResult]:
         """执行混合搜索（全文+向量+外部）"""
         all_results = []
 
@@ -317,8 +315,8 @@ class AthenaIterativeSearchEngine:
         self,
         query: str,
         max_results: int,
-        filters: Optional[List[SearchFilter]] = None
-    ) -> List[PatentSearchResult]:
+        filters: list[SearchFilter] | None = None
+    ) -> list[PatentSearchResult]:
         """Elasticsearch全文搜索"""
         if not self.elasticsearch_client:
             return []
@@ -400,8 +398,8 @@ class AthenaIterativeSearchEngine:
         self,
         query: str,
         max_results: int,
-        filters: Optional[List[SearchFilter]] = None
-    ) -> List[PatentSearchResult]:
+        filters: list[SearchFilter] | None = None
+    ) -> list[PatentSearchResult]:
         """向量语义搜索"""
         # 这里可以实现向量搜索逻辑
         # 暂时返回空列表，后续可以集成FAISS或pgvector
@@ -411,7 +409,7 @@ class AthenaIterativeSearchEngine:
         self,
         query: str,
         max_results: int
-    ) -> List[PatentSearchResult]:
+    ) -> list[PatentSearchResult]:
         """外部搜索引擎"""
         results = []
 
@@ -426,9 +424,9 @@ class AthenaIterativeSearchEngine:
 
     def _merge_and_rank_results(
         self,
-        results: List[PatentSearchResult],
+        results: list[PatentSearchResult],
         max_results: int
-    ) -> List[PatentSearchResult]:
+    ) -> list[PatentSearchResult]:
         """合并和排序搜索结果"""
         if not results:
             return []
@@ -462,9 +460,9 @@ class AthenaIterativeSearchEngine:
 
     def _post_process_results(
         self,
-        results: List[PatentSearchResult],
+        results: list[PatentSearchResult],
         query: str
-    ) -> List[PatentSearchResult]:
+    ) -> list[PatentSearchResult]:
         """后处理搜索结果"""
         # 更新相关性等级
         for result in results:
@@ -490,8 +488,8 @@ class AthenaIterativeSearchEngine:
         self,
         query: str,
         max_results: int,
-        filters: Optional[List[SearchFilter]] = None
-    ) -> List[PatentSearchResult | None]:
+        filters: list[SearchFilter] | None = None
+    ) -> list[PatentSearchResult | None]:
         """从缓存获取搜索结果"""
         query_hash = self._generate_query_hash(query, max_results, filters)
 
@@ -511,8 +509,8 @@ class AthenaIterativeSearchEngine:
     def _cache_results(
         self,
         query: str,
-        results: List[PatentSearchResult],
-        filters: Optional[List[SearchFilter]] = None
+        results: list[PatentSearchResult],
+        filters: list[SearchFilter] | None = None
     ):
         """缓存搜索结果"""
         if len(self.cache) >= self.config.performance_config.max_cache_size:
@@ -537,7 +535,7 @@ class AthenaIterativeSearchEngine:
         self,
         query: str,
         max_results: int,
-        filters: Optional[List[SearchFilter]] = None
+        filters: list[SearchFilter] | None = None
     ) -> str:
         """生成查询哈希值用于缓存"""
         query_data = {
@@ -575,7 +573,7 @@ class AthenaIterativeSearchEngine:
         session: SearchSession,
         iteration_number: int,
         query: str,
-        previous_results: List[PatentSearchResult]
+        previous_results: list[PatentSearchResult]
     ) -> SearchIteration:
         """执行单轮搜索迭代"""
         start_time = time.time()
@@ -618,8 +616,8 @@ class AthenaIterativeSearchEngine:
 
     def _calculate_iteration_quality(
         self,
-        results: List[PatentSearchResult],
-        previous_results: List[PatentSearchResult]
+        results: list[PatentSearchResult],
+        previous_results: list[PatentSearchResult]
     ) -> float:
         """计算迭代质量分数"""
         if not results:
@@ -649,9 +647,9 @@ class AthenaIterativeSearchEngine:
 
     def _generate_iteration_insights(
         self,
-        results: List[PatentSearchResult],
+        results: list[PatentSearchResult],
         iteration_number: int
-    ) -> List[str]:
+    ) -> list[str]:
         """生成迭代洞察"""
         insights = []
 
@@ -694,8 +692,8 @@ class AthenaIterativeSearchEngine:
     async def _generate_next_query(
         self,
         current_query: str,
-        current_results: List[PatentSearchResult],
-        previous_results: List[PatentSearchResult]
+        current_results: list[PatentSearchResult],
+        previous_results: list[PatentSearchResult]
     ) -> str | None:
         """生成下一轮查询"""
         # 这里可以集成LLM来生成更智能的下一轮查询
@@ -741,7 +739,7 @@ class AthenaIterativeSearchEngine:
 
         return None
 
-    async def _generate_research_summary(self, session: SearchSession) -> 'ResearchSummary':
+    async def _generate_research_summary(self, session: SearchSession):  # type: ignore[type-arg]
         """生成研究摘要"""
         from .types import ResearchSummary
 
@@ -768,7 +766,7 @@ class AthenaIterativeSearchEngine:
 
         return summary
 
-    def _extract_technology_trends(self, patents: List[PatentSearchResult]) -> List[str]:
+    def _extract_technology_trends(self, patents: list[PatentSearchResult]) -> list[str]:
         """提取技术趋势"""
         trends = []
 
@@ -796,7 +794,7 @@ class AthenaIterativeSearchEngine:
 
         return trends
 
-    def _extract_competing_applicants(self, patents: List[PatentSearchResult]) -> List[str]:
+    def _extract_competing_applicants(self, patents: list[PatentSearchResult]) -> list[str]:
         """提取竞争对手"""
         applicant_counts = {}
 
@@ -809,7 +807,7 @@ class AthenaIterativeSearchEngine:
         top_applicants = sorted(applicant_counts.items(), key=lambda x: x[1], reverse=True)[:3]
         return [f"{applicant} ({count}项专利)" for applicant, count in top_applicants]
 
-    def _extract_innovation_insights(self, iterations: List[SearchIteration]) -> List[str]:
+    def _extract_innovation_insights(self, iterations: list[SearchIteration]) -> list[str]:
         """提取创新洞察"""
         insights = []
 
@@ -819,7 +817,7 @@ class AthenaIterativeSearchEngine:
         # 去重
         return list(set(insights))
 
-    def _generate_recommendations(self, patents: List[PatentSearchResult]) -> List[str]:
+    def _generate_recommendations(self, patents: list[PatentSearchResult]) -> list[str]:
         """生成建议"""
         recommendations = []
 
@@ -863,7 +861,7 @@ class AthenaIterativeSearchEngine:
         completeness = (iteration_factor * 0.5 + diversity_factor * 0.5)
         return min(completeness, 1.0)
 
-    def _build_es_filters(self, filters: List[SearchFilter]) -> List[Dict]:
+    def _build_es_filters(self, filters: list[SearchFilter]) -> list[dict]:
         """构建Elasticsearch过滤器"""
         es_filters = []
 
@@ -887,7 +885,7 @@ class AthenaIterativeSearchEngine:
 class BaiduSearchEngine:
     """百度搜索引擎"""
 
-    async def search(self, query: str, max_results: int) -> List[PatentSearchResult]:
+    async def search(self, query: str, max_results: int) -> list[PatentSearchResult]:
         """执行百度搜索"""
         # 这里可以实现百度搜索API调用
         # 暂时返回空列表
@@ -896,7 +894,7 @@ class BaiduSearchEngine:
 class BingSearchEngine:
     """Bing搜索引擎"""
 
-    async def search(self, query: str, max_results: int) -> List[PatentSearchResult]:
+    async def search(self, query: str, max_results: int) -> list[PatentSearchResult]:
         """执行Bing搜索"""
         # 这里可以实现Bing搜索API调用
         # 暂时返回空列表
@@ -905,7 +903,7 @@ class BingSearchEngine:
 class SogouSearchEngine:
     """搜狗搜索引擎"""
 
-    async def search(self, query: str, max_results: int) -> List[PatentSearchResult]:
+    async def search(self, query: str, max_results: int) -> list[PatentSearchResult]:
         """执行搜狗搜索"""
         # 这里可以实现搜狗搜索API调用
         # 暂时返回空列表

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习与适应模块 API 接口
 Learning & Adaptation Module API
@@ -18,7 +19,7 @@ Learning & Adaptation Module API
 import logging
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 from fastapi import APIRouter, BackgroundTasks, Depends, FastAPI, HTTPException, Query
 from fastapi import status as http_status  # 重命名避免冲突
@@ -92,8 +93,8 @@ class LearningRequest(BaseModel):
     task_type: LearningTaskType = Field(..., description="学习任务类型")
     context: dict[str, Any] = Field(default_factory=dict, description="学习上下文")
     data: list[dict[str, Any]] = Field(default_factory=list, description="训练数据")
-    config: Optional[dict[str, Any]] = Field(None, description="学习配置")
-    metadata: Optional[dict[str, Any]] = Field(None, description="元数据")
+    config: dict[str, Any] | None = Field(None, description="学习配置")
+    metadata: dict[str, Any] | None = Field(None, description="元数据")
 
 
 class LearningResponse(BaseModel):
@@ -102,7 +103,7 @@ class LearningResponse(BaseModel):
     task_id: str = Field(..., description="任务ID")
     status: str = Field(..., description="状态")
     message: str = Field(..., description="消息")
-    result: Optional[dict[str, Any]] = Field(None, description="学习结果")
+    result: dict[str, Any] | None = Field(None, description="学习结果")
     timestamp: datetime = Field(default_factory=datetime.now, description="时间戳")
 
 
@@ -114,7 +115,7 @@ class LearningStatistics(BaseModel):
     failed_tasks: int = Field(..., description="失败任务数")
     success_rate: float = Field(..., description="成功率")
     average_learning_time: float = Field(..., description="平均学习时间(秒)")
-    last_learning_time: Optional[datetime] = Field(None, description="最后学习时间")
+    last_learning_time: datetime | None = Field(None, description="最后学习时间")
 
 
 class RLInteractionRequest(BaseModel):
@@ -123,8 +124,8 @@ class RLInteractionRequest(BaseModel):
     user_input: str = Field(..., description="用户输入")
     agent_response: str = Field(..., description="智能体响应")
     capability_used: str = Field(..., description="使用的能力")
-    context: Optional[dict[str, Any]] = Field(None, description="上下文")
-    explicit_feedback: Optional[float] = Field(None, ge=0.0, le=1.0, description="显式反馈(0-1)")
+    context: dict[str, Any] | None = Field(None, description="上下文")
+    explicit_feedback: float | None = Field(None, ge=0.0, le=1.0, description="显式反馈(0-1)")
     response_time: float = Field(default=0.0, ge=0.0, description="响应时间(秒)")
     error_occurred: bool = Field(default=False, description="是否发生错误")
     user_corrected: bool = Field(default=False, description="用户是否纠正")
@@ -223,7 +224,7 @@ async def execute_learning(
         raise HTTPException(
             status_code=http_status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"学习任务执行失败: {e!s}",
-        )
+        ) from e
 
 
 @router.get("/statistics", response_model=LearningStatistics, summary="获取学习统计")
@@ -249,7 +250,7 @@ async def get_statistics(learning_system: LearningEngine = Depends(get_learning_
         raise HTTPException(
             status_code=http_status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"获取统计信息失败: {e!s}",
-        )
+        ) from e
 
 
 # ==================== 强化学习端点 ====================
@@ -294,7 +295,7 @@ async def record_rl_interaction(
         logger.error(f"记录RL交互失败: {e}")
         raise HTTPException(
             status_code=http_status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"记录交互失败: {e!s}"
-        )
+        ) from e
 
 
 @router.get("/rl/summary", summary="获取RL学习摘要")
@@ -311,7 +312,7 @@ async def get_rl_summary(rl_system: ProductionRLSystem = Depends(get_rl_system))
         logger.error(f"获取RL摘要失败: {e}")
         raise HTTPException(
             status_code=http_status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"获取摘要失败: {e!s}"
-        )
+        ) from e
 
 
 # ==================== 监控端点 ====================
@@ -332,7 +333,7 @@ async def get_monitoring_metrics(monitoring: RLMonitoringService = Depends(get_m
         raise HTTPException(
             status_code=http_status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"获取监控指标失败: {e!s}",
-        )
+        ) from e
 
 
 @router.get("/monitoring/report", summary="获取监控报告")
@@ -352,7 +353,7 @@ async def get_monitoring_report(monitoring: RLMonitoringService = Depends(get_mo
         logger.error(f"获取监控报告失败: {e}")
         raise HTTPException(
             status_code=http_status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"获取报告失败: {e!s}"
-        )
+        ) from e
 
 
 @router.post("/monitoring/start", summary="启动监控服务")
@@ -375,7 +376,7 @@ async def start_monitoring(
         logger.error(f"启动监控失败: {e}")
         raise HTTPException(
             status_code=http_status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"启动监控失败: {e!s}"
-        )
+        ) from e
 
 
 @router.post("/monitoring/stop", summary="停止监控服务")
@@ -391,7 +392,7 @@ async def stop_monitoring(monitoring: RLMonitoringService = Depends(get_monitori
         logger.error(f"停止监控失败: {e}")
         raise HTTPException(
             status_code=http_status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"停止监控失败: {e!s}"
-        )
+        ) from e
 
 
 # ==================== 错误处理 ====================

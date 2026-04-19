@@ -1,24 +1,21 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 基于DeepSeek Math V2的自验证专利撰写Agent
 实现'生成器+验证器+元验证器'的三重验证架构
 参考Grok建议的专利自验证循环系统
 """
 
-import asyncio
-from core.async_main import async_main
-import json
 import logging
-from core.logging_config import setup_logging
 import os
 import sys
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import numpy as np
 import requests
+
+from core.logging_config import setup_logging
 
 # 添加路径
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -36,8 +33,8 @@ class PatentVerificationResult:
     completeness_score: float  # 完整性分数 [0-1]
     overall_score: float  # 综合分数 [0-1]
     passed_verification: bool  # 是否通过验证
-    feedback: List[str]  # 改进建议
-    risk_assessment: Dict[str, Any]  # 风险评估
+    feedback: list[str]  # 改进建议
+    risk_assessment: dict[str, Any]  # 风险评估
 
 @dataclass
 class PatentSection:
@@ -71,7 +68,7 @@ class SelfVerifyingPatentAgent:
 
     async def write_patent_with_self_verification(self,
                                                    invention_description: str,
-                                                   prior_art_context: List[str] = None) -> Dict[str, Any]:
+                                                   prior_art_context: list[str] = None) -> dict[str, Any]:
         """
         自验证专利撰写主流程
         实现'生成→验证→迭代'的循环
@@ -125,7 +122,7 @@ class SelfVerifyingPatentAgent:
 
     async def _initial_generation(self,
                                   invention_description: str,
-                                  prior_art_context: List[str]) -> Dict[str, PatentSection]:
+                                  prior_art_context: list[str]) -> dict[str, PatentSection]:
         """初始专利生成"""
         logger.info('📝 生成初始专利文档...')
 
@@ -177,7 +174,7 @@ class SelfVerifyingPatentAgent:
 
         return patent_sections
 
-    async def _analyze_prior_art(self, prior_art_context: List[str]) -> Dict:
+    async def _analyze_prior_art(self, prior_art_context: list[str]) -> dict:
         """分析现有技术"""
         logger.info('🔍 分析现有技术背景...')
 
@@ -219,8 +216,8 @@ class SelfVerifyingPatentAgent:
         }
 
     async def _comprehensive_verification(self,
-                                         patent_sections: Dict[str, PatentSection],
-                                         prior_art_context: List[str]) -> PatentVerificationResult:
+                                         patent_sections: dict[str, PatentSection],
+                                         prior_art_context: list[str]) -> PatentVerificationResult:
         """综合验证专利质量"""
         logger.info('🔍 执行综合专利验证...')
 
@@ -283,9 +280,10 @@ class SelfVerifyingPatentAgent:
         )
 
     async def _assess_patent_risks(self,
-                                  patent_sections: Dict[str, PatentSection],
+                                  patent_sections: dict[str, PatentSection],
                                   novelty_score: float,
-                                  inventive_score: float) -> Dict[str, Any]:
+                                  inventive_score: float,
+                                  clarity_score: float = 0.7) -> dict[str, Any]:
         """风险评估"""
 
         risk_factors = []
@@ -317,6 +315,7 @@ class SelfVerifyingPatentAgent:
             risk_level = '中'
 
         # 估算驳回概率
+        overall_score = (novelty_score + inventive_score + clarity_score) / 3
         rejection_probability = max(0.1, 1 - overall_score * 0.8)
 
         return {
@@ -330,7 +329,7 @@ class SelfVerifyingPatentAgent:
                                               novelty_score: float,
                                               inventive_score: float,
                                               clarity_score: float,
-                                              completeness_score: float) -> List[str]:
+                                              completeness_score: float) -> list[str]:
         """生成验证反馈"""
         feedback = []
 
@@ -360,8 +359,8 @@ class SelfVerifyingPatentAgent:
         return feedback
 
     async def _improve_patent_draft(self,
-                                    patent_sections: Dict[str, PatentSection],
-                                    verification_result: PatentVerificationResult) -> Dict[str, PatentSection]:
+                                    patent_sections: dict[str, PatentSection],
+                                    verification_result: PatentVerificationResult) -> dict[str, PatentSection]:
         """根据验证反馈改进专利草稿"""
         logger.info('🔧 根据验证反馈改进专利草稿...')
 
@@ -392,8 +391,8 @@ class SelfVerifyingPatentAgent:
         return improved_sections
 
     async def _meta_verification(self,
-                               patent_sections: Dict[str, PatentSection],
-                               primary_verification: PatentVerificationResult) -> Dict[str, Any]:
+                               patent_sections: dict[str, PatentSection],
+                               primary_verification: PatentVerificationResult) -> dict[str, Any]:
         """元验证：验证验证过程的一致性和可靠性"""
         logger.info('🔍 执行元验证...')
 
@@ -433,7 +432,7 @@ class SelfVerifyingPatentAgent:
 
     def _check_risk_assessment_consistency(self,
                                              result: PatentVerificationResult,
-                                             patent_sections: Dict[str, PatentSection]) -> float:
+                                             patent_sections: dict[str, PatentSection]) -> float:
         """检查风险评估的一致性"""
         # 检查风险等级与分数的一致性
         overall_score = result.overall_score
@@ -448,7 +447,7 @@ class SelfVerifyingPatentAgent:
         else:
             return 0.5  # 不一致
 
-    def _assess_feedback_quality(self, feedback: List[str]) -> float:
+    def _assess_feedback_quality(self, feedback: list[str]) -> float:
         """评估反馈质量"""
         if not feedback:
             return 0.0
@@ -463,7 +462,7 @@ class SelfVerifyingPatentAgent:
         quality_score = sum(quality_indicators) / len(quality_indicators)
         return round(quality_score, 3)
 
-    def _generate_meta_recommendations(self, result: PatentVerificationResult) -> List[str]:
+    def _generate_meta_recommendations(self, result: PatentVerificationResult) -> list[str]:
         """生成元验证建议"""
         recommendations = []
 
@@ -486,35 +485,35 @@ class PatentGeneratorAgent:
     def __init__(self):
         pass
 
-    async def generate_title(self, description: str, prior_art: Dict) -> str:
+    async def generate_title(self, description: str, prior_art: dict) -> str:
         """生成专利标题"""
         return f"基于{description[:30]}的智能系统及方法"
 
-    async def generate_abstract(self, description: str, prior_art: Dict) -> str:
+    async def generate_abstract(self, description: str, prior_art: dict) -> str:
         """生成专利摘要"""
         return f"本发明涉及{description}，解决了传统技术中的问题。"
 
-    async def generate_claims(self, description: str, prior_art: Dict) -> str:
+    async def generate_claims(self, description: str, prior_art: dict) -> str:
         """生成权利要求"""
         return '1. 一种基于深度学习的智能系统，其特征在于...'
 
-    async def generate_description(self, description: str, prior_art: Dict) -> str:
+    async def generate_description(self, description: str, prior_art: dict) -> str:
         """生成说明书"""
         return f"技术领域：本发明属于人工智能技术领域。背景技术：{prior_art.get('analysis', '无')}"
 
-    async def improve_title(self, current_title: str, feedback: List[str]) -> str:
+    async def improve_title(self, current_title: str, feedback: list[str]) -> str:
         """改进标题"""
         return current_title + '（优化版）'
 
-    async def improve_abstract(self, current_abstract: str, feedback: List[str]) -> str:
+    async def improve_abstract(self, current_abstract: str, feedback: list[str]) -> str:
         """改进摘要"""
         return current_abstract + '进一步地，本发明提高了创新性。'
 
-    async def improve_claims(self, current_claims: str, feedback: List[str]) -> str:
+    async def improve_claims(self, current_claims: str, feedback: list[str]) -> str:
         """改进权利要求"""
         return current_claims + '2. 根据权利要求1所述的智能系统...'
 
-    async def improve_description(self, current_description: str, feedback: List[str]) -> str:
+    async def improve_description(self, current_description: str, feedback: list[str]) -> str:
         """改进说明书"""
         return current_description + '具体实施方式：参考图1所示...'
 
@@ -525,20 +524,20 @@ class PatentVerifierAgent:
     def __init__(self):
         pass
 
-    async def verify_novelty(self, sections: Dict[str, PatentSection], prior_art: List[str]) -> float:
+    async def verify_novelty(self, sections: dict[str, PatentSection], prior_art: list[str]) -> float:
         """验证新颖性"""
         # 简化实现，实际应该调用DeepSeek Math V2进行复杂分析
         return np.random.uniform(0.6, 0.9)
 
-    async def verify_inventiveness(self, sections: Dict[str, PatentSection], prior_art: List[str]) -> float:
+    async def verify_inventiveness(self, sections: dict[str, PatentSection], prior_art: list[str]) -> float:
         """验证创造性"""
         return np.random.uniform(0.5, 0.8)
 
-    async def verify_clarity(self, sections: Dict[str, PatentSection]) -> float:
+    async def verify_clarity(self, sections: dict[str, PatentSection]) -> float:
         """验证清晰度"""
         return np.random.uniform(0.7, 0.9)
 
-    async def verify_completeness(self, sections: Dict[str, PatentSection]) -> float:
+    async def verify_completeness(self, sections: dict[str, PatentSection]) -> float:
         """验证完整性"""
         return np.random.uniform(0.8, 0.95)
 
@@ -582,7 +581,7 @@ async def main():
     logger.info(f"🔄 迭代次数: {result['iterations']}")
     logger.info(f"📊 综合评分: {result['verification_result'].overall_score:.3f}")
     logger.info(f"⚠️ 风险等级: {result['verification_result'].risk_assessment['risk_level']}")
-    logger.info(f"📝 改进建议: {len(result['verification_result'].feedback')}条")
+    logger.info(f"改进建议: {len(result['verification_result'].feedback)}条")
 
     return result
 

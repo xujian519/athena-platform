@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 测试BGE模型集成到智能路由系统
 
@@ -7,7 +8,7 @@
 
 import os
 import sys
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 # 添加路径
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))

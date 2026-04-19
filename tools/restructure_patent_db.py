@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 重构专利数据库结构
 Restructure Patent Database
@@ -7,12 +6,10 @@ Restructure Patent Database
 将"案源人"和"客户"分开，重新组织数据
 """
 
-import json
-import psycopg2
-from psycopg2.extras import RealDictCursor
-from datetime import datetime
 import os
-from pathlib import Path
+
+import psycopg2
+
 
 class PatentDBRestructurer:
     """专利数据库重构器"""

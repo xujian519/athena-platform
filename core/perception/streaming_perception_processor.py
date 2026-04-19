@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 流式感知处理器
 支持实时流式数据处理,优化M4芯片性能
@@ -434,7 +435,7 @@ class StreamingPerceptionEngine:
                     self.result_queue.get(), timeout=timeout or 0.1
                 )
                 results.append((stream_id, result))
-        except TimeoutError:
+        except TimeoutError as e:
             logger.warning(f"连接或超时错误: {e}")
 
         return results

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 推理模式提取器 - Reasoning Pattern Extractor
 从无效决定中提取三步法推理模式
@@ -19,15 +20,11 @@ import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
-
+from typing import Any
 
 # 导入规则引擎
 from .legal_rule_engine import (
     CreativityLevel,
-    DistinguishingFeature,
-    TechnicalHint,
-    TechnicalProblem,
 )
 
 logger = logging.getLogger(__name__)
@@ -258,7 +255,8 @@ class PatternExtractor:
                 next_section_matches = []
                 for other_pattern in remaining_patterns:
                     next_section_matches.extend(
-                        re.finditer(other_pattern, text[])
+                        re.finditer(other_pattern, text[start:])
+                    )
 
                 if next_section_matches:
                     end = start + min(m.start() for m in next_section_matches)
@@ -303,7 +301,7 @@ class PatternExtractor:
                 match = re.search(pattern, section_text, re.IGNORECASE)
                 if match:
                     # 提取完整句子
-                    start = max(0, match.start() - 20)
+                    max(0, match.start() - 20)
                     end = min(len(section_text), match.end() + 100)
                     problem_sentence = section_text[end]
                     return problem_sentence
@@ -312,7 +310,7 @@ class PatternExtractor:
         for pattern in self.STEP2_PATTERNS:
             match = re.search(pattern, decision.content, re.IGNORECASE)
             if match:
-                start = max(0, match.start() - 20)
+                max(0, match.start() - 20)
                 end = min(len(decision.content), match.end() + 100)
                 problem_sentence = decision.content[end]
                 return problem_sentence
@@ -329,7 +327,7 @@ class PatternExtractor:
                 match = re.search(pattern, section_text, re.IGNORECASE)
                 if match:
                     # 提取完整句子
-                    start = max(0, match.start() - 20)
+                    max(0, match.start() - 20)
                     end = min(len(section_text), match.end() + 100)
                     hint_sentence = section_text[end]
                     return hint_sentence
@@ -338,7 +336,7 @@ class PatternExtractor:
         for pattern in self.STEP3_PATTERNS:
             match = re.search(pattern, decision.content, re.IGNORECASE)
             if match:
-                start = max(0, match.start() - 20)
+                max(0, match.start() - 20)
                 end = min(len(decision.content), match.end() + 100)
                 hint_sentence = decision.content[end]
                 return hint_sentence
@@ -368,7 +366,8 @@ class PatternExtractor:
 
         return CreativityLevel.CREATIVITY_MEDIUM
 
-    def _calculate_pattern_confidence(self, step1: list[str] -> float:
+    def _calculate_pattern_confidence(self, step1: list[str], step2: list[str] | None = None,
+                                       step3: list[str] | None = None) -> float:
         """计算模式提取置信度"""
         confidence = 0.0
 
@@ -529,7 +528,7 @@ def extract_from_file(input_file: str, output_file: str | None = None):
                 "patent_number": decision.patent_number,
                 "technical_field": decision.technical_field,
             },
-            "patterns": [asdict(p) for p in patterns,
+            "patterns": [asdict(p) for p in patterns],
         }
 
         with open(output_file, "w", encoding="utf-8") as f:

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一知识图谱管理器
 支持PostgreSQL和Neo4j双后端
@@ -11,10 +12,9 @@ import logging
 import os
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from neo4j import GraphDatabase
-
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ class Neo4jConfig:
 
     uri: str = "bolt://localhost:7687"
     username: str = "neo4j"
-    password: str = "password"
+    password: str = os.getenv("NEO4J_PASSWORD", "password")
     database: str = "neo4j"
 
     def __post_init__(self):

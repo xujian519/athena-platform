@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena.智慧女神 - 优化版 v3.0
 Athena Wisdom Goddess - Optimized Edition v3.0
@@ -16,12 +17,16 @@ Athena Wisdom Goddess - Optimized Edition v3.0
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # 使用绝对导入以避免相对导入路径问题
 try:
     from core.athena.meta_cognition_engine import get_meta_cognition_engine
-    from core.athena.platform_orchestrator import AgentCapability, AgentInfo, get_platform_orchestrator
+    from core.athena.platform_orchestrator import (
+        AgentCapability,
+        AgentInfo,
+        get_platform_orchestrator,
+    )
 except ImportError:
     # 如果不可用，提供占位符
     get_meta_cognition_engine = None

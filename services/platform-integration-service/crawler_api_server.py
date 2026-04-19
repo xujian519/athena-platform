@@ -5,20 +5,17 @@ Athena平台爬虫API服务
 """
 
 import asyncio
-from core.async_main import async_main
-import logging
-from core.logging_config import setup_logging
+import json
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import uvicorn
 from crawler_integration_service import get_crawler_integration_service
-from fastapi import BackgroundTasks, FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -38,22 +35,22 @@ class CrawlerTaskRequest(BaseModel):
     """爬虫任务请求模型"""
     user_input: str = Field(..., description='用户输入描述')
     mode: str = Field(default='auto', description='执行模式: auto/xiaonuo/direct/scheduled')
-    context: Optional[Dict[str, Any]] = Field(default=None, description='上下文信息')
-    scenario: Optional[str] = Field(default=None, description='指定场景')
-    urls: Optional[List[str]] = Field(default=None, description='目标URL列表')
-    config: Optional[Dict[str, Any]] = Field(default=None, description='爬虫配置')
+    context: dict[str, Any] | None = Field(default=None, description='上下文信息')
+    scenario: str | None = Field(default=None, description='指定场景')
+    urls: list[str] | None = Field(default=None, description='目标URL列表')
+    config: dict[str, Any] | None = Field(default=None, description='爬虫配置')
     priority: int = Field(default=1, description='任务优先级')
-    schedule_time: Optional[str] = Field(default=None, description='调度时间')
+    schedule_time: str | None = Field(default=None, description='调度时间')
 
 class BatchCrawlerRequest(BaseModel):
     """批量爬虫请求模型"""
-    requests: List[CrawlerTaskRequest]
+    requests: list[CrawlerTaskRequest]
     max_concurrent: int = Field(default=5, description='最大并发数')
 
 class ConfigUpdateRequest(BaseModel):
     """配置更新请求模型"""
-    service_config: Optional[Dict[str, Any]] = None
-    xiaonuo_config: Optional[Dict[str, Any]] = None
+    service_config: dict[str, Any] | None = None
+    xiaonuo_config: dict[str, Any] | None = None
 
 class TaskStatusRequest(BaseModel):
     """任务状态查询请求"""
@@ -129,7 +126,7 @@ async def execute_crawler_task(request: CrawlerTaskRequest):
 
     except Exception as e:
         logger.error(f"执行爬虫任务失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/crawler/tasks/batch')
 async def execute_batch_crawler_tasks(request: BatchCrawlerRequest):
@@ -166,7 +163,7 @@ async def execute_batch_crawler_tasks(request: BatchCrawlerRequest):
 
     except Exception as e:
         logger.error(f"批量执行爬虫任务失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/crawler/scenarios')
 async def get_available_crawler_scenarios():
@@ -182,7 +179,7 @@ async def get_available_crawler_scenarios():
 
     except Exception as e:
         logger.error(f"获取爬虫场景列表失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/crawler/status')
 async def get_crawler_service_status():
@@ -198,7 +195,7 @@ async def get_crawler_service_status():
 
     except Exception as e:
         logger.error(f"获取爬虫服务状态失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/crawler/task/status')
 async def get_crawler_task_status(request: TaskStatusRequest):
@@ -221,7 +218,7 @@ async def get_crawler_task_status(request: TaskStatusRequest):
 
     except Exception as e:
         logger.error(f"获取任务状态失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/crawler/task/cancel')
 async def cancel_crawler_task(request: TaskStatusRequest):
@@ -237,7 +234,7 @@ async def cancel_crawler_task(request: TaskStatusRequest):
 
     except Exception as e:
         logger.error(f"取消任务失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/crawler/config')
 async def update_crawler_config(request: ConfigUpdateRequest):
@@ -255,7 +252,7 @@ async def update_crawler_config(request: ConfigUpdateRequest):
 
     except Exception as e:
         logger.error(f"更新爬虫配置失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/crawler/metrics/reset')
 async def reset_crawler_metrics():
@@ -271,7 +268,7 @@ async def reset_crawler_metrics():
 
     except Exception as e:
         logger.error(f"重置爬虫指标失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/xiaonuo/crawler/analyze')
 async def xiaonuo_crawler_analyze(user_input: str, context: str | None = None):
@@ -298,10 +295,10 @@ async def xiaonuo_crawler_analyze(user_input: str, context: str | None = None):
 
     except Exception as e:
         logger.error(f"小诺爬虫分析失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/xiaonuo/crawler/chat')
-async def xiaonuo_crawler_chat(user_input: str, context: Optional[Dict[str, Any]] = None):
+async def xiaonuo_crawler_chat(user_input: str, context: dict[str, Any] | None = None):
     """小诺爬虫聊天接口 - 智能决策是否使用爬虫"""
     try:
         # 小诺智能执行
@@ -317,7 +314,7 @@ async def xiaonuo_crawler_chat(user_input: str, context: Optional[Dict[str, Any]
 
     except Exception as e:
         logger.error(f"小诺爬虫聊天失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 # 专用场景接口
 @app.post('/api/v1/crawler/patent/search')
@@ -349,11 +346,11 @@ async def patent_search(
 
     except Exception as e:
         logger.error(f"专利检索失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/crawler/website/scrape')
 async def website_scrape(
-    urls: List[str],
+    urls: list[str],
     depth: int = 2,
     extract_links: bool = False,
     extract_images: bool = False
@@ -380,11 +377,11 @@ async def website_scrape(
 
     except Exception as e:
         logger.error(f"网站抓取失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/crawler/data/collect')
 async def data_collect(
-    sources: List[str],
+    sources: list[str],
     data_type: str = 'text',
     batch_size: int = 50,
     parallel_requests: int = 10
@@ -411,12 +408,12 @@ async def data_collect(
 
     except Exception as e:
         logger.error(f"数据收集失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/crawler/news/monitor')
 async def news_monitor(
-    keywords: List[str],
-    sources: Optional[List[str]] = None,
+    keywords: list[str],
+    sources: list[str] | None = None,
     time_range: str = '24h'
 ):
     """新闻监控接口"""
@@ -440,11 +437,11 @@ async def news_monitor(
 
     except Exception as e:
         logger.error(f"新闻监控失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/crawler/competitor/analyze')
 async def competitor_analyze(
-    competitors: List[str],
+    competitors: list[str],
     analysis_type: str = 'basic',
     include_pricing: bool = True
 ):
@@ -469,7 +466,7 @@ async def competitor_analyze(
 
     except Exception as e:
         logger.error(f"竞品分析失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/health')
 async def health_check():
@@ -515,7 +512,7 @@ async def get_running_tasks():
 
     except Exception as e:
         logger.error(f"获取任务列表失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 if __name__ == '__main__':
     # 直接运行服务

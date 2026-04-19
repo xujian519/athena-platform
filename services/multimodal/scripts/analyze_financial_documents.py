@@ -4,17 +4,15 @@
 Analyze financial documents and contracts
 """
 
-import os
-from core.async_main import async_main
-import sys
-import json
-import requests
-import logging
-from core.logging_config import setup_logging
-from pathlib import Path
-from datetime import datetime
-from typing import List, Dict, Any
 import base64
+import logging
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+import requests
+
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -31,7 +29,7 @@ class FinancialDocumentAnalyzer:
         self.api_url = MULTIMODAL_API_URL
         self.target_folder = Path(TARGET_FOLDER)
 
-    def scan_images(self) -> List[Path]:
+    def scan_images(self) -> list[Path]:
         """扫描文件夹中的图片"""
         logger.info(f"扫描文件夹: {self.target_folder}")
 
@@ -53,7 +51,7 @@ class FinancialDocumentAnalyzer:
         image_files.sort(key=lambda x: x.name)
         return image_files
 
-    def analyze_image_with_api(self, image_path: Path) -> Dict[str, Any]:
+    def analyze_image_with_api(self, image_path: Path) -> dict[str, Any]:
         """使用多模态API分析图片"""
         try:
             # 读取图片文件
@@ -116,7 +114,7 @@ class FinancialDocumentAnalyzer:
                 "status": "error"
             }
 
-    def extract_financial_info(self, analyses: List[Dict]) -> Dict[str, Any]:
+    def extract_financial_info(self, analyses: list[dict]) -> dict[str, Any]:
         """提取财务信息"""
         financial_info = {
             "total_amounts": [],
@@ -162,12 +160,12 @@ class FinancialDocumentAnalyzer:
 
         return financial_info
 
-    def analyze_contract_legality(self, financial_info: Dict) -> Dict[str, Any]:
+    def analyze_contract_legality(self, financial_info: dict) -> dict[str, Any]:
         """分析合同合法性"""
         # 使用小娜的法律服务
         try:
             # 准备法律分析请求
-            legal_analysis = {
+            {
                 "query": "请分析以下合作经营协议和终止协议的合法性和潜在漏洞",
                 "context": {
                     "contracts": financial_info["contracts"],
@@ -203,7 +201,7 @@ class FinancialDocumentAnalyzer:
                 "recommendations": []
             }
 
-    def generate_legal_recommendations(self, financial_info: Dict) -> List[str]:
+    def generate_legal_recommendations(self, financial_info: dict) -> list[str]:
         """生成法律建议"""
         recommendations = [
             "1. 检查合同是否具备完整的签名和盖章",
@@ -222,7 +220,7 @@ class FinancialDocumentAnalyzer:
 
         return recommendations
 
-    def assess_risks(self, financial_info: Dict) -> Dict[str, Any]:
+    def assess_risks(self, financial_info: dict) -> dict[str, Any]:
         """评估风险"""
         risks = {
             "high_risks": [],
@@ -244,7 +242,7 @@ class FinancialDocumentAnalyzer:
 
         return risks
 
-    def generate_report(self, analyses: List[Dict], financial_info: Dict, legal_analysis: Dict) -> str:
+    def generate_report(self, analyses: list[dict], financial_info: dict, legal_analysis: dict) -> str:
         """生成分析报告"""
         report = []
         report.append("=" * 60)
@@ -368,7 +366,7 @@ def main() -> None:
     with open(report_path, 'w', encoding='utf-8') as f:
         f.write(report)
 
-    print(f"\n✅ 分析完成！")
+    print("\n✅ 分析完成！")
     print(f"📄 报告已保存: {report_path.absolute()}")
     print("\n" + "=" * 60)
     print(report)

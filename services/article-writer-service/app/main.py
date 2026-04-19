@@ -6,28 +6,30 @@ Article Writer Service Main Entry
 统一文章撰写API服务
 """
 
-import asyncio
 import sys
+from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import List, Optional, Dict, Any
-from datetime import datetime
 
 # 添加项目路径
 current_dir = Path(__file__).parent
 sys.path.insert(0, str(current_dir))
 sys.path.insert(0, str(current_dir.parent.parent.parent))
 
-from config import settings
-# 修复导入路径
-from core.writing_engine import ArticleWritingEngine, WritingRequest, write_article
-from app.openclaw import OpenClawHandover, ArticleContent, handover_to_openclaw
-
 # 日志
 import logging
+
+from app.openclaw import OpenClawHandover, handover_to_openclaw
+
+# 修复导入路径
+from core.writing_engine import ArticleWritingEngine, WritingRequest
+
+from config import settings
+
 logging.basicConfig(
     level=settings.LOG_LEVEL,
     format=settings.LOG_FORMAT
@@ -44,9 +46,9 @@ class ArticleWriteRequest(BaseModel):
     topic: str
     article_type: str = "ip_education"
     style: str = "shandong_humor"
-    platforms: Optional[List[str]] = None
-    requirements: Optional[Dict[str, Any]] = None
-    word_count: Optional[int] = None
+    platforms: list[str] | None = None
+    requirements: dict[str, Any] | None = None
+    word_count: int | None = None
     handover_to_openclaw: bool = False
     generate_images: bool = False
 
@@ -54,12 +56,12 @@ class ArticleWriteRequest(BaseModel):
 class ArticleWriteResponse(BaseModel):
     """文章撰写响应"""
     success: bool
-    article_id: Optional[str] = None
-    title: Optional[str] = None
-    content: Optional[str] = None
-    quality_score: Optional[float] = None
-    warnings: Optional[List[str]] = None
-    handover_result: Optional[Dict[str, Any]] = None
+    article_id: str | None = None
+    title: str | None = None
+    content: str | None = None
+    quality_score: float | None = None
+    warnings: list[str] | None = None
+    handover_result: dict[str, Any] | None = None
     message: str = ""
 
 
@@ -67,18 +69,18 @@ class HandoverRequest(BaseModel):
     """内容交接请求"""
     title: str
     content: str
-    platforms: List[str]
+    platforms: list[str]
     summary: str = ""
-    tags: Optional[List[str]] = None
-    images: Optional[List[str]] = None
+    tags: list[str] | None = None
+    images: list[str] | None = None
 
 
 class HandoverResponse(BaseModel):
     """交接响应"""
     success: bool
-    article_paths: Dict[str, str] = {}
+    article_paths: dict[str, str] = {}
     message: str = ""
-    errors: List[str] = []
+    errors: list[str] = []
 
 
 # 创建FastAPI应用
@@ -208,7 +210,7 @@ async def write_article_endpoint(request: ArticleWriteRequest):
 
     except Exception as e:
         logger.error(f"❌ 撰写异常: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.post("/api/v1/handover", response_model=HandoverResponse)
@@ -245,7 +247,7 @@ async def handover_endpoint(request: HandoverRequest):
 
     except Exception as e:
         logger.error(f"❌ 交接异常: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.get("/api/v1/status")

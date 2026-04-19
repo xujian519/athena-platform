@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 反思模式引擎 (Reflection Pattern)
 基于《智能体设计》反思模式的实现
@@ -22,11 +23,11 @@
 import asyncio
 import json
 import logging
+import re
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
-
 
 logger = logging.getLogger(__name__)
 
@@ -103,7 +104,7 @@ class ReflectionEngine:
         original_prompt: str,
         output: str,
         context: dict[str, Any],        level: ReflectionLevel = ReflectionLevel.DETAILED,
-        criteria: list["key"] = None,
+        criteria: list[str] = None,
     ) -> ReflectionResult:
         """对输出进行反思评估"""
 
@@ -416,14 +417,37 @@ class ReflectionEngine:
 
         return json.dumps(response, ensure_ascii=False, indent=2)
 
+    def _extract_json_from_response(self, response: str) -> str:
+        """从响应中提取JSON（处理markdown代码块包裹的情况）
+
+        支持以下格式:
+        1. ```json {...} ```
+        2. ``` {...} ```
+        3. 直接JSON对象 {...}
+        """
+        # 尝试提取markdown代码块中的JSON
+        json_match = re.search(r'```(?:json)?\s*([\s\S]*?)```', response)
+        if json_match:
+            return json_match.group(1).strip()
+
+        # 尝试直接查找JSON对象
+        json_match = re.search(r'\{[\s\S]*\}', response)
+        if json_match:
+            return json_match.group(0)
+
+        return response
+
     async def _parse_reflection_response(
         self, response: str, criteria: list[ReflectionCriteria]
     ) -> ReflectionResult:
         """解析反思响应"""
 
         try:
+            # 提取JSON（处理markdown代码块）
+            json_str = self._extract_json_from_response(response)
+
             # 尝试解析JSON响应
-            data = json.loads(response)
+            data = json.loads(json_str)
 
             # 提取指标评分
             metric_scores = {}
@@ -442,12 +466,12 @@ class ReflectionEngine:
                 should_refine=data.get("should_refine", False),
             )
 
+            logger.info(f"✅ 反思响应解析成功: 总分={overall_score:.2f}")
             return reflection_result
 
         except (json.JSONDecodeError, KeyError) as e:
-            logger.error(f"捕获(json.JSONDecodeError, KeyError)异常: {e}", exc_info=True)
+            logger.error(f"JSON解析失败: {e}, 原始响应前200字符: {response[:200]}")
             # JSON解析失败时的fallback
-            print(f"反思响应解析失败: {e}")
             return ReflectionResult(
                 overall_score=0.5,
                 metric_scores=dict.fromkeys(QualityMetric, 0.5),

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 轻量级错误预测模块
 Lightweight Error Predictor Module
@@ -23,9 +24,9 @@ from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
-
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -454,12 +455,12 @@ class LightweightErrorPredictor:
         # 计算趋势特征
         if len(self.feature_history) >= 10:
             recent = list(self.feature_history)[-10:]
-            features.cpu_trend = np.mean([f.cpu_usage for f in recent[-5:]) - np.mean(
-                [f.cpu_usage for f in recent[:5])
-            features.memory_trend = np.mean([f.memory_usage for f in recent[-5:]) - np.mean(
-                [f.memory_usage for f in recent[:5])
-            features.error_trend = np.mean([f.error_rate for f in recent[-5:]) - np.mean(
-                [f.error_rate for f in recent[:5])
+            features.cpu_trend = np.mean([f.cpu_usage for f in recent[-5:]]) - np.mean(
+                [f.cpu_usage for f in recent[:5]])
+            features.memory_trend = np.mean([f.memory_usage for f in recent[-5:]]) - np.mean(
+                [f.memory_usage for f in recent[:5]])
+            features.error_trend = np.mean([f.error_rate for f in recent[-5:]]) - np.mean(
+                [f.error_rate for f in recent[:5]])
 
         # 自定义特征
         for key, value in context.items():
@@ -749,7 +750,7 @@ class LightweightErrorPredictor:
 _predictor_instance: LightweightErrorPredictor | None = None
 
 
-def get_error_predictor(config: Optional[dict | None = None) -> LightweightErrorPredictor:
+def get_error_predictor(config: dict | None = None) -> LightweightErrorPredictor:
     """获取错误预测器单例"""
     global _predictor_instance
     if _predictor_instance is None:

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺上下文理解机制
 Xiaonuo Context-Aware Understanding System
@@ -14,12 +15,13 @@ import os
 from collections import deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Any, Optional
+from typing import Any
 
 import jieba
 
 # 安全修复: 使用joblib替代pickle序列化scikit-learn模型
 import joblib
+import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 
 from core.logging_config import setup_logging

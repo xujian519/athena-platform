@@ -1,5 +1,6 @@
 
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena记忆系统性能监控和告警系统
 Memory System Performance Monitoring and Alerting
@@ -19,6 +20,7 @@ Memory System Performance Monitoring and Alerting
 """
 
 import asyncio
+import email
 import gc
 import json
 import logging
@@ -198,9 +200,6 @@ class MemoryPerformanceMonitor:
 
             except Exception:
                 logger.error("操作失败: e", exc_info=True)
-                raise
-            except Exception:
-                raise
             await asyncio.sleep(self.collection_interval)
 
     async def _collect_database_metrics(self):
@@ -215,9 +214,6 @@ class MemoryPerformanceMonitor:
 
             except Exception:
                 logger.error("操作失败: e", exc_info=True)
-                raise
-            except Exception:
-                raise
             await asyncio.sleep(self.collection_interval)
 
     async def _collect_cache_metrics(self):
@@ -234,9 +230,6 @@ class MemoryPerformanceMonitor:
 
             except Exception:
                 logger.error("操作失败: e", exc_info=True)
-                raise
-            except Exception:
-                raise
             await asyncio.sleep(self.collection_interval)
 
     async def _collect_operation_metrics(self):
@@ -249,9 +242,6 @@ class MemoryPerformanceMonitor:
 
             except Exception:
                 logger.error("操作失败: e", exc_info=True)
-                raise
-            except Exception:
-                raise
             await asyncio.sleep(self.collection_interval)
 
     def _record_metric(self, name: str, value: float, unit: str) -> Any:
@@ -265,13 +255,11 @@ class MemoryPerformanceMonitor:
         """检查告警条件"""
         while self.running and not self._stop_event.is_set():
             try:
+                for rule in self.alert_rules:
                     await rule.check(self, self.alert_handlers)
 
             except Exception:
                 logger.error("操作失败: e", exc_info=True)
-                raise
-            except Exception:
-                raise
             await asyncio.sleep(self.collection_interval)
 
     def get_metric_history(
@@ -560,6 +548,7 @@ class EmailAlertHandler(AlertHandler):
             return
 
         try:
+            msg = email.message.EmailMessage()
             msg["Subject"] = f"[{alert.severity.value.upper()}] Athena记忆系统告警"
             msg["From"] = self.from_addr
             msg["To"] = ", ".join(self.to_addrs)
@@ -573,9 +562,6 @@ class EmailAlertHandler(AlertHandler):
 
         except Exception:
             logger.error("操作失败: e", exc_info=True)
-            raise
-        except Exception:
-            raise
 
 # =============================================================================
 # 使用示例

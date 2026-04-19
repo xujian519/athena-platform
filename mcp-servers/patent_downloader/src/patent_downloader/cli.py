@@ -5,8 +5,8 @@ import sys
 
 from .downloader import PatentDownloader
 from .exceptions import PatentDownloadError
-from .progress_logger import setup_progress_logging, get_progress_logger
 from .file_utils import read_patent_numbers_from_file
+from .progress_logger import get_progress_logger, setup_progress_logging
 
 
 def print_progress_bar(completed: int, total: int, patent_number: str, success: bool):

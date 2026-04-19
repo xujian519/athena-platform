@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 强化学习优化的规划器
 RL-Optimized Planner
@@ -23,7 +24,6 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
 
 from .models import ComplexityAnalysis, ComplexityLevel, ExecutionPlan, StrategyType, Task
 

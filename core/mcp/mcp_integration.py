@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 MCP服务集成模块
 
@@ -12,9 +13,9 @@ Version: v1.0.0
 import asyncio
 import logging
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.tools.base import ToolCapability, ToolCategory, ToolDefinition, ToolPriority, ToolRegistry
 

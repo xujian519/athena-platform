@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 API密钥管理模块
 API Keys Management Module
@@ -12,7 +13,7 @@ API Keys Management Module
 
 import logging
 import os
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field, validator
 

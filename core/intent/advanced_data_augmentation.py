@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 高级数据增强系统
 Advanced Data Augmentation System

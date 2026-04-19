@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺主编排中枢 - 系统级智能编排核心
 Xiaonuo Main Orchestrator - System-Level Intelligent Orchestration Core
@@ -9,18 +10,17 @@ Xiaonuo Main Orchestrator - System-Level Intelligent Orchestration Core
 创建时间: 2025-12-14
 版本: v1.0.0
 """
-import networkx as nx
-
 import asyncio
 import logging
+import time
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
-
+import networkx as nx
 
 from .cross_system_gateway import CrossSystemGateway
 
@@ -53,7 +53,7 @@ class ExecutionResult:
     def __init__(self):
         self.success = False
         self.subtask_results: dict[str, Any] = {}
-        self.task_result: Optional[dict[str, Any]] = None
+        self.task_result: dict[str, Any] | None = None
         self.execution_time = 0.0
         self.error: str | None = None
         self.metrics: dict[str, Any] = {}

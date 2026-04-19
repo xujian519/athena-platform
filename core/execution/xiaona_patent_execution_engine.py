@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜·天秤女神 - 专利专家执行引擎
 Xiaona Libra Patent Execution Engine
@@ -17,11 +18,11 @@ Xiaona Libra Patent Execution Engine
 
 import asyncio
 import logging
-from collections import defaultdict, deque
+from collections import deque
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

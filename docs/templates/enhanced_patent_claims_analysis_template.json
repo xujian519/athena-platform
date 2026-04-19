@@ -1,0 +1,531 @@
+{
+  "enhanced_patent_claims_analysis": {
+    "metadata": {
+      "version": "2.0",
+      "created_date": "2025-12-12",
+      "description": "专利权利要求书精确分析模板，支持技术特征提取、实体关系分析，适用于无效宣告、专利诉讼等场景",
+      "focus_areas": [
+        "技术特征精确提取",
+        "实体关系构建",
+        "权利要求对比分析",
+        "无效宣告支持",
+        "专利诉讼分析"
+      ]
+    },
+
+    "claim_analysis_template": {
+      "name": "权利要求书分析模板",
+      "description": "基于标点符号分割的技术特征精确提取和分析",
+      "legal_scenarios": [
+        "专利无效宣告",
+        "专利侵权诉讼",
+        "专利有效性分析",
+        "自由实施分析(FTO)",
+        "专利布局分析"
+      ],
+
+      "structure": {
+        "claim_basic_info": {
+          "claim_number": {
+            "type": "integer",
+            "required": true,
+            "description": "权利要求编号"
+          },
+          "claim_type": {
+            "type": "string",
+            "enum": ["independent", "dependent"],
+            "required": true,
+            "description": "权利要求类型"
+          },
+          "original_text": {
+            "type": "string",
+            "required": true,
+            "description": "权利要求原始文本"
+          },
+          "cleaned_text": {
+            "type": "string",
+            "required": true,
+            "description": "清理后的文本（去除标点符号影响）"
+          },
+          "punctuation_analysis": {
+            "total_count": {
+              "type": "integer",
+              "description": "标点符号总数"
+            },
+            "breakdown": {
+              "commas": {
+                "type": "integer",
+                "description": "逗号数量"
+              },
+              "periods": {
+                "type": "integer",
+                "description": "句号数量"
+              },
+              "colons": {
+                "type": "integer",
+                "description": "冒号数量"
+              },
+              "semicolons": {
+                "type": "integer",
+                "description": "分号数量"
+              }
+            }
+          }
+        },
+
+        "technical_feature_extraction": {
+          "extraction_method": {
+            "basis": "标点符号分割",
+            "splitting_rules": [
+              "按逗号(，)分割技术特征",
+              "按句号(。)分割完整技术方案",
+              "按冒号(：)分割特征引导词后内容",
+              "按分号(；)分割并列技术特征"
+            ]
+          },
+
+          "features": {
+            "type": "array",
+            "description": "提取的技术特征列表",
+            "items": {
+              "feature_id": {
+                "type": "string",
+                "description": "技术特征唯一标识"
+              },
+              "sequence_number": {
+                "type": "integer",
+                "description": "特征在权利要求中的序号"
+              },
+              "feature_text": {
+                "type": "string",
+                "description": "技术特征原始文本"
+              },
+              "splitting_punctuation": {
+                "type": "string",
+                "enum": ["，", "。", "：", "；"],
+                "description": "分割该特征的标点符号"
+              },
+              "feature_category": {
+                "type": "string",
+                "enum": ["结构特征", "功能特征", "方法特征", "参数特征", "位置特征", "连接特征"],
+                "description": "技术特征分类"
+              },
+              "feature_nature": {
+                "type": "string",
+                "enum": ["必要技术特征", "附加技术特征", "可选技术特征"],
+                "description": "技术特征性质"
+              },
+              "feature_level": {
+                "type": "string",
+                "enum": ["核心特征", "重要特征", "一般特征"],
+                "description": "技术特征重要性级别"
+              }
+            }
+          },
+
+          "feature_statistics": {
+            "total_features": {
+              "type": "integer",
+              "description": "提取的技术特征总数"
+            },
+            "essential_features": {
+              "type": "integer",
+              "description": "必要技术特征数量"
+            },
+            "structural_features": {
+              "type": "integer",
+              "description": "结构特征数量"
+            },
+            "functional_features": {
+              "type": "integer",
+              "description": "功能特征数量"
+            }
+          }
+        },
+
+        "entity_extraction": {
+          "description": "从技术特征中提取实体",
+          "entities": {
+            "type": "array",
+            "items": {
+              "entity_id": {
+                "type": "string",
+                "description": "实体唯一标识"
+              },
+              "entity_name": {
+                "type": "string",
+                "description": "实体名称（如：母线本体、接触铜板）"
+              },
+              "entity_type": {
+                "type": "string",
+                "enum": ["部件", "组件", "材料", "位置", "参数", "方法", "结构"],
+                "description": "实体类型"
+              },
+              "reference_number": {
+                "type": "string",
+                "description": "附图标记（如：1、4）"
+              },
+              "feature_ids": {
+                "type": "array",
+                "description": "包含该实体的技术特征ID列表"
+              },
+              "entity_attributes": {
+                "type": "object",
+                "description": "实体属性",
+                "properties": {
+                  "shape": {"type": "string", "description": "形状"},
+                  "size": {"type": "string", "description": "尺寸"},
+                  "material": {"type": "string", "description": "材料"},
+                  "position": {"type": "string", "description": "位置"},
+                  "quantity": {"type": "string", "description": "数量"}
+                }
+              },
+              "synonyms": {
+                "type": "array",
+                "description": "同义词列表"
+              }
+            }
+          }
+        },
+
+        "entity_relationship_analysis": {
+          "description": "实体间关系分析",
+          "relationships": {
+            "type": "array",
+            "items": {
+              "relationship_id": {
+                "type": "string",
+                "description": "关系唯一标识"
+              },
+              "subject_entity": {
+                "type": "string",
+                "description": "主实体ID"
+              },
+              "object_entity": {
+                "type": "string",
+                "description": "客体实体ID"
+              },
+              "relationship_type": {
+                "type": "string",
+                "enum": [
+                  "包含关系",
+                  "连接关系",
+                  "位置关系",
+                  "固定关系",
+                  "接触关系",
+                  "配合关系",
+                  "支撑关系",
+                  "传动关系",
+                  "控制关系",
+                  "材料关系",
+                  "尺寸关系",
+                  "功能关系",
+                  "顺序关系"
+                ],
+                "description": "关系类型"
+              },
+              "relationship_description": {
+                "type": "string",
+                "description": "关系描述文本"
+              },
+              "relationship_strength": {
+                "type": "string",
+                "enum": ["强关系", "弱关系", "可选关系"],
+                "description": "关系强度"
+              },
+              "source_feature_ids": {
+                "type": "array",
+                "description": "表达该关系的技术特征ID列表"
+              }
+            }
+          },
+
+          "relationship_network": {
+            "nodes": {
+              "description": "实体节点信息",
+              "type": "array"
+            },
+            "edges": {
+              "description": "关系边信息",
+              "type": "array"
+            },
+            "centrality_analysis": {
+              "description": "网络中心性分析",
+              "properties": {
+                "degree_centrality": "度中心性",
+                "betweenness_centrality": "介数中心性",
+                "closeness_centrality": "接近中心性"
+              }
+            }
+          }
+        },
+
+        "claim_structure_analysis": {
+          "preamble_analysis": {
+            "text": {
+              "type": "string",
+              "description": "前序部分文本"
+            },
+            "features": {
+              "type": "array",
+              "description": "前序部分包含的技术特征ID列表"
+            },
+            "shared_features": {
+              "type": "array",
+              "description": "与现有技术共有的必要技术特征"
+            },
+            "theme_name": {
+              "type": "string",
+              "description": "技术方案主题名称"
+            }
+          },
+
+          "characterizing_analysis": {
+            "text": {
+              "type": "string",
+              "description": "特征部分文本"
+            },
+            "transition_phrases": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["其特征是", "其特征在于", "还包括", "其中", "进一步"]
+              },
+              "description": "过渡短语"
+            },
+            "distinguishing_features": {
+              "type": "array",
+              "description": "区别于现有技术的技术特征ID列表"
+            },
+            "innovative_aspects": {
+              "type": "array",
+              "description": "创新点分析"
+            }
+          },
+
+          "dependency_analysis": {
+            "applicable": {
+              "type": "boolean",
+              "description": "是否为从属权利要求"
+            },
+            "referenced_claims": {
+              "type": "array",
+              "description": "引用的权利要求编号列表"
+            },
+            "reference_type": {
+              "type": "string",
+              "enum": ["单引", "多引", "择一引用"],
+              "description": "引用类型"
+            },
+            "additional_limitations": {
+              "type": "array",
+              "description": "附加限定特征ID列表"
+            }
+          }
+        },
+
+        "legal_protection_scope": {
+          "scope_definition": {
+            "breadth": {
+              "type": "string",
+              "enum": ["宽", "中", "窄"],
+              "description": "保护范围宽度"
+            },
+            "core_technical_features": {
+              "type": "array",
+              "description": "核心技术特征ID列表"
+            },
+            "boundary_features": {
+              "type": "array",
+              "description": "界定保护边界的特征"
+            }
+          },
+
+          "equivalents_analysis": {
+            "potential_equivalents": {
+              "type": "array",
+              "description": "潜在等同技术特征"
+            },
+            "essential_features": {
+              "type": "array",
+              "description": "不可或缺的技术特征"
+            },
+            "replaceable_features": {
+              "type": "array",
+              "description": "可替换的技术特征"
+            }
+          },
+
+          "vulnerability_points": {
+            "weak_features": {
+              "type": "array",
+              "description": "易被规避的技术特征"
+            },
+            "ambiguous_descriptions": {
+              "type": "array",
+              "description": "可能产生歧义的描述"
+            },
+            "prior_art_risks": {
+              "type": "array",
+              "description": "现有技术风险点"
+            }
+          }
+        }
+      },
+
+      "analysis_rules": {
+        "feature_extraction_rules": {
+          "punctuation_priority": ["。", "，", "：", "；"],
+          "minimum_feature_length": 3,
+          "maximum_feature_length": 200,
+          "exclusion_rules": [
+            "去除纯数字和标点",
+            "去除过渡词如'所述'",
+            "保留附图标记"
+          ]
+        },
+
+        "entity_recognition_rules": {
+          "component_patterns": [
+            "包括.+组件",
+            "设置.+装置",
+            "安装.+部件"
+          ],
+          "material_patterns": [
+            "采用.+材料",
+            "由.+制成",
+            "材质为.+"
+          ],
+          "parameter_patterns": [
+            "\\d+\\s*[mmcmkg]",
+            "温度为\\d+",
+            "压力为\\d+"
+          ]
+        },
+
+        "relationship_inference_rules": {
+          "spatial_relationships": ["位于", "设置于", "安装在"],
+          "structural_relationships": ["连接", "固定", "配合"],
+          "functional_relationships": ["控制", "驱动", "支撑"]
+        }
+      }
+    },
+
+    "claim_comparison_template": {
+      "name": "权利要求对比分析模板",
+      "description": "用于多份专利权利要求的对比分析",
+      "use_cases": [
+        "专利无效宣告中的现有技术对比",
+        "专利侵权诉讼中的被诉侵权技术对比",
+        "专利申请的新创性对比",
+        "技术方案的差异分析"
+      ],
+
+      "structure": {
+        "comparison_setup": {
+          "target_claim": {
+            "patent_id": "目标专利ID",
+            "claim_number": "目标权利要求号",
+            "features": "目标权利要求技术特征"
+          },
+          "reference_claims": {
+            "type": "array",
+            "description": "对比权利要求列表",
+            "items": {
+              "patent_id": "对比专利ID",
+              "claim_number": "对比权利要求号",
+              "features": "对比权利要求技术特征"
+            }
+          }
+        },
+
+        "feature_comparison": {
+          "common_features": {
+            "type": "array",
+            "description": "共同技术特征",
+            "items": {
+              "feature_text": "特征描述",
+              "similarity_score": "相似度得分(0-1)",
+              "feature_mapping": "特征映射关系"
+            }
+          },
+          "different_features": {
+            "target_only": {
+              "type": "array",
+              "description": "目标专利独有特征"
+            },
+            "reference_only": {
+              "type": "array",
+              "description": "对比专利独有特征"
+            }
+          },
+          "equivalent_features": {
+            "type": "array",
+            "description": "等同技术特征",
+            "items": {
+              "target_feature": "目标专利特征",
+              "reference_feature": "对比专利特征",
+              "equivalence_basis": "等同认定依据",
+              "equivalence_strength": "等同强度"
+            }
+          }
+        },
+
+        "infringement_analysis": {
+          "literal_infringement": {
+            "all_elements_rule": {
+              "is_satisfied": "是否满足全面覆盖原则",
+              "missing_elements": "缺少的技术特征",
+              "additional_elements": "多余的技术特征"
+            },
+            "conclusion": "字面侵权结论"
+          },
+          "doctrine_of_equivalents": {
+            "way_test": "手段是否基本相同",
+            "function_test": "功能是否基本相同",
+            "result_test": "效果是否基本相同",
+            "prosecution_history_estoppel": "禁止反悔原则适用",
+            "conclusion": "等同侵权结论"
+          },
+          "invalidity_defense": {
+            "novelty_challenge": "新颖性挑战分析",
+            "obviousness_challenge": "创造性挑战分析",
+            "support_challenge": "得到说明书支持挑战",
+            "clarity_challenge": "清楚性挑战"
+          }
+        },
+
+        "comparison_metrics": {
+          "similarity_scores": {
+            "jaccard_similarity": "Jaccard相似度",
+            "cosine_similarity": "余弦相似度",
+            "edit_distance": "编辑距离",
+            "semantic_similarity": "语义相似度"
+          },
+          "feature_overlap": {
+            "common_feature_count": "共同特征数量",
+            "overlap_ratio": "重叠比例",
+            "completeness_ratio": "完整性比例"
+          }
+        }
+      }
+    },
+
+    "usage_examples": {
+      "example_1": {
+        "title": "铜铝复合阳极母线权利要求分析",
+        "input_text": "1、一种铜铝复合阳极母线，包括母线本体（1），其特征在于：所述母线本体（1）与导杆（6）的接触区域设置有凹槽（2），所述凹槽（2）内固定设置有接触铜板（4），所述接触铜板（4）与母线本体（1）表面平齐，所述接触铜板（4）宽度方向大于导杆（6）宽度。",
+        "analysis_result": {
+          "punctuation_count": 7,
+          "feature_count": 6,
+          "entities": ["母线本体", "导杆", "接触区域", "凹槽", "接触铜板"],
+          "relationships": [
+            {"subject": "母线本体", "object": "接触区域", "type": "包含关系"},
+            {"subject": "接触区域", "object": "凹槽", "type": "设置关系"},
+            {"subject": "凹槽", "object": "接触铜板", "type": "固定关系"}
+          ]
+        }
+      }
+    }
+  }
+}

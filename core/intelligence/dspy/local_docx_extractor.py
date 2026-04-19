@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 从本地DOCX文件提取专利无效复审决定并生成DSPy训练数据
 Local DOCX Patent Decision Extractor for DSPy Training Data
@@ -15,10 +16,10 @@ import json
 import logging
 import random
 import re
-from dataclasses import asdict, dataclass
+from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 

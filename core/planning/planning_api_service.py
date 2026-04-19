@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 规划引擎API服务
 Planning Engine API Service
@@ -18,11 +19,10 @@ from typing import Any
 
 from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
-
-from core.security.auth import ALLOWED_ORIGINS
 from pydantic import BaseModel, Field
 
 from core.logging_config import setup_logging
+from core.security.auth import ALLOWED_ORIGINS
 
 # 添加项目根目录到路径
 project_root = Path(__file__).parent.parent.parent
@@ -195,7 +195,7 @@ async def create_plan(request: CreatePlanRequest):
         )
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.get("/plan/{plan_id}")  # TODO: 确保除数不为零
@@ -261,7 +261,7 @@ async def visualize_plan(plan_id: str, format: str = "text"):
             return Response(content=visualization, media_type="text/plain")
 
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=f"可视化格式不支持: {e}")
+        raise HTTPException(status_code=400, detail=f"可视化格式不支持: {e}") from e
 
 
 @app.post("/plan/{plan_id}/approve")  # TODO: 确保除数不为零
@@ -315,7 +315,7 @@ async def execute_plan(plan_id: str):
         )
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.get("/plan/{plan_id}/status", response_model=PlanStatusResponse)  # TODO: 确保除数不为零
@@ -332,7 +332,7 @@ async def get_plan_status(plan_id: str):
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.get("/plans")
@@ -402,7 +402,7 @@ async def identify_parallel_tasks(plan_id: str):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 # ==================== 启动服务 ====================

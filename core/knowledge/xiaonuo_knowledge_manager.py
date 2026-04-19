@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺知识库管理器
 Xiaonuo Knowledge Manager
@@ -200,7 +201,7 @@ class XiaonuoKnowledgeManager:
         content: str,
         knowledge_type: KnowledgeType,
         priority: KnowledgePriority = KnowledgePriority.NORMAL,
-        tags: list["key"] = None,
+        tags: list[str] = None,
         source: str = "",
     ) -> str:
         """添加知识"""
@@ -602,7 +603,11 @@ class XiaonuoKnowledgeManager:
 
     def _set_cache(self, key: str, data, ttl: int | None = None) -> None:
         """设置缓存"""
-        self._cache[data]}
+        self._cache[key] = {
+            "data": data,
+            "timestamp": time.time(),
+            "ttl": ttl or self._cache_ttl,
+        }
 
     def _invalidate_cache(self) -> Any:
         """清除缓存"""

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Apple Silicon优化的BERT意图分类器
 Optimized BERT Intent Classifier for Apple Silicon
@@ -22,8 +23,7 @@ import random
 from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
-
+from typing import Any
 
 # 配置镜像站和优化(必须在导入transformers之前)
 os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"

@@ -1,30 +1,27 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena平台知识图谱实时同步系统
 保持知识图谱与外部数据源的实时同步
 """
 
 import asyncio
-from core.async_main import async_main
 import json
 import logging
-from core.logging_config import setup_logging
 import sqlite3
 import time
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional, Set
+from datetime import datetime
 from pathlib import Path
+from typing import Any
+
 import aioredis
-import aiofiles
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
 import websockets
-import threading
 
 # Gremlin Python客户端
-from gremlin_python.driver import client, serializer
-from gremlin_python.process.anonymous_traversal import traversal
+from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
+
+from core.async_main import async_main
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(
@@ -119,7 +116,7 @@ class KnowledgeGraphSyncService:
 
         try:
             if self.config_path.exists():
-                with open(self.config_path, 'r', encoding='utf-8') as f:
+                with open(self.config_path, encoding='utf-8') as f:
                     loaded_config = json.load(f)
                     # 合并配置
                     self.__dict__.update(loaded_config)
@@ -130,7 +127,7 @@ class KnowledgeGraphSyncService:
                     json.dump(default_config, f, ensure_ascii=False, indent=2)
                 self.__dict__.update(default_config)
                 logger.info("✅ 创建默认同步配置")
-        except (json.JSONDecodeError, IOError) as e:
+        except (OSError, json.JSONDecodeError) as e:
             logger.error(f"配置文件加载失败: {e}")
             self.__dict__.update(default_config)
 
@@ -297,7 +294,7 @@ class KnowledgeGraphSyncService:
                     data = json.loads(message)
                     if data.get("type") == "trigger_sync":
                         await self.trigger_sync("manual", data.get("table"))
-            except websockets.exceptions.ConnectionClosed:
+            except websockets.exceptions.ConnectionClosed as e:
                 logger.error(f"Error: {e}", exc_info=True)
             finally:
                 self.websocket_clients.discard(websocket)
@@ -492,7 +489,7 @@ class KnowledgeGraphSyncService:
         # 重置检查点
         await self._create_sync_checkpoint()
 
-    async def _sync_records_to_janusgraph(self, records: List[sqlite3.Row], entity_type: str):
+    async def _sync_records_to_janusgraph(self, records: list[sqlite3.Row], entity_type: str):
         """将记录同步到JanusGraph"""
         try:
             # 这里应该连接到JanusGraph并执行导入
@@ -521,7 +518,7 @@ class KnowledgeGraphSyncService:
             logger.error(f"❌ 同步到JanusGraph失败: {e}")
             raise
 
-    async def _notify_clients(self, message: Dict):
+    async def _notify_clients(self, message: dict):
         """通知所有WebSocket客户端"""
         if not self.websocket_clients:
             return
@@ -550,17 +547,17 @@ class KnowledgeGraphSyncService:
         except (asyncio.CancelledError, asyncio.TimeoutError, Exception):
             return False
 
-    def _load_checkpoint(self) -> Dict:
+    def _load_checkpoint(self) -> dict:
         """加载同步检查点"""
         checkpoint_file = self.platform_root / "data" / "sync_checkpoint.json"
 
         if checkpoint_file.exists():
-            with open(checkpoint_file, 'r', encoding='utf-8') as f:
+            with open(checkpoint_file, encoding='utf-8') as f:
                 return json.load(f)
         else:
             return {"synced_records": {}, "table_versions": {}}
 
-    def _save_checkpoint(self, checkpoint: Dict) -> Any:
+    def _save_checkpoint(self, checkpoint: dict) -> Any:
         """保存同步检查点"""
         checkpoint_file = self.platform_root / "data" / "sync_checkpoint.json"
         with open(checkpoint_file, 'w', encoding='utf-8') as f:

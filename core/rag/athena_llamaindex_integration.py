@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台LlamaIndex混合架构集成
 Athena Platform LlamaIndex Hybrid Architecture Integration
@@ -12,6 +13,8 @@ import sys
 import time
 from dataclasses import dataclass
 from typing import Any
+
+import numpy as np
 
 from core.logging_config import setup_logging
 

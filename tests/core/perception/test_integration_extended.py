@@ -18,9 +18,13 @@ Extended Perception Module Integration Tests
 import asyncio
 import contextlib
 import logging
+import sys
 import time
+from pathlib import Path
 
 import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.perception import InputType, TextProcessor
 from core.perception.monitoring import PerformanceMonitor

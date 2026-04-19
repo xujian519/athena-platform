@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 缓存模块
 提供统一的缓存接口和多种缓存实现

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 大规模图谱优化模块
 Large-Scale Graph Optimization Module
@@ -16,9 +17,7 @@ Large-Scale Graph Optimization Module
 版本: v0.1.0 "高性能"
 """
 
-import logging
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Any
 
 from core.logging_config import setup_logging
@@ -149,8 +148,12 @@ class LargeScaleGraphOptimizer:
                 edge_properties["weight"][e] = edge.get("weight", 1.0)
 
         # 根据优化级别执行优化
-        optimized_nodes = len(nodes)
-        optimized_edges = len(edges)
+        # 保存原始统计
+        original_nodes = len(nodes)
+        original_edges = len(edges)
+
+        optimized_nodes = original_nodes
+        optimized_edges = original_edges
         recommendations = []
 
         if optimization_level in ["medium", "aggressive"]:
@@ -170,8 +173,8 @@ class LargeScaleGraphOptimizer:
         optimized_edges = g.num_edges()
 
         return GraphOptimizationResult(
-            original_nodes=len(nodes),
-            original_edges=len(edges),
+            original_nodes=original_nodes,
+            original_edges=original_edges,
             optimized_nodes=optimized_nodes,
             optimized_edges=optimized_edges,
             compression_ratio=optimized_nodes / max(original_nodes, 1),
@@ -461,7 +464,7 @@ async def main():
     result = optimizer.optimize_graph(nodes, edges, optimization_level="medium")
 
     # 输出结果
-    print(f"优化结果:")
+    print("优化结果:")
     print(f"  原始: {result.original_nodes}节点, {result.original_edges}边")
     print(f"  优化: {result.optimized_nodes}节点, {result.optimized_edges}边")
     print(f"  压缩率: {result.compression_ratio:.1%}")
@@ -469,12 +472,12 @@ async def main():
     print(f"  优化耗时: {result.optimization_time:.2f}秒")
 
     if result.recommendations:
-        print(f"\n优化建议:")
+        print("\n优化建议:")
         for rec in result.recommendations:
             print(f"  {rec}")
 
     # 测试中心性计算
-    print(f"\n📊 测试中心性计算:")
+    print("\n📊 测试中心性计算:")
     centrality = optimizer.calculate_centrality_large_scale(
         nodes, edges, centrality_type="pagerank"
     )

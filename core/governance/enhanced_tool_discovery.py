@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强工具发现模块
 Enhanced Tool Discovery Module
@@ -20,7 +21,7 @@ import logging
 import re
 from collections import defaultdict
 from difflib import SequenceMatcher
-from typing import Any, Dict, List, Optional, Set
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

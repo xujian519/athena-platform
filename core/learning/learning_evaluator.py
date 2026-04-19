@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习效果评估器
 Learning Effectiveness Evaluator

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 检查专利申请号格式
 Check Patent Number Format
 """
 
-import psycopg2
 import os
+
+import psycopg2
 
 # PostgreSQL配置
 db_config = {

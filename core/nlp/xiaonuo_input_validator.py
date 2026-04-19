@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺输入验证和安全检查器
 Xiaonuo Input Validator and Security Checker
@@ -17,13 +18,10 @@ Xiaonuo Input Validator and Security Checker
 """
 
 import ast
-from core.async_main import async_main
 import base64
 import hashlib
 import html
 import json
-import logging
-from core.logging_config import setup_logging
 import os
 import re
 import sys
@@ -32,7 +30,9 @@ from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 添加模块路径
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -542,8 +542,8 @@ class InputValidator:
                         location=(match.start(), match.end()),
                         mitigation="解码并验证Base64内容"
                     ))
-        except Exception as e:
-            logger.warning(f'操作失败: {e}')
+            except Exception as e:
+                logger.warning(f'操作失败: {e}')
 
         return {'threats': threats}
 
@@ -596,16 +596,21 @@ class InputValidator:
 
         return metrics
 
-    def _determine_status(self, issues: list[list[str]] -> ValidationStatus:
+    def _determine_status(self, issues: list[list[str]], warnings: list[list[str]] = None, security_issues: list[list[str]] = None) -> ValidationStatus:
         """确定验证状态"""
+        if security_issues is None:
+            security_issues = []
+        if warnings is None:
+            warnings = []
+
         # 严重安全问题
-        critical_threats = [issue for issue in security_issues]
+        critical_threats = [issue for issue in security_issues
                            if hasattr(issue, 'severity') and issue.severity == ThreatLevel.CRITICAL]
         if critical_threats:
             return ValidationStatus.BLOCKED
 
         # 高威胁安全问题
-        high_threats = [issue for issue in security_issues]
+        high_threats = [issue for issue in security_issues
                        if hasattr(issue, 'severity') and issue.severity == ThreatLevel.HIGH]
         if high_threats:
             return ValidationStatus.INVALID
@@ -652,9 +657,9 @@ class InputValidator:
         for issue in result.issues[:5]:  # 只记录前5个
             self.validation_stats['common_issues'][issue] += 1
 
-    def batch_validate(self, inputs: list[dict[str] -> list[ValidationResult]:
+    def batch_validate(self, inputs: list[str]) -> list[ValidationResult]:
         """批量验证"""
-        return [self.validate_input(text, context) for text in inputs]
+        return [self.validate_input(text) for text in inputs]
 
     def get_validation_stats(self) -> dict[str, Any]:
         """获取验证统计"""

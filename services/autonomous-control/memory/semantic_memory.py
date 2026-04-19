@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 语义记忆图谱
 Semantic Memory Knowledge Graph
@@ -11,12 +10,10 @@ Semantic Memory Knowledge Graph
 """
 
 import asyncio
-from core.async_main import async_main
-import aiohttp
-import json
 import logging
-from typing import Dict, List, Any, Optional, Tuple
-import numpy as np
+from typing import Any
+
+import aiohttp
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +26,7 @@ class SemanticMemory:
         self.patent_db_url = "http://localhost:5432"  # 专利数据库
 
     async def search_knowledge(self, query: str, domain: str = "patent",
-                                limit: int = 10) -> Dict[str, Any]:
+                                limit: int = 10) -> dict[str, Any]:
         """
         搜索知识图谱
 
@@ -68,7 +65,7 @@ class SemanticMemory:
             return {"error": str(e)}
 
     async def get_related_entities(self, entity_name: str,
-                                   relation_type: str | None = None) -> List[Dict]:
+                                   relation_type: str | None = None) -> list[dict]:
         """
         获取相关实体
 
@@ -122,7 +119,7 @@ class SemanticMemory:
         """
         try:
             # 在本地缓存中记录概念链接
-            link_record = {
+            {
                 "concept1": concept1,
                 "concept2": concept2,
                 "relation": relation,
@@ -138,8 +135,8 @@ class SemanticMemory:
             logger.error(f"概念链接失败: {str(e)}")
             return False
 
-    async def extract_rules(self, text: str, rule_types: List[str],
-                          domain: str = "patent") -> Dict[str, Any]:
+    async def extract_rules(self, text: str, rule_types: list[str],
+                          domain: str = "patent") -> dict[str, Any]:
         """
         提取规则
 
@@ -173,7 +170,7 @@ class SemanticMemory:
             logger.error(f"规则提取异常: {str(e)}")
             return {}
 
-    async def get_legal_basis(self, issue: str, context: Dict = None) -> List[Dict]:
+    async def get_legal_basis(self, issue: str, context: dict = None) -> list[dict]:
         """
         获取法律依据
 
@@ -222,7 +219,7 @@ class SemanticMemory:
             return []
 
     async def find_similar_cases(self, case_text: str,
-                               case_type: str = "patent") -> List[Dict]:
+                               case_type: str = "patent") -> list[dict]:
         """
         查找相似案例
 
@@ -252,7 +249,7 @@ class SemanticMemory:
             logger.error(f"查找相似案例失败: {str(e)}")
             return []
 
-    async def _search_similar_patents(self, case_text: str) -> List[Dict]:
+    async def _search_similar_patents(self, case_text: str) -> list[dict]:
         """从专利数据库搜索相似专利"""
         try:
             # 这里应该连接PostgreSQL专利数据库
@@ -279,7 +276,7 @@ class SemanticMemory:
             logger.error(f"搜索相似专利失败: {str(e)}")
             return []
 
-    def _convert_to_cases(self, search_result: Dict) -> List[Dict]:
+    def _convert_to_cases(self, search_result: dict) -> list[dict]:
         """将搜索结果转换为案例格式"""
         cases = []
 
@@ -294,7 +291,7 @@ class SemanticMemory:
 
         return cases
 
-    def _process_search_result(self, result: Dict) -> Dict:
+    def _process_search_result(self, result: dict) -> dict:
         """处理搜索结果"""
         return {
             "knowledge_found": True,
@@ -304,7 +301,7 @@ class SemanticMemory:
             "timestamp": result.get("timestamp")
         }
 
-    def _extract_related_entities(self, graph_result: Dict) -> List[Dict]:
+    def _extract_related_entities(self, graph_result: dict) -> list[dict]:
         """提取相关实体"""
         entities = []
 
@@ -320,7 +317,7 @@ class SemanticMemory:
 
         return entities
 
-    async def build_concept_map(self, concepts: List[str]) -> Dict[str, List[str]]:
+    async def build_concept_map(self, concepts: list[str]) -> dict[str, list[str]]:
         """
         构建概念图
 
@@ -342,7 +339,7 @@ class SemanticMemory:
 
         return concept_map
 
-    async def update_knowledge(self, new_knowledge: Dict) -> bool:
+    async def update_knowledge(self, new_knowledge: dict) -> bool:
         """
         更新知识
 

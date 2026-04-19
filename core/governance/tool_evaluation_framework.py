@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena工具评估框架
 Tool Evaluation Framework for Athena Platform
@@ -27,8 +28,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from statistics import mean, median
-from typing import Any, Dict, List, Optional, Tuple
+from statistics import mean
+from typing import Any
 
 from core.logging_config import setup_logging
 

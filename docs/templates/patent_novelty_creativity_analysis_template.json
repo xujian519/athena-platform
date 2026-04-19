@@ -1,0 +1,421 @@
+{
+  "patent_triple_property_analysis": {
+    "metadata": {
+      "version": "1.0",
+      "created_date": "2025-12-12",
+      "description": "专利三性（新颖性、创造性、实用性）分析和技术比对模板",
+      "application_scenarios": [
+        "专利申请前的新创性评估",
+        "专利审查中的三性判断",
+        "专利无效宣告请求",
+        "专利侵权诉讼中的现有技术抗辩",
+        "技术自由实施(FTO)分析",
+        "专利布局和技术研发规划"
+      ]
+    },
+
+    "novelty_analysis_template": {
+      "name": "新颖性分析模板",
+      "description": "基于专利法第22条的新颖性判断标准",
+      "legal_basis": "专利法第22条第2款：新颖性，是指该发明或者实用新型不属于现有技术",
+
+      "structure": {
+        "target_analysis": {
+          "patent_info": {
+            "patent_number": "专利号",
+            "application_date": "申请日",
+            "title": "专利标题",
+            "abstract": "专利摘要",
+            "independent_claims": {
+              "type": "array",
+              "description": "独立权利要求列表"
+            }
+          },
+          "technical_features": {
+            "extracted_features": {
+              "type": "array",
+              "description": "提取的技术特征"
+            },
+            "essential_features": {
+              "type": "array",
+              "description": "必要技术特征"
+            },
+            "distinguishing_features": {
+              "type": "array",
+              "description": "区别特征"
+            }
+          }
+        },
+
+        "prior_art_analysis": {
+          "search_results": {
+            "patent_literature": {
+              "type": "array",
+              "description": "对比专利文献",
+              "items": {
+                "document_number": "文献编号",
+                "publication_date": "公开日期",
+                "title": "标题",
+                "abstract": "摘要",
+                "relevance_score": "相关度评分(0-1)",
+                "overlapping_features": "重叠技术特征列表"
+              }
+            },
+            "non_patent_literature": {
+              "type": "array",
+              "description": "非专利文献",
+              "items": {
+                "document_type": "文献类型(期刊/会议/标准等)",
+                "title": "标题",
+                "authors": "作者",
+                "publication_date": "发表日期",
+                "relevance_score": "相关度评分",
+                "technical_disclosure": "技术披露内容"
+              }
+            },
+            "public_use": {
+              "type": "array",
+              "description": "公开使用证据",
+              "items": {
+                "use_date": "使用日期",
+                "use_location": "使用地点",
+                "disclosure_content": "披露内容",
+                "evidence_type": "证据类型"
+              }
+            }
+          }
+        },
+
+        "novelty_comparison": {
+          "feature_by_feature_analysis": {
+            "type": "array",
+            "description": "逐特征对比分析",
+            "items": {
+              "target_feature": {
+                "feature_id": "特征ID",
+                "description": "特征描述",
+                "feature_type": "结构/功能/参数/位置等"
+              },
+              "prior_art_disclosure": {
+                "document_reference": "对比文献",
+                "disclosure_text": "披露内容",
+                "similarity_assessment": "相似度评估"
+              },
+              "comparison_result": {
+                "identical": "是否完全相同",
+                "equivalent": "是否等同",
+                "differences": "差异点",
+                "conclusion": "该特征的新颖性结论"
+              }
+            }
+          },
+
+          "overall_assessment": {
+            "complete_disclosure_found": {
+              "found": "是否发现完整技术方案披露",
+              "reference_documents": "披露文献列表",
+              "disclosure_completeness": "披露完整度(%)"
+            },
+            "partial_disclosure_analysis": {
+              "missing_essential_features": "未披露的必要技术特征",
+              "distinguishing_features": "区别于现有技术的特征",
+              "innovation_points": "创新点"
+            },
+            "novelty_conclusion": {
+              "is_novel": "是否具备新颖性",
+              "confidence_level": "判断置信度(高/中/低)",
+              "reasoning": "判断理由",
+              "risk_assessment": "风险评估"
+            }
+          }
+        },
+
+        "novelty_defense_strategies": {
+          "if_lacking_novelty": {
+            "amend_claims": "修改权利要求建议",
+            "argue_distinctions": "区别点论证策略",
+            "challenge_prior_art": "挑战对比文献"
+          },
+          "if_having_novelty": {
+            "emphasize_innovations": "强调创新点",
+            "document_differences": "文档化差异",
+            "strengthen_claims": "强化权利要求保护范围"
+          }
+        }
+      }
+    },
+
+    "inventive_step_analysis_template": {
+      "name": "创造性分析模板",
+      "description": "基于专利法第22条的创造性判断标准",
+      "legal_basis": "专利法第22条第3款：创造性，是指与现有技术相比，该发明具有突出的实质性特点和显著的进步",
+
+      "structure": {
+        "closest_prior_art": {
+          "identification": {
+            "reference_document": "最接近的现有技术",
+            "selection_reason": "选择理由",
+            "technical_field_similarity": "技术领域相似度",
+            "technical_problem_similarity": "技术问题相似度",
+            "technical_solution_similarity": "技术方案相似度"
+          },
+          "disclosure_analysis": {
+            "technical_features": "披露的技术特征",
+            "advantages": "优势",
+            "limitations": "技术缺陷",
+            "technical_problems": "存在的技术问题"
+          }
+        },
+
+        "distinguishing_features_analysis": {
+          "feature_comparison": {
+            "type": "array",
+            "description": "区别特征分析",
+            "items": {
+              "feature": "区别技术特征",
+              "closest_prior_art_disclosure": "最接近现有技术是否披露",
+              "other_prior_art_disclosure": "其他现有技术是否披露",
+              "obviousness_assessment": "显而易见性评估"
+            }
+          },
+          "non-obviousness_factors": {
+            "unexpected_results": "预料不到的技术效果",
+            "long_felt_need": "长期未能解决的技术需求",
+            "commercial_success": "商业成功",
+            "teaching_away": "相反教导",
+            "technical_difficulty": "技术难度"
+          }
+        },
+
+        "progressive_improvement_analysis": {
+          "technical_advantages": {
+            "improved_performance": "性能改进",
+            "reduced_cost": "成本降低",
+            "enhanced_efficiency": "效率提升",
+            "environmental_benefits": "环境效益",
+            "social_benefits": "社会效益"
+          },
+          "quantitative_improvements": {
+            "performance_metrics": "性能指标对比",
+            "efficiency_metrics": "效率指标对比",
+            "cost_metrics": "成本指标对比",
+            "quality_metrics": "质量指标对比"
+          },
+          "technical_significance": {
+            "breakthrough_level": "突破性程度",
+            "industry_impact": "行业影响",
+            "technical_advancement": "技术进步贡献",
+            "application_scope": "应用范围"
+          }
+        },
+
+        "inventive_step_conclusion": {
+          "has_inventive_step": "是否具备创造性",
+          "reasoning_elements": {
+            "distinguishing_features": "区别特征",
+            "non_obviousness": "非显而易见性",
+            "technical_progress": "技术进步",
+            "beneficial_effects": "有益效果"
+          },
+          "confidence_assessment": {
+            "confidence_level": "判断置信度",
+            "supporting_evidence": "支撑证据",
+            "counter_evidence": "反面证据"
+          }
+        }
+      }
+    },
+
+    "industrial_applicability_template": {
+      "name": "实用性分析模板",
+      "description": "基于专利法第22条的实用性判断标准",
+      "legal_basis": "专利法第22条第4款：实用性，是指该发明或者实用新型能够制造或者使用，并且能够产生积极效果",
+
+      "structure": {
+        "manufacturability_assessment": {
+          "technical_feasibility": {
+            "existing_manufacturing_methods": "现有制造工艺",
+            "required_equipment": "所需设备",
+            "material_availability": "材料可获得性",
+            "manufacturing_complexity": "制造复杂度"
+          },
+          "scalability_analysis": {
+            "lab_scale_feasibility": "实验室可行性",
+            "pilot_scale_feasibility": "中试可行性",
+            "industrial_scale_feasibility": "工业化可行性",
+            "production_cost_analysis": "生产成本分析"
+          }
+        },
+
+        "usability_assessment": {
+          "application_scenarios": {
+            "target_industries": "目标行业",
+            "application_methods": "应用方法",
+            "operating_conditions": "操作条件",
+            "maintenance_requirements": "维护要求"
+          },
+          "user_acceptance": {
+            "ease_of_use": "使用便利性",
+            "reliability": "可靠性",
+            "safety_considerations": "安全性考虑",
+            "environmental_impact": "环境影响"
+          }
+        },
+
+        "positive_effects_assessment": {
+          "economic_benefits": {
+            "cost_reduction": "成本节约",
+            "efficiency_improvement": "效率提升",
+            "quality_enhancement": "质量改善",
+            "market_potential": "市场潜力"
+          },
+          "social_benefits": {
+            "environmental_protection": "环境保护",
+            "resource_conservation": "资源节约",
+            "safety_improvement": "安全改善",
+            "quality_of_life": "生活质量提升"
+          },
+          "technical_benefits": {
+            "problem_solving": "解决问题",
+            "performance_improvement": "性能改进",
+            "function_enhancement": "功能增强",
+            "innovation_contribution": "创新贡献"
+          }
+        }
+      }
+    },
+
+    "technical_comparison_template": {
+      "name": "技术比对分析模板",
+      "description": "用于多技术方案的详细比对分析",
+
+      "structure": {
+        "comparison_setup": {
+          "target_technology": {
+            "name": "目标技术名称",
+            "source": "技术来源",
+            "description": "技术描述",
+            "key_features": "关键技术特征",
+            "performance_metrics": "性能指标"
+          },
+          "comparison_technologies": {
+            "type": "array",
+            "description": "对比技术列表",
+            "items": {
+              "name": "技术名称",
+              "source": "技术来源",
+              "description": "技术描述",
+              "maturity_level": "成熟度",
+              "market_status": "市场状态"
+            }
+          },
+          "comparison_criteria": {
+            "technical_performance": "技术性能",
+            "economic_feasibility": "经济可行性",
+            "environmental_impact": "环境影响",
+            "implementation_difficulty": "实施难度",
+            "market_potential": "市场潜力"
+          }
+        },
+
+        "feature_level_comparison": {
+          "matrix_analysis": {
+            "rows": "技术方案",
+            "columns": "技术特征",
+            "cells": {
+              "presence": "是否存在",
+              "implementation": "实现方式",
+              "performance": "性能表现",
+              "advantages": "优势",
+              "disadvantages": "劣势"
+            }
+          },
+          "gap_analysis": {
+            "unique_features": "独有技术特征",
+            "missing_features": "缺失技术特征",
+            "superior_features": "优势特征",
+            "inferior_features": "劣势特征"
+          }
+        },
+
+        "performance_comparison": {
+          "quantitative_analysis": {
+            "type": "array",
+            "description": "量化指标对比",
+            "items": {
+              "metric_name": "指标名称",
+              "unit": "单位",
+              "target_value": "目标技术值",
+              "comparison_values": "对比技术值",
+              "improvement_percentage": "改进百分比",
+              "significance": "显著性"
+            }
+          },
+          "qualitative_analysis": {
+            "ease_of_implementation": "实施难易度",
+            "maintenance_requirements": "维护需求",
+            "reliability": "可靠性",
+            "adaptability": "适应性",
+            "scalability": "可扩展性"
+          }
+        },
+
+        "comprehensive_evaluation": {
+          "scoring_system": {
+            "criteria_weights": "评价标准权重",
+            "technology_scores": "各技术评分",
+            "weighted_scores": "加权评分",
+            "ranking": "排名"
+          },
+          "decision_matrix": {
+            "strengths": "优势分析",
+            "weaknesses": "劣势分析",
+            "opportunities": "机会分析",
+            "threats": "威胁分析"
+          },
+          "recommendations": {
+            "best_choice": "最优选择",
+            "application_scenarios": "推荐应用场景",
+            "improvement_suggestions": "改进建议",
+            "development_roadmap": "发展路线图"
+          }
+        }
+      }
+    },
+
+    "analysis_workflows": {
+      "patent_application_workflow": {
+        "step_1": "技术特征提取和分析",
+        "step_2": "现有技术检索",
+        "step_3": "新颖性分析",
+        "step_4": "创造性分析",
+        "step_5": "实用性分析",
+        "step_6": "综合评估和建议"
+      },
+      "patent_invalidity_workflow": {
+        "step_1": "目标专利分析",
+        "step_2": "证据收集和筛选",
+        "step_3": "新颖性挑战分析",
+        "step_4": "创造性挑战分析",
+        "step_5": "实用性挑战分析",
+        "step_6": "无效宣告策略制定"
+      },
+      "freedom_to_operate_workflow": {
+        "step_1": "技术方案定义",
+        "step_2": "相关专利检索",
+        "step_3": "权利要求对比",
+        "step_4": "侵权风险评估",
+        "step_5": "规避设计建议",
+        "step_6": "风险缓解策略"
+      }
+    },
+
+    "quality_assurance": {
+      "data_integrity": "确保提取数据的准确性和完整性",
+      "methodological_rigor": "保证分析方法的科学性和严谨性",
+      "evidence_based_analysis": "基于充分证据进行分析判断",
+      "peer_review": "进行同行评议和质量检查",
+      "document_trail": "保持完整的分析过程记录"
+    }
+  }
+}

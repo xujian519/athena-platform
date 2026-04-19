@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台统一配置管理器
 Unified Configuration Manager for Athena Platform
@@ -13,10 +14,9 @@ import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 import yaml
-
 
 
 @dataclass
@@ -62,7 +62,7 @@ class AthenaConfig:
     # 数据库配置 - Neo4j (TD-001: 统一图数据库)
     neo4j_uri: str = "bolt://localhost:7687"
     neo4j_username: str = "neo4j"
-    neo4j_password: str = "password"
+    neo4j_password: str = os.getenv("NEO4J_PASSWORD", "password")
     neo4j_database: str = "neo4j"
 
     # AI模型配置

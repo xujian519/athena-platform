@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 法律写作素材库管理器
 Legal Writing Materials Manager
@@ -9,13 +9,12 @@ Legal Writing Materials Manager
 """
 
 import asyncio
-from core.async_main import async_main
 import json
 import logging
-from pathlib import Path
-from typing import Dict, Any, List, Optional
-from datetime import datetime
 import re
+from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +64,7 @@ class WritingMaterialsManager:
         """加载或创建索引"""
         if self.index_path.exists():
             try:
-                with open(self.index_path, 'r', encoding='utf-8') as f:
+                with open(self.index_path, encoding='utf-8') as f:
                     index = json.load(f)
                 logger.info(f"   已加载索引: {len(index.get('materials', []))} 条素材")
                 return index
@@ -182,7 +181,7 @@ class WritingMaterialsManager:
                 index["materials"].append(material)
                 index["categories"]["court_judgments"].append(item.stem)
 
-        logger.info(f"   法律书籍扫描完成")
+        logger.info("   法律书籍扫描完成")
 
     def _scan_legal_knowledge(self, index: dict[str, Any]):
         """扫描法律知识库"""
@@ -204,7 +203,7 @@ class WritingMaterialsManager:
                 index["materials"].append(material)
                 index["categories"]["judicial_interpretations"].append(item.stem)
 
-        logger.info(f"   法律知识库扫描完成")
+        logger.info("   法律知识库扫描完成")
 
     def _extract_decision_title(self, decision_id: str) -> str:
         """从决定号提取标题"""
@@ -328,10 +327,10 @@ class WritingMaterialsManager:
 
         try:
             if file_path.suffix == '.md':
-                with open(file_path, 'r', encoding='utf-8') as f:
+                with open(file_path, encoding='utf-8') as f:
                     content = f.read()
             elif file_path.suffix == '.txt':
-                with open(file_path, 'r', encoding='utf-8') as f:
+                with open(file_path, encoding='utf-8') as f:
                     content = f.read()
             else:
                 # 对于其他格式(如docx),返回提示
@@ -443,19 +442,19 @@ if __name__ == "__main__":
         manager = get_materials_manager()
 
         # 测试搜索
-        print(f"\n🔍 搜索测试: 创造性")
+        print("\n🔍 搜索测试: 创造性")
         results = manager.search_materials("创造性", top_k=3)
         for result in results:
             print(f"   {result.get('title', result['id'])}: {result.get('relevance_score', 0)}")
 
         # 测试获取示例
-        print(f"\n📝 获取写作示例...")
+        print("\n📝 获取写作示例...")
         examples = manager.get_writing_examples("research_report")
         for key, value in examples.items():
             print(f"   {key}: {len(value)} 条")
 
         # 测试搜索相关示例
-        print(f"\n🔍 搜索相关示例: 专利 全面覆盖")
+        print("\n🔍 搜索相关示例: 专利 全面覆盖")
         relevant_examples = await manager.search_relevant_examples("专利全面覆盖", "法理基础", top_k=2)
         for i, example in enumerate(relevant_examples, 1):
             print(f"   示例 {i}: {len(example)} 字符")

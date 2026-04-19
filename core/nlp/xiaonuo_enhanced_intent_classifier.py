@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺增强意图分类器
 Xiaonuo Enhanced Intent Classifier
@@ -11,19 +12,16 @@ Xiaonuo Enhanced Intent Classifier
 """
 
 import functools
-from core.async_main import async_main
 import json
-import logging
-from core.logging_config import setup_logging
 import operator
 import os
-import joblib  # 安全修复: 使用joblib替代pickle保存scikit-learn模型
 import re
 from dataclasses import dataclass
 from datetime import datetime
 
 # NLP库
 import jieba
+import joblib  # 安全修复: 使用joblib替代pickle保存scikit-learn模型
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.ensemble import RandomForestClassifier, VotingClassifier
@@ -36,6 +34,8 @@ from sklearn.model_selection import cross_val_score, train_test_split
 from sklearn.pipeline import FeatureUnion, Pipeline
 from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import SVC
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -184,7 +184,7 @@ class XiaonuoEnhancedIntentClassifier:
         }
         return stop_words
 
-    def create_expanded_training_data(self) -> tuple[list[str], list[str]:
+    def create_expanded_training_data(self) -> tuple[list[str], list[str]]:
         """创建扩展的训练数据集"""
         logger.info("📚 创建扩展版小诺意图训练数据集...")
 
@@ -412,7 +412,7 @@ class XiaonuoEnhancedIntentClassifier:
 
         return texts, labels
 
-    def _augment_training_data(self, original_data: list[tuple[str, str]) -> list[tuple[str, str]]:
+    def _augment_training_data(self, original_data: list[tuple[str, str]]) -> list[tuple[str, str]]:
         """数据增强:多样化表达"""
         augmented_data = original_data.copy()
 
@@ -448,8 +448,8 @@ class XiaonuoEnhancedIntentClassifier:
                             # 确保新文本与原文本不同
                             if new_text != text and len(new_text.split()) >= 3:
                                 augmented_data.append((new_text, label))
-        except Exception as e:
-            logger.warning(f'操作失败: {e}')
+                except Exception as e:
+                    logger.warning(f'操作失败: {e}')
 
         return augmented_data
 
@@ -683,9 +683,15 @@ class XiaonuoEnhancedIntentClassifier:
         logger.info(f"✅ 增强模型已加载: {model_path}")
 
     def _save_evaluation_results(self, X_val: list[str], y_true: list[str],
-                                y_pred: list[str]]:
+                                y_pred: list[str]):
         """保存评估结果"""
+        from sklearn.metrics import accuracy_score, classification_report
+
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+        # 计算准确率和分类报告
+        accuracy = accuracy_score(y_true, y_pred)
+        report = classification_report(y_true, y_pred, target_names=self.config.intent_labels)
 
         # 保存评估报告
         report_data = {

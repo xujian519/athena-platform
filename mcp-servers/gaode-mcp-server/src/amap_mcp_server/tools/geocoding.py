@@ -3,11 +3,9 @@
 Geocoding Tool
 """
 
-import logging
-from typing import Any, Dict, Optional
+from typing import Any
 
 import structlog
-from mcp.types import Tool
 
 from ..api.gaode_client import AmapApiClient
 
@@ -22,7 +20,7 @@ class GeocodingTool:
     def __init__(self, api_client: AmapApiClient):
         self.api_client = api_client
 
-    async def call(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
+    async def call(self, arguments: dict[str, Any]) -> dict[str, Any]:
         """
         地理编码处理
 
@@ -46,7 +44,7 @@ class GeocodingTool:
         else:
             raise ValueError(f"不支持的操作类型: {operation}")
 
-    async def _handle_geocoding(self, args: Dict[str, Any]) -> Dict[str, Any]:
+    async def _handle_geocoding(self, args: dict[str, Any]) -> dict[str, Any]:
         """处理地址转坐标"""
         address = args.get('address')
         if not address:
@@ -115,7 +113,7 @@ class GeocodingTool:
                 'results': []
             }
 
-    async def _handle_reverse_geocoding(self, args: Dict[str, Any]) -> Dict[str, Any]:
+    async def _handle_reverse_geocoding(self, args: dict[str, Any]) -> dict[str, Any]:
         """处理坐标转地址"""
         location = args.get('location')
         if not location:
@@ -210,7 +208,7 @@ class GeocodingTool:
                 'pois': []
             }
 
-    def get_input_schema(self) -> Dict[str, Any]:
+    def get_input_schema(self) -> dict[str, Any]:
         """获取输入参数模式"""
         return {
             'type': 'object',
@@ -252,7 +250,7 @@ class GeocodingTool:
             'required': ['operation']
         }
 
-    def get_output_schema(self) -> Dict[str, Any]:
+    def get_output_schema(self) -> dict[str, Any]:
         """获取输出结果模式"""
         return {
             'type': 'object',

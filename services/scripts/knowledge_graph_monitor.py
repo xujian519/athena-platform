@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 知识图谱数据完整性监控系统
 作者：小娜
@@ -7,20 +6,16 @@
 """
 
 import json
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
-import smtplib
-import threading
 import time
-from datetime import datetime, timedelta
-from email.mime.multipart import MimeMultipart
-from email.mime.text import MimeText
+from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 import requests
 import schedule
+
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(
@@ -48,7 +43,7 @@ class KnowledgeGraphMonitor:
         self.reports_dir = Path('data/monitoring_reports')
         self.reports_dir.mkdir(exist_ok=True)
 
-    def execute_query(self, query: str, parameters: Dict = None) -> Dict:
+    def execute_query(self, query: str, parameters: dict = None) -> dict:
         """执行Cypher查询"""
         try:
             data = {'statements': [{'statement': query, 'parameters': parameters or {}}]}
@@ -66,7 +61,7 @@ class KnowledgeGraphMonitor:
             logger.error(f"查询执行异常: {e}")
             return {}
 
-    def check_database_health(self) -> Dict:
+    def check_database_health(self) -> dict:
         """检查数据库健康状况"""
         health = {
             'timestamp': datetime.now().isoformat(),
@@ -116,7 +111,7 @@ class KnowledgeGraphMonitor:
 
         return health
 
-    def check_data_integrity(self) -> Dict:
+    def check_data_integrity(self) -> dict:
         """检查数据完整性"""
         integrity = {
             'timestamp': datetime.now().isoformat(),
@@ -188,7 +183,7 @@ class KnowledgeGraphMonitor:
 
         return integrity
 
-    def check_performance_metrics(self) -> Dict:
+    def check_performance_metrics(self) -> dict:
         """检查性能指标"""
         performance = {
             'timestamp': datetime.now().isoformat(),
@@ -220,7 +215,7 @@ class KnowledgeGraphMonitor:
 
         return performance
 
-    def generate_report(self) -> Dict:
+    def generate_report(self) -> dict:
         """生成监控报告"""
         logger.info('生成监控报告...')
 
@@ -248,7 +243,7 @@ class KnowledgeGraphMonitor:
         logger.info(f"监控报告已保存: {report_file}")
         return report
 
-    def send_alert(self, report: Dict) -> Any:
+    def send_alert(self, report: dict) -> Any:
         """发送告警通知"""
         if report['overall_status'] in ['alert', 'warning']:
             alert_message = f"""

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena统一工具注册中心
 Unified Tool Registry for Athena Platform
@@ -28,13 +29,12 @@ Unified Tool Registry for Athena Platform
 import asyncio
 import contextlib
 import logging
-import sys
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -197,7 +197,10 @@ class UnifiedToolRegistry:
             # 4. 从清单加载服务工具
             await self._load_tools_from_inventory()
 
-            # 5. 启动健康检查
+            # 5. 扫描并注册tools目录工具
+            await self._scan_and_register_tools_directory()
+
+            # 6. 启动健康检查
             await self._start_health_check_scheduler()
 
             total = len(self.tools)
@@ -446,6 +449,56 @@ class UnifiedToolRegistry:
             except Exception as e:
                 logger.debug(f"无法注册工具 {tool_data.get('tool_id')}: {e}")
 
+    async def _scan_and_register_tools_directory(self):
+        """扫描并注册tools目录中的工具"""
+        logger.info("🔧 扫描tools目录...")
+
+        try:
+            # 动态导入工具扫描器
+            import importlib.util
+            import sys
+
+            scanner_path = PROJECT_ROOT / "core" / "governance" / "tools_scanner.py"
+
+            if not scanner_path.exists():
+                logger.warning(f"⚠️ 工具扫描器不存在: {scanner_path}")
+                return
+
+            # 读取并执行扫描器模块
+            with open(scanner_path, encoding="utf-8") as f:
+                code = f.read()
+
+            module = type(
+                importlib.util.module_from_spec(
+                    importlib.util.spec_from_file_location(
+                        "core.governance.tools_scanner", str(scanner_path)
+                    )
+                )
+            )("core.governance.tools_scanner")
+
+            module.__name__ = "core.governance.tools_scanner"
+            module.__package__ = "core.governance"
+            module.__file__ = str(scanner_path)
+
+            sys.modules["core.governance.tools_scanner"] = module
+
+            exec(code, module.__dict__)
+
+            # 创建扫描器并扫描
+            ToolScanner = module.ToolScanner
+            scanner = ToolScanner(tools_dir=self.platform_root / "tools", registry=self)
+
+            # 只扫描顶层文件(不递归子目录)
+            functions = await scanner.scan_directory(recursive=False)
+
+            # 注册发现的工具
+            registered = await scanner.register_all(functions=functions, dry_run=False)
+
+            logger.info(f"✅ 从tools目录注册了 {registered} 个工具")
+
+        except Exception as e:
+            logger.warning(f"⚠️ 扫描tools目录失败: {e}")
+
     async def register_tool(
         self,
         tool_id: str,
@@ -533,7 +586,7 @@ class UnifiedToolRegistry:
                 result = await self._execute_mcp_tool(tool_id, parameters, context)
             elif metadata.category == ToolCategory.SEARCH:
                 result = await self._execute_search_tool(tool_id, parameters, context)
-            elif metadata.category in [ToolCategory.SERVICE, ToolCategory.DOMAIN]:
+            elif metadata.category in [ToolCategory.SERVICE, ToolCategory.DOMAIN, ToolCategory.UTILITY]:
                 result = await self._execute_service_tool(tool_id, parameters, context)
             elif metadata.category == ToolCategory.AGENT:
                 result = await self._execute_agent_tool(tool_id, parameters, context)
@@ -631,13 +684,35 @@ class UnifiedToolRegistry:
     async def _execute_service_tool(
         self, tool_id: str, parameters: dict[str, Any], context: dict[str, Any]
     ) -> ToolExecutionResult:
-        """执行服务工具"""
-        # 服务工具延迟加载(简化实现)
-        return ToolExecutionResult(
-            tool_id=tool_id,
-            success=True,
-            result={"message": f"执行服务工具: {tool_id}", "parameters": parameters},
-        )
+        """执行服务工具/工具函数"""
+        try:
+            # 延迟导入工具执行器
+            if not hasattr(self, '_tool_executor'):
+                from core.governance.tool_executor import get_tool_executor
+                self._tool_executor = get_tool_executor()
+
+            # 执行工具
+            result = await self._tool_executor.execute(
+                tool_id=tool_id,
+                parameters=parameters,
+                context=context
+            )
+
+            return ToolExecutionResult(
+                tool_id=tool_id,
+                success=result["success"],
+                result=result.get("result"),
+                error=result.get("error") if not result["success"] else None,
+                execution_time=result.get("execution_time", 0.0),
+                timestamp=datetime.fromisoformat(result["timestamp"]) if result.get("timestamp") else datetime.now()
+            )
+
+        except Exception as e:
+            return ToolExecutionResult(
+                tool_id=tool_id,
+                success=False,
+                error=f"工具执行失败: {str(e)}"
+            )
 
     async def _execute_agent_tool(
         self, tool_id: str, parameters: dict[str, Any], context: dict[str, Any]

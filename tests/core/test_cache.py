@@ -3,9 +3,9 @@
 测试缓存系统的核心功能
 """
 
-import pytest
 import time
-from typing import Any, Dict
+
+import pytest
 
 
 class TestCacheModule:

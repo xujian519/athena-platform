@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺优化监控模块
 Xiaonuo Optimization Monitoring Module
@@ -16,7 +17,7 @@ from collections import deque
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from threading import Lock
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +59,7 @@ class MetricsCollector:
         self._max_points = max_points
         self._lock = Lock()
 
-    def record(self, metric_name: str, value: float, tags: dict[str | None = None, str | None = None) -> None:
+    def record(self, metric_name: str, value: float, tags: dict[str, str] | None = None) -> None:
         """
         记录指标
 

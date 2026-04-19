@@ -4,12 +4,11 @@
 Xuenuo Life Assistant System - 负责爸爸的生活管理
 """
 
-from xuenuo_recipe_assistant import answer_recipe_question
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-from security_manager import PersonalSecurityManager
 from pathlib import Path
-import json
-from core.async_main import async_main
+
+from security_manager import PersonalSecurityManager
+from xuenuo_recipe_assistant import answer_recipe_question
+
 
 class XuenuoLifeAssistant:
     """小诺 - 爸爸的生活助理"""
@@ -51,7 +50,7 @@ class XuenuoLifeAssistant:
         try:
             results = self.security_manager.get_secure_info(category=category, search_term=keyword)
             return results
-        except Exception as e:
+        except Exception:
             return None
 
     def format_notes_results(self, results) -> None:
@@ -80,7 +79,7 @@ class XuenuoLifeAssistant:
             return self.query_recipe(request)
 
         # 然后尝试其他功能
-        for func_name, func in self.functions.items():
+        for _func_name, func in self.functions.items():
             result = func(request)
             if result and "没有找到" not in result and "需要密码" not in result:
                 return result

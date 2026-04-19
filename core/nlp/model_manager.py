@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能模型管理器
 Intelligent Model Manager
@@ -14,10 +15,9 @@ import gc
 import threading
 import time
 from contextlib import contextmanager
-from typing import Any, Optional
+from typing import Any
 
 import torch
-
 
 
 class LazyModelLoader:

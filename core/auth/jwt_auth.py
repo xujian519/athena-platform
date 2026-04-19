@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 身份认证和授权模块
 Authentication and Authorization Module
@@ -12,7 +13,7 @@ import time
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import jwt
 from fastapi import HTTPException, Security, status
@@ -279,13 +280,13 @@ class JWTAuthManager:
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="令牌已过期",
                 headers={"WWW-Authenticate": "Bearer"},
-            )
+            ) from None
         except jwt.InvalidTokenError as e:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail=f"无效的令牌: {e!s}",
                 headers={"WWW-Authenticate": "Bearer"},
-            )
+            ) from e
 
     def refresh_access_token(self, refresh_token: str) -> str:
         """
@@ -329,11 +330,11 @@ class JWTAuthManager:
             return self.create_access_token(user)
 
         except jwt.ExpiredSignatureError:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="刷新令牌已过期")
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="刷新令牌已过期") from None
         except jwt.InvalidTokenError as e:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, detail=f"无效的刷新令牌: {e!s}"
-            )
+            ) from e
 
 
 # =============================================================================

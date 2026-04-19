@@ -17,11 +17,16 @@ Processor-Specific Performance Tests
 import asyncio
 import contextlib
 import logging
+
+# 导入感知模块
+import sys
 import time
+from pathlib import Path
 
 import pytest
 
-# 导入感知模块
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 from core.perception import ImageProcessor, PerceptionEngine, TextProcessor
 from core.perception.streaming_perception_processor import StreamConfig, StreamType
 

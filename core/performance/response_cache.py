@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 响应缓存机制 - 避免重复AI模型调用
 用于提升系统响应速度,减少AI模型调用开销
@@ -11,7 +12,6 @@ import time
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
 
 
 class ResponseCache:

@@ -1,40 +1,33 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena平台知识图谱智能问答系统
 集成大语言模型，提供基于知识图谱的智能问答服务
 """
 
-import asyncio
-from core.async_main import async_main
 import json
 import logging
-from core.logging_config import setup_logging
-from datetime import datetime
-from typing import Dict, List, Any, Optional, Tuple
-from pathlib import Path
-import aiohttp
-import aiofiles
-import re
 from dataclasses import dataclass
-import requests
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+import aiohttp
+import uvicorn
 
 # FastAPI imports
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-
-from core.security.auth import ALLOWED_ORIGINS
-from pydantic import BaseModel
-import uvicorn
+from langchain.chains import RetrievalQA
 
 # LangChain imports
-from langchain.llms import OpenAI
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings import OpenAIEmbeddings
-from langchain.vectorstores import FAISS
-from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
-from langchain.memory import ConversationBufferMemory
+from langchain.vectorstores import FAISS
+from pydantic import BaseModel
+
+from core.logging_config import setup_logging
+from core.security.auth import ALLOWED_ORIGINS
 
 # 配置日志
 logging.basicConfig(
@@ -52,9 +45,9 @@ class QAContext:
     """问答上下文"""
     user_id: str
     session_id: str
-    history: List[Dict[str, str]]
+    history: list[dict[str, str]]
     current_query: str
-    retrieved_knowledge: List[Dict]
+    retrieved_knowledge: list[dict]
     timestamp: datetime
 
 class KnowledgeGraphQA:
@@ -71,7 +64,7 @@ class KnowledgeGraphQA:
         self.qa_chain = None
 
         # 会话管理
-        self.sessions: Dict[str, QAContext] = {}
+        self.sessions: dict[str, QAContext] = {}
 
         # 知识库缓存
         self.knowledge_cache = {}
@@ -114,7 +107,7 @@ class KnowledgeGraphQA:
         }
 
         if self.config_path.exists():
-            with open(self.config_path, 'r', encoding='utf-8') as f:
+            with open(self.config_path, encoding='utf-8') as f:
                 loaded_config = json.load(f)
                 self.config = {**default_config, **loaded_config}
         else:
@@ -192,7 +185,7 @@ class KnowledgeGraphQA:
 
         logger.info(f"✅ 知识库已初始化，包含 {len(knowledge_texts)} 条知识")
 
-    async def _build_knowledge_base(self) -> List[str]:
+    async def _build_knowledge_base(self) -> list[str]:
         """构建知识库"""
         knowledge_texts = []
 
@@ -224,7 +217,7 @@ class KnowledgeGraphQA:
 
         return knowledge_texts
 
-    async def _fetch_knowledge_graph_data(self) -> Dict:
+    async def _fetch_knowledge_graph_data(self) -> dict:
         """从知识图谱获取数据"""
         api_url = self.config["knowledge_graph"]["api_url"]
 
@@ -294,7 +287,7 @@ class KnowledgeGraphQA:
         user_id: str,
         session_id: str | None = None,
         search_kg: bool = True
-    ) -> Dict:
+    ) -> dict:
         """回答问题"""
         logger.info(f"❓ 收到问题: {question} (用户: {user_id})")
 
@@ -357,9 +350,9 @@ class KnowledgeGraphQA:
 
         except Exception as e:
             logger.error(f"❌ 问答处理失败: {e}")
-            raise HTTPException(status_code=500, detail=str(e))
+            raise HTTPException(status_code=500, detail=str(e)) from e
 
-    async def _search_knowledge_graph(self, query: str) -> List[Dict]:
+    async def _search_knowledge_graph(self, query: str) -> list[dict]:
         """在知识图谱中搜索相关信息"""
         try:
             api_url = self.config["knowledge_graph"]["api_url"]
@@ -383,7 +376,7 @@ class KnowledgeGraphQA:
 
         return []
 
-    async def _generate_answer(self, question: str, history: List[Dict]) -> Dict:
+    async def _generate_answer(self, question: str, history: list[dict]) -> dict:
         """使用问答链生成回答"""
         try:
             # 构建上下文
@@ -415,10 +408,10 @@ class KnowledgeGraphQA:
 
     async def _enhance_answer(
         self,
-        qa_result: Dict,
-        kg_results: List[Dict],
+        qa_result: dict,
+        kg_results: list[dict],
         question: str
-    ) -> Dict:
+    ) -> dict:
         """增强回答（结合知识图谱信息）"""
         enhanced = qa_result.copy()
 
@@ -446,7 +439,7 @@ class KnowledgeGraphQA:
 
         return enhanced
 
-    async def _generate_related_questions(self, question: str) -> List[str]:
+    async def _generate_related_questions(self, question: str) -> list[str]:
         """生成相关问题"""
         # 简单实现：基于关键词生成相关问题
         keywords = ["专利", "申请", "侵权", "审查", "有效期", "费用"]
@@ -518,7 +511,7 @@ async def ask_question(request: QuestionRequest):
         return result
     except Exception as e:
         logger.error(f"问答失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post("/api/v1/chat")
 async def chat(request: ChatRequest):

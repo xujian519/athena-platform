@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 # pyright: ignore
 # !/usr/bin/env python3
@@ -17,13 +18,12 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
 
-# 导入现有的Lyra系统
-from memory.lyra_prompt_memory import get_lyra_memory
-
 # 导入顶级专家系统
-from top_patent_expert_system import ExpertTeamAnalysis, TopPatentExpertSystem
-
+from core.cognition.top_patent_expert_system import ExpertTeamAnalysis, TopPatentExpertSystem
 from core.logging_config import setup_logging
+
+# 导入现有的Lyra系统
+from core.memory.lyra_prompt_memory import get_lyra_memory
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

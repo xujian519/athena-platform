@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 对话式参数收集器
 
@@ -5,11 +6,11 @@
 """
 
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from .parameter_validator import ParameterDefinition, ParameterValidator, ValidationResult
+from .parameter_validator import ParameterValidator, ValidationResult
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +22,7 @@ class CollectionState:
     session_id: str  # 会话ID
     intent: str  # 当前意图
     collected_params: dict[str, Any]  # 已收集的参数
-    current_question: Optional[str]  # 当前问题
+    current_question: str | None  # 当前问题
     question_count: int  # 已提问次数
     start_time: datetime  # 开始时间
     last_activity: datetime  # 最后活动时间
@@ -87,8 +88,9 @@ class ConversationalCollector:
         self,
         session_id: str,
         intent: str,
-        initial_params: dict[str, Any],        context: CollectionContext | None = None,
-    ) -> tuple[bool, str, dict[str, Any]:
+        initial_params: dict[str, Any],
+        context: CollectionContext | None = None,
+    ) -> tuple[bool, str, dict[str, Any]]:
         """
         开始参数收集
 
@@ -135,7 +137,7 @@ class ConversationalCollector:
 
     def continue_collection(
         self, session_id: str, user_message: str
-    ) -> tuple[bool, str, dict[str, Any]:
+    ) -> tuple[bool, str, dict[str, Any]]:
         """
         继续参数收集
 

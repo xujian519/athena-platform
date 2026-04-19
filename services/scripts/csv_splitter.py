@@ -5,8 +5,6 @@ CSV文件切割工具
 """
 
 import logging
-from core.async_main import async_main
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import os
 import sys
 import time
@@ -33,7 +31,7 @@ def split_csv(csv_path, output_dir, lines_per_file=100000) -> None:
     file_size_gb = csv_path.stat().st_size / (1024**3)
 
     logger.info(f"\n{'='*60}")
-    logger.info(f"CSV文件切割器")
+    logger.info("CSV文件切割器")
     logger.info(f"输入文件: {csv_path}")
     logger.info(f"文件大小: {file_size_gb:.2f} GB")
     logger.info(f"输出目录: {output_dir}")
@@ -55,7 +53,7 @@ def split_csv(csv_path, output_dir, lines_per_file=100000) -> None:
         return False
 
     # 分块读取和写入
-    logger.info(f"\n✂️ 开始切割文件...")
+    logger.info("\n✂️ 开始切割文件...")
     chunk_size = min(lines_per_file, 50000)  # pandas每次读取的行数
     file_count = 0
     current_lines = 0
@@ -68,7 +66,7 @@ def split_csv(csv_path, output_dir, lines_per_file=100000) -> None:
                             low_memory=False,
                             on_bad_lines='skip')
 
-        for i, chunk_df in enumerate(reader):
+        for _i, chunk_df in enumerate(reader):
             if current_lines == 0:
                 # 新文件
                 current_df = chunk_df.copy()
@@ -104,7 +102,7 @@ def split_csv(csv_path, output_dir, lines_per_file=100000) -> None:
     total_time = time.time() - start_time
 
     # 统计信息
-    logger.info(f"\n📊 切割完成统计:")
+    logger.info("\n📊 切割完成统计:")
     logger.info(f"  总文件数: {file_count}")
     logger.info(f"  总用时: {total_time:.1f}秒")
     logger.info(f"  平均速度: {file_size_gb/total_time:.2f} GB/秒")
@@ -164,7 +162,7 @@ def main() -> None:
         logger.info(str('=' * 60))
         logger.info('使用方法:')
         logger.info(f"  {sys.argv[0]} CSV文件路径 [每文件行数] [输出目录]")
-        logger.info(f"\n示例:")
+        logger.info("\n示例:")
         logger.info(f"  {sys.argv[0]} /path/to/large.csv 100000 ./output")
         logger.info(f"  {sys.argv[0]} 中国专利数据库2016年.csv")
         return
@@ -181,12 +179,12 @@ def main() -> None:
     success = split_csv(csv_path, output_dir, lines_per_file)
 
     if success:
-        logger.info(f"\n✅ 切割完成！")
-        logger.info(f"下一步：")
+        logger.info("\n✅ 切割完成！")
+        logger.info("下一步：")
         logger.info(f"  1. cd {output_dir}")
-        logger.info(f"  2. bash process_*.sh")
+        logger.info("  2. bash process_*.sh")
     else:
-        logger.info(f"\n❌ 切割失败！")
+        logger.info("\n❌ 切割失败！")
 
 if __name__ == '__main__':
     main()

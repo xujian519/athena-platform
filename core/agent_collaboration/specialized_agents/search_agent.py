@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 搜索Agent (SearchAgent) - 专利检索专家
 
@@ -22,13 +23,13 @@
 
 import asyncio
 import logging
-from datetime import datetime,  timedelta
+from datetime import datetime, timedelta
 from typing import Any
 
 from ...enhanced_patent_retriever import EnhancedPatentRetriever
 from ..agent_registry import AgentType
 from ..base_agent import BaseAgent
-from ..communication import ResponseMessage,  TaskMessage
+from ..communication import ResponseMessage, TaskMessage
 
 logger = logging.getLogger(__name__)
 
@@ -40,16 +41,16 @@ class SearchAgent(BaseAgent):
         self,  agent_id: str = "search_agent_001",  config: dict[str,  Any] | None = None
     ):
         super().__init__(
-            agent_id=agent_id, 
-            name="专利搜索专家", 
-            agent_type=AgentType.SEARCH, 
-            description="专业的专利检索和信息搜索专家, 能够从多个数据源进行高效的专利检索", 
-            config=config or {}, 
+            agent_id=agent_id,
+            name="专利搜索专家",
+            agent_type=AgentType.SEARCH,
+            description="专业的专利检索和信息搜索专家, 能够从多个数据源进行高效的专利检索",
+            config=config or {},
         )
 
         # 搜索策略配置 - 优化版本
         self.search_engines = [  # type: ignore[attr-defined]
-            "google_patents", 
+            "google_patents",
             "baidu_patent",   # 新增:百度专利
             "cnipa_patent",   # 新增:国家知识产权局
         ]
@@ -77,10 +78,10 @@ class SearchAgent(BaseAgent):
 
         # 性能统计
         self.search_stats = {  # type: ignore[attr-defined]
-            "total_searches": 0, 
-            "successful_searches": 0, 
-            "avg_response_time": 0.0, 
-            "cache_hit_rate": 0.0, 
+            "total_searches": 0,
+            "successful_searches": 0,
+            "avg_response_time": 0.0,
+            "cache_hit_rate": 0.0,
         }
 
     async def initialize(self):
@@ -97,25 +98,25 @@ class SearchAgent(BaseAgent):
     def get_capabilities(self) -> list[str]:
         """获取搜索Agent能力列表 - 优化版本"""
         return [
-            "patent_search", 
+            "patent_search",
             "enhanced_patent_retrieval",   # 新增:基于Meta标签的增强检索
             "full_text_acquisition",   # 新增:专利说明书全文获取
             "pdf_document_download",   # 新增:PDF文档下载
-            "keyword_search", 
-            "semantic_search", 
-            "classification_search", 
-            "inventor_search", 
-            "company_search", 
-            "multi_source_search", 
-            "search_optimization", 
-            "result_ranking", 
-            "duplicate_detection", 
-            "real_patent_data", 
-            "concurrent_search", 
-            "intelligent_caching", 
-            "cross_platform_search", 
-            "smart_query_expansion", 
-            "quality_assessment", 
+            "keyword_search",
+            "semantic_search",
+            "classification_search",
+            "inventor_search",
+            "company_search",
+            "multi_source_search",
+            "search_optimization",
+            "result_ranking",
+            "duplicate_detection",
+            "real_patent_data",
+            "concurrent_search",
+            "intelligent_caching",
+            "cross_platform_search",
+            "smart_query_expansion",
+            "quality_assessment",
         ]
 
     async def process_task(self,  task_message: TaskMessage) -> ResponseMessage:
@@ -149,27 +150,27 @@ class SearchAgent(BaseAgent):
                 result = await self._general_search(content)  # type: ignore[attr-defined]
 
             return ResponseMessage(
-                task_id=task_message.task_id, 
-                sender_id=self.agent_id, 
-                recipient_id=task_message.sender_id, 
-                success=True, 
-                content=result, 
+                task_id=task_message.task_id,
+                sender_id=self.agent_id,
+                recipient_id=task_message.sender_id,
+                success=True,
+                content=result,
                 metadata={
-                    "task_type": task_type, 
-                    "search_engines_used": list(result.get("sources",  {}).keys()), 
-                    "result_count": len(result.get("results",  [])), 
-                    "search_time": datetime.now().isoformat(), 
-                }, 
+                    "task_type": task_type,
+                    "search_engines_used": list(result.get("sources",  {}).keys()),
+                    "result_count": len(result.get("results",  [])),
+                    "search_time": datetime.now().isoformat(),
+                },
             )
 
         except Exception as e:
             logger.error(f"❌ 搜索Agent任务处理失败: {e}")
             return ResponseMessage(
-                task_id=task_message.task_id, 
-                sender_id=self.agent_id, 
-                recipient_id=task_message.sender_id, 
-                success=False, 
-                error_message=str(e), 
+                task_id=task_message.task_id,
+                sender_id=self.agent_id,
+                recipient_id=task_message.sender_id,
+                success=False,
+                error_message=str(e),
             )
 
     async def _patent_search(self,  content: dict[str,  Any]) -> dict[str,  Any]:
@@ -193,10 +194,10 @@ class SearchAgent(BaseAgent):
             # 执行增强专利检索
             search_start_time = datetime.now()
             patent_results = await self.patent_retriever.search_patents(  # type: ignore[attr-defined]
-                query=query, 
-                limit=limit, 
-                download_pdfs=download_pdfs, 
-                get_fulltext=get_fulltext, 
+                query=query,
+                limit=limit,
+                download_pdfs=download_pdfs,
+                get_fulltext=get_fulltext,
             )
             search_end_time = datetime.now()
             search_time = (search_end_time - search_start_time).total_seconds()
@@ -229,27 +230,27 @@ class SearchAgent(BaseAgent):
 
             retrieval_methods = {"two_step_retrieval",  "api_search",  "data_extraction"}
             return {
-                "query": query, 
-                "filters": filters, 
-                "results": final_results, 
-                "total_count": len(final_results), 
-                "search_time": search_time, 
-                "sources": {"google_patents": len(final_results)}, 
+                "query": query,
+                "filters": filters,
+                "results": final_results,
+                "total_count": len(final_results),
+                "search_time": search_time,
+                "sources": {"google_patents": len(final_results)},
                 "data_quality": {
-                    "real_data": True, 
-                    "sources_used": ["google_patents"], 
+                    "real_data": True,
+                    "sources_used": ["google_patents"],
                     "completeness": 95.0,   # 真实数据完整性
                     "accuracy": 96.0,   # 数据准确性
                     "source_reliability": "high",   # Google Patents可靠性高
-                    "retrieval_methods": list(retrieval_methods), 
-                }, 
+                    "retrieval_methods": list(retrieval_methods),
+                },
                 "search_metadata": {
-                    "method": "two_step_retrieval", 
-                    "step1": "patent_number_search", 
-                    "step2": "detailed_data_extraction", 
-                    "search_url": "https://patents.google.com", 
-                    "real_data": True, 
-                }, 
+                    "method": "two_step_retrieval",
+                    "step1": "patent_number_search",
+                    "step2": "detailed_data_extraction",
+                    "search_url": "https://patents.google.com",
+                    "real_data": True,
+                },
             }
 
         except Exception as e:
@@ -271,39 +272,39 @@ class SearchAgent(BaseAgent):
             patent_id = f"CN{datetime.now().year}{str(hash(query + str(i)))[-6:]}.{chr(65 + i % 3)}"
 
             patent = {
-                "patent_id": patent_id, 
-                "title": f"基于{query}的智能系统和方法(模拟数据)", 
-                "abstract": f"本发明公开了一种基于{query}的技术方案, 通过创新的算法设计和系统优化, 实现了技术突破和效率提升。该技术具有重要的应用价值和市场前景。", 
-                "inventor": [f"发明家{chr(65 + i)}',  f'发明家{chr(66 + i)}"], 
-                "applicant": f"创新科技有限公司{i+1}", 
+                "patent_id": patent_id,
+                "title": f"基于{query}的智能系统和方法(模拟数据)",
+                "abstract": f"本发明公开了一种基于{query}的技术方案, 通过创新的算法设计和系统优化, 实现了技术突破和效率提升。该技术具有重要的应用价值和市场前景。",
+                "inventor": [f"发明家{chr(65 + i)}',  f'发明家{chr(66 + i)}"],
+                "applicant": f"创新科技有限公司{i+1}",
                 "application_date": (
                     datetime.now() - timedelta(days=365 * (i + 1))
-                ).strftime("%Y-%m-%d"), 
+                ).strftime("%Y-%m-%d"),
                 "publication_date": (datetime.now() - timedelta(days=365 * i)).strftime(
                     "%Y-%m-%d"
-                ), 
-                "ipc_classification": ["G06F",  "G06N",  "H04L"][i % 3 : i % 3 + 2], 
-                "relevance_score": 0.9 - i * 0.05, 
-                "source": "two_step_simulation", 
-                "data_type": "mock", 
+                ),
+                "ipc_classification": ["G06F",  "G06N",  "H04L"][i % 3 : i % 3 + 2],
+                "relevance_score": 0.9 - i * 0.05,
+                "source": "two_step_simulation",
+                "data_type": "mock",
             }
             mock_patents.append(patent)
 
         return {
-            "query": query, 
-            "filters": filters, 
-            "results": mock_patents[:limit], 
-            "total_count": len(mock_patents), 
-            "search_time": 0.5, 
-            "sources": {"google_patents_simulation": len(mock_patents)}, 
+            "query": query,
+            "filters": filters,
+            "results": mock_patents[:limit],
+            "total_count": len(mock_patents),
+            "search_time": 0.5,
+            "sources": {"google_patents_simulation": len(mock_patents)},
             "data_quality": {
-                "real_data": False, 
-                "sources_used": ["google_patents_simulation"], 
-                "completeness": 100.0, 
-                "accuracy": 85.0, 
-                "note": "由于Google Patents暂时不可用, 使用格式化模拟数据", 
-                "simulation_source": "google_patents_format", 
-            }, 
+                "real_data": False,
+                "sources_used": ["google_patents_simulation"],
+                "completeness": 100.0,
+                "accuracy": 85.0,
+                "note": "由于Google Patents暂时不可用, 使用格式化模拟数据",
+                "simulation_source": "google_patents_format",
+            },
         }
 
     async def _semantic_search(self,  content: dict[str,  Any]) -> dict[str,  Any]:
@@ -315,19 +316,19 @@ class SearchAgent(BaseAgent):
 
         # 模拟语义搜索
         return {
-            "query_type": "semantic", 
-            "query_text": text, 
-            "similarity_threshold": similarity_threshold, 
+            "query_type": "semantic",
+            "query_text": text,
+            "similarity_threshold": similarity_threshold,
             "results": [
                 {
-                    "patent_id": "CN202410234567.8", 
-                    "title": "智能语义搜索算法优化", 
-                    "abstract": "一种基于深度学习的智能语义搜索算法...", 
-                    "similarity_score": 0.92, 
-                    "relevance_explanation": "技术领域高度匹配, 关键词相似度高", 
+                    "patent_id": "CN202410234567.8",
+                    "title": "智能语义搜索算法优化",
+                    "abstract": "一种基于深度学习的智能语义搜索算法...",
+                    "similarity_score": 0.92,
+                    "relevance_explanation": "技术领域高度匹配, 关键词相似度高",
                 }
-            ], 
-            "search_time": 1.2, 
+            ],
+            "search_time": 1.2,
         }
 
     async def _classification_search(self,  content: dict[str,  Any]) -> dict[str,  Any]:
@@ -338,18 +339,18 @@ class SearchAgent(BaseAgent):
         logger.info(f"🔍 执行分类搜索: IPC {ipc_codes},  CPC {cpc_codes}")
 
         return {
-            "search_type": "classification", 
-            "ipc_codes": ipc_codes, 
-            "cpc_codes": cpc_codes, 
+            "search_type": "classification",
+            "ipc_codes": ipc_codes,
+            "cpc_codes": cpc_codes,
             "results": [
                 {
-                    "patent_id": "CN202410345678.9", 
-                    "title": "AI专利分类检索系统", 
-                    "ipc_codes": ["G06F",  "G06N"], 
-                    "cpc_codes": ["G06F16/9535",  "G06N3/04"], 
-                    "relevance_score": 0.89, 
+                    "patent_id": "CN202410345678.9",
+                    "title": "AI专利分类检索系统",
+                    "ipc_codes": ["G06F",  "G06N"],
+                    "cpc_codes": ["G06F16/9535",  "G06N3/04"],
+                    "relevance_score": 0.89,
                 }
-            ], 
+            ],
         }
 
     async def _multi_source_search(self,  content: dict[str,  Any]) -> dict[str,  Any]:
@@ -371,14 +372,14 @@ class SearchAgent(BaseAgent):
         merged_results = self._merge_search_results(results,  sources)  # type: ignore[arg-type]
 
         return {
-            "search_type": "multi_source", 
-            "query": query, 
-            "sources_used": sources, 
-            "merged_results": merged_results["results"], 
-            "source_stats": merged_results["stats"], 
+            "search_type": "multi_source",
+            "query": query,
+            "sources_used": sources,
+            "merged_results": merged_results["results"],
+            "source_stats": merged_results["stats"],
             "total_time": sum(
                 r.get("search_time",  0) for r in results if isinstance(r,  dict)
-            ), 
+            ),
         }
 
     async def _search_single_source(self,  source: str,  query: str) -> dict[str,  Any]:
@@ -386,12 +387,12 @@ class SearchAgent(BaseAgent):
         if source != "google_patents":
             logger.warning(f"⚠️ 不支持的数据源: {source}, 仅支持Google Patents")
             return {
-                "source": source, 
-                "query": query, 
-                "results": [], 
-                "search_time": 0.1, 
-                "total_count": 0, 
-                "error": f"数据源 {source} 不受支持", 
+                "source": source,
+                "query": query,
+                "results": [],
+                "search_time": 0.1,
+                "total_count": 0,
+                "error": f"数据源 {source} 不受支持",
             }
 
         # 使用Google Patents搜索引擎
@@ -402,22 +403,22 @@ class SearchAgent(BaseAgent):
             patents = await self.patent_search_engine.search_patents(query,  limit=10)  # type: ignore[attr-defined]
 
             return {
-                "source": source, 
-                "query": query, 
-                "results": patents, 
-                "search_time": 2.0, 
-                "total_count": len(patents), 
+                "source": source,
+                "query": query,
+                "results": patents,
+                "search_time": 2.0,
+                "total_count": len(patents),
             }
 
         except Exception as e:
             logger.error(f"Google Patents搜索失败: {e}")
             return {
-                "source": source, 
-                "query": query, 
-                "results": [], 
-                "search_time": 0.1, 
-                "total_count": 0, 
-                "error": str(e), 
+                "source": source,
+                "query": query,
+                "results": [],
+                "search_time": 0.1,
+                "total_count": 0,
+                "error": str(e),
             }
 
     def _merge_search_results(
@@ -435,9 +436,9 @@ class SearchAgent(BaseAgent):
             if isinstance(result,  dict):  # type: ignore[unnecessary-isinstance]
                 source = result.get("source",  sources[i])
                 stats[source] = {
-                    "count": len(result.get("results",  [])), 
-                    "search_time": result.get("search_time",  0), 
-                    "total_count": result.get("total_count",  0), 
+                    "count": len(result.get("results",  [])),
+                    "search_time": result.get("search_time",  0),
+                    "total_count": result.get("total_count",  0),
                 }
 
                 merged_results.extend(result.get("results",  []))
@@ -520,9 +521,9 @@ class SearchAgent(BaseAgent):
         )
 
         return {
-            "original_query": original_query, 
-            "optimized_suggestions": optimized_suggestions, 
-            "optimization_explanation": "基于查询分析和历史搜索记录的建议", 
+            "original_query": original_query,
+            "optimized_suggestions": optimized_suggestions,
+            "optimization_explanation": "基于查询分析和历史搜索记录的建议",
         }
 
     def _generate_search_suggestions(
@@ -539,9 +540,9 @@ class SearchAgent(BaseAgent):
             if len(keyword) > 1:
                 suggestions.append(
                     {
-                        "type": "keyword_expansion", 
-                        "suggestion": f"{keyword} OR {keyword}技术", 
-                        "reason": f"扩展关键词 '{keyword}' 的搜索范围", 
+                        "type": "keyword_expansion",
+                        "suggestion": f"{keyword} OR {keyword}技术",
+                        "reason": f"扩展关键词 '{keyword}' 的搜索范围",
                     }
                 )
 
@@ -549,9 +550,9 @@ class SearchAgent(BaseAgent):
         if "AI" in query.upper() or "人工智能" in query:
             suggestions.append(
                 {
-                    "type": "classification", 
-                    "suggestion": "IPC: G06F,  G06N", 
-                    "reason": "AI相关专利的主要分类号", 
+                    "type": "classification",
+                    "suggestion": "IPC: G06F,  G06N",
+                    "reason": "AI相关专利的主要分类号",
                 }
             )
 
@@ -562,16 +563,16 @@ class SearchAgent(BaseAgent):
         query = content.get("query",  "")
 
         return {
-            "search_type": "general", 
-            "query": query, 
+            "search_type": "general",
+            "query": query,
             "results": [
                 {
-                    "patent_id": "GENERAL_001", 
-                    "title": f"与'{query}'相关的专利", 
-                    "relevance_score": 0.75, 
+                    "patent_id": "GENERAL_001",
+                    "title": f"与'{query}'相关的专利",
+                    "relevance_score": 0.75,
                 }
-            ], 
-            "search_time": 0.3, 
+            ],
+            "search_time": 0.3,
         }
 
     # ========== 搜索Agent优化方法 ==========
@@ -601,10 +602,10 @@ class SearchAgent(BaseAgent):
             # 如果没有搜索任务, 返回空结果
             if not search_tasks:
                 return {
-                    "query": query, 
-                    "results": [], 
-                    "total_count": 0, 
-                    "search_time": 0, 
+                    "query": query,
+                    "results": [],
+                    "total_count": 0,
+                    "search_time": 0,
                 }
 
             # 并发执行搜索
@@ -632,14 +633,14 @@ class SearchAgent(BaseAgent):
             final_patents = unique_patents[:limit]
 
             return {
-                "patents": final_patents, 
-                "sources": engine_results, 
-                "total_found": len(all_patents), 
-                "unique_found": len(unique_patents), 
-                "returned": len(final_patents), 
-                "search_time": search_time, 
-                "engines_used": engines, 
-                "search_strategy": "concurrent_parallel", 
+                "patents": final_patents,
+                "sources": engine_results,
+                "total_found": len(all_patents),
+                "unique_found": len(unique_patents),
+                "returned": len(final_patents),
+                "search_time": search_time,
+                "engines_used": engines,
+                "search_strategy": "concurrent_parallel",
             }
 
         except Exception as e:
@@ -691,10 +692,10 @@ class SearchAgent(BaseAgent):
 
         # 实现跨平台搜索逻辑
         return {
-            "query": query, 
-            "platforms": platforms, 
-            "results": [], 
-            "total_count": 0, 
+            "query": query,
+            "platforms": platforms,
+            "results": [],
+            "total_count": 0,
         }
 
     async def _smart_query_expansion(self,  content: dict[str,  Any]) -> dict[str,  Any]:
@@ -705,9 +706,9 @@ class SearchAgent(BaseAgent):
 
         # 实现查询扩展逻辑
         return {
-            "original_query": query, 
-            "expanded_queries": [], 
-            "expansion_strategy": "semantic_similarity", 
+            "original_query": query,
+            "expanded_queries": [],
+            "expansion_strategy": "semantic_similarity",
         }
 
     async def _quality_assessment(self,  content: dict[str,  Any]) -> dict[str,  Any]:
@@ -718,26 +719,26 @@ class SearchAgent(BaseAgent):
 
         # 实现质量评估逻辑
         return {
-            "total_results": len(results), 
-            "quality_score": 0.85, 
+            "total_results": len(results),
+            "quality_score": 0.85,
             "quality_metrics": {
-                "relevance": 0.88, 
-                "completeness": 0.82, 
-                "accuracy": 0.85, 
-            }, 
+                "relevance": 0.88,
+                "completeness": 0.82,
+                "accuracy": 0.85,
+            },
         }
 
     def get_search_performance_stats(self) -> dict[str,  Any]:
         """获取搜索性能统计"""
         return {
-            "agent_id": self.agent_id, 
+            "agent_id": self.agent_id,
             "search_engines": self.search_engines,   # type: ignore[attr-defined]
-            "max_concurrent_searches": self.max_concurrent_searches, 
-            "cache_enabled": hasattr(self,  "_search_cache"), 
-            "cache_size": len(getattr(self,  "_search_cache",  {})), 
+            "max_concurrent_searches": self.max_concurrent_searches,
+            "cache_enabled": hasattr(self,  "_search_cache"),
+            "cache_size": len(getattr(self,  "_search_cache",  {})),
             "optimization_features": [
-                "concurrent_search", 
-                "intelligent_caching", 
-                "cross_platform_integration", 
-            ], 
+                "concurrent_search",
+                "intelligent_caching",
+                "cross_platform_integration",
+            ],
         }

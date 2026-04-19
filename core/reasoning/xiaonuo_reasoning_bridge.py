@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺推理引擎桥接器(新版)
 Xiaonuo Reasoning Bridge v2.0
@@ -14,14 +15,16 @@ import asyncio
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 # 导入推理引擎(直接从具体模块导入避免循环导入)
 from core.reasoning.athena_super_reasoning import AthenaSuperReasoningEngine
 
 try:
-    from core.reasoning.xiaonuo_six_step_reasoning import ReasoningMode, XiaonuoSixStepReasoningEngine
+    from core.reasoning.xiaonuo_six_step_reasoning import (
+        ReasoningMode,
+        XiaonuoSixStepReasoningEngine,
+    )
 except ImportError:
     # 如果没有六步引擎,使用超推理引擎作为替代
     try:

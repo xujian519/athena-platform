@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习引擎 v4.0 - 维特根斯坦版
 Learning Engine v4.0 - Wittgenstein Edition
@@ -29,7 +30,6 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any
-
 
 sys.path.append(str(Path(__file__).parent.parent))
 

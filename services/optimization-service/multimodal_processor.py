@@ -5,42 +5,36 @@ Athena平台多模态处理系统
 """
 
 import asyncio
-from core.async_main import async_main
 import base64
-import hashlib
 import io
 import json
-import logging
-from core.logging_config import setup_logging
 import mimetypes
 import os
 import tempfile
 import time
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, BinaryIO, Dict, List, Optional, Set, Tuple, Union
+from typing import Any
 
-import aiofiles
 import cv2
 
 # 音频处理
 import librosa
 
 # 视频处理
-import moviepy.editor as mp
 import numpy as np
 
 # AI模型接口
-import requests
-import soundfile as sf
-from fastapi import File, UploadFile
+from fastapi import UploadFile
 from moviepy.video.io.VideoFileClip import VideoFileClip
 
 # 图像处理
-from PIL import Image, ImageEnhance, ImageFilter, ImageOps
+from PIL import Image, ImageEnhance, ImageOps
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -76,7 +70,7 @@ class MediaItem:
     modality_type: ModalityType
     file_path: str | None = None
     binary_data: bytes | None = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
     created_at: datetime = field(default_factory=datetime.now)
     file_size: int = 0
     mime_type: str = ''
@@ -87,21 +81,21 @@ class ProcessingResult:
     result_id: str
     task_type: ProcessingTask
     input_item: MediaItem
-    output_data: Dict[str, Any]
+    output_data: dict[str, Any]
     confidence: float = 1.0
     processing_time: float = 0.0
     model_used: str = ''
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class MultimodalDocument:
     """多模态文档"""
     doc_id: str
     title: str
-    items: List[MediaItem] = field(default_factory=list)
+    items: list[MediaItem] = field(default_factory=list)
     text_content: str = ''
-    extracted_features: Dict[str, Any] = field(default_factory=dict)
-    cross_modal_embeddings: Dict[str, np.ndarray] = field(default_factory=dict)
+    extracted_features: dict[str, Any] = field(default_factory=dict)
+    cross_modal_embeddings: dict[str, np.ndarray] = field(default_factory=dict)
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
 
@@ -113,7 +107,7 @@ class ImageProcessor:
         self.supported_formats = {'.jpg', '.jpeg', '.png', '.bmp', '.gif', '.tiff', '.webp'}
         self.max_size = (4096, 4096)  # 最大处理尺寸
 
-    async def process_image(self, media_item: MediaItem, tasks: List[ProcessingTask]) -> List[ProcessingResult]:
+    async def process_image(self, media_item: MediaItem, tasks: list[ProcessingTask]) -> list[ProcessingResult]:
         """处理图像"""
         results = []
 
@@ -222,11 +216,10 @@ class ImageProcessor:
             # 将图像转换为base64
             buffered = io.BytesIO()
             image.save(buffered, format='JPEG')
-            img_str = base64.b64encode(buffered.getvalue()).decode()
+            base64.b64encode(buffered.getvalue()).decode()
 
             # 调用GLM-4V API（模拟）
             # 实际实现需要根据GLM-4V的具体API格式
-            ocr_prompt = '请提取图片中的所有文字内容，保持原有格式和排版。'
 
             # 模拟API调用
             extracted_text = f"GLM-4V OCR识别结果：图片包含文档标题、段落文字等具体内容（{image.size[0]}x{image.size[1]}）"
@@ -330,7 +323,7 @@ class ImageProcessor:
                 metadata={'image_size': image.size}
             )
 
-        except Exception as e:
+        except Exception:
             # 生成基础描述
             description = f"这是一张{image.size[0]}x{image.size[1]}像素的{image.format}图像"
 
@@ -352,10 +345,9 @@ class ImageProcessor:
             # 将图像转换为base64
             buffered = io.BytesIO()
             image.save(buffered, format='JPEG')
-            img_str = base64.b64encode(buffered.getvalue()).decode()
+            base64.b64encode(buffered.getvalue()).decode()
 
             # 调用GLM-4V API（模拟）
-            description_prompt = '请详细描述这张图片的内容，包括主要对象、场景、颜色、布局等。'
 
             # 模拟API调用
             description = f"这是一张包含丰富内容的图像，展现了{image.size[0]}x{image.size[1]}分辨率的视觉信息。图像包含多个元素，色彩丰富，构图合理。"
@@ -477,7 +469,7 @@ class ImageProcessor:
                 model_used='error'
             )
 
-    async def _call_glm_vision_detect_objects(self, image: Image.Image) -> List[Dict]:
+    async def _call_glm_vision_detect_objects(self, image: Image.Image) -> list[dict]:
         """调用GLM-4V进行对象检测"""
         try:
             # 模拟GLM-4V对象检测结果
@@ -507,7 +499,7 @@ class AudioProcessor:
         """初始化音频处理器"""
         self.supported_formats = {'.wav', '.mp3', '.flac', '.m4a', '.ogg'}
 
-    async def process_audio(self, media_item: MediaItem, tasks: List[ProcessingTask]) -> List[ProcessingResult]:
+    async def process_audio(self, media_item: MediaItem, tasks: list[ProcessingTask]) -> list[ProcessingResult]:
         """处理音频"""
         results = []
 
@@ -532,7 +524,7 @@ class AudioProcessor:
 
         return results
 
-    async def _load_audio(self, media_item: MediaItem) -> Tuple[np.ndarray, int]:
+    async def _load_audio(self, media_item: MediaItem) -> tuple[np.ndarray, int]:
         """加载音频"""
         if media_item.file_path and os.path.exists(media_item.file_path):
             audio_data, sample_rate = librosa.load(media_item.file_path)
@@ -625,10 +617,10 @@ class AudioProcessor:
             spectral_centroids = librosa.feature.spectral_centroid(y=audio_data, sr=sample_rate)[0]
 
             # 光谱带宽
-            spectral_bandwidth = librosa.feature.spectral_bandwidth(y=audio_data, sr=sample_rate)[0]
+            librosa.feature.spectral_bandwidth(y=audio_data, sr=sample_rate)[0]
 
             # 光谱滚降
-            spectral_rolloff = librosa.feature.spectral_rolloff(y=audio_data, sr=sample_rate)[0]
+            librosa.feature.spectral_rolloff(y=audio_data, sr=sample_rate)[0]
 
             # MFCC特征
             mfcc = librosa.feature.mfcc(y=audio_data, sr=sample_rate, n_mfcc=13)
@@ -700,7 +692,7 @@ class VideoProcessor:
         self.image_processor = ImageProcessor()
         self.audio_processor = AudioProcessor()
 
-    async def process_video(self, media_item: MediaItem, tasks: List[ProcessingTask]) -> List[ProcessingResult]:
+    async def process_video(self, media_item: MediaItem, tasks: list[ProcessingTask]) -> list[ProcessingResult]:
         """处理视频"""
         results = []
 
@@ -800,7 +792,7 @@ class VideoProcessor:
 
             # 提取中间帧进行分析
             middle_frame = video_clip.get_frame(duration / 2)
-            frame_image = Image.fromarray(middle_frame)
+            Image.fromarray(middle_frame)
 
             # 使用图像处理器分析帧内容
             frame_media_item = MediaItem(
@@ -865,7 +857,7 @@ class VideoProcessor:
                 model_used='error'
             )
 
-    def _classify_video_type(self, duration: float, fps: float, width: int, height: int, frame_analysis: Dict) -> str:
+    def _classify_video_type(self, duration: float, fps: float, width: int, height: int, frame_analysis: dict) -> str:
         """分类视频类型"""
         if duration < 10:
             return 'short_clip'
@@ -944,7 +936,7 @@ class MultimodalProcessor:
         self.processed_items = {}
         self.multimodal_docs = {}
 
-    async def process_media(self, media_item: MediaItem, tasks: List[ProcessingTask]) -> List[ProcessingResult]:
+    async def process_media(self, media_item: MediaItem, tasks: list[ProcessingTask]) -> list[ProcessingResult]:
         """处理媒体项目"""
         logger.info(f"开始处理媒体项目: {media_item.item_id}, 类型: {media_item.modality_type.value}")
 
@@ -968,7 +960,7 @@ class MultimodalProcessor:
             logger.error(f"媒体项目处理失败: {e}")
             return []
 
-    async def create_multimodal_document(self, doc_id: str, title: str, media_items: List[MediaItem]) -> MultimodalDocument:
+    async def create_multimodal_document(self, doc_id: str, title: str, media_items: list[MediaItem]) -> MultimodalDocument:
         """创建多模态文档"""
         doc = MultimodalDocument(
             doc_id=doc_id,
@@ -1023,7 +1015,7 @@ class MultimodalProcessor:
         logger.info(f"多模态文档 {doc_id} 创建完成，包含 {len(media_items)} 个媒体项目")
         return doc
 
-    async def cross_modal_search(self, query: str, modality_filter: ModalityType | None = None, limit: int = 10) -> List[Dict]:
+    async def cross_modal_search(self, query: str, modality_filter: ModalityType | None = None, limit: int = 10) -> list[dict]:
         """跨模态搜索"""
         results = []
 
@@ -1051,7 +1043,7 @@ class MultimodalProcessor:
 
         return results[:limit]
 
-    def _calculate_relevance(self, query: str, text_content: str, features: Dict) -> float:
+    def _calculate_relevance(self, query: str, text_content: str, features: dict) -> float:
         """计算相关性分数"""
         query_lower = query.lower()
         text_lower = text_content.lower()
@@ -1112,7 +1104,7 @@ class MultimodalProcessor:
 
         return preview
 
-    def get_processing_stats(self) -> Dict[str, Any]:
+    def get_processing_stats(self) -> dict[str, Any]:
         """获取处理统计信息"""
         total_items = len(self.processed_items)
         total_docs = len(self.multimodal_docs)
@@ -1253,7 +1245,7 @@ if __name__ == '__main__':
             'doc_001', '测试多模态文档', [test_image]
         )
 
-        logger.info(f"\n多模态文档创建成功:")
+        logger.info("\n多模态文档创建成功:")
         logger.info(f"  文档ID: {doc.doc_id}")
         logger.info(f"  标题: {doc.title}")
         logger.info(f"  媒体项目数: {len(doc.items)}")

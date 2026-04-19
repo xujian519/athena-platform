@@ -7,11 +7,12 @@ Author: Athena平台团队
 Created: 2026-01-26
 Version: v1.0.0
 """
+from __future__ import annotations
 
 import logging
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 try:
     import fitz  # PyMuPDF
@@ -19,6 +20,12 @@ try:
 except ImportError:
     PDF_AVAILABLE = False
     logging.warning("PyMuPDF未安装，PDF分析功能受限")
+
+try:
+    import pdfplumber
+    HAS_PDFPLUMBER = True
+except ImportError:
+    HAS_PDFPLUMBER = False
 
 logger = logging.getLogger(__name__)
 
@@ -35,13 +42,20 @@ class PDFDeepAnalyzer:
     5. 提取技术效果（有益效果、技术优势）
     """
 
-    def __init__(self):
-        """初始化分析器"""
+    def __init__(self, parser_factory=None):
+        """初始化分析器
+
+        Args:
+            parser_factory: 可选的DocumentParserFactory实例，
+                           传入后对扫描型PDF自动使用MinerU解析。
+                           不传时行为与原来完全一致。
+        """
         if not PDF_AVAILABLE:
             raise RuntimeError("需要安装PyMuPDF: pip install PyMuPDF")
+        self._parser_factory = parser_factory
         logger.info("✅ PDF深度分析器初始化完成")
 
-    def analyze_patent_pdf(self, pdf_path: str) -> Dict[str, Any]:
+    def analyze_patent_pdf(self, pdf_path: str) -> dict[str, Any]:
         """
         深度分析专利PDF文件
 
@@ -93,6 +107,9 @@ class PDFDeepAnalyzer:
         # 8. 提取关键参数
         parameters = self._extract_parameters(full_text)
 
+        # 9. 提取结构化表格
+        tables = self._extract_tables(pdf_path)
+
         result = {
             "file_name": Path(pdf_path).name,
             "patent_number": patent_number,
@@ -105,25 +122,51 @@ class PDFDeepAnalyzer:
             "claims": claims,
             "technical_effects": effects,
             "key_parameters": parameters,
+            "tables": tables,
         }
 
         logger.info(f"✅ PDF分析完成: {title}")
-        logger.info(f"   权要求数: {len(claims)}, 实施例数: {len(embodiments)}")
+        logger.info(
+            f"   权要求数: {len(claims)}, 实施例数: {len(embodiments)}, "
+            f"表格数: {len(tables)}"
+        )
 
         return result
 
     def _extract_full_text(self, pdf_path: str) -> str:
-        """提取PDF完整文本"""
-        doc = fitz.open(pdf_path)
-        text_parts = []
+        """提取PDF完整文本
 
-        for page in doc:
-            text = page.get_text()
-            if text.strip():
-                text_parts.append(text)
+        优先使用PyMuPDF提取文本层。当文本层内容不足（扫描型PDF）
+        且配置了parser_factory时，自动调用MinerU进行OCR解析。
+        """
+        with fitz.open(pdf_path) as doc:
+            text_parts = []
+            total_pages = len(doc)
+            for page in doc:
+                text = page.get_text()
+                if text.strip():
+                    text_parts.append(text)
+        text = "\n".join(text_parts)
 
-        doc.close()
-        return "\n".join(text_parts)
+        # 文本层内容不足 + 有parser_factory → 尝试MinerU/Tesseract
+        if len(text.strip()) < 100 and self._parser_factory and total_pages > 0:
+            logger.info("PDF文本层不足(%d字符/%d页)，尝试文档解析服务", len(text.strip()), total_pages)
+            try:
+                from core.document_parser.base import ParseRequest
+                from core.document_parser.parser_factory import run_async_safe
+
+                factory = self._parser_factory
+                request = ParseRequest(file_path=pdf_path)
+                result = run_async_safe(factory.parse(request))
+                if result.content and not result.error:
+                    logger.info("文档解析服务成功: backend=%s, %d字符", result.backend_used, len(result.content))
+                    return result.content
+                else:
+                    logger.warning("文档解析服务失败: %s", result.error)
+            except Exception as e:
+                logger.warning("文档解析服务异常: %s", e)
+
+        return text
 
     def _extract_patent_number(self, pdf_path: str, text: str) -> str:
         """从文件名或文本中提取专利号"""
@@ -213,7 +256,7 @@ class PDFDeepAnalyzer:
 
         return ""
 
-    def _extract_embodiments(self, text: str) -> List[Dict[str, Any]]:
+    def _extract_embodiments(self, text: str) -> list[dict[str, Any]]:
         """提取具体实施方式"""
         embodiments = []
 
@@ -260,7 +303,7 @@ class PDFDeepAnalyzer:
 
         return embodiments
 
-    def _extract_claims(self, text: str) -> List[Dict[str, Any]]:
+    def _extract_claims(self, text: str) -> list[dict[str, Any]]:
         """提取权利要求"""
         claims = []
 
@@ -305,7 +348,7 @@ class PDFDeepAnalyzer:
 
         return claims
 
-    def _extract_technical_features(self, claim_text: str) -> List[str]:
+    def _extract_technical_features(self, claim_text: str) -> list[str]:
         """从权利要求中提取技术特征"""
         features = []
 
@@ -324,7 +367,7 @@ class PDFDeepAnalyzer:
 
         return features[:10]  # 最多10个特征
 
-    def _extract_technical_effects(self, text: str) -> List[str]:
+    def _extract_technical_effects(self, text: str) -> list[str]:
         """提取技术效果"""
         effects = []
 
@@ -360,7 +403,7 @@ class PDFDeepAnalyzer:
 
         return effects[:10]  # 最多10个效果
 
-    def _extract_parameters(self, text: str) -> Dict[str, Any]:
+    def _extract_parameters(self, text: str) -> dict[str, Any]:
         """提取关键参数"""
         parameters = {}
 
@@ -421,7 +464,48 @@ class PDFDeepAnalyzer:
 
         return parameters
 
-    def analyze_batch(self, pdf_paths: List[str]) -> Dict[str, Dict]:
+    def _extract_tables(self, pdf_path: str) -> list[dict[str, Any]]:
+        """使用pdfplumber提取PDF中的结构化表格"""
+        if not HAS_PDFPLUMBER:
+            logger.debug("pdfplumber未安装，跳过表格提取")
+            return []
+
+        tables: list[dict[str, Any]] = []
+        try:
+            with pdfplumber.open(pdf_path) as pdf:
+                for page_num, page in enumerate(pdf.pages, 1):
+                    page_tables = page.extract_tables()
+                    for table_data in page_tables:
+                        if not table_data:
+                            continue
+                        has_content = any(
+                            any(cell and cell.strip() for cell in row)
+                            for row in table_data
+                        )
+                        if not has_content:
+                            continue
+                        tables.append({
+                            "table_index": len(tables) + 1,
+                            "page_number": page_num,
+                            "rows": [
+                                [cell.strip() if cell else "" for cell in row]
+                                for row in table_data
+                            ],
+                            "header": (
+                                [cell.strip() if cell else "" for cell in table_data[0]]
+                                if table_data
+                                else None
+                            ),
+                            "row_count": len(table_data),
+                            "col_count": max(len(row) for row in table_data) if table_data else 0,
+                            "source": "pdf",
+                        })
+        except Exception as e:
+            logger.warning(f"表格提取失败: {e}")
+
+        return tables
+
+    def analyze_batch(self, pdf_paths: list[str]) -> dict[str, dict]:
         """
         批量分析PDF文件
 

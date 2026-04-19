@@ -1,28 +1,25 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 智谱AI全系列模型统一客户端
 支持GLM-4.7、GLM-4.7-Code、GLM-4.7-Flash、GLM-4V、CogVideoX、CogView等全系列模型
 """
 
-import asyncio
-from core.async_main import async_main
-import base64
 import json
 import logging
-import os
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-from typing import Any, Dict, List, Optional, Union
-
-import aiohttp
 
 # 导入安全配置
 import sys
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
 from pathlib import Path
+from typing import Any
+
+import aiohttp
+
+logger = logging.getLogger(__name__)
+
 sys.path.append(str(Path(__file__).parent.parent / "core"))
-from security.env_config import get_env_var, get_database_url, get_jwt_secret
 
 
 class GLMModel(Enum):
@@ -50,7 +47,7 @@ class ModalityType(Enum):
 class GLMRequest:
     """GLM统一请求参数"""
     model: GLMModel
-    messages: List[Dict[str, str]]
+    messages: list[dict[str, str]]
     modality: ModalityType = ModalityType.TEXT
     max_tokens: int = 4000
     temperature: float = 0.3
@@ -60,7 +57,7 @@ class GLMRequest:
     thinking_type: str | None = None
 
     # 多模态参数
-    images: Optional[List[str]] = None  # base64编码的图片
+    images: list[str] | None = None  # base64编码的图片
     video_prompt: str | None = None  # 视频生成提示
 
     # 生成参数
@@ -76,14 +73,14 @@ class GLMResponse:
     thinking_process: str | None = None
     modality: ModalityType = ModalityType.TEXT
     model: str = ''
-    usage: Dict = field(default_factory=dict)
+    usage: dict = field(default_factory=dict)
     finish_reason: str = ''
     response_time: float = 0.0
     timestamp: datetime = field(default_factory=datetime.now)
 
     # 多模态输出
-    images: Optional[List[str]] = None  # 生成的图片URL或base64
-    videos: Optional[List[str]] = None  # 生成的视频URL
+    images: list[str] | None = None  # 生成的图片URL或base64
+    videos: list[str] | None = None  # 生成的视频URL
 
     # 错误信息
     error: str | None = None
@@ -485,7 +482,7 @@ class ZhipuAIUnifiedClient:
         else:
             return await self.call_text_model(request)
 
-    def _update_stats(self, model: GLMModel, modality: ModalityType, usage: Dict, response_time: float, success: bool) -> Any:
+    def _update_stats(self, model: GLMModel, modality: ModalityType, usage: dict, response_time: float, success: bool) -> Any:
         """更新统计信息"""
         self.stats['model_usage'][model.value] += 1
         self.stats['modality_usage'][modality.value] += 1
@@ -502,11 +499,11 @@ class ZhipuAIUnifiedClient:
         new_success = 1 if success else 0
         self.stats['success_rate'] = (current_success + new_success) / self.stats['total_requests']
 
-    def get_model_capabilities(self) -> Dict[str, Any]:
+    def get_model_capabilities(self) -> dict[str, Any]:
         """获取模型能力信息"""
         return {model.value: capabilities for model, capabilities in self.model_capabilities.items()}
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """获取使用统计"""
         return self.stats.copy()
 

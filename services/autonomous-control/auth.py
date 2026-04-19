@@ -3,11 +3,10 @@
 """
 
 import hashlib
-import logging
 import secrets
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Any, Dict, Optional
+from typing import Any
 
 import jwt
 from fastapi import Depends, HTTPException, Security
@@ -106,7 +105,7 @@ class AuthManager:
                                              salt.encode('utf-8'),
                                              100000)
             return computed_hash.hex() == hash_value
-        except Exception  # TODO: 指定具体异常类型:
+        except Exception:  # TODO: 指定具体异常类型
             return False
 
     def authenticate_user(self, username: str, password: str) -> User | None:

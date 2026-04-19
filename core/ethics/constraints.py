@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 伦理约束执行器 - 执行伦理决策
 Ethical Constraints Enforcer - Execute Ethical Decisions
@@ -12,7 +13,7 @@ import logging
 from dataclasses import dataclass, field
 from enum import Enum
 from functools import wraps
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from .evaluator import ActionSeverity, ComplianceStatus, EthicsEvaluator, EvaluationResult
 

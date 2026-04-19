@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 SQL注入防护工具类
 SQL Injection Prevention Utilities
@@ -7,9 +7,9 @@ SQL Injection Prevention Utilities
 提供安全的数据库查询方法和验证工具
 """
 
-import re
 import logging
-from typing import Any, List, Optional, Tuple, Union
+import re
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +81,7 @@ class SQLInjectionPrevention:
         return True
 
     @classmethod
-    def validate_identifier_list(cls, identifiers: List[str], identifier_type: str = "identifier") -> bool:
+    def validate_identifier_list(cls, identifiers: list[str], identifier_type: str = "identifier") -> bool:
         """
         验证标识符列表（表名或列名）
 
@@ -135,7 +135,7 @@ class SQLInjectionPrevention:
         where_clause: str | None = None,
         limit: int | None = None,
         offset: int | None = None
-    ) -> Tuple[str, List[Any]]:
+    ) -> tuple[str, list[Any]]:
         """
         构建安全的表查询（使用已验证的表名）
 
@@ -253,7 +253,7 @@ class SafeQueryBuilder:
         self.limit_value = None
         self.offset_value = None
 
-    def select(self, columns: Union[str, List[str]]) -> 'SafeQueryBuilder':
+    def select(self, columns: str | list[str]) -> 'SafeQueryBuilder':
         """
         设置SELECT列
 
@@ -332,7 +332,7 @@ class SafeQueryBuilder:
         self.offset_value = value
         return self
 
-    def build(self) -> Tuple[str, List[Any]]:
+    def build(self) -> tuple[str, list[Any]]:
         """
         构建最终的SQL查询
 
@@ -367,7 +367,7 @@ class SafeQueryBuilder:
 def safe_execute(
     cursor,
     query_template: str,
-    params: Optional[List[Any]] | None = None,
+    params: list[Any] | None | None = None,
     operation: str = "SELECT"
 ) -> Any:
     """

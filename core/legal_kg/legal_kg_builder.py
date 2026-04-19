@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律知识图谱构建工具 - 使用BERT-NER提取实体和关系 (NebulaGraph版本)
 

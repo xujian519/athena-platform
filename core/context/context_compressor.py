@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 上下文压缩器 - Token Sprawl防护机制
 Context Compressor - Token Sprawl Prevention
@@ -19,9 +20,9 @@ Context Compressor - Token Sprawl Prevention
 import logging
 from collections import deque
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -87,6 +88,49 @@ class CompressionStrategy:
     remove_irrelevant: bool = True  # 是否移除不相关信息
 
 
+@dataclass
+class FrozenSnapshot:
+    """
+    冻结快照 (增强功能)
+
+    用于保存长时间会话的关键状态，支持快速恢复
+    """
+
+    snapshot_id: str  # 快照唯一标识
+    original_tokens: int  # 原始Token数
+    summary_l1: str  # 50%压缩摘要
+    summary_l2: str  # 80%压缩摘要
+    summary_l3: str  # 95%压缩摘要
+    key_entities: list[str]  # 关键实体列表 (专利号、法律条款等)
+    legal_keywords_matched: list[str]  # 匹配的法律关键词
+    created_at: datetime = field(default_factory=datetime.now)
+    message_count: int = 0  # 原始消息数量
+
+    def get_summary_for_token_budget(self, max_tokens: int) -> str:
+        """
+        根据Token预算选择合适的摘要层级
+
+        Args:
+            max_tokens: 最大Token数
+
+        Returns:
+            str: 最适合的摘要内容
+        """
+        l1_tokens = len(self.summary_l1) // 3
+        l2_tokens = len(self.summary_l2) // 3
+        l3_tokens = len(self.summary_l3) // 3
+
+        if max_tokens >= l1_tokens:
+            return self.summary_l1
+        elif max_tokens >= l2_tokens:
+            return self.summary_l2
+        elif max_tokens >= l3_tokens:
+            return self.summary_l3
+        else:
+            # Token预算太小，返回最短摘要
+            return self.summary_l3
+
+
 class ContextCompressor:
     """
     上下文压缩器
@@ -96,7 +140,65 @@ class ContextCompressor:
     2. 信息重要性评分
     3. 动态上下文窗口调整
     4. 不相关信息清理
+    5. 专利法律领域关键词识别 (增强)
+    6. 冻结快照支持 (增强)
     """
+
+    # ========================================
+    # 专利法律领域关键词权重 (增强功能)
+    # ========================================
+    LEGAL_KEYWORDS: dict[str, dict[str, list[str]]] = {
+        "critical": [
+            # 关键关键词 - 必须保留
+            "权利要求",
+            "技术特征",
+            "区别特征",
+            "新颖性",
+            "创造性",
+            "三步法",
+            "技术启示",
+            "显而易见",
+            "等同原则",
+            "全面覆盖",
+            "禁止反悔",
+            "审查意见",
+            "对比文件",
+            "实施例",
+        ],
+        "high": [
+            # 高重要性关键词
+            "专利",
+            "发明",
+            "实用新型",
+            "外观设计",
+            "申请",
+            "授权",
+            "无效",
+            "侵权",
+            "技术方案",
+            "现有技术",
+            "检索",
+            "分析",
+            "意见陈述",
+            "权利要求书",
+            "说明书",
+        ],
+        "medium": [
+            # 中等重要性关键词
+            "申请人",
+            "发明人",
+            "代理人",
+            "专利法",
+            "审查",
+            "答复",
+            "修改",
+            "特征",
+            "方案",
+            "对比",
+            "文献",
+            "报告",
+        ],
+    }
 
     def __init__(self, max_context_tokens: int = 8000, summary_threshold: float = 0.7):
         """
@@ -295,6 +397,37 @@ class ContextCompressor:
         greetings = ["你好", "hi", "hello", "您好", "早上好", "下午好", "晚上好"]
         content_lower = content.lower()
         return any(greeting in content_lower for greeting in greetings)
+
+    def _score_legal_importance(self, content: str) -> float:
+        """
+        评估专利法律内容的重要性评分 (增强功能)
+
+        基于专利法律领域关键词的出现频率和权重评估重要性
+
+        Args:
+            content: 消息内容
+
+        Returns:
+            float: 法律重要性评分 (0.0-1.0)
+        """
+        score = 0.0
+
+        # 关键关键词 (每个 0.05 分)
+        for kw in self.LEGAL_KEYWORDS["critical"]:
+            if kw in content:
+                score += 0.05
+
+        # 高重要性关键词 (每个 0.02 分)
+        for kw in self.LEGAL_KEYWORDS["high"]:
+            if kw in content:
+                score += 0.02
+
+        # 中等重要性关键词 (每个 0.01 分)
+        for kw in self.LEGAL_KEYWORDS["medium"]:
+            if kw in content:
+                score += 0.01
+
+        return min(1.0, score)
 
     async def _create_summary_message(
         self, original_msg: Message, max_tokens: int
@@ -556,6 +689,154 @@ class ContextCompressor:
             ),
         )
 
+    # ========================================
+    # 增强功能: 冻结快照
+    # ========================================
+
+    async def create_frozen_snapshot(
+        self,
+        messages: list[Message],
+        snapshot_id: str | None = None,
+    ) -> FrozenSnapshot:
+        """
+        创建冻结快照 (增强功能)
+
+        用于保存长时间会话的关键状态，支持快速恢复。
+        创建三个压缩级别的摘要以适应不同的Token预算。
+
+        Args:
+            messages: 消息列表
+            snapshot_id: 可选的快照ID (默认自动生成)
+
+        Returns:
+            FrozenSnapshot: 冻结快照对象
+        """
+        import uuid
+
+        # 生成快照ID
+        if snapshot_id is None:
+            snapshot_id = (
+                f"snapshot_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:8]}"
+            )
+
+        # 合并所有消息内容
+        combined_content = "\n\n".join(f"[{msg.role.value}]: {msg.content}" for msg in messages)
+
+        original_tokens = sum(msg.token_count for msg in messages)
+
+        # 创建三层摘要
+        summary_l1 = self._create_summary_level1(combined_content)  # 50%压缩
+        summary_l2 = self._create_summary_level2(combined_content)  # 80%压缩
+        summary_l3 = self._create_summary_level3(combined_content)  # 95%压缩
+
+        # 提取关键实体
+        key_entities = self._extract_key_entities(combined_content)
+
+        # 收集匹配的法律关键词
+        legal_keywords_matched: list[str] = []
+        for level_keywords in self.LEGAL_KEYWORDS.values():
+            for kw in level_keywords:
+                if kw in combined_content and kw not in legal_keywords_matched:
+                    legal_keywords_matched.append(kw)
+
+        snapshot = FrozenSnapshot(
+            snapshot_id=snapshot_id,
+            original_tokens=original_tokens,
+            summary_l1=summary_l1,
+            summary_l2=summary_l2,
+            summary_l3=summary_l3,
+            key_entities=key_entities,
+            legal_keywords_matched=legal_keywords_matched,
+            message_count=len(messages),
+        )
+
+        logger.info(
+            f"🧊 创建冻结快照: {snapshot_id} "
+            f"(原始: {original_tokens} tokens, "
+            f"压缩后: L1={len(summary_l1)//3}, L2={len(summary_l2)//3}, L3={len(summary_l3)//3})"
+        )
+
+        return snapshot
+
+    def _create_summary_level3(self, content: str) -> str:
+        """
+        创建L3摘要 (95%压缩)
+
+        只保留最关键的信息：标题和核心法律关键词
+
+        Args:
+            content: 原始内容
+
+        Returns:
+            str: 压缩后的摘要
+        """
+        lines = content.split("\n")
+
+        # 只保留:
+        # 1. 所有标题
+        # 2. 包含核心法律关键词的行
+
+        summary_lines = []
+        for line in lines:
+            # 保留标题
+            if line.strip().startswith("#"):
+                summary_lines.append(line)
+                continue
+
+            # 保留核心法律关键词
+            for kw in self.LEGAL_KEYWORDS["critical"]:
+                if kw in line:
+                    summary_lines.append(line)
+                    break
+
+        return "\n".join(summary_lines)
+
+    def _extract_key_entities(self, content: str) -> list[str]:
+        """
+        提取关键实体 (增强功能)
+
+        识别并提取专利号、法律条款、技术术语等关键实体
+
+        Args:
+            content: 文本内容
+
+        Returns:
+            list[str]: 关键实体列表
+        """
+        import re
+
+        entities: list[str] = []
+
+        # 专利号模式 (CN/US/EP/WO + 数字)
+        patent_patterns = [
+            r"CN\d{1,2}\d{6,8}[A-Z]?",  # 中国专利
+            r"US\d{7,8}[A-Z]?",  # 美国专利
+            r"EP\d{7,8}[A-Z]?",  # 欧洲专利
+            r"WO\d{2}/\d{5,6}[A-Z]?",  # PCT专利
+        ]
+
+        for pattern in patent_patterns:
+            matches = re.findall(pattern, content)
+            entities.extend(matches)
+
+        # 法律条款模式 (专利法第X条)
+        law_patterns = [
+            r"专利法第\d+条",
+            r"实施细则第\d+条",
+            r"审查指南第[一二三四五六七八九十\d]+章",
+        ]
+
+        for pattern in law_patterns:
+            matches = re.findall(pattern, content)
+            entities.extend(matches)
+
+        # 核心法律术语 (去重)
+        for kw in self.LEGAL_KEYWORDS["critical"]:
+            if kw in content and kw not in entities:
+                entities.append(kw)
+
+        return list(set(entities))  # 去重
+
 
 # ============================================================================
 # 便捷函数
@@ -587,6 +868,7 @@ def get_context_compressor_sync() -> ContextCompressor:
 __all__ = [
     "CompressionStrategy",
     "ContextCompressor",
+    "FrozenSnapshot",
     "Message",
     "MessageImportance",
     "MessageRole",

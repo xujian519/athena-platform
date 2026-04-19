@@ -4,15 +4,15 @@
 """
 
 import asyncio
-import json
 import logging
-from core.logging_config import setup_logging
 import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -41,7 +41,7 @@ class Task:
     description: str
     complexity: float
     priority: int
-    requirements: Dict[str, Any]
+    requirements: dict[str, Any]
     created_at: datetime
     deadline: datetime | None = None
 
@@ -51,19 +51,19 @@ class TaskResult:
     task_id: str
     executor: str
     status: TaskStatus
-    result: Optional[Dict[str, Any]] = None
+    result: dict[str, Any] | None = None
     error: str | None = None
     execution_time: float | None = None
     confidence: float | None = None
-    metadata: Optional[Dict[str, Any]] = None
+    metadata: dict[str, Any] | None = None
 
 class CollaborationController:
     """协作控制器"""
 
     def __init__(self):
-        self.tasks: Dict[str, Task] = {}
-        self.results: Dict[str, List[TaskResult]] = {}
-        self.active_sessions: Dict[str, Dict] = {}
+        self.tasks: dict[str, Task] = {}
+        self.results: dict[str, list[TaskResult]] = {}
+        self.active_sessions: dict[str, dict] = {}
         self.executor_pool = ThreadPoolExecutor(max_workers=10)
         self._load_ai_capabilities()
 
@@ -86,7 +86,7 @@ class CollaborationController:
             }
         }
 
-    async def submit_task(self, task_info: Dict[str, Any]) -> str:
+    async def submit_task(self, task_info: dict[str, Any]) -> str:
         """提交任务"""
         task = Task(
             id=str(uuid.uuid4()),
@@ -142,7 +142,7 @@ class CollaborationController:
             )
             self.results[task_id].append(error_result)
 
-    async def _analyze_task(self, task: Task) -> Dict[str, Any]:
+    async def _analyze_task(self, task: Task) -> dict[str, Any]:
         """分析任务，选择执行策略"""
         # 任务类型分析
         task_characteristics = {
@@ -201,7 +201,7 @@ class CollaborationController:
         logger.info(f"任务 {task.id} 选择策略: {strategy['mode'].value}")
         return strategy
 
-    async def _execute_with_strategy(self, task: Task, strategy: Dict[str, Any]) -> List[TaskResult]:
+    async def _execute_with_strategy(self, task: Task, strategy: dict[str, Any]) -> list[TaskResult]:
         """根据策略执行任务"""
         mode = strategy['mode']
         participants = strategy['participants']
@@ -279,7 +279,7 @@ class CollaborationController:
                 execution_time=(datetime.now() - start_time).total_seconds()
             )
 
-    async def _simulate_ai_execution(self, task: Task, ai_name: str) -> Dict[str, Any]:
+    async def _simulate_ai_execution(self, task: Task, ai_name: str) -> dict[str, Any]:
         """模拟AI执行过程"""
         # 这里应该调用实际的AI服务
         capabilities = self.ai_capabilities[ai_name]
@@ -314,7 +314,7 @@ class CollaborationController:
                 'ai_perspective': ai_name
             }
 
-    async def _execute_synergy(self, task: Task, participants: List[str]) -> List[TaskResult]:
+    async def _execute_synergy(self, task: Task, participants: list[str]) -> list[TaskResult]:
         """协同增效执行"""
         results = []
 
@@ -382,7 +382,7 @@ class CollaborationController:
 
         return results
 
-    async def _synthesize_results(self, task: Task, results: List[TaskResult]) -> Dict[str, Any]:
+    async def _synthesize_results(self, task: Task, results: list[TaskResult]) -> dict[str, Any]:
         """融合结果"""
         if not results:
             return {'status': 'error', 'message': '没有结果可融合'}
@@ -417,7 +417,7 @@ class CollaborationController:
 
         return synthesized
 
-    def get_task_status(self, task_id: str) -> Dict[str, Any | None]:
+    def get_task_status(self, task_id: str) -> dict[str, Any | None]:
         """获取任务状态"""
         task = self.tasks.get(task_id)
         if not task:
@@ -431,7 +431,7 @@ class CollaborationController:
             'status': self._determine_overall_status(results)
         }
 
-    def _determine_overall_status(self, results: List[TaskResult]) -> str:
+    def _determine_overall_status(self, results: list[TaskResult]) -> str:
         """确定整体状态"""
         if not results:
             return TaskStatus.PENDING.value
@@ -456,7 +456,7 @@ class CollaborationController:
         logger.info(f"任务已取消: {task_id}")
         return True
 
-    def get_active_tasks(self) -> List[str]:
+    def get_active_tasks(self) -> list[str]:
         """获取活跃任务列表"""
         return [
             task_id for task_id, task in self.tasks.items()

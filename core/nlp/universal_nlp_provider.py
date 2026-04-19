@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 通用NLP服务提供者
 支持多种NLP后端:GLM-4.7、本地模型、OpenAI等
@@ -16,10 +17,9 @@ import ssl
 from abc import ABC, abstractmethod
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 import aiohttp
-
 
 logger = logging.getLogger(__name__)
 
@@ -330,6 +330,137 @@ class BasicNLPProvider(BaseNLPProvider):
         return True
 
 
+class OllamaProvider(BaseNLPProvider):
+    """Ollama本地模型提供者(支持Qwen3.5等模型)"""
+
+    def __init__(self, config: dict[str, Any] | None = None):
+        super().__init__(config)
+        self.base_url = self.config.get("base_url", "http://localhost:11434")
+        self.model = self.config.get("model", "qwen3.5")
+        self.client: aiohttp.ClientSession | None = None
+
+    async def initialize(self) -> None:
+        """初始化Ollama服务"""
+        try:
+            timeout = aiohttp.ClientTimeout(total=120, connect=10.0, sock_read=60.0)
+            self.client = aiohttp.ClientSession(timeout=timeout)
+
+            # 健康检查
+            is_healthy = await self.health_check()
+            if is_healthy:
+                self.is_initialized = True
+                logger.info(f"✅ Ollama NLP服务初始化完成: {self.model}")
+            else:
+                logger.warning(f"⚠️ Ollama服务不可用: {self.base_url}")
+                self.is_initialized = False
+
+        except Exception as e:
+            logger.warning(f"⚠️ Ollama初始化失败: {e}")
+            self.is_initialized = False
+
+    async def process(self, text: str, task_type: TaskType, **kwargs: Any) -> dict[str, Any]:
+        """使用Ollama处理NLP任务"""
+        if not self.is_initialized:
+            await self.initialize()
+
+        if self.client is None:
+            return await self._fallback_response(text, task_type)
+
+        # 构建prompt
+        prompts = {
+            TaskType.PATENT_ANALYSIS: f"请分析以下专利文本的技术要点和创新点:\n\n{text}",
+            TaskType.TECHNICAL_REASONING: f"请对以下技术内容进行推理分析:\n\n{text}",
+            TaskType.EMOTIONAL_ANALYSIS: f"请分析以下文本的情感倾向:\n\n{text}",
+            TaskType.CREATIVE_WRITING: f"请基于以下主题进行创意写作:\n\n{text}",
+            TaskType.CONVERSATION: f"请自然地回应:\n\n{text}",
+            TaskType.SUMMARIZATION: f"请总结以下文本的要点:\n\n{text}",
+            TaskType.TRANSLATION: f"请翻译以下文本:\n\n{text}",
+        }
+        prompt = prompts.get(task_type, f"请处理以下文本:\n\n{text}")
+
+        try:
+            async with self.client.post(
+                f"{self.base_url}/v1/chat/completions",
+                headers={"Content-Type": "application/json"},
+                json={
+                    "model": self.model,
+                    "messages": [{"role": "user", "content": prompt}],
+                    "temperature": kwargs.get("temperature", 0.7),
+                    "max_tokens": kwargs.get("max_tokens", 2000),
+                    "stream": False,
+                },
+            ) as response:
+                if response.status != 200:
+                    error_text = await response.text()
+                    logger.error(f"Ollama API错误: {response.status} - {error_text}")
+                    return await self._fallback_response(text, task_type)
+
+                data = await response.json()
+
+            # 解析响应 - 支持Qwen3.5 thinking模式
+            message = data["choices"][0]["message"]
+            content = message.get("content", "") or message.get("reasoning", "")
+
+            return {
+                "success": True,
+                "content": content,
+                "provider": f"Ollama-{self.model}",
+                "task_type": task_type.value,
+                "usage": data.get("usage", {}),
+                "timestamp": datetime.now().isoformat(),
+            }
+
+        except asyncio.TimeoutError:
+            logger.error("Ollama请求超时")
+            return await self._fallback_response(text, task_type)
+        except Exception as e:
+            logger.error(f"Ollama处理失败: {e}")
+            return await self._fallback_response(text, task_type)
+
+    async def _fallback_response(self, text: str, task_type: TaskType) -> dict[str, Any]:
+        """降级响应"""
+        return {
+            "success": False,
+            "content": "Ollama服务暂时不可用",
+            "provider": f"Ollama-{self.model}",
+            "task_type": task_type.value,
+            "fallback": True,
+            "timestamp": datetime.now().isoformat(),
+        }
+
+    async def health_check(self) -> bool:
+        """健康检查"""
+        if not self.client:
+            return False
+
+        try:
+            async with self.client.get(f"{self.base_url}/api/tags") as response:
+                if response.status != 200:
+                    return False
+
+                data = await response.json()
+                models = data.get("models", [])
+                model_names = [m["name"] for m in models]
+
+                # 检查模型是否存在
+                if self.model in model_names:
+                    return True
+
+                # 检查短名称匹配
+                short_name = self.model.split(":")[0]
+                return any(m.startswith(short_name) for m in model_names)
+
+        except Exception as e:
+            logger.warning(f"Ollama健康检查失败: {e}")
+            return False
+
+    async def close(self) -> None:
+        """关闭客户端"""
+        if self.client:
+            await self.client.close()
+            self.client = None
+
+
 class UniversalNLPService:
     """通用NLP服务"""
 
@@ -341,16 +472,32 @@ class UniversalNLPService:
 
     async def initialize(self):
         """初始化所有NLP提供者"""
-        # 启用GLM-4.7作为主要提供者
-        if self.config.get("enable_glm", True):
+        # 优先使用Ollama本地模型（支持Qwen3.5）
+        if self.config.get("enable_ollama", True):
+            try:
+                ollama_model = self.config.get("ollama_model", "qwen3.5")
+                ollama_provider = OllamaProvider({
+                    "model": ollama_model,
+                    "base_url": self.config.get("ollama_base_url", "http://localhost:11434"),
+                })
+                await ollama_provider.initialize()
+                self.providers[f"ollama-{ollama_model}"] = ollama_provider
+                self.primary_provider = ollama_provider
+                logger.info(f"✅ Ollama {ollama_model}已启用并设为主要提供者")
+            except Exception as e:
+                logger.warning(f"⚠️ Ollama初始化失败: {e}")
+
+        # 启用GLM-4.7作为备用提供者
+        if self.config.get("enable_glm", False) and not self.primary_provider:
             try:
                 glm_provider = GLM47Provider(self.config.get("glm", {}))
                 await glm_provider.initialize()
                 self.providers["glm-4.7"] = glm_provider
-                self.primary_provider = glm_provider
-                logger.info("✅ GLM-4.7已启用并设为主要提供者")
+                if not self.primary_provider:
+                    self.primary_provider = glm_provider
+                logger.info("✅ GLM-4.7已启用")
             except Exception as e:
-                logger.warning(f"⚠️ GLM-4.7初始化失败,将使用备用方案: {e}")
+                logger.warning(f"⚠️ GLM-4.7初始化失败: {e}")
 
         # 初始化本地BERT作为备用提供者
         if self.config.get("enable_local", True):
@@ -358,7 +505,7 @@ class UniversalNLPService:
             await local_provider.initialize()
             self.providers["local-bert"] = local_provider
             if not self.primary_provider:
-                self.primary_provider = local_provider  # 如果GLM失败,设为主要提供者
+                self.primary_provider = local_provider
             self.fallback_providers.append(local_provider)
 
         # 初始化基础NLP作为最终备用
@@ -368,7 +515,8 @@ class UniversalNLPService:
         self.fallback_providers.append(basic_provider)
 
         logger.info(f"✅ NLP服务初始化完成,提供者数量: {len(self.providers)}")
-        logger.info("🎯 GLM-4.7已启用,提供强大的中文理解和推理能力")
+        if self.primary_provider:
+            logger.info(f"🎯 主要提供者: {self.primary_provider.provider_name}")
 
     async def process(self, text: str, task_type, **kwargs: Any) -> dict[str, Any]:
         """处理NLP任务"""

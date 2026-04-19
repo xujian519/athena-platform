@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 自动部署模块
 Auto Deployment Module
@@ -22,10 +23,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
-from core.logging_config import setup_logging
-from .types import EvolutionResult, EvolutionStatus
+from .types import EvolutionResult
 
 logger = logging.getLogger(__name__)
 
@@ -78,11 +78,11 @@ class DeploymentResult:
 
     # 时间信息
     started_at: datetime = field(default_factory=datetime.now)
-    completed_at: Optional[datetime] = None
+    completed_at: datetime | None = None
     duration: float = 0.0
 
     # 错误信息
-    error: Optional[str] = None
+    error: str | None = None
     rollback_performed: bool = False
 
 
@@ -93,7 +93,7 @@ class AutoDeployment:
     提供安全的自动部署能力，支持多种部署策略
     """
 
-    def __init__(self, config: Optional[DeploymentConfig] = None):
+    def __init__(self, config: DeploymentConfig | None = None):
         """初始化自动部署模块"""
         self.config = config or DeploymentConfig()
         self.deployment_history: list[DeploymentResult] = []
@@ -123,7 +123,7 @@ class AutoDeployment:
             DeploymentResult: 部署结果
         """
         started_at = datetime.now()
-        logger.info(f"🚀 开始部署进化结果...")
+        logger.info("🚀 开始部署进化结果...")
 
         try:
             # 1. 备份当前状态
@@ -253,7 +253,7 @@ class AutoDeployment:
                     config = json.load(f)
 
                 # 更新默认参数
-                for provider_name, provider_config in config.get("providers", {}).items():
+                for _provider_name, provider_config in config.get("providers", {}).items():
                     if "parameters" in provider_config:
                         provider_config["parameters"][target] = value
 
@@ -401,10 +401,10 @@ class AutoDeployment:
 
 
 # 全局实例
-_auto_deployment: Optional[AutoDeployment] = None
+_auto_deployment: AutoDeployment | None = None
 
 
-def get_auto_deployment(config: Optional[DeploymentConfig] = None) -> AutoDeployment:
+def get_auto_deployment(config: DeploymentConfig | None = None) -> AutoDeployment:
     """获取自动部署实例"""
     global _auto_deployment
     if _auto_deployment is None:
@@ -421,7 +421,7 @@ if __name__ == "__main__":
         deployment = get_auto_deployment()
 
         # 创建模拟进化结果
-        from .types import EvolutionResult, EvolutionPhase, EvolutionStrategy
+        from .types import EvolutionPhase, EvolutionResult, EvolutionStrategy
 
         mock_result = EvolutionResult(
             success=True,
@@ -442,13 +442,13 @@ if __name__ == "__main__":
         print("\n🚀 执行部署...")
         result = await deployment.deploy_evolution(mock_result)
 
-        print(f"\n✅ 部署完成")
+        print("\n✅ 部署完成")
         print(f"策略: {result.strategy.value}")
         print(f"状态: {result.status.value}")
         print(f"性能变化: {result.performance_delta:+.1%}")
 
         stats = deployment.get_deployment_stats()
-        print(f"\n📊 部署统计:")
+        print("\n📊 部署统计:")
         print(f"  总部署数: {stats['total_deployments']}")
         print(f"  成功率: {stats['success_rate']:.1%}")
 

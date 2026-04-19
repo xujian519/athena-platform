@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺平台控制API服务
 Xiaonuo Platform Control API Service
@@ -9,7 +10,6 @@ Xiaonuo Platform Control API Service
 import sys
 from datetime import datetime
 from pathlib import Path
-
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent))

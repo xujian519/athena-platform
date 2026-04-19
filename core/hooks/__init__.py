@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena Hook系统
 

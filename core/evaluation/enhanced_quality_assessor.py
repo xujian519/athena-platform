@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强的质量评估模块
 Enhanced Quality Assessment Module
@@ -14,7 +15,6 @@ Enhanced Quality Assessment Module
 创建时间: 2026-01-28
 """
 
-import asyncio
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -320,7 +320,7 @@ class EnhancedQualityAssessor:
 """
 
         try:
-            response = await self.llm_client.ainvoke(prompt)
+            await self.llm_client.ainvoke(prompt)
             # 这里应该解析LLM的响应，简化实现返回默认值
             return {
                 "overall_score": 0.85,

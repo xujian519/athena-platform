@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 综合决策模块
 Integrated Decision Module

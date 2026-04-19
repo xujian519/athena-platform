@@ -1,11 +1,13 @@
+from __future__ import annotations
 """
 Redis缓存实现
 使用Redis作为分布式缓存存储
 """
 
 import json
-from typing import Any
 import logging
+from typing import Any
+
 logger = logging.getLogger(__name__)
 
 try:
@@ -297,7 +299,7 @@ class RedisCache:
         """关闭Redis连接"""
         try:
             self._client.close()
-        except Exception:
+        except Exception as e:
             print(f"捕获Exception异常: {e}")
 
     def __del__(self):

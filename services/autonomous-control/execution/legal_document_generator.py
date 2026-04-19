@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 法律文书生成器
 Legal Document Generator
@@ -10,16 +9,13 @@ Legal Document Generator
 创建时间: 2024年12月15日
 """
 
-import asyncio
-from core.async_main import async_main
 import logging
-from typing import Dict, List, Any, Optional
 from datetime import datetime
 from pathlib import Path
-import json
+from typing import Any
 
-from jinja2 import Environment, FileSystemLoader, Template
 import aiofiles
+from jinja2 import Environment, FileSystemLoader, Template
 
 logger = logging.getLogger(__name__)
 
@@ -77,7 +73,7 @@ class LegalDocumentGenerator:
                 for template_name, template_file in templates.items():
                     template_path = self.template_dir / template_file
                     if template_path.exists():
-                        with open(template_path, 'r', encoding='utf-8') as f:
+                        with open(template_path, encoding='utf-8') as f:
                             template_content = f.read()
                         self.templates[doc_type][template_name] = Template(template_content)
                     else:
@@ -96,7 +92,7 @@ class LegalDocumentGenerator:
             await self._create_default_templates()
             self.initialized = True
 
-    async def generate_document(self, request: Dict[str, Any]) -> Dict[str, Any]:
+    async def generate_document(self, request: dict[str, Any]) -> dict[str, Any]:
         """
         生成法律文书
 
@@ -174,7 +170,7 @@ class LegalDocumentGenerator:
                 "document": None
             }
 
-    async def _preprocess_data(self, data: Dict[str, Any], document_type: str) -> Dict[str, Any]:
+    async def _preprocess_data(self, data: dict[str, Any], document_type: str) -> dict[str, Any]:
         """预处理文书数据"""
         processed_data = data.copy()
 
@@ -198,7 +194,7 @@ class LegalDocumentGenerator:
 
         return processed_data
 
-    async def _process_patent_data(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def _process_patent_data(self, data: dict[str, Any]) -> dict[str, Any]:
         """处理专利数据"""
         patent_data = {}
 
@@ -229,7 +225,7 @@ class LegalDocumentGenerator:
 
         return patent_data
 
-    async def _process_trademark_data(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def _process_trademark_data(self, data: dict[str, Any]) -> dict[str, Any]:
         """处理商标数据"""
         trademark_data = {}
 
@@ -247,7 +243,7 @@ class LegalDocumentGenerator:
 
         return trademark_data
 
-    async def _process_copyright_data(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def _process_copyright_data(self, data: dict[str, Any]) -> dict[str, Any]:
         """处理版权数据"""
         copyright_data = {}
 
@@ -265,7 +261,7 @@ class LegalDocumentGenerator:
 
         return copyright_data
 
-    async def _process_contract_data(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def _process_contract_data(self, data: dict[str, Any]) -> dict[str, Any]:
         """处理合同数据"""
         contract_data = {}
 
@@ -329,7 +325,7 @@ class LegalDocumentGenerator:
         else:
             return content
 
-    async def _save_document(self, document_info: Dict[str, Any], content: Any) -> str:
+    async def _save_document(self, document_info: dict[str, Any], content: Any) -> str:
         """保存文档"""
         filename = f"{document_info['document_id']}.{document_info['format']}"
         file_path = self.output_dir / filename
@@ -478,7 +474,7 @@ class LegalDocumentGenerator:
             for template_name in self.document_types[doc_type]:
                 await self._create_basic_template(doc_type, template_name)
 
-    async def get_template_list(self, document_type: str = None) -> List[Dict[str, str]]:
+    async def get_template_list(self, document_type: str = None) -> list[dict[str, str]]:
         """获取模板列表"""
         templates = []
 
@@ -512,7 +508,7 @@ class LegalDocumentGenerator:
             logger.error(f"❌ 模板更新失败: {str(e)}")
             return False
 
-    async def preview_document(self, request: Dict[str, Any]) -> Dict[str, Any]:
+    async def preview_document(self, request: dict[str, Any]) -> dict[str, Any]:
         """预览文档"""
         # 不保存文档，只返回内容预览
         request["format"] = "preview"

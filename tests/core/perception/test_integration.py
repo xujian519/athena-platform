@@ -16,9 +16,13 @@ Perception Module Integration Tests
 """
 
 import asyncio
+import sys
 from datetime import timedelta
+from pathlib import Path
 
 import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.perception import (
     InputType,

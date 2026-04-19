@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 动态连接池
 Dynamic Connection Pool
@@ -18,7 +19,7 @@ from collections import deque
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -135,8 +136,8 @@ class DynamicConnectionPool:
         self._wait_times: deque[float] = deque(maxlen=1000)
 
         # 后台任务
-        self._health_check_task: Optional[asyncio.Task[None]] | None = None
-        self._cleanup_task: Optional[asyncio.Task[None]] | None = None
+        self._health_check_task: asyncio.Task[None] | None | None = None
+        self._cleanup_task: asyncio.Task[None] | None | None = None
 
         logger.info(f"🔗 连接池初始化: min={self.config.min_size}, " f"max={self.config.max_size}")
 

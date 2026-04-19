@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 测试修复后的引擎
 Test Fixed Engines
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
 import asyncio
 from datetime import datetime
+
 
 async def test_fixed_engines():
     """测试修复后的引擎"""
@@ -116,7 +117,7 @@ async def test_planner_functionality(princess):
                 result = await princess.simple_planner_handler(task, {'priority': 'medium'})
                 if result.get('success'):
                     plan = result.get('plan', {})
-                    print(f"    ✅ 规划成功")
+                    print("    ✅ 规划成功")
                     print(f"    📋 类型: {plan.get('type', 'unknown')}")
                     print(f"    ⏱️ 估算时间: {plan.get('estimated_time', 'unknown')}")
                 else:

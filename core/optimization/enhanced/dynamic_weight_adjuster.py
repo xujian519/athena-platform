@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 动态权重调整器 (Dynamic Weight Adjuster) - Stub实现
 根据模型性能动态调整权重

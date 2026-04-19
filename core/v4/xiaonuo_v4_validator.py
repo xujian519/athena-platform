@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺v4.0自检机制
 Xiaonuo v4.0 Self-Validation Module
@@ -8,7 +9,6 @@ Xiaonuo v4.0 Self-Validation Module
 """
 
 import re
-
 
 
 class ResponseValidator:

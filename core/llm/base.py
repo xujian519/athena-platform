@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - 基础抽象类
 定义所有模型适配器必须遵循的接口规范
@@ -9,7 +10,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 class ModelType(Enum):

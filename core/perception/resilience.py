@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 请求重试和熔断机制
 Request Retry and Circuit Breaker Mechanism
@@ -36,7 +37,7 @@ import random
 import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
 from typing import Any, TypeVar
 

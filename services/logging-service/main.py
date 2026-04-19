@@ -5,30 +5,28 @@ Athena Unified Logging Service
 提供集中式日志收集、处理和分析功能
 """
 
-import logging
-from core.async_main import async_main
-from core.logging_config import setup_logging
-import json
-import os
-import sys
-from datetime import datetime, timezone
-from typing import Dict, Any, Optional, List
-from pathlib import Path
-from dataclasses import dataclass, asdict
-from enum import Enum
 import asyncio
 import gzip
+import json
+import logging
+import os
 from collections import defaultdict, deque
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta, timezone
+from enum import Enum
+from pathlib import Path
+from typing import Any
 
-from fastapi import FastAPI, HTTPException, Request
-from fastapi.middleware.cors import CORSMiddleware
-
-from core.security.auth import ALLOWED_ORIGINS
-from pydantic import BaseModel, Field
-import redis
 import aiofiles
-from elasticsearch import AsyncElasticsearch
+import redis
 import uvicorn
+from elasticsearch import AsyncElasticsearch
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+
+from core.logging_config import setup_logging
+from core.security.auth import ALLOWED_ORIGINS
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -62,8 +60,8 @@ class LogEntry:
     span_id: str | None = None
     user_id: str | None = None
     request_id: str | None = None
-    metadata: Dict[str, Any] = None
-    exception: Optional[Dict[str, Any]] = None
+    metadata: dict[str, Any] = None
+    exception: dict[str, Any] | None = None
 
     def __post_init__(self):
         if self.metadata is None:
@@ -79,7 +77,7 @@ class LogRequest(BaseModel):
     span_id: str | None = None
     user_id: str | None = None
     request_id: str | None = None
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
 class LogQuery(BaseModel):
     """日志查询"""
@@ -101,7 +99,7 @@ class LoggingService:
         self.log_buffer: deque = deque(maxlen=10000)
         self.file_storage_path = Path("./data/logs")
         self.file_storage_path.mkdir(parents=True, exist_ok=True)
-        self.log_file_handlers: Dict[str, object] = {}
+        self.log_file_handlers: dict[str, object] = {}
         self.compression_enabled = True
         self.retention_days = 30
 
@@ -293,7 +291,7 @@ class LoggingService:
         except Exception as e:
             logger.error(f"存储到Elasticsearch失败: {e}")
 
-    async def query_logs(self, query: LogQuery) -> Dict[str, Any]:
+    async def query_logs(self, query: LogQuery) -> dict[str, Any]:
         """查询日志"""
         # 如果有Elasticsearch，使用其搜索功能
         if self.elasticsearch:
@@ -302,9 +300,9 @@ class LoggingService:
         # 否则从文件查询
         return await self._query_files(query)
 
-    async def _query_elasticsearch(self, query: LogQuery) -> Dict[str, Any]:
+    async def _query_elasticsearch(self, query: LogQuery) -> dict[str, Any]:
         """从Elasticsearch查询"""
-        index_pattern = f"athena-logs-*"
+        index_pattern = "athena-logs-*"
 
         # 构建查询
         search_body = {
@@ -365,11 +363,10 @@ class LoggingService:
             logger.error(f"Elasticsearch查询失败: {e}")
             return {"logs": [], "total": 0, "error": str(e)}
 
-    async def _query_files(self, query: LogQuery) -> Dict[str, Any]:
+    async def _query_files(self, query: LogQuery) -> dict[str, Any]:
         """从文件查询（简化实现）"""
         # 这是一个简化的实现，实际应该遍历文件并解析
         logs = []
-        total = 0
 
         # 从缓冲区查询最近的日志
         buffer_logs = list(self.log_buffer)
@@ -406,7 +403,7 @@ class LoggingService:
 
         return True
 
-    async def get_log_stats(self) -> Dict[str, Any]:
+    async def get_log_stats(self) -> dict[str, Any]:
         """获取日志统计"""
         stats = {
             "total_logs": 0,
@@ -607,7 +604,7 @@ async def create_log(log_request: LogRequest):
     return {"message": "日志记录成功", "timestamp": datetime.now().isoformat()}
 
 @app.post("/api/v1/logs/batch")
-async def batch_create_logs(logs: List[LogRequest]):
+async def batch_create_logs(logs: list[LogRequest]):
     """批量记录日志"""
     for log in logs:
         await logging_service.log(log)

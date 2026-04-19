@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 跨智能体能力融合系统 v2.0
 Cross-Agent Capability Fusion System Enhanced
@@ -27,7 +28,7 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -551,16 +552,6 @@ def _register_default_agents(fusion_system: CrossAgentCapabilityFusion) -> Any:
         )
     )
 
-    # 云熙
-    fusion_system.register_agent(
-        AgentCapability(
-            agent_id="yunxi",
-            agent_name="云熙·vega",
-            capabilities=["业务管理", "项目管理", "数据分析", "资源配置", "进度跟踪"],
-            specialties=["业务流程", "数据分析", "资源协调"],
-            confidence=0.90,
-        )
-    )
 
     # 小宸
     fusion_system.register_agent(

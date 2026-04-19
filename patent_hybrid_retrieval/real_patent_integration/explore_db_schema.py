@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 探索真实专利数据库结构
 Explore Real Patent Database Schema
@@ -8,6 +7,8 @@ Explore Real Patent Database Schema
 import logging
 import os
 import sys
+
+# 导入标准化数据库工具
 
 logger = logging.getLogger(__name__)
 
@@ -54,21 +55,21 @@ def explore_schema():
                         logger.info(f"   - {col[0]}: {col[1]} ({'NULL' if col[2] == 'YES' else 'NOT NULL'})")
 
             # 3. 查看数据量
-            logger.info(f"\n3. 各表数据量：")
+            logger.info("\n3. 各表数据量：")
             for table_name, _ in tables[:10]:  # 只查看前10个表
                 try:
-        # TODO: 检查SQL注入风险 - cursor.execute(f"SELECT COUNT(*) FROM {table_name};")
-                            cursor.execute(f"SELECT COUNT(*) FROM {table_name};")
+                    # TODO: 检查SQL注入风险 - cursor.execute(f"SELECT COUNT(*) FROM {table_name};")
+                    cursor.execute(f"SELECT COUNT(*) FROM {table_name};")
                     count = cursor.fetchone()[0]
                     logger.info(f"   - {table_name}: {count:,} 条记录")
                 except Exception as e:
                     logger.info(f"   - {table_name}: 无法查询 ({str(e)[:50]})")
 
             # 4. 查看主要表的前几条数据
-            logger.info(f"\n4. 主要表数据示例：")
+            logger.info("\n4. 主要表数据示例：")
             for table_name in ['patent', 'patents', 'application', 'applications']:
-        # TODO: 检查SQL注入风险 - cursor.execute(f"""
-                        cursor.execute(f"""
+                # TODO: 检查SQL注入风险 - cursor.execute(f"""
+                cursor.execute("""
                     SELECT EXISTS (
                         SELECT FROM information_schema.tables
                         WHERE table_schema = 'public'
@@ -79,13 +80,13 @@ def explore_schema():
 
                 if exists:
                     try:
-        # TODO: 检查SQL注入风险 - cursor.execute(f"SELECT * FROM {table_name} LIMIT 1;")
-                                cursor.execute(f"SELECT * FROM {table_name} LIMIT 1;")
+                        # TODO: 检查SQL注入风险 - cursor.execute(f"SELECT * FROM {table_name} LIMIT 1;")
+                        cursor.execute(f"SELECT * FROM {table_name} LIMIT 1;")
                         record = cursor.fetchone()
                         if record:
                             # 获取列名
-        # TODO: 检查SQL注入风险 - cursor.execute(f"""
-                                    cursor.execute(f"""
+                            # TODO: 检查SQL注入风险 - cursor.execute(f"""
+                            cursor.execute("""
                                 SELECT column_name
                                 FROM information_schema.columns
                                 WHERE table_name = %s
@@ -94,9 +95,9 @@ def explore_schema():
                             columns = [col[0] for col in cursor.fetchall()]
 
                             logger.info(f"\n   表 '{table_name}' 示例：")
-                            for i, (col, val) in enumerate(zip(columns, record)):
+                            for i, (col, val) in enumerate(zip(columns, record, strict=False)):
                                 if i >= 10:  # 只显示前10个字段
-                                    logger.info(f"     ...")
+                                    logger.info("     ...")
                                     break
                                 val_str = str(val) if val is not None else 'NULL'
                                 if len(val_str) > 50:
@@ -108,9 +109,6 @@ def explore_schema():
     except Exception as e:
         logger.info(f"\n❌ 探索失败: {e}")
         import traceback
-
-# 导入标准化数据库工具
-from shared.database.db_utils import DatabaseManager, build_safe_query
         traceback.print_exc()
     finally:
         connector.close()

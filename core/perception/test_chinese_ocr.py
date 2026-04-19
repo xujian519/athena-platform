@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 中文OCR优化测试
 Chinese OCR Optimization Tests
@@ -13,8 +14,6 @@ Chinese OCR Optimization Tests
 作者: 小诺·双鱼公主
 创建时间: 2026-01-01
 """
-import numpy as np
-
 import logging
 import os
 
@@ -25,6 +24,7 @@ from pathlib import Path
 from typing import Any
 
 import cv2
+import numpy as np
 import pytest
 from PIL import Image, ImageDraw
 

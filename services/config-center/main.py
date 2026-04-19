@@ -5,25 +5,23 @@ Athena Configuration Center Service
 提供统一的配置管理和动态配置更新功能
 """
 
-import logging
-from core.async_main import async_main
-from core.logging_config import setup_logging
-import os
-import json
-import yaml
-from datetime import datetime
-from typing import Dict, Any, Optional, List
-from pathlib import Path
-from dataclasses import dataclass, asdict
-
-from fastapi import FastAPI, HTTPException, BackgroundTasks
-from fastapi.middleware.cors import CORSMiddleware
-
-from core.security.auth import ALLOWED_ORIGINS
-from pydantic import BaseModel, Field
-import redis
 import asyncio
+import json
+import os
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+import redis
 import uvicorn
+import yaml
+from fastapi import BackgroundTasks, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+
+from core.logging_config import setup_logging
+from core.security.auth import ALLOWED_ORIGINS
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -36,7 +34,7 @@ class ConfigItem:
     value: Any
     type: str = "string"  # string, number, boolean, json, yaml
     description: str = ""
-    tags: List[str] = None
+    tags: list[str] = None
     created_at: datetime = None
     updated_at: datetime = None
     version: int = 1
@@ -55,7 +53,7 @@ class ConfigRequest(BaseModel):
     value: Any = Field(..., description="配置值")
     type: str = Field("string", description="配置类型")
     description: str = Field("", description="配置描述")
-    tags: List[str] = Field(default_factory=list, description="配置标签")
+    tags: list[str] = Field(default_factory=list, description="配置标签")
 
 class ConfigResponse(BaseModel):
     """配置响应"""
@@ -63,7 +61,7 @@ class ConfigResponse(BaseModel):
     value: Any
     type: str
     description: str
-    tags: List[str]
+    tags: list[str]
     version: int
     updated_at: datetime
 
@@ -74,8 +72,8 @@ class ConfigCenter:
         self.redis_client: redis.Redis | None = None
         self.file_storage_path = Path("./data/configs")
         self.file_storage_path.mkdir(parents=True, exist_ok=True)
-        self.config_cache: Dict[str, ConfigItem] = {}
-        self.watchers: Dict[str, List[callable]] = {}
+        self.config_cache: dict[str, ConfigItem] = {}
+        self.watchers: dict[str, list[callable]] = {}
 
     async def initialize(self):
         """初始化配置中心"""
@@ -107,7 +105,7 @@ class ConfigCenter:
         # 从文件加载
         for config_file in self.file_storage_path.glob("*.json"):
             try:
-                with open(config_file, 'r', encoding='utf-8') as f:
+                with open(config_file, encoding='utf-8') as f:
                     data = json.load(f)
                     config = ConfigItem(**data)
                     self.config_cache[config.key] = config
@@ -138,7 +136,7 @@ class ConfigCenter:
         logger.info(f"加载了 {len(self.config_cache)} 个配置项")
 
     async def set_config(self, key: str, value: Any, config_type: str = "string",
-                         description: str = "", tags: List[str] = None) -> bool:
+                         description: str = "", tags: list[str] = None) -> bool:
         """设置配置"""
         try:
             # 检查是否已存在
@@ -226,7 +224,7 @@ class ConfigCenter:
             logger.error(f"删除配置失败 {key}: {e}")
             return False
 
-    async def list_configs(self, prefix: str = None, tags: List[str] = None) -> List[ConfigItem]:
+    async def list_configs(self, prefix: str = None, tags: list[str] = None) -> list[ConfigItem]:
         """列出配置"""
         configs = list(self.config_cache.values())
 
@@ -255,10 +253,10 @@ class ConfigCenter:
                 if not self.watchers[key]:
                     del self.watchers[key]
                 logger.info(f"取消配置监听: {key}")
-            except ValueError:
+            except ValueError as e:
                 logger.error(f"Error: {e}", exc_info=True)
 
-    async def _notify_watchers(self, key: str, config: Optional[ConfigItem]):
+    async def _notify_watchers(self, key: str, config: ConfigItem | None):
         """通知配置观察者"""
         if key in self.watchers:
             for callback in self.watchers[key]:
@@ -482,7 +480,7 @@ async def list_configs(prefix: str = None, tags: str = None):
 
 # 批量操作
 @app.post("/api/v1/configs/batch")
-async def batch_set_configs(configs: List[ConfigRequest]):
+async def batch_set_configs(configs: list[ConfigRequest]):
     """批量设置配置"""
     results = []
     for config in configs:
@@ -558,6 +556,8 @@ async def watch_config(key: str, callback_url: str):
     async def callback_handler(config_key, config):
         if config:
             # 发送HTTP回调
+            import httpx
+
             async with httpx.AsyncClient() as client:
                 await client.post(
                     callback_url,

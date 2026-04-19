@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 多智能体协作测试运行器
 Multi-Agent Collaboration Test Runner
@@ -7,11 +6,11 @@ Multi-Agent Collaboration Test Runner
 运行多智能体协作框架的所有测试
 """
 
-import sys
-import os
-import unittest
-import time
 import logging
+import os
+import sys
+import time
+import unittest
 from pathlib import Path
 
 # 添加项目路径
@@ -32,7 +31,10 @@ def run_basic_collaboration_tests():
 
     try:
         from tests.collaboration.test_multi_agent_collaboration import (
-            TestAgentCapability, TestAgent, TestTask, TestMessage
+            TestAgent,
+            TestAgentCapability,
+            TestMessage,
+            TestTask,
         )
 
         # 创建测试套件
@@ -63,7 +65,7 @@ def run_framework_tests():
 
     try:
         from tests.collaboration.test_multi_agent_collaboration import (
-            TestMultiAgentCollaborationFramework
+            TestMultiAgentCollaborationFramework,
         )
 
         loader = unittest.TestLoader()
@@ -86,10 +88,10 @@ def run_pattern_tests():
 
     try:
         from tests.collaboration.test_multi_agent_collaboration import (
-            TestSequentialCollaborationPattern,
-            TestParallelCollaborationPattern,
+            TestConsensusCollaborationPattern,
             TestHierarchicalCollaborationPattern,
-            TestConsensusCollaborationPattern
+            TestParallelCollaborationPattern,
+            TestSequentialCollaborationPattern,
         )
 
         loader = unittest.TestLoader()
@@ -151,8 +153,8 @@ def run_integration_collaboration_tests():
         try:
             framework_status = integration.get_framework_status()
             agent_status = integration.get_agent_status('xiaonuo')
-            print(f"   框架状态: ✅ 成功获取")
-            print(f"   智能体状态: ✅ 成功获取" if agent_status else "⚠️ 智能体状态获取失败")
+            print("   框架状态: ✅ 成功获取")
+            print("   智能体状态: ✅ 成功获取" if agent_status else "⚠️ 智能体状态获取失败")
         except Exception as e:
             print(f"   状态获取: ❌ 失败 ({e})")
             framework_status = None
@@ -171,10 +173,10 @@ def run_performance_collaboration_tests():
 
     try:
         from core.collaboration import (
-            MultiAgentCollaborationFramework,
             Agent,
             AgentCapability,
-            create_task
+            MultiAgentCollaborationFramework,
+            create_task,
         )
 
         # 创建框架
@@ -266,13 +268,13 @@ def generate_collaboration_test_report(results):
     passed_tests = sum(1 for result in results.values() if result)
     success_rate = passed_tests / total_tests if total_tests > 0 else 0
 
-    print(f"📊 协作测试统计:")
+    print("📊 协作测试统计:")
     print(f"   总测试项: {total_tests}")
     print(f"   通过项目: {passed_tests}")
     print(f"   失败项目: {total_tests - passed_tests}")
     print(f"   成功率: {success_rate:.1%}")
 
-    print(f"\n📋 详细结果:")
+    print("\n📋 详细结果:")
     for test_name, result in results.items():
         status = "✅ 通过" if result else "❌ 失败"
         print(f"   {test_name}: {status}")

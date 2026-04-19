@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能搜索路由器
 Intelligent Search Router
@@ -14,18 +15,16 @@ import re
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from core.vector_db.enhanced_vector_search_with_reranker import (
     EnhancedSearchResult,
-    EnhancedVectorSearchWithReranker,
     SearchMode,
     get_enhanced_searcher,
 )
 from core.vector_db.llm_enhanced_vector_search import (
     LLMEnhancedSearchConfig,
     LLMEnhancedSearchResult,
-    LLMEnhancedVectorSearch,
     LLMOperation,
     get_llm_enhanced_searcher,
 )

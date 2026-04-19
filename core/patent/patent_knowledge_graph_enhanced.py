@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 增强型专利知识图谱分析器
 支持PDF、数据库、文本等多种输入格式
@@ -19,8 +20,7 @@ import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
-
+from typing import Any
 
 # 导入增强检索模块
 from core.patent.enhanced_patent_retriever_v2 import EnhancedPatentRetriever, PatentInfo
@@ -248,7 +248,7 @@ class EnhancedPatentAnalyzer:
         self,
         patent_input: str | Path | dict,
         analysis_type: str = "kg_enhanced",
-        manual_features: list["key"] = None,
+        manual_features: list[str] = None,
     ) -> AnalysisResult | None:
         """
         分析专利
@@ -329,7 +329,7 @@ class EnhancedPatentAnalyzer:
         return {"features": list(features), "problems": list(problems), "effects": list(effects)}
 
     def _kg_enhanced_analysis(
-        self, patent_info: PatentInfo, manual_features: list["key"] = None
+        self, patent_info: PatentInfo, manual_features: list[str] = None
     ) -> dict:
         """
         知识图谱增强分析
@@ -558,7 +558,7 @@ class EnhancedPatentAnalyzer:
 
     def _extract_technical_elements(
         self, patent_info: PatentInfo
-    ) -> tuple[list[str], list[str], list[str]:
+    ) -> tuple[list[str], list[str], list[str]]:
         """提取技术要素"""
         return self._analyze_text(
             (patent_info.abstract or "") + " " + (patent_info.patent_name or "")

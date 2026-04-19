@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 系统管理器 - 模块加载器
 System Manager - Module Loader
@@ -10,14 +11,11 @@ System Manager - Module Loader
 """
 
 import ast
-import importlib.util
 import logging
 import os
 from pathlib import Path
-from typing import Any
 
 from .types import DependencyType, ModuleMetadata
-
 
 logger = logging.getLogger(__name__)
 
@@ -89,7 +87,7 @@ class ModuleLoader:
             模块元数据
         """
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 source = f.read()
 
             tree = ast.parse(source)

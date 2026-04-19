@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena工作平台 - API标准化模块
 API Standards Module
@@ -7,7 +8,7 @@ API Standards Module
 
 import logging
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any
 
 from fastapi import FastAPI, Request, status
 from fastapi.exceptions import RequestValidationError

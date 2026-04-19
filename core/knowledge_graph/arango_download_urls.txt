@@ -1,0 +1,40 @@
+# ArangoDB下载链接
+
+## 官方下载
+https://www.arangodb.com/download-major/
+- 选择：macOS
+- 选择：Community Edition
+- 选择：Universal (支持Intel和Apple Silicon)
+
+## 直接下载链接（测试中）
+### 备选源1：GitHub Releases
+https://github.com/arangodb/arangodb/releases
+- 查找最新版本
+- 下载：arangodb3-macos-universal-*.tar.gz
+
+### 备选源2：使用Docker（如果本地安装有问题）
+```bash
+# 拉取镜像
+docker pull arangodb:3.11.0
+
+# 运行容器
+docker run -d \
+  --name athena-arangodb \
+  -p 8529:8529 \
+  -e ARANGO_ROOT_PASSWORD="" \
+  -e ARANGO_NO_AUTH=1 \
+  -v ~/arangodb_data:/var/lib/arangodb3 \
+  arangodb:3.11.0
+```
+
+## 安装步骤
+1. 下载后解压到 /opt/arangodb3
+2. 创建符号链接：
+   sudo ln -sf /opt/arangodb3/bin/arangod /usr/local/bin/arangod
+   sudo ln -sf /opt/arangodb3/bin/arangosh /usr/local/bin/arangosh
+3. 运行：arangod --server.endpoint tcp://127.0.0.1:8529 --server.authentication false
+
+## 推荐方案
+鉴于网络问题，建议：
+1. 使用Neo4j（已安装）
+2. 等网络恢复后手动下载ArangoDB

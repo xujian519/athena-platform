@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 基于BERT的意图识别模型训练脚本
 BERT-based Intent Recognition Model Training Script
@@ -10,10 +11,9 @@ import json
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 import torch
-import torch.nn as nn
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, Dataset

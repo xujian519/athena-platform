@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 思考模式模块
 Thinking Modes Module - 多种思考模式的选择和执行

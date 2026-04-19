@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利业务智能服务API
 提供专利撰写、分析、检索、评估等全套专利业务的智能服务
@@ -8,12 +7,8 @@
 日期：2025-12-07
 """
 
-import json
-from core.async_main import async_main
-import logging
 from datetime import datetime
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
@@ -42,22 +37,22 @@ class WritingRequest(BaseModel):
 class AnalysisRequest(BaseModel):
     patent_number: str
     patent_type: str  # 新颖性、创造性、侵权分析
-    patent_data: Dict[str, Any]
+    patent_data: dict[str, Any]
 
 class SearchRequest(BaseModel):
     search_type: str  # 查新、无效、侵权
-    tech_keywords: List[str]
-    ipc_codes: List[str]
+    tech_keywords: list[str]
+    ipc_codes: list[str]
     date_range: str | None = None
 
 class EvaluationRequest(BaseModel):
     patent_number: str
     evaluation_type: str  # 技术价值、经济价值
-    patent_data: Dict[str, Any]
+    patent_data: dict[str, Any]
 
 class StrategyRequest(BaseModel):
     business_goal: str  # 防御型、进攻型、货币化
-    company_info: Dict[str, Any]
+    company_info: dict[str, Any]
     tech_domain: str
 
 
@@ -116,7 +111,7 @@ async def patent_writing(request: WritingRequest):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.post('/patent/analysis')
@@ -145,7 +140,7 @@ async def patent_analysis(request: AnalysisRequest):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.post('/patent/search')
@@ -175,7 +170,7 @@ async def patent_search(request: SearchRequest):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.post('/patent/evaluation')
@@ -202,7 +197,7 @@ async def patent_evaluation(request: EvaluationRequest):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.post('/patent/strategy')
@@ -270,7 +265,7 @@ async def patent_strategy(request: StrategyRequest):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.get('/patent/knowledge/rules')
@@ -323,7 +318,7 @@ async def export_knowledge_base():
             'message': '知识库导出成功'
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 # 启动服务

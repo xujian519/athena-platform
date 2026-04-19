@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台向量管理模块
 Vector Management Module for Athena Platform

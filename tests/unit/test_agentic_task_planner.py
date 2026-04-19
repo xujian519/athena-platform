@@ -1,23 +1,24 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 智能任务规划器单元测试
 Unit Tests for Agentic Task Planner
 """
 
 import asyncio
-import unittest
-from unittest.mock import Mock, patch, AsyncMock
-from datetime import datetime
 
 # 添加项目路径
 import sys
+import unittest
+
 sys.path.append('/Users/xujian/Athena工作平台')
 
 from core.cognition.agentic_task_planner import (
-    AgenticTaskPlanner, ExecutionPlan, TaskStep, TaskStatus, TaskPriority
+    AgenticTaskPlanner,
+    ExecutionPlan,
+    TaskStatus,
+    TaskStep,
 )
-from tests.test_framework import test_environment, test_data_generator
+
 
 class TestAgenticTaskPlanner(unittest.TestCase):
     """智能任务规划器测试类"""
@@ -320,8 +321,9 @@ class TestTaskPlannerPerformance(unittest.TestCase):
 
     def test_memory_usage(self):
         """测试内存使用"""
-        import psutil
         import os
+
+        import psutil
 
         process = psutil.Process(os.getpid())
         initial_memory = process.memory_info().rss / 1024 / 1024  # MB

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 连接池管理器
 提供HTTP连接池的管理和优化

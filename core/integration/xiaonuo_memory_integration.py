@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺记忆系统集成
 Xiaonuo Memory Integration
@@ -10,17 +11,14 @@ import sys
 from pathlib import Path
 from typing import Any
 
-
 # 添加项目路径
 current_dir = Path(__file__).parent
 project_root = current_dir.parent
 sys.path.insert(0, str(project_root))
 
 from core.memory.agent_identity_memory import (
-    check_name,
     get_agent_identity,
     get_identity_memory,
-    remind_yunpat,
 )
 
 
@@ -44,30 +42,6 @@ class XiaonuoMemoryHelper:
         # 检查消息中的智能体提及
         message_lower = message.lower()
 
-        # 检查YunPat/云熙相关
-        if any(keyword in message_lower for keyword in ["yunpat", "云熙", "yun-pat", "yun pat"]):
-            # 记录提及
-            result["agent_mentions"].append(
-                {
-                    "name": "YunPat",
-                    "correct": True,
-                    "confidence": "high" if "yunpat" in message_lower else "medium",
-                }
-            )
-
-            # 如果可能存在混淆,添加提醒
-            if self._should_remind("yunpat"):
-                reminder = remind_yunpat()
-                result["reminders"].append(reminder)
-                result["has_reminder"] = True
-                self._record_reminder("yunpat")
-
-        # 检查可能的混淆
-        if "云夕" in message or "yunxi" in message_lower:
-            correction = check_name("yunxi")
-            if correction:
-                result["reminders"].append(correction)
-                result["has_reminder"] = True
 
         # 检查其他智能体
         agent_keywords = {
@@ -130,9 +104,6 @@ class XiaonuoMemoryHelper:
             summary += "\n"
 
         # 特别提醒
-        summary += "⚠️ 重要提醒:\n"
-        summary += "   - YunPat = 云熙(专利管理专家)\n"
-        summary += "   - 云夕 ≠ YunPat(云夕是记忆管理)\n"
 
         return summary
 
@@ -141,9 +112,6 @@ class XiaonuoMemoryHelper:
         corrections = {
             "yun-pat": "YunPat",
             "yun pat": "YunPat",
-            "yunxi": "云夕(注意:不是YunPat)",
-            "yun-xi": "云夕",
-            "yun xi": "云夕",
         }
 
         return corrections.get(wrong_name.lower())

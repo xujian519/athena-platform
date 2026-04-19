@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能体身份记忆系统
 Agent Identity Memory System for Athena Platform
@@ -53,18 +54,6 @@ class AgentIdentityMemory:
     def _ensure_core_identities(self):
         """确保核心身份记录存在"""
         core_identities = {
-            "yunpat": {
-                "name": "YunPat",
-                "chinese_name": "云熙",
-                "description": "YunPat是云熙智能体的正式名称，是平台的核心组件之一",
-                "aliases": ["YunPat", "云熙", "yunpat", "yun-pat"],
-                "role": "专利管理专家",
-                "port": None,
-                "status": "integrated",
-                "important": True,
-                "reminder_count": 0,
-                "created_at": datetime.now().isoformat()
-            },
             "xiaonuo": {
                 "name": "小诺",
                 "chinese_name": "小诺",
@@ -88,19 +77,6 @@ class AgentIdentityMemory:
                 "important": False,
                 "reminder_count": 0,
                 "created_at": datetime.now().isoformat()
-            },
-            "yunxi": {
-                "name": "云夕",
-                "chinese_name": "云夕",
-                "description": "云夕是记忆管理智能体（开发中）",
-                "aliases": ["云夕", "YunXi", "yunxi", "Yun-pat"],
-                "role": "记忆管理",
-                "port": 8007,
-                "status": "development",
-                "important": False,
-                "reminder_count": 0,
-                "created_at": datetime.now().isoformat(),
-                "note": "注意：云夕≠YunPat，YunPat是独立的专利系统"
             },
             "xiaochen_memory": {
                 "name": "小辰",
@@ -187,50 +163,11 @@ class AgentIdentityMemory:
             "suggestion": "请检查智能体名称或添加到记忆系统"
         }
 
-    def remind_yunpat_identity(self) -> str:
-        """提醒YunPat=云熙的对应关系"""
-        yunpat = self.get_identity("yunpat")
-
-        if "error" not in yunpat:
-            reminder = f"""⚠️ 重要提醒：
-🤖 YunPat = 云熙
-
-YunPat是本项目的专利管理智能体，中文名称为"云熙"。
-✅ 正确称呼：YunPat 或 云熙
-❌ 错误称呼：不要与其他名称混淆
-
-详细信息：
-- 名称：{yunpat['name']} ({yunpat['chinese_name']})
-- 角色：{yunpat['role']}
-- 描述：{yunpat['description']}
-- 提醒次数：{yunpat['reminder_count'] + 1}次"""
-
-            # 更新提醒次数
-            self.memory["yunpat"]["reminder_count"] += 1
-            self._save_memory()
-
-            return reminder
-        else:
-            return "❌ 系统中未找到YunPat的记录"
-
     def check_name_confusion(self, mentioned_name: str) -> str:
         """检查可能的名称混淆"""
-        mentioned_lower = mentioned_name.lower()
+        mentioned_name.lower()
 
         # 检查常见混淆
-        if "yun" in mentioned_lower:
-            # 可能混淆YunPat、云夕、YunXi
-            corrections = []
-
-            if "pat" in mentioned_lower or mentioned_lower == "yunpat":
-                corrections.append("✅ 正确：YunPat 是云熙智能体")
-
-            if "xi" in mentioned_lower and "pat" not in mentioned_lower:
-                corrections.append("⚠️ 注意：云夕(YunXi) ≠ YunPat，云夕是记忆管理智能体")
-
-            if corrections:
-                return "\n".join(corrections)
-
         return ""
 
     def get_agent_list(self) -> list[dict[str, Any]]:
@@ -271,11 +208,6 @@ def get_identity_memory() -> AgentIdentityMemory:
         _identity_memory = AgentIdentityMemory()
     return _identity_memory
 
-# 便捷函数
-def remind_yunpat() -> str:
-    """提醒YunPat身份（供小诺使用）"""
-    memory = get_identity_memory()
-    return memory.remind_yunpat_identity()
 
 def get_agent_identity(name: str) -> dict[str, Any]:
     """获取智能体身份（供小诺使用）"""
@@ -305,7 +237,7 @@ if __name__ == "__main__":
     print(reminder)
 
     print("\n3. 测试名称混淆检查:")
-    test_names = ["YunPat", "yunxi", "云夕", "Yun-pat"]
+    test_names = ["YunPat", "云夕", "Yun-pat"]
     for name in test_names:
         result = memory.check_name_confusion(name)
         if result:

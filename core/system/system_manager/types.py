@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 系统管理器 - 类型定义
 System Manager - Type Definitions

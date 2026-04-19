@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 感知模块
 Perception Module
@@ -12,11 +11,11 @@ Perception Module
 
 import asyncio
 import logging
-from typing import Dict, Any, Optional
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 
-from .legal_nlp_processor import LegalNLPProcessor
 from .business_classifier import BusinessClassifier
+from .legal_nlp_processor import LegalNLPProcessor
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +39,7 @@ class PerceptionModule:
             logger.error(f"❌ 感知模块初始化失败: {str(e)}")
             self.initialized = True  # 即使失败也标记为已初始化，使用默认功能
 
-    async def perceive(self, text: str, context: Dict | None = None) -> Dict[str, Any]:
+    async def perceive(self, text: str, context: dict | None = None) -> dict[str, Any]:
         """
         感知处理
 
@@ -83,7 +82,7 @@ class PerceptionModule:
                 "error": str(e)
             }
 
-    def _extract_keywords(self, text: str) -> List[str]:
+    def _extract_keywords(self, text: str) -> list[str]:
         """提取关键词"""
         # 简化的关键词提取
         keywords = []

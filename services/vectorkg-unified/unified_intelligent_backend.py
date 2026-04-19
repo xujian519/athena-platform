@@ -10,21 +10,19 @@ Unified Intelligent Backend Service
 """
 
 import asyncio
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
-from typing import Dict, List, Any, Optional
-from datetime import datetime
-import json
 import uuid
-from fastapi import FastAPI, HTTPException, BackgroundTasks, Header
+from datetime import datetime
+from typing import Any
+
+from domain_adapters import DomainAdapterFactory
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-
-from core.security.auth import ALLOWED_ORIGINS
 from pydantic import BaseModel
-
 from vector_knowledge_infrastructure import get_vector_knowledge_infrastructure
-from domain_adapters import DomainAdapterFactory, DomainType
+
+from core.logging_config import setup_logging
+from core.security.auth import ALLOWED_ORIGINS
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -34,24 +32,24 @@ logger = setup_logging()
 class QueryRequest(BaseModel):
     query: str
     domain: str = "patent"  # 默认专利领域
-    context: Optional[Dict[str, Any]] = None
+    context: dict[str, Any] | None = None
     user_id: str | None = None
     application_id: str | None = None
 
 class BatchQueryRequest(BaseModel):
-    queries: List[QueryRequest]
+    queries: list[QueryRequest]
     max_parallel: int = 5
 
 class RuleExtractionRequest(BaseModel):
     text: str
     domain: str = "patent"
-    rule_types: List[str] = []
-    keywords: Optional[List[str]] = None
+    rule_types: list[str] = []
+    keywords: list[str] | None = None
 
 class ChatRequest(BaseModel):
     message: str
     domain: str = "patent"
-    context: Optional[Dict[str, Any]] = None
+    context: dict[str, Any] | None = None
     conversation_id: str | None = None
 
 # 创建FastAPI应用
@@ -163,7 +161,7 @@ async def domain_query(request: QueryRequest):
 
     except Exception as e:
         logger.error(f"领域查询失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Query failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Query failed: {str(e)}") from e
 
 @app.post("/batch/query")
 async def batch_domain_query(request: BatchQueryRequest):
@@ -175,7 +173,6 @@ async def batch_domain_query(request: BatchQueryRequest):
 
         # 并行处理查询
         semaphore = asyncio.Semaphore(request.max_parallel)
-        results = []
 
         async def process_single_query(query_req):
             async with semaphore:
@@ -216,7 +213,7 @@ async def batch_domain_query(request: BatchQueryRequest):
 
     except Exception as e:
         logger.error(f"批量查询失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Batch query failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Batch query failed: {str(e)}") from e
 
 @app.post("/rules/extract")
 async def extract_domain_rules(request: RuleExtractionRequest):
@@ -246,7 +243,7 @@ async def extract_domain_rules(request: RuleExtractionRequest):
 
     except Exception as e:
         logger.error(f"规则提取失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Rule extraction failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Rule extraction failed: {str(e)}") from e
 
 @app.post("/chat/intelligent")
 async def intelligent_chat(request: ChatRequest):
@@ -282,7 +279,7 @@ async def intelligent_chat(request: ChatRequest):
 
     except Exception as e:
         logger.error(f"智能对话失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Chat failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Chat failed: {str(e)}") from e
 
 @app.post("/search/hybrid")
 async def universal_hybrid_search(request: dict):
@@ -344,7 +341,7 @@ async def universal_hybrid_search(request: dict):
 
     except Exception as e:
         logger.error(f"混合搜索失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Hybrid search failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Hybrid search failed: {str(e)}") from e
 
 @app.get("/domains/list")
 async def list_supported_domains():

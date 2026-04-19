@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 查询客户王玉荣的信息
 Query Customer Wang Yurong's Information
 """
 
-import psycopg2
-import os
-import json
-from datetime import datetime
 import logging
+import os
+
+import psycopg2
 
 logger = logging.getLogger(__name__)
 
@@ -112,7 +110,7 @@ print("-" * 80)
 
 # 查找可能的客户档案文件
 customer_files = []
-for root, dirs, files in os.walk("/Users/xujian/Athena工作平台"):
+for root, _dirs, files in os.walk("/Users/xujian/Athena工作平台"):
     for file in files:
         if "王玉荣" in file or "客户档案" in file:
             if file.endswith('.json'):
@@ -125,10 +123,10 @@ if customer_files:
 
         # 尝试读取文件内容查找王玉荣
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 content = f.read()
                 if '王玉荣' in content:
-                    print(f"    ✅ 该文件包含王玉荣信息")
+                    print("    ✅ 该文件包含王玉荣信息")
         except Exception as e:
 
             # 记录异常但不中断流程

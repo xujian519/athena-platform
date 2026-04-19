@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 分散式智能搜索架构 - 适配版Web搜索管理器
 Decentralized Intelligent Search Architecture - Adapted Web Search Manager
@@ -14,8 +15,7 @@ import asyncio
 import logging
 import time
 from datetime import datetime
-from typing import Any, Optional
-
+from typing import Any
 
 # 导入原始的Web搜索引擎
 from ..external.web_search_engines import SearchResponse as WebSearchResponse

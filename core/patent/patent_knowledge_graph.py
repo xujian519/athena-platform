@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 专利技术知识图谱模块
 使用NetworkX构建专利技术分析的知识图谱
@@ -16,11 +17,11 @@
 import json
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any
 
 import matplotlib
 import matplotlib.pyplot as plt
-
+import networkx as nx
 
 # 设置中文字体支持
 matplotlib.rc_params["font.sans-serif"] = ["Arial Unicode MS", "SimHei", "STHeiti"]

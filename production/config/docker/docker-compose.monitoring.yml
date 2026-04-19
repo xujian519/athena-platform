@@ -1,0 +1,212 @@
+# Athena工作平台 - 监控层 Docker Compose配置
+# Monitoring Layer - Prometheus, Grafana, and Alerting
+#
+# 包含监控服务：Prometheus、Grafana、AlertManager、cAdvisor
+
+version: '3.8'
+
+services:
+  # ==================== Prometheus监控 ====================
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    container_name: athena-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    volumes:
+      - ../../config/monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ../../config/monitoring/prometheus/rules:/etc/prometheus/rules:ro
+      - ../../data/prometheus:/prometheus
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 2G
+    networks:
+      - athena-monitoring
+    labels:
+      - "com.athena.layer=monitoring"
+      - "com.athena.type=prometheus"
+
+  # ==================== Grafana可视化 ====================
+  grafana:
+    image: grafana/grafana:10.2.2
+    container_name: athena-grafana
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin123}
+      GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL:-http://localhost:3001}
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_INSTALL_PLUGINS: ""
+    volumes:
+      - ../../data/grafana:/var/lib/grafana
+      - ../../config/monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ../../config/monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+    networks:
+      - athena-monitoring
+    labels:
+      - "com.athena.layer=monitoring"
+      - "com.athena.type=grafana"
+
+  # ==================== AlertManager告警 ====================
+  alertmanager:
+    image: prom/alertmanager:v0.26.0
+    container_name: athena-alertmanager
+    restart: unless-stopped
+    ports:
+      - "9093:9093"
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+      - '--web.external-url=http://localhost:9093'
+    volumes:
+      - ../../config/monitoring/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - ../../data/alertmanager:/alertmanager
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9093/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+    networks:
+      - athena-monitoring
+    labels:
+      - "com.athena.layer=monitoring"
+      - "com.athena.type=alertmanager"
+
+  # ==================== cAdvisor容器监控 ====================
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
+    container_name: athena-cadvisor
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    networks:
+      - athena-monitoring
+    labels:
+      - "com.athena.layer=monitoring"
+      - "com.athena.type=cadvisor"
+
+  # ==================== Node Exporter节点监控 ====================
+  node-exporter:
+    image: prom/node-exporter:v1.7.0
+    container_name: athena-node-exporter
+    restart: unless-stopped
+    ports:
+      - "9100:9100"
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9100/metrics"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    networks:
+      - athena-monitoring
+    labels:
+      - "com.athena.layer=monitoring"
+      - "com.athena.type=node-exporter"
+
+# ==================== 网络配置 ====================
+networks:
+  athena-monitoring:
+    name: athena-monitoring
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+#
+# 参考网络定义（在主配置文件中）:
+#   athena-monitoring: 监控网络
+
+# ==================== 卷配置 ====================
+# 注意：所有卷定义都在主配置文件docker-compose.yml中
+# 这里保留卷定义的注释供参考
+volumes: {}
+#
+# 参考卷定义（在主配置文件中）:
+#   prometheus-data: Prometheus数据卷
+#   grafana-data: Grafana数据卷
+#   alertmanager-data: AlertManager数据卷

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 简化版系统管理器测试脚本
 Simplified Test for System Manager

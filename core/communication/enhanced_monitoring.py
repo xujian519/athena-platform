@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 通信模块增强监控
 Enhanced Communication Monitoring
@@ -14,7 +15,6 @@ import logging
 import time
 from collections.abc import Callable
 from functools import wraps
-from typing import Any
 
 try:
     from prometheus_client import Counter, Gauge, Histogram
@@ -24,7 +24,7 @@ except ImportError:
     PROMETHEUS_AVAILABLE = False
     logging.warning("prometheus_client未安装,增强监控将被禁用")
 
-from core.communication.monitoring import CommunicationMetrics, get_metrics
+from core.communication.monitoring import CommunicationMetrics
 
 logger = logging.getLogger(__name__)
 
@@ -324,7 +324,7 @@ def track_persistence_operation(operation: str, backend_type: str = "unknown"):
             try:
                 result = await func(*args, **kwargs)
                 return result
-            except Exception as e:
+            except Exception:
                 status = "error"
                 raise
             finally:
@@ -340,7 +340,7 @@ def track_persistence_operation(operation: str, backend_type: str = "unknown"):
             try:
                 result = func(*args, **kwargs)
                 return result
-            except Exception as e:
+            except Exception:
                 status = "error"
                 raise
             finally:

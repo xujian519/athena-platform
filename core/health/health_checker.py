@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 平台统一健康检查服务
 Unified Health Check Service for Athena Platform
@@ -16,12 +17,12 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import httpx
+import redis.asyncio as redis
 from sqlalchemy import text
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-
+from sqlalchemy.ext.asyncio import create_async_engine
 
 logger = logging.getLogger(__name__)
 
@@ -122,14 +123,14 @@ class HealthChecker:
                 host = host_port.split(":")[0] if ":" in host_port else host_port.split("/")[0]
                 port = int(host_port.split(":")[1]) if ":" in host_port else 6379
 
-                redis = AsyncRedis(
+                redis_client = redis.Redis(
                     host=host,
                     port=port,
                     password=password,
                     socket_connect_timeout=2,
                     socket_timeout=2,
                 )
-                await redis.ping()
+                await redis_client.ping()
                 await redis.close()
 
             response_time = (time.time() - start_time) * 1000

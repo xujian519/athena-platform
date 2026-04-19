@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 多模态理解模块 - Multimodal Understanding Module
 

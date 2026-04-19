@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 双系统推理引擎
 
@@ -13,21 +14,20 @@ Dual System Reasoning Engine
 
 import asyncio
 import time
+import uuid
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
+import numpy as np
 
 from .enhanced_reasoning_base import (
     BaseReasoner,
-    MetacognitiveState,
     ReasoningChain,
-    ReasoningComplexity,
     ReasoningContext,
     ReasoningResult,
     ReasoningStep,
     ReasoningType,
-    ThinkingMode,
-    create_reasoning_step,
 )
 
 
@@ -87,7 +87,7 @@ class System1Reasoner(BaseReasoner):
     def __init__(self, config: dict[str, Any] | None = None):
         super().__init__(config)
         self.profile = System1Profile(**config.get("system1_profile", {}))
-        self.patterns: dict[str, list[dict[str, Any]] = {}
+        self.patterns: dict[str, list[dict[str, Any]]] = {}
         self.heuristics_cache: dict[str, Any] = {}
 
     def _get_reasoning_type(self) -> ReasoningType:

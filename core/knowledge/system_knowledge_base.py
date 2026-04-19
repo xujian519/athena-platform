@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 系统知识库建设
 System Knowledge Base Builder
@@ -22,7 +23,6 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any
-
 
 logger = logging.getLogger(__name__)
 

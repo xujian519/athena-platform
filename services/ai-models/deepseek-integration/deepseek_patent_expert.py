@@ -1,33 +1,33 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 DeepSeek专利专家服务 - 真实API集成
 整合真实的DeepSeek API与专利专业知识
 """
 
-from fastapi import FastAPI, HTTPException
-from contextlib import asynccontextmanager
-import uvicorn
-from core.async_main import async_main
-from datetime import datetime
 import asyncio
 import sys
-import os
-import json
-from typing import Dict, List, Optional, Any
+from contextlib import asynccontextmanager
+from datetime import datetime
+
+import uvicorn
+from fastapi import FastAPI, HTTPException
 
 # 添加路径
 sys.path.append('/Users/xujian/Athena工作平台/services/autonomous-control')
-from agent_identity import AgentIdentity, AgentType, register_agent_identity, format_identity_display
+from agent_identity import (
+    AgentIdentity,
+    AgentType,
+    format_identity_display,
+    register_agent_identity,
+)
 
 # 导入DeepSeek服务
 from deepseek_coder_service import (
-    DeepSeekCoderAPI,
     CodeGenerationRequest,
-    CodeGenerationResponse,
+    DeepSeekCoderAPI,
     ProgrammingLanguage,
-    get_deepseek_client
 )
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -83,7 +83,7 @@ async def display_startup_identity():
 
         print("\n" + "="*60)
         print(identity_display)
-        print(f"\n🤖 DeepSeek专利专家 (真实API) 启动成功！")
+        print("\n🤖 DeepSeek专利专家 (真实API) 启动成功！")
         print("📍 服务端口: 8029")
         print("🔗 API类型: 真实DeepSeek API集成")
         print("="*60 + "\n")
@@ -192,7 +192,7 @@ async def analyze_patent(request: dict):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"专利分析失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"专利分析失败: {str(e)}") from e
 
 @app.post("/generate_patent_code")
 async def generate_patent_code(request: dict):
@@ -258,7 +258,7 @@ async def generate_patent_code(request: dict):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"代码生成失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"代码生成失败: {str(e)}") from e
 
 @app.post("/evaluate_patentability")
 async def evaluate_patentability(request: dict):
@@ -321,7 +321,7 @@ async def evaluate_patentability(request: dict):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"可专利性评估失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"可专利性评估失败: {str(e)}") from e
 
 @app.get("/statistics")
 async def get_statistics():

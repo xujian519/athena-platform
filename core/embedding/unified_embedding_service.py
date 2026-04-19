@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一嵌入服务
 Unified Embedding Service for Athena Platform
@@ -204,7 +205,9 @@ class UnifiedEmbeddingService:
             raise e
 
     async def batch_encode_by_module(
-        self, module_batches: dict[ModuleType, list[str]) -> dict[ModuleType, list[list[float]]:
+        self,
+        module_batches: dict[ModuleType, list[str]],
+    ) -> dict[ModuleType, list[list[float]]]:
         """
         按模块批量编码
 

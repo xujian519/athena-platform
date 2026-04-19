@@ -1,0 +1,198 @@
+# AI伦理框架配置文件
+# AI Ethics Framework Configuration
+
+# 伦理原则配置
+ethics:
+  # 评估器配置
+  evaluator:
+    # 最大历史记录数量（防止内存无限增长）
+    max_history_size: 1000
+
+    # 默认置信度阈值
+    default_confidence_threshold: 0.7
+
+  # 约束执行配置
+  constraints:
+    # 自动阻止关键违规
+    auto_block_critical: true
+
+    # 自动协商不确定情况
+    auto_negotiate_uncertain: true
+
+    # 自动升级高严重程度
+    auto_escalate_high_severity: true
+
+  # 监控配置
+  monitoring:
+    # 违规率告警阈值
+    alert_threshold_violation_rate: 0.1
+
+    # 关键违规告警阈值
+    alert_threshold_critical: 3
+
+    # 滑动窗口大小
+    window_size: 100
+
+# 敏感信息过滤配置
+sensitive_data_filter:
+  # 是否启用过滤
+  enabled: true
+
+  # 敏感字段名列表
+  sensitive_fields:
+    - password
+    - passwd
+    - pwd
+    - token
+    - access_token
+    - refresh_token
+    - auth_token
+    - api_key
+    - apikey
+    - api-key
+    - secret
+    - secret_key
+    - private_key
+    - credential
+    - credentials
+    - session_id
+    - sessionid
+    - cookie
+    - cookies
+    - ssn
+    - social_security
+    - credit_card
+    - creditcard
+    - cc_number
+    - bank_account
+    - bankaccount
+    - pin
+    - pin_code
+
+  # 敏感模式配置
+  patterns:
+    - name: email
+      description: 电子邮件地址
+      pattern: '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}'
+      replacement: "***"
+
+    - name: phone
+      description: 电话号码
+      pattern: '\\d{3}[-.]?\\d{3}[-.]?\\d{4}'
+      replacement: "***"
+
+    - name: ip_address
+      description: IP地址
+      pattern: '\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}'
+      replacement: "***.***.***.***"
+
+    - name: credit_card
+      description: 信用卡号
+      pattern: '\\d{4}[-\\s]?\\d{4}[-\\s]?\\d{4}[-\\s]?\\d{4}'
+      replacement: "****-****-****-****"
+
+    - name: ssn
+      description: 社会安全号码
+      pattern: '\\d{3}-\\d{2}-\\d{4}'
+      replacement: "***-**-****"
+
+    - name: api_key
+      description: API密钥（32字符以上）
+      pattern: '[A-Za-z0-9]{32,}'
+      replacement: "***"
+
+# AI身份诚实原则配置
+ai_identity_honesty:
+  # 禁止的声称列表
+  prohibited_claims:
+    - 我是人是
+    - 我是人类
+    - 作为人类
+    - 我认为人类
+    - I am human
+    - I have a body
+    - I can feel
+    - I have emotions
+
+# 无害原则配置
+harmless_principle:
+  # 有害关键词列表
+  harmful_keywords:
+    - 伤害
+    - 破坏
+    - 攻击
+    - 暴力
+    - hack
+    - exploit
+    - malware
+
+  # 有害模式列表
+  harmful_patterns:
+    - text: 如何制造
+      severity: high
+    - text: 如何攻击
+      severity: high
+    - text: 如何入侵
+      severity: high
+    - text: how to hack
+      severity: high
+    - text: how to make bomb
+      severity: critical
+    - text: how to steal
+      severity: high
+
+# Prometheus监控配置
+prometheus:
+  # Metrics端点端口
+  port: 9091
+
+  # 是否启用HTTP端点
+  enable_endpoint: true
+
+  # 评估延迟桶配置
+  duration_buckets:
+    - 0.001
+    - 0.005
+    - 0.01
+    - 0.025
+    - 0.05
+    - 0.1
+    - 0.25
+    - 0.5
+    - 1.0
+    - 2.5
+    - 5.0
+    - 10.0
+
+# 维特根斯坦守护配置
+wittgenstein_guard:
+  # 全局置信度阈值
+  global_confidence_threshold: 0.7
+
+  # 默认不确定性策略
+  default_uncertainty_strategy: negotiate
+
+  # 语言游戏配置
+  language_games:
+    patent_search:
+      domain: patent
+      confidence_threshold: 0.75
+      uncertainty_strategy: negotiate
+      escalation_path: human_patent_attorney
+
+    medical_triage:
+      domain: medical
+      confidence_threshold: 0.85
+      uncertainty_strategy: escalate
+      escalation_path: human_medical_professional
+
+    legal_consultation:
+      domain: legal
+      confidence_threshold: 0.75
+      uncertainty_strategy: negotiate
+      escalation_path: human_attorney
+
+    general_conversation:
+      domain: general
+      confidence_threshold: 0.60
+      uncertainty_strategy: negotiate

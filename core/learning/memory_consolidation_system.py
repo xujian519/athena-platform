@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 记忆整合系统 - Memory Consolidation System
 实现短期记忆向长期知识的转化

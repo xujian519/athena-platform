@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能工具路由系统
 Intelligent Tool Router
@@ -18,7 +19,6 @@ from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from typing import Any
-
 
 logger = logging.getLogger(__name__)
 
@@ -144,7 +144,6 @@ class IntelligentToolRouter:
                 "success_rate": 0.91,
             },
             "chemical_analyzer": {
-                "file_path": "patent-platform/workspace/src/cognition/chemical_formula_analyzer.py",
                 "category": "chemical_analysis",
                 "priority": ToolPriority.OPTIONAL,
                 "estimated_time": 15,

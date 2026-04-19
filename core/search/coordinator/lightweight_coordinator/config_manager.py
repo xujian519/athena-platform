@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 轻量协调器 - 配置管理模块
 Lightweight Coordinator - Configuration Management

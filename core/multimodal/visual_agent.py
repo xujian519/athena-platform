@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 视觉Agent增强模块
 Visual Agent Enhancement Module
@@ -23,7 +24,7 @@ from datetime import datetime
 from enum import Enum
 from io import BytesIO
 from pathlib import Path
-from typing import Any, BinaryIO, Dict, List, Optional, Union, cast
+from typing import Any, BinaryIO
 
 logger = logging.getLogger(__name__)
 

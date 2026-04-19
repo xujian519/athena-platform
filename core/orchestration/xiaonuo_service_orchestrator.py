@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 小诺·双鱼公主服务编排器 - 智能服务启动管理
 Xiaonuo Service Orchestrator - Intelligent Service Startup Management
@@ -11,15 +11,17 @@ Xiaonuo Service Orchestrator - Intelligent Service Startup Management
 """
 
 import asyncio
+import logging
 import subprocess
 import time
-import psutil
-import aiohttp
-from datetime import datetime
-from typing import Any, Optional
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta
 from enum import Enum
-import logging
+from typing import Any
+
+import aiohttp
+import psutil
+
 
 class ServiceStatus(Enum):
     """服务状态"""
@@ -166,34 +168,34 @@ class XiaonuoServiceOrchestrator:
         # 1. 任务类型评分
         if task_type in ["file_upload", "file_parse", "multimodal_analysis"]:
             need_score += 40
-            self.logger.info(f"  任务类型需要多模态服务 (+40分)")
+            self.logger.info("  任务类型需要多模态服务 (+40分)")
 
         # 2. 文件类型评分
         file_types = context.get("file_types", [])
         multimodal_types = {"image", "video", "audio", "pdf", "docx"}
         if any(ft in multimodal_types for ft in file_types):
             need_score += 30
-            self.logger.info(f"  包含多模态文件类型 (+30分)")
+            self.logger.info("  包含多模态文件类型 (+30分)")
 
         # 3. 复杂度评分
         complexity = context.get("complexity", "low")
         if complexity == "high":
             need_score += 20
-            self.logger.info(f"  高复杂度任务 (+20分)")
+            self.logger.info("  高复杂度任务 (+20分)")
         elif complexity == "medium":
             need_score += 10
-            self.logger.info(f"  中等复杂度任务 (+10分)")
+            self.logger.info("  中等复杂度任务 (+10分)")
 
         # 4. 用户意图评分
         if context.get("explicit_multimodal", False):
             need_score += 50
-            self.logger.info(f"  用户明确需要多模态处理 (+50分)")
+            self.logger.info("  用户明确需要多模态处理 (+50分)")
 
         # 5. 历史需求评分
         recent_needs = self._get_recent_needs(minutes=10)
         if len(recent_needs) >= 3:
             need_score += 15
-            self.logger.info(f"  最近需求频繁 (+15分)")
+            self.logger.info("  最近需求频繁 (+15分)")
 
         # 记录需求
         self.demand_monitor["multimodal_requests"].append({
@@ -308,7 +310,7 @@ class XiaonuoServiceOrchestrator:
         while time.time() - start_time < timeout:
             # 检查进程是否还在运行
             if instance.process and instance.process.poll() is not None:
-                self.logger.error(f"服务进程意外退出")
+                self.logger.error("服务进程意外退出")
                 return False
 
             # 检查健康状态
@@ -318,7 +320,7 @@ class XiaonuoServiceOrchestrator:
 
             await asyncio.sleep(1)
 
-        self.logger.error(f"服务启动超时")
+        self.logger.error("服务启动超时")
         return False
 
     async def _check_service_health(self, instance: ServiceInstance) -> bool:
@@ -344,7 +346,7 @@ class XiaonuoServiceOrchestrator:
                 if conn.laddr.port == port:
                     return True
             return False
-        except Exception as e:  # TODO
+        except Exception:  # TODO
             return False
 
     async def _is_service_running(self, instance: ServiceInstance) -> bool:

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 重型依赖懒加载管理器
 Heavy Dependencies Lazy Loader
@@ -13,7 +13,7 @@ Heavy Dependencies Lazy Loader
 
 import importlib
 import logging
-from typing import Any, Callable
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -111,7 +111,7 @@ class CV2Loader:
                 logger.error("OpenCV未安装")
                 raise ImportError(
                     "OpenCV未安装。请运行: pip install opencv-python"
-                )
+                ) from None
         return getattr(self._cv2, name)
 
     def imread(self, path: str, flags: int = 1):

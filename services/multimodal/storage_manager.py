@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 多模态文件存储管理器
 Multimodal File Storage Manager
@@ -8,28 +7,24 @@ Multimodal File Storage Manager
 Integrated with Athena unified storage architecture for multimodal file management
 """
 
-import os
-from core.async_main import async_main
-import asyncio
 import hashlib
-from datetime import datetime
-from pathlib import Path
-from typing import Optional, Dict, Any, List
-from dataclasses import dataclass, asdict
-from enum import Enum
 import json
+import os
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from typing import Any
 
 # Database imports (when available)
-import asyncpg
-from sqlalchemy import create_engine, Column, Integer, String, BigInteger, Text, DateTime, JSON
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.dialects.postgresql import JSONB, TIMESTAMP
-from sqlalchemy.sql import func
-
 # Vector storage imports (when available)
 from qdrant_client import QdrantClient
-from qdrant_client.models import Distance, VectorParams, PointStruct
+from qdrant_client.models import Distance, PointStruct, VectorParams
+from sqlalchemy import BigInteger, Column, Integer, String, Text, create_engine
+from sqlalchemy.dialects.postgresql import JSONB, TIMESTAMP
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql import func
 
 Base = declarative_base()
 
@@ -109,7 +104,7 @@ class ProcessingLog(Base):
 class MultimodalStorageManager:
     """多模态文件存储管理器"""
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """初始化存储管理器"""
         self.config = config or self._get_default_config()
         self.base_path = Path(self.config['storage_base_path'])
@@ -131,7 +126,7 @@ class MultimodalStorageManager:
             FileType.OTHER: 'other'
         }
 
-    def _get_default_config(self) -> Dict[str, Any]:
+    def _get_default_config(self) -> dict[str, Any]:
         """获取默认配置"""
         return {
             'storage_base_path': '/Users/xujian/Athena工作平台/storage/multimodal',
@@ -258,7 +253,7 @@ class MultimodalStorageManager:
         source_path: str,
         original_filename: str,
         mime_type: str | None = None,
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: dict[str, Any] | None = None
     ) -> int | None:
         """存储文件并记录元数据"""
         try:
@@ -352,7 +347,7 @@ class MultimodalStorageManager:
         file_id: int,
         status: ProcessingStatus,
         method: ProcessingMethod | None = None,
-        result: Optional[Dict[str, Any]] = None,
+        result: dict[str, Any] | None = None,
         error_message: str | None = None
     ):
         """更新文件处理状态"""
@@ -399,7 +394,7 @@ class MultimodalStorageManager:
                 # 查找对应的元数据文件
                 for meta_file in self.base_path.rglob('*.meta.json'):
                     try:
-                        with open(meta_file, 'r', encoding='utf-8') as f:
+                        with open(meta_file, encoding='utf-8') as f:
                             data = json.load(f)
 
                         if data.get('id') == file_id:
@@ -430,8 +425,8 @@ class MultimodalStorageManager:
     async def store_file_vector(
         self,
         file_id: int,
-        vector: List[float],
-        vector_metadata: Optional[Dict[str, Any]] = None
+        vector: list[float],
+        vector_metadata: dict[str, Any] | None = None
     ) -> int | None:
         """存储文件向量"""
         try:
@@ -477,7 +472,7 @@ class MultimodalStorageManager:
             print(f"❌ 向量存储失败: {e}")
             return None
 
-    async def get_file_info(self, file_id: int) -> Dict[str, Any | None]:
+    async def get_file_info(self, file_id: int) -> dict[str, Any | None]:
         """获取文件信息"""
         try:
             # 先尝试数据库
@@ -510,7 +505,7 @@ class MultimodalStorageManager:
             # 回退到文件系统
             for meta_file in self.base_path.rglob('*.meta.json'):
                 try:
-                    with open(meta_file, 'r', encoding='utf-8') as f:
+                    with open(meta_file, encoding='utf-8') as f:
                         data = json.load(f)
 
                     if data.get('id') == file_id:
@@ -527,10 +522,10 @@ class MultimodalStorageManager:
 
     async def search_by_vector(
         self,
-        query_vector: List[float],
+        query_vector: list[float],
         limit: int = 10,
         file_type: FileType | None = None
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """通过向量搜索相似文件"""
         try:
             qdrant_client = await self.get_qdrant_client()
@@ -570,7 +565,7 @@ class MultimodalStorageManager:
             print(f"❌ 向量搜索失败: {e}")
             return []
 
-    async def get_statistics(self) -> Dict[str, Any]:
+    async def get_statistics(self) -> dict[str, Any]:
         """获取存储统计信息"""
         try:
             db_session = await self.get_db_connection()
@@ -627,7 +622,7 @@ class MultimodalStorageManager:
                 # 文件系统统计
                 for meta_file in self.base_path.rglob('*.meta.json'):
                     try:
-                        with open(meta_file, 'r', encoding='utf-8') as f:
+                        with open(meta_file, encoding='utf-8') as f:
                             data = json.load(f)
 
                         stats['total_files'] += 1

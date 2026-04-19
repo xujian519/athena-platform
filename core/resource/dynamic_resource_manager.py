@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 动态资源管理器
 Dynamic Resource Manager
@@ -12,13 +13,12 @@ import logging
 import threading
 import time
 from collections.abc import Callable
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import psutil
-
 
 logger = logging.getLogger(__name__)
 

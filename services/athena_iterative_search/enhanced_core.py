@@ -5,10 +5,9 @@
 """
 
 import asyncio
-import json
 import logging
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from .config_enhanced import (
     AthenaEnhancedSearchConfig,
@@ -22,15 +21,10 @@ from .llm_integration import MockLLMIntegration, QwenLLMIntegration
 from .performance_optimizer import (
     PerformanceOptimizer,
     RateLimiter,
-    get_global_optimizer,
 )
 from .types import (
-    PatentMetadata,
     PatentSearchResult,
-    ResearchSummary,
-    ResultRelevance,
     SearchDepth,
-    SearchFilter,
     SearchIteration,
     SearchQuery,
     SearchSession,
@@ -69,7 +63,7 @@ class AthenaEnhancedIterativeSearchEngine:
         # 初始化组件
         self._init_components()
 
-    def _get_db_config(self) -> Dict[str, Any]:
+    def _get_db_config(self) -> dict[str, Any]:
         """获取数据库配置"""
         import os
         return {
@@ -144,9 +138,9 @@ class AthenaEnhancedIterativeSearchEngine:
         query: str,
         strategy: SearchStrategy = SearchStrategy.HYBRID,
         max_results: int = 10,
-        filters: Optional[Dict[str, Any]] = None,
+        filters: dict[str, Any] | None = None,
         use_cache: bool = True
-    ) -> List[PatentSearchResult]:
+    ) -> list[PatentSearchResult]:
         """执行单次搜索"""
         await self.rate_limiters['search'].wait_for_slot()
 
@@ -198,8 +192,8 @@ class AthenaEnhancedIterativeSearchEngine:
         self,
         query: str,
         max_results: int,
-        filters: Optional[Dict[str, Any]] = None
-    ) -> List[PatentSearchResult]:
+        filters: dict[str, Any] | None = None
+    ) -> list[PatentSearchResult]:
         """混合搜索（Elasticsearch + 向量 + 外部）"""
         weights = self.config.engine_weights
 
@@ -258,8 +252,8 @@ class AthenaEnhancedIterativeSearchEngine:
         self,
         query: str,
         max_results: int,
-        filters: Optional[Dict[str, Any]] = None
-    ) -> List[PatentSearchResult]:
+        filters: dict[str, Any] | None = None
+    ) -> list[PatentSearchResult]:
         """Elasticsearch搜索"""
         try:
             # 转换过滤器格式
@@ -298,8 +292,8 @@ class AthenaEnhancedIterativeSearchEngine:
         self,
         query: str,
         max_results: int,
-        filters: Optional[Dict[str, Any]] = None
-    ) -> List[PatentSearchResult]:
+        filters: dict[str, Any] | None = None
+    ) -> list[PatentSearchResult]:
         """向量搜索"""
         try:
             results = await self.vector_search.hybrid_search(
@@ -314,7 +308,7 @@ class AthenaEnhancedIterativeSearchEngine:
             logger.error(f"向量搜索失败: {e}")
             return []
 
-    async def _external_search(self, query: str, max_results: int) -> List[PatentSearchResult]:
+    async def _external_search(self, query: str, max_results: int) -> list[PatentSearchResult]:
         """外部搜索引擎"""
         try:
             await self.rate_limiters['external'].wait_for_slot()
@@ -328,8 +322,8 @@ class AthenaEnhancedIterativeSearchEngine:
         self,
         query: str,
         max_results: int,
-        filters: Optional[Dict[str, Any]] = None
-    ) -> List[PatentSearchResult]:
+        filters: dict[str, Any] | None = None
+    ) -> list[PatentSearchResult]:
         """全文搜索"""
         return await self._elasticsearch_search(query, max_results, filters)
 
@@ -337,8 +331,8 @@ class AthenaEnhancedIterativeSearchEngine:
         self,
         query: str,
         max_results: int,
-        filters: Optional[Dict[str, Any]] = None
-    ) -> List[PatentSearchResult]:
+        filters: dict[str, Any] | None = None
+    ) -> list[PatentSearchResult]:
         """语义搜索"""
         return await self._vector_search(query, max_results, filters)
 
@@ -347,7 +341,7 @@ class AthenaEnhancedIterativeSearchEngine:
         initial_query: str,
         max_iterations: int = 3,
         depth: SearchDepth = SearchDepth.STANDARD,
-        focus_areas: Optional[List[str]] = None,
+        focus_areas: list[str] | None = None,
         progress_callback: callable | None = None
     ) -> SearchSession:
         """迭代式深度搜索"""
@@ -441,7 +435,7 @@ class AthenaEnhancedIterativeSearchEngine:
             session.update_status(SearchStatus.FAILED)
             return session
 
-    def _calculate_quality_score(self, results: List[PatentSearchResult]) -> float:
+    def _calculate_quality_score(self, results: list[PatentSearchResult]) -> float:
         """计算搜索质量分数"""
         if not results:
             return 0.0
@@ -478,7 +472,7 @@ class AthenaEnhancedIterativeSearchEngine:
             self.sessions[session.id] = session
             return session.id
 
-    async def get_statistics(self) -> Dict[str, Any]:
+    async def get_statistics(self) -> dict[str, Any]:
         """获取搜索统计"""
         stats = {
             'total_sessions': len(self.sessions),

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强版真实专利案例提取器
 Enhanced Real Patent Case Extractor for DSPy Training Data
@@ -17,7 +18,7 @@ import random
 import re
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -629,7 +630,6 @@ class EnhancedCaseExtractor:
 
     def _save_dspy_format(self, cases: list[EnhancedPatentCase], output_file: Path) -> Any:
         """保存为DSPy格式"""
-        import dspy
 
         dspy_examples = [case.to_dspy_example() for case in cases]
 

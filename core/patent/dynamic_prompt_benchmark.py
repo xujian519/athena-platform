@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 动态提示词效果基准测试框架
 Dynamic Prompt Effectiveness Benchmark Framework
@@ -269,7 +270,7 @@ class DynamicPromptBenchmark:
         Returns:
             基准测试报告
         """
-        logger.info(f"🚀 开始运行基准测试...")
+        logger.info("🚀 开始运行基准测试...")
 
         # 确定要运行的测试用例
         if specific_case_ids:
@@ -510,7 +511,7 @@ class DynamicPromptBenchmark:
                 f"- **数据源数量**: {result.sources_count}",
                 f"- **维度数量**: {result.dimensions_count}",
                 f"- **通过**: {'是' if result.overall_pass else '否'}",
-                f"",
+                "",
             ])
 
         return "\n".join(md_lines)
@@ -550,7 +551,7 @@ async def main():
     output_path = f"benchmark_reports/dynamic_prompt_benchmark_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
     benchmark.save_report(report, output_path)
 
-    print(f"\n✅ 基准测试完成!")
+    print("\n✅ 基准测试完成!")
 
 
 if __name__ == "__main__":

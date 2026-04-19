@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 安全监控 - 公共接口
 Security Monitor - Public Interface
@@ -13,9 +14,9 @@ Security Monitor - Public Interface
 
 from .system import SecurityMonitor
 from .types import (
+    AccessPattern,
     ActionType,
     AlertType,
-    AccessPattern,
     BehaviorProfile,
     SecurityEvent,
     SecurityLevel,

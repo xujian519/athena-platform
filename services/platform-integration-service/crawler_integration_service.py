@@ -5,20 +5,18 @@ Athena平台爬虫集成服务
 """
 
 import asyncio
-from core.async_main import async_main
-import json
 import logging
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent.parent
 sys.path.append(str(project_root))
 sys.path.append(str(project_root / 'services'))
 
-from common_tools.crawler_tool import CrawlerScenario, CrawlerTool, get_crawler_tool
+from common_tools.crawler_tool import CrawlerScenario, get_crawler_tool
 from xiaonuo_crawler_control import get_xiaonuo_crawler_controller
 
 logger = logging.getLogger(__name__)
@@ -26,7 +24,7 @@ logger = logging.getLogger(__name__)
 class CrawlerIntegrationService:
     """爬虫集成服务"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         """初始化集成服务
 
         Args:
@@ -118,7 +116,7 @@ class CrawlerIntegrationService:
                 logger.error(f"任务工作进程 {worker_id} 执行异常: {e}")
                 await asyncio.sleep(1)
 
-    async def _execute_scheduled_task(self, worker_id: str, task_data: Dict[str, Any]):
+    async def _execute_scheduled_task(self, worker_id: str, task_data: dict[str, Any]):
         """执行调度任务"""
         task_id = task_data.get('task_id')
         task_type = task_data.get('type', 'scenario')
@@ -225,7 +223,7 @@ class CrawlerIntegrationService:
 
                     self.integration_metrics['active_tasks'] -= 1
 
-    async def process_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
+    async def process_request(self, request: dict[str, Any]) -> dict[str, Any]:
         """处理爬虫请求
 
         Args:
@@ -326,7 +324,7 @@ class CrawlerIntegrationService:
                 'timestamp': datetime.now().isoformat()
             }
 
-    async def _schedule_task(self, request: Dict[str, Any]) -> Dict[str, Any]:
+    async def _schedule_task(self, request: dict[str, Any]) -> dict[str, Any]:
         """调度任务执行"""
         if not self.task_scheduler:
             return {
@@ -365,7 +363,7 @@ class CrawlerIntegrationService:
             'queue_size': self.task_scheduler.qsize()
         }
 
-    async def batch_process(self, requests: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    async def batch_process(self, requests: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """批量处理请求
 
         Args:
@@ -395,11 +393,11 @@ class CrawlerIntegrationService:
 
         return processed_results
 
-    async def get_available_scenarios(self) -> Dict[str, Any]:
+    async def get_available_scenarios(self) -> dict[str, Any]:
         """获取可用场景列表"""
         return await self.crawler_tool.list_scenarios()
 
-    async def get_service_status(self) -> Dict[str, Any]:
+    async def get_service_status(self) -> dict[str, Any]:
         """获取服务状态"""
         return {
             'service': 'CrawlerIntegrationService',
@@ -427,7 +425,7 @@ class CrawlerIntegrationService:
             'timestamp': datetime.now().isoformat()
         }
 
-    async def get_task_status(self, task_id: str) -> Dict[str, Any | None]:
+    async def get_task_status(self, task_id: str) -> dict[str, Any | None]:
         """获取任务状态"""
         # 检查运行中的任务
         if task_id in self.running_tasks:
@@ -449,7 +447,7 @@ class CrawlerIntegrationService:
 
         return None
 
-    async def cancel_task(self, task_id: str) -> Dict[str, Any]:
+    async def cancel_task(self, task_id: str) -> dict[str, Any]:
         """取消任务"""
         if task_id not in self.running_tasks:
             return {
@@ -468,7 +466,7 @@ class CrawlerIntegrationService:
             'message': f"任务 {task_id} 已取消"
         }
 
-    async def update_config(self, new_config: Dict[str, Any]):
+    async def update_config(self, new_config: dict[str, Any]):
         """更新服务配置"""
         self.service_config.update(new_config)
         logger.info(f"爬虫服务配置已更新: {new_config}")
@@ -512,7 +510,7 @@ class CrawlerIntegrationService:
 # 全局服务实例
 crawler_integration_service: CrawlerIntegrationService | None = None
 
-def get_crawler_integration_service(config: Optional[Dict[str, Any]] = None) -> CrawlerIntegrationService:
+def get_crawler_integration_service(config: dict[str, Any] | None = None) -> CrawlerIntegrationService:
     """获取爬虫集成服务实例"""
     global crawler_integration_service
     if crawler_integration_service is None:
@@ -568,7 +566,7 @@ async def test_crawler_integration_service():
 
     # 显示服务状态
     status = await service.get_service_status()
-    logger.info(f"\n📊 服务状态:")
+    logger.info("\n📊 服务状态:")
     logger.info(f"   总请求数: {status['metrics']['total_requests']}")
     logger.info(f"   成功请求数: {status['metrics']['successful_requests']}")
     logger.info(f"   小诺决策数: {status['metrics']['xiaonuo_decisions']}")

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能拒绝处理器
 Intelligent Rejection Handler
@@ -20,7 +21,7 @@ import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -98,7 +99,7 @@ class IntelligentRejectionHandler:
 
         logger.info(f"🤝 智能拒绝处理器初始化完成: {agent_id}")
 
-    def _initialize_templates(self) -> dict[RejectionReason, dict[str, Any]:
+    def _initialize_templates(self) -> dict[RejectionReason, dict[str, Any]]:
         """初始化拒绝模板"""
         return {
             RejectionReason.OUT_OF_SCOPE: {
@@ -339,9 +340,14 @@ class IntelligentRejectionHandler:
         self,
         user_request: str,
         reason: RejectionReason,
-        template: dict[dict[str, Any]] -> str:
+        template: dict[str, Any],
+        context: dict[str, Any] | None = None,
+    ) -> str:
         """生成解释说明"""
         explanation_template = template["explanation_template"]
+
+        # 确保context不为None
+        context = context or {}
 
         # 准备模板变量
         variables = {
@@ -372,9 +378,14 @@ class IntelligentRejectionHandler:
         self,
         user_request: str,
         reason: RejectionReason,
-        template: dict[dict[str, Any]] -> list[str]:
+        template: dict[str, Any],
+        context: dict[str, Any] | None = None,
+    ) -> list[str]:
         """生成建议"""
         suggestions_template = template.get("suggestions_template", [])
+
+        # 确保context不为None
+        context = context or {}
 
         suggestions = []
         for suggestion_template in suggestions_template:

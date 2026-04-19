@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 自适应元规划器 - 常量定义
 Adaptive Meta Planner - Constants

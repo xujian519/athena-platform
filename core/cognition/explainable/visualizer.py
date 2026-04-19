@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 可解释认知模块 - 可视化器
 Explainable Cognition Module - Visualizer
@@ -19,8 +20,7 @@ from typing import Any
 try:
     import matplotlib.pyplot as plt
     import networkx as nx
-    from matplotlib.patches import FancyBboxPatch
-    from matplotlib.patches import Patch
+    from matplotlib.patches import FancyBboxPatch, Patch
 
     VISUALIZATION_AVAILABLE = True
 except ImportError:
@@ -30,13 +30,13 @@ except ImportError:
     FancyBboxPatch = None  # type: ignore
     Patch = None  # type: ignore
 
-from core.logging_config import setup_logging
 from core.cognition.explainable.types import (
     DecisionFactor,
     ReasoningPath,
     ReasoningStep,
     ReasoningStepType,
 )
+from core.logging_config import setup_logging
 
 logger = setup_logging()
 

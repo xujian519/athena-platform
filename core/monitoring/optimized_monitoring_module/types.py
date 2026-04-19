@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化版监控告警模块 - 类型定义
 Optimized Monitoring and Alerting Module - Type Definitions
@@ -12,7 +13,6 @@ Optimized Monitoring and Alerting Module - Type Definitions
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any
 
 
 class MetricType(Enum):

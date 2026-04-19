@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 伦理框架接口抽象层
 Ethics Framework Interface Abstraction Layer
@@ -13,7 +14,7 @@ Ethics Framework Interface Abstraction Layer
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional, Protocol
+from typing import Any, Protocol
 
 # ============================================================================
 # 数据结构接口

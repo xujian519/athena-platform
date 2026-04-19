@@ -5,35 +5,33 @@ Athena平台浏览器自动化集成服务
 """
 
 import asyncio
-from core.async_main import async_main
-import json
 import logging
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent.parent
 sys.path.append(str(project_root))
 sys.path.append(str(project_root / 'services'))
 
+# 导入安全配置
+import sys
+from pathlib import Path
+
 from browser_automation.athena_browser_glm import AthenaBrowserGLMAgent
 from common_tools.browser_automation_tool import get_browser_tool
 from xiaonuo_browser_control import get_xiaonuo_controller
 
-# 导入安全配置
-import sys
-from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent / "core"))
-from security.env_config import get_env_var, get_database_url, get_jwt_secret
 
 logger = logging.getLogger(__name__)
 
 class BrowserIntegrationService:
     """浏览器自动化集成服务"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         """初始化集成服务
 
         Args:
@@ -91,7 +89,7 @@ class BrowserIntegrationService:
             self.service_status = 'error'
             logger.error(f"服务初始化失败: {e}")
 
-    async def process_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
+    async def process_request(self, request: dict[str, Any]) -> dict[str, Any]:
         """处理浏览器自动化请求
 
         Args:
@@ -180,7 +178,7 @@ class BrowserIntegrationService:
                 'timestamp': datetime.now().isoformat()
             }
 
-    async def batch_process(self, requests: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    async def batch_process(self, requests: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """批量处理请求
 
         Args:
@@ -210,11 +208,11 @@ class BrowserIntegrationService:
 
         return processed_results
 
-    async def get_available_scenarios(self) -> Dict[str, Any]:
+    async def get_available_scenarios(self) -> dict[str, Any]:
         """获取可用场景列表"""
         return await self.browser_tool.list_scenarios()
 
-    async def get_service_status(self) -> Dict[str, Any]:
+    async def get_service_status(self) -> dict[str, Any]:
         """获取服务状态"""
         return {
             'service': 'BrowserIntegrationService',
@@ -229,7 +227,7 @@ class BrowserIntegrationService:
             'timestamp': datetime.now().isoformat()
         }
 
-    async def update_config(self, new_config: Dict[str, Any]):
+    async def update_config(self, new_config: dict[str, Any]):
         """更新服务配置"""
         self.service_config.update(new_config)
         logger.info(f"服务配置已更新: {new_config}")
@@ -270,7 +268,7 @@ class BrowserIntegrationService:
 # 全局服务实例
 integration_service: BrowserIntegrationService | None = None
 
-def get_integration_service(config: Optional[Dict[str, Any]] = None) -> BrowserIntegrationService:
+def get_integration_service(config: dict[str, Any] | None = None) -> BrowserIntegrationService:
     """获取集成服务实例"""
     global integration_service
     if integration_service is None:
@@ -323,7 +321,7 @@ async def test_integration_service():
 
     # 显示服务状态
     status = await service.get_service_status()
-    logger.info(f"\n📊 服务状态:")
+    logger.info("\n📊 服务状态:")
     logger.info(f"   总请求数: {status['metrics']['total_requests']}")
     logger.info(f"   成功请求数: {status['metrics']['successful_requests']}")
     logger.info(f"   小诺决策数: {status['metrics']['xiaonuo_decisions']}")

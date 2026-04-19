@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Phase 2功能测试脚本
 测试GLM-4.7集成、并行任务识别、动态调整等新功能
@@ -223,7 +224,7 @@ async def main():
         print("✅ Phase 2功能测试完成!")
         print("=" * 60)
 
-    except Exception as e:
+    except Exception:
         import traceback
 
         traceback.print_exc()

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 v4.0反思引擎模块
 Reflection Engine v4.0 Module

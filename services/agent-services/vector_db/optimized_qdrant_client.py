@@ -1,20 +1,15 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 优化后的Qdrant客户端
 支持新的集合名称和Redis缓存
 """
 
-import json
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
 import os
 import sys
-from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
-import numpy as np
+from core.logging_config import setup_logging
 
 # 添加项目路径
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -124,7 +119,7 @@ class OptimizedQdrantClient:
                     logger.warning('⚠️ 缓存服务导入失败，将不使用缓存')
                     self.use_cache = False
 
-        logger.info(f"🚀 优化Qdrant客户端已初始化")
+        logger.info("🚀 优化Qdrant客户端已初始化")
         logger.info(f"📦 集合映射: {len(self.collection_mapping)} 个")
 
     def get_collection_name(self, collection_name: str) -> str:
@@ -135,7 +130,7 @@ class OptimizedQdrantClient:
         """获取集合的向量维度"""
         return self.collection_dimensions.get(collection_name, 1024)
 
-    def standardize_vector(self, vector: List[float], target_dim: int = 1024) -> List[float]:
+    def standardize_vector(self, vector: list[float], target_dim: int = 1024) -> list[float]:
         """标准化向量维度"""
         current_dim = len(vector)
 
@@ -153,9 +148,9 @@ class OptimizedQdrantClient:
 
         return vector
 
-    def search(self, collection_name: str, query_vector: List[float],
-                limit: int = 10, filters: Dict | None = None,
-                score_threshold: float | None = None) -> List[Dict[str, Any]]:
+    def search(self, collection_name: str, query_vector: list[float],
+                limit: int = 10, filters: dict | None = None,
+                score_threshold: float | None = None) -> list[dict[str, Any]]:
         """带缓存的智能搜索"""
         # 处理legal_clauses分片查询
         if collection_name == 'legal_clauses':
@@ -250,7 +245,7 @@ class OptimizedQdrantClient:
             logger.error(f"❌ 搜索失败: {e}")
             return []
 
-    def multi_search(self, queries: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
+    def multi_search(self, queries: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
         """多集合搜索"""
         results = {}
 
@@ -267,9 +262,9 @@ class OptimizedQdrantClient:
 
         return results
 
-    def hybrid_search(self, query_vector: List[float],
-                     collections: List[str] = None,
-                     weights: Optional[Dict[str, float]] = None) -> List[Dict[str, Any]]:
+    def hybrid_search(self, query_vector: list[float],
+                     collections: list[str] = None,
+                     weights: dict[str, float] | None = None) -> list[dict[str, Any]]:
         """混合搜索：跨多个集合搜索并合并结果"""
         if collections is None:
             # 默认搜索主要集合
@@ -281,7 +276,7 @@ class OptimizedQdrantClient:
             ]
 
         if weights is None:
-            weights = {col: 1.0 for col in collections}
+            weights = dict.fromkeys(collections, 1.0)
 
         all_results = []
 
@@ -310,7 +305,7 @@ class OptimizedQdrantClient:
 
         return unique_results[:20]  # 返回前20条
 
-    def get_collection_info(self, collection_name: str) -> Dict[str, Any]:
+    def get_collection_info(self, collection_name: str) -> dict[str, Any]:
         """获取集合信息"""
         mapped_collection = self.get_collection_name(collection_name)
 
@@ -332,9 +327,9 @@ class OptimizedQdrantClient:
         except Exception as e:
             return {'error': str(e)}
 
-    def _search_legal_clauses_shards(self, query_vector: List[float], limit: int = 10,
-                                    filters: Dict | None = None,
-                                    score_threshold: float | None = None) -> List[Dict[str, Any]]:
+    def _search_legal_clauses_shards(self, query_vector: list[float], limit: int = 10,
+                                    filters: dict | None = None,
+                                    score_threshold: float | None = None) -> list[dict[str, Any]]:
         """智能搜索legal_clauses分片"""
         # 确定要搜索的分片（基于关键词路由）
         target_shards = []
@@ -344,11 +339,10 @@ class OptimizedQdrantClient:
 
         # 检查其他分片是否可能相关
         # 这里简化处理，实际应用中可以基于查询文本或历史模式判断
-        all_shards = list(self.legal_clauses_shards.keys())
+        list(self.legal_clauses_shards.keys())
 
         # 并行搜索多个分片以提升性能
         import concurrent.futures
-        from functools import partial
 
         def search_single_shard(shard_name, vector, lim) -> None:
             return self._search_single_collection(shard_name, vector, lim, filters, score_threshold)
@@ -389,9 +383,9 @@ class OptimizedQdrantClient:
 
         return final_results
 
-    def _search_single_collection(self, collection_name: str, query_vector: List[float],
-                                 limit: int = 10, filters: Dict | None = None,
-                                 score_threshold: float | None = None) -> List[Dict[str, Any]]:
+    def _search_single_collection(self, collection_name: str, query_vector: list[float],
+                                 limit: int = 10, filters: dict | None = None,
+                                 score_threshold: float | None = None) -> list[dict[str, Any]]:
         """搜索单个集合的内部方法"""
         if not self.qdrant_client:
             return []
@@ -439,7 +433,7 @@ class OptimizedQdrantClient:
             logger.error(f"搜索集合 {collection_name} 失败: {e}")
             return []
 
-    def list_collections(self) -> List[Dict[str, Any]]:
+    def list_collections(self) -> list[dict[str, Any]]:
         """列出所有集合及其信息"""
         if not self.qdrant_client:
             return []
@@ -475,7 +469,7 @@ class OptimizedQdrantClient:
 
         return collections
 
-    def get_cache_stats(self) -> Dict[str, Any]:
+    def get_cache_stats(self) -> dict[str, Any]:
         """获取缓存统计"""
         if self.cache_service:
             return self.cache_service.get_cache_stats()
@@ -497,7 +491,7 @@ def test_optimized_client() -> Any:
     import random
     test_vector = [random.uniform(-1, 1) for _ in range(1024)]
 
-    logger.info(f"\n🔍 测试搜索...")
+    logger.info("\n🔍 测试搜索...")
     results = client.search('legal_clauses', test_vector, limit=5)
     logger.info(f"返回 {len(results)} 条结果")
 
@@ -506,7 +500,7 @@ def test_optimized_client() -> Any:
         logger.info(f"最低分: {results[-1]['score']:.4f}")
 
     # 缓存统计
-    logger.info(f"\n💾 缓存统计:")
+    logger.info("\n💾 缓存统计:")
     cache_stats = client.get_cache_stats()
     for key, value in cache_stats.items():
         logger.info(f"  {key}: {value}")

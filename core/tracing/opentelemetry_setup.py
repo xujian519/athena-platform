@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 OpenTelemetry分布式追踪配置
 OpenTelemetry Distributed Tracing Setup
@@ -20,7 +21,7 @@ try:
     from opentelemetry.instrumentation.sqlalchemy import SQLAlchemyInstrumentor
     from opentelemetry.sdk.resources import Resource
     from opentelemetry.sdk.trace import TracerProvider
-    from opentelemetry.sdk.trace.export import BatchSpanProcessor, SimpleSpanProcessor
+    from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 
     OTEL_AVAILABLE = True
 except Exception as e:
@@ -252,8 +253,8 @@ def setup_tracing(
 
 
 # 追踪装饰器(简化版)
-def trace_operation(operation_name: Optional[str]
-    attributes: Optional["key"] = None):
+def trace_operation(operation_name: str | None = None,
+    attributes: dict[str, str] | None = None):
     """
     操作追踪装饰器
 

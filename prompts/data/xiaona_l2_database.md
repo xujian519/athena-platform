@@ -135,7 +135,7 @@
 │                                                              │
 │  【存储层】                                                  │
 │  - 向量库 (Qdrant): patent_full_text集合                    │
-│  - 知识图谱 (NebulaGraph): patent_full_text空间             │
+│  - 知识图谱 (Neo4j): patent_full_text数据库                │
 │  - 全文索引 (PostgreSQL): tsvector全文搜索                  │
 │                                                              │
 │  【服务层】                                                  │

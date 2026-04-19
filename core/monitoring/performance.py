@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 性能监控模块
 Performance Monitoring Module
@@ -11,8 +12,8 @@ import threading
 import time
 from collections import defaultdict
 from collections.abc import Callable
-from datetime import datetime, timedelta
-from typing import Any, Dict, Optional
+from datetime import datetime
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

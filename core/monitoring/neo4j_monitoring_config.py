@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Neo4j监控配置
 Neo4j Monitoring Configuration
@@ -18,9 +19,8 @@ Neo4j Monitoring Configuration
 版本: v1.0.0
 """
 
-from dataclasses import dataclass, field
-from datetime import timedelta
-from typing import Any, Callable, Dict, Optional
+from dataclasses import dataclass
+from typing import Any
 
 from core.monitoring.performance_monitoring_system import (
     AlertRule,
@@ -220,7 +220,7 @@ def get_neo4j_alert_rules(config: Neo4jMonitoringConfig | None = None) -> list[A
     return rules
 
 
-def get_neo4j_metric_definitions() -> Dict[str, Any]:
+def get_neo4j_metric_definitions() -> dict[str, Any]:
     """
     获取Neo4j监控指标定义
 
@@ -377,7 +377,7 @@ def get_neo4j_metric_definitions() -> Dict[str, Any]:
     }
 
 
-def get_neo4j_dashboard_config() -> Dict[str, Any]:
+def get_neo4j_dashboard_config() -> dict[str, Any]:
     """
     获取Neo4j监控仪表板配置
 

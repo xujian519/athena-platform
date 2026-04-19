@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 无状态MCP客户端
 Stateless MCP Client

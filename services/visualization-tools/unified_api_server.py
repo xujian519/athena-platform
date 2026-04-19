@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 统一可视化创建API服务器
 Unified Visualization Creation API Server
@@ -12,19 +11,14 @@ Unified Visualization Creation API Server
 版本: 1.0.0
 """
 
-import asyncio
-from core.async_main import async_main
-import base64
 import json
 import logging
-from core.logging_config import setup_logging
 import uuid
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import Response
 from intelligent_caller import intelligent_caller
 from pydantic import BaseModel, Field
 
@@ -35,11 +29,11 @@ from unified_visualization_module import (
     VisualizationCategory,
     VisualizationRequest,
     VisualizationResult,
-    create_visualization,
 )
 
+from core.logging_config import setup_logging
+
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -61,9 +55,9 @@ manager = UnifiedVisualizationManager()
 class CreateVisualizationRequest(BaseModel):
     """创建可视化请求"""
     query: str = Field(..., description='用户查询描述')
-    raw_data: Optional[Dict[str, Any]] = Field(default=None, description='原始数据（用于图表）')
-    category: Optional[str] = Field(default=None, description='可视化类别')
-    complexity: Optional[str] = Field(default='simple', description='复杂度级别')
+    raw_data: dict[str, Any] | None = Field(default=None, description='原始数据（用于图表）')
+    category: str | None = Field(default=None, description='可视化类别')
+    complexity: str | None = Field(default='simple', description='复杂度级别')
     output_format: str = Field(default='svg', description='输出格式')
     style: str = Field(default='modern', description='样式风格')
     width: int = Field(default=800, description='宽度')
@@ -73,17 +67,17 @@ class CreateVisualizationRequest(BaseModel):
     collaboration_needed: bool = Field(default=False, description='是否需要协作')
     title: str = Field(default='', description='标题')
     description: str = Field(default='', description='描述')
-    tags: List[str] = Field(default_factory=list, description='标签')
+    tags: list[str] = Field(default_factory=list, description='标签')
 
 class IntelligentCreateRequest(BaseModel):
     """智能创建请求（Athena和小诺决策）"""
     query: str = Field(..., description='用户查询描述')
-    user_context: Optional[Dict[str, Any]] = Field(default_factory=dict, description='用户上下文')
-    preferences: Optional[Dict[str, Any]] = Field(default_factory=dict, description='偏好设置')
+    user_context: dict[str, Any] | None = Field(default_factory=dict, description='用户上下文')
+    preferences: dict[str, Any] | None = Field(default_factory=dict, description='偏好设置')
 
 class BatchCreateRequest(BaseModel):
     """批量创建请求"""
-    requests: List[CreateVisualizationRequest] = Field(..., description='批量请求列表')
+    requests: list[CreateVisualizationRequest] = Field(..., description='批量请求列表')
 
 class ToolComparisonRequest(BaseModel):
     """工具对比请求"""

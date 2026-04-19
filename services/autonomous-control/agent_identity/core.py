@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 智能体身份系统
 Agent Identity System
@@ -11,10 +10,10 @@ Agent Identity System
 """
 
 import logging
-from typing import Dict, Any, Optional
-from datetime import datetime
 from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +36,7 @@ class AgentIdentity:
     version: str  # 版本
     slogan: str  # Slogan/口号
     specialization: str  # 专业领域
-    capabilities: Dict[str, str]  # 能力列表
+    capabilities: dict[str, str]  # 能力列表
     personality: str  # 个性描述
     work_mode: str  # 工作模式
     created_at: datetime
@@ -241,7 +240,7 @@ class AgentIdentityManager:
         self.identities[agent_name] = identity
         logger.info(f"智能体身份已注册: {identity.name}")
 
-    async def display_identity(self, agent_name: str, style: str = "elegant") -> Dict[str, Any]:
+    async def display_identity(self, agent_name: str, style: str = "elegant") -> dict[str, Any]:
         """展示智能体身份"""
         identity = self.get_identity(agent_name)
         if not identity:
@@ -295,7 +294,7 @@ def get_agent_identity(agent_name: str) -> AgentIdentity | None:
     """获取智能体身份（便捷函数）"""
     return identity_manager.get_identity(agent_name)
 
-async def display_agent_identity(agent_name: str, style: str = "elegant") -> Dict[str, Any]:
+async def display_agent_identity(agent_name: str, style: str = "elegant") -> dict[str, Any]:
     """展示智能体身份（便捷函数）"""
     return await identity_manager.display_identity(agent_name, style)
 

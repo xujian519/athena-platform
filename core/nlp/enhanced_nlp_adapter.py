@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强型NLP适配器 - 优化认知引擎与GLM-4.6的交互
 Enhanced NLP Adapter - Optimizes interaction between cognition engine and GLM-4.6
@@ -185,7 +186,7 @@ class EnhancedNLPAdapter:
                     # 提取JSON部分
                     start = response.content.find("{")
                     end = response.content.rfind("}") + 1
-                    json_str = response.content[start: end,
+                    json_str = response.content[start:end]
                     analysis = json.loads(json_str)
                 else:
                     # 纯文本分析,自动提取要点
@@ -301,7 +302,7 @@ class EnhancedNLPAdapter:
             "metadata": response.metadata,
         }
 
-    async def batch_process(self, tasks: list[dict[str, Any]) -> list[NLPResponse]:
+    async def batch_process(self, tasks: list[dict[str, Any]]) -> list[NLPResponse]:
         """批量处理任务"""
         # 并发处理多个任务
         semaphores = asyncio.Semaphore(5)  # 限制并发数

@@ -1,0 +1,267 @@
+# Grafana生产环境配置
+apiVersion: 1
+
+# 数据源配置
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus-service:9090
+    isDefault: true
+    editable: false
+    jsonData:
+      timeInterval: "15s"
+      queryTimeout: "60s"
+      httpMethod: "POST"
+    secureJsonData: {}
+
+  - name: Elasticsearch
+    type: elasticsearch
+    access: proxy
+    url: http://elasticsearch-service:9200
+    database: "athena-logs-*"
+    jsonData:
+      timeField: "@timestamp"
+      esVersion: "8.0.0"
+      maxConcurrentShardRequests: 5
+      logMessageField: "message"
+      logLevelField: "level"
+
+  - name: PostgreSQL
+    type: postgres
+    access: proxy
+    url: postgres-service:5432
+    database: athena_prod
+    user: athena_user
+    jsonData:
+      sslmode: "require"
+    secureJsonData:
+      password: "postgres-password"
+
+# 仪表板配置
+dashboards:
+  # 系统概览仪表板
+  - id: null
+    uid: athena-system-overview
+    title: "Athena系统概览"
+    tags: ["athena", "system", "overview"]
+    timezone: browser
+    panels:
+      - title: "系统状态"
+        type: stat
+        targets:
+          - expr: up{job="athena-api"}
+            legendFormat: "{{instance}}"
+        fieldConfig:
+          defaults:
+            color:
+              mode: threshold
+            thresholds:
+              steps:
+                - color: red
+                  value: null
+                - color: green
+                  value: 1
+            mappings:
+              - options:
+                  0:
+                    text: "DOWN"
+                    color: red
+                  1:
+                    text: "UP"
+                    color: green
+                type: value
+        gridPos: { h: 8, w: 6, x: 0, y: 0 }
+
+      - title: "API请求率"
+        type: graph
+        targets:
+          - expr: rate(http_requests_total[5m])
+            legendFormat: "请求/秒"
+        yAxes:
+          - label: "请求/秒"
+        gridPos: { h: 8, w: 12, x: 6, y: 0 }
+
+      - title: "API响应时间"
+        type: graph
+        targets:
+          - expr: histogram_quantile(0.50, rate(http_request_duration_seconds_bucket[5m]))
+            legendFormat: "P50"
+          - expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
+            legendFormat: "P95"
+          - expr: histogram_quantile(0.99, rate(http_request_duration_seconds_bucket[5m]))
+            legendFormat: "P99"
+        yAxes:
+          - label: "秒"
+        gridPos: { h: 8, w: 6, x: 18, y: 0 }
+
+      - title: "错误率"
+        type: graph
+        targets:
+          - expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) * 100
+            legendFormat: "5xx错误率"
+          - expr: rate(http_requests_total{status=~"4.."}[5m]) / rate(http_requests_total[5m]) * 100
+            legendFormat: "4xx错误率"
+        yAxes:
+          - label: "百分比"
+          - max: 100
+            min: 0
+        gridPos: { h: 8, w: 12, x: 0, y: 8 }
+
+      - title: "CPU使用率"
+        type: graph
+        targets:
+          - expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+            legendFormat: "{{instance}}"
+        yAxes:
+          - label: "百分比"
+          - max: 100
+            min: 0
+        gridPos: { h: 8, w: 12, x: 12, y: 8 }
+
+  # 数据库监控仪表板
+  - id: null
+    uid: athena-database
+    title: "Athena数据库监控"
+    tags: ["athena", "database", "postgres", "redis", "qdrant"]
+    timezone: browser
+    panels:
+      - title: "PostgreSQL连接数"
+        type: graph
+        targets:
+          - expr: pg_stat_database_numbackends
+            legendFormat: "活跃连接"
+          - expr: pg_settings_max_connections
+            legendFormat: "最大连接"
+        gridPos: { h: 8, w: 12, x: 0, y: 0 }
+
+      - title: "PostgreSQL查询性能"
+        type: graph
+        targets:
+          - expr: rate(pg_stat_statements_calls_total[5m])
+            legendFormat: "查询/秒"
+          - expr: rate(pg_stat_statements_total_time_ms[5m]) / 1000
+            legendFormat: "查询时间/秒"
+        gridPos: { h: 8, w: 12, x: 12, y: 0 }
+
+      - title: "Redis内存使用"
+        type: graph
+        targets:
+          - expr: redis_memory_used_bytes
+            legendFormat: "已使用内存"
+          - expr: redis_memory_max_bytes
+            legendFormat: "最大内存"
+        gridPos: { h: 8, w: 12, x: 0, y: 8 }
+
+      - title: "Redis操作率"
+        type: graph
+        targets:
+          - expr: rate(redis_commands_processed_total[5m])
+            legendFormat: "命令/秒"
+          - expr: rate(redis_keyspace_hits_total[5m])
+            legendFormat: "缓存命中/秒"
+        gridPos: { h: 8, w: 12, x: 12, y: 8 }
+
+  # AI服务监控仪表板
+  - id: null
+    uid: athena-ai-services
+    title: "Athena AI服务监控"
+    tags: ["athena", "ai", "openai", "anthropic"]
+    timezone: browser
+    panels:
+      - title: "AI请求率"
+        type: graph
+        targets:
+          - expr: rate(ai_requests_total[5m])
+            legendFormat: "总请求率"
+          - expr: rate(ai_requests_total{model="gpt-4"}[5m])
+            legendFormat: "GPT-4请求率"
+          - expr: rate(ai_requests_total{model="claude-3"}[5m])
+            legendFormat: "Claude-3请求率"
+        gridPos: { h: 8, w: 12, x: 0, y: 0 }
+
+      - title: "AI响应时间"
+        type: graph
+        targets:
+          - expr: histogram_quantile(0.50, rate(ai_response_time_seconds_bucket[5m]))
+            legendFormat: "P50"
+          - expr: histogram_quantile(0.95, rate(ai_response_time_seconds_bucket[5m]))
+            legendFormat: "P95"
+        gridPos: { h: 8, w: 12, x: 12, y: 0 }
+
+      - title: "AI成功率"
+        type: stat
+        targets:
+          - expr: rate(ai_requests_success_total[5m]) / rate(ai_requests_total[5m]) * 100
+            legendFormat: "成功率"
+        fieldConfig:
+          defaults:
+            unit: "percent"
+            thresholds:
+              steps:
+                - color: red
+                  value: null
+                - color: yellow
+                  value: 90
+                - color: green
+                  value: 95
+        gridPos: { h: 8, w: 6, x: 0, y: 8 }
+
+      - title: "向量搜索延迟"
+        type: graph
+        targets:
+          - expr: histogram_quantile(0.50, rate(vector_search_duration_seconds_bucket[5m]))
+            legendFormat: "P50"
+          - expr: histogram_quantile(0.95, rate(vector_search_duration_seconds_bucket[5m]))
+            legendFormat: "P95"
+        gridPos: { h: 8, w: 6, x: 6, y: 8 }
+
+      - title: "Qdrant集合大小"
+        type: graph
+        targets:
+          - expr: qdrant_collection_points_count
+            legendFormat: "{{collection}}"
+        gridPos: { h: 8, w: 12, x: 12, y: 8 }
+
+  # 记忆系统监控仪表板
+  - id: null
+    uid: athena-memory-system
+    title: "Athena记忆系统监控"
+    tags: ["athena", "memory", "cache"]
+    timezone: browser
+    panels:
+      - title: "记忆系统存储使用"
+        type: graph
+        targets:
+          - expr: memory_hot_layer_bytes
+            legendFormat: "热层"
+          - expr: memory_warm_layer_bytes
+            legendFormat: "温层"
+          - expr: memory_cold_layer_bytes
+            legendFormat: "冷层"
+          - expr: memory_archive_layer_bytes
+            legendFormat: "归档层"
+        gridPos: { h: 8, w: 12, x: 0, y: 0 }
+
+      - title: "记忆系统操作率"
+        type: graph
+        targets:
+          - expr: rate(memory_operations_total{operation="store"}[5m])
+            legendFormat: "存储操作/秒"
+          - expr: rate(memory_operations_total{operation="retrieve"}[5m])
+            legendFormat: "检索操作/秒"
+          - expr: rate(memory_operations_total{operation="delete"}[5m])
+            legendFormat: "删除操作/秒"
+        gridPos: { h: 8, w: 12, x: 12, y: 0 }
+
+# 文件夹配置
+folders:
+  - name: "Athena监控"
+    uid: athena-monitoring
+    type: folder
+    time: now
+    canSave: true
+    canEdit: true
+    canAdmin: true
+    created: now
+    updated: now

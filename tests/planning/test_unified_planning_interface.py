@@ -13,12 +13,12 @@ Unified Planning Interface Tests
 创建时间: 2025-12-18
 """
 
-import asyncio
-import pytest
-from datetime import datetime, timedelta
+import sys
+from datetime import timedelta
 from pathlib import Path
 
-import sys
+import pytest
+
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.planning.unified_planning_interface import (
@@ -34,7 +34,6 @@ from core.planning.unified_planning_interface import (
     get_planner_coordinator,
     get_planner_registry,
 )
-
 
 # ========== 测试规划器实现 ==========
 
@@ -152,7 +151,7 @@ class TestUnifiedPlannerRegistry:
         registry.register_planner(mock_planner)
 
         request = PlanningRequest(title="测试请求")
-        result = await registry.submit_request(request)
+        await registry.submit_request(request)
 
         cached_result = await registry.get_result(request.id)
 

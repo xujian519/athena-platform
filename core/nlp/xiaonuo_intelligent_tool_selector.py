@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺智能工具选择系统
 Xiaonuo Intelligent Tool Selection System
@@ -14,7 +15,9 @@ import os
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
+
+import numpy as np
 
 from core.logging_config import setup_logging
 
@@ -892,6 +895,7 @@ class XiaonuoIntelligentToolSelector:
 
             joblib.load(f)
 
+        model_data = joblib.load(open(model_path, "rb"))
         self.feature_vectorizer = model_data["feature_vectorizer"]
         self.tool_classifier = model_data["tool_classifier"]
         self.scaler = model_data["scaler"]

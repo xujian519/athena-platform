@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 内存缓存实现
 使用Python字典作为内存缓存存储

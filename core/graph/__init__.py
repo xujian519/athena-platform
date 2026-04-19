@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 图和网络分析模块
 Graph and Network Analysis Module

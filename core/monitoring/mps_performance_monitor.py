@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 MPS性能监控器 - 阶段5优化
 实时监控GPU利用率、内存使用、温度和功耗
@@ -14,10 +15,10 @@ import json
 import time
 from collections import deque
 from collections.abc import Callable
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import psutil
 import torch

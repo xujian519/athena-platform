@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化版监控告警模块 - 主模块类
 Optimized Monitoring and Alerting Module - Main Module
@@ -11,12 +12,12 @@ Optimized Monitoring and Alerting Module - Main Module
 
 import asyncio
 import logging
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Any
 
 # 添加项目路径
 import sys
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
@@ -212,7 +213,7 @@ class OptimizedMonitoringModule(BaseModule):
         elif metric_type == MetricType.TIMER:
             self.metrics_collector.record_timer(name, value, labels)
 
-    def get_metric(self, name: str, labels: dict[str | None = None, str | None = None) -> MetricValue | None:
+    def get_metric(self, name: str, labels: dict[str, str] | None = None) -> MetricValue | None:
         """获取指标
 
         Args:

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 planning - 规划引擎模块
 

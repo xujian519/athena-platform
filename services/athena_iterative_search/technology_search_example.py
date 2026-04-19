@@ -5,7 +5,6 @@
 """
 
 import asyncio
-from core.async_main import async_main
 import json
 import logging
 import sys
@@ -18,6 +17,7 @@ sys.path.append('/Users/xujian/Athena工作平台')
 
 from services.athena_iterative_search import AthenaIterativeSearchAgent
 from services.athena_iterative_search.config import SearchDepth
+
 
 async def iterative_technology_search():
     """
@@ -47,7 +47,7 @@ async def iterative_technology_search():
     ]
 
     logger.info(f"🎯 目标技术: {target_technology}")
-    logger.info(f"📚 研究目标:")
+    logger.info("📚 研究目标:")
     for i, obj in enumerate(research_objectives, 1):
         logger.info(f"   {i}. {obj}")
     logger.info(f"🔍 关注领域: {', '.join(focus_areas)}")
@@ -82,14 +82,14 @@ async def iterative_technology_search():
     logger.info(str('='*60))
 
     # 基本统计
-    logger.info(f"\n📈 搜索统计:")
+    logger.info("\n📈 搜索统计:")
     logger.info(f"   • 总迭代轮数: {session.current_iteration}")
     logger.info(f"   • 发现技术方案: {session.total_patents_found}个")
     logger.info(f"   • 唯一技术方案: {session.unique_patents}个")
     logger.info(f"   • 平均每轮发现: {session.total_patents_found / session.current_iteration:.1f}个")
 
     # 每轮详情
-    logger.info(f"\n🔍 各轮搜索详情:")
+    logger.info("\n🔍 各轮搜索详情:")
     for iteration in session.iterations:
         logger.info(f"\n   第{iteration.iteration_number}轮:")
         logger.info(f"   • 搜索查询: {iteration.query.text}")
@@ -105,7 +105,7 @@ async def iterative_technology_search():
             logger.info(f"   • 下一轮建议: {iteration.next_query_suggestion}")
 
     # 第五步：研究摘要
-    logger.info(str(f"\n' + '="*60))
+    logger.info(str("\n' + '="*60))
     logger.info('📝 第五步：研究摘要与建议')
     logger.info(str('='*60))
 
@@ -113,7 +113,7 @@ async def iterative_technology_search():
         summary = session.research_summary
 
         # 置信度和完整度
-        logger.info(f"\n📊 研究质量评估:")
+        logger.info("\n📊 研究质量评估:")
         logger.info(f"   • 置信度: {summary.confidence_level:.1%}")
         logger.info(f"   • 完整度: {summary.completeness_score:.1%}")
 
@@ -131,30 +131,30 @@ async def iterative_technology_search():
 
         # 技术趋势
         if summary.technological_trends:
-            logger.info(f"\n📈 技术发展趋势:")
+            logger.info("\n📈 技术发展趋势:")
             for trend in summary.technological_trends:
                 logger.info(f"   • {trend}")
 
         # 创新洞察
         if summary.innovation_insights:
-            logger.info(f"\n💭 创新洞察:")
+            logger.info("\n💭 创新洞察:")
             for insight in summary.innovation_insights:
                 logger.info(f"   • {insight}")
 
         # 竞争分析
         if summary.competing_applicants:
-            logger.info(f"\n🏢 主要技术提供者:")
+            logger.info("\n🏢 主要技术提供者:")
             for applicant in summary.competing_applicants[:5]:
                 logger.info(f"   • {applicant}")
 
         # 战略建议
         if summary.recommendations:
-            logger.info(f"\n🎯 战略建议:")
+            logger.info("\n🎯 战略建议:")
             for rec in summary.recommendations:
                 logger.info(f"   • {rec}")
 
     # 第六步：保存研究报告
-    logger.info(str(f"\n' + '="*60))
+    logger.info(str("\n' + '="*60))
     logger.info('💾 第六步：保存研究报告')
     logger.info(str('='*60))
 
@@ -209,11 +209,11 @@ async def iterative_technology_search():
     logger.info(f"✅ 研究报告已保存至: {filepath}")
 
     # 总结建议
-    logger.info(str(f"\n' + '="*60))
+    logger.info(str("\n' + '="*60))
     logger.info('🎯 后续行动建议')
     logger.info(str('='*60))
 
-    logger.info(str("""
+    logger.info("""
 1. 📖 深入分析高相关性技术方案
    - 重点关注质量评分>0.7的方案
    - 研究其具体实现细节
@@ -238,9 +238,9 @@ async def iterative_technology_search():
    - 定期更新搜索
    - 关注新技术涌现
    - 调整研究方向
-    """))
+    """)
 
-    logger.info(f"\n✅ 迭代式搜索完成！")
+    logger.info("\n✅ 迭代式搜索完成！")
     logger.info(f"📊 发现了 {session.total_patents_found} 个相关技术方案")
     logger.info(f"🔍 经过 {session.current_iteration} 轮深度搜索")
     logger.info(str(f"🎯 研究完整度: {session.research_summary.completeness_score*100:.1f}%' if session.research_summary else '"))

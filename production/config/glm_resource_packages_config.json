@@ -1,0 +1,200 @@
+{
+  "config_version": "1.0.0",
+  "updated_at": "2025-12-27T00:00:00Z",
+  "provider": "zhipu",
+  "billing_type": "resource_packages",
+
+  "resource_packages": {
+    "reasoning_model": {
+      "package_name": "GLM Coding Max 季度计划",
+      "model": "glm-4.7",
+      "tokens": "每5小时约2400次prompts",
+      "status": "active",
+      "use_cases": ["编程对话", "代码生成", "复杂推理", "专利分析", "法律推理", "日常对话"]
+    },
+
+    "image_generation": {
+      "package_name": "CogView-4 图像生成资源包",
+      "model": "cogview-4",
+      "count": 1000,
+      "status": "active",
+      "use_cases": ["专利附图生成", "技术示意图", "产品概念图", "营销素材", "UI原型"],
+      "note": "高智能旗舰图像生成模型"
+    },
+
+    "video_generation": {
+      "package_name": "CogVideo 资源包",
+      "model": "cogvideox-3",
+      "count": 100,
+      "status": "active",
+      "use_cases": ["产品演示视频", "技术原理动画", "营销宣传视频"],
+      "note": "4K 60fps 高智能旗舰视频生成"
+    },
+
+    "web_search": {
+      "package_name": "Search-Std 资源包",
+      "model": "search-std",
+      "count": 1000,
+      "status": "active",
+      "use_cases": ["联网搜索", "实时信息查询", "外部数据获取"]
+    }
+  },
+
+  "model_capabilities": {
+    "glm_4_6": {
+      "name": "GLM-4.6",
+      "type": "推理模型",
+      "context_window": "128K",
+      "specialties": ["深度推理", "复杂分析", "多步骤任务"],
+      "deprecated": true,
+      "note": "已升级到GLM-4.7，保留作为备用"
+    },
+
+    "glm_4_7": {
+      "name": "GLM-4.7",
+      "type": "通用旗舰模型",
+      "context_window": "200K",
+      "specialties": ["Agentic Coding", "复杂推理", "长程任务规划", "工具协同", "编程对话", "代码生成"],
+      "note": "智谱最新旗舰模型，通过GLM Coding Max套餐提供，适合所有通用任务"
+    },
+
+    "cogview_4": {
+      "name": "CogView-4",
+      "type": "图像生成",
+      "tier": "高智能旗舰",
+      "capabilities": ["文本生成图像", "中文文本渲染", "高质量输出"],
+      "resolution": ["1024x1024", "1024x768", "768x1024", "512x512"]
+    },
+
+    "cogvideox_3": {
+      "name": "CogVideoX-3",
+      "type": "视频生成",
+      "tier": "高智能旗舰",
+      "capabilities": ["文本生成视频", "图像生成视频", "首尾帧生成"],
+      "specifications": {
+        "duration": "6秒",
+        "resolution": "4K",
+        "fps": 60
+      }
+    }
+  },
+
+  "usage_strategy": {
+    "reasoning_tasks": {
+      "preferred_model": "glm-4.7",
+      "resource_package": "GLM Coding Max 季度计划",
+      "scenarios": ["专利分析", "法律推理", "复杂决策", "技术评估"]
+    },
+
+    "coding_tasks": {
+      "preferred_model": "glm-4.7",
+      "resource_package": "GLM Coding Max 季度计划",
+      "scenarios": ["代码生成", "编程对话", "技术实现", "调试"]
+    },
+
+    "image_generation": {
+      "preferred_model": "cogview-4",
+      "resource_package": "CogView-4 资源包（1000次）",
+      "scenarios": ["专利附图", "技术图表", "营销素材"]
+    },
+
+    "video_generation": {
+      "preferred_model": "cogvideox-3",
+      "resource_package": "CogVideo 资源包（100次）",
+      "scenarios": ["产品演示", "技术动画", "营销视频"]
+    },
+
+    "web_search": {
+      "preferred_model": "search-std",
+      "resource_package": "Search-Std 资源包（1000次）",
+      "scenarios": ["联网搜索", "实时数据", "外部信息"]
+    }
+  },
+
+  "agent_allocation": {
+    "athena": {
+      "name": "Athena.智慧女神",
+      "primary_model": "glm-4.7",
+      "reasoning_model": "glm-4.6",
+      "image_generation": "cogview-4",
+      "video_generation": "cogvideox-3",
+      "web_search": "search-std",
+      "reasoning": "编程任务使用GLM-4.7，复杂推理使用GLM-4.6，充分套餐资源包"
+    },
+
+    "xiaonuo": {
+      "name": "小诺·双鱼座",
+      "primary_model": "glm-4.7",
+      "reasoning_model": "glm-4.6",
+      "image_generation": "cogview-4",
+      "video_generation": "cogvideox-3",
+      "web_search": "search-std"
+    },
+
+    "xiaona": {
+      "name": "小娜·天秤女神",
+      "primary_model": "glm-4.7",
+      "reasoning_model": "glm-4.7",
+      "image_generation": "cogview-4",
+      "web_search": "search-std",
+      "reasoning": "专利分析优先使用GLM-4.6推理模型，专利附图使用CogView-4"
+    },
+
+    "xiaochen": {
+      "name": "小宸·星河射手",
+      "primary_model": "glm-4.7",
+      "image_generation": "cogview-4",
+      "video_generation": "cogvideox-3",
+      "web_search": "search-std",
+      "reasoning": "内容创作使用GLM-4.7，营销素材使用CogView-4，短视频使用CogVideoX-3"
+    },
+
+    "yunxi": {
+      "name": "云熙.vega",
+      "primary_model": "glm-4.7",
+      "reasoning_model": "glm-4.7",
+      "image_generation": "cogview-4",
+      "web_search": "search-std",
+      "reasoning": "数据分析使用GLM-4.7，报告图表使用CogView-4"
+    }
+  },
+
+  "cost_optimization": {
+    "principles": [
+      "充分利用所有资源包，最大化使用效率",
+      "统一使用GLM-4.7处理所有通用任务（编程/推理/分析）",
+      "GLM-4.6已废弃，保留作为备用",
+      "图像和视频生成充分利用资源包次数"
+    ],
+    "monitoring": {
+      "glm_4_7_usage": "监控Coding Max套餐使用情况",
+      "cogview_4_count": "追踪1000次使用情况",
+      "cogvideox_3_count": "追踪100次使用情况，优先重要场景",
+      "search_std_count": "追踪1000次搜索使用情况"
+    }
+  },
+
+  "api_endpoints": {
+    "base_url": "https://open.bigmodel.cn/api/paas/v4",
+    "note": "所有功能统一使用通用API端点，通过资源包计费"
+  },
+
+  "best_practices": {
+    "model_selection": {
+      "通用任务": "使用GLM-4.7（Coding Max套餐）",
+      "编程任务": "使用GLM-4.7（Coding Max套餐）",
+      "专利分析": "使用GLM-4.7（Coding Max套餐）",
+      "法律推理": "使用GLM-4.7（推理能力强）",
+      "图像生成": "使用CogView-4（1000次资源包）",
+      "视频生成": "使用CogVideoX-3（100次资源包，谨慎使用）",
+      "联网搜索": "使用Search-Std（1000次资源包）"
+    },
+
+    "resource_management": {
+      "token_efficiency": "优化提示词，减少不必要的token消耗",
+      "image_generation": "积累需求后批量生成，提高效率",
+      "video_generation": "仅在必要时使用，优先重要场景",
+      "search_usage": "合理使用搜索功能，避免浪费"
+    }
+  }
+}

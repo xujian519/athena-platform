@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 测试优化后的小诺完整功能
 Test Complete Optimized Xiaonuo Features
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
 import asyncio
 from datetime import datetime
+
 
 async def test_optimized_xiaonuo():
     """测试优化后的小诺完整功能"""

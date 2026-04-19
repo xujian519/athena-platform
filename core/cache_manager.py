@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena缓存管理器
 提供统一的Redis缓存接口

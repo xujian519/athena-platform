@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena工作平台 - 双模型AI协调器
 智能调度DeepSeek-Coder和GLM-4.6，实现最优性能和成本平衡
 """
 
-import asyncio
-from core.async_main import async_main
 import json
 import logging
-from core.logging_config import setup_logging
 import os
 
 # 导入现有模型服务
@@ -17,15 +13,12 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
-
-import aiohttp
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'deepseek-integration'))
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'glm-integration'))
 
 from deepseek_coder_service import DeepSeekCoderAPI, ProgrammingLanguage
-from glm_4_6_service import GLM46APIClient, GLMModelType, TaskType
+from glm_4_6_service import GLM46APIClient, GLMModelType
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -51,7 +44,7 @@ class TaskRequest:
     content: str
     complexity: TaskComplexity
     priority: ModelPriority
-    context: Dict | None = None
+    context: dict | None = None
     expected_output_length: int = 1000
     requires_thinking: bool = False
     requires_code_generation: bool = False
@@ -60,7 +53,7 @@ class TaskRequest:
 class ModelSelection:
     """模型选择结果"""
     primary_model: str
-    fallback_model: Optional[str]
+    fallback_model: str | None
     reasoning: str
     estimated_cost: float
     estimated_time: float
@@ -73,9 +66,9 @@ class DualAIResponse:
     primary_model: str
     fallback_used: bool
     thinking_process: str | None = None
-    code_blocks: List[str] = None
-    cost_info: Dict = None
-    performance_metrics: Dict = None
+    code_blocks: list[str] = None
+    cost_info: dict = None
+    performance_metrics: dict = None
     timestamp: datetime = None
 
 class AthenaDualAIOrchestrator:
@@ -364,9 +357,9 @@ class AthenaDualAIOrchestrator:
 
             except Exception as fallback_error:
                 self.logger.error(f"❌ 备用模型也执行失败: {str(fallback_error)}")
-                raise Exception(f"所有模型执行失败。主模型错误: {primary_error}, 备用模型错误: {fallback_error}")
+                raise Exception(f"所有模型执行失败。主模型错误: {primary_error}, 备用模型错误: {fallback_error}") from fallback_error
 
-    async def process_patent_workflow(self, patent_info: Dict, analysis_type: str = 'comprehensive') -> Dict:
+    async def process_patent_workflow(self, patent_info: dict, analysis_type: str = 'comprehensive') -> dict:
         """专利工作流处理"""
         self.logger.info('🔄 启动专利分析工作流...')
 
@@ -435,7 +428,7 @@ class AthenaDualAIOrchestrator:
             ])
         }
 
-    async def get_system_statistics(self) -> Dict:
+    async def get_system_statistics(self) -> dict:
         """获取系统统计信息"""
         deepseek_stats = self.deepseek_client.get_statistics() if self.deepseek_client else {}
         glm_stats = self.glm_client.get_statistics() if self.glm_client else {}

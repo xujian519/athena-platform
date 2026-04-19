@@ -1,0 +1,2053 @@
+{
+  "analysis_timestamp": "2026-02-20T10:25:00.718054",
+  "total_log_files": 148,
+  "file_analyses": {
+    "xiaona_api.log": {
+      "file_path": "/Users/xujian/Athena工作平台/data/logs/xiaona_api.log",
+      "total_lines": 512,
+      "error_count": 14,
+      "error_types": {
+        "database_error": 14
+      },
+      "sample_errors": [
+        {
+          "line_number": 30,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "INFO:xiaona_data_service:✅ PostgreSQL连接成功"
+        },
+        {
+          "line_number": 68,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "INFO:xiaona_data_service:✅ PostgreSQL连接成功"
+        },
+        {
+          "line_number": 103,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "INFO:xiaona_data_service:✅ PostgreSQL连接成功"
+        },
+        {
+          "line_number": 138,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "INFO:xiaona_data_service:✅ PostgreSQL连接成功"
+        },
+        {
+          "line_number": 173,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "INFO:xiaona_data_service:✅ PostgreSQL连接成功"
+        }
+      ]
+    },
+    "athena_perception_api.log": {
+      "file_path": "/Users/xujian/Athena工作平台/data/logs/athena_perception_api.log",
+      "total_lines": 55,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "vectorize_v4_20260120_221848.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/vectorize_v4_20260120_221848.log",
+      "total_lines": 73,
+      "error_count": 1,
+      "error_types": {
+        "resource_exhaust": 1
+      },
+      "sample_errors": [
+        {
+          "line_number": 66,
+          "error_types": [
+            "resource_exhaust"
+          ],
+          "content": "2026-01-20 22:26:44,305 - 批量编码失败: MPS backend out of memory (MPS allocated: 7.59 GiB, other allocations: 40.08 GiB, max allowed: 63.65 GiB). Tried to allocate 20.02 GiB on private pool. Use PYTORCH_MP..."
+        }
+      ]
+    },
+    "core_api.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/core_api.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "article-writer-service.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/article-writer-service.log",
+      "total_lines": 5,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "gateway.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/gateway.log",
+      "total_lines": 851,
+      "error_count": 10,
+      "error_types": {
+        "concurrent_limit": 3,
+        "timeout": 4,
+        "network_error": 3
+      },
+      "sample_errors": [
+        {
+          "line_number": 42,
+          "error_types": [
+            "concurrent_limit"
+          ],
+          "content": "2026-01-12 23:32:30,916 - core.planning.explicit_planner - INFO - 🤖 LLM客户端已启用: {'model': 'glm-4-plus', 'provider': 'Zhipu AI', 'mock_mode': False, 'api_key_configured': True, 'capabilities': ['plan_ge..."
+        },
+        {
+          "line_number": 102,
+          "error_types": [
+            "timeout"
+          ],
+          "content": "2026-01-12 23:33:35,661 - apps.xiaonuo.gateway.middleware.middleware - INFO - ➡️  POST /api/v1/optimization/api/v1/integration/timeout-call"
+        },
+        {
+          "line_number": 103,
+          "error_types": [
+            "timeout"
+          ],
+          "content": "2026-01-12 23:33:35,661 - core.integration.timeout_controller - INFO - 注册服务: test_service"
+        },
+        {
+          "line_number": 104,
+          "error_types": [
+            "timeout"
+          ],
+          "content": "2026-01-12 23:33:35,661 - apps.xiaonuo.gateway.middleware.middleware - INFO - ⬅️  POST /api/v1/optimization/api/v1/integration/timeout-call 200 ✅ (0.001s)"
+        },
+        {
+          "line_number": 652,
+          "error_types": [
+            "concurrent_limit"
+          ],
+          "content": "2026-01-12 23:35:51,169 - core.planning.explicit_planner - INFO - 🤖 LLM客户端已启用: {'model': 'glm-4-plus', 'provider': 'Zhipu AI', 'mock_mode': False, 'api_key_configured': True, 'capabilities': ['plan_ge..."
+        }
+      ]
+    },
+    "vector_generation.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/vector_generation.log",
+      "total_lines": 817,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "dialogue_execution_20260131_134219.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/dialogue_execution_20260131_134219.log",
+      "total_lines": 160,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "infrastructure.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/infrastructure.log",
+      "total_lines": 9,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "law_data_processing_optimized.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/law_data_processing_optimized.log",
+      "total_lines": 231,
+      "error_count": 1,
+      "error_types": {
+        "database_error": 1
+      },
+      "sample_errors": [
+        {
+          "line_number": 4,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-19 12:02:51,477 - INFO - PostgreSQL连接成功"
+        }
+      ]
+    },
+    "triple_model_enhancer_20260121_012236.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/triple_model_enhancer_20260121_012236.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "api-gateway.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/api-gateway.log",
+      "total_lines": 31,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "athena_service.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/athena_service.log",
+      "total_lines": 996,
+      "error_count": 4,
+      "error_types": {
+        "network_error": 4
+      },
+      "sample_errors": [
+        {
+          "line_number": 96,
+          "error_types": [
+            "network_error"
+          ],
+          "content": "INFO:core.api.main:✅ 统一报告服务API已注册 (Dolphin + NetworkX + Athena)"
+        },
+        {
+          "line_number": 99,
+          "error_types": [
+            "network_error"
+          ],
+          "content": "INFO:core.api.main:✅ 统一报告服务API已注册 (Dolphin + NetworkX + Athena)"
+        },
+        {
+          "line_number": 100,
+          "error_types": [
+            "network_error"
+          ],
+          "content": "INFO:core.api.main:✅ 统一报告服务API已注册 (Dolphin + NetworkX + Athena)"
+        },
+        {
+          "line_number": 102,
+          "error_types": [
+            "network_error"
+          ],
+          "content": "INFO:core.api.main:✅ 统一报告服务API已注册 (Dolphin + NetworkX + Athena)"
+        }
+      ]
+    },
+    "patent-analysis.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/patent-analysis.log",
+      "total_lines": 7,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "legal_vector_api_v2.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/legal_vector_api_v2.log",
+      "total_lines": 0,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "api.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/api.log",
+      "total_lines": 0,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "memory_api_fixed.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/memory_api_fixed.log",
+      "total_lines": 32,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "deployment_20260126_204124.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/deployment_20260126_204124.log",
+      "total_lines": 27,
+      "error_count": 1,
+      "error_types": {
+        "database_error": 1
+      },
+      "sample_errors": [
+        {
+          "line_number": 5,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "[2026-01-26 20:41:24] [SUCCESS] PostgreSQL检查通过: psql (PostgreSQL) 17.7 (Homebrew)"
+        }
+      ]
+    },
+    "prometheus_monitor.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/prometheus_monitor.log",
+      "total_lines": 3,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "xiaonuo_large_scale_model.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/xiaonuo_large_scale_model.log",
+      "total_lines": 905,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "unified_gateway.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/unified_gateway.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "pattern_extraction.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/pattern_extraction.log",
+      "total_lines": 0,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "vector_generator.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/vector_generator.log",
+      "total_lines": 190,
+      "error_count": 20,
+      "error_types": {
+        "resource_exhaust": 20
+      },
+      "sample_errors": [
+        {
+          "line_number": 13,
+          "error_types": [
+            "resource_exhaust"
+          ],
+          "content": "2026-01-19 12:10:50,626 - ERROR - 生成向量失败: MPS backend out of memory (MPS allocated: 7.37 GiB, other allocations: 38.97 GiB, max allowed: 63.65 GiB). Tried to allocate 26.53 GiB on private pool. Use PY..."
+        },
+        {
+          "line_number": 21,
+          "error_types": [
+            "resource_exhaust"
+          ],
+          "content": "2026-01-19 12:11:03,122 - ERROR - 生成向量失败: MPS backend out of memory (MPS allocated: 8.79 GiB, other allocations: 45.32 GiB, max allowed: 63.65 GiB). Tried to allocate 22.64 GiB on private pool. Use PY..."
+        },
+        {
+          "line_number": 29,
+          "error_types": [
+            "resource_exhaust"
+          ],
+          "content": "2026-01-19 12:11:15,712 - ERROR - 生成向量失败: MPS backend out of memory (MPS allocated: 5.91 GiB, other allocations: 48.96 GiB, max allowed: 63.65 GiB). Tried to allocate 24.46 GiB on private pool. Use PY..."
+        },
+        {
+          "line_number": 33,
+          "error_types": [
+            "resource_exhaust"
+          ],
+          "content": "2026-01-19 12:11:16,190 - ERROR - 生成向量失败: MPS backend out of memory (MPS allocated: 5.58 GiB, other allocations: 48.96 GiB, max allowed: 63.65 GiB). Tried to allocate 19.22 GiB on private pool. Use PY..."
+        },
+        {
+          "line_number": 37,
+          "error_types": [
+            "resource_exhaust"
+          ],
+          "content": "2026-01-19 12:11:16,674 - ERROR - 生成向量失败: MPS backend out of memory (MPS allocated: 6.17 GiB, other allocations: 48.96 GiB, max allowed: 63.65 GiB). Tried to allocate 27.04 GiB on private pool. Use PY..."
+        }
+      ]
+    },
+    "ocr2_optimized.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/ocr2_optimized.log",
+      "total_lines": 49,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "xiaonuo_v6_api_fixed.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/xiaonuo_v6_api_fixed.log",
+      "total_lines": 1000,
+      "error_count": 3,
+      "error_types": {
+        "concurrent_limit": 1,
+        "database_error": 2
+      },
+      "sample_errors": [
+        {
+          "line_number": 84,
+          "error_types": [
+            "concurrent_limit"
+          ],
+          "content": "INFO:core.planning.explicit_planner:🤖 LLM客户端已启用: {'model': 'glm-4-plus', 'provider': 'Zhipu AI', 'mock_mode': False, 'api_key_configured': True, 'capabilities': ['plan_generation', 'adjustment_suggest..."
+        },
+        {
+          "line_number": 115,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "📝 注册端点: legal_database_PKULAW_API"
+        },
+        {
+          "line_number": 118,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "📝 注册端点: infrastructure/infrastructure/database_PATENT_DB"
+        }
+      ]
+    },
+    "vectorize_v2_20260120_214823.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/vectorize_v2_20260120_214823.log",
+      "total_lines": 950,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "joyagent-optimization.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/joyagent-optimization.log",
+      "total_lines": 0,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "storage_monitor.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/storage_monitor.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "unified_gateway_new.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/unified_gateway_new.log",
+      "total_lines": 831,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "modular_gateway.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/modular_gateway.log",
+      "total_lines": 363,
+      "error_count": 57,
+      "error_types": {
+        "concurrent_limit": 1,
+        "database_error": 56
+      },
+      "sample_errors": [
+        {
+          "line_number": 39,
+          "error_types": [
+            "concurrent_limit"
+          ],
+          "content": "INFO:core.planning.explicit_planner:🤖 LLM客户端已启用: {'model': 'glm-4-plus', 'provider': 'Zhipu AI', 'mock_mode': False, 'api_key_configured': True, 'capabilities': ['plan_generation', 'adjustment_suggest..."
+        },
+        {
+          "line_number": 100,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "ERROR:apps.xiaonuo.gateway.routers.capabilities:❌ 聊天处理失败: database \"athena_db\" does not exist"
+        },
+        {
+          "line_number": 113,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "File \"/Users/xujian/Library/Python/3.14/lib/python/site-packages/sqlalchemy/ext/asyncio/session.py\", line 449, in execute"
+        },
+        {
+          "line_number": 119,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "File \"/Users/xujian/Library/Python/3.14/lib/python/site-packages/sqlalchemy/util/_concurrency_py3k.py\", line 201, in greenlet_spawn"
+        },
+        {
+          "line_number": 121,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "File \"/Users/xujian/Library/Python/3.14/lib/python/site-packages/sqlalchemy/orm/session.py\", line 2351, in execute"
+        }
+      ]
+    },
+    "xiaonuo-memory.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/xiaonuo-memory.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "dialogue_execution_20260131_133835.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/dialogue_execution_20260131_133835.log",
+      "total_lines": 3,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "athena_api.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/athena_api.log",
+      "total_lines": 70,
+      "error_count": 2,
+      "error_types": {
+        "network_error": 2
+      },
+      "sample_errors": [
+        {
+          "line_number": 37,
+          "error_types": [
+            "network_error"
+          ],
+          "content": "return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())"
+        },
+        {
+          "line_number": 48,
+          "error_types": [
+            "network_error"
+          ],
+          "content": "await self._serve(sockets)"
+        }
+      ]
+    },
+    "import_2019.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/import_2019.log",
+      "total_lines": 1,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "api_direct.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/api_direct.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "modular_gateway_8100.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/modular_gateway_8100.log",
+      "total_lines": 27,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "optimization_api.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/optimization_api.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "deepseek-ocr2.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/deepseek-ocr2.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "daily_health_report.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/daily_health_report.log",
+      "total_lines": 53,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "gateway.stdout.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/gateway.stdout.log",
+      "total_lines": 1,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "xiaonuo_startup.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/xiaonuo_startup.log",
+      "total_lines": 850,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "triple_model_enhancer_20260120_232527.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/triple_model_enhancer_20260120_232527.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "local_deploy_20260126_203911.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/local_deploy_20260126_203911.log",
+      "total_lines": 35,
+      "error_count": 6,
+      "error_types": {
+        "database_error": 6
+      },
+      "sample_errors": [
+        {
+          "line_number": 4,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-26 20:39:11 [INFO] \u001b[0;34m检查本地PostgreSQL服务...\u001b[0m"
+        },
+        {
+          "line_number": 5,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-26 20:39:11 [INFO] \u001b[0;34mPostgreSQL版本: \u001b[0m"
+        },
+        {
+          "line_number": 6,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-26 20:39:11 [SUCCESS] \u001b[0;32mPostgreSQL服务运行正常\u001b[0m"
+        },
+        {
+          "line_number": 7,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-26 20:39:11 [INFO] \u001b[0;34m配置PostgreSQL数据库...\u001b[0m"
+        },
+        {
+          "line_number": 21,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-26 20:39:36 [SUCCESS] \u001b[0;32m✓ PostgreSQL (本地 17.7)\u001b[0m"
+        }
+      ]
+    },
+    "athena_api_py311.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/athena_api_py311.log",
+      "total_lines": 68,
+      "error_count": 2,
+      "error_types": {
+        "network_error": 2
+      },
+      "sample_errors": [
+        {
+          "line_number": 23,
+          "error_types": [
+            "network_error"
+          ],
+          "content": "return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())"
+        },
+        {
+          "line_number": 33,
+          "error_types": [
+            "network_error"
+          ],
+          "content": "await self._serve(sockets)"
+        }
+      ]
+    },
+    "init_production.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/init_production.log",
+      "total_lines": 0,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "legal_world_model.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/legal_world_model.log",
+      "total_lines": 46,
+      "error_count": 1,
+      "error_types": {
+        "database_error": 1
+      },
+      "sample_errors": [
+        {
+          "line_number": 3,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "from core.database import SyncDatabaseConnectionManager, get_sync_db_manager"
+        }
+      ]
+    },
+    "learning_module_stdout.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/learning_module_stdout.log",
+      "total_lines": 24,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "learning_module.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/learning_module.log",
+      "total_lines": 24,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "vectorize_20260120_193634.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/vectorize_20260120_193634.log",
+      "total_lines": 855,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "prompt-system-api.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/prompt-system-api.log",
+      "total_lines": 84,
+      "error_count": 2,
+      "error_types": {
+        "network_error": 2
+      },
+      "sample_errors": [
+        {
+          "line_number": 28,
+          "error_types": [
+            "network_error"
+          ],
+          "content": "ERROR:__main__:❌ 统一报告服务API注册失败: '[' was never closed (dolphin_networkx_integration.py, line 30)"
+        },
+        {
+          "line_number": 63,
+          "error_types": [
+            "network_error"
+          ],
+          "content": "ERROR:__main__:❌ 统一报告服务API注册失败: '[' was never closed (dolphin_networkx_integration.py, line 30)"
+        }
+      ]
+    },
+    "athena_agent.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/athena_agent.log",
+      "total_lines": 47,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "dialogue_execution_20260131_133919.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/dialogue_execution_20260131_133919.log",
+      "total_lines": 519,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "optimization_service.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/optimization_service.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "ai_reasoning_engine.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/ai_reasoning_engine.log",
+      "total_lines": 0,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "vector_generator_v2.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/vector_generator_v2.log",
+      "total_lines": 75,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "xiaonuo_v6_complete.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/xiaonuo_v6_complete.log",
+      "total_lines": 1000,
+      "error_count": 3,
+      "error_types": {
+        "concurrent_limit": 1,
+        "database_error": 2
+      },
+      "sample_errors": [
+        {
+          "line_number": 87,
+          "error_types": [
+            "concurrent_limit"
+          ],
+          "content": "INFO:core.planning.explicit_planner:🤖 LLM客户端已启用: {'model': 'glm-4-plus', 'provider': 'Zhipu AI', 'mock_mode': False, 'api_key_configured': True, 'capabilities': ['plan_generation', 'adjustment_suggest..."
+        },
+        {
+          "line_number": 118,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "📝 注册端点: legal_database_PKULAW_API"
+        },
+        {
+          "line_number": 121,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "📝 注册端点: infrastructure/infrastructure/database_PATENT_DB"
+        }
+      ]
+    },
+    "memory_service.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/memory_service.log",
+      "total_lines": 13,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "prompt-system-api.stdout.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/prompt-system-api.stdout.log",
+      "total_lines": 252,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "dialogue_execution_20260131_133846.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/dialogue_execution_20260131_133846.log",
+      "total_lines": 10,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "api_v11.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/api_v11.log",
+      "total_lines": 0,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "vectorize_20260120_193353.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/vectorize_20260120_193353.log",
+      "total_lines": 863,
+      "error_count": 2,
+      "error_types": {
+        "timeout": 2
+      },
+      "sample_errors": [
+        {
+          "line_number": 831,
+          "error_types": [
+            "timeout"
+          ],
+          "content": "timeout=timeout,"
+        },
+        {
+          "line_number": 840,
+          "error_types": [
+            "timeout"
+          ],
+          "content": "timeout=timeout,"
+        }
+      ]
+    },
+    "import_1032_20260113_105905.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/import_1032_20260113_105905.log",
+      "total_lines": 1,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "pgvector_import_20260121_092235.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/pgvector_import_20260121_092235.log",
+      "total_lines": 90,
+      "error_count": 4,
+      "error_types": {
+        "database_error": 4
+      },
+      "sample_errors": [
+        {
+          "line_number": 2,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-21 09:22:35,131 - INFO - 🚀 PostgreSQL + pgvector导入器"
+        },
+        {
+          "line_number": 7,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-21 09:22:35,131 - INFO - 📊 初始化PostgreSQL数据库"
+        },
+        {
+          "line_number": 9,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-21 09:22:35,163 - INFO - ✅ PostgreSQL表结构创建完成"
+        },
+        {
+          "line_number": 86,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-21 09:22:38,251 - INFO -   PostgreSQL导入: 1672"
+        }
+      ]
+    },
+    "triple_model_enhancer_20260120_234526.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/triple_model_enhancer_20260120_234526.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "import_1032_fixed_20260113_113026.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/import_1032_fixed_20260113_113026.log",
+      "total_lines": 1,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "enterprise_gateway.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/enterprise_gateway.log",
+      "total_lines": 55,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "pgvector_import_20260121_091853.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/pgvector_import_20260121_091853.log",
+      "total_lines": 35,
+      "error_count": 9,
+      "error_types": {
+        "database_error": 9
+      },
+      "sample_errors": [
+        {
+          "line_number": 2,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-21 09:18:53,182 - INFO - 🚀 PostgreSQL + pgvector导入器"
+        },
+        {
+          "line_number": 7,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-21 09:18:53,182 - INFO - 📊 初始化PostgreSQL数据库"
+        },
+        {
+          "line_number": 8,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-21 09:18:53,194 - ERROR - ❌ PostgreSQL初始化失败: connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"patent_guidelines\" does not exist"
+        },
+        {
+          "line_number": 11,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "File \"/Users/xujian/Athena工作平台/production/scripts/patent_guideline/import_to_pgvector.py\", line 76, in initialize_postgresql"
+        },
+        {
+          "line_number": 16,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "psycopg2.OperationalError: connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"patent_guidelines\" does not exist"
+        }
+      ]
+    },
+    "triple_model_enhancer_20260120_234320.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/triple_model_enhancer_20260120_234320.log",
+      "total_lines": 38,
+      "error_count": 1,
+      "error_types": {
+        "concurrent_limit": 1
+      },
+      "sample_errors": [
+        {
+          "line_number": 13,
+          "error_types": [
+            "concurrent_limit"
+          ],
+          "content": "2026-01-20 23:43:20,422 - core.planning.explicit_planner - INFO - 🤖 LLM客户端已启用: {'model': 'glm-4-plus', 'provider': 'Zhipu AI', 'mock_mode': False, 'api_key_configured': True, 'capabilities': ['plan_ge..."
+        }
+      ]
+    },
+    "triple_model_enhancer_20260120_233102.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/triple_model_enhancer_20260120_233102.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "api_service.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/api_service.log",
+      "total_lines": 80,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "kg_import_full.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/kg_import_full.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "kg_expand.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/kg_expand.log",
+      "total_lines": 93,
+      "error_count": 2,
+      "error_types": {
+        "database_error": 2
+      },
+      "sample_errors": [
+        {
+          "line_number": 7,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "✅ PostgreSQL连接成功"
+        },
+        {
+          "line_number": 92,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "psycopg2.errors.InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block"
+        }
+      ]
+    },
+    "vectorize_start.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/vectorize_start.log",
+      "total_lines": 8,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "memory_system.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/memory_system.log",
+      "total_lines": 13,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "pgvector_import_20260121_092154.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/pgvector_import_20260121_092154.log",
+      "total_lines": 1000,
+      "error_count": 1,
+      "error_types": {
+        "database_error": 1
+      },
+      "sample_errors": [
+        {
+          "line_number": 996,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-21 09:21:57,667 - INFO -   PostgreSQL导入: 0"
+        }
+      ]
+    },
+    "vectorization.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/vectorization.log",
+      "total_lines": 33,
+      "error_count": 1,
+      "error_types": {
+        "database_error": 1
+      },
+      "sample_errors": [
+        {
+          "line_number": 4,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-20 19:20:31,306 - __main__ - INFO - PostgreSQL连接成功"
+        }
+      ]
+    },
+    "api-service.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/api-service.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "athena_unified.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/athena_unified.log",
+      "total_lines": 43,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "historical_import.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/historical_import.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "intelligent_router.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/intelligent_router.log",
+      "total_lines": 0,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "legal_api_startup.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/legal_api_startup.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "memory_api.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/memory_api.log",
+      "total_lines": 1000,
+      "error_count": 30,
+      "error_types": {
+        "database_error": 30
+      },
+      "sample_errors": [
+        {
+          "line_number": 47,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "await self._init_postgresql()"
+        },
+        {
+          "line_number": 48,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "File \"/Users/xujian/Athena工作平台/core/memory/unified_agent_memory_system.py\", line 268, in _init_postgresql"
+        },
+        {
+          "line_number": 112,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "await self._init_postgresql()"
+        },
+        {
+          "line_number": 113,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "File \"/Users/xujian/Athena工作平台/core/memory/unified_agent_memory_system.py\", line 268, in _init_postgresql"
+        },
+        {
+          "line_number": 175,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "await self._init_postgresql()"
+        }
+      ]
+    },
+    "xiaona.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/xiaona.log",
+      "total_lines": 78,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "import_1032_fixed_20260113_112917.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/import_1032_fixed_20260113_112917.log",
+      "total_lines": 1,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "law_entity_extractor.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/law_entity_extractor.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "triple_model_enhancer_20260120_232629.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/triple_model_enhancer_20260120_232629.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "intelligent-collaboration.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/intelligent-collaboration.log",
+      "total_lines": 8,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "multimodal_api.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/multimodal_api.log",
+      "total_lines": 34,
+      "error_count": 3,
+      "error_types": {
+        "network_error": 1,
+        "database_error": 2
+      },
+      "sample_errors": [
+        {
+          "line_number": 12,
+          "error_types": [
+            "network_error"
+          ],
+          "content": "WARNING:core.learning:深度学习引擎导入失败: cannot import name 'NeuralNetworkArchitecture' from 'core.learning.deep_learning_engine' (/Users/xujian/Athena工作平台/core/learning/deep_learning_engine.py)"
+        },
+        {
+          "line_number": 27,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "DATABASE_URL = get_database_url()"
+        },
+        {
+          "line_number": 29,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "File \"/Users/xujian/Athena工作平台/core/security/env_config.py\", line 56, in get_database_url"
+        }
+      ]
+    },
+    "triple_model_enhancer_20260120_232952.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/triple_model_enhancer_20260120_232952.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "gateway-error-2026-01-19.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/gateway-error-2026-01-19.log",
+      "total_lines": 0,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "gateway.stderr.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/gateway.stderr.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "pgvector_import_20260121_092016.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/pgvector_import_20260121_092016.log",
+      "total_lines": 1000,
+      "error_count": 1,
+      "error_types": {
+        "database_error": 1
+      },
+      "sample_errors": [
+        {
+          "line_number": 996,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-21 09:20:19,468 - INFO -   PostgreSQL导入: 0"
+        }
+      ]
+    },
+    "invalid_decision_kg_import.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/invalid_decision_kg_import.log",
+      "total_lines": 375,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "vectorize_optimized_20260120_212546.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/vectorize_optimized_20260120_212546.log",
+      "total_lines": 950,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "webchat_gateway_error.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/webchat_gateway_error.log",
+      "total_lines": 0,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "intent-service.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/intent-service.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "xiaonuo.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/xiaonuo.log",
+      "total_lines": 128,
+      "error_count": 3,
+      "error_types": {
+        "database_error": 3
+      },
+      "sample_errors": [
+        {
+          "line_number": 16,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "🚀 启动 PostgreSQL..."
+        },
+        {
+          "line_number": 17,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "ℹ️  PostgreSQL已在运行"
+        },
+        {
+          "line_number": 18,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "✅ PostgreSQL 启动成功"
+        }
+      ]
+    },
+    "xiaonuo_v6_fixed.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/xiaonuo_v6_fixed.log",
+      "total_lines": 1000,
+      "error_count": 3,
+      "error_types": {
+        "concurrent_limit": 1,
+        "database_error": 2
+      },
+      "sample_errors": [
+        {
+          "line_number": 69,
+          "error_types": [
+            "concurrent_limit"
+          ],
+          "content": "INFO:core.planning.explicit_planner:🤖 LLM客户端已启用: {'model': 'glm-4-plus', 'provider': 'Zhipu AI', 'mock_mode': False, 'api_key_configured': True, 'capabilities': ['plan_generation', 'adjustment_suggest..."
+        },
+        {
+          "line_number": 100,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "📝 注册端点: legal_database_PKULAW_API"
+        },
+        {
+          "line_number": 103,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "📝 注册端点: infrastructure/infrastructure/database_PATENT_DB"
+        }
+      ]
+    },
+    "gateway-combined-2026-01-19.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/gateway-combined-2026-01-19.log",
+      "total_lines": 0,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "imessage_remote.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/imessage_remote.log",
+      "total_lines": 133,
+      "error_count": 41,
+      "error_types": {
+        "database_error": 41
+      },
+      "sample_errors": [
+        {
+          "line_number": 24,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-31 16:32:19,915 - src.core.imessage_client - ERROR - Database query error: no such column: m.chat_id"
+        },
+        {
+          "line_number": 25,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-31 16:32:22,918 - src.core.imessage_client - ERROR - Database query error: no such column: m.chat_id"
+        },
+        {
+          "line_number": 26,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-31 16:32:25,919 - src.core.imessage_client - ERROR - Database query error: no such column: m.chat_id"
+        },
+        {
+          "line_number": 27,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-31 16:32:28,922 - src.core.imessage_client - ERROR - Database query error: no such column: m.chat_id"
+        },
+        {
+          "line_number": 28,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-31 16:32:31,924 - src.core.imessage_client - ERROR - Database query error: no such column: m.chat_id"
+        }
+      ]
+    },
+    "ocr2_new_startup.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/ocr2_new_startup.log",
+      "total_lines": 23,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "xiaona_agent.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/xiaona_agent.log",
+      "total_lines": 125,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "unified_multimodal_api.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/unified_multimodal_api.log",
+      "total_lines": 223,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "law_data_processing.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/law_data_processing.log",
+      "total_lines": 856,
+      "error_count": 9,
+      "error_types": {
+        "database_error": 9
+      },
+      "sample_errors": [
+        {
+          "line_number": 4,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-19 10:50:18,952 - INFO - PostgreSQL连接成功"
+        },
+        {
+          "line_number": 34,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-19 10:50:48,782 - INFO - PostgreSQL连接成功"
+        },
+        {
+          "line_number": 64,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-19 10:57:13,535 - INFO - PostgreSQL连接成功"
+        },
+        {
+          "line_number": 84,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-19 10:58:28,240 - INFO - PostgreSQL连接成功"
+        },
+        {
+          "line_number": 102,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-19 10:58:32,695 - ERROR - 导入PostgreSQL失败: current transaction is aborted, commands ignored until end of transaction block"
+        }
+      ]
+    },
+    "deploy_production_20260124_234319.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/deploy_production_20260124_234319.log",
+      "total_lines": 26,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "optimization-service.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/optimization-service.log",
+      "total_lines": 10,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "neo4j_batch_import.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/neo4j_batch_import.log",
+      "total_lines": 194,
+      "error_count": 3,
+      "error_types": {
+        "database_error": 3
+      },
+      "sample_errors": [
+        {
+          "line_number": 4,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-02-18 23:03:33,996 - INFO - 🔗 连接PostgreSQL..."
+        },
+        {
+          "line_number": 5,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-02-18 23:03:34,012 - INFO - ✅ PostgreSQL连接成功"
+        },
+        {
+          "line_number": 193,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-02-18 23:34:45,078 - INFO - ✅ PostgreSQL连接已关闭"
+        }
+      ]
+    },
+    "dialogue_execution_20260131_133901.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/dialogue_execution_20260131_133901.log",
+      "total_lines": 16,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "prompt-system-api.stderr.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/prompt-system-api.stderr.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "xiaonuo_health.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/xiaonuo_health.log",
+      "total_lines": 4,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "vectorize_20260120_193501.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/vectorize_20260120_193501.log",
+      "total_lines": 809,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "deployment_20260128_005252.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/deployment_20260128_005252.log",
+      "total_lines": 30,
+      "error_count": 1,
+      "error_types": {
+        "database_error": 1
+      },
+      "sample_errors": [
+        {
+          "line_number": 5,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "[2026-01-28 00:52:52] [SUCCESS] PostgreSQL检查通过: psql (PostgreSQL) 17.7 (Homebrew)"
+        }
+      ]
+    },
+    "xiaonuo_service.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/xiaonuo_service.log",
+      "total_lines": 12,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "historical_import_fast.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/historical_import_fast.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "health_check.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/health_check.log",
+      "total_lines": 7,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "athena_nlp.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/athena_nlp.log",
+      "total_lines": 2,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "triple_model_enhancer_20260120_234239.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/triple_model_enhancer_20260120_234239.log",
+      "total_lines": 27,
+      "error_count": 1,
+      "error_types": {
+        "concurrent_limit": 1
+      },
+      "sample_errors": [
+        {
+          "line_number": 13,
+          "error_types": [
+            "concurrent_limit"
+          ],
+          "content": "2026-01-20 23:42:39,850 - core.planning.explicit_planner - INFO - 🤖 LLM客户端已启用: {'model': 'glm-4-plus', 'provider': 'Zhipu AI', 'mock_mode': False, 'api_key_configured': True, 'capabilities': ['plan_ge..."
+        }
+      ]
+    },
+    "athena-memory.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/athena-memory.log",
+      "total_lines": 47,
+      "error_count": 3,
+      "error_types": {
+        "network_error": 3
+      },
+      "sample_errors": [
+        {
+          "line_number": 11,
+          "error_types": [
+            "network_error"
+          ],
+          "content": "target(sockets=sockets)"
+        },
+        {
+          "line_number": 13,
+          "error_types": [
+            "network_error"
+          ],
+          "content": "return asyncio.run(self.serve(sockets=sockets))"
+        },
+        {
+          "line_number": 25,
+          "error_types": [
+            "network_error"
+          ],
+          "content": "await self._serve(sockets)"
+        }
+      ]
+    },
+    "xiaonuo_v6_gateway.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/xiaonuo_v6_gateway.log",
+      "total_lines": 1000,
+      "error_count": 3,
+      "error_types": {
+        "concurrent_limit": 1,
+        "database_error": 2
+      },
+      "sample_errors": [
+        {
+          "line_number": 64,
+          "error_types": [
+            "concurrent_limit"
+          ],
+          "content": "INFO:core.planning.explicit_planner:🤖 LLM客户端已启用: {'model': 'glm-4-plus', 'provider': 'Zhipu AI', 'mock_mode': False, 'api_key_configured': True, 'capabilities': ['plan_generation', 'adjustment_suggest..."
+        },
+        {
+          "line_number": 95,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "📝 注册端点: legal_database_PKULAW_API"
+        },
+        {
+          "line_number": 98,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "📝 注册端点: infrastructure/infrastructure/database_PATENT_DB"
+        }
+      ]
+    },
+    "knowledge-graph-service.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/knowledge-graph-service.log",
+      "total_lines": 7,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "xiaonuo_agent.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/xiaonuo_agent.log",
+      "total_lines": 102,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "learning_module_stderr.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/learning_module_stderr.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "xiaona_control.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/xiaona_control.log",
+      "total_lines": 145,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "vectorize_rules_20260120_225640.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/vectorize_rules_20260120_225640.log",
+      "total_lines": 278,
+      "error_count": 2,
+      "error_types": {
+        "database_error": 1,
+        "resource_exhaust": 1
+      },
+      "sample_errors": [
+        {
+          "line_number": 8,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-20 22:56:47,438 - 专利规则向量化 - PostgreSQL pgvector"
+        },
+        {
+          "line_number": 260,
+          "error_types": [
+            "resource_exhaust"
+          ],
+          "content": "向量化进度:  89%|████████▉ | 1879/2110 [05:02<01:51,  2.08it/s]2026-01-20 23:02:01,825 - 批量处理失败: MPS backend out of memory (MPS allocated: 16.36 GiB, other allocations: 49.22 GiB, max allowed: 63.65 GiB). ..."
+        }
+      ]
+    },
+    "dialogue_execution_20260131_134603.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/dialogue_execution_20260131_134603.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "xiaona_service.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/xiaona_service.log",
+      "total_lines": 61,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "deploy_production_20260125_003101.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/deploy_production_20260125_003101.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "webchat_gateway.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/webchat_gateway.log",
+      "total_lines": 1,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "knowledge-unified.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/knowledge-unified.log",
+      "total_lines": 1,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "original_import_20260121_092724.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/original_import_20260121_092724.log",
+      "total_lines": 106,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "vectorize_full_20260120_204909.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/vectorize_full_20260120_204909.log",
+      "total_lines": 877,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "api_server.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/api_server.log",
+      "total_lines": 79,
+      "error_count": 1,
+      "error_types": {
+        "network_error": 1
+      },
+      "sample_errors": [
+        {
+          "line_number": 16,
+          "error_types": [
+            "network_error"
+          ],
+          "content": "ERROR:core.api.main:❌ 统一报告服务API注册失败: '[' was never closed (dolphin_networkx_integration.py, line 30)"
+        }
+      ]
+    },
+    "self-media-agent.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/self-media-agent.log",
+      "total_lines": 4,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "vectorize_20260120_193328.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/vectorize_20260120_193328.log",
+      "total_lines": 809,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "api_gateway.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/api_gateway.log",
+      "total_lines": 42,
+      "error_count": 2,
+      "error_types": {
+        "database_error": 2
+      },
+      "sample_errors": [
+        {
+          "line_number": 14,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "DATABASE_URL = get_database_url()"
+        },
+        {
+          "line_number": 16,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "File \"/Users/xujian/Athena工作平台/core/security/env_config.py\", line 56, in get_database_url"
+        }
+      ]
+    },
+    "xiaonuo_platform.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/xiaonuo_platform.log",
+      "total_lines": 24,
+      "error_count": 1,
+      "error_types": {
+        "database_error": 1
+      },
+      "sample_errors": [
+        {
+          "line_number": 9,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "INFO:xiaonuo_platform_controller:✅ PostgreSQL数据库 正在运行"
+        }
+      ]
+    },
+    "legal-world-model.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/legal-world-model.log",
+      "total_lines": 59,
+      "error_count": 4,
+      "error_types": {
+        "network_error": 1,
+        "database_error": 3
+      },
+      "sample_errors": [
+        {
+          "line_number": 20,
+          "error_types": [
+            "network_error"
+          ],
+          "content": "2026-01-30 17:09:32,476 - core.communication - WARNING - WebSocket模块导入失败: No module named 'jwt'"
+        },
+        {
+          "line_number": 33,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-30 17:09:34,240 - legal_world_model_api - INFO - ✓ 使用直接PostgreSQL连接"
+        },
+        {
+          "line_number": 48,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-30 17:12:31,333 - legal_world_model_api - WARNING - PostgreSQL搜索失败: column \"title\" does not exist"
+        },
+        {
+          "line_number": 56,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "2026-01-30 17:12:33,690 - legal_world_model_api - WARNING - PostgreSQL搜索失败: current transaction is aborted, commands ignored until end of transaction block"
+        }
+      ]
+    },
+    "xiaonuo_v6.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/xiaonuo_v6.log",
+      "total_lines": 85,
+      "error_count": 1,
+      "error_types": {
+        "concurrent_limit": 1
+      },
+      "sample_errors": [
+        {
+          "line_number": 8,
+          "error_types": [
+            "concurrent_limit"
+          ],
+          "content": "2026-01-23 16:53:36,229 - core.planning.explicit_planner - INFO - 🤖 LLM客户端已启用: {'model': 'glm-4-plus', 'provider': 'Zhipu AI', 'mock_mode': False, 'api_key_configured': True, 'capabilities': ['plan_ge..."
+        }
+      ]
+    },
+    "xiaonuo_final.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/xiaonuo_final.log",
+      "total_lines": 1000,
+      "error_count": 3,
+      "error_types": {
+        "concurrent_limit": 1,
+        "database_error": 2
+      },
+      "sample_errors": [
+        {
+          "line_number": 80,
+          "error_types": [
+            "concurrent_limit"
+          ],
+          "content": "INFO:core.planning.explicit_planner:🤖 LLM客户端已启用: {'model': 'glm-4-plus', 'provider': 'Zhipu AI', 'mock_mode': False, 'api_key_configured': True, 'capabilities': ['plan_generation', 'adjustment_suggest..."
+        },
+        {
+          "line_number": 111,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "📝 注册端点: legal_database_PKULAW_API"
+        },
+        {
+          "line_number": 114,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "📝 注册端点: infrastructure/infrastructure/database_PATENT_DB"
+        }
+      ]
+    },
+    "deploy_production_20260124_234352.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/deploy_production_20260124_234352.log",
+      "total_lines": 26,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "dolphin_service.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/dolphin_service.log",
+      "total_lines": 274,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "multimodal-api.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/multimodal-api.log",
+      "total_lines": 20,
+      "error_count": 6,
+      "error_types": {
+        "database_error": 6
+      },
+      "sample_errors": [
+        {
+          "line_number": 8,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "File \"/opt/homebrew/lib/python3.12/site-packages/sqlalchemy/orm/decl_api.py\", line 198, in __init__"
+        },
+        {
+          "line_number": 10,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "File \"/opt/homebrew/lib/python3.12/site-packages/sqlalchemy/orm/decl_base.py\", line 245, in _as_declarative"
+        },
+        {
+          "line_number": 13,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "File \"/opt/homebrew/lib/python3.12/site-packages/sqlalchemy/orm/decl_base.py\", line 326, in setup_mapping"
+        },
+        {
+          "line_number": 16,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "File \"/opt/homebrew/lib/python3.12/site-packages/sqlalchemy/orm/decl_base.py\", line 573, in __init__"
+        },
+        {
+          "line_number": 18,
+          "error_types": [
+            "database_error"
+          ],
+          "content": "File \"/opt/homebrew/lib/python3.12/site-packages/sqlalchemy/orm/decl_base.py\", line 1530, in _extract_mappable_attributes"
+        }
+      ]
+    },
+    "external_storage_check.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/external_storage_check.log",
+      "total_lines": 1000,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "autonomous-control.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/autonomous-control.log",
+      "total_lines": 2,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "common-tools-service.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/common-tools-service.log",
+      "total_lines": 4,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "xiaonuo_production.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/xiaonuo_production.log",
+      "total_lines": 1,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    },
+    "athena_enhanced.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/athena_enhanced.log",
+      "total_lines": 284,
+      "error_count": 89,
+      "error_types": {
+        "timeout": 1,
+        "concurrent_limit": 88
+      },
+      "sample_errors": [
+        {
+          "line_number": 19,
+          "error_types": [
+            "timeout"
+          ],
+          "content": "self.qdrant_client = QdrantClient(url=qdrant_url, timeout=timeout)"
+        },
+        {
+          "line_number": 50,
+          "error_types": [
+            "concurrent_limit"
+          ],
+          "content": "[Parallel(n_jobs=14)]: Using backend ThreadingBackend with 14 concurrent workers."
+        },
+        {
+          "line_number": 51,
+          "error_types": [
+            "concurrent_limit"
+          ],
+          "content": "[Parallel(n_jobs=14)]: Done  22 tasks      | elapsed:    0.0s"
+        },
+        {
+          "line_number": 52,
+          "error_types": [
+            "concurrent_limit"
+          ],
+          "content": "[Parallel(n_jobs=14)]: Done 172 tasks      | elapsed:    0.0s"
+        },
+        {
+          "line_number": 53,
+          "error_types": [
+            "concurrent_limit"
+          ],
+          "content": "[Parallel(n_jobs=14)]: Done 200 out of 200 | elapsed:    0.0s finished"
+        }
+      ]
+    },
+    "vector-service.log": {
+      "file_path": "/Users/xujian/Athena工作平台/logs/vector-service.log",
+      "total_lines": 9,
+      "error_count": 0,
+      "error_types": {},
+      "sample_errors": []
+    }
+  },
+  "summary": {
+    "total_errors": 357,
+    "most_common_errors": {
+      "database_error": 209,
+      "resource_exhaust": 22,
+      "concurrent_limit": 100,
+      "timeout": 7,
+      "network_error": 19
+    },
+    "files_with_errors": 43,
+    "recommendations": [
+      "🚨 最常见错误类型 'database_error' 发生了 209 次，需要优先处理",
+      "⏱️ 检测到频繁的超时错误，建议：\n   - 优化查询性能\n   - 调整超时阈值\n   - 实现异步处理",
+      "🔄 检测到并发限制错误，建议：\n   - 增加并发处理能力\n   - 实现请求队列\n   - 优化资源分配",
+      "💾 检测到资源耗尽错误，建议：\n   - 增加系统内存\n   - 优化内存使用\n   - 实现资源监控",
+      "🗄️ 检测到数据库错误，建议：\n   - 优化数据库查询\n   - 添加适当的索引\n   - 实现数据库连接池",
+      "🌐 检测到网络错误，建议：\n   - 检查网络连接\n   - 实现重试机制\n   - 添加网络监控",
+      "📊 建议实现实时错误监控和告警系统",
+      "🔍 定期进行性能基准测试",
+      "🛠️ 实现优雅的错误恢复机制",
+      "📝 改进日志记录，包含更详细的上下文信息"
+    ]
+  }
+}

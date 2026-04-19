@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 API限流控制模块
 Rate Limiter for API Calls
@@ -8,6 +9,7 @@ Rate Limiter for API Calls
 
 import asyncio
 import logging
+import os
 import random
 import time
 from collections import deque
@@ -16,8 +18,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from functools import wraps
 from threading import Lock
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

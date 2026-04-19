@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增量更新系统
 Incremental Update System
@@ -15,11 +16,8 @@ Incremental Update System
 """
 
 import asyncio
-from core.async_main import async_main
 import hashlib
 import json
-import logging
-from core.logging_config import setup_logging
 import os
 import sqlite3
 import sys
@@ -34,6 +32,8 @@ from typing import Any
 
 import aiofiles
 import psutil
+
+from core.logging_config import setup_logging
 
 # import sqlite_utils  # 不依赖外部库,使用标准库
 
@@ -647,8 +647,9 @@ class IncrementalUpdateSystem:
         conn.close()
         return db_files
 
-    def _compare_files(self, current_files: dict[dict[str, dict[str] -> dict[str, Any]:
+    def _compare_files(self, current_files: dict[str, dict[str, Any]], db_files: dict[str, dict[str, Any]] | None = None) -> dict[str, Any]:
         """比较文件并检测变更"""
+        db_files = db_files or {}
         changes = {
             "new": [],
             "modified": [],
@@ -1003,7 +1004,7 @@ class IncrementalUpdateSystem:
                 logger.warning(f"处理变更失败,{wait_time}秒后重试 ({attempt + 1}/{max_retries + 1}) {change.file_path}: {e}")
                 await asyncio.sleep(wait_time)
 
-    def _update_snapshot_database(self, files: dict[str, dict[str, Any]):
+    def _update_snapshot_database(self, files: dict[str, dict[str, Any]]):
         """更新快照数据库"""
         conn = sqlite3.connect(self.config.resume_db_path)
         cursor = conn.cursor()
@@ -1218,7 +1219,7 @@ class IncrementalUpdateSystem:
         # 暂时只记录日志,实际处理逻辑可以调用 external_storage_processor.py
         pass
 
-    def _update_change_status(self, file_path: str, status: str, processing_time: float, = None, error_message: str | None = None):
+    def _update_change_status(self, file_path: str, status: str, processing_time: float | None = None, error_message: str | None = None):
         """更新变更状态"""
         conn = sqlite3.connect(self.config.resume_db_path)
         cursor = conn.cursor()
@@ -1440,7 +1441,7 @@ async def main():
                 print(f"   {i+1}. {session['session_id']}")
                 print(f"      - 状态: {session['status']}")
                 print(f"      - 时间: {session['start_time']} → {session.get('end_time', '进行中')}")
-                print(f"      - 文件: {session[{session['processed_files']}]
+                print(f"      - 文件: {session['processed_files']}")
 
     elif choice == "5":
         # 设置自动更新

@@ -9,6 +9,6 @@ from .youtube import YouTubeExtractor
 __all__ = [
     'BaseExtractor',
     'BilibiliExtractor',
-    'YouTubeExtractor', 
+    'YouTubeExtractor',
     'DouyinExtractor'
 ]

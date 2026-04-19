@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 定性定量结合分析器
 Qualitative-Quantitative Integrated Analyzer

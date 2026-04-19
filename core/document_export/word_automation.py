@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Word/WPS自动化接口 - Athena平台深度集成版
 Word/WPS Automation Interface - Deep Integration for Athena Platform
@@ -19,8 +20,7 @@ import platform
 import subprocess
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

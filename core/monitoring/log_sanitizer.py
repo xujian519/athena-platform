@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 日志脱敏器
 Log Sanitizer
@@ -14,8 +15,8 @@ Log Sanitizer
 import json
 import logging
 import re
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Union
+from dataclasses import dataclass
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -103,7 +104,7 @@ class LogSanitizer:
         ),
     ]
 
-    def __init__(self, custom_rules: list[SanitizationRule | None = None):
+    def __init__(self, custom_rules: list[SanitizationRule] | None = None):
         """
         初始化脱敏器
 

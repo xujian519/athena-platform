@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 审查意见答复人机交互流程
 Office Action Human-in-the-Loop Workflow
@@ -14,7 +15,6 @@ Office Action Human-in-the-Loop Workflow
 版本: v0.1.2 "晨星初现"
 """
 
-import json
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -34,7 +34,7 @@ try:
 except ImportError:
     HAS_PARSER = False
 
-from core.patent.smart_oa_responder import SmartOfficeActionResponder, get_smart_oa_responder
+from core.patent.smart_oa_responder import get_smart_oa_responder
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -629,9 +629,9 @@ class HumanInteractionWorkflow:
         if not self.state.parsed_oa:
             return
 
-        for field, value in self.state.user_modifications.items():
-            if hasattr(self.state.parsed_oa, field):
-                setattr(self.state.parsed_oa, field, value)
+        for field_name, value in self.state.user_modifications.items():
+            if hasattr(self.state.parsed_oa, field_name):
+                setattr(self.state.parsed_oa, field_name, value)
 
         logger.info(f"✅ 已应用 {len(self.state.user_modifications)} 个修改")
 

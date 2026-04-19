@@ -4,17 +4,20 @@ Athena迭代式搜索系统增强配置文件
 包含Qwen LLM集成和完整的外部搜索引擎配置
 """
 
-import logging
 import os
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from .config import =, __name__, logger, logging.get_logger
-
-    SearchStrategy, SearchDepth, EngineWeights, IterativeSearchConfig,
-    PatentSearchConfig, PerformanceConfig, AthenaSearchConfig
+from .config import (
+    AthenaSearchConfig,
+    IterativeSearchConfig,
+    PerformanceConfig,
+    SearchDepth,
+    SearchStrategy,
+    logger,
 )
+
 
 class LLMProvider(Enum):
     """LLM提供商"""
@@ -43,7 +46,7 @@ class LLMConfig:
 class ExternalEnginesConfig:
     """外部搜索引擎配置"""
     # 百度搜索配置
-    baidu: Dict[str, Any] = field(default_factory=lambda: {
+    baidu: dict[str, Any] = field(default_factory=lambda: {
         'enabled': False,
         'api_key': os.getenv('BAIDU_API_KEY', ''),
         'api_secret': os.getenv('BAIDU_API_SECRET', ''),
@@ -52,7 +55,7 @@ class ExternalEnginesConfig:
     })
 
     # Bing搜索配置
-    bing: Dict[str, Any] = field(default_factory=lambda: {
+    bing: dict[str, Any] = field(default_factory=lambda: {
         'enabled': False,
         'api_key': os.getenv('BING_API_KEY', ''),
         'rate_limit': 10,
@@ -60,7 +63,7 @@ class ExternalEnginesConfig:
     })
 
     # 搜狗搜索配置
-    sogou: Dict[str, Any] = field(default_factory=lambda: {
+    sogou: dict[str, Any] = field(default_factory=lambda: {
         'enabled': False,
         'api_key': os.getenv('SOGOU_API_KEY', ''),
         'rate_limit': 5,
@@ -68,13 +71,13 @@ class ExternalEnginesConfig:
     })
 
     # Google专利搜索配置（无需API密钥）
-    google_patents: Dict[str, Any] = field(default_factory=lambda: {
+    google_patents: dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
         'rate_limit': 2,
         'base_url': 'https://patents.google.com'
     })
 
-    def get_enabled_engines(self) -> List[str]:
+    def get_enabled_engines(self) -> list[str]:
         """获取启用的搜索引擎列表"""
         enabled = []
         if self.google_patents.get('enabled', False):
@@ -177,7 +180,7 @@ class AthenaEnhancedSearchConfig(AthenaSearchConfig):
         if self.enhanced_performance.max_concurrent_llm_requests <= 0:
             raise ValueError('最大并发LLM请求数必须大于0')
 
-    def get_external_engines_config(self) -> Dict[str, Any]:
+    def get_external_engines_config(self) -> dict[str, Any]:
         """获取外部搜索引擎配置"""
         return {
             'external_engines': {
@@ -188,7 +191,7 @@ class AthenaEnhancedSearchConfig(AthenaSearchConfig):
             }
         }
 
-    def get_llm_config(self) -> Dict[str, Any]:
+    def get_llm_config(self) -> dict[str, Any]:
         """获取LLM配置"""
         return {
             'provider': self.llm_config.provider.value,

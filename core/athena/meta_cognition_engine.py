@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena元认知引擎
 Meta-Cognition Engine for Athena
@@ -20,8 +21,9 @@ from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

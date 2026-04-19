@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 工作记忆 (Working Memory)
 基于Redis的短期记忆系统
@@ -18,8 +19,8 @@ import hashlib
 import json
 import logging
 from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Tuple
+from datetime import datetime
+from typing import Any
 
 from redis.asyncio import Redis
 
@@ -38,8 +39,8 @@ class MemoryItem:
     created_at: str = None
     accessed_at: str = None
     access_count: int = 0
-    tags: list["key"] = None
-    embedding: list["key"] = None  # 向量嵌入(可选)
+    tags: list[str] = None
+    embedding: list[str] = None  # 向量嵌入(可选)
 
     def __post_init__(self):
         if self.created_at is None:
@@ -119,7 +120,7 @@ class WorkingMemory:
         return f"wm:{hash_key}"
 
     async def store(
-        self, value: Any, importance: float = 0.5, tags: list["key"] = None, ttl: int | None = None
+        self, value: Any, importance: float = 0.5, tags: list[str] = None, ttl: int | None = None
     ) -> str:
         """
         存储记忆
@@ -196,7 +197,7 @@ class WorkingMemory:
         return memory_item
 
     async def search(
-        self, query: str, top_k: int = 10, tags: list["key"] = None
+        self, query: str, top_k: int = 10, tags: list[str] = None
     ) -> list[MemoryItem]:
         """
         搜索记忆

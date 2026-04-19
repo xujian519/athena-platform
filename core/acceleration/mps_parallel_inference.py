@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 MPS并行推理引擎 - 阶段3优化
 实现GPU异步并行推理,大幅提升吞吐量
@@ -13,9 +14,10 @@ import threading
 import time
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple
+from dataclasses import dataclass
+from typing import Any
 
+import numpy as np
 import torch
 
 from core.logging_config import setup_logging
@@ -402,7 +404,7 @@ class MPSParallelInferenceEngine:
             inputs_str = str(request.inputs)
 
         # 生成哈希(用于缓存key,非安全场景)
-        hash_obj = hashlib.md5(f"{request.model_name}:{inputs_str}".encode('utf-8'), usedforsecurity=False)
+        hash_obj = hashlib.md5(f"{request.model_name}:{inputs_str}".encode(), usedforsecurity=False)
         return hash_obj.hexdigest()
 
     def get_stats(self) -> dict[str, Any]:

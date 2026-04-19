@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 测试 Athena 搜索引擎与 STORM 的集成
 

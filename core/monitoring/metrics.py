@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Prometheus监控指标
 Prometheus Metrics for Search Engine
@@ -10,7 +11,7 @@ import logging
 import time
 from collections.abc import Callable
 from functools import wraps
-from typing import Any, Dict, Optional
+from typing import Any
 
 from prometheus_client import (
     CONTENT_TYPE_LATEST,

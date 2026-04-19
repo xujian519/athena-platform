@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利下载管理器
 Patent Download Manager
@@ -10,7 +11,6 @@ Patent Download Manager
 版本: v0.1.2 "晨星初现"
 """
 
-import logging
 import sys
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -96,7 +96,7 @@ class PatentDownloadManager:
         # 初始化下载器
         self._init_downloaders()
 
-        logger.info(f"📥 专利下载管理器初始化完成")
+        logger.info("📥 专利下载管理器初始化完成")
         logger.info(f"📁 输出目录: {self.output_dir}")
 
     def _init_downloaders(self):

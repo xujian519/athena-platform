@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 联邦学习系统
 Federated Learning System
@@ -19,10 +20,10 @@ Federated Learning System
 import asyncio
 import logging
 import random
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -392,7 +393,7 @@ class FederatedLearningSystem:
 
         # 损失趋势
         losses = [r.avg_loss for r in self.training_history]
-        loss_improvement = losses[0] - losses[-1] if len(losss) > 1 else 0
+        loss_improvement = losses[0] - losses[-1] if len(losses) > 1 else 0
 
         # 参与趋势
         participations = [r.participation_rate for r in self.training_history]

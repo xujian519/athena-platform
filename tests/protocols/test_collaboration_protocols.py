@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 协作协议测试
 Collaboration Protocols Tests
@@ -7,21 +6,23 @@ Collaboration Protocols Tests
 测试多智能体协作协议的功能
 """
 
-import unittest
-import asyncio
 import sys
-import os
-from datetime import datetime, timedelta
-from unittest.mock import Mock, AsyncMock
+import unittest
+from datetime import datetime
 
 # 添加项目路径
 sys.path.append('/Users/xujian/Athena工作平台')
 
 from core.protocols.collaboration_protocols import (
-    ProtocolType, ProtocolPhase, ProtocolStatus,
-    ProtocolMessage, ProtocolContext,
-    CommunicationProtocol, CoordinationProtocol, DecisionProtocol,
-    ProtocolManager
+    CommunicationProtocol,
+    CoordinationProtocol,
+    DecisionProtocol,
+    ProtocolContext,
+    ProtocolManager,
+    ProtocolMessage,
+    ProtocolPhase,
+    ProtocolStatus,
+    ProtocolType,
 )
 
 

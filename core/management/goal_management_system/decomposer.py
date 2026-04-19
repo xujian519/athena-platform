@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 目标管理系统 - 目标分解器
 Goal Management System - Goal Decomposer
@@ -10,11 +10,11 @@ Goal Management System - Goal Decomposer
 版本: 2.0.0
 """
 
+import uuid
 from datetime import datetime, timedelta
 from typing import Any
-import uuid
 
-from .types import GoalStatus, SubGoal
+from .types import SubGoal
 
 
 class GoalDecomposer:

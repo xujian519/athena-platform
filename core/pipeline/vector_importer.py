@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 向量库导入模块
 Vector Database Importer
@@ -13,7 +14,7 @@ Vector Database Importer
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # 向量数据库
 from qdrant_client import QdrantClient
@@ -25,7 +26,6 @@ from qdrant_client.models import (
     PointStruct,
     VectorParams,
 )
-
 
 # 向量化服务
 from core.embedding.bge_embedding_service import BGEEmbeddingService

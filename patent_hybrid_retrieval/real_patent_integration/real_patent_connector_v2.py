@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 真实专利数据库连接器（适配真实表结构）
 Real Patent Database Connector (Adapted to Real Schema)
@@ -7,12 +6,9 @@ Real Patent Database Connector (Adapted to Real Schema)
 
 import logging
 from contextlib import contextmanager
-from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
-import pandas as pd
 import psycopg2
-from psycopg2.extras import execute_values
 
 # 配置日志
 logger = logging.getLogger(__name__)
@@ -66,7 +62,7 @@ class RealPatentConnectorV2:
             logger.error(f"数据库连接失败: {e}")
             return False
 
-    def get_patent_statistics(self) -> Dict[str, Any]:
+    def get_patent_statistics(self) -> dict[str, Any]:
         """获取专利数据库统计信息"""
         stats = {}
 
@@ -115,8 +111,8 @@ class RealPatentConnectorV2:
         limit: int = 10000,
         include_abstract: bool = True,
         include_claims: bool = True,
-        filters: Optional[Dict[str, Any]] = None
-    ) -> List[Dict[str, Any]]:
+        filters: dict[str, Any] | None = None
+    ) -> list[dict[str, Any]]:
         """加载专利数据"""
         patents = []
 
@@ -187,7 +183,7 @@ class RealPatentConnectorV2:
 
                 # 转换为字典列表
                 for row in rows:
-                    patent = dict(zip(columns, row))
+                    patent = dict(zip(columns, row, strict=False))
                     # 添加专利ID字段（使用id作为标识）
                     patent['patent_id'] = str(patent['id'])
                     patents.append(patent)
@@ -203,8 +199,8 @@ class RealPatentConnectorV2:
         self,
         query: str,
         limit: int = 100,
-        search_fields: Optional[List[str] = None
-    ) -> List[Dict[str, Any]]:
+        search_fields: list[str] | None = None
+    ) -> list[dict[str, Any]]:
         """全文搜索专利"""
         if search_fields is None:
             search_fields = ['patent_name', 'abstract', 'claims']
@@ -240,7 +236,7 @@ class RealPatentConnectorV2:
                 rows = cursor.fetchall()
 
                 for row in rows:
-                    patent = dict(zip(columns, row))
+                    patent = dict(zip(columns, row, strict=False))
                     patent['patent_id'] = str(patent['id'])
                     patents.append(patent)
 
@@ -251,7 +247,7 @@ class RealPatentConnectorV2:
 
         return patents
 
-    def get_patent_details(self, patent_id: str) -> Dict[str, Any | None]:
+    def get_patent_details(self, patent_id: str) -> dict[str, Any | None]:
         """获取专利详细信息"""
         try:
             with self.get_cursor() as cursor:
@@ -263,7 +259,7 @@ class RealPatentConnectorV2:
                 row = cursor.fetchone()
                 if row:
                     columns = [desc[0] for desc in cursor.description]
-                    patent = dict(zip(columns, row))
+                    patent = dict(zip(columns, row, strict=False))
                     patent['patent_id'] = str(patent['id'])
 
                     # 获取IPC分类详情
@@ -278,7 +274,7 @@ class RealPatentConnectorV2:
 
         return None
 
-    def get_patents_for_vectorization(self, batch_size: int = 1000, offset: int = 0) -> List[Dict[str, Any]]:
+    def get_patents_for_vectorization(self, batch_size: int = 1000, offset: int = 0) -> list[dict[str, Any]]:
         """获取需要向量化的专利数据"""
         patents = []
 
@@ -298,7 +294,7 @@ class RealPatentConnectorV2:
                 rows = cursor.fetchall()
 
                 for row in rows:
-                    patent = dict(zip(columns, row))
+                    patent = dict(zip(columns, row, strict=False))
                     patent['patent_id'] = str(patent['id'])
 
                     # 合并文本内容用于向量化
@@ -322,7 +318,7 @@ class RealPatentConnectorV2:
 
         return patents
 
-    def update_patent_vectors(self, patent_ids: List[str], vectors: List[Dict]) -> bool:
+    def update_patent_vectors(self, patent_ids: list[str], vectors: list[dict]) -> bool:
         """更新专利向量数据"""
         try:
             with self.get_cursor() as cursor:

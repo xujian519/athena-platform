@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - Qwen(通义千问)云端模型客户端
 支持Qwen-Max、Qwen-Plus、Qwen-Turbo等模型
@@ -8,7 +9,7 @@
 
 import logging
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

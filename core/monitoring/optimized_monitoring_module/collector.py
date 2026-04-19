@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化版监控告警模块 - 指标收集器
 Optimized Monitoring and Alerting Module - Metrics Collector
@@ -13,7 +14,7 @@ import statistics
 import threading
 from collections import defaultdict, deque
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 import numpy as np
 
@@ -44,7 +45,7 @@ class MetricsCollector:
         self.collection_interval = self.config.get("collection_interval", 10)
         self.retention_period = self.config.get("retention_period", 3600)  # 1小时
 
-    def record_counter(self, name: str, value: float = 1, labels: Optional[dict[str | None = None, str | None = None) -> Any:
+    def record_counter(self, name: str, value: float = 1, labels: dict[str, str] | None = None) -> Any:
         """记录计数器
 
         Args:
@@ -57,7 +58,7 @@ class MetricsCollector:
             self.counters[key] += value
             self._add_to_metrics(name, self.counters[key], labels, MetricType.COUNTER)
 
-    def set_gauge(self, name: str, value: float, labels: dict[str | None = None, str | None = None) -> None:
+    def set_gauge(self, name: str, value: float, labels: dict[str, str] | None = None) -> None:
         """设置仪表盘值
 
         Args:
@@ -70,7 +71,7 @@ class MetricsCollector:
             self.gauges[key] = value
             self._add_to_metrics(name, value, labels, MetricType.GAUGE)
 
-    def record_histogram(self, name: str, value: float, labels: dict[str | None = None, str | None = None) -> Any:
+    def record_histogram(self, name: str, value: float, labels: dict[str, str] | None = None) -> Any:
         """记录直方图
 
         Args:
@@ -86,7 +87,7 @@ class MetricsCollector:
                 self.histograms[key] = self.histograms[key][-1000:]
             self._add_to_metrics(name, value, labels, MetricType.HISTOGRAM)
 
-    def record_timer(self, name: str, duration: float, labels: dict[str | None = None, str | None = None) -> Any:
+    def record_timer(self, name: str, duration: float, labels: dict[str, str] | None = None) -> Any:
         """记录计时器
 
         Args:
@@ -102,7 +103,7 @@ class MetricsCollector:
                 self.timers[key] = self.timers[key][-1000:]
             self._add_to_metrics(name, duration, labels, MetricType.TIMER)
 
-    def get_metric(self, name: str, labels: dict[str | None = None, str | None = None) -> MetricValue | None:
+    def get_metric(self, name: str, labels: dict[str, str] | None = None) -> MetricValue | None:
         """获取最新指标值
 
         Args:
@@ -151,7 +152,7 @@ class MetricsCollector:
 
             return history
 
-    def get_metric_stats(self, name: str, labels: dict[str | None = None, str | None = None) -> dict[str, float]:
+    def get_metric_stats(self, name: str, labels: dict[str, str] | None = None) -> dict[str, float]:
         """获取指标统计信息
 
         Args:
@@ -191,7 +192,7 @@ class MetricsCollector:
             else:
                 return {}
 
-    def _make_key(self, name: str, labels: dict[str | None = None, str | None = None) -> str:
+    def _make_key(self, name: str, labels: dict[str, str] | None = None) -> str:
         """生成指标键
 
         Args:

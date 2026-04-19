@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 轻量级工具发现模块
 Lightweight Tool Discovery Module
@@ -21,9 +22,9 @@ from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
-
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -143,7 +144,7 @@ class LightweightToolDiscovery:
     async def discover_tools(
         self,
         task_description: str,
-        available_tools: list["key"] = None,
+        available_tools: list[str] = None,
         context: dict[str, Any] | None = None,
         top_k: int = 5,
     ) -> list[SemanticMatch]:
@@ -223,14 +224,14 @@ class LightweightToolDiscovery:
                 continue
 
             # 能力匹配
-            capabilities = getattr(tool, "capabilities", [)
+            capabilities = getattr(tool, "capabilities", [])
             for cap in capabilities:
                 if cap.lower() in task_lower:
                     candidates.append(tool_id)
                     break
 
             # 标签匹配
-            tags = getattr(tool, "tags", [)
+            tags = getattr(tool, "tags", [])
             if any(tag.lower() in task_lower for tag in tags):
                 if tool_id not in candidates:
                     candidates.append(tool_id)
@@ -359,7 +360,7 @@ class LightweightToolDiscovery:
 
         # 归一化为固定维度向量(简化为384维)
         embedding = np.zeros(384, dtype=np.float32)
-        for i, word in enumerate(list(word_vector.keys())[:384):
+        for i, word in enumerate(list(word_vector.keys())[:384]):
             embedding[i] = word_vector[word] / max(word_vector.values())
 
         return embedding
@@ -384,11 +385,11 @@ class LightweightToolDiscovery:
         if description:
             tool_words.update(description.lower().split())
 
-        capabilities = getattr(tool, "capabilities", [)
+        capabilities = getattr(tool, "capabilities", [])
         for cap in capabilities:
             tool_words.update(cap.lower().split())
 
-        tags = getattr(tool, "tags", [)
+        tags = getattr(tool, "tags", [])
         for tag in tags:
             tool_words.update(tag.lower().split())
 
@@ -418,7 +419,7 @@ class LightweightToolDiscovery:
 
     def _compute_capability_match(self, task_description: str, tool: Any) -> float:
         """计算能力匹配度"""
-        capabilities = getattr(tool, "capabilities", [)
+        capabilities = getattr(tool, "capabilities", [])
         if not capabilities:
             return 0.0
 
@@ -531,7 +532,7 @@ class LightweightToolDiscovery:
 _discovery_instance: LightweightToolDiscovery | None = None
 
 
-def get_tool_discovery(config: Optional[dict | None = None) -> LightweightToolDiscovery:
+def get_tool_discovery(config: dict | None = None) -> LightweightToolDiscovery:
     """获取工具发现模块单例"""
     global _discovery_instance
     if _discovery_instance is None:

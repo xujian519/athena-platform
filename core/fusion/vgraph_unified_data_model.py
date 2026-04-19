@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一数据模型 - Vector-Graph Unified Schema
 为 NebulaGraph + pgvector 深度融合提供统一的数据抽象
@@ -10,7 +11,7 @@
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 from uuid import UUID, uuid4
 
 

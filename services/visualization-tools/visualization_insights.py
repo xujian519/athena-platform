@@ -3,11 +3,10 @@
 Athena对draw.io、ECharts和Excalidraw的深刻理解
 """
 
-import json
 import logging
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -24,11 +23,11 @@ class VisualizationType(Enum):
 class ToolCapability:
     """工具能力"""
     tool_name: str
-    strengths: List[str]
-    limitations: List[str]
-    best_scenarios: List[str]
+    strengths: list[str]
+    limitations: list[str]
+    best_scenarios: list[str]
     integration_complexity: str
-    output_formats: List[str]
+    output_formats: list[str]
     real_time_collaboration: bool
     programming_friendly: bool
 
@@ -140,7 +139,7 @@ class VisualizationAnalyzer:
             programming_friendly=True
         )
 
-    def get_tool_recommendation(self, scenario: str, requirements: Dict[str, Any]) -> str:
+    def get_tool_recommendation(self, scenario: str, requirements: dict[str, Any]) -> str:
         """根据场景和需求推荐工具"""
         scenario_keywords = {
             'architecture': ['drawio'],
@@ -167,7 +166,7 @@ class VisualizationAnalyzer:
 
         return 'drawio'  # 默认推荐
 
-    def get_integration_strategy(self, tool_name: str) -> Dict[str, Any]:
+    def get_integration_strategy(self, tool_name: str) -> dict[str, Any]:
         """获取工具集成策略"""
         strategies = {
             'drawio': {
@@ -194,7 +193,7 @@ class VisualizationAnalyzer:
         }
         return strategies.get(tool_name, {})
 
-    def compare_tools(self) -> Dict[str, Any]:
+    def compare_tools(self) -> dict[str, Any]:
         """工具对比分析"""
         return {
             'feature_comparison': {

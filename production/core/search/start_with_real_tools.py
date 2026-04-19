@@ -1,0 +1,365 @@
+#!/usr/bin/env python3
+"""
+集成真实搜索工具的启动脚本
+Real Search Tools Integration Startup Script
+
+演示如何使用真实的搜索引擎工具
+
+作者: Athena AI系统
+创建时间: 2025-12-05
+版本: 1.0.0
+"""
+
+from __future__ import annotations
+import asyncio
+import sys
+from pathlib import Path
+
+from core.async_main import async_main
+from core.logging_config import setup_logging
+
+# 添加项目路径
+current_dir = Path(__file__).parent
+project_root = current_dir.parent.parent
+sys.path.append(str(project_root))
+
+# 设置日志
+# setup_logging()  # 日志配置已移至模块导入
+logger = setup_logging()
+
+from core.search.athena.athena_smart_search import (
+    initialize_athena_smart_search,
+)
+
+# 导入系统组件
+from core.search.config.api_key_manager import get_api_key_manager
+from core.search.tools.real_patent_search_adapter import create_real_patent_search
+from core.search.tools.real_web_search_adapter import create_real_web_search
+
+
+async def setup_api_keys():
+    """设置API密钥"""
+    logger.info("🔑 配置API密钥")
+    logger.info(str("-" * 40))
+
+    manager = get_api_key_manager()
+
+    # 显示当前配置状态
+    report = manager.get_validation_report()
+    logger.info("📊 配置状态:")
+    logger.info(f"   总服务数: {report['total_services']}")
+    logger.info(f"   有效服务数: {report['valid_services']}")
+    logger.info(f"   启用服务数: {report['enabled_services']}")
+
+    if report["valid_services"] == 0:
+        logger.info("\n⚠️ 未配置有效的API密钥")
+        logger.info("💡 请选择以下方式之一:")
+        logger.info("   1. 手动编辑配置文件: core/search/config/search_api_config.json")
+        logger.info("   2. 使用环境变量")
+        logger.info("   3. 运行API密钥配置向导")
+
+        choice = input("\n请选择 (1/2/3): ").strip()
+
+        if choice == "1":
+            logger.info(f"📝 请编辑配置文件: {manager.config_file}")
+            logger.info("   将API密钥填入对应服务的 api_key 字段")
+            logger.info("   将 enabled 设置为 true")
+
+        elif choice == "2":
+            logger.info("🌍 使用环境变量配置:")
+            logger.info("   export TAVILY_API_KEY='your_tavily_key'")
+            logger.info("   export GOOGLE_API_KEY='your_google_key'")
+            logger.info("   export BOCHA_API_KEY='your_bocha_key'")
+
+            # 从环境变量加载
+            tavily_key = os.getenv("TAVILY_API_KEY")
+            if tavily_key:
+                manager.update_api_key("tavily", tavily_key)
+                logger.info("✅ 已配置Tavily API密钥")
+
+            google_key = os.getenv("GOOGLE_API_KEY")
+            if google_key:
+                manager.update_api_key("google_custom_search", google_key)
+                logger.info("✅ 已配置Google API密钥")
+
+        elif choice == "3":
+            await run_config_wizard(manager)
+
+    return manager
+
+
+async def run_config_wizard(manager):
+    """运行配置向导"""
+    logger.info("\n🧙‍♀️ API密钥配置向导")
+    logger.info(str("-" * 30))
+
+    services = {
+        "tavily": {
+            "name": "Tavily AI搜索",
+            "description": "强大的AI搜索引擎,支持实时搜索",
+            "signup_url": "https://tavily.com",
+        },
+        "google_custom_search": {
+            "name": "Google自定义搜索",
+            "description": "Google官方搜索引擎API",
+            "signup_url": "https://console.developers.google.com",
+        },
+        "bocha": {
+            "name": "Bocha AI搜索",
+            "description": "中文友好的AI搜索引擎",
+            "signup_url": "https://bochaai.com",
+        },
+    }
+
+    for service_id, service_info in services.items():
+        logger.info(f"\n🔍 {service_info['name']}")
+        logger.info(f"   描述: {service_info['description']}")
+        logger.info(f"   注册地址: {service_info['signup_url']}")
+
+        configure = input(f"   是否配置 {service_info['name']}? (y/n): ").lower().strip()
+
+        if configure == "y":
+            api_key = input("   请输入API密钥: ").strip()
+            if api_key:
+                additional_config = {}
+                if service_id == "google_custom_search":
+                    search_engine_id = input("   请输入搜索引擎ID: ").strip()
+                    additional_config["search_engine_id"] = search_engine_id
+
+                manager.update_api_key(service_id, api_key, **additional_config)
+                logger.info(f"   ✅ {service_info['name']} 配置成功")
+
+
+async def initialize_real_search_system():
+    """初始化真实搜索系统"""
+    logger.info("\n🚀 初始化真实搜索系统")
+    logger.info(str("=" * 50))
+
+    # 1. 设置API密钥
+    api_manager = await setup_api_keys()
+
+    # 2. 初始化Athena智能搜索系统
+    logger.info("\n📦 初始化Athena智能搜索系统...")
+    athena = await initialize_athena_smart_search()
+
+    if not athena:
+        logger.info("❌ Athena系统初始化失败")
+        return None
+
+    # 3. 注册真实Web搜索工具
+    logger.info("\n🔧 注册真实Web搜索工具...")
+    try:
+        web_config = api_manager.get_system_settings()
+        web_config.update(
+            {
+                "tavily_api_key": api_manager.get_api_key("tavily"),
+                "google_api_key": api_manager.get_api_key("google_custom_search"),
+                "bocha_api_key": api_manager.get_api_key("bocha"),
+                "metaso_api_key": api_manager.get_api_key("metaso"),
+            }
+        )
+
+        web_tool = await create_real_web_search(web_config)
+        if web_tool:
+            await athena.registry.register_tool(web_tool)
+            logger.info("✅ 真实Web搜索工具注册成功")
+        else:
+            logger.info("⚠️ 真实Web搜索工具注册失败")
+
+    except Exception as e:
+        logger.info(f"❌ Web搜索工具注册失败: {e}")
+
+    # 4. 注册真实专利搜索工具
+    logger.info("\n🔧 注册真实专利搜索工具...")
+    try:
+        patent_config = api_manager.get_patent_config()
+        patent_tool = await create_real_patent_search(patent_config)
+
+        if patent_tool:
+            await athena.registry.register_tool(patent_tool)
+            logger.info("✅ 真实专利搜索工具注册成功")
+        else:
+            logger.info("⚠️ 真实专利搜索工具注册失败")
+
+    except Exception as e:
+        logger.info(f"❌ 专利搜索工具注册失败: {e}")
+
+    # 5. 系统健康检查
+    logger.info("\n🏥 系统健康检查...")
+    health_status = await athena.health_check()
+    logger.info(f"系统状态: {health_status.get('status', 'unknown')}")
+
+    # 显示注册的工具
+    tools_info = athena.registry.list_tools()
+    logger.info("\n📋 已注册工具:")
+    for tool_info in tools_info:
+        logger.info(
+            f"   - {tool_info['name']} ({tool_info['category']}) - {'✅' if tool_info['healthy'] else '❌'}"
+        )
+
+    return athena
+
+
+async def demonstrate_real_search(athena):
+    """演示真实搜索功能"""
+    logger.info("\n🔍 真实搜索功能演示")
+    logger.info(str("-" * 40))
+
+    test_queries = [
+        {
+            "query": "人工智能最新技术发展",
+            "type": "general_web_search",
+            "expected_tools": ["web_search"],
+        },
+        {
+            "query": "US20230123456A1专利详情",
+            "type": "patent_search",
+            "expected_tools": ["patent_search"],
+        },
+        {
+            "query": "机器学习算法专利研究",
+            "type": "hybrid_search",
+            "expected_tools": ["web_search", "patent_search"],
+        },
+    ]
+
+    for i, test_case in enumerate(test_queries, 1):
+        logger.info(f"\n{i}. {test_case['query']}")
+        logger.info(f"   类型: {test_case['type']}")
+
+        try:
+            # 执行搜索
+            result = await athena.search_simple(test_case["query"], max_results=5)
+
+            logger.info("   ✅ 搜索成功")
+            logger.info(f"   📊 结果数: {len(result.fused_documents)}")
+            logger.info(f"   🛠️ 使用工具: {', '.join(result.tools_used)}")
+            logger.info(f"   ⏱️ 耗时: {result.total_time:.3f}s")
+
+            # 显示部分结果
+            if result.fused_documents:
+                logger.info("   📄 部分结果:")
+                for j, doc in enumerate(result.fused_documents[:2], 1):
+                    logger.info(f"      {j}. {doc.title[:50]}...")
+                    logger.info(f"         来源: {doc.metadata.get('source_tool', 'unknown')}")
+                    logger.info(f"         相关性: {doc.relevance_score:.2f}")
+
+        except Exception as e:
+            logger.info(f"   ❌ 搜索失败: {e}")
+
+
+async def interactive_real_search(athena):
+    """交互式真实搜索"""
+    logger.info("\n🎮 交互式真实搜索模式")
+    logger.info("输入 'quit' 退出")
+    logger.info(str("-" * 40))
+
+    while True:
+        try:
+            query = input("\n请输入搜索查询: ").strip()
+
+            if query.lower() in ["quit", "exit", "q"]:
+                logger.info("👋 退出搜索模式")
+                break
+
+            if not query:
+                continue
+
+            logger.info(f"\n🔍 正在搜索: {query}")
+
+            # 执行搜索
+            result = await athena.search_simple(query, max_results=8)
+
+            if result.fused_documents:
+                logger.info(
+                    f"✅ 找到 {len(result.fused_documents)} 个文档 (耗时: {result.total_time:.3f}s)"
+                )
+                logger.info(f"🛠️ 使用工具: {', '.join(result.tools_used)}")
+
+                logger.info("\n搜索结果:")
+                for i, doc in enumerate(result.fused_documents[:5], 1):
+                    logger.info(f"\n{i}. {doc.title}")
+                    logger.info(f"   来源: {doc.metadata.get('source_tool', 'unknown')}")
+                    logger.info(f"   相关性: {doc.relevance_score:.2f}")
+                    if doc.url:
+                        logger.info(f"   链接: {doc.url}")
+                    if doc.snippet:
+                        logger.info(f"   摘要: {doc.snippet[:100]}...")
+            else:
+                logger.info("❌ 未找到相关文档")
+
+        except KeyboardInterrupt:
+            logger.info("\n👋 用户中断,退出搜索模式")
+            break
+        except Exception as e:
+            logger.info(f"❌ 搜索出错: {e}")
+
+
+@async_main
+async def main():
+    """主函数"""
+    import argparse
+
+    parser = argparse.ArgumentParser(description="真实搜索工具集成演示")
+    parser.add_argument("--interactive", "-i", action="store_true", help="启动交互模式")
+    parser.add_argument("--demo", "-d", action="store_true", help="运行演示模式")
+    parser.add_argument("--query", "-q", help="执行单次搜索")
+    parser.add_argument("--config-only", "-c", action="store_true", help="仅配置API密钥")
+
+    args = parser.parse_args()
+
+    if args.config_only:
+        # 仅配置模式
+        await setup_api_keys()
+        return
+
+    # 初始化系统
+    athena = await initialize_real_search_system()
+
+    if not athena:
+        logger.info("❌ 系统初始化失败,退出")
+        return
+
+    # 根据参数执行相应操作
+    if args.query:
+        # 单次搜索模式
+        logger.info(f"\n🔍 执行搜索: {args.query}")
+        result = await athena.search_simple(args.query, max_results=10)
+
+        if result.fused_documents:
+            logger.info(
+                f"✅ 找到 {len(result.fused_documents)} 个文档 (耗时: {result.total_time:.3f}s)"
+            )
+
+            for i, doc in enumerate(result.fused_documents, 1):
+                logger.info(f"\n{i}. {doc.title}")
+                logger.info(f"   来源: {doc.metadata.get('source_tool', 'unknown')}")
+                logger.info(f"   相关性: {doc.relevance_score:.2f}")
+                if doc.url:
+                    logger.info(f"   链接: {doc.url}")
+                if doc.snippet:
+                    logger.info(f"   摘要: {doc.snippet}")
+        else:
+            logger.info("❌ 未找到相关文档")
+
+    elif args.interactive:
+        # 交互模式
+        await interactive_real_search(athena)
+
+    elif args.demo:
+        # 演示模式
+        await demonstrate_real_search(athena)
+
+    else:
+        # 默认模式
+        logger.info("\n💡 使用提示:")
+        logger.info("   --interactive: 启动交互搜索模式")
+        logger.info("   --demo: 运行搜索演示")
+        logger.info("   --query '搜索内容': 执行单次搜索")
+        logger.info("   --config-only: 仅配置API密钥")
+
+
+if __name__ == "__main__":
+    import os
+
+    asyncio.run(main())

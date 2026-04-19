@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 多模态系统集成测试
 Multimodal System Integration Test
@@ -8,20 +7,22 @@ Multimodal System Integration Test
 """
 
 import asyncio
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import sys
-import os
-from pathlib import Path
 import json
-import time
-import httpx
+import os
+import sys
 import tempfile
+import time
 from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+import httpx
 
 # 添加项目路径
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
 from storage_manager import MultimodalStorageManager, ProcessingStatus
+
 
 class IntegrationTester:
     """集成测试器"""
@@ -197,7 +198,7 @@ class IntegrationTester:
             start_time = time.time()
             try:
                 with tempfile.NamedTemporaryFile(suffix='.txt', delete=False) as f:
-                    f.write("This is a test document for OCR recognition.".encode('utf-8'))
+                    f.write(b"This is a test document for OCR recognition.")
                     test_file_path = f.name
 
                 self.temp_files.append(test_file_path)

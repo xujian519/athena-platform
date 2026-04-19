@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 可解释认知模块 - 数据模型
 Explainable Cognition Module - Data Models

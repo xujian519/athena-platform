@@ -1,0 +1,727 @@
+{
+  "analysis_timestamp": "2026-02-20T10:23:28.557731",
+  "databases": {
+    "xiaonuo_knowledge.db": {
+      "schema_analysis": {
+        "database_path": "/Users/xujian/Athena工作平台/data/xiaonuo_knowledge.db",
+        "file_size_mb": 0.046875,
+        "table_count": 4,
+        "tables": {
+          "knowledge_items": {
+            "column_count": 13,
+            "row_count": 40,
+            "index_count": 3,
+            "columns": [
+              {
+                "name": "id",
+                "type": "INTEGER",
+                "primary_key": 1
+              },
+              {
+                "name": "title",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "category",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "subcategory",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "content",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "keywords",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "importance",
+                "type": "INTEGER",
+                "primary_key": 0
+              },
+              {
+                "name": "confidence",
+                "type": "REAL",
+                "primary_key": 0
+              },
+              {
+                "name": "source",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "created_at",
+                "type": "TIMESTAMP",
+                "primary_key": 0
+              },
+              {
+                "name": "updated_at",
+                "type": "TIMESTAMP",
+                "primary_key": 0
+              },
+              {
+                "name": "access_count",
+                "type": "INTEGER",
+                "primary_key": 0
+              },
+              {
+                "name": "last_accessed",
+                "type": "TIMESTAMP",
+                "primary_key": 0
+              }
+            ],
+            "indexes": [
+              {
+                "name": "idx_importance",
+                "unique": 0
+              },
+              {
+                "name": "idx_keywords",
+                "unique": 0
+              },
+              {
+                "name": "idx_category",
+                "unique": 0
+              }
+            ]
+          },
+          "sqlite_sequence": {
+            "column_count": 2,
+            "row_count": 1,
+            "index_count": 0,
+            "columns": [
+              {
+                "name": "name",
+                "type": "",
+                "primary_key": 0
+              },
+              {
+                "name": "seq",
+                "type": "",
+                "primary_key": 0
+              }
+            ],
+            "indexes": []
+          },
+          "knowledge_relations": {
+            "column_count": 5,
+            "row_count": 0,
+            "index_count": 0,
+            "columns": [
+              {
+                "name": "id",
+                "type": "INTEGER",
+                "primary_key": 1
+              },
+              {
+                "name": "item_id1",
+                "type": "INTEGER",
+                "primary_key": 0
+              },
+              {
+                "name": "item_id2",
+                "type": "INTEGER",
+                "primary_key": 0
+              },
+              {
+                "name": "relation_type",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "strength",
+                "type": "REAL",
+                "primary_key": 0
+              }
+            ],
+            "indexes": []
+          },
+          "query_history": {
+            "column_count": 5,
+            "row_count": 0,
+            "index_count": 0,
+            "columns": [
+              {
+                "name": "id",
+                "type": "INTEGER",
+                "primary_key": 1
+              },
+              {
+                "name": "query",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "matched_items",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "context",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "timestamp",
+                "type": "TIMESTAMP",
+                "primary_key": 0
+              }
+            ],
+            "indexes": []
+          }
+        }
+      },
+      "query_performance": {
+        "table": "knowledge_items",
+        "query_performance": {
+          "count_all": {
+            "sql": "SELECT COUNT(*) FROM knowledge_items",
+            "description": "统计总记录数",
+            "avg_time_ms": 0.005817413330078125,
+            "min_time_ms": 0.0030994415283203125,
+            "max_time_ms": 0.02193450927734375,
+            "std_dev_ms": 0.005687947577237357,
+            "result_count": 1,
+            "success_rate": 1.0
+          },
+          "select_first_10": {
+            "sql": "SELECT * FROM knowledge_items LIMIT 10",
+            "description": "获取前10条记录",
+            "avg_time_ms": 0.019216537475585938,
+            "min_time_ms": 0.015735626220703125,
+            "max_time_ms": 0.03910064697265625,
+            "std_dev_ms": 0.007060303731403575,
+            "result_count": 10,
+            "success_rate": 1.0
+          },
+          "select_with_order": {
+            "sql": "SELECT * FROM knowledge_items ORDER BY rowid DESC LIMIT 10",
+            "description": "按ID倒序获取前10条记录",
+            "avg_time_ms": 0.018405914306640625,
+            "min_time_ms": 0.015735626220703125,
+            "max_time_ms": 0.034809112548828125,
+            "std_dev_ms": 0.005918247334722003,
+            "result_count": 10,
+            "success_rate": 1.0
+          },
+          "text_search": {
+            "sql": "SELECT * FROM knowledge_items WHERE title LIKE '%test%' LIMIT 10",
+            "description": "在title字段中搜索",
+            "avg_time_ms": 0.0077724456787109375,
+            "min_time_ms": 0.0057220458984375,
+            "max_time_ms": 0.02288818359375,
+            "std_dev_ms": 0.005321952727872725,
+            "result_count": 0,
+            "success_rate": 1.0
+          }
+        }
+      },
+      "write_performance": {
+        "table": "performance_test",
+        "single_insert": {
+          "avg_time_ms": 0.282595157623291,
+          "min_time_ms": 0.14495849609375,
+          "max_time_ms": 3.014802932739258,
+          "total_records": 100
+        },
+        "batch_insert": {
+          "batch_10": {
+            "total_time_ms": 0.3998279571533203,
+            "avg_time_per_record_ms": 0.03998279571533203,
+            "records_per_second": 25010.757304710794
+          },
+          "batch_50": {
+            "total_time_ms": 0.19097328186035156,
+            "avg_time_per_record_ms": 0.0038194656372070312,
+            "records_per_second": 261816.7290886392
+          },
+          "batch_100": {
+            "total_time_ms": 0.2548694610595703,
+            "avg_time_per_record_ms": 0.002548694610595703,
+            "records_per_second": 392357.7174929841
+          },
+          "batch_500": {
+            "total_time_ms": 0.5300045013427734,
+            "avg_time_per_record_ms": 0.0010600090026855469,
+            "records_per_second": 943388.2141250563
+          }
+        },
+        "update": {
+          "avg_time_ms": 0.1746511459350586,
+          "min_time_ms": 0.14209747314453125,
+          "max_time_ms": 0.240325927734375,
+          "total_records": 50
+        },
+        "delete": {
+          "avg_time_ms": 0.2269887924194336,
+          "min_time_ms": 0.1442432403564453,
+          "max_time_ms": 2.9010772705078125,
+          "total_records": 50
+        }
+      },
+      "optimization_recommendations": [
+        "💾 批量写入性能显著优于单条写入(0.00ms vs 0.28ms)，建议使用批量操作",
+        "🔧 定期执行 VACUUM 命令清理数据库碎片",
+        "📊 监控数据库文件大小，避免过度增长",
+        "🛡️ 对重要表添加外键约束确保数据完整性",
+        "📈 定期分析查询计划，优化慢查询"
+      ]
+    },
+    "online_learning.db": {
+      "schema_analysis": {
+        "database_path": "/Users/xujian/Athena工作平台/data/online_learning.db",
+        "file_size_mb": 0.02734375,
+        "table_count": 4,
+        "tables": {
+          "learning_records": {
+            "column_count": 9,
+            "row_count": 1,
+            "index_count": 0,
+            "columns": [
+              {
+                "name": "id",
+                "type": "INTEGER",
+                "primary_key": 1
+              },
+              {
+                "name": "timestamp",
+                "type": "DATETIME",
+                "primary_key": 0
+              },
+              {
+                "name": "text",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "predicted_intent",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "true_intent",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "confidence",
+                "type": "REAL",
+                "primary_key": 0
+              },
+              {
+                "name": "feedback_type",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "learning_weight",
+                "type": "REAL",
+                "primary_key": 0
+              },
+              {
+                "name": "processed",
+                "type": "BOOLEAN",
+                "primary_key": 0
+              }
+            ],
+            "indexes": []
+          },
+          "sqlite_sequence": {
+            "column_count": 2,
+            "row_count": 1,
+            "index_count": 0,
+            "columns": [
+              {
+                "name": "name",
+                "type": "",
+                "primary_key": 0
+              },
+              {
+                "name": "seq",
+                "type": "",
+                "primary_key": 0
+              }
+            ],
+            "indexes": []
+          },
+          "model_versions": {
+            "column_count": 8,
+            "row_count": 0,
+            "index_count": 1,
+            "columns": [
+              {
+                "name": "id",
+                "type": "INTEGER",
+                "primary_key": 1
+              },
+              {
+                "name": "version",
+                "type": "INTEGER",
+                "primary_key": 0
+              },
+              {
+                "name": "created_at",
+                "type": "DATETIME",
+                "primary_key": 0
+              },
+              {
+                "name": "training_samples",
+                "type": "INTEGER",
+                "primary_key": 0
+              },
+              {
+                "name": "accuracy",
+                "type": "REAL",
+                "primary_key": 0
+              },
+              {
+                "name": "improvement",
+                "type": "REAL",
+                "primary_key": 0
+              },
+              {
+                "name": "metadata",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "is_active",
+                "type": "BOOLEAN",
+                "primary_key": 0
+              }
+            ],
+            "indexes": [
+              {
+                "name": "sqlite_autoindex_model_versions_1",
+                "unique": 1
+              }
+            ]
+          },
+          "performance_stats": {
+            "column_count": 8,
+            "row_count": 0,
+            "index_count": 1,
+            "columns": [
+              {
+                "name": "id",
+                "type": "INTEGER",
+                "primary_key": 1
+              },
+              {
+                "name": "date",
+                "type": "DATE",
+                "primary_key": 0
+              },
+              {
+                "name": "total_predictions",
+                "type": "INTEGER",
+                "primary_key": 0
+              },
+              {
+                "name": "correct_predictions",
+                "type": "INTEGER",
+                "primary_key": 0
+              },
+              {
+                "name": "accuracy",
+                "type": "REAL",
+                "primary_key": 0
+              },
+              {
+                "name": "new_samples",
+                "type": "INTEGER",
+                "primary_key": 0
+              },
+              {
+                "name": "model_updates",
+                "type": "INTEGER",
+                "primary_key": 0
+              },
+              {
+                "name": "timestamp",
+                "type": "DATETIME",
+                "primary_key": 0
+              }
+            ],
+            "indexes": [
+              {
+                "name": "sqlite_autoindex_performance_stats_1",
+                "unique": 1
+              }
+            ]
+          }
+        }
+      },
+      "query_performance": {
+        "table": "learning_records",
+        "query_performance": {
+          "count_all": {
+            "sql": "SELECT COUNT(*) FROM learning_records",
+            "description": "统计总记录数",
+            "avg_time_ms": 0.0033855438232421875,
+            "min_time_ms": 0.0026226043701171875,
+            "max_time_ms": 0.0069141387939453125,
+            "std_dev_ms": 0.001250530132469873,
+            "result_count": 1,
+            "success_rate": 1.0
+          },
+          "select_first_10": {
+            "sql": "SELECT * FROM learning_records LIMIT 10",
+            "description": "获取前10条记录",
+            "avg_time_ms": 0.00457763671875,
+            "min_time_ms": 0.0030994415283203125,
+            "max_time_ms": 0.010967254638671875,
+            "std_dev_ms": 0.002264070050629858,
+            "result_count": 1,
+            "success_rate": 1.0
+          },
+          "select_with_order": {
+            "sql": "SELECT * FROM learning_records ORDER BY rowid DESC LIMIT 10",
+            "description": "按ID倒序获取前10条记录",
+            "avg_time_ms": 0.0045299530029296875,
+            "min_time_ms": 0.00286102294921875,
+            "max_time_ms": 0.010967254638671875,
+            "std_dev_ms": 0.002365569443088725,
+            "result_count": 1,
+            "success_rate": 1.0
+          },
+          "text_search": {
+            "sql": "SELECT * FROM learning_records WHERE text LIKE '%test%' LIMIT 10",
+            "description": "在text字段中搜索",
+            "avg_time_ms": 0.004100799560546875,
+            "min_time_ms": 0.00286102294921875,
+            "max_time_ms": 0.011920928955078125,
+            "std_dev_ms": 0.0027845003739655366,
+            "result_count": 0,
+            "success_rate": 1.0
+          }
+        }
+      },
+      "write_performance": {
+        "table": "performance_test",
+        "single_insert": {
+          "avg_time_ms": 0.2563643455505371,
+          "min_time_ms": 0.1380443572998047,
+          "max_time_ms": 2.6979446411132812,
+          "total_records": 100
+        },
+        "batch_insert": {
+          "batch_10": {
+            "total_time_ms": 0.1881122589111328,
+            "avg_time_per_record_ms": 0.01881122589111328,
+            "records_per_second": 53159.74651457541
+          },
+          "batch_50": {
+            "total_time_ms": 0.1728534698486328,
+            "avg_time_per_record_ms": 0.0034570693969726562,
+            "records_per_second": 289262.3448275862
+          },
+          "batch_100": {
+            "total_time_ms": 0.244140625,
+            "avg_time_per_record_ms": 0.00244140625,
+            "records_per_second": 409600.0
+          },
+          "batch_500": {
+            "total_time_ms": 0.48089027404785156,
+            "avg_time_per_record_ms": 0.0009617805480957031,
+            "records_per_second": 1039738.2250867626
+          }
+        },
+        "update": {
+          "avg_time_ms": 0.19588470458984375,
+          "min_time_ms": 0.13899803161621094,
+          "max_time_ms": 2.393007278442383,
+          "total_records": 50
+        },
+        "delete": {
+          "avg_time_ms": 0.1483011245727539,
+          "min_time_ms": 0.14090538024902344,
+          "max_time_ms": 0.15997886657714844,
+          "total_records": 50
+        }
+      },
+      "optimization_recommendations": [
+        "💾 批量写入性能显著优于单条写入(0.00ms vs 0.26ms)，建议使用批量操作",
+        "🔧 定期执行 VACUUM 命令清理数据库碎片",
+        "📊 监控数据库文件大小，避免过度增长",
+        "🛡️ 对重要表添加外键约束确保数据完整性",
+        "📈 定期分析查询计划，优化慢查询"
+      ]
+    },
+    "user_preferences.db": {
+      "schema_analysis": {
+        "database_path": "/Users/xujian/Athena工作平台/data/user_preferences.db",
+        "file_size_mb": 0.01171875,
+        "table_count": 1,
+        "tables": {
+          "user_preferences": {
+            "column_count": 10,
+            "row_count": 0,
+            "index_count": 1,
+            "columns": [
+              {
+                "name": "user_id",
+                "type": "TEXT",
+                "primary_key": 1
+              },
+              {
+                "name": "response_detail",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "technical_depth",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "language_style",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "output_format",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "preferred_capabilities",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "avoided_topics",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "custom_prompts",
+                "type": "TEXT",
+                "primary_key": 0
+              },
+              {
+                "name": "created_at",
+                "type": "REAL",
+                "primary_key": 0
+              },
+              {
+                "name": "updated_at",
+                "type": "REAL",
+                "primary_key": 0
+              }
+            ],
+            "indexes": [
+              {
+                "name": "sqlite_autoindex_user_preferences_1",
+                "unique": 1
+              }
+            ]
+          }
+        }
+      },
+      "query_performance": {
+        "table": "user_preferences",
+        "query_performance": {
+          "count_all": {
+            "sql": "SELECT COUNT(*) FROM user_preferences",
+            "description": "统计总记录数",
+            "avg_time_ms": 0.0038862228393554688,
+            "min_time_ms": 0.00286102294921875,
+            "max_time_ms": 0.0069141387939453125,
+            "std_dev_ms": 0.00116285931021097,
+            "result_count": 1,
+            "success_rate": 1.0
+          },
+          "select_first_10": {
+            "sql": "SELECT * FROM user_preferences LIMIT 10",
+            "description": "获取前10条记录",
+            "avg_time_ms": 0.004696846008300781,
+            "min_time_ms": 0.0030994415283203125,
+            "max_time_ms": 0.012874603271484375,
+            "std_dev_ms": 0.0029005960740755483,
+            "result_count": 0,
+            "success_rate": 1.0
+          },
+          "select_with_order": {
+            "sql": "SELECT * FROM user_preferences ORDER BY rowid DESC LIMIT 10",
+            "description": "按ID倒序获取前10条记录",
+            "avg_time_ms": 0.004887580871582031,
+            "min_time_ms": 0.00286102294921875,
+            "max_time_ms": 0.017881393432617188,
+            "std_dev_ms": 0.004593297541037728,
+            "result_count": 0,
+            "success_rate": 1.0
+          },
+          "text_search": {
+            "sql": "SELECT * FROM user_preferences WHERE user_id LIKE '%test%' LIMIT 10",
+            "description": "在user_id字段中搜索",
+            "avg_time_ms": 0.0051021575927734375,
+            "min_time_ms": 0.00286102294921875,
+            "max_time_ms": 0.02193450927734375,
+            "std_dev_ms": 0.005931465814921533,
+            "result_count": 0,
+            "success_rate": 1.0
+          }
+        }
+      },
+      "write_performance": {
+        "table": "performance_test",
+        "single_insert": {
+          "avg_time_ms": 0.314481258392334,
+          "min_time_ms": 0.13399124145507812,
+          "max_time_ms": 4.281044006347656,
+          "total_records": 100
+        },
+        "batch_insert": {
+          "batch_10": {
+            "total_time_ms": 0.20694732666015625,
+            "avg_time_per_record_ms": 0.020694732666015625,
+            "records_per_second": 48321.47465437788
+          },
+          "batch_50": {
+            "total_time_ms": 0.1888275146484375,
+            "avg_time_per_record_ms": 0.00377655029296875,
+            "records_per_second": 264791.9191919192
+          },
+          "batch_100": {
+            "total_time_ms": 0.24509429931640625,
+            "avg_time_per_record_ms": 0.0024509429931640625,
+            "records_per_second": 408006.22568093386
+          },
+          "batch_500": {
+            "total_time_ms": 0.4589557647705078,
+            "avg_time_per_record_ms": 0.0009179115295410156,
+            "records_per_second": 1089429.6103896103
+          }
+        },
+        "update": {
+          "avg_time_ms": 0.3053760528564453,
+          "min_time_ms": 0.1361370086669922,
+          "max_time_ms": 2.7687549591064453,
+          "total_records": 50
+        },
+        "delete": {
+          "avg_time_ms": 0.1500225067138672,
+          "min_time_ms": 0.13709068298339844,
+          "max_time_ms": 0.21886825561523438,
+          "total_records": 50
+        }
+      },
+      "optimization_recommendations": [
+        "💾 批量写入性能显著优于单条写入(0.00ms vs 0.31ms)，建议使用批量操作",
+        "🔧 定期执行 VACUUM 命令清理数据库碎片",
+        "📊 监控数据库文件大小，避免过度增长",
+        "🛡️ 对重要表添加外键约束确保数据完整性",
+        "📈 定期分析查询计划，优化慢查询"
+      ]
+    }
+  }
+}

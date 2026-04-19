@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台MCP服务器
 Athena Platform MCP Server
@@ -19,7 +20,7 @@ Athena Platform MCP Server
 
 import json
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
@@ -89,7 +90,7 @@ async def list_tools() -> list[Tool]:
                     "include_citations": {
                         "type": "boolean",
                         "description": "是否包含引用分析",
-                        "default": true,
+                        "default": True,
                     },
                 },
                 "required": ["patent_id"],
@@ -169,12 +170,12 @@ async def list_tools() -> list[Tool]:
                     "include_text_similarity": {
                         "type": "boolean",
                         "description": "是否包含文本相似度分析",
-                        "default": true,
+                        "default": True,
                     },
                     "include_technology_overlap": {
                         "type": "boolean",
                         "description": "是否包含技术重叠度分析",
-                        "default": true,
+                        "default": True,
                     },
                 },
                 "required": ["patent_id1", "patent_id2"],
@@ -195,7 +196,7 @@ async def list_tools() -> list[Tool]:
                     "extract_elements": {
                         "type": "boolean",
                         "description": "是否提取技术特征要素",
-                        "default": true,
+                        "default": True,
                     },
                 },
                 "required": ["patent_id"],

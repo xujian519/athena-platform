@@ -1,0 +1,18 @@
+{
+	"ulid": "01KFC17N75SGB6WFS2GCFRTDC6",
+	"minTime": 1768845601105,
+	"maxTime": 1768852800000,
+	"stats": {
+		"numSamples": 148662,
+		"numFloatSamples": 148662,
+		"numSeries": 739,
+		"numChunks": 1473
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01KFC17N75SGB6WFS2GCFRTDC6"
+		]
+	},
+	"version": 1
+}

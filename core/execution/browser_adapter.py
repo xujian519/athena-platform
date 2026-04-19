@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 浏览器自动化适配器
 Browser Automation Adapter
@@ -16,8 +17,7 @@ Browser Automation Adapter
 import asyncio
 import logging
 from dataclasses import dataclass
-from typing import Any, Dict, Optional
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

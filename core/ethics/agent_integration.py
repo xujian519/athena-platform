@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 智能体伦理集成示例
 Agent Ethics Integration Example
@@ -6,8 +7,7 @@ Agent Ethics Integration Example
 """
 
 import logging
-from typing import Any, Dict, Optional
-
+from typing import Any
 
 from .constitution import AthenaConstitution
 from .constraints import ConstraintEnforcer, EthicalConstraint, ethical_action

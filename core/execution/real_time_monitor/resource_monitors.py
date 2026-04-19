@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 实时执行监控系统 - 资源监控器
 Real-time Execution Monitoring System - Resource Monitors

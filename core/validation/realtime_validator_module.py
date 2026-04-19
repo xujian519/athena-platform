@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 轻量级实时参数验证模块
 Lightweight Realtime Parameter Validator Module
@@ -25,8 +26,7 @@ from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -83,7 +83,7 @@ class ParameterSchema:
     min_length: int | None = None
     max_length: int | None = None
     pattern: str | None = None
-    enum: list["key"] = None
+    enum: list[str] = None
     custom_validator: Callable | None = None
 
     # 验证规则描述
@@ -468,7 +468,7 @@ class LightweightRealtimeValidator:
         return previous_result
 
     async def validate_batch(
-        self, parameter_sets: list[dict[str, Any]) -> list[dict[str, ValidationResult]]:
+        self, parameter_sets: list[dict[str, Any]]) -> list[dict[str, ValidationResult]]:
         """
         批量验证多组参数
 
@@ -565,7 +565,7 @@ class LightweightRealtimeValidator:
 _validator_instance: LightweightRealtimeValidator | None = None
 
 
-def get_realtime_validator(config: Optional[dict | None = None) -> LightweightRealtimeValidator:
+def get_realtime_validator(config: dict | None = None) -> LightweightRealtimeValidator:
     """获取实时验证器单例"""
     global _validator_instance
     if _validator_instance is None:

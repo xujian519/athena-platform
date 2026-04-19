@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 智能项目清理工具
 Smart Project Cleaner
@@ -19,8 +18,6 @@ import shutil
 import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple
 
 # 配置日志
 logging.basicConfig(
@@ -54,9 +51,9 @@ class SmartProjectCleaner:
     def __init__(self, project_path: str = None):
         self.project_path = project_path or '/Users/xujian/Athena工作平台'
         self.backup_dir = os.path.join(self.project_path, '.backup', f"cleanup_{int(time.time())}")
-        self.file_registry: Dict[str, FileInfo] = {}
-        self.duplicate_groups: List[List[str]] = []
-        self.cleanup_candidates: List[FileInfo] = []
+        self.file_registry: dict[str, FileInfo] = {}
+        self.duplicate_groups: list[list[str]] = []
+        self.cleanup_candidates: list[FileInfo] = []
 
         # 安全设置
         self.safe_extensions = {'.py', '.js', '.html', '.css', '.md', '.txt', '.json', '.yml', '.yaml', '.sh'}
@@ -74,11 +71,11 @@ class SmartProjectCleaner:
             'files_deleted': 0
         }
 
-        logger.info(f"🧹 初始化智能项目清理器")
+        logger.info("🧹 初始化智能项目清理器")
         logger.info(f"项目路径: {self.project_path}")
         logger.info(f"备份目录: {self.backup_dir}")
 
-    async def scan_project(self) -> Dict[str, any]:
+    async def scan_project(self) -> dict[str, any]:
         """扫描项目并识别冗余文件"""
         logger.info('🔍 开始扫描项目文件...')
         logger.info(str('=' * 60))
@@ -189,7 +186,7 @@ class SmartProjectCleaner:
         logger.info('🔍 查找重复文件...')
 
         # 按哈希值分组
-        hash_groups: Dict[str, List[str]] = {}
+        hash_groups: dict[str, list[str]] = {}
         for file_path, file_info in self.file_registry.items():
             if file_info.file_hash and file_info.size > self.duplicate_threshold:
                 if file_info.file_hash not in hash_groups:
@@ -198,7 +195,7 @@ class SmartProjectCleaner:
 
         # 找出重复的文件组
         duplicate_count = 0
-        for file_hash, file_list in hash_groups.items():
+        for _file_hash, file_list in hash_groups.items():
             if len(file_list) > 1:
                 self.duplicate_groups.append(file_list)
                 duplicate_count += len(file_list) - 1
@@ -221,7 +218,7 @@ class SmartProjectCleaner:
 
         unused_count = 0
 
-        for file_path, file_info in self.file_registry.items():
+        for _file_path, file_info in self.file_registry.items():
             if file_info.is_duplicate:
                 continue
 
@@ -274,7 +271,7 @@ class SmartProjectCleaner:
         expired_count = 0
         cutoff_date = datetime.now() - timedelta(days=self.max_file_age_days)
 
-        for file_path, file_info in self.file_registry.items():
+        for _file_path, file_info in self.file_registry.items():
             if file_info.is_duplicate:
                 continue
 
@@ -318,7 +315,7 @@ class SmartProjectCleaner:
             else:
                 file_info.deletion_risk = 'low'
 
-    async def _generate_scan_report(self) -> Dict[str, any]:
+    async def _generate_scan_report(self) -> dict[str, any]:
         """生成扫描报告"""
         logger.info('📊 生成扫描报告...')
 
@@ -357,7 +354,7 @@ class SmartProjectCleaner:
 
         return report
 
-    def _generate_recommendations(self) -> List[str]:
+    def _generate_recommendations(self) -> list[str]:
         """生成清理建议"""
         recommendations = []
 
@@ -375,7 +372,7 @@ class SmartProjectCleaner:
 
         return recommendations
 
-    async def _save_detailed_report(self, report: Dict[str, any]):
+    async def _save_detailed_report(self, report: dict[str, any]):
         """保存详细报告"""
         report_file = os.path.join(self.backup_dir, 'cleanup_report.json')
 
@@ -402,7 +399,7 @@ class SmartProjectCleaner:
 
         logger.info(f"📄 详细报告已保存到: {report_file}")
 
-    async def safe_cleanup(self, delete_high_risk: bool = False, delete_medium_risk: bool = False) -> Dict[str, any]:
+    async def safe_cleanup(self, delete_high_risk: bool = False, delete_medium_risk: bool = False) -> dict[str, any]:
         """安全清理文件"""
         logger.info('🧹 开始安全清理...')
         logger.info(str('=' * 60))
@@ -462,7 +459,7 @@ class SmartProjectCleaner:
         # 保存删除记录
         await self._save_deletion_record(deleted_files, failed_files)
 
-        logger.info(f"\n🎉 清理完成！")
+        logger.info("\n🎉 清理完成！")
         logger.info(f"   ✅ 成功删除: {len(deleted_files)} 个文件")
         logger.info(f"   ❌ 删除失败: {len(failed_files)} 个文件")
         logger.info(f"   💾 释放空间: {self._format_size(space_freed)}")
@@ -477,7 +474,7 @@ class SmartProjectCleaner:
             'failed_files': failed_files
         }
 
-    async def _save_deletion_record(self, deleted_files: List[Dict], failed_files: List[Dict]):
+    async def _save_deletion_record(self, deleted_files: list[dict], failed_files: list[dict]):
         """保存删除记录"""
         record_file = os.path.join(self.backup_dir, 'deletion_record.json')
 
@@ -508,10 +505,10 @@ class SmartProjectCleaner:
             logger.info('❌ 没有找到备份文件')
             return
 
-        logger.info(f"🔄 从备份恢复文件...")
+        logger.info("🔄 从备份恢复文件...")
         restored_count = 0
 
-        for root, dirs, files in os.walk(backup_files_dir):
+        for root, _dirs, files in os.walk(backup_files_dir):
             for file in files:
                 backup_path = os.path.join(root, file)
                 # 这里需要根据实际的备份结构来恢复文件
@@ -566,7 +563,7 @@ async def main():
 
             cleanup_result = await cleaner.safe_cleanup(delete_medium_risk=delete_medium, delete_high_risk=delete_high)
 
-            logger.info(f"\n📋 清理结果:")
+            logger.info("\n📋 清理结果:")
             logger.info(f"   ✅ 成功删除: {cleanup_result['deleted_count']} 个文件")
             logger.info(f"   ❌ 删除失败: {cleanup_result['failed_count']} 个文件")
             logger.info(f"   💾 释放空间: {cleaner._format_size(cleanup_result['space_freed'])}")

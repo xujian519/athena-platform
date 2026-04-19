@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena法律世界模型宪法 - 核心定义
 Constitution of Athena Legal World Model
@@ -20,7 +21,7 @@ Constitution of Athena Legal World Model
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Union
+from typing import Any
 from uuid import uuid4
 
 # =============================================================================
@@ -452,18 +453,18 @@ class ConstitutionalValidator:
             if isinstance(entity_type, str):
                 entity_type = LegalEntityType(entity_type)
             elif not isinstance(entity_type, LegalEntityType):
-                raise ValueError(f"entity_type 必须是 LegalEntityType 枚举值")
+                raise ValueError("entity_type 必须是 LegalEntityType 枚举值")
         except ValueError:
-            raise ValueError(f"无效的实体类型: {entity_type}")
+            raise ValueError(f"无效的实体类型: {entity_type}") from None
 
         # 验证层级是否合法
         try:
             if isinstance(layer, str):
                 layer = LayerType(layer)
             elif not isinstance(layer, LayerType):
-                raise ValueError(f"layer 必须是 LayerType 枚举值")
+                raise ValueError("layer 必须是 LayerType 枚举值")
         except ValueError:
-            raise ValueError(f"无效的层级: {layer}")
+            raise ValueError(f"无效的层级: {layer}") from None
 
         # 实体类型和层级的匹配验证
         # 第一层(基础法律层)只能包含法律规则实体
@@ -518,9 +519,9 @@ class ConstitutionalValidator:
                 if isinstance(source_type, str):
                     source_type = DocumentSource(source_type)
                 elif not isinstance(source_type, DocumentSource):
-                    raise ValueError(f"source_type 必须是 DocumentSource 枚举值")
+                    raise ValueError("source_type 必须是 DocumentSource 枚举值")
             except ValueError:
-                raise ValueError(f"无效的来源类型: {source_type}")
+                raise ValueError(f"无效的来源类型: {source_type}") from None
 
             if source_type not in authoritative_sources:
                 raise ValueError(

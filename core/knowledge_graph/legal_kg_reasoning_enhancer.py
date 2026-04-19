@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律知识图谱推理增强器
 Legal Knowledge Graph Reasoning Enhancer
@@ -14,8 +15,7 @@ import json
 import logging
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
-
+from typing import Any
 
 from .kg_integration import (
     Entity,

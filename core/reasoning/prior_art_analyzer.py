@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 现有技术图谱分析引擎
 Prior Art Knowledge Graph Analyzer
@@ -16,7 +17,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any
 
-
+import networkx as nx
 
 from ..knowledge.patent_analysis.enhanced_knowledge_graph import EnhancedPatentKnowledgeGraph
 
@@ -181,7 +182,7 @@ class PriorArtAnalyzer:
             self.logger.info("✅ PriorArtAnalyzer 初始化完成")
             return True
 
-        except Exception as e:
+        except Exception:
             return False
 
     async def _build_technology_graph(self):
@@ -201,6 +202,7 @@ class PriorArtAnalyzer:
             )
 
         except Exception as e:
+            self.logger.error(f"技术图谱构建失败: {e}")
 
     async def _load_patent_data(self):
         """加载专利数据"""
@@ -227,6 +229,7 @@ class PriorArtAnalyzer:
             self.stats["patents_analyzed"] = len(self.patents)
 
         except Exception as e:
+            self.logger.error(f"专利数据加载失败: {e}")
 
     async def _extract_technology_relations(self):
         """提取技术关系"""
@@ -254,6 +257,7 @@ class PriorArtAnalyzer:
             self.stats["relations_extracted"] = len(self.relations)
 
         except Exception as e:
+            self.logger.error(f"技术关系提取失败: {e}")
 
     async def _analyze_relation(
         self, source_id: str, target_id: str, relation_type: str
@@ -287,7 +291,7 @@ class PriorArtAnalyzer:
                 evidence=evidence,
             )
 
-        except Exception as e:
+        except Exception:
             return None
 
     async def _calculate_relation_strength(
@@ -325,7 +329,7 @@ class PriorArtAnalyzer:
 
             return min(1.0, base_strength)
 
-        except Exception as e:
+        except Exception:
             return 0.5
 
     async def _gather_relation_evidence(
@@ -354,6 +358,7 @@ class PriorArtAnalyzer:
                     evidence.append(f"同一技术领域: {source_field}")
 
         except Exception as e:
+            self.logger.warning(f"证据生成失败: {e}")
 
         return evidence
 
@@ -367,6 +372,7 @@ class PriorArtAnalyzer:
             self._identify_key_nodes()
 
         except Exception as e:
+            self.logger.error(f"网络结构构建失败: {e}")
 
     def _calculate_network_metrics(self) -> Any:
         """计算网络指标"""
@@ -393,6 +399,7 @@ class PriorArtAnalyzer:
                     )
 
         except Exception as e:
+            self.logger.warning(f"网络指标计算失败: {e}")
 
     def _identify_key_nodes(self) -> Any:
         """识别关键节点"""
@@ -424,6 +431,7 @@ class PriorArtAnalyzer:
                 self.patents[node_id].features["importance_score"] = score
 
         except Exception as e:
+            self.logger.warning(f"关键节点识别失败: {e}")
 
     async def analyze_technology_evolution(
         self, technology_field: str, time_range: tuple[datetime, datetime] | None = None
@@ -474,7 +482,7 @@ class PriorArtAnalyzer:
             self.logger.info(f"✅ 技术演进分析完成: {technology_field}")
             return evolution
 
-        except Exception as e:
+        except Exception:
             raise
 
     async def _filter_patents_by_field(
@@ -559,7 +567,7 @@ class PriorArtAnalyzer:
             return len(intersection) / len(union) if union else 0.0
 
         except Exception:
-        except Exception:
+            return 0.0
 
     async def _identify_key_innovations(self, evolution_path: list[TechNode]) -> list[TechNode]:
         """识别关键创新"""
@@ -625,7 +633,7 @@ class PriorArtAnalyzer:
                 tech_keywords = self._extract_technology_keywords(recent_patents)
 
                 # 基于关键词生成趋势预测
-                trends.extend([f"向{keyword}方向发展" for keyword in tech_keywords[:3])
+                trends.extend([f"向{keyword}方向发展" for keyword in tech_keywords[:3]])
 
             # 基于关键创新预测
             for innovation in key_innovations[:2]:
@@ -635,6 +643,7 @@ class PriorArtAnalyzer:
             trends.extend(["技术集成与融合", "智能化和自动化", "成本降低和效率提升"])
 
         except Exception as e:
+            self.logger.warning(f"趋势预测失败: {e}")
 
         return list(set(trends))  # 去重
 
@@ -723,7 +732,7 @@ class PriorArtAnalyzer:
             self.logger.info(f"✅ 技术路线图生成完成: {focus_technology}")
             return roadmap
 
-        except Exception as e:
+        except Exception:
             raise
 
     async def _identify_development_phases(self, evolution: TechEvolution) -> list[dict[str, Any]]:
@@ -744,7 +753,7 @@ class PriorArtAnalyzer:
             end_idx = min((i + 1) * patents_per_phase, total_patents)
 
             if start_idx < total_patents:
-                phase_patents = evolution.evolution_path[start_idx: end_idx,
+                phase_patents = evolution.evolution_path[start_idx:end_idx]
 
                 phase = {
                     "phase_name": phase_name,
@@ -772,7 +781,7 @@ class PriorArtAnalyzer:
         return focus_map.get(phase_name, "持续改进")
 
     async def _identify_key_milestones(
-        self, evolution: TechEvolution, development_phases: list[dict[str, Any]) -> list[TechNode]:
+        self, evolution: TechEvolution, development_phases: list[dict[str, Any]]) -> list[TechNode]:
         """识别关键里程碑"""
         milestones = []
 
@@ -825,6 +834,7 @@ class PriorArtAnalyzer:
                     competing_techs.append(field)
 
         except Exception as e:
+            self.logger.warning(f"竞争技术识别失败: {e}")
 
         return competing_techs
 
@@ -846,6 +856,7 @@ class PriorArtAnalyzer:
             opportunities = list(set(opportunities))
 
         except Exception as e:
+            self.logger.warning(f"机会识别失败: {e}")
 
         return opportunities[:8]  # 限制数量
 
@@ -864,6 +875,7 @@ class PriorArtAnalyzer:
             risks.extend(["人才短缺", "资金压力", "技术集成难度", "用户接受度"])
 
         except Exception as e:
+            self.logger.warning(f"风险识别失败: {e}")
 
         return risks[:10]  # 限制数量
 

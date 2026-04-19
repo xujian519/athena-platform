@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化版监控告警模块 - 公共接口
 Optimized Monitoring and Alerting Module - Public Interface
@@ -10,6 +11,8 @@ Optimized Monitoring and Alerting Module - Public Interface
 
 提供全方位的系统监控、性能分析和智能告警功能。
 """
+import logging
+from typing import Any
 
 from .alert_manager import AlertManager
 from .analyzer import PerformanceAnalyzer
@@ -17,6 +20,8 @@ from .collector import MetricsCollector
 from .module import OptimizedMonitoringModule
 from .system_collector import SystemMetricsCollector
 from .types import Alert, AlertLevel, AlertRule, AlertStatus, MetricType, MetricValue
+
+logger = logging.getLogger(__name__)
 
 
 # 便捷函数

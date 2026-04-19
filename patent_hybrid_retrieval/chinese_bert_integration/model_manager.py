@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 中文BERT模型管理器
 Chinese BERT Model Manager
@@ -8,20 +7,20 @@ Chinese BERT Model Manager
 """
 
 # Numpy兼容性导入
-from config.numpy_compatibility import array, zeros, ones, random, mean, sum, dot
-import json
 import logging
 import os
 import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 import numpy as np
 import torch
 from FlagEmbedding import FlagReranker
 from sentence_transformers import SentenceTransformer
+
+from config.numpy_compatibility import array
 
 # 添加项目路径以导入本地模型配置
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -54,7 +53,7 @@ class ChineseBERTModelManager:
         # 预加载性能指标
         self.performance_metrics = {}
 
-    def _load_model_configs(self) -> Dict[str, Dict[str, Any]]:
+    def _load_model_configs(self) -> dict[str, dict[str, Any]]:
         """加载模型配置"""
         return {
             # 通用中文模型
@@ -208,7 +207,7 @@ class ChineseBERTModelManager:
 
     def encode_texts(
         self,
-        texts: List[str],
+        texts: list[str],
         model_name: str | None = None,
         batch_size: int = 32,
         normalize: bool = True
@@ -265,9 +264,9 @@ class ChineseBERTModelManager:
     def rerank_results(
         self,
         query: str,
-        passages: List[str],
+        passages: list[str],
         top_k: int | None = None
-    ) -> List[Tuple[int, float]]:
+    ) -> list[tuple[int, float]]:
         """重排序结果
 
         Args:
@@ -306,7 +305,7 @@ class ChineseBERTModelManager:
             logger.error(f"重排序失败: {e}")
             return [(i, 1.0) for i in range(len(passages))]
 
-    def get_model_info(self, model_name: str | None = None) -> Dict[str, Any | None]:
+    def get_model_info(self, model_name: str | None = None) -> dict[str, Any | None]:
         """获取模型信息
 
         Args:
@@ -332,7 +331,7 @@ class ChineseBERTModelManager:
 
         return None
 
-    def list_available_models(self) -> List[Dict[str, Any]]:
+    def list_available_models(self) -> list[dict[str, Any]]:
         """列出所有可用模型"""
         models = []
 
@@ -381,10 +380,10 @@ class ChineseBERTModelManager:
 
     def batch_encode_with_models(
         self,
-        texts: List[str],
-        model_names: List[str],
-        weights: Optional[List[float] = None
-    ) -> Dict[str, np.ndarray]:
+        texts: list[str],
+        model_names: list[str],
+        weights: list[float] | None = None
+    ) -> dict[str, np.ndarray]:
         """使用多个模型批量编码
 
         Args:
@@ -412,7 +411,7 @@ class ChineseBERTModelManager:
         # 并行执行
         with ThreadPoolExecutor(max_workers=min(4, len(model_names))) as executor:
             futures = []
-            for model_name, weight in zip(model_names, weights):
+            for model_name, weight in zip(model_names, weights, strict=False):
                 future = executor.submit(encode_with_model, model_name, weight)
                 futures.append(future)
 
@@ -443,7 +442,7 @@ class ChineseBERTModelManager:
 
         metrics['last_updated'] = datetime.now()
 
-    def get_performance_metrics(self) -> Dict[str, Dict[str, Any]]:
+    def get_performance_metrics(self) -> dict[str, dict[str, Any]]:
         """获取性能指标"""
         return self.performance_metrics
 

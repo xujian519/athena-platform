@@ -1,0 +1,97 @@
+# ========================================
+# Athena平台 - 测试环境配置
+# Test Environment Configuration
+# ========================================
+# 说明: 测试环境专用配置，覆盖base.yaml中的值
+# 创建时间: 2025-12-29
+# ========================================
+
+# ========== 环境标识 ==========
+platform:
+  environment: "test"
+  debug: false
+
+# ========== 日志配置 ==========
+logging:
+  level: "WARNING"  # 测试环境只记录警告和错误
+  format: "text"
+  output:
+    - type: "console"
+      level: "WARNING"
+    - type: "file"
+      level: "INFO"
+      path: "./logs/athena_test.log"
+
+# ========== API服务配置 ==========
+api:
+  host: "0.0.0.0"
+  port: 8001
+  workers: 2
+  reload: false
+
+# ========== 数据库配置 ==========
+database:
+  postgres:
+    host: "localhost"
+    port: 5432
+    user: "athena_test"
+    password: "test_password"
+    database: "athena_test"
+    pool_size: 5
+    max_overflow: 5
+    
+  sqlite:
+    path: "./data/knowledge_graph_sqlite/athena_test.db"
+    
+  qdrant:
+    host: "localhost"
+    port: 6334
+    collection: "athena_vectors_test"
+
+# ========== Redis配置 ==========
+redis:
+  host: "localhost"
+  port: 6380  # 测试环境使用不同端口
+  db: 1
+  
+  cache:
+    default_ttl: 60  # 测试环境1分钟缓存
+
+# ========== AI模型配置 ==========
+models:
+  embedding:
+    model: "bge-small-zh-v1.5"  # 测试环境使用最小模型
+    device: "cpu"
+    batch_size: 8
+    
+  llm:
+    provider: "openai"
+    model: "gpt-3.5-turbo"
+    temperature: 0.5  # 测试环境使用较低温度，结果更确定
+    
+  nlp:
+    device: "cpu"
+
+# ========== 测试配置 ==========
+testing:
+  mock_external_apis: true  # 测试环境模拟外部API
+  use_fixtures: true
+  test_data_path: "./tests/fixtures"
+  
+  # 超时配置
+  timeouts:
+    api_call: 5
+    db_query: 1
+    model_inference: 10
+
+# ========== 功能开关 ==========
+features:
+  enabled_modules:
+    - "core.agent"
+    - "core.nlp"
+    - "core.search"
+    - "core.vector"
+  
+  experimental:
+    new_search_algorithm: true  # 测试新算法
+    ai_optimization: true

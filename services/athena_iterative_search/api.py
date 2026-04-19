@@ -4,25 +4,18 @@ Athena迭代式搜索系统API服务
 提供RESTful API接口，供其他系统调用
 """
 
-import asyncio
-from core.async_main import async_main
-import json
-import logging
-from core.logging_config import setup_logging
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import uvicorn
-from fastapi import BackgroundTasks, FastAPI, HTTPException, Query
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI
 from pydantic import BaseModel, Field
 
-# 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
+from core.logging_config import setup_logging
 
+# 导入统一认证模块
 from .agent import AthenaIterativeSearchAgent
-from .config import AthenaSearchConfig, SearchDepth, SearchStrategy
+from .config import SearchDepth, SearchStrategy
 from .core import AthenaIterativeSearchEngine
 from .types import PatentSearchResult, SearchSession
 
@@ -46,25 +39,25 @@ search_engine = AthenaIterativeSearchEngine()
 search_agent = AthenaIterativeSearchAgent()
 
 # 存储搜索会话
-search_sessions: Dict[str, SearchSession] = {}
+search_sessions: dict[str, SearchSession] = {}
 
 # Pydantic模型定义
 class SearchRequest(BaseModel):
     query: str = Field(..., description='搜索查询')
     strategy: str = Field('hybrid', description='搜索策略')
     max_results: int = Field(10, description='最大结果数')
-    filters: Optional[Dict[str, Any]] = Field(None, description='搜索过滤器')
+    filters: dict[str, Any] | None = Field(None, description='搜索过滤器')
 
 class IterativeSearchRequest(BaseModel):
     initial_query: str = Field(..., description='初始查询')
     max_iterations: int = Field(3, description='最大迭代轮数')
     depth: str = Field('standard', description='搜索深度')
-    focus_areas: Optional[List[str]] = Field(None, description='关注领域')
+    focus_areas: list[str] | None = Field(None, description='关注领域')
 
 class PatentAnalysisRequest(BaseModel):
     company_name: str = Field(..., description='公司名称')
-    technology_domain: Optional[str] = Field(None, description='技术领域')
-    time_range: Optional[List[str]] = Field(None, description='时间范围')
+    technology_domain: str | None = Field(None, description='技术领域')
+    time_range: list[str] | None = Field(None, description='时间范围')
 
 class TrendAnalysisRequest(BaseModel):
     technology: str = Field(..., description='技术名称')
@@ -72,19 +65,19 @@ class TrendAnalysisRequest(BaseModel):
 
 class InfringementRiskRequest(BaseModel):
     target_patent_id: str = Field(..., description='目标专利ID')
-    technology_keywords: List[str] = Field(..., description='技术关键词')
+    technology_keywords: list[str] = Field(..., description='技术关键词')
 
 class SearchResponse(BaseModel):
     success: bool = Field(..., description='是否成功')
     message: str = Field(..., description='响应消息')
-    data: Optional[Dict[str, Any]] = Field(None, description='响应数据')
+    data: dict[str, Any] | None = Field(None, description='响应数据')
     execution_time: float = Field(..., description='执行时间')
 
 # 工具函数
 def create_response(
     success: bool,
     message: str,
-    data: Optional[Dict[str, Any]] = None,
+    data: dict[str, Any] | None = None,
     execution_time: float = 0.0
 ) -> SearchResponse:
     """创建统一响应格式"""
@@ -95,7 +88,7 @@ def create_response(
         execution_time=execution_time
     )
 
-def patent_result_to_dict(result: PatentSearchResult) -> Dict[str, Any]:
+def patent_result_to_dict(result: PatentSearchResult) -> dict[str, Any]:
     """将专利搜索结果转换为字典"""
     return {
         'id': result.id,
@@ -120,7 +113,7 @@ def patent_result_to_dict(result: PatentSearchResult) -> Dict[str, Any]:
         } if result.patent_metadata else None
     }
 
-def search_session_to_dict(session: SearchSession) -> Dict[str, Any]:
+def search_session_to_dict(session: SearchSession) -> dict[str, Any]:
     """将搜索会话转换为字典"""
     return {
         'id': session.id,
@@ -394,7 +387,7 @@ async def infringement_risk_assessment(request: InfringementRiskRequest):
         execution_time = (datetime.now() - start_time).total_seconds()
         return create_response(
             success=True,
-            message=f"侵权风险评估完成",
+            message="侵权风险评估完成",
             data=data,
             execution_time=execution_time
         )

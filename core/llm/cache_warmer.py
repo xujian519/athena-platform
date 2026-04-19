@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - 缓存预热器
 在系统启动时预加载常用数据,提升首次请求性能
@@ -180,7 +181,7 @@ class CacheWarmer:
 
         return {"count": warmed_count}
 
-    def configure_warmup_queries(self, queries: list[tuple], task_types: set[str | None = None) -> None:
+    def configure_warmup_queries(self, queries: list[tuple], task_types: set[str] | None = None) -> None:
         """
         配置预热查询
 

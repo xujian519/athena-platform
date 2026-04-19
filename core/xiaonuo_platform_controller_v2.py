@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena增强平台控制器
 Enhanced Platform Controller - 小诺的完整平台控制能力
@@ -27,10 +28,9 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any
 
 import requests
-
 
 # 配置日志
 logger = logging.getLogger(__name__)
@@ -87,8 +87,8 @@ class ServiceInfo:
     category: str
     service_type: ServiceType
     path: str
-    entry_file: Optional[str]
-    port: Optional[int]
+    entry_file: str | None
+    port: int | None
     status: ServiceStatus = ServiceStatus.UNKNOWN
     pid: int | None = None
     container_id: str | None = None

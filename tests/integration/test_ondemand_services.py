@@ -5,9 +5,10 @@ Test All On-demand Services
 """
 
 import asyncio
-import requests
 import sys
 from pathlib import Path
+
+import requests
 
 # 添加路径
 sys.path.append(str(Path(__file__).parent))
@@ -20,9 +21,9 @@ async def test_all_services():
     # 导入管理器
     from core.services.on_demand_manager import (
         get_laws_api_url,
+        get_on_demand_manager,
         get_xiaochen_api_url,
         get_yunxi_api_url,
-        get_on_demand_manager
     )
 
     manager = get_on_demand_manager()
@@ -50,7 +51,7 @@ async def test_all_services():
                 try:
                     response = requests.get(f"{url}/", timeout=5)
                     if response.status_code == 200:
-                        print(f"   📡 API响应正常")
+                        print("   📡 API响应正常")
                     else:
                         print(f"   ⚠️ API响应码: {response.status_code}")
                 except Exception as e:

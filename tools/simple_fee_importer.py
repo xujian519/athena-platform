@@ -1,22 +1,19 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 简化的官费缴费记录导入工具
 专门处理2025年专利官费缴费记录的特殊格式
 """
 
-import pandas as pd
-import psycopg2
-from psycopg2.extras import execute_values, RealDictCursor
+import json
+import logging
+import re
+import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
-import os
-import sys
-import logging
-import uuid
-import re
-import json
+
+import pandas as pd
+import psycopg2
+from psycopg2.extras import execute_values
 
 # 配置日志
 logging.basicConfig(
@@ -104,7 +101,7 @@ class SimpleFeeImporter:
 
         return patent_num
 
-    def process_fee_file(self, excel_path: str) -> List[Dict]:
+    def process_fee_file(self, excel_path: str) -> list[dict]:
         """处理官费缴费记录文件"""
         logger.info("📝 处理官费缴费记录文件...")
 
@@ -144,10 +141,9 @@ class SimpleFeeImporter:
                         try:
                             payment_amount = float(row['费用金额（人民币）'])
                         except Exception as e:
-
                             # 记录异常但不中断流程
-
                             logger.debug(f"[simple_fee_importer] Exception: {e}")
+
                     # 费用种类
                     payment_type = "未知"
                     if pd.notna(row['费用种类']):
@@ -189,7 +185,7 @@ class SimpleFeeImporter:
             logger.error(f"处理文件失败: {str(e)}")
             return []
 
-    def save_to_database(self, payment_records: List[Dict]):
+    def save_to_database(self, payment_records: list[dict]):
         """保存到数据库"""
         logger.info("💾 保存数据到数据库...")
 
@@ -309,12 +305,12 @@ class SimpleFeeImporter:
             if conn:
                 conn.close()
 
-    def analyze_payment_data(self, payment_records: List[Dict]) -> Dict:
+    def analyze_payment_data(self, payment_records: list[dict]) -> dict:
         """分析缴费数据"""
         logger.info("📈 分析缴费数据...")
 
         total_amount = sum(r['payment_amount'] for r in payment_records)
-        unique_patents = len(set(r['patent_number'] for r in payment_records))
+        unique_patents = len({r['patent_number'] for r in payment_records})
         payment_types = {}
 
         for record in payment_records:
@@ -379,12 +375,6 @@ def main():
     except Exception as e:
         logger.error(f"❌ 导入失败: {str(e)}")
         import traceback
-
-# 导入安全配置
-import sys
-from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent / "core"))
-from security.env_config import get_env_var, get_database_url, get_jwt_secret
         traceback.print_exc()
         return False
 

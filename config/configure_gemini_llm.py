@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 配置 Google Gemini 大模型
 Configure Google Gemini LLM
@@ -12,10 +11,10 @@ Configure Google Gemini LLM
 """
 
 import json
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import logging
 import sys
 from datetime import datetime, timezone
+from typing import Any
 
 from domestic_llm_integration import DomesticLLMManager, LLMProvider
 
@@ -27,7 +26,7 @@ def configure_gemini_llm() -> Any:
     """配置 Google Gemini 大模型"""
     logger.info('🤖 配置 Google Gemini Pro 大模型')
     logger.info(str('=' * 40))
-    
+
     # 提示用户输入API密钥
     api_key = input('🔑 请输入您的 Google Gemini API 密钥: ').strip()
 
@@ -45,7 +44,7 @@ def configure_gemini_llm() -> Any:
             api_key=api_key,
             model_name='gemini-1.5-pro-latest'
         )
-        logger.info(f"✅ Google Gemini 已成功配置")
+        logger.info("✅ Google Gemini 已成功配置")
         logger.info(f"   API Key: ...{api_key[-4:]}")
 
         # 测试连接
@@ -60,7 +59,7 @@ def configure_gemini_llm() -> Any:
 
 def test_gemini_connection(llm_manager) -> Any:
     """测试 Gemini API 连接"""
-    logger.info(f"\n🔍 测试 Google Gemini API 连接...")
+    logger.info("\n🔍 测试 Google Gemini API 连接...")
 
     test_prompt = '请用中文简单介绍一下你自己'
 
@@ -71,15 +70,15 @@ def test_gemini_connection(llm_manager) -> Any:
         # 注意：我们复用了 generate_drawing_description，但它现在是通用的
         response_text = llm_manager.generate_drawing_description(test_prompt, LLMProvider.GEMINI)
 
-        logger.info(f"   ✅ Gemini API 调用成功")
+        logger.info("   ✅ Gemini API 调用成功")
         logger.info(f"   📝 模型回复: {response_text[:150]}...")
-        logger.info(f"   📊 模型: Google Gemini 1.5 Pro")
-        logger.info(f"\n🎉 Google Gemini API 测试通过！")
+        logger.info("   📊 模型: Google Gemini 1.5 Pro")
+        logger.info("\n🎉 Google Gemini API 测试通过！")
         return True
 
     except Exception as e:
         logger.info(f"   ❌ API 调用失败: {e}")
-        logger.info(f"   请检查您的 API 密钥是否正确，以及网络连接是否正常。\n")
+        logger.info("   请检查您的 API 密钥是否正确，以及网络连接是否正常。\n")
         return False
 
 def save_config(api_key) -> None:
@@ -123,13 +122,13 @@ def main() -> None:
     if not save_config(api_key):
         return 1
 
-    logger.info(f"\n\n🎉 配置完成！")
+    logger.info("\n\n🎉 配置完成！")
     logger.info(str('=' * 50))
     logger.info('✅ Google Gemini 1.5 Pro 已成功集成')
     logger.info('✅ API 连接测试通过')
     logger.info('✅ 配置文件已更新')
 
-    logger.info(f"\n💡 现在，系统将默认使用 Gemini Pro 作为其核心语言模型。\n")
+    logger.info("\n💡 现在，系统将默认使用 Gemini Pro 作为其核心语言模型。\n")
     return 0
 
 if __name__ == '__main__':

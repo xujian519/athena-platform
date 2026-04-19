@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 CAP05 创造性分析 + STORM 集成
 
@@ -17,17 +18,14 @@ CAP05 创造性分析 + STORM 集成
 
 import asyncio
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 from core.storm_integration.patent_agents import (
     AgentFactory,
-    AgentRole,
-    BasePatentAgent,
     Conversation,
-    Utterance,
 )
 from core.storm_integration.patent_curator import (
     PatentInformationCurator,
@@ -66,7 +64,7 @@ class PriorArtReference:
     patent_id: str  # 专利号
     title: str  # 标题
     abstract: str  # 摘要
-    relevance: str // 相关性描述
+    relevance: str  # 相关性描述
     differences: list[str]  # 区别特征
     similarity_score: float  # 相似度分数
 
@@ -97,7 +95,7 @@ class Step3Analysis:
 
     obviousness_assessment: str  # 显而易见性评估
     evidence: list[str]  # 证据
-    motivation: Optional[str]  # 动机
+    motivation: str | None  # 动机
     conclusion: str  # 结论
 
 

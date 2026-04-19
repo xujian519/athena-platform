@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 简化版爬虫系统验证脚本
 Simplified Crawler System Verification Script
@@ -57,7 +58,6 @@ class SimpleCrawlerVerifier:
         crawler_files = {
             "通用爬虫": "/Users/xujian/Athena工作平台/services/crawler-service/core/universal_crawler.py",
             "混合爬虫管理器": "/Users/xujian/Athena工作平台/services/crawler-service/core/hybrid_crawler_manager.py",
-            "专利爬虫": "/Users/xujian/Athena工作平台/patent-platform/workspace/enhanced_patent_crawler.py",
             "分布式爬虫": "/Users/xujian/Athena工作平台/tools/advanced/distributed_crawler.py",
             "浏览器自动化": "/Users/xujian/Athena工作平台/services/browser-automation-service/browser_automation_server.py",
             "抖音爬虫": "/Users/xujian/Athena工作平台/services/browser-automation-service/douyin_scraper.py",

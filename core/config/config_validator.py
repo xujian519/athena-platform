@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台配置验证器
 Configuration Validator for Athena Platform
@@ -10,11 +11,10 @@ Configuration Validator for Athena Platform
 import os
 import re
 import socket
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-
+from typing import Any
 
 
 class ValidationLevel(Enum):

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Chrome MCP命令行工具
 提供便捷的浏览器自动化操作命令
@@ -19,7 +18,7 @@ logger = logging.getLogger(__name__)
 # 添加项目路径
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from automation.chrome_mcp_integration import ChromeMCPIntegration, get_chrome_mcp
+from automation.chrome_mcp_integration import get_chrome_mcp
 
 
 async def navigate_command(url: str, headless: bool = False):
@@ -32,7 +31,7 @@ async def navigate_command(url: str, headless: bool = False):
         result = await chrome.navigate_to(url)
 
         if result['success']:
-            logger.info(f"✅ 导航成功")
+            logger.info("✅ 导航成功")
             logger.info(f"   URL: {result['url']}")
             logger.info(f"   标题: {result['title']}")
             logger.info(f"   加载时间: {result['load_time']:.2f}秒")
@@ -59,7 +58,7 @@ async def extract_command(url: str, selectors_file: str = None, headless: bool =
         # 加载选择器
         selectors = {}
         if selectors_file and Path(selectors_file).exists():
-            with open(selectors_file, 'r', encoding='utf-8') as f:
+            with open(selectors_file, encoding='utf-8') as f:
                 selectors = json.load(f)
 
         # 提取内容
@@ -67,7 +66,7 @@ async def extract_command(url: str, selectors_file: str = None, headless: bool =
 
         if extract_result['success']:
             content = extract_result['content']
-            logger.info(f"✅ 内容提取成功")
+            logger.info("✅ 内容提取成功")
             logger.info(f"   页面标题: {content.get('page_title', '')}")
             logger.info(f"   页面URL: {content.get('page_url', '')}")
 
@@ -107,7 +106,7 @@ async def screenshot_command(url: str, filename: str = None, full_page: bool = T
         screenshot_result = await chrome.take_screenshot(filename, full_page)
 
         if screenshot_result['success']:
-            logger.info(f"✅ 截图成功")
+            logger.info("✅ 截图成功")
             logger.info(f"   文件名: {screenshot_result['filename']}")
             logger.info(f"   路径: {screenshot_result['path']}")
             logger.info(f"   全页截图: {screenshot_result['full_page']}")
@@ -130,7 +129,7 @@ async def search_patents_command(query: str, source: str = 'google_patents', hea
 
         if search_result['success']:
             results = search_result['results']
-            logger.info(f"✅ 专利搜索成功")
+            logger.info("✅ 专利搜索成功")
             logger.info(f"   查询: {search_result['query']}")
             logger.info(f"   数据源: {search_result['source']}")
             logger.info(f"   URL: {search_result['url']}")
@@ -140,7 +139,7 @@ async def search_patents_command(query: str, source: str = 'google_patents', hea
                 if items and key != 'page_title' and key != 'page_url':
                     logger.info(f"   {key}: {len(items)} 项")
         else:
-            logger.info(f"❌ 专利搜索失败")
+            logger.info("❌ 专利搜索失败")
 
     finally:
         await chrome.close()
@@ -163,7 +162,7 @@ async def script_command(url: str, script: str, headless: bool = False):
         script_result = await chrome.execute_script(script)
 
         if script_result['success']:
-            logger.info(f"✅ 脚本执行成功")
+            logger.info("✅ 脚本执行成功")
             logger.info(f"   结果: {script_result['result']}")
         else:
             logger.info(f"❌ 脚本执行失败: {script_result.get('error')}")
@@ -222,7 +221,7 @@ def main():
     script_parser.add_argument('--code', required=True, help='JavaScript代码')
 
     # 创建示例文件
-    sample_parser = subparsers.add_parser('create-sample', help='创建示例选择器文件')
+    subparsers.add_parser('create-sample', help='创建示例选择器文件')
 
     args = parser.parse_args()
 

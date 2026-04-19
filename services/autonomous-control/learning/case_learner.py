@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 案例学习器
 Case Learner
@@ -11,15 +10,13 @@ Case Learner
 """
 
 import asyncio
-from core.async_main import async_main
-import logging
-from typing import Dict, List, Any, Optional, Tuple
-from datetime import datetime, timedelta
 import json
+import logging
 import pickle
+from collections import defaultdict
+from datetime import datetime
 from pathlib import Path
-import numpy as np
-from collections import defaultdict, deque
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -88,7 +85,7 @@ class CaseLearner:
             await self._initialize_expertise_weights()
             self.initialized = True
 
-    async def learn_from_case(self, case_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def learn_from_case(self, case_data: dict[str, Any]) -> dict[str, Any]:
         """
         从案例中学习
 
@@ -162,7 +159,7 @@ class CaseLearner:
                 "error": str(e)
             }
 
-    async def update_model(self, feedback: Dict[str, Any]) -> Dict[str, Any]:
+    async def update_model(self, feedback: dict[str, Any]) -> dict[str, Any]:
         """
         更新学习模型
 
@@ -234,7 +231,7 @@ class CaseLearner:
                 "error": str(e)
             }
 
-    async def get_learning_insights(self, business_type: str = None) -> Dict[str, Any]:
+    async def get_learning_insights(self, business_type: str = None) -> dict[str, Any]:
         """
         获取学习洞察
 
@@ -263,7 +260,7 @@ class CaseLearner:
                 "insights": {}
             }
 
-    async def _extract_case_features(self, case_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def _extract_case_features(self, case_data: dict[str, Any]) -> dict[str, Any]:
         """提取案例特征"""
         features = {
             "text_features": await self._extract_text_features(case_data.get("case_content", "")),
@@ -273,7 +270,7 @@ class CaseLearner:
         }
         return features
 
-    async def _extract_text_features(self, text: str) -> Dict[str, Any]:
+    async def _extract_text_features(self, text: str) -> dict[str, Any]:
         """提取文本特征"""
         # 简化的文本特征提取
         features = {
@@ -285,7 +282,7 @@ class CaseLearner:
         }
         return features
 
-    async def _extract_keywords(self, text: str) -> List[str]:
+    async def _extract_keywords(self, text: str) -> list[str]:
         """提取关键词"""
         # 简化的关键词提取
         keywords = []
@@ -295,7 +292,7 @@ class CaseLearner:
                 keywords.append(keyword)
         return keywords
 
-    async def _extract_legal_terms(self, text: str) -> List[str]:
+    async def _extract_legal_terms(self, text: str) -> list[str]:
         """提取法律术语"""
         legal_terms = {
             "专利权": "patent_right",
@@ -315,7 +312,7 @@ class CaseLearner:
                 })
         return found_terms
 
-    async def _extract_structure_features(self, case_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def _extract_structure_features(self, case_data: dict[str, Any]) -> dict[str, Any]:
         """提取结构特征"""
         features = {
             "has_recommendations": bool(case_data.get("recommendations")),
@@ -333,7 +330,7 @@ class CaseLearner:
         depth = len(analysis.split('\n')) // 10
         return min(depth, 5)
 
-    async def _extract_outcome_features(self, case_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def _extract_outcome_features(self, case_data: dict[str, Any]) -> dict[str, Any]:
         """提取结果特征"""
         outcome = case_data.get("outcome", "pending")
         feedback = case_data.get("feedback", {})
@@ -346,7 +343,7 @@ class CaseLearner:
         }
         return features
 
-    async def _extract_context_features(self, case_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def _extract_context_features(self, case_data: dict[str, Any]) -> dict[str, Any]:
         """提取上下文特征"""
         features = {
             "business_type": case_data.get("business_type", "unknown"),
@@ -355,7 +352,7 @@ class CaseLearner:
         }
         return features
 
-    async def _assess_case_complexity(self, case_data: Dict[str, Any]) -> str:
+    async def _assess_case_complexity(self, case_data: dict[str, Any]) -> str:
         """评估案例复杂度"""
         complexity_score = 0
 
@@ -387,8 +384,8 @@ class CaseLearner:
         else:
             return "低"
 
-    async def _update_case_patterns(self, business_type: str, features: Dict[str, Any],
-                                  outcome: str, feedback: Dict[str, Any]) -> bool:
+    async def _update_case_patterns(self, business_type: str, features: dict[str, Any],
+                                  outcome: str, feedback: dict[str, Any]) -> bool:
         """更新案例模式"""
         try:
             # 创建模式
@@ -425,8 +422,8 @@ class CaseLearner:
             logger.error(f"更新案例模式失败: {str(e)}")
             return False
 
-    async def _calculate_pattern_similarity(self, features1: Dict[str, Any],
-                                          features2: Dict[str, Any]) -> float:
+    async def _calculate_pattern_similarity(self, features1: dict[str, Any],
+                                          features2: dict[str, Any]) -> float:
         """计算模式相似度"""
         similarity = 0.0
         count = 0
@@ -460,14 +457,14 @@ class CaseLearner:
 
         return similarity / count if count > 0 else 0
 
-    async def _weighted_average_features(self, features1: Dict[str, Any],
-                                       features2: Dict[str, Any], weight: float) -> Dict[str, Any]:
+    async def _weighted_average_features(self, features1: dict[str, Any],
+                                       features2: dict[str, Any], weight: float) -> dict[str, Any]:
         """加权平均特征"""
         # 简化实现，返回features1
         # 实际应该根据特征类型进行加权平均
         return features1
 
-    async def _update_success_patterns(self, business_type: str, features: Dict[str, Any],
+    async def _update_success_patterns(self, business_type: str, features: dict[str, Any],
                                      outcome: str) -> bool:
         """更新成功模式"""
         if outcome != "success":
@@ -504,7 +501,7 @@ class CaseLearner:
             return False
 
     async def _update_expertise_weights(self, business_type: str, outcome: str,
-                                      feedback: Dict[str, Any]) -> bool:
+                                      feedback: dict[str, Any]) -> bool:
         """更新专业权重"""
         try:
             if business_type not in self.expertise_weights:
@@ -559,7 +556,7 @@ class CaseLearner:
         else:
             return "初级"
 
-    async def _record_strength(self, weights: Dict[str, Any], feedback: Dict[str, Any]):
+    async def _record_strength(self, weights: dict[str, Any], feedback: dict[str, Any]):
         """记录强项"""
         strengths = weights.get("strengths", [])
         # 基于反馈记录强项
@@ -569,7 +566,7 @@ class CaseLearner:
             strengths.append("建议有效性")
         weights["strengths"] = list(set(strengths))  # 去重
 
-    async def _record_weakness(self, weights: Dict[str, Any], feedback: Dict[str, Any]):
+    async def _record_weakness(self, weights: dict[str, Any], feedback: dict[str, Any]):
         """记录弱项"""
         weaknesses = weights.get("weaknesses", [])
         # 基于反馈记录弱项
@@ -608,15 +605,15 @@ class CaseLearner:
 
             # 加载专业权重
             if self.expertise_weights_file.exists():
-                with open(self.expertise_weights_file, 'r', encoding='utf-8') as f:
+                with open(self.expertise_weights_file, encoding='utf-8') as f:
                     self.expertise_weights = json.load(f)
 
             # 加载学习统计
             if self.learning_stats_file.exists():
-                with open(self.learning_stats_file, 'r', encoding='utf-8') as f:
+                with open(self.learning_stats_file, encoding='utf-8') as f:
                     self.learning_stats = json.load(f)
 
-            logger.info(f"✅ 学习数据加载完成")
+            logger.info("✅ 学习数据加载完成")
 
         except Exception as e:
             logger.warning(f"加载学习数据失败，使用默认值: {str(e)}")
@@ -693,13 +690,13 @@ class CaseLearner:
             # 降低学习率
             self.learning_rate = max(0.05, self.learning_rate * 0.99)
 
-    async def _find_case_data(self, case_id: str) -> Dict[str, Any | None]:
+    async def _find_case_data(self, case_id: str) -> dict[str, Any | None]:
         """查找案例数据"""
         # 简化实现，返回None
         # 实际应该从数据库或文件中查找
         return None
 
-    async def _analyze_corrections(self, corrections: List[str]) -> Dict[str, Any]:
+    async def _analyze_corrections(self, corrections: list[str]) -> dict[str, Any]:
         """分析修正内容"""
         return {
             "correction_count": len(corrections),
@@ -707,7 +704,7 @@ class CaseLearner:
             "severity": "中等"
         }
 
-    async def _apply_correction(self, correction: str, case_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def _apply_correction(self, correction: str, case_data: dict[str, Any]) -> dict[str, Any]:
         """应用修正"""
         return {
             "correction": correction,
@@ -715,7 +712,7 @@ class CaseLearner:
             "impact": "positive"
         }
 
-    async def _adjust_weights_based_on_feedback(self, rating: int, business_type: str) -> Dict[str, Any]:
+    async def _adjust_weights_based_on_feedback(self, rating: int, business_type: str) -> dict[str, Any]:
         """基于反馈调整权重"""
         if business_type in self.expertise_weights:
             weights = self.expertise_weights[business_type]
@@ -727,7 +724,7 @@ class CaseLearner:
 
         return {"adjusted": True}
 
-    async def _generate_improvement_actions(self, improvements: List[str], case_data: Dict[str, Any]) -> List[str]:
+    async def _generate_improvement_actions(self, improvements: list[str], case_data: dict[str, Any]) -> list[str]:
         """生成改进行动"""
         actions = []
         for improvement in improvements:
@@ -737,29 +734,29 @@ class CaseLearner:
                 actions.append("优化推理算法")
         return actions
 
-    async def _get_learning_overview(self) -> Dict[str, Any]:
+    async def _get_learning_overview(self) -> dict[str, Any]:
         """获取学习概览"""
         return self.learning_stats
 
-    async def _get_expertise_levels(self, business_type: str = None) -> Dict[str, Any]:
+    async def _get_expertise_levels(self, business_type: str = None) -> dict[str, Any]:
         """获取专业级别"""
         if business_type:
             return {business_type: self.expertise_weights.get(business_type, {})}
         return self.expertise_weights
 
-    async def _get_key_success_patterns(self, business_type: str = None) -> Dict[str, Any]:
+    async def _get_key_success_patterns(self, business_type: str = None) -> dict[str, Any]:
         """获取关键成功模式"""
         if business_type:
             return self.success_patterns.get(business_type, {})
         return self.success_patterns
 
-    async def _get_key_failure_patterns(self, business_type: str = None) -> Dict[str, Any]:
+    async def _get_key_failure_patterns(self, business_type: str = None) -> dict[str, Any]:
         """获取关键失败模式"""
         if business_type:
             return self.failure_patterns.get(business_type, {})
         return self.failure_patterns
 
-    async def _get_learning_trends(self, business_type: str = None) -> List[Dict[str, Any]]:
+    async def _get_learning_trends(self, business_type: str = None) -> list[dict[str, Any]]:
         """获取学习趋势"""
         # 简化实现
         return [
@@ -767,7 +764,7 @@ class CaseLearner:
             {"date": "2024-12-14", "success_rate": 0.83}
         ]
 
-    async def _get_learning_recommendations(self, business_type: str = None) -> List[str]:
+    async def _get_learning_recommendations(self, business_type: str = None) -> list[str]:
         """获取学习建议"""
         recommendations = []
 

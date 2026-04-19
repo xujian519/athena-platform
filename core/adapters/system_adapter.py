@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 系统适配器 - 连接优化模块与现有系统
 提供统一的接口和向后兼容性
@@ -115,7 +116,7 @@ class SystemAdapter:
         # 实现协作处理逻辑
         return {
             "status": "collaboration_completed",
-            "participants": ["小娜", "小诺", "云熙", "小宸"],
+            "participants": ["小娜", "小诺", "小宸"],
             "collaboration_mode": "hierarchical",
             "timestamp": datetime.now().isoformat(),
         }

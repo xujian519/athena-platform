@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 DSPy集成模块 - Athena平台
 DSPy Integration Module for Athena Platform

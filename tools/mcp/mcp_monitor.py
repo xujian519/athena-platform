@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 MCP服务器监控和自动重启系统
 MCP Server Monitoring and Auto-Restart System
@@ -16,10 +15,10 @@ import signal
 import sys
 import time
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import psutil
 
@@ -78,7 +77,7 @@ class MCPMonitor:
         self.config = config or MonitorConfig()
         self.platform_root = platform_root
         self.manager = AthenaMCPManager()
-        self.servers: Dict[str, ServerHealth] = {}
+        self.servers: dict[str, ServerHealth] = {}
         self.running = False
         self.monitor_task: asyncio.Task | None = None
 
@@ -286,7 +285,7 @@ class MCPMonitor:
             logger.error(f"手动重启服务器 {server_name} 时发生异常: {e}")
             return False
 
-    async def get_health_report(self) -> Dict[str, Any]:
+    async def get_health_report(self) -> dict[str, Any]:
         """获取健康状态报告"""
         report = {
             'timestamp': datetime.now().isoformat(),
@@ -312,12 +311,12 @@ class MCPMonitor:
 
         return report
 
-    async def start_all_servers(self) -> Dict[str, bool]:
+    async def start_all_servers(self) -> dict[str, bool]:
         """启动所有服务器"""
         logger.info('启动所有MCP服务器...')
         return await self.manager.start_all_servers()
 
-    async def stop_all_servers(self) -> Dict[str, bool]:
+    async def stop_all_servers(self) -> dict[str, bool]:
         """停止所有服务器"""
         logger.info('停止所有MCP服务器...')
         return await self.manager.stop_all_servers()

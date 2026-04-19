@@ -1,22 +1,23 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 测试：感知模块工厂模式
 Test: Perception Module Factory Pattern
 """
 
-import pytest
 import sys
 from pathlib import Path
+
+import pytest
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.perception.factory import (
-    ProcessorFactory,
-    PerceptionEngineFactory,
-    StreamProcessorFactory,
     PerceptionBuilder,
+    PerceptionEngineFactory,
+    ProcessorFactory,
+    StreamProcessorFactory,
 )
 from core.perception.types import InputType, PerceptionConfig
 
@@ -116,7 +117,7 @@ class TestStreamProcessorFactory:
 
     def test_stream_factory_register_and_create(self):
         """测试注册和创建流处理器"""
-        from core.perception.types import StreamType, StreamConfig
+        from core.perception.types import StreamConfig, StreamType
 
         # 创建一个模拟流处理器类
         class MockStreamProcessor:

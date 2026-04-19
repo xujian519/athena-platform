@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 决策引擎配置类
 Decision Engine Configuration

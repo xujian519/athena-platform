@@ -4,9 +4,8 @@
 Article Writer Service Configuration
 """
 
-from pathlib import Path
-from typing import Dict, List, Any
 import os
+from pathlib import Path
 
 
 class Config:

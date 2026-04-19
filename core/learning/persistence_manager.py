@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习数据持久化管理器
 Learning Data Persistence Manager

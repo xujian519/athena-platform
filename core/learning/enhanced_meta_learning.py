@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 元学习引擎增强版 - Enhanced Meta-Learning Engine
 实现"如何学习"的学习能力
@@ -21,8 +22,8 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
-from core.logging_config import setup_logging
 from core.learning.input_validator import get_input_validator
+from core.logging_config import setup_logging
 
 logger = setup_logging()
 

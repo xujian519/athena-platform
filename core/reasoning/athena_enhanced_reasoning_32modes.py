@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena增强推理引擎 - 借鉴Athena工作平台的32种推理模式集成架构
 
@@ -18,8 +19,7 @@ import time
 import uuid
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
-
+from typing import Any
 
 from core.logging_config import setup_logging
 

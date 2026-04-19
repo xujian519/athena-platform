@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 技术发展趋势分析器
 Technology Trend Analyzer
@@ -7,23 +6,24 @@ Technology Trend Analyzer
 """
 
 import asyncio
-from core.async_main import async_main
-import sys
-import os
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any, Tuple
-import json
-from core.database.unified_connection import get_postgres_pool
-import numpy as np
-from collections import defaultdict, Counter
-from dataclasses import dataclass
-from enum import Enum
 import re
-import math
+import sys
+from collections import Counter, defaultdict
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any
+
+from core.database.unified_connection import get_postgres_pool
 
 # 添加路径
 sys.path.append('/Users/xujian/Athena工作平台/services/autonomous-control')
-from agent_identity import AgentIdentity, AgentType, register_agent_identity, format_identity_display
+from agent_identity import (
+    AgentIdentity,
+    AgentType,
+    format_identity_display,
+    register_agent_identity,
+)
 
 # 数据库配置
 PATENT_DB_CONFIG = {
@@ -51,8 +51,8 @@ class TechnologyTrend:
     growth_rate: float
     confidence: float
     time_span: int
-    key_indicators: Dict[str, Any]
-    prediction: Dict[str, Any]
+    key_indicators: dict[str, Any]
+    prediction: dict[str, Any]
 
 @dataclass
 class HotspotAnalysis:
@@ -61,16 +61,16 @@ class HotspotAnalysis:
     heat_index: float
     growth_potential: float
     market_size: str
-    key_players: List[str]
-    emerging_keywords: List[str]
+    key_players: list[str]
+    emerging_keywords: list[str]
 
 @dataclass
 class TrendForecast:
     """趋势预测"""
     time_horizon: int  # 预测时间范围（年）
     expected_development: str
-    risk_factors: List[str]
-    opportunities: List[str]
+    risk_factors: list[str]
+    opportunities: list[str]
     confidence_level: float
 
 class TechnologyTrendAnalyzer:
@@ -81,7 +81,7 @@ class TechnologyTrendAnalyzer:
         self.technology_keywords = self._init_technology_keywords()
         self.ipc_tech_mapping = self._init_ipc_mapping()
 
-    def _init_technology_keywords(self) -> Dict[str, List[str]]:
+    def _init_technology_keywords(self) -> dict[str, list[str]]:
         """初始化技术关键词词典"""
         return {
             "人工智能": [
@@ -144,7 +144,7 @@ class TechnologyTrendAnalyzer:
             ]
         }
 
-    def _init_ipc_mapping(self) -> Dict[str, str]:
+    def _init_ipc_mapping(self) -> dict[str, str]:
         """初始化IPC到技术领域的映射"""
         return {
             "G06F": "计算机技术/软件",
@@ -208,7 +208,7 @@ class TechnologyTrendAnalyzer:
             prediction=prediction
         )
 
-    async def _get_technology_patents(self, technology: str, years: int) -> List[Dict]:
+    async def _get_technology_patents(self, technology: str, years: int) -> list[dict]:
         """获取技术相关的专利数据"""
         async with self.db_pool.acquire() as conn:
             # 获取关键词
@@ -262,7 +262,7 @@ class TechnologyTrendAnalyzer:
 
             return patents
 
-    def _calculate_yearly_statistics(self, patent_data: List[Dict]) -> Dict[int, Dict]:
+    def _calculate_yearly_statistics(self, patent_data: list[dict]) -> dict[int, dict]:
         """计算年度统计信息"""
         yearly_stats = defaultdict(lambda: {
             'count': 0,
@@ -297,7 +297,7 @@ class TechnologyTrendAnalyzer:
 
         return dict(yearly_stats)
 
-    def _determine_trend_direction(self, yearly_stats: Dict[int, Dict]) -> Tuple[TrendDirection, float, float]:
+    def _determine_trend_direction(self, yearly_stats: dict[int, dict]) -> tuple[TrendDirection, float, float]:
         """确定趋势方向和增长率"""
         if len(yearly_stats) < 3:
             return TrendDirection.STABLE, 0.0, 0.0
@@ -340,7 +340,7 @@ class TechnologyTrendAnalyzer:
 
         return trend_direction, growth_rate, min(confidence, 1.0)
 
-    async def _calculate_key_indicators(self, patent_data: List[Dict], yearly_stats: Dict[int, Dict]) -> Dict[str, Any]:
+    async def _calculate_key_indicators(self, patent_data: list[dict], yearly_stats: dict[int, dict]) -> dict[str, Any]:
         """计算关键指标"""
         if not patent_data:
             return {}
@@ -394,8 +394,8 @@ class TechnologyTrendAnalyzer:
             }
         }
 
-    async def _predict_future_trend(self, technology: str, yearly_stats: Dict[int, Dict],
-                                   key_indicators: Dict) -> Dict[str, Any]:
+    async def _predict_future_trend(self, technology: str, yearly_stats: dict[int, dict],
+                                   key_indicators: dict) -> dict[str, Any]:
         """预测未来趋势"""
         years = sorted(yearly_stats.keys())
         if len(years) < 3:
@@ -448,7 +448,7 @@ class TechnologyTrendAnalyzer:
             "factors": ["历史数据有限，预测精度较低"]
         }
 
-    async def identify_technology_hotspots(self, years: int = 5) -> List[HotspotAnalysis]:
+    async def identify_technology_hotspots(self, years: int = 5) -> list[HotspotAnalysis]:
         """识别技术热点"""
         hotspots = []
 
@@ -515,7 +515,7 @@ class TechnologyTrendAnalyzer:
         hotspots.sort(key=lambda x: x.heat_index, reverse=True)
         return hotspots[:10]  # 返回前10个热点
 
-    async def _calculate_heat_index(self, patents: List[Dict], years: int) -> float:
+    async def _calculate_heat_index(self, patents: list[dict], years: int) -> float:
         """计算技术热度指数"""
         if not patents:
             return 0.0
@@ -531,14 +531,14 @@ class TechnologyTrendAnalyzer:
         growth_score = recent_count / max(len(patents), 1)
 
         # 多样性分数：申请人多样性
-        applicant_diversity = len(set(p.get('applicant', '') for p in patents))
+        applicant_diversity = len({p.get('applicant', '') for p in patents})
         diversity_score = min(applicant_diversity / 50.0, 1.0)
 
         # 综合热度指数
         heat_index = (base_score * 0.4 + growth_score * 0.4 + diversity_score * 0.2)
         return round(heat_index, 3)
 
-    async def _calculate_growth_potential(self, patents: List[Dict]) -> float:
+    async def _calculate_growth_potential(self, patents: list[dict]) -> float:
         """计算增长潜力"""
         if len(patents) < 5:
             return 0.5  # 默认中等潜力
@@ -577,7 +577,7 @@ class TechnologyTrendAnalyzer:
         else:
             return "新兴市场"
 
-    def _extract_emerging_keywords(self, patents: List[Dict]) -> List[str]:
+    def _extract_emerging_keywords(self, patents: list[dict]) -> list[str]:
         """提取新兴关键词"""
         # 简单的关键词提取（实际应用中可使用更复杂的NLP方法）
         all_text = []
@@ -604,7 +604,7 @@ class TechnologyTrendAnalyzer:
 
         return emerging_keywords
 
-    async def generate_trend_report(self, technology: str = None, years: int = 5) -> Dict[str, Any]:
+    async def generate_trend_report(self, technology: str = None, years: int = 5) -> dict[str, Any]:
         """生成技术趋势报告"""
         if technology:
             # 分析特定技术
@@ -652,20 +652,20 @@ class TechnologyTrendAnalyzer:
                 "generated_at": datetime.now().isoformat()
             }
 
-    def _generate_recommendations(self, trend: TechnologyTrend) -> List[str]:
+    def _generate_recommendations(self, trend: TechnologyTrend) -> list[str]:
         """生成建议"""
         recommendations = []
 
         if trend.trend_direction == TrendDirection.RISING:
-            recommendations.append(f"技术呈上升趋势，建议加大研发投入")
+            recommendations.append("技术呈上升趋势，建议加大研发投入")
             recommendations.append(f"增长率{trend.growth_rate:.1%}，市场前景良好")
         elif trend.trend_direction == TrendDirection.DECLINING:
-            recommendations.append(f"技术呈下降趋势，建议谨慎投资")
-            recommendations.append(f"考虑技术转型或寻找新的应用领域")
+            recommendations.append("技术呈下降趋势，建议谨慎投资")
+            recommendations.append("考虑技术转型或寻找新的应用领域")
         elif trend.trend_direction == TrendDirection.VOLATILE:
-            recommendations.append(f"技术发展波动较大，建议深入分析市场驱动因素")
+            recommendations.append("技术发展波动较大，建议深入分析市场驱动因素")
         else:
-            recommendations.append(f"技术发展相对稳定，适合长期布局")
+            recommendations.append("技术发展相对稳定，适合长期布局")
 
         # 基于关键指标的建议
         if trend.key_indicators.get('maturity_score', 0) > 0.7:
@@ -678,7 +678,7 @@ class TechnologyTrendAnalyzer:
 
         return recommendations
 
-    def _generate_strategic_insights(self, hotspots: List[HotspotAnalysis]) -> List[str]:
+    def _generate_strategic_insights(self, hotspots: list[HotspotAnalysis]) -> list[str]:
         """生成战略洞察"""
         insights = []
 
@@ -707,7 +707,7 @@ class TechnologyTrendAnalyzer:
 
         return insights
 
-    def _find_technology_overlaps(self, hotspots: List[HotspotAnalysis]) -> List[str]:
+    def _find_technology_overlaps(self, hotspots: list[HotspotAnalysis]) -> list[str]:
         """发现技术重叠领域"""
         # 简化的重叠检测
         overlaps = []
@@ -718,9 +718,11 @@ class TechnologyTrendAnalyzer:
         return overlaps
 
 # FastAPI应用部分
-from fastapi import FastAPI, HTTPException
 from contextlib import asynccontextmanager
+
 import uvicorn
+from fastapi import FastAPI, HTTPException
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -775,7 +777,7 @@ async def display_startup_identity():
 
         print("\n" + "="*70)
         print(identity_display)
-        print(f"\n📈 技术趋势分析师启动成功！")
+        print("\n📈 技术趋势分析师启动成功！")
         print("📍 服务端口: 8035")
         print("🗄️ 数据源: PostgreSQL专利数据库")
         print("🔍 分析能力: 趋势分析 + 热点识别 + 战略预测")
@@ -879,7 +881,7 @@ async def analyze_technology_trend(request: dict):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"趋势分析失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"趋势分析失败: {str(e)}") from e
 
 @app.post("/identify_hotspots")
 async def identify_hotspots(request: dict):
@@ -924,7 +926,7 @@ async def identify_hotspots(request: dict):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"热点识别失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"热点识别失败: {str(e)}") from e
 
 @app.post("/generate_trend_report")
 async def generate_trend_report(request: dict):
@@ -947,7 +949,7 @@ async def generate_trend_report(request: dict):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"报告生成失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"报告生成失败: {str(e)}") from e
 
 @app.get("/available_technologies")
 async def get_available_technologies():

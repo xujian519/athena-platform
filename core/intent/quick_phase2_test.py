@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Phase 2 快速验证脚本
 Quick Phase 2 Verification

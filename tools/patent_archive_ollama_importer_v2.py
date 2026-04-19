@@ -1,29 +1,23 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-使用Ollama大模型的专利档案表智能导入工具 v2.0
+使用MLX大模型的专利档案表智能导入工具 v2.0
 适配现有的athena_business数据库结构
 """
 
 import json
-import pandas as pd
-import requests
-import hashlib
-import psycopg2
-from psycopg2.extras import execute_values, RealDictCursor
+import logging
+import sys
+import uuid
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple
-import os
-import sys
-import logging
-import uuid
+
+import pandas as pd
+import psycopg2
+import requests
+from psycopg2.extras import execute_values
 
 # 导入安全配置
-import sys
-from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent / "core"))
-from security.env_config import get_env_var, get_database_url, get_jwt_secret
 
 # 配置日志
 logging.basicConfig(
@@ -32,12 +26,12 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-class OllamaPatentImporter:
-    """使用Ollama的专利导入器 v2.0"""
+class MLXPatentImporter:
+    """使用MLX的专利导入器 v2.0"""
 
     def __init__(self):
-        # Ollama配置
-        self.ollama_url = "http://localhost:11434/api"
+        # MLX配置
+        self.mlx_url = "http://127.0.0.1:8765/v1"
         self.model_name = "qwen:7b"  # 使用qwen模型
 
         # 数据库配置
@@ -55,29 +49,31 @@ class OllamaPatentImporter:
         self.existing_clients = set()
         self.client_map = {}  # 名称到ID的映射
 
-    def query_ollama(self, prompt: str, system_prompt: str = None) -> str:
-        """查询Ollama模型"""
+    def query_mlx(self, prompt: str, system_prompt: str = None) -> str:
+        """查询MLX模型"""
         try:
+            messages = []
+            if system_prompt:
+                messages.append({"role": "system", "content": system_prompt})
+            messages.append({"role": "user", "content": prompt})
+
             payload = {
                 "model": self.model_name,
-                "prompt": prompt,
+                "messages": messages,
                 "stream": False
             }
 
-            if system_prompt:
-                payload["system"] = system_prompt
-
-            response = requests.post(f"{self.ollama_url}/generate", json=payload, timeout=60)
+            response = requests.post(f"{self.mlx_url}/chat/completions", json=payload, timeout=60)
 
             if response.status_code == 200:
                 result = response.json()
-                return result.get("response", "")
+                return result.get("choices", [{}])[0].get("message", {}).get("content", "")
             else:
-                logger.error(f"Ollama请求失败: {response.status_code}")
+                logger.error(f"MLX请求失败: {response.status_code}")
                 return ""
 
         except Exception as e:
-            logger.error(f"查询Ollama出错: {str(e)}")
+            logger.error(f"查询MLX出错: {str(e)}")
             return ""
 
     def load_existing_data(self):
@@ -121,7 +117,7 @@ class OllamaPatentImporter:
             if conn:
                 conn.close()
 
-    def analyze_excel_with_ai(self, excel_path: str) -> Dict:
+    def analyze_excel_with_ai(self, excel_path: str) -> dict:
         """使用AI分析Excel表格结构"""
         logger.info("🤖 使用AI分析Excel表格结构...")
 
@@ -131,7 +127,7 @@ class OllamaPatentImporter:
 
             # 准备样本数据
             sample_data = []
-            for idx, row in df.iterrows():
+            for _idx, row in df.iterrows():
                 row_data = {}
                 for col in df.columns:
                     value = row[col]
@@ -181,7 +177,7 @@ class OllamaPatentImporter:
 }}
 """
 
-            response = self.query_ollama(prompt, system_prompt)
+            response = self.query_mlx(prompt, system_prompt)
 
             # 尝试解析JSON响应
             try:
@@ -207,7 +203,7 @@ class OllamaPatentImporter:
             logger.error(f"AI分析失败: {e}")
             return self._fallback_analysis(excel_path)
 
-    def _fallback_analysis(self, excel_path: str) -> Dict:
+    def _fallback_analysis(self, excel_path: str) -> dict:
         """备用分析方法（不使用AI）"""
         logger.info("使用备用分析方法...")
 
@@ -262,7 +258,7 @@ class OllamaPatentImporter:
 请只返回客户名称，不要其他解释：
 """
 
-        response = self.query_ollama(prompt,
+        response = self.query_mlx(prompt,
             "你是一个专业的文本提取专家，专门从专利标题中提取客户名称。")
 
         client_name = response.strip()
@@ -314,7 +310,7 @@ class OllamaPatentImporter:
 
         return patent_name
 
-    def process_excel_data(self, excel_path: str) -> Dict:
+    def process_excel_data(self, excel_path: str) -> dict:
         """处理Excel数据"""
         logger.info("📊 开始处理Excel数据...")
 
@@ -447,14 +443,14 @@ class OllamaPatentImporter:
             "processing_time": datetime.now().isoformat()
         }
 
-        logger.info(f"\n📈 处理结果:")
+        logger.info("\n📈 处理结果:")
         logger.info(f"  新专利: {result['new_patents']}")
         logger.info(f"  重复专利: {result['duplicate_patents']}")
         logger.info(f"  新客户: {result['new_clients']}")
 
         return result
 
-    def save_to_database(self, processed_data: List[Dict]):
+    def save_to_database(self, processed_data: list[dict]):
         """保存数据到数据库"""
         logger.info("💾 正在保存数据到数据库...")
 
@@ -493,7 +489,7 @@ class OllamaPatentImporter:
             patent_records = []
             for record in processed_data:
                 client_name = record.get('client_name', '').strip()
-                client_id = self.client_map.get(client_name)
+                self.client_map.get(client_name)
 
                 # 生成专利ID
                 patent_id = str(uuid.uuid4())
@@ -508,7 +504,7 @@ class OllamaPatentImporter:
                     'filing_date': self._parse_date(record.get('filing_date')),
                     'legal_status': record.get('legal_status', 'PENDING'),
                     'metadata': json.dumps({
-                        'source': 'ollama_import',
+                        'source': 'mlx_import',
                         'client_name': client_name,
                         'agent': record.get('agent', ''),
                         'archive_number': record.get('archive_number', ''),
@@ -518,7 +514,7 @@ class OllamaPatentImporter:
                     }, ensure_ascii=False),
                     'created_at': datetime.now(),
                     'updated_at': datetime.now(),
-                    'created_by': 'ollama_importer'
+                    'created_by': 'mlx_importer'
                 }
                 patent_records.append(patent_record)
 
@@ -603,7 +599,7 @@ class OllamaPatentImporter:
             logger.debug(f"[patent_archive_ollama_importer_v2] Exception: {e}")
         return None
 
-    def export_results(self, result: Dict):
+    def export_results(self, result: dict):
         """导出处理结果"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -670,7 +666,7 @@ def main():
     """主函数"""
     excel_path = "/Users/xujian/工作/10_归档文件/专利档案表（2016---) .xlsx"
 
-    print("🚀 使用Ollama大模型的专利档案智能导入工具 v2.0")
+    print("🚀 使用MLX大模型的专利档案智能导入工具 v2.0")
     print("=" * 60)
 
     # 检查文件
@@ -679,7 +675,7 @@ def main():
         return False
 
     # 创建导入器
-    importer = OllamaPatentImporter()
+    importer = MLXPatentImporter()
 
     try:
         # 1. 加载现有数据

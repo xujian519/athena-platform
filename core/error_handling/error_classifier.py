@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 错误分类器
 Error Classifier
@@ -13,7 +14,6 @@ Error Classifier
 - 提供重试延迟建议
 """
 
-from typing import Optional
 import logging
 from enum import Enum
 
@@ -250,7 +250,7 @@ class ErrorClassifier:
         return category in ErrorClassifier.RETRYABLE_CATEGORIES
 
     @staticmethod
-    def get_retry_delay(attempt: Optional[int],
+    def get_retry_delay(attempt: int | None,
                         error: Exception | None = None) -> float:
         """
         获取重试延迟(指数退避)

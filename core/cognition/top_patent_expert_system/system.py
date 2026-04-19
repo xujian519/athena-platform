@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 顶级专利专家系统 - 主系统
 Top Patent Expert System - Main System
@@ -12,7 +13,6 @@ Top Patent Expert System - Main System
 import json
 import logging
 from datetime import datetime
-from pathlib import Path
 from typing import Any
 
 from core.logging_config import setup_logging
@@ -347,7 +347,7 @@ class TopPatentExpertSystem:
         Returns:
             提示词
         """
-        expert_type = expert["type"]
+        expert["type"]
         expert_name = expert["name"]
         expert_title = expert["title"]
         specialization = expert["specialization"]

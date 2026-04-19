@@ -6,10 +6,10 @@ Platform Manager
 """
 
 import asyncio
-from core.async_main import async_main
 import json
+import random
 from datetime import datetime
-from typing import Dict, List, Optional, Any
+from typing import Any
 
 from utils.logger import logger
 
@@ -83,7 +83,7 @@ class PlatformManager:
         self.publish_history = []
 
         # 平台认证状态
-        self.auth_status = {platform: False for platform in self.platforms}
+        self.auth_status = dict.fromkeys(self.platforms, False)
 
     async def initialize(self):
         """初始化平台管理器"""
@@ -102,7 +102,7 @@ class PlatformManager:
         try:
             # 检查所有平台连接状态
             connected_platforms = sum(1 for status in self.auth_status.values() if status)
-            total_platforms = len(self.auth_status)
+            len(self.auth_status)
 
             # 至少需要一个平台连接正常
             return connected_platforms > 0
@@ -134,7 +134,7 @@ class PlatformManager:
         # 暂时使用空列表
         self.publish_history = []
 
-    async def publish_to_platforms(self, content: Dict, platforms: List[str], schedule_time: str | None = None) -> Dict[str, Any]:
+    async def publish_to_platforms(self, content: dict, platforms: list[str], schedule_time: str | None = None) -> dict[str, Any]:
         """
         发布内容到指定平台
 
@@ -166,7 +166,7 @@ class PlatformManager:
 
         return results
 
-    async def _publish_to_single_platform(self, platform: str, content: Dict, schedule_time: str | None = None) -> Dict[str, Any]:
+    async def _publish_to_single_platform(self, platform: str, content: dict, schedule_time: str | None = None) -> dict[str, Any]:
         """发布到单个平台"""
         if platform not in self.platforms:
             raise ValueError(f"不支持的平台: {platform}")
@@ -175,7 +175,7 @@ class PlatformManager:
             raise ConnectionError(f"{platform}未连接或未授权")
 
         # 适配平台格式
-        adapted_content = await self._adapt_content_for_platform(content, platform)
+        await self._adapt_content_for_platform(content, platform)
 
         # 模拟发布（实际应该调用真实API）
         logger.info(f"📤 正在发布到{platform}...")
@@ -202,7 +202,7 @@ class PlatformManager:
         logger.info(f"✅ {platform}发布成功")
         return publish_result
 
-    async def _adapt_content_for_platform(self, content: Dict, platform: str) -> Dict[str, Any]:
+    async def _adapt_content_for_platform(self, content: dict, platform: str) -> dict[str, Any]:
         """适配内容到指定平台"""
         platform_config = self.platforms[platform]
         adapted = content.copy()
@@ -231,7 +231,7 @@ class PlatformManager:
 
         return adapted
 
-    async def _adapt_for_xiaohongshu(self, content: Dict) -> Dict[str, Any]:
+    async def _adapt_for_xiaohongshu(self, content: dict) -> dict[str, Any]:
         """适配小红书"""
         adapted = content.copy()
 
@@ -248,7 +248,7 @@ class PlatformManager:
 
         return adapted
 
-    async def _adapt_for_zhihu(self, content: Dict) -> Dict[str, Any]:
+    async def _adapt_for_zhihu(self, content: dict) -> dict[str, Any]:
         """适配知乎"""
         adapted = content.copy()
 
@@ -260,7 +260,7 @@ class PlatformManager:
 
         return adapted
 
-    async def _adapt_for_douyin(self, content: Dict) -> Dict[str, Any]:
+    async def _adapt_for_douyin(self, content: dict) -> dict[str, Any]:
         """适配抖音"""
         adapted = content.copy()
 
@@ -273,7 +273,7 @@ class PlatformManager:
 
         return adapted
 
-    async def _adapt_for_bilibili(self, content: Dict) -> Dict[str, Any]:
+    async def _adapt_for_bilibili(self, content: dict) -> dict[str, Any]:
         """适配B站"""
         adapted = content.copy()
 
@@ -286,7 +286,7 @@ class PlatformManager:
 
         return adapted
 
-    async def _adapt_for_wechat(self, content: Dict) -> Dict[str, Any]:
+    async def _adapt_for_wechat(self, content: dict) -> dict[str, Any]:
         """适配公众号"""
         adapted = content.copy()
 
@@ -298,7 +298,7 @@ class PlatformManager:
 
         return adapted
 
-    async def _adapt_for_weibo(self, content: Dict) -> Dict[str, Any]:
+    async def _adapt_for_weibo(self, content: dict) -> dict[str, Any]:
         """适配微博"""
         adapted = content.copy()
 
@@ -318,7 +318,7 @@ class PlatformManager:
         # 简单地在开头添加一个emoji
         return random.choice(emojis) + " " + text
 
-    def _record_publish(self, platform: str, content: Dict, result: Dict) -> Any:
+    def _record_publish(self, platform: str, content: dict, result: dict) -> Any:
         """记录发布历史"""
         record = {
             "platform": platform,
@@ -335,7 +335,7 @@ class PlatformManager:
         if len(self.publish_history) > 1000:
             self.publish_history = self.publish_history[-1000:]
 
-    async def get_publish_stats(self, platform: str | None = None) -> Dict[str, Any]:
+    async def get_publish_stats(self, platform: str | None = None) -> dict[str, Any]:
         """获取发布统计"""
         # 过滤平台
         history = self.publish_history
@@ -364,7 +364,7 @@ class PlatformManager:
             "recent_publishes": history[-10:]  # 最近10条
         }
 
-    async def get_platform_status(self) -> Dict[str, Any]:
+    async def get_platform_status(self) -> dict[str, Any]:
         """获取平台状态"""
         return {
             "platforms": self.platforms,

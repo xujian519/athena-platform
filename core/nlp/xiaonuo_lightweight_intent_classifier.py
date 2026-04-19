@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺轻量级意图分类器
 Xiaonuo Lightweight Intent Classifier
@@ -11,17 +12,15 @@ Xiaonuo Lightweight Intent Classifier
 """
 
 import json
-from core.async_main import async_main
-import logging
-from core.logging_config import setup_logging
 import os
-# 安全修复: 使用joblib替代pickle序列化scikit-learn模型
-import joblib
 from dataclasses import dataclass
 from datetime import datetime
 
 # NLP库
 import jieba
+
+# 安全修复: 使用joblib替代pickle序列化scikit-learn模型
+import joblib
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 
@@ -34,6 +33,8 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import SVC
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -113,7 +114,7 @@ class XiaonuoLightweightIntentClassifier:
         }
         return stop_words
 
-    def create_training_data(self) -> tuple[list[str], list[str]:
+    def create_training_data(self) -> tuple[list[str], list[str]]:
         """创建训练数据集"""
         logger.info("📚 创建小诺专用意图训练数据集...")
 
@@ -271,7 +272,7 @@ class XiaonuoLightweightIntentClassifier:
 
         return texts, labels
 
-    def _augment_training_data(self, original_data: list[tuple[str, str]) -> list[tuple[str, str]]:
+    def _augment_training_data(self, original_data: list[tuple[str, str]]) -> list[tuple[str, str]]:
         """数据增强:通过句式变化"""
         augmented_data = original_data.copy()
 
@@ -286,15 +287,15 @@ class XiaonuoLightweightIntentClassifier:
 
         # 对部分数据进行句式变化
         for text, label in original_data[:30]:  # 只对前30条进行增强,避免过多重复
-            for _pattern in patterns[2: 4,:  # 使用部分模式
+            for _pattern in patterns[2:4]:  # 使用部分模式
                 try:
                     if len(text.split()) > 5:  # 只对较长句子进行变化
                         new_text = text.replace("帮我", "").replace("请", "").strip()
                         augmented_text = f"帮我{new_text}"
                         if augmented_text != text:
                             augmented_data.append((augmented_text, label))
-        except Exception as e:
-            logger.warning(f'操作失败: {e}')
+                except Exception as e:
+                    logger.warning(f'操作失败: {e}')
 
         return augmented_data
 
@@ -508,9 +509,14 @@ class XiaonuoLightweightIntentClassifier:
         logger.info(f"✅ 模型已加载: {model_path}")
 
     def _save_evaluation_results(self, X_val: list[str], y_true: list[str],
-                                y_pred: list[str]]:
+                                y_pred: list[str]):
         """保存评估结果"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+        # 计算评估指标
+        accuracy = sum(1 for t, p in zip(y_true, y_pred, strict=False) if t == p) / len(y_true) if y_true else 0.0
+        from sklearn.metrics import classification_report
+        report = classification_report(y_true, y_pred, output_dict=True)
 
         # 保存评估报告
         report_data = {

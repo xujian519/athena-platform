@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律规则引擎 - Legal Rule Engine
 Legal Rule Engine for Patent Law
@@ -22,8 +23,7 @@ import logging
 import re
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -99,8 +99,8 @@ class CreativityAssessment:
     creativity_level: CreativityLevel
     confidence: float
     step1_distinguishing: list[DistinguishingFeature]
-    step2_problem: Optional[TechnicalProblem]
-    step3_hint: Optional[TechnicalHint]
+    step2_problem: TechnicalProblem | None
+    step3_hint: TechnicalHint | None
     reasoning_chain: list[str] = field(default_factory=list)
     suggestions: list[str] = field(default_factory=list)
 

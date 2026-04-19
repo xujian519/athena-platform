@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 向量化服务
 Embedding Service
@@ -8,18 +7,17 @@ Embedding Service
 """
 
 # Numpy兼容性导入
-from config.numpy_compatibility import array, zeros, ones, random, mean, sum, dot
 import json
 import logging
-import os
 import re
-import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer
+
+from config.numpy_compatibility import array
 
 # 配置日志
 logger = logging.getLogger(__name__)
@@ -58,7 +56,7 @@ class PatentGuidelineEmbedder:
             logger.error(f"模型加载失败: {e}")
             raise
 
-    def encode_texts(self, texts: List[str], batch_size: int = 32) -> np.ndarray:
+    def encode_texts(self, texts: list[str], batch_size: int = 32) -> np.ndarray:
         """批量编码文本
 
         Args:
@@ -90,7 +88,7 @@ class PatentGuidelineEmbedder:
         logger.info(f"编码完成，向量维度: {all_embeddings.shape}")
         return all_embeddings
 
-    def enhance_text_with_metadata(self, text: str, metadata: Dict[str, Any]) -> str:
+    def enhance_text_with_metadata(self, text: str, metadata: dict[str, Any]) -> str:
         """使用元数据增强文本
 
         Args:
@@ -129,7 +127,7 @@ class PatentGuidelineEmbedder:
 
         return '\n'.join(enhanced_parts)
 
-    def embed_sections(self, sections: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def embed_sections(self, sections: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """对章节进行向量化
 
         Args:
@@ -196,7 +194,7 @@ class PatentGuidelineEmbedder:
         logger.info(f"向量化完成，生成了 {len(results)} 个向量")
         return results
 
-    def _extract_keywords(self, text: str) -> List[str]:
+    def _extract_keywords(self, text: str) -> list[str]:
         """提取关键词
 
         Args:
@@ -237,7 +235,7 @@ class PatentGuidelineEmbedder:
         # 去重
         return list(set(found_keywords))
 
-    def _extract_concepts(self, text: str) -> List[str]:
+    def _extract_concepts(self, text: str) -> list[str]:
         """提取概念
 
         Args:
@@ -253,15 +251,7 @@ class PatentGuidelineEmbedder:
         text_lower = text.lower()
 
         # 寻找"XX的概念"、"XX的定义"等模式
-        concepts_pattern = r'([^，。；：！''''\n]+)(的概念|的定义)'
-        matches = re.findall(concepts_pattern, text_lower)
-        for match in matches:
-            concept = match[0].strip()
-            if len(concept) > 1:
-                concepts.append(concept)
-
-        # 寻找"是指"、"指的是"等定义
-        definition_pattern = r'([^，。；：！''''\n]+)(是指|指的是|指的是：|定义为|定义为：)'
+        definition_pattern = r'([\u4e00-\u9fff]+)的(?:概念|定义|含义|特征|特点)'
         matches = re.findall(definition_pattern, text_lower)
         for match in matches:
             concept = match[0].strip()
@@ -270,7 +260,7 @@ class PatentGuidelineEmbedder:
 
         return concepts
 
-    def save_embeddings(self, embeddings: List[Dict[str, Any]], output_path: str):
+    def save_embeddings(self, embeddings: list[dict[str, Any]], output_path: str):
         """保存向量
 
         Args:
@@ -295,7 +285,7 @@ class PatentGuidelineEmbedder:
 
         logger.info(f"向量已保存到: {output_path}")
 
-    def load_embeddings(self, input_path: str) -> List[Dict[str, Any]]:
+    def load_embeddings(self, input_path: str) -> list[dict[str, Any]]:
         """加载向量
 
         Args:
@@ -304,7 +294,7 @@ class PatentGuidelineEmbedder:
         Returns:
             向量列表
         """
-        with open(input_path, 'r', encoding='utf-8') as f:
+        with open(input_path, encoding='utf-8') as f:
             data = json.load(f)
 
         logger.info(f"从 {input_path} 加载了 {data['total_embeddings']} 个向量")

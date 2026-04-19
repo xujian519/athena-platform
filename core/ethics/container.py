@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 依赖注入容器
 Dependency Injection Container
@@ -18,7 +19,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, Optional, Type, TypeVar
+from typing import Any, TypeVar
 
 from .config.config_loader import ConfigLoader, EthicsConfig
 
@@ -163,7 +164,7 @@ class EthicsContainer(IContainer):
         """
         self._services: dict[type[Any], ServiceDescriptor] = {}
         self._lock = threading.RLock()
-        self._config: Optional[EthicsConfig] = config
+        self._config: EthicsConfig | None = config
         self._initialized: bool = False
 
         # 注册自身

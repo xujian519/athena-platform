@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 智能检索器
 Memory Retriever
@@ -11,11 +10,9 @@ Memory Retriever
 """
 
 import asyncio
-from core.async_main import async_main
 import logging
-from typing import Dict, List, Any, Optional, Tuple
-import numpy as np
-from datetime import datetime, timedelta
+from datetime import datetime
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -25,8 +22,8 @@ class MemoryRetriever:
     def __init__(self):
         """初始化记忆检索器"""
         from .episodic_memory import EpisodicMemory
-        from .semantic_memory import SemanticMemory
         from .procedural_memory import ProceduralMemory
+        from .semantic_memory import SemanticMemory
 
         self.episodic_memory = EpisodicMemory()
         self.semantic_memory = SemanticMemory()
@@ -44,7 +41,7 @@ class MemoryRetriever:
             logger.warning(f"情景记忆初始化失败，将使用模拟模式: {str(e)}")
             self.episodic_initialized = False
 
-    async def retrieve(self, query: Dict[str, Any], limit: int = 10) -> Dict[str, Any]:
+    async def retrieve(self, query: dict[str, Any], limit: int = 10) -> dict[str, Any]:
         """
         智能检索记忆
 
@@ -65,9 +62,9 @@ class MemoryRetriever:
         """
         try:
             retrieval_type = query.get("type", "all")
-            business_type = query.get("business_type", "patent")
+            query.get("business_type", "patent")
             text = query.get("text", "")
-            context = query.get("context", {})
+            query.get("context", {})
 
             results = {
                 "episodic": [],
@@ -129,7 +126,7 @@ class MemoryRetriever:
                 "metadata": {"error": True}
             }
 
-    async def _retrieve_episodic(self, query: Dict, limit: int) -> List[Dict]:
+    async def _retrieve_episodic(self, query: dict, limit: int) -> list[dict]:
         """检索情景记忆"""
         if not self.episodic_initialized:
             # 模拟情景记忆
@@ -177,7 +174,7 @@ class MemoryRetriever:
             logger.error(f"情景记忆检索失败: {str(e)}")
             return []
 
-    async def _retrieve_semantic(self, query: Dict, limit: int) -> List[Dict]:
+    async def _retrieve_semantic(self, query: dict, limit: int) -> list[dict]:
         """检索语义记忆"""
         try:
             text = query.get("text", "")
@@ -192,7 +189,7 @@ class MemoryRetriever:
             )
 
             # 获取相关实体
-            related_entities = await self.semantic_memory.get_related_entities(
+            await self.semantic_memory.get_related_entities(
                 text[:50]  # 取前50个字符作为关键词
             )
 
@@ -200,7 +197,7 @@ class MemoryRetriever:
             semantic_results = []
 
             # 处理知识搜索结果
-            for i, vector_result in enumerate(knowledge_result.get("vector_results", [])):
+            for _i, vector_result in enumerate(knowledge_result.get("vector_results", [])):
                 semantic_results.append({
                     "type": "knowledge",
                     "source": "vector_search",
@@ -232,7 +229,7 @@ class MemoryRetriever:
             logger.error(f"语义记忆检索失败: {str(e)}")
             return []
 
-    async def _retrieve_procedural(self, query: Dict, limit: int) -> List[Dict]:
+    async def _retrieve_procedural(self, query: dict, limit: int) -> list[dict]:
         """检索程序记忆"""
         try:
             business_type = query.get("business_type")
@@ -274,7 +271,7 @@ class MemoryRetriever:
             logger.error(f"程序记忆检索失败: {str(e)}")
             return []
 
-    async def _combine_results(self, results: Dict, query_text: str, limit: int) -> List[Dict]:
+    async def _combine_results(self, results: dict, query_text: str, limit: int) -> list[dict]:
         """组合不同源的检索结果"""
         combined = []
 
@@ -306,7 +303,7 @@ class MemoryRetriever:
 
         return combined[:limit]
 
-    def _calculate_episodic_score(self, memory: Dict, query: Dict) -> float:
+    def _calculate_episodic_score(self, memory: dict, query: dict) -> float:
         """计算情景记忆分数"""
         score = memory.get("similarity", 0.5) * 0.6  # 相似度权重60%
 
@@ -322,7 +319,7 @@ class MemoryRetriever:
 
         return min(score, 1.0)
 
-    def _calculate_procedural_score(self, procedure, query: Dict) -> float:
+    def _calculate_procedural_score(self, procedure, query: dict) -> float:
         """计算程序记忆分数"""
         score = 0.0
 
@@ -342,7 +339,7 @@ class MemoryRetriever:
 
         return min(score, 1.0)
 
-    def _calculate_combined_score(self, item: Dict, query_text: str) -> float:
+    def _calculate_combined_score(self, item: dict, query_text: str) -> float:
         """计算综合分数"""
         # 获取源特定分数
         source_score = item.get("retrieval_score", 0.5)
@@ -361,19 +358,19 @@ class MemoryRetriever:
         else:
             return source_score
 
-    def _text_to_embedding(self, text: str) -> List[float]:
+    def _text_to_embedding(self, text: str) -> list[float]:
         """文本转向量（简化实现）"""
         # 这里应该调用实际的embedding模型
         # 简化实现：返回随机向量
         import hashlib
-        hash_obj = hashlib.md5(text.encode(), usedforsecurity=False))
+        hash_obj = hashlib.md5(text.encode(), usedforsecurity=False)
         vector = []
         for i in range(768):
             byte_idx = i % 16
             vector.append(ord(hash_obj.digest()[byte_idx]) / 255.0)
         return vector
 
-    def _simulate_episodic_retrieval(self, query: Dict, limit: int) -> List[Dict]:
+    def _simulate_episodic_retrieval(self, query: dict, limit: int) -> list[dict]:
         """模拟情景记忆检索"""
         # 模拟数据
         mock_memories = [
@@ -391,7 +388,7 @@ class MemoryRetriever:
 
         return mock_memories
 
-    async def update_memory(self, memory_type: str, memory_data: Dict) -> bool:
+    async def update_memory(self, memory_type: str, memory_data: dict) -> bool:
         """更新记忆"""
         try:
             if memory_type == "episodic":
@@ -415,7 +412,7 @@ class MemoryRetriever:
             logger.error(f"更新{memory_type}记忆失败: {str(e)}")
             return False
 
-    async def get_memory_statistics(self) -> Dict[str, Any]:
+    async def get_memory_statistics(self) -> dict[str, Any]:
         """获取记忆统计"""
         stats = {
             "episodic": {},

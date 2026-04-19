@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一检索API服务
 Unified Retrieval API Service
@@ -46,6 +47,7 @@ from core.monitoring.metrics import (
     metrics_endpoint,
     update_app_info,
 )
+
 # TD-001: 使用Neo4j版本的智能路由器
 from core.search.neo4j_intelligent_router import (
     get_router,
@@ -462,7 +464,7 @@ async def search(
     except ValueError as e:
         # 输入验证错误
         logger.warning(f"⚠️ 输入验证失败: query='{request.query}', error={e!s}")
-        raise HTTPException(status_code=400, detail=f"请求参数错误: {e!s}")
+        raise HTTPException(status_code=400, detail=f"请求参数错误: {e!s}") from e
 
     except Exception as e:
         # 记录错误日志 (脱敏)
@@ -480,7 +482,7 @@ async def search(
             pass
 
         # 返回安全的错误消息
-        raise HTTPException(status_code=500, detail=safe_error)
+        raise HTTPException(status_code=500, detail=safe_error) from e
 
 
 @app.post("/api/batch-search", response_model=BatchSearchResponse)
@@ -561,7 +563,7 @@ async def batch_search(request: BatchSearchRequest):
 
     except Exception as e:
         logger.error(f"Batch search failed: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.get("/api/stats")

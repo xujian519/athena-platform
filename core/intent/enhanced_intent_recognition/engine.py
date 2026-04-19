@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强意图识别引擎 - 第一阶段优化版本(重构版)
 Enhanced Intent Recognition Engine - Phase 1 Optimization (Refactored)

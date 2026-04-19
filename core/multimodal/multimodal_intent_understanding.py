@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多模态意图理解系统 v2.0
 Multi-Modal Intent Understanding System Enhanced
@@ -24,7 +25,7 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -257,7 +258,7 @@ class MultiModalIntentUnderstanding:
             for keyword in keywords:
                 # 基于关键词哈希
                 hash_val = int(
-                    hashlib.md5(f"{keyword}{i}".encode('utf-8'), usedforsecurity=False).hexdigest()[:8], 16
+                    hashlib.md5(f"{keyword}{i}".encode(), usedforsecurity=False).hexdigest()[:8], 16
                 )
                 value += (hash_val % 100) / 100.0
 

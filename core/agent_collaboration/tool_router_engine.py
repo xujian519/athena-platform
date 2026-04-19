@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 智能工具路由引擎
 负责智能体的工具选择和路由决策
@@ -7,11 +8,11 @@ import re
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from loguru import logger
 
-from .service_kg import ServiceCapability, ServiceCategory, ServiceKnowledgeGraph, get_service_kg
+from .service_kg import ServiceCategory, ServiceKnowledgeGraph, get_service_kg
 
 
 class RoutingStrategy(Enum):

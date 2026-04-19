@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 企业级OpenCV图像处理器
 支持场景识别、目标检测、图像预处理、特征提取
 最后更新: 2026-01-26
 """
 
-import os
 import hashlib
 import logging
+import os
 from datetime import datetime
 from pathlib import Path
-from typing import Optional, Dict, Any, List
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -57,8 +58,8 @@ class OpenCVImageProcessor:
         self,
         image_path: str,
         operation: str,
-        parameters: Optional[Dict[str, Any]] | None = None
-    ) -> Dict[str, Any]:
+        parameters: dict[str, Any] | None | None = None
+    ) -> dict[str, Any]:
         """
         处理图像
 
@@ -107,7 +108,7 @@ class OpenCVImageProcessor:
             logger.error(f"图像处理失败: {e}")
             raise
 
-    def _validate_input(self, image_path: str) -> Dict[str, Any]:
+    def _validate_input(self, image_path: str) -> dict[str, Any]:
         """验证输入文件"""
         result = {"valid": True, "error": None}
 
@@ -141,8 +142,8 @@ class OpenCVImageProcessor:
         self,
         img,
         operation: str,
-        parameters: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        parameters: dict[str, Any]
+    ) -> dict[str, Any]:
         """执行指定的图像操作"""
 
         if operation == "scene_detection":
@@ -164,7 +165,7 @@ class OpenCVImageProcessor:
         else:
             raise ValueError(f"不支持的操作: {operation}")
 
-    def _detect_scene(self, img) -> Dict[str, Any]:
+    def _detect_scene(self, img) -> dict[str, Any]:
         """场景检测"""
         # 转换为灰度图
         gray = self.cv2.cvtColor(img, self.cv2.COLOR_BGR2GRAY)
@@ -236,7 +237,7 @@ class OpenCVImageProcessor:
         }
         return descriptions.get(scene_type, "未知场景")
 
-    def _detect_edges(self, img, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    def _detect_edges(self, img, parameters: dict[str, Any]) -> dict[str, Any]:
         """边缘检测"""
         gray = self.cv2.cvtColor(img, self.cv2.COLOR_BGR2GRAY)
 
@@ -258,7 +259,7 @@ class OpenCVImageProcessor:
             "description": f"检测到 {edge_pixels} 个边缘像素，占比 {edge_ratio*100:.2f}%"
         }
 
-    def _enhance_image(self, img, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    def _enhance_image(self, img, parameters: dict[str, Any]) -> dict[str, Any]:
         """图像增强"""
         # 对比度增强
         alpha = parameters.get("alpha", 1.5)  # 对比度
@@ -276,7 +277,7 @@ class OpenCVImageProcessor:
             "description": "图像对比度和亮度增强完成"
         }
 
-    def _analyze_image(self, img) -> Dict[str, Any]:
+    def _analyze_image(self, img) -> dict[str, Any]:
         """分析图像"""
         height, width, channels = img.shape
         total_pixels = height * width
@@ -347,7 +348,7 @@ class OpenCVImageProcessor:
             else:
                 return "purple"
 
-    def _resize_image(self, img, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    def _resize_image(self, img, parameters: dict[str, Any]) -> dict[str, Any]:
         """调整图像大小"""
         width = parameters.get("width", 800)
         height = parameters.get("height", 600)
@@ -364,7 +365,7 @@ class OpenCVImageProcessor:
             "description": f"图像调整为 {width}x{height}"
         }
 
-    def _rotate_image(self, img, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    def _rotate_image(self, img, parameters: dict[str, Any]) -> dict[str, Any]:
         """旋转图像"""
         angle = parameters.get("angle", 90)
 
@@ -384,7 +385,7 @@ class OpenCVImageProcessor:
             "description": f"图像旋转 {angle} 度"
         }
 
-    def _blur_image(self, img, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    def _blur_image(self, img, parameters: dict[str, Any]) -> dict[str, Any]:
         """模糊图像"""
         kernel_size = parameters.get("kernel_size", 5)
 
@@ -399,7 +400,7 @@ class OpenCVImageProcessor:
             "description": f"高斯模糊 (核大小: {kernel_size})"
         }
 
-    def _sharpen_image(self, img) -> Dict[str, Any]:
+    def _sharpen_image(self, img) -> dict[str, Any]:
         """锐化图像"""
         kernel = np.array([[-1, -1, -1],
                           [-1,  9, -1],
@@ -422,10 +423,10 @@ class OpenCVImageProcessor:
 
     async def batch_process(
         self,
-        image_paths: List[str],
+        image_paths: list[str],
         operation: str,
-        parameters: Optional[Dict[str, Any]] | None = None
-    ) -> List[Dict[str, Any]]:
+        parameters: dict[str, Any] | None | None = None
+    ) -> list[dict[str, Any]]:
         """
         批量处理图像
 
@@ -454,7 +455,7 @@ class OpenCVImageProcessor:
 
         return results
 
-    def get_supported_operations(self) -> List[str]:
+    def get_supported_operations(self) -> list[str]:
         """获取支持的操作"""
         return [
             "scene_detection",
@@ -496,7 +497,7 @@ if __name__ == "__main__":
         test_image = "/tmp/test_image.png"
         if os.path.exists(test_image):
             result = await processor.process_image(test_image, "analyze")
-            print(f"\n✅ 图像分析成功:")
+            print("\n✅ 图像分析成功:")
             print(f"描述: {result['result']['description']}")
 
     asyncio.run(test())

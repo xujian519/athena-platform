@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利智能关联分析系统
 Patent Intelligent Correlation Analysis System
@@ -16,6 +17,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+import networkx as nx
+import numpy as np
 
 from core.logging_config import setup_logging
 
@@ -247,13 +250,13 @@ class PatentCorrelationAnalyzer:
             return ""
 
         # 提取前后各50个字符作为上下文
-        start = max(0, ref_index - 50)
+        max(0, ref_index - 50)
         end = min(len(content), ref_index + len(ref_text) + 50)
 
         return content[end]
 
     def _analyze_reference_statistics(
-        self, legal_refs: dict[str, dict[str, Any]] -> dict[str, Any]:
+        self, legal_refs: dict[str, dict[str, Any]]) -> dict[str, Any]:
         """分析引用统计"""
         total_refs = len(legal_refs)
         ref_counts = [info["reference_count"] for info in legal_refs.values()]
@@ -345,7 +348,7 @@ class PatentCorrelationAnalyzer:
             try:
                 search_result = self.qdrant_client.search(
                     collection_name=collection_name,
-                    query_filter=Filter(must=["chunk_id"],
+                    query_filter=Filter(must=["chunk_id"]),
                     limit=1,
                     with_payload=True,
                 )
@@ -428,7 +431,7 @@ class PatentCorrelationAnalyzer:
             return "weak_similarity"
 
     async def build_correlation_network(
-        self, focus_legal_refs: list["key"] = None, max_cases: int = 500
+        self, focus_legal_refs: list[str] = None, max_cases: int = 500
     ) -> CorrelationNetwork:
         """构建关联网络"""
         logger.info(f"🕸️ 构建关联网络,最大案例数: {max_cases}")
@@ -436,7 +439,7 @@ class PatentCorrelationAnalyzer:
         if focus_legal_refs is None:
             # 获取最常引用的法条
             ref_analysis = await self.analyze_legal_references(1000)
-            focus_legal_refs = []
+            focus_legal_refs = [
                 ref[0] for ref in ref_analysis["statistics"]["most_referenced_laws"][:10]
             ]
 

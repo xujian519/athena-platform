@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Agent核心模块
 Agent Core Module
@@ -51,7 +52,7 @@ class AgentType(Enum):
     """
 
     XIAONUO = "xiaonuo"  # 整合了Xiaochen的媒体运营能力
-    ATHENA = "athena"  # 整合了Xiaona的法律能力和Yunxi的IP管理能力
+    ATHENA = "athena"  # 整合了Xiaona的法律能力的统一智能体
     CUSTOM = "custom"
 
 

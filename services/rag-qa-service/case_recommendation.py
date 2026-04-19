@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 完整案例推荐系统
 Comprehensive Case Recommendation System
@@ -13,20 +12,21 @@ Comprehensive Case Recommendation System
 6. 案例对比分析
 """
 
+import logging
+import os
+from collections import Counter
+from typing import Any
+
+import psycopg2
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-from typing import List, Optional, Dict, Any
-import psycopg2
-from core.async_main import async_main
-import logging
-from core.logging_config import setup_logging
-from collections import Counter
-from dotenv import load_dotenv
 
 # GLM-4.7
 from zhipuai import ZhipuAI
-import os
+
+from core.logging_config import setup_logging
 
 # 加载环境变量
 # 注意：此服务使用平台统一的环境变量配置
@@ -188,10 +188,10 @@ async def shutdown():
 class CaseRecommendationRequest(BaseModel):
     """案例推荐请求"""
     description: str = Field(..., description="技术方案/案件描述")
-    technology_field: Optional[str] = Field(None, description="技术领域（自动识别）")
-    issue_type: Optional[str] = Field(None, description="争议类型")
-    claims: Optional[str] = Field(None, description="权利要求内容")
-    prior_art: Optional[str] = Field(None, description="对比现有技术")
+    technology_field: str | None = Field(None, description="技术领域（自动识别）")
+    issue_type: str | None = Field(None, description="争议类型")
+    claims: str | None = Field(None, description="权利要求内容")
+    prior_art: str | None = Field(None, description="对比现有技术")
     top_k: int = Field(10, description="推荐案例数量", ge=1, le=50)
     analysis_depth: str = Field("standard", description="分析深度: basic/standard/deep")
 
@@ -202,25 +202,25 @@ class CaseAnalysis(BaseModel):
     decision_number: str
     decision_result: str
     technology_field: str
-    issue_types: List[str]
+    issue_types: list[str]
     similarity_score: float
     reference_value: str
-    key_points: List[str]
+    key_points: list[str]
     reasoning_summary: str
     outcome_prediction: str
 
 class ComparisonResult(BaseModel):
     """案例对比结果"""
-    input_case: Dict[str, Any]
-    recommended_cases: List[CaseAnalysis]
-    technology_analysis: Dict[str, Any]
-    issue_analysis: Dict[str, Any]
-    success_prediction: Dict[str, Any]
-    recommendations: List[str]
+    input_case: dict[str, Any]
+    recommended_cases: list[CaseAnalysis]
+    technology_analysis: dict[str, Any]
+    issue_analysis: dict[str, Any]
+    success_prediction: dict[str, Any]
+    recommendations: list[str]
 
 # ============ 核心分析函数 ============
 
-def identify_technology_field(text: str) -> Dict[str, Any]:
+def identify_technology_field(text: str) -> dict[str, Any]:
     """
     智能识别技术领域
 
@@ -259,7 +259,7 @@ def identify_technology_field(text: str) -> Dict[str, Any]:
             'method': 'keyword_matching'
         }
 
-def extract_issue_types(reasoning: str) -> List[str]:
+def extract_issue_types(reasoning: str) -> list[str]:
     """
     从理由书中提取争议类型
 
@@ -305,7 +305,7 @@ def calculate_similarity(input_text: str, case_text: str) -> float:
     return round(jaccard_similarity, 3)
 
 def assess_reference_value(similarity: float, decision_result: str,
-                          issue_types: List[str]) -> str:
+                          issue_types: list[str]) -> str:
     """
     评估案例的参考价值
 
@@ -329,7 +329,7 @@ def assess_reference_value(similarity: float, decision_result: str,
     else:
         return 'low'
 
-def predict_outcome(similar_cases: List[Dict]) -> Dict[str, Any]:
+def predict_outcome(similar_cases: list[dict]) -> dict[str, Any]:
     """
     基于相似案例预测案件结果
 
@@ -650,7 +650,7 @@ async def recommend_cases(request: CaseRecommendationRequest):
         import traceback
         logger.error(f"Error in case recommendation: {e}")
         logger.error(f"Traceback: {traceback.format_exc()}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post("/api/analyze/case")
 async def analyze_case(request: CaseRecommendationRequest):
@@ -746,7 +746,7 @@ async def analyze_case(request: CaseRecommendationRequest):
 
     except Exception as e:
         logger.error(f"Error in case analysis: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 if __name__ == "__main__":
     import uvicorn

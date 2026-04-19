@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 安全版本的外部搜索引擎实现
 Secure Version of External Search Engines
@@ -17,7 +18,6 @@ from datetime import datetime
 from typing import Any
 
 import aiohttp
-
 
 logger = logging.getLogger(__name__)
 

@@ -4,14 +4,12 @@
 提供高性能的专利语义搜索和相似度匹配
 """
 
-import asyncio
 import hashlib
 import json
 import logging
 import pickle
 import time
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 # 向量数据库和索引
 import faiss
@@ -22,8 +20,6 @@ import psycopg2
 import redis
 
 # 文本处理和嵌入
-import sentence_transformers
-from psycopg2.extras import execute_values
 from sentence_transformers import SentenceTransformer
 
 from .config_enhanced import VectorSearchConfig
@@ -81,7 +77,7 @@ class PatentTextProcessor:
 
         return combined_text
 
-    def extract_patent_features(self, patent: PatentSearchResult) -> Dict[str, Any]:
+    def extract_patent_features(self, patent: PatentSearchResult) -> dict[str, Any]:
         """提取专利特征"""
         features = {
             'text_length': 0,
@@ -122,7 +118,7 @@ class PatentTextProcessor:
 class EnhancedVectorSearch:
     """增强向量搜索引擎"""
 
-    def __init__(self, config: VectorSearchConfig, db_config: Dict[str, Any]):
+    def __init__(self, config: VectorSearchConfig, db_config: dict[str, Any]):
         self.config = config
         self.db_config = db_config
         self.model = None
@@ -240,7 +236,7 @@ class EnhancedVectorSearch:
                 batch_embeddings = []
                 batch_patent_ids = []
 
-                for patent_id, title, abstract, applicant, ipc_code in patents:
+                for patent_id, title, abstract, _applicant, _ipc_code in patents:
                     # 处理文本
                     text = self.text_processor.process_patent_text(title, abstract)
 
@@ -282,8 +278,8 @@ class EnhancedVectorSearch:
         self,
         query_text: str,
         top_k: int = 10,
-        filters: Optional[Dict[str, Any]] = None
-    ) -> List[PatentSearchResult]:
+        filters: dict[str, Any] | None = None
+    ) -> list[PatentSearchResult]:
         """搜索相似专利"""
         start_time = time.time()
 
@@ -332,9 +328,9 @@ class EnhancedVectorSearch:
 
     async def _get_patents_by_ids(
         self,
-        patent_ids: List[int],
-        filters: Optional[Dict[str, Any]] = None
-    ) -> List[Dict[str, Any]]:
+        patent_ids: list[int],
+        filters: dict[str, Any] | None = None
+    ) -> list[dict[str, Any]]:
         """根据ID获取专利信息"""
         if not self.db_connection:
             return []
@@ -378,7 +374,7 @@ class EnhancedVectorSearch:
             query += ' ORDER BY id'
 
             cursor.execute(query, params)
-            patents = [dict(zip([col[0] for col in cursor.description], row))
+            patents = [dict(zip([col[0] for col in cursor.description], row, strict=False))
                        for row in cursor.fetchall()]
 
             return patents
@@ -438,8 +434,8 @@ class EnhancedVectorSearch:
         top_k: int = 10,
         text_weight: float = 0.3,
         vector_weight: float = 0.7,
-        filters: Optional[Dict[str, Any]] = None
-    ) -> List[PatentSearchResult]:
+        filters: dict[str, Any] | None = None
+    ) -> list[PatentSearchResult]:
         """混合搜索（文本+向量）"""
         # 向量搜索
         vector_results = await self.search_similar_patents(query_text, top_k * 2, filters)
@@ -489,8 +485,8 @@ class EnhancedVectorSearch:
         self,
         query_text: str,
         top_k: int,
-        filters: Optional[Dict[str, Any]] = None
-    ) -> List[PatentSearchResult]:
+        filters: dict[str, Any] | None = None
+    ) -> list[PatentSearchResult]:
         """简单文本搜索"""
         if not self.db_connection:
             return []
@@ -549,7 +545,7 @@ class EnhancedVectorSearch:
         finally:
             cursor.close()
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """获取搜索统计信息"""
         stats = {
             'index_type': self.config.index_type,

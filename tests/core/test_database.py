@@ -3,9 +3,13 @@
 测试数据库连接、查询和操作
 """
 
+import sys
+from pathlib import Path
+
 import pytest
-from unittest.mock import Mock, patch, MagicMock
-from typing import Dict, Any, List
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 
 
 class TestDatabaseModule:
@@ -169,7 +173,7 @@ class TestDatabaseOperations:
     def test_connection_establishment(self):
         """测试数据库连接建立"""
         # 创建模拟连接
-        from unittest.mock import AsyncMock, MagicMock
+        from unittest.mock import MagicMock
 
         mock_asyncpg = MagicMock()
         mock_conn = MagicMock()

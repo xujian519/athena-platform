@@ -5,7 +5,7 @@ API Gateway安全配置
 """
 
 import os
-from typing import Dict, List, Optional
+
 from pydantic import BaseSettings, validator
 
 
@@ -40,9 +40,9 @@ class SecurityConfig(BaseSettings):
     rate_limit_redis_key: str = "athena:rate_limit"
 
     # IP白名单/黑名单
-    ip_whitelist: List[str] = []
-    ip_blacklist: List[str] = []
-    trusted_proxy_ips: List[str] = ["127.0.0.1", "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
+    ip_whitelist: list[str] = []
+    ip_blacklist: list[str] = []
+    trusted_proxy_ips: list[str] = ["127.0.0.1", "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
 
     # 加密配置
     encryption_key: str = os.getenv("ENCRYPTION_KEY", "your-encryption-key-32-chars")
@@ -82,13 +82,6 @@ API_KEYS = {
         "permissions": ["read", "write", "delete", "admin"],
         "rate_limit": {"rate": 1000, "window": 3600},
         "ip_whitelist": [],
-        "expires_at": None
-    },
-    "service_key_yunpat": {
-        "name": "YunPat Service Key",
-        "permissions": ["read", "write"],
-        "rate_limit": {"rate": 500, "window": 3600},
-        "ip_whitelist": ["10.0.0.0/8"],
         "expires_at": None
     },
     "readonly_key_demo": {

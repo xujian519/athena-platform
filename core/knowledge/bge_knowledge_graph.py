@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BGE增强的知识图谱
 BGE Enhanced Knowledge Graph for Athena Platform
@@ -8,12 +9,11 @@ BGE Enhanced Knowledge Graph for Athena Platform
 作者: 小诺·双鱼座
 创建时间: 2025-12-16
 """
-import numpy as np
-
 import logging
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any
 
+import numpy as np
 
 from ..embedding.unified_embedding_service import encode_for_knowledge_graph
 
@@ -71,7 +71,7 @@ class BGEKnowledgeGraph:
 
         # 索引
         self.type_index: dict[str, set[str]] = {}
-        self.embedding_index: Optional[dict[str, np.ndarray]] | None = None
+        self.embedding_index: dict[str, np.ndarray] | None | None = None
 
         # 统计
         self.stats = {

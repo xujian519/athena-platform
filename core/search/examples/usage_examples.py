@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 分散式智能搜索架构 - 使用示例
 Decentralized Intelligent Search Architecture - Usage Examples

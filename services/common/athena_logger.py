@@ -4,17 +4,14 @@ Athena Unified Logger Client
 提供统一的日志记录接口
 """
 
+import asyncio
 import logging
-import json
 import traceback
 from datetime import datetime, timezone
-from typing import Dict, Any, Optional
 from functools import wraps
-import asyncio
-import httpx
+from typing import Any
 
-from athena_service_client import get_service_client
-from message_bus import get_message_bus
+import httpx
 
 # 日志级别映射
 LOG_LEVEL_MAP = {
@@ -135,7 +132,7 @@ class AthenaLogger:
             print(f"刷新日志失败: {e}")
 
 # 全局日志记录器实例
-_loggers: Dict[str, AthenaLogger] = {}
+_loggers: dict[str, AthenaLogger] = {}
 
 def get_logger(service_name: str) -> AthenaLogger:
     """获取服务日志记录器"""

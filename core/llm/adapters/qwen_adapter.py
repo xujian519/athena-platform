@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - Qwen模型适配器
 适配Qwen-Plus和Qwen-Max云端模型
@@ -8,10 +9,10 @@
 
 import logging
 import time
-from typing import Any, Dict
+from typing import Any
 
 from core.llm.base import BaseLLMAdapter, LLMRequest, LLMResponse, ModelCapability
-from core.llm.security_utils import SensitiveDataFilter, mask_api_key
+from core.llm.security_utils import SensitiveDataFilter
 
 logger = logging.getLogger(__name__)
 # 添加敏感数据过滤器

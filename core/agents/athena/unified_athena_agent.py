@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
-Athena统一智能体 - 整合Xiaona + Yunxi能力
-Athena Unified Agent - Integrated with Xiaona + Yunxi Capabilities
+Athena统一智能体 - 整合Xiaona能力
+Athena Unified Agent - Integrated with Xiaona Capabilities
 
 这是整合后的Athena智能体,拥有:
 1. 法律专业能力(来自Xiaona)
-2. IP管理能力(来自Yunxi)
+2. IP管理能力
 3. 战略规划能力(Athena原有)
 
 作者: Athena平台团队
@@ -15,7 +16,7 @@ Athena Unified Agent - Integrated with Xiaona + Yunxi Capabilities
 
 import asyncio
 import logging
-from typing import Any, Dict, Optional, Union
+from typing import Any
 
 from core.agent.base_agent_with_memory import AgentRole, MemoryEnabledAgent
 from core.logging_config import setup_logging
@@ -262,7 +263,7 @@ class AthenaUnifiedAgent(MemoryEnabledAgent):
             "ip_capabilities": len(self.ip_module.capabilities),
             "memory_stats": stats,
             "core_capabilities": self.capabilities,
-            "integrated_agents": ["Xiaona", "Yunxi"],
+            "integrated_agents": ["Xiaona"],
             "integration_status": "complete",
         }
 

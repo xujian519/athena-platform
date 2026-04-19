@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 系统管理器 - 配置管理器
 System Manager - Configuration Manager
@@ -10,11 +11,11 @@ System Manager - Configuration Manager
 """
 
 import logging
-import yaml
 from pathlib import Path
 from threading import Lock
 from typing import Any
 
+import yaml
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +57,7 @@ class ConfigurationManager:
             return self.global_config
 
         try:
-            with open(self.config_path, "r", encoding="utf-8") as f:
+            with open(self.config_path, encoding="utf-8") as f:
                 self.global_config = yaml.safe_load(f) or {}
 
             self.logger.info(f"全局配置已加载: {self.config_path}")

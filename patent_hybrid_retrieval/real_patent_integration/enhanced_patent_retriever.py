@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 增强的专利检索器
 Enhanced Patent Retriever
@@ -7,14 +6,12 @@ Enhanced Patent Retriever
 集成真实专利数据的混合检索系统
 """
 
-import asyncio
 import logging
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
-import numpy as np
 from neo4j import GraphDatabase
 from qdrant_client import QdrantClient
 from real_patent_connector import RealPatentConnector
@@ -31,7 +28,7 @@ class SearchResult:
     abstract: str
     score: float
     source: str  # 'vector', 'graph', 'keyword', 'bm25'
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
     explanation: str | None = None
 
 @dataclass
@@ -89,10 +86,10 @@ class EnhancedPatentRetriever:
         self,
         query: str,
         top_k: int = 10,
-        filters: Optional[Dict[str, Any]] = None,
-        search_modes: Optional[List[str] = None,
-        weights: Optional[Dict[str, float]] = None
-    ) -> Tuple[List[SearchResult], RetrievalStats]:
+        filters: dict[str, Any] | None = None,
+        search_modes: list[str] | None = None,
+        weights: dict[str, float] | None = None
+    ) -> tuple[list[SearchResult], RetrievalStats]:
         """执行增强专利检索
 
         Args:
@@ -199,8 +196,8 @@ class EnhancedPatentRetriever:
         self,
         query: str,
         top_k: int,
-        filters: Optional[Dict[str, Any]] = None
-    ) -> Tuple[List[SearchResult], float]:
+        filters: dict[str, Any] | None = None
+    ) -> tuple[list[SearchResult], float]:
         """执行向量搜索"""
         start_time = datetime.now()
 
@@ -267,8 +264,8 @@ class EnhancedPatentRetriever:
         self,
         query: str,
         top_k: int,
-        filters: Optional[Dict[str, Any]] = None
-    ) -> Tuple[List[SearchResult], float]:
+        filters: dict[str, Any] | None = None
+    ) -> tuple[list[SearchResult], float]:
         """执行图搜索"""
         start_time = datetime.now()
 
@@ -332,8 +329,8 @@ class EnhancedPatentRetriever:
         self,
         query: str,
         top_k: int,
-        filters: Optional[Dict[str, Any]] = None
-    ) -> Tuple[List[SearchResult], float]:
+        filters: dict[str, Any] | None = None
+    ) -> tuple[list[SearchResult], float]:
         """执行关键词搜索"""
         start_time = datetime.now()
 
@@ -394,8 +391,8 @@ class EnhancedPatentRetriever:
         self,
         query: str,
         top_k: int,
-        filters: Optional[Dict[str, Any]] = None
-    ) -> Tuple[List[SearchResult], float]:
+        filters: dict[str, Any] | None = None
+    ) -> tuple[list[SearchResult], float]:
         """执行BM25搜索（简化版）"""
         # 这里简化处理，实际应该使用PostgreSQL的全文搜索
         # 直接返回关键词搜索的结果，但降低分数
@@ -411,10 +408,10 @@ class EnhancedPatentRetriever:
 
     def _merge_results(
         self,
-        all_results: Dict[str, List[SearchResult]],
-        weights: Dict[str, float],
+        all_results: dict[str, list[SearchResult]],
+        weights: dict[str, float],
         top_k: int
-    ) -> List[SearchResult]:
+    ) -> list[SearchResult]:
         """融合不同搜索的结果"""
         # 收集所有结果
         merged = {}
@@ -467,7 +464,7 @@ class EnhancedPatentRetriever:
 
         return final_results
 
-    def get_patent_details(self, patent_id: str) -> Dict[str, Any | None]:
+    def get_patent_details(self, patent_id: str) -> dict[str, Any | None]:
         """获取专利详细信息"""
         try:
             # 先从数据库获取
@@ -497,7 +494,7 @@ class EnhancedPatentRetriever:
 
         return None
 
-    def get_search_statistics(self) -> Dict[str, Any]:
+    def get_search_statistics(self) -> dict[str, Any]:
         """获取搜索统计信息"""
         return {
             'total_queries': self.stats['total_queries'],
@@ -547,7 +544,7 @@ def test_enhanced_retriever():
                 weights={'vector': 0.4, 'graph': 0.3, 'keyword': 0.3}
             )
 
-            logger.info(f"\n检索统计:")
+            logger.info("\n检索统计:")
             logger.info(f"  总耗时: {stats.total_time:.3f}s")
             logger.info(f"  向量搜索: {stats.vector_time:.3f}s")
             logger.info(f"  图搜索: {stats.graph_time:.3f}s")
@@ -555,7 +552,7 @@ def test_enhanced_retriever():
             logger.info(f"  结果融合: {stats.fusion_time:.3f}s")
             logger.info(f"  结果数量: {stats.results_count}")
 
-            logger.info(f"\nTop 5 结果:")
+            logger.info("\nTop 5 结果:")
             for i, result in enumerate(results[:5], 1):
                 logger.info(f"\n{i}. 【专利ID】{result.patent_id}")
                 logger.info(f"   标题: {result.title}")
@@ -564,7 +561,7 @@ def test_enhanced_retriever():
                 logger.info(f"   说明: {result.explanation}")
 
         # 显示总体统计
-        logger.info(f"\n总体统计:")
+        logger.info("\n总体统计:")
         stats = retriever.get_search_statistics()
         for key, value in stats.items():
             logger.info(f"  {key}: {value}")

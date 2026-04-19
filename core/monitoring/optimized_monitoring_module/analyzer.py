@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化版监控告警模块 - 性能分析器
 Optimized Monitoring and Alerting Module - Performance Analyzer

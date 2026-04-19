@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协作管理器
 Collaboration Manager
@@ -9,6 +10,7 @@ Collaboration Manager
 import asyncio
 import logging
 import uuid
+from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Any
@@ -191,7 +193,7 @@ class CollaborationOrchestrator:
             # 初始化工作流执行
             self._execute_workflow(workflow_id, template, context)
 
-            logger.info(f"协作工作流 {workflow_id} 已启动,使用模板 {template_name}")
+            logger.info(f"协作工作流 {workflow_id} 已启动,使用模板 {template.name}")
             return workflow_id
 
         except Exception as e:

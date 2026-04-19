@@ -6,11 +6,10 @@ Content Creator Module
 """
 
 import asyncio
-from core.async_main import async_main
 import json
 import random
 from datetime import datetime
-from typing import Dict, List, Optional, Any
+from typing import Any
 
 from utils.logger import logger
 
@@ -141,7 +140,7 @@ class ContentCreator:
             logger.error(f"内容创作模块健康检查失败: {str(e)}")
             return False
 
-    async def create_content(self, content_type: str, topic: str, platform: str, style: str = "professional") -> Dict[str, Any]:
+    async def create_content(self, content_type: str, topic: str, platform: str, style: str = "professional") -> dict[str, Any]:
         """
         创建内容
 
@@ -191,7 +190,7 @@ class ContentCreator:
             logger.error(f"内容创作失败: {str(e)}")
             raise
 
-    async def _create_article(self, topic: str, platform_config: Dict, style_config: Dict) -> Dict[str, Any]:
+    async def _create_article(self, topic: str, platform_config: dict, style_config: dict) -> dict[str, Any]:
         """创作文章"""
         templates = self.templates["article"]
 
@@ -222,7 +221,7 @@ class ContentCreator:
             "engagement_elements": self._generate_engagement_elements(topic, style_config)
         }
 
-    async def _create_video_script(self, topic: str, platform_config: Dict, style_config: Dict) -> Dict[str, Any]:
+    async def _create_video_script(self, topic: str, platform_config: dict, style_config: dict) -> dict[str, Any]:
         """创作视频脚本"""
         templates = self.templates["video_script"]
 
@@ -248,7 +247,7 @@ class ContentCreator:
             "tags": await self._generate_tags(topic, platform_config)
         }
 
-    async def _create_image_content(self, topic: str, platform_config: Dict, style_config: Dict) -> Dict[str, Any]:
+    async def _create_image_content(self, topic: str, platform_config: dict, style_config: dict) -> dict[str, Any]:
         """创作图文内容"""
         return {
             "main_text": await self._generate_image_text(topic, style_config),
@@ -258,7 +257,7 @@ class ContentCreator:
             "overlay_text": await self._generate_overlay_text(topic)
         }
 
-    async def _create_general_content(self, topic: str, platform_config: Dict, style_config: Dict) -> Dict[str, Any]:
+    async def _create_general_content(self, topic: str, platform_config: dict, style_config: dict) -> dict[str, Any]:
         """创作通用内容"""
         return {
             "content": await self._generate_general_text(topic, style_config),
@@ -266,7 +265,7 @@ class ContentCreator:
             "adaptation_suggestions": await self._generate_adaptation_suggestions(topic)
         }
 
-    async def _generate_article_body(self, topic: str, style_config: Dict) -> str:
+    async def _generate_article_body(self, topic: str, style_config: dict) -> str:
         """生成文章正文"""
         # 专业角度分析
         professional_part = f"""
@@ -308,7 +307,7 @@ class ContentCreator:
         ]
         return random.choice(cultural_refs)
 
-    async def _generate_video_main_content(self, topic: str, style_config: Dict) -> str:
+    async def _generate_video_main_content(self, topic: str, style_config: dict) -> str:
         """生成视频主体内容"""
         return f"""
 【第一段：背景介绍】
@@ -327,7 +326,7 @@ class ContentCreator:
 这几个坑，千万别踩！
         """
 
-    async def _generate_tags(self, topic: str, platform_config: Dict) -> List[str]:
+    async def _generate_tags(self, topic: str, platform_config: dict) -> list[str]:
         """生成标签"""
         base_tags = [topic, "知识产权", "小宸说"]
 
@@ -354,7 +353,7 @@ class ContentCreator:
         """生成摘要"""
         return f"关于{topic}的实在话，专业分析+实践经验，帮你少走弯路！"
 
-    async def _suggest_images(self, topic: str) -> List[str]:
+    async def _suggest_images(self, topic: str) -> list[str]:
         """建议配图"""
         return [
             f"{topic}相关示意图",
@@ -363,7 +362,7 @@ class ContentCreator:
             "互动引导图"
         ]
 
-    def _generate_engagement_elements(self, topic: str, style_config: Dict) -> Dict[str, Any]:
+    def _generate_engagement_elements(self, topic: str, style_config: dict) -> dict[str, Any]:
         """生成互动元素"""
         return {
             "questions": [
@@ -378,7 +377,7 @@ class ContentCreator:
             ]
         }
 
-    async def _generate_video_scenes(self, topic: str) -> List[Dict]:
+    async def _generate_video_scenes(self, topic: str) -> list[dict]:
         """生成视频场景"""
         return [
             {
@@ -401,7 +400,7 @@ class ContentCreator:
             }
         ]
 
-    async def _suggest_video_visuals(self, topic: str) -> List[str]:
+    async def _suggest_video_visuals(self, topic: str) -> list[str]:
         """建议视频视觉元素"""
         return [
             "动态文字效果",
@@ -421,11 +420,11 @@ class ContentCreator:
         ]
         return random.choice(music_options)
 
-    async def _generate_image_text(self, topic: str, style_config: Dict) -> str:
+    async def _generate_image_text(self, topic: str, style_config: dict) -> str:
         """生成图文文字"""
         return f"{topic}\n\n山东小宸跟你说：\n\n三个要点：\n1. 实在最重要\n2. 专业不能少\n3. 方法要对路"
 
-    async def _generate_image_prompts(self, topic: str) -> List[str]:
+    async def _generate_image_prompts(self, topic: str) -> list[str]:
         """生成图片提示"""
         return [
             f"{topic}相关概念图",
@@ -434,14 +433,14 @@ class ContentCreator:
             "专业图表"
         ]
 
-    async def _suggest_layout(self, topic: str, platform_config: Dict) -> str:
+    async def _suggest_layout(self, topic: str, platform_config: dict) -> str:
         """建议布局"""
         if platform_config.get("visual_focus"):
             return "图为主，文为辅，重点突出"
         else:
             return "文为主，图为辅，深度内容"
 
-    async def _suggest_color_scheme(self, topic: str) -> Dict[str, str]:
+    async def _suggest_color_scheme(self, topic: str) -> dict[str, str]:
         """建议配色方案"""
         return {
             "primary": "#2C5F8C",  # 专业蓝
@@ -468,11 +467,11 @@ class ContentCreator:
         minutes = max(1, word_count // speaking_speed)
         return f"{minutes}分钟"
 
-    async def _generate_general_text(self, topic: str, style_config: Dict) -> str:
+    async def _generate_general_text(self, topic: str, style_config: dict) -> str:
         """生成通用文本"""
         return f"关于{topic}，咱山东人有自己的理解和表达方式！"
 
-    async def _generate_adaptation_suggestions(self, topic: str) -> List[str]:
+    async def _generate_adaptation_suggestions(self, topic: str) -> list[str]:
         """生成适配建议"""
         return [
             "根据不同平台调整内容长度",

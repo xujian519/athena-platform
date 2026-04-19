@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利申请信息管理系统
 Patent Application Information Management System
@@ -18,7 +19,6 @@ from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
 
 
 @dataclass

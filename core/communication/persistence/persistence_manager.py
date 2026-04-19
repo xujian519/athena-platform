@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 消息持久化管理器
 Message Persistence Manager

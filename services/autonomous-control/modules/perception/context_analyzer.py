@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 上下文分析器
 Context Analyzer
@@ -10,10 +9,11 @@ Context Analyzer
 创建时间: 2024年12月15日
 """
 
-from typing import Dict, List, Any, Optional
 import logging
+from datetime import datetime
+from typing import Any
+
 from core.async_main import async_main
-from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ class ContextAnalyzer:
         self.session_context = {}
         self.user_profiles = {}
 
-    async def analyze(self, text: str, context: Dict | None = None) -> Dict[str, Any]:
+    async def analyze(self, text: str, context: dict | None = None) -> dict[str, Any]:
         """
         分析文本上下文
 
@@ -67,7 +67,7 @@ class ContextAnalyzer:
             logger.error(f"上下文分析失败: {str(e)}")
             return {"error": str(e)}
 
-    async def _analyze_conversation_history(self, context: Optional[Dict]) -> Dict[str, Any]:
+    async def _analyze_conversation_history(self, context: dict | None) -> dict[str, Any]:
         """分析对话历史"""
         if not context:
             return {"type": "new_conversation", "depth": 0}
@@ -89,7 +89,7 @@ class ContextAnalyzer:
             "turn_count": depth
         }
 
-    async def _analyze_user_state(self, context: Optional[Dict]) -> Dict[str, Any]:
+    async def _analyze_user_state(self, context: dict | None) -> dict[str, Any]:
         """分析用户状态"""
         if not context:
             return {"status": "unknown"}
@@ -116,7 +116,7 @@ class ContextAnalyzer:
             "status": "identified" if user_id != "anonymous" else "anonymous"
         }
 
-    async def _analyze_business_context(self, text: str, context: Optional[Dict]) -> Dict[str, Any]:
+    async def _analyze_business_context(self, text: str, context: dict | None) -> dict[str, Any]:
         """分析业务上下文"""
         business_context = {
             "domain": "general",
@@ -147,7 +147,7 @@ class ContextAnalyzer:
 
         return business_context
 
-    async def _analyze_temporal_context(self, context: Optional[Dict]) -> Dict[str, Any]:
+    async def _analyze_temporal_context(self, context: dict | None) -> dict[str, Any]:
         """分析时间上下文"""
         temporal_context = {
             "current_time": datetime.now().isoformat(),
@@ -182,7 +182,7 @@ class ContextAnalyzer:
 
         return temporal_context
 
-    async def _analyze_emotional_context(self, text: str, context: Optional[Dict]) -> Dict[str, Any]:
+    async def _analyze_emotional_context(self, text: str, context: dict | None) -> dict[str, Any]:
         """分析情感上下文"""
         emotional_context = {
             "sentiment": "neutral",
@@ -218,7 +218,7 @@ class ContextAnalyzer:
 
         return emotional_context
 
-    def _check_topic_continuity(self, history: List[Dict]) -> bool:
+    def _check_topic_continuity(self, history: list[dict]) -> bool:
         """检查话题连续性"""
         if len(history) < 2:
             return True
@@ -229,10 +229,10 @@ class ContextAnalyzer:
 
         return last_topic == prev_topic
 
-    def _assess_user_familiarity(self, user_history: Dict) -> str:
+    def _assess_user_familiarity(self, user_history: dict) -> str:
         """评估用户熟悉度"""
         interaction_count = user_history.get("interaction_count", 0)
-        last_interaction = user_history.get("last_interaction")
+        user_history.get("last_interaction")
 
         if interaction_count > 10:
             return "expert"
@@ -243,7 +243,7 @@ class ContextAnalyzer:
         else:
             return "new"
 
-    def _generate_context_summary(self, conversation: Dict, user_state: Dict, business: Dict) -> str:
+    def _generate_context_summary(self, conversation: dict, user_state: dict, business: dict) -> str:
         """生成上下文摘要"""
         summary_parts = []
 
@@ -258,7 +258,7 @@ class ContextAnalyzer:
 
         return ", ".join(summary_parts) if summary_parts else "新对话"
 
-    def update_context(self, user_id: str, interaction: Dict) -> None:
+    def update_context(self, user_id: str, interaction: dict) -> None:
         """更新上下文"""
         if user_id not in self.user_profiles:
             self.user_profiles[user_id] = {

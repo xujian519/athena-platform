@@ -16,22 +16,22 @@ Tests for State Module System
 版本: v1.0.0 "Phase 1"
 """
 
-import pytest
-import asyncio
-import tempfile
 import shutil
+import sys
+import tempfile
 from pathlib import Path
-from datetime import datetime
-from typing import Set
 
-from core.state.state_module import StateModule
+import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+from core.state.checkpoint import CheckpointManager
 from core.state.persistence_manager import (
-    StatePersistenceManager,
+    PersistenceConfig,
     PersistenceStrategy,
-    PersistenceConfig
+    StatePersistenceManager,
 )
-from core.state.checkpoint import CheckpointManager, CheckpointInfo
-
+from core.state.state_module import StateModule
 
 # ============================================================================
 # 测试 fixtures
@@ -458,7 +458,7 @@ class TestStateIntegration:
 
         # 2. 创建检查点（带元数据）
         outer = persistence_manager._modules["outer"]
-        checkpoint_info = await checkpoint_manager.save_with_metadata(
+        await checkpoint_manager.save_with_metadata(
             outer,
             checkpoint_id="checkpoint_1",
             phase="initial"

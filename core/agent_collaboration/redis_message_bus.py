@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Redis持久化消息总线
 Redis Persistent Message Bus for Agent Communication
@@ -18,7 +19,7 @@ import json
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Set
+from typing import Any
 
 try:
     import redis.asyncio as redis
@@ -148,8 +149,8 @@ class RedisMessageBus:
         }
 
         # 后台任务
-        self._health_check_task: Optional[asyncio.Task[Any]] | None = None
-        self._cleanup_task: Optional[asyncio.Task[Any]] | None = None
+        self._health_check_task: asyncio.Task[Any] | None | None = None
+        self._cleanup_task: asyncio.Task[Any] | None | None = None
 
     async def start(self):
         """启动消息总线"""

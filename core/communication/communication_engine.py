@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 通讯引擎 - 完整实现
 Communication Engine - Complete Implementation
@@ -686,7 +687,7 @@ class CommunicationEngine:
             try:
                 await self.websocket_manager.broadcast_to_channel(channel.id, message)
                 return True
-            except Exception:
+            except Exception as e:
                 logger.error(f"捕获异常: {e}", exc_info=True)
 
         return False

@@ -1,17 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 更新PQAI服务使用中文专利专用语义模型
 直接更新模型配置，提升中文专利检索效果
 """
 
 import json
-from core.async_main import async_main
-import logging
-from core.logging_config import setup_logging
 import os
-import sys
-from pathlib import Path
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -26,14 +22,14 @@ def update_pqai_searcher_config():
     # 备份原文件
     backup_file = config_file + '.backup'
     if not os.path.exists(backup_file):
-        with open(config_file, 'r', encoding='utf-8') as f:
+        with open(config_file, encoding='utf-8') as f:
             content = f.read()
         with open(backup_file, 'w', encoding='utf-8') as f:
             f.write(content)
         logger.info(f"✅ 已备份原文件到: {backup_file}")
 
     # 更新模型配置
-    with open(config_file, 'r', encoding='utf-8') as f:
+    with open(config_file, encoding='utf-8') as f:
         content = f.read()
 
     # 替换模型名称
@@ -41,8 +37,8 @@ def update_pqai_searcher_config():
     new_model = 'shibing624/text2vec-base-chinese'
 
     content = content.replace(
-        f'model_name='{old_model}'',
-        f'model_name='{new_model}''
+        f"model_name='{old_model}'",
+        f"model_name='{new_model}'"
     )
 
     # 添加中文模型说明

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 本地嵌入模型服务
 Local Embedding Model Service
@@ -17,7 +18,7 @@ import asyncio
 import logging
 from pathlib import Path
 
-
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -204,7 +205,7 @@ class EmbeddingModelManager:
         return self.models[model_name]
 
     async def encode(
-        self, texts: str | Optional[list[str], model_name: str | None = None
+        self, texts: str | list[str] | None, model_name: str | None = None
     ) -> np.ndarray:
         """便捷编码方法"""
         model = await self.get_model(model_name)
@@ -311,7 +312,7 @@ async def main():
     for i in range(len(similarities)):
         print(f"工具{i+1}:  ", end="")
         for j in range(len(similarities[i])):
-            print(f"{similarities[.2f}  "]
+            print(f"{similarities[i][j]:.2f}  ", end="")
         print()
 
     print("\n✅ 演示完成")

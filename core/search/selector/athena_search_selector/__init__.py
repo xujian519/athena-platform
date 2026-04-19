@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena智能搜索选择器 - 公共接口
 Athena Search Selector - Public Interface
@@ -12,19 +13,18 @@ Athena Search Selector - Public Interface
 """
 
 # 导入类型定义
-from .types import (
-    QueryIntent,
-    DomainType,
-    QueryAnalysis,
-    ToolRecommendation,
-    SelectionStrategy,
-)
+# 导入全局函数
+from .globals import get_search_selector, initialize_search_selector
 
 # 导入主选择器
 from .selector import AthenaSearchSelector
-
-# 导入全局函数
-from .globals import get_search_selector, initialize_search_selector
+from .types import (
+    DomainType,
+    QueryAnalysis,
+    QueryIntent,
+    SelectionStrategy,
+    ToolRecommendation,
+)
 
 # 导出公共接口
 __all__ = [

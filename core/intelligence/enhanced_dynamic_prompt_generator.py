@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强版动态提示词生成器
 Enhanced Dynamic Prompt Generator
 
 集成专利规则向量库 + AI术语知识图谱,为专利检索和分析提供全方位支持
 """
-import numpy as np
-
 import json
 import logging
 import os
 from dataclasses import dataclass
 from typing import Any
 
+import numpy as np
 import requests
 from sentence_transformers import SentenceTransformer
 from services.sqlite_patent_knowledge_service import get_sqlite_patent_knowledge_service

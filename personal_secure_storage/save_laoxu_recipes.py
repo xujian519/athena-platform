@@ -3,11 +3,11 @@
 保存老徐家菜谱（去重处理）
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-from pathlib import Path
+import sqlite3
 from datetime import datetime
+from pathlib import Path
+
 
 def save_laoxu_recipes() -> None:
     """保存老徐家菜谱到数据库，去除重复内容"""

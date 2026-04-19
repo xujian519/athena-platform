@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 意图识别服务 - 动态批处理引擎
 
@@ -7,8 +8,6 @@ Author: Xiaonuo
 Created: 2025-01-17
 Version: 1.0.0
 """
-import numpy as np
-
 import logging
 import time
 from collections import deque
@@ -19,6 +18,7 @@ from enum import Enum
 from threading import Lock
 from typing import Any
 
+import numpy as np
 
 # ========================================================================
 # 批处理策略枚举
@@ -156,7 +156,7 @@ class DynamicBatchProcessor:
     """
 
     def __init__(
-        self, processor_func: Callable[[list[str], list[Any]], config: BatchConfig | None = None
+        self, processor_func: Callable[[list[str]], list[Any]], config: BatchConfig | None = None
     ):
         """
         初始化批处理器
@@ -230,8 +230,8 @@ class DynamicBatchProcessor:
     def submit_batch(
         self,
         texts: list[str],
-        callbacks: list[Callable[..., Any] | None = None,
-        contexts: list[dict[str, Any] | None = None,
+        callbacks: list[Callable[..., Any]] | None = None,
+        contexts: list[dict[str, Any]] | None = None,
     ) -> None:
         """
         批量提交文本到批处理队列
@@ -320,7 +320,7 @@ class DynamicBatchProcessor:
 
             # 计算处理时间
             processing_time_ms = (time.perf_counter() - start_time) * 1000
-            total_latencies = []
+            total_latencies = [
                 waiting_times[i] + processing_time_ms for i in range(len(batch_items))
             ]
             avg_latency = np.mean(total_latencies)

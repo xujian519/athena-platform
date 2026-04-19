@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 层次接口模块
 Layer Interface Module

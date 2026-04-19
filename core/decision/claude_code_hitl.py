@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Claude Code环境人机协作决策系统
 专门优化用于Claude Code环境的HITL实现
@@ -9,10 +10,11 @@ Claude Code环境人机协作决策系统
 """
 
 import asyncio
-from typing import Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
+from typing import Any
+
 
 class DecisionUrgency(Enum):
     """决策紧急程度"""
@@ -122,7 +124,7 @@ class ClaudeCodeHITLDecisionEngine:
             "analysis_summary": f"推荐选项: {best_option['title']},置信度: {best_option['confidence']:.2f}"
         }
 
-        print(f"\n🧠 AI分析结果:")
+        print("\n🧠 AI分析结果:")
         print(f"   推荐: {analysis['recommendation_confidence']:.2f} 置信度")
         print(f"   风险评估: {analysis['risk_assessment']:.2f}")
         print(f"   {analysis['analysis_summary']}")
@@ -401,7 +403,7 @@ class ClaudeCodeHITLDecisionEngine:
             print(f"置信度: {rec['confidence']:.2f}")
 
         # 显示选项
-        print(f"\n📝 选项:")
+        print("\n📝 选项:")
         for i, opt in enumerate(request.options, 1):
             print(f"  {i}. {opt['title']}")
 
@@ -446,7 +448,7 @@ class ClaudeCodeHITLDecisionEngine:
     def _analyze_categories(self) -> dict[str, int]:
         """分析决策类别分布"""
         categories = {}
-        for decision in self.decision_history:
+        for _decision in self.decision_history:
             # 这里需要在决策中存储类别信息
             pass
         return categories
@@ -505,7 +507,7 @@ async def claude_code_demo():
 
     # 显示洞察
     insights = engine.get_decision_insights()
-    print(f"\n📊 决策洞察:")
+    print("\n📊 决策洞察:")
     for key, value in insights.items():
         print(f"   {key}: {value}")
 

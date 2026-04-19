@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 异步文件操作工具 - Athena平台工具集
 Async File Utilities - Athena Platform Toolkit
@@ -130,7 +131,7 @@ class AsyncFileOperations:
 
     @staticmethod
     async def append_file(
-        file_path: str | Path, content: bytes | Optional[str, encoding: str, = "utf-8"
+        file_path: str | Path, content: bytes | str, encoding: str = "utf-8"
     ) -> int:
         """
         异步追加到文件
@@ -341,7 +342,7 @@ class AsyncFileOperations:
     @staticmethod
     async def batch_read(
         file_paths: list[str | Path], concurrency: int = 10
-    ) -> list[tuple[Path, bytes | Optional[str]:
+    ) -> list[tuple[Path, bytes | str]]:
         """
         批量异步读取文件
 
@@ -354,7 +355,7 @@ class AsyncFileOperations:
         """
         semaphore = asyncio.Semaphore(concurrency)
 
-        async def read_with_semaphore(file_path: str | Path) -> tuple[Path, bytes | Optional[str]]:
+        async def read_with_semaphore(file_path: str | Path) -> tuple[Path, bytes | str | None]:
             async with semaphore:
                 try:
                     path = Path(file_path) if isinstance(file_path, str) else file_path
@@ -415,7 +416,7 @@ class AsyncFileProcessor:
 
     async def process_file(
         self, file_path: str | Path, processor: callable, output_path: str | Path | None = None
-    ) -> bytes | Optional[str]:
+    ) -> bytes | str | None:
         """
         处理文件
 

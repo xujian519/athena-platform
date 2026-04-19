@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 查询当前正在处理的客户
 Check Currently Active Customers
 """
 
-import psycopg2
 import os
-from datetime import datetime, timedelta
+
+import psycopg2
 
 # PostgreSQL配置
 db_config = {

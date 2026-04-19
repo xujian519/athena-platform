@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena.智慧女神 - 增强版 v2.0
 Athena Wisdom Goddess - Enhanced Edition v2.0
@@ -16,8 +17,18 @@ Athena Wisdom Goddess - Enhanced Edition v2.0
 """
 
 import logging
-from typing import TYPE_CHECKING, Any, Dict, Optional
+from typing import TYPE_CHECKING, Any
 
+from core.agent_collaboration.agent_coordinator.core import get_agent_coordinator
+from core.athena.meta_cognition_engine import get_meta_cognition_engine
+from core.athena.platform_orchestrator import ServiceState, get_platform_orchestrator
+from core.collaboration import CollaborationMode
+from core.learning.deep_learning_engine import (
+    DeepLearningModel,
+    LearningTask,
+    get_deep_learning_engine,
+)
+from core.learning.reinforcement_learning_agent import get_rl_agent
 from core.logging_config import setup_logging
 
 # 配置日志
@@ -26,7 +37,7 @@ logger = setup_logging()
 
 # 仅在类型检查时导入类型,避免运行时循环依赖
 if TYPE_CHECKING:
-    from ..athena.platform_orchestrator import AgentCapability, AgentInfo, PlatformOrchestrator
+    from ..athena.platform_orchestrator import AgentCapability, AgentInfo
     from ..memory.unified_agent_memory_system import UnifiedAgentMemorySystem
 
 # 使用延迟导入避免循环依赖
@@ -334,10 +345,10 @@ class AthenaWisdomAgentEnhanced(AthenaWisdomAgent):
 
         elif intent == "agent_coordination":
             # 智能体协调模式
-            # 默认协调小诺和云熙
+            # 默认协调小诺
             result = await self.coordinate_agents(
                 task=user_input,
-                agent_ids=["xiaonuo_pisces", "yunxi_vega"],
+                agent_ids=["xiaonuo_pisces"],
                 mode=CollaborationMode.PEER,
             )
             return self._format_coordination_result(result)

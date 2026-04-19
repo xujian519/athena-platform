@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 重试处理器
 Retry Handler
@@ -17,9 +18,9 @@ import asyncio
 import logging
 from collections.abc import Callable
 from functools import wraps
-from typing import Any, Optional, TypeVar
+from typing import Any, TypeVar
 
-from .error_classifier import ErrorClassifier, ErrorSeverity
+from .error_classifier import ErrorClassifier
 
 logger = logging.getLogger("RetryHandler")
 

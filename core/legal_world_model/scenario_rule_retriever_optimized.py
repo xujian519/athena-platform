@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 场景规则检索器 - 生产优化版本
 Scenario Rule Retriever - Production Optimized Version
@@ -21,7 +22,7 @@ from collections import OrderedDict
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Optional, Set, Tuple, List
 
 logger = logging.getLogger(__name__)
 
@@ -219,7 +220,7 @@ class ScenarioRuleRetrieverOptimized:
         enable_metrics: bool = True,
         enable_preload: bool = True,
         preload_on_init: bool = True,
-        preload_domains: set[str] | None = None,
+        preload_domains: Optional[Set[str]] = None,
     ):
         """
         初始化规则检索器
@@ -312,7 +313,7 @@ class ScenarioRuleRetrieverOptimized:
 
         return task_type
 
-    def _validate_phase(self, phase: str,) -> str | None:
+    def _validate_phase(self, phase: str,) -> Optional[str]:
         """
         验证阶段参数
 
@@ -338,7 +339,7 @@ class ScenarioRuleRetrieverOptimized:
 
         return phase
 
-    def _get_cache_key(self, domain: str, task_type: str, phase: str | None = None) -> str:
+    def _get_cache_key(self, domain: str, task_type: str, phase: Optional[str] = None) -> str:
         """生成缓存键"""
         return f"{domain}:{task_type}:{phase or 'any'}"
 
@@ -368,7 +369,7 @@ class ScenarioRuleRetrieverOptimized:
         self._cache[cache_key] = (data, datetime.now())
 
     def retrieve_rule(
-        self, domain: str, task_type: str, phase: str | None = None
+        self, domain: str, task_type: str, phase: Optional[str] = None
     ) -> ScenarioRule | None:
         """
         从Neo4j检索场景规则(优化版本)
@@ -685,7 +686,7 @@ class ScenarioRuleRetrieverOptimized:
             return []
 
     def retrieve_rule_with_relations(
-        self, domain: str, task_type: str, phase: str | None = None
+        self, domain: str, task_type: str, phase: Optional[str] = None
     ) -> ScenarioRule | None:
         """
         检索规则及其关联的法律依据和参考案例(优化版本)
@@ -714,7 +715,7 @@ class ScenarioRuleRetrieverOptimized:
         return rule
 
     def preload_common_rules(
-        self, domains: set["key"] = None, force: bool = False
+        self, domains: set[str] = None, force: bool = False
     ) -> dict[str, Any]:
         """
         预加载常用规则到缓存
@@ -817,7 +818,7 @@ class ScenarioRuleRetrieverOptimized:
             return {"status": "failed", "error": str(e), "count": loaded_count}
 
     async def preload_common_rules_async(
-        self, domains: set["key"] = None, force: bool = False
+        self, domains: set[str] = None, force: bool = False
     ) -> dict[str, Any]:
         """
         异步预加载常用规则
@@ -867,7 +868,7 @@ class ScenarioRuleRetrieverOptimized:
 
 # 便捷函数
 def retrieve_scenario_rule(
-    db_manager: Any | None = None, domain: str | None = None, task_type: str | None = None, phase: str | None = None
+    db_manager: Any | None = None, domain: Optional[str] = None, task_type: Optional[str] = None, phase: Optional[str] = None
 ) -> ScenarioRule | None:
     """
     便捷函数:检索场景规则(优化版本)

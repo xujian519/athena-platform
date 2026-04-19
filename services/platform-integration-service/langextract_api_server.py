@@ -4,18 +4,12 @@ LangExtract API服务器
 为Athena平台提供统一的结构化信息提取API服务
 """
 
-import asyncio
-from core.async_main import async_main
-import json
-import logging
-from core.logging_config import setup_logging
 import uuid
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import uvicorn
-from fastapi import BackgroundTasks, FastAPI, HTTPException, Query
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, HTTPException, Query
 from langextract_integration_service import (
     ExtractionRequest,
     IntegrationMode,
@@ -23,8 +17,9 @@ from langextract_integration_service import (
 )
 from pydantic import BaseModel, Field
 
+from core.logging_config import setup_logging
+
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -47,17 +42,17 @@ class ExtractionTaskRequest(BaseModel):
     """信息提取任务请求"""
     user_input: str = Field(..., description='用户输入描述')
     mode: str = Field(default='xiaonuo_auto', description='执行模式')
-    text_or_documents: Optional[str] = Field(None, description='待提取的文本或文档')
-    scenario: Optional[str] = Field(None, description='指定提取场景')
-    custom_prompt: Optional[str] = Field(None, description='自定义提取提示')
-    config: Dict[str, Any] = Field(default_factory=dict, description='提取配置')
-    context: Dict[str, Any] = Field(default_factory=dict, description='上下文信息')
-    callback_url: Optional[str] = Field(None, description='回调URL')
+    text_or_documents: str | None = Field(None, description='待提取的文本或文档')
+    scenario: str | None = Field(None, description='指定提取场景')
+    custom_prompt: str | None = Field(None, description='自定义提取提示')
+    config: dict[str, Any] = Field(default_factory=dict, description='提取配置')
+    context: dict[str, Any] = Field(default_factory=dict, description='上下文信息')
+    callback_url: str | None = Field(None, description='回调URL')
     priority: int = Field(default=1, description='任务优先级')
 
 class BatchExtractionRequest(BaseModel):
     """批量提取请求"""
-    requests: List[ExtractionTaskRequest]
+    requests: list[ExtractionTaskRequest]
     max_concurrent: int = Field(default=5, description='最大并发数')
 
 class PatentAnalysisRequest(BaseModel):
@@ -68,13 +63,13 @@ class PatentAnalysisRequest(BaseModel):
 class XiaoNuoChatRequest(BaseModel):
     """小诺聊天请求"""
     message: str = Field(..., description='用户消息')
-    context: Dict[str, Any] = Field(default_factory=dict, description='对话上下文')
-    text_or_documents: Optional[str] = Field(None, description='待分析文本')
+    context: dict[str, Any] = Field(default_factory=dict, description='对话上下文')
+    text_or_documents: str | None = Field(None, description='待分析文本')
 
 class VisualizationRequest(BaseModel):
     """可视化请求"""
-    extractions: List[Dict[str, Any]] = Field(..., description='提取结果')
-    output_path: Optional[str] = Field(None, description='输出路径')
+    extractions: list[dict[str, Any]] = Field(..., description='提取结果')
+    output_path: str | None = Field(None, description='输出路径')
 
 # 响应模型
 class APIResponse(BaseModel):
@@ -161,7 +156,7 @@ async def execute_extraction(request: ExtractionTaskRequest):
             raise HTTPException(
                 status_code=400,
                 detail=f"不支持的执行模式: {request.mode}"
-            )
+            ) from None
 
         # 创建提取请求
         extraction_request = ExtractionRequest(
@@ -194,7 +189,7 @@ async def execute_extraction(request: ExtractionTaskRequest):
 
     except Exception as e:
         logger.error(f"执行提取任务失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/extraction/batch')
 async def execute_batch_extraction(request: BatchExtractionRequest):
@@ -209,7 +204,7 @@ async def execute_batch_extraction(request: BatchExtractionRequest):
                 raise HTTPException(
                     status_code=400,
                     detail=f"不支持的执行模式: {req.mode}"
-                )
+                ) from None
 
             extraction_requests.append(
                 ExtractionRequest(
@@ -261,7 +256,7 @@ async def execute_batch_extraction(request: BatchExtractionRequest):
 
     except Exception as e:
         logger.error(f"批量执行提取任务失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/xiaonuo/chat')
 async def xiaonuo_chat(request: XiaoNuoChatRequest):
@@ -294,12 +289,12 @@ async def xiaonuo_chat(request: XiaoNuoChatRequest):
 
     except Exception as e:
         logger.error(f"小诺聊天失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/xiaonuo/analyze')
 async def xiaonuo_analyze(
     user_input: str,
-    context: Optional[Dict[str, Any]] = None
+    context: dict[str, Any] | None = None
 ):
     """小诺智能分析接口（仅分析，不执行）"""
     try:
@@ -316,7 +311,7 @@ async def xiaonuo_analyze(
 
     except Exception as e:
         logger.error(f"小诺分析失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/patent/analyze')
 async def analyze_patent(request: PatentAnalysisRequest):
@@ -336,7 +331,7 @@ async def analyze_patent(request: PatentAnalysisRequest):
 
     except Exception as e:
         logger.error(f"专利分析失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/scenarios')
 async def get_available_scenarios():
@@ -355,7 +350,7 @@ async def get_available_scenarios():
 
     except Exception as e:
         logger.error(f"获取场景列表失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/modes')
 async def get_available_modes():
@@ -365,7 +360,7 @@ async def get_available_modes():
             {
                 'value': mode.value,
                 'name': mode.value.replace('_', ' ').title(),
-                'description': self._get_mode_description(mode)
+                'description': mode.value.replace('_', ' ')
             }
             for mode in IntegrationMode
         ]
@@ -378,7 +373,7 @@ async def get_available_modes():
 
     except Exception as e:
         logger.error(f"获取执行模式失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 def _get_mode_description(mode: IntegrationMode) -> str:
     """获取模式描述"""
@@ -415,7 +410,7 @@ async def generate_visualization(request: VisualizationRequest):
 
     except Exception as e:
         logger.error(f"生成可视化失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/business/integrations')
 async def get_business_integrations():
@@ -431,7 +426,7 @@ async def get_business_integrations():
 
     except Exception as e:
         logger.error(f"获取业务集成信息失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/statistics')
 async def get_extraction_statistics():
@@ -462,7 +457,7 @@ async def get_extraction_statistics():
 
     except Exception as e:
         logger.error(f"获取统计信息失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/feedback')
 async def submit_feedback(
@@ -494,7 +489,7 @@ async def submit_feedback(
 
     except Exception as e:
         logger.error(f"提交反馈失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 # 专利专用接口
 @app.post('/api/v1/patent/claims/analyze')
@@ -527,7 +522,7 @@ async def analyze_patent_claims(patent_text: str):
 
     except Exception as e:
         logger.error(f"权利要求分析失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/patent/technical/extract')
 async def extract_technical_features(patent_text: str):
@@ -558,7 +553,7 @@ async def extract_technical_features(patent_text: str):
 
     except Exception as e:
         logger.error(f"技术特征提取失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/docs')
 async def get_api_documentation():

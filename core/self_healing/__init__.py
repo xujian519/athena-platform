@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 自愈系统 (Self-healing System)
 提供预测性故障检测、自动修复和系统自愈能力

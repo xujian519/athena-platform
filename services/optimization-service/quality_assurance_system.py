@@ -5,34 +5,23 @@ Athena平台质量保证体系
 """
 
 import ast
-from core.async_main import async_main
 import asyncio
-import c_profile
-import hashlib
-import io
 import json
-import logging
-from core.logging_config import setup_logging
-import os
-import pickle
 import pstats
-import queue
 import re
-import ssl
 import subprocess
 import sys
-import threading
 import time
 import tracemalloc
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
-from urllib.parse import urlparse
+from typing import Any
 
 import bandit
+import c_profile
 
 # 代码质量检测
 import flake8
@@ -41,9 +30,9 @@ import flake8
 import psutil
 
 # 安全审计
-import requests
 from coverage import Coverage
-from pylint import lint
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -99,10 +88,10 @@ class QualityReport:
     timestamp: datetime = field(default_factory=datetime.now)
     overall_score: float = 0.0
     quality_standard: QualityStandard = QualityStandard.POOR
-    metrics: Dict[str, Any] = field(default_factory=dict)
-    issues: List[QualityIssue] = field(default_factory=list)
-    summary: Dict[str, Any] = field(default_factory=dict)
-    recommendations: List[str] = field(default_factory=list)
+    metrics: dict[str, Any] = field(default_factory=dict)
+    issues: list[QualityIssue] = field(default_factory=list)
+    summary: dict[str, Any] = field(default_factory=dict)
+    recommendations: list[str] = field(default_factory=list)
 
 @dataclass
 class TestResult:
@@ -114,7 +103,7 @@ class TestResult:
     duration: float
     error_message: str | None = None
     assertions: int = 0
-    coverage_data: Dict[str, Any] = field(default_factory=dict)
+    coverage_data: dict[str, Any] = field(default_factory=dict)
 
 class CodeQualityAnalyzer:
     """代码质量分析器"""
@@ -124,7 +113,7 @@ class CodeQualityAnalyzer:
         self.supported_extensions = {'.py'}
         self.quality_rules = self._initialize_quality_rules()
 
-    def _initialize_quality_rules(self) -> Dict[str, Dict]:
+    def _initialize_quality_rules(self) -> dict[str, dict]:
         """初始化质量规则"""
         return {
             'complexity': {
@@ -204,7 +193,7 @@ class CodeQualityAnalyzer:
 
         return report
 
-    async def _analyze_complexity(self, project_path: str) -> Dict[str, Any]:
+    async def _analyze_complexity(self, project_path: str) -> dict[str, Any]:
         """分析代码复杂度"""
         complexity_data = {
             'files_analyzed': 0,
@@ -225,7 +214,7 @@ class CodeQualityAnalyzer:
 
             for file_path in python_files:
                 try:
-                    with open(file_path, 'r', encoding='utf-8') as f:
+                    with open(file_path, encoding='utf-8') as f:
                         content = f.read()
 
                     # 计算行数
@@ -299,7 +288,7 @@ class CodeQualityAnalyzer:
 
         return complexity
 
-    async def _check_code_style(self, project_path: str) -> Dict[str, Any]:
+    async def _check_code_style(self, project_path: str) -> dict[str, Any]:
         """检查代码风格"""
         style_data = {
             'files_checked': 0,
@@ -357,7 +346,7 @@ class CodeQualityAnalyzer:
 
         return style_data
 
-    async def _scan_security_vulnerabilities(self, project_path: str) -> Dict[str, Any]:
+    async def _scan_security_vulnerabilities(self, project_path: str) -> dict[str, Any]:
         """扫描安全漏洞"""
         security_data = {
             'files_scanned': 0,
@@ -419,7 +408,7 @@ class CodeQualityAnalyzer:
 
         return security_data
 
-    async def _analyze_code_coverage(self, project_path: str) -> Dict[str, Any]:
+    async def _analyze_code_coverage(self, project_path: str) -> dict[str, Any]:
         """分析代码覆盖率"""
         coverage_data = {
             'files_covered': 0,
@@ -471,6 +460,8 @@ class CodeQualityAnalyzer:
             total_lines = 0
             covered_lines = 0
 
+            # 获取所有被测量的Python文件
+            python_files = cov.get_data().measured_files()
             for file_path in python_files:
                 try:
                     analysis = cov._analyze(file_path)
@@ -497,7 +488,7 @@ class CodeQualityAnalyzer:
 
         return coverage_data
 
-    async def _analyze_maintainability(self, project_path: str) -> Dict[str, Any]:
+    async def _analyze_maintainability(self, project_path: str) -> dict[str, Any]:
         """分析可维护性"""
         maintainability_data = {
             'files_analyzed': 0,
@@ -516,7 +507,7 @@ class CodeQualityAnalyzer:
             for file_path in python_files:
                 try:
                     # 简化的可维护性指数计算
-                    with open(file_path, 'r', encoding='utf-8') as f:
+                    with open(file_path, encoding='utf-8') as f:
                         content = f.read()
 
                     # 基础指标
@@ -556,7 +547,7 @@ class CodeQualityAnalyzer:
 
         return maintainability_data
 
-    async def _collect_all_issues(self, project_path: str) -> List[QualityIssue]:
+    async def _collect_all_issues(self, project_path: str) -> list[QualityIssue]:
         """收集所有质量问题"""
         issues = []
 
@@ -565,7 +556,7 @@ class CodeQualityAnalyzer:
 
             for file_path in python_files:
                 try:
-                    with open(file_path, 'r', encoding='utf-8') as f:
+                    with open(file_path, encoding='utf-8') as f:
                         content = f.read()
 
                     # 检查硬编码密码
@@ -650,7 +641,7 @@ class CodeQualityAnalyzer:
 
         return False
 
-    def _calculate_overall_score(self, metrics: Dict[str, Any]) -> Tuple[float, QualityStandard]:
+    def _calculate_overall_score(self, metrics: dict[str, Any]) -> tuple[float, QualityStandard]:
         """计算总体评分"""
         score = 0.0
         weights = {
@@ -706,7 +697,7 @@ class CodeQualityAnalyzer:
 
         return score, standard
 
-    def _generate_summary(self, report: QualityReport) -> Dict[str, Any]:
+    def _generate_summary(self, report: QualityReport) -> dict[str, Any]:
         """生成质量摘要"""
         return {
             'files_analyzed': report.metrics.get('complexity', {}).get('files_analyzed', 0),
@@ -718,7 +709,7 @@ class CodeQualityAnalyzer:
             'improvement_areas': self._identify_improvement_areas(report.metrics)
         }
 
-    def _generate_recommendations(self, report: QualityReport) -> List[str]:
+    def _generate_recommendations(self, report: QualityReport) -> list[str]:
         """生成改进建议"""
         recommendations = []
 
@@ -746,7 +737,7 @@ class CodeQualityAnalyzer:
 
         return recommendations
 
-    def _count_issues_by_severity(self, issues: List[QualityIssue]) -> Dict[str, int]:
+    def _count_issues_by_severity(self, issues: list[QualityIssue]) -> dict[str, int]:
         """按严重程度统计问题"""
         counts = {
             'low': 0,
@@ -760,7 +751,7 @@ class CodeQualityAnalyzer:
 
         return counts
 
-    def _get_most_common_issues(self, issues: List[QualityIssue]) -> List[Dict[str, Any]]:
+    def _get_most_common_issues(self, issues: list[QualityIssue]) -> list[dict[str, Any]]:
         """获取最常见的问题"""
         issue_counts = {}
 
@@ -773,7 +764,7 @@ class CodeQualityAnalyzer:
 
         return [{'title': title, 'count': count} for title, count in sorted_issues[:5]]
 
-    def _identify_improvement_areas(self, metrics: Dict[str, Any]) -> List[str]:
+    def _identify_improvement_areas(self, metrics: dict[str, Any]) -> list[str]:
         """识别改进领域"""
         areas = []
 
@@ -794,7 +785,7 @@ class CodeQualityAnalyzer:
 
         return areas
 
-    def _get_python_files(self, project_path: str) -> List[Path]:
+    def _get_python_files(self, project_path: str) -> list[Path]:
         """获取Python文件列表"""
         python_files = []
         project_path = Path(project_path)
@@ -808,7 +799,7 @@ class CodeQualityAnalyzer:
 
         return python_files
 
-    def _get_test_files(self, project_path: str) -> List[Path]:
+    def _get_test_files(self, project_path: str) -> list[Path]:
         """获取测试文件列表"""
         test_files = []
         project_path = Path(project_path)
@@ -829,7 +820,7 @@ class PerformanceTester:
         """初始化性能测试器"""
         self.test_results = []
 
-    async def run_performance_tests(self, project_path: str) -> Dict[str, Any]:
+    async def run_performance_tests(self, project_path: str) -> dict[str, Any]:
         """运行性能测试"""
         logger.info(f"开始性能测试: {project_path}")
 
@@ -843,7 +834,7 @@ class PerformanceTester:
 
         return test_results
 
-    async def _test_memory_usage(self, project_path: str) -> Dict[str, Any]:
+    async def _test_memory_usage(self, project_path: str) -> dict[str, Any]:
         """测试内存使用"""
         # 启动内存追踪
         tracemalloc.start()
@@ -857,7 +848,7 @@ class PerformanceTester:
             # 加载和解析所有Python文件
             for file_path in python_files[:10]:  # 限制文件数量
                 try:
-                    with open(file_path, 'r', encoding='utf-8') as f:
+                    with open(file_path, encoding='utf-8') as f:
                         content = f.read()
 
                     # 模拟代码执行
@@ -881,13 +872,13 @@ class PerformanceTester:
 
         return memory_data
 
-    async def _test_cpu_performance(self, project_path: str) -> Dict[str, Any]:
+    async def _test_cpu_performance(self, project_path: str) -> dict[str, Any]:
         """测试CPU性能"""
         import time
 
         # 记录开始时的CPU时间
         start_time = time.time()
-        start_cpu = psutil.cpu_percent()
+        psutil.cpu_percent()
 
         try:
             # 模拟CPU密集型任务
@@ -909,7 +900,7 @@ class PerformanceTester:
 
         return cpu_data
 
-    async def _test_response_time(self, project_path: str) -> Dict[str, Any]:
+    async def _test_response_time(self, project_path: str) -> dict[str, Any]:
         """测试响应时间"""
         response_times = []
 
@@ -921,8 +912,8 @@ class PerformanceTester:
                 start_time = time.time()
 
                 try:
-                    with open(file_path, 'r', encoding='utf-8') as f:
-                        content = f.read()
+                    with open(file_path, encoding='utf-8') as f:
+                        f.read()
 
                     end_time = time.time()
                     response_time = (end_time - start_time) * 1000  # 转换为毫秒
@@ -947,7 +938,7 @@ class PerformanceTester:
 
         return response_data
 
-    async def _test_load_performance(self, project_path: str) -> Dict[str, Any]:
+    async def _test_load_performance(self, project_path: str) -> dict[str, Any]:
         """测试负载性能"""
         import concurrent.futures
 
@@ -961,8 +952,8 @@ class PerformanceTester:
 
                 if python_files:
                     file_path = python_files[0]
-                    with open(file_path, 'r', encoding='utf-8') as f:
-                        content = f.read()
+                    with open(file_path, encoding='utf-8') as f:
+                        f.read()
 
                     # 模拟处理时间
                     time.sleep(0.01)
@@ -970,7 +961,7 @@ class PerformanceTester:
                 end_time = time.time()
                 return (end_time - start_time) * 1000  # 毫秒
 
-            except Exception as e:
+            except Exception:
                 return -1  # 错误标记
 
         try:
@@ -1010,7 +1001,7 @@ class PerformanceTester:
 
         return load_data
 
-    async def _profile_code(self, project_path: str) -> Dict[str, Any]:
+    async def _profile_code(self, project_path: str) -> dict[str, Any]:
         """代码性能分析"""
         profiler = c_profile.Profile()
 
@@ -1026,7 +1017,7 @@ class PerformanceTester:
             def profiled_function():
                 """被分析的性能函数"""
                 try:
-                    with open(test_file, 'r', encoding='utf-8') as f:
+                    with open(test_file, encoding='utf-8') as f:
                         content = f.read()
 
                     # 模拟一些处理
@@ -1098,7 +1089,7 @@ class SecurityAuditor:
             'insecure_communication'
         ]
 
-    async def audit_security(self, project_path: str) -> Dict[str, Any]:
+    async def audit_security(self, project_path: str) -> dict[str, Any]:
         """执行安全审计"""
         logger.info(f"开始安全审计: {project_path}")
 
@@ -1138,7 +1129,7 @@ class SecurityAuditor:
 
         return audit_results
 
-    async def _run_security_check(self, check_type: str, project_path: str) -> Dict[str, Any]:
+    async def _run_security_check(self, check_type: str, project_path: str) -> dict[str, Any]:
         """运行特定安全检查"""
         check_methods = {
             'hardcoded_secrets': self._check_hardcoded_secrets,
@@ -1156,7 +1147,7 @@ class SecurityAuditor:
         else:
             return {'error': f"未知的安全检查类型: {check_type}"}
 
-    async def _check_hardcoded_secrets(self, project_path: str) -> Dict[str, Any]:
+    async def _check_hardcoded_secrets(self, project_path: str) -> dict[str, Any]:
         """检查硬编码密钥"""
         secrets_patterns = [
             (r'password\s*=\s*["\'][^"\']{8,}["\']', "password"),
@@ -1173,7 +1164,7 @@ class SecurityAuditor:
         try:
             for file_path in Path(project_path).rglob('*.py'):
                 try:
-                    with open(file_path, 'r', encoding='utf-8') as f:
+                    with open(file_path, encoding='utf-8') as f:
                         content = f.read()
 
                     line_number = 0
@@ -1203,7 +1194,7 @@ class SecurityAuditor:
             'issues': issues
         }
 
-    async def _check_insecure_dependencies(self, project_path: str) -> Dict[str, Any]:
+    async def _check_insecure_dependencies(self, project_path: str) -> dict[str, Any]:
         """检查不安全的依赖"""
         issues = []
 
@@ -1211,7 +1202,7 @@ class SecurityAuditor:
             # 检查requirements.txt
             requirements_file = Path(project_path) / 'requirements.txt'
             if requirements_file.exists():
-                with open(requirements_file, 'r') as f:
+                with open(requirements_file) as f:
                     requirements = f.read().split('\n')
 
                 # 已知有安全问题的包
@@ -1240,7 +1231,7 @@ class SecurityAuditor:
             # 检查setup.py
             setup_file = Path(project_path) / 'setup.py'
             if setup_file.exists():
-                with open(setup_file, 'r') as f:
+                with open(setup_file) as f:
                     setup_content = f.read()
 
                 for package_name, description in vulnerable_packages.items():
@@ -1262,7 +1253,7 @@ class SecurityAuditor:
             'issues': issues
         }
 
-    async def _check_weak_cryptography(self, project_path: str) -> Dict[str, Any]:
+    async def _check_weak_cryptography(self, project_path: str) -> dict[str, Any]:
         """检查弱加密"""
         issues = []
 
@@ -1278,7 +1269,7 @@ class SecurityAuditor:
         try:
             for file_path in Path(project_path).rglob('*.py'):
                 try:
-                    with open(file_path, 'r', encoding='utf-8') as f:
+                    with open(file_path, encoding='utf-8') as f:
                         content = f.read()
 
                     line_number = 0
@@ -1307,22 +1298,22 @@ class SecurityAuditor:
             'issues': issues
         }
 
-    async def _check_input_validation(self, project_path: str) -> Dict[str, Any]:
+    async def _check_input_validation(self, project_path: str) -> dict[str, Any]:
         """检查输入验证"""
         issues = []
 
         try:
             for file_path in Path(project_path).rglob('*.py'):
                 try:
-                    with open(file_path, 'r', encoding='utf-8') as f:
+                    with open(file_path, encoding='utf-8') as f:
                         content = f.read()
 
                     # 检查是否有输入验证的缺失
                     flask_routes = re.findall(r'@app\.route\([^)]+\)', content)
-                    django_views = re.findall(r'def\s+\w+\s*\([^)]*\)\s*->\s*HttpResponse', content)
+                    re.findall(r'def\s+\w+\s*\([^)]*\)\s*->\s*HttpResponse', content)
 
                     # 检查这些路由/视图是否有输入验证
-                    for i, route in enumerate(flask_routes):
+                    for _i, route in enumerate(flask_routes):
                         # 简化检查：如果路由后面没有验证逻辑，标记为潜在问题
                         route_start = content.find(route)
                         next_function = content.find('def ', route_start)
@@ -1353,7 +1344,7 @@ class SecurityAuditor:
             'issues': issues
         }
 
-    async def _check_authentication_issues(self, project_path: str) -> Dict[str, Any]:
+    async def _check_authentication_issues(self, project_path: str) -> dict[str, Any]:
         """检查认证问题"""
         issues = []
 
@@ -1367,7 +1358,7 @@ class SecurityAuditor:
         try:
             for file_path in Path(project_path).rglob('*.py'):
                 try:
-                    with open(file_path, 'r', encoding='utf-8') as f:
+                    with open(file_path, encoding='utf-8') as f:
                         content = f.read()
 
                     line_number = 0
@@ -1396,14 +1387,14 @@ class SecurityAuditor:
             'issues': issues
         }
 
-    async def _check_authorization_issues(self, project_path: str) -> Dict[str, Any]:
+    async def _check_authorization_issues(self, project_path: str) -> dict[str, Any]:
         """检查授权问题"""
         issues = []
 
         try:
             for file_path in Path(project_path).rglob('*.py'):
                 try:
-                    with open(file_path, 'r', encoding='utf-8') as f:
+                    with open(file_path, encoding='utf-8') as f:
                         content = f.read()
 
                     # 检查是否有管理员权限直接判断
@@ -1437,7 +1428,7 @@ class SecurityAuditor:
             'issues': issues
         }
 
-    async def _check_data_exposure(self, project_path: str) -> Dict[str, Any]:
+    async def _check_data_exposure(self, project_path: str) -> dict[str, Any]:
         """检查数据暴露"""
         issues = []
 
@@ -1456,7 +1447,7 @@ class SecurityAuditor:
         try:
             for file_path in Path(project_path).rglob('*.py'):
                 try:
-                    with open(file_path, 'r', encoding='utf-8') as f:
+                    with open(file_path, encoding='utf-8') as f:
                         content = f.read()
 
                     line_number = 0
@@ -1485,7 +1476,7 @@ class SecurityAuditor:
             'issues': issues
         }
 
-    async def _check_insecure_communication(self, project_path: str) -> Dict[str, Any]:
+    async def _check_insecure_communication(self, project_path: str) -> dict[str, Any]:
         """检查不安全通信"""
         issues = []
 
@@ -1496,15 +1487,15 @@ class SecurityAuditor:
             (r'urllib\.request\.urlopen\([^)]*\)', '可能缺少SSL验证'),
             (r'requests\.get\([^)]*verify\s*=\s*False[^)]*\)', 'SSL验证被禁用'),
             (r'requests\.post\([^)]*verify\s*=\s*False[^)]*\)', 'SSL验证被禁用'),
-            (r'socket\.socket\([^)]*\)', "使用原始socket（可能不安全）'),
-            (r'telnetlib\.', "使用Telnet协议（不安全）'),
-            (r'ftplib\.', "使用FTP协议（不安全）')
+            (r'socket\.socket\([^)]*\)', '使用原始socket（可能不安全）'),
+            (r'telnetlib\.', '使用Telnet协议（不安全）'),
+            (r'ftplib\.', '使用FTP协议（不安全）')
         ]
 
         try:
             for file_path in Path(project_path).rglob('*.py'):
                 try:
-                    with open(file_path, 'r', encoding='utf-8') as f:
+                    with open(file_path, encoding='utf-8') as f:
                         content = f.read()
 
                     line_number = 0
@@ -1533,12 +1524,12 @@ class SecurityAuditor:
             'issues': issues
         }
 
-    def _calculate_security_score(self, vulnerabilities_by_category: Dict[str, Any]) -> float:
+    def _calculate_security_score(self, vulnerabilities_by_category: dict[str, Any]) -> float:
         """计算安全评分"""
         total_issues = 0
         critical_issues = 0
 
-        for category, check_result in vulnerabilities_by_category.items():
+        for _category, check_result in vulnerabilities_by_category.items():
             if isinstance(check_result, dict) and 'issues' in check_result:
                 issues = check_result['issues']
                 total_issues += len(issues)
@@ -1559,7 +1550,7 @@ class SecurityAuditor:
 
         return max(0, base_score)
 
-    def _assess_security_risk(self, security_issues: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def _assess_security_risk(self, security_issues: list[dict[str, Any]]) -> dict[str, Any]:
         """评估安全风险"""
         if not security_issues:
             return {
@@ -1598,7 +1589,7 @@ class SecurityAuditor:
             'low_vulnerabilities': low_count
         }
 
-    async def _check_compliance(self, project_path: str) -> Dict[str, Any]:
+    async def _check_compliance(self, project_path: str) -> dict[str, Any]:
         """检查合规性"""
         compliance_checks = {
             'has_license': False,
@@ -1658,7 +1649,7 @@ class SecurityAuditor:
 
         return compliance_checks
 
-    def _generate_security_recommendations(self, audit_results: Dict[str, Any]) -> List[str]:
+    def _generate_security_recommendations(self, audit_results: dict[str, Any]) -> list[str]:
         """生成安全建议"""
         recommendations = []
 
@@ -1710,7 +1701,7 @@ class QualityAssuranceSystem:
         self.security_auditor = SecurityAuditor()
         self.test_results = {}
 
-    async def run_comprehensive_qa(self, project_path: str) -> Dict[str, Any]:
+    async def run_comprehensive_qa(self, project_path: str) -> dict[str, Any]:
         """运行全面质量保证检查"""
         logger.info(f"开始全面质量保证检查: {project_path}")
 
@@ -1749,7 +1740,7 @@ class QualityAssuranceSystem:
 
         return qa_results
 
-    def _generate_overall_assessment(self, qa_results: Dict[str, Any]) -> Dict[str, Any]:
+    def _generate_overall_assessment(self, qa_results: dict[str, Any]) -> dict[str, Any]:
         """生成综合评估"""
         assessment = {
             'overall_score': 0.0,
@@ -1843,7 +1834,7 @@ class QualityAssuranceSystem:
 
         return assessment
 
-    def _generate_overall_recommendations(self, qa_results: Dict[str, Any]) -> List[str]:
+    def _generate_overall_recommendations(self, qa_results: dict[str, Any]) -> list[str]:
         """生成总体建议"""
         recommendations = []
 
@@ -1896,7 +1887,7 @@ if __name__ == '__main__':
         # 运行全面质量保证检查
         qa_results = await qa_system.run_comprehensive_qa(project_path)
 
-        logger.info(f"质量保证检查结果:")
+        logger.info("质量保证检查结果:")
         logger.info(f"  总体评分: {qa_results.get('overall_assessment', {}).get('overall_score', 0):.1f}")
         logger.info(f"  质量等级: {qa_results.get('overall_assessment', {}).get('quality_grade', 'F')}")
         logger.info(f"  代码质量问题: {len(qa_results.get('quality_report', {}).get('issues', []))}")

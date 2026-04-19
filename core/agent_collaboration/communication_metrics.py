@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Agent通信系统Prometheus监控指标
 Communication Metrics for Prometheus
@@ -18,10 +19,9 @@ import logging
 import time
 from collections.abc import Callable
 from functools import wraps
-from typing import Any, Dict, Optional, Tuple
+from typing import Any
 
 from prometheus_client import (
-    CONTENT_TYPE_LATEST,
     CollectorRegistry,
     Counter,
     Gauge,

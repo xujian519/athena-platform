@@ -1,21 +1,18 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 分析M4 Pro硬件资源利用情况
 Analyze M4 Pro Hardware Resource Usage
 """
 
 import subprocess
-import json
-import os
-import sys
+
 
 def run_command(cmd):
     """执行系统命令"""
     try:
         result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
         return result.stdout.strip()
-    except:
+    except Exception:
         return ""
 
 def check_m4_specs():
@@ -32,9 +29,9 @@ def check_m4_specs():
     print(f"CPU型号: {cpu_info}")
     print(f"CPU核心数: {cpu_cores}")
     if cpu_freq and cpu_freq.isdigit():
-    print(f"CPU频率: {int(cpu_freq)//1000000} GHz")
-else:
-    print("CPU频率: 需要查询")
+        print(f"CPU频率: {int(cpu_freq)//1000000} GHz")
+    else:
+        print("CPU频率: 需要查询")
 
     # 获取内存信息
     mem_size = run_command("sysctl -n hw.memsize")

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜专利命名系统 - 公共接口
 Xiaona Patent Naming System - Public Interface
@@ -12,15 +13,14 @@ Xiaona Patent Naming System - Public Interface
 """
 
 # 导入类型定义
+# 导入主系统
+from .naming_system import XiaonaPatentNamingSystem
 from .types import (
-    PatentType,
     NamingStyle,
     PatentNamingRequest,
     PatentNamingResult,
+    PatentType,
 )
-
-# 导入主系统
-from .naming_system import XiaonaPatentNamingSystem
 
 # 导出公共接口
 __all__ = [

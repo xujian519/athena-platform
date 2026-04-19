@@ -4,14 +4,12 @@ Athena平台健康检查服务
 """
 
 import asyncio
-from core.async_main import async_main
 import json
-import logging
-from core.logging_config import setup_logging
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional
+from datetime import datetime
 
 import aiohttp
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -32,7 +30,7 @@ class ServiceHealth:
         self.consecutive_failures = 0
         self.consecutive_successes = 0
 
-    async def check(self) -> Dict:
+    async def check(self) -> dict:
         """执行健康检查"""
         start_time = datetime.now()
 
@@ -86,7 +84,7 @@ class HealthChecker:
     """健康检查器"""
 
     def __init__(self):
-        self.services: Dict[str, ServiceHealth] = {}
+        self.services: dict[str, ServiceHealth] = {}
         self.session: aiohttp.ClientSession | None = None
 
         # 默认服务配置
@@ -136,14 +134,14 @@ class HealthChecker:
             del self.services[name]
             logger.info(f"已移除服务: {name}")
 
-    async def check_service(self, name: str) -> Dict:
+    async def check_service(self, name: str) -> dict:
         """检查单个服务"""
         if name not in self.services:
             return {'error': f"Service {name} not found"}
 
         return await self.services[name].check()
 
-    async def check_all(self) -> Dict:
+    async def check_all(self) -> dict:
         """检查所有服务"""
         results = {}
 
@@ -168,17 +166,17 @@ class HealthChecker:
 
         return results
 
-    async def get_healthy_services(self) -> List[str]:
+    async def get_healthy_services(self) -> list[str]:
         """获取健康的服务列表"""
         results = await self.check_all()
         return [name for name, result in results.items() if result.get('status') == 'healthy']
 
-    async def get_unhealthy_services(self) -> List[str]:
+    async def get_unhealthy_services(self) -> list[str]:
         """获取不健康的服务列表"""
         results = await self.check_all()
         return [name for name, result in results.items() if result.get('status') != 'healthy']
 
-    async def get_overall_status(self) -> Dict:
+    async def get_overall_status(self) -> dict:
         """获取整体状态"""
         results = await self.check_all()
 
@@ -213,7 +211,7 @@ class HealthChecker:
                 results = await self.check_all()
 
                 # 记录状态变化
-                for name, result in results.items():
+                for name, _result in results.items():
                     service = self.services[name]
                     if service.consecutive_failures == 3:
                         logger.warning(f"服务 {name} 连续失败3次")
@@ -230,11 +228,11 @@ class HealthChecker:
                 await self.save_results(results)
 
             except Exception as e:
-                logger.error(f"健康检查失败: {e}: {exc_info=True}")
+                logger.error(f"健康检查失败: {e}", exc_info=True)
 
             await asyncio.sleep(interval)
 
-    async def save_results(self, results: Dict):
+    async def save_results(self, results: dict):
         """保存检查结果"""
         try:
             # 创建检查结果目录
@@ -263,7 +261,6 @@ class HealthChecker:
 
 # API接口
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import JSONResponse
 
 app = FastAPI(title='Athena平台健康检查API', version='1.0.0')
 health_checker = HealthChecker()

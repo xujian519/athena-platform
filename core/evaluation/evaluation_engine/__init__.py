@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 评估引擎 - 公共接口
 Evaluation Engine - Public Interface
@@ -12,6 +13,11 @@ Evaluation Engine - Public Interface
 """
 
 # 导入类型定义
+# 导入核心类
+from .engine import EvaluationEngine
+from .metrics import MetricsCalculator
+from .qa_checker import QualityAssuranceChecker
+from .reflection import ReflectionEngine
 from .types import (
     EvaluationCriteria,
     EvaluationLevel,
@@ -20,12 +26,6 @@ from .types import (
     ReflectionRecord,
     ReflectionType,
 )
-
-# 导入核心类
-from .engine import EvaluationEngine
-from .metrics import MetricsCalculator
-from .qa_checker import QualityAssuranceChecker
-from .reflection import ReflectionEngine
 
 # 导出公共接口
 __all__ = [

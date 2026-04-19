@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 联邦学习系统 (Federated Learning System)
 分布式隐私保护机器学习
@@ -10,11 +11,12 @@
 
 import logging
 from collections import deque
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
+import numpy as np
 
 from ..optimization_constants import FederatedLearningConfig
 

@@ -6,13 +6,13 @@
   "updated_at": "2026-02-06T00:00:00.000000",
 
   "default_provider": "deepseek",
-  "fallback_providers": ["zhipu", "ollama"],
+  "fallback_providers": ["zhipu", "mlx"],
 
   "providers": {
-    "ollama": {
+    "mlx": {
       "enabled": true,
-      "description": "本地Ollama服务",
-      "base_url": "http://localhost:11434",
+      "description": "本地MLX服务",
+      "base_url": "http://127.0.0.1:8765",
       "timeout": 30,
       "models": {
         "default": "qwen:7b",

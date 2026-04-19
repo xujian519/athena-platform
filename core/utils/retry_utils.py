@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 重试工具模块
 Retry Utilities
@@ -16,7 +17,7 @@ import functools
 import logging
 import random
 from collections.abc import Callable
-from typing import Any, Optional, Tuple, Type, TypeVar
+from typing import Any, TypeVar
 
 logger = logging.getLogger(__name__)
 

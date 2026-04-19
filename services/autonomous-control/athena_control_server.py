@@ -5,20 +5,20 @@ Athena Autonomous Control Server
 让小娜重新掌控平台！
 """
 
-import asyncio
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
 from datetime import datetime
+
+import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+from core.logging_config import setup_logging
 from core.security.auth import ALLOWED_ORIGINS
-import uvicorn
 
 # 导入开发助手
 try:
-    from athena_dev_integration import router as dev_router, integrate_with_athena_server
+    from athena_dev_integration import integrate_with_athena_server
+    from athena_dev_integration import router as dev_router
 except ImportError:
     dev_router = None
 
@@ -85,8 +85,6 @@ async def get_status():
 async def control_service(service_name: str, action: str):
     """控制平台服务"""
     services = {
-        "yunpat": {"port": 8087, "script": "services/yunpat-agent/api_service.py"},
-        "xiaonuo": {"port": 8090, "script": "services/yunpat-agent/client_integration/client_capability_service.py"},
         "qdrant": {"docker": "qdrant"},
         "crawler": {"script": "services/crawler-service/crawler_api.py"}
     }
@@ -127,12 +125,6 @@ async def control_service(service_name: str, action: str):
 async def list_services():
     """列出所有平台服务"""
     services = {
-        "yunpat": {
-            "name": "YunPat专利服务",
-            "port": 8087,
-            "status": "running" if 8087 in [8001, 8087] else "stopped",
-            "controlled": "yunpat" in platform_status["controlled_services"]
-        },
         "xiaonuo": {
             "name": "小诺协作服务",
             "port": 8090,
@@ -207,7 +199,7 @@ async def activate_full_control():
     return {
         "status": "success",
         "message": "小娜已激活全平台控制权",
-        "controlled_services": ["postgresql", "redis", "yunpat", "xiaonuo"],
+        "controlled_services": ["postgresql", "redis", "xiaonuo"],
         "next_step": "现在可以启动小诺的协作服务",
         "timestamp": datetime.now().isoformat()
     }

@@ -4,14 +4,10 @@
 Recipe Query System
 """
 
-import os
-from core.async_main import async_main
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import sys
-import json
 from pathlib import Path
-import sqlite3
+
 from security_manager import PersonalSecurityManager
+
 
 class RecipeQuerySystem:
     """菜谱查询系统"""
@@ -51,7 +47,7 @@ class RecipeQuerySystem:
                 backup_file = self.find_backup_file(result["title"])
                 if backup_file and backup_file.exists():
                     try:
-                        with open(backup_file, 'r', encoding='utf-8') as f:
+                        with open(backup_file, encoding='utf-8') as f:
                             return f.read()
                     except Exception as e:
                         return f"读取文件失败: {e}"

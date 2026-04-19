@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 显式规划器测试脚本
 
@@ -238,7 +239,7 @@ async def main():
         # if response == 'y':
         #     await test_api_service()
 
-    except Exception as e:
+    except Exception:
         import traceback
 
         traceback.print_exc()

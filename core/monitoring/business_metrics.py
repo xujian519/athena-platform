@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 认知与决策模块业务指标扩展
 Business Metrics Extension for Cognitive & Decision Module
@@ -15,11 +15,11 @@ Business Metrics Extension for Cognitive & Decision Module
 版本: v1.0
 """
 
-from prometheus_client import Counter, Histogram, Gauge
-from typing import Dict, Any
-from functools import wraps
 import time
+from functools import wraps
+from typing import Any
 
+from prometheus_client import Counter, Gauge, Histogram
 
 # ============== 专利分析业务指标 ==============
 
@@ -237,12 +237,10 @@ def track_patent_analysis(analysis_type: str = 'general'):
         @wraps(func)
         def sync_wrapper(*args, **kwargs):
             start_time = time.time()
-            success = False
             quality_score = 0
 
             try:
                 result = func(*args, **kwargs)
-                success = True
 
                 # 从结果中提取质量评分（如果有）
                 if isinstance(result, dict) and 'quality_score' in result:
@@ -265,7 +263,7 @@ def track_patent_analysis(analysis_type: str = 'general'):
 
                 return result
 
-            except Exception as e:
+            except Exception:
                 # 记录失败指标
                 duration = time.time() - start_time
                 patent_analysis_requests.labels(
@@ -316,7 +314,7 @@ def track_intent_recognition(model_type: str = 'default'):
 
                 return result
 
-            except Exception as e:
+            except Exception:
                 # 记录失败
                 duration = time.time() - start_time
                 intent_recognition_duration.labels(
@@ -352,7 +350,7 @@ def track_user_interaction(interaction_type: str = 'general'):
 
                 return result
 
-            except Exception as e:
+            except Exception:
                 # 记录失败交互
                 duration = time.time() - start_time
                 user_interaction_duration.labels(
@@ -369,7 +367,7 @@ def track_reasoning_quality(reasoning_mode: str = 'basic'):
     def decorator(func):
         @wraps(func)
         def sync_wrapper(*args, **kwargs):
-            start_time = time.time()
+            time.time()
             steps = 0
 
             try:
@@ -400,7 +398,7 @@ def track_reasoning_quality(reasoning_mode: str = 'basic'):
 
                 return result
 
-            except Exception as e:
+            except Exception:
                 raise
 
         return sync_wrapper
@@ -468,7 +466,7 @@ business_metrics = BusinessMetricsCollector()
 
 
 # 便捷函数
-def update_business_metrics(metrics_data: Dict[str, Any]):
+def update_business_metrics(metrics_data: dict[str, Any]):
     """更新业务指标"""
     # 专利分析指标
     if 'patent_analysis' in metrics_data:

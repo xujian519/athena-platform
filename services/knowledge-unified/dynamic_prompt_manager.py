@@ -9,14 +9,15 @@ Dynamic Prompt Manager
 创建时间: 2024年12月15日
 """
 
+import asyncio
 import json
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
-from typing import Dict, List, Any, Optional
 from datetime import datetime
 from pathlib import Path
-import asyncio
+from typing import Any
+
+from core.logging_config import setup_logging
+
 from .unified_knowledge_graph_service import get_unified_knowledge_service
 
 # 配置日志
@@ -38,7 +39,7 @@ class DynamicPromptManager:
         self.knowledge_service = await get_unified_knowledge_service()
         logger.info("动态提示词管理器初始化完成")
 
-    def _load_prompt_templates(self) -> Dict[str, str]:
+    def _load_prompt_templates(self) -> dict[str, str]:
         """加载提示词模板"""
         return {
             "patent_analysis": """
@@ -97,8 +98,8 @@ class DynamicPromptManager:
         user_query: str,
         patent_text: str = "",
         context_type: str = "general",
-        additional_context: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+        additional_context: dict[str, Any] = None
+    ) -> dict[str, Any]:
         """生成上下文感知的提示词"""
 
         # 检查缓存
@@ -131,12 +132,12 @@ class DynamicPromptManager:
         self,
         query: str,
         patent_text: str,
-        context: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+        context: dict[str, Any] = None
+    ) -> dict[str, Any]:
         """生成审查相关的提示词"""
 
         # 提取关键词
-        keywords = await self._extract_relevant_keywords(patent_text + " " + query)
+        await self._extract_relevant_keywords(patent_text + " " + query)
 
         # 获取相关规则
         rules = await self.knowledge_service.get_comprehensive_rules(patent_text)
@@ -196,8 +197,8 @@ class DynamicPromptManager:
         self,
         query: str,
         patent_text: str,
-        context: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+        context: dict[str, Any] = None
+    ) -> dict[str, Any]:
         """生成法律咨询相关的提示词"""
 
         # 获取相关法律规则
@@ -235,8 +236,8 @@ class DynamicPromptManager:
         self,
         query: str,
         patent_text: str,
-        context: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+        context: dict[str, Any] = None
+    ) -> dict[str, Any]:
         """生成技术分析相关的提示词"""
 
         tech_prompts = {
@@ -269,8 +270,8 @@ class DynamicPromptManager:
         self,
         query: str,
         patent_text: str,
-        context: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+        context: dict[str, Any] = None
+    ) -> dict[str, Any]:
         """生成通用提示词"""
 
         general_prompts = {
@@ -290,14 +291,14 @@ class DynamicPromptManager:
 
         return general_prompts
 
-    async def _extract_relevant_keywords(self, text: str) -> List[str]:
+    async def _extract_relevant_keywords(self, text: str) -> list[str]:
         """提取相关关键词"""
         # 这里可以调用知识服务的关键词提取功能
         import jieba.analyse
         keywords = jieba.analyse.extract_tags(text, top_k=15)
         return [kw[0] for kw in keywords]
 
-    def _format_rules_as_guidance(self, rules: Dict[str, List[Dict]]) -> str:
+    def _format_rules_as_guidance(self, rules: dict[str, list[dict]]) -> str:
         """将规则格式化为指导内容"""
         guidance = ""
 
@@ -309,7 +310,7 @@ class DynamicPromptManager:
 
         return guidance
 
-    def _format_rules_as_legal_basis(self, rules: Dict[str, List[Dict]]) -> str:
+    def _format_rules_as_legal_basis(self, rules: dict[str, list[dict]]) -> str:
         """将规则格式化为法律依据"""
         basis = ""
 
@@ -327,7 +328,7 @@ class DynamicPromptManager:
 
         return basis
 
-    async def save_prompt_session(self, session_id: str, prompts: Dict[str, Any]):
+    async def save_prompt_session(self, session_id: str, prompts: dict[str, Any]):
         """保存提示词会话"""
         session_data = {
             'session_id': session_id,
@@ -345,12 +346,12 @@ class DynamicPromptManager:
 
         logger.info(f"提示词会话已保存: {session_file}")
 
-    async def load_prompt_session(self, session_id: str) -> Dict[str, Any | None]:
+    async def load_prompt_session(self, session_id: str) -> dict[str, Any | None]:
         """加载提示词会话"""
         session_file = Path(f"/Users/xujian/Athena工作平台/data/prompt_sessions/session_{session_id}.json")
 
         if session_file.exists():
-            with open(session_file, 'r', encoding='utf-8') as f:
+            with open(session_file, encoding='utf-8') as f:
                 return json.load(f)
         return None
 

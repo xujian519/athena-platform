@@ -15,12 +15,11 @@ Evaluation Module Tests
 创建时间: 2026-01-30
 """
 
-import asyncio
-import pytest
-from unittest.mock import AsyncMock, MagicMock
-
 import sys
 from pathlib import Path
+from unittest.mock import MagicMock
+
+import pytest
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
@@ -156,9 +155,9 @@ class TestEnhancedQualityAssessor:
         if not quality_assessor_available:
             pytest.skip("EnhancedQualityAssessor not available")
         from core.evaluation import (
-            EnhancedQualityAssessor,
             AssessmentCriteria,
             AssessmentDimension,
+            EnhancedQualityAssessor,
             QualityMetrics,
             QualityReport,
         )
@@ -306,9 +305,9 @@ class TestFeedbackSystem:
         if not feedback_system_available:
             pytest.skip("XiaonuoFeedbackSystem not available")
         from core.evaluation import (
-            XiaonuoFeedbackSystem,
             FeedbackCollector,
             FeedbackProcessor,
+            XiaonuoFeedbackSystem,
         )
         assert XiaonuoFeedbackSystem is not None
         assert FeedbackCollector is not None

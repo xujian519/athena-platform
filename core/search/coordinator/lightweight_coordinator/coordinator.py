@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 轻量协调器 - 主协调器
 Lightweight Coordinator - Main Coordinator

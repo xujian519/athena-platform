@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 向量workflow检索器
 
@@ -71,9 +72,6 @@ class VectorWorkflowRetriever:
                 "安装命令: pip install qdrant-client"
             )
         except Exception:
-            logger.error("操作失败: e", exc_info=True)
-            raise
-        except Exception:
             logger.warning("💡 启动Qdrant: docker run -p 6333:6333 qdrant/qdrant")
 
     def _ensure_collection_exists(self):
@@ -98,9 +96,6 @@ class VectorWorkflowRetriever:
                 )
             else:
                 logger.debug(f"✅ Collection已存在: {self.COLLECTION_NAME}")
-        except Exception:
-            logger.error("操作失败: e", exc_info=True)
-            raise
         except Exception:
             logger.error("操作失败: e", exc_info=True)
             raise
@@ -155,9 +150,6 @@ class VectorWorkflowRetriever:
             logger.debug(f"📇 模式已索引: {pattern.pattern_id}")
             return True
 
-        except Exception:
-            logger.error("操作失败: e", exc_info=True)
-            raise
         except Exception:
             return False
 
@@ -216,9 +208,6 @@ class VectorWorkflowRetriever:
             return results
 
         except Exception:
-            logger.error("操作失败: e", exc_info=True)
-            raise
-        except Exception:
             return []
 
     def _payload_to_pattern(self, payload: dict) -> WorkflowPattern | None:
@@ -237,9 +226,6 @@ class VectorWorkflowRetriever:
                 usage_count=payload["usage_count"],
                 created_at=datetime.fromisoformat(payload["created_at"])
             )
-        except Exception:
-            logger.error("操作失败: e", exc_info=True)
-            raise
         except Exception:
             return None
 
@@ -264,9 +250,6 @@ class VectorWorkflowRetriever:
             logger.debug(f"🗑️ 模式索引已删除: {pattern_id}")
             return True
         except Exception:
-            logger.error("操作失败: e", exc_info=True)
-            raise
-        except Exception:
             return False
 
     async def get_collection_info(self) -> dict | None:
@@ -287,9 +270,6 @@ class VectorWorkflowRetriever:
                 "points_count": info.points_count,
                 "indexed_vectors_count": info.indexed_vectors_count
             }
-        except Exception:
-            logger.error("操作失败: e", exc_info=True)
-            raise
         except Exception:
             return None
 

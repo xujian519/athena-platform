@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 增强版音频处理器
 Enhanced Audio Processor
@@ -7,13 +6,10 @@ Enhanced Audio Processor
 集成Whisper语音识别
 """
 
-import os
-from core.async_main import async_main
 import asyncio
 import logging
-from typing import Dict, List, Any, Optional
-import numpy as np
-import tempfile
+import os
+from typing import Any
 
 # 尝试导入Whisper
 try:
@@ -57,7 +53,7 @@ class WhisperAudioProcessor:
             print(f"❌ Whisper模型加载失败: {e}")
             self.model = None
 
-    async def transcribe_audio(self, audio_path: str, language: str = "zh") -> Dict[str, Any]:
+    async def transcribe_audio(self, audio_path: str, language: str = "zh") -> dict[str, Any]:
         """转录音频文件"""
         try:
             print(f"开始转录音频: {audio_path}")
@@ -80,7 +76,7 @@ class WhisperAudioProcessor:
                 "language": language
             }
 
-    async def _transcribe_with_whisper(self, audio_path: str, language: str) -> Dict[str, Any]:
+    async def _transcribe_with_whisper(self, audio_path: str, language: str) -> dict[str, Any]:
         """使用Whisper转录"""
         try:
             # 异步执行Whisper转录
@@ -121,7 +117,7 @@ class WhisperAudioProcessor:
             logger.error(f"Whisper转录失败: {e}")
             raise
 
-    async def _simulate_transcription(self, audio_path: str) -> Dict[str, Any]:
+    async def _simulate_transcription(self, audio_path: str) -> dict[str, Any]:
         """模拟转录（当Whisper不可用时）"""
         try:
             # 使用librosa获取音频信息
@@ -157,7 +153,7 @@ class WhisperAudioProcessor:
                 "language": "unknown"
             }
 
-    async def transcribe_with_timestamps(self, audio_path: str, language: str = "zh") -> Dict[str, Any]:
+    async def transcribe_with_timestamps(self, audio_path: str, language: str = "zh") -> dict[str, Any]:
         """带时间戳的转录"""
         result = await self.transcribe_audio(audio_path, language)
 
@@ -197,7 +193,7 @@ class WhisperAudioProcessor:
             return True
         return False
 
-    def get_model_info(self) -> Dict[str, Any]:
+    def get_model_info(self) -> dict[str, Any]:
         """获取模型信息"""
         return {
             "whisper_available": WHISPER_AVAILABLE,
@@ -237,7 +233,7 @@ async def test_audio_transcription(audio_file_path: str):
 
     print("转录结果:")
     if result["success"]:
-        print(f"✅ 转录成功")
+        print("✅ 转录成功")
         print(f"模型: {result.get('model', 'unknown')}")
         print(f"语言: {result.get('language', 'unknown')}")
         print(f"时长: {result.get('duration', 0):.2f}秒")

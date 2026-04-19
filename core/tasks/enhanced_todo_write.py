@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强的TodoWrite工具 - 持久化版本
 Enhanced TodoWrite Tool - Persistent Version
@@ -16,8 +17,7 @@ import threading
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Optional
-
+from typing import Any
 
 from .task_scheduler import ReminderType, TaskPriority, get_scheduler
 

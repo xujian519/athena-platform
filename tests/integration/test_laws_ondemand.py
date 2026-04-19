@@ -4,11 +4,11 @@
 Test Laws API On-demand Startup
 """
 
-import requests
-import subprocess
-import time
 import sys
 from pathlib import Path
+
+import requests
+
 
 def test_laws_api():
     """测试法律API按需启动"""
@@ -22,15 +22,16 @@ def test_laws_api():
         if response.status_code == 200:
             print("❌ 法律API已在运行，请先停止")
             return
-    except:
+    except Exception:
         print("✅ 法律API未运行（符合预期）")
 
     # 2. 导入并测试按需启动
     print("\n2. 测试按需启动...")
     sys.path.append(str(Path(__file__).parent))
 
-    from core.services.on_demand_manager import get_laws_api_url
     import asyncio
+
+    from core.services.on_demand_manager import get_laws_api_url
 
     async def test():
         # 按需启动
@@ -79,7 +80,7 @@ def test_laws_api():
     try:
         response = requests.get("http://localhost:8099/health", timeout=3)
         print("   ⚠️ 服务仍在运行")
-    except:
+    except Exception:
         print("   ✅ 服务已停止")
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺数据流优化器
 Xiaonuo Data Flow Optimizer

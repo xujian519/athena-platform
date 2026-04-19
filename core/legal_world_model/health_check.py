@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律世界模型健康检查
 Legal World Model Health Check
@@ -120,9 +121,10 @@ class LegalWorldModelHealthChecker:
         """检查Neo4j连接"""
         start_time = datetime.now()
         try:
-            import subprocess
-            from dotenv import load_dotenv
             import os
+            import subprocess
+
+            from dotenv import load_dotenv
 
             load_dotenv()
 
@@ -204,24 +206,26 @@ class LegalWorldModelHealthChecker:
         """检查PostgreSQL连接"""
         start_time = datetime.now()
         try:
+            import os
+
             import psycopg2
             from dotenv import load_dotenv
-            import os
 
             load_dotenv()
 
+            # 优先使用法律世界模型专用数据库，回退到通用配置
             conn = psycopg2.connect(
-                host=os.getenv("DB_HOST", "localhost"),
-                port=int(os.getenv("DB_PORT", 5432)),
-                database=os.getenv("DB_NAME", "athena"),
-                user=os.getenv("DB_USER", "postgres"),
-                password=os.getenv("DB_PASSWORD", ""),
+                host=os.getenv("LWM_DB_HOST", os.getenv("DB_HOST", "localhost")),
+                port=int(os.getenv("LWM_DB_PORT", os.getenv("DB_PORT", 5432))),
+                database=os.getenv("LWM_DB_NAME", "legal_world_model"),
+                user=os.getenv("LWM_DB_USER", os.getenv("DB_USER", "postgres")),
+                password=os.getenv("LWM_DB_PASSWORD", os.getenv("DB_PASSWORD", "")),
             )
 
             cur = conn.cursor()
 
-            # 检查专利法律文档表（实际存在的表）
-            cur.execute("SELECT COUNT(*) FROM patent_law_documents")
+            # 检查法律文章表（legal_world_model数据库的主要表）
+            cur.execute("SELECT COUNT(*) FROM legal_articles_v2")
             doc_count = cur.fetchone()[0]
 
             cur.close()
@@ -251,9 +255,10 @@ class LegalWorldModelHealthChecker:
         """检查Qdrant连接"""
         start_time = datetime.now()
         try:
-            from qdrant_client import QdrantClient
-            from dotenv import load_dotenv
             import os
+
+            from dotenv import load_dotenv
+            from qdrant_client import QdrantClient
 
             load_dotenv()
 
@@ -291,9 +296,10 @@ class LegalWorldModelHealthChecker:
         """检查缓存状态"""
         start_time = datetime.now()
         try:
+            import os
+
             import redis
             from dotenv import load_dotenv
-            import os
 
             load_dotenv()
 
@@ -314,7 +320,7 @@ class LegalWorldModelHealthChecker:
             return ComponentHealth(
                 name="cache",
                 status=HealthStatus.HEALTHY,
-                message=f"Redis正常运行",
+                message="Redis正常运行",
                 response_time_ms=response_time,
                 details={"total_connections": info.get("total_connections_received", 0)},
             )

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena外部搜索平台命令行工具
 Athena External Search Platform CLI Tool
@@ -13,11 +12,10 @@ Athena External Search Platform CLI Tool
 
 import argparse
 import asyncio
-import json
 import logging
 import sys
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +66,7 @@ def print_error(message: str):
 def print_result(message: str):
     logger.info(f"{CYAN}📊 {message}{END}")
 
-def format_search_results(results: Dict[str, Any], show_details: bool = False):
+def format_search_results(results: dict[str, Any], show_details: bool = False):
     """格式化搜索结果显示"""
     if results.get('status') == 'error':
         print_error(f"搜索失败: {results.get('error', '未知错误')}")
@@ -107,7 +105,7 @@ def format_search_results(results: Dict[str, Any], show_details: bool = False):
 
         print()
 
-def format_multi_engine_results(results: Dict[str, Any], show_details: bool = False):
+def format_multi_engine_results(results: dict[str, Any], show_details: bool = False):
     """格式化多引擎搜索结果显示"""
     if results.get('status') == 'error':
         print_error(f"多引擎搜索失败: {results.get('error', '未知错误')}")
@@ -266,7 +264,7 @@ async def handle_status_command(args):
             logger.info(f"  {config_item}: {enabled_text}")
 
         if args.verbose:
-            logger.info(f"\n统计信息:")
+            logger.info("\n统计信息:")
             stats = status.get('statistics', {})
             logger.info(f"  总搜索次数: {stats.get('total_searches', 0)}")
             logger.info(f"  成功次数: {stats.get('successful_searches', 0)}")
@@ -305,7 +303,7 @@ async def handle_manual_command(args):
         logger.info(str('-' * 40))
 
         quick_start = manual.get('quick_start', {})
-        for key, info in quick_start.items():
+        for _key, info in quick_start.items():
             logger.info(f"\n{info['description']}:")
             logger.info(f"  用法: {info['usage']}")
             if 'example' in info:
@@ -470,13 +468,13 @@ def create_parser():
     comprehensive_parser.add_argument('--max-results', '-n', type=int, default=15, help='最大结果数量')
 
     # 状态命令
-    status_parser = subparsers.add_parser('status', help='显示平台状态')
+    subparsers.add_parser('status', help='显示平台状态')
 
     # 手册命令
-    manual_parser = subparsers.add_parser('manual', help='显示用户手册')
+    subparsers.add_parser('manual', help='显示用户手册')
 
     # 测试命令
-    test_parser = subparsers.add_parser('test', help='测试搜索引擎功能')
+    subparsers.add_parser('test', help='测试搜索引擎功能')
 
     return parser
 

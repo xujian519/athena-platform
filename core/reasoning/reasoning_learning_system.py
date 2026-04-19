@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 推理历史分析和增量学习系统
 Reasoning History Analysis and Incremental Learning System
@@ -16,17 +17,16 @@ Reasoning History Analysis and Incremental Learning System
 """
 
 import asyncio
+import hashlib
 import json
 import logging
-import pickle
 import statistics
 from collections import defaultdict, deque
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
-import hashlib
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -175,7 +175,7 @@ class EnginePerformanceStats:
         else:
             self.cache_misses += 1
 
-    def get_score(self, metric_weights: dict[str | None = None, float | None = None) -> float:
+    def get_score(self, metric_weights: dict[str, float | None] | None = None) -> float:
         """计算综合评分"""
         weights = metric_weights or {
             "speed": 0.3,
@@ -279,7 +279,7 @@ class ReasoningHistoryAnalyzer:
             # 加载记录
             records_file = self.storage_path / "reasoning_records.jsonl"
             if records_file.exists():
-                with open(records_file, "r", encoding="utf-8") as f:
+                with open(records_file, encoding="utf-8") as f:
                     for line in f:
                         try:
                             data = json.loads(line.strip())
@@ -292,7 +292,7 @@ class ReasoningHistoryAnalyzer:
             # 加载路由规则
             rules_file = self.storage_path / "routing_rules.json"
             if rules_file.exists():
-                with open(rules_file, "r", encoding="utf-8") as f:
+                with open(rules_file, encoding="utf-8") as f:
                     try:
                         rules_data = json.load(f)
                         for task_type, rule_data in rules_data.items():
@@ -354,7 +354,7 @@ class ReasoningHistoryAnalyzer:
     def get_task_type_performance(self, task_type: str) -> dict[str, float]:
         """获取任务类型的引擎性能"""
         # 筛选相关记录
-        relevant_records = []
+        relevant_records = [
             r for r in self.records if r.task_type == task_type and r.success
         ]
 
@@ -387,7 +387,7 @@ class ReasoningHistoryAnalyzer:
     def analyze_trends(self, days: int = 7) -> dict[str, Any]:
         """分析趋势"""
         cutoff_time = datetime.now() - timedelta(days=days)
-        recent_records = []
+        recent_records = [
             r for r in self.records if r.timestamp >= cutoff_time
         ]
 
@@ -538,7 +538,7 @@ class IncrementalLearningSystem:
     def _update_user_preferences(self) -> None:
         """更新用户偏好"""
         # 分析用户反馈模式
-        positive_records = []
+        positive_records = [
             r for r in self.analyzer.records
             if r.user_feedback == FeedbackType.POSITIVE
         ]
@@ -605,7 +605,7 @@ class RoutingOptimizer:
         rule.update_weights(performance_data)
 
         # 更新统计
-        relevant_records = []
+        relevant_records = [
             r for r in self.analyzer.records
             if r.task_type == task_type
         ]

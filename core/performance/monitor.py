@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 性能分析工具 - Performance Monitoring
 
@@ -17,9 +18,9 @@ import time
 from collections import defaultdict, deque
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena治理模块
 Athena Governance Module
@@ -45,6 +46,7 @@ __author__ = "Athena Team"
 # ================================
 
 from core.async_main import async_main
+
 from .react_executor import (
     ReActExecutor,
     ReActResult,
@@ -121,7 +123,8 @@ __all__ = [
 # ================================
 
 
-async def initialize_governance(config: dict | None = None) -> bool: """
+async def initialize_governance(config: dict | None = None) -> bool:
+    """
     初始化治理模块的所有组件
 
     Args:
@@ -168,7 +171,8 @@ async def initialize_governance(config: dict | None = None) -> bool: """
 
         return True
 
-    except Exception as e: logger.error(f"❌ 治理模块初始化失败: {e}")
+    except Exception as e:
+        logger.error(f"❌ 治理模块初始化失败: {e}")
         import traceback
 
         traceback.print_exc()

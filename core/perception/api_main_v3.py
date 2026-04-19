@@ -1,31 +1,31 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 生产级API服务 v3.0
 集成Redis缓存、异步任务队列、批处理优化
 最后更新: 2026-01-26
 """
 
-from fastapi import FastAPI, HTTPException, Depends, Header, BackgroundTasks
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
-from typing import Optional, List, Dict, Any
-import uvicorn
 import asyncio
 import logging
-from datetime import datetime
 import os
 import sys
+from datetime import datetime
 from pathlib import Path
+from typing import Any
+
+import uvicorn
+from fastapi import Depends, FastAPI, Header, HTTPException
+from pydantic import BaseModel, Field
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 # 导入处理器
-from core.perception.processors.tesseract_ocr import TesseractOCRProcessor
-from core.perception.processors.opencv_image_processor import OpenCVImageProcessor
-
 # 导入缓存和任务队列
 from core.perception.cache.redis_cache import RedisCacheManager
+from core.perception.processors.opencv_image_processor import OpenCVImageProcessor
+from core.perception.processors.tesseract_ocr import TesseractOCRProcessor
 from core.perception.queue.async_task_queue import AsyncTaskQueue, TaskPriority
 
 # 配置日志
@@ -77,7 +77,7 @@ class ImageProcessRequest(BaseModel):
     """图像处理请求"""
     image_path: str = Field(..., description="图像文件路径")
     operation: str = Field(..., description="操作类型")
-    parameters: Dict[str, Any] = Field(default_factory=dict, description="操作参数")
+    parameters: dict[str, Any] = Field(default_factory=dict, description="操作参数")
     use_cache: bool = Field(default=True, description="是否使用缓存")
     priority: str = Field(default="normal", description="任务优先级")
 
@@ -87,16 +87,16 @@ class ImageProcessResponse(BaseModel):
     task_id: str | None = None
     agent_id: str
     operation: str
-    result: Optional[Dict[str, Any]] | None = None
+    result: dict[str, Any] | None | None = None
     processing_time: float | None = None
     cached: bool = False
     error: str | None = None
 
 class BatchProcessRequest(BaseModel):
     """批量处理请求"""
-    image_paths: List[str] = Field(..., description="图像文件路径列表")
+    image_paths: list[str] = Field(..., description="图像文件路径列表")
     operation: str = Field(..., description="操作类型")
-    parameters: Dict[str, Any] = Field(default_factory=dict)
+    parameters: dict[str, Any] = Field(default_factory=dict)
     use_cache: bool = Field(default=True)
     concurrent: int = Field(default=5, description="并发数")
 
@@ -134,6 +134,7 @@ app = FastAPI(
 
 # 记录启动时间
 import time
+
 app.state.start_time = time.time()
 
 # ========================================
@@ -178,8 +179,8 @@ async def startup_event():
         logger.warning("⚠ 任务队列未启动")
 
     logger.info("✓ 感知模块服务启动完成")
-    logger.info(f"✓ API地址: http://localhost:8070")
-    logger.info(f"✓ API文档: http://localhost:8070/docs")
+    logger.info("✓ API地址: http://localhost:8070")
+    logger.info("✓ API文档: http://localhost:8070/docs")
 
 @app.on_event("shutdown")
 async def shutdown_event():
@@ -615,7 +616,7 @@ async def batch_process_v3(
 
     except Exception as e:
         logger.error(f"[{agent_id}] 批量处理失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 # ========================================
 # 主函数

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 检查点管理器
 Checkpoint Manager
@@ -15,10 +16,10 @@ Checkpoint Manager
 
 import json
 import logging
-from typing import Optional, Any
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 from .state_module import StateModule
 
@@ -81,7 +82,7 @@ class CheckpointManager:
         self,
         state_module: StateModule,
         checkpoint_id: str | None = None,
-        metadata: Optional[dict[str, Any] | None = None
+        metadata: dict[str, Any] | None = None
     ) -> CheckpointInfo:
         """
         保存检查点
@@ -223,7 +224,7 @@ class CheckpointManager:
             # 读取元数据
             metadata = {}
             try:
-                with open(file_path, 'r', encoding='utf-8') as f:
+                with open(file_path, encoding='utf-8') as f:
                     data = json.load(f)
                     metadata = data.get("_metadata", {})
             except Exception as e:
@@ -334,7 +335,7 @@ class CheckpointManager:
         # 读取元数据
         metadata = {}
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 data = json.load(f)
                 metadata = data.get("_metadata", {})
         except Exception as e:
@@ -397,7 +398,7 @@ class CheckpointManager:
 
             # 更新文件,添加元数据
             file_path = Path(info.file_path)
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 data = json.load(f)
 
             data.update(full_metadata)

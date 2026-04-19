@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 类型统一工具
 
@@ -13,7 +14,7 @@ from enum import Enum
 from typing import Any
 
 
-def normalize_enum_value(value: str | Optional[Enum, enum_class: type | None = None) -> str:
+def normalize_enum_value(value: str | Enum | None, enum_class: type | None = None) -> str:
     """
     将Enum或str标准化为字符串值
 

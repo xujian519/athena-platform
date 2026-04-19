@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 轻量级请求处理器
 Lightweight Request Processor
@@ -13,7 +14,6 @@ from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from typing import Any
-
 
 
 class TaskComplexity(Enum):

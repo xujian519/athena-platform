@@ -1,4 +1,3 @@
-import enum
 import json
 import logging
 import os
@@ -10,8 +9,9 @@ from enum import Enum
 from hashlib import md5, sha1
 from pathlib import Path
 from time import sleep, time
-from typing import Any, List, Tuple
+from typing import Any
 
+import database
 import requests
 from bs4 import BeautifulSoup
 from docx import Document
@@ -20,8 +20,6 @@ from docx.oxml.table import CT_Tbl
 from docx.oxml.text.paragraph import CT_P
 from docx.table import Table, _Cell, _Row
 from docx.text.paragraph import Paragraph
-
-import database
 
 logger = logging.getLogger('Law')
 logger.setLevel(logging.DEBUG)
@@ -36,12 +34,12 @@ logger.addHandler(console_handler)
 
 REQUEST_HEADER = {
     'authority': 'flk.npc.gov.cn',
-    'sec-ch-ua': '' Not A;Brand';v='99', 'Chromium';v='99', 'Microsoft Edge';v='99'',
+    'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="99", "Microsoft Edge";v="99"',
     'accept': 'application/json, text/javascript, */*; q=0.01',
     'x-requested-with': 'XMLHttpRequest',
     'sec-ch-ua-mobile': '?0',
     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36 Edg/99.0.1150.39',
-    'sec-ch-ua-platform': ''mac_os'',
+    'sec-ch-ua-platform': '"mac_os"',
     'sec-fetch-site': 'same-origin',
     'sec-fetch-mode': 'cors',
     'sec-fetch-dest': 'empty',
@@ -51,7 +49,7 @@ REQUEST_HEADER = {
 }
 
 
-def find(f, arr: List[Any]) -> Any:
+def find(f, arr: list[Any]) -> Any:
     for item in arr:
         if f(item):
             return item
@@ -73,14 +71,14 @@ LINE_RE = INDENT_RE + [f"^第{NUMBER_RE}+条"]
 
 DESC_REMOVE_PATTERNS = [
     '^（',
-    "^\(",
+    r"^\(",
     '）$',
-    "\)$",
+    r"\)$",
     '^根据',
     '^自',
 ]
 
-line_start = f"""^({"|".join(map(lambda x: f"({x})".replace(NUMBER_RE, "一"), filter(lambda x: "节" not in x, LINE_RE)))})"""
+line_start = f"""^({"|".join(f"({x})".replace(NUMBER_RE, "一") for x in filter(lambda x: "节" not in x, LINE_RE))})"""
 
 
 def is_start_line(line: str):
@@ -96,7 +94,7 @@ class CacheType(Enum):
     HTMLDocument = 'html'
 
 
-class CacheManager(object):
+class CacheManager:
 
     def __init__(self) -> None:
         self.base_path = Path('./__cache__')
@@ -118,7 +116,7 @@ class CacheManager(object):
         if not full_path.exists():
             return None
         try:
-            with open(full_path, 'r') as f:
+            with open(full_path) as f:
                 if filetype == 'json':
                     return json.load(f)
                 return f.read()
@@ -134,7 +132,7 @@ class CacheManager(object):
             else:
                 f.write(data if isinstance(data, str) else str(data))
 
-    def write_law(self, path: Path, data: List[str]):
+    def write_law(self, path: Path, data: list[str]):
         out_path = self.base_path / 'out'
         if not out_path.exists():
             out_path.mkdir()
@@ -151,7 +149,7 @@ class CacheManager(object):
             f.write(result)
 
 
-class RequestManager(object):
+class RequestManager:
 
     def __init__(self) -> None:
         self.cache = CacheManager()
@@ -237,7 +235,7 @@ class RequestManager(object):
         with open(path, 'rb') as f:
             try:
                 return Document(f)
-            except:
+            except Exception:
                 return None
 
 
@@ -249,7 +247,7 @@ class Parser(ABC):
         self.parse_type = parse_type
 
     @abstractmethod
-    def parse(self, result, detail) -> Tuple[str, str, List[str]]:
+    def parse(self, result, detail) -> tuple[str, str, list[str]]:
         pass
 
     def __eq__(self, __o: object) -> bool:
@@ -283,7 +281,7 @@ class WordParser(Parser):
             elif isinstance(child, CT_Tbl):
                 yield Table(child, parent)
 
-    def parse(self, result, detail) -> Tuple[str, str, List[str]]:
+    def parse(self, result, detail) -> tuple[str, str, list[str]]:
         document = self.request.get_word(detail['path'])
         if not document:
             logger.warning(f"document {detail['path']} not exists")
@@ -345,7 +343,7 @@ class WordParser(Parser):
                 content.append(line)
 
             # 信息行结束
-            if is_desc and re.search("[）\)]$", line):
+            if is_desc and re.search(r"[）\)]$", line):
                 is_desc = False
             if is_desc and re.search(r"目.*录", line):
                 is_desc = False
@@ -363,7 +361,7 @@ class HTMLParser(Parser):
     def __init__(self) -> None:
         super().__init__('HTML')
 
-    def parse(self, result, detail) -> Tuple[str, str, List[str]]:
+    def parse(self, result, detail) -> tuple[str, str, list[str]]:
         html_data = self.request.get_html(detail['url'])
         if not html_data:
             return
@@ -371,7 +369,7 @@ class HTMLParser(Parser):
         bs4 = BeautifulSoup(html_data, features='lxml')
         title = bs4.title.text
         parts = bs4.find('div', class_='law-content').find_all('p')
-        content = map(lambda x: x.text.replace("\xa0", ' ').strip(), parts)
+        content = (x.text.replace("\xa0", ' ').strip() for x in parts)
         content = filter(lambda x: x, content)
         content = filter(lambda x: not title.startswith(x)
                          and not title.endswith(x), content)
@@ -382,9 +380,9 @@ class HTMLParser(Parser):
         return title, content[0], content[1:]
 
 
-class ContentParser(object):
+class ContentParser:
 
-    def __filter_content(self, content: List[str]) -> List[str]:
+    def __filter_content(self, content: list[str]) -> list[str]:
         menu_start = False
         menu_at = -1
         pattern = ''
@@ -394,7 +392,7 @@ class ContentParser(object):
 
         for i in range(len(content)):
             line = content[i].replace("\u3000", ' ').replace('　', ' ')
-            line = re.sub("\s+", ' ', line)
+            line = re.sub(r"\s+", ' ', line)
             if menu_at >= 0 and i == menu_at + 1:
                 pattern = line
 
@@ -419,14 +417,14 @@ class ContentParser(object):
                 if re.match(line_start, line):
                     menu_start = False
 
-            if i < 40 and re.match("公\s*告", line):
+            if i < 40 and re.match(r"公\s*告", line):
                 skip = True
 
             # if re.match("^附", line):
             #     break
             if not menu_start and not skip:
                 content_line = re.sub(
-                    f"^(第{NUMBER_RE}{{1,6}}[条章节篇](?:之{NUMBER_RE}{{1,2}})*)\s*",
+                    rf"^(第{NUMBER_RE}{{1,6}}[条章节篇](?:之{NUMBER_RE}{{1,2}})*)\s*",
                     lambda x: x.group(0).strip() + ' ',
                     line.strip()
                 )
@@ -437,20 +435,15 @@ class ContentParser(object):
 
         return filtered_content
 
-    def __filter_desc(self, desc: str) -> List[str]:
+    def __filter_desc(self, desc: str) -> list[str]:
         desc_arr = re.findall(
             r"(\d{4}年\d{1,2}月\d{1,2}日.*?(?:(?:根据)|(?:通过)|(?:公布)|(?:施行)|(?:）)|(?:　)))", desc)
-        desc_arr = map(
-            lambda line: re.sub("^(\d{4,4}年\d{1,2}月\d{1,2}日)",
-                                lambda x: x.group(0) + ' ', line),
-            desc_arr)
-        desc_arr = map(
-            lambda x: x.replace('起施行', '施行'),
-            desc_arr
-        )
+        desc_arr = (re.sub(r"^(\d{4,4}年\d{1,2}月\d{1,2}日)",
+                                lambda x: x.group(0) + ' ', line) for line in desc_arr)
+        desc_arr = (x.replace('起施行', '施行') for x in desc_arr)
         return list(desc_arr)
 
-    def __get_indents(self, content: List[str]) -> List[str]:
+    def __get_indents(self, content: list[str]) -> list[str]:
         ret = []
         for line in content:
             for r in INDENT_RE:
@@ -459,7 +452,7 @@ class ContentParser(object):
                     break
         return ret
 
-    def parse(self, result, title, desc, content: List[str]) -> List[str]:
+    def parse(self, result, title, desc, content: list[str]) -> list[str]:
         desc = self.__filter_desc(desc)
         content = self.__filter_content(content)
         if len(content) == 0:
@@ -472,7 +465,7 @@ class ContentParser(object):
 
         ret.append(f"# {title}")
         ret += desc
-        ret.append(f"<!-- INFO END -->")
+        ret.append("<!-- INFO END -->")
 
         for line in content:
             flag = False
@@ -486,7 +479,7 @@ class ContentParser(object):
         return ret
 
 
-class LawParser(object):
+class LawParser:
 
     def __init__(self) -> None:
         self.request = RequestManager()
@@ -503,7 +496,7 @@ class LawParser(object):
 
     def __init(self):
         categories = []
-        with open('./cate.txt', 'r') as f:
+        with open('./cate.txt') as f:
             title = ''
             for line in f.readlines():
                 line = line.strip()
@@ -578,9 +571,8 @@ class LawParser(object):
 
     def parse_file(self, file_path, publish_at=None):
         result = {}
-        with open(file_path, 'r') as f:
-            data = list(filter(lambda x: x, map(
-                lambda x: x.strip(), f.readlines())))
+        with open(file_path) as f:
+            data = list(filter(lambda x: x, (x.strip() for x in f.readlines())))
         title = data[0]
         filedata = self.content_parser.parse(result, title, data[1], data[2:])
         if not filedata:

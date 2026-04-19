@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 NetworkX图分析工具模块
 NetworkX Graph Analysis Utilities
@@ -10,8 +11,7 @@ import json
 import logging
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-
+from typing import Any
 
 try:
 
@@ -127,7 +127,7 @@ class NetworkXGraphManager:
         self.graph.add_edge(source, target, weight=weight, **attributes)
         self.logger.debug(f"添加边: {source} -> {target} (权重: {weight})")
 
-    def add_nodes_from(self, nodes: list[tuple[str, dict[str, Any]) -> None:
+    def add_nodes_from(self, nodes: list[tuple[str, dict[str, Any]]]) -> None:
         """批量添加节点
 
         Args:
@@ -136,7 +136,7 @@ class NetworkXGraphManager:
         self.graph.add_nodes_from(nodes)
         self.logger.debug(f"批量添加 {len(nodes)} 个节点")
 
-    def add_edges_from(self, edges: list[tuple[str, str, float, dict[str, Any]) -> None:
+    def add_edges_from(self, edges: list[tuple[str, str, float, dict[str, Any]]]) -> None:
         """批量添加边
 
         Args:
@@ -313,7 +313,7 @@ class NetworkXGraphManager:
 
         return stats
 
-    def find_cycles(self, length: int | None = None) -> list[list[str]:
+    def find_cycles(self, length: int | None = None) -> list[list[str]]:
         """查找图中的环
 
         Args:

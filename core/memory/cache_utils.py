@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 缓存和性能优化工具
 
@@ -16,7 +17,7 @@ from collections import OrderedDict
 from collections.abc import Callable
 from datetime import datetime
 from functools import wraps
-from typing import Any, ParamSpec, TypeVar, Optional
+from typing import Any, ParamSpec, TypeVar
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +32,7 @@ class LRUCache:
     用于缓存频繁访问的数据，自动淘汰最少使用的项。
     """
 
-    def __init__(self, max_size: int = 128, ttl: Optional[float | None = None):
+    def __init__(self, max_size: int = 128, ttl: float | None = None):
         """
         初始化LRU缓存
 
@@ -149,7 +150,7 @@ class LRUCache:
 
 def cached(
     cache_instance: LRUCache | None = None,
-    key_func: Callable[..., str | None = None,
+    key_func: Callable[..., str] | None = None,
     ttl: float | None = None
 ):
     """
@@ -207,7 +208,7 @@ def cached(
 
 def async_cached(
     cache_instance: LRUCache | None = None,
-    key_func: Callable[..., str | None = None,
+    key_func: Callable[..., str] | None = None,
     ttl: float | None = None
 ):
     """

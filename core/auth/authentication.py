@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 API认证系统
 提供JWT认证、API密钥管理和访问控制
@@ -11,13 +12,14 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any
 
+import aioredis
 import bcrypt
 import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from core.logging_config import setup_logging
-from core.security.env_config import get_jwt_secret, SecurityConfigError
+from core.security.env_config import SecurityConfigError, get_jwt_secret
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

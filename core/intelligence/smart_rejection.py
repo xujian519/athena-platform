@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 智能拒绝处理器
 

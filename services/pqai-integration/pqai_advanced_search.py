@@ -1,30 +1,31 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PQAI高级专利检索与分析服务
 Advanced Patent Search and Analysis Service
 集成PostgreSQL全文检索、向量搜索和智能评分模型
 """
 
-from fastapi import FastAPI, HTTPException
-from contextlib import asynccontextmanager
-import uvicorn
-from core.async_main import async_main
-from datetime import datetime, timedelta
 import asyncio
-import sys
-import os
-from typing import Dict, List, Optional, Any, Tuple
-import json
 import re
-from core.database.unified_connection import get_postgres_pool
+import sys
+from collections import Counter, defaultdict
+from contextlib import asynccontextmanager
+from datetime import datetime, timedelta
+
 import numpy as np
-from collections import defaultdict, Counter
-import math
+import uvicorn
+from fastapi import FastAPI, HTTPException
+
+from core.database.unified_connection import get_postgres_pool
 
 # 添加路径
 sys.path.append('/Users/xujian/Athena工作平台/services/autonomous-control')
-from agent_identity import AgentIdentity, AgentType, register_agent_identity, format_identity_display
+from agent_identity import (
+    AgentIdentity,
+    AgentType,
+    format_identity_display,
+    register_agent_identity,
+)
 
 # 数据库配置
 PATENT_DB_CONFIG = {
@@ -99,7 +100,7 @@ async def display_startup_identity():
 
         print("\n" + "="*70)
         print(identity_display)
-        print(f"\n🚀 PQAI高级专利分析师启动成功！")
+        print("\n🚀 PQAI高级专利分析师启动成功！")
         print("📍 服务端口: 8034")
         print("🗄️ 数据源: PostgreSQL专利数据库 (全文检索)")
         print("🧠 智能算法: 语义相似度 + 价值评估 + 竞争分析")
@@ -114,7 +115,7 @@ class AdvancedPatentSearcher:
     def __init__(self, db_pool):
         self.db_pool = db_pool
 
-    async def full_text_search(self, query: str, limit: int = 20, offset: int = 0) -> List[Dict]:
+    async def full_text_search(self, query: str, limit: int = 20, offset: int = 0) -> list[dict]:
         """PostgreSQL全文检索"""
         async with self.db_pool.acquire() as conn:
             # 使用tsvector和tsquery进行全文检索
@@ -167,7 +168,7 @@ class AdvancedPatentSearcher:
 
             return patents
 
-    async def vector_similarity_search(self, query: str, limit: int = 20) -> List[Dict]:
+    async def vector_similarity_search(self, query: str, limit: int = 20) -> list[dict]:
         """向量相似度搜索 (模拟实现)"""
         # 这里是向量搜索的模拟实现
         # 实际应用中需要集成真实的向量数据库
@@ -192,7 +193,7 @@ class AdvancedPatentSearcher:
         enhanced_results.sort(key=lambda x: x['combined_score'], reverse=True)
         return enhanced_results[:limit]
 
-    async def semantic_search(self, query: str, limit: int = 20) -> List[Dict]:
+    async def semantic_search(self, query: str, limit: int = 20) -> list[dict]:
         """智能语义匹配搜索"""
         # 提取查询的技术关键词
         tech_keywords = self._extract_technical_keywords(query)
@@ -268,7 +269,7 @@ class AdvancedPatentSearcher:
 
             return patents
 
-    def _extract_technical_keywords(self, text: str) -> List[str]:
+    def _extract_technical_keywords(self, text: str) -> list[str]:
         """提取技术关键词"""
         # 技术词汇词典
         tech_dict = {
@@ -284,7 +285,7 @@ class AdvancedPatentSearcher:
         keywords = []
         text_lower = text.lower()
 
-        for category, words in tech_dict.items():
+        for _category, words in tech_dict.items():
             for word in words:
                 if word.lower() in text_lower:
                     keywords.append(word)
@@ -297,7 +298,7 @@ class PatentValuationModel:
     def __init__(self, db_pool):
         self.db_pool = db_pool
 
-    async def evaluate_patent_value(self, patent: Dict, similar_patents: List[Dict]) -> Dict:
+    async def evaluate_patent_value(self, patent: dict, similar_patents: list[dict]) -> dict:
         """多维度专利价值评估"""
 
         # 1. 新颖性评分
@@ -351,7 +352,7 @@ class PatentValuationModel:
             'assessment_time': datetime.now().isoformat()
         }
 
-    async def _calculate_novelty_score(self, patent: Dict, similar_patents: List[Dict]) -> float:
+    async def _calculate_novelty_score(self, patent: dict, similar_patents: list[dict]) -> float:
         """计算新颖性评分"""
         if not similar_patents:
             return 0.95
@@ -371,7 +372,7 @@ class PatentValuationModel:
 
         return base_score * time_factor
 
-    async def _calculate_inventive_score(self, patent: Dict, similar_patents: List[Dict]) -> float:
+    async def _calculate_inventive_score(self, patent: dict, similar_patents: list[dict]) -> float:
         """计算创造性评分"""
         if not similar_patents:
             return 0.90
@@ -385,7 +386,7 @@ class PatentValuationModel:
         base_score = tech_complexity * 0.6 + (1.0 - existing_gap * 0.2) * 0.4
         return max(0.2, min(1.0, base_score))
 
-    def _assess_technical_complexity(self, patent: Dict) -> float:
+    def _assess_technical_complexity(self, patent: dict) -> float:
         """评估技术复杂度"""
         complexity_indicators = 0
 
@@ -413,7 +414,7 @@ class PatentValuationModel:
         # 转化为0-1分数
         return min(1.0, complexity_indicators / 2.5)
 
-    async def _calculate_utility_score(self, patent: Dict) -> float:
+    async def _calculate_utility_score(self, patent: dict) -> float:
         """计算实用性评分"""
         # 基于技术领域和应用范围评估
         utility_indicators = 0
@@ -439,7 +440,7 @@ class PatentValuationModel:
 
         return min(1.0, utility_indicators)
 
-    async def _calculate_technical_value(self, patent: Dict) -> float:
+    async def _calculate_technical_value(self, patent: dict) -> float:
         """计算技术价值评分"""
         tech_value_indicators = 0
 
@@ -460,9 +461,8 @@ class PatentValuationModel:
 
         return min(1.0, tech_value_indicators / 1.4)
 
-    async def _calculate_market_value(self, patent: Dict, similar_patents: List[Dict]) -> float:
+    async def _calculate_market_value(self, patent: dict, similar_patents: list[dict]) -> float:
         """计算市场价值评分"""
-        market_indicators = 0
 
         # 竞争激烈程度
         competition_density = len(similar_patents)
@@ -487,7 +487,7 @@ class PatentValuationModel:
         market_value = competition_factor * 0.6 + market_heat * 0.4
         return market_value
 
-    async def _calculate_legal_value(self, patent: Dict) -> float:
+    async def _calculate_legal_value(self, patent: dict) -> float:
         """计算法律价值评分"""
         # 这里简化处理，实际可以考虑专利家族、法律状态等
         legal_indicators = 0
@@ -528,12 +528,12 @@ class CompetitiveIntelligenceAnalyzer:
     def __init__(self, db_pool):
         self.db_pool = db_pool
 
-    async def analyze_competition(self, similar_patents: List[Dict], time_window: int = 5) -> Dict:
+    async def analyze_competition(self, similar_patents: list[dict], time_window: int = 5) -> dict:
         """分析竞争格局"""
         if not similar_patents:
             return {"competition_level": "低", "analysis": "暂无相关专利，竞争环境较好"}
 
-        async with self.db_pool.acquire() as conn:
+        async with self.db_pool.acquire():
             # 分析时间窗口内的专利分布
             cutoff_date = datetime.now() - timedelta(days=time_window * 365)
 
@@ -595,7 +595,7 @@ class CompetitiveIntelligenceAnalyzer:
         }
         return ipc_mapping.get(ipc[:4], f"技术领域({ipc[:4]})")
 
-    def _analyze_trends(self, recent_patents: List[Dict], time_window: int) -> Dict:
+    def _analyze_trends(self, recent_patents: list[dict], time_window: int) -> dict:
         """分析技术发展趋势"""
         if not recent_patents:
             return {"trend": "稳定", "description": "技术发展相对稳定"}
@@ -640,7 +640,7 @@ class CompetitiveIntelligenceAnalyzer:
             "yearly_distribution": dict(year_counts)
         }
 
-    def _generate_strategic_recommendations(self, competition_level: str, applicant_counter: Counter) -> List[str]:
+    def _generate_strategic_recommendations(self, competition_level: str, applicant_counter: Counter) -> list[str]:
         """生成战略建议"""
         recommendations = []
 
@@ -758,7 +758,7 @@ async def advanced_search(request: dict):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"检索失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"检索失败: {str(e)}") from e
 
 @app.post("/evaluate_patent")
 async def evaluate_patent(request: dict):
@@ -784,7 +784,7 @@ async def evaluate_patent(request: dict):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"评估失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"评估失败: {str(e)}") from e
 
 @app.post("/analyze_competition")
 async def analyze_competition(request: dict):
@@ -809,7 +809,7 @@ async def analyze_competition(request: dict):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"分析失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"分析失败: {str(e)}") from e
 
 @app.post("/comprehensive_analysis")
 async def comprehensive_analysis(request: dict):
@@ -883,9 +883,9 @@ async def comprehensive_analysis(request: dict):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"综合分析失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"综合分析失败: {str(e)}") from e
 
-def _generate_comprehensive_recommendations(patents: List[Dict], evaluations: List[Dict], competition: Dict) -> List[str]:
+def _generate_comprehensive_recommendations(patents: list[dict], evaluations: list[dict], competition: dict) -> list[str]:
     """生成综合建议"""
     recommendations = []
 

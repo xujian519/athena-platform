@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 时间线记忆系统 v4.0 - 维特根斯坦版
 Timeline Memory System v4.0 - Wittgenstein Edition

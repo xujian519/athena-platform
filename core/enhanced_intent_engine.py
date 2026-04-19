@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 超级思维链增强意图识别引擎
 Super Thinking Chain Enhanced Intent Recognition Engine

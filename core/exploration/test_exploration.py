@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Phase 3探索引擎测试脚本
 Testing Phase 3 Exploration Engine
@@ -22,11 +23,10 @@ sys.path.insert(0, str(project_root))
 os.chdir(project_root)
 
 from core.exploration.active_exploration_engine import (
-    ExplorationStrategy,
     get_active_exploration_engine,
 )
-from core.exploration.alternative_explorer import ApproachType, get_alternative_explorer
-from core.exploration.knowledge_gap_analyzer import GapType, get_knowledge_gap_analyzer
+from core.exploration.alternative_explorer import get_alternative_explorer
+from core.exploration.knowledge_gap_analyzer import get_knowledge_gap_analyzer
 from core.orchestration.xiaonuo_main_orchestrator import TaskPriority, XiaonuoMainOrchestrator
 
 

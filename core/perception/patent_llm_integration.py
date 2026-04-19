@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利大模型集成服务
 Patent LLM Integration Service
@@ -530,7 +531,7 @@ class PatentLLMIntegration:
                     score = extracted_score / 20
                 else:  # 10分制
                     score = extracted_score / 10
-            except (ValueError, IndexError):
+            except (ValueError, IndexError) as e:
                 logger.error(f"捕获(ValueError, IndexError)异常: {e}", exc_info=True)
 
         return max(0.0, min(1.0, score))

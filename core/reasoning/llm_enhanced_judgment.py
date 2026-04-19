@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 LLM增强智能判断系统
 LLM Enhanced Intelligent Judgment System
@@ -17,7 +18,6 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import TYPE_CHECKING, Any
-
 
 from .patent_rule_chain import PatentAnalysis
 
@@ -166,7 +166,7 @@ class LLMEnhancedJudgment:
             self.logger.info("✅ LLMEnhancedJudgment 初始化完成")
             return True
 
-        except Exception as e:
+        except Exception:
             return False
 
     async def _init_llm_client(self):
@@ -184,7 +184,7 @@ class LLMEnhancedJudgment:
 
             self.logger.info(f"✅ LLM客户端初始化完成: {self.llm_provider.value}")
 
-        except Exception as e:
+        except Exception:
             self.llm_client = "mock_llm_client"
 
     async def _load_knowledge_base(self):
@@ -216,6 +216,7 @@ class LLMEnhancedJudgment:
             self.logger.info("✅ 知识库加载完成")
 
         except Exception as e:
+            self.logger.error(f"知识库加载失败: {e}")
 
     async def _build_judgment_templates(self):
         """构建判断模板"""
@@ -296,7 +297,7 @@ class LLMEnhancedJudgment:
             )
             return judgment_result
 
-        except Exception as e:
+        except Exception:
             raise
 
     async def _collect_evidence(
@@ -376,6 +377,7 @@ class LLMEnhancedJudgment:
                 )
 
         except Exception as e:
+            self.logger.warning(f"证据收集失败: {e}")
 
         return evidence_items
 
@@ -402,7 +404,7 @@ class LLMEnhancedJudgment:
 
             return analysis_result
 
-        except Exception as e:
+        except Exception:
             # 返回模拟分析结果
             return {
                 "conclusion": "基于现有信息的初步判断",
@@ -450,7 +452,7 @@ class LLMEnhancedJudgment:
         # 证据信息
         if evidence_items:
             prompt_parts.append("\n相关证据:")
-            for evidence in evidence_items:5:  # 限制证据数量
+            for evidence in evidence_items[:5]:  # 限制证据数量
                 prompt_parts.append(f"- {evidence.evidence_type}: {evidence.content:100}...")
 
         # 输出要求
@@ -485,7 +487,7 @@ class LLMEnhancedJudgment:
 
             return json.dumps(mock_response, ensure_ascii=False, indent=2)
 
-        except Exception as e:
+        except Exception:
             raise
 
     async def _parse_llm_response(
@@ -507,9 +509,8 @@ class LLMEnhancedJudgment:
                 }
 
         except json.JSONDecodeError:
-        except json.JSONDecodeError:
             return {
-                "conclusion": llm_response:200,
+                "conclusion": llm_response[:200],
                 "reasoning": [llm_response],
                 "confidence": 0.5,
                 "recommendations": ["建议重新分析"],
@@ -582,7 +583,7 @@ class LLMEnhancedJudgment:
 
             return judgment_result
 
-        except Exception as e:
+        except Exception:
             raise
 
     async def _generate_expert_insights(
@@ -635,13 +636,14 @@ class LLMEnhancedJudgment:
             self.insight_cache.get(context.patent_id).extend(insights)
 
         except Exception as e:
+            self.logger.warning(f"洞察提取失败: {e}")
 
         return insights
 
     async def batch_judge_patents(
         self,
         patents_data: list[dict[str, Any]],        context_template: JudgmentContext,
-        judgment_types: list["key"] = None,
+        judgment_types: list[str] = None,
     ) -> list[JudgmentResult]:
         """批量判断专利"""
         if judgment_types is None:
@@ -666,7 +668,7 @@ class LLMEnhancedJudgment:
                     judgment = await self._make_judgment(judgment_type, patent_data, context)
                     results.append(judgment)
 
-            except Exception as e:
+            except Exception:
                 continue
 
         return results
@@ -703,7 +705,7 @@ class LLMEnhancedJudgment:
 
             return enhanced_analysis
 
-        except Exception as e:
+        except Exception:
             return rule_analysis
 
     def get_statistics(self) -> dict[str, Any]:

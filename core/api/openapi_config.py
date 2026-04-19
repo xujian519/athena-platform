@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 OpenAPI文档配置模块
 
@@ -6,9 +7,10 @@ OpenAPI文档配置模块
 """
 
 import logging
-from typing import Any, Dict, Optional
+from typing import Any
 
 from fastapi import FastAPI
+from fastapi.openapi.utils import get_openapi as _get_openapi
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +32,7 @@ API_DESCRIPTION = """
 
 - **意图识别与路由**: 智能识别用户意图并路由到合适的智能体
 - **能力编排与调度**: 协调17个专业能力模块的调用
-- **多智能体协作**: 统一管理小娜、云熙、小宸等专业智能体
+- **多智能体协作**: 统一管理小娜、小宸等专业智能体
 - **性能优化**: 集成v4.0 + Phase 1/2/3优化模块
 
 ## 能力列表
@@ -74,9 +76,9 @@ API_DESCRIPTION = """
 └─────────────────────────────────────────────────────────┘
           │         │         │         │
           ▼         ▼         ▼         ▼
-       小娜      云熙      小宸    Athena核心
-       (8001)    (8020)    (8030)     (integrated)
-       法律      IP       媒体       通用AI
+       小娜      小宸    Athena核心
+       (8001)    (8030)     (integrated)
+       法律      媒体       通用AI
 ```
 
 ## 使用说明

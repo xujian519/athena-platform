@@ -1,27 +1,33 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 感知模块验证框架测试
 Tests for Perception Module Validation Framework
 """
 
+import sys
+from pathlib import Path
+
 import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 from core.perception.validation import (
-    ValidationError as ValidationErr,
-    ValidationSeverity,
-    ValidationResult,
-    Validator,
-    StringValidator,
-    NumberValidator,
-    PathValidator,
     ImageValidator,
     InputValidator,
+    NumberValidator,
+    PathValidator,
+    StringValidator,
+    ValidationResult,
+    ValidationSeverity,
     get_global_validator,
-    string_validator,
-    path_validator,
     image_validator,
     number_validator,
+    path_validator,
     strict_string_validator,
+    string_validator,
+)
+from core.perception.validation import (
+    ValidationError as ValidationErr,
 )
 
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一参数验证框架
 Unified Parameter Validation Framework
@@ -22,7 +23,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -67,9 +68,9 @@ class ValidationRule:
     min_length: int | None = None
     max_length: int | None = None
     pattern: str | None = None
-    allowed_values: list["key"] = None
+    allowed_values: list[str] = None
     custom_validator: Callable[[Any, tuple[bool, str]]] | None = None
-    depends_on: list["key"] = None
+    depends_on: list[str] = None
 
 
 @dataclass
@@ -318,7 +319,7 @@ class UnifiedParameterValidator:
 
     async def pre_execution_check(
         self, tool_id: str, parameters: dict[str, Any]
-    ) -> tuple[bool, str | None, dict[str, Any]:
+    ) -> tuple[bool, str | None, dict[str, Any]]:
         """
         执行前完整性检查
 
@@ -411,8 +412,8 @@ class UnifiedParameterValidator:
     async def _validate_range(
         self,
         value: Any,
-        min_value: int | Optional[float],
-        max_value: int | Optional[float],
+        min_value: int | float | None,
+        max_value: int | float | None,
     ) -> tuple[bool, str | None]:
         """验证数值范围"""
         try:

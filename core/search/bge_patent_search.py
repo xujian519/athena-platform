@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BGE专利搜索增强器
 BGE Enhanced Patent Search

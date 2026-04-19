@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 能力编排器
 Capability Orchestrator
@@ -9,7 +10,7 @@ Capability Orchestrator
 import asyncio
 import logging
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -69,7 +70,7 @@ class CapabilityOrchestrator:
             elif isinstance(value, list):
                 resolved[key] = [
                     (
-                        self._resolve_parameters({k: v}, context).get(k, v)
+                        self._resolve_parameters(v, context)
                         if isinstance(v, dict)
                         else v
                     )

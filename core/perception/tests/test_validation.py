@@ -1,23 +1,22 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 测试：输入验证框架
 Test: Input Validation Framework
 """
 
-import pytest
 import sys
 from pathlib import Path
+
+import pytest
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.perception.validation import (
-    StringValidator,
-    PathValidator,
-    ImageValidator,
     NumberValidator,
-    InputValidator,
+    PathValidator,
+    StringValidator,
     get_global_validator,
 )
 

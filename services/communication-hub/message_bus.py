@@ -6,16 +6,20 @@
 import asyncio
 import json
 import logging
-from core.logging_config import setup_logging
 import uuid
 from collections import defaultdict, deque
-from dataclasses import asdict, dataclass
+from collections.abc import Callable
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any
 
-import websockets
-from websockets.server import WebSocketServerProtocol
+from websockets.asyncio.server import ServerConnection
+
+from core.logging_config import setup_logging
+
+# 类型别名，保持向后兼容
+WebSocketServerProtocol = ServerConnection
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -46,8 +50,8 @@ class Message:
     id: str
     type: MessageType
     sender: str
-    recipient: Optional[str]  # None表示广播
-    content: Dict[str, Any]
+    recipient: str | None  # None表示广播
+    content: dict[str, Any]
     priority: Priority
     timestamp: datetime
     correlation_id: str | None = None  # 关联ID，用于追踪对话
@@ -57,7 +61,7 @@ class Message:
 class Subscription:
     """订阅信息"""
     subscriber: str
-    message_types: List[MessageType]
+    message_types: list[MessageType]
     callback: Callable
     active: bool = True
 
@@ -65,13 +69,13 @@ class MessageBus:
     """消息总线"""
 
     def __init__(self):
-        self.subscribers: Dict[str, List[Subscription]] = defaultdict(list)
+        self.subscribers: dict[str, list[Subscription]] = defaultdict(list)
         self.message_history: deque = deque(maxlen=1000)  # 保留最近1000条消息
-        self.active_connections: Dict[str, WebSocketServerProtocol] = {}
-        self.pending_messages: Dict[str, List[Message]] = defaultdict(list)
-        self.message_handlers: Dict[MessageType, List[Callable]] = defaultdict(list)
+        self.active_connections: dict[str, WebSocketServerProtocol] = {}
+        self.pending_messages: dict[str, list[Message]] = defaultdict(list)
+        self.message_handlers: dict[MessageType, list[Callable]] = defaultdict(list)
 
-    def subscribe(self, subscriber: str, message_types: List[MessageType], callback: Callable) -> Any:
+    def subscribe(self, subscriber: str, message_types: list[MessageType], callback: Callable) -> Any:
         """订阅消息"""
         subscription = Subscription(
             subscriber=subscriber,
@@ -178,7 +182,7 @@ class MessageBus:
             logger.info(f"WebSocket连接已注销: {connection_id}")
 
     async def send_to_ai(self, sender: str, recipient: str, message_type: MessageType,
-                        content: Dict[str, Any], priority: Priority = Priority.NORMAL) -> str:
+                        content: dict[str, Any], priority: Priority = Priority.NORMAL) -> str:
         """发送消息给特定AI"""
         message = Message(
             id=str(uuid.uuid4()),
@@ -194,7 +198,7 @@ class MessageBus:
         return message.id
 
     async def broadcast(self, sender: str, message_type: MessageType,
-                       content: Dict[str, Any], priority: Priority = Priority.NORMAL) -> str:
+                       content: dict[str, Any], priority: Priority = Priority.NORMAL) -> str:
         """广播消息"""
         message = Message(
             id=str(uuid.uuid4()),
@@ -209,7 +213,7 @@ class MessageBus:
         await self.publish(message)
         return message.id
 
-    def get_message_history(self, limit: int = 100, message_type: MessageType | None = None) -> List[Message]:
+    def get_message_history(self, limit: int = 100, message_type: MessageType | None = None) -> list[Message]:
         """获取消息历史"""
         messages = list(self.message_history)
         if message_type:
@@ -239,7 +243,7 @@ class MessageBus:
 message_bus = MessageBus()
 
 # 便捷函数
-async def send_task_update(sender: str, task_id: str, status: str, details: Dict = None):
+async def send_task_update(sender: str, task_id: str, status: str, details: dict = None):
     """发送任务更新"""
     await message_bus.send_to_ai(
         sender=sender,
@@ -254,7 +258,7 @@ async def send_task_update(sender: str, task_id: str, status: str, details: Dict
         priority=Priority.NORMAL
     )
 
-async def request_collaboration(requester: str, task_info: Dict, required_ais: List[str]) -> str:
+async def request_collaboration(requester: str, task_info: dict, required_ais: list[str]) -> str:
     """请求协作"""
     message_id = await message_bus.send_to_ai(
         sender=requester,
@@ -269,7 +273,7 @@ async def request_collaboration(requester: str, task_info: Dict, required_ais: L
     )
     return message_id
 
-async def notify_ai_response(ai_name: str, response: Dict, correlation_id: str = None):
+async def notify_ai_response(ai_name: str, response: dict, correlation_id: str = None):
     """通知AI响应"""
     await message_bus.send_to_ai(
         sender=ai_name,

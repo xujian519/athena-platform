@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena工作平台 - API模块
 API Module for Athena Platform

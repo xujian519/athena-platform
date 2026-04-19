@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 代理管理器 - 高级代理轮换和健康检查系统
 Proxy Manager - Advanced Proxy Rotation and Health Check System
@@ -16,14 +15,11 @@ import json
 import logging
 import queue
 import random
-import socket
-import ssl
 import threading
 import time
-from dataclasses import asdict, dataclass, field
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from typing import Any
 from urllib.parse import urlparse
 
 import aiohttp
@@ -33,7 +29,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - [ProxyManager] %(message)s',
     handlers=[
-        logging.FileHandler(f'proxy_manager_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log'),
+        logging.FileHandler(f"proxy_manager_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"),
         logging.StreamHandler()
     ]
 )
@@ -91,7 +87,7 @@ class ProxyStats:
 class ProxyHealthChecker:
     """代理健康检查器"""
 
-    def __init__(self, check_interval: int = 300, test_urls: Optional[List[str] = None):
+    def __init__(self, check_interval: int = 300, test_urls: list[str] | None = None):
         self.check_interval = check_interval
         self.test_urls = test_urls or [
             'http://httpbin.org/ip',
@@ -101,7 +97,7 @@ class ProxyHealthChecker:
         self.is_running = False
         self.check_thread = None
 
-    async def check_proxy(self, proxy_config: ProxyConfig) -> Tuple[bool, float, str]:
+    async def check_proxy(self, proxy_config: ProxyConfig) -> tuple[bool, float, str]:
         """检查单个代理的健康状态"""
         start_time = time.time()
 
@@ -139,7 +135,7 @@ class ProxyHealthChecker:
         except Exception as e:
             return False, time.time() - start_time, str(e)
 
-    def start_health_check(self, proxy_stats: Dict[str, ProxyStats]):
+    def start_health_check(self, proxy_stats: dict[str, ProxyStats]):
         """启动健康检查线程"""
         def health_check_loop():
             while self.is_running:
@@ -161,7 +157,7 @@ class ProxyHealthChecker:
             self.check_thread.join(timeout=5)
         logger.info('⏹️ 代理健康检查已停止')
 
-    async def _check_all_proxies(self, proxy_stats: Dict[str, ProxyStats]):
+    async def _check_all_proxies(self, proxy_stats: dict[str, ProxyStats]):
         """检查所有代理的健康状态"""
         check_tasks = []
         proxy_keys = list(proxy_stats.keys())
@@ -193,8 +189,8 @@ class ProxyHealthChecker:
 class ProxyRotationManager:
     """代理轮换管理器"""
 
-    def __init__(self, proxy_configs: Optional[List[ProxyConfig] = None):
-        self.proxy_stats: Dict[str, ProxyStats] = {}
+    def __init__(self, proxy_configs: list[ProxyConfig] | None = None):
+        self.proxy_stats: dict[str, ProxyStats] = {}
         self.rotation_queue = queue.Queue()
         self.health_checker = ProxyHealthChecker()
         self.load_balancer = None
@@ -206,7 +202,7 @@ class ProxyRotationManager:
 
         logger.info(f"🔄 代理轮换管理器初始化完成，加载了 {len(self.proxy_stats)} 个代理")
 
-    def add_proxies(self, proxy_configs: List[ProxyConfig]):
+    def add_proxies(self, proxy_configs: list[ProxyConfig]):
         """添加代理列表"""
         for config in proxy_configs:
             proxy_key = f"{config.host}:{config.port}"
@@ -240,7 +236,7 @@ class ProxyRotationManager:
     def load_proxies_from_file(self, file_path: str):
         """从文件加载代理列表"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 lines = f.readlines()
 
             proxy_configs = []
@@ -340,7 +336,7 @@ class ProxyRotationManager:
                 threading.Thread(target=unban_proxy, daemon=True).start()
                 logger.warning(f"🚫 代理 {proxy_key} 已封禁 {duration_minutes} 分钟")
 
-    def get_proxy_stats(self) -> Dict[str, Any]:
+    def get_proxy_stats(self) -> dict[str, Any]:
         """获取代理统计信息"""
         with self.lock:
             total_proxies = len(self.proxy_stats)
@@ -470,17 +466,17 @@ def main():
     for proxy_str in proxy_strings:
         manager.add_proxy_from_string(proxy_str, '未知地区')
 
-    logger.info(f"\n📋 代理统计:")
+    logger.info("\n📋 代理统计:")
     stats = manager.get_proxy_stats()
     for key, value in stats.items():
         logger.info(f"   {key}: {value}")
 
     # 启动健康监控
-    logger.info(f"\n🔍 启动健康监控...")
+    logger.info("\n🔍 启动健康监控...")
     manager.start_health_monitoring()
 
     # 模拟获取最佳代理
-    logger.info(f"\n🎯 获取最佳代理:")
+    logger.info("\n🎯 获取最佳代理:")
     for i in range(3):
         best_proxy = manager.get_best_proxy()
         if best_proxy:
@@ -500,7 +496,7 @@ def main():
 
     # 停止监控
     manager.stop_health_monitoring()
-    logger.info(f"\n✅ 演示完成")
+    logger.info("\n✅ 演示完成")
 
 if __name__ == '__main__':
     main()

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 改进版意图识别模型训练脚本
 Enhanced Intent Recognition Model Training Script
@@ -10,7 +11,7 @@ import json
 import pickle
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier, VotingClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer

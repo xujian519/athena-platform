@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 自适应元规划器 - 数据类型
 Adaptive Meta Planner - Data Types
@@ -16,7 +17,6 @@ from typing import Any
 
 from ..models import ComplexityLevel, StrategyType, Task
 from .constants import WORKFLOW_EXPIRY_DAYS
-
 
 logger = logging.getLogger(__name__)
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协作模式基础类
 Collaboration Pattern Base Classes
@@ -18,11 +19,8 @@ from typing import Any
 
 from ..collaboration_manager import Conflict
 from ..multi_agent_collaboration import (
-    Message,
-    MessageType,
     MultiAgentCollaborationFramework,
     Task,
-    TaskStatus,
 )
 
 logger = logging.getLogger(__name__)

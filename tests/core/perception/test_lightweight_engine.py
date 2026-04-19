@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 轻量级感知引擎测试
 Tests for Lightweight Perception Engine
 """
 
-import pytest
+import sys
 from pathlib import Path
+
+import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.perception.lightweight_perception_engine import (
     LightweightPerceptionEngine,

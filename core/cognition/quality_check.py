@@ -1,6 +1,7 @@
 # pyright: ignore
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 认知模块质量保障框架
 Cognitive Module Quality Assurance Framework

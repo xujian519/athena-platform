@@ -1,12 +1,11 @@
 """File utility functions for reading patent numbers from files."""
 
-import os
 import csv
+import os
 from pathlib import Path
-from typing import List
 
 
-def read_patent_numbers_from_file(file_path: str, has_header: bool = False) -> List[str]:
+def read_patent_numbers_from_file(file_path: str, has_header: bool = False) -> list[str]:
     """
     Read patent numbers from a file (txt or csv).
 
@@ -34,11 +33,11 @@ def read_patent_numbers_from_file(file_path: str, has_header: bool = False) -> L
         raise ValueError(f"Unsupported file format: {path.suffix}. Only .txt and .csv are supported.")
 
 
-def _read_txt_file(path: Path, has_header: bool) -> List[str]:
+def _read_txt_file(path: Path, has_header: bool) -> list[str]:
     """Read patent numbers from a text file."""
     patent_numbers = []
 
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         lines = f.readlines()
 
         if has_header and lines:
@@ -55,11 +54,11 @@ def _read_txt_file(path: Path, has_header: bool) -> List[str]:
     return patent_numbers
 
 
-def _read_csv_file(path: Path, has_header: bool) -> List[str]:
+def _read_csv_file(path: Path, has_header: bool) -> list[str]:
     """Read patent numbers from a CSV file."""
     patent_numbers = []
 
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         reader = csv.reader(f)
 
         if has_header:

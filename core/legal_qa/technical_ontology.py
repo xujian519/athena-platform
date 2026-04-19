@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 技术本体管理器 - Technical Ontology Manager
 从专利文档构建技术概念知识图谱
@@ -19,8 +20,7 @@ import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -261,9 +261,9 @@ class TechnicalOntologyManager:
         """
         scores = {}
 
-        for field, keywords in self.TECHNICAL_FIELDS.items():
+        for field_name, keywords in self.TECHNICAL_FIELDS.items():
             score = sum(1 for keyword in keywords if keyword in text)
-            scores[field] = score
+            scores[field_name] = score
 
         # 返回得分最高的领域
         if scores:
@@ -619,7 +619,7 @@ def build_from_file(input_file: str, output_file: str | None = None):
                     "field": c.technical_field,
                 }
                 for c in manager.concepts.values()
-            ,
+            ],
             "relations": [
                 {
                     "source": r.source_concept,

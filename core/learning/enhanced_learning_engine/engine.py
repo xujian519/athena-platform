@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强学习引擎 - 主引擎
 Enhanced Learning Engine - Main Engine
@@ -20,6 +21,7 @@ from typing import Any
 import numpy as np
 
 from core.base_module import BaseModule
+
 from .strategies import LearningStrategies
 from .types import (
     AdaptationMode,

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 真实专利搜索适配器
 Real Patent Search Adapter
@@ -15,7 +16,6 @@ import logging
 import time
 from datetime import datetime
 from typing import Any
-
 
 from ..standards.base_search_tool import (
     BaseSearchTool,

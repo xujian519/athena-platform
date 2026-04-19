@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 智能遗忘策略
 基于重要性、时效性和访问频率的智能记忆管理
@@ -11,7 +12,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 import numpy as np
 

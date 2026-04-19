@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 即时反馈系统
 Real-time Feedback System - 实时展示智能体思考和执行过程
@@ -17,7 +18,7 @@ from collections.abc import AsyncIterator, Callable
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -279,7 +280,7 @@ class FeedbackStream:
             feedback: 反馈管理器实例
         """
         self.feedback = feedback
-        self._queue: Optional[asyncio.Queue[FeedbackMessage]] = asyncio.Queue()
+        self._queue: asyncio.Queue[FeedbackMessage] | None = asyncio.Queue()
         self._done = False
 
         # 订阅反馈消息

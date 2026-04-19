@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Workflow记忆Hooks
 
@@ -149,7 +150,7 @@ class WorkflowMemoryHooks:
         trajectory = context.data.get("trajectory")
 
         # 保存工具调用轨迹
-        tool_call_trajectory: Optional[ToolCallTrajectory] = context.get("tool_call_trajectory")
+        tool_call_trajectory: ToolCallTrajectory | None = context.get("tool_call_trajectory")
         if tool_call_trajectory and self.tool_recorder:
             try:
                 # 保存轨迹到文件
@@ -224,7 +225,7 @@ class WorkflowMemoryHooks:
         error_message = context.data.get("error_message")
 
         # 获取轨迹对象
-        trajectory: Optional[ToolCallTrajectory] = context.get("tool_call_trajectory")
+        trajectory: ToolCallTrajectory | None = context.get("tool_call_trajectory")
 
         if trajectory and self.tool_recorder:
             try:
@@ -289,7 +290,7 @@ class WorkflowMemoryHooks:
                 }
 
                 # 如果有工具调用轨迹,添加到上下文
-                trajectory: Optional[ToolCallTrajectory] = context.get("tool_call_trajectory")
+                trajectory: ToolCallTrajectory | None = context.get("tool_call_trajectory")
                 if trajectory:
                     failure_context["tool_calls"] = [
                         {

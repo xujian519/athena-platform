@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利检索评估指标
 Patent Retrieval Evaluation Metrics
@@ -11,7 +12,6 @@ import math
 from collections import defaultdict
 from dataclasses import dataclass
 from typing import Any
-
 
 # 配置日志
 logger = logging.getLogger(__name__)

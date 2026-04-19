@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主健康检查器
 Xiaonuo Pisces Princess Health Checker
@@ -20,7 +21,6 @@ from enum import Enum
 from typing import Any
 
 import psutil
-
 
 logger = logging.getLogger(__name__)
 

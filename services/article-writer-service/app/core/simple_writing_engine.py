@@ -6,10 +6,9 @@ Simplified Article Writing Engine for Testing
 
 import asyncio
 import logging
-from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
-from pathlib import Path
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -20,20 +19,20 @@ class WritingRequest:
     topic: str
     article_type: str = "ip_education"
     style: str = "shandong_humor"
-    platforms: List[str] = None
-    requirements: Dict[str, Any] = None
-    word_count: Optional[int] = None
+    platforms: list[str] = None
+    requirements: dict[str, Any] = None
+    word_count: int | None = None
 
 
 @dataclass
 class WritingResult:
     """撰写结果"""
     success: bool
-    article: Optional[Any] = None
-    markdown_content: Optional[str] = None
-    metadata: Dict[str, Any] = None
-    errors: List[str] = None
-    warnings: List[str] = None
+    article: Any | None = None
+    markdown_content: str | None = None
+    metadata: dict[str, Any] = None
+    errors: list[str] = None
+    warnings: list[str] = None
 
     def __post_init__(self):
         if self.metadata is None:
@@ -72,7 +71,7 @@ class SimpleArticleWritingEngine:
 
         return result
 
-    def _generate_simple_article(self, request: WritingRequest) -> Dict[str, Any]:
+    def _generate_simple_article(self, request: WritingRequest) -> dict[str, Any]:
         """生成简单文章"""
         # 根据风格生成标题
         title_templates = {
@@ -131,7 +130,7 @@ class SimpleArticleWritingEngine:
             "generated_at": datetime.now().isoformat()
         }
 
-    def _to_markdown(self, article: Dict[str, Any]) -> str:
+    def _to_markdown(self, article: dict[str, Any]) -> str:
         """转换为Markdown格式"""
         lines = []
 
@@ -151,7 +150,7 @@ async def write_article_simple(
     topic: str,
     article_type: str = "ip_education",
     style: str = "shandong_humor",
-    platforms: Optional[List[str]] = None
+    platforms: list[str] | None = None
 ) -> WritingResult:
     """便捷函数：撰写文章"""
     engine = SimpleArticleWritingEngine()
@@ -183,12 +182,12 @@ if __name__ == "__main__":
             )
         )
 
-        print(f"\n✅ 撰写结果:")
+        print("\n✅ 撰写结果:")
         print(f"   成功: {result.success}")
         if result.article:
             print(f"   标题: {result.article['title']}")
         if result.markdown_content:
-            print(f"\n📝 文章内容预览:")
+            print("\n📝 文章内容预览:")
             print(result.markdown_content[:500] + "...")
         if result.errors:
             print(f"   错误: {result.errors}")

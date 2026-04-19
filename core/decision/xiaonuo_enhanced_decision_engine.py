@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主增强决策引擎
 Xiaonuo Pisces Princess Enhanced Decision Engine
@@ -22,6 +23,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any
 
+import numpy as np
 
 # AI/ML库
 from sklearn.ensemble import RandomForestClassifier
@@ -686,13 +688,13 @@ class XiaonuoEnhancedDecisionEngine:
         )
 
         logger.info(
-            f"✅ 决策完成: {best_option_id[.2f}]"
+            f"✅ 决策完成: {best_option_id}"
         )
 
         return result
 
     def _calculate_final_scores(
-        self, layer_scores: dict[DecisionLayer, dict[str, float]) -> dict[str, float]:
+        self, layer_scores: dict[DecisionLayer, dict[str, float]]) -> dict[str, float]:
         """计算最终综合得分"""
         final_scores = defaultdict(float)
 
@@ -707,7 +709,7 @@ class XiaonuoEnhancedDecisionEngine:
         self,
         context: DecisionContext,
         option: DecisionOption,
-        layer_analysis: dict[DecisionLayer, dict[str, Any],
+        layer_analysis: dict[DecisionLayer, dict[str, Any]],
     ) -> list[str]:
         """生成推理链"""
         reasoning = []

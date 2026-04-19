@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 演化式专利撰写系统
 Evolutionary Patent Drafting System

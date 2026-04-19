@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 增强版智能实体识别器
 Enhanced Intelligent Entity Recognizer
@@ -15,11 +14,9 @@ import logging
 import os
 import re
 from dataclasses import dataclass
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 # 深度学习相关
-import numpy as np
 
 # NLP库
 try:
@@ -62,7 +59,7 @@ class RecognizedEntity:
     end: int
     confidence: float
     source: str  # 来源：rule/bert/spacy/llm
-    attributes: Dict[str, Any] = None
+    attributes: dict[str, Any] = None
 
 class PatentEntityRecognizer:
     """专利实体识别器"""
@@ -85,7 +82,7 @@ class PatentEntityRecognizer:
         if API_AVAILABLE:
             self._init_llm_recognizer()
 
-    def _load_domain_vocabulary(self) -> Dict[str, List[str]]:
+    def _load_domain_vocabulary(self) -> dict[str, list[str]]:
         """加载领域词汇"""
         return {
             '部件': [
@@ -143,7 +140,7 @@ class PatentEntityRecognizer:
             ]
         }
 
-    def _load_entity_patterns(self) -> Dict[str, List[str]]:
+    def _load_entity_patterns(self) -> dict[str, list[str]]:
         """加载实体识别模式"""
         return {
             '部件': [
@@ -242,7 +239,7 @@ class PatentEntityRecognizer:
         })
         logger.info('LLM识别器初始化成功')
 
-    def recognize_entities(self, text: str, use_all: bool = True) -> List[RecognizedEntity]:
+    def recognize_entities(self, text: str, use_all: bool = True) -> list[RecognizedEntity]:
         """
         识别实体
 
@@ -274,7 +271,7 @@ class PatentEntityRecognizer:
 
         return fused_entities
 
-    def _recognize_by_rules(self, text: str) -> List[RecognizedEntity]:
+    def _recognize_by_rules(self, text: str) -> list[RecognizedEntity]:
         """基于规则识别实体"""
         entities = []
 
@@ -317,7 +314,7 @@ class PatentEntityRecognizer:
 
         return entities
 
-    def _recognize_by_spacy(self, text: str) -> List[RecognizedEntity]:
+    def _recognize_by_spacy(self, text: str) -> list[RecognizedEntity]:
         """使用Spacy识别实体"""
         entities = []
 
@@ -363,7 +360,7 @@ class PatentEntityRecognizer:
         }
         return mapping.get(spacy_label, '其他')
 
-    def _recognize_by_bert(self, text: str) -> List[RecognizedEntity]:
+    def _recognize_by_bert(self, text: str) -> list[RecognizedEntity]:
         """使用BERT识别实体"""
         entities = []
 
@@ -402,7 +399,7 @@ class PatentEntityRecognizer:
         }
         return mapping.get(bert_label, '其他')
 
-    def _recognize_by_llm(self, text: str) -> List[RecognizedEntity]:
+    def _recognize_by_llm(self, text: str) -> list[RecognizedEntity]:
         """使用大语言模型识别实体"""
         entities = []
 
@@ -463,7 +460,7 @@ class PatentEntityRecognizer:
 
         return entities
 
-    def _fuse_entities(self, entities: List[RecognizedEntity]) -> List[RecognizedEntity]:
+    def _fuse_entities(self, entities: list[RecognizedEntity]) -> list[RecognizedEntity]:
         """融合多个识别器的结果"""
         if not entities:
             return []
@@ -514,7 +511,7 @@ class PatentEntityRecognizer:
 
         return merged
 
-    def extract_entities_with_context(self, text: str, context_window: int = 50) -> List[Dict[str, Any]]:
+    def extract_entities_with_context(self, text: str, context_window: int = 50) -> list[dict[str, Any]]:
         """提取实体并保留上下文"""
         entities = self.recognize_entities(text)
 
@@ -548,7 +545,7 @@ class PatentEntityRecognizer:
 
         return results
 
-    def batch_recognize(self, texts: List[str], batch_size: int = 10) -> List[List[RecognizedEntity]]:
+    def batch_recognize(self, texts: list[str], batch_size: int = 10) -> list[list[RecognizedEntity]]:
         """批量识别实体"""
         results = []
 

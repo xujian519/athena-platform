@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多模态真实服务客户端 v2
 Multimodal Real Service Client v2
@@ -15,10 +16,9 @@ import os
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import aiohttp
-
 
 
 class ServiceType(Enum):

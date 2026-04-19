@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Tavily搜索引擎 - API密钥轮换策略
 Tavily Search Engine - API Key Rotation Strategy
@@ -12,6 +13,7 @@ Tavily Search Engine - API Key Rotation Strategy
 import asyncio
 import logging
 from datetime import timedelta
+from typing import Any
 
 import httpx
 
@@ -48,10 +50,12 @@ class TavilySearchEngine(BaseSearchEngine):
             max_retries: 最大重试次数
         """
         super().__init__(
-            name="Tavily",
-            base_url="https://api.tavily.com/search",
-            timeout=timeout,
-            max_retries=max_retries,
+            api_keys,
+            config={
+                "base_url": "https://api.tavily.com/search",
+                "timeout": timeout,
+                "max_retries": max_retries,
+            }
         )
         self.api_keys = api_keys
         self._last_key_index = 0 if api_keys else -1
@@ -78,7 +82,7 @@ class TavilySearchEngine(BaseSearchEngine):
 
         try:
             result = await self._search_with_key(api_key, query, start_time)
-            self._record_success(result.results_count)
+            self._record_success(result.total_results)
             return result
         except Exception as e:
             self._record_failure(str(e))
@@ -134,11 +138,12 @@ class TavilySearchEngine(BaseSearchEngine):
             )
 
             return SearchResponse(
+                success=True,
                 query=query.query,
                 results=results,
-                results_count=len(results),
+                total_results=len(results),
                 engine=self.name,
-                elapsed_time=elapsed,
+                search_time=elapsed.total_seconds(),
                 metadata={"api_key_index": self._last_key_index},
             )
 

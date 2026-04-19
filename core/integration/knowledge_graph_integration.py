@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台知识图谱集成模块
 将知识图谱功能集成到现有平台中
@@ -279,7 +280,7 @@ async def enhanced_search():
             file_path = examples_path / f"integration_example_{language.lower()}.md"
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write(f"# {language} 集成示例\n\n")
-                f.write(f"```{language.lower()}\n{code}\n```\n")
+                f.write(f"```{language.lower()}\n{_code}\n```\n")
 
         logger.info(f"✅ 集成示例已保存到: {examples_path}")
         return examples

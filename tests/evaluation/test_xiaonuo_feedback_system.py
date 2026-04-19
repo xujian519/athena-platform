@@ -16,25 +16,20 @@ Xiaonuo Feedback System Tests
 
 import json
 import os
+import sys
 import tempfile
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
-from unittest.mock import Mock, patch
 
 import pytest
 
-import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.evaluation.xiaonuo_feedback_system import (
-    FeedbackItem,
     FeedbackType,
-    QualityMetrics,
     SatisfactionLevel,
-    ServiceMetrics,
     XiaonuoFeedbackSystem,
 )
-
 
 # ========== 测试数据 ==========
 
@@ -106,7 +101,7 @@ class TestExplicitFeedback:
             "非常不满意",
         ]
 
-        for sat, content in zip(satisfactions, contents):
+        for sat, content in zip(satisfactions, contents, strict=False):
             feedback_system.collect_explicit_feedback(sat, content)
 
         assert len(feedback_system.feedback_history) == 5

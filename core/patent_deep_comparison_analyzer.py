@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利深度对比分析系统 - 用于审查意见答复
 Patent Deep Comparison Analyzer for Office Action Response
@@ -25,14 +26,14 @@ import asyncio
 import logging
 import re
 import sys
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
+import networkx as nx
 import numpy as np
-
 
 from core.logging_config import setup_logging
 

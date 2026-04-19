@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 真实MCP服务器连接器
 Real MCP Server Connector
@@ -10,7 +11,7 @@ import asyncio
 import json
 import logging
 import os
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import yaml
 
@@ -239,7 +240,7 @@ class RealMCPConnector:
             return response.get("result", {})
 
         except asyncio.TimeoutError:
-            raise Exception(f"调用超时: {timeout}秒")
+            raise Exception(f"调用超时: {timeout}秒") from None
 
     async def _fallback_to_mock(
         self, capability_id: str, parameters: dict[str, Any]

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - 语义响应缓存系统
 使用语义相似度匹配缓存查询,减少重复API调用
@@ -10,9 +11,9 @@ import hashlib
 import logging
 import threading
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

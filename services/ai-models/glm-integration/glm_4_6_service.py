@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 GLM-4.6 集成服务
 为Athena工作平台提供智谱AI GLM-4.6最强能力
 """
 
-import asyncio
-from core.async_main import async_main
-import json
 import logging
 import os
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import aiohttp
+
+logger = logging.getLogger(__name__)
 
 
 class GLMModelType(Enum):
@@ -37,14 +35,14 @@ class TaskType(Enum):
 @dataclass
 class GLMRequest:
     """GLM请求参数"""
-    messages: List[Dict[str, str]]
+    messages: list[dict[str, str]]
     model: GLMModelType = GLMModelType.GLM_4_6
     max_tokens: int = 4000
     temperature: float = 0.3
     top_p: float = 0.7
     enable_thinking: bool = False
     thinking_type: str | None = None  # 'step_by_step' or 'chain_of_thought'
-    tools: Optional[List[Dict]] = None  # 智能体工具调用
+    tools: list[dict] | None = None  # 智能体工具调用
     stream: bool = False
 
 @dataclass
@@ -52,8 +50,8 @@ class GLMResponse:
     """GLM响应结果"""
     content: str
     thinking_process: str | None = None
-    tool_calls: Optional[List[Dict]] = None
-    usage: Dict = field(default_factory=dict)
+    tool_calls: list[dict] | None = None
+    usage: dict = field(default_factory=dict)
     model: str = ''
     finish_reason: str = ''
     response_time: float = 0.0
@@ -116,7 +114,7 @@ class GLM46APIClient:
         if self.session:
             await self.session.close()
 
-    def _create_patent_analysis_prompt(self, patent_info: Dict) -> List[Dict[str, str]]:
+    def _create_patent_analysis_prompt(self, patent_info: dict) -> list[dict[str, str]]:
         """创建专利分析专用提示词"""
         system_prompt = """你是一位专业的专利分析师，具有深厚的技术背景和法律知识。请对给定的专利信息进行深度分析。
 
@@ -146,7 +144,7 @@ class GLM46APIClient:
             {'role': 'user', 'content': user_prompt}
         ]
 
-    def _create_agent_coordination_prompt(self, task: str, available_tools: List[str]) -> List[Dict[str, str]]:
+    def _create_agent_coordination_prompt(self, task: str, available_tools: list[str]) -> list[dict[str, str]]:
         """创建智能体协调提示词"""
         system_prompt = """你是一个强大的AI智能体协调器，能够合理分配任务给不同的专业工具。
 
@@ -174,7 +172,7 @@ class GLM46APIClient:
             {'role': 'user', 'content': user_prompt}
         ]
 
-    def _create_long_text_processing_prompt(self, text: str, analysis_type: str) -> List[Dict[str, str]]:
+    def _create_long_text_processing_prompt(self, text: str, analysis_type: str) -> list[dict[str, str]]:
         """创建长文本处理提示词"""
         system_prompt = f"""你是一个专业的长文本分析专家，能够处理和分析大量的技术文档。
 
@@ -199,7 +197,7 @@ class GLM46APIClient:
             {'role': 'user', 'content': user_prompt}
         ]
 
-    async def create_patent_analysis_request(self, patent_info: Dict) -> GLMRequest:
+    async def create_patent_analysis_request(self, patent_info: dict) -> GLMRequest:
         """创建专利分析请求"""
         messages = self._create_patent_analysis_prompt(patent_info)
 
@@ -212,7 +210,7 @@ class GLM46APIClient:
             thinking_type='step_by_step'
         )
 
-    async def create_agent_coordination_request(self, task: str, tools: List[str]) -> GLMRequest:
+    async def create_agent_coordination_request(self, task: str, tools: list[str]) -> GLMRequest:
         """创建智能体协调请求"""
         messages = self._create_agent_coordination_prompt(task, tools)
 
@@ -327,12 +325,12 @@ class GLM46APIClient:
                 timestamp=start_time
             )
 
-    async def analyze_patent(self, patent_info: Dict) -> GLMResponse:
+    async def analyze_patent(self, patent_info: dict) -> GLMResponse:
         """专利分析"""
         request = await self.create_patent_analysis_request(patent_info)
         return await self.call_glm_api(request)
 
-    async def coordinate_agents(self, task: str, available_tools: List[str]) -> GLMResponse:
+    async def coordinate_agents(self, task: str, available_tools: list[str]) -> GLMResponse:
         """智能体协调"""
         request = await self.create_agent_coordination_request(task, available_tools)
         return await self.call_glm_api(request)
@@ -375,7 +373,7 @@ class GLM46APIClient:
 
         return await self.call_glm_api(request)
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """获取使用统计"""
         return self.stats.copy()
 
@@ -419,14 +417,14 @@ async def main():
                 'python'
             )
 
-            logger.info(f"\n🤔 思考过程:")
+            logger.info("\n🤔 思考过程:")
             if response.thinking_process:
                 logger.info(str(response.thinking_process))
 
-            logger.info(f"\n💻 生成的代码:")
+            logger.info("\n💻 生成的代码:")
             logger.info(str(response.content))
 
-            logger.info(f"\n📊 响应信息:")
+            logger.info("\n📊 响应信息:")
             logger.info(f"- 模型: {response.model}")
             logger.info(f"- 耗时: {response.response_time:.2f}秒")
             logger.info(f"- Tokens: {response.usage.get('total_tokens', 0)}")

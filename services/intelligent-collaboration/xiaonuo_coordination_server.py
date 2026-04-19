@@ -5,16 +5,15 @@ Xiaonuo Intelligent Collaboration Server
 小诺来协调姐姐和整个平台！
 """
 
-import asyncio
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
 from datetime import datetime
-from fastapi import FastAPI, HTTPException
+
+import uvicorn
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from core.logging_config import setup_logging
 from core.security.auth import ALLOWED_ORIGINS
-import uvicorn
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

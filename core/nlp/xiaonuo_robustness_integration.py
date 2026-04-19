@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺鲁棒性模块集成器
 Xiaonuo Robustness Module Integration
@@ -22,7 +23,7 @@ import sys
 import threading
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 

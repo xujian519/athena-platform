@@ -1,17 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 测试版多模态文件系统API
 Test Multimodal File System API
 """
 
-import os
-import sys
-import asyncio
-import json
 import hashlib
-import uuid
+import sys
 import time
+import uuid
 from datetime import datetime
 from pathlib import Path
 
@@ -19,10 +15,10 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent))
 
 try:
-    from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Query
+    import uvicorn
+    from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile
     from fastapi.middleware.cors import CORSMiddleware
     from fastapi.responses import JSONResponse
-    import uvicorn
     print("✅ FastAPI 导入成功")
 except ImportError as e:
     print(f"❌ FastAPI 导入失败: {e}")

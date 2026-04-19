@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 多智能体协作框架测试
 Multi-Agent Collaboration Framework Tests
@@ -7,25 +6,28 @@ Multi-Agent Collaboration Framework Tests
 测试多智能体协作框架的核心功能
 """
 
-import unittest
-import asyncio
 import sys
-import os
-from datetime import datetime, timedelta
-from unittest.mock import Mock, AsyncMock
+import unittest
+from datetime import timedelta
 
 # 添加项目路径
 sys.path.append('/Users/xujian/Athena工作平台')
 
 from core.collaboration import (
-    Agent, AgentCapability, Task, TaskStatus, Priority,
-    MultiAgentCollaborationFramework, Message, MessageType
+    Agent,
+    AgentCapability,
+    Message,
+    MessageType,
+    MultiAgentCollaborationFramework,
+    Priority,
+    Task,
+    TaskStatus,
 )
 from core.collaboration.collaboration_patterns import (
-    SequentialCollaborationPattern,
-    ParallelCollaborationPattern,
+    ConsensusCollaborationPattern,
     HierarchicalCollaborationPattern,
-    ConsensusCollaborationPattern
+    ParallelCollaborationPattern,
+    SequentialCollaborationPattern,
 )
 
 
@@ -469,7 +471,7 @@ class TestHierarchicalCollaborationPattern(unittest.TestCase):
     def test_role_identification(self):
         """测试角色识别"""
         # 创建协调者智能体
-        coordinator = Agent(
+        Agent(
             id="coordinator",
             name="协调者",
             capabilities=[AgentCapability(name="coordination", description="协调能力")],
@@ -477,13 +479,13 @@ class TestHierarchicalCollaborationPattern(unittest.TestCase):
         )
 
         # 创建工作者智能体
-        worker1 = Agent(
+        Agent(
             id="worker1",
             name="工作者1",
             capabilities=[AgentCapability(name="work", description="工作能力")],
             metadata={"role": "worker"}
         )
-        worker2 = Agent(
+        Agent(
             id="worker2",
             name="工作者2",
             capabilities=[AgentCapability(name="work", description="工作能力")],

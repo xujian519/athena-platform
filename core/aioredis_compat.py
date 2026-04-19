@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 aioredis兼容层 - 使用官方redis.asyncio替代已弃用的aioredis库
 Compatibility layer for aioredis -> redis.asyncio

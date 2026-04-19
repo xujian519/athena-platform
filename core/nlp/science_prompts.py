@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 理科推理提示词模板
 用于物理、化学、生物等理科科目的双模型协同推理

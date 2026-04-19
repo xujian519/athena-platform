@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 意图识别服务 - API路由
 
@@ -11,12 +12,11 @@ Version: 1.0.0
 import logging
 import time
 
-from fastapi import APIRouter, Depends, HTTPException, Response, status
-from fastapi.responses import JSONResponse, PlainTextResponse
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import PlainTextResponse
 
 from core.api.intent_auth import (
     check_rate_limit_depends,
-    create_access_token,
     get_current_user,
     get_current_user_optional,
 )
@@ -26,7 +26,6 @@ from core.api.intent_models import (
     EngineInfo,
     EnginesListResponse,
     EngineStatsResponse,
-    ErrorResponse,
     HealthResponse,
     IntentRecognitionRequest,
     IntentRecognitionResponse,
@@ -167,7 +166,7 @@ async def get_service_stats():
         logger.error(f"获取统计信息失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"获取统计信息失败: {e!s}"
-        )
+        ) from e
 
 
 # ========================================================================
@@ -228,7 +227,7 @@ async def recognize_intent(
 
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"意图识别失败: {e!s}"
-        )
+        ) from e
 
 
 @router.post("/recognize/batch", response_model=BatchIntentRecognitionResponse)
@@ -289,7 +288,7 @@ async def recognize_batch(
 
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"批量意图识别失败: {e!s}"
-        )
+        ) from e
 
 
 # ========================================================================
@@ -329,7 +328,7 @@ async def list_engines(current_user: str = Depends(get_current_user)):
         logger.error(f"获取引擎列表失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"获取引擎列表失败: {e!s}"
-        )
+        ) from e
 
 
 @router.get("/engines/{engine_name}", response_model=EngineStatsResponse)
@@ -358,7 +357,7 @@ async def get_engine_stats(engine_name: str, current_user: str = Depends(get_cur
         logger.error(f"获取引擎统计失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"获取引擎统计失败: {e!s}"
-        )
+        ) from e
 
 
 @router.post("/engines/{engine_name}/reload")
@@ -385,7 +384,7 @@ async def reload_engine(engine_name: str, current_user: str = Depends(get_curren
         logger.error(f"重新加载引擎失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"重新加载引擎失败: {e!s}"
-        )
+        ) from e
 
 
 # ========================================================================
@@ -431,7 +430,7 @@ async def list_models(current_user: str = Depends(get_current_user)):
         logger.error(f"获取模型列表失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"获取模型列表失败: {e!s}"
-        )
+        ) from e
 
 
 @router.post("/models/{model_name}/load", response_model=ModelLoadResponse)
@@ -474,7 +473,7 @@ async def load_model(
         logger.error(f"加载模型失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"加载模型失败: {e!s}"
-        )
+        ) from e
 
 
 @router.post("/models/{model_name}/unload", response_model=ModelUnloadResponse)
@@ -508,7 +507,7 @@ async def unload_model(model_name: str, current_user: str = Depends(get_current_
         logger.error(f"卸载模型失败: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"卸载模型失败: {e!s}"
-        )
+        ) from e
 
 
 # ========================================================================

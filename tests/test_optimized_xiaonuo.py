@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 测试优化后的小诺认知与决策功能
 Test Optimized Xiaonuo Cognition & Decision Features
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
 import asyncio
 from datetime import datetime
-from typing import Dict, Any
+
 
 async def test_optimized_features():
     """测试优化后的功能"""
@@ -81,7 +81,7 @@ async def test_planning_features(princess):
                 if result.get('success', False):
                     print(f"    ✅ 规划成功: {result.get('response', '')[:100]}...")
                 else:
-                    print(f"    ⚠️ 规划部分成功")
+                    print("    ⚠️ 规划部分成功")
             else:
                 print("    ⚠️ 规划集成器不可用")
 
@@ -134,7 +134,7 @@ async def test_decision_features(princess):
 
             if result.get('success', False):
                 best_option = result.get('best_option', {})
-                print(f"    ✅ 决策成功")
+                print("    ✅ 决策成功")
                 print(f"    🏆 最佳选择: {best_option.get('option', {}).get('name', 'Unknown')}")
                 print(f"    📊 置信度: {result.get('confidence', 0):.2f}")
             else:

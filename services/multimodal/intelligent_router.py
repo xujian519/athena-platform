@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 智能多模态处理路由器
 Intelligent Multimodal Processing Router
@@ -8,19 +7,18 @@ Intelligent Multimodal Processing Router
 """
 
 import asyncio
-from core.async_main import async_main
-import os
 import json
 import time
-from datetime import datetime
-from typing import Dict, List, Any, Optional, Union
-from enum import Enum
 from dataclasses import dataclass
-from pathlib import Path
+from datetime import datetime
+from enum import Enum
+from typing import Any
+
+from ai.ai_processor import ProcessingType
 
 # 导入本地处理器
 from ai.audio_processor_enhanced import get_audio_processor
-from ai.ai_processor import AIProcessor, ProcessingType
+
 
 class ProcessingMethod(Enum):
     """处理方法"""
@@ -53,7 +51,7 @@ class ProcessingRequest:
     require_high_quality: bool = False
     batch_size: int = 1
     deadline: datetime | None = None
-    metadata: Dict[str, Any] = None
+    metadata: dict[str, Any] = None
 
     def __post_init__(self):
         if self.metadata is None:
@@ -65,7 +63,7 @@ class ProcessingResult:
     request_id: str
     method_used: ProcessingMethod
     success: bool
-    result_data: Dict[str, Any]
+    result_data: dict[str, Any]
     processing_time: float
     cost: float
     quality_score: float
@@ -78,7 +76,7 @@ class IntelligentRouter:
         """初始化路由器"""
         self.mcp_available = True  # MCP工具是否可用
         self.local_available = True  # 本地系统是否可用
-        self.processing_history: List[Dict] = []
+        self.processing_history: list[dict] = []
 
         # 成本配置
         self.cost_config = {
@@ -108,12 +106,12 @@ class IntelligentRouter:
 
         # 规则1：数据敏感度决策
         if request.sensitivity in [DataSensitivity.CONFIDENTIAL, DataSensitivity.SECRET]:
-            print(f"🔒 敏感数据，选择本地处理")
+            print("🔒 敏感数据，选择本地处理")
             return ProcessingMethod.LOCAL
 
         # 规则2：紧急程度决策
         if request.priority in [ProcessingPriority.HIGH, ProcessingPriority.URGENT]:
-            print(f"⚡ 紧急任务，选择MCP处理")
+            print("⚡ 紧急任务，选择MCP处理")
             return ProcessingMethod.MCP
 
         # 规则3：批量大小决策
@@ -123,7 +121,7 @@ class IntelligentRouter:
 
         # 规则4：质量要求决策
         if request.require_high_quality:
-            print(f"🎯 高质量要求，选择MCP处理")
+            print("🎯 高质量要求，选择MCP处理")
             return ProcessingMethod.MCP
 
         # 规则5：成本敏感决策
@@ -135,7 +133,7 @@ class IntelligentRouter:
             return ProcessingMethod.LOCAL
 
         # 默认选择MCP
-        print(f"🚀 使用MCP处理（默认高质量选择）")
+        print("🚀 使用MCP处理（默认高质量选择）")
         return ProcessingMethod.MCP
 
     async def process_request(self, request: ProcessingRequest) -> ProcessingResult:
@@ -181,7 +179,7 @@ class IntelligentRouter:
                 error_message=str(e)
             )
 
-    async def _process_with_mcp(self, request: ProcessingRequest) -> Dict[str, Any]:
+    async def _process_with_mcp(self, request: ProcessingRequest) -> dict[str, Any]:
         """使用MCP工具处理"""
         print(f"📡 通过MCP处理: {request.file_path}")
 
@@ -195,7 +193,7 @@ class IntelligentRouter:
         else:
             return {"success": False, "error": f"不支持的文件类型: {request.file_type}"}
 
-    async def _process_with_local(self, request: ProcessingRequest) -> Dict[str, Any]:
+    async def _process_with_local(self, request: ProcessingRequest) -> dict[str, Any]:
         """使用本地系统处理"""
         print(f"🏠 本地处理: {request.file_path}")
 
@@ -209,7 +207,7 @@ class IntelligentRouter:
         else:
             return {"success": False, "error": f"不支持的文件类型: {request.file_type}"}
 
-    async def _process_with_hybrid(self, request: ProcessingRequest) -> Dict[str, Any]:
+    async def _process_with_hybrid(self, request: ProcessingRequest) -> dict[str, Any]:
         """混合模式处理"""
         print(f"🔄 混合模式处理: {request.file_path}")
 
@@ -229,7 +227,7 @@ class IntelligentRouter:
 
         return local_result
 
-    async def _mcp_analyze_image(self, request: ProcessingRequest) -> Dict[str, Any]:
+    async def _mcp_analyze_image(self, request: ProcessingRequest) -> dict[str, Any]:
         """MCP图像分析"""
         try:
             # 这里应该调用实际的MCP工具
@@ -249,7 +247,7 @@ class IntelligentRouter:
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    async def _mcp_transcribe_audio(self, request: ProcessingRequest) -> Dict[str, Any]:
+    async def _mcp_transcribe_audio(self, request: ProcessingRequest) -> dict[str, Any]:
         """MCP音频转录"""
         # MCP可能不直接支持音频，可以先用本地转换，再发送
         local_result = await self._local_transcribe_audio(request)
@@ -265,7 +263,7 @@ class IntelligentRouter:
 
         return local_result
 
-    async def _local_transcribe_audio(self, request: ProcessingRequest) -> Dict[str, Any]:
+    async def _local_transcribe_audio(self, request: ProcessingRequest) -> dict[str, Any]:
         """本地音频转录"""
         try:
             audio_processor = get_audio_processor()
@@ -284,7 +282,7 @@ class IntelligentRouter:
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    async def _local_analyze_image(self, request: ProcessingRequest) -> Dict[str, Any]:
+    async def _local_analyze_image(self, request: ProcessingRequest) -> dict[str, Any]:
         """本地图像分析"""
         try:
             from ai.ai_processor import AIProcessor
@@ -312,7 +310,7 @@ class IntelligentRouter:
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    async def _local_parse_document(self, request: ProcessingRequest) -> Dict[str, Any]:
+    async def _local_parse_document(self, request: ProcessingRequest) -> dict[str, Any]:
         """本地文档解析"""
         try:
             from ai.ai_processor import AIProcessor
@@ -359,7 +357,7 @@ class IntelligentRouter:
         else:  # HYBRID
             return self.cost_config['mcp_per_request'] + (processing_time / 3600) * self.cost_config['local_per_hour']
 
-    def _calculate_quality(self, result: Dict[str, Any]) -> float:
+    def _calculate_quality(self, result: dict[str, Any]) -> float:
         """计算质量分数（0-1）"""
         if not result.get('success'):
             return 0.0
@@ -373,7 +371,7 @@ class IntelligentRouter:
             return 0.75  # 其他
 
     def _log_processing(self, request: ProcessingRequest, method: ProcessingMethod,
-                       processing_time: float, result: Dict):
+                       processing_time: float, result: dict):
         """记录处理日志"""
         log_entry = {
             "timestamp": datetime.now().isoformat(),
@@ -393,7 +391,7 @@ class IntelligentRouter:
         if len(self.processing_history) > 1000:
             self.processing_history = self.processing_history[-1000:]
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """获取路由统计信息"""
         if not self.processing_history:
             return {"message": "暂无处理记录"}
@@ -447,7 +445,7 @@ async def process_file_intelligently(
     sensitivity: str = "public",
     high_quality: bool = False,
     batch_size: int = 1
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """智能处理文件的便捷函数"""
 
     router = get_intelligent_router()

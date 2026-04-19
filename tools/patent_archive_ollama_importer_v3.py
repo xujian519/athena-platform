@@ -1,30 +1,24 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 使用Ollama大模型的专利档案表智能导入工具 v3.0
 优化AI响应解析和错误处理
 """
 
 import json
-import pandas as pd
-import requests
-import hashlib
-import psycopg2
-from psycopg2.extras import execute_values, RealDictCursor
+import logging
+import re
+import sys
+import uuid
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple
-import os
-import sys
-import logging
-import uuid
-import re
+
+import pandas as pd
+import psycopg2
+import requests
+from psycopg2.extras import execute_values
 
 # 导入安全配置
-import sys
-from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent / "core"))
-from security.env_config import get_env_var, get_database_url, get_jwt_secret
 
 # 配置日志
 logging.basicConfig(
@@ -38,7 +32,7 @@ class OllamaPatentImporter:
 
     def __init__(self):
         # Ollama配置
-        self.ollama_url = "http://localhost:11434/api"
+        self.ollama_url = "http://127.0.0.1:8765/v1"
         self.model_name = "qwen:7b"  # 使用qwen模型
 
         # 数据库配置
@@ -59,20 +53,22 @@ class OllamaPatentImporter:
     def query_ollama(self, prompt: str, system_prompt: str = None) -> str:
         """查询Ollama模型"""
         try:
+            messages = []
+            if system_prompt:
+                messages.append({"role": "system", "content": system_prompt})
+            messages.append({"role": "user", "content": prompt})
+
             payload = {
                 "model": self.model_name,
-                "prompt": prompt,
+                "messages": messages,
                 "stream": False
             }
 
-            if system_prompt:
-                payload["system"] = system_prompt
-
-            response = requests.post(f"{self.ollama_url}/generate", json=payload, timeout=60)
+            response = requests.post(f"{self.ollama_url}/chat/completions", json=payload, timeout=60)
 
             if response.status_code == 200:
                 result = response.json()
-                return result.get("response", "")
+                return result.get("choices", [{}])[0].get("message", {}).get("content", "")
             else:
                 logger.error(f"Ollama请求失败: {response.status_code}")
                 return ""
@@ -81,7 +77,7 @@ class OllamaPatentImporter:
             logger.error(f"查询Ollama出错: {str(e)}")
             return ""
 
-    def parse_json_response(self, response: str) -> Dict | None:
+    def parse_json_response(self, response: str) -> dict | None:
         """健壮的JSON响应解析"""
         if not response:
             return None
@@ -138,7 +134,7 @@ class OllamaPatentImporter:
             logger.error(f"尝试解析的内容: {json_part[:200]}...")
             return None
 
-    def analyze_excel_with_ai(self, excel_path: str) -> Dict:
+    def analyze_excel_with_ai(self, excel_path: str) -> dict:
         """使用AI分析Excel表格结构"""
         logger.info("🤖 使用AI分析Excel表格结构...")
 
@@ -199,7 +195,7 @@ class OllamaPatentImporter:
             logger.error(f"AI分析失败: {e}")
             return self._fallback_analysis(excel_path)
 
-    def _fallback_analysis(self, excel_path: str) -> Dict:
+    def _fallback_analysis(self, excel_path: str) -> dict:
         """备用分析方法（不使用AI）"""
         logger.info("使用备用分析方法...")
 
@@ -293,7 +289,7 @@ class OllamaPatentImporter:
             if conn:
                 conn.close()
 
-    def process_excel_data(self, excel_path: str) -> Dict:
+    def process_excel_data(self, excel_path: str) -> dict:
         """处理Excel数据"""
         logger.info("📊 开始处理Excel数据...")
 
@@ -425,7 +421,7 @@ class OllamaPatentImporter:
             "processing_time": datetime.now().isoformat()
         }
 
-        logger.info(f"\n📈 处理结果:")
+        logger.info("\n📈 处理结果:")
         logger.info(f"  新专利: {result['new_patents']}")
         logger.info(f"  重复专利: {result['duplicate_patents']}")
         logger.info(f"  新客户: {result['new_clients']}")
@@ -468,7 +464,7 @@ class OllamaPatentImporter:
 
         return title
 
-    def save_to_database(self, processed_data: List[Dict]):
+    def save_to_database(self, processed_data: list[dict]):
         """保存数据到数据库"""
         logger.info("💾 正在保存数据到数据库...")
 
@@ -521,7 +517,7 @@ class OllamaPatentImporter:
             patent_records = []
             for record in processed_data:
                 client_name = record.get('client_name', '').strip()
-                client_id = self.client_map.get(client_name)
+                self.client_map.get(client_name)
 
                 patent_record = {
                     'patent_id': str(uuid.uuid4()),
@@ -567,7 +563,7 @@ class OllamaPatentImporter:
             if conn:
                 conn.close()
 
-    def export_results(self, result: Dict):
+    def export_results(self, result: dict):
         """导出处理结果"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 

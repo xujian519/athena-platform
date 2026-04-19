@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 系统知识库模块
 System Knowledge Base Module

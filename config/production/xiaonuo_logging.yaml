@@ -1,0 +1,182 @@
+# 小诺·双鱼座 - 生产环境日志配置
+# Xiaonuo Pisces - Production Logging Configuration
+
+version: 1
+disable_existing_loggers: false
+
+# =============================================================================
+# 格式化器
+# =============================================================================
+formatters:
+  # JSON格式化器（生产环境推荐）
+  json:
+    class: 'pythonjsonlogger.jsonlogger.JsonFormatter'
+    format: '%(asctime)s %(name)s %(levelname)s %(message)s %(pathname)s %(lineno)d'
+    timestamp: true
+
+  # 文本格式化器（开发/调试）
+  text:
+    format: '[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
+
+  # 简洁格式化器
+  simple:
+    format: '%(levelname)s - %(message)s'
+
+# =============================================================================
+# 过滤器
+# =============================================================================
+filters:
+  # 敏感信息过滤器
+  sensitive:
+    class: 'core.logging.filters.SensitiveDataFilter'
+    patterns:
+      - 'password'
+      - 'token'
+      - 'api_key'
+      - 'secret'
+
+  # 上下文过滤器
+  context:
+    class: 'core.logging.filters.ContextFilter'
+    fields:
+      service: 'xiaonuo-pisces'
+      environment: 'production'
+      version: '1.0.0'
+
+# =============================================================================
+# 处理器
+# =============================================================================
+handlers:
+  # 控制台处理器
+  console:
+    class: 'logging.StreamHandler'
+    level: 'INFO'
+    formatter: 'json'
+    filters:
+      - sensitive
+      - context
+    stream: 'ext://sys.stdout'
+
+  # 主文件处理器
+  main_file:
+    class: 'logging.handlers.RotatingFileHandler'
+    level: 'INFO'
+    formatter: 'json'
+    filters:
+      - sensitive
+      - context
+    filename: '/var/log/xiaonuo/xiaonuo.log'
+    maxBytes: 104857600  # 100MB
+    backupCount: 10
+    encoding: 'utf-8'
+
+  # 错误文件处理器
+  error_file:
+    class: 'logging.handlers.RotatingFileHandler'
+    level: 'ERROR'
+    formatter: 'json'
+    filters:
+      - sensitive
+      - context
+    filename: '/var/log/xiaonuo/xiaonuo-error.log'
+    maxBytes: 104857600  # 100MB
+    backupCount: 10
+    encoding: 'utf-8'
+
+  # 任务日志处理器
+  task_file:
+    class: 'logging.handlers.RotatingFileHandler'
+    level: 'DEBUG'
+    formatter: 'json'
+    filters:
+      - sensitive
+      - context
+    filename: '/var/log/xiaonuo/xiaonuo-tasks.log'
+    maxBytes: 52428800  # 50MB
+    backupCount: 5
+    encoding: 'utf-8'
+
+  # 协作日志处理器
+  collaboration_file:
+    class: 'logging.handlers.RotatingFileHandler'
+    level: 'DEBUG'
+    formatter: 'json'
+    filters:
+      - sensitive
+      - context
+    filename: '/var/log/xiaonuo/xiaonuo-collaboration.log'
+    maxBytes: 52428800  # 50MB
+    backupCount: 5
+    encoding: 'utf-8'
+
+  # Syslog处理器（可选）
+  syslog:
+    class: 'logging.handlers.SysLogHandler'
+    level: 'WARNING'
+    formatter: 'json'
+    filters:
+      - sensitive
+      - context
+    address: '/var/run/syslog'  # Linux
+    # address: '/var/run/syslog'  # macOS
+    facility: 'local0'
+    socktype: 'ext://socket.SOCK_STREAM'
+
+# =============================================================================
+# 日志记录器
+# =============================================================================
+loggers:
+  # 小诺主日志记录器
+  xiaonuo:
+    level: 'INFO'
+    propagate: false
+    handlers:
+      - console
+      - main_file
+      - error_file
+
+  # 任务调度日志记录器
+  xiaonuo.tasks:
+    level: 'DEBUG'
+    propagate: false
+    handlers:
+      - task_file
+
+  # 智能体协作日志记录器
+  xiaonuo.collaboration:
+    level: 'DEBUG'
+    propagate: false
+    handlers:
+      - collaboration_file
+
+  # 记忆系统日志记录器
+  xiaonuo.memory:
+    level: 'INFO'
+    propagate: false
+    handlers:
+      - main_file
+
+  # API日志记录器
+  xiaonuo.api:
+    level: 'INFO'
+    propagate: false
+    handlers:
+      - main_file
+
+  # 性能日志记录器
+  xiaonuo.performance:
+    level: 'INFO'
+    propagate: false
+    handlers:
+      - main_file
+
+# =============================================================================
+# 根日志记录器
+# =============================================================================
+root:
+  level: 'WARNING'
+  handlers:
+    - console
+    - main_file
+    - error_file

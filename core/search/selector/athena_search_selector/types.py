@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena智能搜索选择器 - 类型定义
 Athena Search Selector - Type Definitions
@@ -12,7 +13,6 @@ Athena Search Selector - Type Definitions
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
 
 from ...standards.base_search_tool import QueryComplexity
 

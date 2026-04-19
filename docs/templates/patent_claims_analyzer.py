@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利权利要求书分析器
 专门用于权利要求的技术特征提取、实体识别和关系分析
@@ -11,7 +10,7 @@ import logging
 import re
 import uuid
 from collections import defaultdict
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +24,7 @@ class PatentClaimsAnalyzer:
         Args:
             template_file: 分析模板文件路径
         """
-        with open(template_file, 'r', encoding='utf-8') as f:
+        with open(template_file, encoding='utf-8') as f:
             self.template = json.load(f)
 
         # 实体识别模式
@@ -61,7 +60,7 @@ class PatentClaimsAnalyzer:
             '接触关系': [r"([^，。；:]+?)接触([^，。；:]+?)', r'([^，。；:]+?]与([^，。；:]+?)接触"]
         }
 
-    def analyze_claim(self, claim_text: str, claim_number: int = 1) -> Dict[str, Any]:
+    def analyze_claim(self, claim_text: str, claim_number: int = 1) -> dict[str, Any]:
         """
         分析单个权利要求
 
@@ -95,7 +94,7 @@ class PatentClaimsAnalyzer:
 
         return result
 
-    def _analyze_basic_info(self, claim_text: str, claim_number: int) -> Dict[str, Any]:
+    def _analyze_basic_info(self, claim_text: str, claim_number: int) -> dict[str, Any]:
         """分析权利要求基本信息"""
         # 统计标点符号
         punctuation_count = {
@@ -124,7 +123,7 @@ class PatentClaimsAnalyzer:
             }
         }
 
-    def _extract_technical_features(self, claim_text: str) -> Dict[str, Any]:
+    def _extract_technical_features(self, claim_text: str) -> dict[str, Any]:
         """基于标点符号提取技术特征"""
         features = []
 
@@ -139,13 +138,12 @@ class PatentClaimsAnalyzer:
         # 先去除数字编号前缀（如"1、"）
         text = re.sub(r'^\d+、', '', claim_text)
 
-        current_pos = 0
         sequence_number = 1
 
-        for punct, punct_type in splitting_rules:
+        for punct, _punct_type in splitting_rules:
             if punct in text:
                 parts = text.split(punct)
-                for i, part in enumerate(parts):
+                for _i, part in enumerate(parts):
                     if part.strip():
                         # 保存特征
                         feature = {
@@ -233,7 +231,7 @@ class PatentClaimsAnalyzer:
 
         return '一般特征'
 
-    def _calculate_feature_statistics(self, features: List[Dict]) -> Dict[str, int]:
+    def _calculate_feature_statistics(self, features: list[dict]) -> dict[str, int]:
         """计算技术特征统计信息"""
         stats = {
             'total_features': len(features),
@@ -252,7 +250,7 @@ class PatentClaimsAnalyzer:
 
         return stats
 
-    def _extract_entities(self, features: List[Dict]) -> List[Dict]:
+    def _extract_entities(self, features: list[dict]) -> list[dict]:
         """从技术特征中提取实体"""
         entities = {}
         entity_id_counter = 1
@@ -293,7 +291,7 @@ class PatentClaimsAnalyzer:
 
         return list(entities.values())
 
-    def _extract_entity_attributes(self, text: str, entity_name: str) -> Dict[str, str]:
+    def _extract_entity_attributes(self, text: str, entity_name: str) -> dict[str, str]:
         """提取实体属性"""
         attributes = {}
 
@@ -319,7 +317,7 @@ class PatentClaimsAnalyzer:
 
         return attributes
 
-    def _analyze_relationships(self, features: List[Dict], entities: List[Dict]) -> List[Dict]:
+    def _analyze_relationships(self, features: list[dict], entities: list[dict]) -> list[dict]:
         """分析实体间关系"""
         relationships = []
         relationship_id_counter = 1
@@ -373,7 +371,7 @@ class PatentClaimsAnalyzer:
 
         return '可选关系'
 
-    def _build_relationship_network(self, entities: List[Dict], relationships: List[Dict]) -> Dict[str, Any]:
+    def _build_relationship_network(self, entities: list[dict], relationships: list[dict]) -> dict[str, Any]:
         """构建关系网络"""
         # 构建节点
         nodes = []
@@ -404,7 +402,7 @@ class PatentClaimsAnalyzer:
             'centrality_analysis': centrality_analysis
         }
 
-    def _calculate_centrality(self, nodes: List[Dict], edges: List[Dict]) -> Dict[str, Any]:
+    def _calculate_centrality(self, nodes: list[dict], edges: list[dict]) -> dict[str, Any]:
         """计算网络中心性指标（简化实现）"""
         # 计算度中心性
         degree_count = defaultdict(int)
@@ -425,7 +423,7 @@ class PatentClaimsAnalyzer:
             'closeness_centrality': {}    # 简化实现暂不计算
         }
 
-    def _analyze_claim_structure(self, claim_text: str) -> Dict[str, Any]:
+    def _analyze_claim_structure(self, claim_text: str) -> dict[str, Any]:
         """分析权利要求结构"""
         # 分割前序部分和特征部分
         characterizing_phrases = ['其特征是', '其特征在于', '还包括', '其中', '进一步']
@@ -482,7 +480,7 @@ class PatentClaimsAnalyzer:
         match = re.search(theme_pattern, text)
         return match.group(1).strip() if match else ''
 
-    def _analyze_protection_scope(self, claim_text: str) -> Dict[str, Any]:
+    def _analyze_protection_scope(self, claim_text: str) -> dict[str, Any]:
         """分析法律保护范围"""
         # 这里是简化分析，实际应用中需要更复杂的NLP技术
         scope_analysis = {
@@ -512,7 +510,7 @@ class PatentClaimsAnalyzer:
 
         return scope_analysis
 
-    def compare_claims(self, target_claim: Dict, reference_claims: List[Dict]) -> Dict[str, Any]:
+    def compare_claims(self, target_claim: dict, reference_claims: list[dict]) -> dict[str, Any]:
         """
         对比分析多个权利要求
 

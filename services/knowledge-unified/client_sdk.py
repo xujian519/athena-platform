@@ -9,14 +9,12 @@ Patent Knowledge Graph SDK
 创建时间: 2024年12月15日
 """
 
-import requests
-from core.async_main import async_main
-import json
-import logging
-from typing import Dict, List, Any, Optional
-from datetime import datetime
 import asyncio
+import logging
+from typing import Any
+
 import aiohttp
+import requests
 
 # 配置日志
 logger = logging.getLogger(__name__)
@@ -41,7 +39,7 @@ class PatentKGClient:
             self.session.headers.update({"Authorization": f"Bearer {api_key}"})
         self.session.headers.update({"Content-Type": "application/json"})
 
-    def health_check(self) -> Dict[str, Any]:
+    def health_check(self) -> dict[str, Any]:
         """健康检查"""
         try:
             response = self.session.get(f"{self.base_url}/health")
@@ -56,10 +54,10 @@ class PatentKGClient:
         query: str,
         patent_text: str = "",
         context_type: str = "general",
-        context: Dict[str, Any] = None,
+        context: dict[str, Any] = None,
         user_id: str = None,
         application_id: str = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         查询知识图谱
 
@@ -97,9 +95,9 @@ class PatentKGClient:
 
     def batch_query(
         self,
-        queries: List[Dict[str, Any]],
+        queries: list[dict[str, Any]],
         max_parallel: int = 5
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         批量查询
 
@@ -130,9 +128,9 @@ class PatentKGClient:
     def extract_rules(
         self,
         patent_text: str,
-        rule_types: List[str] = None,
-        keywords: List[str] = None
-    ) -> Dict[str, Any]:
+        rule_types: list[str] = None,
+        keywords: list[str] = None
+    ) -> dict[str, Any]:
         """
         提取规则
 
@@ -168,7 +166,7 @@ class PatentKGClient:
         similarity_threshold: float = 0.7,
         max_results: int = 10,
         collection: str = "patent_legal_vectors_1024"
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         相似度搜索
 
@@ -200,7 +198,7 @@ class PatentKGClient:
             logger.error(f"Similarity search failed: {e}")
             raise
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """获取服务统计"""
         try:
             response = self.session.get(f"{self.base_url}/stats")
@@ -211,7 +209,7 @@ class PatentKGClient:
             logger.error(f"Get statistics failed: {e}")
             raise
 
-    def get_capabilities(self) -> Dict[str, Any]:
+    def get_capabilities(self) -> dict[str, Any]:
         """获取服务能力"""
         try:
             response = self.session.get(f"{self.base_url}/capabilities")
@@ -247,10 +245,10 @@ class PatentKGAsyncClient:
         query: str,
         patent_text: str = "",
         context_type: str = "general",
-        context: Dict[str, Any] = None,
+        context: dict[str, Any] = None,
         user_id: str = None,
         application_id: str = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """异步查询知识图谱"""
         async with aiohttp.ClientSession(headers=self.headers) as session:
             data = {
@@ -268,9 +266,9 @@ class PatentKGAsyncClient:
 
     async def batch_query(
         self,
-        queries: List[Dict[str, Any]],
+        queries: list[dict[str, Any]],
         max_parallel: int = 5
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """异步批量查询"""
         async with aiohttp.ClientSession(headers=self.headers) as session:
             data = {

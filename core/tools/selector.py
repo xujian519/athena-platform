@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 工具选择器
 
@@ -12,7 +13,7 @@ Version: v1.0.0
 import logging
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from .base import ToolCategory, ToolDefinition, ToolPriority, ToolRegistry
 

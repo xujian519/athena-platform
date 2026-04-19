@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 错误处理模块 - Athena平台错误处理系统
 Error Handlers Module - Athena Platform Error Handling System

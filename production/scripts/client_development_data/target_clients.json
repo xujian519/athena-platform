@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "company_name": "山东中科先进技术有限公司",
+    "industry": "电子科技",
+    "email": "kyglb@sdiat.ac.cn",
+    "phone": "0531-80986098",
+    "level": "国家级小巨人",
+    "status": "未联系",
+    "contact_history": []
+  },
+  {
+    "id": 2,
+    "company_name": "济南晶正电子科技有限公司",
+    "industry": "电子材料",
+    "email": "info@nanoln.com",
+    "phone": "0531-88983077",
+    "level": "国家级小巨人",
+    "status": "未联系",
+    "contact_history": []
+  },
+  {
+    "id": 3,
+    "company_name": "智洋创新科技股份有限公司",
+    "industry": "数字技术",
+    "email": "zhiyangchuangxin@zhiyang.com.cn",
+    "phone": "0533-3580242",
+    "level": "上市公司",
+    "status": "未联系",
+    "contact_history": []
+  },
+  {
+    "id": 4,
+    "company_name": "济南镭迈机械科技有限公司",
+    "industry": "激光设备",
+    "email": "signcutokay@hotmail.com",
+    "phone": "0531-88988271",
+    "level": "高新技术企业",
+    "status": "未联系",
+    "contact_history": []
+  },
+  {
+    "id": 5,
+    "company_name": "山东莱博生物科技有限公司",
+    "industry": "生物医药",
+    "email": "labchina@126.com",
+    "phone": "0531-88875206",
+    "level": "高新技术企业",
+    "status": "未联系",
+    "contact_history": []
+  },
+  {
+    "id": 6,
+    "company_name": "济南沃茨数控机械有限公司",
+    "industry": "数控机械",
+    "email": "546354649@qq.com",
+    "phone": "0531-87986180",
+    "level": "专精特新",
+    "status": "未联系",
+    "contact_history": []
+  }
+]

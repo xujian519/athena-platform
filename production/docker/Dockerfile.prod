@@ -1,0 +1,113 @@
+# 生产环境Dockerfile - 多阶段构建优化
+# 基于Python 3.11-slim，优化安全性和性能
+
+# ========================================
+# 构建阶段 - 安装依赖和构建应用
+# ========================================
+FROM python:3.11-slim as builder
+
+# 设置构建环境变量
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# 安装构建工具
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# 创建应用用户
+RUN groupadd -r athena && useradd -r -g athena -d /app -s /bin/bash athena
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制依赖文件
+COPY requirements.txt requirements-prod.txt ./
+
+# 安装Python依赖
+RUN pip install --upgrade pip setuptools wheel && \
+    pip install -r requirements-prod.txt
+
+# ========================================
+# 运行阶段 - 最小化生产镜像
+# ========================================
+FROM python:3.11-slim as production
+
+# 安全标签
+LABEL maintainer="Athena Platform Team <team@athena-patent.com>" \
+      version="1.0.0" \
+      description="Athena Working Platform - Production Environment"
+
+# 设置生产环境变量
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PATH="/home/athena/.local/bin:$PATH" \
+    ATHENA_ENV="production"
+
+# 安装运行时依赖
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    netcat-traditional \
+    procps \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# 创建应用用户
+RUN groupadd -r athena && useradd -r -g athena -d /app -s /bin/bash athena
+
+# 从构建阶段复制Python包
+COPY --from=builder /usr/local/lib/python3.11/site-packages/ /usr/local/lib/python3.11/site-packages/
+COPY --from=builder /usr/local/bin/ /usr/local/bin/
+
+# 设置工作目录
+WORKDIR /app
+
+# 创建必要的目录
+RUN mkdir -p /app/logs /app/data /app/tmp /app/config && \
+    chown -R athena:athena /app
+
+# 复制应用代码
+COPY --chown=athena:athena . .
+
+# 设置权限
+RUN chmod +x scripts/*.sh || true && \
+    chmod -R 755 /app
+
+# 复制健康检查脚本
+COPY --chown=athena:athena docker/healthcheck.sh /usr/local/bin/healthcheck.sh
+RUN chmod +x /usr/local/bin/healthcheck.sh
+
+# 切换到非root用户
+USER athena
+
+# 暴露端口
+EXPOSE 8005
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD /usr/local/bin/healthcheck.sh
+
+# 启动命令
+CMD ["python3", "scripts/xiaonuo_unified_startup.py", "启动平台"]
+
+# ========================================
+# 安全扫描阶段 - 可选的安全检查
+# ========================================
+FROM production as security-scan
+
+# 安装安全扫描工具
+USER root
+RUN pip install safety bandit
+USER athena
+
+# 运行安全检查
+RUN safety check -r requirements-prod.txt || true
+RUN bandit -r core/ services/ -f json -o /app/security-report.json || true
+
+# 最终生产镜像
+FROM production

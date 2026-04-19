@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 状态持久化模块
 State Persistence Module

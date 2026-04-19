@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 网关能力选择器训练脚本
 Gateway Capability Selector Training Script
@@ -15,6 +16,7 @@ from datetime import datetime
 from typing import Any
 
 import jieba
+import numpy as np
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import accuracy_score, classification_report
@@ -51,8 +53,7 @@ GATEWAY_CAPABILITIES = [
     "enterprise",
     "quantization",
     "federated",
-    # 智能体能力(2种)
-    "yunxi",
+    # 智能体能力(1种)
     "xiaochen",
 ]
 
@@ -972,63 +973,6 @@ BALANCED_TRAINING_DATA = {
         "协作通信",
         "协作管理",
     ],
-    "yunxi": [
-        # 云溪智能体(10个)
-        "云溪",
-        "yunxi",
-        "云溪智能体",
-        "云溪助手",
-        "云溪服务",
-        "云溪功能",
-        "云溪能力",
-        "云溪系统",
-        "云溪平台",
-        "云溪工具",
-        # 云溪对话(10个)
-        "云溪对话",
-        "和云溪聊天",
-        "云溪聊天",
-        "云溪交流",
-        "云溪沟通",
-        "云溪问答",
-        "云溪咨询",
-        "云溪回复",
-        "云溪应答",
-        "云溪响应",
-        # 云溪分析(10个)
-        "云溪分析",
-        "云溪诊断",
-        "云溪评估",
-        "云溪检测",
-        "云溪监控",
-        "云溪优化",
-        "云溪改进",
-        "云溪提升",
-        "云溪建议",
-        "云溪推荐",
-        # 云溪协作(10个)
-        "云溪协作",
-        "云溪配合",
-        "云溪协同",
-        "云溪联动",
-        "云溪集成",
-        "云溪融合",
-        "云溪互通",
-        "云溪连接",
-        "云溪对接",
-        "云溪合作",
-        # 云溪管理(10个)
-        "云溪管理",
-        "云溪配置",
-        "云溪设置",
-        "云溪控制",
-        "云溪调度",
-        "云溪监控",
-        "云溪运维",
-        "云溪部署",
-        "云溪维护",
-        "云溪更新",
-    ],
     "xiaochen": [
         # 小晨智能体(10个)
         "小晨",
@@ -1216,7 +1160,6 @@ def extract_flat_features(text: str) -> dict[str, float]:
         "quantization_keywords": ["量化", "压缩", "精度", "加速", "模型", "推理", "训练", "优化"],
         "federated_keywords": ["联邦", "分布式", "隐私", "协同", "联合", "隐私保护", "协作学习"],
         # 智能体能力关键词
-        "yunxi_keywords": ["云溪", "yunxi", "云溪智能体", "云溪助手"],
         "xiaochen_keywords": ["小晨", "xiaochen", "小晨智能体", "小晨助手"],
     }
 
@@ -1459,7 +1402,6 @@ def test_capability_selector() -> Any:
         ("企业管理系统", "enterprise"),
         ("模型量化优化", "quantization"),
         ("联邦学习训练", "federated"),
-        ("云溪智能体服务", "yunxi"),
         ("小晨智能体对话", "xiaochen"),
     ]
 

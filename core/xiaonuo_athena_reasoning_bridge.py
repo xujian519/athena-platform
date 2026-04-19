@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺-Athena超级推理桥接器
 Xiaonuo-Athena Super Reasoning Bridge
@@ -14,8 +15,7 @@ import asyncio
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 # 配置日志
 logger = logging.getLogger(__name__)

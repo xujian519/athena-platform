@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 高级专利检索系统 - 提升检索准确性和覆盖范围
 Advanced Patent Search System - Enhanced Accuracy and Coverage
@@ -17,8 +18,6 @@ import time
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any
-
-
 
 logger = logging.getLogger(__name__)
 

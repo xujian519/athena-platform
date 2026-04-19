@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 常量定义 - Athena平台全局常量
 Constants - Athena Platform Global Constants

@@ -1,0 +1,36 @@
+{
+  "test_time": "2026-03-17T14:17:59.058629",
+  "feature_flags": {
+    "enable_intent_cache": true,
+    "intent_cache_ttl": 3600,
+    "intent_cache_threshold": 0.85,
+    "enable_tool_cache": true,
+    "tool_cache_ttl": 1800,
+    "enable_tool_cache_warmup": true,
+    "enable_recovery_monitoring": true,
+    "recovery_rate_target": 0.9,
+    "enable_recovery_dashboard": true,
+    "enable_unified_cache": true,
+    "enable_neo4j_indexes": true,
+    "enable_hnsw_search": true,
+    "enable_async_queries": true,
+    "performance_targets": {
+      "intent_accuracy": 0.93,
+      "tool_accuracy": 0.88,
+      "kg_query_latency_ms": 40,
+      "cache_hit_rate": 0.92,
+      "recovery_rate": 0.9,
+      "throughput_qps": 110
+    }
+  },
+  "tests": {
+    "feature_flags": true,
+    "intent_cache": false,
+    "tool_cache": "no_model",
+    "unified_cache": false,
+    "neo4j_indexes": "connection_failed",
+    "hnsw_search": false
+  },
+  "performance": {},
+  "overall_status": "failed"
+}

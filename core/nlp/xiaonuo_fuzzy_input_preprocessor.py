@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺模糊输入预处理器
 Xiaonuo Fuzzy Input Preprocessor
@@ -16,12 +17,9 @@ Xiaonuo Fuzzy Input Preprocessor
 """
 
 import base64
-from core.async_main import async_main
 import hashlib
 import html
 import json
-import logging
-from core.logging_config import setup_logging
 import os
 import re
 import sys
@@ -31,7 +29,9 @@ from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 添加模块路径
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -457,8 +457,8 @@ class FuzzyInputPreprocessor:
             try:
                 json.loads(text)
                 return InputType.STRUCTURED
-        except Exception as e:
-            logger.warning(f'操作失败: {e}')
+            except Exception as e:
+                logger.warning(f'操作失败: {e}')
 
         # 默认为文本
         return InputType.TEXT

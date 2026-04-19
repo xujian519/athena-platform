@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 从专利无效决定书中提取成功辩护样本
 Extract Successful Defense Samples from Patent Invalidation Decisions
@@ -20,7 +21,6 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
 
 
 @dataclass

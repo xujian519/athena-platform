@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 评估与反思引擎
 Evaluation and Reflection Engine
@@ -11,16 +10,14 @@ Evaluation and Reflection Engine
 """
 
 import asyncio
-from core.async_main import async_main
-import logging
-from typing import Dict, List, Any, Optional, Tuple
-from datetime import datetime, timedelta
-from dataclasses import dataclass, asdict
-from enum import Enum
 import json
-from pathlib import Path
-import numpy as np
+import logging
 from collections import defaultdict, deque
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
+from pathlib import Path
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -56,8 +53,8 @@ class Reflection:
     reflection_id: str
     type: ReflectionType
     topic: str
-    insights: List[str]
-    action_items: List[str]
+    insights: list[str]
+    action_items: list[str]
     impact_assessment: str
     confidence: float
     created_at: datetime
@@ -184,7 +181,7 @@ class EvaluationReflectionEngine:
             self.initialized = True  # 使用默认配置
 
     async def evaluate_performance(self, evaluation_type: EvaluationType,
-                                  data: Dict[str, Any]) -> Dict[str, Any]:
+                                  data: dict[str, Any]) -> dict[str, Any]:
         """
         评估性能
 
@@ -242,7 +239,7 @@ class EvaluationReflectionEngine:
             }
 
     async def reflect(self, reflection_type: ReflectionType,
-                      context: Dict[str, Any] = None) -> Dict[str, Any]:
+                      context: dict[str, Any] = None) -> dict[str, Any]:
         """
         执行反思
 
@@ -305,7 +302,7 @@ class EvaluationReflectionEngine:
             }
 
     async def get_evaluation_report(self, report_type: str = "comprehensive",
-                                   time_range: int = 30) -> Dict[str, Any]:
+                                   time_range: int = 30) -> dict[str, Any]:
         """
         获取评估报告
 
@@ -352,7 +349,7 @@ class EvaluationReflectionEngine:
             }
 
     async def _calculate_metrics(self, evaluation_type: EvaluationType,
-                                data: Dict[str, Any]) -> Dict[str, float]:
+                                data: dict[str, Any]) -> dict[str, float]:
         """计算指标"""
         metrics = {}
 
@@ -394,7 +391,7 @@ class EvaluationReflectionEngine:
         return metrics
 
     async def _analyze_trends(self, evaluation_type: EvaluationType,
-                            metrics: Dict[str, float]) -> Dict[str, str]:
+                            metrics: dict[str, float]) -> dict[str, str]:
         """分析趋势"""
         trends = {}
         category = evaluation_type.value
@@ -421,8 +418,8 @@ class EvaluationReflectionEngine:
         return trends
 
     async def _generate_insights(self, evaluation_type: EvaluationType,
-                                metrics: Dict[str, float],
-                                trends: Dict[str, str]) -> List[str]:
+                                metrics: dict[str, float],
+                                trends: dict[str, str]) -> list[str]:
         """生成洞察"""
         insights = []
         category = evaluation_type.value
@@ -447,7 +444,7 @@ class EvaluationReflectionEngine:
         return insights
 
     async def _update_metrics_history(self, evaluation_type: EvaluationType,
-                                    metrics: Dict[str, float]):
+                                    metrics: dict[str, float]):
         """更新指标历史"""
         category = evaluation_type.value
         timestamp = datetime.now()
@@ -460,8 +457,8 @@ class EvaluationReflectionEngine:
             })
 
     async def _check_reflection_triggers(self, evaluation_type: EvaluationType,
-                                       metrics: Dict[str, float],
-                                       trends: Dict[str, str]):
+                                       metrics: dict[str, float],
+                                       trends: dict[str, str]):
         """检查反思触发条件"""
         # 如果有关键指标下降，触发事件反思
         for metric_name, trend in trends.items():
@@ -476,7 +473,7 @@ class EvaluationReflectionEngine:
                 break
 
     async def _collect_reflection_data(self, reflection_type: ReflectionType,
-                                     context: Dict[str, Any] = None) -> Dict[str, Any]:
+                                     context: dict[str, Any] = None) -> dict[str, Any]:
         """收集反思数据"""
         data = {
             "type": reflection_type.value,
@@ -490,7 +487,7 @@ class EvaluationReflectionEngine:
 
         return data
 
-    async def _deep_analysis(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def _deep_analysis(self, data: dict[str, Any]) -> dict[str, Any]:
         """深度分析"""
         analysis = {
             "patterns": await self._identify_patterns(data),
@@ -501,25 +498,25 @@ class EvaluationReflectionEngine:
         }
         return analysis
 
-    async def _identify_patterns(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    async def _identify_patterns(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         """识别模式"""
         patterns = []
         # 简化实现，返回空列表
         return patterns
 
-    async def _find_correlations(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    async def _find_correlations(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         """发现关联"""
         correlations = []
         # 简化实现，返回空列表
         return correlations
 
-    async def _detect_anomalies(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    async def _detect_anomalies(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         """检测异常"""
         anomalies = []
         # 简化实现，返回空列表
         return anomalies
 
-    async def _identify_opportunities(self, data: Dict[str, Any]) -> List[str]:
+    async def _identify_opportunities(self, data: dict[str, Any]) -> list[str]:
         """识别机会"""
         opportunities = []
 
@@ -532,7 +529,7 @@ class EvaluationReflectionEngine:
 
         return opportunities
 
-    async def _assess_risks(self, data: Dict[str, Any]) -> List[str]:
+    async def _assess_risks(self, data: dict[str, Any]) -> list[str]:
         """评估风险"""
         risks = []
 
@@ -545,7 +542,7 @@ class EvaluationReflectionEngine:
 
         return risks
 
-    async def _generate_reflection_insights(self, analysis: Dict[str, Any]) -> List[str]:
+    async def _generate_reflection_insights(self, analysis: dict[str, Any]) -> list[str]:
         """生成反思洞察"""
         insights = []
 
@@ -566,7 +563,7 @@ class EvaluationReflectionEngine:
 
         return insights
 
-    async def _create_action_items(self, insights: List[str]) -> List[Dict[str, Any]]:
+    async def _create_action_items(self, insights: list[str]) -> list[dict[str, Any]]:
         """创建行动项"""
         action_items = []
 
@@ -588,8 +585,8 @@ class EvaluationReflectionEngine:
 
         return action_items
 
-    async def _assess_impact(self, insights: List[str],
-                           action_items: List[Dict[str, Any]]) -> str:
+    async def _assess_impact(self, insights: list[str],
+                           action_items: list[dict[str, Any]]) -> str:
         """评估影响"""
         high_priority_count = sum(1 for item in action_items if item.get("priority") == "high")
 
@@ -600,7 +597,7 @@ class EvaluationReflectionEngine:
         else:
             return "轻微影响，可持续改进"
 
-    async def _calculate_reflection_confidence(self, insights: List[str]) -> float:
+    async def _calculate_reflection_confidence(self, insights: list[str]) -> float:
         """计算反思置信度"""
         # 基于洞察数量和质量计算置信度
         if not insights:
@@ -610,7 +607,7 @@ class EvaluationReflectionEngine:
         return min(0.95, 0.6 + len(insights) * 0.1)
 
     async def _determine_reflection_topic(self, reflection_type: ReflectionType,
-                                        data: Dict[str, Any]) -> str:
+                                        data: dict[str, Any]) -> str:
         """确定反思主题"""
         if reflection_type == ReflectionType.DAILY:
             return "日常运营反思"
@@ -623,14 +620,14 @@ class EvaluationReflectionEngine:
         else:
             return "战略规划反思"
 
-    async def _execute_action_items(self, action_items: List[Dict[str, Any]]):
+    async def _execute_action_items(self, action_items: list[dict[str, Any]]):
         """执行行动项"""
         for item in action_items:
             # 这里应该实际执行行动
             logger.info(f"执行行动项: {item['action']}")
 
     async def _generate_comprehensive_report(self, start_date: datetime,
-                                           end_date: datetime) -> Dict[str, Any]:
+                                           end_date: datetime) -> dict[str, Any]:
         """生成综合报告"""
         report = {
             "report_type": "comprehensive",
@@ -646,7 +643,7 @@ class EvaluationReflectionEngine:
         }
         return report
 
-    async def _generate_summary(self) -> Dict[str, Any]:
+    async def _generate_summary(self) -> dict[str, Any]:
         """生成摘要"""
         return {
             "overall_health": "good",  # good/fair/poor
@@ -655,7 +652,7 @@ class EvaluationReflectionEngine:
             "next_focus": ["优化推理算法", "扩大案例库"]
         }
 
-    async def _generate_performance_section(self) -> Dict[str, Any]:
+    async def _generate_performance_section(self) -> dict[str, Any]:
         """生成性能部分"""
         return {
             "metrics": self.metrics["performance"],
@@ -667,7 +664,7 @@ class EvaluationReflectionEngine:
             }
         }
 
-    async def _generate_quality_section(self) -> Dict[str, Any]:
+    async def _generate_quality_section(self) -> dict[str, Any]:
         """生成质量部分"""
         return {
             "metrics": self.metrics["quality"],
@@ -680,7 +677,7 @@ class EvaluationReflectionEngine:
             }
         }
 
-    async def _generate_trends_section(self) -> Dict[str, Any]:
+    async def _generate_trends_section(self) -> dict[str, Any]:
         """生成趋势部分"""
         return {
             "improving_metrics": ["success_rate", "user_satisfaction"],
@@ -689,7 +686,7 @@ class EvaluationReflectionEngine:
             "trend_analysis": "整体呈积极发展趋势"
         }
 
-    async def _generate_recommendations(self) -> List[str]:
+    async def _generate_recommendations(self) -> list[str]:
         """生成建议"""
         return [
             "继续优化响应速度，目标控制在3秒内",
@@ -703,7 +700,7 @@ class EvaluationReflectionEngine:
         try:
             # 加载指标历史
             if self.metrics_file.exists():
-                with open(self.metrics_file, 'r', encoding='utf-8') as f:
+                with open(self.metrics_file, encoding='utf-8') as f:
                     data = json.load(f)
                     self.metrics = data.get("metrics", self.metrics)
 
@@ -714,7 +711,7 @@ class EvaluationReflectionEngine:
 
             # 加载反思记录
             if self.reflections_file.exists():
-                with open(self.reflections_file, 'r', encoding='utf-8') as f:
+                with open(self.reflections_file, encoding='utf-8') as f:
                     reflections_data = json.load(f)
                     for ref_data in reflections_data:
                         reflection = Reflection(**ref_data)
@@ -725,7 +722,7 @@ class EvaluationReflectionEngine:
         except Exception as e:
             logger.warning(f"加载历史数据失败: {str(e)}")
 
-    async def _save_evaluation_result(self, result: Dict[str, Any]):
+    async def _save_evaluation_result(self, result: dict[str, Any]):
         """保存评估结果"""
         # 简化实现，可以保存到数据库或文件
         pass
@@ -782,7 +779,7 @@ class EvaluationReflectionEngine:
                 logger.error(f"定期反思失败: {str(e)}")
 
     async def _generate_performance_report(self, start_date: datetime,
-                                         end_date: datetime) -> Dict[str, Any]:
+                                         end_date: datetime) -> dict[str, Any]:
         """生成性能报告"""
         # 返回性能相关的数据
         return {
@@ -795,7 +792,7 @@ class EvaluationReflectionEngine:
         }
 
     async def _generate_quality_report(self, start_date: datetime,
-                                     end_date: datetime) -> Dict[str, Any]:
+                                     end_date: datetime) -> dict[str, Any]:
         """生成质量报告"""
         return {
             "report_type": "quality",
@@ -807,7 +804,7 @@ class EvaluationReflectionEngine:
         }
 
     async def _generate_trend_report(self, start_date: datetime,
-                                   end_date: datetime) -> Dict[str, Any]:
+                                   end_date: datetime) -> dict[str, Any]:
         """生成趋势报告"""
         trends = {}
         for category in self.metrics:
@@ -859,7 +856,7 @@ async def main():
     print(f"反思结果: {reflection}")
 
     # 获取综合报告
-    report = await engine.get_evaluation_report("comprehensive", 7)
-    print(f"综合报告已生成")
+    await engine.get_evaluation_report("comprehensive", 7)
+    print("综合报告已生成")
 
 # 入口点: @async_main装饰器已添加到main函数

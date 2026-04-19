@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利代理领域增强意图识别器
 Patent Agent Enhanced Intent Recognition
@@ -10,8 +11,6 @@ Patent Agent Enhanced Intent Recognition
 版本: v2.0.0-patent-enhanced
 创建: 2026-01-13
 """
-import numpy as np
-
 import json
 import sys
 import time
@@ -19,6 +18,7 @@ from pathlib import Path
 from typing import Any
 
 import joblib
+import numpy as np
 import torch
 from transformers import AutoModel, AutoTokenizer
 

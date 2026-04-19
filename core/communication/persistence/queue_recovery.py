@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 队列恢复管理器
 Queue Recovery Manager

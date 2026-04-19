@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 冲突检测与拍卖管理器
 Conflict Detection and Auction Manager
@@ -16,7 +17,6 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any
-
 
 
 class ConflictType(Enum):
@@ -98,7 +98,9 @@ class ConflictDetector:
 
     def detect_conflicts(
         self,
-        tasks: list[dict[str, Any]],        resources: dict[str, dict[str, Any],        current_time: datetime,
+        tasks: list[dict[str, Any]],
+        resources: dict[str, dict[str, Any]],
+        current_time: datetime,
     ) -> list[ResourceConflict]:
         """检测所有类型的冲突"""
         conflicts = []
@@ -114,7 +116,9 @@ class ConflictDetector:
 
     def _detect_exclusive_resource_conflict(
         self,
-        tasks: list[dict[str, Any]],        resources: dict[str, dict[str, Any],        current_time: datetime,
+        tasks: list[dict[str, Any]],
+        resources: dict[str, dict[str, Any]],
+        current_time: datetime,
     ) -> list[ResourceConflict]:
         """检测独占资源冲突"""
         conflicts = []
@@ -153,7 +157,9 @@ class ConflictDetector:
 
     def _detect_capacity_conflict(
         self,
-        tasks: list[dict[str, Any]],        resources: dict[str, dict[str, Any],        current_time: datetime,
+        tasks: list[dict[str, Any]],
+        resources: dict[str, dict[str, Any]],
+        current_time: datetime,
     ) -> list[ResourceConflict]:
         """检测容量限制冲突"""
         conflicts = []
@@ -189,7 +195,9 @@ class ConflictDetector:
 
     def _detect_time_window_conflict(
         self,
-        tasks: list[dict[str, Any]],        resources: dict[str, dict[str, Any],        current_time: datetime,
+        tasks: list[dict[str, Any]],
+        resources: dict[str, dict[str, Any]],
+        current_time: datetime,
     ) -> list[ResourceConflict]:
         """检测时间窗口冲突"""
         conflicts = []
@@ -237,7 +245,9 @@ class ConflictDetector:
 
     def _detect_priority_deadlock(
         self,
-        tasks: list[dict[str, Any]],        resources: dict[str, dict[str, Any],        current_time: datetime,
+        tasks: list[dict[str, Any]],
+        resources: dict[str, dict[str, Any]],
+        current_time: datetime,
     ) -> list[ResourceConflict]:
         """检测优先级死锁"""
         conflicts = []
@@ -271,7 +281,9 @@ class ConflictDetector:
 
     def _detect_dependency_cycle(
         self,
-        tasks: list[dict[str, Any]],        resources: dict[str, dict[str, Any],        current_time: datetime,
+        tasks: list[dict[str, Any]],
+        resources: dict[str, dict[str, Any]],
+        current_time: datetime,
     ) -> list[ResourceConflict]:
         """检测依赖循环"""
         conflicts = []
@@ -325,12 +337,12 @@ class ConflictDetector:
         return conflicts
 
     def _time_overlap(
-        self, task: dict[str, Any], resource_id: str, all_tasks: list[dict[str, Any]) -> bool:
+        self, task: dict[str, Any], resource_id: str, all_tasks: list[dict[str, Any]]) -> bool:
         """检查任务时间重叠"""
         # 简化实现
         return True
 
-    def _time_windows_overlap(self, task1: dict[dict[str, str]] -> bool:
+    def _time_windows_overlap(self, task1: dict[str, str], task2: dict[str, str]) -> bool:
         """检查两个任务的时间窗口是否重叠"""
         start1 = task1.get("start_time", datetime.now())
         end1 = task1.get("end_time", datetime.now() + timedelta(hours=1))
@@ -391,12 +403,12 @@ class AuctionManager:
         return result
 
     def calculate_shapley_values(
-        self, conflict: ResourceConflict, tasks: list[dict[str, Any]) -> dict[str, float]:
+        self, conflict: ResourceConflict, tasks: list[dict[str, Any]]) -> dict[str, float]:
         """计算Shapley值进行公平分配"""
         return self.shapley_calculator.calculate(conflict, tasks)
 
     def _collect_bids(
-        self, conflict: ResourceConflict, tasks: list[dict[str, Any]], agents: list[dict[str, Any]) -> list[Bid]:
+        self, conflict: ResourceConflict, tasks: list[dict[str, Any]], agents: list[dict[str, Any]]) -> list[Bid]:
         """收集出价"""
         bids = []
 
@@ -577,7 +589,7 @@ class AuctionManager:
 
         return result
 
-    def _can_agent_handle_task(self, agent: dict[dict[str, str]] -> bool:
+    def _can_agent_handle_task(self, agent: dict[str, str], task: dict[str, str]) -> bool:
         """检查智能体是否能处理任务"""
         task_requirements = task.get("required_capabilities", [])
         agent_capabilities = agent.get("capabilities", [])
@@ -658,7 +670,7 @@ class ShapleyValueCalculator:
     """Shapley值计算器"""
 
     def calculate(
-        self, conflict: ResourceConflict, tasks: list[dict[str, Any]) -> dict[str, float]:
+        self, conflict: ResourceConflict, tasks: list[dict[str, Any]]) -> dict[str, float]:
         """计算Shapley值"""
         n = len(conflict.competing_tasks)
         if n == 0:

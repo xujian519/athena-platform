@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 法律文本解析器 - 精细化解析法律条、款、项
 用于法律文档的深度处理和知识图谱构建
 """
 
-import re
-from core.async_main import async_main
 import json
-from typing import List, Dict, Optional, Tuple
-from dataclasses import dataclass, asdict
+import logging
+import re
+from dataclasses import dataclass
 from enum import Enum
+
+logger = logging.getLogger(__name__)
 
 
 class LawLevel(Enum):
@@ -116,7 +117,7 @@ class LegalTextParser:
         # 普通:地方性法规、规章等
         return LawImportance.NORMAL
 
-    def parse_law_text(self, content: str, law_id: str, title: str) -> Dict:
+    def parse_law_text(self, content: str, law_id: str, title: str) -> dict:
         """解析法律文本"""
         importance = self.determine_importance(title)
 
@@ -128,7 +129,7 @@ class LegalTextParser:
         else:
             return self._parse_normal_quality(content, law_id, title)
 
-    def _parse_high_quality(self, content: str, law_id: str, title: str) -> Dict:
+    def _parse_high_quality(self, content: str, law_id: str, title: str) -> dict:
         """
         高质量解析:拆分到条、款、项
         用于民法典等重要法律
@@ -144,8 +145,6 @@ class LegalTextParser:
 
         lines = content.split('\n')
         current_article = None
-        current_paragraph_num = 0
-        current_item_num = 0
         article_order = 0
 
         i = 0
@@ -202,7 +201,7 @@ class LegalTextParser:
 
         return result
 
-    def _parse_medium_quality(self, content: str, law_id: str, title: str) -> Dict:
+    def _parse_medium_quality(self, content: str, law_id: str, title: str) -> dict:
         """
         中等质量解析:拆分到条和主要项
         用于普通法律
@@ -240,12 +239,14 @@ class LegalTextParser:
 
                 result['articles'].append(article)
 
-            except Exception as e:  # TODO
+            except (ValueError, KeyError, AttributeError) as e:
+                # 解析失败时跳过该条目
+                logger.debug(f"文章解析跳过: {e}")
                 continue
 
         return result
 
-    def _parse_normal_quality(self, content: str, law_id: str, title: str) -> Dict:
+    def _parse_normal_quality(self, content: str, law_id: str, title: str) -> dict:
         """
         普通解析:按段落分割
         用于地方法规等
@@ -267,7 +268,7 @@ class LegalTextParser:
             'paragraphs': paragraphs
         }
 
-    def _parse_paragraphs_and_items(self, content: str, article_id: str, law_id: str) -> tuple[List, List]:
+    def _parse_paragraphs_and_items(self, content: str, article_id: str, law_id: str) -> tuple[list, list]:
         """解析款和项"""
         paragraphs = []
         items = []

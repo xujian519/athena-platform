@@ -5,21 +5,17 @@ Athena平台实时协作系统
 """
 
 import asyncio
-from core.async_main import async_main
-import hashlib
 import json
-import logging
-from core.logging_config import setup_logging
-import time
 import uuid
-from collections import OrderedDict, defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Set, Union
+from typing import Any
 
 import diff_match_patch as dmp_module
 import websockets
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -61,7 +57,7 @@ class User:
     email: str
     avatar_url: str | None = None
     role: str = 'editor'  # owner, editor, viewer
-    permissions: Set[str] = field(default_factory=set)
+    permissions: set[str] = field(default_factory=set)
     is_online: bool = True
     last_active: datetime = field(default_factory=datetime.now)
     cursor_position: int | None = None
@@ -77,7 +73,7 @@ class DocumentVersion:
     author_id: str
     changes_summary: str
     parent_version_id: str | None = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class Operation:
@@ -89,9 +85,9 @@ class Operation:
     position: int
     content: str | None = None
     length: int | None = None
-    attributes: Dict[str, Any] = field(default_factory=dict)
+    attributes: dict[str, Any] = field(default_factory=dict)
     timestamp: datetime = field(default_factory=datetime.now)
-    author_info: Dict[str, Any] = field(default_factory=dict)
+    author_info: dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class Comment:
@@ -105,7 +101,7 @@ class Comment:
     resolved: bool = False
     resolved_by: str | None = None
     resolved_at: datetime | None = None
-    replies: List[Dict[str, Any]] = field(default_factory=list)
+    replies: list[dict[str, Any]] = field(default_factory=list)
 
 @dataclass
 class CollaborationEvent:
@@ -114,7 +110,7 @@ class CollaborationEvent:
     event_type: CollaborationEventType
     user_id: str
     document_id: str
-    data: Dict[str, Any] = field(default_factory=dict)
+    data: dict[str, Any] = field(default_factory=dict)
     timestamp: datetime = field(default_factory=datetime.now)
 
 class DocumentLockManager:
@@ -199,7 +195,7 @@ class DocumentLockManager:
 
         return self.locks[lock_key]['user_id'] != user_id
 
-    def get_lock_info(self, document_id: str, section_id: str) -> Dict[str, Any | None]:
+    def get_lock_info(self, document_id: str, section_id: str) -> dict[str, Any | None]:
         """获取锁信息"""
         lock_key = f"{document_id}_{section_id}"
         return self.locks.get(lock_key)
@@ -613,7 +609,7 @@ class CollaborationSession:
         self.versions.append(version)
         return version
 
-    def get_session_stats(self) -> Dict[str, Any]:
+    def get_session_stats(self) -> dict[str, Any]:
         """获取会话统计"""
         online_users = sum(1 for user in self.users.values() if user.is_online)
 
@@ -717,7 +713,7 @@ class RealtimeCollaborationServer:
                 if session and websocket.user_id:
                     await self._handle_user_offline(session, websocket.user_id)
 
-    def _parse_websocket_path(self, path: str) -> Dict[str, str]:
+    def _parse_websocket_path(self, path: str) -> dict[str, str]:
         """解析WebSocket路径"""
         # 简单的路径解析: /ws/collaboration/{session_id}?user_id={user_id}
         parts = path.strip('/').split('/')
@@ -865,7 +861,7 @@ class RealtimeCollaborationServer:
         if not has_connection:
             await session.remove_user(user_id)
 
-    def get_all_sessions(self) -> List[Dict[str, Any]]:
+    def get_all_sessions(self) -> list[dict[str, Any]]:
         """获取所有会话信息"""
         return [
             {
@@ -874,7 +870,7 @@ class RealtimeCollaborationServer:
                 'online_users': sum(1 for user in session.users.values() if user.is_online),
                 'total_operations': len(session.operations),
                 'total_comments': len(session.comments),
-                'created_at': min((u.last_active for u in session.users.values())).isoformat() if session.users else None
+                'created_at': min(u.last_active for u in session.users.values()).isoformat() if session.users else None
             }
             for session in self.sessions.values()
         ]

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强缓存管理器
 Advanced Cache Manager
@@ -15,7 +16,7 @@ from collections import OrderedDict
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from functools import wraps
-from typing import Any, Dict, Optional, TypeVar, Union
+from typing import Any, TypeVar
 
 logger = logging.getLogger(__name__)
 
@@ -224,7 +225,7 @@ class LRUCache:
                 self._stats["expirations"] = 0
         logger.info("缓存已清空")
 
-    def cached(self, ttl: int, = None, key_fn: Callable | None = None) -> Any:
+    def cached(self, ttl: int | None = None, key_fn: Callable | None = None) -> Any:
         """
         缓存装饰器
 

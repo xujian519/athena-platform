@@ -1,0 +1,124 @@
+{
+  "cleanup_timestamp": "2025-12-12T16:30:00+08:00",
+  "cleaned_by": "小诺 (Xiaonuo)",
+  "directory": "/Users/xujian/Athena工作平台",
+  "actions_taken": {
+    "deleted_files": [
+      {
+        "file": ".DS_Store",
+        "size": "68.00 KB",
+        "reason": "macOS系统垃圾文件"
+      },
+      {
+        "file": "test_document.pdf",
+        "size": "592 B",
+        "reason": "临时测试文件"
+      },
+      {
+        "file": "test_document.txt",
+        "size": "319 B",
+        "reason": "临时测试文件"
+      },
+      {
+        "file": ".amap_mcp_configured",
+        "size": "0 B",
+        "reason": "空配置文件"
+      }
+    ],
+    "archived_reports": [
+      {
+        "file": "DEPLOYMENT_GUIDE.md",
+        "size": "14.22 KB",
+        "destination": "reports/archive/"
+      },
+      {
+        "file": "deployment_info.json",
+        "size": "9.32 KB",
+        "destination": "reports/archive/"
+      },
+      {
+        "file": "IMPLEMENTATION_COMPLETE.md",
+        "size": "5.50 KB",
+        "destination": "reports/archive/"
+      },
+      {
+        "file": "MIGRATION_SUMMARY.md",
+        "size": "5.07 KB",
+        "destination": "reports/archive/"
+      },
+      {
+        "file": "OPTIMIZATION_COMPLETE.md",
+        "size": "4.44 KB",
+        "destination": "reports/archive/"
+      },
+      {
+        "file": "PRODUCTION_DEPLOYMENT_COMPLETE.md",
+        "size": "14.68 KB",
+        "destination": "reports/archive/"
+      },
+      {
+        "file": "qdrant_consolidation_report.json",
+        "size": "18.98 KB",
+        "destination": "reports/archive/"
+      },
+      {
+        "file": "optimization_report.json",
+        "size": "7.62 KB",
+        "destination": "reports/archive/"
+      },
+      {
+        "file": "service_status_report_20251212_1552.md",
+        "size": "4.25 KB",
+        "destination": "reports/archive/"
+      },
+      {
+        "file": "tasks_completion_report_20251212_1600.md",
+        "size": "4.98 KB",
+        "destination": "reports/archive/"
+      },
+      {
+        "file": "migration_report.json",
+        "size": "764 B",
+        "destination": "reports/archive/"
+      },
+      {
+        "file": "migration_client_update_summary.json",
+        "size": "431 B",
+        "destination": "reports/archive/"
+      }
+    ],
+    "moved_scripts": [
+      {
+        "file": "start_with_local_models.sh",
+        "size": "1.02 KB",
+        "destination": "dev/scripts/"
+      },
+      {
+        "file": "start_amap_mcp",
+        "size": "292 B",
+        "destination": "dev/scripts/"
+      }
+    ]
+  },
+  "summary": {
+    "total_files_processed": 18,
+    "deleted_files": 4,
+    "archived_files": 12,
+    "moved_files": 2,
+    "space_saved": "约93 KB",
+    "directory_cleaned": true
+  },
+  "remaining_root_files": [
+    ".env.platform",
+    ".env_models",
+    ".gitignore",
+    "docker-compose.quick.yml",
+    "xiaonuo_learning_guide.md"
+  ],
+  "recommendations": [
+    "保留.env.*文件 - 这些是环境配置文件",
+    "保留.docker-compose.quick.yml - 快速启动配置",
+    "保留.xiaonuo_learning_guide.md - 项目文档",
+    "建议定期清理reports/archive目录中的旧报告"
+  ]
+}

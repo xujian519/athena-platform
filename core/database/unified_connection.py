@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一数据库连接管理模块
 Unified Database Connection Manager
@@ -12,7 +13,7 @@ Unified Database Connection Manager
 import logging
 from contextlib import asynccontextmanager, contextmanager
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +38,7 @@ class PostgreSQLConnection:
             logger.info(f"PostgreSQL连接池已创建: {min_size}-{max_size}")
             return self._pool
         except ImportError:
-            raise ImportError("需要安装asyncpg: pip install asyncpg")
+            raise ImportError("需要安装asyncpg: pip install asyncpg") from None
 
     @asynccontextmanager
     async def connection(self):
@@ -265,7 +266,7 @@ class Psycopg2Connection:
             import psycopg2
             from psycopg2.extras import RealDictCursor
         except ImportError:
-            raise ImportError("需要安装psycopg2: pip install psycopg2-binary")
+            raise ImportError("需要安装psycopg2: pip install psycopg2-binary") from None
 
         self._conn = psycopg2.connect(
             host=self.host,

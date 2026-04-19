@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律世界模型 - 综合集成测试
 Legal World Model - Comprehensive Integration Test

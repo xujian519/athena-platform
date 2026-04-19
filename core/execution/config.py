@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena执行系统 - 统一配置管理
 Unified Configuration Management for Execution System
@@ -16,7 +17,7 @@ Unified Configuration Management for Execution System
 
 import logging
 import os
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Optional
 

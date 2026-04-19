@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 异步任务队列
 支持任务优先级、并发控制、状态跟踪
@@ -6,12 +7,13 @@ Athena 感知模块 - 异步任务队列
 """
 
 import asyncio
-import uuid
 import logging
-from datetime import datetime
-from typing import Optional, Dict, Any, List, Callable, Awaitable
-from enum import Enum
+import uuid
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -87,13 +89,13 @@ class AsyncTaskQueue:
         self._queue: asyncio.PriorityQueue = asyncio.PriorityQueue(maxsize=max_queue_size)
 
         # 任务存储
-        self._tasks: Dict[str, Task] = {}
+        self._tasks: dict[str, Task] = {}
 
         # 并发控制
         self._semaphore = asyncio.Semaphore(max_concurrent_tasks)
 
         # 工作任务
-        self._worker_tasks: List[asyncio.Task] = []
+        self._worker_tasks: list[asyncio.Task] = []
 
         # 队列状态
         self._running = False
@@ -208,7 +210,7 @@ class AsyncTaskQueue:
             return task_id
         except asyncio.QueueFull:
             del self._tasks[task_id]
-            raise RuntimeError("任务队列已满")
+            raise RuntimeError("任务队列已满") from None
 
     async def get_task(self, task_id: str) -> Task | None:
         """
@@ -382,7 +384,7 @@ class AsyncTaskQueue:
                 self.stats["failed"] += 1
                 logger.error(f"[{worker_name}] 任务失败: {task.id} - {e}")
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """
         获取统计信息
 
@@ -421,7 +423,7 @@ class AsyncTaskQueue:
             )
         }
 
-    def get_queue_info(self) -> List[Dict[str, Any]]:
+    def get_queue_info(self) -> list[dict[str, Any]]:
         """
         获取队列信息
 

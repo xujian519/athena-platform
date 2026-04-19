@@ -1,0 +1,110 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-01-23T00:00:00Z",
+  "description": "Athena统一LLM层 - 模型能力注册表",
+  "models": [
+    {
+      "model_id": "glm-4-plus",
+      "model_type": "reasoning",
+      "deployment": "cloud",
+      "max_context": 128000,
+      "supports_streaming": true,
+      "supports_function_call": true,
+      "supports_vision": false,
+      "supports_thinking": true,
+      "avg_latency_ms": 1500,
+      "throughput_tps": 80,
+      "cost_per_1k_tokens": 0.05,
+      "quality_score": 0.95,
+      "suitable_tasks": [
+        "novelty_analysis",
+        "creativity_analysis",
+        "invalidation_analysis",
+        "oa_response",
+        "reasoning",
+        "complex_analysis"
+      ],
+      "unsuitable_tasks": ["simple_chat"]
+    },
+    {
+      "model_id": "glm-4-flash",
+      "model_type": "reasoning",
+      "deployment": "cloud",
+      "max_context": 200000,
+      "supports_streaming": true,
+      "supports_function_call": true,
+      "supports_vision": false,
+      "supports_thinking": false,
+      "avg_latency_ms": 800,
+      "throughput_tps": 120,
+      "cost_per_1k_tokens": 0.01,
+      "quality_score": 0.90,
+      "suitable_tasks": ["simple_chat", "general_chat", "simple_qa", "reasoning", "tech_analysis", "patent_search", "general_analysis"],
+      "unsuitable_tasks": []
+    },
+    {
+      "model_id": "deepseek-chat",
+      "model_type": "chat",
+      "deployment": "cloud",
+      "max_context": 64000,
+      "supports_streaming": true,
+      "supports_function_call": false,
+      "supports_vision": false,
+      "supports_thinking": false,
+      "avg_latency_ms": 1200,
+      "throughput_tps": 60,
+      "cost_per_1k_tokens": 0.014,
+      "quality_score": 0.85,
+      "suitable_tasks": ["general_chat", "simple_chat", "conversation", "qa", "simple_qa"],
+      "unsuitable_tasks": ["complex_reasoning"]
+    },
+    {
+      "model_id": "deepseek-reasoner",
+      "model_type": "reasoning",
+      "deployment": "cloud",
+      "max_context": 64000,
+      "supports_streaming": true,
+      "supports_function_call": false,
+      "supports_vision": false,
+      "supports_thinking": true,
+      "avg_latency_ms": 2000,
+      "throughput_tps": 40,
+      "cost_per_1k_tokens": 0.055,
+      "quality_score": 0.92,
+      "suitable_tasks": [
+        "novelty_analysis",
+        "creativity_analysis",
+        "math_reasoning",
+        "complex_reasoning"
+      ],
+      "unsuitable_tasks": ["simple_chat"]
+    },
+    {
+      "model_id": "qwen2.5-7b-instruct-gguf",
+      "model_type": "chat",
+      "deployment": "local",
+      "max_context": 8192,
+      "supports_streaming": false,
+      "supports_function_call": false,
+      "supports_vision": false,
+      "supports_thinking": false,
+      "avg_latency_ms": 3000,
+      "throughput_tps": 15,
+      "cost_per_1k_tokens": 0.0,
+      "quality_score": 0.75,
+      "suitable_tasks": ["general_chat", "simple_chat", "simple_qa", "draft", "conversation"],
+      "unsuitable_tasks": [
+        "complex_reasoning",
+        "novelty_analysis",
+        "creativity_analysis"
+      ]
+    }
+  ],
+  "model_groups": {
+    "reasoning_models": ["glm-4-plus", "deepseek-reasoner"],
+    "chat_models": ["deepseek-chat", "glm-4-plus", "glm-4-flash", "qwen2.5-7b-instruct-gguf"],
+    "fast_models": ["glm-4-flash"],
+    "local_models": ["qwen2.5-7b-instruct-gguf"],
+    "free_models": ["qwen2.5-7b-instruct-gguf"]
+  }
+}

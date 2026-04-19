@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多搜索引擎集成模块 - 公共接口
 Multiple Search Engines Integration - Public Interface

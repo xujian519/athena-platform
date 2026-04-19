@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强评估模块测试脚本
 Test Enhanced Evaluation Module
@@ -261,7 +262,7 @@ async def test_enhanced_evaluation_module():
         logger.info("🎉 增强评估模块测试完成 - 所有测试通过!")
         return True
 
-    except Exception as e:
+    except Exception:
         import traceback
 
         traceback.print_exc()
@@ -339,7 +340,7 @@ async def test_evaluation_scenarios():
         await evaluation_module.shutdown()
         return True
 
-    except Exception as e:
+    except Exception:
         return False
 
 

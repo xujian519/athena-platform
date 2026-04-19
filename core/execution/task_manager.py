@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 任务管理器 - 兼容性实现
 Task Manager - Compatibility Implementation
@@ -18,7 +19,7 @@ import logging
 import uuid
 from collections.abc import Callable
 from datetime import datetime, timedelta
-from typing import Any, Optional
+from typing import Any
 
 # 从统一的 shared_types.py 导入类型定义
 from .shared_types import Task, TaskPriority, TaskStatus

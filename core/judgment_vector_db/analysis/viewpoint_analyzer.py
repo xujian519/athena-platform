@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 观点聚合分析器
 Viewpoint Aggregation Analyzer for Patent Judgments
@@ -15,7 +16,7 @@ import re
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -184,7 +185,7 @@ class ViewpointAnalyzer:
         return trends
 
     def generate_analysis_report(
-        self, query: str, analysis_types: list["key"] = None
+        self, query: str, analysis_types: list[str] = None
     ) -> dict[str, Any]:
         """
         生成综合分析报告
@@ -358,7 +359,7 @@ class ViewpointAnalyzer:
 
     def _build_timeline(
         self, results: list, start_year: int, end_year: int
-    ) -> dict[str, list[tuple[int, int]:
+    ) -> dict[str, list[tuple[int, int]]]:
         """构建时间线"""
         timelines = defaultdict(lambda: defaultdict(int))
 
@@ -381,7 +382,7 @@ class ViewpointAnalyzer:
 
         return timeline_dict
 
-    def _analyze_trend(self, topic: str, year_counts: list[tuple[int, int]) -> TemporalTrend:
+    def _analyze_trend(self, topic: str, year_counts: list[tuple[int, int]]) -> TemporalTrend:
         """分析单个趋势"""
         if len(year_counts) < 2:
             return TemporalTrend(
@@ -458,7 +459,7 @@ class ViewpointAnalyzer:
 
 # 便捷函数
 def create_viewpoint_analyzer(
-    Optional[postgres_client, hybrid_retriever, config: dict[str, Any] | None = None
+    postgres_client=None, hybrid_retriever=None, config: dict[str, Any] | None = None
 ) -> ViewpointAnalyzer:
     """
     创建观点分析器

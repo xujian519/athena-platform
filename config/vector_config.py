@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -49,16 +49,27 @@ COLLECTION_DISPLAY_NAMES = {
 
 # 模型配置
 MODEL_CONFIGS = {
-    # 中文BERT模型
-    'bert_chinese': {
-        'name': 'bert-base-chinese',
+    # BGE-M3 (默认, 通过 OpenAI 兼容 API 服务)
+    'bge_m3': {
+        'name': 'bge-m3',
+        'type': 'api',
+        'api_url': 'http://127.0.0.1:8766/v1',
+        'dimension': VECTOR_DIMENSION,
+        'max_length': 8192
+    },
+
+    # BGE-Large-ZH (备用, 本地 SentenceTransformer)
+    'bge_large_zh': {
+        'name': 'BAAI/bge-large-zh-v1.5',
+        'type': 'local',
         'dimension': VECTOR_DIMENSION,
         'max_length': 512
     },
 
-    # BGE大模型
-    'bge_large_zh': {
-        'name': 'BAAI/bge-large-zh-v1.5',
+    # 中文BERT模型
+    'bert_chinese': {
+        'name': 'bert-base-chinese',
+        'type': 'local',
         'dimension': VECTOR_DIMENSION,
         'max_length': 512
     },
@@ -66,10 +77,14 @@ MODEL_CONFIGS = {
     # 法律专用模型
     'legal_electra': {
         'name': 'chinese_legal_electra',
+        'type': 'local',
         'dimension': VECTOR_DIMENSION,
         'max_length': 512
     }
 }
+
+# 默认嵌入模型
+DEFAULT_EMBEDDING_MODEL = 'bge_m3'
 
 # Qdrant配置
 QDRANT_CONFIG = {
@@ -112,7 +127,7 @@ def validate_vector_dimension(vector) -> bool:
     return False
 
 if __name__ == '__main__':
-    logger.info(f"🚀 Athena工作平台向量配置")
+    logger.info("🚀 Athena工作平台向量配置")
     logger.info(f"📏 标准向量维度: {VECTOR_DIMENSION}")
     logger.info(f"📚 向量集合数量: {len(COLLECTION_CONFIGS)}")
     logger.info(f"🤖 支持模型数量: {len(MODEL_CONFIGS)}")

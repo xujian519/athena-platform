@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 统一可视化创建模块
 Unified Visualization Creation Module
@@ -20,21 +19,19 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 try:
-from intelligent_caller import ScenarioContext, ToolSelection, intelligent_caller
+    from intelligent_caller import ScenarioContext, ToolSelection, intelligent_caller
     pass  # 实际导入在下面
 except ImportError:
     intelligent_caller = None  # 可选依赖未安装
 
 # 导入LangChain基础
-from langchain.tools import BaseTool
 
 # 导入现有可视化工具
 from langchain_tools import DrawIOTool, EChartsTool, ExcalidrawTool
-from pydantic import BaseModel, Field
-from visualization_insights import VisualizationAnalyzer, VisualizationType
+from visualization_insights import VisualizationAnalyzer
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +62,7 @@ class VisualizationRequest:
 
     # 用户输入
     query: str = ''                           # 用户查询描述
-    raw_data: Optional[Dict[str, Any]] = None  # 原始数据（用于图表）
+    raw_data: dict[str, Any] | None = None  # 原始数据（用于图表）
     sketch_image: bytes | None = None      # 手绘草图图像
 
     # 分类信息
@@ -75,7 +72,7 @@ class VisualizationRequest:
     # 输出要求
     output_format: str = 'svg'                # svg, png, jpg, json, html
     style: str = 'modern'                     # modern, classic, minimalist, hand_drawn
-    size: Tuple[int, int] = (800, 600)       # (width, height)
+    size: tuple[int, int] = (800, 600)       # (width, height)
 
     # 上下文信息
     use_case: str = 'general'                 # general, patent, presentation, documentation
@@ -85,7 +82,7 @@ class VisualizationRequest:
     # 元数据
     title: str = ''
     description: str = ''
-    tags: List[str] = field(default_factory=list)
+    tags: list[str] = field(default_factory=list)
     created_at: datetime = field(default_factory=datetime.now)
 
 @dataclass
@@ -97,8 +94,8 @@ class VisualizationResult:
     category: str
 
     # 输出内容
-    result_data: Union[str, bytes, Dict[str, Any]]
-    metadata: Dict[str, Any]
+    result_data: str | bytes | dict[str, Any]
+    metadata: dict[str, Any]
 
     # 质量指标
     confidence: float = 0.0
@@ -107,11 +104,11 @@ class VisualizationResult:
 
     # 多工具协作信息
     primary_result: Any | None = None
-    secondary_results: List[Any] = field(default_factory=list)
+    secondary_results: list[Any] = field(default_factory=list)
 
     # 错误信息
     error_message: str | None = None
-    warnings: List[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
 
     # 时间戳
     created_at: datetime = field(default_factory=datetime.now)
@@ -125,7 +122,7 @@ class BaseVisualizationTool(ABC):
         self.langchain_tool = None
 
     @abstractmethod
-    async def can_handle(self, request: VisualizationRequest) -> Tuple[bool, float]:
+    async def can_handle(self, request: VisualizationRequest) -> tuple[bool, float]:
         """判断是否能处理该请求，返回(是否可以处理, 置信度)"""
         pass
 
@@ -135,12 +132,12 @@ class BaseVisualizationTool(ABC):
         pass
 
     @abstractmethod
-    def get_supported_categories(self) -> List[VisualizationCategory]:
+    def get_supported_categories(self) -> list[VisualizationCategory]:
         """获取支持的类别"""
         pass
 
     @abstractmethod
-    def get_supported_formats(self) -> List[str]:
+    def get_supported_formats(self) -> list[str]:
         """获取支持的输出格式"""
         pass
 
@@ -151,7 +148,7 @@ class SketchAgentTool(BaseVisualizationTool):
         super().__init__('SketchAgent', VisualizationTool.SKETCHAGENT)
         self.api_endpoint = 'http://localhost:8080/generate'
 
-    async def can_handle(self, request: VisualizationRequest) -> Tuple[bool, float]:
+    async def can_handle(self, request: VisualizationRequest) -> tuple[bool, float]:
         """判断SketchAgent是否能处理该请求"""
         confidence = 0.0
 
@@ -231,10 +228,10 @@ class SketchAgentTool(BaseVisualizationTool):
                 error_message=str(e)
             )
 
-    def get_supported_categories(self) -> List[VisualizationCategory]:
+    def get_supported_categories(self) -> list[VisualizationCategory]:
         return [VisualizationCategory.DIAGRAM, VisualizationCategory.SKETCH]
 
-    def get_supported_formats(self) -> List[str]:
+    def get_supported_formats(self) -> list[str]:
         return ['svg', 'png', 'jpg']
 
 class DrawIOToolAdapter(BaseVisualizationTool):
@@ -245,7 +242,7 @@ class DrawIOToolAdapter(BaseVisualizationTool):
         # 使用现有的LangChain工具
         self.langchain_tool = DrawIOTool()
 
-    async def can_handle(self, request: VisualizationRequest) -> Tuple[bool, float]:
+    async def can_handle(self, request: VisualizationRequest) -> tuple[bool, float]:
         """判断Draw.io是否能处理该请求"""
         confidence = 0.0
 
@@ -317,10 +314,10 @@ class DrawIOToolAdapter(BaseVisualizationTool):
                 error_message=str(e)
             )
 
-    def get_supported_categories(self) -> List[VisualizationCategory]:
+    def get_supported_categories(self) -> list[VisualizationCategory]:
         return [VisualizationCategory.DIAGRAM]
 
-    def get_supported_formats(self) -> List[str]:
+    def get_supported_formats(self) -> list[str]:
         return ['svg', 'png', 'jpg', 'xml', 'html']
 
 class EChartsToolAdapter(BaseVisualizationTool):
@@ -330,7 +327,7 @@ class EChartsToolAdapter(BaseVisualizationTool):
         super().__init__('ECharts', VisualizationTool.ECHARTS)
         self.langchain_tool = EChartsTool()
 
-    async def can_handle(self, request: VisualizationRequest) -> Tuple[bool, float]:
+    async def can_handle(self, request: VisualizationRequest) -> tuple[bool, float]:
         """判断ECharts是否能处理该请求"""
         confidence = 0.0
 
@@ -399,10 +396,10 @@ class EChartsToolAdapter(BaseVisualizationTool):
                 error_message=str(e)
             )
 
-    def get_supported_categories(self) -> List[VisualizationCategory]:
+    def get_supported_categories(self) -> list[VisualizationCategory]:
         return [VisualizationCategory.CHART, VisualizationCategory.INTERACTIVE]
 
-    def get_supported_formats(self) -> List[str]:
+    def get_supported_formats(self) -> list[str]:
         return ['html', 'json', 'png', 'jpg']
 
 class ExcalidrawToolAdapter(BaseVisualizationTool):
@@ -412,7 +409,7 @@ class ExcalidrawToolAdapter(BaseVisualizationTool):
         super().__init__('Excalidraw', VisualizationTool.EXCALIDRAW)
         self.langchain_tool = ExcalidrawTool()
 
-    async def can_handle(self, request: VisualizationRequest) -> Tuple[bool, float]:
+    async def can_handle(self, request: VisualizationRequest) -> tuple[bool, float]:
         """判断Excalidraw是否能处理该请求"""
         confidence = 0.0
 
@@ -481,17 +478,17 @@ class ExcalidrawToolAdapter(BaseVisualizationTool):
                 error_message=str(e)
             )
 
-    def get_supported_categories(self) -> List[VisualizationCategory]:
+    def get_supported_categories(self) -> list[VisualizationCategory]:
         return [VisualizationCategory.SKETCH, VisualizationCategory.DIAGRAM]
 
-    def get_supported_formats(self) -> List[str]:
+    def get_supported_formats(self) -> list[str]:
         return ['svg', 'png', 'jpg', 'json', 'html']
 
 class UnifiedVisualizationManager:
     """统一可视化管理器"""
 
     def __init__(self):
-        self.tools: List[BaseVisualizationTool] = []
+        self.tools: list[BaseVisualizationTool] = []
         self.analyzer = VisualizationAnalyzer()
         self.intelligent_caller = intelligent_caller
 
@@ -582,7 +579,7 @@ class UnifiedVisualizationManager:
         else:
             return ComplexityLevel.SIMPLE
 
-    async def select_best_tool(self, request: VisualizationRequest) -> Tuple[BaseVisualizationTool, float]:
+    async def select_best_tool(self, request: VisualizationRequest) -> tuple[BaseVisualizationTool, float]:
         """选择最佳工具"""
 
         best_tool = None
@@ -632,7 +629,7 @@ class UnifiedVisualizationManager:
 
     async def _handle_complex_request(self, request: VisualizationRequest, primary_tool: BaseVisualizationTool) -> VisualizationResult:
         """处理复杂请求（多工具协作）"""
-        logger.info(f"🔄 处理复杂请求，使用多工具协作")
+        logger.info("🔄 处理复杂请求，使用多工具协作")
 
         # 并行调用多个工具
         tasks = []
@@ -712,7 +709,7 @@ class UnifiedVisualizationManager:
         except Exception as e:
             logger.warning(f"学习记录失败: {e}")
 
-    def get_tool_status(self) -> Dict[str, Any]:
+    def get_tool_status(self) -> dict[str, Any]:
         """获取所有工具状态"""
         return {
             'total_tools': len(self.tools),

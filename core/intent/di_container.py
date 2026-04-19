@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 意图识别服务 - 依赖注入容器
 
@@ -11,7 +12,7 @@ Version: 1.0.0
 import logging
 from collections.abc import Callable
 from functools import wraps
-from typing import Any, Optional
+from typing import Any
 
 # ========================================================================
 # 服务容器
@@ -410,7 +411,7 @@ def create_cache_service(container: ServiceContainer) -> Any:
 # ========================================================================
 
 
-def initialize_container(config: Optional[dict | None = None) -> ServiceContainer:
+def initialize_container(config: dict | None | None = None) -> ServiceContainer:
     """
     初始化服务容器
 

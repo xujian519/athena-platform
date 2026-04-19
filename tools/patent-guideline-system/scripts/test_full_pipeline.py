@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 测试完整的GraphRAG流水线
 Test full GraphRAG pipeline
@@ -46,7 +45,7 @@ def test_parsing():
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
 
-        logger.info(f"✅ 解析成功！")
+        logger.info("✅ 解析成功！")
         logger.info(f"   文档标题: {data['document_info']['title']}")
         logger.info(f"   总页数: {data['document_info']['total_pages']}")
         logger.info(f"   章节数: {data['document_info']['total_sections']}")
@@ -73,10 +72,10 @@ def test_vectorization():
         # 加载解析数据
         json_path = '/Users/xujian/Athena工作平台/patent_guideline_system/data/processed/test_parse_result.json'
         if not os.path.exists(json_path):
-            logger.info(f"❌ 解析数据不存在，请先运行解析")
+            logger.info("❌ 解析数据不存在，请先运行解析")
             return False
 
-        with open(json_path, 'r', encoding='utf-8') as f:
+        with open(json_path, encoding='utf-8') as f:
             data = json.load(f)
 
         # 创建向量化器
@@ -94,7 +93,7 @@ def test_vectorization():
 
         embedder.save_embeddings(embedded_sections, output_path)
 
-        logger.info(f"✅ 向量化成功！")
+        logger.info("✅ 向量化成功！")
         logger.info(f"   处理章节数: {len(embedded_sections)}")
         logger.info(f"   向量维度: {1024}")
         logger.info(f"   结果已保存到: {output_path}")
@@ -127,7 +126,7 @@ def test_neo4j_import():
     try:
         json_path = '/Users/xujian/Athena工作平台/patent_guideline_system/data/processed/test_parse_result.json'
         if not os.path.exists(json_path):
-            logger.info(f"❌ 解析数据不存在，请先运行解析")
+            logger.info("❌ 解析数据不存在，请先运行解析")
             return False
 
         # 创建导入器
@@ -136,7 +135,7 @@ def test_neo4j_import():
         # 执行导入
         importer.import_from_json(json_path)
 
-        logger.info(f"✅ 导入成功！")
+        logger.info("✅ 导入成功！")
         logger.info(f"   导入的概念数: {len(importer.concept_cache)}")
         logger.info(f"   导入的法条数: {len(importer.law_cache)}")
         logger.info(f"   导入的案例数: {len(importer.case_cache)}")

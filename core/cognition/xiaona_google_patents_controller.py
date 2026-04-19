@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 # pyright: ignore
 # !/usr/bin/env python3
@@ -22,9 +23,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-
 # 导入小娜专利分析系统
-
 from core.logging_config import setup_logging
 
 # 配置日志
@@ -231,6 +230,9 @@ class XiaonaGooglePatentsController:
     async def _fetch_patent_with_playwright(self, patent_number: str) -> dict[str, Any] | None:
         """使用Playwright获取专利数据"""
         try:
+            from playwright.async_api import async_playwright
+
+            p = await async_playwright().start()
             browser = await p.chromium.launch(
                 headless=self.config.get("headless"),
                 args=[
@@ -582,9 +584,9 @@ class XiaonaGooglePatentsController:
             "化学材料": ["化学", "材料", "组合物", "chemical", "material", "composition"],
         }
 
-        for field, keywords in field_keywords.items():
+        for field_name, keywords in field_keywords.items():
             if any(keyword in text for keyword in keywords):
-                return field
+                return field_name
 
         return "其他技术领域"
 

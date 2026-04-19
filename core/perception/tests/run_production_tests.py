@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 生产验证测试运行器
 统一运行所有生产验证测试并生成报告
@@ -6,12 +7,10 @@ Athena 感知模块 - 生产验证测试运行器
 """
 
 import asyncio
-import sys
 import json
-from datetime import datetime
-from pathlib import Path
-from typing import Dict, Any, List
 import logging
+from datetime import datetime
+from typing import Any
 
 # 配置日志
 logging.basicConfig(
@@ -30,7 +29,7 @@ class ProductionTestRunner:
 
     def __init__(self):
         """初始化测试运行器"""
-        self.test_results: Dict[str, Any] = {
+        self.test_results: dict[str, Any] = {
             "load_tests": {},
             "stability_tests": {},
             "extreme_tests": {},
@@ -45,7 +44,7 @@ class ProductionTestRunner:
         self,
         test_image: str,
         quick_mode: bool = False
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         运行所有测试
 
@@ -252,7 +251,7 @@ class ProductionTestRunner:
                 self.test_results["benchmark_tests"]["image_processing"] = result2.get_summary()
 
                 # 缓存性能测试
-                result3 = await tester.benchmark_cache_performance(
+                await tester.benchmark_cache_performance(
                     iterations=50
                 )
                 # 缓存测试有两个结果（读/写）
@@ -272,7 +271,7 @@ class ProductionTestRunner:
         # 负载测试得分 (30%)
         load_score = 0.0
         if "load_tests" in self.test_results:
-            for test_name, result in self.test_results["load_tests"].items():
+            for _test_name, result in self.test_results["load_tests"].items():
                 if isinstance(result, dict) and "success_rate" in result:
                     load_score += result["success_rate"]
             if self.test_results["load_tests"]:
@@ -284,7 +283,7 @@ class ProductionTestRunner:
         if "stability_tests" in self.test_results:
             stable_count = 0
             total_count = 0
-            for test_name, result in self.test_results["stability_tests"].items():
+            for _test_name, result in self.test_results["stability_tests"].items():
                 if isinstance(result, dict) and "overall_stable" in result:
                     total_count += 1
                     if result["overall_stable"]:
@@ -296,7 +295,7 @@ class ProductionTestRunner:
         # 极端场景测试得分 (20%)
         extreme_score = 0.0
         if "extreme_tests" in self.test_results:
-            for test_name, result in self.test_results["extreme_tests"].items():
+            for _test_name, result in self.test_results["extreme_tests"].items():
                 if isinstance(result, dict) and "resilience_score" in result:
                     extreme_score += result["resilience_score"]
             if self.test_results["extreme_tests"]:
@@ -309,7 +308,7 @@ class ProductionTestRunner:
 
         # 计算加权总分
         total_score = 0.0
-        for name, score, weight in scores:
+        for _name, score, weight in scores:
             total_score += score * weight
 
         self.production_readiness_score = total_score
@@ -326,7 +325,7 @@ class ProductionTestRunner:
         logger.info(f"结束时间: {self.end_time.strftime('%Y-%m-%d %H:%M:%S')}")
 
         # 分项得分
-        logger.info(f"\n分项得分:")
+        logger.info("\n分项得分:")
         for name, score, weight in self.scores_breakdown:
             logger.info(f"  {name:20s}: {score:6.2f}% (权重 {weight*100:.0f}%)")
 
@@ -401,8 +400,8 @@ async def main():
     test_image = "/tmp/production_test_image.png"
 
     if not Path(test_image).exists():
-        import numpy as np
         import cv2
+        import numpy as np
         img = np.ones((100, 200, 3), dtype=np.uint8) * 255
         cv2.putText(img, "Production Test", (20, 50),
                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2)

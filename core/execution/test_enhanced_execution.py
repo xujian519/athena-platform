@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强执行引擎测试脚本
 Test Enhanced Execution Engine
@@ -19,6 +20,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.execution.enhanced_execution_engine import EnhancedExecutionEngine
+from core.execution.types import TaskDependency
 from core.task_models import Task, TaskPriority, TaskType
 
 # 配置日志

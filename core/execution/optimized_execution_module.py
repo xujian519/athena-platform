@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化版执行模块 - 向后兼容重定向
 Optimized Execution Module - Backward Compatibility Redirect

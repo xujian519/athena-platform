@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 SQLite统一数据服务
 SQLite Unified Data Service
@@ -7,22 +6,18 @@ SQLite Unified Data Service
 统一管理SQLite形式的向量库和知识图谱数据
 """
 
-import json
-from core.async_main import async_main
-import logging
-from core.logging_config import setup_logging
 import os
 import sqlite3
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from fastapi import FastAPI, HTTPException, Query
-from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
+from core.logging_config import setup_logging
+
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -58,15 +53,15 @@ class DatabaseInfo(BaseModel):
     name: str
     path: str
     size: str
-    tables: List[str]
+    tables: list[str]
     exists: bool
     last_modified: str | None = None
 
 class QueryRequest(BaseModel):
     database: str
     query: str
-    params: Optional[List[Any]] = None
-    limit: Optional[int] = Field(100, ge=1, le=1000)
+    params: list[Any] | None = None
+    limit: int | None = Field(100, ge=1, le=1000)
 
 class VectorSearchRequest(BaseModel):
     query: str = Field(..., description='搜索文本')
@@ -175,14 +170,14 @@ async def get_database_tables(db_name: str):
         table_name = table[0]
 
         # 获取表结构
-        # TODO: 检查SQL注入风险 - cursor.execute(f"PRAGMA table_info({table_name})")
-                cursor.execute(f"PRAGMA table_info({table_name})")
+        # TODO: 检查SQL注入风险
+        cursor.execute(f"PRAGMA table_info({table_name})")
         columns = cursor.fetchall()
 
         # 获取行数
         try:
-        # TODO: 检查SQL注入风险 - cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
-                    cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
+            # TODO: 检查SQL注入风险
+            cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
             row_count = cursor.fetchone()[0]
         except (ConnectionError, OSError, TimeoutError):
             row_count = 0
@@ -248,7 +243,7 @@ async def execute_query(request: QueryRequest):
 
     except Exception as e:
         logger.error(f"查询执行失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Query execution failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Query execution failed: {str(e)}") from e
 
 @app.post('/api/vector/search')
 async def vector_search(request: VectorSearchRequest):
@@ -270,8 +265,8 @@ async def vector_search(request: VectorSearchRequest):
 
         try:
             # 获取列信息
-        # TODO: 检查SQL注入风险 - cursor.execute(f"PRAGMA table_info({table_name})")
-                    cursor.execute(f"PRAGMA table_info({table_name})")
+            # TODO: 检查SQL注入风险
+            cursor.execute(f"PRAGMA table_info({table_name})")
             columns = cursor.fetchall()
 
             # 查找文本列
@@ -395,7 +390,7 @@ async def graph_search(request: GraphSearchRequest):
 
     except Exception as e:
         logger.error(f"图搜索失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Graph search failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Graph search failed: {str(e)}") from e
 
 @app.get('/api/database/{db_name}/stats')
 async def get_database_stats(db_name: str):
@@ -422,13 +417,13 @@ async def get_database_stats(db_name: str):
 
             # 获取记录数
             try:
-        # TODO: 检查SQL注入风险 - cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
-                        cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
+                # TODO: 检查SQL注入风险
+                cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
                 count = cursor.fetchone()[0]
 
                 # 获取表大小（估算）
-        # TODO: 检查SQL注入风险 - cursor.execute(f"SELECT COUNT(*) * AVG(LENGTH(CAST(* AS TEXT))) FROM {table_name}")
-                        cursor.execute(f"SELECT COUNT(*) * AVG(LENGTH(CAST(* AS TEXT))) FROM {table_name}")
+                # TODO: 检查SQL注入风险
+                cursor.execute(f"SELECT COUNT(*) * AVG(LENGTH(CAST(* AS TEXT))) FROM {table_name}")
                 size_info = cursor.fetchone()
                 estimated_size = size_info[0] if size_info and size_info[0] else 0
 
@@ -447,7 +442,7 @@ async def get_database_stats(db_name: str):
 
     except Exception as e:
         logger.error(f"获取数据库统计失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Failed to get stats: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to get stats: {str(e)}") from e
 
 @app.get('/api/knowledge-graph/paths')
 async def find_paths(
@@ -477,9 +472,6 @@ async def find_paths(
 
 if __name__ == '__main__':
     import uvicorn
-
-# 导入标准化数据库工具
-from shared.database.db_utils import DatabaseManager, build_safe_query
     uvicorn.run(
         'sqlite_unified_service:app',
         host='0.0.0.0',

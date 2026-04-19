@@ -10,6 +10,16 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
+# 添加production目录（部分测试需要）
+production_path = project_root / "production"
+if production_path.exists():
+    sys.path.insert(0, str(production_path))
+
+# 添加services目录（部分测试需要）
+services_path = project_root / "services" / "api-gateway"
+if services_path.exists():
+    sys.path.insert(0, str(services_path))
+
 import pytest
 
 
@@ -64,3 +74,24 @@ def pytest_configure(config):
     config.addinivalue_line(
         "markers", "gpu: 需要GPU的测试标记"
     )
+
+
+@pytest.fixture
+def test_environment():
+    """测试环境fixture"""
+    return {
+        "test_mode": True,
+        "database_url": "sqlite:///:memory:",
+        "redis_url": "redis://localhost:6379/15"
+    }
+
+@pytest.fixture
+def test_data_generator():
+    """测试数据生成器fixture"""
+    from faker import Faker
+    fake = Faker()
+    return {
+        "generate_patent_id": lambda: f"CN{fake.random_number(digits=12)}",
+        "generate_title": lambda: fake.sentence(),
+        "generate_abstract": lambda: fake.text(),
+    }

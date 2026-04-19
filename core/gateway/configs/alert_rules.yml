@@ -1,0 +1,92 @@
+groups:
+  - name: gateway_business_alerts
+    rules:
+      - alert: HighErrorRate
+        expr: rate(athena_gateway_http_errors_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+          service: athena-gateway
+          team: platform
+        annotations:
+          summary: "High error rate detected in Athena Gateway"
+          description: "Error rate is {{ $value }} errors per second over the last 5 minutes"
+
+      - alert: HighLatency
+        expr: histogram_quantile(0.99, rate(athena_gateway_http_request_duration_seconds_bucket[5m])) > 2.0
+        for: 5m
+        labels:
+          severity: warning
+          service: athena-gateway
+          team: platform
+        annotations:
+          summary: "High latency detected in Athena Gateway"
+          description: "99th percentile latency is {{ $value }} seconds"
+
+      - alert: HighMemoryUsage
+        expr: athena_gateway_go_memory_bytes{type="heap"} / 1024 / 1024 > 512
+        for: 10m
+        labels:
+          severity: warning
+          service: athena-gateway
+          team: platform
+        annotations:
+          summary: "High memory usage detected in Athena Gateway"
+          description: "Heap memory usage is {{ $value }} MB"
+
+      - alert: TooManyGoroutines
+        expr: athena_gateway_go_goroutines > 1000
+        for: 10m
+        labels:
+          severity: warning
+          service: athena-gateway
+          team: platform
+        annotations:
+          summary: "High number of goroutines in Athena Gateway"
+          description: "Current goroutine count is {{ $value }}"
+
+      - alert: CircuitBreakerOpen
+        expr: athena_gateway_circuitbreaker_state == 1
+        for: 2m
+        labels:
+          severity: critical
+          service: athena-gateway
+          team: platform
+        annotations:
+          summary: "Circuit breaker is open"
+          description: "Circuit breaker {{ $labels.breaker_name }} for service {{ $labels.service }} is open"
+
+  - name: gateway_infrastructure_alerts
+    rules:
+      - alert: GatewayDown
+        expr: up{job="athena-gateway"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: athena-gateway
+          team: platform
+        annotations:
+          summary: "Athena Gateway is down"
+          description: "Athena Gateway has been down for more than 1 minute"
+
+      - alert: HighRequestRate
+        expr: rate(athena_gateway_http_requests_total[5m]) > 1000
+        for: 5m
+        labels:
+          severity: info
+          service: athena-gateway
+          team: platform
+        annotations:
+          summary: "High request rate detected"
+          description: "Request rate is {{ $value }} requests per second"
+
+      - alert: AuthenticationFailures
+        expr: rate(athena_gateway_auth_requests_total{status!="success"}[5m]) > 10
+        for: 3m
+        labels:
+          severity: warning
+          service: athena-gateway
+          team: security
+        annotations:
+          summary: "High authentication failure rate"
+          description: "Authentication failure rate is {{ $value }} failures per second"

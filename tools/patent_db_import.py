@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利数据PostgreSQL导入脚本
 Patent Data PostgreSQL Import Script
@@ -8,14 +7,14 @@ Patent Data PostgreSQL Import Script
 """
 
 import json
+import logging
+import os
+from datetime import datetime
+from pathlib import Path
+
+import pandas as pd
 import psycopg2
 from psycopg2.extras import RealDictCursor
-from datetime import datetime
-from typing import Dict, List
-import os
-from pathlib import Path
-import pandas as pd
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -154,7 +153,7 @@ class PatentDBImporter:
             print(f"   连接参数: host={self.db_config['host']}, port={self.db_config['port']}, database={self.db_config['database']}, user={self.db_config['user']}")
             return None
 
-    def import_clients(self, clients_data: Dict) -> Dict[str, int]:
+    def import_clients(self, clients_data: dict) -> dict[str, int]:
         """导入客户数据"""
         conn = self.get_connection()
         if not conn:
@@ -207,7 +206,7 @@ class PatentDBImporter:
 
         return client_map
 
-    def import_patents(self, patents_data: List[Dict], client_map: Dict[str, int]):
+    def import_patents(self, patents_data: list[dict], client_map: dict[str, int]):
         """导入专利数据"""
         conn = self.get_connection()
         if not conn:
@@ -338,7 +337,7 @@ class PatentDBImporter:
             return False
 
         try:
-            with open(json_file, 'r', encoding='utf-8') as f:
+            with open(json_file, encoding='utf-8') as f:
                 data = json.load(f)
 
             # 创建表

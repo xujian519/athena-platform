@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 配置热更新系统
 Hot Configuration Reload System
@@ -19,7 +20,7 @@ import threading
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import yaml
 from watchdog.events import FileModifiedEvent, FileSystemEventHandler
@@ -49,7 +50,7 @@ class ConfigReloadHandler(FileSystemEventHandler):
     def __init__(
         self,
         config_path: str,
-        reload_callback: Callable[[dict[str, Any], None],
+        reload_callback: Callable[[dict[str, Any]], None],
         debounce_seconds: float = 1.0,
     ):
         """
@@ -70,7 +71,7 @@ class ConfigReloadHandler(FileSystemEventHandler):
         """计算配置文件哈希"""
         try:
             with open(self.config_path, "rb") as f:
-                return hashlib.md5(f.read(, usedforsecurity=False).hexdigest()
+                return hashlib.md5(f.read(), usedforsecurity=False).hexdigest()
         except Exception as e:
             logger.error(f"❌ 计算配置文件哈希失败: {e}")
             return ""
@@ -168,7 +169,7 @@ class ConfigManager:
         self._lock = threading.RLock()
 
         # 变更订阅者
-        self._subscribers: list[Callable[[dict[str, Any], dict[str, Any], None]] = []
+        self._subscribers: list[Callable[[dict[str, Any], dict[str, Any]], None]] = []
 
         # 加载初始配置
         self._load_config()
@@ -245,7 +246,7 @@ class ConfigManager:
             # 通知订阅者
             self._notify_subscribers(old_config, new_config)
 
-    def _notify_subscribers(self, old_config: dict[dict[str]:
+    def _notify_subscribers(self, old_config: dict[str, Any], new_config: dict[str, Any]):
         """通知配置变更订阅者"""
         for callback in self._subscribers:
             try:
@@ -287,7 +288,7 @@ class ConfigManager:
         self._load_config()
         self._notify_subscribers({}, self._current_config)
 
-    def subscribe(self, callback: Callable[[dict[str, Any], dict[str, Any], None]):
+    def subscribe(self, callback: Callable[[dict[str, Any], dict[str, Any]], None]):
         """
         订阅配置变更
 
@@ -297,7 +298,7 @@ class ConfigManager:
         self._subscribers.append(callback)
         logger.info(f"✅ 配置变更订阅者已添加: {callback.__name__}")
 
-    def unsubscribe(self, callback: Callable[[dict[str, Any], dict[str, Any], None]):
+    def unsubscribe(self, callback: Callable[[dict[str, Any], dict[str, Any]], None]):
         """
         取消订阅配置变更
 
@@ -511,7 +512,7 @@ def create_config_manager(config_path: str, enable_hot_reload: bool = True) -> C
 _global_config_manager: ConfigManager | None = None
 
 
-def get_global_config_manager(config_path: Optional[str | None = None) -> ConfigManager:
+def get_global_config_manager(config_path: str | None = None) -> ConfigManager:
     """
     获取全局配置管理器
 

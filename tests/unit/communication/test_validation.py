@@ -8,17 +8,22 @@ Unit Tests for Input Validation Module
 版本: 1.0.0
 """
 
+import sys
+from pathlib import Path
+
 import pytest
-import json
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 from core.communication.utils.validation import (
-    ValidationException,
-    ValidationErrorCode,
-    ValidationError,
     InputValidator,
     MessageValidator,
-    validate_message,
+    ValidationError,
+    ValidationErrorCode,
+    ValidationException,
+    validate_agent_id,
     validate_channel_id,
-    validate_agent_id
+    validate_message,
 )
 
 

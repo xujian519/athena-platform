@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 GLM-4.7 LLM客户端
 集成GLM-4.7作为Athena平台的大语言模型
@@ -15,7 +16,7 @@ GLM-4.7 LLM客户端
 
 import json
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import httpx
 
@@ -290,7 +291,7 @@ class GLM47Client:
         except json.JSONDecodeError as e:
             logger.error(f"JSON解析失败: {e}")
             logger.error(f"响应内容: {response}")
-            raise ValueError(f"无法解析LLM响应为JSON: {e}")
+            raise ValueError(f"无法解析LLM响应为JSON: {e}") from e
 
     async def _mock_generate_plan(
         self, task_description: str, context: dict[str, Any], available_tools: list[dict[str, str]]

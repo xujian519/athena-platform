@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 生产就绪的统一提示词管理器
 Production-Ready Unified Prompt Manager
@@ -10,17 +11,18 @@ import functools
 import logging
 import time
 from collections import defaultdict
-from typing import Any, Dict, Optional
+from typing import Any
 
 from core.legal_world_model.scenario_identifier_optimized import (
-    Domain,
-    Phase,
-    ScenarioIdentifierOptimized as ScenarioIdentifier,
-    TaskType,
+    ScenarioContext,
 )
-from core.legal_world_model.scenario_identifier_optimized import ScenarioContext
+from core.legal_world_model.scenario_identifier_optimized import (
+    ScenarioIdentifierOptimized as ScenarioIdentifier,
+)
 from core.legal_world_model.scenario_rule_retriever_optimized import (
     ScenarioRule,
+)
+from core.legal_world_model.scenario_rule_retriever_optimized import (
     ScenarioRuleRetrieverOptimized as ScenarioRuleRetriever,
 )
 from core.prompts.integrated_prompt_generator import IntegratedPromptGenerator

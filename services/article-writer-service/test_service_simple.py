@@ -11,8 +11,8 @@ from pathlib import Path
 # 添加路径
 sys.path.insert(0, str(Path(__file__).parent))
 
-from app.openclaw import OpenClawHandover, ArticleContent
 from app.core.simple_writing_engine import SimpleArticleWritingEngine, WritingRequest
+from app.openclaw import ArticleContent, OpenClawHandover
 
 
 async def test_openclaw_handover():
@@ -25,7 +25,7 @@ async def test_openclaw_handover():
 
     # 获取状态
     status = handover.get_handover_status()
-    print(f"\n📊 OpenClaw状态:")
+    print("\n📊 OpenClaw状态:")
     print(f"   路径: {status['openclaw_path']}")
     print(f"   可用: {status['available']}")
     print(f"   支持平台: {len(status['platforms'])}个 - {', '.join(status['platforms'][:3])}...")
@@ -33,7 +33,7 @@ async def test_openclaw_handover():
     print(f"   文章统计: {status['article_counts']}")
 
     # 测试交接
-    print(f"\n📝 测试文章交接...")
+    print("\n📝 测试文章交接...")
 
     article = ArticleContent(
         title="专利申请流程详解",
@@ -62,7 +62,7 @@ async def test_openclaw_handover():
         platforms=["小红书"]
     )
 
-    print(f"\n✅ 交接结果:")
+    print("\n✅ 交接结果:")
     print(f"   成功: {result.success}")
     print(f"   消息: {result.message}")
     print(f"   文章路径: {result.article_paths}")
@@ -90,7 +90,7 @@ async def test_writing_engine():
         )
     )
 
-    print(f"\n✅ 撰写结果:")
+    print("\n✅ 撰写结果:")
     print(f"   成功: {result.success}")
     if result.article:
         print(f"   标题: {result.article['title']}")
@@ -98,7 +98,7 @@ async def test_writing_engine():
         print(f"   风格: {result.article['style']}")
 
     if result.markdown_content:
-        print(f"\n📝 文章内容预览（前300字）:")
+        print("\n📝 文章内容预览（前300字）:")
         print(result.markdown_content[:300] + "...")
 
     return result
@@ -126,11 +126,11 @@ async def test_full_workflow():
         print(f"❌ 撰写失败: {write_result.errors}")
         return
 
-    print(f"\n✅ 步骤1: 文章撰写完成")
+    print("\n✅ 步骤1: 文章撰写完成")
     print(f"   标题: {write_result.article['title']}")
 
     # 2. 交接到OpenClaw
-    print(f"\n📤 步骤2: 交接到OpenClaw...")
+    print("\n📤 步骤2: 交接到OpenClaw...")
     handover = OpenClawHandover()
 
     article_content = ArticleContent(
@@ -145,7 +145,7 @@ async def test_full_workflow():
         platforms=write_result.article['platforms']
     )
 
-    print(f"\n✅ 交接完成:")
+    print("\n✅ 交接完成:")
     print(f"   成功: {handover_result.success}")
     print(f"   消息: {handover_result.message}")
     print(f"   文章路径: {handover_result.article_paths}")

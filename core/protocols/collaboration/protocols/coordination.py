@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协作协议 - 协调协议实现
 Collaboration Protocols - Coordination Protocol Implementation
@@ -19,10 +20,8 @@ from typing import Any
 # 从本地模块导入
 from core.protocols.collaboration.base import BaseProtocol
 from core.protocols.collaboration.types import (
-    ProtocolContext,
     ProtocolMessage,
     ProtocolPhase,
-    ProtocolStatus,
     ProtocolType,
 )
 

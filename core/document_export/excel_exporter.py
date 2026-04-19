@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Excel表格解析和导出模块 - Athena平台集成版
 Excel Table Parser and Export Module - Athena Platform Integration
@@ -12,12 +13,12 @@ Excel Table Parser and Export Module - Athena Platform Integration
 版本: v1.0.0 "深度集成"
 """
 
-from typing import Optional
 import json
 import logging
 from datetime import datetime
 from pathlib import Path
 
+import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -55,6 +56,7 @@ class ExcelExporter:
             生成的Excel文件路径
         """
         try:
+            pass
         except ImportError:
             logger.error("❌ 需要安装pandas: pip install pandas openpyxl")
             return None
@@ -167,6 +169,7 @@ class ExcelExporter:
             生成的Excel文件路径
         """
         try:
+            pass
         except ImportError:
             logger.error("❌ 需要安装pandas: pip install pandas openpyxl")
             return None
@@ -208,7 +211,7 @@ class ExcelExporter:
             return None
 
     def export_multiple_sheets(
-        self, sheets_data: dict[str, list[dict] | Optional[str], output_filename: str | None = None
+        self, sheets_data: dict[str, list[dict] | str | None], output_filename: str | None = None
     ) -> str | None:
         """
         导出多个工作表到一个Excel文件
@@ -221,6 +224,7 @@ class ExcelExporter:
             生成的Excel文件路径
         """
         try:
+            pass
         except ImportError:
             logger.error("❌ 需要安装pandas: pip install pandas openpyxl")
             return None
@@ -259,7 +263,7 @@ class ExcelExporter:
 _excel_exporter_instance = None
 
 
-def get_excel_exporter(output_dir: Optional[str | None = None) -> ExcelExporter:
+def get_excel_exporter(output_dir: str | None | None = None) -> ExcelExporter:
     """获取Excel导出器单例"""
     global _excel_exporter_instance
     if _excel_exporter_instance is None:

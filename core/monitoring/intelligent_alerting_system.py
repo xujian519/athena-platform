@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能告警系统
 Intelligent Alerting System
@@ -8,9 +9,6 @@ Intelligent Alerting System
 创建时间: 2025-12-11
 版本: 2.0.0
 """
-import networkx as nx
-import numpy as np
-
 import asyncio
 import logging
 
@@ -23,9 +21,10 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
-
+import networkx as nx
+import numpy as np
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
@@ -106,7 +105,7 @@ class RootCauseAnalyzer:
         }
 
     def build_dependency_graph(
-        self, services: list[str], dependencies: list[tuple[str, str]) -> Any:
+        self, services: list[str], dependencies: list[tuple[str, str]]) -> Any:
         """构建服务依赖图"""
         self.dependency_graph.clear()
 
@@ -120,7 +119,7 @@ class RootCauseAnalyzer:
                 upstream, downstream = dependency
                 self.dependency_graph.add_edge(upstream, downstream)
 
-    def analyze_root_cause(self, alert: Alert, related_alerts: list[Alert | None = None) -> RootCause:
+    def analyze_root_cause(self, alert: Alert, related_alerts: list[Alert] | None = None) -> RootCause:
         """分析告警根因"""
         try:
             # 收集相关指标数据
@@ -729,7 +728,7 @@ class AutoRecoveryEngine:
 
 # 便捷函数
 def create_root_cause_analyzer(
-    Optional[metrics_collector, config: dict[str, Any] | None = None
+    metrics_collector, config: dict[str, Any] | None = None
 ) -> RootCauseAnalyzer:
     """创建根因分析器"""
     return RootCauseAnalyzer(metrics_collector, config)

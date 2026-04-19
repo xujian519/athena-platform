@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 记忆模块初始化
 Memory Module Initialization
@@ -13,13 +12,13 @@ Memory Module Initialization
 import asyncio
 import json
 import logging
-from typing import Dict, List, Any, Optional
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 from .episodic_memory import EpisodicMemory
-from .semantic_memory import SemanticMemory
-from .procedural_memory import ProceduralMemory, LegalProcedure
 from .memory_retriever import MemoryRetriever
+from .procedural_memory import LegalProcedure, ProceduralMemory
+from .semantic_memory import SemanticMemory
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +44,7 @@ class IntelligentMemorySystem:
             logger.error(f"记忆系统初始化失败: {str(e)}")
             return False
 
-    async def store(self, memory_data: Dict[str, Any]) -> str:
+    async def store(self, memory_data: dict[str, Any]) -> str:
         """
         存储记忆
 
@@ -86,7 +85,7 @@ class IntelligentMemorySystem:
 
         return "unknown_type"
 
-    async def retrieve(self, query: Dict[str, Any], limit: int = 10) -> Dict[str, Any]:
+    async def retrieve(self, query: dict[str, Any], limit: int = 10) -> dict[str, Any]:
         """
         检索记忆
 
@@ -99,7 +98,7 @@ class IntelligentMemorySystem:
         """
         return await self.memory_retriever.retrieve(query, limit)
 
-    async def recall(self, query: str, context: Dict = None) -> List[Dict]:
+    async def recall(self, query: str, context: dict = None) -> list[dict]:
         """
         回忆相关信息
 
@@ -123,7 +122,7 @@ class IntelligentMemorySystem:
         # 返回综合排序的结果
         return results.get("combined", [])
 
-    async def get_statistics(self) -> Dict[str, Any]:
+    async def get_statistics(self) -> dict[str, Any]:
         """获取记忆系统统计"""
         if self.initialized:
             return await self.memory_retriever.get_memory_statistics()
@@ -137,7 +136,7 @@ class IntelligentMemorySystem:
         """更新程序使用记录"""
         self.procedural_memory.update_procedure_usage(procedure_id, success)
 
-    async def recommend_action(self, situation: Dict[str, Any]) -> Dict | None:
+    async def recommend_action(self, situation: dict[str, Any]) -> dict | None:
         """
         基于记忆推荐行动
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 通信模块监控API端点
 Communication Module Monitoring API Endpoints

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 评估引擎 - 核心引擎
 Evaluation Engine - Core Engine
@@ -25,7 +26,13 @@ from typing import Any
 from .metrics import MetricsCalculator
 from .qa_checker import QualityAssuranceChecker
 from .reflection import ReflectionEngine
-from .types import EvaluationCriteria, EvaluationLevel, EvaluationResult, EvaluationType, ReflectionRecord
+from .types import (
+    EvaluationCriteria,
+    EvaluationLevel,
+    EvaluationResult,
+    EvaluationType,
+    ReflectionRecord,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -82,7 +89,7 @@ class EvaluationEngine:
 
             logger.info(f"✅ 评估引擎初始化完成: {self.agent_id}")
 
-        except Exception as e:
+        except Exception:
             raise
 
     async def evaluate(
@@ -165,7 +172,7 @@ class EvaluationEngine:
 
             return result
 
-        except Exception as e:
+        except Exception:
             raise
 
     async def reflect(
@@ -201,7 +208,7 @@ class EvaluationEngine:
 
             return reflection
 
-        except Exception as e:
+        except Exception:
             raise
 
     async def get_trend_analysis(self, target_type: str) -> dict[str, Any]:

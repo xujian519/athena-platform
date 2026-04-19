@@ -11,8 +11,8 @@ from pathlib import Path
 # 添加路径
 sys.path.insert(0, str(Path(__file__).parent))
 
-from app.openclaw import OpenClawHandover, ArticleContent, handover_to_openclaw
 from app.core.writing_engine import ArticleWritingEngine, WritingRequest
+from app.openclaw import ArticleContent, OpenClawHandover
 
 
 async def test_openclaw_handover():
@@ -25,7 +25,7 @@ async def test_openclaw_handover():
 
     # 获取状态
     status = handover.get_handover_status()
-    print(f"\n📊 OpenClaw状态:")
+    print("\n📊 OpenClaw状态:")
     print(f"   路径: {status['openclaw_path']}")
     print(f"   可用: {status['available']}")
     print(f"   支持平台: {len(status['platforms'])}个")
@@ -33,7 +33,7 @@ async def test_openclaw_handover():
     print(f"   文章统计: {status['article_counts']}")
 
     # 测试交接
-    print(f"\n📝 测试文章交接...")
+    print("\n📝 测试文章交接...")
 
     article = ArticleContent(
         title="专利申请流程详解",
@@ -62,7 +62,7 @@ async def test_openclaw_handover():
         platforms=["小红书"]
     )
 
-    print(f"\n✅ 交接结果:")
+    print("\n✅ 交接结果:")
     print(f"   成功: {result.success}")
     print(f"   消息: {result.message}")
     print(f"   文章路径: {result.article_paths}")
@@ -88,7 +88,7 @@ async def test_writing_engine():
         )
     )
 
-    print(f"\n✅ 撰写结果:")
+    print("\n✅ 撰写结果:")
     print(f"   成功: {result.success}")
     if result.article:
         print(f"   标题: {result.article.title}")
@@ -100,7 +100,7 @@ async def test_writing_engine():
 
     # 测试交接
     if result.success and result.article:
-        print(f"\n📤 测试自动交接...")
+        print("\n📤 测试自动交接...")
         handover_result = await engine.handover_to_openclaw(
             result.article,
             ["小红书"]
@@ -115,15 +115,16 @@ async def test_convenience_function():
     print("🧪 测试3: 便捷函数")
     print("=" * 70)
 
+    from .service import write_article
+
     result = await write_article(
-        topic="商标注册流程",
         article_type="ip_education",
         style="practical",
         platforms=["微信公众号"],
         handover=False
     )
 
-    print(f"\n✅ 撰写结果:")
+    print("\n✅ 撰写结果:")
     print(f"   成功: {result.success}")
     if result.article:
         print(f"   标题: {result.article.title}")

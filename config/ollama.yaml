@@ -1,35 +1,30 @@
-# Athena工作平台Ollama配置
-# Ollama Configuration
+# ⚠️ 此配置文件已迁移到 mlx.yaml，请使用 config/mlx.yaml 作为主配置文件。
+# 本文件仅作历史参考保留。
+#
+# Athena工作平台 - 本地模型配置
+# 通过 MLX 推理服务提供 (统一脚本: ~/scripts/mlx-server.sh)
+# LLM 服务: http://127.0.0.1:8765/v1  (mlx_lm / mlx_vlm)
+# Embedding: http://127.0.0.1:8766/v1  (BGE-M3 MLX 4bit, 1024维)
 
-# 服务器配置
+# 服务器配置 (MLX LLM 服务)
 server:
-  host: localhost
-  port: 11434
+  host: "127.0.0.1"
+  port: 8765
   timeout: 300
   retries: 3
 
-# 模型配置
+# LLM 模型配置
 models:
-  # 默认模型 - 小诺·双鱼公主（调度官）
-  default: "qwen2.5-14b-xiaonuo"
+  # 默认模型
+  default: "glm47flash"
 
-  # 可用模型列表
+  # 可用模型列表 (通过 mlx-server.sh switch 切换)
   available:
-    - name: "qwen2.5-14b-xiaonuo"
-      description: "小诺·双鱼公主 - Athena调度官智能体（Qwen2.5 14B Instruct Q4_K_M）"
-      size: "9.0GB"
+    - name: "glm47flash"
+      description: "GLM-4.7-Flash 30B MoE (3B活跃) (MLX 4bit, 默认)"
       type: "chat"
-      context_length: 32768
+      context_length: 131072
       embedding: false
-      role: "调度官"
-
-    - name: "qwen2.5-14b-local"
-      description: "小娜·天秤女神 - Athena法律专家智能体（Qwen2.5 14B Instruct Q4_K_M）"
-      size: "9.0GB"
-      type: "chat"
-      context_length: 32768
-      embedding: false
-      role: "法律专家"
 
 # 专利分析专用配置
 patent_analysis:
@@ -73,12 +68,13 @@ patent_analysis:
       3. 风险等级评估
       4. 规避建议
 
-# 向量嵌入配置
+# 向量嵌入配置 (MLX Embedding 服务)
 embedding:
-  # 文本嵌入模型 (需安装)
-  text_model: "nomic-embed-text:latest"
-  dimensions: 768
-  note: "当前未安装嵌入模型，需执行: ollama pull nomic-embed-text:latest"
+  # BGE-M3 MLX 4-bit 量化
+  service_url: "http://127.0.0.1:8766"
+  text_model: "bge-m3-mlx-4bit"
+  dimensions: 1024
+  model_path: "/Users/xujian/.models/bge-m3-mlx-4bit"
 
   # 批量处理配置
   batch:

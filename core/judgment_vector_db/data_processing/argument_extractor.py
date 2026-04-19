@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 论点提取模块
 Argument Extractor for Patent Judgments
@@ -13,7 +14,7 @@ Argument Extractor for Patent Judgments
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -505,7 +506,7 @@ class JudgmentStructurer:
 
 # 便捷函数
 def structure_judgment(
-    extraction_result: dict[str, Any, config: dict[str, Any] | None = None
+    extraction_result: dict[str, Any], config: dict[str, Any] | None = None
 ) -> dict[str, Any]:
     """
     结构化判决书

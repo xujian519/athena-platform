@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 性能基准跟踪系统
 跟踪性能指标变化，检测性能回归
 最后更新: 2026-01-26
 """
 
-import json
 import asyncio
-from datetime import datetime, timedelta
-from typing import Dict, Any, List, Optional
-from pathlib import Path
+import json
 import logging
 import statistics
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any
 
 # 配置日志
 logging.basicConfig(
@@ -30,7 +31,7 @@ class PerformanceMetric:
     metric_name: str
     value: float
     unit: str
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -41,7 +42,7 @@ class PerformanceBaseline:
     baseline_value: float
     unit: str
     created_at: str
-    samples: List[float] = field(default_factory=list)
+    samples: list[float] = field(default_factory=list)
     threshold_percent: float = 20.0  # 回归阈值百分比
 
 
@@ -80,8 +81,8 @@ class PerformanceTracker:
         self.baseline_dir = Path(baseline_dir)
         self.baseline_dir.mkdir(parents=True, exist_ok=True)
 
-        self.metrics: List[PerformanceMetric] = []
-        self.baselines: Dict[str, PerformanceBaseline] = {}
+        self.metrics: list[PerformanceMetric] = []
+        self.baselines: dict[str, PerformanceBaseline] = {}
 
         logger.info(f"✓ 性能跟踪器已初始化 (基准目录: {baseline_dir})")
 
@@ -91,7 +92,7 @@ class PerformanceTracker:
         metric_name: str,
         value: float,
         unit: str,
-        metadata: Optional[Dict[str, Any]] | None = None
+        metadata: dict[str, Any] | None | None = None
     ):
         """
         记录性能指标
@@ -121,7 +122,7 @@ class PerformanceTracker:
         metric_name: str,
         baseline_value: float,
         unit: str,
-        samples: Optional[List[float]] | None = None,
+        samples: list[float] | None | None = None,
         threshold_percent: float = 20.0
     ):
         """
@@ -158,7 +159,7 @@ class PerformanceTracker:
     def check_regressions(
         self,
         threshold_percent: float | None = None
-    ) -> List[PerformanceRegression]:
+    ) -> list[PerformanceRegression]:
         """
         检测性能回归
 
@@ -231,7 +232,7 @@ class PerformanceTracker:
         self,
         test_name: str,
         metric_name: str,
-        samples: List[float],
+        samples: list[float],
         unit: str,
         threshold_percent: float = 20.0
     ):
@@ -273,7 +274,7 @@ class PerformanceTracker:
         test_name: str,
         metric_name: str,
         days: int = 7
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         获取性能趋势
 
@@ -399,7 +400,7 @@ class PerformanceTracker:
             filepath: 文件路径
         """
         try:
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, encoding='utf-8') as f:
                 data = json.load(f)
 
             for key, baseline_data in data.get("baselines", {}).items():
@@ -422,7 +423,7 @@ class PerformanceTracker:
         """加载基准目录中的所有基准"""
         for filepath in self.baseline_dir.glob("*.json"):
             try:
-                with open(filepath, 'r', encoding='utf-8') as f:
+                with open(filepath, encoding='utf-8') as f:
                     baseline_data = json.load(f)
 
                 # 跳过汇总文件

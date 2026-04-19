@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 混合检索引擎
 Hybrid Retrieval Engine for Patent Judgments
@@ -13,8 +14,7 @@ Hybrid Retrieval Engine for Patent Judgments
 import logging
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

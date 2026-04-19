@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena通信系统 - 速率限制器
 Rate Limiter for Communication System
@@ -20,8 +21,8 @@ Rate Limiter for Communication System
 import logging
 import time
 from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+from dataclasses import dataclass
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

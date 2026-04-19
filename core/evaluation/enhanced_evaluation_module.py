@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强评估模块 - BaseModule标准接口兼容版本
 Enhanced Evaluation Module - BaseModule Compatible Version
@@ -39,7 +40,7 @@ try:
     )
 
     EVALUATION_SYSTEM_AVAILABLE = True
-except ImportError as e:
+except ImportError:
     EVALUATION_SYSTEM_AVAILABLE = False
 
 # 配置日志
@@ -140,7 +141,7 @@ class EnhancedEvaluationModule(BaseModule):
                     )
                     await self.evaluation_engine.initialize()
                     logger.info("✅ 现有评估系统就绪")
-                except Exception as e:
+                except Exception:
                     self.evaluation_engine = None
             else:
                 logger.info("📦 使用备用评估实现")
@@ -157,7 +158,7 @@ class EnhancedEvaluationModule(BaseModule):
             logger.info("✅ 评估模块初始化成功")
             return True
 
-        except Exception as e:
+        except Exception:
             self._module_status = ModuleStatus.ERROR
             return False
 
@@ -194,7 +195,7 @@ class EnhancedEvaluationModule(BaseModule):
             else:
                 return HealthStatus.DEGRADED
 
-        except Exception as e:
+        except Exception:
             return HealthStatus.UNHEALTHY
 
     async def evaluate(
@@ -520,7 +521,7 @@ class EnhancedEvaluationModule(BaseModule):
                     )
                     await self.evaluation_engine.initialize()
                     logger.info("✅ 现有评估系统就绪")
-                except Exception as e:
+                except Exception:
                     self.evaluation_engine = None
             else:
                 logger.info("📦 使用备用评估实现")
@@ -528,7 +529,7 @@ class EnhancedEvaluationModule(BaseModule):
 
             return True
 
-        except Exception as e:
+        except Exception:
             return False
 
     async def _on_start(self) -> bool:
@@ -541,7 +542,7 @@ class EnhancedEvaluationModule(BaseModule):
             logger.info("✅ 评估模块启动成功")
             return True
 
-        except Exception as e:
+        except Exception:
             return False
 
     async def _on_stop(self) -> bool:
@@ -551,7 +552,7 @@ class EnhancedEvaluationModule(BaseModule):
             logger.info("🛑 停止自动保存")
             return True
 
-        except Exception as e:
+        except Exception:
             return False
 
     async def _on_shutdown(self) -> bool:
@@ -572,7 +573,7 @@ class EnhancedEvaluationModule(BaseModule):
             logger.info("✅ 评估模块关闭成功")
             return True
 
-        except Exception as e:
+        except Exception:
             return False
 
     async def _on_health_check(self) -> bool:
@@ -586,7 +587,7 @@ class EnhancedEvaluationModule(BaseModule):
                 # 备用模式检查
                 return len(self.evaluation_history) >= 0  # 基本检查
 
-        except Exception as e:
+        except Exception:
             return False
 
     async def shutdown(self):

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 分散式智能搜索架构 - 工具注册中心
 Decentralized Intelligent Search Architecture - Tool Registry
@@ -22,8 +23,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
-
+from typing import Any
 
 from ..standards.base_search_tool import (
     BaseSearchTool,
@@ -148,7 +148,7 @@ class ToolRegistry:
         # 注册中心状态
         self.initialized = False
         self._start_time = time.time()
-        self._health_check_task: Optional[asyncio.Task[Any]] | None = None
+        self._health_check_task: asyncio.Task[Any] | None | None = None
 
         # 统计信息
         self.stats = RegistryStats()

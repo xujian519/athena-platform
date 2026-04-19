@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 访问控制系统测试
 Tests for Access Control System
 """
 
+import sys
+from pathlib import Path
+
 import pytest
 
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 from core.perception.access_control import (
+    AccessControl,
     Permission,
     Role,
     User,
-    AccessControl,
 )
 
 

@@ -6,10 +6,10 @@ Test LLM Integration for Athena Platform
 
 import asyncio
 import json
-import requests
 import sys
 from pathlib import Path
-from datetime import datetime
+
+import requests
 
 # 添加路径
 sys.path.append(str(Path(__file__).parent))
@@ -22,9 +22,9 @@ async def test_llm_integration():
     # 1. 测试配置加载
     print("\n1️⃣ 测试配置加载...")
     try:
-        with open('config/domestic_llm_config.json', 'r') as f:
+        with open('config/domestic_llm_config.json') as f:
             config = json.load(f)
-        print(f"✅ 配置加载成功")
+        print("✅ 配置加载成功")
         print(f"   - 主要提供商: {config['primary_provider']}")
         print(f"   - API Key: {config['zhipu_api_key'][:10]}...")
     except Exception as e:

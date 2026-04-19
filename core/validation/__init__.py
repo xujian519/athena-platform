@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 实时参数验证模块
 Real-time Parameter Validation Module

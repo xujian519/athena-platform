@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化版执行模块 - 类型定义（重定向到统一类型）
 Optimized Execution Module - Type Definitions (Redirect to Shared Types)

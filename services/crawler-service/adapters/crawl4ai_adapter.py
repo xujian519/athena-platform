@@ -1,16 +1,14 @@
-# -*- coding: utf-8 -*-
 """
 Crawl4AI适配器
 提供Crawl4AI的统一接口封装
 """
 
 import asyncio
-import json
 import logging
 import time
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 # Crawl4AI导入
 try:
@@ -59,18 +57,18 @@ class CrawlResult:
     url: str
     success: bool
     content: str
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
     extraction_mode: str
     processing_time: float
     cost: float = 0.0
     error_message: str | None = None
 
     # AI增强结果
-    extracted_data: Optional[Dict[str, Any]] = None
-    chunks: Optional[List[Dict[str, Any]]] = None
+    extracted_data: dict[str, Any] | None = None
+    chunks: list[dict[str, Any]] | None = None
     markdown_content: str | None = None
-    links: Optional[List[Dict[str, str]]] = None
-    images: Optional[List[Dict[str, str]]] = None
+    links: list[dict[str, str]] | None = None
+    images: list[dict[str, str]] | None = None
 
 
 class Crawl4AIAdapter:
@@ -248,7 +246,7 @@ class Crawl4AIAdapter:
                 error_message=error_message
             )
 
-    async def batch_crawl(self, urls: List[str], max_concurrent: int = 3) -> List[CrawlResult]:
+    async def batch_crawl(self, urls: list[str], max_concurrent: int = 3) -> list[CrawlResult]:
         """批量爬取"""
         semaphore = asyncio.Semaphore(max_concurrent)
 
@@ -261,7 +259,7 @@ class Crawl4AIAdapter:
 
         # 处理异常结果
         processed_results = []
-        for url, result in zip(urls, results):
+        for url, result in zip(urls, results, strict=False):
             if isinstance(result, Exception):
                 processed_results.append(CrawlResult(
                     url=url,
@@ -278,7 +276,7 @@ class Crawl4AIAdapter:
 
         return processed_results
 
-    def get_usage_stats(self) -> Dict[str, Any]:
+    def get_usage_stats(self) -> dict[str, Any]:
         """获取使用统计"""
         return {
             'total_requests': self.request_count,

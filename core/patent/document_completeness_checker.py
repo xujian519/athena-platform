@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 审查意见文档完整性检查器
 Office Action Document Completeness Checker
@@ -78,12 +79,12 @@ class CompletenessReport:
             status = self.target_patent_status
             if status.exists and status.has_full_text:
                 md.append(f"**申请号**: `{self.target_application_number}`\n")
-                md.append(f"**状态**: ✅ 已有全文\n")
+                md.append("**状态**: ✅ 已有全文\n")
                 if status.has_pdf:
                     md.append(f"**PDF路径**: `{status.pdf_path}`\n")
             else:
                 md.append(f"**申请号**: `{self.target_application_number}`\n")
-                md.append(f"**状态**: ❌ 缺失全文\n")
+                md.append("**状态**: ❌ 缺失全文\n")
                 if status.missing_reason:
                     md.append(f"**原因**: {status.missing_reason}\n")
         md.append("")
@@ -99,7 +100,7 @@ class CompletenessReport:
                         md.append(f"- **PDF**: `{status.pdf_path}`\n")
                 else:
                     md.append(f"### D{i}: `{status.patent_number}` ❌\n")
-                    md.append(f"- **状态**: 缺失全文\n")
+                    md.append("- **状态**: 缺失全文\n")
                     if status.missing_reason:
                         md.append(f"- **原因**: {status.missing_reason}\n")
                 md.append("")
@@ -192,7 +193,7 @@ class DocumentCompletenessChecker:
         Returns:
             CompletenessReport: 完整性报告
         """
-        logger.info(f"🔍 开始检查文档完整性")
+        logger.info("🔍 开始检查文档完整性")
         logger.info(f"   目标专利: {target_application_number}")
         logger.info(f"   对比文件数: {len(prior_art_references)}")
 

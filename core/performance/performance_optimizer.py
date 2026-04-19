@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 性能优化器 - 统一的性能优化管理
 集成响应缓存、模型预加载、上下文压缩等功能
@@ -10,7 +11,6 @@ from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
 
 from .context_compressor import get_context_manager
 from .model_preloader import get_preloader

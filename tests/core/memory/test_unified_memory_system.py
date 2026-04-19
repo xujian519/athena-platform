@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena统一智能体记忆系统 - 单元测试
 Unit Tests for Unified Agent Memory System
@@ -18,24 +17,22 @@ Unit Tests for Unified Agent Memory System
 版本: v1.0.0
 """
 
-import asyncio
 import os
 import sys
-import pytest
-import uuid
 from datetime import datetime
-from typing import Dict, Any
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, patch
+
+import pytest
 
 # 添加项目路径
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../..'))
 
 from core.memory.unified_memory import (
-    UnifiedAgentMemorySystem,
     AgentType,
-    MemoryType,
-    MemoryTier,
     CacheStatistics,
+    MemoryTier,
+    MemoryType,
+    UnifiedAgentMemorySystem,
 )
 from core.memory.unified_memory.utils import retry_with_backoff
 

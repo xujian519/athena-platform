@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 向量-图融合架构
 Vector-Graph Fusion Architecture
@@ -8,6 +9,9 @@ Vector-Graph Fusion Architecture
 作者: 小诺·双鱼公主
 创建时间: 2025-12-28
 """
+import numpy as np
+
+from core.database.unified_connection import get_postgres_pool
 
 # 导入核心融合服务
 # 导入API扩展
@@ -48,12 +52,16 @@ __all__ = [
 import os
 import sys
 
-
 # 添加项目路径
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # 导入安全配置
 from core.config.secure_config import get_config
+
+try:
+    import asyncpg
+except ImportError:
+    asyncpg = None
 
 
 async def init_sample_data():
@@ -150,7 +158,7 @@ async def test_fusion_query():
 
     # 创建连接
     config = get_config()
-    await get_postgres_pool(
+    pg_pool = await get_postgres_pool(
         host=config.get("POSTGRES_HOST", "localhost"),
         port=config.get_int("POSTGRES_PORT", 5438),
         user=config.get("POSTGRES_USER", "postgres"),
@@ -169,15 +177,8 @@ async def test_fusion_query():
         try:
 
             nebula_config = config.get_nebula_config()
-            nebula_pool = NebulaPool()
-            await nebula_pool.init(
-                username=nebula_config.get("user", "root"),
-                password=nebula_config.get("password", required=True),
-                space_name=nebula_config.get("space", "vgraph_unified_space"),
-                addresses=[
-                    (nebula_config.get("host", "localhost"), nebula_config.get_int("port", 9669))
-                ],
-            )
+            from nebula3.gclient.net.SessionPool import SessionPool
+            nebula_pool = SessionPool([], config.get_nebula_config())
         except Exception as e:
             print(f"  ⚠️  NebulaGraph 连接跳过: {e}")
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 评估引擎 - 向后兼容重定向
 Evaluation Engine - Backward Compatibility Redirect

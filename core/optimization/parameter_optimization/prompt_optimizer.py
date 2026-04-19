@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 提示词参数优化器
 Prompt Parameter Optimizer
@@ -20,7 +21,7 @@ Prompt Parameter Optimizer
 """
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import optuna
 

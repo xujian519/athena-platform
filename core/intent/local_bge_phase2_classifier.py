@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Phase 2: 本地BGE意图识别系统(Transformers直接加载)
 Local BGE Intent Recognition System using Transformers
@@ -11,8 +12,6 @@ Local BGE Intent Recognition System using Transformers
 版本: v2.0.0-fixed
 创建: 2025-12-29
 """
-import numpy as np
-
 import json
 import sys
 import time
@@ -20,6 +19,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import torch
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report, f1_score

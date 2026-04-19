@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena超级推理引擎 V2 - 集成真实LLM调用
 作者: Athena AI团队
@@ -9,14 +10,14 @@ Athena超级推理引擎 V2 - 集成真实LLM调用
 import asyncio
 import logging
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
+import numpy as np
 
 from core.logging_config import setup_logging
 
 # 导入基础类
 from .athena_super_reasoning import (
-    ConfidenceLevel,
     Hypothesis,
     HypothesisManager,
     MetaCognitiveMonitor,
@@ -24,7 +25,6 @@ from .athena_super_reasoning import (
     ReasoningState,
     RecursiveThinkingEngine,
     ThinkingPhase,
-    ThoughtNode,
 )
 
 # 配置日志
@@ -124,7 +124,7 @@ class LLMEnhancedHypothesisManager(HypothesisManager):
                 hypothesis = Hypothesis(
                     description=hyp_data.get("description", ""),
                     confidence=float(hyp_data.get("confidence", 0.5)),
-                    test_predictions=[{hyp_data.get('reasoning'][:50]}"],
+                    test_predictions=[{hyp_data.get('reasoning')[:50]}],
                 )
                 new_hypotheses.append(hypothesis)
 
@@ -140,7 +140,7 @@ class LLMEnhancedHypothesisManager(HypothesisManager):
             logger.info(f"✅ LLM生成了{len(new_hypotheses)}个假设")
             return new_hypotheses
 
-        except Exception as e:
+        except Exception:
             logger.info("⚠️ 降级到模板生成")
             return self.generate_hypotheses(problem_context, num_hypotheses)
 
@@ -318,7 +318,7 @@ class LLMEnhancedSuperReasoningEngine:
                             f"分析要点: {line}", ThinkingPhase.PROBLEM_ANALYSIS, confidence=0.7
                         )
 
-            except Exception as e:
+            except Exception:
                 # 降级到基础分析
                 await self._basic_problem_analysis(problem)
         else:
@@ -439,6 +439,7 @@ class LLMEnhancedSuperReasoningEngine:
                 )
 
             except Exception as e:
+                self.logger.warning(f"LLM深度洞察失败: {e}")
 
         # 模式识别
         patterns = self.thinking_flow.find_patterns()
@@ -565,7 +566,7 @@ class LLMEnhancedSuperReasoningEngine:
 {hypotheses_summary}
 
 ## 生成的洞察
-{chr(10).join([f"- {insight}" for insight in all_insights[:5])}
+{chr(10).join([f"- {insight}" for insight in all_insights[:5]])}
 
 ## 综合要求
 1. 整合最佳假设和关键洞察
@@ -601,11 +602,11 @@ class LLMEnhancedSuperReasoningEngine:
                 # 清理markdown标记
                 response_text = response_text.strip()
                 if response_text.startswith("```json"):
-                    response_text = response_text7:
+                    response_text = response_text[7:]
                 if response_text.startswith("```"):
-                    response_text = response_text3:
+                    response_text = response_text[3:]
                 if response_text.endswith("```"):
-                    response_text = response_text:-3
+                    response_text = response_text[:-3]
                 response_text = response_text.strip()
 
                 synthesis_result = json.loads(response_text)
@@ -616,7 +617,7 @@ class LLMEnhancedSuperReasoningEngine:
 
                 logger.info("✅ LLM综合结论生成成功")
 
-            except Exception as e:
+            except Exception:
                 # 降级到基础综合
                 if final_hypotheses:
                     best_hypothesis = final_hypotheses[0]
@@ -664,7 +665,7 @@ class LLMEnhancedSuperReasoningEngine:
                         "phase": phase.value,
                         "thought_count": len(phase_thoughts),
                         "avg_confidence": np.mean([t.confidence for t in phase_thoughts]),
-                        "key_thoughts": [t.content:50 for t in phase_thoughts[:3]],
+                        "key_thoughts": [t.content[:50] for t in phase_thoughts[:3]],
                     }
                 )
 

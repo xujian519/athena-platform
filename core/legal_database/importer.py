@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律数据库导入器
 Legal Database Importer
@@ -15,19 +16,10 @@ Legal Database Importer
 import logging
 import uuid
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from tqdm import tqdm
 
-from core.legal_database.models import (
-    ArticleClause,
-    ChangeType,
-    LegalHierarchy,
-    LegalNorm,
-    LegalStatus,
-    NormChange,
-    VectorizedClause,
-)
 from core.legal_database.parser import LegalTextParser, ParsedArticle, ParsedNorm
 
 logger = logging.getLogger(__name__)
@@ -85,7 +77,7 @@ class LegalDatabaseImporter:
         """连接Qdrant"""
         try:
             from qdrant_client import QdrantClient
-            from qdrant_client.models import CreateCollection, Distance, VectorParams
+            from qdrant_client.models import Distance, VectorParams
 
             self.qdrant_client = QdrantClient(url=url)
 

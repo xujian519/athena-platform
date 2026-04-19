@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 Athena工作平台 - 统一配置管理器
@@ -17,10 +16,10 @@ import argparse
 import json
 import logging
 import os
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Optional, Union
+from typing import Any
 
 import yaml
 
@@ -56,9 +55,9 @@ class ConfigManager:
         self.environment = self.config.environment
 
         # 配置缓存
-        self._config_cache: Dict[str, Any] = {}
-        self._config_sources: Dict[str, ConfigSource] = {}
-        self._last_modified: Dict[str, datetime] = {}
+        self._config_cache: dict[str, Any] = {}
+        self._config_sources: dict[str, ConfigSource] = {}
+        self._last_modified: dict[str, datetime] = {}
 
         # 注册配置源
         self._register_config_sources()
@@ -100,7 +99,7 @@ class ConfigManager:
             ),
         }
 
-    def _load_config_file(self, source: ConfigSource) -> Dict[str, Any]:
+    def _load_config_file(self, source: ConfigSource) -> dict[str, Any]:
         """加载单个配置文件"""
         if not source.path.exists():
             if source.required:
@@ -109,7 +108,7 @@ class ConfigManager:
             return {}
 
         try:
-            with open(source.path, 'r', encoding='utf-8') as f:
+            with open(source.path, encoding='utf-8') as f:
                 if source.format == 'yaml':
                     config = yaml.safe_load(f) or {}
                 elif source.format == 'json':
@@ -156,7 +155,7 @@ class ConfigManager:
 
         logger.info('All configs loaded successfully')
 
-    def _merge_configs(self) -> Dict[str, Any]:
+    def _merge_configs(self) -> dict[str, Any]:
         """合并所有配置"""
         merged = {}
 
@@ -221,7 +220,7 @@ class ConfigManager:
                 return env_value
             return default
 
-    def get_section(self, section: str) -> Dict[str, Any]:
+    def get_section(self, section: str) -> dict[str, Any]:
         """获取配置段"""
         return self._merged_config.get(section, {})
 
@@ -237,7 +236,7 @@ class ConfigManager:
         else:
             self.load_all_configs()
 
-    def check_changes(self) -> Dict[str, bool]:
+    def check_changes(self) -> dict[str, bool]:
         """检查配置文件变更"""
         changes = {}
 
@@ -255,7 +254,7 @@ class ConfigManager:
 
         return changes
 
-    def list_configs(self) -> Dict[str, Dict[str, Any]]:
+    def list_configs(self) -> dict[str, dict[str, Any]]:
         """列出所有配置及其状态"""
         configs = {}
 
@@ -270,7 +269,7 @@ class ConfigManager:
 
         return configs
 
-    def save_config(self, section: str, config: Dict[str, Any]) -> None:
+    def save_config(self, section: str, config: dict[str, Any]) -> None:
         """保存配置段"""
         # 暂时不实现配置保存功能
         # 配置应该是只读的，通过版本控制管理

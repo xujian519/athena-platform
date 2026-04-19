@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 稳定性测试
 长时间运行测试，检测内存泄漏、资源泄漏等问题
@@ -6,14 +7,15 @@ Athena 感知模块 - 稳定性测试
 """
 
 import asyncio
+import json
+import logging
 import time
-import psutil
 import tracemalloc
 from datetime import datetime, timedelta
-from typing import Dict, Any, List
 from pathlib import Path
-import logging
-import json
+from typing import Any
+
+import psutil
 
 # 配置日志
 logging.basicConfig(
@@ -27,14 +29,14 @@ class StabilityMetrics:
     """稳定性指标"""
 
     def __init__(self):
-        self.timestamps: List[datetime] = []
-        self.memory_usage_mb: List[float] = []
-        self.cpu_percent: List[float] = []
-        self.open_files: List[int] = []
-        self.thread_count: List[int] = []
+        self.timestamps: list[datetime] = []
+        self.memory_usage_mb: list[float] = []
+        self.cpu_percent: list[float] = []
+        self.open_files: list[int] = []
+        self.thread_count: list[int] = []
         self.success_count: int = 0
         self.failure_count: int = 0
-        self.response_times: List[float] = []
+        self.response_times: list[float] = []
 
     def add_sample(
         self,
@@ -60,7 +62,7 @@ class StabilityMetrics:
         else:
             self.failure_count += 1
 
-    def get_analysis(self) -> Dict[str, Any]:
+    def get_analysis(self) -> dict[str, Any]:
         """获取分析结果"""
         if not self.memory_usage_mb:
             return {"error": "没有数据"}
@@ -151,12 +153,12 @@ class StabilityTester:
     def __init__(self):
         """初始化稳定性测试器"""
         self.process = psutil.Process()
-        self.test_results: Dict[str, StabilityMetrics] = {}
+        self.test_results: dict[str, StabilityMetrics] = {}
 
         # 启动内存跟踪
         tracemalloc.start()
 
-    def _get_current_metrics(self) -> Dict[str, Any]:
+    def _get_current_metrics(self) -> dict[str, Any]:
         """获取当前进程指标"""
         try:
             memory_info = self.process.memory_info()
@@ -308,11 +310,11 @@ class StabilityTester:
             if core_dir not in sys.path:
                 sys.path.insert(0, core_dir)
 
-            from core.perception.processors.tesseract_ocr import TesseractOCRProcessor
             from core.perception.cache.redis_cache import RedisCacheManager
+            from core.perception.processors.tesseract_ocr import TesseractOCRProcessor
 
             ocr_processor = TesseractOCRProcessor()
-            cache_manager = RedisCacheManager()
+            RedisCacheManager()
         except ImportError as e:
             logger.error(f"导入失败: {e}")
             metrics = StabilityMetrics()
@@ -454,7 +456,7 @@ class StabilityTester:
 
         return metrics
 
-    def _print_stability_analysis(self, test_name: str, analysis: Dict[str, Any]):
+    def _print_stability_analysis(self, test_name: str, analysis: dict[str, Any]):
         """打印稳定性分析"""
         logger.info(f"\n{'='*60}")
         logger.info(f"📊 {test_name} - 稳定性分析")
@@ -472,7 +474,7 @@ class StabilityTester:
 
         # 内存分析
         memory = analysis.get('memory', {})
-        logger.info(f"\n内存:")
+        logger.info("\n内存:")
         logger.info(f"  初始:           {memory.get('initial_mb', 0):.2f} MB")
         logger.info(f"  最终:           {memory.get('final_mb', 0):.2f} MB")
         logger.info(f"  增长:           {memory.get('growth_mb', 0):.2f} MB "
@@ -481,33 +483,33 @@ class StabilityTester:
 
         # CPU分析
         cpu = analysis.get('cpu', {})
-        logger.info(f"\nCPU:")
+        logger.info("\nCPU:")
         logger.info(f"  平均使用:       {cpu.get('avg_percent', 0):.2f}%")
         logger.info(f"  峰值使用:       {cpu.get('max_percent', 0):.2f}%")
 
         # 文件描述符分析
         fd = analysis.get('file_descriptors', {})
-        logger.info(f"\n文件描述符:")
+        logger.info("\n文件描述符:")
         logger.info(f"  初始:           {fd.get('initial', 0)}")
         logger.info(f"  最终:           {fd.get('final', 0)}")
         logger.info(f"  泄漏检测:       {'⚠️ 检测到泄漏' if fd.get('leak_detected') else '✅ 无泄漏'}")
 
         # 线程分析
         threads = analysis.get('threads', {})
-        logger.info(f"\n线程:")
+        logger.info("\n线程:")
         logger.info(f"  平均:           {threads.get('avg', 0):.1f}")
         logger.info(f"  峰值:           {threads.get('max', 0)}")
 
         # 响应时间
         resp_time = analysis.get('response_time', {})
-        logger.info(f"\n响应时间:")
+        logger.info("\n响应时间:")
         logger.info(f"  平均:           {resp_time.get('avg_seconds', 0)*1000:.2f} ms")
 
         # 总体评估
         logger.info(f"\n总体评估:         {'✅ 稳定' if analysis.get('overall_stable') else '⚠️ 不稳定'}")
         logger.info(f"{'='*60}\n")
 
-    def get_all_results(self) -> Dict[str, Dict[str, Any]]:
+    def get_all_results(self) -> dict[str, dict[str, Any]]:
         """获取所有测试结果"""
         return {
             test_name: metrics.get_analysis()
@@ -538,8 +540,8 @@ if __name__ == "__main__":
         # 如果测试图像不存在，创建一个
         from pathlib import Path
         if not Path(test_image).exists():
-            import numpy as np
             import cv2
+            import numpy as np
             img = np.ones((100, 200, 3), dtype=np.uint8) * 255
             cv2.imwrite(test_image, img)
             logger.info(f"✓ 已创建测试图像: {test_image}")

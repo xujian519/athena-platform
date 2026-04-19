@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强专利感知模块
 Enhanced Patent Perception Module

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Study管理器
 Study Manager
@@ -15,9 +16,10 @@ Study Manager
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import optuna
+import pandas as pd
 
 logger = logging.getLogger(__name__)
 

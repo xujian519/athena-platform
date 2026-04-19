@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 DSPy专利案例分析训练系统 v3 - 增强版
 DSPy Patent Case Analysis Training System v3 - Enhanced
@@ -19,7 +20,7 @@ import logging
 import random
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import dspy
 

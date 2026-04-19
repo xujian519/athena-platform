@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 异常处理模块
 Exception Handling Module
@@ -15,7 +16,7 @@ import traceback
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, Optional, Union
+from typing import Any
 
 from fastapi import HTTPException, Request, status
 from fastapi.responses import JSONResponse
@@ -342,7 +343,7 @@ def handle_errors(
             except Exception as e:
                 logger.exception(f"Unexpected error in {func.__name__}")
                 if reraise:
-                    raise AthenaException(error_code, default_message, {"original_error": str(e)})
+                    raise AthenaException(error_code, default_message, {"original_error": str(e)}) from e
                 raise
 
         return wrapper

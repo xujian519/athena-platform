@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 协作协议测试运行器
 Collaboration Protocols Test Runner
@@ -7,12 +6,12 @@ Collaboration Protocols Test Runner
 运行协作协议的所有测试
 """
 
-import sys
-import os
-import unittest
-import time
-import logging
 import asyncio
+import logging
+import os
+import sys
+import time
+import unittest
 from pathlib import Path
 
 # 添加项目路径
@@ -33,7 +32,8 @@ def run_protocol_core_tests():
 
     try:
         from tests.protocols.test_collaboration_protocols import (
-            TestProtocolMessage, TestProtocolContext
+            TestProtocolContext,
+            TestProtocolMessage,
         )
 
         # 创建测试套件
@@ -167,8 +167,12 @@ async def run_advanced_coordination_tests():
 
     try:
         from core.protocols.advanced_coordination import (
-            AdvancedCoordinationEngine, AgentCapability, TaskSpecification,
-            TaskPriority, ResourceType, register_agent, submit_task
+            AdvancedCoordinationEngine,
+            AgentCapability,
+            ResourceType,
+            TaskPriority,
+            TaskSpecification,
+            submit_task,
         )
 
         # 创建协调引擎
@@ -236,7 +240,7 @@ async def run_advanced_coordination_tests():
         print(f"   注册智能体数: {status['registered_agents']}")
         print(f"   排队任务数: {status['queued_tasks']}")
         print(f"   协调策略: {status['coordination_strategy']}")
-        print(f"   协调状态: ✅ 正常")
+        print("   协调状态: ✅ 正常")
 
         return True
 
@@ -253,7 +257,7 @@ def run_performance_protocol_tests():
     print("=" * 50)
 
     try:
-        from core.protocols.collaboration_protocols import ProtocolManager, CommunicationProtocol
+        from core.protocols.collaboration_protocols import ProtocolManager
 
         print("1. 测试协议创建性能...")
         start_time = time.time()
@@ -311,7 +315,7 @@ def run_performance_protocol_tests():
             query_time < 0.1
         )
 
-        print(f"\n📈 性能评估:")
+        print("\n📈 性能评估:")
         print(f"   协议创建: {'✅ 优秀' if creation_time < 0.5 else '⚠️ 一般' if creation_time < 1.0 else '❌ 需要优化'}")
         print(f"   消息处理: {'✅ 优秀' if processing_time < 0.25 else '⚠️ 一般' if processing_time < 0.5 else '❌ 需要优化'}")
         print(f"   状态查询: {'✅ 优秀' if query_time < 0.05 else '⚠️ 一般' if query_time < 0.1 else '❌ 需要优化'}")
@@ -333,13 +337,13 @@ def generate_protocol_test_report(results):
     passed_tests = sum(1 for result in results.values() if result)
     success_rate = passed_tests / total_tests if total_tests > 0 else 0
 
-    print(f"📊 协议测试统计:")
+    print("📊 协议测试统计:")
     print(f"   总测试项: {total_tests}")
     print(f"   通过项目: {passed_tests}")
     print(f"   失败项目: {total_tests - passed_tests}")
     print(f"   成功率: {success_rate:.1%}")
 
-    print(f"\n📋 详细结果:")
+    print("\n📋 详细结果:")
     for test_name, result in results.items():
         status = "✅ 通过" if result else "❌ 失败"
         print(f"   {test_name}: {status}")

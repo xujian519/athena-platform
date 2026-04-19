@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜智能体统一配置管理系统
 Xiaona Unified Configuration Management System

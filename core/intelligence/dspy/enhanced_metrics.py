@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 DSPy增强评估指标模块
 Enhanced Metrics for DSPy Training
@@ -13,7 +14,6 @@ Enhanced Metrics for DSPy Training
 import re
 
 import dspy
-
 
 
 class EnhancedPatentMetrics:

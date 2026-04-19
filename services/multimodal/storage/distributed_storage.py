@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 分布式存储管理器
 Distributed Storage Manager
@@ -7,19 +6,17 @@ Distributed Storage Manager
 支持本地存储、云存储（S3、阿里云OSS、腾讯云COS）和混合存储策略
 """
 
-import os
-from core.async_main import async_main
 import asyncio
 import hashlib
-import json
 import logging
-import aiofiles
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional, Union, BinaryIO
-from pathlib import Path
-from dataclasses import dataclass, asdict
-from enum import Enum
 import mimetypes
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from typing import Any
+
+import aiofiles
 
 # 云存储SDK（可选依赖）
 try:
@@ -88,15 +85,15 @@ class DistributedStorageManager:
     """分布式存储管理器"""
 
     def __init__(self):
-        self.storage_configs: Dict[StorageType, StorageConfig] = {}
+        self.storage_configs: dict[StorageType, StorageConfig] = {}
         self.default_storage: StorageType = StorageType.LOCAL
-        self.tier_routing: Dict[StorageTier, List[StorageType]] = {
+        self.tier_routing: dict[StorageTier, list[StorageType]] = {
             StorageTier.HOT: [StorageType.LOCAL, StorageType.S3],
             StorageTier.WARM: [StorageType.S3, StorageType.ALIYUN_OSS],
             StorageTier.COLD: [StorageType.ALIYUN_OSS, StorageType.TENCENT_COS]
         }
-        self.storage_clients: Dict[StorageType, Any] = {}
-        self.access_patterns: Dict[str, Dict[str, Any]] = {}  # 文件访问模式记录
+        self.storage_clients: dict[StorageType, Any] = {}
+        self.access_patterns: dict[str, dict[str, Any]] = {}  # 文件访问模式记录
         self.replication_enabled = True
         self.compression_enabled = True
 
@@ -191,7 +188,7 @@ class DistributedStorageManager:
 
     async def store_file(self, file_content: bytes, filename: str,
                         file_id: str = None, tier: StorageTier = None,
-                        replicate: bool = None) -> List[FileLocation]:
+                        replicate: bool = None) -> list[FileLocation]:
         """存储文件到分布式存储"""
         if not file_id:
             file_id = hashlib.sha256(file_content).hexdigest()
@@ -430,7 +427,7 @@ class DistributedStorageManager:
             file_content = await self.retrieve_file(file_id)
 
             # 2. 存储到目标层级
-            locations = await self.store_file(
+            await self.store_file(
                 file_content, f"migrated_{file_id}", file_id, target_tier, replicate=False
             )
 
@@ -448,7 +445,7 @@ class DistributedStorageManager:
             logger.error(f"文件迁移失败: {e}")
             return False
 
-    async def optimize_storage(self) -> Dict[str, Any]:
+    async def optimize_storage(self) -> dict[str, Any]:
         """优化存储布局"""
         optimized_files = 0
         freed_space = 0
@@ -472,7 +469,7 @@ class DistributedStorageManager:
             "total_files": len(self.access_patterns)
         }
 
-    def get_storage_stats(self) -> Dict[str, Any]:
+    def get_storage_stats(self) -> dict[str, Any]:
         """获取存储统计信息"""
         stats = {
             "configured_storages": [t.value for t in self.storage_configs.keys()],
@@ -483,7 +480,7 @@ class DistributedStorageManager:
         }
 
         # 统计各层级的文件数量
-        for file_id, pattern in self.access_patterns.items():
+        for _file_id, pattern in self.access_patterns.items():
             tier = pattern.get('tier', 'hot')
             stats["tier_distribution"][tier] = stats["tier_distribution"].get(tier, 0) + 1
 

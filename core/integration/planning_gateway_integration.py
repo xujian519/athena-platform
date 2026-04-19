@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺网关规划引擎集成模块
 Xiaonuo Gateway Planning Integration
@@ -19,13 +20,13 @@ import logging
 # 添加项目路径
 import sys
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 from core.llm.glm47_client import get_glm47_client
-from core.planning.explicit_planner import ExplicitPlanner, PlanStepStatus, get_explicit_planner
+from core.planning.explicit_planner import get_explicit_planner
 from core.planning.plan_visualizer import get_plan_visualizer
 
 logger = logging.getLogger(__name__)

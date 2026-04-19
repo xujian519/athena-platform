@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 文本质量评估器
 Text Quality Assessor
@@ -13,7 +14,7 @@ Text Quality Assessor
 import logging
 import re
 from enum import Enum
-from typing import Any, Dict, List
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

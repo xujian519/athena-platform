@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 NebulaGraph知识图谱构建器
 Legal Knowledge Graph Builder for NebulaGraph
@@ -8,19 +9,17 @@ Legal Knowledge Graph Builder for NebulaGraph
 
 import logging
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from nebula3.Config import Config
 from nebula3.gclient.net import ConnectionPool
 
 # 安全查询工具导入
 from core.legal_database.citation_extractor import CitationExtractor, ExtractedCitation
-from core.legal_database.extractor import ExtractedEntity, ExtractedRelation, HybridLegalExtractor
+from core.legal_database.extractor import ExtractedEntity, HybridLegalExtractor
 from core.legal_database.nebula_schema import (
-    EntityType,
     NebulaQueryBuilder,
     NebulaSchema,
-    RelationType,
 )
 from core.legal_database.relation_extractor import (
     ExtractedRelation as ExtractedEntityRelation,
@@ -451,10 +450,11 @@ class LegalKnowledgeGraphBuilder:
         text = original_text[:500] if original_text else ""
 
         # 插入
+        escaped_text = text.replace('"', '\\"')
         stmt = f'''
             INSERT VERTEX Article(id, article_number, original_text, hierarchy_path)
             VALUES "{vertex_id}": (
-                "{clause_id}", "{article_number or ""}", "{text.replace('"', '\\"')}",
+                "{clause_id}", "{article_number or ""}", "{escaped_text}",
                 "{hierarchy_path or ""}"
             );
         '''
@@ -480,11 +480,12 @@ class LegalKnowledgeGraphBuilder:
 
         # 插入(忽略重复)
         try:
+            escaped_entity_text = entity.entity_text[:100].replace('"', '\\"')
             stmt = f'''
                 INSERT VERTEX {tag}(id, name, type, description)
                 VALUES "{vertex_id}": (
                     "{vertex_id}", "{entity.entity_name}", "{entity.entity_type}",
-                    "{entity.entity_text[:100].replace('"', '\\"')}"
+                    "{escaped_entity_text}"
                 );
             '''
             self._execute_statement(stmt)

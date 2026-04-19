@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 异步NLP处理器
 Asynchronous NLP Processor
@@ -19,7 +20,7 @@ import logging
 from collections.abc import Awaitable, Callable
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +59,7 @@ class AsyncNLPProcessor:
         )
 
     async def process_single(
-        self, text: str, processor: Callable[[str], Awaitable[dict[str, Any], **kwargs: Any
+        self, text: str, processor: Callable[[str], Awaitable[dict[str, Any]]], **kwargs: Any
     ) -> dict[str, Any]:
         """
         异步处理单个文本
@@ -92,7 +93,7 @@ class AsyncNLPProcessor:
     async def process_batch(
         self,
         texts: list[str],
-        processor: Callable[[str], Awaitable[dict[str, Any],
+        processor: Callable[[str], Awaitable[dict[str, Any]]],
         show_progress: bool = False,
         **kwargs: Any,
     ) -> list[dict[str, Any]]:
@@ -133,7 +134,7 @@ class AsyncNLPProcessor:
     async def process_batch_with_rate_limit(
         self,
         texts: list[str],
-        processor: Callable[[str], Awaitable[dict[str, Any],
+        processor: Callable[[str], Awaitable[dict[str, Any]]],
         rate_limit: float = 100.0,  # 每秒请求数
         **kwargs: Any,
     ) -> list[dict[str, Any]]:
@@ -174,7 +175,7 @@ class AsyncNLPProcessor:
     async def process_streaming(
         self,
         texts: list[str],
-        processor: Callable[[str], Awaitable[dict[str, Any],
+        processor: Callable[[str], Awaitable[dict[str, Any]]],
         batch_size: int = 32,
         **kwargs: Any,
     ) -> Any:
@@ -197,7 +198,7 @@ class AsyncNLPProcessor:
             for result in batch_results:
                 yield result
 
-    def run_cpu_bound(self, func: Callable[Any] -> Awaitable[Any]:
+    def run_cpu_bound(self, func: Callable[..., Any], *args, **kwargs) -> Awaitable[Any]:
         """
         在线程池中运行CPU密集型任务
 
@@ -256,7 +257,7 @@ def get_async_processor() -> AsyncNLPProcessor:
 
 
 # 便捷装饰器:将同步函数转换为异步
-def asyncify(max_workers: int = 4) -> Callable[[Callable[..., Any]], Callable[..., Awaitable[Any]:
+def asyncify(max_workers: int = 4) -> Callable[[Callable[..., Any]], Callable[..., Awaitable[Any]]]:
     """
     将同步函数转换为异步的装饰器
 

@@ -1,0 +1,318 @@
+{
+  "dashboard": {
+    "title": "意图识别服务监控",
+    "description": "意图识别服务的完整监控仪表板",
+    "tags": ["intent", "ai", "ml"],
+    "timezone": "browser",
+    "refresh": "10s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "请求速率（QPS）",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+        "targets": [
+          {
+            "expr": "rate(intent_recognition_requests_total[1m])",
+            "legendFormat": "{{engine_type}} - {{intent_type}} - {{status}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "reqps"
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "请求延迟分布",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, rate(intent_recognition_latency_seconds_bucket[5m]))",
+            "legendFormat": "p50 - {{engine_type}}",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(intent_recognition_latency_seconds_bucket[5m]))",
+            "legendFormat": "p95 - {{engine_type}}",
+            "refId": "B"
+          },
+          {
+            "expr": "histogram_quantile(0.99, rate(intent_recognition_latency_seconds_bucket[5m]))",
+            "legendFormat": "p99 - {{engine_type}}",
+            "refId": "C"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s"
+          }
+        }
+      },
+      {
+        "id": 3,
+        "title": "错误率",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+        "targets": [
+          {
+            "expr": "rate(intent_recognition_requests_total{status=\"error\"}[5m]) / rate(intent_recognition_requests_total[5m]) * 100",
+            "legendFormat": "错误率 - {{engine_type}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "green"},
+                {"value": 1, "color": "yellow"},
+                {"value": 5, "color": "red"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "意图类型分布",
+        "type": "piechart",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+        "targets": [
+          {
+            "expr": "sum by (intent_type) (increase(intent_recognition_requests_total[1h]))",
+            "legendFormat": "{{intent_type}}",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "批处理吞吐量",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16},
+        "targets": [
+          {
+            "expr": "intent_batch_throughput_per_second",
+            "legendFormat": "{{strategy}} 策略",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "reqps"
+          }
+        }
+      },
+      {
+        "id": 6,
+        "title": "批处理大小分布",
+        "type": "heatmap",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16},
+        "targets": [
+          {
+            "expr": "sum(increase(intent_batch_size_distribution_bucket[1h])) by (le)",
+            "legendFormat": "{{le}}",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "已加载模型数量",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 24},
+        "targets": [
+          {
+            "expr": "intent_loaded_models_count",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": {"mode": "thresholds"},
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "blue"},
+                {"value": 3, "color": "green"},
+                {"value": 5, "color": "yellow"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 8,
+        "title": "模型加载时间",
+        "type": "graph",
+        "gridPos": {"h": 4, "w": 18, "x": 6, "y": 24},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(intent_model_load_duration_seconds_bucket[5m]))",
+            "legendFormat": "p95 - {{model_name}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s"
+          }
+        }
+      },
+      {
+        "id": 9,
+        "title": "缓存命中率",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 28},
+        "targets": [
+          {
+            "expr": "intent_cache_hit_rate",
+            "legendFormat": "{{cache_type}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percentunit",
+            "max": 1,
+            "min": 0
+          }
+        }
+      },
+      {
+        "id": 10,
+        "title": "缓存大小",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 28},
+        "targets": [
+          {
+            "expr": "intent_cache_size",
+            "legendFormat": "{{cache_type}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short"
+          }
+        }
+      },
+      {
+        "id": 11,
+        "title": "队列长度",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 36},
+        "targets": [
+          {
+            "expr": "intent_queue_length",
+            "legendFormat": "{{queue_name}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": {"mode": "thresholds"},
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "green"},
+                {"value": 50, "color": "yellow"},
+                {"value": 100, "color": "red"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 12,
+        "title": "当前批大小",
+        "type": "gauge",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 36},
+        "targets": [
+          {
+            "expr": "intent_current_batch_size",
+            "legendFormat": "{{processor_name}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "min": 1,
+            "max": 32
+          }
+        }
+      },
+      {
+        "id": 13,
+        "title": "系统资源使用率",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 44},
+        "targets": [
+          {
+            "expr": "intent_system_resource_usage{resource_type=\"cpu\"}",
+            "legendFormat": "CPU",
+            "refId": "A"
+          },
+          {
+            "expr": "intent_system_resource_usage{resource_type=\"memory\"}",
+            "legendFormat": "内存",
+            "refId": "B"
+          },
+          {
+            "expr": "intent_system_resource_usage{resource_type=\"gpu\"}",
+            "legendFormat": "GPU",
+            "refId": "C"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "green"},
+                {"value": 70, "color": "yellow"},
+                {"value": 90, "color": "red"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 14,
+        "title": "错误总数",
+        "type": "stat",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 44},
+        "targets": [
+          {
+            "expr": "sum by (error_type, component) (increase(intent_errors_total[1h]))",
+            "legendFormat": "{{error_type}} - {{component}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": {"mode": "palette-classic"}
+          }
+        }
+      }
+    ]
+  }
+}

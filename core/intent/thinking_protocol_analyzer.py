@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 思维协议驱动的意图分析器
 Thinking Protocol-Driven Intent Analyzer
@@ -22,8 +23,7 @@ import logging
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 # 导入基础组件
 from core.intent.intelligent_intent_service import (

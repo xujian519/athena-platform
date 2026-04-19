@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺v4.0全面升级集成测试
 Xiaonuo v4.0 Comprehensive Upgrade Integration Test

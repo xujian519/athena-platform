@@ -9,9 +9,13 @@ Integration Tests for Enhanced Meta-Learning System
 """
 
 import asyncio
+import sys
 from datetime import datetime
+from pathlib import Path
 
 import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.learning.enhanced_meta_learning import (
     EnhancedMetaLearningEngine,
@@ -564,7 +568,7 @@ class TestEnhancedMetaLearningStress:
 
         elapsed = __import__("time").perf_counter() - start_time
 
-        print(f"\n高容量元学习测试 (100任务):")
+        print("\n高容量元学习测试 (100任务):")
         print(f"  耗时: {elapsed*1000:.2f}ms")
         print(f"  吞吐量: {100/elapsed:.0f} tasks/sec")
 
@@ -598,7 +602,7 @@ class TestEnhancedMetaLearningStress:
 
         elapsed = time.perf_counter() - start_time
 
-        print(f"\n超参数优化压测 (20任务, 20迭代):")
+        print("\n超参数优化压测 (20任务, 20迭代):")
         print(f"  耗时: {elapsed*1000:.2f}ms")
         print(f"  优化后参数: {optimized_params}")
 
@@ -627,7 +631,7 @@ class TestEnhancedMetaLearningStress:
 
         results = await asyncio.gather(*transfers)
 
-        print(f"\n批量知识迁移测试 (10次迁移):")
+        print("\n批量知识迁移测试 (10次迁移):")
         for i, result in enumerate(results):
             print(
                 f"  迁移{i}: {result['source_domain']} -> {result['target_domain']}, "

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Agent服务健康检查和故障转移系统
 Health Check and Failover System for Agent Services
@@ -19,9 +20,9 @@ import contextlib
 import logging
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set
+from typing import Any
 from uuid import uuid4
 
 logger = logging.getLogger(__name__)
@@ -143,7 +144,7 @@ class HealthChecker:
 
         # 运行状态
         self.running = False
-        self._check_task: Optional[asyncio.Task[Any]] | None = None
+        self._check_task: asyncio.Task[Any] | None | None = None
 
     async def start(self):
         """启动健康检查器"""
@@ -372,7 +373,7 @@ class FailoverManager:
 
         # 运行状态
         self.running = False
-        self._monitor_task: Optional[asyncio.Task[Any]] | None = None
+        self._monitor_task: asyncio.Task[Any] | None | None = None
 
     async def start(self):
         """启动故障转移管理器"""

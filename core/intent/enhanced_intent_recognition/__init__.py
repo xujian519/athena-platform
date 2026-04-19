@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强意图识别引擎 - 公共接口
 Enhanced Intent Recognition Engine - Public Interface
@@ -17,6 +18,8 @@ from .engine import (
     EnhancedIntentRecognitionEngine,
     create_enhanced_intent_engine,
     get_enhanced_intent_engine,
+)
+from .engine import (
     recognize_intent as _recognize_intent,
 )
 

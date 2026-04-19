@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 业务分类器
 Business Classifier
@@ -10,12 +9,10 @@ Business Classifier
 创建时间: 2024年12月15日
 """
 
-import re
-from core.async_main import async_main
-import asyncio
-from typing import Dict, List, Tuple, Optional, Any
-from enum import Enum
 import logging
+import re
+from enum import Enum
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -123,7 +120,7 @@ class BusinessClassifier:
         self.threshold = 0.6  # 分类阈值
         self.max_keywords = 20  # 最大关键词数
 
-    async def classify(self, text: str, context: Dict | None = None) -> Dict[str, Any]:
+    async def classify(self, text: str, context: dict | None = None) -> dict[str, Any]:
         """
         分类业务类型
 
@@ -184,7 +181,7 @@ class BusinessClassifier:
         text = ' '.join(text.split())
         return text
 
-    async def _classify_by_keywords(self, text: str) -> Dict[BusinessType, float]:
+    async def _classify_by_keywords(self, text: str) -> dict[BusinessType, float]:
         """基于关键词分类"""
         scores = {}
 
@@ -216,9 +213,9 @@ class BusinessClassifier:
 
         return scores
 
-    async def _classify_by_patterns(self, text: str) -> Dict[BusinessType, float]:
+    async def _classify_by_patterns(self, text: str) -> dict[BusinessType, float]:
         """基于模式分类"""
-        scores = {bt: 0.0 for bt in BusinessType}
+        scores = dict.fromkeys(BusinessType, 0.0)
 
         # 检查专利号
         if self.patterns['patent_number'].search(text):
@@ -238,9 +235,9 @@ class BusinessClassifier:
 
         return scores
 
-    async def _classify_by_context(self, text: str, context: Dict) -> Dict[BusinessType, float]:
+    async def _classify_by_context(self, text: str, context: dict) -> dict[BusinessType, float]:
         """基于上下文分类"""
-        scores = {bt: 0.0 for bt in BusinessType}
+        scores = dict.fromkeys(BusinessType, 0.0)
 
         # 检查上下文中的线索
         if 'previous_queries' in context:
@@ -257,7 +254,7 @@ class BusinessClassifier:
 
         return scores
 
-    def _combine_scores(self, keyword_scores: Dict, pattern_scores: Dict, context_scores: Dict) -> Dict[BusinessType, float]:
+    def _combine_scores(self, keyword_scores: dict, pattern_scores: dict, context_scores: dict) -> dict[BusinessType, float]:
         """综合评分"""
         combined = {}
 
@@ -271,16 +268,16 @@ class BusinessClassifier:
 
         return combined
 
-    def _get_found_keywords(self, text: str) -> List[str]:
+    def _get_found_keywords(self, text: str) -> list[str]:
         """获取找到的关键词"""
         found = []
-        for business_type, keywords_data in self.keywords.items():
+        for _business_type, keywords_data in self.keywords.items():
             for keyword in keywords_data['primary'] + keywords_data['secondary']:
                 if keyword in text:
                     found.append(keyword)
         return found[:self.max_keywords]
 
-    def _get_found_patterns(self, text: str) -> List[str]:
+    def _get_found_patterns(self, text: str) -> list[str]:
         """获取找到的模式"""
         found = []
         for pattern_name, pattern in self.patterns.items():
@@ -288,7 +285,7 @@ class BusinessClassifier:
                 found.append(pattern_name)
         return found
 
-    def _generate_reasoning(self, best_type: BusinessType, scores: Dict[BusinessType, float]) -> str:
+    def _generate_reasoning(self, best_type: BusinessType, scores: dict[BusinessType, float]) -> str:
         """生成推理说明"""
         if best_type == BusinessType.UNKNOWN:
             return "未能明确识别业务类型，需要更多信息"

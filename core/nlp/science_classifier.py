@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 理科科目分类器
 自动识别问题属于哪个理科科目和主题
@@ -6,7 +7,6 @@
 import logging
 from dataclasses import dataclass
 from enum import Enum
-
 
 logger = logging.getLogger(__name__)
 

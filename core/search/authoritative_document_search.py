@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 权威文档检索系统
 Authoritative Document Search System
@@ -12,8 +13,7 @@ Authoritative Document Search System
 import logging
 import time
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 from core.reranking.authoritative_document_reranker import (
     AuthoritativeDocumentReranker,

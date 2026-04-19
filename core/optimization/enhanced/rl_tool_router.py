@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 强化学习工具路由器 (RL Tool Router)
 基于强化学习的智能工具选择和路由决策
@@ -13,8 +14,9 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -266,7 +268,7 @@ class RLToolRouter:
         self.agent = QLearningAgent()
 
         # 工具注册表
-        self.tool_registry: dict[Action, dict[str, Any] = {}
+        self.tool_registry: dict[Action, dict[str, Any]] = {}
 
         # 历史决策
         self.decision_history: list[dict[str, Any]] = []

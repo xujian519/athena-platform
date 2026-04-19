@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一Agent记忆系统 - 数据模型
 Unified Agent Memory System - Data Models
@@ -64,7 +65,6 @@ class AgentType(Enum):
 
     ATHENA = "athena"  # 智慧女神
     XIAONA = "xiaona"  # 小娜·天秤女神
-    YUNXI = "yunxi"  # 云熙.vega
     XIAOCHEN = "xiaochen"  # 小宸·星河射手
     XIAONUO = "xiaonuo"  # 小诺·双鱼座
 
@@ -149,15 +149,6 @@ AGENT_REGISTRY = {
         role="专利法律专家，大姐姐",
         description="专业的知识产权法律服务提供者，守护正义与平衡",
         special_tags=["法律", "专利", "专业", "天秤", "守护"],
-    ),
-    AgentType.YUNXI: AgentIdentity(
-        agent_id="yunxi_vega",
-        agent_type=AgentType.YUNXI,
-        name="云熙.vega",
-        english_name="Yunxi Vega",
-        role="IP管理系统",
-        description="知识产权管理系统，织女星守护",
-        special_tags=["管理", "IP", "织女星", "细致", "专业"],
     ),
     AgentType.XIAOCHEN: AgentIdentity(
         agent_id="xiaochen_sagittarius",

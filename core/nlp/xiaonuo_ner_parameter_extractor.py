@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺命名实体识别(NER)参数提取系统
 集成深度学习NER技术,实现高精度参数提取和实体识别
@@ -20,13 +21,14 @@ import re
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 import jieba
 import jieba.posseg as pseg
 
 # 安全修复: 使用joblib替代pickle序列化scikit-learn模型
 import joblib
+import numpy as np
 
 # NLP和机器学习库
 from sklearn.feature_extraction.text import TfidfVectorizer

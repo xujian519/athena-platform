@@ -3,11 +3,11 @@
 保存爸爸的新创作短诗《天快亮了》
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-from pathlib import Path
+import sqlite3
 from datetime import datetime
+from pathlib import Path
+
 
 def save_new_poem() -> None:
     """保存新创作的短诗到数据库"""

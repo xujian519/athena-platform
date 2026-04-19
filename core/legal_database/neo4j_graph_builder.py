@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Neo4j知识图谱构建器
 Legal Knowledge Graph Builder for Neo4j
@@ -21,16 +22,14 @@ Legal Knowledge Graph Builder for Neo4j
 
 import logging
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # 安全查询工具导入
 from core.legal_database.citation_extractor import CitationExtractor, ExtractedCitation
-from core.legal_database.extractor import ExtractedEntity, ExtractedRelation, HybridLegalExtractor
+from core.legal_database.extractor import ExtractedEntity, HybridLegalExtractor
 from core.legal_database.neo4j_schema import (
-    EntityType,
     Neo4jQueryBuilder,
     Neo4jSchema,
-    RelationType,
 )
 from core.legal_database.relation_extractor import (
     ExtractedRelation as ExtractedEntityRelation,
@@ -511,7 +510,7 @@ class Neo4jLegalKnowledgeGraphBuilder:
         try:
             self._execute_cypher(cypher, props)
             self.stats.nodes_created += 1
-        except Exception as e:
+        except Exception:
             # 可能是重复插入,忽略
             logger.debug(f"实体节点插入已存在: {node_id}")
 

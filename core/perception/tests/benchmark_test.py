@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 性能基准测试
 建立性能基线，对比不同配置的性能表现
@@ -6,13 +7,13 @@ Athena 感知模块 - 性能基准测试
 """
 
 import asyncio
-import time
-import statistics
-from datetime import datetime
-from typing import Dict, Any, List, Callable
-from pathlib import Path
-import logging
 import json
+import logging
+import statistics
+import time
+from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 # 配置日志
 logging.basicConfig(
@@ -29,14 +30,14 @@ class BenchmarkResult:
         self.benchmark_name = benchmark_name
         self.start_time = datetime.now()
         self.end_time = None
-        self.measurements: List[float] = []
-        self.metadata: Dict[str, Any] = {}
+        self.measurements: list[float] = []
+        self.metadata: dict[str, Any] = {}
 
     def add_measurement(self, value: float):
         """添加测量值"""
         self.measurements.append(value)
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """获取统计数据"""
         if not self.measurements:
             return {
@@ -64,7 +65,7 @@ class BenchmarkResult:
             "p99": sorted_data[int(n * 0.99)] if n >= 100 else sorted_data[-1]
         }
 
-    def get_summary(self) -> Dict[str, Any]:
+    def get_summary(self) -> dict[str, Any]:
         """获取测试摘要"""
         self.end_time = datetime.now()
         stats = self.get_statistics()
@@ -94,8 +95,8 @@ class BenchmarkTester:
 
     def __init__(self):
         """初始化性能基准测试器"""
-        self.benchmarks: Dict[str, BenchmarkResult] = {}
-        self.baseline_scores: Dict[str, float] = {}
+        self.benchmarks: dict[str, BenchmarkResult] = {}
+        self.baseline_scores: dict[str, float] = {}
 
     async def benchmark_ocr_performance(
         self,
@@ -186,7 +187,7 @@ class BenchmarkTester:
     async def benchmark_image_processing(
         self,
         image_path: str,
-        operations: List[str],
+        operations: list[str],
         iterations: int = 10
     ) -> BenchmarkResult:
         """
@@ -445,8 +446,8 @@ class BenchmarkTester:
             if core_dir not in sys.path:
                 sys.path.insert(0, core_dir)
 
-            from core.perception.processors.tesseract_ocr import TesseractOCRProcessor
             from core.perception.cache.redis_cache import RedisCacheManager
+            from core.perception.processors.tesseract_ocr import TesseractOCRProcessor
             from core.perception.queue.async_task_queue import AsyncTaskQueue, TaskPriority
 
             ocr_processor = TesseractOCRProcessor()
@@ -525,7 +526,7 @@ class BenchmarkTester:
     def _print_benchmark_statistics(
         self,
         result: BenchmarkResult,
-        stats: Dict[str, Any],
+        stats: dict[str, Any],
         unit: str = "秒"
     ):
         """打印性能基准统计"""
@@ -546,7 +547,7 @@ class BenchmarkTester:
         self,
         benchmark_name: str,
         current_value: float
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         与基准线对比
 
@@ -603,7 +604,7 @@ class BenchmarkTester:
         # 详细结果
         report.append("\n## 详细测试结果\n")
 
-        for benchmark_name, result in self.benchmarks.items():
+        for _benchmark_name, result in self.benchmarks.items():
             summary = result.get_summary()
             stats = summary["statistics"]
 
@@ -636,7 +637,7 @@ class BenchmarkTester:
     def load_baseline(self, filepath: str) -> bool:
         """从文件加载基准线"""
         try:
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, encoding='utf-8') as f:
                 data = json.load(f)
 
             self.baseline_scores = data.get("baselines", {})
@@ -659,8 +660,8 @@ if __name__ == "__main__":
         # 创建测试图像
         from pathlib import Path
         if not Path(test_image).exists():
-            import numpy as np
             import cv2
+            import numpy as np
             img = np.ones((100, 200, 3), dtype=np.uint8) * 255
             cv2.putText(img, "Test", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
             cv2.imwrite(test_image, img)

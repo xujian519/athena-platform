@@ -6,13 +6,12 @@ Smart Publish Scheduler
 """
 
 import asyncio
-from core.async_main import async_main
 import json
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any, Callable
+import random
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta
 from enum import Enum
-import logging
+from typing import Any
 
 from utils.logger import logger
 
@@ -47,8 +46,8 @@ class PublishPriority(Enum):
 class PublishTask:
     """发布任务 - 增强版本"""
     id: str
-    content: Dict[str, Any]
-    platforms: List[str]
+    content: dict[str, Any]
+    platforms: list[str]
     strategy: PublishStrategy
     priority: PublishPriority = PublishPriority.NORMAL
     scheduled_time: datetime | None = None
@@ -57,7 +56,7 @@ class PublishTask:
     published_at: datetime | None = None
     retry_count: int = 0
     max_retries: int = 3
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     # 小宸特有字段
     style_context: str | None = None
@@ -73,8 +72,8 @@ class PublishResult:
     message: str
     platform: str
     published_at: datetime | None = None
-    platform_response: Dict[str, Any] = field(default_factory=dict)
-    metrics: Dict[str, Any] = field(default_factory=dict)
+    platform_response: dict[str, Any] = field(default_factory=dict)
+    metrics: dict[str, Any] = field(default_factory=dict)
 
     # 小宸特有字段
     engagement_prediction: float | None = None
@@ -86,18 +85,18 @@ class PublishResult:
 class PublishSchedule:
     """发布计划 - 增强版本"""
     name: str
-    tasks: List[PublishTask] = field(default_factory=list)
+    tasks: list[PublishTask] = field(default_factory=list)
     start_date: datetime = field(default_factory=datetime.now)
     end_date: datetime | None = None
 
     # 发布限制
-    daily_limits: Dict[str, int] = field(default_factory=lambda: {
+    daily_limits: dict[str, int] = field(default_factory=lambda: {
         "max_posts_per_day": 3,
         "min_interval_hours": 2
     })
 
     # 最佳发布时段（基于山东地区用户习惯）
-    peak_hours: List[str] = field(default_factory=lambda: [
+    peak_hours: list[str] = field(default_factory=lambda: [
         "08:00-09:00",  # 上班路上
         "12:00-13:00", # 午休时间
         "18:00-19:00", # 下班路上
@@ -106,7 +105,7 @@ class PublishSchedule:
     ])
 
     # 内容类型分配
-    content_distribution: Dict[str, float] = field(default_factory=lambda: {
+    content_distribution: dict[str, float] = field(default_factory=lambda: {
         "ip_education": 0.4,        # IP知识普及
         "business_promotion": 0.2,  # 业务推广
         "cultural_content": 0.2,   # 文化内容
@@ -135,9 +134,9 @@ class XiaochenSmartScheduler:
         self.enable_ai_optimization = enable_ai_optimization
 
         # 任务队列
-        self.pending_tasks: List[PublishTask] = []
-        self.scheduled_tasks: List[PublishTask] = []
-        self.completed_tasks: List[PublishResult] = []
+        self.pending_tasks: list[PublishTask] = []
+        self.scheduled_tasks: list[PublishTask] = []
+        self.completed_tasks: list[PublishResult] = []
 
         # 发布统计
         self.publish_stats = {
@@ -150,7 +149,7 @@ class XiaochenSmartScheduler:
         # 山东地区特有时间适配
         self.time_zone_adapter = self._init_timezone_adapter()
 
-    def _init_timezone_adapter(self) -> Dict[str, Any]:
+    def _init_timezone_adapter(self) -> dict[str, Any]:
         """初始化时区适配器"""
         return {
             "timezone": "Asia/Shanghai",
@@ -327,7 +326,7 @@ class XiaochenSmartScheduler:
         else:
             logger.warning("批处理队列已满，稍后再试")
 
-    async def process_scheduled_tasks(self) -> List[PublishResult]:
+    async def process_scheduled_tasks(self) -> list[PublishResult]:
         """处理定时任务"""
         now = datetime.now()
         results = []
@@ -342,7 +341,7 @@ class XiaochenSmartScheduler:
 
         return results
 
-    async def generate_publish_report(self, days: int = 7) -> Dict[str, Any]:
+    async def generate_publish_report(self, days: int = 7) -> dict[str, Any]:
         """生成发布报告"""
         end_date = datetime.now()
         start_date = end_date - timedelta(days=days)
@@ -385,7 +384,7 @@ class XiaochenSmartScheduler:
             "recommendations": await self._generate_recommendations()
         }
 
-    async def _generate_recommendations(self) -> List[str]:
+    async def _generate_recommendations(self) -> list[str]:
         """生成优化建议"""
         recommendations = [
             "建议在高峰时段发布IP教育内容",
@@ -403,7 +402,7 @@ class XiaochenSmartScheduler:
     async def create_publish_schedule(self,
                                      name: str,
                                      days: int = 7,
-                                     content_plan: Dict[str, int] = None) -> PublishSchedule:
+                                     content_plan: dict[str, int] = None) -> PublishSchedule:
         """创建发布计划"""
 
         schedule = PublishSchedule(

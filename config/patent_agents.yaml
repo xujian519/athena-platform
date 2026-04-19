@@ -1,0 +1,542 @@
+# 专利代理类型配置
+# Patent Agent Types Configuration
+#
+# 该配置文件定义了4种专利代理类型的详细配置
+# 包括工具列表、能力描述、模型参数等
+
+version: "1.0.0"
+last_updated: "2026-04-06"
+
+# 全局配置
+global:
+  default_timeout: 300  # 默认超时时间（秒）
+  max_retries: 3  # 最大重试次数
+  retry_delay: 5  # 重试延迟（秒）
+  health_check_interval: 60  # 健康检查间隔（秒）
+  
+# 模型配置模板
+model_templates:
+  # 快速模型（适合简单任务）
+  fast:
+    temperature: 0.3
+    max_tokens: 2000
+    top_p: 0.9
+    frequency_penalty: 0.0
+    presence_penalty: 0.0
+  
+  # 平衡模型（适合一般任务）
+  balanced:
+    temperature: 0.5
+    max_tokens: 4000
+    top_p: 0.9
+    frequency_penalty: 0.1
+    presence_penalty: 0.1
+  
+  # 深度模型（适合复杂分析）
+  deep:
+    temperature: 0.7
+    max_tokens: 8000
+    top_p: 0.95
+    frequency_penalty: 0.2
+    presence_penalty: 0.2
+
+# 代理类型定义
+agents:
+  # 1. 专利分析师 (Patent Analyst)
+  patent-analyst:
+    display_name: "专利分析师"
+    description: "负责专利技术分析、创新点识别、技术对比分析"
+    
+    # 模型配置
+    model:
+      default: "claude-3-5-sonnet-20241022"
+      fallback: "claude-3-haiku-20240307"
+      template: "balanced"  # 使用balanced模板
+      
+    # 代理优先级（1-10，数字越小优先级越高）
+    priority: 1
+    
+    # 并发配置
+    concurrency:
+      max_concurrent_tasks: 5
+      queue_size: 20
+      
+    # 能力定义
+    capabilities:
+      - name: "专利技术分析"
+        description: "深入分析专利技术方案的技术特征"
+        keywords: ["技术分析", "技术特征", "技术方案"]
+        
+      - name: "创新点识别"
+        description: "识别专利的核心技术创新点"
+        keywords: ["创新点", "技术创新", "技术突破"]
+        
+      - name: "技术对比分析"
+        description: "对比分析专利与现有技术的差异"
+        keywords: ["对比分析", "技术对比", "现有技术"]
+        
+      - name: "技术方案评估"
+        description: "评估技术方案的可行性和价值"
+        keywords: ["技术评估", "可行性分析", "价值评估"]
+        
+      - name: "技术领域分类"
+        description: "确定专利所属的技术领域"
+        keywords: ["技术领域", "IPC分类", "CPC分类"]
+    
+    # 工具权限
+    tools:
+      allowed:
+        - "code_analyzer"  # 代码分析工具
+        - "knowledge_graph"  # 知识图谱查询
+        - "patent_search"  # 专利检索
+        - "web_search"  # 网络搜索
+        - "document_processor"  # 文档处理
+        - "embedding_service"  # 向量嵌入服务
+        - "vector_search"  # 向量检索
+        - "text_analyzer"  # 文本分析
+        - "data_visualization"  # 数据可视化
+        
+      restricted: []  # 受限工具（需要特殊权限）
+      
+    # 系统提示词模板
+    system_prompt: |
+      你是一位专业的专利分析师，擅长从技术角度分析专利文件。
+
+      你的核心能力：
+      1. 深入理解技术方案的本质
+      2. 识别技术创新点
+      3. 对比分析现有技术
+      4. 评估技术方案的可行性和价值
+
+      分析框架：
+      - 技术领域：明确专利所属的技术领域
+      - 技术问题：分析专利要解决的技术问题
+      - 技术方案：详细说明专利的技术方案
+      - 创新点：识别专利的核心创新点
+      - 技术效果：评估技术方案带来的有益效果
+      - 对比分析：与现有技术进行对比
+
+      分析原则：
+      - 基于事实，客观中立
+      - 关注技术本质，而非表面表述
+      - 识别真正的创新，避免过度解读
+      - 结合技术背景和市场环境评估价值
+    
+    # 性能指标
+    performance:
+      expected_response_time: 30  # 预期响应时间（秒）
+      max_response_time: 120  # 最大响应时间（秒）
+      target_accuracy: 0.85  # 目标准确率
+      
+    # 元数据
+    metadata:
+      created_at: "2026-04-06"
+      updated_at: "2026-04-06"
+      author: "Athena Team"
+      version: "1.0.0"
+
+  # 2. 专利检索员 (Patent Searcher)
+  patent-searcher:
+    display_name: "专利检索员"
+    description: "负责专利检索、对比文件查找、现有技术分析"
+    
+    # 模型配置
+    model:
+      default: "claude-3-5-haiku-20241022"  # 使用快速模型
+      fallback: "claude-3-5-sonnet-20241022"
+      template: "fast"  # 使用fast模板
+      
+    # 代理优先级
+    priority: 2
+    
+    # 并发配置
+    concurrency:
+      max_concurrent_tasks: 10  # 可以处理更多并发任务
+      queue_size: 50
+      
+    # 能力定义
+    capabilities:
+      - name: "专利检索策略制定"
+        description: "制定高效的专利检索策略"
+        keywords: ["检索策略", "检索规划", "检索方案"]
+        
+      - name: "关键词扩展"
+        description: "扩展和优化检索关键词"
+        keywords: ["关键词", "同义词", "上下位词"]
+        
+      - name: "分类号检索"
+        description: "使用IPC/CPC分类号进行检索"
+        keywords: ["IPC", "CPC", "分类号"]
+        
+      - name: "对比文件筛选"
+        description: "筛选和评估对比文件"
+        keywords: ["对比文件", "筛选", "评估"]
+        
+      - name: "检索结果分析"
+        description: "分析检索结果的相关性"
+        keywords: ["结果分析", "相关性", "评估"]
+    
+    # 工具权限
+    tools:
+      allowed:
+        - "patent_search"  # 专利检索（核心工具）
+        - "web_search"  # 网络搜索
+        - "knowledge_graph"  # 知识图谱
+        - "embedding_service"  # 向量嵌入
+        - "vector_search"  # 向量检索
+        - "text_analyzer"  # 文本分析
+        - "ipc_classifier"  # IPC分类器
+        - "cpc_classifier"  # CPC分类器
+        
+      restricted: []
+      
+    # 系统提示词模板
+    system_prompt: |
+      你是一位专业的专利检索员，擅长制定高效的检索策略。
+
+      你的核心能力：
+      1. 理解专利检索需求
+      2. 制定检索策略
+      3. 选择合适的检索工具和数据库
+      4. 筛选和评估对比文件
+
+      检索流程：
+      1. 需求分析：明确检索目标和技术领域
+      2. 关键词提取：从技术方案中提取关键技术特征
+      3. 关键词扩展：使用同义词、上下位词、缩写等扩展关键词
+      4. 分类号选择：选择合适的IPC/CPC分类号
+      5. 检索式构建：组合关键词和分类号构建检索式
+      6. 结果筛选：根据相关性筛选对比文件
+      7. 对比分析：分析对比文件与目标专利的异同
+
+      检索原则：
+      - 全面覆盖，避免遗漏
+      - 精准定位，提高效率
+      - 多角度检索，交叉验证
+      - 及时调整，优化策略
+    
+    # 性能指标
+    performance:
+      expected_response_time: 15  # 预期响应时间（秒）
+      max_response_time: 60  # 最大响应时间（秒）
+      target_accuracy: 0.90  # 目标准确率（检索要求更高准确率）
+      
+    # 元数据
+    metadata:
+      created_at: "2026-04-06"
+      updated_at: "2026-04-06"
+      author: "Athena Team"
+      version: "1.0.0"
+
+  # 3. 法律研究员 (Legal Researcher)
+  legal-researcher:
+    display_name: "法律研究员"
+    description: "负责法律法规检索、案例分析、法律条文解读"
+    
+    # 模型配置
+    model:
+      default: "claude-3-5-sonnet-20241022"  # 需要深度分析
+      fallback: "claude-opus-4-20250514"
+      template: "deep"  # 使用deep模板
+      
+    # 代理优先级
+    priority: 1  # 高优先级，需要深度分析
+    
+    # 并发配置
+    concurrency:
+      max_concurrent_tasks: 3  # 法律研究任务较重，限制并发
+      queue_size: 15
+      
+    # 能力定义
+    capabilities:
+      - name: "法律法规检索"
+        description: "检索相关的法律法规条文"
+        keywords: ["法律法规", "法律条文", "法条检索"]
+        
+      - name: "案例分析"
+        description: "分析典型案例的判决和理由"
+        keywords: ["案例分析", "判决", "判例"]
+        
+      - name: "法律条文解读"
+        description: "深入解读法律条文的含义"
+        keywords: ["条文解读", "法律解释", "法条理解"]
+        
+      - name: "风险评估"
+        description: "评估法律风险和应对策略"
+        keywords: ["风险评估", "法律风险", "风险应对"]
+        
+      - name: "法律意见生成"
+        description: "生成专业的法律意见书"
+        keywords: ["法律意见", "意见书", "法律建议"]
+    
+    # 工具权限
+    tools:
+      allowed:
+        - "legal_search"  # 法律检索（核心工具）
+        - "knowledge_graph"  # 知识图谱
+        - "web_search"  # 网络搜索
+        - "document_processor"  # 文档处理
+        - "case_database"  # 案例数据库
+        - "regulation_database"  # 法规数据库
+        - "embedding_service"  # 向量嵌入
+        - "vector_search"  # 向量检索
+        - "text_analyzer"  # 文本分析
+        
+      restricted: []
+      
+    # 系统提示词模板
+    system_prompt: |
+      你是一位资深的法律研究员，精通专利法和相关法律法规。
+
+      你的核心能力：
+      1. 深入理解法律法规
+      2. 准确解读法律条文
+      3. 分析典型案例
+      4. 评估法律风险
+
+      研究框架：
+      1. 法律条文分析：
+         - 条文的立法目的
+         - 条文的适用范围
+         - 条文的适用条件
+         - 条文的法律后果
+
+      2. 案例分析：
+         - 案例的基本事实
+         - 争议焦点
+         - 法院观点
+         - 判决理由
+         - 判决结果
+
+      3. 风险评估：
+         - 识别潜在的法律风险
+         - 评估风险发生的可能性
+         - 评估风险的影响程度
+         - 提出风险应对建议
+
+      研究原则：
+      - 严格依据法律条文
+      - 参考权威案例
+      - 保持客观中立
+      - 关注最新法律动态
+    
+    # 性能指标
+    performance:
+      expected_response_time: 60  # 预期响应时间（秒）
+      max_response_time: 180  # 最大响应时间（秒）
+      target_accuracy: 0.95  # 目标准确率（法律研究要求最高准确率）
+      
+    # 元数据
+    metadata:
+      created_at: "2026-04-06"
+      updated_at: "2026-04-06"
+      author: "Athena Team"
+      version: "1.0.0"
+
+  # 4. 专利撰写员 (Patent Drafter)
+  patent-drafter:
+    display_name: "专利撰写员"
+    description: "负责专利申请文件的撰写和修改"
+    
+    # 模型配置
+    model:
+      default: "claude-3-5-sonnet-20241022"
+      fallback: "claude-3-5-haiku-20241022"
+      template: "balanced"  # 使用balanced模板
+      
+    # 代理优先级
+    priority: 2
+    
+    # 并发配置
+    concurrency:
+      max_concurrent_tasks: 4
+      queue_size: 20
+      
+    # 能力定义
+    capabilities:
+      - name: "专利申请文件撰写"
+        description: "撰写完整的专利申请文件"
+        keywords: ["专利申请", "申请文件", "专利撰写"]
+        
+      - name: "权利要求书撰写"
+        description: "撰写清晰的权利要求书"
+        keywords: ["权利要求", "权利要求书", "claim"]
+        
+      - name: "说明书撰写"
+        description: "撰写详细的技术说明书"
+        keywords: ["说明书", "技术描述", "实施例"]
+        
+      - name: "专利答复撰写"
+        description: "撰写审查意见答复文件"
+        keywords: ["答复", "审查意见", "OA答复"]
+        
+      - name: "专利文件修改"
+        description: "修改和完善专利文件"
+        keywords: ["文件修改", "专利修改", "文件完善"]
+    
+    # 工具权限
+    tools:
+      allowed:
+        - "document_processor"  # 文档处理（核心工具）
+        - "code_analyzer"  # 代码分析
+        - "knowledge_graph"  # 知识图谱
+        - "text_analyzer"  # 文本分析
+        - "template_engine"  # 模板引擎
+        - "formatting_tool"  # 格式化工具
+        - "embedding_service"  # 向量嵌入
+        - "patent_search"  # 专利检索
+        
+      restricted: []
+      
+    # 系统提示词模板
+    system_prompt: |
+      你是一位专业的专利撰写员，擅长撰写高质量的专利申请文件。
+
+      你的核心能力：
+      1. 理解技术方案
+      2. 撰写权利要求书
+      3. 撰写说明书
+      4. 撰写专利答复文件
+
+      撰写原则：
+      1. 权利要求书撰写：
+         - 清晰、准确地限定保护范围
+         - 采用"包括...的..."结构
+         - 避免使用模糊词汇
+         - 合理设置从属权利要求
+
+      2. 说明书撰写：
+         - 充分公开技术方案
+         - 详细描述实施例
+         - 提供技术效果
+         - 满足说明书支持要求
+
+      3. 答复文件撰写：
+         - 有针对性地答复审查意见
+         - 修改权利要求
+         - 陈述理由和证据
+         - 保持礼貌和专业
+
+      撰写标准：
+      - 语言准确、简洁
+      - 逻辑清晰、严谨
+      - 符合专利法规要求
+      - 便于审查员理解
+    
+    # 性能指标
+    performance:
+      expected_response_time: 45  # 预期响应时间（秒）
+      max_response_time: 150  # 最大响应时间（秒）
+      target_accuracy: 0.88  # 目标准确率
+      
+    # 元数据
+    metadata:
+      created_at: "2026-04-06"
+      updated_at: "2026-04-06"
+      author: "Athena Team"
+      version: "1.0.0"
+
+# 工具定义
+tools:
+  code_analyzer:
+    description: "代码分析工具"
+    category: "analysis"
+    
+  knowledge_graph:
+    description: "知识图谱查询工具"
+    category: "knowledge"
+    
+  patent_search:
+    description: "专利检索工具"
+    category: "search"
+    
+  web_search:
+    description: "网络搜索工具"
+    category: "search"
+    
+  document_processor:
+    description: "文档处理工具"
+    category: "document"
+    
+  embedding_service:
+    description: "向量嵌入服务"
+    category: "ml"
+    
+  vector_search:
+    description: "向量检索工具"
+    category: "search"
+    
+  text_analyzer:
+    description: "文本分析工具"
+    category: "analysis"
+    
+  data_visualization:
+    description: "数据可视化工具"
+    category: "visualization"
+    
+  ipc_classifier:
+    description: "IPC分类器"
+    category: "classification"
+    
+  cpc_classifier:
+    description: "CPC分类器"
+    category: "classification"
+    
+  legal_search:
+    description: "法律检索工具"
+    category: "search"
+    
+  case_database:
+    description: "案例数据库"
+    category: "database"
+    
+  regulation_database:
+    description: "法规数据库"
+    category: "database"
+    
+  template_engine:
+    description: "模板引擎"
+    category: "document"
+    
+  formatting_tool:
+    description: "格式化工具"
+    category: "document"
+
+# 配置验证规则
+validation:
+  # 必需字段
+  required_fields:
+    - "display_name"
+    - "description"
+    - "model.default"
+    - "priority"
+    - "capabilities"
+    - "tools.allowed"
+    
+  # 字段约束
+  constraints:
+    priority:
+      min: 1
+      max: 10
+      
+    max_concurrent_tasks:
+      min: 1
+      max: 20
+      
+    queue_size:
+      min: 10
+      max: 100
+      
+    target_accuracy:
+      min: 0.0
+      max: 1.0
+      
+  # 模型验证
+  allowed_models:
+    - "claude-3-5-sonnet-20241022"
+    - "claude-3-5-haiku-20241022"
+    - "claude-opus-4-20250514"
+    - "gpt-4"
+    - "gpt-4-turbo"
+    - "deepseek-chat"
+    - "glm-4"

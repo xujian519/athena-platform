@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena增强工具调用管理器 - 集成全链路监控
 Enhanced Tool Call Manager with Full-Link Monitoring
@@ -18,7 +19,7 @@ Enhanced Tool Call Manager with Full-Link Monitoring
 import asyncio
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 from core.monitoring.full_link_monitoring_system import (
@@ -29,9 +30,7 @@ from core.monitoring.full_link_monitoring_system import (
 from core.tools.tool_call_manager import (
     CallStatus,
     ToolCallManager,
-    ToolCallRequest,
     ToolCallResult,
-    ToolDefinition,
 )
 
 # 配置日志
@@ -380,7 +379,7 @@ def get_monitored_tool_manager() -> MonitoredToolCallManager:
 
 # 便捷函数
 async def call_tool(
-    tool_name: str, parameters: dict[str, Any, context: dict[str, Any] | None = None
+    tool_name: str, parameters: dict[str, Any], context: dict[str, Any] | None = None
 ) -> MonitoredToolCallResult:
     """便捷的工具调用函数(带监控)"""
     manager = get_monitored_tool_manager()

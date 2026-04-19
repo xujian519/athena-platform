@@ -1,23 +1,24 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 测试：权限控制系统
 Test: Access Control System
 """
 
-import pytest
 import sys
 from pathlib import Path
+
+import pytest
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.perception.access_control import (
+    AccessControl,
     Permission,
+    PermissionDenied,
     Role,
     User,
-    AccessControl,
-    PermissionDenied,
     get_global_access_control,
     require_permission,
 )

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 综合专利分析系统
 Comprehensive Patent Analysis System

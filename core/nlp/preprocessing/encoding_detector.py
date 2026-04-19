@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 输入编码检测器
 Input Encoding Detector
@@ -14,6 +15,7 @@ import base64
 import html
 import logging
 import re
+from urllib.parse import url_unquote
 
 logger = logging.getLogger(__name__)
 

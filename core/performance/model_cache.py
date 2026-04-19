@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 三级模型缓存系统
 L1内存 + L2Redis + L3磁盘
@@ -12,12 +12,11 @@ L1内存 + L2Redis + L3磁盘
 
 import hashlib
 import json
-import pickle
-import time
-from typing import Any, Optional, Dict, List
-from pathlib import Path
-from collections import OrderedDict
 import logging
+import pickle
+from collections import OrderedDict
+from pathlib import Path
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -107,7 +106,7 @@ class L1MemoryCache:
         self.misses = 0
         logger.info("L1缓存已清空")
 
-    def get_stats(self) -> Dict:
+    def get_stats(self) -> dict:
         """获取统计信息"""
         total_requests = self.hits + self.misses
         hit_rate = self.hits / total_requests if total_requests > 0 else 0
@@ -243,8 +242,8 @@ class ModelCacheManager:
                                 86400,  # 24小时
                                 pickle.dumps(value)
                             )
-        except Exception as e:
-            logger.warning(f'操作失败: {e}')
+                        except Exception as e:
+                            logger.warning(f'L2回填失败: {e}')
 
                     self.l3_hits += 1
                     logger.debug(f"L3缓存命中: {model_name}")
@@ -321,7 +320,7 @@ class ModelCacheManager:
             self.l3_hits = 0
             self.total_misses = 0
 
-    def get_stats(self) -> Dict:
+    def get_stats(self) -> dict:
         """获取缓存统计"""
         total_hits = self.l1_hits + self.l2_hits + self.l3_hits
         total_requests = total_hits + self.total_misses
@@ -351,7 +350,7 @@ class ModelCacheManager:
 
         return stats
 
-    def get_detailed_stats(self) -> Dict:
+    def get_detailed_stats(self) -> dict:
         """获取详细统计信息"""
         stats = self.get_stats()
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena工作平台 - 专利复审向量库构建器
 构建专业专利复审分析向量库
@@ -11,7 +12,6 @@ import os
 # 添加项目路径
 import sys
 from typing import Any
-
 
 from config.numpy_compatibility import random
 from core.logging_config import setup_logging
@@ -27,34 +27,34 @@ logger = setup_logging()
 
 class PatentReviewBuilder:
     """专利复审向量库构建器"""
-    
+
     def __init__(self):
         self.vector_db_manager = VectorDBManager()
         self.collection_name = 'patent_review_db'
-    
+
     def create_patent_review_collection(self) -> bool:
         """创建专利复审集合"""
         logger.info(f"🏗️ 创建专利复审库: {self.collection_name}")
-        
+
         # 创建集合 (1024维,适用于专利分析)
         success = self.vector_db_manager.create_collection(
             collection_name=self.collection_name,
             vector_size=1024,
             distance='Cosine'
         )
-        
+
         if success:
             self.vector_db_manager.existing_collections.add(self.collection_name)
             logger.info(f"✅ 专利复审库创建成功: {self.collection_name}")
         else:
             logger.error(f"❌ 专利复审库创建失败: {self.collection_name}")
-        
+
         return success
-    
+
     def generate_sample_patent_review_data(self) -> list[dict[str, Any]]:
         """生成示例专利复审数据"""
         logger.info('📝 生成示例专利复审数据...')
-        
+
         sample_data = [
             # 专利复审决定
             {
@@ -153,47 +153,47 @@ class PatentReviewBuilder:
                 'process_type': '审查要点'
             }
         ]
-        
+
         logger.info(f"✅ 生成了 {len(sample_data)} 条示例专利复审数据")
         return sample_data
-    
+
     def generate_embedding_vector(self, text: str) -> list[float]:
         """生成嵌入向量 - 实际应用中应使用真实的embedding模型"""
         vector = random(1024).tolist()
         return vector
-    
+
     def build_patent_review_db(self) -> bool:
         """构建专利复审数据库"""
         logger.info('🚀 开始构建专利复审库...')
-        
+
         # 创建集合
         if not self.create_patent_review_collection():
             logger.error('❌ 专利复审库创建失败')
             return False
-        
+
         # 生成示例数据
         sample_data = self.generate_sample_patent_review_data()
-        
+
         # 准备插入数据
         vectors_data = []
         for i, item in enumerate(sample_data):
             vector = self.generate_embedding_vector(item['text'])
-            
+
             vector_data = {
                 'id': i,  # 使用整数ID
                 'vector': vector,
                 'payload': item  # 包含所有元数据
             }
             vectors_data.append(vector_data)
-        
+
         logger.info(f"📦 准备插入 {len(vectors_data)} 个向量到专利复审库")
-        
+
         # 批量插入向量
         success = self.vector_db_manager.batch_insert(
             collection_name=self.collection_name,
             vectors_data=vectors_data
         )
-        
+
         if success:
             logger.info(f"✅ 专利复审库构建完成: {self.collection_name}")
             collection_info = self.vector_db_manager.get_collection_info(self.collection_name)
@@ -202,48 +202,48 @@ class PatentReviewBuilder:
                 logger.info(f"📊 集合状态: {points_count} 个向量点")
         else:
             logger.error('❌ 专利复审库构建失败')
-        
+
         return success
-    
+
     def test_patent_review_db(self) -> bool:
         """测试专利复审库功能"""
         logger.info('🧪 测试专利复审库功能...')
-        
+
         if self.collection_name not in self.vector_db_manager.existing_collections:
             logger.error(f"❌ 集合 {self.collection_name} 不存在")
             return False
-        
+
         # 生成测试向量
         test_vector = self.generate_embedding_vector('专利复审 创造性 驳回决定')
-        
+
         from core.vector_db.vector_db_manager import VectorQuery
-        
+
         query = VectorQuery(
             vector=test_vector,
             text='专利复审 创造性 驳回决定',
             limit=3,
             with_payload=True
         )
-        
+
         results = self.vector_db_manager.search_in_collection(self.collection_name, query)
-        
+
         logger.info(f"🔍 在专利复审库中找到 {len(results)} 个结果")
-        
+
         for i, result in enumerate(results):
             logger.info(f"  {i+1}. 评分: {result.score:.3f}")
             logger.info(f"     内容: {result.payload.get('text', '')[:100]}...")
             logger.info(f"     类别: {result.payload.get('category', 'Unknown')}")
             logger.info(f"     类型: {result.payload.get('type', 'Unknown')}")
             print()
-        
+
         return len(results) > 0
 
 def main():
     """主函数 - 构建专利复审向量库"""
     logger.info('🏗️  开始构建专利复审向量库...')
-    
+
     builder = PatentReviewBuilder()
-    
+
     logger.info(str('='*70))
     logger.info('🏗️  专利复审向量库构建器')
     logger.info(str('='*70))
@@ -251,13 +251,13 @@ def main():
     logger.info("📊 向量维度: 1024 (专利分析)")
     logger.info("🎯 用途: 专利复审分析、复审决定检索、策略参考")
     logger.info(str('='*70))
-    
+
     # 构建专利复审库
     success = builder.build_patent_review_db()
-    
+
     if success:
         logger.info("\n✅ 专利复审向量库构建成功!")
-        
+
         # 测试功能
         test_success = builder.test_patent_review_db()
         if test_success:
@@ -268,12 +268,12 @@ def main():
     else:
         logger.info("\n❌ 专利复审向量库构建失败")
         return False
-    
+
     logger.info(str("\n" + '='*70))
     logger.info('🎯 专利复审向量库已成功集成到Athena平台')
     logger.info('📋 现在可以进行专利复审分析、决定检索等专业操作')
     logger.info(str('='*70))
-    
+
     return success
 
 if __name__ == '__main__':

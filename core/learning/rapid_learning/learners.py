@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 快速学习机制 - 学习器组件
 Rapid Learning - Learner Components

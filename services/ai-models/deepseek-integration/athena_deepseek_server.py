@@ -1,35 +1,24 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena工作平台 - DeepSeek API服务器
 提供RESTful API接口，集成DeepSeek-Coder能力
 """
 
-import asyncio
-from core.async_main import async_main
 import json
 import logging
-from core.logging_config import setup_logging
-import os
-from dataclasses import asdict
 from datetime import datetime
-from typing import Any, Dict, List, Optional
 
 import uvicorn
 from deepseek_coder_service import (
     CodeGenerationRequest,
-    CodeGenerationResponse,
     DeepSeekCoderAPI,
     ProgrammingLanguage,
-    get_deepseek_client,
 )
-from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -52,16 +41,16 @@ class CodeGenerationRequestModel(BaseModel):
     language: str = Field(..., description='编程语言')
     max_tokens: int = Field(default=2000, description='最大生成tokens数', ge=1, le=8000)
     temperature: float = Field(default=0.1, description='生成温度', ge=0.0, le=2.0)
-    context: Optional[str] = Field(default=None, description='专利上下文信息(JSON格式)')
+    context: str | None = Field(default=None, description='专利上下文信息(JSON格式)')
 
 class PatentContextModel(BaseModel):
     title: str | None = None
     abstract: str | None = None
     field: str | None = None
-    key_technologies: List[str] = []
+    key_technologies: list[str] = []
 
 class BatchCodeRequestModel(BaseModel):
-    requests: List[CodeGenerationRequestModel] = Field(..., description='批量代码生成请求', min_items=1, max_items=10)
+    requests: list[CodeGenerationRequestModel] = Field(..., description='批量代码生成请求', min_items=1, max_items=10)
 
 class CodeGenerationResponseModel(BaseModel):
     success: bool
@@ -149,7 +138,7 @@ async def shutdown_event():
         await _deepseek_client.__aexit__(None, None, None)
         logger.info('🛑 Athena DeepSeek API服务器已关闭')
 
-@app.get('/', response_model=Dict[str, str])
+@app.get('/', response_model=dict[str, str])
 async def root():
     """根路径"""
     return {
@@ -173,7 +162,7 @@ async def health_check():
             deepseek_connected=deepseek_connected,
             server_uptime=str(uptime).split('.')[0]  # 去掉微秒
         )
-    except Exception as e:
+    except Exception:
         return HealthResponseModel(
             status='unhealthy',
             timestamp=datetime.now().isoformat(),
@@ -215,7 +204,7 @@ async def generate_code(request: CodeGenerationRequestModel):
 
     except Exception as e:
         logger.error(f"代码生成失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/generate-code/patent', response_model=CodeGenerationResponseModel)
 async def generate_patent_code(
@@ -274,9 +263,9 @@ async def generate_patent_code(
 
     except Exception as e:
         logger.error(f"专利代码生成失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
-@app.post('/generate-code/batch', response_model=List[CodeGenerationResponseModel])
+@app.post('/generate-code/batch', response_model=list[CodeGenerationResponseModel])
 async def generate_batch_code(request: BatchCodeRequestModel):
     """批量生成代码"""
     try:
@@ -326,9 +315,9 @@ async def generate_batch_code(request: BatchCodeRequestModel):
 
     except Exception as e:
         logger.error(f"批量代码生成失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
-@app.get('/languages', response_model=List[str])
+@app.get('/languages', response_model=list[str])
 async def get_supported_languages():
     """获取支持的编程语言列表"""
     return [lang.value for lang in ProgrammingLanguage]
@@ -344,7 +333,7 @@ async def get_usage_statistics():
 
     except Exception as e:
         logger.error(f"获取统计信息失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/reset-statistics')
 async def reset_statistics():
@@ -360,7 +349,7 @@ async def reset_statistics():
 
     except Exception as e:
         logger.error(f"重置统计信息失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 # 错误处理
 @app.exception_handler(Exception)

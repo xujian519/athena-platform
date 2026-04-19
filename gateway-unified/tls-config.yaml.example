@@ -1,0 +1,24 @@
+# TLS配置示例
+
+server:
+  port: 8443  # HTTPS端口
+  production: true
+
+# TLS配置
+tls:
+  enabled: true
+  # 使用自签名证书（测试环境）
+  cert_file: ./certs/gateway.crt
+  key_file: ./certs/gateway.key
+
+# 生产环境使用正式证书：
+# cert_file: /etc/ssl/certs/gateway.crt
+# key_file: /etc/ssl/private/gateway.key
+
+logging:
+  level: info
+  format: json
+
+monitoring:
+  enabled: true
+  port: 9090

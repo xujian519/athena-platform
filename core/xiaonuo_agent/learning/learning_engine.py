@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习引擎 (Learning Engine)
 基于经验强化和知识迁移的学习系统
@@ -22,9 +23,9 @@ import logging
 import time
 from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -197,7 +198,7 @@ class LearningEngine:
         # 使用锁确保并发安全
         async with self._lock:
             # 创建经验ID
-            experience_id = f"exp_{int(time.time() * 1000)}_{hashlib.md5(f'{situation}:{action}'.encode('utf-8'), usedforsecurity=False).hexdigest()[:8]}"
+            experience_id = f"exp_{int(time.time() * 1000)}_{hashlib.md5(f'{situation}:{action}'.encode(), usedforsecurity=False).hexdigest()[:8]}"
 
             # 创建学习经验
             experience = LearningExperience(

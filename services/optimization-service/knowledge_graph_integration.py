@@ -5,20 +5,18 @@ Athena平台知识图谱集成系统
 """
 
 import asyncio
-from core.async_main import async_main
 import hashlib
 import json
-import logging
-from core.logging_config import setup_logging
-import math
 import re
-from collections import Counter, defaultdict
+from collections import Counter
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any
 
 import networkx as nx
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -68,8 +66,8 @@ class Entity:
     entity_id: str
     name: str
     entity_type: EntityType
-    properties: Dict[str, Any] = field(default_factory=dict)
-    aliases: List[str] = field(default_factory=list)
+    properties: dict[str, Any] = field(default_factory=dict)
+    aliases: list[str] = field(default_factory=list)
     confidence: float = 1.0
     source: str = ''
     created_at: datetime = field(default_factory=datetime.now)
@@ -81,7 +79,7 @@ class Relation:
     subject: str  # 主实体ID
     predicate: RelationType
     object: str   # 客体实体ID
-    properties: Dict[str, Any] = field(default_factory=dict)
+    properties: dict[str, Any] = field(default_factory=dict)
     confidence: float = 1.0
     source: str = ''
     created_at: datetime = field(default_factory=datetime.now)
@@ -103,7 +101,7 @@ class EntityExtractor:
         self.entity_patterns = self._initialize_patterns()
         self.type_keywords = self._initialize_type_keywords()
 
-    def _initialize_patterns(self) -> Dict[str, List[str]]:
+    def _initialize_patterns(self) -> dict[str, list[str]]:
         """初始化实体识别模式"""
         return {
             'patent': [
@@ -131,7 +129,7 @@ class EntityExtractor:
             ]
         }
 
-    def _initialize_type_keywords(self) -> Dict[EntityType, List[str]]:
+    def _initialize_type_keywords(self) -> dict[EntityType, list[str]]:
         """初始化类型关键词"""
         return {
             EntityType.PERSON: ['人', '发明人', '申请人', '作者', '研究员', '工程师'],
@@ -147,7 +145,7 @@ class EntityExtractor:
             EntityType.INVENTION: ['发明创造', '技术创新', '技术突破', '创新成果']
         }
 
-    def extract_entities(self, text: str, context: str = '') -> List[Entity]:
+    def extract_entities(self, text: str, context: str = '') -> list[Entity]:
         """从文本中提取实体"""
         entities = []
 
@@ -195,7 +193,7 @@ class EntityExtractor:
         }
         return mapping.get(pattern_type, EntityType.UNKNOWN)
 
-    def _infer_entity_types(self, text: str, entities: List[Entity]) -> List[Entity]:
+    def _infer_entity_types(self, text: str, entities: list[Entity]) -> list[Entity]:
         """基于关键词推断实体类型"""
         words = re.findall(r'[\u4e00-\u9fff]+|[a-z_a-Z]+', text.lower())
 
@@ -220,7 +218,7 @@ class EntityExtractor:
 
     def _generate_entity_id(self, name: str, entity_type: EntityType) -> str:
         """生成实体ID"""
-        name_hash = hashlib.md5(name.encode('utf-8'), usedforsecurity=False).hexdigest()]
+        name_hash = hashlib.md5(name.encode('utf-8'), usedforsecurity=False).hexdigest()
         return f"{entity_type.value}_{name_hash}"
 
 class RelationExtractor:
@@ -230,7 +228,7 @@ class RelationExtractor:
         """初始化关系提取器"""
         self.relation_patterns = self._initialize_relation_patterns()
 
-    def _initialize_relation_patterns(self) -> List[Dict]:
+    def _initialize_relation_patterns(self) -> list[dict]:
         """初始化关系提取模式"""
         return [
             {
@@ -290,7 +288,7 @@ class RelationExtractor:
             }
         ]
 
-    def extract_relations(self, text: str, entities: List[Entity]) -> List[Relation]:
+    def extract_relations(self, text: str, entities: list[Entity]) -> list[Relation]:
         """从文本中提取关系"""
         relations = []
         entity_map = {e.name.lower(): e for e in entities}
@@ -333,7 +331,7 @@ class RelationExtractor:
 
         return relations
 
-    def _find_entity(self, text: str, entity_map: Dict[str, Entity]) -> Entity | None:
+    def _find_entity(self, text: str, entity_map: dict[str, Entity]) -> Entity | None:
         """查找实体"""
         text_lower = text.lower()
 
@@ -351,7 +349,7 @@ class RelationExtractor:
     def _generate_relation_id(self, subject: str, predicate: str, object: str) -> str:
         """生成关系ID"""
         content = f"{subject}_{predicate}_{object}"
-        return hashlib.md5(content.encode('utf-8'), usedforsecurity=False).hexdigest()2]
+        return hashlib.md5(content.encode('utf-8'), usedforsecurity=False).hexdigest()[:12]
 
 class KnowledgeGraphBuilder:
     """知识图谱构建器"""
@@ -364,7 +362,7 @@ class KnowledgeGraphBuilder:
         self.relations = {}
         self.graph = nx.DiGraph()
 
-    def build_from_text(self, text: str, context: str = '') -> Dict[str, Any]:
+    def build_from_text(self, text: str, context: str = '') -> dict[str, Any]:
         """从文本构建知识图谱"""
         logger.info(f"从文本构建知识图谱，文本长度: {len(text)}")
 
@@ -390,7 +388,7 @@ class KnowledgeGraphBuilder:
             'graph_edges': self.graph.number_of_edges()
         }
 
-    def _merge_entities(self, new_entities: List[Entity]) -> Any:
+    def _merge_entities(self, new_entities: list[Entity]) -> Any:
         """合并实体"""
         for entity in new_entities:
             if entity.entity_id in self.entities:
@@ -412,7 +410,7 @@ class KnowledgeGraphBuilder:
                 # 添加新实体
                 self.entities[entity.entity_id] = entity
 
-    def _merge_relations(self, new_relations: List[Relation]) -> Any:
+    def _merge_relations(self, new_relations: list[Relation]) -> Any:
         """合并关系"""
         for relation in new_relations:
             if relation.relation_id in self.relations:
@@ -439,7 +437,7 @@ class KnowledgeGraphBuilder:
             )
 
         # 添加边
-        for relation_id, relation in self.relations.items():
+        for _relation_id, relation in self.relations.items():
             if relation.subject in self.graph and relation.object in self.graph:
                 self.graph.add_edge(
                     relation.subject,
@@ -449,7 +447,7 @@ class KnowledgeGraphBuilder:
                     properties=relation.properties
                 )
 
-    def query_entity(self, entity_name: str, fuzzy: bool = True) -> List[Entity]:
+    def query_entity(self, entity_name: str, fuzzy: bool = True) -> list[Entity]:
         """查询实体"""
         results = []
 
@@ -473,7 +471,7 @@ class KnowledgeGraphBuilder:
 
         return results
 
-    def query_relations(self, entity_id: str, relation_type: RelationType | None = None) -> List[Relation]:
+    def query_relations(self, entity_id: str, relation_type: RelationType | None = None) -> list[Relation]:
         """查询关系"""
         results = []
 
@@ -484,7 +482,7 @@ class KnowledgeGraphBuilder:
 
         return results
 
-    def find_path(self, source: str, target: str, max_depth: int = 5) -> List[List[str]]:
+    def find_path(self, source: str, target: str, max_depth: int = 5) -> list[list[str]]:
         """查找实体间路径"""
         try:
             paths = list(nx.all_simple_paths(self.graph, source, target, cutoff=max_depth))
@@ -492,7 +490,7 @@ class KnowledgeGraphBuilder:
         except nx.NetworkXNoPath:
             return []
 
-    def get_neighbors(self, entity_id: str, depth: int = 1) -> Set[str]:
+    def get_neighbors(self, entity_id: str, depth: int = 1) -> set[str]:
         """获取邻居实体"""
         neighbors = set()
 
@@ -541,7 +539,7 @@ class KnowledgeGraphBuilder:
         # 综合相似度
         return jaccard_sim * 0.7 + type_sim * 0.3
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """获取知识图谱统计信息"""
         entity_type_counts = Counter()
         relation_type_counts = Counter()
@@ -622,7 +620,7 @@ class KnowledgeGraphReasoner:
         self.graph_builder = graph_builder
         self.inference_rules = self._initialize_inference_rules()
 
-    def _initialize_inference_rules(self) -> List[Dict]:
+    def _initialize_inference_rules(self) -> list[dict]:
         """初始化推理规则"""
         return [
             {
@@ -671,7 +669,7 @@ class KnowledgeGraphReasoner:
             }
         ]
 
-    def infer_new_relations(self, max_inferences: int = 100) -> List[Relation]:
+    def infer_new_relations(self, max_inferences: int = 100) -> list[Relation]:
         """推理新关系"""
         new_relations = []
         inference_count = 0
@@ -700,7 +698,7 @@ class KnowledgeGraphReasoner:
         logger.info(f"推理出 {len(new_relations)} 个新关系")
         return new_relations
 
-    def _apply_single_premise_rule(self, rule: Dict) -> List[Relation]:
+    def _apply_single_premise_rule(self, rule: dict) -> list[Relation]:
         """应用单前提规则"""
         inferred_relations = []
 
@@ -723,7 +721,7 @@ class KnowledgeGraphReasoner:
 
         return inferred_relations
 
-    def _apply_double_premise_rule(self, rule: Dict) -> List[Relation]:
+    def _apply_double_premise_rule(self, rule: dict) -> list[Relation]:
         """应用双前提规则"""
         inferred_relations = []
 
@@ -759,10 +757,10 @@ class KnowledgeGraphReasoner:
 
         return inferred_relations
 
-    def _generate_inference_id(self, rule: Dict, *relations) -> str:
+    def _generate_inference_id(self, rule: dict, *relations) -> str:
         """生成推理关系ID"""
-        content = f"{rule['name']}_' + '_".join([rel.relation_id for rel in relations])
-        return f"inferred_{hashlib.md5(content.encode('utf-8'), usedforsecurity=False).hexdigest()]}"
+        content = f"{rule['name']}_{'_'.join([rel.relation_id for rel in relations])}"
+        return f"inferred_{hashlib.md5(content.encode('utf-8'), usedforsecurity=False).hexdigest()}"
 
     def apply_inferences(self, max_inferences: int = 100) -> Any:
         """应用推理结果"""
@@ -777,7 +775,7 @@ class KnowledgeGraphReasoner:
 
         return len(new_relations)
 
-    def explain_entity(self, entity_id: str, max_depth: int = 3) -> Dict[str, Any]:
+    def explain_entity(self, entity_id: str, max_depth: int = 3) -> dict[str, Any]:
         """解释实体（获取实体的相关信息）"""
         if entity_id not in self.graph_builder.entities:
             return {'error': '实体不存在'}
@@ -829,7 +827,7 @@ class KnowledgeGraphReasoner:
             'similar_entities': similar_entities
         }
 
-    def _analyze_entity_roles(self, entity_id: str) -> List[str]:
+    def _analyze_entity_roles(self, entity_id: str) -> list[str]:
         """分析实体的角色"""
         roles = []
 
@@ -868,7 +866,7 @@ def get_knowledge_graph() -> KnowledgeGraphBuilder:
     return _knowledge_graph
 
 # 工具函数
-async def build_knowledge_graph_from_documents(documents: List[Dict[str, str]]) -> Dict[str, Any]:
+async def build_knowledge_graph_from_documents(documents: list[dict[str, str]]) -> dict[str, Any]:
     """从文档构建知识图谱"""
     kg = get_knowledge_graph()
     reasoner = KnowledgeGraphReasoner(kg)

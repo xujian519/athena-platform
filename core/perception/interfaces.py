@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 感知模块统一接口定义
 Perception Module Unified Interface Definitions

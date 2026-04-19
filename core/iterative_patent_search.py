@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 PostgreSQL中国专利数据库迭代式搜索系统
 Iterative Patent Search System for PostgreSQL Chinese Patent Database

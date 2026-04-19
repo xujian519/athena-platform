@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 分布式爬虫架构 - 多节点协同爬取系统
 Distributed Crawler Architecture - Multi-node Collaborative Crawling System
@@ -12,35 +11,25 @@ Distributed Crawler Architecture - Multi-node Collaborative Crawling System
 """
 
 import asyncio
-import hashlib
-import json
 import logging
-import multiprocessing as mp
-import pickle
-import queue
-import socket
+import random
 import threading
 import time
 import uuid
 from collections import defaultdict, deque
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
-from dataclasses import asdict, dataclass, field
-from datetime import datetime, timedelta
+from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
-from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional
-
-from proxy_manager import ProxyConfig, ProxyRotationManager
+from typing import Any
 
 # 导入相关模块
-from resilient_crawler import CircuitBreakerConfig, ResilientAsyncCrawler, RetryConfig
 
 # 配置日志
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - [DistributedCrawler] %(message)s',
     handlers=[
-        logging.FileHandler(f'distributed_crawler_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log'),
+        logging.FileHandler(f"distributed_crawler_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"),
         logging.StreamHandler()
     ]
 )
@@ -68,15 +57,15 @@ class CrawlTask:
     task_id: str
     url: str
     method: str = 'GET'
-    data: Dict = field(default_factory=dict)
-    headers: Dict = field(default_factory=dict)
+    data: dict = field(default_factory=dict)
+    headers: dict = field(default_factory=dict)
     priority: int = 0
     created_at: datetime = field(default_factory=datetime.now)
     retries: int = 0
     max_retries: int = 3
     status: TaskStatus = TaskStatus.PENDING
     assigned_node: str | None = None
-    result: Dict | None = None
+    result: dict | None = None
     error: str | None = None
     started_at: datetime | None = None
     completed_at: datetime | None = None
@@ -89,14 +78,14 @@ class WorkerNode:
     port: int
     status: NodeStatus = NodeStatus.IDLE
     last_heartbeat: datetime = field(default_factory=datetime.now)
-    current_tasks: List[str] = field(default_factory=list)
+    current_tasks: list[str] = field(default_factory=list)
     total_tasks: int = 0
     completed_tasks: int = 0
     failed_tasks: int = 0
     avg_response_time: float = 0.0
     cpu_usage: float = 0.0
     memory_usage: float = 0.0
-    capabilities: List[str] = field(default_factory=list)
+    capabilities: list[str] = field(default_factory=list)
 
     @property
     def is_available(self) -> bool:
@@ -157,7 +146,7 @@ class TaskQueue:
                     if hasattr(task, key):
                         setattr(task, key, value)
 
-    def complete_task(self, task_id: str, result: Dict = None, error: str = None):
+    def complete_task(self, task_id: str, result: dict = None, error: str = None):
         """完成任务"""
         with self.lock:
             if task_id in self.task_dict:
@@ -169,19 +158,19 @@ class TaskQueue:
                 return task
             return None
 
-    def get_pending_tasks(self) -> List[CrawlTask]:
+    def get_pending_tasks(self) -> list[CrawlTask]:
         """获取所有待处理任务"""
         with self.lock:
             return [task for task in self.task_dict.values()
                    if task.status == TaskStatus.PENDING]
 
-    def get_running_tasks(self) -> List[CrawlTask]:
+    def get_running_tasks(self) -> list[CrawlTask]:
         """获取所有运行中任务"""
         with self.lock:
             return [task for task in self.task_dict.values()
                    if task.status == TaskStatus.RUNNING]
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取队列统计"""
         with self.lock:
             status_counts = defaultdict(int)
@@ -204,7 +193,7 @@ class LoadBalancer:
     """负载均衡器"""
 
     def __init__(self):
-        self.nodes: Dict[str, WorkerNode] = {}
+        self.nodes: dict[str, WorkerNode] = {}
         self.lock = threading.Lock()
 
     def add_node(self, node: WorkerNode):
@@ -217,7 +206,7 @@ class LoadBalancer:
         """移除节点"""
         with self.lock:
             if node_id in self.nodes:
-                node = self.nodes.pop(node_id)
+                self.nodes.pop(node_id)
                 logger.info(f"➖ 移除工作节点: {node_id}")
 
     def update_node_status(self, node_id: str, **kwargs):
@@ -269,7 +258,7 @@ class LoadBalancer:
             best_node.status = NodeStatus.BUSY
             return best_node
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取负载均衡统计"""
         with self.lock:
             status_counts = defaultdict(int)
@@ -337,7 +326,7 @@ class DistributedCrawlerMaster:
         self.is_running = False
         logger.info('⏹️ 主控节点已停止')
 
-    def add_urls(self, urls: List[str], priority: int = 0) -> List[str]:
+    def add_urls(self, urls: list[str], priority: int = 0) -> list[str]:
         """添加URL到任务队列"""
         task_ids = []
         for url in urls:
@@ -353,7 +342,7 @@ class DistributedCrawlerMaster:
         logger.info(f"📋 添加了 {len(urls)} 个任务到队列 (优先级: {priority})")
         return task_ids
 
-    def get_task_results(self, task_ids: Optional[List[str] = None) -> Dict[str, Any]:
+    def get_task_results(self, task_ids: list[str] | None = None) -> dict[str, Any]:
         """获取任务结果"""
         if not task_ids:
             # 返回所有任务结果
@@ -379,10 +368,11 @@ class DistributedCrawlerMaster:
                     'completed_at': task.completed_at.isoformat() if task.completed_at else None
                 }
                 for task_id in task_ids
-                if task_id in self.task_queue.task_dict
+                for task in [self.task_queue.task_dict.get(task_id)]
+                if task is not None
             }
 
-    def add_worker_node(self, host: str, port: int, capabilities: Optional[List[str] = None) -> str:
+    def add_worker_node(self, host: str, port: int, capabilities: list[str] | None = None) -> str:
         """添加工作节点"""
         node_id = str(uuid.uuid4())
         node = WorkerNode(
@@ -446,7 +436,7 @@ class DistributedCrawlerMaster:
         """本地执行任务（简化实现）"""
         try:
             # 模拟执行爬取任务
-            start_time = time.time()
+            time.time()
 
             # 这里应该调用实际的爬虫逻辑
             # 为了演示，我们模拟成功/失败
@@ -488,7 +478,7 @@ class DistributedCrawlerMaster:
 
     def _check_node_health(self):
         """检查节点健康状态"""
-        current_time = datetime.now()
+        datetime.now()
         for node_id, node in list(self.load_balancer.nodes.items()):
             # 检查心跳超时
             if time.time() - node.last_heartbeat.timestamp() > 120:  # 2分钟超时
@@ -512,7 +502,7 @@ class DistributedCrawlerMaster:
             self.task_queue.complete_task(task_id, error='Task timeout')
             logger.warning(f"⏰ 任务 {task_id} 运行超时，标记为失败")
 
-    def get_master_stats(self) -> Dict[str, Any]:
+    def get_master_stats(self) -> dict[str, Any]:
         """获取主控节点统计"""
         uptime = datetime.now() - self.stats['start_time']
 
@@ -552,7 +542,7 @@ async def demo_distributed_crawler():
         ('192.168.1.12', 8003)
     ]
 
-    logger.info(f"\n🔧 添加工作节点...")
+    logger.info("\n🔧 添加工作节点...")
     for host, port in worker_nodes:
         node_id = master.add_worker_node(host, port, ['http', 'https'])
         logger.info(f"   节点 {node_id}: {host}:{port}")
@@ -571,10 +561,10 @@ async def demo_distributed_crawler():
     ]
 
     logger.info(f"📋 添加 {len(priority_urls)} 个高优先级URL...")
-    priority_task_ids = master.add_urls(priority_urls, priority=10)
+    master.add_urls(priority_urls, priority=10)
 
     # 监控执行进度
-    logger.info(f"\n📊 监控任务执行进度...")
+    logger.info("\n📊 监控任务执行进度...")
     for i in range(30):  # 监控30秒
         await asyncio.sleep(1)
 
@@ -595,7 +585,7 @@ async def demo_distributed_crawler():
             queue_stats['running_tasks'] == 0):
             break
 
-    logger.info(f"\n\n📈 最终统计:")
+    logger.info("\n\n📈 最终统计:")
     final_stats = master.get_master_stats()
 
     logger.info(f"   总任务数: {final_stats['task_stats']['total_tasks_created']}")
@@ -606,7 +596,7 @@ async def demo_distributed_crawler():
     logger.info(f"   活跃节点: {final_stats['node_stats']['active_nodes'] + final_stats['node_stats']['busy_nodes']}")
 
     # 获取部分任务结果
-    logger.info(f"\n📋 示例任务结果:")
+    logger.info("\n📋 示例任务结果:")
     sample_results = master.get_task_results(task_ids[:3])
     for task_id, result in sample_results.items():
         status = result['status']

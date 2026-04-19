@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Plan文档生成模块
 Plan Document Generator Module - 生成和管理plan.md文档

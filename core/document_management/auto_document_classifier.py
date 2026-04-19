@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 自动文档分类器
 
@@ -16,7 +17,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -132,9 +133,9 @@ class ClassificationResult:
 
     success: bool  # 是否成功
     source_path: Path  # 源文件路径
-    target_path: Optional[Path]  # 目标文件路径
-    category: Optional[DocumentCategory]  # 分类
-    rule_name: Optional[str]  # 使用的规则名称
+    target_path: Path | None  # 目标文件路径
+    category: DocumentCategory | None  # 分类
+    rule_name: str | None  # 使用的规则名称
     confidence: float = 0.0  # 置信度 (0.0-1.0)
     error_message: str | None = None  # 错误消息
 

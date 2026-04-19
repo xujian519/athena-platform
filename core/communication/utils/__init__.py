@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 通信模块工具包
 Communication Module Utilities

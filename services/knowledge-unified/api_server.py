@@ -9,23 +9,22 @@ Unified Knowledge Graph API Server
 创建时间: 2024年12月15日
 """
 
-from fastapi import FastAPI, HTTPException, BackgroundTasks
-from fastapi.middleware.cors import CORSMiddleware
-
-from core.security.auth import ALLOWED_ORIGINS
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
-from typing import List, Dict, Any, Optional
-import uvicorn
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
-import asyncio
-from datetime import datetime
 import uuid
+from datetime import datetime
+from typing import Any
+
+import uvicorn
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 # 导入服务
 from integrated_patent_service import get_integrated_patent_service
+from pydantic import BaseModel, Field
+
+from core.logging_config import setup_logging
+from core.security.auth import ALLOWED_ORIGINS
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -52,26 +51,26 @@ app.add_middleware(
 # 请求模型
 class PatentQuery(BaseModel):
     query: str = Field(..., description="用户查询问题")
-    patent_text: Optional[str] = Field(None, description="专利文本内容")
-    context_type: Optional[str] = Field("general", description="上下文类型")
-    context: Optional[Dict[str, Any]] = Field(None, description="额外上下文信息")
-    user_id: Optional[str] = Field(None, description="用户ID")
-    application_id: Optional[str] = Field(None, description="应用ID")
+    patent_text: str | None = Field(None, description="专利文本内容")
+    context_type: str | None = Field("general", description="上下文类型")
+    context: dict[str, Any] | None = Field(None, description="额外上下文信息")
+    user_id: str | None = Field(None, description="用户ID")
+    application_id: str | None = Field(None, description="应用ID")
 
 class BatchQuery(BaseModel):
-    queries: List[PatentQuery] = Field(..., description="批量查询列表")
-    max_parallel: Optional[int] = Field(5, description="最大并行数")
+    queries: list[PatentQuery] = Field(..., description="批量查询列表")
+    max_parallel: int | None = Field(5, description="最大并行数")
 
 class RuleExtraction(BaseModel):
     patent_text: str = Field(..., description="专利文本")
-    rule_types: Optional[List[str]] = Field(["novelty", "creativity", "procedure"], description="规则类型")
-    keywords: Optional[List[str]] = Field(None, description="指定关键词")
+    rule_types: list[str] | None = Field(["novelty", "creativity", "procedure"], description="规则类型")
+    keywords: list[str] | None = Field(None, description="指定关键词")
 
 class SimilaritySearch(BaseModel):
     text: str = Field(..., description="搜索文本")
-    similarity_threshold: Optional[float] = Field(0.7, description="相似度阈值")
-    max_results: Optional[int] = Field(10, description="最大结果数")
-    collection: Optional[str] = Field("patent_legal_vectors_1024", description="搜索集合")
+    similarity_threshold: float | None = Field(0.7, description="相似度阈值")
+    max_results: int | None = Field(10, description="最大结果数")
+    collection: str | None = Field("patent_legal_vectors_1024", description="搜索集合")
 
 # 全局服务实例
 service = None
@@ -118,7 +117,7 @@ async def health_check():
             "service_stats": stats['statistics']
         }
     except Exception as e:
-        raise HTTPException(status_code=503, detail=f"Service unhealthy: {str(e)}")
+        raise HTTPException(status_code=503, detail=f"Service unhealthy: {str(e)}") from e
 
 @app.post("/query")
 async def query_knowledge(query: PatentQuery):
@@ -142,7 +141,7 @@ async def query_knowledge(query: PatentQuery):
 
     except Exception as e:
         logger.error(f"查询处理失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Query processing failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Query processing failed: {str(e)}") from e
 
 @app.post("/batch/query")
 async def batch_query(batch: BatchQuery):
@@ -172,7 +171,7 @@ async def batch_query(batch: BatchQuery):
 
     except Exception as e:
         logger.error(f"批量查询失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Batch query failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Batch query failed: {str(e)}") from e
 
 @app.post("/rules/extract")
 async def extract_rules(request: RuleExtraction):
@@ -200,7 +199,7 @@ async def extract_rules(request: RuleExtraction):
 
     except Exception as e:
         logger.error(f"规则提取失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Rule extraction failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Rule extraction failed: {str(e)}") from e
 
 @app.post("/search/similarity")
 async def similarity_search(request: SimilaritySearch):
@@ -233,7 +232,7 @@ async def similarity_search(request: SimilaritySearch):
 
     except Exception as e:
         logger.error(f"相似度搜索失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Similarity search failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Similarity search failed: {str(e)}") from e
 
 @app.get("/stats")
 async def get_statistics():
@@ -251,7 +250,7 @@ async def get_statistics():
 
     except Exception as e:
         logger.error(f"获取统计失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Statistics retrieval failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Statistics retrieval failed: {str(e)}") from e
 
 @app.get("/capabilities")
 async def get_capabilities():

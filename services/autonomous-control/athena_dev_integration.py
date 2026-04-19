@@ -4,19 +4,19 @@ Athena开发助手集成模块
 将开发助手功能集成到Athena主服务
 """
 
-from fastapi import APIRouter
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import sys
 from pathlib import Path
+from typing import Any
+
+from fastapi import APIRouter
 
 # 添加路径
 current_dir = Path(__file__).parent
 sys.path.append(str(current_dir))
 
 # 导入工具
-from athena_dev_assistant.tools.patent_writing_tool import AthenaPatentWritingTool
 from athena_dev_assistant.tools.examination_response_tool import AthenaExaminationResponseTool
-
+from athena_dev_assistant.tools.patent_writing_tool import AthenaPatentWritingTool
 
 # 全局工具实例
 writing_tool = None

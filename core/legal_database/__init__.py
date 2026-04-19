@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 高质量法律数据库系统
 Athena High-Quality Legal Database System
@@ -17,17 +18,6 @@ Athena High-Quality Legal Database System
 """
 
 # Neo4j核心导出 (TD-001)
-from core.legal_database.neo4j_graph_builder import (
-    Neo4jLegalKnowledgeGraphBuilder,
-    build_legal_knowledge_graph,
-)
-from core.legal_database.neo4j_schema import (
-    EntityType,
-    Neo4jSchema,
-    Neo4jQueryBuilder,
-    RelationType,
-)
-
 # 其他模块导出
 from core.legal_database.importer import LegalDatabaseImporter
 from core.legal_database.models import (
@@ -38,6 +28,16 @@ from core.legal_database.models import (
     LegalStatus,
     NormChange,
     VectorizedClause,
+)
+from core.legal_database.neo4j_graph_builder import (
+    Neo4jLegalKnowledgeGraphBuilder,
+    build_legal_knowledge_graph,
+)
+from core.legal_database.neo4j_schema import (
+    EntityType,
+    Neo4jQueryBuilder,
+    Neo4jSchema,
+    RelationType,
 )
 from core.legal_database.parser import LegalTextParser, ParsedArticle, ParsedNorm
 

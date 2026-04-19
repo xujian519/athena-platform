@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化版执行模块测试脚本
 Test Optimized Execution Module
@@ -45,7 +46,7 @@ def io_intensive_task(delay: float = 0.1) -> str:
 def memory_intensive_task(size_mb: int = 10) -> int:
     """内存密集型任务"""
     data = [0] * (size_mb * 1024 * 256)  # 约size_mb MB
-    result = sum(data)
+    sum(data)
     return len(data)
 
 def mixed_task(cpu_ops: int, io_delay: float, mem_size: int) -> dict:
@@ -423,7 +424,7 @@ async def test_task_dependencies():
         max_wait = 30
 
         while len(completed_chain) < len(dependency_chain) and wait_time < max_wait:
-            for i, task_id in enumerate(dependency_chain):
+            for _i, task_id in enumerate(dependency_chain):
                 if task_id not in completed_chain:
                     status = await execution_module.get_task_status(task_id)
                     if status and status['status'] == 'completed':

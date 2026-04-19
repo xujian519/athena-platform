@@ -4,20 +4,20 @@ API Gateway安全中间件
 创建日期: 2025-12-13
 """
 
-import time
 import hashlib
 import hmac
-import secrets
-from typing import Dict, Optional, Callable, Any
-from fastapi import Request, Response, HTTPException, status
-from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.responses import JSONResponse
-import redis
-import jwt
-from datetime import datetime, timedelta
 import ipaddress
-import re
 import logging
+import os
+import re
+import time
+from collections.abc import Callable
+from datetime import datetime
+from typing import Any
+
+import redis
+from fastapi import HTTPException, Request, Response, status
+from starlette.middleware.base import BaseHTTPMiddleware
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +81,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
         return f"ip:{ip}"
 
-    def _check_rate_limit(self, key: str, config: Dict[str, int]) -> bool:
+    def _check_rate_limit(self, key: str, config: dict[str, int]) -> bool:
         """检查限流"""
         current_time = int(time.time())
         window_start = current_time - config["window"]
@@ -181,7 +181,7 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
             logger.error(f"API key validation error: {e}")
             return False
 
-    def _get_key_permissions(self, api_key: str) -> Dict[str, Any]:
+    def _get_key_permissions(self, api_key: str) -> dict[str, Any]:
         """获取API密钥权限"""
         # 这里应该从数据库或配置获取权限信息
         # 示例实现
@@ -199,7 +199,7 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
         }
         return key_permissions.get(api_key, {})
 
-    def _check_permissions(self, permissions: Dict[str, Any], request: Request) -> bool:
+    def _check_permissions(self, permissions: dict[str, Any], request: Request) -> bool:
         """检查权限"""
         method = request.method
         path = request.url.path
@@ -395,7 +395,7 @@ class InputValidationMiddleware(BaseHTTPMiddleware):
 
     def _validate_query_params(self, request: Request) -> Any:
         """验证查询参数"""
-        for key, value in request.query_params.items():
+        for _key, value in request.query_params.items():
             # 检查SQL注入
             if self._contains_sql_injection(value):
                 raise HTTPException(
@@ -436,7 +436,7 @@ class InputValidationMiddleware(BaseHTTPMiddleware):
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail="Invalid JSON"
-                )
+                ) from e
 
     def _validate_json_body(self, data: Any) -> Any:
         """验证JSON数据"""

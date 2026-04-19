@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 条款级法律向量化系统
 将法律文档按条款拆分并进行向量化，支持精确的条款检索
@@ -8,13 +7,12 @@
 import hashlib
 import json
 import logging
-import os
 import re
 import time
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Any
 
 # 设置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -49,7 +47,7 @@ class LegalClause:
     article: str | None = None    # 所属条文章节
     file_path: str = ''              # 原始文件路径
     line_number: int = 0             # 在文件中的行号
-    vector: Optional[List[float] = None  # 向量表示
+    vector: list[float] | None = None  # 向量表示
 
 
 class ClauseLevelVectorizer:
@@ -114,10 +112,10 @@ class ClauseLevelVectorizer:
         # 节模式
         self.section_pattern = re.compile(r'^第[一二三四五六七八九十百千万零]+节[：:\s]*(.*?)$', re.MULTILINE)
 
-    def extract_clauses_from_file(self, file_path: Path) -> List[LegalClause]:
+    def extract_clauses_from_file(self, file_path: Path) -> list[LegalClause]:
         """从文件中提取条款"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 content = f.read()
         except Exception as e:
             logger.error(f"❌ 读取文件失败 {file_path}: {e}")
@@ -263,10 +261,10 @@ class ClauseLevelVectorizer:
         """生成条款唯一ID"""
         # 创建基于法律名称和条款编号的哈希ID
         id_string = f"{law_name}_{clause_num}_{clause_type}"
-        hash_obj = hashlib.md5(id_string.encode('utf-8', usedforsecurity=False)
+        hash_obj = hashlib.md5(id_string.encode('utf-8'), usedforsecurity=False)
         return hash_obj.hexdigest()[:16]
 
-    def process_all_legal_documents(self) -> List[LegalClause]:
+    def process_all_legal_documents(self) -> list[LegalClause]:
         """处理所有法律文档"""
         logger.info(f"📁 开始扫描法律文档目录: {self.laws_path}")
 
@@ -288,7 +286,7 @@ class ClauseLevelVectorizer:
                 self.stats['law_documents'][law_name] = len(clauses)
                 logger.info(f"   ✅ 提取了 {len(clauses)} 个条款")
             else:
-                logger.warning(f"   ⚠️ 未提取到条款")
+                logger.warning("   ⚠️ 未提取到条款")
 
         self.stats['total_files'] = doc_count
         self.stats['total_clauses'] = len(all_clauses)
@@ -323,7 +321,7 @@ class ClauseLevelVectorizer:
             logger.error(f"❌ 创建条款集合失败: {e}")
             return False
 
-    def vectorize_and_upload_clauses(self, clauses: List[LegalClause]) -> Any:
+    def vectorize_and_upload_clauses(self, clauses: list[LegalClause]) -> Any:
         """向量化并上传条款"""
         if not self.qdrant:
             logger.warning('⚠️ Qdrant不可用，跳过上传播放')
@@ -358,7 +356,7 @@ class ClauseLevelVectorizer:
 
                 # 创建Qdrant点
                 points = []
-                for clause, embedding in zip(batch, embeddings):
+                for clause, embedding in zip(batch, embeddings, strict=False):
                     point = PointStruct(
                         id=hash(clause.clause_id) % (2**31),  # 转换为整数ID
                         vector=embedding.tolist(),
@@ -392,7 +390,7 @@ class ClauseLevelVectorizer:
         self.stats['vector_generation_time'] = time.time() - start_time
         logger.info(f"🎉 条款向量化完成！总耗时: {self.stats['vector_generation_time']:.2f}秒")
 
-    def save_clause_metadata(self, clauses: List[LegalClause]) -> None:
+    def save_clause_metadata(self, clauses: list[LegalClause]) -> None:
         """保存条款元数据"""
         metadata = {
             'created_time': datetime.now().isoformat(),
@@ -434,7 +432,7 @@ class ClauseLevelVectorizer:
         with open(clause_file, 'w', encoding='utf-8') as f:
             json.dump(clause_data, f, ensure_ascii=False, indent=2)
 
-        logger.info(f"💾 条款数据已保存:")
+        logger.info("💾 条款数据已保存:")
         logger.info(f"   - 元数据: {metadata_file}")
         logger.info(f"   - 条款数据: {clause_file}")
 
@@ -469,13 +467,13 @@ class ClauseLevelVectorizer:
         logger.info('📊 条款级向量化统计报告:')
         logger.info(f"   - 处理文档: {self.stats['total_files']} 个")
         logger.info(f"   - 提取条款: {self.stats['total_clauses']} 个")
-        logger.info(f"   - 条款类型分布:")
+        logger.info("   - 条款类型分布:")
 
         for clause_type, count in sorted(self.stats['clause_types'].items(),
                                         key=lambda x: x[1], reverse=True):
             logger.info(f"     * {clause_type}: {count} 个")
 
-        logger.info(f"   - 法律文档分布 (前10):")
+        logger.info("   - 法律文档分布 (前10):")
         law_docs = sorted(self.stats['law_documents'].items(),
                          key=lambda x: x[1], reverse=True)[:10]
         for law_name, count in law_docs:

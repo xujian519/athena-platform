@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 llm - LLM集成模块
 

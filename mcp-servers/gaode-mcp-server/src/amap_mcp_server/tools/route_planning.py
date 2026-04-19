@@ -3,11 +3,9 @@
 Route Planning Tool
 """
 
-import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import structlog
-from mcp.types import Tool
 
 from ..api.extended_gaode_client import ExtendedAmapApiClient
 
@@ -22,7 +20,7 @@ class RoutePlanningTool:
     def __init__(self, api_client: ExtendedAmapApiClient):
         self.api_client = api_client
 
-    async def call(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
+    async def call(self, arguments: dict[str, Any]) -> dict[str, Any]:
         """
         路径规划处理
 
@@ -53,7 +51,7 @@ class RoutePlanningTool:
         else:
             raise ValueError(f"不支持的出行方式: {mode}")
 
-    async def _handle_driving_route(self, args: Dict[str, Any]) -> Dict[str, Any]:
+    async def _handle_driving_route(self, args: dict[str, Any]) -> dict[str, Any]:
         """处理驾车路径规划"""
         origin = args.get('origin')
         destination = args.get('destination')
@@ -148,7 +146,7 @@ class RoutePlanningTool:
                 'routes': []
             }
 
-    async def _handle_walking_route(self, args: Dict[str, Any]) -> Dict[str, Any]:
+    async def _handle_walking_route(self, args: dict[str, Any]) -> dict[str, Any]:
         """处理步行路径规划"""
         origin = args.get('origin')
         destination = args.get('destination')
@@ -228,7 +226,7 @@ class RoutePlanningTool:
                 'routes': []
             }
 
-    async def _handle_bicycling_route(self, args: Dict[str, Any]) -> Dict[str, Any]:
+    async def _handle_bicycling_route(self, args: dict[str, Any]) -> dict[str, Any]:
         """处理骑行路径规划"""
         origin = args.get('origin')
         destination = args.get('destination')
@@ -307,7 +305,7 @@ class RoutePlanningTool:
                 'routes': []
             }
 
-    async def _handle_transit_route(self, args: Dict[str, Any]) -> Dict[str, Any]:
+    async def _handle_transit_route(self, args: dict[str, Any]) -> dict[str, Any]:
         """处理公交路径规划"""
         origin = args.get('origin')
         destination = args.get('destination')
@@ -407,7 +405,7 @@ class RoutePlanningTool:
                 'routes': []
             }
 
-    def get_input_schema(self) -> Dict[str, Any]:
+    def get_input_schema(self) -> dict[str, Any]:
         """获取输入参数模式"""
         return {
             'type': 'object',
@@ -451,7 +449,7 @@ class RoutePlanningTool:
             'required': ['mode', 'origin', 'destination']
         }
 
-    def get_output_schema(self) -> Dict[str, Any]:
+    def get_output_schema(self) -> dict[str, Any]:
         """获取输出结果模式"""
         return {
             'type': 'object',

@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Numpy兼容性测试
 Numpy Compatibility Test
 """
 
 import sys
-import warnings
 import traceback
 from pathlib import Path
 
@@ -19,7 +17,7 @@ def test_numpy_compatibility():
 
     try:
         # 测试基础导入
-        from config.numpy_compatibility import np, array, zeros, ones, random, mean, sum, dot
+        from config.numpy_compatibility import array, dot, mean, np, random, sum, zeros
         print("✅ 基础导入成功")
 
         # 测试数组创建

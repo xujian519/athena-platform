@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena工作平台 - 向量库完整验证器
 验证所有向量库是否已正确构建和集成
@@ -10,7 +11,6 @@ import os
 import sys
 from datetime import datetime
 from typing import Any
-
 
 from config.numpy_compatibility import random
 from core.logging_config import setup_logging

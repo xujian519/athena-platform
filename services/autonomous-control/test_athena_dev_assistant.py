@@ -12,8 +12,8 @@ from pathlib import Path
 current_dir = Path(__file__).parent
 sys.path.append(str(current_dir / "athena_dev_assistant"))
 
-from tools.patent_writing_tool import AthenaPatentWritingTool
 from tools.examination_response_tool import AthenaExaminationResponseTool
+from tools.patent_writing_tool import AthenaPatentWritingTool
 
 
 async def test_patent_writing():
@@ -109,8 +109,8 @@ async def test_examination_response():
 
     # 检查完整性
     print("\n5. 检查答复完整性...")
-    completeness = tool.check_response_completeness(response)
-    print(f"✅ 完整性检查: 格式完整, 内容完整")
+    tool.check_response_completeness(response)
+    print("✅ 完整性检查: 格式完整, 内容完整")
 
 
 async def test_integration():
@@ -120,12 +120,12 @@ async def test_integration():
 
     # 测试模块导入
     try:
-        from athena_dev_integration import router, get_writing_tool, get_response_tool
+        from athena_dev_integration import get_response_tool, get_writing_tool, router
         print("✅ 模块导入成功")
 
         # 测试工具实例化
-        writing_tool = get_writing_tool()
-        response_tool = get_response_tool()
+        get_writing_tool()
+        get_response_tool()
         print("✅ 工具实例化成功")
 
         # 测试路由

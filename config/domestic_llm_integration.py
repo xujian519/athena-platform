@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 国产大模型集成方案
 Domestic LLM Integration Solution
@@ -11,15 +10,11 @@ Domestic LLM Integration Solution
 版本: 1.0.0
 """
 
-import hashlib
-import json
 import logging
-import os
 import sys
-import time
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import requests
 
@@ -103,7 +98,7 @@ class DomesticLLMManager:
             }
         }
 
-        self.configs: Dict[LLMProvider, LLMConfig] = {}
+        self.configs: dict[LLMProvider, LLMConfig] = {}
         self.default_provider = LLMProvider.ZHIPU  # 推荐：智谱清言
 
     def register_provider(self, provider: LLMProvider, api_key: str, **kwargs) -> Any:
@@ -151,7 +146,7 @@ class DomesticLLMManager:
         }
 
         # 计算综合评分
-        for provider, score in scores.items():
+        for _provider, score in scores.items():
             score['overall'] = (
                 score['accuracy_score'] * 0.3 +
                 score['speed_score'] * 0.2 +
@@ -248,7 +243,7 @@ class DomesticLLMManager:
         """调用Google Gemini API"""
         url = f"{self.providers[LLMProvider.GEMINI]['base_url']}?key={config.api_key}"
         headers = {'Content-Type': 'application/json'}
-        
+
         # Gemini的prompt结构
         enhanced_prompt = f"""
 作为一名专家，请根据以下需求提供详细的答复：
@@ -257,7 +252,7 @@ class DomesticLLMManager:
 
 请提供结构清晰、内容详尽的答复。
 """
-        
+
         data = {
             'contents': [{
                 'parts': [{'text': enhanced_prompt}]
@@ -305,7 +300,7 @@ class DomesticLLMManager:
 组件：包含主要功能模块和连接关系
 """
 
-    def get_provider_comparison(self) -> Dict[str, Any]:
+    def get_provider_comparison(self) -> dict[str, Any]:
         """获取提供商对比信息"""
         comparison = {}
         for provider, info in self.providers.items():
@@ -333,10 +328,10 @@ def main() -> None:
 
     # 显示推荐结果
     logger.info("\n🎯 AI绘图场景大模型推荐:")
-    recommended = llm_manager.get_recommendation_for_drawing()
+    llm_manager.get_recommendation_for_drawing()
 
     # 显示详细对比
-    logger.info(f"\n📊 四大国产大模型详细对比:")
+    logger.info("\n📊 四大国产大模型详细对比:")
     comparison = llm_manager.get_provider_comparison()
 
     logger.info(f"{'模型':<15} {'准确率':<8} {'速度':<8} {'价格':<12} {'上下文':<10} {'推荐指数'}")
@@ -354,14 +349,14 @@ def main() -> None:
         stars = '⭐' * int(score * 5)
         logger.info(f"{info['name']:<15} {info['accuracy']:<8}% {info['speed']:<8}s {info['price']:<12}元 {info['context_length']:<10} {stars}")
 
-    logger.info(f"\n💡 推荐理由：")
-    logger.info(f"   🥇 智谱清言GLM-4：最高准确率(97.1%) + 最快速度(0.7s) + 最低价格 + 超长上下文(128K)")
-    logger.info(f"   🥈 百度文心一言：企业级应用成熟，中文理解优秀")
-    logger.info(f"   🥉 阿里通义千问：阿里云深度集成，成本效益好")
-    logger.info(f"   🏅 科大讯飞星火：语音处理能力强，教育领域优势")
+    logger.info("\n💡 推荐理由：")
+    logger.info("   🥇 智谱清言GLM-4：最高准确率(97.1%) + 最快速度(0.7s) + 最低价格 + 超长上下文(128K)")
+    logger.info("   🥈 百度文心一言：企业级应用成熟，中文理解优秀")
+    logger.info("   🥉 阿里通义千问：阿里云深度集成，成本效益好")
+    logger.info("   🏅 科大讯飞星火：语音处理能力强，教育领域优势")
 
     # 演示绘图描述生成（使用模拟API）
-    logger.info(f"\n🎨 绘图描述生成演示:")
+    logger.info("\n🎨 绘图描述生成演示:")
 
     test_prompts = [
         '一个用户登录系统的流程图',
@@ -374,10 +369,10 @@ def main() -> None:
         enhanced_description = llm_manager.generate_drawing_description(prompt)
         logger.info(f"   增强描述: {enhanced_description[:100]}...")
 
-    logger.info(f"\n🚀 立即开始使用:")
-    logger.info(f"   1. 注册智谱清言API: https://open.bigmodel.cn/")
-    logger.info(f"   2. 获取API Key后配置到系统中")
-    logger.info(f"   3. 享受高质量、低成本的AI绘图服务")
+    logger.info("\n🚀 立即开始使用:")
+    logger.info("   1. 注册智谱清言API: https://open.bigmodel.cn/")
+    logger.info("   2. 获取API Key后配置到系统中")
+    logger.info("   3. 享受高质量、低成本的AI绘图服务")
 
     return 0
 

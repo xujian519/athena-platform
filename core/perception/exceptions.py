@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 感知模块自定义异常类体系
 Perception Module Custom Exception Hierarchy
@@ -11,7 +11,7 @@ Perception Module Custom Exception Hierarchy
 版本: 1.0.0
 """
 
-from typing import Any, Optional
+from typing import Any
 
 
 class PerceptionError(Exception):
@@ -187,7 +187,7 @@ class MemoryError(PerceptionError):
     当内存不足时抛出
     """
 
-    def __init__(self, message: str, required_mb: Optional[float] = None, available_mb: float | None = None):
+    def __init__(self, message: str, required_mb: float | None = None, available_mb: float | None = None):
         details = {}
         if required_mb:
             details["required_mb"] = required_mb

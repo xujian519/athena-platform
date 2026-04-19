@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 DSPy 500个全面覆盖训练数据提取器
 Comprehensive DSPy Training Data Extractor (500 cases)
@@ -24,10 +25,10 @@ import logging
 import random
 import re
 from collections import Counter, defaultdict
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -485,7 +486,7 @@ class ComprehensiveExtractor:
 
     def _extract_decision_number(self, text: str) -> str:
         """提取决定文号"""
-        patterns = [\s]*(\d+)", r"WX(\d{5]"]
+        patterns = [r"[A-Z]+\s*[\s]*(\d+)", r"WX(\d{5})"]
         for pattern in patterns:
             match = re.search(pattern, text)
             if match:
@@ -604,7 +605,7 @@ class ComprehensiveExtractor:
                         start = text.find(marker)
                         if start != -1:
                             end = start + 1200
-                            sections[min(end]]
+                            sections[section_name] = text[start:min(end, len(text))]
                             break
         return sections
 
@@ -653,7 +654,7 @@ class ComprehensiveExtractor:
             return list({f"专利法第{m}条" for m in matches})
         return ["专利法第22条", "专利法第26条"]
 
-    def balance_distribution(self, cases: list[dict[str, Any]) -> list[dict[str, Any]]:
+    def balance_distribution(self, cases: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """平衡案例分布
 
         Args:
@@ -772,7 +773,7 @@ class ComprehensiveExtractor:
 
         return final_cases
 
-    def _print_statistics(self, cases: list[dict[str, Any]) -> Any:
+    def _print_statistics(self, cases: list[dict[str, Any]]) -> Any:
         """打印统计信息"""
         logger.info("\n" + "=" * 60)
         logger.info("最终数据统计")
@@ -862,7 +863,7 @@ class ComprehensiveExtractor:
                 f.write(f"        decision_outcome='{case['decision_outcome']}',\n")
 
                 # 输入字段
-                background_text = case[200].replace("'''"]
+                background_text = case.get("background", "").replace("'''", "'\"'\"'")
                 f.write(f"        background='''{background_text}''',\n")
 
                 # 输出字段

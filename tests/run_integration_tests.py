@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 集成测试运行器
 Integration Test Runner
@@ -7,14 +6,14 @@ Integration Test Runner
 运行整个多智能体协作系统的集成测试
 """
 
-import sys
-import os
-import unittest
 import asyncio
-import time
 import logging
-from pathlib import Path
+import os
+import sys
+import time
+import unittest
 from datetime import datetime, timedelta
+from pathlib import Path
 
 # 添加项目路径
 sys.path.append('/Users/xujian/Athena工作平台')
@@ -59,13 +58,11 @@ async def run_system_integration_tests():
 
     try:
         # 导入各个模块
-        from core.collaboration import (
-            MultiAgentCollaborationFramework,
-            Agent, AgentCapability
-        )
+        from integration.multi_agent_integration import MultiAgentIntegration
+
+        from core.collaboration import Agent, MultiAgentCollaborationFramework
         from core.protocols import ProtocolManager
         from core.protocols.advanced_coordination import AdvancedCoordinationEngine
-        from integration.multi_agent_integration import MultiAgentIntegration
 
         print("1. 测试模块导入...")
         # 模块导入测试
@@ -78,7 +75,7 @@ async def run_system_integration_tests():
 
         for module_name, module_class in modules:
             try:
-                instance = module_class()
+                module_class()
                 print(f"   {module_name}: ✅ 导入成功")
             except Exception as e:
                 print(f"   {module_name}: ❌ 导入失败 - {e}")
@@ -89,7 +86,7 @@ async def run_system_integration_tests():
         framework = MultiAgentCollaborationFramework()
         protocol_manager = ProtocolManager()
         coordination_engine = AdvancedCoordinationEngine()
-        integration = MultiAgentIntegration()
+        MultiAgentIntegration()
 
         # 启动框架
         framework.start_framework()
@@ -99,7 +96,11 @@ async def run_system_integration_tests():
         # 组件集成测试
         # 注册智能体 - 使用统一能力接口
         try:
-            from core.collaboration.unified_capability import UnifiedAgentCapability, CapabilityAdapter, CapabilityType
+            from core.collaboration.unified_capability import (
+                CapabilityAdapter,
+                CapabilityType,
+                UnifiedAgentCapability,
+            )
             use_unified_capability = True
         except ImportError:
             use_unified_capability = False
@@ -150,7 +151,7 @@ async def run_system_integration_tests():
 
         print("\n4. 测试完整工作流...")
         # 完整工作流测试
-        from core.collaboration import Task, TaskStatus, Priority
+        from core.collaboration import Priority, Task, TaskStatus
 
         # 创建任务
         task = Task(
@@ -180,7 +181,7 @@ async def run_system_integration_tests():
         print(f"   框架智能体数: {framework_status['agents']['total']}")
         print(f"   框架任务数: {framework_status['tasks']['total']}")
         print(f"   协调引擎智能体数: {coordination_status['registered_agents']}")
-        print(f"   系统状态: ✅ 正常")
+        print("   系统状态: ✅ 正常")
 
         return True
 
@@ -197,17 +198,14 @@ async def run_performance_integration_tests():
     print("=" * 50)
 
     try:
-        from core.collaboration import (
-            MultiAgentCollaborationFramework,
-            Agent, AgentCapability
-        )
+        from core.collaboration import Agent, AgentCapability, MultiAgentCollaborationFramework
         from core.protocols import ProtocolManager
         from core.protocols.advanced_coordination import AdvancedCoordinationEngine
 
         # 创建系统组件
         framework = MultiAgentCollaborationFramework()
         protocol_manager = ProtocolManager()
-        coordination_engine = AdvancedCoordinationEngine()
+        AdvancedCoordinationEngine()
 
         print("1. 性能基准测试...")
         start_time = time.time()
@@ -218,7 +216,11 @@ async def run_performance_integration_tests():
 
         # 导入统一能力接口
         try:
-            from core.collaboration.unified_capability import UnifiedAgentCapability, CapabilityAdapter, CapabilityType
+            from core.collaboration.unified_capability import (
+                CapabilityAdapter,
+                CapabilityType,
+                UnifiedAgentCapability,
+            )
             use_unified_capability = True
         except ImportError:
             use_unified_capability = False
@@ -272,7 +274,7 @@ async def run_performance_integration_tests():
         successful_assignments = 0
         for i in range(200):
             # 创建任务
-            from core.collaboration import Task, Priority
+            from core.collaboration import Priority, Task
             task = Task(
                 title=f"性能任务{i:04d}",
                 required_capabilities=[f"capability_{i%5}"],
@@ -321,8 +323,12 @@ async def run_scenario_based_tests():
 
     try:
         from core.collaboration import (
-            MultiAgentCollaborationFramework, AgentCapability,
-            Task, TaskStatus, Priority, Agent
+            Agent,
+            AgentCapability,
+            MultiAgentCollaborationFramework,
+            Priority,
+            Task,
+            TaskStatus,
         )
 
         framework = MultiAgentCollaborationFramework()
@@ -510,7 +516,7 @@ async def run_scenario_based_tests():
 
         # 获取最终状态
         final_status = framework.get_framework_status()
-        print(f"\n📊 最终状态统计:")
+        print("\n📊 最终状态统计:")
         print(f"   注册智能体: {final_status['agents']['total']}")
         print(f"   创建任务: {final_status['tasks']['total']}")
         print(f"   活跃会话: {final_status['sessions']['active']}")
@@ -534,13 +540,13 @@ def generate_integration_test_report(results):
     passed_tests = sum(1 for result in results.values() if result)
     success_rate = passed_tests / total_tests if total_tests > 0 else 0
 
-    print(f"📊 集成测试统计:")
+    print("📊 集成测试统计:")
     print(f"   总测试项: {total_tests}")
     print(f"   通过项目: {passed_tests}")
     print(f"   失败项目: {total_tests - passed_tests}")
     print(f"   成功率: {success_rate:.1%}")
 
-    print(f"\n📋 详细结果:")
+    print("\n📋 详细结果:")
     for test_name, result in results.items():
         status = "✅ 通过" if result else "❌ 失败"
         print(f"   {test_name}: {status}")

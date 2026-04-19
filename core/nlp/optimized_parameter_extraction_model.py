@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Apple Silicon优化的参数提取模型
 Optimized Parameter Extraction for Apple Silicon
@@ -19,10 +20,9 @@ import json
 import logging
 import os
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
-
+from typing import Any
 
 # 配置镜像站和优化(必须在导入transformers之前)
 os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"

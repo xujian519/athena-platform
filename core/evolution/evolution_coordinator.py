@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 进化协调器
 Evolution Coordinator
@@ -20,18 +21,17 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
-from core.logging_config import setup_logging
 from .types import (
     EvolutionConfig,
-    EvolutionResult,
     EvolutionPhase,
+    EvolutionResult,
     EvolutionStatus,
+    EvolutionStrategy,
     Mutation,
     MutationType,
     PerformanceMetrics,
-    EvolutionStrategy
 )
 
 logger = logging.getLogger(__name__)
@@ -48,7 +48,7 @@ class EvolutionCoordinator:
     - 管理安全回滚
     """
 
-    def __init__(self, config: Optional[EvolutionConfig] = None):
+    def __init__(self, config: EvolutionConfig | None = None):
         """初始化进化协调器"""
         self.config = config or EvolutionConfig()
         self.status = EvolutionStatus.IDLE
@@ -59,8 +59,8 @@ class EvolutionCoordinator:
         self.mutation_history: list[Mutation] = []
 
         # 性能监控
-        self.current_metrics: Optional[PerformanceMetrics] = None
-        self.baseline_metrics: Optional[PerformanceMetrics] = None
+        self.current_metrics: PerformanceMetrics | None = None
+        self.baseline_metrics: PerformanceMetrics | None = None
 
         # 组件引用（延迟加载）
         self._learning_system = None
@@ -157,7 +157,7 @@ class EvolutionCoordinator:
         except ImportError:
             logger.warning("⚠️ 演化记忆不可用")
 
-    async def check_and_evolve(self) -> Optional[EvolutionResult]:
+    async def check_and_evolve(self) -> EvolutionResult | None:
         """
         检查并触发进化
 
@@ -224,7 +224,7 @@ class EvolutionCoordinator:
 
         return False
 
-    async def evolve(self, strategy: Optional[EvolutionStrategy] = None) -> EvolutionResult:
+    async def evolve(self, strategy: EvolutionStrategy | None = None) -> EvolutionResult:
         """
         执行进化
 
@@ -482,10 +482,10 @@ class EvolutionCoordinator:
 
 
 # 全局实例
-_evolution_coordinator: Optional[EvolutionCoordinator] = None
+_evolution_coordinator: EvolutionCoordinator | None = None
 
 
-def get_evolution_coordinator(config: Optional[EvolutionConfig] = None) -> EvolutionCoordinator:
+def get_evolution_coordinator(config: EvolutionConfig | None = None) -> EvolutionCoordinator:
     """获取进化协调器实例"""
     global _evolution_coordinator
     if _evolution_coordinator is None:
@@ -510,7 +510,7 @@ if __name__ == "__main__":
         print("\n🧬 执行测试进化...")
         result = await coordinator.evolve()
 
-        print(f"\n✅ 进化完成")
+        print("\n✅ 进化完成")
         print(f"成功: {result.success}")
         print(f"改进: {result.improvement:.1%}")
         print(f"突变数: {result.mutations_count}")

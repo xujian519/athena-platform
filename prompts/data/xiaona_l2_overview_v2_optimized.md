@@ -14,13 +14,13 @@
 │                    小娜数据资产全景                           │
 ├─────────────────────────────────────────────────────────────┤
 │                                                              │
-│  【Qdrant向量库】         【NebulaGraph知识图谱】             │
+│  【Qdrant向量库】         【Neo4j知识图谱】                  │
 │  ┌──────────────────┐   ┌──────────────────────────────┐   │
-│  │ 集合           记录数   │ │ 图空间           节点+边    │   │
+│  │ 集合           记录数   │ │ 图名称         节点+关系   │   │
 │  ├──────────────────┤   ├──────────────────────────────┤   │
-│  │ patent_rules_complete 2,694│ │ patent_rules    64,913节点    │   │
-│  │ patent_decisions     64,815│ │ legal_kg        22,372节点    │   │
-│  │ laws_articles        53,903│ │ patent_kg       专利知识图谱   │   │
+│  │ patent_rules_complete 2,056│ │ patent_rules    64,913节点    │   │
+│  │ patent_decisions     119,660│ │ legal_kg        22,372节点    │   │
+│  │ laws_articles        295,810│ │ patent_kg       专利知识图谱   │   │
 │  │ patent_guidelines        376│ └──────────────────────────────┘   │
 │  │ patent_full_text         13│ 用途: 法条关联推理                │   │
 │  └──────────────────┘                                      │   │
@@ -28,7 +28,7 @@
 │                                                              │
 │  【PostgreSQL数据库】    【搜索引擎】                        │
 │  ┌──────────────────┐   ┌──────────────────────────────┐   │
-│  │ patent_db  28M+专利   │ │ Tavily/Bocha/Metaso/Baidu   │   │
+│  │ patent_db  75M+专利   │ │ Tavily/Bocha/Metaso/Baidu   │   │
 │  └──────────────────┘   │ Google Patents               │   │
 │  用途: 中国专利主数据库   └──────────────────────────────┘   │
 │                          用途: 技术知识获取                  │
@@ -44,7 +44,7 @@
 法律问题
 ├─ 具体法条? → Qdrant: patent_rules_complete
 ├─ 实务案例? → Qdrant: patent_decisions
-├─ 法条关联? → NebulaGraph: patent_rules + legal_kg
+├─ 法条关联? → Neo4j: patent_rules + legal_kg
 └─ 完整条文? → Qdrant: laws_articles
 ```
 
@@ -54,7 +54,7 @@
 ├─ 中国专利摘要? → PostgreSQL: patent_db
 ├─ 专利全文? → 专利全文处理系统
 ├─ 国际专利? → Google Patents
-└─ 专利关系? → NebulaGraph: patent_kg
+└─ 专利关系? → Neo4j: patent_kg
 ```
 
 ### 技术理解
@@ -77,14 +77,14 @@
 
 | 场景 | 首选 | 辅助 | 备用 |
 |------|------|------|------|
-| 法律条文 | Qdrant(patent_rules) | NebulaGraph | - |
-| 案例检索 | Qdrant(patent_decisions) | NebulaGraph | - |
+| 法律条文 | Qdrant(patent_rules) | Neo4j | - |
+| 案例检索 | Qdrant(patent_decisions) | Neo4j | - |
 | 专利摘要 | PostgreSQL(patent_db) | - | - |
 | 专利全文 | 全文系统 | PostgreSQL | - |
 | 现有技术 | PostgreSQL + 全文 | 搜索引擎(非专利) | - |
 | 技术背景 | Tavily | Bocha | Qdrant |
-| 法条关联 | NebulaGraph | Qdrant | - |
-| 专利关系 | NebulaGraph(patent_kg) | PostgreSQL | - |
+| 法条关联 | Neo4j | Qdrant | - |
+| 专利关系 | Neo4j(patent_kg) | PostgreSQL | - |
 
 ---
 

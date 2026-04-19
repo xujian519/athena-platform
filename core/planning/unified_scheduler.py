@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 统一调度器 - Unified Scheduler
 整合任务调度和日历调度功能
@@ -12,21 +12,19 @@
 import asyncio
 import json
 import logging
-from datetime import datetime, timedelta
-from typing import Any, Optional
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta
 from enum import Enum
-
-# 导入基础规划器接口
-from .unified_planning_interface import (
-    BasePlanner,
-    PlannerType,
-    PlanningRequest,
-    PlanningResult
-)
+from typing import Any
 
 # 导入相关模块
 from ..cognition.agentic_task_planner import AgenticTaskPlanner
+
+# 导入基础规划器接口
+from .unified_planning_interface import BasePlanner, PlannerType, PlanningRequest, PlanningResult
+
+logger = logging.getLogger(__name__)
+
 
 class ScheduleType(Enum):
     """调度类型"""
@@ -129,7 +127,7 @@ class UnifiedScheduler(BasePlanner):
         Returns:
             PlanningResult: 规划结果
         """
-        print(f"📅 统一调度器: 开始处理调度请求")
+        print("📅 统一调度器: 开始处理调度请求")
 
         # 解析调度类型
         schedule_type = self._detect_schedule_type(request)

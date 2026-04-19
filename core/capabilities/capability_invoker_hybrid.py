@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 混合模式能力调用器
 Hybrid Capability Invoker
@@ -8,7 +9,7 @@ Hybrid Capability Invoker
 
 import logging
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 from core.capabilities.capability_invoker_optimized import (
     MCPCapabilityInvokerOptimized,

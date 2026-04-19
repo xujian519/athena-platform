@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 审查意见答复反馈闭环管理器
 Office Action Response Feedback Loop Manager
@@ -26,9 +27,7 @@ from pathlib import Path
 from typing import Any
 
 from core.logging_config import setup_logging
-from core.patent.oa_response_workflow_recorder import get_oa_workflow_recorder
 from core.utils.error_handling import (
-    ConfigurationError,
     WorkflowRecordError,
     timeout,
 )
@@ -135,7 +134,7 @@ class FeedbackLoopManager:
         """加载反馈索引"""
         if self.feedback_index_file.exists():
             try:
-                with open(self.feedback_index_file, "r", encoding="utf-8") as f:
+                with open(self.feedback_index_file, encoding="utf-8") as f:
                     return json.load(f)
             except Exception as e:
                 logger.warning(f"加载反馈索引失败: {e}")

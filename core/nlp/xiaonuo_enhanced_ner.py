@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺增强NER模块 - 集成BERT模型和专利实体识别
 Enhanced NER Module with BERT and Patent Entity Support
@@ -18,7 +19,7 @@ import re
 import threading
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import torch
 from transformers import AutoModelForTokenClassification, AutoTokenizer

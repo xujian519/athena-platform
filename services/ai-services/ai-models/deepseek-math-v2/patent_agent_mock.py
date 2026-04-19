@@ -1,23 +1,26 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 DeepSeek专利Agent模拟服务
 Mock service for DeepSeek Patent Agent
 """
 
-from fastapi import FastAPI
-from contextlib import asynccontextmanager
-import uvicorn
-from core.async_main import async_main
-from datetime import datetime
-import json
 import asyncio
 import sys
-import os
+from contextlib import asynccontextmanager
+from datetime import datetime
+
+import uvicorn
+from fastapi import FastAPI
 
 # 添加路径
 sys.path.append('/Users/xujian/Athena工作平台/services/autonomous-control')
-from agent_identity import AgentIdentity, AgentType, register_agent_identity, format_identity_display
+from agent_identity import (
+    AgentIdentity,
+    AgentType,
+    format_identity_display,
+    register_agent_identity,
+)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -62,7 +65,7 @@ async def display_startup_identity():
 
         print("\n" + "="*50)
         print(identity_display)
-        print(f"\n🤖 DeepSeek专利专家 启动成功！")
+        print("\n🤖 DeepSeek专利专家 启动成功！")
         print("📍 服务端口: 8022")
         print("="*50 + "\n")
 
@@ -77,7 +80,7 @@ async def health():
 
 @app.post("/analyze_patent")
 async def analyze_patent(request: dict):
-    invention = request.get("invention_description", "")
+    request.get("invention_description", "")
 
     # 模拟专利分析
     return {
@@ -101,7 +104,7 @@ async def analyze_patent(request: dict):
 
 @app.post("/write_patent")
 async def write_patent(request: dict):
-    invention = request.get("invention_description", "")
+    request.get("invention_description", "")
     patent_type = request.get("patent_type", "invention")
 
     # 模拟自验证专利撰写

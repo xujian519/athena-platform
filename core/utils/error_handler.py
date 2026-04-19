@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 错误处理器
 Error Handler
@@ -17,7 +18,7 @@ import traceback
 from collections.abc import Callable
 from contextlib import contextmanager
 from datetime import datetime
-from typing import Any, Dict, Optional, ParamSpec, TypeVar
+from typing import Any, ParamSpec, TypeVar
 
 from ..exceptions import AthenaError, format_error
 
@@ -152,7 +153,7 @@ def create_error_handler(component_name: str, raise_on_error: bool = False) -> E
 
 
 def async_error_handler(
-    context: str = "", raise_on_error: bool = False | None = None, component_name: str | None = None
+    context: str = "", raise_on_error: bool = False, component_name: str | None = None
 ):
     """
     异步错误处理装饰器
@@ -196,7 +197,7 @@ def async_error_handler(
 
 
 def sync_error_handler(
-    context: str = "", raise_on_error: bool = False | None = None, component_name: str | None = None
+    context: str = "", raise_on_error: bool = False, component_name: str | None = None
 ):
     """
     同步错误处理装饰器
@@ -399,7 +400,7 @@ def safe_execute(
     func: Callable[..., T],
     *args: Any,
     default: Any = None,
-    on_error: Callable[[Exception, Any] | None = None,
+    on_error: Callable[[Exception, Any]] | None = None,
     **kwargs: Any,
 ) -> Any:
     """
@@ -435,7 +436,7 @@ async def async_safe_execute(
     func: Callable[..., T],
     *args: Any,
     default: Any = None,
-    on_error: Callable[[Exception, Any] | None = None,
+    on_error: Callable[[Exception, Any]] | None = None,
     **kwargs: Any,
 ) -> Any:
     """

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 规则查询模块
 Rules Query Module - 三库联动规则查询系统

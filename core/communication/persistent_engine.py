@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 持久化通信引擎包装器
 Persistent Communication Engine Wrapper
@@ -18,13 +19,13 @@ Persistent Communication Engine Wrapper
 
 import logging
 from collections.abc import Callable
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any
 
-from core.communication.types import Message, MessageType, MessageStatus
 from core.communication.persistence.base_persistence import MessageState
 from core.communication.persistence.persistence_manager import PersistenceManager
 from core.communication.persistence.queue_recovery import QueueRecoveryManager
+from core.communication.types import Message, MessageType
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +53,7 @@ class PersistentCommunicationEngine:
         """
         self.base_engine = base_engine
         self.persistence = PersistenceManager(persistence_config)
+        self.recovery_config = recovery_config or {}
         self.recovery_manager: QueueRecoveryManager | None = None
 
         # 统计信息
@@ -82,7 +84,7 @@ class PersistentCommunicationEngine:
 
             # 2. 创建恢复管理器
             self.recovery_manager = QueueRecoveryManager(
-                self.persistence, recovery_config
+                self.persistence, self.recovery_config
             )
 
             # 3. 执行队列恢复

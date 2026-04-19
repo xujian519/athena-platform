@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Dolphin文档解析API路由
 Dolphin Document Parsing API Routes for Athena
@@ -52,7 +53,7 @@ def register_dolphin_routes(app):
             return JSONResponse(info)
         except Exception as e:
             logger.error(f"❌ 获取模型信息失败: {e}")
-            raise HTTPException(status_code=500, detail=str(e))
+            raise HTTPException(status_code=500, detail=str(e)) from e
 
     @router.post("/parse")
     async def parse_document(
@@ -111,7 +112,7 @@ def register_dolphin_routes(app):
             # 清理临时文件
             if "temp_file" in locals():
                 temp_file.unlink(missing_ok=True)
-            raise HTTPException(status_code=500, detail=str(e))
+            raise HTTPException(status_code=500, detail=str(e)) from e
 
     @router.post("/parse/patent")
     async def parse_patent_document(
@@ -169,7 +170,7 @@ def register_dolphin_routes(app):
             # 清理临时文件
             if "temp_file" in locals():
                 temp_file.unlink(missing_ok=True)
-            raise HTTPException(status_code=500, detail=str(e))
+            raise HTTPException(status_code=500, detail=str(e)) from e
 
     @router.post("/chat")
     async def chat_with_document(
@@ -219,7 +220,7 @@ def register_dolphin_routes(app):
             # 清理临时文件
             if "temp_file" in locals():
                 temp_file.unlink(missing_ok=True)
-            raise HTTPException(status_code=500, detail=str(e))
+            raise HTTPException(status_code=500, detail=str(e)) from e
 
     # 注册路由
     app.include_router(router)

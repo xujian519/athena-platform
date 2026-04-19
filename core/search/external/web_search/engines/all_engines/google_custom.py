@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Google Custom Search搜索引擎
 Google Custom Search Engine

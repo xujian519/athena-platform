@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜专利命名系统 - 主系统
 Xiaona Patent Naming System - Main System
@@ -11,18 +12,16 @@ Xiaona Patent Naming System - Main System
 专利命名系统的主类，协调各个组件完成专利命名任务。
 """
 
-import asyncio
-import json
 import logging
 
 from core.logging_config import setup_logging
 
-from .types import PatentType, PatentNamingRequest, PatentNamingResult
-from .rule_loader import RuleLoader
-from .technical_analyzer import TechnicalAnalyzer
+from .compliance_checker import ComplianceChecker
 from .innovation_extractor import InnovationExtractor
 from .name_generator import NameGenerator
-from .compliance_checker import ComplianceChecker
+from .rule_loader import RuleLoader
+from .technical_analyzer import TechnicalAnalyzer
+from .types import PatentNamingRequest, PatentNamingResult, PatentType
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

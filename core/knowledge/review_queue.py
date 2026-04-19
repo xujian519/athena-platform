@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 知识审核队列管理系统
 Knowledge Review Queue Management System
@@ -29,7 +30,6 @@ from unified_knowledge_item import (
     UnifiedKnowledgeItem,
     create_knowledge_item,
 )
-
 
 logger = logging.getLogger(__name__)
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 混合精度推理测试和验证
 Mixed Precision Inference Testing and Validation
@@ -13,7 +14,7 @@ import logging
 import os
 import sys
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 import pytest
 import torch

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena BERT语义增强意图分类器
 BERT Semantic Enhanced Intent Classifier
@@ -24,20 +25,18 @@ import os
 import threading
 import time
 from collections import defaultdict
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 # 安全修复: 使用joblib替代pickle序列化scikit-learn模型
 import joblib
 import numpy as np
 import torch
-import torch.nn as nn
 from sklearn.ensemble import (
     GradientBoostingClassifier,
     RandomForestClassifier,
-    StackingClassifier,
     VotingClassifier,
 )
 from sklearn.feature_extraction.text import TfidfVectorizer

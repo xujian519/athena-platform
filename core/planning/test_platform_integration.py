@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Phase 2平台集成测试脚本
 Testing Phase 2 Integration with Platform
@@ -211,7 +212,7 @@ async def main():
         print("   ✅ 服务注册表已更新")
         print("\n🚀 Phase 2功能已成功集成到Athena平台!")
 
-    except Exception as e:
+    except Exception:
         import traceback
 
         traceback.print_exc()

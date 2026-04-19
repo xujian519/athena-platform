@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 系统管理器 - 依赖图管理
 System Manager - Dependency Graph
@@ -128,7 +129,7 @@ class DependencyGraph:
             排序后的模块ID列表
         """
         # 计算入度
-        in_degree: dict[str, int] = {module_id: 0 for module_id in module_ids}
+        in_degree: dict[str, int] = dict.fromkeys(module_ids, 0)
         adjacency_list: dict[str, list[str]] = {module_id: [] for module_id in module_ids}
 
         for module_id in module_ids:

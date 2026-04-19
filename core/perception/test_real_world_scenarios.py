@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 实际场景测试套件 (模拟版)
 Real-World Scenarios Test Suite (Simulated)

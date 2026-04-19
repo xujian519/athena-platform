@@ -1,13 +1,11 @@
+from __future__ import annotations
 """
 消息序列化器
 提供高性能的消息序列化和压缩功能
 """
-import pandas as pd
-
 import gzip
 import json
 import logging
-from core.logging_config import setup_logging
 import lzma
 import pickle
 import time
@@ -15,11 +13,14 @@ import zlib
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 import msgpack
 import numpy as np
 import orjson
+import pandas as pd
+
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -180,7 +181,7 @@ class MessageSerializer:
 
         return metadata_length + metadata_bytes + data
 
-    def _parse_metadata(self, data: bytes) -> tuple[bytes, dict[str, Any]:
+    def _parse_metadata(self, data: bytes) -> tuple[bytes, dict[str, Any]]:
         """解析元数据"""
         # 读取元数据长度
         metadata_length = int.from_bytes(data[:4], byteorder='big')
@@ -283,7 +284,7 @@ class HighPerformanceSerializer:
             import pandas as pd
             buffer = io.BytesIO(data)
             return pd.read_parquet(buffer)
-        except Exception as e:  # TODO
+        except Exception:  # TODO
             return pickle.loads(data)
 
 class MessageBatchSerializer:

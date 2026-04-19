@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 目标专利技术特征提取器
 专门用于目标专利的权利要求书技术特征提取
@@ -12,7 +11,7 @@ import re
 import uuid
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +27,7 @@ class TargetPatentExtractor:
             'total_relationships_found': 0
         }
 
-    def extract_target_patent(self, patent_info: Dict[str, Any], claims_text: str) -> Dict[str, Any]:
+    def extract_target_patent(self, patent_info: dict[str, Any], claims_text: str) -> dict[str, Any]:
         """
         提取目标专利的技术特征
 
@@ -93,7 +92,7 @@ class TargetPatentExtractor:
 
         return result
 
-    def _format_patent_info(self, patent_info: Dict[str, Any]) -> Dict[str, Any]:
+    def _format_patent_info(self, patent_info: dict[str, Any]) -> dict[str, Any]:
         """格式化专利信息"""
         return {
             'patent_number': patent_info.get('patent_number', ''),
@@ -106,7 +105,7 @@ class TargetPatentExtractor:
             'ipc_classification': patent_info.get('ipc', [])
         }
 
-    def _analyze_claims_overview(self, claims_text: str) -> Dict[str, Any]:
+    def _analyze_claims_overview(self, claims_text: str) -> dict[str, Any]:
         """分析权利要求概况"""
         # 统计标点符号
         punctuation_stats = {
@@ -129,7 +128,7 @@ class TargetPatentExtractor:
             'claim_numbers': [int(num) for num in claim_numbers]
         }
 
-    def _parse_claims(self, claims_text: str) -> List[Dict[str, Any]]:
+    def _parse_claims(self, claims_text: str) -> list[dict[str, Any]]:
         """解析权利要求"""
         claims = []
 
@@ -158,7 +157,7 @@ class TargetPatentExtractor:
         claims = self._parse_claims(claims_text)
         return sum(1 for claim in claims if claim['type'] == 'dependent')
 
-    def _analyze_single_claim(self, claim: Dict[str, Any]) -> Dict[str, Any]:
+    def _analyze_single_claim(self, claim: dict[str, Any]) -> dict[str, Any]:
         """分析单个权利要求"""
         analysis = {
             'claim_number': claim['number'],
@@ -181,7 +180,7 @@ class TargetPatentExtractor:
 
         return analysis
 
-    def _extract_features_by_punctuation(self, claim_text: str) -> List[Dict[str, Any]]:
+    def _extract_features_by_punctuation(self, claim_text: str) -> list[dict[str, Any]]:
         """基于标点符号提取技术特征"""
         features = []
 
@@ -194,19 +193,18 @@ class TargetPatentExtractor:
         for i, segment in enumerate(segments):
             if segment.strip():
                 feature = {
-                    'feature_id': f"F_{claim['number']}_{i+1}_{uuid.uuid4().hex[:6]}",
+                    'feature_id': f"F_{i+1}_{uuid.uuid4().hex[:6]}",
                     'sequence_number': i + 1,
                     'feature_text': segment.strip(),
                     'splitting_punctuation': self._get_splitting_punctuation(segment, segments, i),
                     'feature_category': self._categorize_feature(segment.strip()),
                     'feature_importance': self._assess_feature_importance(segment.strip(), i, segments),
-                    'claim_number': claim['number']
                 }
                 features.append(feature)
 
         return features
 
-    def _split_by_punctuation(self, text: str) -> List[str]:
+    def _split_by_punctuation(self, text: str) -> list[str]:
         """按标点符号分割文本"""
         # 定义分割优先级
         splitters = ['。', '，', '：', '；']
@@ -228,7 +226,7 @@ class TargetPatentExtractor:
 
         return segments
 
-    def _get_splitting_punctuation(self, segment: str, all_segments: List[str], index: int) -> str:
+    def _get_splitting_punctuation(self, segment: str, all_segments: list[str], index: int) -> str:
         """获取分割标点符号"""
         if segment.endswith(('。', '，', '：', '；')):
             return segment[-1]
@@ -255,7 +253,7 @@ class TargetPatentExtractor:
 
         return '其他特征'
 
-    def _assess_feature_importance(self, feature_text: str, index: int, total_features: List[str]) -> str:
+    def _assess_feature_importance(self, feature_text: str, index: int, total_features: list[str]) -> str:
         """评估特征重要性"""
         # 前序特征通常更重要
         if index == 0:
@@ -272,7 +270,7 @@ class TargetPatentExtractor:
         # 其他为一般特征
         return '一般特征'
 
-    def _extract_entities_from_features(self, features: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def _extract_entities_from_features(self, features: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """从特征中提取实体"""
         entities = []
 
@@ -351,7 +349,7 @@ class TargetPatentExtractor:
 
         return entities
 
-    def _extract_relationships_from_features(self, features: List[Dict[str, Any]], entities: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def _extract_relationships_from_features(self, features: list[dict[str, Any]], entities: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """从特征中提取关系"""
         relationships = []
 
@@ -417,7 +415,7 @@ class TargetPatentExtractor:
 
         return relationships
 
-    def _deduplicate_entities(self, entities: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def _deduplicate_entities(self, entities: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """去除重复实体"""
         seen = set()
         unique_entities = []
@@ -430,7 +428,7 @@ class TargetPatentExtractor:
 
         return unique_entities
 
-    def _build_extraction_details(self, features: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def _build_extraction_details(self, features: list[dict[str, Any]]) -> dict[str, Any]:
         """构建提取详情"""
         total_features = len(features)
         category_stats = {}
@@ -455,7 +453,7 @@ class TargetPatentExtractor:
             'extraction_timestamp': datetime.now().isoformat()
         }
 
-    def _build_features_structure(self, features: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def _build_features_structure(self, features: list[dict[str, Any]]) -> dict[str, Any]:
         """构建特征结构"""
         return {
             'features_list': features,
@@ -467,7 +465,7 @@ class TargetPatentExtractor:
             }
         }
 
-    def _build_entity_structure(self, entities: List[Dict[str, Any]], relationships: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def _build_entity_structure(self, entities: list[dict[str, Any]], relationships: list[dict[str, Any]]) -> dict[str, Any]:
         """构建实体结构"""
         return {
             'identified_entities': entities,
@@ -476,12 +474,12 @@ class TargetPatentExtractor:
                 'total_entities': len(entities),
                 'entity_type_distribution': {
                     entity_type: sum(1 for e in entities if e['entity_type'] == entity_type)
-                    for entity_type in set(e['entity_type'] for e in entities)
+                    for entity_type in {e['entity_type'] for e in entities}
                 }
             }
         }
 
-    def _assess_downstream_readiness(self, result: Dict[str, Any]) -> Dict[str, Any]:
+    def _assess_downstream_readiness(self, result: dict[str, Any]) -> dict[str, Any]:
         """评估下游分析准备情况"""
         # 检查必要的提取结果
         has_features = result.get('extracted_technical_features', {}).get('features_list')
@@ -500,7 +498,7 @@ class TargetPatentExtractor:
             'overall_readiness': 'complete' if all([ready_for_novelty, ready_for_creativity, ready_for_infringement, ready_for_fto]) else 'partial'
         }
 
-    def _perform_quality_assessment(self, result: Dict[str, Any]) -> Dict[str, Any]:
+    def _perform_quality_assessment(self, result: dict[str, Any]) -> dict[str, Any]:
         """执行质量评估"""
         features = result.get('extracted_technical_features', {}).get('features_list', [])
         entities = result.get('entity_analysis', {}).get('identified_entities', [])
@@ -526,7 +524,7 @@ class TargetPatentExtractor:
             'quality_grade': '优秀' if overall_quality_score >= 90 else '良好' if overall_quality_score >= 70 else '需改进'
         }
 
-    def save_extraction_result(self, result: Dict[str, Any], output_path: str) -> None:
+    def save_extraction_result(self, result: dict[str, Any], output_path: str) -> None:
         """保存提取结果"""
         output_file = Path(output_path)
         output_file.parent.mkdir(parents=True, exist_ok=True)

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺平台控制API扩展
 Xiaonuo Platform Control API Extension
@@ -24,7 +25,6 @@ from core.platform.xiaonuo_platform_controller_v3 import (
     OrchestrationRequest,
     ServiceAction,
     ServiceControlRequest,
-    ServiceControlResponse,
     get_platform_controller,
 )
 

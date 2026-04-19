@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 IPC分类API路由
 IPC Classification API Routes
@@ -10,9 +11,8 @@ import logging
 import sys
 from pathlib import Path
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
-from typing import Optional
 
 from core.logging_config import setup_logging
 
@@ -31,8 +31,8 @@ router = APIRouter(prefix="/api/v2", tags=["IPC分类"])
 class IPCClassificationRequest(BaseModel):
     """IPC分类请求"""
 
-    title: Optional[str] = Field(None, description="专利标题")
-    abstract: Optional[str] = Field(None, description="专利摘要")
+    title: str | None = Field(None, description="专利标题")
+    abstract: str | None = Field(None, description="专利摘要")
     patent_text: str = Field(..., description="专利权利要求或全文")
     top_n: int = Field(5, description="返回前N个分类结果")
 
@@ -42,7 +42,7 @@ class IPCSearchRequest(BaseModel):
 
     query: str = Field(..., description="搜索查询")
     top_n: int = Field(10, description="返回前N个结果")
-    section_filter: Optional[str] = Field(None, description="部级筛选 (A-H)")
+    section_filter: str | None = Field(None, description="部级筛选 (A-H)")
 
 
 # IPC向量数据库单例
@@ -58,7 +58,6 @@ def get_ipc_vector_db():
             from core.patent.ipc_vector_database import IPCVectorDatabase
 
             # 使用更完整的IPC定义文件
-            data_path = "/Users/xujian/Athena工作平台/apps/patent-platform/workspace/data/cnipa_ipc_chinese_definitions.json"
             _ipc_vector_db = IPCVectorDatabase(ipc_data_path=data_path)
             _ipc_vector_db.load_ipc_data()
             logger.info("✅ IPC向量数据库已初始化")
@@ -137,7 +136,7 @@ async def classify_ipc(request: IPCClassificationRequest):
 
     except Exception as e:
         logger.error(f"IPC分类失败: {e}")
-        raise HTTPException(status_code=500, detail=f"分类失败: {e!s}")
+        raise HTTPException(status_code=500, detail=f"分类失败: {e!s}") from e
 
 
 @router.post("/ipc/search")
@@ -186,7 +185,7 @@ async def search_ipc(request: IPCSearchRequest):
 
     except Exception as e:
         logger.error(f"IPC搜索失败: {e}")
-        raise HTTPException(status_code=500, detail=f"搜索失败: {e!s}")
+        raise HTTPException(status_code=500, detail=f"搜索失败: {e!s}") from e
 
 
 @router.get("/ipc/details/{ipc_code}")
@@ -226,7 +225,7 @@ async def get_ipc_details(ipc_code: str):
         raise
     except Exception as e:
         logger.error(f"获取IPC详情失败: {e}")
-        raise HTTPException(status_code=500, detail=f"获取失败: {e!s}")
+        raise HTTPException(status_code=500, detail=f"获取失败: {e!s}") from e
 
 
 @router.get("/ipc/section/{section}")
@@ -283,7 +282,7 @@ async def get_ipc_by_section(section: str):
         raise
     except Exception as e:
         logger.error(f"获取IPC部信息失败: {e}")
-        raise HTTPException(status_code=500, detail=f"获取失败: {e!s}")
+        raise HTTPException(status_code=500, detail=f"获取失败: {e!s}") from e
 
 
 @router.get("/ipc/statistics")
@@ -314,7 +313,7 @@ async def get_ipc_statistics():
 
     except Exception as e:
         logger.error(f"获取IPC统计失败: {e}")
-        raise HTTPException(status_code=500, detail=f"获取失败: {e!s}")
+        raise HTTPException(status_code=500, detail=f"获取失败: {e!s}") from e
 
 
 @router.post("/ipc/domain/analyze")
@@ -367,7 +366,7 @@ async def analyze_patent_domain(request: IPCClassificationRequest):
 
     except Exception as e:
         logger.error(f"IPC领域分析失败: {e}")
-        raise HTTPException(status_code=500, detail=f"分析失败: {e!s}")
+        raise HTTPException(status_code=500, detail=f"分析失败: {e!s}") from e
 
 
 # 注册路由函数

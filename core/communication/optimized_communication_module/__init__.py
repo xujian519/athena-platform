@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化版通信模块 - 公共接口
 Optimized Communication Module - Public Interface
@@ -14,7 +15,7 @@ Optimized Communication Module - Public Interface
 from typing import Any
 
 from .batch_processor import BatchProcessor
-from .compressor import MessageCompressor, LZ4_AVAILABLE, ZSTD_AVAILABLE
+from .compressor import LZ4_AVAILABLE, ZSTD_AVAILABLE, MessageCompressor
 from .module import OptimizedCommunicationModule
 from .router import MessageRouter
 from .types import (

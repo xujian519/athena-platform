@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 分层模型加载器 - 方案A(保守型)
 实现模型的分层加载和动态管理,优先保证办公流畅度

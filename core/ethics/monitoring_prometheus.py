@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Prometheus监控集成
 Prometheus Monitoring Integration for Ethics Framework
@@ -8,11 +9,9 @@ Prometheus Monitoring Integration for Ethics Framework
 import threading
 import time
 from contextlib import contextmanager
-from typing import Any, Dict, Optional
+from typing import Any
 
 from prometheus_client import (
-    REGISTRY,
-    CollectorRegistry,
     Counter,
     Gauge,
     Histogram,

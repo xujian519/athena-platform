@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 外部搜索引擎管理器
 External Search Engine Manager
@@ -12,12 +13,14 @@ External Search Engine Manager
 import asyncio
 import hashlib
 import logging
+import ssl
 import time
 from datetime import datetime
 from typing import Any
 from urllib.parse import urlencode
 
 import aiohttp
+import certifi
 
 from ..types import Document, SearchResult, SearchType
 
@@ -151,8 +154,12 @@ class ExternalSearchManager:
         engine_config = self.engines[engine_name]
 
         try:
+            # 创建SSL上下文，使用certifi证书库
+            ssl_context = ssl.create_default_context(cafile=certifi.where())
+
             async with aiohttp.ClientSession(
-                timeout=aiohttp.ClientTimeout(total=self.config.get("timeout", 30))
+                timeout=aiohttp.ClientTimeout(total=self.config.get("timeout", 30)),
+                connector=aiohttp.TCPConnector(ssl=ssl_context)
             ) as session:
 
                 # 构建搜索URL

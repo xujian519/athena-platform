@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强学习引擎 - 学习策略
 Enhanced Learning Engine - Learning Strategies
@@ -10,7 +11,6 @@ Enhanced Learning Engine - Learning Strategies
 """
 
 import logging
-from collections import defaultdict
 
 import numpy as np
 

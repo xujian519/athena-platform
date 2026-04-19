@@ -4,16 +4,22 @@
 Tests for Enhanced Multimodal Processor (Simplified)
 """
 
+import sys
+from pathlib import Path
+
 import pytest
-from unittest.mock import Mock, patch, AsyncMock, MagicMock
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+from unittest.mock import patch
 
 from core.perception.processors.enhanced_multimodal_processor import (
-    FusionStrategy,
-    ModalityType,
-    ModalityData,
-    FusionResult,
-    MultiModalAnalysis,
     EnhancedMultiModalProcessor,
+    FusionResult,
+    FusionStrategy,
+    ModalityData,
+    ModalityType,
+    MultiModalAnalysis,
 )
 
 

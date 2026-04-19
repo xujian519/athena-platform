@@ -1,0 +1,11 @@
+{
+  "case_id": "oa-response-20260326-202310776442",
+  "current_step": "step1_receive_instruction",
+  "started_at": "2026-03-26T18:10:23.770012",
+  "materials": {
+    "oa_notification": null,
+    "application_file": null,
+    "reference_documents": []
+  },
+  "user_confirmations_count": 0
+}

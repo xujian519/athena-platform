@@ -5,29 +5,26 @@ Common Tools Service
 提供系统通用工具的统一API接口
 """
 
-import logging
-from core.async_main import async_main
-from core.logging_config import setup_logging
-import os
 import sys
 from datetime import datetime
-from typing import Dict, Any, Optional, List
 from pathlib import Path
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 添加当前目录到Python路径
 sys.path.append(str(Path(__file__).parent))
 
-from fastapi import FastAPI, HTTPException, BackgroundTasks
-from fastapi.middleware.cors import CORSMiddleware
-
-from core.security.auth import ALLOWED_ORIGINS
-from pydantic import BaseModel, Field, BaseSettings
-
 # 导入工具模块
 from browser_automation_tool import BrowserAutomationTool
 from crawler_tool import CrawlerTool
-from langextract_tool import LangExtractTool
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from langextract_glm_tool import LangExtractGLMTool
+from langextract_tool import LangExtractTool
+from pydantic import BaseModel, BaseSettings, Field
+
+from core.security.auth import ALLOWED_ORIGINS
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -73,21 +70,21 @@ app.add_middleware(
 class BrowserActionRequest(BaseModel):
     """浏览器操作请求"""
     action: str = Field(..., description="操作类型")
-    url: Optional[str] = Field(None, description="目标URL")
-    selector: Optional[str] = Field(None, description="CSS选择器")
-    text: Optional[str] = Field(None, description="输入文本")
-    options: Dict[str, Any] = Field(default_factory=dict, description="额外选项")
+    url: str | None = Field(None, description="目标URL")
+    selector: str | None = Field(None, description="CSS选择器")
+    text: str | None = Field(None, description="输入文本")
+    options: dict[str, Any] = Field(default_factory=dict, description="额外选项")
 
 class CrawlerRequest(BaseModel):
     """爬虫请求"""
     url: str = Field(..., description="目标URL")
-    options: Dict[str, Any] = Field(default_factory=dict, description="爬取选项")
+    options: dict[str, Any] = Field(default_factory=dict, description="爬取选项")
 
 class TextExtractRequest(BaseModel):
     """文本提取请求"""
     text: str = Field(..., description="待处理文本")
     extract_type: str = Field("keywords", description="提取类型")
-    options: Dict[str, Any] = Field(default_factory=dict)
+    options: dict[str, Any] = Field(default_factory=dict)
 
 # 工具实例管理
 class ToolManager:
@@ -117,7 +114,7 @@ class ToolManager:
             try:
                 await self.browser_tool.close()
             except Exception as e:
-            logger.error(f"Error: {e}", exc_info=True)
+                logger.error(f"Error: {e}", exc_info=True)
         logger.info("工具资源清理完成")
 
 tool_manager = ToolManager()
@@ -193,7 +190,7 @@ async def execute_browser_action(request: BrowserActionRequest):
         }
     except Exception as e:
         logger.error(f"浏览器操作失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get("/api/v1/browser/screenshot")
 async def take_screenshot(url: str, selector: str | None = None):
@@ -213,7 +210,7 @@ async def take_screenshot(url: str, selector: str | None = None):
         }
     except Exception as e:
         logger.error(f"截图失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 # 爬虫接口
 @app.post("/api/v1/crawler/crawl")
@@ -234,10 +231,10 @@ async def crawl_url(request: CrawlerRequest):
         }
     except Exception as e:
         logger.error(f"爬取失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post("/api/v1/crawler/batch")
-async def batch_crawl(urls: List[str], options: Dict[str, Any] = None):
+async def batch_crawl(urls: list[str], options: dict[str, Any] = None):
     """批量爬取"""
     if not tool_manager.crawler_tool:
         raise HTTPException(status_code=503, detail="爬虫工具未初始化")
@@ -289,7 +286,7 @@ async def extract_text_features(request: TextExtractRequest):
         }
     except Exception as e:
         logger.error(f"文本提取失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post("/api/v1/text/extract-glm")
 async def extract_with_glm(request: TextExtractRequest):
@@ -310,7 +307,7 @@ async def extract_with_glm(request: TextExtractRequest):
         }
     except Exception as e:
         logger.error(f"GLM文本提取失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 # 工具状态接口
 @app.get("/api/v1/tools/status")

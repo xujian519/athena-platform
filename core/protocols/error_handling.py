@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协议错误处理增强模块
 Protocol Error Handling Enhancement

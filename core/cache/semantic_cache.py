@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 语义缓存模块
 Semantic Cache Module
@@ -14,9 +15,10 @@ import hashlib
 import json
 import logging
 import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set, Tuple
+from dataclasses import dataclass
+from typing import Any
 
+import numpy as np
 from sentence_transformers import SentenceTransformer
 
 logger = logging.getLogger(__name__)
@@ -350,7 +352,7 @@ class SimpleCache:
 
         return None
 
-    def set(self, result: dict[int, Any] | None, *args) -> Any:
+    def set(self, result: dict[int, Any] | None, *args, **kwargs) -> Any:
         """
         将结果存入缓存
 
@@ -361,7 +363,6 @@ class SimpleCache:
             **kwargs: 关键字参数
         """
         key = self._get_cache_key(*args, **kwargs)
-        ttl = ttl or self.default_ttl
 
         # 如果缓存已满,清理所有过期的条目
         if len(self._cache) >= self.max_size:

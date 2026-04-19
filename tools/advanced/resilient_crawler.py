@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 弹性爬虫 - 增强的错误重试和故障恢复机制
 Resilient Crawler - Enhanced Error Retry and Failure Recovery
@@ -12,21 +11,17 @@ Resilient Crawler - Enhanced Error Retry and Failure Recovery
 """
 
 import asyncio
-import enum
-import hashlib
-import json
 import logging
-import math
 import random
 import socket
 import ssl
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Union
-from urllib.parse import urljoin, urlparse
+from typing import Any
+from urllib.parse import urlparse
 
 import aiohttp
 
@@ -38,7 +33,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - [ResilientCrawler] %(message)s',
     handlers=[
-        logging.FileHandler(f'resilient_crawler_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log'),
+        logging.FileHandler(f"resilient_crawler_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"),
         logging.StreamHandler()
     ]
 )
@@ -67,8 +62,8 @@ class RetryConfig:
     jitter: bool = True
     jitter_factor: float = 0.1
     retry_strategy: RetryStrategy = RetryStrategy.EXPONENTIAL_BACKOFF
-    retry_on_status: List[int] = field(default_factory=lambda: [429, 500, 502, 503, 504])
-    retry_on_exceptions: List[str] = field(default_factory=lambda: [
+    retry_on_status: list[int] = field(default_factory=lambda: [429, 500, 502, 503, 504])
+    retry_on_exceptions: list[str] = field(default_factory=lambda: [
         'TimeoutError', 'ConnectionError', 'SSLError', 'HTTPError'
     ])
 
@@ -77,7 +72,7 @@ class CircuitBreakerConfig:
     """熔断器配置"""
     failure_threshold: int = 5
     recovery_timeout: float = 60.0
-    expected_exception: List[str] = field(default_factory=lambda: [
+    expected_exception: list[str] = field(default_factory=lambda: [
         'ConnectionError', 'TimeoutError'
     ])
     success_threshold: int = 3  # 半开状态下的成功次数阈值
@@ -207,7 +202,7 @@ class AdaptiveRetryManager:
 
         self.global_stats['total_retries'] += 1
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取重试统计"""
         return {
             'global_stats': self.global_stats.copy(),
@@ -265,7 +260,7 @@ class ResilientAsyncCrawler:
 
         logger.info('✅ 弹性HTTP会话初始化完成')
 
-    def _get_default_headers(self) -> Dict[str, str]:
+    def _get_default_headers(self) -> dict[str, str]:
         """获取默认请求头"""
         user_agents = [
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -289,7 +284,7 @@ class ResilientAsyncCrawler:
         return self.circuit_breakers[domain]
 
     async def fetch_with_retry(self, url: str, method: str = 'GET',
-                              data: Dict = None, headers: Dict = None) -> Dict[str, Any]:
+                              data: dict = None, headers: dict = None) -> dict[str, Any]:
         """带重试机制的请求"""
         domain = urlparse(url).netloc
         circuit_breaker = self._get_circuit_breaker(domain)
@@ -373,8 +368,8 @@ class ResilientAsyncCrawler:
         }
 
     async def _execute_request(self, url: str, method: str = 'GET',
-                             data: Dict = None, headers: Dict = None,
-                             proxy_config: ProxyConfig = None) -> Dict[str, Any]:
+                             data: dict = None, headers: dict = None,
+                             proxy_config: ProxyConfig = None) -> dict[str, Any]:
         """执行HTTP请求"""
         start_time = time.time()
 
@@ -417,11 +412,11 @@ class ResilientAsyncCrawler:
                 )
                 raise error
 
-    async def batch_fetch(self, urls: List[str], max_concurrent: int = 10) -> List[Dict[str, Any]]:
+    async def batch_fetch(self, urls: list[str], max_concurrent: int = 10) -> list[dict[str, Any]]:
         """批量获取URLs"""
         semaphore = asyncio.Semaphore(max_concurrent)
 
-        async def fetch_with_semaphore(url: str) -> Dict[str, Any]:
+        async def fetch_with_semaphore(url: str) -> dict[str, Any]:
             async with semaphore:
                 return await self.fetch_with_retry(url)
 
@@ -450,14 +445,14 @@ class ResilientAsyncCrawler:
         total_time = time.time() - start_time
         successful_count = sum(1 for r in processed_results if r.get('success', False))
 
-        logger.info(f"✅ 弹性批量获取完成")
+        logger.info("✅ 弹性批量获取完成")
         logger.info(f"   成功: {successful_count}/{len(urls)}")
         logger.info(f"   总耗时: {total_time:.2f}秒")
         logger.info(f"   平均速度: {len(urls)/total_time:.1f} URLs/秒")
 
         return processed_results
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
         current_time = time.time()
         uptime = current_time - self.stats['start_time']
@@ -547,7 +542,7 @@ async def demo_resilient_crawler():
     results = await crawler.batch_fetch(test_urls, max_concurrent=3)
 
     # 显示结果
-    logger.info(f"\n📊 结果统计:")
+    logger.info("\n📊 结果统计:")
     for i, result in enumerate(results):
         status = '✅ 成功' if result.get('success') else '❌ 失败'
         attempts = result.get('attempts', 0)
@@ -556,7 +551,7 @@ async def demo_resilient_crawler():
 
     # 显示详细统计
     stats = crawler.get_stats()
-    logger.info(f"\n📈 弹性爬虫统计:")
+    logger.info("\n📈 弹性爬虫统计:")
     logger.info(f"   总请求数: {stats['basic_stats']['total_requests']}")
     logger.info(f"   成功率: {stats['basic_stats']['success_rate']}%")
     logger.info(f"   重试率: {stats['resilience_stats']['retry_rate']}%")
@@ -564,7 +559,7 @@ async def demo_resilient_crawler():
     logger.info(f"   代理切换: {stats['resilience_stats']['proxy_switches']}次")
 
     if stats['proxy_stats']:
-        logger.info(f"\n🌐 代理统计:")
+        logger.info("\n🌐 代理统计:")
         proxy_stats = stats['proxy_stats']
         logger.info(f"   总代理数: {proxy_stats['total_proxies']}")
         logger.info(f"   健康代理: {proxy_stats['healthy_proxies']}")

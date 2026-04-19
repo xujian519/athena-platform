@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Neo4j知识图谱客户端
 Neo4j Knowledge Graph Client for Patent Judgments
@@ -12,7 +13,7 @@ Neo4j Knowledge Graph Client for Patent Judgments
 """
 
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.config.unified_config import get_database_config
 from core.logging_config import setup_logging
@@ -107,21 +108,21 @@ class Neo4jJudgmentClient:
                 # 创建唯一性约束(同时创建索引)
                 constraints = [
                     # 法律条文
-                    f"CREATE CONSTRAINT IF NOT EXISTS FOR (n:LegalArticle) REQUIRE n.id IS UNIQUE",
+                    "CREATE CONSTRAINT IF NOT EXISTS FOR (n:LegalArticle) REQUIRE n.id IS UNIQUE",
                     # 裁判规则
-                    f"CREATE CONSTRAINT IF NOT EXISTS FOR (n:JudgmentRule) REQUIRE n.id IS UNIQUE",
+                    "CREATE CONSTRAINT IF NOT EXISTS FOR (n:JudgmentRule) REQUIRE n.id IS UNIQUE",
                     # 典型案例
-                    f"CREATE CONSTRAINT IF NOT EXISTS FOR (n:TypicalCase) REQUIRE n.case_id IS UNIQUE",
+                    "CREATE CONSTRAINT IF NOT EXISTS FOR (n:TypicalCase) REQUIRE n.case_id IS UNIQUE",
                     # 法律概念
-                    f"CREATE CONSTRAINT IF NOT EXISTS FOR (n:LegalConcept) REQUIRE n.name IS UNIQUE",
+                    "CREATE CONSTRAINT IF NOT EXISTS FOR (n:LegalConcept) REQUIRE n.name IS UNIQUE",
                     # 争议焦点
-                    f"CREATE CONSTRAINT IF NOT EXISTS FOR (n:DisputeFocus) REQUIRE n.id IS UNIQUE",
+                    "CREATE CONSTRAINT IF NOT EXISTS FOR (n:DisputeFocus) REQUIRE n.id IS UNIQUE",
                 ]
 
                 for constraint in constraints:
                     try:
                         session.run(constraint)
-                        logger.info(f"✅ 创建约束成功")
+                        logger.info("✅ 创建约束成功")
                     except Exception as e:
                         # 约束可能已存在
                         logger.debug(f"约束已存在或创建失败: {e}")
@@ -184,7 +185,7 @@ class Neo4jJudgmentClient:
         name: str,
         description: str,
         applicability: float,
-        core_elements: List[str],
+        core_elements: list[str],
         logic_pattern: str = "",
     ) -> bool:
         """
@@ -339,7 +340,7 @@ class Neo4jJudgmentClient:
             logger.error(f"❌ 创建关系失败: {e!s}")
             return False
 
-    def query_by_legal_article(self, article_name: str) -> List[Dict[str, Any]]:
+    def query_by_legal_article(self, article_name: str) -> list[dict[str, Any]]:
         """
         根据法律条文查询相关裁判规则和案例
 
@@ -372,7 +373,7 @@ class Neo4jJudgmentClient:
             logger.error(f"❌ 查询失败: {e!s}")
             return []
 
-    def query_shortest_path(self, src_name: str, dst_name: str) -> List[Dict[str, Any]]:
+    def query_shortest_path(self, src_name: str, dst_name: str) -> list[dict[str, Any]]:
         """
         查询最短路径
 

@@ -5,17 +5,16 @@ Athena平台通用工具 - 智能爬虫系统
 """
 
 import asyncio
-from core.async_main import async_main
 import hashlib
-import json
 import logging
-from core.logging_config import setup_logging
 import sys
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent.parent
@@ -45,13 +44,13 @@ class CrawlerTask:
     """爬虫任务定义"""
     task_id: str
     scenario: CrawlerScenario
-    urls: List[str]
-    config: Dict[str, Any] = field(default_factory=dict)
+    urls: list[str]
+    config: dict[str, Any] = field(default_factory=dict)
     priority: int = 1
     max_retries: int = 3
     timeout: int = 300
     callback_url: str | None = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -59,9 +58,9 @@ class CrawlerResult:
     """爬虫结果"""
     task_id: str
     success: bool
-    data: List[Dict[str, Any]] = field(default_factory=list)
+    data: list[dict[str, Any]] = field(default_factory=list)
     error: str | None = None
-    stats: Dict[str, Any] = field(default_factory=dict)
+    stats: dict[str, Any] = field(default_factory=dict)
     execution_time: float = 0.0
     timestamp: datetime = field(default_factory=datetime.now)
 
@@ -215,7 +214,7 @@ class CrawlerTool:
         }
     }
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """初始化爬虫工具"""
         self.config = config or {}
         self.task_queue = asyncio.Queue()
@@ -235,7 +234,7 @@ class CrawlerTool:
 
         logger.info('智能爬虫工具初始化完成')
 
-    def _initialize_data_sources(self) -> Dict[str, Any]:
+    def _initialize_data_sources(self) -> dict[str, Any]:
         """初始化数据源配置"""
         return {
             'google_patents': {
@@ -308,8 +307,8 @@ class CrawlerTool:
 
     async def execute_scenario(
         self,
-        scenario: Union[CrawlerScenario, str],
-        params: Dict[str, Any]
+        scenario: CrawlerScenario | str,
+        params: dict[str, Any]
     ) -> CrawlerResult:
         """执行预定义场景
 
@@ -325,7 +324,7 @@ class CrawlerTool:
             try:
                 scenario = CrawlerScenario(scenario)
             except ValueError:
-                raise ValueError(f"不支持的场景类型: {scenario}")
+                raise ValueError(f"不支持的场景类型: {scenario}") from None
 
         # 获取场景配置
         scenario_config = self.SCENARIOS.get(scenario)
@@ -348,8 +347,8 @@ class CrawlerTool:
 
     async def execute_custom_task(
         self,
-        urls: List[str],
-        config: Dict[str, Any]
+        urls: list[str],
+        config: dict[str, Any]
     ) -> CrawlerResult:
         """执行自定义爬虫任务
 
@@ -569,7 +568,7 @@ class CrawlerTool:
             }
         )
 
-    async def _scrape_single_url(self, url: str, prefix: str) -> Dict[str, Any]:
+    async def _scrape_single_url(self, url: str, prefix: str) -> dict[str, Any]:
         """爬取单个URL（模拟）"""
         # 模拟网络请求延迟
         await asyncio.sleep(0.2)
@@ -586,7 +585,7 @@ class CrawlerTool:
             'size': len(f"内容_{prefix}_{content_hash[:8]}")
         }
 
-    async def list_scenarios(self) -> Dict[str, Any]:
+    async def list_scenarios(self) -> dict[str, Any]:
         """列出所有可用场景"""
         scenarios = []
 
@@ -606,7 +605,7 @@ class CrawlerTool:
             'total_count': len(scenarios)
         }
 
-    def get_status(self) -> Dict[str, Any]:
+    def get_status(self) -> dict[str, Any]:
         """获取工具状态"""
         return {
             'tool': self.TOOL_DEFINITION,
@@ -617,7 +616,7 @@ class CrawlerTool:
             'timestamp': datetime.now().isoformat()
         }
 
-    async def get_task_status(self, task_id: str) -> Dict[str, Any | None]:
+    async def get_task_status(self, task_id: str) -> dict[str, Any | None]:
         """获取任务状态"""
         # 检查运行中的任务
         if task_id in self.running_tasks:
@@ -643,7 +642,7 @@ class CrawlerTool:
 
         return None
 
-    def get_supported_data_sources(self) -> List[Dict[str, Any]]:
+    def get_supported_data_sources(self) -> list[dict[str, Any]]:
         """获取支持的数据源"""
         sources = []
 
@@ -686,7 +685,7 @@ class CrawlerToolManager:
 
     async def initialize_all(self):
         """初始化所有工具"""
-        for tool_id, tool in self.tools.items():
+        for _tool_id, tool in self.tools.items():
             await tool.initialize()
 
 
@@ -741,7 +740,7 @@ async def test_crawler_tool():
     logger.info(f"   页面数量: {len(scraping_result.data)}")
 
     # 显示性能指标
-    logger.info(f"\n📊 性能指标:")
+    logger.info("\n📊 性能指标:")
     logger.info(f"   总任务数: {status['metrics']['total_tasks']}")
     logger.info(f"   成功任务数: {status['metrics']['successful_tasks']}")
     logger.info(f"   数据收集量: {status['metrics']['data_collected']}")

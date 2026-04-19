@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 协作协议 - 管理器
 Collaboration Protocols - Manager
@@ -10,8 +11,8 @@ Collaboration Protocols - Manager
 该模块提供协作协议的管理功能，包括协议的注册、启动、停止和消息路由。
 """
 
-import uuid
 import logging
+import uuid
 from typing import Any
 
 from .base import BaseProtocol

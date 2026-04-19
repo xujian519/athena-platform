@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 目标管理系统 - 主管理类
 Goal Management System - Main Manager
@@ -10,9 +10,9 @@ Goal Management System - Main Manager
 版本: 2.0.0
 """
 
-from datetime import datetime, timedelta
-from typing import Any, Optional
 import uuid
+from datetime import datetime, timedelta
+from typing import Any
 
 from .analyzers import GoalOptimizer, NotificationSystem, ProgressAnalyzer
 from .decomposer import GoalDecomposer
@@ -137,7 +137,7 @@ class GoalManagementSystem:
             return 'xiaona'
         elif any(keyword in title_lower or keyword in description_lower
                   for keyword in ['ip', '知识产权', '管理', 'management']):
-            return 'yunxi'
+            return 'athena'
         elif any(keyword in title_lower or keyword in description_lower
                   for keyword in ['运营', '市场', '营销', 'marketing']):
             return 'xiaochen'
@@ -170,7 +170,7 @@ class GoalManagementSystem:
 
         # 基于时间的进度指标
         if 'due_date' in goal_def:
-            total_days = (self._parse_due_date(goal_def['due_date']) - datetime.now()).days
+            (self._parse_due_date(goal_def['due_date']) - datetime.now()).days
             metrics.append(ProgressMetric(
                 name="timeline_adherence",
                 metric_type=MetricType.PERCENTAGE,
@@ -210,7 +210,7 @@ class GoalManagementSystem:
 
         return metrics
 
-    def _parse_due_date(self, due_date_str: Optional[str]) -> datetime | None:
+    def _parse_due_date(self, due_date_str: str | None) -> datetime | None:
         """解析到期日期
 
         Args:
@@ -230,7 +230,7 @@ class GoalManagementSystem:
             else:
                 # 尝试解析日期字符串
                 return datetime.fromisoformat(due_date_str.replace('Z', '+00:00'))
-        except Exception as e:
+        except Exception:
             return None
 
     def _initialize_progress_tracking(self, goal: Goal) -> Any:
@@ -717,7 +717,7 @@ class GoalManagementSystem:
         """
         agent_stats = {}
 
-        for agent in ['xiaonuo', 'xiaona', 'yunxi', 'xiaochen']:
+        for agent in ['xiaonuo', 'xiaona', 'athena', 'xiaochen']:
             agent_goals = [g for g in self.active_goals.values() if g.assigned_agent == agent]
 
             completed_count = len([g for g in agent_goals if g.status == GoalStatus.COMPLETED])

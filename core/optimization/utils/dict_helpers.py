@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 字典工具函数 - 安全的字典访问和操作
 Dict Helpers - Safe Dictionary Access and Operations
@@ -8,14 +9,17 @@ Dict Helpers - Safe Dictionary Access and Operations
 """
 
 from collections.abc import Callable
-from typing import Dict, List, Optional, TypeVar, Union
+from typing import TypeVar
 
 K = TypeVar("K")
 V = TypeVar("V", bound=int | float | str)
 
 
 def safe_get_nested(
-    data: dict[K, dict[K, V], outer_key: K, inner_key: K, default: V] | None = None
+    data: dict[K, dict[K, V]] | None = None,
+    outer_key: K | None = None,
+    inner_key: K | None = None,
+    default: V | None = None,
 ) -> V | None:
     """
     安全访问嵌套字典
@@ -39,11 +43,11 @@ def safe_get_nested(
     if not data:
         return default
 
-    inner_dict = data.get(outer_key)
+    inner_dict = data.get(outer_key)  # type: ignore[arg-type]
     if not inner_dict:
         return default
 
-    return inner_dict.get(inner_key, default)
+    return inner_dict.get(inner_key, default)  # type: ignore[arg-type]
 
 
 def safe_set_nested(data: dict[K, dict[K, V]], outer_key: K, inner_key: K, value: V) -> None:
@@ -63,13 +67,13 @@ def safe_set_nested(data: dict[K, dict[K, V]], outer_key: K, inner_key: K, value
         {'a': {'b': 1}}
     """
     if outer_key not in data:
-        data[outer_key] = {}
-    data[outer_key][inner_key] = value
+        data[outer_key] = {}  # type: ignore[assignment]
+    data[outer_key][inner_key] = value  # type: ignore[index]
 
 
 def safe_max_from_dict(
     data: dict[K, int | float], default: int | float | None = None
-) -> int | Optional[float]:
+) -> int | float | None:
     """
     安全获取字典中的最大值
 
@@ -91,7 +95,10 @@ def safe_max_from_dict(
 
 
 def safe_get_or_default(
-    data: dict[K, V, key: K, default: V, factory: Callable[[], V]] | None = None
+    data: dict[K, V] | None = None,
+    key: K | None = None,
+    default: V | None = None,
+    factory: Callable[[], V] | None = None,
 ) -> V:
     """
     获取字典值或创建默认值
@@ -109,17 +116,18 @@ def safe_get_or_default(
         >>> data = {}
         >>> safe_get_or_default(data, 'a', 0)
         0
-        >>> safe_get_or_default(data, 'a', 0, lambda: defaultdict(int))
-        defaultdict(<class 'int'>, {})
     """
+    if data is None or key is None:
+        return default  # type: ignore[return-value]
+
     if key in data:
         return data[key]
 
     if factory is not None:
-        data[key] = factory()
+        data[key] = factory()  # type: ignore[index]
         return data[key]
 
-    return default
+    return default  # type: ignore[return-value]
 
 
 def ensure_nested_dict(data: dict[K, dict[K, V]], outer_key: K) -> dict[K, V]:
@@ -141,7 +149,7 @@ def ensure_nested_dict(data: dict[K, dict[K, V]], outer_key: K) -> dict[K, V]:
         {'a': {'x': 1}}
     """
     if outer_key not in data:
-        data[outer_key] = {}
+        data[outer_key] = {}  # type: ignore[assignment]
     return data[outer_key]
 
 

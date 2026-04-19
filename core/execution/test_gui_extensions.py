@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 GUI自动化扩展测试
 GUI Automation Extensions Test Suite
@@ -16,9 +17,10 @@ import logging
 # 导入被测试模块
 import sys
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 from unittest.mock import AsyncMock, MagicMock, patch
 
+import numpy as np
 import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
@@ -29,10 +31,8 @@ from core.execution.gui_action_extensions import (
     ExtendedGUIExecutor,
     HoverAction,
     PerformanceOptimizer,
-    RightClickAction,
     ScrollAction,
     SelectAction,
-    UploadAction,
 )
 
 logging.basicConfig(

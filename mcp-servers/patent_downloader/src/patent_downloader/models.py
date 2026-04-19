@@ -1,7 +1,6 @@
 """Data models for the patent downloader."""
 
 from dataclasses import dataclass
-from typing import List, Optional
 
 
 @dataclass
@@ -10,12 +9,12 @@ class PatentInfo:
 
     patent_number: str
     title: str
-    inventors: List[str]
+    inventors: list[str]
     assignee: str
     publication_date: str
     abstract: str
-    url: Optional[str] = None
-    pdf_url: Optional[str] = None
+    url: str | None = None
+    pdf_url: str | None = None
 
 
 @dataclass
@@ -24,14 +23,14 @@ class DownloadResult:
 
     patent_number: str
     success: bool
-    file_path: Optional[str] = None
-    error_message: Optional[str] = None
+    file_path: str | None = None
+    error_message: str | None = None
 
 
 @dataclass
 class SearchResult:
     """Result of a patent search."""
 
-    patents: List[PatentInfo]
+    patents: list[PatentInfo]
     total_count: int
     query: str

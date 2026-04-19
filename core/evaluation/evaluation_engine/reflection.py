@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 评估引擎 - 反思引擎
 Evaluation Engine - Reflection Engine

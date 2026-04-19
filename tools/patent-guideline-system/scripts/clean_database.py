@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 分批清理Neo4j数据库
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from neo4j import GraphDatabase
 import time
+
+from neo4j import GraphDatabase
 
 # 连接Neo4j
 driver = GraphDatabase.driver("bolt://localhost:7687", auth=("neo4j", "password"))

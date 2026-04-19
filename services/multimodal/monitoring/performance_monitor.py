@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 性能监控系统
 Performance Monitoring System
@@ -7,17 +6,17 @@ Performance Monitoring System
 实时监控系统性能、API调用、文件处理等指标
 """
 
-import time
-from core.async_main import async_main
-import psutil
-import logging
 import asyncio
-import threading
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional
-from collections import defaultdict, deque
-from pathlib import Path
 import json
+import logging
+import threading
+import time
+from collections import defaultdict, deque
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any
+
+import psutil
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +64,7 @@ class APICallTracker:
         self.status_codes[status_code] += 1
         self.response_times.append(response_time)
 
-    def get_stats(self, time_window: int = 300) -> Dict[str, Any]:
+    def get_stats(self, time_window: int = 300) -> dict[str, Any]:
         """获取API调用统计（最近N秒）"""
         cutoff_time = datetime.now() - timedelta(seconds=time_window)
         recent_calls = [call for call in self.calls if call['timestamp'] > cutoff_time]
@@ -136,7 +135,7 @@ class FileProcessingTracker:
         self.operation_types[operation_type].append(operation_data)
         self.processing_times.append(processing_time)
 
-    def get_stats(self, time_window: int = 3600) -> Dict[str, Any]:
+    def get_stats(self, time_window: int = 3600) -> dict[str, Any]:
         """获取文件处理统计"""
         cutoff_time = datetime.now() - timedelta(seconds=time_window)
         recent_ops = [op for op in self.operations if op['timestamp'] > cutoff_time]
@@ -224,7 +223,7 @@ class SystemResourceMonitor:
                 logger.error(f"监控循环异常: {e}")
                 time.sleep(self.update_interval)
 
-    def _collect_metrics(self) -> Dict[str, Any]:
+    def _collect_metrics(self) -> dict[str, Any]:
         """收集系统指标"""
         # CPU使用率
         cpu_percent = psutil.cpu_percent(interval=1)
@@ -264,7 +263,7 @@ class SystemResourceMonitor:
             'load_avg': load_avg
         }
 
-    def _check_alerts(self, metrics: Dict[str, Any]) -> Any:
+    def _check_alerts(self, metrics: dict[str, Any]) -> Any:
         """检查告警条件"""
         alerts = []
 
@@ -321,19 +320,19 @@ class SystemResourceMonitor:
             self.alerts.append(alert)
             logger.warning(f"性能告警: {alert['message']}")
 
-    def get_current_metrics(self) -> Dict[str, Any | None]:
+    def get_current_metrics(self) -> dict[str, Any | None]:
         """获取当前指标"""
         if self.metrics_history:
             return self.metrics_history[-1]
         return None
 
-    def get_metrics_history(self, minutes: int = 60) -> List[Dict[str, Any]]:
+    def get_metrics_history(self, minutes: int = 60) -> list[dict[str, Any]]:
         """获取历史指标"""
         cutoff_time = datetime.now() - timedelta(minutes=minutes)
         return [m for m in self.metrics_history if m['timestamp'] > cutoff_time]
 
     def get_alerts(self, level: str | None = None,
-                   hours: int = 24) -> List[Dict[str, Any]]:
+                   hours: int = 24) -> list[dict[str, Any]]:
         """获取告警记录"""
         cutoff_time = datetime.now() - timedelta(hours=hours)
         alerts = [a for a in self.alerts if a['timestamp'] > cutoff_time]
@@ -403,7 +402,7 @@ class PerformanceMonitor:
             processing_time, success, user_id
         )
 
-    def add_custom_metric(self, name: str, value: float, tags: Dict[str, str] = None) -> None:
+    def add_custom_metric(self, name: str, value: float, tags: dict[str, str] = None) -> None:
         """添加自定义指标"""
         metric_data = {
             'timestamp': datetime.now(),
@@ -442,7 +441,7 @@ class PerformanceMonitor:
         except Exception as e:
             logger.error(f"生成性能报告失败: {e}")
 
-    def get_dashboard_data(self) -> Dict[str, Any]:
+    def get_dashboard_data(self) -> dict[str, Any]:
         """获取仪表板数据"""
         return {
             'system': {

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 增强版AI绘图引擎
 Enhanced AI Drawing Engine
@@ -11,16 +10,13 @@ Enhanced AI Drawing Engine
 版本: 2.0.0
 """
 
-import hashlib
-import json
 import logging
 import re
-import sys
 import time
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import requests
 
@@ -56,7 +52,7 @@ class EnhancedAIDrawingEngine:
         # SVG模板和验证
         self.svg_templates = self._load_svg_templates()
 
-    def _load_svg_templates(self) -> Dict[str, str]:
+    def _load_svg_templates(self) -> dict[str, str]:
         """加载SVG模板"""
         return {
             'flowchart': self._get_flowchart_template(),
@@ -295,7 +291,7 @@ SVG格式要求：
                     timeout=self.config.timeout
                 )
 
-                response_time = time.time() - start_time
+                time.time() - start_time
 
                 if response.status_code == 200:
                     result = response.json()
@@ -334,7 +330,7 @@ SVG格式要求：
         logger.error(f"API调用最终失败: {last_error}")
         return None
 
-    def generate_drawing(self, description: str, filename: str = None) -> Dict[str, Any]:
+    def generate_drawing(self, description: str, filename: str = None) -> dict[str, Any]:
         """生成图纸"""
         logger.info(f"开始生成图纸: {description[:50]}...")
 
@@ -479,7 +475,7 @@ SVG格式要求：
   <text x='400' y='395' text-anchor='middle' class='text'>接口层</text>
             """
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
         total = self.stats['total_calls']
         if total > 0:
@@ -532,7 +528,7 @@ def demo_enhanced_engine() -> Any:
         if result['success']:
             logger.info(f"   ✅ 成功: {result['file_path']}")
             if result.get('fallback'):
-                logger.info(f"   ⚠️ 使用模板生成")
+                logger.info("   ⚠️ 使用模板生成")
         else:
             logger.info(f"   ❌ 失败: {result.get('error', '未知错误')}")
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 通信管理器
 Communication Manager
@@ -11,15 +10,11 @@ Communication Manager
 """
 
 import asyncio
-from core.async_main import async_main
 import logging
-from typing import Dict, List, Any, Optional, Union
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-import json
-from pathlib import Path
-import aiohttp
-from dataclasses import dataclass
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +43,7 @@ class Message:
     sender: str
     receiver: str
     content: str
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
     timestamp: datetime
     status: str = "pending"
     response_id: str | None = None
@@ -110,7 +105,7 @@ class CommunicationManager:
             logger.error(f"❌ 通信管理器初始化失败: {str(e)}")
             self.initialized = True  # 使用默认配置
 
-    async def send_message(self, message_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def send_message(self, message_data: dict[str, Any]) -> dict[str, Any]:
         """
         发送消息
 
@@ -176,7 +171,7 @@ class CommunicationManager:
                 "error": str(e)
             }
 
-    async def _generate_response(self, message: Message) -> Dict[str, Any | None]:
+    async def _generate_response(self, message: Message) -> dict[str, Any | None]:
         """生成响应"""
         try:
             # 获取上下文
@@ -237,7 +232,7 @@ class CommunicationManager:
         # 简化实现，仅记录
         logger.info(f"响应已发送: {response.message_id} -> {response.receiver}")
 
-    async def _get_conversation_context(self, user_id: str) -> Dict[str, Any]:
+    async def _get_conversation_context(self, user_id: str) -> dict[str, Any]:
         """获取会话上下文"""
         if user_id not in self.active_conversations:
             self.active_conversations[user_id] = {
@@ -279,7 +274,7 @@ class CommunicationManager:
         if len(conversation["messages"]) > self.config["max_conversation_length"]:
             conversation["messages"] = conversation["messages"][-self.config["max_conversation_length"]:]
 
-    async def process_batch_messages(self, messages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    async def process_batch_messages(self, messages: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """批量处理消息"""
         results = []
         for msg_data in messages:
@@ -287,7 +282,7 @@ class CommunicationManager:
             results.append(result)
         return results
 
-    async def schedule_proactive_message(self, user_id: str, trigger: Dict[str, Any]) -> Dict[str, Any]:
+    async def schedule_proactive_message(self, user_id: str, trigger: dict[str, Any]) -> dict[str, Any]:
         """
         调度主动消息
 
@@ -312,7 +307,7 @@ class CommunicationManager:
             logger.error(f"调度主动消息失败: {str(e)}")
             return {"success": False, "error": str(e)}
 
-    async def get_conversation_summary(self, user_id: str) -> Dict[str, Any]:
+    async def get_conversation_summary(self, user_id: str) -> dict[str, Any]:
         """获取会话摘要"""
         try:
             if user_id not in self.active_conversations:
@@ -338,7 +333,7 @@ class CommunicationManager:
             logger.error(f"获取会话摘要失败: {str(e)}")
             return {"error": str(e)}
 
-    async def _analyze_emotion_trend(self, messages: List[Dict[str, Any]]) -> Dict[str, Any]:
+    async def _analyze_emotion_trend(self, messages: list[dict[str, Any]]) -> dict[str, Any]:
         """分析情感趋势"""
         if not messages:
             return {"trend": "stable", "dominant_emotion": "neutral"}
@@ -366,7 +361,7 @@ class CommunicationManager:
             "distribution": emotion_counts
         }
 
-    async def _extract_key_issues(self, messages: List[Dict[str, Any]]) -> List[str]:
+    async def _extract_key_issues(self, messages: list[dict[str, Any]]) -> list[str]:
         """提取关键问题"""
         # 简化实现，提取包含特定关键词的消息
         key_issues = []
@@ -381,7 +376,7 @@ class CommunicationManager:
 
         return key_issues[:5]  # 最多返回5个问题
 
-    async def _calculate_satisfaction(self, messages: List[Dict[str, Any]]) -> float:
+    async def _calculate_satisfaction(self, messages: list[dict[str, Any]]) -> float:
         """计算满意度分数"""
         if not messages:
             return 0.5
@@ -437,7 +432,7 @@ class CommunicationManager:
             }
         }
 
-    async def update_user_preferences(self, user_id: str, preferences: Dict[str, Any]) -> bool:
+    async def update_user_preferences(self, user_id: str, preferences: dict[str, Any]) -> bool:
         """更新用户偏好"""
         try:
             self.user_preferences[user_id] = preferences
@@ -453,7 +448,7 @@ class CommunicationManager:
             logger.error(f"更新用户偏好失败: {str(e)}")
             return False
 
-    async def get_communication_analytics(self) -> Dict[str, Any]:
+    async def get_communication_analytics(self) -> dict[str, Any]:
         """获取通信分析"""
         try:
             analytics = {
@@ -473,7 +468,7 @@ class CommunicationManager:
             logger.error(f"获取通信分析失败: {str(e)}")
             return {}
 
-    async def _get_message_distribution(self) -> Dict[str, int]:
+    async def _get_message_distribution(self) -> dict[str, int]:
         """获取消息分布"""
         distribution = {}
         for conv in self.active_conversations.values():
@@ -482,7 +477,7 @@ class CommunicationManager:
                 distribution[channel] = distribution.get(channel, 0) + 1
         return distribution
 
-    async def _get_global_emotion_analysis(self) -> Dict[str, Any]:
+    async def _get_global_emotion_analysis(self) -> dict[str, Any]:
         """获取全局情感分析"""
         all_emotions = []
         for conv in self.active_conversations.values():
@@ -503,7 +498,7 @@ class CommunicationManager:
             "total_analyzed": len(all_emotions)
         }
 
-    async def _get_response_time_analysis(self) -> Dict[str, float]:
+    async def _get_response_time_analysis(self) -> dict[str, float]:
         """获取响应时间分析"""
         # 简化实现，返回模拟数据
         return {
@@ -512,7 +507,7 @@ class CommunicationManager:
             "95th_percentile": 5.2
         }
 
-    async def _get_popular_topics(self) -> List[Dict[str, Any]]:
+    async def _get_popular_topics(self) -> list[dict[str, Any]]:
         """获取热门话题"""
         topics = {}
         for conv in self.active_conversations.values():
@@ -530,7 +525,7 @@ class EmotionAnalyzer:
         """初始化"""
         pass
 
-    async def analyze_emotion(self, text: str) -> Dict[str, Any]:
+    async def analyze_emotion(self, text: str) -> dict[str, Any]:
         """分析情感"""
         # 简化的情感分析
         positive_words = ["好", "棒", "优秀", "满意", "感谢", "不错"]
@@ -560,7 +555,7 @@ class ResponseGenerator:
         """初始化"""
         pass
 
-    async def generate(self, input_text: str, context: Dict[str, Any], emotion: Dict[str, Any]) -> Dict[str, Any]:
+    async def generate(self, input_text: str, context: dict[str, Any], emotion: dict[str, Any]) -> dict[str, Any]:
         """生成响应"""
         # 基于情感和上下文生成响应
         primary_emotion = emotion.get("primary", "neutral")
@@ -604,7 +599,7 @@ class ProactiveCommunicationManager:
         """初始化"""
         pass
 
-    async def schedule_message(self, user_id: str, trigger: Dict[str, Any]) -> Dict[str, Any]:
+    async def schedule_message(self, user_id: str, trigger: dict[str, Any]) -> dict[str, Any]:
         """调度消息"""
         schedule_id = f"SCHED_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 

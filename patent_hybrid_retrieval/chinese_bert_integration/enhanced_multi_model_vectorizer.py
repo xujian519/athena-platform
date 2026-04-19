@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 增强版多模型向量融合器
 Enhanced Multi-Model Vectorizer
@@ -7,19 +6,15 @@ Enhanced Multi-Model Vectorizer
 集成Redis缓存和并行处理优化
 """
 
-import asyncio
 import logging
 import multiprocessing as mp
-import os
-import pickle
 from collections import defaultdict
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from functools import partial
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 import numpy as np
-import torch
 from intelligent_model_selector import IntelligentModelSelector
 from model_manager import ChineseBERTModelManager
 from redis_cache_manager import RedisCacheManager
@@ -35,7 +30,7 @@ class EnhancedMultiModelVectorizer:
         cache_dir: str = '/Users/xujian/Athena工作平台/patent_hybrid_retrieval/cache',
         max_cache_size: int = 10000,
         enable_redis: bool = True,
-        redis_config: Optional[Dict[str, Any]] = None,
+        redis_config: dict[str, Any] | None = None,
         max_workers: int = None,
         enable_parallel: bool = True
     ):
@@ -92,13 +87,13 @@ class EnhancedMultiModelVectorizer:
 
     def encode_with_multiple_models_enhanced(
         self,
-        texts: List[str],
-        model_config: Optional[Dict[str, Any]] = None,
+        texts: list[str],
+        model_config: dict[str, Any] | None = None,
         fusion_strategy: str = 'weighted_average',
         return_individual: bool = False,
         use_cache: bool = True,
         parallel_threshold: int = 10
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """使用多个模型编码文本（增强版）
 
         Args:
@@ -208,7 +203,7 @@ class EnhancedMultiModelVectorizer:
 
         return result
 
-    def _determine_models(self, texts: List[str], model_config: Dict[str, Any]) -> List[str]:
+    def _determine_models(self, texts: list[str], model_config: dict[str, Any]) -> list[str]:
         """确定要使用的模型"""
         model_names = model_config.get('models', [])
 
@@ -227,7 +222,7 @@ class EnhancedMultiModelVectorizer:
 
         return model_names
 
-    def _parallel_encode(self, texts: List[str], model_names: List[str]) -> Dict[str, np.ndarray]:
+    def _parallel_encode(self, texts: list[str], model_names: list[str]) -> dict[str, np.ndarray]:
         """并行编码文本"""
         embeddings = {}
 
@@ -270,7 +265,7 @@ class EnhancedMultiModelVectorizer:
 
         return embeddings
 
-    def _sequential_encode(self, texts: List[str], model_names: List[str]) -> Dict[str, np.ndarray]:
+    def _sequential_encode(self, texts: list[str], model_names: list[str]) -> dict[str, np.ndarray]:
         """顺序编码文本"""
         embeddings = {}
 
@@ -288,11 +283,11 @@ class EnhancedMultiModelVectorizer:
 
     def batch_encode_with_parallel(
         self,
-        text_batches: List[List[str]],
-        model_config: Optional[Dict[str, Any]] = None,
+        text_batches: list[list[str]],
+        model_config: dict[str, Any] | None = None,
         fusion_strategy: str = 'weighted_average',
         parallel_batches: bool = True
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """批量编码（支持批次级并行）
 
         Args:
@@ -328,7 +323,7 @@ class EnhancedMultiModelVectorizer:
                         results[batch_idx] = {'error': str(e)}
         else:
             # 顺序处理
-            for i, batch in enumerate(text_batches):
+            for _i, batch in enumerate(text_batches):
                 result = self._encode_single_batch(batch, model_config, fusion_strategy)
                 results.append(result)
 
@@ -336,10 +331,10 @@ class EnhancedMultiModelVectorizer:
 
     def _encode_single_batch(
         self,
-        texts: List[str],
-        model_config: Optional[Dict[str, Any]],
+        texts: list[str],
+        model_config: dict[str, Any] | None,
         fusion_strategy: str
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """编码单个批次"""
         logger.info(f"编码批次，文本数: {len(texts)}")
         result = self.encode_with_multiple_models(
@@ -349,7 +344,7 @@ class EnhancedMultiModelVectorizer:
         )
         return result
 
-    def _get_from_cache(self, cache_key: str) -> Dict[str, Any | None]:
+    def _get_from_cache(self, cache_key: str) -> dict[str, Any | None]:
         """从缓存获取结果"""
         if self.cache_manager and self.cache_manager.is_connected():
             try:
@@ -367,7 +362,7 @@ class EnhancedMultiModelVectorizer:
 
         return None
 
-    def _cache_result(self, cache_key: str, result: Dict[str, Any]):
+    def _cache_result(self, cache_key: str, result: dict[str, Any]):
         """缓存结果"""
         if self.cache_manager and self.cache_manager.is_connected():
             try:
@@ -384,7 +379,7 @@ class EnhancedMultiModelVectorizer:
 
         self.vector_cache[cache_key] = result
 
-    def _get_cache_key(self, texts: List[str], config: Dict, strategy: str) -> str:
+    def _get_cache_key(self, texts: list[str], config: dict, strategy: str) -> str:
         """生成缓存键"""
         import hashlib
         content = {
@@ -395,14 +390,14 @@ class EnhancedMultiModelVectorizer:
         content_str = str(content)
         return hashlib.md5(content_str.encode('utf-8'), usedforsecurity=False).hexdigest()
 
-    def _normalize_weights(self, weights: List[float]) -> List[float]:
+    def _normalize_weights(self, weights: list[float]) -> list[float]:
         """归一化权重"""
         total_weight = sum(weights)
         if total_weight == 0:
             return [1.0 / len(weights)] if weights else [1.0]
         return [w / total_weight for w in weights]
 
-    def _get_model_info(self, model_names: List[str]) -> Dict[str, Any]:
+    def _get_model_info(self, model_names: list[str]) -> dict[str, Any]:
         """获取模型信息"""
         info = {}
         for model_name in model_names:
@@ -413,9 +408,9 @@ class EnhancedMultiModelVectorizer:
 
     def _concatenation_fusion(
         self,
-        embeddings: Dict[str, np.ndarray],
-        weights: List[float]
-    ) -> Tuple[np.ndarray, Dict[str, Any]]:
+        embeddings: dict[str, np.ndarray],
+        weights: list[float]
+    ) -> tuple[np.ndarray, dict[str, Any]]:
         """拼接融合策略"""
         vectors = list(embeddings.values())
         max_length = max(v.shape[1] for v in vectors)
@@ -444,9 +439,9 @@ class EnhancedMultiModelVectorizer:
 
     def _weighted_average_fusion(
         self,
-        embeddings: Dict[str, np.ndarray],
-        weights: List[float]
-    ) -> Tuple[np.ndarray, Dict[str, Any]]:
+        embeddings: dict[str, np.ndarray],
+        weights: list[float]
+    ) -> tuple[np.ndarray, dict[str, Any]]:
         """加权平均融合策略"""
         vectors = list(embeddings.values())
         weights_array = np.array(weights)
@@ -469,7 +464,7 @@ class EnhancedMultiModelVectorizer:
 
         # 加权平均
         fused = np.zeros_like(vectors[0])
-        for i, (v, weight) in enumerate(zip(vectors, weights_array)):
+        for _i, (v, weight) in enumerate(zip(vectors, weights_array, strict=False)):
             fused += weight * v
 
         fusion_info = {
@@ -483,24 +478,24 @@ class EnhancedMultiModelVectorizer:
 
     def _attention_fusion(
         self,
-        embeddings: Dict[str, np.ndarray],
-        weights: List[float]
-    ) -> Tuple[np.ndarray, Dict[str, Any]]:
+        embeddings: dict[str, np.ndarray],
+        weights: list[float]
+    ) -> tuple[np.ndarray, dict[str, Any]]:
         """注意力融合策略（简化版）"""
         # 将weights作为注意力权重
         return self._weighted_average_fusion(embeddings, weights)
 
     def _adaptive_fusion(
         self,
-        embeddings: Dict[str, np.ndarray],
-        weights: List[float]
-    ) -> Tuple[np.ndarray, Dict[str, Any]]:
+        embeddings: dict[str, np.ndarray],
+        weights: list[float]
+    ) -> tuple[np.ndarray, dict[str, Any]]:
         """自适应融合策略"""
         # 简化实现：根据模型性能调整权重
         performance_scores = self._get_model_performance(list(embeddings.keys()))
         adapted_weights = []
 
-        for i, (model_name, original_weight) in enumerate(zip(embeddings.keys(), weights)):
+        for _i, (model_name, original_weight) in enumerate(zip(embeddings.keys(), weights, strict=False)):
             performance = performance_scores.get(model_name, 1.0)
             adapted_weight = original_weight * performance
             adapted_weights.append(adapted_weight)
@@ -513,9 +508,9 @@ class EnhancedMultiModelVectorizer:
 
     def _simple_average_fusion(
         self,
-        embeddings: Dict[str, np.ndarray],
-        weights: List[float]
-    ) -> Tuple[np.ndarray, Dict[str, Any]]:
+        embeddings: dict[str, np.ndarray],
+        weights: list[float]
+    ) -> tuple[np.ndarray, dict[str, Any]]:
         """简单平均融合（回退策略）"""
         vectors = list(embeddings.values())
 
@@ -541,7 +536,7 @@ class EnhancedMultiModelVectorizer:
 
         return fused, fusion_info
 
-    def _get_model_performance(self, model_names: List[str]) -> Dict[str, float]:
+    def _get_model_performance(self, model_names: list[str]) -> dict[str, float]:
         """获取模型性能分数"""
         performance_map = {
             'bge-large-zh-v1.5': 1.2,
@@ -556,12 +551,12 @@ class EnhancedMultiModelVectorizer:
 
     def encode_patents(
         self,
-        patents: List[Dict[str, Any]],
-        text_fields: List[str] = ['title', 'abstract'],
-        model_config: Optional[Dict[str, Any]] = None,
+        patents: list[dict[str, Any]],
+        text_fields: list[str] = None,
+        model_config: dict[str, Any] | None = None,
         fusion_strategy: str = 'weighted_average',
         parallel_threshold: int = 5
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """编码专利数据（增强版）
 
         Args:
@@ -575,6 +570,8 @@ class EnhancedMultiModelVectorizer:
             包含向量的专利数据
         """
         # 准备文本
+        if text_fields is None:
+            text_fields = ['title', 'abstract']
         texts = []
         for patent in patents:
             text_parts = []
@@ -609,7 +606,7 @@ class EnhancedMultiModelVectorizer:
 
         return patents_with_vectors
 
-    def get_enhanced_stats(self) -> Dict[str, Any]:
+    def get_enhanced_stats(self) -> dict[str, Any]:
         """获取增强的性能统计"""
         base_stats = {
             'total_requests': self.stats['total_requests'],

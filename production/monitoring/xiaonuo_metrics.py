@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺Prometheus指标收集器
 Xiaonuo Prometheus Metrics Collector
@@ -16,20 +15,23 @@ Xiaonuo Prometheus Metrics Collector
 版本: v1.0.0
 """
 
+from __future__ import annotations
 import time
-import psutil
-from typing import Any, Callable, Optional
+from collections.abc import Callable
 from functools import wraps
+from typing import Any
+
+import psutil
 
 try:
     from prometheus_client import (
+        CONTENT_TYPE_LATEST,
+        CollectorRegistry,
         Counter,
         Gauge,
         Histogram,
         Summary,
-        CollectorRegistry,
         generate_latest,
-        CONTENT_TYPE_LATEST,
     )
     PROMETHEUS_AVAILABLE = True
 except ImportError:

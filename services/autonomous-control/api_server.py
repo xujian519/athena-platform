@@ -3,37 +3,35 @@
 提供Athena和小诺自主控制平台的RESTful API接口
 """
 
-import asyncio
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
 import uuid
 from contextlib import asynccontextmanager
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import uvicorn
 
 # 导入安全认证
 from auth import Permissions, User, auth_manager, get_current_user, require_permission
-from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Security
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException
+from fastapi.security import HTTPBearer
 from pydantic import BaseModel, Field
-
-from config import config
 
 # 导入自主控制系统
 from core.autonomous_control import (
     AutonomousController,
-    AutonomousTask,
     ControlMode,
-    ControlStatus,
     TaskPriority,
 )
+from core.logging_config import setup_logging
 
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
+
+# Token验证函数（使用get_current_user）
+async def verify_token(token: str = Depends(HTTPBearer())) -> str:
+    """验证token并返回用户ID"""
+    user = await get_current_user(token)
+    return user.id if user else "anonymous"
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -54,7 +52,7 @@ class TaskRequest(BaseModel):
     description: str = Field(..., description='任务描述')
     priority: TaskPriority = TaskPriority.MEDIUM
     goal_type: str = Field(..., description='目标类型')
-    target_metrics: Dict[str, Any] = Field(default_factory=dict, description='目标指标')
+    target_metrics: dict[str, Any] = Field(default_factory=dict, description='目标指标')
     deadline: datetime | None = None
 
 class ServiceControlRequest(BaseModel):
@@ -69,13 +67,13 @@ class AgentMessageRequest(BaseModel):
     receiver: str = Field(..., description='接收者: athena/xiaonuo')
     content: str = Field(..., description='消息内容')
     message_type: str = Field(..., description='消息类型')
-    emotions: Dict[str, float] = Field(default_factory=dict, description='情感值')
+    emotions: dict[str, float] = Field(default_factory=dict, description='情感值')
 
 class DecisionRequest(BaseModel):
     """决策请求"""
-    context: Dict[str, Any] = Field(..., description='决策上下文')
+    context: dict[str, Any] = Field(..., description='决策上下文')
     decision_type: str = Field(..., description='决策类型')
-    options: List[Dict[str, Any]] = Field(..., description='决策选项')
+    options: list[dict[str, Any]] = Field(..., description='决策选项')
 
 # 全局控制器实例
 autonomous_controller = None
@@ -139,7 +137,7 @@ async def login(username: str, password: str):
         raise
     except Exception as e:
         logger.error(f"登录失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/auth/me', summary='获取当前用户信息')
 async def get_current_user_info(current_user: User = Depends(get_current_user)):
@@ -171,7 +169,7 @@ async def get_control_mode(current_user: User = Depends(require_permission(Permi
         }
     except Exception as e:
         logger.error(f"获取控制模式失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/control/mode', summary='设置控制模式')
 async def set_control_mode(
@@ -191,7 +189,7 @@ async def set_control_mode(
             raise HTTPException(status_code=400, detail=result.get('error'))
     except Exception as e:
         logger.error(f"设置控制模式失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 # ==================== 自主任务管理 ====================
 @app.post('/api/v1/tasks', summary='创建自主任务')
@@ -222,7 +220,7 @@ async def create_autonomous_task(request: TaskRequest, background_tasks: Backgro
         }
     except Exception as e:
         logger.error(f"创建自主任务失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/tasks', summary='获取自主任务列表')
 async def get_autonomous_tasks(token: str = Depends(verify_token)):
@@ -239,7 +237,7 @@ async def get_autonomous_tasks(token: str = Depends(verify_token)):
         }
     except Exception as e:
         logger.error(f"获取任务列表失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/tasks/{task_id}', summary='获取任务详情')
 async def get_task_detail(task_id: str, token: str = Depends(verify_token)):
@@ -259,7 +257,7 @@ async def get_task_detail(task_id: str, token: str = Depends(verify_token)):
         raise
     except Exception as e:
         logger.error(f"获取任务详情失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.delete('/api/v1/tasks/{task_id}', summary='取消任务')
 async def cancel_task(task_id: str, token: str = Depends(verify_token)):
@@ -272,7 +270,7 @@ async def cancel_task(task_id: str, token: str = Depends(verify_token)):
         }
     except Exception as e:
         logger.error(f"取消任务失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 # ==================== 平台服务控制 ====================
 @app.get('/api/v1/platform/services', summary='获取平台服务状态')
@@ -286,7 +284,7 @@ async def get_platform_services(token: str = Depends(verify_token)):
         }
     except Exception as e:
         logger.error(f"获取平台服务状态失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/platform/services/control', summary='控制平台服务')
 async def control_service(request: ServiceControlRequest, background_tasks: BackgroundTasks, token: str = Depends(verify_token)):
@@ -317,7 +315,7 @@ async def control_service(request: ServiceControlRequest, background_tasks: Back
         raise
     except Exception as e:
         logger.error(f"控制服务失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/platform/restart', summary='重启整个平台')
 async def restart_platform(background_tasks: BackgroundTasks, token: str = Depends(verify_token)):
@@ -336,7 +334,7 @@ async def restart_platform(background_tasks: BackgroundTasks, token: str = Depen
         }
     except Exception as e:
         logger.error(f"重启平台失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 # ==================== Agent协调管理 ====================
 @app.get('/api/v1/agents/status', summary='获取Agent状态')
@@ -360,7 +358,7 @@ async def get_agents_status(token: str = Depends(verify_token)):
         }
     except Exception as e:
         logger.error(f"获取Agent状态失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post('/api/v1/agents/message', summary='发送Agent消息')
 async def send_agent_message(request: AgentMessageRequest, token: str = Depends(verify_token)):
@@ -395,13 +393,12 @@ async def send_agent_message(request: AgentMessageRequest, token: str = Depends(
         }
     except Exception as e:
         logger.error(f"发送Agent消息失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/agents/messages', summary='获取消息历史')
 async def get_message_history(limit: int = 50, token: str = Depends(verify_token)):
     """获取Agent消息历史"""
     try:
-        from core.autonomous_control.agent_coordinator import AgentRole
 
         # 获取所有消息
         messages = await autonomous_controller.agent_coordinator.get_message_history(limit=limit)
@@ -415,7 +412,7 @@ async def get_message_history(limit: int = 50, token: str = Depends(verify_token
         }
     except Exception as e:
         logger.error(f"获取消息历史失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 # ==================== 决策引擎接口 ====================
 @app.post('/api/v1/decisions/make', summary='执行自主决策')
@@ -445,7 +442,7 @@ async def make_decision(request: DecisionRequest, token: str = Depends(verify_to
         }
     except Exception as e:
         logger.error(f"执行决策失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/decisions/history', summary='获取决策历史')
 async def get_decision_history(limit: int = 50, token: str = Depends(verify_token)):
@@ -461,7 +458,7 @@ async def get_decision_history(limit: int = 50, token: str = Depends(verify_toke
         }
     except Exception as e:
         logger.error(f"获取决策历史失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 # ==================== 系统监控 ====================
 @app.get('/api/v1/system/status', summary='获取系统整体状态')
@@ -476,7 +473,7 @@ async def get_system_status(token: str = Depends(verify_token)):
         }
     except Exception as e:
         logger.error(f"获取系统状态失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/system/health', summary='健康检查')
 async def health_check():
@@ -505,7 +502,7 @@ async def get_system_goals(token: str = Depends(verify_token)):
         }
     except Exception as e:
         logger.error(f"获取系统目标失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get('/api/v1/goals/{goal_id}/progress', summary='获取目标进度')
 async def get_goal_progress(goal_id: str, token: str = Depends(verify_token)):
@@ -522,7 +519,7 @@ async def get_goal_progress(goal_id: str, token: str = Depends(verify_token)):
         }
     except Exception as e:
         logger.error(f"获取目标进度失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 if __name__ == '__main__':
     uvicorn.run(

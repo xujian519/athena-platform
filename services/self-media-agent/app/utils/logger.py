@@ -5,9 +5,8 @@ Logger Utility for Xiaochen Agent
 """
 
 import logging
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import sys
-from pathlib import Path
+from typing import Any
 
 from config import settings
 

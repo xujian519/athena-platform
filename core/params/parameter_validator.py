@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 参数验证器
 
@@ -7,7 +8,7 @@
 import re
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Type
+from typing import Any
 
 
 class ParamRequirement(Enum):

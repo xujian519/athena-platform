@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能体性能监控包装器
 Agent Performance Monitoring Wrapper
@@ -13,8 +14,7 @@ import time
 from collections.abc import Callable
 from datetime import datetime
 from functools import wraps
-from typing import Any, Dict, Optional
-
+from typing import Any
 
 # 导入性能监控器
 try:

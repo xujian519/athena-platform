@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from typing import Any
+
 """
 小诺菜谱助手
 Xuenuo Recipe Assistant - 小诺是您的生活助理

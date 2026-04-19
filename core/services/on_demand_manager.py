@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 按需服务管理器
 On-demand Service Manager for Athena Platform
 """
 
-import time
-import subprocess
-import requests
 import asyncio
-from typing import Dict, Optional, Any
-from pathlib import Path
 import logging
+import subprocess
+import time
+from pathlib import Path
+from typing import Any
+
+import requests
+
 logger = logging.getLogger(__name__)
 
 class OnDemandService:
@@ -31,7 +34,7 @@ class OnDemandService:
         try:
             response = requests.get(f"{self.base_url}{self.health_endpoint}", timeout=3)
             return response.status_code == 200
-        except Exception as e:  # TODO
+        except Exception:  # TODO
             return False
 
     async def start(self) -> bool:
@@ -131,13 +134,6 @@ class OnDemandManager:
             health_endpoint="/"
         )
 
-        # 云夕记忆API(开发中)
-        self.services["yunxi"] = OnDemandService(
-            name="云夕记忆API",
-            port=8007,
-            script_path="/Users/xujian/Athena工作平台/yunxi_simple_api.py",
-            health_endpoint="/"
-        )
 
         # 其他可能需要的按需服务
         # self.services["crawler"] = OnDemandService(
@@ -189,7 +185,7 @@ class OnDemandManager:
             except Exception as e:
                 print(f"⚠️ 清理任务错误: {e}")
 
-    def get_status(self) -> dict[str, Dict]:
+    def get_status(self) -> dict[str, dict]:
         """获取所有服务状态"""
         status = {}
         for name, service in self.services.items():
@@ -239,10 +235,6 @@ async def get_xiaochen_api_url() -> str | None:
     manager = get_on_demand_manager()
     return await manager.get_service("xiaochen")
 
-async def get_yunxi_api_url() -> str | None:
-    """获取云夕API URL(按需启动)"""
-    manager = get_on_demand_manager()
-    return await manager.get_service("yunxi")
 
 async def stop_laws_api():
     """停止法律API"""
@@ -254,10 +246,6 @@ async def stop_xiaochen_api():
     manager = get_on_demand_manager()
     await manager.stop_service("xiaochen")
 
-async def stop_yunxi_api():
-    """停止云夕API"""
-    manager = get_on_demand_manager()
-    await manager.stop_service("yunxi")
 
 # 批量管理
 async def stop_all_ondemand_apis():

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺平台总控制器
 Xiaonuo Platform Controller
@@ -12,24 +11,21 @@ Xiaonuo Platform Controller
 版本: v0.1.1 "心有灵犀"
 """
 
-import asyncio
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
-import subprocess
-import json
-from datetime import datetime
-from typing import Any, Dict, List, Optional
-from pathlib import Path
-
 import sys
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+from core.logging_config import setup_logging
+
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
+import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from core.security.auth import ALLOWED_ORIGINS
-import uvicorn
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -60,13 +56,6 @@ class XiaonuoPlatformController:
 
         # 服务注册表
         self.service_registry = {
-            "yunpat": {
-                "name": "云熙IP管理系统",
-                "port": 8087,
-                "script": "services/yunpat-agent/app/main.py",
-                "status": "stopped",
-                "controller": "云熙"
-            },
             "xiaona": {
                 "name": "小娜专利法律专家",
                 "port": 8001,
@@ -110,13 +99,6 @@ class XiaonuoPlatformController:
                 "specialty": ["专利分析", "法律咨询", "商标注册", "知识产权"],
                 "status": "inactive",
                 "port": 8001
-            },
-            "yunxi": {
-                "name": "云熙.vega",
-                "role": "IP管理专家",
-                "specialty": ["案卷管理", "客户端服务", "同事协作", "SaaS运营"],
-                "status": "inactive",
-                "port": 8087
             },
             "xiaochen": {
                 "name": "小宸·星河射手",
@@ -327,7 +309,7 @@ class XiaonuoPlatformController:
 
             # 启动所有关键服务
             start_results = []
-            for service_id in ["xiaona", "yunpat"]:
+            for service_id in ["xiaona"]:
                 if self.service_registry[service_id]["status"] == "stopped":
                     result = await self._start_service(service_id)
                     start_results.append(result)
@@ -345,7 +327,7 @@ class XiaonuoPlatformController:
                 "timestamp": datetime.now().isoformat()
             }
 
-    async def _start_service(self, service_name: str) -> Dict[str, Any]:
+    async def _start_service(self, service_name: str) -> dict[str, Any]:
         """启动服务"""
         service_info = self.service_registry[service_name]
 
@@ -382,7 +364,7 @@ class XiaonuoPlatformController:
                 "service": service_name
             }
 
-    async def _stop_service(self, service_name: str) -> Dict[str, Any]:
+    async def _stop_service(self, service_name: str) -> dict[str, Any]:
         """停止服务"""
         service_info = self.service_registry[service_name]
 
@@ -401,7 +383,7 @@ class XiaonuoPlatformController:
         """启动控制服务器"""
         logger.info(f"🌸 启动{self.name}平台控制中心...")
         logger.info(f"📍 端口: {self.controller_port}")
-        logger.info(f"💖 爸爸，我来掌控平台了！")
+        logger.info("💖 爸爸，我来掌控平台了！")
 
         config = uvicorn.Config(
             app=self.app,

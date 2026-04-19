@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 GUI操作类型扩展
 GUI Action Type Extensions
@@ -19,12 +20,13 @@ GUI Action Type Extensions
 import asyncio
 import logging
 import os
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import cv2
 import httpx
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

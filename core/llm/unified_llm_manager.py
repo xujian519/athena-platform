@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - 统一LLM管理器
 核心协调者,管理所有模型适配器,提供统一的调用接口
@@ -9,21 +10,28 @@
 import asyncio
 import logging
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.llm.base import (
     BaseLLMAdapter,
     LLMRequest,
     LLMResponse,
-    ModelCapability,
-    SelectionStrategy,
 )
 from core.llm.cache_warmer import get_cache_warmer
 from core.llm.cost_monitor import get_cost_monitor
 from core.llm.model_registry import ModelCapabilityRegistry, get_model_registry
-from core.llm.model_selector import IntelligentModelSelector, SelectionCriteria
-from core.llm.prometheus_metrics import MetricsContext, get_metrics
+from core.llm.model_selector import IntelligentModelSelector
+from core.llm.prometheus_metrics import get_metrics
 from core.llm.response_cache import get_response_cache
+
+# 智能模型路由 (Hermes Agent 设计模式)
+try:
+    from core.llm.smart_model_routing import RoutingDecision, SmartModelRouter
+    SMART_ROUTING_AVAILABLE = True
+except ImportError:
+    SMART_ROUTING_AVAILABLE = False
+    SmartModelRouter = None  # type: ignore
+    RoutingDecision = None  # type: ignore
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +89,19 @@ class UnifiedLLMManager:
             "total_tokens": 0,
             "total_processing_time": 0.0,
             "warmup_results": None,  # 缓存预热结果
+            "smart_routing_savings": 0.0,  # 智能路由节省的成本
         }
+
+        # 智能模型路由器 (Hermes Agent 设计模式)
+        self.smart_router: SmartModelRouter | None = None
+        self._smart_routing_enabled = False
+        if SMART_ROUTING_AVAILABLE and SmartModelRouter is not None:
+            try:
+                self.smart_router = SmartModelRouter()
+                self._smart_routing_enabled = True
+                logger.info("✅ 智能模型路由器已启用")
+            except Exception as e:
+                logger.warning(f"⚠️ 智能模型路由器初始化失败: {e}")
 
         logger.info("✅ 统一LLM管理器初始化完成")
 
@@ -129,6 +149,9 @@ class UnifiedLLMManager:
 
     async def _load_adapters(self):
         """加载所有模型适配器"""
+        # 加载Ollama适配器(优先本地模型)
+        await self._load_ollama_adapters()
+
         # 加载GLM适配器
         await self._load_glm_adapters()
 
@@ -188,6 +211,38 @@ class UnifiedLLMManager:
                         self.adapters[model_id] = adapter
             except Exception as e:
                 logger.warning(f"⚠️ 本地模型 {model_id} 适配器加载失败: {e}")
+
+    async def _load_ollama_adapters(self):
+        """加载Ollama模型适配器"""
+        # Ollama模型列表(本地模型优先)
+        ollama_models = ["glm-4.7-flash:q4_K_M", "glm-4.7-flash", "qwen2.5-14b", "qwen2.5-7b"]
+
+        for model_id in ollama_models:
+            try:
+                from core.llm.adapters.ollama_adapter import OllamaAdapter
+
+                # 先尝试从registry获取
+                capability = self.registry.get_capability(model_id)
+
+                # 如果registry中没有,使用默认配置
+                if not capability:
+                    from core.llm.base import DeploymentType, ModelCapability, ModelType
+                    capability = ModelCapability(
+                        model_id=model_id,
+                        model_type=ModelType.CHAT,
+                        deployment=DeploymentType.LOCAL,
+                        max_context=128000,
+                        supports_streaming=True,
+                        cost_per_1k_tokens=0.0,
+                        quality_score=0.90,
+                    )
+
+                adapter = OllamaAdapter(model_id, capability)
+                if await adapter.initialize():
+                    self.adapters[model_id] = adapter
+                    logger.info(f"✅ Ollama模型加载成功: {model_id}")
+            except Exception as e:
+                logger.warning(f"⚠️ Ollama模型 {model_id} 适配器加载失败: {e}")
 
     async def _load_qwen_adapters(self):
         """加载Qwen云端模型适配器"""
@@ -258,6 +313,8 @@ class UnifiedLLMManager:
                 "complex_analysis",
                 "math_reasoning",
                 "general_analysis",
+                "reflection",  # 反思评估任务
+                "quality_evaluation",  # 质量评估任务
             }
 
             if not task_type or task_type not in SUPPORTED_TASK_TYPES:
@@ -568,6 +625,98 @@ class UnifiedLLMManager:
             }
             for alert in alerts
         ]
+
+    async def reflect(
+        self,
+        original_prompt: str,
+        output: str,
+        context: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """
+        反思评估便捷方法
+
+        对AI输出进行质量评估，返回改进建议
+
+        Args:
+            original_prompt: 原始提示
+            output: AI输出
+            context: 上下文信息
+
+        Returns:
+            dict: 包含overall_score, feedback, suggestions的字典
+        """
+        import json
+        import re
+
+        # 构建反思提示
+        reflection_prompt = f'''你是一个专业的AI输出质量评估专家。请对以下AI输出进行评估。
+
+## 原始提示
+{original_prompt}
+
+## 输出结果
+{output}
+
+## 上下文信息
+{json.dumps(context or {}, ensure_ascii=False, indent=2)}
+
+## 评估标准 (0-1分)
+- accuracy: 准确性
+- completeness: 完整性
+- clarity: 清晰度
+- relevance: 相关性
+- usefulness: 有用性
+- consistency: 一致性
+
+请严格按以下JSON格式返回:
+{{
+    "overall_score": 0.85,
+    "metric_scores": {{
+        "accuracy": 0.9,
+        "completeness": 0.8,
+        "clarity": 0.88,
+        "relevance": 0.92,
+        "usefulness": 0.85,
+        "consistency": 0.9
+    }},
+    "feedback": "评估反馈",
+    "suggestions": ["建议1", "建议2"],
+    "should_refine": true
+}}'''
+
+        try:
+            # 调用LLM进行反思
+            response = await self.generate(
+                message=reflection_prompt,
+                task_type="reflection",
+                temperature=0.1,
+                max_tokens=2000,
+            )
+
+            # 提取JSON
+            content = response.content
+            json_match = re.search(r'```(?:json)?\s*([\s\S]*?)```', content)
+            if json_match:
+                json_str = json_match.group(1).strip()
+            else:
+                json_match = re.search(r'\{[\s\S]*\}', content)
+                json_str = json_match.group(0) if json_match else content
+
+            result = json.loads(json_str)
+            result["model_used"] = response.model_used
+            result["processing_time"] = response.processing_time
+
+            return result
+
+        except Exception as e:
+            logger.error(f"反思评估失败: {e}")
+            return {
+                "overall_score": 0.5,
+                "feedback": f"反思评估出现错误: {str(e)}",
+                "suggestions": ["请重新生成输出"],
+                "should_refine": False,
+                "error": str(e),
+            }
 
     async def shutdown(self):
         """关闭管理器,清理资源"""

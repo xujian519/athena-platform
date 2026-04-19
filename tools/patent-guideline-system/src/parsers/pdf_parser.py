@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利审查指南PDF解析器
 Patent Guideline PDF Parser
@@ -12,7 +11,7 @@ import logging
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import pdfplumber
 
@@ -27,9 +26,9 @@ class DocumentNode:
     level: int  # 1=部分, 2=章, 3=节, 4=条, 5=段落
     content: str
     parent_id: str | None = None
-    children_ids: Optional[List[str] = None
+    children_ids: list[str] | None = None
     page_number: int | None = None
-    metadata: Dict[str, Any] = None
+    metadata: dict[str, Any] = None
 
     def __post_init__(self):
         if self.children_ids is None:
@@ -88,7 +87,7 @@ class PatentGuidelineParser:
             }
         }
 
-    def parse(self) -> Dict[str, Any]:
+    def parse(self) -> dict[str, Any]:
         """解析PDF文档
 
         Returns:
@@ -139,7 +138,7 @@ class PatentGuidelineParser:
         logger.info(f"解析完成: {result['statistics']}")
         return result
 
-    def _parse_structure(self, text: str, page_contents: List[Dict]) -> List[Dict[str, Any]]:
+    def _parse_structure(self, text: str, page_contents: list[dict]) -> list[dict[str, Any]]:
         """解析文档结构
 
         Args:
@@ -154,9 +153,8 @@ class PatentGuidelineParser:
 
         current_section = None
         section_buffer = []
-        section_start_page = 1
 
-        for i, line in enumerate(lines):
+        for _i, line in enumerate(lines):
             line = line.strip()
             if not line:
                 continue
@@ -202,7 +200,7 @@ class PatentGuidelineParser:
 
         return sections
 
-    def _match_section_pattern(self, line: str) -> Tuple[str, str, str | None]:
+    def _match_section_pattern(self, line: str) -> tuple[str, str, str | None]:
         """匹配章节标题模式
 
         Args:
@@ -265,7 +263,7 @@ class PatentGuidelineParser:
 
         return f"{prefix}{clean_number}"
 
-    def _find_page_number(self, line: str, page_contents: List[Dict]) -> int:
+    def _find_page_number(self, line: str, page_contents: list[dict]) -> int:
         """查找文本行所在的页码
 
         Args:
@@ -284,7 +282,7 @@ class PatentGuidelineParser:
 
         return 1  # 默认返回第1页
 
-    def _extract_references(self, text: str) -> List[Dict[str, Any]]:
+    def _extract_references(self, text: str) -> list[dict[str, Any]]:
         """提取引用关系
 
         Args:
@@ -328,7 +326,7 @@ class PatentGuidelineParser:
 
         return references
 
-    def _build_document_tree(self, sections: List[Dict]) -> List[DocumentNode]:
+    def _build_document_tree(self, sections: list[dict]) -> list[DocumentNode]:
         """构建文档树结构
 
         Args:
@@ -375,7 +373,7 @@ class PatentGuidelineParser:
         self.nodes = node_dict
         return nodes
 
-    def _serialize_tree(self) -> Dict[str, Any]:
+    def _serialize_tree(self) -> dict[str, Any]:
         """序列化树结构
 
         Returns:
@@ -403,7 +401,7 @@ class PatentGuidelineParser:
             'total_nodes': len(self.nodes)
         }
 
-    def _get_statistics(self) -> Dict[str, Any]:
+    def _get_statistics(self) -> dict[str, Any]:
         """获取统计信息
 
         Returns:

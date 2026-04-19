@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 工具性能跟踪和优化建议系统
 Tool Performance Tracker and Optimization Advisor
@@ -21,7 +22,6 @@ from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
 from typing import Any
-
 
 # 导入标准化数据库工具
 

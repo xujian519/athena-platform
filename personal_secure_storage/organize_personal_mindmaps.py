@@ -3,11 +3,12 @@
 整理个人导图文档，分类保存并去重
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-from pathlib import Path
+import sqlite3
 from datetime import datetime
+from pathlib import Path
+from typing import Any
+
 
 def organize_personal_mindmaps() -> Any:
     """整理个人导图文档"""
@@ -26,7 +27,7 @@ def organize_personal_mindmaps() -> Any:
     # 提取已有的内容用于去重
     existing_titles = set()
     existing_categories = {}
-    for category, title, created_at in existing_records:
+    for category, title, _created_at in existing_records:
         existing_titles.add(title)
         if category not in existing_categories:
             existing_categories[category] = []
@@ -118,7 +119,7 @@ def organize_personal_mindmaps() -> Any:
         if not is_duplicate:
             new_records.append(mm)
 
-    print(f"\n去重结果：")
+    print("\n去重结果：")
     print(f"  - 总计: {len(mindmaps)}个文件")
     print(f"  - 新增: {len(new_records)}个文件")
     print(f"  - 重复: {len(duplicates)}个文件")

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 自适应学习率优化器 (Adaptive Learning Rate Optimizer)
 智能学习率调整,优化模型收敛速度和性能
@@ -13,8 +14,9 @@ from collections import deque
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

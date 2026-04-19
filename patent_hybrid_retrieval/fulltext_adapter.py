@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PostgreSQL全文搜索适配器
 PostgreSQL Full-text Search Adapter
@@ -10,7 +9,7 @@ PostgreSQL Full-text Search Adapter
 import logging
 import os
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import psycopg2
 from psycopg2.extras import RealDictCursor
@@ -18,7 +17,7 @@ from psycopg2.extras import RealDictCursor
 logger = logging.getLogger(__name__)
 
 
-def _get_db_config() -> Dict[str, str]:
+def _get_db_config() -> dict[str, str]:
     """从环境变量获取数据库配置，支持多种配置源"""
     # 优先使用POSTGRES_前缀的配置（.env中的主要配置）
     config = {
@@ -127,7 +126,7 @@ class FullTextSearchAdapter:
             logger.error(f"创建索引失败: {e}")
 
     def search(self, query: str, limit: int = 20,
-               offset: int = 0) -> List[Dict[str, Any]]:
+               offset: int = 0) -> list[dict[str, Any]]:
         """
         执行全文搜索
 
@@ -211,8 +210,8 @@ class FullTextSearchAdapter:
 
         return results
 
-    def search_with_filters(self, query: str, filters: Dict[str, Any] = None,
-                          limit: int = 20, offset: int = 0) -> List[Dict[str, Any]]:
+    def search_with_filters(self, query: str, filters: dict[str, Any] = None,
+                          limit: int = 20, offset: int = 0) -> list[dict[str, Any]]:
         """
         带过滤条件的全文搜索
 
@@ -304,7 +303,7 @@ class FullTextSearchAdapter:
 
         return results
 
-    def get_similar_patents(self, patent_id: str, limit: int = 10) -> List[Dict[str, Any]]:
+    def get_similar_patents(self, patent_id: str, limit: int = 10) -> list[dict[str, Any]]:
         """
         基于相似性查找相关专利
 
@@ -387,7 +386,7 @@ class FullTextSearchAdapter:
         cleaned = re.sub(r'\s+', ' ', cleaned).strip()
         return cleaned
 
-    def get_search_stats(self) -> Dict[str, Any]:
+    def get_search_stats(self) -> dict[str, Any]:
         """获取搜索统计信息"""
         stats = {
             'connected': self.conn is not None,

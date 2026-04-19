@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 监控模块核心功能测试脚本
 Test Core Monitoring Module

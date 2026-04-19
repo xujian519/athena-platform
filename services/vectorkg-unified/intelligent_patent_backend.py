@@ -9,19 +9,15 @@ Intelligent Patent Backend Service
 创建时间: 2024年12月15日
 """
 
-import asyncio
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
-from typing import Dict, List, Any, Optional
 from datetime import datetime
-import json
-import uuid
-from fastapi import FastAPI, HTTPException, BackgroundTasks
-from fastapi.middleware.cors import CORSMiddleware
-from core.security.auth import ALLOWED_ORIGINS
 
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from vector_knowledge_infrastructure import get_vector_knowledge_infrastructure
+
+from core.logging_config import setup_logging
+from core.security.auth import ALLOWED_ORIGINS
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -145,7 +141,7 @@ async def hybrid_search(request: dict):
 
     except Exception as e:
         logger.error(f"混合搜索失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Hybrid search failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Hybrid search failed: {str(e)}") from e
 
 @app.post("/search/vector")
 async def vector_search(request: dict):
@@ -179,7 +175,7 @@ async def vector_search(request: dict):
 
     except Exception as e:
         logger.error(f"向量搜索失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Vector search failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Vector search failed: {str(e)}") from e
 
 @app.post("/search/graph")
 async def graph_search(request: dict):
@@ -190,7 +186,7 @@ async def graph_search(request: dict):
     try:
         query_text = request.get('query', '')
         max_paths = request.get('max_paths', 5)
-        graph_names = request.get('graphs', [])
+        request.get('graphs', [])
 
         # 图谱搜索
         graph_results = await infrastructure._graph_search(
@@ -209,7 +205,7 @@ async def graph_search(request: dict):
 
     except Exception as e:
         logger.error(f"图谱搜索失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Graph search failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Graph search failed: {str(e)}") from e
 
 @app.post("/analyze/patent")
 async def analyze_patent(request: dict):
@@ -224,11 +220,11 @@ async def analyze_patent(request: dict):
     - 市场价值分析
     """
     if not infrastructure:
-        raise HTTP_status_code=503, detail="Infrastructure not initialized")
+        raise HTTPException(status_code=503, detail="Infrastructure not initialized")
 
     patent_text = request.get('patent_text', '')
     patent_title = request.get('title', '')
-    ipc_classification = request.get('ipc_classification', '')
+    request.get('ipc_classification', '')
 
     if not patent_text and not patent_title:
         raise HTTPException(status_code=400, detail="Patent text or title is required")
@@ -237,7 +233,7 @@ async def analyze_patent(request: dict):
     analysis_results = {}
 
     # 1. 新颖性分析
-    novelty_query = f"评估专利的新颖性要求，判断是否属于现有技术"
+    novelty_query = "评估专利的新颖性要求，判断是否属于现有技术"
     if patent_title:
         novelty_query += f"，专利标题：{patent_title}"
 
@@ -246,31 +242,31 @@ async def analyze_patent(request: dict):
         context_type="novelty_assessment"
     )
     analysis_results['novelty'] = {
-        "assessment": self._extract_assessment(novelty_results),
-        "key_points": self._extract_key_points(novelty_results, "novelty"),
-        "confidence": self._calculate_confidence(novelty_results)
+        "assessment": _extract_assessment(novelty_results),
+        "key_points": _extract_key_points(novelty_results, "novelty"),
+        "confidence": _calculate_confidence(novelty_results)
     }
 
     # 2. 创造性分析
     creativity_results = await infrastructure.hybrid_search(
-        query_text=f"评估专利的创造性，包括技术进步性和非显而易见性" + patent_text,
+        query_text="评估专利的创造性，包括技术进步性和非显而易见性" + patent_text,
         context_type="creativity_assessment"
     )
     analysis_results['creativity'] = {
-        "assessment": self._extract_assessment(creativity_results),
-        "key_points": self._extract_key_points(creativity_results, "creativity"),
-        "confidence": self._calculate_confidence(creativity_results)
+        "assessment": _extract_assessment(creativity_results),
+        "key_points": _extract_key_points(creativity_results, "creativity"),
+        "confidence": _calculate_confidence(creativity_results)
     }
 
     # 3. 技术先进性
     tech_results = await infrastructure.hybrid_search(
-        query_text=f"分析专利技术的先进性和创新程度" + patent_text,
+        query_text="分析专利技术的先进性和创新程度" + patent_text,
         context_type="technical_analysis"
     )
     analysis_results['technical'] = {
-        "assessment": self._extract_assessment(tech_results),
-        "key_points": self._extract_key_points(tech_results, "technical"),
-        "confidence": self._calculate_confidence(tech_results)
+        "assessment": _extract_assessment(tech_results),
+        "key_points": _extract_key_points(tech_results, "technical"),
+        "confidence": _calculate_confidence(tech_results)
     }
 
     # 4. 综合评分
@@ -278,8 +274,8 @@ async def analyze_patent(request: dict):
         "novelty_score": analysis_results['novelty']['confidence'],
         "creativity_score": analysis_results['creativity']['confidence'],
         "technical_score": analysis_results['technical']['confidence'],
-        "combined_score": self._calculate_overall_score(analysis_results),
-        "recommendations": self._generate_recommendations(analysis_results)
+        "combined_score": _calculate_overall_score(analysis_results),
+        "recommendations": _generate_recommendations(analysis_results)
     }
 
     return analysis_results
@@ -302,7 +298,7 @@ def _extract_assessment(self, search_results: dict) -> str:
 
     return " | ".join(assessments) if assessments else "暂无相关评估"
 
-def _extract_key_points(self, search_results: dict, focus_area: str) -> List[str]:
+def _extract_key_points(self, search_results: dict, focus_area: str) -> list[str]:
     """提取关键点"""
     key_points = []
 
@@ -310,7 +306,7 @@ def _extract_key_points(self, search_results: dict, focus_area: str) -> List[str
     if focus_area == "novelty":
         novelty_keywords = ["现有技术", "申请日", "公开", "抵触申请", "不属于现有技术"]
     elif focus_area == "creativeity":
-        creativity_keywords = ["进步性", "非显而易见", "技术启示", "组合发明", "选择发明"]
+        pass
     else:
         novelty_keywords = ["创新", "技术方案", "技术效果"]
 
@@ -356,7 +352,7 @@ def _calculate_overall_score(self, analysis_results: dict) -> float:
             creativity_score * weights['creativity'] +
             technical_score * weights['technical'])
 
-def _generate_recommendations(self, analysis_results: dict) -> List[str]:
+def _generate_recommendations(self, analysis_results: dict) -> list[str]:
     """生成建议"""
     recommendations = []
 
@@ -388,13 +384,13 @@ async def intelligent_chat(request: dict):
     """
     query = request.get('query', '')
     context = request.get('context', {})
-    conversation_id = request.get('conversation_id')
+    request.get('conversation_id')
 
     if not query:
         raise HTTPException(status_code=400, detail="Query is required")
 
     # 根据上下文和查询意图选择处理策略
-    intent = self._classify_intent(query, context)
+    intent = _classify_intent(query, context)
 
     try:
         if intent == "search":
@@ -404,10 +400,10 @@ async def intelligent_chat(request: dict):
         elif intent == "guidance":
             return await _handle_guidance_intent(query, context)
         else:
-            return await _handle_general_intent(query, context)
+            return await _provide_general_guidance(query, context)
     except Exception as e:
         logger.error(f"智能对话处理失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Chat processing failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Chat processing failed: {str(e)}") from e
 
 async def _handle_search_intent(query: str, context: dict) -> dict:
     """处理搜索意图"""
@@ -470,7 +466,7 @@ async def _provide_review_guidance(query: str, context: dict) -> dict:
 
     return {
         "type": "review_guidance",
-        "guidance": self._extract_guidance(search_results),
+        "guidance": _extract_guidance(search_results),
         "response": "根据专利审查要求，我为您找到了相关指导"
     }
 
@@ -483,7 +479,7 @@ async def _provide_filing_guidance(query: str, context: dict) -> dict:
 
     return {
         "type": "filing_guidance",
-        "guidance": self._extract_guidance(search_results),
+        "guidance": _extract_guidance(search_results),
         "response": "根据专利申请要求，我为您提供申请指导"
     }
 
@@ -496,7 +492,7 @@ async def _provide_infringement_guidance(query: str, context: dict) -> dict:
 
     return {
         "type": "infringement_guidance",
-        "guidance": self._extract_guidance(search_results),
+        "guidance": _extract_guidance(search_results),
         "response": "基于知识产权法律，我为您提供侵权风险分析"
     }
 
@@ -509,7 +505,7 @@ async def _provide_general_guidance(query: str, context: dict) -> dict:
 
     return {
         "type": "general_guidance",
-        "guidance": self._extract_guidance(search_results),
+        "guidance": _extract_guidance(search_results),
         "response": "我为您提供专利相关的专业指导"
     }
 

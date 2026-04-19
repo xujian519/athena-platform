@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台 - 多模态文件系统集成服务
 Platform Integration Service for Multimodal File System

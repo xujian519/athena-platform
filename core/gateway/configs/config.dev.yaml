@@ -1,0 +1,227 @@
+# 开发环境配置
+server:
+  host: "0.0.0.0"
+  port: 8080
+  read_timeout: 60s
+  write_timeout: 60s
+  max_header_bytes: 2097152  # 2MB
+
+# 日志配置 - 开发模式更详细
+logging:
+  level: "debug"
+  format: "text"
+  output: "stdout"
+
+# Redis配置 - 开发环境
+redis:
+  host: "localhost"
+  port: 6379
+  password: ""
+  db: 0
+  pool_size: 50
+  min_idle_conns: 5
+  max_retries: 3
+  dial_timeout: 5s
+  read_timeout: 3s
+  write_timeout: 3s
+
+# 认证配置 - 开发环境使用简单的密钥
+auth:
+  jwt_secret: "athena-gateway-dev-jwt-secret-not-for-production"
+  token_expire: 24h
+  refresh_expire: 168h  # 7 days
+  issuer: "athena-gateway-dev"
+  skip_paths:
+    - "/health"
+    - "/metrics"
+    - "/ready"
+    - "/api/v1/auth/login"
+    - "/api/v1/auth/register"
+  required_scopes:
+    - "read"
+    - "write"
+
+# 限流配置 - 开发环境更宽松
+limiter:
+  enabled: true
+  requests_per_minute: 5000
+  burst: 500
+  strategies:
+    - type: "ip"
+      limit: 1000
+      match: ""
+    - type: "user"
+      limit: 200
+      match: ""
+  distributed_enabled: false
+  redis_key_prefix: "gateway:dev:limiter:"
+
+# 代理配置 - 开发环境
+proxy:
+  timeout: 60s
+  retry_attempts: 5
+  retry_delay: 2s
+  circuit_breaker:
+    enabled: true
+    failure_threshold: 10
+    recovery_timeout: 30s
+    success_threshold: 5
+    timeout: 120s
+  load_balancer:
+    strategy: "round_robin"
+    nodes: []
+  health_check:
+    enabled: true
+    path: "/health"
+    interval: 15s
+    timeout: 10s
+    unhealthy_threshold: 5
+    healthy_threshold: 3
+
+# 监控配置 - 开发环境启用所有监控
+monitoring:
+  prometheus:
+    enabled: true
+    path: "/metrics"
+    port: 9090
+  tracing:
+    enabled: true
+    provider: "jaeger"
+    jaeger_endpoint: "http://localhost:14268/api/traces"
+    service_name: "athena-gateway-dev"
+    sample_rate: 1.0  # 开发环境100%采样
+  health_check:
+    enabled: true
+    path: "/health"
+    interval: 15s
+    timeout: 5s
+    unhealthy_threshold: 3
+    healthy_threshold: 2
+
+# 安全配置 - 开发环境更宽松
+security:
+  cors:
+    enabled: true
+    allowed_origins:
+      - "*"
+      - "http://localhost:3000"
+      - "http://localhost:8080"
+      - "http://127.0.0.1:3000"
+    allowed_methods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+      - "OPTIONS"
+      - "PATCH"
+    allowed_headers:
+      - "*"
+    exposed_headers:
+      - "Content-Length"
+      - "X-Total-Count"
+    allow_credentials: true
+    max_age: 12
+  csrf:
+    enabled: false  # 开发环境禁用CSRF
+  rate_limit:
+    enabled: true
+    limit: 5000
+  ip_whitelist:
+    enabled: false
+
+# 服务配置 - 开发环境服务
+services:
+  - name: "user-service"
+    url: "http://localhost:8001"
+    health_check: "/health"
+    timeout: 60s
+    retries: 5
+    circuit_breaker:
+      enabled: true
+      failure_threshold: 10
+      recovery_timeout: 30s
+      success_threshold: 5
+      timeout: 120s
+    load_balancer:
+      strategy: "round_robin"
+      nodes: []
+    metadata:
+      description: "用户管理服务 - 开发环境"
+      version: "1.0.0-dev"
+      env: "development"
+  
+  - name: "order-service"
+    url: "http://localhost:8002"
+    health_check: "/health"
+    timeout: 60s
+    retries: 5
+    circuit_breaker:
+      enabled: true
+      failure_threshold: 10
+      recovery_timeout: 30s
+      success_threshold: 5
+      timeout: 120s
+    load_balancer:
+      strategy: "round_robin"
+      nodes: []
+    metadata:
+      description: "订单管理服务 - 开发环境"
+      version: "1.0.0-dev"
+      env: "development"
+
+  - name: "payment-service"
+    url: "http://localhost:8003"
+    health_check: "/health"
+    timeout: 60s
+    retries: 5
+    circuit_breaker:
+      enabled: true
+      failure_threshold: 8  # 支付服务更严格
+      recovery_timeout: 60s
+      success_threshold: 8
+      timeout: 180s
+    load_balancer:
+      strategy: "round_robin"
+      nodes: []
+    metadata:
+      description: "支付服务 - 开发环境"
+      version: "1.0.0-dev"
+      env: "development"
+
+  - name: "notification-service"
+    url: "http://localhost:8004"
+    health_check: "/health"
+    timeout: 30s
+    retries: 3
+    circuit_breaker:
+      enabled: true
+      failure_threshold: 10
+      recovery_timeout: 30s
+      success_threshold: 5
+      timeout: 60s
+    load_balancer:
+      strategy: "round_robin"
+      nodes: []
+    metadata:
+      description: "通知服务 - 开发环境"
+      version: "1.0.0-dev"
+      env: "development"
+
+  # 开发环境特定的模拟服务
+  - name: "mock-service"
+    url: "http://localhost:9999"
+    health_check: "/mock/health"
+    timeout: 30s
+    retries: 2
+    circuit_breaker:
+      enabled: false  # 模拟服务不启用熔断
+    load_balancer:
+      strategy: "round_robin"
+      nodes: []
+    metadata:
+      description: "模拟服务 - 开发环境测试用"
+      version: "0.0.1-dev"
+      env: "development"
+
+# 环境配置
+environment: "development"

@@ -1,0 +1,20 @@
+{
+  "oa_notification": {
+    "status": "✅ 已收集",
+    "path": "/Users/xujian/Athena工作平台/openspec-oa-workflow/outputs/oa-response-20260326-202310776442/oa_notification.json"
+  },
+  "application_file": {
+    "status": "❌ 缺失",
+    "description": "原始申请文件（权利要求书、说明书）"
+  },
+  "utility_model": {
+    "status": "❌ 缺失",
+    "document_number": "ZL2023216673538",
+    "description": "同日申请的实用新型专利"
+  },
+  "first_oa_response": {
+    "status": "✅ 已有",
+    "path": "/Users/xujian/Desktop/于刚审查意见/202310776442.4-意见陈述书-法律适用抗辩-v2.md",
+    "note": "用户已起草的答复"
+  }
+}

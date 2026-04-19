@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 并行推理引擎和结果融合系统
 Parallel Reasoning Engine and Result Fusion System
@@ -20,7 +21,8 @@ import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any
+
 import numpy as np
 
 logger = logging.getLogger(__name__)
@@ -235,7 +237,7 @@ class ResultFusionEngine:
         weights = self._get_dynamic_weights(results)
 
         # 加权平均置信度
-        avg_confidence = sum(r.confidence * w for r, w in zip(results, weights))
+        avg_confidence = sum(r.confidence * w for r, w in zip(results, weights, strict=False))
 
         # 融合结论(取置信度最高的结论作为基础)
         best_result = max(results, key=lambda r: r.confidence)
@@ -252,7 +254,7 @@ class ResultFusionEngine:
             fusion_strategy=FusionStrategy.WEIGHTED_AVERAGE,
             source_engines=[r.engine_name for r in results],
             conflict_detected=False,
-            fusion_details={"weights": dict(zip([r.engine_name for r in results], weights))},
+            fusion_details={"weights": dict(zip([r.engine_name for r in results], weights, strict=False))},
         )
 
     def _majority_vote_fusion(self, results: list[ReasoningResult]) -> FusionResult:
@@ -362,7 +364,7 @@ class ResultFusionEngine:
 
         # 加权融合
         weighted_conclusion = self._build_weighted_conclusion(results, weights)
-        avg_confidence = sum(r.confidence * w for r, w in zip(results, weights))
+        avg_confidence = sum(r.confidence * w for r, w in zip(results, weights, strict=False))
 
         return FusionResult(
             final_conclusion=weighted_conclusion,
@@ -370,7 +372,7 @@ class ResultFusionEngine:
             fusion_strategy=FusionStrategy.LEARNING_BASED,
             source_engines=[r.engine_name for r in results],
             conflict_detected=False,
-            fusion_details={"weights": dict(zip([r.engine_name for r in results], weights))},
+            fusion_details={"weights": dict(zip([r.engine_name for r in results], weights, strict=False))},
         )
 
     def _meta_reasoning_fusion(self, results: list[ReasoningResult]) -> FusionResult:
@@ -380,7 +382,7 @@ class ResultFusionEngine:
 
         # 综合质量和置信度
         combined_scores = [
-            r.confidence * q for r, q in zip(results, quality_scores)
+            r.confidence * q for r, q in zip(results, quality_scores, strict=False)
         ]
 
         # 选择最佳结果
@@ -397,7 +399,7 @@ class ResultFusionEngine:
             source_engines=[r.engine_name for r in results],
             conflict_detected=False,
             fusion_details={
-                "quality_scores": dict(zip([r.engine_name for r in results], quality_scores))
+                "quality_scores": dict(zip([r.engine_name for r in results], quality_scores, strict=False))
             },
         )
 
@@ -529,7 +531,7 @@ class ResultFusionEngine:
         conclusion = f"[加权融合结果] {best_result.conclusion}"
 
         # 添加权重信息
-        conclusion += f"\n权重分配: {dict(zip([r.engine_name for r in results], weights))}"
+        conclusion += f"\n权重分配: {dict(zip([r.engine_name for r in results], weights, strict=False))}"
 
         return conclusion
 
@@ -656,7 +658,7 @@ class ParallelReasoningEngine:
         # 并行执行推理
         tasks = [
             self._execute_single_engine(engine, task_description, name)
-            for engine, name in zip(engines, engine_names)
+            for engine, name in zip(engines, engine_names, strict=False)
         ]
 
         # 等待所有引擎完成

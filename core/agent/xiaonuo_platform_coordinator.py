@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺平台总调度核心模块
 Xiaonuo Platform Coordinator Core Module
@@ -42,12 +43,6 @@ class XiaonuoPlatformCoordinator:
                     "role": "知识产权专家",
                     "status": AgentStatus.IDLE,
                     "capabilities": ["patent", "trademark", "copyright", "legal"],
-                },
-                "yunxi": {
-                    "name": "云熙",
-                    "role": "YunPat IP管理",
-                    "status": AgentStatus.IDLE,
-                    "capabilities": ["ip_management", "patent_search", "portfolio"],
                 },
                 "xiaochen": {
                     "name": "小宸",
@@ -353,7 +348,6 @@ class XiaonuoPlatformCoordinator:
         # 简化实现
         return {
             "xiaona": {"tasks": 5, "hours_active": 6},
-            "yunxi": {"tasks": 3, "hours_active": 4},
             "xiaochen": {"tasks": 2, "hours_active": 3},
         }
 

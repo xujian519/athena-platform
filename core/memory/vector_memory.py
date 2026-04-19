@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 向量记忆系统
 Vector Memory System
@@ -48,7 +49,7 @@ class VectorSearchEngine:
 
         return len(self.vectors) - 1
 
-    def add_vectors(self, vectors: list[list[dict[str]]] -> list[int]:
+    def add_vectors(self, vectors: list[list[float]], metadata_list: list[dict[str, Any]]) -> list[int]:
         """批量添加向量"""
         indices = []
         for vector, metadata in zip(vectors, metadata_list, strict=False):
@@ -71,7 +72,7 @@ class VectorSearchEngine:
         self.last_build_time = time.time()
         logger.debug(f"构建向量索引完成: {len(self.vectors)} 个向量")
 
-    def search(self, query_vector: np.ndarray, k: int = 10, threshold: float = 0.0) -> list[tuple[int, float, dict[str, Any]]:
+    def search(self, query_vector: np.ndarray, k: int = 10, threshold: float = 0.0) -> list[tuple[int, float, dict[str, Any]]]:
         """搜索最相似的向量"""
         if not self.vectors:
             return []
@@ -301,7 +302,7 @@ class VectorMemorySystem:
             # 过滤分类
             if category and category in self.memory_categories:
                 category_ids = {item['vector_id'] for item in self.memory_categories[category]}
-                search_results = []
+                search_results = [
                     (idx, dist, meta) for idx, dist, meta in search_results
                     if idx in category_ids
                 ]

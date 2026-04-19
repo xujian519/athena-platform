@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena通信系统 - WebSocket认证模块
 WebSocket Authentication for Communication System

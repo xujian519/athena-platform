@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 NLP性能监控系统
 NLP Performance Monitor
@@ -18,7 +19,6 @@ from datetime import datetime
 from typing import Any
 
 import psutil
-
 
 
 class PerformanceMonitor:

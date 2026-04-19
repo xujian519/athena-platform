@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 增强化学式分析器 - 集成ChemPy库
 Enhanced Chemical Formula Analyzer with ChemPy Integration
 """
 
-import json
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
 import re
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 尝试导入ChemPy
 try:
@@ -63,7 +61,7 @@ class EnhancedChemicalAnalyzer:
             'EDTA': '乙二胺四乙酸'
         }
 
-    def analyze_with_chempy(self, formula: str) -> Dict[str, Any | None]:
+    def analyze_with_chempy(self, formula: str) -> dict[str, Any | None]:
         """使用ChemPy分析化学式"""
         if not self.chempy_enabled:
             return None
@@ -82,7 +80,7 @@ class EnhancedChemicalAnalyzer:
             logger.debug(f"ChemPy解析失败 {formula}: {str(e)}")
             return None
 
-    def validate_formula_basic(self, formula: str) -> Dict[str, Any]:
+    def validate_formula_basic(self, formula: str) -> dict[str, Any]:
         """基础化学式验证"""
         result = {
             'formula': formula,
@@ -114,7 +112,7 @@ class EnhancedChemicalAnalyzer:
 
         return result
 
-    def extract_chemical_formulas(self, text: str) -> List[Dict[str, Any]]:
+    def extract_chemical_formulas(self, text: str) -> list[dict[str, Any]]:
         """提取并分析化学式"""
         formulas = []
 
@@ -159,7 +157,7 @@ class EnhancedChemicalAnalyzer:
 
         return formulas
 
-    def analyze_chemical_abbreviations(self, text: str) -> List[Dict[str, Any]]:
+    def analyze_chemical_abbreviations(self, text: str) -> list[dict[str, Any]]:
         """分析化学缩写"""
         abbreviations = []
 
@@ -189,7 +187,7 @@ class EnhancedChemicalAnalyzer:
 
         return abbreviations
 
-    def extract_chinese_chemical_terms(self, text: str) -> List[Dict[str, Any]]:
+    def extract_chinese_chemical_terms(self, text: str) -> list[dict[str, Any]]:
         """提取中文化学术语"""
         chinese_chemicals = []
 
@@ -224,7 +222,7 @@ class EnhancedChemicalAnalyzer:
         else:
             return 'other'
 
-    def comprehensive_analysis(self, text: str) -> Dict[str, Any]:
+    def comprehensive_analysis(self, text: str) -> dict[str, Any]:
         """综合化学分析"""
         logger.info(f"开始综合化学分析，文本长度: {len(text)} 字符")
 
@@ -258,7 +256,7 @@ class EnhancedChemicalAnalyzer:
 
         return results
 
-    def _generate_statistics(self, results: Dict[str, Any]) -> Dict[str, Any]:
+    def _generate_statistics(self, results: dict[str, Any]) -> dict[str, Any]:
         """生成统计信息"""
         formulas = results['chemical_formulas']
 
@@ -288,7 +286,7 @@ class EnhancedChemicalAnalyzer:
 
         return stats
 
-    def _generate_recommendations(self, results: Dict[str, Any]) -> List[str]:
+    def _generate_recommendations(self, results: dict[str, Any]) -> list[str]:
         """生成分析建议"""
         recommendations = []
         stats = results['statistics']
@@ -341,28 +339,28 @@ def demo_enhanced_analyzer() -> Any:
     results = analyzer.comprehensive_analysis(test_text)
 
     # 显示结果
-    logger.info(f"🔬 化学式分析结果:")
+    logger.info("🔬 化学式分析结果:")
     logger.info(f"   总数: {results['statistics']['total_formulas']}")
     logger.info(f"   有效: {results['statistics']['valid_formulas']}")
     logger.info(f"   高置信度: {results['statistics']['high_confidence']}")
     logger.info(f"   ChemPy分析: {results['statistics']['chempy_analyzed']}")
 
-    logger.info(f"\n📊 详细化学式:")
+    logger.info("\n📊 详细化学式:")
     for formula in results['chemical_formulas']:
         if formula.get('valid'):
             logger.info(f"   ✅ {formula['text']} - 分子量: {formula.get('molecular_weight', 'N/A')} g/mol ({formula.get('confidence', 'N/A')} 置信度)")
         else:
             logger.info(f"   ❌ {formula['text']} - 验证失败")
 
-    logger.info(f"\n🔤 中文化学术语:")
+    logger.info("\n🔤 中文化学术语:")
     for chemical in results['chinese_chemicals']:
         logger.info(f"   🔤 {chemical['text']} ({chemical.get('category', 'unknown')})")
 
-    logger.info(f"\n📝 化学缩写:")
+    logger.info("\n📝 化学缩写:")
     for abbr in results['abbreviations']:
         logger.info(f"   📝 {abbr['abbreviation']} = {abbr['full_name']}")
 
-    logger.info(f"\n💡 分析建议:")
+    logger.info("\n💡 分析建议:")
     for rec in results['recommendations']:
         logger.info(f"   {rec}")
 

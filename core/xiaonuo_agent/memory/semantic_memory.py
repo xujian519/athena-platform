@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 语义记忆 (Semantic Memory)
 基于Neo4j + Qdrant的长期语义知识记忆
@@ -19,8 +20,9 @@ import logging
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
+import numpy as np
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, PointStruct, VectorParams
 
@@ -47,9 +49,9 @@ class SemanticMemoryItem:
     knowledge_id: str
     knowledge_type: KnowledgeType
     content: str
-    embedding: list["key"] = None
-    entities: list["key"] = None
-    relations: dict[str, list["key"] = None  # {"related_to": ["id1", "id2"]}
+    embedding: list[float] | None = None
+    entities: list[str] | None = None
+    relations: dict[str, list[str]] | None = None  # {"related_to": ["id1", "id2"]}
     metadata: dict[str, Any] | None = None
     confidence: float = 1.0
     created_at: str = None
@@ -157,7 +159,7 @@ class SemanticMemory:
 
 
         # 使用文本哈希生成伪随机向量(仅为演示)
-        hash_obj = hashlib.md5(text.encode('utf-8', usedforsecurity=False)
+        hash_obj = hashlib.md5(text.encode('utf-8'), usedforsecurity=False)
         np.random.seed(int(hash_obj.hexdigest()[:8], 16))
         embedding = np.random.randn(self.embedding_dim).tolist()
 
@@ -171,8 +173,8 @@ class SemanticMemory:
         self,
         content: str,
         knowledge_type: KnowledgeType,
-        entities: list["key"] = None,
-        relations: dict[str, list["key"] = None,
+        entities: list[str] | None = None,
+        relations: dict[str, list[str]] | None = None,
         metadata: dict[str, Any] | None = None,
         confidence: float = 1.0,
     ) -> str:

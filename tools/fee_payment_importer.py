@@ -1,22 +1,19 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 2025年专利官费缴费记录导入工具
 基于成功经验，导入官费缴费记录到数据库
 """
 
-import pandas as pd
-import psycopg2
-from psycopg2.extras import execute_values, RealDictCursor
+import json
+import logging
+import re
+import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
-import os
-import sys
-import logging
-import uuid
-import re
-import json
+
+import pandas as pd
+import psycopg2
+from psycopg2.extras import execute_values
 
 # 配置日志
 logging.basicConfig(
@@ -104,7 +101,7 @@ class FeePaymentImporter:
 
         return patent_num
 
-    def analyze_excel_structure(self, excel_path: str) -> Dict:
+    def analyze_excel_structure(self, excel_path: str) -> dict:
         """分析Excel表格结构"""
         logger.info("📊 分析Excel表格结构...")
 
@@ -137,7 +134,7 @@ class FeePaymentImporter:
             for i, col in enumerate(df.columns):
                 print(f"  {i+1:2d}. {col}")
 
-            print(f"\n📊 数据概览:")
+            print("\n📊 数据概览:")
             print(f"  总行数: {len(df)} (不含汇总行)")
             print(f"  总列数: {len(df.columns)}")
 
@@ -168,7 +165,7 @@ class FeePaymentImporter:
                 elif '状态' in col_str:
                     column_mapping[col] = 'status'
 
-            print(f"\n🔍 智能识别的列映射:")
+            print("\n🔍 智能识别的列映射:")
             for col, mapped in column_mapping.items():
                 print(f"  {col} -> {mapped}")
 
@@ -182,7 +179,7 @@ class FeePaymentImporter:
             logger.error(f"分析失败: {str(e)}")
             return None
 
-    def extract_payment_records(self, excel_path: str, column_mapping: Dict) -> List[Dict]:
+    def extract_payment_records(self, excel_path: str, column_mapping: dict) -> list[dict]:
         """提取缴费记录"""
         logger.info("📝 提取缴费记录...")
 
@@ -339,12 +336,12 @@ class FeePaymentImporter:
                 logger.debug(f"[fee_payment_importer] Exception: {e}")
         return None
 
-    def analyze_payment_data(self, payment_records: List[Dict]) -> Dict:
+    def analyze_payment_data(self, payment_records: list[dict]) -> dict:
         """分析缴费数据"""
         logger.info("📈 分析缴费数据...")
 
         total_amount = sum(r['payment_amount'] for r in payment_records)
-        unique_patents = len(set(r['patent_number'] for r in payment_records))
+        unique_patents = len({r['patent_number'] for r in payment_records})
         payment_types = {}
 
         for record in payment_records:
@@ -358,8 +355,8 @@ class FeePaymentImporter:
             "payment_types": payment_types,
             "average_amount": total_amount / len(payment_records) if payment_records else 0,
             "date_range": {
-                "earliest": min((r['payment_date'] for r in payment_records if r['payment_date'])),
-                "latest": max((r['payment_date'] for r in payment_records if r['payment_date']))
+                "earliest": min(r['payment_date'] for r in payment_records if r['payment_date']),
+                "latest": max(r['payment_date'] for r in payment_records if r['payment_date'])
             }
         }
 
@@ -370,7 +367,7 @@ class FeePaymentImporter:
 
         return analysis
 
-    def save_to_database(self, payment_records: List[Dict]):
+    def save_to_database(self, payment_records: list[dict]):
         """保存到数据库"""
         logger.info("💾 保存数据到数据库...")
 
@@ -489,7 +486,7 @@ class FeePaymentImporter:
             if conn:
                 conn.close()
 
-    def export_results(self, payment_records: List[Dict], analysis: Dict, excel_path: str):
+    def export_results(self, payment_records: list[dict], analysis: dict, excel_path: str):
         """导出结果"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -581,12 +578,6 @@ def main():
     except Exception as e:
         logger.error(f"❌ 导入失败: {str(e)}")
         import traceback
-
-# 导入安全配置
-import sys
-from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent / "core"))
-from security.env_config import get_env_var, get_database_url, get_jwt_secret
         traceback.print_exc()
         return False
 

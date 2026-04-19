@@ -1,0 +1,80 @@
+# Athena 通信模块 - 本地测试配置
+# Communication Module - Local Test Configuration
+
+# 服务器配置
+server:
+  host: "127.0.0.1"
+  port: 8765
+  max_connections: 100
+  ping_interval: 20.0
+  ping_timeout: 20.0
+  max_message_size: 1048576  # 1MB
+
+# WebSocket 配置
+websocket:
+  enabled: true
+  compression: false
+  max_queue_size: 1000
+
+# 认证配置
+auth:
+  enabled: false  # 本地测试禁用认证
+
+# 持久化配置 (使用内存后端进行本地测试)
+persistence:
+  backend: "memory"
+  memory:
+    max_messages: 10000
+
+  # 消息保留策略
+  retention:
+    enabled: true
+    ttl: 3600  # 1小时
+    cleanup_interval: 300  # 5分钟
+
+# 监控配置
+monitoring:
+  enabled: true
+  prometheus:
+    enabled: false  # 本地测试禁用 Prometheus
+    port: 9090
+    path: "/metrics"
+
+  # 日志配置
+  logging:
+    level: "INFO"
+    format: "text"
+    output: "logs/athena/communication.log"
+
+# 性能配置
+performance:
+  batch:
+    enabled: true
+    max_size: 50
+    timeout: 0.1
+
+  queue:
+    max_size: 1000
+    flush_interval: 0.05
+
+# 消息重试配置
+retry:
+  max_attempts: 3
+  backoff_base: 1.0
+  max_backoff: 10.0
+
+# 死信队列配置
+dead_letter:
+  enabled: true
+  max_size: 1000
+
+# 健康检查配置
+health_check:
+  enabled: true
+  endpoint: "/health"
+  interval: 30
+
+# 优雅关闭配置
+graceful_shutdown:
+  timeout: 10
+  drain_timeout: 5

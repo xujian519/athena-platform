@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 DeepSeekMath V2技术集成部署器
 将论文技术集成到Athena智能工作平台的统一部署系统
@@ -9,16 +8,13 @@ DeepSeekMath V2技术集成部署器
 创建时间: 2025-11-28
 """
 
-import importlib.util
-from core.async_main import async_main
 import json
-import logging
-from core.logging_config import setup_logging
 import os
-import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -39,7 +35,7 @@ class DeepSeekMathV2Integrator:
             'timestamp': datetime.now().isoformat()
         }
 
-    def deploy_all_components(self) -> Dict[str, Any]:
+    def deploy_all_components(self) -> dict[str, Any]:
         """部署所有组件"""
         logger.info('开始部署DeepSeekMath V2技术组件...')
 
@@ -122,167 +118,22 @@ class DeepSeekMathV2Integrator:
         logger.info('🎉 DeepSeekMath V2技术部署完成!')
         return deployment_results
 
-    def _deploy_grpo_optimizer(self) -> Dict[str, Any]:
+    def _deploy_grpo_optimizer(self) -> dict[str, Any]:
         """部署GRPO优化器"""
         # 创建GRPO服务脚本
         grpo_service_path = self.deepseek_root / 'services' / 'grpo_service.py'
         grpo_service_path.parent.mkdir(parents=True, exist_ok=True)
 
-        grpo_service_code = '''#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-GRPO优化器服务
-基于DeepSeekMath V2的无奖励强化学习专利分析优化服务
-"""
+        # 创建API路由脚本
+        api_router_path = self.deepseek_root / 'services' / 'api_router.py'
+        api_router_path.parent.mkdir(parents=True, exist_ok=True)
+        api_router_code = '''# DeepSeekMath V2 API路由服务
+from fastapi import FastAPI
+app = FastAPI(title="DeepSeekMath V2 API")
 
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from fastapi import FastAPI, HTTPException
-
-# 导入统一认证模块
-from shared.auth.auth_middleware import (
-    create_auth_middleware,
-    setup_cors
-)
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import List, Dict, Optional
-import torch
-import json
-from datetime import datetime
-
-# 导入GRPO模块
-from grpo_optimizer import PatentGRPOOptimizer, GRPOConfig, PatentPolicyNetwork
-
-app = FastAPI(
-    title='Athena GRPO专利分析优化器',
-    description='基于DeepSeekMath V2的无奖励强化学习专利分析优化服务',
-    version='1.0.0'
-)
-
-
-# 服务端点配置
-SERVICE_ENDPOINTS = {
-    'grpo': 'http://localhost:8020',
-    'two_stage': 'http://localhost:8021',
-    'data_generator': 'http://localhost:8022',
-    'evaluation': 'http://localhost:8023'
-}
-
-@app.get('/')
-async def root():
-    return {
-        'service': 'Athena DeepSeekMath V2统一API',
-        'status': 'running',
-        'version': '1.0.0',
-        'description': 'DeepSeekMath V2技术集成统一API服务',
-        'integrated_services': list(SERVICE_ENDPOINTS.keys()),
-        'features': [
-            '🔍 GRPO优化器',
-            '🎯 两阶段学习',
-            '📊 数据生成器',
-            '📈 性能评估',
-            '🔗 统一接口'
-        ]
-    }
-
-@app.get('/health')
-async def health_check():
-    """统一健康检查"""
-    service_status = {}
-
-    for service_name, endpoint in SERVICE_ENDPOINTS.items():
-        try:
-            response = requests.get(f"{endpoint}/health", timeout=2)
-            service_status[service_name] = {
-                'status': 'healthy' if response.status_code == 200 else 'unhealthy',
-                'endpoint': endpoint,
-                'response_time': response.elapsed.total_seconds()
-            }
-        except Exception as e:
-            service_status[service_name] = {
-                'status': 'error',
-                'endpoint': endpoint,
-                'error': str(e)
-            }
-
-    all_healthy = all(status['status'] == 'healthy' for status in service_status.values())
-
-    return {
-        'overall_status': 'healthy' if all_healthy else 'partial',
-        'services': service_status,
-        'timestamp': datetime.now().isoformat()
-    }
-
-@app.post('/patent/optimize')
-async def optimize_patent_strategy(request: dict):
-    """专利策略优化接口"""
-    try:
-        response = requests.post(
-            f"{SERVICE_ENDPOINTS['grpo']}/optimize",
-            json=request,
-            timeout=30
-        )
-        return response.json()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"GRPO优化失败: {str(e)}")
-
-@app.post('/patent/analyze')
-async def analyze_patent(request: dict):
-    """专利分析接口"""
-    try:
-        response = requests.post(
-            f"{SERVICE_ENDPOINTS['two_stage']}/analyze",
-            json=request,
-            timeout=30
-        )
-        return response.json()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"专利分析失败: {str(e)}")
-
-@app.post('/patent/generate_data')
-async def generate_patent_data(request: dict):
-    """专利数据生成接口"""
-    try:
-        response = requests.post(
-            f"{SERVICE_ENDPOINTS['data_generator']}/generate_training_data",
-            json=request,
-            timeout=60
-        )
-        return response.json()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"数据生成失败: {str(e)}")
-
-@app.post('/evaluate')
-async def evaluate_performance(request: dict):
-    """性能评估接口"""
-    try:
-        response = requests.post(
-            f"{SERVICE_ENDPOINTS['evaluation']}/evaluate",
-            json=request,
-            timeout=30
-        )
-        return response.json()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"性能评估失败: {str(e)}")
-
-@app.get('/metrics')
-async def get_metrics():
-    """获取性能指标"""
-    try:
-        response = requests.get(
-            f"{SERVICE_ENDPOINTS['evaluation']}/metrics",
-            timeout=10
-        )
-        return response.json()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"获取指标失败: {str(e)}")
-
-if __name__ == '__main__':
-    import uvicorn
-    uvicorn.run(app, host='0.0.0.0', port=8025)
+@app.get("/health")
+async def health():
+    return {"status": "healthy"}
 '''
 
         with open(api_router_path, 'w', encoding='utf-8') as f:
@@ -469,7 +320,7 @@ echo '✅ 所有DeepSeekMath V2服务已停止'
             ]
         }
 
-    def _run_integration_tests(self) -> Dict[str, Any]:
+    def _run_integration_tests(self) -> dict[str, Any]:
         """运行集成测试"""
         test_results = {}
 
@@ -526,7 +377,7 @@ echo '✅ 所有DeepSeekMath V2服务已停止'
 
         return test_results
 
-    def _save_deployment_status(self, deployment_results: Dict[str, Any]):
+    def _save_deployment_status(self, deployment_results: dict[str, Any]):
         """保存部署状态"""
         status_path = self.deepseek_root / 'deployment_status.json'
 
@@ -569,18 +420,3 @@ if __name__ == '__main__':
             logger.info(f"  {status} {service}: {result['status']}")
 
     logger.info(f"\n📄 详细部署报告: {integrator.deepseek_root / 'deployment_status.json'}")
-'''
-
-        with write_file_path.open('w', encoding='utf-8') as f:
-            f.write(integrator_script_content)
-
-        # 设置执行权限
-        os.chmod(integrator_path, 0o755)
-
-        logger.info(f"集成部署器已创建: {integrator_path}")
-        logger.info('使用方法: python3 deploy_integrator.py')
-
-        return str(integrator_path)
-TodoWrite
-<arg_key>todos</arg_key>
-<arg_value>[{'content': '深度挖掘论文核心架构设计', 'status': 'completed', 'active_form': '深度挖掘论文核心架构设计'}, {'content': '实现GRPO核心算法模块', 'status': 'completed', 'active_form': '实现GRPO核心算法模块'}, {'content': '部署两阶段学习系统', 'status': 'completed', 'active_form': '部署两阶段学习系统'}, {'content': '集成数据生成和优化器', 'status': 'completed', 'active_form': '集成数据生成和优化器'}, {'content': '测试和性能评估', 'status': 'completed', 'active_form': '测试和性能评估'}]

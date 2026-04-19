@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 SQLite知识图谱服务
 SQLite Knowledge Graph Service
@@ -8,18 +7,17 @@ SQLite Knowledge Graph Service
 """
 
 import json
-from core.async_main import async_main
-import logging
-from core.logging_config import setup_logging
 import sqlite3
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import uvicorn
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -63,7 +61,7 @@ class SQLiteKnowledgeGraph:
         if self.connection:
             self.connection.close()
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """获取图谱统计信息"""
         stats = {'name': self.db_path.name}
 
@@ -91,7 +89,7 @@ class SQLiteKnowledgeGraph:
                     """)
                     stats['entity_types'] = dict(cursor.fetchall())
                 except Exception as e:
-                logger.error(f"Error: {e}", exc_info=True)
+                    logger.error(f"Error: {e}", exc_info=True)
 
             # 关系统计
             if 'relations' in tables:
@@ -109,7 +107,7 @@ class SQLiteKnowledgeGraph:
                     """)
                     stats['relation_types'] = dict(cursor.fetchall())
                 except Exception as e:
-                logger.error(f"Error: {e}", exc_info=True)
+                    logger.error(f"Error: {e}", exc_info=True)
 
         except Exception as e:
             logger.error(f"获取统计信息失败: {e}")
@@ -117,7 +115,7 @@ class SQLiteKnowledgeGraph:
 
         return stats
 
-    def search_entities(self, keyword: str, limit: int = 10) -> List[Dict]:
+    def search_entities(self, keyword: str, limit: int = 10) -> list[dict]:
         """搜索实体"""
         try:
             cursor = self.connection.cursor()
@@ -136,7 +134,7 @@ class SQLiteKnowledgeGraph:
                     try:
                         entity['properties'] = json.loads(entity['properties'])
                     except Exception as e:
-                    logger.error(f"Error: {e}", exc_info=True)
+                        logger.error(f"Error: {e}", exc_info=True)
                 results.append(entity)
 
             return results
@@ -145,7 +143,7 @@ class SQLiteKnowledgeGraph:
             logger.error(f"搜索实体失败: {e}")
             return []
 
-    def get_entity_relations(self, entity_id: str, limit: int = 20) -> List[Dict]:
+    def get_entity_relations(self, entity_id: str, limit: int = 20) -> list[dict]:
         """获取实体的关系"""
         try:
             cursor = self.connection.cursor()
@@ -168,7 +166,7 @@ class SQLiteKnowledgeGraph:
                     try:
                         relation['properties'] = json.loads(relation['properties'])
                     except Exception as e:
-                    logger.error(f"Error: {e}", exc_info=True)
+                        logger.error(f"Error: {e}", exc_info=True)
                 results.append(relation)
 
             return results
@@ -177,7 +175,7 @@ class SQLiteKnowledgeGraph:
             logger.error(f"获取实体关系失败: {e}")
             return []
 
-    def find_path(self, from_entity: str, to_entity: str, max_depth: int = 3) -> List[Dict]:
+    def find_path(self, from_entity: str, to_entity: str, max_depth: int = 3) -> list[dict]:
         """查找实体间路径（简化版）"""
         try:
             cursor = self.connection.cursor()
@@ -227,22 +225,22 @@ for name, path in GRAPHS.items():
         try:
             graph_instances[name] = SQLiteKnowledgeGraph(path)
         except Exception as e:
-        logger.error(f"Error: {e}", exc_info=True)
+            logger.error(f"Error: {e}", exc_info=True)
 
 # API模型定义
 class QueryRequest(BaseModel):
     """查询请求模型"""
     graph: str = 'main'
     query: str
-    parameters: Optional[Dict[str, Any]] = {}
+    parameters: dict[str, Any] | None = {}
 
 class EntityResponse(BaseModel):
     """实体响应模型"""
     entity_id: str
     entity_type: str
     name: str
-    properties: Dict[str, Any]
-    aliases: Optional[str]
+    properties: dict[str, Any]
+    aliases: str | None
 
 # API路由
 @app.on_event('shutdown')
@@ -393,7 +391,7 @@ async def execute_query(request: QueryRequest):
         # 获取结果
         results = []
         for row in cursor.fetchall():
-            results.append(dict(zip(columns, row)))
+            results.append(dict(zip(columns, row, strict=False)))
 
         return {
             'query': request.query,
@@ -405,7 +403,7 @@ async def execute_query(request: QueryRequest):
 
     except Exception as e:
         logger.error(f"查询执行失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 # 记忆系统集成接口
 @app.get('/memory/graph_entities')
@@ -434,10 +432,10 @@ async def get_memory_graph_entities():
                         try:
                             entity['properties'] = json.loads(entity['properties'])
                         except Exception as e:
-                        logger.error(f"Error: {e}", exc_info=True)
+                            logger.error(f"Error: {e}", exc_info=True)
                     memory_related.append(entity)
             except Exception as e:
-            logger.error(f"Error: {e}", exc_info=True)
+                logger.error(f"Error: {e}", exc_info=True)
 
     return {
         'entities': memory_related,

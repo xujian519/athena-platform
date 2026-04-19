@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利智能问答API服务 - GLM-4.7增强版 (向量搜索激活)
 Patent Q&A API Service with GLM-4.7 Integration
@@ -16,27 +15,28 @@ RAG流程：
 - NebulaGraph: ⏳ 待集成
 """
 
+import logging
+import os
+from datetime import datetime
+from typing import Any
+
+import psycopg2
+import psycopg2.pool  # 连接池
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
-from typing import List, Optional
-import psycopg2
-from core.async_main import async_main
-import psycopg2.pool  # 连接池
-import logging
-from core.logging_config import setup_logging
-from datetime import datetime
-import os
+from nebula3.Config import Config
 
-# ZhipuAI (GLM-4.7)
-from zhipuai import ZhipuAI
+# NebulaGraph知识图谱
+from nebula3.gclient.net import ConnectionPool
+from pydantic import BaseModel, Field
 
 # 向量嵌入生成
 from sentence_transformers import SentenceTransformer
 
-# NebulaGraph知识图谱
-from nebula3.gclient.net import ConnectionPool
-from nebula3.Config import Config
+# ZhipuAI (GLM-4.7)
+from zhipuai import ZhipuAI
+
+from core.logging_config import setup_logging
 
 logging.basicConfig(level=logging.INFO)
 logger = setup_logging()
@@ -203,13 +203,13 @@ class QAResponse(BaseModel):
     """问答响应"""
     question: str
     answer: str
-    sources: List[RAGContext] = []
+    sources: list[RAGContext] = []
     llm_used: bool = False
     model_used: str | None = None
 
 # ============ 核心功能函数 ============
 
-def generate_question_embedding(question: str) -> List[float | None]:
+def generate_question_embedding(question: str) -> list[float | None]:
     """
     生成问题的向量嵌入
 
@@ -230,7 +230,7 @@ def generate_question_embedding(question: str) -> List[float | None]:
         logger.error(f"Failed to generate embedding: {e}")
         return None
 
-def vector_search_cases(question: str, top_k: int = 5) -> List[dict]:
+def vector_search_cases(question: str, top_k: int = 5) -> list[dict]:
     """
     使用向量语义搜索无效决定案例
 
@@ -290,7 +290,7 @@ def vector_search_cases(question: str, top_k: int = 5) -> List[dict]:
 
     return documents
 
-def vector_search_laws(question: str, top_k: int = 5) -> List[dict]:
+def vector_search_laws(question: str, top_k: int = 5) -> list[dict]:
     """
     使用向量语义搜索法律法规
 
@@ -345,7 +345,7 @@ def vector_search_laws(question: str, top_k: int = 5) -> List[dict]:
 
     return documents
 
-def search_relevant_documents(question: str, top_k: int = 5, use_vector: bool = True, use_graph: bool = True) -> List[dict]:
+def search_relevant_documents(question: str, top_k: int = 5, use_vector: bool = True, use_graph: bool = True) -> list[dict]:
     """
     搜索相关文档（混合检索：向量50% + 图谱30% + 全文20%）
 
@@ -401,7 +401,7 @@ def search_relevant_documents(question: str, top_k: int = 5, use_vector: bool = 
     logger.warning("Vector and graph search returned no results, using text search fallback")
     return text_search_documents(question, top_k)
 
-def graph_search_related_entities(question: str, top_k: int = 5) -> List[dict]:
+def graph_search_related_entities(question: str, top_k: int = 5) -> list[dict]:
     """
     使用知识图谱查找相关实体和关联文档
 
@@ -479,7 +479,7 @@ def graph_search_related_entities(question: str, top_k: int = 5) -> List[dict]:
 
     return documents[:top_k]  # 返回前top_k个结果
 
-def text_search_documents(question: str, top_k: int = 5) -> List[dict]:
+def text_search_documents(question: str, top_k: int = 5) -> list[dict]:
     """
     全文搜索（备用方案）
 
@@ -614,7 +614,7 @@ def calculate_relevance(text: str, query: str) -> float:
 
     return relevance
 
-def build_rag_prompt(question: str, contexts: List[dict]) -> str:
+def build_rag_prompt(question: str, contexts: list[dict]) -> str:
     """构建RAG提示词"""
 
     # 格式化检索到的上下文
@@ -683,9 +683,9 @@ def call_glm_api(prompt: str) -> str:
 
     except Exception as e:
         logger.error(f"GLM API error: {e}")
-        raise HTTPException(status_code=500, detail=f"LLM generation failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"LLM generation failed: {str(e)}") from e
 
-def generate_simple_answer(question: str, contexts: List[dict]) -> str:
+def generate_simple_answer(question: str, contexts: list[dict]) -> str:
     """生成简单答案（不使用LLM）"""
 
     if not contexts:
@@ -785,7 +785,7 @@ async def get_stats():
 
         return stats
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post("/api/qa/ask", response_model=QAResponse)
 async def ask_question(request: QuestionRequest):
@@ -861,7 +861,7 @@ async def ask_question(request: QuestionRequest):
         raise
     except Exception as e:
         logger.error(f"Error processing question: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 if __name__ == "__main__":
     import uvicorn
@@ -886,10 +886,10 @@ if __name__ == "__main__":
     ║""")
     if GLM_API_KEY:
         print(f"    ✅ GLM-4.7已启用 (model: {GLM_MODEL})")
-        print(f"    ✅ API Key已配置")
+        print("    ✅ API Key已配置")
     else:
-        print(f"    ⚠️  GLM-4.7未启用")
-        print(f"    ⚠️  请设置环境变量: export ZHIPUAI_API_KEY='your_key_here'")
+        print("    ⚠️  GLM-4.7未启用")
+        print("    ⚠️  请设置环境变量: export ZHIPUAI_API_KEY='your_key_here'")
     print("""
     ╚══════════════════════════════════════════════════════════════════╝
     """)

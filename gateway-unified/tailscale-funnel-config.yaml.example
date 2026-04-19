@@ -1,0 +1,72 @@
+# Athena Gateway - Tailscale Funnel配置示例 (公共互联网访问)
+# 警告: 此模式会将Gateway暴露到公共互联网，请确保配置了强密码认证
+
+# 服务器配置
+server:
+  port: 8005
+  production: true
+  read_timeout: 30
+  write_timeout: 30
+  idle_timeout: 120
+
+# 日志配置
+logging:
+  level: warn
+  format: json
+  output: stdout
+
+# 监控配置
+monitoring:
+  enabled: true
+  port: 9090
+  path: /metrics
+
+# ========================================
+# Tailscale配置 - 公共互联网访问
+# ========================================
+# 警告: Funnel模式会将服务暴露到公共互联网
+# 必须配置强密码认证！
+
+tailscale:
+  # 使用funnel模式
+  mode: funnel
+
+  # 退出时重置
+  reset_on_exit: true
+
+  # Funnel模式不支持Tailscale身份认证
+  allow_tailscale_auth: false
+
+# 认证配置 (Funnel模式必须配置)
+auth:
+  # 使用密码认证
+  mode: password
+
+  # 强密码 (建议使用环境变量 GATEWAY_AUTH_PASSWORD 或 OPENCLAW_GATEWAY_PASSWORD)
+  # password: "your-strong-password-here"
+
+# ========================================
+# 访问方式说明
+# ========================================
+# 1. 启动Gateway后，自动配置Tailscale Funnel
+# 2. 访问地址: https://<hostname>.<tailnet>.ts.net/
+# 3. 公共互联网可访问
+# 4. 必须提供密码才能访问
+
+# ========================================
+# Funnel前置条件
+# ========================================
+# 1. Tailscale v1.38.3+
+# 2. 启用MagicDNS
+# 3. 启用HTTPS
+# 4. Funnel节点属性 (在Tailscale管理后台启用)
+# 5. macOS需要开源版Tailscale应用
+
+# ========================================
+# 环境变量配置 (推荐)
+# ========================================
+# export GATEWAY_TAILSCALE_MODE=funnel
+# export GATEWAY_AUTH_MODE=password
+# export GATEWAY_AUTH_PASSWORD="your-strong-password"
+# 或
+# export OPENCLAW_GATEWAY_PASSWORD="your-strong-password"

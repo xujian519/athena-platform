@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺高德地图MCP集成
 Xiaonuo Gaode Maps MCP Integration

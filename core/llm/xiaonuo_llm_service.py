@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主 GLM-4.7 LLM服务
 Xiaonuo Pisces GLM-4.7 LLM Service
@@ -16,10 +17,9 @@ import logging
 import os
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from openai import AsyncOpenAI
-
 
 logger = logging.getLogger(__name__)
 

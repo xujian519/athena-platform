@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena自主控制系统主控制器
 整合平台管理、决策引擎和Agent协调
@@ -635,7 +636,7 @@ class AutonomousController:
             # 更新平台健康目标进度
             if "service_status_counts" in platform_status:
                 error_count = platform_status["service_status_counts"].get("error", 0)
-                total_services = platform_status_status.get("total_services", 1)
+                total_services = platform_status.get("total_services", 1)
                 uptime_rate = (total_services - error_count) / total_services
                 self.system_goals["platform_health"]["current_uptime"] = uptime_rate
 
@@ -692,7 +693,7 @@ class AutonomousController:
 
             # 获取Agent状态
             athena_status = await self.agent_coordinator.get_agent_status(AgentRole.ATHENA)
-            xiaonuo_status = await self.agent_coordinator.get_agent_status(Agent.XIAONUO)
+            xiaonuo_status = await self.agent_coordinator.get_agent_status(AgentRole.XIAONUO)
 
             # 获取决策统计
             decision_stats = self.decision_engine.get_decision_stats()

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena平台全智能体记忆导入工具
 Import All Platform Agent Memories to Unified Memory System
@@ -59,12 +60,6 @@ class PlatformMemoryImporter:
                 "agent_id": "athena_wisdom",
                 "agent_type": "athena",
                 "name": "Athena.智慧女神",
-                "family_related": False,
-            },
-            "yunxi": {
-                "agent_id": "yunxi_vega",
-                "agent_type": "yunxi",
-                "name": "云熙.vega",
                 "family_related": False,
             },
             "xiaochen": {
@@ -509,8 +504,6 @@ class PlatformMemoryImporter:
             return self.agent_mapping["xiaona"]
         elif "athena" in user_id_lower:
             return self.agent_mapping["athena"]
-        elif "yunxi" in user_id_lower:
-            return self.agent_mapping["yunxi"]
         elif "xiaochen" in user_id_lower:
             return self.agent_mapping["xiaochen"]
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 实时执行监控系统 - 公共接口
 Real-time Execution Monitoring System - Public Interface
@@ -83,7 +84,7 @@ class _RealTimeMonitorWithWebSocket(RealTimeMonitor):
                 except json.JSONDecodeError:
                     logger.warning(f"无效的JSON消息: {message}")
 
-        except websockets.exceptions.ConnectionClosed:
+        except websockets.exceptions.ConnectionClosed as e:
             print(f"捕获websockets.exceptions.ConnectionClosed异常: {e}")
         finally:
             self.websocket_clients.remove(websocket)

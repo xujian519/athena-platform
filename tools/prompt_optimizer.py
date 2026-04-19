@@ -7,8 +7,6 @@ Claude Code 提示词优化器
 版本: v1.0.0
 """
 
-import re
-from typing import Optional, Dict, Any, List
 from pathlib import Path
 
 
@@ -61,7 +59,7 @@ class ClaudeCodePromptOptimizer:
 - 质量标准: 核心功能必须有测试
 """
 
-    def _load_templates(self) -> Dict[str, str]:
+    def _load_templates(self) -> dict[str, str]:
         """加载提示词模板"""
         return {
             "code_analysis": """
@@ -285,7 +283,7 @@ class ClaudeCodePromptOptimizer:
     def optimize(
         self,
         user_input: str,
-        context_type: Optional[str] = None
+        context_type: str | None = None
     ) -> str:
         """
         优化用户输入

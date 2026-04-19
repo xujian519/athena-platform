@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 显式规划器 - Explicit Planner
 按照《智能体设计模式》书中的标准实现规划模式

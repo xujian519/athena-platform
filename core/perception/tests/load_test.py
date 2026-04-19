@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 负载测试
 测试系统在高并发情况下的性能表现
@@ -6,12 +7,12 @@ Athena 感知模块 - 负载测试
 """
 
 import asyncio
-import time
-import statistics
-from datetime import datetime, timedelta
-from typing import List, Dict, Any
-from pathlib import Path
 import logging
+import statistics
+import time
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any
 
 # 配置日志
 logging.basicConfig(
@@ -28,8 +29,8 @@ class LoadTestResult:
         self.success_count = 0
         self.failure_count = 0
         self.total_requests = 0
-        self.response_times: List[float] = []
-        self.errors: List[Dict[str, Any]] = []
+        self.response_times: list[float] = []
+        self.errors: list[dict[str, Any]] = []
         self.start_time = None
         self.end_time = None
 
@@ -51,7 +52,7 @@ class LoadTestResult:
             "time": datetime.now().isoformat()
         })
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """获取统计数据"""
         if not self.response_times:
             return {
@@ -86,7 +87,7 @@ class LoadTestResult:
             "error_types": self._get_error_types()
         }
 
-    def _get_error_types(self) -> Dict[str, int]:
+    def _get_error_types(self) -> dict[str, int]:
         """获取错误类型统计"""
         error_types = {}
         for error in self.errors:
@@ -108,7 +109,7 @@ class LoadTester:
 
     def __init__(self):
         """初始化负载测试器"""
-        self.test_results: Dict[str, LoadTestResult] = {}
+        self.test_results: dict[str, LoadTestResult] = {}
 
     async def test_concurrent_ocr(
         self,
@@ -135,14 +136,14 @@ class LoadTester:
         try:
             import sys
             # 添加感知模块目录到路径
-            perception_dir = str(Path(__file__).parent.parent)
+            str(Path(__file__).parent.parent)
             core_dir = str(Path(__file__).parent.parent.parent)
             if core_dir not in sys.path:
                 sys.path.insert(0, core_dir)
 
             # 使用绝对导入
-            from core.perception.processors.tesseract_ocr import TesseractOCRProcessor
             from core.perception.cache.redis_cache import RedisCacheManager
+            from core.perception.processors.tesseract_ocr import TesseractOCRProcessor
 
             ocr_processor = TesseractOCRProcessor()
             cache_manager = RedisCacheManager() if use_cache else None
@@ -239,8 +240,8 @@ class LoadTester:
             if core_dir not in sys.path:
                 sys.path.insert(0, core_dir)
 
-            from core.perception.processors.tesseract_ocr import TesseractOCRProcessor
             from core.perception.cache.redis_cache import RedisCacheManager
+            from core.perception.processors.tesseract_ocr import TesseractOCRProcessor
 
             ocr_processor = TesseractOCRProcessor()
             cache_manager = RedisCacheManager()
@@ -478,7 +479,7 @@ class LoadTester:
 
         return result
 
-    def _print_statistics(self, test_name: str, stats: Dict[str, Any]):
+    def _print_statistics(self, test_name: str, stats: dict[str, Any]):
         """打印统计数据"""
         logger.info(f"\n{'='*60}")
         logger.info(f"📊 {test_name} - 测试结果")
@@ -497,13 +498,13 @@ class LoadTester:
         logger.info(f"测试时长:         {stats.get('duration_seconds', 0):.2f}秒")
 
         if stats.get('total_errors', 0) > 0:
-            logger.info(f"错误统计:")
+            logger.info("错误统计:")
             for error_type, count in stats.get('error_types', {}).items():
                 logger.info(f"  - {error_type}: {count}")
 
         logger.info(f"{'='*60}\n")
 
-    def get_all_results(self) -> Dict[str, Dict[str, Any]]:
+    def get_all_results(self) -> dict[str, dict[str, Any]]:
         """获取所有测试结果"""
         return {
             test_name: result.get_statistics()
@@ -530,7 +531,6 @@ class LoadTester:
 
 # 使用示例
 if __name__ == "__main__":
-    import sys
 
     async def main():
         tester = LoadTester()
@@ -541,8 +541,8 @@ if __name__ == "__main__":
         # 如果测试图像不存在，创建一个简单的测试图像
         from pathlib import Path
         if not Path(test_image).exists():
-            import numpy as np
             import cv2
+            import numpy as np
             # 创建白色测试图像
             img = np.ones((100, 200, 3), dtype=np.uint8) * 255
             cv2.imwrite(test_image, img)

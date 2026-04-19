@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺主编排器 - 优化增强版
 Xiaonuo Main Orchestrator - Optimization Enhanced
@@ -20,7 +21,7 @@ import logging
 import uuid
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import yaml
 
@@ -29,7 +30,6 @@ from core.logging_config import setup_logging
 
 # 导入原始编排器
 from .xiaonuo_main_orchestrator import (
-    ExecutionResult,
     OrchestrationMode,
     OrchestrationReport,
     Task,
@@ -39,10 +39,6 @@ from .xiaonuo_main_orchestrator import (
     XiaonuoMainOrchestrator,
 )
 from .xiaonuo_orchestration_hub import (
-    AgentCapability,
-    AgentInfo,
-    DynamicTaskDecomposer,
-    ResourceAwareScheduler,
     SubTask,
 )
 

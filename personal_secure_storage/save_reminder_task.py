@@ -3,11 +3,11 @@
 保存用户任务到小娜记忆系统
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-from pathlib import Path
+import sqlite3
 from datetime import datetime, timedelta
+from pathlib import Path
+
 
 def save_reminder_task() -> None:
     """保存提醒事项任务"""
@@ -151,10 +151,10 @@ def save_reminder_task() -> None:
     conn.commit()
     conn.close()
 
-    print(f'✅ 任务已成功保存到小娜记忆系统')
+    print('✅ 任务已成功保存到小娜记忆系统')
     print(f'✅ 执行时间: {tomorrow_date} 上午{tomorrow_time}')
-    print(f'✅ 已同步到提醒事项和日历')
-    print(f'✅ 任务状态：待完成')
+    print('✅ 已同步到提醒事项和日历')
+    print('✅ 任务状态：待完成')
 
 if __name__ == "__main__":
     save_reminder_task()

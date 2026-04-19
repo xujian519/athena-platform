@@ -1,11 +1,9 @@
-import json
 import logging
 import re
 from collections import defaultdict
 from datetime import datetime
-from functools import reduce
 from pathlib import Path
-from typing import List
+from typing import Any
 from uuid import uuid4
 
 import peewee
@@ -61,7 +59,7 @@ class Law(BaseModel):
     __str__ = __repr__
 
 
-class LawDatabase(object):
+class LawDatabase:
 
     def __init__(self) -> None:
         self.db = db
@@ -76,7 +74,7 @@ class LawDatabase(object):
             'folder': folder
         })
 
-    def get_laws(self, name: str = None, publish_at: datetime | str = None) -> List[Law]:
+    def get_laws(self, name: str = None, publish_at: datetime | str = None) -> list[Law]:
         if publish_at and isinstance(publish_at, datetime):
             publish_at = publish_at.strftime('%Y-%m-%d')
         expr = None
@@ -142,7 +140,7 @@ law_db = LawDatabase()
 def update_database() -> None:
     for folder, f in get_laws():
         category = law_db.get_or_create_category(folder)
-        ret = re.search("\((\d{4,4}\-\d{2,2}\-\d{2,2})\)", f)
+        ret = re.search(r"\((\d{4,4}\-\d{2,2}\-\d{2,2})\)", f)
         if not ret:
             continue
         pub_at = ret.group(1)
@@ -220,7 +218,7 @@ def update_status_same_name() -> None:
     law_map = defaultdict(list)
     for law in Law.select().where(Law.ver > 1):
         law_map[law.name].append(law)
-    for name, laws in law_map.items():
+    for _name, laws in law_map.items():
         laws.sort(key=lambda x: x.publish)
         for i in range(0, len(laws) - 1):
             law = laws[i]

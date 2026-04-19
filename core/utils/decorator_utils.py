@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 通用装饰器模块
 """
-from typing import Optional
 import functools
 import logging
 import time
@@ -10,7 +10,7 @@ from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 
-def log_errors(logger_obj: Optional[logging.Logger | None = None):
+def log_errors(logger_obj: logging.Logger | None | None = None):
     """记录错误的装饰器"""
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)

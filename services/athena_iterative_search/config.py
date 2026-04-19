@@ -4,10 +4,10 @@ Athena迭代式搜索系统配置文件
 基于XiaoXi搜索架构，针对专利搜索优化
 """
 
-import logging
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
+
 
 class SearchStrategy(Enum):
     """搜索策略枚举"""

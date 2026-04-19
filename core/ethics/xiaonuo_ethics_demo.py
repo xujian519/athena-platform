@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺伦理框架演示程序
 Xiaonuo Ethics Framework Demo
@@ -8,8 +9,7 @@ Xiaonuo Ethics Framework Demo
 
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
-
+from typing import Any
 
 # 确保项目路径
 project_root = Path(__file__).parent.parent.parent

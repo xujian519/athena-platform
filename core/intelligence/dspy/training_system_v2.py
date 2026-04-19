@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 DSPy专利案例分析训练系统 V2 - 改进版
 DSPy Patent Case Analysis Training System V2 - Enhanced
@@ -20,7 +21,7 @@ import pickle
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import dspy
 

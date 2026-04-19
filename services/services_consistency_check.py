@@ -3,13 +3,10 @@
 Services目录一致性检查脚本
 """
 
-import os
-from core.async_main import async_main
-import json
-import yaml
-from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Tuple
+from pathlib import Path
+from typing import Any
+
 
 class ServicesConsistencyChecker:
     def __init__(self, base_path: str = "/Users/xujian/Athena工作平台/services"):
@@ -22,7 +19,7 @@ class ServicesConsistencyChecker:
             "summary": {}
         }
 
-    def scan_services(self) -> List[Dict]:
+    def scan_services(self) -> list[dict]:
         """扫描所有服务目录"""
         services = []
         exclude_dirs = {"scripts", "config", "archives", "__pycache__", ".git", "node_modules", "logs"}
@@ -70,7 +67,7 @@ class ServicesConsistencyChecker:
         else:
             return "其他"
 
-    def _check_service_structure(self, path: Path, service_info: Dict) -> Any:
+    def _check_service_structure(self, path: Path, service_info: dict) -> Any:
         """检查服务结构"""
         # 查找Python文件
         py_files = list(path.rglob("*.py"))
@@ -114,7 +111,7 @@ class ServicesConsistencyChecker:
         if test_dirs or test_files:
             service_info["has_tests"] = True
 
-    def check_consistency(self) -> Dict:
+    def check_consistency(self) -> dict:
         """执行一致性检查"""
         services = self.scan_services()
 
@@ -151,7 +148,7 @@ class ServicesConsistencyChecker:
 
         return self.results
 
-    def _check_service_issues(self, service: Dict) -> Any:
+    def _check_service_issues(self, service: dict) -> Any:
         """检查单个服务的问题"""
         issues = []
 

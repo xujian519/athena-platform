@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 在线学习意图识别系统
 Online Learning Intent Recognition System
@@ -13,15 +14,15 @@ import time
 from collections import deque
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import joblib
+import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 
 # ML imports
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import LabelEncoder
-
 
 
 class OnlineLearningIntentClassifier:

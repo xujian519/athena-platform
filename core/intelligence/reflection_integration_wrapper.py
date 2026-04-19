@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 反思引擎集成包装器
 Reflection Engine Integration Wrapper

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 审查意见答复集成服务
 Office Action Response Integration Service
@@ -132,7 +133,7 @@ class OAIntegrationService:
                 self.interaction.state.parsed_oa = parsed_oa
 
                 # 生成确认消息（实际应用中会等待用户确认）
-                confirm_result = await self.interaction._step_parse_confirm()
+                await self.interaction._step_parse_confirm()
 
                 # 应用用户修改（如果有）
                 if self.interaction.state.user_modifications:
@@ -187,9 +188,9 @@ class OAIntegrationService:
 
     def _apply_modifications(self, parsed_oa: ParsedOfficeAction, modifications: dict[str, Any]) -> ParsedOfficeAction:
         """应用用户修改"""
-        for field, value in modifications.items():
-            if hasattr(parsed_oa, field):
-                setattr(parsed_oa, field, value)
+        for field_name, value in modifications.items():
+            if hasattr(parsed_oa, field_name):
+                setattr(parsed_oa, field_name, value)
         return parsed_oa
 
     def export_result(self, result: OAProcessingResult, format: str = "json") -> str:
@@ -235,7 +236,7 @@ class OAIntegrationService:
     def _export_markdown(self, result: OAProcessingResult) -> str:
         """导出Markdown格式"""
         md = []
-        md.append(f"# 📋 审查意见处理报告\n")
+        md.append("# 📋 审查意见处理报告\n")
         md.append(f"**ID**: {result.oa_id}")
         md.append(f"**状态**: {'✅ 成功' if result.success else '❌ 失败'}")
         md.append(f"**阶段**: {result.stage}")
@@ -349,7 +350,7 @@ async def main():
 
         # 统计
         stats = service.get_statistics()
-        print(f"\n📈 统计信息:")
+        print("\n📈 统计信息:")
         print(f"总处理数: {stats['total_processed']}")
         print(f"成功率: {stats['success_rate']:.1%}")
         print(f"平均置信度: {stats['avg_parsing_confidence']:.1%}")

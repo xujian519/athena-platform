@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 工具中文标签映射
 Tool Chinese Labels Mapping

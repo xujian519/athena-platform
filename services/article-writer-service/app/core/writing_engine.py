@@ -8,37 +8,33 @@ Unified Article Writing Engine
 
 import asyncio
 import logging
-from typing import List, Dict, Any, Optional
-from dataclasses import dataclass
-from datetime import datetime
-from pathlib import Path
 
 # 导入现有模块
 import sys
+from dataclasses import dataclass
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent.parent))
 
-from core.llm.writing_materials_manager import WritingMaterialsManager, get_materials_manager
 from core.judgment_vector_db.generation.article_generator import (
-    ArticleGenerator,
-    GeneratedArticle,
+    ArticleQuality,
     ArticleType,
-    ArticleQuality
+    GeneratedArticle,
 )
+from core.llm.writing_materials_manager import get_materials_manager
+
 # 导入风格管理器
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "services" / "self-media-agent"))
 try:
-    from app.core.enhanced_content_styles import (
-        XiaochenStyleManager,
-        ContentStyle,
-        ContentPurpose
-    )
+    from app.core.enhanced_content_styles import ContentPurpose, ContentStyle, XiaochenStyleManager
 except ImportError:
     # 简化版本，不依赖完整导入
     XiaochenStyleManager = None
     ContentStyle = None
     ContentPurpose = None
 
-from ..openclaw import ArticleContent as OpenClawArticle
 
 logger = logging.getLogger(__name__)
 
@@ -49,20 +45,20 @@ class WritingRequest:
     topic: str                      # 主题
     article_type: str = "ip_education"  # 文章类型
     style: str = "shandong_humor"     # 风格
-    platforms: List[str] = None      # 目标平台
-    requirements: Dict[str, Any] = None  # 特殊要求
-    word_count: Optional[int] = None  # 目标字数
+    platforms: list[str] = None      # 目标平台
+    requirements: dict[str, Any] = None  # 特殊要求
+    word_count: int | None = None  # 目标字数
 
 
 @dataclass
 class WritingResult:
     """撰写结果"""
     success: bool
-    article: Optional[GeneratedArticle] = None
-    markdown_content: Optional[str] = None
-    metadata: Dict[str, Any] = None
-    errors: List[str] = None
-    warnings: List[str] = None
+    article: GeneratedArticle | None = None
+    markdown_content: str | None = None
+    metadata: dict[str, Any] = None
+    errors: list[str] = None
+    warnings: list[str] = None
 
     def __post_init__(self):
         if self.metadata is None:
@@ -179,7 +175,7 @@ class ArticleWritingEngine:
         }
         return style_mapping.get(style, ContentStyle.SHANDONG_HUMOR)
 
-    async def _search_materials(self, topic: str, top_k: int = 5) -> List[Dict]:
+    async def _search_materials(self, topic: str, top_k: int = 5) -> list[dict]:
         """搜索相关素材"""
         try:
             materials = self.materials_manager.search_materials(
@@ -196,9 +192,9 @@ class ArticleWritingEngine:
         self,
         request: WritingRequest,
         article_type: ArticleType,
-        style_guide: Dict,
-        materials: List[Dict]
-    ) -> Optional[GeneratedArticle]:
+        style_guide: dict,
+        materials: list[dict]
+    ) -> GeneratedArticle | None:
         """
         生成文章
 
@@ -261,7 +257,7 @@ class ArticleWritingEngine:
 
         return article
 
-    def _generate_main_content(self, topic: str, materials: List[Dict]) -> str:
+    def _generate_main_content(self, topic: str, materials: list[dict]) -> str:
         """生成主要内容"""
         content_parts = []
 
@@ -275,7 +271,7 @@ class ArticleWritingEngine:
 
         # 添加主体内容
         content_parts.append(f"## 关于{topic}\n\n")
-        content_parts.append(f"这个话题涉及到多个方面，我们来逐一分析。\n\n")
+        content_parts.append("这个话题涉及到多个方面，我们来逐一分析。\n\n")
         content_parts.append("### 核心要点\n\n")
         content_parts.append("第一，要理解基本概念。\n\n")
         content_parts.append("第二，掌握关键流程。\n\n")
@@ -283,7 +279,7 @@ class ArticleWritingEngine:
 
         return "".join(content_parts)
 
-    def _generate_title(self, topic: str, style_guide: Dict) -> str:
+    def _generate_title(self, topic: str, style_guide: dict) -> str:
         """生成标题"""
         style = style_guide.get("style", "shandong_humor")
 
@@ -320,7 +316,7 @@ class ArticleWritingEngine:
 
         return "\n".join(lines)
 
-    def _check_quality(self, article: GeneratedArticle) -> List[str]:
+    def _check_quality(self, article: GeneratedArticle) -> list[str]:
         """检查文章质量"""
         warnings = []
 
@@ -342,8 +338,8 @@ class ArticleWritingEngine:
     async def handover_to_openclaw(
         self,
         article: GeneratedArticle,
-        platforms: List[str]
-    ) -> Dict[str, Any]:
+        platforms: list[str]
+    ) -> dict[str, Any]:
         """
         交接到OpenClaw
 
@@ -354,7 +350,7 @@ class ArticleWritingEngine:
         Returns:
             交接结果
         """
-        from ..openclaw import OpenClawHandover, ArticleContent
+        from ..openclaw import ArticleContent, OpenClawHandover
 
         handover = OpenClawHandover()
 
@@ -390,7 +386,7 @@ async def write_article(
     topic: str,
     article_type: str = "ip_education",
     style: str = "shandong_humor",
-    platforms: Optional[List[str]] = None,
+    platforms: list[str] | None = None,
     handover: bool = False
 ) -> WritingResult:
     """
@@ -446,7 +442,7 @@ if __name__ == "__main__":
             )
         )
 
-        print(f"\n✅ 撰写结果:")
+        print("\n✅ 撰写结果:")
         print(f"   成功: {result.success}")
         if result.article:
             print(f"   标题: {result.article.title}")
@@ -459,7 +455,7 @@ if __name__ == "__main__":
 
         # 测试交接
         if result.success:
-            print(f"\n📤 测试OpenClaw交接...")
+            print("\n📤 测试OpenClaw交接...")
             handover_result = await engine.handover_to_openclaw(
                 result.article,
                 ["小红书"]

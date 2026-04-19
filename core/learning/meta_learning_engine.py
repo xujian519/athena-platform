@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 元学习引擎
 Meta Learning Engine
@@ -12,8 +13,6 @@ Meta Learning Engine
 创建时间: 2026-01-01
 版本: 1.0.0
 """
-import numpy as np
-
 import asyncio
 import logging
 import random
@@ -22,11 +21,11 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Protocol, runtime_checkable
 
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, Dataset
-
 
 
 @runtime_checkable

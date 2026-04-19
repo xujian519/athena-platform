@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化版执行模块 - 任务优先级队列
 Optimized Execution Module - Task Priority Queue

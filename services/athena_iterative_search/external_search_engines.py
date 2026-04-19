@@ -5,15 +5,10 @@
 """
 
 import asyncio
-import base64
-import hashlib
-import hmac
-import json
 import logging
 import time
 from datetime import datetime
-from typing import Any, Dict, List, Optional
-from urllib.parse import quote, urlencode
+from typing import Any
 
 import aiohttp
 
@@ -21,9 +16,7 @@ from .types import (
     ExternalSearchResult,
     PatentMetadata,
     PatentSearchResult,
-    PatentType,
     SearchEngineType,
-    SearchResult,
 )
 
 logger = logging.getLogger(__name__)
@@ -31,7 +24,7 @@ logger = logging.getLogger(__name__)
 class BaseSearchEngine:
     """搜索引擎基类"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         self.config = config
         self.api_key = config.get('api_key')
         self.api_secret = config.get('api_secret')
@@ -92,7 +85,7 @@ class BaseSearchEngine:
             return PatentMetadata(
                 patent_id=patent_number,
                 patent_name=result.title,
-                source_file=external_result.source_engine
+                source_file=result.source_engine
             )
 
         return None
@@ -100,7 +93,7 @@ class BaseSearchEngine:
 class BaiduSearchEngine(BaseSearchEngine):
     """百度搜索引擎API实现"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         super().__init__(config)
         self.base_url = 'https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/plugin'
         self.access_token = None
@@ -128,7 +121,7 @@ class BaiduSearchEngine(BaseSearchEngine):
                 else:
                     raise Exception(f"百度API认证失败: {response.status}")
 
-    async def search(self, query: str, max_results: int = 10) -> List[PatentSearchResult]:
+    async def search(self, query: str, max_results: int = 10) -> list[PatentSearchResult]:
         """执行百度搜索"""
         await self._rate_limit()
 
@@ -160,7 +153,7 @@ class BaiduSearchEngine(BaseSearchEngine):
             logger.error(f"百度搜索失败: {e}")
             return []
 
-    def _parse_baidu_response(self, data: Dict) -> List[PatentSearchResult]:
+    def _parse_baidu_response(self, data: dict) -> list[PatentSearchResult]:
         """解析百度搜索响应"""
         results = []
 
@@ -183,11 +176,11 @@ class BaiduSearchEngine(BaseSearchEngine):
 class BingSearchEngine(BaseSearchEngine):
     """Bing搜索引擎API实现"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         super().__init__(config)
         self.base_url = 'https://api.bing.microsoft.com/v7.0/search'
 
-    async def search(self, query: str, max_results: int = 10) -> List[PatentSearchResult]:
+    async def search(self, query: str, max_results: int = 10) -> list[PatentSearchResult]:
         """执行Bing搜索"""
         await self._rate_limit()
 
@@ -218,7 +211,7 @@ class BingSearchEngine(BaseSearchEngine):
             logger.error(f"Bing搜索失败: {e}")
             return []
 
-    def _parse_bing_response(self, data: Dict) -> List[PatentSearchResult]:
+    def _parse_bing_response(self, data: dict) -> list[PatentSearchResult]:
         """解析Bing搜索响应"""
         results = []
 
@@ -241,11 +234,11 @@ class BingSearchEngine(BaseSearchEngine):
 class SogouSearchEngine(BaseSearchEngine):
     """搜狗搜索引擎API实现"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         super().__init__(config)
         self.base_url = 'https://api.sogou.com/sss'
 
-    async def search(self, query: str, max_results: int = 10) -> List[PatentSearchResult]:
+    async def search(self, query: str, max_results: int = 10) -> list[PatentSearchResult]:
         """执行搜狗搜索"""
         await self._rate_limit()
 
@@ -270,7 +263,7 @@ class SogouSearchEngine(BaseSearchEngine):
             logger.error(f"搜狗搜索失败: {e}")
             return []
 
-    def _parse_sogou_response(self, data: Dict) -> List[PatentSearchResult]:
+    def _parse_sogou_response(self, data: dict) -> list[PatentSearchResult]:
         """解析搜狗搜索响应"""
         results = []
 
@@ -293,11 +286,11 @@ class SogouSearchEngine(BaseSearchEngine):
 class GooglePatentSearchEngine(BaseSearchEngine):
     """Google专利搜索引擎"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         super().__init__(config)
         self.base_url = 'https://patents.google.com'
 
-    async def search(self, query: str, max_results: int = 10) -> List[PatentSearchResult]:
+    async def search(self, query: str, max_results: int = 10) -> list[PatentSearchResult]:
         """执行Google专利搜索"""
         await self._rate_limit()
 
@@ -323,7 +316,7 @@ class GooglePatentSearchEngine(BaseSearchEngine):
             logger.error(f"Google专利搜索失败: {e}")
             return []
 
-    def _parse_google_patents_html(self, html: str) -> List[PatentSearchResult]:
+    def _parse_google_patents_html(self, html: str) -> list[PatentSearchResult]:
         """解析Google专利搜索HTML响应"""
         results = []
 
@@ -338,7 +331,7 @@ class GooglePatentSearchEngine(BaseSearchEngine):
             for item in patent_items:
                 try:
                     title_elem = item.find('h3')
-                    title = title_elem.get_text(strip()) if title_elem else ''
+                    title = title_elem.get_text(strip=True) if title_elem else ''
 
                     link_elem = item.find('a')
                     url = link_elem.get('href') if link_elem else ''
@@ -348,7 +341,7 @@ class GooglePatentSearchEngine(BaseSearchEngine):
 
                     # 提取摘要
                     snippet_elem = item.find('p', class_='snippet')
-                    snippet = snippet_elem.get_text(strip()) if snippet_elem else ''
+                    snippet = snippet_elem.get_text(strip=True) if snippet_elem else ''
 
                     external_result = ExternalSearchResult(
                         title=title,
@@ -396,7 +389,7 @@ class GooglePatentSearchEngine(BaseSearchEngine):
 class ExternalSearchEngineManager:
     """外部搜索引擎管理器"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         self.config = config
         self.engines = {}
         self._init_engines()
@@ -420,7 +413,7 @@ class ExternalSearchEngineManager:
         # 初始化Google专利搜索（默认启用）
         self.engines['google_patents'] = GooglePatentSearchEngine(engine_configs.get('google_patents', {}))
 
-    async def search_all(self, query: str, max_results: int = 10) -> List[PatentSearchResult]:
+    async def search_all(self, query: str, max_results: int = 10) -> list[PatentSearchResult]:
         """并行搜索所有启用的搜索引擎"""
         if not self.engines:
             logger.warning('没有可用的外部搜索引擎')
@@ -448,7 +441,7 @@ class ExternalSearchEngineManager:
 
         return results[:max_results]
 
-    async def _search_single_engine(self, engine_name: str, engine: BaseSearchEngine, query: str, max_results: int) -> List[PatentSearchResult]:
+    async def _search_single_engine(self, engine_name: str, engine: BaseSearchEngine, query: str, max_results: int) -> list[PatentSearchResult]:
         """单个搜索引擎搜索"""
         try:
             logger.info(f"使用 {engine_name} 搜索: {query}")
@@ -459,7 +452,7 @@ class ExternalSearchEngineManager:
             logger.error(f"搜索引擎 {engine_name} 搜索失败: {e}")
             return []
 
-    def _deduplicate_and_rank(self, results: List[PatentSearchResult]) -> List[PatentSearchResult]:
+    def _deduplicate_and_rank(self, results: list[PatentSearchResult]) -> list[PatentSearchResult]:
         """去重并排序"""
         if not results:
             return results
@@ -479,6 +472,6 @@ class ExternalSearchEngineManager:
 
         return deduplicated
 
-    def get_available_engines(self) -> List[str]:
+    def get_available_engines(self) -> list[str]:
         """获取可用的搜索引擎列表"""
         return list(self.engines.keys())

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Agent注册发现系统
 Agent Registry and Discovery System

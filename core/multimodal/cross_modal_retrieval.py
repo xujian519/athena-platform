@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 跨模态检索系统
 Cross-Modal Retrieval System
@@ -14,11 +15,11 @@ import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
+import numpy as np
 
 from core.multimodal.multimodal_fusion import (
-    FusionStrategy,
     ModalityData,
     ModalityType,
     MultimodalFusion,
@@ -172,7 +173,7 @@ class CrossModalRetrieval:
             self.logger.error(f"❌ 索引失败: {e}")
             return False
 
-    def index_batch(self, items: list[tuple[str, ModalityData, dict[str, Any]) -> int:
+    def index_batch(self, items: list[tuple[str, ModalityData, dict[str, Any]]]) -> int:
         """
         批量索引
 

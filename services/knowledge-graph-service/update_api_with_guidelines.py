@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 更新知识图谱API服务以支持审查指南
 """
 
 import os
-from core.async_main import async_main
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import shutil
-import logging
-from core.logging_config import setup_logging
 from pathlib import Path
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -25,7 +22,7 @@ def update_main_app() -> None:
         logger.error(f"主应用文件不存在: {main_app_path}")
         return False
 
-    with open(main_app_path, 'r', encoding='utf-8') as f:
+    with open(main_app_path, encoding='utf-8') as f:
         content = f.read()
 
     # 检查是否已导入

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺本地BERT模型管理器
 使用本地缓存的高质量中文模型来升级NLP系统
@@ -23,8 +24,9 @@ import os
 import threading
 import time
 from functools import lru_cache
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
+import numpy as np
 import torch
 from transformers import AutoModel, AutoModelForTokenClassification, AutoTokenizer
 

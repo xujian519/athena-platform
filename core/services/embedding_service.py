@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一嵌入服务
 Unified Embedding Service
@@ -13,7 +14,7 @@ Unified Embedding Service
 import asyncio
 import logging
 
-
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

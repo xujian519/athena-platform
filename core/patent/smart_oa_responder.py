@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能意见答复系统
 Smart Office Action Response System
@@ -775,13 +776,13 @@ class SmartOfficeActionResponder:
             graph_density = knowledge_graph.get("graph_density", 0)
             core_features_count = len(knowledge_graph.get("core_innovation_features", []))
 
-            rationale += f"\n\n### 技术知识图谱分析:\n"
+            rationale += "\n\n### 技术知识图谱分析:\n"
             rationale += f"- 图谱密度: {graph_density:.3f} (反映技术复杂度)\n"
             rationale += f"- 核心创新特征: {core_features_count}个 (反映创新强度)\n"
 
             if core_features_count > 0:
-                rationale += f"- 基于图谱分析，目标专利具有明确的创新技术特征，"
-                rationale += f"建议通过争辩这些核心特征与对比文件的技术差异来答复。\n"
+                rationale += "- 基于图谱分析，目标专利具有明确的创新技术特征，"
+                rationale += "建议通过争辩这些核心特征与对比文件的技术差异来答复。\n"
 
         return rationale
 

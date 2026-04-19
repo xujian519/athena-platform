@@ -1,0 +1,325 @@
+# Prometheus告警规则 - OA答复系统
+# Prometheus Alert Rules - Office Action Response System
+#
+# 定义OA答复系统的关键指标告警规则
+# Define critical metric alert rules for the OA response system
+#
+# 作者: 小诺·双鱼公主
+# 创建时间: 2026-01-26
+# 版本: v1.0.0
+
+groups:
+  # ===== 性能告警组 =====
+  - name: oa_response_performance
+    interval: 30s
+    rules:
+      # 高响应时间告警
+      - alert: OAResponseHighLatency
+        expr: |
+          histogram_quantile(0.95,
+            rate(oa_response_duration_seconds_bucket[5m])
+          ) > 10
+        for: 2m
+        labels:
+          severity: warning
+          service: oa_response_system
+        annotations:
+          summary: "OA答复响应时间过高"
+          description: "95分位响应时间超过10秒，当前值: {{ $value }}秒"
+          impact: "用户体验下降，可能影响工作效率"
+
+      # 超高响应时间严重告警
+      - alert: OAResponseVeryHighLatency
+        expr: |
+          histogram_quantile(0.95,
+            rate(oa_response_duration_seconds_bucket[5m])
+          ) > 30
+        for: 1m
+        labels:
+          severity: critical
+          service: oa_response_system
+        annotations:
+          summary: "OA答复响应时间严重过高"
+          description: "95分位响应时间超过30秒，当前值: {{ $value }}秒"
+          impact: "系统几乎不可用，需要立即处理"
+
+      # 错误率告警
+      - alert: OAResponseHighErrorRate
+        expr: |
+          rate(oa_response_errors_total[5m]) /
+          rate(oa_response_requests_total[5m]) > 0.05
+        for: 3m
+        labels:
+          severity: warning
+          service: oa_response_system
+        annotations:
+          summary: "OA答复错误率过高"
+          description: "错误率超过5%，当前值: {{ $value | humanizePercentage }}"
+          impact: "部分答复请求失败，影响服务质量"
+
+      # 严重错误率告警
+      - alert: OAResponseCriticalErrorRate
+        expr: |
+          rate(oa_response_errors_total[5m]) /
+          rate(oa_response_requests_total[5m]) > 0.15
+        for: 1m
+        labels:
+          severity: critical
+          service: oa_response_system
+        annotations:
+          summary: "OA答复错误率严重过高"
+          description: "错误率超过15%，当前值: {{ $value | humanizePercentage }}"
+          impact: "系统严重故障，大量请求失败"
+
+  # ===== 质量告警组 =====
+  - name: oa_response_quality
+    interval: 30s
+    rules:
+      # 质量分数过低告警
+      - alert: OAResponseLowQualityScore
+        expr: |
+          avg(oa_response_quality_score) < 0.7
+        for: 5m
+        labels:
+          severity: warning
+          service: oa_response_system
+        annotations:
+          summary: "OA答复质量分数过低"
+          description: "平均质量分数低于0.7，当前值: {{ $value }}"
+          impact: "答复质量下降，可能影响专利授权率"
+
+      # 严重质量问题告警
+      - alert: OAResponseVeryLowQualityScore
+        expr: |
+          avg(oa_response_quality_score) < 0.5
+        for: 3m
+        labels:
+          severity: critical
+          service: oa_response_system
+        annotations:
+          summary: "OA答复质量严重过低"
+          description: "平均质量分数低于0.5，当前值: {{ $value }}"
+          impact: "答复质量严重不达标，需要立即优化"
+
+      # 模式匹配率过低告警
+      - alert: OAResponseLowPatternMatchRate
+        expr: |
+          rate(oa_pattern_retrieval_matches_total[10m]) /
+          rate(oa_pattern_retrieval_requests_total[10m]) < 0.3
+        for: 10m
+        labels:
+          severity: warning
+          service: oa_response_system
+        annotations:
+          summary: "模式匹配率过低"
+          description: "历史模式匹配成功率低于30%，当前值: {{ $value | humanizePercentage }}"
+          impact: "历史经验复用效果差，无法充分利用已有知识"
+
+  # ===== 资源使用告警组 =====
+  - name: oa_response_resources
+    interval: 30s
+    rules:
+      # 内存使用率告警
+      - alert: OAResponseHighMemoryUsage
+        expr: |
+          process_resident_memory_bytes{job="oa_response_system"} /
+          (1024 * 1024 * 1024) > 2
+        for: 5m
+        labels:
+          severity: warning
+          service: oa_response_system
+        annotations:
+          summary: "OA答复系统内存使用过高"
+          description: "内存使用超过2GB，当前值: {{ $value }}GB"
+          impact: "可能导致性能下降或OOM"
+
+      # 严重内存使用告警
+      - alert: OAResponseCriticalMemoryUsage
+        expr: |
+          process_resident_memory_bytes{job="oa_response_system"} /
+          (1024 * 1024 * 1024) > 4
+        for: 2m
+        labels:
+          severity: critical
+          service: oa_response_system
+        annotations:
+          summary: "OA答复系统内存使用严重过高"
+          description: "内存使用超过4GB，当前值: {{ $value }}GB"
+          impact: "系统可能崩溃，需要立即扩容或优化"
+
+      # CPU使用率告警
+      - alert: OAResponseHighCPUUsage
+        expr: |
+          rate(process_cpu_seconds_total{job="oa_response_system"}[5m]) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          service: oa_response_system
+        annotations:
+          summary: "OA答复系统CPU使用过高"
+          description: "CPU使用率超过80%，当前值: {{ $value | humanizePercentage }}"
+          impact: "系统负载高，响应时间可能增加"
+
+  # === 存储告警组 =====
+  - name: oa_response_storage
+    interval: 1m
+    rules:
+      # 工作流存储空间告警
+      - alert: OAWorkflowStorageSpaceLow
+        expr: |
+          (node_filesystem_avail_bytes{mountpoint="/data/oa_responses"} /
+          node_filesystem_size_bytes{mountpoint="/data/oa_responses"}) < 0.2
+        for: 5m
+        labels:
+          severity: warning
+          service: oa_response_system
+        annotations:
+          summary: "OA工作流存储空间不足"
+          description: "可用存储空间低于20%，当前值: {{ $value | humanizePercentage }}"
+          impact: "无法继续保存新的工作流记录"
+
+      # 严重存储空间告警
+      - alert: OAWorkflowStorageSpaceCritical
+        expr: |
+          (node_filesystem_avail_bytes{mountpoint="/data/oa_responses"} /
+          node_filesystem_size_bytes{mountpoint="/data/oa_responses"}) < 0.1
+        for: 2m
+        labels:
+          severity: critical
+          service: oa_response_system
+        annotations:
+          summary: "OA工作流存储空间严重不足"
+          description: "可用存储空间低于10%，当前值: {{ $value | humanizePercentage }}"
+          impact: "系统可能无法写入数据，需要立即清理或扩容"
+
+      # 模式存储空间告警
+      - alert: OAPatternStorageSpaceLow
+        expr: |
+          (node_filesystem_avail_bytes{mountpoint="/data/oa_responses/patterns"} /
+          node_filesystem_size_bytes{mountpoint="/data/oa_responses/patterns"}) < 0.15
+        for: 5m
+        labels:
+          severity: warning
+          service: oa_response_system
+        annotations:
+          summary: "OA模式存储空间不足"
+          description: "可用存储空间低于15%，当前值: {{ $value | humanizePercentage }}"
+          impact: "无法继续保存新的模式"
+
+  # ===== 可用性告警组 =====
+  - name: oa_response_availability
+    interval: 30s
+    rules:
+      # 服务不可用告警
+      - alert: OAResponseServiceDown
+        expr: |
+          up{job="oa_response_system"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: oa_response_system
+        annotations:
+          summary: "OA答复服务不可用"
+          description: "服务已停止响应超过1分钟"
+          impact: "系统完全不可用，需要立即重启"
+
+      # 服务实例过少告警
+      - alert: OAResponseLowInstanceCount
+        expr: |
+          count(up{job="oa_response_system"} == 1) < 2
+        for: 3m
+        labels:
+          severity: warning
+          service: oa_response_system
+        annotations:
+          summary: "OA答复服务实例过少"
+          description: "运行中的服务实例少于2个，当前值: {{ $value }}"
+          impact: "系统容错能力下降，存在单点故障风险"
+
+  # ===== 业务指标告警组 =====
+  - name: oa_response_business
+    interval: 1m
+    rules:
+      # 待处理队列积压告警
+      - alert: OAResponseQueueBacklog
+        expr: |
+          oa_response_queue_size > 100
+        for: 5m
+        labels:
+          severity: warning
+          service: oa_response_system
+        annotations:
+          summary: "OA答复队列积压"
+          description: "待处理请求数量超过100，当前值: {{ $value }}"
+          impact: "响应时间增加，用户体验下降"
+
+      # 严重队列积压告警
+      - alert: OAResponseSevereQueueBacklog
+        expr: |
+          oa_response_queue_size > 500
+        for: 2m
+        labels:
+          severity: critical
+          service: oa_response_system
+        annotations:
+          summary: "OA答复队列严重积压"
+          description: "待处理请求数量超过500，当前值: {{ $value }}"
+          impact: "系统处理能力严重不足，需要扩容"
+
+      # 模式提取失败率告警
+      - alert: OAPatternExtractionHighFailureRate
+        expr: |
+          rate(oa_pattern_extraction_failures_total[10m]) /
+          rate(oa_pattern_extraction_attempts_total[10m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: oa_response_system
+        annotations:
+          summary: "模式提取失败率过高"
+          description: "模式提取失败率超过10%，当前值: {{ $value | humanizePercentage }}"
+          impact: "无法有效积累经验，系统学习能力下降"
+
+      # 成功率下降告警
+      - alert: OAResponseSuccessRateDeclining
+        expr: |
+          avg_over_time(oa_response_success_rate[1h]) <
+          avg_over_time(oa_response_success_rate[24h]) - 0.1
+        for: 10m
+        labels:
+          severity: warning
+          service: oa_response_system
+        annotations:
+          summary: "OA答复成功率下降"
+          description: "1小时平均成功率比24小时平均成功率低10%以上"
+          impact: "答复质量或系统性能出现下降趋势，需要调查"
+
+  # ===== 数据完整性告警组 =====
+  - name: oa_response_data_integrity
+    interval: 5m
+    rules:
+      # 工作流记录丢失告警
+      - alert: OAWorkflowRecordLoss
+        expr: |
+          increase(oa_workflow_records_lost_total[1h]) > 0
+        for: 1m
+        labels:
+          severity: critical
+          service: oa_response_system
+        annotations:
+          summary: "工作流记录丢失"
+          description: "检测到工作流记录丢失，丢失数量: {{ $value }}"
+          impact: "数据不完整，影响模式提取和分析"
+
+      # 模式保存失败告警
+      - alert: OAPatternSaveFailure
+        expr: |
+          increase(oa_pattern_save_failures_total[30m]) > 5
+        for: 1m
+        labels:
+          severity: warning
+          service: oa_response_system
+        annotations:
+          summary: "模式保存失败过多"
+          description: "30分钟内模式保存失败超过5次，失败次数: {{ $value }}"
+          impact: "无法保存新的模式，影响经验积累"

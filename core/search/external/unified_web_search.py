@@ -1,9 +1,10 @@
+from __future__ import annotations
 """
 统一Web搜索模块
 Unified Web Search Module
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 class UnifiedWebSearchManager:

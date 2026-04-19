@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强学习引擎 - 公共接口
 Enhanced Learning Engine - Public Interface
@@ -22,7 +23,6 @@ from .types import (
     LearningResult,
     LearningStrategy,
 )
-
 
 # =============================================================================
 # === 学习配置类 ===

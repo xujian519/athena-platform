@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena智能搜索选择器 - 工具评估器
 Athena Search Selector - Tool Evaluator
@@ -12,16 +13,15 @@ Athena Search Selector - Tool Evaluator
 """
 
 import logging
-from typing import Any, Optional
 
 from ...registry.tool_registry import ToolRegistry, ToolStatus
 from ...standards.base_search_tool import QueryComplexity, SearchCapabilities, SearchType
 from .types import (
-    QueryAnalysis,
-    ToolRecommendation,
-    SelectionStrategy,
-    QueryIntent,
     DomainType,
+    QueryAnalysis,
+    QueryIntent,
+    SelectionStrategy,
+    ToolRecommendation,
 )
 
 logger = logging.getLogger(__name__)

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 快速学习机制 - 类型定义
 Rapid Learning - Type Definitions

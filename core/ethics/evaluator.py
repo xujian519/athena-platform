@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 伦理评估器 - 评估AI行动是否符合宪法
 Ethics Evaluator - Evaluate AI Actions Against Constitution
@@ -12,10 +13,10 @@ Ethics Evaluator - Evaluate AI Actions Against Constitution
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from .constitution import AthenaConstitution, EthicalPrinciple, PrinciplePriority, PrincipleSource
-from .wittgenstein_guard import LanguageGame, WittgensteinGuard
+from .constitution import AthenaConstitution, EthicalPrinciple, PrinciplePriority
+from .wittgenstein_guard import WittgensteinGuard
 
 # 导入配置加载器(可选,如果配置文件存在则使用)
 try:

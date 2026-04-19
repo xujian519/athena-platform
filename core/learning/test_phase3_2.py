@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Phase 3.2 学习与优先级测试脚本
 Testing Phase 3.2 Learning & Prioritization

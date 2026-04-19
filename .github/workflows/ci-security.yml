@@ -1,0 +1,27 @@
+name: CI - Security
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  secure-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up QEMU for multi-arch builds
+        uses: docker/setup-qemu-action@v2
+      - name: Build secure image
+        run: |
+          docker buildx create --name sec-builder --use || true
+          docker buildx build --platform linux/amd64,linux/arm64 -t athena-api-gateway-secure:latest -f docker/Dockerfile.secure --load .
+      - name: Trivy vulnerability scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: athena-api-gateway-secure:latest
+          format: 'table'
+          severity: 'HIGH,CRITICAL'
+          exit-code: '1'

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 工具分组管理系统基础模块
 
@@ -9,6 +10,7 @@ Created: 2026-01-20
 Version: v1.0.0
 """
 
+import functools
 import logging
 import math
 import threading
@@ -16,7 +18,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -223,11 +225,12 @@ class ToolDefinition:
 
 class ToolRegistry:
     """
-    工具注册中心(线程安全版)
+    工具注册中心(线程安全版 + 缓存优化)
 
     管理所有工具的注册、查询、选择和性能跟踪。
 
     线程安全:使用RLock保证多线程环境下的安全访问。
+    缓存优化:使用LRU缓存提升查询性能 (P2-1)
     """
 
     def __init__(self):
@@ -240,11 +243,21 @@ class ToolRegistry:
         # 🔒 线程安全:添加可重入锁
         self._lock = threading.RLock()
 
-        logger.info("🔧 ToolRegistry初始化完成(线程安全版)")
+        # 💾 缓存统计 (P2-1)
+        self._cache_stats = {
+            "find_by_category_hits": 0,
+            "find_by_category_misses": 0,
+            "find_by_domain_hits": 0,
+            "find_by_domain_misses": 0,
+            "search_tools_hits": 0,
+            "search_tools_misses": 0,
+        }
+
+        logger.info("🔧 ToolRegistry初始化完成(线程安全版 + 缓存优化)")
 
     def register(self, tool: ToolDefinition) -> "ToolRegistry":
         """
-        注册工具(线程安全)
+        注册工具(线程安全 + 缓存失效, P2-1)
 
         Args:
             tool: ToolDefinition对象
@@ -279,6 +292,9 @@ class ToolRegistry:
                     self._tag_index[tag] = set()
                 self._tag_index[tag].add(tool_id)
 
+            # 💾 缓存失效 (P2-1) - 工具注册后清除相关缓存
+            self.clear_cache()
+
             logger.info(
                 f"✅ 工具已注册: {tool.name} "
                 f"(分类: {tool.category.value}, 优先级: {tool.priority.value})"
@@ -298,11 +314,33 @@ class ToolRegistry:
         """
         return self._tools.get(tool_id)
 
+    @functools.lru_cache(maxsize=128)
     def find_by_category(
+        self, category: ToolCategory, enabled_only: bool = True
+    ) -> tuple[ToolDefinition, ...]:
+        """
+        按分类查找工具 (带LRU缓存, P2-1)
+
+        Args:
+            category: 工具分类
+            enabled_only: 是否只返回启用的工具
+
+        Returns:
+            工具列表 (元组，可哈希以支持缓存)
+        """
+        tool_ids = self._category_index.get(category, set())
+        tools = tuple(self._tools[tid] for tid in tool_ids if tid in self._tools)
+
+        if enabled_only:
+            tools = tuple(t for t in tools if t.enabled)
+
+        return tools
+
+    def find_by_category_uncached(
         self, category: ToolCategory, enabled_only: bool = True
     ) -> list[ToolDefinition]:
         """
-        按分类查找工具
+        按分类查找工具 (无缓存版本，用于更新缓存)
 
         Args:
             category: 工具分类
@@ -311,17 +349,37 @@ class ToolRegistry:
         Returns:
             工具列表
         """
-        tool_ids = self._category_index.get(category, set())
-        tools = [self._tools[tid] for tid in tool_ids if tid in self._tools]
+        # 清除缓存
+        self.find_by_category.cache_clear()
+
+        # 调用带缓存版本
+        return list(self.find_by_category(category, enabled_only))
+
+    @functools.lru_cache(maxsize=256)
+    def find_by_domain(self, domain: str, enabled_only: bool = True) -> tuple[ToolDefinition, ...]:
+        """
+        按领域查找工具 (带LRU缓存, P2-1)
+
+        Args:
+            domain: 领域名称
+            enabled_only: 是否只返回启用的工具
+
+        Returns:
+            工具列表 (元组，可哈希以支持缓存)
+        """
+        tool_ids = self._domain_index.get(domain, set())
+        tools = tuple(self._tools[tid] for tid in tool_ids if tid in self._tools)
 
         if enabled_only:
-            tools = [t for t in tools if t.enabled]
+            tools = tuple(t for t in tools if t.enabled)
 
         return tools
 
-    def find_by_domain(self, domain: str, enabled_only: bool = True) -> list[ToolDefinition]:
+    def find_by_domain_uncached(
+        self, domain: str, enabled_only: bool = True
+    ) -> list[ToolDefinition]:
         """
-        按领域查找工具
+        按领域查找工具 (无缓存版本，用于更新缓存)
 
         Args:
             domain: 领域名称
@@ -330,13 +388,11 @@ class ToolRegistry:
         Returns:
             工具列表
         """
-        tool_ids = self._domain_index.get(domain, set())
-        tools = [self._tools[tid] for tid in tool_ids if tid in self._tools]
+        # 清除缓存
+        self.find_by_domain.cache_clear()
 
-        if enabled_only:
-            tools = [t for t in tools if t.enabled]
-
-        return tools
+        # 调用带缓存版本
+        return list(self.find_by_domain(domain, enabled_only))
 
     def find_by_tag(self, tag: str, enabled_only: bool = True) -> list[ToolDefinition]:
         """
@@ -433,7 +489,7 @@ class ToolRegistry:
 
     def get_statistics(self) -> dict[str, Any]:
         """
-        获取工具统计信息
+        获取工具统计信息 (包含缓存统计, P2-1)
 
         Returns:
             统计信息字典
@@ -449,6 +505,9 @@ class ToolRegistry:
         total_success = sum(t.performance.successful_calls for t in self._tools.values())
         overall_success_rate = total_success / total_calls if total_calls > 0 else 0.0
 
+        # 💾 缓存统计 (P2-1)
+        cache_stats = self._get_cache_statistics()
+
         return {
             "total_tools": total_tools,
             "enabled_tools": enabled_tools,
@@ -457,7 +516,46 @@ class ToolRegistry:
             "total_calls": total_calls,
             "total_success": total_success,
             "overall_success_rate": overall_success_rate,
+            "cache_performance": cache_stats,  # 新增缓存性能统计
         }
+
+    def _get_cache_statistics(self) -> dict[str, Any]:
+        """
+        获取缓存统计信息 (P2-1)
+
+        Returns:
+            缓存统计字典
+        """
+        # 获取各个方法的缓存信息
+        find_by_category_info = self.find_by_category.cache_info()
+        find_by_domain_info = self.find_by_domain.cache_info()
+
+        return {
+            "find_by_category": {
+                "hits": find_by_category_info.hits,
+                "misses": find_by_category_info.misses,
+                "size": find_by_category_info.currsize,
+                "hit_rate": find_by_category_info.hits
+                / max(find_by_category_info.hits + find_by_category_info.misses, 1),
+            },
+            "find_by_domain": {
+                "hits": find_by_domain_info.hits,
+                "misses": find_by_domain_info.misses,
+                "size": find_by_domain_info.currsize,
+                "hit_rate": find_by_domain_info.hits
+                / max(find_by_domain_info.hits + find_by_domain_info.misses, 1),
+            },
+        }
+
+    def clear_cache(self):
+        """
+        清除所有缓存 (P2-1)
+
+        在工具注册/更新后调用，以保持缓存一致性。
+        """
+        self.find_by_category.cache_clear()
+        self.find_by_domain.cache_clear()
+        logger.info("🧹 工具缓存已清除")
 
     def update_tool_performance(self, tool_id: str, execution_time: float, success: bool):
         """
@@ -482,8 +580,58 @@ _global_registry = ToolRegistry()
 
 
 def get_global_registry() -> ToolRegistry:
-    """获取全局工具注册中心"""
+    """
+    获取全局工具注册中心
+
+    注意: 此函数已弃用，请使用 get_unified_registry() 代替。
+    为了向后兼容，此函数将继续可用。
+
+    Returns:
+        ToolRegistry: 全局工具注册中心实例
+
+    Deprecated:
+        使用 get_unified_registry() 替代
+    """
+    import warnings
+
+    warnings.warn(
+        "get_global_registry() 已弃用，请使用 get_unified_registry() 代替",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+
     return _global_registry
+
+
+# ================================
+# 向后兼容Shim (v2.0.0)
+# ================================
+
+
+def get_unified_registry():
+    """
+    获取统一工具注册表（新接口）
+
+    这是推荐使用的工具注册表访问方式。
+
+    Returns:
+        UnifiedToolRegistry: 统一工具注册表实例
+
+    Example:
+        >>> from core.tools.base import get_unified_registry
+        >>> registry = get_unified_registry()
+        >>> tools = registry.find_by_category(ToolCategory.PATENT_SEARCH)
+    """
+    try:
+        # 动态导入避免循环依赖
+        from core.tools.unified_registry import UnifiedToolRegistry
+
+        return UnifiedToolRegistry.get_instance()
+
+    except Exception as e:
+        # 回退到旧注册表
+        logger.warning(f"⚠️ 无法加载统一注册表，回退到旧注册表: {e}")
+        return _global_registry
 
 
 __all__ = [
@@ -494,4 +642,5 @@ __all__ = [
     "ToolPriority",
     "ToolRegistry",
     "get_global_registry",
+    "get_unified_registry",  # 新增
 ]

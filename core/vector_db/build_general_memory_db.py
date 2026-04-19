@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena工作平台 - 共用向量库构建器
 构建用于Athena和小诺的通用记忆向量库
@@ -12,7 +13,6 @@ import os
 import sys
 from datetime import datetime
 from typing import Any
-
 
 from config.numpy_compatibility import random
 from core.logging_config import setup_logging
@@ -28,34 +28,34 @@ logger = setup_logging()
 
 class GeneralMemoryBuilder:
     """共用记忆库构建器"""
-    
+
     def __init__(self):
         self.vector_db_manager = VectorDBManager()
         self.collection_name = 'general_memory_db'
-    
+
     def create_general_memory_collection(self) -> bool:
         """创建共用记忆集合"""
         logger.info(f"🏗️ 创建共用记忆库: {self.collection_name}")
-        
+
         # 创建集合 (1024维,适用于通用知识)
         success = self.vector_db_manager.create_collection(
             collection_name=self.collection_name,
             vector_size=1024,
             distance='Cosine'
         )
-        
+
         if success:
             self.vector_db_manager.existing_collections.add(self.collection_name)
             logger.info(f"✅ 共用记忆库创建成功: {self.collection_name}")
         else:
             logger.error(f"❌ 共用记忆库创建失败: {self.collection_name}")
-        
+
         return success
-    
+
     def generate_sample_general_memory_data(self) -> list[dict[str, Any]]:
         """生成示例通用记忆数据"""
         logger.info('📝 生成示例通用记忆数据...')
-        
+
         sample_data = [
             # 通用知识
             {
@@ -117,7 +117,7 @@ class GeneralMemoryBuilder:
             {
                 'id': 'preference_002',
                 'text': '用户关注专利法律知识,经常询问专利申请和保护相关问题。',
-                'category': '用户偏好', 
+                'category': '用户偏好',
                 'type': 'preference',
                 'domain': 'user_profile',
                 'user': 'patent_user'
@@ -140,17 +140,17 @@ class GeneralMemoryBuilder:
                 'user': 'researcher_001'
             }
         ]
-        
+
         logger.info(f"✅ 生成了 {len(sample_data)} 条示例数据")
         return sample_data
-    
+
     def generate_embedding_vector(self, text: str) -> list[float]:
         """生成嵌入向量 - 在实际应用中这里应该调用真实的embedding模型"""
         # 使用随机向量作为占位符,实际应用中应使用真实的嵌入模型
         # 如 sentence-transformers, OpenAI embeddings, etc.
         vector = random(1024).tolist()
         return vector
-    
+
     def build_general_memory_db(self) -> bool:
         """构建共用记忆数据库"""
         logger.info('🚀 开始构建共用记忆库...')
@@ -193,45 +193,45 @@ class GeneralMemoryBuilder:
             logger.error('❌ 共用记忆库构建失败')
 
         return success
-    
+
     def test_general_memory_db(self) -> bool:
         """测试共用记忆库功能"""
         logger.info('🧪 测试共用记忆库功能...')
-        
+
         if self.collection_name not in self.vector_db_manager.existing_collections:
             logger.error(f"❌ 集合 {self.collection_name} 不存在")
             return False
-        
+
         # 生成测试向量
         test_vector = self.generate_embedding_vector('人工智能技术')
-        
+
         from core.vector_db.vector_db_manager import VectorQuery
-        
+
         query = VectorQuery(
             vector=test_vector,
             text='人工智能技术',
             limit=3,
             with_payload=True
         )
-        
+
         results = self.vector_db_manager.search_in_collection(self.collection_name, query)
-        
+
         logger.info(f"🔍 在共用记忆库中找到 {len(results)} 个结果")
-        
+
         for i, result in enumerate(results):
             logger.info(f"  {i+1}. 评分: {result.score:.3f}")
             logger.info(f"     内容: {result.payload.get('text', '')[:100]}...")
             logger.info(f"     类别: {result.payload.get('category', 'Unknown')}")
             print()
-        
+
         return len(results) > 0
 
 def main():
     """主函数 - 构建共用向量库"""
     logger.info('🏗️  开始构建Athena和小诺共用向量库...')
-    
+
     builder = GeneralMemoryBuilder()
-    
+
     logger.info(str('='*70))
     logger.info('🏗️  Athena和小诺共用向量库构建器')
     logger.info(str('='*70))
@@ -239,13 +239,13 @@ def main():
     logger.info("📊 向量维度: 1024 (通用知识)")
     logger.info("🎯 用途: 存储Athena和小诺的通用记忆")
     logger.info(str('='*70))
-    
+
     # 构建共用记忆库
     success = builder.build_general_memory_db()
-    
+
     if success:
         logger.info("\n✅ 共用向量库构建成功!")
-        
+
         # 测试功能
         test_success = builder.test_general_memory_db()
         if test_success:
@@ -256,12 +256,12 @@ def main():
     else:
         logger.info("\n❌ 共用向量库构建失败")
         return False
-    
+
     logger.info(str("\n" + '='*70))
     logger.info('🎯 共用向量库已成功集成到Athena和小诺的记忆系统')
     logger.info('📋 现在可以存储和检索通用知识、对话历史、用户偏好等信息')
     logger.info(str('='*70))
-    
+
     return success
 
 if __name__ == '__main__':

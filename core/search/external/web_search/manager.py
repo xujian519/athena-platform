@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 联网搜索引擎 - 统一管理器
 Web Search Engines - Unified Manager
@@ -11,7 +12,7 @@ Web Search Engines - Unified Manager
 版本: 2.1.0
 """
 
-from typing import Any, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 from core.search.external.web_search.api_key_manager import APIKeyManager
@@ -140,7 +141,7 @@ class UnifiedWebSearchManager:
     async def search(
         self,
         query: str,
-        engines: Optional[list[SearchEngineType]] | None = None,
+        engines: list[SearchEngineType] | None | None = None,
         **kwargs: Any,
     ) -> SearchResponse:
         """

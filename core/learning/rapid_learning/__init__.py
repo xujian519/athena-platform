@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 快速学习机制 - 公共接口
 Rapid Learning - Public Interface
@@ -13,7 +14,7 @@ Rapid Learning - Public Interface
 
 from typing import Any
 
-from .engine import RapidLearningEngine, SKLEARN_AVAILABLE, TORCH_AVAILABLE
+from .engine import SKLEARN_AVAILABLE, TORCH_AVAILABLE, RapidLearningEngine
 from .learners import ActiveLearner, CurriculumScheduler, MetaLearner
 from .replay_buffer import PrioritizedReplayBuffer
 from .types import (
@@ -36,8 +37,8 @@ async def learn_from_data(
     importance: float = 1.0,
 ) -> bool:
     """从数据学习"""
-    from datetime import datetime
     import uuid
+    from datetime import datetime
 
     experience = LearningExperience(
         experience_id=str(uuid.uuid4()),

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena 感知模块 - 企业级重试管理器
 支持指数退避、智能重试、重试限制
@@ -8,10 +9,11 @@ Athena 感知模块 - 企业级重试管理器
 import asyncio
 import logging
 import random
-from datetime import datetime, timedelta
-from typing import Optional, Callable, Any, List, Type, Dict
+from collections.abc import Callable
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -34,8 +36,8 @@ class RetryConfig:
     backoff_multiplier: float = 2.0    # 退避倍数
     jitter: bool = True                # 添加随机抖动
     jitter_range: float = 0.1          # 抖动范围（0-1）
-    retry_on: List[Type[Exception]] = field(default_factory=list)
-    stop_on: List[Type[Exception]] = field(default_factory=list)
+    retry_on: list[type[Exception]] = field(default_factory=list)
+    stop_on: list[type[Exception]] = field(default_factory=list)
 
 
 @dataclass
@@ -46,7 +48,7 @@ class RetryResult:
     total_duration: float
     result: Any = None
     error: Exception | None = None
-    retry_history: List[Dict[str, Any]] = field(default_factory=list)
+    retry_history: list[dict[str, Any]] = field(default_factory=list)
 
 
 class RetryManager:
@@ -221,11 +223,11 @@ class RetryManager:
     async def execute_batch_with_retry(
         self,
         func: Callable,
-        items: List[Any],
+        items: list[Any],
         config: RetryConfig | None = None,
         *args,
         **kwargs
-    ) -> List[RetryResult]:
+    ) -> list[RetryResult]:
         """
         批量执行带重试的函数
 
@@ -262,7 +264,7 @@ class RetryManager:
 
         return results
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """
         获取重试统计
 
@@ -302,7 +304,7 @@ def retry(
     base_delay: float = 1.0,
     strategy: RetryStrategy = RetryStrategy.EXPONENTIAL,
     backoff_multiplier: float = 2.0,
-    retry_on: Optional[List[Type[Exception]]] | None = None
+    retry_on: list[type[Exception]] | None | None = None
 ):
     """
     重试装饰器

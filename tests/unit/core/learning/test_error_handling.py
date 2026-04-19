@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 错误处理和重试机制单元测试
 Error Handling and Retry Mechanism Unit Tests
@@ -16,8 +15,12 @@ Error Handling and Retry Mechanism Unit Tests
 """
 
 import asyncio
+import sys
+from pathlib import Path
 
 import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.learning.error_handling import (
     CircuitBreaker,

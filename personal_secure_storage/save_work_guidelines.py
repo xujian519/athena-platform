@@ -4,11 +4,11 @@
 这对云熙和小宸的成长特别重要
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-from pathlib import Path
+import sqlite3
 from datetime import datetime
+from pathlib import Path
+
 
 def save_work_guidelines() -> None:
     """保存宝宸专利事务所工作指南"""
@@ -536,7 +536,7 @@ def save_work_guidelines() -> None:
 
     total_files = sum(1 for cat in guidelines.values() if isinstance(cat, dict) and 'files' in cat)
     total_files = total_files + sum(len(cat.get('files', [])) for cat in guidelines.values() if isinstance(cat, dict))
-    print(f'✅ 涵盖文件总数: 20+个（含流程图）')
+    print('✅ 涵盖文件总数: 20+个（含流程图）')
 
     print('\n🎯 对云熙和小宸的价值：')
     print('  - 系统的业务指导体系')

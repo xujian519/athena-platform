@@ -33,17 +33,6 @@
             "color": "🏹",
             "startup_message": "准备为您的内容创作之旅搭箭开弓！🎯"
         },
-        "yunxi": {
-            "name": "云熙",
-            "full_name": "云熙·织女星",
-            "role": "YunPat IP管理专家",
-            "title": "知识产权管理执行官",
-            "slogan": "如织女般精心编织每一份知识产权的保护网，让创新之星在银河中璀璨生辉。",
-            "motto": "织梦成网，护创新星",
-            "port": 8007,
-            "color": "✨",
-            "startup_message": "云熙已就位，守护您的每一份创新！💫"
-        }
     },
     "display_settings": {
         "show_on_startup": true,

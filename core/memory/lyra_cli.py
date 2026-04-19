@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Lyra提示词优化CLI
 Lyra Prompt Optimizer CLI for Athena Platform
@@ -11,19 +12,17 @@ Lyra Prompt Optimizer CLI for Athena Platform
 
 import asyncio
 import sys
-from typing import Optional
 
 # 添加项目路径
 sys.path.append('/Users/xujian/Athena工作平台')
 
-from core.memory.lyra_prompt_optimizer import (
-    LyraPromptOptimizer,
-    OptimizationRequest,
-    OptimizationMode,
-    TargetAI,
-    get_lyra_optimizer
-)
 from core.memory.lyra_prompt_memory import get_lyra_memory
+from core.memory.lyra_prompt_optimizer import (
+    OptimizationMode,
+    OptimizationRequest,
+    TargetAI,
+    get_lyra_optimizer,
+)
 
 
 class LyraCLI:
@@ -90,8 +89,8 @@ class LyraCLI:
         # 默认设置
         current_mode = OptimizationMode.BASIC
         current_ai = TargetAI.CLAUDE
-        context: Optional[str] = None
-        output_format: Optional[str] = None
+        context: str | None = None
+        output_format: str | None = None
 
         while self.running:
             try:
@@ -181,8 +180,8 @@ class LyraCLI:
         user_input: str,
         mode: OptimizationMode,
         target_ai: TargetAI,
-        context: Optional[str],
-        output_format: Optional[str]
+        context: str | None,
+        output_format: str | None
     ):
         """优化提示词"""
         request = OptimizationRequest(
@@ -205,10 +204,10 @@ class LyraCLI:
         print(f"📋 模式: {result.mode.value}")
         print(f"⭐ 优化分数: {result.score:.1%}")
 
-        print(f"\n📝 原始输入:")
+        print("\n📝 原始输入:")
         print(f"   {result.original_input}")
 
-        print(f"\n✨ 优化后提示词:")
+        print("\n✨ 优化后提示词:")
         print("   " + "-" * 66)
         # 分行显示优化后的提示词
         for line in result.optimized_prompt.split("\n"):
@@ -216,16 +215,16 @@ class LyraCLI:
         print("   " + "-" * 66)
 
         if result.improvements:
-            print(f"\n🔧 改进项:")
+            print("\n🔧 改进项:")
             for i, improvement in enumerate(result.improvements, 1):
                 print(f"   {i}. {improvement}")
 
         if result.reasoning:
-            print(f"\n💭 优化说明:")
+            print("\n💭 优化说明:")
             print(f"   {result.reasoning}")
 
         if result.suggestions:
-            print(f"\n💡 额外建议:")
+            print("\n💡 额外建议:")
             for suggestion in result.suggestions:
                 print(f"   {suggestion}")
 

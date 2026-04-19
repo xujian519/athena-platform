@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 三人对话管理系统
 Three-Person Dialogue Management System

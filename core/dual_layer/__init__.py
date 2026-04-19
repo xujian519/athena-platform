@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 双层级架构模块
 Dual-Layer Architecture Module - Work Level + Task Level两层架构

@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena IP管理能力模块
 Athena IP Management Capability Module
-
-整合自YunxiVegaAgent的IP管理专业知识
 
 作者: Athena平台团队
 创建时间: 2026-01-22
@@ -11,7 +10,7 @@ Athena IP Management Capability Module
 """
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -33,7 +32,7 @@ class IPManagementModule:
         self.ip_domains = ["专利业务", "商标业务", "版权业务", "法律事务", "综合服务"]
 
         # 使命宣言
-        self.mission = "云端智能,熙然成事 - 为知识产权从业者提供全方位的业务管理"
+        self.mission = "智能管理,高效成事 - 为知识产权从业者提供全方位的业务管理"
 
         # 核心能力
         self.capabilities = [
@@ -125,7 +124,7 @@ class IPManagementModule:
         response += "3. 授权阶段:登记手续、证书领取、费用缴纳\n"
         response += "4. 维护阶段:年费监控、期限提醒、状态维护\n\n"
 
-        response += "💡 云熙智能提醒:\n"
+        response += "💡 智能提醒:\n"
         response += "• 自动监控每个专利的官方期限\n"
         response += "• 提前3个月发出年费缴纳提醒\n"
         response += "• 审查意见24小时内响应提醒\n"

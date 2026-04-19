@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 统一配置中心
 Unified Configuration Center
@@ -20,13 +21,12 @@ Unified Configuration Center
 import json
 import logging
 import os
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 import yaml
-
 
 logger = logging.getLogger(__name__)
 
@@ -212,7 +212,7 @@ class UnifiedConfigCenter:
             return ConfigCategory.API
         elif any(svc in key_lower for svc in ["service", "server", "worker"]):
             return ConfigCategory.SERVICE
-        elif any(agent in key_lower for agent in ["agent", "xiaonuo", "xiana", "yunxi"]):
+        elif any(agent in key_lower for agent in ["agent", "xiaonuo", "xiana"]):
             return ConfigCategory.AGENT
         elif any(mon in key_lower for mon in ["monitor", "prometheus", "grafana"]):
             return ConfigCategory.MONITORING

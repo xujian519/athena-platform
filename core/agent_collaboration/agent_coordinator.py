@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Agent协调器 - 向后兼容重定向
 Agent Coordinator - Backward Compatibility Redirect

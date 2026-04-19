@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 情景记忆数据库
 Episodic Memory Database
@@ -10,13 +9,11 @@ Episodic Memory Database
 创建时间: 2024年12月15日
 """
 
-import asyncio
-from core.async_main import async_main
-from core.database.unified_connection import get_postgres_pool
-from typing import Dict, List, Any, Optional
-from datetime import datetime
 import json
 import logging
+from typing import Any
+
+from core.database.unified_connection import get_postgres_pool
 
 logger = logging.getLogger(__name__)
 
@@ -91,7 +88,7 @@ class EpisodicMemory:
 
             logger.info("✅ 情景记忆表创建完成")
 
-    async def store(self, episode: Dict[str, Any]) -> str:
+    async def store(self, episode: dict[str, Any]) -> str:
         """
         存储情景记忆
 
@@ -166,7 +163,7 @@ class EpisodicMemory:
             logger.error(f"存储情景记忆失败: {str(e)}")
             raise
 
-    async def retrieve(self, query: Dict[str, Any], limit: int = 10) -> List[Dict[str, Any]]:
+    async def retrieve(self, query: dict[str, Any], limit: int = 10) -> list[dict[str, Any]]:
         """
         检索情景记忆
 
@@ -281,7 +278,7 @@ class EpisodicMemory:
             logger.error(f"检索情景记忆失败: {str(e)}")
             return []
 
-    async def get_episode_by_id(self, episode_id: str) -> Dict[str, Any | None]:
+    async def get_episode_by_id(self, episode_id: str) -> dict[str, Any | None]:
         """根据ID获取情景记忆"""
         try:
             async with self.pool.acquire() as conn:
@@ -311,7 +308,7 @@ class EpisodicMemory:
             logger.error(f"获取情景记忆失败: {str(e)}")
             return None
 
-    async def update_episode(self, episode_id: str, updates: Dict[str, Any]) -> bool:
+    async def update_episode(self, episode_id: str, updates: dict[str, Any]) -> bool:
         """更新情景记忆"""
         try:
             async with self.pool.acquire() as conn:
@@ -360,7 +357,7 @@ class EpisodicMemory:
             logger.error(f"删除情景记忆失败: {str(e)}")
             return False
 
-    async def get_statistics(self) -> Dict[str, Any]:
+    async def get_statistics(self) -> dict[str, Any]:
         """获取统计信息"""
         try:
             async with self.pool.acquire() as conn:

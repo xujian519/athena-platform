@@ -78,20 +78,21 @@ def vector_retrieval_for_case(elements):
 ### 步骤3: 知识图谱查询关联关系
 
 ```cypher
-// 知识图谱查询: 查找法条关联和案例关联
+// 知识图谱查询: 查找法条关联和案例关联 (Neo4j Cypher)
 
 // 查询法条关联关系
-MATCH (law:legal_citation {law_name: "专利法第22条"})
-OPTIONAL MATCH (law)-[:上位法]->(upper:legal_citation)
-OPTIONAL MATCH (law)-[:配套]->(guide:legal_citation)
-OPTIONAL MATCH (law)-[:关联]->(related:legal_citation)
-RETURN law, upper, guide, collect(related)[0:5] as related_laws
+MATCH (law:Article {name: "专利法第22条"})
+OPTIONAL MATCH (law)-[:SUPERIOR_LAW]->(upper:Law)
+OPTIONAL MATCH (law)-[:SUPPORTS]->(guide:JudicialInterpretation)
+OPTIONAL MATCH (law)-[:CITES]->(related:Article)
+RETURN law.name, upper.name as superior_law, guide.name as support_guide,
+       collect(related.name)[0:5] as related_laws
 
 // 查询类似案例的裁判规则
-MATCH (db:decision_block)-[:cites]->(law:legal_citation {law_name: "专利法第22条"})
-WHERE db.decision_type IN ["支持", "驳回"]
-RETURN db.doc_id, db.decision_type, db.decision_date, db.referee_essence
-ORDER BY db.decision_date DESC
+MATCH (c:Case)-[:APPLIES]->(law:Article {name: "专利法第22条"})
+WHERE c.decision_type IN ["支持", "驳回"]
+RETURN c.case_number, c.decision_type, c.judgment_date, c.judgment_summary
+ORDER BY c.judgment_date DESC
 LIMIT 10
 ```
 
@@ -133,7 +134,7 @@ def comprehensive_analysis(elements, laws, cases):
 ### 标准格式
 
 ```markdown
-【案情分析】(基于64,815份复审无效决定书案例经验)
+【案情分析】(基于119,660份复审无效决定书案例经验)
 
 ## 案情要素
 

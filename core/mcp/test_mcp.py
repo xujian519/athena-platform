@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 MCP客户端测试脚本
 
@@ -18,8 +19,6 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 from core.mcp.athena_mcp_client import (
-    AthenaMCPClient,
-    MCPToolInvoker,
     get_mcp_client,
     get_mcp_invoker,
 )

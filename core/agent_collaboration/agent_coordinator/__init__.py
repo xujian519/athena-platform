@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Agent协调器 - 公共接口
 Agent Coordinator - Public Interface

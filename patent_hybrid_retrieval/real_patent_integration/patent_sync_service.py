@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利数据同步服务
 Patent Data Synchronization Service
@@ -7,13 +6,11 @@ Patent Data Synchronization Service
 将PostgreSQL中的专利数据同步到Qdrant和Neo4j
 """
 
-import asyncio
-import json
 import logging
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from neo4j import GraphDatabase
 from qdrant_client import QdrantClient
@@ -132,7 +129,7 @@ class PatentSyncService:
                     try:
                         session.run(constraint)
                         logger.info(f"创建约束: {constraint}")
-                    except Exception as e:
+                    except Exception:
                         logger.warning(f"约束可能已存在: {constraint}")
 
                 # 创建索引
@@ -146,7 +143,7 @@ class PatentSyncService:
                     try:
                         session.run(index)
                         logger.info(f"创建索引: {index}")
-                    except Exception as e:
+                    except Exception:
                         logger.warning(f"索引可能已存在: {index}")
 
             logger.info('Neo4j约束和索引初始化完成')
@@ -155,7 +152,7 @@ class PatentSyncService:
             logger.error(f"初始化Neo4j失败: {e}")
             raise
 
-    def embed_patent_batch(self, patents: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def embed_patent_batch(self, patents: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """批量向量化专利
 
         Args:
@@ -193,7 +190,7 @@ class PatentSyncService:
 
         return patents
 
-    def sync_to_qdrant(self, patents: List[Dict[str, Any]]) -> int:
+    def sync_to_qdrant(self, patents: list[dict[str, Any]]) -> int:
         """同步专利数据到Qdrant
 
         Args:
@@ -205,7 +202,7 @@ class PatentSyncService:
         try:
             # 准备Qdrant点
             points = []
-            for i, patent in enumerate(patents):
+            for _i, patent in enumerate(patents):
                 if 'vector' not in patent:
                     logger.warning(f"专利 {patent.get('patent_id', 'unknown')} 缺少向量")
                     continue
@@ -241,7 +238,7 @@ class PatentSyncService:
             logger.error(f"同步到Qdrant失败: {e}")
             return 0
 
-    def sync_to_neo4j(self, patents: List[Dict[str, Any]]) -> int:
+    def sync_to_neo4j(self, patents: list[dict[str, Any]]) -> int:
         """同步专利数据到Neo4j
 
         Args:
@@ -313,7 +310,7 @@ class PatentSyncService:
             logger.error(f"同步到Neo4j失败: {e}")
             return 0
 
-    def process_batch(self, patents: List[Dict[str, Any]]) -> Dict[str, int]:
+    def process_batch(self, patents: list[dict[str, Any]]) -> dict[str, int]:
         """处理一个批次的专利数据
 
         Args:
@@ -353,7 +350,7 @@ class PatentSyncService:
             batch_stats['failed'] = batch_stats['total']
             return batch_stats
 
-    def sync_all_patents(self, limit: int | None = None) -> Dict[str, Any]:
+    def sync_all_patents(self, limit: int | None = None) -> dict[str, Any]:
         """同步所有专利数据
 
         Args:
@@ -508,7 +505,7 @@ def test_sync():
         logger.info("\n2. 执行同步测试...")
         stats = sync_service.sync_all_patents(limit=50)
 
-        logger.info(f"\n✅ 同步测试完成！")
+        logger.info("\n✅ 同步测试完成！")
         logger.info(f"   处理总数: {stats['total_processed']}")
         logger.info(f"   成功同步: {stats['successful_syncs']}")
         logger.info(f"   失败数量: {stats['failed_syncs']}")

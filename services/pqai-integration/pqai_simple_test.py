@@ -1,22 +1,24 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PQAI专利检索 - 简化测试版
 Simplified Patent Search Test Service
 """
 
-from fastapi import FastAPI, HTTPException
-import uvicorn
-from datetime import datetime
 import asyncio
 import sys
-import os
-from typing import Dict, List
-import json
+from datetime import datetime
+
+import uvicorn
+from fastapi import FastAPI, HTTPException
 
 # 添加路径
 sys.path.append('/Users/xujian/Athena工作平台/services/autonomous-control')
-from agent_identity import AgentIdentity, AgentType, register_agent_identity, format_identity_display
+from agent_identity import (
+    AgentIdentity,
+    AgentType,
+    format_identity_display,
+    register_agent_identity,
+)
 
 app = FastAPI(title="PQAI专利检索 - 简化测试")
 
@@ -95,7 +97,7 @@ async def display_startup_identity():
         identity_display = await format_identity_display("pqai_simple_test", "startup")
         print("\n" + "="*50)
         print(identity_display)
-        print(f"\n🔍 PQAI专利检索测试服务启动成功！")
+        print("\n🔍 PQAI专利检索测试服务启动成功！")
         print("📍 服务端口: 8033")
         print("📋 数据来源: 模拟专利数据（测试用）")
         print("="*50 + "\n")

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化系统配置常量
 Optimization System Configuration Constants

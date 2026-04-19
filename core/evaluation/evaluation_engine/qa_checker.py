@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 评估引擎 - 质量保证检查器
 Evaluation Engine - Quality Assurance Checker

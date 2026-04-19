@@ -5,20 +5,17 @@ Athena Development Assistant Main
 爸爸的专利专业助手
 """
 
-import asyncio
-from core.async_main import async_main
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import json
 import sys
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 # 添加路径
 current_dir = Path(__file__).parent
 sys.path.append(str(current_dir))
 
-from tools.patent_writing_tool import AthenaPatentWritingTool
 from tools.examination_response_tool import AthenaExaminationResponseTool
+from tools.patent_writing_tool import AthenaPatentWritingTool
 
 
 class AthenaDevAssistant:
@@ -231,10 +228,10 @@ class AthenaDevAssistant:
 
         print("\n🔄 正在分析...")
         # 这里可以连接实际的专利数据库进行分析
-        print(f"\n📊 分析结果：")
+        print("\n📊 分析结果：")
         print(f"  输入: {patent_input}")
-        print(f"  状态: 需要连接专利数据库进行详细分析")
-        print(f"  建议: 可以查询专利数据库获取更多信息")
+        print("  状态: 需要连接专利数据库进行详细分析")
+        print("  建议: 可以查询专利数据库获取更多信息")
 
     async def handle_database_query(self):
         """处理数据库查询"""
@@ -303,7 +300,7 @@ class AthenaDevAssistant:
                 print(f"\n📖 {file.name}:")
                 print("-" * 30)
 
-                with open(file, 'r', encoding='utf-8') as f:
+                with open(file, encoding='utf-8') as f:
                     content = f.read()
                     # 只显示前1000字
                     preview = content[:1000] + "..." if len(content) > 1000 else content

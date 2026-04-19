@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 视觉验证引擎
 Visual Verification Engine
@@ -25,6 +26,11 @@ from typing import Any
 
 import cv2
 
+# 条件导入SSIM (scikit-image)
+try:
+    from skimage.metrics import structural_similarity as ssim
+except ImportError:
+    ssim = None
 
 logger = logging.getLogger(__name__)
 
@@ -181,7 +187,7 @@ class VisualVerificationEngine:
         action: GUIAction,
         before_screenshot: str,
         after_screenshot: str,
-        expected_elements: list["key"] = None,
+        expected_elements: list[str] = None,
         expected_text: str | None = None,
         verify_change: bool = True,
     ) -> VerificationResult:
@@ -497,7 +503,7 @@ class VisualVerificationEngine:
 
     async def compare_screenshots(
         self, image1_path: str, image2_path: str
-    ) -> tuple[float, dict[str, Any]:
+    ) -> tuple[float, dict[str, Any]]:
         """
         对比两张截图
 

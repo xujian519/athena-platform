@@ -1,3 +1,5 @@
+import os
+
 #!/usr/bin/env python3
 """
 Athena平台智能工作流引擎
@@ -5,21 +7,13 @@ Athena平台智能工作流引擎
 """
 
 import asyncio
-from core.async_main import async_main
-import hashlib
 import json
-import logging
-from core.logging_config import setup_logging
-import pickle
-import queue
-import threading
-import time
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union
+from typing import Any
 
 # 导入其他优化模块
 from intelligent_model_selector import (
@@ -29,7 +23,9 @@ from intelligent_model_selector import (
     get_intelligent_model_selector,
 )
 from knowledge_graph_integration import get_knowledge_graph
-from multimodal_processor import MediaItem, ProcessingTask, get_multimodal_processor
+from multimodal_processor import ProcessingTask, get_multimodal_processor
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -89,10 +85,10 @@ class WorkflowTask:
     workflow_id: str
     name: str
     task_type: TaskType
-    config: Dict[str, Any] = field(default_factory=dict)
-    dependencies: List[str] = field(default_factory=list)
-    inputs: Dict[str, Any] = field(default_factory=dict)
-    outputs: Dict[str, Any] = field(default_factory=dict)
+    config: dict[str, Any] = field(default_factory=dict)
+    dependencies: list[str] = field(default_factory=list)
+    inputs: dict[str, Any] = field(default_factory=dict)
+    outputs: dict[str, Any] = field(default_factory=dict)
     status: TaskStatus = TaskStatus.PENDING
     priority: TaskPriority = TaskPriority.NORMAL
     retry_count: int = 0
@@ -103,7 +99,7 @@ class WorkflowTask:
     completed_at: datetime | None = None
     error_message: str | None = None
     execution_time: float = 0.0
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class WorkflowTrigger:
@@ -111,7 +107,7 @@ class WorkflowTrigger:
     trigger_id: str
     workflow_id: str
     trigger_type: TriggerType
-    config: Dict[str, Any] = field(default_factory=dict)
+    config: dict[str, Any] = field(default_factory=dict)
     enabled: bool = True
     last_triggered: datetime | None = None
     trigger_count: int = 0
@@ -124,10 +120,10 @@ class WorkflowDefinition:
     name: str
     description: str
     version: str = '1.0'
-    tasks: List[WorkflowTask] = field(default_factory=list)
-    triggers: List[WorkflowTrigger] = field(default_factory=list)
-    variables: Dict[str, Any] = field(default_factory=dict)
-    settings: Dict[str, Any] = field(default_factory=dict)
+    tasks: list[WorkflowTask] = field(default_factory=list)
+    triggers: list[WorkflowTrigger] = field(default_factory=list)
+    variables: dict[str, Any] = field(default_factory=dict)
+    settings: dict[str, Any] = field(default_factory=dict)
     status: WorkflowStatus = WorkflowStatus.DRAFT
     created_by: str = ''
     created_at: datetime = field(default_factory=datetime.now)
@@ -141,8 +137,8 @@ class WorkflowExecution:
     status: WorkflowStatus = WorkflowStatus.ACTIVE
     started_at: datetime = field(default_factory=datetime.now)
     completed_at: datetime | None = None
-    task_executions: Dict[str, WorkflowTask] = field(default_factory=dict)
-    variables: Dict[str, Any] = field(default_factory=dict)
+    task_executions: dict[str, WorkflowTask] = field(default_factory=dict)
+    variables: dict[str, Any] = field(default_factory=dict)
     error_message: str | None = None
     triggered_by: str = ''
 
@@ -156,7 +152,7 @@ class TaskExecutor:
         self.knowledge_graph = get_knowledge_graph()
         self.executor = ThreadPoolExecutor(max_workers=10)
 
-    async def execute_task(self, task: WorkflowTask, context: Dict[str, Any]) -> Dict[str, Any]:
+    async def execute_task(self, task: WorkflowTask, context: dict[str, Any]) -> dict[str, Any]:
         """执行任务"""
         logger.info(f"开始执行任务: {task.name} ({task.task_type.value})")
 
@@ -199,7 +195,7 @@ class TaskExecutor:
             logger.error(f"任务执行失败: {task.name}, 错误: {e}")
             raise
 
-    async def _execute_data_processing(self, task: WorkflowTask, context: Dict[str, Any]) -> Dict[str, Any]:
+    async def _execute_data_processing(self, task: WorkflowTask, context: dict[str, Any]) -> dict[str, Any]:
         """执行数据处理任务"""
         config = task.config
 
@@ -238,7 +234,7 @@ class TaskExecutor:
             'operation': operation
         }
 
-    def _apply_transformation(self, item: Any, rules: Dict[str, Any]) -> Any:
+    def _apply_transformation(self, item: Any, rules: dict[str, Any]) -> Any:
         """应用转换规则"""
         if isinstance(item, dict):
             transformed_item = item.copy()
@@ -257,16 +253,16 @@ class TaskExecutor:
 
         return item
 
-    def _meets_criteria(self, item: Any, criteria: Dict[str, Any]) -> bool:
+    def _meets_criteria(self, item: Any, criteria: dict[str, Any]) -> bool:
         """检查是否满足过滤条件"""
         if not isinstance(item, dict):
             return True
 
-        for field, condition in criteria.items():
-            if field not in item:
+        for field_name, condition in criteria.items():
+            if field_name not in item:
                 return False
 
-            value = item[field]
+            value = item[field_name]
             cond_type = condition.get('type', 'equals')
             cond_value = condition.get('value')
 
@@ -285,7 +281,7 @@ class TaskExecutor:
 
         return True
 
-    def _aggregate_data(self, data: List[Any], aggregation_type: str) -> Any:
+    def _aggregate_data(self, data: list[Any], aggregation_type: str) -> Any:
         """聚合数据"""
         if aggregation_type == 'count':
             return len(data)
@@ -295,7 +291,7 @@ class TaskExecutor:
             numeric_data = [item for item in data if isinstance(item, (int, float))]
             return sum(numeric_data) / len(numeric_data) if numeric_data else 0
         elif aggregation_type == 'group_by':
-            group_field = task.config.get('group_field')
+            group_field = data[0].get('group_field') if data else None  # type: ignore[attr-defined]
             if group_field:
                 groups = {}
                 for item in data:
@@ -308,7 +304,7 @@ class TaskExecutor:
 
         return data
 
-    async def _execute_model_inference(self, task: WorkflowTask, context: Dict[str, Any]) -> Dict[str, Any]:
+    async def _execute_model_inference(self, task: WorkflowTask, context: dict[str, Any]) -> dict[str, Any]:
         """执行模型推理任务"""
         config = task.config
 
@@ -346,7 +342,7 @@ class TaskExecutor:
 
         return inference_result
 
-    async def _execute_text_analysis(self, task: WorkflowTask, context: Dict[str, Any]) -> Dict[str, Any]:
+    async def _execute_text_analysis(self, task: WorkflowTask, context: dict[str, Any]) -> dict[str, Any]:
         """执行文本分析任务"""
         config = task.config
         text = config.get('text', context.get('text', ''))
@@ -394,7 +390,7 @@ class TaskExecutor:
 
         return result
 
-    def _analyze_sentiment(self, text: str) -> Dict[str, float]:
+    def _analyze_sentiment(self, text: str) -> dict[str, float]:
         """分析情感（简化版）"""
         positive_words = ['好', '优秀', '棒', '喜欢', '满意', '成功']
         negative_words = ['坏', '差', '糟糕', '失败', '不满', '问题']
@@ -417,7 +413,7 @@ class TaskExecutor:
             'neutral': neutral_score
         }
 
-    def _extract_keywords(self, text: str, max_keywords: int = 10) -> List[str]:
+    def _extract_keywords(self, text: str, max_keywords: int = 10) -> list[str]:
         """提取关键词（简化版）"""
         # 简单的关键词提取：去除停用词后取高频词
         stop_words = {'的', '了', '在', '是', '我', '有', '和', '就', '不', '人', '都', '一', '一个', '上', '也', '很', '到', '说', '要', '去', '你', '会', '着', '没有', '看', '好', '自己', '这'}
@@ -434,7 +430,7 @@ class TaskExecutor:
 
         return [word for word, freq in sorted_words[:max_keywords]]
 
-    def _extract_entities(self, text: str) -> List[Dict[str, str]]:
+    def _extract_entities(self, text: str) -> list[dict[str, str]]:
         """提取实体（简化版）"""
         entities = []
 
@@ -458,7 +454,7 @@ class TaskExecutor:
 
         return entities
 
-    async def _execute_multimodal_processing(self, task: WorkflowTask, context: Dict[str, Any]) -> Dict[str, Any]:
+    async def _execute_multimodal_processing(self, task: WorkflowTask, context: dict[str, Any]) -> dict[str, Any]:
         """执行多模态处理任务"""
         config = task.config
 
@@ -508,7 +504,7 @@ class TaskExecutor:
             'total_tasks': len(processed_results)
         }
 
-    async def _execute_knowledge_extraction(self, task: WorkflowTask, context: Dict[str, Any]) -> Dict[str, Any]:
+    async def _execute_knowledge_extraction(self, task: WorkflowTask, context: dict[str, Any]) -> dict[str, Any]:
         """执行知识提取任务"""
         config = task.config
 
@@ -530,7 +526,7 @@ class TaskExecutor:
             'context': config.get('context', '')
         }
 
-    async def _execute_api_call(self, task: WorkflowTask, context: Dict[str, Any]) -> Dict[str, Any]:
+    async def _execute_api_call(self, task: WorkflowTask, context: dict[str, Any]) -> dict[str, Any]:
         """执行API调用任务"""
         import aiohttp
 
@@ -577,7 +573,7 @@ class TaskExecutor:
                     'status_code': None
                 }
 
-    async def _execute_file_operation(self, task: WorkflowTask, context: Dict[str, Any]) -> Dict[str, Any]:
+    async def _execute_file_operation(self, task: WorkflowTask, context: dict[str, Any]) -> dict[str, Any]:
         """执行文件操作任务"""
         import os
         import shutil
@@ -590,7 +586,7 @@ class TaskExecutor:
             if not file_path or not os.path.exists(file_path):
                 raise ValueError(f"文件不存在: {file_path}")
 
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 content = f.read()
 
             return {
@@ -629,7 +625,7 @@ class TaskExecutor:
         else:
             raise ValueError(f"不支持的文件操作: {operation}")
 
-    async def _execute_custom_task(self, task: WorkflowTask, context: Dict[str, Any]) -> Dict[str, Any]:
+    async def _execute_custom_task(self, task: WorkflowTask, context: dict[str, Any]) -> dict[str, Any]:
         """执行自定义任务"""
         config = task.config
 
@@ -681,7 +677,7 @@ class WorkflowEngine:
         return workflow
 
     def add_task_to_workflow(self, workflow_id: str, task_name: str, task_type: TaskType,
-                            config: Dict[str, Any], dependencies: List[str] = None) -> WorkflowTask:
+                            config: dict[str, Any], dependencies: list[str] = None) -> WorkflowTask:
         """向工作流添加任务"""
         if workflow_id not in self.workflows:
             raise ValueError(f"工作流不存在: {workflow_id}")
@@ -704,7 +700,7 @@ class WorkflowEngine:
         return task
 
     def add_trigger_to_workflow(self, workflow_id: str, trigger_type: TriggerType,
-                              config: Dict[str, Any]) -> WorkflowTrigger:
+                              config: dict[str, Any]) -> WorkflowTrigger:
         """向工作流添加触发器"""
         if workflow_id not in self.workflows:
             raise ValueError(f"工作流不存在: {workflow_id}")
@@ -724,7 +720,7 @@ class WorkflowEngine:
         logger.info(f"向工作流 {workflow_id} 添加触发器: {trigger_type.value}")
         return trigger
 
-    async def execute_workflow(self, workflow_id: str, trigger_context: Dict[str, Any] = None,
+    async def execute_workflow(self, workflow_id: str, trigger_context: dict[str, Any] = None,
                              triggered_by: str = 'manual') -> WorkflowExecution:
         """执行工作流"""
         if workflow_id not in self.workflows:
@@ -894,7 +890,7 @@ class WorkflowEngine:
         workflow = self.workflows[execution.workflow_id]
 
         # 构建任务依赖图
-        task_graph = self._build_task_graph(workflow.tasks)
+        self._build_task_graph(workflow.tasks)
 
         # 执行任务
         completed_tasks = set()
@@ -985,7 +981,7 @@ class WorkflowEngine:
 
         logger.info(f"工作流执行完成: {execution.execution_id}, 状态: {execution.status.value}")
 
-    def _build_task_graph(self, tasks: List[WorkflowTask]) -> Dict[str, List[str]]:
+    def _build_task_graph(self, tasks: list[WorkflowTask]) -> dict[str, list[str]]:
         """构建任务依赖图"""
         graph = {}
 
@@ -994,7 +990,7 @@ class WorkflowEngine:
 
         return graph
 
-    def get_workflow_status(self, workflow_id: str) -> Dict[str, Any]:
+    def get_workflow_status(self, workflow_id: str) -> dict[str, Any]:
         """获取工作流状态"""
         if workflow_id not in self.workflows:
             return {'error': '工作流不存在'}
@@ -1020,7 +1016,7 @@ class WorkflowEngine:
             'updated_at': workflow.updated_at.isoformat()
         }
 
-    def get_execution_details(self, execution_id: str) -> Dict[str, Any]:
+    def get_execution_details(self, execution_id: str) -> dict[str, Any]:
         """获取执行详情"""
         if execution_id not in self.executions:
             return {'error': '执行记录不存在'}
@@ -1057,7 +1053,7 @@ class WorkflowEngine:
             'task_details': task_details
         }
 
-    def get_engine_stats(self) -> Dict[str, Any]:
+    def get_engine_stats(self) -> dict[str, Any]:
         """获取引擎统计信息"""
         total_workflows = len(self.workflows)
         total_executions = len(self.executions)

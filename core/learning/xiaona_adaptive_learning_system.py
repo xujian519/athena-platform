@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜自适应学习系统
 Xiaona Adaptive Learning System
@@ -21,7 +22,6 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any
-
 
 from ..cognition.xiaona_enhanced_reflection_engine import LegalReflectionResult
 from ..collaboration.human_ai_collaboration_framework import CollaborationSession

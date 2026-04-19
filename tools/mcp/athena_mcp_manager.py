@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena MCP管理器 - 统一管理所有MCP服务器
 Athena MCP Manager - Unified Management for All MCP Servers
@@ -14,12 +13,11 @@ import json
 import logging
 import os
 import subprocess
-import sys
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -36,10 +34,10 @@ class MCPServerConfig:
     name: str
     path: str
     command: str
-    args: List[str]
-    env: Dict[str, str]
+    args: list[str]
+    env: dict[str, str]
     description: str
-    capabilities: List[str]
+    capabilities: list[str]
     status: MCPServerStatus = MCPServerStatus.UNKNOWN
     process: subprocess.Popen | None = None
 
@@ -48,7 +46,7 @@ class MCPTool:
     """MCP工具定义"""
     name: str
     description: str
-    input_schema: Dict[str, Any]
+    input_schema: dict[str, Any]
     server: str
 
 class AthenaMCPManager:
@@ -67,7 +65,7 @@ class AthenaMCPManager:
         self.version = '1.0.0'
 
         # MCP服务器配置
-        self.servers: Dict[str, MCPServerConfig] = {}
+        self.servers: dict[str, MCPServerConfig] = {}
 
         # 初始化服务器配置
         self._initialize_servers()
@@ -132,7 +130,7 @@ class AthenaMCPManager:
         """加载配置文件"""
         try:
             if self.config_path.exists():
-                with open(self.config_path, 'r', encoding='utf-8') as f:
+                with open(self.config_path, encoding='utf-8') as f:
                     config = json.load(f)
                     # 更新服务器配置
                     for name, server_config in config.get('servers', {}).items():
@@ -274,7 +272,7 @@ class AthenaMCPManager:
         await self.stop_server(server_name)
         return await self.start_server(server_name)
 
-    async def get_server_status(self, server_name: str) -> Dict[str, Any]:
+    async def get_server_status(self, server_name: str) -> dict[str, Any]:
         """
         获取服务器状态信息
 
@@ -308,7 +306,7 @@ class AthenaMCPManager:
 
         return status_info
 
-    async def list_tools(self, server_name: str) -> List[MCPTool]:
+    async def list_tools(self, server_name: str) -> list[MCPTool]:
         """
         列出指定服务器的所有工具
 
@@ -358,7 +356,7 @@ class AthenaMCPManager:
             logger.error(f"获取服务器 {server_name} 工具列表失败: {e}")
             raise
 
-    async def call_tool(self, server_name: str, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
+    async def call_tool(self, server_name: str, tool_name: str, arguments: dict[str, Any]) -> dict[str, Any]:
         """
         调用指定服务器的工具
 
@@ -406,7 +404,7 @@ class AthenaMCPManager:
             logger.error(f"调用工具 {tool_name} 失败: {e}")
             raise
 
-    async def get_all_status(self) -> Dict[str, Any]:
+    async def get_all_status(self) -> dict[str, Any]:
         """
         获取所有MCP服务器的状态
 
@@ -431,7 +429,7 @@ class AthenaMCPManager:
 
         return status_report
 
-    async def start_all_servers(self) -> Dict[str, bool]:
+    async def start_all_servers(self) -> dict[str, bool]:
         """
         启动所有可用的MCP服务器
 
@@ -453,7 +451,7 @@ class AthenaMCPManager:
 
         return results
 
-    async def stop_all_servers(self) -> Dict[str, bool]:
+    async def stop_all_servers(self) -> dict[str, bool]:
         """
         停止所有MCP服务器
 
@@ -479,7 +477,7 @@ class AthenaMCPManager:
         """
         return self.servers.get(server_name)
 
-    def list_all_servers(self) -> List[str]:
+    def list_all_servers(self) -> list[str]:
         """
         列出所有可用的服务器名称
 

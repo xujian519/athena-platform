@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利智能问答API服务 - V4.0 缓存增强版
 Patent Q&A API Service with Redis Caching and Performance Monitoring
@@ -23,34 +22,35 @@ RAG流程：
 - 数据库负载降低: 70%
 """
 
+import hashlib
+import json
+import logging
+import os
+import time
+from datetime import datetime
+from functools import wraps
+from typing import Any
+
+import psycopg2
+import psycopg2.pool
+
+# Redis缓存
+import redis
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
-from typing import List, Optional, Dict, Any
-import psycopg2
-from core.async_main import async_main
-import psycopg2.pool
-import logging
-from core.logging_config import setup_logging
-from datetime import datetime
-import os
-import json
-import time
-import hashlib
-from functools import wraps
+from nebula3.Config import Config
 
-# ZhipuAI (GLM-4.7)
-from zhipuai import ZhipuAI
+# NebulaGraph知识图谱
+from nebula3.gclient.net import ConnectionPool
+from pydantic import BaseModel, Field
 
 # 向量嵌入生成
 from sentence_transformers import SentenceTransformer
 
-# NebulaGraph知识图谱
-from nebula3.gclient.net import ConnectionPool
-from nebula3.Config import Config
+# ZhipuAI (GLM-4.7)
+from zhipuai import ZhipuAI
 
-# Redis缓存
-import redis
+from core.logging_config import setup_logging
 
 logging.basicConfig(level=logging.INFO)
 logger = setup_logging()
@@ -383,7 +383,7 @@ class QAResponse(BaseModel):
     """问答响应"""
     question: str
     answer: str
-    sources: List[RAGContext] = []
+    sources: list[RAGContext] = []
     llm_used: bool = False
     model_used: str | None = None
     from_cache: bool = False
@@ -394,10 +394,10 @@ class QAResponse(BaseModel):
 class CaseRecommendationRequest(BaseModel):
     """案例推荐请求"""
     description: str = Field(..., description="技术方案/案件描述")
-    technology_field: Optional[str] = Field(None, description="技术领域（自动识别）")
-    issue_type: Optional[str] = Field(None, description="争议类型")
-    claims: Optional[str] = Field(None, description="权利要求内容")
-    prior_art: Optional[str] = Field(None, description="对比现有技术")
+    technology_field: str | None = Field(None, description="技术领域（自动识别）")
+    issue_type: str | None = Field(None, description="争议类型")
+    claims: str | None = Field(None, description="权利要求内容")
+    prior_art: str | None = Field(None, description="对比现有技术")
     top_k: int = Field(10, description="推荐案例数量", ge=1, le=50)
     analysis_depth: str = Field("standard", description="分析深度: basic/standard/deep")
 
@@ -408,23 +408,23 @@ class CaseAnalysis(BaseModel):
     decision_number: str
     decision_result: str
     technology_field: str
-    issue_types: List[str]
+    issue_types: list[str]
     similarity_score: float
     reference_value: str
-    key_points: List[str]
+    key_points: list[str]
     reasoning_summary: str
 
 class ComparisonResult(BaseModel):
     """案例对比结果"""
-    input_case: Dict[str, Any]
-    recommended_cases: List[CaseAnalysis]
-    technology_analysis: Dict[str, Any]
-    issue_analysis: Dict[str, Any]
-    recommendations: List[str]
+    input_case: dict[str, Any]
+    recommended_cases: list[CaseAnalysis]
+    technology_analysis: dict[str, Any]
+    issue_analysis: dict[str, Any]
+    recommendations: list[str]
 
 # ============ 核心功能函数 ============
 
-def generate_question_embedding(question: str) -> List[float | None]:
+def generate_question_embedding(question: str) -> list[float | None]:
     """
     生成问题的向量嵌入（带缓存）
 
@@ -457,7 +457,7 @@ def generate_question_embedding(question: str) -> List[float | None]:
         logger.error(f"Failed to generate embedding: {e}")
         return None
 
-def vector_search_cases(question: str, top_k: int = 5) -> List[dict]:
+def vector_search_cases(question: str, top_k: int = 5) -> list[dict]:
     """
     使用向量语义搜索无效决定案例（带缓存）
 
@@ -524,7 +524,7 @@ def vector_search_cases(question: str, top_k: int = 5) -> List[dict]:
         logger.error(f"Vector search failed: {e}")
         return []
 
-def vector_search_laws(question: str, top_k: int = 5) -> List[dict]:
+def vector_search_laws(question: str, top_k: int = 5) -> list[dict]:
     """
     使用向量语义搜索法律法规（带缓存）
 
@@ -541,7 +541,7 @@ def vector_search_laws(question: str, top_k: int = 5) -> List[dict]:
     cache_key = get_cache_key("law_vector", question, top_k)
     cached = cache_get(cache_key)
     if cached:
-        logger.debug(f"Law vector search cache hit")
+        logger.debug("Law vector search cache hit")
         return cached
 
     documents = []
@@ -589,7 +589,7 @@ def vector_search_laws(question: str, top_k: int = 5) -> List[dict]:
         logger.error(f"Law search failed: {e}")
         return []
 
-def graph_search_related_entities(question: str, top_k: int = 5) -> List[dict]:
+def graph_search_related_entities(question: str, top_k: int = 5) -> list[dict]:
     """
     使用知识图谱搜索相关实体（带缓存）
 
@@ -609,7 +609,7 @@ def graph_search_related_entities(question: str, top_k: int = 5) -> List[dict]:
     cache_key = get_cache_key("graph", question, top_k)
     cached = cache_get(cache_key)
     if cached:
-        logger.debug(f"Graph search cache hit")
+        logger.debug("Graph search cache hit")
         return cached
 
     try:
@@ -646,7 +646,7 @@ def graph_search_related_entities(question: str, top_k: int = 5) -> List[dict]:
         logger.error(f"Graph search error: {e}")
         return []
 
-def text_search_documents(question: str, top_k: int = 5) -> List[dict]:
+def text_search_documents(question: str, top_k: int = 5) -> list[dict]:
     """
     全文搜索（备用方案，当向量搜索失败时使用）
 
@@ -715,7 +715,7 @@ def extract_key_paragraphs(reasoning: str, question: str, max_paragraphs: int = 
 
     return '\n\n'.join(selected)
 
-def retrieve_relevant_documents(question: str, top_k: int = 5) -> List[dict]:
+def retrieve_relevant_documents(question: str, top_k: int = 5) -> list[dict]:
     """
     混合检索策略：向量搜索 + 知识图谱 + 全文搜索
 
@@ -773,7 +773,7 @@ def retrieve_relevant_documents(question: str, top_k: int = 5) -> List[dict]:
 
     return unique_documents[:top_k]
 
-def generate_answer_with_llm(question: str, contexts: List[dict]) -> str:
+def generate_answer_with_llm(question: str, contexts: list[dict]) -> str:
     """
     使用GLM-4.7生成答案
 
@@ -871,7 +871,7 @@ async def health():
     try:
         pg_cursor.execute("SELECT 1")
         db_status = "connected"
-    except (psycopg2.Error, Exception):
+    except (psycopg2.Error, Exception) as e:
         logger.error(f"Error: {e}", exc_info=True)
 
     redis_status = "disconnected"
@@ -1072,7 +1072,7 @@ async def clear_cache(pattern: str = ""):
 
 # ============ 案例推荐功能函数 ============
 
-def identify_technology_field(text: str) -> Dict[str, Any]:
+def identify_technology_field(text: str) -> dict[str, Any]:
     """
     智能识别技术领域
 
@@ -1109,7 +1109,7 @@ def identify_technology_field(text: str) -> Dict[str, Any]:
             'method': 'keyword_matching'
         }
 
-def extract_issue_types(reasoning: str) -> List[str]:
+def extract_issue_types(reasoning: str) -> list[str]:
     """
     从理由书中提取争议类型
 
@@ -1245,7 +1245,7 @@ async def recommend_cases(request: CaseRecommendationRequest):
 
     except Exception as e:
         logger.error(f"Case recommendation failed: {e}")
-        raise HTTPException(status_code=500, detail=f"案例推荐失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"案例推荐失败: {str(e)}") from e
 
 @app.get("/api/recommend/fields")
 async def list_technology_fields():

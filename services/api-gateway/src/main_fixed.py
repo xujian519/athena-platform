@@ -4,21 +4,17 @@ API网关主程序 - 修复版本
 解决502 Bad Gateway问题
 """
 
-import json
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
 import time
-from typing import Any, Dict
 
 import httpx
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+from core.logging_config import setup_logging
+
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -94,7 +90,7 @@ async def check_service_health(service_name: str, service_config: dict) -> bool:
         logger.warning(f"服务 {service_name} 健康检查失败: {e}")
         return False
 
-async def check_all_services_health() -> Dict[str, bool]:
+async def check_all_services_health() -> dict[str, bool]:
     """检查所有服务健康状态"""
     results = {}
     for service_name, config in SERVICE_ROUTES.items():
@@ -184,13 +180,13 @@ async def proxy_request(request: Request, path: str):
 
     except httpx.TimeoutException:
         logger.error(f"请求超时: {target_service}")
-        raise HTTPException(status_code=504, detail=f"服务 {target_service} 响应超时")
+        raise HTTPException(status_code=504, detail=f"服务 {target_service} 响应超时") from None
     except httpx.ConnectError:
         logger.error(f"连接失败: {target_service} at {target_url}")
-        raise HTTPException(status_code=502, detail=f"无法连接到服务 {target_service} ({target_url})")
+        raise HTTPException(status_code=502, detail=f"无法连接到服务 {target_service} ({target_url})") from None
     except Exception as e:
         logger.error(f"请求转发失败: {e}")
-        raise HTTPException(status_code=502, detail=f"服务 {target_service} 不可用: {str(e)}")
+        raise HTTPException(status_code=502, detail=f"服务 {target_service} 不可用: {str(e)}") from e
 
 @app.get('/services')
 async def list_services():

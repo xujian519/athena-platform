@@ -1,5 +1,6 @@
 
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 徐健的AI家族时间线记忆系统
 Timeline Memory System for Xu Jian's AI Family
@@ -36,7 +37,6 @@ class Participant(Enum):
     FATHER = "徐健"  # 爸爸
     XIAONUO = "小诺"  # 小诺·双鱼公主
     XIANA = "小娜"  # 小娜·天秤女神(原Athena)
-    YUNXI = "云熙"  # 云熙.vega
     XIAOCHEN = "小宸"  # 小宸
 
 

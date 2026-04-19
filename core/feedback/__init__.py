@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 反馈闭环模块
 System Feedback Loop Module

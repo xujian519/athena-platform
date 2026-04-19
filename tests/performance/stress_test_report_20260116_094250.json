@@ -1,0 +1,107 @@
+{
+  "test_suite": "Athena Memory System Stress Test",
+  "start_time": "2026-01-16T09:36:19.903135",
+  "tests": [
+    {
+      "name": "\u5e76\u53d1\u8bbf\u95ee\u6d4b\u8bd5",
+      "success": true,
+      "duration": 30.084467887878418,
+      "operations": 54388,
+      "ops_per_second": 1807.843176841227,
+      "errors": 0,
+      "error_rate": 0.0,
+      "metrics": {
+        "min_latency": 7.152557373046875e-07,
+        "max_latency": 0.0003101825714111328,
+        "avg_latency": 3.934480814826114e-06,
+        "p50_latency": 3.814697265625e-06,
+        "p95_latency": 6.9141387939453125e-06,
+        "p99_latency": 1.0967254638671875e-05
+      },
+      "config": {
+        "concurrent_users": 100,
+        "target_duration": 30
+      }
+    },
+    {
+      "name": "\u5185\u5b58\u538b\u529b\u6d4b\u8bd5",
+      "success": true,
+      "duration": 0.05580592155456543,
+      "operations": 10000,
+      "ops_per_second": 179192.45344281764,
+      "errors": 0,
+      "error_rate": 0.0,
+      "metrics": {
+        "cache_count": 10000,
+        "cache_size_mb": 10.2,
+        "cache_evictions": 0,
+        "memory_efficiency": 10.2
+      }
+    },
+    {
+      "name": "\u5411\u91cf\u7f13\u5b58\u6027\u80fd\u6d4b\u8bd5",
+      "success": true,
+      "duration": 0.029210567474365234,
+      "operations": 2000,
+      "ops_per_second": 68468.3719943192,
+      "errors": 0,
+      "error_rate": 0.0,
+      "metrics": {
+        "write_ops_per_sec": 35062.102403343786,
+        "read_ops_per_sec": 1449811.2685793294,
+        "cache_hit_rate": 1.0,
+        "cache_size": 1000,
+        "write_latency_p95": 1.1920928955078125e-06,
+        "read_latency_p95": 1.1920928955078125e-06
+      }
+    },
+    {
+      "name": "\u6df7\u5408\u8d1f\u8f7d\u6d4b\u8bd5",
+      "success": true,
+      "duration": 60.00960683822632,
+      "operations": 34413,
+      "ops_per_second": 573.4581813337062,
+      "errors": 0,
+      "error_rate": 0.0,
+      "metrics": {
+        "write": 10155,
+        "read": 14011,
+        "search": 6808,
+        "delete": 3439,
+        "operation_distribution": {
+          "write": 0.2950919710574492,
+          "read": 0.40714264958010055,
+          "search": 0.19783221457007527,
+          "delete": 0.09993316479237498
+        }
+      }
+    },
+    {
+      "name": "\u957f\u65f6\u95f4\u7a33\u5b9a\u6027\u6d4b\u8bd5",
+      "success": true,
+      "duration": 300.01621198654175,
+      "operations": 1000,
+      "ops_per_second": 3.3331532098833994,
+      "errors": 0,
+      "error_rate": 0.0,
+      "metrics": {
+        "memory_samples": 10,
+        "initial_memory_mb": 103.859375,
+        "final_memory_mb": 103.859375,
+        "memory_growth_mb": 0.0,
+        "growth_rate_mb_per_min": 0.0,
+        "leak_detected": false
+      }
+    }
+  ],
+  "end_time": "2026-01-16T09:42:50.122147",
+  "summary": {
+    "total_tests": 5,
+    "passed": 5,
+    "failed": 0,
+    "pass_rate": 1.0,
+    "total_operations": 101801,
+    "total_errors": 0,
+    "overall_error_rate": 0.0
+  }
+}

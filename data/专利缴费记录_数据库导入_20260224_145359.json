@@ -1,0 +1,67 @@
+{
+  "table_name": "patent_fee_payments",
+  "records": [
+    {
+      "application_number": "2025203047164",
+      "business_type": "实用新型",
+      "company_name": "珠海星迪科技有限公司",
+      "credit_code": "91440400MA51NTT81D",
+      "fee_type": "实用新型专利第2年年费",
+      "fee_amount": 90.0,
+      "payment_date": "2026-02-24",
+      "payment_voucher_path": null,
+      "notes": "",
+      "created_at": "2026-02-24T14:53:59.563423"
+    },
+    {
+      "application_number": "2024231090357",
+      "business_type": "实用新型",
+      "company_name": "山东南西新型建材科技有限公司",
+      "credit_code": "91370881MA3NEM0N8A",
+      "fee_type": "实用新型专利第2年年费",
+      "fee_amount": 90.0,
+      "payment_date": "2026-02-24",
+      "payment_voucher_path": null,
+      "notes": "",
+      "created_at": "2026-02-24T14:53:59.563426"
+    },
+    {
+      "application_number": "202511950662X",
+      "business_type": "发明",
+      "company_name": "济南宝宸专利代理事务所（普通合伙）",
+      "credit_code": "91370112MA3Q6KR642",
+      "fee_type": "发明专利申请费",
+      "fee_amount": 135.0,
+      "payment_date": "2026-02-24",
+      "payment_voucher_path": null,
+      "notes": "",
+      "created_at": "2026-02-24T14:53:59.563427"
+    },
+    {
+      "application_number": "202511950662X",
+      "business_type": "发明",
+      "company_name": "济南宝宸专利代理事务所（普通合伙）",
+      "credit_code": "91370112MA3Q6KR642",
+      "fee_type": "公布印刷费",
+      "fee_amount": 50.0,
+      "payment_date": "2026-02-24",
+      "payment_voucher_path": null,
+      "notes": "",
+      "created_at": "2026-02-24T14:53:59.563429"
+    },
+    {
+      "application_number": "2025203623737",
+      "business_type": "实用新型",
+      "company_name": "山东中达威专用车辆有限公司",
+      "credit_code": "91370829MA3NNJ3MXA",
+      "fee_type": "实用新型专利第2年年费",
+      "fee_amount": 600.0,
+      "payment_date": "2026-02-24",
+      "payment_voucher_path": null,
+      "notes": "",
+      "created_at": "2026-02-24T14:53:59.563430"
+    }
+  ],
+  "total_count": 5,
+  "total_amount": 965.0
+}

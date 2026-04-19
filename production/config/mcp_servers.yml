@@ -1,0 +1,221 @@
+# MCP服务器配置文件
+# MCP Servers Configuration for Dynamic Prompt System
+
+# 全局配置
+global:
+  # 连接超时（秒）
+  connection_timeout: 30
+  # 请求超时（秒）
+  request_timeout: 60
+  # 最大重试次数
+  max_retries: 3
+  # 重试延迟（秒）
+  retry_delay: 1
+  # 是否启用连接池
+  enable_pooling: true
+  # 连接池大小
+  pool_size: 10
+
+# MCP服务器列表
+servers:
+  # 专利搜索服务器（中国）
+  patent_search_cn:
+    name: "中国专利搜索MCP服务器"
+    type: "stdio"
+    command: "node"
+    args:
+      - "/Users/xujian/Athena工作平台/mcp-servers/patent-search-mcp-server/index.js"
+    cwd: "/Users/xujian/Athena工作平台/mcp-servers/patent-search-mcp-server"
+    env:
+      NODE_ENV: production
+    capabilities:
+      - "patent_search_cn"
+    enabled: true
+    description: "搜索2800万+中国专利数据"
+
+  # 专利下载服务器 (Patent Downloader SDK)
+  patent_download:
+    name: "专利文档下载MCP服务器"
+    type: "stdio"
+    command: "python3"
+    args:
+      - "-c"
+      - "import sys; sys.path.insert(0, '/Users/xujian/Athena工作平台/mcp-servers/patent_downloader/src'); from patent_downloader.mcp_server import start_mcp_server; start_mcp_server()"
+    cwd: "/Users/xujian/Athena工作平台/mcp-servers/patent_downloader"
+    env:
+      OUTPUT_DIR: "/Users/xujian/Athena工作平台/data/patents/PDF"
+      PYTHONPATH: "/Users/xujian/Athena工作平台/mcp-servers/patent_downloader/src"
+    capabilities:
+      - "download_patent"
+      - "download_patents"
+      - "download_patents_from_file"
+      - "get_patent_info"
+    enabled: true
+    description: "从Google Patents下载专利PDF文档"
+
+  # 学术搜索服务器
+  academic_search:
+    name: "学术论文搜索MCP服务器"
+    type: "stdio"
+    command: "node"
+    args:
+      - "/Users/xujian/Athena工作平台/mcp-servers/academic-search-mcp-server/index.js"
+    cwd: "/Users/xujian/Athena工作平台/mcp-servers/academic-search-mcp-server"
+    env:
+      NODE_ENV: production
+    capabilities:
+      - "academic_search"
+    enabled: true
+    description: "检索学术论文和引用关系"
+
+  # Jina AI服务器
+  jina_ai:
+    name: "Jina AI集成MCP服务器"
+    type: "stdio"
+    command: "python"
+    args:
+      - "-m"
+      - "mcp_servers.jina_ai"
+    cwd: "/Users/xujian/Athena工作平台"
+    capabilities:
+      - "jina_embedding"
+      - "jina_rerank"
+      - "web_search"
+    enabled: true
+    description: "向量嵌入、结果重排、网络搜索"
+
+  # 高德地图服务器
+  gaode:
+    name: "高德地图MCP服务器"
+    type: "stdio"
+    command: "python"
+    args:
+      - "-m"
+      - "mcp_servers.gaode"
+    cwd: "/Users/xujian/Athena工作平台"
+    capabilities:
+      - "geocoding"
+      - "route_planning"
+    enabled: true
+    description: "地理编码和路径规划"
+
+  # Chrome浏览器控制服务器
+  chrome:
+    name: "Chrome浏览器MCP服务器"
+    type: "stdio"
+    command: "python"
+    args:
+      - "-m"
+      - "mcp_servers.chrome"
+    cwd: "/Users/xujian/Athena工作平台"
+    capabilities:
+      - "chrome_control"
+      - "browser_automate"
+    enabled: true
+    description: "Chrome浏览器自动化控制"
+
+  # GitHub集成服务器
+  github:
+    name: "GitHub集成MCP服务器"
+    type: "node"
+    command: "node"
+    args:
+      - "/Users/xujian/Athena工作平台/mcp-servers/github-mcp-server/dist/index.js"
+    cwd: "/Users/xujian/Athena工作平台/mcp-servers/github-mcp-server"
+    capabilities:
+      - "github_search"
+      - "github_issues"
+      - "github_pr"
+    enabled: false  # TypeScript服务，需要先编译
+    description: "GitHub Issues和PR管理"
+
+  # 谷歌专利元数据服务器
+  google_patents:
+    name: "谷歌专利元数据MCP服务器"
+    type: "stdio"
+    command: "python"
+    args:
+      - "-m"
+      - "mcp_servers.google_patents"
+    cwd: "/Users/xujian/Athena工作平台"
+    capabilities:
+      - "google_patents_meta"
+    enabled: true
+    description: "获取谷歌专利元数据"
+
+# 能力映射配置
+capability_mapping:
+  # 专利相关能力
+  patent_search_cn:
+    server: patent_search_cn
+    method: "search_patents"
+    timeout: 30
+
+  # 专利下载能力
+  download_patent:
+    server: patent_download
+    method: "download_patent"
+    timeout: 60
+
+  download_patents:
+    server: patent_download
+    method: "download_patents"
+    timeout: 300
+
+  download_patents_from_file:
+    server: patent_download
+    method: "download_patents_from_file"
+    timeout: 600
+
+  get_patent_info:
+    server: patent_download
+    method: "get_patent_info"
+    timeout: 30
+
+  # 学术相关能力
+  academic_search:
+    server: academic_search
+    method: "search_papers"
+    timeout: 30
+
+  # AI相关能力
+  jina_embedding:
+    server: jina_ai
+    method: "generate_embedding"
+    timeout: 20
+
+  jina_rerank:
+    server: jina_ai
+    method: "rerank_results"
+    timeout: 20
+
+  # 地图相关能力
+  geocoding:
+    server: gaode
+    method: "geocode"
+    timeout: 10
+
+  route_planning:
+    server: gaode
+    method: "plan_route"
+    timeout: 15
+
+  # 浏览器相关能力
+  chrome_control:
+    server: chrome
+    method: "control_browser"
+    timeout: 30
+
+  browser_automate:
+    server: chrome
+    method: "automate_browser"
+    timeout: 60
+
+# 回退配置
+fallback:
+  # 当MCP服务器不可用时是否使用模拟数据
+  use_mock_data: true
+  # 模拟数据质量
+  mock_data_quality: "medium"
+  # 是否记录回退事件
+  log_fallback_events: true

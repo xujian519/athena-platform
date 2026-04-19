@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 情感模块 (Emotion Module)
 基于PAD模型的情感管理系统

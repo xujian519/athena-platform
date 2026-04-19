@@ -4,17 +4,16 @@ Athena平台通用工具 - LangExtract GLM智能信息提取系统
 集成GLM模型的本地化智能信息提取工具
 """
 
-import asyncio
 import hashlib
-import json
 import logging
-from core.logging_config import setup_logging
 import sys
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any
+
+from core.logging_config import setup_logging  # type: ignore
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent.parent
@@ -59,16 +58,16 @@ class ExtractionTask:
     """信息提取任务定义"""
     task_id: str
     scenario: ExtractionScenario
-    text_or_documents: Union[str, List[str]]
+    text_or_documents: str | list[str]
     prompt_description: str | None = None
-    examples: Optional[List[Any]] = None
+    examples: list[Any] | None = None
     model_type: str = 'glm-4-flash'
-    config: Dict[str, Any] = field(default_factory=dict)
+    config: dict[str, Any] = field(default_factory=dict)
     priority: int = 1
     max_retries: int = 3
     timeout: int = 300
     callback_url: str | None = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -76,8 +75,8 @@ class ExtractionResult:
     """信息提取结果"""
     task_id: str
     success: bool
-    data: Dict[str, Any] = field(default_factory=dict)
-    extractions: List[Any] = field(default_factory=list)
+    data: dict[str, Any] = field(default_factory=dict)
+    extractions: list[Any] = field(default_factory=list)
     raw_response: str = ''
     model_used: str = ''
     tokens_used: int = 0
@@ -185,7 +184,7 @@ class LangExtractGLMTool:
             ],
             'recommended_model': 'glm-4-air'
         },
-        
+
         ExtractionScenario.CONTRACT_REVIEW: {
             'name': '合同审查',
             'description': '从合同文档中提取关键条款、当事人信息、权利义务等',
@@ -360,11 +359,11 @@ class LangExtractGLMTool:
             'model_usage': {}
         }
         self.active_tasks = {}
-        
+
         # 初始化GLM提供商
         if self.is_glm_available:
             self.glm_provider = get_glm_provider()
-        
+
         logger.info(f"LangExtract GLM工具初始化完成，GLM可用性: {self.is_glm_available}")
 
     async def initialize(self) -> bool:
@@ -378,24 +377,24 @@ class LangExtractGLMTool:
                     examples=[],
                     extraction_type='test'
                 )
-                
+
                 test_result = await self.glm_provider.extract_with_glm(test_request)
-                
+
                 if test_result.success:
                     logger.info('GLM提供商验证成功')
                 else:
                     logger.warning('GLM提供商验证失败，将使用降级模式')
             else:
                 logger.info('GLM不可用，使用模拟模式')
-            
+
             logger.info('LangExtract GLM工具初始化成功')
             return True
-            
+
         except Exception as e:
             logger.error(f"LangExtract GLM工具初始化失败: {e}")
             return False
 
-    def get_status(self) -> Dict[str, Any]:
+    def get_status(self) -> dict[str, Any]:
         """获取工具状态"""
         status = {
             'tool': {
@@ -416,16 +415,16 @@ class LangExtractGLMTool:
             'performance': self.usage_stats,
             'active_tasks': len(self.active_tasks)
         }
-        
+
         # 添加模型信息
         if self.is_glm_available and self.glm_provider:
-            status['models'] = await self.glm_provider.get_model_performance()
+            status['models'] = self.glm_provider.get_model_performance()
         else:
             status['models'] = {'error': 'GLM不可用'}
-        
+
         return status
 
-    async def list_scenarios(self) -> Dict[str, Any]:
+    async def list_scenarios(self) -> dict[str, Any]:
         """列出可用的提取场景"""
         scenarios_info = {}
         for scenario, config in self.SCENARIOS.items():
@@ -435,7 +434,7 @@ class LangExtractGLMTool:
                 'recommended_model': config.get('recommended_model', 'glm-4-flash'),
                 'capabilities': config.get('capabilities', [])
             }
-        
+
         return {
             'total_scenarios': len(self.SCENARIOS),
             'scenarios': scenarios_info,
@@ -443,22 +442,22 @@ class LangExtractGLMTool:
         }
 
     async def execute_scenario(
-        self, 
-        scenario: str, 
-        text_or_documents: Union[str, List[str]], 
-        config: Optional[Dict[str, Any]] = None
+        self,
+        scenario: str,
+        text_or_documents: str | list[str],
+        config: dict[str, Any] | None = None
     ) -> ExtractionResult:
         """执行预定义场景的信息提取"""
         start_time = datetime.now()
-        
+
         try:
             # 验证场景
             if scenario not in [s.value for s in ExtractionScenario]:
                 raise ValueError(f"不支持的场景: {scenario}")
-            
+
             scenario_enum = ExtractionScenario(scenario)
             scenario_config = self.SCENARIOS[scenario_enum]
-            
+
             # 选择模型
             preferred_model = None
             if scenario_config.get('recommended_model'):
@@ -466,7 +465,7 @@ class LangExtractGLMTool:
                     preferred_model = GLMModelType(scenario_config['recommended_model'])
                 except ValueError:
                     preferred_model = None
-            
+
             # 创建任务
             task = ExtractionTask(
                 task_id=self._generate_task_id(),
@@ -477,20 +476,20 @@ class LangExtractGLMTool:
                 model_type=scenario_config.get('recommended_model', 'glm-4-flash'),
                 config=config or {}
             )
-            
+
             # 执行提取
             result = await self._execute_extraction(task, preferred_model)
-            
+
             # 更新统计
             execution_time = (datetime.now() - start_time).total_seconds()
             result.processing_time = execution_time
             result.timestamp = datetime.now()
-            
+
             if result.success:
                 self.usage_stats['successful_extractions'] += 1
                 self.usage_stats['total_tokens_used'] += result.tokens_used
                 self.usage_stats['total_cost'] += result.cost
-                
+
                 # 更新模型使用统计
                 model_name = result.model_used
                 if model_name not in self.usage_stats['model_usage']:
@@ -498,16 +497,16 @@ class LangExtractGLMTool:
                 self.usage_stats['model_usage'][model_name] += 1
             else:
                 self.usage_stats['failed_extractions'] += 1
-            
+
             self.usage_stats['total_extractions'] += 1
             self.usage_stats['last_used'] = datetime.now().isoformat()
-            
+
             # 更新工具定义
             self.TOOL_DEFINITION['last_used'] = datetime.now().isoformat()
             self.TOOL_DEFINITION['usage_count'] += 1
-            
+
             return result
-            
+
         except Exception as e:
             logger.error(f"场景执行失败: {e}")
             execution_time = (datetime.now() - start_time).total_seconds()
@@ -520,15 +519,15 @@ class LangExtractGLMTool:
 
     async def execute_custom_extraction(
         self,
-        text_or_documents: Union[str, List[str]],
+        text_or_documents: str | list[str],
         prompt_description: str,
-        examples: Optional[List[Any]] = None,
+        examples: list[Any] | None = None,
         model_type: str = 'glm-4-flash',
-        config: Optional[Dict[str, Any]] = None
+        config: dict[str, Any] | None = None
     ) -> ExtractionResult:
         """执行自定义信息提取"""
         start_time = datetime.now()
-        
+
         try:
             # 选择模型类型
             preferred_model = None
@@ -536,7 +535,7 @@ class LangExtractGLMTool:
                 preferred_model = GLMModelType(model_type)
             except ValueError:
                 preferred_model = None
-            
+
             # 创建任务
             task = ExtractionTask(
                 task_id=self._generate_task_id(),
@@ -547,20 +546,20 @@ class LangExtractGLMTool:
                 model_type=model_type,
                 config=config or {}
             )
-            
+
             # 执行提取
             result = await self._execute_extraction(task, preferred_model)
-            
+
             # 更新统计
             execution_time = (datetime.now() - start_time).total_seconds()
             result.processing_time = execution_time
             result.timestamp = datetime.now()
-            
+
             if result.success:
                 self.usage_stats['successful_extractions'] += 1
                 self.usage_stats['total_tokens_used'] += result.tokens_used
                 self.usage_stats['total_cost'] += result.cost
-                
+
                 # 更新模型使用统计
                 model_name = result.model_used
                 if model_name not in self.usage_stats['model_usage']:
@@ -568,12 +567,12 @@ class LangExtractGLMTool:
                 self.usage_stats['model_usage'][model_name] += 1
             else:
                 self.usage_stats['failed_extractions'] += 1
-            
+
             self.usage_stats['total_extractions'] += 1
             self.usage_stats['last_used'] = datetime.now().isoformat()
-            
+
             return result
-            
+
         except Exception as e:
             logger.error(f"自定义提取失败: {e}")
             execution_time = (datetime.now() - start_time).total_seconds()
@@ -585,15 +584,15 @@ class LangExtractGLMTool:
             )
 
     async def _execute_extraction(
-        self, 
-        task: ExtractionTask, 
+        self,
+        task: ExtractionTask,
         preferred_model: GLMModelType | None = None
     ) -> ExtractionResult:
         """执行信息提取任务"""
         if not self.is_glm_available or not self.glm_provider:
             # 模拟模式
             return self._simulate_extraction(task)
-        
+
         try:
             # 创建GLM提取请求
             glm_request = GLMExtractionRequest(
@@ -605,26 +604,26 @@ class LangExtractGLMTool:
                 priority=task.priority,
                 cost_budget=task.config.get('cost_budget')
             )
-            
+
             logger.info(f"开始执行GLM提取任务: {task.task_id}")
-            
+
             # 执行GLM提取
             glm_result = await self.glm_provider.extract_with_glm(
                 glm_request, preferred_model
             )
-            
+
             # 构建返回数据
             result_data = {
                 'text_length': len(str(task.text_or_documents)),
                 'extraction_count': len(glm_result.extractions),
-                'extraction_types': list(set(
-                    ext.get('extraction_class', 'unknown') 
+                'extraction_types': list({
+                    ext.get('extraction_class', 'unknown')
                     for ext in glm_result.extractions
-                )),
+                }),
                 'scenario': task.scenario.value,
                 'processing_mode': 'glm_local'
             }
-            
+
             stats = {
                 'model_used': glm_result.model_used,
                 'text_length': len(str(task.text_or_documents)),
@@ -634,9 +633,9 @@ class LangExtractGLMTool:
                 'cost': glm_result.cost,
                 'confidence_score': glm_result.confidence_score
             }
-            
+
             logger.info(f"GLM提取完成: {len(glm_result.extractions)}个实体提取成功")
-            
+
             return ExtractionResult(
                 task_id=task.task_id,
                 success=glm_result.success,
@@ -649,7 +648,7 @@ class LangExtractGLMTool:
                 confidence_score=glm_result.confidence_score,
                 stats=stats
             )
-            
+
         except Exception as e:
             logger.error(f"GLM提取执行失败: {e}")
             return ExtractionResult(
@@ -661,20 +660,20 @@ class LangExtractGLMTool:
     def _simulate_extraction(self, task: ExtractionTask) -> ExtractionResult:
         """模拟信息提取（当GLM不可用时）"""
         logger.info(f"使用模拟模式执行提取任务: {task.task_id}")
-        
+
         # 模拟一些提取结果
         simulated_extractions = [
             {
                 'extraction_class': 'simulated_entity',
                 'extraction_text': '模拟提取的实体',
                 'attributes': {
-                    'source': 'simulation', 
+                    'source': 'simulation',
                     'confidence': 0.95,
                     'model': 'local'
                 }
             }
         ]
-        
+
         result_data = {
             'text_length': len(str(task.text_or_documents)),
             'extraction_count': len(simulated_extractions),
@@ -682,7 +681,7 @@ class LangExtractGLMTool:
             'scenario': task.scenario.value,
             'processing_mode': 'simulation'
         }
-        
+
         stats = {
             'model_used': 'simulation',
             'text_length': len(str(task.text_or_documents)),
@@ -692,7 +691,7 @@ class LangExtractGLMTool:
             'cost': 0.0,
             'confidence_score': 0.8
         }
-        
+
         return ExtractionResult(
             task_id=task.task_id,
             success=True,
@@ -709,12 +708,12 @@ class LangExtractGLMTool:
     def _generate_task_id(self) -> str:
         """生成任务ID"""
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        hash_obj = hashlib.md5(timestamp.encode(), usedforsecurity=False))
+        hash_obj = hashlib.md5(timestamp.encode(), usedforsecurity=False)
         return f"langextract_glm_{hash_obj.hexdigest()[:8]}_{timestamp}"
 
     async def visualize_results(
-        self, 
-        extractions: List[Dict[str, Any]], 
+        self,
+        extractions: list[dict[str, Any]],
         output_path: str = None
     ) -> str:
         """生成交互式可视化结果"""
@@ -725,12 +724,12 @@ class LangExtractGLMTool:
                 with open(output_path, 'w', encoding='utf-8') as f:
                     f.write(html_content)
             return html_content
-            
+
         except Exception as e:
             logger.error(f"可视化生成失败: {e}")
             return f"<html><body><h1>GLM可视化生成失败</h1><p>{str(e)}</p></body></html>"
 
-    def _generate_glm_visualization(self, extractions: List[Dict[str, Any]]) -> str:
+    def _generate_glm_visualization(self, extractions: list[dict[str, Any]]) -> str:
         """生成GLM主题的HTML可视化"""
         html = f"""
         <!DOCTYPE html>
@@ -866,7 +865,7 @@ class LangExtractGLMTool:
                     <h1>🧠 LangExtract GLM 智能提取结果</h1>
                     <p>基于GLM模型的结构化信息提取系统</p>
                 </div>
-                
+
                 <div class='stats'>
                     <div class='stat-card'>
                         <div class='stat-number'>{len(extractions)}</div>
@@ -885,11 +884,11 @@ class LangExtractGLMTool:
                         <div class='stat-label'>部署方式</div>
                     </div>
                 </div>
-                
+
                 <div class='extractions-container'>
         """
-        
-        for i, ext in enumerate(extractions):
+
+        for _i, ext in enumerate(extractions):
             confidence = ext.get('confidence_score', 0.8) * 100
             html += f"""
                 <div class='extraction-card'>
@@ -900,19 +899,19 @@ class LangExtractGLMTool:
                     <div class='extraction-text'>"{ext.get('extraction_text', '')}"</div>
                     <div class='attributes'>
             """
-            
+
             attributes = ext.get('attributes', {})
             for key, value in attributes.items():
-                html += f'<span class='attribute'>{key}: {value}</span> '
-            
+                html += f'<span class="attribute">{key}: {value}</span> '
+
             html += """
                     </div>
                 </div>
             """
-        
-        html += f"""
+
+        html += """
                 </div>
-                
+
                 <div class='model-info'>
                     🤖 Powered by GLM | 💰 本地化AI处理 | ⚡ 实时响应
                 </div>
@@ -920,19 +919,19 @@ class LangExtractGLMTool:
         </body>
         </html>
         """
-        
+
         return html
 
     async def batch_extract(
-        self, 
-        tasks: List[ExtractionTask], 
+        self,
+        tasks: list[ExtractionTask],
         max_concurrent: int = 5
-    ) -> List[ExtractionResult]:
+    ) -> list[ExtractionResult]:
         """批量提取"""
         if not self.is_glm_available or not self.glm_provider:
             # 模拟模式批量处理
             return [self._simulate_extraction(task) for task in tasks]
-        
+
         # 转换为GLM请求格式
         glm_requests = []
         for task in tasks:
@@ -945,13 +944,13 @@ class LangExtractGLMTool:
                 priority=task.priority
             )
             glm_requests.append(glm_request)
-        
+
         # 使用GLM提供商的批量处理
         glm_results = await self.glm_provider.batch_extract(glm_requests, max_concurrent)
-        
+
         # 转换为 ExtractionResult 格式
         results = []
-        for i, (task, glm_result) in enumerate(zip(tasks, glm_results)):
+        for _i, (task, glm_result) in enumerate(zip(tasks, glm_results, strict=False)):
             result = ExtractionResult(
                 task_id=task.task_id,
                 success=glm_result.success,
@@ -971,16 +970,16 @@ class LangExtractGLMTool:
                 error=glm_result.error
             )
             results.append(result)
-        
+
         # 更新统计
         successful_count = sum(1 for r in results if r.success)
         self.usage_stats['successful_extractions'] += successful_count
         self.usage_stats['failed_extractions'] += len(results) - successful_count
         self.usage_stats['total_extractions'] += len(results)
         self.usage_stats['last_used'] = datetime.now().isoformat()
-        
+
         logger.info(f"GLM批量提取完成: {successful_count}/{len(results)} 成功")
-        
+
         return results
 
 

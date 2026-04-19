@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多模态融合接口
 Multimodal Fusion Interface
@@ -15,9 +16,9 @@ import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
-
+import numpy as np
 
 
 class ModalityType(Enum):

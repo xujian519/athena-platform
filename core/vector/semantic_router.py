@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能语义路由器
 Intelligent Semantic Router
@@ -12,6 +13,8 @@ import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+import numpy as np
 
 from core.logging_config import setup_logging
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 判决书向量化模块
 Judgment Vectorizer
@@ -14,8 +15,9 @@ import pickle
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
+import numpy as np
 
 from core.logging_config import setup_logging
 
@@ -242,7 +244,7 @@ class JudgmentVectorizer:
         return vectors
 
     def _vectorize_layer3(
-        self, case_id: str, layer3_data: list[dict[str, Any]) -> list[VectorizedData]:
+        self, case_id: str, layer3_data: list[dict[str, Any]]) -> list[VectorizedData]:
         """
         向量化L3层(论点层)
 
@@ -416,7 +418,7 @@ class JudgmentVectorizer:
 
 # 便捷函数
 def vectorize_judgment(
-    structured_data: dict[str, Any, config: dict[str, Any] | None = None
+    structured_data: dict[str, Any], config: dict[str, Any] | None = None
 ) -> list[VectorizedData]:
     """
     向量化判决书

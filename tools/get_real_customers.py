@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 查询当前正在处理的实际客户（申请人）
 Check Currently Active Real Customers (Applicants)
 """
 
-import psycopg2
 import os
-from datetime import datetime, timedelta
+
+import psycopg2
 
 # PostgreSQL配置
 db_config = {

@@ -3,11 +3,9 @@ POI搜索工具
 POI Search Tool
 """
 
-import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import structlog
-from mcp.types import Tool
 
 from ..api.gaode_client import AmapApiClient
 
@@ -22,7 +20,7 @@ class POISearchTool:
     def __init__(self, api_client: AmapApiClient):
         self.api_client = api_client
 
-    async def call(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
+    async def call(self, arguments: dict[str, Any]) -> dict[str, Any]:
         """
         POI搜索处理
 
@@ -53,7 +51,7 @@ class POISearchTool:
         else:
             raise ValueError(f"不支持的搜索类型: {search_type}")
 
-    async def _handle_text_search(self, args: Dict[str, Any]) -> Dict[str, Any]:
+    async def _handle_text_search(self, args: dict[str, Any]) -> dict[str, Any]:
         """处理文本搜索"""
         keywords = args.get('keywords')
         if not keywords:
@@ -160,7 +158,7 @@ class POISearchTool:
                 'results': []
             }
 
-    async def _handle_around_search(self, args: Dict[str, Any]) -> Dict[str, Any]:
+    async def _handle_around_search(self, args: dict[str, Any]) -> dict[str, Any]:
         """处理周边搜索"""
         keywords = args.get('keywords')
         location = args.get('location')
@@ -267,7 +265,7 @@ class POISearchTool:
                 'results': []
             }
 
-    async def _handle_polygon_search(self, args: Dict[str, Any]) -> Dict[str, Any]:
+    async def _handle_polygon_search(self, args: dict[str, Any]) -> dict[str, Any]:
         """处理多边形搜索"""
         # 注意：当前高德地图API暂不直接支持多边形搜索，
         # 这里提供基于多个点的近似搜索逻辑
@@ -282,7 +280,7 @@ class POISearchTool:
             if len(points) < 3:
                 raise ValueError('多边形至少需要3个点')
         except Exception as e:
-            raise ValueError(f"多边形坐标格式错误: {str(e)}")
+            raise ValueError(f"多边形坐标格式错误: {str(e)}") from e
 
         logger.info(
             '执行POI多边形搜索',
@@ -329,7 +327,7 @@ class POISearchTool:
                         poi_lon, poi_lat = map(float, poi_location.split(','))
                         if self._point_in_polygon(poi_lon, poi_lat, coords):
                             filtered_results.append(poi)
-                    except:
+                    except Exception:
                         continue
 
             result['results'] = filtered_results
@@ -337,7 +335,7 @@ class POISearchTool:
 
         return result
 
-    def _point_in_polygon(self, x: float, y: float, polygon: List[tuple]) -> bool:
+    def _point_in_polygon(self, x: float, y: float, polygon: list[tuple]) -> bool:
         """判断点是否在多边形内（射线法）"""
         n = len(polygon)
         inside = False
@@ -356,7 +354,7 @@ class POISearchTool:
 
         return inside
 
-    def get_input_schema(self) -> Dict[str, Any]:
+    def get_input_schema(self) -> dict[str, Any]:
         """获取输入参数模式"""
         return {
             'type': 'object',
@@ -413,7 +411,7 @@ class POISearchTool:
             'required': ['search_type', 'keywords']
         }
 
-    def get_output_schema(self) -> Dict[str, Any]:
+    def get_output_schema(self) -> dict[str, Any]:
         """获取输出结果模式"""
         return {
             'type': 'object',

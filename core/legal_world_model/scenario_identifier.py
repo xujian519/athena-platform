@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 场景识别器 - 识别用户输入的业务场景
 Scenario Identifier - Identify business scenarios from user input
@@ -11,7 +12,7 @@ import logging
 import re
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Tuple, Dict
 
 logger = logging.getLogger(__name__)
 
@@ -79,11 +80,19 @@ class ScenarioIdentifier:
                 "技术贡献",
                 "突出的实质性特点",
                 "显著的进步",
+                "用途发明",
+                "反向教导",
+                "技术启示",
+                "预料不到",
+                "事后诸葛亮",
+                "技术偏见",
+                "复审请求",
+                "驳回复审",
             ],
             TaskType.NOVELTY_ANALYSIS: ["新颖性", "现有技术", "公开", "在先技术", "不属于现有技术"],
             TaskType.INFRINGEMENT: ["侵权", "落入保护范围", "等同", "相同", "保护范围"],
             TaskType.VALIDITY: ["无效", "无效宣告", "不符合专利法", "不具备", "不授予"],
-            TaskType.DRAFTING: ["撰写", "申请文件", "权利要求", "说明书", "摘要"],
+            TaskType.DRAFTING: ["撰写", "写", "起草", "生成", "申请文件", "权利要求", "说明书", "摘要"],
             TaskType.SEARCH: ["检索", "查新", "现有技术检索", "对比文件"],
         },
         Domain.TRADEMARK: {
@@ -117,7 +126,7 @@ class ScenarioIdentifier:
         self.enable_llm_fallback = enable_llm_fallback
 
     def identify_scenario(
-        self, user_input: str, additional_context: dict[str, Any] | None = None
+        self, user_input: str, additional_context: Optional[Dict[str, Any]] = None
     ) -> ScenarioContext:
         """
         识别用户输入的场景
@@ -146,11 +155,16 @@ class ScenarioIdentifier:
         logger.info(f"  领域: {domain.value} (置信度: {domain_confidence:.2f})")
 
         # 2. 识别任务类型
+        task_type = TaskType.OTHER  # 默认值
+        task_confidence = 0.0
         if domain in self.KEYWORD_RULES:
             task_type, task_confidence = self._identify_task_type(user_input, domain)
             result.task_type = task_type
             result.confidence = (domain_confidence + task_confidence) / 2
             logger.info(f"  任务: {task_type.value} (置信度: {task_confidence:.2f})")
+        else:
+            result.task_type = TaskType.OTHER
+            result.confidence = domain_confidence
 
         # 3. 识别阶段
         phase, phase_confidence = self._identify_phase(user_input)
@@ -180,6 +194,8 @@ class ScenarioIdentifier:
                 "发明",
                 "实用新型",
                 "外观设计",
+                "外观",
+                "设计",
                 "技术方案",
                 "权利要求",
                 "说明书",
@@ -350,7 +366,7 @@ class ScenarioIdentifier:
         return variables
 
     async def identify_scenario_with_llm(
-        self, user_input: str, additional_context: dict[str, Any] | None = None
+        self, user_input: str, additional_context: Optional[Dict[str, Any]] = None
     ) -> ScenarioContext:
         """
         使用LLM辅助识别场景(当规则匹配置信度较低时)
@@ -362,15 +378,138 @@ class ScenarioIdentifier:
         Returns:
             ScenarioContext: 识别的场景上下文
         """
-        # TODO: 实现LLM辅助的场景识别
-        # 可以使用平台现有的LLM接口
-        logger.warning("⚠️ LLM辅助场景识别功能尚未实现")
+        try:
+            # 尝试导入LLM管理器
+            from core.llm.unified_llm_manager import UnifiedLLMManager
+
+            llm_manager = UnifiedLLMManager()
+
+            # 构建场景识别提示
+            prompt = f"""请分析以下用户输入,识别其业务场景:
+
+用户输入: {user_input}
+
+请按以下格式输出:
+1. 业务领域 (patent/trademark/legal/copyright/other)
+2. 任务类型 (creativity_analysis/novelty_analysis/infringement/similarity/validity/drafting/search/other)
+3. 业务阶段 (application/examination/opposition/litigation/other)
+4. 置信度 (0.0-1.0)
+5. 提取的关键变量 (JSON格式)
+
+请直接输出JSON格式结果。"""
+
+            # 调用LLM
+            response = await llm_manager.generate(
+                prompt=prompt,
+                model_preference="fast",  # 使用快速模型
+                max_tokens=500,
+            )
+
+            if response and response.get("text"):
+                # 解析LLM响应
+                result = self._parse_llm_response(response["text"], user_input)
+                logger.info(f"✅ LLM辅助场景识别完成: {result.domain.value}/{result.task_type.value}")
+                return result
+
+        except Exception as e:
+            logger.warning(f"⚠️ LLM辅助场景识别失败: {e}, 使用规则匹配")
+
+        # 降级到规则匹配
         return self.identify_scenario(user_input, additional_context)
+
+    def _parse_llm_response(self, llm_response: str, user_input: str) -> "ScenarioContext":
+        """解析LLM响应并构建场景上下文"""
+        import json
+
+        try:
+            # 尝试解析JSON
+            # 移除可能的markdown代码块标记
+            clean_response = llm_response.strip()
+            if clean_response.startswith("```"):
+                clean_response = re.sub(r"```\w*\n?", "", clean_response)
+                clean_response = clean_response.rstrip("`").strip()
+
+            parsed = json.loads(clean_response)
+
+            # 构建场景上下文
+            domain_str = parsed.get("业务领域", parsed.get("domain", "other"))
+            task_type_str = parsed.get("任务类型", parsed.get("task_type", "other"))
+            phase_str = parsed.get("业务阶段", parsed.get("phase", "other"))
+            confidence = float(parsed.get("置信度", parsed.get("confidence", 0.5)))
+            variables = parsed.get("提取的关键变量", parsed.get("variables", {}))
+
+            # 转换为枚举
+            domain = self._str_to_domain(domain_str)
+            task_type = self._str_to_task_type(task_type_str)
+            phase = self._str_to_phase(phase_str)
+
+            return ScenarioContext(
+                domain=domain,
+                task_type=task_type,
+                phase=phase,
+                confidence=confidence,
+                extracted_variables=variables,
+                metadata={"source": "llm", "raw_response": llm_response[:200]},
+            )
+
+        except (json.JSONDecodeError, ValueError, KeyError) as e:
+            logger.warning(f"解析LLM响应失败: {e}")
+            # 返回基于规则的结果
+            return self.identify_scenario(user_input)
+
+    def _str_to_domain(self, domain_str: str) -> Domain:
+        """字符串转Domain枚举"""
+        domain_map = {
+            "patent": Domain.PATENT,
+            "专利": Domain.PATENT,
+            "trademark": Domain.TRADEMARK,
+            "商标": Domain.TRADEMARK,
+            "legal": Domain.LEGAL,
+            "法律": Domain.LEGAL,
+            "copyright": Domain.COPYRIGHT,
+            "版权": Domain.COPYRIGHT,
+            "著作权": Domain.COPYRIGHT,
+        }
+        return domain_map.get(domain_str.lower(), Domain.OTHER)
+
+    def _str_to_task_type(self, task_type_str: str) -> TaskType:
+        """字符串转TaskType枚举"""
+        task_map = {
+            "creativity_analysis": TaskType.CREATIVITY_ANALYSIS,
+            "创造性分析": TaskType.CREATIVITY_ANALYSIS,
+            "novelty_analysis": TaskType.NOVELTY_ANALYSIS,
+            "新颖性分析": TaskType.NOVELTY_ANALYSIS,
+            "infringement": TaskType.INFRINGEMENT,
+            "侵权": TaskType.INFRINGEMENT,
+            "similarity": TaskType.SIMILARITY,
+            "相似性": TaskType.SIMILARITY,
+            "validity": TaskType.VALIDITY,
+            "无效": TaskType.VALIDITY,
+            "drafting": TaskType.DRAFTING,
+            "撰写": TaskType.DRAFTING,
+            "search": TaskType.SEARCH,
+            "检索": TaskType.SEARCH,
+        }
+        return task_map.get(task_type_str.lower(), TaskType.OTHER)
+
+    def _str_to_phase(self, phase_str: str) -> Phase:
+        """字符串转Phase枚举"""
+        phase_map = {
+            "application": Phase.APPLICATION,
+            "申请": Phase.APPLICATION,
+            "examination": Phase.EXAMINATION,
+            "审查": Phase.EXAMINATION,
+            "opposition": Phase.OPPOSITION,
+            "异议": Phase.OPPOSITION,
+            "litigation": Phase.LITIGATION,
+            "诉讼": Phase.LITIGATION,
+        }
+        return phase_map.get(phase_str.lower(), Phase.OTHER)
 
 
 # 便捷函数
 def identify_scenario_from_input(
-    user_input: str, additional_context: dict[str, Any] | None = None
+    user_input: str, additional_context: Optional[Dict[str, Any]] = None
 ) -> ScenarioContext:
     """
     便捷函数:从用户输入识别场景

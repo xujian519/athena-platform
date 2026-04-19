@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 异步批处理器
 Async Batch Processor
@@ -17,7 +18,7 @@ import uuid
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 from core.communication.optimized_communication_module import BatchMessage, CompressionType, Message
 

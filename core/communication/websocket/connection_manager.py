@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 WebSocket连接管理器
 WebSocket Connection Manager
@@ -17,9 +18,12 @@ WebSocket Connection Manager
 import asyncio
 import logging
 from datetime import datetime
-from typing import Any, Dict, Set
+from typing import Any
 
-from websockets.server import WebSocketServerProtocol
+from websockets.asyncio.server import ServerConnection
+
+# 类型别名，保持向后兼容
+WebSocketServerProtocol = ServerConnection
 
 from core.communication.websocket_auth import WebSocketAuthResult
 
@@ -40,8 +44,8 @@ class ConnectionInfo:
         self.auth_result = auth_result
         self.connected_at = datetime.now()
         self.last_activity = datetime.now()
-        self.subscriptions: Set[str] = set()
-        self.metadata: Dict[str, Any] = {}
+        self.subscriptions: set[str] = set()
+        self.metadata: dict[str, Any] = {}
 
     @property
     def is_expired(self) -> bool:
@@ -66,8 +70,8 @@ class ConnectionManager:
             max_connections: 最大连接数
         """
         self.max_connections = max_connections
-        self._connections: Dict[str, ConnectionInfo] = {}
-        self._channels: Dict[str, Set[str]] = {}  # channel -> set of connection_ids
+        self._connections: dict[str, ConnectionInfo] = {}
+        self._channels: dict[str, set[str]] = {}  # channel -> set of connection_ids
         self._lock = asyncio.Lock()
         self._cleanup_task: asyncio.Task | None = None
 
@@ -238,7 +242,7 @@ class ConnectionManager:
 
             return True
 
-    async def get_channel_subscribers(self, channel: str) -> Set[str]:
+    async def get_channel_subscribers(self, channel: str) -> set[str]:
         """
         获取频道的所有订阅者
 
@@ -251,7 +255,7 @@ class ConnectionManager:
         return self._channels.get(channel, set()).copy()
 
     async def broadcast(
-        self, message: str, exclude: Set[str] | None = None
+        self, message: str, exclude: set[str] | None = None
     ) -> int:
         """
         广播消息到所有连接
@@ -311,7 +315,7 @@ class ConnectionManager:
         """
         return len(self._connections)
 
-    async def get_stats(self) -> Dict[str, Any]:
+    async def get_stats(self) -> dict[str, Any]:
         """
         获取连接统计信息
 
@@ -320,7 +324,7 @@ class ConnectionManager:
         """
         async with self._lock:
             # 按角色统计
-            role_counts: Dict[str, int] = {}
+            role_counts: dict[str, int] = {}
             for connection_info in self._connections.values():
                 role = connection_info.auth_result.role.value if connection_info.auth_result.role else "unknown"
                 role_counts[role] = role_counts.get(role, 0) + 1

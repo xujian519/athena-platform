@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 执行模块配置加载器
 Execution Module Configuration Loader
@@ -116,7 +117,7 @@ class ExecutionConfig:
 class ConfigLoader:
     """
     配置加载器
-    
+
     支持从YAML文件加载配置，并允许通过环境变量覆盖。
     """
 
@@ -127,7 +128,7 @@ class ConfigLoader:
     ):
         """
         初始化配置加载器
-        
+
         Args:
             config_path: 配置文件路径，默认为 config/production.yaml
             env_prefix: 环境变量前缀
@@ -139,7 +140,7 @@ class ConfigLoader:
     def _find_config_file(self) -> str:
         """
         查找配置文件
-        
+
         按优先级查找：
         1. 环境变量指定的配置文件
         2. config/production.yaml
@@ -170,7 +171,7 @@ class ConfigLoader:
     def load(self) -> ExecutionConfig:
         """
         加载配置
-        
+
         Returns:
             ExecutionConfig: 加载的配置对象
         """
@@ -385,11 +386,11 @@ def load_config(
 ) -> ExecutionConfig:
     """
     加载配置（单例模式）
-    
+
     Args:
         config_path: 配置文件路径
         env_prefix: 环境变量前缀
-    
+
     Returns:
         ExecutionConfig: 配置对象
     """
@@ -405,7 +406,7 @@ def load_config(
 def get_config() -> ExecutionConfig | None:
     """
     获取已加载的配置
-    
+
     Returns:
         ExecutionConfig: 配置对象，如果未加载则返回None
     """
@@ -415,7 +416,7 @@ def get_config() -> ExecutionConfig | None:
 def reload_config() -> ExecutionConfig:
     """
     重新加载配置
-    
+
     Returns:
         ExecutionConfig: 重新加载的配置对象
     """

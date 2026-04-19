@@ -1,0 +1,1489 @@
+# =====================================================================
+# Athena工作平台 - 完整服务元数据配置（59个服务）
+# Complete Services Metadata Configuration
+# =====================================================================
+#
+# 本文件定义了平台所有59个微服务的元数据，包括：
+# - 服务名称和层级
+# - 端口配置
+# - 依赖关系
+# - 健康检查配置
+# - 启动优先级
+# - 是否按需启动
+#
+# =====================================================================
+
+services:
+  # ##########################################################################
+  # 第1层：基础设施层服务 (Infrastructure Layer) - 优先级P0，必须启动
+  # ##########################################################################
+
+  postgresql:
+    name: PostgreSQL数据库
+    layer: infrastructure
+    priority: P0
+    on_demand: false
+    image: postgres:15-alpine
+    ports:
+      internal: 5432
+      external: 5432
+    environment:
+      POSTGRES_DB: athena
+      POSTGRES_USER: athena
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-athena123}
+    volumes:
+      - ../../data/postgres:/var/lib/postgresql/data
+    health_check:
+      type: tcp
+      port: 5432
+      interval: 10
+      timeout: 5
+    dependencies: []
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+    labels:
+      - database
+      - primary
+
+  redis:
+    name: Redis缓存
+    layer: infrastructure
+    priority: P0
+    on_demand: false
+    image: redis:7-alpine
+    ports:
+      internal: 6379
+      external: 6379
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis123}
+    volumes:
+      - ../../data/redis:/data
+    health_check:
+      type: tcp
+      port: 6379
+      interval: 10
+      timeout: 5
+    dependencies: []
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  qdrant:
+    name: Qdrant向量数据库
+    layer: infrastructure
+    priority: P0
+    on_demand: false
+    image: qdrant/qdrant:v1.7.4
+    ports:
+      internal: 6333
+      external: 6333
+      grpc: 6334
+    environment:
+      QDRANT__SERVICE__HTTP_PORT: 6333
+      QDRANT__SERVICE__GRPC_PORT: 6334
+    volumes:
+      - ../../data/qdrant:/qdrant/storage
+    health_check:
+      type: http
+      port: 6333
+      path: /health
+      interval: 30
+      timeout: 10
+    dependencies: []
+    resource_limits:
+      cpus: "4.0"
+      memory: 16G
+
+  nebula-metad:
+    name: NebulaGraph Meta服务
+    layer: infrastructure
+    priority: P0
+    on_demand: false
+    image: vesoft/nebula-metad:v3.6.0
+    ports:
+      internal: 9559
+      external: 9559
+    dependencies: []
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  nebula-storaged:
+    name: NebulaGraph Storage服务
+    layer: infrastructure
+    priority: P0
+    on_demand: false
+    image: vesoft/nebula-storaged:v3.6.0
+    ports:
+      internal: 9779
+      external: 9779
+    dependencies:
+      - nebula-metad
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+
+  nebula-graph:
+    name: NebulaGraph图数据库
+    layer: infrastructure
+    priority: P0
+    on_demand: false
+    image: vesoft/nebula-graph:v3.6.0
+    ports:
+      internal: 9669
+      external: 9669
+    health_check:
+      type: tcp
+      port: 9669
+      interval: 15
+      timeout: 10
+    dependencies:
+      - nebula-metad
+      - nebula-storaged
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+
+  # ##########################################################################
+  # 第2层：核心服务层服务 (Core Services Layer) - 优先级P1/P2
+  # ##########################################################################
+
+  api-gateway:
+    name: API网关
+    layer: core_services
+    priority: P1
+    on_demand: false
+    type: nodejs
+    ports:
+      internal: 8080
+      external: 8080
+    working_dir: services/api-gateway
+    health_check:
+      type: http
+      port: 8080
+      path: /health
+      interval: 20
+      timeout: 5
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  unified-identity:
+    name: 统一身份认证
+    layer: core_services
+    priority: P1
+    on_demand: false
+    type: python
+    ports:
+      internal: 8010
+      external: 8010
+    working_dir: services/unified-identity
+    health_check:
+      type: http
+      port: 8010
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  yunpat-agent:
+    name: YunPat专利代理
+    layer: core_services
+    priority: P1
+    on_demand: false
+    type: python
+    ports:
+      internal: 8020
+      external: 8020
+    working_dir: services/yunpat-agent
+    health_check:
+      type: http
+      port: 8020
+      path: /api/health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  browser-automation:
+    name: 浏览器自动化
+    layer: core_services
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8030
+      external: 8030
+    working_dir: services/browser-automation-service
+    health_check:
+      type: http
+      port: 8030
+      path: /health
+      interval: 30
+    dependencies:
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  autonomous-control:
+    name: 自主控制
+    layer: core_services
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8040
+      external: 8040
+    working_dir: services/autonomous-control
+    health_check:
+      type: http
+      port: 8040
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  patent-analysis:
+    name: 专利分析
+    layer: core_services
+    priority: P1
+    on_demand: false
+    type: python
+    ports:
+      internal: 8050
+      external: 8050
+    working_dir: services/patent-analysis
+    health_check:
+      type: http
+      port: 8050
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - qdrant
+      - nebula-graph
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+
+  patent-search:
+    name: 专利搜索
+    layer: core_services
+    priority: P1
+    on_demand: false
+    type: python
+    ports:
+      internal: 8060
+      external: 8060
+    working_dir: services/patent-search
+    health_check:
+      type: http
+      port: 8060
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  knowledge-graph-service:
+    name: 知识图谱服务
+    layer: core_services
+    priority: P1
+    on_demand: false
+    type: python
+    ports:
+      internal: 8070
+      external: 8070
+    working_dir: services/knowledge-graph-service
+    health_check:
+      type: http
+      port: 8070
+      path: /health
+      interval: 20
+    dependencies:
+      - nebula-graph
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+
+  joyagent-optimization:
+    name: JoyAgent优化服务
+    layer: core_services
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8035
+      external: 8035
+    working_dir: services/joyagent-optimization-service
+    health_check:
+      type: http
+      port: 8035
+      path: /api/v1/health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  agent_core:
+    name: Agent核心服务
+    layer: core_services
+    priority: P1
+    on_demand: false
+    type: python
+    ports:
+      internal: 8015
+      external: 8015
+    working_dir: services/agent_core
+    health_check:
+      type: http
+      port: 8015
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+
+  athena-platform:
+    name: Athena平台服务
+    layer: core_services
+    priority: P1
+    on_demand: false
+    type: python
+    ports:
+      internal: 8080
+      external: 8080
+    working_dir: services/athena-platform
+    health_check:
+      type: http
+      port: 8080
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+
+  athena-unified:
+    name: Athena统一服务
+    layer: core_services
+    priority: P1
+    on_demand: false
+    type: python
+    ports:
+      internal: 8090
+      external: 8090
+    working_dir: services/athena-unified
+    health_check:
+      type: http
+      port: 8090
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.5"
+      memory: 3G
+
+  crawler-service:
+    name: 爬虫服务
+    layer: core_services
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8085
+      external: 8085
+    working_dir: services/crawler-service
+    health_check:
+      type: http
+      port: 8085
+      path: /health
+      interval: 30
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  intelligent-collaboration:
+    name: 智能协作服务
+    layer: core_services
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8095
+      external: 8095
+    working_dir: services/intelligent-collaboration
+    health_check:
+      type: http
+      port: 8095
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+    resource_limits:
+      cpus: "1.5"
+      memory: 3G
+
+  optimization-service:
+    name: 优化服务
+    layer: core_services
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8105
+      external: 8105
+    working_dir: services/optimization-service
+    health_check:
+      type: http
+      port: 8105
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  logging-service:
+    name: 日志服务
+    layer: core_services
+    priority: P1
+    on_demand: false
+    type: python
+    ports:
+      internal: 8110
+      external: 8110
+    working_dir: services/logging-service
+    health_check:
+      type: http
+      port: 8110
+      path: /health
+      interval: 30
+    dependencies:
+      - postgresql
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  visualization-tools:
+    name: 可视化工具
+    layer: core_services
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8091
+      external: 8091
+    working_dir: services/visualization-tools
+    health_check:
+      type: http
+      port: 8091
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - qdrant
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  knowledge-unified:
+    name: 知识统一服务
+    layer: core_services
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8075
+      external: 8075
+    working_dir: services/knowledge-unified
+    health_check:
+      type: http
+      port: 8075
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - nebula-graph
+      - qdrant
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+
+  vectorkg-unified:
+    name: 向量知识图谱统一服务
+    layer: core_services
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8076
+      external: 8076
+    working_dir: services/vectorkg-unified
+    health_check:
+      type: http
+      port: 8076
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - nebula-graph
+      - qdrant
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+
+  # ##########################################################################
+  # 第3层：MCP服务器层服务 (MCP Servers Layer) - 优先级P2/P3，大部分按需启动
+  # ##########################################################################
+
+  academic-search-mcp:
+    name: 学术搜索MCP服务器
+    layer: mcp_servers
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8200
+      external: 8200
+    working_dir: mcp-servers/academic-search-mcp-server
+    health_check:
+      type: tcp
+      port: 8200
+      interval: 30
+    dependencies:
+      - api-gateway
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  patent-search-mcp:
+    name: 专利搜索MCP服务器
+    layer: mcp_servers
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8201
+      external: 8201
+    working_dir: mcp-servers/patent-search-mcp-server
+    health_check:
+      type: tcp
+      port: 8201
+      interval: 30
+    dependencies:
+      - postgresql
+      - api-gateway
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  patent-downloader-mcp:
+    name: 专利下载MCP服务器
+    layer: mcp_servers
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8202
+      external: 8202
+    working_dir: mcp-servers/patent-downloader-mcp-server
+    health_check:
+      type: tcp
+      port: 8202
+      interval: 30
+    dependencies:
+      - postgresql
+      - redis
+      - api-gateway
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  jina-ai-mcp:
+    name: Jina AI MCP服务器
+    layer: mcp_servers
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8203
+      external: 8203
+    working_dir: mcp-servers/jina-ai-mcp-server
+    health_check:
+      type: tcp
+      port: 8203
+      interval: 30
+    dependencies:
+      - api-gateway
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  chrome-mcp:
+    name: Chrome MCP服务器
+    layer: mcp_servers
+    priority: P3
+    on_demand: true
+    type: python
+    ports:
+      internal: 8205
+      external: 8205
+    working_dir: mcp-servers/chrome-mcp-server
+    health_check:
+      type: tcp
+      port: 8205
+      interval: 30
+    dependencies:
+      - browser-automation
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  gaode-mcp:
+    name: 高德地图MCP服务器
+    layer: mcp_servers
+    priority: P3
+    on_demand: true
+    type: python
+    ports:
+      internal: 8206
+      external: 8206
+    working_dir: mcp-servers/gaode-mcp-server
+    health_check:
+      type: tcp
+      port: 8206
+      interval: 30
+    dependencies:
+      - api-gateway
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  github-mcp:
+    name: GitHub MCP服务器
+    layer: mcp_servers
+    priority: P3
+    on_demand: true
+    type: typescript
+    ports:
+      internal: 8207
+      external: 8207
+    working_dir: mcp-servers/github-mcp-server
+    health_check:
+      type: tcp
+      port: 8207
+      interval: 30
+    dependencies:
+      - api-gateway
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  google-patents-meta-mcp:
+    name: 谷歌专利元数据MCP服务器
+    layer: mcp_servers
+    priority: P3
+    on_demand: true
+    type: python
+    ports:
+      internal: 8208
+      external: 8208
+    working_dir: mcp-servers/google-patents-meta-server
+    health_check:
+      type: tcp
+      port: 8208
+      interval: 30
+    dependencies:
+      - api-gateway
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  bing-cn-mcp:
+    name: 必应中文MCP服务器
+    layer: mcp_servers
+    priority: P3
+    on_demand: true
+    type: python
+    ports:
+      internal: 8209
+      external: 8209
+    working_dir: mcp-servers/bing-cn-mcp-server
+    health_check:
+      type: tcp
+      port: 8209
+      interval: 30
+    dependencies:
+      - api-gateway
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  postgres-mcp:
+    name: PostgreSQL MCP服务器
+    layer: mcp_servers
+    priority: P3
+    on_demand: true
+    type: python
+    ports:
+      internal: 8210
+      external: 8210
+    working_dir: mcp-servers/postgres-mcp-server
+    health_check:
+      type: tcp
+      port: 8210
+      interval: 30
+    dependencies:
+      - postgresql
+      - api-gateway
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  # ##########################################################################
+  # 第4层：应用层服务 (Applications Layer) - 优先级P2/P3，部分按需启动
+  # ##########################################################################
+
+  xiaonuo-gateway:
+    name: XiaoNuo统一网关
+    layer: applications
+    priority: P1
+    on_demand: false
+    type: python
+    ports:
+      internal: 8100
+      external: 8100
+    working_dir: apps/xiaonuo
+    command: python start_gateway.py
+    health_check:
+      type: http
+      port: 8100
+      path: /health
+      interval: 15
+    dependencies:
+      - api-gateway
+      - academic-search-mcp
+      - patent-search-mcp
+      - jina-ai-mcp
+      - joyagent-optimization
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+
+  xiaonuo-control-center:
+    name: XiaoNuo控制中心
+    layer: applications
+    priority: P1
+    on_demand: false
+    type: python
+    ports:
+      internal: 8500
+      external: 8500
+    working_dir: services/xiaonuo-control-center
+    health_check:
+      type: http
+      port: 8500
+      path: /health
+      interval: 15
+    dependencies:
+      - postgresql
+      - redis
+      - api-gateway
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  xiaonuo-optimized:
+    name: XiaoNuo优化版
+    layer: applications
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8501
+      external: 8501
+    working_dir: services/xiaonuo-optimized
+    health_check:
+      type: http
+      port: 8501
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+    resource_limits:
+      cpus: "1.5"
+      memory: 3G
+
+  intent-recognition:
+    name: 意图识别服务
+    layer: applications
+    priority: P1
+    on_demand: false
+    type: python
+    ports:
+      internal: 8002
+      external: 8002
+    working_dir: api
+    command: python -m uvicorn intent_recognition_api_v11:app --host 0.0.0.0 --port 8002
+    health_check:
+      type: http
+      port: 8002
+      path: /health
+      interval: 15
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  ai-models:
+    name: AI模型服务
+    layer: applications
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8300
+      external: 8300
+    working_dir: services/ai-models
+    health_check:
+      type: http
+      port: 8300
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - qdrant
+    resource_limits:
+      cpus: "4.0"
+      memory: 8G
+
+  ai-services:
+    name: AI服务集合
+    layer: applications
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8301
+      external: 8301
+    working_dir: services/ai-services
+    health_check:
+      type: http
+      port: 8301
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+
+  application-integration-service:
+    name: 应用集成服务
+    layer: applications
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8400
+      external: 8400
+    working_dir: services/application-integration-service
+    health_check:
+      type: http
+      port: 8400
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  athena_iterative_search:
+    name: Athena迭代搜索
+    layer: applications
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8401
+      external: 8401
+    working_dir: services/athena_iterative_search
+    health_check:
+      type: http
+      port: 8401
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - qdrant
+    resource_limits:
+      cpus: "1.5"
+      memory: 3G
+
+  communication-hub:
+    name: 通信中心
+    layer: applications
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8402
+      external: 8402
+    working_dir: services/communication-hub
+    health_check:
+      type: http
+      port: 8402
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  config-center:
+    name: 配置中心
+    layer: applications
+    priority: P1
+    on_demand: false
+    type: python
+    ports:
+      internal: 8403
+      external: 8403
+    working_dir: services/config-center
+    health_check:
+      type: http
+      port: 8403
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  document-processing-service:
+    name: 文档处理服务
+    layer: applications
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8404
+      external: 8404
+    working_dir: services/document-processing-service
+    health_check:
+      type: http
+      port: 8404
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  dolphin_document_service:
+    name: Dolphin文档服务
+    layer: applications
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8405
+      external: 8405
+    working_dir: services/dolphin_document_service
+    health_check:
+      type: http
+      port: 8405
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  drawing-analysis-service:
+    name: 图纸分析服务
+    layer: applications
+    priority: P3
+    on_demand: true
+    type: python
+    ports:
+      internal: 8406
+      external: 8406
+    working_dir: services/drawing-analysis-service
+    health_check:
+      type: http
+      port: 8406
+      path: /health
+      interval: 30
+    dependencies:
+      - postgresql
+      - qdrant
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+
+  laws-knowledge-base:
+    name: 法律知识库
+    layer: applications
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8407
+      external: 8407
+    working_dir: services/laws-knowledge-base
+    health_check:
+      type: http
+      port: 8407
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - nebula-graph
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  mindmap-service:
+    name: 思维导图服务
+    layer: applications
+    priority: P3
+    on_demand: true
+    type: python
+    ports:
+      internal: 8408
+      external: 8408
+    working_dir: services/mindmap-service
+    health_check:
+      type: http
+      port: 8408
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  multimodal:
+    name: 多模态服务
+    layer: applications
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8409
+      external: 8409
+    working_dir: services/multimodal
+    health_check:
+      type: http
+      port: 8409
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - qdrant
+    resource_limits:
+      cpus: "2.0"
+      memory: 4G
+
+  office-action-response:
+    name: 审查意见答复
+    layer: applications
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8410
+      external: 8410
+    working_dir: services/office-action-response
+    health_check:
+      type: http
+      port: 8410
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+    resource_limits:
+      cpus: "1.5"
+      memory: 3G
+
+  patent-full-text-service:
+    name: 专利全文服务
+    layer: applications
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8411
+      external: 8411
+    working_dir: services/patent-full-text-service
+    health_check:
+      type: http
+      port: 8411
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  platform-integration-service:
+    name: 平台集成服务
+    layer: applications
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8412
+      external: 8412
+    working_dir: services/platform-integration-service
+    health_check:
+      type: http
+      port: 8412
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  pqai-integration:
+    name: PQAI集成服务
+    layer: applications
+    priority: P3
+    on_demand: true
+    type: python
+    ports:
+      internal: 8413
+      external: 8413
+    working_dir: services/pqai-integration
+    health_check:
+      type: http
+      port: 8413
+      path: /health
+      interval: 30
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  qa_system:
+    name: 问答系统
+    layer: applications
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8414
+      external: 8414
+    working_dir: services/qa_system
+    health_check:
+      type: http
+      port: 8414
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+    resource_limits:
+      cpus: "1.5"
+      memory: 3G
+
+  rag-qa-service:
+    name: RAG问答服务
+    layer: applications
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8415
+      external: 8415
+    working_dir: services/rag-qa-service
+    health_check:
+      type: http
+      port: 8415
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+    resource_limits:
+      cpus: "1.5"
+      memory: 3G
+
+  self-media-agent:
+    name: 自媒体代理
+    layer: applications
+    priority: P3
+    on_demand: true
+    type: python
+    ports:
+      internal: 8416
+      external: 8416
+    working_dir: services/self-media-agent
+    health_check:
+      type: http
+      port: 8416
+      path: /health
+      interval: 30
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  sync_service:
+    name: 同步服务
+    layer: applications
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8417
+      external: 8417
+    working_dir: services/sync_service
+    health_check:
+      type: http
+      port: 8417
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "0.5"
+      memory: 1G
+
+  unified-legal-api:
+    name: 统一法律API
+    layer: applications
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8418
+      external: 8418
+    working_dir: services/unified-legal-api
+    health_check:
+      type: http
+      port: 8418
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  video-metadata-extractor:
+    name: 视频元数据提取
+    layer: applications
+    priority: P3
+    on_demand: true
+    type: python
+    ports:
+      internal: 8419
+      external: 8419
+    working_dir: services/video-metadata-extractor
+    health_check:
+      type: http
+      port: 8419
+      path: /health
+      interval: 30
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  whiteboard-service:
+    name: 白板服务
+    layer: applications
+    priority: P3
+    on_demand: true
+    type: python
+    ports:
+      internal: 8420
+      external: 8420
+    working_dir: services/whiteboard-service
+    health_check:
+      type: http
+      port: 8420
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  xiaochen-media:
+    name: 小晨媒体
+    layer: applications
+    priority: P3
+    on_demand: true
+    type: python
+    ports:
+      internal: 8421
+      external: 8421
+    working_dir: services/xiaochen-media
+    health_check:
+      type: http
+      port: 8421
+      path: /health
+      interval: 30
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  xiaona-patents:
+    name: 小娜专利
+    layer: applications
+    priority: P2
+    on_demand: true
+    type: python
+    ports:
+      internal: 8422
+      external: 8422
+    working_dir: services/xiaona-patents
+    health_check:
+      type: http
+      port: 8422
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+      - qdrant
+    resource_limits:
+      cpus: "1.5"
+      memory: 3G
+
+  xiaona-xinuo:
+    name: 小娜小诺
+    layer: applications
+    priority: P3
+    on_demand: true
+    type: python
+    ports:
+      internal: 8423
+      external: 8423
+    working_dir: services/xiaona-xinuo
+    health_check:
+      type: http
+      port: 8423
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+  yunxi-ip:
+    name: 云溪IP
+    layer: applications
+    priority: P3
+    on_demand: true
+    type: python
+    ports:
+      internal: 8424
+      external: 8424
+    working_dir: services/yunxi-ip
+    health_check:
+      type: http
+      port: 8424
+      path: /health
+      interval: 20
+    dependencies:
+      - postgresql
+      - redis
+    resource_limits:
+      cpus: "1.0"
+      memory: 2G
+
+# 服务总数统计：59个
+# - 基础设施层: 6个服务 (全部P0，必须启动)
+# - 核心服务层: 20个服务 (P1: 10个必须, P2: 10个按需)
+# - MCP服务器层: 11个服务 (P2: 4个, P3: 7个，大部分按需)
+# - 应用层: 22个服务 (P1: 4个必须, P2/P3: 18个按需)

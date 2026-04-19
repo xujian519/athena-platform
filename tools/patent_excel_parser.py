@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利档案Excel解析工具
 Patent Archive Excel Parser Tool
@@ -7,16 +6,16 @@ Patent Archive Excel Parser Tool
 解析专利档案Excel表格，提取关键信息到数据库
 """
 
-import os
-import sys
+import asyncio
 import json
+import logging
+import os
 import re
+import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+
 import pandas as pd
-import asyncio
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -28,17 +27,23 @@ sys.path.append(str(Path(__file__).parent.parent))
 try:
     import asyncpg
     import sqlalchemy
-    from sqlalchemy import create_engine, Column, Integer, String, Date, Text, Boolean, DateTime, Numeric, ForeignKey
-    from sqlalchemy.ext.declarative import declarative_base
-    from sqlalchemy.orm import sessionmaker, relationship
+    from sqlalchemy import (
+        Boolean,
+        Column,
+        Date,
+        DateTime,
+        ForeignKey,
+        Integer,
+        Numeric,
+        String,
+        Text,
+        create_engine,
+    )
     from sqlalchemy.dialects.postgresql import JSONB, TIMESTAMP
+    from sqlalchemy.ext.declarative import declarative_base
+    from sqlalchemy.orm import relationship, sessionmaker
     from sqlalchemy.sql import func
 
-# 导入安全配置
-import sys
-from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent / "core"))
-from security.env_config import get_env_var, get_database_url, get_jwt_secret
     DB_AVAILABLE = True
 except ImportError:
     print("数据库模块未安装，将输出到JSON文件")
@@ -116,7 +121,7 @@ class PatentDataExtractor:
 
         return "未知"
 
-    def parse_excel(self) -> Dict:
+    def parse_excel(self) -> dict:
         """解析Excel文件"""
         try:
             # 读取Excel文件
@@ -177,7 +182,7 @@ class PatentDataExtractor:
             print(f"解析Excel失败: {str(e)}")
             return {"error": str(e)}
 
-    def identify_columns(self, columns) -> Dict:
+    def identify_columns(self, columns) -> dict:
         """智能识别列的用途"""
         mapping = {}
 
@@ -216,7 +221,7 @@ class PatentDataExtractor:
 
         return mapping
 
-    def extract_patent_data(self, row, column_mapping: Dict) -> Dict | None:
+    def extract_patent_data(self, row, column_mapping: dict) -> dict | None:
         """提取单行专利数据"""
         patent_number_col = column_mapping.get("patent_number")
 
@@ -294,7 +299,7 @@ class PatentDataExtractor:
             logger.debug(f"[patent_excel_parser] Exception: {e}")
             return None
 
-    def process_clients(self, patents: List[Dict]) -> Dict:
+    def process_clients(self, patents: list[dict]) -> dict:
         """处理客户信息，合并相同客户"""
         clients = {}
 
@@ -336,7 +341,7 @@ class PatentDataExtractor:
 
         return clients
 
-    def save_to_json(self, data: Dict, output_file: str = None):
+    def save_to_json(self, data: dict, output_file: str = None):
         """保存到JSON文件"""
         if not output_file:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -352,7 +357,7 @@ class PatentDataExtractor:
 class PatentDatabaseImporter:
     """专利数据库导入器"""
 
-    def __init__(self, db_config: Dict = None):
+    def __init__(self, db_config: dict = None):
         self.db_config = db_config or {
             "host": "localhost",
             "port": 5432,
@@ -363,7 +368,7 @@ class PatentDatabaseImporter:
 
         if DB_AVAILABLE:
             self.engine = create_engine(
-                fget_database_url()username']}:{self.db_config['password']}"
+                f"postgresql://{self.db_config['username']}:{self.db_config['password']}"
                 f"@{self.db_config['host']}:{self.db_config['port']}/{self.db_config['database']}"
             )
             self.Base = declarative_base()
@@ -434,7 +439,7 @@ class PatentDatabaseImporter:
         self.Patent = Patent
         self.PatentReview = PatentReview
 
-    def import_data(self, extracted_data: Dict):
+    def import_data(self, extracted_data: dict):
         """导入数据到数据库"""
         if not DB_AVAILABLE:
             print("数据库不可用，跳过导入")

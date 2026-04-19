@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 模式识别器单元测试
 Pattern Recognizer Unit Tests
@@ -15,7 +14,13 @@ Pattern Recognizer Unit Tests
 创建时间: 2026-01-27
 """
 
+import sys
+from pathlib import Path
+
 import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 from core.learning.learning_engine import PatternRecognizer
 
 

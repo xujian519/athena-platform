@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能响应缓存系统
 Intelligent Response Cache System
@@ -12,7 +13,6 @@ import time
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
 
 
 class IntelligentCache:

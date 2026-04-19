@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 协作协议 - 工具函数
 Collaboration Protocols - Utility Functions

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Redis缓存管理器
 Redis Cache Manager for Patent Vectors
@@ -8,19 +7,19 @@ Redis Cache Manager for Patent Vectors
 """
 
 # Numpy兼容性导入
-from config.numpy_compatibility import array, zeros, ones, random, mean, sum, dot
 import hashlib
 import json
 import logging
 import pickle
 import threading
-import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import numpy as np
 import redis
+
+from config.numpy_compatibility import random
 
 # 配置日志
 logger = logging.getLogger(__name__)
@@ -106,7 +105,7 @@ class RedisCacheManager:
             if self.redis_client:
                 self.redis_client.ping()
                 return True
-        except:
+        except Exception:
             self.connected = False
             return False
         return False
@@ -135,7 +134,7 @@ class RedisCacheManager:
             # 尝试使用JSON作为备用方案
             try:
                 return json.loads(data.decode())
-            except:
+            except Exception:
                 return data
 
     def get(self, key_prefix: str, *args) -> Any | None:
@@ -214,7 +213,7 @@ class RedisCacheManager:
             self.memory_cache_expiry[key] = datetime.now() + timedelta(seconds=ttl)
         self.stats['sets'] += 1
 
-    def mget(self, keys: List[tuple]) -> Dict[str, Any]:
+    def mget(self, keys: list[tuple]) -> dict[str, Any]:
         """批量获取缓存
 
         Args:
@@ -234,7 +233,7 @@ class RedisCacheManager:
                 key_list = [cache_key for cache_key, _ in cache_keys]
                 values = self.redis_client.mget(key_list)
 
-                for (cache_key, original_key), value in zip(cache_keys, values):
+                for (cache_key, original_key), value in zip(cache_keys, values, strict=False):
                     if value:
                         results[f"{original_key}"] = self._deserialize(value)
                         self.stats['hits'] += 1
@@ -253,7 +252,7 @@ class RedisCacheManager:
 
         return results
 
-    def mset(self, items: List[tuple], ttl: int = 3600):
+    def mset(self, items: list[tuple], ttl: int = 3600):
         """批量设置缓存
 
         Args:
@@ -342,7 +341,7 @@ class RedisCacheManager:
         except Exception as e:
             logger.error(f"清除所有缓存失败: {e}")
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取缓存统计"""
         total_requests = self.stats['hits'] + self.stats['misses']
         hit_rate = self.stats['hits'] / max(1, total_requests)
@@ -367,7 +366,7 @@ class RedisCacheManager:
                     'connected_clients': info.get('connected_clients', 0),
                     'total_commands_processed': info.get('total_commands_processed', 0)
                 }
-            except:
+            except Exception:
                 pass
 
         # 如果使用内存缓存，获取内存缓存信息
@@ -383,7 +382,7 @@ class RedisCacheManager:
             if self.redis_client:
                 self.redis_client.close()
                 logger.info('Redis连接已关闭')
-        except:
+        except Exception:
             pass
         finally:
             self.connected = False
@@ -420,8 +419,8 @@ def test_redis_cache():
         logger.info("\n2. 测试批量操作...")
 
         batch_data = [
-            ('batch', 'item1', random((768)).astype(np.float32)),
-            ('batch', 'item2', random((768)).astype(np.float32)),
+            ('batch', 'item1', random(768).astype(np.float32)),
+            ('batch', 'item2', random(768).astype(np.float32)),
             ('batch', 'item3', {'text': '测试文本', 'score': 0.95})
         ]
 

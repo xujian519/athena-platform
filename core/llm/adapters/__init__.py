@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 统一LLM层 - 模型适配器
 提供各种LLM模型的适配器实现

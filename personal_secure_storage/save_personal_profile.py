@@ -3,11 +3,11 @@
 保存徐健正式个人简介到数据库
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-from pathlib import Path
+import sqlite3
 from datetime import datetime
+from pathlib import Path
+
 
 def save_personal_profile() -> None:
     """保存正式个人简介到数据库"""
@@ -160,7 +160,7 @@ def save_personal_profile() -> None:
     ))
 
     # 创建简历版本（简化版）
-    resume_version = f"""# 徐健 - 简历
+    resume_version = """# 徐健 - 简历
 
 ## 个人信息
 - **姓名**: 徐健
@@ -233,10 +233,10 @@ def save_personal_profile() -> None:
     print('  - 正式版个人简介（完整版）')
     print('  - 简化版简历')
     print('\n📋 主要信息摘要：')
-    print(f'  - 执业年限：15年')
-    print(f'  - 处理案件：180余件')
-    print(f'  - 典型案例：5个重大案例')
-    print(f'  - 专业资质：最高人民法院推荐')
+    print('  - 执业年限：15年')
+    print('  - 处理案件：180余件')
+    print('  - 典型案例：5个重大案例')
+    print('  - 专业资质：最高人民法院推荐')
 
 if __name__ == "__main__":
     save_personal_profile()

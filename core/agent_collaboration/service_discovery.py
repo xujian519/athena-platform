@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 服务发现与负载均衡模块
 Service Discovery and Load Balancing Module
@@ -14,10 +15,9 @@ import asyncio
 import contextlib
 import logging
 import random
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -273,7 +273,7 @@ class ServiceDiscovery:
         """初始化服务发现"""
         self.registry = registry
         self.health_check_interval = 30  # 秒
-        self.health_check_task: Optional[asyncio.Task[Any]] | None = None
+        self.health_check_task: asyncio.Task[Any] | None | None = None
         self.is_running = False
 
         logger.info("🔍 服务发现已初始化")
@@ -402,17 +402,6 @@ def initialize_default_services() -> None:
         )
     )
 
-    # 云熙服务
-    registry.register(
-        ServiceInstance(
-            instance_id="yunxi-8002",
-            agent_id="yunxi",
-            host="localhost",
-            port=8002,
-            weight=1,
-            metadata={"version": "v2.0.0-standalone", "role": "IP管理执行官"},
-        )
-    )
 
     logger.info("✅ 默认服务已注册到服务发现中心")
 

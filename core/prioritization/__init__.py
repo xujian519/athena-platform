@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优先级与排序模块
 Prioritization & Ordering Module

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强的时间线记忆系统 - 集成向量存储
 Timeline Memory System with Vector Integration
@@ -15,6 +16,7 @@ Timeline Memory System with Vector Integration
 
 
 import json
+import logging
 from datetime import datetime
 from typing import Any
 
@@ -25,6 +27,8 @@ from .family_memory_vector_db import FamilyMemoryVectorDB, MemoryVector, get_fam
 
 # 导入基础时间线记忆系统
 from .timeline_memory_system import TimelineMemory
+
+logger = logging.getLogger(__name__)
 
 
 class TimelineMemoryWithVector(TimelineMemory):

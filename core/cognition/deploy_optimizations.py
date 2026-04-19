@@ -1,3 +1,4 @@
+from __future__ import annotations
 # pyright: ignore
 # !/usr/bin/env python3
 """
@@ -92,7 +93,7 @@ async def deploy_optimizations():
 
         return True
 
-    except Exception:
+    except Exception as e:
         logger.error(f"捕获异常: {e}", exc_info=True)
 
 

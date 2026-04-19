@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律世界模型问答系统测试脚本
 Legal World Model Q&A System Test Script

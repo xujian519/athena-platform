@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 个性化响应模块 - Personalized Response
 
@@ -15,7 +16,7 @@ import sqlite3
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺性能瓶颈分析器
 Xiaonuo Performance Bottleneck Analyzer
@@ -25,8 +26,9 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
+import numpy as np
 
 from core.logging_config import setup_logging
 

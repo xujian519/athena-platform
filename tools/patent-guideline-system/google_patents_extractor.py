@@ -8,14 +8,15 @@ Google专利全文获取工具
 版本: v1.0.0
 """
 
-import re
 import json
+import re
 import time
-import requests
-from bs4 import BeautifulSoup
-from typing import Dict, List, Optional
 from dataclasses import dataclass
 from urllib.parse import quote
+
+import requests
+from bs4 import BeautifulSoup
+
 
 @dataclass
 class PatentSection:
@@ -23,7 +24,7 @@ class PatentSection:
     section_type: str  # abstract, claims, description等
     title: str
     content: str
-    paragraphs: List[str]
+    paragraphs: list[str]
 
 @dataclass
 class PatentMetadata:
@@ -31,12 +32,12 @@ class PatentMetadata:
     patent_number: str
     title: str
     abstract: str
-    inventors: List[str]
+    inventors: list[str]
     assignee: str
     filing_date: str
     publication_date: str
     family_id: str
-    citations: List[str]
+    citations: list[str]
 
 class GooglePatentsExtractor:
     """Google专利全文获取器"""
@@ -150,7 +151,7 @@ class GooglePatentsExtractor:
 
         return metadata
 
-    def parse_patent_sections(self, soup: BeautifulSoup) -> List[PatentSection]:
+    def parse_patent_sections(self, soup: BeautifulSoup) -> list[PatentSection]:
         """解析专利各部分内容"""
         sections = []
 
@@ -160,7 +161,7 @@ class GooglePatentsExtractor:
 
             if content_div:
                 # 解析各个部分
-                section_headers = content_div.find_all(['h2', 'h3', 'h4', 'strong'])
+                content_div.find_all(['h2', 'h3', 'h4', 'strong'])
 
                 current_section = None
                 current_content = []
@@ -266,7 +267,7 @@ class GooglePatentsExtractor:
 
         return None
 
-    def get_patent_full_text(self, patent_number: str) -> Dict | None:
+    def get_patent_full_text(self, patent_number: str) -> dict | None:
         """获取专利全文（结构化）"""
         try:
             # 标准化专利号
@@ -348,7 +349,7 @@ class GooglePatentsExtractor:
         page_text = soup.get_text().lower()
         return any(indicator in page_text for indicator in not_found_indicators)
 
-    def batch_extract(self, patent_numbers: List[str], delay: int = 3) -> List[Dict]:
+    def batch_extract(self, patent_numbers: list[str], delay: int = 3) -> list[dict]:
         """批量获取专利"""
         results = []
 
@@ -370,7 +371,7 @@ class GooglePatentsExtractor:
         print(f"\n批量获取完成！成功: {len(results)}/{len(patent_numbers)}")
         return results
 
-    def save_to_file(self, patent_data: Dict, filename: str = None):
+    def save_to_file(self, patent_data: dict, filename: str = None):
         """保存专利数据到文件"""
         if not filename:
             patent_number = patent_data.get('patent_number', 'unknown')

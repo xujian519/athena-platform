@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 联网搜索引擎 - 公共接口
 Web Search Engines - Public Interface
@@ -12,13 +13,6 @@ Web Search Engines - Public Interface
 """
 
 # 数据模型
-from core.search.external.web_search.types import (
-    SearchEngineType,
-    SearchQuery,
-    SearchResult,
-    SearchResponse,
-)
-
 # API密钥管理器
 from core.search.external.web_search.api_key_manager import APIKeyManager
 
@@ -35,6 +29,12 @@ from core.search.external.web_search.engines import (
 
 # 统一管理器
 from core.search.external.web_search.manager import UnifiedWebSearchManager
+from core.search.external.web_search.types import (
+    SearchEngineType,
+    SearchQuery,
+    SearchResponse,
+    SearchResult,
+)
 
 # 便捷工具
 from core.search.external.web_search.utils import (

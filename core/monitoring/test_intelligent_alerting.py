@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能告警系统测试脚本
 Test Intelligent Alerting System
@@ -11,6 +12,7 @@ Test Intelligent Alerting System
 
 import asyncio
 import logging
+import random
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -25,6 +27,7 @@ from core.monitoring.intelligent_alerting_system import (
 )
 from core.monitoring.optimized_monitoring_module import (
     AlertLevel,
+    AlertStatus,
     create_alert_rule,
     create_monitoring_module,
 )

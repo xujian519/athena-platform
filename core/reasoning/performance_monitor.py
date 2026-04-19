@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 推理引擎性能监控系统
 Reasoning Engine Performance Monitoring System
@@ -17,13 +18,14 @@ Reasoning Engine Performance Monitoring System
 
 import asyncio
 import logging
+import statistics
 import time
 from collections import defaultdict, deque
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Callable
-import statistics
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -283,7 +285,7 @@ class PerformanceMonitor:
         self.active_alerts.append(alert)
 
         logger.warning(
-            f"🚨 性能告警: {alert.title} | 当前值: {current_value:.2f} | 阈值: {threshold}"
+            f"🚨 性能告警: {alert.title} | 当前值: {current_value:.2f} | 阈值: {alert.threshold}"
         )
 
         # 调用回调函数
@@ -548,7 +550,7 @@ if __name__ == "__main__":
         # 模拟引擎调用
         engines = ["athena_super", "semantic_v4", "dual_system"]
 
-        for i in range(10):
+        for _i in range(10):
             for engine in engines:
                 # 模拟响应时间
                 import random

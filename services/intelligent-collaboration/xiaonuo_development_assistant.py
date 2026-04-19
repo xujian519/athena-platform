@@ -5,17 +5,14 @@
 """
 
 import asyncio
-from core.async_main import async_main
-import json
-import subprocess
-import os
-from datetime import datetime
-from typing import Dict, List, Any, Optional
-from pathlib import Path
-import aiohttp
-import re
-
 import logging
+import os
+import re
+import subprocess
+from datetime import datetime
+from pathlib import Path
+
+import aiohttp
 
 logger = logging.getLogger(__name__)
 
@@ -89,7 +86,7 @@ class XiaonuoDevAssistant:
 
         # 分析最近修改
         recent_files = self._get_recent_modified_files()
-        print(f"\n最近修改的文件:")
+        print("\n最近修改的文件:")
         for file_info in recent_files[:5]:
             print(f"  • {file_info['path']} ({file_info['time']})")
 
@@ -110,7 +107,7 @@ class XiaonuoDevAssistant:
         except (KeyError, TypeError, ValueError, ZeroDivisionError):
             return "不是Git仓库"
 
-    def _get_recent_modified_files(self) -> List[Dict]:
+    def _get_recent_modified_files(self) -> list[dict]:
         """获取最近修改的文件"""
         files = []
         for py_file in self.project_root.rglob("*.py"):
@@ -267,7 +264,7 @@ class XiaonuoDevAssistant:
             return
 
         # 分析代码
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         issues = []
@@ -277,12 +274,12 @@ class XiaonuoDevAssistant:
             issues.append("避免使用 import *")
 
         # 检查异常处理
-        if 'except:' in content and not 'except Exception' in content:
+        if 'except:' in content and 'except Exception' not in content:
             issues.append("建议指定具体的异常类型")
 
         # 检查文档字符串
         functions = re.findall(r'def (\w+)\(', content)
-        if functions and not '"""' in content:
+        if functions and '"""' not in content:
             issues.append("建议添加函数文档字符串")
 
         if issues:
@@ -305,20 +302,20 @@ class XiaonuoDevAssistant:
                 continue
 
             try:
-                with open(py_file, 'r', encoding='utf-8') as f:
+                with open(py_file, encoding='utf-8') as f:
                     lines = len(f.readlines())
                     total_lines += lines
                     python_files += 1
             except Exception as e:
                     logger.error(f"Error occurred: {e}", exc_info=True)
 
-        print(f"\n项目统计:")
+        print("\n项目统计:")
         print(f"  • Python文件: {python_files}")
         print(f"  • 总代码行数: {total_lines:,}")
         print(f"  • 平均每文件: {total_lines // python_files if python_files else 0} 行")
 
         # TODO列表
-        print(f"\n📋 待办事项:")
+        print("\n📋 待办事项:")
         print("  □ 完成按需启动机制")
         print("  □ 添加错误处理")
         print("  □ 优化数据库查询")

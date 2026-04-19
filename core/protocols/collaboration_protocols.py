@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 协作协议 - 向后兼容重定向
 Collaboration Protocols - Backward Compatibility Redirect
@@ -79,6 +80,12 @@ import warnings
 logger = logging.getLogger(__name__)
 
 # 向后兼容重定向
+# 便捷函数从protocols主模块导入
+from core.protocols import (
+    create_communication_protocol,
+    create_coordination_protocol,
+    create_decision_protocol,
+)
 from core.protocols.collaboration import (  # type: ignore
     BaseProtocol,
     CommunicationProtocol,
@@ -90,18 +97,11 @@ from core.protocols.collaboration import (  # type: ignore
     ProtocolPhase,
     ProtocolStatus,
     ProtocolType,
+    create_protocol_session,
     get_protocol_session_status,
     protocol_manager,
     shutdown_protocol_manager,
     start_protocol_session,
-    create_protocol_session,
-)
-
-# 便捷函数从protocols主模块导入
-from core.protocols import (
-    create_communication_protocol,
-    create_coordination_protocol,
-    create_decision_protocol,
 )
 
 # 发出迁移警告

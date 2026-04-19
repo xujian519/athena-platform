@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BGE-M3长文本处理器
 Long Text Processor for BGE-M3
@@ -8,8 +9,9 @@ Long Text Processor for BGE-M3
 
 import re
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Protocol, Tuple
+from typing import Any, Protocol
 
+import numpy as np
 
 from core.logging_config import setup_logging
 
@@ -67,7 +69,7 @@ class LongTextProcessor:
             model_loader: BGE-M3模型加载器
             max_tokens: 最大token数量(默认8192)
         """
-        self.model_loader: Optional[ModelLoader] = model_loader
+        self.model_loader: ModelLoader | None = model_loader
         self.max_tokens: int = max_tokens
         self.recommended_tokens: int = int(max_tokens * 0.9)  # 建议使用90%
 

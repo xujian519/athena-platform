@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 双模型协同推理系统
 
@@ -11,8 +12,7 @@ import asyncio
 import logging
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, Optional, Tuple
-
+from typing import Any
 
 # 导入理科分类器和提示词
 try:

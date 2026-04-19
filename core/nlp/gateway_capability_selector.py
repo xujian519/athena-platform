@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 网关能力选择器
 Gateway Capability Selector
@@ -14,10 +15,11 @@ import logging
 import os
 import threading
 from dataclasses import dataclass
-from typing import Any, Optional, TypedDict
+from typing import Any, TypedDict
 
 import jieba
 import joblib
+import numpy as np
 
 # 配置日志
 logger = logging.getLogger(__name__)
@@ -126,7 +128,6 @@ class FlatFeatures(TypedDict):
     enterprise_keywords: float
     quantization_keywords: float
     federated_keywords: float
-    yunxi_keywords: float
     xiaochen_keywords: float
 
 
@@ -423,7 +424,6 @@ def extract_flat_features(text: str) -> FlatFeatures:
                 "协作学习",
             ],
             # 智能体能力关键词
-            "yunxi_keywords": ["云溪", "yunxi", "云溪智能体", "云溪助手"],
             "xiaochen_keywords": ["小晨", "xiaochen", "小晨智能体", "小晨助手"],
         }
 

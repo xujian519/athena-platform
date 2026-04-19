@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 执行引擎 - 主引擎类
 Execution Engine - Main Engine
@@ -18,7 +19,7 @@ from contextlib import suppress
 from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 from ..types import ActionType, Task, TaskPriority, TaskStatus
 from .action_executor import ActionExecutor
@@ -35,7 +36,7 @@ class ExecutionEngine:
     提供任务执行、工作流管理、并发控制和结果处理功能。
     """
 
-    def __init__(self, agent_id: str, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, agent_id: str, config: dict[str, Any] | None = None):
         """初始化执行引擎
 
         Args:
@@ -52,9 +53,9 @@ class ExecutionEngine:
         self.workflow_engine = WorkflowEngine(self.action_executor)
 
         # 存储和状态
-        self.tasks: Dict[str, Task] = {}
-        self.task_results: Dict[str, TaskResult] = {}
-        self.active_workflows: Dict[str, asyncio.Task] = {}
+        self.tasks: dict[str, Task] = {}
+        self.task_results: dict[str, TaskResult] = {}
+        self.active_workflows: dict[str, asyncio.Task] = {}
 
         # 统计信息
         self.stats = {
@@ -114,7 +115,7 @@ class ExecutionEngine:
         logger.info(f"📋 任务已调度: {task.name}")
         return task.id
 
-    async def execute_actions(self, actions: List[Dict[str, Any]]) -> List[str]:
+    async def execute_actions(self, actions: list[dict[str, Any]]) -> list[str]:
         """执行多个动作
 
         Args:
@@ -151,7 +152,7 @@ class ExecutionEngine:
     async def create_workflow(
         self,
         name: str,
-        tasks_data: List[Dict[str, Any]],        parallel: bool = False,
+        tasks_data: list[dict[str, Any]],        parallel: bool = False,
         max_concurrent: int = 5,
     ) -> str:
         """创建工作流
@@ -205,7 +206,7 @@ class ExecutionEngine:
         logger.info(f"🔗 工作流已创建: {name}")
         return workflow_id
 
-    async def execute_workflow(self, workflow_id: str) -> List[TaskResult]:
+    async def execute_workflow(self, workflow_id: str) -> list[TaskResult]:
         """执行工作流
 
         Args:
@@ -254,7 +255,7 @@ class ExecutionEngine:
             self.active_workflows.pop(workflow_id, None)
             self.stats["active_workflows"] = max(0, self.stats["active_workflows"] - 1)
 
-    async def get_task_result(self, task_id: str) -> Optional[TaskResult]:
+    async def get_task_result(self, task_id: str) -> TaskResult | None:
         """获取任务结果
 
         Args:
@@ -265,7 +266,7 @@ class ExecutionEngine:
         """
         return self.task_results.get(task_id)
 
-    async def get_task_status(self, task_id: str) -> Optional[TaskStatus]:
+    async def get_task_status(self, task_id: str) -> TaskStatus | None:
         """获取任务状态
 
         Args:
@@ -292,7 +293,7 @@ class ExecutionEngine:
             return True
         return False
 
-    async def get_statistics(self) -> Dict[str, Any]:
+    async def get_statistics(self) -> dict[str, Any]:
         """获取统计信息
 
         Returns:
@@ -359,7 +360,7 @@ class ExecutionEngine:
         """
         self._callbacks[event_type].append(callback)
 
-    async def _trigger_callbacks(self, event_type: str, data: Dict[str, Any]):
+    async def _trigger_callbacks(self, event_type: str, data: dict[str, Any]):
         """触发回调
 
         Args:
@@ -435,7 +436,7 @@ class ExecutionEngine:
             logger.error(f"保存状态失败: {e}")
 
     @classmethod
-    async def initialize_global(cls, config: Optional[Dict[str, Any]] = None):
+    async def initialize_global(cls, config: dict[str, Any] | None = None):
         """初始化全局实例"""
         if not hasattr(cls, "global_instance"):
             cls.global_instance = cls("global", config)

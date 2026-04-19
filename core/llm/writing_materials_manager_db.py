@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律写作素材库管理器 - 数据库版本
 Legal Writing Materials Manager - Database Version
@@ -17,8 +18,7 @@ import asyncio
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -336,7 +336,7 @@ _materials_manager_instance = None
 
 
 def get_materials_manager_db(
-    rag_manager=None | None = None, materials_path: Path | None = None
+    rag_manager=None, materials_path: Path | None = None
 ) -> WritingMaterialsManagerDB:
     """获取素材库管理器单例(数据库版本)"""
     global _materials_manager_instance
@@ -379,7 +379,7 @@ if __name__ == "__main__":
         print("\n🔍 搜索测试: 创造性")
         results = manager.search_materials("创造性", top_k=3)
         for result in results:
-            print(f"   {result.get('title', result[{result.get('relevance_score']
+            print(f"   {result.get('title', 'N/A')}: {result.get('relevance_score', 'N/A')}")
 
         # 4. 测试搜索相关示例
         if rag_manager:

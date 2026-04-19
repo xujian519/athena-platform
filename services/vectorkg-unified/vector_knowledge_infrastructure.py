@@ -9,26 +9,26 @@ Vector + Knowledge Graph Unified Infrastructure
 创建时间: 2024年12月15日
 """
 
-import asyncio
-from core.async_main import async_main
+import json
 import logging
-from core.logging_config import setup_logging
-from typing import List, Dict, Any, Optional, Tuple
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-import json
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 向量数据库
 try:
     from qdrant_client import QdrantClient
-    from qdrant_client.models import Distance, VectorParams, PointStruct
+    from qdrant_client.models import Distance, PointStruct, VectorParams
     HAS_QDRANT = True
 except ImportError:
     HAS_QDRANT = False
 
 # 知识图谱
 import sqlite3
+
 import networkx as nx
 import numpy as np
 
@@ -157,9 +157,9 @@ class VectorKnowledgeInfrastructure:
         relations_path = Path(path) / "relationships.json"
 
         if entities_path.exists() and relations_path.exists():
-            with open(entities_path, 'r', encoding='utf-8') as f:
+            with open(entities_path, encoding='utf-8') as f:
                 entities = json.load(f)
-            with open(relations_path, 'r', encoding='utf-8') as f:
+            with open(relations_path, encoding='utf-8') as f:
                 relations = json.load(f)
 
             # 添加节点
@@ -188,8 +188,8 @@ class VectorKnowledgeInfrastructure:
         vector_threshold: float = 0.7,
         max_vector_results: int = 10,
         max_graph_paths: int = 5,
-        collections: List[str] = None
-    ) -> Dict[str, Any]:
+        collections: list[str] = None
+    ) -> dict[str, Any]:
         """
         混合搜索：向量检索 + 知识图谱推理
         """
@@ -227,10 +227,10 @@ class VectorKnowledgeInfrastructure:
     async def _vector_search(
         self,
         query_text: str,
-        collections: List[str],
+        collections: list[str],
         threshold: float = 0.7,
         max_results: int = 10
-    ) -> List[Dict]:
+    ) -> list[dict]:
         """向量检索"""
         results = []
 
@@ -261,7 +261,7 @@ class VectorKnowledgeInfrastructure:
         results.sort(key=lambda x: x['score'], reverse=True)
         return results[:max_results]
 
-    async def _graph_search(self, query_text: str, max_paths: int = 5) -> List[Dict]:
+    async def _graph_search(self, query_text: str, max_paths: int = 5) -> list[dict]:
         """知识图谱搜索"""
         results = []
 
@@ -276,7 +276,7 @@ class VectorKnowledgeInfrastructure:
 
         return results
 
-    def _search_in_graph(self, graph: nx.DiGraph, keywords: List[str], graph_name: str, max_paths: int) -> List[Dict]:
+    def _search_in_graph(self, graph: nx.DiGraph, keywords: list[str], graph_name: str, max_paths: int) -> list[dict]:
         """在单个图中搜索"""
         results = []
 
@@ -318,9 +318,9 @@ class VectorKnowledgeInfrastructure:
     def _analyze_hybrid_results(
         self,
         query_text: str,
-        vector_results: List[Dict],
-        graph_results: List[Dict]
-    ) -> List[Dict]:
+        vector_results: list[dict],
+        graph_results: list[dict]
+    ) -> list[dict]:
         """分析混合搜索结果"""
         insights = []
 
@@ -345,7 +345,7 @@ class VectorKnowledgeInfrastructure:
 
         return insights
 
-    def _find_vector_graph_links(self, vector_results: List[Dict], graph_results: List[Dict]) -> List[Dict]:
+    def _find_vector_graph_links(self, vector_results: list[dict], graph_results: list[dict]) -> list[dict]:
         """找到向量结果和图谱结果的关联"""
         links = []
         vector_content = " ".join([r.get('content', '') for r in vector_results[:5]])
@@ -362,14 +362,14 @@ class VectorKnowledgeInfrastructure:
 
         return links
 
-    def _calculate_combined_score(self, vector_results: List[Dict], graph_results: List[Dict]) -> float:
+    def _calculate_combined_score(self, vector_results: list[dict], graph_results: list[dict]) -> float:
         """计算综合评分"""
         vector_score = sum(r['score'] for r in vector_results) / len(vector_results) if vector_results else 0
         graph_score = sum(1 for r in graph_results if r['centrality']['betweenness'] > 0) / len(graph_results) if graph_results else 0
 
         return (vector_score * 0.6 + graph_score * 0.4)
 
-    def _generate_recommendations(self, query_text: str, vector_results: List[Dict], graph_results: List[Dict]) -> List[Dict]:
+    def _generate_recommendations(self, query_text: str, vector_results: list[dict], graph_results: list[dict]) -> list[dict]:
         """生成推荐"""
         recommendations = []
 
@@ -390,18 +390,17 @@ class VectorKnowledgeInfrastructure:
 
         return recommendations
 
-    def _text_to_vector(self, text: str) -> List[float]:
+    def _text_to_vector(self, text: str) -> list[float]:
         """文本转向量（简化版，实际应使用embedding模型）"""
         import hashlib
 
-        hash_obj = hashlib.md5(text.encode('utf-8', usedforsecurity=False)
+        hash_obj = hashlib.md5(text.encode('utf-8'), usedforsecurity=False)
         vector = []
         for i in range(1024):  # 假设1024维
             byte_idx = i % 16
             vector.append(ord(hash_obj.digest()[byte_idx]) / 255.0)
 
         # 归一化
-        import numpy as np
         vector = np.array(vector)
         norm = np.linalg.norm(vector)
         if norm > 0:
@@ -409,7 +408,7 @@ class VectorKnowledgeInfrastructure:
 
         return vector.tolist()
 
-    def _extract_keywords(self, text: str) -> List[str]:
+    def _extract_keywords(self, text: str) -> list[str]:
         """提取关键词"""
         # 使用简单的分词（实际应使用jieba）
         words = text.lower().split()
@@ -420,11 +419,11 @@ class VectorKnowledgeInfrastructure:
         # 去重并限制数量
         return list(set(keywords))[:20]
 
-    def _get_default_collections(self) -> List[str]:
+    def _get_default_collections(self) -> list[str]:
         """获取默认向量集合"""
         return [c.name for c in self.vector_collections if c.vector_size == 1024]
 
-    async def get_infrastructure_stats(self) -> Dict[str, Any]:
+    async def get_infrastructure_stats(self) -> dict[str, Any]:
         """获取基础设施统计"""
         stats = {
             "vector_collections": {

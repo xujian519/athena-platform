@@ -5,8 +5,8 @@ Configuration for Xiaochen Agent
 """
 
 import os
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 from pathlib import Path
+from typing import Any
 
 # 项目根目录
 PROJECT_ROOT = Path(__file__).parent.parent.parent

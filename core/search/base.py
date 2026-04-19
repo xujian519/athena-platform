@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 搜索模块基础定义
 定义搜索接口和基础数据结构

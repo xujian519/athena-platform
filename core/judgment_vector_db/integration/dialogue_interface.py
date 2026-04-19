@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 纯对话交互接口
 Pure Dialogue Interface for Patent Judgment Vector Database
@@ -14,7 +15,11 @@ import logging
 import re
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from core.judgment_vector_db.generation.article_generator import ArticleType
+    from core.judgment_vector_db.retrieval.hybrid_retriever import RetrievalStrategy
 
 logger = logging.getLogger(__name__)
 
@@ -197,7 +202,6 @@ class PureDialogueInterface:
         analysis = self.classifier.classify(user_input)
 
         # 2. 执行检索
-        from core.judgment_vector_db.retrieval.hybrid_retriever import RetrievalStrategy
 
         strategy = self._map_to_strategy(analysis.suggested_strategy)
         result = self.retriever.retrieve(
@@ -376,7 +380,7 @@ class PureDialogueInterface:
             needs_clarification=True,
         )
 
-    def _map_to_strategy(self, suggested_strategy: str) -> "RetrievalStrategy":
+    def _map_to_strategy(self, suggested_strategy: str) -> RetrievalStrategy:
         """映射建议策略到实际策略"""
         from core.judgment_vector_db.retrieval.hybrid_retriever import RetrievalStrategy
 
@@ -512,7 +516,7 @@ class PureDialogueInterface:
 
         return suggestions
 
-    def _infer_article_type(self, user_input: str) -> "ArticleType":
+    def _infer_article_type(self, user_input: str) -> ArticleType:
         """推断文章类型"""
         from core.judgment_vector_db.generation.article_generator import ArticleType
 

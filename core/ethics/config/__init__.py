@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 伦理框架配置模块
 Ethics Framework Configuration Module

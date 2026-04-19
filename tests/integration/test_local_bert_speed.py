@@ -44,7 +44,7 @@ async def test_local_bert_speed():
                 await bert_service.initialize_model(model_key)
                 load_time = time.time() - load_start
 
-                print(f"   ✅ 模型加载成功！")
+                print("   ✅ 模型加载成功！")
                 print(f"   ⏱️  加载时间: {load_time:.2f}秒")
 
                 # 测试编码时间
@@ -104,7 +104,7 @@ async def test_bert_vs_bge_speed():
         bert_times = []
         for i in range(3):
             start = time.time()
-            result = await encode_with_general_bert(test_text)
+            await encode_with_general_bert(test_text)
             bert_time = time.time() - start
             bert_times.append(bert_time)
             print(f"   第{i+1}次: {bert_time:.3f}秒")
@@ -119,7 +119,7 @@ async def test_bert_vs_bge_speed():
         bge_times = []
         for i in range(3):
             start = time.time()
-            result = await encode_for_document(test_text)
+            await encode_for_document(test_text)
             bge_time = time.time() - start
             bge_times.append(bge_time)
             print(f"   第{i+1}次: {bge_time:.3f}秒")

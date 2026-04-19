@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 文件验证器 - 多模态文件系统安全验证
 File Validator - Multimodal File System Security Validation
@@ -13,7 +14,7 @@ File Validator - Multimodal File System Security Validation
 import logging
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

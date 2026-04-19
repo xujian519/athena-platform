@@ -8,16 +8,16 @@ Unit Tests for Async Batch Processor
 版本: 1.0.0
 """
 
-import pytest
 import asyncio
-from datetime import datetime
-from core.communication.optimized_communication_module import (
-    Message,
-    MessagePriority,
-    CompressionType,
-    DeliveryMode
-)
+import sys
+from pathlib import Path
+
+import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 from core.communication.engine.async_batch_processor import AsyncBatchProcessor
+from core.communication.optimized_communication_module import Message, MessagePriority
 
 
 @pytest.mark.asyncio

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 三库联动规则查询系统 - 实际数据库接入版本
 Three-Database Rule Query System - Real Database Integration
@@ -11,14 +12,13 @@ Three-Database Rule Query System - Real Database Integration
 """
 
 import asyncio
-import concurrent.futures
 import hashlib
 import logging
 import time
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import yaml
 
@@ -217,7 +217,6 @@ class RealVectorDBQuerier:
         if self._embedding_model is None:
             try:
                 # 使用平台MPS优化的BGE-M3模型
-                from core.models.mps_embedding_models import get_mps_embedding_manager
 
                 # 异步加载模型（在同步上下文中创建新事件循环）
                 import asyncio

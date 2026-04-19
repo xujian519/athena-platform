@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习引擎 - 知识图谱更新器
 Learning Engine - Knowledge Graph Updater
@@ -14,7 +15,7 @@ import contextlib
 import logging
 import time
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +26,7 @@ class KnowledgeGraphUpdater:
     def __init__(self, knowledge_manager: Any):
         self.knowledge_manager = knowledge_manager
         self.update_queue: asyncio.Queue[dict[str, Any]] = asyncio.Queue()
-        self.update_task: Optional[asyncio.Task[None]] | None = None
+        self.update_task: asyncio.Task[None] | None | None = None
 
     async def start(self) -> None:
         """启动更新器"""

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小娜法律专家 - 增强集成版
 Xiaona Legal Expert - Enhanced Integrated Version
@@ -10,22 +9,17 @@ Xiaona Legal Expert - Enhanced Integrated Version
 创建时间: 2024年12月15日
 """
 
-import asyncio
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
 from datetime import datetime
-from typing import Any, Dict, List, Optional
-import aiohttp
-import json
-import sys
-import os
+from typing import Any
 
+import aiohttp
+import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+from core.logging_config import setup_logging
 from core.security.auth import ALLOWED_ORIGINS
-import uvicorn
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -196,7 +190,7 @@ class XiaonaLegalEnhanced:
                 "timestamp": datetime.now().isoformat()
             }
 
-    async def _check_backend_services(self) -> Dict[str, str]:
+    async def _check_backend_services(self) -> dict[str, str]:
         """检查后端服务状态"""
         status = {}
 
@@ -212,7 +206,7 @@ class XiaonaLegalEnhanced:
         try:
             # 这里应该检查PostgreSQL连接
             status["postgresql"] = "✅ 正常"
-        except (Exception, sqlite3.Error, psycopg2.Error):
+        except Exception:
             status["postgresql"] = "❌ 异常"
 
         return status
@@ -232,7 +226,7 @@ class XiaonaLegalEnhanced:
         else:
             return "legal_advice"
 
-    async def _search_vector_knowledge(self, query: str, business_type: str) -> List[Dict]:
+    async def _search_vector_knowledge(self, query: str, business_type: str) -> list[dict]:
         """搜索向量知识库"""
         try:
             async with aiohttp.ClientSession() as session:
@@ -253,7 +247,7 @@ class XiaonaLegalEnhanced:
             logger.error(f"向量检索失败: {str(e)}")
             return []
 
-    async def _search_knowledge_graph(self, query: str, business_type: str) -> List[Dict]:
+    async def _search_knowledge_graph(self, query: str, business_type: str) -> list[dict]:
         """搜索知识图谱"""
         try:
             async with aiohttp.ClientSession() as session:
@@ -275,8 +269,8 @@ class XiaonaLegalEnhanced:
             return []
 
     async def _generate_comprehensive_analysis(self, text: str, business_type: str,
-                                             vector_results: List[Dict],
-                                             graph_results: List[Dict]) -> Dict[str, Any]:
+                                             vector_results: list[dict],
+                                             graph_results: list[dict]) -> dict[str, Any]:
         """生成综合分析"""
         analysis = {
             "business_type": business_type,
@@ -292,8 +286,8 @@ class XiaonaLegalEnhanced:
 
         return analysis
 
-    def _generate_knowledge_insights(self, vector_results: List[Dict],
-                                    graph_results: List[Dict]) -> List[str]:
+    def _generate_knowledge_insights(self, vector_results: list[dict],
+                                    graph_results: list[dict]) -> list[str]:
         """基于检索结果生成洞察"""
         insights = []
 
@@ -305,9 +299,9 @@ class XiaonaLegalEnhanced:
 
         return insights
 
-    def _combine_search_results(self, vector_results: List[Dict],
-                               graph_results: List[Dict],
-                               limit: int) -> List[Dict]:
+    def _combine_search_results(self, vector_results: list[dict],
+                               graph_results: list[dict],
+                               limit: int) -> list[dict]:
         """合并搜索结果"""
         combined = []
 
@@ -331,12 +325,12 @@ class XiaonaLegalEnhanced:
 
         return combined[:limit]
 
-    async def _store_to_memory(self, analysis: Dict, request: Dict):
+    async def _store_to_memory(self, analysis: dict, request: dict):
         """存储到记忆（模拟）"""
         # 这里应该存储到PostgreSQL
         logger.info(f"案例已存储到记忆系统: {analysis.get('business_type')}")
 
-    def _extract_key_points(self, text: str) -> List[str]:
+    def _extract_key_points(self, text: str) -> list[str]:
         """提取关键点"""
         key_points = []
 
@@ -349,7 +343,7 @@ class XiaonaLegalEnhanced:
 
         return key_points[:3]
 
-    def _generate_recommendations(self, text: str, business_type: str) -> List[str]:
+    def _generate_recommendations(self, text: str, business_type: str) -> list[str]:
         """生成建议"""
         if business_type == "patent":
             return [
@@ -370,7 +364,7 @@ class XiaonaLegalEnhanced:
                 "咨询专业法律意见"
             ]
 
-    def _assess_risks(self, text: str) -> Dict[str, Any]:
+    def _assess_risks(self, text: str) -> dict[str, Any]:
         """评估风险"""
         risks = []
         level = "low"
@@ -389,7 +383,7 @@ class XiaonaLegalEnhanced:
             "suggestions": "建议进行全面的知识产权分析"
         }
 
-    def _suggest_next_steps(self, business_type: str) -> List[str]:
+    def _suggest_next_steps(self, business_type: str) -> list[str]:
         """建议后续步骤"""
         if business_type == "patent":
             return [
@@ -406,7 +400,7 @@ class XiaonaLegalEnhanced:
                 "4. 实施保护措施"
             ]
 
-    async def _generate_fallback_analysis(self, text: str) -> Dict[str, Any]:
+    async def _generate_fallback_analysis(self, text: str) -> dict[str, Any]:
         """生成备用分析"""
         return {
             "business_type": self._detect_business_type(text),

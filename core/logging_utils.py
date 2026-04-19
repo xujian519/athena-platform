@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 日志工具模块
 Logging Utilities Module
@@ -10,8 +11,7 @@ import logging
 from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Optional
-
+from typing import Any
 
 # ============================================
 # 结构化日志记录器

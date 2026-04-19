@@ -5,32 +5,18 @@ Athena平台边缘计算系统
 """
 
 import asyncio
-from core.async_main import async_main
-import hashlib
 import json
-import logging
-from core.logging_config import setup_logging
-import os
-import pickle
 import queue
-import socket
-import subprocess
-import threading
 import time
 import uuid
-import zlib
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union
+from typing import Any
 
-import aiohttp
 import psutil
-import requests
-from docker.errors import APIError
 
-import docker
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -90,12 +76,12 @@ class EdgeNode:
     host: str
     port: int
     location: str  # 地理位置
-    capabilities: Dict[str, Any] = field(default_factory=dict)
-    resources: Dict[str, Any] = field(default_factory=dict)
+    capabilities: dict[str, Any] = field(default_factory=dict)
+    resources: dict[str, Any] = field(default_factory=dict)
     status: NodeStatus = NodeStatus.OFFLINE
     last_heartbeat: datetime | None = None
     created_at: datetime = field(default_factory=datetime.now)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class ComputeTask:
@@ -104,7 +90,7 @@ class ComputeTask:
     name: str
     task_type: str
     priority: int = 1
-    requirements: Dict[str, Any] = field(default_factory=dict)
+    requirements: dict[str, Any] = field(default_factory=dict)
     data_size: int = 0
     estimated_duration: float = 0.0  # 秒
     max_retries: int = 3
@@ -116,7 +102,7 @@ class ComputeTask:
     completed_at: datetime | None = None
     result: Any | None = None
     error_message: str | None = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class DataSync:
@@ -187,7 +173,7 @@ class NodeManager:
 
         return False
 
-    def check_node_health(self) -> List[str]:
+    def check_node_health(self) -> list[str]:
         """检查节点健康状态"""
         now = datetime.now()
         unhealthy_nodes = []
@@ -204,7 +190,7 @@ class NodeManager:
 
         return unhealthy_nodes
 
-    def get_available_nodes(self, location: str = None, node_type: NodeType = None) -> List[EdgeNode]:
+    def get_available_nodes(self, location: str = None, node_type: NodeType = None) -> list[EdgeNode]:
         """获取可用节点"""
         available_nodes = []
 
@@ -245,7 +231,7 @@ class NodeManager:
 
         return True
 
-    def get_node_stats(self) -> Dict[str, Any]:
+    def get_node_stats(self) -> dict[str, Any]:
         """获取节点统计信息"""
         stats = {
             'total_nodes': len(self.nodes),
@@ -311,7 +297,7 @@ class LoadBalancer:
         suitable_nodes = self._filter_nodes_by_requirements(available_nodes, task)
 
         if not suitable_nodes:
-            logger.warning(f"没有满足任务要求的节点")
+            logger.warning("没有满足任务要求的节点")
             return None
 
         # 根据策略选择节点
@@ -330,7 +316,7 @@ class LoadBalancer:
         else:
             return suitable_nodes[0]
 
-    def _filter_nodes_by_requirements(self, nodes: List[EdgeNode], task: ComputeTask) -> List[EdgeNode]:
+    def _filter_nodes_by_requirements(self, nodes: list[EdgeNode], task: ComputeTask) -> list[EdgeNode]:
         """根据任务要求过滤节点"""
         suitable_nodes = []
         requirements = task.requirements
@@ -365,7 +351,7 @@ class LoadBalancer:
 
         return suitable_nodes
 
-    def _round_robin_selection(self, nodes: List[EdgeNode]) -> EdgeNode:
+    def _round_robin_selection(self, nodes: list[EdgeNode]) -> EdgeNode:
         """轮询选择"""
         if not nodes:
             return None
@@ -374,7 +360,7 @@ class LoadBalancer:
         self.round_robin_index += 1
         return node
 
-    def _least_connections_selection(self, nodes: List[EdgeNode]) -> EdgeNode:
+    def _least_connections_selection(self, nodes: list[EdgeNode]) -> EdgeNode:
         """最少连接选择"""
         min_connections = float('inf')
         selected_node = None
@@ -387,7 +373,7 @@ class LoadBalancer:
 
         return selected_node
 
-    def _weighted_round_robin_selection(self, nodes: List[EdgeNode]) -> EdgeNode:
+    def _weighted_round_robin_selection(self, nodes: list[EdgeNode]) -> EdgeNode:
         """加权轮询选择"""
         total_weight = 0
         weighted_nodes = []
@@ -408,7 +394,7 @@ class LoadBalancer:
 
         return weighted_nodes[self.round_robin_index % len(weighted_nodes)]
 
-    def _response_time_selection(self, nodes: List[EdgeNode]) -> EdgeNode:
+    def _response_time_selection(self, nodes: list[EdgeNode]) -> EdgeNode:
         """响应时间选择"""
         best_node = None
         best_response_time = float('inf')
@@ -427,7 +413,7 @@ class LoadBalancer:
 
         return best_node or nodes[0]
 
-    def _resource_based_selection(self, nodes: List[EdgeNode]) -> EdgeNode:
+    def _resource_based_selection(self, nodes: list[EdgeNode]) -> EdgeNode:
         """基于资源选择"""
         best_node = None
         best_score = -1
@@ -446,7 +432,7 @@ class LoadBalancer:
 
         return best_node or nodes[0]
 
-    def _geographic_selection(self, nodes: List[EdgeNode], task: ComputeTask) -> EdgeNode:
+    def _geographic_selection(self, nodes: list[EdgeNode], task: ComputeTask) -> EdgeNode:
         """地理位置选择"""
         task_location = task.metadata.get('preferred_location')
 
@@ -677,7 +663,7 @@ class TaskScheduler:
             'result': 'Task completed successfully'
         }
 
-    def get_task_stats(self) -> Dict[str, Any]:
+    def get_task_stats(self) -> dict[str, Any]:
         """获取任务统计信息"""
         return {
             'pending_tasks': self.pending_tasks.qsize(),
@@ -805,7 +791,7 @@ class DataSyncManager:
         # 定期同步逻辑
         await asyncio.sleep(0.3)  # 模拟定期处理时间
 
-    def get_sync_stats(self) -> Dict[str, Any]:
+    def get_sync_stats(self) -> dict[str, Any]:
         """获取同步统计信息"""
         return {
             'pending_syncs': self.sync_queue.qsize(),
@@ -859,7 +845,7 @@ class EdgeComputingSystem:
 
     async def add_edge_node(self, name: str, host: str, port: int, location: str,
                            node_type: NodeType = NodeType.EDGE,
-                           capabilities: Dict[str, Any] = None) -> str:
+                           capabilities: dict[str, Any] = None) -> str:
         """添加边缘节点"""
         node = EdgeNode(
             node_id=str(uuid.uuid4()),
@@ -921,7 +907,7 @@ class EdgeComputingSystem:
         while self.running:
             try:
                 # 收集各项指标
-                metrics = self._get_system_metrics()
+                self._get_system_metrics()
 
                 # 这里可以发送到监控系统
                 # logger.info(f"系统指标: {metrics}")
@@ -934,7 +920,7 @@ class EdgeComputingSystem:
                 logger.error(f"指标收集异常: {e}")
                 await asyncio.sleep(10)
 
-    def _collect_node_resources(self, host: str, port: int) -> Dict[str, Any]:
+    def _collect_node_resources(self, host: str, port: int) -> dict[str, Any]:
         """收集节点资源信息"""
         try:
             # CPU信息
@@ -966,7 +952,7 @@ class EdgeComputingSystem:
             logger.error(f"收集节点资源失败: {e}")
             return {}
 
-    def _get_system_metrics(self) -> Dict[str, Any]:
+    def _get_system_metrics(self) -> dict[str, Any]:
         """获取系统指标"""
         node_stats = self.node_manager.get_node_stats()
         task_stats = self.task_scheduler.get_task_stats()
@@ -980,7 +966,7 @@ class EdgeComputingSystem:
             'load_balancing_strategy': self.load_balancer.strategy.value
         }
 
-    async def submit_task(self, task_name: str, task_type: str, requirements: Dict[str, Any] = None,
+    async def submit_task(self, task_name: str, task_type: str, requirements: dict[str, Any] = None,
                          priority: int = 1, location: str = None, **kwargs) -> str:
         """提交计算任务"""
         task = ComputeTask(
@@ -1015,7 +1001,7 @@ def get_edge_computing_system() -> EdgeComputingSystem:
     return _edge_computing_system
 
 # 工具函数
-async def create_sample_edge_nodes() -> List[str]:
+async def create_sample_edge_nodes() -> list[str]:
     """创建示例边缘节点"""
     edge_system = get_edge_computing_system()
 

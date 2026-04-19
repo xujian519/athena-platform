@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 测试人机协作决策模型
 Test Human-in-the-Loop Decision Model
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
 import asyncio
 from datetime import datetime
-from typing import Dict, Any
+
 
 async def test_human_in_loop_decision():
     """测试人机协作决策模型"""
@@ -114,7 +114,7 @@ async def test_tech_selection(decision_model):
     )
 
     if result['success']:
-        print(f"✅ 决策成功!")
+        print("✅ 决策成功!")
         print(f"   选中方案: {result['result']['selected_option'].name}")
         print(f"   置信度: {result['result']['confidence']:.2f}")
         print(f"   人类参与: {'是' if result['result']['human_incorporated'] else '否'}")
@@ -164,13 +164,13 @@ async def test_resource_allocation(decision_model):
         'stakeholder_expectation': '高'
     }
 
-    result = await decision_model.collaborative_decision_process(
+    await decision_model.collaborative_decision_process(
         problem=problem,
         options_data=options,
         context=context
     )
 
-    print(f"✅ 资源分配决策完成")
+    print("✅ 资源分配决策完成")
     print()
 
 async def test_strategic_planning(decision_model):
@@ -214,13 +214,13 @@ async def test_strategic_planning(decision_model):
         'competitor_count': '多'
     }
 
-    result = await decision_model.collaborative_decision_process(
+    await decision_model.collaborative_decision_process(
         problem=problem,
         options_data=options,
         context=context
     )
 
-    print(f"✅ 战略规划决策完成")
+    print("✅ 战略规划决策完成")
     print()
 
 async def get_decision_insights(decision_model):
@@ -233,20 +233,20 @@ async def get_decision_insights(decision_model):
     if 'message' in insights:
         print(insights['message'])
     else:
-        print(f"📊 决策统计:")
+        print("📊 决策统计:")
         print(f"  • 总决策数: {insights['total_decisions']}")
         print(f"  • 最近决策数: {insights['recent_decisions']}")
         print(f"  • 平均置信度: {insights['average_confidence']:.2f}")
         print(f"  • 人类参与率: {insights['human_participation_rate']:.2%}")
 
-        print(f"\n💡 爸爸偏好:")
+        print("\n💡 爸爸偏好:")
         prefs = insights['dad_preferences']
         print(f"  • 风险承受度: {prefs['risk_tolerance']:.2f}")
         print(f"  • 决策风格: {prefs['decision_style']}")
         print(f"  • 关注因素: {', '.join(prefs['preferred_factors'])}")
 
         if insights['recommendations']:
-            print(f"\n📋 改进建议:")
+            print("\n📋 改进建议:")
             for rec in insights['recommendations']:
                 print(f"  • {rec}")
 

@@ -1,0 +1,158 @@
+# ===================================================================
+# 动态提示词系统 - Gateway服务配置
+# Dynamic Prompt System - Gateway Service Configuration
+# ===================================================================
+# 服务: 动态提示词系统API
+# 端口: 8002
+# 路径前缀: /api/v1/prompt-system
+# ===================================================================
+
+# 服务实例配置
+services:
+  - name: prompt-system-api
+    host: localhost
+    port: 8002
+    metadata:
+      service_type: "dynamic_prompt_system"
+      version: "2.1.0"
+      description: "动态提示词系统 - 场景识别、规则检索、能力调用"
+
+# 路由规则配置
+routes:
+  # 健康检查端点
+  - id: route-prompt-system-health
+    path: /api/prompt-system/health
+    target_service: prompt-system-api
+    methods: [GET]
+    strip_prefix: false
+    metadata:
+      target_path: /api/v1/prompt-system/health
+      description: "健康检查端点"
+
+  # 场景识别端点
+  - id: route-prompt-system-scenario-identify
+    path: /api/prompt-system/scenario/identify
+    target_service: prompt-system-api
+    methods: [POST]
+    strip_prefix: false
+    metadata:
+      target_path: /api/v1/prompt-system/scenario/identify
+      description: "场景识别 - 识别用户输入的业务场景"
+
+  # 规则检索端点
+  - id: route-prompt-system-rules-retrieve
+    path: /api/prompt-system/rules/retrieve
+    target_service: prompt-system-api
+    methods: [POST]
+    strip_prefix: false
+    metadata:
+      target_path: /api/v1/prompt-system/rules/retrieve
+      description: "规则检索 - 从Neo4j检索场景规则"
+
+  # 能力调用端点
+  - id: route-prompt-system-capabilities-invoke
+    path: /api/prompt-system/capabilities/invoke
+    target_service: prompt-system-api
+    methods: [POST]
+    strip_prefix: false
+    metadata:
+      target_path: /api/v1/prompt-system/capabilities/invoke
+      description: "能力调用 - 调用指定的原子化能力"
+
+  # 提示词生成端点
+  - id: route-prompt-system-prompt-generate
+    path: /api/prompt-system/prompt/generate
+    target_service: prompt-system-api
+    methods: [POST]
+    strip_prefix: false
+    metadata:
+      target_path: /api/v1/prompt-system/prompt/generate
+      description: "提示词生成 - 生成优化的动态提示词"
+
+  # 能力列表端点
+  - id: route-prompt-system-capabilities-list
+    path: /api/prompt-system/capabilities/list
+    target_service: prompt-system-api
+    methods: [GET]
+    strip_prefix: false
+    metadata:
+      target_path: /api/v1/prompt-system/capabilities/list
+      description: "能力列表 - 获取所有可用的能力"
+
+  # 缓存统计端点
+  - id: route-prompt-system-cache-stats
+    path: /api/prompt-system/cache/stats
+    target_service: prompt-system-api
+    methods: [GET]
+    strip_prefix: false
+    metadata:
+      target_path: /api/v1/prompt-system/cache/stats
+      description: "缓存统计 - 获取缓存统计信息"
+
+  # 缓存清理端点
+  - id: route-prompt-system-cache-clear
+    path: /api/prompt-system/cache/clear
+    target_service: prompt-system-api
+    methods: [POST]
+    strip_prefix: false
+    metadata:
+      target_path: /api/v1/prompt-system/cache/clear
+      description: "缓存清理 - 清除所有缓存"
+
+  # 监控指标端点
+  - id: route-prompt-system-monitoring-metrics
+    path: /api/prompt-system/monitoring/metrics
+    target_service: prompt-system-api
+    methods: [GET, POST]
+    strip_prefix: false
+    metadata:
+      target_path: /api/v1/prompt-system/monitoring/metrics
+      description: "监控指标 - 获取或重置监控指标"
+
+  # 性能监控端点
+  - id: route-prompt-system-monitoring-performance
+    path: /api/prompt-system/monitoring/performance
+    target_service: prompt-system-api
+    methods: [GET]
+    strip_prefix: false
+    metadata:
+      target_path: /api/v1/prompt-system/monitoring/performance
+      description: "性能监控 - 获取性能监控数据"
+
+  # 配置状态端点
+  - id: route-prompt-system-config-status
+    path: /api/prompt-system/config/status
+    target_service: prompt-system-api
+    methods: [GET]
+    strip_prefix: false
+    metadata:
+      target_path: /api/v1/prompt-system/config/status
+      description: "配置状态 - 获取配置状态信息"
+
+  # 配置重载端点
+  - id: route-prompt-system-config-reload
+    path: /api/prompt-system/config/reload
+    target_service: prompt-system-api
+    methods: [POST]
+    strip_prefix: false
+    metadata:
+      target_path: /api/v1/prompt-system/config/reload
+      description: "配置重载 - 重新加载配置"
+
+  # 扩展健康检查端点
+  - id: route-prompt-system-health-extended
+    path: /api/prompt-system/health/extended
+    target_service: prompt-system-api
+    methods: [GET]
+    strip_prefix: false
+    metadata:
+      target_path: /api/v1/prompt-system/health/extended
+      description: "扩展健康检查 - 获取详细的健康状态信息"
+
+# 依赖关系配置
+dependencies:
+  - service: prompt-system-api
+    depends_on:
+      - neo4j
+      - postgres
+      - qdrant

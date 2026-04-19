@@ -22,17 +22,6 @@
       "log_file": "/tmp/xiaona_enhanced_integrated.log",
       "process_pattern": "xiaona_enhanced_integrated.py"
     },
-    "yunxi": {
-      "name": "云熙.vega",
-      "english_name": "Yunxi Vega",
-      "role": "IP管理系统",
-      "description": "知识产权管理系统，织女星守护",
-      "keywords": ["云熙", "yun", "yunxi", "IP", "vega"],
-      "startup_script": null,
-      "port": null,
-      "log_file": null,
-      "status": "开发中"
-    },
     "xiaochen": {
       "name": "小宸",
       "english_name": "Xiaochen",
@@ -59,7 +48,6 @@
   "launch_commands": {
     "启动小诺": "xiaonuo",
     "启动小娜": "xiaona",
-    "启动云熙": "yunxi",
     "启动小宸": "xiaochen",
     "启动Athena": "athena",
     "start xiaonuo": "xiaonuo",

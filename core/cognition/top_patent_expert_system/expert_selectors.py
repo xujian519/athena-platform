@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 顶级专利专家系统 - 专家选择模块
 Top Patent Expert System - Expert Selection Module

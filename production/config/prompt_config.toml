@@ -1,0 +1,40 @@
+# 提示词系统配置
+# Prompt System Configuration
+
+[loader]
+# 加载模式: full / progressive / minimal
+load_mode = "progressive"
+
+# 压缩比例 (0.0 - 1.0)
+compression_ratio = 0.4
+
+# 是否启用压缩
+enable_compression = true
+
+# 是否启用缓存
+enable_cache = true
+
+# 缓存TTL (秒)
+cache_ttl = 3600
+
+# 缓存目录
+cache_dir = "/tmp/prompt_cache"
+
+# 详细日志
+verbose = false
+
+[task_defaults]
+# 各任务类型的默认复杂度
+patent_writing = "medium"
+office_action = "complex"
+invalidity = "complex"
+prior_art_search = "simple"
+claims_analysis = "medium"
+general = "simple"
+
+[token_limits]
+# 各场景的Token限制警告阈值
+minimal = 5000
+simple = 15000
+medium = 30000
+complex = 50000

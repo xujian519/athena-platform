@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强推理基础模块
 Enhanced Reasoning Base Module
@@ -11,7 +12,7 @@ import time
 import uuid
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -95,22 +96,6 @@ class ReasoningContext:
 
 
 @dataclass
-class ReasoningResult:
-    """推理结果"""
-
-    result_id: str = field(default_factory=lambda: str(uuid.uuid4()))
-    conclusion: str = ""
-    reasoning_chain: list[ReasoningStep] | ReasoningChain = field(default_factory=list)
-    confidence: float = 0.0
-    metadata: dict[str, Any] = field(default_factory=dict)
-    processing_time: float = 0.0
-    success: bool = True
-    error_message: str = ""
-    reasoning_type: ReasoningType | None = None
-    performance_metrics: dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
 class ReasoningChain:
     """推理链"""
 
@@ -135,6 +120,22 @@ class ReasoningChain:
         elif self.end_time > 0:
             return self.end_time - self.start_time
         return self.total_time
+
+
+@dataclass
+class ReasoningResult:
+    """推理结果"""
+
+    result_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    conclusion: str = ""
+    reasoning_chain: list[ReasoningStep] | ReasoningChain = field(default_factory=list)
+    confidence: float = 0.0
+    metadata: dict[str, Any] = field(default_factory=dict)
+    processing_time: float = 0.0
+    success: bool = True
+    error_message: str = ""
+    reasoning_type: ReasoningType | None = None
+    performance_metrics: dict[str, Any] = field(default_factory=dict)
 
 
 def create_reasoning_step(

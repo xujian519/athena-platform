@@ -5,11 +5,9 @@ Enhanced Content Style System
 传承小溪平台的优秀设计，结合小宸的山东男性特质
 """
 
+from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, field
-import random
-from core.async_main import async_main
+from typing import Any
 
 
 class ContentStyle(Enum):
@@ -48,7 +46,7 @@ class StyleCharacteristics:
     humor_level: float                       # 幽默程度 0-1
     formality_level: float                  # 正式程度 0-1
     cultural_ref_frequency: float           # 文化引用频率 0-1
-    shandong_elements: List[str]             # 山东元素
+    shandong_elements: list[str]             # 山东元素
     professional_depth: float                # 专业深度 0-1
     emotional_appeal: float                   # 情感吸引力 0-1
 
@@ -120,7 +118,7 @@ class XiaochenStyleManager:
         self.style_cache = {}
         self.mixing_rules = self._initialize_mixing_rules()
 
-    def _initialize_mixing_rules(self) -> Dict[str, Any]:
+    def _initialize_mixing_rules(self) -> dict[str, Any]:
         """初始化风格混合规则"""
         return {
             "compatible_combinations": [
@@ -140,7 +138,7 @@ class XiaochenStyleManager:
         """获取风格特征"""
         return STYLE_CHARACTERISTICS_MAP.get(style, STYLE_CHARACTERISTICS_MAP[ContentStyle.CASUAL])
 
-    def generate_style_guide(self, style: ContentStyle, purpose: ContentPurpose) -> Dict[str, Any]:
+    def generate_style_guide(self, style: ContentStyle, purpose: ContentPurpose) -> dict[str, Any]:
         """生成风格指导"""
         characteristics = self.get_style_characteristics(style)
 
@@ -162,7 +160,7 @@ class XiaochenStyleManager:
 
         return guide
 
-    def _get_opening_phrases(self, style: ContentStyle, purpose: ContentPurpose) -> List[str]:
+    def _get_opening_phrases(self, style: ContentStyle, purpose: ContentPurpose) -> list[str]:
         """获取开场白短语"""
         base_phrases = {
             ContentStyle.SHANDONG_HUMOR: [
@@ -184,7 +182,7 @@ class XiaochenStyleManager:
 
         return base_phrases.get(style, base_phrases[ContentStyle.CASUAL])
 
-    def _get_transition_words(self, style: ContentStyle) -> List[str]:
+    def _get_transition_words(self, style: ContentStyle) -> list[str]:
         """获取过渡词汇"""
         transitions = {
             ContentStyle.SHANDONG_HUMOR: ["那咋办呢", "说实在的", "俺觉得吧"],
@@ -194,7 +192,7 @@ class XiaochenStyleManager:
 
         return transitions.get(style, ["然后", "所以", "另外"])
 
-    def _get_closing_phrases(self, style: ContentStyle, purpose: ContentPurpose) -> List[str]:
+    def _get_closing_phrases(self, style: ContentStyle, purpose: ContentPurpose) -> list[str]:
         """获取结束语短语"""
         closing_phrases = {
             ContentStyle.SHANDONG_HUMOR: [
@@ -216,7 +214,7 @@ class XiaochenStyleManager:
 
         return closing_phrases.get(style, ["谢谢大家！", "再见！"])
 
-    def _get_content_structure(self, style: ContentStyle, purpose: ContentPurpose) -> Dict[str, Any]:
+    def _get_content_structure(self, style: ContentStyle, purpose: ContentPurpose) -> dict[str, Any]:
         """获取内容结构"""
         if purpose == ContentPurpose.IP_EDUCATION:
             return {
@@ -246,7 +244,7 @@ class XiaochenStyleManager:
                 "section_ratio": [2, 6, 2]
             }
 
-    def _get_engagement_tips(self, style: ContentStyle, purpose: ContentPurpose) -> List[str]:
+    def _get_engagement_tips(self, style: ContentStyle, purpose: ContentPurpose) -> list[str]:
         """获取互动技巧"""
         tips = [
             "使用提问引发思考",
@@ -269,7 +267,7 @@ class XiaochenStyleManager:
 
         return tips
 
-    def _get_cultural_references(self, style: ContentStyle, purpose: ContentPurpose) -> List[str]:
+    def _get_cultural_references(self, style: ContentStyle, purpose: ContentPurpose) -> list[str]:
         """获取文化引用"""
         cultural_refs = {
             ContentStyle.CULTURAL: [
@@ -289,7 +287,7 @@ class XiaochenStyleManager:
 
         return cultural_refs.get(style, ["中华文化", "传统智慧"])
 
-    def mix_styles(self, primary_style: ContentStyle, secondary_style: ContentStyle | None = None) -> Dict[str, Any]:
+    def mix_styles(self, primary_style: ContentStyle, secondary_style: ContentStyle | None = None) -> dict[str, Any]:
         """混合风格"""
         if secondary_style is None:
             return self.generate_style_guide(primary_style, ContentPurpose.KNOWLEDGE_EDU)
@@ -329,7 +327,7 @@ class XiaochenStyleManager:
             "characteristics": self.style_cache.get(frozenset(combination))
         }
 
-    def adapt_for_platform(self, style_guide: Dict[str, Any], platform: str) -> Dict[str, Any]:
+    def adapt_for_platform(self, style_guide: dict[str, Any], platform: str) -> dict[str, Any]:
         """为平台适配风格"""
         adapted = style_guide.copy()
 

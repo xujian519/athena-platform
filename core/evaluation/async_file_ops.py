@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 异步文件操作工具
 Async File Operations Utility
@@ -154,7 +155,7 @@ class AsyncFileManager:
                 path.unlink()
                 return True
             return False
-        except Exception as e:
+        except Exception:
             return False
 
     async def list_files(self, directory: str | Path, pattern: str = "*") -> list[Path]:

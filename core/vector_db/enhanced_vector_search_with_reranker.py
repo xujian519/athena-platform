@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Reranker增强的向量搜索引擎
 Enhanced Vector Search with Reranker
@@ -13,13 +14,14 @@ import logging
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
+import numpy as np
 
 from core.nlp.bge_embedding_service import get_bge_service
 
 # 导入现有模块
-from core.reranking.bge_reranker import BGEReranker, RerankConfig, RerankMode, RerankResult
+from core.reranking.bge_reranker import BGEReranker, RerankConfig, RerankMode
 from core.vector_db.unified_search_interface import UnifiedVectorSearcher, VectorQuery, VectorResult
 
 logger = logging.getLogger(__name__)

@@ -1,31 +1,33 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 DeepSeek专利专家 - 简化版真实API服务
 基于现有成功模式，确保稳定运行
 """
 
-from fastapi import FastAPI, HTTPException
-from contextlib import asynccontextmanager
-import uvicorn
-from core.async_main import async_main
-from datetime import datetime
 import asyncio
 import sys
-import os
-import json
-from typing import Dict, List, Optional, Any
+from contextlib import asynccontextmanager
+from datetime import datetime
+from typing import Any
+
 import aiohttp
+import uvicorn
+from fastapi import FastAPI, HTTPException
 
 # 添加路径
 sys.path.append('/Users/xujian/Athena工作平台/services/autonomous-control')
-from agent_identity import AgentIdentity, AgentType, register_agent_identity, format_identity_display
-
 # 导入安全配置
 import sys
 from pathlib import Path
+
+from agent_identity import (
+    AgentIdentity,
+    AgentType,
+    format_identity_display,
+    register_agent_identity,
+)
+
 sys.path.append(str(Path(__file__).parent.parent / "core"))
-from security.env_config import get_env_var, get_database_url, get_jwt_secret
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -96,7 +98,7 @@ async def display_startup_identity():
 
         print("\n" + "="*60)
         print(identity_display)
-        print(f"\n🤖 DeepSeek专利专家 (简化版) 启动成功！")
+        print("\n🤖 DeepSeek专利专家 (简化版) 启动成功！")
         print("📍 服务端口: 8030")
         print("🔗 API类型: 真实DeepSeek API (简化版)")
         print("="*60 + "\n")
@@ -130,7 +132,7 @@ async def health_check():
         "timestamp": datetime.now().isoformat()
     }
 
-async def call_deepseek_api(prompt: str, max_tokens: int = 1000) -> Dict[str, Any]:
+async def call_deepseek_api(prompt: str, max_tokens: int = 1000) -> dict[str, Any]:
     """调用DeepSeek API的简化函数"""
     try:
         if not hasattr(app.state, 'session') or not app.state.session:

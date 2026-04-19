@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 异步处理模块 - Async Processing Module
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺噪声和异常字符处理器
 Xiaonuo Noise and Anomaly Character Processor
@@ -16,10 +17,7 @@ Xiaonuo Noise and Anomaly Character Processor
 """
 
 import base64
-from core.async_main import async_main
 import html
-import logging
-from core.logging_config import setup_logging
 import os
 import re
 import sys
@@ -30,7 +28,9 @@ from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 添加模块路径
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -346,7 +346,7 @@ class NoiseProcessor:
         try:
             text.encode('utf-8')
         except UnicodeEncodeError as e:
-            segments.append((e.start, e.end, text[e.end]]
+            segments.append((e.start, e.end, text[e.end:]))
 
         return segments
 
@@ -462,7 +462,7 @@ class NoiseProcessor:
                             segments.append((
                                 start_idx,
                                 i,
-                                text[start_idx: i,
+                                text[start_idx:i],
                                 NoiseType.MIXED_SCRIPT
                             ))
                     start_idx = i
@@ -491,7 +491,7 @@ class NoiseProcessor:
                 consecutive_emoticons[i+2][0] - consecutive_emoticons[i+1][1] <= 1):
                 start = consecutive_emoticons[i][0]
                 end = consecutive_emoticons[i+2][1]
-                segments.append((start, end, text[end]
+                segments.append((start, end, text[start:end]))
 
         return segments
 
@@ -610,10 +610,10 @@ class NoiseProcessor:
                     decoded = base64.b64decode(segment).decode('utf-8', errors='ignore')
                     if self._is_meaningful_text(decoded):
                         return decoded
-        except (TypeError, ZeroDivisionError) as e:
-            logger.warning(f'计算时发生错误: {e}')
-        except Exception as e:
-            logger.error(f'未预期的错误: {e}')
+                except (TypeError, ZeroDivisionError) as e:
+                    logger.warning(f'计算时发生错误: {e}')
+                except Exception as e:
+                    logger.error(f'未预期的错误: {e}')
             return segment
 
         cleaned = base64_pattern.sub(replace_base64, cleaned)
@@ -832,7 +832,7 @@ if __name__ == "__main__":
         "😀😁😂🤣😃😄😅😆😉😊😋😎😍😘😗😙😚",  # 表情垃圾
         "   Multiple    spaces   ",  # 空白噪声
         "Binary \x80\x81\x82 data \x90\x91",  # 二进制数据
-        "Malformed \u_d800 Unicode",  # 畸形Unicode
+        "Malformed \\u_d800 Unicode",  # 畸形Unicode
         "Direction\u202B test",  # 格式字符
     ]
 

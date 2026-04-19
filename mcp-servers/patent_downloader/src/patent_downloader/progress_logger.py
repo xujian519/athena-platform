@@ -3,7 +3,6 @@
 import logging
 import sys
 import threading
-from typing import Optional
 
 
 class ProgressLogger:
@@ -139,7 +138,7 @@ class ProgressLogHandler(logging.Handler):
 _ui_level: int = logging.ERROR
 
 # Global progress logger instance
-_progress_logger: Optional[ProgressLogger] = None
+_progress_logger: ProgressLogger | None = None
 
 
 def get_ui_level() -> int:

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 状态持久化管理器
 
@@ -12,13 +13,13 @@ Version: v1.0.0
 import asyncio
 import json
 import logging
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from core.hooks.base import HookFunction, HookRegistry, HookType
-from core.tools.base import ToolDefinition, ToolRegistry
+from core.hooks.base import HookRegistry, HookType
+from core.tools.base import ToolRegistry
 
 logger = logging.getLogger(__name__)
 

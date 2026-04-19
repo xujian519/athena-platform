@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 专利复审决定深度处理器
 Patent Re-examination Decision Deep Processor
@@ -14,7 +15,7 @@ import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 # 文档处理
 from docx import Document
@@ -142,7 +143,7 @@ class DOCXProcessor:
                 return self._extract_with_docx2python(file_path)
             raise
 
-    def _extract_tables(self, doc: Document) -> list[list[str]:
+    def _extract_tables(self, doc: Document) -> list[list[str]]:
         """提取表格内容"""
         tables = []
         for table in doc.tables:
@@ -206,7 +207,7 @@ class DOCXProcessor:
         for _i, para in enumerate(paragraphs):
             # 提取决定号
             if "决定号" in para or "无效宣告请求审查决定" in para:
-                match = re.search(r"决定号[]\s*([^\s]+)"]
+                match = re.search(r"决定号[：:]*\s*([^\s]+)", para)
                 if match:
                     data.decision_number = match.group(1)
                 else:
@@ -602,7 +603,7 @@ class PatentDecisionProcessor:
 
     def vectorize_decision(
         self, data: PatentDecisionData, granularity: str = "multi"
-    ) -> dict[str, list[tuple[str, list[float]]:
+    ) -> dict[str, list[tuple[str, list[float]]]]:
         """
         将决定书向量化
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 文件类型检测器 - Athena工作平台多模态文件处理系统
 File Type Detector - Multimodal File Processing System for Athena Platform
@@ -15,19 +14,19 @@ import hashlib
 import json
 import logging
 import mimetypes
-import os
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import magic
 
 # 配置日志
+log_filename = f'file_detector_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - [FileTypeDetector] %(message)s',
     handlers=[
-        logging.FileHandler(f'file_detector_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log'),
+        logging.FileHandler(log_filename),
         logging.StreamHandler()
     ]
 )
@@ -112,7 +111,7 @@ class FileTypeDetector:
             'type_distribution': {}
         }
 
-    def detect_file_type(self, file_path: str) -> Dict[str, Any]:
+    def detect_file_type(self, file_path: str) -> dict[str, Any]:
         """
         检测文件类型
 
@@ -193,7 +192,7 @@ class FileTypeDetector:
                 'file_type': 'error'
             }
 
-    def _get_basic_info(self, file_path: Path) -> Dict[str, Any]:
+    def _get_basic_info(self, file_path: Path) -> dict[str, Any]:
         """获取基础文件信息"""
         try:
             stat = file_path.stat()
@@ -209,7 +208,7 @@ class FileTypeDetector:
             logger.error(f"获取基础文件信息失败 {file_path}: {e}")
             return {}
 
-    def _detect_by_extension(self, file_path: Path, basic_info: Dict) -> Dict[str, Any | None]:
+    def _detect_by_extension(self, file_path: Path, basic_info: dict) -> dict[str, Any | None]:
         """通过文件扩展名检测"""
         extension = basic_info.get('extension', '').lower()
 
@@ -227,7 +226,7 @@ class FileTypeDetector:
 
         return None
 
-    def _detect_by_mime_type(self, file_path: Path, basic_info: Dict) -> Dict[str, Any | None]:
+    def _detect_by_mime_type(self, file_path: Path, basic_info: dict) -> dict[str, Any | None]:
         """通过MIME类型检测"""
         mime_type = self._get_mime_type(file_path)
 
@@ -245,7 +244,7 @@ class FileTypeDetector:
 
         return None
 
-    def _detect_by_magic_number(self, file_path: Path, basic_info: Dict) -> Dict[str, Any | None]:
+    def _detect_by_magic_number(self, file_path: Path, basic_info: dict) -> dict[str, Any | None]:
         """通过魔术数字检测"""
         try:
             if not hasattr(self, 'mime'):
@@ -293,7 +292,7 @@ class FileTypeDetector:
             logger.warning(f"魔术数字检测失败 {file_path}: {e}")
             return None
 
-    def _detect_by_content_analysis(self, file_path: Path, basic_info: Dict) -> Dict[str, Any | None]:
+    def _detect_by_content_analysis(self, file_path: Path, basic_info: dict) -> dict[str, Any | None]:
         """通过内容分析检测"""
         try:
             # 只对文本文件进行内容分析
@@ -350,7 +349,7 @@ class FileTypeDetector:
         try:
             mime_type, _ = mimetypes.guess_type(str(file_path))
             return mime_type or 'application/octet-stream'
-        except:
+        except Exception:
             return 'application/octet-stream'
 
     def _calculate_file_hash(self, file_path: Path) -> str:
@@ -361,7 +360,7 @@ class FileTypeDetector:
                 for chunk in iter(lambda: f.read(4096), b""):
                     hash_md5.update(chunk)
             return hash_md5.hexdigest()
-        except:
+        except Exception:
             return ''
 
     def _format_size(self, size_bytes: int) -> str:
@@ -372,7 +371,7 @@ class FileTypeDetector:
             size_bytes /= 1024.0
         return f"{size_bytes:.1f}PB"
 
-    def _update_stats(self, result: Dict[str, Any]):
+    def _update_stats(self, result: dict[str, Any]):
         """更新统计信息"""
         self.stats['total_files'] += 1
 
@@ -389,7 +388,7 @@ class FileTypeDetector:
                 self.stats['type_distribution'][file_type] = 0
             self.stats['type_distribution'][file_type] += 1
 
-    def scan_directory(self, directory: str, recursive: bool = True) -> List[Dict[str, Any]]:
+    def scan_directory(self, directory: str, recursive: bool = True) -> list[dict[str, Any]]:
         """
         扫描目录中的所有文件
 
@@ -423,7 +422,7 @@ class FileTypeDetector:
         logger.info(f"扫描完成，共检测 {len(files_found)} 个文件")
         return files_found
 
-    def get_supported_formats(self) -> Dict[str, Any]:
+    def get_supported_formats(self) -> dict[str, Any]:
         """获取支持的文件格式"""
         return {
             'total_types': len(self.supported_formats),
@@ -431,7 +430,7 @@ class FileTypeDetector:
             'total_extensions': sum(len(config['extensions']) for config in self.supported_formats.values())
         }
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """获取检测统计信息"""
         return {
             'detection_stats': self.stats.copy(),
@@ -440,7 +439,7 @@ class FileTypeDetector:
             'confidence_levels': ['high (>0.8)', 'medium (0.5-0.8)', 'low (<0.5)']
         }
 
-    def export_results(self, results: List[Dict[str, Any]], output_file: str = None):
+    def export_results(self, results: list[dict[str, Any]], output_file: str = None):
         """导出检测结果到文件"""
         if not output_file:
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -468,25 +467,25 @@ def main():
 
     # 显示支持的格式
     formats = detector.get_supported_formats()
-    logger.info(f"📋 支持的文件格式:")
+    logger.info("📋 支持的文件格式:")
     logger.info(f"   文件类型: {formats['total_types']} 种")
     logger.info(f"   扩展名: {formats['total_extensions']} 个")
-    logger.info(f"   检测方法: 4 种 (扩展名/MIME/魔术数字/内容分析)")
+    logger.info("   检测方法: 4 种 (扩展名/MIME/魔术数字/内容分析)")
 
     # 扫描当前目录
-    logger.info(f"\n🔍 开始扫描当前目录...")
+    logger.info("\n🔍 开始扫描当前目录...")
     results = detector.scan_directory('.', recursive=False)
 
     # 统计结果
     stats = detector.get_statistics()
-    logger.info(f"\n📊 扫描结果统计:")
+    logger.info("\n📊 扫描结果统计:")
     logger.info(f"   总文件数: {stats['detection_stats']['total_files']}")
     logger.info(f"   成功检测: {stats['detection_stats']['detected_files']}")
     logger.info(f"   支持格式: {stats['detection_stats']['supported_files']}")
     logger.info(f"   不支持: {stats['detection_stats']['unsupported_files']}")
 
     # 显示类型分布
-    logger.info(f"\n📋 文件类型分布:")
+    logger.info("\n📋 文件类型分布:")
     for file_type, count in stats['detection_stats']['type_distribution'].items():
         logger.info(f"   {file_type}: {count} 个")
 

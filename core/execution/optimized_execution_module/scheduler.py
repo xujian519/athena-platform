@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化版执行模块 - 智能任务调度器
 Optimized Execution Module - Intelligent Task Scheduler

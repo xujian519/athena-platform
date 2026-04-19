@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能缓存淘汰策略
 Intelligent Cache Eviction Policy

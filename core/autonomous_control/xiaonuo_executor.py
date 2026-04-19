@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 小诺自主执行引擎
 实现情感驱动的任务执行和用户交互能力
@@ -5,13 +6,13 @@
 
 import asyncio
 import logging
-from core.logging_config import setup_logging
 from collections import deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any
 
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -269,7 +270,7 @@ class XiaonuoExecutor:
             self.emotional_state.update_emotion('curiosity', 0.05)
 
         # 考虑用户情感状态
-        for emotion, value in context.emotional_context.items():
+        for _emotion, value in context.emotional_context.items():
             if value > 0.7:  # 强烈情感
                 self.emotional_state.update_emotion('empathy', 0.1)
 

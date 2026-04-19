@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Neo4j增强的意图识别器
 Neo4j Enhanced Intent Classifier

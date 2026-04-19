@@ -5,13 +5,8 @@ Athena Patent Writing Tool
 帮助爸爸进行专业的专利撰写
 """
 
-import asyncio
-from core.async_main import async_main
 import json
 import re
-from datetime import datetime
-from typing import Dict, List, Optional, Tuple
-from pathlib import Path
 
 
 class AthenaPatentWritingTool:
@@ -21,7 +16,7 @@ class AthenaPatentWritingTool:
         self.templates = self._load_templates()
         self.guidelines = self._load_guidelines()
 
-    def _load_templates(self) -> Dict:
+    def _load_templates(self) -> dict:
         """加载专利模板"""
         return {
             "权利要求书": {
@@ -39,7 +34,7 @@ class AthenaPatentWritingTool:
             }
         }
 
-    def _load_guidelines(self) -> Dict:
+    def _load_guidelines(self) -> dict:
         """加载撰写指南"""
         return {
             "权利要求撰写要点": [
@@ -67,7 +62,7 @@ class AthenaPatentWritingTool:
             }
         }
 
-    def analyze_invention_disclosure(self, disclosure: str) -> Dict:
+    def analyze_invention_disclosure(self, disclosure: str) -> dict:
         """分析技术交底书"""
         analysis = {
             "技术领域": "",
@@ -138,7 +133,7 @@ class AthenaPatentWritingTool:
 
         return analysis
 
-    def draft_claims(self, analysis: Dict, claim_type: str = "产品") -> List[str]:
+    def draft_claims(self, analysis: dict, claim_type: str = "产品") -> list[str]:
         """起草权利要求"""
         claims = []
 
@@ -164,7 +159,7 @@ class AthenaPatentWritingTool:
             claims.append(claim_text)
 
             # 添加从属权利要求
-            for i, feature in enumerate(features[3:], 2):
+            for _i, feature in enumerate(features[3:], 2):
                 dependent_claim = self.templates["权利要求书"]["从属权利要求"]
                 dependent_claim = dependent_claim.replace("[技术方案名称]", "技术装置")
                 dependent_claim = dependent_claim.replace("[附加技术特征]", feature)
@@ -188,7 +183,7 @@ class AthenaPatentWritingTool:
 
         return claims
 
-    def _extract_technical_features(self, tech_solution: str) -> List[str]:
+    def _extract_technical_features(self, tech_solution: str) -> list[str]:
         """提取技术特征"""
         # 简化版：使用正则表达式和关键词识别
         features = []
@@ -205,7 +200,7 @@ class AthenaPatentWritingTool:
 
         return features[:5]  # 返回前5个特征
 
-    def _extract_method_steps(self, tech_solution: str) -> List[str]:
+    def _extract_method_steps(self, tech_solution: str) -> list[str]:
         """提取方法步骤"""
         steps = []
 
@@ -223,7 +218,7 @@ class AthenaPatentWritingTool:
 
         return steps[:5]  # 返回前5个步骤
 
-    def draft_specification(self, analysis: Dict) -> Dict:
+    def draft_specification(self, analysis: dict) -> dict:
         """起草说明书"""
         spec = {
             "技术领域": "",
@@ -260,7 +255,7 @@ class AthenaPatentWritingTool:
 
         return spec
 
-    def check_patent_law_26(self, specification: str) -> Dict:
+    def check_patent_law_26(self, specification: str) -> dict:
         """检查是否符合专利法第26条"""
         checks = {
             "完整性检查": {
@@ -308,7 +303,7 @@ class AthenaPatentWritingTool:
 
         return checks
 
-    def generate_review_comments(self, document: str, doc_type: str) -> List[str]:
+    def generate_review_comments(self, document: str, doc_type: str) -> list[str]:
         """生成审查意见"""
         comments = []
 
@@ -345,7 +340,7 @@ class AthenaPatentWritingTool:
 
         return comments
 
-    def save_draft(self, content: Dict, file_path: str) -> None:
+    def save_draft(self, content: dict, file_path: str) -> None:
         """保存草稿"""
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(content, f, ensure_ascii=False, indent=2)

@@ -4,14 +4,14 @@
 """
 
 import json
-from core.async_main import async_main
 import logging
-from core.logging_config import setup_logging
 import os
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -38,9 +38,9 @@ class AIIdentity:
     code_name: str
     role_type: RoleType
     role_description: str
-    capabilities: Dict[str, Any]
-    personality: Dict[str, Any]
-    expertise: List[str]
+    capabilities: dict[str, Any]
+    personality: dict[str, Any]
+    expertise: list[str]
     collaboration_style: str
     weight: float = 1.0  # 决策权重
 
@@ -49,7 +49,7 @@ class UnifiedIdentityManager:
 
     def __init__(self, config_dir: str = None):
         self.config_dir = config_dir or '/Users/xujian/Athena工作平台/config/identity'
-        self.identities: Dict[RoleType, AIIdentity] = {}
+        self.identities: dict[RoleType, AIIdentity] = {}
         self.collaboration_configs = {}
         self._load_identities()
         self._setup_collaboration_config()
@@ -58,12 +58,12 @@ class UnifiedIdentityManager:
         """加载身份配置"""
         try:
             # 加载Athena身份
-            with open(os.path.join(self.config_dir, 'athena.json'), 'r', encoding='utf-8') as f:
+            with open(os.path.join(self.config_dir, 'athena.json'), encoding='utf-8') as f:
                 athena_data = json.load(f)
                 self.identities[RoleType.ATHENA] = self._parse_athena_identity(athena_data)
 
             # 加载小诺身份
-            with open(os.path.join(self.config_dir, 'xiaonuo.json'), 'r', encoding='utf-8') as f:
+            with open(os.path.join(self.config_dir, 'xiaonuo.json'), encoding='utf-8') as f:
                 xiaonuo_data = json.load(f)
                 self.identities[RoleType.XIAONUO] = self._parse_xiaonuo_identity(xiaonuo_data)
 
@@ -71,7 +71,7 @@ class UnifiedIdentityManager:
         except Exception as e:
             logger.error(f"加载身份配置失败: {e}")
 
-    def _parse_athena_identity(self, data: Dict) -> AIIdentity:
+    def _parse_athena_identity(self, data: dict) -> AIIdentity:
         """解析Athena身份信息"""
         return AIIdentity(
             name=data['identity']['name'],
@@ -90,7 +90,7 @@ class UnifiedIdentityManager:
             weight=0.6  # 战略决策权重
         )
 
-    def _parse_xiaonuo_identity(self, data: Dict) -> AIIdentity:
+    def _parse_xiaonuo_identity(self, data: dict) -> AIIdentity:
         """解析小诺身份信息"""
         return AIIdentity(
             name=data['identity']['name'],
@@ -142,15 +142,15 @@ class UnifiedIdentityManager:
         """获取身份信息"""
         return self.identities.get(role_type)
 
-    def get_all_identities(self) -> List[AIIdentity]:
+    def get_all_identities(self) -> list[AIIdentity]:
         """获取所有身份"""
         return list(self.identities.values())
 
-    def get_collaboration_config(self, task_type: TaskType) -> Dict:
+    def get_collaboration_config(self, task_type: TaskType) -> dict:
         """获取协作配置"""
         return self.collaboration_configs.get(task_type, {})
 
-    def select_optimal_participants(self, task_type: TaskType, complexity: float = 0.5) -> List[RoleType]:
+    def select_optimal_participants(self, task_type: TaskType, complexity: float = 0.5) -> list[RoleType]:
         """选择最优参与者"""
         config = self.get_collaboration_config(task_type)
         participants = []
@@ -166,7 +166,7 @@ class UnifiedIdentityManager:
 
         return participants
 
-    def create_collaborative_identity(self, participants: List[RoleType]) -> AIIdentity:
+    def create_collaborative_identity(self, participants: list[RoleType]) -> AIIdentity:
         """创建协作身份"""
         if not participants:
             raise ValueError('参与者列表不能为空')
@@ -194,7 +194,7 @@ class UnifiedIdentityManager:
 
         return primary
 
-    def _merge_capabilities(self, id1: AIIdentity, id2: AIIdentity) -> Dict:
+    def _merge_capabilities(self, id1: AIIdentity, id2: AIIdentity) -> dict:
         """合并能力"""
         merged = {}
         for key in set(id1.capabilities.keys()) | set(id2.capabilities.keys()):
@@ -208,7 +208,7 @@ class UnifiedIdentityManager:
                 merged[key] = id2.capabilities[key]
         return merged
 
-    def _merge_personalities(self, id1: AIIdentity, id2: AIIdentity) -> Dict:
+    def _merge_personalities(self, id1: AIIdentity, id2: AIIdentity) -> dict:
         """合并性格特质"""
         merged = id1.personality.copy()
         for key, value in id2.personality.items():

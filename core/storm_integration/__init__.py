@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Co-STORM 与 Athena 平台深度集成
 

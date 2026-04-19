@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 伦理评估器优化版本 - 添加缓存和性能优化
 Optimized Ethics Evaluator with Caching and Performance Improvements
@@ -15,10 +16,10 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from .constitution import AthenaConstitution, EthicalPrinciple, PrinciplePriority, PrincipleSource
-from .wittgenstein_guard import LanguageGame, WittgensteinGuard
+from .constitution import AthenaConstitution, EthicalPrinciple
+from .wittgenstein_guard import WittgensteinGuard
 
 
 class ComplianceStatus(Enum):

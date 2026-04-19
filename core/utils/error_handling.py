@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 增强的异常处理和超时控制工具
 Enhanced Exception Handling and Timeout Control Utilities
@@ -19,10 +20,10 @@ Enhanced Exception Handling and Timeout Control Utilities
 import asyncio
 import functools
 import inspect
-import logging
+from collections.abc import Callable
 from contextlib import contextmanager
 from datetime import datetime
-from typing import Any, Callable, Optional, TypeVar
+from typing import Any, TypeVar
 
 from core.logging_config import setup_logging
 
@@ -40,7 +41,7 @@ class OAResponseBaseError(Exception):
         self,
         message: str,
         error_code: str = "UNKNOWN",
-        context: Optional[dict[str, Any] | None = None,
+        context: dict[str, Any] | None = None,
     ):
         self.message = message
         self.error_code = error_code
@@ -64,7 +65,7 @@ class PromptGenerationError(OAResponseBaseError):
     def __init__(
         self,
         message: str,
-        context: Optional[dict[str, Any] | None = None,
+        context: dict[str, Any] | None = None,
     ):
         super().__init__(
             message=message,
@@ -79,7 +80,7 @@ class KnowledgeGraphError(OAResponseBaseError):
     def __init__(
         self,
         message: str,
-        context: Optional[dict[str, Any] | None = None,
+        context: dict[str, Any] | None = None,
     ):
         super().__init__(
             message=message,
@@ -94,7 +95,7 @@ class WorkflowRecordError(OAResponseBaseError):
     def __init__(
         self,
         message: str,
-        context: Optional[dict[str, Any] | None = None,
+        context: dict[str, Any] | None = None,
     ):
         super().__init__(
             message=message,
@@ -109,7 +110,7 @@ class PatternExtractionError(OAResponseBaseError):
     def __init__(
         self,
         message: str,
-        context: Optional[dict[str, Any] | None = None,
+        context: dict[str, Any] | None = None,
     ):
         super().__init__(
             message=message,
@@ -124,7 +125,7 @@ class ConfigurationError(OAResponseBaseError):
     def __init__(
         self,
         message: str,
-        context: Optional[dict[str, Any] | None = None,
+        context: dict[str, Any] | None = None,
     ):
         super().__init__(
             message=message,
@@ -140,7 +141,7 @@ class TimeoutErrorCustom(OAResponseBaseError):
         self,
         message: str,
         timeout_seconds: float,
-        context: Optional[dict[str, Any] | None = None,
+        context: dict[str, Any] | None = None,
     ):
         super().__init__(
             message=message,
@@ -185,7 +186,7 @@ def timeout(seconds: float, reraise: bool = True):
                         message=f"操作超时: {func_name}",
                         timeout_seconds=seconds,
                         context={"function": func_name},
-                    )
+                    ) from None
                 return None  # type: ignore
 
         return wrapper
@@ -199,7 +200,7 @@ def handle_errors(
     error_types: tuple[type[Exception], ...] = (Exception,),
     default_return: Any = None,
     reraise: bool = False,
-    context: Optional[dict[str, Any] | None = None,
+    context: dict[str, Any] | None = None,
 ):
     """
     异常处理上下文管理器

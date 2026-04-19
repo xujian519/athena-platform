@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 语义推理引擎
 Semantic Reasoning Engine
@@ -15,6 +16,9 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any
+
+import networkx as nx
+import numpy as np
 
 from core.async_main import async_main
 from core.logging_config import setup_logging
@@ -142,7 +146,7 @@ class SemanticReasoningEngine:
 
             logger.info(f"✅ BGE嵌入模型加载成功,设备: {device}")
 
-        except Exception as e:
+        except Exception:
             self.embedding_model = None
 
     def _load_reasoning_rules(self) -> Any:
@@ -485,7 +489,7 @@ class SemanticReasoningEngine:
                     )
                     results.append(result)
 
-        except Exception as e:
+        except Exception:
             return results
 
     async def _ontology_reasoning(
@@ -534,7 +538,7 @@ class SemanticReasoningEngine:
             vector2 = self.embedding_model.encode([text2])
             similarity = np.dot(vector1, vector2.T)[0][0]
             return float(similarity)
-        except Exception as e:
+        except Exception:
             return 0.0
 
     async def _case_based_reasoning(
@@ -600,7 +604,7 @@ class SemanticReasoningEngine:
 
             return combined_similarity
 
-        except Exception as e:
+        except Exception:
             return 0.0
 
     async def _causal_reasoning(
@@ -696,7 +700,7 @@ class SemanticReasoningEngine:
 
             results.append(result)
 
-        except Exception as e:
+        except Exception:
             return results
 
     async def add_custom_rule(self, rule: ReasoningRule):
@@ -837,7 +841,7 @@ async def main():
         print("\n🎉 语义推理引擎测试完成!")
         return 0
 
-    except Exception as e:
+    except Exception:
         return 1
 
 

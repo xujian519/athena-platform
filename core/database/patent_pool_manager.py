@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Patent数据库优化连接池管理器
 针对2800万+专利数据的优化连接池
@@ -8,6 +9,8 @@ import asyncio
 import logging
 from dataclasses import dataclass
 from typing import Any, Optional
+
+import asyncpg
 
 from core.database.unified_connection import get_postgres_pool
 

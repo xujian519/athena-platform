@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Dolphin + NetworkX 深度技术分析集成
 Dolphin Document Parsing + NetworkX Graph Analysis Integration
@@ -13,6 +14,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+import networkx as nx
 
 from core.graph.networkx_utils import NetworkXGraphManager
 from core.perception.dolphin_client import DolphinDocumentParser
@@ -27,7 +29,7 @@ class TechnicalEntity:
     entity_id: str
     entity_type: str  # component, method, formula, table, reference
     text: str
-    position: tuple[int, int, int, int | None = None  # (x1, y1, x2, y2)
+    position: tuple[int, int, int, int | None] = None  # (x1, y1, x2, y2)
     confidence: float = 1.0
     metadata: dict | None = None
 

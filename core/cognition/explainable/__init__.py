@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 可解释认知模块 - 重构版本
 Explainable Cognition Module - Refactored Version
@@ -12,6 +13,8 @@ Explainable Cognition Module - Refactored Version
 """
 
 # 数据模型
+# 核心模块
+from .core import ExplainableCognitionModule
 from .types import (
     DecisionFactor,
     FactorImportance,
@@ -22,9 +25,6 @@ from .types import (
 
 # 可视化
 from .visualizer import ReasoningPathVisualizer
-
-# 核心模块
-from .core import ExplainableCognitionModule
 
 __all__ = [
     # 数据模型

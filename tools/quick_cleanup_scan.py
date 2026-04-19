@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 快速平台清理扫描工具
 Quick Platform Cleanup Scanner
 """
 
-import os
-import re
-from pathlib import Path
-from collections import defaultdict
 import logging
+from collections import defaultdict
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
@@ -150,15 +147,15 @@ def scan_platform():
     safe_size = sum(f["size"] for f in safe_delete) / (1024 * 1024)
     review_size = sum(f["size"] for f in review_needed) / (1024 * 1024)
 
-    print(f"\n✅ 可以安全删除的文件:")
+    print("\n✅ 可以安全删除的文件:")
     print(f"   - 文件数: {len(safe_delete)}")
     print(f"   - 空间: {safe_size:.2f} MB")
-    print(f"   包括: 所有备份文件和空目录")
+    print("   包括: 所有备份文件和空目录")
 
-    print(f"\n⚠️ 需要审查的文件:")
+    print("\n⚠️ 需要审查的文件:")
     print(f"   - 文件数: {len(review_needed)}")
     print(f"   - 空间: {review_size:.2f} MB")
-    print(f"   包括: 测试文件、Demo和示例文件")
+    print("   包括: 测试文件、Demo和示例文件")
 
     # 生成删除命令
     print("\n📋 删除命令:")
@@ -207,7 +204,7 @@ def scan_platform():
             for p in dup['paths']:
                 f.write(f"    {p}\n")
 
-    print(f"\n📄 详细报告已保存到: quick_cleanup_report.txt")
+    print("\n📄 详细报告已保存到: quick_cleanup_report.txt")
 
     return {
         "backup_files": found_files["备份文件"],

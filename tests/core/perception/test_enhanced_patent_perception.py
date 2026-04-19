@@ -4,16 +4,23 @@
 Tests for Enhanced Patent Perception Module
 """
 
-import pytest
-from unittest.mock import Mock, patch, MagicMock
+import sys
 from pathlib import Path
 
+import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+from pathlib import Path
+from unittest.mock import MagicMock, patch
+
 from core.perception.enhanced_patent_perception import (
-    PatentInputType,
-    PatentTechnicalExtractor,
-    PatentDrawingAnalyzer,
-    PatentNoveltyAnalyzer,
     EnhancedPatentPerceptionEngine,
+    PatentDrawingAnalyzer,
+    PatentInputType,
+    PatentNoveltyAnalyzer,
+    PatentPerceptionResult,
+    PatentTechnicalExtractor,
 )
 
 

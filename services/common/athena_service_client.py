@@ -5,12 +5,13 @@ Athena Service Communication Client Library
 """
 
 import asyncio
-import logging
-from datetime import datetime
-from typing import Dict, Any, Optional, List, Union
-from dataclasses import dataclass, asdict
-from enum import Enum
 import json
+import logging
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any
+
 import httpx
 from pydantic import BaseModel
 
@@ -40,16 +41,16 @@ class ServiceRequest(BaseModel):
     service_name: str
     endpoint: str
     method: str = "GET"
-    data: Optional[Dict[str, Any]] = None
-    params: Optional[Dict[str, Any]] = None
-    headers: Optional[Dict[str, str]] = None
+    data: dict[str, Any] | None = None
+    params: dict[str, Any] | None = None
+    headers: dict[str, str] | None = None
     timeout: int = 30
 
 class ServiceResponse(BaseModel):
     """标准服务响应"""
     success: bool
     status_code: int
-    data: Optional[Dict[str, Any]] = None
+    data: dict[str, Any] | None = None
     error: str | None = None
     response_time: float = 0.0
     timestamp: datetime
@@ -58,7 +59,7 @@ class AthenaServiceClient:
     """Athena服务通信客户端"""
 
     def __init__(self):
-        self.services: Dict[str, ServiceInfo] = {}
+        self.services: dict[str, ServiceInfo] = {}
         self.http_client: httpx.AsyncClient | None = None
         self._initialize_default_services()
 
@@ -76,12 +77,6 @@ class AthenaServiceClient:
                 url="http://localhost",
                 port=8001,
                 version="2.0.0"
-            ),
-            "yunpat-agent": ServiceInfo(
-                name="yunpat-agent",
-                url="http://localhost",
-                port=8000,
-                version="1.0.0"
             ),
             "ai-models": ServiceInfo(
                 name="ai-models",
@@ -183,7 +178,7 @@ class AthenaServiceClient:
             logger.error(f"服务 {service_name} 健康检查失败: {e}")
             return ServiceStatus.UNHEALTHY
 
-    async def check_all_services(self) -> Dict[str, ServiceStatus]:
+    async def check_all_services(self) -> dict[str, ServiceStatus]:
         """检查所有服务健康状态"""
         tasks = [self.check_service_health(name) for name in self.services.keys()]
         results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -299,7 +294,7 @@ class AthenaServiceClient:
             )
 
     # 便捷方法
-    async def get(self, service_name: str, endpoint: str, params: Dict | None = None) -> ServiceResponse:
+    async def get(self, service_name: str, endpoint: str, params: dict | None = None) -> ServiceResponse:
         """GET请求"""
         request = ServiceRequest(
             service_name=service_name,
@@ -309,7 +304,7 @@ class AthenaServiceClient:
         )
         return await self.call_service(request)
 
-    async def post(self, service_name: str, endpoint: str, data: Dict | None = None) -> ServiceResponse:
+    async def post(self, service_name: str, endpoint: str, data: dict | None = None) -> ServiceResponse:
         """POST请求"""
         request = ServiceRequest(
             service_name=service_name,
@@ -319,7 +314,7 @@ class AthenaServiceClient:
         )
         return await self.call_service(request)
 
-    async def put(self, service_name: str, endpoint: str, data: Dict | None = None) -> ServiceResponse:
+    async def put(self, service_name: str, endpoint: str, data: dict | None = None) -> ServiceResponse:
         """PUT请求"""
         request = ServiceRequest(
             service_name=service_name,
@@ -342,9 +337,9 @@ class AthenaServiceClient:
     async def broadcast_message(
         self,
         endpoint: str,
-        message: Dict[str, Any],
-        services: Optional[List[str]] = None
-    ) -> Dict[str, ServiceResponse]:
+        message: dict[str, Any],
+        services: list[str] | None = None
+    ) -> dict[str, ServiceResponse]:
         """广播消息到多个服务"""
         if not services:
             services = list(self.services.keys())
@@ -377,8 +372,8 @@ class AthenaServiceClient:
 
     async def orchestrate_workflow(
         self,
-        workflow_steps: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+        workflow_steps: list[dict[str, Any]]
+    ) -> dict[str, Any]:
         """执行工作流"""
         results = []
 
@@ -461,7 +456,7 @@ client = AthenaServiceClient()
 await client.initialize()
 
 # 简单调用
-response = await client.get("yunpat-agent", "/health")
+response = await client.get("athena-platform", "/health")
 if response.success:
     print("服务健康")
 
@@ -475,14 +470,14 @@ response = await client.post("ai-services", "/api/v1/inference", {
 responses = await client.broadcast_message(
     "/api/v1/notify",
     {"message": "System maintenance scheduled"},
-    services=["yunpat-agent", "ai-services", "crawler-service"]
+    services=["api-gateway", "ai-services", "crawler-service"]
 )
 
 # 工作流执行
 workflow = [
     {"service": "crawler-service", "endpoint": "/api/v1/crawl", "data": {"url": "https://example.com"}},
     {"service": "ai-services", "endpoint": "/api/v1/analyze", "data": {}, "use_previous_result": True},
-    {"service": "yunpat-agent", "endpoint": "/api/v1/store", "data": {}, "use_previous_result": True}
+    {"service": "athena-platform", "endpoint": "/api/v1/store", "data": {}, "use_previous_result": True}
 ]
 result = await client.orchestrate_workflow(workflow)
 """

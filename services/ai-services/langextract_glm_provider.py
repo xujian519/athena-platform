@@ -7,13 +7,14 @@ LangExtract GLM模型适配器
 import asyncio
 import json
 import logging
-from core.logging_config import setup_logging
 import sys
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent.parent
@@ -52,9 +53,9 @@ class GLMModelConfig:
 @dataclass
 class ExtractionRequest:
     """提取请求"""
-    text_or_documents: Union[str, List[str]]
+    text_or_documents: str | list[str]
     prompt_description: str
-    examples: Optional[List[Any]] = None
+    examples: list[Any] | None = None
     extraction_type: str = 'structured_extraction'
     complexity: str = 'medium'
     priority: int = 1
@@ -65,7 +66,7 @@ class ExtractionRequest:
 class ExtractionResult:
     """提取结果"""
     success: bool
-    extractions: List[Dict[str, Any]] = field(default_factory=list)
+    extractions: list[dict[str, Any]] = field(default_factory=list)
     raw_response: str = ''
     model_used: str = ''
     tokens_used: int = 0
@@ -77,7 +78,7 @@ class ExtractionResult:
 
 class GLMLangExtractProvider:
     """GLM LangExtract提供商"""
-    
+
     def __init__(self):
         """初始化GLM提供商"""
         self.models = {}
@@ -89,23 +90,23 @@ class GLMLangExtractProvider:
             'total_cost': 0.0,
             'average_response_time': 0.0
         }
-        
+
         # 初始化模型配置
         self._initialize_models()
-        
+
         logger.info('GLM LangExtract提供商初始化完成')
 
     def _initialize_models(self) -> Any:
         """初始化GLM模型配置"""
         # 检查环境变量中的API配置
         import os
-        
+
         glm_api_key = os.environ.get('GLM_API_KEY', '')
         if not glm_api_key:
             logger.warning('未设置GLM_API_KEY环境变量，将使用模拟模式')
-        
+
         base_url = os.environ.get('GLM_BASE_URL', 'https://open.bigmodel.cn/api/paas/v4/')
-        
+
         # 配置各种GLM模型
         self.models = {
             GLMModelType.GLM_4_FLASH: GLMModelConfig(
@@ -147,40 +148,40 @@ class GLMLangExtractProvider:
         }
 
     async def extract_with_glm(
-        self, 
+        self,
         request: ExtractionRequest,
         preferred_model: GLMModelType | None = None
     ) -> ExtractionResult:
         """使用GLM进行信息提取"""
         start_time = datetime.now()
-        
+
         try:
             # 选择最佳模型
             selected_model = await self._select_optimal_model(request, preferred_model)
             model_config = self.models[selected_model]
-            
+
             logger.info(f"选择模型: {selected_model.value} 进行提取")
-            
+
             # 构建提示词
             prompt = await self._build_extraction_prompt(request)
-            
+
             # 调用GLM API
             response = await self._call_glm_api(prompt, model_config)
-            
+
             # 解析响应
             extractions = await self._parse_extraction_response(response, request)
-            
+
             # 计算统计信息
             processing_time = (datetime.now() - start_time).total_seconds()
             tokens_used = self._estimate_tokens(prompt + response)
             cost = (tokens_used / 1000) * model_config.cost_per_1k_tokens
-            
+
             # 计算置信度
             confidence_score = await self._calculate_confidence(extractions, response)
-            
+
             # 更新性能统计
             self._update_performance_stats(processing_time, tokens_used, cost, True)
-            
+
             result = ExtractionResult(
                 success=True,
                 extractions=extractions,
@@ -191,17 +192,17 @@ class GLMLangExtractProvider:
                 cost=cost,
                 confidence_score=confidence_score
             )
-            
+
             logger.info(f"GLM提取完成: {len(extractions)}个实体, 耗时: {processing_time:.2f}秒")
-            
+
             return result
-            
+
         except Exception as e:
             processing_time = (datetime.now() - start_time).total_seconds()
             self._update_performance_stats(processing_time, 0, 0, False)
-            
+
             logger.error(f"GLM提取失败: {e}")
-            
+
             return ExtractionResult(
                 success=False,
                 processing_time=processing_time,
@@ -209,7 +210,7 @@ class GLMLangExtractProvider:
             )
 
     async def _select_optimal_model(
-        self, 
+        self,
         request: ExtractionRequest,
         preferred_model: GLMModelType | None = None
     ) -> GLMModelType:
@@ -218,19 +219,19 @@ class GLMLangExtractProvider:
             # 检查是否符合约束条件
             model_config = self.models[preferred_model]
             if request.cost_budget and model_config.cost_per_1k_tokens > request.cost_budget:
-                logger.warning(f"首选模型成本超预算，自动选择其他模型")
+                logger.warning("首选模型成本超预算，自动选择其他模型")
             else:
                 return preferred_model
-        
+
         # 基于任务复杂度和优先级选择模型
         if request.priority >= 3 or request.complexity == 'high':
             # 高优先级或复杂任务使用高质量模型
             return GLMModelType.GLM_4_PLUS
-        
+
         elif request.complexity == 'medium':
             # 中等复杂度使用平衡模型
             return GLMModelType.GLM_4_AIR
-        
+
         else:
             # 简单任务使用高性能模型
             return GLMModelType.GLM_4_FLASH
@@ -246,7 +247,7 @@ class GLMLangExtractProvider:
 {request.prompt_description}
 
 """
-        
+
         # 添加示例
         if request.examples:
             prompt += "\n提取示例:\n"
@@ -266,7 +267,7 @@ class GLMLangExtractProvider:
                                     prompt += f" (属性: {attrs})"
                                 prompt += "\n"
                 prompt += "\n"
-        
+
         # 添加输出格式要求
         prompt += """
 请严格按照以下JSON格式输出提取结果:
@@ -287,15 +288,15 @@ class GLMLangExtractProvider:
 
 现在开始提取以下文本:
 """
-        
+
         # 添加待提取的文本
         if isinstance(request.text_or_documents, list):
             text = "\n\n".join(request.text_or_documents)
         else:
             text = request.text_or_documents
-        
+
         prompt += text
-        
+
         return prompt
 
     async def _call_glm_api(self, prompt: str, model_config: GLMModelConfig) -> str:
@@ -304,15 +305,15 @@ class GLMLangExtractProvider:
         # 如果没有API密钥，返回模拟响应
         if not model_config.api_key:
             return await self._simulate_glm_response(prompt)
-        
+
         try:
             import httpx
-            
+
             headers = {
                 'Authorization': f"Bearer {model_config.api_key}",
                 'Content-Type': 'application/json'
             }
-            
+
             data = {
                 'model': model_config.model_type.value,
                 'messages': [
@@ -325,7 +326,7 @@ class GLMLangExtractProvider:
                 'max_tokens': model_config.max_tokens,
                 'top_p': model_config.top_p
             }
-            
+
             async with httpx.AsyncClient(timeout=model_config.timeout) as client:
                 response = await client.post(
                     f"{model_config.base_url}/chat/completions",
@@ -333,10 +334,10 @@ class GLMLangExtractProvider:
                     json=data
                 )
                 response.raise_for_status()
-                
+
                 result = response.json()
                 return result['choices'][0]['message']['content']
-                
+
         except Exception as e:
             logger.error(f"GLM API调用失败: {e}")
             raise
@@ -355,7 +356,7 @@ class GLMLangExtractProvider:
                     'confidence': 0.95
                 },
                 {
-                    'extraction_class': 'invention_title', 
+                    'extraction_class': 'invention_title',
                     'extraction_text': '智能数据处理方法',
                     'attributes': {'language': 'zh', 'type': 'method'},
                     'start_char': 20,
@@ -364,14 +365,14 @@ class GLMLangExtractProvider:
                 }
             ]
         }
-        
+
         return json.dumps(mock_response, ensure_ascii=False, indent=2)
 
     async def _parse_extraction_response(
-        self, 
-        response: str, 
+        self,
+        response: str,
         request: ExtractionRequest
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """解析提取响应"""
         try:
             # 尝试解析JSON响应
@@ -381,16 +382,16 @@ class GLMLangExtractProvider:
             else:
                 # 如果不是JSON格式，尝试从文本中提取
                 return await self._extract_from_text(response)
-                
+
         except json.JSONDecodeError:
             # JSON解析失败，尝试文本提取
             return await self._extract_from_text(response)
 
-    async def _extract_from_text(self, text: str) -> List[Dict[str, Any]]:
+    async def _extract_from_text(self, text: str) -> list[dict[str, Any]]:
         """从文本中提取结构化信息"""
         # 简单的文本提取逻辑
         extractions = []
-        
+
         # 提取专利号
         import re
         patent_pattern = r'CN\d{13}\.\d'
@@ -402,7 +403,7 @@ class GLMLangExtractProvider:
                 'attributes': {'type': 'patent_id', 'country': 'CN'},
                 'confidence': 0.9
             })
-        
+
         # 提取发明名称
         title_pattern = r'发明名称[：:]\s*([^\n\r]+)'
         title_match = re.search(title_pattern, text)
@@ -413,7 +414,7 @@ class GLMLangExtractProvider:
                 'attributes': {'type': 'title'},
                 'confidence': 0.85
             })
-        
+
         return extractions
 
     def _estimate_tokens(self, text: str) -> int:
@@ -421,58 +422,58 @@ class GLMLangExtractProvider:
         # 简单估算：中文字符数 * 1.5 + 英文单词数
         chinese_chars = len([c for c in text if '\u4e00' <= c <= '\u9fff'])
         english_words = len(text.split()) - chinese_chars
-        
+
         return int(chinese_chars * 1.5 + english_words)
 
     async def _calculate_confidence(
-        self, 
-        extractions: List[Dict[str, Any]], 
+        self,
+        extractions: list[dict[str, Any]],
         response: str
     ) -> float:
         """计算置信度分数"""
         if not extractions:
             return 0.0
-        
+
         # 基于提取数量和质量计算置信度
         base_confidence = 0.5
         extraction_bonus = min(len(extractions) * 0.1, 0.3)
-        
+
         # 检查响应质量
         response_quality = 0.0
         if response.strip():
             response_quality = 0.2
-        
+
         # 检查提取质量
         extraction_quality = 0.0
         valid_extractions = sum(1 for ext in extractions if ext.get('confidence', 0) > 0.7)
         if extractions:
             extraction_quality = (valid_extractions / len(extractions)) * 0.2
-        
+
         confidence = base_confidence + extraction_bonus + response_quality + extraction_quality
         return min(confidence, 1.0)
 
     def _update_performance_stats(
-        self, 
-        processing_time: float, 
-        tokens_used: int, 
-        cost: float, 
+        self,
+        processing_time: float,
+        tokens_used: int,
+        cost: float,
         success: bool
     ):
         """更新性能统计"""
         self.performance_stats['total_requests'] += 1
-        
+
         if success:
             self.performance_stats['successful_requests'] += 1
             self.performance_stats['total_tokens_used'] += tokens_used
             self.performance_stats['total_cost'] += cost
-            
+
             # 更新平均响应时间
             current_avg = self.performance_stats['average_response_time']
             successful_count = self.performance_stats['successful_requests']
             new_avg = (current_avg * (successful_count - 1) + processing_time) / successful_count
             self.performance_stats['average_response_time'] = new_avg
 
-    async def get_model_performance(self) -> Dict[str, Any]:
+    async def get_model_performance(self) -> dict[str, Any]:
         """获取模型性能统计"""
         return {
             'models': {
@@ -491,50 +492,50 @@ class GLMLangExtractProvider:
             'recommendations': await self._get_model_recommendations()
         }
 
-    async def _get_model_recommendations(self) -> List[str]:
+    async def _get_model_recommendations(self) -> list[str]:
         """获取模型使用建议"""
         recommendations = []
-        
+
         stats = self.performance_stats
         success_rate = stats['successful_requests'] / max(stats['total_requests'], 1)
         avg_response_time = stats['average_response_time']
-        
+
         if success_rate < 0.8:
             recommendations.append('建议检查模型配置，成功率偏低')
-        
+
         if avg_response_time > 5.0:
             recommendations.append('响应时间较长，考虑使用更快的模型')
-        
+
         if stats['total_cost'] > 100:
             recommendations.append('成本较高，建议优化模型选择策略')
-        
+
         if not recommendations:
             recommendations.append('系统运行正常，性能良好')
-        
+
         return recommendations
 
     async def batch_extract(
-        self, 
-        requests: List[ExtractionRequest],
+        self,
+        requests: list[ExtractionRequest],
         max_concurrent: int = 5
-    ) -> List[ExtractionResult]:
+    ) -> list[ExtractionResult]:
         """批量提取"""
         logger.info(f"开始批量提取 {len(requests)} 个请求")
-        
+
         # 创建信号量控制并发
         semaphore = asyncio.Semaphore(max_concurrent)
-        
+
         async def process_single_request(req):
             async with semaphore:
                 return await self.extract_with_glm(req)
-        
+
         # 并发处理
         tasks = [process_single_request(req) for req in requests]
         results = await asyncio.gather(*tasks, return_exceptions=True)
-        
+
         # 处理异常结果
         processed_results = []
-        for i, result in enumerate(results):
+        for _i, result in enumerate(results):
             if isinstance(result, Exception):
                 processed_results.append(
                     ExtractionResult(
@@ -544,10 +545,10 @@ class GLMLangExtractProvider:
                 )
             else:
                 processed_results.append(result)
-        
+
         successful_count = sum(1 for r in processed_results if r.success)
         logger.info(f"批量提取完成: {successful_count}/{len(processed_results)} 成功")
-        
+
         return processed_results
 
 

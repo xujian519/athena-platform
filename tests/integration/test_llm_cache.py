@@ -21,7 +21,7 @@ async def test_cache_manager():
     # 1. 导入并初始化
     print("\n1️⃣ 初始化缓存管理器...")
     try:
-        from llm_cache_manager import LLMCacheManager, CacheConfig, CacheStrategy
+        from llm_cache_manager import CacheConfig, CacheStrategy, LLMCacheManager
 
         cache_config = CacheConfig(
             enabled=True,
@@ -208,7 +208,7 @@ async def performance_benchmark():
 
     # 获取最终统计
     final_stats = router.get_usage_statistics()
-    print(f"\n📈 最终统计:")
+    print("\n📈 最终统计:")
     print(f"   - 缓存命中: {final_stats.get('cache_hits', 0)}")
     print(f"   - 缓存未命中: {final_stats.get('cache_misses', 0)}")
     print(f"   - 平均响应时间: {final_stats.get('avg_response_time', 0):.3f}秒")

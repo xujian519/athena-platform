@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 模块依赖管理系统测试脚本
 Test Module Dependency Manager

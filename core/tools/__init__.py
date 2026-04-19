@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Athena工具分组管理系统
 
@@ -17,9 +18,12 @@ from .base import (
     ToolRegistry,
     get_global_registry,
 )
-from .tool_group import GroupActivationRule, ToolGroup, ToolGroupDef
-from .tool_manager import ToolManager, get_tool_manager, ToolSelectionResult
 from .selector import SelectionScore, SelectionStrategy, ToolSelector
+from .tool_group import GroupActivationRule, ToolGroup, ToolGroupDef
+from .tool_manager import ToolManager, ToolSelectionResult, get_tool_manager
+
+# 导入自动注册模块（触发生产工具自动注册）
+from . import auto_register  # noqa: F401
 
 __all__ = [
     "ActivationRule",

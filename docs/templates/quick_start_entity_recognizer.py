@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 快速上线的专利实体识别器
 Quick Start Patent Entity Recognizer
@@ -12,12 +11,11 @@ Quick Start Patent Entity Recognizer
 
 import json
 import logging
-import os
 import re
 import warnings
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 # 抑制警告
 warnings.filterwarnings('ignore')
@@ -57,7 +55,7 @@ class Entity:
     end: int
     confidence: float
     source: str  # 'rule' 或 'bert'
-    attributes: Dict[str, Any] = None
+    attributes: dict[str, Any] = None
 
 class QuickStartEntityRecognizer:
     """快速上线的实体识别器"""
@@ -247,7 +245,7 @@ class QuickStartEntityRecognizer:
             logger.info('将仅使用规则识别器')
             self.use_bert = False
 
-    def recognize_entities(self, text: str) -> List[Entity]:
+    def recognize_entities(self, text: str) -> list[Entity]:
         """
         识别文本中的实体
 
@@ -275,7 +273,7 @@ class QuickStartEntityRecognizer:
 
         return merged_entities
 
-    def _recognize_by_rules(self, text: str) -> List[Entity]:
+    def _recognize_by_rules(self, text: str) -> list[Entity]:
         """基于规则识别实体"""
         entities = []
 
@@ -315,7 +313,7 @@ class QuickStartEntityRecognizer:
 
         return entities
 
-    def _recognize_by_bert(self, text: str) -> List[Entity]:
+    def _recognize_by_bert(self, text: str) -> list[Entity]:
         """使用BERT识别实体"""
         entities = []
 
@@ -347,7 +345,7 @@ class QuickStartEntityRecognizer:
 
         return entities
 
-    def _extract_attributes(self, text: str, label: str) -> Dict[str, Any]:
+    def _extract_attributes(self, text: str, label: str) -> dict[str, Any]:
         """提取实体属性"""
         attributes = {}
 
@@ -378,7 +376,7 @@ class QuickStartEntityRecognizer:
 
         return attributes
 
-    def _merge_entities(self, entities: List[Entity]) -> List[Entity]:
+    def _merge_entities(self, entities: list[Entity]) -> list[Entity]:
         """合并多个识别器的结果"""
         if not entities:
             return []
@@ -411,7 +409,7 @@ class QuickStartEntityRecognizer:
         """检查两个实体是否重叠"""
         return not (e1.end <= e2.start or e2.end <= e1.start)
 
-    def batch_recognize(self, texts: List[str], batch_size: int = 10) -> List[List[Entity]]:
+    def batch_recognize(self, texts: list[str], batch_size: int = 10) -> list[list[Entity]]:
         """批量识别实体"""
         results = []
 
@@ -430,7 +428,7 @@ class QuickStartEntityRecognizer:
 
         return results
 
-    def export_entities(self, entities: List[Entity], format: str = 'json') -> str:
+    def export_entities(self, entities: list[Entity], format: str = 'json') -> str:
         """导出识别结果"""
         if format == 'json':
             result = {
@@ -458,20 +456,20 @@ class QuickStartEntityRecognizer:
             lines = ['文本,标签,开始位置,结束位置,置信度,来源,属性']
             for e in entities:
                 attrs = str(e.attributes) if e.attributes else ''
-                lines.append(f''{e.text}','{e.label}',{e.start},{e.end},{e.confidence},{e.source},'{attrs}'')
+                lines.append(f"'{e.text}','{e.label}',{e.start},{e.end},{e.confidence},{e.source},'{attrs}'")
             return "\n".join(lines)
 
         else:
             return str(entities)
 
-    def _get_source_distribution(self, entities: List[Entity]) -> Dict[str, int]:
+    def _get_source_distribution(self, entities: list[Entity]) -> dict[str, int]:
         """获取来源分布统计"""
         distribution = {}
         for entity in entities:
             distribution[entity.source] = distribution.get(entity.source, 0) + 1
         return distribution
 
-    def _get_label_distribution(self, entities: List[Entity]) -> Dict[str, int]:
+    def _get_label_distribution(self, entities: list[Entity]) -> dict[str, int]:
         """获取标签分布统计"""
         distribution = {}
         for entity in entities:
@@ -543,7 +541,7 @@ def quick_start_example():
     logger.info("\n导出JSON格式:")
     logger.info(str('-' * 40))
     json_result = recognizer.export_entities(entities, format='json')
-    logger.info(str(json_result[:500] + '...' if len(json_result)) > 500 else json_result)
+    logger.info(json_result[:500] + '...' if len(json_result) > 500 else json_result)
 
     # 6. 保存到文件
     output_path = Path('patent_entities_output.json')

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 LLM增强的向量搜索引擎
 LLM Enhanced Vector Search with GLM-4.7 Cloud
@@ -15,14 +16,13 @@ LLM Enhanced Vector Search with GLM-4.7 Cloud
 import asyncio
 import logging
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 from core.cognition.llm_interface import LLMInterface, LLMRequest
 from core.vector_db.enhanced_vector_search_with_reranker import (
     EnhancedSearchResult,
-    EnhancedVectorSearchWithReranker,
     SearchMode,
     get_enhanced_searcher,
 )

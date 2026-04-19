@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 执行模块监控指标收集器
 Execution Module Metrics Collector
@@ -37,14 +38,14 @@ logger = logging.getLogger(__name__)
 class ExecutionMetrics:
     """
     执行模块监控指标收集器
-    
+
     提供标准的Prometheus指标收集和导出功能。
     """
 
     def __init__(self, registry: CollectorRegistry | None = None):
         """
         初始化指标收集器
-        
+
         Args:
             registry: Prometheus注册表，默认使用全局注册表
         """
@@ -198,7 +199,7 @@ class ExecutionMetrics:
     def set_instance_info(self, instance_id: str, version: str = "2.0.0"):
         """
         设置实例信息
-        
+
         Args:
             instance_id: 实例ID
             version: 版本号
@@ -225,7 +226,7 @@ class ExecutionMetrics:
     def inc_task_completed(self, priority: str, duration: float, instance: str = "default"):
         """
         任务完成计数
-        
+
         Args:
             priority: 任务优先级
             duration: 执行时长（秒）
@@ -244,7 +245,7 @@ class ExecutionMetrics:
     ):
         """
         任务失败计数
-        
+
         Args:
             priority: 任务优先级
             error_type: 错误类型
@@ -284,7 +285,7 @@ class ExecutionMetrics:
     def set_workers(self, active: int, idle: int, max_workers: int, instance: str = "default"):
         """
         设置工作线程数量
-        
+
         Args:
             active: 活跃线程数
             idle: 空闲线程数
@@ -300,7 +301,7 @@ class ExecutionMetrics:
     def observe_task_duration(self, duration: float, priority: str, instance: str = "default"):
         """
         记录任务执行时长
-        
+
         Args:
             duration: 执行时长（秒）
             priority: 任务优先级
@@ -311,7 +312,7 @@ class ExecutionMetrics:
     def observe_task_wait_time(self, wait_time: float, priority: str, instance: str = "default"):
         """
         记录任务等待时间
-        
+
         Args:
             wait_time: 等待时间（秒）
             priority: 任务优先级
@@ -338,7 +339,7 @@ class ExecutionMetrics:
     def set_health_status(self, check_name: str, healthy: bool, instance: str = "default"):
         """
         设置健康检查状态
-        
+
         Args:
             check_name: 检查项名称
             healthy: 是否健康
@@ -352,7 +353,7 @@ class ExecutionMetrics:
     def export_metrics(self) -> bytes:
         """
         导出Prometheus格式的指标
-        
+
         Returns:
             bytes: Prometheus文本格式的指标
         """
@@ -361,7 +362,7 @@ class ExecutionMetrics:
     def start_metrics_server(self, port: int = 9090):
         """
         启动Prometheus指标HTTP服务器
-        
+
         Args:
             port: HTTP端口
         """
@@ -372,7 +373,7 @@ class ExecutionMetrics:
 class MetricsCollector:
     """
     指标收集器
-    
+
     定期收集系统指标并更新到Prometheus。
     """
 
@@ -384,7 +385,7 @@ class MetricsCollector:
     ):
         """
         初始化指标收集器
-        
+
         Args:
             metrics: 指标对象
             interval: 收集间隔（秒）
@@ -455,7 +456,7 @@ _global_metrics: ExecutionMetrics | None = None
 def get_metrics() -> ExecutionMetrics:
     """
     获取全局指标实例
-    
+
     Returns:
         ExecutionMetrics: 指标对象
     """
@@ -474,12 +475,12 @@ def setup_metrics(
 ) -> ExecutionMetrics:
     """
     设置监控指标
-    
+
     Args:
         instance_id: 实例ID
         version: 版本号
         metrics_port: Prometheus metrics端口，如果提供则启动HTTP服务器
-    
+
     Returns:
         ExecutionMetrics: 指标对象
     """

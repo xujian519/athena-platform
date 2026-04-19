@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 上下文冲突检测器 - 第二阶段
 Context Conflict Detector - Phase 2
@@ -15,10 +16,11 @@ Context Conflict Detector - Phase 2
 """
 
 import logging
+from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -605,7 +607,7 @@ class ContextConflictDetector:
 
         return conflicts
 
-    def _get_intent_group(self, intent: str, groups: dict[str, list[str]] -> str | None:
+    def _get_intent_group(self, intent: str, groups: dict[str, list[str]]) -> str | None:
         """获取意图所属组"""
         for group_name, intents in groups.items():
             if intent in intents:

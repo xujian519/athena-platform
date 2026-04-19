@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习引擎统一接口
 Learning Engine Unified Interface
@@ -248,7 +249,6 @@ class BaseLearningEngine(ABC):
             ValueError: 如果数据无效
             TypeError: 如果数据类型错误
         """
-        from .exceptions import ConfigurationError, ExperienceStoreError
 
         # 转换为字典进行验证
         if isinstance(experience, LearningExperience):

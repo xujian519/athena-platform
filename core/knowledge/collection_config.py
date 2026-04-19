@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 向量集合配置优化
 Vector Collection Configuration Optimization

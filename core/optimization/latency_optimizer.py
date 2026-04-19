@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 P99延迟优化器
 P99 Latency Optimizer
@@ -16,8 +17,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Deque, Dict, List, Optional
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

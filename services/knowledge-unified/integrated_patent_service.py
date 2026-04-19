@@ -10,13 +10,12 @@ Integrated Patent Service
 """
 
 import asyncio
-from core.async_main import async_main
-import json
 import logging
-from core.logging_config import setup_logging
-from typing import Dict, List, Any, Optional
 from datetime import datetime
-from pathlib import Path
+from typing import Any
+
+from core.logging_config import setup_logging
+
 from .dynamic_prompt_manager import DynamicPromptManager
 
 # 配置日志
@@ -46,9 +45,9 @@ class IntegratedPatentService:
         self,
         query: str,
         patent_text: str = "",
-        context: Dict[str, Any] = None,
+        context: dict[str, Any] = None,
         user_id: str = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """处理专利查询"""
 
         self.service_stats['total_queries'] += 1
@@ -113,7 +112,7 @@ class IntegratedPatentService:
         # 默认返回通用查询
         return "general_inquiry"
 
-    def _generate_suggested_actions(self, intent: str) -> List[Dict[str, str]]:
+    def _generate_suggested_actions(self, intent: str) -> list[dict[str, str]]:
         """生成建议的操作"""
         action_map = {
             "patent_review": [
@@ -142,7 +141,7 @@ class IntegratedPatentService:
             {"action": "general_analysis", "label": "综合分析"}
         ])
 
-    def _get_knowledge_sources(self) -> List[Dict[str, str]]:
+    def _get_knowledge_sources(self) -> list[dict[str, str]]:
         """获取知识来源信息"""
         return [
             {
@@ -173,8 +172,8 @@ class IntegratedPatentService:
 
     async def batch_process_queries(
         self,
-        queries: List[Dict[str, Any]]
-    ) -> List[Dict[str, Any]]:
+        queries: list[dict[str, Any]]
+    ) -> list[dict[str, Any]]:
         """批量处理查询"""
         results = []
 
@@ -189,7 +188,7 @@ class IntegratedPatentService:
 
         return results
 
-    async def get_service_statistics(self) -> Dict[str, Any]:
+    async def get_service_statistics(self) -> dict[str, Any]:
         """获取服务统计信息"""
         return {
             'statistics': self.service_stats,
@@ -209,7 +208,7 @@ class IntegratedPatentService:
             }
         }
 
-    async def export_knowledge_insights(self) -> Dict[str, Any]:
+    async def export_knowledge_insights(self) -> dict[str, Any]:
         """导出知识洞察"""
         insights = {
             "knowledge_graph_summary": {

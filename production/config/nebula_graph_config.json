@@ -1,0 +1,35 @@
+{
+  "connection": {
+    "connection_string": "nebula://root:nebula@127.0.0.1:9669/patent_kg",
+    "hosts": ["127.0.0.1"],
+    "port": 9669,
+    "username": "root",
+    "password": "nebula",
+    "space_name": "patent_kg",
+    "max_connections": 20,
+    "timeout_ms": 120000
+  },
+  "schema": {
+    "tags": {
+      "patent_entity": ["name", "type", "description", "category", "weight"],
+      "patent_type": ["name", "description"],
+      "applicant": ["name", "category", "country"],
+      "inventor": ["name", "affiliation"],
+      "ipc_code": ["code", "description", "section"],
+      "legal_status": ["status", "date", "authority"]
+    },
+    "edges": {
+      "patent_relation": ["relation_type", "confidence", "source", "date"],
+      "has_patent_type": ["classification_date", "authority"],
+      "invented_by": ["invention_date", "contribution"],
+      "belongs_to_ipc": ["classification_date", "depth"],
+      "has_legal_status": ["status_change_date", "authority"],
+      "cites": ["citation_date", "citation_type", "context"]
+    }
+  },
+  "space_config": {
+    "partition_num": 20,
+    "replica_factor": 1
+  },
+  "environment": "production"
+}

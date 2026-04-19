@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺智能体主类 (XiaonuoAgent)
 整合所有子系统的完整AI智能体
@@ -23,13 +24,13 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Any
 
 # 使用TYPE_CHECKING避免循环导入
 if TYPE_CHECKING:
     from core.xiaonuo_agent.emotion import EmotionalState, EmotionalSystem
     from core.xiaonuo_agent.learning import FeedbackType, LearningEngine
-    from core.xiaonuo_agent.memory import MemorySystem, MemoryType
+    from core.xiaonuo_agent.memory import MemorySystem
     from core.xiaonuo_agent.metacognition import MetacognitionSystem
     from core.xiaonuo_agent.planning.htn_planner import ExecutionPlan, HierarchicalPlanner
     from core.xiaonuo_agent.reasoning.react_engine import ReActEngine, ReActResult
@@ -197,7 +198,7 @@ class XiaonuoAgent:
             # 运行时导入各子系统
             from core.xiaonuo_agent.emotion import EmotionalState, create_emotional_system
             from core.xiaonuo_agent.learning import create_learning_engine
-            from core.xiaonuo_agent.memory import MemoryType, get_memory_system
+            from core.xiaonuo_agent.memory import get_memory_system
             from core.xiaonuo_agent.metacognition import create_metacognition_system
             from core.xiaonuo_agent.planning.htn_planner import create_planner
             from core.xiaonuo_agent.reasoning.react_engine import create_react_engine
@@ -375,7 +376,7 @@ class XiaonuoAgent:
 
     async def plan_and_execute(
         self, goal: str, context: dict[str, Any] | None = None
-    ) -> ExecutionPlan:
+    ) -> "ExecutionPlan":
         """
         规划并执行目标
 

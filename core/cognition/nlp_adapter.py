@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # pyright: ignore
 """
 NLP适配器 - 连接认知引擎与各种NLP服务

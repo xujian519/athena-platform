@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺·双鱼公主Function Calling质量保障系统
 Xiaonuo·Pisces Princess Function Calling Quality Assurance System
@@ -15,6 +16,7 @@ import json
 import logging
 import time
 import uuid
+from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum

@@ -1,5 +1,6 @@
 
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena记忆系统安全加固措施
 Memory System Security Hardening
@@ -198,16 +199,16 @@ class SensitiveDataEncryptor:
         self.key_manager = key_manager or PersistentEncryptionKeyManager()
         self.audit_logger = AuditLogger()
 
-    def encrypt_memory_data(self, memory_data: Dict, security_level: SecurityLevel) -> Dict:
+    def encrypt_memory_data(self, memory_data: dict, security_level: SecurityLevel) -> dict:
         """加密记忆数据中的敏感字段"""
         if security_level == SecurityLevel.PUBLIC:
             return memory_data
 
         encrypted_data = memory_data.copy()
 
-        for field in self.SENSITIVE_FIELDS:
-            if encrypted_data.get(field):
-                value = encrypted_data[field]
+        for field_name in self.SENSITIVE_FIELDS:
+            if encrypted_data.get(field_name):
+                value = encrypted_data[field_name]
 
                 # 转换为字节
                 if isinstance(value, str):
@@ -220,44 +221,45 @@ class SensitiveDataEncryptor:
                 # 加密
                 encrypted = self.key_manager.encrypt(value_bytes)
                 if encrypted:
-                    encrypted_data[field] = encrypted.hex()  # 存储为十六进制字符串
+                    encrypted_data[field_name] = encrypted.hex()  # 存储为十六进制字符串
 
         return encrypted_data
 
-    def decrypt_memory_data(self, memory_data: Dict) -> Dict:
+    def decrypt_memory_data(self, memory_data: dict) -> dict:
         """解密记忆数据"""
         decrypted_data = memory_data.copy()
 
-        for field in self.SENSITIVE_FIELDS:
-            if decrypted_data.get(field):
-                value = decrypted_data[field]
+        for field_name in self.SENSITIVE_FIELDS:
+            if decrypted_data.get(field_name):
+                value = decrypted_data[field_name]
 
                 # 检查是否为加密数据(十六进制字符串)
                 if isinstance(value, str) and all(c in '0123456789abcdef' for c in value.lower()):
                     try:
+                        value_bytes = bytes.fromhex(value)
                         decrypted = self.key_manager.decrypt(value_bytes)
                         if decrypted:
-                            decrypted_data[field] = decrypted.decode('utf-8')
-                    except Exception:
+                            decrypted_data[field_name] = decrypted.decode('utf-8')
+                    except Exception as e:
                         logger.error(f"操作失败: {e}", exc_info=True)
                         raise
 
         return decrypted_data
 
-    def mask_sensitive_data(self, data: Dict, visible_chars: int = 4) -> Dict:
+    def mask_sensitive_data(self, data: dict, visible_chars: int = 4) -> dict:
         """脱敏敏感数据(用于日志和显示)"""
         masked_data = data.copy()
 
-        for field in self.SENSITIVE_FIELDS:
-            if masked_data.get(field):
-                value = masked_data[field]
+        for field_name in self.SENSITIVE_FIELDS:
+            if masked_data.get(field_name):
+                value = masked_data[field_name]
 
                 if isinstance(value, str):
                     if len(value) > visible_chars:
-                        masked_data[field] = value[:visible_chars] + '*' * (len(value) - visible_chars)
+                        masked_data[field_name] = value[:visible_chars] + '*' * (len(value) - visible_chars)
                 elif isinstance(value, dict):
                     # 对字典类型,只保留键名
-                    masked_data[field] = dict.fromkeys(value.keys(), "***")
+                    masked_data[field_name] = dict.fromkeys(value.keys(), "***")
 
         return masked_data
 
@@ -273,7 +275,7 @@ class EnhancedAccessControl:
         self.audit_logger = AuditLogger()
 
         # 访问策略
-        self.access_policies: dict[str, Dict] = {
+        self.access_policies: dict[str, dict] = {
             'default': {
                 'allow_read': ['creator'],
                 'allow_write': ['creator'],
@@ -304,7 +306,7 @@ class EnhancedAccessControl:
         action: str,
         creator_id: str,
         access_level: str,
-        requester_roles: set[str | None = None
+        requester_roles: set[str] | None = None
     ) -> bool:
         """检查访问权限"""
         # 记录审计事件
@@ -385,7 +387,7 @@ class SQLInjectionProtector:
 
     def __init__(self):
         self.audit_logger = AuditLogger()
-        self.violation_log: list[Dict] = []
+        self.violation_log: list[dict] = []
 
     def validate_input(self, input_value: Any, field_name: str = "unknown") -> bool:
         """验证输入是否安全"""
@@ -450,7 +452,7 @@ class SecurityConfigValidator:
     """安全配置验证器"""
 
     def __init__(self):
-        self.checks: list[Dict] = []
+        self.checks: list[dict] = []
 
     def validate_all(self) -> dict[str, Any]:
         """执行所有安全检查"""
@@ -486,7 +488,7 @@ class SecurityConfigValidator:
 
         return results
 
-    def _check_encryption_key(self) -> Dict:
+    def _check_encryption_key(self) -> dict:
         """检查加密密钥"""
         key_file = Path.home() / ".athena" / "secure" / "memory_encryption_key.bin"
 
@@ -514,7 +516,7 @@ class SecurityConfigValidator:
                 'message': '加密密钥文件不存在'
             }
 
-    def _check_database_ssl(self) -> Dict:
+    def _check_database_ssl(self) -> dict:
         """检查数据库SSL配置"""
         ssl_enabled = os.getenv('DB_SSL', 'false').lower() == 'true'
 
@@ -531,7 +533,7 @@ class SecurityConfigValidator:
                 'message': 'SSL未启用,建议在生产环境启用'
             }
 
-    def _check_file_permissions(self) -> Dict:
+    def _check_file_permissions(self) -> dict:
         """检查敏感文件权限"""
         issues = []
 
@@ -563,7 +565,7 @@ class SecurityConfigValidator:
                 'message': '文件权限检查通过'
             }
 
-    def _check_environment_variables(self) -> Dict:
+    def _check_environment_variables(self) -> dict:
         """检查环境变量"""
         required_vars = [
             'DATABASE_URL',
@@ -588,7 +590,7 @@ class SecurityConfigValidator:
                 'message': '所有必需的环境变量已设置'
             }
 
-    def _check_password_policy(self) -> Dict:
+    def _check_password_policy(self) -> dict:
         """检查密码策略"""
         db_password = os.getenv('DB_PASSWORD', '')
 
@@ -605,7 +607,7 @@ class SecurityConfigValidator:
                 'message': '密码策略检查通过'
             }
 
-    def _check_api_keys(self) -> Dict:
+    def _check_api_keys(self) -> dict:
         """检查API密钥"""
         # 检查密钥是否硬编码
         config_files = list(Path("config").rglob("*.py")) + list(Path(".env*").glob("*"))
@@ -621,6 +623,7 @@ class SecurityConfigValidator:
         for file_path in config_files:
             if file_path.exists():
                 try:
+                    content = file_path.read_text(errors='ignore')
                     for pattern in dangerous_patterns:
                         if re.search(pattern, content, re.IGNORECASE):
                             hardcoded_keys.append(str(file_path))
@@ -651,7 +654,7 @@ class KeyRotationManager:
 
     def __init__(self):
         self.rotation_schedule: dict[str, datetime] = {}
-        self.rotation_history: list[Dict] = []
+        self.rotation_history: list[dict] = []
 
     def schedule_rotation(self, key_id: str, rotation_date: datetime):
         """安排密钥轮换"""

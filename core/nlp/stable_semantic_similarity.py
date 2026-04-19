@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 稳定语义相似度匹配算法
 Stable Semantic Similarity Matching Algorithm
@@ -12,12 +13,11 @@ Stable Semantic Similarity Matching Algorithm
 
 import logging
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 import jieba
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
 
 logger = logging.getLogger(__name__)
 

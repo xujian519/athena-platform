@@ -1,0 +1,192 @@
+{
+  "timestamp": "2026-04-18T23:38:54.744592",
+  "completeness": "基本完整",
+  "total_data": 4217673,
+  "data_sources": [
+    "Qdrant",
+    "PostgreSQL"
+  ],
+  "results": {
+    "Neo4j": {
+      "status": "✅ 正常",
+      "nodes": 0,
+      "relationships": 0,
+      "has_data": false
+    },
+    "Qdrant": {
+      "status": "✅ 正常",
+      "collections": 13,
+      "total_points": 63154,
+      "details": [
+        {
+          "name": "case_analysis",
+          "points": 10,
+          "vector_size": 1024
+        },
+        {
+          "name": "legal_knowledge",
+          "points": 40050,
+          "vector_size": 1024
+        },
+        {
+          "name": "agent_memory_vectors",
+          "points": 2212,
+          "vector_size": 1024
+        },
+        {
+          "name": "patent_legal",
+          "points": 10,
+          "vector_size": 1024
+        },
+        {
+          "name": "knowledge_vectors",
+          "points": 0,
+          "vector_size": 1024
+        },
+        {
+          "name": "conversation_vectors",
+          "points": 0,
+          "vector_size": 1024
+        },
+        {
+          "name": "patent_rules_1024",
+          "points": 10,
+          "vector_size": 1024
+        },
+        {
+          "name": "legal_main",
+          "points": 10,
+          "vector_size": 1024
+        },
+        {
+          "name": "technical_terms_1024",
+          "points": 10,
+          "vector_size": 1024
+        },
+        {
+          "name": "baochen_wiki",
+          "points": 3788,
+          "vector_size": 1024
+        },
+        {
+          "name": "patent_fulltext",
+          "points": 10,
+          "vector_size": 768
+        },
+        {
+          "name": "legal_qa",
+          "points": 10,
+          "vector_size": 768
+        },
+        {
+          "name": "invalidation_decisions",
+          "points": 17034,
+          "vector_size": 1024
+        }
+      ],
+      "has_data": true
+    },
+    "PostgreSQL_LWM": {
+      "status": "✅ 正常",
+      "database": "legal_world_model",
+      "tables": 23,
+      "total_rows": 4154519,
+      "large_tables": 18,
+      "table_details": [
+        {
+          "name": "crawling_test",
+          "rows": 0
+        },
+        {
+          "name": "judgment_courts",
+          "rows": 12497
+        },
+        {
+          "name": "judgment_embeddings",
+          "rows": 20478
+        },
+        {
+          "name": "judgment_entities",
+          "rows": 891659
+        },
+        {
+          "name": "judgment_law_articles",
+          "rows": 20306
+        },
+        {
+          "name": "judgment_paragraphs",
+          "rows": 0
+        },
+        {
+          "name": "judgment_patent_numbers",
+          "rows": 4243
+        },
+        {
+          "name": "judgment_relations",
+          "rows": 45770
+        },
+        {
+          "name": "judgment_vector_stats",
+          "rows": 5906
+        },
+        {
+          "name": "legal_articles_v2",
+          "rows": 295733
+        },
+        {
+          "name": "legal_articles_v2_embeddings",
+          "rows": 295810
+        },
+        {
+          "name": "legal_documents",
+          "rows": 25
+        },
+        {
+          "name": "patent_decisions_v1",
+          "rows": 6845
+        },
+        {
+          "name": "patent_decisions_v2",
+          "rows": 9562
+        },
+        {
+          "name": "patent_invalid_decisions",
+          "rows": 31562
+        },
+        {
+          "name": "patent_invalid_embeddings",
+          "rows": 119660
+        },
+        {
+          "name": "patent_invalid_entities",
+          "rows": 2363891
+        },
+        {
+          "name": "patent_judgment_cases",
+          "rows": 5906
+        },
+        {
+          "name": "patent_judgment_vectors",
+          "rows": 17388
+        },
+        {
+          "name": "patent_judgments",
+          "rows": 5906
+        },
+        {
+          "name": "patent_rules_unified",
+          "rows": 1371
+        },
+        {
+          "name": "patent_rules_unified_embeddings",
+          "rows": 0
+        },
+        {
+          "name": "test_documents",
+          "rows": 1
+        }
+      ],
+      "has_data": true
+    }
+  }
+}

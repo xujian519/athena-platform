@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺多轮对话参数澄清机制
 实现智能参数缺失检测、提问生成和多轮对话管理
@@ -23,8 +24,9 @@ import sys
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
+import numpy as np
 
 from core.logging_config import setup_logging
 

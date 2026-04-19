@@ -1,30 +1,33 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 感知模块异常类测试
 Tests for Perception Module Exception Classes
 """
 
-import pytest
+
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.perception.exceptions import (
-    PerceptionError,
-    ProcessingError,
-    ValidationError,
-    InitializationError,
-    ConfigurationError,
-    ResourceError,
-    ModelLoadError,
-    FileReadError,
-    NetworkError,
-    TimeoutError,
-    RateLimitError,
-    MemoryError,
-    ConcurrencyError,
+    AudioFormatError,
     CacheError,
+    ConcurrencyError,
+    ConfigurationError,
+    FileReadError,
     FormatError,
     ImageFormatError,
-    AudioFormatError,
+    InitializationError,
+    MemoryError,
+    ModelLoadError,
+    NetworkError,
+    PerceptionError,
+    ProcessingError,
+    RateLimitError,
+    ResourceError,
+    TimeoutError,
+    ValidationError,
     VideoFormatError,
 )
 
@@ -561,7 +564,7 @@ class TestExceptionChaining:
             try:
                 raise ValueError("Original error")
             except ValueError:
-                raise ProcessingError("Processing failed")
+                raise ProcessingError("Processing failed") from None
         except ProcessingError as e:
             # 应该有异常上下文
             assert e.__context__ is not None

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 修复外部搜索引擎问题脚本
 Fix External Search Engine Issues
@@ -13,9 +13,10 @@ Fix External Search Engine Issues
 
 import json
 import logging
-from core.logging_config import setup_logging
 import sys
 from pathlib import Path
+
+from core.logging_config import setup_logging
 
 # 添加项目路径
 current_dir = Path(__file__).parent
@@ -56,7 +57,7 @@ async def check_external_search_status():
     config_file = project_root / 'core/search/config/search_api_config.json'
 
     try:
-        with open(config_file, 'r', encoding='utf-8') as f:
+        with open(config_file, encoding='utf-8') as f:
             config = json.load(f)
 
         api_keys = config.get('search_api_keys', {})
@@ -85,7 +86,7 @@ async def check_external_search_status():
         ('core.search.config.api_key_manager', 'API密钥管理器')
     ]
 
-    for module_name, description in import_checks:
+    for module_name, _description in import_checks:
         try:
             __import__(module_name)
             logger.info(f"   ✅ {module_name}: 可导入")
@@ -98,7 +99,7 @@ async def check_external_search_status():
     web_search_file = project_root / 'core/search/external/web_search_engines.py'
 
     try:
-        with open(web_search_file, 'r', encoding='utf-8') as f:
+        with open(web_search_file, encoding='utf-8') as f:
             content = f.read()
 
         security_issues = []
@@ -156,7 +157,7 @@ async def create_fixed_imports():
     adapter_file = project_root / 'core/search/tools/real_web_search_adapter.py'
 
     try:
-        with open(adapter_file, 'r', encoding='utf-8') as f:
+        with open(adapter_file, encoding='utf-8') as f:
             content = f.read()
 
         # 修复导入路径
@@ -217,7 +218,7 @@ async def test_secure_search():
                     logger.info(f"   ❌ {engine}: 不可用")
 
             if available_engines:
-                logger.info(f"\n   🔍 测试搜索功能...")
+                logger.info("\n   🔍 测试搜索功能...")
                 results = await search_manager.search(
                     'Python编程语言',
                     engines=available_engines[:2],  # 使用前两个可用引擎
@@ -225,7 +226,7 @@ async def test_secure_search():
                 )
 
                 if results['success']:
-                    logger.info(f"   ✅ 搜索成功")
+                    logger.info("   ✅ 搜索成功")
                     logger.info(f"   📊 找到 {results['total_results']} 个结果")
                     logger.info(f"   ⏱️ 耗时 {results['search_time']:.2f}s")
                     logger.info(f"   🛠️ 使用引擎: {', '.join(results['engines_used'])}")
@@ -319,7 +320,7 @@ async def main():
         logger.info("\n✅ 未发现明显问题")
 
     if recommendations:
-        logger.info(f"\n💡 建议:")
+        logger.info("\n💡 建议:")
         for i, rec in enumerate(recommendations, 1):
             logger.info(f"   {i}. {rec}")
 

@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 简化的测试运行器
 Simple Test Runner for Agentic Design Patterns
 """
 
-import sys
 import os
-import unittest
+import sys
 import time
+import unittest
 from pathlib import Path
 
 # 添加项目路径
@@ -67,7 +66,7 @@ def run_basic_functionality_tests():
 
         # 测试基本实例化
         print("2. 测试基本实例化...")
-        planner = AgenticTaskPlanner()
+        planner = AgenticTaskPlanner()  # type: ignore[name-defined]
         processor = PromptChainProcessor()
         goal_manager = GoalManagementSystem()
         print("   ✅ 所有组件实例化成功")
@@ -91,7 +90,7 @@ def run_basic_functionality_tests():
 
         # 测试提示链（简单测试，避免复杂操作）
         try:
-            chain_id = processor.create_chain("simple_test", {"query": "测试"})
+            processor.create_chain("simple_test", {"query": "测试"})
             print("   ✅ 提示链功能正常")
         except Exception as e:
             print(f"   ⚠️ 提示链功能部分异常: {e}")
@@ -109,8 +108,12 @@ def run_performance_checks():
     print("=" * 50)
 
     try:
-        import psutil
         import time
+
+        import psutil
+
+        # 导入被测试模块
+        from core.cognition import AgenticTaskPlanner
 
         # 获取当前进程
         process = psutil.Process()
@@ -122,8 +125,8 @@ def run_performance_checks():
         # 创建多个组件测试内存使用
         components = []
         for i in range(10):
-            planner = AgenticTaskPlanner()
-            plan = planner.create_execution_plan(f"测试任务 {i}", {})
+            planner = AgenticTaskPlanner()  # type: ignore[name-defined]  # type: ignore[name-defined]
+            planner.create_execution_plan(f"测试任务 {i}", {})
             components.append(planner)
 
         final_memory = process.memory_info().rss / 1024 / 1024  # MB
@@ -139,8 +142,8 @@ def run_performance_checks():
         print("2. 检查响应时间...")
         start_time = time.time()
 
-        planner = AgenticTaskPlanner()
-        plan = planner.create_execution_plan("性能测试任务", {})
+        planner = AgenticTaskPlanner()  # type: ignore[name-defined]
+        planner.create_execution_plan("性能测试任务", {})
 
         end_time = time.time()
         response_time = end_time - start_time
@@ -170,13 +173,13 @@ def generate_test_report(results):
     passed_tests = sum(1 for result in results.values() if result)
     success_rate = passed_tests / total_tests if total_tests > 0 else 0
 
-    print(f"📊 测试统计:")
+    print("📊 测试统计:")
     print(f"   总测试项: {total_tests}")
     print(f"   通过项目: {passed_tests}")
     print(f"   失败项目: {total_tests - passed_tests}")
     print(f"   成功率: {success_rate:.1%}")
 
-    print(f"\n📋 详细结果:")
+    print("\n📋 详细结果:")
     for test_name, result in results.items():
         status = "✅ 通过" if result else "❌ 失败"
         print(f"   {test_name}: {status}")

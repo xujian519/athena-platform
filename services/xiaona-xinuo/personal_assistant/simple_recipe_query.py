@@ -5,7 +5,7 @@ Simple Recipe Query System - 直接从备份文件查询
 """
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
+
 
 class SimpleRecipeQuery:
     """简单菜谱查询系统"""
@@ -19,7 +19,7 @@ class SimpleRecipeQuery:
         for file in self.backup_dir.glob("*.md"):
             if recipe_name in file.name:
                 try:
-                    with open(file, 'r', encoding='utf-8') as f:
+                    with open(file, encoding='utf-8') as f:
                         content = f.read()
                     return self.format_recipe(content, recipe_name)
                 except Exception as e:
@@ -36,7 +36,7 @@ class SimpleRecipeQuery:
         """在文件内容中搜索关键词"""
         for file in self.backup_dir.glob("*.md"):
             try:
-                with open(file, 'r', encoding='utf-8') as f:
+                with open(file, encoding='utf-8') as f:
                     content = f.read()
                     if keyword in content:
                         recipe_name = file.stem

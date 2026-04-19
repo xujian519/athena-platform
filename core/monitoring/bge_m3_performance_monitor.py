@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 BGE-M3性能监控系统
 Performance Monitor for BGE-M3
@@ -9,10 +10,11 @@ Performance Monitor for BGE-M3
 import threading
 import time
 from collections import deque
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any
 
+import numpy as np
 import psutil
 
 from core.logging_config import setup_logging

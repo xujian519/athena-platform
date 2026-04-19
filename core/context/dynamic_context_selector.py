@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 动态上下文选择器 - 智能上下文管理
 Dynamic Context Selector - Intelligent Context Management
@@ -17,10 +18,10 @@ Dynamic Context Selector - Intelligent Context Management
 """
 
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from core.logging_config import setup_logging
 

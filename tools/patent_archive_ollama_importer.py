@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-使用Ollama大模型的专利档案表智能导入工具
-Intelligent Patent Archive Importer with Ollama AI
+使用MLX大模型的专利档案表智能导入工具
+Intelligent Patent Archive Importer with MLX AI
 
 1. 使用AI智能分析Excel表格结构
 2. 智能识别和提取客户信息
@@ -11,17 +10,15 @@ Intelligent Patent Archive Importer with Ollama AI
 """
 
 import json
-import pandas as pd
-import requests
-import hashlib
-import psycopg2
-from psycopg2.extras import execute_values
+import logging
+import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple
-import os
-import sys
-import logging
+
+import pandas as pd
+import psycopg2
+import requests
+from psycopg2.extras import execute_values
 
 # 配置日志
 logging.basicConfig(
@@ -30,12 +27,12 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-class OllamaPatentImporter:
-    """使用Ollama的专利导入器"""
+class MLXPatentImporter:
+    """使用MLX的专利导入器"""
 
     def __init__(self):
-        # Ollama配置
-        self.ollama_url = "http://localhost:11434/api"
+        # MLX配置
+        self.mlx_url = "http://127.0.0.1:8765/v1"
         self.model_name = "qwen:7b"  # 使用qwen模型
         self.embedding_model = "nomic-embed-text:latest"  # 用于相似度比较
 
@@ -53,44 +50,49 @@ class OllamaPatentImporter:
         self.existing_patent_names = set()
         self.existing_clients = set()
 
-    def query_ollama(self, prompt: str, system_prompt: str = None) -> str:
-        """查询Ollama模型"""
+    def query_mlx(self, prompt: str, system_prompt: str = None) -> str:
+        """查询MLX模型"""
         try:
+            messages = []
+            if system_prompt:
+                messages.append({"role": "system", "content": system_prompt})
+            messages.append({"role": "user", "content": prompt})
+
             payload = {
                 "model": self.model_name,
-                "prompt": prompt,
+                "messages": messages,
                 "stream": False
             }
 
-            if system_prompt:
-                payload["system"] = system_prompt
-
-            response = requests.post(f"{self.ollama_url}/generate", json=payload, timeout=60)
+            response = requests.post(f"{self.mlx_url}/chat/completions", json=payload, timeout=60)
 
             if response.status_code == 200:
                 result = response.json()
-                return result.get("response", "")
+                return result.get("choices", [{}])[0].get("message", {}).get("content", "")
             else:
-                logger.error(f"Ollama请求失败: {response.status_code}")
+                logger.error(f"MLX请求失败: {response.status_code}")
                 return ""
 
         except Exception as e:
-            logger.error(f"查询Ollama出错: {str(e)}")
+            logger.error(f"查询MLX出错: {str(e)}")
             return ""
 
-    def get_embedding(self, text: str) -> List[float | None]:
+    def get_embedding(self, text: str) -> list[float | None]:
         """获取文本的向量嵌入"""
         try:
             payload = {
                 "model": self.embedding_model,
-                "prompt": text
+                "input": text
             }
 
-            response = requests.post(f"{self.ollama_url}/embeddings", json=payload, timeout=30)
+            response = requests.post(f"{self.mlx_url}/embeddings", json=payload, timeout=30)
 
             if response.status_code == 200:
                 result = response.json()
-                return result.get("embedding", [])
+                data = result.get("data", [])
+                if data:
+                    return data[0].get("embedding", [])
+                return []
             else:
                 logger.warning(f"嵌入生成失败: {response.status_code}")
                 return None
@@ -99,12 +101,12 @@ class OllamaPatentImporter:
             logger.warning(f"获取嵌入出错: {str(e)}")
             return None
 
-    def cosine_similarity(self, vec1: List[float], vec2: List[float]) -> float:
+    def cosine_similarity(self, vec1: list[float], vec2: list[float]) -> float:
         """计算余弦相似度"""
         if not vec1 or not vec2:
             return 0.0
 
-        dot_product = sum(a * b for a, b in zip(vec1, vec2))
+        dot_product = sum(a * b for a, b in zip(vec1, vec2, strict=False))
         magnitude1 = sum(a * a for a in vec1) ** 0.5
         magnitude2 = sum(b * b for b in vec2) ** 0.5
 
@@ -151,7 +153,7 @@ class OllamaPatentImporter:
             if conn:
                 conn.close()
 
-    def analyze_excel_with_ai(self, excel_path: str) -> Dict:
+    def analyze_excel_with_ai(self, excel_path: str) -> dict:
         """使用AI分析Excel表格结构"""
         logger.info("🤖 使用AI分析Excel表格结构...")
 
@@ -161,7 +163,7 @@ class OllamaPatentImporter:
 
             # 准备样本数据
             sample_data = []
-            for idx, row in df.iterrows():
+            for _idx, row in df.iterrows():
                 row_data = {}
                 for col in df.columns:
                     value = row[col]
@@ -212,7 +214,7 @@ class OllamaPatentImporter:
 }}
 """
 
-            response = self.query_ollama(prompt, system_prompt)
+            response = self.query_mlx(prompt, system_prompt)
 
             # 尝试解析JSON响应
             try:
@@ -240,7 +242,7 @@ class OllamaPatentImporter:
             logger.error(f"AI分析失败: {e}")
             return self._fallback_analysis(excel_path)
 
-    def _fallback_analysis(self, excel_path: str) -> Dict:
+    def _fallback_analysis(self, excel_path: str) -> dict:
         """备用分析方法（不使用AI）"""
         logger.info("使用备用分析方法...")
 
@@ -295,7 +297,7 @@ class OllamaPatentImporter:
 请只返回客户名称，不要其他解释：
 """
 
-        response = self.query_ollama(prompt,
+        response = self.query_mlx(prompt,
             "你是一个专业的文本提取专家，专门从专利标题中提取客户名称。")
 
         client_name = response.strip()
@@ -336,7 +338,7 @@ class OllamaPatentImporter:
 请只返回发明名称，如果无法确定请返回空字符串：
 """
 
-        response = self.query_ollama(prompt,
+        response = self.query_mlx(prompt,
             "你是一个专利专家，能够准确区分客户名称和专利发明名称。")
 
         patent_name = response.strip()
@@ -347,7 +349,7 @@ class OllamaPatentImporter:
 
         return patent_name
 
-    def check_similarity_with_ai(self, new_title: str, existing_titles: List[str]) -> Tuple[bool, float]:
+    def check_similarity_with_ai(self, new_title: str, existing_titles: list[str]) -> tuple[bool, float]:
         """使用AI检查相似度"""
         if not new_title or not existing_titles:
             return False, 0.0
@@ -366,7 +368,7 @@ class OllamaPatentImporter:
 
         return max_similarity > 0.8, max_similarity  # 0.8作为相似度阈值
 
-    def process_excel_data(self, excel_path: str) -> Dict:
+    def process_excel_data(self, excel_path: str) -> dict:
         """处理Excel数据"""
         logger.info("📊 开始处理Excel数据...")
 
@@ -509,14 +511,14 @@ class OllamaPatentImporter:
             "processing_time": datetime.now().isoformat()
         }
 
-        logger.info(f"\n📈 处理结果:")
+        logger.info("\n📈 处理结果:")
         logger.info(f"  新专利: {result['new_patents']}")
         logger.info(f"  重复专利: {result['duplicate_patents']}")
         logger.info(f"  新客户: {result['new_clients']}")
 
         return result
 
-    def save_to_database(self, processed_data: List[Dict]):
+    def save_to_database(self, processed_data: list[dict]):
         """保存数据到数据库"""
         logger.info("💾 正在保存数据到数据库...")
 
@@ -566,7 +568,7 @@ class OllamaPatentImporter:
                     'archive_number': record.get('archive_number'),
                     'application_method': record.get('application_method'),
                     'contact_info': record.get('contact'),
-                    'source': 'ollama_import',
+                    'source': 'mlx_import',
                     'created_at': datetime.now()
                 }
                 patent_records.append(patent_record)
@@ -607,7 +609,7 @@ class OllamaPatentImporter:
             if conn:
                 conn.close()
 
-    def export_results(self, result: Dict):
+    def export_results(self, result: dict):
         """导出处理结果"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -657,7 +659,7 @@ def main():
     """主函数"""
     excel_path = "/Users/xujian/工作/10_归档文件/专利档案表（2016---) .xlsx"
 
-    print("🚀 使用Ollama大模型的专利档案智能导入工具")
+    print("🚀 使用MLX大模型的专利档案智能导入工具")
     print("=" * 60)
 
     # 检查文件
@@ -666,7 +668,7 @@ def main():
         return False
 
     # 创建导入器
-    importer = OllamaPatentImporter()
+    importer = MLXPatentImporter()
 
     try:
         # 1. 加载现有数据

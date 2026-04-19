@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利申请文件模板提取器
 用于根据JSON模板从专利申请文件中提取结构化信息
@@ -8,8 +7,7 @@
 import json
 import logging
 import re
-from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -23,10 +21,10 @@ class PatentTemplateExtractor:
         Args:
             template_file: JSON模板文件路径
         """
-        with open(template_file, 'r', encoding='utf-8') as f:
+        with open(template_file, encoding='utf-8') as f:
             self.templates = json.load(f)
 
-    def extract_abstract(self, text: str) -> Dict[str, Any]:
+    def extract_abstract(self, text: str) -> dict[str, Any]:
         """
         提取说明书摘要信息
 
@@ -96,7 +94,7 @@ class PatentTemplateExtractor:
 
         return result
 
-    def extract_claims(self, text: str) -> Dict[str, Any]:
+    def extract_claims(self, text: str) -> dict[str, Any]:
         """
         提取权利要求书信息
 
@@ -138,7 +136,7 @@ class PatentTemplateExtractor:
 
         return result
 
-    def extract_specification(self, text: str) -> Dict[str, Any]:
+    def extract_specification(self, text: str) -> dict[str, Any]:
         """
         提取说明书信息
 
@@ -200,7 +198,7 @@ class PatentTemplateExtractor:
             return 'dependent'
         return 'unknown'
 
-    def _parse_independent_claim(self, claim_text: str) -> Dict[str, Any]:
+    def _parse_independent_claim(self, claim_text: str) -> dict[str, Any]:
         """解析独立权利要求"""
         result = {}
 
@@ -218,7 +216,7 @@ class PatentTemplateExtractor:
 
         return result
 
-    def _parse_dependent_claim(self, claim_text: str) -> Dict[str, Any]:
+    def _parse_dependent_claim(self, claim_text: str) -> dict[str, Any]:
         """解析从属权利要求"""
         result = {}
 
@@ -239,7 +237,7 @@ class PatentTemplateExtractor:
 
         return result
 
-    def _extract_technical_features(self, text: str) -> List[str]:
+    def _extract_technical_features(self, text: str) -> list[str]:
         """提取技术特征"""
         # 简单的特征提取（可以根据需要改进）
         features = []
@@ -251,7 +249,7 @@ class PatentTemplateExtractor:
                 features.append(seg)
         return features
 
-    def _check_claim_references(self, claims: List[Dict]) -> Dict[str, Any]:
+    def _check_claim_references(self, claims: list[dict]) -> dict[str, Any]:
         """检查权利要求引用关系"""
         issues = []
         for claim in claims:
@@ -266,7 +264,7 @@ class PatentTemplateExtractor:
             'issues': issues
         }
 
-    def _parse_disclosure(self, text: str) -> Dict[str, Any]:
+    def _parse_disclosure(self, text: str) -> dict[str, Any]:
         """解析发明内容"""
         result = {}
 
@@ -290,7 +288,7 @@ class PatentTemplateExtractor:
 
         return result
 
-    def _parse_drawings_description(self, text: str) -> List[Dict[str, str]]:
+    def _parse_drawings_description(self, text: str) -> list[dict[str, str]]:
         """解析附图说明"""
         drawings = []
         pattern = r"图(\d+)[是]?\s*([^\n]+)"
@@ -304,7 +302,7 @@ class PatentTemplateExtractor:
 
         return drawings
 
-    def _parse_implementation(self, text: str) -> Dict[str, Any]:
+    def _parse_implementation(self, text: str) -> dict[str, Any]:
         """解析具体实施方式"""
         result = {
             'implementation': text.strip()[:500] + '...' if len(text) > 500 else text.strip()
@@ -318,7 +316,7 @@ class PatentTemplateExtractor:
 
         return result
 
-    def validate_extraction(self, data: Dict[str, Any], template_type: str) -> Dict[str, Any]:
+    def validate_extraction(self, data: dict[str, Any], template_type: str) -> dict[str, Any]:
         """
         验证提取数据的完整性和合规性
 
@@ -350,7 +348,7 @@ class PatentTemplateExtractor:
                 validation['errors'].append('缺少独立权利要求')
                 validation['valid'] = False
 
-            if data.get('reference_check', {}).get('valid') == False:
+            if not data.get('reference_check', {}).get('valid'):
                 validation['errors'].extend(data['reference_check']['issues'])
                 validation['valid'] = False
 

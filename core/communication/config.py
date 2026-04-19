@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena通信系统 - 统一配置管理
 Unified Configuration Management for Communication System
@@ -18,7 +19,7 @@ import json
 import logging
 import os
 from collections.abc import Callable
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
@@ -247,7 +248,7 @@ class CommunicationConfig:
             return False
 
     @classmethod
-    def load_from_file(cls, path: str) -> "Optional[CommunicationConfig]":
+    def load_from_file(cls, path: str) -> "CommunicationConfig | None":
         """
         从文件加载配置
 

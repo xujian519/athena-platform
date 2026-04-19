@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 查询缓存模块
 Query Cache for Athena Intelligent Router
@@ -7,7 +8,7 @@ Query Cache for Athena Intelligent Router
 import hashlib
 import os
 import time
-from typing import Any, Dict, Optional
+from typing import Any
 
 
 class QueryCache:

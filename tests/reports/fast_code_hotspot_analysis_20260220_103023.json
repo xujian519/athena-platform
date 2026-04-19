@@ -1,0 +1,225 @@
+{
+  "analysis_timestamp": "2026-02-20T10:30:23.418126",
+  "total_files": 30,
+  "hotspots": [
+    {
+      "file": "unified_knowledge_manager.py",
+      "path": "/Users/xujian/Athena工作平台/domains/legal-ai/apis/unified_knowledge_manager.py",
+      "total_lines": 646,
+      "code_lines": 529,
+      "functions": 21,
+      "classes": 5,
+      "patterns": {
+        "database_operations": 59,
+        "blocking_io": 0,
+        "complex_loops": 1,
+        "exception_handling": 0,
+        "nested_functions": 1,
+        "string_operations": 12,
+        "list_operations": 0,
+        "regex_operations": 0
+      },
+      "complexity_score": 201.29,
+      "size_kb": 20.3408203125
+    },
+    {
+      "file": "knowledge_graph_api.py",
+      "path": "/Users/xujian/Athena工作平台/domains/legal-ai/apis/knowledge_graph_api.py",
+      "total_lines": 1062,
+      "code_lines": 904,
+      "functions": 25,
+      "classes": 9,
+      "patterns": {
+        "database_operations": 37,
+        "blocking_io": 1,
+        "complex_loops": 1,
+        "exception_handling": 0,
+        "nested_functions": 1,
+        "string_operations": 16,
+        "list_operations": 0,
+        "regex_operations": 0
+      },
+      "complexity_score": 147.04,
+      "size_kb": 37.244140625
+    },
+    {
+      "file": "tool_auto_executor.py",
+      "path": "/Users/xujian/Athena工作平台/core/tool_auto_executor.py",
+      "total_lines": 847,
+      "code_lines": 645,
+      "functions": 28,
+      "classes": 6,
+      "patterns": {
+        "database_operations": 13,
+        "blocking_io": 0,
+        "complex_loops": 1,
+        "exception_handling": 0,
+        "nested_functions": 1,
+        "string_operations": 11,
+        "list_operations": 0,
+        "regex_operations": 0
+      },
+      "complexity_score": 63.45,
+      "size_kb": 32.26953125
+    },
+    {
+      "file": "iterative_patent_search.py",
+      "path": "/Users/xujian/Athena工作平台/core/iterative_patent_search.py",
+      "total_lines": 512,
+      "code_lines": 380,
+      "functions": 16,
+      "classes": 3,
+      "patterns": {
+        "database_operations": 7,
+        "blocking_io": 2,
+        "complex_loops": 1,
+        "exception_handling": 1,
+        "nested_functions": 1,
+        "string_operations": 13,
+        "list_operations": 0,
+        "regex_operations": 6
+      },
+      "complexity_score": 63.0,
+      "size_kb": 18.6318359375
+    },
+    {
+      "file": "clause_level_vectorizer.py",
+      "path": "/Users/xujian/Athena工作平台/domains/legal-ai/services/processors/clause_level_vectorizer.py",
+      "total_lines": 492,
+      "code_lines": 376,
+      "functions": 13,
+      "classes": 2,
+      "patterns": {
+        "database_operations": 0,
+        "blocking_io": 4,
+        "complex_loops": 1,
+        "exception_handling": 0,
+        "nested_functions": 1,
+        "string_operations": 20,
+        "list_operations": 0,
+        "regex_operations": 9
+      },
+      "complexity_score": 61.0,
+      "size_kb": 18.22265625
+    },
+    {
+      "file": "offline_legal_clause_builder.py",
+      "path": "/Users/xujian/Athena工作平台/domains/legal-ai/services/processors/offline_legal_clause_builder.py",
+      "total_lines": 379,
+      "code_lines": 283,
+      "functions": 9,
+      "classes": 2,
+      "patterns": {
+        "database_operations": 0,
+        "blocking_io": 8,
+        "complex_loops": 1,
+        "exception_handling": 0,
+        "nested_functions": 1,
+        "string_operations": 3,
+        "list_operations": 0,
+        "regex_operations": 5
+      },
+      "complexity_score": 52.0,
+      "size_kb": 15.4150390625
+    },
+    {
+      "file": "hybrid_clause_search.py",
+      "path": "/Users/xujian/Athena工作平台/domains/legal-ai/services/hybrid_clause_search.py",
+      "total_lines": 380,
+      "code_lines": 278,
+      "functions": 10,
+      "classes": 1,
+      "patterns": {
+        "database_operations": 0,
+        "blocking_io": 0,
+        "complex_loops": 1,
+        "exception_handling": 0,
+        "nested_functions": 1,
+        "string_operations": 31,
+        "list_operations": 0,
+        "regex_operations": 5
+      },
+      "complexity_score": 48.0,
+      "size_kb": 13.8271484375
+    },
+    {
+      "file": "legal_vector_search.py",
+      "path": "/Users/xujian/Athena工作平台/domains/legal-ai/services/legal_vector_search.py",
+      "total_lines": 248,
+      "code_lines": 186,
+      "functions": 8,
+      "classes": 2,
+      "patterns": {
+        "database_operations": 0,
+        "blocking_io": 2,
+        "complex_loops": 1,
+        "exception_handling": 0,
+        "nested_functions": 1,
+        "string_operations": 22,
+        "list_operations": 0,
+        "regex_operations": 2
+      },
+      "complexity_score": 41.0,
+      "size_kb": 8.3837890625
+    },
+    {
+      "file": "advanced_patent_search_system.py",
+      "path": "/Users/xujian/Athena工作平台/core/advanced_patent_search_system.py",
+      "total_lines": 834,
+      "code_lines": 611,
+      "functions": 23,
+      "classes": 4,
+      "patterns": {
+        "database_operations": 0,
+        "blocking_io": 0,
+        "complex_loops": 1,
+        "exception_handling": 0,
+        "nested_functions": 1,
+        "string_operations": 21,
+        "list_operations": 0,
+        "regex_operations": 2
+      },
+      "complexity_score": 38.11,
+      "size_kb": 30.9013671875
+    },
+    {
+      "file": "xiaonuo_athena_reasoning_bridge.py",
+      "path": "/Users/xujian/Athena工作平台/core/xiaonuo_athena_reasoning_bridge.py",
+      "total_lines": 330,
+      "code_lines": 250,
+      "functions": 10,
+      "classes": 3,
+      "patterns": {
+        "database_operations": 5,
+        "blocking_io": 0,
+        "complex_loops": 1,
+        "exception_handling": 0,
+        "nested_functions": 1,
+        "string_operations": 15,
+        "list_operations": 0,
+        "regex_operations": 0
+      },
+      "complexity_score": 37.0,
+      "size_kb": 10.056640625
+    }
+  ],
+  "pattern_summary": {
+    "database_operations": 130,
+    "blocking_io": 20,
+    "complex_loops": 23,
+    "exception_handling": 1,
+    "nested_functions": 26,
+    "string_operations": 296,
+    "list_operations": 0,
+    "regex_operations": 37
+  },
+  "recommendations": [
+    "🗄️ 检测到数据库操作，建议：\n   - 使用连接池\n   - 实现查询缓存\n   - 优化SQL语句",
+    "⏱️ 检测到阻塞性IO，建议：\n   - 使用异步IO\n   - 实现超时控制\n   - 添加错误重试",
+    "🔄 检测到复杂循环，建议：\n   - 简化循环逻辑\n   - 避免深层嵌套\n   - 使用高效的数据结构",
+    "🔧 发现19个高复杂度文件，建议：\n   - 重构复杂逻辑\n   - 拆分大函数\n   - 提取公共模块",
+    "📊 使用性能分析工具进行详细分析",
+    "🧪 添加性能测试覆盖热点代码",
+    "📝 实现性能监控和告警"
+  ]
+}

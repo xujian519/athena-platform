@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena多模态文件系统智能启动器
 Smart Launcher for Multimodal File System
@@ -7,16 +6,14 @@ Smart Launcher for Multimodal File System
 根据需求智能选择启动组件，优化资源使用
 """
 
-import os
-from core.async_main import async_main
-import sys
-import json
-import asyncio
 import argparse
-import logging
+import asyncio
+import json
+import os
+import sys
+from typing import Any
+
 from core.logging_config import setup_logging
-from datetime import datetime
-from typing import Dict, List, Optional, Set
 
 # 添加路径
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -106,11 +103,11 @@ class ComponentManager:
             }
         }
 
-        self.active_components: Set[str] = set()
+        self.active_components: set[str] = set()
         self.startup_reason: str = ""
 
     def determine_startup_mode(self, mode: str = None,
-                             keywords: List[str] = None) -> str:
+                             keywords: list[str] = None) -> str:
         """确定启动模式"""
 
         if mode:
@@ -125,7 +122,7 @@ class ComponentManager:
         self.startup_reason = "默认启动核心组件"
         return 'minimal'
 
-    def _analyze_keywords(self, keywords: List[str]) -> str:
+    def _analyze_keywords(self, keywords: list[str]) -> str:
         """根据关键词确定启动模式"""
         mode = 'minimal'  # 默认只启动核心
         enabled_components = set()
@@ -166,7 +163,7 @@ class ComponentManager:
 
         return mode
 
-    async def startup(self, mode: str = None, keywords: List[str] = None):
+    async def startup(self, mode: str = None, keywords: list[str] = None):
         """启动组件"""
         startup_mode = self.determine_startup_mode(mode, keywords)
 
@@ -226,7 +223,7 @@ class ComponentManager:
         except Exception as e:
             logger.error(f"组件 {component_name} 启动失败: {e}")
             if component['required']:
-                raise RuntimeError(f"必需组件 {component_name} 启动失败")
+                raise RuntimeError(f"必需组件 {component_name} 启动失败") from e
 
     def _print_startup_summary(self) -> Any:
         """打印启动摘要"""
@@ -275,7 +272,7 @@ class ComponentManager:
         print("  - 关键词启动: python smart_launcher.py --keywords 监控 ai")
         print("  - 查看状态: python smart_launcher.py --status")
 
-    def get_status(self) -> Dict[str, any]:
+    def get_status(self) -> dict[str, any]:
         """获取组件状态"""
         return {
             "active_components": list(self.active_components),
@@ -329,7 +326,7 @@ async def main():
 
     # 从配置文件加载
     if args.config and os.path.exists(args.config):
-        with open(args.config, 'r', encoding='utf-8') as f:
+        with open(args.config, encoding='utf-8') as f:
             config = json.load(f)
 
         # 应用配置

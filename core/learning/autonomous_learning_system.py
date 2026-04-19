@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 自主学习和自我优化系统
 Autonomous Learning and Self-Optimization System
@@ -18,7 +19,6 @@ Autonomous Learning and Self-Optimization System
 
 import asyncio
 import logging
-import random
 import statistics
 from collections import defaultdict, deque
 from collections.abc import Callable
@@ -29,6 +29,7 @@ from typing import Any
 
 # 导入配置常量
 try:
+    from .input_validator import get_input_validator
     from .learning_config import (
         ABTestConfig,
         AIThresholds,
@@ -38,14 +39,13 @@ try:
         RewardConfig,
         TimeoutConfig,
     )
-    from .input_validator import get_input_validator
 except ImportError:
     # 如果相对导入失败,尝试绝对导入
+    from core.learning.input_validator import get_input_validator
     from core.learning.learning_config import (
         PerformanceThresholds,
         RewardConfig,
     )
-    from core.learning.input_validator import get_input_validator
 
 logger = logging.getLogger(__name__)
 
@@ -452,7 +452,6 @@ class AutonomousLearningSystem:
         logger.info(f"🧪 运行A/B测试: {experiment.name}")
 
         # 基于配置参数计算样本量（使用统计功效分析）
-        from math import sqrt
 
         # 计算最小样本量（基于95%置信度和80%统计功效）
         min_sample_size = self._calculate_min_sample_size(
@@ -908,7 +907,7 @@ async def run_daemon(agent_id: str, config_file: str | None = None):
     config = {}
     if config_file and Path(config_file).exists():
         import yaml
-        with open(config_file, 'r') as f:
+        with open(config_file) as f:
             config = yaml.safe_load(f) or {}
 
     learning_config = config.get('learning', {})

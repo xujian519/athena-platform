@@ -4,9 +4,6 @@
 针对超大文件优化，支持断点续传
 """
 
-import hashlib
-from core.async_main import async_main
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
 import logging
 import os
@@ -59,7 +56,7 @@ class EnhancedSafeProcessor:
         progress_file = self.get_progress_file(csv_path)
 
         if progress_file.exists():
-            with open(progress_file, 'r', encoding='utf-8') as f:
+            with open(progress_file, encoding='utf-8') as f:
                 return json.load(f)
         return None
 
@@ -95,7 +92,7 @@ class EnhancedSafeProcessor:
         # 检查是否有未完成的进度
         progress = self.load_progress(csv_path)
         if progress:
-            logger.info(f"\n⚠️  发现未完成的进度:")
+            logger.info("\n⚠️  发现未完成的进度:")
             logger.info(f"  已处理: {progress['processed_rows']:,} 行")
             logger.info(f"  总计: {progress['total_rows']:,} 行")
             logger.info(f"  进度: {progress['processed_rows']/progress['total_rows']*100:.1f}%")
@@ -159,7 +156,7 @@ class EnhancedSafeProcessor:
         ''')
 
         # 4. 分块读取和处理
-        logger.info(f"\n📝 开始分块处理数据...")
+        logger.info("\n📝 开始分块处理数据...")
         total_processed = progress['processed_rows'] if progress else 0
         batch_count = progress['batch_num'] if progress else 0
         skip_rows = progress['processed_rows'] if progress else 0
@@ -208,7 +205,7 @@ class EnhancedSafeProcessor:
                                 ''  # file_hash
                             ))
                             valid_count += 1
-                    except Exception as e:
+                    except Exception:
                         continue
 
                 if batch_data:
@@ -236,18 +233,18 @@ class EnhancedSafeProcessor:
                     # 估算总行数（基于已处理的部分）
                     estimated_total = (total_processed / skip_rows) * os.path.getsize(csv_path) if skip_rows > 0 else total_processed * 10
                     self.save_progress(csv_path, total_processed, estimated_total, batch_count)
-                    logger.info(f"    💾 进度已保存")
+                    logger.info("    💾 进度已保存")
 
                 # 定期创建检查点
                 if batch_count % 20 == 0:
                     cursor.execute('PRAGMA wal_checkpoint(TRUNCATE);')
-                    logger.info(f"    💾 创建检查点")
+                    logger.info("    💾 创建检查点")
 
         except KeyboardInterrupt:
-            logger.info(f"\n\n⚠️  用户中断处理")
+            logger.info("\n\n⚠️  用户中断处理")
             logger.info(f"  已处理: {total_processed:,} 行")
             self.save_progress(csv_path, total_processed, total_processed * 2, batch_count)
-            logger.info(f"  进度已保存，可以稍后继续")
+            logger.info("  进度已保存，可以稍后继续")
 
             if conn:
                 conn.close()
@@ -262,7 +259,7 @@ class EnhancedSafeProcessor:
             return False, 0
 
         # 5. 创建索引
-        logger.info(f"\n🔨 创建索引...")
+        logger.info("\n🔨 创建索引...")
         index_start = time.time()
 
         indexes = [
@@ -279,7 +276,7 @@ class EnhancedSafeProcessor:
                 logger.info(f"  ⚠️  索引创建警告: {e}")
 
         conn.commit()
-        index_time = time.time() - index_start
+        time.time() - index_start
 
         # 6. 最终检查点
         cursor.execute('PRAGMA wal_checkpoint(TRUNCATE);')
@@ -289,7 +286,7 @@ class EnhancedSafeProcessor:
         progress_file = self.get_progress_file(csv_path)
         if progress_file.exists():
             progress_file.unlink()
-            logger.info(f"  🗑️  清理进度文件")
+            logger.info("  🗑️  清理进度文件")
 
         return True, total_processed
 
@@ -330,8 +327,8 @@ class EnhancedSafeProcessor:
                 LIMIT 3
             ''', (int(year),))
 
-            logger.info(f"\n示例专利:")
-            for i, (title, applicant, date) in enumerate(cursor.fetchall(), 1):
+            logger.info("\n示例专利:")
+            for i, (title, applicant, _date) in enumerate(cursor.fetchall(), 1):
                 logger.info(f"  {i}. {title[:50]}... ({applicant})")
 
             conn.close()
@@ -361,6 +358,6 @@ if __name__ == '__main__':
             processor.verify_database(str(db_path), year)
             logger.info(f"\n✅ 处理完成! 共处理 {count:,} 条专利")
         else:
-            logger.info(f"\n❌ 处理失败")
+            logger.info("\n❌ 处理失败")
     else:
         logger.info(f"❌ 文件不存在: {csv_path}")

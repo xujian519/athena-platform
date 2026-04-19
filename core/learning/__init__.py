@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 学习与适应模块 - 统一导出接口
 Learning & Adaptation Module - Unified Export Interface
@@ -78,8 +79,10 @@ try:
         AdaptiveOptimizer,
         ExperienceStore,
         KnowledgeGraphUpdater,
-        LearningEngine as ModularLearningEngine,
         PatternRecognizer,
+    )
+    from .learning_engine import (
+        LearningEngine as ModularLearningEngine,
     )
 
     MODULAR_LEARNING_AVAILABLE = True
@@ -175,14 +178,14 @@ except ImportError as e:
 # =============================================================================
 
 try:
+    from .production_rl_integration import (
+        ProductionRLIntegration,
+        RLProductionConfig,
+    )
     from .reinforcement_learning_agent import (
         ReinforcementLearningAgent,
         RLPolicy,
         RLTrainer,
-    )
-    from .production_rl_integration import (
-        ProductionRLIntegration,
-        RLProductionConfig,
     )
 
     RL_AVAILABLE = True
@@ -201,9 +204,9 @@ except ImportError as e:
 # =============================================================================
 
 try:
-    from .meta_learning_engine import MetaLearningEngine
     from .enhanced_meta_learning import EnhancedMetaLearning
     from .enhanced_meta_learning_impl import MetaLearningImplementation
+    from .meta_learning_engine import MetaLearningEngine
 
     META_LEARNING_AVAILABLE = True
 except ImportError as e:
@@ -240,9 +243,9 @@ except ImportError as e:
 
 try:
     from .transfer_learning_framework import (
+        DomainAdaptation,
         TransferLearningFramework,
         TransferStrategy,
-        DomainAdaptation,
     )
 
     TRANSFER_LEARNING_AVAILABLE = True
@@ -260,8 +263,8 @@ except ImportError as e:
 
 try:
     from .uncertainty_quantifier import (
-        UncertaintyQuantifier,
         UncertaintyEstimate,
+        UncertaintyQuantifier,
     )
 
     UNCERTAINTY_AVAILABLE = True
@@ -295,8 +298,8 @@ except ImportError as e:
 
 try:
     from .rapid_learning import (
-        RapidLearningEngine,
         RapidLearner,
+        RapidLearningEngine,
     )
     from .rapid_learning.engine import RapidLearningEngine as RapidLearningEngineV2
 
@@ -351,9 +354,9 @@ except ImportError as e:
 
 try:
     from .xiaonuo_personalized_learning import (
+        LearningPath,
         PersonalizedLearningSystem,
         UserProfile,
-        LearningPath,
     )
 
     PERSONALIZED_LEARNING_AVAILABLE = True
@@ -371,8 +374,8 @@ except ImportError as e:
 
 try:
     from .memory_consolidation_system import (
-        MemoryConsolidationSystem,
         ConsolidationStrategy,
+        MemoryConsolidationSystem,
     )
 
     MEMORY_CONSOLIDATION_AVAILABLE = True
@@ -406,15 +409,15 @@ except ImportError as e:
 # =============================================================================
 
 try:
-    from .learning_config import LearningModuleConfig
-    from .learning_evaluator import LearningEvaluator
+    from .base_interface import BaseLearningInterface
     from .benchmarks import LearningBenchmarks
     from .concurrency_control import ConcurrencyController
     from .error_handling import LearningErrorHandler
     from .exceptions import LearningException
     from .input_validator import InputValidator
+    from .learning_config import LearningModuleConfig
+    from .learning_evaluator import LearningEvaluator
     from .persistence_manager import LearningPersistenceManager
-    from .base_interface import BaseLearningInterface
 except ImportError as e:
     logger.warning(f"其他组件导入失败: {e}")
     LearningModuleConfig = None

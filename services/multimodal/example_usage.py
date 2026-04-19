@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena多模态文件系统使用示例
 Example Usage of Athena Multimodal File System
 """
 
+from typing import Any
+
 import requests
-from core.async_main import async_main
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import json
-from pathlib import Path
 
 # API基础URL
 BASE_URL = "http://localhost:8088"

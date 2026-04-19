@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 安全增强的多模态文件系统API
 Secure Enhanced Multimodal File System API
@@ -7,46 +6,47 @@ Secure Enhanced Multimodal File System API
 集成安全验证、权限控制、性能监控等功能
 """
 
-import sys
-from core.async_main import async_main
-import os
-from pathlib import Path
-from datetime import datetime
 import asyncio
-import json
 import hashlib
-import uuid
+import json
+import os
+import sys
 import time
-from typing import Dict, List, Any, Optional
-import logging
+import uuid
+from collections import defaultdict
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any
+
 from core.logging_config import setup_logging
 
 # 添加项目路径
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from fastapi import FastAPI, File, UploadFile, HTTPException, Form, Query, Header, Depends, status
-from fastapi.middleware.cors import CORSMiddleware
-
-from core.security.auth import ALLOWED_ORIGINS
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from fastapi.responses import FileResponse, JSONResponse, Response
-from pydantic import BaseModel, Field
-import uvicorn
-import aiofiles
-from PIL import Image
 import io
+
+import aiofiles
+import uvicorn
+from ai.ai_processor import ProcessingStatus, ProcessingType, ai_processor
+from base_settings_manager import get_settings_manager
+from batch.batch_operations import BatchOperationStatus, batch_operation_manager
+from cache_manager import FileCacheManager, cache_manager
+from fastapi import Depends, FastAPI, File, Form, HTTPException, Query, UploadFile, status
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, JSONResponse, Response
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from monitoring.metrics_collector import metrics_collector
+from monitoring.performance_monitor import monitor_performance, performance_monitor
+from PIL import Image
+from pydantic import BaseModel, Field
 
 # 导入安全模块
 from security.auth_manager import auth_manager, file_validator, permission_manager
-from cache_manager import cache_manager, FileCacheManager
-from base_settings_manager import get_settings_manager
-from monitoring.performance_monitor import performance_monitor, monitor_performance
-from monitoring.metrics_collector import metrics_collector
-from batch.batch_operations import batch_operation_manager, BatchOperationStatus
-from storage.distributed_storage import distributed_storage, StorageType, StorageTier
+from storage.distributed_storage import StorageTier, StorageType, distributed_storage
 from storage.storage_policy import storage_policy_manager
-from version.file_version_manager import file_version_manager, ChangeType
-from ai.ai_processor import ai_processor, ProcessingType, ProcessingStatus
+from version.file_version_manager import ChangeType, file_version_manager
+
+from core.security.auth import ALLOWED_ORIGINS
 
 # 日志配置
 # setup_logging()  # 日志配置已移至模块导入
@@ -84,35 +84,35 @@ class UploadResponse(BaseModel):
     filename: str | None = None
     file_type: str | None = None
     file_size: int | None = None
-    security_score: Optional[float] = Field(None, description="安全评分 0-100")
-    security_warnings: List[str] = Field(default_factory=list)
+    security_score: float | None = Field(None, description="安全评分 0-100")
+    security_warnings: list[str] = Field(default_factory=list)
     upload_time: str | None = None
 
 class UserInfo(BaseModel):
     user_id: str
     role: str
     name: str | None = None
-    permissions: List[str] = Field(default_factory=list)
+    permissions: list[str] = Field(default_factory=list)
 
 class FileResponseModel(BaseModel):
     success: bool
     message: str
-    file_info: Optional[Dict[str, Any]] = None
-    permissions: List[str] = Field(default_factory=list)
+    file_info: dict[str, Any] | None = None
+    permissions: list[str] = Field(default_factory=list)
 
 class SearchResponse(BaseModel):
     success: bool
     message: str
     total_count: int
-    files: List[Dict[str, Any]]
-    permissions: List[str] = Field(default_factory=list)
+    files: list[dict[str, Any]]
+    permissions: list[str] = Field(default_factory=list)
     took_seconds: float | None = None
 
 class StatsResponse(BaseModel):
     success: bool
-    stats: Dict[str, Any]
-    security_stats: Dict[str, Any]
-    performance_stats: Dict[str, Any]
+    stats: dict[str, Any]
+    security_stats: dict[str, Any]
+    performance_stats: dict[str, Any]
 
 # 性能监控
 class PerformanceMonitor:
@@ -138,7 +138,7 @@ class PerformanceMonitor:
             "avg_response_time": self.total_response_time / self.request_count if self.request_count > 0 else 0
         }, timeout=300)  # 5分钟缓存
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取性能统计"""
         uptime = time.time() - self.start_time
         return {
@@ -207,12 +207,14 @@ class SecureStorageManager:
             path.mkdir(parents=True, exist_ok=True)
 
     async def save_file_secure(self, file_content: bytes, filename: str,
-                           user_info: UserInfo, metadata: Dict[str, Any] = None) -> Dict[str, Any]:
+                           user_info: UserInfo, metadata: dict[str, Any] = None) -> dict[str, Any]:
         """安全保存文件"""
         try:
             start_time = time.time()
 
             # 1. 文件类型验证
+            import mimetypes
+
             content_type = mimetypes.guess_type(filename)
             type_result = file_validator.validate_file_type(filename, content_type)
             if not type_result["valid"]:
@@ -255,7 +257,7 @@ class SecureStorageManager:
             if not file_type:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"不支持的文件类型"
+                    detail="不支持的文件类型"
                 )
 
             # 生成唯一文件名
@@ -360,7 +362,7 @@ class SecureStorageManager:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"文件上传失败: {str(e)}"
-            )
+            ) from e
 
 # 全局存储管理器
 secure_storage = SecureStorageManager()
@@ -400,7 +402,7 @@ async def upload_file(
             file_metadata
         )
 
-        processing_time = time.time() - processing_start
+        time.time() - processing_start
         total_time = time.time() - start_time
 
         perf_monitor.log_request("upload", total_time, error=False)
@@ -426,7 +428,7 @@ async def upload_file(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"上传失败: {str(e)}"
-        )
+        ) from e
 
 @app.get("/download/{file_id}")
 async def download_file(
@@ -482,7 +484,7 @@ async def download_file(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"下载失败: {str(e)}"
-        )
+        ) from e
 
 @app.get("/search", response_model=SearchResponse)
 async def search_files(
@@ -613,8 +615,8 @@ async def get_stats(user_info: UserInfo = Depends(get_current_user)):
         # 安全统计
         security_stats = {
             "total_files_scanned": len(file_validator.scanned_files_cache),
-            "safe_files": sum(1 for r in file_validator.scanned_files_cache.values() if r.get("result", {}).get("safe", False) == True),
-            "dangerous_files": sum(1 for r in file_validator.scanned_files_cache.values() if r.get("result", {}).get("safe", False) == False),
+            "safe_files": sum(1 for r in file_validator.scanned_files_cache.values() if r.get("result", {}).get("safe", False)),
+            "dangerous_files": sum(1 for r in file_validator.scanned_files_cache.values() if not r.get("result", {}).get("safe", False)),
             "blocked_uploads": 0  # 可以从错误日志统计
         }
 
@@ -711,7 +713,7 @@ async def get_monitoring_dashboard(credentials: HTTPAuthorizationCredentials = D
 @app.get("/monitoring/metrics")
 @monitor_performance("/monitoring/metrics", "GET")
 async def get_metrics_summary(
-    metric_name: Optional[str] = Query(None, description="指标名称"),
+    metric_name: str | None = Query(None, description="指标名称"),
     hours: int = Query(1, description="时间范围(小时)", ge=1, le=168),
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
@@ -749,7 +751,7 @@ async def get_metrics_summary(
 @app.get("/monitoring/metrics/export")
 @monitor_performance("/monitoring/metrics/export", "GET")
 async def export_metrics(
-    metric_names: Optional[str] = Query(None, description="指标名称列表(逗号分隔)"),
+    metric_names: str | None = Query(None, description="指标名称列表(逗号分隔)"),
     hours: int = Query(24, description="时间范围(小时)", ge=1, le=168),
     format: str = Query("json", description="导出格式", regex="^(json|csv)$"),
     credentials: HTTPAuthorizationCredentials = Depends(security)
@@ -800,7 +802,7 @@ async def export_metrics(
 @app.get("/monitoring/alerts")
 @monitor_performance("/monitoring/alerts", "GET")
 async def get_monitoring_alerts(
-    level: Optional[str] = Query(None, description="告警级别", regex="^(warning|critical)$"),
+    level: str | None = Query(None, description="告警级别", regex="^(warning|critical)$"),
     hours: int = Query(24, description="时间范围(小时)", ge=1, le=168),
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
@@ -839,7 +841,7 @@ async def get_monitoring_alerts(
 @app.post("/monitoring/metrics/custom")
 @monitor_performance("/monitoring/metrics/custom", "POST")
 async def add_custom_metric(
-    metric_data: Dict[str, Any],
+    metric_data: dict[str, Any],
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
     """添加自定义指标"""
@@ -888,7 +890,7 @@ async def add_custom_metric(
 @app.get("/monitoring/performance/api")
 @monitor_performance("/monitoring/performance/api", "GET")
 async def get_api_performance_stats(
-    endpoint: Optional[str] = Query(None, description="API端点"),
+    endpoint: str | None = Query(None, description="API端点"),
     minutes: int = Query(60, description="时间范围(分钟)", ge=5, le=1440),
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
@@ -957,8 +959,8 @@ async def get_api_performance_stats(
 @app.get("/monitoring/performance/files")
 @monitor_performance("/monitoring/performance/files", "GET")
 async def get_file_processing_stats(
-    file_type: Optional[str] = Query(None, description="文件类型"),
-    operation: Optional[str] = Query(None, description="操作类型"),
+    file_type: str | None = Query(None, description="文件类型"),
+    operation: str | None = Query(None, description="操作类型"),
     hours: int = Query(24, description="时间范围(小时)", ge=1, le=168),
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
@@ -1035,8 +1037,8 @@ async def get_file_processing_stats(
 class BatchOperationRequest(BaseModel):
     """批量操作请求"""
     operation_type: str = Field(..., description="操作类型: upload, download, process, analyze, delete")
-    files: List[Dict[str, Any]] = Field(..., description="文件列表")
-    config: Optional[Dict[str, Any]] = Field(default_factory=dict, description="配置参数")
+    files: list[dict[str, Any]] = Field(..., description="文件列表")
+    config: dict[str, Any] | None = Field(default_factory=dict, description="配置参数")
 
 class BatchOperationResponse(BaseModel):
     """批量操作响应"""
@@ -1148,7 +1150,7 @@ async def get_batch_operation_status(
 @app.get("/batch/operations")
 @monitor_performance("/batch/operations", "GET")
 async def get_user_batch_operations(
-    status: Optional[str] = Query(None, description="状态过滤"),
+    status: str | None = Query(None, description="状态过滤"),
     limit: int = Query(50, description="返回数量限制", ge=1, le=1000),
     user_info: UserInfo = Depends(get_current_user)
 ):
@@ -1160,7 +1162,7 @@ async def get_user_batch_operations(
             try:
                 status_filter = BatchOperationStatus(status)
             except ValueError:
-                raise HTTPException(status_code=400, detail=f"无效的状态: {status}")
+                raise HTTPException(status_code=400, detail=f"无效的状态: {status}") from None
 
         # 获取操作列表
         operations = batch_operation_manager.get_user_operations(
@@ -1302,7 +1304,7 @@ async def get_batch_operation_results(
 @app.post("/batch/upload")
 @monitor_performance("/batch/upload", "POST")
 async def batch_upload_files(
-    files: List[UploadFile] = File(...),
+    files: list[UploadFile] = File(...),
     metadata: str = Form("{}"),
     user_info: UserInfo = Depends(get_current_user)
 ):
@@ -1409,7 +1411,7 @@ async def get_batch_statistics(
 @app.post("/storage/configure")
 @monitor_performance("/storage/configure", "POST")
 async def configure_distributed_storage(
-    config: Dict[str, Any],
+    config: dict[str, Any],
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
     """配置分布式存储"""
@@ -1569,7 +1571,7 @@ async def cleanup_expired_files(
 @app.post("/storage/policies")
 @monitor_performance("/storage/policies", "POST")
 async def create_storage_policy(
-    policy_data: Dict[str, Any],
+    policy_data: dict[str, Any],
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
     """创建存储策略"""
@@ -1676,7 +1678,7 @@ async def get_storage_policy(
 @monitor_performance("/storage/policies/{policy_id}/assign", "POST")
 async def assign_storage_policy(
     policy_id: str,
-    assignment_data: Dict[str, Any],
+    assignment_data: dict[str, Any],
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
     """为文件分配存储策略"""
@@ -1752,7 +1754,7 @@ async def export_storage_policies(
 @app.post("/storage/policies/import")
 @monitor_performance("/storage/policies/import", "POST")
 async def import_storage_policies(
-    import_data: Dict[str, Any],
+    import_data: dict[str, Any],
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
     """导入存储策略配置"""
@@ -1800,9 +1802,9 @@ async def create_file_version(
     file_id: str,
     file: UploadFile = File(...),
     change_type: str = Form("update"),
-    parent_version_id: Optional[str] = Form(None),
-    branch_name: Optional[str] = Form(None),
-    comment: Optional[str] = Form(None),
+    parent_version_id: str | None = Form(None),
+    branch_name: str | None = Form(None),
+    comment: str | None = Form(None),
     user_info: UserInfo = Depends(get_current_user)
 ):
     """创建文件版本"""
@@ -1811,7 +1813,7 @@ async def create_file_version(
         try:
             change_enum = ChangeType(change_type)
         except ValueError:
-            raise HTTPException(status_code=400, detail=f"无效的变更类型: {change_type}")
+            raise HTTPException(status_code=400, detail=f"无效的变更类型: {change_type}") from None
 
         # 读取文件内容
         file_content = await file.read()
@@ -2037,7 +2039,7 @@ async def compare_versions(
 async def revert_to_version(
     file_id: str,
     version_id: str,
-    revert_data: Dict[str, Any] = None,
+    revert_data: dict[str, Any] = None,
     user_info: UserInfo = Depends(get_current_user)
 ):
     """回滚到指定版本"""
@@ -2085,7 +2087,7 @@ async def revert_to_version(
 @monitor_performance("/files/{file_id}/versions/branch", "POST")
 async def create_version_branch(
     file_id: str,
-    branch_data: Dict[str, Any],
+    branch_data: dict[str, Any],
     user_info: UserInfo = Depends(get_current_user)
 ):
     """创建版本分支"""
@@ -2229,7 +2231,7 @@ async def get_version_statistics(
 @app.post("/version/cleanup")
 @monitor_performance("/version/cleanup", "POST")
 async def cleanup_old_versions(
-    cleanup_data: Dict[str, Any] = None,
+    cleanup_data: dict[str, Any] = None,
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
     """清理旧版本"""
@@ -2270,7 +2272,7 @@ async def cleanup_old_versions(
 async def submit_ai_processing(
     file_id: str,
     processing_type: str,
-    options: Dict[str, Any] = None,
+    options: dict[str, Any] = None,
     user_info: UserInfo = Depends(get_current_user)
 ):
     """提交AI处理任务"""
@@ -2282,7 +2284,7 @@ async def submit_ai_processing(
             raise HTTPException(
                 status_code=400,
                 detail=f"不支持的处理类型: {processing_type}"
-            )
+            ) from None
 
         # 获取文件路径（这里需要根据实际的存储实现来获取）
         file_path = f"/tmp/uploads/{file_id}"  # 简化实现
@@ -2462,7 +2464,7 @@ async def get_supported_processing_types(
 @app.post("/ai/batch/process")
 @monitor_performance("/ai/batch/process", "POST")
 async def batch_ai_processing(
-    batch_data: Dict[str, Any],
+    batch_data: dict[str, Any],
     user_info: UserInfo = Depends(get_current_user)
 ):
     """批量AI处理"""
@@ -2484,7 +2486,7 @@ async def batch_ai_processing(
             raise HTTPException(
                 status_code=400,
                 detail=f"不支持的处理类型: {processing_type}"
-            )
+            ) from None
 
         # 限制批量处理数量
         max_batch_size = 10

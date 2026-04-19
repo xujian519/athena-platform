@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 跨系统接口网关 - 统一对外服务接口
 Cross System Gateway - Unified External Service Interface
@@ -17,7 +18,7 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 import aiohttp
 
@@ -404,7 +405,7 @@ class CrossSystemGateway:
         method: str,
         url: str,
         headers: dict[str, str],
-        params: dict[str, Any],        json_data: dict[str, Any],        data: str | Optional[bytes],
+        params: dict[str, Any],        json_data: dict[str, Any],        data: str | bytes | None,
         timeout: float,
     ):
         """执行HTTP请求"""

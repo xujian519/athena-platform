@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 自适应元规划器 - 公共接口
 Adaptive Meta Planner - Public Interface
@@ -13,6 +14,15 @@ Adaptive Meta Planner - Public Interface
 """
 
 # 导入常量
+# 导入异常类 (从父模块重新导出)
+from ..exceptions import (
+    ConfigurationError,
+    PerformanceTrackingError,
+    StrategySelectionError,
+    TaskExecutionError,
+    TaskValidationError,
+    WorkflowExecutionError,
+)
 from .constants import (
     DEFAULT_SIMILARITY_THRESHOLD,
     MAX_WORKFLOW_PATTERNS,
@@ -25,16 +35,6 @@ from .core import AdaptiveMetaPlanner, get_adaptive_meta_planner, plan_adaptive
 from .performance import PerformanceTracker
 from .types import StrategyPerformance, WorkflowPattern
 from .workflow_reuse import WorkflowReuseManager
-
-# 导入异常类 (从父模块重新导出)
-from ..exceptions import (
-    ConfigurationError,
-    PerformanceTrackingError,
-    StrategySelectionError,
-    TaskExecutionError,
-    TaskValidationError,
-    WorkflowExecutionError,
-)
 
 # 导出公共接口
 __all__ = [

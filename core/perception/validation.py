@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 感知模块统一输入验证框架
 Perception Module Unified Input Validation Framework
@@ -11,8 +11,8 @@ Perception Module Unified Input Validation Framework
 版本: 1.0.0
 """
 
-import re
 import logging
+import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum

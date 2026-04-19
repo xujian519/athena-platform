@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小娜专利命名系统 - 技术分析器
 Xiaona Patent Naming System - Technical Analyzer
@@ -15,7 +16,6 @@ import re
 from typing import Any
 
 from .types import PatentNamingRequest
-from .rule_loader import RuleLoader
 
 
 class TechnicalAnalyzer:

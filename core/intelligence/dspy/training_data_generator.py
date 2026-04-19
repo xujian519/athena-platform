@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 DSPy训练数据生成器
 DSPy Training Data Generator for Athena Platform
@@ -13,9 +14,9 @@ DSPy Training Data Generator for Athena Platform
 import json
 import logging
 import random
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.logging_config import setup_logging
 
@@ -568,7 +569,7 @@ class TrainingDataGenerator:
         logger.info(f"生成了 {len(cases)} 个案例")
         return cases
 
-    def save_examples(self, cases: list[str]]:
+    def save_examples(self, cases: list[str], output_file: str = "examples.json", format: str = "json"):
         """保存案例到文件
 
         Args:
@@ -604,7 +605,6 @@ class TrainingDataGenerator:
 
         elif format == "dspy":
             # 保存为DSPy Python格式
-            import dspy
 
             dspy_examples = [case.to_dspy_example() for case in cases]
 

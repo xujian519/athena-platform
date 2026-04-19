@@ -3,11 +3,11 @@
 保存爸爸的缠中说禅股票学习笔记到个人爱好
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-from pathlib import Path
+import sqlite3
 from datetime import datetime
+from pathlib import Path
+
 
 def save_chanshuozen_notes() -> None:
     """保存缠中说禅学习笔记到数据库"""
@@ -332,7 +332,7 @@ def save_chanshuozen_notes() -> None:
     conn.close()
 
     print('✅ 缠中说禅股票学习笔记已保存到个人数据库')
-    print(f'✅ 新增记录：3个（如果之前没有记录）')
+    print('✅ 新增记录：3个（如果之前没有记录）')
     print('✅ 保存内容：')
     print('  - 理论框架总览')
     print('  - 核心定理详解')

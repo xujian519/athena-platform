@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 测试配置文件
 Test Configuration
@@ -16,11 +16,12 @@ sys.path.insert(0, str(project_root))
 sys.path.insert(0, str(project_root / "config"))
 sys.path.insert(0, str(project_root / "core"))
 
-import pytest
 import asyncio
-from typing import Generator
-import tempfile
 import shutil
+import tempfile
+from collections.abc import Generator
+
+import pytest
 
 
 @pytest.fixture(scope="session")

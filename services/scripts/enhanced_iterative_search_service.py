@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 增强版迭代式专利搜索服务
 Enhanced Iterative Patent Search Service
@@ -12,28 +11,22 @@ Enhanced Iterative Patent Search Service
 5. 搜索结果智能排序
 """
 
-import asyncio
-from core.async_main import async_main
 import json
-import logging
-from core.logging_config import setup_logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from fastapi import BackgroundTasks, FastAPI, HTTPException, Query
-from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 # 导入我们的搜索器
 from core.iterative_patent_search import (
-    GooglePatentMeta,
     IterativePatentSearcher,
     PatentInfo,
 )
+from core.logging_config import setup_logging
 
 # 导入统一认证模块
-from shared.auth.auth_middleware import create_auth_middleware, setup_cors
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -55,35 +48,35 @@ searcher = None
 class SearchRequest(BaseModel):
     query: str = Field(..., description='搜索查询词')
     max_results: int = Field(50, ge=1, le=200, description='最大结果数')
-    search_fields: List[str] = Field(
+    search_fields: list[str] = Field(
         default=['patent_name', 'abstract', 'claims_content'],
         description='搜索字段'
     )
-    filters: Optional[Dict[str, Any]] = Field(default=None, description='搜索过滤条件')
+    filters: dict[str, Any] | None = Field(default=None, description='搜索过滤条件')
     boost_exact_match: bool = Field(default=True, description='是否提升完全匹配的权重')
 
 class PatentResponse(BaseModel):
     id: str
     patent_name: str
     abstract: str
-    claims_content: Optional[str]
+    claims_content: str | None
     applicant: str
-    inventor: Optional[str]
-    application_number: Optional[str]
-    publication_number: Optional[str]
-    ipc_main_class: Optional[str]
+    inventor: str | None
+    application_number: str | None
+    publication_number: str | None
+    ipc_main_class: str | None
     citation_count: int
     cited_count: int
     relevance_score: float
-    google_meta: Optional[Dict[str, Any]] = None
+    google_meta: dict[str, Any] | None = None
 
 class SearchResponse(BaseModel):
     query: str
     total_results: int
-    patents: List[PatentResponse]
+    patents: list[PatentResponse]
     search_time: float
     iterations: int
-    suggestions: Optional[List[str]] = None
+    suggestions: list[str] | None = None
 
 class ExportRequest(BaseModel):
     search_id: str
@@ -133,7 +126,7 @@ async def health_check():
                     'timestamp': datetime.now().isoformat()
                 }
     except Exception as e:
-        raise HTTPException(status_code=503, detail=f"Service unhealthy: {str(e)}")
+        raise HTTPException(status_code=503, detail=f"Service unhealthy: {str(e)}") from e
 
 @app.post('/api/v2/search', response_model=SearchResponse)
 async def search_patents(request: SearchRequest, background_tasks: BackgroundTasks):
@@ -209,7 +202,7 @@ async def search_patents(request: SearchRequest, background_tasks: BackgroundTas
 
     except Exception as e:
         logger.error(f"搜索失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Search failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Search failed: {str(e)}") from e
 
 @app.get('/api/v2/patent/{patent_id}')
 async def get_patent_detail(patent_id: str):
@@ -249,7 +242,7 @@ async def get_patent_detail(patent_id: str):
         raise
     except Exception as e:
         logger.error(f"获取专利详情失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Failed to get patent detail: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to get patent detail: {str(e)}") from e
 
 @app.post('/api/v2/export')
 async def export_results(request: ExportRequest, background_tasks: BackgroundTasks):
@@ -280,7 +273,7 @@ async def export_results(request: ExportRequest, background_tasks: BackgroundTas
 
     except Exception as e:
         logger.error(f"导出失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Export failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Export failed: {str(e)}") from e
 
 @app.get('/api/v2/suggestions/{query}')
 async def get_search_suggestions(query: str, limit: int = Query(10, ge=1, le=20)):
@@ -290,7 +283,7 @@ async def get_search_suggestions(query: str, limit: int = Query(10, ge=1, le=20)
         return {'suggestions': suggestions}
     except Exception as e:
         logger.error(f"获取搜索建议失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Failed to get suggestions: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to get suggestions: {str(e)}") from e
 
 @app.get('/api/v2/statistics')
 async def get_search_statistics():
@@ -305,10 +298,10 @@ async def get_search_statistics():
         return stats
     except Exception as e:
         logger.error(f"获取统计信息失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Failed to get statistics: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to get statistics: {str(e)}") from e
 
 # 辅助函数
-async def _generate_suggestions(query: str, results: List[PatentInfo]) -> List[str]:
+async def _generate_suggestions(query: str, results: list[PatentInfo]) -> list[str]:
     """生成搜索建议"""
     suggestions = []
 
@@ -348,7 +341,7 @@ async def _generate_suggestions(query: str, results: List[PatentInfo]) -> List[s
 
     return suggestions[:5]  # 最多返回5个建议
 
-async def _find_similar_patents(patent_id: str, limit: int = 5) -> List[Dict]:
+async def _find_similar_patents(patent_id: str, limit: int = 5) -> list[dict]:
     """查找相似专利"""
     try:
         # 获取当前专利信息
@@ -392,7 +385,7 @@ async def _find_similar_patents(patent_id: str, limit: int = 5) -> List[Dict]:
         logger.error(f"查找相似专利失败: {str(e)}")
         return []
 
-async def _generate_search_suggestions(query: str, limit: int) -> List[str]:
+async def _generate_search_suggestions(query: str, limit: int) -> list[str]:
     """生成搜索建议"""
     suggestions = []
 
@@ -440,7 +433,7 @@ async def _get_total_patents() -> int:
     except (ConnectionError, OSError, TimeoutError):
         return 0
 
-async def _get_database_info() -> Dict:
+async def _get_database_info() -> dict:
     """获取数据库信息"""
     try:
         with searcher.conn.cursor() as cursor:

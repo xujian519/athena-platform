@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Athena反思引擎
 Reflection Engine for Athena Platform

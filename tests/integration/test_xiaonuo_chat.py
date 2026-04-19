@@ -4,15 +4,19 @@
 Test Xiaonuo Chat Functionality
 """
 
-import requests
-import json
 import sys
-from datetime import datetime
+
+import requests
 
 # 添加项目路径
 sys.path.append('/Users/xujian/Athena工作平台')
-from core.memory.agent_identity_memory import check_name, get_agent_identity, get_lyra_learning_record
-from core.memory.lyra_prompt_memory import get_lyra_identity, get_lyra_methodology
+from core.memory.agent_identity_memory import (
+    check_name,
+    get_agent_identity,
+    get_lyra_learning_record,
+)
+from core.memory.lyra_prompt_memory import get_lyra_identity
+
 
 def test_xiaonuo_responses():
     """测试小诺的响应"""
@@ -24,7 +28,7 @@ def test_xiaonuo_responses():
         response = requests.get("http://localhost:8005/")
         if response.status_code == 200:
             xiaonuo_info = response.json()
-            print(f"✅ 小诺正在运行")
+            print("✅ 小诺正在运行")
             print(f"   角色: {xiaonuo_info.get('role')}")
             print(f"   状态: {xiaonuo_info.get('status')}")
         else:
@@ -122,7 +126,7 @@ YunPat是平台的专利管理专家，我牢记着：
 {xiaonuo_info.get('message', '我是小诺，平台总调度官')}
 
 需要我帮您调用YunPat吗？"""
-        except:
+        except Exception:
             return f"""YunPat是云熙智能体，负责专利管理。
 
 {xiaonuo_info.get('message', '我是小诺')}"""

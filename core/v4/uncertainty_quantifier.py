@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 不确定性量化模块
 Uncertainty Quantifier Module

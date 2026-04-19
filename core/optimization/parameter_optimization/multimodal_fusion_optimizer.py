@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 多模态融合优化器(简化版)
 Multimodal Fusion Optimizer (Simplified)
@@ -10,7 +11,7 @@ Multimodal Fusion Optimizer (Simplified)
 """
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import optuna
 

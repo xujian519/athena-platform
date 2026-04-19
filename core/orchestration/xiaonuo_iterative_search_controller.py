@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 小诺迭代式搜索控制器
 Xiaonuo Iterative Search Controller
@@ -11,8 +12,10 @@ Xiaonuo Iterative Search Controller
 
 import logging
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 # 添加路径
 sys.path.append("/Users/xujian/Athena工作平台/services/athena_iterative_search")
@@ -71,7 +74,7 @@ class XiaonuoIterativeSearchController:
             self.search_engine = AthenaEnhancedIterativeSearchEngine(config)
             self.is_real = True
             print("   ✅ 已加载真实迭代式搜索引擎")
-        except:
+        except Exception:
             # 使用mock实现
             self.search_engine = MockIterativeSearchEngine()
             self.is_real = False
@@ -325,7 +328,7 @@ class XiaonuoIterativeSearchController:
                     "related_concepts": getattr(expansion, "related_concepts", []),
                     "confidence": getattr(expansion, "confidence", 0.7),
                 }
-        except Exception:
+        except Exception as e:
             logger.error(f"捕获异常: {e}", exc_info=True)
         # 返回默认扩展
         return {

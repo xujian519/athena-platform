@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律向量检索服务 - 生产环境版本
 Legal Vector Retrieval Service - Production Version
@@ -18,9 +19,9 @@ import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-import requests
+import numpy as np
 
 from core.logging_config import setup_logging
 
@@ -156,7 +157,7 @@ class LegalVectorRetrievalService:
             self.requests = requests
         except ImportError:
             logger.error("❌ requests库未安装,服务无法正常运行")
-            raise ImportError("requests库是必需的")
+            raise ImportError("requests库是必需的") from None
 
         # 验证Qdrant连接
         self._verify_qdrant_connection()

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 自适应元规划器 - 性能跟踪器
 Adaptive Meta Planner - Performance Tracker
@@ -14,7 +15,6 @@ from typing import Any
 
 from ..models import ComplexityLevel, StrategyType
 from .types import StrategyPerformance
-
 
 logger = logging.getLogger(__name__)
 

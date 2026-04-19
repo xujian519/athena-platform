@@ -5,12 +5,10 @@
 """
 
 import json
-from core.async_main import async_main
 import sqlite3
-from datetime import datetime
-from typing import Dict, List, Optional, Any, Tuple
 from pathlib import Path
-import re
+from typing import Any
+
 
 class XiaonuoKnowledgeBase:
     """小诺知识库 - 帮助诺诺更好地为爸爸服务"""
@@ -162,7 +160,7 @@ class XiaonuoKnowledgeBase:
         return knowledge_id
 
     def search_knowledge(self, query: str, category: str = None,
-                        limit: int = 10) -> List[Dict]:
+                        limit: int = 10) -> list[dict]:
         """搜索知识"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
@@ -232,7 +230,7 @@ class XiaonuoKnowledgeBase:
 
         return knowledge_list
 
-    def get_related_knowledge(self, knowledge_id: int, limit: int = 5) -> List[Dict]:
+    def get_related_knowledge(self, knowledge_id: int, limit: int = 5) -> list[dict]:
         """获取相关知识"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
@@ -272,7 +270,7 @@ class XiaonuoKnowledgeBase:
 
         return related_list
 
-    def get_knowledge_summary(self, category: str = None) -> Dict:
+    def get_knowledge_summary(self, category: str = None) -> dict:
         """获取知识库摘要"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
@@ -342,7 +340,7 @@ class XiaonuoKnowledgeBase:
                     source="交互学习"
                 )
 
-    def _extract_keywords(self, text: str) -> List[str]:
+    def _extract_keywords(self, text: str) -> list[str]:
         """提取关键词"""
         # 简单的关键词提取
         keywords = []
@@ -422,7 +420,7 @@ class XiaonuoKnowledgeBase:
 
     def import_knowledge(self, file_path: str) -> int:
         """导入知识库"""
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             knowledge_data = json.load(f)
 
         imported_count = 0

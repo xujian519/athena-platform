@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 验证国内LLM API密钥是否可用
 Verify Domestic LLM API Keys
@@ -15,8 +16,8 @@ Verify Domestic LLM API Keys
 import asyncio
 import os
 import sys
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 # 添加项目根目录到路径
 project_root = Path(__file__).parent.parent.parent
@@ -85,7 +86,7 @@ class APIKeyVerifier:
                 latency_ms = (datetime.now() - start_time).total_seconds() * 1000
 
                 if response and response.content:
-                    print(f"✅ 请求成功!")
+                    print("✅ 请求成功!")
                     print(f"📊 响应延迟: {latency_ms:.0f}ms")
                     print(f"🤖 响应内容: {response.content[:100]}...")
 
@@ -99,7 +100,7 @@ class APIKeyVerifier:
                     }
                     self.results["passed"] += 1
                 else:
-                    print(f"❌ 响应为空")
+                    print("❌ 响应为空")
                     result = {
                         "provider": provider,
                         "model": model_id,

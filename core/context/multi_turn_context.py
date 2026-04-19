@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 多轮对话上下文管理器
 
@@ -10,10 +11,10 @@
 
 import logging
 import re
-from dataclasses import asdict, dataclass, field
-from datetime import datetime, timedelta
+from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

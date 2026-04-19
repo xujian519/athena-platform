@@ -3,11 +3,11 @@
 更新曹玉琳档案的可信度评级
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-from pathlib import Path
+import sqlite3
 from datetime import datetime
+from pathlib import Path
+
 
 def update_caoyulin_credibility() -> None:
     """更新曹玉琳的可信度评级"""

@@ -4,7 +4,6 @@ import json
 import logging
 import os
 from pathlib import Path
-from typing import List, Optional
 
 from mcp.server import FastMCP
 from pydantic import BaseModel, Field
@@ -26,7 +25,7 @@ class DownloadPatentResponse(BaseModel):
     """Response for downloading a single patent."""
 
     patent_number: str = Field(..., description="The patent number")
-    file_path: Optional[str] = Field(None, description="Path to the downloaded PDF file")
+    file_path: str | None = Field(None, description="Path to the downloaded PDF file")
 
 
 class DownloadPatentsResponse(BaseModel):
@@ -35,10 +34,10 @@ class DownloadPatentsResponse(BaseModel):
     total: int = Field(..., description="Total number of patents processed")
     successful: int = Field(..., description="Number of successfully downloaded patents")
     failed: int = Field(..., description="Number of failed downloads")
-    successful_patents: List[str] = Field(
+    successful_patents: list[str] = Field(
         default_factory=list, description="List of successfully downloaded patent numbers"
     )
-    failed_patents: List[str] = Field(default_factory=list, description="List of failed patent numbers")
+    failed_patents: list[str] = Field(default_factory=list, description="List of failed patent numbers")
     output_directory: str = Field(..., description="Directory where patents were saved")
 
 
@@ -47,7 +46,7 @@ class PatentInfoResponse(BaseModel):
 
     patent_number: str = Field(..., description="The patent number")
     title: str = Field(..., description="Patent title")
-    inventors: List[str] = Field(default_factory=list, description="List of inventors")
+    inventors: list[str] = Field(default_factory=list, description="List of inventors")
     assignee: str = Field(..., description="Patent assignee/owner")
     publication_date: str = Field(..., description="Publication date")
     abstract: str = Field(..., description="Patent abstract")
@@ -64,9 +63,9 @@ def _load_config() -> dict:
     config_path = _get_config_path()
     if config_path.exists():
         try:
-            with open(config_path, "r", encoding="utf-8") as f:
+            with open(config_path, encoding="utf-8") as f:
                 return json.load(f)
-        except (json.JSONDecodeError, IOError) as e:
+        except (OSError, json.JSONDecodeError) as e:
             logger.warning(f"Failed to load config file: {e}. Using defaults.")
     return {}
 
@@ -78,7 +77,7 @@ def _save_config(config: dict) -> None:
         config_path.parent.mkdir(parents=True, exist_ok=True)
         with open(config_path, "w", encoding="utf-8") as f:
             json.dump(config, f, indent=2, ensure_ascii=False)
-    except IOError as e:
+    except OSError as e:
         logger.error(f"Failed to save config file: {e}")
 
 
@@ -101,7 +100,7 @@ def _set_default_output_dir(output_dir: str) -> None:
     _save_config(config)
 
 
-def create_mcp_server(output_dir: Optional[str] = None) -> FastMCP:
+def create_mcp_server(output_dir: str | None = None) -> FastMCP:
     """Create and configure the MCP server.
 
     Args:
@@ -115,7 +114,7 @@ def create_mcp_server(output_dir: Optional[str] = None) -> FastMCP:
         _set_default_output_dir(output_dir)
 
     @server.tool(structured_output=True)
-    def download_patent(patent_number: str, output_dir: Optional[str] = None) -> DownloadPatentResponse:
+    def download_patent(patent_number: str, output_dir: str | None = None) -> DownloadPatentResponse:
         """Download a single patent PDF from Google Patents.
 
         Args:
@@ -164,7 +163,7 @@ def create_mcp_server(output_dir: Optional[str] = None) -> FastMCP:
             )
 
     @server.tool(structured_output=True)
-    def download_patents(patent_numbers: List[str], output_dir: Optional[str] = None) -> DownloadPatentsResponse:
+    def download_patents(patent_numbers: list[str], output_dir: str | None = None) -> DownloadPatentsResponse:
         """Download multiple patent PDFs from Google Patents.
 
         Args:
@@ -221,7 +220,7 @@ def create_mcp_server(output_dir: Optional[str] = None) -> FastMCP:
 
     @server.tool(structured_output=True)
     def download_patents_from_file(
-        file_path: str, has_header: bool = False, output_dir: Optional[str] = None
+        file_path: str, has_header: bool = False, output_dir: str | None = None
     ) -> DownloadPatentsResponse:
         """Download multiple patent PDFs from a file (txt or csv).
 

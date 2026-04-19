@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 配置智谱清言大模型
 Configure Zhipu AI GLM-4
@@ -12,11 +11,10 @@ Configure Zhipu AI GLM-4
 """
 
 import json
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import logging
 import sys
+from typing import Any
 
-import requests
 from domestic_llm_integration import DomesticLLMManager, LLMProvider
 from universal_ai_drawing_platform import (
     DrawingType,
@@ -47,7 +45,7 @@ def configure_zhipu_llm() -> Any:
             api_key=api_key,
             model_name='glm-4'
         )
-        logger.info(f"✅ 智谱清言GLM-4 已成功配置")
+        logger.info("✅ 智谱清言GLM-4 已成功配置")
         logger.info(f"   API Key: {api_key[:10]}...{api_key[-10:]}")
 
         # 测试连接
@@ -59,7 +57,7 @@ def configure_zhipu_llm() -> Any:
 
 def test_zhipu_connection(llm_manager) -> Any:
     """测试智谱清言连接"""
-    logger.info(f"\n🔍 测试智谱清言API连接...")
+    logger.info("\n🔍 测试智谱清言API连接...")
 
     test_prompts = [
         '用户登录系统的流程图',
@@ -74,20 +72,20 @@ def test_zhipu_connection(llm_manager) -> Any:
             # 调用智谱清言生成绘图描述
             enhanced_description = llm_manager.generate_drawing_description(prompt, LLMProvider.ZHIPU)
 
-            logger.info(f"   ✅ 增强描述生成成功")
+            logger.info("   ✅ 增强描述生成成功")
             logger.info(f"   📝 增强描述: {enhanced_description[:150]}...")
-            logger.info(f"   📊 模型: 智谱清言GLM-4")
+            logger.info("   📊 模型: 智谱清言GLM-4")
 
         except Exception as e:
             logger.info(f"   ❌ 生成失败: {e}")
             return False
 
-    logger.info(f"\n🎉 智谱清言API测试通过！")
+    logger.info("\n🎉 智谱清言API测试通过！")
     return True
 
 def demo_enhanced_drawing() -> Any:
     """演示增强的绘图功能"""
-    logger.info(f"\n\n🎨 智谱清言增强绘图演示")
+    logger.info("\n\n🎨 智谱清言增强绘图演示")
     logger.info(str('=' * 50))
 
     # 创建增强的绘图引擎
@@ -145,7 +143,7 @@ def demo_enhanced_drawing() -> Any:
         result = drawing_engine.generate_drawing(request)
 
         if result.success:
-            logger.info(f"   ✅ 绘图生成成功")
+            logger.info("   ✅ 绘图生成成功")
             logger.info(f"   📊 置信度: {result.confidence:.2f}")
             logger.info(f"   ⏱️ 处理时间: {result.processing_time:.2f}秒")
             logger.info(f"   🎯 质量分数: {result.quality_score:.2f}")
@@ -196,18 +194,18 @@ def main() -> None:
     # 3. 演示增强绘图功能
     demo_enhanced_drawing()
 
-    logger.info(f"\n\n🎉 配置完成！")
+    logger.info("\n\n🎉 配置完成！")
     logger.info(str('=' * 50))
     logger.info('✅ 智谱清言GLM-4已成功集成')
     logger.info('✅ API连接测试通过')
     logger.info('✅ 绘图功能增强演示完成')
 
-    logger.info(f"\n💡 使用方法:")
+    logger.info("\n💡 使用方法:")
     logger.info('   1. 在绘图时自动使用智谱清言增强描述')
     logger.info('   2. 获得更准确、更详细的绘图指令')
     logger.info('   3. 支持复杂的技术和专利图纸生成')
 
-    logger.info(f"\n🎯 下一步:")
+    logger.info("\n🎯 下一步:")
     logger.info('   1. 开始使用增强的绘图功能')
     logger.info('   2. 根据使用效果调整参数')
     logger.info('   3. 探索更多绘图场景')

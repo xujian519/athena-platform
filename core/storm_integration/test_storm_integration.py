@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Co-STORM + Athena 集成测试脚本
 
@@ -19,7 +20,7 @@ import logging
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 # 添加项目根目录到路径
 project_root = Path(__file__).parent.parent.parent
@@ -34,7 +35,6 @@ from core.storm_integration.patent_agents import (
 from core.storm_integration.patent_perspectives import (
     PatentBasicInfo,
     PatentPerspectiveDiscoverer,
-    discover_patent_perspectives,
 )
 
 # 配置日志

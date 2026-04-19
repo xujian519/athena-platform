@@ -1,19 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 SketchAgent Flask API Server
 SketchAgent绘图服务API
 """
 
-import base64
-import io
-import json
 import logging
 
 import torch
-import torch.nn as nn
 from flask import Flask, jsonify, request
-from PIL import Image
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -52,19 +46,19 @@ class SketchAgentModel:
         """生成模拟图纸"""
         # 创建简单的SVG图纸
         svg_template = (
-            '<svg width='800' height='600' xmlns='http://www.w3.org/2000/svg'>'
-            '<rect x='100' y='100' width='200' height='100' fill='none' stroke='black' stroke-width='2'/>'
-            '<rect x='400' y='100' width='200' height='100' fill='none' stroke='black' stroke-width='2'/>'
-            '<line x1='300' y1='150' x2='400' y2='150' stroke='black' stroke-width='2' marker-end='url(#arrow)'/>'
-            '<text x='200' y='150' text-anchor='middle' font-family='Arial' font-size='14'>Input</text>'
-            '<text x='500' y='150' text-anchor='middle' font-family='Arial' font-size='14'>Output</text>'
-            '<text x='350' y='250' text-anchor='middle' font-family='Arial' font-size='12'>{desc}</text>'
-            '<defs>'
-            '<marker id='arrow' marker_width='10' marker_height='10' ref_x='9' ref_y='3' orient='auto' marker_units='stroke_width'>'
-            '<path d='M0,0 L0,6 L9,3 z' fill='black'/>'
-            '</marker>'
-            '</defs>'
-            '</svg>'
+            "<svg width='800' height='600' xmlns='http://www.w3.org/2000/svg'>"
+            "<rect x='100' y='100' width='200' height='100' fill='none' stroke='black' stroke-width='2'/>"
+            "<rect x='400' y='100' width='200' height='100' fill='none' stroke='black' stroke-width='2'/>"
+            "<line x1='300' y1='150' x2='400' y2='150' stroke='black' stroke-width='2' marker-end='url(#arrow)'/>"
+            "<text x='200' y='150' text-anchor='middle' font-family='Arial' font-size='14'>Input</text>"
+            "<text x='500' y='150' text-anchor='middle' font-family='Arial' font-size='14'>Output</text>"
+            "<text x='350' y='250' text-anchor='middle' font-family='Arial' font-size='12'>{desc}</text>"
+            "<defs>"
+            "<marker id='arrow' marker_width='10' marker_height='10' ref_x='9' ref_y='3' orient='auto' marker_units='stroke_width'>"
+            "<path d='M0,0 L0,6 L9,3 z' fill='black'/>"
+            "</marker>"
+            "</defs>"
+            "</svg>"
         )
 
         svg_content = svg_template.format(desc=description[:50] + '...')
@@ -97,7 +91,7 @@ def generate_drawing():
         data = request.get_json()
         description = data.get('description', '')
         drawing_type = data.get('type', 'flowchart')
-        style = data.get('style', 'technical')
+        data.get('style', 'technical')
 
         if not description:
             return jsonify({'error': 'Description is required'}), 400

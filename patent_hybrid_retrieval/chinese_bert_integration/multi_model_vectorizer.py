@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 多模型向量融合器
 Multi-Model Vectorizer
@@ -8,15 +7,12 @@ Multi-Model Vectorizer
 """
 
 import logging
-import os
-import pickle
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 import numpy as np
-import torch
 from intelligent_model_selector import IntelligentModelSelector
 from model_manager import ChineseBERTModelManager
 
@@ -62,11 +58,11 @@ class MultiModelVectorizer:
 
     def encode_with_multiple_models(
         self,
-        texts: List[str],
-        model_config: Optional[Dict[str, Any]] = None,
+        texts: list[str],
+        model_config: dict[str, Any] | None = None,
         fusion_strategy: str = 'weighted_average',
         return_individual: bool = False
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """使用多个模型编码文本
 
         Args:
@@ -211,9 +207,9 @@ class MultiModelVectorizer:
 
     def _concatenation_fusion(
         self,
-        embeddings: Dict[str, np.ndarray],
-        weights: List[float]
-    ) -> Tuple[np.ndarray, Dict[str, Any]]:
+        embeddings: dict[str, np.ndarray],
+        weights: list[float]
+    ) -> tuple[np.ndarray, dict[str, Any]]:
         """拼接融合策略"""
         vectors = list(embeddings.values())
         max_length = max(v.shape[1] for v in vectors)
@@ -242,9 +238,9 @@ class MultiModelVectorizer:
 
     def _weighted_average_fusion(
         self,
-        embeddings: Dict[str, np.ndarray],
-        weights: List[float]
-    ) -> Tuple[np.ndarray, Dict[str, Any]]:
+        embeddings: dict[str, np.ndarray],
+        weights: list[float]
+    ) -> tuple[np.ndarray, dict[str, Any]]:
         """加权平均融合策略"""
         vectors = list(embeddings.values())
         weights_array = np.array(weights)
@@ -267,7 +263,7 @@ class MultiModelVectorizer:
 
         # 加权平均
         fused = np.zeros_like(vectors[0])
-        for i, (v, weight) in enumerate(zip(vectors, weights_array)):
+        for _i, (v, weight) in enumerate(zip(vectors, weights_array, strict=False)):
             fused += weight * v
 
         fusion_info = {
@@ -281,24 +277,24 @@ class MultiModelVectorizer:
 
     def _attention_fusion(
         self,
-        embeddings: Dict[str, np.ndarray],
-        weights: List[float]
-    ) -> Tuple[np.ndarray, Dict[str, Any]]:
+        embeddings: dict[str, np.ndarray],
+        weights: list[float]
+    ) -> tuple[np.ndarray, dict[str, Any]]:
         """注意力融合策略（简化版）"""
         # 将weights作为注意力权重
         return self._weighted_average_fusion(embeddings, weights)
 
     def _adaptive_fusion(
         self,
-        embeddings: Dict[str, np.ndarray],
-        weights: List[float]
-    ) -> Tuple[np.ndarray, Dict[str, Any]]:
+        embeddings: dict[str, np.ndarray],
+        weights: list[float]
+    ) -> tuple[np.ndarray, dict[str, Any]]:
         """自适应融合策略"""
         # 简化实现：根据模型性能调整权重
         performance_scores = self._get_model_performance(list(embeddings.keys()))
         adapted_weights = []
 
-        for i, (model_name, original_weight) in enumerate(zip(embeddings.keys(), weights)):
+        for _i, (model_name, original_weight) in enumerate(zip(embeddings.keys(), weights, strict=False)):
             performance = performance_scores.get(model_name, 1.0)
             adapted_weight = original_weight * performance
             adapted_weights.append(adapted_weight)
@@ -311,9 +307,9 @@ class MultiModelVectorizer:
 
     def _simple_average_fusion(
         self,
-        embeddings: Dict[str, np.ndarray],
-        weights: List[float]
-    ) -> Tuple[np.ndarray, Dict[str, Any]]:
+        embeddings: dict[str, np.ndarray],
+        weights: list[float]
+    ) -> tuple[np.ndarray, dict[str, Any]]:
         """简单平均融合（回退策略）"""
         vectors = list(embeddings.values())
 
@@ -339,7 +335,7 @@ class MultiModelVectorizer:
 
         return fused, fusion_info
 
-    def _get_model_performance(self, model_names: List[str]) -> Dict[str, float]:
+    def _get_model_performance(self, model_names: list[str]) -> dict[str, float]:
         """获取模型性能分数"""
         # 简化实现，实际应该基于历史性能数据
         performance_map = {
@@ -355,11 +351,11 @@ class MultiModelVectorizer:
 
     def encode_patents(
         self,
-        patents: List[Dict[str, Any]],
-        text_fields: List[str] = ['title', 'abstract'],
-        model_config: Optional[Dict[str, Any]] = None,
+        patents: list[dict[str, Any]],
+        text_fields: list[str] = None,
+        model_config: dict[str, Any] | None = None,
         fusion_strategy: str = 'weighted_average'
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """编码专利数据
 
         Args:
@@ -372,6 +368,8 @@ class MultiModelVectorizer:
             包含向量的专利数据
         """
         # 准备文本
+        if text_fields is None:
+            text_fields = ['title', 'abstract']
         texts = []
         for patent in patents:
             text_parts = []
@@ -407,10 +405,10 @@ class MultiModelVectorizer:
 
     def batch_encode(
         self,
-        text_batches: List[List[str]],
-        model_config: Optional[Dict[str, Any]] = None,
+        text_batches: list[list[str]],
+        model_config: dict[str, Any] | None = None,
         fusion_strategy: str = 'weighted_average'
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """批量编码
 
         Args:
@@ -434,7 +432,7 @@ class MultiModelVectorizer:
 
         return results
 
-    def _get_cache_key(self, texts: List[str], config: Dict, strategy: str) -> str:
+    def _get_cache_key(self, texts: list[str], config: dict, strategy: str) -> str:
         """生成缓存键"""
         import hashlib
         content = {
@@ -445,7 +443,7 @@ class MultiModelVectorizer:
         content_str = str(content)
         return hashlib.md5(content_str.encode('utf-8'), usedforsecurity=False).hexdigest()
 
-    def _cache_result(self, key: str, result: Dict[str, Any]):
+    def _cache_result(self, key: str, result: dict[str, Any]):
         """缓存结果"""
         # 如果缓存已满，清理旧缓存
         if len(self.vector_cache) >= self.max_cache_size:
@@ -455,7 +453,7 @@ class MultiModelVectorizer:
 
         self.vector_cache[key] = result
 
-    def get_cache_stats(self) -> Dict[str, Any]:
+    def get_cache_stats(self) -> dict[str, Any]:
         """获取缓存统计"""
         return {
             'cache_size': len(self.vector_cache),
@@ -463,7 +461,7 @@ class MultiModelVectorizer:
             'cache_hit_rate': self.stats['cache_hits'] / max(1, self.stats['total_requests'])
         }
 
-    def get_performance_stats(self) -> Dict[str, Any]:
+    def get_performance_stats(self) -> dict[str, Any]:
         """获取性能统计"""
         fusion_stats = {}
         for strategy, times in self.stats['fusion_times'].items():

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 智能体基类 - 集成统一记忆系统
 Base Agent Class with Integrated Memory System
@@ -6,7 +7,6 @@ Base Agent Class with Integrated Memory System
 所有Athena平台智能体的基类,提供统一的记忆功能:
 - Athena.智慧女神
 - Athena.小娜·天秤女神
-- 云熙.vega
 - 小宸·星河射手
 - 小诺·双鱼座
 
@@ -298,7 +298,6 @@ class MemoryEnabledAgent(ABC):
             "athena": "athena_wisdom",
             "智慧女神": "athena_wisdom",
             "小娜": "xiaona_libra",
-            "云熙": "yunxi_vega",
             "小宸": "xiaochen_sagittarius",
             "小诺": "xiaonuo_pisces",
         }

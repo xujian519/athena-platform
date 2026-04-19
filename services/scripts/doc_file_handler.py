@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 DOC文件处理模块
 DOC File Handler for Athena Multimodal System
@@ -7,14 +6,13 @@ DOC File Handler for Athena Multimodal System
 """
 
 import logging
-from core.async_main import async_main
-from core.logging_config import setup_logging
 import os
 import shutil
-import sys
 import tempfile
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 导入DOC处理相关库
 try:
@@ -47,7 +45,7 @@ class DOCFileHandler:
         self.docx_available = DOCX_AVAILABLE
         self.olefile_available = OLEFILE_AVAILABLE
 
-        logger.info(f"DOC处理器初始化:")
+        logger.info("DOC处理器初始化:")
         logger.info(f"  - doc2docx: {'✓' if self.doc2docx_available else '✗'}")
         logger.info(f"  - python-docx: {'✓' if self.docx_available else '✗'}")
         logger.info(f"  - olefile: {'✓' if self.olefile_available else '✗'}")
@@ -57,7 +55,7 @@ class DOCFileHandler:
         ext = Path(file_path).suffix.lower()
         return ext == '.doc'
 
-    async def extract_text_from_doc(self, doc_path: str, options: Dict[str, Any] = None) -> Dict[str, Any]:
+    async def extract_text_from_doc(self, doc_path: str, options: dict[str, Any] = None) -> dict[str, Any]:
         """
         从DOC文件中提取文本
 
@@ -112,7 +110,7 @@ class DOCFileHandler:
                 'exception_type': type(e).__name__
             }
 
-    async def _extract_via_doc2docx(self, doc_path: str, options: Dict[str, Any] = None) -> Dict[str, Any]:
+    async def _extract_via_doc2docx(self, doc_path: str, options: dict[str, Any] = None) -> dict[str, Any]:
         """使用doc2docx转换并提取文本"""
         temp_docx_path = None
         try:
@@ -195,14 +193,14 @@ class DOCFileHandler:
                 try:
                     os.unlink(temp_docx_path)
                 except Exception as e:
-                logger.error(f"Error: {e}", exc_info=True)
+                    logger.error(f"Error: {e}", exc_info=True)
             if 'temp_dir' in locals() and os.path.exists(temp_dir):
                 try:
                     shutil.rmtree(temp_dir)
                 except Exception as e:
-                logger.error(f"Error: {e}", exc_info=True)
+                    logger.error(f"Error: {e}", exc_info=True)
 
-    async def _extract_via_olefile(self, doc_path: str, options: Dict[str, Any] = None) -> Dict[str, Any]:
+    async def _extract_via_olefile(self, doc_path: str, options: dict[str, Any] = None) -> dict[str, Any]:
         """使用olefile直接提取DOC文件文本"""
         try:
             if not olefile.is_ole_file(doc_path):
@@ -242,7 +240,7 @@ class DOCFileHandler:
             logger.error(f"olefile提取失败: {e}")
             raise e
 
-    async def convert_doc_to_docx(self, doc_path: str, output_dir: str | None = None) -> Dict[str, Any]:
+    async def convert_doc_to_docx(self, doc_path: str, output_dir: str | None = None) -> dict[str, Any]:
         """
         将DOC文件转换为DOCX格式
 
@@ -295,7 +293,7 @@ class DOCFileHandler:
                 'original_file': doc_path
             }
 
-    def get_supported_info(self) -> Dict[str, Any]:
+    def get_supported_info(self) -> dict[str, Any]:
         """获取支持的信息"""
         return {
             'supported_formats': ['.doc'],

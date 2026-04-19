@@ -6,12 +6,11 @@ Shared Book EPUB Reader
 为爸爸和小诺的共读时光服务
 """
 
-import os
+import html
 import zipfile
 from pathlib import Path
+from typing import Any
 from xml.etree import ElementTree as ET
-from typing import Dict, List, Optional
-import html
 
 
 class EpubReader:
@@ -22,7 +21,7 @@ class EpubReader:
         self._metadata = {}
         self._chapters = []
 
-    def read(self) -> Dict:
+    def read(self) -> dict:
         """读取EPUB文件"""
         if not self.epub_path.exists():
             raise FileNotFoundError(f"找不到文件: {self.epub_path}")
@@ -103,7 +102,7 @@ class EpubReader:
                         if len(self._chapters) >= 50:  # 限制章节数量
                             break
 
-                except Exception as e:
+                except Exception:
                     continue
 
         except Exception as e:

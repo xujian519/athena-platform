@@ -3,11 +3,9 @@
 Geofence Tool
 """
 
-import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import structlog
-from mcp.types import Tool
 
 from ..api.extended_gaode_client import ExtendedAmapApiClient
 
@@ -22,7 +20,7 @@ class GeofenceTool:
     def __init__(self, api_client: ExtendedAmapApiClient):
         self.api_client = api_client
 
-    async def call(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
+    async def call(self, arguments: dict[str, Any]) -> dict[str, Any]:
         """
         地理围栏处理
 
@@ -53,7 +51,7 @@ class GeofenceTool:
         else:
             raise ValueError(f"不支持的操作类型: {operation}")
 
-    async def _handle_create_geofence(self, args: Dict[str, Any]) -> Dict[str, Any]:
+    async def _handle_create_geofence(self, args: dict[str, Any]) -> dict[str, Any]:
         """处理创建地理围栏"""
         name = args.get('name')
         center = args.get('center')
@@ -122,7 +120,7 @@ class GeofenceTool:
                 'requires_enterprise_permission': True
             }
 
-    async def _handle_search_geofence(self, args: Dict[str, Any]) -> Dict[str, Any]:
+    async def _handle_search_geofence(self, args: dict[str, Any]) -> dict[str, Any]:
         """处理查询地理围栏"""
         center = args.get('center')
         if not center:
@@ -199,7 +197,7 @@ class GeofenceTool:
                 'requires_enterprise_permission': True
             }
 
-    async def _handle_update_geofence(self, args: Dict[str, Any]) -> Dict[str, Any]:
+    async def _handle_update_geofence(self, args: dict[str, Any]) -> dict[str, Any]:
         """处理更新地理围栏"""
         id_ = args.get('id')
         if not id_:
@@ -261,7 +259,7 @@ class GeofenceTool:
                 'operation': 'update'
             }
 
-    async def _handle_delete_geofence(self, args: Dict[str, Any]) -> Dict[str, Any]:
+    async def _handle_delete_geofence(self, args: dict[str, Any]) -> dict[str, Any]:
         """处理删除地理围栏"""
         id_ = args.get('id')
         if not id_:
@@ -296,7 +294,7 @@ class GeofenceTool:
                 'operation': 'delete'
             }
 
-    def get_input_schema(self) -> Dict[str, Any]:
+    def get_input_schema(self) -> dict[str, Any]:
         """获取输入参数模式"""
         return {
             'type': 'object',
@@ -350,7 +348,7 @@ class GeofenceTool:
             'required': ['operation']
         }
 
-    def get_output_schema(self) -> Dict[str, Any]:
+    def get_output_schema(self) -> dict[str, Any]:
         """获取输出结果模式"""
         return {
             'type': 'object',

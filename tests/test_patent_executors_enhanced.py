@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 增强版专利执行器单元测试
 Unit Tests for Enhanced Patent Executors
@@ -16,32 +15,31 @@ Version: 1.0.0
 """
 
 import asyncio
-import pytest
-import sys
 import os
-from datetime import datetime, timedelta
-from typing import Dict, Any
+import sys
+from datetime import datetime
+from typing import Any
+
+import pytest
 
 # 添加项目路径
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../patent-platform/workspace/src/action'))
 
 from patent_executors_enhanced import (
-    PatentTask,
-    ExecutionResult,
-    TaskStatus,
-    TaskPriority,
     AnalysisType,
+    ExecutionResult,
+    ExecutorConfig,
     FilingType,
     MonitoringType,
-    ExecutorConfig,
     PatentAnalysisExecutor,
+    PatentExecutorFactory,
     PatentFilingExecutor,
     PatentMonitoringExecutor,
+    PatentTask,
     PatentValidationExecutor,
-    PatentExecutorFactory
+    TaskPriority,
+    TaskStatus,
 )
-
 
 # =============================================================================
 # 测试数据生成器
@@ -51,7 +49,7 @@ class TestDataGenerator:
     """测试数据生成器"""
 
     @staticmethod
-    def get_sample_patent_data() -> Dict[str, Any]:
+    def get_sample_patent_data() -> dict[str, Any]:
         """获取示例专利数据"""
         return {
             'patent_id': 'CN202410001234.5',
@@ -609,7 +607,7 @@ class TestPatentValidationExecutor:
         assert 'legal_compliance' in validation_results
 
         # 检查状态
-        for check_name, check_result in validation_results.items():
+        for _check_name, check_result in validation_results.items():
             assert 'status' in check_result
             assert check_result['status'] in ['passed', 'warning', 'failed']
 
@@ -640,7 +638,7 @@ class TestPatentExecutorFactory:
         assert 'patent_monitoring' in executors
         assert 'patent_validation' in executors
 
-        for name, info in executors.items():
+        for _name, info in executors.items():
             assert 'name' in info
             assert 'description' in info
             assert 'class' in info

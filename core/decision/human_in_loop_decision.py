@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 人机协作决策系统 - Human-in-the-Loop Decision System
 在终端和Claude Code环境下实现的人机协作决策框架
@@ -13,8 +14,12 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
+try:
+    from claude_code import ask_user_question
+except ImportError:
+    ask_user_question = None
 
 
 class DecisionType(Enum):

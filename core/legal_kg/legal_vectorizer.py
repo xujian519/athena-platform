@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 法律文档向量化工具 - 使用BGE-M3模型
 将法律文档向量化并存储到Qdrant向量数据库
@@ -8,15 +9,13 @@ import sys
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
+import numpy as np
 import psycopg2
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
     Distance,
-    FieldCondition,
-    Filter,
-    MatchValue,
     PointStruct,
     VectorParams,
 )
@@ -25,7 +24,7 @@ from core.logging_config import setup_logging
 
 # 添加项目路径
 sys.path.append(str(Path(__file__).parent.parent))
-from legal_kg.legal_text_parser import LawImportance, LegalTextParser
+from legal_kg.legal_text_parser import LegalTextParser
 
 # ==================== 配置 ====================
 # BGE-M3模型路径

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 经验存储器单元测试
 Experience Store Unit Tests
@@ -15,8 +14,14 @@ Experience Store Unit Tests
 创建时间: 2026-01-27
 """
 
-import pytest
+import sys
 from datetime import datetime
+from pathlib import Path
+
+import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
 from core.learning.learning_engine import ExperienceStore
 
 

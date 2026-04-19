@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 优化版通信模块测试脚本
 Test Optimized Communication Module

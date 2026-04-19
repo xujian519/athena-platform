@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 权威文档检索系统 - 修复版 v1.1
 P1-6修复: 实现完整的L1向量搜索功能
@@ -10,11 +11,10 @@ P1-6修复: 实现完整的L1向量搜索功能
 import logging
 import time
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.reranking.authoritative_document_reranker import (
     AuthoritativeDocumentReranker,
-    AuthorityConfig,
     get_authoritative_reranker,
 )
 
@@ -336,7 +336,7 @@ class AuthoritativeDocumentSearch:
         return documents
 
     def _l2_kg_expansion(
-        self, query: str, l1_results: list[dict[str, Any], kg_connection
+        self, query: str, l1_results: list[dict[str, Any]], kg_connection
     ) -> list[dict[str, Any]]:
         """L2: 知识图谱扩展"""
         # TD-001: 使用Neo4j版本的kg_expansion
@@ -351,7 +351,7 @@ class AuthoritativeDocumentSearch:
             logger.warning(f"   知识图谱扩展失败: {e}")
             return l1_results
 
-    def _l3_rerank(self, query: str, l2_results: list[dict[str, Any]) -> list[dict[str, Any]]:
+    def _l3_rerank(self, query: str, l2_results: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """L3: Rerank精排"""
         try:
             reranked = self.reranker.rerank(

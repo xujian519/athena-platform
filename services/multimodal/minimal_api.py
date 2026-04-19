@@ -1,25 +1,18 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena多模态文件系统 - 最小化API
 精简版本，确保快速启动和稳定运行
 """
 
-import os
-from core.async_main import async_main
-import sys
-import json
-import time
 import hashlib
-import uuid
-import asyncio
-import logging
-from core.logging_config import setup_logging
-from datetime import datetime
+import os
+import sys
+import time
+from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Any, Optional
-import io
-from datetime import timedelta
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 添加路径
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -29,12 +22,12 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 logger = setup_logging()
 
 try:
-    from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Query
-    from fastapi.middleware.cors import CORSMiddleware
-
-from core.security.auth import ALLOWED_ORIGINS
-    from fastapi.responses import JSONResponse
     import uvicorn
+    from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile
+    from fastapi.middleware.cors import CORSMiddleware
+    from fastapi.responses import JSONResponse
+
+    from core.security.auth import ALLOWED_ORIGINS
     FASTAPI_AVAILABLE = True
 except ImportError as e:
     logger.error(f"FastAPI导入失败: {e}")
@@ -83,7 +76,7 @@ class SimpleAuthManager:
             self.secret_key = "athena_multimodal_2024"  # 默认值
         self.sessions = {}
 
-    def login(self, username: str, password: str) -> Dict[str, Any]:
+    def login(self, username: str, password: str) -> dict[str, Any]:
         """登录认证"""
         # 简化的认证逻辑
         if not username or not password:
@@ -107,7 +100,7 @@ class SimpleAuthManager:
             "expires_in": 86400
         }
 
-    def verify_token(self, token: str) -> Dict[str, Any | None]:
+    def verify_token(self, token: str) -> dict[str, Any | None]:
         """验证令牌"""
         for session in sessions_db.values():
             if session["token"] == token:
@@ -140,7 +133,7 @@ class SimpleFileManager:
                 return file_type
         return 'unknown'
 
-    def save_file(self, file_content: bytes, filename: str) -> Dict[str, Any]:
+    def save_file(self, file_content: bytes, filename: str) -> dict[str, Any]:
         """保存文件"""
         try:
             # 生成文件ID
@@ -313,7 +306,7 @@ async def download_file_content(file_id: str):
             }
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"文件读取失败: {e}")
+        raise HTTPException(status_code=500, detail=f"文件读取失败: {e}") from e
 
 @app.get("/statistics")
 async def get_statistics():
@@ -342,7 +335,7 @@ if __name__ == "__main__":
     print("🚀 启动 Athena多模态文件系统")
     print("=" * 50)
     print(f"📁 存储路径: {STORAGE_PATH}")
-    print(f"🌐 服务地址: http://localhost:8001")
+    print("🌐 服务地址: http://localhost:8001")
     print("📚 API文档: http://localhost:8001/docs")
     print("❤ 健康检查: http://localhost:8001/health")
     print("=" * 50)

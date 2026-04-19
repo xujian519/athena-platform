@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 验证专利审查指南知识图谱导入结果
 """
@@ -23,10 +22,10 @@ def main():
     # 1. 显示知识图谱数据
     try:
         graph_file = "patent_guideline_graph.json"
-        with open(graph_file, 'r', encoding='utf-8') as f:
+        with open(graph_file, encoding='utf-8') as f:
             graph_data = json.load(f)
 
-        metadata = graph_data.get("metadata", {})
+        graph_data.get("metadata", {})
         nodes = graph_data.get("nodes", [])
         relationships = graph_data.get("relationships", [])
 
@@ -59,10 +58,10 @@ def main():
 
     # 2. 显示Qdrant向量库信息
     print("\n🔢 Qdrant向量库:")
-    print(f"  集合名称: patent_guideline")
-    print(f"  向量维度: 768")
-    print(f"  距离度量: Cosine")
-    print(f"  向量数量: 53")
+    print("  集合名称: patent_guideline")
+    print("  向量维度: 768")
+    print("  距离度量: Cosine")
+    print("  向量数量: 53")
 
     # 3. 使用指南
     print("\n💡 使用指南:")

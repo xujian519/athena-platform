@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 小诺·双鱼公主Browser-Use全量控制系统
 Xiaonuo·Pisces Princess Browser-Use Universal Control System
@@ -13,14 +13,15 @@ Xiaonuo·Pisces Princess Browser-Use Universal Control System
 
 import asyncio
 import logging
-from core.logging_config import setup_logging
 import os
 import subprocess
-from datetime import datetime
-from typing import Any, Optional
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
 from pathlib import Path
+from typing import Any
+
+from core.logging_config import setup_logging
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -60,7 +61,7 @@ class BrowserUseTask:
     started_at: datetime | None = None
     completed_at: datetime | None = None
     status: str = "pending"
-    result: Optional[dict[str, Any] | None = None
+    result: dict[str, Any] | None = None
     error: str | None = None
 
 @dataclass
@@ -378,7 +379,7 @@ class XiaonuoBrowserUseController:
         """执行代理模式"""
         # 获取代理
         agent_id = None
-        for session_id, session in self.sessions.items():
+        for _session_id, session in self.sessions.items():
             if session.status == "active":
                 agent_id = session.agent_id
                 break

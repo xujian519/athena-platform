@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 """
 联网搜索引擎集成系统 - 向后兼容重定向
 Web Search Engines Integration System - Backward Compatibility Redirect
@@ -67,8 +67,8 @@ from core.search.external.web_search import (  # type: ignore
     MetasoSearchEngine,
     SearchEngineType,
     SearchQuery,
-    SearchResult,
     SearchResponse,
+    SearchResult,
     TavilySearchEngine,
     UnifiedWebSearchManager,
     get_web_search_manager,
