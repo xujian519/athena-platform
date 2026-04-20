@@ -5,7 +5,7 @@
     "dimension_config_ok": true,
     "model_output_ok": false,
     "collections_ok": false,
-    "manager_ok": false,
+    "manager_ok": true,
     "overall_ready": false
   },
   "details": {
@@ -22,7 +22,7 @@
       "status": "❌ 错误"
     },
     "manager": {
-      "status": "❌ 不可用"
+      "status": "✅ 可用"
     }
   },
   "recommendations": [

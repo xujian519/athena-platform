@@ -1,0 +1,37 @@
+id: document_writing
+name: 法律文书写作技能
+category: writing
+description: 撰写各类法律文书，包括起诉状、答辩状、代理词等
+tools:
+  - template_manager
+  - document_generator
+  - llm_service
+metadata:
+  author: Athena平台团队
+  version: 1.0.0
+  tags:
+    - writing
+    - document
+    - legal
+  enabled: true
+  priority: 7
+content: |
+  # 法律文书写作技能
+
+  本技能用于撰写各类法律文书。
+
+  ## 支持的文书类型
+
+  - 起诉状
+  - 答辩状
+  - 上诉状
+  - 代理词
+  - 法律意见书
+  - 合同草案
+
+  ## 使用场景
+
+  1. 诉讼文书起草
+  2. 合同条款撰写
+  3. 法律意见表达
+  4. 律师函起草

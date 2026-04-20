@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-04-19",
+  "dimension": 1024,
+  "summary": {
+    "bge_m3_api_ok": true,
+    "qdrant_collections_ok": false,
+    "vector_search_ok": true,
+    "dimension_validation_ok": true,
+    "overall_ready": false
+  },
+  "details": {
+    "bge_m3_api": {
+      "endpoint": "http://127.0.0.1:8766/v1/embeddings",
+      "dimension": 1024,
+      "status": "✅ 正常"
+    },
+    "qdrant": {
+      "endpoint": "http://localhost:6333",
+      "dimension": 1024,
+      "status": "❌ 异常"
+    },
+    "vector_search": {
+      "status": "✅ 正常"
+    },
+    "dimension_validation": {
+      "status": "✅ 正常"
+    }
+  },
+  "recommendations": [
+    "❌ Qdrant集合维度不是1024，需要重建集合"
+  ]
+}

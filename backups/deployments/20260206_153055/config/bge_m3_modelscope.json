@@ -1,9 +1,0 @@
-{
-  "model_path": "/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3-safetensors",
-  "device": "mps",
-  "dimension": 1024,
-  "has_safetensors": true,
-  "mps_optimized": true,
-  "source": "modelscope",
-  "model_id": "Xorbits/bge-m3"
-}

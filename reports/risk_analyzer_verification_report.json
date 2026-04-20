@@ -1,0 +1,277 @@
+{
+  "timestamp": "2026-04-19T23:19:35.332836",
+  "total_tests": 8,
+  "passed": 8,
+  "failed": 0,
+  "success_rate": "100.0%",
+  "test_results": [
+    {
+      "test_name": "基本功能测试",
+      "status": "PASS",
+      "details": {
+        "success": true,
+        "scenario": "测试基本风险分析功能",
+        "total_risks": 2,
+        "risks": [
+          {
+            "name": "测试风险1",
+            "description": "测试风险描述1",
+            "probability": "中 (30-50%)",
+            "impact": "中等影响",
+            "risk_level": "中",
+            "score": 5,
+            "mitigation": "加强监控,定期评估,及时调整"
+          },
+          {
+            "name": "测试风险2",
+            "description": "测试风险描述2",
+            "probability": "中 (30-50%)",
+            "impact": "中等影响",
+            "risk_level": "中",
+            "score": 5,
+            "mitigation": "加强监控,定期评估,及时调整"
+          }
+        ],
+        "overall_risk_level": "中",
+        "mitigation_strategies": [
+          "重点关注: 测试风险1 - 加强监控,定期评估,及时调整",
+          "重点关注: 测试风险2 - 加强监控,定期评估,及时调整"
+        ],
+        "risk_color": "yellow",
+        "overall_score": 5.0
+      }
+    },
+    {
+      "test_name": "专利申请风险分析",
+      "status": "PASS",
+      "details": {
+        "success": true,
+        "scenario": "申请人工智能自动驾驶相关专利，涉及复杂算法和大量数据",
+        "total_risks": 3,
+        "risks": [
+          {
+            "name": "技术风险",
+            "description": "算法新颖性不足，创造性可能被质疑",
+            "probability": "高 (70-80%)",
+            "impact": "严重影响",
+            "risk_level": "高",
+            "score": 8,
+            "mitigation": "加强技术调研,进行原型验证,准备备用方案"
+          },
+          {
+            "name": "时间风险",
+            "description": "专利审查周期长，可能影响产品上市",
+            "probability": "高 (70-80%)",
+            "impact": "严重影响",
+            "risk_level": "高",
+            "score": 8,
+            "mitigation": "制定详细计划,设置里程碑,预留缓冲时间"
+          },
+          {
+            "name": "竞争风险",
+            "description": "竞争对手已有类似专利",
+            "probability": "高 (70-80%)",
+            "impact": "严重影响",
+            "risk_level": "高",
+            "score": 8,
+            "mitigation": "加强监控,定期评估,及时调整"
+          }
+        ],
+        "overall_risk_level": "高",
+        "mitigation_strategies": [
+          "重点关注: 技术风险 - 加强技术调研,进行原型验证,准备备用方案",
+          "重点关注: 时间风险 - 制定详细计划,设置里程碑,预留缓冲时间",
+          "重点关注: 竞争风险 - 加强监控,定期评估,及时调整"
+        ],
+        "risk_color": "red",
+        "overall_score": 8.0
+      }
+    },
+    {
+      "test_name": "软件开发风险分析",
+      "status": "PASS",
+      "details": {
+        "success": true,
+        "scenario": "开发一个复杂的分布式系统，涉及微服务架构和大量并发处理",
+        "total_risks": 4,
+        "risks": [
+          {
+            "name": "技术风险",
+            "description": "系统复杂度高，架构设计难度大",
+            "probability": "高 (70-80%)",
+            "impact": "严重影响",
+            "risk_level": "高",
+            "score": 8,
+            "mitigation": "加强技术调研,进行原型验证,准备备用方案"
+          },
+          {
+            "name": "时间风险",
+            "description": "开发周期紧张，可能延期",
+            "probability": "高 (70-80%)",
+            "impact": "严重影响",
+            "risk_level": "高",
+            "score": 8,
+            "mitigation": "制定详细计划,设置里程碑,预留缓冲时间"
+          },
+          {
+            "name": "资源风险",
+            "description": "高级开发人员不足",
+            "probability": "高 (70-80%)",
+            "impact": "严重影响",
+            "risk_level": "高",
+            "score": 8,
+            "mitigation": "提前规划资源分配,建立资源储备,优化资源配置"
+          },
+          {
+            "name": "集成风险",
+            "description": "微服务之间集成复杂",
+            "probability": "高 (70-80%)",
+            "impact": "严重影响",
+            "risk_level": "高",
+            "score": 8,
+            "mitigation": "加强监控,定期评估,及时调整"
+          }
+        ],
+        "overall_risk_level": "高",
+        "mitigation_strategies": [
+          "重点关注: 技术风险 - 加强技术调研,进行原型验证,准备备用方案",
+          "重点关注: 时间风险 - 制定详细计划,设置里程碑,预留缓冲时间",
+          "重点关注: 资源风险 - 提前规划资源分配,建立资源储备,优化资源配置"
+        ],
+        "risk_color": "red",
+        "overall_score": 8.0
+      }
+    },
+    {
+      "test_name": "商业投资风险分析",
+      "status": "PASS",
+      "details": {
+        "success": true,
+        "scenario": "投资一家新兴科技公司，涉及大额资金和长期回报预期",
+        "total_risks": 3,
+        "risks": [
+          {
+            "name": "市场风险",
+            "description": "市场需求变化，竞争加剧",
+            "probability": "中 (30-50%)",
+            "impact": "中等影响",
+            "risk_level": "中",
+            "score": 5,
+            "mitigation": "持续市场调研,灵活调整策略,建立竞争优势"
+          },
+          {
+            "name": "财务风险",
+            "description": "资金链断裂，回报不及预期",
+            "probability": "中 (30-50%)",
+            "impact": "中等影响",
+            "risk_level": "中",
+            "score": 5,
+            "mitigation": "加强监控,定期评估,及时调整"
+          },
+          {
+            "name": "政策风险",
+            "description": "监管政策变化",
+            "probability": "中 (30-50%)",
+            "impact": "中等影响",
+            "risk_level": "中",
+            "score": 5,
+            "mitigation": "关注政策动向,合规经营,建立应对预案"
+          }
+        ],
+        "overall_risk_level": "中",
+        "mitigation_strategies": [
+          "重点关注: 市场风险 - 持续市场调研,灵活调整策略,建立竞争优势",
+          "重点关注: 财务风险 - 加强监控,定期评估,及时调整",
+          "重点关注: 政策风险 - 关注政策动向,合规经营,建立应对预案"
+        ],
+        "risk_color": "yellow",
+        "overall_score": 5.0
+      }
+    },
+    {
+      "test_name": "风险等级准确性测试",
+      "status": "PASS",
+      "passed": 3,
+      "failed": 0,
+      "total": 3
+    },
+    {
+      "test_name": "概率计算准确性测试",
+      "status": "PASS",
+      "passed": 3,
+      "failed": 0,
+      "total": 3
+    },
+    {
+      "test_name": "空场景测试",
+      "status": "PASS",
+      "details": {
+        "success": true,
+        "scenario": "",
+        "total_risks": 5,
+        "risks": [
+          {
+            "name": "技术风险",
+            "description": "技术实现困难或失败",
+            "probability": "中 (30-50%)",
+            "impact": "中等影响",
+            "risk_level": "中",
+            "score": 5,
+            "mitigation": "加强技术调研,进行原型验证,准备备用方案"
+          },
+          {
+            "name": "时间风险",
+            "description": "项目延期或时间不足",
+            "probability": "中 (30-50%)",
+            "impact": "中等影响",
+            "risk_level": "中",
+            "score": 5,
+            "mitigation": "制定详细计划,设置里程碑,预留缓冲时间"
+          },
+          {
+            "name": "资源风险",
+            "description": "人力、资金或设备不足",
+            "probability": "中 (30-50%)",
+            "impact": "中等影响",
+            "risk_level": "中",
+            "score": 5,
+            "mitigation": "提前规划资源分配,建立资源储备,优化资源配置"
+          },
+          {
+            "name": "市场风险",
+            "description": "市场需求变化或竞争加剧",
+            "probability": "中 (30-50%)",
+            "impact": "中等影响",
+            "risk_level": "中",
+            "score": 5,
+            "mitigation": "持续市场调研,灵活调整策略,建立竞争优势"
+          },
+          {
+            "name": "政策风险",
+            "description": "政策法规变化影响",
+            "probability": "中 (30-50%)",
+            "impact": "中等影响",
+            "risk_level": "中",
+            "score": 5,
+            "mitigation": "关注政策动向,合规经营,建立应对预案"
+          }
+        ],
+        "overall_risk_level": "中",
+        "mitigation_strategies": [
+          "重点关注: 技术风险 - 加强技术调研,进行原型验证,准备备用方案",
+          "重点关注: 时间风险 - 制定详细计划,设置里程碑,预留缓冲时间",
+          "重点关注: 资源风险 - 提前规划资源分配,建立资源储备,优化资源配置"
+        ],
+        "risk_color": "yellow",
+        "overall_score": 5.0
+      }
+    },
+    {
+      "test_name": "大量风险因子测试",
+      "status": "PASS",
+      "details": {
+        "total_risks": 100
+      }
+    }
+  ]
+}

@@ -19,6 +19,7 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 aiofiles = "^23.2.1"
 numpy = "^2.4.4"
 pandas = "^3.0.0"
+openpyxl = "^3.1.0"  # Excel文件支持（pandas依赖）
 # AI/ML依赖
 scikit-learn = "^1.3.0"
 # 向量数据库

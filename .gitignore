@@ -137,3 +137,32 @@ rust-core/target/
 **/target/
 *.rlib
 *.rmeta
+
+# 虚拟环境（特定于本项目）
+venv_perception/
+athena_env_py311/
+*/venv/
+*/venv*/
+
+# 备份文件（更全面的规则）
+*.bak
+*.bak2
+*.bak3
+*.bak4
+*.bak_final
+*.bak_*
+
+# 废弃目录
+archive/
+production/
+computer-use-ootb/
+
+# 大型数据目录
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+models/*.bin
+models/*.safetensors
+
+# Node.js（在非标准位置）
+*/node_modules/

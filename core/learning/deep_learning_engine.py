@@ -253,7 +253,7 @@ class DeepLearningEngine:
             prediction = {"generated": "生成的文本内容", "confidence": 0.75}
         elif task_type == LearningTask.EMBEDDING:
             prediction = {
-                "embedding": np.random.randn(768).tolist(),  # 1024维(BGE-M3)嵌入
+                "embedding": np.random.randn(1024).tolist(),  # 1024维(BGE-M3)嵌入
                 "confidence": 1.0,
             }
         else:  # RL

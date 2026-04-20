@@ -46,16 +46,16 @@ class AthenaModelLoader:
             "remote_path": "BAAI/bge-small-zh-v1.5",
         },
         "BAAI/bge-m3": {
-            "dimension": 768,
-            "word_embedding_dimension": 768,
-            "max_seq_length": 512,
+            "dimension": 1024,  # BGE-M3正确维度
+            "word_embedding_dimension": 1024,
+            "max_seq_length": 8192,  # BGE-M3支持8192长度
             "remote_path": "BAAI/bge-m3",
         },
-        "BAAI/bge-m3": {
+        "bge-large-zh-v1.5": {
             "dimension": 1024,
             "word_embedding_dimension": 1024,
             "max_seq_length": 512,
-            "remote_path": "BAAI/BAAI/bge-m3",
+            "remote_path": "BAAI/bge-large-zh-v1.5",
         },
         "bge-reranker-large": {
             "dimension": 1024,
@@ -63,12 +63,6 @@ class AthenaModelLoader:
             "max_seq_length": 512,
             "remote_path": "BAAI/bge-reranker-large",
         },
-        # "nomic-embed-text-v1.5": {  # 已删除,使用BGE-M3替代
-        #     "dimension": 768,
-        #     "word_embedding_dimension": 768,
-        #     "max_seq_length": 8192,
-        #     "remote_path": "nomic-ai/nomic-embed-text-v1.5"
-        # }
     }
 
     @classmethod
@@ -183,7 +177,7 @@ class AthenaModelLoader:
 
     @classmethod
     def load_sentence_transformer(
-        cls, model_name: str | None = None, device: str | None = None, fix_config: bool = True
+        cls, model_name: Optional[str] = None, device: Optional[str] = None, fix_config: bool = True
     ):
         """
         加载SentenceTransformer模型
@@ -252,7 +246,7 @@ class AthenaModelLoader:
 
 # 便捷函数
 def load_model(
-    model_name: str = "BAAI/bge-m3", device: str | None = None, fix_config: bool = True
+    model_name: str = "BAAI/bge-m3", device: Optional[str] = None, fix_config: bool = True
 ):
     """
     加载模型的便捷函数

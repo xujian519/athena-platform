@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS test_patents (
     publication_date DATE,
     ipc_code VARCHAR(50),
     status VARCHAR(50) DEFAULT 'pending',
-    embedding vector(768),  -- 768维向量 (BGE-M3)
+    embedding vector(1024),  -- 1024维向量 (BGE-M3)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

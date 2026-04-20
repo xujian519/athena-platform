@@ -1,0 +1,38 @@
+# Prometheus监控配置文件
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+# 告警管理器配置
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - localhost:9093  # 如果需要告警，取消注释
+
+# 告警规则
+rule_files:
+  # - "alert_rules.yml"  # 如果需要自定义告警规则
+
+# 抓取配置
+scrape_configs:
+  # Gateway监控
+  - job_name: 'athena-gateway'
+    static_configs:
+      - targets: ['localhost:9090']
+    scrape_interval: 10s
+    metrics_path: /metrics
+
+  # WebSocket控制平面监控
+  - job_name: 'websocket-control-plane'
+    static_configs:
+      - targets: ['localhost:9090']
+    scrape_interval: 10s
+    metrics_path: /metrics
+
+  # 系统监控（可选）
+  - job_name: 'node'
+    static_configs:
+      - targets: ['localhost:9100']
+    scrape_interval: 15s

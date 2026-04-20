@@ -89,7 +89,7 @@
 | 模型名称 | 路径 | 维度 | 用途 |
 |----------|------|------|------|
 | bge-large-zh-v1.5 | /models/bge-large-zh-v1.5 | 1024 | 中文语义搜索 |
-| "BAAI/bge-m3" | /models/"BAAI/bge-m3" | 768 | 中文文本嵌入 |
+| "BAAI/bge-m3" | /models/"BAAI/bge-m3" | 1024 | 中文文本嵌入（多语言） |
 | chinese_bert | /models/chinese_bert | 768 | 中文理解 |
 | chinese_legal_electra | /models/chinese_legal_electra | - | 法律文本处理 |
 

@@ -1,0 +1,11 @@
+{
+  "name": "Gateway Prometheus",
+  "type": "prometheus",
+  "access": "proxy",
+  "url": "http://localhost:9090/metrics",
+  "basicAuth": false,
+  "isDefault": true,
+  "jsonData": {
+    "httpMethod": "POST"
+  }
+}

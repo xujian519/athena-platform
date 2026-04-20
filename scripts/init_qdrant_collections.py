@@ -42,8 +42,8 @@ class QdrantCollectionInitializer:
         "patent_legal": (1024, Distance.COSINE, "专利法律向量(1024维)"),
         "technical_terms_1024": (1024, Distance.COSINE, "技术术语向量(1024维)"),
         "case_analysis": (1024, Distance.COSINE, "案例分析向量(1024维)"),
-        "patent_fulltext": (768, Distance.COSINE, "专利全文向量(768维,BGE-M3)"),
-        "legal_qa": (768, Distance.COSINE, "法律问答向量(768维)"),
+        "patent_fulltext": (1024, Distance.COSINE, "专利全文向量(1024维,BGE-M3)"),
+        "legal_qa": (1024, Distance.COSINE, "法律问答向量(1024维)"),
     }
 
     def __init__(self, host: str = "localhost", port: int = 16333):

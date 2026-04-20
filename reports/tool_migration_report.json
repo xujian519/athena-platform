@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-04-19T21:51:01.804891",
+  "summary": {
+    "total_tools": 0,
+    "migrated_tools": 0,
+    "failed_tools": 0,
+    "skipped_tools": 0
+  },
+  "errors": [],
+  "warnings": []
+}

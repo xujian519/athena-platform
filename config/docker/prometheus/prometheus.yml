@@ -65,6 +65,16 @@ scrape_configs:
   #         service: 'node'
   #         tier: 'infrastructure'
 
+  # Athena Gateway监控 (运行在宿主机)
+  - job_name: 'athena-gateway'
+    static_configs:
+      - targets: ['host.docker.internal:9091']
+        labels:
+          service: 'athena-gateway'
+          tier: 'application'
+    metrics_path: /metrics
+    scrape_interval: 10s
+
   # cAdvisor (容器监控，可选)
   # - job_name: 'cadvisor'
   #   static_configs:

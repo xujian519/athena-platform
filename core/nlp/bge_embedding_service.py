@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 """
-BGE Large ZH v1.5 嵌入服务
-BGE Embedding Service for Athena Platform
+BGE-M3 嵌入服务
+BGE-M3 Embedding Service for Athena Platform
 
-提供高性能的中文文本嵌入服务,专门优化专利和法律领域
+提供高性能的多语言文本嵌入服务,专门优化专利和法律领域
 
 作者: 小诺·双鱼座
 创建时间: 2025-12-16
+更新时间: 2026-04-19 (迁移至BGE-M3)
 """
 import asyncio
 import logging
@@ -40,16 +41,16 @@ class BGEEmbeddingService:
     """BGE嵌入服务"""
 
     def __init__(self, config: dict[str, Any] | None = None):
-        self.name = "BGE嵌入服务"
-        self.version = "1.0.0"
+        self.name = "BGE-M3嵌入服务"
+        self.version = "2.0.0"
         self.logger = logging.getLogger(self.name)
 
         # 配置
         self.config = config or {
-            "model_path": "/Users/xujian/.cache/huggingface/hub/models--BAAI--bge-large-zh-v1.5/snapshots/79e7739b6ab944e86d6171e44d24c997fc1e0116",
-            "device": "cpu",  # 使用CPU(避免auto错误)
+            "model_path": "BAAI/bge-m3",  # 使用HuggingFace模型名称，自动检测本地缓存
+            "device": "cpu",  # 使用CPU(避免MPS兼容性问题)
             "batch_size": 32,
-            "max_length": 512,
+            "max_length": 8192,  # BGE-M3支持8192长度
             "normalize_embeddings": True,
             "cache_enabled": True,
             "preload": True,
@@ -78,7 +79,7 @@ class BGEEmbeddingService:
         print(f"🚀 {self.name} 初始化完成")
 
     def _load_model(self) -> Any:
-        """加载BGE模型"""
+        """加载BGE-M3模型"""
         with self.load_lock:
             if self.is_loaded:
                 return
@@ -86,7 +87,7 @@ class BGEEmbeddingService:
             try:
                 from sentence_transformers import SentenceTransformer
 
-                print("📦 正在加载BGE Large ZH v1.5模型...")
+                print("📦 正在加载BGE-M3模型...")
                 start_time = time.time()
 
                 # 加载模型
@@ -96,18 +97,18 @@ class BGEEmbeddingService:
 
                 # 验证模型
                 test_embedding = self.model.encode("测试", convert_to_numpy=True)
-                assert len(test_embedding) == 1024, "向量维度应为1024"
+                assert len(test_embedding) == 1024, "BGE-M3向量维度应为1024"
 
                 load_time = time.time() - start_time
                 self.is_loaded = True
 
-                print("✅ BGE模型加载成功!")
+                print("✅ BGE-M3模型加载成功!")
                 print(f"   - 加载时间: {load_time:.2f}秒")
                 print(f"   - 向量维度: {len(test_embedding)}")
                 print(f"   - 设备: {self.model.device}")
 
             except Exception as e:
-                self.logger.error(f"BGE模型加载失败: {e}")
+                self.logger.error(f"BGE-M3模型加载失败: {e}")
                 raise e
 
     async def initialize(self):
@@ -211,7 +212,7 @@ class BGEEmbeddingService:
             return EmbeddingResult(
                 embeddings=cached_embeddings[0] if single_text else cached_embeddings,
                 dimension=1024,
-                model_name="bge-large-zh-v1.5",
+                model_name="bge-m3",
                 processing_time=0.001,
                 batch_size=len(texts),
                 metadata={"cache_hit": True, "task_type": task_type},
@@ -248,7 +249,7 @@ class BGEEmbeddingService:
             return EmbeddingResult(
                 embeddings=embedding_list[0] if single_text else embedding_list,
                 dimension=1024,
-                model_name="bge-large-zh-v1.5",
+                model_name="bge-m3",
                 processing_time=processing_time,
                 batch_size=len(texts),
                 metadata={
@@ -296,9 +297,9 @@ class BGEEmbeddingService:
     def get_model_info(self) -> dict[str, Any]:
         """获取模型信息"""
         return {
-            "name": "BGE Large ZH v1.5",
+            "name": "BGE-M3",
             "dimension": 1024,
-            "max_length": self.config.get("max_length", 512),
+            "max_length": self.config.get("max_length", 8192),
             "device": str(self.model.device) if self.model else "not_loaded",
             "batch_size": self.config.get("batch_size", 32),
             "normalize_embeddings": self.config.get("normalize_embeddings", True),

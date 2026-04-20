@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- 服务标签 -->
+    <key>Label</key>
+    <string>com.athena.gateway.logrotate</string>
+
+    <!-- 程序路径 -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/xujian/Athena工作平台/gateway-unified/scripts/log_rotate.sh</string>
+    </array>
+
+    <!-- 运行用户 -->
+    <key>UserName</key>
+    <string>xujian</string>
+
+    <!-- 定时任务：每天凌晨2点运行 -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>2</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <!-- 标准输出和错误输出 -->
+    <key>StandardOutPath</key>
+    <string>/Users/xujian/Athena工作平台/gateway-unified/logs/logrotate.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/xujian/Athena工作平台/gateway-unified/logs/logrotate-error.log</string>
+
+</dict>
+</plist>

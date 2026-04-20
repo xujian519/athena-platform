@@ -127,7 +127,7 @@ class SecurityConfig:
 
     # CORS
     cors_origins: list = field(
-        default_factory=lambda: ["http://localhost:3000", "http://localhost:8080"]
+        default_factory=lambda: ["http://localhost:3000", "http://localhost:8005"]
     )
     cors_allow_credentials: bool = True
     cors_allow_methods: list = field(default_factory=lambda: ["GET", "POST", "PUT", "DELETE"])

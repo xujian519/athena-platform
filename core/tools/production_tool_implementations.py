@@ -122,14 +122,14 @@ async def text_embedding_handler(
     params: dict[str, Any], context: dict[str, Any]
 ) -> dict[str, Any]:
     """
-    文本向量化处理器 - 真实实现
+    文本向量化处理器 - 使用BGE-M3 API服务（8766端口）
 
-    使用本地BGE模型生成文本向量
+    使用BGE-M3模型（通过8766端口API）生成高质量多语言文本向量
 
     Args:
         params: {
             "text": str,  # 输入文本
-            "model": str,  # 模型名称
+            "model": str,  # 模型名称（保留参数兼容性）
             "normalize": bool  # 是否归一化
         }
         context: 上下文信息
@@ -138,58 +138,96 @@ async def text_embedding_handler(
         向量化结果
     """
     text = params.get("text", "")
-    model_name = params.get("model", "BAAI/bge-m3")
+    model_name = params.get("model", "bge-m3")
     normalize = params.get("normalize", True)
 
+    # 处理空文本
+    if not text or not text.strip():
+        logger.warning("输入文本为空，使用零向量")
+        return {
+            "success": True,
+            "text": "",
+            "model": model_name,
+            "embedding_dim": 1024,
+            "embedding": [0.0] * 10,
+            "normalized": normalize,
+            "full_embedding_available": True,
+            "message": "空文本，返回零向量",
+        }
+
     try:
-        # 动态导入向量化模块
-        from core.models.athena_model_loader import AthenaModelLoader
+        # 使用8766端口的BGE-M3 API服务
+        import http.client
+        import urllib.error
+        import json
 
-        # 获取模型加载器
-        loader = AthenaModelLoader()
+        api_url = "http://127.0.0.1:8766/v1/embeddings"
+        payload = {
+            "input": text,
+            "model": model_name
+        }
 
-        # 生成嵌入向量
-        embeddings = loader.encode([text], model_name=model_name)
+        # 使用http.client（更底层，更稳定）
+        conn = http.client.HTTPConnection("127.0.0.1", 8766, timeout=30)
+        headers = {
+            "Content-Type": "application/json",
+            "User-Agent": "curl/7.79.1",
+            "Accept": "*/*",
+        }
 
-        if embeddings is not None and len(embeddings) > 0:
-            embedding = embeddings[0]
+        conn.request("POST", "/v1/embeddings", json.dumps(payload).encode("utf-8"), headers)
+        response = conn.getresponse()
+
+        if response.status != 200:
+            raise urllib.error.HTTPError(
+                api_url,
+                response.status,
+                response.reason,
+                response.headers,
+                None
+            )
+
+        result = json.loads(response.read().decode("utf-8"))
+        conn.close()
+
+        # 提取向量数据
+        if result.get("object") == "list" and len(result.get("data", [])) > 0:
+            embedding_data = result["data"][0]
+            embedding_vector = embedding_data.get("embedding", [])
 
             return {
                 "success": True,
                 "text": text[:100] + "..." if len(text) > 100 else text,
                 "model": model_name,
-                "embedding_dim": len(embedding),
-                "embedding": (
-                    embedding.tolist()[:10] if len(embedding) > 10 else embedding.tolist()
-                ),  # 返回前10维作为示例
+                "embedding_dim": len(embedding_vector),
+                "embedding": embedding_vector[:10],  # 返回前10维作为示例
                 "normalized": normalize,
                 "full_embedding_available": True,
-                "message": f"成功生成 {len(embedding)} 维向量",
+                "message": f"成功生成 {len(embedding_vector)} 维向量",
+                "api_service": True,
             }
         else:
-            # 备用方案: 使用简单的hash向量
-            logger.warning("模型加载失败,使用hash向量作为备用")
-            hash_vector = _create_hash_vector(text, dim=1024)  # BGE-M3向量维度(已更新)
-            return {
-                "success": True,
-                "text": text[:100] + "..." if len(text) > 100 else text,
-                "model": "hash_fallback",
-                "embedding_dim": 768,
-                "embedding": hash_vector[:10],
-                "normalized": normalize,
-                "full_embedding_available": False,
-                "message": "使用hash向量作为备用方案",
-            }
+            raise ValueError("API返回格式错误")
 
+    except urllib.error.URLError as e:
+        logger.error(f"BGE-M3 API连接失败: {e}")
+        # 备用方案: 使用hash向量
+        hash_vector = _create_hash_vector(text, dim=1024)
+        return {
+            "success": False,
+            "error": f"API连接失败: {e}",
+            "fallback_embedding": hash_vector[:10],
+            "message": "向量化失败，使用备用方案",
+        }
     except Exception as e:
         logger.error(f"文本向量化失败: {e}")
-        # 备用方案
-        hash_vector = _create_hash_vector(text, dim=1024)  # BGE-M3向量维度(已更新)
+        # 备用方案: 使用hash向量
+        hash_vector = _create_hash_vector(text, dim=1024)
         return {
             "success": False,
             "error": str(e),
             "fallback_embedding": hash_vector[:10],
-            "message": "向量化失败,使用备用方案",
+            "message": "向量化失败，使用备用方案",
         }
 
 

@@ -338,8 +338,8 @@ class TestKnowledgeBaseConnectivity:
             embedding = await embedding_service.aencode(test_text)
             duration_ms = (time.time() - start_time) * 1000
 
-            # BGE-M3应返回768维向量
-            if len(embedding) == 768:
+            # BGE-M3应返回1024维向量
+            if len(embedding) == 1024:
                 result = TestResult(
                     test_id="KB-CONN-05",
                     test_name="BGE-M3嵌入服务",
@@ -354,7 +354,7 @@ class TestKnowledgeBaseConnectivity:
                     test_name="BGE-M3嵌入服务",
                     status="FAIL",
                     duration_ms=duration_ms,
-                    details={"error": f"向量维度错误: {len(embedding)}, 预期768"},
+                    details={"error": f"向量维度错误: {len(embedding)}, 预期1024"},
                     timestamp=datetime.now().isoformat()
                 )
         except Exception as e:

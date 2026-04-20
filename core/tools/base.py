@@ -54,6 +54,12 @@ class ToolCategory(Enum):
     WEB_SEARCH = "web_search"  # 网络搜索
     CHAT_COMPLETION = "chat_completion"  # 聊天补全
 
+    # 文件系统类
+    FILESYSTEM = "filesystem"  # 文件系统操作
+
+    # 系统类
+    SYSTEM = "system"  # 系统操作
+
     # 辅助类
     LOGGING = "logging"  # 日志记录
     MONITORING = "monitoring"  # 监控

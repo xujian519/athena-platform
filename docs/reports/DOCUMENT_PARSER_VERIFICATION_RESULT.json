@@ -1,0 +1,260 @@
+{
+  "timestamp": "2026-04-19T23:19:27.567571",
+  "total_tests": 11,
+  "successful_parses": 11,
+  "failed_parses": 0,
+  "accuracy_tests": 9,
+  "complete_extractions": 9,
+  "error_tests": 3,
+  "error_handling_ok": 3,
+  "large_file_truncated": true,
+  "supported_formats": [
+    "txt",
+    "md",
+    "json",
+    "yaml",
+    "xml",
+    "html",
+    "py",
+    "js",
+    "css",
+    "large",
+    "empty"
+  ],
+  "parse_results": [
+    {
+      "type": "txt",
+      "path": "/tmp/athena_tools/document_parser_test/test.txt",
+      "success": true,
+      "has_file_info": true,
+      "has_content": true,
+      "has_metadata": true,
+      "has_error": false,
+      "error": null,
+      "file_size": 720,
+      "content_length": 300,
+      "is_truncated": false
+    },
+    {
+      "type": "md",
+      "path": "/tmp/athena_tools/document_parser_test/test.md",
+      "success": true,
+      "has_file_info": true,
+      "has_content": true,
+      "has_metadata": true,
+      "has_error": false,
+      "error": null,
+      "file_size": 198,
+      "content_length": 130,
+      "is_truncated": false
+    },
+    {
+      "type": "json",
+      "path": "/tmp/athena_tools/document_parser_test/test.json",
+      "success": true,
+      "has_file_info": true,
+      "has_content": true,
+      "has_metadata": true,
+      "has_error": false,
+      "error": null,
+      "file_size": 175,
+      "content_length": 159,
+      "is_truncated": false
+    },
+    {
+      "type": "yaml",
+      "path": "/tmp/athena_tools/document_parser_test/test.yaml",
+      "success": true,
+      "has_file_info": true,
+      "has_content": true,
+      "has_metadata": true,
+      "has_error": false,
+      "error": null,
+      "file_size": 124,
+      "content_length": 104,
+      "is_truncated": false
+    },
+    {
+      "type": "xml",
+      "path": "/tmp/athena_tools/document_parser_test/test.xml",
+      "success": true,
+      "has_file_info": true,
+      "has_content": true,
+      "has_metadata": true,
+      "has_error": false,
+      "error": null,
+      "file_size": 250,
+      "content_length": 230,
+      "is_truncated": false
+    },
+    {
+      "type": "html",
+      "path": "/tmp/athena_tools/document_parser_test/test.html",
+      "success": true,
+      "has_file_info": true,
+      "has_content": true,
+      "has_metadata": true,
+      "has_error": false,
+      "error": null,
+      "file_size": 258,
+      "content_length": 216,
+      "is_truncated": false
+    },
+    {
+      "type": "py",
+      "path": "/tmp/athena_tools/document_parser_test/test.py",
+      "success": true,
+      "has_file_info": true,
+      "has_content": true,
+      "has_metadata": true,
+      "has_error": false,
+      "error": null,
+      "file_size": 335,
+      "content_length": 317,
+      "is_truncated": false
+    },
+    {
+      "type": "js",
+      "path": "/tmp/athena_tools/document_parser_test/test.js",
+      "success": true,
+      "has_file_info": true,
+      "has_content": true,
+      "has_metadata": true,
+      "has_error": false,
+      "error": null,
+      "file_size": 285,
+      "content_length": 269,
+      "is_truncated": false
+    },
+    {
+      "type": "css",
+      "path": "/tmp/athena_tools/document_parser_test/test.css",
+      "success": true,
+      "has_file_info": true,
+      "has_content": true,
+      "has_metadata": true,
+      "has_error": false,
+      "error": null,
+      "file_size": 233,
+      "content_length": 225,
+      "is_truncated": false
+    },
+    {
+      "type": "large",
+      "path": "/tmp/athena_tools/document_parser_test/large.txt",
+      "success": true,
+      "has_file_info": true,
+      "has_content": true,
+      "has_metadata": true,
+      "has_error": false,
+      "error": null,
+      "file_size": 28000,
+      "content_length": 10000,
+      "is_truncated": false
+    },
+    {
+      "type": "empty",
+      "path": "/tmp/athena_tools/document_parser_test/empty.txt",
+      "success": true,
+      "has_file_info": true,
+      "has_content": true,
+      "has_metadata": true,
+      "has_error": false,
+      "error": null,
+      "file_size": 0,
+      "content_length": 0,
+      "is_truncated": false
+    }
+  ],
+  "accuracy_results": [
+    {
+      "type": "txt",
+      "original_length": 300,
+      "extracted_length": 300,
+      "match_ratio": 1.0,
+      "is_complete": true
+    },
+    {
+      "type": "md",
+      "original_length": 130,
+      "extracted_length": 130,
+      "match_ratio": 1.0,
+      "is_complete": true
+    },
+    {
+      "type": "json",
+      "original_length": 159,
+      "extracted_length": 159,
+      "match_ratio": 1.0,
+      "is_complete": true
+    },
+    {
+      "type": "yaml",
+      "original_length": 104,
+      "extracted_length": 104,
+      "match_ratio": 1.0,
+      "is_complete": true
+    },
+    {
+      "type": "xml",
+      "original_length": 230,
+      "extracted_length": 230,
+      "match_ratio": 1.0,
+      "is_complete": true
+    },
+    {
+      "type": "html",
+      "original_length": 216,
+      "extracted_length": 216,
+      "match_ratio": 1.0,
+      "is_complete": true
+    },
+    {
+      "type": "py",
+      "original_length": 317,
+      "extracted_length": 317,
+      "match_ratio": 1.0,
+      "is_complete": true
+    },
+    {
+      "type": "js",
+      "original_length": 269,
+      "extracted_length": 269,
+      "match_ratio": 1.0,
+      "is_complete": true
+    },
+    {
+      "type": "css",
+      "original_length": 225,
+      "extracted_length": 225,
+      "match_ratio": 1.0,
+      "is_complete": true
+    }
+  ],
+  "error_results": [
+    {
+      "test": "文件不存在",
+      "expected_error": true,
+      "actual_error": true,
+      "error_message": "路径不在允许范围内: /nonexistent/file.txt. 允许的目录: /Users/xujian/Athena工作平台/data, /Users/xujian/Athena工作平台/docs, /Users/xujian/Athena工作平台/cache, /tmp/athena_tools"
+    },
+    {
+      "test": "路径遍历攻击",
+      "expected_error": true,
+      "actual_error": true,
+      "error_message": "路径不在允许范围内: /etc/passwd. 允许的目录: /Users/xujian/Athena工作平台/data, /Users/xujian/Athena工作平台/docs, /Users/xujian/Athena工作平台/cache, /tmp/athena_tools"
+    },
+    {
+      "test": "空路径",
+      "expected_error": true,
+      "actual_error": true,
+      "error_message": "路径不在允许范围内: . 允许的目录: /Users/xujian/Athena工作平台/data, /Users/xujian/Athena工作平台/docs, /Users/xujian/Athena工作平台/cache, /tmp/athena_tools"
+    }
+  ],
+  "large_file_result": {
+    "original_size": 190000,
+    "extracted_length": 1000,
+    "is_truncated": true,
+    "truncated_ratio": 0.005263157894736842
+  }
+}

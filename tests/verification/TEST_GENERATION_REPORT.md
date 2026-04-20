@@ -189,7 +189,7 @@
 **核心功能**:
 - ✅ 异步HTTP客户端 (httpx.AsyncClient)
 - ✅ Neo4j、Qdrant、PostgreSQL、Redis连通性测试
-- ✅ BGE-M3嵌入服务验证 (768维向量)
+- ✅ BGE-M3嵌入服务验证 (1024维向量)
 - ✅ 网关路由转发测试
 - ✅ 黄金查询集 (Golden Set) 准确性验证
 - ✅ 测试报告JSON导出

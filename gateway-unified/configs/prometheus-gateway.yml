@@ -1,0 +1,18 @@
+# Prometheus配置 - 从Gateway抓取指标
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # Gateway Prometheus指标
+  - job_name: 'athena-gateway'
+    static_configs:
+      - targets: ['localhost:9091']  # Gateway的监控端口
+    metrics_path: '/metrics'
+    scrape_interval: 10s
+
+  # Prometheus自身监控
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']

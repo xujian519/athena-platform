@@ -16,6 +16,7 @@ import (
 	"github.com/athena-workspace/gateway-unified/internal/monitoring"
 	"github.com/athena-workspace/gateway-unified/internal/router"
 	"github.com/athena-workspace/gateway-unified/internal/tailscale"
+	"github.com/athena-workspace/gateway-unified/internal/websocket"
 )
 
 // 版本信息
@@ -66,8 +67,12 @@ func main() {
 		logging.LogFatal("创建网关失败", logging.Err(err))
 	}
 
+	// 创建WebSocket控制器
+	wsController := websocket.NewController(websocket.DefaultConfig())
+	logging.LogInfo("WebSocket控制器已创建")
+
 	// 设置路由
-	if err := router.SetupRoutes(gw.GetRouter(), cfg); err != nil {
+	if err := router.SetupRoutes(gw.GetRouter(), cfg, wsController); err != nil {
 		logging.LogFatal("设置路由失败", logging.Err(err))
 	}
 
@@ -182,21 +187,28 @@ func main() {
 	ctx2, cancel2 := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel2()
 
-	done := make(chan error, 1)
+	done := make(chan error, 2)
 	go func() {
 		done <- gw.Close()
 	}()
+	go func() {
+		done <- wsController.Close()
+	}()
 
-	select {
-	case err := <-done:
-		if err != nil {
-			logging.LogError("网关关闭失败", logging.Err(err))
-		} else {
-			logging.LogInfo("第二阶段完成: 网关资源已释放")
+	// 等待所有资源关闭
+	for i := 0; i < 2; i++ {
+		select {
+		case err := <-done:
+			if err != nil {
+				logging.LogError("资源关闭失败", logging.Err(err))
+			}
+		case <-ctx2.Done():
+			logging.LogWarn("第二阶段超时")
+			break
 		}
-	case <-ctx2.Done():
-		logging.LogWarn("第二阶段超时")
 	}
+
+	logging.LogInfo("第二阶段完成: 网关和WebSocket资源已释放")
 
 	// 第三阶段: 重置Tailscale配置
 	if tsManager != nil && cfg.Tailscale.ResetOnExit {

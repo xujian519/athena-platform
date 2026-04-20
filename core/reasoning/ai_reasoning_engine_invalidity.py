@@ -152,7 +152,7 @@ class AIReasoningEngine:
         if FAISS_AVAILABLE:
             try:
                 # 创建FAISS索引
-                self.vector_index = faiss.IndexFlatIP(768)  # 假设使用1024维向量(BGE-M3)
+                self.vector_index = faiss.IndexFlatIP(1024)  # BGE-M3标准维度为1024维
                 logger.info("向量数据库初始化完成")
             except Exception:
                 self.vector_index = None

@@ -31,3 +31,14 @@ monitoring:
   port: 9090
   # 指标路径 (默认: /metrics)
   path: /metrics
+
+# 限流配置
+rate_limiting:
+  # 启用限流 (默认: false)
+  enabled: true
+  # 默认限制 (每分钟请求数)
+  default_limit: 1000
+  # 默认突发 (令牌桶大小)
+  default_burst: 100
+  # 自适应模式
+  adaptive_mode: true

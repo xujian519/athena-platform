@@ -842,8 +842,8 @@ Task Tool系统
 - 专利撰写: Claude 3 Opus (main)
 
 **向量模型**:
-- 专利文本: BGE-M3 (768维)
-- 法律文本: BGE-M3 (768维)
+- 专利文本: BGE-M3 (1024维)
+- 法律文本: BGE-M3 (1024维)
 
 **检索引擎**:
 - 本地检索: Elasticsearch + pgvector

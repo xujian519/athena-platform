@@ -823,7 +823,7 @@ class LegalKnowledgeGraphBuilder:
             # 创建集合（如果不存在）
             collection_config = {
                 "vectors": {
-                    "size": 768,  # BGE-M3向量维度
+                    "size": 1024,  # BGE-M3向量维度（标准1024维）
                     "distance": "Cosine",
                 }
             }

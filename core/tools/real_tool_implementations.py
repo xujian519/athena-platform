@@ -127,15 +127,21 @@ class CodeAnalyzer:
         return suggestions
 
 
-async def real_code_analyzer_handler(params: dict[str, Any], context: dict[str, Any] | None = None) -> Any:
-    """真实的代码分析处理器"""
+async def code_analyzer_handler(params: dict, context: dict) -> dict:
+    """
+    代码分析器工具处理器
+
+    Args:
+        params: 参数字典，包含code和language
+        context: 上下文信息
+
+    Returns:
+        分析结果字典
+    """
     code = params.get("code", "")
     language = params.get("language", "python")
 
-    if not code:
-        raise ValueError("缺少必需参数: code")
-
-    logger.info(f"🔍 分析 {language} 代码,长度: {len(code)} 字符")
+    logger.info(f"分析代码,长度: {len(code)} 字符")
 
     try:
         analyzer = CodeAnalyzer()
@@ -171,12 +177,22 @@ async def real_code_analyzer_handler(params: dict[str, Any], context: dict[str, 
 # 2. MONITORING: 真实系统监控
 # ========================================
 
-async def real_system_monitor_handler(params: dict[str, Any], context: dict[str, Any] | None = None) -> Any:
-    """真实的系统监控处理器"""
-    target = params.get("target", "system")
-    metrics = params.get("metrics", ["cpu", "memory", "disk"])
 
-    logger.info(f"📊 监控目标: {target}, 指标: {metrics}")
+async def system_monitor_handler(params: dict, context: dict) -> dict:
+    """
+    系统监控工具处理器
+
+    Args:
+        params: 参数字典，包含target和metrics
+        context: 上下文信息
+
+    Returns:
+        监控结果字典
+    """
+    target = params.get("target", "localhost")
+    metrics = params.get("metrics", ["cpu", "memory"])
+
+    logger.info(f"监控系统: {target}, 指标: {metrics}")
 
     try:
         result: dict[str, Any] = {
@@ -310,20 +326,21 @@ async def _get_search_engine() -> LocalSearchEngine:
     return _search_engine_instance
 
 
-async def real_web_search_handler(params: dict[str, Any], context: dict[str, Any] | None = None) -> Any:
+async def local_web_search_handler(params: dict, context: dict) -> dict:
     """
-    本地网络搜索处理器
+    本地网络搜索工具处理器
 
-    使用本地构建的搜索引擎（基于SearXNG + Firecrawl）
-    不依赖外部API，完全本地化运行
+    Args:
+        params: 参数字典，包含query和limit
+        context: 上下文信息
+
+    Returns:
+        搜索结果字典
     """
     query = params.get("query", "")
     limit = params.get("limit", 10)
 
-    if not query:
-        raise ValueError("缺少必需参数: query")
-
-    logger.info(f"🔍 本地网络搜索: {query}")
+    logger.info(f"本地网络搜索: {query}")
 
     try:
         search_engine = await _get_search_engine()
@@ -464,16 +481,22 @@ def _get_knowledge_graph() -> LocalKnowledgeGraph:
     return _kg_instance
 
 
-async def real_knowledge_graph_handler(params: dict[str, Any], context: dict[str, Any] | None = None) -> Any:
-    """真实的知识图谱查询处理器"""
+async def knowledge_graph_search_handler(params: dict, context: dict) -> dict:
+    """
+    知识图谱搜索工具处理器
+
+    Args:
+        params: 参数字典，包含query、domain和depth
+        context: 上下文信息
+
+    Returns:
+        搜索结果字典
+    """
     query = params.get("query", "")
-    domain = params.get("domain", "general")
-    depth = params.get("depth", 1)
+    domain = params.get("domain", "patent")
+    depth = params.get("depth", 2)
 
-    if not query:
-        raise ValueError("缺少必需参数: query")
-
-    logger.info(f"🕸️ 知识图谱查询: {query}, 领域: {domain}")
+    logger.info(f"知识图谱搜索: {query}, 领域: {domain}")
 
     try:
         kg = _get_knowledge_graph()
@@ -598,15 +621,21 @@ def _get_chat_companion() -> ChatCompanion:
     return _chat_companion_instance
 
 
-async def real_chat_companion_handler(params: dict[str, Any], context: dict[str, Any] | None = None) -> Any:
-    """真实的聊天伴侣处理器"""
+async def chat_companion_handler(params: dict, context: dict) -> dict:
+    """
+    聊天伴侣工具处理器
+
+    Args:
+        params: 参数字典，包含message和style
+        context: 上下文信息
+
+    Returns:
+        聊天回复字典
+    """
     message = params.get("message", "")
     style = params.get("style", "friendly")
 
-    if not message:
-        raise ValueError("缺少必需参数: message")
-
-    logger.info(f"💬 聊天消息: {message[:50]}...")
+    logger.info(f"聊天伴侣请求: {message[:50]}...")
 
     try:
         companion = _get_chat_companion()

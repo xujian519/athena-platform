@@ -82,10 +82,10 @@ class RedisConfig:
             db=int(os.getenv('REDIS_DB', '0')),
             password=os.getenv('REDIS_PASSWORD'),
             ttl={
-                'agent_stats': int(os.getenv('REDIS_TTL_AGENT_STATS', '300')),
-                'search_results': int(os.getenv('REDIS_TTL_SEARCH_RESULTS', '60')),
-                'memory_data': int(os.getenv('REDIS_TTL_MEMORY_DATA', '180')),
-                'hot_memory': int(os.getenv('REDIS_TTL_HOT_MEMORY', '600'))
+                'agent_stats': int(os.getenv('REDIS_TTL_AGENT_STATS', '1800')),  # 优化: 300s → 1800s (30分钟)
+                'search_results': int(os.getenv('REDIS_TTL_SEARCH_RESULTS', '300')),  # 优化: 60s → 300s (5分钟)
+                'memory_data': int(os.getenv('REDIS_TTL_MEMORY_DATA', '1800')),  # 优化: 180s → 1800s (30分钟)
+                'hot_memory': int(os.getenv('REDIS_TTL_HOT_MEMORY', '1800'))  # 优化: 600s → 1800s (30分钟)
             }
         )
 
@@ -187,7 +187,7 @@ class EmbeddingConfig:
 class PerformanceConfig:
     """性能配置"""
 
-    hot_cache_limit: int = 50
+    hot_cache_limit: int = 200  # 优化: 50 → 200 (4倍容量，提升缓存命中率)
     batch_size: int = 100
     query_timeout: int = 30
 
@@ -195,7 +195,7 @@ class PerformanceConfig:
     def from_env(cls) -> 'PerformanceConfig':
         """从环境变量加载配置"""
         return cls(
-            hot_cache_limit=int(os.getenv('HOT_CACHE_LIMIT', '50')),
+            hot_cache_limit=int(os.getenv('HOT_CACHE_LIMIT', '200')),  # 优化: 默认值提升到200
             batch_size=int(os.getenv('BATCH_SIZE', '100')),
             query_timeout=int(os.getenv('QUERY_TIMEOUT', '30'))
         )

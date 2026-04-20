@@ -382,23 +382,12 @@ async def file_operator_handler(
 # ========================================
 
 
-async def code_executor_handler(
-    params: dict[str, Any], context: dict[str, Any]
-) -> dict[str, Any]:
+async def code_executor_handler(params: dict, context: dict) -> dict:
     """
-    代码执行处理器 - 安全实现
-
-    功能:
-    1. 执行Python代码片段
-    2. 捕获输出
-    3. 超时保护
-    4. 沙箱环境
+    代码执行器工具处理器
 
     Args:
-        params: {
-            "code": str,  # 要执行的代码
-            "timeout": int  # 超时时间(秒)
-        }
+        params: 参数字典，包含code和timeout
         context: 上下文信息
 
     Returns:
@@ -423,6 +412,7 @@ async def code_executor_handler(
         sys.stderr = StringIO()
 
         # 执行代码 (简化版,实际应该使用更安全的沙箱)
+        # 注意: 添加time和sys模块以支持基本功能
         exec_globals = {
             "__builtins__": {
                 "print": print,
@@ -436,7 +426,9 @@ async def code_executor_handler(
                 "sum": sum,
                 "max": max,
                 "min": min,
-            }
+                "time": time,  # 允许time.sleep等操作
+            },
+            "sys": sys,  # 允许sys.stderr.write等操作
         }
 
         # 限制代码长度

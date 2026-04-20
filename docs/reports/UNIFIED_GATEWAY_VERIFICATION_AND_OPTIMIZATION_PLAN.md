@@ -46,7 +46,7 @@
 | KB-CONN-02 | Qdrant向量库连通性 | `curl http://localhost:6333/collections` | 返回200, 含7个集合列表 | P0 |
 | KB-CONN-03 | PostgreSQL连通性 | `docker-compose exec postgres pg_isready -U athena` | 返回 "accepting connections" | P0 |
 | KB-CONN-04 | Redis连通性 | `docker-compose exec redis redis-cli ping` | 返回 PONG | P0 |
-| KB-CONN-05 | BGE-M3嵌入服务 | 调用 `UnifiedEmbeddingService.encode("测试文本")` | 返回768维向量 | P0 |
+| KB-CONN-05 | BGE-M3嵌入服务 | 调用 `UnifiedEmbeddingService.encode("测试文本")` | 返回1024维向量 | P0 |
 | KB-CONN-06 | 网关→知识图谱路由 | `curl http://localhost:8005/api/v1/kg/query` (POST) | 正确转发至8100端口 | P0 |
 | KB-CONN-07 | 网关→向量搜索路由 | `curl http://localhost:8005/api/v1/vector/search` (POST) | 正确转发至Qdrant | P0 |
 | KB-CONN-08 | 网关→法律搜索路由 | `curl http://localhost:8005/api/v1/legal/search` (POST) | 正确转发至法律向量API | P1 |
@@ -809,7 +809,7 @@ class RetrievalConfidence:
 - [ ] KB-ACC-01~06: 基准查询准确率验证通过
 - [ ] KB-PERF-01~05: 并发性能测试达标
 - [ ] KB-SYNC-01~04: 数据同步一致性验证通过
-- [ ] 嵌入服务(BGE-M3)768维输出正确
+- [ ] 嵌入服务(BGE-M3)1024维输出正确
 - [ ] 5种RAG策略均可正常返回结果
 - [ ] 7个Qdrant集合全部可查询
 - [ ] Neo4j和ArangoDB双引擎切换正常

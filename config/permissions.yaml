@@ -1,0 +1,117 @@
+# Athena 平台权限配置文件
+#
+# 配置多级权限系统的行为和规则
+#
+# 文档: docs/api/PERMISSION_MODES_DESIGN.md
+
+# ========================================
+# 权限模式
+# ========================================
+# 可选值:
+# - default: 默认模式，未匹配规则时需要用户确认
+# - auto: 自动模式，未匹配规则时自动拒绝
+# - plan: 计划模式，阻止所有写入操作
+# - bypass: 绕过模式，允许所有调用（谨慎使用）
+mode: default
+
+# ========================================
+# 路径级规则
+# ========================================
+# 基于文件路径的权限控制
+#
+# 字段说明:
+# - rule_id: 规则唯一标识
+# - pattern: 路径模式（支持 ** 递归匹配, * 单层匹配）
+# - allow: true=允许, false=拒绝
+# - priority: 优先级（数值越大优先级越高）
+# - reason: 规则原因说明
+# - enabled: 是否启用该规则
+path_rules:
+  # 项目目录 - 允许访问
+  - rule_id: project-dir
+    pattern: /Users/xujian/Athena工作平台/**
+    allow: true
+    priority: 50
+    reason: 项目目录允许访问
+    enabled: true
+
+  # 系统目录 - 禁止访问
+  - rule_id: system-dir
+    pattern: /etc/**
+    allow: false
+    priority: 100
+    reason: 系统目录禁止访问
+    enabled: true
+
+  - rule_id: usr-dir
+    pattern: /usr/**
+    allow: false
+    priority: 100
+    reason: 系统目录禁止访问
+    enabled: true
+
+  # 临时目录 - 允许访问
+  - rule_id: temp-dir
+    pattern: /tmp/**
+    allow: true
+    priority: 10
+    reason: 临时目录允许访问
+    enabled: true
+
+  # 用户主目录 - 允许访问
+  - rule_id: home-dir
+    pattern: /Users/xujian/**
+    allow: true
+    priority: 50
+    reason: 用户主目录允许访问
+    enabled: true
+
+# ========================================
+# 命令黑名单
+# ========================================
+# 危险命令列表，这些命令无论权限规则如何都会被拒绝
+denied_commands:
+  # 系统破坏命令
+  - rm -rf /
+  - rm -rf /*
+  - rm -rf /.*
+  - mkfs
+  - format
+
+  # 数据库破坏命令
+  - DROP TABLE
+  - DROP DATABASE
+  - DELETE FROM
+  - TRUNCATE TABLE
+
+  # 系统控制命令
+  - shutdown -h now
+  - shutdown -h +0
+  - shutdown now
+  - poweroff
+  - halt
+  - reboot
+  - init 0
+
+  # Fork 炸弹
+  - :(){ :|:& };:
+  - fork() { fork | fork & }; fork
+
+  # 其他危险命令
+  - dd if=/dev/zero of=/dev/
+  - chmod -R 777 /
+  - chown -R
+
+# ========================================
+# PLAN 模式写入操作（可选）
+# ========================================
+# 自定义 PLAN 模式下的写入操作列表
+# 如果不指定，将使用默认列表
+plan_mode_writes:
+  - file:write
+  - file:edit
+  - file:delete
+  - bash:execute
+  - database:write
+  - database:delete
+  - database:update

@@ -8,7 +8,7 @@ import logging
 import os
 import sys
 import warnings
-from typing import Any
+from typing import Any, Union
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -76,7 +76,7 @@ class NumpyCompatibilityManager:
 
         self.compatibility_mode = "legacy"
 
-    def get_safe_array(self, data: Any, dtype: str | type = None) -> "np.ndarray":
+    def get_safe_array(self, data: Any, dtype: Union[str, type, None] = None) -> "np.ndarray":
         """创建安全的numpy数组"""
         import numpy as np
 
@@ -100,7 +100,7 @@ class NumpyCompatibilityManager:
             # 备用方案：转换为列表再创建数组
             return np.array(list(data), dtype=np.object_)
 
-    def safe_random(self, size: int | tuple, dtype: type = None) -> "np.ndarray":
+    def safe_random(self, size: Union[int, tuple], dtype: Union[type, None] = None) -> "np.ndarray":
         """安全的随机数生成"""
         import numpy as np
 

@@ -618,7 +618,8 @@ class CallSimulator:
     async def _simulate_embedding(self, args: dict[str, Any]) -> dict[str, Any]:
         """模拟向量嵌入"""
         await asyncio.sleep(0.05)
-        return {"embedding": [0.1, 0.2, 0.3] * 256, "dimensions": 768}  # 1024维向量(BGE-M3)
+        # BGE-M3标准维度为1024维
+        return {"embedding": [0.1] * 1024, "dimensions": 1024}
 
     async def _simulate_document_processing(self, args: dict[str, Any]) -> dict[str, Any]:
         """模拟文档处理"""

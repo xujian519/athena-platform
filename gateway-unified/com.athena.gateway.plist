@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- 服务标签 -->
+    <key>Label</key>
+    <string>com.athena.gateway</string>
+
+    <!-- 程序路径 -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/xujian/Athena工作平台/gateway-unified/bin/gateway-unified</string>
+        <string>-config</string>
+        <string>/Users/xujian/Athena工作平台/gateway-unified/config.yaml</string>
+    </array>
+
+    <!-- 工作目录 -->
+    <key>WorkingDirectory</key>
+    <string>/Users/xujian/Athena工作平台/gateway-unified</string>
+
+    <!-- 运行用户 -->
+    <key>UserName</key>
+    <string>xujian</string>
+
+    <!-- 环境变量 -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin</string>
+    </dict>
+
+    <!-- 标准输出和错误输出到日志文件 -->
+    <key>StandardOutPath</key>
+    <string>/Users/xujian/Athena工作平台/gateway-unified/logs/gateway-stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/xujian/Athena工作平台/gateway-unified/logs/gateway-error.log</string>
+
+    <!-- 自动启动 -->
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!-- 保持运行，如果崩溃则重启 -->
+    <key>KeepAlive</key>
+    <dict>
+        <!-- 崩溃后重启 -->
+        <key>SuccessfulExit</key>
+        <false/>
+        <!-- 如果进程异常退出，10秒后重启 -->
+        <key>Crashed</key>
+        <true/>
+    </dict>
+
+    <!-- 重启延迟（秒） -->
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+
+    <!-- 网络依赖：等待网络可用后启动 -->
+    <key>NetworkState</key>
+    <true/>
+
+    <!-- 文件系统监视：如果配置文件变化则重启 -->
+    <key>WatchPaths</key>
+    <array>
+        <string>/Users/xujian/Athena工作平台/gateway-unified/config.yaml</string>
+    </array>
+
+    <!-- 进程类型：交互式 -->
+    <key>ProcessType</key>
+    <string>Interactive</string>
+
+    <!-- 优雅关闭：发送SIGTERM后等待30秒 -->
+    <key>ExitTimeout</key>
+    <integer>30</integer>
+</dict>
+</plist>

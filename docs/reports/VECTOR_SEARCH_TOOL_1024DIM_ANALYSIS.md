@@ -23,10 +23,10 @@
 
 ### 1.3 技术架构
 
-**模型**: BGE-M3（定制版）
-- 标准维度: 768维
-- **项目维度: 1024维** ⚠️
-- 扩展方式: Zero-padding或投影层
+**模型**: BGE-M3（标准版）
+- 标准维度: 1024维
+- **项目维度: 1024维** ✅
+- 无需扩展或投影
 
 **向量数据库**: Qdrant
 - 端点: http://localhost:6333
@@ -135,23 +135,20 @@ class BGE_M3_Embedder:
 
 ## 四、维度处理机制
 
-### 4.1 维度扩展
+### 4.1 维度说明
 
-**标准BGE-M3**: 768维
+**标准BGE-M3**: 1024维
 **项目BGE-M3**: 1024维
-**扩展方式**: Zero-padding（补256个零）
+**无需扩展**: 直接使用标准输出
 
 ```python
-def expand_vector_to_1024(vector_768: np.ndarray) -> np.ndarray:
-    """将768维向量扩展到1024维"""
-    if len(vector_768) == 768:
-        # 补256个零
-        padding = np.zeros(1024 - 768, dtype=vector_768.dtype)
-        return np.concatenate([vector_768, padding])
-    elif len(vector_768) == 1024:
-        return vector_768
-    else:
-        raise ValueError(f"不支持的向量维度: {len(vector_768)}")
+def validate_vector_dimension(vector: np.ndarray) -> bool:
+    """验证BGE-M3向量维度是否为1024维"""
+    if isinstance(vector, (list, np.ndarray)):
+        return len(vector) == 1024
+    elif hasattr(vector, 'shape'):
+        return vector.shape[-1] == 1024
+    return False
 ```
 
 ### 4.2 维度验证
@@ -327,29 +324,14 @@ async def vector_search_handler(
         }
 ```
 
-### 6.2 维度兼容性处理
+### 6.2 BGE-M3模型说明
 
-```python
-def ensure_vector_dimension(vector: np.ndarray, target_dim: int = 1024) -> np.ndarray:
-    """确保向量维度为目标维度"""
-    current_dim = len(vector) if isinstance(vector, (list, np.ndarray)) else vector.shape[-1]
-    
-    if current_dim == target_dim:
-        return vector
-    elif current_dim < target_dim:
-        # 补零
-        padding = np.zeros(target_dim - current_dim, dtype=vector.dtype)
-        if isinstance(vector, np.ndarray):
-            return np.concatenate([vector, padding])
-        else:
-            return list(vector) + list(padding)
-    else:
-        # 截断
-        if isinstance(vector, np.ndarray):
-            return vector[:target_dim]
-        else:
-            return vector[:target_dim]
-```
+**重要**: BGE-M3模型的**标准输出维度就是1024维**，而非768维。
+
+- BGE-Large系列（如bge-large-zh-v1.5）: 768维
+- BGE-M3（多语言版本）: 1024维
+
+本项目使用的是**BGE-M3标准版本**，无需任何维度扩展或转换。
 
 ---
 
@@ -491,4 +473,4 @@ async def test_collection_dimension():
 
 ---
 
-**重要提醒**: ⚠️ **本项目使用1024维向量，而非标准的768维！**
+**重要说明**: ✅ **BGE-M3的标准维度就是1024维，本项目使用标准配置。**

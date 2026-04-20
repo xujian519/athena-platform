@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athena Gateway WebSocket测试客户端</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+
+        .section h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .status.connected {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.disconnected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        input, select, textarea {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        #log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-left: 3px solid #667eea;
+            background: white;
+        }
+
+        .log-entry.error {
+            border-left-color: #dc3545;
+        }
+
+        .log-entry.success {
+            border-left-color: #28a745;
+        }
+
+        .timestamp {
+            color: #6c757d;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Athena Gateway WebSocket测试客户端</h1>
+
+        <!-- 连接状态 -->
+        <div class="section">
+            <h2>连接状态</h2>
+            <div id="status" class="status disconnected">
+                <strong>状态:</strong> 未连接
+            </div>
+            <div>
+                <button id="connectBtn" onclick="connect()">连接</button>
+                <button id="disconnectBtn" onclick="disconnect()" disabled>断开</button>
+            </div>
+        </div>
+
+        <!-- 发送消息 -->
+        <div class="section">
+            <h2>发送消息</h2>
+            <div>
+                <label>消息类型:</label>
+                <select id="messageType">
+                    <option value="handshake">握手 (handshake)</option>
+                    <option value="task">任务 (task)</option>
+                    <option value="query">查询 (query)</option>
+                    <option value="ping">心跳 (ping)</option>
+                </select>
+            </div>
+            <div id="taskOptions" style="display: none;">
+                <label>任务类型:</label>
+                <input type="text" id="taskType" value="patent_analysis" placeholder="例如: patent_analysis">
+                <label>目标Agent:</label>
+                <select id="targetAgent">
+                    <option value="xiaona">小娜 (法律专家)</option>
+                    <option value="xiaonuo">小诺 (调度官)</option>
+                    <option value="yunxi">云熙 (IP管理)</option>
+                </select>
+            </div>
+            <div>
+                <label>认证Token:</label>
+                <input type="text" id="authToken" value="demo_token" placeholder="输入认证Token">
+            </div>
+            <div>
+                <button onclick="sendMessage()" id="sendBtn" disabled>发送消息</button>
+                <button onclick="clearLog()">清空日志</button>
+            </div>
+        </div>
+
+        <!-- 消息日志 -->
+        <div class="section">
+            <h2>消息日志</h2>
+            <div id="log"></div>
+        </div>
+    </div>
+
+    <script>
+        let ws = null;
+        let clientID = null;
+        let sessionID = null;
+
+        // 生成客户端ID
+        function generateClientID() {
+            return 'client_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // 生成消息ID
+        function generateMessageID() {
+            return 'msg_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // 连接WebSocket
+        function connect() {
+            clientID = generateClientID();
+            const wsUrl = 'ws://' + window.location.host + '/ws?client_id=' + clientID;
+
+            log('尝试连接到: ' + wsUrl, 'info');
+
+            ws = new WebSocket(wsUrl);
+
+            ws.onopen = function() {
+                log('WebSocket已连接', 'success');
+                updateStatus(true);
+            };
+
+            ws.onmessage = function(event) {
+                try {
+                    const message = JSON.parse(event.data);
+                    log('收到消息: ' + JSON.stringify(message, null, 2), 'success');
+                    handleMessage(message);
+                } catch (e) {
+                    log('解析消息失败: ' + e.message, 'error');
+                }
+            };
+
+            ws.onclose = function() {
+                log('WebSocket已断开', 'error');
+                updateStatus(false);
+            };
+
+            ws.onerror = function(error) {
+                log('WebSocket错误: ' + error, 'error');
+            };
+        }
+
+        // 断开连接
+        function disconnect() {
+            if (ws) {
+                ws.close();
+                ws = null;
+            }
+        }
+
+        // 更新状态
+        function updateStatus(connected) {
+            const statusDiv = document.getElementById('status');
+            const connectBtn = document.getElementById('connectBtn');
+            const disconnectBtn = document.getElementById('disconnectBtn');
+            const sendBtn = document.getElementById('sendBtn');
+
+            if (connected) {
+                statusDiv.className = 'status connected';
+                statusDiv.innerHTML = '<strong>状态:</strong> 已连接 (Client ID: ' + clientID + ')';
+                connectBtn.disabled = true;
+                disconnectBtn.disabled = false;
+                sendBtn.disabled = false;
+            } else {
+                statusDiv.className = 'status disconnected';
+                statusDiv.innerHTML = '<strong>状态:</strong> 未连接';
+                connectBtn.disabled = false;
+                disconnectBtn.disabled = true;
+                sendBtn.disabled = true;
+                sessionID = null;
+            }
+        }
+
+        // 发送消息
+        function sendMessage() {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                log('WebSocket未连接', 'error');
+                return;
+            }
+
+            const messageType = document.getElementById('messageType').value;
+            const message = createMessage(messageType);
+
+            try {
+                ws.send(JSON.stringify(message));
+                log('发送消息: ' + JSON.stringify(message, null, 2), 'info');
+            } catch (e) {
+                log('发送失败: ' + e.message, 'error');
+            }
+        }
+
+        // 创建消息
+        function createMessage(messageType) {
+            const baseMessage = {
+                id: generateMessageID(),
+                type: messageType,
+                timestamp: Date.now() * 1000000,
+                session_id: sessionID,
+                data: {}
+            };
+
+            switch (messageType) {
+                case 'handshake':
+                    baseMessage.data = {
+                        client_id: clientID,
+                        auth_token: document.getElementById('authToken').value,
+                        capabilities: ['canvas', 'task', 'query'],
+                        user_agent: navigator.userAgent
+                    };
+                    break;
+
+                case 'task':
+                    baseMessage.data = {
+                        task_type: document.getElementById('taskType').value,
+                        target_agent: document.getElementById('targetAgent').value,
+                        priority: 5,
+                        parameters: {
+                            query: '测试任务'
+                        }
+                    };
+                    break;
+
+                case 'query':
+                    baseMessage.data = {
+                        type: 'test_query',
+                        parameters: {}
+                    };
+                    break;
+
+                case 'ping':
+                    baseMessage.data = {
+                        ping_id: generateMessageID()
+                    };
+                    break;
+            }
+
+            return baseMessage;
+        }
+
+        // 处理收到的消息
+        function handleMessage(message) {
+            switch (message.type) {
+                case 'handshake':
+                    sessionID = message.session_id;
+                    log('握手成功! Session ID: ' + sessionID, 'success');
+                    break;
+
+                case 'progress':
+                    log('进度更新: ' + message.data.progress + '% - ' + message.data.status, 'info');
+                    break;
+
+                case 'response':
+                    log('响应: ' + JSON.stringify(message.data.result), 'success');
+                    break;
+
+                case 'error':
+                    log('错误: ' + message.data.error_msg, 'error');
+                    break;
+
+                case 'pong':
+                    log('收到Pong响应', 'info');
+                    break;
+            }
+        }
+
+        // 记录日志
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry ' + type;
+
+            const timestamp = new Date().toLocaleTimeString('zh-CN');
+            entry.innerHTML = '<span class="timestamp">[' + timestamp + ']</span> ' + message;
+
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        // 清空日志
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+
+        // 消息类型切换
+        document.getElementById('messageType').addEventListener('change', function() {
+            const taskOptions = document.getElementById('taskOptions');
+            taskOptions.style.display = (this.value === 'task') ? 'block' : 'none';
+        });
+
+        // 页面加载完成
+        window.addEventListener('load', function() {
+            log('WebSocket测试客户端已加载', 'info');
+        });
+    </script>
+</body>
+</html>

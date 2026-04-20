@@ -1,0 +1,4 @@
+# 工具注册表API服务依赖
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0

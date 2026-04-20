@@ -1,0 +1,242 @@
+{
+  "summary": {
+    "total": 13,
+    "migrated": 4,
+    "pending": 9,
+    "file_exists": 9,
+    "can_import": 7,
+    "has_handler": 3,
+    "by_priority": {
+      "P0": 5,
+      "P1": 5,
+      "P2": 3
+    }
+  },
+  "tools": [
+    {
+      "name": "patent_search",
+      "file": "core/tools/patent_retrieval.py",
+      "handler": "patent_search_handler",
+      "category": "patent_search",
+      "priority": "P0",
+      "status": "已迁移",
+      "description": "在专利数据库中搜索专利（支持本地PostgreSQL和Google Patents）",
+      "file_exists": true,
+      "can_import": true,
+      "has_handler": true,
+      "dependencies": [],
+      "issues": [],
+      "recommendations": []
+    },
+    {
+      "name": "patent_download",
+      "file": "core/tools/patent_download.py",
+      "handler": "patent_download_handler",
+      "category": "data_extraction",
+      "priority": "P0",
+      "status": "已迁移",
+      "description": "从Google Patents下载专利PDF文件",
+      "file_exists": true,
+      "can_import": true,
+      "has_handler": true,
+      "dependencies": [],
+      "issues": [],
+      "recommendations": []
+    },
+    {
+      "name": "enhanced_document_parser",
+      "file": "core/tools/enhanced_document_parser.py",
+      "handler": "enhanced_document_parser_handler",
+      "category": "data_extraction",
+      "priority": "P0",
+      "status": "已迁移",
+      "description": "增强文档解析器（支持OCR、PDF、DOCX等）",
+      "file_exists": true,
+      "can_import": true,
+      "has_handler": true,
+      "dependencies": [],
+      "issues": [],
+      "recommendations": []
+    },
+    {
+      "name": "local_web_search",
+      "file": "core/tools/real_tool_implementations.py",
+      "handler": "local_web_search_handler",
+      "category": "web_search",
+      "priority": "P0",
+      "status": "已迁移",
+      "description": "本地网络搜索（支持多个搜索引擎）",
+      "file_exists": true,
+      "can_import": true,
+      "has_handler": false,
+      "dependencies": [],
+      "issues": [
+        "Handler不存在: local_web_search_handler"
+      ],
+      "recommendations": []
+    },
+    {
+      "name": "vector_search",
+      "file": "core/vector/intelligent_vector_manager.py",
+      "handler": "vector_search_handler",
+      "category": "vector_search",
+      "priority": "P0",
+      "status": "待迁移",
+      "description": "向量语义搜索（基于BGE-M3模型）",
+      "file_exists": true,
+      "can_import": true,
+      "has_handler": false,
+      "dependencies": [],
+      "issues": [
+        "Handler不存在: vector_search_handler"
+      ],
+      "recommendations": [
+        "高优先级工具，建议立即迁移"
+      ]
+    },
+    {
+      "name": "academic_search",
+      "file": "core/search/tools/google_scholar_tool.py",
+      "handler": "google_scholar_search_handler",
+      "category": "academic_search",
+      "priority": "P1",
+      "status": "待迁移",
+      "description": "学术文献搜索（Google Scholar）",
+      "file_exists": true,
+      "can_import": false,
+      "has_handler": false,
+      "dependencies": [],
+      "issues": [
+        "导入失败: attempted relative import with no known parent package"
+      ],
+      "recommendations": [
+        "中优先级工具，建议本周迁移"
+      ]
+    },
+    {
+      "name": "legal_analysis",
+      "file": "core/legal/legal_vector_retrieval_service.py",
+      "handler": "legal_vector_retrieval_handler",
+      "category": "legal_analysis",
+      "priority": "P1",
+      "status": "待迁移",
+      "description": "法律文献向量检索和分析",
+      "file_exists": true,
+      "can_import": false,
+      "has_handler": false,
+      "dependencies": [],
+      "issues": [
+        "导入失败: 'NoneType' object has no attribute '__dict__'"
+      ],
+      "recommendations": [
+        "中优先级工具，建议本周迁移"
+      ]
+    },
+    {
+      "name": "semantic_analysis",
+      "file": "core/nlp/semantic_analyzer.py",
+      "handler": "semantic_analysis_handler",
+      "category": "semantic_analysis",
+      "priority": "P1",
+      "status": "待迁移",
+      "description": "文本语义分析和理解",
+      "file_exists": false,
+      "can_import": false,
+      "has_handler": false,
+      "dependencies": [],
+      "issues": [
+        "文件不存在: /Users/xujian/Athena工作平台/core/nlp/semantic_analyzer.py"
+      ],
+      "recommendations": []
+    },
+    {
+      "name": "patent_analysis",
+      "file": "core/patent/patent_analyzer.py",
+      "handler": "patent_analysis_handler",
+      "category": "patent_analysis",
+      "priority": "P1",
+      "status": "待迁移",
+      "description": "专利内容分析和创造性评估",
+      "file_exists": false,
+      "can_import": false,
+      "has_handler": false,
+      "dependencies": [],
+      "issues": [
+        "文件不存在: /Users/xujian/Athena工作平台/core/patent/patent_analyzer.py"
+      ],
+      "recommendations": []
+    },
+    {
+      "name": "knowledge_graph_search",
+      "file": "core/knowledge_graph/graph_manager.py",
+      "handler": "knowledge_graph_search_handler",
+      "category": "knowledge_graph",
+      "priority": "P2",
+      "status": "待迁移",
+      "description": "知识图谱搜索和推理",
+      "file_exists": false,
+      "can_import": false,
+      "has_handler": false,
+      "dependencies": [],
+      "issues": [
+        "文件不存在: /Users/xujian/Athena工作平台/core/knowledge_graph/graph_manager.py"
+      ],
+      "recommendations": []
+    },
+    {
+      "name": "browser_automation",
+      "file": "core/tools/browser_automation_tool.py",
+      "handler": "browser_automation_handler",
+      "category": "web_automation",
+      "priority": "P2",
+      "status": "待迁移",
+      "description": "浏览器自动化工具（Playwright）",
+      "file_exists": true,
+      "can_import": true,
+      "has_handler": false,
+      "dependencies": [],
+      "issues": [
+        "Handler不存在: browser_automation_handler"
+      ],
+      "recommendations": [
+        "低优先级工具，可按需迁移"
+      ]
+    },
+    {
+      "name": "cache_management",
+      "file": "core/cache/unified_cache.py",
+      "handler": "cache_management_handler",
+      "category": "cache_management",
+      "priority": "P1",
+      "status": "待迁移",
+      "description": "统一缓存管理",
+      "file_exists": true,
+      "can_import": true,
+      "has_handler": false,
+      "dependencies": [],
+      "issues": [
+        "Handler不存在: cache_management_handler"
+      ],
+      "recommendations": [
+        "中优先级工具，建议本周迁移"
+      ]
+    },
+    {
+      "name": "data_transformation",
+      "file": "core/data/transformation.py",
+      "handler": "data_transformation_handler",
+      "category": "data_transformation",
+      "priority": "P2",
+      "status": "待迁移",
+      "description": "数据转换和格式化",
+      "file_exists": false,
+      "can_import": false,
+      "has_handler": false,
+      "dependencies": [],
+      "issues": [
+        "文件不存在: /Users/xujian/Athena工作平台/core/data/transformation.py"
+      ],
+      "recommendations": []
+    }
+  ]
+}

@@ -194,7 +194,7 @@ pytest tests/verification/gateway_compatibility_verification.py -v -s
 | KB-CONN-02 | Qdrant向量库连通性 | `curl http://localhost:6333/collections` | 返回200, 含7个集合 | P0 |
 | KB-CONN-03 | PostgreSQL连通性 | `docker-compose exec postgres pg_isready` | accepting connections | P0 |
 | KB-CONN-04 | Redis连通性 | `docker-compose exec redis redis-cli ping` | PONG | P0 |
-| KB-CONN-05 | BGE-M3嵌入服务 | `UnifiedEmbeddingService.encode("测试")` | 返回768维向量 | P0 |
+| KB-CONN-05 | BGE-M3嵌入服务 | `UnifiedEmbeddingService.encode("测试")` | 返回1024维向量 | P0 |
 | KB-CONN-06 | 网关→知识图谱路由 | `POST /api/v1/kg/query` | 正确转发至8100端口 | P0 |
 | KB-CONN-07 | 网关→向量搜索路由 | `POST /api/v1/vector/search` | 正确转发至Qdrant | P0 |
 | KB-CONN-08 | 网关→法律搜索路由 | `POST /api/v1/legal/search` | 正确转发至法律向量API | P1 |

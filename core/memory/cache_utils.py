@@ -17,9 +17,20 @@ from collections import OrderedDict
 from collections.abc import Callable
 from datetime import datetime
 from functools import wraps
-from typing import Any, ParamSpec, TypeVar
+from typing import Any, TypeVar
 
 logger = logging.getLogger(__name__)
+
+# Python 3.9 兼容：使用typing_extensions
+try:
+    from typing_extensions import ParamSpec
+except ImportError:
+    # 如果没有typing_extensions，定义一个简单的替代
+    class _ParamSpec:
+        def __init__(self, name):
+            self.name = name
+
+    ParamSpec = _ParamSpec  # type: ignore
 
 P = ParamSpec('P')
 T = TypeVar('T')
