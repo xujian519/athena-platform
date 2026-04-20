@@ -72,7 +72,7 @@ jobs:
 
     - name: Upload cleanup report
       if: steps.check_issues.outputs.report_file != ''
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: cleanup-report-${{ env.TIMESTAMP }}
         path: ${{ steps.check_issues.outputs.report_file }}

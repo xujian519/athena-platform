@@ -1,0 +1,298 @@
+# Athena工作平台 - 清理配置文件
+# 用于自定义清理规则和策略
+
+################################################################################
+# 全局配置
+################################################################################
+
+global:
+  # 项目根目录（留空自动检测）
+  project_root: ""
+
+  # 备份保留天数（0=永久保留）
+  backup_retention_days: 30
+
+  # 是否自动压缩备份
+  compress_backup: true
+
+  # 是否自动修复Git状态
+  auto_fix_git: false
+
+  # 日志级别：DEBUG, INFO, WARNING, ERROR
+  log_level: "INFO"
+
+################################################################################
+# 清理规则配置
+################################################################################
+
+cleanup_rules:
+
+  # 备份文件清理
+  backup_files:
+    enabled: true
+    priority: 1
+    confirm_required: false
+    patterns:
+      - "**/*.bak"
+      - "**/*.backup"
+      - "requirements_backup.txt"
+      - "core/llm/response_cache.py.backup"
+      - "core/patent/infringement/infringement_determiner.py.bak"
+      - "core/agents/xiaona_legal.py.bak"
+      - "core/search/enhanced_hybrid_search.py.backup"
+    exclude_patterns:
+      - "**/node_modules/**"
+      - "**/venv/**"
+
+  # 备份目录清理
+  backup_directories:
+    enabled: true
+    priority: 1
+    confirm_required: false
+    directories:
+      - ".backup"
+
+  # PID文件清理
+  pid_files:
+    enabled: true
+    priority: 1
+    confirm_required: true
+    check_running_processes: true
+    patterns:
+      - "pids/*.pid"
+      - "tasks/**/*.pid"
+      - "**/*.pid"
+
+  # 临时数据文件清理
+  temp_files:
+    enabled: true
+    priority: 2
+    confirm_required: false
+    directories:
+      - "data/trademark_rules/temp"
+      - "data/temp"
+      - "tmp"
+      - "temp"
+    patterns:
+      - "**/*.tmp"
+      - "**/*.temp"
+      - "**/temp_*"
+    exclude_patterns:
+      - "**/node_modules/**"
+
+  # 测试报告清理
+  test_reports:
+    enabled: true
+    priority: 2
+    confirm_required: false
+    retention_days: 90
+    directories:
+      - "tests/results"
+    patterns:
+      - "**/test_results/*.json"
+      - "**/test_reports/*.html"
+      - "**/coverage/*.xml"
+
+  # Python缓存清理
+  python_cache:
+    enabled: true
+    priority: 3
+    confirm_required: true
+    patterns:
+      - "**/__pycache__"
+      - "**/*.pyc"
+      - "**/*.pyo"
+      - "**/*.pyd"
+      - "**/.pytest_cache"
+      - "**/.mypy_cache"
+
+  # 日志文件清理
+  log_files:
+    enabled: false  # 默认禁用，谨慎启用
+    priority: 3
+    confirm_required: true
+    retention_days: 30
+    patterns:
+      - "**/*.log"
+      - "logs/**/*.txt"
+    exclude_patterns:
+      - "cleanup_log_*.log"  # 保留清理日志
+
+  # 数据库文件清理
+  database_files:
+    enabled: false  # 默认禁用，谨慎启用
+    priority: 2
+    confirm_required: true
+    patterns:
+      - "**/*.db"
+      - "**/*.sqlite"
+      - "**/*.sqlite3"
+    exclude_patterns:
+      - "**/migrations/**"  # 排除迁移文件
+
+  # 文档和报告清理
+  old_documents:
+    enabled: false  # 默认禁用
+    priority: 3
+    confirm_required: true
+    retention_days: 180
+    patterns:
+      - "docs/archive/**/*.md"
+      - "reports/old/**/*.pdf"
+      - "**/draft_*.md"
+
+################################################################################
+# Git配置
+################################################################################
+
+git:
+  # 是否自动修复Git状态
+  auto_fix: false
+
+  # 是否在清理前提交当前更改
+  auto_commit_before_cleanup: false
+
+  # 提交消息模板
+  commit_message_template: "chore: 自动清理项目文件"
+
+  # 需要忽略的文件模式
+  ignore_patterns:
+    - "*.log"
+    - ".cleanup_backup*"
+    - "**/__pycache__"
+    - "*.pyc"
+
+################################################################################
+# 通知配置
+################################################################################
+
+notifications:
+  # 清理完成后是否显示通知
+  enabled: true
+
+  # 通知方式：console, email, slack
+  methods:
+    - console
+
+  # 邮件通知配置（如果启用）
+  email:
+    enabled: false
+    to: "admin@example.com"
+    from: "cleanup@athena.platform"
+    subject: "Athena平台清理报告"
+
+################################################################################
+# 安全配置
+################################################################################
+
+safety:
+  # 是否在清理前创建系统快照（macOS Time Machine）
+  create_snapshot: false
+
+  # 最大允许删除的文件数（超过此数量需要额外确认）
+  max_deletion_count: 100
+
+  # 最大允许删除的磁盘空间（MB，超过此值需要额外确认）
+  max_deletion_size_mb: 500
+
+  # 危险文件模式（需要额外确认）
+  dangerous_patterns:
+    - "**/*.env"
+    - "**/config.*"
+    - "**/credentials.*"
+    - "**/*.key"
+    - "**/*.pem"
+
+  # 禁止删除的文件模式
+  forbidden_patterns:
+    - "**/.git/**"
+    - "**/node_modules/**"
+    - "**/venv/**"
+    - "**/.venv/**"
+    - "**/__pycache__/**"
+    - "**/models/**"  # AI模型文件
+
+################################################################################
+# 报告配置
+################################################################################
+
+reporting:
+  # 是否生成详细报告
+  detailed: true
+
+  # 报告格式：text, json, html
+  formats:
+    - text
+
+  # 报告保存位置
+  output_dir: "reports/cleanup"
+
+  # 是否包含文件统计
+  include_statistics: true
+
+  # 是否包含文件列表
+  include_file_list: true
+
+################################################################################
+# 定时任务配置
+################################################################################
+
+scheduling:
+  # 是否启用定时清理
+  enabled: false
+
+  # Cron表达式：每月1号凌晨2点执行
+  cron: "0 2 1 * *"
+
+  # 定时任务日志
+  log_file: "logs/cleanup_cron.log"
+
+################################################################################
+# 高级配置
+################################################################################
+
+advanced:
+  # 是否在后台运行
+  run_in_background: false
+
+  # 超时时间（秒）
+  timeout: 3600
+
+  # 是否显示进度条
+  show_progress: true
+
+  # 是否启用调试模式
+  debug: false
+
+  # 自定义清理前钩子脚本
+  pre_cleanup_hook: ""
+
+  # 自定义清理后钩子脚本
+  post_cleanup_hook: ""
+
+  # 并发处理的文件数
+  concurrent_files: 10
+
+################################################################################
+# 环境特定配置
+################################################################################
+
+environments:
+  development:
+    auto_fix_git: false
+    backup_retention_days: 7
+    log_level: "DEBUG"
+
+  production:
+    auto_fix_git: true
+    backup_retention_days: 90
+    log_level: "WARNING"
+    confirm_required: true
+    create_snapshot: true
+
+  testing:
+    auto_fix_git: false
+    backup_retention_days: 1
+    log_level: "INFO"
+    backup_files:
+      enabled: false  # 测试环境不清理备份文件

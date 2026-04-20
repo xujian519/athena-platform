@@ -84,7 +84,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Cache pip dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ needs.prepare.outputs.cache-key }}
@@ -118,7 +118,7 @@ jobs:
           safety check --json --output safety-report.json || true
 
       - name: Upload quality reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: quality-reports
@@ -154,7 +154,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Cache pip dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ needs.prepare.outputs.cache-key }}-${{ matrix.python-version }}
@@ -187,7 +187,7 @@ jobs:
           docker-compose -f deployment/docker/docker-compose.test.yml down
 
       - name: Upload test reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-reports-${{ matrix.test-type }}-${{ matrix.python-version }}
@@ -213,7 +213,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Cache pip dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ needs.prepare.outputs.cache-key }}
@@ -251,7 +251,7 @@ jobs:
           docker-compose -f deployment/docker/docker-compose.production.yml down
 
       - name: Upload test reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: advanced-test-reports-${{ matrix.test-type }}
@@ -442,7 +442,7 @@ jobs:
     if: always()
     steps:
       - name: Download all artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
 
       - name: Generate comprehensive test report
         run: |
@@ -451,7 +451,7 @@ jobs:
             --output test_report.html
 
       - name: Upload test report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: comprehensive-test-report
           path: test_report.html

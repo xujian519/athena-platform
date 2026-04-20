@@ -589,7 +589,7 @@ class RealDataManager:
         self,
         query: str,
         limit_per_source: int = 5
-    ) -> dict[str, list[dict[str, Any]]:
+    ) -> dict[str, list[dict[str, Any]]]:
         """并行检索所有数据源"""
         import asyncio
 

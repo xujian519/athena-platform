@@ -195,7 +195,7 @@ on:
         timeout-minutes: 2
       - name: Upload coverage artifact
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: htmlcov/

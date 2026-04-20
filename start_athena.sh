@@ -26,8 +26,8 @@ echo ""
 # 2. 启动Docker容器
 echo "2. 启动Docker容器..."
 cd /Users/xujian/Athena工作平台
-docker-compose up -d > /dev/null 2>&1
-echo "   ✅ Docker容器已启动"
+docker-compose -f docker-compose.unified.yml --profile dev up -d > /dev/null 2>&1
+echo "   ✅ Docker容器已启动（开发环境）"
 echo ""
 
 # 3. 启动应用服务

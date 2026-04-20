@@ -52,7 +52,7 @@ jobs:
         grep -E "(加速比|MPS设备)" performance_${{ matrix.python-version }}.txt || echo "未检测到MPS设备"
 
     - name: 上传报告
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: numpy-compatibility-reports-python${{ matrix.python-version }}
@@ -86,7 +86,7 @@ jobs:
         bandit -r . -f json -o bandit-report.json || true
 
     - name: 上传安全报告
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: security-reports

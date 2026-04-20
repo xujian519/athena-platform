@@ -152,6 +152,19 @@ def test_agents_module():
             def process(self, input_text: str, **kwargs) -> str:
                 return f"处理: {input_text}"
 
+            async def health_check(self) -> dict:
+                return {"status": "healthy"}
+
+            async def initialize(self) -> None:
+                pass
+
+            @property
+            def agent_name(self) -> str:
+                return self.name
+
+            async def shutdown(self) -> None:
+                pass
+
         # 测试初始化
         agent = TestAgent(
             name="test_agent",

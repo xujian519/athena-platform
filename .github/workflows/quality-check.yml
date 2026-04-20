@@ -32,7 +32,7 @@ jobs:
         pip install flake8 pytest pytest-cov black isort mypy
 
     - name: 缓存pip依赖
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
@@ -138,7 +138,7 @@ print(f'可用报告: {len(reports)}')
 "
 
     - name: 上传质量报告
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: quality-reports-${{ matrix.python-version }}

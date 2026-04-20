@@ -69,7 +69,7 @@ jobs:
           safety check --json --output safety-report.json || true
 
       - name: 上传质量报告
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: quality-reports
@@ -239,7 +239,7 @@ jobs:
           name: codecov-umbrella
 
       - name: 上传测试结果
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-results
@@ -275,7 +275,7 @@ jobs:
           safety check --json --output safety-report.json || true
 
       - name: 上传安全报告
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: security-reports
@@ -492,7 +492,7 @@ jobs:
           artillery run load-test.yml
 
       - name: 上传性能测试报告
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: performance-report

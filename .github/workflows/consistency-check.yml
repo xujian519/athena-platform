@@ -16,7 +16,7 @@ jobs:
 
     steps:
     - name: 检出代码
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: 设置Python环境
       uses: actions/setup-python@v4
@@ -65,7 +65,7 @@ jobs:
 
     - name: 上传检查报告
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: consistency-check-report
         path: |
@@ -154,7 +154,7 @@ jobs:
 
     steps:
     - name: 检出代码
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: 检查文档一致性
       run: |
@@ -199,7 +199,7 @@ jobs:
 
     steps:
     - name: 检出代码
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: 路径一致性检查
       run: |
