@@ -53,6 +53,20 @@ try:
 except ImportError:
     OA_RESPONDER_AVAILABLE = False
 
+# 导入工具调用管理器和统一工具注册表
+try:
+    from core.tools.tool_call_manager import get_tool_manager, ToolCallResult
+    TOOL_MANAGER_AVAILABLE = True
+except ImportError:
+    TOOL_MANAGER_AVAILABLE = False
+
+# 导入统一工具注册表（直接使用已注册的工具）
+try:
+    from core.tools.unified_registry import get_unified_registry
+    UNIFIED_REGISTRY_AVAILABLE = True
+except ImportError:
+    UNIFIED_REGISTRY_AVAILABLE = False
+
 
 logger = logging.getLogger(__name__)
 
@@ -666,27 +680,132 @@ class XiaonaLegalAgent(BaseAgent):
         }
 
     async def _handle_patent_search(self, params: dict[str, Any]) -> dict[str, Any]:
-        """处理专利检索"""
-        query = params.get("query", "")
-        params.get("search_fields", ["title", "abstract"])
-        params.get("databases", ["CN"])
+        """处理专利检索 - 直接使用统一工具注册表中的工具"""
+        query = params.get("query", "").strip()
+        channel = params.get("channel", "local_postgres")  # local_postgres, google_patents, both
+        max_results = params.get("max_results", 10)
 
-        self.logger.info(f"🔎 专利检索: query={query}")
+        if not query:
+            return {
+                "task_type": "patent-search",
+                "success": False,
+                "error": "缺少必需参数: query",
+            }
 
-        return {
-            "task_type": "patent-search",
-            "query": query,
-            "results": [
-                {
-                    "patent_id": "CN123456789U",
-                    "title": "一种智能控制方法",
-                    "abstract": "本发明涉及...",
-                    "relevance": 0.92,
+        self.logger.info(f"🔎 专利检索: query='{query}', channel={channel}, max_results={max_results}")
+
+        # 方法1: 优先使用统一工具注册表（已通过auto_register注册）
+        if UNIFIED_REGISTRY_AVAILABLE:
+            try:
+                registry = get_unified_registry()
+                tool = registry.get("patent_search")
+
+                if tool and tool.enabled:
+                    self.logger.info("✅ 从统一工具注册表调用patent_search")
+
+                    # 直接调用工具的handler
+                    import time
+                    start_time = time.time()
+
+                    result = await tool.function(
+                        params={
+                            "query": query,
+                            "channel": channel,
+                            "max_results": max_results,
+                        },
+                        context={}
+                    )
+
+                    execution_time = time.time() - start_time
+
+                    # 检查结果
+                    if result.get("success"):
+                        self.logger.info(f"✅ 专利检索完成: 找到 {result.get('total_results', 0)} 个相关专利")
+                        return {
+                            "task_type": "patent-search",
+                            "query": query,
+                            "success": True,
+                            "total_results": result.get("total_results", 0),
+                            "results": result.get("results", []),
+                            "search_strategy": f"关键词+语义+分类号 (渠道: {channel})",
+                            "execution_time_ms": int(execution_time * 1000),
+                        }
+                    else:
+                        error_msg = result.get("error", "UNKNOWN_ERROR")
+                        self.logger.error(f"❌ 专利检索失败: {error_msg}")
+                        return {
+                            "task_type": "patent-search",
+                            "query": query,
+                            "success": False,
+                            "error": error_msg,
+                            "message": f"专利检索失败: {error_msg}",
+                        }
+                else:
+                    self.logger.warning("⚠️  patent_search工具未在统一工具注册表中找到")
+
+            except Exception as e:
+                self.logger.exception(f"❌ 从统一工具注册表调用失败: {e}")
+
+        # 方法2: 降级到直接导入handler
+        try:
+            from core.tools.patent_retrieval import patent_search_handler
+
+            self.logger.info("✅ 使用直接导入的patent_search_handler")
+
+            result = await patent_search_handler(
+                params={
+                    "query": query,
+                    "channel": channel,
+                    "max_results": max_results,
+                },
+                context={}
+            )
+
+            if result.get("success"):
+                self.logger.info(f"✅ 专利检索完成: 找到 {result.get('total_results', 0)} 个相关专利")
+                return {
+                    "task_type": "patent-search",
+                    "query": query,
+                    "success": True,
+                    **result  # 展开结果
                 }
-            ],
-            "total_results": 1,
-            "search_time_ms": 150,
-        }
+            else:
+                return {
+                    "task_type": "patent-search",
+                    "query": query,
+                    "success": False,
+                    **result  # 展开错误结果
+                }
+
+        except Exception as e:
+            self.logger.exception(f"❌ 专利检索异常: {e}")
+            return {
+                "task_type": "patent-search",
+                "query": query,
+                "success": False,
+                "error": str(e),
+                "message": f"专利检索异常: {str(e)}",
+            }
+
+            return {
+                "task_type": "patent-search",
+                "query": query,
+                "success": True,
+                "total_results": total_found,
+                "results": formatted_results,
+                "search_strategy": f"关键词+语义+分类号 (渠道: {channel})",
+                "execution_time_ms": int(result.execution_time * 1000),
+            }
+
+        except Exception as e:
+            self.logger.exception(f"❌ 专利检索异常: {e}")
+            return {
+                "task_type": "patent-search",
+                "query": query,
+                "success": False,
+                "error": str(e),
+                "message": f"专利检索异常: {str(e)}",
+            }
 
     async def _handle_technology_landscape(self, params: dict[str, Any]) -> dict[str, Any]:
         """处理技术态势分析"""

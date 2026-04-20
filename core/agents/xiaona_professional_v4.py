@@ -53,6 +53,15 @@ except ImportError:
     OA_RESPONDER_AVAILABLE = False
     logging.warning("专业意见答复服务不可用")
 
+# 导入工具调用管理器
+try:
+    from ..tools.tool_call_manager import get_tool_manager, ToolCallResult
+
+    TOOL_MANAGER_AVAILABLE = True
+except ImportError:
+    TOOL_MANAGER_AVAILABLE = False
+    logging.warning("工具调用管理器不可用")
+
 logger = logging.getLogger(__name__)
 
 
@@ -549,20 +558,99 @@ class XiaonaProfessionalV4(AthenaXiaonaAgent):
     async def _handle_patent_search(
         self, description: str, context: TaskContext, **kwargs
     ) -> dict[str, Any]:
-        """处理专利检索"""
-        logger.info("🔍 处理专利检索")
+        """处理专利检索 - 使用真实的专利检索工具"""
+        logger.info(f"🔍 处理专利检索: {description[:100]}...")
 
-        return {
-            "status": "success",
-            "message": "专利检索完成",
-            "results": {
-                "total_found": 0,
-                "relevant_patents": [],
-                "search_strategy": "关键词+语义+分类号",
-            },
-            "capability": "CAP01",
-            "bypass_super_reasoning": True,
-        }
+        # 检查工具管理器是否可用
+        if not TOOL_MANAGER_AVAILABLE:
+            logger.error("❌ 工具调用管理器不可用，无法执行专利检索")
+            return {
+                "status": "error",
+                "message": "专利检索工具不可用",
+                "error": "TOOL_MANAGER_NOT_AVAILABLE",
+                "capability": "CAP01",
+                "bypass_super_reasoning": True,
+            }
+
+        try:
+            # 获取工具管理器
+            tool_manager = get_tool_manager()
+
+            # 提取检索参数
+            query = description.strip()
+            channel = kwargs.get("channel", "both")  # local_postgres, google_patents, both
+            max_results = kwargs.get("max_results", 10)
+
+            logger.info(f"  📋 检索参数: query='{query}', channel={channel}, max_results={max_results}")
+
+            # 调用专利检索工具
+            result: ToolCallResult = await tool_manager.call_tool(
+                tool_id="patent_search",
+                parameters={
+                    "query": query,
+                    "channel": channel,
+                    "max_results": max_results,
+                }
+            )
+
+            # 检查调用结果
+            if result.status.value != "success":
+                logger.error(f"❌ 专利检索失败: {result.error}")
+                return {
+                    "status": "error",
+                    "message": f"专利检索失败: {result.error}",
+                    "error": result.error,
+                    "capability": "CAP01",
+                    "bypass_super_reasoning": True,
+                }
+
+            # 提取检索结果
+            search_data = result.result
+            total_found = search_data.get("total_results", 0)
+            raw_results = search_data.get("results", [])
+
+            # 转换为标准格式
+            relevant_patents = []
+            for item in raw_results:
+                patent = {
+                    "patent_id": item.get("patent_id", ""),
+                    "title": item.get("title", ""),
+                    "abstract": item.get("abstract", "")[:500],  # 限制摘要长度
+                    "source": item.get("source", "unknown"),
+                    "url": item.get("url"),
+                    "publication_date": item.get("publication_date"),
+                    "applicant": item.get("applicant"),
+                    "inventor": item.get("inventor"),
+                    "score": item.get("score"),
+                }
+                relevant_patents.append(patent)
+
+            logger.info(f"✅ 专利检索完成: 找到 {total_found} 个相关专利")
+
+            return {
+                "status": "success",
+                "message": f"专利检索完成，找到 {total_found} 个相关专利",
+                "results": {
+                    "total_found": total_found,
+                    "relevant_patents": relevant_patents,
+                    "search_strategy": f"关键词+语义+分类号 (渠道: {channel})",
+                    "query": query,
+                    "channel": channel,
+                },
+                "capability": "CAP01",
+                "bypass_super_reasoning": True,
+                "execution_time": result.execution_time,
+            }
+
+        except Exception as e:
+            logger.exception(f"❌ 专利检索异常: {e}")
+            return {
+                "status": "error",
+                "message": f"专利检索异常: {str(e)}",
+                "error": str(e),
+                "capability": "CAP01",
+                "bypass_super_reasoning": True,
+            }
 
     async def _handle_technology_landscape(
         self, description: str, context: TaskContext, **kwargs

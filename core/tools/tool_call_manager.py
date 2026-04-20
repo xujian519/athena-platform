@@ -741,13 +741,30 @@ def get_tool_manager() -> ToolCallManager:
 def _register_real_tools(manager: ToolCallManager) -> Any:
     """注册真实工具(使用真实实现)"""
     import asyncio
+    import time
 
     from .real_tool_implementations import register_real_tools
 
-    # 注册所有真实工具
-    asyncio.run(register_real_tools(manager))
+    try:
+        # 尝试获取当前事件循环
+        try:
+            loop = asyncio.get_running_loop()
+            # 如果有运行中的事件循环，创建后台任务
+            task = asyncio.create_task(register_real_tools(manager))
+            logger.info("✅ 真实工具注册任务已创建（后台运行）")
 
-    logger.info(f"✅ 已注册 {len(manager.tools)} 个真实工具")
+            # 等待一小段时间让注册开始
+            # 注意：不能使用await，因为这是同步函数
+            # 但大多数情况下，注册会在100ms内完成
+            time.sleep(0.1)  # 等待100ms让注册开始
+
+        except RuntimeError:
+            # 没有运行中的事件循环，使用asyncio.run()
+            asyncio.run(register_real_tools(manager))
+            logger.info(f"✅ 已注册 {len(manager.tools)} 个真实工具")
+    except Exception as e:
+        logger.warning(f"⚠️  真实工具注册失败: {e}")
+        # 不抛出异常，允许系统继续运行
 
 
 # 便捷函数
