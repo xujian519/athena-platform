@@ -42,20 +42,20 @@ start_monitoring() {
 
     cd /Users/xujian/Athena工作平台
 
-    docker-compose up -d prometheus grafana
+    docker-compose -f docker-compose.unified.yml --profile dev up -d prometheus grafana
 
     log_info "等待服务启动..."
     sleep 5
 
     # 检查服务状态
-    if docker-compose ps | grep -q "athena-prometheus.*Up"; then
+    if docker-compose -f docker-compose.unified.yml --profile dev ps | grep -q "athena-prometheus.*Up"; then
         log_info "✅ Prometheus已启动 (http://localhost:9090)"
     else
         log_error "Prometheus启动失败"
         return 1
     fi
 
-    if docker-compose ps | grep -q "athena-grafana.*Up"; then
+    if docker-compose -f docker-compose.unified.yml --profile dev ps | grep -q "athena-grafana.*Up"; then
         log_info "✅ Grafana已启动 (http://localhost:3000)"
     else
         log_error "Grafana启动失败"
@@ -91,7 +91,7 @@ show_status() {
 
     cd /Users/xujian/Athena工作平台
 
-    docker-compose ps prometheus grafana
+    docker-compose -f docker-compose.unified.yml --profile dev ps prometheus grafana
 }
 
 # 查看日志
@@ -102,10 +102,10 @@ show_logs() {
 
     case $SERVICE in
         prometheus)
-            docker-compose logs -f prometheus
+            docker-compose -f docker-compose.unified.yml --profile dev logs -f prometheus
             ;;
         grafana)
-            docker-compose logs -f grafana
+            docker-compose -f docker-compose.unified.yml --profile dev logs -f grafana
             ;;
         *)
             echo "用法: $0 logs [prometheus|grafana]"

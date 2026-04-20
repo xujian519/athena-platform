@@ -71,10 +71,16 @@ make docker-build   # Build Docker image
 ### Docker Operations
 
 ```bash
-# Main docker-compose
-docker-compose up -d                    # Start all services
-docker-compose logs -f                   # View logs
-docker-compose down                      # Stop services
+# Main docker-compose (开发环境)
+docker-compose -f docker-compose.unified.yml --profile dev up -d
+docker-compose -f docker-compose.unified.yml --profile dev logs -f
+docker-compose -f docker-compose.unified.yml --profile dev down
+
+# 测试环境
+docker-compose -f docker-compose.unified.yml --profile test up -d
+
+# 生产环境
+docker-compose -f docker-compose.unified.yml --profile prod up -d
 
 # Production deployment
 ./production/scripts/deploy_production.sh deploy
@@ -110,10 +116,10 @@ sudo systemctl restart athena-gateway
 
 ```bash
 # PostgreSQL (via docker-compose)
-docker-compose exec postgres psql -U athena -d athena
+docker-compose -f docker-compose.unified.yml --profile dev exec postgres psql -U athena -d athena
 
 # Redis
-docker-compose exec redis redis-cli
+docker-compose -f docker-compose.unified.yml --profile dev exec redis redis-cli -a ${REDIS_PASSWORD:-redis123}
 
 # Qdrant
 curl http://localhost:6333/collections
@@ -181,7 +187,8 @@ Athena工作平台/
 ├── skills/                 # 技能定义
 ├── data/                   # 运行时数据 (.gitignore)
 ├── models/                 # AI模型文件 (.gitignore)
-├── docker-compose.yml      # Docker编排
+├── docker-compose.unified.yml  # 统一Docker编排配置（支持dev/test/prod/monitoring）
+├── docker-compose.yml       # 旧Docker配置（已废弃）
 ├── pyproject.toml          # Python项目配置
 └── start_xiaona.py         # 启动入口
 ```

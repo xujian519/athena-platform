@@ -61,7 +61,7 @@ case $choice in
 
         if ! $janusgraph_ok; then
             echo "❌ JanusGraph未运行，请先启动JanusGraph服务"
-            echo "💡 提示: cd services/knowledge-graph-service && docker-compose up -d janusgraph"
+            echo "💡 提示: cd services/knowledge-graph-service && docker-compose -f docker-compose.unified.yml --profile dev up -d janusgraph"
             exit 1
         fi
 

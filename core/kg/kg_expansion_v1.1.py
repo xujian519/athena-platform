@@ -125,7 +125,7 @@ class KnowledgeGraphExpander:
             return False
 
     def expand_by_citations(
-        self, documents: list[dict[str, Any], db_connection=None
+        self, documents: list[dict[str, Any]], db_connection=None
     ) -> list[dict[str, Any]]:
         """
         通过引用关系扩展文档 (P1-9修复: 增强实现)
@@ -220,7 +220,7 @@ class KnowledgeGraphExpander:
             return []
 
     def _expand_via_database(
-        self, documents: list[dict[str, Any], db_connection=None
+        self, documents: list[dict[str, Any]], db_connection=None
     ) -> list[dict[str, Any]]:
         """
         通过数据库引用关系扩展文档 (回退方案)
@@ -317,7 +317,7 @@ class KnowledgeGraphExpander:
             logger.error(f"❌ 查询引用文档失败: {e}")
             return []
 
-    def _deduplicate_documents(self, documents: list[dict[str, Any]) -> list[dict[str, Any]]:
+    def _deduplicate_documents(self, documents: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """去重文档列表"""
         seen_ids = set()
         unique_docs = []
@@ -331,7 +331,7 @@ class KnowledgeGraphExpander:
         return unique_docs
 
     def expand_by_concepts(
-        self, query: str, documents: list[dict[str, Any]) -> list[dict[str, Any]]:
+        self, query: str, documents: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """
         通过概念关系扩展文档
 

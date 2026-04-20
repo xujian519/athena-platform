@@ -75,7 +75,7 @@ class KnowledgeGraphExpander:
             return False
 
     def expand_by_citations(
-        self, documents: list[dict[str, Any], db_connection=None
+        self, documents: list[dict[str, Any]], db_connection=None
     ) -> list[dict[str, Any]]:
         """
         通过引用关系扩展文档
@@ -180,7 +180,7 @@ class KnowledgeGraphExpander:
             return []
 
     def expand_by_concepts(
-        self, query: str, documents: list[dict[str, Any]) -> list[dict[str, Any]]:
+        self, query: str, documents: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """
         通过概念关系扩展文档
         例如: "创造性" -> "新颖性" (相关概念)

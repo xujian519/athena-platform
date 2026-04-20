@@ -92,7 +92,7 @@ stop_existing_services() {
     pkill -f "gateway-unified" 2>/dev/null || true
 
     log_info "停止Docker容器..."
-    docker-compose down 2>/dev/null || true
+    docker-compose -f docker-compose.unified.yml --profile dev down 2>/dev/null || true
 
     log_success "现有服务已停止"
 }
@@ -129,7 +129,7 @@ start_infrastructure() {
     print_section "启动基础设施服务"
 
     log_info "启动Redis、Qdrant、Neo4j等基础设施..."
-    docker-compose up -d redis qdrant neo4j postgres
+    docker-compose -f docker-compose.unified.yml --profile dev up -d redis qdrant neo4j postgres
 
     # 等待服务启动
     log_info "等待服务启动..."
@@ -137,7 +137,7 @@ start_infrastructure() {
 
     # 检查服务状态
     log_info "检查服务健康状态..."
-    docker-compose ps
+    docker-compose -f docker-compose.unified.yml --profile dev ps
 
     log_success "基础设施服务启动完成"
 }
@@ -151,7 +151,7 @@ configure_redis() {
     log_info "设置Redis密码..."
 
     # 重启Redis容器以应用密码
-    docker-compose restart redis
+    docker-compose -f docker-compose.unified.yml --profile dev restart redis
 
     sleep 5
 
@@ -361,7 +361,7 @@ setup_monitoring() {
     log_info "配置Prometheus和Grafana..."
 
     # 启动监控服务
-    docker-compose up -d prometheus grafana
+    docker-compose -f docker-compose.unified.yml --profile dev up -d prometheus grafana
 
     sleep 5
 
@@ -420,10 +420,10 @@ generate_report() {
 ## 服务状态
 
 \`\`\`bash
-$ docker-compose ps
+$ docker-compose -f docker-compose.unified.yml --profile dev ps
 \`\`\`
 
-$(docker-compose ps)
+$(docker-compose -f docker-compose.unified.yml --profile dev ps)
 
 ---
 
@@ -474,12 +474,12 @@ sudo systemctl restart athena-gateway
 
 ### 查看Docker容器状态
 \`\`\`bash
-docker-compose ps
+docker-compose -f docker-compose.unified.yml --profile dev ps
 \`\`\`
 
 ### 查看服务日志
 \`\`\`bash
-docker-compose logs -f [service_name]
+docker-compose -f docker-compose.unified.yml --profile dev logs -f [service_name]
 \`\`\`
 
 ---
@@ -560,7 +560,7 @@ main() {
     echo ""
     echo "📚 管理命令:"
     echo "  - 查看日志: tail -f /tmp/gateway.log"
-    echo "  - 查看状态: docker-compose ps"
+    echo "  - 查看状态: docker-compose -f docker-compose.unified.yml --profile dev ps"
     echo "  - 重启服务: sudo systemctl restart athena-gateway"
     echo ""
 }

@@ -165,15 +165,15 @@ case $choice in
         fi
 
         # 启动服务
-        docker-compose up -d
+        docker-compose -f docker-compose.unified.yml --profile dev up -d
 
         echo "✅ Docker服务启动中..."
         echo ""
         echo "📡 API地址: http://localhost:8080"
         echo "📖 API文档: http://localhost:8080/docs"
         echo ""
-        echo "💡 查看日志: docker-compose logs -f knowledge-graph-api"
-        echo "💡 停止服务: docker-compose down"
+        echo "💡 查看日志: docker-compose -f docker-compose.unified.yml --profile dev logs -f knowledge-graph-api"
+        echo "💡 停止服务: docker-compose -f docker-compose.unified.yml --profile dev down"
         ;;
 
     3)

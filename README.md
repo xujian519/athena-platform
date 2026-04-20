@@ -35,7 +35,8 @@ Athena工作平台/
 │   ├── 🔍 xiaonuo_system_checker.py       # 系统状态检查器
 │   └── 🚀 xiaonuo_quick_start.sh         # 快速启动脚本
 ├── 📁 config/                             # 配置文件
-│   ├── 🐳 docker-compose.yml              # Docker编排配置
+│   ├── 🐳 docker-compose.unified.yml      # 统一Docker编排配置（支持dev/test/prod）
+│   ├── 🐳 docker-compose.yml               # 旧Docker配置（已废弃，请使用unified版本）
 │   └── ⚙️ service_discovery.json         # 服务注册与发现
 ├── 📁 core/                              # 核心系统
 │   ├── 🤖 agents/                         # 智能体实现（小娜、小诺、云熙）
@@ -158,8 +159,8 @@ Athena工作平台/
 # 方式2: 详细启动
 python3 scripts/xiaonuo_unified_startup.py 启动平台
 
-# 方式3: Docker启动
-docker-compose up -d
+# 方式3: Docker启动（开发环境）
+docker-compose -f docker-compose.unified.yml --profile dev up -d
 ```
 
 ### Gateway网关部署
@@ -181,13 +182,13 @@ sudo journalctl -u athena-gateway -f
 ### MCP服务器管理
 ```bash
 # 启动所有MCP服务器
-docker-compose up -d gaode-mcp-server academic-search jina-ai-mcp-server
+docker-compose -f docker-compose.unified.yml --profile dev up -d
 
 # 查看MCP服务器状态
-docker-compose ps | grep mcp
+docker-compose -f docker-compose.unified.yml --profile dev ps | grep mcp
 
 # 查看MCP服务器日志
-docker-compose logs -f gaode-mcp-server
+docker-compose -f docker-compose.unified.yml --profile dev logs -f gaode-mcp-server
 ```
 
 ### 检查状态

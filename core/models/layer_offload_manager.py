@@ -283,10 +283,9 @@ class LayerOffloadManager:
             elif "3b" in self.model_name:
                 return 24  # Qwen2.5-3B约24层
             else:
+                return 32  # 默认
         except Exception as e:
-            logger.debug(f"空except块已触发: {e}")
-        except Exception as e:
-            logger.debug(f"空except块已触发: {e}")
+            logger.debug(f"层数估算失败: {e}")
             return 32
 
     def predict_performance(

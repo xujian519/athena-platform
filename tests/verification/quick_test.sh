@@ -364,9 +364,9 @@ main() {
 
     # 检查Docker是否运行
     echo "检查Docker环境..."
-    if ! docker-compose ps >/dev/null 2>&1; then
+    if ! docker-compose -f docker-compose.unified.yml --profile dev ps >/dev/null 2>&1; then
         echo -e "${RED}错误: Docker服务未启动${NC}"
-        echo "请先运行: docker-compose up -d"
+        echo "请先运行: docker-compose -f docker-compose.unified.yml --profile dev up -d"
         exit 1
     fi
     echo "Docker环境正常"

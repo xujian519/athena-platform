@@ -1,1 +1,0 @@
-/Users/xujian/Athena工作平台/scripts_new/test_athena.py

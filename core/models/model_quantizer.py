@@ -66,7 +66,7 @@ class M4ModelQuantizer:
             return torch.device("cpu")
 
     def quantize_model(
-        self, model: nn.Module, calibration_data: torch.utils.data.DataLoader] | None = None
+        self, model: nn.Module, calibration_data: torch.utils.data.DataLoader | None = None
     ) -> nn.Module:
         """
         量化模型
@@ -108,7 +108,7 @@ class M4ModelQuantizer:
         return quantized_model
 
     def _quantize_int8(
-        self, model: nn.Module, calibration_data: torch.utils.data.DataLoader]
+        self, model: nn.Module, calibration_data: torch.utils.data.DataLoader
     ) -> nn.Module:
         """INT8静态量化"""
         logger.info("🎯 执行INT8静态量化...")

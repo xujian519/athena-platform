@@ -776,7 +776,7 @@ class OptimizedPerceptionModule(BaseModule):
 
     async def _detect_document_changes(
         self, file_path: str, processing_id: str
-    ) -> tuple[DocumentMetadata, dict[str, Any]:
+    ) -> tuple[DocumentMetadata, dict[str, Any]]:
         """
         检测文档变更
 

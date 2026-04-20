@@ -174,8 +174,8 @@ restart_services() {
         log_info "使用docker-compose重启服务..."
 
         # 重启API服务
-        docker-compose restart api 2>/dev/null || \
-        docker-compose restart 2>/dev/null || \
+        docker-compose -f docker-compose.unified.yml --profile dev restart api 2>/dev/null || \
+        docker-compose -f docker-compose.unified.yml --profile dev restart 2>/dev/null || \
         log_warning "docker-compose重启失败，尝试手动重启"
     fi
 

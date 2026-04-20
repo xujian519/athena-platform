@@ -126,7 +126,7 @@ start_infrastructure() {
     print_success "Docker服务正常"
 
     print_info "启动Docker Compose服务..."
-    docker-compose up -d redis qdrant neo4j prometheus grafana alertmanager
+    docker-compose -f docker-compose.unified.yml --profile dev up -d redis qdrant neo4j prometheus grafana alertmanager
 
     print_info "等待服务启动..."
     sleep 5

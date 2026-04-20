@@ -177,7 +177,7 @@ start_services() {
     print_header "启动测试服务"
 
     print_info "启动核心测试服务..."
-    docker-compose -f docker-compose.test.yml up -d postgres-test redis-test qdrant-test neo4j-test minio-test
+    docker-compose -f docker-compose.unified.yml --profile test up -d postgres-test redis-test qdrant-test neo4j-test minio-test
 
     print_success "测试服务已启动"
 }
@@ -265,14 +265,14 @@ show_management_commands() {
 
     echo ""
     echo -e "${GREEN}服务管理:${NC}"
-    echo "  启动服务:     docker-compose -f docker-compose.test.yml up -d"
-    echo "  停止服务:     docker-compose -f docker-compose.test.yml down"
+    echo "  启动服务:     docker-compose -f docker-compose.unified.yml --profile test up -d"
+    echo "  停止服务:     docker-compose -f docker-compose.unified.yml --profile test down"
     echo "  重启服务:     docker-compose -f docker-compose.test.yml restart"
     echo "  查看状态:     docker-compose -f docker-compose.test.yml ps"
     echo "  查看日志:     docker-compose -f docker-compose.test.yml logs -f [service_name]"
     echo ""
     echo -e "${GREEN}数据管理:${NC}"
-    echo "  清理数据:     docker-compose -f docker-compose.test.yml down -v"
+    echo "  清理数据:     docker-compose -f docker-compose.unified.yml --profile test down -v"
     echo "  备份数据:     ./scripts/backup-test-data.sh"
     echo "  恢复数据:     ./scripts/restore-test-data.sh"
     echo ""

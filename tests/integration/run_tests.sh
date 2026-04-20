@@ -88,7 +88,7 @@ start_test_services() {
     cd "$PROJECT_ROOT"
     
     # 启动测试数据库和缓存
-    docker-compose -f docker-compose.test.yml up -d
+    docker-compose -f docker-compose.unified.yml --profile test up -d
     
     # 等待服务就绪
     log_info "等待服务就绪..."
@@ -183,7 +183,7 @@ cleanup_test_environment() {
     cd "$PROJECT_ROOT"
     
     # 停止测试服务
-    docker-compose -f docker-compose.test.yml down
+    docker-compose -f docker-compose.unified.yml --profile test down
     
     # 清理测试数据
     rm -f "$TEST_DIR/coverage.out"

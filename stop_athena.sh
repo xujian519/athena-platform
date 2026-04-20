@@ -25,8 +25,8 @@ echo "2. 停止Docker容器？"
 read -p "   是否停止Docker容器？(y/N) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo "   正在停止Docker容器..."
-    docker-compose down
+    echo "   正在停止Docker容器（开发环境）..."
+    docker-compose -f docker-compose.unified.yml --profile dev down
     echo "   ✅ Docker容器已停止"
 else
     echo "   ⏭️  Docker容器保持运行"

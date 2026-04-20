@@ -143,11 +143,11 @@ class FusionQueryEngine:
         self,
         query_text: str,
         query_vector: list[float],
-        entity_types: list["key"] = None,
+        entity_types: list[str] | None = None,
         limit: int = 10,
         filters: dict[str, Any] | None = None,
         strategy: str = "balanced",
-    ]) -> tuple[list[QueryResult], dict[str, Any]]:
+    ) -> tuple[list[QueryResult], dict[str, Any]]:
         """
         执行融合查询
 
