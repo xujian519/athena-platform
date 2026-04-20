@@ -511,9 +511,9 @@ class GooglePatentsRetriever:
                     await self.page.wait_for_url('**/*?*', timeout=10000)
                     logger.info('✅ 检测到搜索URL变化')
                     result_loaded = True
-16except Exception as e:
-16    # 记录异常但不中断流程
-16    logger.debug(f"[google_patents_retriever] Exception: {e}")
+                except Exception as e:
+                    # 记录异常但不中断流程
+                    logger.debug(f"[google_patents_retriever] URL等待异常: {e}")
 
             # 最后的等待策略 - 等待页面稳定
             if not result_loaded:
@@ -530,9 +530,9 @@ class GooglePatentsRetriever:
                 current_url = self.page.url
                 page_title = await self.page.title()
                 logger.info(f"🔍 当前页面: {current_url} - {page_title}")
-12except Exception as e:
-12    # 记录异常但不中断流程
-12    logger.debug(f"[google_patents_retriever] Exception: {e}")
+            except Exception as e:
+                # 记录异常但不中断流程
+                logger.debug(f"[google_patents_retriever] 页面状态获取异常: {e}")
 
         return patents
 
@@ -717,9 +717,9 @@ class GooglePatentsRetriever:
                 try:
                     title = await result_element.text_content()
                     title = title.strip().split('\n')[0][:100]
-16except Exception as e:
-16    # 记录异常但不中断流程
-16    logger.debug(f"[google_patents_retriever] Exception: {e}")
+                except Exception as e:
+                    # 记录异常但不中断流程
+                    logger.debug(f"[google_patents_retriever] 标题提取异常: {e}")
 
             # 提取专利号
             patent_selectors = [

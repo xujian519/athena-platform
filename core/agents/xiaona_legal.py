@@ -698,16 +698,19 @@ class XiaonaLegalAgent(BaseAgent):
         if UNIFIED_REGISTRY_AVAILABLE:
             try:
                 registry = get_unified_registry()
-                tool = registry.get("patent_search")
 
-                if tool and tool.enabled:
+                # 检查工具是否存在
+                if registry.require("patent_search"):
                     self.logger.info("✅ 从统一工具注册表调用patent_search")
+
+                    # 获取工具并调用
+                    tool = registry.get("patent_search")
 
                     # 直接调用工具的handler
                     import time
                     start_time = time.time()
 
-                    result = await tool.function(
+                    result = await tool(
                         params={
                             "query": query,
                             "channel": channel,
