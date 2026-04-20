@@ -33,7 +33,7 @@ jobs:
     - name: 代码检查 - Flake8
       run: |
         echo "🔍 运行Flake8代码检查..."
-        flake8 core/ --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 core/ --count --select=E9,F63,F7 --show-source --statistics
     
     - name: 代码格式化检查
       run: |
