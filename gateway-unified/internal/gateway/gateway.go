@@ -5,21 +5,24 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"os"
 	"sync"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gin-contrib/cors"
 	"github.com/athena-workspace/gateway-unified/internal/config"
+	"github.com/athena-workspace/gateway-unified/internal/handlers"
+	"github.com/athena-workspace/gateway-unified/internal/middleware"
 )
 
 // Gateway 网关核心结构
 type Gateway struct {
-	config   *config.Config
-	router   *gin.Engine
-	handlers *Handlers
-	done     chan struct{}
-	mu       sync.RWMutex
+	config         *config.Config
+	router         *gin.Engine
+	handlers       *Handlers
+	versionConfig  *middleware.VersionConfig
+	done           chan struct{}
+	mu             sync.RWMutex
 }
 
 // GetRegistry 获取服务注册表
@@ -30,6 +33,11 @@ func (g *Gateway) GetRegistry() *ServiceRegistry {
 // GetRouteManager 获取路由管理器
 func (g *Gateway) GetRouteManager() *RouteManager {
 	return g.handlers.GetRouteManager()
+}
+
+// GetVersionConfig 获取版本配置
+func (g *Gateway) GetVersionConfig() *middleware.VersionConfig {
+	return g.versionConfig
 }
 
 // NewGateway 创建网关实例
@@ -43,6 +51,9 @@ func NewGateway(cfg *config.Config) (*Gateway, error) {
 		router: router,
 		done:   make(chan struct{}),
 	}
+
+	// 创建版本配置
+	gw.versionConfig = middleware.NewVersionConfig()
 
 	// 创建处理器（传入网关引用）
 	handlers := NewHandlers(gw)
@@ -70,18 +81,61 @@ func (g *Gateway) setupMiddleware() {
 	// 日志中间件
 	g.router.Use(gin.Logger())
 
-	// CORS中间件
-	g.router.Use(cors.New(cors.Config{
-		AllowAllOrigins:  true,
-		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
-		ExposeHeaders:    []string{"Content-Length"},
+	// 安全响应头中间件（最先执行）
+	securityHeadersConfig := &middleware.SecurityHeadersConfigExtended{
+		XFrameOptions:             "SAMEORIGIN",
+		XContentTypeOptions:       "nosniff",
+		XXSSProtection:            "1; mode=block",
+		StrictTransportSecurity:   "max-age=31536000; includeSubDomains",
+		ContentSecurityPolicy:     "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'",
+		ReferrerPolicy:            "strict-origin-when-cross-origin",
+		PermissionsPolicy:         "geolocation=(), microphone=(), camera=()",
+		CrossOriginOpenerPolicy:   "same-origin",
+		CrossOriginResourcePolicy: "same-origin",
+	}
+	g.router.Use(middleware.SecurityHeadersMiddlewareExtended(securityHeadersConfig))
+
+	// CORS中间件（使用新的安全配置）
+	corsConfig := &middleware.CORSConfig{
+		AllowedOrigins:   []string{"http://localhost:3000", "http://localhost:8080", "https://athena.example.com", "*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Origin", "Content-Type", "Accept", "Authorization", "X-API-Key", "X-Request-ID"},
+		ExposedHeaders:   []string{"Content-Length", "X-Total-Count", "X-Request-ID"},
 		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
-	}))
+		MaxAge:           3600,
+	}
+	g.router.Use(middleware.CORSMiddleware(corsConfig))
+
+	// JWT认证中间件（可选认证，允许匿名访问）
+	jwtSecret := os.Getenv("JWT_SECRET")
+	if jwtSecret != "" {
+		jwtConfig := &middleware.JWTConfig{
+			Secret:           jwtSecret,
+			Issuer:           "athena-gateway",
+			Expiration:       24 * time.Hour,
+			RefreshExpiration: 7 * 24 * time.Hour,
+			CookieName:       "athena_token",
+			UseCookie:        false,
+			UseHeader:        true,
+			HeaderName:       "Authorization",
+			UseQuery:         false,
+		}
+		jwtManager := middleware.NewJWTManager(jwtConfig)
+		g.router.Use(jwtManager.OptionalAuth())
+	}
+
+	// API密钥认证中间件
+	apiKeyMiddleware := createAPIKeyMiddleware([]string{
+		os.Getenv("API_KEY_1"),
+		os.Getenv("API_KEY_2"),
+	})
+	g.router.Use(apiKeyMiddleware)
 
 	// 请求ID中间件
 	g.router.Use(requestIDMiddleware())
+
+	// API版本管理中间件
+	g.router.Use(g.versionConfig.VersionMiddleware())
 
 	// 超时中间件
 	g.router.Use(timeoutMiddleware(30 * time.Second))
@@ -102,6 +156,9 @@ func (g *Gateway) setupRoutes() {
 	g.router.GET("/health", g.handlers.HealthCheck)
 	g.router.GET("/ready", g.handlers.Ready)
 	g.router.GET("/live", g.handlers.Live)
+
+	// 创建版本管理处理器
+	versionHandler := handlers.NewVersionHandler(g.versionConfig)
 
 	// API路由组
 	api := g.router.Group("/api")
@@ -128,6 +185,14 @@ func (g *Gateway) setupRoutes() {
 
 		// 健康告警
 		api.POST("/health/alerts", g.handlers.HealthAlert)
+
+		// API版本管理
+		api.GET("/versions", versionHandler.ListVersions)
+		api.GET("/versions/:version", versionHandler.GetVersion)
+		api.POST("/versions", versionHandler.RegisterVersion)
+		api.PUT("/versions/:version", versionHandler.UpdateVersion)
+		api.POST("/versions/:version/deprecate", versionHandler.DeprecateVersion)
+		api.PUT("/versions/default", versionHandler.SetDefaultVersion)
 	}
 
 	// 代理路由 - 放在最后作为catch-all
@@ -257,7 +322,8 @@ func (g *Gateway) ServiceCall(serviceName, path string, method string, headers m
 }
 
 // 辅助函数
-func generateServiceID(name, host string, port int, index int) string {
+// GenerateServiceID 生成服务实例ID（导出版本）
+func GenerateServiceID(name, host string, port int, index int) string {
 	return fmt.Sprintf("%s:%s:%d:%d", name, host, port, index)
 }
 
@@ -290,4 +356,52 @@ func timeoutMiddleware(timeout time.Duration) gin.HandlerFunc {
 
 func generateRequestID() string {
 	return fmt.Sprintf("%d-%d", time.Now().UnixNano(), time.Now().Unix())
+}
+
+// createAPIKeyMiddleware 创建API密钥认证中间件
+func createAPIKeyMiddleware(validKeys []string) gin.HandlerFunc {
+	// 创建密钥集合以便快速查找
+	keySet := make(map[string]bool)
+	for _, key := range validKeys {
+		if key != "" {
+			keySet[key] = true
+		}
+	}
+
+	return func(c *gin.Context) {
+		// 跳过健康检查和根路径
+		if c.Request.URL.Path == "/" || c.Request.URL.Path == "/health" || c.Request.URL.Path == "/ready" || c.Request.URL.Path == "/live" {
+			c.Next()
+			return
+		}
+
+		// 检查JWT是否已认证
+		if _, exists := c.Get("user_id"); exists {
+			c.Next()
+			return
+		}
+
+		// 检查API密钥
+		apiKey := c.GetHeader("X-API-Key")
+		if apiKey == "" {
+			// 没有API密钥，继续（可选认证）
+			c.Next()
+			return
+		}
+
+		// 验证API密钥
+		if !keySet[apiKey] {
+			c.JSON(401, gin.H{
+				"success": false,
+				"error":   "Invalid API key",
+			})
+			c.Abort()
+			return
+		}
+
+		// 设置认证信息
+		c.Set("auth_method", "api_key")
+		c.Set("api_key", apiKey)
+		c.Next()
+	}
 }

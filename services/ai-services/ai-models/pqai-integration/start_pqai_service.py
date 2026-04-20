@@ -59,7 +59,7 @@ async def start_simple_service():
 
         # 启动服务
         import uvicorn
-        await uvicorn.run(app, host='0.0.0.0', port=8030, log_level='info')
+        await uvicorn.run(app, host='127.0.0.1', port=8030, log_level='info')  # 内网通信，通过Gateway访问
 
         return True
 

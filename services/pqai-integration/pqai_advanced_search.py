@@ -922,4 +922,4 @@ def _generate_comprehensive_recommendations(patents: list[dict], evaluations: li
     return recommendations
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8034)
+    uvicorn.run(app, host="127.0.0.1", port=8034)  # 内网通信，通过Gateway访问

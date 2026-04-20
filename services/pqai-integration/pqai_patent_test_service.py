@@ -389,4 +389,4 @@ async def get_sample_patents():
         raise HTTPException(status_code=500, detail=f"获取样本失败: {str(e)}") from e
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8032)
+    uvicorn.run(app, host="127.0.0.1", port=8032)  # 内网通信，通过Gateway访问

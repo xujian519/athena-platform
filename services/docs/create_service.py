@@ -79,7 +79,7 @@ async def health_check():
 if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", 8080))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run(app, host="127.0.0.1", port=port)  # 内网通信，通过Gateway访问
 '''
     (service_path / "main.py").write_text(main_py_content)
 

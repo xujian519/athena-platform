@@ -11,7 +11,7 @@ import os
 import sys
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any
+from typing import Any, Optional, List, Dict
 from pathlib import Path
 
 # 配置日志（必须在最前面）
@@ -56,14 +56,14 @@ class PatentDocument:
     abstract: str
     claims: str
     description: str
-    ipc_codes: list[str]
+    ipc_codes: List[str]
     publication_date: str
     applicant: str
-    inventors: list[str]
-    citations: list[str]
-    family_id: str | None = None
-    priority_date: str | None = None
-    legal_status: str | None = None
+    inventors: List[str]
+    citations: List[str]
+    family_id: Optional[str] = None
+    priority_date: Optional[str] = None
+    legal_status: Optional[str] = None
 
 
 @dataclass
@@ -76,7 +76,7 @@ class RetrievalResult:
     score: float
     source: str  # 'fulltext', 'vector', 'kg'
     evidence: str  # 匹配的文本片段或路径
-    metadata: dict[str, Any]
+    metadata: Dict[str, Any]
 
 
 class RealPatentHybridRetrieval:
@@ -134,7 +134,7 @@ class RealPatentHybridRetrieval:
             logger.error(f"❌ PostgreSQL连接失败: {e}")
             self.pg_conn = None
 
-    async def search(self, query: str, top_k: int = 20) -> list[RetrievalResult]:
+    async def search(self, query: str, top_k: int = 20) -> List[RetrievalResult]:
         """
         混合检索主函数
 
@@ -173,7 +173,7 @@ class RealPatentHybridRetrieval:
         logger.info(f"✅ 检索完成，返回 {len(final_results)} 条结果")
         return final_results
 
-    async def _fulltext_search(self, query: str, top_k: int) -> list[RetrievalResult]:
+    async def _fulltext_search(self, query: str, top_k: int) -> List[RetrievalResult]:
         """PostgreSQL全文搜索 - 真实数据版本"""
         if not self.pg_conn:
             logger.warning("PostgreSQL未连接，跳过全文搜索")
@@ -193,26 +193,26 @@ class RealPatentHybridRetrieval:
                     p.title,
                     p.abstract,
                     ts_rank_cd(
-                        setweight(to_tsvector('chinese', p.title), 'A') ||
-                        setweight(to_tsvector('chinese', p.abstract), 'B') ||
-                        setweight(to_tsvector('chinese', p.claims), 'C') ||
-                        setweight(to_tsvector('chinese', p.description), 'D'),
-                        plainto_tsquery('chinese', %s),
+                        setweight(to_tsvector('simple', p.title), 'A') ||
+                        setweight(to_tsvector('simple', p.abstract), 'B') ||
+                        setweight(to_tsvector('simple', p.claims), 'C') ||
+                        setweight(to_tsvector('simple', p.description), 'D'),
+                        plainto_tsquery('simple', %s),
                         {weights["title"]}  -- title权重
                     ) as title_rank,
                     ts_rank_cd(
-                        setweight(to_tsvector('chinese', p.title), 'A') ||
-                        setweight(to_tsvector('chinese', p.abstract), 'B') ||
-                        setweight(to_tsvector('chinese', p.claims), 'C') ||
-                        setweight(to_tsvector('chinese', p.description), 'D'),
-                        plainto_tsquery('chinese', %s),
+                        setweight(to_tsvector('simple', p.title), 'A') ||
+                        setweight(to_tsvector('simple', p.abstract), 'B') ||
+                        setweight(to_tsvector('simple', p.claims), 'C') ||
+                        setweight(to_tsvector('simple', p.description), 'D'),
+                        plainto_tsquery('simple', %s),
                         {weights["abstract"]}  -- abstract权重
                     ) as abstract_rank,
-                    ts_headline('chinese', p.title, plainto_tsquery('chinese', %s)) as title_highlight,
-                    ts_headline('chinese', p.abstract, plainto_tsquery('chinese', %s)) as abstract_highlight
+                    ts_headline('simple', p.title, plainto_tsquery('simple', %s)) as title_highlight,
+                    ts_headline('simple', p.abstract, plainto_tsquery('simple', %s)) as abstract_highlight
                 FROM {patents_table} p
                 WHERE
-                    to_tsvector('chinese', p.title || ' ' || p.abstract || ' ' || p.claims || ' ' || p.description) @@ plainto_tsquery('chinese', %s)
+                    to_tsvector('simple', p.title || ' ' || p.abstract || ' ' || p.claims || ' ' || p.description) @@ plainto_tsquery('simple', %s)
                 ORDER BY (title_rank + abstract_rank) DESC
                 LIMIT %s
                 """
@@ -262,7 +262,7 @@ class RealPatentHybridRetrieval:
 
         return results
 
-    async def _vector_search(self, query: str, top_k: int) -> list[RetrievalResult]:
+    async def _vector_search(self, query: str, top_k: int) -> List[RetrievalResult]:
         """Qdrant向量检索 - 真实数据版本"""
         try:
             # 生成查询向量（这里需要调用实际的embedding模型）
@@ -307,7 +307,7 @@ class RealPatentHybridRetrieval:
             logger.error(f"❌ 向量搜索出错: {e}")
             return []
 
-    async def _kg_search(self, query: str, top_k: int) -> list[RetrievalResult]:
+    async def _kg_search(self, query: str, top_k: int) -> List[RetrievalResult]:
         """Neo4j知识图谱检索 - 真实数据版本"""
         try:
             # 提取查询中的关键技术术语
@@ -388,7 +388,7 @@ class RealPatentHybridRetrieval:
             logger.error(f"❌ 知识图谱搜索出错: {e}")
             return []
 
-    async def _generate_query_vector(self, query: str) -> list[float] | None:
+    async def _generate_query_vector(self, query: str) -> Optional[List[float]]:
         """生成查询向量"""
         try:
             # 这里应该调用实际的embedding模型
@@ -400,7 +400,7 @@ class RealPatentHybridRetrieval:
             logger.error(f"生成查询向量失败: {e}")
             return None
 
-    def _extract_keywords(self, text: str) -> list[str]:
+    def _extract_keywords(self, text: str) -> List[str]:
         """提取关键词"""
         try:
             import re
@@ -451,7 +451,7 @@ class RealPatentHybridRetrieval:
             logger.error(f"关键词提取失败: {e}")
             return []
 
-    async def _get_patent_info(self, patent_id: str) -> dict[str, Any] | None:
+    async def _get_patent_info(self, patent_id: str) -> Optional[Dict[str, Any]]:
         """从PostgreSQL获取专利详细信息"""
         if not self.pg_conn:
             return None
@@ -472,11 +472,11 @@ class RealPatentHybridRetrieval:
 
     def _merge_and_rerank(
         self,
-        ft_results: list[RetrievalResult],
-        vector_results: list[RetrievalResult],
-        kg_results: list[RetrievalResult],
+        ft_results: List[RetrievalResult],
+        vector_results: List[RetrievalResult],
+        kg_results: List[RetrievalResult],
         top_k: int,
-    ) -> list[RetrievalResult]:
+    ) -> List[RetrievalResult]:
         """融合和重排序检索结果"""
         all_patents = {}
 
@@ -543,7 +543,7 @@ class RealPatentHybridRetrieval:
         final_results.sort(key=lambda x: x.score, reverse=True)
         return final_results[:top_k]
 
-    async def get_patent_details(self, patent_id: str) -> dict[str, Any] | None:
+    async def get_patent_details(self, patent_id: str) -> Optional[Dict[str, Any]]:
         """获取专利详细信息"""
         patent_info = await self._get_patent_info(patent_id)
         if not patent_info:
@@ -564,7 +564,7 @@ class RealPatentHybridRetrieval:
 
         return details
 
-    async def _get_patent_kg_info(self, patent_id: str) -> dict[str, Any]:
+    async def _get_patent_kg_info(self, patent_id: str) -> Dict[str, Any]:
         """获取专利在知识图谱中的信息"""
         try:
             cypher = """
@@ -592,7 +592,7 @@ class RealPatentHybridRetrieval:
             logger.error(f"获取专利知识图谱信息出错: {e}")
             return {}
 
-    def get_system_stats(self) -> dict[str, Any]:
+    def get_system_stats(self) -> Dict[str, Any]:
         """获取系统统计信息"""
         stats = {
             "components": {

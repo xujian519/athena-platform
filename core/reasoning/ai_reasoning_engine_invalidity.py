@@ -40,14 +40,14 @@ except ImportError:
 
 # 导入NLP处理器
 try:
-    from chinese_nlp_processor import ChineseNLPProcessor, ProcessResult
+    from core.reasoning.chinese_nlp_processor import ChineseNLPProcessor
 
     CHINESE_NLP_AVAILABLE = True
 except ImportError:
     logging.warning("中文NLP处理器不可用")
 
 try:
-    from enhanced_entity_recognizer import EnhancedEntityRecognizer, RecognitionResult
+    from core.reasoning.enhanced_entity_recognizer import EnhancedEntityRecognizer
 
     ENHANCED_ENTITY_RECOGNIZER_AVAILABLE = True
 except ImportError:

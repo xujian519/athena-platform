@@ -17,36 +17,63 @@ try:
 except ImportError:
     REDIS_AVAILABLE = False
 
+# 使用统一的Redis配置
+try:
+    from core.cache.redis_config import get_redis_config
+    REDIS_CONFIG_AVAILABLE = True
+except ImportError:
+    REDIS_CONFIG_AVAILABLE = False
+
 
 class RedisCache:
     """Redis缓存类"""
 
     def __init__(
         self,
-        host: str = "localhost",
-        port: int = 6379,
-        db: int = 0,
+        host: str | None = None,
+        port: int | None = None,
+        db: int | None = None,
         password: str | None = None,
         default_ttl: int = 300,
+        use_config: bool = True,
         **kwargs,
     ):
         """
         初始化Redis缓存
 
         Args:
-            host: Redis主机
-            port: Redis端口
-            db: Redis数据库编号
-            password: Redis密码
+            host: Redis主机（如果为None且use_config=True，从配置读取）
+            port: Redis端口（如果为None且use_config=True，从配置读取）
+            db: Redis数据库编号（如果为None且use_config=True，从配置读取）
+            password: Redis密码（如果为None且use_config=True，从配置读取）
             default_ttl: 默认生存时间（秒）
+            use_config: 是否使用统一配置（默认True）
             **kwargs: 其他Redis连接参数
         """
         if not REDIS_AVAILABLE:
             raise ImportError("redis包未安装，请运行: pip install redis")
 
+        # 获取配置
+        if use_config and REDIS_CONFIG_AVAILABLE:
+            config = get_redis_config()
+            redis_host = host or config.get("host")
+            redis_port = port or config.get("port")
+            redis_db = db or config.get("db")
+            redis_password = password or config.get("password")
+        else:
+            redis_host = host or "localhost"
+            redis_port = port or 6379
+            redis_db = db or 0
+            redis_password = password
+
         self._default_ttl = default_ttl
         self._client = redis.Redis(
-            host=host, port=port, db=db, password=password, decode_responses=True, **kwargs
+            host=redis_host,
+            port=redis_port,
+            db=redis_db,
+            password=redis_password,
+            decode_responses=True,
+            **kwargs
         )
 
     def set(self, key: str, value: Any, ttl: int | None = None) -> bool:

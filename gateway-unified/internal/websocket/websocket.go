@@ -79,8 +79,8 @@ func NewController(config *Config) *Controller {
 	}
 	ctrl.sessionManager = session.NewManager(sessionConfig)
 
-	// 创建消息路由器
-	ctrl.messageRouter = router.NewRouter()
+	// 创建消息路由器（传入会话管理器）
+	ctrl.messageRouter = router.NewRouter(ctrl.sessionManager)
 
 	// 创建Canvas Host（如果启用）
 	if config.EnableCanvasHost {
@@ -277,9 +277,29 @@ func (c *Controller) GetStats() map[string]interface{} {
 	defer c.mu.RUnlock()
 
 	return map[string]interface{}{
-		"session_count": c.sessionManager.GetSessionCount(),
-		"active_sessions": c.sessionManager.GetAllSessions(),
+		"session_count":    c.sessionManager.GetSessionCount(),
+		"active_sessions":  c.sessionManager.GetAllSessions(),
+		"router_stats":     c.messageRouter.GetStats(),
 	}
+}
+
+// ==================== 新增：消息转发和广播方法 ====================
+
+// ForwardMessage 转发消息到另一个会话
+func (c *Controller) ForwardMessage(messageID string, targetSessionID string) error {
+	// 查找原始消息（从会话历史或其他来源）
+	// 这里简化实现，直接使用messageID
+	msg := protocol.NewMessage(protocol.MessageTypeNotify, targetSessionID, map[string]interface{}{
+		"forwarded":       true,
+		"original_msg_id": messageID,
+	})
+
+	return c.messageRouter.ForwardMessage(msg, targetSessionID)
+}
+
+// BroadcastToAgentType 向指定Agent类型的所有会话广播
+func (c *Controller) BroadcastToAgentType(message *protocol.Message, agentType protocol.AgentType) error {
+	return c.messageRouter.BroadcastToAgentType(message, agentType)
 }
 
 // Close 关闭控制器

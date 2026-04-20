@@ -35,7 +35,7 @@ monitoring:
 # TLS/SSL配置
 tls:
   # 启用TLS (默认: false)
-  enabled: true
+  enabled: false
   # TLS证书文件路径
   cert_file: /Users/xujian/Athena工作平台/gateway-unified/certs/server.crt
   # TLS私钥文件路径

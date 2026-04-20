@@ -382,4 +382,4 @@ async def analyze_competition(request: dict):
         raise HTTPException(status_code=500, detail=f"竞争分析失败: {str(e)}") from e
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8036)
+    uvicorn.run(app, host="127.0.0.1", port=8036)  # 内网通信，通过Gateway访问

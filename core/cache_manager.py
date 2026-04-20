@@ -12,17 +12,46 @@ from typing import Any
 
 import redis
 
+# 使用统一的Redis配置
+try:
+    from core.cache.redis_config import get_redis_config
+    REDIS_CONFIG_AVAILABLE = True
+except ImportError:
+    REDIS_CONFIG_AVAILABLE = False
+
 
 class AthenaCacheManager:
     """Athena平台统一缓存管理器"""
 
-    def __init__(self, host="127.0.0.1", port=6379, db=0, password=None):
-        """初始化Redis连接"""
+    def __init__(self, host=None, port=None, db=None, password=None, use_config=True):
+        """
+        初始化Redis连接
+
+        Args:
+            host: Redis主机（如果为None且use_config=True，从配置读取）
+            port: Redis端口（如果为None且use_config=True，从配置读取）
+            db: Redis数据库编号（如果为None且use_config=True，从配置读取）
+            password: Redis密码（如果为None且use_config=True，从配置读取）
+            use_config: 是否使用统一配置（默认True）
+        """
+        # 获取配置
+        if use_config and REDIS_CONFIG_AVAILABLE:
+            config = get_redis_config()
+            redis_host = host or config.get("host")
+            redis_port = port or config.get("port")
+            redis_db = db or config.get("db")
+            redis_password = password or config.get("password")
+        else:
+            redis_host = host or "127.0.0.1"
+            redis_port = port or 6379
+            redis_db = db or 0
+            redis_password = password
+
         self.redis_client = redis.Redis(
-            host=host,
-            port=port,
-            db=db,
-            password=password,
+            host=redis_host,
+            port=redis_port,
+            db=redis_db,
+            password=redis_password,
             decode_responses=False,  # 保持二进制模式,支持pickle
             socket_connect_timeout=5,
             socket_timeout=5,

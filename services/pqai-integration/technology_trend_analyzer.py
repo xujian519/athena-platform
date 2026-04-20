@@ -964,4 +964,4 @@ async def get_available_technologies():
     }
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8035)
+    uvicorn.run(app, host="127.0.0.1", port=8035)  # 内网通信，通过Gateway访问

@@ -49,6 +49,12 @@ coverage.xml
 # 大文件排除 - 防止仓库膨胀
 # ============================================================
 
+# 整个 data 目录（除了 README）
+data/*
+!data/README.md
+!data/DATABASE_LOCATIONS.md
+!data/README_DATA_STRUCTURE.md
+
 # AI 模型文件 (应使用外部存储或 Git LFS)
 models/
 *.pt
@@ -166,3 +172,30 @@ models/*.safetensors
 
 # Node.js（在非标准位置）
 */node_modules/
+
+# Gateway密钥配置
+gateway-unified/.env
+gateway-unified/.env.*
+gateway-unified/.env.secrets
+gateway-unified/config.yaml.secure
+.env.production
+.env.local
+.env
+.env.*
+!**/.env.example
+!**/.env.template
+!**/.env*.example
+ gateway-unified/certs/key.pem
+gateway-unified/certs/server.key
+gateway-unified/certs/cert.pem
+gateway-unified/certs/server.crt
+projects/phoenix/nginx/ssl/key.pem
+projects/phoenix/nginx/ssl/cert.pem
+projects/phoenix/nginx/ssl/chain.pem
+config/production/app-secrets.yaml
+mcp-servers/.env
+scripts/.env
+config/memory/production.env
+config/production.env
+services/knowledge-graph-service/.env
+services/knowledge-unified/subservices/knowledge-graph-service/.env

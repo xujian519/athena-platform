@@ -180,7 +180,7 @@ async def batch_store_memories(requests: list[FusionStoreRequest]):
 
 def main() -> None:
     """主函数"""
-    uvicorn.run(app, host="0.0.0.0", port=8100, log_level="info")
+    uvicorn.run(app, host="127.0.0.1", port=8100, log_level="info")  # 内网通信
 
 
 if __name__ == "__main__":

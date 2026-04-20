@@ -412,7 +412,7 @@ class XiaonaLegalEnhanced:
 
     def run(self) -> None:
         """运行服务"""
-        uvicorn.run(self.app, host="0.0.0.0", port=self.service_port)
+        uvicorn.run(self.app, host="127.0.0.1", port=self.service_port)  # 内网通信
 
 def main() -> None:
     """主函数"""

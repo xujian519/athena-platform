@@ -11,10 +11,11 @@ Enhanced Collaboration Protocol
 4. 协议版本控制 - 向后兼容
 5. 错误处理和重试 - 可靠通信
 6. 性能监控 - 协作性能追踪
+7. Gateway WebSocket集成 - 统一通信
 
 作者: Athena平台团队
 创建时间: 2025-12-26
-版本: v2.0.0 "协议升级"
+版本: v2.1.0 "Gateway集成"
 """
 
 import asyncio
@@ -28,6 +29,24 @@ from enum import Enum
 from typing import Any
 
 logger = logging.getLogger(__name__)
+
+# Gateway客户端可选导入
+try:
+    from core.agents.gateway_client import (
+        GatewayClient,
+        GatewayClientConfig,
+        AgentType as GatewayAgentType,
+        Message as GatewayMessage,
+        MessageType as GatewayMessageType
+    )
+    GATEWAY_AVAILABLE = True
+except ImportError:
+    GATEWAY_AVAILABLE = False
+    GatewayClient = None  # type: ignore
+    GatewayClientConfig = None  # type: ignore
+    GatewayAgentType = None  # type: ignore
+    GatewayMessage = None  # type: ignore
+    GatewayMessageType = None  # type: ignore
 
 
 class MessageType(Enum):
@@ -166,9 +185,10 @@ class EnhancedCollaborationProtocol:
     4. 协议兼容 - 版本管理
     5. 错误处理 - 自动重试
     6. 性能监控 - 消息追踪
+    7. Gateway集成 - 统一WebSocket通信
     """
 
-    def __init__(self):
+    def __init__(self, enable_gateway: bool = True, gateway_url: str = "ws://localhost:8005/ws"):
         # 消息队列(每个智能体一个队列)
         self.message_queues: dict[str, deque[Message]] = defaultdict(lambda: deque(maxlen=10000))
 
@@ -194,18 +214,126 @@ class EnhancedCollaborationProtocol:
         # 消息历史(用于追踪)
         self.message_history: deque[Message] = deque(maxlen=10000)
 
-        logger.info("🤝 增强协作协议初始化完成")
+        # Gateway集成
+        self._gateway_enabled = enable_gateway and GATEWAY_AVAILABLE
+        self._gateway_client: GatewayClient | None = None
+        self._gateway_url = gateway_url
+        self._agent_id_map: dict[str, GatewayAgentType] = {}
+
+        logger.info("🤝 增强协作协议初始化完成" +
+                    (f" (Gateway: {'启用' if self._gateway_enabled else '禁用'})" if GATEWAY_AVAILABLE else ""))
+
+    async def initialize_gateway(self, agent_id: str, agent_type: str) -> bool:
+        """
+        初始化Gateway连接
+
+        Args:
+            agent_id: Agent ID
+            agent_type: Agent类型（xiaona/xiaonuo/yunxi）
+
+        Returns:
+            bool: 是否成功
+        """
+        if not self._gateway_enabled:
+            return False
+
+        try:
+            # 映射Agent类型
+            type_map = {
+                "xiaona": GatewayAgentType.XIAONA,
+                "小娜": GatewayAgentType.XIAONA,
+                "xiaonuo": GatewayAgentType.XIAONUO,
+                "小诺": GatewayAgentType.XIAONUO,
+                "yunxi": GatewayAgentType.YUNXI,
+                "云熙": GatewayAgentType.YUNXI,
+            }
+            gw_type = type_map.get(agent_type.lower(), GatewayAgentType.UNKNOWN)
+            self._agent_id_map[agent_id] = gw_type
+
+            # 创建Gateway客户端
+            config = GatewayClientConfig(
+                gateway_url=self._gateway_url,
+                agent_type=gw_type,
+                agent_id=agent_id
+            )
+            self._gateway_client = GatewayClient(config)
+
+            # 连接
+            success = await self._gateway_client.connect()
+            if success:
+                logger.info(f"✅ Gateway连接成功: {agent_id}")
+
+            return success
+
+        except Exception as e:
+            logger.error(f"❌ Gateway初始化失败: {e}")
+            return False
+
+    async def send_via_gateway(
+        self,
+        sender_id: str,
+        receiver_id: str,
+        action: str,
+        payload: dict[str, Any]
+    ) -> bool:
+        """
+        通过Gateway发送消息
+
+        Args:
+            sender_id: 发送者ID
+            receiver_id: 接收者ID
+            action: 动作
+            payload: 负载
+
+        Returns:
+            bool: 是否成功
+        """
+        if not self._gateway_client or not self._gateway_client.is_connected:
+            return False
+
+        try:
+            # 确定目标Agent类型
+            target_type = self._agent_id_map.get(receiver_id, GatewayAgentType.UNKNOWN)
+
+            response = await self._gateway_client.send_task(
+                task_type=action,
+                target_agent=target_type,
+                parameters=payload
+            )
+
+            return response is not None and response.success
+
+        except Exception as e:
+            logger.error(f"❌ Gateway发送失败: {e}")
+            return False
 
     async def send_message(
         self,
         sender_id: str,
         receiver_id: str,
         action: str,
-        payload: dict[str, Any],        message_type: MessageType = MessageType.REQUEST,
+        payload: dict[str, Any],
+        message_type: MessageType = MessageType.REQUEST,
         priority: MessagePriority = MessagePriority.NORMAL,
+        use_gateway: bool = True,
         **kwargs,
     ) -> str:
-        """发送消息"""
+        """
+        发送消息
+
+        Args:
+            sender_id: 发送者ID
+            receiver_id: 接收者ID
+            action: 动作
+            payload: 负载
+            message_type: 消息类型
+            priority: 优先级
+            use_gateway: 是否使用Gateway（如果可用）
+            **kwargs: 其他参数
+
+        Returns:
+            str: 消息ID
+        """
         message = Message(
             sender_id=sender_id,
             receiver_id=receiver_id,
@@ -216,7 +344,15 @@ class EnhancedCollaborationProtocol:
             **kwargs,
         )
 
-        # 添加到接收者队列
+        # 尝试通过Gateway发送
+        if use_gateway and self._gateway_enabled:
+            gateway_success = await self.send_via_gateway(sender_id, receiver_id, action, payload)
+            if gateway_success:
+                logger.debug(f"📤 消息已通过Gateway发送: {sender_id} -> {receiver_id}")
+                return message.message_id
+
+        # 回退到本地队列
+        self.message_queues[receiver_id].append(message)
         self.message_queues[receiver_id].append(message)
 
         # 记录消息

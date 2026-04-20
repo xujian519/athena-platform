@@ -201,4 +201,4 @@ if __name__ == '__main__':
     logger.info('⚡ 启动Redis缓存服务...')
     logger.info("📊 端口: 6001")
     logger.info("🔗 Redis: 127.0.0.1:6379")
-    uvicorn.run(app, host='0.0.0.0', port=6001)
+    uvicorn.run(app, host='127.0.0.1', port=6001)  # 内网通信，通过Gateway访问

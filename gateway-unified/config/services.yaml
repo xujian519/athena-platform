@@ -1,0 +1,86 @@
+# Gateway服务实例注册配置
+# 定义目标服务的端口号
+
+services:
+  # 小娜法律专家服务
+  - name: "xiaona-legal"
+    host: "127.0.0.1"
+    port: 8000
+    metadata:
+      description: "小娜法律专家服务"
+      agent: "xiaona"
+      version: "1.0.0"
+
+  # 小诺协调器服务
+  - name: "xiaonuo-coordinator"
+    host: "127.0.0.1"
+    port: 8003
+    metadata:
+      description: "小诺任务协调服务"
+      agent: "xiaonuo"
+      version: "1.0.0"
+
+  # 云熙IP管理服务
+  - name: "yunxi-ip"
+    host: "127.0.0.1"
+    port: 8006
+    metadata:
+      description: "云熙IP管理服务"
+      agent: "yunxi"
+      version: "1.0.0"
+
+  # Coordinator模式服务
+  - name: "coordinator"
+    host: "127.0.0.1"
+    port: 8201
+    metadata:
+      description: "Coordinator协调模式"
+      version: "1.0.0"
+
+  # Swarm模式服务
+  - name: "swarm"
+    host: "127.0.0.1"
+    port: 8202
+    metadata:
+      description: "Swarm协作模式"
+      version: "1.0.0"
+
+  # Canvas Host服务
+  - name: "canvas-host"
+    host: "127.0.0.1"
+    port: 8203
+    metadata:
+      description: "Canvas UI渲染服务"
+      version: "1.0.0"
+
+  # 专利检索服务
+  - name: "patent-retrieval"
+    host: "127.0.0.1"
+    port: 8301
+    metadata:
+      description: "专利检索服务"
+      version: "1.0.0"
+
+  # 知识图谱服务
+  - name: "knowledge-graph"
+    host: "127.0.0.1"
+    port: 8202
+    metadata:
+      description: "知识图谱服务"
+      version: "1.0.0"
+
+  # LLM服务
+  - name: "llm-service"
+    host: "127.0.0.1"
+    port: 8302
+    metadata:
+      description: "LLM推理服务"
+      version: "1.0.0"
+
+  # 向量检索服务
+  - name: "vector-service"
+    host: "127.0.0.1"
+    port: 8303
+    metadata:
+      description: "向量检索服务"
+      version: "1.0.0"

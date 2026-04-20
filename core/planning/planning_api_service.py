@@ -419,7 +419,7 @@ def start_planning_api(port: int = 8019, log_level: str = "INFO") -> Any:
 
     logger.info(f"🚀 启动规划引擎API服务,端口: {port}")
 
-    uvicorn.run(app, host="0.0.0.0", port=port, log_level=log_level.lower())
+    uvicorn.run(app, host="127.0.0.1", port=port, log_level=log_level.lower())  # 内网通信，通过Gateway访问
 
 
 if __name__ == "__main__":

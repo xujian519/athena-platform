@@ -407,4 +407,4 @@ if __name__ == "__main__":
     print("🚀 服务启动中...")
 
     # 启动服务
-    uvicorn.run(app, host="0.0.0.0", port=8088)
+    uvicorn.run(app, host="127.0.0.1", port=8088)  # 内网通信，通过Gateway访问

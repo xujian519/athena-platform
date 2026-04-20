@@ -303,7 +303,7 @@ def main():
         print("🚀 启动服务...")
         uvicorn.run(
             app,
-            host="0.0.0.0",
+            host="127.0.0.1",  # 内网通信，通过Gateway访问
             port=8000,
             log_level="info"
         )

@@ -66,7 +66,7 @@ func (h *Handlers) BatchRegister(c *gin.Context) {
 	results := make([]*ServiceInstance, 0, len(req.Services))
 	for i, svc := range req.Services {
 		instance := &ServiceInstance{
-			ID:          generateServiceID(svc.Name, svc.Host, svc.Port, i),
+			ID:          GenerateServiceID(svc.Name, svc.Host, svc.Port, i),
 			ServiceName: svc.Name,
 			Host:        svc.Host,
 			Port:        svc.Port,
@@ -299,7 +299,7 @@ func (h *Handlers) LoadConfig(c *gin.Context) {
 				}
 
 				instance := &ServiceInstance{
-					ID:          generateServiceID(name, host, port, servicesAdded),
+					ID:          GenerateServiceID(name, host, port, servicesAdded),
 					ServiceName: name,
 					Host:        host,
 					Port:        port,

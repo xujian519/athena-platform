@@ -614,4 +614,4 @@ if __name__ == '__main__':
     logger.info('🔧 工具状态: http://localhost:8093/api/v1/tools/status')
     logger.info('🤖 智能创建: http://localhost:8093/api/v1/visualization/create/smart')
 
-    uvicorn.run(app, host='0.0.0.0', port=8093, log_level='info')
+    uvicorn.run(app, host='127.0.0.1', port=8093, log_level='info')  # 内网通信，通过Gateway访问

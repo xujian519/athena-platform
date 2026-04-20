@@ -596,4 +596,4 @@ if __name__ == '__main__':
     logger.info('🔧 工具分析: http://localhost:8091/api/v1/tools/insights')
     logger.info('🤖 智能决策: http://localhost:8091/api/v1/collaborative-decision')
 
-    uvicorn.run(app, host='0.0.0.0', port=8091, log_level='info')
+    uvicorn.run(app, host='127.0.0.1', port=8091, log_level='info')  # 内网通信，通过Gateway访问

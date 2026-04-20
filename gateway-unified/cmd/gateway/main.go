@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/athena-workspace/gateway-unified/internal/config"
+	"github.com/athena-workspace/gateway-unified/internal/discovery"
 	"github.com/athena-workspace/gateway-unified/internal/gateway"
 	"github.com/athena-workspace/gateway-unified/internal/logging"
 	"github.com/athena-workspace/gateway-unified/internal/monitoring"
@@ -61,15 +62,157 @@ func main() {
 		logging.String("git_commit", GitCommit),
 	)
 
+	// generateServiceID 生成服务实例ID
 	// 创建网关实例
 	gw, err := gateway.NewGateway(cfg)
 	if err != nil {
 		logging.LogFatal("创建网关失败", logging.Err(err))
 	}
 
+	// 加载版本配置
+	versionLoader := config.NewVersionLoader()
+	versionConfigPath := "config/versions.yaml"
+	if err := versionLoader.LoadFromFile(versionConfigPath); err != nil {
+		logging.LogWarn("版本配置加载失败，使用默认配置", logging.Err(err))
+	} else {
+		// 应用版本配置到中间件
+		versionLoader.ApplyTo(gw.GetVersionConfig())
+		logging.LogInfo("版本配置加载完成",
+			logging.String("default_version", gw.GetVersionConfig().GetDefaultVersion()),
+			logging.Int("total_versions", len(gw.GetVersionConfig().ListVersions())),
+		)
+	}
+
+	// 加载路由配置
+	routesLoader := config.NewRoutesLoader()
+	routesConfigPath := "config/routes.yaml"
+	if err := routesLoader.LoadFromFile(routesConfigPath); err != nil {
+		logging.LogWarn("路由配置加载失败，使用默认配置", logging.Err(err))
+	} else {
+		// 验证路由配置
+		if err := routesLoader.Validate(); err != nil {
+			logging.LogWarn("路由配置验证失败", logging.Err(err))
+		}
+
+		// 批量创建路由
+		routeManager := gw.GetRouteManager()
+		validator := gateway.NewRouteValidator()
+		loadedCount := 0
+
+		for _, cfgRoute := range routesLoader.GetRoutes() {
+			// 转换为gateway.RouteRule
+			route := &gateway.RouteRule{
+				ID:            cfgRoute.ID,
+				Path:          cfgRoute.Path,
+				TargetService: cfgRoute.TargetService,
+				Methods:       cfgRoute.Methods,
+				StripPrefix:   cfgRoute.StripPrefix,
+				Timeout:       cfgRoute.Timeout,
+				Retries:       cfgRoute.Retries,
+				AuthRequired:  cfgRoute.AuthRequired,
+				Priority:      cfgRoute.Priority,
+				Weight:        cfgRoute.Weight,
+				Enabled:       cfgRoute.Enabled,
+				Metadata:      cfgRoute.Metadata,
+			}
+
+			// 验证路由
+			if err := validator.Validate(route); err != nil {
+				logging.LogWarn("路由验证失败，跳过",
+					logging.String("id", route.ID),
+					logging.String("path", route.Path),
+					logging.Err(err),
+				)
+				continue
+			}
+
+			// 检查路由冲突
+			existingRoutes := routeManager.GetAll()
+			if err := validator.ValidateConflict(route, existingRoutes); err != nil {
+				logging.LogWarn("路由冲突检测失败，跳过",
+					logging.String("id", route.ID),
+					logging.String("path", route.Path),
+					logging.Err(err),
+				)
+				continue
+			}
+
+			// 创建路由
+			routeManager.Create(route)
+
+			loadedCount++
+			logging.LogInfo("路由已加载",
+				logging.String("id", route.ID),
+				logging.String("path", route.Path),
+				logging.String("target", route.TargetService),
+				logging.Int("priority", route.Priority),
+			)
+		}
+
+		logging.LogInfo("路由配置加载完成",
+			logging.Int("total", len(routesLoader.GetRoutes())),
+			logging.Int("loaded", loadedCount),
+		)
+	}
+
+	// 加载服务实例配置
+	servicesConfigPath := "config/services.yaml"
+	if servicesConfig, err := config.LoadServiceInstances(servicesConfigPath); err == nil {
+		registry := gw.GetRegistry()
+		registeredCount := 0
+
+		for i, svc := range servicesConfig.Services {
+			instance := &gateway.ServiceInstance{
+				ID:          gateway.GenerateServiceID(svc.Name, svc.Host, svc.Port, i),
+				ServiceName: svc.Name,
+				Host:        svc.Host,
+				Port:        svc.Port,
+				Status:      "UP",
+				Weight:      1,
+				Metadata:    svc.Metadata,
+			}
+			registry.Register(instance)
+			registeredCount++
+			logging.LogInfo("服务实例已注册",
+				logging.String("service", svc.Name),
+				logging.String("host", svc.Host),
+				logging.Int("port", svc.Port),
+			)
+		}
+
+		logging.LogInfo("服务实例注册完成",
+			logging.Int("total", len(servicesConfig.Services)),
+			logging.Int("registered", registeredCount),
+		)
+	} else {
+		logging.LogWarn("服务实例配置加载失败", logging.Err(err))
+	}
+
 	// 创建WebSocket控制器
 	wsController := websocket.NewController(websocket.DefaultConfig())
 	logging.LogInfo("WebSocket控制器已创建")
+
+	// 创建服务发现适配器
+	discoveryConfig := &discovery.ServiceDiscoveryConfig{
+		ConfigPath:     "config/service_discovery.json",
+		ScanInterval:   30 * time.Second,
+		AutoRegister:   true,
+		HealthCheck:    true,
+		HealthEndpoint: "/health",
+	}
+
+	// 使用适配器包装Gateway的ServiceRegistry，避免循环导入
+	registryAdapter := discovery.NewGatewayRegistryAdapter(gw.GetRegistry())
+	discoveryAdapter := discovery.NewAdapter(discoveryConfig, registryAdapter)
+	if err := discoveryAdapter.Start(); err != nil {
+		logging.LogWarn("启动服务发现失败，将不启用自动服务发现", logging.Err(err))
+	} else {
+		logging.LogInfo("服务发现适配器已启动",
+			logging.String("config_path", discoveryConfig.ConfigPath),
+			logging.String("scan_interval", discoveryConfig.ScanInterval.String()),
+		)
+		defer discoveryAdapter.Close()
+	}
 
 	// 设置路由
 	if err := router.SetupRoutes(gw.GetRouter(), cfg, wsController); err != nil {

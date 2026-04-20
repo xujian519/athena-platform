@@ -1,0 +1,160 @@
+# Gateway路由配置
+# Athena平台核心路由规则
+
+routes:
+  # 小娜法律专家路由
+  - id: "xiaona-legal"
+    path: "/api/legal/*"
+    target_service: "xiaona-legal"
+    methods: ["GET", "POST", "PUT", "DELETE"]
+    strip_prefix: true
+    timeout: 30
+    retries: 3
+    auth_required: true
+    priority: 100
+    metadata:
+      description: "小娜法律专家服务"
+      version: "1.0.0"
+      agent: "xiaona"
+
+  # 小诺协调器路由 (集成在Gateway中)
+  - id: "xiaonuo-coordinator"
+    path: "/api/coord/*"
+    target_service: "xiaonuo-coordinator"
+    methods: ["GET", "POST"]
+    strip_prefix: true
+    timeout: 20
+    retries: 2
+    auth_required: true
+    priority: 90
+    metadata:
+      description: "小诺任务协调服务"
+      version: "1.0.0"
+      agent: "xiaonuo"
+
+  # 云熙IP管理路由
+  - id: "yunxi-ip"
+    path: "/api/ip/*"
+    target_service: "yunxi-ip"
+    methods: ["GET", "POST", "PUT"]
+    strip_prefix: true
+    timeout: 25
+    retries: 2
+    auth_required: true
+    priority: 80
+    metadata:
+      description: "云熙IP管理服务"
+      version: "1.0.0"
+      agent: "yunxi"
+
+  # Coordinator模式路由
+  - id: "coordinator"
+    path: "/api/coordinator/*"
+    target_service: "coordinator"
+    methods: ["GET", "POST", "PUT", "DELETE"]
+    strip_prefix: true
+    timeout: 30
+    retries: 3
+    auth_required: true
+    priority: 95
+    metadata:
+      description: "Coordinator协调模式"
+      version: "1.0.0"
+
+  # Swarm模式路由
+  - id: "swarm"
+    path: "/api/swarm/*"
+    target_service: "swarm"
+    methods: ["GET", "POST"]
+    strip_prefix: true
+    timeout: 30
+    retries: 2
+    auth_required: true
+    priority: 85
+    metadata:
+      description: "Swarm协作模式"
+      version: "1.0.0"
+
+  # WebSocket控制平面
+  - id: "websocket-control"
+    path: "/ws"
+    target_service: "gateway-websocket"
+    methods: ["GET"]
+    strip_prefix: false
+    timeout: 600
+    retries: 0
+    auth_required: true
+    priority: 100
+    metadata:
+      description: "WebSocket控制平面"
+      version: "1.0.0"
+
+  # Canvas Host服务
+  - id: "canvas-host"
+    path: "/api/canvas/*"
+    target_service: "canvas-host"
+    methods: ["GET", "POST"]
+    strip_prefix: true
+    timeout: 15
+    retries: 2
+    auth_required: true
+    priority: 70
+    metadata:
+      description: "Canvas UI渲染服务"
+      version: "1.0.0"
+
+  # 专利检索服务
+  - id: "patent-search"
+    path: "/api/patent/search/*"
+    target_service: "patent-retrieval"
+    methods: ["GET", "POST"]
+    strip_prefix: true
+    timeout: 30
+    retries: 2
+    auth_required: false
+    priority: 75
+    metadata:
+      description: "专利检索服务"
+      version: "1.0.0"
+
+  # 知识图谱服务
+  - id: "knowledge-graph"
+    path: "/api/knowledge/*"
+    target_service: "knowledge-graph"
+    methods: ["GET", "POST", "PUT"]
+    strip_prefix: true
+    timeout: 20
+    retries: 2
+    auth_required: true
+    priority: 70
+    metadata:
+      description: "知识图谱服务"
+      version: "1.0.0"
+
+  # LLM服务
+  - id: "llm-service"
+    path: "/api/llm/*"
+    target_service: "llm-service"
+    methods: ["POST"]
+    strip_prefix: true
+    timeout: 60
+    retries: 1
+    auth_required: true
+    priority: 90
+    metadata:
+      description: "LLM推理服务"
+      version: "1.0.0"
+
+  # 向量检索服务
+  - id: "vector-service"
+    path: "/api/vector/*"
+    target_service: "vector-service"
+    methods: ["GET", "POST"]
+    strip_prefix: true
+    timeout: 15
+    retries: 2
+    auth_required: true
+    priority: 85
+    metadata:
+      description: "向量检索服务"
+      version: "1.0.0"

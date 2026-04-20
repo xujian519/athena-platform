@@ -7,30 +7,30 @@ import (
 
 // ServiceInstance 服务实例
 type ServiceInstance struct {
-	ID          string                 `json:"id"`
-	ServiceName string                 `json:"service_name"`
-	Host        string                 `json:"host"`
-	Port        int                    `json:"port"`
-	Weight      int                    `json:"weight"`
-	Status      string                 `json:"status"`
-	Metadata    map[string]interface{} `json:"metadata"`
-	CreatedAt   time.Time              `json:"created_at"`
+	ID            string                 `json:"id"`
+	ServiceName   string                 `json:"service_name"`
+	Host          string                 `json:"host"`
+	Port          int                    `json:"port"`
+	Weight        int                    `json:"weight"`
+	Status        string                 `json:"status"`
+	Metadata      map[string]interface{} `json:"metadata"`
+	CreatedAt     time.Time              `json:"created_at"`
 	LastHeartbeat time.Time              `json:"last_heartbeat"`
 }
 
 // ServiceRegistry 服务注册表
 type ServiceRegistry struct {
-	mu          sync.RWMutex
-	instances   map[string]*ServiceInstance  // id -> instance
-	byService  map[string][]*ServiceInstance  // service_name -> instances
+	mu           sync.RWMutex
+	instances    map[string]*ServiceInstance   // id -> instance
+	byService    map[string][]*ServiceInstance // service_name -> instances
 	dependencies map[string][]string           // service -> dependencies
 }
 
 // NewServiceRegistry 创建服务注册表
 func NewServiceRegistry() *ServiceRegistry {
 	return &ServiceRegistry{
-		instances:   make(map[string]*ServiceInstance),
-		byService:  make(map[string][]*ServiceInstance),
+		instances:    make(map[string]*ServiceInstance),
+		byService:    make(map[string][]*ServiceInstance),
 		dependencies: make(map[string][]string),
 	}
 }
@@ -111,6 +111,29 @@ func (r *ServiceRegistry) Delete(id string) bool {
 	}
 
 	delete(r.instances, id)
+	return true
+}
+
+// Update 更新服务实例
+func (r *ServiceRegistry) Update(instance *ServiceInstance) bool {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	if _, exists := r.instances[instance.ID]; !exists {
+		return false
+	}
+
+	// 更新实例
+	r.instances[instance.ID] = instance
+
+	// 更新byService索引
+	for i, inst := range r.byService[instance.ServiceName] {
+		if inst.ID == instance.ID {
+			r.byService[instance.ServiceName][i] = instance
+			break
+		}
+	}
+
 	return true
 }
 

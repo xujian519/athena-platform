@@ -50,7 +50,7 @@ class PatentElement(Enum):
 
 
 @dataclass
-class PatentElement:
+class PatentElementData:
     """专利要素数据"""
 
     element_type: PatentElement
@@ -408,13 +408,13 @@ class PatentRuleChainEngine:
 
     async def _parse_patent_elements(
         self, patent_data: dict[str, Any]
-    ) -> dict[PatentElement, PatentElement]:
+    ) -> dict[PatentElement, PatentElementData]:
         """解析专利要素"""
         elements = {}
 
         # 解析标题
         if "title" in patent_data:
-            elements[PatentElement.TITLE] = PatentElement(
+            elements[PatentElement.TITLE] = PatentElementData(
                 element_type=PatentElement.TITLE,
                 content=patent_data.get("title"),
                 metadata={"length": len(patent_data.get("title"))},
@@ -422,7 +422,7 @@ class PatentRuleChainEngine:
 
         # 解析摘要
         if "abstract" in patent_data:
-            elements[PatentElement.ABSTRACT] = PatentElement(
+            elements[PatentElement.ABSTRACT] = PatentElementData(
                 element_type=PatentElement.ABSTRACT,
                 content=patent_data.get("abstract"),
                 metadata={"word_count": len(patent_data.get("abstract").split())},
@@ -430,7 +430,7 @@ class PatentRuleChainEngine:
 
         # 解析权利要求
         if "claims" in patent_data:
-            elements[PatentElement.CLAIMS] = PatentElement(
+            elements[PatentElement.CLAIMS] = PatentElementData(
                 element_type=PatentElement.CLAIMS,
                 content=patent_data.get("claims"),
                 metadata={
@@ -443,7 +443,7 @@ class PatentRuleChainEngine:
 
         # 解析说明书
         if "description" in patent_data:
-            elements[PatentElement.DESCRIPTION] = PatentElement(
+            elements[PatentElement.DESCRIPTION] = PatentElementData(
                 element_type=PatentElement.DESCRIPTION,
                 content=patent_data.get("description"),
                 metadata={"word_count": len(patent_data.get("description").split())},
@@ -451,7 +451,7 @@ class PatentRuleChainEngine:
 
         # 解析技术领域
         if "technical_field" in patent_data:
-            elements[PatentElement.TECHNICAL_FIELD] = PatentElement(
+            elements[PatentElement.TECHNICAL_FIELD] = PatentElementData(
                 element_type=PatentElement.TECHNICAL_FIELD, content=patent_data.get("technical_field")
             )
 

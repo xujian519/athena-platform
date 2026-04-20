@@ -315,4 +315,4 @@ if __name__ == '__main__':
     logger.info('📍 服务地址: http://localhost:8030')
     logger.info('🎯 核心功能: 基于PQAI算法的增强专利检索')
 
-    uvicorn.run(app, host='0.0.0.0', port=8030, log_level='info')
+    uvicorn.run(app, host='127.0.0.1', port=8030, log_level='info')  # 内网通信，通过Gateway访问

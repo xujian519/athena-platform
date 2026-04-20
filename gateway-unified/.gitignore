@@ -1,0 +1,46 @@
+# Gateway环境变量文件（包含敏感密钥）
+.env
+.env.local
+.env.production
+
+# Gateway日志文件
+logs/
+*.log
+
+# Gateway二进制文件
+bin/gateway
+gateway
+gateway.exe
+
+# Gateway数据文件
+data/
+*.pid
+
+# Gateway测试覆盖率
+coverage.html
+coverage.out
+
+# Gateway临时文件
+tmp/
+temp/
+
+# TLS证书和私钥（不要提交到Git）
+certs/
+*.crt
+*.key
+*.pem
+
+# IDE配置
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS文件
+.DS_Store
+Thumbs.db
+
+# 备份文件
+*.backup
+*.bak

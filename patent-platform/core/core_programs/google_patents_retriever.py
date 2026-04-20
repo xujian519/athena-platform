@@ -678,7 +678,7 @@ class GooglePatentsRetriever:
 
         return patents
 
-    async def _extract_patent_info_playwright_enhanced(self, result_element, index: int, query: str) -> PatentData | None:
+    async def _extract_patent_info_playwright_enhanced(self, result_element, index: int, query: str) -> Optional[PatentData]:
         """使用Playwright提取单个专利信息 - 增强版"""
         try:
             # 通用提取策略
@@ -787,7 +787,7 @@ class GooglePatentsRetriever:
             logger.error(f"❌ 增强版专利信息提取失败: {e}")
             return None
 
-    async def _extract_patent_from_js_result(self, js_result: Dict[str, Any], query: str) -> PatentData | None:
+    async def _extract_patent_from_js_result(self, js_result: Dict[str, Any], query: str) -> Optional[PatentData]:
         """从JavaScript提取的结果创建专利对象"""
         try:
             href = js_result.get('href', '')
@@ -825,7 +825,7 @@ class GooglePatentsRetriever:
             logger.warning(f"⚠️ JS结果转换失败: {e}")
             return None
 
-    async def _extract_patent_info_playwright(self, result_element, index: int, query: str) -> PatentData | None:
+    async def _extract_patent_info_playwright(self, result_element, index: int, query: str) -> Optional[PatentData]:
         """使用Playwright提取单个专利信息"""
         try:
             # 专利标题
@@ -1124,7 +1124,7 @@ class GooglePatentsRetriever:
         self,
         patents: List[PatentData],
         format: str = 'json',
-        filename: str | None = None,
+        filename: Optional[str] = None,
         include_analysis: bool = False
     ) -> str:
         """导出专利数据"""
@@ -1298,7 +1298,7 @@ class GooglePatentsRetriever:
 
         return patents
 
-    async def _create_patent_from_dict(self, data: Dict[str, Any], query: str) -> PatentData | None:
+    async def _create_patent_from_dict(self, data: Dict[str, Any], query: str) -> Optional[PatentData]:
         """从字典创建专利对象"""
         try:
             patent = PatentData(

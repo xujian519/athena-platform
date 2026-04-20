@@ -23,6 +23,97 @@ logging:
   # 输出目标: stdout, stderr, 或文件路径 (默认: stdout)
   output: stdout
 
+# 认证配置
+auth:
+  # JWT认证配置
+  jwt:
+    # JWT密钥 - 从环境变量读取
+    secret: "${JWT_SECRET:-athena-gateway-secret-key-change-in-production}"
+    # 签发者
+    issuer: "athena-gateway"
+    # Token有效期（默认24小时）
+    expiration: 24h
+    # Refresh Token有效期（默认7天）
+    refresh_expiration: 168h
+    # Cookie名称
+    cookie_name: "athena_token"
+    # 是否使用Cookie传输Token
+    use_cookie: false
+    # 是否允许通过Header传输Token
+    use_header: true
+    # Header名称
+    header_name: "Authorization"
+    # 是否允许通过Query传输Token
+    use_query: false
+
+  # API密钥认证
+  api_key:
+    # 是否启用API密钥认证
+    enabled: true
+    # API密钥列表 - 从环境变量读取
+    keys:
+      - "${API_KEY_1:-athena-admin-key-2024}"
+      - "${API_KEY_2:-athena-service-key-2024}"
+    # Header名称
+    header_name: "X-API-Key"
+
+  # IP白名单
+  ip_whitelist:
+    # 是否启用IP白名单
+    enabled: false
+    # 白名单IP列表（支持CIDR）
+    allowed_ips:
+      - "127.0.0.1/32"
+      - "10.0.0.0/8"
+      - "172.16.0.0/12"
+      - "192.168.0.0/16"
+
+# 速率限制配置
+rate_limit:
+  # 是否启用速率限制
+  enabled: true
+  # 默认限制：每分钟请求数
+  requests_per_minute: 100
+  # 默认限制：突发请求数
+  burst_size: 20
+  # 按IP限制
+  by_ip: true
+  # 按API Key限制
+  by_api_key: true
+
+# CORS配置
+cors:
+  # 是否启用CORS
+  enabled: true
+  # 允许的源
+  allowed_origins:
+    - "http://localhost:3000"
+    - "http://localhost:8080"
+    - "${FRONTEND_URL:-https://athena.example.com}"
+  # 允许的方法
+  allowed_methods:
+    - GET
+    - POST
+    - PUT
+    - PATCH
+    - DELETE
+    - OPTIONS
+  # 允许的Header
+  allowed_headers:
+    - Origin
+    - Content-Type
+    - Accept
+    - Authorization
+    - X-API-Key
+  # 暴露的Header
+  exposed_headers:
+    - Content-Length
+    - X-Total-Count
+  # 允许携带凭证
+  allow_credentials: true
+  # 预检请求缓存时间（秒）
+  max_age: 3600
+
 # 监控配置
 monitoring:
   # 启用Prometheus指标 (默认: false)

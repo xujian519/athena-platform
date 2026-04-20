@@ -5,8 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"sync"
+	"sync/atomic"
 	"time"
 
+	"github.com/athena-workspace/gateway-unified/internal/logging"
 	"github.com/athena-workspace/gateway-unified/internal/websocket/protocol"
 	"github.com/athena-workspace/gateway-unified/internal/websocket/session"
 )
@@ -21,23 +23,39 @@ type Router struct {
 	mu            sync.RWMutex
 	ctx           context.Context
 	cancel        context.CancelFunc
+
+	// 新增：会话管理器引用（用于消息转发）
+	sessionManager *session.Manager
+
+	// 新增：消息统计
+	messagesRouted atomic.Int64
+	messagesBroadcast atomic.Int64
+	messagesForwarded atomic.Int64
 }
 
 // NewRouter 创建消息路由器
-func NewRouter() *Router {
+func NewRouter(sessionMgr *session.Manager) *Router {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	router := &Router{
-		handlers:      make(map[protocol.MessageType]HandlerFunc),
-		agentHandlers: make(map[protocol.AgentType]HandlerFunc),
-		ctx:           ctx,
-		cancel:        cancel,
+		handlers:        make(map[protocol.MessageType]HandlerFunc),
+		agentHandlers:   make(map[protocol.AgentType]HandlerFunc),
+		ctx:             ctx,
+		cancel:          cancel,
+		sessionManager:  sessionMgr,
 	}
 
 	// 注册默认处理器
 	router.registerDefaultHandlers()
 
 	return router
+}
+
+// SetSessionManager 设置会话管理器
+func (r *Router) SetSessionManager(manager *session.Manager) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	r.sessionManager = manager
 }
 
 // registerDefaultHandlers 注册默认处理器
@@ -127,6 +145,132 @@ func (r *Router) RouteToAgent(agentType protocol.AgentType, msg *protocol.Messag
 // Close 关闭路由器
 func (r *Router) Close() {
 	r.cancel()
+}
+
+// ==================== 新增：消息转发和广播功能 ====================
+
+// ForwardMessage 转发消息到另一个会话
+func (r *Router) ForwardMessage(originalMsg *protocol.Message, targetSessionID string) error {
+	if r.sessionManager == nil {
+		return fmt.Errorf("会话管理器未设置")
+	}
+
+	// 获取目标会话
+	targetSess, exists := r.sessionManager.GetSession(targetSessionID)
+	if !exists {
+		return fmt.Errorf("目标会话不存在: %s", targetSessionID)
+	}
+
+	// 创建转发消息
+	forwardMsg := protocol.NewMessage(originalMsg.Type, targetSessionID, originalMsg.Data)
+	forwardMsg.Data["forwarded_from"] = originalMsg.SessionID
+	forwardMsg.Data["original_message_id"] = originalMsg.ID
+
+	// 发送消息
+	if err := r.sendMessage(targetSess, forwardMsg); err != nil {
+		return fmt.Errorf("转发消息失败: %w", err)
+	}
+
+	r.messagesForwarded.Add(1)
+	logging.LogInfo("消息已转发",
+		logging.String("from", originalMsg.SessionID),
+		logging.String("to", targetSessionID),
+		logging.String("message_id", originalMsg.ID),
+	)
+
+	return nil
+}
+
+// BroadcastToAll 广播消息到所有会话（除发送者外）
+func (r *Router) BroadcastToAll(msg *protocol.Message, excludeSender bool) error {
+	if r.sessionManager == nil {
+		return fmt.Errorf("会话管理器未设置")
+	}
+
+	sessions := r.sessionManager.GetAllSessions()
+	successCount := 0
+
+	for _, sess := range sessions {
+		// 排除发送者
+		if excludeSender && sess.ID == msg.SessionID {
+			continue
+		}
+
+		// 创建广播消息
+		broadcastMsg := protocol.NewMessage(msg.Type, sess.ID, msg.Data)
+		broadcastMsg.Data["broadcast_from"] = msg.SessionID
+		broadcastMsg.Data["original_message_id"] = msg.ID
+
+		if err := r.sendMessage(sess, broadcastMsg); err != nil {
+			logging.LogError("广播发送失败",
+				logging.Err(err),
+				logging.String("session_id", sess.ID),
+			)
+			continue
+		}
+		successCount++
+	}
+
+	r.messagesBroadcast.Add(int64(successCount))
+	logging.LogInfo("消息已广播",
+		logging.Int("count", successCount),
+		logging.String("message_id", msg.ID),
+	)
+
+	return nil
+}
+
+// BroadcastToAgentType 广播消息到指定Agent类型的所有会话
+func (r *Router) BroadcastToAgentType(msg *protocol.Message, agentType protocol.AgentType) error {
+	if r.sessionManager == nil {
+		return fmt.Errorf("会话管理器未设置")
+	}
+
+	sessions := r.sessionManager.GetAllSessions()
+	successCount := 0
+
+	for _, sess := range sessions {
+		// 检查会话是否匹配Agent类型
+		// 假设会话元数据中有agent_type字段
+		sessAgentType, ok := sess.Metadata["agent_type"].(string)
+		if !ok || sessAgentType != string(agentType) {
+			continue
+		}
+
+		// 创建广播消息
+		broadcastMsg := protocol.NewMessage(msg.Type, sess.ID, msg.Data)
+		broadcastMsg.Data["broadcast_from"] = msg.SessionID
+		broadcastMsg.Data["original_message_id"] = msg.ID
+
+		if err := r.sendMessage(sess, broadcastMsg); err != nil {
+			logging.LogError("广播发送失败",
+				logging.Err(err),
+				logging.String("session_id", sess.ID),
+			)
+			continue
+		}
+		successCount++
+	}
+
+	r.messagesBroadcast.Add(int64(successCount))
+	logging.LogInfo("消息已广播到Agent类型",
+		logging.String("agent_type", string(agentType)),
+		logging.Int("count", successCount),
+		logging.String("message_id", msg.ID),
+	)
+
+	return nil
+}
+
+// GetStats 获取路由统计信息
+func (r *Router) GetStats() map[string]interface{} {
+	return map[string]interface{}{
+		"messages_routed":     r.messagesRouted.Load(),
+		"messages_broadcast":  r.messagesBroadcast.Load(),
+		"messages_forwarded":  r.messagesForwarded.Load(),
+		"handlers_count":      len(r.handlers),
+		"agent_handlers_count": len(r.agentHandlers),
+	}
 }
 
 // === 默认处理器 ===

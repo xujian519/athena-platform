@@ -1269,4 +1269,4 @@ async def list_technology_fields():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8012)
+    uvicorn.run(app, host="127.0.0.1", port=8012)  # 内网通信，通过Gateway访问

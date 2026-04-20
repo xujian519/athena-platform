@@ -2,10 +2,36 @@ from __future__ import annotations
 """
 基础智能体类
 提供所有智能体的基础功能
+
+集成Gateway WebSocket通信:
+1. 支持通过Gateway与其他Agent通信
+2. 保持向后兼容性
+3. 自动连接管理
 """
 
+import logging
 from abc import ABC, abstractmethod
 from typing import Any
+
+logger = logging.getLogger(__name__)
+
+# Gateway客户端导入（可选依赖）
+try:
+    from core.agents.gateway_client import (
+        GatewayClient,
+        GatewayClientConfig,
+        AgentType as GatewayAgentType,
+        Message,
+        MessageType
+    )
+    GATEWAY_AVAILABLE = True
+except ImportError:
+    GATEWAY_AVAILABLE = False
+    GatewayClient = None  # type: ignore
+    GatewayClientConfig = None  # type: ignore
+    GatewayAgentType = None  # type: ignore
+    Message = None  # type: ignore
+    MessageType = None  # type: ignore
 
 
 class BaseAgent(ABC):
@@ -18,6 +44,8 @@ class BaseAgent(ABC):
         model: str = "gpt-4",
         temperature: float = 0.7,
         max_tokens: int = 2000,
+        enable_gateway: bool = True,
+        gateway_url: str = "ws://localhost:8005/ws",
         **kwargs,
     ):
         """
@@ -29,6 +57,8 @@ class BaseAgent(ABC):
             model: 使用的模型
             temperature: 温度参数
             max_tokens: 最大token数
+            enable_gateway: 是否启用Gateway通信
+            gateway_url: Gateway WebSocket URL
             **kwargs: 其他参数
         """
         self.name = name
@@ -46,6 +76,29 @@ class BaseAgent(ABC):
 
         # 记忆
         self.memory: dict[str, Any] = {}
+
+        # Gateway通信支持
+        self._gateway_client: GatewayClient | None = None
+        self._gateway_enabled = enable_gateway and GATEWAY_AVAILABLE
+        self._gateway_url = gateway_url
+
+        # 根据名称确定Agent类型
+        self._agent_type = self._determine_agent_type()
+
+    def _determine_agent_type(self) -> GatewayAgentType | None:
+        """根据名称确定Agent类型"""
+        if not GATEWAY_AVAILABLE:
+            return None
+
+        name_lower = self.name.lower()
+        if "xiaona" in name_lower or "小娜" in name_lower:
+            return GatewayAgentType.XIAONA
+        elif "xiaonuo" in name_lower or "小诺" in name_lower:
+            return GatewayAgentType.XIAONUO
+        elif "yunxi" in name_lower or "云熙" in name_lower:
+            return GatewayAgentType.YUNXI
+        else:
+            return GatewayAgentType.UNKNOWN
 
     @abstractmethod
     def process(self, input_text: str, **kwargs) -> str:
@@ -188,6 +241,127 @@ class BaseAgent(ABC):
     def __str__(self) -> str:
         """字符串表示"""
         return self.__repr__()
+
+    # ==================== Gateway通信方法 ====================
+
+    async def connect_gateway(self) -> bool:
+        """
+        连接到Gateway
+
+        Returns:
+            bool: 连接是否成功
+        """
+        if not GATEWAY_AVAILABLE:
+            logger.warning("⚠️ Gateway客户端不可用")
+            return False
+
+        if not self._gateway_enabled:
+            logger.info("Gateway通信已禁用")
+            return False
+
+        if self._gateway_client is None:
+            config = GatewayClientConfig(
+                gateway_url=self._gateway_url,
+                agent_type=self._agent_type or GatewayAgentType.UNKNOWN,
+                agent_id=self.name
+            )
+            self._gateway_client = GatewayClient(config)
+
+        # 注册消息处理器
+        self._gateway_client.register_handler(MessageType.TASK, self._handle_gateway_task)
+        self._gateway_client.register_handler(MessageType.QUERY, self._handle_gateway_query)
+        self._gateway_client.register_handler(MessageType.NOTIFY, self._handle_gateway_notify)
+
+        return await self._gateway_client.connect()
+
+    async def disconnect_gateway(self) -> None:
+        """断开Gateway连接"""
+        if self._gateway_client:
+            await self._gateway_client.disconnect()
+
+    async def send_to_agent(
+        self,
+        target_agent: str,
+        task_type: str,
+        parameters: dict[str, Any] | None = None,
+        priority: int = 5
+    ) -> Any | None:
+        """
+        发送消息到其他Agent
+
+        Args:
+            target_agent: 目标Agent名称（xiaona/xiaonuo/yunxi）
+            task_type: 任务类型
+            parameters: 任务参数
+            priority: 优先级（0-10）
+
+        Returns:
+            响应结果
+        """
+        if not self._gateway_client or not self._gateway_client.is_connected:
+            logger.warning("⚠️ 未连接到Gateway")
+            return None
+
+        # 确定目标Agent类型
+        agent_type_map = {
+            "xiaona": GatewayAgentType.XIAONA,
+            "小娜": GatewayAgentType.XIAONA,
+            "xiaonuo": GatewayAgentType.XIAONUO,
+            "小诺": GatewayAgentType.XIAONUO,
+            "yunxi": GatewayAgentType.YUNXI,
+            "云熙": GatewayAgentType.YUNXI,
+        }
+
+        target_type = agent_type_map.get(target_agent.lower(), GatewayAgentType.UNKNOWN)
+
+        response = await self._gateway_client.send_task(
+            task_type=task_type,
+            target_agent=target_type,
+            parameters=parameters,
+            priority=priority
+        )
+
+        return response.result if response and response.success else None
+
+    async def broadcast(self, data: dict[str, Any]) -> bool:
+        """
+        广播消息到所有Agent
+
+        Args:
+            data: 广播数据
+
+        Returns:
+            bool: 是否成功
+        """
+        if not self._gateway_client or not self._gateway_client.is_connected:
+            logger.warning("⚠️ 未连接到Gateway")
+            return False
+
+        return await self._gateway_client.broadcast(data)
+
+    def _handle_gateway_task(self, message: Message) -> None:
+        """处理Gateway任务消息"""
+        logger.info(f"📨 收到任务: {message.data}")
+
+    def _handle_gateway_query(self, message: Message) -> None:
+        """处理Gateway查询消息"""
+        logger.info(f"📨 收到查询: {message.data}")
+
+    def _handle_gateway_notify(self, message: Message) -> None:
+        """处理Gateway通知消息"""
+        logger.info(f"📨 收到通知: {message.data}")
+
+    @property
+    def gateway_connected(self) -> bool:
+        """是否已连接到Gateway"""
+        return self._gateway_client is not None and self._gateway_client.is_connected
+
+    @property
+    def gateway_session_id(self) -> str:
+        """Gateway会话ID"""
+        if self._gateway_client:
+            return self._gateway_client.session_id
+        return ""
 
 
 class AgentUtils:

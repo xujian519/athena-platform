@@ -157,42 +157,57 @@ class UnifiedPatentRetriever:
         max_results: int,
         **kwargs
     ) -> List[PatentSearchResult]:
-        """本地PostgreSQL检索"""
+        """本地PostgreSQL检索 - 使用增强版检索器（支持title、abstract、claims）"""
         logger.info(f"  🔍 使用本地PostgreSQL检索...")
 
         try:
-            retriever = self._get_local_retriever()
+            # 使用增强版检索器
+            import sys
+            from pathlib import Path
 
-            # 调用本地检索器
-            # 注意：这里需要根据实际的API调整
-            raw_results = retriever.search(
-                query=query,
-                limit=max_results,
-                **kwargs
-            )
+            # 导入增强版检索器
+            enhanced_search_path = Path(__file__).parent.parent.parent / "enhanced_patent_search.py"
+            if enhanced_search_path.exists():
+                spec = __import__('importlib.util').util.spec_from_file_location("enhanced_search", enhanced_search_path)
+                enhanced_search = __import__('importlib.util').util.module_from_spec(spec)
+                sys.modules['enhanced_search'] = enhanced_search
+                spec.loader.exec_module(enhanced_search)
 
-            # 转换为统一格式
-            results = []
-            for item in raw_results:
-                result = PatentSearchResult(
-                    patent_id=item.get("patent_id", ""),
-                    title=item.get("title", ""),
-                    abstract=item.get("abstract", ""),
-                    source="local_postgres",
-                    url=item.get("url"),
-                    publication_date=item.get("publication_date"),
-                    applicant=item.get("applicant"),
-                    inventor=item.get("inventor"),
-                    score=item.get("score"),
-                    metadata=item
-                )
-                results.append(result)
+                retriever = enhanced_search.EnhancedPatentRetriever()
+                raw_results = await retriever.search(query, top_k=max_results)
 
-            logger.info(f"  ✅ 本地检索完成: {len(results)} 个结果")
-            return results
+                # 转换为统一格式
+                results = []
+                for item in raw_results:
+                    result = PatentSearchResult(
+                        patent_id=item.patent_id,
+                        title=item.title,
+                        abstract=item.abstract,
+                        source="local_postgres",
+                        url=None,
+                        publication_date=item.publication_date if item.publication_date else None,
+                        applicant=item.applicant if item.applicant else None,
+                        inventor=None,
+                        score=item.score,
+                        metadata={
+                            "search_method": "enhanced_like",
+                            "matched_fields": item.matched_fields,
+                            "claims_preview": item.claims[:200] + "..." if len(item.claims) > 200 else item.claims
+                        }
+                    )
+                    results.append(result)
+
+                retriever.close()
+                logger.info(f"  ✅ 本地检索完成: {len(results)} 个结果")
+                return results
+            else:
+                logger.error("  ❌ 增强版检索器不存在")
+                return []
 
         except Exception as e:
             logger.error(f"  ❌ 本地检索失败: {e}")
+            import traceback
+            traceback.print_exc()
             return []
 
     async def _search_google(
@@ -201,42 +216,81 @@ class UnifiedPatentRetriever:
         max_results: int,
         **kwargs
     ) -> List[PatentSearchResult]:
-        """Google Patents检索"""
+        """Google Patents检索 - 使用v2检索器"""
         logger.info(f"  🔍 使用Google Patents检索...")
 
         try:
-            retriever = self._get_google_retriever()
+            import sys
+            from pathlib import Path
 
-            # 调用Google检索器
-            # 注意：这里需要根据实际的API调整
-            raw_results = await retriever.search(
-                query=query,
-                max_results=max_results,
-                **kwargs
-            )
+            # 导入Google Patents检索器v2
+            google_retriever_path = Path(__file__).parent.parent.parent / "google_patents_retriever_v2.py"
+            if google_retriever_path.exists():
+                spec = __import__('importlib.util').util.spec_from_file_location("google_patents_v2", google_retriever_path)
+                google_search = __import__('importlib.util').util.module_from_spec(spec)
+                sys.modules['google_patents_v2'] = google_search
+                spec.loader.exec_module(google_search)
 
-            # 转换为统一格式
-            results = []
-            for item in raw_results:
-                result = PatentSearchResult(
-                    patent_id=item.get("patent_id", ""),
-                    title=item.get("title", ""),
-                    abstract=item.get("abstract", ""),
-                    source="google_patents",
-                    url=item.get("url"),
-                    publication_date=item.get("publication_date"),
-                    applicant=item.get("assignee"),
-                    inventor=item.get("inventor"),
-                    score=item.get("relevance_score"),
-                    metadata=item
+                retriever = google_search.GooglePatentsRetrieverV2(headless=True)
+                raw_results = await retriever.search(query, max_results=max_results)
+
+                # 转换为统一格式
+                results = []
+                for item in raw_results:
+                    result = PatentSearchResult(
+                        patent_id=item.patent_id,
+                        title=item.title,
+                        abstract=item.abstract,
+                        source="google_patents",
+                        url=item.url,
+                        publication_date=item.publication_date if item.publication_date else None,
+                        applicant=item.assignee if item.assignee else None,
+                        inventor=", ".join(item.inventors) if item.inventors else None,
+                        score=item.relevance_score,
+                        metadata={
+                            "search_method": "google_patents_v2",
+                            "inventors_list": item.inventors
+                        }
+                    )
+                    results.append(result)
+
+                await retriever.close()
+                logger.info(f"  ✅ Google检索完成: {len(results)} 个结果")
+                return results
+            else:
+                logger.warning("  ⚠️ Google Patents检索器v2不存在，尝试使用旧版检索器")
+                # 使用旧版检索器
+                retriever = self._get_google_retriever()
+                raw_results = await retriever.search(
+                    query=query,
+                    max_results=max_results,
+                    **kwargs
                 )
-                results.append(result)
 
-            logger.info(f"  ✅ Google检索完成: {len(results)} 个结果")
-            return results
+                # 转换为统一格式
+                results = []
+                for item in raw_results:
+                    result = PatentSearchResult(
+                        patent_id=item.get("patent_id", ""),
+                        title=item.get("title", ""),
+                        abstract=item.get("abstract", ""),
+                        source="google_patents",
+                        url=item.get("url"),
+                        publication_date=item.get("publication_date"),
+                        applicant=item.get("assignee"),
+                        inventor=item.get("inventor"),
+                        score=item.get("relevance_score"),
+                        metadata=item
+                    )
+                    results.append(result)
+
+                logger.info(f"  ✅ Google检索完成: {len(results)} 个结果")
+                return results
 
         except Exception as e:
             logger.error(f"  ❌ Google检索失败: {e}")
+            import traceback
+            traceback.print_exc()
             return []
 
     async def _search_both(

@@ -8,14 +8,17 @@ import (
 
 // RouteRule 路由规则
 type RouteRule struct {
-	ID             string   `json:"id"`
-	Path           string   `json:"path"`
-	TargetService  string   `json:"target_service"`
-	Methods        []string `json:"methods"`
-	StripPrefix    bool     `json:"strip_prefix"`
-	Timeout        int      `json:"timeout"`
-	Retries        int      `json:"retries"`
-	AuthRequired   bool     `json:"auth_required"`
+	ID             string                 `json:"id"`
+	Path           string                 `json:"path"`
+	TargetService  string                 `json:"target_service"`
+	Methods        []string               `json:"methods"`
+	StripPrefix    bool                   `json:"strip_prefix"`
+	Timeout        int                    `json:"timeout"`
+	Retries        int                    `json:"retries"`
+	AuthRequired   bool                   `json:"auth_required"`
+	Priority       int                    `json:"priority"`
+	Weight         int                    `json:"weight"`
+	Enabled        bool                   `json:"enabled"`
 	Metadata       map[string]interface{} `json:"metadata,omitempty"`
 }
 
