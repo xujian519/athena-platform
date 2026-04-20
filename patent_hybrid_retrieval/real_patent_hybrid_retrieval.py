@@ -12,30 +12,31 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
+from pathlib import Path
+
+# 配置日志（必须在最前面）
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # 添加项目路径
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # 数据库连接
-import os
-import sys
-
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
-sys.path.append(
-    os.path.join(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-        "workspace",
-        "src",
-    )
-)
-import os
+# 添加patent-platform路径
+project_root = Path(__file__).parent.parent.parent
+workspace_src = project_root / "patent-platform" / "workspace" / "src"
+if str(workspace_src) not in sys.path:
+    sys.path.insert(0, str(workspace_src))
 
-# Athena现有组件
-import sys
-
-from knowledge_graph.neo4j_manager import Neo4jManager
+try:
+    from knowledge_graph.neo4j_manager import Neo4jManager
+except ImportError:
+    # 如果导入失败，设置为None（知识图谱功能可选）
+    Neo4jManager = None
+    logger.warning("⚠️ Neo4jManager不可用，知识图谱功能将被禁用")
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config.database import get_patent_db_config, test_patent_database
@@ -92,7 +93,11 @@ class RealPatentHybridRetrieval:
         self.vector_adapter = QdrantVectorAdapter()
 
         # 初始化知识图谱（Neo4j）
-        self.kg_manager = Neo4jManager()
+        if Neo4jManager is not None:
+            self.kg_manager = Neo4jManager()
+        else:
+            self.kg_manager = None
+            logger.warning("⚠️ 知识图谱管理器未初始化，仅使用PostgreSQL+Qdrant检索")
 
         # 获取专利数据库配置
         self.db_config = get_patent_db_config()

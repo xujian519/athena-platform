@@ -440,9 +440,9 @@ class GooglePatentsRetriever:
                 await search_input.press('Enter')
                 submit_success = True
                 logger.info('✅ 通过Enter键提交搜索')
-12except Exception as e:
-12    # 记录异常但不中断流程
-12    logger.debug(f"[google_patents_retriever] Exception: {e}")
+            except Exception as e:
+                # 记录异常但不中断流程
+                logger.debug(f"[google_patents_retriever] Exception: {e}")
 
             # 方法2: 点击搜索按钮
             if not submit_success:

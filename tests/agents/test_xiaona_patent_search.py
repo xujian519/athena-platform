@@ -148,6 +148,83 @@ async def test_patent_search():
 
         print()
 
+        # 测试3: Google Patents在线检索
+        print("=" * 80)
+        print("测试3: Google Patents在线检索 - 'artificial intelligence'")
+        print("=" * 80)
+
+        result3 = await xiaona._handle_patent_search(
+            params={
+                "query": "artificial intelligence machine learning",
+                "channel": "google_patents",
+                "max_results": 5
+            }
+        )
+
+        print(f"\n📊 检索结果:")
+        print(f"  成功: {result3.get('success')}")
+        print(f"  消息: {result3.get('message')}")
+
+        if result3.get('success'):
+            total_found = result3.get('total_results', 0)
+            patents = result3.get('results', [])
+
+            print(f"  找到专利数: {total_found}")
+            print(f"  检索策略: {result3.get('search_strategy', 'N/A')}")
+
+            if patents:
+                print(f"\n  前3个相关专利:")
+                for i, patent in enumerate(patents[:3], 1):
+                    print(f"    {i}. {patent.get('patent_id')} - {patent.get('title')}")
+                    if patent.get('abstract'):
+                        abstract = patent.get('abstract', '')[:100]
+                        print(f"       摘要: {abstract}...")
+
+            if 'execution_time_ms' in result3:
+                print(f"  执行时间: {result3['execution_time_ms']}ms")
+        else:
+            error = result3.get('error', 'UNKNOWN_ERROR')
+            print(f"  ❌ 检索失败: {error}")
+
+        print()
+
+        # 测试4: 双渠道对比
+        print("=" * 80)
+        print("测试4: 双渠道对比 - 'deep learning'")
+        print("=" * 80)
+
+        result4 = await xiaona._handle_patent_search(
+            params={
+                "query": "deep learning neural network",
+                "channel": "both",
+                "max_results": 3
+            }
+        )
+
+        print(f"\n📊 检索结果:")
+        print(f"  成功: {result4.get('success')}")
+        print(f"  消息: {result4.get('message')}")
+
+        if result4.get('success'):
+            total_found = result4.get('total_results', 0)
+            print(f"  找到专利数: {total_found}")
+            print(f"  检索策略: {result4.get('search_strategy', 'N/A')}")
+
+            # 显示渠道分布
+            results = result4.get('results', [])
+            if results:
+                channel_count = {}
+                for patent in results:
+                    source = patent.get('source', 'unknown')
+                    channel_count[source] = channel_count.get(source, 0) + 1
+
+                print(f"  渠道分布: {channel_count}")
+        else:
+            error = result4.get('error', 'UNKNOWN_ERROR')
+            print(f"  ❌ 检索失败: {error}")
+
+        print()
+
         # 关闭Agent
         await xiaona.shutdown()
 
@@ -159,16 +236,18 @@ async def test_patent_search():
         success_count = sum([
             1 if result1.get('success') else 0,
             1 if result2.get('success') else 0,
+            1 if result3.get('success') else 0,
+            1 if result4.get('success') else 0,
         ])
 
-        print(f"  成功: {success_count}/2")
-        print(f"  失败: {2 - success_count}/2")
+        print(f"  成功: {success_count}/4")
+        print(f"  失败: {4 - success_count}/4")
 
-        if success_count == 2:
-            print("\n✅ 所有测试通过！小娜Agent专利检索功能正常工作")
+        if success_count == 4:
+            print("\n✅ 所有测试通过！小娜Agent专利检索功能正常工作（包括Google Patents在线检索）")
             return True
         else:
-            print("\n⚠️  部分测试失败，请检查日志")
+            print(f"\n⚠️  部分测试失败（{4 - success_count}/4），请检查日志")
             return False
 
     except Exception as e:
