@@ -48,3 +48,12 @@ websocket:
   session_timeout: 600
   # 启用Canvas Host服务
   enable_canvas_host: true
+
+# TLS/SSL配置
+tls:
+  # 启用TLS (默认: false)
+  enabled: true
+  # TLS证书文件路径
+  cert_file: /Users/xujian/Athena工作平台/gateway-unified/certs/server.crt
+  # TLS私钥文件路径
+  key_file: /Users/xujian/Athena工作平台/gateway-unified/certs/server.key

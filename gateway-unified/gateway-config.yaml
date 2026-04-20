@@ -31,3 +31,12 @@ monitoring:
   port: 9090
   # 指标路径 (默认: /metrics)
   path: /metrics
+
+# TLS/SSL配置
+tls:
+  # 启用TLS (默认: false)
+  enabled: true
+  # TLS证书文件路径
+  cert_file: /Users/xujian/Athena工作平台/gateway-unified/certs/server.crt
+  # TLS私钥文件路径
+  key_file: /Users/xujian/Athena工作平台/gateway-unified/certs/server.key

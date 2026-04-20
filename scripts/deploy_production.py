@@ -182,38 +182,66 @@ class ProductionDeployer:
         return env_config
 
     async def start_gateway_service(self) -> bool:
-        """启动网关服务"""
-        logger.info("🚀 启动统一网关服务...")
+        """启动网关服务（使用gateway-unified Go实现）"""
+        logger.info("🚀 启动统一网关服务（Gateway Unified）...")
 
         try:
-            # 导入网关模块 - 修复导入路径
-            sys.path.insert(0, str(self.project_root / "services" / "api-gateway"))
-            # 配置Uvicorn
-            import uvicorn
-            from athena_gateway import app
+            # Gateway Unified (Go) 已通过系统服务启动
+            # 这里只检查运行状态
+            gateway_binary = self.project_root / "gateway-unified" / "bin" / "gateway-unified"
+            config_file = self.project_root / "gateway-unified" / "gateway-config.yaml"
 
-            host = os.getenv('GATEWAY_HOST', '0.0.0.0')
-            port = int(os.getenv('GATEWAY_PORT', 8005))
+            if not gateway_binary.exists():
+                logger.error(f"  ❌ Gateway二进制文件不存在: {gateway_binary}")
+                return False
 
-            logger.info(f"  🌐 网关地址: http://{host}:{port}")
-            logger.info(f"  📚 API文档: http://{host}:{port}/docs")
+            if not config_file.exists():
+                logger.error(f"  ❌ Gateway配置文件不存在: {config_file}")
+                return False
 
-            # 存储进程ID
-            pid_file = self.data_dir / "gateway.pid"
+            # 检查Gateway是否已经在运行
+            import subprocess
+            try:
+                result = subprocess.run(
+                    ["pgrep", "-f", "gateway-unified"],
+                    capture_output=True,
+                    text=True
+                )
+                if result.returncode == 0:
+                    logger.info("  ✅ Gateway Unified已在运行")
+                    return True
+            except Exception as e:
+                logger.warning(f"  ⚠️ 无法检查Gateway状态: {e}")
 
-            # 启动服务（后台运行）
-            config = uvicorn.Config(
-                app,
-                host=host,
-                port=port,
-                log_level="info",
-                access_log=True,
-                reload=False,  # 生产环境不使用热重载
-                workers=1,  # 单worker模式，适合开发/测试
+            # 如果Gateway未运行，启动它
+            logger.info("  🔄 启动Gateway Unified...")
+            gateway_dir = self.project_root / "gateway-unified"
+
+            # 使用nohup后台启动
+            subprocess.Popen(
+                [str(gateway_binary), "-config", "gateway-config.yaml"],
+                cwd=str(gateway_dir),
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                start_new_session=True
             )
 
-            # 创建服务器实例
-            server = uvicorn.Server(config)
+            # 等待启动
+            await asyncio.sleep(2)
+
+            # 验证启动成功
+            result = subprocess.run(
+                ["pgrep", "-f", "gateway-unified"],
+                capture_output=True,
+                text=True
+            )
+
+            if result.returncode == 0:
+                logger.info("  ✅ Gateway Unified启动成功")
+                return True
+            else:
+                logger.error("  ❌ Gateway Unified启动失败")
+                return False
 
             # 保存PID
             with open(pid_file, 'w') as f:
