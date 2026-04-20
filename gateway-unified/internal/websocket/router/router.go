@@ -93,7 +93,11 @@ func (r *Router) Route(msg *protocol.Message, sess *session.Session) error {
 	r.mu.RUnlock()
 
 	if !exists {
-		return r.sendError(sess, msg, "UNKNOWN_MESSAGE_TYPE", fmt.Sprintf("未知的消息类型: %s", msg.Type))
+		err := r.sendError(sess, msg, "UNKNOWN_MESSAGE_TYPE", fmt.Sprintf("未知的消息类型: %s", msg.Type))
+		if err != nil {
+			return err
+		}
+		return fmt.Errorf("未知的消息类型: %s", msg.Type)
 	}
 
 	// DEBUG: 打印找到处理器

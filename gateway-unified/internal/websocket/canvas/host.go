@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/athena-workspace/gateway-unified/internal/logging"
@@ -17,6 +18,7 @@ type CanvasHost struct {
 	mu            sync.RWMutex
 	ctx           context.Context
 	cancel        context.CancelFunc
+	counter       uint64 // 原子计数器，用于生成唯一ID
 }
 
 // Canvas Canvas实例
@@ -45,7 +47,9 @@ func NewCanvasHost() *CanvasHost {
 
 // CreateCanvas 创建新Canvas
 func (ch *CanvasHost) CreateCanvas(sessionID, title string) *Canvas {
-	canvasID := fmt.Sprintf("canvas_%d", time.Now().UnixNano())
+	// 使用原子计数器生成唯一ID，避免并发冲突
+	id := atomic.AddUint64(&ch.counter, 1)
+	canvasID := fmt.Sprintf("canvas_%d", id)
 
 	canvas := &Canvas{
 		ID:        canvasID,
