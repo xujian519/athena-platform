@@ -59,7 +59,7 @@ pytest --cov=core --cov-report=html  # 生成HTML报告
 ### Go Development (Gateway)
 
 ```bash
-# In core/gateway/ or api-gateway/ or services/api-gateway/go-gateway/
+# In gateway-unified/
 make build          # Build binary
 make run-dev        # Run in development mode
 make test           # Run tests
@@ -157,16 +157,13 @@ Athena工作平台/
 │   ├── database/           # Database connection pooling
 │   ├── collaboration/      # Agent collaboration patterns
 │   ├── legal_world_model/  # 法律世界模型
-│   ├── knowledge_graph/    # 知识图谱引擎
-│   └── gateway/            # Gateway implementation (Go)
+│   └── knowledge_graph/    # 知识图谱引擎
 ├── services/               # Microservices
 │   ├── intelligent-collaboration/  # Xiaonuo coordination service
 │   ├── athena-unified/     # Unified Athena services
-│   ├── api-gateway/        # API Gateway (Go + TypeScript)
 │   ├── multimodal/         # Multimodal processing service
 │   └── legal-support/      # 法律支持服务
-├── gateway-unified/        # 统一Go网关 (Port 8005)
-├── api-gateway/            # API Gateway (Go)
+├── gateway-unified/        # 统一Go网关 (Port 8005) ⭐
 ├── domains/                # 业务领域模块 (legal-ai, ai-art, legal-knowledge)
 ├── tools/                  # 工具集
 ├── patent-platform/        # Patent platform application
@@ -826,8 +823,7 @@ docker-compose exec redis redis-cli ping
 | `core/tools/tool_manager.py` | Tool group management |
 | `core/tools/tool_call_manager.py` | Tool call orchestration |
 | `core/tools/base.py` | Tool definitions and registry |
-| `services/api-gateway/` | API Gateway (Go) |
-| `gateway-unified/` | Unified Go gateway system |
+| `gateway-unified/` | Unified Go gateway system ⭐ |
 | `mcp-servers/` | MCP servers (gaode, academic-search, jina-ai, etc.) |
 | `config/service_discovery.json` | Service registry |
 | `docker-compose.yml` | Main Docker configuration |
