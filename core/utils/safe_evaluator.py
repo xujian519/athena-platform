@@ -166,7 +166,7 @@ class SafeExpressionEvaluator:
         elif isinstance(node, ast.Compare):
             left = self._eval_node(node.left, context, depth + 1)
             result = True
-            for op, comparator in zip(node.ops, node.comparators, strict=False):
+            for op, comparator in zip(node.ops, node.comparators):
                 right = self._eval_node(comparator, context, depth + 1)
                 op_type = type(op)
                 if op_type in self._operators:
@@ -216,7 +216,7 @@ class SafeExpressionEvaluator:
         elif isinstance(node, ast.Dict):
             return {
                 self._eval_node(k, context, depth + 1): self._eval_node(v, context, depth + 1)
-                for k, v in zip(node.keys, node.values, strict=False)
+                for k, v in zip(node.keys, node.values)
             }
 
         # 下标
