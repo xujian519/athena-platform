@@ -199,3 +199,9 @@ config/memory/production.env
 config/production.env
 services/knowledge-graph-service/.env
 services/knowledge-unified/subservices/knowledge-graph-service/.env
+
+# 备份文件（Day 3 添加）
+*.bak
+*.bak2
+*.bak3
+*.bak_final
