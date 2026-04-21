@@ -205,3 +205,12 @@ services/knowledge-unified/subservices/knowledge-graph-service/.env
 *.bak2
 *.bak3
 *.bak_final
+
+# 虚拟环境（Day 4-5 添加）
+venv_perception/
+athena_env_py311/
+__pycache__/
+*.pyc
+
+# 外部项目（Day 4-5 添加）
+computer-use-ootb/
