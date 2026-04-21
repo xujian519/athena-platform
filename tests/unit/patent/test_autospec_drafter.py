@@ -34,11 +34,16 @@ class TestEnums:
     """枚举类型测试"""
 
     def test_draft_phase_values(self):
-        """测试撰写阶段枚举"""
+        """测试撰写阶段枚举（9阶段流程）"""
         assert DraftPhase.INVENTION_UNDERSTANDING.value == "invention_understanding"
-        assert DraftPhase.STRUCTURE_PLANNING.value == "structure_planning"
-        assert DraftPhase.CONTENT_GENERATION.value == "content_generation"
-        assert DraftPhase.QUALITY_CHECK.value == "quality_check"
+        assert DraftPhase.PRIOR_ART_SEARCH.value == "prior_art_search"
+        assert DraftPhase.COMPARISON_ANALYSIS.value == "comparison_analysis"
+        assert DraftPhase.INVENTIVE_POINT.value == "inventive_point"
+        assert DraftPhase.SPECIFICATION_DRAFTING.value == "specification_drafting"
+        assert DraftPhase.CLAIMS_DRAFTING.value == "claims_drafting"
+        assert DraftPhase.EXAMINER_SIMULATION.value == "examiner_simulation"
+        assert DraftPhase.MODIFICATION.value == "modification"
+        assert DraftPhase.FINAL_CONFIRMATION.value == "final_confirmation"
 
     def test_section_type_values(self):
         """测试章节类型枚举"""
@@ -100,11 +105,21 @@ class TestInventionUnderstanding:
             core_innovation="智能充电控制",
             technical_problem="充电效率低",
             technical_solution="采用智能控制算法",
-            technical_effects=["提高充电效率", "延长电池寿命"]
+            technical_effects=["提高充电效率", "延长电池寿命"],
+            essential_features=[
+                TechnicalFeature("F1", "智能控制器", "控制充电过程", True, "提高效率")
+            ],
+            optional_features=[
+                TechnicalFeature("F2", "显示模块", "显示充电状态", False, "用户体验")
+            ],
+            prior_art_issues=["现有充电方式效率低下", "缺乏智能控制"],
+            differentiation=["采用AI算法", "自适应充电策略"]
         )
         assert understanding.invention_title == "光伏充电系统"
         assert understanding.invention_type == InventionType.SYSTEM
         assert len(understanding.technical_effects) == 2
+        assert len(understanding.essential_features) == 1
+        assert len(understanding.optional_features) == 1
 
     def test_understanding_to_dict(self):
         """测试发明理解序列化"""
@@ -118,7 +133,10 @@ class TestInventionUnderstanding:
             technical_effects=["效果1"],
             essential_features=[
                 TechnicalFeature("F1", "特征1", "描述1", True, "效果1")
-            ]
+            ],
+            optional_features=[],
+            prior_art_issues=[],
+            differentiation=[]
         )
         result = understanding.to_dict()
         assert result["invention_title"] == "测试发明"
@@ -318,9 +336,12 @@ class TestAutoSpecDrafter:
             technical_solution="测试方案",
             technical_effects=["效果1"],
             essential_features=[
-                TechnicalFeature("F1", "组件A", "描述A", True),
-                TechnicalFeature("F2", "组件B", "描述B", True)
-            ]
+                TechnicalFeature("F1", "组件A", "描述A", True, "效果A"),
+                TechnicalFeature("F2", "组件B", "描述B", True, "效果B")
+            ],
+            optional_features=[],
+            prior_art_issues=[],
+            differentiation=[]
         )
         claims = drafter._generate_simple_claims(understanding)
         assert len(claims) >= 1
@@ -337,7 +358,10 @@ class TestAutoSpecDrafter:
             technical_problem="测试问题",
             technical_solution="测试方案",
             technical_effects=["效果1"],
-            prior_art_issues=["现有问题1"]
+            essential_features=[],
+            optional_features=[],
+            prior_art_issues=["现有问题1"],
+            differentiation=["差异化特点"]
         )
 
         section = drafter._generate_heuristic_section(
