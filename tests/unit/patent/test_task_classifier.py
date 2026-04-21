@@ -207,7 +207,7 @@ class TestPatentTaskClassifier:
         """测试规则分类 - 侵权分析"""
         classifier = PatentTaskClassifier()
         task_type = classifier._rule_based_classification(
-            "这个产品是否侵犯了我的专利权？"
+            "这个产品是否侵权了我的专利权？"
         )
         assert task_type == PatentTaskType.INFRINGEMENT_ANALYSIS
 

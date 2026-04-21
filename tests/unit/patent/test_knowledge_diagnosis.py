@@ -264,7 +264,8 @@ class TestKnowledgeActivationDiagnoser:
             diagnosis_id="test",
             error_type=ErrorType.KNOWLEDGE_MISSING,
             severity=DiagnosisSeverity.HIGH,
-            error_description="test"
+            error_description="test",
+            evidence=["测试证据"]
         )
         strategy = diagnoser._select_activation_strategy(diagnosis)
         assert strategy == ActivationStrategy.DECOMPOSITION
@@ -365,7 +366,8 @@ class TestAsyncMethods:
             diagnosis_id="test",
             error_type=ErrorType.KNOWLEDGE_UNUSED,
             severity=DiagnosisSeverity.MEDIUM,
-            error_description="测试"
+            error_description="测试",
+            evidence=["测试证据"]
         )
         improved = await diagnoser.activate_knowledge(
             query="问题",

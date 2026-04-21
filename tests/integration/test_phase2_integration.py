@@ -61,7 +61,7 @@ class TestModuleImports:
         assert KnowledgeActivationDiagnoser is not None
         assert DiagnosisResult is not None
         assert ErrorType is not None
-        assert len(ErrorType) == 17  # 17种错误类型
+        assert len(ErrorType) == 6  # 6种错误类型（已优化）
         assert len(DiagnosisSeverity) == 4
         assert len(ActivationStrategy) == 5
 
@@ -70,7 +70,7 @@ class TestModuleImports:
         assert PatentTaskClassifier is not None
         assert TaskClassificationResult is not None
         assert PatentTaskType is not None
-        assert len(PatentTaskType) == 17  # 17种任务类型
+        assert len(PatentTaskType) == 21  # 21种任务类型（已扩展）
         assert len(TaskComplexity) == 4
         assert len(WorkflowStage) == 5
 
@@ -140,8 +140,7 @@ class TestModuleFunctions:
 
         result = await diagnose_response(
             query=query,
-            response=response,
-            context=sample_patent_data
+            response=response
         )
 
         assert result is not None
@@ -297,8 +296,7 @@ class TestEndToEndWorkflow:
         # Step 2: 知识诊断
         diagnosis = await diagnose_response(
             query=query,
-            response="该专利涉及智能图像处理",
-            context=complete_patent_data
+            response="该专利涉及智能图像处理"
         )
         assert diagnosis is not None
         print(f"诊断类型: {diagnosis.error_type.value}")
