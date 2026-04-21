@@ -24,8 +24,9 @@ from .types import InputType, PerceptionResult
 
 logger = logging.getLogger(__name__)
 
-# 类型别名
-CallbackFunc = Callable[[Any], Any | Coroutine[Any, Any, Any]]
+# 类型别名（使用Union兼容Python 3.9+）
+from typing import Union
+CallbackFunc = Callable[[Any], Union[Any, Coroutine[Any, Any, Any]]]
 
 
 class BaseProcessor(ABC):

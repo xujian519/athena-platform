@@ -222,10 +222,10 @@ class MissingConfigException(ConfigurationException):
         super().__init__(
             f"缺少必需的配置: {config_key}",
             config_key,
-            code="MISSING_CONFIG",
-            status_code=500,
             details=details,
         )
+        # 覆盖父类的code
+        self.code = "MISSING_CONFIG"
 
 
 class InvalidConfigException(ConfigurationException):
@@ -239,10 +239,10 @@ class InvalidConfigException(ConfigurationException):
         super().__init__(
             f"无效的配置值: {config_key} = {value} ({reason})",
             config_key,
-            code="INVALID_CONFIG",
-            status_code=500,
             details=details,
         )
+        # 覆盖父类的code
+        self.code = "INVALID_CONFIG"
 
 
 # ============================================================================
@@ -385,10 +385,20 @@ class ConnectionException(StorageException):
     ):
         details = details or {}
         if connection_string:
-            # 隐藏敏感信息
+            # 隐藏敏感信息（密码等）
             safe_string = connection_string
             if "@" in connection_string:
-                safe_string = connection_string[: connection_string.index("@") + 1]
+                # 保留协议和@之后的部分，隐藏用户名:密码部分
+                parts = connection_string.split("@")
+                if len(parts) == 2:
+                    # protocol://user:pass@host → protocol://***@host
+                    before_at = parts[0]
+                    after_at = parts[1]
+                    if "://" in before_at:
+                        protocol = before_at.split("://")[0]
+                        safe_string = f"{protocol}://***@{after_at}"
+                    else:
+                        safe_string = f"***@{after_at}"
             details["connection"] = safe_string
         super().__init__(
             message,
@@ -427,8 +437,10 @@ class RequiredFieldException(ValidationException):
 
     def __init__(self, field: str, details: dict[str, Any] | None = None):
         super().__init__(
-            f"必填字段缺失: {field}", field=field, code="REQUIRED_FIELD", details=details
+            f"必填字段缺失: {field}", field=field, details=details
         )
+        # 覆盖父类的code
+        self.code = "REQUIRED_FIELD"
 
 
 class InvalidFormatException(ValidationException):
@@ -443,9 +455,10 @@ class InvalidFormatException(ValidationException):
             f"无效格式: {field} (期望格式: {expected_format})",
             field=field,
             value=value,
-            code="INVALID_FORMAT",
             details=details,
         )
+        # 覆盖父类的code
+        self.code = "INVALID_FORMAT"
 
 
 # ============================================================================

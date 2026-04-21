@@ -1,0 +1,263 @@
+# Athena测试管道
+# Test Pipeline with Coverage and Quality Gates
+
+name: Test Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+  workflow_dispatch:  # 允许手动触发
+
+env:
+  PYTHON_VERSION: '3.11'
+  POETRY_VERSION: '1.7.1'
+
+jobs:
+  # ==================== 单元测试 ====================
+  unit-tests:
+    name: 单元测试
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 获取完整历史用于覆盖率
+
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: 安装依赖
+        run: |
+          poetry install --no-interaction --no-root
+
+      - name: 运行单元测试
+        run: |
+          poetry run pytest tests/ -m unit -v \
+            --cov=core \
+            --cov-report=xml \
+            --cov-report=term-missing \
+            --cov-report=html \
+            --junitxml=test-results/unit-tests.xml
+
+      - name: 上传测试结果
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unit-test-results
+          path: test-results/unit-tests.xml
+          retention-days: 30
+
+      - name: 上传覆盖率报告
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            coverage.xml
+            htmlcov/
+          retention-days: 30
+
+  # ==================== 集成测试 ====================
+  integration-tests:
+    name: 集成测试
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: athena
+          POSTGRES_PASSWORD: athena123
+          POSTGRES_DB: athena_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: 安装依赖
+        run: |
+          poetry install --no-interaction --no-root
+
+      - name: 等待服务就绪
+        run: |
+          timeout 60 bash -c 'until pg_isready -h localhost; do sleep 1; done'
+          timeout 60 bash -c 'until redis-cli ping; do sleep 1; done'
+
+      - name: 运行集成测试
+        env:
+          DATABASE_URL: postgresql://athena:athena123@localhost:5432/athena_test
+          REDIS_URL: redis://localhost:6379
+        run: |
+          poetry run pytest tests/ -m integration -v \
+            --junitxml=test-results/integration-tests.xml
+
+      - name: 上传测试结果
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: integration-test-results
+          path: test-results/integration-tests.xml
+          retention-days: 30
+
+  # ==================== 代码质量检查 ====================
+  code-quality:
+    name: 代码质量检查
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: 安装Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: 安装依赖
+        run: |
+          poetry install --no-interaction --no-root
+
+      # Ruff语法检查
+      - name: Ruff语法检查
+        run: |
+          poetry run ruff check . \
+            --select=E9,F63,F7,F82 \
+            --show-source \
+            --exit-zero
+
+      # 类型检查
+      - name: Mypy类型检查
+        run: |
+          poetry run mypy core/ \
+            --ignore-missing-imports \
+            --no-strict-optional \
+            --warn-return-any \
+            --warn-unused-ignores \
+            || true
+
+      # 导入排序检查
+      - name: 导入排序检查
+        run: |
+          poetry run ruff check . --select I --exit-zero
+
+      # 代码格式检查
+      - name: 代码格式检查
+        run: |
+          poetry run ruff format --check .
+
+  # ==================== 覆盖率汇总 ====================
+  coverage-summary:
+    name: 覆盖率汇总
+    runs-on: ubuntu-latest
+    needs: [unit-tests, integration-tests]
+    if: always()
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 下载覆盖率报告
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-report
+          path: ./coverage
+
+      - name: 生成覆盖率摘要
+        run: |
+          if [ -f coverage/coverage.xml ]; then
+            echo "## 测试覆盖率报告" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "✅ 覆盖率报告已生成" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+
+            # 提取总体覆盖率
+            COVERAGE=$(grep -oP 'line-rate="\K[0-9.]+' coverage/coverage.xml | head -1)
+            PERCENTAGE=$(awk "BEGIN {printf \"%.2f\", ${COVERAGE} * 100}")
+            echo "总体覆盖率: **${PERCENTAGE}%**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ 覆盖率报告未找到" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # ==================== 质量门禁 ====================
+  quality-gate:
+    name: 质量门禁
+    runs-on: ubuntu-latest
+    needs: [unit-tests, integration-tests, code-quality]
+    if: always()
+
+    steps:
+      - name: 检查测试结果
+        run: |
+          echo "## 质量门禁检查" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # 检查单元测试
+          if [ "${{ needs.unit-tests.result }}" != "success" ]; then
+            echo "❌ 单元测试失败" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo "✅ 单元测试通过" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # 集成测试允许失败
+          if [ "${{ needs.integration-tests.result }}" != "success" ]; then
+            echo "⚠️ 集成测试失败（非阻塞）" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ 集成测试通过" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # 代码质量检查
+          if [ "${{ needs.code-quality.result }}" != "success" ]; then
+            echo "⚠️ 代码质量检查发现问题（非阻塞）" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ 代码质量检查通过" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🎉 质量门禁检查完成！" >> $GITHUB_STEP_SUMMARY

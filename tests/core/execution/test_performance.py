@@ -18,15 +18,10 @@ Execution Module Performance Tests
 
 import pytest
 
-pytestmark = pytest.mark.skip(reason="模块导入问题，待修复")
-
 import asyncio
 import statistics
 import sys
 import time
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.execution.parallel_executor import ParallelExecutor
 from core.execution.shared_types import (

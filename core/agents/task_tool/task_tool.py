@@ -7,10 +7,12 @@ TaskTool - 任务工具主体
 
 import uuid
 from datetime import datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from core.agents.fork_context_builder import ForkContext, ForkContextBuilder
-from core.agents.subagent_registry import SubagentRegistry
+
+if TYPE_CHECKING:
+    from core.agents.subagent_registry import SubagentRegistry
 from core.agents.task_tool.model_mapper import ModelMapper
 from core.agents.task_tool.models import (
     TaskInput,
@@ -44,6 +46,10 @@ class TaskTool:
         self.config = config or {}
         self.task_store = task_store or TaskStore(self.config)
         self.model_mapper = model_mapper or ModelMapper()
+
+        # 延迟导入以避免循环依赖
+        from core.agents.subagent_registry import SubagentRegistry
+
         self.subagent_registry = SubagentRegistry()
         self.tool_filter = ToolFilter(self.subagent_registry)
         self.fork_context_builder = ForkContextBuilder(

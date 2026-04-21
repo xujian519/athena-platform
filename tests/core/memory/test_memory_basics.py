@@ -87,7 +87,6 @@ class TestAgentType:
         """测试所有智能体类型"""
         assert AgentType.ATHENA.value == "athena"
         assert AgentType.XIAONA.value == "xiaona"
-        assert AgentType.YUNXI.value == "yunxi"
         assert AgentType.XIAOCHEN.value == "xiaochen"
         assert AgentType.XIAONUO.value == "xiaonuo"
 
@@ -204,7 +203,7 @@ class TestMemoryItem:
         item = MemoryItem(
             id="test_memory_4",
             agent_id="test_agent",
-            agent_type=AgentType.YUNXI,
+            agent_type=AgentType.XIAOCHEN,
             content="测试内容",
             memory_type=MemoryType.CONVERSATION,
             memory_tier=MemoryTier.HOT

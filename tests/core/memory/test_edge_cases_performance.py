@@ -249,7 +249,12 @@ class TestErrorHandling:
             raise Exception("Redis连接失败")
 
         initialized_system.redis_client.get = mock_get
-        initialized_system.cache_stats = {"test_agent": CacheStatistics()}
+
+        # 确保cache_stats是CacheStatistics对象
+        # 系统会使用_cache_stats["agent_id"]或全局cache_stats
+        if not hasattr(initialized_system, '_cache_stats'):
+            initialized_system._cache_stats = {}
+        initialized_system._cache_stats["test_agent"] = CacheStatistics()
 
         # 应该能降级到数据库查询
         async def mock_fetch(*args, **kwargs):

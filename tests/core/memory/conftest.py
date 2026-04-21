@@ -116,14 +116,19 @@ class MockConnectionPool:
 # 创建一个模拟的Qdrant HTTP响应
 class MockQdrantResponse:
     """模拟Qdrant HTTP响应"""
-    def __init__(self):
-        self.status = 200
+    def __init__(self, status=200, result=None):
+        self.status = status
+        self._result = result or {"result": []}
 
     async def __aenter__(self):
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         pass
+
+    async def json(self):
+        """返回JSON格式的响应数据"""
+        return self._result
 
 
 # 创建一个模拟的Qdrant客户端
@@ -134,15 +139,16 @@ class MockQdrantClient:
 
     def put(self, *args, **kwargs):
         """返回一个异步上下文管理器"""
-        return MockQdrantResponse()
+        return MockQdrantResponse(result={"status": "ok"})
 
     def post(self, *args, **kwargs):
         """返回一个异步上下文管理器"""
-        return MockQdrantResponse()
+        return MockQdrantResponse(result={"status": "ok"})
 
     def get(self, *args, **kwargs):
         """返回一个异步上下文管理器"""
-        return MockQdrantResponse()
+        # 对于搜索请求，返回空结果
+        return MockQdrantResponse(result={"result": []})
 
 
 @pytest.fixture
@@ -195,8 +201,18 @@ async def initialized_system():
 
     system.warm_cache = {}
 
-    # 初始化cache_stats - 使用CacheStatistics对象
+    # 初始化cache_stats - 使用CacheStatistics对象（正确的对象，不是dict）
     system.cache_stats = CacheStatistics()
+
+    # 设置全局缓存统计（用于agent特定的统计）
+    system._cache_stats = {
+        "test_agent": CacheStatistics(),
+        "xiaonuo_pisces": CacheStatistics(),
+        "xiaona_libra": CacheStatistics(),
+        "yunxi_vega": CacheStatistics(),
+        "xiaochen_sagittarius": CacheStatistics(),
+        "athena_wisdom": CacheStatistics()
+    }
 
     # 设置已初始化标志 - 这是关键！
     system._initialized = True

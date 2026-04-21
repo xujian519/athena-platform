@@ -174,6 +174,7 @@ class TestMemoryRetrieval:
             return [
                 {
                     "id": "test_memory_1",
+                    "memory_id": "test_memory_1",  # 添加memory_id字段
                     "agent_id": "xiaonuo_pisces",
                     "agent_type": "xiaonuo",
                     "content": "用户询问了专利检索问题",
@@ -182,7 +183,8 @@ class TestMemoryRetrieval:
                     "importance": 0.7,
                     "created_at": datetime.now(),
                     "last_accessed": datetime.now(),
-                    "access_count": 1
+                    "access_count": 1,
+                    "text_rank": 0.8
                 }
             ]
 
@@ -394,9 +396,35 @@ class TestMemorySharing:
 
         initialized_system.postgresql_pool.fetchval = mock_fetchval
 
+        # Mock获取原始记忆（包含所有必需字段）
+        async def mock_fetchrow(*args, **kwargs):
+            return {
+                "id": "test_mem_1",
+                "content": "测试记忆内容",
+                "agent_id": "xiaonuo_pisces",
+                "memory_type": "conversation",
+                "agent_type": "xiaonuo",
+                "memory_tier": "warm",
+                "importance": 0.7
+            }
+
+        initialized_system.postgresql_pool.fetchrow = mock_fetchrow
+
+        # Mock store_memory的fetchval返回memory_id
+        original_fetchval = initialized_system.postgresql_pool.fetchval
+
+        async def mock_store_fetchval(*args, **kwargs):
+            # 如果是INSERT操作，返回新的memory_id
+            if args and 'INSERT' in str(args[0]):
+                return "shared_memory_123"
+            # 其他操作使用原始fetchval
+            return await original_fetchval(*args, **kwargs)
+
+        initialized_system.postgresql_pool.fetchval = mock_store_fetchval
+
         result = await initialized_system.share_memory(
             memory_id="test_mem_1",
-            target_agents=["xiaona_libra", "yunxi_vega"]
+            target_agents=["xiaona_libra", "xiaochen_sagittarius"]
         )
 
         assert result is True

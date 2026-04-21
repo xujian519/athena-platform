@@ -1,27 +1,79 @@
-# Pre-commit配置
-# 使用方法: pip install pre-commit && pre-commit install
+# Pre-commit配置 for Athena工作平台
+# 安装: pip install pre-commit && pre-commit install
 
 repos:
-  # 代码格式化 - Black
-  - repo: https://github.com/psf/black
-    rev: 24.10.0
-    hooks:
-      - id: black
-        language_version: python3.11
-        args: ['--line-length=100']
-
-  # 代码检查+自动修复 - Ruff (替代flake8+isort)
+  # ==================== 代码检查 - Ruff ====================
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.8.4
     hooks:
+      # 语法错误检查（必须通过）
       - id: ruff
-        args: ['--fix', '--exit-non-zero-on-fix']
-      - id: ruff-format
+        name: Ruff语法检查
+        args: ['--select=E9,F63,F7,F82', '--show-source']
 
-  # 类型检查 - mypy
+      # 代码检查+自动修复
+      - id: ruff
+        name: Ruff代码检查
+        args: ['--fix', '--exit-non-zero-on-fix']
+
+      # 代码格式化
+      - id: ruff-format
+        name: Ruff格式化
+
+  # ==================== 类型检查 - mypy ====================
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.13.0
     hooks:
       - id: mypy
-        args: ['--ignore-missing-imports', '--no-strict-optional']
-        exclude: ^core/
+        name: Mypy类型检查
+        args: [
+          '--ignore-missing-imports',
+          '--no-strict-optional',
+          '--warn-return-any',
+          '--warn-unused-ignores'
+        ]
+        additional_dependencies:
+          - types-requests
+        files: ^core/agents/|^core/llm/|^core/memory/
+
+  # ==================== 通用检查 ====================
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      # 检查JSON文件
+      - id: check-json
+        files: \.json$
+
+      # 检查YAML文件
+      - id: check-yaml
+        files: \.ya?ml$
+
+      # 检查TOML文件
+      - id: check-toml
+        files: \.toml$
+
+      # 检查大文件
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+
+      # 检查行尾
+      - id: end-of-file-fixer
+
+      # 移除行尾空格
+      - id: trailing-whitespace
+
+      # 检查merge冲突标记
+      - id: check-merge-conflict
+
+      # 检查debug语句
+      - id: debug-statements
+        files: \.py$
+
+# ==================== 配置 ====================
+default_stages: [commit]
+fail_fast: false
+
+# 本地测试命令
+# pre-commit run --all-files
+# pre-commit run --files core/llm/unified_llm_manager.py
+
