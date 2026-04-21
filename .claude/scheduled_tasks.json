@@ -5,6 +5,12 @@
       "cron": "0 9 25 4 *",
       "prompt": "## 📅 提醒：自适应动态知识库架构实施计划\n\n**开始日期**: 2026-04-25（今天）\n\n### 🎯 项目概览\n为宝宸知识库（827个文件，3615个双链）构建自适应动态架构\n\n### 📋 实施计划（6周）\n\n**Phase 1（第1-2周）**: 文件监控与增量索引\n- Obsidian文件监控器（watchdog）\n- 增量索引引擎\n- Obsidian解析器增强\n\n**Phase 2（第3-4周）**: 双链演化追踪\n- Neo4j历史版本存储\n- 知识图谱可视化增强\n- 演化分析API\n\n**Phase 3（第5周）**: 知识流动自动化\n- 层次转换规则引擎\n- 自动提升执行器\n- 元数据管理工具\n\n**Phase 4（第6周）**: 性能优化\n- 查询优化器\n- 缓存层\n- 扩展性监控\n\n### 📄 详细计划文档\n位置: `/Users/xujian/Athena工作平台/docs/development_plans/adaptive_knowledge_base_implementation.md`\n\n### ✅ 今日启动任务\n1. 阅读完整实施计划文档\n2. 创建feature分支: `feature/adaptive-knowledge-base`\n3. 安装依赖: `poetry add watchdog tantivy`\n4. 从Phase 1.1开始实施\n\n### 🎯 预期收益\n- 索引更新速度提升10倍\n- 查询响应速度提升2倍\n- 支持知识库增长到2000+文件\n\n祝开发顺利！🚀",
       "createdAt": 1776483246163
+    },
+    {
+      "id": "60c07c4a",
+      "cron": "0 9 28 4 *",
+      "prompt": "自动运行Phase 3备份清理脚本\n\n2026年4月28日上午9点自动清理Phase 3迁移的备份目录：\n- core/patent.bak\n- patent_hybrid_retrieval.bak  \n- patent-platform.bak\n- openspec-oa-workflow.bak\n- services/xiaona-patents.bak\n\n清理脚本位置: /Users/xujian/Athena工作平台/scripts/cleanup_backup_dirs.sh\n\n这是单次清理任务，执行后自动删除。",
+      "createdAt": 1776743163864
     }
   ]
 }
