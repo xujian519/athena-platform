@@ -32,7 +32,7 @@
             "port": 8006,
             "color": "🏹",
             "startup_message": "准备为您的内容创作之旅搭箭开弓！🎯"
-        },
+        }
     },
     "display_settings": {
         "show_on_startup": true,

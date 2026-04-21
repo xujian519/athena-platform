@@ -18,7 +18,12 @@ import traceback
 from collections.abc import Callable
 from contextlib import contextmanager
 from datetime import datetime
-from typing import Any, ParamSpec, TypeVar
+from typing import Any, TypeVar
+
+try:
+    from typing import ParamSpec
+except ImportError:
+    from typing_extensions import ParamSpec
 
 from ..exceptions import AthenaError, format_error
 
