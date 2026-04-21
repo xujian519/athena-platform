@@ -1,0 +1,40 @@
+# Qdrant 生产环境配置
+# Qdrant Production Configuration for Athena Platform
+
+# 服务配置
+service:
+  http_port: 6333
+  grpc_port: 6334
+  max_request_size_mb: 32
+  enable_cors: true
+  cors_allow_origin: "*"
+
+# 存储配置
+storage:
+  # 性能优化
+  performance:
+    max_search_threads: 4
+    max_search_threads_per_cpu: 2
+    update_concurrency: 2
+    writers_await_leader: true
+
+  # 缓存配置
+  cache:
+    vector_cache_size: 1Gb
+    payload_index_cache_size: 256Mb
+    record_cache_size: 256Mb
+
+  # 搜索优化
+  optimizers:
+    indexing_threshold: 20000
+    segment_step: 2
+
+  wal:
+    capacity_mb: 32
+
+# 日志配置
+log_level: INFO
+
+# 集群配置（单机模式）
+cluster:
+  enabled: false
