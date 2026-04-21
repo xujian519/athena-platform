@@ -24,7 +24,7 @@ from pydantic import BaseModel
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from core.knowledge.patent_analysis.knowledge_graph import (
+from core.kg_unified.models.patent import (
     NodeType,
     RelationType,
 )

@@ -14,7 +14,7 @@ import logging
 from typing import Any
 
 # Type hints for type checkers
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +59,7 @@ async def knowledge_graph_search_handler(
             "count": int,  # 结果数量
             "execution_time": float,  # 执行时间（秒）
             "query_type": str,  # 查询类型
-            "error": str | None  # 错误信息（如果失败）
+            "error": Optional[str]  # 错误信息（如果失败）
         }
 
     Examples:
@@ -288,7 +288,7 @@ async def search_patents_by_keyword(
 
 async def find_related_patents(
     patent_id: str,
-    relationship_type: str | None = None,
+    relationship_type: Optional[str] = None,
     limit: int = 10
 ) -> Dict[str, Any]:
     """

@@ -91,7 +91,7 @@ class AsyncQueryMixin:
         """
         try:
             # 使用现有的搜索方法
-            from core.knowledge.patent_analysis.knowledge_graph import NodeType
+            from core.kg_unified.models.patent import NodeType
             results = await self.search_nodes(patent_id, [NodeType.PATENT], limit=1)
 
             if results:
@@ -119,7 +119,7 @@ class AsyncQueryMixin:
         """
         try:
             # 使用现有方法获取关系
-            from core.knowledge.patent_analysis.knowledge_graph import RelationType
+            from core.kg_unified.models.patent import RelationType
             relations = await self.get_node_relations(
                 patent_id,
                 relation_type=RelationType.CITES,
@@ -151,7 +151,7 @@ class AsyncQueryMixin:
         """
         try:
             # 使用现有方法获取相似专利
-            from core.knowledge.patent_analysis.knowledge_graph import RelationType
+            from core.kg_unified.models.patent import RelationType
             relations = await self.get_node_relations(
                 patent_id,
                 relation_type=RelationType.SIMILAR_TO,
@@ -185,7 +185,7 @@ class AsyncQueryMixin:
         Returns:
             搜索结果列表的列表
         """
-        from core.knowledge.patent_analysis.knowledge_graph import NodeType
+        from core.kg_unified.models.patent import NodeType
 
         tasks = [
             self.search_nodes(" ".join(keywords), [NodeType.TECHNOLOGY], limit=limit)

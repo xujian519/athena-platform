@@ -21,10 +21,10 @@ from pathlib import Path
 from typing import Any
 
 # 导入增强检索模块
-from patents.core.enhanced_patent_retriever_v2 import EnhancedPatentRetriever, PatentInfo
+from core.patents.enhanced_patent_retriever_v2 import EnhancedPatentRetriever, PatentInfo
 
-# 导入知识图谱模块
-from patents.core.patent_knowledge_graph import (
+# 导入知识图谱模块（统一架构）
+from core.kg_unified.models.patent import (
     FeatureRelation,
     PatentKnowledgeGraph,
     RelationType,
