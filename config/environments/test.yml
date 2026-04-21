@@ -1,0 +1,24 @@
+# 测试环境配置
+# Test Environment Configuration
+
+environment: test
+debug: false
+log_level: INFO
+
+# 覆盖基础配置
+database:
+  pool_size: 10
+  max_overflow: 5
+  name: athena_test
+
+redis:
+  db: 2  # 使用独立的测试DB
+  default_ttl: 600  # 10分钟
+
+qdrant:
+  collection_name: athena_vectors_test
+
+llm:
+  default_provider: anthropic
+  cache_enabled: false  # 测试环境禁用缓存
+  max_retries: 1

@@ -1,0 +1,36 @@
+# ============================================================================
+# Athena工作平台 - Qdrant向量数据库基础配置
+# Qdrant Base Configuration
+# ============================================================================
+
+qdrant:
+  # 服务配置
+  host: localhost
+  port: 6333
+  https: false
+  api_key: ${QDRANT_API_KEY:-}
+
+  # 集合配置
+  collection_name: athena_vectors
+  vector_size: 768
+  distance: Cosine
+
+  # 搜索配置
+  search_limit: 20
+  search_max_limit: 100
+  search_score_threshold: 0.7
+
+  # 索引配置
+  hnsw_config:
+    m: 16
+    ef_construct: 100
+    full_scan_threshold: 10000
+
+  # 优化配置
+  optimizers_config:
+    indexing_threshold: 20000
+
+  # WAL配置
+  wal_config:
+    wal_capacity_mb: 32
+    wal_segments_ahead: 2

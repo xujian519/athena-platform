@@ -1,0 +1,25 @@
+# 开发环境配置
+# Development Environment Configuration
+
+environment: development
+debug: true
+log_level: DEBUG
+
+# 覆盖基础配置
+database:
+  pool_size: 5
+  max_overflow: 2
+  pool_timeout: 10
+
+redis:
+  db: 1  # 使用独立的开发DB
+  default_ttl: 300  # 5分钟（开发环境短缓存）
+
+qdrant:
+  collection_name: athena_vectors_dev
+
+llm:
+  default_provider: anthropic
+  cache_enabled: true
+  cache_ttl: 1800  # 30分钟
+  max_retries: 2

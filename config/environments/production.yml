@@ -1,0 +1,37 @@
+# 生产环境配置
+# Production Environment Configuration
+
+environment: production
+debug: false
+log_level: WARNING
+
+# 安全配置
+secrets_required: true
+
+# 覆盖基础配置
+database:
+  pool_size: 20
+  max_overflow: 10
+  pool_timeout: 30
+  # 生产环境必须从环境变量读取密码
+  password: ${DB_PASSWORD}
+
+redis:
+  password: ${REDIS_PASSWORD}  # 生产环境必须设置密码
+  default_ttl: 3600  # 1小时
+
+qdrant:
+  collection_name: athena_vectors
+  api_key: ${QDRANT_API_KEY}
+
+llm:
+  default_provider: anthropic
+  cache_enabled: true
+  cache_ttl: 3600  # 1小时
+  max_retries: 3
+
+# 性能优化
+performance:
+  enable_monitoring: true
+  enable_profiling: false
+  slow_query_threshold: 1000  # ms
