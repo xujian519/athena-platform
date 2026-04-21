@@ -132,12 +132,20 @@ Athena工作平台/
 - 🤔 **推理引擎**: 基于法律知识的推理分析
 - 📄 **文档生成**: 自动生成法律文档
 
-### 8. **存储系统**
-- 🗄️ **PostgreSQL**: 主数据库
+### 8. **存储系统** ⭐ 已优化（2026-04-21）
+- 🗄️ **PostgreSQL**: 主数据库（~417万条记录，含453,336条1024维向量）
+  - 数据库: `legal_world_model`
+  - 向量搜索性能: **平均3.86ms**（已优化IVFFlat索引）
+  - 连接: `psql -h localhost -p 5432 -U postgres -d legal_world_model`
 - 🔴 **Redis**: 缓存系统
-- 🔍 **Qdrant**: 向量数据库
-- 🕸️ **Neo4j**: 知识图谱
+- 🔍 **Qdrant**: Agent记忆存储（39条向量）
+- 🕸️ **Neo4j**: 知识图谱（55,906节点，OpenClaw数据）
+  - Case节点: 5,906个
+  - Entity节点: 50,000个
+  - 查询性能: **平均1.67ms**
 - 🔎 **Elasticsearch**: 搜索引擎
+
+**详细配置**: 参考 `data/DATABASE_LOCATIONS.md`
 
 ## 🔧 系统要求
 

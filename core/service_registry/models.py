@@ -5,7 +5,7 @@ Service Registry Data Models
 from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from enum import Enum
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, List, Literal
 import json
 
 
@@ -167,6 +167,3 @@ class ServiceRegistration:
             last_heartbeat=datetime.now(),
             metadata=self.metadata
         )
-
-
-from typing import Literal

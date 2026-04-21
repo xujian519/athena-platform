@@ -301,37 +301,30 @@ services:
     profiles:
       - prod
 
-  # NebulaGraph图数据库 (生产环境)
-  nebula-metad:
-    image: vesoft/nebula-metad:v3.8.0
-    container_name: athena-nebula-metad-prod
-    environment:
-      - USER=root
-      - PASSWORD=nebula
-    volumes:
-      - ./data/nebula/meta:/data/meta
-    networks:
-      - athena-prod-network
+  # Neo4j图数据库 (生产环境)
+  neo4j-prod:
+    image: neo4j:5.15-community
+    container_name: athena-neo4j-prod
     restart: unless-stopped
-    profiles:
-      - prod
-
-  nebula-graphd:
-    image: vesoft/nebula-graphd:v3.8.0
-    container_name: athena-nebula-graphd-prod
     ports:
-      - "9670:9669"
-      - "19670:19669"
-    environment:
-      - USER=root
-      - PASSWORD=nebula
-    command:
-      - --meta_server_addrs=nebula-metad:9559
-    depends_on:
-      - nebula-metad
+      - "7476:7474"  # HTTP (使用7476避免冲突)
+      - "7688:7687"  # Bolt (使用7688避免冲突)
+    volumes:
+      - neo4j-prod-data:/data
     networks:
       - athena-prod-network
-    restart: unless-stopped
+    environment:
+      - NEO4J_AUTH=neo4j/athena_prod_neo4j_2024
+      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_server_memory_heap_initial__size=512m
+      - NEO4J_server_memory_heap_max__size=2G
+      - NEO4J_server_memory_pagecache_size=512m
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 5s bash -c ':> /dev/tcp/127.0.0.1/7474' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
     profiles:
       - prod
 
@@ -455,6 +448,12 @@ volumes:
     name: athena-neo4j-test-logs
   minio-test-data:
     name: athena-minio-test-data
+
+  # 生产环境数据卷
+  qdrant-prod-data:
+    name: athena-qdrant-prod-data
+  neo4j-prod-data:
+    name: athena-neo4j-prod-data
 
   # 监控服务数据卷
   prometheus-data:
