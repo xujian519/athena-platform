@@ -17,7 +17,7 @@ try:
     print("✅ 使用混合检索系统")
 except ImportError:
     try:
-        from core.patent.enhanced_patent_retriever import EnhancedPatentRetriever
+        from patents.core.enhanced_patent_retriever import EnhancedPatentRetriever
         PatentRetriever = EnhancedPatentRetriever
         print("✅ 使用增强专利检索器")
     except ImportError:

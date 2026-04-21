@@ -16,10 +16,10 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from unittest.mock import AsyncMock, Mock
 
-from core.patent.claim_generator import ClaimsSet, ClaimType, InventionType
+from patents.core.claim_generator import ClaimsSet, ClaimType, InventionType
 
 # 测试目标
-from core.patent.claim_generator_v2 import (
+from patents.core.claim_generator_v2 import (
     EnhancedClaimDraft,
     EnhancedClaimGenerator,
     QualityDimension,

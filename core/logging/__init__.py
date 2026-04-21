@@ -21,6 +21,20 @@ from .unified_logger import (
     TextFormatter,
 )
 
+from .handlers import (
+    AsyncLogHandler,
+    RotatingFileHandler,
+    RemoteHandler,
+)
+
+from .filters import (
+    SensitiveDataFilter,
+)
+
+from .config import (
+    LoggingConfigLoader,
+)
+
 __all__ = [
     # 原有导出（结构化决策日志）
     "DecisionLogEntry",
@@ -36,4 +50,15 @@ __all__ = [
     "ContextFilter",
     "JSONFormatter",
     "TextFormatter",
+
+    # 新增导出（高级处理器）
+    "AsyncLogHandler",
+    "RotatingFileHandler",
+    "RemoteHandler",
+
+    # 新增导出（过滤器）
+    "SensitiveDataFilter",
+
+    # 新增导出（配置系统）
+    "LoggingConfigLoader",
 ]

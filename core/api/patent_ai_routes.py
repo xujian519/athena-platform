@@ -237,7 +237,7 @@ async def classify_patent(request: ClassifyRequest):
     ```
     """
     try:
-        from core.patent.ai_services import PatentClassifier
+        from patents.core.ai_services import PatentClassifier
 
         classifier = PatentClassifier()
         result = await classifier.classify(
@@ -281,7 +281,7 @@ async def revise_claims(request: ClaimRevisionRequest):
     - aggressive: 较大改动
     """
     try:
-        from core.patent.ai_services import ClaimReviser
+        from patents.core.ai_services import ClaimReviser
 
         reviser = ClaimReviser()
         result = await reviser.revise_claims(
@@ -330,7 +330,7 @@ async def predict_invalidity(request: InvalidityPredictionRequest):
     - critical: > 75%
     """
     try:
-        from core.patent.ai_services import InvalidityPredictor
+        from patents.core.ai_services import InvalidityPredictor
 
         predictor = InvalidityPredictor()
         result = await predictor.predict_invalidity_risk(
@@ -382,7 +382,7 @@ async def score_quality(request: QualityScoringRequest):
     - claims_only: 仅权利要求评估
     """
     try:
-        from core.patent.ai_services import EnhancedPatentQualityScorer
+        from patents.core.ai_services import EnhancedPatentQualityScorer
 
         scorer = EnhancedPatentQualityScorer()
         result = await scorer.comprehensive_quality_assessment(
@@ -425,7 +425,7 @@ async def assess_risk(
     - 缓解建议
     """
     try:
-        from core.patent.ai_services.risk_assessment import (
+        from patents.core.ai_services.risk_assessment import (
             NPERiskDetector,
             SoftwarePatentRiskAnalyzer,
         )
@@ -474,7 +474,7 @@ async def get_service_stats():
     获取专利AI服务统计信息
     """
     try:
-        from core.patent.ai_services import (
+        from patents.core.ai_services import (
             ClaimReviser,
             EnhancedPatentQualityScorer,
             InvalidityPredictor,
@@ -544,7 +544,7 @@ async def draft_full_specification(request: DraftFullSpecRequest):
     task_id = f"CASE-{int(time.time() * 1000)}"
 
     try:
-        from core.patent.ai_services.autospec_drafter import AutoSpecDrafter
+        from patents.core.ai_services.autospec_drafter import AutoSpecDrafter
 
         # 创建撰写器实例
         drafter = AutoSpecDrafter(
@@ -630,7 +630,7 @@ async def review_specification_quality(
     - P2: 可选优化
     """
     try:
-        from core.patent.specification_quality_reviewer import SpecificationQualityReviewer
+        from patents.core.specification_quality_reviewer import SpecificationQualityReviewer
 
         reviewer = SpecificationQualityReviewer()
         report = reviewer.review(specification, claims, prior_art)
@@ -676,7 +676,7 @@ async def list_tasks(
     - failed: 失败
     """
     try:
-        from core.patent.task_state_manager import TaskStateManager
+        from patents.core.task_state_manager import TaskStateManager
 
         manager = TaskStateManager()
         tasks = manager.list_tasks(status=status)
@@ -699,7 +699,7 @@ async def get_task_progress(task_id: str):
     返回任务当前状态、阶段进度、时间信息等
     """
     try:
-        from core.patent.task_state_manager import TaskStateManager
+        from patents.core.task_state_manager import TaskStateManager
 
         manager = TaskStateManager()
         progress = manager.get_progress(task_id)
@@ -724,7 +724,7 @@ async def pause_task(task_id: str, reason: str = Query("", description="暂停�
     任务状态将保存，可通过 /resume 恢复
     """
     try:
-        from core.patent.task_state_manager import TaskStateManager
+        from patents.core.task_state_manager import TaskStateManager
 
         manager = TaskStateManager()
         result = manager.pause_task(task_id, reason)
@@ -754,7 +754,7 @@ async def resume_task(task_id: str):
     从上次中断的阶段继续执行
     """
     try:
-        from core.patent.task_state_manager import TaskStateManager
+        from patents.core.task_state_manager import TaskStateManager
 
         manager = TaskStateManager()
         result = manager.resume_task(task_id)
@@ -784,7 +784,7 @@ async def delete_task(task_id: str):
     **警告**: 此操作不可恢复
     """
     try:
-        from core.patent.task_state_manager import TaskStateManager
+        from patents.core.task_state_manager import TaskStateManager
 
         manager = TaskStateManager()
         success = manager.delete_task(task_id)

@@ -26,12 +26,11 @@ from core.cognition.xiaona_google_patents_controller import (
     PatentRetrievalRequest,
     XiaonaGooglePatentsController,
 )
-from core.logging_config import setup_logging
+from core.logging import get_logger, LogLevel, LoggingConfigLoader
 from core.security.auth import ALLOWED_ORIGINS
 
-# 配置日志
-logging.basicConfig(level=logging.INFO)
-logger = setup_logging()
+# 配置统一日志
+logger = get_logger("xiaona", level=LogLevel.INFO)
 
 # 创建FastAPI应用
 app = FastAPI(

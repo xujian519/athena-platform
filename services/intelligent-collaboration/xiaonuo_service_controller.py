@@ -5,7 +5,6 @@
 """
 
 import asyncio
-import logging
 import os
 import subprocess
 from datetime import datetime
@@ -14,7 +13,9 @@ from pathlib import Path
 import aiohttp
 import psutil
 
-logger = logging.getLogger(__name__)
+from core.logging import get_logger, LogLevel
+
+logger = get_logger("xiaonuo", level=LogLevel.INFO)
 
 class XiaonuoServiceController:
     """小诺服务控制器 - 平台总控制中心"""
@@ -80,12 +81,7 @@ class XiaonuoServiceController:
             }
         }
         self.running_services = {}
-        self.logger = self._setup_logger()
-
-    def _setup_logger(self):
-        """设置日志"""
-        # setup_logging()  # 日志配置已移至模块导入
-        return logging.getLogger("XiaonuoController")
+        self.logger = logger
 
     async def initialize_platform(self):
         """初始化平台"""

@@ -176,7 +176,7 @@ def _creativity_analysis(
 
     # 尝试使用知识图谱增强分析器
     try:
-        from core.patent.patent_knowledge_graph_analyzer import PatentKnowledgeGraphAnalyzer
+        from patents.core.patent_knowledge_graph_analyzer import PatentKnowledgeGraphAnalyzer
 
         with PatentKnowledgeGraphAnalyzer() as analyzer:
             # 构建分析对象

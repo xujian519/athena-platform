@@ -16,7 +16,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from core.patent.ai_services.knowledge_diagnosis import (
+from patents.core.ai_services.knowledge_diagnosis import (
     ActivationStrategy,
     DiagnosisResult,
     DiagnosisSeverity,
@@ -24,7 +24,7 @@ from core.patent.ai_services.knowledge_diagnosis import (
     KnowledgeActivationDiagnoser,
     diagnose_response,
 )
-from core.patent.ai_services.multimodal_retrieval import (
+from patents.core.ai_services.multimodal_retrieval import (
     FusionStrategy,
     ImageType,
     ImageVectorizer,
@@ -32,7 +32,7 @@ from core.patent.ai_services.multimodal_retrieval import (
     SearchMode,
     hybrid_search,
 )
-from core.patent.ai_services.quality_assessment_enhanced import (
+from patents.core.ai_services.quality_assessment_enhanced import (
     AssessmentType,
     EnhancedQualityAssessment,
     EnhancedQualityAssessor,
@@ -40,7 +40,7 @@ from core.patent.ai_services.quality_assessment_enhanced import (
     QualityGrade,
     assess_patent_quality,
 )
-from core.patent.ai_services.task_classifier import (
+from patents.core.ai_services.task_classifier import (
     PatentTaskClassifier,
     PatentTaskType,
     TaskClassificationResult,

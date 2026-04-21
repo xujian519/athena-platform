@@ -1,0 +1,146 @@
+# 服务告警规则
+# Service Alert Rules
+
+groups:
+  - name: service_alerts
+    interval: 30s
+    rules:
+      # 服务错误率告警
+      - alert: HighErrorRate
+        expr: |
+          (
+            rate(http_requests_total{status=~"5.."}[5m])
+            /
+            rate(http_requests_total[5m])
+          ) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+          service: "{{ $labels.service }}"
+        annotations:
+          summary: "服务错误率过高"
+          description: "{{ $labels.service }} 错误率超过5% (当前值: {{ $value | humanizePercentage }})"
+
+      # 服务响应时间告警
+      - alert: HighLatency
+        expr: |
+          histogram_quantile(0.95,
+            rate(http_request_duration_seconds_bucket[5m])
+          ) > 1
+        for: 5m
+        labels:
+          severity: warning
+          service: "{{ $labels.service }}"
+        annotations:
+          summary: "服务响应时间过长"
+          description: "{{ $labels.service }} P95响应时间超过1秒 (当前值: {{ $value | humanizeDuration }})"
+
+      # 服务不可用告警
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: "{{ $labels.job }}"
+        annotations:
+          summary: "服务不可用"
+          description: "{{ $labels.job }} 服务已停止"
+
+      # LLM调用失败率告警
+      - alert: HighLLMErrorRate
+        expr: |
+          (
+            rate(llm_requests_total{status="error"}[5m])
+            /
+            rate(llm_requests_total[5m])
+          ) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: "llm"
+        annotations:
+          summary: "LLM调用失败率过高"
+          description: "LLM调用失败率超过10% (当前值: {{ $value | humanizePercentage }})"
+
+      # 缓存命中率低告警
+      - alert: LowCacheHitRate
+        expr: |
+          (
+            rate(cache_hits_total[5m])
+            /
+            (
+              rate(cache_hits_total[5m])
+              +
+              rate(cache_misses_total[5m])
+            )
+          ) < 0.8
+        for: 10m
+        labels:
+          severity: info
+          service: "cache"
+        annotations:
+          summary: "缓存命中率低"
+          description: "缓存命中率低于80% (当前值: {{ $value | humanizePercentage }})"
+
+  - name: system_alerts
+    interval: 30s
+    rules:
+      # CPU使用率告警
+      - alert: HighCPUUsage
+        expr: |
+          (
+            100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+          ) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "CPU使用率过高"
+          description: "{{ $labels.instance }} CPU使用率超过80% (当前值: {{ $value | humanizePercentage }})"
+
+      # 内存使用率告警
+      - alert: HighMemoryUsage
+        expr: |
+          (
+            (
+              node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes
+            )
+            /
+            node_memory_MemTotal_bytes
+          ) > 0.9
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "内存使用率过高"
+          description: "{{ $labels.instance }} 内存使用率超过90% (当前值: {{ $value | humanizePercentage }})"
+
+      # 磁盘空间告警
+      - alert: HighDiskUsage
+        expr: |
+          (
+            (
+              node_filesystem_size_bytes - node_filesystem_avail_bytes
+            )
+            /
+            node_filesystem_size_bytes
+          ) > 0.85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "磁盘空间不足"
+          description: "{{ $labels.instance }} 磁盘使用率超过85% (当前值: {{ $value | humanizePercentage }})"
+
+      # 系统负载告警
+      - alert: HighSystemLoad
+        expr: |
+          (
+            node_load1 / (count by (instance) (node_cpu_seconds_total{mode="idle"}))
+          ) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "系统负载过高"
+          description: "{{ $labels.instance }} 系统负载超过0.8 (当前值: {{ $value }})"

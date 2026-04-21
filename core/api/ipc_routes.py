@@ -55,7 +55,7 @@ def get_ipc_vector_db():
     global _ipc_vector_db
     if _ipc_vector_db is None:
         try:
-            from core.patent.ipc_vector_database import IPCVectorDatabase
+            from patents.core.ipc_vector_database import IPCVectorDatabase
 
             # 使用更完整的IPC定义文件
             _ipc_vector_db = IPCVectorDatabase(ipc_data_path=data_path)
@@ -72,7 +72,7 @@ def get_ipc_domain_system():
     global _ipc_domain_system
     if _ipc_domain_system is None:
         try:
-            from core.patent.ipc_domain_matching import IPCDomainMatchingSystem
+            from patents.core.ipc_domain_matching import IPCDomainMatchingSystem
 
             _ipc_domain_system = IPCDomainMatchingSystem()
             logger.info("✅ IPC领域匹配系统已初始化")

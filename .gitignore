@@ -214,3 +214,33 @@ __pycache__/
 
 # 外部项目（Day 4-5 添加）
 computer-use-ootb/
+
+# 备份文件
+*.bak
+*.bak2
+*.bak3
+*.bak_final
+*.old
+*.backup
+*~
+
+# Python缓存
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# 测试缓存
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# 类型检查
+.pytype/
+.dmypy.json
+dmypy.json
+
+# Jupyter Notebook
+.ipynb_checkpoints/

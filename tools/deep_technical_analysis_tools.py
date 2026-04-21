@@ -52,7 +52,7 @@ def analyze_patent_text(
         >>> print(f"技术特征数: {len(result['features'])}")
     """
     try:
-        from core.patent.xiaona_deep_technical_analyzer import (
+        from patents.core.xiaona_deep_technical_analyzer import (
             PatentAnalysis,
             XiaonaDeepTechnicalAnalyzer,
         )
@@ -173,7 +173,7 @@ def compare_patents(
         >>> print(f"差异点: {len(result['key_differences'])}")
     """
     try:
-        from core.patent.xiaona_deep_technical_analyzer import XiaonaDeepTechnicalAnalyzer
+        from patents.core.xiaona_deep_technical_analyzer import XiaonaDeepTechnicalAnalyzer
 
         # 创建分析器
         analyzer = XiaonaDeepTechnicalAnalyzer(
@@ -231,7 +231,7 @@ def extract_technical_features(
         >>> print(f"核心特征: {result['core_features']}")
     """
     try:
-        from core.patent.xiaona_deep_technical_analyzer import (
+        from patents.core.xiaona_deep_technical_analyzer import (
             PatentAnalysis,
             XiaonaDeepTechnicalAnalyzer,
         )
@@ -351,7 +351,7 @@ def identify_innovations(
         ...     print(f"- {innovation}")
     """
     try:
-        from core.patent.xiaona_deep_technical_analyzer import (
+        from patents.core.xiaona_deep_technical_analyzer import (
             PatentAnalysis,
             XiaonaDeepTechnicalAnalyzer,
         )
@@ -413,7 +413,7 @@ def assess_complexity(
         >>> print(f"复杂因素: {result['complexity_factors']}")
     """
     try:
-        from core.patent.xiaona_deep_technical_analyzer import XiaonaDeepTechnicalAnalyzer
+        from patents.core.xiaona_deep_technical_analyzer import XiaonaDeepTechnicalAnalyzer
 
         analyzer = XiaonaDeepTechnicalAnalyzer()
 

@@ -259,7 +259,7 @@ def example_5_workflow_integration():
     # 专利分析工作流示例
     print("1. 专利分析工作流 (AnalysisWorkflow):")
     print("""
-    from core.patent.workflows import AnalysisWorkflow
+    from patents.core.workflows import AnalysisWorkflow
 
     workflow = AnalysisWorkflow()
     result = workflow.execute(
@@ -276,7 +276,7 @@ def example_5_workflow_integration():
     # 专利检索工作流示例
     print("\n2. 专利检索工作流 (SearchWorkflow):")
     print("""
-    from core.patent.workflows import SearchWorkflow
+    from patents.core.workflows import SearchWorkflow
 
     workflow = SearchWorkflow()
     result = workflow.execute(
@@ -295,7 +295,7 @@ def example_5_workflow_integration():
     # 法律研究工作流示例
     print("\n3. 法律研究工作流 (LegalWorkflow):")
     print("""
-    from core.patent.workflows import LegalWorkflow
+    from patents.core.workflows import LegalWorkflow
 
     workflow = LegalWorkflow()
     result = workflow.execute(

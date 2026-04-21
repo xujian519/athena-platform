@@ -36,7 +36,7 @@ class YunxiIPAgent(BaseAgent):
 
         # 初始化专利组合管理器
         try:
-            from core.patent.portfolio import PortfolioManager
+            from patents.core.portfolio import PortfolioManager
             self.portfolio_manager = PortfolioManager()
             self.portfolio_available = True
         except ImportError:

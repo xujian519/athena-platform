@@ -4,9 +4,9 @@ import asyncio
 import sys
 sys.path.insert(0, '/Users/xujian/Athena工作平台')
 
-from core.patent.infringement.infringement_determiner import InfringementDeterminer
-from core.patent.infringement.feature_comparator import FeatureComparison, FeatureMapping
-from core.patent.infringement.claim_parser import ParsedClaim, ParsedFeature
+from patents.core.infringement.infringement_determiner import InfringementDeterminer
+from patents.core.infringement.feature_comparator import FeatureComparison, FeatureMapping
+from patents.core.infringement.claim_parser import ParsedClaim, ParsedFeature
 
 async def test():
     determiner = InfringementDeterminer()

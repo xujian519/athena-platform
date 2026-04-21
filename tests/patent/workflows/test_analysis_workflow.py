@@ -15,7 +15,7 @@ from unittest.mock import Mock
 import pytest
 
 # 导入工作流
-from core.patent.workflows.analysis_workflow import (
+from patents.core.workflows.analysis_workflow import (
     AnalysisWorkflow,
     AnalysisWorkflowInput,
 )

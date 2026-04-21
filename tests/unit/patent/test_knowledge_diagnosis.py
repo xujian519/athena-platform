@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from unittest.mock import MagicMock
 
-from core.patent.ai_services.knowledge_diagnosis import (
+from patents.core.ai_services.knowledge_diagnosis import (
     ActivationSession,
     ActivationStrategy,
     ClarificationQuestion,

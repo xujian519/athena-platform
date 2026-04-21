@@ -17,7 +17,7 @@ import tempfile
 from pathlib import Path
 from unittest.mock import MagicMock
 
-from core.patent.ai_services.drawing_analyzer import (
+from patents.core.ai_services.drawing_analyzer import (
     ComponentConnection,
     ComponentType,
     DrawingAnalysisResult,

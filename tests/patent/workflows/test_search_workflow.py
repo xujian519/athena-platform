@@ -14,7 +14,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from core.patent.workflows.search_workflow import (
+from patents.core.workflows.search_workflow import (
     SearchWorkflow,
     SearchWorkflowInput,
 )

@@ -52,7 +52,7 @@ def generate_claims(
         >>> print(result['total_claims'])
     """
     try:
-        from core.patent.claim_generator import InventionType, PatentClaimGenerator
+        from patents.core.claim_generator import InventionType, PatentClaimGenerator
 
         # 映射发明类型
         type_map = {
@@ -141,7 +141,7 @@ def extract_claims_from_text(
     try:
         import re
 
-        from core.patent.claim_generator import ClaimType
+        from patents.core.claim_generator import ClaimType
 
         claims = []
 

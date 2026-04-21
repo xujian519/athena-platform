@@ -844,7 +844,7 @@ class XiaonaProfessionalAgent(BaseAgent):
         self.logger.info("📊 处理专利分类任务 - CAP11")
 
         try:
-            from core.patent.ai_services import PatentClassifier
+            from patents.core.ai_services import PatentClassifier
 
             classifier = PatentClassifier()
             result = await classifier.classify(
@@ -884,7 +884,7 @@ class XiaonaProfessionalAgent(BaseAgent):
         self.logger.info("✏️ 处理权利要求修订任务 - CAP12")
 
         try:
-            from core.patent.ai_services import ClaimReviser
+            from patents.core.ai_services import ClaimReviser
 
             reviser = ClaimReviser()
             result = await reviser.revise_claims(
@@ -929,7 +929,7 @@ class XiaonaProfessionalAgent(BaseAgent):
         self.logger.info("⚠️ 处理无效性预测任务 - CAP13")
 
         try:
-            from core.patent.ai_services import InvalidityPredictor
+            from patents.core.ai_services import InvalidityPredictor
 
             predictor = InvalidityPredictor()
             result = await predictor.predict_invalidity_risk(
@@ -974,7 +974,7 @@ class XiaonaProfessionalAgent(BaseAgent):
         self.logger.info("📈 处理专利质量评分任务 - CAP14")
 
         try:
-            from core.patent.ai_services import EnhancedPatentQualityScorer
+            from patents.core.ai_services import EnhancedPatentQualityScorer
 
             scorer = EnhancedPatentQualityScorer()
             result = await scorer.comprehensive_quality_assessment(

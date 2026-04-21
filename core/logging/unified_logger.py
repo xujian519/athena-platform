@@ -220,6 +220,28 @@ class UnifiedLogger:
         if self.context_filter:
             self.context_filter.clear_context()
 
+    def add_handler(self, handler: logging.Handler):
+        """添加日志处理器
+
+        Args:
+            handler: 日志处理器
+        """
+        # 如果有上下文过滤器，添加到新handler
+        if self.context_filter:
+            handler.addFilter(self.context_filter)
+
+        self.logger.addHandler(handler)
+
+    def add_filter(self, filter: logging.Filter):
+        """添加日志过滤器
+
+        Args:
+            filter: 日志过滤器
+        """
+        # 添加到所有handlers
+        for handler in self.logger.handlers:
+            handler.addFilter(filter)
+
     def _log(self, level: LogLevel, message: str, **kwargs):
         """记录日志
 
