@@ -63,7 +63,7 @@ class TestModuleImports:
         assert ErrorType is not None
         assert len(ErrorType) == 6  # 6种错误类型（已优化）
         assert len(DiagnosisSeverity) == 5  # 5种严重程度级别
-        assert len(ActivationStrategy) == 5
+        assert len(ActivationStrategy) == 6  # 6种激活策略
 
     def test_task_classifier_imports(self):
         """测试任务分类模块导入"""
