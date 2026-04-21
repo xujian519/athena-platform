@@ -10,7 +10,7 @@ import os
 import re
 from typing import Any
 
-from arango_engine import ArangoGraphEngine, GraphEdge, GraphNode, GraphType
+from core.knowledge_graph.neo4j_graph_engine import Neo4jGraphEngine, GraphEdge, GraphNode, GraphType
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -21,7 +21,7 @@ class PatentGuidelineImporter:
 
     def __init__(self):
         """初始化导入器"""
-        self.engine = ArangoGraphEngine()
+        self.engine = Neo4jGraphEngine(uri="bolt://localhost:7687")
         self.graph_type = GraphType.PATENT_GUIDELINE
 
         # 创建图

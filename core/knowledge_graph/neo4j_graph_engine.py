@@ -16,9 +16,11 @@ from typing import Any
 from neo4j import GraphDatabase
 from neo4j.exceptions import ServiceUnavailable
 
-# 导入安全配置
-sys.path.append(str(Path(__file__).parent.parent / "core"))
-from security.env_config import get_neo4j_config
+# Neo4j配置（不再依赖security.env_config）
+import os
+NEO4J_URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")
+NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
+NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "password")
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -67,7 +69,7 @@ class Neo4jGraphEngine:
         """
         # 从环境变量读取配置（如果未提供参数）
         if uri is None or username is None or password is None:
-            config = get_neo4j_config()
+            config = {"uri": NEO4J_URI, "username": NEO4J_USER, "password": NEO4J_PASSWORD}
             uri = uri or config["uri"]
             username = username or config["username"]
             password = password or config["password"]
