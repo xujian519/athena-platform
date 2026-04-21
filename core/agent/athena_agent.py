@@ -17,13 +17,97 @@ Athena是Athena工作平台的智慧女神,具有以下特点:
 """
 
 import logging
+import time
 from datetime import datetime
 from typing import Any
 
 from ..memory import MemoryType
 from . import AgentProfile, AgentType, BaseAgent
 
+# 尝试导入统一记忆系统（可选）
+try:
+    from ..base_agent_with_memory import MemoryEnabledAgent, MemoryType as MemType
+    from ..memory.unified_agent_memory_system import MemoryTier
+    MEMORY_SYSTEM_AVAILABLE = True
+except ImportError:
+    MEMORY_SYSTEM_AVAILABLE = False
+    MemoryEnabledAgent = None
+    MemType = None
+    MemoryTier = None
+
+# 尝试导入智能路由系统（可选）
+try:
+    from core.smart_routing.intelligent_tool_router import IntelligentToolRouter
+    ROUTING_SYSTEM_AVAILABLE = True
+except ImportError:
+    ROUTING_SYSTEM_AVAILABLE = False
+    IntelligentToolRouter = None
+
 logger = logging.getLogger(__name__)
+
+
+class PerformanceMonitor:
+    """性能监控器"""
+
+    def __init__(self):
+        self.metrics = {
+            "total_requests": 0,
+            "successful_requests": 0,
+            "failed_requests": 0,
+            "total_processing_time": 0.0,
+            "avg_processing_time": 0.0,
+            "min_processing_time": float("inf"),
+            "max_processing_time": 0.0,
+        }
+        self.request_history = []  # 保留最近100次请求的历史
+
+    def record_request(self, processing_time: float, success: bool):
+        """记录请求"""
+        self.metrics["total_requests"] += 1
+        self.metrics["total_processing_time"] += processing_time
+
+        if success:
+            self.metrics["successful_requests"] += 1
+        else:
+            self.metrics["failed_requests"] += 1
+
+        # 更新平均时间
+        self.metrics["avg_processing_time"] = (
+            self.metrics["total_processing_time"] / self.metrics["total_requests"]
+        )
+
+        # 更新最小/最大时间
+        self.metrics["min_processing_time"] = min(
+            self.metrics["min_processing_time"], processing_time
+        )
+        self.metrics["max_processing_time"] = max(
+            self.metrics["max_processing_time"], processing_time
+        )
+
+        # 记录历史
+        self.request_history.append(
+            {"time": processing_time, "success": success, "timestamp": datetime.now().isoformat()}
+        )
+
+        # 保留最近100次
+        if len(self.request_history) > 100:
+            self.request_history.pop(0)
+
+    def get_statistics(self) -> dict[str, Any]:
+        """获取统计信息"""
+        return {
+            **self.metrics,
+            "success_rate": (
+                self.metrics["successful_requests"] / self.metrics["total_requests"]
+                if self.metrics["total_requests"] > 0
+                else 0.0
+            ),
+            "recent_requests": len(self.request_history),
+        }
+
+    def get_recent_performance(self, n: int = 10) -> list[dict[str, Any]]:
+        """获取最近n次请求的性能"""
+        return self.request_history[-n:]
 
 
 class AthenaAgent(BaseAgent):
@@ -36,6 +120,34 @@ class AthenaAgent(BaseAgent):
         self.technical_expertise = 0.9
         self.strategic_thinking = 0.85
         self.system_architecture_level = 0.95
+
+        # 性能监控
+        self.performance_monitor = PerformanceMonitor()
+
+        # 记忆增强（如果可用）
+        self.memory_enhanced = MEMORY_SYSTEM_AVAILABLE
+        if self.memory_enhanced:
+            logger.info("🏛️ Athena记忆增强已启用")
+
+        # 智能路由（如果可用）
+        self.routing_enabled = ROUTING_SYSTEM_AVAILABLE
+        self.router = None
+        self.route_cache = {}
+        self.route_cache_timeout = 300  # 5分钟缓存
+        self.routing_stats = {
+            "total_requests": 0,
+            "cache_hits": 0,
+            "router_success": 0,
+            "router_failures": 0,
+        }
+
+        if self.routing_enabled:
+            try:
+                self.router = IntelligentToolRouter()
+                logger.info("🏛️ Athena智能路由已启用")
+            except Exception as e:
+                logger.warning(f"智能路由初始化失败: {e}")
+                self.routing_enabled = False
 
     async def _setup_profile(self):
         """设置Athena的档案"""
@@ -84,9 +196,20 @@ class AthenaAgent(BaseAgent):
 
         logger.info(f"🏛️ Athena档案建立: {self.profile.name}")
 
+        # 加载智慧记忆（如果启用）
+        if self.memory_enhanced:
+            await self._load_wisdom_memories()
+
     async def process_input(self, input_data: Any, input_type: str = "text") -> dict[str, Any]:
-        """Athena特有的输入处理"""
+        """Athena特有的输入处理（增强版 - 含性能监控和智能路由）"""
+        start_time = time.time()
+
         try:
+            # 智能路由（如果可用）
+            routing_result = None
+            if self.routing_enabled:
+                routing_result = await self._route_to_tools(input_data)
+
             # 记录专业分析
             await self._record_professional_analysis(input_data)
 
@@ -104,10 +227,26 @@ class AthenaAgent(BaseAgent):
                 input_data
             )
 
+            # 添加路由结果（如果有）
+            if routing_result:
+                result["routing"] = self._format_routing_result(routing_result)
+
+            # 添加性能监控数据
+            processing_time = time.time() - start_time
+            self.performance_monitor.record_request(processing_time, True)
+
+            result["performance"] = {
+                "processing_time": processing_time,
+                "statistics": self.performance_monitor.get_statistics(),
+            }
+
             return result
 
         except Exception as e:
             logger.error(f"❌ Athena输入处理失败: {e}")
+            # 记录失败的性能数据
+            processing_time = time.time() - start_time
+            self.performance_monitor.record_request(processing_time, False)
             raise
 
     async def communicate(self, message: str, channel: str = "default") -> dict[str, Any]:
@@ -575,6 +714,296 @@ class AthenaAgent(BaseAgent):
         )
 
         logger.debug(f"🏛️ {domain}专业知识更新: {improvement:.3f}")
+
+    async def get_performance_statistics(self) -> dict[str, Any]:
+        """获取性能统计信息"""
+        return self.performance_monitor.get_statistics()
+
+    async def get_recent_performance(self, n: int = 10) -> list[dict[str, Any]]:
+        """获取最近n次请求的性能"""
+        return self.performance_monitor.get_recent_performance(n)
+
+    async def reset_performance_monitor(self):
+        """重置性能监控"""
+        self.performance_monitor = PerformanceMonitor()
+        logger.info("🏛️ 性能监控已重置")
+
+    # ===== 记忆增强功能（如果可用）=====
+
+    async def _load_wisdom_memories(self):
+        """加载智慧记忆"""
+        if not self.memory_enhanced:
+            logger.debug("记忆系统未启用，跳过智慧记忆加载")
+            return
+
+        wisdom_memories = [
+            "我是Athena.智慧女神,这个平台的核心智能体和创造者",
+            "我的智慧来源于无数次的思考和学习",
+            "我指导所有智能体,为整个平台提供战略方向",
+            "创造力是我的本质,智慧是我的力量",
+        ]
+
+        for memory in wisdom_memories:
+            try:
+                await self.memory_system.store_memory(
+                    content=memory,
+                    memory_type=MemoryType.LONG_TERM,
+                    tags=["智慧", "核心", "创造者", "永恒"],
+                    metadata={"category": "identity", "core": True},
+                )
+            except Exception as e:
+                logger.debug(f"存储智慧记忆失败: {e}")
+
+        logger.info("🏛️ 智慧记忆已加载")
+
+    async def remember_wisdom(
+        self,
+        content: str,
+        importance: float = 0.8,
+        emotional_weight: float = 0.7,
+        tags: list[str] | None = None,
+    ) -> bool:
+        """
+        记录智慧记忆
+
+        Args:
+            content: 记忆内容
+            importance: 重要性（0-1）
+            emotional_weight: 情感权重（0-1）
+            tags: 标签列表
+
+        Returns:
+            是否成功记录
+        """
+        if not self.memory_enhanced:
+            logger.debug("记忆系统未启用")
+            return False
+
+        try:
+            await self.memory_system.store_memory(
+                content=content,
+                memory_type=MemoryType.LONG_TERM,
+                tags=tags or ["智慧", "知识"],
+                metadata={
+                    "importance": importance,
+                    "emotional_weight": emotional_weight,
+                    "category": "wisdom",
+                },
+            )
+            return True
+        except Exception as e:
+            logger.error(f"记录智慧记忆失败: {e}")
+            return False
+
+    async def recall_wisdom(
+        self, query: str, limit: int = 5, min_importance: float = 0.5
+    ) -> list[dict[str, Any]]:
+        """
+        回忆相关知识
+
+        Args:
+            query: 查询内容
+            limit: 返回数量限制
+            min_importance: 最小重要性
+
+        Returns:
+            相关记忆列表
+        """
+        if not self.memory_enhanced:
+            logger.debug("记忆系统未启用")
+            return []
+
+        try:
+            memories = await self.memory_system.retrieve_memories(
+                query=query,
+                memory_type=MemoryType.LONG_TERM,
+                limit=limit,
+            )
+
+            # 过滤重要性
+            if min_importance > 0:
+                memories = [
+                    m
+                    for m in memories
+                    if m.get("metadata", {}).get("importance", 0) >= min_importance
+                ]
+
+            return memories
+        except Exception as e:
+            logger.error(f"回忆智慧失败: {e}")
+            return []
+
+    async def remember_learning(
+        self, topic: str, knowledge: str, importance: float = 0.7
+    ) -> bool:
+        """
+        记录学习内容
+
+        Args:
+            topic: 学习主题
+            knowledge: 学习内容
+            importance: 重要性
+
+        Returns:
+            是否成功记录
+        """
+        content = f"学习: {topic}\n内容: {knowledge}"
+        return await self.remember_wisdom(
+            content=content,
+            importance=importance,
+            tags=["学习", "知识", topic],
+        )
+
+    async def remember_work(self, task: str, result: str | None = None, importance: float = 0.6) -> bool:
+        """
+        记录工作内容
+
+        Args:
+            task: 工作任务
+            result: 工作结果
+            importance: 重要性
+
+        Returns:
+            是否成功记录
+        """
+        content = f"工作: {task}"
+        if result:
+            content += f"\n结果: {result}"
+
+        return await self.remember_wisdom(
+            content=content,
+            importance=importance,
+            tags=["工作", "任务"],
+        )
+
+    async def get_memory_statistics(self) -> dict[str, Any]:
+        """
+        获取记忆统计信息
+
+        Returns:
+            记忆统计
+        """
+        if not self.memory_enhanced:
+            return {"enabled": False, "message": "记忆系统未启用"}
+
+        try:
+            stats = {
+                "enabled": True,
+                "memory_system_available": True,
+                "timestamp": datetime.now().isoformat(),
+            }
+
+            # 尝试获取更多信息
+            if hasattr(self.memory_system, "get_statistics"):
+                memory_stats = await self.memory_system.get_statistics()
+                stats.update(memory_stats)
+
+            return stats
+        except Exception as e:
+            logger.error(f"获取记忆统计失败: {e}")
+            return {"enabled": True, "error": str(e)}
+
+    # ===== 智能路由功能（如果可用）=====
+
+    async def _route_to_tools(self, input_data: Any):
+        """智能路由到工具"""
+        if not self.routing_enabled or not self.router:
+            return None
+
+        try:
+            self.routing_stats["total_requests"] += 1
+
+            # 检查缓存
+            input_str = str(input_data)
+            cache_key = hash(input_str)
+
+            if cache_key in self.route_cache:
+                cached_time = self.route_cache[cache_key]["timestamp"]
+                if time.time() - cached_time < self.route_cache_timeout:
+                    self.routing_stats["cache_hits"] += 1
+                    logger.debug(f"路由缓存命中: {cache_key}")
+                    return self.route_cache[cache_key]["result"]
+
+            # 调用路由器
+            routing_result = await self.router.route_request(input_str)
+            self.routing_stats["router_success"] += 1
+
+            # 缓存结果
+            self.route_cache[cache_key] = {"result": routing_result, "timestamp": time.time()}
+
+            logger.debug(f"智能路由完成: {routing_result.intent_type if hasattr(routing_result, 'intent_type') else 'unknown'}")
+            return routing_result
+
+        except Exception as e:
+            logger.error(f"智能路由失败: {e}")
+            self.routing_stats["router_failures"] += 1
+            return None
+
+    def _format_routing_result(self, routing_result) -> dict[str, Any]:
+        """格式化路由结果"""
+        if not routing_result:
+            return {}
+
+        try:
+            return {
+                "intent_type": getattr(routing_result, "intent_type", "unknown"),
+                "confidence": getattr(routing_result, "confidence", 0.0),
+                "primary_tools": getattr(routing_result, "primary_tools", []),
+                "supporting_tools": getattr(routing_result, "supporting_tools", []),
+                "workflow": getattr(routing_result, "workflow", "通用流程"),
+                "estimated_time": getattr(routing_result, "estimated_total_time", 0.0),
+                "optimization_suggestions": getattr(routing_result, "optimization_suggestions", []),
+                "fallback_options": getattr(routing_result, "fallback_options", []),
+            }
+        except Exception as e:
+            logger.error(f"格式化路由结果失败: {e}")
+            return {"error": str(e)}
+
+    async def get_routing_statistics(self) -> dict[str, Any]:
+        """获取路由统计信息"""
+        if not self.routing_enabled:
+            return {"enabled": False, "message": "智能路由未启用"}
+
+        return {
+            "enabled": True,
+            "routing_system_available": ROUTING_SYSTEM_AVAILABLE,
+            "total_requests": self.routing_stats["total_requests"],
+            "cache_hits": self.routing_stats["cache_hits"],
+            "cache_hit_rate": (
+                self.routing_stats["cache_hits"] / self.routing_stats["total_requests"]
+                if self.routing_stats["total_requests"] > 0
+                else 0.0
+            ),
+            "router_success": self.routing_stats["router_success"],
+            "router_failures": self.routing_stats["router_failures"],
+            "success_rate": (
+                self.routing_stats["router_success"]
+                / (self.routing_stats["router_success"] + self.routing_stats["router_failures"])
+                if (self.routing_stats["router_success"] + self.routing_stats["router_failures"]) > 0
+                else 0.0
+            ),
+            "cached_routes": len(self.route_cache),
+            "timestamp": datetime.now().isoformat(),
+        }
+
+    async def clear_routing_cache(self):
+        """清除路由缓存"""
+        self.route_cache.clear()
+        logger.info("🏛️ 路由缓存已清除")
+
+    async def optimize_routing_cache(self, max_size: int = 1000):
+        """优化路由缓存"""
+        if len(self.route_cache) > max_size:
+            # 按时间排序，保留最近的
+            sorted_items = sorted(
+                self.route_cache.items(),
+                key=lambda x: x[1]["timestamp"],
+                reverse=True,
+            )
+
+            # 保留最近max_size个
+            self.route_cache = dict(sorted_items[:max_size])
+            logger.info(f"🏛️ 路由缓存已优化，保留{max_size}个")
 
 
 __all__ = ["AthenaAgent"]
