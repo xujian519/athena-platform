@@ -1,0 +1,69 @@
+# Athena工作平台 - 核心依赖
+# Core Dependencies for Athena Platform
+# 从 pyproject.toml 导出 (poetry export -f requirements.txt)
+#
+# 使用方法:
+#   pip install -r requirements.txt
+#
+# 注意:
+#   - 此文件仅包含核心平台依赖
+#   - 微服务依赖见各服务目录下的 requirements.txt
+#   - 推荐使用 Poetry 管理依赖: poetry install
+
+# Web框架
+fastapi>=0.136.0
+uvicorn[standard]>=0.44.0
+pydantic>=2.0
+python-multipart>=0.0.26
+
+# 数据库
+asyncpg>=0.31.0
+psycopg2-binary>=2.9.11
+psycopg>=3.3.3
+redis>=7.4.0
+
+# 认证和安全
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+
+# 文件处理
+aiofiles>=23.2.1
+openpyxl>=3.1.0
+pillow>=12.2.0
+
+# 数据处理
+numpy>=2.4.4
+pandas>=3.0.0
+scikit-learn>=1.3.0
+
+# 向量数据库
+qdrant-client>=1.7.0
+
+# 图数据库
+neo4j>=6.1.0
+
+# NLP/文本处理
+jieba>=0.42.1
+
+# HTTP客户端
+httpx>=0.28.0
+aiohttp>=3.9.0
+requests>=2.33.1
+
+# 任务队列
+celery>=5.3.0
+
+# 数据验证
+pydantic-settings>=2.0.0
+
+# 日志
+loguru>=0.7.0
+
+# 工具库
+click>=8.1.0
+python-dotenv>=1.0.0
+tenacity>=9.1.0
+
+# 监控
+prometheus-client>=0.24.1
+psutil>=7.2.2
