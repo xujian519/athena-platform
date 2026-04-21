@@ -43,7 +43,7 @@ class KnowledgeGraphManager:
     def connect(self) -> bool:
         """连接到知识图谱"""
         try:
-            from patent_platform.workspace.src.knowledge_graph.neo4j_manager import Neo4jManager
+            from patents.platform.workspace.src.knowledge_graph.neo4j_manager import Neo4jManager
 
             self._neo4j_manager = Neo4jManager(
                 uri=self.uri,

@@ -18,7 +18,7 @@ from datetime import datetime
 
 # 导入增强专利搜索工具
 try:
-    from patent_platform.workspace.src.tools.enhanced_patent_search import (
+    from patents.platform.workspace.src.tools.enhanced_patent_search import (
         EnhancedPatentSearchTool,
     )
     BOOLEAN_SEARCH_AVAILABLE = True

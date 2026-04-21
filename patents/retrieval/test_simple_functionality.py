@@ -223,7 +223,7 @@ async def test_hybrid_retrieval_imports():
         )()
 
         # 测试混合检索系统导入
-        from patent_hybrid_retrieval.hybrid_retrieval_system import HybridRetrievalSystem
+        from patents.retrieval.hybrid_retrieval_system import HybridRetrievalSystem
 
         logger.info("✅ 混合检索系统导入成功")
 

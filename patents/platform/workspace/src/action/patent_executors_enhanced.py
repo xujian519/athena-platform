@@ -230,7 +230,7 @@ class AIServiceClient:
         try:
             import sys
             sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../..'))
-            from patent_platform.workspace.src.cognition.external_ai_integration import (
+            from patents.platform.workspace.src.cognition.external_ai_integration import (
                 ExternalAIManager,
                 AIProvider
             )

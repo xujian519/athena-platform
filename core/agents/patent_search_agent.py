@@ -27,7 +27,7 @@ from core.agents.base import (
 
 # 导入专利检索模块
 try:
-    from patent_hybrid_retrieval.hybrid_retrieval_system import (
+    from patents.retrieval.hybrid_retrieval_system import (
         PatentHybridRetrievalSystem,
     )
     PATENT_RETRIEVAL_AVAILABLE = True
