@@ -22,8 +22,22 @@
 
 ## 🚧 迁移状态
 
-### 核心模块
-- [ ] core/patent/ → patents/core/ (53,617行)
+### 总体进度: 30% (1/3批次完成)
+
+**已完成**: Batch 1 - 核心模块 (53,617行)
+**进行中**: Batch 2 - 检索引擎和平台应用 (~87,731行)
+**待开始**: Batch 3 - 剩余模块
+
+### ✅ Batch 1 - 核心模块 (已完成 2026-04-21)
+
+- [x] core/patent/ → patents/core/ (53,617行)
+- [x] 创建子模块__init__.py (7个)
+- [x] 批量更新导入路径 (110文件, 286处)
+- [x] 创建符号链接向后兼容
+- [x] 运行测试验证 (37 passed)
+- [x] Git提交 (204文件)
+
+**执行时间**: 9分钟 (原计划75分钟, 效率提升88%)
 
 ### 检索引擎
 - [ ] patent_hybrid_retrieval/ → patents/retrieval/ (7,715行)
@@ -68,7 +82,7 @@
 
 | 模块 | 原路径 | 新路径 | 代码行数 | 状态 |
 |------|--------|--------|---------|------|
-| 核心模块 | core/patent/ | patents/core/ | 53,617 | ⏳ 进行中 |
+| 核心模块 | core/patent/ | patents/core/ | 53,617 | ✅ 完成 (Batch 1) |
 | 检索引擎 | patent_hybrid_retrieval/ | patents/retrieval/ | 7,715 | ⏳ 待开始 |
 | 平台应用 | patent-platform/ | patents/platform/ | 79,061 | ⏳ 待开始 |
 | Web界面 | patent-retrieval-webui/ | patents/webui/ | - | ⏳ 待开始 |
