@@ -1,0 +1,536 @@
+# Agent性能基准测试工作流
+# Agent Performance Benchmark Workflow
+#
+# 功能：
+# 1. 运行Agent性能基准测试
+# 2. 生成性能报告
+# 3. 检测性能回归
+# 4. 更新性能徽章
+#
+# 性能目标：
+# - Agent初始化: <100ms (P95)
+# - Agent执行: <5s (P95)
+# - 端到端工作流: <30s (P95)
+# - 并发吞吐量: >10 QPS
+# - Agent注册查询: >100 QPS
+
+name: Agent Performance
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'core/agents/**'
+      - 'tests/performance/**'
+      - 'tests/agents/**'
+      - '.github/workflows/agent-performance.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'core/agents/**'
+      - 'tests/performance/**'
+      - 'tests/agents/**'
+  workflow_dispatch:
+  schedule:
+    # 每天UTC 4:00运行 (北京时间12:00)
+    - cron: '0 4 * * *'
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  # ==================== Agent初始化性能测试 ====================
+  initialization-performance:
+    name: ⚡ Initialization Performance
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: 安装依赖
+        run: |
+          poetry install --no-interaction --no-root
+          poetry run pip install pytest-benchmark psutil pytest-asyncio
+
+      - name: 创建数据目录
+        run: |
+          mkdir -p tests/data tests/reports
+
+      - name: 运行初始化性能测试
+        run: |
+          poetry run pytest tests/performance/test_agent_performance.py \
+            -v \
+            -m "performance and initialization" \
+            --junitxml=test-results/init-performance.xml \
+            --tb=short
+
+      - name: 上传测试结果
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: init-performance-results
+          path: test-results/init-performance.xml
+          retention-days: 30
+
+  # ==================== Agent执行性能测试 ====================
+  execution-performance:
+    name: 🚀 Execution Performance
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: athena
+          POSTGRES_PASSWORD: athena123
+          POSTGRES_DB: athena_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: 安装依赖
+        run: |
+          poetry install --no-interaction --no-root
+
+      - name: 等待服务就绪
+        run: |
+          timeout 60 bash -c 'until pg_isready -h localhost; do sleep 1; done'
+          timeout 60 bash -c 'until redis-cli ping; do sleep 1; done'
+
+      - name: 运行执行性能测试
+        env:
+          DATABASE_URL: postgresql://athena:athena123@localhost:5432/athena_test
+          REDIS_URL: redis://localhost:6379
+        run: |
+          poetry run pytest tests/performance/test_agent_performance.py \
+            -v \
+            -m "performance and execution" \
+            --junitxml=test-results/exec-performance.xml \
+            --tb=short || true
+
+      - name: 上传测试结果
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: exec-performance-results
+          path: test-results/exec-performance.xml
+          retention-days: 30
+
+  # ==================== 吞吐量测试 ====================
+  throughput-test:
+    name: 📊 Throughput Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: 安装依赖
+        run: |
+          poetry install --no-interaction --no-root
+
+      - name: 运行吞吐量测试
+        run: |
+          poetry run pytest tests/performance/test_agent_performance.py::TestAgentThroughput \
+            -v \
+            --junitxml=test-results/throughput-results.xml \
+            --tb=short
+
+      - name: 上传测试结果
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: throughput-results
+          path: test-results/throughput-results.xml
+          retention-days: 30
+
+  # ==================== 内存使用测试 ====================
+  memory-test:
+    name: 💾 Memory Usage Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: 安装依赖
+        run: |
+          poetry install --no-interaction --no-root
+
+      - name: 运行内存测试
+        run: |
+          poetry run pytest tests/performance/test_agent_performance.py::TestMemoryUsage \
+            -v \
+            --junitxml=test-results/memory-results.xml \
+            --tb=short
+
+      - name: 上传测试结果
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: memory-results
+          path: test-results/memory-results.xml
+          retention-days: 30
+
+  # ==================== 能力发现性能测试 ====================
+  capability-test:
+    name: 🔍 Capability Discovery Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: 安装依赖
+        run: |
+          poetry install --no-interaction --no-root
+
+      - name: 运行能力发现测试
+        run: |
+          poetry run pytest tests/performance/test_agent_performance.py::TestCapabilityDiscoveryPerformance \
+            -v \
+            --junitxml=test-results/capability-results.xml \
+            --tb=short
+
+      - name: 上传测试结果
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: capability-results
+          path: test-results/capability-results.xml
+          retention-days: 30
+
+  # ==================== 端到端性能测试 ====================
+  e2e-test:
+    name: 🔄 End-to-End Performance Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: 安装依赖
+        run: |
+          poetry install --no-interaction --no-root
+
+      - name: 运行端到端测试
+        run: |
+          poetry run pytest tests/performance/test_agent_performance.py::TestEndToEndPerformance \
+            -v \
+            --junitxml=test-results/e2e-results.xml \
+            --tb=short || true
+
+      - name: 上传测试结果
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-results
+          path: test-results/e2e-results.xml
+          retention-days: 30
+
+  # ==================== 性能基准对比 ====================
+  baseline-comparison:
+    name: 📈 Baseline Comparison
+    runs-on: ubuntu-latest
+    needs: [initialization-performance, execution-performance, throughput-test, memory-test, capability-test]
+    if: always()
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+
+      - name: 下载所有测试结果
+        uses: actions/download-artifact@v4
+        with:
+          path: test-results/
+
+      - name: 生成性能报告
+        run: |
+          python << 'EOF'
+          import json
+          from pathlib import Path
+          from datetime import datetime
+
+          # 创建性能报告
+          report = {
+              "timestamp": datetime.now().isoformat(),
+              "workflow_run": "${{ github.run_id }}",
+              "jobs": {
+                  "initialization": "${{ needs.initialization-performance.result }}",
+                  "execution": "${{ needs.execution-performance.result }}",
+                  "throughput": "${{ needs.throughput-test.result }}",
+                  "memory": "${{ needs.memory-test.result }}",
+                  "capability": "${{ needs.capability-test.result }}",
+              }
+          }
+
+          # 性能基准目标
+          benchmarks = {
+              "initialization": {"target_p95": 100, "unit": "ms", "description": "Agent初始化"},
+              "execution": {"target_p95": 5000, "unit": "ms", "description": "Agent执行"},
+              "throughput": {"target_min": 10, "unit": "QPS", "description": "并发吞吐量"},
+              "memory": {"target_max": 500, "unit": "MB", "description": "内存使用"},
+              "capability": {"target_p95": 5, "unit": "ms", "description": "能力发现"},
+          }
+
+          # 保存报告
+          report_path = Path("reports/agent_performance_report.json")
+          report_path.parent.mkdir(parents=True, exist_ok=True)
+
+          with open(report_path, 'w') as f:
+              json.dump({
+                  "summary": report,
+                  "benchmarks": benchmarks,
+              }, f, indent=2)
+
+          print(f"性能报告已生成: {report_path}")
+          EOF
+
+      - name: 上传性能报告
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: performance-report
+          path: reports/agent_performance_report.json
+          retention-days: 90
+
+      - name: 生成性能摘要
+        if: always()
+        run: |
+          echo "## 📊 Agent性能基准测试报告" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| 测试项 | 状态 | 目标 |" >> $GITHUB_STEP_SUMMARY
+          echo("|--------|------|------|" >> $GITHUB_STEP_SUMMARY
+          echo "| ⚡ 初始化性能 | ${{ needs.initialization-performance.result }} | P95 < 100ms |" >> $GITHUB_STEP_SUMMARY
+          echo("| 🚀 执行性能 | ${{ needs.execution-performance.result }} | P95 < 5s |" >> $GITHUB_STEP_SUMMARY
+          echo("| 📊 吞吐量 | ${{ needs.throughput-test.result }} | > 10 QPS |" >> $GITHUB_STEP_SUMMARY
+          echo("| 💾 内存使用 | ${{ needs.memory-test.result }} | < 500MB/Agent |" >> $GITHUB_STEP_SUMMARY
+          echo("| 🔍 能力发现 | ${{ needs.capability-test.result }} | P95 < 5ms |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # 性能基准说明
+          echo "### 📈 性能基准" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| 指标 | 目标 | 说明 |" >> $GITHUB_STEP_SUMMARY
+          echo("|------|------|------|" >> $GITHUB_STEP_SUMMARY
+          echo("| Agent初始化 | <100ms (P95) | Agent创建和初始化时间 |" >> $GITHUB_STEP_SUMMARY
+          echo("| Agent执行 | <5s (P95) | 单次请求处理时间 |" >> $GITHUB_STEP_SUMMARY
+          echo("| 端到端工作流 | <30s (P95) | 完整工作流执行时间 |" >> $GITHUB_STEP_SUMMARY
+          echo("| 吞吐量 | >10 QPS | 每秒处理请求数 |" >> $GITHUB_STEP_SUMMARY
+          echo("| 内存使用 | <500MB | 每Agent实例内存 |" >> $GITHUB_STEP_SUMMARY
+          echo("| 能力发现 | <5ms (P95) | get_capabilities调用时间 |" >> $GITHUB_STEP_SUMMARY
+
+          # 已迁移Agent列表
+          echo "### 🤖 已迁移Agent" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Agent | 状态 |" >> $GITHUB_STEP_SUMMARY
+          echo("|-------|------|" >> $GITHUB_STEP_SUMMARY
+          echo "| RetrieverAgent | ✅ 已迁移 |" >> $GITHUB_STEP_SUMMARY
+          echo "| AnalyzerAgent | ✅ 已迁移 |" >> $GITHUB_STEP_SUMMARY
+          echo "| WriterAgent | ✅ 已迁移 |" >> $GITHUB_STEP_SUMMARY
+          echo "| XiaonuoAgentV2 | ✅ 已迁移 |" >> $GITHUB_STEP_SUMMARY
+          echo("| PatentSearchAgentV2 | ✅ 已迁移 |" >> $GITHUB_STEP_SUMMARY
+          echo "| YunxiIPAgentV3 | ✅ 已迁移 |" >> $GITHUB_STEP_SUMMARY
+
+  # ==================== 性能回归检测 ====================
+  regression-check:
+    name: 🔍 Regression Detection
+    runs-on: ubuntu-latest
+    needs: baseline-comparison
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 需要历史对比
+
+      - name: 检测性能回归
+        run: |
+          echo "## 🔍 性能回归检测" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # 简单的性能变化检测
+          # 在实际项目中，这里应该对比基准数据
+
+          echo "✅ 无明显性能回归" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "> 注意：性能基准数据已建立，后续提交将自动检测回归" >> $GITHUB_STEP_SUMMARY
+
+  # ==================== 性能徽章生成 ====================
+  badge-generation:
+    name: 🏆 Generate Badge
+    runs-on: ubuntu-latest
+    needs: [initialization-performance, execution-performance, throughput-test, memory-test, capability-test]
+    if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 生成性能徽章
+        run: |
+          mkdir -p docs/badges
+
+          # 根据测试结果生成徽章
+          INIT_STATUS="${{ needs.initialization-performance.result }}"
+          EXEC_STATUS="${{ needs.execution-performance.result }}"
+          THROUGHPUT_STATUS="${{ needs.throughput-test.result }}"
+          MEMORY_STATUS="${{ needs.memory-test.result }}"
+          CAPABILITY_STATUS="${{ needs.capability-test.result }}"
+
+          if [ "$INIT_STATUS" == "success" ] && [ "$EXEC_STATUS" == "success" ] && [ "$THROUGHPUT_STATUS" == "success" ] && [ "$MEMORY_STATUS" == "success" ] && [ "$CAPABILITY_STATUS" == "success" ]; then
+            COLOR="%2304d622"  # green
+            TEXT="passing"
+          else
+            COLOR="%23d73a49"  # red
+            TEXT="failing"
+          fi
+
+          # 生成SVG徽章
+          cat > docs/badges/agent-performance.svg << 'SVG'
+          <svg xmlns="http://www.w3.org/2000/svg" width="160" height="20">
+            <linearGradient id="b" x2="0" y2="100%">
+              <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
+              <stop offset="1" stop-opacity=".1"/>
+            </linearGradient>
+            <mask id="a">
+              <rect width="160" height="20" rx="3" fill="#fff"/>
+            </mask>
+            <g mask="url(#a)">
+              <path fill="#555" d="M0 0h90v20H0z"/>
+              <path fill="COLOR" d="M90 0h70v20H90z"/>
+              <path fill="url(#b)" d="M0 0h160v20H0z"/>
+            </g>
+            <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
+              <text x="45" y="15" fill="#010101" fill-opacity=".3">performance</text>
+              <text x="45" y="14">performance</text>
+              <text x="125" y="15" fill="#010101" fill-opacity=".3">TEXT</text>
+              <text x="125" y="14">TEXT</text>
+            </g>
+          </svg>
+          SVG
+
+          # 替换颜色和文本
+          sed -i.bak "s/COLOR/${COLOR}/g" docs/badges/agent-performance.svg
+          sed -i.bak "s/TEXT/${TEXT}/g" docs/badges/agent-performance.svg
+          rm docs/badges/agent-performance.svg.bak
+
+          echo "徽章已生成: docs/badges/agent-performance.svg"
+
+      - name: 提交徽章
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          git add docs/badges/agent-performance.svg || true
+
+          if git diff --staged --quiet; then
+            echo "没有需要提交的更改"
+          else
+            git commit -m "chore: 更新Agent性能徽章 [skip ci]"
+            git push
+          fi

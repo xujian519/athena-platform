@@ -80,8 +80,8 @@ class BERTIntentConfig:
         "chinese_bert": str(PROJECT_ROOT / "models/converted/chinese_bert"),
         "bert_base_chinese": str(PROJECT_ROOT / "models/converted/bert-base-chinese"),
         "chinese_roberta_wwm": str(PROJECT_ROOT / "models/converted/chinese-roberta-wwm-ext"),
-        "bge_base_zh": str(PROJECT_ROOT / "models/converted/BAAI/bge-m3"),
-        "bge_large_zh": str(PROJECT_ROOT / "models/converted/BAAI/bge-m3"),
+        "bge_base_zh": "http://127.0.0.1:8766/v1/embeddings",
+        "bge_large_zh": "http://127.0.0.1:8766/v1/embeddings",
     }
 
     # 默认使用BGE-base-zh(性能和效果平衡)

@@ -58,7 +58,7 @@ class _SimplifiedAthenaAgent:
         self.initialized = True
         logger.info(f"✅ {self.name} 初始化完成")
 
-    async def generate_response(self, user_input: str, **kwargs: Any) -> str:
+    async def generate_response(self, user_input: str, **_kwargs  # noqa: ARG001: Any) -> str:
         """生成响应"""
         return f"Athena收到: {user_input}"
 
@@ -328,7 +328,7 @@ class AthenaWisdomAgentEnhanced(AthenaWisdomAgent):
 
         return results
 
-    async def generate_response(self, user_input: str, **kwargs: Any) -> str:
+    async def generate_response(self, user_input: str, **_kwargs  # noqa: ARG001: Any) -> str:
         """生成增强响应"""
         # 检测用户意图
         intent = await self._analyze_enhanced_intent(user_input)
@@ -360,7 +360,7 @@ class AthenaWisdomAgentEnhanced(AthenaWisdomAgent):
 
         else:
             # 使用基础响应
-            return await super().generate_response(user_input, **kwargs)
+            return await super().generate_response(user_input, **_kwargs  # noqa: ARG001)
 
     async def _analyze_enhanced_intent(self, user_input: str) -> str:
         """分析增强意图"""

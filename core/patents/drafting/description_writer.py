@@ -8,7 +8,7 @@ import asyncio
 import logging
 from typing import List, Dict, Any, Optional
 
-from patents.core.data_structures import InventionUnderstanding
+from core.patents.data_structures import InventionUnderstanding
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -249,7 +249,7 @@ class DescriptionWriter:
 
 async def test_description_writer():
     """测试说明书撰写器"""
-    from patents.core.data_structures import InventionUnderstanding, InventionType, TechnicalFeature, FeatureType
+    from core.patents.data_structures import InventionUnderstanding, InventionType, TechnicalFeature, FeatureType
 
     writer = DescriptionWriter()
 

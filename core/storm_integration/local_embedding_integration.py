@@ -33,12 +33,12 @@ class LocalEmbeddingModel:
     # 可用的本地模型
     AVAILABLE_MODELS = {
         "bge-large-zh": {
-            "path": Path("/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3"),
+            "path": Path("http://127.0.0.1:8766/v1/embeddings"),
             "dim": 1024,
             "max_seq_length": 512,
         },
         "bge-base-zh": {
-            "path": Path("/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3"),
+            "path": Path("http://127.0.0.1:8766/v1/embeddings"),
             "dim": 768,
             "max_seq_length": 512,
         },

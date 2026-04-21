@@ -119,23 +119,23 @@ class AgentResponse:
         }
 
     @classmethod
-    def error_response(cls, request_id: str, error: str, **kwargs) -> AgentResponse:
+    def error_response(cls, request_id: str, error: str, **_kwargs) -> AgentResponse:  # noqa: ARG001
         """创建错误响应"""
         return cls(
             request_id=request_id,
             success=False,
             error=error,
-            **kwargs
+            **_kwargs  # noqa: ARG001
         )
 
     @classmethod
-    def success_response(cls, request_id: str, data: Any = None, **kwargs) -> AgentResponse:
+    def success_response(cls, request_id: str, data: Any = None, **_kwargs) -> AgentResponse:  # noqa: ARG001
         """创建成功响应"""
         return cls(
             request_id=request_id,
             success=True,
             data=data,
-            **kwargs
+            **_kwargs  # noqa: ARG001
         )
 
 

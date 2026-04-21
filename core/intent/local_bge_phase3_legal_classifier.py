@@ -7,7 +7,7 @@ Local BGE Intent Recognition System - Patent Agent Large-Scale Enhanced (Phase 3
 基于308,888复审无效决定、5,906专利判决书、14,968审查指南训练
 支持50个细粒度意图类别,覆盖专利代理全流程
 
-本地模型: models/converted/BAAI/bge-m3
+当前使用: BGE-M3 API服务 (http://127.0.0.1:8766/v1/embeddings)
 统一模型: models/intent_recognition/unified_classifier (统一意图分类器)
 
 作者: Athena平台团队
@@ -55,7 +55,7 @@ class LocalBGEPhase3Classifier:
         self.device = self._select_device()
 
         # BGE模型路径
-        self.bge_model_path = str(project_root / "models/converted/BAAI/bge-m3")
+        self.bge_model_path = "http://127.0.0.1:8766/v1/embeddings"
 
         self.tokenizer = None
         self.model = None

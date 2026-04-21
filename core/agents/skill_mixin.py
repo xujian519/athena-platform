@@ -23,8 +23,8 @@ class SkillMixin:
     为智能体添加技能使用能力。
     """
 
-    def __init__(self, *args, skills_dir=None, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, *args, skills_dir=None, **_kwargs  # noqa: ARG001):
+        super().__init__(*args, **_kwargs  # noqa: ARG001)
         self._skill_manager: SkillManager | None = None
         self._skill_executor: SkillExecutor | None = None
         self._skills_dir = skills_dir
@@ -135,9 +135,9 @@ class SkillfulAgent(SkillMixin):
     集成技能系统的智能体基类，可以方便地使用各种技能。
     """
 
-    async def initialize(self, *args, **kwargs):
+    async def initialize(self, *args, **_kwargs  # noqa: ARG001):
         """初始化智能体"""
-        await super().initialize(*args, **kwargs)
+        await super().initialize(*args, **_kwargs  # noqa: ARG001)
         await self.setup_skills()
 
     async def process_with_skill(

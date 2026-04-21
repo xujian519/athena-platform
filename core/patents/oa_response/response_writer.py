@@ -284,7 +284,7 @@ async def test_response_writer():
     try:
         from response_strategy_generator import ResponseStrategy, ResponseStrategyType
     except ImportError:
-        from patents.core.oa_response.response_strategy_generator import ResponseStrategy, ResponseStrategyType
+        from core.patents.oa_response.response_strategy_generator import ResponseStrategy, ResponseStrategyType
 
     test_strategy = ResponseStrategy(
         strategy_type=ResponseStrategyType.COMBINE,

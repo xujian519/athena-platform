@@ -127,7 +127,7 @@ class UnifiedFamilyMemory:
             port=5432,
             database="athena_memory",
             user="xujian",
-            model_path="/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3",
+            model_path="http://127.0.0.1:8766/v1/embeddings",
         )
         await self.primary_client.initialize()
         logger.info("✅ PostgreSQL后端已就绪")
@@ -168,7 +168,7 @@ class UnifiedFamilyMemory:
                 from sentence_transformers import SentenceTransformer
 
                 self.model = SentenceTransformer(
-                    "/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3"
+                    "http://127.0.0.1:8766/v1/embeddings"
                 )
             embedding = self.model.encode(memory.content).tolist()
             return await self.primary_client.add_memory(memory, embedding)
@@ -186,7 +186,7 @@ class UnifiedFamilyMemory:
                 from sentence_transformers import SentenceTransformer
 
                 self.model = SentenceTransformer(
-                    "/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3"
+                    "http://127.0.0.1:8766/v1/embeddings"
                 )
             embedding = self.model.encode(memory.content).tolist()
             return await self.fallback_client.add_memory(memory, embedding)
@@ -212,7 +212,7 @@ class UnifiedFamilyMemory:
                     from sentence_transformers import SentenceTransformer
 
                     self.model = SentenceTransformer(
-                        "/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3"
+                        "http://127.0.0.1:8766/v1/embeddings"
                     )
 
                 embedding = self.model.encode(query).tolist()

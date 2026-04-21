@@ -13,8 +13,8 @@ try:
     from .patent_list_manager import PatentRecord, PatentType, PatentStatus
     from .patent_classifier import PatentGrade
 except ImportError:
-    from patents.core.portfolio.patent_list_manager import PatentRecord, PatentType, PatentStatus
-    from patents.core.portfolio.patent_classifier import PatentGrade
+    from core.patents.portfolio.patent_list_manager import PatentRecord, PatentType, PatentStatus
+    from core.patents.portfolio.patent_classifier import PatentGrade
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

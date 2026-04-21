@@ -100,7 +100,7 @@ class AthenaXiaonaAgent(MemoryEnabledAgent):
         self.legal_analysis_memory = legal_memories
         logger.info(f"✅ 已加载 {len(legal_memories)}条法律专业知识")
 
-    async def generate_response(self, user_input: str, **kwargs) -> str:
+    async def generate_response(self, user_input: str, **_kwargs  # noqa: ARG001) -> str:
         """生成响应"""
         # 分析用户输入的法律需求
         legal_need = await self._analyze_legal_need(user_input)

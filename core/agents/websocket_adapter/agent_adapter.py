@@ -27,7 +27,7 @@ class BaseAgentAdapter(ABC):
         agent_type: AgentType,
         gateway_url: str = "ws://localhost:8005/ws",
         auth_token: str = "demo_token",
-        **kwargs
+        **_kwargs  # noqa: ARG001
     ):
         """
         初始化Agent适配器
@@ -36,7 +36,7 @@ class BaseAgentAdapter(ABC):
             agent_type: Agent类型
             gateway_url: Gateway WebSocket URL
             auth_token: 认证Token
-            **kwargs: 其他参数传递给WebSocketClient
+            **_kwargs  # noqa: ARG001: 其他参数传递给WebSocketClient
         """
         self.agent_type = agent_type
         self.gateway_url = gateway_url
@@ -46,7 +46,7 @@ class BaseAgentAdapter(ABC):
         self.client = WebSocketClient(
             gateway_url=gateway_url,
             auth_token=auth_token,
-            **kwargs
+            **_kwargs  # noqa: ARG001
         )
 
         # 注册消息处理器

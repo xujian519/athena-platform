@@ -31,7 +31,7 @@ class TestTaskStateManager:
     @pytest.fixture
     def manager(self, temp_storage):
         """创建管理器实例"""
-        from patents.core.task_state_manager import TaskStateManager
+        from core.patents.task_state_manager import TaskStateManager
         return TaskStateManager(storage_dir=temp_storage)
 
     def test_create_task(self, manager):
@@ -112,7 +112,7 @@ class TestSpecificationQualityReviewer:
     @pytest.fixture
     def reviewer(self):
         """创建审查器实例"""
-        from patents.core.specification_quality_reviewer import SpecificationQualityReviewer
+        from core.patents.specification_quality_reviewer import SpecificationQualityReviewer
         return SpecificationQualityReviewer()
 
     @pytest.fixture
@@ -204,7 +204,7 @@ class TestDataStructures:
 
     def test_technical_feature(self):
         """测试技术特征"""
-        from patents.core.data_structures import FeatureType, TechnicalFeature
+        from core.patents.data_structures import FeatureType, TechnicalFeature
 
         feature = TechnicalFeature(
             id="F1",
@@ -224,7 +224,7 @@ class TestDataStructures:
 
     def test_invention_understanding(self):
         """测试发明理解结构"""
-        from patents.core.data_structures import (
+        from core.patents.data_structures import (
             FeatureType,
             InventionType,
             InventionUnderstanding,
@@ -257,7 +257,7 @@ class TestDataStructures:
 
     def test_claims_set(self):
         """测试权利要求集合"""
-        from patents.core.ai_services.autospec_drafter import SpecificationDraft
+        from core.patents.ai_services.autospec_drafter import SpecificationDraft
 
         draft = SpecificationDraft(
             draft_id="test-draft",
@@ -289,7 +289,7 @@ class TestAutoSpecDrafterIntegration:
     @pytest.mark.asyncio
     async def test_full_workflow(self, temp_storage):
         """测试完整9阶段流程"""
-        from patents.core.ai_services.autospec_drafter import AutoSpecDrafter
+        from core.patents.ai_services.autospec_drafter import AutoSpecDrafter
 
         drafter = AutoSpecDrafter(
             llm_manager=None,
@@ -328,7 +328,7 @@ class TestAutoSpecDrafterIntegration:
     @pytest.mark.asyncio
     async def test_task_persistence(self, temp_storage):
         """测试任务持久化"""
-        from patents.core.ai_services.autospec_drafter import AutoSpecDrafter
+        from core.patents.ai_services.autospec_drafter import AutoSpecDrafter
 
         drafter = AutoSpecDrafter(
             llm_manager=None,
@@ -343,7 +343,7 @@ class TestAutoSpecDrafterIntegration:
         )
 
         # 验证任务状态已保存
-        from patents.core.task_state_manager import TaskStateManager
+        from core.patents.task_state_manager import TaskStateManager
         manager = TaskStateManager(storage_dir=temp_storage)
         task = manager.load_task("PERSIST-TEST-001")
 

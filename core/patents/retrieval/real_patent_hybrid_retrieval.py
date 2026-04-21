@@ -32,7 +32,7 @@ if str(workspace_src) not in sys.path:
     sys.path.insert(0, str(workspace_src))
 
 try:
-    from knowledge_graph.neo4j_manager import Neo4jManager
+    from core.knowledge_graph.neo4j_manager import Neo4jManager
 except ImportError:
     # 如果导入失败，设置为None（知识图谱功能可选）
     Neo4jManager = None

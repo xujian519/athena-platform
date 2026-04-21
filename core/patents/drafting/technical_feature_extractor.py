@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import List, Dict, Any, Optional
 
-from patents.core.data_structures import (
+from core.patents.data_structures import (
     TechnicalFeature,
     ProblemFeatureEffect,
     FeatureType

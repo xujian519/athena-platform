@@ -35,7 +35,7 @@ from core.biology.evolutionary_memory_system import (
     get_evolutionary_memory,
 )
 from core.biology.hebbian_optimizer import get_hebbian_optimizer
-from patents.core.case_database import (
+from core.patents.case_database import (
     CaseStatus,
     CaseType,
     PatentCase,

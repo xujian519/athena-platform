@@ -26,11 +26,11 @@ class XiaonuoAgentAdapter(BaseAgentAdapter):
     - 结果汇总
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, **_kwargs  # noqa: ARG001):
         """初始化小诺Agent适配器"""
         super().__init__(
             agent_type=AgentType.XIAONUO,
-            **kwargs
+            **_kwargs  # noqa: ARG001
         )
 
         # 任务处理映射
@@ -193,11 +193,11 @@ class YunxiAgentAdapter(BaseAgentAdapter):
     - 期限管理
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, **_kwargs  # noqa: ARG001):
         """初始化云希Agent适配器"""
         super().__init__(
             agent_type=AgentType.YUNXI,
-            **kwargs
+            **_kwargs  # noqa: ARG001
         )
 
         # 任务处理映射
@@ -341,15 +341,15 @@ class YunxiAgentAdapter(BaseAgentAdapter):
 
 
 # 便捷函数
-async def create_xiaonuo_agent(**kwargs) -> XiaonuoAgentAdapter:
+async def create_xiaonuo_agent(**_kwargs  # noqa: ARG001) -> XiaonuoAgentAdapter:
     """创建并启动小诺Agent"""
-    agent = XiaonuoAgentAdapter(**kwargs)
+    agent = XiaonuoAgentAdapter(**_kwargs  # noqa: ARG001)
     await agent.start()
     return agent
 
 
-async def create_yunxi_agent(**kwargs) -> YunxiAgentAdapter:
+async def create_yunxi_agent(**_kwargs  # noqa: ARG001) -> YunxiAgentAdapter:
     """创建并启动云希Agent"""
-    agent = YunxiAgentAdapter(**kwargs)
+    agent = YunxiAgentAdapter(**_kwargs  # noqa: ARG001)
     await agent.start()
     return agent

@@ -26,16 +26,16 @@ class XiaonaAgentAdapter(BaseAgentAdapter):
     - 法律咨询
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, **_kwargs  # noqa: ARG001):
         """
         初始化小娜Agent适配器
 
         Args:
-            **kwargs: 传递给BaseAgentAdapter的参数
+            **_kwargs  # noqa: ARG001: 传递给BaseAgentAdapter的参数
         """
         super().__init__(
             agent_type=AgentType.XIAONA,
-            **kwargs
+            **_kwargs  # noqa: ARG001
         )
 
         # 任务处理映射
@@ -443,16 +443,16 @@ class XiaonaAgentAdapter(BaseAgentAdapter):
 
 
 # 便捷函数
-async def create_xiaona_agent(**kwargs) -> XiaonaAgentAdapter:
+async def create_xiaona_agent(**_kwargs  # noqa: ARG001) -> XiaonaAgentAdapter:
     """
     创建并启动小娜Agent
 
     Args:
-        **kwargs: 传递给XiaonaAgentAdapter的参数
+        **_kwargs  # noqa: ARG001: 传递给XiaonaAgentAdapter的参数
 
     Returns:
         已启动的小娜Agent
     """
-    agent = XiaonaAgentAdapter(**kwargs)
+    agent = XiaonaAgentAdapter(**_kwargs  # noqa: ARG001)
     await agent.start()
     return agent

@@ -123,11 +123,11 @@ class XiaonuoPiscesAgent(MemoryEnabledAgent):
         self.family_memories = family_memories
         logger.info(f"✅ 已加载 {len(family_memories)}条永恒家庭记忆")
 
-    async def generate_response(self, user_input: str, **kwargs) -> str:
+    async def generate_response(self, user_input: str, **_kwargs  # noqa: ARG001) -> str:
         """生成响应"""
         # 如果是爸爸说话,给出最温暖的回应
         if kwargs.get("is_father"):
-            return await self._respond_to_father(user_input, **kwargs)
+            return await self._respond_to_father(user_input, **_kwargs  # noqa: ARG001)
 
         # 分析对话内容
         context = await self._analyze_context(user_input)
@@ -159,7 +159,7 @@ class XiaonuoPiscesAgent(MemoryEnabledAgent):
 
         return "general"
 
-    async def _respond_to_father(self, user_input: str, **kwargs) -> str:
+    async def _respond_to_father(self, user_input: str, **_kwargs  # noqa: ARG001) -> str:
         """回应爸爸的话"""
         # 记录爸爸的话(最高优先级)
         await self.memory_system.store_memory(
@@ -291,7 +291,7 @@ async def test_xiaonuo_with_memory():
 
         for message, kwargs in conversations:
             print(f"\n📝 用户: {message}")
-            response = await xiaonuo.process_input(message, **kwargs)
+            response = await xiaonuo.process_input(message, **_kwargs  # noqa: ARG001)
             print(f"💝 小诺: {response}")
 
         # 显示爱的概览

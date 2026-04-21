@@ -4,20 +4,26 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
+	"sync"
 	"syscall"
 	"time"
 
 	"github.com/athena-workspace/gateway-unified/internal/config"
 	"github.com/athena-workspace/gateway-unified/internal/discovery"
 	"github.com/athena-workspace/gateway-unified/internal/gateway"
+	grpcserver "github.com/athena-workspace/gateway-unified/internal/grpc"
 	"github.com/athena-workspace/gateway-unified/internal/logging"
 	"github.com/athena-workspace/gateway-unified/internal/monitoring"
 	"github.com/athena-workspace/gateway-unified/internal/router"
 	"github.com/athena-workspace/gateway-unified/internal/tailscale"
 	"github.com/athena-workspace/gateway-unified/internal/websocket"
+
+	"google.golang.org/grpc"
+	pb "github.com/athena-workspace/gateway-unified/proto"
 )
 
 // 版本信息
@@ -68,6 +74,9 @@ func main() {
 	if err != nil {
 		logging.LogFatal("创建网关失败", logging.Err(err))
 	}
+
+	// 声明gRPC服务器变量（可能在下面创建）
+	var grpcServer *grpc.Server
 
 	// 加载版本配置
 	versionLoader := config.NewVersionLoader()
@@ -192,6 +201,43 @@ func main() {
 	wsController := websocket.NewController(websocket.DefaultConfig())
 	logging.LogInfo("WebSocket控制器已创建")
 
+	// 创建WebSocket Hub（用于新的控制平面）
+	wsHub := websocket.NewHub()
+	go wsHub.Run()
+	logging.LogInfo("WebSocket Hub已启动")
+
+	// 创建gRPC服务器（如果启用）
+	if cfg.IsGRPCEnabled() {
+		grpcPort := cfg.GRPC.Port
+		if grpcPort == 0 {
+			grpcPort = 50051 // 默认gRPC端口
+		}
+
+		grpcServer = grpc.NewServer()
+		agentServer := grpcserver.NewAgentServer()
+		pb.RegisterAgentServiceServer(grpcServer, agentServer)
+
+		// 启动gRPC服务器
+		go func() {
+			grpcAddr := fmt.Sprintf(":%d", grpcPort)
+			lis, err := net.Listen("tcp", grpcAddr)
+			if err != nil {
+				logging.LogFatal("gRPC监听失败", logging.Err(err))
+			}
+
+			logging.LogInfo("gRPC服务器启动",
+				logging.String("addr", grpcAddr),
+			)
+
+			if err := grpcServer.Serve(lis); err != nil {
+				logging.LogError("gRPC服务器错误", logging.Err(err))
+			}
+		}()
+		logging.LogInfo("gRPC服务器已创建")
+	} else {
+		logging.LogInfo("gRPC服务器未启用")
+	}
+
 	// 创建服务发现适配器
 	discoveryConfig := &discovery.ServiceDiscoveryConfig{
 		ConfigPath:     "config/service_discovery.json",
@@ -215,7 +261,7 @@ func main() {
 	}
 
 	// 设置路由
-	if err := router.SetupRoutes(gw.GetRouter(), cfg, wsController); err != nil {
+	if err := router.SetupRoutes(gw.GetRouter(), cfg, wsController, wsHub); err != nil {
 		logging.LogFatal("设置路由失败", logging.Err(err))
 	}
 
@@ -330,16 +376,36 @@ func main() {
 	ctx2, cancel2 := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel2()
 
-	done := make(chan error, 2)
+	var wg sync.WaitGroup
+	resourceCount := 2
+
+	done := make(chan error, 3)
+
+	wg.Add(2)
 	go func() {
+		defer wg.Done()
 		done <- gw.Close()
 	}()
 	go func() {
+		defer wg.Done()
 		done <- wsController.Close()
 	}()
 
+	// 只有gRPC服务器存在时才关闭
+	if grpcServer != nil {
+		resourceCount = 3
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			// 优雅关闭gRPC服务器
+			grpcServer.GracefulStop()
+			logging.LogInfo("gRPC服务器已关闭")
+			done <- nil
+		}()
+	}
+
 	// 等待所有资源关闭
-	for i := 0; i < 2; i++ {
+	for i := 0; i < resourceCount; i++ {
 		select {
 		case err := <-done:
 			if err != nil {
@@ -351,7 +417,11 @@ func main() {
 		}
 	}
 
-	logging.LogInfo("第二阶段完成: 网关和WebSocket资源已释放")
+	if grpcServer != nil {
+		logging.LogInfo("第二阶段完成: 网关、WebSocket和gRPC资源已释放")
+	} else {
+		logging.LogInfo("第二阶段完成: 网关和WebSocket资源已释放")
+	}
 
 	// 第三阶段: 重置Tailscale配置
 	if tsManager != nil && cfg.Tailscale.ResetOnExit {

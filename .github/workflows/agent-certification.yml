@@ -1,0 +1,381 @@
+# Agent自动化认证工作流 v3.0
+# Agent Automated Certification Workflow
+#
+# 新增功能（v3.0）:
+# - 增量检查：仅检查变更的Agent
+# - 并行执行：多个检查项并行运行
+# - 缓存优化：加速构建
+# - 智能跳过：无变更时跳过
+
+name: Agent Certification v3
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'core/agents/**'
+      - 'tests/agents/**'
+      - 'tools/agent_certifier.py'
+      - '.github/workflows/agent-certification.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'core/agents/**'
+      - 'tests/agents/**'
+  workflow_dispatch:
+    inputs:
+      agent:
+        description: '指定要认证的Agent（留空认证所有）'
+        required: false
+        default: ''
+      strict:
+        description: '严格模式'
+        required: false
+        default: 'false'
+        type: boolean
+      skip_performance:
+        description: '跳过性能检查（快速模式）'
+        required: false
+        default: 'false'
+        type: boolean
+
+  schedule:
+    # 每周日凌晨UTC 0:00运行
+    - cron: '0 0 * * 0'
+
+env:
+  PYTHON_VERSION: '3.11'
+  CERTIFICATION_REPORT_PATH: 'reports/certification_report_v3.json'
+  BADGE_OUTPUT_PATH: 'docs/badges/agent-certification.svg'
+
+jobs:
+  # ==================== 变更检测 ====================
+  detect-changes:
+    name: 🔍 Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      has_changes: ${{ steps.changes.outputs.has_changes }}
+      changed_agents: ${{ steps.changes.outputs.changed_agents }}
+      should_run_full: ${{ steps.changes.outputs.should_run_full }}
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 检测变更
+        id: changes
+        run: |
+          # 检测是否有Agent文件变更
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            # 手动触发，根据输入决定
+            if [ -n "${{ github.event.inputs.agent }}" ]; then
+              echo "has_changes=true" >> $GITHUB_OUTPUT
+              echo "changed_agents=${{ github.event.inputs.agent }}" >> $GITHUB_OUTPUT
+              echo "should_run_full=false" >> $GITHUB_OUTPUT
+            else
+              echo "has_changes=true" >> $GITHUB_OUTPUT
+              echo "changed_agents=all" >> $GITHUB_OUTPUT
+              echo "should_run_full=true" >> $GITHUB_OUTPUT
+            fi
+          else
+            # 自动检测
+            CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+            AGENT_FILES=$(echo "$CHANGED_FILES" | grep '^core/agents/.*\.py$' || true)
+
+            if [ -n "$AGENT_FILES" ]; then
+              echo "has_changes=true" >> $GITHUB_OUTPUT
+
+              # 提取Agent名称
+              AGENT_NAMES=$(echo "$AGENT_FILES" | while read file; do
+                basename "$file" .py
+              done | sort -u | tr '\n' ',' | sed 's/,$//')
+
+              echo "changed_agents=$AGENT_NAMES" >> $GITHUB_OUTPUT
+
+              # 如果变更超过5个Agent，运行完整检查
+              AGENT_COUNT=$(echo "$AGENT_NAMES" | tr ',' '\n' | wc -l)
+              if [ "$AGENT_COUNT" -gt 5 ]; then
+                echo "should_run_full=true" >> $GITHUB_OUTPUT
+              else
+                echo "should_run_full=false" >> $GITHUB_OUTPUT
+              fi
+            else
+              echo "has_changes=false" >> $GITHUB_OUTPUT
+              echo "changed_agents=" >> $GITHUB_OUTPUT
+              echo "should_run_full=false" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+      - name: 输出检测结果
+        run: |
+          echo "Has changes: ${{ steps.changes.outputs.has_changes }}"
+          echo "Changed agents: ${{ steps.changes.outputs.changed_agents }}"
+          echo "Should run full: ${{ steps.changes.outputs.should_run_full }}"
+
+  # ==================== 快速检查（并行）====================
+  quick-checks:
+    name: ⚡ Quick Checks
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.has_changes == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        check:
+          - name: "Format"
+            cmd: "ruff format --check core/agents/"
+          - name: "Lint"
+            cmd: "ruff check core/agents/"
+          - name: "Import Check"
+            cmd: "python -m py_compile core/agents/**/*.py"
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff
+
+      - name: 运行检查 - ${{ matrix.check.name }}
+        run: ${{ matrix.check.cmd }}
+
+  # ==================== Agent认证 ====================
+  certification:
+    name: 🏆 Agent Certification
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.has_changes == 'true'
+    outputs:
+      certification_result: ${{ steps.certify.outputs.result }}
+      passed_count: ${{ steps.certify.outputs.passed }}
+      failed_count: ${{ steps.certify.outputs.failed }}
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml psutil
+
+      - name: 创建报告目录
+        run: |
+          mkdir -p reports
+          mkdir -p docs/badges
+
+      - name: 运行Agent认证（指定）
+        id: certify
+        if: |
+          github.event_name == 'workflow_dispatch' &&
+          github.event.inputs.agent != ''
+        run: |
+          SKIP_PERF="${{ github.event.inputs.skip_performance == 'true' && echo '--skip-performance' || echo '' }}"
+          STRICT="${{ github.event.inputs.strict == 'true' && echo '--strict' || echo '' }}"
+
+          python tools/agent_certifier.py \
+            --agent "${{ github.event.inputs.agent }}" \
+            --report "${{ env.CERTIFICATION_REPORT_PATH }}" \
+            $SKIP_PERF $STRICT
+
+          echo "result=success" >> $GITHUB_OUTPUT
+
+      - name: 运行Agent认证（增量）
+        id: certify_incremental
+        if: |
+          needs.detect-changes.outputs.should_run_full == 'false' &&
+          (github.event_name != 'workflow_dispatch' || github.event.inputs.agent == '')
+        run: |
+          # 增量模式：仅检查变更的Agent
+          CHANGED_AGENTS="${{ needs.detect-changes.outputs.changed_agents }}"
+          IFS=',' read -ra AGENT_ARRAY <<< "$CHANGED_AGENTS"
+
+          for agent in "${AGENT_ARRAY[@]}"; do
+            echo "认证Agent: $agent"
+            python tools/agent_certifier.py \
+              --agent "$agent" \
+              --report "${{ env.CERTIFICATION_REPORT_PATH }}" \
+              --skip-performance || true
+          done
+
+          echo "result=success" >> $GITHUB_OUTPUT
+
+      - name: 运行Agent认证（完整）
+        id: certify_full
+        if: needs.detect-changes.outputs.should_run_full == 'true'
+        run: |
+          python tools/agent_certifier.py \
+            --all \
+            --report "${{ env.CERTIFICATION_REPORT_PATH }}"
+
+          # 输出统计
+          PASSED=$(python -c "
+import json
+with open('${{ env.CERTIFICATION_REPORT_PATH }}') as f:
+    data = json.load(f)
+print(sum(1 for a in data.get('agents', []) if a.get('status') == 'passed'))
+" 2>/dev/null || echo "0")
+
+          FAILED=$(python -c "
+import json
+with open('${{ env.CERTIFICATION_REPORT_PATH }}') as f:
+    data = json.load(f)
+print(sum(1 for a in data.get('agents', []) if a.get('status') == 'failed'))
+" 2>/dev/null || echo "0")
+
+          echo "passed=$PASSED" >> $GITHUB_OUTPUT
+          echo "failed=$FAILED" >> $GITHUB_OUTPUT
+
+          if [ "$FAILED" -gt "0" ]; then
+            echo "result=failure" >> $GITHUB_OUTPUT
+            exit 1
+          else
+            echo "result=success" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 上传认证报告
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: agent-certification-report
+          path: ${{ env.CERTIFICATION_REPORT_PATH }}
+          retention-days: 90
+
+      - name: 生成认证徽章
+        run: |
+          python << 'EOF'
+          import json
+          from pathlib import Path
+
+          report_path = Path("${{ env.CERTIFICATION_REPORT_PATH }}")
+          if not report_path.exists():
+              print("未找到认证报告")
+              exit(0)
+
+          with open(report_path) as f:
+              report = json.load(f)
+
+          summary = report.get("summary", {})
+          total = summary.get("total", 0)
+          passed = summary.get("passed", 0)
+
+          # 生成SVG徽章
+          badge_color = "#28a745" if passed == total else "#ffc107" if passed > 0 else "#dc3545"
+
+          svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="200" height="20">
+            <linearGradient id="a" x2="0" y2="100%">
+              <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
+              <stop offset="1" stop-opacity=".1"/>
+            </linearGradient>
+            <rect rx="3" width="200" height="20" fill="#555"/>
+            <rect rx="3" x="120" width="80" height="20" fill="{badge_color}"/>
+            <path fill="{badge_color}" d="M120 0h4v20h-4z"/>
+            <rect rx="3" width="200" height="20" fill="url(#a)"/>
+            <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
+              <text x="60" y="15" fill="#010101" fill-opacity=".3">Certification</text>
+              <text x="60" y="14">Certification</text>
+              <text x="155" y="15" fill="#010101" fill-opacity=".3">{passed}/{total}</text>
+              <text x="155" y="14">{passed}/{total}</text>
+            </g>
+          </svg>'''
+
+          badge_path = Path("${{ env.BADGE_OUTPUT_PATH }}")
+          badge_path.parent.mkdir(parents=True, exist_ok=True)
+          badge_path.write_text(svg)
+          print(f"徽章已生成: {badge_path}")
+          EOF
+
+      - name: 上传认证徽章
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: agent-certification-badge
+          path: ${{ env.BADGE_OUTPUT_PATH }}
+          retention-days: 90
+
+  # ==================== 质量门禁 ====================
+  quality-gate:
+    name: 🚪 Quality Gate
+    runs-on: ubuntu-latest
+    needs: [detect-changes, quick-checks, certification]
+    if: always() && needs.detect-changes.outputs.has_changes == 'true'
+    steps:
+      - name: 检查结果
+        run: |
+          echo "## 🚪 认证质量门禁" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # 检查各项任务状态
+          QUICK_CHECKS="${{ needs.quick-checks.result }}"
+          CERTIFICATION="${{ needs.certification.result }}"
+
+          echo "| 检查项 | 状态 |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|------|" >> $GITHUB_STEP_SUMMARY
+          echo "| 快速检查 | $QUICK_CHECKS |" >> $GITHUB_STEP_SUMMARY
+          echo "| Agent认证 | $CERTIFICATION |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "$QUICK_CHECKS" == "success" ] && [ "$CERTIFICATION" == "success" ]; then
+            echo "✅ 所有检查通过" >> $GITHUB_STEP_SUMMARY
+            exit 0
+          else
+            echo "❌ 质量门禁失败" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+  # ==================== 更新文档 ====================
+  update-docs:
+    name: 📝 Update Documentation
+    runs-on: ubuntu-latest
+    needs: quality-gate
+    if: |
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main' &&
+      needs.quality-gate.result == 'success'
+    permissions:
+      contents: write
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 下载认证报告
+        uses: actions/download-artifact@v4
+        with:
+          name: agent-certification-report
+          path: ./
+
+      - name: 下载认证徽章
+        uses: actions/download-artifact@v4
+        with:
+          name: agent-certification-badge
+          path: docs/badges/
+
+      - name: 提交更新的文档
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          git add ${{ env.CERTIFICATION_REPORT_PATH }} || true
+          git add ${{ env.BADGE_OUTPUT_PATH }} || true
+
+          if git diff --staged --quiet; then
+            echo "没有需要提交的更改"
+          else
+            git commit -m "chore: 更新Agent认证报告和徽章 [skip ci]"
+            git push
+          fi

@@ -9,7 +9,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import List, Dict, Any, Optional
 
-from patents.core.prior_art_differ import get_prior_art_differ
+from core.patents.prior_art_differ import get_prior_art_differ
 from enhanced_patent_search import EnhancedPatentRetriever
 
 logging.basicConfig(level=logging.INFO)

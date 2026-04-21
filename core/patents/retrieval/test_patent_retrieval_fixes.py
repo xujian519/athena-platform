@@ -51,7 +51,7 @@ async def test_hybrid_retrieval_system():
 
         # 测试混合检索系统导入
         logger.info("🔍 测试混合检索系统导入...")
-        from patents.retrieval.hybrid_retrieval_system import HybridRetrievalSystem
+        from core.patents.retrieval.hybrid_retrieval_system import HybridRetrievalSystem
 
         logger.info("✅ 混合检索系统导入成功")
 
@@ -104,7 +104,7 @@ async def test_real_patent_system():
     try:
         # 测试真实专利系统导入
         logger.info("🔍 测试真实专利检索系统导入...")
-        from patents.retrieval.real_patent_hybrid_retrieval import RealPatentHybridRetrieval
+        from core.patents.retrieval.real_patent_hybrid_retrieval import RealPatentHybridRetrieval
 
         logger.info("✅ 真实专利检索系统导入成功")
 

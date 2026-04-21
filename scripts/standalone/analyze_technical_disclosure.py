@@ -17,7 +17,7 @@ import sys
 # 添加项目根目录到Python路径
 sys.path.insert(0, "/Users/xujian/Athena工作平台")
 
-from patents.core.xiaona_deep_technical_analyzer import XiaonaDeepTechnicalAnalyzer
+from core.patents.xiaona_deep_technical_analyzer import XiaonaDeepTechnicalAnalyzer
 
 
 def setup_logging():

@@ -68,10 +68,15 @@ class PatentExpertSystem:
         # 初始化Lyra记忆系统
         self.lyra_memory = get_lyra_memory()
 
-        # 专利知识库路径
+        # 专利知识库路径（相对于项目根目录）
+        import os
+        # 从当前文件 core/cognition/xiaona_patent_expert_system.py 向上找到项目根目录
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        core_dir = os.path.dirname(current_dir)
+        project_root = os.path.dirname(core_dir)
         self.knowledge_bases = {
-            "patent_guidelines": "/Users/xujian/Athena工作平台/knowledge/patent_guidelines.json",  # TODO: 确保除数不为零
-            "patent_rules": "/Users/xujian/Athena工作平台/knowledge/patent_rules.json",  # TODO: 确保除数不为零
+            "patent_guidelines": os.path.join(project_root, "core/patents/knowledge/patent_guidelines.json"),
+            "patent_rules": os.path.join(project_root, "core/patents/knowledge/patent_rules.json"),
             "patent_vector_db": "qdrant://patent_vectors",
             "knowledge_graph": "neo4j://patent_kg",
         }

@@ -113,7 +113,7 @@ class BackgroundTaskManager:
 
         try:
             # 执行任务
-            result = func(*args, **kwargs)
+            result = func(*args, **_kwargs  # noqa: ARG001)
 
             # 更新任务状态为完成
             with self._lock:

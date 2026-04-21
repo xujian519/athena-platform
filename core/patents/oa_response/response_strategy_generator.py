@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import List, Dict, Any, Optional
 
-from patents.core.qualitative_rules import get_qualitative_rule_engine
+from core.patents.qualitative_rules import get_qualitative_rule_engine
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

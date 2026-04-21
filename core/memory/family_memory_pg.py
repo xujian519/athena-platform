@@ -296,7 +296,7 @@ async def get_family_memory_pg() -> FamilyMemoryPG:
 
     if _pg_instance is None:
         _pg_instance = FamilyMemoryPG(
-            model_path="/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3"
+            model_path="http://127.0.0.1:8766/v1/embeddings"
         )
         await _pg_instance.initialize()
 
@@ -309,7 +309,7 @@ async def test():
     print("🧪 测试PostgreSQL记忆库\n")
 
     # 初始化
-    memory = FamilyMemoryPG(model_path="/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3")
+    memory = FamilyMemoryPG(model_path="http://127.0.0.1:8766/v1/embeddings")
     await memory.initialize()
 
     # 测试搜索

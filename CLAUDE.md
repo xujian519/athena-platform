@@ -230,6 +230,14 @@ Athena工作平台/
 - **Document Generator**: Automatic generation of legal documents (分析报告, 意见书)
 - **Persistence**: Triple-database architecture (PostgreSQL + Neo4j + Qdrant) for legal knowledge persistence
 
+**7. Knowledge Graph System** (`core/knowledge_graph/`)
+- **Integration Layer**: `kg_integration.py` - 统一API和数据模型
+- **Graph Engines**: Neo4j (`neo4j_graph_engine.py`) and ArangoDB (`arango_engine.py`) support
+- **Legal Reasoning**: `legal_kg_reasoning_enhancer.py` - 法律知识图谱推理增强
+- **Data Import**: `patent_guideline_importer.py` - 专利审查指南导入
+- **Architecture Note**: 采用扁平架构（不同于 `core/llm/` 的分层架构），适配多种图数据库和业务特性
+- **Documentation**: 详细架构说明见 `docs/architecture/knowledge_graph.md`
+
 ### Data Flow
 
 ```
@@ -825,6 +833,11 @@ docker-compose exec redis redis-cli ping
 | `core/embedding/unified_embedding_service.py` | Embedding service |
 | `core/memory/` | Memory system implementation |
 | `core/legal_world_model/` | Legal world model for patent analysis |
+| `core/knowledge_graph/` | Knowledge graph integration (Neo4j/ArangoDB) |
+| `core/knowledge_graph/kg_integration.py` | Knowledge graph API and data models |
+| `core/knowledge_graph/neo4j_graph_engine.py` | Neo4j graph engine |
+| `core/knowledge_graph/arango_engine.py` | ArangoDB engine |
+| `core/knowledge_graph/legal_kg_reasoning_enhancer.py` | Legal knowledge graph reasoning |
 | `core/tools/` | Tool system (permissions, manager, registry) |
 | `core/tools/permissions.py` | Tool permission system |
 | `core/tools/tool_manager.py` | Tool group management |

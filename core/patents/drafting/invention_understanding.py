@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import List, Dict, Any, Optional
 
-from patents.core.data_structures import (
+from core.patents.data_structures import (
     InventionUnderstanding,
     InventionType,
     TechnicalFeature,

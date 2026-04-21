@@ -571,10 +571,10 @@ class XiaonaPrompts:
         confirmation_points = self.get_mandatory_confirmation_points(task_type)
         return current_step in confirmation_points
 
-    def get_response_template(self, scenario: str, **kwargs) -> str:
+    def get_response_template(self, scenario: str, **_kwargs  # noqa: ARG001) -> str:
         """获取响应模板"""
         template = self._response_templates.get(scenario, self._response_templates["general"])
-        return template.format(**kwargs)
+        return template.format(**_kwargs  # noqa: ARG001)
 
     def get_greeting(self, message: str) -> str | None:
         """获取问候响应"""

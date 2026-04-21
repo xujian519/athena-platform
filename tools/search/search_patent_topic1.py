@@ -13,11 +13,11 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 # 导入检索工具
 try:
-    from patents.retrieval.real_patent_hybrid_retrieval import PatentHybridRetrieval
+    from core.patents.retrieval.real_patent_hybrid_retrieval import PatentHybridRetrieval
     print("✅ 使用混合检索系统")
 except ImportError:
     try:
-        from patents.core.enhanced_patent_retriever import EnhancedPatentRetriever
+        from core.patents.enhanced_patent_retriever import EnhancedPatentRetriever
         PatentRetriever = EnhancedPatentRetriever
         print("✅ 使用增强专利检索器")
     except ImportError:

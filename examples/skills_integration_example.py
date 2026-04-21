@@ -89,13 +89,13 @@ class SkillEnabledAgent(BaseAgent):
     def execute_skill(
         self,
         skill_id: str,
-        **kwargs,
+        **_kwargs  # noqa: ARG001,
     ) -> Dict[str, any]:
         """执行技能
 
         Args:
             skill_id: 技能ID
-            **kwargs: 传递给工具的参数
+            **_kwargs  # noqa: ARG001: 传递给工具的参数
 
         Returns:
             dict: 执行结果

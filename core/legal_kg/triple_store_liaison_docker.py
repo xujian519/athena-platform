@@ -217,7 +217,7 @@ class LegalTripleStoreLiaison:
         from sentence_transformers import SentenceTransformer
 
         # 加载模型
-        model_path = "/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3"
+        model_path = "http://127.0.0.1:8766/v1/embeddings"
         model = SentenceTransformer(model_path, device="mps")
 
         # 生成查询向量

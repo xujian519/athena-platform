@@ -1,0 +1,10 @@
+# Patent专利库配置
+patent:
+  host: localhost
+  port: 5432
+  name: patent_db
+  user: athena
+  pool_size: 10
+  max_overflow: 20
+  pool_timeout: 30
+  pool_recycle: 3600

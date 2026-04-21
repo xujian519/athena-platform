@@ -14,10 +14,10 @@ try:
     from .value_assessor import ValueAssessor, ValueAssessment
     from .maintenance_decider import MaintenanceDecisionMaker, MaintenanceDecision
 except ImportError:
-    from patents.core.portfolio.patent_list_manager import PatentListManager, PatentRecord
-    from patents.core.portfolio.patent_classifier import PatentClassifier, ClassificationResult, GradingResult
-    from patents.core.portfolio.value_assessor import ValueAssessor, ValueAssessment
-    from patents.core.portfolio.maintenance_decider import MaintenanceDecisionMaker, MaintenanceDecision
+    from core.patents.portfolio.patent_list_manager import PatentListManager, PatentRecord
+    from core.patents.portfolio.patent_classifier import PatentClassifier, ClassificationResult, GradingResult
+    from core.patents.portfolio.value_assessor import ValueAssessor, ValueAssessment
+    from core.patents.portfolio.maintenance_decider import MaintenanceDecisionMaker, MaintenanceDecision
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

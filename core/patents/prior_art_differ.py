@@ -18,7 +18,7 @@ import re
 from difflib import SequenceMatcher
 from typing import Any
 
-from patents.core.pdf_deep_analyzer import get_pdf_deep_analyzer
+from core.patents.pdf_deep_analyzer import get_pdf_deep_analyzer
 
 logger = logging.getLogger(__name__)
 

@@ -20,7 +20,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 
 # 导入被测模块
-from patents.core.ai_services.quality_assessment_enhanced import (
+from core.patents.ai_services.quality_assessment_enhanced import (
     AssessmentType,
     BenchmarkComparison,
     # 核心类

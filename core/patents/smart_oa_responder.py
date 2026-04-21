@@ -39,14 +39,14 @@ from core.logging_config import setup_logging
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.biology.hebbian_optimizer import get_hebbian_optimizer
-from patents.core.case_database import (
+from core.patents.case_database import (
     CaseStatus,
     CaseType,
     PatentCase,
     TechnicalField,
     get_patent_case_db,
 )
-from patents.core.qualitative_rules import get_qualitative_rule_engine
+from core.patents.qualitative_rules import get_qualitative_rule_engine
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -175,7 +175,7 @@ class SmartOfficeActionResponder:
         # Prometheus性能监控（新增）
         self.prompt_metrics = None
         try:
-            from patents.core.dynamic_prompt_metrics import get_dynamic_prompt_metrics
+            from core.patents.dynamic_prompt_metrics import get_dynamic_prompt_metrics
 
             self.prompt_metrics = get_dynamic_prompt_metrics()
             logger.info("✅ 动态提示词性能监控初始化成功")
@@ -283,7 +283,7 @@ class SmartOfficeActionResponder:
         # 开始计时（如果启用了监控）
         timer = None
         if self.prompt_metrics:
-            from patents.core.dynamic_prompt_metrics import PromptGenerationTimer
+            from core.patents.dynamic_prompt_metrics import PromptGenerationTimer
 
             timer = PromptGenerationTimer(self.prompt_metrics)
             timer.__enter__()

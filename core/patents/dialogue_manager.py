@@ -16,7 +16,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from patents.core.examiner_simulator import get_examiner_simulator
+from core.patents.examiner_simulator import get_examiner_simulator
 
 logger = logging.getLogger(__name__)
 

@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from unittest.mock import MagicMock
 
-from patents.core.ai_services.task_classifier import (
+from core.patents.ai_services.task_classifier import (
     ExecutionPriority,
     PatentTaskClassifier,
     PatentTaskType,

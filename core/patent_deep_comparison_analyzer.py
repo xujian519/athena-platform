@@ -287,9 +287,8 @@ class PatentDeepComparisonAnalyzer:
         if BGE_AVAILABLE and self.config["enable_bge_service"]:
             try:
                 # BGEModelConfig会自动查找:
-                # 1. models/converted/BAAI/bge-m3/ (MPS优化模型)
-                # 2. models/BAAI/bge-m3/ (普通本地模型)
-                # 3. BAAI/BAAI/bge-m3 (HuggingFace远程)
+                # 1. http://127.0.0.1:8766/v1/embeddings (BGE-M3 API服务)
+                # 2. BAAI/bge-m3 (HuggingFace远程模型)
                 self.bge_service = get_bge_service(
                     model_name=self.config["embedding_model"],
                     device=self.config["embedding_device"],

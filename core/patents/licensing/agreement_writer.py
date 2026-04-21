@@ -16,9 +16,9 @@ try:
     from .clause_generator import ClauseGenerator, LicenseTerms
     from .agreement_writer import AgreementWriter
 except ImportError:
-    from patents.core.licensing.patent_valuator import PatentValuator, ValuationResult
-    from patents.core.licensing.clause_generator import ClauseGenerator, LicenseTerms
-    from patents.core.licensing.agreement_writer import AgreementWriter
+    from core.patents.licensing.patent_valuator import PatentValuator, ValuationResult
+    from core.patents.licensing.clause_generator import ClauseGenerator, LicenseTerms
+    from core.patents.licensing.agreement_writer import AgreementWriter
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

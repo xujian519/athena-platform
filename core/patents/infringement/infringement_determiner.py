@@ -12,7 +12,7 @@ from typing import List, Dict, Any
 try:
     from .feature_comparator import FeatureComparison
 except ImportError:
-    from patents.core.infringement.feature_comparator import FeatureComparison
+    from core.patents.infringement.feature_comparator import FeatureComparison
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

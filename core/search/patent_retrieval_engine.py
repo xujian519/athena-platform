@@ -18,7 +18,7 @@ from typing import Any
 # BGE嵌入服务
 # Athena现有组件
 from core.vector.qdrant_adapter import QdrantVectorAdapter
-from patents.retrieval.fulltext_adapter import FullTextSearchAdapter
+from core.patents.retrieval.fulltext_adapter import FullTextSearchAdapter
 
 # 配置日志
 logger = logging.getLogger(__name__)

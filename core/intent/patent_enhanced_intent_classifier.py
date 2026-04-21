@@ -50,7 +50,7 @@ class PatentEnhancedIntentClassifier:
         self.device = self._select_device()
 
         # BGE模型路径
-        self.bge_model_path = str(project_root / "models/converted/BAAI/bge-m3")
+        self.bge_model_path = "http://127.0.0.1:8766/v1/embeddings"
 
         self.tokenizer = None
         self.model = None

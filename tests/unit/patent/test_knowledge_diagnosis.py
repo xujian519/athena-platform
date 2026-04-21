@@ -10,11 +10,13 @@ from pathlib import Path
 
 import pytest
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+# 添加项目根目录到sys.path
+project_root = Path(__file__).parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
 
 from unittest.mock import MagicMock
 
-from patents.core.ai_services.knowledge_diagnosis import (
+from core.patents.ai_services.knowledge_diagnosis import (
     ActivationSession,
     ActivationStrategy,
     ClarificationQuestion,

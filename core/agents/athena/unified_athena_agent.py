@@ -159,18 +159,18 @@ class AthenaUnifiedAgent(MemoryEnabledAgent):
 
         logger.info(f"✅ 已加载 {len(unified_memories)}条统一知识")
 
-    async def generate_response(self, user_input: str, **kwargs: Any) -> str:
+    async def generate_response(self, user_input: str, **_kwargs  # noqa: ARG001: Any) -> str:
         """生成响应"""
         # 分析请求类型
         request_type = await self._analyze_request_type(user_input)
 
         # 路由到相应的模块
         if request_type == "legal":
-            return await self._handle_legal_request(user_input, **kwargs)
+            return await self._handle_legal_request(user_input, **_kwargs  # noqa: ARG001)
         elif request_type == "ip_management":
-            return await self._handle_ip_request(user_input, **kwargs)
+            return await self._handle_ip_request(user_input, **_kwargs  # noqa: ARG001)
         elif request_type == "strategic":
-            return await self._handle_strategic_request(user_input, **kwargs)
+            return await self._handle_strategic_request(user_input, **_kwargs  # noqa: ARG001)
         else:
             return await self._general_response(user_input)
 
@@ -200,7 +200,7 @@ class AthenaUnifiedAgent(MemoryEnabledAgent):
 
         return "general"
 
-    async def _handle_legal_request(self, request: str, **kwargs: Any) -> str:
+    async def _handle_legal_request(self, request: str, **_kwargs  # noqa: ARG001: Any) -> str:
         """处理法律请求(使用Xiaona的能力)"""
         # 调用法律分析模块
         result = await self.legal_module.analyze(request, kwargs)
@@ -208,7 +208,7 @@ class AthenaUnifiedAgent(MemoryEnabledAgent):
         # 添加Athena的专业标识
         return f"⚖️ {result}\n\n---\n🏛️ Athena统一智能体为您提供专业的法律分析"
 
-    async def _handle_ip_request(self, request: str, **kwargs: Any) -> str:
+    async def _handle_ip_request(self, request: str, **_kwargs  # noqa: ARG001: Any) -> str:
         """处理IP管理请求(使用Yunxi的能力)"""
         # 调用IP管理模块
         result = await self.ip_module.manage(request, kwargs)
@@ -216,7 +216,7 @@ class AthenaUnifiedAgent(MemoryEnabledAgent):
         # 添加Athena的专业标识
         return f"💼 {result}\n\n---\n🏛️ Athena统一智能体为您提供专业的IP管理"
 
-    async def _handle_strategic_request(self, request: str, **kwargs: Any) -> str:
+    async def _handle_strategic_request(self, request: str, **_kwargs  # noqa: ARG001: Any) -> str:
         """处理战略请求(使用Athena原有的能力)"""
         strategic_analysis = f"关于'{request}'的战略分析:\n\n"
         strategic_analysis += "🏛️ 战略思维框架:\n"

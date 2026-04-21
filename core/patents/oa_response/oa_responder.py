@@ -16,9 +16,9 @@ try:
     from .response_strategy_generator import ResponseStrategyGenerator, ResponseStrategy
     from .response_writer import ResponseWriter
 except ImportError:
-    from patents.core.oa_response.prior_art_analyzer import PriorArtAnalyzer, PriorArtAnalysis
-    from patents.core.oa_response.response_strategy_generator import ResponseStrategyGenerator, ResponseStrategy
-    from patents.core.oa_response.response_writer import ResponseWriter
+    from core.patents.oa_response.prior_art_analyzer import PriorArtAnalyzer, PriorArtAnalysis
+    from core.patents.oa_response.response_strategy_generator import ResponseStrategyGenerator, ResponseStrategy
+    from core.patents.oa_response.response_writer import ResponseWriter
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

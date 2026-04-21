@@ -188,7 +188,7 @@ class EnhancedXiaonuo(XiaonuoUnifiedAgent):
         user_input: str,
         enable_reflection: bool = True,
         enable_learning: bool = True,
-        **kwargs,
+        **_kwargs  # noqa: ARG001,
     ) -> str:
         """
         处理用户输入(增强版)
@@ -226,7 +226,7 @@ class EnhancedXiaonuo(XiaonuoUnifiedAgent):
 
         # 2. 调用父类处理
         try:
-            response = await super().process_input(user_input, **kwargs)
+            response = await super().process_input(user_input, **_kwargs  # noqa: ARG001)
         except Exception as e:
             logger.error(f"父类处理失败: {e}")
             response = f"抱歉,处理过程中出现了问题: {e!s}"

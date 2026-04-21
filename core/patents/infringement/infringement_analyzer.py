@@ -18,11 +18,11 @@ try:
     from .infringement_determiner import InfringementDeterminer, InfringementResult
     from .opinion_writer import OpinionWriter
 except ImportError:
-    from patents.core.infringement.claim_parser import ClaimParser, ParsedClaim
-    from patents.core.infringement.product_analyzer import ProductAnalyzer, AnalyzedProduct
-    from patents.core.infringement.feature_comparator import FeatureComparator, FeatureComparison
-    from patents.core.infringement.infringement_determiner import InfringementDeterminer, InfringementResult
-    from patents.core.infringement.opinion_writer import OpinionWriter
+    from core.patents.infringement.claim_parser import ClaimParser, ParsedClaim
+    from core.patents.infringement.product_analyzer import ProductAnalyzer, AnalyzedProduct
+    from core.patents.infringement.feature_comparator import FeatureComparator, FeatureComparison
+    from core.patents.infringement.infringement_determiner import InfringementDeterminer, InfringementResult
+    from core.patents.infringement.opinion_writer import OpinionWriter
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

@@ -24,7 +24,7 @@ DRY_RUN = False  # 设为True只显示会修改什么，不实际修改
 # 需要更新的导入路径模式 (Batch 2)
 IMPORT_PATTERNS = [
     # patent_hybrid_retrieval.xxx -> patents.retrieval.xxx
-    (r'from patents.retrieval.\.?', 'from patents.retrieval.'),
+    (r'from core.patents.retrieval.\.?', 'from core.patents.retrieval.'),
     (r'import patents.retrieval.\.?', 'import patents.retrieval.'),
     # patent_platform.xxx -> patents.platform.xxx
     (r'from patents.platform.\.?', 'from patents.platform.'),

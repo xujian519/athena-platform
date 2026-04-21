@@ -1,25 +1,45 @@
 # 开发环境配置
-# Development Environment Configuration
+# 注意：这些配置会覆盖config/base/中的配置
+# 环境变量会覆盖这些配置
 
-environment: development
-debug: true
-log_level: DEBUG
-
-# 覆盖基础配置
+# 数据库配置
 database:
-  pool_size: 5
-  max_overflow: 2
-  pool_timeout: 10
+  host: localhost
+  port: 5432
+  user: athena
+  password: athena123
+  name: athena_dev
 
+# Redis配置
 redis:
-  db: 1  # 使用独立的开发DB
-  default_ttl: 300  # 5分钟（开发环境短缓存）
+  host: localhost
+  port: 6379
+  password: redis123
 
-qdrant:
-  collection_name: athena_vectors_dev
-
+# LLM配置（开发环境使用Ollama，不需要API密钥）
 llm:
-  default_provider: anthropic
-  cache_enabled: true
-  cache_ttl: 1800  # 30分钟
-  max_retries: 2
+  provider: ollama
+  model: claude-sonnet-4-6
+
+# Gateway配置
+gateway:
+  log_level: debug
+
+# Agent配置
+agents:
+  log_level: debug
+
+# 环境配置
+debug: true
+
+# Patent专利库配置
+patent:
+  host: localhost
+  port: 5432
+  name: patent_db
+
+# Neo4j法律世界模型配置
+neo4j:
+  host: localhost
+  port: 7687
+  name: neo4j

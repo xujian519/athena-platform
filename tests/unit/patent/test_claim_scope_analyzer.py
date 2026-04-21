@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 import json
 from unittest.mock import AsyncMock, Mock
 
-from patents.core.ai_services.claim_scope_analyzer import (
+from core.patents.ai_services.claim_scope_analyzer import (
     ClaimScopeAnalyzer,
     ProbabilityEstimate,
     RiskLevel,

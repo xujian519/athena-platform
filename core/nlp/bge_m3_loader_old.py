@@ -34,7 +34,7 @@ class BGEM3ModelLoader:
         "bge-m3": {
             "dimension": 1024,
             "max_seq_length": 8192,
-            "model_path": "/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3/",
+            "model_path": http://127.0.0.1:8766/v1/embeddings,
             "fallback_paths": [
                 "/Users/xujian/Athena工作平台/models/converted/bge-m3",
                 "/Users/xujian/Athena工作平台/models/pretrained/bge-m3",

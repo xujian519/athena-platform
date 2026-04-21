@@ -171,7 +171,7 @@ class ClaimReviser:
         """延迟加载质量评估器"""
         if self._quality_assessor is None:
             try:
-                from patents.core.quality_assessor import ClaimQualityAssessor
+                from core.patents.quality_assessor import ClaimQualityAssessor
                 self._quality_assessor = ClaimQualityAssessor()
             except ImportError:
                 self.logger.warning("质量评估器未找到")

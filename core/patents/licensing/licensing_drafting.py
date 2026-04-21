@@ -15,8 +15,8 @@ try:
     from .patent_valuator import PatentValuator
     from .clause_generator import ClauseGenerator
 except ImportError:
-    from patents.core.licensing.patent_valuator import PatentValuator
-    from patents.core.licensing.clause_generator import ClauseGenerator
+    from core.patents.licensing.patent_valuator import PatentValuator
+    from core.patents.licensing.clause_generator import ClauseGenerator
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

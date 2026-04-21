@@ -163,7 +163,7 @@ class SemanticRouter:
         try:
             # 优先使用本地converted模型
             model_paths = [
-                "/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3",
+                http://127.0.0.1:8766/v1/embeddings,
                 "/Users/xujian/Athena工作平台/models/BAAI/bge-m3",
             ]
 

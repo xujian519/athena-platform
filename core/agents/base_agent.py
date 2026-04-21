@@ -7,11 +7,17 @@ from __future__ import annotations
 1. 支持通过Gateway与其他Agent通信
 2. 保持向后兼容性
 3. 自动连接管理
+
+集成统一记忆系统:
+1. 智能体初始化时加载记忆
+2. 智能体执行时保存工作历史
+3. 智能体学习成果自动更新
+4. 项目上下文自动读取
 """
 
 import logging
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +39,22 @@ except ImportError:
     Message = None  # type: ignore
     MessageType = None  # type: ignore
 
+# 统一记忆系统导入（可选依赖）
+try:
+    from core.memory.unified_memory_system import (
+        UnifiedMemorySystem,
+        get_project_memory,
+        MemoryType,
+        MemoryCategory
+    )
+    MEMORY_AVAILABLE = True
+except ImportError:
+    MEMORY_AVAILABLE = False
+    UnifiedMemorySystem = None  # type: ignore
+    get_project_memory = None  # type: ignore
+    MemoryType = None  # type: ignore
+    MemoryCategory = None  # type: ignore
+
 
 class BaseAgent(ABC):
     """基础智能体抽象类"""
@@ -46,7 +68,8 @@ class BaseAgent(ABC):
         max_tokens: int = 2000,
         enable_gateway: bool = True,
         gateway_url: str = "ws://localhost:8005/ws",
-        **kwargs,
+        project_path: Optional[str] = None,
+        **_kwargs  # noqa: ARG001,
     ):
         """
         初始化基础智能体
@@ -59,14 +82,15 @@ class BaseAgent(ABC):
             max_tokens: 最大token数
             enable_gateway: 是否启用Gateway通信
             gateway_url: Gateway WebSocket URL
-            **kwargs: 其他参数
+            project_path: 项目路径（用于记忆系统）
+            **_kwargs  # noqa: ARG001: 其他参数
         """
         self.name = name
         self.role = role
         self.model = model
         self.temperature = temperature
         self.max_tokens = max_tokens
-        self.config = kwargs
+        self.config = _kwargs or {}
 
         # 对话历史
         self.conversation_history: list[dict[str, str]] = []
@@ -81,6 +105,20 @@ class BaseAgent(ABC):
         self._gateway_client: GatewayClient | None = None
         self._gateway_enabled = enable_gateway and GATEWAY_AVAILABLE
         self._gateway_url = gateway_url
+
+        # 统一记忆系统支持
+        self.memory_system: Optional[UnifiedMemorySystem] = None
+        self.project_path = project_path
+        self._memory_enabled = False
+
+        # 初始化记忆系统
+        if project_path and MEMORY_AVAILABLE:
+            try:
+                self.memory_system = get_project_memory(project_path)
+                self._memory_enabled = True
+                logger.info(f"记忆系统已启用 - 项目: {project_path}")
+            except Exception as e:
+                logger.warning(f"记忆系统初始化失败: {e}")
 
         # 根据名称确定Agent类型
         self._agent_type = self._determine_agent_type()
@@ -101,13 +139,13 @@ class BaseAgent(ABC):
             return GatewayAgentType.UNKNOWN
 
     @abstractmethod
-    def process(self, input_text: str, **kwargs) -> str:
+    def process(self, input_text: str, **_kwargs) -> str:  # noqa: ARG001
         """
         处理输入并生成响应
 
         Args:
             input_text: 输入文本
-            **kwargs: 其他参数
+            **_kwargs  # noqa: ARG001: 其他参数
 
         Returns:
             响应文本
@@ -362,6 +400,176 @@ class BaseAgent(ABC):
         if self._gateway_client:
             return self._gateway_client.session_id
         return ""
+
+    # ==================== 统一记忆系统方法 ====================
+
+    def load_memory(
+        self,
+        type: MemoryType,
+        category: MemoryCategory,
+        key: str
+    ) -> Optional[str]:
+        """
+        加载记忆
+
+        Args:
+            type: 记忆类型
+            category: 记忆分类
+            key: 唯一键
+
+        Returns:
+            记忆内容，如果不存在或记忆系统未启用则返回None
+        """
+        if not self._memory_enabled or not self.memory_system:
+            return None
+
+        try:
+            return self.memory_system.read(type, category, key)
+        except Exception as e:
+            logger.error(f"记忆加载失败: {e}")
+            return None
+
+    def save_memory(
+        self,
+        type: MemoryType,
+        category: MemoryCategory,
+        key: str,
+        content: str,
+        metadata: Optional[dict[str, Any]] = None
+    ) -> bool:
+        """
+        保存记忆
+
+        Args:
+            type: 记忆类型
+            category: 记忆分类
+            key: 唯一键
+            content: Markdown内容
+            metadata: 元数据
+
+        Returns:
+            是否成功
+        """
+        if not self._memory_enabled or not self.memory_system:
+            logger.debug("记忆系统未启用，跳过保存")
+            return False
+
+        try:
+            self.memory_system.write(type, category, key, content, metadata)
+            return True
+        except Exception as e:
+            logger.error(f"记忆保存失败: {e}")
+            return False
+
+    def save_work_history(
+        self,
+        task: str,
+        result: str,
+        status: str = "success"
+    ) -> bool:
+        """
+        保存工作历史
+
+        Args:
+            task: 任务描述
+            result: 任务结果
+            status: 任务状态（success/failed/pending）
+
+        Returns:
+            是否成功
+        """
+        if not self._memory_enabled or not self.memory_system:
+            return False
+
+        try:
+            self.memory_system.append_work_history(
+                agent_name=self.name,
+                task=task,
+                result=result,
+                status=status
+            )
+            return True
+        except Exception as e:
+            logger.error(f"工作历史保存失败: {e}")
+            return False
+
+    def search_memory(
+        self,
+        query: str,
+        type: Optional[MemoryType] = None,
+        category: Optional[MemoryCategory] = None,
+        limit: int = 10
+    ) -> list:
+        """
+        搜索记忆
+
+        Args:
+            query: 搜索查询
+            type: 记忆类型过滤（可选）
+            category: 记忆分类过滤（可选）
+            limit: 返回数量限制
+
+        Returns:
+            匹配的记忆条目列表
+        """
+        if not self._memory_enabled or not self.memory_system:
+            return []
+
+        try:
+            return self.memory_system.search(query, type, category, limit)
+        except Exception as e:
+            logger.error(f"记忆搜索失败: {e}")
+            return []
+
+    def get_project_context(self) -> Optional[str]:
+        """
+        获取项目上下文
+
+        Returns:
+            项目上下文内容，如果不存在则返回None
+        """
+        return self.load_memory(
+            MemoryType.PROJECT,
+            MemoryCategory.PROJECT_CONTEXT,
+            "project_context"
+        )
+
+    def get_user_preferences(self) -> Optional[str]:
+        """
+        获取用户偏好
+
+        Returns:
+            用户偏好内容，如果不存在则返回None
+        """
+        return self.load_memory(
+            MemoryType.GLOBAL,
+            MemoryCategory.USER_PREFERENCE,
+            "user_preferences"
+        )
+
+    def update_learning(
+        self,
+        insights: str,
+        metadata: Optional[dict[str, Any]] = None
+    ) -> bool:
+        """
+        更新学习成果（仅学习型智能体使用）
+
+        Args:
+            insights: 学习洞察
+            metadata: 元数据
+
+        Returns:
+            是否成功
+        """
+        learning_key = f"{self.name}_learning"
+        return self.save_memory(
+            MemoryType.GLOBAL,
+            MemoryCategory.AGENT_LEARNING,
+            learning_key,
+            insights,
+            metadata
+        )
 
 
 class AgentUtils:

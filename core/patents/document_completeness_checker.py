@@ -164,7 +164,7 @@ class DocumentCompletenessChecker:
         # 初始化专利检索器
         self.retriever = None
         try:
-            from patents.core.enhanced_patent_retriever import (
+            from core.patents.enhanced_patent_retriever import (
                 EnhancedPatentRetriever,
             )
 

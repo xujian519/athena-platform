@@ -104,8 +104,8 @@ class SystemTestSuite:
 def test_cap01_patent_search():
     """测试CAP01: 专利检索系统"""
     try:
-        from patents.core.enhanced_patent_retriever import EnhancedPatentRetriever
-        from patents.core.comprehensive_analyzer import ComprehensivePatentAnalyzer
+        from core.patents.enhanced_patent_retriever import EnhancedPatentRetriever
+        from core.patents.comprehensive_analyzer import ComprehensivePatentAnalyzer
 
         print("初始化专利检索系统...")
         retriever = EnhancedPatentRetriever()
@@ -121,7 +121,7 @@ def test_cap01_patent_search():
 def test_cap02_patent_evaluation():
     """测试CAP02: 专利评估系统"""
     try:
-        from patents.core.quality_assessor import (
+        from core.patents.quality_assessor import (
             QualityAssessment,
             QualityDimension,
             SeverityLevel,
@@ -141,7 +141,7 @@ def test_cap02_patent_evaluation():
 def test_cap03_patent_drafting():
     """测试CAP03: 专利撰写辅助系统"""
     try:
-        from patents.core.drafting.patent_drafter import PatentDrafter
+        from core.patents.drafting.patent_drafter import PatentDrafter
 
         print("初始化专利撰写系统...")
         drafter = PatentDrafter()
@@ -156,7 +156,7 @@ def test_cap03_patent_drafting():
 def test_cap04_oa_response():
     """测试CAP04: 审查意见答复系统"""
     try:
-        from patents.core.oa_response.oa_responder import OAResponder
+        from core.patents.oa_response.oa_responder import OAResponder
 
         print("初始化审查答复系统...")
         responder = OAResponder()
@@ -171,7 +171,7 @@ def test_cap04_oa_response():
 def test_cap05_invalidity():
     """测试CAP05: 无效宣告请求系统"""
     try:
-        from patents.core.invalidity.invalidity_petitioner import InvalidityPetitioner
+        from core.patents.invalidity.invalidity_petitioner import InvalidityPetitioner
 
         print("初始化无效宣告系统...")
         petitioner = InvalidityPetitioner()
@@ -186,7 +186,7 @@ def test_cap05_invalidity():
 def test_cap06_infringement():
     """测试CAP06: 侵权分析系统"""
     try:
-        from patents.core.infringement.infringement_analyzer import InfringementAnalyzer
+        from core.patents.infringement.infringement_analyzer import InfringementAnalyzer
 
         print("初始化侵权分析系统...")
         analyzer = InfringementAnalyzer()
@@ -201,7 +201,7 @@ def test_cap06_infringement():
 def test_cap07_licensing():
     """测试CAP07: 许可协议起草系统"""
     try:
-        from patents.core.licensing.licensing_drafting import LicensingDrafting
+        from core.patents.licensing.licensing_drafting import LicensingDrafting
 
         print("初始化许可协议起草系统...")
         drafting = LicensingDrafting()
@@ -216,7 +216,7 @@ def test_cap07_licensing():
 def test_cap08_litigation():
     """测试CAP08: 专利诉讼支持系统"""
     try:
-        from patents.core.litigation.litigation_supporter import LitigationSupporter
+        from core.patents.litigation.litigation_supporter import LitigationSupporter
 
         print("初始化专利诉讼支持系统...")
         supporter = LitigationSupporter()
@@ -231,7 +231,7 @@ def test_cap08_litigation():
 def test_cap09_portfolio():
     """测试CAP09: 专利组合管理系统"""
     try:
-        from patents.core.portfolio.portfolio_manager import PortfolioManager
+        from core.patents.portfolio.portfolio_manager import PortfolioManager
 
         print("初始化专利组合管理系统...")
         manager = PortfolioManager()
@@ -246,7 +246,7 @@ def test_cap09_portfolio():
 def test_cap10_international():
     """测试CAP10: 国际专利申请系统"""
     try:
-        from patents.core.international.international_filing_manager import InternationalFilingManager
+        from core.patents.international.international_filing_manager import InternationalFilingManager
 
         print("初始化国际专利申请系统...")
         manager = InternationalFilingManager()

@@ -457,7 +457,7 @@ class OptimizedQdrantRetriever:
             from core.storm_integration.local_embedding_integration import LocalEmbeddingModel
 
             embedding_model_path or Path(
-                "/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3"
+                "http://127.0.0.1:8766/v1/embeddings"
             )
             self._embedding_model = LocalEmbeddingModel(model_name="bge-large-zh")
             logger.info("✅ 本地 Embedding 模型已就绪")

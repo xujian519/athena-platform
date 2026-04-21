@@ -230,7 +230,7 @@ class AthenaWisdomAgentEnhanced:
 
         return {"team": team.team_id, "execution_result": result, "coordination_report": report}
 
-    async def generate_response(self, user_input: str, **kwargs: Any) -> str:
+    async def generate_response(self, user_input: str, **_kwargs  # noqa: ARG001: Any) -> str:
         """生成增强响应"""
         # 检测用户意图
         intent = await self._analyze_enhanced_intent(user_input)

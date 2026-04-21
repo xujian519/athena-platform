@@ -1,0 +1,221 @@
+name: E2E Tests - Agent Workflow
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # 每天凌晨2点运行
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      # PostgreSQL for database tests
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: athena
+          POSTGRES_PASSWORD: athena123
+          POSTGRES_DB: athena_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      # Redis for cache
+      redis:
+        image: redis:6-alpine
+        options: >-
+          --health-cmd redis-cli ping
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Cache pip packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/pyproject.toml') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install poetry
+        poetry install
+
+    - name: Wait for services
+      run: |
+        # Wait for PostgreSQL
+        until docker-compose -f docker-compose.unified.yml --profile test exec postgres pg_isready -U athena -d athena_test; do
+          echo "Waiting for PostgreSQL..."
+          sleep 2
+        done
+        # Wait for Redis
+        until docker-compose -f docker-compose.unified.yml --profile test exec redis redis-cli -a redis123 ping; do
+          echo "Waiting for Redis..."
+          sleep 2
+        done
+        echo "All services are ready"
+
+    - name: Run unit tests
+      run: |
+        poetry run pytest tests/ -m unit --cov=core/agents --cov-report=xml
+      continue-on-error: false
+
+    - name: Run E2E tests
+      env:
+        PYTHONPATH: /home/runner/work/Athena工作平台/Athena工作平台
+        TEST_MODE: e2e
+        MOCK_DATA: true
+      run: |
+        cd tests/e2e
+        python run_e2e_tests.py --output ./test_results
+
+    - name: Generate test report
+      if: always()
+      run: |
+        cd tests/e2e
+        # Find the latest test report
+        latest_report=$(ls -t test_results/*.json | head -1)
+        if [ -f "$latest_report" ]; then
+          echo "## E2E Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "### Pass Rate: $(jq -r '.pass_rate' $latest_report | awk '{printf "%.2f%%", $1*100}')" >> $GITHUB_STEP_SUMMARY
+          echo "### Total Tests: $(jq -r '.total_tests' $latest_report)" >> $GITHUB_STEP_SUMMARY
+          echo "### Failed Tests: $(jq -r '.failed_tests' $latest_report)" >> $GITHUB_STEP_SUMMARY
+          echo "### Duration: $(jq -r '.total_duration' $latest_report) seconds" >> $GITHUB_STEP_SUMMARY
+
+          # Show failed tests
+          failed_tests=$(jq -r '.test_results[] | select(.status == "failed") | .test_name' $latest_report | paste -sd "," -)
+          if [ -n "$failed_tests" ]; then
+            echo "### Failed Tests:" >> $GITHUB_STEP_SUMMARY
+            echo "$failed_tests" >> $GITHUB_STEP_SUMMARY
+          fi
+        fi
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: e2e-test-results
+        path: |
+          tests/e2e/test_results/
+        retention-days: 30
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./tests/e2e/coverage.xml
+        flags: e2e
+        name: codecov-umbrella
+
+    - name: Performance Benchmark
+      if: github.event_name != 'schedule'
+      run: |
+        # Run performance benchmark
+        cd tests/e2e
+        python -c "
+        import json
+        from pathlib import Path
+
+        # Read latest test results
+        latest_report = list(Path('test_results').glob('*.json'))[-1]
+        with open(latest_report) as f:
+            data = json.load(f)
+
+        # Check performance thresholds
+        perf_thresholds = {
+            'max_avg_duration': 5.0,  # seconds
+            'max_total_duration': 20.0,  # seconds
+            'min_pass_rate': 0.8  # 80%
+        }
+
+        avg_duration = data.get('avg_duration', 0)
+        total_duration = data.get('total_duration', 0)
+        pass_rate = data.get('pass_rate', 0)
+
+        print('Performance Metrics:')
+        print(f'  Average Duration: {avg_duration:.2f}s (threshold: {perf_thresholds[\"max_avg_duration\"]}s)')
+        print(f'  Total Duration: {total_duration:.2f}s (threshold: {perf_thresholds[\"max_total_duration\"]}s)')
+        print(f'  Pass Rate: {pass_rate:.2%} (threshold: {perf_thresholds[\"min_pass_rate\"]:.2%})')
+
+        # Check thresholds
+        if avg_duration > perf_thresholds['max_avg_duration']:
+            print(f'⚠️  Average duration exceeds threshold!')
+
+        if total_duration > perf_thresholds['max_total_duration']:
+            print(f'⚠️  Total duration exceeds threshold!')
+
+        if pass_rate < perf_thresholds['min_pass_rate']:
+            print(f'❌ Pass rate below threshold!')
+            exit(1)
+        "
+
+    - name: Notify on failure
+      if: failure()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: failure
+        fields: repo,message,commit,author,action,eventName,ref,workflow
+        text: '🚨 E2E测试失败！请检查：${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+
+  e2e-performance-check:
+    needs: e2e-tests
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Download test results
+      uses: actions/download-artifact@v3
+      with:
+        name: e2e-test-results
+        path: test_results
+
+    - name: Analyze performance trends
+      run: |
+        # Analyze performance trends over time
+        echo "## Performance Analysis" >> $GITHUB_STEP_SUMMARY
+
+        # Check for performance degradation
+        if [ -d "test_results" ]; then
+          echo "### Latest Test Results" >> $GITHUB_STEP_SUMMARY
+
+          # Find the most recent report
+          latest_report=$(ls -t test_results/*.json | head -1)
+          if [ -f "$latest_report" ]; then
+            avg_duration=$(jq -r '.avg_duration' "$latest_report")
+            pass_rate=$(jq -r '.pass_rate' "$latest_report")
+
+            echo "- Average Duration: ${avg_duration}s" >> $GITHUB_STEP_SUMMARY
+            echo "- Pass Rate: $(echo "$pass_rate * 100" | bc -l | cut -d. -f1)%" >> $GITHUB_STEP_SUMMARY
+
+            # Check if performance is degrading
+            if [ -f "test_results/$(basename "$latest_report" | sed 's/_20240[0-9][0-9]_/20240420_/')" ]; then
+              echo "Performance trend analysis not implemented yet" >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+        fi

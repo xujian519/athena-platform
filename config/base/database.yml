@@ -1,42 +1,6 @@
-# ============================================================================
-# Athena工作平台 - 数据库基础配置
-# Database Base Configuration
-# ============================================================================
-
-# PostgreSQL配置
+# 数据库基础配置（所有环境共享）
 database:
-  # 主数据库配置
-  host: localhost
-  port: 5432
-  user: athena
-  password: athena123
-  name: athena
-
-  # 连接池配置
   pool_size: 20
   max_overflow: 10
   pool_timeout: 30
   pool_recycle: 3600
-
-  # 连接配置
-  connect_timeout: 10
-  statement_timeout: 30000
-
-# 法律世界模型数据库
-legal_world_model:
-  host: localhost
-  port: 5432
-  user: postgres
-  password: ${LWM_DB_PASSWORD}
-  name: legal_world_model
-
-# 专利数据库
-patent:
-  host: localhost
-  port: 15432
-  user: athena
-  password: ${PATENT_DB_PASSWORD}
-  name: athena
-  schema: public
-  pool_size: 10
-  max_overflow: 20

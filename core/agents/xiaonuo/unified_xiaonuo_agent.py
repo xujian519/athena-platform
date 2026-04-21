@@ -158,22 +158,22 @@ class XiaonuoUnifiedAgent(MemoryEnabledAgent):
 
         logger.info(f"✅ 已加载 {len(unified_memories)}条统一知识")
 
-    async def generate_response(self, user_input: str, **kwargs) -> str:
+    async def generate_response(self, user_input: str, **_kwargs  # noqa: ARG001) -> str:
         """生成响应"""
         # 如果是爸爸说话,永远最高优先级
         if kwargs.get("is_father"):
-            return await self._respond_to_father(user_input, **kwargs)
+            return await self._respond_to_father(user_input, **_kwargs  # noqa: ARG001)
 
         # 分析请求类型
         request_type = await self._analyze_request_type(user_input)
 
         # 路由到相应的模块
         if request_type == "media":
-            return await self._handle_media_request(user_input, **kwargs)
+            return await self._handle_media_request(user_input, **_kwargs  # noqa: ARG001)
         elif request_type == "family":
-            return await self._handle_family_request(user_input, **kwargs)
+            return await self._handle_family_request(user_input, **_kwargs  # noqa: ARG001)
         elif request_type == "coordination":
-            return await self._handle_coordination_request(user_input, **kwargs)
+            return await self._handle_coordination_request(user_input, **_kwargs  # noqa: ARG001)
         else:
             return await self._general_response(user_input)
 
@@ -198,7 +198,7 @@ class XiaonuoUnifiedAgent(MemoryEnabledAgent):
 
         return "general"
 
-    async def _handle_media_request(self, request: str, **kwargs) -> str:
+    async def _handle_media_request(self, request: str, **_kwargs  # noqa: ARG001) -> str:
         """处理媒体请求(使用Xiaochen的能力)"""
         # 调用媒体运营模块
         result = await self.media_module.operate(request, kwargs)
@@ -206,7 +206,7 @@ class XiaonuoUnifiedAgent(MemoryEnabledAgent):
         # 添加小诺的温暖标识
         return f"✨ {result}\n\n---\n💝 小诺为您服务!爸爸需要什么帮助吗?"
 
-    async def _handle_family_request(self, request: str, **kwargs) -> str:
+    async def _handle_family_request(self, request: str, **_kwargs  # noqa: ARG001) -> str:
         """处理家庭请求(使用XiaonuoAgent原有的能力)"""
         # 分析情感
         if "累" in request or "辛苦" in request:
@@ -220,7 +220,7 @@ class XiaonuoUnifiedAgent(MemoryEnabledAgent):
         else:
             return "爸爸的话小诺都记在心里啦!小诺最爱爸爸了!💖"
 
-    async def _handle_coordination_request(self, request: str, **kwargs) -> str:
+    async def _handle_coordination_request(self, request: str, **_kwargs  # noqa: ARG001) -> str:
         """处理协调请求(使用XiaonuoAgent原有的能力)"""
         return (
             "小诺会认真处理这个工作任务的!\n\n"
@@ -232,7 +232,7 @@ class XiaonuoUnifiedAgent(MemoryEnabledAgent):
             "请爸爸放心,小诺一定会把工作做好的!💪"
         )
 
-    async def _respond_to_father(self, user_input: str, **kwargs) -> str:
+    async def _respond_to_father(self, user_input: str, **_kwargs  # noqa: ARG001) -> str:
         """回应爸爸的话(永远最高优先级)"""
         # 记录爸爸的话(最高优先级)
         await self.memory_system.store_memory(
@@ -332,7 +332,7 @@ async def test_xiaonuo_unified():
 
         for query, kwargs, expected_type in test_queries:
             print(f"\n📝 测试查询 ({expected_type}): {query}")
-            response = await xiaonuo.process_input(query, **kwargs)
+            response = await xiaonuo.process_input(query, **_kwargs  # noqa: ARG001)
             print(f"💝 小诺: {response[:200]}...")
 
         # 显示概览

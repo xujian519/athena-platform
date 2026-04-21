@@ -550,7 +550,7 @@ class EnhancedPatentQualityScorer:
         """延迟加载基础评估器"""
         if self._base_assessor is None:
             try:
-                from patents.core.quality_assessor import ClaimQualityAssessor
+                from core.patents.quality_assessor import ClaimQualityAssessor
                 self._base_assessor = ClaimQualityAssessor()
             except ImportError:
                 self.logger.warning("基础评估器未找到，使用简化模式")

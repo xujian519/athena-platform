@@ -12,7 +12,7 @@ from pathlib import Path
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from patents.core.enhanced_patent_retriever_v2 import EnhancedPatentRetriever
+from core.patents.enhanced_patent_retriever_v2 import EnhancedPatentRetriever
 
 
 def print_section(title: str):

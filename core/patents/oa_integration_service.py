@@ -25,13 +25,13 @@ from core.logging_config import setup_logging
 
 # 导入各模块
 try:
-    from patents.core.oa_document_parser import OfficeActionParser, ParsedOfficeAction
-    from patents.core.oa_human_interaction import (
+    from core.patents.oa_document_parser import OfficeActionParser, ParsedOfficeAction
+    from core.patents.oa_human_interaction import (
         HumanInteractionWorkflow,
         InteractionStep,
         get_oa_interaction,
     )
-    from patents.core.smart_oa_responder import (
+    from core.patents.smart_oa_responder import (
         ResponsePlan,
         SmartOfficeActionResponder,
         get_smart_oa_responder,

@@ -12,8 +12,8 @@ try:
     from .claim_parser import ParsedClaim, ParsedFeature
     from .product_analyzer import AnalyzedProduct, ProductFeature
 except ImportError:
-    from patents.core.infringement.claim_parser import ParsedClaim, ParsedFeature
-    from patents.core.infringement.product_analyzer import AnalyzedProduct, ProductFeature
+    from core.patents.infringement.claim_parser import ParsedClaim, ParsedFeature
+    from core.patents.infringement.product_analyzer import AnalyzedProduct, ProductFeature
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

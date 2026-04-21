@@ -1,0 +1,5 @@
+# Gateway基础配置（所有环境共享）
+gateway:
+  workers: 4
+  log_level: info
+  timeout: 30

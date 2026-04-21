@@ -106,7 +106,7 @@ class XiaochenSagittariusAgent(MemoryEnabledAgent):
         self.campaign_history = media_memories
         logger.info(f"✅ 已加载 {len(media_memories)}条自媒体运营知识")
 
-    async def generate_response(self, user_input: str, **kwargs) -> str:
+    async def generate_response(self, user_input: str, **_kwargs  # noqa: ARG001) -> str:
         """生成响应"""
         # 分析自媒体运营需求
         media_need = await self._analyze_media_need(user_input)

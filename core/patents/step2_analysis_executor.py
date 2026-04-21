@@ -225,7 +225,7 @@ class Step2AnalysisExecutor:
         """初始化子系统"""
         # 小娜深度技术分析器
         try:
-            from patents.core.xiaona_deep_technical_analyzer import (
+            from core.patents.xiaona_deep_technical_analyzer import (
                 get_xiaona_deep_analyzer,
             )
 
@@ -239,7 +239,7 @@ class Step2AnalysisExecutor:
 
         # 智能答复系统
         try:
-            from patents.core.smart_oa_responder import get_smart_oa_responder
+            from core.patents.smart_oa_responder import get_smart_oa_responder
 
             self.smart_responder = get_smart_oa_responder()
             logger.info("✅ 智能答复系统初始化成功")
@@ -249,7 +249,7 @@ class Step2AnalysisExecutor:
 
         # 三元关系提取ML模型
         try:
-            from patents.core.triple_relation_extractor_ml import (
+            from core.patents.triple_relation_extractor_ml import (
                 get_triple_extractor_ml,
             )
 
@@ -263,7 +263,7 @@ class Step2AnalysisExecutor:
 
         # 大规模图谱优化器
         try:
-            from patents.core.large_scale_graph_optimizer import (
+            from core.patents.large_scale_graph_optimizer import (
                 get_graph_optimizer,
             )
 
@@ -275,7 +275,7 @@ class Step2AnalysisExecutor:
 
         # 技术演化分析器
         try:
-            from patents.core.technology_evolution_analyzer import (
+            from core.patents.technology_evolution_analyzer import (
                 get_evolution_analyzer,
             )
 
@@ -451,7 +451,7 @@ class Step2AnalysisExecutor:
             # 3. 技术演化分析
             if self.evolution_analyzer and result.deep_analysis:
                 try:
-                    from patents.core.technology_evolution_analyzer import (
+                    from core.patents.technology_evolution_analyzer import (
                         EvolutionNode,
                     )
 

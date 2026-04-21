@@ -182,7 +182,7 @@ class FixedBGEEmbeddingService:
         self.version = "1.0.1"
 
         # 配置
-        default_model_path = "/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3"
+        default_model_path = "http://127.0.0.1:8766/v1/embeddings"
         self.config = config or {
             "model_path": default_model_path,
             "device": "cpu",

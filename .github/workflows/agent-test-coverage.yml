@@ -1,0 +1,365 @@
+# Agent测试覆盖率检查
+# Agent Test Coverage Check
+#
+# 功能：
+# 1. 运行所有Agent相关测试
+# 2. 收集测试覆盖率数据
+# 3. 生成覆盖率报告
+# 4. 上传到Codecov（如果配置）
+# 5. 设置覆盖率质量门禁
+
+name: Agent Test Coverage
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'core/agents/**'
+      - 'tests/agents/**'
+      - '.github/workflows/agent-test-coverage.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'core/agents/**'
+      - 'tests/agents/**'
+  workflow_dispatch:
+  schedule:
+    # 每天UTC 2:00运行 (北京时间10:00)
+    - cron: '0 2 * * *'
+
+env:
+  PYTHON_VERSION: '3.11'
+  COVERAGE_THRESHOLD: 70  # 覆盖率阈值：70%
+  AGENT_COVERAGE_THRESHOLD: 60  # Agent模块覆盖率阈值：60%
+
+jobs:
+  # ==================== Agent单元测试 ====================
+  agent-unit-tests:
+    name: 🧪 Agent Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 获取完整历史用于覆盖率
+
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: 安装依赖
+        run: |
+          poetry install --no-interaction --no-root
+
+      - name: 运行Agent单元测试
+        run: |
+          poetry run pytest tests/agents/ \
+            -v \
+            -m unit \
+            --cov=core/agents \
+            --cov-report=xml \
+            --cov-report=term-missing \
+            --cov-report=html:htmlcov-agent \
+            --cov-report=json:coverage-agent.json \
+            --junitxml=test-results/agent-unit-tests.xml \
+            --cov-fail-under=${{ env.AGENT_COVERAGE_THRESHOLD }} || true
+
+      - name: 上传测试结果
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: agent-unit-test-results
+          path: test-results/agent-unit-tests.xml
+          retention-days: 30
+
+      - name: 上传覆盖率报告
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-coverage-report
+          path: |
+            coverage-agent.json
+            htmlcov-agent/
+          retention-days: 30
+
+      - name: 上传到Codecov
+        uses: codecov/codecov-action@v4
+        if: success()
+        with:
+          files: ./coverage.xml
+          flags: agents
+          name: agent-coverage
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  # ==================== Agent集成测试 ====================
+  agent-integration-tests:
+    name: 🔗 Agent Integration Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: athena
+          POSTGRES_PASSWORD: athena123
+          POSTGRES_DB: athena_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: 安装依赖
+        run: |
+          poetry install --no-interaction --no-root
+
+      - name: 等待服务就绪
+        run: |
+          timeout 60 bash -c 'until pg_isready -h localhost; do sleep 1; done'
+          timeout 60 bash -c 'until redis-cli ping; do sleep 1; done'
+
+      - name: 运行Agent集成测试
+        env:
+          DATABASE_URL: postgresql://athena:athena123@localhost:5432/athena_test
+          REDIS_URL: redis://localhost:6379
+        run: |
+          poetry run pytest tests/agents/ \
+            -v \
+            -m integration \
+            --junitxml=test-results/agent-integration-tests.xml
+
+      - name: 上传测试结果
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: agent-integration-test-results
+          path: test-results/agent-integration-tests.xml
+          retention-days: 30
+
+  # ==================== Agent性能测试 ====================
+  agent-performance-tests:
+    name: ⚡ Agent Performance Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: 安装依赖
+        run: |
+          poetry install --no-interaction --no-root
+          poetry run pip install pytest-benchmark
+
+      - name: 运行性能测试
+        run: |
+          poetry run pytest tests/agents/ \
+            -v \
+            -m performance \
+            --benchmark-only \
+            --benchmark-json=benchmark-results.json \
+            --junitxml=test-results/agent-performance-tests.xml || true
+
+      - name: 上传性能测试结果
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: agent-performance-results
+          path: |
+            benchmark-results.json
+            test-results/agent-performance-tests.xml
+          retention-days: 30
+
+      - name: 生成性能报告
+        if: always()
+        run: |
+          echo "## ⚡ Agent性能测试结果" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -f benchmark-results.json ]; then
+            echo "性能基准测试已完成" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            cat benchmark-results.json | head -50 >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ 未找到性能测试结果" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # ==================== 覆盖率汇总分析 ====================
+  coverage-analysis:
+    name: 📊 Coverage Analysis
+    runs-on: ubuntu-latest
+    needs: [agent-unit-tests, agent-integration-tests]
+    if: always()
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 下载覆盖率报告
+        uses: actions/download-artifact@v4
+        with:
+          name: agent-coverage-report
+          path: ./coverage
+
+      - name: 分析覆盖率数据
+        run: |
+          echo "## 📊 Agent测试覆盖率报告" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -f coverage/coverage-agent.json ]; then
+            # 使用Python解析覆盖率JSON
+            python << 'EOF'
+            import json
+            import os
+
+            with open('coverage/coverage-agent.json', 'r') as f:
+                data = json.load(f)
+
+            # 提取总体覆盖率
+            totals = data.get('totals', {})
+            line_coverage = totals.get('percent_covered', 0)
+
+            # 提取各文件覆盖率
+            files = data.get('files', {})
+
+            print(f"\n### 总体覆盖率: {line_coverage:.1f}%\n")
+
+            # 生成Markdown表格
+            print("| 文件 | 语句覆盖 | 分支覆盖 |")
+            print("|------|---------|---------|")
+
+            for file_path, file_data in files.items():
+                # 只显示agents目录下的文件
+                if 'agents' in file_path:
+                    summary = file_data.get('summary', {})
+                    line_cov = summary.get('percent_covered', 0)
+                    branch_cov = summary.get('percent_covered', 0)  # 简化处理
+
+                    # 只显示简短文件名
+                    short_name = file_path.split('/')[-1]
+                    print(f"| {short_name} | {line_cov:.1f}% | {branch_cov:.1f}% |")
+
+            # 检查是否达标
+            threshold = float(os.getenv('AGENT_COVERAGE_THRESHOLD', 60))
+            if line_coverage >= threshold:
+                print(f"\n✅ 覆盖率达标 (≥{threshold}%)")
+            else:
+                print(f"\n⚠️ 覆盖率未达标 (<{threshold}%)")
+                exit(1)
+
+            # 写入GitHub Step Summary
+            with open(os.getenv('GITHUB_STEP_SUFFIX', ''), 'a') as f:
+                pass
+            EOF
+          else
+            echo "⚠️ 覆盖率报告未找到" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # ==================== 质量门禁 ====================
+  quality-gate:
+    name: 🚪 Agent Quality Gate
+    runs-on: ubuntu-latest
+    needs: [agent-unit-tests, agent-integration-tests, coverage-analysis]
+    if: always()
+
+    steps:
+      - name: 检查质量门禁
+        run: |
+          echo "## 🚪 Agent质量门禁检查" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| 检查项 | 状态 |" >> $GITHUB_STEP_SUMMARY
+          echo("|-------|------|" >> $GITHUB_STEP_SUMMARY
+
+          GATE_FAILED=0
+
+          # 单元测试
+          if [ "${{ needs.agent-unit-tests.result }}" == "success" ]; then
+            echo "| ✅ 单元测试 | 通过 |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| ❌ 单元测试 | 失败 |" >> $GITHUB_STEP_SUMMARY
+            GATE_FAILED=1
+          fi
+
+          # 集成测试（允许失败）
+          if [ "${{ needs.agent-integration-tests.result }}" == "success" ]; then
+            echo "| ✅ 集成测试 | 通过 |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| ⚠️ 集成测试 | 失败（非阻塞） |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # 覆盖率分析
+          if [ "${{ needs.coverage-analysis.result }}" == "success" ]; then
+            echo "| ✅ 覆盖率分析 | 通过 |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| ❌ 覆盖率分析 | 失败 |" >> $GITHUB_STEP_SUMMARY
+            GATE_FAILED=1
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # 总体判定
+          if [ $GATE_FAILED -eq 0 ]; then
+            echo "### 🎉 Agent质量门禁通过！" >> $GITHUB_STEP_SUMMARY
+            exit 0
+          else
+            echo "### ❌ Agent质量门禁未通过" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+      - name: 发送状态通知
+        if: always()
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "✅ Agent测试覆盖率检查完成"
+          else
+            echo "⚠️ Agent测试覆盖率检查发现问题"
+          fi

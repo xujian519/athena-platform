@@ -221,7 +221,7 @@ class VectorGraphFusionService:
                 logger.info("✅ 使用 CPU 推理")
 
             # 使用本地BGE模型
-            model_path = "/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3"
+            model_path = "http://127.0.0.1:8766/v1/embeddings"
 
             self.bge_tokenizer = BertTokenizer.from_pretrained(model_path, local_files_only=True)
             self.bge_model = BertModel.from_pretrained(

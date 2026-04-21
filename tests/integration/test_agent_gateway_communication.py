@@ -308,7 +308,7 @@ class TestBaseAgentIntegration:
 
         # 创建测试Agent
         class TestAgent(BaseAgent):
-            def process(self, input_text: str, **kwargs) -> str:
+            def process(self, input_text: str, **_kwargs  # noqa: ARG001) -> str:
                 return f"Processed: {input_text}"
 
         agent = TestAgent(

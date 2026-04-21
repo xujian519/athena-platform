@@ -563,7 +563,7 @@ def create_enhanced_agent_loop(
     agent_name: str,
     agent_type: str,
     system_prompt: str,
-    **kwargs,
+    **_kwargs  # noqa: ARG001,
 ) -> EnhancedAgentLoop:
     """创建增强版 Agent Loop
 
@@ -571,7 +571,7 @@ def create_enhanced_agent_loop(
         agent_name: 代理名称
         agent_type: 代理类型
         system_prompt: 系统提示词
-        **kwargs: 其他配置参数
+        **_kwargs  # noqa: ARG001: 其他配置参数
 
     Returns:
         EnhancedAgentLoop: 增强版 Agent Loop 实例
@@ -580,7 +580,7 @@ def create_enhanced_agent_loop(
         agent_name=agent_name,
         agent_type=agent_type,
         system_prompt=system_prompt,
-        **kwargs,
+        **_kwargs  # noqa: ARG001,
     )
     return EnhancedAgentLoop(config)
 

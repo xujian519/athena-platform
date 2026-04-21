@@ -117,7 +117,7 @@ class SemanticReasoningEngine:
 
             # 模型搜索顺序:优先MPS优化模型,然后普通本地模型
             model_paths = [
-                "/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3",  # MPS优化模型  # TODO: 确保除数不为零
+                "http://127.0.0.1:8766/v1/embeddings",  # MPS优化模型  # TODO: 确保除数不为零
                 "/Users/xujian/Athena工作平台/models/BAAI/bge-m3",  # 普通本地模型  # TODO: 确保除数不为零
             ]
 

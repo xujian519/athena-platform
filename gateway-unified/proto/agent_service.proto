@@ -1,0 +1,148 @@
+syntax = "proto3";
+
+package athena.agent.v1;
+
+option go_package = "github.com/athena-workspace/gateway-unified/proto";
+
+// Agent服务 - 提供智能体执行和状态查询
+service AgentService {
+  // 执行任务（流式响应）
+  rpc ExecuteTask(TaskRequest) returns (stream TaskResponse);
+
+  // 获取智能体状态
+  rpc GetAgentStatus(AgentStatusRequest) returns (AgentStatusResponse);
+
+  // 心跳
+  rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse);
+
+  // 批量执行任务
+  rpc ExecuteBatch(BatchRequest) returns (stream BatchResponse);
+
+  // 取消任务
+  rpc CancelTask(CancelRequest) returns (CancelResponse);
+}
+
+// ==================== 任务执行 ====================
+
+// 任务请求
+message TaskRequest {
+  string task_id = 1;
+  string agent_type = 2;      // "xiaona", "xiaonuo", "yunxi"
+  string scenario = 3;        // "patent_search", "legal_analysis", etc.
+  string user_input = 4;
+  map<string, string> context = 5;
+  string project_path = 6;
+  int32 priority = 7;         // 0-10, 默认5
+  int32 timeout = 8;          // 超时时间（秒）
+}
+
+// 任务响应（流式）
+message TaskResponse {
+  string task_id = 1;
+  string agent_type = 2;
+  ResponseType type = 3;
+  int64 timestamp = 4;
+
+  oneof payload {
+    ProgressUpdate progress = 5;
+    string partial_result = 6;
+    string final_result = 7;
+    Error error = 8;
+  }
+}
+
+// 响应类型
+enum ResponseType {
+  PROGRESS = 0;      // 进度更新
+  PARTIAL = 1;       // 部分结果
+  FINAL = 2;         // 最终结果
+  ERROR = 3;         // 错误
+}
+
+// 进度更新
+message ProgressUpdate {
+  int32 percentage = 1;        // 0-100
+  string message = 2;
+  string current_step = 3;
+  int32 total_steps = 4;
+  map<string, string> details = 5;
+}
+
+// 错误信息
+message Error {
+  string code = 1;
+  string message = 2;
+  string details = 3;
+}
+
+// ==================== 状态查询 ====================
+
+// Agent状态请求
+message AgentStatusRequest {
+  string agent_type = 1;
+}
+
+// Agent状态响应
+message AgentStatusResponse {
+  string agent_type = 1;
+  bool is_healthy = 2;
+  string status = 3;           // "idle", "busy", "error"
+  int32 current_tasks = 4;
+  int64 total_completed = 5;
+  int64 total_failed = 6;
+  double cpu_usage = 7;
+  double memory_usage = 8;
+  int64 uptime_seconds = 9;
+  repeated string active_task_ids = 10;
+}
+
+// ==================== 心跳 ====================
+
+// 心跳请求
+message HeartbeatRequest {
+  string agent_type = 1;
+  int64 timestamp = 2;
+  map<string, string> metadata = 3;
+}
+
+// 心跳响应
+message HeartbeatResponse {
+  string status = 1;           // "ok", "error"
+  int64 timestamp = 2;
+  map<string, string> metadata = 3;
+}
+
+// ==================== 批量执行 ====================
+
+// 批量请求
+message BatchRequest {
+  repeated TaskRequest tasks = 1;
+  int32 concurrency = 2;       // 并发数
+}
+
+// 批量响应
+message BatchResponse {
+  string batch_id = 1;
+  string task_id = 2;
+  ResponseType type = 3;
+  oneof payload {
+    ProgressUpdate progress = 4;
+    string final_result = 5;
+    Error error = 6;
+  }
+}
+
+// ==================== 任务取消 ====================
+
+// 取消请求
+message CancelRequest {
+  string task_id = 1;
+  string reason = 2;
+}
+
+// 取消响应
+message CancelResponse {
+  string task_id = 1;
+  bool success = 2;
+  string message = 3;
+}

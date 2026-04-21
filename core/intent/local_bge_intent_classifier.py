@@ -4,15 +4,13 @@ from __future__ import annotations
 Phase 2: 本地BGE增强意图识别系统(使用项目本地模型)
 Local BGE-Enhanced Intent Recognition System
 
-使用项目内已优化的本地BGE模型:
-- models/converted/BAAI/bge-m3/ (2.1GB, 1024维, MPS优化)
+使用BGE-M3 API服务:
+- http://127.0.0.1:8766/v1/embeddings (1024维向量)
 
 特性:
-1. 使用本地优化模型,无需下载
-2. MPS GPU加速(Apple Silicon)
-3. Sentence Transformers集成
-4. 高性能意图分类
-5. 支持50种意图类型
+1. 使用API服务,无需本地模型文件
+2. 高性能意图分类
+3. 支持50种意图类型
 
 预期提升: 准确率 70% → 90%+
 
@@ -52,7 +50,7 @@ class LocalBGEIntentClassifier:
     """本地BGE增强意图识别器(使用项目本地BGE-M3模型)"""
 
     # 本地模型路径 - 使用BGE-M3
-    LOCAL_BGE_M3 = str(project_root / "models/converted/BAAI/bge-m3")
+    LOCAL_BGE_M3 = "http://127.0.0.1:8766/v1/embeddings"
 
     def __init__(self, model_size: str = "m3"):
         """初始化本地BGE意图识别器(使用BGE-M3)

@@ -1,188 +1,275 @@
 """
-配置适配器（兼容旧配置）
-Configuration Adapter for Legacy Configuration
+配置适配器
 
-提供适配器模式，使旧配置可以无缝迁移到新配置系统
+> 版本: v1.0
+> 更新: 2026-04-21
+> 说明: 适配旧配置格式到新的统一配置系统
+
+用途:
+- 兼容旧的配置访问方式
+- 逐步迁移到新的配置系统
+- 无缝过渡，不破坏现有代码
 """
+
 from typing import Dict, Any, Optional
 from pathlib import Path
-import yaml
-from core.config.unified_settings import UnifiedSettings
+import json
+import os
 
 
 class ConfigAdapter:
-    """配置适配器"""
+    """
+    配置适配器
+    
+    将旧的配置格式适配到新的统一配置系统
+    """
 
     @staticmethod
-    def adapt_old_database_config(old_config: Dict[str, Any]) -> Dict[str, Any]:
-        """适配旧数据库配置到新格式
-
-        Args:
-            old_config: 旧配置字典
-
-        Returns:
-            新格式配置字典
+    def adapt_env_file(env_path: str = ".env") -> Dict[str, Any]:
         """
-        new_config = {}
-
-        # 适配DATABASE_URL
-        if "DATABASE_URL" in old_config:
-            new_config["database_url"] = old_config["DATABASE_URL"]
-            # 解析URL提取配置
-            # postgresql://user:pass@host:port/db
-            import re
-            match = re.match(r'postgresql://(\w+):([^@]+)@([^:]+):(\d+)/(\w+)', old_config["DATABASE_URL"])
-            if match:
-                new_config["database_user"] = match.group(1)
-                new_config["database_password"] = match.group(2)
-                new_config["database_host"] = match.group(3)
-                new_config["database_port"] = int(match.group(4))
-                new_config["database_name"] = match.group(5)
-
-        # 适配单独的数据库配置
-        if "DB_HOST" in old_config:
-            new_config["database_host"] = old_config["DB_HOST"]
-        if "DB_PORT" in old_config:
-            new_config["database_port"] = old_config["DB_PORT"]
-        if "DB_USER" in old_config:
-            new_config["database_user"] = old_config["DB_USER"]
-        if "DB_PASSWORD" in old_config:
-            new_config["database_password"] = old_config["DB_PASSWORD"]
-        if "DB_NAME" in old_config:
-            new_config["database_name"] = old_config["DB_NAME"]
-
-        return new_config
-
-    @staticmethod
-    def adapt_old_redis_config(old_config: Dict[str, Any]) -> Dict[str, Any]:
-        """适配旧Redis配置到新格式
-
-        Args:
-            old_config: 旧配置字典
-
-        Returns:
-            新格式配置字典
-        """
-        new_config = {}
-
-        # 适配REDIS_URL
-        if "REDIS_URL" in old_config:
-            new_config["redis_url"] = old_config["REDIS_URL"]
-            # 解析URL提取配置
-            # redis://[:password]@host:port/db
-            import re
-            match = re.match(r'redis://(:([^@]+)@)?([^:]+):(\d+)/(\d+)', old_config["REDIS_URL"])
-            if match:
-                if match.group(2):  # 有密码
-                    new_config["redis_password"] = match.group(2)
-                new_config["redis_host"] = match.group(3)
-                new_config["redis_port"] = int(match.group(4))
-                new_config["redis_db"] = int(match.group(5))
-
-        # 适配单独的Redis配置
-        if "REDIS_HOST" in old_config:
-            new_config["redis_host"] = old_config["REDIS_HOST"]
-        if "REDIS_PORT" in old_config:
-            new_config["redis_port"] = old_config["REDIS_PORT"]
-        if "REDIS_PASSWORD" in old_config:
-            new_config["redis_password"] = old_config["REDIS_PASSWORD"]
-        if "REDIS_DB" in old_config:
-            new_config["redis_db"] = old_config["REDIS_DB"]
-
-        return new_config
-
-    @staticmethod
-    def adapt_old_llm_config(old_config: Dict[str, Any]) -> Dict[str, Any]:
-        """适配旧LLM配置到新格式
-
-        Args:
-            old_config: 旧配置字典
-
-        Returns:
-            新格式配置字典
-        """
-        new_config = {}
-
-        # 适配API密钥
-        if "OPENAI_API_KEY" in old_config:
-            new_config["llm_default_provider"] = "openai"
-            new_config["llm_api_key"] = old_config["OPENAI_API_KEY"]
-        elif "ANTHROPIC_API_KEY" in old_config:
-            new_config["llm_default_provider"] = "anthropic"
-            new_config["llm_api_key"] = old_config["ANTHROPIC_API_KEY"]
-        elif "DEEPSEEK_API_KEY" in old_config:
-            new_config["llm_default_provider"] = "deepseek"
-            new_config["llm_api_key"] = old_config["DEEPSEEK_API_KEY"]
-
-        # 适配模型配置
-        if "LLM_MODEL" in old_config:
-            new_config["llm_model"] = old_config["LLM_MODEL"]
-        if "LLM_TEMPERATURE" in old_config:
-            new_config["llm_temperature"] = old_config["LLM_TEMPERATURE"]
-        if "LLM_MAX_TOKENS" in old_config:
-            new_config["llm_max_tokens"] = old_config["LLM_MAX_TOKENS"]
-
-        return new_config
-
-    @staticmethod
-    def load_old_config(config_path: str) -> Dict[str, Any]:
-        """加载旧配置文件
-
-        Args:
-            config_path: 配置文件路径
-
-        Returns:
+        适配.env文件到新配置格式
+        
+        参数:
+            env_path: .env文件路径
+            
+        返回:
             配置字典
         """
-        config_file = Path(config_path)
-        if not config_file.exists():
-            return {}
-
-        # 根据文件扩展名选择加载方式
-        if config_file.suffix in [".yml", ".yaml"]:
-            with open(config_file) as f:
-                return yaml.safe_load(f) or {}
-        elif config_file.suffix == ".json":
-            import json
-            with open(config_file) as f:
-                return json.load(f)
-        else:
-            return {}
+        config = {}
+        
+        if not Path(env_path).exists():
+            return config
+        
+        with open(env_path) as f:
+            for line in f:
+                line = line.strip()
+                
+                # 跳过注释和空行
+                if not line or line.startswith("#"):
+                    continue
+                
+                # 解析KEY=VALUE
+                if "=" in line:
+                    key, value = line.split("=", 1)
+                    key = key.strip()
+                    value = value.strip()
+                    
+                    # 适配到新的配置键名
+                    new_key = ConfigAdapter._map_old_key_to_new(key)
+                    config[new_key] = value
+        
+        return config
 
     @staticmethod
-    def migrate_config(old_config_path: str, config_type: str) -> Dict[str, Any]:
-        """迁移旧配置到新格式
-
-        Args:
-            old_config_path: 旧配置文件路径
-            config_type: 配置类型 (database/redis/llm)
-
-        Returns:
-            新格式配置字典
+    def _map_old_key_to_new(old_key: str) -> str:
         """
-        old_config = ConfigAdapter.load_old_config(old_config_path)
+        映射旧的配置键到新的配置键
+        
+        参数:
+            old_key: 旧的配置键名
+            
+        返回:
+            新的配置键名
+        """
+        # 数据库配置映射
+        mapping = {
+            "DB_HOST": "database_host",
+            "DB_PORT": "database_port",
+            "DB_USER": "database_user",
+            "DB_NAME": "database_name",
+            "DB_PASSWORD": "database_password",
+            
+            # Redis配置
+            "REDIS_HOST": "redis_host",
+            "REDIS_PORT": "redis_port",
+            "REDIS_PASSWORD": "redis_password",
+            
+            # LLM配置
+            "OPENAI_API_KEY": "llm_api_key",
+            "ANTHROPIC_API_KEY": "llm_api_key",
+            
+            # JWT配置
+            "JWT_SECRET": "jwt_secret",
+            "JWT_SECRET_KEY": "jwt_secret",
+            
+            # Neo4j配置
+            "NEO4J_PASSWORD": "neo4j_password",
+        }
+        
+        return mapping.get(old_key, old_key.lower())
 
-        if config_type == "database":
-            return ConfigAdapter.adapt_old_database_config(old_config)
-        elif config_type == "redis":
-            return ConfigAdapter.adapt_old_redis_config(old_config)
-        elif config_type == "llm":
-            return ConfigAdapter.adapt_old_llm_config(old_config)
-        else:
-            return old_config
+    @staticmethod
+    def adapt_service_discovery(
+        config_path: str = "config/service_discovery.json"
+    ) -> Dict[str, Any]:
+        """
+        适配服务发现配置
+        
+        参数:
+            config_path: 配置文件路径
+            
+        返回:
+            配置字典
+        """
+        if not Path(config_path).exists():
+            return {}
+        
+        with open(config_path) as f:
+            data = json.load(f)
+        
+        # 提取API配置
+        api_config = data.get("api", {})
+        
+        return {
+            "gateway_host": api_config.get("host", "0.0.0.0"),
+            "gateway_port": api_config.get("port", 8005),
+            "gateway_cors_enabled": api_config.get("cors_enabled", True),
+            "gateway_rate_limiting": api_config.get("rate_limiting", {}),
+        }
+
+    @staticmethod
+    def adapt_llm_model_registry(
+        config_path: str = "config/llm_model_registry.json"
+    ) -> Dict[str, Any]:
+        """
+        适配LLM模型注册表
+        
+        参数:
+            config_path: 配置文件路径
+            
+        返回:
+            配置字典
+        """
+        if not Path(config_path).exists():
+            return {}
+        
+        with open(config_path) as f:
+            data = json.load(f)
+        
+        # 提取模型信息
+        registry = data.get("models", [])
+        
+        # 按provider分组
+        providers = {}
+        for model in registry:
+            provider = model.get("provider", "unknown")
+            if provider not in providers:
+                providers[provider] = []
+            providers[provider].append(model)
+        
+        return {
+            "llm_providers": list(providers.keys()),
+            "llm_models": {model["model_id"]: model for model in registry},
+        }
+
+    @staticmethod
+    def get_legacy_config(key: str, default: Any = None) -> Any:
+        """
+        获取旧配置的值（向后兼容）
+        
+        参数:
+            key: 配置键名
+            default: 默认值
+            
+        返回:
+            配置值
+        """
+        # 1. 尝试从环境变量读取
+        env_value = os.getenv(key, default)
+        if env_value != default:
+            return env_value
+        
+        # 2. 尝试从.env文件读取
+        env_path = Path(".env")
+        if env_path.exists():
+            with open(env_path) as f:
+                for line in f:
+                    line = line.strip()
+                    if line.startswith("#") or not line:
+                        continue
+                    
+                    if "=" in line:
+                        k, v = line.split("=", 1)
+                        if k.strip() == key:
+                            return v.strip()
+        
+        return default
+
+    @staticmethod
+    def migrate_to_new_config(
+        old_config_paths: list = None,
+        output_path: str = "config/environments/development.yml"
+    ) -> None:
+        """
+        迁移旧配置到新配置格式
+        
+        参数:
+            old_config_paths: 旧配置文件路径列表
+            output_path: 输出配置文件路径
+        """
+        if old_config_paths is None:
+            old_config_paths = [
+                ".env",
+                "config/service_discovery.json",
+                "config/llm_model_registry.json",
+            ]
+        
+        # 收集所有配置
+        new_config = {}
+        
+        # 适配.env文件
+        env_config = ConfigAdapter.adapt_env_file(old_config_paths[0])
+        new_config.update(env_config)
+        
+        # 适配服务发现配置
+        if len(old_config_paths) > 1:
+            service_config = ConfigAdapter.adapt_service_discovery(old_config_paths[1])
+            new_config.update(service_config)
+        
+        # 适配LLM模型注册表
+        if len(old_config_paths) > 2:
+            llm_config = ConfigAdapter.adapt_llm_model_registry(old_config_paths[2])
+            new_config.update(llm_config)
+        
+        # 输出到新配置文件
+        import yaml
+        with open(output_path, "w") as f:
+            yaml.dump(new_config, f, default_flow_style=False)
+        
+        print(f"✅ 配置已迁移到: {output_path}")
 
 
-# 便捷函数
-def migrate_database_config(config_path: str) -> Dict[str, Any]:
-    """迁移数据库配置"""
-    return ConfigAdapter.migrate_config(config_path, "database")
+# 向后兼容的便捷函数
+def get_config(key: str, default: Any = None) -> Any:
+    """
+    获取配置值（向后兼容）
+    
+    优先级:
+    1. 新的统一配置系统
+    2. 旧的环境变量
+    3. .env文件
+    4. 默认值
+    
+    参数:
+        key: 配置键名
+        default: 默认值
+        
+    返回:
+        配置值
+    """
+    try:
+        from core.config.unified_settings import settings
+        # 尝试从新配置获取
+        if hasattr(settings, key):
+            return getattr(settings, key)
+    except Exception:
+        pass
+    
+    # 回退到旧配置
+    return ConfigAdapter.get_legacy_config(key, default)
 
 
-def migrate_redis_config(config_path: str) -> Dict[str, Any]:
-    """迁移Redis配置"""
-    return ConfigAdapter.migrate_config(config_path, "redis")
-
-
-def migrate_llm_config(config_path: str) -> Dict[str, Any]:
-    """迁移LLM配置"""
-    return ConfigAdapter.migrate_config(config_path, "llm")
+__all__ = [
+    "ConfigAdapter",
+    "get_config",
+]

@@ -32,22 +32,22 @@ try:
         TrialPreparationGuide
     )
 except ImportError:
-    from patents.core.litigation.litigation_strategy_analyzer import (
+    from core.patents.litigation.litigation_strategy_analyzer import (
         LitigationStrategyAnalyzer,
         LitigationType,
         LitigationRole,
         CaseAnalysis
     )
-    from patents.core.litigation.evidence_organizer import (
+    from core.patents.litigation.evidence_organizer import (
         EvidenceOrganizer,
         EvidenceOrganizationResult
     )
-    from patents.core.litigation.pleading_generator import (
+    from core.patents.litigation.pleading_generator import (
         PleadingGenerator,
         PleadingType,
         PleadingResult
     )
-    from patents.core.litigation.trial_assistant import (
+    from core.patents.litigation.trial_assistant import (
         TrialAssistant,
         TrialPreparationGuide
     )

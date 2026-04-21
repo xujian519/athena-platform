@@ -44,9 +44,13 @@ class TopPatentExpertSystem:
 
         # 专家数据库路径
         if expert_database_path is None:
-            expert_database_path = (
-                "/Users/xujian/Athena工作平台/knowledge/top_patent_experts.json"
-            )
+            import os
+            # 从当前文件 core/cognition/top_patent_expert_system/system.py 向上找到项目根目录
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            cognition_dir = os.path.dirname(current_dir)
+            core_dir = os.path.dirname(cognition_dir)
+            project_root = os.path.dirname(core_dir)
+            expert_database_path = os.path.join(project_root, "core/patents/knowledge/top_patent_experts.json")
         self.expert_database_path = expert_database_path
         self.expert_database: dict[str, Any] = {}
 

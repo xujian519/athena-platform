@@ -15,7 +15,7 @@ from pathlib import Path
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from patents.core.enhanced_patent_retriever_v2 import EnhancedPatentRetriever
+from core.patents.enhanced_patent_retriever_v2 import EnhancedPatentRetriever
 
 
 def print_section(title: str):
@@ -245,7 +245,7 @@ def search_oxygen_molecular_sieve():
         for result in results:
             patent_dict = dict(zip(col_names, result, strict=False))
             # 使用PatentInfo类来处理（虽然字段可能不完全匹配）
-            from patents.core.enhanced_patent_retriever_v2 import PatentInfo
+            from core.patents.enhanced_patent_retriever_v2 import PatentInfo
             # 过滤掉不存在的字段
             filtered_dict = {k: v for k, v in patent_dict.items()
                            if k in ['patent_name', 'application_number', 'patent_type',

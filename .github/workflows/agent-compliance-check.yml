@@ -1,0 +1,332 @@
+# Agent接口合规性检查
+# Agent Interface Compliance Check
+#
+# 功能：
+# 1. 自动检查所有Agent是否符合统一接口标准
+# 2. 验证Agent能力注册
+# 3. 检查get_info、get_system_prompt等核心方法
+# 4. 生成合规性报告
+
+name: Agent Compliance Check
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'core/agents/**'
+      - 'tests/agents/**'
+      - '.github/workflows/agent-compliance-check.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'core/agents/**'
+      - 'tests/agents/**'
+  workflow_dispatch:  # 允许手动触发
+
+env:
+  PYTHON_VERSION: '3.11'
+  POETRY_VERSION: '1.7.1'
+
+jobs:
+  # ==================== Agent发现 ====================
+  agent-discovery:
+    name: 🔍 Agent Discovery
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+
+      - name: 发现所有Agent
+        id: discover
+        run: |
+          # 查找所有Agent类
+          python << 'EOF'
+          import os
+          import re
+          from pathlib import Path
+
+          # 搜索core/agents目录
+          agents_dir = Path("core/agents")
+          discovered_agents = []
+
+          # 遍历Python文件
+          for py_file in agents_dir.rglob("*agent*.py"):
+              # 跳过测试文件和__init__.py
+              if "test" in py_file.name or py_file.name == "__init__.py":
+                  continue
+
+              # 读取文件内容，查找Agent类定义
+              try:
+                  content = py_file.read_text(encoding='utf-8')
+
+                  # 查找类定义
+                  class_pattern = r'class\s+(\w+Agent)\s*\('
+                  matches = re.findall(class_pattern, content)
+
+                  for class_name in matches:
+                      # 计算模块路径
+                      rel_path = py_file.relative_to("core")
+                      module_path = str(rel_path.with_suffix('')).replace('/', '.')
+
+                      discovered_agents.append({
+                          'class': class_name,
+                          'module': module_path,
+                          'file': str(py_file)
+                      })
+              except Exception as e:
+                  print(f"Warning: Could not read {py_file}: {e}")
+
+          # 输出结果到GitHub Actions输出
+          if discovered_agents:
+              print(f"Found {len(discovered_agents)} agents")
+              for agent in discovered_agents:
+                  print(f"agent_class={agent['class']}")
+                  print(f"agent_module={agent['module']}")
+                  print(f"agent_file={agent['file']}")
+          else:
+              print("No agents found")
+
+          # 保存到文件
+          import json
+          with open('.github/workflows/discovered_agents.json', 'w') as f:
+              json.dump(discovered_agents, f, indent=2)
+          EOF
+
+      - name: 上传Agent列表
+        uses: actions/upload-artifact@v4
+        with:
+          name: discovered-agents
+          path: .github/workflows/discovered_agents.json
+          retention-days: 7
+
+  # ==================== 接口合规性检查 ====================
+  compliance-check:
+    name: ✅ Interface Compliance
+    runs-on: ubuntu-latest
+    needs: agent-discovery
+    timeout-minutes: 15
+
+    strategy:
+      matrix:
+        check-type:
+          - name: "基础接口检查"
+            file: "test_interface_compliance_simple"
+          - name: "完整接口检查"
+            file: "test_interface_compliance"
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: 安装依赖
+        run: |
+          poetry install --no-interaction --no-root
+
+      - name: 下载Agent列表
+        uses: actions/download-artifact@v4
+        with:
+          name: discovered-agents
+          path: .github/workflows/
+
+      - name: 运行合规性检查
+        env:
+          AGENT_CHECK_TYPE: ${{ matrix.check-type.name }}
+        run: |
+          poetry run pytest tests/agents/${{ matrix.check-type.file }}.py \
+            -v \
+            --tb=short \
+            --junitxml=test-results/compliance-${{ matrix.check-type.file }}.xml
+
+      - name: 上传测试结果
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: compliance-results-${{ matrix.check-type.file }}
+          path: test-results/compliance-${{ matrix.check-type.file }}.xml
+          retention-days: 30
+
+      - name: 生成合规性报告
+        if: always()
+        run: |
+          echo "## ${{ matrix.check-type.name }} 报告" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # 检查测试结果
+          if [ -f test-results/compliance-${{ matrix.check-type.file }}.xml ]; then
+            # 提取测试统计
+            TESTS=$(grep -o 'tests="[0-9]*"' test-results/compliance-${{ matrix.check-type.file }}.xml | head -1 | grep -o '[0-9]*')
+            FAILURES=$(grep -o 'failures="[0-9]*"' test-results/compliance-${{ matrix.check-type.file }}.xml | head -1 | grep -o '[0-9]*')
+            ERRORS=$(grep -o 'errors="[0-9]*"' test-results/compliance-${{ matrix.check-type.file }}.xml | head -1 | grep -o '[0-9]*')
+
+            echo "| 指标 | 数值 |" >> $GITHUB_STEP_SUMMARY
+            echo "|------|------|" >> $GITHUB_STEP_SUMMARY
+            echo "| 总测试数 | $TESTS |" >> $GITHUB_STEP_SUMMARY
+            echo "| 失败数 | $FAILURES |" >> $GITHUB_STEP_SUMMARY
+            echo "| 错误数 | $ERRORS |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ 测试结果文件未找到" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # ==================== 能力注册检查 ====================
+  capability-check:
+    name: 🎯 Capability Registration
+    runs-on: ubuntu-latest
+    needs: agent-discovery
+    timeout-minutes: 10
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+
+      - name: 检查能力注册
+        run: |
+          poetry install --no-interaction --no-root
+          poetry run python << 'EOF'
+          import sys
+          from pathlib import Path
+
+          # 添加core到路径
+          sys.path.insert(0, str(Path.cwd()))
+
+          results = []
+
+          try:
+              from core.agents.xiaona.retriever_agent import RetrieverAgent
+              agent = RetrieverAgent(agent_id="test_check")
+              capabilities = agent.get_capabilities()
+
+              results.append({
+                  'agent': 'RetrieverAgent',
+                  'capabilities': len(capabilities),
+                  'status': '✅'
+              })
+          except Exception as e:
+              results.append({
+                  'agent': 'RetrieverAgent',
+                  'capabilities': 0,
+                  'status': f'❌ {str(e)}'
+              })
+
+          try:
+              from core.agents.xiaona.analyzer_agent import AnalyzerAgent
+              agent = AnalyzerAgent(agent_id="test_check")
+              capabilities = agent.get_capabilities()
+
+              results.append({
+                  'agent': 'AnalyzerAgent',
+                  'capabilities': len(capabilities),
+                  'status': '✅'
+              })
+          except Exception as e:
+              results.append({
+                  'agent': 'AnalyzerAgent',
+                  'capabilities': 0,
+                  'status': f'❌ {str(e)}'
+              })
+
+          try:
+              from core.agents.xiaona.writer_agent import WriterAgent
+              agent = WriterAgent(agent_id="test_check")
+              capabilities = agent.get_capabilities()
+
+              results.append({
+                  'agent': 'WriterAgent',
+                  'capabilities': len(capabilities),
+                  'status': '✅'
+              })
+          except Exception as e:
+              results.append({
+                  'agent': 'WriterAgent',
+                  'capabilities': 0,
+                  'status': f'❌ {str(e)}'
+              })
+
+          # 输出结果
+          print("\n## 能力注册检查结果\n")
+          print("| Agent | 能力数 | 状态 |")
+          print("|-------|--------|------|")
+          for r in results:
+              print(f"| {r['agent']} | {r['capabilities']} | {r['status']} |")
+
+          # 检查是否有失败
+          failed = [r for r in results if '❌' in r['status']]
+          if failed:
+              print(f"\n⚠️ {len(failed)} 个Agent能力检查失败")
+              sys.exit(1)
+          else:
+              print("\n✅ 所有Agent能力检查通过")
+          EOF
+
+  # ==================== 合规性汇总 ====================
+  compliance-summary:
+    name: 📊 Compliance Summary
+    runs-on: ubuntu-latest
+    needs: [compliance-check, capability-check]
+    if: always()
+
+    steps:
+      - name: 生成合规性摘要
+        run: |
+          echo "## 📊 Agent合规性检查汇总" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| 检查项 | 状态 |" >> $GITHUB_STEP_SUMMARY
+          echo("|-------|------|" >> $GITHUB_STEP_SUMMARY
+
+          # 接口合规性检查
+          if [ "${{ needs.compliance-check.result }}" == "success" ]; then
+            echo "| ✅ 接口合规性 | 通过 |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| ❌ 接口合规性 | 失败 |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # 能力注册检查
+          if [ "${{ needs.capability-check.result }}" == "success" ]; then
+            echo "| ✅ 能力注册 | 通过 |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| ❌ 能力注册 | 失败 |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # 总体状态
+          if [ "${{ needs.compliance-check.result }}" == "success" ] && \
+             [ "${{ needs.capability-check.result }}" == "success" ]; then
+            echo "### 🎉 所有合规性检查通过！" >> $GITHUB_STEP_SUMMARY
+            exit 0
+          else
+            echo "### ⚠️ 存在合规性问题，请查看详情" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi

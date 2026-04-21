@@ -3,7 +3,7 @@
 批量更新导入路径 - Phase 3专利目录整合
 Batch Update Import Paths - Phase 3 Patent Directory Unification
 
-将所有 `from patents.core.*` 和 `import patents.core.*` 更新为 `from patents.core.*`
+将所有 `from core.patents.*` 和 `import patents.core.*` 更新为 `from core.patents.*`
 
 执行方式:
     python3 scripts/batch_update_imports_phase3.py
@@ -23,8 +23,8 @@ DRY_RUN = False  # 设为True只显示会修改什么，不实际修改
 
 # 需要更新的导入路径模式
 IMPORT_PATTERNS = [
-    # from patents.core.xxx -> from patents.core.xxx
-    (r'from core\.patent\.', 'from patents.core.'),
+    # from core.patents.xxx -> from core.patents.xxx
+    (r'from core\.patent\.', 'from core.patents.'),
     # import patents.core.xxx -> import patents.core.xxx
     (r'import core\.patent\.', 'import patents.core.'),
 ]

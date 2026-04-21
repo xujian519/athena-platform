@@ -1,62 +1,35 @@
 """
-服务注册中心模块
-Service Registry Module
+服务注册中心
 
-提供统一的服务注册、发现和健康检查功能
+> 版本: v1.0
+> 更新: 2026-04-21
+
+统一的服务注册、发现和健康检查系统
 """
 
-from core.service_registry.models import (
-    ServiceInstance,
+from .models import (
     ServiceStatus,
-    ServiceRegistration,
-    HealthCheckConfig,
-    LoadBalanceStrategy
+    ServiceHealth,
+    ServiceInfo,
+    ServiceRegistry as ServiceRegistryModel,
 )
-from core.service_registry.storage import (
-    ServiceRegistryStorage,
-    get_storage
-)
-from core.service_registry.health_checker import (
-    HealthChecker,
-    HealthCheckResult,
-    get_health_checker
-)
-from core.service_registry.discovery import (
-    ServiceDiscovery,
-    get_discovery,
-    NoHealthyInstanceError
-)
-from core.service_registry.registry import (
-    ServiceRegistryCenter,
-    get_registry
-)
+from .registry import ServiceRegistry, get_service_registry
+from .health_check import HealthChecker, get_health_checker
+from .discovery import DiscoveryAPI, get_discovery_api
 
 __all__ = [
     # Models
-    "ServiceInstance",
     "ServiceStatus",
-    "ServiceRegistration",
-    "HealthCheckConfig",
-    "LoadBalanceStrategy",
-
-    # Storage
-    "ServiceRegistryStorage",
-    "get_storage",
-
-    # Health Checker
-    "HealthChecker",
-    "HealthCheckResult",
-    "get_health_checker",
-
-    # Discovery
-    "ServiceDiscovery",
-    "get_discovery",
-    "NoHealthyInstanceError",
-
+    "ServiceHealth",
+    "ServiceInfo",
+    "ServiceRegistryModel",
     # Registry
-    "ServiceRegistryCenter",
-    "get_registry",
+    "ServiceRegistry",
+    "get_service_registry",
+    # Health Check
+    "HealthChecker",
+    "get_health_checker",
+    # Discovery
+    "DiscoveryAPI",
+    "get_discovery_api",
 ]
-
-__version__ = "1.0.0"
-__author__ = "Claude Code (OMC)"

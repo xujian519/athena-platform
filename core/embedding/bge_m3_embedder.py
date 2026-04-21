@@ -101,7 +101,7 @@ class BGE_M3_Embedder:
 
             # 确定模型路径
             if not self.model_path:
-                self.model_path = "/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3/"
+                self.model_path = "http://127.0.0.1:8766/v1/embeddings"
 
             # 确定设备
             if self.device_preference == "auto":

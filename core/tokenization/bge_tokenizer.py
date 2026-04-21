@@ -50,7 +50,7 @@ class BGETokenizer:
 
     def __init__(
         self,
-        model_path: str = "/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3",
+        model_path: str = "http://127.0.0.1:8766/v1/embeddings",
         max_length: int = 512,
         remove_special_tokens: bool = True,
         keep_subword_prefix: bool = False,
@@ -264,7 +264,7 @@ _tokenizer_instance: BGETokenizer | None = None
 
 
 def get_bge_tokenizer(
-    model_path: str = "/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3",
+    model_path: str = "http://127.0.0.1:8766/v1/embeddings",
 ) -> BGETokenizer:
     """
     获取BGE-M3分词器单例

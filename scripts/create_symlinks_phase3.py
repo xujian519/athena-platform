@@ -158,7 +158,7 @@ def main():
         print()
         print("向后兼容性:")
         print("  ✓ 旧代码 `from core.patent.xxx` 仍然可以工作")
-        print("  ✓ 新代码 `from patents.core.xxx` 也可以使用")
+        print("  ✓ 新代码 `from core.patents.xxx` 也可以使用")
         print()
         print("下一步:")
         print("  1. 运行测试验证功能")

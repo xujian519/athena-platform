@@ -21,7 +21,7 @@ def test_imports():
     print("=" * 60)
 
     try:
-        from patents.core.ai_services.autospec_drafter import (
+        from core.patents.ai_services.autospec_drafter import (
             DraftPhase,
         )
         print("✅ AutoSpecDrafter导入成功")
@@ -31,7 +31,7 @@ def test_imports():
 
         print("✅ TaskStateManager导入成功")
 
-        from patents.core.specification_quality_reviewer import (
+        from core.patents.specification_quality_reviewer import (
             IssuePriority,
         )
         print("✅ SpecificationQualityReviewer导入成功")
@@ -53,7 +53,7 @@ def test_task_state_manager():
     print("=" * 60)
 
     try:
-        from patents.core.task_state_manager import TaskStateManager
+        from core.patents.task_state_manager import TaskStateManager
 
         manager = TaskStateManager(storage_dir="test_cases")
 
@@ -102,7 +102,7 @@ def test_quality_reviewer():
     print("=" * 60)
 
     try:
-        from patents.core.specification_quality_reviewer import (
+        from core.patents.specification_quality_reviewer import (
             SpecificationQualityReviewer,
         )
 
@@ -159,7 +159,7 @@ def test_autospec_drafter():
     print("=" * 60)
 
     try:
-        from patents.core.ai_services.autospec_drafter import (
+        from core.patents.ai_services.autospec_drafter import (
             AutoSpecDrafter,
         )
 
@@ -177,7 +177,7 @@ def test_autospec_drafter():
             print(f"   • Phase {phase['phase_id']}: {phase['phase_name']}")
 
         # 测试启发式审查员模拟
-        from patents.core.ai_services.autospec_drafter import (
+        from core.patents.ai_services.autospec_drafter import (
             SectionContent,
             SectionType,
             SpecificationDraft,
@@ -215,7 +215,7 @@ async def test_full_workflow():
     print("=" * 60)
 
     try:
-        from patents.core.ai_services.autospec_drafter import AutoSpecDrafter
+        from core.patents.ai_services.autospec_drafter import AutoSpecDrafter
 
         drafter = AutoSpecDrafter(llm_manager=None, storage_dir="test_cases")
 

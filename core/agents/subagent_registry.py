@@ -456,12 +456,12 @@ class SubagentRegistry:
         """
         return [agent for agent in self._agents.values() if capability in agent.capabilities]
 
-    def update_agent_config(self, agent_type: str, **kwargs) -> None:
+    def update_agent_config(self, agent_type: str, **_kwargs  # noqa: ARG001) -> None:
         """更新代理配置
 
         Args:
             agent_type: 代理类型标识
-            **kwargs: 要更新的配置项
+            **_kwargs  # noqa: ARG001: 要更新的配置项
 
         Raises:
             ValueError: 如果代理类型不存在

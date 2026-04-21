@@ -20,11 +20,11 @@ try:
     from .description_writer import DescriptionWriter
 except ImportError:
     # 绝对导入（直接运行时）
-    from patents.core.drafting.disclosure_parser import DisclosureDocumentParser, DisclosureDocument
-    from patents.core.drafting.technical_feature_extractor import TechnicalFeatureExtractor
-    from patents.core.drafting.invention_understanding import InventionUnderstandingBuilder
-    from patents.core.drafting.claim_generator import ClaimGenerator, ClaimGenerationOptions
-    from patents.core.drafting.description_writer import DescriptionWriter
+    from core.patents.drafting.disclosure_parser import DisclosureDocumentParser, DisclosureDocument
+    from core.patents.drafting.technical_feature_extractor import TechnicalFeatureExtractor
+    from core.patents.drafting.invention_understanding import InventionUnderstandingBuilder
+    from core.patents.drafting.claim_generator import ClaimGenerator, ClaimGenerationOptions
+    from core.patents.drafting.description_writer import DescriptionWriter
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -262,7 +262,7 @@ async def test_patent_drafter():
     project_root = Path(__file__).parent.parent.parent.parent
     sys.path.insert(0, str(project_root))
 
-    from patents.core.drafting.patent_drafter import PatentDrafter, DraftingOptions
+    from core.patents.drafting.patent_drafter import PatentDrafter, DraftingOptions
 
     drafter = PatentDrafter()
 

@@ -13,9 +13,9 @@ try:
     from .legal_adapter import LegalAdapter
     from .translation_assistant import TranslationAssistant
 except ImportError:
-    from patents.core.international.pct_assistant import PCTAssistant, PCTApplication
-    from patents.core.international.legal_adapter import LegalAdapter
-    from patents.core.international.translation_assistant import TranslationAssistant
+    from core.patents.international.pct_assistant import PCTAssistant, PCTApplication
+    from core.patents.international.legal_adapter import LegalAdapter
+    from core.patents.international.translation_assistant import TranslationAssistant
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

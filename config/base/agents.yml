@@ -1,0 +1,5 @@
+# Agent基础配置（所有环境共享）
+agents:
+  timeout: 300
+  max_retries: 3
+  log_level: debug

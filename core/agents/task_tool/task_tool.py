@@ -91,12 +91,12 @@ class TaskTool:
             config=self.config,
         )
 
-    def _tool_handler(self, **kwargs) -> dict[str, Any]:
+    def _tool_handler(self, **_kwargs  # noqa: ARG001) -> dict[str, Any]:
         """
         ToolDefinition的处理器函数
 
         Args:
-            **kwargs: 任务参数
+            **_kwargs  # noqa: ARG001: 任务参数
 
         Returns:
             任务执行结果

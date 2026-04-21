@@ -235,10 +235,10 @@ class XiaochenPrompts:
 
         return content
 
-    def get_response_template(self, scenario: str, **kwargs) -> str:
+    def get_response_template(self, scenario: str, **_kwargs  # noqa: ARG001) -> str:
         """获取响应模板"""
         template = self._response_templates.get(scenario, self._response_templates["greeting"])
-        return template.format(**kwargs)
+        return template.format(**_kwargs  # noqa: ARG001)
 
     def get_platform_template(self, platform: str) -> str:
         """获取平台写作模板"""

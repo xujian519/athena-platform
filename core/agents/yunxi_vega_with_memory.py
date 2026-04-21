@@ -105,7 +105,7 @@ class YunxiVegaAgent(MemoryEnabledAgent):
         self.client_records = ip_memories
         logger.info(f"✅ 已加载 {len(ip_memories)}条IP管理专业知识")
 
-    async def generate_response(self, user_input: str, **kwargs) -> str:
+    async def generate_response(self, user_input: str, **_kwargs  # noqa: ARG001) -> str:
         """生成响应"""
         # 分析IP管理需求
         ip_need = await self._analyze_ip_need(user_input)

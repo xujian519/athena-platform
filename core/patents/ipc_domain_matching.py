@@ -30,8 +30,8 @@ from core.logging_config import setup_logging
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from patents.core.ipc_vector_database import IPCClassificationResult, get_ipc_vector_db
-from patents.core.negentropy_retrieval import get_negentropy_retrieval_system
+from core.patents.ipc_vector_database import IPCClassificationResult, get_ipc_vector_db
+from core.patents.negentropy_retrieval import get_negentropy_retrieval_system
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

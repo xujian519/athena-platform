@@ -1,0 +1,5 @@
+# 云熙服务配置
+yunxi:
+  agent_type: ip_management
+  model: claude-sonnet-4-6
+  temperature: 0.6

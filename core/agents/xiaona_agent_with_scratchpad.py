@@ -50,13 +50,13 @@ class XiaonaAgentWithScratchpad(BaseAgent):
         # 摘要配置
         self.summary_max_length = 500  # 摘要最大长度
 
-    def process(self, input_text: str, **kwargs) -> str:
+    def process(self, input_text: str, **_kwargs  # noqa: ARG001) -> str:
         """
         处理任务（带Scratchpad）
 
         Args:
             input_text: 输入文本（可以是JSON格式的任务描述，或普通文本）
-            **kwargs: 其他参数
+            **_kwargs  # noqa: ARG001: 其他参数
 
         Returns:
             处理结果（JSON格式的字符串）

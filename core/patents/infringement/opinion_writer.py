@@ -12,8 +12,8 @@ try:
     from .infringement_determiner import InfringementResult
     from .feature_comparator import FeatureComparison
 except ImportError:
-    from patents.core.infringement.infringement_determiner import InfringementResult
-    from patents.core.infringement.feature_comparator import FeatureComparison
+    from core.patents.infringement.infringement_determiner import InfringementResult
+    from core.patents.infringement.feature_comparator import FeatureComparison
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

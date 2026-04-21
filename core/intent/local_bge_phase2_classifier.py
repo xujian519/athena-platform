@@ -6,7 +6,7 @@ Local BGE Intent Recognition System using Transformers
 
 直接使用Transformers库加载本地BGE模型,避免Sentence Transformers兼容性问题
 
-本地模型: models/converted/BAAI/bge-m3/
+当前使用: BGE-M3 API服务 (http://127.0.0.1:8766/v1/embeddings)
 
 作者: 小诺·双鱼公主
 版本: v2.0.0-fixed
@@ -53,7 +53,7 @@ class LocalBGEPhase2Classifier:
         # 本地模型路径 - 使用存在的BGE-M3模型
         if use_local_model:
             # 使用bge-m3模型(实际存在的模型)
-            self.model_path = str(project_root / "models/converted/BAAI/bge-m3")
+            self.model_path = "http://127.0.0.1:8766/v1/embeddings"
             logger.info(f"📂 使用本地BGE-M3模型: {self.model_path}")
         else:
             # 使用HuggingFace上的bge-m3模型

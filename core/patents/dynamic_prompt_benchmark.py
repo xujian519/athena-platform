@@ -284,7 +284,7 @@ class DynamicPromptBenchmark:
 
         # 导入SmartOfficeActionResponder
         try:
-            from patents.core.smart_oa_responder import SmartOfficeActionResponder
+            from core.patents.smart_oa_responder import SmartOfficeActionResponder
 
             responder = SmartOfficeActionResponder()
         except Exception as e:

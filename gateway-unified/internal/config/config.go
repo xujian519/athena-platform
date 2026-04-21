@@ -8,6 +8,7 @@ type Config struct {
 	Monitoring MonitoringConfig `yaml:"monitoring" json:"monitoring"`
 	Tailscale  TailscaleConfig  `yaml:"tailscale" json:"tailscale"`
 	Auth       AuthConfig       `yaml:"auth" json:"auth"`
+	GRPC       GRPCConfig       `yaml:"grpc" json:"grpc"`
 }
 
 // TailscaleConfig Tailscale配置
@@ -37,6 +38,14 @@ type AuthConfig struct {
 
 	// 密码（可从环境变量OPENCLAW_GATEWAY_PASSWORD获取）
 	Password string `yaml:"password" json:"password"`
+}
+
+// GRPCConfig gRPC配置
+type GRPCConfig struct {
+	// 是否启用gRPC服务
+	Enabled bool `yaml:"enabled" json:"enabled" mapstructure:"enabled"`
+	// gRPC服务端口（0表示禁用）
+	Port int `yaml:"port" json:"port" mapstructure:"port"`
 }
 
 // ServerConfig 服务器配置
@@ -97,4 +106,9 @@ func (c *Config) IsAuthRequired() bool {
 	}
 	// 其他模式根据配置决定
 	return c.Auth.Mode != ""
+}
+
+// IsGRPCEnabled 判断是否启用gRPC
+func (c *Config) IsGRPCEnabled() bool {
+	return c.GRPC.Enabled && c.GRPC.Port > 0
 }

@@ -12,7 +12,7 @@ from typing import List, Dict, Any, Optional
 try:
     from .patent_list_manager import PatentRecord, PatentType, PatentStatus
 except ImportError:
-    from patents.core.portfolio.patent_list_manager import PatentRecord, PatentType, PatentStatus
+    from core.patents.portfolio.patent_list_manager import PatentRecord, PatentType, PatentStatus
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

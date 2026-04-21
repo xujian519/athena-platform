@@ -9,7 +9,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import List, Dict, Any, Optional
 
-from patents.core.data_structures import (
+from core.patents.data_structures import (
     InventionUnderstanding,
     TechnicalFeature,
     FeatureType,
@@ -284,7 +284,7 @@ class ClaimGenerator:
 
 async def test_claim_generator():
     """测试权利要求生成器"""
-    from patents.core.data_structures import InventionUnderstanding, InventionType, TechnicalFeature, FeatureType
+    from core.patents.data_structures import InventionUnderstanding, InventionType, TechnicalFeature, FeatureType
 
     generator = ClaimGenerator()
 

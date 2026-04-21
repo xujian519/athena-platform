@@ -533,18 +533,18 @@ class WebSocketClient:
 # 便捷函数
 async def create_client(
     gateway_url: str = "ws://localhost:8005/ws",
-    **kwargs
+    **_kwargs  # noqa: ARG001
 ) -> WebSocketClient:
     """
     创建并连接WebSocket客户端
 
     Args:
         gateway_url: Gateway WebSocket URL
-        **kwargs: 其他参数传递给WebSocketClient
+        **_kwargs  # noqa: ARG001: 其他参数传递给WebSocketClient
 
     Returns:
         已连接的WebSocket客户端
     """
-    client = WebSocketClient(gateway_url=gateway_url, **kwargs)
+    client = WebSocketClient(gateway_url=gateway_url, **_kwargs  # noqa: ARG001)
     await client.connect()
     return client

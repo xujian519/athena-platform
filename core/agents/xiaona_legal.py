@@ -643,8 +643,8 @@ class XiaonaLegalAgent(BaseAgent):
     async def _handle_office_action_response(self, params: dict[str, Any]) -> dict[str, Any]:
         """处理意见答复 - 集成CAP04审查意见答复系统"""
         try:
-            from patents.core.oa_response.oa_responder import OAResponder, ExaminationOpinion, ResponseOptions
-            from patents.core.oa_response.response_strategy_generator import ResponseStrategyType
+            from core.patents.oa_response.oa_responder import OAResponder, ExaminationOpinion, ResponseOptions
+            from core.patents.oa_response.response_strategy_generator import ResponseStrategyType
 
             # 参数提取
             oa_number = params.get("oa_number", "")
@@ -743,7 +743,7 @@ class XiaonaLegalAgent(BaseAgent):
     async def _handle_invalidity_request(self, params: dict[str, Any]) -> dict[str, Any]:
         """处理无效宣告 - 集成CAP05无效宣告请求系统"""
         try:
-            from patents.core.invalidity.invalidity_petitioner import InvalidityPetitioner, InvalidityPetitionOptions
+            from core.patents.invalidity.invalidity_petitioner import InvalidityPetitioner, InvalidityPetitionOptions
 
             # 参数提取
             patent_id = params.get("patent_id", "")
@@ -791,7 +791,7 @@ class XiaonaLegalAgent(BaseAgent):
                 self.logger.info("⚠️ 无效宣告信息不完整，提供理由分析")
 
                 # 根据专利号检索分析（简化）
-                from patents.core.invalidity.invalidity_analyzer import InvalidityAnalyzer, InvalidityGround
+                from core.patents.invalidity.invalidity_analyzer import InvalidityAnalyzer, InvalidityGround
 
                 analyzer = InvalidityAnalyzer()
 
@@ -832,7 +832,7 @@ class XiaonaLegalAgent(BaseAgent):
     async def _handle_infringement_analysis(self, params: dict[str, Any]) -> dict[str, Any]:
         """处理侵权分析 - 集成CAP06侵权分析系统"""
         try:
-            from patents.core.infringement import InfringementAnalyzer, InfringementAnalysisOptions
+            from core.patents.infringement import InfringementAnalyzer, InfringementAnalysisOptions
 
             # 参数提取
             patent_id = params.get("patent_id", "")
@@ -907,7 +907,7 @@ class XiaonaLegalAgent(BaseAgent):
     async def _handle_licensing(self, params: dict[str, Any]) -> dict[str, Any]:
         """处理许可协议起草 - 集成CAP07许可协议起草系统"""
         try:
-            from patents.core.licensing import LicensingDrafting, LicensingOptions
+            from core.patents.licensing import LicensingDrafting, LicensingOptions
 
             # 参数提取
             patent_id = params.get("patent_id", "")
@@ -986,7 +986,7 @@ class XiaonaLegalAgent(BaseAgent):
     async def _handle_international_filing(self, params: dict[str, Any]) -> dict[str, Any]:
         """处理国际申请 - 集成CAP10国际专利申请系统"""
         try:
-            from patents.core.international import InternationalFilingManager
+            from core.patents.international import InternationalFilingManager
 
             # 参数提取
             patent_id = params.get("patent_id", "")
@@ -1050,7 +1050,7 @@ class XiaonaLegalAgent(BaseAgent):
     async def _handle_patent_drafting(self, params: dict[str, Any]) -> dict[str, Any]:
         """处理专利撰写 - 集成CAP03专利撰写辅助系统"""
         try:
-            from patents.core.drafting.patent_drafter import PatentDrafter, DraftingOptions
+            from core.patents.drafting.patent_drafter import PatentDrafter, DraftingOptions
 
             # 参数提取
             disclosure_file = params.get("disclosure_file", "")
@@ -1090,7 +1090,7 @@ class XiaonaLegalAgent(BaseAgent):
                 # 如果没有技术交底书文件，使用参数构建模拟申请
                 self.logger.info("⚠️ 未提供技术交底书文件，使用参数构建")
 
-                from patents.core.data_structures import InventionUnderstanding, InventionType, TechnicalFeature, FeatureType
+                from core.patents.data_structures import InventionUnderstanding, InventionType, TechnicalFeature, FeatureType
 
                 # 构建发明理解
                 understanding = InventionUnderstanding(

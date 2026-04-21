@@ -235,7 +235,7 @@ class XiaonaProfessionalV4(AthenaXiaonaAgent):
         task_type: ProfessionalTaskType,
         description: str,
         context: TaskContext | None = None,
-        **kwargs,
+        **_kwargs  # noqa: ARG001,
     ) -> dict[str, Any]:
         """
         处理专业任务(统一入口)
@@ -244,7 +244,7 @@ class XiaonaProfessionalV4(AthenaXiaonaAgent):
             task_type: 任务类型
             description: 任务描述
             context: 任务上下文
-            **kwargs: 额外参数
+            **_kwargs  # noqa: ARG001: 额外参数
 
         Returns:
             处理结果
@@ -299,7 +299,7 @@ class XiaonaProfessionalV4(AthenaXiaonaAgent):
 
         if route and route["handler"]:
             # 调用对应的处理函数
-            result = await route["handler"](description, context, **kwargs)
+            result = await route["handler"](description, context, **_kwargs  # noqa: ARG001)
 
             # 添加路由信息
             result["route_info"] = {
@@ -361,7 +361,7 @@ class XiaonaProfessionalV4(AthenaXiaonaAgent):
     # ==================== 专业任务处理函数 ====================
 
     async def _handle_office_action_response(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """
         处理意见答复任务 ⭐
@@ -421,7 +421,7 @@ class XiaonaProfessionalV4(AthenaXiaonaAgent):
             }
 
     async def _handle_invalidity_request(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """处理无效宣告请求"""
         logger.info("⚔️ 处理无效宣告请求")
@@ -443,7 +443,7 @@ class XiaonaProfessionalV4(AthenaXiaonaAgent):
         }
 
     async def _handle_patent_drafting(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """处理专利撰写任务"""
         logger.info("✍️ 处理专利撰写任务")
@@ -465,7 +465,7 @@ class XiaonaProfessionalV4(AthenaXiaonaAgent):
         }
 
     async def _handle_inventiveness_analysis(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """处理创造性分析(三步法)"""
         logger.info("🔬 处理创造性分析 - 使用三步法")
@@ -485,7 +485,7 @@ class XiaonaProfessionalV4(AthenaXiaonaAgent):
         }
 
     async def _handle_novelty_analysis(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """处理新颖性分析"""
         logger.info("🆕 处理新颖性分析")
@@ -503,7 +503,7 @@ class XiaonaProfessionalV4(AthenaXiaonaAgent):
         }
 
     async def _handle_claim_analysis(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """处理权利要求分析"""
         logger.info("📋 处理权利要求分析")
@@ -521,7 +521,7 @@ class XiaonaProfessionalV4(AthenaXiaonaAgent):
         }
 
     async def _handle_patent_compliance(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """处理专利合规检查"""
         logger.info("✅ 处理专利合规检查")
@@ -539,7 +539,7 @@ class XiaonaProfessionalV4(AthenaXiaonaAgent):
         }
 
     async def _handle_legal_consultation_enhanced(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """处理法律咨询(增强版)"""
         logger.info("⚖️ 处理法律咨询")
@@ -556,7 +556,7 @@ class XiaonaProfessionalV4(AthenaXiaonaAgent):
         }
 
     async def _handle_patent_search(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """处理专利检索 - 使用真实的专利检索工具"""
         logger.info(f"🔍 处理专利检索: {description[:100]}...")
@@ -653,7 +653,7 @@ class XiaonaProfessionalV4(AthenaXiaonaAgent):
             }
 
     async def _handle_technology_landscape(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """处理技术态势分析"""
         logger.info("🌐 处理技术态势分析")

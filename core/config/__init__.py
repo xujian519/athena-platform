@@ -1,9 +1,19 @@
-from __future__ import annotations
 """
 配置模块
-提供系统配置、环境变量管理和加载功能
+
+> 版本: v2.0
+> 更新: 2026-04-21
+
+统一配置管理系统
 """
 
-from .system_prompt import get_agent_prompt, get_system_prompt
+from .unified_settings import Settings, get_settings, settings
+from .config_adapter import ConfigAdapter, get_config
 
-__all__ = ['get_system_prompt', 'get_agent_prompt']
+__all__ = [
+    "Settings",
+    "get_settings",
+    "settings",
+    "ConfigAdapter",
+    "get_config",
+]

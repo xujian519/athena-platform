@@ -29,7 +29,7 @@ from core.memory.workflow_pattern import (
     WorkflowPattern,
     WorkflowStep,
 )
-from patents.core.oa_response_workflow_recorder import (
+from core.patents.oa_response_workflow_recorder import (
     OAResponseTrajectory,
     OAStepType,
     StepStatus,

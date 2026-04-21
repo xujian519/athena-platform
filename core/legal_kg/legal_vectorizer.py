@@ -28,7 +28,7 @@ from legal_kg.legal_text_parser import LegalTextParser
 
 # ==================== 配置 ====================
 # BGE-M3模型路径
-BGE_M3_MODEL_PATH = "/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3"
+BGE_M3_MODEL_PATH = "http://127.0.0.1:8766/v1/embeddings"
 
 # PostgreSQL配置
 DB_CONFIG = {

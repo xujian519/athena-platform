@@ -44,7 +44,7 @@ class BGE_M3_IntentClassifier:
     def __init__(self):
         """初始化BGE-M3意图分类器"""
         # BGE-M3模型路径
-        self.model_path = str(project_root / "models/converted/BAAI/bge-m3")
+        self.model_path = "http://127.0.0.1:8766/v1/embeddings"
         self.device = self._select_device()
 
         # 分类器和编码器

@@ -14,7 +14,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from patents.core.workflows.legal_workflow import (
+from core.patents.workflows.legal_workflow import (
     LegalWorkflow,
     LegalWorkflowInput,
 )

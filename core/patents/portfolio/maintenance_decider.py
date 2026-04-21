@@ -14,8 +14,8 @@ try:
     from .patent_list_manager import PatentRecord, PatentStatus
     from .value_assessor import ValueAssessment
 except ImportError:
-    from patents.core.portfolio.patent_list_manager import PatentRecord, PatentStatus
-    from patents.core.portfolio.value_assessor import ValueAssessment
+    from core.patents.portfolio.patent_list_manager import PatentRecord, PatentStatus
+    from core.patents.portfolio.value_assessor import ValueAssessment
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

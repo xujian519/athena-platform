@@ -25,7 +25,7 @@ from core.logging_config import setup_logging
 
 # 导入审查意见解析器
 try:
-    from patents.core.oa_document_parser import (
+    from core.patents.oa_document_parser import (
         OfficeActionParser,
         ParsedOfficeAction,
         RejectionType,
@@ -34,7 +34,7 @@ try:
 except ImportError:
     HAS_PARSER = False
 
-from patents.core.smart_oa_responder import get_smart_oa_responder
+from core.patents.smart_oa_responder import get_smart_oa_responder
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -118,7 +118,7 @@ class HumanInteractionWorkflow:
         """初始化新模块"""
         # 文档完整性检查器
         try:
-            from patents.core.document_completeness_checker import (
+            from core.patents.document_completeness_checker import (
                 get_document_completeness_checker,
             )
 
@@ -130,7 +130,7 @@ class HumanInteractionWorkflow:
 
         # 专利下载管理器
         try:
-            from patents.core.patent_download_manager import get_patent_download_manager
+            from core.patents.patent_download_manager import get_patent_download_manager
 
             self.download_manager = get_patent_download_manager()
             logger.info("✅ 专利下载管理器初始化成功")
@@ -140,7 +140,7 @@ class HumanInteractionWorkflow:
 
         # 分析计划生成器
         try:
-            from patents.core.analysis_plan_generator import get_analysis_plan_generator
+            from core.patents.analysis_plan_generator import get_analysis_plan_generator
 
             self.plan_generator = get_analysis_plan_generator()
             logger.info("✅ 分析计划生成器初始化成功")
@@ -430,7 +430,7 @@ class HumanInteractionWorkflow:
 
         # 初始化步骤2执行器
         try:
-            from patents.core.step2_analysis_executor import (
+            from core.patents.step2_analysis_executor import (
                 AnalysisExecutionResult,
                 get_step2_executor,
             )

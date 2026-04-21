@@ -1,0 +1,2717 @@
+{
+  "timestamp": "2026-04-21T19:19:19.712444",
+  "version": "2.0",
+  "summary": {
+    "total": 36,
+    "passed": 0,
+    "failed": 36,
+    "warning": 0,
+    "by_level": {
+      "platinum": 0,
+      "gold": 0,
+      "silver": 0,
+      "bronze": 36
+    }
+  },
+  "agents": [
+    {
+      "agent_name": "YunxiIPAgent",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 7.0,
+      "max_score": 100,
+      "percentage": 7.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_yunxiipagent.py"
+          }
+        },
+        "code_quality": {
+          "passed": false,
+          "score": 7,
+          "max_score": 15,
+          "message": "代码质量: 7/15 - 缺少或过短的类文档字符串",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 10,
+            "total_methods": 21,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'YunxiIPAgent' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'YunxiIPAgent' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.712444"
+    },
+    {
+      "agent_name": "ExampleAgent",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 12.0,
+      "max_score": 100,
+      "percentage": 12.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_exampleagent.py"
+          }
+        },
+        "code_quality": {
+          "passed": true,
+          "score": 12,
+          "max_score": 15,
+          "message": "代码质量: 12/15",
+          "details": {
+            "issues": [],
+            "class_docstring": "present",
+            "methods_with_docs": 10,
+            "total_methods": 21,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'ExampleAgent' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'ExampleAgent' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.723760"
+    },
+    {
+      "agent_name": "BaseAgent",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 9.0,
+      "max_score": 100,
+      "percentage": 9.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_system_prompt (获取系统提示词), execute (执行方法), 未继承BaseXiaonaComponent基类, 能力检查失败: Can't instantiate abstract class BaseAgent with abstract method process",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_system_prompt (获取系统提示词), execute (执行方法)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: Can't instantiate abstract class BaseAgent with abstract method process"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_baseagent.py"
+          }
+        },
+        "code_quality": {
+          "passed": true,
+          "score": 9,
+          "max_score": 15,
+          "message": "代码质量: 9/15 - 缺少或过短的类文档字符串",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 15,
+            "total_methods": 18,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'BaseAgent' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'BaseAgent' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.735575"
+    },
+    {
+      "agent_name": "AgentUtils",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 10.0,
+      "max_score": 100,
+      "percentage": 10.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: AgentUtils() takes no arguments",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: AgentUtils() takes no arguments"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_agentutils.py"
+          }
+        },
+        "code_quality": {
+          "passed": true,
+          "score": 10,
+          "max_score": 15,
+          "message": "代码质量: 10/15 - 缺少或过短的类文档字符串",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 4,
+            "total_methods": 4,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'AgentUtils' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'AgentUtils' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.740778"
+    },
+    {
+      "agent_name": "AgentResponse",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 7.0,
+      "max_score": 100,
+      "percentage": 7.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_agentresponse.py"
+          }
+        },
+        "code_quality": {
+          "passed": false,
+          "score": 7,
+          "max_score": 15,
+          "message": "代码质量: 7/15 - 缺少或过短的类文档字符串",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 1,
+            "total_methods": 2,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'AgentResponse' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'AgentResponse' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.746158"
+    },
+    {
+      "agent_name": "BaseAgentLoop",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 15.0,
+      "max_score": 100,
+      "percentage": 15.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_baseagentloop.py"
+          }
+        },
+        "code_quality": {
+          "passed": true,
+          "score": 15,
+          "max_score": 15,
+          "message": "代码质量: 15/15",
+          "details": {
+            "issues": [],
+            "class_docstring": "present",
+            "methods_with_docs": 3,
+            "total_methods": 3,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'BaseAgentLoop' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'BaseAgentLoop' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.754124"
+    },
+    {
+      "agent_name": "PatentSearchAgent",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 12.0,
+      "max_score": 100,
+      "percentage": 12.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: Can't instantiate abstract class PatentSearchAgent with abstract method shutdown",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: Can't instantiate abstract class PatentSearchAgent with abstract method shutdown"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_patentsearchagent.py"
+          }
+        },
+        "code_quality": {
+          "passed": true,
+          "score": 12,
+          "max_score": 15,
+          "message": "代码质量: 12/15",
+          "details": {
+            "issues": [],
+            "class_docstring": "present",
+            "methods_with_docs": 12,
+            "total_methods": 21,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'PatentSearchAgent' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'PatentSearchAgent' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.769745"
+    },
+    {
+      "agent_name": "AgentLoopConfig",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 0.0,
+      "max_score": 100,
+      "percentage": 0.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_agentloopconfig.py"
+          }
+        },
+        "code_quality": {
+          "passed": false,
+          "score": 0,
+          "max_score": 15,
+          "message": "代码质量: 0/15 - 缺少或过短的类文档字符串, 缺少类型注解",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串",
+              "缺少类型注解"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 0,
+            "total_methods": 1,
+            "type_annotations": "missing"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'AgentLoopConfig' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'AgentLoopConfig' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.781813"
+    },
+    {
+      "agent_name": "AgentResult",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 0.0,
+      "max_score": 100,
+      "percentage": 0.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_agentresult.py"
+          }
+        },
+        "code_quality": {
+          "passed": false,
+          "score": 0,
+          "max_score": 15,
+          "message": "代码质量: 0/15 - 缺少或过短的类文档字符串, 缺少类型注解",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串",
+              "缺少类型注解"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 0,
+            "total_methods": 1,
+            "type_annotations": "missing"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'AgentResult' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'AgentResult' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.785403"
+    },
+    {
+      "agent_name": "EnhancedAgentLoop",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 15.0,
+      "max_score": 100,
+      "percentage": 15.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_enhancedagentloop.py"
+          }
+        },
+        "code_quality": {
+          "passed": true,
+          "score": 15,
+          "max_score": 15,
+          "message": "代码质量: 15/15",
+          "details": {
+            "issues": [],
+            "class_docstring": "present",
+            "methods_with_docs": 6,
+            "total_methods": 6,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'EnhancedAgentLoop' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'EnhancedAgentLoop' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.881979"
+    },
+    {
+      "agent_name": "AgentType",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 0.0,
+      "max_score": 100,
+      "percentage": 0.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __call__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __call__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_agenttype.py"
+          }
+        },
+        "code_quality": {
+          "passed": false,
+          "score": 0,
+          "max_score": 15,
+          "message": "代码质量: 0/15 - 缺少或过短的类文档字符串, 缺少类型注解",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串",
+              "缺少类型注解"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 0,
+            "total_methods": 0,
+            "type_annotations": "missing"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: execute",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "execute"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.887118"
+    },
+    {
+      "agent_name": "AgentCapability",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 0.0,
+      "max_score": 100,
+      "percentage": 0.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __call__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __call__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_agentcapability.py"
+          }
+        },
+        "code_quality": {
+          "passed": false,
+          "score": 0,
+          "max_score": 15,
+          "message": "代码质量: 0/15 - 缺少或过短的类文档字符串, 缺少类型注解",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串",
+              "缺少类型注解"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 0,
+            "total_methods": 0,
+            "type_annotations": "missing"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: execute",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "execute"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.890137"
+    },
+    {
+      "agent_name": "AgentStatus",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 0.0,
+      "max_score": 100,
+      "percentage": 0.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __call__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __call__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_agentstatus.py"
+          }
+        },
+        "code_quality": {
+          "passed": false,
+          "score": 0,
+          "max_score": 15,
+          "message": "代码质量: 0/15 - 缺少或过短的类文档字符串, 缺少类型注解",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串",
+              "缺少类型注解"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 0,
+            "total_methods": 0,
+            "type_annotations": "missing"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: execute",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "execute"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.892755"
+    },
+    {
+      "agent_name": "AgentConfig",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 0.0,
+      "max_score": 100,
+      "percentage": 0.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_agentconfig.py"
+          }
+        },
+        "code_quality": {
+          "passed": false,
+          "score": 0,
+          "max_score": 15,
+          "message": "代码质量: 0/15 - 缺少或过短的类文档字符串, 缺少类型注解",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串",
+              "缺少类型注解"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 0,
+            "total_methods": 1,
+            "type_annotations": "missing"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'AgentConfig' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'AgentConfig' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.896076"
+    },
+    {
+      "agent_name": "AgentCapabilityRegistry",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 7.0,
+      "max_score": 100,
+      "percentage": 7.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_agentcapabilityregistry.py"
+          }
+        },
+        "code_quality": {
+          "passed": false,
+          "score": 7,
+          "max_score": 15,
+          "message": "代码质量: 7/15 - 缺少或过短的类文档字符串",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 2,
+            "total_methods": 5,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'AgentCapabilityRegistry' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'AgentCapabilityRegistry' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.901119"
+    },
+    {
+      "agent_name": "BaseAgent",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 5.0,
+      "max_score": 100,
+      "percentage": 5.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: Can't instantiate abstract class BaseAgent with abstract methods initialize, process_task, shutdown",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: Can't instantiate abstract class BaseAgent with abstract methods initialize, process_task, shutdown"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_baseagent.py"
+          }
+        },
+        "code_quality": {
+          "passed": false,
+          "score": 5,
+          "max_score": 15,
+          "message": "代码质量: 5/15 - 缺少或过短的类文档字符串",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 0,
+            "total_methods": 6,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'BaseAgent' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'BaseAgent' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.906034"
+    },
+    {
+      "agent_name": "XiaonaAgentWithScratchpad",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 14.0,
+      "max_score": 100,
+      "percentage": 14.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_system_prompt (获取系统提示词), execute (执行方法), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_system_prompt (获取系统提示词), execute (执行方法)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_xiaonaagentwithscratchpad.py"
+          }
+        },
+        "code_quality": {
+          "passed": true,
+          "score": 14,
+          "max_score": 15,
+          "message": "代码质量: 14/15",
+          "details": {
+            "issues": [],
+            "class_docstring": "present",
+            "methods_with_docs": 16,
+            "total_methods": 20,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'XiaonaAgentWithScratchpad' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'XiaonaAgentWithScratchpad' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.922372"
+    },
+    {
+      "agent_name": "YunxiIPAgentV3",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 53.0,
+      "max_score": 100,
+      "percentage": 53.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": true,
+          "score": 25,
+          "max_score": 25,
+          "message": "接口合规性: 25/25",
+          "details": {
+            "issues": [],
+            "details": {
+              "required_methods": "present",
+              "base_class": "BaseXiaonaComponent",
+              "capabilities": [
+                {
+                  "name": "portfolio_management",
+                  "description": "专利组合管理 - 专利清单、分类分级、价值评估"
+                },
+                {
+                  "name": "patent_valuation",
+                  "description": "专利价值评估 - 动态价值评估和维持建议"
+                },
+                {
+                  "name": "deadline_tracking",
+                  "description": "期限跟踪 - 年费缴纳期限提醒"
+                }
+              ],
+              "capability_count": 3
+            }
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_yunxiipagentv3.py"
+          }
+        },
+        "code_quality": {
+          "passed": true,
+          "score": 14,
+          "max_score": 15,
+          "message": "代码质量: 14/15",
+          "details": {
+            "issues": [],
+            "class_docstring": "present",
+            "methods_with_docs": 8,
+            "total_methods": 9,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "best_practices": {
+          "passed": false,
+          "score": 4,
+          "max_score": 10,
+          "message": "最佳实践: 4/10",
+          "details": {
+            "practices": [
+              "有错误处理",
+              "异步执行"
+            ]
+          }
+        },
+        "security": {
+          "passed": true,
+          "score": 10,
+          "max_score": 10,
+          "message": "安全检查: 10/10",
+          "details": {
+            "issues": [],
+            "input_validation": "documented",
+            "error_handling": "excellent",
+            "hardcoded_secrets": "none_found",
+            "insecure_functions": "none_found"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.941689"
+    },
+    {
+      "agent_name": "PatentSearchAgentV2",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 53.0,
+      "max_score": 100,
+      "percentage": 53.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": true,
+          "score": 25,
+          "max_score": 25,
+          "message": "接口合规性: 25/25",
+          "details": {
+            "issues": [],
+            "details": {
+              "required_methods": "present",
+              "base_class": "BaseXiaonaComponent",
+              "capabilities": [
+                {
+                  "name": "analyze_requirement",
+                  "description": "分析用户检索需求"
+                },
+                {
+                  "name": "extract_keywords",
+                  "description": "从检索需求中提取关键词"
+                },
+                {
+                  "name": "search_cn_patents",
+                  "description": "检索中文专利数据库"
+                },
+                {
+                  "name": "search_foreign_patents",
+                  "description": "检索国外专利数据库"
+                },
+                {
+                  "name": "search_patent_families",
+                  "description": "检索专利家族信息"
+                },
+                {
+                  "name": "merge_results",
+                  "description": "合并来自不同数据源的检索结果"
+                },
+                {
+                  "name": "generate_report",
+                  "description": "生成检索报告"
+                }
+              ],
+              "capability_count": 7
+            }
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_patentsearchagentv2.py"
+          }
+        },
+        "code_quality": {
+          "passed": true,
+          "score": 14,
+          "max_score": 15,
+          "message": "代码质量: 14/15",
+          "details": {
+            "issues": [],
+            "class_docstring": "present",
+            "methods_with_docs": 8,
+            "total_methods": 9,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "best_practices": {
+          "passed": false,
+          "score": 4,
+          "max_score": 10,
+          "message": "最佳实践: 4/10",
+          "details": {
+            "practices": [
+              "有错误处理",
+              "异步执行"
+            ]
+          }
+        },
+        "security": {
+          "passed": true,
+          "score": 10,
+          "max_score": 10,
+          "message": "安全检查: 10/10",
+          "details": {
+            "issues": [],
+            "input_validation": "documented",
+            "error_handling": "excellent",
+            "hardcoded_secrets": "none_found",
+            "insecure_functions": "none_found"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.965789"
+    },
+    {
+      "agent_name": "BaseAgentAdapter",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 13.0,
+      "max_score": 100,
+      "percentage": 13.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: Can't instantiate abstract class BaseAgentAdapter with abstract methods handle_query, handle_task",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: Can't instantiate abstract class BaseAgentAdapter with abstract methods handle_query, handle_task"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_baseagentadapter.py"
+          }
+        },
+        "code_quality": {
+          "passed": true,
+          "score": 13,
+          "max_score": 15,
+          "message": "代码质量: 13/15",
+          "details": {
+            "issues": [],
+            "class_docstring": "present",
+            "methods_with_docs": 5,
+            "total_methods": 7,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'BaseAgentAdapter' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'BaseAgentAdapter' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:19.977708"
+    },
+    {
+      "agent_name": "AnalyzerAgent",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 49.0,
+      "max_score": 100,
+      "percentage": 49.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": true,
+          "score": 25,
+          "max_score": 25,
+          "message": "接口合规性: 25/25",
+          "details": {
+            "issues": [],
+            "details": {
+              "required_methods": "present",
+              "base_class": "BaseXiaonaComponent",
+              "capabilities": [
+                {
+                  "name": "feature_extraction",
+                  "description": "技术特征提取"
+                },
+                {
+                  "name": "novelty_analysis",
+                  "description": "新颖性分析"
+                },
+                {
+                  "name": "creativity_analysis",
+                  "description": "创造性分析"
+                },
+                {
+                  "name": "infringement_analysis",
+                  "description": "侵权分析"
+                }
+              ],
+              "capability_count": 4
+            }
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_analyzeragent.py"
+          }
+        },
+        "code_quality": {
+          "passed": true,
+          "score": 13,
+          "max_score": 15,
+          "message": "代码质量: 13/15",
+          "details": {
+            "issues": [],
+            "class_docstring": "present",
+            "methods_with_docs": 6,
+            "total_methods": 8,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "best_practices": {
+          "passed": false,
+          "score": 4,
+          "max_score": 10,
+          "message": "最佳实践: 4/10",
+          "details": {
+            "practices": [
+              "有错误处理",
+              "异步执行"
+            ]
+          }
+        },
+        "security": {
+          "passed": true,
+          "score": 7,
+          "max_score": 10,
+          "message": "安全检查: 7/10 - 缺少输入验证",
+          "details": {
+            "issues": [
+              "缺少输入验证"
+            ],
+            "input_validation": "missing",
+            "error_handling": "excellent",
+            "hardcoded_secrets": "none_found",
+            "insecure_functions": "none_found"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:20.001923"
+    },
+    {
+      "agent_name": "XiaonaAgentScratchpadV2",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 53.0,
+      "max_score": 100,
+      "percentage": 53.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": true,
+          "score": 25,
+          "max_score": 25,
+          "message": "接口合规性: 25/25",
+          "details": {
+            "issues": [],
+            "details": {
+              "required_methods": "present",
+              "base_class": "BaseXiaonaComponent",
+              "capabilities": [
+                {
+                  "name": "patent_analysis",
+                  "description": "专利分析 - 新颖性、创造性、侵权分析"
+                },
+                {
+                  "name": "office_action_response",
+                  "description": "审查意见答复 - 分析审查意见并制定答复策略"
+                },
+                {
+                  "name": "invalidity_analysis",
+                  "description": "无效宣告分析 - 分析无效理由和证据"
+                },
+                {
+                  "name": "legal_reasoning",
+                  "description": "法律推理 - 基于法条和案例的推理分析"
+                }
+              ],
+              "capability_count": 4
+            }
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_xiaonaagentscratchpadv2.py"
+          }
+        },
+        "code_quality": {
+          "passed": true,
+          "score": 14,
+          "max_score": 15,
+          "message": "代码质量: 14/15",
+          "details": {
+            "issues": [],
+            "class_docstring": "present",
+            "methods_with_docs": 10,
+            "total_methods": 11,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "best_practices": {
+          "passed": false,
+          "score": 4,
+          "max_score": 10,
+          "message": "最佳实践: 4/10",
+          "details": {
+            "practices": [
+              "有错误处理",
+              "异步执行"
+            ]
+          }
+        },
+        "security": {
+          "passed": true,
+          "score": 10,
+          "max_score": 10,
+          "message": "安全检查: 10/10",
+          "details": {
+            "issues": [],
+            "input_validation": "documented",
+            "error_handling": "excellent",
+            "hardcoded_secrets": "none_found",
+            "insecure_functions": "none_found"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:20.023576"
+    },
+    {
+      "agent_name": "RetrieverAgent",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 49.0,
+      "max_score": 100,
+      "percentage": 49.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": true,
+          "score": 25,
+          "max_score": 25,
+          "message": "接口合规性: 25/25",
+          "details": {
+            "issues": [],
+            "details": {
+              "required_methods": "present",
+              "base_class": "BaseXiaonaComponent",
+              "capabilities": [
+                {
+                  "name": "patent_search",
+                  "description": "专利检索"
+                },
+                {
+                  "name": "keyword_expansion",
+                  "description": "关键词扩展"
+                },
+                {
+                  "name": "document_filtering",
+                  "description": "对比文件筛选"
+                }
+              ],
+              "capability_count": 3
+            }
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_retrieveragent.py"
+          }
+        },
+        "code_quality": {
+          "passed": true,
+          "score": 13,
+          "max_score": 15,
+          "message": "代码质量: 13/15",
+          "details": {
+            "issues": [],
+            "class_docstring": "present",
+            "methods_with_docs": 6,
+            "total_methods": 8,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "best_practices": {
+          "passed": false,
+          "score": 4,
+          "max_score": 10,
+          "message": "最佳实践: 4/10",
+          "details": {
+            "practices": [
+              "有错误处理",
+              "异步执行"
+            ]
+          }
+        },
+        "security": {
+          "passed": true,
+          "score": 7,
+          "max_score": 10,
+          "message": "安全检查: 7/10 - 缺少输入验证",
+          "details": {
+            "issues": [
+              "缺少输入验证"
+            ],
+            "input_validation": "missing",
+            "error_handling": "excellent",
+            "hardcoded_secrets": "none_found",
+            "insecure_functions": "none_found"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:20.034599"
+    },
+    {
+      "agent_name": "WriterAgent",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 49.0,
+      "max_score": 100,
+      "percentage": 49.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": true,
+          "score": 25,
+          "max_score": 25,
+          "message": "接口合规性: 25/25",
+          "details": {
+            "issues": [],
+            "details": {
+              "required_methods": "present",
+              "base_class": "BaseXiaonaComponent",
+              "capabilities": [
+                {
+                  "name": "claim_drafting",
+                  "description": "权利要求书撰写"
+                },
+                {
+                  "name": "description_drafting",
+                  "description": "说明书撰写"
+                },
+                {
+                  "name": "office_action_response",
+                  "description": "审查意见答复"
+                },
+                {
+                  "name": "invalidation_petition",
+                  "description": "无效宣告请求书"
+                }
+              ],
+              "capability_count": 4
+            }
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_writeragent.py"
+          }
+        },
+        "code_quality": {
+          "passed": true,
+          "score": 13,
+          "max_score": 15,
+          "message": "代码质量: 13/15",
+          "details": {
+            "issues": [],
+            "class_docstring": "present",
+            "methods_with_docs": 6,
+            "total_methods": 8,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "best_practices": {
+          "passed": false,
+          "score": 4,
+          "max_score": 10,
+          "message": "最佳实践: 4/10",
+          "details": {
+            "practices": [
+              "有错误处理",
+              "异步执行"
+            ]
+          }
+        },
+        "security": {
+          "passed": true,
+          "score": 7,
+          "max_score": 10,
+          "message": "安全检查: 7/10 - 缺少输入验证",
+          "details": {
+            "issues": [
+              "缺少输入验证"
+            ],
+            "input_validation": "missing",
+            "error_handling": "excellent",
+            "hardcoded_secrets": "none_found",
+            "insecure_functions": "none_found"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:20.051851"
+    },
+    {
+      "agent_name": "XiaonuoUnifiedAgent",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 10.0,
+      "max_score": 100,
+      "percentage": 10.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_xiaonuounifiedagent.py"
+          }
+        },
+        "code_quality": {
+          "passed": true,
+          "score": 10,
+          "max_score": 15,
+          "message": "代码质量: 10/15",
+          "details": {
+            "issues": [],
+            "class_docstring": "present",
+            "methods_with_docs": 1,
+            "total_methods": 13,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'XiaonuoUnifiedAgent' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'XiaonuoUnifiedAgent' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:20.085018"
+    },
+    {
+      "agent_name": "XiaonuoAgentV2",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 53.0,
+      "max_score": 100,
+      "percentage": 53.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": true,
+          "score": 25,
+          "max_score": 25,
+          "message": "接口合规性: 25/25",
+          "details": {
+            "issues": [],
+            "details": {
+              "required_methods": "present",
+              "base_class": "BaseXiaonaComponent",
+              "capabilities": [
+                {
+                  "name": "emotional_care",
+                  "description": "情感关怀 - 爸爸的贴心小女儿"
+                },
+                {
+                  "name": "platform_coordination",
+                  "description": "平台协调 - 任务调度和智能体协调"
+                },
+                {
+                  "name": "media_operations",
+                  "description": "媒体运营支持 - 内容策划和平台运营"
+                },
+                {
+                  "name": "task_scheduling",
+                  "description": "任务调度 - 分配和跟踪任务"
+                }
+              ],
+              "capability_count": 4
+            }
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_xiaonuoagentv2.py"
+          }
+        },
+        "code_quality": {
+          "passed": true,
+          "score": 14,
+          "max_score": 15,
+          "message": "代码质量: 14/15",
+          "details": {
+            "issues": [],
+            "class_docstring": "present",
+            "methods_with_docs": 9,
+            "total_methods": 11,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "best_practices": {
+          "passed": false,
+          "score": 4,
+          "max_score": 10,
+          "message": "最佳实践: 4/10",
+          "details": {
+            "practices": [
+              "有错误处理",
+              "异步执行"
+            ]
+          }
+        },
+        "security": {
+          "passed": true,
+          "score": 10,
+          "max_score": 10,
+          "message": "安全检查: 10/10",
+          "details": {
+            "issues": [],
+            "input_validation": "documented",
+            "error_handling": "excellent",
+            "hardcoded_secrets": "none_found",
+            "insecure_functions": "none_found"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:20.102156"
+    },
+    {
+      "agent_name": "AgentRole",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 0.0,
+      "max_score": 100,
+      "percentage": 0.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __call__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __call__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_agentrole.py"
+          }
+        },
+        "code_quality": {
+          "passed": false,
+          "score": 0,
+          "max_score": 15,
+          "message": "代码质量: 0/15 - 缺少或过短的类文档字符串, 缺少类型注解",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串",
+              "缺少类型注解"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 0,
+            "total_methods": 0,
+            "type_annotations": "missing"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: execute",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "execute"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:20.108632"
+    },
+    {
+      "agent_name": "AgentTask",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 0.0,
+      "max_score": 100,
+      "percentage": 0.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_agenttask.py"
+          }
+        },
+        "code_quality": {
+          "passed": false,
+          "score": 0,
+          "max_score": 15,
+          "message": "代码质量: 0/15 - 缺少或过短的类文档字符串, 缺少类型注解",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串",
+              "缺少类型注解"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 0,
+            "total_methods": 1,
+            "type_annotations": "missing"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'AgentTask' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'AgentTask' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:20.112270"
+    },
+    {
+      "agent_name": "AgentResponse",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 0.0,
+      "max_score": 100,
+      "percentage": 0.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_agentresponse.py"
+          }
+        },
+        "code_quality": {
+          "passed": false,
+          "score": 0,
+          "max_score": 15,
+          "message": "代码质量: 0/15 - 缺少或过短的类文档字符串, 缺少类型注解",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串",
+              "缺少类型注解"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 0,
+            "total_methods": 1,
+            "type_annotations": "missing"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'AgentResponse' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'AgentResponse' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:20.116063"
+    },
+    {
+      "agent_name": "AuthoritativeAgent",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 7.0,
+      "max_score": 100,
+      "percentage": 7.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_authoritativeagent.py"
+          }
+        },
+        "code_quality": {
+          "passed": false,
+          "score": 7,
+          "max_score": 15,
+          "message": "代码质量: 7/15 - 缺少或过短的类文档字符串",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 2,
+            "total_methods": 4,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'AuthoritativeAgent' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'AuthoritativeAgent' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:20.121136"
+    },
+    {
+      "agent_name": "PatentLawAgent",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 6.0,
+      "max_score": 100,
+      "percentage": 6.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_patentlawagent.py"
+          }
+        },
+        "code_quality": {
+          "passed": false,
+          "score": 6,
+          "max_score": 15,
+          "message": "代码质量: 6/15 - 缺少或过短的类文档字符串",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 1,
+            "total_methods": 4,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'PatentLawAgent' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'PatentLawAgent' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:20.127039"
+    },
+    {
+      "agent_name": "GuidelineAgent",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 6.0,
+      "max_score": 100,
+      "percentage": 6.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_guidelineagent.py"
+          }
+        },
+        "code_quality": {
+          "passed": false,
+          "score": 6,
+          "max_score": 15,
+          "message": "代码质量: 6/15 - 缺少或过短的类文档字符串",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 1,
+            "total_methods": 4,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'GuidelineAgent' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'GuidelineAgent' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:20.133453"
+    },
+    {
+      "agent_name": "RuleAgent",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 6.0,
+      "max_score": 100,
+      "percentage": 6.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_ruleagent.py"
+          }
+        },
+        "code_quality": {
+          "passed": false,
+          "score": 6,
+          "max_score": 15,
+          "message": "代码质量: 6/15 - 缺少或过短的类文档字符串",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 1,
+            "total_methods": 4,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'RuleAgent' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'RuleAgent' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:20.140198"
+    },
+    {
+      "agent_name": "DecisionAgent",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 6.0,
+      "max_score": 100,
+      "percentage": 6.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_decisionagent.py"
+          }
+        },
+        "code_quality": {
+          "passed": false,
+          "score": 6,
+          "max_score": 15,
+          "message": "代码质量: 6/15 - 缺少或过短的类文档字符串",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 1,
+            "total_methods": 4,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'DecisionAgent' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'DecisionAgent' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:20.146428"
+    },
+    {
+      "agent_name": "AgentCoordinator",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 7.0,
+      "max_score": 100,
+      "percentage": 7.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_agentcoordinator.py"
+          }
+        },
+        "code_quality": {
+          "passed": false,
+          "score": 7,
+          "max_score": 15,
+          "message": "代码质量: 7/15 - 缺少或过短的类文档字符串",
+          "details": {
+            "issues": [
+              "缺少或过短的类文档字符串"
+            ],
+            "class_docstring": "missing",
+            "methods_with_docs": 1,
+            "total_methods": 2,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'AgentCoordinator' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'AgentCoordinator' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:20.154428"
+    },
+    {
+      "agent_name": "AthenaUnifiedAgent",
+      "status": "failed",
+      "level": "bronze",
+      "level_name": "青铜认证",
+      "score": 10.0,
+      "max_score": 100,
+      "percentage": 10.0,
+      "checks": {
+        "interface_compliance": {
+          "passed": false,
+          "score": 0,
+          "max_score": 25,
+          "message": "接口合规性: 0/25 - 缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证), 未继承BaseXiaonaComponent基类, 能力检查失败: __init__() got an unexpected keyword argument 'agent_id'",
+          "details": {
+            "issues": [
+              "缺少必需方法: _initialize (初始化钩子), get_capabilities (获取能力列表), get_info (获取Agent信息), get_system_prompt (获取系统提示词), execute (执行方法), validate_input (输入验证)",
+              "未继承BaseXiaonaComponent基类",
+              "能力检查失败: __init__() got an unexpected keyword argument 'agent_id'"
+            ],
+            "details": {}
+          }
+        },
+        "test_coverage": {
+          "passed": false,
+          "score": 0,
+          "max_score": 20,
+          "message": "测试覆盖: 0/20",
+          "details": {
+            "test_exists": false,
+            "suggested_test_path": "tests/agents/test_athenaunifiedagent.py"
+          }
+        },
+        "code_quality": {
+          "passed": true,
+          "score": 10,
+          "max_score": 15,
+          "message": "代码质量: 10/15",
+          "details": {
+            "issues": [],
+            "class_docstring": "present",
+            "methods_with_docs": 1,
+            "total_methods": 13,
+            "type_annotations": "present"
+          }
+        },
+        "documentation": {
+          "passed": false,
+          "score": 0,
+          "max_score": 10,
+          "message": "文档完整性: 0/10",
+          "details": {}
+        },
+        "certification_error": {
+          "passed": false,
+          "score": 0,
+          "max_score": 130,
+          "message": "认证过程中发生错误: type object 'AthenaUnifiedAgent' has no attribute 'execute'",
+          "details": {
+            "error_type": "AttributeError",
+            "error_details": "type object 'AthenaUnifiedAgent' has no attribute 'execute'"
+          }
+        }
+      },
+      "timestamp": "2026-04-21T19:19:20.164326"
+    }
+  ],
+  "standards": {
+    "interface_compliance": {
+      "weight": 25,
+      "required": true
+    },
+    "test_coverage": {
+      "weight": 20,
+      "required": true,
+      "threshold": 0.8
+    },
+    "code_quality": {
+      "weight": 15,
+      "required": true
+    },
+    "documentation": {
+      "weight": 10,
+      "required": false
+    },
+    "best_practices": {
+      "weight": 10,
+      "required": false
+    },
+    "performance": {
+      "weight": 20,
+      "required": false
+    },
+    "security": {
+      "weight": 10,
+      "required": false
+    }
+  }
+}

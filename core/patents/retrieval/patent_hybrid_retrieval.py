@@ -34,7 +34,7 @@ import os
 # Athena现有组件
 import sys
 
-from knowledge_graph.neo4j_manager import Neo4jManager
+from core.knowledge_graph.neo4j_manager import Neo4jManager
 from psycopg2.extras import RealDictCursor
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

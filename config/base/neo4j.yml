@@ -1,0 +1,6 @@
+# Neo4j法律世界模型配置
+neo4j:
+  host: localhost
+  port: 7687
+  name: neo4j
+  database: neo4j

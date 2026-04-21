@@ -28,7 +28,9 @@ from typing import Any
 from core.agents.base import (
     AgentCapability,
     AgentMetadata,
+    AgentStatus,
     BaseAgent,
+    HealthStatus,
 )
 
 # 导入提示词生成器
@@ -225,7 +227,7 @@ class XiaonaWithLegalWorld(BaseAgent):
 
     def __init__(
         self,
-        integration_mode: LegalWorldIntegrationMode = LegalWorldIntegrationMode.STRICT,
+        integration_mode: LegalWorldIntegrationMode | str = LegalWorldIntegrationMode.STRICT,
         neo4j_uri: str = "bolt://localhost:7687",
         neo4j_username: str = "neo4j",
         neo4j_password: str = os.getenv("NEO4J_PASSWORD", "password"),
@@ -235,7 +237,7 @@ class XiaonaWithLegalWorld(BaseAgent):
         初始化小娜智能体
 
         Args:
-            integration_mode: 集成模式
+            integration_mode: 集成模式 (枚举或字符串)
             neo4j_uri: Neo4j服务URI
             neo4j_username: Neo4j用户名
             neo4j_password: Neo4j密码
@@ -243,8 +245,16 @@ class XiaonaWithLegalWorld(BaseAgent):
         """
         super().__init__()
 
-        # 集成模式
-        self.integration_mode = integration_mode
+        # 集成模式 - 支持字符串和枚举
+        if isinstance(integration_mode, str):
+            mode_map = {
+                "strict": LegalWorldIntegrationMode.STRICT,
+                "hybrid": LegalWorldIntegrationMode.HYBRID,
+                "fallback": LegalWorldIntegrationMode.FALLBACK,
+            }
+            self.integration_mode = mode_map.get(integration_mode.lower(), LegalWorldIntegrationMode.FALLBACK)
+        else:
+            self.integration_mode = integration_mode
 
         # Neo4j配置
         self.neo4j_uri = neo4j_uri
@@ -266,7 +276,7 @@ class XiaonaWithLegalWorld(BaseAgent):
             "validation_failures": 0,
         }
 
-        logger.info(f"⚖️ 小娜法律世界模型集成版初始化完成 (模式: {integration_mode.value})")
+        logger.info(f"⚖️ 小娜法律世界模型集成版初始化完成 (模式: {self.integration_mode.value})")
 
     async def initialize(self) -> None:
         """初始化智能体"""
@@ -306,6 +316,10 @@ class XiaonaWithLegalWorld(BaseAgent):
                 raise RuntimeError("严格模式下法律世界模型必须可用") from e
             else:
                 logger.warning("⚠️ 将在回退模式下运行")
+
+        # 设置就绪状态
+        self._status = AgentStatus.READY
+        logger.info("✅ 小娜法律世界模型集成版初始化完成")
 
     # ========== 核心处理流程 ==========
 
@@ -617,10 +631,11 @@ class XiaonaWithLegalWorld(BaseAgent):
 
     # ========== BaseAgent抽象方法实现 ==========
 
-    async def health_check(self) -> dict[str, Any]:
+    async def health_check(self) -> HealthStatus:
         """健康检查"""
-        return {
-            "status": "healthy" if self.scenario_identifier else "unhealthy",
+        from core.agents.base import AgentStatus
+
+        details = {
             "integration_mode": self.integration_mode.value,
             "components": {
                 "scenario_identifier": self.scenario_identifier is not None,
@@ -628,7 +643,15 @@ class XiaonaWithLegalWorld(BaseAgent):
                 "prompt_generator": self.prompt_generator is not None,
                 "validator": self.validator is not None,
             },
+            "total_requests": self.stats.get("total_requests", 0),
+            "legal_world_used": self.stats.get("legal_world_used", 0),
         }
+
+        is_healthy = self.scenario_identifier is not None
+        status = AgentStatus.READY if is_healthy else AgentStatus.ERROR
+        message = "小娜法律世界模型集成版运行正常" if is_healthy else "场景识别器未初始化"
+
+        return HealthStatus(status=status, message=message, details=details)
 
     async def process(self, request: Any) -> Any:
         """处理请求"""

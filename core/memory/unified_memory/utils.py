@@ -74,7 +74,7 @@ def _load_embedding_model() -> Any:
     - BGE-M3本地模型 (1024维,多语言,支持 dense/sparse/colbert) ✅
     - paraphrase-multilingual-MiniLM-L12-v2 (384维,多语言)
 
-    BGE-M3本地路径: /Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3
+    BGE-M3本地路径: http://127.0.0.1:8766/v1/embeddings
 
     Returns:
         模型和模型名称

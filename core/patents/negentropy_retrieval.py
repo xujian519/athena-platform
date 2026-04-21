@@ -32,7 +32,7 @@ from core.logging_config import setup_logging
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.biology.negentropy_optimizer import get_negentropy_optimizer
-from patents.core.ipc_vector_database import IPCMatchResult, get_ipc_vector_db
+from core.patents.ipc_vector_database import IPCMatchResult, get_ipc_vector_db
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)

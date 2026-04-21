@@ -108,7 +108,7 @@ async def test_basic_functionality():
         logger.info("   ✅ 数据库配置测试通过")
 
         # 测试关键词提取
-        from patents.retrieval.real_patent_hybrid_retrieval import RealPatentHybridRetrieval
+        from core.patents.retrieval.real_patent_hybrid_retrieval import RealPatentHybridRetrieval
 
         retrieval_system = RealPatentHybridRetrieval()
         keywords = retrieval_system._extract_keywords("深度学习图像识别技术")
@@ -126,7 +126,7 @@ async def start_demo_system():
     logger.info("🚀 启动专利检索演示系统...")
 
     try:
-        from patents.retrieval.real_patent_hybrid_retrieval import RealPatentHybridRetrieval
+        from core.patents.retrieval.real_patent_hybrid_retrieval import RealPatentHybridRetrieval
 
         # 创建检索系统实例
         retrieval_system = RealPatentHybridRetrieval()
@@ -175,7 +175,7 @@ async def start_interactive_mode():
     logger.info("💬 启动交互模式...")
 
     try:
-        from patents.retrieval.real_patent_hybrid_retrieval import RealPatentHybridRetrieval
+        from core.patents.retrieval.real_patent_hybrid_retrieval import RealPatentHybridRetrieval
 
         retrieval_system = RealPatentHybridRetrieval()
 

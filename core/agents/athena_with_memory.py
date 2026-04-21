@@ -95,10 +95,10 @@ class AthenaWisdomAgent(MemoryEnabledAgent):
         self.creation_knowledge = eternal_memories
         logger.info(f"✅ 已加载 {len(eternal_memories)}条永恒知识")
 
-    async def generate_response(self, user_input: str, **kwargs) -> str:
+    async def generate_response(self, user_input: str, **_kwargs  # noqa: ARG001) -> str:
         """生成响应"""
         # 使用超级思考模式生成回应
-        response = await self._think_deeper(user_input, **kwargs)
+        response = await self._think_deeper(user_input, **_kwargs  # noqa: ARG001)
 
         # 记录战略洞察
         if user_input.strip().endswith("?"):
@@ -113,7 +113,7 @@ class AthenaWisdomAgent(MemoryEnabledAgent):
 
         return response
 
-    async def _think_deeper(self, user_input: str, **kwargs) -> str:
+    async def _think_deeper(self, user_input: str, **_kwargs  # noqa: ARG001) -> str:
         """深度思考模式生成回应"""
         # 识别用户意图
         intent = await self._analyze_intent(user_input)

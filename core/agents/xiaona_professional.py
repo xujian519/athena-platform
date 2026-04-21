@@ -675,14 +675,14 @@ class XiaonaProfessionalAgent(BaseAgent):
     # ========== 专业任务处理函数 ==========
 
     async def _handle_office_action_response(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """处理意见答复任务"""
         self.logger.info("📝 处理意见答复任务")
         return await self._handle_respond_oa(kwargs)
 
     async def _handle_invalidity_request(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """处理无效宣告请求"""
         self.logger.info("⚔️ 处理无效宣告请求")
@@ -702,7 +702,7 @@ class XiaonaProfessionalAgent(BaseAgent):
         }
 
     async def _handle_patent_drafting(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """处理专利撰写任务"""
         self.logger.info("✍️ 处理专利撰写任务")
@@ -722,7 +722,7 @@ class XiaonaProfessionalAgent(BaseAgent):
         }
 
     async def _handle_inventiveness_analysis(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """处理创造性分析 (三步法)"""
         self.logger.info("🔬 处理创造性分析 - 使用三步法")
@@ -740,7 +740,7 @@ class XiaonaProfessionalAgent(BaseAgent):
         }
 
     async def _handle_novelty_analysis(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """处理新颖性分析"""
         self.logger.info("🆕 处理新颖性分析")
@@ -756,7 +756,7 @@ class XiaonaProfessionalAgent(BaseAgent):
         }
 
     async def _handle_claim_analysis(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """处理权利要求分析"""
         self.logger.info("📋 处理权利要求分析")
@@ -772,7 +772,7 @@ class XiaonaProfessionalAgent(BaseAgent):
         }
 
     async def _handle_patent_compliance(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """处理专利合规检查"""
         self.logger.info("✅ 处理专利合规检查")
@@ -788,7 +788,7 @@ class XiaonaProfessionalAgent(BaseAgent):
         }
 
     async def _handle_legal_consultation(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """处理法律咨询"""
         self.logger.info("⚖️ 处理法律咨询")
@@ -800,7 +800,7 @@ class XiaonaProfessionalAgent(BaseAgent):
         }
 
     async def _handle_patent_search(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """处理专利检索"""
         self.logger.info("🔍 处理专利检索")
@@ -816,7 +816,7 @@ class XiaonaProfessionalAgent(BaseAgent):
         }
 
     async def _handle_technology_landscape(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """处理技术态势分析"""
         self.logger.info("🌐 处理技术态势分析")
@@ -834,7 +834,7 @@ class XiaonaProfessionalAgent(BaseAgent):
     # ========== AI服务处理函数 (CAP11-CAP14) ==========
 
     async def _handle_patent_classification(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """
         处理专利分类任务 (CAP11)
@@ -844,7 +844,7 @@ class XiaonaProfessionalAgent(BaseAgent):
         self.logger.info("📊 处理专利分类任务 - CAP11")
 
         try:
-            from patents.core.ai_services import PatentClassifier
+            from core.patents.ai_services import PatentClassifier
 
             classifier = PatentClassifier()
             result = await classifier.classify(
@@ -874,7 +874,7 @@ class XiaonaProfessionalAgent(BaseAgent):
             }
 
     async def _handle_claim_revision(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """
         处理权利要求修订任务 (CAP12)
@@ -884,7 +884,7 @@ class XiaonaProfessionalAgent(BaseAgent):
         self.logger.info("✏️ 处理权利要求修订任务 - CAP12")
 
         try:
-            from patents.core.ai_services import ClaimReviser
+            from core.patents.ai_services import ClaimReviser
 
             reviser = ClaimReviser()
             result = await reviser.revise_claims(
@@ -919,7 +919,7 @@ class XiaonaProfessionalAgent(BaseAgent):
             }
 
     async def _handle_invalidity_prediction(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """
         处理无效性预测任务 (CAP13)
@@ -929,7 +929,7 @@ class XiaonaProfessionalAgent(BaseAgent):
         self.logger.info("⚠️ 处理无效性预测任务 - CAP13")
 
         try:
-            from patents.core.ai_services import InvalidityPredictor
+            from core.patents.ai_services import InvalidityPredictor
 
             predictor = InvalidityPredictor()
             result = await predictor.predict_invalidity_risk(
@@ -964,7 +964,7 @@ class XiaonaProfessionalAgent(BaseAgent):
             }
 
     async def _handle_patent_quality_scoring(
-        self, description: str, context: TaskContext, **kwargs
+        self, description: str, context: TaskContext, **_kwargs  # noqa: ARG001
     ) -> dict[str, Any]:
         """
         处理专利质量评分任务 (CAP14)
@@ -974,7 +974,7 @@ class XiaonaProfessionalAgent(BaseAgent):
         self.logger.info("📈 处理专利质量评分任务 - CAP14")
 
         try:
-            from patents.core.ai_services import EnhancedPatentQualityScorer
+            from core.patents.ai_services import EnhancedPatentQualityScorer
 
             scorer = EnhancedPatentQualityScorer()
             result = await scorer.comprehensive_quality_assessment(

@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 
 # 导入新增模块
 try:
-    from patents.core.specification_quality_reviewer import (
+    from core.patents.specification_quality_reviewer import (
         IssuePriority,
         QualityReviewReport,
         SpecificationQualityReviewer,
@@ -48,7 +48,7 @@ except ImportError:
     logger.warning("SpecificationQualityReviewer模块不可用")
 
 try:
-    from patents.core.task_state_manager import PhaseStatus, TaskState, TaskStateManager, TaskStatus
+    from core.patents.task_state_manager import PhaseStatus, TaskState, TaskStateManager, TaskStatus
     TASK_MANAGER_AVAILABLE = True
 except ImportError:
     TASK_MANAGER_AVAILABLE = False
@@ -595,7 +595,7 @@ class AutoSpecDrafter:
         """获取权利要求生成器"""
         if self._claim_generator is None:
             try:
-                from patents.core.claim_generator_v2 import EnhancedClaimGenerator
+                from core.patents.claim_generator_v2 import EnhancedClaimGenerator
                 self._claim_generator = EnhancedClaimGenerator(llm_manager=self.llm_manager)
             except ImportError:
                 logger.warning("无法导入EnhancedClaimGenerator")
@@ -605,7 +605,7 @@ class AutoSpecDrafter:
         """获取范围分析器"""
         if self._scope_analyzer is None:
             try:
-                from patents.core.ai_services.claim_scope_analyzer import ClaimScopeAnalyzer
+                from core.patents.ai_services.claim_scope_analyzer import ClaimScopeAnalyzer
                 self._scope_analyzer = ClaimScopeAnalyzer(llm_manager=self.llm_manager)
             except ImportError:
                 logger.warning("无法导入ClaimScopeAnalyzer")
@@ -615,7 +615,7 @@ class AutoSpecDrafter:
         """获取附图分析器"""
         if self._drawing_analyzer is None:
             try:
-                from patents.core.ai_services.drawing_analyzer import PatentDrawingAnalyzer
+                from core.patents.ai_services.drawing_analyzer import PatentDrawingAnalyzer
                 self._drawing_analyzer = PatentDrawingAnalyzer(llm_manager=self.llm_manager)
             except ImportError:
                 logger.warning("无法导入PatentDrawingAnalyzer")
@@ -1241,7 +1241,7 @@ class AutoSpecDrafter:
 
         if claim_generator:
             try:
-                from patents.core.claim_generator_v2 import SpecificationContext
+                from core.patents.claim_generator_v2 import SpecificationContext
 
                 spec_context = SpecificationContext(
                     title=understanding.invention_title,
@@ -1284,7 +1284,7 @@ class AutoSpecDrafter:
 
     def _map_invention_type(self, inv_type: InventionType):
         """映射发明类型"""
-        from patents.core.claim_generator_v2 import InventionType as ClaimInvType
+        from core.patents.claim_generator_v2 import InventionType as ClaimInvType
         mapping = {
             InventionType.DEVICE: ClaimInvType.DEVICE,
             InventionType.METHOD: ClaimInvType.METHOD,
