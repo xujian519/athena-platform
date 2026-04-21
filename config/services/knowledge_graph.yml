@@ -1,0 +1,41 @@
+# ============================================================================
+# 知识图谱服务配置
+# Knowledge Graph Service Configuration
+# ============================================================================
+
+service:
+  name: knowledge_graph
+  type: backend
+  version: "1.0"
+
+# Neo4j配置
+neo4j:
+  uri: bolt://localhost:7687
+  user: neo4j
+  password: ${NEO4J_PASSWORD}
+  database: neo4j
+
+# 图数据库配置
+graph:
+  max_nodes: 1000000
+  max_relationships: 5000000
+
+  indexes:
+    - label: Entity
+      properties: [name, type]
+      unique: true
+
+    - label: Concept
+      properties: [name, domain]
+      unique: true
+
+# 缓存配置
+cache:
+  enabled: true
+  ttl: 3600
+  max_size: 10000
+
+# 性能配置
+performance:
+  batch_size: 1000
+  query_timeout: 30

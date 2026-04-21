@@ -1,0 +1,41 @@
+# ============================================================================
+# 小娜 (Xiaona) 智能体配置
+# Xiaona Agent Configuration
+# ============================================================================
+
+service:
+  name: xiaona
+  type: agent
+  version: "2.0"
+
+# 能力配置
+capabilities:
+  patent_analysis: true
+  legal_research: true
+  document_review: true
+  case_analysis: true
+
+# 模型配置
+models:
+  llm:
+    provider: anthropic
+    model: claude-sonnet-4-6
+    temperature: 0.7
+    max_tokens: 4096
+
+  embedding:
+    provider: local
+    model: bge-m3-mlx-4bit
+    dimension: 768
+
+# 工作流配置
+workflows:
+  default:
+    max_iterations: 10
+    timeout: 300
+
+# 性能配置
+performance:
+  max_concurrent_tasks: 5
+  cache_enabled: true
+  cache_ttl: 3600

@@ -1,0 +1,52 @@
+# ============================================================================
+# Gateway统一网关配置
+# Gateway Configuration
+# ============================================================================
+
+service:
+  name: gateway
+  type: api_gateway
+  version: "1.0"
+
+# 服务器配置
+server:
+  host: 0.0.0.0
+  port: 8005
+  workers: 4
+  log_level: info
+
+# 路由配置
+routes:
+  # API路由
+  - path: /api/legal/*
+    strip_path: true
+    target_service: xiaona
+
+  - path: /api/coordination/*
+    strip_path: true
+    target_service: xiaonuo
+
+  - path: /api/ip/*
+    strip_path: true
+    target_service: yunxi
+
+  # WebSocket路由
+  - path: /ws/*
+    target_service: websocket_hub
+
+# 负载均衡
+load_balancing:
+  strategy: round_robin
+  health_check_interval: 30
+
+# 安全配置
+security:
+  jwt_enabled: true
+  jwt_secret: ${JWT_SECRET}
+  api_key_required: false
+
+# 限流配置
+rate_limiting:
+  enabled: true
+  requests_per_minute: 60
+  burst_size: 10
