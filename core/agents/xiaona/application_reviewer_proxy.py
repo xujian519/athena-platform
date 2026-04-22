@@ -6,6 +6,8 @@
 
 from typing import Any, Dict, List, Optional
 import logging
+import json
+import re
 from core.agents.xiaona.base_component import BaseXiaonaComponent
 
 logger = logging.getLogger(__name__)
@@ -54,6 +56,46 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
                 "estimated_time": 25.0,
             },
         ])
+
+    def get_system_prompt(self) -> str:
+        """获取系统提示词"""
+        return """
+你是一位专业的专利申请文件审查专家，具备深厚的专利法知识和丰富的审查经验。
+
+你的职责是：
+1. 审查专利申请文件的格式规范性
+2. 评估技术披露的充分性
+3. 检查权利要求书的质量
+4. 评价说明书的撰写质量
+
+请以专业、严谨的态度进行审查，并提供明确的改进建议。
+输出必须是严格的JSON格式，不要添加任何额外的文字说明。
+"""
+
+    async def execute(self, context) -> Any:
+        """
+        执行智能体任务
+
+        Args:
+            context: 执行上下文
+
+        Returns:
+            执行结果
+        """
+        # 根据任务类型执行相应的审查
+        task_type = context.config.get("task_type", "comprehensive")
+
+        if task_type == "format":
+            return await self.review_format(context.input_data)
+        elif task_type == "disclosure":
+            return await self.review_disclosure(context.input_data)
+        elif task_type == "claims":
+            return await self.review_claims(context.input_data)
+        elif task_type == "specification":
+            return await self.review_specification(context.input_data)
+        else:
+            # 完整审查
+            return await self.review_application(context.input_data)
 
     async def review_application(
         self,
@@ -117,7 +159,34 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
         application: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        审查申请文件格式
+        审查申请文件格式（LLM版本）
+
+        Args:
+            application: 申请文件数据
+
+        Returns:
+            格式审查结果
+        """
+        # 尝试使用LLM分析
+        try:
+            prompt = self._build_format_review_prompt(application)
+            response = await self._call_llm_with_fallback(
+                prompt=prompt,
+                task_type="format_review"
+            )
+
+            # 解析LLM响应
+            return self._parse_format_review_response(response)
+        except Exception as e:
+            self.logger.warning(f"LLM格式审查失败: {e}，使用规则-based审查")
+            return self._review_format_by_rules(application)
+
+    def _review_format_by_rules(
+        self,
+        application: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        基于规则的格式审查（降级方案）
 
         Args:
             application: 申请文件数据
@@ -177,12 +246,113 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
             "completeness_ratio": len(provided_documents) / len(required_documents) if required_documents else 0,
         }
 
+    def _build_format_review_prompt(self, application: Dict[str, Any]) -> str:
+        """构建格式审查提示词"""
+        return f"""# 任务：专利申请文件格式审查
+
+## 申请文件信息
+```json
+{json.dumps(application, ensure_ascii=False, indent=2)}
+```
+
+## 审查要点
+1. **必备文件检查**：请求书、说明书、权利要求书、摘要
+2. **申请人信息**：姓名、地址、国籍是否完整
+3. **文件格式规范**：是否符合专利局要求
+4. **页码/页眉**：是否连续、规范
+
+## 输出要求
+请严格按照以下JSON格式输出审查结果：
+
+```json
+{{
+    "format_check": "passed或failed",
+    "required_documents": ["必备文件列表"],
+    "provided_documents": ["已提供文件列表"],
+    "missing_documents": ["缺失文件列表"],
+    "applicant_data": {{
+        "status": "complete或incomplete",
+        "info": {{
+            "name": "申请人姓名",
+            "address": "地址",
+            "nationality": "国籍"
+        }}
+    }},
+    "format_issues": ["格式问题列表"],
+    "completeness_ratio": 0.8
+}}
+```
+
+请只输出JSON，不要添加任何额外说明。
+"""
+
+    def _parse_format_review_response(self, response: str) -> Dict[str, Any]:
+        """解析格式审查LLM响应"""
+        try:
+            # 提取JSON
+            json_match = re.search(r'```json\s*([\s\S]*?)```', response)
+            if json_match:
+                json_str = json_match.group(1).strip()
+            else:
+                json_str = response.strip()
+
+            result = json.loads(json_str)
+
+            # 验证必需字段
+            required_fields = ["format_check", "required_documents", "provided_documents",
+                             "missing_documents", "applicant_data", "format_issues", "completeness_ratio"]
+            for field in required_fields:
+                if field not in result:
+                    result[field] = None
+
+            return result
+
+        except (json.JSONDecodeError, Exception) as e:
+            self.logger.error(f"解析格式审查响应失败: {e}")
+            # 返回默认响应
+            return {
+                "format_check": "failed",
+                "required_documents": [],
+                "provided_documents": [],
+                "missing_documents": [],
+                "applicant_data": {"status": "incomplete", "info": {}},
+                "format_issues": ["LLM响应解析失败"],
+                "completeness_ratio": 0.0,
+            }
+
     async def review_disclosure(
         self,
         application: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        审查技术披露充分性
+        审查技术披露充分性（LLM版本）
+
+        Args:
+            application: 申请文件数据
+
+        Returns:
+            披露审查结果
+        """
+        # 尝试使用LLM分析
+        try:
+            prompt = self._build_disclosure_review_prompt(application)
+            response = await self._call_llm_with_fallback(
+                prompt=prompt,
+                task_type="disclosure_review"
+            )
+
+            # 解析LLM响应
+            return self._parse_disclosure_review_response(response)
+        except Exception as e:
+            self.logger.warning(f"LLM披露审查失败: {e}，使用规则-based审查")
+            return self._review_disclosure_by_rules(application)
+
+    def _review_disclosure_by_rules(
+        self,
+        application: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        基于规则的技术披露审查（降级方案）
 
         Args:
             application: 申请文件数据
@@ -233,12 +403,133 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
             "completeness_score": sum(d["score"] for d in disclosures.values()) / len(disclosures),
         }
 
+    def _build_disclosure_review_prompt(self, application: Dict[str, Any]) -> str:
+        """构建披露审查提示词"""
+        return f"""# 任务：专利申请文件技术披露充分性审查
+
+## 申请文件信息
+```json
+{json.dumps(application, ensure_ascii=False, indent=2)}
+```
+
+## 审查要点
+1. **技术领域**：是否清楚说明所属技术领域
+2. **背景技术**：是否描述现有技术及其不足
+3. **技术问题**：是否明确指出要解决的技术问题
+4. **技术方案**：是否完整描述技术方案
+5. **有益效果**：是否说明技术方案带来的有益效果
+
+## 充分性标准
+- **充分**：内容详实，本领域技术人员能够理解
+- **不充分**：内容过于简单或缺失关键信息
+
+## 输出要求
+请严格按照以下JSON格式输出审查结果：
+
+```json
+{{
+    "disclosure_adequacy": "sufficient或insufficient",
+    "disclosures": {{
+        "technical_field": {{
+            "status": "sufficient或insufficient",
+            "score": 0.8,
+            "description": "评估说明"
+        }},
+        "background_art": {{
+            "status": "sufficient或insufficient",
+            "score": 0.7,
+            "description": "评估说明"
+        }},
+        "technical_problem": {{
+            "status": "sufficient或insufficient",
+            "score": 0.9,
+            "description": "评估说明"
+        }},
+        "technical_solution": {{
+            "status": "sufficient或insufficient",
+            "score": 0.85,
+            "description": "评估说明"
+        }},
+        "beneficial_effects": {{
+            "status": "sufficient或insufficient",
+            "score": 0.75,
+            "description": "评估说明"
+        }}
+    }},
+    "missing_disclosures": ["披露不充分的方面列表"],
+    "completeness_score": 0.8
+}}
+```
+
+请只输出JSON，不要添加任何额外说明。
+"""
+
+    def _parse_disclosure_review_response(self, response: str) -> Dict[str, Any]:
+        """解析披露审查LLM响应"""
+        try:
+            # 提取JSON
+            json_match = re.search(r'```json\s*([\s\S]*?)```', response)
+            if json_match:
+                json_str = json_match.group(1).strip()
+            else:
+                json_str = response.strip()
+
+            result = json.loads(json_str)
+
+            # 验证必需字段
+            if "disclosure_adequacy" not in result:
+                result["disclosure_adequacy"] = "insufficient"
+            if "disclosures" not in result:
+                result["disclosures"] = {}
+            if "missing_disclosures" not in result:
+                result["missing_disclosures"] = []
+            if "completeness_score" not in result:
+                result["completeness_score"] = 0.0
+
+            return result
+
+        except (json.JSONDecodeError, Exception) as e:
+            self.logger.error(f"解析披露审查响应失败: {e}")
+            return {
+                "disclosure_adequacy": "insufficient",
+                "disclosures": {},
+                "missing_disclosures": ["LLM响应解析失败"],
+                "completeness_score": 0.0,
+            }
+
     async def review_claims(
         self,
         application: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        审查权利要求书
+        审查权利要求书（LLM版本）
+
+        Args:
+            application: 申请文件数据
+
+        Returns:
+            权利要求审查结果
+        """
+        # 尝试使用LLM分析
+        try:
+            prompt = self._build_claims_review_prompt(application)
+            response = await self._call_llm_with_fallback(
+                prompt=prompt,
+                task_type="claims_review"
+            )
+
+            # 解析LLM响应
+            return self._parse_claims_review_response(response)
+        except Exception as e:
+            self.logger.warning(f"LLM权利要求审查失败: {e}，使用规则-based审查")
+            return self._review_claims_by_rules(application)
+
+    def _review_claims_by_rules(
+        self,
+        application: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        基于规则的权利要求审查（降级方案）
 
         Args:
             application: 申请文件数据
@@ -285,12 +576,135 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
             "suggestions": suggestions,
         }
 
+    def _build_claims_review_prompt(self, application: Dict[str, Any]) -> str:
+        """构建权利要求审查提示词"""
+        claims_text = application.get("claims", "")
+        specification = application.get("specification", "")
+
+        return f"""# 任务：专利权利要求书审查
+
+## 权利要求书内容
+```
+{claims_text}
+```
+
+## 说明书（用于支持性审查）
+```
+{specification[:1000]}...
+```
+
+## 审查要点
+1. **清晰度**：权利要求表述是否清晰、明确
+2. **支持性**：权利要求是否得到说明书支持
+3. **保护范围**：独立权利要求保护范围是否合理
+4. **依赖关系**：从属权利要求引用关系是否正确
+
+## 输出要求
+请严格按照以下JSON格式输出审查结果：
+
+```json
+{{
+    "claims_review": {{
+        "clarity": {{
+            "score": 0.8,
+            "description": "清晰度评估说明"
+        }},
+        "support": {{
+            "score": 0.75,
+            "description": "支持性评估说明"
+        }},
+        "breadth": {{
+            "score": 0.7,
+            "description": "保护范围评估说明"
+        }},
+        "dependency": {{
+            "score": 0.85,
+            "description": "依赖关系评估说明"
+        }}
+    }},
+    "total_claims": 5,
+    "independent_claims": 1,
+    "dependent_claims": 4,
+    "issues": ["问题1", "问题2"],
+    "suggestions": ["建议1", "建议2"]
+}}
+```
+
+请只输出JSON，不要添加任何额外说明。
+"""
+
+    def _parse_claims_review_response(self, response: str) -> Dict[str, Any]:
+        """解析权利要求审查LLM响应"""
+        try:
+            # 提取JSON
+            json_match = re.search(r'```json\s*([\s\S]*?)```', response)
+            if json_match:
+                json_str = json_match.group(1).strip()
+            else:
+                json_str = response.strip()
+
+            result = json.loads(json_str)
+
+            # 验证必需字段
+            if "claims_review" not in result:
+                result["claims_review"] = {}
+            if "total_claims" not in result:
+                result["total_claims"] = 0
+            if "independent_claims" not in result:
+                result["independent_claims"] = 0
+            if "dependent_claims" not in result:
+                result["dependent_claims"] = 0
+            if "issues" not in result:
+                result["issues"] = []
+            if "suggestions" not in result:
+                result["suggestions"] = []
+
+            return result
+
+        except (json.JSONDecodeError, Exception) as e:
+            self.logger.error(f"解析权利要求审查响应失败: {e}")
+            return {
+                "claims_review": {},
+                "total_claims": 0,
+                "independent_claims": 0,
+                "dependent_claims": 0,
+                "issues": ["LLM响应解析失败"],
+                "suggestions": [],
+            }
+
     async def review_specification(
         self,
         application: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        审查说明书
+        审查说明书（LLM版本）
+
+        Args:
+            application: 申请文件数据
+
+        Returns:
+            说明书审查结果
+        """
+        # 尝试使用LLM分析
+        try:
+            prompt = self._build_specification_review_prompt(application)
+            response = await self._call_llm_with_fallback(
+                prompt=prompt,
+                task_type="specification_review"
+            )
+
+            # 解析LLM响应
+            return self._parse_specification_review_response(response)
+        except Exception as e:
+            self.logger.warning(f"LLM说明书审查失败: {e}，使用规则-based审查")
+            return self._review_specification_by_rules(application)
+
+    def _review_specification_by_rules(
+        self,
+        application: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        基于规则的说明书审查（降级方案）
 
         Args:
             application: 申请文件数据
@@ -326,6 +740,107 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
             "issues": issues,
             "suggestions": self._generate_specification_suggestions(specification_review),
         }
+
+    def _build_specification_review_prompt(self, application: Dict[str, Any]) -> str:
+        """构建说明书审查提示词"""
+        specification = application.get("specification", "")
+        embodiments = application.get("embodiments", [])
+        drawings = application.get("drawings", [])
+
+        return f"""# 任务：专利说明书审查
+
+## 说明书内容
+```
+{specification[:1500]}
+```
+
+## 实施方式
+```json
+{json.dumps(embodiments, ensure_ascii=False)}
+```
+
+## 附图信息
+附图数量：{len(drawings)}幅
+
+## 审查要点
+1. **完整性**：是否包含所有必要部分（技术领域、背景技术、发明内容、附图说明、具体实施方式）
+2. **清晰度**：表述是否清晰、有条理
+3. **充分公开**：本领域技术人员能否根据说明书实现发明
+4. **最佳实施方式**：是否披露最佳实施方式
+5. **附图支持**：附图是否充分支持说明书
+
+## 输出要求
+请严格按照以下JSON格式输出审查结果：
+
+```json
+{{
+    "specification_review": {{
+        "completeness": {{
+            "score": 0.8,
+            "description": "完整性评估说明"
+        }},
+        "clarity": {{
+            "score": 0.75,
+            "description": "清晰度评估说明"
+        }},
+        "enablement": {{
+            "score": 0.85,
+            "description": "充分公开评估说明"
+        }},
+        "best_mode": {{
+            "score": 0.7,
+            "description": "最佳实施方式评估说明"
+        }},
+        "drawings_support": {{
+            "score": 0.8,
+            "description": "附图支持评估说明"
+        }}
+    }},
+    "total_embodiments": 3,
+    "total_drawings": 5,
+    "issues": ["问题1", "问题2"],
+    "suggestions": ["建议1", "建议2"]
+}}
+```
+
+请只输出JSON，不要添加任何额外说明。
+"""
+
+    def _parse_specification_review_response(self, response: str) -> Dict[str, Any]:
+        """解析说明书审查LLM响应"""
+        try:
+            # 提取JSON
+            json_match = re.search(r'```json\s*([\s\S]*?)```', response)
+            if json_match:
+                json_str = json_match.group(1).strip()
+            else:
+                json_str = response.strip()
+
+            result = json.loads(json_str)
+
+            # 验证必需字段
+            if "specification_review" not in result:
+                result["specification_review"] = {}
+            if "total_embodiments" not in result:
+                result["total_embodiments"] = 0
+            if "total_drawings" not in result:
+                result["total_drawings"] = 0
+            if "issues" not in result:
+                result["issues"] = []
+            if "suggestions" not in result:
+                result["suggestions"] = []
+
+            return result
+
+        except (json.JSONDecodeError, Exception) as e:
+            self.logger.error(f"解析说明书审查响应失败: {e}")
+            return {
+                "specification_review": {},
+                "total_embodiments": 0,
+                "total_drawings": 0,
+                "issues": ["LLM响应解析失败"],
+                "suggestions": [],
+            }
 
     # 辅助方法
 

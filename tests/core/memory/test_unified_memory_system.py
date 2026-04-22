@@ -1,482 +1,859 @@
-#!/usr/bin/env python3
 """
-Athena统一智能体记忆系统 - 单元测试
-Unit Tests for Unified Agent Memory System
+统一记忆系统单元测试
 
-测试内容：
-1. 系统初始化测试
-2. 记忆存储测试
-3. 记忆回忆测试
-4. 记忆搜索测试
-5. 缓存命中率测试
-6. 重试机制测试
-7. 结构化日志测试
-
-作者: Athena平台团队
-创建时间: 2026-01-21
-版本: v1.0.0
+测试覆盖：
+- 全局记忆写入和读取
+- 项目记忆写入和读取
+- 记忆索引更新
+- 工作历史追加
+- 搜索功能
+- 错误处理
 """
 
-import os
-import sys
+from __future__ import annotations
+
+import tempfile  # noqa: ARG001 (used in fixtures)
 from datetime import datetime
-from unittest.mock import AsyncMock, patch
+from pathlib import Path
+from unittest.mock import patch  # noqa: ARG001 (used in tests)
 
 import pytest
 
-# 添加项目路径
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../..'))
-
-from core.memory.unified_memory import (
-    AgentType,
-    CacheStatistics,
-    MemoryTier,
+from core.memory.unified_memory_system import (
+    MemoryCategory,
+    MemoryEntry,
     MemoryType,
-    UnifiedAgentMemorySystem,
+    UnifiedMemorySystem,
+    get_global_memory,
+    get_project_memory,
 )
-from core.memory.unified_memory.utils import retry_with_backoff
 
 
-class TestMemorySystemInitialization:
-    """测试系统初始化"""
-
-    @pytest.mark.asyncio
-    async def test_initialization(self):
-        """测试系统初始化"""
-        # 使用环境变量设置测试数据库配置
-        os.environ['MEMORY_DB_PASSWORD'] = 'test_password'
-        os.environ['REDIS_HOST'] = 'localhost'
-
-        system = UnifiedAgentMemorySystem()
-
-        # 验证系统配置
-        assert system.system_name == "Athena统一智能体记忆系统"
-        assert system.version == "v1.0.0 永恒记忆"
-        assert system.cache_stats is not None
-        assert isinstance(system.cache_stats, CacheStatistics)
-
-        # 验证数据库配置
-        assert 'postgresql' in system.db_config
-        assert 'redis' in system.db_config
-        assert 'qdrant' in system.db_config
-
-        # 验证Redis TTL配置
-        redis_config = system.db_config['redis']
-        assert 'ttl' in redis_config
-        assert redis_config['ttl']['agent_stats'] == 300  # 5分钟
-        assert redis_config['ttl']['search_results'] == 60  # 1分钟
-
-        print("✅ 系统初始化测试通过")
-
-
-class TestMemoryStorage:
-    """测试记忆存储功能"""
-
-    @pytest.mark.asyncio
-    async def test_store_memory(self):
-        """测试存储基本记忆"""
-        system = UnifiedAgentMemorySystem()
-
-        # Mock数据库连接
-        with patch.object(system, '_check_initialized'):
-            with patch.object(system, '_generate_embedding', return_value=[0.1] * 768):
-                with patch.object(system, '_store_to_postgresql', return_value="test-memory-id"):
-                    with patch.object(system, '_store_to_qdrant', return_value="test-memory-id"):
-                        with patch.object(system, '_update_vector_id'):
-                            with patch.object(system, '_invalidate_agent_caches'):
-                                memory_id = await system.store_memory(
-                                    agent_id="test_agent",
-                                    agent_type=AgentType.ATHENA,
-                                    content="这是一条测试记忆",
-                                    memory_type=MemoryType.CONVERSATION,
-                                    importance=0.8,
-                                    emotional_weight=0.5
-                                )
-
-                                assert memory_id == "test-memory-id"
-
-        print("✅ 记忆存储测试通过")
-
-    @pytest.mark.asyncio
-    async def test_store_hot_memory(self):
-        """测试存储热记忆"""
-        system = UnifiedAgentMemorySystem()
-        system.HOT_CACHE_LIMIT = 50
-
-        # Mock数据库连接
-        with patch.object(system, '_check_initialized'):
-            with patch.object(system, '_generate_embedding', return_value=[0.1] * 768):
-                with patch.object(system, '_store_to_postgresql', return_value="hot-memory-id"):
-                    with patch.object(system, '_store_to_qdrant', return_value="hot-memory-id"):
-                        with patch.object(system, '_update_vector_id'):
-                            with patch.object(system, '_cache_hot_memory') as mock_cache:
-                                with patch.object(system, '_invalidate_agent_caches'):
-                                    memory_id = await system.store_memory(
-                                        agent_id="test_agent",
-                                        agent_type=AgentType.XIAONUO,
-                                        content="这是热记忆",
-                                        memory_type=MemoryType.CONVERSATION,
-                                        tier=MemoryTier.HOT
-                                    )
-
-                                    # 验证缓存方法被调用
-                                    mock_cache.assert_called_once()
-                                    assert memory_id == "hot-memory-id"
-
-        print("✅ 热记忆存储测试通过")
-
-
-class TestMemoryRecall:
-    """测试记忆回忆功能"""
-
-    @pytest.mark.asyncio
-    async def test_recall_memory(self):
-        """测试回忆记忆"""
-        system = UnifiedAgentMemorySystem()
-
-        # Mock返回结果 - 返回足够的结果避免调用数据库
-        mock_results = [
-            {
-                'memory_id': f'mem{i}',
-                'content': f'测试记忆{i}',
-                'memory_type': 'conversation',
-                'tier': 'hot',
-                'similarity': 0.95 - i * 0.05,
-                'importance': 0.8 - i * 0.05,
-                'source': 'hot_cache'
-            }
-            for i in range(10)  # 返回10个结果以满足limit=10
-        ]
-
-        with patch.object(system, '_check_initialized'):
-            with patch.object(system, '_search_hot_cache', return_value=mock_results):
-                # 也mock _search_database以防万一
-                with patch.object(system, '_search_database', return_value=[]):
-                    results = await system.recall_memory(
-                        agent_id="test_agent",
-                        query="测试",
-                        limit=10
-                    )
-
-                    assert len(results) > 0
-                    assert results[0]['content'] == '测试记忆0'
-
-        print("✅ 记忆回忆测试通过")
-
-
-class TestMemorySearch:
-    """测试记忆搜索功能"""
-
-    @pytest.mark.asyncio
-    async def test_search_memories(self):
-        """测试搜索记忆"""
-        system = UnifiedAgentMemorySystem()
-
-        # Mock返回结果
-        mock_search_results = [
-            {
-                'memory_id': 'mem1',
-                'agent_id': 'athena_wisdom',
-                'content': '智能体测试记忆',
-                'memory_type': 'conversation',
-                'tier': 'cold',
-                'importance': 0.9,
-                'created_at': datetime.now().isoformat()
-            }
-        ]
-
-        with patch.object(system, '_check_initialized'):
-            with patch.object(system, '_cache_get', return_value=None):  # 缓存未命中
-                # 创建async context manager mock
-                from contextlib import asynccontextmanager
-
-                @asynccontextmanager
-                async def mock_connection():
-                    mock_conn = AsyncMock()
-                    mock_conn.fetch = AsyncMock(return_value=mock_search_results)
-                    yield mock_conn
-
-                mock_pool = AsyncMock()
-                mock_pool.acquire = mock_connection
-
-                # 设置pg_pool属性
-                system.pg_pool = mock_pool
-
-                with patch.object(system, '_cache_set') as mock_cache_set:
-                    results = await system.search_memories(
-                        query="测试",
-                        limit=20
-                    )
-
-                    # 验证结果
-                    assert len(results) == 1
-                    assert results[0]['content'] == '智能体测试记忆'
-
-                    # 验证缓存被设置
-                    mock_cache_set.assert_called_once()
-
-        print("✅ 记忆搜索测试通过")
-
-    @pytest.mark.asyncio
-    async def test_search_with_cache_hit(self):
-        """测试搜索命中缓存"""
-        system = UnifiedAgentMemorySystem()
-
-        # Mock缓存命中
-        cached_results = [
-            {
-                'memory_id': 'mem1',
-                'content': '缓存中的记忆',
-                'memory_type': 'conversation'
-            }
-        ]
-
-        with patch.object(system, '_check_initialized'):
-            with patch.object(system, '_cache_get', return_value=cached_results):
-                results = await system.search_memories(query="测试")
-
-                # 验证返回缓存结果
-                assert len(results) == 1
-                assert results[0]['content'] == '缓存中的记忆'
-
-        print("✅ 搜索缓存命中测试通过")
-
-
-class TestCacheStatistics:
-    """测试缓存统计功能"""
-
-    def test_cache_hit_rate(self):
-        """测试缓存命中率计算"""
-        stats = CacheStatistics()
-
-        # 初始状态
-        assert stats.hit_rate == 0.0
-        assert stats.total_requests == 0
-
-        # 添加一些命中和未命中
-        stats.record_hit()
-        stats.record_hit()
-        stats.record_miss()
-
-        assert stats.hit_rate == 2/3
-        assert stats.total_requests == 3
-        assert stats.hits == 2
-        assert stats.misses == 1
-
-        # 获取统计信息
-        stats_dict = stats.get_stats()
-        assert stats_dict['hit_rate'] == 2/3
-        assert 'hits' in stats_dict
-        assert 'misses' in stats_dict
-
-        print("✅ 缓存统计测试通过")
-
-    def test_empty_cache_stats(self):
-        """测试空缓存统计"""
-        stats = CacheStatistics()
-
-        # 空状态不应该有除零错误
-        assert stats.hit_rate == 0.0
-
-        stats_dict = stats.get_stats()
-        assert stats_dict['total_requests'] == 0
-        assert stats_dict['hit_rate'] == 0.0
-
-        print("✅ 空缓存统计测试通过")
-
-
-class TestRetryMechanism:
-    """测试重试机制"""
-
-    @pytest.mark.asyncio
-    async def test_retry_with_backoff(self):
-        """测试指数退避重试机制"""
-        call_count = 0
-
-        @retry_with_backoff(max_retries=3, base_delay=0.1, max_delay=1.0)
-        async def failing_function():
-            nonlocal call_count
-            call_count += 1
-            if call_count < 3:
-                raise Exception("模拟失败")
-            return "成功"
-
-        result = await failing_function()
-
-        # 验证重试了3次
-        assert call_count == 3
-        assert result == "成功"
-
-        print("✅ 重试机制测试通过")
-
-    @pytest.mark.asyncio
-    async def test_retry_max_retries_exceeded(self):
-        """测试超过最大重试次数"""
-        call_count = 0
-
-        @retry_with_backoff(max_retries=2, base_delay=0.1, max_delay=1.0)
-        async def always_failing_function():
-            nonlocal call_count
-            call_count += 1
-            raise Exception("总是失败")
-
-        # 验证最终抛出异常
-        with pytest.raises(Exception, match="总是失败"):
-            await always_failing_function()
-
-        # 验证尝试了最大次数
-        assert call_count == 2
-
-        print("✅ 最大重试次数测试通过")
-
-
-class TestAgentStats:
-    """测试智能体统计功能"""
-
-    @pytest.mark.asyncio
-    async def test_get_agent_stats_from_cache(self):
-        """测试从缓存获取智能体统计"""
-        system = UnifiedAgentMemorySystem()
-
-        # Mock缓存命中
-        cached_stats = {
-            'agent_id': 'athena_wisdom',
-            'total_memories': 100,
-            'family_memories': 20,
-            'agent_name': 'Athena.智慧女神'
-        }
-
-        with patch.object(system, '_check_initialized'):
-            with patch.object(system, '_cache_get', return_value=cached_stats):
-                stats = await system.get_agent_stats("athena_wisdom")
-
-                assert stats['agent_id'] == 'athena_wisdom'
-                assert stats['total_memories'] == 100
-                assert stats['agent_name'] == 'Athena.智慧女神'
-
-        print("✅ 缓存统计测试通过")
-
-    @pytest.mark.asyncio
-    async def test_get_agent_stats_from_db(self):
-        """测试从数据库获取智能体统计"""
-        system = UnifiedAgentMemorySystem()
-
-        # Mock数据库查询结果
-        mock_db_row = {
-            'agent_id': 'xiaonuo_pisces',
-            'agent_type': 'xiaonuo',
-            'total_memories': 50,
-            'family_memories': 30
-        }
-
-        with patch.object(system, '_check_initialized'):
-            with patch.object(system, '_cache_get', return_value=None):  # 缓存未命中
-                # 创建async context manager mock
-                from contextlib import asynccontextmanager
-
-                @asynccontextmanager
-                async def mock_connection():
-                    mock_conn = AsyncMock()
-                    mock_conn.fetchrow = AsyncMock(return_value=mock_db_row)
-                    yield mock_conn
-
-                mock_pool = AsyncMock()
-                mock_pool.acquire = mock_connection
-
-                # 设置pg_pool属性
-                system.pg_pool = mock_pool
-
-                with patch.object(system, '_cache_set') as mock_cache_set:
-                    stats = await system.get_agent_stats("xiaonuo_pisces")
-
-                    # 验证结果
-                    assert stats['agent_id'] == 'xiaonuo_pisces'
-                    assert stats['total_memories'] == 50
-
-                    # 验证缓存被设置
-                    mock_cache_set.assert_called_once()
-
-        print("✅ 数据库统计测试通过")
-
-
-class TestCacheInvalidation:
-    """测试缓存失效功能"""
-
-    @pytest.mark.asyncio
-    async def test_invalidate_agent_caches(self):
-        """测试智能体缓存失效"""
-        system = UnifiedAgentMemorySystem()
-
-        with patch.object(system, '_cache_delete') as mock_delete:
-            with patch.object(system, '_cache_delete_pattern') as mock_delete_pattern:
-                await system._invalidate_agent_caches("athena_wisdom")
-
-                # 验证删除了统计缓存
-                mock_delete.assert_called_once()
-
-                # 验证删除了搜索缓存
-                mock_delete_pattern.assert_called_once_with("search:*")
-
-        print("✅ 缓存失效测试通过")
-
-
-class TestStructuredLogging:
-    """测试结构化日志功能"""
-
-    def test_log_format(self):
-        """测试日志格式"""
-        import logging
-
-        # 创建logger并设置格式
-        logger = logging.getLogger('test_logger')
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter(
-            '%(asctime)s - %(name)s - %(levelname)s - [%(request_id)s] - %(message)s'
+class TestMemoryTypeAndCategory:
+    """测试记忆类型和分类枚举"""
+
+    def test_memory_type_enum(self) -> None:
+        """测试MemoryType枚举"""
+        assert MemoryType.GLOBAL.value == "global"
+        assert MemoryType.PROJECT.value == "project"
+
+    def test_memory_category_enum(self) -> None:
+        """测试MemoryCategory枚举"""
+        assert MemoryCategory.USER_PREFERENCE.value == "user_preference"
+        assert MemoryCategory.AGENT_LEARNING.value == "agent_learning"
+        assert MemoryCategory.PROJECT_CONTEXT.value == "project_context"
+        assert MemoryCategory.WORK_HISTORY.value == "work_history"
+        assert MemoryCategory.AGENT_COLLABORATION.value == "agent_collaboration"
+        assert MemoryCategory.TECHNICAL_FINDINGS.value == "technical_findings"
+        assert MemoryCategory.LEGAL_ANALYSIS.value == "legal_analysis"
+
+
+class TestMemoryEntry:
+    """测试记忆条目数据类"""
+
+    def test_memory_entry_creation(self) -> None:
+        """测试MemoryEntry创建"""
+        entry = MemoryEntry(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.USER_PREFERENCE,
+            key="test_key",
+            content="测试内容",
+            metadata={"author": "test"}
         )
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
 
-        # 验证格式包含request_id
-        assert formatter._fmt.startswith('%(asctime)s')
-        assert '[%(request_id)s]' in formatter._fmt
+        assert entry.type == MemoryType.GLOBAL
+        assert entry.category == MemoryCategory.USER_PREFERENCE
+        assert entry.key == "test_key"
+        assert entry.content == "测试内容"
+        assert entry.metadata == {"author": "test"}
+        assert isinstance(entry.created_at, datetime)
+        assert isinstance(entry.updated_at, datetime)
+        assert entry.embedding is None
 
-        print("✅ 日志格式测试通过")
-
-
-class TestCacheKeyGeneration:
-    """测试缓存键生成功能"""
-
-    def test_generate_cache_key(self):
-        """测试缓存键生成"""
-        system = UnifiedAgentMemorySystem()
-
-        # 测试基本键生成
-        key1 = system._generate_cache_key("test", agent_id="123")
-        assert "test" in key1
-        assert "agent_id:123" in key1
-
-        # 测试多个参数
-        key2 = system._generate_cache_key(
-            "search",
-            query="测试",
-            agent_id="athena",
-            limit=10
+    def test_memory_entry_with_embedding(self) -> None:
+        """测试带向量嵌入的MemoryEntry"""
+        embedding = [0.1, 0.2, 0.3]
+        entry = MemoryEntry(
+            type=MemoryType.PROJECT,
+            category=MemoryCategory.WORK_HISTORY,
+            key="test",
+            content="内容",
+            embedding=embedding
         )
-        assert "search" in key2
-        assert "agent_id:athena" in key2
-        assert "limit:10" in key2
 
-        # 测试None参数被忽略
-        key3 = system._generate_cache_key(
-            "stats",
-            agent_id="123",
-            memory_type=None  # 应该被忽略
+        assert entry.embedding == embedding
+
+
+class TestUnifiedMemorySystem:
+    """测试统一记忆系统"""
+
+    @pytest.fixture
+    def temp_global_path(self) -> Path:
+        """创建临时全局记忆路径"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            yield Path(tmpdir)
+
+    @pytest.fixture
+    def temp_project_path(self) -> Path:
+        """创建临时项目路径"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            yield Path(tmpdir)
+
+    @pytest.fixture
+    def memory_system(
+        self,
+        temp_global_path: Path,
+        temp_project_path: Path
+    ) -> UnifiedMemorySystem:
+        """创建记忆系统实例"""
+        return UnifiedMemorySystem(
+            global_memory_path=str(temp_global_path),
+            current_project_path=str(temp_project_path)
         )
-        assert "memory_type" not in key3
 
-        print("✅ 缓存键生成测试通过")
+    @pytest.fixture
+    def global_only_system(
+        self,
+        temp_global_path: Path
+    ) -> UnifiedMemorySystem:
+        """创建只有全局记忆的系统"""
+        return UnifiedMemorySystem(
+            global_memory_path=str(temp_global_path),
+            current_project_path=None
+        )
+
+    def test_initialization_with_project(
+        self,
+        temp_global_path: Path,
+        temp_project_path: Path
+    ) -> None:
+        """测试初始化（带项目路径）"""
+        system = UnifiedMemorySystem(
+            global_memory_path=str(temp_global_path),
+            current_project_path=str(temp_project_path)
+        )
+
+        # 验证目录创建
+        assert temp_global_path.exists()
+        assert (temp_project_path / ".athena").exists()
+        assert (temp_global_path / "agent_learning").exists()
+        assert (temp_project_path / ".athena" / "project_knowledge").exists()
+
+        # 验证索引初始化
+        assert isinstance(system.memory_index, dict)
+
+    def test_initialization_without_project(
+        self,
+        temp_global_path: Path
+    ) -> None:
+        """测试初始化（无项目路径）"""
+        system = UnifiedMemorySystem(
+            global_memory_path=str(temp_global_path),
+            current_project_path=None
+        )
+
+        # 验证全局目录创建
+        assert temp_global_path.exists()
+        assert (temp_global_path / "agent_learning").exists()
+
+        # 验证索引初始化
+        assert isinstance(system.memory_index, dict)
+
+    def test_write_global_memory(
+        self,
+        memory_system: UnifiedMemorySystem
+    ) -> None:
+        """测试写入全局记忆"""
+        content = "# 用户偏好\n\n代码风格：简体中文注释"
+        entry = memory_system.write(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.USER_PREFERENCE,
+            key="user_preferences",
+            content=content,
+            metadata={"version": "1.0"}
+        )
+
+        # 验证返回值
+        assert isinstance(entry, MemoryEntry)
+        assert entry.type == MemoryType.GLOBAL
+        assert entry.key == "user_preferences"
+
+        # 验证文件创建
+        file_path = (
+            memory_system.global_memory_path /
+            "user_preferences.md"
+        )
+        assert file_path.exists()
+
+        # 验证文件内容
+        with open(file_path, 'r', encoding='utf-8') as f:
+            assert f.read() == content
+
+    def test_write_project_memory(
+        self,
+        memory_system: UnifiedMemorySystem
+    ) -> None:
+        """测试写入项目记忆"""
+        content = "# 项目上下文\n\n项目名称：测试项目"
+        entry = memory_system.write(
+            type=MemoryType.PROJECT,
+            category=MemoryCategory.PROJECT_CONTEXT,
+            key="project_context",
+            content=content,
+            metadata={"project": "test"}
+        )
+
+        # 验证返回值
+        assert entry.type == MemoryType.PROJECT
+        assert entry.key == "project_context"
+
+        # 验证文件创建
+        project_path = memory_system.current_project_path
+        assert project_path is not None
+        file_path = project_path / ".athena" / "project_context.md"
+        assert file_path.exists()
+
+    def test_write_agent_learning_memory(
+        self,
+        memory_system: UnifiedMemorySystem
+    ) -> None:
+        """测试写入智能体学习记忆"""
+        content = "# 小娜学习成果\n\n学习了新的法律原则"
+        memory_system.write(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.AGENT_LEARNING,
+            key="xiaona_learning",
+            content=content
+        )
+
+        # 验证文件创建在子目录
+        file_path = (
+            memory_system.global_memory_path /
+            "agent_learning" /
+            "xiaona_learning.md"
+        )
+        assert file_path.exists()
+
+    def test_write_project_knowledge_memory(
+        self,
+        memory_system: UnifiedMemorySystem
+    ) -> None:
+        """测试写入项目知识记忆"""
+        content = "# 技术发现\n\n发现了新的技术方案"
+        memory_system.write(
+            type=MemoryType.PROJECT,
+            category=MemoryCategory.TECHNICAL_FINDINGS,
+            key="technical_findings",
+            content=content
+        )
+
+        # 验证文件创建在子目录
+        project_path = memory_system.current_project_path
+        assert project_path is not None
+        file_path = (
+            project_path /
+            ".athena" /
+            "project_knowledge" /
+            "technical_findings.md"
+        )
+        assert file_path.exists()
+
+    def test_write_project_memory_without_project_path(
+        self,
+        global_only_system: UnifiedMemorySystem
+    ) -> None:
+        """测试写入项目记忆但没有项目路径"""
+        with pytest.raises(IOError, match="无法写入记忆"):
+            global_only_system.write(
+                type=MemoryType.PROJECT,
+                category=MemoryCategory.PROJECT_CONTEXT,
+                key="test",
+                content="测试内容"
+            )
+
+    def test_read_existing_memory(
+        self,
+        memory_system: UnifiedMemorySystem
+    ) -> None:
+        """测试读取存在的记忆"""
+        # 先写入
+        content = "# 测试内容\n\n这是测试"
+        memory_system.write(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.USER_PREFERENCE,
+            key="test_read",
+            content=content
+        )
+
+        # 再读取
+        read_content = memory_system.read(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.USER_PREFERENCE,
+            key="test_read"
+        )
+
+        assert read_content == content
+
+    def test_read_non_existing_memory(
+        self,
+        memory_system: UnifiedMemorySystem
+    ) -> None:
+        """测试读取不存在的记忆"""
+        content = memory_system.read(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.USER_PREFERENCE,
+            key="non_existing"
+        )
+
+        assert content is None
+
+    def test_memory_index_update(
+        self,
+        memory_system: UnifiedMemorySystem
+    ) -> None:
+        """测试记忆索引更新"""
+        # 写入记忆
+        memory_system.write(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.USER_PREFERENCE,
+            key="index_test",
+            content="索引测试内容",
+            metadata={"test": "data"}
+        )
+
+        # 验证索引更新
+        unique_key = "global/user_preference/index_test"
+        assert unique_key in memory_system.memory_index
+
+        entry_data = memory_system.memory_index[unique_key]
+        assert entry_data['type'] == "global"
+        assert entry_data['category'] == "user_preference"
+        assert entry_data['key'] == "index_test"
+        assert entry_data['metadata'] == {"test": "data"}
+        assert len(entry_data['content']) <= 500  # 索引只保存前500字符
+
+    def test_memory_index_persistence(
+        self,
+        temp_global_path: Path,
+        temp_project_path: Path
+    ) -> None:
+        """测试记忆索引持久化"""
+        # 创建第一个实例并写入
+        system1 = UnifiedMemorySystem(
+            global_memory_path=str(temp_global_path),
+            current_project_path=str(temp_project_path)
+        )
+        system1.write(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.USER_PREFERENCE,
+            key="persistence_test",
+            content="持久化测试"
+        )
+
+        # 创建第二个实例（应该加载之前的索引）
+        system2 = UnifiedMemorySystem(
+            global_memory_path=str(temp_global_path),
+            current_project_path=str(temp_project_path)
+        )
+
+        # 验证索引被正确加载
+        unique_key = "global/user_preference/persistence_test"
+        assert unique_key in system2.memory_index
+
+    def test_search_basic(
+        self,
+        memory_system: UnifiedMemorySystem
+    ) -> None:
+        """测试基本搜索功能"""
+        # 写入多条记忆
+        memory_system.write(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.USER_PREFERENCE,
+            key="pref1",
+            content="代码风格：简体中文注释"
+        )
+        memory_system.write(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.USER_PREFERENCE,
+            key="pref2",
+            content="交互风格：先规划再执行"
+        )
+        memory_system.write(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.AGENT_LEARNING,
+            key="learning1",
+            content="学习了新的检索策略"
+        )
+
+        # 搜索"代码"
+        results = memory_system.search(query="代码")
+        assert len(results) == 1
+        assert results[0].key == "pref1"
+
+        # 搜索"风格"
+        results = memory_system.search(query="风格")
+        assert len(results) == 2
+
+    def test_search_with_type_filter(
+        self,
+        memory_system: UnifiedMemorySystem
+    ) -> None:
+        """测试带类型过滤的搜索"""
+        # 写入不同类型的记忆
+        memory_system.write(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.USER_PREFERENCE,
+            key="global_pref",
+            content="全局偏好"
+        )
+        memory_system.write(
+            type=MemoryType.PROJECT,
+            category=MemoryCategory.PROJECT_CONTEXT,
+            key="project_ctx",
+            content="项目上下文"
+        )
+
+        # 只搜索全局记忆
+        results = memory_system.search(
+            query="偏好",
+            type=MemoryType.GLOBAL
+        )
+        assert len(results) == 1
+        assert results[0].type == MemoryType.GLOBAL
+
+    def test_search_with_category_filter(
+        self,
+        memory_system: UnifiedMemorySystem
+    ) -> None:
+        """测试带分类过滤的搜索"""
+        # 写入不同分类的记忆
+        memory_system.write(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.USER_PREFERENCE,
+            key="pref",
+            content="用户偏好"
+        )
+        memory_system.write(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.AGENT_LEARNING,
+            key="learning",
+            content="学习成果"
+        )
+
+        # 只搜索用户偏好
+        results = memory_system.search(
+            query="用户",
+            category=MemoryCategory.USER_PREFERENCE
+        )
+        assert len(results) == 1
+        assert results[0].category == MemoryCategory.USER_PREFERENCE
+
+    def test_search_with_limit(
+        self,
+        memory_system: UnifiedMemorySystem
+    ) -> None:
+        """测试搜索结果数量限制"""
+        # 写入多条记忆
+        for i in range(5):
+            memory_system.write(
+                type=MemoryType.GLOBAL,
+                category=MemoryCategory.USER_PREFERENCE,
+                key=f"pref_{i}",
+                content=f"偏好设置 {i}"
+            )
+
+        # 限制返回3条
+        results = memory_system.search(query="偏好", limit=3)
+        assert len(results) == 3
+
+    def test_search_case_insensitive(
+        self,
+        memory_system: UnifiedMemorySystem
+    ) -> None:
+        """测试搜索不区分大小写"""
+        memory_system.write(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.USER_PREFERENCE,
+            key="test",
+            content="Python代码风格"
+        )
+
+        # 小写搜索
+        results = memory_system.search(query="python")
+        assert len(results) == 1
+
+        # 大写搜索
+        results = memory_system.search(query="PYTHON")
+        assert len(results) == 1
+
+    def test_append_work_history(
+        self,
+        memory_system: UnifiedMemorySystem
+    ) -> None:
+        """测试追加工作历史"""
+        # 追加第一条工作历史
+        memory_system.append_work_history(
+            agent_name="xiaonuo",
+            task="分析专利",
+            result="完成分析",
+            status="success"
+        )
+
+        # 读取工作历史
+        content = memory_system.read(
+            type=MemoryType.PROJECT,
+            category=MemoryCategory.WORK_HISTORY,
+            key="work_history"
+        )
+
+        assert content is not None
+        assert "xiaonuo" in content
+        assert "分析专利" in content
+        assert "完成分析" in content
+        assert "success" in content
+
+    def test_append_work_history_multiple_times(
+        self,
+        memory_system: UnifiedMemorySystem
+    ) -> None:
+        """测试多次追加工作历史"""
+        # 追加多条工作历史
+        for i in range(3):
+            memory_system.append_work_history(
+                agent_name=f"agent_{i}",
+                task=f"任务_{i}",
+                result=f"结果_{i}",
+                status="success"
+            )
+
+        # 读取工作历史
+        content = memory_system.read(
+            type=MemoryType.PROJECT,
+            category=MemoryCategory.WORK_HISTORY,
+            key="work_history"
+        )
+
+        assert content is not None
+        assert "agent_0" in content
+        assert "agent_1" in content
+        assert "agent_2" in content
+
+    def test_append_work_history_without_project_path(
+        self,
+        global_only_system: UnifiedMemorySystem
+    ) -> None:
+        """测试没有项目路径时追加工作历史"""
+        with pytest.raises(ValueError, match="工作历史需要指定项目路径"):
+            global_only_system.append_work_history(
+                agent_name="test",
+                task="test",
+                result="test"
+            )
+
+    def test_get_subdirectory(
+        self,
+        memory_system: UnifiedMemorySystem
+    ) -> None:
+        """测试子目录获取"""
+        # 测试全局记忆分类
+        assert (
+            memory_system._get_subdirectory(
+                MemoryCategory.AGENT_LEARNING
+            ) == "agent_learning"
+        )
+
+        # 测试项目记忆分类
+        assert (
+            memory_system._get_subdirectory(
+                MemoryCategory.TECHNICAL_FINDINGS
+            ) == "project_knowledge"
+        )
+
+        # 测试未定义的分类（返回value）
+        assert (
+            memory_system._get_subdirectory(
+                MemoryCategory.USER_PREFERENCE
+            ) == ""
+        )
 
 
-# 运行所有测试
-if __name__ == "__main__":
-    pytest.main([__file__, "-v", "--tb=short"])
+class TestConvenienceFunctions:
+    """测试便捷函数"""
+
+    def test_get_global_memory(self) -> None:
+        """测试获取全局记忆系统"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            memory = get_global_memory(global_memory_path=tmpdir)
+
+            assert isinstance(memory, UnifiedMemorySystem)
+            assert memory.global_memory_path == Path(tmpdir).expanduser()
+            assert memory.current_project_path is None
+
+    def test_get_project_memory(self) -> None:
+        """测试获取项目记忆系统"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            global_path = Path(tmpdir) / "global"
+            project_path = Path(tmpdir) / "project"
+
+            memory = get_project_memory(
+                project_path=str(project_path),
+                global_memory_path=str(global_path)
+            )
+
+            assert isinstance(memory, UnifiedMemorySystem)
+            assert memory.global_memory_path == global_path.expanduser()
+            assert memory.current_project_path == project_path.expanduser()
+
+
+class TestErrorHandling:
+    """测试错误处理"""
+
+    @pytest.fixture
+    def temp_global_path(self) -> Path:
+        """创建临时全局记忆路径"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            yield Path(tmpdir)
+
+    @pytest.fixture
+    def temp_project_path(self) -> Path:
+        """创建临时项目路径"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            yield Path(tmpdir)
+
+    @pytest.fixture
+    def memory_system(
+        self,
+        temp_global_path: Path,
+        temp_project_path: Path
+    ) -> UnifiedMemorySystem:
+        """创建记忆系统实例"""
+        return UnifiedMemorySystem(
+            global_memory_path=str(temp_global_path),
+            current_project_path=str(temp_project_path)
+        )
+
+    def test_write_with_invalid_path(self, memory_system: UnifiedMemorySystem) -> None:
+        """测试写入到无效路径"""
+        # 模拟权限错误（通过patch）
+        with patch('builtins.open', side_effect=PermissionError("Permission denied")):
+            with pytest.raises(IOError):
+                memory_system.write(
+                    type=MemoryType.GLOBAL,
+                    category=MemoryCategory.USER_PREFERENCE,
+                    key="test",
+                    content="测试"
+                )
+
+    def test_read_with_corrupted_index(
+        self,
+        temp_global_path: Path,
+        temp_project_path: Path
+    ) -> None:
+        """测试读取损坏的索引文件"""
+        # 创建损坏的索引文件
+        index_file = Path(temp_global_path) / "memory_index.json"
+        index_file.write_text("invalid json{{")
+
+        # 初始化系统（应该处理损坏的索引）
+        system = UnifiedMemorySystem(
+            global_memory_path=str(temp_global_path),
+            current_project_path=str(temp_project_path)
+        )
+
+        # 索引应该为空字典
+        assert system.memory_index == {}
+
+    def test_search_empty_index(
+        self,
+        memory_system: UnifiedMemorySystem
+    ) -> None:
+        """测试空索引搜索"""
+        results = memory_system.search(query="test")
+        assert results == []
+
+    def test_write_updates_existing_entry(
+        self,
+        memory_system: UnifiedMemorySystem
+    ) -> None:
+        """测试写入更新现有条目"""
+        # 第一次写入
+        memory_system.write(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.USER_PREFERENCE,
+            key="update_test",
+            content="原始内容"
+        )
+
+        # 第二次写入（更新）
+        memory_system.write(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.USER_PREFERENCE,
+            key="update_test",
+            content="更新后的内容"
+        )
+
+        # 验证文件被更新
+        content = memory_system.read(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.USER_PREFERENCE,
+            key="update_test"
+        )
+
+        assert content == "更新后的内容"
+
+        # 验证索引被更新
+        unique_key = "global/user_preference/update_test"
+        assert unique_key in memory_system.memory_index
+        assert "更新后的内容" in memory_system.memory_index[unique_key]['content']
+
+
+@pytest.mark.integration
+class TestIntegrationScenarios:
+    """集成测试场景"""
+
+    @pytest.fixture
+    def temp_global_path(self) -> Path:
+        """创建临时全局记忆路径"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            yield Path(tmpdir)
+
+    @pytest.fixture
+    def temp_project_path(self) -> Path:
+        """创建临时项目路径"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            yield Path(tmpdir)
+
+    def test_complete_workflow(
+        self,
+        temp_global_path: Path,
+        temp_project_path: Path
+    ) -> None:
+        """测试完整工作流程"""
+        # 1. 创建记忆系统
+        memory = UnifiedMemorySystem(
+            global_memory_path=str(temp_global_path),
+            current_project_path=str(temp_project_path)
+        )
+
+        # 2. 写入用户偏好
+        memory.write(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.USER_PREFERENCE,
+            key="user_preferences",
+            content="# 用户偏好\n\n代码风格：简体中文"
+        )
+
+        # 3. 写入项目上下文
+        memory.write(
+            type=MemoryType.PROJECT,
+            category=MemoryCategory.PROJECT_CONTEXT,
+            key="project_context",
+            content="# 项目上下文\n\n项目：测试项目"
+        )
+
+        # 4. 记录工作历史
+        memory.append_work_history(
+            agent_name="xiaonuo",
+            task="初始化项目",
+            result="成功",
+            status="success"
+        )
+
+        # 5. 搜索记忆
+        results = memory.search(query="项目")
+        assert len(results) >= 1
+
+        # 6. 读取记忆
+        context = memory.read(
+            type=MemoryType.PROJECT,
+            category=MemoryCategory.PROJECT_CONTEXT,
+            key="project_context"
+        )
+        assert context is not None
+        assert "测试项目" in context
+
+    def test_multi_agent_collaboration(
+        self,
+        temp_global_path: Path,
+        temp_project_path: Path
+    ) -> None:
+        """测试多智能体协作场景"""
+        memory = UnifiedMemorySystem(
+            global_memory_path=str(temp_global_path),
+            current_project_path=str(temp_project_path)
+        )
+
+        # 智能体1工作
+        memory.append_work_history(
+            agent_name="xiaonuo",
+            task="任务分解",
+            result="分解为3个子任务",
+            status="success"
+        )
+
+        # 智能体2工作
+        memory.append_work_history(
+            agent_name="xiaona",
+            task="法律分析",
+            result="完成专利分析",
+            status="success"
+        )
+
+        # 智能体3工作
+        memory.append_work_history(
+            agent_name="analyzer",
+            task="技术分析",
+            result="完成技术特征提取",
+            status="success"
+        )
+
+        # 验证所有工作历史被记录
+        history = memory.read(
+            type=MemoryType.PROJECT,
+            category=MemoryCategory.WORK_HISTORY,
+            key="work_history"
+        )
+
+        assert history is not None
+        assert "xiaonuo" in history
+        assert "xiaona" in history
+        assert "analyzer" in history
+
+    def test_cross_project_knowledge_sharing(
+        self,
+        temp_global_path: Path
+    ) -> None:
+        """测试跨项目知识共享"""
+        # 项目A
+        project_a_path = Path(temp_global_path) / "project_a"
+        project_a_path.mkdir()
+
+        # 项目B
+        project_b_path = Path(temp_global_path) / "project_b"
+        project_b_path.mkdir()
+
+        # 项目A写入学习成果到全局记忆
+        memory_a = UnifiedMemorySystem(
+            global_memory_path=str(temp_global_path),
+            current_project_path=str(project_a_path)
+        )
+        memory_a.write(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.AGENT_LEARNING,
+            key="retrieval_strategy",
+            content="# 检索策略\n\n使用本地PG+Google Patents"
+        )
+
+        # 项目B可以读取该学习成果
+        memory_b = UnifiedMemorySystem(
+            global_memory_path=str(temp_global_path),
+            current_project_path=str(project_b_path)
+        )
+        content = memory_b.read(
+            type=MemoryType.GLOBAL,
+            category=MemoryCategory.AGENT_LEARNING,
+            key="retrieval_strategy"
+        )
+
+        assert content is not None
+        assert "本地PG" in content

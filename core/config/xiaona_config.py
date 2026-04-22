@@ -326,6 +326,110 @@ class XiaonaIdentityConfig:
     balance_principle: str = "公平、公正、精准、专业"
 
 
+# LLM配置
+LLM_CONFIG: dict[str, Any] = {
+    # 默认模型配置
+    "default_model": "claude-3-5-sonnet-20241022",
+    "fallback_model": "claude-3-haiku-20240307",
+
+    # 生成参数
+    "temperature": 0.7,
+    "max_tokens": 4096,
+    "top_p": 0.95,
+    "top_k": 40,
+
+    # 超时配置
+    "timeout": 30.0,
+    "max_retries": 3,
+    "retry_delay": 1.0,
+
+    # 缓存配置
+    "enable_cache": True,
+    "cache_ttl": 3600,
+
+    # 成本控制
+    "max_cost_per_request": 0.5,
+    "daily_budget": 100.0,
+
+    # 流式输出
+    "enable_streaming": False,
+}
+
+
+# 任务类型映射
+LLM_TASK_TYPE_MAPPING: dict[str, dict[str, Any]] = {
+    # 专利分析任务
+    "patent_analysis": {
+        "model": "claude-3-5-sonnet-20241022",
+        "temperature": 0.6,
+        "max_tokens": 8192,
+        "timeout": 60.0,
+    },
+    "novelty_analysis": {
+        "model": "claude-3-5-sonnet-20241022",
+        "temperature": 0.5,
+        "max_tokens": 6144,
+        "timeout": 45.0,
+    },
+    "creativity_analysis": {
+        "model": "claude-3-5-sonnet-20241022",
+        "temperature": 0.7,
+        "max_tokens": 8192,
+        "timeout": 60.0,
+    },
+    "infringement_analysis": {
+        "model": "claude-3-5-sonnet-20241022",
+        "temperature": 0.5,
+        "max_tokens": 10240,
+        "timeout": 90.0,
+    },
+    "invalidation_analysis": {
+        "model": "claude-3-5-sonnet-20241022",
+        "temperature": 0.6,
+        "max_tokens": 10240,
+        "timeout": 90.0,
+    },
+
+    # 法律检索任务
+    "legal_search": {
+        "model": "claude-3-5-sonnet-20241022",
+        "temperature": 0.3,
+        "max_tokens": 4096,
+        "timeout": 30.0,
+    },
+
+    # 文档撰写任务
+    "patent_drafting": {
+        "model": "claude-3-5-sonnet-20241022",
+        "temperature": 0.7,
+        "max_tokens": 16384,
+        "timeout": 120.0,
+    },
+    "response_drafting": {
+        "model": "claude-3-5-sonnet-20241022",
+        "temperature": 0.6,
+        "max_tokens": 12288,
+        "timeout": 90.0,
+    },
+
+    # 快速任务
+    "quick_question": {
+        "model": "claude-3-haiku-20240307",
+        "temperature": 0.7,
+        "max_tokens": 2048,
+        "timeout": 15.0,
+    },
+
+    # 通用任务
+    "general": {
+        "model": "claude-3-5-sonnet-20241022",
+        "temperature": 0.7,
+        "max_tokens": 4096,
+        "timeout": 30.0,
+    },
+}
+
+
 class XiaonaConfigManager:
     """小娜配置管理器 - 单例模式"""
 

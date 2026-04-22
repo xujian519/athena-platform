@@ -103,12 +103,11 @@ async def startup_event():
     logger.info("🎭 初始化小诺·双鱼公主...")
 
     try:
-        # 这里需要根据实际的小诺实现来调整
-        # 目前使用一个模拟的智能体
-        from core.agents.base_agent import BaseAgent
+        # 使用小诺协调器实现
+        from core.agents.xiaonuo_coordinator import XiaonuoAgent
 
         # 创建小诺实例
-        xiaonuo_agent = BaseAgent(name="小诺")
+        xiaonuo_agent = XiaonuoAgent()
         await xiaonuo_agent.initialize()
 
         logger.info("✅ 小诺初始化完成")

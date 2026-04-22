@@ -6,6 +6,7 @@
 
 from typing import Any, Dict, List
 import logging
+import json
 import re
 from core.agents.xiaona.base_component import BaseXiaonaComponent
 
@@ -70,6 +71,64 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
             },
         ])
 
+    def get_system_prompt(self) -> str:
+        """获取系统提示词"""
+        return """
+你是一位专业的专利无效宣告分析专家，具备深厚的专利法知识和丰富的无效宣告经验。
+
+你的职责是：
+1. 分析专利的无效理由（新颖性、创造性、公开不充分等）
+2. 制定证据搜集策略
+3. 评估无效宣告的成功概率
+4. 生成无效请求书草稿
+
+请以专业、严谨的态度进行分析，并提供明确的策略建议。
+输出必须是严格的JSON格式，不要添加任何额外的文字说明。
+"""
+
+    async def execute(self, context) -> Any:
+        """
+        执行智能体任务
+
+        Args:
+            context: 执行上下文
+
+        Returns:
+            执行结果
+        """
+        # 根据任务类型执行相应的分析
+        task_type = context.config.get("task_type", "comprehensive")
+
+        if task_type == "grounds":
+            return await self.analyze_invalidation_grounds(
+                context.input_data.get("patent", {}),
+                context.input_data.get("references", [])
+            )
+        elif task_type == "evidence":
+            return await self.develop_evidence_strategy(
+                context.input_data.get("valid_grounds", []),
+                context.input_data.get("existing_references", [])
+            )
+        elif task_type == "probability":
+            return await self.assess_success_probability(
+                context.input_data.get("grounds_analysis", {}),
+                context.input_data.get("evidence_strategy", {})
+            )
+        elif task_type == "petition":
+            return await self.generate_invalidation_petition(
+                context.input_data.get("patent", {}),
+                context.input_data.get("grounds_analysis", {}),
+                context.input_data.get("evidence_strategy", {}),
+                context.input_data.get("probability_assessment", {})
+            )
+        else:
+            # 完整分析
+            return await self.analyze_invalidation(
+                target_patent=context.input_data.get("patent", {}),
+                prior_art_references=context.input_data.get("references", []),
+                analysis_depth=context.config.get("analysis_depth", "comprehensive")
+            )
+
     async def analyze_invalidation(
         self,
         target_patent: Dict[str, Any],
@@ -77,7 +136,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
         analysis_depth: str = "comprehensive"
     ) -> Dict[str, Any]:
         """
-        完整无效宣告分析流程
+        完整无效宣告分析流程（LLM版本）
 
         Args:
             target_patent: 目标专利数据
@@ -89,6 +148,66 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
         """
         patent_id = target_patent.get("patent_id", "未知")
         logger.info(f"开始无效宣告分析: {patent_id}, 深度: {analysis_depth}")
+
+        # 尝试使用LLM分析
+        try:
+            prompt = self._build_comprehensive_analysis_prompt(
+                target_patent,
+                prior_art_references,
+                analysis_depth
+            )
+            response = await self._call_llm_with_fallback(
+                prompt=prompt,
+                task_type="invalidation_analysis"
+            )
+
+            # 解析LLM响应
+            llm_result = self._parse_comprehensive_analysis_response(response)
+
+            logger.info(f"LLM无效宣告分析完成: {patent_id}")
+
+            return {
+                "target_patent": {
+                    "patent_id": target_patent.get("patent_id", "未知"),
+                    "title": target_patent.get("title", ""),
+                    "grant_date": target_patent.get("grant_date", ""),
+                },
+                "analysis_depth": analysis_depth,
+                "analysis_method": "llm",
+                "invalidation_grounds_analysis": llm_result.get("invalidation_grounds_analysis", {}),
+                "evidence_strategy": llm_result.get("evidence_strategy", {}),
+                "success_probability": llm_result.get("success_probability", {}),
+                "petition_support": llm_result.get("petition_support", {}),
+                "overall_recommendation": llm_result.get("overall_recommendation", ""),
+                "analyzed_at": self._get_timestamp(),
+            }
+
+        except Exception as e:
+            self.logger.warning(f"LLM无效宣告分析失败: {e}，使用规则-based分析")
+            return await self._analyze_invalidation_by_rules(
+                target_patent,
+                prior_art_references,
+                analysis_depth
+            )
+
+    async def _analyze_invalidation_by_rules(
+        self,
+        target_patent: Dict[str, Any],
+        prior_art_references: List[Dict[str, Any]],
+        analysis_depth: str = "comprehensive"
+    ) -> Dict[str, Any]:
+        """
+        基于规则的无效宣告分析（降级方案）
+
+        Args:
+            target_patent: 目标专利数据
+            prior_art_references: 对比文件列表
+            analysis_depth: 分析深度
+
+        Returns:
+            完整无效宣告分析报告
+        """
+        patent_id = target_patent.get("patent_id", "未知")
 
         # 1. 无效理由分析
         grounds_analysis = await self.analyze_invalidation_grounds(
@@ -128,6 +247,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
                 "grant_date": target_patent.get("grant_date", ""),
             },
             "analysis_depth": analysis_depth,
+            "analysis_method": "rule-based",
             "invalidation_grounds_analysis": grounds_analysis,
             "evidence_strategy": evidence_strategy,
             "success_probability": probability_assessment,
@@ -138,13 +258,180 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
             "analyzed_at": self._get_timestamp(),
         }
 
+    def _build_comprehensive_analysis_prompt(
+        self,
+        target_patent: Dict[str, Any],
+        prior_art_references: List[Dict[str, Any]],
+        analysis_depth: str
+    ) -> str:
+        """构建完整分析提示词"""
+        return f"""# 任务：专利无效宣告综合分析
+
+## 目标专利信息
+```json
+{json.dumps(target_patent, ensure_ascii=False, indent=2)}
+```
+
+## 对比文件列表
+```json
+{json.dumps(prior_art_references, ensure_ascii=False, indent=2)}
+```
+
+## 分析深度
+{analysis_depth}
+
+## 分析要点
+
+### 1. 无效理由分析
+- **新颖性**（专利法第22条第2款）：检查对比文件是否公开了权利要求的所有技术特征
+- **创造性**（专利法第22条第3款）：评估是否显而易见、是否存在技术启示
+- **公开不充分**（专利法第26条第3款）：判断说明书是否充分公开技术方案
+- **修改超范围**（专利法第33条）：检查修改是否超出原申请文件记载范围
+
+### 2. 证据搜集策略
+- 根据无效理由制定证据搜集计划
+- 确定证据来源（专利文献、非专利文献、公开使用等）
+- 制定优先级排序
+
+### 3. 成功概率评估
+- 综合考虑理由强度、证据质量、法律依据
+- 评估无效宣告成功概率（0-100%）
+- 识别风险因素
+
+### 4. 无效请求书建议
+- 生成请求书框架
+- 提供法律依据
+- 撰写核心论据
+
+## 输出要求
+请严格按照以下JSON格式输出分析结果：
+
+```json
+{{
+    "invalidation_grounds_analysis": {{
+        "valid_grounds": [
+            {{
+                "ground_type": "lack_of_novelty/lack_of_creativity/insufficient_disclosure/amendment_exceeds_scope",
+                "description": "无效理由描述",
+                "analysis": {{
+                    "is_valid_ground": true,
+                    "confidence": 0.8,
+                    "detailed_reasoning": "详细理由说明",
+                    "suggested_evidence": []
+                }},
+                "strength": "strong/moderate/weak"
+            }}
+        ],
+        "total_grounds": 3,
+        "ground_strengths": [],
+        "recommended_grounds": []
+    }},
+    "evidence_strategy": {{
+        "evidence_categories": [],
+        "collection_plan": [],
+        "priority_list": []
+    }},
+    "success_probability": {{
+        "overall_probability": 0.75,
+        "confidence": "high/medium/low",
+        "probability_breakdown": {{
+            "ground_strength": 0.8,
+            "evidence_quality": 0.7,
+            "legal_basis": 0.9
+        }},
+        "prediction": {{
+            "predicted_outcome": "全部无效/部分无效/维持有效",
+            "likelihood": "high/medium/low",
+            "reasoning": "预测说明"
+        }},
+        "risk_factors": [],
+        "recommended_strategy": "策略建议"
+    }},
+    "petition_support": {{
+        "petition_structure": {{
+            "title": "请求书标题",
+            "sections": []
+        }},
+        "word_count": 3000,
+        "estimated_preparation_time": "2-3天",
+        "recommended_evidence_count": 5,
+        "completion_checklist": []
+    }},
+    "overall_recommendation": "总体建议"
+}}
+```
+
+请只输出JSON，不要添加任何额外说明。
+"""
+
+    def _parse_comprehensive_analysis_response(self, response: str) -> Dict[str, Any]:
+        """解析完整分析LLM响应"""
+        try:
+            # 提取JSON
+            json_match = re.search(r'```json\s*([\s\S]*?)```', response)
+            if json_match:
+                json_str = json_match.group(1).strip()
+            else:
+                json_str = response.strip()
+
+            result = json.loads(json_str)
+
+            # 验证必需字段
+            required_sections = ["invalidation_grounds_analysis", "evidence_strategy",
+                               "success_probability", "petition_support", "overall_recommendation"]
+            for section in required_sections:
+                if section not in result:
+                    result[section] = {}
+
+            return result
+
+        except (json.JSONDecodeError, Exception) as e:
+            self.logger.error(f"解析完整分析响应失败: {e}")
+            return {
+                "invalidation_grounds_analysis": {},
+                "evidence_strategy": {},
+                "success_probability": {},
+                "petition_support": {},
+                "overall_recommendation": "LLM响应解析失败，请重新分析",
+            }
+
     async def analyze_invalidation_grounds(
         self,
         patent: Dict[str, Any],
         references: List[Dict[str, Any]]
     ) -> Dict[str, Any]:
         """
-        分析无效理由
+        分析无效理由（LLM版本）
+
+        Args:
+            patent: 目标专利
+            references: 对比文件
+
+        Returns:
+            无效理由分析结果
+        """
+        # 尝试使用LLM分析
+        try:
+            prompt = self._build_grounds_analysis_prompt(patent, references)
+            response = await self._call_llm_with_fallback(
+                prompt=prompt,
+                task_type="grounds_analysis"
+            )
+
+            # 解析LLM响应
+            return self._parse_grounds_analysis_response(response)
+
+        except Exception as e:
+            self.logger.warning(f"LLM无效理由分析失败: {e}，使用规则-based分析")
+            return await self._analyze_grounds_by_rules(patent, references)
+
+    async def _analyze_grounds_by_rules(
+        self,
+        patent: Dict[str, Any],
+        references: List[Dict[str, Any]]
+    ) -> Dict[str, Any]:
+        """
+        基于规则的无效理由分析（降级方案）
 
         Args:
             patent: 目标专利
@@ -219,13 +506,155 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
             "recommended_grounds": self._select_best_grounds(valid_grounds),
         }
 
+    def _build_grounds_analysis_prompt(
+        self,
+        patent: Dict[str, Any],
+        references: List[Dict[str, Any]]
+    ) -> str:
+        """构建无效理由分析提示词"""
+        return f"""# 任务：专利无效理由分析
+
+## 目标专利信息
+```json
+{json.dumps(patent, ensure_ascii=False, indent=2)}
+```
+
+## 对比文件列表
+```json
+{json.dumps(references, ensure_ascii=False, indent=2)}
+```
+
+## 分析要点
+
+### 1. 新颖性分析（专利法第22条第2款）
+- 检查对比文件是否公开了权利要求的所有技术特征
+- 判断是否存在相同技术方案
+- 评估破坏新颖性的可能性
+
+### 2. 创造性分析（专利法第22条第3款）
+- 评估区别技术特征是否显而易见
+- 检查现有技术是否给出技术启示
+- 判断是否具备突出的实质性特点和显著的进步
+
+### 3. 公开不充分分析（专利法第26条第3款）
+- 判断说明书是否充分公开技术方案
+- 检查本领域技术人员能否实现
+- 识别缺失的技术细节
+
+### 4. 修改超范围分析（专利法第33条）
+- 检查修改是否超出原申请文件记载范围
+- 对比原始申请与授权文本
+- 评估修改的合法性
+
+## 输出要求
+请严格按照以下JSON格式输出分析结果：
+
+```json
+{{
+    "valid_grounds": [
+        {{
+            "ground_type": "lack_of_novelty/lack_of_creativity/insufficient_disclosure/amendment_exceeds_scope",
+            "description": "无效理由描述",
+            "analysis": {{
+                "is_valid_ground": true,
+                "confidence": 0.8,
+                "detailed_reasoning": "详细理由说明",
+                "suggested_evidence": []
+            }},
+            "strength": "strong/moderate/weak"
+        }}
+    ],
+    "total_grounds": 3,
+    "ground_strengths": [
+        {{
+            "type": "lack_of_novelty",
+            "strength": "strong",
+            "confidence": 0.8
+        }}
+    ],
+    "recommended_grounds": []
+}}
+```
+
+请只输出JSON，不要添加任何额外说明。
+"""
+
+    def _parse_grounds_analysis_response(self, response: str) -> Dict[str, Any]:
+        """解析无效理由分析LLM响应"""
+        try:
+            # 提取JSON
+            json_match = re.search(r'```json\s*([\s\S]*?)```', response)
+            if json_match:
+                json_str = json_match.group(1).strip()
+            else:
+                json_str = response.strip()
+
+            result = json.loads(json_str)
+
+            # 验证必需字段
+            if "valid_grounds" not in result:
+                result["valid_grounds"] = []
+            if "total_grounds" not in result:
+                result["total_grounds"] = len(result.get("valid_grounds", []))
+            if "ground_strengths" not in result:
+                result["ground_strengths"] = []
+            if "recommended_grounds" not in result:
+                result["recommended_grounds"] = []
+
+            return result
+
+        except (json.JSONDecodeError, Exception) as e:
+            self.logger.error(f"解析无效理由分析响应失败: {e}")
+            return {
+                "valid_grounds": [],
+                "total_grounds": 0,
+                "ground_strengths": [],
+                "recommended_grounds": [],
+            }
+
     async def develop_evidence_strategy(
         self,
-        valid_grounds: List[str],
+        valid_grounds: List[Any],
+        existing_references: List[Dict[str, Any]]
+    ) -> Dict[str, Any]:
+        """
+        制定证据搜集策略（LLM版本）
+
+        Args:
+            valid_grounds: 有效无效理由列表（可能是字符串或Dict）
+            existing_references: 现有对比文件
+
+        Returns:
+            证据搜集策略
+        """
+        # 尝试使用LLM分析
+        try:
+            # 提取ground_type（兼容新旧格式）
+            if valid_grounds and isinstance(valid_grounds[0], dict):
+                ground_types = [g.get("ground_type", str(g)) for g in valid_grounds]
+            else:
+                ground_types = valid_grounds
+
+            prompt = self._build_evidence_strategy_prompt(ground_types, existing_references)
+            response = await self._call_llm_with_fallback(
+                prompt=prompt,
+                task_type="evidence_strategy"
+            )
+
+            # 解析LLM响应
+            return self._parse_evidence_strategy_response(response)
+
+        except Exception as e:
+            self.logger.warning(f"LLM证据策略制定失败: {e}，使用规则-based策略")
+            return await self._develop_evidence_strategy_by_rules(valid_grounds, existing_references)
+
+    async def _develop_evidence_strategy_by_rules(
+        self,
+        valid_grounds: List[Any],
         _existing_references: List[Dict[str, Any]]
     ) -> Dict[str, Any]:
         """
-        制定证据搜集策略
+        基于规则的证据搜集策略（降级方案）
 
         Args:
             valid_grounds: 有效无效理由列表
@@ -234,6 +663,12 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
         Returns:
             证据搜集策略
         """
+        # 提取ground_type（兼容新旧格式）
+        if valid_grounds and isinstance(valid_grounds[0], dict):
+            ground_types = [g.get("ground_type", str(g)) for g in valid_grounds]
+        else:
+            ground_types = valid_grounds
+
         strategy = {
             "evidence_categories": [],
             "collection_plan": [],
@@ -241,7 +676,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
         }
 
         # 根据无效理由制定证据搜集策略
-        for ground_type in valid_grounds:
+        for ground_type in ground_types:
             if ground_type == "lack_of_novelty":
                 strategy["evidence_categories"].append({
                     "category": "对比文件",
@@ -301,10 +736,101 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
                 "ground": g,
                 "priority": "high" if i == 0 else "medium"
             }
-            for i, g in enumerate(valid_grounds)
+            for i, g in enumerate(ground_types)
         ]
 
         return strategy
+
+    def _build_evidence_strategy_prompt(
+        self,
+        ground_types: List[str],
+        existing_references: List[Dict[str, Any]]
+    ) -> str:
+        """构建证据策略提示词"""
+        return f"""# 任务：证据搜集策略制定
+
+## 无效理由列表
+```json
+{json.dumps(ground_types, ensure_ascii=False)}
+```
+
+## 现有对比文件
+```json
+{json.dumps(existing_references, ensure_ascii=False, indent=2)}
+```
+
+## 策略要点
+1. **证据分类**：根据无效理由确定证据类型
+2. **来源确定**：明确证据来源（专利文献、非专利文献等）
+3. **搜集计划**：制定具体的搜集步骤和时间安排
+4. **优先级排序**：根据重要性和难易程度排序
+
+## 输出要求
+请严格按照以下JSON格式输出策略：
+
+```json
+{{
+    "evidence_categories": [
+        {{
+            "category": "对比文件",
+            "description": "类别描述",
+            "sources": ["来源1", "来源2"],
+            "search_keywords": ["关键词1", "关键词2"]
+        }}
+    ],
+    "collection_plan": [
+        {{
+            "priority": 1,
+            "category": "类别名称",
+            "actions": [
+                {{
+                    "source": "具体来源",
+                    "estimated_time": "3-5天",
+                    "responsible": "负责人"
+                }}
+            ]
+        }}
+    ],
+    "priority_list": [
+        {{
+            "ground": "lack_of_novelty",
+            "priority": "high/medium/low"
+        }}
+    ]
+}}
+```
+
+请只输出JSON，不要添加任何额外说明。
+"""
+
+    def _parse_evidence_strategy_response(self, response: str) -> Dict[str, Any]:
+        """解析证据策略LLM响应"""
+        try:
+            json_match = re.search(r'```json\s*([\s\S]*?)```', response)
+            if json_match:
+                json_str = json_match.group(1).strip()
+            else:
+                json_str = response.strip()
+
+            result = json.loads(json_str)
+
+            # 验证必需字段
+            if "evidence_categories" not in result:
+                result["evidence_categories"] = []
+            if "collection_plan" not in result:
+                result["collection_plan"] = []
+            if "priority_list" not in result:
+                result["priority_list"] = []
+
+            return result
+
+        except (json.JSONDecodeError, Exception) as e:
+            self.logger.error(f"解析证据策略响应失败: {e}")
+            return {
+                "evidence_categories": [],
+                "collection_plan": [],
+                "priority_list": [],
+            }
 
     async def assess_success_probability(
         self,
@@ -487,7 +1013,28 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
         patent: Dict,
         references: List[Dict]
     ) -> Dict:
-        """分析新颖性无效理由"""
+        """分析新颖性无效理由（LLM版本）"""
+        # 尝试使用LLM分析
+        try:
+            prompt = self._build_novelty_analysis_prompt(patent, references)
+            response = await self._call_llm_with_fallback(
+                prompt=prompt,
+                task_type="novelty_analysis"
+            )
+
+            # 解析LLM响应
+            return self._parse_novelty_analysis_response(response)
+
+        except Exception as e:
+            self.logger.warning(f"LLM新颖性分析失败: {e}，使用规则-based分析")
+            return self._analyze_novelty_by_rules(patent, references)
+
+    def _analyze_novelty_by_rules(
+        self,
+        patent: Dict,
+        references: List[Dict]
+    ) -> Dict:
+        """基于规则的新颖性分析（降级方案）"""
         # 检查是否有对比文件公开了所有必要技术特征
         patent_claims = patent.get("claims", "")
         total_features = len(self._extract_features(patent_claims))
@@ -508,12 +1055,108 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
             "suggested_evidence": references[:3] if references else []
         }
 
+    def _build_novelty_analysis_prompt(
+        self,
+        patent: Dict,
+        references: List[Dict]
+    ) -> str:
+        """构建新颖性分析提示词"""
+        return f"""# 任务：新颖性无效理由分析
+
+## 目标专利权利要求
+```
+{patent.get("claims", "")}
+```
+
+## 对比文件列表
+```json
+{json.dumps(references, ensure_ascii=False, indent=2)}
+```
+
+## 分析要点（专利法第22条第2款）
+1. **技术特征对比**：对比文件是否公开了权利要求的所有技术特征
+2. **相同技术方案**：是否存在相同的技术领域、技术问题、技术方案、有益效果
+3. **新颖性判断**：是否存在区别技术特征
+
+## 输出要求
+请严格按照以下JSON格式输出分析结果：
+
+```json
+{{
+    "is_valid_ground": true,
+    "confidence": 0.8,
+    "detailed_reasoning": "详细理由说明",
+    "suggested_evidence": ["对比文件1", "对比文件2"],
+    "feature_comparison": {{
+        "total_features": 10,
+        "disclosed_features": 8,
+        "undisclosed_features": ["特征1", "特征2"]
+    }}
+}}
+```
+
+请只输出JSON，不要添加任何额外说明。
+"""
+
+    def _parse_novelty_analysis_response(self, response: str) -> Dict:
+        """解析新颖性分析LLM响应"""
+        try:
+            json_match = re.search(r'```json\s*([\s\S]*?)```', response)
+            if json_match:
+                json_str = json_match.group(1).strip()
+            else:
+                json_str = response.strip()
+
+            result = json.loads(json_str)
+
+            # 验证必需字段
+            if "is_valid_ground" not in result:
+                result["is_valid_ground"] = False
+            if "confidence" not in result:
+                result["confidence"] = 0.5
+            if "detailed_reasoning" not in result:
+                result["detailed_reasoning"] = ""
+            if "suggested_evidence" not in result:
+                result["suggested_evidence"] = []
+
+            return result
+
+        except (json.JSONDecodeError, Exception) as e:
+            self.logger.error(f"解析新颖性分析响应失败: {e}")
+            return {
+                "is_valid_ground": False,
+                "confidence": 0.0,
+                "detailed_reasoning": "LLM响应解析失败",
+                "suggested_evidence": [],
+            }
+
     async def _analyze_creativity_ground(
         self,
         patent: Dict,
         references: List[Dict]
     ) -> Dict:
-        """分析创造性无效理由"""
+        """分析创造性无效理由（LLM版本）"""
+        # 尝试使用LLM分析
+        try:
+            prompt = self._build_creativity_analysis_prompt(patent, references)
+            response = await self._call_llm_with_fallback(
+                prompt=prompt,
+                task_type="creativity_analysis"
+            )
+
+            # 解析LLM响应
+            return self._parse_creativity_analysis_response(response)
+
+        except Exception as e:
+            self.logger.warning(f"LLM创造性分析失败: {e}，使用规则-based分析")
+            return self._analyze_creativity_by_rules(patent, references)
+
+    def _analyze_creativity_by_rules(
+        self,
+        patent: Dict,
+        references: List[Dict]
+    ) -> Dict:
+        """基于规则的创造性分析（降级方案）"""
         # 检查现有技术是否给出技术启示
         has_guidance = len(references) > 0
 
@@ -527,11 +1170,108 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
             "suggested_evidence": references[:2] if references else []
         }
 
+    def _build_creativity_analysis_prompt(
+        self,
+        patent: Dict,
+        references: List[Dict]
+    ) -> str:
+        """构建创造性分析提示词"""
+        return f"""# 任务：创造性无效理由分析
+
+## 目标专利权利要求
+```
+{patent.get("claims", "")}
+```
+
+## 对比文件列表
+```json
+{json.dumps(references, ensure_ascii=False, indent=2)}
+```
+
+## 分析要点（专利法第22条第3款）
+1. **区别技术特征**：识别与现有技术的区别
+2. **技术启示**：现有技术是否给出结合启示
+3. **显而易见性**：本领域技术人员是否容易想到
+4. **显著进步**：是否产生有益效果
+
+## 输出要求
+请严格按照以下JSON格式输出分析结果：
+
+```json
+{{
+    "is_valid_ground": true,
+    "confidence": 0.7,
+    "detailed_reasoning": "详细理由说明",
+    "suggested_evidence": ["对比文件1", "对比文件2"],
+    "obviousness_analysis": {{
+        "disclosed_features": ["已公开特征"],
+        "undisclosed_features": ["未公开特征"],
+        "teaching_away": "是否有相反教导",
+        "combination_motivation": "结合动机说明"
+    }}
+}}
+```
+
+请只输出JSON，不要添加任何额外说明。
+"""
+
+    def _parse_creativity_analysis_response(self, response: str) -> Dict:
+        """解析创造性分析LLM响应"""
+        try:
+            json_match = re.search(r'```json\s*([\s\S]*?)```', response)
+            if json_match:
+                json_str = json_match.group(1).strip()
+            else:
+                json_str = response.strip()
+
+            result = json.loads(json_str)
+
+            # 验证必需字段
+            if "is_valid_ground" not in result:
+                result["is_valid_ground"] = False
+            if "confidence" not in result:
+                result["confidence"] = 0.5
+            if "detailed_reasoning" not in result:
+                result["detailed_reasoning"] = ""
+            if "suggested_evidence" not in result:
+                result["suggested_evidence"] = []
+
+            return result
+
+        except (json.JSONDecodeError, Exception) as e:
+            self.logger.error(f"解析创造性分析响应失败: {e}")
+            return {
+                "is_valid_ground": False,
+                "confidence": 0.0,
+                "detailed_reasoning": "LLM响应解析失败",
+                "suggested_evidence": [],
+            }
+
     async def _analyze_insufficient_disclosure(
         self,
         patent: Dict
     ) -> Dict:
-        """分析公开不充分无效理由"""
+        """分析公开不充分无效理由（LLM版本）"""
+        # 尝试使用LLM分析
+        try:
+            prompt = self._build_disclosure_analysis_prompt(patent)
+            response = await self._call_llm_with_fallback(
+                prompt=prompt,
+                task_type="disclosure_analysis"
+            )
+
+            # 解析LLM响应
+            return self._parse_disclosure_analysis_response(response)
+
+        except Exception as e:
+            self.logger.warning(f"LLM公开不充分分析失败: {e}，使用规则-based分析")
+            return self._analyze_disclosure_by_rules(patent)
+
+    def _analyze_disclosure_by_rules(
+        self,
+        patent: Dict
+    ) -> Dict:
+        """基于规则的公开不充分分析（降级方案）"""
         specification = patent.get("specification", "")
         embodiments = patent.get("embodiments", [])
 
@@ -547,6 +1287,82 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
             "detailed_reasoning": "说明书技术描述过于简单，本领域技术人员无法实现" if is_insufficient else "说明书公开较为充分",
             "missing_aspects": self._identify_missing_disclosure_aspects(patent)
         }
+
+    def _build_disclosure_analysis_prompt(
+        self,
+        patent: Dict
+    ) -> str:
+        """构建公开不充分分析提示词"""
+        return f"""# 任务：说明书公开不充分分析
+
+## 说明书内容
+```
+{patent.get("specification", "")[:1000]}
+```
+
+## 实施方式
+```json
+{json.dumps(patent.get("embodiments", []), ensure_ascii=False)}
+```
+
+## 分析要点（专利法第26条第3款）
+1. **技术领域**：是否清楚说明所属技术领域
+2. **技术方案**：是否完整描述技术方案
+3. **实现方式**：本领域技术人员能否实现
+4. **技术效果**：是否说明有益效果
+
+## 输出要求
+请严格按照以下JSON格式输出分析结果：
+
+```json
+{{
+    "is_valid_ground": true,
+    "confidence": 0.6,
+    "detailed_reasoning": "详细理由说明",
+    "missing_aspects": ["缺失方面1", "缺失方面2"],
+    "disclosure_assessment": {{
+        "technical_field": "sufficient/insufficient",
+        "technical_solution": "sufficient/insufficient",
+        "enablement": "sufficient/insufficient",
+        "beneficial_effects": "sufficient/insufficient"
+    }}
+}}
+```
+
+请只输出JSON，不要添加任何额外说明。
+"""
+
+    def _parse_disclosure_analysis_response(self, response: str) -> Dict:
+        """解析公开不充分分析LLM响应"""
+        try:
+            json_match = re.search(r'```json\s*([\s\S]*?)```', response)
+            if json_match:
+                json_str = json_match.group(1).strip()
+            else:
+                json_str = response.strip()
+
+            result = json.loads(json_str)
+
+            # 验证必需字段
+            if "is_valid_ground" not in result:
+                result["is_valid_ground"] = False
+            if "confidence" not in result:
+                result["confidence"] = 0.5
+            if "detailed_reasoning" not in result:
+                result["detailed_reasoning"] = ""
+            if "missing_aspects" not in result:
+                result["missing_aspects"] = []
+
+            return result
+
+        except (json.JSONDecodeError, Exception) as e:
+            self.logger.error(f"解析公开不充分分析响应失败: {e}")
+            return {
+                "is_valid_ground": False,
+                "confidence": 0.0,
+                "detailed_reasoning": "LLM响应解析失败",
+                "missing_aspects": [],
+            }
 
     async def _analyze_amendment_exceeds_scope(
         self,
@@ -703,7 +1519,8 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
 
         for ground in ground_strengths:
             if ground["strength"] == "weak":
-                risks.append(f"{ground['type']}理由强度较弱，可能不被支持")
+                ground_type = ground.get("type", "无效")
+                risks.append(f"{ground_type}理由强度较弱，可能不被支持")
 
         # 检查是否有多个理由但都较弱
         weak_count = len([g for g in ground_strengths if g["strength"] == "weak"])

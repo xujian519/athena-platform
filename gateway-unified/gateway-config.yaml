@@ -1,42 +1,100 @@
-# Athena Gateway 统一网关配置文件
-# 复制此文件为 gateway-config.yaml 并根据需要修改
+# Athena Gateway 统一网关配置文件（生产环境安全配置）
+# 最后更新: 2026-04-21
 
 # 服务器配置
 server:
-  # 监听端口 (默认: 8005)
   port: 8005
-  # 生产模式 (默认: false)
   production: true
-  # 读取超时（秒） (默认: 30)
   read_timeout: 30
-  # 写入超时（秒） (默认: 30)
   write_timeout: 30
-  # 空闲超时（秒） (默认: 120)
   idle_timeout: 120
 
 # 日志配置
 logging:
-  # 日志级别: debug, info, warn, error (默认: info)
   level: info
-  # 日志格式: json, text (默认: json)
   format: json
-  # 输出目标: stdout, stderr, 或文件路径 (默认: stdout)
   output: stdout
+
+# 认证配置
+auth:
+  jwt:
+    secret: "${JWT_SECRET:-CHANGE_THIS_TO_STRONG_SECRET}"
+    issuer: "athena-gateway"
+    expiration: 24h
+    refresh_expiration: 168h
+    use_cookie: false
+    use_header: true
+    header_name: "Authorization"
+    use_query: false
+
+  api_key:
+    enabled: false
+    keys:
+      - "${API_KEY_1:-your-api-key-1}"
+      - "${API_KEY_2:-your-api-key-2}"
+    header_name: "X-API-Key"
+
+  ip_whitelist:
+    enabled: false
+    allowed_ips:
+      - "127.0.0.1/32"
+      - "10.0.0.0/8"
+      - "172.16.0.0/12"
+      - "192.168.0.0/16"
+
+# 速率限制配置
+rate_limit:
+  enabled: false
+  requests_per_minute: 100
+  burst_size: 20
+  by_ip: true
+  by_api_key: true
+
+# CORS配置
+cors:
+  enabled: false
+  allowed_origins:
+    - "http://localhost:3000"
+    - "http://localhost:8080"
+    - "${FRONTEND_URL:-https://athena.example.com}"
+  allowed_methods:
+    - GET
+    - POST
+    - PUT
+    - PATCH
+    - DELETE
+    - OPTIONS
+  allowed_headers:
+    - Origin
+    - Content-Type
+    - Accept
+    - Authorization
+    - X-API-Key
+  exposed_headers:
+    - Content-Length
+    - X-Total-Count
+  allow_credentials: true
+  max_age: 3600
 
 # 监控配置
 monitoring:
-  # 启用Prometheus指标 (默认: false)
-  enabled: true
-  # 指标服务端口 (默认: 9090)
-  port: 9090
-  # 指标路径 (默认: /metrics)
+  enabled: false
+  port: 9091
   path: /metrics
 
-# TLS/SSL配置
-tls:
-  # 启用TLS (默认: false)
+# WebSocket控制平面配置
+websocket:
   enabled: false
-  # TLS证书文件路径
+  path: /ws
+  read_buffer_size: 1024
+  write_buffer_size: 1024
+  heartbeat_interval: 30
+  session_timeout: 600
+  enable_canvas_host: true
+
+# TLS/SSL配置 ⭐ 已启用生产级TLS
+tls:
+  enabled: false
   cert_file: /Users/xujian/Athena工作平台/gateway-unified/certs/server.crt
-  # TLS私钥文件路径
   key_file: /Users/xujian/Athena工作平台/gateway-unified/certs/server.key
+  min_version: "TLS1.2"

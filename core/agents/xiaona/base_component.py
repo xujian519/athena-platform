@@ -5,14 +5,25 @@
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 from enum import Enum
 from dataclasses import dataclass
 import logging
-import time
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
+
+# LLM管理器导入
+try:
+    from core.llm.unified_llm_manager import UnifiedLLMManager, get_unified_llm_manager
+    from core.llm.base import LLMRequest, LLMResponse
+    LLM_AVAILABLE = True
+except ImportError:
+    LLM_AVAILABLE = False
+    UnifiedLLMManager = None  # type: ignore
+    get_unified_llm_manager = None  # type: ignore
+    LLMRequest = None  # type: ignore
+    LLMResponse = None  # type: ignore
 
 
 class AgentStatus(Enum):
@@ -84,6 +95,11 @@ class BaseXiaonaComponent(ABC):
         # 初始化日志
         self.logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
 
+        # LLM管理器（延迟初始化）
+        self._llm_manager: Optional[UnifiedLLMManager] = None
+        self._llm_config: Dict[str, Any] = {}
+        self._llm_initialized = False
+
         # 子类初始化
         self._initialize()
 
@@ -123,15 +139,29 @@ class BaseXiaonaComponent(ABC):
         """
         pass
 
-    def _register_capabilities(self, capabilities: List[AgentCapability]) -> None:
+    def _register_capabilities(self, capabilities: List[Union[AgentCapability, Dict[str, Any]]]) -> None:
         """
         注册智能体能力
 
         Args:
-            capabilities: 能力列表
+            capabilities: 能力列表（支持AgentCapability对象或字典）
         """
-        self._capabilities = capabilities
-        self.logger.info(f"注册 {len(capabilities)} 个能力: {[c.name for c in capabilities]}")
+        # 转换字典为AgentCapability对象
+        converted_capabilities = []
+        for cap in capabilities:
+            if isinstance(cap, dict):
+                converted_capabilities.append(AgentCapability(
+                    name=cap["name"],
+                    description=cap["description"],
+                    input_types=cap["input_types"],
+                    output_types=cap["output_types"],
+                    estimated_time=cap.get("estimated_time", 30.0)
+                ))
+            else:
+                converted_capabilities.append(cap)
+
+        self._capabilities = converted_capabilities
+        self.logger.info(f"注册 {len(converted_capabilities)} 个能力: {[c.name for c in converted_capabilities]}")
 
     def get_capabilities(self) -> List[AgentCapability]:
         """
@@ -212,8 +242,6 @@ class BaseXiaonaComponent(ABC):
         Returns:
             执行结果
         """
-        import time
-
         # 更新状态
         self.status = AgentStatus.BUSY
         context.start_time = datetime.now()
@@ -254,6 +282,340 @@ class BaseXiaonaComponent(ABC):
                 error_message=str(e),
                 execution_time=execution_time,
             )
+
+    # ========== LLM集成方法 ==========
+
+    def _ensure_llm_initialized(self) -> None:
+        """
+        确保LLM管理器已初始化
+
+        如果LLM管理器未初始化，则进行初始化。
+        注意：这是一个同步方法，如果需要异步初始化，应该在外部处理。
+        """
+        if self._llm_initialized:
+            return
+
+        try:
+            if LLM_AVAILABLE and get_unified_llm_manager is not None:
+                # 注意：这里使用同步方式获取管理器
+                # 如果get_unified_llm_manager()是异步的，需要在外部先初始化
+                import inspect
+                if inspect.iscoroutinefunction(get_unified_llm_manager):
+                    # 异步函数，暂时跳过，等待外部初始化
+                    self.logger.warning(f"get_unified_llm_manager是异步函数，需要外部初始化: {self.agent_id}")
+                    self._llm_manager = None
+                else:
+                    self._llm_manager = get_unified_llm_manager()
+
+                self._llm_config = self._load_llm_config()
+                self._llm_initialized = True
+                if self._llm_manager is not None:
+                    self.logger.info(f"LLM管理器初始化成功: {self.agent_id}")
+            else:
+                self.logger.warning(f"LLM模块不可用: {self.agent_id}")
+                self._llm_initialized = True  # 标记为已尝试初始化
+        except Exception as e:
+            self.logger.error(f"LLM管理器初始化失败: {e}")
+            self._llm_initialized = True  # 标记为已尝试初始化，避免重复尝试
+
+    async def _call_llm(
+        self,
+        prompt: str,
+        task_type: str = "general",
+        **kwargs
+    ) -> str:
+        """
+        调用LLM生成响应
+
+        Args:
+            prompt: 提示词
+            task_type: 任务类型（用于选择模型）
+            **kwargs: 额外的LLM参数
+
+        Returns:
+            LLM响应文本
+
+        Raises:
+            RuntimeError: 如果LLM未初始化或调用失败
+        """
+        self._ensure_llm_initialized()
+
+        if self._llm_manager is None:
+            raise RuntimeError(f"LLM管理器未初始化: {self.agent_id}")
+
+        try:
+            # 构建LLM请求
+            context = self._build_llm_context(task_type)
+            params = self._merge_llm_params(task_type, kwargs)
+
+            # 创建请求对象（使用正确的字段名）
+            if LLMRequest is not None:
+                request = LLMRequest(
+                    message=prompt,  # 注意：使用message而不是prompt
+                    task_type=task_type,
+                    context=context,
+                    temperature=params.get("temperature", 0.7),
+                    max_tokens=params.get("max_tokens", 4096),
+                    stream=params.get("enable_streaming", False),
+                )
+            else:
+                # 降级处理：直接传递参数
+                request = None
+
+            # 调用LLM
+            if request is not None:
+                response: LLMResponse = await self._llm_manager.generate_async(request)
+                return response.content
+            else:
+                # 降级处理：使用简化接口
+                result = await self._llm_manager.generate_async(
+                    message=prompt,
+                    task_type=task_type,
+                    **params
+                )
+                if isinstance(result, str):
+                    return result
+                elif hasattr(result, 'content'):
+                    return result.content
+                else:
+                    return str(result)
+
+        except Exception as e:
+            self.logger.error(f"LLM调用失败: {e}")
+            raise
+
+    async def _call_deepseek(
+        self,
+        prompt: str,
+        task_type: str = "general",
+        **kwargs
+    ) -> str:
+        """
+        调用DeepSeek云端模型
+
+        Args:
+            prompt: 提示词
+            task_type: 任务类型
+            **kwargs: 额外的LLM参数
+
+        Returns:
+            LLM响应文本
+
+        Raises:
+            RuntimeError: DeepSeek调用失败
+        """
+        try:
+            from core.llm.deepseek_client import get_deepseek_client
+
+            # 获取DeepSeek客户端
+            client = get_deepseek_client()
+
+            # 构建系统提示
+            system_prompt = self.get_system_prompt()
+
+            # 调用DeepSeek
+            response = await client.reason(
+                problem=prompt,
+                task_type=task_type,
+                temperature=kwargs.get("temperature", 0.7),
+                max_tokens=kwargs.get("max_tokens", 4096),
+            )
+
+            return response.answer
+
+        except ImportError as e:
+            raise RuntimeError(f"DeepSeek客户端不可用: {e}")
+        except Exception as e:
+            raise RuntimeError(f"DeepSeek调用失败: {e}")
+
+    async def _call_local_8009(
+        self,
+        prompt: str,
+        task_type: str = "general",
+        **kwargs
+    ) -> str:
+        """
+        调用本地8009端口模型
+
+        Args:
+            prompt: 提示词
+            task_type: 任务类型
+            **kwargs: 额外的LLM参数
+
+        Returns:
+            LLM响应文本
+
+        Raises:
+            RuntimeError: 本地8009调用失败
+        """
+        try:
+            from core.llm.adapters.local_8009_adapter import get_local_8009_adapter
+
+            # 获取本地8009适配器
+            adapter = await get_local_8009_adapter()
+
+            # 构建系统提示
+            system_prompt = self.get_system_prompt()
+
+            # 调用本地模型
+            response = await adapter.generate(
+                prompt=prompt,
+                system_prompt=system_prompt,
+                temperature=kwargs.get("temperature", 0.7),
+                max_tokens=kwargs.get("max_tokens", 4096),
+            )
+
+            return response
+
+        except ImportError as e:
+            raise RuntimeError(f"本地8009适配器不可用: {e}")
+        except Exception as e:
+            raise RuntimeError(f"本地8009调用失败: {e}")
+
+    async def _call_llm_with_fallback(
+        self,
+        prompt: str,
+        task_type: str = "general",
+        fallback_prompt: Optional[str] = None,
+        **kwargs
+    ) -> str:
+        """
+        带智能降级机制的LLM调用
+
+        降级策略：
+        1. 优先调用云端DeepSeek模型
+        2. 失败时降级到本地8009端口模型
+        3. 复杂任务禁止使用规则执行
+
+        Args:
+            prompt: 主要提示词
+            task_type: 任务类型
+            fallback_prompt: 降级提示词（保留兼容性，未使用）
+            **kwargs: 额外的LLM参数
+
+        Returns:
+            LLM响应文本
+
+        Raises:
+            RuntimeError: 所有LLM调用均失败
+        """
+        # 策略1: 优先调用DeepSeek云端模型
+        try:
+            self.logger.info(f"📡 尝试DeepSeek云端模型: {task_type}")
+            response = await self._call_deepseek(prompt, task_type, **kwargs)
+            self.logger.info(f"✅ DeepSeek云端模型调用成功")
+            return response
+        except Exception as e:
+            self.logger.warning(f"⚠️ DeepSeek云端模型调用失败: {e}")
+
+        # 策略2: 降级到本地8009端口模型
+        try:
+            self.logger.info(f"📡 降级到本地8009端口模型: {task_type}")
+            response = await self._call_local_8009(prompt, task_type, **kwargs)
+            self.logger.info(f"✅ 本地8009端口模型调用成功")
+            return response
+        except Exception as e:
+            self.logger.error(f"❌ 本地8009端口模型调用失败: {e}")
+
+        # 策略3: 所有LLM均失败，抛出异常（禁止使用规则执行复杂任务）
+        complex_tasks = {
+            "invalidation_analysis",
+            "grounds_analysis",
+            "evidence_strategy",
+            "creativity_analysis",
+            "novelty_analysis",
+        }
+
+        if task_type in complex_tasks:
+            raise RuntimeError(
+                f"复杂任务'{task_type}'的LLM调用全部失败，禁止使用规则执行。"
+                f"原始错误: DeepSeek失败 -> 本地8009失败"
+            )
+        else:
+            # 简单任务可以抛出异常，由调用方决定是否使用规则
+            raise RuntimeError(
+                f"所有LLM调用均失败: DeepSeek -> 本地8009。"
+                f"最后错误: {e}"
+            )
+
+    def _build_llm_context(self, task_type: str) -> Dict[str, Any]:
+        """
+        构建LLM上下文
+
+        Args:
+            task_type: 任务类型
+
+        Returns:
+            上下文字典
+        """
+        return {
+            "agent_id": self.agent_id,
+            "agent_type": self.__class__.__name__,
+            "task_type": task_type,
+            "capabilities": [c.name for c in self._capabilities],
+            "system_prompt": self.get_system_prompt(),
+        }
+
+    def _load_llm_config(self) -> Dict[str, Any]:
+        """
+        加载LLM配置
+
+        Returns:
+            LLM配置字典
+        """
+        # 1. 从实例配置中获取
+        if "llm_config" in self.config:
+            return self.config["llm_config"]
+
+        # 2. 从全局配置中获取
+        try:
+            from core.config.xiaona_config import config_manager
+            if hasattr(config_manager, 'export_config'):
+                global_config = config_manager.export_config()
+                if "llm" in global_config:
+                    return global_config["llm"]
+        except ImportError:
+            pass
+
+        # 3. 使用默认配置
+        return {
+            "model": "claude-3-5-sonnet-20241022",
+            "temperature": 0.7,
+            "max_tokens": 4096,
+            "timeout": 30.0,
+        }
+
+    def _merge_llm_params(
+        self,
+        task_type: str,
+        user_params: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        合并LLM参数
+
+        Args:
+            task_type: 任务类型
+            user_params: 用户提供的参数
+
+        Returns:
+            合并后的参数字典
+        """
+        # 基础配置
+        base_params = self._llm_config.copy()
+
+        # 任务类型特定配置
+        try:
+            from core.config.xiaona_config import LLM_TASK_TYPE_MAPPING
+            if task_type in LLM_TASK_TYPE_MAPPING:
+                task_config = LLM_TASK_TYPE_MAPPING[task_type]
+                base_params.update(task_config)
+        except (ImportError, AttributeError):
+            pass
+
+        # 用户参数优先级最高
+        base_params.update(user_params)
+
+        return base_params
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__}(agent_id='{self.agent_id}', status='{self.status.value}')>"

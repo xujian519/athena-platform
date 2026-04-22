@@ -24,6 +24,8 @@ def parse_frontmatter(content: str) -> tuple[dict[str, Any], str]:
 
         正文内容
 
+    使用正则表达式，只匹配行首的---标记，避免正文中的---干扰。
+
     Args:
         content: 文件完整内容
 
@@ -31,15 +33,17 @@ def parse_frontmatter(content: str) -> tuple[dict[str, Any], str]:
         (metadata_dict, body_content) 元组。
         如果没有 frontmatter，metadata 为空字典，body 为原始内容。
     """
-    if not content.startswith("---"):
+    import re
+
+    # 使用正则匹配，^---$ 确保只匹配行首的---
+    pattern = r'^---\s*\n(.*?)\n^---\s*\n(.*)$'
+    match = re.match(pattern, content, re.DOTALL | re.MULTILINE)
+
+    if not match:
         return {}, content
 
-    parts = content.split("---", 2)
-    if len(parts) < 3:
-        return {}, content
-
-    yaml_str = parts[1].strip()
-    body = parts[2].strip()
+    yaml_str = match.group(1).strip()
+    body = match.group(2).strip()
 
     if not yaml_str:
         return {}, body

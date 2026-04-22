@@ -4,8 +4,9 @@
 专注于专利撰写质量审查，确保申请文件符合专业撰写标准。
 """
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 import logging
+import json
 import re
 from core.agents.xiaona.base_component import BaseXiaonaComponent
 
@@ -73,13 +74,51 @@ class WritingReviewerProxy(BaseXiaonaComponent):
             },
         ])
 
+    def get_system_prompt(self) -> str:
+        """获取系统提示词"""
+        return """
+你是一位专业的专利撰写质量审查专家，具备深厚的专利法知识和丰富的撰写审查经验。
+
+你的职责是：
+1. 审查专利申请文件的法律用语规范性
+2. 评估技术描述的准确性
+3. 检查撰写风格的一致性
+4. 评价整体撰写质量
+
+请以专业、严谨的态度进行审查，并提供明确的改进建议。
+输出必须是严格的JSON格式，不要添加任何额外的文字说明。
+"""
+
+    async def execute(self, context) -> Any:
+        """
+        执行智能体任务
+
+        Args:
+            context: 执行上下文
+
+        Returns:
+            执行结果
+        """
+        # 根据任务类型执行相应的审查
+        task_type = context.config.get("task_type", "comprehensive")
+
+        if task_type == "legal_terminology":
+            return await self.review_legal_terminology(context.input_data)
+        elif task_type == "technical_accuracy":
+            return await self.review_technical_accuracy(context.input_data)
+        elif task_type == "style_consistency":
+            return await self.check_writing_style_consistency(context.input_data)
+        else:
+            # 完整审查
+            return await self.review_writing(context.input_data)
+
     async def review_writing(
         self,
         application_data: Dict[str, Any],
         review_scope: str = "comprehensive"
     ) -> Dict[str, Any]:
         """
-        完整撰写审查流程
+        完整撰写审查流程（LLM版本）
 
         Args:
             application_data: 申请文件数据
@@ -91,18 +130,703 @@ class WritingReviewerProxy(BaseXiaonaComponent):
         application_id = application_data.get("application_id", "未知")
         logger.info(f"开始撰写审查: {application_id}, 范围: {review_scope}")
 
+        # 尝试使用LLM进行综合分析
+        try:
+            prompt = self._build_writing_review_prompt(application_data, review_scope)
+            response = await self._call_llm_with_fallback(
+                prompt=prompt,
+                task_type="writing_review"
+            )
+
+            # 解析LLM响应
+            result = self._parse_writing_review_response(response)
+            result["application_id"] = application_id
+            result["review_scope"] = review_scope
+            result["reviewed_at"] = self._get_timestamp()
+
+            logger.info(f"撰写审查完成: {application_id}, 质量等级: {result.get('overall_quality', '未知')}")
+            return result
+
+        except Exception as e:
+            self.logger.warning(f"LLM撰写审查失败: {e}，使用规则-based审查")
+            return await self._review_writing_by_rules(application_data, review_scope)
+
+    async def review_legal_terminology(
+        self,
+        application: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        法律用语规范性审查（LLM版本）
+
+        Args:
+            application: 申请文件数据
+
+        Returns:
+            法律用语审查结果
+        """
+        # 尝试使用LLM分析
+        try:
+            prompt = self._build_legal_terminology_prompt(application)
+            response = await self._call_llm_with_fallback(
+                prompt=prompt,
+                task_type="legal_terminology_review"
+            )
+
+            # 解析LLM响应
+            return self._parse_legal_terminology_response(response)
+        except Exception as e:
+            self.logger.warning(f"LLM法律用语审查失败: {e}，使用规则-based审查")
+            return await self._review_legal_terminology_by_rules(application)
+
+    async def review_technical_accuracy(
+        self,
+        application: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        技术描述准确性审查（LLM版本）
+
+        Args:
+            application: 申请文件数据
+
+        Returns:
+            技术准确性审查结果
+        """
+        # 尝试使用LLM分析
+        try:
+            prompt = self._build_technical_accuracy_prompt(application)
+            response = await self._call_llm_with_fallback(
+                prompt=prompt,
+                task_type="technical_accuracy_review"
+            )
+
+            # 解析LLM响应
+            return self._parse_technical_accuracy_response(response)
+        except Exception as e:
+            self.logger.warning(f"LLM技术准确性审查失败: {e}，使用规则-based审查")
+            return await self._review_technical_accuracy_by_rules(application)
+
+    async def check_writing_style_consistency(
+        self,
+        application: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        撰写风格一致性检查（LLM版本）
+
+        Args:
+            application: 申请文件数据
+
+        Returns:
+            风格一致性检查结果
+        """
+        # 尝试使用LLM分析
+        try:
+            prompt = self._build_style_consistency_prompt(application)
+            response = await self._call_llm_with_fallback(
+                prompt=prompt,
+                task_type="style_consistency_check"
+            )
+
+            # 解析LLM响应
+            return self._parse_style_consistency_response(response)
+        except Exception as e:
+            self.logger.warning(f"LLM风格一致性检查失败: {e}，使用规则-based检查")
+            return await self._check_style_consistency_by_rules(application)
+
+    async def assess_writing_quality(
+        self,
+        legal_review: Dict,
+        technical_review: Dict,
+        style_review: Dict
+    ) -> Dict[str, Any]:
+        """
+        撰写质量评估
+
+        Args:
+            legal_review: 法律用语审查结果
+            technical_review: 技术准确性审查结果
+            style_review: 风格一致性检查结果
+
+        Returns:
+            质量评估结果
+        """
+        # 综合评分
+        scores = [
+            legal_review.get("score", 0) * 0.3,  # 30%权重
+            technical_review.get("score", 0) * 0.4,  # 40%权重
+            style_review.get("overall_score", 0) * 0.3,  # 30%权重
+        ]
+        overall_score = sum(scores) if scores else 0
+
+        # 确定质量等级
+        if overall_score >= EXCELLENCE_SCORE:
+            quality_level = "优秀"
+            comparable_to = "标准案例"
+        elif overall_score >= GOOD_SCORE:
+            quality_level = "良好"
+            comparable_to = "高于平均水平"
+        elif overall_score >= ACCEPTABLE_SCORE:
+            quality_level = "合格"
+            comparable_to = "基本达标"
+        else:
+            quality_level = "待改进"
+            comparable_to = "需要大幅修改"
+
+        # 评估具体维度
+        dimensions = {
+            "professionalism": {
+                "score": legal_review.get("score", 0),
+                "level": self._get_quality_level(legal_review.get("score", 0))
+            },
+            "accuracy": {
+                "score": technical_review.get("score", 0),
+                "level": self._get_quality_level(technical_review.get("score", 0))
+            },
+            "readability": {
+                "score": style_review.get("overall_score", 0),
+                "level": self._get_quality_level(style_review.get("overall_score", 0))
+            },
+        }
+
+        return {
+            "overall_score": overall_score,
+            "overall_quality": quality_level,
+            "comparable_to": comparable_to,
+            "dimensions": dimensions,
+            "strengths": self._identify_strengths(dimensions),
+            "weaknesses": self._identify_weaknesses(dimensions),
+            "improvement_priority": self._determine_improvement_priority(dimensions),
+        }
+
+    # === LLM相关方法 ===
+
+    def _build_writing_review_prompt(
+        self,
+        application: Dict[str, Any],
+        review_scope: str
+    ) -> str:
+        """构建撰写审查提示词"""
+        return f"""# 任务：专利申请文件撰写质量审查
+
+## 申请文件信息
+```json
+{json.dumps(application, ensure_ascii=False, indent=2)}
+```
+
+## 审查范围
+{review_scope}
+
+## 审查要点
+1. **法律用语规范性**：
+   - 检查禁用词汇（大约、左右、约、可能等）
+   - 检查标准法律用语使用（所述、其特征在于等）
+   - 检查专业术语一致性
+
+2. **技术描述准确性**：
+   - 技术问题与解决方案一致性
+   - 技术术语使用准确性
+   - 有益效果的技术合理性
+
+3. **撰写风格一致性**：
+   - 时态一致性（权利要求用现在时）
+   - 术语一致性
+   - 格式一致性
+   - 编号一致性
+
+4. **撰写质量评估**：
+   - 专业性（法律用语规范程度）
+   - 准确性（技术描述准确程度）
+   - 可读性（撰写风格一致程度）
+
+## 输出要求
+请严格按照以下JSON格式输出审查结果：
+
+```json
+{{
+    "legal_terminology_review": {{
+        "status": "excellent/good/fair/poor",
+        "score": 0.8,
+        "terminology_issues": [
+            {{
+                "type": "forbidden_term",
+                "term": "大约",
+                "suggestion": "删除或替换'大约'，使用更确切的表述",
+                "severity": "high"
+            }}
+        ],
+        "missing_standards": [],
+        "consistency_check": {{
+            "score": 0.9,
+            "consistent_terms_count": 45,
+            "inconsistent_terms": []
+        }},
+        "total_issues": 1,
+        "correction_suggestions": ["将'大约'替换为更确切的表述"]
+    }},
+    "technical_accuracy_review": {{
+        "status": "good",
+        "score": 0.8,
+        "accuracy_issues": [],
+        "clarifications_needed": [],
+        "consistency_check": {{
+            "is_consistent": true,
+            "description": "技术问题与解决方案一致",
+            "suggestion": null
+        }},
+        "term_accuracy": {{
+            "issues": [],
+            "accuracy_score": 0.9
+        }},
+        "total_issues": 0
+    }},
+    "style_consistency": {{
+        "overall_consistency": "good",
+        "overall_score": 0.8,
+        "style_checks": {{
+            "tense_consistency": {{
+                "score": 0.9,
+                "issues": [],
+                "description": "时态使用一致"
+            }},
+            "terminology_consistency": {{
+                "score": 0.8,
+                "consistent_terms_count": 45,
+                "inconsistent_terms": []
+            }},
+            "format_consistency": {{
+                "score": 0.85,
+                "issues": [],
+                "description": "格式一致"
+            }},
+            "numbering_consistency": {{
+                "score": 0.75,
+                "issues": [],
+                "description": "编号一致"
+            }}
+        }},
+        "issues": []
+    }},
+    "quality_assessment": {{
+        "overall_score": 0.8,
+        "overall_quality": "良好",
+        "comparable_to": "高于平均水平",
+        "dimensions": {{
+            "professionalism": {{
+                "score": 0.85,
+                "level": "良好"
+            }},
+            "accuracy": {{
+                "score": 0.8,
+                "level": "良好"
+            }},
+            "readability": {{
+                "score": 0.75,
+                "level": "合格"
+            }}
+        }},
+        "strengths": ["专业性: 良好", "准确性: 良好"],
+        "weaknesses": [],
+        "improvement_priority": []
+    }},
+    "overall_score": 0.8,
+    "overall_quality": "良好",
+    "recommendations": [
+        "撰写质量良好，建议保持"
+    ]
+}}
+```
+
+请只输出JSON，不要添加任何额外说明。
+"""
+
+    def _parse_writing_review_response(self, response: str) -> Dict[str, Any]:
+        """解析撰写审查LLM响应"""
+        try:
+            # 提取JSON
+            json_match = re.search(r'```json\s*([\s\S]*?)```', response)
+            if json_match:
+                json_str = json_match.group(1).strip()
+            else:
+                json_str = response.strip()
+
+            result = json.loads(json_str)
+
+            # 验证必需字段
+            if "legal_terminology_review" not in result:
+                result["legal_terminology_review"] = {"status": "poor", "score": 0.0, "total_issues": 0}
+            if "technical_accuracy_review" not in result:
+                result["technical_accuracy_review"] = {"status": "poor", "score": 0.0, "total_issues": 0}
+            if "style_consistency" not in result:
+                result["style_consistency"] = {"overall_score": 0.0, "issues": []}
+            if "quality_assessment" not in result:
+                result["quality_assessment"] = {"overall_score": 0.0, "overall_quality": "待改进"}
+            if "overall_score" not in result:
+                result["overall_score"] = 0.0
+            if "overall_quality" not in result:
+                result["overall_quality"] = "待改进"
+            if "recommendations" not in result:
+                result["recommendations"] = []
+
+            return result
+
+        except (json.JSONDecodeError, Exception) as e:
+            self.logger.error(f"解析撰写审查响应失败: {e}")
+            return {
+                "legal_terminology_review": {"status": "poor", "score": 0.0, "total_issues": 0},
+                "technical_accuracy_review": {"status": "poor", "score": 0.0, "total_issues": 0},
+                "style_consistency": {"overall_score": 0.0, "issues": []},
+                "quality_assessment": {"overall_score": 0.0, "overall_quality": "待改进"},
+                "overall_score": 0.0,
+                "overall_quality": "待改进",
+                "recommendations": ["LLM响应解析失败，请检查输入格式"],
+            }
+
+    def _build_legal_terminology_prompt(self, application: Dict[str, Any]) -> str:
+        """构建法律用语审查提示词"""
+        claims_text = application.get("claims", "")
+        specification_text = application.get("specification", "")
+
+        return f"""# 任务：专利申请文件法律用语规范性审查
+
+## 权利要求书
+```
+{claims_text}
+```
+
+## 说明书
+```
+{specification_text[:1000]}
+```
+
+## 审查要点
+1. **禁用词汇检查**：是否使用了"大约"、"左右"、"约"、"可能"、"也许"、"大概"等不确定词汇
+2. **标准法律用语**：是否规范使用"所述"、"其特征在于"、"其中"、"包括"等标准用语
+3. **专业术语一致性**：同一技术术语是否全文使用一致
+
+## 输出要求
+请严格按照以下JSON格式输出审查结果：
+
+```json
+{{
+    "status": "excellent/good/fair/poor",
+    "score": 0.8,
+    "terminology_issues": [
+        {{
+            "type": "forbidden_term",
+            "term": "大约",
+            "suggestion": "删除或替换'大约'，使用更确切的表述",
+            "severity": "high"
+        }}
+    ],
+    "missing_standards": [
+        {{
+            "type": "missing_standard_term",
+            "term": "所述",
+            "suggestion": "在权利要求中规范使用'所述'",
+            "severity": "medium"
+        }}
+    ],
+    "consistency_check": {{
+        "score": 0.9,
+        "consistent_terms_count": 45,
+        "inconsistent_terms": [
+            {{
+                "term": "传感器",
+                "variants": ["感应器", "探测装置"],
+                "suggestion": "统一使用'传感器'，避免使用变体"
+            }}
+        ]
+    }},
+    "total_issues": 2,
+    "correction_suggestions": ["将'大约'替换为更确切的表述", "在权利要求中规范使用'所述'"]
+}}
+```
+
+请只输出JSON，不要添加任何额外说明。
+"""
+
+    def _parse_legal_terminology_response(self, response: str) -> Dict[str, Any]:
+        """解析法律用语审查LLM响应"""
+        try:
+            # 提取JSON
+            json_match = re.search(r'```json\s*([\s\S]*?)```', response)
+            if json_match:
+                json_str = json_match.group(1).strip()
+            else:
+                json_str = response.strip()
+
+            result = json.loads(json_str)
+
+            # 验证必需字段
+            required_fields = ["status", "score", "terminology_issues", "missing_standards",
+                             "consistency_check", "total_issues", "correction_suggestions"]
+            for field in required_fields:
+                if field not in result:
+                    if field == "status":
+                        result[field] = "poor"
+                    elif field == "score":
+                        result[field] = 0.0
+                    elif field in ["terminology_issues", "missing_standards", "correction_suggestions"]:
+                        result[field] = []
+                    elif field == "total_issues":
+                        result[field] = 0
+                    elif field == "consistency_check":
+                        result[field] = {"score": 0.0, "consistent_terms_count": 0, "inconsistent_terms": []}
+
+            return result
+
+        except (json.JSONDecodeError, Exception) as e:
+            self.logger.error(f"解析法律用语审查响应失败: {e}")
+            return {
+                "status": "poor",
+                "score": 0.0,
+                "terminology_issues": [],
+                "missing_standards": [],
+                "consistency_check": {"score": 0.0, "consistent_terms_count": 0, "inconsistent_terms": []},
+                "total_issues": 0,
+                "correction_suggestions": ["LLM响应解析失败"],
+            }
+
+    def _build_technical_accuracy_prompt(self, application: Dict[str, Any]) -> str:
+        """构建技术准确性审查提示词"""
+        technical_field = application.get("technical_field", "")
+        technical_problem = application.get("technical_problem", "")
+        technical_solution = application.get("technical_solution", "")
+        beneficial_effects = application.get("beneficial_effects", "")
+
+        return f"""# 任务：专利申请文件技术描述准确性审查
+
+## 技术领域
+{technical_field}
+
+## 技术问题
+{technical_problem}
+
+## 技术方案
+{technical_solution}
+
+## 有益效果
+{beneficial_effects}
+
+## 审查要点
+1. **问题与解决方案一致性**：技术方案是否直接回应技术问题
+2. **技术术语准确性**：技术术语在所属领域内使用是否准确
+3. **有益效果合理性**：有益效果是否有技术因果关系支撑
+
+## 输出要求
+请严格按照以下JSON格式输出审查结果：
+
+```json
+{{
+    "status": "good",
+    "score": 0.8,
+    "accuracy_issues": [
+        {{
+            "type": "inconsistency",
+            "aspect": "问题与解决方案",
+            "description": "技术方案未完全解决技术问题",
+            "suggestion": "补充技术方案中解决技术问题的具体措施"
+        }}
+    ],
+    "clarifications_needed": [],
+    "consistency_check": {{
+        "is_consistent": true,
+        "description": "技术问题与解决方案一致",
+        "suggestion": null
+    }},
+    "term_accuracy": {{
+        "issues": [],
+        "accuracy_score": 0.9
+    }},
+    "total_issues": 1
+}}
+```
+
+请只输出JSON，不要添加任何额外说明。
+"""
+
+    def _parse_technical_accuracy_response(self, response: str) -> Dict[str, Any]:
+        """解析技术准确性审查LLM响应"""
+        try:
+            # 提取JSON
+            json_match = re.search(r'```json\s*([\s\S]*?)```', response)
+            if json_match:
+                json_str = json_match.group(1).strip()
+            else:
+                json_str = response.strip()
+
+            result = json.loads(json_str)
+
+            # 验证必需字段
+            required_fields = ["status", "score", "accuracy_issues", "clarifications_needed",
+                             "consistency_check", "term_accuracy", "total_issues"]
+            for field in required_fields:
+                if field not in result:
+                    if field == "status":
+                        result[field] = "poor"
+                    elif field == "score":
+                        result[field] = 0.0
+                    elif field in ["accuracy_issues", "clarifications_needed"]:
+                        result[field] = []
+                    elif field == "total_issues":
+                        result[field] = 0
+                    elif field == "consistency_check":
+                        result[field] = {"is_consistent": False, "description": "检查失败", "suggestion": "请重试"}
+                    elif field == "term_accuracy":
+                        result[field] = {"issues": [], "accuracy_score": 0.0}
+
+            return result
+
+        except (json.JSONDecodeError, Exception) as e:
+            self.logger.error(f"解析技术准确性审查响应失败: {e}")
+            return {
+                "status": "poor",
+                "score": 0.0,
+                "accuracy_issues": [],
+                "clarifications_needed": [],
+                "consistency_check": {"is_consistent": False, "description": "LLM响应解析失败", "suggestion": "请重试"},
+                "term_accuracy": {"issues": [], "accuracy_score": 0.0},
+                "total_issues": 0,
+            }
+
+    def _build_style_consistency_prompt(self, application: Dict[str, Any]) -> str:
+        """构建风格一致性检查提示词"""
+        claims_text = application.get("claims", "")
+        specification_text = application.get("specification", "")
+        abstract = application.get("abstract", "")
+
+        return f"""# 任务：专利申请文件撰写风格一致性检查
+
+## 权利要求书
+```
+{claims_text}
+```
+
+## 说明书
+```
+{specification_text[:800]}
+```
+
+## 摘要
+```
+{abstract}
+```
+
+## 审查要点
+1. **时态一致性**：权利要求是否使用现在时，说明书背景技术是否使用过去时
+2. **术语一致性**：全文技术术语使用是否统一
+3. **格式一致性**：各部分格式是否统一规范
+4. **编号一致性**：附图标记、段落编号是否一致
+
+## 输出要求
+请严格按照以下JSON格式输出检查结果：
+
+```json
+{{
+    "overall_consistency": "good",
+    "overall_score": 0.8,
+    "style_checks": {{
+        "tense_consistency": {{
+            "score": 0.9,
+            "issues": [],
+            "description": "时态使用一致"
+        }},
+        "terminology_consistency": {{
+            "score": 0.8,
+            "consistent_terms_count": 45,
+            "inconsistent_terms": [
+                {{
+                    "term": "传感器",
+                    "variants": ["感应器"],
+                    "suggestion": "统一使用'传感器'"
+                }}
+            ]
+        }},
+        "format_consistency": {{
+            "score": 0.85,
+            "issues": [],
+            "description": "格式一致"
+        }},
+        "numbering_consistency": {{
+            "score": 0.75,
+            "issues": [
+                {{
+                    "aspect": "附图引用",
+                    "issue": "权利要求引用了附图，但说明书中无附图说明",
+                    "suggestion": "确保说明书中有对应的附图说明"
+                }}
+            ],
+            "description": "编号基本一致"
+        }}
+    }},
+    "issues": [
+        {{
+            "aspect": "附图引用",
+            "issue": "权利要求引用了附图，但说明书中无附图说明",
+            "suggestion": "确保说明书中有对应的附图说明"
+        }}
+    ]
+}}
+```
+
+请只输出JSON，不要添加任何额外说明。
+"""
+
+    def _parse_style_consistency_response(self, response: str) -> Dict[str, Any]:
+        """解析风格一致性检查LLM响应"""
+        try:
+            # 提取JSON
+            json_match = re.search(r'```json\s*([\s\S]*?)```', response)
+            if json_match:
+                json_str = json_match.group(1).strip()
+            else:
+                json_str = response.strip()
+
+            result = json.loads(json_str)
+
+            # 验证必需字段
+            if "overall_consistency" not in result:
+                result["overall_consistency"] = "needs_improvement"
+            if "overall_score" not in result:
+                result["overall_score"] = 0.0
+            if "style_checks" not in result:
+                result["style_checks"] = {}
+            if "issues" not in result:
+                result["issues"] = []
+
+            return result
+
+        except (json.JSONDecodeError, Exception) as e:
+            self.logger.error(f"解析风格一致性检查响应失败: {e}")
+            return {
+                "overall_consistency": "needs_improvement",
+                "overall_score": 0.0,
+                "style_checks": {},
+                "issues": ["LLM响应解析失败"],
+            }
+
+    # === 规则-based降级方法 ===
+
+    async def _review_writing_by_rules(
+        self,
+        application_data: Dict[str, Any],
+        review_scope: str
+    ) -> Dict[str, Any]:
+        """基于规则的撰写审查（降级方案）"""
+        application_id = application_data.get("application_id", "未知")
+        logger.info(f"使用规则-based撰写审查: {application_id}")
+
         # 1. 法律用语规范性审查
-        legal_review = await self.review_legal_terminology(application_data)
+        legal_review = await self._review_legal_terminology_by_rules(application_data)
         legal_issues = legal_review.get("total_issues", 0)
         logger.debug(f"法律用语审查完成: 发现{legal_issues}个问题")
 
         # 2. 技术描述准确性审查
-        technical_review = await self.review_technical_accuracy(application_data)
+        technical_review = await self._review_technical_accuracy_by_rules(application_data)
         technical_issues = technical_review.get("total_issues", 0)
         logger.debug(f"技术准确性审查完成: 发现{technical_issues}个问题")
 
         # 3. 撰写风格一致性检查
-        style_review = await self.check_writing_style_consistency(application_data)
+        style_review = await self._check_style_consistency_by_rules(application_data)
         style_score = style_review.get("overall_score", 0)
         logger.debug(f"风格一致性检查完成: 评分{style_score:.2f}")
 
@@ -124,31 +848,23 @@ class WritingReviewerProxy(BaseXiaonaComponent):
         )
 
         return {
-            "application_id": application_data.get("application_id", "未知"),
+            "application_id": application_id,
             "review_scope": review_scope,
             "legal_terminology_review": legal_review,
             "technical_accuracy_review": technical_review,
             "style_consistency": style_review,
             "quality_assessment": quality_assessment,
             "overall_score": quality_assessment.get("overall_score", 0),
-            "overall_quality": quality_assessment.get("overall_quality", "待改进"),
+            "overall_quality": overall_quality,
             "recommendations": recommendations,
             "reviewed_at": self._get_timestamp(),
         }
 
-    async def review_legal_terminology(
+    async def _review_legal_terminology_by_rules(
         self,
         application: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """
-        法律用语规范性审查
-
-        Args:
-            application: 申请文件数据
-
-        Returns:
-            法律用语审查结果
-        """
+        """基于规则的法律用语审查（降级方案）"""
         # 提取文本内容
         claims_text = application.get("claims", "")
         specification_text = application.get("specification", "")
@@ -210,19 +926,11 @@ class WritingReviewerProxy(BaseXiaonaComponent):
             "correction_suggestions": self._generate_terminology_corrections(terminology_issues),
         }
 
-    async def review_technical_accuracy(
+    async def _review_technical_accuracy_by_rules(
         self,
         application: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """
-        技术描述准确性审查
-
-        Args:
-            application: 申请文件数据
-
-        Returns:
-            技术准确性审查结果
-        """
+        """基于规则的技术准确性审查（降级方案）"""
         technical_field = application.get("technical_field", "")
         technical_problem = application.get("technical_problem", "")
         technical_solution = application.get("technical_solution", "")
@@ -290,19 +998,11 @@ class WritingReviewerProxy(BaseXiaonaComponent):
             "total_issues": total_issues,
         }
 
-    async def check_writing_style_consistency(
+    async def _check_style_consistency_by_rules(
         self,
         application: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """
-        撰写风格一致性检查
-
-        Args:
-            application: 申请文件数据
-
-        Returns:
-            风格一致性检查结果
-        """
+        """基于规则的风格一致性检查（降级方案）"""
         # 提取各部分文本
         claims_text = application.get("claims", "")
         specification_text = application.get("specification", "")
@@ -340,73 +1040,6 @@ class WritingReviewerProxy(BaseXiaonaComponent):
             "style_checks": style_checks,
             "issues": self._collect_style_issues(style_checks),
         }
-
-    async def assess_writing_quality(
-        self,
-        legal_review: Dict,
-        technical_review: Dict,
-        style_review: Dict
-    ) -> Dict[str, Any]:
-        """
-        撰写质量评估
-
-        Args:
-            legal_review: 法律用语审查结果
-            technical_review: 技术准确性审查结果
-            style_review: 风格一致性检查结果
-
-        Returns:
-            质量评估结果
-        """
-        # 综合评分
-        scores = [
-            legal_review.get("score", 0) * 0.3,  # 30%权重
-            technical_review.get("score", 0) * 0.4,  # 40%权重
-            style_review.get("overall_score", 0) * 0.3,  # 30%权重
-        ]
-        overall_score = sum(scores) if scores else 0
-
-        # 确定质量等级
-        if overall_score >= EXCELLENCE_SCORE:
-            quality_level = "优秀"
-            comparable_to = "标准案例"
-        elif overall_score >= GOOD_SCORE:
-            quality_level = "良好"
-            comparable_to = "高于平均水平"
-        elif overall_score >= ACCEPTABLE_SCORE:
-            quality_level = "合格"
-            comparable_to = "基本达标"
-        else:
-            quality_level = "待改进"
-            comparable_to = "需要大幅修改"
-
-        # 评估具体维度
-        dimensions = {
-            "professionalism": {
-                "score": legal_review.get("score", 0),
-                "level": self._get_quality_level(legal_review.get("score", 0))
-            },
-            "accuracy": {
-                "score": technical_review.get("score", 0),
-                "level": self._get_quality_level(technical_review.get("score", 0))
-            },
-            "readability": {
-                "score": style_review.get("overall_score", 0),
-                "level": self._get_quality_level(style_review.get("overall_score", 0))
-            },
-        }
-
-        return {
-            "overall_score": overall_score,
-            "overall_quality": quality_level,
-            "comparable_to": comparable_to,
-            "dimensions": dimensions,
-            "strengths": self._identify_strengths(dimensions),
-            "weaknesses": self._identify_weaknesses(dimensions),
-            "improvement_priority": self._determine_improvement_priority(dimensions),
-        }
-
-    # 辅助方法
 
     def _check_terminology_consistency(
         self,

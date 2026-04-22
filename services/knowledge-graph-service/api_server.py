@@ -6,7 +6,7 @@
 
 import asyncio
 from datetime import datetime
-from typing import Any
+from typing import Any, Dict, List, Optional
 
 import uvicorn
 
@@ -52,9 +52,9 @@ add_guideline_routes(app)
 # 数据模型
 class SearchRequest(BaseModel):
     query: str = Field(..., description="搜索查询文本")
-    entity_type: str | None = Field(None, description="实体类型过滤")
+    entity_type: Optional[str] = Field(None, description="实体类型过滤")
     limit: int = Field(10, ge=1, le=100, description="返回结果数量")
-    filters: dict[str, Any] | None = Field(None, description="额外过滤条件")
+    filters: Optional[Dict[str, Any]] = Field(None, description="额外过滤条件")
 
 class GraphQueryRequest(BaseModel):
     gremlin: str = Field(..., description="Gremlin查询语句")
@@ -63,7 +63,7 @@ class GraphQueryRequest(BaseModel):
 class RelationAnalysisRequest(BaseModel):
     entity_id: str = Field(..., description="起始实体ID")
     depth: int = Field(2, ge=1, le=5, description="搜索深度")
-    relation_types: list[str] | None = Field(None, description="关系类型过滤")
+    relation_types: Optional[List[str]] = Field(None, description="关系类型过滤")
 
 # 服务状态
 service_status = {
@@ -159,7 +159,7 @@ class HybridSearchEngine:
             logger.error(f"混合搜索失败: {e}")
             raise HTTPException(status_code=500, detail=str(e)) from e
 
-    async def _vector_search(self, query: str, limit: int) -> list[dict]:
+    async def _vector_search(self, query: str, limit: int) -> List[Dict]:
         """执行向量搜索（模拟实现）"""
         # 这里应该连接到真实的Qdrant
         # 返回模拟结果用于演示
@@ -186,7 +186,7 @@ class HybridSearchEngine:
             }
         ][:limit]
 
-    async def _graph_search(self, entity_type: str) -> list[dict]:
+    async def _graph_search(self, entity_type: str) -> List[Dict]:
         """执行图搜索（模拟实现）"""
         # 这里应该连接到真实的JanusGraph
         # 返回模拟结果用于演示
@@ -210,7 +210,7 @@ class HybridSearchEngine:
             }
         ]
 
-    def _merge_results(self, vector_results: list[dict], graph_results: list[dict]) -> list[dict]:
+    def _merge_results(self, vector_results: List[Dict], graph_results: List[Dict]) -> List[Dict]:
         """融合向量搜索和图搜索结果"""
         merged = []
 

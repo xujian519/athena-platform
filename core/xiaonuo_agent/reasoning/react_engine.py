@@ -65,9 +65,11 @@ class Action:
     """行动步骤"""
 
     step: int
-    action_type: str  # 工具类型/函数名
+    action_type: str  # 工具类型/函数名/Agent名称
     parameters: dict[str, Any]
     reasoning: str  # 为什么选择这个行动
+    is_agent: bool = False  # 是否为Agent调用
+    agent_context: Any | None = None  # Agent上下文
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
 
     def to_dict(self) -> dict[str, Any]:
@@ -77,6 +79,7 @@ class Action:
             "type": self.action_type,
             "parameters": self.parameters,
             "reasoning": self.reasoning,
+            "is_agent": self.is_agent,
             "timestamp": self.timestamp,
         }
 
@@ -358,21 +361,42 @@ class ReActEngine:
         self,
         thought: Thought,
         task: str,
-        available_tools: dict[str, Any],        context: dict[str, Any],        step: int,
+        available_tools: dict[str, Any],
+        context: dict[str, Any],
+        step: int,
     ) -> Action:
         """
-        决定下一步行动
+        决定下一步行动（支持Agent选择）
 
         Args:
             thought: 当前思考
             task: 任务
-            available_tools: 可用工具
+            available_tools: 可用工具和Agent
             context: 上下文
             step: 步骤
 
         Returns:
             行动
         """
+        # 1. 识别任务类型
+        task_type = await self._identify_task_type(task, thought)
+
+        # 2. 如果是复杂任务,优先选择Agent
+        if task_type in ["patent_analysis", "legal_consulting", "literature_review", "patent_search"]:
+            agent_name = await self._select_agent(task_type, available_tools)
+
+            if agent_name:
+                # 创建Agent调用行动
+                return Action(
+                    step=step,
+                    action_type=agent_name,
+                    parameters={"task": task, "context": context},
+                    reasoning=f"使用Agent '{agent_name}' 处理 {task_type} 任务",
+                    is_agent=True,
+                    agent_context=context.get("agent_context"),  # 传递Agent上下文
+                )
+
+        # 3. 简单任务或无Agent可用,使用工具
         # 基于思考内容决定行动类型
         action_prompt = f"""
 基于以下思考,决定下一步行动:
@@ -437,11 +461,11 @@ class ReActEngine:
         self, action: Action, available_tools: dict[str, Any], context: dict[str, Any], step: int
     ) -> Observation:
         """
-        执行行动
+        执行行动（支持Agent调用）
 
         Args:
             action: 行动
-            available_tools: 可用工具
+            available_tools: 可用工具和Agent
             context: 上下文
             step: 步骤
 
@@ -454,6 +478,49 @@ class ReActEngine:
                 observation = Observation(
                     step=step, result="思考完成", success=True, new_information=[]
                 )
+
+            elif action.is_agent:
+                # 执行Agent调用
+                logger.info(f"🤖 调用Agent: {action.action_type}")
+
+                # 获取Agent函数
+                agent_func = available_tools.get(action.action_type)
+
+                if agent_func is None:
+                    observation = Observation(
+                        step=step,
+                        result=None,
+                        success=False,
+                        error_message=f"Agent '{action.action_type}' 不可用",
+                    )
+                else:
+                    # 准备Agent参数
+                    agent_params = action.parameters.copy()
+
+                    # 如果有Agent上下文,传递给Agent
+                    if action.agent_context:
+                        agent_params["agent_context"] = action.agent_context
+
+                    # 调用Agent
+                    result = await self._call_agent(agent_func, agent_params, context)
+
+                    # 更新Agent上下文（如果有）
+                    if action.agent_context and isinstance(result, dict):
+                        # 从Agent结果中提取需要共享的数据
+                        if "shared_data" in result:
+                            # 更新上下文数据
+                            for key, value in result["shared_data"].items():
+                                action.agent_context.update(key, value)
+
+                        # 添加Agent到调用链
+                        action.agent_context.add_to_call_chain(action.action_type)
+
+                    observation = Observation(
+                        step=step,
+                        result=result,
+                        success=True,
+                        new_information=self._extract_new_information(result),
+                    )
 
             elif action.action_type in available_tools:
                 # 执行工具
@@ -620,6 +687,107 @@ class ReActEngine:
             return await tool_func(**parameters, **context)
         else:
             return tool_func(**parameters, **context)
+
+    # ========== Agent编排增强方法 ==========
+
+    async def _identify_task_type(self, task: str, thought: Thought) -> str:
+        """
+        识别任务类型
+
+        Args:
+            task: 任务描述
+            thought: 当前思考
+
+        Returns:
+            任务类型字符串
+        """
+        task_lower = task.lower()
+
+        # 先检查是否为专利相关任务
+        if "专利" in task_lower:
+            # 专利任务的子类型（按优先级排序）
+            if "侵权" in task_lower:
+                return "infringement_analysis"
+            elif "无效" in task_lower:
+                return "invalidation_analysis"
+            elif "新颖性" in task_lower:
+                return "novelty_analysis"
+            elif "创造性" in task_lower:
+                return "creativity_analysis"
+            elif "检索" in task_lower or "搜索" in task_lower:
+                return "patent_search"
+            elif "分析" in task_lower:
+                return "patent_analysis"
+        elif "法律" in task_lower or "法" in task_lower:
+            return "legal_consulting"
+        elif "文献" in task_lower or "论文" in task_lower:
+            return "literature_review"
+
+        # 默认为通用任务
+        return "general_task"
+
+    async def _select_agent(self, task_type: str, available_tools: dict[str, Any]) -> str | None:
+        """
+        选择合适的Agent
+
+        Args:
+            task_type: 任务类型
+            available_tools: 可用工具和Agent
+
+        Returns:
+            Agent名称或None
+        """
+        # 任务类型到Agent的映射
+        agent_mapping = {
+            "patent_search": ["patent-searcher", "patent_searcher"],
+            "patent_analysis": ["patent-analyzer", "patent_analyzer"],
+            "infringement_analysis": ["infringement_analyzer.analyze_infringement", "infringement-analyzer"],
+            "invalidation_analysis": ["invalidation_analyzer.analyze_invalidation", "invalidation-analyzer"],
+            "novelty_analysis": ["novelty_analyzer.analyze_novelty", "novelty-analyzer"],
+            "creativity_analysis": ["creativity_analyzer.analyze_creativity", "creativity-analyzer"],
+            "legal_consulting": ["legal-analyzer", "legal_analyzer"],
+            "literature_review": ["researcher", "patent-searcher"],
+        }
+
+        # 获取该任务类型对应的候选Agent列表
+        candidates = agent_mapping.get(task_type, [])
+
+        # 按优先级查找可用的Agent
+        for agent_name in candidates:
+            if agent_name in available_tools:
+                logger.debug(f"🎯 选择Agent: {agent_name} (任务类型: {task_type})")
+                return agent_name
+
+        # 如果没有找到专用Agent,尝试查找任何合适的Agent
+        for tool_name in available_tools.keys():
+            # 检查是否是Agent (通过命名约定)
+            if any(keyword in tool_name.lower() for keyword in ["analyzer", "searcher", "reviewer", "agent"]):
+                logger.debug(f"🎯 使用备用Agent: {tool_name} (任务类型: {task_type})")
+                return tool_name
+
+        logger.debug(f"⚠️  未找到合适的Agent (任务类型: {task_type})")
+        return None
+
+    async def _call_agent(self, agent_func: Any, parameters: dict, context: dict) -> Any:
+        """
+        调用Agent函数
+
+        Args:
+            agent_func: Agent函数
+            parameters: 参数字典
+            context: 上下文字典
+
+        Returns:
+            Agent执行结果
+        """
+        # Agent调用通常需要task参数
+        if "task" not in parameters and "data" not in parameters:
+            # 如果没有明确的task或data参数,使用整个parameters作为data
+            result = await self._call_tool(agent_func, {"data": parameters}, context)
+        else:
+            result = await self._call_tool(agent_func, parameters, context)
+
+        return result
 
     async def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
