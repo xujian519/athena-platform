@@ -14,12 +14,14 @@ from core.agents.xiaona.base_component import BaseXiaonaComponent
 from core.agents.xiaona.retriever_agent import RetrieverAgent
 from core.agents.xiaona.analyzer_agent import AnalyzerAgent
 from core.agents.xiaona.writer_agent import WriterAgent
+from core.agents.xiaona.patent_drafting_proxy import PatentDraftingProxy
 
 __all__ = [
     "BaseXiaonaComponent",
     "RetrieverAgent",
     "AnalyzerAgent",
     "WriterAgent",
+    "PatentDraftingProxy",
 ]
 
 # 版本信息
