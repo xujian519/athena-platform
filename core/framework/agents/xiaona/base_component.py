@@ -81,15 +81,19 @@ class BaseXiaonaComponent(ABC):
     提供统一的生命周期管理、能力描述和执行接口。
     """
 
-    def __init__(self, agent_id: str, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, agent_id: Optional[str] = None, config: Optional[Dict[str, Any]] = None):
 
         """
         初始化智能体
 
         Args:
-            agent_id: 智能体唯一标识
+            agent_id: 智能体唯一标识（默认使用类名）
             config: 配置参数
         """
+        # 如果未提供agent_id，使用类名的小写形式
+        if agent_id is None:
+            agent_id = self.__class__.__name__.replace('Agent', '').replace('Proxy', '').lower() + '_agent'
+
         self.agent_id = agent_id
         self.config = config or {}
         self.status = AgentStatus.IDLE
