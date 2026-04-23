@@ -49,7 +49,7 @@ class PatentDraftingModule:
 
     # ========== 核心方法1：分析技术交底书 ==========
 
-    async def analyze_disclosure(self, disclosure_data: Optional[Dict[str, Any]]] -> Dict[str, Any]:
+    async def analyze_disclosure(self, disclosure_data: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """
         分析技术交底书
 
@@ -81,7 +81,7 @@ class PatentDraftingModule:
 
     # ========== 核心方法2：评估可专利性 ==========
 
-    async def assess_patentability(self, data: Optional[Dict[str, Any])] -> Dict[str, Any]:
+    async def assess_patentability(self, data: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """
         评估可专利性
 
@@ -105,7 +105,7 @@ class PatentDraftingModule:
 
     # ========== 核心方法3：撰写说明书 ==========
 
-    async def draft_specification(self, data: Optional[Dict[str, Any])] -> Dict[str, Any]:
+    async def draft_specification(self, data: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """
         撰写说明书
 
@@ -132,7 +132,7 @@ class PatentDraftingModule:
 
     # ========== 核心方法4：撰写权利要求书 ==========
 
-    async def draft_claims(self, data: Optional[Dict[str, Any])] -> Dict[str, Any]:
+    async def draft_claims(self, data: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """
         撰写权利要求书
 
@@ -157,7 +157,7 @@ class PatentDraftingModule:
 
     # ========== 核心方法5：优化保护范围 ==========
 
-    async def optimize_protection_scope(self, data: Optional[Dict[str, Any])] -> Dict[str, Any]:
+    async def optimize_protection_scope(self, data: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """
         优化保护范围
 
@@ -185,7 +185,7 @@ class PatentDraftingModule:
 
     # ========== 核心方法6：审查充分公开 ==========
 
-    async def review_adequacy(self, data: Optional[Dict[str, Any])] -> Dict[str, Any]:
+    async def review_adequacy(self, data: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """
         审查充分公开
 
@@ -212,7 +212,7 @@ class PatentDraftingModule:
 
     # ========== 核心方法7：检测常见错误 ==========
 
-    async def detect_common_errors(self, data: Optional[Dict[str, Any])] -> Dict[str, Any]:
+    async def detect_common_errors(self, data: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """
         检测常见错误
 
@@ -240,7 +240,7 @@ class PatentDraftingModule:
 
     # ========== 私有辅助方法：交底书分析 ==========
 
-    def _analyze_disclosure_by_rules(self, disclosure_data: Optional[Dict[str, Any])] -> Dict[str, Any]:
+    def _analyze_disclosure_by_rules(self, disclosure_data: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """
         基于规则的交底书分析（降级方案）
 
@@ -276,7 +276,7 @@ class PatentDraftingModule:
             "analyzed_at": self._get_timestamp(),
         }
 
-    def _extract_document_content(self, disclosure_data: Optional[Dict[str, Any])] -> str:
+    def _extract_document_content(self, disclosure_data: Optional[Dict[str, Any]]) -> str:
         """
         提取文档内容（支持多种格式）
 
@@ -333,7 +333,7 @@ class PatentDraftingModule:
             return ""
 
     def _extract_key_information(
-        self, content: str, disclosure_data: Optional[Dict[str, Any]]
+        self, content: str, disclosure_data: Optional[Dict[str, Any]
 
     ) -> Dict[str, Any]:
         """
@@ -359,7 +359,7 @@ class PatentDraftingModule:
 
         return extracted
 
-    def _extract_invention_name(self, content: str, disclosure_data: Optional[Dict[str, Any])] -> str:
+    def _extract_invention_name(self, content: str, disclosure_data: Optional[Dict[str, Any]]) -> str:
         """
         提取发明名称
 
@@ -406,7 +406,7 @@ class PatentDraftingModule:
         return ""
 
     def _identify_technical_field(
-        self, content: str, disclosure_data: Optional[Dict[str, Any]]
+        self, content: str, disclosure_data: Optional[Dict[str, Any]
 
     ) -> Dict[str, Any]:
         """
@@ -457,7 +457,7 @@ class PatentDraftingModule:
 
         return result
 
-    def _get_ipc_classification_keywords(self)] -> dict[str, List[str]]:
+    def _get_ipc_classification_keywords(self)] -> dict[str, List[str]:
         """
         获取IPC分类关键词映射
 
@@ -476,7 +476,7 @@ class PatentDraftingModule:
         }
 
     def _extract_background_art(
-        self, content: str, disclosure_data: Optional[Dict[str, Any]]
+        self, content: str, disclosure_data: Optional[Dict[str, Any]
 
     ) -> Dict[str, Any]:
         """
@@ -553,7 +553,7 @@ class PatentDraftingModule:
 
         return problems[:5]  # 限制前5个
 
-    def _extract_technical_problem(self, content: str, disclosure_data: Optional[Dict[str, Any])] -> str:
+    def _extract_technical_problem(self, content: str, disclosure_data: Optional[Dict[str, Any]]) -> str:
         """
         提取技术问题
 
@@ -592,7 +592,7 @@ class PatentDraftingModule:
         return ""
 
     def _extract_technical_solution(
-        self, content: str, disclosure_data: Optional[Dict[str, Any]]
+        self, content: str, disclosure_data: Optional[Dict[str, Any]
 
     ) -> Dict[str, Any]:
         """
@@ -667,7 +667,7 @@ class PatentDraftingModule:
         return features[:10]  # 限制前10个
 
     def _extract_beneficial_effects(
-        self, content: str, disclosure_data: Optional[Dict[str, Any]]
+        self, content: str, disclosure_data: Optional[Dict[str, Any]
 
     ) -> List[str]:
         """
@@ -734,7 +734,7 @@ class PatentDraftingModule:
         return effects[:8]  # 限制前8个
 
     def _extract_examples(
-        self, content: str, disclosure_data: Optional[Dict[str, Any]]
+        self, content: str, disclosure_data: Optional[Dict[str, Any]
 
     ) -> list[str, Any]:
         """
@@ -802,7 +802,7 @@ class PatentDraftingModule:
 
         return parameters
 
-    def _check_completeness(self, extracted_info: Optional[Dict[str, Any])]] -> dict[str, Dict[str, Any]:
+    def _check_completeness(self, extracted_info: Optional[Dict[str, Any]]] dict[str, Dict[str, Any]:
         """
         检查完整性
 
@@ -836,7 +836,7 @@ class PatentDraftingModule:
         return completeness
 
     def _assess_quality(
-        self, extracted_info: Optional[Dict[str, Any], completeness: Optional[dict[str, Dict[str, Any]]
+        self, extracted_info: Optional[Dict[str, Any], completeness: Optional[dict[str, Dict[str, Any]
 
     ) -> Dict[str, Any]:
         """
@@ -870,7 +870,7 @@ class PatentDraftingModule:
             "质量等级": self._get_quality_level(overall_score),
         }
 
-    def _assess_detail_level(self, extracted_info: Optional[Dict[str, Any])] -> str:
+    def _assess_detail_level(self, extracted_info: Optional[Dict[str, Any]]) -> str:
         """
         评估详细程度
 
@@ -906,7 +906,7 @@ class PatentDraftingModule:
         # 评分标准：平均长度>100字符为满分
         return min(avg_length / 100, 1.0)
 
-    def _assess_clarity(self, extracted_info: Optional[Dict[str, Any])] -> str:
+    def _assess_clarity(self, extracted_info: Optional[Dict[str, Any]]) -> str:
         """
         评估清晰度
 
@@ -930,7 +930,7 @@ class PatentDraftingModule:
         self,
         extracted_info: Optional[Dict[str, Any],]
 
-        completeness: Optional[dict[str, Dict[str, Any],]]
+        completeness: Optional[dict[str, Dict[str, Any],]
 
         quality_assessment: Optional[Dict[str, Any],]
 
@@ -994,7 +994,7 @@ class PatentDraftingModule:
 
     # ========== 私有辅助方法：可专利性评估 ==========
 
-    def _assess_patentability_by_rules(self, data: Optional[Dict[str, Any])] -> Dict[str, Any]:
+    def _assess_patentability_by_rules(self, data: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """
         基于规则的可专利性评估（降级方案）
 
@@ -1036,7 +1036,7 @@ class PatentDraftingModule:
 
     # ========== 私有辅助方法：说明书撰写 ==========
 
-    def _draft_specification_by_template(self, data: Optional[Dict[str, Any])] -> Dict[str, Any]:
+    def _draft_specification_by_template(self, data: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """
         基于模板撰写说明书（降级方案）
 
@@ -1067,7 +1067,7 @@ class PatentDraftingModule:
             "drafted_at": self._get_timestamp(),
         }
 
-    def _generate_title(self, disclosure: Optional[Dict[str, Any])] -> str:
+    def _generate_title(self, disclosure: Optional[Dict[str, Any]]) -> str:
         """
         生成发明名称
 
@@ -1109,7 +1109,7 @@ class PatentDraftingModule:
 
         return "未命名发明"
 
-    def _draft_technical_field(self, disclosure: Optional[Dict[str, Any])] -> str:
+    def _draft_technical_field(self, disclosure: Optional[Dict[str, Any]]) -> str:
         """
         撰写技术领域
 
@@ -1133,7 +1133,7 @@ class PatentDraftingModule:
 
         return technical_field
 
-    def _draft_background_art(self, disclosure: Optional[Dict[str, Any])] -> str:
+    def _draft_background_art(self, disclosure: Optional[Dict[str, Any]]) -> str:
         """
         撰写背景技术
 
@@ -1168,7 +1168,7 @@ class PatentDraftingModule:
 
         return background_text
 
-    def _draft_invention_content(self, disclosure: Optional[Dict[str, Any])] -> str:
+    def _draft_invention_content(self, disclosure: Optional[Dict[str, Any]]) -> str:
         """
         撰写发明内容（三段式）
 
@@ -1215,7 +1215,7 @@ class PatentDraftingModule:
 
         return "\n\n".join(parts)
 
-    def _draft_drawing_description(self, disclosure: Optional[Dict[str, Any])] -> str:
+    def _draft_drawing_description(self, disclosure: Optional[Dict[str, Any]]) -> str:
         """
         撰写附图说明
 
@@ -1247,7 +1247,7 @@ class PatentDraftingModule:
 
         return "\n".join(drawing_descriptions)
 
-    def _draft_detailed_description(self, disclosure: Optional[Dict[str, Any])] -> str:
+    def _draft_detailed_description(self, disclosure: Optional[Dict[str, Any]]) -> str:
         """
         撰写具体实施方式
 
@@ -1295,7 +1295,7 @@ class PatentDraftingModule:
 
         return "\n".join(parts)
 
-    def _assemble_specification(self, parts: Optional[dict[str, str)]] -> str:
+    def _assemble_specification(self, parts: Optional[dict[str, str]] str:
         """
         组装完整说明书
 
@@ -1327,7 +1327,7 @@ class PatentDraftingModule:
 
     # ========== 私有辅助方法：权利要求书撰写 ==========
 
-    def _draft_claims_by_template(self, data: Optional[Dict[str, Any])] -> Dict[str, Any]:
+    def _draft_claims_by_template(self, data: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """
         基于模板撰写权利要求书（降级方案）
 
@@ -1369,7 +1369,7 @@ class PatentDraftingModule:
             "drafted_at": self._get_timestamp(),
         }
 
-    def _extract_essential_features(self, disclosure: Optional[Dict[str, Any])] -> List[str]:
+    def _extract_essential_features(self, disclosure: Optional[Dict[str, Any]]) -> List[str]:
         """
         提取必要技术特征
 
@@ -1404,7 +1404,7 @@ class PatentDraftingModule:
         # 限制数量（独立权利要求通常5-10个特征）
         return essential_features[:10]
 
-    def _extract_preferred_features(self, disclosure: Optional[Dict[str, Any])] -> List[str]:
+    def _extract_preferred_features(self, disclosure: Optional[Dict[str, Any]]) -> List[str]:
         """
         提取优选技术特征
 
@@ -1432,7 +1432,7 @@ class PatentDraftingModule:
         return preferred
 
     def _generate_independent_claim(
-        self, disclosure: Optional[Dict[str, Any], essential_features: Optional[List[str]]
+        self, disclosure: Optional[Dict[str, Any], essential_features: Optional[List[str]
 
     ) -> str:
         """
@@ -1460,7 +1460,7 @@ class PatentDraftingModule:
         else:
             return self._format_independent_device_claim(title, essential_features)
 
-    def _determine_claim_type(self, disclosure: Optional[Dict[str, Any])] -> str:
+    def _determine_claim_type(self, disclosure: Optional[Dict[str, Any]]) -> str:
         """
         判断权利要求类型
 
@@ -1481,7 +1481,7 @@ class PatentDraftingModule:
         # 默认为装置类
         return "device"
 
-    def _format_independent_method_claim(self, title: str, features: Optional[list[str)]] -> str:
+    def _format_independent_method_claim(self, title: str, features: Optional[list[str]]] str:
         """
         格式化方法独立权利要求
 
@@ -1511,7 +1511,7 @@ class PatentDraftingModule:
 
         return claim
 
-    def _format_independent_device_claim(self, title: str, features: Optional[list[str)]] -> str:
+    def _format_independent_device_claim(self, title: str, features: Optional[list[str]]] str:
         """
         格式化装置独立权利要求
 
@@ -1600,7 +1600,7 @@ class PatentDraftingModule:
 
     # ========== 私有辅助方法：提示词构建 ==========
 
-    def _build_disclosure_analysis_prompt(self, disclosure_data: Optional[Dict[str, Any])] -> str:
+    def _build_disclosure_analysis_prompt(self, disclosure_data: Optional[Dict[str, Any]]) -> str:
         """
         构建交底书分析提示词
 
@@ -1611,7 +1611,7 @@ class PatentDraftingModule:
             disclosure_data=json.dumps(disclosure_data, ensure_ascii=False, indent=2),
         )
 
-    def _build_patentability_assessment_prompt(self, data: Optional[Dict[str, Any])] -> str:
+    def _build_patentability_assessment_prompt(self, data: Optional[Dict[str, Any]]) -> str:
         """
         构建可专利性评估提示词
 
@@ -1626,7 +1626,7 @@ class PatentDraftingModule:
             prior_art=json.dumps(prior_art, ensure_ascii=False, indent=2),
         )
 
-    def _build_specification_draft_prompt(self, data: Optional[Dict[str, Any])] -> str:
+    def _build_specification_draft_prompt(self, data: Optional[Dict[str, Any]]) -> str:
         """
         构建说明书撰写提示词
 
@@ -1641,7 +1641,7 @@ class PatentDraftingModule:
             patentability_assessment=json.dumps(patentability, ensure_ascii=False, indent=2),
         )
 
-    def _build_claims_draft_prompt(self, data: Optional[Dict[str, Any])] -> str:
+    def _build_claims_draft_prompt(self, data: Optional[Dict[str, Any]]) -> str:
         """
         构建权利要求书撰写提示词
 
@@ -1656,7 +1656,7 @@ class PatentDraftingModule:
             specification=specification,
         )
 
-    def _build_optimization_prompt(self, data: Optional[Dict[str, Any])] -> str:
+    def _build_optimization_prompt(self, data: Optional[Dict[str, Any]]) -> str:
         """
         构建保护范围优化提示词
 
@@ -1671,7 +1671,7 @@ class PatentDraftingModule:
             prior_art=json.dumps(prior_art, ensure_ascii=False, indent=2),
         )
 
-    def _build_adequacy_review_prompt(self, data: Optional[Dict[str, Any])] -> str:
+    def _build_adequacy_review_prompt(self, data: Optional[Dict[str, Any]]) -> str:
         """
         构建充分公开审查提示词
 
@@ -1684,7 +1684,7 @@ class PatentDraftingModule:
             "adequacy_review", specification=specification, claims=claims
         )
 
-    def _build_error_detection_prompt(self, data: Optional[Dict[str, Any])] -> str:
+    def _build_error_detection_prompt(self, data: Optional[Dict[str, Any]]) -> str:
         """
         构建常见错误检测提示词
 

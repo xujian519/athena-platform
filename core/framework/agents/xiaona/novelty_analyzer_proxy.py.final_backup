@@ -10,7 +10,10 @@ import logging
 import re
 from typing import Any, Dict, List, Optional
 
-from core.framework.agents.xiaona.base_component import BaseXiaonaComponent
+from core.framework.agents.xiaona.base_component import (
+    BaseXiaonaComponent,
+    AgentCapability,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -100,8 +103,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
         self,
         patent_data: dict,
         reference_docs: list
-
-    )]) -> str:
+    ) -> str:
         """默认新颖性分析提示词构建"""
         return f"""# 任务：专利新颖性分析
 
@@ -185,8 +187,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
 
     async def analyze_novelty(
         self,
-        patent_data: Optional[Dict[str, Any],]
-
+        patent_data: Optional[Dict[str, Any]] = None,
         analysis_mode: str = "standard"
     ) -> Dict[str, Any]:
         """
@@ -275,9 +276,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
     def _parse_novelty_analysis_response(
         self,
         response: str,
-        patent_data: Optional[Dict[str, Any]]
-
-    ) -> Dict[str, Any]:
+        patent_data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """解析新颖性分析LLM响应"""
         try:
             # 提取JSON
@@ -353,9 +352,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
         self,
         target_features: Optional[Dict[str, Any],]
 
-        reference_doc: Optional[Dict[str, Any]]
-
-    ) -> Dict[str, Any]:
+        reference_doc: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         基于规则的特征对比（降级方案）
 
@@ -381,7 +378,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
                 })
 
         # 统计公开情况
-        disclosed_count = sum(1 for f in feature_comparison if f["disclosed"])
+        disclosed_count = sum(1 for f in feature_comparison if f["disclosed")
         total_count = len(feature_comparison)
 
         return {
@@ -398,9 +395,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
     def _parse_feature_comparison_response(
         self,
         response: str,
-        reference_doc: Optional[Dict[str, Any]]
-
-    ) -> Dict[str, Any]:
+        reference_doc: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """解析特征对比LLM响应"""
         try:
             # 提取JSON
@@ -434,11 +429,9 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
 
     async def _judge_novelty(
         self,
-        novel_features: Optional[[list[Dict[str, Any]]],]
+        novel_features: Optional[[List[Dict[str, Any]]],]
 
-        target_features: Optional[Dict[str, Any]]
-
-    ) -> Dict[str, Any]:
+        target_features: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         判断新颖性（LLM增强版本）
 
@@ -467,11 +460,9 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
 
     def _judge_novelty_by_rules(
         self,
-        novel_features: Optional[[list[Dict[str, Any]]],]
+        novel_features: Optional[[List[Dict[str, Any]]],]
 
-        target_features: Optional[Dict[str, Any]]
-
-    ) -> Dict[str, Any]:
+        target_features: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         基于规则的新颖性判断（降级方案）
 
@@ -541,26 +532,22 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
 
     async def _extract_all_features(
         self,
-        patent: Optional[Dict[str, Any]]
-
-    ) -> Dict[str, Any]:
+        patent: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """提取所有技术特征"""
         claims_text = patent.get("claims", "")
 
         # 简化版特征提取
         return {
-            "essential": self._extract_features_by_type(claims_text, ["必要", "包括"]),
-            "additional": self._extract_features_by_type(claims_text, ["其特征在于", "进一步"]),
-            "functional": self._extract_features_by_type(claims_text, ["用于", "实现"]),
-            "structural": self._extract_features_by_type(claims_text, ["设置", "配置"]),
+            "essential": self._extract_features_by_type(claims_text, ["必要", "包括"),
+            "additional": self._extract_features_by_type(claims_text, ["其特征在于", "进一步"),
+            "functional": self._extract_features_by_type(claims_text, ["用于", "实现"),
+            "structural": self._extract_features_by_type(claims_text, ["设置", "配置"),
         }
 
     def _extract_features_by_type(
         self,
         claims_text: str,
-        keywords: Optional[[List[str]]]
-
-    ) -> List[str]:
+        keywords: Optional[[List[str]]) -> List[str]:
         """根据关键词提取特征"""
         import re
 
@@ -569,7 +556,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
             # 简化提取：查找包含关键词的句子
             pattern = re.compile(f'[^。]*{keyword}[^。]*。')
             matches = pattern.findall(claims_text)
-            features.extend(matches[:2])  # 每个关键词最多提取2个
+            features.extend(matches[:2)  # 每个关键词最多提取2个
 
         return features if features else [f"基于关键词{keywords[0]}的特征"]
 
@@ -577,8 +564,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
         self,
         target_features: Optional[Dict[str, Any],]
 
-        comparison_results: Optional[[list[Dict[str, Any]]]
-    ) -> list[str, Any]:
+        comparison_results: Optional[[List[Dict[str, Any]]) -> List[str, Any]:
         """识别新颖特征"""
         novel_features = []
 
@@ -587,7 +573,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
         for result in comparison_results:
             for comp in result.get("feature_comparison", []):
                 if comp.get("disclosed"):
-                    disclosed_features.add(comp["feature"])
+                    disclosed_features.add(comp["feature")
 
         # 找出未被公开的特征
         for category, features in target_features.items():
@@ -603,11 +589,9 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
 
     def _calculate_novelty_confidence(
         self,
-        novel_features: Optional[[list[Dict[str, Any]]],]
+        novel_features: Optional[[List[Dict[str, Any]]],]
 
-        target_features: Optional[Dict[str, Any]]
-
-    ) -> str:
+        target_features: Optional[Dict[str, Any]] = None) -> str:
         """
         计算新颖性置信度
 
@@ -641,7 +625,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
         self,
         target_patent: Optional[Dict[str, Any],]
 
-        reference_docs: Optional[[list[Dict[str, Any]]],]
+        reference_docs: Optional[[List[Dict[str, Any]]],]
 
         comparison_mode: str = "individual"
     ) -> Dict[str, Any]:

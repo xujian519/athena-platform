@@ -1,0 +1,52 @@
+[
+  {
+    "user_input": "请评估以下技术方案的创造性：一种基于注意力机制的多模态专利文献检索系统，其将专利文本、附图和技术分类号进行联合嵌入，采用交叉注意力融合不同模态特征，并引入领域特定的对比学习损失函数优化检索排序。现有技术仅支持单模态文本检索或简单的关键词匹配。",
+    "additional_context": {
+      "analysis_type": "inventive_step",
+      "technical_domain": "信息检索/多模态学习",
+      "prior_art_level": "单模态文本检索",
+      "key_differences": ["多模态联合嵌入", "交叉注意力融合", "领域对比学习"],
+      "problem_solved": "提高专利文献检索的准确率和召回率"
+    }
+  },
+  {
+    "user_input": "分析该技术方案是否具备创造性：一种用于芯片设计的热管理结构，在3D堆叠芯片的硅通孔（TSV）周围布置微型液冷通道，并通过拓扑优化算法动态调整冷却液流道布局，使得热点区域热阻降低40%以上。现有技术采用全局均匀液冷或风冷方案。",
+    "additional_context": {
+      "analysis_type": "inventive_step",
+      "technical_domain": "半导体封装/热管理",
+      "prior_art_level": "全局均匀液冷",
+      "key_differences": ["TSV周围微型液冷通道", "拓扑优化流道布局", "动态热点管理"],
+      "problem_solved": "3D堆叠芯片的局部热点散热"
+    }
+  },
+  {
+    "user_input": "评估以下发明的创造性：一种基于区块链的知识产权交易智能合约系统，引入动态定价预言机根据专利引用网络、法律状态和市场许可数据实时评估专利价值，并支持分阶段许可条款的自动执行和争议仲裁。现有技术多为静态定价和一次性转让。",
+    "additional_context": {
+      "analysis_type": "inventive_step",
+      "technical_domain": "区块链/知识产权运营",
+      "prior_art_level": "静态定价一次性转让",
+      "key_differences": ["动态定价预言机", "引用网络分析", "分阶段自动执行"],
+      "problem_solved": "专利价值评估不透明、交易效率低"
+    }
+  },
+  {
+    "user_input": "请判断该技术方案是否满足创造性要求：一种量子纠错码的自适应解码方法，根据量子比特的错误率实时切换表面码和颜色码的解码策略，并利用强化学习优化解码器参数，将逻辑错误率降低到10^-9以下。现有技术通常采用固定解码策略。",
+    "additional_context": {
+      "analysis_type": "inventive_step",
+      "technical_domain": "量子计算/纠错编码",
+      "prior_art_level": "固定解码策略",
+      "key_differences": ["自适应码切换", "强化学习优化", "动态参数调整"],
+      "problem_solved": "不同错误率场景下解码效率与精度的平衡"
+    }
+  },
+  {
+    "user_input": "分析该方案的创造性：一种面向自动驾驶的端到端感知-决策联合优化架构，将激光雷达点云、摄像头图像和毫米波雷达数据在BEV空间进行早期融合，并通过可微分运动规划模块实现感知到控制的梯度回传。现有技术多为模块化串行 pipeline。",
+    "additional_context": {
+      "analysis_type": "inventive_step",
+      "technical_domain": "自动驾驶/多传感器融合",
+      "prior_art_level": "模块化串行pipeline",
+      "key_differences": ["BEV早期融合", "端到端可微分", "梯度回传优化"],
+      "problem_solved": "模块化系统的误差累积和优化瓶颈"
+    }
+  }
+]

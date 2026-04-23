@@ -103,7 +103,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
         if task_type == "grounds":
             return await self.analyze_invalidation_grounds(
                 context.input_data.get("patent", {}),
-                context.input_data.get("references", [)
+                context.input_data.get("references", [])
             )
         elif task_type == "evidence":
             return await self.develop_evidence_strategy(
@@ -126,7 +126,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
             # 完整分析
             return await self.analyze_invalidation(
                 target_patent=context.input_data.get("patent", {}),
-                prior_art_references=context.input_data.get("references", [),
+                prior_art_references=context.input_data.get("references", []),
                 analysis_depth=context.config.get("analysis_depth", "comprehensive")
             )
 

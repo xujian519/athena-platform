@@ -203,7 +203,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
         ]
 
         # 检查文件完整性
-        provided_documents = application.get("documents", [)
+        provided_documents = application.get("documents", [])
         missing_documents = [
             doc for doc in required_documents
             if doc not in provided_documents

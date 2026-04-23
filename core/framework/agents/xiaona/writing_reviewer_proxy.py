@@ -154,7 +154,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     async def review_legal_terminology(
         self,
-        application: Optional[Dict[str, Any]) -> Dict[str, Any]:
+        application: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         法律用语规范性审查（LLM版本）
 
@@ -180,7 +180,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     async def review_technical_accuracy(
         self,
-        application: Optional[Dict[str, Any]) -> Dict[str, Any]:
+        application: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         技术描述准确性审查（LLM版本）
 
@@ -206,7 +206,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     async def check_writing_style_consistency(
         self,
-        application: Optional[Dict[str, Any]) -> Dict[str, Any]:
+        application: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         撰写风格一致性检查（LLM版本）
 
@@ -899,7 +899,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     async def _review_legal_terminology_by_rules(
         self,
-        application: Optional[Dict[str, Any]) -> Dict[str, Any]:
+        application: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """基于规则的法律用语审查（降级方案）"""
         # 提取文本内容
         claims_text = application.get("claims", "")
@@ -964,7 +964,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     async def _review_technical_accuracy_by_rules(
         self,
-        application: Optional[Dict[str, Any]) -> Dict[str, Any]:
+        application: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """基于规则的技术准确性审查（降级方案）"""
         technical_field = application.get("technical_field", "")
         technical_problem = application.get("technical_problem", "")
@@ -1035,7 +1035,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     async def _check_style_consistency_by_rules(
         self,
-        application: Optional[Dict[str, Any]) -> Dict[str, Any]:
+        application: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """基于规则的风格一致性检查（降级方案）"""
         # 提取各部分文本
         claims_text = application.get("claims", "")

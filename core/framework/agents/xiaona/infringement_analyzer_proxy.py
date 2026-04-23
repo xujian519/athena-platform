@@ -89,7 +89,7 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
         if task_type == "interpret_claims":
             return await self.interpret_claims(context.input_data)
         elif task_type == "compare_features":
-            claims = context.input_data.get("claims", [)
+            claims = context.input_data.get("claims", [])
             product = context.input_data.get("product", {})
             return await self.compare_features(claims, product)
         elif task_type == "determine_infringement":

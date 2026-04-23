@@ -1,0 +1,164 @@
+
+================================================================================
+  性能分析摘要 — generate_prompt 端点
+================================================================================
+测试请求数 : 200 次
+压测负载   : 5 种不同 payload 轮询
+分析时间   : 2026-04-23T21:12:19.922197
+
+关键发现（基于代码路径静态分析 + 运行时统计）：
+1. 场景识别 (ScenarioIdentifierOptimized.identify_scenario) — 耗时占比最高
+   - 涉及 BGE-M3 编码 / 意图分类，为 CPU 密集型操作
+   - 优化建议：增加本地缓存或异步批处理
+
+2. 规则检索 (ScenarioRuleRetrieverOptimized.retrieve_rule) — IO 密集型
+   - Neo4j Cypher 查询延迟取决于图复杂度
+   - 优化建议：热点规则本地缓存（TTL 5min）
+
+3. 提示词模板渲染 (substitute_variables / Jinja2) — 轻量
+   - 纯字符串替换，耗时通常 < 1ms
+   - 已存在 PromptTemplateCache 进行结果级缓存
+
+4. 变量治理（校验 + 清洗）— 中量
+   - regex 匹配、schema 构造在变量较多时有开销
+   - 优化建议：schema 预编译、正则预编译
+
+5. 融合构建 (LegalPromptContextBuilder.build) — 高耗时（开启时）
+   - 三源检索（Postgres + Neo4j + Wiki）串行或并发 IO
+   - 优化建议：异步并行检索、证据预加载
+
+6. 缓存查询 (PromptTemplateCache.get) — 极快
+   - hash + dict 查找，亚毫秒级
+   - 缓存 miss 时才会走完整生成链路
+
+热点路径排序（预期，未开启融合）：
+  场景识别 > 规则检索 > 变量治理 > 模板渲染 > 缓存查询
+================================================================================
+
+         293874276 function calls (293868343 primitive calls) in 66.960 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1186 to 50 due to restriction <50>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000   67.018   67.018 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/asyncio/runners.py:8(run)
+        3    0.000    0.000   67.018   22.339 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/asyncio/base_events.py:606(run_until_complete)
+        3    0.000    0.000   67.018   22.339 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/asyncio/base_events.py:583(run_forever)
+        9    0.000    0.000   67.018    7.446 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/asyncio/base_events.py:1815(_run_once)
+      225    0.000    0.000   67.018    0.298 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/asyncio/events.py:78(_run)
+      225    0.000    0.000   67.018    0.298 {method 'run' of 'Context' objects}
+        1    0.000    0.000   67.010   67.010 /Users/xujian/Athena工作平台/scripts/profile_generate_prompt.py:300(_run_requests)
+      200    0.000    0.000   67.009    0.335 /Users/xujian/Library/Python/3.9/lib/python/site-packages/httpx/_client.py:1838(post)
+      200    0.000    0.000   67.009    0.335 /Users/xujian/Library/Python/3.9/lib/python/site-packages/httpx/_client.py:1485(request)
+      200    0.001    0.000   66.982    0.335 /Users/xujian/Library/Python/3.9/lib/python/site-packages/httpx/_client.py:1594(send)
+      200    0.001    0.000   66.974    0.335 /Users/xujian/Library/Python/3.9/lib/python/site-packages/httpx/_client.py:1645(_send_handling_auth)
+      200    0.000    0.000   66.972    0.335 /Users/xujian/Library/Python/3.9/lib/python/site-packages/httpx/_client.py:1679(_send_handling_redirects)
+      200    0.002    0.000   66.972    0.335 /Users/xujian/Library/Python/3.9/lib/python/site-packages/httpx/_client.py:1717(_send_single_request)
+      200    0.002    0.000   66.952    0.335 /Users/xujian/Library/Python/3.9/lib/python/site-packages/httpx/_transports/asgi.py:99(handle_async_request)
+      200    0.000    0.000   66.946    0.335 /Users/xujian/Library/Python/3.9/lib/python/site-packages/fastapi/applications.py:1103(__call__)
+      200    0.000    0.000   66.946    0.335 /Users/xujian/Library/Python/3.9/lib/python/site-packages/starlette/applications.py:118(__call__)
+      200    0.000    0.000   66.946    0.335 /Users/xujian/Library/Python/3.9/lib/python/site-packages/starlette/middleware/errors.py:147(__call__)
+      200    0.001    0.000   66.945    0.335 /Users/xujian/Library/Python/3.9/lib/python/site-packages/starlette/middleware/exceptions.py:53(__call__)
+      200    0.001    0.000   66.936    0.335 /Users/xujian/Library/Python/3.9/lib/python/site-packages/fastapi/middleware/asyncexitstack.py:12(__call__)
+      200    0.001    0.000   66.935    0.335 /Users/xujian/Library/Python/3.9/lib/python/site-packages/starlette/routing.py:697(__call__)
+      200    0.000    0.000   66.932    0.335 /Users/xujian/Library/Python/3.9/lib/python/site-packages/starlette/routing.py:265(handle)
+      200    0.000    0.000   66.932    0.335 /Users/xujian/Library/Python/3.9/lib/python/site-packages/starlette/routing.py:63(app)
+      200    0.002    0.000   66.931    0.335 /Users/xujian/Library/Python/3.9/lib/python/site-packages/fastapi/routing.py:218(app)
+      200    0.000    0.000   66.912    0.335 /Users/xujian/Library/Python/3.9/lib/python/site-packages/fastapi/routing.py:183(run_endpoint_function)
+      200    0.011    0.000   66.911    0.335 /Users/xujian/Athena工作平台/core/api/prompt_system_routes.py:415(generate_prompt)
+      200    0.000    0.000   66.779    0.334 /Users/xujian/Athena工作平台/core/legal_world_model/scenario_rule_retriever_optimized.py:216(__init__)
+      200    0.039    0.000   66.778    0.334 /Users/xujian/Athena工作平台/core/legal_world_model/scenario_rule_retriever_optimized.py:717(preload_common_rules)
+   116200    1.462    0.000   66.746    0.001 /Users/xujian/Athena工作平台/core/legal_world_model/scenario_rule_retriever_optimized.py:371(retrieve_rule)
+  2668370    1.455    0.000   60.617    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:1088(__call__)
+  2668370   28.975    0.000   56.676    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:1099(_increment_mock_call)
+ 32366964    6.099    0.000   16.428    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:2400(__new__)
+ 32367633    9.408    0.000    9.408    0.000 {built-in method __new__ of type object at 0x10318a830}
+ 32947324    3.265    0.000    4.638    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:320(_get)
+ 32366964    3.460    0.000    3.460    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:2432(__init__)
+8005175/8005145    1.508    0.000    2.427    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:730(__setattr__)
+  2668370    1.071    0.000    2.354    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:1096(_mock_call)
+   812000    0.289    0.000    2.084    0.000 /Users/xujian/Athena工作平台/core/legal_world_model/scenario_rule_retriever_optimized.py:30(_parse_json_field)
+2088029/2088023    0.967    0.000    2.079    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:625(__getattr__)
+ 32952521    1.374    0.000    1.374    0.000 {built-in method builtins.getattr}
+   812200    0.305    0.000    1.320    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/__init__.py:299(loads)
+  2668370    0.722    0.000    1.283    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:1145(_execute_mock_call)
+7548884/7548484    0.696    0.000    1.109    0.000 {built-in method builtins.isinstance}
+  8005110    0.919    0.000    0.919    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:325(_set)
+   812200    0.449    0.000    0.919    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/decoder.py:332(decode)
+33305621/33305341    0.827    0.000    0.827    0.000 {built-in method builtins.len}
+ 32399308    0.748    0.000    0.748    0.000 {method 'append' of 'list' objects}
+  4524030    0.411    0.000    0.411    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:538(__class__)
+  2088010    0.362    0.000    0.362    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:272(_is_magic)
+  2668370    0.293    0.000    0.293    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:551(__get_side_effect)
+  2668370    0.267    0.000    0.268    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:513(__get_return_value)
+
+
+         293874276 function calls (293868343 primitive calls) in 66.960 seconds
+
+   Ordered by: internal time
+   List reduced from 1186 to 50 due to restriction <50>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+  2668370   28.975    0.000   56.676    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:1099(_increment_mock_call)
+ 32367633    9.408    0.000    9.408    0.000 {built-in method __new__ of type object at 0x10318a830}
+ 32366964    6.099    0.000   16.428    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:2400(__new__)
+ 32366964    3.460    0.000    3.460    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:2432(__init__)
+ 32947324    3.265    0.000    4.638    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:320(_get)
+8005175/8005145    1.508    0.000    2.427    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:730(__setattr__)
+   116200    1.462    0.000   66.746    0.001 /Users/xujian/Athena工作平台/core/legal_world_model/scenario_rule_retriever_optimized.py:371(retrieve_rule)
+  2668370    1.455    0.000   60.617    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:1088(__call__)
+ 32952521    1.374    0.000    1.374    0.000 {built-in method builtins.getattr}
+  2668370    1.071    0.000    2.354    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:1096(_mock_call)
+2088029/2088023    0.967    0.000    2.079    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:625(__getattr__)
+  8005110    0.919    0.000    0.919    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:325(_set)
+33305621/33305341    0.827    0.000    0.827    0.000 {built-in method builtins.len}
+ 32399308    0.748    0.000    0.748    0.000 {method 'append' of 'list' objects}
+  2668370    0.722    0.000    1.283    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:1145(_execute_mock_call)
+7548884/7548484    0.696    0.000    1.109    0.000 {built-in method builtins.isinstance}
+   812200    0.449    0.000    0.919    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/decoder.py:332(decode)
+  4524030    0.411    0.000    0.411    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:538(__class__)
+  2088010    0.362    0.000    0.362    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:272(_is_magic)
+   812200    0.305    0.000    1.320    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/__init__.py:299(loads)
+  2668370    0.293    0.000    0.293    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:551(__get_side_effect)
+   812000    0.289    0.000    2.084    0.000 /Users/xujian/Athena工作平台/core/legal_world_model/scenario_rule_retriever_optimized.py:30(_parse_json_field)
+  2668370    0.267    0.000    0.268    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:513(__get_return_value)
+  2901378    0.239    0.000    0.239    0.000 {method 'startswith' of 'str' objects}
+  1627932    0.224    0.000    0.224    0.000 {method 'match' of 're.Pattern' objects}
+   812200    0.153    0.000    0.153    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/decoder.py:343(raw_decode)
+  2668370    0.132    0.000    0.132    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:1083(_mock_check_sig)
+   350040    0.110    0.000    0.110    0.000 {built-in method now}
+  2098578    0.079    0.000    0.079    0.000 {method 'get' of 'dict' objects}
+   116000    0.078    0.000    0.131    0.000 /Users/xujian/Athena工作平台/core/legal_world_model/scenario_rule_retriever_optimized.py:362(_set_cache)
+  1624400    0.063    0.000    0.063    0.000 {method 'end' of 're.Match' objects}
+   116200    0.049    0.000    0.066    0.000 /Users/xujian/Athena工作平台/core/legal_world_model/scenario_rule_retriever_optimized.py:268(_validate_domain)
+       38    0.043    0.001    0.043    0.001 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:2039(_mock_set_magics)
+   235999    0.042    0.000    0.073    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/logging/__init__.py:1436(info)
+      200    0.039    0.000   66.778    0.334 /Users/xujian/Athena工作平台/core/legal_world_model/scenario_rule_retriever_optimized.py:717(preload_common_rules)
+   116200    0.039    0.000    0.056    0.000 /Users/xujian/Athena工作平台/core/legal_world_model/scenario_rule_retriever_optimized.py:291(_validate_task_type)
+   116160    0.033    0.000    0.044    0.000 /Users/xujian/Athena工作平台/core/legal_world_model/scenario_rule_retriever_optimized.py:316(_validate_phase)
+   236564    0.030    0.000    0.030    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/logging/__init__.py:1689(isEnabledFor)
+   116160    0.026    0.000    0.026    0.000 /Users/xujian/Athena工作平台/core/legal_world_model/scenario_rule_retriever_optimized.py:346(_get_from_cache)
+   326665    0.020    0.000    0.020    0.000 {method 'lower' of 'str' objects}
+   116160    0.016    0.000    0.016    0.000 /Users/xujian/Athena工作平台/core/legal_world_model/scenario_rule_retriever_optimized.py:342(_get_cache_key)
+   116876    0.015    0.000    0.015    0.000 {method 'total_seconds' of 'datetime.timedelta' objects}
+   320240    0.015    0.000    0.015    0.000 {method 'strip' of 'str' objects}
+      200    0.011    0.000   66.911    0.335 /Users/xujian/Athena工作平台/core/api/prompt_system_routes.py:415(generate_prompt)
+     1601    0.005    0.000    0.006    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:664(_extract_mock_name)
+      360    0.004    0.000    0.004    0.000 {method 'validate_python' of 'pydantic_core._pydantic_core.SchemaValidator' objects}
+      136    0.004    0.000    0.004    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/sre_compile.py:276(_optimize_charset)
+      400    0.003    0.000    0.003    0.000 {method 'write' of '_io.TextIOWrapper' objects}
+       26    0.003    0.000    0.003    0.000 {built-in method io.open_code}
+      724    0.003    0.000    0.003    0.000 /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py:204(iterencode)
+
+
+         293874276 function calls (293868343 primitive calls) in 66.960 seconds
+
+   Ordered by: file name
+   List reduced from 1186 to 3 due to restriction <'prompt_system_routes'>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+      160    0.000    0.000    0.011    0.000 /Users/xujian/Athena工作平台/core/api/prompt_system_routes.py:42(_get_rollout_config)
+      200    0.000    0.000    0.003    0.000 /Users/xujian/Athena工作平台/core/api/prompt_system_routes.py:149(get_db_manager)
+      200    0.011    0.000   66.911    0.335 /Users/xujian/Athena工作平台/core/api/prompt_system_routes.py:415(generate_prompt)
+
+

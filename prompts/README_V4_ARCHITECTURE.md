@@ -151,14 +151,14 @@ __SYSTEM_PROMPT_DYNAMIC_BOUNDARY__
 # 会话指导
 
 ## 当前会话信息
-- 会话ID: {session_id}
-- 开始时间: {start_time}
-- 工作目录: {cwd}
+- 会话ID: {{ session_id }}
+- 开始时间: {{ start_time }}
+- 工作目录: {{ cwd }}
 
 ## 用户偏好（从记忆中学习）
-- 风格偏好: {style_preference}
-- 决策倾向: {decision_tendency}
-- 关注重点: {focus_area}
+- 风格偏好: {{ style_preference }}
+- 决策倾向: {{ decision_tendency }}
+- 关注重点: {{ focus_area }}
 ```
 
 ### 2. 记忆注入 (dynamic/memory_injection.md)
@@ -169,16 +169,16 @@ __SYSTEM_PROMPT_DYNAMIC_BOUNDARY__
 ## 从MEMORY.md加载的关键信息
 
 ### 用户信息
-{user_info}
+{{ user_info }}
 
 ### 项目上下文
-{project_context}
+{{ project_context }}
 
 ### 最近工作
-{recent_work}
+{{ recent_work }}
 
 ### 重要提醒
-{important_reminders}
+{{ important_reminders }}
 ```
 
 ### 3. 环境信息 (dynamic/env_context.md)
@@ -187,14 +187,14 @@ __SYSTEM_PROMPT_DYNAMIC_BOUNDARY__
 # 环境信息
 
 ## 可用工具
-- LLM: {available_models}
-- 数据库: {databases}
-- 向量库: {vector_collections}
-- 知识图谱: {knowledge_graphs}
+- LLM: {{ available_models }}
+- 数据库: {{ databases }}
+- 向量库: {{ vector_collections }}
+- 知识图谱: {{ knowledge_graphs }}
 
 ## 平台状态
-- Gateway: {gateway_status}
-- 服务健康: {service_health}
+- Gateway: {{ gateway_status }}
+- 服务健康: {{ service_health }}
 ```
 
 ### 4. MCP服务器指令 (dynamic/mcp_instructions.md)
@@ -203,13 +203,13 @@ __SYSTEM_PROMPT_DYNAMIC_BOUNDARY__
 # MCP服务器指令
 
 ## 已连接的MCP服务器
-{mcp_servers_list}
+{{ mcp_servers_list }}
 
 ## 可用的MCP工具
-{mcp_tools_list}
+{{ mcp_tools_list }}
 
 ## MCP使用指南
-{mcp_usage_guide}
+{{ mcp_usage_guide }}
 ```
 
 ---

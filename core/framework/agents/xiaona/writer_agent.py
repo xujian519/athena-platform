@@ -263,7 +263,7 @@ class WriterAgent(BaseXiaonaComponent):
     async def _draft_claims(
         self,
         user_input: str,
-        previous_results: Optional[Dict[str, Any]) -> Dict[str, Any]:
+        previous_results: Optional[Dict[str, Any) -> Dict[str, Any]:
         """
         撰写权利要求书（废弃方法）
 
@@ -278,7 +278,7 @@ class WriterAgent(BaseXiaonaComponent):
     async def _draft_description(
         self,
         user_input: str,
-        previous_results: Optional[Dict[str, Any]) -> Dict[str, Any]:
+        previous_results: Optional[Dict[str, Any) -> Dict[str, Any]:
         """
         撰写说明书（废弃方法）
 
@@ -293,7 +293,7 @@ class WriterAgent(BaseXiaonaComponent):
     async def _draft_response(
         self,
         user_input: str,
-        previous_results: Optional[Dict[str, Any]) -> Dict[str, Any]:
+        previous_results: Optional[Dict[str, Any) -> Dict[str, Any]:
         """
         撰写审查意见答复（废弃方法）
 
@@ -312,7 +312,7 @@ class WriterAgent(BaseXiaonaComponent):
     async def _draft_invalidation(
         self,
         user_input: str,
-        previous_results: Optional[Dict[str, Any]) -> Dict[str, Any]:
+        previous_results: Optional[Dict[str, Any) -> Dict[str, Any]:
         """
         撰写无效宣告请求书（废弃方法）
 
@@ -331,7 +331,7 @@ class WriterAgent(BaseXiaonaComponent):
     async def _draft_full_application(
         self,
         user_input: str,
-        previous_results: Optional[Dict[str, Any]) -> Dict[str, Any]:
+        previous_results: Optional[Dict[str, Any) -> Dict[str, Any]:
         """
         撰写完整申请文件（废弃方法）
 
@@ -348,15 +348,15 @@ class WriterAgent(BaseXiaonaComponent):
     # ========== 便捷格式化方法（保留） ==========
 
     @staticmethod
-    def _format_claims(claims: Optional[Dict[str, Any)] -> str:
+    def _format_claims(claims: Optional[Dict[str, Any]] -> str:
         """格式化权利要求书"""
         text = claims.get("independent_claim", "") + "\n\n"
-        for claim in claims.get("dependent_claims", [):
+        for claim in claims.get("dependent_claims", []):
             text += claim + "\n"
         return text
 
     @staticmethod
-    def _format_description(description: Optional[Dict[str, Any)] -> str:
+    def _format_description(description: Optional[Dict[str, Any]] -> str:
         """格式化说明书"""
         return "\n\n".join([]
 
@@ -369,24 +369,24 @@ class WriterAgent(BaseXiaonaComponent):
         )
 
     @staticmethod
-    def _format_response(response: Optional[Dict[str, Any)] -> str:
+    def _format_response(response: Optional[Dict[str, Any]] -> str:
         """格式化意见陈述书"""
         text = response.get("introduction", "") + "\n\n"
-        for resp in response.get("responses", [):
+        for resp in response.get("responses", []):
             text += f"审查意见：{resp.get('issue', '')}\n"
             text += f"答复：{resp.get('response', '')}\n\n"
         text += response.get("conclusion", "")
         return text
 
     @staticmethod
-    def _format_petition(petition: Optional[Dict[str, Any)] -> str:
+    def _format_petition(petition: Optional[Dict[str, Any]] -> str:
         """格式化无效宣告请求书"""
         return str(petition)
 
 
 # ========== 便捷函数 ==========
 
-def create_writer_agent(config: Optional[Dict[str, Any])] -> str:
+def create_writer_agent(config: Optional[Dict[str, Any]] -> str:
     """
     创建WriterAgent实例（便捷函数）
 

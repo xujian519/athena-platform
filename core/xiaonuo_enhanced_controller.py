@@ -114,8 +114,13 @@ class XiaonuoEnhancedController:
         logger.info("✅ 失败模式防护系统已就绪")
 
         # 6. 初始化统一提示词管理器 ✨
-        self.prompt_manager = get_unified_prompt_manager()
-        logger.info("✅ 统一提示词管理器已就绪")
+        # TODO: 迁移至主链路 core.api.prompt_system_routes.generate_prompt()
+        try:
+            self.prompt_manager = get_unified_prompt_manager()
+            logger.info("✅ 统一提示词管理器已就绪 (deprecated, will be migrated)")
+        except Exception as e:
+            logger.warning(f"⚠️ 统一提示词管理器初始化失败，使用回退方案: {e}")
+            self.prompt_manager = None
 
         # 7. 优化指标
         self.metrics = OptimizationMetrics()
@@ -251,6 +256,8 @@ class XiaonuoEnhancedController:
         """
         加载智能体提示词 (统一接口)
 
+        TODO: 迁移至主链路 core.api.prompt_system_routes.generate_prompt()
+
         Args:
             agent: 智能体名称 (xiaona, xiaonuo, etc.)
             layers: 要加载的层 (L1, L2, L3, L4), None表示全部
@@ -258,6 +265,10 @@ class XiaonuoEnhancedController:
         Returns:
             提示词内容,失败返回None
         """
+        if self.prompt_manager is None:
+            logger.warning("⚠️ prompt_manager 未初始化，使用回退方案")
+            return self._fallback_load_prompt(agent, layers)
+
         try:
             result = await self.prompt_manager.load_prompt(
                 agent=agent, layers=layers, format=PromptFormat.MARKDOWN
@@ -266,11 +277,33 @@ class XiaonuoEnhancedController:
             if result.status == "success":
                 return result.content
             else:
-                logger.warning(f"⚠️ 加载{agent}提示词失败: {result.content}")
-                return None
+                logger.warning(f"⚠️ 加载{agent}提示词失败: {result.content}，使用回退方案")
+                return self._fallback_load_prompt(agent, layers)
 
         except Exception as e:
-            logger.error(f"❌ 加载{agent}提示词异常: {e}")
+            logger.error(f"❌ 加载{agent}提示词异常: {e}，使用回退方案")
+            return self._fallback_load_prompt(agent, layers)
+
+    def _fallback_load_prompt(self, agent: str, layers: Optional[list[str]] = None) -> Optional[str]:
+        """回退方案：直接从 prompts/foundation/ 读取 Markdown 文件。"""
+        try:
+            base = Path(__file__).resolve().parent.parent / "prompts" / "foundation"
+            candidates = [f"{agent}_core_v3_compressed.md", f"{agent}_core.md", f"{agent}.md"]
+            for cand in candidates:
+                fpath = base / cand
+                if fpath.exists():
+                    content = fpath.read_text(encoding="utf-8")
+                    if layers:
+                        parts = []
+                        for layer in layers:
+                            part = self._extract_layer_content(content, layer)
+                            if part:
+                                parts.append(part)
+                        return "\n\n".join(parts) if parts else content
+                    return content
+            return None
+        except Exception as e:
+            logger.error(f"❌ 回退加载提示词失败: {e}")
             return None
 
     async def optimize_prompt_with_lyra(
@@ -278,6 +311,8 @@ class XiaonuoEnhancedController:
     ) -> Optional[str]:
         """
         使用Lyra优化提示词 (统一接口)
+
+        TODO: Lyra 优化能力待迁移至主链路后统一提供
 
         Args:
             content: 要优化的内容
@@ -287,6 +322,10 @@ class XiaonuoEnhancedController:
         Returns:
             优化后的内容,失败返回None
         """
+        if self.prompt_manager is None:
+            logger.warning("⚠️ prompt_manager 未初始化，跳过 Lyra 优化")
+            return content
+
         try:
             result = await self.prompt_manager.optimize_prompt(
                 content=content, target_ai=target_ai, mode=mode
@@ -295,11 +334,12 @@ class XiaonuoEnhancedController:
             if result.status == "success":
                 return result.content
             else:
-                logger.warning(f"⚠️ Lyra优化失败: {result.content}")
-                return None
+                logger.warning(f"⚠️ Lyra优化失败: {result.content}，返回原文")
+                return content
 
         except Exception as e:
-            logger.error(f"❌ Lyra优化异常: {e}")
+            logger.error(f"❌ Lyra优化异常: {e}，返回原文")
+            return content
             return None
 
     async def process_request(self, user_request: str) -> dict[str, Any]:

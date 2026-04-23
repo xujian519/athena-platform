@@ -93,7 +93,7 @@
 
 **表结构**:
 ```sql
-CREATE TABLE {agent_name}_memory (
+CREATE TABLE {{ agent_name }}_memory (
     id SERIAL PRIMARY KEY,
     memory_type VARCHAR(50) NOT NULL,
     content TEXT NOT NULL,

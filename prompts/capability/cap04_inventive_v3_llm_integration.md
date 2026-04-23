@@ -29,17 +29,17 @@
 
 ## 目标专利信息
 ```json
-{patent_data}
+{{ patent_data }}
 ```
 
 ## 对比文件（现有技术）
 ```json
-{prior_art}
+{{ prior_art }}
 ```
 
 ## 区别特征
 ```json
-{differences}
+{{ differences }}
 ```
 
 ## 评估要点
@@ -65,7 +65,7 @@
 请严格按照以下JSON格式输出评估结果：
 
 ```json
-{{
+{{ '{{' }}
     "is_obvious": true或false,
     "confidence": 0.85,
     "reasoning": "详细推理过程",
@@ -78,7 +78,7 @@
     "distinguishing_features": ["区别特征1", "区别特征2"],
     "technical_problem": "要解决的技术问题",
     "obviousness_conclusion": "显而易见性结论及理由"
-}}
+{{ '}}' }}
 ```
 
 请只输出JSON，不要添加任何额外说明。
@@ -95,12 +95,12 @@
 
 ## 目标专利信息
 ```json
-{patent_data}
+{{ patent_data }}
 ```
 
 ## 区别特征
 ```json
-{differences}
+{{ differences }}
 ```
 
 ## 评估要点
@@ -125,7 +125,7 @@
 请严格按照以下JSON格式输出评估结果：
 
 ```json
-{{
+{{ '{{' }}
     "has_inventive_step": true或false,
     "step_magnitude": "significant或moderate或minor或none",
     "confidence": 0.8,
@@ -138,7 +138,7 @@
     "technical_difficulty": "high或medium或low",
     "innovation_level": "breakthrough或incremental或routine",
     "contribution_to_field": "对技术领域的贡献描述"
-}}
+{{ '}}' }}
 ```
 
 请只输出JSON，不要添加任何额外说明。
@@ -155,12 +155,12 @@
 
 ## 目标专利信息
 ```json
-{patent_data}
+{{ patent_data }}
 ```
 
 ## 技术领域
 ```json
-{technical_field}
+{{ technical_field }}
 ```
 
 ## 评估要点
@@ -190,7 +190,7 @@
 请严格按照以下JSON格式输出评估结果：
 
 ```json
-{{
+{{ '{{' }}
     "has_advancement": true或false,
     "advancement_type": "performance或cost或function或process或environment或user_experience",
     "improvement_degree": "significant或moderate或minor或none",
@@ -201,14 +201,14 @@
         "证据2：成本降低20%",
         "证据3：解决了XX技术难题"
     ],
-    "quantitative_metrics": {{
+    "quantitative_metrics": {{ '{{' }}
         "performance_improvement": "30%",
         "cost_reduction": "20%",
         "efficiency_gain": "25%"
-    }},
+    {{ '}}' }},
     "commercial_value": "high或medium或low",
     "technical_significance": "技术重要性描述"
-}}
+{{ '}}' }}
 ```
 
 请只输出JSON，不要添加任何额外说明。
@@ -225,12 +225,12 @@
 
 ## 目标专利信息
 ```json
-{patent_data}
+{{ patent_data }}
 ```
 
 ## 对比文件（现有技术）
 ```json
-{prior_art}
+{{ prior_art }}
 ```
 
 ## 综合分析要点
@@ -259,29 +259,29 @@
 请严格按照以下JSON格式输出评估结果：
 
 ```json
-{{
-    "obviousness_assessment": {{
+{{ '{{' }}
+    "obviousness_assessment": {{ '{{' }}
         "is_obvious": false,
         "confidence": 0.85,
         "reasoning": "推理过程"
-    }},
-    "inventive_step_evaluation": {{
+    {{ '}}' }},
+    "inventive_step_evaluation": {{ '{{' }}
         "has_inventive_step": true,
         "step_magnitude": "significant",
         "confidence": 0.8,
         "evidence": ["证据1", "证据2"]
-    }},
-    "technical_advancement": {{
+    {{ '}}' }},
+    "technical_advancement": {{ '{{' }}
         "has_advancement": true,
         "advancement_type": "performance",
         "improvement_degree": "significant",
         "evidence": ["证据1", "证据2"]
-    }},
-    "unexpected_effects": {{
+    {{ '}}' }},
+    "unexpected_effects": {{ '{{' }}
         "has_unexpected_effects": true,
         "effects": ["预料不到的效果1", "预料不到的效果2"],
         "evidence": ["证据1", "证据2"]
-    }},
+    {{ '}}' }},
     "creativity_conclusion": "具备创造性",
     "creativity_level": "high或medium或low或none",
     "overall_confidence": 0.85,
@@ -291,7 +291,7 @@
         "理由3：预料不到的技术效果"
     ],
     "recommendations": ["建议1", "建议2"]
-}}
+{{ '}}' }}
 ```
 
 请只输出JSON，不要添加任何额外说明。
