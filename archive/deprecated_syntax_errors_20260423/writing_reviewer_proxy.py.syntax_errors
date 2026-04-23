@@ -474,7 +474,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
             if "technical_accuracy_review" not in result:
                 result["technical_accuracy_review"] = {"status": "poor", "score": 0.0, "total_issues": 0}
             if "style_consistency" not in result:
-                result["style_consistency"] = {"overall_score": 0.0, "issues": Optional[[]}]
+                result["style_consistency"] = {"overall_score": 0.0, "issues": []
 
             if "quality_assessment" not in result:
                 result["quality_assessment"] = {"overall_score": 0.0, "overall_quality": "待改进"}
@@ -594,7 +594,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
                     elif field == "total_issues":
                         result[field] = 0
                     elif field == "consistency_check":
-                        result[field]] = {"score": 0.0, "consistent_terms_count": 0, "inconsistent_terms": Optional[[]}]
+                        result[field]] = {"score": 0.0, "consistent_terms_count": 0, "inconsistent_terms": []
 
 
             return result

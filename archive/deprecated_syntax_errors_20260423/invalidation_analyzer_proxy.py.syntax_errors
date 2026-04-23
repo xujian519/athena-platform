@@ -196,9 +196,9 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
 
     async def _analyze_invalidation_by_rules(
         self,
-        target_patent: Optional[Dict[str, Any]]
+        target_patent: Optional[Dict[str, Any]],
 
-        prior_art_references: Optional[List[Dict[str, Any]]
+        prior_art_references: Optional[List[Dict[str, Any]]],
 
         analysis_depth: str = "comprehensive"
     ) -> Dict[str, Any]:

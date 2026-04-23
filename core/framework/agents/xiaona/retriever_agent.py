@@ -57,6 +57,13 @@ class RetrieverAgent(BaseXiaonaComponent):
                 output_types=["筛选后的专利列表"],
                 estimated_time=10.0,
             ),
+            AgentCapability(
+                name="patent_download",
+                description="专利PDF下载",
+                input_types=["专利号"],
+                output_types=["PDF文件"],
+                estimated_time=30.0,
+            ),
         ])
 
         # 初始化LLM
@@ -242,22 +249,52 @@ class RetrieverAgent(BaseXiaonaComponent):
             检索结果列表
         """
         all_results = []
-        databases = config.get("databases", ["cnipa"])
 
-        for query in queries:
-            for database in databases:
-                # 调用专利检索工具
-                try:
-                    tool = self.tool_registry.get("patent_search")
-                    if tool:
-                        result = await tool.function(
-                            query=query,
-                            database=database,
-                            limit=config.get("limit", 50),
-                        )
-                        all_results.extend(result.get("patents", []))
-                except Exception as e:
-                    self.logger.warning(f"检索失败: {database}, {query}, 错误: {e}")
+        # 优先使用技能工具
+        try:
+            tool = self.tool_registry.get("skills_patent_search")
+            if tool:
+                # 使用技能工具检索
+                for query in queries:
+                    result = tool.function(
+                        query=query,
+                        num_results=config.get("limit", 50),
+                        output_dir=config.get("output_dir")
+                    )
+
+                    if result.get("success"):
+                        # 技能工具返回的是检索报告和链接
+                        # 这里我们记录结果，实际检索结果需要用户从链接中获取
+                        self.logger.info(f"检索完成: {query}")
+                        all_results.append({
+                            "query": query,
+                            "search_url": result.get("search_url"),
+                            "report_path": result.get("report_path"),
+                            "json_path": result.get("json_path"),
+                            "analysis": result.get("analysis")
+                        })
+                    else:
+                        self.logger.warning(f"检索失败: {query}, 错误: {result.get('error')}")
+        except Exception as e:
+            self.logger.warning(f"技能检索工具调用失败: {e}")
+
+        # 如果没有结果，尝试传统检索
+        if not all_results:
+            databases = config.get("databases", ["cnipa"])
+            for query in queries:
+                for database in databases:
+                    # 调用专利检索工具
+                    try:
+                        tool = self.tool_registry.get("patent_search")
+                        if tool:
+                            result = await tool.function(
+                                query=query,
+                                database=database,
+                                limit=config.get("limit", 50),
+                            )
+                            all_results.extend(result.get("patents", []))
+                    except Exception as e:
+                        self.logger.warning(f"检索失败: {database}, {query}, 错误: {e}")
 
         # 去重
         seen = set()
@@ -305,3 +342,123 @@ class RetrieverAgent(BaseXiaonaComponent):
         # 限制返回数量
         limit = config.get("limit", 50)
         return sorted_results[:limit]
+
+    async def download_patents(
+        self,
+        patent_numbers: List[str],
+        output_dir: str = ".",
+        proxy: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """
+        下载专利PDF
+
+        Args:
+            patent_numbers: 专利号列表
+            output_dir: 输出目录
+            proxy: 代理设置
+
+        Returns:
+            下载结果字典
+        """
+        try:
+            # 优先使用技能工具
+            tool = self.tool_registry.get("skills_patent_batch_download")
+            if tool:
+                result = tool.function(
+                    patent_numbers=patent_numbers,
+                    output_dir=output_dir,
+                    proxy=proxy
+                )
+                return result
+            else:
+                self.logger.error("批量专利下载工具未注册")
+                return {
+                    "success": False,
+                    "error": "批量专利下载工具未注册"
+                }
+        except Exception as e:
+            self.logger.exception(f"批量专利下载失败: {e}")
+            return {
+                "success": False,
+                "error": str(e)
+            }
+
+    async def download_single_patent(
+        self,
+        patent_number: str,
+        output_dir: str = ".",
+        open_after_download: bool = False,
+        proxy: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """
+        下载单个专利PDF
+
+        Args:
+            patent_number: 专利号
+            output_dir: 输出目录
+            open_after_download: 下载后自动打开
+            proxy: 代理设置
+
+        Returns:
+            下载结果字典
+        """
+        try:
+            # 使用技能工具
+            tool = self.tool_registry.get("skills_patent_download")
+            if tool:
+                result = tool.function(
+                    patent_number=patent_number,
+                    output_dir=output_dir,
+                    open_after_download=open_after_download,
+                    proxy=proxy
+                )
+                return result
+            else:
+                self.logger.error("专利下载工具未注册")
+                return {
+                    "success": False,
+                    "error": "专利下载工具未注册"
+                }
+        except Exception as e:
+            self.logger.exception(f"专利下载失败: {patent_number}")
+            return {
+                "success": False,
+                "error": str(e)
+            }
+
+    async def get_patent_info(
+        self,
+        patent_number: str,
+        proxy: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """
+        获取专利信息（不下载）
+
+        Args:
+            patent_number: 专利号
+            proxy: 代理设置
+
+        Returns:
+            专利信息字典
+        """
+        try:
+            # 使用技能工具
+            tool = self.tool_registry.get("skills_patent_info")
+            if tool:
+                result = tool.function(
+                    patent_number=patent_number,
+                    proxy=proxy
+                )
+                return result
+            else:
+                self.logger.error("专利信息查询工具未注册")
+                return {
+                    "success": False,
+                    "error": "专利信息查询工具未注册"
+                }
+        except Exception as e:
+            self.logger.exception(f"专利信息查询失败: {patent_number}")
+            return {
+                "success": False,
+                "error": str(e)
+            }

@@ -350,7 +350,7 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
 
     def _compare_features_by_rules(
         self,
-        claims: Optional[List[Dict[str, Any]]],]
+        claims: Optional[List[Dict[str, Any]]],
 
         product_description: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
@@ -413,7 +413,7 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
 
     def _build_feature_comparison_prompt(
         self,
-        claims: Optional[List[Dict[str, Any]]],]
+        claims: Optional[List[Dict[str, Any]]],
 
         product_description: Optional[Dict[str, Any]] = None) -> str:
         """构建特征比对提示词"""
@@ -672,7 +672,7 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
                     if field == "infringement_conclusion":
                         result[field] = "无法判定"
                     elif field == "infringed_claims":
-                        result[field]] = {"literal": Optional[[], "equivalent": Optional[[], "total": 0}]]
+                        result[field] = {"literal": [], "equivalent": [], "total": 0}
 
                     elif field == "non_infringed_claims":
                         result[field]] = []

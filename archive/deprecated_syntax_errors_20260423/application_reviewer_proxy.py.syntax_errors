@@ -864,7 +864,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
                     claims.append(current_claim)
 
                 current_claim = {
-                    "number": int(line.split(".")[0),
+                    "number": int(line.split(".")[0]),
                     "type": "independent" if len(claims) == 0 else "dependent",
                     "text": line,
                 }
@@ -910,7 +910,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
         self,
         claims_list: Optional[List[Dict[str, Any] -> Dict[str, Any]:
         """评估权利要求清晰度"""
-        avg_length = sum(len(c["text") for c in claims_list) / len(claims_list) if claims_list else 0
+        avg_length = sum(len(c["text"]) for c in claims_list) / len(claims_list) if claims_list else 0
 
         # 权利要求长度适中通常更清晰
         if 50 <= avg_length <= 300:

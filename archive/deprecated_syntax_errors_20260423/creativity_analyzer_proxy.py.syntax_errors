@@ -372,9 +372,9 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
 
     async def analyze_creativity_legacy(
         self,
-        target_patent: Optional[Dict[str, Any],]
+        target_patent: Optional[Dict[str, Any]],
 
-        reference_docs: Optional[List[Dict[str, Any]]],]
+        reference_docs: Optional[List[Dict[str, Any]]],
 
         analysis_depth: str = "standard"
     ) -> Dict[str, Any]:
@@ -463,7 +463,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
 
     async def _assess_obviousness(
         self,
-        differences: Optional[List[Dict[str, Any]]],]
+        differences: Optional[List[Dict[str, Any]]],
 
         prior_art: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """评估显而易见性"""

@@ -460,7 +460,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
 
     def _judge_novelty_by_rules(
         self,
-        novel_features: Optional[List[Dict[str, Any]]],]
+        novel_features: Optional[List[Dict[str, Any]]],
 
         target_features: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """

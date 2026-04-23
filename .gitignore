@@ -159,9 +159,13 @@ athena_env_py311/
 *.bak_*
 
 # 废弃目录
-archive/
+# archive/  # 修改：允许跟踪特定的归档目录
 production/
 computer-use-ootb/
+
+# 归档目录例外：允许跟踪deprecated_syntax_errors归档
+!archive/deprecated_syntax_errors_*/
+archive/*
 
 # 大型数据目录
 data/*.db
