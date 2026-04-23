@@ -271,7 +271,7 @@ class ICache(ABC):
         pass
 
     @abstractmethod
-    async def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
+    async def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
         """设置缓存值"""
         pass
 
@@ -320,7 +320,7 @@ class IMonitor(ABC):
 
     @abstractmethod
     def record_request(
-        self, latency: float, success: bool, metadata: dict[str, Any] | None = None
+        self, latency: float, success: bool, metadata: Optional[dict[str, Any]] = None
     ) -> None:
         """记录请求"""
         pass
@@ -350,7 +350,7 @@ class IProcessorFactory(ABC):
 
     @abstractmethod
     def create_processor(
-        self, processor_type: InputType, config: dict[str, Any] | None = None
+        self, processor_type: InputType, config: Optional[dict[str, Any]] = None
     ) -> IProcessor:
         """
         创建处理器实例

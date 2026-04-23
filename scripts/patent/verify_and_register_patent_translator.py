@@ -14,7 +14,6 @@ Date: 2026-04-20
 
 import asyncio
 import sys
-from typing import Dict, Any
 
 sys.path.insert(0, '/Users/xujian/Athena工作平台')
 
@@ -63,7 +62,7 @@ async def test_basic_translation():
             )
 
             if result['success']:
-                print(f"   ✅ 翻译成功")
+                print("   ✅ 翻译成功")
                 print(f"   译文: {result['translated'][:80]}...")
                 print(f"   源语言: {result['source_lang']} → 目标语言: {result['target_lang']}")
 
@@ -75,7 +74,7 @@ async def test_basic_translation():
                 if found_keywords:
                     print(f"   ✅ 关键词匹配: {', '.join(found_keywords)}")
                 else:
-                    print(f"   ⚠️ 关键词未完全匹配")
+                    print("   ⚠️ 关键词未完全匹配")
             else:
                 print(f"   ❌ 翻译失败: {result.get('error', 'Unknown error')}")
                 all_passed = False
@@ -141,7 +140,7 @@ async def test_patent_terms_preservation():
                 if found_terms:
                     print(f"   ✅ 术语保留成功: {', '.join(found_terms)}")
                 else:
-                    print(f"   ⚠️ 术语未完全保留")
+                    print("   ⚠️ 术语未完全保留")
             else:
                 print(f"   ❌ 翻译失败: {result.get('error', 'Unknown error')}")
                 all_passed = False
@@ -181,7 +180,7 @@ async def test_batch_translation():
             preserve_terms=True
         )
 
-        print(f"\n翻译结果:")
+        print("\n翻译结果:")
         success_count = sum(1 for r in results if r['success'])
 
         for i, result in enumerate(results, 1):
@@ -238,7 +237,7 @@ async def test_language_support():
             )
 
             if result['success']:
-                print(f"   ✅ 翻译成功")
+                print("   ✅ 翻译成功")
                 print(f"   译文: {result['translated'][:80]}...")
                 print(f"   检测到的源语言: {result['source_lang']}")
             else:
@@ -261,8 +260,8 @@ async def register_to_unified_registry():
     print("=" * 60)
 
     try:
-        from core.tools.unified_registry import get_unified_registry
         from core.tools.base import ToolCategory, ToolPriority
+        from core.tools.unified_registry import get_unified_registry
 
         registry = get_unified_registry()
 

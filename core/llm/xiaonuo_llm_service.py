@@ -93,8 +93,8 @@ class XiaonuoLLMService:
 
     def __init__(
         self,
-        api_key: str | None = None,
-        model: str | None = None,
+        api_key: Optional[str] = None,
+        model: Optional[str] = None,
         base_url: str = "https://open.bigmodel.cn/api/paas/v4",
         timeout: int = 60,
         max_history: int = 10,
@@ -328,7 +328,7 @@ class XiaonuoLLMService:
             ]
 
     def get_conversation_history(
-        self, user_id: str, limit: int | None = None
+        self, user_id: str, limit: Optional[int] = None
     ) -> list[ConversationTurn]:
         """获取对话历史"""
         history = self.conversation_history.get(user_id, [])

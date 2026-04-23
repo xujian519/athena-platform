@@ -30,7 +30,7 @@ class EmotionalState:
 class XiaonuoEnhancedAgent(XiaonuoAgent):
     """小诺增强版Agent"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__(config)
         self.enhanced_nlp = None
         self.emotional_memory = []

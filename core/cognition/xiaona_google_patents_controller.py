@@ -41,7 +41,7 @@ class PatentRetrievalRequest:
     user_request: str
     output_format: list[str] = field(default_factory=lambda: ["json", "structured"])
     language_preference: str = "zh"
-    batch_id: str | None = None
+    batch_id: Optional[str] = None
 
 
 @dataclass
@@ -57,7 +57,7 @@ class PatentRetrievalResult:
     metadata: dict[str, Any]
     retrieval_time: float
     structured_data: dict[str, Any]
-    legal_analysis: str | None = None
+    legal_analysis: Optional[str] = None
     professional_insights: list[str] = field(default_factory=list)
 
 
@@ -227,7 +227,7 @@ class XiaonaGooglePatentsController:
 
         return processed_results
 
-    async def _fetch_patent_with_playwright(self, patent_number: str) -> dict[str, Any] | None:
+    async def _fetch_patent_with_playwright(self, patent_number: str) -> Optional[dict[str, Any]]:
         """使用Playwright获取专利数据"""
         try:
             from playwright.async_api import async_playwright
@@ -447,7 +447,7 @@ class XiaonaGooglePatentsController:
 
         return insights
 
-    async def _perform_legal_analysis(self, patent_data: dict[str, Any]) -> str | None:
+    async def _perform_legal_analysis(self, patent_data: dict[str, Any]) -> Optional[str]:
         """执行法律分析"""
         if not self.patent_analyzer:
             return None

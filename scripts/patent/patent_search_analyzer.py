@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 A级专利检索和分析工具
 用于完成剩余A级专利的数据库检索和分析工作
 """
 
-import pandas as pd
-import numpy as np
-from datetime import datetime, timedelta
 import random
-from typing import List, Dict, Tuple
-import json
+from datetime import datetime
+
+import pandas as pd
+
 
 class PatentSearchAnalyzer:
     def __init__(self):
@@ -73,10 +71,10 @@ class PatentSearchAnalyzer:
             "远程诊断和维护系统"
         ]
 
-    def simulate_patent_search(self, category: str, patent_info: Dict) -> Dict:
+    def simulate_patent_search(self, category: str, patent_info: dict) -> dict:
         """模拟专利数据库检索"""
         keywords = self.patent_categories[category]["keywords"]
-        keyword_count = len(keywords)
+        len(keywords)
 
         # 模拟检索到的相关专利数量
         related_patents = random.randint(15, 50)
@@ -129,7 +127,7 @@ class PatentSearchAnalyzer:
             "search_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
 
-    def analyze_existing_tech_limits(self, category: str) -> List[str]:
+    def analyze_existing_tech_limits(self, category: str) -> list[str]:
         """分析现有技术限制"""
         tech_limits = {
             "移栽工具类": [
@@ -188,7 +186,7 @@ class PatentSearchAnalyzer:
         self.results = all_results
         return pd.DataFrame(all_results)
 
-    def generate_summary_statistics(self) -> Dict:
+    def generate_summary_statistics(self) -> dict:
         """生成汇总统计信息"""
         if not self.results:
             return {}
@@ -211,7 +209,7 @@ class PatentSearchAnalyzer:
 
         return stats
 
-    def _get_top_competitors(self) -> Dict:
+    def _get_top_competitors(self) -> dict:
         """获取主要竞争对手统计"""
         competitor_count = {}
         for result in self.results:
@@ -238,7 +236,7 @@ class PatentSearchAnalyzer:
                 'patent_id', 'patent_name', 'category',
                 'related_patents_count', 'total_score',
                 'authorization_prospect', 'search_date'
-            ]]
+            ]
             main_df.to_excel(writer, sheet_name='检索汇总', index=False)
 
             # 详细分析表
@@ -246,7 +244,7 @@ class PatentSearchAnalyzer:
                 'patent_id', 'patent_name', 'category',
                 'novelty_score', 'creative_score', 'practical_score',
                 'tech_gaps', 'authorization_prospect'
-            ]]
+            ]
             detail_df.to_excel(writer, sheet_name='详细分析', index=False)
 
             # 竞争对手分析表
@@ -279,7 +277,7 @@ def main() -> None:
     analyzer = PatentSearchAnalyzer()
 
     # 生成检索报告
-    results_df = analyzer.generate_search_report()
+    analyzer.generate_search_report()
 
     # 显示汇总统计
     stats = analyzer.generate_summary_statistics()

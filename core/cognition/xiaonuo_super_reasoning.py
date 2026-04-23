@@ -141,8 +141,8 @@ class XiaonuoSuperReasoningEngine(AthenaSuperReasoningEngine):
     async def reason_with_xiaonuo_style(
         self,
         query: str,
-        user_context: dict[str, Any] | None = None,
-        preference: dict[str, Any] | None = None,
+        user_context: Optional[dict[str, Any]] = None,
+        preference: Optional[dict[str, Any]] = None,
     ) -> dict[str, Any]:
         """小诺风格推理"""
         start_time = datetime.now()
@@ -216,7 +216,7 @@ class XiaonuoSuperReasoningEngine(AthenaSuperReasoningEngine):
             }
 
     async def _analyze_user_emotion(
-        self, query: str, user_context: dict[str, Any] | None = None
+        self, query: str, user_context: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """分析用户情感"""
         emotion_scores = {}

@@ -345,7 +345,7 @@ class IntelligentRouter:
             # 示例：优化转录文本的语法和表达
             optimized = text  # 实际应该调用MCP
             return optimized
-        except (asyncio.CancelledError, asyncio.TimeoutError, Exception):
+        except (TimeoutError, asyncio.CancelledError, Exception):
             return text
 
     def _calculate_cost(self, method: ProcessingMethod, processing_time: float) -> float:

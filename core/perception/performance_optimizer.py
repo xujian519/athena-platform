@@ -59,7 +59,7 @@ class PerformanceMetrics:
 class PerformanceOptimizer:
     """感知模块性能优化器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
 
         # 性能配置
@@ -181,7 +181,7 @@ class PerformanceOptimizer:
         return wrapper
 
     async def batch_process(
-        self, processor, items: list[dict[str, Any]], max_concurrent: int | None = None
+        self, processor, items: list[dict[str, Any]], max_concurrent: Optional[int] = None
     ) -> list[PerceptionResult]:
         """批量处理
 
@@ -373,7 +373,7 @@ class PerformanceOptimizer:
 _global_optimizer: PerformanceOptimizer | None = None
 
 
-async def get_global_optimizer(config: dict[str, Any] | None = None) -> PerformanceOptimizer:
+async def get_global_optimizer(config: Optional[dict[str, Any]] = None) -> PerformanceOptimizer:
     """获取全局性能优化器"""
     global _global_optimizer
     if _global_optimizer is None:
@@ -382,7 +382,7 @@ async def get_global_optimizer(config: dict[str, Any] | None = None) -> Performa
 
 
 # 性能优化装饰器
-def optimize_performance(config: dict[str, Any] | None = None) -> Any:
+def optimize_performance(config: Optional[dict[str, Any]] = None) -> Any:
     """性能优化装饰器"""
 
     def decorator(cls) -> Any:
@@ -478,7 +478,7 @@ class CacheManager:
         """设置缓存结果(静态方法,用于向后兼容)"""
         pass
 
-    async def invalidate(self, cache_key: str | None = None, pattern: str | None = None) -> None:
+    async def invalidate(self, cache_key: Optional[str] = None, pattern: Optional[str] = None) -> None:
         """失效缓存
 
         Args:
@@ -498,7 +498,7 @@ class CacheManager:
             logger.debug(f"模式匹配失效了 {len(keys_to_remove)} 个缓存: {pattern}")
 
     @staticmethod
-    async def invalidate_cache(pattern: str | None = None) -> None:
+    async def invalidate_cache(pattern: Optional[str] = None) -> None:
         """失效缓存(静态方法,用于向后兼容)"""
         pass
 

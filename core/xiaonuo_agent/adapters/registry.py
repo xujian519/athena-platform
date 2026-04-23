@@ -195,7 +195,7 @@ class AgentToolRegistry:
             metadata=tool_def["metadata"]
         )
 
-    def list_agents(self, agent_type: str | None = None) -> list[str]:
+    def list_agents(self, agent_type: Optional[str] = None) -> list[str]:
         """
         列出已注册的Agent
 
@@ -214,7 +214,7 @@ class AgentToolRegistry:
             if info["type"] == agent_type
         ]
 
-    def get_agent_info(self, agent_name: str) -> dict[str, Any] | None:
+    def get_agent_info(self, agent_name: str) -> Optional[dict[str, Any]]:
         """
         获取Agent信息
 

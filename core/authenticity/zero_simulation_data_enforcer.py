@@ -340,7 +340,7 @@ class ZeroSimulationDataEnforcer:
             return ReliabilityLevel.USER_GENERATED.value
 
     def log_violation(
-        self, check_result: AuthenticityCheck, query: str, original_response: str | None = None
+        self, check_result: AuthenticityCheck, query: str, original_response: Optional[str] = None
     ):
         """记录违规行为"""
         violation_record = {

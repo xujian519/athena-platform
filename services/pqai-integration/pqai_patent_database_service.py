@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 import uvicorn
 from fastapi import FastAPI, HTTPException
 
-from core.database.unified_connection import get_postgres_pool
+from core.infrastructure.database.unified_connection import get_postgres_pool
 
 # 添加路径
 sys.path.append('/Users/xujian/Athena工作平台/services/autonomous-control')
@@ -222,7 +222,7 @@ async def search_similar_patents(db_pool, query_text: str, limit: int = 10) -> l
         print(f"专利检索错误: {str(e)}")
         return []
 
-def calculate_patentability(similar_patents: list[dict]) -> tuple[float, dict[str, float]]:
+def calculate_patentability(similar_patents: list[dict]) -> tuple[float, dict[str, float]:
     """基于相似专利计算可申请性"""
 
     if not similar_patents:
@@ -242,7 +242,7 @@ def calculate_patentability(similar_patents: list[dict]) -> tuple[float, dict[st
     for p in similar_patents:
         ipc = p.get('ipc_class', '')
         if ipc:
-            ipc_density[ipc[:3]] = ipc_density.get(ipc[:3], 0) + 1
+            ipc_density[ipc[:3] = ipc_density.get(ipc[:3], 0) + 1
     max_ipc_density = max(ipc_density.values()) if ipc_density else 0
 
     # 计算各项指标

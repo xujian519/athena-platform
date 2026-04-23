@@ -459,7 +459,7 @@ class Neo4jManager:
             'total_relations': len(relations)
         }
 
-    def query_entity(self, entity_id: str) -> Dict[str, Any | None]:
+    def query_entity(self, entity_id: str) -> Dict[str, Any] | None]:
         """查询实体"""
         if not self.driver:
             raise RuntimeError('未连接到Neo4j数据库')
@@ -477,7 +477,7 @@ class Neo4jManager:
                 return dict(record['e'])
             return None
 
-    def query_relations(self, entity_id: str, direction: str = 'both', relation_type: str | None = None) -> List[Dict[str, Any]]:
+    def query_relations(self, entity_id: str, direction: str = 'both', relation_type: Optional[str] = None) -> List[Dict[str, Any]]:
         """查询实体的关系"""
         if not self.driver:
             raise RuntimeError('未连接到Neo4j数据库')
@@ -511,7 +511,7 @@ class Neo4jManager:
 
             return relations
 
-    def search_entities(self, entity_type: str | None = None, name_pattern: str | None = None,
+    def search_entities(self, entity_type: Optional[str] = None, name_pattern: Optional[str] = None,
                         limit: int = 100) -> List[Dict[str, Any]]:
         """搜索实体"""
         if not self.driver:

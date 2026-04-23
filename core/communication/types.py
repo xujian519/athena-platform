@@ -179,8 +179,8 @@ class Message:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     # 回复和关联
-    reply_to: str | None = None  # 回复的消息ID
-    correlation_id: str | None = None  # 关联ID(用于追踪对话)
+    reply_to: Optional[str] = None  # 回复的消息ID
+    correlation_id: Optional[str] = None  # 关联ID(用于追踪对话)
     expires_at: datetime | None = None  # 过期时间
 
     # 重试相关
@@ -290,7 +290,7 @@ class ResponseMessage(Message):
     """
 
     success: bool = True
-    error_message: str | None = None
+    error_message: Optional[str] = None
     execution_time: float = 0.0
     original_message_id: str = ""
 
@@ -444,7 +444,7 @@ def create_message_id() -> str:
     return f"msg_{timestamp}_{unique_id}"
 
 
-def validate_message(message: Message) -> tuple[bool, str | None]:
+def validate_message(message: Message) -> Optional[tuple[bool, str]]:
     """
     验证消息的基本有效性
 

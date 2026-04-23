@@ -69,7 +69,7 @@ class AthenaError(Exception):
         self,
         message: str,
         error_type: ErrorType = ErrorType.UNKNOWN_ERROR,
-        details: dict[str, Any] | None = None,
+        details: Optional[dict[str, Any]] = None,
         original_error: Exception | None = None,
     ):
         """
@@ -107,7 +107,7 @@ class AthenaError(Exception):
 class ValidationError(AthenaError):
     """验证错误"""
 
-    def __init__(self, message: str, field: str | None = None, value: Any | None = None):
+    def __init__(self, message: str, field: Optional[str] = None, value: Any | None = None):
         details = {}
         if field:
             details["field"] = field
@@ -145,7 +145,7 @@ class AuthorizationError(AthenaError):
 class ExternalServiceError(AthenaError):
     """外部服务错误"""
 
-    def __init__(self, message: str, service_name: str, status_code: int | None = None):
+    def __init__(self, message: str, service_name: str, status_code: Optional[int] = None):
         details = {"service_name": service_name}
         if status_code:
             details["status_code"] = status_code
@@ -158,7 +158,7 @@ class ExternalServiceError(AthenaError):
 class RateLimitError(AthenaError):
     """速率限制错误"""
 
-    def __init__(self, message: str = "请求过于频繁", retry_after: int | None = None):
+    def __init__(self, message: str = "请求过于频繁", retry_after: Optional[int] = None):
         details = {}
         if retry_after:
             details["retry_after"] = retry_after
@@ -383,7 +383,7 @@ class ErrorHandler:
         self.include_traceback = include_traceback
 
     def handle_error(
-        self, error: Exception, context: dict[str, Any] | None = None
+        self, error: Exception, context: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """
         处理错误并返回格式化的错误信息

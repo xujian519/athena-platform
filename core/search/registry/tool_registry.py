@@ -129,7 +129,7 @@ class ToolRegistry:
     4. 智能推荐 - 基于历史性能推荐最佳工具
     """
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化工具注册中心
 
@@ -317,7 +317,7 @@ class ToolRegistry:
     def list_tools(
         self,
         status_filter: ToolStatus | None = None,
-        category_filter: str | None = None,
+        category_filter: Optional[str] = None,
         search_type_filter: SearchType | None = None,
     ) -> list[str]:
         """
@@ -356,7 +356,7 @@ class ToolRegistry:
         return tool_names
 
     async def recommend_tools(
-        self, query: SearchQuery, max_tools: int = 3, exclude_tools: list[str] | None = None
+        self, query: SearchQuery, max_tools: int = 3, exclude_tools: Optional[list[str]] = None
     ) -> list[str]:
         """
         推荐最佳工具
@@ -612,7 +612,7 @@ def get_tool_registry() -> ToolRegistry:
     return _tool_registry
 
 
-async def initialize_tool_registry(config: dict[str, Any] | None = None) -> ToolRegistry:
+async def initialize_tool_registry(config: Optional[dict[str, Any]] = None) -> ToolRegistry:
     """初始化全局工具注册中心"""
     registry = get_tool_registry()
     await registry.initialize()

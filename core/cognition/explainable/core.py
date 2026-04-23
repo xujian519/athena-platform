@@ -33,7 +33,7 @@ logger = setup_logging()
 class ExplainableCognitionModule(BaseModule):
     """可解释认知模块 - 重构版本"""
 
-    def __init__(self, agent_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, agent_id: str, config: Optional[dict[str, Any]] = None):
         super().__init__(agent_id, config)
 
         # 可解释性配置

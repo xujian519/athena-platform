@@ -108,7 +108,7 @@ def save_new_poem() -> None:
 ## 💫 艺术特色
 
 ### 意象运用
-{chr(10).join([f"- **{意象}**: 象征着深层含义" for 意象 in new_poem['analysis']['主要意象']])}
+{chr(10).join([f"- **{意象}**: 象征着深层含义" for 意象 in new_poem['analysis']['主要意象'])}
 
 ### 语言特点
 - 简洁而富有张力

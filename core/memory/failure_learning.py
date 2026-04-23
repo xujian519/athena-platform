@@ -49,8 +49,8 @@ class FailureCase:
     # 上下文信息
     context: dict[str, Any] = field(default_factory=dict)
     tool_calls: list[dict[str, Any]] = field(default_factory=list)
-    error_message: str | None = None
-    stack_trace: str | None = None
+    error_message: Optional[str] = None
+    stack_trace: Optional[str] = None
 
     # 学习信息
     learned_lessons: list[str] = field(default_factory=list)
@@ -79,7 +79,7 @@ class FailureCase:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> 'FailureCase':
+    def from_dict(cls, data: dict[str, Any]) -> FailureCase:
         """从字典创建实例"""
         return cls(
             case_id=data["case_id"],

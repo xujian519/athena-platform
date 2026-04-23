@@ -40,7 +40,7 @@ class MemoryItem:
     last_accessed: float = field(default_factory=time.time)
     created_at: float = field(default_factory=time.time)
     updated_at: float = field(default_factory=time.time)
-    expires_at: float | None = None
+    expires_at: Optional[float] = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -78,7 +78,7 @@ class LongTermMemoryManager:
 
     def __init__(
         self,
-        db_path: str | None = None,
+        db_path: Optional[str] = None,
         memory_ttl: int = 2592000,
         max_memories_per_user: int = 1000,
     ):

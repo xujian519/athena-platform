@@ -7,24 +7,19 @@ Plugins系统Hook集成测试
 Author: Athena平台团队
 创建时间: 2026-04-20
 """
-from __future__ import annotations
 
-import asyncio
 import pytest
-
-from core.hooks.base import HookContext, HookFunction, HookRegistry, HookType
-from core.hooks.enhanced import HookLifecycleManager
-from core.hooks.integrations import (
-    PluginHookIntegration,
-    PluginLoaderWithHooks,
-    create_plugin_hook_integration,
-    wrap_plugin_loader_with_hooks,
-)
 from core.plugins.types import (
     PluginDefinition,
     PluginMetadata,
     PluginStatus,
     PluginType,
+)
+
+from core.hooks.base import HookContext, HookFunction, HookType
+from core.hooks.integrations import (
+    create_plugin_hook_integration,
+    wrap_plugin_loader_with_hooks,
 )
 
 
@@ -375,3 +370,4 @@ __all__ = [
     "TestPluginLoaderWithHooks",
     "TestPluginHookLifecycle",
 ]
+

@@ -93,9 +93,9 @@ class ServiceInfo:
     service_name: str
     service_type: str
     state: ServiceState = ServiceState.STOPPED
-    endpoint: str | None = None
+    endpoint: Optional[str] = None
     dependencies: list[str] = field(default_factory=list)
-    health_check_url: str | None = None
+    health_check_url: Optional[str] = None
     last_health_check: datetime | None = None
     restart_count: int = 0
     uptime_seconds: float = 0.0
@@ -115,7 +115,7 @@ class Task:
     deadline: datetime | None = None
     payload: dict[str, Any] = field(default_factory=dict)
     status: str = "pending"
-    assigned_agent: str | None = None
+    assigned_agent: Optional[str] = None
 
 
 @dataclass
@@ -413,7 +413,7 @@ class PlatformOrchestrator:
         logger.info(f"✅ 任务完成: {task_id} (成功: {success})")
 
     async def update_agent_state(
-        self, agent_id: str, state: ServiceState, load: float | None = None
+        self, agent_id: str, state: ServiceState, load: Optional[float] = None
     ):
         """更新智能体状态"""
         if agent_id not in self.agents:

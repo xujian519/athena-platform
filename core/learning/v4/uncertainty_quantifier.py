@@ -86,7 +86,7 @@ class Confidence:
         if limitation and limitation not in self.limitations:
             self.limitations.append(limitation)
 
-    def adjust(self, delta: float, reason: str | None = None):
+    def adjust(self, delta: float, reason: Optional[str] = None):
         """
         调整置信度
 
@@ -164,7 +164,7 @@ class UncertaintyQuantifier:
         information_completeness: float = 0.5,
         evidence_quality: str = "reliable_source",
         topic_complexity: str = "moderate",
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> Confidence:
         """
         量化不确定性
@@ -320,7 +320,7 @@ class UncertaintyQuantifier:
             confidence.add_limitation(f"主题复杂度高: {topic_complexity}")
 
     def _record_quantification(
-        self, claim: str, confidence: Confidence, context: dict[str, Any] | None
+        self, claim: str, confidence: Confidence, context: Optional[dict[str, Any]]
     ):
         """记录量化历史"""
         record = {

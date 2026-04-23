@@ -210,7 +210,7 @@ class GoalManagementSystem:
 
         return metrics
 
-    def _parse_due_date(self, due_date_str: str | None) -> datetime | None:
+    def _parse_due_date(self, due_date_str: Optional[str]) -> datetime | None:
         """解析到期日期
 
         Args:

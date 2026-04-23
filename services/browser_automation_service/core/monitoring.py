@@ -86,7 +86,7 @@ class MetricsCollector:
         self._max_metrics = max_metrics
         self._counters: defaultdict[str, int] = defaultdict(int)
         self._gauges: defaultdict[str, float] = defaultdict(float)
-        self._histograms: defaultdict[str, list[float]] = defaultdict(list)
+        self._histograms: defaultdict[str, list[float] = defaultdict(list)
 
     def add_metric(self, metric: Metric) -> None:
         """添加指标"""

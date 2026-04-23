@@ -274,7 +274,7 @@ class CommunicationManager:
         if len(conversation["messages"]) > self.config["max_conversation_length"]:
             conversation["messages"] = conversation["messages"][-self.config["max_conversation_length"]:]
 
-    async def process_batch_messages(self, messages: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    async def process_batch_messages(self, messages: list[dict[str, Any]) -> list[dict[str, Any]:
         """批量处理消息"""
         results = []
         for msg_data in messages:
@@ -333,7 +333,7 @@ class CommunicationManager:
             logger.error(f"获取会话摘要失败: {str(e)}")
             return {"error": str(e)}
 
-    async def _analyze_emotion_trend(self, messages: list[dict[str, Any]]) -> dict[str, Any]:
+    async def _analyze_emotion_trend(self, messages: list[dict[str, Any]) -> dict[str, Any]:
         """分析情感趋势"""
         if not messages:
             return {"trend": "stable", "dominant_emotion": "neutral"}
@@ -361,7 +361,7 @@ class CommunicationManager:
             "distribution": emotion_counts
         }
 
-    async def _extract_key_issues(self, messages: list[dict[str, Any]]) -> list[str]:
+    async def _extract_key_issues(self, messages: list[dict[str, Any]) -> list[str]:
         """提取关键问题"""
         # 简化实现，提取包含特定关键词的消息
         key_issues = []
@@ -376,7 +376,7 @@ class CommunicationManager:
 
         return key_issues[:5]  # 最多返回5个问题
 
-    async def _calculate_satisfaction(self, messages: list[dict[str, Any]]) -> float:
+    async def _calculate_satisfaction(self, messages: list[dict[str, Any]) -> float:
         """计算满意度分数"""
         if not messages:
             return 0.5
@@ -507,7 +507,7 @@ class CommunicationManager:
             "95th_percentile": 5.2
         }
 
-    async def _get_popular_topics(self) -> list[dict[str, Any]]:
+    async def _get_popular_topics(self) -> list[dict[str, Any]:
         """获取热门话题"""
         topics = {}
         for conv in self.active_conversations.values():

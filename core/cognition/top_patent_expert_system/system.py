@@ -33,7 +33,7 @@ class TopPatentExpertSystem:
     集成中国顶级专利代理人、专利律师、专利审查员和技术专家的专家系统
     """
 
-    def __init__(self, expert_database_path: str | None = None):
+    def __init__(self, expert_database_path: Optional[str] = None):
         """初始化顶级专利专家系统
 
         Args:
@@ -101,7 +101,7 @@ class TopPatentExpertSystem:
         patent_type: str,
         analysis_type: str,
         technical_description: str,
-        user_requirements: list[str] | None = None,
+        user_requirements: Optional[list[str]] = None,
     ) -> ExpertTeamAnalysis:
         """使用专家团队进行分析
 
@@ -286,7 +286,7 @@ class TopPatentExpertSystem:
         self,
         expert: dict[str, Any],        technical_description: str,
         analysis_type: str,
-        user_requirements: list[str] | None = None,
+        user_requirements: Optional[list[str]] = None,
     ) -> ExpertConsultation:
         """咨询单个专家
 
@@ -338,7 +338,7 @@ class TopPatentExpertSystem:
         self,
         expert: dict[str, Any],        technical_description: str,
         analysis_type: str,
-        user_requirements: list[str] | None = None,
+        user_requirements: Optional[list[str]] = None,
     ) -> str:
         """生成专家特定的提示词
 

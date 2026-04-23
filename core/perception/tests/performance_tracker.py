@@ -92,7 +92,7 @@ class PerformanceTracker:
         metric_name: str,
         value: float,
         unit: str,
-        metadata: dict[str, Any] | None | None = None
+        metadata: Optional[dict[str, Any]] | None = None
     ):
         """
         记录性能指标
@@ -158,7 +158,7 @@ class PerformanceTracker:
 
     def check_regressions(
         self,
-        threshold_percent: float | None = None
+        threshold_percent: Optional[float] = None
     ) -> list[PerformanceRegression]:
         """
         检测性能回归
@@ -369,7 +369,7 @@ class PerformanceTracker:
 
         return "\n".join(lines)
 
-    def save_baselines(self, filepath: str | None = None):
+    def save_baselines(self, filepath: Optional[str] = None):
         """
         保存所有基准到文件
 

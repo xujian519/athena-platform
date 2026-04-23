@@ -32,7 +32,7 @@ class ChromeCookieManager:
             cache_duration: Cookie缓存时间（秒），默认1小时
         """
         self.cache_duration = cache_duration
-        self._cookie_cache: dict[str, list[CookieInfo]] = {}
+        self._cookie_cache: dict[str, list[CookieInfo] = {}
         self._last_cache_update: dict[str, datetime] = {}
 
         # 平台对应的域名映射
@@ -272,7 +272,7 @@ class ChromeCookieManager:
             self._last_cache_update.clear()
             logger.info('已清除所有Cookie缓存')
 
-    def get_cache_info(self) -> dict[str, dict[str, any]]:
+    def get_cache_info(self) -> dict[str, dict[str, any]:
         """获取缓存信息"""
         cache_info = {}
 

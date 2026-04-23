@@ -38,8 +38,8 @@ class TechnicalFeature:
     """技术特征"""
     name: str
     type: str  # "component", "function", "relationship", "parameter"
-    value: str | None = None
-    source: str | None = None  # 在原文中的位置
+    value: Optional[str] = None
+    source: Optional[str] = None  # 在原文中的位置
 
 
 @dataclass
@@ -49,7 +49,7 @@ class ClaimDraft:
     claim_type: ClaimType
     text: str
     features: list[TechnicalFeature] = field(default_factory=list)
-    parent_ref: int | None = None  # 引用的父权利要求号
+    parent_ref: Optional[int] = None  # 引用的父权利要求号
     confidence: float = 0.5  # 生成置信度
 
     def to_dict(self) -> dict:

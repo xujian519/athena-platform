@@ -40,7 +40,7 @@ def migrate_permissions(
 
     # 读取旧配置
     logger.info(f"📥 读取旧配置: {input_path}")
-    with open(input_file, "r", encoding="utf-8") as f:
+    with open(input_file, encoding="utf-8") as f:
         old_config = yaml.safe_load(f) or {}
 
     # 构建新配置
@@ -96,7 +96,7 @@ def migrate_permissions(
     with open(output_file, "w", encoding="utf-8") as f:
         yaml.dump(new_config, f, allow_unicode=True, default_flow_style=False)
 
-    logger.info(f"✅ 迁移完成！")
+    logger.info("✅ 迁移完成！")
     logger.info(f"   新配置文件: {output_path}")
     logger.info(f"   权限模式: {mode}")
 

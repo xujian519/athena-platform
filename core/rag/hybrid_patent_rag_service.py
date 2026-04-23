@@ -59,11 +59,11 @@ class PatentRAGQuery:
     top_k: int = 10
     rerank_method: str = "hybrid"
     include_metadata: bool = True
-    filters: dict[str, Any] | None = None
+    filters: Optional[dict[str, Any]] = None
     # 决定书特有参数
-    decision_date_range: tuple[str, str | None] | None = None  # 开始日期,结束日期
-    patent_numbers: list[str] | None = None  # 特定专利号
-    case_types: list[str] | None = None  # 案件类型
+    decision_date_range: Optional[tuple[str, str]] | None = None  # 开始日期,结束日期
+    patent_numbers: Optional[list[str]] = None  # 特定专利号
+    case_types: Optional[list[str]] = None  # 案件类型
 
 
 @dataclass

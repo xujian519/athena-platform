@@ -15,14 +15,14 @@ UnifiedLLMManager单元测试
 - 缓存管理
 """
 
-import pytest
 import asyncio
-from unittest.mock import AsyncMock, MagicMock, patch, Mock
+from unittest.mock import AsyncMock, MagicMock
 
-from core.llm.unified_llm_manager import UnifiedLLMManager
-from core.llm.base import LLMRequest, LLMResponse
-from core.llm.model_registry import ModelCapabilityRegistry
+import pytest
 
+from core.ai.llm.base import LLMRequest, LLMResponse
+from core.ai.llm.model_registry import ModelCapabilityRegistry
+from core.ai.llm.unified_llm_manager import UnifiedLLMManager
 
 # ==================== Mock适配器 ====================
 
@@ -147,7 +147,7 @@ class TestLLMGeneration:
         manager.adapters["test-model"] = mock_adapter
 
         # 创建请求
-        request = LLMRequest(
+        LLMRequest(
             message="Hello, world!",
             task_type="chat",
             max_tokens=100
@@ -498,21 +498,19 @@ class TestEdgeCases:
 
     def test_empty_prompt(self):
         """测试空提示"""
-        manager = UnifiedLLMManager()
+        UnifiedLLMManager()
 
         # 空提示应该被处理
         # 可能返回错误响应或默认响应
 
     def test_very_long_prompt(self):
         """测试超长提示"""
-        manager = UnifiedLLMManager()
+        UnifiedLLMManager()
 
         # 超长提示应该被截断或处理
-        long_prompt = "A" * 100000
 
     def test_concurrent_generation(self):
         """测试并发生成"""
-        import asyncio
 
         async def test_concurrent():
             manager = UnifiedLLMManager()
@@ -549,7 +547,7 @@ class TestPerformance:
         import time
 
         start = time.time()
-        manager = UnifiedLLMManager()
+        UnifiedLLMManager()
         elapsed = time.time() - start
 
         # 初始化应该很快 (< 0.1秒)
@@ -566,7 +564,7 @@ class TestPerformance:
             manager.stats[f"key_{i}"] = f"value_{i}"
 
         start = time.time()
-        stats = manager.get_stats()
+        manager.get_stats()
         elapsed = time.time() - start
 
         # 检索应该很快 (< 0.01秒)

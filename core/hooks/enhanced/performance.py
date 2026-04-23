@@ -139,7 +139,7 @@ class HookPerformanceMonitor:
                 throughput=throughput,
             )
 
-    async def reset_metrics(self, hook_id: str | None = None) -> None:
+    async def reset_metrics(self, hook_id: Optional[str] = None) -> None:
         """重置性能指标
 
         Args:

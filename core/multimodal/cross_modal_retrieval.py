@@ -123,7 +123,7 @@ class CrossModalRetrieval:
         return logger
 
     def index_item(
-        self, item_id: str, modality_data: ModalityData, metadata: dict[str, Any] | None = None
+        self, item_id: str, modality_data: ModalityData, metadata: Optional[dict[str, Any]] = None
     ) -> bool:
         """
         索引单个项目
@@ -173,7 +173,7 @@ class CrossModalRetrieval:
             self.logger.error(f"❌ 索引失败: {e}")
             return False
 
-    def index_batch(self, items: list[tuple[str, ModalityData, dict[str, Any]]]) -> int:
+    def index_batch(self, items: list[tuple[str, ModalityData, dict[str, Any]]) -> int]:
         """
         批量索引
 
@@ -194,7 +194,7 @@ class CrossModalRetrieval:
         query: str | ModalityData,
         mode: RetrievalMode,
         top_k: int = 10,
-        filters: dict[str, Any] | None = None,
+        filters: Optional[dict[str, Any]] = None,
     ) -> RetrievalResponse:
         """
         跨模态检索
@@ -350,7 +350,7 @@ class CrossModalRetrieval:
     def hybrid_search(
         self,
         query_text: str,
-        query_image: str | None = None,
+        query_image: Optional[str] = None,
         top_k: int = 10,
         text_weight: float = 0.7,
         image_weight: float = 0.3,

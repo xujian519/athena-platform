@@ -58,7 +58,7 @@ class AuthoritativeAgent:
         role: AgentRole,
         name: str,
         description: str,
-        knowledge_base: list[str] | None = None,
+        knowledge_base: Optional[list[str]] = None,
     ):
         """
         初始化Agent

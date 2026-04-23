@@ -108,7 +108,7 @@ class AlertManager:
         self,
         enabled_channels: list[AlertChannel] | None = None,
         email_config: dict | None = None,
-        webhook_url: str | None = None,
+        webhook_url: Optional[str] = None,
     ):
         """
         初始化告警管理器
@@ -298,7 +298,7 @@ def get_alert_manager() -> AlertManager:
 def setup_alert_manager(
     enabled_channels: list[AlertChannel] | None = None,
     email_config: dict | None = None,
-    webhook_url: str | None = None,
+    webhook_url: Optional[str] = None,
 ) -> AlertManager:
     """设置全局告警管理器"""
     global _alert_manager

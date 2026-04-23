@@ -33,7 +33,7 @@ class SessionStorage:
         """
         raise NotImplementedError
 
-    def load(self, session_id: str) -> Optional[SessionMemory]:
+    def load(self, session_id: str) -> SessionMemory | None:
         """加载会话
 
         Args:
@@ -113,7 +113,7 @@ class FileSessionStorage(SessionStorage):
             logger.error(f"❌ 保存会话失败 {memory.context.session_id}: {e}")
             return False
 
-    def load(self, session_id: str) -> Optional[SessionMemory]:
+    def load(self, session_id: str) -> SessionMemory | None:
         """加载会话
 
         Args:

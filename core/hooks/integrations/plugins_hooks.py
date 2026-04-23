@@ -68,7 +68,7 @@ class PluginHookIntegration:
         return self._lifecycle
 
     async def before_plugin_load(
-        self, plugin_path: str, metadata: dict[str, Any] | None = None
+        self, plugin_path: str, metadata: Optional[dict[str, Any]] = None
     ) -> HookResult:
         """插件加载前Hook
 
@@ -95,7 +95,7 @@ class PluginHookIntegration:
         )
 
     async def after_plugin_load(
-        self, plugin: PluginDefinition, success: bool = True, error: str | None = None
+        self, plugin: PluginDefinition, success: bool = True, error: Optional[str] = None
     ) -> HookResult:
         """插件加载后Hook
 

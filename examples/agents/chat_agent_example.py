@@ -7,15 +7,14 @@
 功能：使用LLM进行智能对话
 """
 
-from typing import Dict
 import logging
 
-from core.agents.xiaona.base_component import (
-    BaseXiaonaComponent,
+from core.framework.agents.xiaona.base_component import (
     AgentCapability,
     AgentExecutionContext,
     AgentExecutionResult,
     AgentStatus,
+    BaseXiaonaComponent,
 )
 
 logger = logging.getLogger(__name__)
@@ -42,7 +41,7 @@ class ChatAgent(BaseXiaonaComponent):
         ])
 
         # 初始化LLM
-        from core.llm.unified_llm_manager import UnifiedLLMManager
+        from core.ai.llm.unified_llm_manager import UnifiedLLMManager
         self.llm = UnifiedLLMManager()
 
         logger.info(f"ChatAgent初始化完成: {self.agent_id}")
@@ -130,7 +129,6 @@ def create_chat_agent(agent_id: str = "chat_agent_001", model: str = "kimi-k2.5"
 # 测试入口
 async def main():
     """测试入口"""
-    import asyncio
 
     # 创建Agent
     agent = ChatAgent(agent_id="chat_agent_001")
@@ -139,7 +137,7 @@ async def main():
     print("=== ChatAgent示例 ===")
     info = agent.get_info()
     print(f"Agent ID: {info['agent_id']}")
-    print(f"能力: {[c['name'] for c in info['capabilities']]}")
+    print(f"能力: {[c['name'] for c in info['capabilities']}")
 
     # 测试对话
     print("\n=== 对话示例 ===")

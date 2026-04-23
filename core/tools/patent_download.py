@@ -28,7 +28,7 @@ class PatentDownloadResult:
         file_size: Optional[int] = None,
         error: Optional[str] = None,
         download_time: Optional[float] = None,
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: Optional[dict[str, Any]] = None
     ):
         self.patent_number = patent_number
         self.success = success
@@ -38,7 +38,7 @@ class PatentDownloadResult:
         self.download_time = download_time
         self.metadata = metadata or {}
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "patent_number": self.patent_number,
@@ -84,10 +84,10 @@ class UnifiedPatentDownloader:
 
     async def download(
         self,
-        patent_numbers: List[str],
+        patent_numbers: list[str],
         output_dir: Optional[str] = None,
         **kwargs
-    ) -> List[PatentDownloadResult]:
+    ) -> list[PatentDownloadResult]:
         """
         统一下载接口
 
@@ -243,7 +243,7 @@ class UnifiedPatentDownloader:
 # Tool Handler - 用于工具系统注册
 # ============================================================================
 
-async def patent_download_handler(params: Dict[str, Any], context: Dict) -> Dict[str, Any]:
+async def patent_download_handler(params: dict[str, Any], context: dict) -> dict[str, Any]:
     """
     专利下载工具Handler
 
@@ -318,9 +318,9 @@ async def patent_download_handler(params: Dict[str, Any], context: Dict) -> Dict
 # ============================================================================
 
 async def download_patents(
-    patent_numbers: List[str],
+    patent_numbers: list[str],
     output_dir: str = "/tmp/patents"
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """
     便捷的专利下载函数
 
@@ -339,7 +339,7 @@ async def download_patents(
 async def download_patent(
     patent_number: str,
     output_dir: str = "/tmp/patents"
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     便捷的单个专利下载函数
 

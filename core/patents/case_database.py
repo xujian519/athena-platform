@@ -200,7 +200,7 @@ class PatentCaseDatabase:
         return case.case_id
 
     def update_case_fitness(
-        self, case_id: str, fitness: float, success: bool | None = None
+        self, case_id: str, fitness: float, success: Optional[bool] = None
     ) -> None:
         """
         更新案例适应度(自然选择)

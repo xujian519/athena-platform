@@ -34,7 +34,7 @@ class AthenaPQAIIntegration:
             logger.error(f"注册PQAI服务失败: {e}")
             return False
 
-    async def load_patent_data_from_kg(self) -> list[dict[str, Any]]:
+    async def load_patent_data_from_kg(self) -> list[dict[str, Any]:
         """从Athena知识图谱加载专利数据"""
         try:
             # 从Athena知识图谱服务获取专利数据
@@ -69,7 +69,7 @@ class AthenaPQAIIntegration:
             logger.error(f"从知识图谱加载专利数据失败: {e}")
             return []
 
-    async def build_pqai_index(self, patent_data: list[dict[str, Any]] = None):
+    async def build_pqai_index(self, patent_data: list[dict[str, Any] = None):
         """构建PQAI专利索引"""
         try:
             if not patent_data:

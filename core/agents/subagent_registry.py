@@ -341,7 +341,7 @@ class SubagentRegistry:
         """
         return self._agents.get(agent_type)
 
-    def get_available_agents(self, priority: int | None = None) -> list[SubagentConfig]:
+    def get_available_agents(self, priority: Optional[int] = None) -> list[SubagentConfig]:
         """获取可用的子代理类型列表
 
         Args:

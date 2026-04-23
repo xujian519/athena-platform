@@ -8,7 +8,7 @@ import json
 import logging
 import sqlite3
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 import networkx as nx
 
@@ -61,7 +61,7 @@ class NetworkXSQLiteImporter:
 
     def import_json_graph(self, json_file: Path, graph_name: str) -> Any:
         """从JSON导入知识图谱"""
-        with open(json_file, 'r', encoding='utf-8') as f:
+        with open(json_file, encoding='utf-8') as f:
             data = json.load(f)
 
         conn = sqlite3.connect(self.db_path)
@@ -117,7 +117,7 @@ class NetworkXSQLiteImporter:
         conn.close()
         logger.info(f"✅ 成功导入到SQLite: {graph_name}")
 
-    def query_entity(self, entity_name: str) -> List[Dict]:
+    def query_entity(self, entity_name: str) -> list[dict]:
         """查询实体"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
@@ -130,9 +130,9 @@ class NetworkXSQLiteImporter:
         conn.close()
 
         columns = ['id', 'name', 'entity_type', 'confidence', 'source', 'properties', 'created_at']
-        return [dict(zip(columns, row)) for row in results]
+        return [dict(zip(columns, row, strict=False)) for row in results]
 
-    def get_graph_statistics(self) -> Dict:
+    def get_graph_statistics(self) -> dict:
         """获取图统计信息"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()

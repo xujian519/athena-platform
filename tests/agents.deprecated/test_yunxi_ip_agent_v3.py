@@ -4,9 +4,8 @@ YunxiIPAgentV3单元测试
 测试YunxiIPAgentV3的基本功能
 """
 
-import pytest
-from unittest.mock import Mock, patch
 
+import pytest
 from core.yunxi.yunxi_ip_agent_v3 import YunxiIPAgentV3
 
 

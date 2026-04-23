@@ -2,12 +2,14 @@
 import asyncio
 import logging
 import sys
+
 sys.path.insert(0, 'patent_hybrid_retrieval')
 
 # 设置详细日志
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(name)s - %(message)s')
 
 from real_patent_hybrid_retrieval import RealPatentHybridRetrieval
+
 
 async def test_retrieval():
     try:

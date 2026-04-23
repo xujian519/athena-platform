@@ -38,12 +38,12 @@ class StepContext:
     step_id: str
     step_name: str
     status: str
-    start_time: str | None = None
-    end_time: str | None = None
-    input_data: dict[str, Any] | None = None
-    output_data: dict[str, Any] | None = None
-    error_message: str | None = None
-    metadata: dict[str, Any] | None = None
+    start_time: Optional[str] = None
+    end_time: Optional[str] = None
+    input_data: Optional[dict[str, Any]] = None
+    output_data: Optional[dict[str, Any]] = None
+    error_message: Optional[str] = None
+    metadata: Optional[dict[str, Any]] = None
 
     def to_dict(self) -> dict:
         """转换为字典"""
@@ -215,7 +215,7 @@ class TaskContextManager:
         status: str,
         input_data: dict | None = None,
         output_data: dict | None = None,
-        error_message: str | None = None,
+        error_message: Optional[str] = None,
         metadata: dict | None = None,
     ) -> bool:
         """
@@ -338,7 +338,7 @@ class TaskContextManager:
         context.status = status
         return await self.save_context(context)
 
-    async def get_progress(self, task_id: str) -> dict[str, Any] | None:
+    async def get_progress(self, task_id: str) -> Optional[dict[str, Any]]:
         """
         获取任务进度
 

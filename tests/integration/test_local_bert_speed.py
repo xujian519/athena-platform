@@ -18,7 +18,7 @@ async def test_local_bert_speed():
     print("=" * 50)
 
     try:
-        from core.nlp.bert_service import get_bert_service
+        from core.ai.nlp.bert_service import get_bert_service
 
         # 获取服务
         bert_service = await get_bert_service()
@@ -99,7 +99,7 @@ async def test_bert_vs_bge_speed():
     try:
         # 测试BERT（使用本地模型）
         print("\n🔹 BERT性能测试...")
-        from core.nlp.bert_service import encode_with_general_bert
+        from core.ai.nlp.bert_service import encode_with_general_bert
 
         bert_times = []
         for i in range(3):
@@ -114,7 +114,7 @@ async def test_bert_vs_bge_speed():
 
         # 测试BGE
         print("\n🔹 BGE性能测试...")
-        from core.embedding.unified_embedding_service import encode_for_document
+        from core.ai.embedding.unified_embedding_service import encode_for_document
 
         bge_times = []
         for i in range(3):

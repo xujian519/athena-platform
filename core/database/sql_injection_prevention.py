@@ -132,9 +132,9 @@ class SQLInjectionPrevention:
         cls,
         operation: str,
         table_name: str,
-        where_clause: str | None = None,
-        limit: int | None = None,
-        offset: int | None = None
+        where_clause: Optional[str] = None,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None
     ) -> tuple[str, list[Any]]:
         """
         构建安全的表查询（使用已验证的表名）
@@ -253,7 +253,7 @@ class SafeQueryBuilder:
         self.limit_value = None
         self.offset_value = None
 
-    def select(self, columns: str | list[str]) -> 'SafeQueryBuilder':
+    def select(self, columns: str | list[str]) -> SafeQueryBuilder:
         """
         设置SELECT列
 
@@ -271,7 +271,7 @@ class SafeQueryBuilder:
         self.select_columns = columns
         return self
 
-    def where(self, condition: str, *params: Any) -> 'SafeQueryBuilder':
+    def where(self, condition: str, *params: Any) -> SafeQueryBuilder:
         """
         添加WHERE条件（参数化）
 
@@ -286,7 +286,7 @@ class SafeQueryBuilder:
         self.where_params.extend(params)
         return self
 
-    def order_by(self, column: str, ascending: bool = True) -> 'SafeQueryBuilder':
+    def order_by(self, column: str, ascending: bool = True) -> SafeQueryBuilder:
         """
         添加排序
 
@@ -302,7 +302,7 @@ class SafeQueryBuilder:
         self.order_by_column = f"{column} {direction}"
         return self
 
-    def limit(self, value: int) -> 'SafeQueryBuilder':
+    def limit(self, value: int) -> SafeQueryBuilder:
         """
         设置LIMIT
 
@@ -317,7 +317,7 @@ class SafeQueryBuilder:
         self.limit_value = value
         return self
 
-    def offset(self, value: int) -> 'SafeQueryBuilder':
+    def offset(self, value: int) -> SafeQueryBuilder:
         """
         设置OFFSET
 

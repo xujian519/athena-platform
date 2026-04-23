@@ -14,9 +14,7 @@ Logic Error Fixer for Cognitive & Decision Module
 
 import os
 import re
-import ast
 from pathlib import Path
-from typing import List, Tuple
 
 
 def fix_cannot_assign_to_function_call(file_path: str) -> int:
@@ -28,7 +26,7 @@ def fix_cannot_assign_to_function_call(file_path: str) -> int:
     - func()[index] = value →  temp = func(); temp[index] = value
     """
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         original = content
@@ -41,7 +39,7 @@ def fix_cannot_assign_to_function_call(file_path: str) -> int:
 
         for match in reversed(matches1):
             # 提取字典名和键
-            dict_call = content[max(0, match.start()-50):match.end()]
+            content[max(0, match.start()-50):match.end()]
             # 简单修复：将 Any 替换为 None
             fixed = content[:match.start()] + re.sub(r',\s*Any\)', ', None)', content[match.start():match.end()]) + content[match.end():]
             content = fixed
@@ -90,7 +88,7 @@ def fix_cannot_assign_to_function_call(file_path: str) -> int:
 def fix_empty_except_blocks(file_path: str) -> int:
     """修复空的except块"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             lines = f.readlines()
 
         fixed_count = 0
@@ -131,7 +129,7 @@ def fix_empty_except_blocks(file_path: str) -> int:
 def fix_dict_get_any_pattern(file_path: str) -> int:
     """修复 dict.get(str, Any) 模式"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         original = content
@@ -171,19 +169,19 @@ def fix_return_in_try_block(file_path: str) -> int:
     # 后续代码永远不会执行
     """
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            lines = f.readlines()
+        with open(file_path, encoding='utf-8') as f:
+            f.readlines()
 
         # 简单检测：try块有return，except块也有return
         # 这种模式本身可能是有意的，不强制修改
         # 只记录潜在问题
         return 0
 
-    except Exception as e:
+    except Exception:
         return 0
 
 
-def scan_and_fix_specific_files() -> Tuple[int, int]:
+def scan_and_fix_specific_files() -> tuple[int, int]:
     """扫描并修复已知的特定问题文件"""
     fixed_total = 0
     files_fixed = 0
@@ -217,7 +215,7 @@ def scan_and_fix_specific_files() -> Tuple[int, int]:
             fixed_total += fixes
             files_fixed += 1
         else:
-            print(f"   ℹ️  无需修复")
+            print("   ℹ️  无需修复")
 
     return files_fixed, fixed_total
 
@@ -237,7 +235,7 @@ def main():
     if args.all:
         print("🔧 开始修复认知与决策模块的逻辑错误...")
         files_fixed, total_fixes = scan_and_fix_specific_files()
-        print(f"\n✅ 修复完成!")
+        print("\n✅ 修复完成!")
         print(f"   修复文件数: {files_fixed}")
         print(f"   修复问题数: {total_fixes}")
     elif args.files:

@@ -41,7 +41,7 @@ class PermissionConfig:
 
     mode: PermissionMode = PermissionMode.DEFAULT
     path_rules: list[PathRule] = field(default_factory=lambda: DEFAULT_PATH_RULES.copy())
-    denied_commands: list[str] | None = None
+    denied_commands: Optional[list[str]] = None
     always_allow: list[PermissionRule] = field(default_factory=list)
     always_deny: list[PermissionRule] = field(default_factory=list)
 
@@ -77,7 +77,7 @@ class EnhancedPermissionChecker(ToolPermissionContext):
         self,
         mode: PermissionMode = PermissionMode.DEFAULT,
         path_rules: list[PathRule] | None = None,
-        denied_commands: list[str] | None = None,
+        denied_commands: Optional[list[str]] = None,
         always_allow: list[PermissionRule] | None = None,
         always_deny: list[PermissionRule] | None = None,
     ):
@@ -119,7 +119,7 @@ class EnhancedPermissionChecker(ToolPermissionContext):
     def check_permission(
         self,
         tool_name: str,
-        parameters: dict[str, Any] | None = None,
+        parameters: Optional[dict[str, Any]] = None,
     ) -> PermissionDecision:
         """增强的权限检查
 

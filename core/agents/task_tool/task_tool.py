@@ -34,7 +34,7 @@ class TaskTool:
         self,
         task_store: TaskStore | None = None,
         model_mapper: ModelMapper | None = None,
-        config: dict[str, Any] | None = None,
+        config: Optional[dict[str, Any]] = None,
     ):
         """初始化TaskTool
 
@@ -119,10 +119,10 @@ class TaskTool:
         self,
         prompt: str,
         tools: list[str],
-        model: str | None = None,
-        agent_type: str | None = None,
+        model: Optional[str] = None,
+        agent_type: Optional[str] = None,
         background: bool = False,
-        fork_context: dict[str, Any] | None = None,
+        fork_context: Optional[dict[str, Any]] = None,
     ) -> dict[str, Any]:
         """执行任务 (同步包装器，如果可能建议使用 execute_async)"""
         import asyncio
@@ -143,10 +143,10 @@ class TaskTool:
         self,
         prompt: str,
         tools: list[str],
-        model: str | None = None,
-        agent_type: str | None = None,
+        model: Optional[str] = None,
+        agent_type: Optional[str] = None,
         background: bool = False,
-        fork_context: dict[str, Any] | None = None,
+        fork_context: Optional[dict[str, Any]] = None,
     ) -> dict[str, Any]:
         """异步执行任务
 
@@ -205,8 +205,8 @@ class TaskTool:
 
     def _build_fork_context(
         self,
-        context: dict[str, Any] | None,
-        agent_type: str | None,
+        context: Optional[dict[str, Any]],
+        agent_type: Optional[str],
         prompt: str,
     ) -> ForkContext | None:
         """构建Fork上下文
@@ -234,8 +234,8 @@ class TaskTool:
 
     def _select_model(
         self,
-        model: str | None,
-        agent_type: str | None,
+        model: Optional[str],
+        agent_type: Optional[str],
     ) -> str:
         """选择模型
 
@@ -268,7 +268,7 @@ class TaskTool:
         # 默认使用sonnet
         return self.model_mapper.map("sonnet")
 
-    def _generate_agent_id(self, agent_type: str | None = None) -> str:
+    def _generate_agent_id(self, agent_type: Optional[str] = None) -> str:
         """生成代理ID
 
         Args:

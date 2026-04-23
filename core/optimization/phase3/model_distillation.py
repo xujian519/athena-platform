@@ -165,8 +165,8 @@ class ModelDistillationSystem:
         method: DistillationMethod = DistillationMethod.RESPONSE_BASED,
         epochs: int = 100,
         batch_size: int = 32,
-        temperature: float | None = None,
-        alpha: float | None = None,
+        temperature: Optional[float] = None,
+        alpha: Optional[float] = None,
     ) -> DistillationResult:
         """
         执行蒸馏

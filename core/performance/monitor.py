@@ -134,7 +134,7 @@ class Alert:
     threshold: float  # 阈值
     timestamp: float = field(default_factory=time.time)  # 时间戳
     resolved: bool = False  # 是否已解决
-    resolved_at: float | None = None  # 解决时间
+    resolved_at: Optional[float] = None  # 解决时间
 
     def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
@@ -338,7 +338,7 @@ class PerformanceMonitor:
             return {name: metric.to_dict() for name, metric in self.metrics.items()}
 
     def get_metric_history(
-        self, name: str, since: float | None = None
+        self, name: str, since: Optional[float] = None
     ) -> list[tuple[float, float]]:
         """获取指标历史"""
         if since is None:
@@ -576,7 +576,7 @@ class TerminalReporter:
         except KeyboardInterrupt:
             print(Colors.yellow("\n\n仪表板已停止"))
 
-    def generate_report(self, output_file: str | None = None) -> dict[str, Any]:
+    def generate_report(self, output_file: Optional[str] = None) -> dict[str, Any]:
         """
         生成性能报告
 
@@ -665,6 +665,6 @@ def show_live_dashboard(interval: float = 1.0, duration: float = 60.0) -> None:
     get_terminal_reporter().print_live_dashboard(interval, duration)
 
 
-def generate_report(output_file: str | None = None) -> dict[str, Any]:
+def generate_report(output_file: Optional[str] = None) -> dict[str, Any]:
     """生成性能报告"""
     return get_terminal_reporter().generate_report(output_file)

@@ -70,7 +70,7 @@ class ErrorRecord:
     severity: ErrorSeverity
     stack_trace: str
     context: Dict[str, Any]
-    recovery_action: str | None = None
+    recovery_action: Optional[str] = None
     recovery_success: bool = False
 
 @dataclass
@@ -86,7 +86,7 @@ class StateTransition:
 class CognitiveStateManager:
     """认知状态管理器"""
 
-    def __init__(self, state_change_callbacks: Optional[List[Callable] = None):
+    def __init__(self, state_change_callbacks: Optional[List[Callable]] = None):
         # 状态管理
         self._current_state = CognitiveState.INITIALIZING
         self._previous_state = None
@@ -402,7 +402,7 @@ class CognitiveStateManager:
     async def execute_with_retry(self,
                                 func: Callable,
                                 *args,
-                                max_retries: int | None = None,
+                                max_retries: Optional[int] = None,
                                 context: Optional[Dict[str, Any]] = None,
                                 **kwargs) -> Any:
         """带重试机制的函数执行"""
@@ -478,7 +478,7 @@ class CognitiveStateManager:
             ]
         }
 
-    def export_state_history(self, file_path: str, limit: int | None = None):
+    def export_state_history(self, file_path: str, limit: Optional[int] = None):
         """导出状态历史"""
         history_to_export = self.state_history[-limit:] if limit else self.state_history
 

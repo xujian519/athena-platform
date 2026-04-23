@@ -36,7 +36,7 @@ class RecognitionResult:
     """识别结果"""
 
     text: str
-    entities: list[dict[str, Any]]
+    entities: list[dict[str, Any]
     confidence: float
     metadata: dict[str, Any]
 
@@ -128,7 +128,7 @@ class EnhancedEntityRecognizer:
             metadata={"recognizer": "enhanced", "entity_count": len(entities)},
         )
 
-    def _pattern_match(self, text: str) -> list[dict[str, Any]]:
+    def _pattern_match(self, text: str) -> list[dict[str, Any]:
         """模式匹配"""
         entities = []
 
@@ -194,7 +194,7 @@ class EnhancedEntityRecognizer:
 
         return entities
 
-    def _dict_match(self, text: str) -> list[dict[str, Any]]:
+    def _dict_match(self, text: str) -> list[dict[str, Any]:
         """词典匹配"""
         entities = []
 
@@ -236,7 +236,7 @@ class EnhancedEntityRecognizer:
 
         return entities
 
-    def _deduplicate(self, entities: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    def _deduplicate(self, entities: list[dict[str, Any]) -> list[dict[str, Any]:
         """去重"""
         seen = set()
         unique = []
@@ -249,7 +249,7 @@ class EnhancedEntityRecognizer:
 
         return sorted(unique, key=lambda x: x["start"])
 
-    def _calculate_confidence(self, entities: list[dict[str, Any]], text: str) -> float:
+    def _calculate_confidence(self, entities: list[dict[str, Any], text: str) -> float:
         """计算置信度"""
         if not entities:
             return 0.0
@@ -265,7 +265,7 @@ class EnhancedEntityRecognizer:
 
     def get_entities_by_type(
         self, text: str, entity_type: EntityType
-    ) -> list[dict[str, Any]]:
+    ) -> list[dict[str, Any]:
         """按类型获取实体"""
         result = self.recognize(text)
         return [e for e in result.entities if e["type"] == entity_type.value]

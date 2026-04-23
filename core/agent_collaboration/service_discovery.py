@@ -42,7 +42,7 @@ class ServiceInstance:
         host: str,
         port: int,
         weight: int = 1,
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ):
         self.instance_id = instance_id
         self.agent_id = agent_id

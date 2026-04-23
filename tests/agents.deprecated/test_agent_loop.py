@@ -7,7 +7,6 @@ Agent Loop 单元测试
 作者: Athena平台团队
 创建时间: 2026-04-20
 """
-from __future__ import annotations
 
 import asyncio
 import logging
@@ -18,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 async def test_agent_loop_creation():
     """测试 Agent Loop 创建"""
-    from core.agents.agent_loop import create_agent_loop
+    from core.framework.agents.agent_loop import create_agent_loop
 
     print("\n=== 测试 Agent Loop 创建 ===")
 
@@ -43,7 +42,7 @@ async def test_agent_loop_creation():
 
 async def test_agent_loop_execution():
     """测试 Agent Loop 执行"""
-    from core.agents.agent_loop import create_agent_loop
+    from core.framework.agents.agent_loop import create_agent_loop
 
     print("\n=== 测试 Agent Loop 执行 ===")
 
@@ -71,9 +70,10 @@ async def test_agent_loop_execution():
 
 async def test_integration():
     """测试事件系统和 Agent Loop 集成"""
-    from core.events.event_bus import get_global_event_bus, CallbackSubscriber
-    from core.events.event_types import AgentStarted, AgentStopped, ToolExecutionStarted
-    from core.agents.agent_loop import create_agent_loop
+    from core.events.event_bus import CallbackSubscriber, get_global_event_bus
+    from core.events.event_types import AgentStarted, AgentStopped
+
+    from core.framework.agents.agent_loop import create_agent_loop
 
     print("\n=== 测试事件系统和 Agent Loop 集成 ===")
 
@@ -81,7 +81,7 @@ async def test_integration():
     event_bus = get_global_event_bus()
 
     # 创建 Agent Loop
-    agent_loop = create_agent_loop(
+    create_agent_loop(
         agent_name="xiaona",
         agent_type="legal",
         system_prompt="你是一个专利法律专家。",
@@ -133,3 +133,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+

@@ -13,7 +13,7 @@ import json
 import logging
 import sys
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 # 配置日志
 logging.basicConfig(
@@ -53,7 +53,7 @@ class HybridOCREngine:
 
             # 初始化LLM适配器
             try:
-                from core.llm.adapters.local_8009_adapter import Local8009Adapter
+                from core.ai.llm.adapters.local_8009_adapter import Local8009Adapter
 
                 self.llm_adapter = Local8009Adapter(
                     base_url=self.llm_base_url,
@@ -78,7 +78,7 @@ class HybridOCREngine:
             logger.error(f"❌ 初始化失败: {e}", exc_info=True)
             return False
 
-    async def analyze_with_docling(self, pdf_path: str) -> Dict[str, Any]:
+    async def analyze_with_docling(self, pdf_path: str) -> dict[str, Any]:
         """
         使用Docling分析PDF结构
 
@@ -88,7 +88,7 @@ class HybridOCREngine:
         Returns:
             Docling分析结果
         """
-        logger.info(f"🔍 阶段1：Docling分析PDF结构...")
+        logger.info("🔍 阶段1：Docling分析PDF结构...")
 
         try:
             # Docling转换
@@ -143,7 +143,7 @@ class HybridOCREngine:
         self,
         pdf_path: str,
         max_pages: int = 3
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         使用GLM-OCR（VLM）识别PDF内容
 
@@ -196,7 +196,7 @@ class HybridOCREngine:
 4. 如果有附图，说明附图内容
 5. 保持段落结构"""
 
-                user_prompt = f"""请识别这页专利文档的内容。
+                user_prompt = """请识别这页专利文档的内容。
 
 特别注意：
 - 专利号、申请日、授权公告日等关键信息
@@ -248,7 +248,7 @@ class HybridOCREngine:
         self,
         pdf_path: str,
         output_markdown: str = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         测试单个PDF文件
 
@@ -278,7 +278,7 @@ class HybridOCREngine:
             logger.error(f"❌ Docling分析失败: {docling_result['error']}")
             return docling_result
 
-        logger.info(f"✅ Docling分析完成:")
+        logger.info("✅ Docling分析完成:")
         logger.info(f"   - 总页数: {docling_result['total_pages']}")
         logger.info(f"   - 是否扫描件: {docling_result['is_scanned']}")
         logger.info(f"   - 包含文本: {docling_result['has_text']}")
@@ -290,7 +290,7 @@ class HybridOCREngine:
             logger.error(f"❌ VLM识别失败: {vlm_result['error']}")
             return vlm_result
 
-        logger.info(f"✅ VLM识别完成:")
+        logger.info("✅ VLM识别完成:")
         logger.info(f"   - 处理页数: {vlm_result['processed_pages']}")
         logger.info(f"   - 成功页数: {vlm_result['successful_pages']}")
 
@@ -320,7 +320,7 @@ class HybridOCREngine:
 
     def _generate_markdown_report(
         self,
-        result: Dict[str, Any],
+        result: dict[str, Any],
         output_path: str
     ):
         """生成Markdown格式报告"""

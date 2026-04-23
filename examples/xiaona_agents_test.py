@@ -5,8 +5,8 @@
 """
 
 import asyncio
-import logging
 import json
+import logging
 
 # 配置日志
 logging.basicConfig(
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 async def test_scenario_detection():
     """测试场景识别"""
-    from core.agents.xiaonuo_orchestrator import XiaonuoOrchestrator
+    from core.framework.agents.xiaonuo_orchestrator import XiaonuoOrchestrator
 
     # 创建小诺编排者
     xiaonuo = XiaonuoOrchestrator()
@@ -47,7 +47,7 @@ async def test_scenario_detection():
 
 async def test_patent_search():
     """测试专利检索任务"""
-    from core.agents.xiaonuo_orchestrator import XiaonuoOrchestrator
+    from core.framework.agents.xiaonuo_orchestrator import XiaonuoOrchestrator
 
     print("\n" + "="*60)
     print("专利检索任务测试")
@@ -80,7 +80,7 @@ async def test_patent_search():
 
 async def test_creativity_analysis():
     """测试创造性分析任务"""
-    from core.agents.xiaonuo_orchestrator import XiaonuoOrchestrator
+    from core.framework.agents.xiaonuo_orchestrator import XiaonuoOrchestrator
 
     print("\n" + "="*60)
     print("创造性分析任务测试")
@@ -108,7 +108,7 @@ async def test_creativity_analysis():
 
 async def test_agent_status():
     """测试智能体状态查询"""
-    from core.agents.xiaonuo_orchestrator import XiaonuoOrchestrator
+    from core.framework.agents.xiaonuo_orchestrator import XiaonuoOrchestrator
 
     print("\n" + "="*60)
     print("智能体状态查询")
@@ -120,13 +120,13 @@ async def test_agent_status():
     # 获取智能体状态
     status = xiaonuo.get_agent_status()
 
-    print(f"\n统计信息:")
+    print("\n统计信息:")
     print(f"  总智能体数: {status['statistics']['total_agents']}")
     print(f"  启用智能体: {status['statistics']['enabled']}")
     print(f"  总能力数: {status['statistics']['total_capabilities']}")
     print(f"  阶段分布: {status['statistics']['phase_distribution']}")
 
-    print(f"\n智能体详情:")
+    print("\n智能体详情:")
     for agent_id, agent_info in status['agents'].items():
         print(f"  - {agent_id}:")
         print(f"    类型: {agent_info['type']}")
@@ -137,7 +137,7 @@ async def test_agent_status():
 
 async def test_supported_scenarios():
     """测试支持的场景列表"""
-    from core.agents.xiaonuo_orchestrator import XiaonuoOrchestrator
+    from core.framework.agents.xiaonuo_orchestrator import XiaonuoOrchestrator
 
     print("\n" + "="*60)
     print("支持的场景列表")

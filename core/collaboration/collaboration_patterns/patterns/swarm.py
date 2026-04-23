@@ -72,7 +72,7 @@ class SwarmTask:
         self.result = None
         self.error = None
 
-    def add_subtask(self, subtask: "SwarmTask") -> None:
+    def add_subtask(self, subtask: SwarmTask) -> None:
         """添加子任务"""
         subtask.parent_id = self.id
         self.subtasks.append(subtask)
@@ -171,7 +171,7 @@ class SwarmCollaborationPattern:
         task: Any,
         participants: list[str],
         context: dict[str, Any],
-    ) -> str | None:
+    ) -> Optional[str]:
         """
         启动Swarm协作
 
@@ -600,7 +600,7 @@ class SwarmCollaborationPattern:
         proposer: str,
         content: dict[str, Any],
         proposal_type: str,
-    ) -> str | None:
+    ) -> Optional[str]:
         """
         创建提案
 
@@ -1060,7 +1060,7 @@ class SwarmCollaborationPattern:
     # 工具方法
     # ========================================================================
 
-    def get_session_info(self, session_id: str) -> dict[str, Any] | None:
+    def get_session_info(self, session_id: str) -> Optional[dict[str, Any]]:
         """
         获取会话信息
 
@@ -1086,7 +1086,7 @@ class SwarmCollaborationPattern:
             ),
         }
 
-    def get_statistics(self, session_id: str) -> dict[str, Any] | None:
+    def get_statistics(self, session_id: str) -> Optional[dict[str, Any]]:
         """
         获取统计信息
 

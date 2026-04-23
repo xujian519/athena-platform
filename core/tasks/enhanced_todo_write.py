@@ -25,7 +25,7 @@ from .task_scheduler import ReminderType, TaskPriority, get_scheduler
 class EnhancedTodoWrite:
     """增强的TodoWrite工具"""
 
-    def __init__(self, storage_path: str | None = None):
+    def __init__(self, storage_path: Optional[str] = None):
         """
         初始化增强TodoWrite
 
@@ -99,9 +99,9 @@ class EnhancedTodoWrite:
         status: str = "pending",
         active_form: str = "",
         priority: str = "normal",
-        deadline: str | None = None,
-        tags: list[str] | None = None,
-        reminder_minutes: int | None = None,
+        deadline: Optional[str] = None,
+        tags: Optional[list[str]] = None,
+        reminder_minutes: Optional[int] = None,
     ) -> str:
         """
         添加单个任务
@@ -246,7 +246,7 @@ class EnhancedTodoWrite:
             ),
         }
 
-    def export_todos(self, format_type: str = "json", file_path: str | None = None) -> str:
+    def export_todos(self, format_type: str = "json", file_path: Optional[str] = None) -> str:
         """
         导出任务
 
@@ -531,9 +531,9 @@ def add_todo(
     status: str = "pending",
     active_form: str = "",
     priority: str = "normal",
-    deadline: str | None = None,
-    tags: list[str] | None = None,
-    reminder_minutes: int | None = None,
+    deadline: Optional[str] = None,
+    tags: Optional[list[str]] = None,
+    reminder_minutes: Optional[int] = None,
 ) -> str:
     """快捷添加任务"""
     enhanced_todo = get_enhanced_todo()

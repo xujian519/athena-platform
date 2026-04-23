@@ -13,7 +13,6 @@ Legal Research Workflow Tests
 from unittest.mock import Mock
 
 import pytest
-
 from core.patents.workflows.legal_workflow import (
     LegalWorkflow,
     LegalWorkflowInput,

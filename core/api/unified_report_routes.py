@@ -60,7 +60,7 @@ class ReportGenerationRequest(BaseModel):
 class BatchReportRequest(BaseModel):
     """批量报告生成请求"""
     report_type: str = Field(..., description="报告类型")
-    output_dir: str | None = Field(default=None, description="输出目录")
+    output_dir: Optional[str] = Field(default=None, description="输出目录")
     max_concurrent: int = Field(default=3, description="最大并发数")
 
 
@@ -74,10 +74,10 @@ class TaskStatusResponse(BaseModel):
     task_id: str
     status: str
     created_at: str
-    started_at: str | None = None
-    completed_at: str | None = None
-    error: str | None = None
-    processing_time: float | None = None
+    started_at: Optional[str] = None
+    completed_at: Optional[str] = None
+    error: Optional[str] = None
+    processing_time: Optional[float] = None
 
 
 class ReportResponse(BaseModel):
@@ -185,7 +185,7 @@ async def generate_report_from_upload(
 async def generate_report_from_path(
     document_path: str = Form(..., description="文档路径"),
     report_type: str = Form("patent_technical_analysis", description="报告类型"),
-    output_dir: str | None = Form(None, description="输出目录"),
+    output_dir: Optional[str] = Form(None, description="输出目录"),
 ):
     """
     从文档路径生成报告
@@ -286,7 +286,7 @@ async def generate_report_from_data(
 async def compare_documents_api(
     doc1_path: str = Form(..., description="文档1路径"),
     doc2_path: str = Form(..., description="文档2路径"),
-    output_dir: str | None = Form(None, description="输出目录"),
+    output_dir: Optional[str] = Form(None, description="输出目录"),
 ):
     """
     对比两个文档并生成对比报告
@@ -451,7 +451,7 @@ async def get_task_status(task_id: str):
 
 @router.get("/tasks")
 async def list_all_tasks(
-    status: str | None = None,
+    status: Optional[str] = None,
     limit: int = 100,
 ):
     """

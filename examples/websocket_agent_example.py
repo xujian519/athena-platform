@@ -6,13 +6,13 @@ Python WebSocket Agent适配器使用示例
 
 import asyncio
 import logging
-from core.agents.websocket_adapter import (
+
+from core.framework.agents.websocket_adapter import (
+    WebSocketClient,
     create_xiaona_agent,
     create_xiaonuo_agent,
     create_yunxi_agent,
-    WebSocketClient
 )
-
 
 # 配置日志
 logging.basicConfig(
@@ -33,7 +33,7 @@ async def example_1_basic_usage():
         auth_token="demo_token"
     )
 
-    print(f"✅ 小娜Agent已启动")
+    print("✅ 小娜Agent已启动")
     print(f"   Session ID: {xiaona.session_id}")
     print(f"   连接状态: {xiaona.is_connected}")
 
@@ -96,7 +96,7 @@ async def example_3_multiple_agents():
         auth_token="demo_token"
     )
     agents.append(("小娜", xiaona))
-    print(f"✅ 小娜Agent已启动")
+    print("✅ 小娜Agent已启动")
 
     # 小诺 - 调度官
     xiaonuo = await create_xiaonuo_agent(
@@ -104,7 +104,7 @@ async def example_3_multiple_agents():
         auth_token="demo_token"
     )
     agents.append(("小诺", xiaonuo))
-    print(f"✅ 小诺Agent已启动")
+    print("✅ 小诺Agent已启动")
 
     # 云希 - IP管理
     yunxi = await create_yunxi_agent(
@@ -112,7 +112,7 @@ async def example_3_multiple_agents():
         auth_token="demo_token"
     )
     agents.append(("云希", yunxi))
-    print(f"✅ 云希Agent已启动")
+    print("✅ 云希Agent已启动")
 
     # 保持运行
     await asyncio.sleep(5)
@@ -149,7 +149,7 @@ async def example_4_task_with_progress():
         progress_callback=progress_callback
     )
 
-    print(f"\n✅ 任务完成")
+    print("\n✅ 任务完成")
     print(f"   创造性评分: {result['creativity']['score']}")
     print(f"   创造性等级: {result['creativity']['level']}")
 

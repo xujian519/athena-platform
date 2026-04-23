@@ -12,6 +12,7 @@ Browser Operation Routes for Browser Automation Service
 
 from config.settings import logger
 from core.browser_manager import get_browser_manager
+from core.concurrency import get_concurrency_manager
 from core.task_executor import TaskExecutor
 from fastapi import APIRouter, Depends, HTTPException
 
@@ -33,7 +34,6 @@ from api.models.responses import (
     ScreenshotResponse,
     TaskResponse,
 )
-from core.concurrency import get_concurrency_manager
 from core.exceptions import (
     generate_error_id,
 )

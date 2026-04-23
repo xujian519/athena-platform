@@ -38,7 +38,6 @@ except Exception as e:
 # 3. 测试基本功能（不加载模型）
 print("\n3. 测试基本功能...")
 try:
-    from FlagEmbedding import FlagModel
     print("✅ FlagModel类可用")
     print("   注意: 实际模型加载需要时间，首次运行会下载模型文件")
 except Exception as e:
@@ -48,8 +47,9 @@ except Exception as e:
 # 4. 检查安装位置
 print("\n4. 检查安装位置...")
 import site
+
 site_packages = site.getsitepackages()
-print(f"   site-packages位置:")
+print("   site-packages位置:")
 for sp in site_packages:
     print(f"   - {sp}")
 

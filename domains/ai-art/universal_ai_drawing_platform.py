@@ -491,7 +491,7 @@ class UniversalDrawingEngine:
             }
         }
 
-    def _load_use_case_configs(self) -> dict[UseCase, dict[str, Any]]:
+    def _load_use_case_configs(self) -> dict[UseCase, dict[str, Any]:
         """加载使用场景配置"""
         return {
             UseCase.PATENT_APPLICATION: {

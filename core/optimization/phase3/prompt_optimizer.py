@@ -271,7 +271,7 @@ class PromptEngineeringOptimizer:
         self,
         prompt: str,
         model_call: callable,
-        evaluation_criteria: dict[str, Any] | None = None,
+        evaluation_criteria: Optional[dict[str, Any]] = None,
     ) -> EvaluationResult:
         """
         评估提示

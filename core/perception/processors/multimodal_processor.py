@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 class MultiModalProcessor(BaseProcessor):
     """多模态处理器"""
 
-    def __init__(self, processor_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, processor_id: str, config: Optional[dict[str, Any]] = None):
         super().__init__(processor_id, config)
 
     async def initialize(self):

@@ -38,7 +38,7 @@ logger = setup_logging()
 class DataCollectionPipeline:
     """数据收集管道"""
 
-    def __init__(self, db_path: str | None = None):
+    def __init__(self, db_path: Optional[str] = None):
         """初始化数据收集管道
 
         Args:
@@ -128,9 +128,9 @@ class DataCollectionPipeline:
         self,
         user_id: str,
         text: str,
-        intent: str | None = None,
-        predicted_intent: str | None = None,
-        confidence: float | None = None,
+        intent: Optional[str] = None,
+        predicted_intent: Optional[str] = None,
+        confidence: Optional[float] = None,
         context: dict | None = None,
         source: str = "manual",
     ) -> bool:

@@ -18,7 +18,7 @@ class ResponseCache:
     """智能响应缓存系统"""
 
     def __init__(
-        self, cache_dir: str | None = None, max_memory_items: int = 1000, max_ttl_hours: int = 24
+        self, cache_dir: Optional[str] = None, max_memory_items: int = 1000, max_ttl_hours: int = 24
     ):
         """
         初始化缓存系统
@@ -129,7 +129,7 @@ class ResponseCache:
         response: Any,
         context: dict | None = None,
         model: str = "default",
-        ttl_hours: int | None = None,
+        ttl_hours: Optional[int] = None,
         metadata: dict | None = None,
     ) -> None:
         """
@@ -153,7 +153,7 @@ class ResponseCache:
             self._save_to_disk(cache_key, response, ttl_hours, metadata)
 
     def _add_to_memory(
-        self, cache_key: str, response: Any, ttl_hours: int | None = None, metadata: dict | None = None
+        self, cache_key: str, response: Any, ttl_hours: Optional[int] = None, metadata: dict | None = None
     ) -> None:
         """添加到内存缓存"""
         # 检查是否需要清理
@@ -220,7 +220,7 @@ class ResponseCache:
             return None
 
     def _save_to_disk(
-        self, cache_key: str, response: Any, ttl_hours: int | None = None, metadata: dict | None = None
+        self, cache_key: str, response: Any, ttl_hours: Optional[int] = None, metadata: dict | None = None
     ) -> None:
         """保存到磁盘"""
         cache_file = self.cache_dir / f"{cache_key}.json"

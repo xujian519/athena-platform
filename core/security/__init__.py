@@ -58,7 +58,7 @@ class SecurityEngine:
 
     async def authenticate(
         self, username: str, password: str, **kwargs
-    ) -> dict[str, Any] | None:
+    ) -> Optional[dict[str, Any]]:
         """用户认证"""
         if not self.auth_manager:
             return {"error": "认证功能未启用"}
@@ -103,8 +103,8 @@ class SecurityEngine:
             return False
 
     async def create_token(
-        self, user_id: str, scopes: list[str] | None = None, **kwargs
-    ) -> str | None:
+        self, user_id: str, scopes: Optional[list[str]] = None, **kwargs
+    ) -> Optional[str]:
         """创建访问令牌"""
         if not self.auth_manager:
             return None
@@ -116,7 +116,7 @@ class SecurityEngine:
             logger.error(f"令牌创建错误: {e}")
             return None
 
-    async def validate_token(self, token: str, **kwargs) -> dict[str, Any] | None:
+    async def validate_token(self, token: str, **kwargs) -> Optional[dict[str, Any]]:
         """验证访问令牌"""
         if not self.auth_manager:
             return None
@@ -151,7 +151,7 @@ class SecurityEngine:
 
     async def register_user(
         self, username: str, email: str, password: str, role: str = "user", **kwargs
-    ) -> dict[str, Any] | None:
+    ) -> Optional[dict[str, Any]]:
         """注册用户"""
         if not self.auth_manager:
             return {"error": "用户注册功能未启用"}
@@ -175,7 +175,7 @@ class SecurityEngine:
             logger.error(f"用户注册错误: {e}")
             return {"success": False, "error": str(e)}
 
-    async def get_user_info(self, user_id: str) -> dict[str, Any] | None:
+    async def get_user_info(self, user_id: str) -> Optional[dict[str, Any]]:
         """获取用户信息"""
         if not self.auth_manager:
             return None
@@ -224,7 +224,7 @@ class SecurityEngine:
 
     async def add_access_policy(
         self, resource: str, action: str, effect: str, **kwargs
-    ) -> str | None:
+    ) -> Optional[str]:
         """添加访问策略"""
         if not self.access_controller:
             return None

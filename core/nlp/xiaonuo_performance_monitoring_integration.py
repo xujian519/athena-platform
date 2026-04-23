@@ -328,7 +328,7 @@ class PerformanceMonitoringIntegration:
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    def save_monitoring_data(self, filepath: str | None = None) -> bool:
+    def save_monitoring_data(self, filepath: Optional[str] = None) -> bool:
         """保存监控数据"""
         if not self.enable_monitoring:
             return False

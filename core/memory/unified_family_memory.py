@@ -196,8 +196,8 @@ class UnifiedFamilyMemory:
     async def search_similar_memories(
         self,
         query: str,
-        agent: str | None = None,
-        memory_type: str | None = None,
+        agent: Optional[str] = None,
+        memory_type: Optional[str] = None,
         limit: int = 5,
     ) -> list[dict]:
         """搜索相似记忆"""
@@ -236,7 +236,7 @@ class UnifiedFamilyMemory:
             logger.error(f"操作失败: {e}", exc_info=True)
             raise
 
-    async def get_recent_memories(self, agent: str | None = None, limit: int = 10) -> list[dict]:
+    async def get_recent_memories(self, agent: Optional[str] = None, limit: int = 10) -> list[dict]:
         """获取最近的记忆"""
         try:
             return await self.primary_client.get_recent_memories(agent, limit)
@@ -302,7 +302,7 @@ async def add_family_memory(
 
 
 async def search_family_memories(
-    query: str | None = None, agent: str | None = None, limit: int = 5
+    query: Optional[str] = None, agent: Optional[str] = None, limit: int = 5
 ) -> list[dict]:
     """搜索家族记忆(便捷函数)"""
     unified_memory = await get_unified_memory()

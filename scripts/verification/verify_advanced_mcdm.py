@@ -10,8 +10,8 @@
 日期: 2026-04-20
 """
 
+
 import numpy as np
-import json
 
 
 class AHPVerifier:
@@ -64,9 +64,9 @@ class AHPVerifier:
         weights = eigenvectors[:, eigenvalues.real.argmax()].real
         weights = weights / weights.sum()
 
-        print(f"\n  权重向量:")
+        print("\n  权重向量:")
         criteria = ["C1", "C2", "C3"]
-        for i, (c, w) in enumerate(zip(criteria, weights)):
+        for _i, (c, w) in enumerate(zip(criteria, weights, strict=False)):
             print(f"    {c}: {w:.4f}")
 
         # 验证权重和为1
@@ -86,15 +86,15 @@ class AHPVerifier:
 
         # 方案层判断矩阵（针对每个准则）
         # 准则1: 成本
-        alt1_cost = np.array([[1, 2], [1/2, 1]])
+        alt1_cost = np.array([[1, 2], [1/2, 1])
         w1 = self._calculate_ahp_weights(alt1_cost)
 
         # 准则2: 质量
-        alt2_quality = np.array([[1, 1/3], [3, 1]])
+        alt2_quality = np.array([[1, 1/3], [3, 1])
         w2 = self._calculate_ahp_weights(alt2_quality)
 
         # 准则3: 时间
-        alt3_time = np.array([[1, 1], [1, 1]])
+        alt3_time = np.array([[1, 1], [1, 1])
         w3 = self._calculate_ahp_weights(alt3_time)
 
         # 构建决策矩阵
@@ -107,11 +107,9 @@ class AHPVerifier:
         print(f"  方案B得分: {final_scores[1]:.4f}")
 
         if final_scores[0] > final_scores[1]:
-            print(f"  ✓ 方案A优于方案B")
-            best = "A"
+            print("  ✓ 方案A优于方案B")
         else:
-            print(f"  ✓ 方案B优于方案A")
-            best = "B"
+            print("  ✓ 方案B优于方案A")
 
         self.test_results.append(("优先级计算", True, final_scores))
 
@@ -149,7 +147,7 @@ class TOPSISVerifier:
         # 准则类型（True=效益型，False=成本型）
         is_benefit = [True, True, True]
 
-        print(f"  原始决策矩阵:")
+        print("  原始决策矩阵:")
         print(f"    方案A: {decision_matrix[0]}")
         print(f"    方案B: {decision_matrix[1]}")
         print(f"    方案C: {decision_matrix[2]}")
@@ -157,14 +155,14 @@ class TOPSISVerifier:
         # 步骤1: 归一化
         normalized_matrix = self._normalize(decision_matrix)
 
-        print(f"\n  归一化矩阵:")
+        print("\n  归一化矩阵:")
         for i, row in enumerate(normalized_matrix):
             print(f"    方案{chr(65+i)}: {[f'{x:.4f}' for x in row]}")
 
         # 步骤2: 加权归一化
         weighted_matrix = normalized_matrix * weights
 
-        print(f"\n  加权归一化矩阵:")
+        print("\n  加权归一化矩阵:")
         for i, row in enumerate(weighted_matrix):
             print(f"    方案{chr(65+i)}: {[f'{x:.4f}' for x in row]}")
 
@@ -186,7 +184,7 @@ class TOPSISVerifier:
         # 步骤5: 计算相对贴近度
         closeness = dist_negative / (dist_positive + dist_negative)
 
-        print(f"\n  相对贴近度:")
+        print("\n  相对贴近度:")
         rankings = []
         for i, c in enumerate(closeness):
             print(f"    方案{chr(65+i)}: {c:.4f}")
@@ -195,7 +193,7 @@ class TOPSISVerifier:
         # 排序
         rankings.sort(key=lambda x: x[1], reverse=True)
 
-        print(f"\n  最终排名:")
+        print("\n  最终排名:")
         for rank, (alt, score) in enumerate(rankings, 1):
             print(f"    {rank}. 方案{alt}: {score:.4f}")
 
@@ -274,7 +272,7 @@ def test_comparison():
         [9, 4, 6],  # C
     ])
 
-    print(f"\n  决策问题: 选择最优方案")
+    print("\n  决策问题: 选择最优方案")
     print(f"  评估准则: {criteria}")
     print(f"  权重: {weights}")
 
@@ -282,19 +280,19 @@ def test_comparison():
     normalized = scores / scores.sum(axis=0)
     saw_scores = normalized @ weights
 
-    print(f"\n  方法1 - 简单加权求和(SAW):")
+    print("\n  方法1 - 简单加权求和(SAW):")
     for i, opt in enumerate(options):
         print(f"    {opt}: {saw_scores[i]:.4f}")
 
     # 方法2: 加权乘法(WPM)
     wpm_scores = np.prod(scores ** weights, axis=1) / np.prod(scores ** weights, axis=1).sum()
 
-    print(f"\n  方法2 - 加权乘法(WPM):")
+    print("\n  方法2 - 加权乘法(WPM):")
     for i, opt in enumerate(options):
         print(f"    {opt}: {wpm_scores[i]:.4f}")
 
-    print(f"\n  ✓ 多方法对比完成")
-    print(f"  注: 不同方法可能产生不同排名，取决于数据特性和权重分布")
+    print("\n  ✓ 多方法对比完成")
+    print("  注: 不同方法可能产生不同排名，取决于数据特性和权重分布")
 
 
 def main():
@@ -334,7 +332,7 @@ def main():
     print(f"通过率: {passed/total*100:.1f}%")
 
     print("\n详细结果:")
-    for name, success, value in all_results:
+    for name, success, _value in all_results:
         status = "✅ 通过" if success else "❌ 失败"
         print(f"  {status} - {name}")
 

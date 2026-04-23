@@ -247,7 +247,7 @@ class RapidLearningEngine:
             logger.warning(f"不支持的模型类型: {model_type}")
             return None
 
-    async def _create_neural_network(self, task: LearningTask) -> dict[str, Any] | None:
+    async def _create_neural_network(self, task: LearningTask) -> Optional[dict[str, Any]]:
         """创建神经网络模型"""
         try:
             # 根据任务类型定义网络结构
@@ -284,7 +284,7 @@ class RapidLearningEngine:
             logger.error(f"创建神经网络失败: {e}")
             return None
 
-    async def _create_linear_model(self, task: LearningTask) -> dict[str, Any] | None:
+    async def _create_linear_model(self, task: LearningTask) -> Optional[dict[str, Any]]:
         """创建线性模型
 
         Args:
@@ -303,7 +303,7 @@ class RapidLearningEngine:
 
     async def _create_random_forest(
         self, task: LearningTask
-    ) -> dict[str, Any] | None:
+    ) -> Optional[dict[str, Any]]:
         """创建随机森林模型
 
         Args:
@@ -481,7 +481,7 @@ class RapidLearningEngine:
 
     def _prepare_target_data(
         self, data: Any, as_numpy: bool = False
-    ) -> torch.Tensor | float | None:
+    ) -> torch.Tensor | Optional[float]:
         """准备目标数据"""
         try:
             if isinstance(data, (int, float, np.number)):
@@ -620,7 +620,7 @@ class RapidLearningEngine:
 
     async def _create_model_variant(
         self, model_info: dict[str, Any], environment_data: dict[str, Any]
-    ) -> dict[str, Any] | None:
+    ) -> Optional[dict[str, Any]]:
         """创建模型变体
 
         Args:
@@ -854,7 +854,7 @@ class RapidLearningEngine:
             return False
 
     async def load_model_checkpoint(
-        self, task_id: str, checkpoint_id: str | None = None
+        self, task_id: str, checkpoint_id: Optional[str] = None
     ) -> bool:
         """
         加载模型检查点（安全实现）

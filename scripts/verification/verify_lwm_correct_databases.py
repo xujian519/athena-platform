@@ -6,17 +6,18 @@ Legal World Model Data Volume Verification (Correct Version)
 连接到正确的数据库：legal_world_model
 """
 
-import sys
-from pathlib import Path
-import os
-from datetime import datetime
 import json
+import os
+import sys
+from datetime import datetime
+from pathlib import Path
 
 # 设置路径
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # 加载环境变量
 from dotenv import load_dotenv
+
 load_dotenv()
 
 print("=" * 80)
@@ -49,7 +50,7 @@ try:
     # 先列出所有数据库
     with driver.session(database="system") as session:
         db_list = session.run("SHOW DATABASES").data()
-        print(f"\n  可用数据库:")
+        print("\n  可用数据库:")
         for db in db_list:
             db_name = db['name']
             db_status = db.get('currentStatus', 'unknown')
@@ -168,7 +169,7 @@ try:
             "has_data": total_points > 0
         }
     else:
-        print(f"  ❌ Qdrant API错误")
+        print("  ❌ Qdrant API错误")
         results["Qdrant"] = {
             "status": "❌ 失败",
             "has_data": False
@@ -238,7 +239,7 @@ try:
         table_details = []
         large_tables = []
 
-        for schema, table in tables:
+        for _schema, table in tables:
             try:
                 cursor.execute(f'SELECT COUNT(*) FROM "{table}"')
                 count = cursor.fetchone()[0]
@@ -257,7 +258,7 @@ try:
         print(f"\n  ✅ 总记录数: {total_rows:,}")
 
         if large_tables:
-            print(f"\n  主要数据表（>1000条）:")
+            print("\n  主要数据表（>1000条）:")
             for table, count in sorted(large_tables, key=lambda x: x[1], reverse=True):
                 print(f"    - {table}: {count:,} 行")
 
@@ -299,12 +300,12 @@ print("=" * 80)
 print("法律世界模型数据量总结")
 print("=" * 80)
 
-print(f"\n📊 数据库状态:")
+print("\n📊 数据库状态:")
 print(f"  Neo4j知识图谱:       {results.get('Neo4j', {}).get('status', '未知')}")
 print(f"  Qdrant向量数据库:     {results.get('Qdrant', {}).get('status', '未知')}")
 print(f"  PostgreSQL法律知识库: {results.get('PostgreSQL_LWM', {}).get('status', '未知')}")
 
-print(f"\n📈 数据量统计:")
+print("\n📈 数据量统计:")
 
 total_data = 0
 data_sources = []
@@ -315,25 +316,25 @@ if "Neo4j" in results:
     if neo4j_data.get("has_data"):
         nodes = neo4j_data.get("nodes", 0)
         rels = neo4j_data.get("relationships", 0)
-        print(f"\n  🔗 Neo4j知识图谱:")
+        print("\n  🔗 Neo4j知识图谱:")
         print(f"     - 节点总数:      {nodes:,}")
         print(f"     - 关系总数:      {rels:,}")
         total_data += nodes + rels
         data_sources.append("Neo4j")
     else:
-        print(f"\n  ⚠️  Neo4j: 暂无数据")
+        print("\n  ⚠️  Neo4j: 暂无数据")
 
 # Qdrant
 if "Qdrant" in results:
     qdrant_data = results["Qdrant"]
     if qdrant_data.get("has_data"):
         points = qdrant_data.get("total_points", 0)
-        print(f"\n  🔍 Qdrant向量数据库:")
+        print("\n  🔍 Qdrant向量数据库:")
         print(f"     - 数据点总数:    {points:,}")
         total_data += points
         data_sources.append("Qdrant")
     else:
-        print(f"\n  ⚠️  Qdrant: 暂无数据")
+        print("\n  ⚠️  Qdrant: 暂无数据")
 
 # PostgreSQL
 if "PostgreSQL_LWM" in results:
@@ -341,16 +342,16 @@ if "PostgreSQL_LWM" in results:
     if pg_data.get("has_data"):
         rows = pg_data.get("total_rows", 0)
         tables = pg_data.get("tables", 0)
-        print(f"\n  🗄️  PostgreSQL法律知识库:")
+        print("\n  🗄️  PostgreSQL法律知识库:")
         print(f"     - 数据库:        {pg_data.get('database', 'N/A')}")
         print(f"     - 表数量:        {tables}")
         print(f"     - 记录总数:      {rows:,}")
         total_data += rows
         data_sources.append("PostgreSQL")
     else:
-        print(f"\n  ⚠️  PostgreSQL: 暂无数据")
+        print("\n  ⚠️  PostgreSQL: 暂无数据")
 
-print(f"\n🎯 总体评估:")
+print("\n🎯 总体评估:")
 if len(data_sources) >= 3:
     print("  ✅ 数据完整 - 所有数据源都有数据")
     completeness = "完整"
@@ -390,8 +391,8 @@ print(f"\n📄 详细报告已保存至: {report_path}")
 
 # 返回完成状态
 if len(data_sources) >= 2:
-    print(f"\n✅ 法律世界模型数据验证通过")
+    print("\n✅ 法律世界模型数据验证通过")
     sys.exit(0)
 else:
-    print(f"\n⚠️  法律世界模型数据不完整")
+    print("\n⚠️  法律世界模型数据不完整")
     sys.exit(1)

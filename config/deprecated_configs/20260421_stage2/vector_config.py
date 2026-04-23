@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -103,18 +103,18 @@ PROCESSING_CONFIG = {
     'cache_ttl': 3600  # 1小时
 }
 
-def get_vector_dimension() -> Optional[int]:
+def get_vector_dimension() -> int | None:
     """获取标准向量维度"""
     return VECTOR_DIMENSION
 
-def get_collection_config(collection_type) -> Optional[dict[str, Any]]:
+def get_collection_config(collection_type) -> dict[str, Any] | None:
     """获取向量集合配置"""
     return COLLECTION_CONFIGS.get(collection_type, {})
 
-def get_collection_display_name(collection_name) -> Optional[str]:
+def get_collection_display_name(collection_name) -> str | None:
     return COLLECTION_DISPLAY_NAMES.get(collection_name, collection_name)
 
-def get_model_config(model_name) -> Optional[dict[str, Any]]:
+def get_model_config(model_name) -> dict[str, Any] | None:
     """获取模型配置"""
     return MODEL_CONFIGS.get(model_name, {})
 

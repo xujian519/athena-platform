@@ -133,9 +133,9 @@ class CrossSessionMemoryManager:
         session_id: str,
         user_id: str,
         importance: MemoryImportance = MemoryImportance.MEDIUM,
-        keywords: list[str] | None = None,
-        entities: list[str] | None = None,
-        metadata: dict[str, Any] | None = None,
+        keywords: Optional[list[str]] = None,
+        entities: Optional[list[str]] = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> str:
         """
         存储记忆片段

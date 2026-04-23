@@ -137,19 +137,19 @@ class PatentPerceptionResult:
     """
 
     # 基础标识
-    patent_id: str | None = None
-    input_type: str | None = None  # PatentInputType枚举值
-    modality_type: str | None = None  # ModalityType枚举值
+    patent_id: Optional[str] = None
+    input_type: Optional[str] = None  # PatentInputType枚举值
+    modality_type: Optional[str] = None  # ModalityType枚举值
 
     # 原始内容
     raw_content: Any | None = None
     structured_content: dict[str, Any] = field(default_factory=dict)
 
     # 专利核心信息
-    title: str | None = None
-    abstract: str | None = None
-    technical_field: str | None = None
-    ipc_classification: list[str] | None = None
+    title: Optional[str] = None
+    abstract: Optional[str] = None
+    technical_field: Optional[str] = None
+    ipc_classification: Optional[list[str]] = None
 
     # 分析结果
     features: list[dict[str, Any]] = field(default_factory=list)
@@ -204,7 +204,7 @@ class DocumentChunk:
     end_pos: int
     content_hash: str
     processing_status: str = "pending"
-    ocr_result: dict[str, Any] | None = None
+    ocr_result: Optional[dict[str, Any]] = None
     last_processed: datetime | None = None
     dependencies: set[str] = field(default_factory=set)
 
@@ -364,7 +364,7 @@ class OptimizedPerceptionConfig(PerceptionConfig):
     change_detection_enabled: bool = True
 
     # 并行处理配置
-    thread_pool_size: int | None = None  # None表示自动检测CPU核心数
+    thread_pool_size: Optional[int] = None  # None表示自动检测CPU核心数
 
     def __post_init__(self) -> None:
         """初始化后处理"""

@@ -163,7 +163,7 @@ class Neo4jClient:
                 logger.error(f"❌ Neo4j连接异常: {e}")
             return False
 
-    def execute(self, query: str, parameters: dict[str, Any] | None = None) -> Any | None:
+    def execute(self, query: str, parameters: Optional[dict[str, Any]] = None) -> Any | None:
         """
         执行Cypher查询
 
@@ -190,7 +190,7 @@ class Neo4jClient:
             return None
 
     def execute_and_fetch(
-        self, query: str, parameters: dict[str, Any] | None = None
+        self, query: str, parameters: Optional[dict[str, Any]] = None
     ) -> list[dict[str, Any]]:
         """
         执行Cypher查询并获取所有结果

@@ -48,7 +48,7 @@ class PlanningEvent:
     timestamp: datetime = field(default_factory=datetime.now)
     duration: float = 0.0
     success: bool = True
-    error: str | None = None
+    error: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -226,7 +226,7 @@ class PlanningMonitor:
         return timer_id
 
     def end_planning_timer(
-        self, timer_id: str, planner_id: str, plan_id: str, success: bool | None = None, error: str | None = None
+        self, timer_id: str, planner_id: str, plan_id: str, success: Optional[bool] = None, error: Optional[str] = None
     ) -> float:
         """结束规划计时"""
         try:

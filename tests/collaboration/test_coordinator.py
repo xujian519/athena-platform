@@ -4,12 +4,11 @@ Coordinator模式测试
 测试Coordinator的核心功能。
 """
 
-import pytest
-import asyncio
-from datetime import datetime
 
-from core.collaboration.coordinator import Coordinator
-from core.collaboration.coordinator.types import (
+import pytest
+
+from core.framework.collaboration.coordinator import Coordinator
+from core.framework.collaboration.coordinator.types import (
     AgentInfo,
     AgentStatus,
     TaskInfo,

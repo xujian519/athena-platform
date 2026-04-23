@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 API Key配置管理工具
 统一管理所有外部API服务的密钥配置
@@ -9,10 +8,9 @@ import getpass
 import json
 import logging
 import os
-import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # 设置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -147,7 +145,7 @@ class APIKeyManager:
             )
         ]
 
-    def load_current_config(self) -> Dict[str, Any]:
+    def load_current_config(self) -> dict[str, Any]:
         """加载当前配置"""
         config = {
             'configured_services': {},
@@ -171,7 +169,7 @@ class APIKeyManager:
 
         return config
 
-    def print_status_report(self, config: Dict[str, Any]) -> Any:
+    def print_status_report(self, config: dict[str, Any]) -> Any:
         """打印状态报告"""
         logger.info(str("\n" + '='*80))
         logger.info('🔑 API Key状态报告')
@@ -185,7 +183,7 @@ class APIKeyManager:
         logger.info(f"✅ 已配置: {configured_count}")
         logger.info(f"❌ 缺失配置: {missing_count}")
 
-        logger.info(f"\n📋 详细状态:")
+        logger.info("\n📋 详细状态:")
         logger.info(str('-' * 80))
 
         # 已配置的服务
@@ -215,7 +213,7 @@ class APIKeyManager:
 
         # 如果文件存在，读取现有内容
         if self.env_file.exists():
-            with open(self.env_file, 'r', encoding='utf-8') as f:
+            with open(self.env_file, encoding='utf-8') as f:
                 env_content = f.read()
 
         # 检查是否已存在该配置
@@ -497,7 +495,7 @@ def main() -> None:
             required_missing.append(api_config)
 
     if required_missing:
-        logger.info(f"\n⚠️ 警告: 以下必需服务尚未配置:")
+        logger.info("\n⚠️ 警告: 以下必需服务尚未配置:")
         for api_config in required_missing:
             logger.info(f"   ❌ {api_config.name}")
 

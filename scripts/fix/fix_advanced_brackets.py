@@ -6,7 +6,8 @@
 import re
 from pathlib import Path
 
-def fix_bracket_errors_advanced(content: str) -> tuple[str, list[str]]:
+
+def fix_bracket_errors_advanced(content: str) -> tuple[str, list[str]:
     """高级括号修复"""
     fixes = []
     lines = content.split('\n')
@@ -15,8 +16,8 @@ def fix_bracket_errors_advanced(content: str) -> tuple[str, list[str]]:
     for i, line in enumerate(lines):
         original_line = line
 
-        # 模式1: list[dict[str, Any]] 缺少闭合括号
-        # 匹配: def func(self, param: list[dict[str, Any]] -> 返回类型:
+        # 模式1: list[dict[str, Any] 缺少闭合括号
+        # 匹配: def func(self, param: list[dict[str, Any] -> 返回类型:
         if 'def ' in line and 'list[dict[str, Any]' in line:
             # 计算括号数量
             open_brackets = line.count('[')
@@ -34,7 +35,7 @@ def fix_bracket_errors_advanced(content: str) -> tuple[str, list[str]]:
             if line.count('[') > line.count(']'):
                 # 找到 dict[ 的位置并添加闭合括号
                 line = re.sub(
-                    r'(dict\[str,\s*[^|\]]+\|?\s*None\s*=\s*None)',
+                    r'(dict\[str,\s*[^|\]+\|?\s*None\s*=\s*None)',
                     lambda m: m.group(1).replace('None = None', '] | None = None') if ']' not in m.group(1).split('None')[0] else m.group(0),
                     line
                 )
@@ -48,29 +49,29 @@ def fix_bracket_errors_advanced(content: str) -> tuple[str, list[str]]:
                 fixes.append(f"第{i+1}行: list[str] 分隔")
 
         # 模式4: tuple[type, ...] 缺少闭合括号
-        if re.search(r'tuple\[[^\]]+:\s*$', line):
-            line = re.sub(r'tuple\[([^\]]+):\s*$', r'tuple[\1]]:', line)
+        if re.search(r'tuple\[[^\]+:\s*$', line):
+            line = re.sub(r'tuple\[([^\]+):\s*$', r'tuple[\1]:', line)
             if line != original_line:
                 fixes.append(f"第{i+1}行: tuple 闭合括号")
 
         # 模式5: -> type] (多余的右方括号)
-        if re.search(r'->\s*[^]]+\]:\s*$', line):
+        if re.search(r'->\s*[^]+\]:\s*$', line):
             # 检查括号是否平衡
             if line.count('[') < line.count(']'):
                 # 移除多余的 ]
-                line = re.sub(r'->\s*([^]]+)\]:\s*$', r'-> \1:', line)
+                line = re.sub(r'->\s*([^]+)\]:\s*$', r'-> \1:', line)
                 if line != original_line:
                     fixes.append(f"第{i+1}行: 移除多余的 ]")
 
         # 模式6: algorithms=[value) 缺少闭合方括号
-        if re.search(r'algorithms=\[([^\]]+)\)', line):
-            line = re.sub(r'algorithms=\[([^\]]+)\)', r'algorithms=[\1]]', line)
+        if re.search(r'algorithms=\[([^\]+)\)', line):
+            line = re.sub(r'algorithms=\[([^\]+)\)', r'algorithms=[\1]', line)
             if line != original_line:
                 fixes.append(f"第{i+1}行: algorithms 闭合括号")
 
         # 模式7: list[dict[str, Any] -> (缺少括号)
         if re.search(r'list\[dict\[str,\s*Any\]\s*->', line):
-            line = re.sub(r'list\[dict\[str,\s*Any\]\s*->', r'list[dict[str, Any]]) ->', line)
+            line = re.sub(r'list\[dict\[str,\s*Any\]\s*->', r'list[dict[str, Any]) ->', line)
             if line != original_line:
                 fixes.append(f"第{i+1}行: 参数列表闭合")
 
@@ -78,10 +79,10 @@ def fix_bracket_errors_advanced(content: str) -> tuple[str, list[str]]:
 
     return '\n'.join(result_lines), fixes
 
-def fix_file(file_path: Path) -> tuple[bool, list[str]]:
+def fix_file(file_path: Path) -> tuple[bool, list[str]:
     """修复单个文件"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         new_content, fixes = fix_bracket_errors_advanced(content)
@@ -125,7 +126,7 @@ def main():
                 for fix in fixes[:3]:
                     print(f"    {fix}")
 
-    print(f"\n修复完成!")
+    print("\n修复完成!")
     print(f"修复文件数: {fixed_count}")
 
 if __name__ == "__main__":

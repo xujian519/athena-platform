@@ -3,7 +3,6 @@
 实时验证模块单元测试
 """
 
-import pytest
 
 
 class TestRealtimeValidatorModule:

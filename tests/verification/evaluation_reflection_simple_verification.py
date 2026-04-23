@@ -66,14 +66,13 @@ async def verify_reflection_engine_v5(result: VerificationResult):
     print("\n🔍 验证反思引擎v5...")
 
     try:
+        from datetime import datetime
+
         from core.intelligence.reflection_engine_v5 import (
             ReflectionEngineV5,
             ReflectionType,
             ThoughtStep,
-            ActionCategory,
-            ActionPriority,
         )
-        from datetime import datetime
 
         # 创建引擎
         engine = ReflectionEngineV5(agent_id="test_agent")
@@ -155,10 +154,9 @@ async def verify_evaluation_engine(result: VerificationResult):
 
     try:
         from core.evaluation.evaluation_engine import (
-            EvaluationEngine,
             EvaluationCriteria,
+            EvaluationEngine,
             EvaluationType,
-            EvaluationLevel,
         )
 
         # 创建引擎
@@ -243,7 +241,11 @@ async def verify_integration(result: VerificationResult):
 
     # 测试1: 评估与反思的集成
     try:
-        from core.evaluation.evaluation_engine import EvaluationEngine, EvaluationCriteria, EvaluationType
+        from core.evaluation.evaluation_engine import (
+            EvaluationCriteria,
+            EvaluationEngine,
+            EvaluationType,
+        )
         from core.intelligence.reflection_engine_v5 import ReflectionEngineV5, ReflectionType
 
         # 创建引擎
@@ -293,10 +295,9 @@ async def verify_integration(result: VerificationResult):
     # 测试2: 反思集成包装器
     try:
         from core.intelligence.reflection_integration_wrapper import (
-            ReflectionIntegrationWrapper,
             ReflectionConfig,
+            ReflectionIntegrationWrapper,
         )
-        from core.intelligence.reflection_engine_v5 import ReflectionLevel
 
         # 创建包装器
         wrapper = ReflectionIntegrationWrapper(config=ReflectionConfig())
@@ -333,7 +334,11 @@ async def verify_communication(result: VerificationResult):
 
     # 测试1: 数据序列化
     try:
-        from core.evaluation.evaluation_engine import EvaluationEngine, EvaluationCriteria, EvaluationType
+        from core.evaluation.evaluation_engine import (
+            EvaluationCriteria,
+            EvaluationEngine,
+            EvaluationType,
+        )
 
         engine = EvaluationEngine(agent_id="serialization_test")
         await engine.initialize()
@@ -378,7 +383,7 @@ async def verify_communication(result: VerificationResult):
         engine = ReflectionEngineV5(agent_id="persistence_test")
 
         # 执行反思
-        loop = await engine.reflect_with_loop(
+        await engine.reflect_with_loop(
             original_input="持久化测试",
             output="测试输出",
             context={"test": True},
@@ -404,8 +409,8 @@ async def verify_real_world_usage(result: VerificationResult):
     # 场景1: 专利分析质量评估
     try:
         from core.evaluation.evaluation_engine import (
-            EvaluationEngine,
             EvaluationCriteria,
+            EvaluationEngine,
             EvaluationType,
         )
         from core.intelligence.reflection_engine_v5 import ReflectionEngineV5, ReflectionType

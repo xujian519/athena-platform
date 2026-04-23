@@ -147,7 +147,7 @@ class ContextCompressor:
     # ========================================
     # 专利法律领域关键词权重 (增强功能)
     # ========================================
-    LEGAL_KEYWORDS: dict[str, dict[str, list[str]]] = {
+    LEGAL_KEYWORDS: dict[str, dict[str, list[str]] = {
         "critical": [
             # 关键关键词 - 必须保留
             "权利要求",
@@ -222,7 +222,7 @@ class ContextCompressor:
     async def compress_context(
         self,
         messages: list[Message],
-        target_tokens: int | None = None,
+        target_tokens: Optional[int] = None,
         strategy: CompressionStrategy | None = None,
     ) -> list[Message]:
         """
@@ -696,7 +696,7 @@ class ContextCompressor:
     async def create_frozen_snapshot(
         self,
         messages: list[Message],
-        snapshot_id: str | None = None,
+        snapshot_id: Optional[str] = None,
     ) -> FrozenSnapshot:
         """
         创建冻结快照 (增强功能)

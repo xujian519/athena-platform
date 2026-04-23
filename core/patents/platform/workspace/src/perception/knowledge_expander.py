@@ -245,7 +245,7 @@ class KnowledgeExpander:
 
         logger.info('🚀 知识库扩展器初始化完成')
 
-    async def expand_knowledge_base(self, sources: Optional[List[DataSource] = None) -> bool:
+    async def expand_knowledge_base(self, sources: Optional[List[DataSource]] = None) -> bool]:
         """扩展知识库"""
         sources = sources or [
             DataSource.TECH_STANDARDS,

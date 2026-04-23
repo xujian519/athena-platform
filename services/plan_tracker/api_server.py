@@ -31,6 +31,7 @@ try:
         TaskExecutionEngine,
     )
     from core.cognition.task_templates import TemplateManager
+
     from core.communication.websocket.progress_pusher import (
         ConnectionManager,
         ProgressPusher,
@@ -52,7 +53,7 @@ class CreateTaskRequest(BaseModel):
     title: str
     description: str
     template_id: str | None = None
-    steps: list[dict[str, Any]] = []
+    steps: list[dict[str, Any] = []
     execution_mode: str = "sequential"
 
 
@@ -93,7 +94,7 @@ if DUAL_LAYER_AVAILABLE:
 
     # 注册智能体（如果有的话）
     try:
-        from core.agents.patent_search_agent import PatentSearchAgent
+        from core.framework.agents.patent_search_agent import PatentSearchAgent
         patent_agent = PatentSearchAgent()
         asyncio.create_task(patent_agent.initialize())
         execution_engine.register_agent("xiaona", patent_agent)

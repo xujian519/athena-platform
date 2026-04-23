@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 沙箱化代码执行器
 
@@ -74,7 +73,7 @@ class SandboxResult:
         self.timeout = timeout
         self.memory_exceeded = memory_exceeded
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "success": self.success,
@@ -238,7 +237,7 @@ print(json.dumps(result, ensure_ascii=False))
             # 某些系统可能不支持这些限制
             pass
 
-    async def execute(self, code: str, timeout: float | None = None) -> SandboxResult:
+    async def execute(self, code: str, timeout: Optional[float] = None) -> SandboxResult:
         """
         在沙箱中执行代码
 
@@ -354,7 +353,7 @@ async def execute_in_sandbox(
     code: str,
     timeout: float = 10.0,
     max_memory: int = 100 * 1024 * 1024,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     在沙箱中执行代码（便捷函数）
 

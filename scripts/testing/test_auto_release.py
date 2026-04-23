@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 服务自动释放功能测试脚本
 Test Script for Service Auto-Release Feature
@@ -20,11 +19,7 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from core.session.service_session_manager import (
-    ServiceType,
-    get_service_session_manager,
-    auto_register_current_process
-)
+from core.session.service_session_manager import ServiceType, get_service_session_manager
 
 # 配置日志
 logging.basicConfig(
@@ -59,8 +54,8 @@ async def test_basic_functionality():
     )
 
     logger.info(f"✅ 测试服务已注册 (PID: {session.process_id})")
-    logger.info(f"⏰ 超时时间: 10秒（测试用）")
-    logger.info(f"🔍 检查间隔: 5秒")
+    logger.info("⏰ 超时时间: 10秒（测试用）")
+    logger.info("🔍 检查间隔: 5秒")
 
     # 显示初始状态
     stats = manager.get_stats()
@@ -238,7 +233,7 @@ async def test_real_scenario():
 
     # 显示初始状态
     stats = manager.get_stats()
-    logger.info(f"\n📊 初始状态:")
+    logger.info("\n📊 初始状态:")
     logger.info(f"   活动会话: {stats['active_sessions']}")
     logger.info(f"   总内存: {stats['current_memory_usage_mb']:.1f}MB")
 
@@ -249,7 +244,7 @@ async def test_real_scenario():
     logger.info("   - 每次处理请求时更新活动时间")
 
     # 显示会话详情
-    logger.info(f"\n📋 会话详情:")
+    logger.info("\n📋 会话详情:")
     for session_info in stats['sessions']:
         auto_stop_str = "是" if session_info['auto_stop'] else "否"
         logger.info(f"   - {session_info['service_name']}")

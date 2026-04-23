@@ -61,8 +61,8 @@ class CrawlerService:
     type: CrawlerType
     script_path: str
     working_dir: str
-    config_file: str | None = None
-    health_check_url: str | None = None
+    config_file: Optional[str] = None
+    health_check_url: Optional[str] = None
     dependencies: list[str] = field(default_factory=list)
     auto_start: bool = False
     max_instances: int = 1
@@ -76,7 +76,7 @@ class CrawlerInstance:
     service_id: str
     instance_id: str
     process: subprocess.Popen | None = None
-    pid: int | None = None
+    pid: Optional[int] = None
     status: CrawlerStatus = CrawlerStatus.UNKNOWN
     start_time: datetime | None = None
     last_check: datetime | None = None
@@ -100,7 +100,7 @@ class CrawlerTask:
     started_at: datetime | None = None
     completed_at: datetime | None = None
     status: str = "pending"
-    result: dict[str, Any] | None = None
+    result: Optional[dict[str, Any]] = None
 
 
 class XiaonuoUniversalCrawlerController:
@@ -383,7 +383,7 @@ class XiaonuoUniversalCrawlerController:
             return None
 
     async def stop_service(
-        self, service_id: str, instance_id: str | None = None
+        self, service_id: str, instance_id: Optional[str] = None
     ) -> dict[str, bool]:
         """停止爬虫服务"""
         if service_id not in self.instances:
@@ -672,7 +672,7 @@ class XiaonuoUniversalCrawlerController:
             "timestamp": datetime.now().isoformat(),
         }
 
-    async def get_task_status(self, task_id: str) -> dict[str, Any] | None:
+    async def get_task_status(self, task_id: str) -> Optional[dict[str, Any]]:
         """获取任务状态"""
         task = self.tasks.get(task_id)
         if not task:

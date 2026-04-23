@@ -86,7 +86,7 @@ class PlanningKnowledgeBase:
     4. 智能知识查询
     """
 
-    def __init__(self, storage_path: str | None = None):
+    def __init__(self, storage_path: Optional[str] = None):
         self.logger = logging.getLogger(__name__)
         self.storage_path = storage_path or "data/planning_knowledge.json"
 
@@ -279,8 +279,8 @@ class PlanningKnowledgeBase:
         strategy: PlanStrategy,
         plan: ExecutionPlan,
         evaluation: PlanEvaluation | None = None,
-        lessons_learned: list[str] | None = None,
-        tags: list[str] | None = None,
+        lessons_learned: Optional[list[str]] = None,
+        tags: Optional[list[str]] = None,
     ) -> PlanningCase:
         """添加案例"""
         case_id = f"case_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
@@ -320,7 +320,7 @@ class PlanningKnowledgeBase:
         self,
         intent_type: IntentType,
         strategy: PlanStrategy | None = None,
-        tags: list[str] | None = None,
+        tags: Optional[list[str]] = None,
         limit: int = 5,
     ) -> list[PlanningCase]:
         """查询相似案例"""
@@ -366,7 +366,7 @@ class PlanningKnowledgeBase:
 
     def get_best_practices(
         self,
-        scenario: str | None = None,
+        scenario: Optional[str] = None,
         intent_type: IntentType | None = None,
         limit: int = 5,
     ) -> list[BestPractice]:
@@ -414,7 +414,7 @@ class PlanningKnowledgeBase:
         implementation: str,
         expected_benefit: str,
         confidence: float,
-        source_case_ids: list[str] | None = None,
+        source_case_ids: Optional[list[str]] = None,
     ) -> BestPractice:
         """添加最佳实践"""
         practice = BestPractice(

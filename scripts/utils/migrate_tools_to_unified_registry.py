@@ -31,8 +31,8 @@ async def migrate_tools():
     print("🔄 迁移7个已验证工具到统一工具注册表")
     print("=" * 60)
 
+    from core.tools.base import ToolCategory, ToolPriority
     from core.tools.unified_registry import get_unified_registry
-    from core.tools.base import ToolDefinition, ToolCategory, ToolPriority
 
     # 获取统一工具注册表
     registry = get_unified_registry()
@@ -117,7 +117,7 @@ async def migrate_tools():
             # 检查工具是否已注册
             existing = registry.get(tool_id)
             if existing is not None:
-                print(f"   ⚠️ 工具已存在，跳过注册")
+                print("   ⚠️ 工具已存在，跳过注册")
                 results.append((tool_id, "skipped", "已存在"))
                 continue
 
@@ -136,10 +136,10 @@ async def migrate_tools():
             )
 
             if success:
-                print(f"   ✅ 注册成功")
+                print("   ✅ 注册成功")
                 results.append((tool_id, "success", "注册成功"))
             else:
-                print(f"   ❌ 注册失败")
+                print("   ❌ 注册失败")
                 results.append((tool_id, "failed", "注册失败"))
 
         except Exception as e:
@@ -188,9 +188,9 @@ async def migrate_tools():
             try:
                 tool = registry.get(tool_id)
                 if tool is not None:
-                    print(f"   ✅ 工具可访问")
+                    print("   ✅ 工具可访问")
                 else:
-                    print(f"   ❌ 工具无法访问")
+                    print("   ❌ 工具无法访问")
             except Exception as e:
                 print(f"   ❌ 错误: {e}")
 
@@ -228,7 +228,7 @@ async def verify_tools():
                 },
                 context={}
             )
-            print(f"   ✅ decision_engine可用")
+            print("   ✅ decision_engine可用")
             print(f"   推荐: {result.get('recommendation', 'N/A')}")
     except Exception as e:
         print(f"   ❌ decision_engine测试失败: {e}")
@@ -245,7 +245,7 @@ async def verify_tools():
                 },
                 context={}
             )
-            print(f"   ✅ document_parser可用")
+            print("   ✅ document_parser可用")
             print(f"   解析状态: {result.get('success', 'N/A')}")
     except Exception as e:
         print(f"   ❌ document_parser测试失败: {e}")
@@ -262,7 +262,7 @@ async def verify_tools():
                 },
                 context={}
             )
-            print(f"   ✅ text_embedding可用")
+            print("   ✅ text_embedding可用")
             print(f"   向量维度: {result.get('embedding_dim', 'N/A')}")
     except Exception as e:
         print(f"   ❌ text_embedding测试失败: {e}")

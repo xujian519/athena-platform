@@ -111,7 +111,7 @@ class QueryClassifier:
         "一致性",
     ]
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化查询分类器
 
@@ -363,7 +363,7 @@ class QueryClassifier:
 
 
 # 便捷函数
-def classify_query(query: str | None = None, config: dict[str, Any] | None = None) -> QueryAnalysis:
+def classify_query(query: Optional[str] = None, config: Optional[dict[str, Any]] = None) -> QueryAnalysis:
     """
     分类查询
 

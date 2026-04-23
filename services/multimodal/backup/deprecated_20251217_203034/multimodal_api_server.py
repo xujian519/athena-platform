@@ -99,7 +99,7 @@ class FileUploadResponse(BaseModel):
 
 class FileListResponse(BaseModel):
     success: bool
-    files: List[Dict[str, Any]]
+    files: List[Dict[str, Any]
     total: int
 
 @app.get("/")

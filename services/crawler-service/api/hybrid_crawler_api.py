@@ -102,9 +102,9 @@ class HybridCrawlResponse(BaseModel):
     """混合爬取响应模型"""
     task_id: str
     status: str
-    results: list[dict[str, Any]]
+    results: list[dict[str, Any]
     stats: dict[str, Any]
-    routing_decisions: list[dict[str, Any]]
+    routing_decisions: list[dict[str, Any]
     cost_info: dict[str, Any]
     message: str | None = None
 

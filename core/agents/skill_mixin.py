@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Optional
 """
 智能体技能集成
 

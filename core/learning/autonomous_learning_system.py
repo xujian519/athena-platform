@@ -118,7 +118,7 @@ class ABTestExperiment:
     treatment_variants: list[ABTestVariant]
     status: str = "running"
     started_at: datetime = field(default_factory=datetime.now)
-    results: dict[str, Any] | None = None
+    results: Optional[dict[str, Any]] = None
 
 
 class AutonomousLearningSystem:
@@ -164,7 +164,7 @@ class AutonomousLearningSystem:
         logger.info(f"🧠 自主学习系统初始化: {agent_id}")
 
     async def learn_from_experience(
-        self, context: dict[str, Any], action: str, result: Any, reward: float | None = None
+        self, context: dict[str, Any], action: str, result: Any, reward: Optional[float] = None
     ) -> LearningExperience:
         """从经验中学习"""
         # 输入验证
@@ -898,7 +898,7 @@ def setup_signal_handlers(shutdown_event: asyncio.Event):
     signal.signal(signal.SIGINT, signal_handler)
 
 
-async def run_daemon(agent_id: str, config_file: str | None = None):
+async def run_daemon(agent_id: str, config_file: Optional[str] = None):
     """以守护进程模式运行学习系统"""
     # 创建关闭事件
     shutdown_event = asyncio.Event()

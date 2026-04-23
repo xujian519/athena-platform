@@ -146,7 +146,7 @@ class TextPreprocessor:
         return text.strip()
 
     @staticmethod
-    def remove_punctuation(text: str, keep: str | None = None) -> str:
+    def remove_punctuation(text: str, keep: Optional[str] = None) -> str:
         """
         去除标点符号
 
@@ -361,7 +361,7 @@ class KeywordMatcher:
         return results
 
     @classmethod
-    def detect_intent_from_keywords(cls, text: str) -> str | None:
+    def detect_intent_from_keywords(cls, text: str) -> Optional[str]:
         """
         从关键词检测意图
 

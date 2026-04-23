@@ -44,7 +44,7 @@ except ImportError:
 class RealWebSearchAdapter(BaseSearchTool):
     """真实Web搜索引擎适配器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化真实Web搜索适配器
 
@@ -368,13 +368,13 @@ from ..registry.tool_registry import register_to_registry
 
 
 @register_to_registry(category="real_web_search", auto_init=False)
-def create_real_web_search_adapter(config: dict[str, Any] | None = None) -> RealWebSearchAdapter:
+def create_real_web_search_adapter(config: Optional[dict[str, Any]] = None) -> RealWebSearchAdapter:
     """创建真实Web搜索适配器的工厂函数"""
     return RealWebSearchAdapter(config)
 
 
 # 便捷函数
-async def create_real_web_search(config: dict[str, Any] | None = None) -> RealWebSearchAdapter:
+async def create_real_web_search(config: Optional[dict[str, Any]] = None) -> RealWebSearchAdapter:
     """
     创建并初始化真实Web搜索适配器
 

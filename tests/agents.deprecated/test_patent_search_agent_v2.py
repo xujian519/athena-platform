@@ -4,9 +4,8 @@ PatentSearchAgentV2单元测试
 测试PatentSearchAgentV2的基本功能
 """
 
-import pytest
-from unittest.mock import Mock, patch
 
+import pytest
 from core.patent.patent_search_agent_v2 import PatentSearchAgentV2
 
 

@@ -40,7 +40,7 @@ class QualityIssue:
     issue_type: str
     message: str
     code_snippet: str
-    suggestion: str | None = None
+    suggestion: Optional[str] = None
 
 
 class CognitiveQualityChecker:

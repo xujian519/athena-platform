@@ -15,7 +15,7 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 try:
-    from core.agents.task_tool.models import (
+    from core.framework.agents.task_tool.models import (
         BackgroundTask,
         ModelChoice,
         TaskInput,

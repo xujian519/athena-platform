@@ -679,7 +679,7 @@ class XiaonuoIntelligentToolSelector:
         self,
         text: str,
         intent: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
         user_id: str = "default",
     ) -> list[tuple[str, float]]:
         """智能选择工具"""
@@ -880,7 +880,7 @@ class XiaonuoIntelligentToolSelector:
 
         logger.info(f"💾 工具选择模型已保存: {model_path}")
 
-    def load_models(self, model_path: str | None = None) -> Any | None:
+    def load_models(self, model_path: Optional[str] = None) -> Any | None:
         """加载模型"""
         if model_path is None:
             model_path = os.path.join(self.config.model_dir, "latest_tool_selector.pkl")

@@ -196,7 +196,7 @@ class XiaonuoEmotionProcessor:
             sensitivity_level=0.8,
         )
 
-    def analyze_emotion(self, text: str, context: dict[str, Any] | None = None) -> EmotionAnalysis:
+    def analyze_emotion(self, text: str, context: Optional[dict[str, Any]] = None) -> EmotionAnalysis:
         """分析文本情感"""
         # 分词
         list(jieba.cut(text))

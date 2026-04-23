@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 从PDF提取Kudo论文的完整结构化内容
 生成适合翻译的Markdown模板
@@ -9,7 +8,7 @@ import re
 from datetime import datetime
 
 # 读取提取的文本
-with open("/tmp/kudo_paper.txt", 'r', encoding='utf-8') as f:
+with open("/tmp/kudo_paper.txt", encoding='utf-8') as f:
     content = f.read()
 
 # 解析论文结构
@@ -112,7 +111,7 @@ output.append("")
 # 输出标题
 output.append(f"# {metadata['title']}")
 output.append("")
-output.append(f"**中文标题：** 磺酸基离子液体作为稳定高效催化剂用于糖类催化热解制备左旋葡聚糖酮")
+output.append("**中文标题：** 磺酸基离子液体作为稳定高效催化剂用于糖类催化热解制备左旋葡聚糖酮")
 output.append("")
 output.append("---")
 output.append("")

@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena硬编码密码批量修复脚本
 自动扫描并修复所有硬编码的敏感信息
 """
 
-import os
-import re
-import sys
-from pathlib import Path
-from typing import List, Dict, Tuple
 import logging
+import re
+from pathlib import Path
 
 # 配置日志
 logging.basicConfig(
@@ -49,7 +45,7 @@ class SecurityFixer:
         self.fixes_applied = []
         self.errors = []
 
-    def scan_file(self, file_path: Path) -> List[Dict]:
+    def scan_file(self, file_path: Path) -> list[dict]:
         """扫描单个文件"""
         issues = []
 
@@ -87,7 +83,7 @@ class SecurityFixer:
                 return i
         return 0
 
-    def fix_file(self, file_path: Path, issues: List[Dict]) -> bool:
+    def fix_file(self, file_path: Path, issues: list[dict]) -> bool:
         """修复文件中的问题"""
         try:
             content = file_path.read_text(encoding='utf-8')
@@ -152,7 +148,7 @@ class SecurityFixer:
                         )
                     else:
                         # 其他API密钥
-                        var_name = env_var.lower()
+                        env_var.lower()
                         content = content.replace(
                             f'{env_var} = "{secret}"',
                             f'{env_var} = get_env_var("{env_var}")'
@@ -188,7 +184,7 @@ class SecurityFixer:
 
         return False
 
-    def scan_directory(self, directory: Path, extensions: Tuple[str, ...] = ('.py',)) -> Dict:
+    def scan_directory(self, directory: Path, extensions: tuple[str, ...] = ('.py',)) -> dict:
         """扫描目录"""
         results = {
             'scanned': 0,

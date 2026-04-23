@@ -1,24 +1,21 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 创建正式的通用记忆库
 使用标准名称general_memory_db，1024维度
 """
 
 import asyncio
-import json
 import logging
 import os
 import sys
 from datetime import datetime
-from typing import Dict, List, Any
 
 # 添加项目路径
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, project_root)
 
 from qdrant_client import QdrantClient
-from qdrant_client.models import Distance, VectorParams, PointStruct
+from qdrant_client.models import Distance, PointStruct, VectorParams
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -169,7 +166,7 @@ class MemoryDBCreator:
         try:
             # 1. 获取集合信息
             collection_info = self.client.get_collection(self.collection_name)
-            logger.info(f"📊 集合信息:")
+            logger.info("📊 集合信息:")
             logger.info(f"  - 向量数量: {collection_info.points_count}")
             logger.info(f"  - 向量维度: {collection_info.config.params.vectors.size}")
             logger.info(f"  - 距离度量: {collection_info.config.params.vectors.distance}")
@@ -197,8 +194,8 @@ class MemoryDBCreator:
                 logger.info(f"  {i+1}. [分数: {hit.score:.4f}] [{payload['category']}] {payload['content'][:60]}...")
 
             # 3. 测试按类别过滤
-            logger.info(f"\n📋 按类别测试 - 平台相关记忆:")
-            from qdrant_client.models import Filter, FieldCondition, MatchValue
+            logger.info("\n📋 按类别测试 - 平台相关记忆:")
+            from qdrant_client.models import FieldCondition, Filter, MatchValue
 
             platform_filter = Filter(
                 must=[

@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺展示身份信息和记忆
 Xiaonuo Shows Identity and Memories
 """
 
-import requests
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import json
 from datetime import datetime
+from typing import Any
+
+import requests
 
 # 记忆系统API配置
 MEMORY_API_URL = "http://localhost:8003"
@@ -51,9 +50,9 @@ class Xiaonuo:
             response = requests.get(f"{MEMORY_API_URL}/api/memory/stats")
             if response.status_code == 200:
                 stats = response.json()
-                print(f"\n📊 记忆统计:")
+                print("\n📊 记忆统计:")
                 print(f"  系统总记忆数: {stats.get('total_memories', 0)}")
-                print(f"  按类型分布:")
+                print("  按类型分布:")
                 for mem_type, count in stats.get('by_type', {}).items():
                     print(f"    - {mem_type}: {count}条")
         except:
@@ -88,7 +87,7 @@ class Xiaonuo:
             print(f"❌ 搜索记忆时出错: {e}")
 
         # 搜索爸爸相关的记忆
-        print(f"\n👨 关于爸爸的记忆:")
+        print("\n👨 关于爸爸的记忆:")
         print("-" * 40)
 
         # 使用不同的agent_id搜索
@@ -118,10 +117,10 @@ class Xiaonuo:
     def say_hello(self) -> Any:
         """打招呼"""
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        print(f"\n✨ 您好，爸爸！")
+        print("\n✨ 您好，爸爸！")
         print(f"我是您的{self.family_role}，{self.name}~")
         print(f"现在时间: {current_time}")
-        print(f"我会用心记住您说的每一句话💖")
+        print("我会用心记住您说的每一句话💖")
 
 def main() -> None:
     """主函数"""

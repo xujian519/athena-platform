@@ -41,7 +41,7 @@ class TechnicalFeature:
     name: str
     description: str
     category: str  # 技术类别
-    keywords: List[str] = field(default_factory=list)
+    keywords: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -51,10 +51,10 @@ class NoveltyAnalysisResult:
     novelty_score: float  # 0-100
     novelty_level: AssessmentLevel
     prior_art_found: bool
-    similar_patents: List[Dict[str, Any]] = field(default_factory=list)
-    novel_features: List[str] = field(default_factory=list)
-    analysis_details: Dict[str, Any] = field(default_factory=dict)
-    recommendations: List[str] = field(default_factory=list)
+    similar_patents: list[dict[str, Any]] = field(default_factory=list)
+    novel_features: list[str] = field(default_factory=list)
+    analysis_details: dict[str, Any] = field(default_factory=dict)
+    recommendations: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -64,10 +64,10 @@ class CreativityAssessmentResult:
     creativity_score: float  # 0-100
     creativity_level: AssessmentLevel
     technical_contribution: str
-    innovation_type: List[str] = field(default_factory=list)
-    unexpected_effects: List[str] = field(default_factory=list)
-    analysis_details: Dict[str, Any] = field(default_factory=dict)
-    improvement_suggestions: List[str] = field(default_factory=list)
+    innovation_type: list[str] = field(default_factory=list)
+    unexpected_effects: list[str] = field(default_factory=list)
+    analysis_details: dict[str, Any] = field(default_factory=dict)
+    improvement_suggestions: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -79,8 +79,8 @@ class UtilityAssessmentResult:
     industrial_applicability: bool
     implementation_feasibility: str
     commercial_potential: str
-    analysis_details: Dict[str, Any] = field(default_factory=dict)
-    application_suggestions: List[str] = field(default_factory=list)
+    analysis_details: dict[str, Any] = field(default_factory=dict)
+    application_suggestions: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -91,10 +91,10 @@ class ClaimsAnalysisResult:
     clarity_score: float  # 0-100
     coverage_score: float  # 0-100
     breadth_assessment: str
-    independent_claims: List[Dict[str, Any]] = field(default_factory=list)
-    dependent_claims: List[Dict[str, Any]] = field(default_factory=list)
-    analysis_details: Dict[str, Any] = field(default_factory=dict)
-    drafting_suggestions: List[str] = field(default_factory=list)
+    independent_claims: list[dict[str, Any]] = field(default_factory=list)
+    dependent_claims: list[dict[str, Any]] = field(default_factory=list)
+    analysis_details: dict[str, Any] = field(default_factory=dict)
+    drafting_suggestions: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -116,12 +116,12 @@ class ComprehensiveEvaluationReport:
     patentability_recommendation: str  # 可专利性建议
 
     # 关键发现
-    key_strengths: List[str]
-    key_weaknesses: List[str]
-    risk_factors: List[str]
+    key_strengths: list[str]
+    key_weaknesses: list[str]
+    risk_factors: list[str]
 
     # 行动建议
-    recommended_actions: List[str]
+    recommended_actions: list[str]
 
 
 class PatentEvaluationSystem:
@@ -137,7 +137,7 @@ class PatentEvaluationSystem:
         patent_id: str,
         title: str,
         abstract: str,
-        claims: List[str],
+        claims: list[str],
         description: Optional[str] = None,
         applicant: Optional[str] = None,
         inventor: Optional[str] = None,
@@ -253,7 +253,7 @@ class PatentEvaluationSystem:
         patent_id: str,
         title: str,
         abstract: str,
-        claims: List[str],
+        claims: list[str],
         description: Optional[str]
     ) -> NoveltyAnalysisResult:
         """新颖性分析"""
@@ -315,7 +315,7 @@ class PatentEvaluationSystem:
         patent_id: str,
         title: str,
         abstract: str,
-        claims: List[str],
+        claims: list[str],
         description: Optional[str]
     ) -> CreativityAssessmentResult:
         """创造性评估"""
@@ -359,7 +359,7 @@ class PatentEvaluationSystem:
         patent_id: str,
         title: str,
         abstract: str,
-        claims: List[str],
+        claims: list[str],
         description: Optional[str],
         applicant: Optional[str]
     ) -> UtilityAssessmentResult:
@@ -401,7 +401,7 @@ class PatentEvaluationSystem:
         self,
         patent_id: str,
         title: str,
-        claims: List[str]
+        claims: list[str]
     ) -> ClaimsAnalysisResult:
         """权利要求分析"""
         logger.info(f"⚖️ 执行权利要求分析: {patent_id}")
@@ -454,7 +454,7 @@ class PatentEvaluationSystem:
 
     # ==================== 辅助方法 ====================
 
-    def _extract_novel_features(self, title: str, abstract: str, claims: List[str]) -> List[str]:
+    def _extract_novel_features(self, title: str, abstract: str, claims: list[str]) -> list[str]:
         """提取新颖性特征"""
         novel_features = []
 
@@ -469,7 +469,7 @@ class PatentEvaluationSystem:
 
         return list(set(novel_features))
 
-    def _calculate_novelty_score(self, similar_patents: List, novel_features: List, abstract: str) -> float:
+    def _calculate_novelty_score(self, similar_patents: list, novel_features: list, abstract: str) -> float:
         """计算新颖性评分"""
         score = 100.0
 
@@ -486,7 +486,7 @@ class PatentEvaluationSystem:
 
         return max(0, min(100, score))
 
-    def _extract_technical_features(self, title: str, abstract: str, claims: List[str]) -> List[TechnicalFeature]:
+    def _extract_technical_features(self, title: str, abstract: str, claims: list[str]) -> list[TechnicalFeature]:
         """提取技术特征"""
         features = []
 
@@ -510,7 +510,7 @@ class PatentEvaluationSystem:
 
         return features
 
-    def _identify_innovation_types(self, title: str, abstract: str, claims: List[str]) -> List[str]:
+    def _identify_innovation_types(self, title: str, abstract: str, claims: list[str]) -> list[str]:
         """识别创新类型"""
         innovation_types = []
 
@@ -533,7 +533,7 @@ class PatentEvaluationSystem:
 
         return innovation_types
 
-    def _identify_unexpected_effects(self, abstract: str, claims: List[str]) -> List[str]:
+    def _identify_unexpected_effects(self, abstract: str, claims: list[str]) -> list[str]:
         """识别预料不到的技术效果"""
         effects = []
 
@@ -552,8 +552,8 @@ class PatentEvaluationSystem:
 
         return list(set(effects))
 
-    def _calculate_creativity_score(self, features: List, innovation_types: List,
-                                   unexpected_effects: List, abstract: str) -> float:
+    def _calculate_creativity_score(self, features: list, innovation_types: list,
+                                   unexpected_effects: list, abstract: str) -> float:
         """计算创造性评分"""
         score = 50.0  # 基础分
 
@@ -573,7 +573,7 @@ class PatentEvaluationSystem:
 
         return max(0, min(100, score))
 
-    def _determine_technical_contribution(self, score: float, innovation_types: List[str]) -> str:
+    def _determine_technical_contribution(self, score: float, innovation_types: list[str]) -> str:
         """确定技术贡献度"""
         if score >= 80:
             return "重大技术贡献"
@@ -584,7 +584,7 @@ class PatentEvaluationSystem:
         else:
             return "微小改进"
 
-    def _assess_industrial_applicability(self, title: str, abstract: str, claims: List[str]) -> bool:
+    def _assess_industrial_applicability(self, title: str, abstract: str, claims: list[str]) -> bool:
         """评估工业实用性"""
         # 检查是否包含具体的实施方式
         full_text = f"{title} {abstract} {' '.join(claims)}"
@@ -600,7 +600,7 @@ class PatentEvaluationSystem:
 
         return has_implementation or tech_terms >= 3
 
-    def _assess_implementation_feasibility(self, title: str, abstract: str, claims: List[str]) -> str:
+    def _assess_implementation_feasibility(self, title: str, abstract: str, claims: list[str]) -> str:
         """评估实施可行性"""
         full_text = f"{title} {abstract} {' '.join(claims)}"
 
@@ -663,7 +663,7 @@ class PatentEvaluationSystem:
         else:
             return "标准范围"
 
-    def _assess_claims_clarity(self, claims: List[str]) -> float:
+    def _assess_claims_clarity(self, claims: list[str]) -> float:
         """评估权利要求清晰度"""
         if not claims:
             return 0.0
@@ -687,7 +687,7 @@ class PatentEvaluationSystem:
 
         return max(0, min(100, score))
 
-    def _assess_claims_coverage(self, claims: List[str]) -> tuple:
+    def _assess_claims_coverage(self, claims: list[str]) -> tuple:
         """评估权利要求保护范围"""
         coverage_score = 70.0
 
@@ -808,7 +808,7 @@ class PatentEvaluationSystem:
     def _generate_recommendations(self, novelty: NoveltyAnalysisResult,
                                 creativity: CreativityAssessmentResult,
                                 utility: UtilityAssessmentResult,
-                                claims: ClaimsAnalysisResult) -> List[str]:
+                                claims: ClaimsAnalysisResult) -> list[str]:
         """生成行动建议"""
         recommendations = []
 
@@ -831,7 +831,7 @@ class PatentEvaluationSystem:
         return recommendations
 
     def _generate_novelty_recommendations(self, score: float,
-                                        similar_patents: List) -> List[str]:
+                                        similar_patents: list) -> list[str]:
         """生成新颖性改进建议"""
         recommendations = []
 
@@ -843,7 +843,7 @@ class PatentEvaluationSystem:
 
         return recommendations
 
-    def _generate_creativity_improvements(self, score: float) -> List[str]:
+    def _generate_creativity_improvements(self, score: float) -> list[str]:
         """生成创造性改进建议"""
         recommendations = []
 
@@ -855,7 +855,7 @@ class PatentEvaluationSystem:
 
         return recommendations
 
-    def _generate_utility_suggestions(self, score: float) -> List[str]:
+    def _generate_utility_suggestions(self, score: float) -> list[str]:
         """生成实用性改进建议"""
         recommendations = []
 
@@ -866,7 +866,7 @@ class PatentEvaluationSystem:
 
     def _generate_claims_suggestions(self, clarity_score: float,
                                    coverage_score: float,
-                                   breadth: str) -> List[str]:
+                                   breadth: str) -> list[str]:
         """生成权利要求撰写建议"""
         suggestions = []
 
@@ -923,7 +923,7 @@ class PatentEvaluationSystem:
         )
 
     def _get_default_claims_result(self, patent_id: str, title: str,
-                                 claims: List[str]) -> ClaimsAnalysisResult:
+                                 claims: list[str]) -> ClaimsAnalysisResult:
         """获取默认权利要求分析结果"""
         return ClaimsAnalysisResult(
             patent_id=patent_id,

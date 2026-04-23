@@ -70,7 +70,7 @@ class UserInteraction:
     context: dict[str, Any] = field(default_factory=dict)
 
     # 反馈信息
-    explicit_feedback: float | None = None  # 显式评分 0-1
+    explicit_feedback: Optional[float] = None  # 显式评分 0-1
     implicit_feedback: dict[str, float] = field(default_factory=dict)
 
     # 质量指标
@@ -293,8 +293,8 @@ class ProductionRLSystem:
         user_input: str,
         agent_response: str,
         capability_used: str,
-        context: dict[str, Any] | None = None,
-        explicit_feedback: float | None = None,
+        context: Optional[dict[str, Any]] = None,
+        explicit_feedback: Optional[float] = None,
         response_time: float = 0.0,
         error_occurred: bool = False,
         user_corrected: bool = False,

@@ -97,7 +97,7 @@ class StreamingBuffer:
         self.total_size += len(str(chunk.data)) if hasattr(chunk.data, "__len__") else 1
         return True
 
-    def get_batch(self, batch_size: int | None = None) -> list[StreamChunk]:
+    def get_batch(self, batch_size: Optional[int] = None) -> list[StreamChunk]:
         """获取批次数据"""
         if batch_size is None:
             batch_size = len(self.buffer)
@@ -333,7 +333,7 @@ class StreamingPerceptionEngine:
         return stream_id
 
     async def put_chunk(
-        self, stream_id: str, data: Any, metadata: dict[str, Any] | None = None
+        self, stream_id: str, data: Any, metadata: Optional[dict[str, Any]] = None
     ) -> bool:
         """添加数据块到流"""
         if not self.is_running:
@@ -425,7 +425,7 @@ class StreamingPerceptionEngine:
         if len(self.performance_stats[stream_id]) > 100:
             self.performance_stats[stream_id] = self.performance_stats[stream_id][-100:]
 
-    async def get_results(self, timeout: float | None = None) -> list[tuple[str, ProcessingResult]]:
+    async def get_results(self, timeout: Optional[float] = None) -> list[tuple[str, ProcessingResult]]:
         """获取处理结果"""
         results = []
 
@@ -440,7 +440,7 @@ class StreamingPerceptionEngine:
 
         return results
 
-    def get_stream_stats(self, stream_id: str | None = None) -> dict[str, Any]:
+    def get_stream_stats(self, stream_id: Optional[str] = None) -> dict[str, Any]:
         """获取流统计信息"""
         if stream_id:
             buffer = self.buffers.get(stream_id)

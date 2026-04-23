@@ -7,15 +7,14 @@
 功能：返回问候语
 """
 
-from typing import Dict
 import logging
 
-from core.agents.xiaona.base_component import (
-    BaseXiaonaComponent,
+from core.framework.agents.xiaona.base_component import (
     AgentCapability,
     AgentExecutionContext,
     AgentExecutionResult,
     AgentStatus,
+    BaseXiaonaComponent,
 )
 
 logger = logging.getLogger(__name__)
@@ -96,7 +95,6 @@ def create_hello_agent(agent_id: str = "hello_agent_001") -> HelloAgent:
 # 测试入口
 async def main():
     """测试入口"""
-    import asyncio
 
     # 创建Agent
     agent = HelloAgent(agent_id="hello_agent_001")
@@ -106,7 +104,7 @@ async def main():
     info = agent.get_info()
     print(f"Agent ID: {info['agent_id']}")
     print(f"类型: {info['agent_type']}")
-    print(f"能力: {[c['name'] for c in info['capabilities']]}")
+    print(f"能力: {[c['name'] for c in info['capabilities']}")
 
     # 测试执行
     print("\n=== 执行示例 ===")

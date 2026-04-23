@@ -55,9 +55,9 @@ class AgentTask:
     dependencies: list[str] = field(default_factory=list)
     status: str = "pending"
     result: Any | None = None
-    error: str | None = None
-    started_at: str | None = None
-    completed_at: str | None = None
+    error: Optional[str] = None
+    started_at: Optional[str] = None
+    completed_at: Optional[str] = None
 
 
 @dataclass

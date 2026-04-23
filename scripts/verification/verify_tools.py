@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 验证所有24个Claude Code基础工具注册状态
 
@@ -8,44 +7,44 @@ Created: 2026-04-20
 Version: v1.0.0
 """
 
-import sys
 import asyncio
+import sys
 
 sys.path.insert(0, "/Users/xujian/Athena工作平台")
 
+from core.tools.base import ToolCategory, ToolDefinition, ToolPriority
 from core.tools.unified_registry import get_unified_registry
-from core.tools.base import ToolDefinition, ToolCategory, ToolPriority
 
 
 async def register_tools_quiet():
     """静默注册所有工具"""
     from core.tools.p0_basic_tools import bash_handler, read_handler, write_handler
     from core.tools.p1_search_edit_tools import (
+        edit_handler,
         glob_handler,
         grep_handler,
-        edit_handler,
-        web_search_handler,
         web_fetch_handler,
+        web_search_handler,
     )
     from core.tools.p2_agent_task_tools import (
         agent_handler,
         task_create_handler,
-        task_list_handler,
         task_get_handler,
-        task_update_handler,
+        task_list_handler,
         task_stop_handler,
+        task_update_handler,
     )
     from core.tools.p3_mcp_workflow_tools import (
-        mcp_tool_handler,
-        list_mcp_resources_handler,
-        read_mcp_resource_handler,
         enter_plan_mode_handler,
-        exit_plan_mode_handler,
         enter_worktree_handler,
+        exit_plan_mode_handler,
         exit_worktree_handler,
-        tool_search_handler,
+        list_mcp_resources_handler,
+        mcp_tool_handler,
         notebook_edit_handler,
+        read_mcp_resource_handler,
         send_message_handler,
+        tool_search_handler,
     )
 
     registry = get_unified_registry()

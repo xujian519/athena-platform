@@ -189,7 +189,7 @@ class LegalWorldVerifier:
             tables = cursor.fetchall()
 
             # 计算总数据量
-            total_size = sum([db[1] for db in databases if db[1]])
+            total_size = sum([db[1] for db in databases if db[1])
 
             status = DatabaseStatus(
                 name="PostgreSQL",
@@ -200,8 +200,8 @@ class LegalWorldVerifier:
                 data_volume=total_size,
                 collections_count=len(databases),
                 details={
-                    "databases": [{"name": db[0], "size": db[1]} for db in databases[:10]],
-                    "tables": [{"schema": t[0], "table": t[1]} for t in tables[:20]],
+                    "databases": [{"name": db[0], "size": db[1]} for db in databases[:10],
+                    "tables": [{"schema": t[0], "table": t[1]} for t in tables[:20],
                 }
             )
 

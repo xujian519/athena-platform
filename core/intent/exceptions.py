@@ -23,7 +23,7 @@ class IntentRecognitionError(Exception):
         self,
         message: str,
         error_code: str = "INTENT_ERROR",
-        details: dict[str, Any] | None = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         """
         初始化异常
@@ -58,7 +58,7 @@ class ModelLoadError(IntentRecognitionError):
     当模型文件不存在、加载失败或初始化错误时抛出。
     """
 
-    def __init__(self, model_name: str, reason: str, details: dict[str, Any] | None = None):
+    def __init__(self, model_name: str, reason: str, details: Optional[dict[str, Any]] = None):
         self.model_name = model_name
         self.reason = reason
         full_details = {"model_name": model_name, "reason": reason}
@@ -93,7 +93,7 @@ class ModelInferenceError(IntentRecognitionError):
         model_name: str,
         input_text: str,
         reason: str,
-        details: dict[str, Any] | None = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         self.model_name = model_name
         self.input_text = input_text[:100]  # 只保留前100字符
@@ -125,7 +125,7 @@ class SemanticMatchError(IntentRecognitionError):
         query: str,
         candidates_count: int,
         reason: str,
-        details: dict[str, Any] | None = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         self.query = query[:100]
         self.candidates_count = candidates_count
@@ -152,7 +152,7 @@ class ConfigurationError(IntentRecognitionError):
     当配置文件缺失、格式错误或配置项无效时抛出。
     """
 
-    def __init__(self, config_key: str, reason: str, details: dict[str, Any] | None = None):
+    def __init__(self, config_key: str, reason: str, details: Optional[dict[str, Any]] = None):
         self.config_key = config_key
         self.reason = reason
         full_details = {"config_key": config_key, "reason": reason}
@@ -174,7 +174,7 @@ class CacheError(IntentRecognitionError):
     """
 
     def __init__(
-        self, cache_key: str, operation: str, reason: str, details: dict[str, Any] | None = None
+        self, cache_key: str, operation: str, reason: str, details: Optional[dict[str, Any]] = None
     ):
         self.cache_key = cache_key
         self.operation = operation
@@ -202,7 +202,7 @@ class ValidationError(IntentRecognitionError):
         field_name: str,
         provided_value: Any,
         reason: str,
-        details: dict[str, Any] | None = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         self.field_name = field_name
         self.provided_value = str(provided_value)[:100]
@@ -230,7 +230,7 @@ class IntentRecognitionTimeoutError(IntentRecognitionError):
     """
 
     def __init__(
-        self, timeout_seconds: float, operation: str, details: dict[str, Any] | None = None
+        self, timeout_seconds: float, operation: str, details: Optional[dict[str, Any]] = None
     ):
         self.timeout_seconds = timeout_seconds
         self.operation = operation
@@ -247,7 +247,7 @@ class IntentRecognitionTimeoutError(IntentRecognitionError):
 
 # 异常处理工具函数
 def handle_intent_error(
-    error: Exception, context: dict[str, Any] | None = None
+    error: Exception, context: Optional[dict[str, Any]] = None
 ) -> IntentRecognitionError:
     """
     将通用异常转换为意图识别异常

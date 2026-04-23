@@ -33,10 +33,10 @@ class GlobalPermissionManager:
     - 线程安全
     """
 
-    _instance: "GlobalPermissionManager | None" = None
+    _instance: GlobalPermissionManager | None = None
     _initialized: bool = False
 
-    def __new__(cls) -> "GlobalPermissionManager":
+    def __new__(cls) -> GlobalPermissionManager:
         """实现单例模式"""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
@@ -56,9 +56,9 @@ class GlobalPermissionManager:
     def initialize(
         self,
         mode: PermissionMode = PermissionMode.DEFAULT,
-        config_path: str | None = None,
+        config_path: Optional[str] = None,
         path_rules: list[PathRule] | None = None,
-        denied_commands: list[str] | None = None,
+        denied_commands: Optional[list[str]] = None,
     ) -> None:
         """初始化权限检查器
 
@@ -86,8 +86,8 @@ class GlobalPermissionManager:
     def check_permission(
         self,
         tool_name: str,
-        parameters: dict[str, Any] | None = None,
-    ) -> tuple[bool, str | None]:
+        parameters: Optional[dict[str, Any]] = None,
+    ) -> Optional[tuple[bool, str]]:
         """检查工具调用权限
 
         Args:
@@ -95,7 +95,7 @@ class GlobalPermissionManager:
             parameters: 工具参数
 
         Returns:
-            tuple[bool, str | None]: (是否允许, 原因)
+            Optional[tuple[bool, str]]: (是否允许, 原因)
         """
         if self._checker is None:
             # 未初始化，使用默认配置
@@ -182,7 +182,7 @@ class GlobalPermissionManager:
             self.initialize()
         return self._checker.get_config()
 
-    def save_config(self, path: str | None = None) -> None:
+    def save_config(self, path: Optional[str] = None) -> None:
         """保存当前配置到文件
 
         Args:
@@ -227,7 +227,7 @@ class GlobalPermissionManager:
         """
         import yaml
 
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             config_dict = yaml.safe_load(f)
 
         # 解析权限模式

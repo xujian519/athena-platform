@@ -22,7 +22,7 @@ logger = setup_logging()
 class PostgreSQLClient:
     """PostgreSQL元数据存储客户端"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化PostgreSQL客户端
 
@@ -374,7 +374,7 @@ class PostgreSQLClient:
             logger.error(f"❌ 全文检索失败: {e!s}")
             return []
 
-    def get_judgment_by_id(self, case_id: str) -> dict[str, Any] | None:
+    def get_judgment_by_id(self, case_id: str) -> Optional[dict[str, Any]]:
         """
         根据案号获取判决书
 
@@ -477,7 +477,7 @@ class PostgreSQLClient:
 
 
 # 便捷函数
-def get_postgres_client(config: dict[str, Any] | None = None) -> PostgreSQLClient | None:
+def get_postgres_client(config: Optional[dict[str, Any]] = None) -> PostgreSQLClient | None:
     """
     获取PostgreSQL客户端单例
 

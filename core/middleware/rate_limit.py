@@ -133,7 +133,7 @@ class MemoryRateLimiter:
         ip_hash = hashlib.sha256(ip.encode()).hexdigest()[:16]
         return f"ip:{ip_hash}"
 
-    async def check_rate_limit(self, request: Request) -> tuple[bool, int | None]:
+    async def check_rate_limit(self, request: Request) -> Optional[tuple[bool, int]]:
         """
         检查是否超过速率限制
 
@@ -197,7 +197,7 @@ class MemoryRateLimiter:
             )
             return True, None
 
-    def _block(self, info: RateLimitInfo, window_size: int) -> tuple[bool, int | None]:
+    def _block(self, info: RateLimitInfo, window_size: int) -> Optional[tuple[bool, int]]:
         """
         封禁请求者
 
@@ -249,7 +249,7 @@ class MemoryRateLimiter:
             "blocked_until": info.blocked_until.isoformat() if info.blocked_until else None,
         }
 
-    def reset(self, key: str | None = None):
+    def reset(self, key: Optional[str] = None):
         """
         重置速率限制
 
@@ -302,8 +302,8 @@ def reset_rate_limiter():
 
 # 装饰器
 def rate_limit(
-    requests_per_minute: int | None = None,
-    requests_per_hour: int | None = None,
+    requests_per_minute: Optional[int] = None,
+    requests_per_hour: Optional[int] = None,
     key_func: Callable[[Request, str], Any] | None = None,
 ):
     """

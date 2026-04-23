@@ -50,7 +50,7 @@ class CacheEntry:
     key: str
     value: Any
     created_at: float = field(default_factory=time.time)
-    ttl: int | None = None
+    ttl: Optional[int] = None
     hits: int = 0
     misses: int = 0
 
@@ -176,7 +176,7 @@ class LRUCache:
 
             return entry.value
 
-    def set(self, key: str, value: Any, ttl: int | None = None) -> None:
+    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> None:
         """
         设置缓存值
 
@@ -225,7 +225,7 @@ class LRUCache:
                 self._stats["expirations"] = 0
         logger.info("缓存已清空")
 
-    def cached(self, ttl: int | None = None, key_fn: Callable | None = None) -> Any:
+    def cached(self, ttl: Optional[int] = None, key_fn: Callable | None = None) -> Any:
         """
         缓存装饰器
 
@@ -377,7 +377,7 @@ class MultiLevelCache:
 
         return None
 
-    def set(self, key: str, value: Any, ttl: int | None = None) -> None:
+    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> None:
         """
         设置缓存值(同时设置L1和L2)
 

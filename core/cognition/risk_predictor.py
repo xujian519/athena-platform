@@ -67,7 +67,7 @@ class RiskPredictor:
     def predict(
         self,
         plan: ExecutionPlan,
-        context: dict[str, Any] | None = None
+        context: Optional[dict[str, Any]] = None
     ) -> RiskAssessment:
         """
         预测方案风险

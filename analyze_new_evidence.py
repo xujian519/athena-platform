@@ -2,10 +2,10 @@
 """
 济南力邦专利无效案件 - 新增证据深度分析
 """
-import sys
 import re
-from pathlib import Path
+import sys
 from datetime import datetime
+from pathlib import Path
 
 sys.path.insert(0, '.')
 
@@ -40,7 +40,7 @@ for pdf_file in pdf_files:
             pdf_doc = PdfReaderClass(f)
             num_pages = len(pdf_doc.pages)
 
-            print(f"\n📄 基本信息:")
+            print("\n📄 基本信息:")
             print(f"  总页数: {num_pages}")
 
             # 提取文本（前3页，通常包含关键信息）
@@ -76,7 +76,7 @@ for pdf_file in pdf_files:
                 # 清理摘要文本
                 abstract = re.sub(r'\s+', ' ', abstract)
                 abstract = abstract[:500] + "..." if len(abstract) > 500 else abstract
-                print(f"\n📝 摘要:")
+                print("\n📝 摘要:")
                 print(f"  {abstract}")
 
             # 提取权利要求（第一项）
@@ -87,7 +87,7 @@ for pdf_file in pdf_files:
                 if claim1_match:
                     claim1 = claim1_match.group(0).strip()
                     claim1 = re.sub(r'\s+', ' ', claim1)
-                    print(f"\n⚖️  权利要求1:")
+                    print("\n⚖️  权利要求1:")
                     print(f"  {claim1[:300]}...")
 
             # 提取申请人和发明人
@@ -126,7 +126,7 @@ for pdf_file in pdf_files:
                 print(f"\n🔑 技术关键词: {', '.join(set(keywords))}")
 
             # 评估证据价值
-            print(f"\n💡 初步评估:")
+            print("\n💡 初步评估:")
 
             # 检查是否包含目标专利的关键技术特征
             key_features = [
@@ -141,10 +141,10 @@ for pdf_file in pdf_files:
 
             if matched_features:
                 print(f"  ✅ 发现相关技术特征: {', '.join(matched_features[:5])}")
-                print(f"  ⭐ 证据价值: 高（与目标专利技术领域相关）")
+                print("  ⭐ 证据价值: 高（与目标专利技术领域相关）")
             else:
-                print(f"  ⚠️ 未发现明显相关技术特征")
-                print(f"  ⭐ 证据价值: 待评估（需要详细分析技术方案）")
+                print("  ⚠️ 未发现明显相关技术特征")
+                print("  ⭐ 证据价值: 待评估（需要详细分析技术方案）")
 
     except Exception as e:
         print(f"\n❌ 分析失败: {e}")

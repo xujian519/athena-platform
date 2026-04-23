@@ -75,7 +75,7 @@ class XiaoNuoLangExtractController:
 
         logger.info('小诺LangExtract控制器初始化完成')
 
-    def _load_intent_patterns(self) -> dict[str, list[str]]:
+    def _load_intent_patterns(self) -> dict[str, list[str]:
         """加载意图识别模式"""
         return {
             ExtractionIntent.STRUCTURED_EXTRACTION.value: [
@@ -112,7 +112,7 @@ class XiaoNuoLangExtractController:
             ]
         }
 
-    def _load_scenario_keywords(self) -> dict[str, list[str]]:
+    def _load_scenario_keywords(self) -> dict[str, list[str]:
         """加载场景关键词"""
         return {
             ExtractionScenario.PATENT_ANALYSIS.value: [

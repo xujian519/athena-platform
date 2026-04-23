@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 class KnowledgeGraphImporter:
     """知识图谱导入器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化导入器
 

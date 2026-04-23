@@ -91,7 +91,7 @@ class FileCache:
         self,
         cache_dir: str = DEFAULT_CACHE_DIR,
         ttl: int = DEFAULT_CACHE_TTL,
-        max_size: int | None = None,
+        max_size: Optional[int] = None,
         enabled: bool = CACHE_ENABLED,
     ):
         """
@@ -184,7 +184,7 @@ class FileCache:
             logger.debug(f"缓存命中: {file_path}")
             return entry.content
 
-    async def set(self, file_path: str, content: bytes, ttl: int | None = None) -> bool:
+    async def set(self, file_path: str, content: bytes, ttl: Optional[int] = None) -> bool:
         """
         设置缓存
 
@@ -422,7 +422,7 @@ class FileCache:
             "max_size": self.max_size,
         }
 
-    def get_cache_info(self, file_path: str) -> dict[str, Any] | None:
+    def get_cache_info(self, file_path: str) -> Optional[dict[str, Any]]:
         """获取特定文件的缓存信息"""
         cache_key = self._get_cache_key(file_path)
         entry = self._index.get(cache_key)
@@ -455,7 +455,7 @@ def CACHE_STATS():
 
 # 便捷函数
 async def cached_file_operation(
-    file_path: str | None = None, operation: callable | None = None, ttl: int | None = None
+    file_path: Optional[str] = None, operation: callable | None = None, ttl: Optional[int] = None
 ) -> bytes:
     """
     执行缓存文件操作

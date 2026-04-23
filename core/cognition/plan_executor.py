@@ -157,7 +157,7 @@ class StepResult:
     step_id: str
     status: StepStatus
     output: dict[str, Any] = field(default_factory=dict)
-    error: str | None = None
+    error: Optional[str] = None
     started_at: datetime | None = None
     completed_at: datetime | None = None
     duration_ms: int = 0
@@ -171,7 +171,7 @@ class ExecutionResult:
     status: TaskStatus
     step_results: list[StepResult] = field(default_factory=list)
     final_output: dict[str, Any] = field(default_factory=dict)
-    error: str | None = None
+    error: Optional[str] = None
     started_at: datetime | None = None
     completed_at: datetime | None = None
     total_duration_ms: int = 0
@@ -221,7 +221,7 @@ class PlanExecutor:
         self.on_step_fail = on_step_fail
 
         # 执行中状态
-        self._current_task_id: str | None = None
+        self._current_task_id: Optional[str] = None
         self._current_plan: ExecutionPlan | None = None
         self._is_cancelled = False
 
@@ -263,7 +263,7 @@ class PlanExecutor:
     async def execute_plan(
         self,
         plan: ExecutionPlan,
-        task_id: str | None = None,
+        task_id: Optional[str] = None,
     ) -> ExecutionResult:
         """
         执行完整的方案

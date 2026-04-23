@@ -9,8 +9,8 @@ Created: 2026-04-19
 """
 
 import asyncio
-import sys
 import logging
+import sys
 
 # 添加项目路径
 sys.path.insert(0, "/Users/xujian/Athena工作平台")
@@ -41,7 +41,7 @@ async def test_knowledge_graph_tool():
     print("-" * 80)
     try:
         stats = await get_graph_statistics()
-        print(f"✅ 成功获取统计信息")
+        print("✅ 成功获取统计信息")
         print(f"  - 后端类型: {stats['results'][0]['backend']}")
         print(f"  - 节点数量: {stats['results'][0]['node_count']}")
         print(f"  - 边数量: {stats['results'][0]['edge_count']}")
@@ -63,7 +63,7 @@ async def test_knowledge_graph_tool():
         result = await knowledge_graph_search_handler(
             query="MATCH (n) RETURN count(n) as total_nodes", query_type="cypher", top_k=1
         )
-        print(f"✅ Cypher查询成功")
+        print("✅ Cypher查询成功")
         print(f"  - 结果数量: {result['count']}")
         print(f"  - 执行时间: {result['execution_time']:.3f}秒")
         if result["count"] > 0:
@@ -80,7 +80,7 @@ async def test_knowledge_graph_tool():
     print("-" * 80)
     try:
         result = await knowledge_graph_search_handler(query="MATCH (n) RETURN n LIMIT 5", query_type="cypher")
-        print(f"✅ 查询节点成功")
+        print("✅ 查询节点成功")
         print(f"  - 结果数量: {result['count']}")
         print(f"  - 执行时间: {result['execution_time']:.3f}秒")
         if result["count"] > 0:
@@ -97,7 +97,7 @@ async def test_knowledge_graph_tool():
     print("-" * 80)
     try:
         result = await search_patents_by_keyword("专利", limit=3)
-        print(f"✅ 专利搜索成功")
+        print("✅ 专利搜索成功")
         print(f"  - 结果数量: {result['count']}")
         print(f"  - 执行时间: {result['execution_time']:.3f}秒")
     except Exception as e:
@@ -113,12 +113,12 @@ async def test_knowledge_graph_tool():
     try:
         result = await knowledge_graph_search_handler(query="test", query_type="invalid_type")
         if not result["success"]:
-            print(f"✅ 错误处理正确")
+            print("✅ 错误处理正确")
             print(f"  - 错误信息: {result['error']}")
         else:
-            print(f"❌ 错误处理失败: 应该返回错误但没有")
+            print("❌ 错误处理失败: 应该返回错误但没有")
     except Exception as e:
-        print(f"✅ 错误处理正确（抛出异常）")
+        print("✅ 错误处理正确（抛出异常）")
         print(f"  - 异常信息: {e}")
 
     print("\n" + "=" * 80)

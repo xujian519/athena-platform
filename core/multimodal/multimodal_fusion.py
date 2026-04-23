@@ -436,7 +436,7 @@ class MultimodalFusion:
 
 
 # 便捷函数
-def create_text_modality(text: str | None = None, metadata: dict[str, Any] | None = None) -> ModalityData:
+def create_text_modality(text: Optional[str] = None, metadata: Optional[dict[str, Any]] = None) -> ModalityData:
     """创建文本模态数据"""
     return ModalityData(modality=ModalityType.TEXT, data=text, metadata=metadata or {})
 
@@ -449,7 +449,7 @@ def create_image_modality(
 
 
 def create_audio_modality(
-    audio_path: str, metadata: dict[str, Any] | None = None
+    audio_path: str, metadata: Optional[dict[str, Any]] = None
 ) -> ModalityData:
     """创建音频模态数据"""
     return ModalityData(modality=ModalityType.AUDIO, data=audio_path, metadata=metadata or {})

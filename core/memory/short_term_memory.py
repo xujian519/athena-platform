@@ -19,7 +19,7 @@ class ShortTermMemory:
         self.ttl_seconds = ttl_seconds
         self._memory = {}
 
-    async def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
+    async def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
         """设置短期记忆"""
         try:
             self._memory[key] = {"value": value, "expires_at": datetime.now().timestamp() + ttl}

@@ -206,7 +206,7 @@ class AlertThresholdOptimizer:
             "memory_cache_low_hit": round(warning_threshold, 2)
         }
 
-    def optimize_all_thresholds(self) -> Dict[str, Dict[str, float]]:
+    def optimize_all_thresholds(self) -> Dict[str, Dict[str, float]:
         """优化所有告警阈值"""
         print("🔧 开始优化告警阈值...")
         print("=" * 60)

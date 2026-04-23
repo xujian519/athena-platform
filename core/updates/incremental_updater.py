@@ -56,10 +56,10 @@ class UpdateRecord:
     data: dict[str, Any]
     timestamp: datetime
     status: UpdateStatus = UpdateStatus.PENDING
-    checksum: str | None = None
+    checksum: Optional[str] = None
     dependencies: list[str] = field(default_factory=list)
-    error_message: str | None = None
-    rollback_data: dict[str, Any] | None = None
+    error_message: Optional[str] = None
+    rollback_data: Optional[dict[str, Any]] = None
 
 
 @dataclass
@@ -139,7 +139,7 @@ class IncrementalUpdater:
         update_type: UpdateType,
         target_type: str,
         target_id: str,
-        data: dict[str, Any],        dependencies: list[str] | None = None,
+        data: dict[str, Any],        dependencies: Optional[list[str]] = None,
     ) -> str:
         """
         添加更新记录
@@ -210,7 +210,7 @@ class IncrementalUpdater:
 
         return update_id
 
-    async def _process_batch(self) -> str | None:
+    async def _process_batch(self) -> Optional[str]:
         """处理批次更新"""
         if not self.pending_updates:
             return None
@@ -397,7 +397,7 @@ class IncrementalUpdater:
         data_str = json.dumps(data, sort_keys=True)
         return hashlib.md5(data_str.encode('utf-8'), usedforsecurity=False).hexdigest()
 
-    async def _get_node_data(self, node_id: str) -> dict[str, Any] | None:
+    async def _get_node_data(self, node_id: str) -> Optional[dict[str, Any]]:
         """获取节点数据"""
         try:
             # 从知识图谱获取节点数据

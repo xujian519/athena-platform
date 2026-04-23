@@ -7,18 +7,19 @@
 import sys
 import time
 from pathlib import Path
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 import pytest
+
 from core.tools.tool_call_manager import (
+    CallStatus,
     ToolCallManager,
     ToolCallRequest,
     ToolCallResult,
-    CallStatus,
 )
 
 

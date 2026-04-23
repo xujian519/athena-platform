@@ -8,7 +8,7 @@ import ast
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -22,7 +22,7 @@ class ToolIdentifier:
         self.core_dir = project_root / "core"
         self.tools_found = []
 
-    def scan_for_tools(self) -> List[Dict[str, Any]]:
+    def scan_for_tools(self) -> list[dict[str, Any]:
         """扫描core目录，查找工具定义"""
         tools = []
 
@@ -41,7 +41,7 @@ class ToolIdentifier:
 
         return tools
 
-    def _extract_tools_from_file(self, file_path: Path) -> List[Dict[str, Any]]:
+    def _extract_tools_from_file(self, file_path: Path) -> list[dict[str, Any]:
         """从文件中提取工具定义"""
         tools = []
 
@@ -69,7 +69,7 @@ class ToolIdentifier:
 
         return tools
 
-    def _analyze_function(self, node: ast.FunctionDef, file_path: Path) -> Optional[Dict[str, Any]]:
+    def _analyze_function(self, node: ast.FunctionDef, file_path: Path) -> dict[str, Any] | None:
         """分析函数是否是工具"""
 
         # 检查函数名
@@ -90,7 +90,7 @@ class ToolIdentifier:
 
         return tool_info
 
-    def _analyze_class(self, node: ast.ClassDef, file_path: Path) -> List[Dict[str, Any]]:
+    def _analyze_class(self, node: ast.ClassDef, file_path: Path) -> list[dict[str, Any]:
         """分析类是否包含工具"""
 
         tools = []
@@ -136,7 +136,7 @@ class ToolIdentifier:
 
         return False
 
-    def categorize_tools(self, tools: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
+    def categorize_tools(self, tools: list[dict[str, Any]) -> dict[str, list[dict[str, Any]]:
         """对工具进行分类"""
 
         categories = {
@@ -170,7 +170,7 @@ class ToolIdentifier:
 
         return categories
 
-    def generate_report(self, tools: List[Dict[str, Any]], output_path: Path):
+    def generate_report(self, tools: list[dict[str, Any], output_path: Path):
         """生成工具迁移报告"""
 
         categories = self.categorize_tools(tools)

@@ -41,7 +41,7 @@ class SecurityMonitor:
     提供全面的安全防护、风险监控和异常检测能力
     """
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """初始化安全监控器
 
         Args:

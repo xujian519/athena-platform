@@ -40,7 +40,7 @@ class PatentAnalysisResult:
 
     # IPC分类结果
     ipc_classifications: list[dict[str, Any]] = field(default_factory=list)
-    primary_ipc: str | None = None
+    primary_ipc: Optional[str] = None
 
     # 技术特征分析
     technical_features: list[dict[str, Any]] = field(default_factory=list)
@@ -86,7 +86,7 @@ class ComparisonResult:
 class IntegratedPatentAnalysisSystem:
     """集成专利分析系统"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
 
         # 初始化各个子系统

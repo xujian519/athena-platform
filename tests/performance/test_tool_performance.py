@@ -6,19 +6,20 @@
 """
 import sys
 import time
-from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from statistics import mean, median, stdev
+from pathlib import Path
+from statistics import mean, median
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 import pytest
-from core.tools.tool_manager import ToolManager
-from core.tools.selector import ToolSelector, SelectionStrategy
+
+from core.tools.base import ToolDefinition, ToolPriority, ToolRegistry
+from core.tools.selector import SelectionStrategy, ToolSelector
 from core.tools.tool_call_manager import ToolCallManager, ToolCallRequest
-from core.tools.base import ToolDefinition, ToolRegistry, ToolPriority
+from core.tools.tool_manager import ToolManager
 
 
 class TestToolPerformance:
@@ -142,7 +143,7 @@ class TestToolPerformance:
         min_latency = min(latencies)
         max_latency = max(latencies)
 
-        print(f"\n✅ 工具调用延迟统计(100次调用):")
+        print("\n✅ 工具调用延迟统计(100次调用):")
         print(f"   平均延迟: {avg_latency*1000:.2f}毫秒")
         print(f"   中位延迟: {median_latency*1000:.2f}毫秒")
         print(f"   最小延迟: {min_latency*1000:.2f}毫秒")
@@ -249,10 +250,10 @@ class TestToolPerformance:
         history = call_manager.get_call_history()
         assert len(history) <= 1000, "历史记录超过限制"
 
-        print(f"\n✅ 内存使用测试(1000次调用):")
+        print("\n✅ 内存使用测试(1000次调用):")
         print(f"   历史记录数: {len(history)}")
         print(f"   历史记录限制: {call_manager.max_history}")
-        print(f"   内存管理: ✅ 正常")
+        print("   内存管理: ✅ 正常")
 
     def test_different_strategies_performance(self):
         """测试不同选择策略的性能"""
@@ -298,7 +299,7 @@ class TestToolPerformance:
                 "throughput": 1000 / total_time,
             }
 
-        print(f"\n✅ 不同策略性能对比(1000次选择):")
+        print("\n✅ 不同策略性能对比(1000次选择):")
         for strategy_name, metrics in results.items():
             print(f"   {strategy_name}:")
             print(f"     耗时: {metrics['time']:.3f}秒")
@@ -325,13 +326,13 @@ class TestToolPerformance:
         # 测试重复获取工具的性能
         start_time = time.time()
 
-        for i in range(1000):
+        for _i in range(1000):
             manager.get_active_tools()
 
         end_time = time.time()
         total_time = end_time - start_time
 
-        print(f"\n✅ 缓存有效性测试(1000次获取):")
+        print("\n✅ 缓存有效性测试(1000次获取):")
         print(f"   总耗时: {total_time:.3f}秒")
         print(f"   平均耗时: {total_time/1000*1000:.2f}毫秒")
 

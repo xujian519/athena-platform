@@ -176,7 +176,7 @@ class ExecutionConfig:
 
         return config
 
-    def save_to_file(self, path: str | None = None) -> bool:
+    def save_to_file(self, path: Optional[str] = None) -> bool:
         """
         保存配置到文件
 
@@ -247,7 +247,7 @@ class ConfigManager:
 
     def __init__(self, config: ExecutionConfig | None = None):
         self.config = config or ExecutionConfig()
-        self._config_path: str | None = None
+        self._config_path: Optional[str] = None
         self._observers = []
 
     def load_config(self, path: str) -> bool:
@@ -268,7 +268,7 @@ class ConfigManager:
             return True
         return False
 
-    def save_config(self, path: str | None = None) -> bool:
+    def save_config(self, path: Optional[str] = None) -> bool:
         """
         保存配置到文件
 

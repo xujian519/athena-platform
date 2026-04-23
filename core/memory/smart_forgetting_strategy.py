@@ -71,12 +71,12 @@ class ForgettingEvent:
     importance_before_forget: float
     access_count_before_forget: int
     summary: str  # 遗忘内容的摘要
-    backup_location: str | None = None
+    backup_location: Optional[str] = None
 
 class SmartForgettingStrategy:
     """智能遗忘策略管理器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {
             'max_memory_items': 10000,
             'time_decay_half_life': 30,  # 天
@@ -476,7 +476,7 @@ smart_forgetting_strategy = SmartForgettingStrategy()
 # 便捷函数
 async def add_memory_with_forgetting(memory_id: str, content: Any, memory_type: str,
                                   priority: MemoryPriority = MemoryPriority.MEDIUM,
-                                  tags: list[str] | None = None):
+                                  tags: Optional[list[str]] = None):
     """添加带遗忘策略的记忆"""
     memory = MemoryItem(
         memory_id=memory_id,

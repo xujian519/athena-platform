@@ -93,8 +93,8 @@ class LearningRequest(BaseModel):
     task_type: LearningTaskType = Field(..., description="学习任务类型")
     context: dict[str, Any] = Field(default_factory=dict, description="学习上下文")
     data: list[dict[str, Any]] = Field(default_factory=list, description="训练数据")
-    config: dict[str, Any] | None = Field(None, description="学习配置")
-    metadata: dict[str, Any] | None = Field(None, description="元数据")
+    config: Optional[dict[str, Any]] = Field(None, description="学习配置")
+    metadata: Optional[dict[str, Any]] = Field(None, description="元数据")
 
 
 class LearningResponse(BaseModel):
@@ -103,7 +103,7 @@ class LearningResponse(BaseModel):
     task_id: str = Field(..., description="任务ID")
     status: str = Field(..., description="状态")
     message: str = Field(..., description="消息")
-    result: dict[str, Any] | None = Field(None, description="学习结果")
+    result: Optional[dict[str, Any]] = Field(None, description="学习结果")
     timestamp: datetime = Field(default_factory=datetime.now, description="时间戳")
 
 
@@ -124,8 +124,8 @@ class RLInteractionRequest(BaseModel):
     user_input: str = Field(..., description="用户输入")
     agent_response: str = Field(..., description="智能体响应")
     capability_used: str = Field(..., description="使用的能力")
-    context: dict[str, Any] | None = Field(None, description="上下文")
-    explicit_feedback: float | None = Field(None, ge=0.0, le=1.0, description="显式反馈(0-1)")
+    context: Optional[dict[str, Any]] = Field(None, description="上下文")
+    explicit_feedback: Optional[float] = Field(None, ge=0.0, le=1.0, description="显式反馈(0-1)")
     response_time: float = Field(default=0.0, ge=0.0, description="响应时间(秒)")
     error_occurred: bool = Field(default=False, description="是否发生错误")
     user_corrected: bool = Field(default=False, description="用户是否纠正")

@@ -52,16 +52,16 @@ class SearchRequest:
     timeout: float = 30.0
 
     # 高级选项
-    prefer_tools: list[str] | None = None
-    exclude_tools: list[str] | None = None
+    prefer_tools: Optional[list[str]] = None
+    exclude_tools: Optional[list[str]] = None
     require_fallback: bool = True
     enable_result_fusion: bool = True
-    strategy: str | None = None
+    strategy: Optional[str] = None
 
     # 上下文信息
-    user_id: str | None = None
-    session_id: str | None = None
-    conversation_context: dict[str, Any] | None = None
+    user_id: Optional[str] = None
+    session_id: Optional[str] = None
+    conversation_context: Optional[dict[str, Any]] = None
 
 
 @dataclass
@@ -122,7 +122,7 @@ class AthenaSmartSearch:
         registry: ToolRegistry | None = None,
         selector: AthenaSearchSelector | None = None,
         coordinator: LightweightCoordinator | None = None,
-        config: dict[str, Any] | None = None,
+        config: Optional[dict[str, Any]] = None,
     ):
         """
         初始化Athena智能搜索系统
@@ -583,7 +583,7 @@ class AthenaSmartSearch:
 
     # === 会话管理 ===
 
-    def create_session(self, session_id: str, user_id: str | None = None) -> SearchSession:
+    def create_session(self, session_id: str, user_id: Optional[str] = None) -> SearchSession:
         """创建搜索会话"""
         session = SearchSession(session_id=session_id, user_id=user_id)
         self.sessions[session_id] = session
@@ -594,7 +594,7 @@ class AthenaSmartSearch:
         """获取搜索会话"""
         return self.sessions.get(session_id)
 
-    def _add_to_session(self, session_id: str, result: SearchResult, user_id: str | None = None):
+    def _add_to_session(self, session_id: str, result: SearchResult, user_id: Optional[str] = None):
         """添加搜索结果到会话"""
         if session_id not in self.sessions:
             self.create_session(session_id, user_id)
@@ -647,7 +647,7 @@ class AthenaSmartSearch:
         selected_tools: list[str],
         success: bool,
         satisfaction: float,
-        session_id: str | None = None,
+        session_id: Optional[str] = None,
     ):
         """添加搜索反馈"""
         # 向选择器添加反馈
@@ -726,7 +726,7 @@ def get_athena_smart_search() -> AthenaSmartSearch:
 
 
 async def initialize_athena_smart_search(
-    config: dict[str, Any] | None = None,
+    config: Optional[dict[str, Any]] = None,
 ) -> AthenaSmartSearch:
     """初始化全局Athena智能搜索系统"""
     smart_search = get_athena_smart_search()

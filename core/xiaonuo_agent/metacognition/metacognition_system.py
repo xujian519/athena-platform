@@ -202,7 +202,7 @@ class MetacognitionSystem:
         }
 
     async def monitor_cognitive_process(
-        self, task: str, context: dict[str, Any] | None = None
+        self, task: str, context: Optional[dict[str, Any]] = None
     ) -> CognitiveState:
         """
         监控认知过程
@@ -324,7 +324,7 @@ class MetacognitionSystem:
             )
 
     async def reflect_on_action(
-        self, action: str, result: Any, context: dict[str, Any] | None = None
+        self, action: str, result: Any, context: Optional[dict[str, Any]] = None
     ) -> ReflectionEntry:
         """
         对行动进行反思

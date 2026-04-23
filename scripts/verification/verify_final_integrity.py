@@ -18,9 +18,9 @@ import logging
 import sys
 from datetime import datetime
 
+import psycopg2
 from neo4j import GraphDatabase
 from qdrant_client import QdrantClient
-import psycopg2
 
 logging.basicConfig(
     level=logging.INFO,
@@ -48,7 +48,7 @@ def verify_qdrant():
                 count = collection_info.points_count
                 total_count += count
                 logger.info(f"  ✅ {collection_name}: {count:,} 条记录")
-            except Exception as e:
+            except Exception:
                 logger.warning(f"  ⚠️ {collection_name}: 不存在或无法访问")
 
         logger.info(f"\n  📊 Qdrant总计: {total_count:,} 条记录")
@@ -130,7 +130,7 @@ def verify_postgresql():
             import_count = result[0]
             enhanced_count = result[1]
 
-            logger.info(f"  📊 无效决定统计:")
+            logger.info("  📊 无效决定统计:")
             logger.info(f"    • invalidation_decisions_import: {import_count:,} 条")
             logger.info(f"    • invalidation_decisions_enhanced: {enhanced_count:,} 条")
 
@@ -141,7 +141,7 @@ def verify_postgresql():
                 GROUP BY decision_conclusion
                 ORDER BY count DESC
             """)
-            logger.info(f"\n  📊 按决定结果统计:")
+            logger.info("\n  📊 按决定结果统计:")
             for record in cursor:
                 conclusion = record[0] or "未知"
                 count = record[1]

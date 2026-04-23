@@ -74,10 +74,10 @@ class TaskResult:
     task_id: str
     status: TaskStatus
     result: Any = None
-    error: str | None = None
+    error: Optional[str] = None
     start_time: datetime = field(default_factory=datetime.now)
     end_time: datetime | None = None
-    duration: float | None = None
+    duration: Optional[float] = None
     metrics: dict[str, Any] = field(default_factory=dict)
     logs: list[str] = field(default_factory=list)
 
@@ -94,5 +94,5 @@ class Workflow:
     tasks: list[Task] = field(default_factory=list)
     parallel: bool = False
     max_concurrent: int = 5
-    timeout: float | None = None
+    timeout: Optional[float] = None
     created_at: datetime = field(default_factory=datetime.now)

@@ -115,7 +115,7 @@ class ScenarioRuleRetriever:
         self.db_manager = db_manager
 
     def retrieve_rule(
-        self, domain: str, task_type: str, phase: str | None = None
+        self, domain: str, task_type: str, phase: Optional[str] = None
     ) -> ScenarioRule | None:
         """
         从Neo4j检索场景规则
@@ -333,7 +333,7 @@ class ScenarioRuleRetriever:
             return cases
 
     def retrieve_rule_with_relations(
-        self, domain: str, task_type: str, phase: str | None = None
+        self, domain: str, task_type: str, phase: Optional[str] = None
     ) -> ScenarioRule | None:
         """
         检索规则及其关联的法律依据和参考案例
@@ -361,7 +361,7 @@ class ScenarioRuleRetriever:
 
         return rule
 
-    def list_available_scenarios(self, domain: str | None = None) -> list[dict[str, str]]:
+    def list_available_scenarios(self, domain: Optional[str] = None) -> list[dict[str, str]]:
         """
         列出可用的场景
 
@@ -500,7 +500,7 @@ class ScenarioRuleRetriever:
 
 # 便捷函数
 def retrieve_scenario_rule(
-    db_manager: Any | None = None, domain: str | None = None, task_type: str | None = None, phase: str | None = None
+    db_manager: Any | None = None, domain: Optional[str] = None, task_type: Optional[str] = None, phase: Optional[str] = None
 ) -> ScenarioRule | None:
     """
     便捷函数:检索场景规则

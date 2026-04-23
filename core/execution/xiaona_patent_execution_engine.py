@@ -70,11 +70,11 @@ class PatentTask:
     completed_at: datetime | None = None
 
     # 执行结果
-    result: dict[str, Any] | None = None
-    error_message: str | None = None
+    result: Optional[dict[str, Any]] = None
+    error_message: Optional[str] = None
 
     # 元数据
-    metadata: dict[str, Any] | None = None  # 使用 Optional
+    metadata: Optional[dict[str, Any]] = None  # 使用 Optional
 
     def __post_init__(self):
         if self.created_at is None:
@@ -162,7 +162,7 @@ class XiaonaPatentExecutionEngine:
         description: str,
         priority: int = 5,
         deadline: datetime | None = None,
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> str:
         """创建专利任务"""
         import uuid

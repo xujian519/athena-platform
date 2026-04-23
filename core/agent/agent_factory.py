@@ -103,7 +103,7 @@ class AgentFactory:
         logger.info("✅ Agent工厂初始化完成")
 
     async def create_agent(
-        self, agent_type: str, config: dict[str, Any] | None = None
+        self, agent_type: str, config: Optional[dict[str, Any]] = None
     ) -> BaseAgent:
         """创建Agent实例"""
         if not self.factory_initialized:
@@ -319,7 +319,7 @@ class AgentFactory:
 
         logger.info("✅ 所有Agent已关闭")
 
-    async def backup_agent_state(self, agent_id: str) -> dict[str, Any] | None:
+    async def backup_agent_state(self, agent_id: str) -> Optional[dict[str, Any]]:
         """备份Agent状态"""
         if agent_id not in self.agents:
             return None

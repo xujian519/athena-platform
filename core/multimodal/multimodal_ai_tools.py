@@ -63,11 +63,11 @@ class ImageGenerationRequest:
     prompt: str
     model: str = "cogview-4"
     size: str = "1024x1024"
-    style: str | None = None
+    style: Optional[str] = None
     quality: str = "high"
     num_images: int = 1
-    negative_prompt: str | None = None
-    seed: int | None = None
+    negative_prompt: Optional[str] = None
+    seed: Optional[int] = None
 
 
 @dataclass
@@ -79,9 +79,9 @@ class VideoGenerationRequest:
     duration: int = 6
     resolution: str = "4K"
     fps: int = 60
-    style: str | None = None
-    image_url: str | None = None  # 首帧参考
-    end_image_url: str | None = None  # 尾帧参考
+    style: Optional[str] = None
+    image_url: Optional[str] = None  # 首帧参考
+    end_image_url: Optional[str] = None  # 尾帧参考
     audio_enabled: bool = False
 
 
@@ -95,7 +95,7 @@ class GenerationResponse:
     model: str
     status: str
     result_urls: list[str] = field(default_factory=list)
-    error: str | None = None
+    error: Optional[str] = None
     generation_time: float = 0.0
     timestamp: datetime = field(default_factory=datetime.now)
 
@@ -103,7 +103,7 @@ class GenerationResponse:
 class MultimodalAITools:
     """多模态AI工具类"""
 
-    def __init__(self, api_key: str | None = None):
+    def __init__(self, api_key: Optional[str] = None):
         # 从环境变量获取API密钥(安全要求:禁止硬编码)
         self.api_key = api_key or os.getenv("ZHIPU_API_KEY")
         if not self.api_key:

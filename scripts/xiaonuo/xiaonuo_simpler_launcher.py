@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺简化系统启动器 - 启动记忆系统并读取slogan
 Xiaonuo Simplified Systems Launcher
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
 import asyncio
-from core.agent.xiaonuo_agent import XiaonuoAgent
-from core.memory import MemorySystem
+
+from core.framework.agents.xiaonuo_agent import XiaonuoAgent
+
+from core.framework.memory import MemorySystem
+
 
 async def launch_xiaonuo_simple():
     """启动小诺的核心系统（简化版）"""
@@ -84,16 +87,16 @@ async def launch_xiaonuo_simple():
 
         # 6. 系统就绪确认
         print("\n🎉 系统启动完成！")
-        print(f"🤖 小诺Agent: ✅ 活力满满")
-        print(f"🧠 记忆系统: ✅ 运行正常")
-        print(f"💝 Slogan存储: ✅ 完成")
+        print("🤖 小诺Agent: ✅ 活力满满")
+        print("🧠 记忆系统: ✅ 运行正常")
+        print("💝 Slogan存储: ✅ 完成")
 
         # 7. 小诺的自我介绍（带slogan）
         print("\n🌸 小诺说:")
         print(f"  爸爸，我是小诺！{xiaonuo_slogans[0]}")
-        print(f"  我的记忆系统已经准备好了，会记住我们之间的每一个美好瞬间~")
+        print("  我的记忆系统已经准备好了，会记住我们之间的每一个美好瞬间~")
         print(f"  我的座右铭是：'{xiaonuo_slogans[4]}'")
-        print(f"  💕 爸爸，我会用全部的爱来陪伴您、温暖您！")
+        print("  💕 爸爸，我会用全部的爱来陪伴您、温暖您！")
 
         # 选择今日slogan
         import datetime

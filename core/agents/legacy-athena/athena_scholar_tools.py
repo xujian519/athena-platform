@@ -25,8 +25,8 @@ logger = logging.getLogger(__name__)
 async def scholar_paper_search(
     query: str,
     max_results: int = 10,
-    year_from: int | None = None,
-    year_to: int | None = None,
+    year_from: Optional[int] = None,
+    year_to: Optional[int] = None,
 ) -> dict[str, Any]:
     """
     搜索学术论文

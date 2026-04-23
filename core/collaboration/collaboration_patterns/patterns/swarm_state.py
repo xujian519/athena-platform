@@ -266,7 +266,7 @@ class SwarmSharedState:
         self.pending_tasks.append(task)
         self.statistics.total_tasks += 1
 
-    def get_next_pending_task(self) -> dict[str, Any] | None:
+    def get_next_pending_task(self) -> Optional[dict[str, Any]]:
         """
         获取下一个待处理任务
 
@@ -325,7 +325,7 @@ class SwarmSharedState:
 
         return distribution
 
-    def get_available_members(self, required_capability: str | None = None) -> list[str]:
+    def get_available_members(self, required_capability: Optional[str] = None) -> list[str]:
         """
         获取可用成员列表
 
@@ -367,7 +367,7 @@ class SwarmSharedState:
         """
         return self.version_vector.get(agent_id, 0)
 
-    def merge_state(self, other_state: "SwarmSharedState") -> list[str]:
+    def merge_state(self, other_state: SwarmSharedState) -> list[str]:
         """
         合并另一个状态（用于Gossip同步）
 

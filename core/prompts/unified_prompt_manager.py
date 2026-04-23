@@ -74,7 +74,7 @@ class PromptLoadRequest:
     """提示词加载请求"""
 
     agent: str  # 智能体名称 (xiaonuo, xiaona, etc.)
-    layers: list[str] | None = None  # L1-L4层列表
+    layers: Optional[list[str]] = None  # L1-L4层列表
     format: PromptFormat = PromptFormat.MARKDOWN
     type: PromptType = PromptType.AGENT_ROLE
 
@@ -86,8 +86,8 @@ class PromptOptimizeRequest:
     content: str  # 要优化的内容
     target_ai: str = "ChatGPT"  # 目标AI
     mode: str = "BASIC"  # BASIC/DETAIL
-    context: str | None = None  # 上下文
-    constraints: list[str] | None = None  # 约束条件
+    context: Optional[str] = None  # 上下文
+    constraints: Optional[list[str]] = None  # 约束条件
 
 
 @dataclass
@@ -179,7 +179,7 @@ class UnifiedPromptManager:
     async def load_prompt(
         self,
         agent: str,
-        layers: list[str] | None = None,
+        layers: Optional[list[str]] = None,
         format: PromptFormat = PromptFormat.MARKDOWN,
     ) -> UnifiedPromptResult:
         """
@@ -272,8 +272,8 @@ class UnifiedPromptManager:
         content: str,
         target_ai: str = "ChatGPT",
         mode: str = "BASIC",
-        context: str | None = None,
-        constraints: list[str] | None = None,
+        context: Optional[str] = None,
+        constraints: Optional[list[str]] = None,
     ) -> UnifiedPromptResult:
         """
         统一优化接口 - 使用Lyra优化提示词
@@ -549,7 +549,7 @@ def get_unified_prompt_manager() -> UnifiedPromptManager:
     return _manager_instance
 
 
-async def load_agent_prompt(agent: str | None = None, layers: list[str] | None | None = None) -> str:
+async def load_agent_prompt(agent: Optional[str] = None, layers: Optional[list[str]] | None = None) -> str:
     """便捷函数: 加载智能体提示词"""
     manager = get_unified_prompt_manager()
     result = await manager.load_prompt(agent, layers)

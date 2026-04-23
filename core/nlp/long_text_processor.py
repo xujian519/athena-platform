@@ -111,7 +111,7 @@ class LongTextProcessor:
             return int(words * 1.3)
 
     def truncate_text(
-        self, text: str, max_tokens: int | None = None, strategy: str = "middle"
+        self, text: str, max_tokens: Optional[int] = None, strategy: str = "middle"
     ) -> tuple[str, int]:
         """截断文本到指定token数量
 

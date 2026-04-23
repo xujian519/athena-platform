@@ -34,7 +34,7 @@ class GenerationResult:
 class GGUFModelAdapter:
     """GGUF模型适配器"""
 
-    def __init__(self, model_path: str, config: dict[str, Any] | None = None):
+    def __init__(self, model_path: str, config: Optional[dict[str, Any]] = None):
         """
         初始化GGUF模型适配器
 
@@ -125,11 +125,11 @@ class GGUFModelAdapter:
         self,
         prompt: str,
         max_tokens: int = 2000,
-        temperature: float | None = None,
-        top_p: float | None = None,
-        top_k: int | None = None,
-        repeat_penalty: float | None = None,
-        stop: list[str] | None = None,
+        temperature: Optional[float] = None,
+        top_p: Optional[float] = None,
+        top_k: Optional[int] = None,
+        repeat_penalty: Optional[float] = None,
+        stop: Optional[list[str]] = None,
         echo: bool = False,
     ) -> GenerationResult:
         """
@@ -207,10 +207,10 @@ class GGUFModelAdapter:
         self,
         prompt: str,
         max_tokens: int = 2000,
-        temperature: float | None = None,
-        top_p: float | None = None,
-        top_k: int | None = None,
-        repeat_penalty: float | None = None,
+        temperature: Optional[float] = None,
+        top_p: Optional[float] = None,
+        top_k: Optional[int] = None,
+        repeat_penalty: Optional[float] = None,
     ):
         """
         流式生成文本
@@ -285,7 +285,7 @@ class GGUFModelManager:
         self.adapters: dict[str, GGUFModelAdapter] = {}
 
     async def load_model(
-        self, model_id: str, model_path: str, config: dict[str, Any] | None = None
+        self, model_id: str, model_path: str, config: Optional[dict[str, Any]] = None
     ) -> bool:
         """
         加载模型

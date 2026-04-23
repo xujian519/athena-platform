@@ -72,7 +72,7 @@ class TransformationResult(BaseModel):
     success: bool = Field(..., description="操作是否成功")
     data: Any = Field(None, description="转换后的数据")
     metadata: dict[str, Any] = Field(default_factory=dict, description="元数据信息")
-    error: str | None = Field(None, description="错误信息")
+    error: Optional[str] = Field(None, description="错误信息")
 
 
 class DataTransformationTool:

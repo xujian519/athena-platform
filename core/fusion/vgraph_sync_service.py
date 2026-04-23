@@ -74,7 +74,7 @@ class ChangeEvent:
     entity_type: str
     business_key: str
     data: dict[str, Any]
-    old_data: dict[str, Any] | None = None
+    old_data: Optional[dict[str, Any]] = None
     timestamp: datetime = field(default_factory=datetime.now)
     metadata: dict[str, Any] = field(default_factory=dict)
 
@@ -84,7 +84,7 @@ class RealtimeSyncService:
 
     def __init__(
         self,
-        pg_config: dict[str, Any],        nebula_config: dict[str, Any],        sync_config: dict[str, Any] | None = None,
+        pg_config: dict[str, Any],        nebula_config: dict[str, Any],        sync_config: Optional[dict[str, Any]] = None,
     ):
         """初始化同步服务"""
         self.pg_config = pg_config
@@ -463,7 +463,7 @@ class RealtimeSyncService:
             logger.error(f"❌ 同步到 pgvector 失败: {e}")
             raise
 
-    async def _log_sync_event(self, event: ChangeEvent, status: str, error_message: str | None = None):
+    async def _log_sync_event(self, event: ChangeEvent, status: str, error_message: Optional[str] = None):
         """记录同步事件日志"""
         try:
             async with self.pg_pool.acquire() as conn:

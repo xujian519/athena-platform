@@ -172,7 +172,7 @@ def run_performance_collaboration_tests():
     print("=" * 50)
 
     try:
-        from core.collaboration import (
+        from core.framework.collaboration import (
             Agent,
             AgentCapability,
             MultiAgentCollaborationFramework,

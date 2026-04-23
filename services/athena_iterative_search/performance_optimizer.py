@@ -319,7 +319,7 @@ class AsyncTaskQueue:
                     logger.error(f"任务执行失败 [{name}]: {e}")
                 finally:
                     self.queue.task_done()
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 continue
             except Exception as e:
                 logger.error(f"工作线程错误 [{name}]: {e}")

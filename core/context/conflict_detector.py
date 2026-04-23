@@ -64,7 +64,7 @@ class Conflict:
     # 解决信息
     resolution_suggestions: list[str] = field(default_factory=list)
     auto_resolvable: bool = False
-    resolution: str | None = None
+    resolution: Optional[str] = None
 
 
 @dataclass
@@ -75,7 +75,7 @@ class ContextState:
     user_id: str
 
     # 当前意图
-    current_intent: str | None = None
+    current_intent: Optional[str] = None
     intent_history: list[str] = field(default_factory=list)
 
     # 参数状态
@@ -211,7 +211,7 @@ class ContextConflictDetector:
         }
 
     def detect_conflicts(
-        self, context_state: ContextState, new_input: dict[str, Any] | None = None
+        self, context_state: ContextState, new_input: Optional[dict[str, Any]] = None
     ) -> ConflictDetectionResult:
         """
         检测上下文冲突
@@ -607,7 +607,7 @@ class ContextConflictDetector:
 
         return conflicts
 
-    def _get_intent_group(self, intent: str, groups: dict[str, list[str]]) -> str | None:
+    def _get_intent_group(self, intent: str, groups: dict[str, list[str]]) -> Optional[str]:
         """获取意图所属组"""
         for group_name, intents in groups.items():
             if intent in intents:

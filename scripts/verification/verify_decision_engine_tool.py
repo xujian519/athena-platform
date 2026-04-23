@@ -14,7 +14,6 @@ decision_engine工具验证脚本
 """
 
 import asyncio
-import json
 import sys
 from pathlib import Path
 
@@ -83,7 +82,7 @@ class DecisionEngineVerifier:
         # 手动计算验证
         python_score = 0.6 * 0.4 + 0.9 * 0.3 + 0.95 * 0.3  # 0.795
         go_score = 0.85 * 0.4 + 0.8 * 0.3 + 0.75 * 0.3  # 0.805
-        rust_score = 0.95 * 0.4 + 0.6 * 0.3 + 0.7 * 0.3  # 0.770
+        0.95 * 0.4 + 0.6 * 0.3 + 0.7 * 0.3  # 0.770
 
         actual_scores = {r["option"]: r["score"] for r in result["ranking"]}
 
@@ -182,7 +181,7 @@ class DecisionEngineVerifier:
 
         # 检查分数范围合理性
         if result["ranking"]:
-            scores = [r["score"] for r in result["ranking"]]
+            scores = [r["score"] for r in result["ranking"]
             if all(0.6 <= s <= 0.95 for s in scores):
                 checks.append(("✓", f"生成分数范围合理: {scores}"))
             else:
@@ -362,7 +361,7 @@ class DecisionEngineVerifier:
 
         # 检查分数分布
         if result["ranking"]:
-            scores = [r["score"] for r in result["ranking"]]
+            scores = [r["score"] for r in result["ranking"]
             if len(set(scores)) == 4:  # 所有分数不同
                 checks.append(("✓", f"分数分布合理: {scores}"))
             else:

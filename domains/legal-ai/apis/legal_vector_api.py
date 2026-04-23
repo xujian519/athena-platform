@@ -120,7 +120,7 @@ LEGAL_DATABASE = {'documents': [], 'vectors': [], 'metadata': {}}
 # 模拟的搜索结果
 def simulate_legal_search(
     query: str, limit: int = 10, filters: dict[str, Any] = None
-) -> list[dict[str, Any]]:
+) -> list[dict[str, Any]:
     """模拟法律搜索结果"""
     import random
 

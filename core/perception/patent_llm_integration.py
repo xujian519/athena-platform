@@ -40,8 +40,8 @@ class PatentLLMConfig:
 
     provider: PatentLLMProvider = PatentLLMProvider.LOCAL_MODEL
     model_name: str = "patent-specialist-v1"
-    api_key: str | None = None
-    api_base: str | None = None
+    api_key: Optional[str] = None
+    api_base: Optional[str] = None
     temperature: float = 0.1
     max_tokens: int = 4000
     timeout: int = 30
@@ -51,10 +51,10 @@ class PatentLLMConfig:
 class PatentAnalysisRequest:
     """专利分析请求"""
 
-    patent_id: str | None = None
+    patent_id: Optional[str] = None
     patent_text: str = ""
     analysis_type: str = "comprehensive"  # comprehensive, novelty, claims, technical
-    context: dict[str, Any] | None = None
+    context: Optional[dict[str, Any]] = None
     language: str = "zh-CN"
 
 
@@ -63,7 +63,7 @@ class PatentAnalysisResult:
     """专利分析结果"""
 
     analysis_type: str
-    patent_id: str | None = None
+    patent_id: Optional[str] = None
     technical_summary: str = ""
     novelty_assessment: str = ""
     claims_analysis: str = ""

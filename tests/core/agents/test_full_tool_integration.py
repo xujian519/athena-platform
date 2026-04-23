@@ -36,7 +36,13 @@ async def test_full_integration():
     print()
 
     # 导入BaseAgent
-    from core.agents.base import AgentRequest, AgentResponse, AgentStatus, BaseAgent, HealthStatus
+    from core.framework.agents.base import (
+        AgentRequest,
+        AgentResponse,
+        AgentStatus,
+        BaseAgent,
+        HealthStatus,
+    )
 
     # 创建一个简单的测试智能体
     class TestAgent(BaseAgent):

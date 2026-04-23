@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 创建法律知识图谱SQLite数据库
 Create Legal Knowledge Graph SQLite Database
@@ -8,11 +7,11 @@ Create Legal Knowledge Graph SQLite Database
 """
 
 import json
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import logging
 import sqlite3
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 # 配置日志
 logging.basicConfig(
@@ -111,7 +110,7 @@ class LegalKGSQLiteBuilder:
             logger.error(f"❌ 知识图谱JSON文件不存在: {self.kg_json_path}")
             return None, None
 
-        with open(self.kg_json_path, 'r', encoding='utf-8') as f:
+        with open(self.kg_json_path, encoding='utf-8') as f:
             kg_data = json.load(f)
 
         entities = kg_data.get('entities', [])
@@ -281,7 +280,7 @@ class LegalKGSQLiteBuilder:
         cursor.execute('SELECT COUNT(*) FROM relation_types')
         relation_type_count = cursor.fetchone()[0]
 
-        logger.info(f"📊 数据库统计:")
+        logger.info("📊 数据库统计:")
         logger.info(f"  - 实体总数: {entity_count}")
         logger.info(f"  - 关系总数: {relation_count}")
         logger.info(f"  - 实体类型数: {entity_type_count}")

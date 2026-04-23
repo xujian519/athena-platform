@@ -86,7 +86,7 @@ class CacheManager:
         self,
         prompt: str,
         model: str,
-        system_message: str | None = None,
+        system_message: Optional[str] = None,
         temperature: float = 0.7,
         max_tokens: int = 4000,
     ) -> str:
@@ -133,8 +133,8 @@ class CacheManager:
         self,
         key: str,
         value: Any,
-        ttl: int | None = None,
-        tags: list[str] | None = None,
+        ttl: Optional[int] = None,
+        tags: Optional[list[str]] = None,
         persist: bool = False,
     ) -> bool:
         """设置缓存值"""
@@ -416,10 +416,10 @@ cache_manager = CacheManager(max_size_mb=50.0, default_ttl=3600)  # 50MB缓存  
 async def get_cached_response(
     prompt: str,
     model: str,
-    system_message: str | None = None,
+    system_message: Optional[str] = None,
     temperature: float = 0.7,
     max_tokens: int = 4000,
-) -> str | None:
+) -> Optional[str]:
     """获取缓存的响应"""
     key = cache_manager._generate_key(prompt, model, system_message, temperature, max_tokens)  # type: ignore
     return await cache_manager.get(key)
@@ -429,11 +429,11 @@ async def cache_response(
     prompt: str,
     model: str,
     response: str,
-    system_message: str | None = None,
+    system_message: Optional[str] = None,
     temperature: float = 0.7,
     max_tokens: int = 4000,
-    ttl: int | None = None,
-    tags: list[str] | None = None,
+    ttl: Optional[int] = None,
+    tags: Optional[list[str]] = None,
 ):
     """缓存响应"""
     key = cache_manager._generate_key(prompt, model, system_message, temperature, max_tokens)  # type: ignore

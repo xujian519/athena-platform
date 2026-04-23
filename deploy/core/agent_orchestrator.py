@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 智能体编排器
 Agent Orchestrator - 负责专业智能体的生命周期管理和协调
 """
 
 import asyncio
-import subprocess
-import psutil
-import signal
-import time
 import logging
-from typing import Dict, List, Optional, Callable, Any
+import subprocess
+import time
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
+from typing import Any
+
+import psutil
 
 logger = logging.getLogger(__name__)
 
@@ -39,9 +38,9 @@ class AgentConfig:
     health_check_url: str = ""
     startup_timeout: int = 30
     idle_timeout: int = 300  # 5分钟后自动停止
-    dependencies: List[str] = field(default_factory=list)
+    dependencies: list[str] = field(default_factory=list)
     max_concurrent_tasks: int = 5
-    environment: Dict[str, str] = field(default_factory=dict)
+    environment: dict[str, str] = field(default_factory=dict)
 
 @dataclass
 class AgentTask:
@@ -49,7 +48,7 @@ class AgentTask:
     id: str
     agent_name: str
     task_type: str
-    parameters: Dict[str, Any]
+    parameters: dict[str, Any]
     priority: int = 0
     created_at: datetime = field(default_factory=datetime.now)
     timeout: int = 60
@@ -96,12 +95,12 @@ class AgentOrchestrator:
     """智能体编排器"""
 
     def __init__(self):
-        self.agents: Dict[str, AgentConfig] = {}
-        self.agent_status: Dict[str, AgentStatus] = {}
-        self.agent_processes: Dict[str, subprocess.Popen] = {}
-        self.agent_last_activity: Dict[str, datetime] = {}
-        self.task_queue: List[AgentTask] = []
-        self.active_tasks: Dict[str, AgentTask] = {}
+        self.agents: dict[str, AgentConfig] = {}
+        self.agent_status: dict[str, AgentStatus] = {}
+        self.agent_processes: dict[str, subprocess.Popen] = {}
+        self.agent_last_activity: dict[str, datetime] = {}
+        self.task_queue: list[AgentTask] = []
+        self.active_tasks: dict[str, AgentTask] = {}
 
         self._initialize_agents()
 
@@ -380,7 +379,7 @@ class AgentOrchestrator:
         """监控智能体状态"""
         while True:
             try:
-                for agent_name, config in self.agents.items():
+                for agent_name, _config in self.agents.items():
                     if self.agent_status[agent_name] in [AgentStatus.ACTIVE, AgentStatus.IDLE, AgentStatus.BUSY]:
                         # 进行健康检查
                         is_healthy = await self._health_check(agent_name)
@@ -415,7 +414,7 @@ class AgentOrchestrator:
                 logger.error(f"清理空闲智能体时发生错误: {e}")
                 await asyncio.sleep(30)
 
-    def get_agent_status(self, agent_name: str | None = None) -> Dict[str, Any]:
+    def get_agent_status(self, agent_name: str | None = None) -> dict[str, Any]:
         """获取智能体状态"""
         if agent_name:
             return {
@@ -431,7 +430,7 @@ class AgentOrchestrator:
                 for name in self.agents.keys()
             }
 
-    def get_system_overview(self) -> Dict[str, Any]:
+    def get_system_overview(self) -> dict[str, Any]:
         """获取系统概览"""
         total_agents = len(self.agents)
         active_agents = len([s for s in self.agent_status.values() if s == AgentStatus.ACTIVE])

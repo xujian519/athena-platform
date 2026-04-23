@@ -47,7 +47,7 @@ class ToolManager:
         """
         self.registry = registry or get_global_registry()
         self.groups: dict[str, ToolGroup] = {}
-        self.active_group: str | None = None
+        self.active_group: Optional[str] = None
 
         # 单组激活模式 (默认True)
         self._single_group_mode = True
@@ -85,7 +85,7 @@ class ToolManager:
         """
         return self.groups.get(group_name)
 
-    def activate_group(self, group_name: str, deactivate_others: bool | None = None) -> bool:
+    def activate_group(self, group_name: str, deactivate_others: Optional[bool] = None) -> bool:
         """
         激活工具组
 
@@ -153,8 +153,8 @@ class ToolManager:
         logger.info("⏹️ 所有工具组已停用")
 
     async def auto_activate_group_for_task(
-        self, task_description: str, task_type: str | None = None, domain: str | None = None
-    ) -> str | None:
+        self, task_description: str, task_type: Optional[str] = None, domain: Optional[str] = None
+    ) -> Optional[str]:
         """
         为任务自动激活最合适的工具组
 
@@ -217,8 +217,8 @@ class ToolManager:
         self,
         group: ToolGroup,
         task_description: str,
-        task_type: str | None = None,
-        domain: str | None = None,
+        task_type: Optional[str] = None,
+        domain: Optional[str] = None,
     ) -> float:
         """
         计算工具组与任务的匹配分数
@@ -293,7 +293,7 @@ class ToolManager:
         return unique_tools
 
     async def select_best_tool(
-        self, task_description: str, task_type: str | None = None, domain: str | None = None
+        self, task_description: str, task_type: Optional[str] = None, domain: Optional[str] = None
     ) -> ToolSelectionResult:
         """
         为任务选择最佳工具

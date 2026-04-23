@@ -32,7 +32,7 @@ CallbackFunc = Callable[[Any], Union[Any, Coroutine[Any, Any, Any]]]
 class BaseProcessor(ABC):
     """基础处理器"""
 
-    def __init__(self, processor_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, processor_id: str, config: Optional[dict[str, Any]] = None):
         self.processor_id = processor_id
         self.config = config or {}
         self.initialized = False
@@ -88,7 +88,7 @@ class BaseProcessor(ABC):
 class PerceptionEngine:
     """感知引擎"""
 
-    def __init__(self, agent_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, agent_id: str, config: Optional[dict[str, Any]] = None):
         self.agent_id = agent_id
         self.config = config or {}
         self.initialized = False

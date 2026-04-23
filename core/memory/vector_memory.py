@@ -218,7 +218,7 @@ class VectorMemorySystem:
         content: Any,
         category: str = 'episodic',
         embedding: np.ndarray | None = None,
-        metadata: dict[str, Any] | None = None
+        metadata: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """存储向量记忆"""
         if not self.initialized:
@@ -276,7 +276,7 @@ class VectorMemorySystem:
     async def search_memories(
         self,
         query: str,
-        category: str | None = None,
+        category: Optional[str] = None,
         k: int = 10,
         threshold: float = 0.3,
         embedding: np.ndarray | None = None
@@ -392,7 +392,7 @@ class VectorMemorySystem:
             'timestamp': datetime.now().isoformat()
         }
 
-    async def clear_memories(self, category: str | None = None) -> dict[str, Any]:
+    async def clear_memories(self, category: Optional[str] = None) -> dict[str, Any]:
         """清空记忆"""
         if not self.initialized:
             raise RuntimeError('向量记忆系统未初始化')
@@ -511,14 +511,14 @@ class VectorMemorySystem:
 # 全局实例管理
 _global_instances: dict[str, VectorMemorySystem] = {}
 
-async def get_vector_memory_instance(agent_id: str | None = None, config: dict | None = None) -> VectorMemorySystem:
+async def get_vector_memory_instance(agent_id: Optional[str] = None, config: dict | None = None) -> VectorMemorySystem:
     """获取向量记忆实例"""
     if agent_id not in _global_instances:
         _global_instances[agent_id] = VectorMemorySystem(agent_id, config)
         await _global_instances[agent_id].initialize()
     return _global_instances[agent_id]
 
-async def shutdown_vector_memory(agent_id: str | None = None):
+async def shutdown_vector_memory(agent_id: Optional[str] = None):
     """关闭向量记忆实例"""
     if agent_id:
         if agent_id in _global_instances:

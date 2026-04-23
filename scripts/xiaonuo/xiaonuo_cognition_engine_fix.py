@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺认知引擎命名一致性修复器
 Xiaonuo Cognition Engine Naming Consistency Fixer
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
 import asyncio
 import json
 from datetime import datetime
+
 
 async def fix_cognition_engine_naming():
     """修复认知引擎命名不一致问题"""
@@ -32,7 +33,7 @@ async def fix_cognition_engine_naming():
     base_agent_path = "/Users/xujian/Athena工作平台/core/agent/xiaonuo_agent.py"
 
     # 读取文件内容
-    with open(base_agent_path, 'r', encoding='utf-8') as f:
+    with open(base_agent_path, encoding='utf-8') as f:
         base_content = f.read()
 
     # 检查是否有认知引擎引用
@@ -45,7 +46,7 @@ async def fix_cognition_engine_naming():
     print("\n📝 步骤 2/3: 检查增强Agent类...")
     enhanced_agent_path = "/Users/xujian/Athena工作平台/core/agent/xiaonuo_enhanced.py"
 
-    with open(enhanced_agent_path, 'r', encoding='utf-8') as f:
+    with open(enhanced_agent_path, encoding='utf-8') as f:
         enhanced_content = f.read()
 
     # 检查是否需要添加属性别名
@@ -127,7 +128,7 @@ import os
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
 async def verify_fix():
-    from core.agent.xiaonuo_integrated_enhanced import XiaonuoIntegratedEnhanced
+    from core.framework.agents.xiaonuo_integrated_enhanced import XiaonuoIntegratedEnhanced
 
     princess = XiaonuoIntegratedEnhanced()
     await princess.initialize()

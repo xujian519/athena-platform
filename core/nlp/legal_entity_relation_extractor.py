@@ -24,7 +24,7 @@ class Entity:
     start: int
     end: int
     confidence: float
-    metadata: dict[str, Any] | None = None
+    metadata: Optional[dict[str, Any]] = None
 
     def to_dict(self) -> dict[str, Any]:
         d = {
@@ -48,7 +48,7 @@ class Relation:
     object: str
     confidence: float
     evidence: str = ""
-    metadata: dict[str, Any] | None = None
+    metadata: Optional[dict[str, Any]] = None
 
     def to_dict(self) -> dict[str, Any]:
         d = {

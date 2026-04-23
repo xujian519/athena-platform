@@ -26,7 +26,7 @@ class MemoryTimelineViewer:
         self.memory = TimelineMemory()
 
     def show_timeline(
-        self, start_date: str | None = None, end_date: str | None = None, limit: int = 50
+        self, start_date: Optional[str] = None, end_date: Optional[str] = None, limit: int = 50
     ) -> Any:
         """
         展示时间线

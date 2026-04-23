@@ -186,7 +186,7 @@ class DialogueManager:
     def process_applicant_response(
         self,
         applicant_response: str,
-        session_id: str | None = None
+        session_id: Optional[str] = None
     ) -> dict[str, Any]:
         """
         处理申请人的答复
@@ -268,7 +268,7 @@ class DialogueManager:
 
     def get_dialogue_summary(
         self,
-        session_id: str | None = None
+        session_id: Optional[str] = None
     ) -> dict[str, Any]:
         """
         获取对话摘要
@@ -299,8 +299,8 @@ class DialogueManager:
 
     def export_dialogue_transcript(
         self,
-        session_id: str | None = None,
-        output_path: str | None = None
+        session_id: Optional[str] = None,
+        output_path: Optional[str] = None
     ) -> str:
         """
         导出对话记录
@@ -335,7 +335,7 @@ class DialogueManager:
 
         return output_path
 
-    def _get_session(self, session_id: str | None) -> DialogueSession | None:
+    def _get_session(self, session_id: Optional[str]) -> DialogueSession | None:
         """获取会话"""
         if session_id:
             # 从历史记录中查找

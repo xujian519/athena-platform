@@ -62,7 +62,7 @@ class PatentAnalysisResult:
     """专利分析结果"""
 
     analysis_type: str
-    patent_number: str | None
+    patent_number: Optional[str]
     title: str
     abstract: str
     claims: str

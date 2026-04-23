@@ -7,8 +7,9 @@
 import asyncio
 import json
 import logging
-import aiohttp
 from pathlib import Path
+
+import aiohttp
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -47,7 +48,7 @@ async def verify_bge_m3_api():
                 embedding = data["data"][0]["embedding"]
                 dimension = len(embedding)
 
-                print(f"✅ BGE-M3 API正常工作")
+                print("✅ BGE-M3 API正常工作")
                 print(f"   维度: {dimension}")
                 print(f"   向量范围: [{min(embedding):.4f}, {max(embedding):.4f}]")
 
@@ -55,7 +56,7 @@ async def verify_bge_m3_api():
                     print(f"❌ 维度不是1024: {dimension}")
                     return False
 
-                print(f"✅ 维度正确: 1024")
+                print("✅ 维度正确: 1024")
                 return True
 
     except Exception as e:
@@ -94,9 +95,9 @@ async def verify_qdrant_collections():
             print(f"  维度: {vector_size}")
 
             if vector_size == 1024:
-                print(f"  ✅ 维度正确")
+                print("  ✅ 维度正确")
             else:
-                print(f"  ❌ 维度不是1024")
+                print("  ❌ 维度不是1024")
                 all_1024 = False
 
         if all_1024:
@@ -136,7 +137,7 @@ async def test_vector_search():
         print(f"   结果: {json.dumps(result, ensure_ascii=False, indent=2)}")
 
         if result.get("success"):
-            print(f"✅ 向量搜索成功")
+            print("✅ 向量搜索成功")
             print(f"   查询: {result['query']}")
             print(f"   集合: {result['collection']}")
             print(f"   维度: {result.get('dimension', 'unknown')}")
@@ -147,13 +148,13 @@ async def test_vector_search():
             # 如果是集合不存在或集合为空的错误，这也是正常的
             # 因为handler功能本身是正常的，只是测试数据不存在
             if "not found" in str(error).lower() or "collection" in str(error).lower():
-                print(f"⚠️ 集合不存在（这是正常的，如果集合尚未创建）")
-                print(f"   ✅ Handler功能正常")
+                print("⚠️ 集合不存在（这是正常的，如果集合尚未创建）")
+                print("   ✅ Handler功能正常")
                 return True
             # 如果只是没有结果，也算测试通过
             elif "no results" in str(error).lower() or result.get("total_results") == 0:
-                print(f"⚠️ 集合为空（这是正常的，如果集合尚未添加数据）")
-                print(f"   ✅ Handler功能正常")
+                print("⚠️ 集合为空（这是正常的，如果集合尚未添加数据）")
+                print("   ✅ Handler功能正常")
                 return True
             else:
                 print(f"❌ 向量搜索失败: {error}")
@@ -186,10 +187,10 @@ async def test_dimension_validation():
         )
 
         if not result.get("success") and "_1024" in result.get("error", ""):
-            print(f"✅ 集合名称验证正确")
+            print("✅ 集合名称验证正确")
             print(f"   错误信息: {result['error']}")
         else:
-            print(f"❌ 集合名称验证失败")
+            print("❌ 集合名称验证失败")
             return False
 
         # 测试2: 空查询
@@ -200,9 +201,9 @@ async def test_dimension_validation():
         )
 
         if not result.get("success"):
-            print(f"✅ 空查询验证正确")
+            print("✅ 空查询验证正确")
         else:
-            print(f"❌ 空查询验证失败")
+            print("❌ 空查询验证失败")
             return False
 
         # 测试3: 无效参数
@@ -214,9 +215,9 @@ async def test_dimension_validation():
         )
 
         if not result.get("success"):
-            print(f"✅ 参数验证正确")
+            print("✅ 参数验证正确")
         else:
-            print(f"❌ 参数验证失败")
+            print("❌ 参数验证失败")
             return False
 
         return True

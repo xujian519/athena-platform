@@ -456,7 +456,7 @@ class GatewayCapabilitySelector:
     user_preferences: dict[str, dict[str, float]]
     model_version: str
 
-    def __init__(self, model_path: str | None = None, fail_fast: bool = False):
+    def __init__(self, model_path: Optional[str] = None, fail_fast: bool = False):
         """
         初始化能力选择器
 
@@ -581,7 +581,7 @@ class GatewayCapabilitySelector:
         self,
         text: str,
         intent: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
         user_id: str = "default",
     ) -> tuple[str, float]:
         """
@@ -681,7 +681,7 @@ class GatewayCapabilitySelector:
         self,
         text: str,
         intent: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
         user_id: str = "default",
     ) -> list[tuple[str, float]]:
         """

@@ -104,7 +104,7 @@ class SearchResponse(BaseModel):
     success: bool
     message: str
     total_count: int
-    files: list[dict[str, Any]]
+    files: list[dict[str, Any]
     permissions: list[str] = Field(default_factory=list)
     took_seconds: float | None = None
 
@@ -916,7 +916,7 @@ async def get_api_performance_stats(
                 response_times = [call['response_time'] for call in recent_calls]
                 status_codes = defaultdict(int)
                 for call in recent_calls:
-                    status_codes[call['status_code']] += 1
+                    status_codes[call['status_code'] += 1
 
                 endpoint_stats = {
                     "endpoint": endpoint,
@@ -1037,7 +1037,7 @@ async def get_file_processing_stats(
 class BatchOperationRequest(BaseModel):
     """批量操作请求"""
     operation_type: str = Field(..., description="操作类型: upload, download, process, analyze, delete")
-    files: list[dict[str, Any]] = Field(..., description="文件列表")
+    files: list[dict[str, Any] = Field(..., description="文件列表")
     config: dict[str, Any] | None = Field(default_factory=dict, description="配置参数")
 
 class BatchOperationResponse(BaseModel):

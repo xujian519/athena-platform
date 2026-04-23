@@ -13,13 +13,13 @@ import asyncio
 import time
 
 import pytest
-
 from core.concurrency import (
     CircuitBreaker,
     ConcurrencyManager,
     RateLimiter,
     SemaphoreManager,
 )
+
 from core.exceptions import ConcurrentLimitExceededError
 
 

@@ -6,8 +6,9 @@
 
 import logging
 import time
-from psycopg2 import pool
+
 from neo4j import GraphDatabase
+from psycopg2 import pool
 
 # 配置日志
 logging.basicConfig(

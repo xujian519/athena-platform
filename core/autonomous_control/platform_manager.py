@@ -41,7 +41,7 @@ class ServiceInfo:
     status: ServiceStatus
     cpu_usage: float = 0.0
     memory_usage: float = 0.0
-    health_check_url: str | None = None
+    health_check_url: Optional[str] = None
 
 
 class PlatformManager:
@@ -435,7 +435,7 @@ class PlatformManager:
         """获取控制历史记录"""
         return self.control_history[-limit:] if limit > 0 else self.control_history
 
-    async def health_check(self, service_name: str | None = None) -> dict[str, Any]:
+    async def health_check(self, service_name: Optional[str] = None) -> dict[str, Any]:
         """健康检查"""
         try:
             if service_name:

@@ -46,9 +46,9 @@ class OptimizationRequest:
     user_input: str
     target_ai: TargetAI = TargetAI.CLAUDE
     mode: OptimizationMode = OptimizationMode.BASIC
-    context: str | None = None
-    constraints: list[str] | None = None
-    output_format: str | None = None
+    context: Optional[str] = None
+    constraints: Optional[list[str]] = None
+    output_format: Optional[str] = None
 
 
 @dataclass
@@ -427,7 +427,7 @@ Focus on clear specifications, constraints, and technical requirements.
                 score=0.7
             )
 
-    def _suggest_role(self, user_input: str) -> str | None:
+    def _suggest_role(self, user_input: str) -> Optional[str]:
         """建议角色"""
         input_lower = user_input.lower()
 
@@ -451,7 +451,7 @@ Focus on clear specifications, constraints, and technical requirements.
 
         return "an expert assistant"
 
-    def _suggest_output_format(self, user_input: str) -> str | None:
+    def _suggest_output_format(self, user_input: str) -> Optional[str]:
         """建议输出格式"""
         input_lower = user_input.lower()
 

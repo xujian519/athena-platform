@@ -487,7 +487,7 @@ class KnowledgeGraphManager:
     def search_nodes(self,
                     node_type: NodeType | None = None,
                     properties: Optional[Dict[str, Any]] = None,
-                    keywords: Optional[List[str] = None,
+                    keywords: Optional[List[str]] = None,
                     limit: int = 100) -> List[KnowledgeNode]:
         """搜索节点"""
         results = []
@@ -556,7 +556,7 @@ class KnowledgeGraphManager:
         similarities.sort(key=lambda x: x[1], reverse=True)
         return similarities[:limit]
 
-    def get_node_neighbors(self, node_id: str, relation_types: Optional[List[RelationType] = None) -> List[Tuple[str, RelationType, float]]:
+    def get_node_neighbors(self, node_id: str, relation_types: Optional[List[RelationType]] = None) -> List[Tuple[str, RelationType, float]]]:
         """获取节点的邻居"""
         if node_id not in self.graph:
             return []

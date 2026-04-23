@@ -9,7 +9,7 @@ import asyncio
 import json
 import logging
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 
 # 完全独立的BaseAgent实现
@@ -142,7 +142,7 @@ class XiaonaAgentWithScratchpad(BaseAgent):
                     import warnings
                     warnings.warn(
                         "检测到嵌套事件循环，但nest_asyncio不可用。"
-                        "建议安装nest_asyncio: pip install nest-asyncio"
+                        "建议安装nest_asyncio: pip install nest-asyncio", stacklevel=2
                     )
                     # 在实际应用中，这里应该抛出更明确的错误
                     # 但为了兼容性，我们尝试使用asyncio.run
@@ -353,7 +353,7 @@ class XiaonaAgentWithScratchpad(BaseAgent):
         if len(self.scratchpad_history) > 100:
             self.scratchpad_history = self.scratchpad_history[-100:]
 
-    async def get_scratchpad(self, task_id: str) -> Optional[dict[str, Any]]:
+    async def get_scratchpad(self, task_id: str) -> dict[str, Any] | None:
         """获取指定任务的Scratchpad"""
         for record in self.scratchpad_history:
             if record["task_id"] == task_id:
@@ -373,7 +373,7 @@ def run_tests():
 
     # 创建代理
     agent = XiaonaAgentWithScratchpad()
-    print(f"\n✅ 代理创建成功")
+    print("\n✅ 代理创建成功")
     print(f"   名称: {agent.name}")
     print(f"   角色: {agent.role}")
 
@@ -389,7 +389,7 @@ def run_tests():
     print(f"✅ 有推理摘要: {'reasoning_summary' in result}")
     print(f"✅ 有输出内容: {'output' in result}")
     print(f"✅ Scratchpad可用: {result.get('scratchpad_available', False)}")
-    print(f"\n推理摘要:")
+    print("\n推理摘要:")
     print(result['reasoning_summary'])
 
     # 测试2: JSON输入
@@ -452,7 +452,7 @@ def run_tests():
 
     if scratchpads:
         latest = scratchpads[-1]
-        print(f"✅ 最新记录:")
+        print("✅ 最新记录:")
         print(f"   任务ID: {latest.get('task_id', 'N/A')}")
         print(f"   任务类型: {latest.get('task_type', 'N/A')}")
         print(f"   时间戳: {latest.get('timestamp', 'N/A')}")

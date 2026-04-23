@@ -398,7 +398,7 @@ class SQLiteKnowledgeGraphManager:
             logger.error(f"❌ 获取统计信息失败: {e}")
             return {}
 
-    def find_path(self, source_id: int, target_id: int, max_depth: int = 5) -> List[List[int]]:
+    def find_path(self, source_id: int, target_id: int, max_depth: int = 5) -> List[List[int]:
         """
         查找两个实体之间的路径
 
@@ -489,7 +489,7 @@ class SQLiteKnowledgeGraphManager:
 
             entities = {}
             for row in cursor.fetchall():
-                entities[row[0]] = {
+                entities[row[0] = {
                     'id': row[0],
                     'name': row[1],
                     'entity_type': row[2],

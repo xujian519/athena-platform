@@ -62,8 +62,8 @@ class UserFeedback:
     model_used: str  # 使用的模型/策略
 
     # 反馈详情
-    rating: int | None = None  # 1-5评分
-    correction: str | None = None  # 纠正内容
+    rating: Optional[int] = None  # 1-5评分
+    correction: Optional[str] = None  # 纠正内容
     suggestions: list[str] = field(default_factory=list)
 
     # 元数据

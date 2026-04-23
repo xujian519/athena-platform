@@ -66,7 +66,7 @@ class KnowledgeGapAnalyzer:
         print(f"📊 {self.name} v{self.version} 初始化完成")
 
     async def analyze_domain_gaps(
-        self, domain: str, knowledge_graph: dict[str, Any] | None = None
+        self, domain: str, knowledge_graph: Optional[dict[str, Any]] = None
     ) -> GraphAnalysisResult:
         """
         分析领域知识空白

@@ -125,7 +125,7 @@ class HebbianOptimizer:
         logger.info(f"🧠 {self.name} ({self.version}) 初始化完成")
         logger.info(f"   学习率: {learning_rate}, 衰减率: {decay_rate}")
 
-    def record_activation(self, nodes: list[str], context: dict[str, Any] | None = None) -> None:
+    def record_activation(self, nodes: list[str], context: Optional[dict[str, Any]] = None) -> None:
         """
         记录节点激活(协同激活)
 

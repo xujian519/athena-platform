@@ -4,13 +4,13 @@
 """
 
 import json
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 # 读取新发现的36个中价值证据
 medium_file = Path("/Users/xujian/Nutstore Files/02无效诉讼/济南力邦/201921401279.9无效材料/深度技术分析输出/中价值证据详细分析.json")
 
-with open(medium_file, 'r', encoding='utf-8') as f:
+with open(medium_file, encoding='utf-8') as f:
     medium_evidences = json.load(f)
 
 # 按专利号排序
@@ -37,7 +37,7 @@ for i, evidence in enumerate(medium_evidences[:10], 1):
     print(f"   不同特征: {len(evidence.get('claim1_comparison', {}).get('different_features', []))}个")
     print()
 
-print(f"... 还有26个证据（共36个）")
+print("... 还有26个证据（共36个）")
 print()
 
 # ========== 任务2: 对比分析 ==========
@@ -160,12 +160,12 @@ for i, evidence in enumerate(medium_evidences, 1):
     md_content += f"#### {i}. {evidence['patent_number']}\n\n"
     md_content += f"- **技术领域**: {evidence.get('technical_field', 'N/A')}\n"
     md_content += f"- **发明主题**: {evidence.get('invention_title', 'N/A')}\n"
-    md_content += f"- **关键特征**:\n"
+    md_content += "- **关键特征**:\n"
     for feature in evidence.get('key_features', [])[:5]:
         md_content += f"  - {feature}\n"
     md_content += f"- **相同特征**: {', '.join(evidence.get('claim1_comparison', {}).get('same_features', []))}\n"
     md_content += f"- **不同特征**: {', '.join(evidence.get('claim1_comparison', {}).get('different_features', []))}\n"
-    md_content += f"- **证据价值**: ⭐⭐⭐ **中**\n"
+    md_content += "- **证据价值**: ⭐⭐⭐ **中**\n"
     md_content += f"- **评估理由**: {evidence.get('evidence_reason', 'N/A')}\n"
     md_content += "\n"
 
@@ -201,7 +201,7 @@ md_content += "### 证据组合优势\n\n"
 md_content += "| 优势 | 说明 |\n"
 md_content += "|------|------|\n"
 md_content += "| ✅ 全部新证据 | D2+D4+D7+2个新发现，无重复使用风险 |\n"
-md_content += f"| ✅ 包装机械相关 | 5个证据都涉及包装/输送/调节 |\n"
+md_content += "| ✅ 包装机械相关 | 5个证据都涉及包装/输送/调节 |\n"
 md_content += "| ✅ 技术启示完整 | 涵盖导轨、限位、调节、输送等多个方面 |\n"
 md_content += "| ✅ 成功率预估 | 75-80% |\n"
 md_content += "\n"

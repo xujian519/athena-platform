@@ -211,7 +211,7 @@ class MultiTenantSystem:
         return f"tenant_{timestamp}_{hash_val}"
 
     async def check_tenant_access(
-        self, tenant_id: str, capability: str, user_id: str | None = None
+        self, tenant_id: str, capability: str, user_id: Optional[str] = None
     ) -> dict[str, Any]:
         """
         检查租户访问权限

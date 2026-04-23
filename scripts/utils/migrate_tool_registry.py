@@ -21,7 +21,7 @@ import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -100,7 +100,7 @@ class ToolRegistryMigrator:
 
         return scan_result
 
-    def _scan_registry_file(self, file_path: Path) -> list[dict[str, Any]]:
+    def _scan_registry_file(self, file_path: Path) -> list[dict[str, Any]:
         """
         扫描注册表文件
 
@@ -136,7 +136,7 @@ class ToolRegistryMigrator:
 
         return tools
 
-    def _analyze_register_method(self, func_node: ast.FunctionDef) -> list[dict[str, Any]]:
+    def _analyze_register_method(self, func_node: ast.FunctionDef) -> list[dict[str, Any]:
         """
         分析register方法
 
@@ -164,7 +164,7 @@ class ToolRegistryMigrator:
 
         return tools
 
-    def _extract_tool_definition(self, call_node: ast.Call) -> Optional[Dict[str, Any]]:
+    def _extract_tool_definition(self, call_node: ast.Call) -> dict[str, Any] | None:
         """
         提取ToolDefinition参数
 
@@ -226,7 +226,7 @@ class ToolRegistryMigrator:
 
         self.result.total_tools = scan_result["total_tools"]
 
-        logger.info(f"✅ 迁移完成")
+        logger.info("✅ 迁移完成")
         logger.info(f"   总计: {self.result.total_tools}")
         logger.info(f"   成功: {self.result.migrated_tools}")
         logger.info(f"   失败: {self.result.failed_tools}")
@@ -305,7 +305,7 @@ async def main():
 
     # 2. 迁移工具（演练模式）
     print()
-    result = migrator.migrate_tools(scan_result, dry_run=True)
+    migrator.migrate_tools(scan_result, dry_run=True)
 
     # 3. 生成报告
     report_path = project_root / "reports" / "tool_migration_report.json"

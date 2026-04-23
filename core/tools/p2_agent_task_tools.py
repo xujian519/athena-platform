@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 P2 Agent协作和任务管理工具实现
 
@@ -66,13 +65,13 @@ class Task:
         self.working_dir = working_dir
         self.status = TaskStatus.PENDING
         self.created_at = datetime.now()
-        self.started_at: Optional[datetime] = None
-        self.completed_at: Optional[datetime] = None
-        self.result: Optional[str] = None
-        self.error: Optional[str] = None
-        self.process: Optional[asyncio.subprocess.Process] = None
+        self.started_at: datetime | None = None
+        self.completed_at: datetime | None = None
+        self.result: str | None = None
+        self.error: str | None = None
+        self.process: asyncio.subprocess.Process | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "task_id": self.task_id,
@@ -92,8 +91,8 @@ class Task:
 class TaskManager:
     """任务管理器（单例）"""
 
-    _instance: Optional["TaskManager"] = None
-    _tasks: Dict[str, Task] = {}
+    _instance: TaskManager | None = None
+    _tasks: dict[str, Task] = {}
 
     def __new__(cls):
         if cls._instance is None:
@@ -120,11 +119,11 @@ class TaskManager:
         logger.info(f"✅ 任务已创建: {task_id} - {name}")
         return task
 
-    def get_task(self, task_id: str) -> Optional[Task]:
+    def get_task(self, task_id: str) -> Task | None:
         """获取任务"""
         return self._tasks.get(task_id)
 
-    def list_tasks(self, status: Optional[TaskStatus] = None) -> List[Task]:
+    def list_tasks(self, status: TaskStatus | None = None) -> list[Task]:
         """列出所有任务"""
         tasks = list(self._tasks.values())
         if status:
@@ -135,8 +134,8 @@ class TaskManager:
         self,
         task_id: str,
         status: TaskStatus,
-        result: Optional[str] = None,
-        error: Optional[str] = None,
+        result: str | None = None,
+        error: str | None = None,
     ) -> bool:
         """更新任务状态"""
         task = self.get_task(task_id)
@@ -221,7 +220,7 @@ class AgentInput(BaseModel):
     """Agent工具输入参数"""
     agent_type: str = Field(..., description="Agent类型（xiaona/xiaonuo/yunxi）")
     task: str = Field(..., description="任务描述")
-    context: Optional[Dict[str, Any]] = Field(default=None, description="上下文信息")
+    context: dict[str, Any] | None = Field(default=None, description="上下文信息")
 
 
 class AgentOutput(BaseModel):
@@ -237,7 +236,7 @@ class AgentOutput(BaseModel):
     category="agent",
     tags=["agent", "collaboration", "subtask"],
 )
-async def agent_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def agent_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     Agent工具处理器
 
@@ -335,8 +334,8 @@ class TaskCreateInput(BaseModel):
     name: str = Field(..., description="任务名称")
     description: str = Field(..., description="任务描述")
     command: str = Field(..., description="要执行的命令")
-    working_dir: Optional[str] = Field(default=None, description="工作目录")
-    auto_start: Optional[bool] = Field(default=True, description="是否自动启动")
+    working_dir: str | None = Field(default=None, description="工作目录")
+    auto_start: bool | None = Field(default=True, description="是否自动启动")
 
 
 class TaskCreateOutput(BaseModel):
@@ -351,7 +350,7 @@ class TaskCreateOutput(BaseModel):
     category="task_management",
     tags=["task", "create", "background"],
 )
-async def task_create_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def task_create_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     TaskCreate工具处理器
 
@@ -427,12 +426,12 @@ async def task_create_handler(params: Dict[str, Any], context: Dict[str, Any]) -
 
 class TaskListInput(BaseModel):
     """TaskList工具输入参数"""
-    status_filter: Optional[str] = Field(default=None, description="状态过滤（pending/in_progress/completed/failed/cancelled）")
+    status_filter: str | None = Field(default=None, description="状态过滤（pending/in_progress/completed/failed/cancelled）")
 
 
 class TaskListOutput(BaseModel):
     """TaskList工具输出结果"""
-    tasks: List[Dict[str, Any]] = Field(..., description="任务列表")
+    tasks: list[dict[str, Any]] = Field(..., description="任务列表")
     total_count: int = Field(..., description="总任务数")
 
 
@@ -442,7 +441,7 @@ class TaskListOutput(BaseModel):
     category="task_management",
     tags=["task", "list", "status"],
 )
-async def task_list_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def task_list_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     TaskList工具处理器
 
@@ -512,7 +511,7 @@ class TaskGetInput(BaseModel):
 
 class TaskGetOutput(BaseModel):
     """TaskGet工具输出结果"""
-    task: Dict[str, Any] = Field(..., description="任务详情")
+    task: dict[str, Any] = Field(..., description="任务详情")
 
 
 @tool(
@@ -521,7 +520,7 @@ class TaskGetOutput(BaseModel):
     category="task_management",
     tags=["task", "get", "details"],
 )
-async def task_get_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def task_get_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     TaskGet工具处理器
 
@@ -583,9 +582,9 @@ async def task_get_handler(params: Dict[str, Any], context: Dict[str, Any]) -> D
 class TaskUpdateInput(BaseModel):
     """TaskUpdate工具输入参数"""
     task_id: str = Field(..., description="任务ID")
-    status: Optional[str] = Field(default=None, description="新状态")
-    result: Optional[str] = Field(default=None, description="执行结果")
-    error: Optional[str] = Field(default=None, description="错误信息")
+    status: str | None = Field(default=None, description="新状态")
+    result: str | None = Field(default=None, description="执行结果")
+    error: str | None = Field(default=None, description="错误信息")
 
 
 class TaskUpdateOutput(BaseModel):
@@ -601,7 +600,7 @@ class TaskUpdateOutput(BaseModel):
     category="task_management",
     tags=["task", "update", "status"],
 )
-async def task_update_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def task_update_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     TaskUpdate工具处理器
 
@@ -708,7 +707,7 @@ class TaskStopOutput(BaseModel):
     category="task_management",
     tags=["task", "stop", "cancel"],
 )
-async def task_stop_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def task_stop_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     TaskStop工具处理器
 

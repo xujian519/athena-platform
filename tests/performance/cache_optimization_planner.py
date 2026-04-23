@@ -62,7 +62,7 @@ class CacheStrategyPlanner:
                 cache_analysis["cache_files"].append(analysis)
 
                 if analysis.get("cache_type"):
-                    cache_analysis["cache_strategies"][analysis["cache_type"]] = analysis
+                    cache_analysis["cache_strategies"][analysis["cache_type"] = analysis
 
         return cache_analysis
 
@@ -113,7 +113,7 @@ class CacheStrategyPlanner:
 
         return analysis
 
-    def generate_optimization_recommendations(self) -> list[dict[str, Any]]:
+    def generate_optimization_recommendations(self) -> list[dict[str, Any]:
         """生成优化建议"""
         recommendations = []
 

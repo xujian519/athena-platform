@@ -52,7 +52,7 @@ class DecisionRecord:
     timestamp: datetime = field(default_factory=datetime.now)
     impact_score: float = 0.0
     reasoning_trace: list[str] = field(default_factory=list)
-    feedback: str | None = None
+    feedback: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -80,7 +80,7 @@ class TrendAnalysis:
     trend_strength: float  # 0-1
     current_value: float
     historical_values: list[tuple[datetime, float]]
-    prediction: float | None = None
+    prediction: Optional[float] = None
     confidence_interval: tuple[float, float] | None = None
 
 

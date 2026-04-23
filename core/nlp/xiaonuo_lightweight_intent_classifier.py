@@ -490,7 +490,7 @@ class XiaonuoLightweightIntentClassifier:
 
         logger.info(f"💾 模型已保存到: {model_path}")
 
-    def load_model(self, model_path: str | None = None):
+    def load_model(self, model_path: Optional[str] = None):
         """加载模型"""
         if model_path is None:
             model_path = os.path.join(self.config.model_dir, "latest_model.joblib")

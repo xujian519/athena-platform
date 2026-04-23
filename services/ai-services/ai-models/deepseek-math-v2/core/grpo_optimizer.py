@@ -78,7 +78,7 @@ class ReferenceGroup:
                 param.data.add_(noise)
 
     def calculate_relative_advantages(
-        self, current_rewards: list[float], reference_rewards: list[list[float]]
+        self, current_rewards: list[float], reference_rewards: list[list[float]
     ) -> list[float]:
         """计算相对优势估计 - GRPO的核心"""
         if not reference_rewards:
@@ -140,7 +140,7 @@ class PatentGRPOOptimizer:
 
     def _generate_reference_responses(
         self, states: list[dict], actions: list[int]
-    ) -> list[list[float]]:
+    ) -> list[list[float]:
         """生成参考组策略的奖励"""
         reference_rewards = []
 
@@ -239,7 +239,7 @@ class PatentGRPOOptimizer:
                     # 文本特征需要转换为数值
                     features.append(hash(value) % 1000)
                 elif isinstance(value, list):
-                    features.extend([hash(str(x)) % 1000 for x in value[:10]])
+                    features.extend([hash(str(x)) % 1000 for x in value[:10])
 
             # 填充或截断到固定长度
             while len(features) < 512:  # 假设512维特征

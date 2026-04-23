@@ -38,9 +38,9 @@ class TaskAnalysisResponse(BaseModel):
 
     request_id: str
     status: str
-    result: dict[str, Any] | None = None
+    result: Optional[dict[str, Any]] = None
     error: str = None
-    metadata: dict[str, Any] | None = None
+    metadata: Optional[dict[str, Any]] = None
 
 
 # =============================================================================

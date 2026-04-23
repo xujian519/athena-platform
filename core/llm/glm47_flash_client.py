@@ -69,7 +69,7 @@ class GLM47FlashClient:
 
     def __init__(
         self,
-        api_key: str | None = None,
+        api_key: Optional[str] = None,
         base_url: str = "https://open.bigmodel.cn/api/paas/v4",
         model: str = "glm-4.7-flash",
         timeout: int = 60,
@@ -111,8 +111,8 @@ class GLM47FlashClient:
     async def chat(
         self,
         messages: list[dict[str, str] | GLM47FlashMessage],
-        max_tokens: int | None = None,
-        temperature: float | None = None,
+        max_tokens: Optional[int] = None,
+        temperature: Optional[float] = None,
         top_p: float = 0.9,
         enable_thinking: bool = True,
         thinking_type: str = "enabled",
@@ -177,7 +177,7 @@ class GLM47FlashClient:
             raise
 
     async def chat_simple(
-        self, prompt: str, system_prompt: str | None = None, **kwargs
+        self, prompt: str, system_prompt: Optional[str] = None, **kwargs
     ) -> GLM47FlashResponse:
         """
         简化的对话接口(单轮对话)
@@ -337,7 +337,7 @@ def get_glm47_flash_client() -> GLM47FlashClient:
 
 
 async def ask_glm47_flash(
-    prompt: str | None = None, system_prompt: str | None = None, enable_thinking: bool = True, **kwargs
+    prompt: Optional[str] = None, system_prompt: Optional[str] = None, enable_thinking: bool = True, **kwargs
 ) -> str:
     """
     快速提问函数

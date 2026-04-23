@@ -41,9 +41,9 @@ class ComponentHealth:
     name: str
     status: HealthStatus
     message: str
-    response_time: float | None = None
+    response_time: Optional[float] = None
     last_check: datetime | None = None
-    details: dict[str, Any] | None = None
+    details: Optional[dict[str, Any]] = None
 
 
 @dataclass

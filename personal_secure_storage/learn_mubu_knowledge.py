@@ -271,19 +271,19 @@ def learn_mubu_knowledge() -> Any:
 ## 🏗️ 知识架构
 
 ### 1. 专利法核心理论
-{chr(10).join([f"- **{mat['title']}** ({mat['importance']}){chr(10)}  {mat['content']}" for mat in knowledge_categories['patent_law']['materials']])}
+{chr(10).join([f"- **{mat['title']}** ({mat['importance']}){chr(10)}  {mat['content']}" for mat in knowledge_categories['patent_law']['materials'])}
 
 ### 2. 专利申请实务
-{chr(10).join([f"- **{mat['title']}** ({mat['importance']}){chr(10)}  {mat['content']}" for mat in knowledge_categories['patent_prosecution']['materials']])}
+{chr(10).join([f"- **{mat['title']}** ({mat['importance']}){chr(10)}  {mat['content']}" for mat in knowledge_categories['patent_prosecution']['materials'])}
 
 ### 3. 专利诉讼实务
-{chr(10).join([f"- **{mat['title']}** ({mat['importance']}){chr(10)}  {mat['content']}" for mat in knowledge_categories['patent_litigation']['materials']])}
+{chr(10).join([f"- **{mat['title']}** ({mat['importance']}){chr(10)}  {mat['content']}" for mat in knowledge_categories['patent_litigation']['materials'])}
 
 ### 4. 知识产权服务
-{chr(10).join([f"- **{mat['title']}** ({mat['importance']}){chr(10)}  {mat['content']}" for mat in knowledge_categories['ip_services']['materials']])}
+{chr(10).join([f"- **{mat['title']}** ({mat['importance']}){chr(10)}  {mat['content']}" for mat in knowledge_categories['ip_services']['materials'])}
 
 ### 5. 工作指南
-{chr(10).join([f"- **{mat['title']}** ({mat['importance']}){chr(10)}  {mat['content']}" for mat in knowledge_categories['work_guide']['materials']])}
+{chr(10).join([f"- **{mat['title']}** ({mat['importance']}){chr(10)}  {mat['content']}" for mat in knowledge_categories['work_guide']['materials'])}
 
 ## 💡 核心要点
 

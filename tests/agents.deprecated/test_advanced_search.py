@@ -37,10 +37,10 @@ async def main():
     stats = await retriever.get_statistics()
     print(f"总专利数: {stats.get('total_patents', 0)}")
     print(f"状态分布: {stats.get('by_status', {})}")
-    print(f"\nTop 5 申请人:")
+    print("\nTop 5 申请人:")
     for i, (name, count) in enumerate(stats.get('top_assignees', [])[:5], 1):
         print(f"  {i}. {name}: {count} 件")
-    print(f"\nTop 5 IPC分类号:")
+    print("\nTop 5 IPC分类号:")
     for i, (ipc, count) in enumerate(stats.get('top_ipc_codes', [])[:5], 1):
         print(f"  {i}. {ipc}: {count} 件")
     print(f"\n日期范围: {stats.get('date_range', {})}")

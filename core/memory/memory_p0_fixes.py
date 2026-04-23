@@ -148,7 +148,7 @@ class VectorCache:
         self.hits = 0
         self.misses = 0
 
-    def get(self, text: str) -> list[float | None]:
+    def get(self, text: str) -> Optional[list[float]]:
         """获取缓存的向量"""
         with self.lock:
             if text in self.cache:
@@ -305,7 +305,7 @@ class SizeLimitedLRU:
 class PersistentEncryptionKeyManager:
     """持久化加密密钥管理器"""
 
-    def __init__(self, key_file_path: str | None = None):
+    def __init__(self, key_file_path: Optional[str] = None):
         if key_file_path is None:
             # 默认使用安全目录
             key_dir = Path.home() / ".athena" / "secure"
@@ -701,7 +701,7 @@ class FixedSmartForgettingStrategy:
         max_items = self.config["max_memory_items"]
         return memory_usage >= max_items * 0.9  # 90%阈值
 
-    async def execute_forgetting(self, batch_size: int | None = None):
+    async def execute_forgetting(self, batch_size: Optional[int] = None):
         """执行遗忘操作"""
         if not await self.check_memory_pressure():
             return

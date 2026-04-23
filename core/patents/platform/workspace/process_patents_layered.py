@@ -41,7 +41,7 @@ class LayeredDocumentReader:
     """分层文档读取器 - 智能编码检测"""
 
     @staticmethod
-    def read_document(file_path: str) -> str | None:
+    def read_document(file_path: str) -> Optional[str]:
         """智能读取文档内容"""
         try:
             # 扩展编码检测

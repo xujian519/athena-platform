@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 整理根目录散落文件
 Organize Root Directory Files
@@ -8,11 +7,10 @@ Organize Root Directory Files
 """
 
 import logging
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import os
 import shutil
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -104,7 +102,7 @@ class RootDirectoryOrganizer:
                 return target
 
         # 检查分类规则
-        for category, rules in self.file_categories.items():
+        for _category, rules in self.file_categories.items():
             for pattern in rules['pattern']:
                 if file_name.endswith(pattern.replace('*', '')) or pattern.replace('*', '') in file_name:
                     return rules['target_dir']

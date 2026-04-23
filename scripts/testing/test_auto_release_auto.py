@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 服务自动释放功能 - 自动化测试
 Automated Test for Service Auto-Release Feature
@@ -20,11 +19,11 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
+from core.session.auto_release_config import get_auto_release_config
 from core.session.service_session_manager import (
     ServiceType,
     get_service_session_manager,
 )
-from core.session.auto_release_config import get_auto_release_config
 
 # 配置日志
 logging.basicConfig(
@@ -90,7 +89,7 @@ async def test_config_loading(results: TestResults):
         print(f"  ✅ 清理间隔: {interval}秒")
 
         # 验证默认值
-        assert enabled == True, "默认应该启用"
+        assert enabled, "默认应该启用"
         assert timeout == 3600, "默认超时应该是3600秒"
         assert interval == 300, "默认清理间隔应该是300秒"
 
@@ -130,7 +129,7 @@ async def test_session_registration(results: TestResults):
         # 验证会话属性
         assert session.service_name == "测试服务"
         assert session.process_id == os.getpid()
-        assert session.auto_stop == True
+        assert session.auto_stop
 
         results.add_result("会话注册", True)
         print("  ✅ 会话注册测试通过")
@@ -225,7 +224,7 @@ async def test_session_expiration(results: TestResults):
         assert idle_time_3 > idle_time_1, "空闲时间应该增长"
 
         # 验证过期状态（3秒后应该过期，因为超时是2秒）
-        assert is_expired_3 == True, f"会话应该已过期（空闲{idle_time_3:.1f}秒 > 2秒超时）"
+        assert is_expired_3, f"会话应该已过期（空闲{idle_time_3:.1f}秒 > 2秒超时）"
 
         results.add_result("会话过期检测", True)
         print("  ✅ 会话过期检测测试通过")

@@ -191,7 +191,7 @@ class TestRunner:
                 error_message = f"结果不匹配: 期望 {test_case.expected_result}, 实际 {actual_result}"
                 logger.error(f"❌ 测试失败: {test_case.name} - {error_message}")
 
-        except asyncio.TimeoutError:
+        except TimeoutError:
             error_message = f"测试超时 (>{test_case.timeout}秒)"
             logger.error(f"⏰ 测试超时: {test_case.name}")
 
@@ -313,7 +313,7 @@ class TestReporter:
             'average_execution_time': avg_time
         }
 
-    def _format_results(self, results: list[TestResult]) -> list[dict[str, Any]]:
+    def _format_results(self, results: list[TestResult]) -> list[dict[str, Any]:
         """格式化测试结果"""
         formatted_results = []
 

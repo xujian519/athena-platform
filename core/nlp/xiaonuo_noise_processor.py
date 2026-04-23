@@ -725,7 +725,7 @@ class NoiseProcessor:
 
         return cleaned_special < original_special
 
-    def _get_char_script(self, char: str) -> str | None:
+    def _get_char_script(self, char: str) -> Optional[str]:
         """获取字符的脚本类型"""
         for script_name, pattern in self.script_patterns.items():
             if pattern.match(char):

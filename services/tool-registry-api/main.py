@@ -16,25 +16,22 @@ Unified Tool Registry HTTP API Service
 
 import asyncio
 import logging
-from typing import Any, Dict, List
-from datetime import datetime
-
-from fastapi import FastAPI, HTTPException, status
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
-import uvicorn
 
 # 添加项目路径
 import sys
+from datetime import datetime
 from pathlib import Path
+from typing import Any
+
+import uvicorn
+from fastapi import FastAPI, HTTPException, status
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.tools.unified_registry import get_unified_registry
-from core.tools.permissions import (
-    ToolPermissionContext,
-    PermissionMode
-)
-from core.tools.unified_registry import ToolHealthStatus
+from core.tools.permissions import PermissionMode, ToolPermissionContext
+from core.tools.unified_registry import ToolHealthStatus, get_unified_registry
 
 # =============================================================================
 # 日志配置
@@ -58,13 +55,13 @@ class ToolInfo(BaseModel):
     description: str = ""
     enabled: bool = True
     healthy: bool = True
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
 class ToolExecuteRequest(BaseModel):
     """工具执行请求"""
     tool_name: str = Field(..., description="工具名称")
-    parameters: Dict[str, Any] = Field(default_factory=dict, description="工具参数")
-    user_context: Dict[str, Any] = Field(default_factory=dict, description="用户上下文（用于权限检查）")
+    parameters: dict[str, Any] = Field(default_factory=dict, description="工具参数")
+    user_context: dict[str, Any] = Field(default_factory=dict, description="用户上下文（用于权限检查）")
 
 class ToolExecuteResponse(BaseModel):
     """工具执行响应"""
@@ -429,12 +426,12 @@ async def list_categories():
 
     try:
         all_tools = tool_registry.list_tools()
-        categories = set(tool.category for tool in all_tools)
+        categories = {tool.category for tool in all_tools}
 
         return {
             "success": True,
             "count": len(categories),
-            "data": sorted(list(categories))
+            "data": sorted(categories)
         }
 
     except Exception as e:

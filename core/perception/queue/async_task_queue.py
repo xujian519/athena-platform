@@ -45,13 +45,13 @@ class Task:
     priority: TaskPriority = TaskPriority.NORMAL
     status: TaskStatus = TaskStatus.PENDING
     result: Any = None
-    error: str | None = None
+    error: Optional[str] = None
     created_at: datetime = field(default_factory=datetime.now)
     started_at: datetime | None = None
     completed_at: datetime | None = None
 
     @property
-    def duration(self) -> float | None:
+    def duration(self) -> Optional[float]:
         """获取任务执行时长（秒）"""
         if self.started_at and self.completed_at:
             return (self.completed_at - self.started_at).total_seconds()
@@ -227,7 +227,7 @@ class AsyncTaskQueue:
     async def get_task_result(
         self,
         task_id: str,
-        timeout: float | None = None
+        timeout: Optional[float] = None
     ) -> Any:
         """
         等待任务完成并获取结果

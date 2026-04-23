@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PostgreSQL数据库配置
 PostgreSQL Database Configuration for Hybrid Architecture

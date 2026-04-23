@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 集成记忆系统到所有智能体
 Integrate Memory System to All Agents
 """
 
 import os
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import sys
-import shutil
-from pathlib import Path
 
 # 项目根目录
 PROJECT_ROOT = "/Users/xujian/Athena工作平台"
@@ -42,7 +37,7 @@ from datetime import datetime
 # 添加项目路径
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from core.agent.base_agent_with_unified_memory import BaseAgentWithUnifiedMemory
+from core.framework.agents.base_agent_with_unified_memory import BaseAgentWithUnifiedMemory
 
 class {agent_class_name}(BaseAgentWithUnifiedMemory):
     """{agent_title}"""

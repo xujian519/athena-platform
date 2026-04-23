@@ -215,7 +215,7 @@ def save_trade_secrets_materials() -> None:
 
 ## 📚 相关资料
 同类学习资料推荐：
-{chr(10).join([f"- {mat['title']}" for mat in materials_by_category.get(material['category'], []) if mat['title'] != material['title']])}
+{chr(10).join([f"- {mat['title']}" for mat in materials_by_category.get(material['category'], []) if mat['title'] != material['title'])}
 
 ## 💡 使用提示
 - 建议使用XMind等思维导图软件打开
@@ -232,7 +232,7 @@ def save_trade_secrets_materials() -> None:
                 '类型': '学习资料',
                 '分类': material['category'],
                 '来源': '高泽传',
-                '标签': ['商业秘密', material['category']]
+                '标签': ['商业秘密', material['category']
             }),
             json.dumps({
                 '创建日期': material['date'],

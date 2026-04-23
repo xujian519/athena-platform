@@ -199,7 +199,7 @@ class SessionSearchEngine:
         session_id: str,
         role: str,
         content: str,
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> SessionMessage | None:
         """
         添加消息到会话
@@ -241,7 +241,7 @@ class SessionSearchEngine:
         self,
         query: str,
         mode: str = "hybrid",
-        session_id: str | None = None,
+        session_id: Optional[str] = None,
         limit: int = 10,
     ) -> list[SearchResult]:
         """

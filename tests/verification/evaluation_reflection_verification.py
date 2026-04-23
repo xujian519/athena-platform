@@ -16,7 +16,6 @@ Evaluation and Reflection Module Verification Script
 import asyncio
 import sys
 from pathlib import Path
-from typing import Any
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent
@@ -68,7 +67,7 @@ class ModuleVerificationResult:
         print("=" * 80)
 
         # 总体统计
-        print(f"\n📈 总体统计:")
+        print("\n📈 总体统计:")
         print(f"  总测试数: {self.total_tests}")
         print(f"  ✅ 通过: {self.passed_tests} ({self.passed_tests/self.total_tests*100:.1f}%)")
         print(f"  ❌ 失败: {self.failed_tests} ({self.failed_tests/self.total_tests*100:.1f}%)")
@@ -151,8 +150,8 @@ async def verify_imports(result: ModuleVerificationResult):
     # 测试4: 反思集成包装器导入
     try:
         from core.intelligence.reflection_integration_wrapper import (
-            ReflectionIntegrationWrapper,
             ReflectionConfig,
+            ReflectionIntegrationWrapper,
         )
         result.add_result("import", "反思集成包装器导入", True, "ReflectionIntegrationWrapper")
     except ImportError as e:
@@ -167,7 +166,6 @@ async def verify_imports(result: ModuleVerificationResult):
 
     # 测试6: 基础智能体导入
     try:
-        from core.agents.base_agent import BaseAgent
         result.add_result("import", "基础智能体导入", True, "BaseAgent")
     except ImportError as e:
         result.add_result("import", "基础智能体导入", False, f"导入失败: {e}")
@@ -237,13 +235,13 @@ async def verify_communication(result: ModuleVerificationResult):
         from core.intelligence.reflection_engine_v5 import ReflectionEngineV5
 
         # 创建评估引擎
-        eval_engine = EvaluationEngine(evaluator_id="test_evaluator")
+        EvaluationEngine(evaluator_id="test_evaluator")
 
         # 创建反思引擎
         reflect_engine = ReflectionEngineV5(agent_id="test_agent")
 
         # 模拟评估结果
-        eval_result = EvaluationResult(
+        EvaluationResult(
             id="test_eval_001",
             evaluator_id="test_evaluator",
             target_id="test_target",
@@ -306,8 +304,8 @@ async def verify_communication(result: ModuleVerificationResult):
 
     # 测试3: 评估结果格式兼容性
     try:
+
         from core.evaluation.evaluation_engine import EvaluationResult
-        from datetime import datetime
 
         # 创建评估结果
         result = EvaluationResult(
@@ -344,16 +342,17 @@ async def verify_workflow(result: ModuleVerificationResult):
 
     # 测试1: 评估→反思→改进工作流
     try:
+        from datetime import datetime
+
         from core.evaluation.evaluation_engine import EvaluationEngine, EvaluationResult
         from core.intelligence.reflection_engine_v5 import (
             ReflectionEngineV5,
-            ThoughtStep,
             ReflectionType,
+            ThoughtStep,
         )
-        from datetime import datetime
 
         # 步骤1: 执行评估
-        eval_engine = EvaluationEngine(evaluator_id="workflow_evaluator")
+        EvaluationEngine(evaluator_id="workflow_evaluator")
         eval_result = EvaluationResult(
             id="workflow_eval_001",
             evaluator_id="workflow_evaluator",
@@ -480,7 +479,7 @@ async def check_integration_with_agents(result: ModuleVerificationResult):
 
     # 测试1: 检查小诺智能体是否使用反思引擎
     try:
-        from core.agents.xiaonuo.enhanced_xiaonuo import EnhancedXiaonuo
+        from core.framework.agents.xiaonuo.enhanced_xiaonuo import EnhancedXiaonuo
 
         # 检查是否有反思引擎
         has_reflection_v5 = hasattr(EnhancedXiaonuo, "reflection_engine_v5")
@@ -501,7 +500,7 @@ async def check_integration_with_agents(result: ModuleVerificationResult):
 
     # 测试2: 检查Athena智能体是否有评估功能
     try:
-        from core.agent.athena_agent import AthenaAgent
+        from core.framework.agents.athena_agent import AthenaAgent
 
         # 检查是否有评估方法
         has_evaluate = hasattr(AthenaAgent, "_evaluate_performance_aspects")
@@ -523,8 +522,8 @@ async def check_integration_with_agents(result: ModuleVerificationResult):
     # 测试3: 检查反思集成包装器
     try:
         from core.intelligence.reflection_integration_wrapper import (
-            ReflectionIntegrationWrapper,
             ReflectionConfig,
+            ReflectionIntegrationWrapper,
         )
 
         # 创建包装器
@@ -585,3 +584,4 @@ async def main():
 if __name__ == "__main__":
     exit_code = asyncio.run(main())
     sys.exit(exit_code)
+

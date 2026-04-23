@@ -428,9 +428,9 @@ class TaskExecutor:
         # 按频率排序
         sorted_words = sorted(word_freq.items(), key=lambda x: x[1], reverse=True)
 
-        return [word for word, freq in sorted_words[:max_keywords]]
+        return [word for word, freq in sorted_words[:max_keywords]
 
-    def _extract_entities(self, text: str) -> list[dict[str, str]]:
+    def _extract_entities(self, text: str) -> list[dict[str, str]:
         """提取实体（简化版）"""
         entities = []
 
@@ -808,7 +808,7 @@ class WorkflowEngine:
                 # 执行工作流
                 await self._execute_workflow_tasks(execution)
 
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 continue
             except asyncio.CancelledError:
                 break
@@ -981,7 +981,7 @@ class WorkflowEngine:
 
         logger.info(f"工作流执行完成: {execution.execution_id}, 状态: {execution.status.value}")
 
-    def _build_task_graph(self, tasks: list[WorkflowTask]) -> dict[str, list[str]]:
+    def _build_task_graph(self, tasks: list[WorkflowTask]) -> dict[str, list[str]:
         """构建任务依赖图"""
         graph = {}
 

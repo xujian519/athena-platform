@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 简化的定期性能检查系统
 不依赖外部包，专注于核心性能检查
@@ -7,11 +6,9 @@
 
 import json
 import sys
-import os
-import time
+from datetime import datetime
 from pathlib import Path
-from datetime import datetime, timedelta
-from typing import Dict, List, Any
+from typing import Any
 
 # 添加项目路径
 sys.path.append('/Users/xujian/Athena工作平台')
@@ -72,7 +69,7 @@ class SimplePerformanceChecker:
 
         return check_results
 
-    def _check_configuration(self) -> Dict[str, Any]:
+    def _check_configuration(self) -> dict[str, Any]:
         """检查配置文件状态"""
         result = {
             'status': 'unknown',
@@ -86,7 +83,7 @@ class SimplePerformanceChecker:
                 result['issues'].append('配置文件不存在')
                 return result
 
-            with open(self.config_path, 'r', encoding='utf-8') as f:
+            with open(self.config_path, encoding='utf-8') as f:
                 config = json.load(f)
 
             # 检查关键配置参数
@@ -124,7 +121,7 @@ class SimplePerformanceChecker:
 
         return result
 
-    def _check_storage_components(self) -> Dict[str, Any]:
+    def _check_storage_components(self) -> dict[str, Any]:
         """检查存储组件文件"""
         result = {
             'status': 'unknown',
@@ -168,7 +165,7 @@ class SimplePerformanceChecker:
 
         return result
 
-    def _analyze_log_files(self) -> Dict[str, Any]:
+    def _analyze_log_files(self) -> dict[str, Any]:
         """分析日志文件"""
         result = {
             'status': 'unknown',
@@ -245,7 +242,7 @@ class SimplePerformanceChecker:
 
         return result
 
-    def _analyze_performance_trend(self) -> Dict[str, Any]:
+    def _analyze_performance_trend(self) -> dict[str, Any]:
         """分析性能趋势"""
         result = {
             'status': 'unknown',
@@ -267,9 +264,9 @@ class SimplePerformanceChecker:
             recent_report = perf_reports[0]
             previous_report = perf_reports[1]
 
-            with open(recent_report, 'r', encoding='utf-8') as f:
+            with open(recent_report, encoding='utf-8') as f:
                 recent_data = json.load(f)
-            with open(previous_report, 'r', encoding='utf-8') as f:
+            with open(previous_report, encoding='utf-8') as f:
                 previous_data = json.load(f)
 
             # 比较性能指标
@@ -319,7 +316,7 @@ class SimplePerformanceChecker:
 
         return result
 
-    def _evaluate_optimization_effectiveness(self) -> Dict[str, Any]:
+    def _evaluate_optimization_effectiveness(self) -> dict[str, Any]:
         """评估优化效果"""
         result = {
             'status': 'unknown',
@@ -338,7 +335,7 @@ class SimplePerformanceChecker:
 
             # 读取最新的优化报告
             latest_report = max(optimization_reports, key=lambda x: x.stat().st_mtime)
-            with open(latest_report, 'r', encoding='utf-8') as f:
+            with open(latest_report, encoding='utf-8') as f:
                 opt_data = json.load(f)
 
             # 分析优化效果
@@ -370,7 +367,7 @@ class SimplePerformanceChecker:
 
         return result
 
-    def _calculate_overall_score(self, checks: Dict[str, Any]) -> int:
+    def _calculate_overall_score(self, checks: dict[str, Any]) -> int:
         """计算总体性能评分"""
         scores = {
             'excellent': 100,
@@ -386,7 +383,7 @@ class SimplePerformanceChecker:
         total_score = 0
         check_count = 0
 
-        for check_name, check_result in checks.items():
+        for _check_name, check_result in checks.items():
             status = check_result.get('status', 'unknown')
             total_score += scores.get(status, 50)
             check_count += 1
@@ -415,12 +412,12 @@ class SimplePerformanceChecker:
         else:
             return 'critical'
 
-    def _generate_recommendations(self, checks: Dict[str, Any]) -> List[str]:
+    def _generate_recommendations(self, checks: dict[str, Any]) -> list[str]:
         """生成优化建议"""
         recommendations = []
 
         # 基于各个检查结果生成建议
-        for check_name, check_result in checks.items():
+        for _check_name, check_result in checks.items():
             issues = check_result.get('issues', [])
 
             for issue in issues:
@@ -445,9 +442,9 @@ class SimplePerformanceChecker:
 
         return recommendations
 
-    def _display_results(self, results: Dict[str, Any]) -> Any:
+    def _display_results(self, results: dict[str, Any]) -> Any:
         """显示检查结果"""
-        print(f"\n📊 存储系统性能检查结果")
+        print("\n📊 存储系统性能检查结果")
         print(f"📅 检查时间: {results['timestamp']}")
         print(f"🎯 总体评分: {results['performance_score']}/100")
         print(f"📋 系统状态: {results['overall_status'].upper()}")
@@ -502,11 +499,11 @@ class SimplePerformanceChecker:
                 print(f"   ⚠️ {issue}")
 
         # 显示建议
-        print(f"\n💡 优化建议:")
+        print("\n💡 优化建议:")
         for i, rec in enumerate(results['recommendations'], 1):
             print(f"   {i}. {rec}")
 
-    def _save_check_results(self, results: Dict[str, Any]) -> Any:
+    def _save_check_results(self, results: dict[str, Any]) -> Any:
         """保存检查结果"""
         try:
             check_file = self.logs_path / f"storage_performance_check_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"

@@ -321,7 +321,7 @@ class BaseAgent(ABC):
         self,
         target_agent: str,
         task_type: str,
-        parameters: dict[str, Any] | None = None,
+        parameters: Optional[dict[str, Any]] = None,
         priority: int = 5
     ) -> Any | None:
         """
@@ -645,7 +645,7 @@ class AgentUtils:
 class AgentResponse:
     """智能体响应类"""
 
-    def __init__(self, content: str, success: bool | None = None, metadata: dict[str, Any] | None | None = None):
+    def __init__(self, content: str, success: Optional[bool] = None, metadata: Optional[dict[str, Any]] | None = None):
         """
         初始化响应
 

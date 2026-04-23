@@ -353,7 +353,7 @@ class FeatureFusion:
 class EnhancedMultiModalProcessor(BaseProcessor):
     """增强多模态处理器"""
 
-    def __init__(self, processor_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, processor_id: str, config: Optional[dict[str, Any]] = None):
         super().__init__(processor_id, config)
 
         # 配置参数

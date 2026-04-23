@@ -41,9 +41,9 @@ class AgentInfo:
     agent_id: str
     name: str
     status: AgentStatus = AgentStatus.IDLE
-    capabilities: List[str] = field(default_factory=list)
-    current_tasks: List[str] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    capabilities: list[str] = field(default_factory=list)
+    current_tasks: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     def is_available(self) -> bool:
         """检查Agent是否可用"""
@@ -60,9 +60,9 @@ class TaskInfo:
     task_id: str
     task_type: str
     priority: TaskPriority = TaskPriority.MEDIUM
-    payload: Dict[str, Any] = field(default_factory=dict)
-    required_capabilities: List[str] = field(default_factory=list)
-    dependencies: List[str] = field(default_factory=list)
+    payload: dict[str, Any] = field(default_factory=dict)
+    required_capabilities: list[str] = field(default_factory=list)
+    dependencies: list[str] = field(default_factory=list)
     timeout: int = 300  # 超时时间（秒）
     created_at: datetime = field(default_factory=datetime.now)
     assigned_to: Optional[str] = None
@@ -78,8 +78,8 @@ class ConflictInfo:
     """冲突信息"""
     conflict_id: str
     conflict_type: ConflictType
-    agents_involved: List[str]
-    tasks_involved: List[str]
+    agents_involved: list[str]
+    tasks_involved: list[str]
     description: str
     severity: str = "medium"  # low, medium, high, critical
     detected_at: datetime = field(default_factory=datetime.now)
@@ -93,7 +93,7 @@ class SchedulingResult:
     task_id: str
     assigned_agent: Optional[str] = None
     reason: str = ""
-    conflicts: List[ConflictInfo] = field(default_factory=list)
+    conflicts: list[ConflictInfo] = field(default_factory=list)
     scheduled_at: datetime = field(default_factory=datetime.now)
 
 
@@ -103,7 +103,7 @@ class AgentProtocol(Protocol):
 
     agent_id: str
     status: AgentStatus
-    capabilities: List[str]
+    capabilities: list[str]
 
     async def execute_task(self, task: TaskInfo) -> Any:
         """执行任务"""
@@ -117,10 +117,10 @@ class AgentProtocol(Protocol):
 class SchedulerProtocol(Protocol):
     """调度器协议接口"""
 
-    async def schedule(self, task: TaskInfo, available_agents: List[AgentInfo]) -> SchedulingResult:
+    async def schedule(self, task: TaskInfo, available_agents: list[AgentInfo]) -> SchedulingResult:
         """调度任务"""
         ...
 
-    async def get_queue_status(self) -> Dict[str, int]:
+    async def get_queue_status(self) -> dict[str, int]:
         """获取队列状态"""
         ...

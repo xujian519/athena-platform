@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小娜任务清单查看器
 Xiaonuo Task Dashboard
@@ -7,14 +6,16 @@ Xiaonuo Task Dashboard
 查看小娜当前的所有任务清单、系统状态和工作进度
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
 import asyncio
-from datetime import datetime
-import json
 import glob
+import json
+from datetime import datetime
+
 
 async def view_xiaonuo_task_dashboard():
     """查看小娜任务清单看板"""
@@ -60,7 +61,7 @@ async def view_core_tasks():
 
     # 导入小娜并检查当前实例
     try:
-        from core.agent.xiaonuo_integrated_enhanced import XiaonuoIntegratedEnhanced
+        from core.framework.agents.xiaonuo_integrated_enhanced import XiaonuoIntegratedEnhanced
 
         # 创建临时实例来检查系统状态
         xiaonuo = XiaonuoIntegratedEnhanced()
@@ -81,7 +82,7 @@ async def view_core_tasks():
         for module_name, attr_name, tasks in core_modules:
             status = "🟢 运行中"
             if hasattr(xiaonuo, attr_name) and getattr(xiaonuo, attr_name) is not None:
-                module = getattr(xiaonuo, attr_name)
+                getattr(xiaonuo, attr_name)
                 # 简化状态检查
                 print(f"  {status} {module_name}")
                 for task in tasks[:2]:  # 只显示前2个任务
@@ -110,7 +111,7 @@ async def view_system_status():
     for config_file in config_files:
         try:
             if os.path.exists(config_file):
-                with open(config_file, 'r', encoding='utf-8') as f:
+                with open(config_file, encoding='utf-8') as f:
                     config = json.load(f)
 
                 if "startup" in config_file:
@@ -163,7 +164,7 @@ async def view_learning_memory_status():
         for memory_file in recent_memories:
             filename = os.path.basename(memory_file)
             try:
-                with open(memory_file, 'r', encoding='utf-8') as f:
+                with open(memory_file, encoding='utf-8') as f:
                     memory_data = json.load(f)
                     memory_type = memory_data.get('type', 'unknown')
                     print(f"    • {filename[:30]}... ({memory_type})")
@@ -171,9 +172,9 @@ async def view_learning_memory_status():
                 print(f"    • {filename[:30]}... (读取失败)")
 
     # 查看学习进度
-    print(f"  📚 学习引擎: 正在学习和优化中")
-    print(f"  🔍 知识图谱: 持续更新中")
-    print(f"  💡 经验积累: 基于交互反馈")
+    print("  📚 学习引擎: 正在学习和优化中")
+    print("  🔍 知识图谱: 持续更新中")
+    print("  💡 经验积累: 基于交互反馈")
 
     print()
 
@@ -302,15 +303,15 @@ async def generate_task_summary():
         ]
     }
 
-    print(f"\n🎯 系统状态:")
+    print("\n🎯 系统状态:")
     print(f"   核心系统: {summary['core_systems']['active']}/{summary['core_systems']['total']} 激活")
     print(f"   专业能力: {summary['professional_capabilities']['ready']} 就绪, {summary['professional_capabilities']['in_progress']} 进行中")
 
-    print(f"\n🔍 当前重点:")
+    print("\n🔍 当前重点:")
     for focus in summary['current_focus']:
         print(f"   • {focus}")
 
-    print(f"\n📋 下一步优先级:")
+    print("\n📋 下一步优先级:")
     for priority in summary['next_priorities']:
         print(f"   • {priority}")
 
@@ -318,7 +319,7 @@ async def generate_task_summary():
     with open('/Users/xujian/xiaonuo_task_summary.json', 'w', encoding='utf-8') as f:
         json.dump(summary, f, ensure_ascii=False, indent=2)
 
-    print(f"\n💾 任务摘要已保存至: /Users/xujian/xiaonuo_task_summary.json")
+    print("\n💾 任务摘要已保存至: /Users/xujian/xiaonuo_task_summary.json")
 
 if __name__ == "__main__":
     asyncio.run(view_xiaonuo_task_dashboard())

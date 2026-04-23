@@ -163,7 +163,7 @@ class IntelligentSearchRouter:
             )
             self.llm_searcher = await get_llm_enhanced_searcher(llm_config)
 
-    def analyze_query(self, query: str, context: dict[str, Any] | None = None) -> RoutingAnalysis:
+    def analyze_query(self, query: str, context: Optional[dict[str, Any]] = None) -> RoutingAnalysis:
         """
         分析查询特征
 
@@ -331,7 +331,7 @@ class IntelligentSearchRouter:
     async def route_search(
         self,
         query: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
         force_decision: RouteDecision | None = None,
     ) -> tuple[RoutingAnalysis, Any]:
         """
@@ -534,7 +534,7 @@ def get_intelligent_router(config: RoutingConfig = None) -> IntelligentSearchRou
 
 # 便捷函数
 async def intelligent_search(
-    query: str, context: dict[str, Any] | None = None
+    query: str, context: Optional[dict[str, Any]] = None
 ) -> tuple[RoutingAnalysis, Any]:
     """便捷函数:智能搜索"""
     router = get_intelligent_router()

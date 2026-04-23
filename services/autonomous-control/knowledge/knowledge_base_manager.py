@@ -204,7 +204,7 @@ class KnowledgeBaseManager:
 
     async def search_knowledge(self, query: str, knowledge_type: str | None = None,
                              filters: dict[str, Any] | None = None,
-                             limit: int = 10) -> list[dict[str, Any]]:
+                             limit: int = 10) -> list[dict[str, Any]:
         """
         搜索知识
 
@@ -249,7 +249,7 @@ class KnowledgeBaseManager:
             return []
 
     async def _perform_search(self, query: str, knowledge_type: str | None,
-                            filters: dict[str, Any] | None, limit: int) -> list[dict[str, Any]]:
+                            filters: dict[str, Any] | None, limit: int) -> list[dict[str, Any]:
         """执行搜索"""
         results = []
 
@@ -269,7 +269,7 @@ class KnowledgeBaseManager:
         return results[:limit]
 
     async def _text_search(self, query: str, knowledge_type: str | None,
-                         filters: dict[str, Any] | None) -> list[dict[str, Any]]:
+                         filters: dict[str, Any] | None) -> list[dict[str, Any]:
         """文本搜索"""
         results = []
         query_lower = query.lower()
@@ -307,7 +307,7 @@ class KnowledgeBaseManager:
 
         return results
 
-    async def _semantic_search(self, query: str, knowledge_type: str | None) -> list[dict[str, Any]]:
+    async def _semantic_search(self, query: str, knowledge_type: str | None) -> list[dict[str, Any]:
         """语义搜索"""
         try:
             # 调用外部向量库
@@ -342,13 +342,13 @@ class KnowledgeBaseManager:
 
         return []
 
-    async def _merge_results(self, results1: list[dict[str, Any]],
-                          results2: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    async def _merge_results(self, results1: list[dict[str, Any],
+                          results2: list[dict[str, Any]) -> list[dict[str, Any]:
         """合并搜索结果"""
         # 简单合并，实际应该去重
         return results1 + results2
 
-    async def _rank_results(self, results: list[dict[str, Any]], query: str) -> list[dict[str, Any]]:
+    async def _rank_results(self, results: list[dict[str, Any], query: str) -> list[dict[str, Any]:
         """排序结果"""
         # 按分数和置信度综合排序
         for result in results:

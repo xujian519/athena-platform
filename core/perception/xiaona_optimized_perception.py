@@ -86,7 +86,7 @@ class PerceptionResult:
     metadata: dict[str, Any] = field(default_factory=dict)
     confidence: float = 0.0
     processing_time: float = 0.0
-    error: str | None = None
+    error: Optional[str] = None
     extracted_entities: list[dict[str, Any]] = field(default_factory=list)
     structure_info: dict[str, Any] = field(default_factory=dict)
 

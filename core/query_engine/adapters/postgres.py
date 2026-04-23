@@ -86,7 +86,7 @@ class PostgreSQLAdapter(BaseAdapter):
     async def execute(
         self,
         query: str,
-        parameters: dict[str, Any] | None = None,
+        parameters: Optional[dict[str, Any]] = None,
         **kwargs,
     ) -> QueryResult:
         """

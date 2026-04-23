@@ -175,7 +175,7 @@ class IPWhitelist:
 class AuthenticationMiddleware(BaseHTTPMiddleware):
     """认证中间件"""
 
-    def __init__(self, app, exclude_paths: list[str] | None = None):
+    def __init__(self, app, exclude_paths: Optional[list[str]] = None):
         super().__init__(app)
         self.exclude_paths = exclude_paths or ['/', '/health', '/docs', '/openapi.json', '/metrics']
         self.jwt_manager = JWTManager(AuthConfig.JWT_SECRET_KEY, AuthConfig.JWT_ALGORITHM)
@@ -321,7 +321,7 @@ async def get_api_key(api_key: str = Security(HTTPBearer())):
 
 
 # 创建默认的认证中间件实例
-def create_auth_middleware(app, exclude_paths: list[str] | None = None) -> None:
+def create_auth_middleware(app, exclude_paths: Optional[list[str]] = None) -> None:
     """创建认证中间件"""
     return AuthenticationMiddleware(app, exclude_paths)
 

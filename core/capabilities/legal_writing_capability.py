@@ -164,8 +164,8 @@ class LegalWritingCapability:
         task_type: str = "research_report",
         role: str = "scholar",
         word_count: int = 5000,
-        structure: list[str] | None = None,
-        context: dict[str, Any] | None = None,
+        structure: Optional[list[str]] = None,
+        context: Optional[dict[str, Any]] = None,
         enable_rag: bool = True,
         enable_iteration: bool = True,
     ) -> dict[str, Any]:
@@ -293,7 +293,7 @@ class LegalWritingCapability:
             raise ValueError(f"不支持的角色: {role}," f"支持的角色: {list(self.ROLES.keys())}")
 
     def _get_document_structure(
-        self, task_type: str, custom_structure: list[str] | None = None
+        self, task_type: str, custom_structure: Optional[list[str]] = None
     ) -> list[str]:
         """获取文档结构"""
         if custom_structure:

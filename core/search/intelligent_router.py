@@ -219,7 +219,7 @@ class IntentClassifier:
 class VectorSearchEngine:
     """向量搜索引擎(带重试机制和熔断器)"""
 
-    def __init__(self, qdrant_url: str | None = None, timeout: int = 30):
+    def __init__(self, qdrant_url: Optional[str] = None, timeout: int = 30):
         """初始化向量搜索引擎
 
         Args:
@@ -352,7 +352,7 @@ class VectorSearchEngine:
 class KGRetriever:
     """知识图谱检索器"""
 
-    def __init__(self, nebula_host: str | None = None, nebula_port: int | None = None):
+    def __init__(self, nebula_host: Optional[str] = None, nebula_port: Optional[int] = None):
         """初始化知识图谱检索器
 
         Args:

@@ -40,7 +40,7 @@ class AthenaSearchSelector:
     """
 
     def __init__(
-        self, registry: ToolRegistry | None = None, config: dict[str, Any] | None = None
+        self, registry: ToolRegistry | None = None, config: Optional[dict[str, Any]] = None
     ):
         """
         初始化智能选择器
@@ -131,8 +131,8 @@ class AthenaSearchSelector:
         self,
         analysis: QueryAnalysis,
         strategy: SelectionStrategy | None = None,
-        max_tools: int | None = None,
-        exclude_tools: list[str] | None = None,
+        max_tools: Optional[int] = None,
+        exclude_tools: Optional[list[str]] = None,
     ) -> list[ToolRecommendation]:
         """
         选择最佳搜索工具

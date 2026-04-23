@@ -115,7 +115,7 @@ class ServiceCapability:
 class ServiceKnowledgeGraph:
     """服务能力知识图谱"""
 
-    def __init__(self, kg_path: str | None = None):
+    def __init__(self, kg_path: Optional[str] = None):
         self.services: dict[str, ServiceCapability] = {}
         self.keyword_index: dict[str, list[str]] = {}  # keyword -> service_ids
         self.semantic_index: dict[str, list[str]] = {}  # semantic_tag -> service_ids

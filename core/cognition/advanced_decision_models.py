@@ -63,7 +63,7 @@ class DecisionOption:
     confidence: float  # 0.0-1.0
     risk_score: float  # 0.0-1.0
     resource_requirements: dict[str, Any]
-    execution_time: float | None = None
+    execution_time: Optional[float] = None
 
 
 @dataclass

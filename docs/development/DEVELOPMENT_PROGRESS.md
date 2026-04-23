@@ -118,6 +118,36 @@
   - 核心加载：5K tokens（75%压缩）
   - 完整加载：8-10K tokens（50-60%压缩）
 
+---
+
+### Phase 1.1: 法律知识融合提示词（已完成 ✅）
+
+#### 完成时间: 2026-04-23
+
+#### 已完成的工作
+
+**1. 三源知识融合层（可复用运行时模块）**
+- ✅ 新增 `core/legal_prompt_fusion/`，统一接入：
+  - PostgreSQL（结构化法条/案例）
+  - Neo4j（关系推理/场景规则/关联节点）
+  - Obsidian Wiki（非结构化实务知识库，位于宝宸知识库）
+- ✅ Wiki revision 与 template version 联动，用于缓存失效与评估追踪
+
+**2. 并入动态提示词主链路**
+- ✅ 将融合证据上下文注入 `POST /api/v1/prompt-system/prompt/generate` 的 `system_prompt`
+- ✅ 增加开关 `LEGAL_PROMPT_FUSION_ENABLED=true`（默认关闭，避免未就绪数据源影响主链路）
+
+**3. API 与文档**
+- ✅ 新增融合 API 路由：`core/api/legal_prompt_fusion_routes.py`
+- ✅ 架构方案文档：
+  - `docs/architecture/integration/LEGAL_WORLD_MODEL_WIKI_PROMPT_FUSION_ARCHITECTURE_20260423.md`
+- ✅ 部署运维指南：
+  - `docs/deployment/LEGAL_PROMPT_FUSION_DEPLOYMENT_GUIDE.md`
+
+**4. 测试与可用性修复**
+- ✅ 新增单测：`tests/unit/test_legal_prompt_fusion.py`
+- ✅ 修复若干阻断启动的历史注解/语法问题，使主链路在 Python 3.9 环境可导入
+
 **6. 最终总结**
 - ✅ `PROMPT_ENGINE_V5_FINAL_SUMMARY.md` - 提示词工程最终总结
 

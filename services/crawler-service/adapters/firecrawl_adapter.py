@@ -70,8 +70,8 @@ class FireCrawlResult:
     error_message: str | None = None
 
     # 爬取特有字段
-    links: list[dict[str, str]] = None
-    images: list[dict[str, str]] = None
+    links: list[dict[str, str] = None
+    images: list[dict[str, str] = None
     screenshot: str | None = None
     total_pages: int = 0
     crawl_id: str | None = None

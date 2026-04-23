@@ -92,7 +92,7 @@ async def main():
                         context_end = min(start + 80, len(claims))
                         context = claims[context_start:context_end]
 
-                        print(f"   ⚖️  权利要求匹配:")
+                        print("   ⚖️  权利要求匹配:")
                         print(f"      ...{context}...")
 
                 print()

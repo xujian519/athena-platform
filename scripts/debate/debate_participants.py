@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 辩论参与者 - 小娜、Athena
 Debate Participants - Xiaona, Athena
@@ -11,13 +10,11 @@ Debate Participants - Xiaona, Athena
 创建时间: 2026-02-09
 """
 
-import asyncio
 import logging
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional
 
-from core.llm.deepseek_client import DeepSeekClient
+from core.ai.llm.deepseek_client import DeepSeekClient
 from scripts.debate.patent_examiner_agent import ExaminerOpinion
 
 logger = logging.getLogger(__name__)
@@ -39,9 +36,9 @@ class DebateArgument:
     speaker: str
     role: ParticipantRole
     content: str
-    legal_basis: List[str]
-    evidence: List[str]
-    counterarguments: List[str] = None
+    legal_basis: list[str]
+    evidence: list[str]
+    counterarguments: list[str] = None
     confidence: float = 0.8
 
     def to_dict(self) -> dict:
@@ -113,16 +110,16 @@ class XiaonaDebator:
 
     def __init__(
         self,
-        deepseek_client: Optional[DeepSeekClient] = None,
-        system_prompt: Optional[str] = None,
+        deepseek_client: DeepSeekClient | None = None,
+        system_prompt: str | None = None,
     ):
         self.name = "小娜·天秤女神"
         self.role = ParticipantRole.XIAONA
         self.deepseek_client = deepseek_client or DeepSeekClient(model="deepseek-chat")
         self.system_prompt = system_prompt or self.XIAONA_SYSTEM_PROMPT
-        self.debate_history: List[DebateArgument] = []
+        self.debate_history: list[DebateArgument] = []
 
-        logger.info(f"✅ 小娜辩论者初始化完成")
+        logger.info("✅ 小娜辩论者初始化完成")
 
     async def formulate_initial_response(
         self,
@@ -191,7 +188,7 @@ class XiaonaDebator:
     async def respond_to_examiner(
         self,
         examiner_opinion: ExaminerOpinion,
-        previous_arguments: List[DebateArgument],
+        previous_arguments: list[DebateArgument],
     ) -> DebateArgument:
         """
         回应审查员意见
@@ -260,7 +257,7 @@ class XiaonaDebator:
 
         return argument
 
-    def _build_debate_context(self, arguments: List[DebateArgument]) -> str:
+    def _build_debate_context(self, arguments: list[DebateArgument]) -> str:
         """构建辩论上下文"""
         if not arguments:
             return "暂无历史论点"
@@ -358,21 +355,21 @@ class AthenaDebator:
 
     def __init__(
         self,
-        deepseek_client: Optional[DeepSeekClient] = None,
-        system_prompt: Optional[str] = None,
+        deepseek_client: DeepSeekClient | None = None,
+        system_prompt: str | None = None,
     ):
         self.name = "Athena·智慧女神"
         self.role = ParticipantRole.ATHENA
         self.deepseek_client = deepseek_client or DeepSeekClient(model="deepseek-chat")
         self.system_prompt = system_prompt or self.ATHENA_SYSTEM_PROMPT
-        self.debate_history: List[DebateArgument] = []
+        self.debate_history: list[DebateArgument] = []
 
-        logger.info(f"✅ Athena辩论者初始化完成")
+        logger.info("✅ Athena辩论者初始化完成")
 
     async def synthesize_debate(
         self,
         examiner_opinion: ExaminerOpinion,
-        xiaona_arguments: List[DebateArgument],
+        xiaona_arguments: list[DebateArgument],
         round_num: int,
     ) -> DebateArgument:
         """
@@ -457,7 +454,7 @@ class AthenaDebator:
 
     async def make_final_statement(
         self,
-        all_arguments: Dict[str, List[DebateArgument]],
+        all_arguments: dict[str, list[DebateArgument],
         final_stance: str,
     ) -> DebateArgument:
         """

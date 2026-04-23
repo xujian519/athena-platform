@@ -5,7 +5,8 @@
 展示如何将现有工具迁移到统一工具注册表
 """
 
-from typing import Dict, Any
+from typing import Any
+
 from core.tools.decorators import tool
 
 # ============================================================================
@@ -60,8 +61,8 @@ async def patent_search_handler_v2(
     query: str,
     channel: str = "both",
     max_results: int = 10,
-    context: Dict[str, Any] = None
-) -> Dict[str, Any]:
+    context: dict[str, Any] = None
+) -> dict[str, Any]:
     """
     专利检索工具Handler (v2.0)
 
@@ -176,7 +177,7 @@ async def patent_search_handler_v2(
 # 向后兼容适配器
 # ============================================================================
 
-async def patent_search_handler(params: Dict[str, Any], context: Dict = None) -> Dict[str, Any]:
+async def patent_search_handler(params: dict[str, Any], context: dict = None) -> dict[str, Any]:
     """
     向后兼容适配器
 

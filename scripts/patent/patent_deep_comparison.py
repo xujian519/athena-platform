@@ -4,11 +4,10 @@
 用于专利无效分析中的证据详细对比
 """
 
-import os
 import json
-from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Any
+from pathlib import Path
+from typing import Any
 
 
 class PatentDeepComparator:
@@ -90,20 +89,20 @@ class PatentDeepComparator:
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
         # 加载相关性分析结果
-        with open(self.relevance_file, 'r', encoding='utf-8') as f:
+        with open(self.relevance_file, encoding='utf-8') as f:
             self.relevance_data = json.load(f)
 
         # 获取Top候选专利
-        self.top_candidates = [p for p in self.relevance_data if p['patent_number'] != self.TARGET_PATENT['patent_number']][:10]
+        self.top_candidates = [p for p in self.relevance_data if p['patent_number'] != self.TARGET_PATENT['patent_number'][:10]
 
-    def extract_claims_analysis(self, patent_number: str) -> Dict[str, Any]:
+    def extract_claims_analysis(self, patent_number: str) -> dict[str, Any]:
         """深度分析权利要求"""
         feature_file = self.features_dir / f"{patent_number}_features.json"
 
         if not feature_file.exists():
             return {"error": "特征文件不存在"}
 
-        with open(feature_file, 'r', encoding='utf-8') as f:
+        with open(feature_file, encoding='utf-8') as f:
             patent_data = json.load(f)
 
         sections = patent_data.get("sections", {})
@@ -154,7 +153,7 @@ class PatentDeepComparator:
 
         return "无法提取独立权利要求"
 
-    def _extract_dependent_claims(self, claims_text: str) -> List[str]:
+    def _extract_dependent_claims(self, claims_text: str) -> list[str]:
         """提取从属权利要求"""
         claims = []
         lines = claims_text.split('\n')
@@ -168,7 +167,7 @@ class PatentDeepComparator:
 
         return claims[:5]  # 最多返回5个从属权利要求
 
-    def _extract_technical_elements(self, text: str) -> List[str]:
+    def _extract_technical_elements(self, text: str) -> list[str]:
         """提取技术方案要素"""
         elements = []
 
@@ -205,7 +204,7 @@ class PatentDeepComparator:
 
         return "未明确描述"
 
-    def _extract_technical_effects(self, text: str) -> List[str]:
+    def _extract_technical_effects(self, text: str) -> list[str]:
         """提取技术效果"""
         effects = []
 
@@ -223,7 +222,7 @@ class PatentDeepComparator:
 
         return list(set(effects))[:8]  # 去重并限制数量
 
-    def compare_features(self, candidate_patent_number: str) -> Dict[str, Any]:
+    def compare_features(self, candidate_patent_number: str) -> dict[str, Any]:
         """对比目标专利与候选专利的技术特征"""
         # 获取候选专利的深度分析
         candidate_analysis = self.extract_claims_analysis(candidate_patent_number)
@@ -338,14 +337,14 @@ class PatentDeepComparator:
         matrix += "| 特征 | 目标专利CN210456236U |"
 
         # 添加候选专利列头
-        for i, candidate in enumerate(self.top_candidates[:5], 1):
+        for _i, candidate in enumerate(self.top_candidates[:5], 1):
             matrix += f" {candidate['patent_number']} |"
 
         matrix += "\n|" + "|".join(["------"] * (7)) + "|\n"
         matrix += "| 特征名称 | 描述 |"
 
         for candidate in self.top_candidates[:5]:
-            matrix += f" 覆盖 |"
+            matrix += " 覆盖 |"
 
         matrix += "\n|" + "|".join(["------"] * (7)) + "|\n"
 
@@ -360,7 +359,7 @@ class PatentDeepComparator:
                     is_covered = comparison["feature_comparison"][feature_key]["is_present"]
                     matrix += f" {'✅' if is_covered else '❌'} |"
                 else:
-                    matrix += f" ❓ |"
+                    matrix += " ❓ |"
 
             matrix += "\n"
 
@@ -455,14 +454,14 @@ class PatentDeepComparator:
 """
 
         # 添加特征对比行
-        for feature_key, feature_data in comparison["feature_comparison"].items():
+        for _feature_key, feature_data in comparison["feature_comparison"].items():
             status = "✅ 公开" if feature_data["is_present"] else "❌ 未公开"
             similarity = feature_data["similarity"]
             evidence = feature_data["candidate_evidence"][:50] if feature_data["candidate_evidence"] else "无"
 
             section += f"| {feature_data['name']} | {feature_data['target_feature'][:30]} | {evidence} | {status} (相似度:{similarity:.0f}%) |\n"
 
-        section += f"\n#### 技术效果\n\n"
+        section += "\n#### 技术效果\n\n"
 
         effects = candidate_analysis.get('technical_effects', [])
         if effects:
@@ -513,6 +512,7 @@ class PatentDeepComparator:
 
 
 import re
+
 
 def main():
     """主函数"""

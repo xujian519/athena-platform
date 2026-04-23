@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 class RateLimitError(Exception):
     """限流错误"""
 
-    def __init__(self, message: str, retry_after: float | None = None):
+    def __init__(self, message: str, retry_after: Optional[float] = None):
         super().__init__(message)
         self.retry_after = retry_after
 
@@ -82,7 +82,7 @@ class TokenBucket:
         self.last_update = time.time()
         self._lock = Lock()
 
-    def acquire(self, tokens: int = 1, timeout: float | None = None) -> bool:
+    def acquire(self, tokens: int = 1, timeout: Optional[float] = None) -> bool:
         """
         获取令牌
 

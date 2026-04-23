@@ -254,12 +254,12 @@ class AthenaIterativeSearchEngine:
 
             # 计算统计信息
             session.total_patents_found = sum(len(iter.results) for iter in session.iterations)
-            session.unique_patents = len(set(
+            session.unique_patents = len({
                 result.patent_metadata.patent_id
                 for iter in session.iterations
                 for result in iter.results
                 if result.patent_metadata
-            ))
+            })
 
             session.update_status(SearchStatus.COMPLETED)
 
@@ -856,7 +856,7 @@ class AthenaIterativeSearchEngine:
 
         # 基于迭代轮数和结果多样性计算完整度
         iteration_factor = session.current_iteration / session.max_iterations
-        diversity_factor = len(set(r.title for r in session.iterations[-1].results if r.title)) / max(len(session.iterations[-1].results), 1)
+        diversity_factor = len({r.title for r in session.iterations[-1].results if r.title}) / max(len(session.iterations[-1].results), 1)
 
         completeness = (iteration_factor * 0.5 + diversity_factor * 0.5)
         return min(completeness, 1.0)

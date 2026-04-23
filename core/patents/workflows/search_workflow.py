@@ -27,7 +27,7 @@ class SearchWorkflowInput:
     data_sources: list[str] = None  # 数据源: ["local", "online"]
     max_results: int = 50  # 最大结果数
     export_format: str = "csv"  # 导出格式: csv/json/xml/pdf
-    export_path: str | None = None  # 导出路径
+    export_path: Optional[str] = None  # 导出路径
     run_in_background: bool = False  # 是否后台运行
 
 
@@ -42,8 +42,8 @@ class SearchWorkflowResult:
     steps_completed: list[str]  # 完成的步骤
     total_count: int  # 总结果数
     results: list[dict[str, Any]] = None  # 检索结果
-    export_path: str | None = None  # 导出文件路径
-    error: str | None = None  # 错误信息
+    export_path: Optional[str] = None  # 导出文件路径
+    error: Optional[str] = None  # 错误信息
     metadata: dict[str, Any] = field(default_factory=dict)  # 元数据
 
 
@@ -61,7 +61,7 @@ class SearchWorkflow:
     def __init__(
         self,
         task_tool: TaskTool | None = None,
-        config: dict[str, Any] | None = None,
+        config: Optional[dict[str, Any]] = None,
     ):
         """初始化专利检索工作流
 
@@ -352,7 +352,7 @@ class SearchWorkflow:
         self,
         results: list[dict[str, Any]],
         export_format: str = "csv",
-        export_path: str | None = None,
+        export_path: Optional[str] = None,
     ) -> dict[str, Any]:
         """步骤5: 结果导出
 

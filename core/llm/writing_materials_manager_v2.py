@@ -93,7 +93,7 @@ class WritingMaterialsManager:
             json.dump(index, f, ensure_ascii=False, indent=2)
 
     def search_materials(
-        self, query: str, category: str | None = None, top_k: int = 5
+        self, query: str, category: Optional[str] = None, top_k: int = 5
     ) -> list[dict[str, Any]]:
         """
         搜索素材
@@ -137,7 +137,7 @@ class WritingMaterialsManager:
 
         return results[:top_k]
 
-    def get_material_content(self, material_id: str) -> str | None:
+    def get_material_content(self, material_id: str) -> Optional[str]:
         """
         获取素材内容
 
@@ -225,7 +225,7 @@ class WritingMaterialsManager:
         section: str,
         role: str,
         base_style_prompt: str,
-        category: str | None = None,
+        category: Optional[str] = None,
     ) -> str:
         """
         构建包含示例的写作提示词

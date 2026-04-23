@@ -474,7 +474,7 @@ class LegalDocumentGenerator:
             for template_name in self.document_types[doc_type]:
                 await self._create_basic_template(doc_type, template_name)
 
-    async def get_template_list(self, document_type: str = None) -> list[dict[str, str]]:
+    async def get_template_list(self, document_type: str = None) -> list[dict[str, str]:
         """获取模板列表"""
         templates = []
 

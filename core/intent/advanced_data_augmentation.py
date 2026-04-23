@@ -205,7 +205,7 @@ class AdvancedDataAugmentation:
         # 默认返回原文
         return text
 
-    def context_injection(self, text: str, intent: str | None = None) -> str:
+    def context_injection(self, text: str, intent: Optional[str] = None) -> str:
         """上下文注入增强
 
         Args:
@@ -296,7 +296,7 @@ class AdvancedDataAugmentation:
             return f"{emoji} {text}"
 
     def multi_strategy_augment(
-        self, text: str, intent: str | None = None, factor: int = 10
+        self, text: str, intent: Optional[str] = None, factor: int = 10
     ) -> list[str]:
         """多策略组合增强
 
@@ -406,7 +406,7 @@ async def augment_dataset(input_file: str, output_file: str, samples_per_intent:
 
 
 # 便捷函数
-def augment_text(text: str | None = None, intent: str | None = None, factor: int = 10) -> list[str]:
+def augment_text(text: Optional[str] = None, intent: Optional[str] = None, factor: int = 10) -> list[str]:
     """便捷函数:增强单个文本
 
     Args:

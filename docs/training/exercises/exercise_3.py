@@ -17,18 +17,16 @@
 - 测试错误处理
 """
 
-import pytest
-from unittest.mock import AsyncMock, patch, MagicMock
 
-from core.agents.xiaona.base_component import (
+import pytest
+
+from core.framework.agents.xiaona.base_component import (
     AgentExecutionContext,
-    AgentExecutionResult,
     AgentStatus,
 )
 
-
 # TODO: 导入你要测试的Agent
-# from core.agents.my_agent import MyAgent
+# from core.framework.agents.my_agent import MyAgent
 
 
 class TestMyAgent:
@@ -234,7 +232,7 @@ class TestMyAgent:
         #     result = await agent.execute(basic_context)
 
         end_time = time.time()
-        execution_time = end_time - start_time
+        end_time - start_time
 
         # TODO: 根据你的Agent调整性能期望
         # assert execution_time < 10.0  # 应该在10秒内完成
@@ -248,7 +246,6 @@ def test_interface_compliance():
 
     使用InterfaceComplianceChecker验证Agent符合统一接口标准
     """
-    from tests.agents.test_interface_compliance_simple import InterfaceComplianceChecker
 
     # TODO: 创建你的Agent实例
     # agent = MyAgent(agent_id="compliance_test")

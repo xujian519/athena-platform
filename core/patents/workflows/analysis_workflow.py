@@ -29,7 +29,7 @@ class AnalysisWorkflowInput:
     include_comparison: bool = True  # 是否包含对比分析
     generate_report: bool = True  # 是否生成报告
     report_format: str = "markdown"  # 报告格式: markdown/json/pdf
-    export_path: str | None = None  # 导出路径
+    export_path: Optional[str] = None  # 导出路径
 
 
 @dataclass
@@ -41,11 +41,11 @@ class AnalysisWorkflowResult:
     patent_number: str  # 专利号
     analysis_type: str  # 分析类型
     steps_completed: list[str]  # 完成的步骤
-    analysis_result: dict[str, Any] | None = None  # 分析结果
-    comparison_result: dict[str, Any] | None = None  # 对比结果
-    report_content: str | None = None  # 报告内容
-    report_path: str | None = None  # 报告路径
-    error: str | None = None  # 错误信息
+    analysis_result: Optional[dict[str, Any]] = None  # 分析结果
+    comparison_result: Optional[dict[str, Any]] = None  # 对比结果
+    report_content: Optional[str] = None  # 报告内容
+    report_path: Optional[str] = None  # 报告路径
+    error: Optional[str] = None  # 错误信息
     metadata: dict[str, Any] = field(default_factory=dict)  # 元数据
 
 
@@ -64,7 +64,7 @@ class AnalysisWorkflow:
         self,
         task_tool: TaskTool | None = None,
         tool_filter: ToolFilter | None = None,
-        config: dict[str, Any] | None = None,
+        config: Optional[dict[str, Any]] = None,
     ):
         """初始化专利分析工作流
 
@@ -345,7 +345,7 @@ class AnalysisWorkflow:
         self,
         patent_data: dict[str, Any],
         analysis_result: dict[str, Any],
-        comparison_result: dict[str, Any] | None,
+        comparison_result: Optional[dict[str, Any]],
         report_format: str = "markdown",
     ) -> dict[str, Any]:
         """步骤5: 报告生成
@@ -406,7 +406,7 @@ class AnalysisWorkflow:
         self,
         patent_data: dict[str, Any],
         analysis_result: dict[str, Any],
-        comparison_result: dict[str, Any] | None,
+        comparison_result: Optional[dict[str, Any]],
     ) -> str:
         """生成Markdown格式报告"""
 
@@ -523,7 +523,7 @@ class AnalysisWorkflow:
         self,
         patent_data: dict[str, Any],
         analysis_result: dict[str, Any],
-        comparison_result: dict[str, Any] | None,
+        comparison_result: Optional[dict[str, Any]],
     ) -> str:
         """生成JSON格式报告"""
 
@@ -546,7 +546,7 @@ class AnalysisWorkflow:
         self,
         patent_data: dict[str, Any],
         analysis_result: dict[str, Any],
-        comparison_result: dict[str, Any] | None,
+        comparison_result: Optional[dict[str, Any]],
     ) -> str:
         """生成PDF格式报告
 

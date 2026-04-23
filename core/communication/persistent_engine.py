@@ -40,8 +40,8 @@ class PersistentCommunicationEngine:
     def __init__(
         self,
         base_engine: Any,  # 现有的通信引擎实例
-        persistence_config: dict[str, Any] | None = None,
-        recovery_config: dict[str, Any] | None = None,
+        persistence_config: Optional[dict[str, Any]] = None,
+        recovery_config: Optional[dict[str, Any]] = None,
     ):
         """
         初始化持久化通信引擎
@@ -343,8 +343,8 @@ class PersistentCommunicationEngine:
 async def create_persistent_engine(
     base_engine: Any,
     persistence_backend: str = "memory",
-    persistence_config: dict[str, Any] | None = None,
-    recovery_config: dict[str, Any] | None = None,
+    persistence_config: Optional[dict[str, Any]] = None,
+    recovery_config: Optional[dict[str, Any]] = None,
 ) -> PersistentCommunicationEngine:
     """
     便捷函数：创建持久化通信引擎

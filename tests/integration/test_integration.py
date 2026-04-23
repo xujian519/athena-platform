@@ -50,7 +50,7 @@ class TestSystemIntegration(unittest.TestCase):
     def test_memory_integration(self):
         """测试记忆管理集成"""
         try:
-            from core.memory.enhanced_memory_manager import EnhancedMemoryManager
+            from core.framework.memory.enhanced_memory_manager import EnhancedMemoryManager
             memory_manager = EnhancedMemoryManager()
             self.assertIsNotNone(memory_manager)
             self.integration_status["memory_manager"] = True
@@ -61,7 +61,9 @@ class TestSystemIntegration(unittest.TestCase):
     def test_coordination_integration(self):
         """测试智能体协作集成"""
         try:
-            from core.collaboration.enhanced_agent_coordination import EnhancedAgentCoordinator
+            from core.framework.collaboration.enhanced_agent_coordination import (
+                EnhancedAgentCoordinator,
+            )
             coordinator = EnhancedAgentCoordinator()
             self.assertIsNotNone(coordinator)
             self.integration_status["agent_coordination"] = True

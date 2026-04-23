@@ -63,7 +63,7 @@ class ToolScanner:
         self,
         tools_dir: Path | str = None,
         registry: UnifiedToolRegistry = None,
-        config: dict[str, Any] | None = None
+        config: Optional[dict[str, Any]] = None
     ):
         """
         初始化工具扫描器

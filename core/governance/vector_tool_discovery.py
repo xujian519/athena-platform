@@ -38,7 +38,7 @@ class VectorEmbedder:
     def __init__(
         self,
         model_name: str = "paraphrase-multilingual-MiniLM-L12-v2",
-        model_path: str | None = None,
+        model_path: Optional[str] = None,
     ):
         """
         初始化向量嵌入器
@@ -121,7 +121,7 @@ class VectorToolDiscovery:
     def __init__(
         self,
         tool_metadata: dict[str, Any],        model_name: str = "paraphrase-multilingual-MiniLM-L12-v2",
-        cache_dir: str | None = None,
+        cache_dir: Optional[str] = None,
     ):
         """
         初始化向量工具发现器
@@ -247,7 +247,7 @@ class VectorToolDiscovery:
             logger.warning(f"⚠️ 缓存保存失败: {e}")
 
     async def discover_tools(
-        self, query: str, limit: int = 10, category: str | None = None, threshold: float = 0.3
+        self, query: str, limit: int = 10, category: Optional[str] = None, threshold: float = 0.3
     ) -> list[dict[str, Any]]:
         """
         基于语义相似度发现工具
@@ -339,7 +339,7 @@ class VectorToolDiscovery:
         self,
         query: str,
         limit: int = 10,
-        category: str | None = None,
+        category: Optional[str] = None,
         vector_weight: float = 0.7,
         keyword_weight: float = 0.3,
     ) -> list[dict[str, Any]]:

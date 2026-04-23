@@ -26,7 +26,7 @@ from pydantic import BaseModel, Field
 
 # 导入统一认证模块
 # 感知模块导入
-from core.perception import InputType, PerceptionEngine
+from core.ai.perception import InputType, PerceptionEngine
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -56,7 +56,7 @@ class MultimodalInputRequest(BaseModel):
     options: dict[str, Any] | None = Field(default={}, description='处理选项')
 
 class BatchProcessRequest(BaseModel):
-    items: list[dict[str, Any]] = Field(..., description='批量处理项目')
+    items: list[dict[str, Any] = Field(..., description='批量处理项目')
     options: dict[str, Any] | None = Field(default={}, description='处理选项')
 
 # 响应模型
@@ -155,7 +155,7 @@ async def get_status():
         return StatusResponse(
             status='running' if perception_engine.initialized else 'stopped',
             processor_count=status['processor_count'],
-            available_processors=[p.value for p in status['available_processors']],
+            available_processors=[p.value for p in status['available_processors'],
             engine_initialized=status['initialized'],
             optimization_enabled=perception_engine.optimizer is not None,
             monitoring_enabled=perception_engine.monitor is not None

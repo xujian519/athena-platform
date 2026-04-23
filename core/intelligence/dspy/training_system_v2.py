@@ -47,7 +47,7 @@ class TrainingCheckpoint:
     total_batches: int
     best_score: float
     training_history: list[dict[str, Any]]
-    model_state: dict[str, Any] | None = None
+    model_state: Optional[dict[str, Any]] = None
 
     def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
@@ -651,7 +651,7 @@ class DSPyTrainingManagerV2:
         return 0.0
 
     def _save_model(
-        self, model: dspy.Module, optimizer_name: str, metadata: dict[str, Any] | None = None
+        self, model: dspy.Module, optimizer_name: str, metadata: Optional[dict[str, Any]] = None
     ):
         """保存模型
 

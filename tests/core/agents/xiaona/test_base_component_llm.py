@@ -8,14 +8,16 @@
 - 配置加载测试
 """
 
+from unittest.mock import AsyncMock, Mock, patch
+
 import pytest
-from unittest.mock import Mock, AsyncMock, patch
-from core.agents.xiaona.base_component import (
-    BaseXiaonaComponent,
+
+from core.framework.agents.xiaona.base_component import (
     AgentCapability,
-    AgentStatus,
     AgentExecutionContext,
-    AgentExecutionResult
+    AgentExecutionResult,
+    AgentStatus,
+    BaseXiaonaComponent,
 )
 
 

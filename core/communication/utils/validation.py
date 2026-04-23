@@ -197,7 +197,7 @@ class InputValidator:
         return channel_id
 
     @staticmethod
-    def validate_message_content(content: Any, max_length: int | None = None) -> Any:
+    def validate_message_content(content: Any, max_length: Optional[int] = None) -> Any:
         """
         验证消息内容
 

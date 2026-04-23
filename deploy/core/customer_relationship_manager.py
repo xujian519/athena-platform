@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 客户关系管理器
 Customer Relationship Manager - 客户关联数据管理
@@ -8,12 +7,11 @@ Customer Relationship Manager - 客户关联数据管理
 """
 
 import logging
-from datetime import datetime, date, timedelta
-from typing import Dict, List, Optional, Any, Union
+from datetime import datetime
 from enum import Enum
-import json
+from typing import Any
 
-from .xiaonuo_basic_operations import PostgreSQLManager, CustomerDataManager
+from .xiaonuo_basic_operations import CustomerDataManager
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +28,7 @@ class RelationshipType(Enum):
 class CustomerRelationshipManager:
     """客户关系管理器 - 处理客户与各业务模块的关联关系"""
 
-    def __init__(self, config: Dict | None = None):
+    def __init__(self, config: dict | None = None):
         """
         初始化客户关系管理器
 
@@ -43,7 +41,7 @@ class CustomerRelationshipManager:
         if self.basic_ops.use_postgresql():
             self.pg_manager = self.basic_ops.pg_customer_manager
 
-    def get_customer_complete_info(self, customer_id: str) -> Dict[str, Any]:
+    def get_customer_complete_info(self, customer_id: str) -> dict[str, Any]:
         """
         获取客户完整信息（包含所有关联数据）
 
@@ -73,7 +71,7 @@ class CustomerRelationshipManager:
             logger.error(f"获取客户完整信息失败: {str(e)}")
             return {"error": str(e)}
 
-    def _get_customer_basic_info(self, customer_id: str) -> Dict[str, Any | None]:
+    def _get_customer_basic_info(self, customer_id: str) -> dict[str, Any | None]:
         """获取客户基本信息"""
         try:
             if self.pg_manager:
@@ -87,7 +85,7 @@ class CustomerRelationshipManager:
             logger.error(f"获取客户基本信息失败: {str(e)}")
             return None
 
-    def _get_customer_cases(self, customer_id: str) -> List[Dict[str, Any]]:
+    def _get_customer_cases(self, customer_id: str) -> list[dict[str, Any]:
         """获取客户案卷信息"""
         try:
             if not self.pg_manager:
@@ -116,7 +114,7 @@ class CustomerRelationshipManager:
             logger.error(f"获取客户案卷失败: {str(e)}")
             return []
 
-    def _get_customer_tasks(self, customer_id: str) -> List[Dict[str, Any]]:
+    def _get_customer_tasks(self, customer_id: str) -> list[dict[str, Any]:
         """获取客户任务信息"""
         try:
             if not self.pg_manager:
@@ -137,9 +135,9 @@ class CustomerRelationshipManager:
                 status_list = ['pending', 'in_progress', 'completed', 'cancelled']
 
             # 使用实际的状态值
-            status_placeholder = "'" + "', '".join(status_list) + "'"
+            "'" + "', '".join(status_list) + "'"
 
-            query = f"""
+            query = """
             SELECT
                 id as task_id,
                 title as task_title,
@@ -164,7 +162,7 @@ class CustomerRelationshipManager:
             logger.error(f"获取客户任务失败: {str(e)}")
             return []
 
-    def _get_customer_documents(self, customer_id: str) -> List[Dict[str, Any]]:
+    def _get_customer_documents(self, customer_id: str) -> list[dict[str, Any]:
         """获取客户文档信息"""
         try:
             if not self.pg_manager:
@@ -193,7 +191,7 @@ class CustomerRelationshipManager:
             logger.error(f"获取客户文档失败: {str(e)}")
             return []
 
-    def _get_customer_financial_summary(self, customer_id: str) -> Dict[str, Any]:
+    def _get_customer_financial_summary(self, customer_id: str) -> dict[str, Any]:
         """获取客户财务汇总"""
         try:
             if not self.pg_manager:
@@ -214,7 +212,7 @@ class CustomerRelationshipManager:
             logger.error(f"获取客户财务汇总失败: {str(e)}")
             return {"total_income": 0, "total_expense": 0, "transaction_count": 0}
 
-    def _get_customer_recent_activities(self, customer_id: str) -> List[Dict[str, Any]]:
+    def _get_customer_recent_activities(self, customer_id: str) -> list[dict[str, Any]:
         """获取客户最近活动"""
         try:
             if not self.pg_manager:
@@ -265,7 +263,7 @@ class CustomerRelationshipManager:
             logger.error(f"获取客户最近活动失败: {str(e)}")
             return []
 
-    def _get_customer_statistics(self, customer_id: str) -> Dict[str, Any]:
+    def _get_customer_statistics(self, customer_id: str) -> dict[str, Any]:
         """获取客户统计信息"""
         try:
             if not self.pg_manager:
@@ -321,7 +319,7 @@ class CustomerRelationshipManager:
             logger.error(f"获取客户统计信息失败: {str(e)}")
             return {}
 
-    def get_customer_overview(self, limit: int = 10) -> List[Dict[str, Any]]:
+    def get_customer_overview(self, limit: int = 10) -> list[dict[str, Any]:
         """
         获取客户概览列表
 
@@ -396,7 +394,7 @@ class CustomerRelationshipManager:
             logger.error(f"获取客户概览失败: {str(e)}")
             return []
 
-    def add_customer_case(self, customer_id: str, case_data: Dict[str, Any]) -> Dict[str, Any]:
+    def add_customer_case(self, customer_id: str, case_data: dict[str, Any]) -> dict[str, Any]:
         """
         为客户添加案卷
 
@@ -444,7 +442,7 @@ class CustomerRelationshipManager:
             logger.error(f"添加客户案卷失败: {str(e)}")
             return {"error": str(e)}
 
-    def add_customer_task(self, customer_id: str, task_data: Dict[str, Any]) -> Dict[str, Any]:
+    def add_customer_task(self, customer_id: str, task_data: dict[str, Any]) -> dict[str, Any]:
         """
         为客户添加任务
 
@@ -495,7 +493,7 @@ class CustomerRelationshipManager:
             logger.error(f"添加客户任务失败: {str(e)}")
             return {"error": str(e)}
 
-    def add_customer_document(self, customer_id: str, document_data: Dict[str, Any]) -> Dict[str, Any]:
+    def add_customer_document(self, customer_id: str, document_data: dict[str, Any]) -> dict[str, Any]:
         """
         为客户添加文档
 
@@ -546,7 +544,7 @@ class CustomerRelationshipManager:
 
     def search_customers_by_relationship(self,
                                        relationship_type: RelationshipType,
-                                       search_criteria: Dict[str, Any]) -> List[Dict[str, Any]]:
+                                       search_criteria: dict[str, Any]) -> list[dict[str, Any]:
         """
         根据关联关系搜索客户
 
@@ -606,7 +604,7 @@ class CustomerRelationshipManager:
             logger.error(f"根据关联关系搜索客户失败: {str(e)}")
             return []
 
-    def get_relationship_summary(self) -> Dict[str, Any]:
+    def get_relationship_summary(self) -> dict[str, Any]:
         """
         获取关系汇总统计
 

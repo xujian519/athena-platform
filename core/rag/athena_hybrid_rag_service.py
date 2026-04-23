@@ -37,10 +37,10 @@ class RAGQuery:
 
     query: str
     top_k: int = 10
-    filters: dict[str, Any] | None = None
+    filters: Optional[dict[str, Any]] = None
     rerank_method: str = "hybrid"  # hybrid, athena_optimized, llamaindex_hybrid
     include_metadata: bool = True
-    doc_types: list[str] | None = None
+    doc_types: Optional[list[str]] = None
 
 
 @dataclass

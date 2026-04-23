@@ -244,8 +244,8 @@ class StableSemanticIntentEngine:
     async def recognize_intent(
         self,
         text: str,
-        context: dict[str, Any] | None = None,
-        user_id: str | None = None,
+        context: Optional[dict[str, Any]] = None,
+        user_id: Optional[str] = None,
         enable_semantic: bool = True,
     ) -> IntentResult:
         """
@@ -439,7 +439,7 @@ async def get_stable_semantic_engine() -> StableSemanticIntentEngine:
 
 # 便捷函数
 async def recognize_intent_stable(
-    text: str, context: dict[str, Any]  | None = None, user_id: str | None = None
+    text: str, context: dict[str, Any]  | None = None, user_id: Optional[str] = None
 ) -> IntentResult:
     """便捷函数:稳定语义增强意图识别"""
     engine = await get_stable_semantic_engine()

@@ -409,7 +409,7 @@ class QuickStartEntityRecognizer:
         """检查两个实体是否重叠"""
         return not (e1.end <= e2.start or e2.end <= e1.start)
 
-    def batch_recognize(self, texts: list[str], batch_size: int = 10) -> list[list[Entity]]:
+    def batch_recognize(self, texts: list[str], batch_size: int = 10) -> list[list[Entity]:
         """批量识别实体"""
         results = []
 

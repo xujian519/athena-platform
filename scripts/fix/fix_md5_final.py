@@ -4,10 +4,9 @@ MD5弱哈希算法修复工具
 自动为非安全场景的MD5使用添加usedforsecurity=False参数
 """
 
-import os
 import re
-import sys
 from pathlib import Path
+
 
 def scan_md5_usage(directory):
     """扫描目录中的MD5使用"""
@@ -16,9 +15,8 @@ def scan_md5_usage(directory):
     # 扫描Python文件
     for py_file in Path(directory).rglob("*.py"):
         try:
-            with open(py_file, 'r', encoding='utf-8') as f:
+            with open(py_file, encoding='utf-8') as f:
                 content = f.read()
-                original_content = content
 
             # 查找MD5使用模式
             patterns = [
@@ -27,7 +25,6 @@ def scan_md5_usage(directory):
                 r'md5\([^)]*\)',
             ]
 
-            found = False
             for pattern in patterns:
                 matches = re.finditer(pattern, content)
                 for match in matches:
@@ -36,7 +33,6 @@ def scan_md5_usage(directory):
                         'match': match.group(),
                         'line': content[:match.start()].count('\n') + 1
                     })
-                    found = True
 
         except Exception as e:
             print(f"⚠️  扫描文件失败 {py_file}: {e}")
@@ -46,7 +42,7 @@ def scan_md5_usage(directory):
 def fix_md5_usage(file_path, dry_run=True):
     """修复文件中的MD5使用"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         original_content = content
@@ -145,7 +141,7 @@ def main():
             files_to_fix[file_path] = []
         files_to_fix[file_path].append(usage)
 
-    for file_path, usages in files_to_fix.items():
+    for file_path, _usages in files_to_fix.items():
         fixes, changed = fix_md5_usage(file_path, dry_run=False)
         if changed:
             fixed_files += 1

@@ -161,7 +161,7 @@ def search_patents_simple(query_text: str, limit: int = 10) -> list[dict]:
         print(f"专利检索错误: {str(e)}")
         return []
 
-def calculate_simple_patentability(search_results: list[dict], query_text: str) -> tuple[float, dict[str, float]]:
+def calculate_simple_patentability(search_results: list[dict], query_text: str) -> tuple[float, dict[str, float]:
     """简单的可申请性计算"""
 
     if not search_results:

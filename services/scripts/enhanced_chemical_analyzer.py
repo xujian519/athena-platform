@@ -112,7 +112,7 @@ class EnhancedChemicalAnalyzer:
 
         return result
 
-    def extract_chemical_formulas(self, text: str) -> list[dict[str, Any]]:
+    def extract_chemical_formulas(self, text: str) -> list[dict[str, Any]:
         """提取并分析化学式"""
         formulas = []
 
@@ -157,7 +157,7 @@ class EnhancedChemicalAnalyzer:
 
         return formulas
 
-    def analyze_chemical_abbreviations(self, text: str) -> list[dict[str, Any]]:
+    def analyze_chemical_abbreviations(self, text: str) -> list[dict[str, Any]:
         """分析化学缩写"""
         abbreviations = []
 
@@ -187,7 +187,7 @@ class EnhancedChemicalAnalyzer:
 
         return abbreviations
 
-    def extract_chinese_chemical_terms(self, text: str) -> list[dict[str, Any]]:
+    def extract_chinese_chemical_terms(self, text: str) -> list[dict[str, Any]:
         """提取中文化学术语"""
         chinese_chemicals = []
 

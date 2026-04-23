@@ -54,7 +54,7 @@ class SearchRequest(BaseModel):
 
 class SearchResponse(BaseModel):
     """检索响应模型"""
-    results: list[dict[str, Any]]
+    results: list[dict[str, Any]
     total_found: int
     query: str
     search_type: str

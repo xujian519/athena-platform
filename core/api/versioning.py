@@ -53,7 +53,7 @@ class VersionInfo:
     sunset_at: datetime | None = None
     retired_at: datetime | None = None
     description: str = ""
-    migration_guide: str | None = None
+    migration_guide: Optional[str] = None
     breaking_changes: list[str] = field(default_factory=list)
     new_features: list[str] = field(default_factory=list)
 
@@ -69,7 +69,7 @@ class APIEndpoint:
     description: str = ""
     tags: list[str] = field(default_factory=list)
     deprecated: bool = False
-    deprecation_message: str | None = None
+    deprecation_message: Optional[str] = None
 
 
 # API版本注册表
@@ -224,7 +224,7 @@ class APIVersionRouter:
     def create_version_router(
         self,
         version: APIVersion,
-        tags: list[str] | None = None,
+        tags: Optional[list[str]] = None,
     ) -> APIRouter:
         """
         创建指定版本的路由器
@@ -308,10 +308,10 @@ class APIVersionRouter:
 def versioned_endpoint(
     version: APIVersion,
     path: str,
-    methods: list[str] | None = None,
+    methods: Optional[list[str]] = None,
     description: str = "",
     deprecated: bool = False,
-    deprecation_message: str | None = None,
+    deprecation_message: Optional[str] = None,
 ):
     """
     版本化端点装饰器
@@ -402,7 +402,7 @@ class APIResponse:
         return response
 
     @staticmethod
-    def error(error: str, message: str, code: int | None = None, details: dict | None = None) -> dict:
+    def error(error: str, message: str, code: Optional[int] = None, details: dict | None = None) -> dict:
         """
         错误响应
 
@@ -439,7 +439,7 @@ class VersionCompatibility:
     @staticmethod
     def check_compatibility(
         client_version: str, server_version: APIVersion
-    ) -> tuple[bool, str | None]:
+    ) -> Optional[tuple[bool, str]]:
         """
         检查客户端版本与服务器版本的兼容性
 

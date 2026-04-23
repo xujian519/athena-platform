@@ -42,9 +42,9 @@ class ReasoningRequest:
     """推理请求"""
 
     problem: str  # 待解决的问题
-    context: dict[str, Any] | None = None  # 上下文信息
-    session_id: str | None = None  # 会话ID
-    user_id: str | None = None  # 用户ID
+    context: Optional[dict[str, Any]] = None  # 上下文信息
+    session_id: Optional[str] = None  # 会话ID
+    user_id: Optional[str] = None  # 用户ID
     max_hypotheses: int = 5  # 最大假设数量
     enable_recursive: bool = True  # 是否启用递归思考
     timeout: float = 60.0  # 超时时间(秒)
@@ -62,7 +62,7 @@ class ReasoningResponse:
     phase_summary: list[dict[str, Any]]
     execution_time: float
     reasoning_metadata: dict[str, Any] = field(default_factory=dict)
-    error_message: str | None = None
+    error_message: Optional[str] = None
 
 
 class XiaonuoAthenaReasoningBridge:
@@ -278,8 +278,8 @@ def get_reasoning_bridge() -> XiaonuoAthenaReasoningBridge:
 # 便捷函数
 async def execute_super_reasoning(
     problem: str,
-    context: dict[str, Any] | None = None,
-    session_id: str | None = None,
+    context: Optional[dict[str, Any]] = None,
+    session_id: Optional[str] = None,
     quick_mode: bool = False,
 ) -> ReasoningResponse | str:
     """执行超级推理的便捷函数

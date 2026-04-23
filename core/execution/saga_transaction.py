@@ -54,7 +54,7 @@ class SagaStep:
     kwargs: dict = field(default_factory=dict)
     status: StepStatus = StepStatus.PENDING
     result: Any = None
-    error: str | None = None
+    error: Optional[str] = None
     compensated: bool = False
 
 
@@ -70,7 +70,7 @@ class SagaResult:
     total_duration: float
     results: dict[str, Any]
     compensated_steps: list[str]
-    final_error: str | None = None
+    final_error: Optional[str] = None
 
 
 class SagaTransaction:
@@ -84,7 +84,7 @@ class SagaTransaction:
     4. 错误处理
     """
 
-    def __init__(self, saga_id: str | None = None):
+    def __init__(self, saga_id: Optional[str] = None):
         """
         初始化Saga事务
 
@@ -274,7 +274,7 @@ class SagaCoordinator:
             "avg_saga_duration": 0.0,
         }
 
-    def create_saga(self, saga_id: str | None = None) -> SagaTransaction:
+    def create_saga(self, saga_id: Optional[str] = None) -> SagaTransaction:
         """
         创建新Saga
 

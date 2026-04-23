@@ -165,7 +165,7 @@ class EnhancedIntentRecognitionEngine(BaseIntentEngine):
         )
 
     async def recognize_intent_async(
-        self, text: str, context: dict[str, Any] | None = None, user_id: str | None = None
+        self, text: str, context: Optional[dict[str, Any]] = None, user_id: Optional[str] = None
     ) -> IntentResult:
         """
         异步识别意图
@@ -181,7 +181,7 @@ class EnhancedIntentRecognitionEngine(BaseIntentEngine):
         return await self._recognize_intent_async(text, context, user_id)
 
     async def _recognize_intent_async(
-        self, text: str, context: dict[str, Any] | None = None, user_id: str | None = None
+        self, text: str, context: Optional[dict[str, Any]] = None, user_id: Optional[str] = None
     ) -> IntentResult:
         """内部异步识别方法"""
         start_time = datetime.now()
@@ -637,7 +637,7 @@ class EnhancedIntentRecognitionEngine(BaseIntentEngine):
         return similarity_scores
 
     def _context_analysis(
-        self, text: str, context: dict[str, Any] | None = None, user_id: str | None = None
+        self, text: str, context: Optional[dict[str, Any]] = None, user_id: Optional[str] = None
     ) -> dict[IntentType, float]:
         """上下文分析"""
         boost = defaultdict(float)
@@ -861,7 +861,7 @@ def get_enhanced_intent_engine() -> EnhancedIntentRecognitionEngine:
 
 # 便捷函数
 def recognize_intent(
-    text: str, context: dict | None = None, user_id: str | None = None
+    text: str, context: dict | None = None, user_id: Optional[str] = None
 ) -> IntentResult:
     """便捷函数:识别意图(同步)"""
     engine = get_enhanced_intent_engine()
@@ -869,7 +869,7 @@ def recognize_intent(
 
 
 async def recognize_intent_async(
-    text: str, context: dict | None = None, user_id: str | None = None
+    text: str, context: dict | None = None, user_id: Optional[str] = None
 ) -> IntentResult:
     """便捷函数:识别意图(异步)"""
     engine = get_enhanced_intent_engine()

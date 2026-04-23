@@ -85,7 +85,7 @@ class ClaimGenerator:
         understanding: InventionUnderstanding,
         independent_claim: str,
         options: Optional[ClaimGenerationOptions] = None
-    ) -> List[str]:
+    ) -> list[str]:
         """
         生成从属权利要求
 
@@ -180,7 +180,7 @@ class ClaimGenerator:
 
         return features_text
 
-    def _organize_component_features(self, features: List[TechnicalFeature]) -> str:
+    def _organize_component_features(self, features: list[TechnicalFeature]) -> str:
         """组织组件特征"""
         feature_descriptions = []
 
@@ -198,7 +198,7 @@ class ClaimGenerator:
         else:
             return f"，其特征在于，包括{'；'.join(feature_descriptions[:-1])}；以及{feature_descriptions[-1]}"
 
-    def _organize_step_features(self, features: List[TechnicalFeature]) -> str:
+    def _organize_step_features(self, features: list[TechnicalFeature]) -> str:
         """组织步骤特征"""
         feature_descriptions = []
 
@@ -249,7 +249,7 @@ class ClaimGenerator:
         self,
         understanding: InventionUnderstanding,
         options: Optional[ClaimGenerationOptions] = None
-    ) -> List[str]:
+    ) -> list[str]:
         """
         生成所有权利要求
 

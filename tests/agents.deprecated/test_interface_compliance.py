@@ -4,9 +4,11 @@ Agent接口合规性测试
 测试Agent是否符合统一接口标准。
 """
 
+from typing import Any
+
 import pytest
-from typing import Any, Type
-from core.agents.xiaona.base_component import BaseXiaonaComponent
+
+from core.framework.agents.xiaona.base_component import BaseXiaonaComponent
 
 
 class InterfaceComplianceChecker:
@@ -197,7 +199,7 @@ class InterfaceComplianceChecker:
 
 def test_base_agent_compliance():
     """测试BaseXiaonaComponent是否符合接口标准"""
-    from core.agents.xiaona.base_component import BaseXiaonaComponent
+    from core.framework.agents.xiaona.base_component import BaseXiaonaComponent
 
     checker = InterfaceComplianceChecker()
     results = checker.check_agent_class(BaseXiaonaComponent)
@@ -220,7 +222,8 @@ async def test_example_agent_compliance():
 
     try:
         from example_agent import ExampleAgent
-        from core.agents.xiaona.base_component import (
+
+        from core.framework.agents.xiaona.base_component import (
             AgentExecutionContext,
             AgentStatus,
         )
@@ -285,11 +288,8 @@ async def test_example_agent_compliance():
 @pytest.mark.asyncio
 async def test_retriever_agent_compliance():
     """测试RetrieverAgent是否符合接口标准"""
-    from core.agents.xiaona.retiever_agent import RetrieverAgent
-    from core.agents.xiaona.base_component import (
-        AgentExecutionContext,
-        AgentStatus,
-    )
+    from core.framework.agents.xiaona.retiever_agent import RetrieverAgent
+
 
     # 创建Agent实例
     agent = RetrieverAgent(agent_id="test_retriever")
@@ -330,7 +330,7 @@ async def test_retriever_agent_compliance():
 
 def test_all_agents_compliance():
     """测试所有Agent是否符合接口标准"""
-    from core.agents.xiaona import retriever_agent, analyzer_agent, writer_agent
+    from core.framework.agents.xiaona import analyzer_agent, retriever_agent, writer_agent
 
     agents_to_test = [
         ("RetrieverAgent", retriever_agent.RetrieverAgent),
@@ -353,7 +353,7 @@ def test_all_agents_compliance():
             instance_results = checker.check_agent_instance(agent)
         except Exception as e:
             print(f"❌ 创建实例失败: {e}")
-            assert False, f"{agent_name} 创建实例失败: {e}"
+            raise AssertionError(f"{agent_name} 创建实例失败: {e}")
 
         # 统计结果
         total_passed = len(class_results["passed"]) + len(instance_results["passed"])
@@ -378,7 +378,7 @@ def pytest_configure(config):
 
 # ==================== 测试工具函数 ====================
 
-def run_compliance_check(agent_class: Type[BaseXiaconaComponent]) -> dict:
+def run_compliance_check(agent_class: type[BaseXiaconaComponent]) -> dict:
     """
     运行完整的接口合规性检查
 
@@ -441,27 +441,27 @@ def print_compliance_report(agent_class: Any):
     print(f"❌ 失败: {summary['total_failed']}")
 
     if class_results["passed"]:
-        print(f"\n类检查 - 通过项:")
+        print("\n类检查 - 通过项:")
         for result in class_results["passed"]:
             print(f"  ✅ {result['check']}: {result['message']}")
 
     if instance_results["passed"]:
-        print(f"\n实例检查 - 通过项:")
+        print("\n实例检查 - 通过项:")
         for result in instance_results["passed"]:
             print(f"  ✅ {result['check']}: {result['message']}")
 
     if instance_results["warnings"]:
-        print(f"\n实例检查 - 警告项:")
+        print("\n实例检查 - 警告项:")
         for result in instance_results["warnings"]:
             print(f"  ⚠️  {result['check']}: {result['message']}")
 
     if class_results["failed"]:
-        print(f"\n类检查 - 失败项:")
+        print("\n类检查 - 失败项:")
         for result in class_results["failed"]:
             print(f"  ❌ {result['check']}: {result['message']}")
 
     if instance_results["failed"]:
-        print(f"\n实例检查 - 失败项:")
+        print("\n实例检查 - 失败项:")
         for result in instance_results["failed"]:
             print(f"  ❌ {result['check']}: {result['message']}")
 
@@ -477,6 +477,6 @@ def print_compliance_report(agent_class: Any):
 
 if __name__ == "__main__":
     # 直接运行此文件时，执行所有Agent的合规性检查
-    from core.agents.xiaona import retriever_agent
+    from core.framework.agents.xiaona import retriever_agent
 
     print_compliance_report(retriever_agent.RetrieverAgent)

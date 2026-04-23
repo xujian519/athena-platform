@@ -154,7 +154,7 @@ class CertificateGenerator:
 
     @staticmethod
     def generate_self_signed_cert(
-        cert_file: str, key_file: str, domains: list[str] | None = None, valid_days: int = 365
+        cert_file: str, key_file: str, domains: Optional[list[str]] = None, valid_days: int = 365
     ) -> bool:
         """生成自签名证书"""
         try:

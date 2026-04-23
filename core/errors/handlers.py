@@ -37,8 +37,8 @@ def format_error_response(
     code: str,
     message: str,
     status_code: int = 500,
-    details: dict[str, Any] | None = None,
-    request_id: str | None = None,
+    details: Optional[dict[str, Any]] = None,
+    request_id: Optional[str] = None,
 ) -> dict[str, Any]:
     """
     格式化错误响应
@@ -68,7 +68,7 @@ def format_error_response(
 
 
 def create_error_response(
-    error: AthenaException | Exception | None = None, request_id: str | None = None
+    error: AthenaException | Exception | None = None, request_id: Optional[str] = None
 ) -> JSONResponse:
     """
     从异常创建错误响应
@@ -393,7 +393,7 @@ class ErrorLogger:
 
     @staticmethod
     def log_exception(
-        exc: Exception, context: dict[str, Any] | None = None, level: str = "ERROR"
+        exc: Exception, context: Optional[dict[str, Any]] = None, level: str = "ERROR"
     ):
         """
         记录异常信息

@@ -8,7 +8,7 @@ TIMEOUT = 10
 @pytest.mark.integration
 def test_patent_semantic_search(kb_urls, golden_queries):
     """KB-ACC-01: 专利语义搜索准确性"""
-    query = golden_queries[0]  # "发明专利创造性判断标准"
+    golden_queries[0]  # "发明专利创造性判断标准"
     try:
         # 通过Qdrant直接进行向量搜索
         resp = requests.post(

@@ -301,7 +301,7 @@ class ReinforcementLearningAgent:
 
         return {"avg_td_error": avg_td_error, "batch_size": len(transitions)}
 
-    async def experience_replay(self, batch_size: int = 32) -> dict[str, float | None]:
+    async def experience_replay(self, batch_size: int = 32) -> Optional[dict[str, float]]:
         """
         经验回放(优化采样效率)
         """

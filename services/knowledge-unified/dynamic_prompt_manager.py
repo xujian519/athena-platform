@@ -298,7 +298,7 @@ class DynamicPromptManager:
         keywords = jieba.analyse.extract_tags(text, top_k=15)
         return [kw[0] for kw in keywords]
 
-    def _format_rules_as_guidance(self, rules: dict[str, list[dict]]) -> str:
+    def _format_rules_as_guidance(self, rules: dict[str, list[dict]) -> str:
         """将规则格式化为指导内容"""
         guidance = ""
 
@@ -310,7 +310,7 @@ class DynamicPromptManager:
 
         return guidance
 
-    def _format_rules_as_legal_basis(self, rules: dict[str, list[dict]]) -> str:
+    def _format_rules_as_legal_basis(self, rules: dict[str, list[dict]) -> str:
         """将规则格式化为法律依据"""
         basis = ""
 

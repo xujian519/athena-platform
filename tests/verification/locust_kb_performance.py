@@ -15,9 +15,9 @@ Athena平台知识库并发性能测试脚本 (基于Locust)
 
 import json
 import time
-from locust import HttpUser, task, between, events
-from locust.runners import MasterRunner
 
+from locust import HttpUser, between, events, task
+from locust.runners import MasterRunner
 
 # ============================================================================
 # 测试数据
@@ -103,7 +103,7 @@ class KnowledgeBaseUser(HttpUser):
         ) as response:
             if response.status_code == 200:
                 data = response.json()
-                results = data.get("results", [])
+                data.get("results", [])
                 response.success()
             elif response.status_code in [401, 422]:
                 response.success()
@@ -123,7 +123,7 @@ class KnowledgeBaseUser(HttpUser):
         ) as response:
             if response.status_code == 200:
                 data = response.json()
-                results = data.get("results", [])
+                data.get("results", [])
                 response.success()
             elif response.status_code in [401, 422]:
                 response.success()
@@ -195,7 +195,7 @@ class MixedReadWriteUser(HttpUser):
 def on_test_start(environment, **kwargs):
     """测试开始时执行"""
     print(f"\n{'='*80}")
-    print(f"Locust性能测试开始")
+    print("Locust性能测试开始")
     print(f"目标: {environment.host}")
     print(f"用户数: {environment.runner.target_user_count if hasattr(environment.runner, 'target_user_count') else '未指定'}")
     print(f"{'='*80}\n")
@@ -205,7 +205,7 @@ def on_test_start(environment, **kwargs):
 def on_test_stop(environment, **kwargs):
     """测试结束时执行"""
     print(f"\n{'='*80}")
-    print(f"Locust性能测试完成")
+    print("Locust性能测试完成")
 
     # 输出统计摘要
     stats = environment.runner.stats
@@ -213,7 +213,7 @@ def on_test_stop(environment, **kwargs):
     print(f"失败请求数: {stats.total.num_failures}")
     print(f"失败率: {stats.total.fail_ratio * 100:.2f}%")
     print(f"总RPS: {stats.total.total_rps:.2f}")
-    print(f"\n响应时间统计:")
+    print("\n响应时间统计:")
     print(f"  中位数 (P50): {stats.total.median_response_time:.0f} ms")
     print(f"  P95: {stats.total.get_response_time_percentile(0.95):.0f} ms")
     print(f"  P99: {stats.total.get_response_time_percentile(0.99):.0f} ms")
@@ -232,7 +232,6 @@ def on_test_stop(environment, **kwargs):
 # ============================================================================
 
 if __name__ == "__main__":
-    import sys
 
     # 如果通过命令行直接运行此脚本
     print("""

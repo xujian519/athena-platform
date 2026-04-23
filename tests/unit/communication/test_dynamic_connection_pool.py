@@ -122,7 +122,7 @@ class TestDynamicConnectionPool:
                     timeout=2.0
                 )
                 connections.append(conn)
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 # 预期会超时
                 break
 
@@ -145,7 +145,7 @@ class TestDynamicConnectionPool:
                     timeout=3.0
                 )
                 connections.append(conn)
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 break
 
         # 尝试获取超出限制的连接，应该超时

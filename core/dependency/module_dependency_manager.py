@@ -61,7 +61,7 @@ class ModuleInfo:
     module_class: type
     priority: ModulePriority
     required: bool = True
-    config: dict[str, Any] | None = None
+    config: Optional[dict[str, Any]] = None
     auto_start: bool = True
     startup_timeout: float = 30.0
     dependencies: list[ModuleDependency] = field(default_factory=list)
@@ -81,7 +81,7 @@ class StartupPlan:
 class ModuleDependencyManager:
     """模块依赖管理器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化依赖管理器
 
@@ -275,7 +275,7 @@ class ModuleDependencyManager:
             startup_results['error'] = str(e)
             return startup_results
 
-    async def startup_module(self, module_id: str, config: dict[str, Any] | None = None) -> bool:
+    async def startup_module(self, module_id: str, config: Optional[dict[str, Any]] = None) -> bool:
         """
         启动单个模块
 
@@ -439,7 +439,7 @@ class ModuleDependencyManager:
 
         return groups
 
-    def _get_root_node(self) -> str | None:
+    def _get_root_node(self) -> Optional[str]:
         """获取根节点(没有依赖的模块)"""
         for node in self.dependency_graph.nodes:
             if self.dependency_graph.in_degree(node) == 0:
@@ -489,7 +489,7 @@ class ModuleDependencyManager:
         return group_result
 
     async def _startup_single_module(self, module_id: str,
-                                   config: dict[str, Any] | None = None) -> dict[str, Any]:
+                                   config: Optional[dict[str, Any]] = None) -> dict[str, Any]:
         """启动单个模块"""
         module_info = self.modules[module_id]
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 孙俊霞专利申请信息更新脚本
 Update Sun Junxia Patent Application Information
@@ -12,12 +11,11 @@ Update Sun Junxia Patent Application Information
 版本: v1.0.0
 """
 
-import psycopg2
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import psycopg2.extras
-import sys
 from datetime import datetime
-import getpass
+from typing import Any
+
+import psycopg2
+import psycopg2.extras
 
 # 数据库连接配置
 DB_CONFIG = {
@@ -78,7 +76,7 @@ class SunJunxiaInfoUpdater:
             """, (self.case_id,))
             case = self.cursor.fetchone()
 
-            print(f"\n📄 案卷信息:")
+            print("\n📄 案卷信息:")
             print(f"  案卷号: {case[0]}")
             print(f"  专利名称: {case[1]}")
             print(f"  专利类型: {case[2]}")
@@ -262,7 +260,7 @@ class SunJunxiaInfoUpdater:
             # 付款状态
             payment_status = input("  付款状态 (未支付/已支付/部分支付): ").strip() or "未支付"
 
-            print(f"\n📋 费用明细:")
+            print("\n📋 费用明细:")
             print(f"  代理费: ¥{agency_fee}")
             print(f"  申请费: ¥{application_fee}")
             print(f"  印刷费: ¥{printing_fee}")
@@ -352,7 +350,7 @@ class SunJunxiaInfoUpdater:
                 for fee_name, fee_amount in fee_info['other_fees'].items():
                     records.append(('EXPENSE', fee_amount, f'其他费用: {fee_name}', None))
 
-                for record_type, amount, description, invoice_number in records:
+                for record_type, amount, description, _invoice_number in records:
                     record_id = str(uuid.uuid4())
                     self.cursor.execute("""
                         INSERT INTO financial_records (
@@ -435,8 +433,8 @@ def main() -> None:
     print("📝" + " " * 25 + "孙俊霞专利申请信息更新" + " " * 25 + "📝")
     print("=" * 80)
     print(f"🕐 更新时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"👩‍⚖️ 操作者: 小娜·天秤女神 (专利法律专家)")
-    print(f"🎯 更新目标: 从确认书提取关键信息并更新数据库")
+    print("👩‍⚖️ 操作者: 小娜·天秤女神 (专利法律专家)")
+    print("🎯 更新目标: 从确认书提取关键信息并更新数据库")
     print("=" * 80)
 
     updater = SunJunxiaInfoUpdater()

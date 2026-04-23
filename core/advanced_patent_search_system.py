@@ -40,7 +40,7 @@ class SearchTerm:
     weight: float = 1.0
     is_mandatory: bool = False
     is_excluded: bool = False
-    synonyms: list[str] | None = None
+    synonyms: Optional[list[str]] = None
     field_specific: dict[str, list[str]] | None = None  # 字段特定检索词
 
 
@@ -53,15 +53,15 @@ class SearchQuery:
     boolean_expression: str
     ipc_classifications: list[str]
     date_range: dict[str, str] | None = None
-    assignee_filters: list[str] | None = None
-    inventor_filters: list[str] | None = None
+    assignee_filters: Optional[list[str]] = None
+    inventor_filters: Optional[list[str]] = None
     strategy: SearchStrategy = SearchStrategy.HYBRID_APPROACH
 
 
 class AdvancedPatentSearchSystem:
     """高级专利检索系统"""
 
-    def __init__(self, download_dir: str | None = None):
+    def __init__(self, download_dir: Optional[str] = None):
         """初始化高级检索系统"""
         # 导入基础检索器
         from .enhanced_patent_retriever import EnhancedPatentRetriever

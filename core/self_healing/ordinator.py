@@ -59,8 +59,8 @@ class HealingAction:
     action_type: str  # predict, repair, verify
     params: dict[str, Any] = field(default_factory=dict)
     status: HealingStatus = HealingStatus.DETECTING
-    result: dict[str, Any] | None = None
-    error: str | None = None
+    result: Optional[dict[str, Any]] = None
+    error: Optional[str] = None
     started_at: datetime | None = None
     completed_at: datetime | None = None
 
@@ -282,7 +282,7 @@ class SelfHealingOrchestrator:
         return trends
 
     async def execute_healing(
-        self, action_id: str, strategy: str | None = None
+        self, action_id: str, strategy: Optional[str] = None
     ) -> dict[str, Any]:
         """
         执行自愈修复

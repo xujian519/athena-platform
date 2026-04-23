@@ -71,7 +71,7 @@ class PermissionDecision:
     allowed: bool  # 是否允许调用
     reason: str  # 决策原因
     mode: PermissionMode  # 决策时使用的权限模式
-    matched_rule: str | None = None  # 匹配的规则ID (如果有)
+    matched_rule: Optional[str] = None  # 匹配的规则ID (如果有)
 
 
 class ToolPermissionContext:
@@ -125,7 +125,7 @@ class ToolPermissionContext:
         logger.info(f"   允许规则: {len(self._always_allow)}, 拒绝规则: {len(self._always_deny)}")
 
     def check_permission(
-        self, tool_name: str, parameters: dict[str, Any] | None = None
+        self, tool_name: str, parameters: Optional[dict[str, Any]] = None
     ) -> PermissionDecision:
         """
         检查工具调用权限

@@ -43,7 +43,7 @@ logger = setup_logging()
 class LegalBookPipeline:
     """法律书籍导入管道"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化管道
 

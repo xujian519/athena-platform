@@ -99,7 +99,7 @@ class AgentFactory:
     def create(
         cls,
         name: str,
-        config: dict[str, Any] | None = None,
+        config: Optional[dict[str, Any]] = None,
         register: bool = True
     ) -> BaseAgent:
         """
@@ -141,7 +141,7 @@ class AgentFactory:
     async def create_async(
         cls,
         name: str,
-        config: dict[str, Any] | None = None,
+        config: Optional[dict[str, Any]] = None,
         register: bool = True
     ) -> BaseAgent:
         """
@@ -234,7 +234,7 @@ class AgentFactory:
         logger.info("清空智能体类注册表")
 
     @classmethod
-    def load_declarative_agents(cls, project_root: str | None = None) -> list[str]:
+    def load_declarative_agents(cls, project_root: Optional[str] = None) -> list[str]:
         """
         加载声明式 Agent 定义并注册到工厂
 
@@ -296,7 +296,7 @@ class AgentAutoLoader:
         ```
     """
 
-    def __init__(self, base_path: str | None = None):
+    def __init__(self, base_path: Optional[str] = None):
         """
         初始化自动加载器
 

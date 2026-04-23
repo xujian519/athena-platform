@@ -42,7 +42,7 @@ class DocumentParserFactory:
 
     _instance: DocumentParserFactory | None = None
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self._config = config or {}
         self._parsers: dict[ParserBackend, BaseDocumentParser] = {}
         self._initialized = False
@@ -55,7 +55,7 @@ class DocumentParserFactory:
         self._mineru_recovery_interval: float = 60.0  # 失败后60秒重试MinerU
 
     @classmethod
-    def get_instance(cls, config: dict[str, Any] | None = None) -> DocumentParserFactory:
+    def get_instance(cls, config: Optional[dict[str, Any]] = None) -> DocumentParserFactory:
         """获取单例实例（线程安全）"""
         if cls._instance is None:
             with _instance_lock:
@@ -170,14 +170,14 @@ class DocumentParserFactory:
             processing_time=time.time() - start_time,
         )
 
-    async def _try_extract_text_layer(self, request: ParseRequest) -> str | None:
+    async def _try_extract_text_layer(self, request: ParseRequest) -> Optional[str]:
         """尝试用PyMuPDF直接提取PDF文本层（异步非阻塞）"""
         try:
             import fitz  # PyMuPDF
         except ImportError:
             return None
 
-        def _extract() -> str | None:
+        def _extract() -> Optional[str]:
             try:
                 with fitz.open(request.file_path) as doc:
                     text_parts = []

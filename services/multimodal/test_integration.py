@@ -381,7 +381,7 @@ class IntegrationTester:
         print("=" * 50)
 
         total_tests = len(self.test_results)
-        passed_tests = len([r for r in self.test_results if r['success']])
+        passed_tests = len([r for r in self.test_results if r['success'])
         failed_tests = total_tests - passed_tests
 
         print(f"总测试数: {total_tests}")

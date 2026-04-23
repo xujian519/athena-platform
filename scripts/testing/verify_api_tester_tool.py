@@ -16,7 +16,6 @@ import asyncio
 import sys
 import time
 from pathlib import Path
-from typing import Any
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent
@@ -335,7 +334,7 @@ async def test_response_time_measurement() -> bool:
 
     times = []
 
-    for i in range(5):
+    for _i in range(5):
         result = await api_tester_handler(
             params={
                 "endpoint": "https://httpbin.org/delay/0.5",
@@ -459,7 +458,7 @@ async def run_all_tests():
     return passed == len(results)
 
 
-def generate_report(results: list[tuple[str, bool]], total_time: float) -> str:
+def generate_report(results: list[tuple[str, bool], total_time: float) -> str:
     """生成验证报告"""
     passed = sum(1 for _, result in results if result)
     failed = len(results) - passed
@@ -492,11 +491,11 @@ def generate_report(results: list[tuple[str, bool]], total_time: float) -> str:
         "",
         "| 指标 | 结果 |",
         "|------|------|",
-        "| 总测试数 | {} |".format(len(results)),
-        "| 通过测试 | {} |".format(passed),
-        "| 失败测试 | {} |".format(failed),
-        "| 成功率 | {:.1f}% |".format(passed/len(results)*100 if results else 0),
-        "| 总耗时 | {:.2f}秒 |".format(total_time),
+        f"| 总测试数 | {len(results)} |",
+        f"| 通过测试 | {passed} |",
+        f"| 失败测试 | {failed} |",
+        f"| 成功率 | {passed/len(results)*100 if results else 0:.1f}% |",
+        f"| 总耗时 | {total_time:.2f}秒 |",
         "",
         "---",
         "",
@@ -506,21 +505,21 @@ def generate_report(results: list[tuple[str, bool]], total_time: float) -> str:
         "",
         "| HTTP方法 | 状态 | 说明 |",
         "|----------|------|------|",
-        "| GET | {} | 基础GET请求 |".format(status_mark(1)),
-        "| POST | {} | JSON数据提交 |".format(status_mark(2)),
-        "| PUT | {} | 完整更新 |".format(status_mark(3)),
-        "| PATCH | {} | 部分更新 |".format(status_mark(4)),
-        "| DELETE | {} | 资源删除 |".format(status_mark(5)),
+        f"| GET | {status_mark(1)} | 基础GET请求 |",
+        f"| POST | {status_mark(2)} | JSON数据提交 |",
+        f"| PUT | {status_mark(3)} | 完整更新 |",
+        f"| PATCH | {status_mark(4)} | 部分更新 |",
+        f"| DELETE | {status_mark(5)} | 资源删除 |",
         "",
         "### 2. 高级功能",
         "",
         "| 功能 | 状态 | 说明 |",
         "|------|------|------|",
-        "| 自定义请求头 | {} | 支持自定义HTTP头 |".format(status_mark(6)),
-        "| 状态码验证 | {} | 正确识别2xx/4xx/5xx |".format(status_mark(7)),
-        "| 超时处理 | {} | 请求超时控制 |".format(status_mark(8)),
-        "| 响应时间测量 | {} | 精确计时 |".format(status_mark(9)),
-        "| JSON解析 | {} | 自动解析JSON响应 |".format(status_mark(10)),
+        f"| 自定义请求头 | {status_mark(6)} | 支持自定义HTTP头 |",
+        f"| 状态码验证 | {status_mark(7)} | 正确识别2xx/4xx/5xx |",
+        f"| 超时处理 | {status_mark(8)} | 请求超时控制 |",
+        f"| 响应时间测量 | {status_mark(9)} | 精确计时 |",
+        f"| JSON解析 | {status_mark(10)} | 自动解析JSON响应 |",
         "",
         "---",
         "",

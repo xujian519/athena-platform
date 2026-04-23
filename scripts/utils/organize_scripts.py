@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 整理scripts目录，按功能分类脚本文件
 """
 
 import logging
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import os
 import shutil
 from pathlib import Path
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

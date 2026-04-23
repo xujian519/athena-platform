@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 class BaseModule:
     """基础模块接口"""
 
-    def __init__(self, module_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, module_id: str, config: Optional[dict[str, Any]] = None):
         """初始化模块
 
         Args:
@@ -154,7 +154,7 @@ class SystemManager:
         logger.info("✅ 系统管理器初始化完成")
 
     async def load_module(
-        self, module_path: str, config: dict[str, Any] | None = None
+        self, module_path: str, config: Optional[dict[str, Any]] = None
     ) -> bool:
         """加载模块
 
@@ -189,7 +189,7 @@ class SystemManager:
             return False
 
     async def _load_single_module(
-        self, metadata: ModuleMetadata, config: dict[str, Any] | None = None
+        self, metadata: ModuleMetadata, config: Optional[dict[str, Any]] = None
     ) -> bool:
         """加载单个模块"""
         try:
@@ -554,7 +554,7 @@ class SystemManager:
         """获取服务"""
         return self.service_registry.get_service(service_name)
 
-    def get_module_status(self, module_id: str) -> dict[str, Any] | None:
+    def get_module_status(self, module_id: str) -> Optional[dict[str, Any]]:
         """获取模块状态"""
         if module_id not in self.module_instances:
             return None

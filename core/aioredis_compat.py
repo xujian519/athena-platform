@@ -35,7 +35,7 @@ except ImportError:
         async def get(self, key: str):
             return None
 
-        async def set(self, key: str, value: str, ex: int | None = None):
+        async def set(self, key: str, value: str, ex: Optional[int] = None):
             return True
 
         async def delete(self, key: str):

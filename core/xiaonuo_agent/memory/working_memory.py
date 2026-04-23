@@ -59,7 +59,7 @@ class MemoryItem:
         return data
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "MemoryItem":
+    def from_dict(cls, data: dict[str, Any]) -> MemoryItem:
         """从字典创建"""
         return cls(**data)
 
@@ -120,7 +120,7 @@ class WorkingMemory:
         return f"wm:{hash_key}"
 
     async def store(
-        self, value: Any, importance: float = 0.5, tags: list[str] = None, ttl: int | None = None
+        self, value: Any, importance: float = 0.5, tags: list[str] = None, ttl: Optional[int] = None
     ) -> str:
         """
         存储记忆

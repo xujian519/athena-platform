@@ -59,7 +59,7 @@ class ServiceDescriptor:
     instance: Any | None = None  # 单例实例
     lifecycle: LifecycleType = LifecycleType.SINGLETON
     dependencies: list = field(default_factory=list)  # 依赖的服务类型列表
-    config_key: str | None = None  # 配置键
+    config_key: Optional[str] = None  # 配置键
 
 
 # ============================================================================

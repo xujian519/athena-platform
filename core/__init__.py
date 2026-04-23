@@ -124,21 +124,21 @@ def get_agent_factory() -> "AgentFactory":
     return _agent_factory
 
 
-async def create_xiaonuo_agent(config: dict[str, Any] | None = None) -> "XiaonuoAgent":
+async def create_xiaonuo_agent(config: Optional[dict[str, Any]] = None) -> "XiaonuoAgent":
     """创建小诺Agent实例"""
     factory = get_agent_factory()
     agent = await factory.create_agent("xiaonuo", config)
     return cast(XiaonuoAgent, agent)
 
 
-async def create_athena_agent(config: dict[str, Any] | None = None) -> "AthenaAgent":
+async def create_athena_agent(config: Optional[dict[str, Any]] = None) -> "AthenaAgent":
     """创建Athena Agent实例"""
     factory = get_agent_factory()
     agent = await factory.create_agent("athena", config)
     return cast(AthenaAgent, agent)
 
 
-async def initialize_core_system(config: dict[str, Any] | None = None):
+async def initialize_core_system(config: Optional[dict[str, Any]] = None):
     """初始化核心系统"""
     logger.info("🚀 初始化小诺和Athena核心系统...")
 

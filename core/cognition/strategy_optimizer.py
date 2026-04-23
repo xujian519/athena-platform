@@ -73,7 +73,7 @@ class StrategyOptimizer:
     4. 维护优化历史
     """
 
-    def __init__(self, storage_path: str | None = None):
+    def __init__(self, storage_path: Optional[str] = None):
         self.logger = logging.getLogger(__name__)
         self.storage_path = storage_path or "data/strategy_optimization.json"
 
@@ -427,7 +427,7 @@ class StrategyOptimizer:
 
     def get_strategy_recommendation(
         self,
-        intent_context: dict[str, Any] | None = None
+        intent_context: Optional[dict[str, Any]] = None
     ) -> PlanStrategy:
         """获取策略推荐"""
         # 如果有性能数据，推荐表现最好的策略

@@ -6,12 +6,13 @@
 """
 
 import asyncio
-from core.agents.xiaona.base_component import (
-    BaseXiaonaComponent,
+
+from core.framework.agents.xiaona.base_component import (
     AgentCapability,
-    AgentStatus,
     AgentExecutionContext,
-    AgentExecutionResult
+    AgentExecutionResult,
+    AgentStatus,
+    BaseXiaonaComponent,
 )
 
 
@@ -188,7 +189,7 @@ async def main():
         print(f"\n执行状态: {result.status.value}")
         if result.status == AgentStatus.COMPLETED:
             print(f"✅ 分析完成，耗时: {result.execution_time:.2f}秒")
-            print(f"\n分析结果:")
+            print("\n分析结果:")
             print(result.output_data.get("analysis", "无结果"))
         else:
             print(f"❌ 分析失败: {result.error_message}")

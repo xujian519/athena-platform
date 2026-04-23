@@ -49,7 +49,7 @@ class PersistedMessage:
     created_at: datetime = field(default_factory=datetime.now)  # 创建时间
     updated_at: datetime = field(default_factory=datetime.now)  # 更新时间
     expires_at: datetime | None = None  # 过期时间
-    error_message: str | None = None  # 错误信息
+    error_message: Optional[str] = None  # 错误信息
     metadata: dict[str, Any] = field(default_factory=dict)  # 元数据
 
     def to_dict(self) -> dict[str, Any]:
@@ -91,7 +91,7 @@ class BaseMessagePersistence(ABC):
     定义所有持久化实现必须遵循的接口。
     """
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化持久化后端
 
@@ -152,7 +152,7 @@ class BaseMessagePersistence(ABC):
 
     @abstractmethod
     async def update_message_state(
-        self, message_id: str, state: MessageState, error_message: str | None = None
+        self, message_id: str, state: MessageState, error_message: Optional[str] = None
     ) -> bool:
         """
         更新消息状态
@@ -321,7 +321,7 @@ class InMemoryPersistence(BaseMessagePersistence):
     用于测试和开发环境，不提供真正的持久化。
     """
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__(config)
         self._messages: dict[str, PersistedMessage] = {}
         self._state_index: dict[MessageState, set[str]] = {
@@ -356,7 +356,7 @@ class InMemoryPersistence(BaseMessagePersistence):
         return self._messages.get(message_id)
 
     async def update_message_state(
-        self, message_id: str, state: MessageState, error_message: str | None = None
+        self, message_id: str, state: MessageState, error_message: Optional[str] = None
     ) -> bool:
         """更新消息状态"""
         if message_id not in self._messages:
@@ -484,4 +484,4 @@ class PersistenceConfig:
     max_size: int = 10000
     enable_compression: bool = False
     enable_encryption: bool = False
-    ttl: int | None = None  # 消息生存时间（秒）
+    ttl: Optional[int] = None  # 消息生存时间（秒）

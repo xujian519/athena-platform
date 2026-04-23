@@ -16,8 +16,8 @@ pytestmark = pytest.mark.skip(reason="模块导入问题，待修复")
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent.parent))
 
-from core.perception import TextProcessor
-from core.perception.factory import (
+from core.ai.perception import TextProcessor
+from core.ai.perception.factory import (
     PerceptionBuilder,
     PerceptionEngineFactory,
     ProcessorFactory,
@@ -28,7 +28,7 @@ from core.perception.factory import (
     create_text_processor,
     create_video_processor,
 )
-from core.perception.types import (
+from core.ai.perception.types import (
     InputType,
     PerceptionConfig,
 )
@@ -113,7 +113,7 @@ class TestPerceptionEngineFactory:
     def test_register_engine(self):
         """测试注册引擎"""
         # 使用PerceptionEngine作为测试引擎
-        from core.perception import PerceptionEngine
+        from core.ai.perception import PerceptionEngine
 
         PerceptionEngineFactory.register_engine("standard", PerceptionEngine)
 
@@ -122,7 +122,7 @@ class TestPerceptionEngineFactory:
 
     def test_create_engine_with_dict_config(self):
         """测试使用字典配置创建引擎"""
-        from core.perception import PerceptionEngine
+        from core.ai.perception import PerceptionEngine
 
         PerceptionEngineFactory.register_engine("standard", PerceptionEngine)
 
@@ -135,7 +135,7 @@ class TestPerceptionEngineFactory:
 
     def test_create_engine_with_config_object(self):
         """测试使用配置对象创建引擎"""
-        from core.perception import PerceptionEngine
+        from core.ai.perception import PerceptionEngine
 
         PerceptionEngineFactory.register_engine("standard", PerceptionEngine)
 
@@ -149,7 +149,7 @@ class TestPerceptionEngineFactory:
 
     def test_create_engine_default_config(self):
         """测试使用默认配置创建引擎"""
-        from core.perception import PerceptionEngine
+        from core.ai.perception import PerceptionEngine
 
         PerceptionEngineFactory.register_engine("standard", PerceptionEngine)
 
@@ -162,7 +162,7 @@ class TestPerceptionEngineFactory:
 
     def test_create_engine_singleton(self):
         """测试创建单例引擎"""
-        from core.perception import PerceptionEngine
+        from core.ai.perception import PerceptionEngine
 
         PerceptionEngineFactory.register_engine("standard", PerceptionEngine)
 
@@ -183,7 +183,7 @@ class TestPerceptionEngineFactory:
 
     def test_get_engine_types(self):
         """测试获取已注册的引擎类型"""
-        from core.perception import PerceptionEngine
+        from core.ai.perception import PerceptionEngine
 
         PerceptionEngineFactory.register_engine("standard", PerceptionEngine)
 
@@ -264,7 +264,7 @@ class TestPerceptionBuilder:
 
     async def test_build(self):
         """测试构建引擎"""
-        from core.perception import PerceptionEngine
+        from core.ai.perception import PerceptionEngine
 
         # 注册引擎
         PerceptionEngineFactory.register_engine("standard", PerceptionEngine)
@@ -289,7 +289,7 @@ class TestConvenienceFunctions:
 
     async def test_create_perception_engine(self):
         """测试创建感知引擎便捷函数"""
-        from core.perception import PerceptionEngine
+        from core.ai.perception import PerceptionEngine
 
         PerceptionEngineFactory.register_engine("standard", PerceptionEngine)
         ProcessorFactory.register_processor(InputType.TEXT, TextProcessor)
@@ -367,7 +367,7 @@ class TestFactoryIntegration:
     @pytest.mark.asyncio
     async def test_builder_pattern_workflow(self):
         """测试构建器模式工作流"""
-        from core.perception import PerceptionEngine
+        from core.ai.perception import PerceptionEngine
 
         # 注册引擎和处理器
         PerceptionEngineFactory.register_engine("standard", PerceptionEngine)

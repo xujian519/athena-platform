@@ -54,7 +54,7 @@ class ImportanceScore:
     message_id: str
     score: float  # 0.0 - 1.0
     level: MessageImportance
-    factors: Dict[str, float] = field(default_factory=dict)
+    factors: dict[str, float] = field(default_factory=dict)
     timestamp: datetime = field(default_factory=datetime.now)
 
     def __post_init__(self):
@@ -76,10 +76,10 @@ class ImportanceScore:
 class CompressionResult:
     """压缩结果"""
 
-    original_messages: List[str]  # 原始消息ID列表
-    compressed_messages: List[str]  # 压缩后保留的消息ID列表
-    removed_messages: List[str]  # 删除的消息ID列表
-    summaries: List[str]  # 生成的摘要列表
+    original_messages: list[str]  # 原始消息ID列表
+    compressed_messages: list[str]  # 压缩后保留的消息ID列表
+    removed_messages: list[str]  # 删除的消息ID列表
+    summaries: list[str]  # 生成的摘要列表
     compression_ratio: float  # 压缩率 (0.0 - 1.0)
     tokens_saved: int  # 节省的token数
     quality_score: float  # 压缩质量评分 (0.0 - 1.0)
@@ -156,8 +156,8 @@ class MessageMetadata:
     has_code: bool = False  # 是否包含代码
     has_entity: bool = False  # 是否包含实体
     conversation_turn: int = 0  # 对话轮次
-    references: List[str] = field(default_factory=list)  # 引用的消息ID
-    referenced_by: List[str] = field(default_factory=list)  # 被引用的消息ID
+    references: list[str] = field(default_factory=list)  # 引用的消息ID
+    referenced_by: list[str] = field(default_factory=list)  # 被引用的消息ID
 
 
 __all__ = [

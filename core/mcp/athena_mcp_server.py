@@ -434,7 +434,7 @@ async def _patent_similarity(
 
 
 async def _claim_analysis(
-    patent_id: str | None = None, claim_number: int | None = None, extract_elements: bool = True
+    patent_id: Optional[str] = None, claim_number: Optional[int] = None, extract_elements: bool = True
 ) -> dict:
     """权利要求分析"""
     logger.info(f"⚖️ 权利要求分析: patent_id={patent_id}, claim={claim_number}")

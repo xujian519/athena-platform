@@ -46,7 +46,7 @@ from core.intent.enhanced_intent_recognition import (
 
 
 def get_intent_engine(
-    engine_type: str = "enhanced", config: dict[str, Any] | None = None
+    engine_type: str = "enhanced", config: Optional[dict[str, Any]] = None
 ) -> BaseIntentEngine:
     """
     获取意图识别引擎(统一入口)
@@ -97,7 +97,7 @@ def get_intent_engine(
 
 
 async def get_intent_engine_async(
-    engine_type: str = "semantic", config: dict[str, Any] | None = None
+    engine_type: str = "semantic", config: Optional[dict[str, Any]] = None
 ) -> BaseIntentEngine:
     """
     获取意图识别引擎(异步版本,用于需要异步初始化的引擎)
@@ -128,7 +128,7 @@ async def get_intent_engine_async(
 
 
 def recognize_intent(
-    text: str, context: dict[str, Any] | None = None, engine_type: str = "enhanced"
+    text: str, context: Optional[dict[str, Any]] = None, engine_type: str = "enhanced"
 ) -> IntentResult:
     """
     识别意图(同步便捷函数)
@@ -147,8 +147,8 @@ def recognize_intent(
 
 async def recognize_intent_async(
     text: str,
-    context: dict[str, Any] | None = None,
-    user_id: str | None = None,
+    context: Optional[dict[str, Any]] = None,
+    user_id: Optional[str] = None,
     engine_type: str = "enhanced",
 ) -> IntentResult:
     """

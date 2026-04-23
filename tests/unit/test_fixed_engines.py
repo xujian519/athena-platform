@@ -21,7 +21,7 @@ async def test_fixed_engines():
     print()
 
     try:
-        from core.agent.xiaonuo_integrated_enhanced import XiaonuoIntegratedEnhanced
+        from core.framework.agents.xiaonuo_integrated_enhanced import XiaonuoIntegratedEnhanced
 
         # 创建小诺实例
         print("🚀 创建小诺实例...")

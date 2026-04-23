@@ -154,7 +154,7 @@ class UncertaintyQuantifier:
         print(confidence.level)  # CertaintyLevel.HIGH
     """
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
 
         # 置信度计算权重
@@ -177,7 +177,7 @@ class UncertaintyQuantifier:
         claim: str,
         evidence: list[str],
         information_completeness: float = 0.8,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> Confidence:
         """
         量化命题的不确定性
@@ -421,7 +421,7 @@ class UncertaintyQuantifier:
         return limitations if limitations else ["无明显局限性"]
 
     def batch_quantify(
-        self, claims: list[tuple[str, list[str]]], information_completeness: float = 0.8
+        self, claims: list[tuple[str, list[str]], information_completeness: float = 0.8
     ) -> list[Confidence]:
         """
         批量量化多个命题

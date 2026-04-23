@@ -100,7 +100,7 @@ class BrowserAutomationTool:
             "POST", "/api/v1/navigate", {"url": url, "wait_until": wait_until}
         )
 
-    def click(self, selector: str, timeout: int | None = None) -> dict[str, Any]:
+    def click(self, selector: str, timeout: Optional[int] = None) -> dict[str, Any]:
         """
         点击元素
 
@@ -116,7 +116,7 @@ class BrowserAutomationTool:
             "POST", "/api/v1/click", {"selector": selector, "timeout": timeout}
         )
 
-    def fill(self, selector: str, value: str, timeout: int | None = None) -> dict[str, Any]:
+    def fill(self, selector: str, value: str, timeout: Optional[int] = None) -> dict[str, Any]:
         """
         填写表单
 

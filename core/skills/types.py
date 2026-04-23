@@ -31,13 +31,13 @@ class SkillCategory(Enum):
 class SkillMetadata:
     """技能元数据"""
 
-    author: str | None = None
+    author: Optional[str] = None
     version: str = "1.0.0"
     tags: list[str] = field(default_factory=list)
     enabled: bool = True
     priority: int = 5  # 1-10, 10最高
-    created_at: str | None = None
-    updated_at: str | None = None
+    created_at: Optional[str] = None
+    updated_at: Optional[str] = None
 
 
 @dataclass
@@ -52,7 +52,7 @@ class SkillDefinition:
     metadata: SkillMetadata | None = None  # 元数据
     content: str = ""  # 技能内容（Markdown格式）
     source: str = "athena"  # 来源
-    path: str | None = None  # 文件路径
+    path: Optional[str] = None  # 文件路径
 
     def __post_init__(self):
         """初始化后处理"""

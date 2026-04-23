@@ -37,15 +37,15 @@ class KGEnhancedAnalysisResult:
 
     # 知识图谱增强
     matched_entities: List[Tuple[TechEntity, float]] = None
-    related_entities: Optional[List[TechEntity] = None
+    related_entities: Optional[List[TechEntity]] = None
     knowledge_context: Dict[str, Any] = None
     technology_trends: Dict[str, Any] = None
 
     # 增强分析
-    innovation_insights: Optional[List[str] = None
+    innovation_insights: Optional[List[str]] = None
     cross_domain_potential: bool = False
-    similar_patents_suggestions: Optional[List[str] = None
-    expert_considerations: Optional[List[str] = None
+    similar_patents_suggestions: Optional[List[str]] = None
+    expert_considerations: Optional[List[str]] = None
 
     # 量化评分
     kg_confidence_score: float = 0.0

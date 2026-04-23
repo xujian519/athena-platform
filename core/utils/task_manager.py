@@ -48,7 +48,7 @@ class TaskInfo:
     created_at: datetime = field(default_factory=datetime.now)
     started_at: datetime | None = None
     completed_at: datetime | None = None
-    error: str | None = None
+    error: Optional[str] = None
     critical: bool = False  # 是否为关键任务
     task_ref: asyncio.Task | None = None
 

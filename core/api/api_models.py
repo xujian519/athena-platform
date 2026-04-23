@@ -39,9 +39,9 @@ class ErrorResponse(BaseModel):
     success: bool = Field(False, description="请求是否成功")
     message: str = Field(..., description="错误消息")
     error_code: str = Field(..., description="错误代码")
-    details: dict[str, Any] | None = Field(None, description="错误详情")
+    details: Optional[dict[str, Any]] = Field(None, description="错误详情")
     timestamp: str = Field(..., description="时间戳")
-    path: str | None = Field(None, description="请求路径")
+    path: Optional[str] = Field(None, description="请求路径")
 
     class Config:
         json_schema_extra = {
@@ -129,8 +129,8 @@ class UserPreferenceRequest(BaseModel):
         LanguageStyleEnum.PROFESSIONAL, description="语言风格"
     )
     output_format: OutputFormatEnum = Field(OutputFormatEnum.TEXT, description="输出格式")
-    preferred_agent: str | None = Field(None, description="首选智能体")
-    avoid_topics: list[str] | None = Field(None, description="避免的话题")
+    preferred_agent: Optional[str] = Field(None, description="首选智能体")
+    avoid_topics: Optional[list[str]] = Field(None, description="避免的话题")
 
     class Config:
         json_schema_extra = {
@@ -169,7 +169,7 @@ class WorkflowTaskDefinition(BaseModel):
     capability: str = Field(..., description="使用的能力")
     input: dict[str, Any] = Field(default_factory=dict, description="任务输入")
     depends_on: list[str] = Field(default_factory=list, description="依赖的任务ID列表")
-    timeout: float | None = Field(None, description="超时时间(秒)")
+    timeout: Optional[float] = Field(None, description="超时时间(秒)")
     retry: int = Field(0, description="重试次数")
 
     class Config:
@@ -192,7 +192,7 @@ class WorkflowRequest(BaseModel):
     description: str = Field(..., description="工作流描述")
     tasks: list[WorkflowTaskDefinition] = Field(..., description="任务列表")
     stop_on_failure: bool = Field(True, description="失败时是否停止")
-    timeout: float | None = Field(None, description="总超时时间(秒)")
+    timeout: Optional[float] = Field(None, description="总超时时间(秒)")
 
     class Config:
         json_schema_extra = {
@@ -218,10 +218,10 @@ class TaskResult(BaseModel):
     task_name: str = Field(..., description="任务名称")
     status: str = Field(..., description="任务状态: pending/running/success/failed")
     result: Any | None = Field(None, description="任务结果")
-    error: str | None = Field(None, description="错误信息")
+    error: Optional[str] = Field(None, description="错误信息")
     start_time: float = Field(..., description="开始时间")
-    end_time: float | None = Field(None, description="结束时间")
-    duration: float | None = Field(None, description="执行时长(秒)")
+    end_time: Optional[float] = Field(None, description="结束时间")
+    duration: Optional[float] = Field(None, description="执行时长(秒)")
 
 
 class WorkflowResponse(BaseModel):
@@ -233,7 +233,7 @@ class WorkflowResponse(BaseModel):
     status: str = Field(..., description="工作流状态")
     results: list[TaskResult] = Field(..., description="任务结果列表")
     total_duration: float = Field(..., description="总执行时长(秒)")
-    error: str | None = Field(None, description="错误信息")
+    error: Optional[str] = Field(None, description="错误信息")
 
     class Config:
         json_schema_extra = {

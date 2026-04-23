@@ -41,7 +41,7 @@ def data_transformation_handler(operation: str, **kwargs) -> dict[str, Any]:
             - success: bool - 操作是否成功
             - data: Any - 转换后的数据
             - metadata: dict - 元数据信息
-            - error: str | None - 错误信息
+            - error: Optional[str] - 错误信息
 
     Examples:
         >>> # 加载CSV文件
@@ -200,7 +200,7 @@ def aggregate_data(data: Any, agg_func: str | dict, **kwargs) -> dict[str, Any]:
     )
 
 
-def merge_data(data: Any, other: Any, on: str | list[str] | None = None, **kwargs) -> dict[str, Any]:
+def merge_data(data: Any, other: Any, on: str | Optional[list[str]] = None, **kwargs) -> dict[str, Any]:
     """合并数据"""
     return data_transformation_handler(
         operation="merge", data=data, params={"other": other, "on": on, **kwargs}

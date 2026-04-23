@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Agentic Design Patterns 中文内容提取工具
 Extract Chinese-Only Content for Agentic Design Patterns
 """
 
 import os
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import re
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+from typing import Any
+
 
 class ChineseContentExtractor:
     """中文内容提取器"""
@@ -29,7 +29,7 @@ class ChineseContentExtractor:
         self.english_dir.mkdir(exist_ok=True)
 
         # 遍历所有Markdown文件
-        for root, dirs, files in os.walk(self.original_dir):
+        for root, _dirs, files in os.walk(self.original_dir):
             for file in files:
                 if file.endswith('.md'):
                     self.extract_chinese_from_file(root, file)
@@ -42,7 +42,7 @@ class ChineseContentExtractor:
 
         try:
             # 读取原文件
-            with open(source_file, 'r', encoding='utf-8') as f:
+            with open(source_file, encoding='utf-8') as f:
                 content = f.read()
         except Exception as e:
             print(f"⚠️ 读取文件失败: {source_file} - {e}")
@@ -207,7 +207,6 @@ class ChineseContentExtractor:
         """提取英文部分"""
         # 移除中文字符，保留英文和标点
         # 保留英文字母、数字、标点和空格
-        english_pattern = r'[^\x00-\x7F\u4e00-\u9fff\uff00-\uffef]*'
         result = re.sub(r'[\u4e00-\u9fff\uff00-\uffef]', '', line)
 
         # 清理多余的空格

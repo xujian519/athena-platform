@@ -80,9 +80,9 @@ class PasteMDCore:
     def markdown_to_docx(
         self,
         markdown_content: str,
-        output_filename: str | None = None,
-        reference_docx: str | None = None,
-    ) -> str | None:
+        output_filename: Optional[str] = None,
+        reference_docx: Optional[str] = None,
+    ) -> Optional[str]:
         """
         将Markdown内容转换为DOCX格式
 
@@ -153,8 +153,8 @@ class PasteMDCore:
                 Path(md_file_path).unlink()
 
     def html_to_docx(
-        self, html_content: str, output_filename: str | None = None
-    ) -> str | None:
+        self, html_content: str, output_filename: Optional[str] = None
+    ) -> Optional[str]:
         """
         将HTML富文本转换为DOCX格式
 
@@ -212,8 +212,8 @@ class PasteMDCore:
                 Path(html_file_path).unlink()
 
     def markdown_table_to_excel(
-        self, markdown_table: str, output_filename: str | None = None
-    ) -> str | None:
+        self, markdown_table: str, output_filename: Optional[str] = None
+    ) -> Optional[str]:
         """
         将Markdown表格转换为Excel格式
 
@@ -273,8 +273,8 @@ class PasteMDCore:
         self,
         conversation_content: str,
         content_type: str = "markdown",
-        output_filename: str | None = None,
-    ) -> str | None:
+        output_filename: Optional[str] = None,
+    ) -> Optional[str]:
         """
         导出AI对话内容到Word文档
 
@@ -307,7 +307,7 @@ class AthenaDocumentExporter:
 
     def export_patent_report(
         self, patent_data: dict[str, Any], analysis_result: str, include_raw_data: bool = False
-    ) -> str | None:
+    ) -> Optional[str]:
         """
         导出专利分析报告
 
@@ -378,8 +378,8 @@ class AthenaDocumentExporter:
         self,
         conversation_id: str,
         messages: list[dict[str, str]],
-        output_filename: str | None = None,
-    ) -> str | None:
+        output_filename: Optional[str] = None,
+    ) -> Optional[str]:
         """
         导出对话记录到Word文档
 
@@ -443,7 +443,7 @@ class AthenaDocumentExporter:
 
     def export_data_analysis_to_excel(
         self, data: list[dict] | dict, table_name: str = "数据分析结果"
-    ) -> str | None:
+    ) -> Optional[str]:
         """
         导出数据分析到Excel
 

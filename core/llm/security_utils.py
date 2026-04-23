@@ -43,7 +43,7 @@ def mask_api_key(api_key: str, visible_chars: int = 8) -> str:
     return f"{visible_start}{'*' * masked_length}{visible_end}"
 
 
-def mask_sensitive_data(data: str | None = None, patterns: dict[str, str] | None = None) -> str:
+def mask_sensitive_data(data: Optional[str] = None, patterns: dict[str, str] | None = None) -> str:
     """
     脱敏敏感数据
 

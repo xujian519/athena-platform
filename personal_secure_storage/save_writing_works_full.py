@@ -225,7 +225,7 @@ def save_writing_works_with_content() -> None:
 ```
 
 ## 🌟 创作特色
-{chr(10).join([f"- {feature}" for feature in work['key_features']])}
+{chr(10).join([f"- {feature}" for feature in work['key_features'])}
 
 ## 📝 作品赏析
 
@@ -255,7 +255,7 @@ def save_writing_works_with_content() -> None:
                 '创作日期': work['date'],
                 '文体': work['type'],
                 '风格': work['style'],
-                '标签': ['个人创作', '文学', work['type']]
+                '标签': ['个人创作', '文学', work['type']
             }),
             json.dumps({
                 '整理时间': datetime.now().strftime('%Y-%m-%d'),
@@ -287,7 +287,7 @@ def save_writing_works_with_content() -> None:
 {chr(10).join([f"1. **{work['title']}** ({work['date']}){chr(10)}   - 风格：{work['style']}{chr(10)}   - 特色：{work['key_features'][0]}" for work in writing_works if work['type'] == '书信'])}
 
 ### 📖 小说类 ({len([w for w in writing_works if w['type'] == '小说'])}篇)
-{chr(10).join([f"1. **{work['title']}** ({work['date']}){chr(10)}   - 风格：{work['style']}{chr(10)}   - 特色：{work['key_features'][0]}" for work in writing_works if '小说' in work['type']])}
+{chr(10).join([f"1. **{work['title']}** ({work['date']}){chr(10)}   - 风格：{work['style']}{chr(10)}   - 特色：{work['key_features'][0]}" for work in writing_works if '小说' in work['type'])}
 
 ### 🎵 歌词类 ({len([w for w in writing_works if w['type'] == '歌词'])}篇)
 {chr(10).join([f"1. **{work['title']}** ({work['date']}){chr(10)}   - 副标题：{work.get('sub_title', '无')}{chr(10)}   - 特色：{work['key_features'][0]}" for work in writing_works if work['type'] == '歌词'])}

@@ -32,7 +32,7 @@ class ReflectionEngine:
         self.patterns = []
 
     async def generate_reflection(
-        self, evaluation_result: EvaluationResult, context: dict[str, Any] | None = None
+        self, evaluation_result: EvaluationResult, context: Optional[dict[str, Any]] = None
     ) -> ReflectionRecord:
         """生成反思"""
         reflection_id = str(uuid.uuid4())

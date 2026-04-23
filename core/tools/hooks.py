@@ -60,10 +60,10 @@ class HookContext:
         self,
         tool_name: str,
         parameters: dict[str, Any],
-        context: Optional[dict[str, Any]] = None,
-        request_id: Optional[str] = None,
-        timestamp: Optional[datetime] = None,
-        metadata: Optional[dict[str, Any]] = None,
+        context: dict[str, Any] | None = None,
+        request_id: str | None = None,
+        timestamp: datetime | None = None,
+        metadata: dict[str, Any] | None = None,
     ):
         self.tool_name = tool_name
         self.parameters = parameters
@@ -88,9 +88,9 @@ class HookResult:
     def __init__(
         self,
         should_proceed: bool = True,
-        modified_parameters: Optional[dict[str, Any]] = None,
-        metadata: Optional[dict[str, Any]] = None,
-        error_message: Optional[str] = None,
+        modified_parameters: dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
+        error_message: str | None = None,
     ):
         self.should_proceed = should_proceed
         self.modified_parameters = modified_parameters

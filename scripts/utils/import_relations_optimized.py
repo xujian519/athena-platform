@@ -6,8 +6,9 @@
 
 import logging
 import time
-from psycopg2 import pool
+
 from neo4j import GraphDatabase
+from psycopg2 import pool
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)

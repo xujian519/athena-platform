@@ -48,7 +48,7 @@ class CacheEntry:
     created_at: float
     last_accessed: float
     access_count: int = 0
-    ttl: float | None = None  # TTL in seconds
+    ttl: Optional[float] = None  # TTL in seconds
 
     def is_expired(self) -> bool:
         """检查是否过期"""
@@ -111,7 +111,7 @@ class L1MemoryCache:
             self.stats["hits"] += 1
             return entry.value
 
-    def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
+    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
         """
         设置缓存值
 
@@ -240,7 +240,7 @@ class L2RedisCache:
         host: str = "127.0.0.1",
         port: int = 6379,
         db: int = 0,
-        password: str | None = None,
+        password: Optional[str] = None,
         default_ttl: int = 3600,
         key_prefix: str = "athena_l2",
     ):
@@ -316,7 +316,7 @@ class L2RedisCache:
             self.stats["misses"] += 1
             return None
 
-    def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
+    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
         """设置缓存值"""
         self.stats["sets"] += 1
 
@@ -518,7 +518,7 @@ class L3DiskCache:
         finally:
             self._release_lock(lock)
 
-    def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
+    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
         """设置缓存值"""
         self.stats["sets"] += 1
 
@@ -564,7 +564,7 @@ class L3DiskCache:
             return True
         return False
 
-    def clear(self, older_than: int | None = None) -> Any:
+    def clear(self, older_than: Optional[int] = None) -> Any:
         """
         清空缓存
 
@@ -707,7 +707,7 @@ class ThreeTierCacheSystem:
         logger.debug(f"缓存未命中: {key} (查找时间: {latency_ms:.2f}ms)")
         return default
 
-    def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
+    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
         """
         设置缓存值 - 同时写入所有层级
 
@@ -750,7 +750,7 @@ class ThreeTierCacheSystem:
 
         return success
 
-    def clear(self, level: str | None = None) -> Any:
+    def clear(self, level: Optional[str] = None) -> Any:
         """
         清空缓存
 

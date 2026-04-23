@@ -223,7 +223,7 @@ class ContextManager:
 
         return "\n".join(prompt_lines)
 
-    async def store_conversation(self, text: str, context_info: dict[str, Any] | None = None):
+    async def store_conversation(self, text: str, context_info: Optional[dict[str, Any]] = None):
         """存储对话到上下文库"""
         if not self.initialized:
             await self.initialize()
@@ -241,7 +241,7 @@ class ContextManager:
         # 清除相关缓存
         await self._clear_cache_for_query(text)
 
-    async def store_memory(self, text: str, category: str, metadata: dict[str, Any] | None = None):
+    async def store_memory(self, text: str, category: str, metadata: Optional[dict[str, Any]] = None):
         """存储记忆到上下文库"""
         if not self.initialized:
             await self.initialize()

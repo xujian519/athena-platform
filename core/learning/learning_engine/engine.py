@@ -355,7 +355,7 @@ class LearningEngine:
             "learning_confidence": self._calculate_learning_confidence(),
         }
 
-    async def get_patterns(self, pattern_type: str | None = None) -> list[dict[str, Any]]:
+    async def get_patterns(self, pattern_type: Optional[str] = None) -> list[dict[str, Any]]:
         """获取学习到的模式"""
         all_patterns = []
         for history in self.pattern_recognizer.pattern_history:

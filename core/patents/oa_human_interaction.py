@@ -74,10 +74,10 @@ class InteractionState:
     created_at: str = field(default_factory=lambda: datetime.now().isoformat())
 
     # 新增: 完整性检查相关
-    completeness_report: dict[str, Any] | None = None
-    download_result: dict[str, Any] | None = None
-    analysis_plan: dict[str, Any] | None = None
-    analysis_result: dict[str, Any] | None = None  # 步骤2智能分析结果
+    completeness_report: Optional[dict[str, Any]] = None
+    download_result: Optional[dict[str, Any]] = None
+    analysis_plan: Optional[dict[str, Any]] = None
+    analysis_result: Optional[dict[str, Any]] = None  # 步骤2智能分析结果
 
 
 class HumanInteractionWorkflow:
@@ -148,7 +148,7 @@ class HumanInteractionWorkflow:
             logger.warning(f"⚠️ 分析计划生成器初始化失败: {e}")
             self.plan_generator = None
 
-    async def start_workflow(self, document_path: str | None = None) -> dict[str, Any]:
+    async def start_workflow(self, document_path: Optional[str] = None) -> dict[str, Any]:
         """
         启动人机交互工作流程
 

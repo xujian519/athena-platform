@@ -74,7 +74,7 @@ class ModuleInstance:
     config: dict[str, Any] = field(default_factory=dict)
     health_status: HealthStatus = HealthStatus.UNKNOWN
     error_count: int = 0
-    last_error: str | None = None
+    last_error: Optional[str] = None
     last_health_check: datetime | None = None
     start_time: datetime | None = None
     load_time: datetime | None = None

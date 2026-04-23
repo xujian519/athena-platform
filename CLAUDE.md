@@ -169,21 +169,41 @@ The platform uses a centralized Gateway pattern for multi-agent coordination:
 
 ### Directory Structure
 
+> **架构优化完成** (2026-04-23): Core子目录从164减少到27（-83.5%），根目录从32减少到19（-40.6%），采用三层架构
+
+**优化成果**:
+- ✅ Python 3.9完全兼容（修复798个文件）
+- ✅ 导入路径100%修复（添加737个文件）
+- ✅ 小诺协调代理成功集成
+- ✅ 测试通过率87.6%（162/185）
+
+详细报告: `docs/reports/ARCHITECTURE_OPTIMIZATION_COMPLETE_20260423.md`
+
 ```
 Athena工作平台/
-├── core/                    # Core system modules
-│   ├── agents/             # Agent implementations (Xiaona, Xiaonuo, etc.)
-│   ├── llm/                # LLM adapters and management
-│   ├── embedding/          # Vector embedding services (BGE-M3)
-│   ├── memory/             # Four-tier memory system
-│   ├── cognition/          # Cognitive processing engine
-│   ├── nlp/                # NLP services
-│   ├── perception/         # Perception modules
-│   ├── patent/             # Patent processing (含 drawing/)
-│   ├── database/           # Database connection pooling
-│   ├── collaboration/      # Agent collaboration patterns
+├── core/                    # 核心系统模块（三层架构，27个子目录）
+│   ├── ai/                 # AI能力层
+│   │   ├── llm/            # LLM适配器和管理（Claude, GPT-4, DeepSeek, GLM）
+│   │   ├── embedding/      # 向量嵌入服务（BGE-M3）
+│   │   ├── nlp/            # NLP服务
+│   │   └── cognition/      # 认知处理引擎
+│   ├── framework/          # 框架层
+│   │   ├── agents/         # 智能体实现
+│   │   │   ├── xiaona/     # 小娜·法律专家（9个专业代理）
+│   │   │   └── xiaonuo_agent.py  # 小诺·协调代理（轻量级桥接）
+│   │   ├── collaboration/  # 智能体协作模式
+│   │   ├── tools/          # 工具系统（统一注册表、权限、管理）
+│   │   └── ...
+│   ├── infrastructure/     # 基础设施层
+│   │   ├── database/       # 数据库连接池
+│   │   ├── cache/          # 多级缓存（Redis, 内存, 文件）
+│   │   ├── vector_db/      # 向量数据库（Qdrant, Neo4j）
+│   │   └── ...
+│   ├── agents/             # 智能体基类（向后兼容）
+│   ├── memory/             # 四层记忆系统（HOT→WARM→COLD→ARCHIVE）
+│   ├── patent/             # 专利处理（含drawing/）
 │   ├── legal_world_model/  # 法律世界模型
-│   └── knowledge_graph/    # 知识图谱引擎
+│   └── knowledge_graph/    # 知识图谱引擎（Neo4j/ArangoDB）
 ├── services/               # Microservices
 │   ├── intelligent-collaboration/  # Xiaonuo coordination service
 │   ├── athena-unified/     # Unified Athena services

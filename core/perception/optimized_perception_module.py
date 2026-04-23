@@ -144,7 +144,7 @@ class DocumentChunk:
     end_pos: int
     content_hash: str
     processing_status: str = "pending"
-    ocr_result: dict[str, Any] | None = None
+    ocr_result: Optional[dict[str, Any]] = None
     last_processed: datetime | None = None
     dependencies: set[str] = field(default_factory=set)
 
@@ -371,7 +371,7 @@ class IncrementalOCRProcessor:
             "processing_method": "incremental_ocr",
         }
 
-    def _get_cached_ocr_result(self, content_hash: str) -> dict[str, Any] | None:
+    def _get_cached_ocr_result(self, content_hash: str) -> Optional[dict[str, Any]]:
         """获取缓存的OCR结果"""
         if not self.cache_enabled:
             return None
@@ -496,7 +496,7 @@ class OptimizedPerceptionModule(BaseModule):
     def __init__(
         self,
         agent_id: str,
-        config: dict[str, Any] | None = None,
+        config: Optional[dict[str, Any]] = None,
         cache_config: CacheConfig | None = None,
     ):
         super().__init__(agent_id, config)

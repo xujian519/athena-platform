@@ -65,7 +65,7 @@ class ExpertSelectors:
             f"{len(self.technical_experts)}技术专家"
         )
 
-    async def select_best_agent(self, technology_field: str) -> dict[str, Any] | None:
+    async def select_best_agent(self, technology_field: str) -> Optional[dict[str, Any]]:
         """选择最佳专利代理人
 
         Args:
@@ -96,7 +96,7 @@ class ExpertSelectors:
 
         return best_agent
 
-    async def select_best_lawyer(self, technology_field: str) -> dict[str, Any] | None:
+    async def select_best_lawyer(self, technology_field: str) -> Optional[dict[str, Any]]:
         """选择最佳专利律师
 
         Args:
@@ -129,7 +129,7 @@ class ExpertSelectors:
 
     async def select_best_examiner(
         self, technology_field: str
-    ) -> dict[str, Any] | None:
+    ) -> Optional[dict[str, Any]]:
         """选择最佳专利审查员
 
         Args:

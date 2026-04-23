@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 修复通用记忆库
 将general_memory_db从384维升级到1024维
@@ -9,11 +8,9 @@ import asyncio
 import json
 import logging
 import os
-import shutil
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Any
 
 # 添加项目路径
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -107,7 +104,6 @@ class MemoryDBFixer:
         ]
 
         total_vectors = 0
-        migrated_collections = []
 
         for data_path in memory_data_paths:
             if data_path.exists():
@@ -119,7 +115,7 @@ class MemoryDBFixer:
 
                 for json_file in json_files:
                     try:
-                        with open(json_file, 'r', encoding='utf-8') as f:
+                        with open(json_file, encoding='utf-8') as f:
                             data = json.load(f)
 
                         # 检查是否包含向量数据
@@ -182,7 +178,7 @@ class MemoryDBFixer:
         import numpy as np
 
         points = []
-        for i, memory in enumerate(sample_memories):
+        for _i, memory in enumerate(sample_memories):
             # 生成归一化的1024维向量
             vector = np.random.normal(0, 1, 1024)
             vector = vector / np.linalg.norm(vector)  # 归一化
@@ -215,7 +211,7 @@ class MemoryDBFixer:
         try:
             # 获取集合信息
             collection_info = self.client.get_collection(self.new_collection_name)
-            logger.info(f"📊 集合信息:")
+            logger.info("📊 集合信息:")
             logger.info(f"  - 向量数量: {collection_info.points_count}")
             logger.info(f"  - 向量维度: {collection_info.config.params.vectors.size}")
             logger.info(f"  - 距离度量: {collection_info.config.params.vectors.distance}")
@@ -233,7 +229,7 @@ class MemoryDBFixer:
                     limit=3
                 )
 
-                logger.info(f"🔍 搜索测试结果:")
+                logger.info("🔍 搜索测试结果:")
                 for i, hit in enumerate(search_result):
                     payload = hit.payload
                     logger.info(f"  {i+1}. [{payload.get('category', 'unknown')}] {payload.get('content', '')[:50]}...")

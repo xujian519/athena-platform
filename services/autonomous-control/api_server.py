@@ -73,7 +73,7 @@ class DecisionRequest(BaseModel):
     """决策请求"""
     context: dict[str, Any] = Field(..., description='决策上下文')
     decision_type: str = Field(..., description='决策类型')
-    options: list[dict[str, Any]] = Field(..., description='决策选项')
+    options: list[dict[str, Any] = Field(..., description='决策选项')
 
 # 全局控制器实例
 autonomous_controller = None
@@ -232,7 +232,7 @@ async def get_autonomous_tasks(token: str = Depends(verify_token)):
             'data': {
                 'tasks': tasks,
                 'total': len(tasks),
-                'active_count': len([t for t in tasks if t['status'] in ['pending', 'in_progress']])
+                'active_count': len([t for t in tasks if t['status'] in ['pending', 'in_progress'])
             }
         }
     except Exception as e:

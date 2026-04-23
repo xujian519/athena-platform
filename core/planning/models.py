@@ -100,17 +100,17 @@ class Task:
     task_id: str = field(default_factory=lambda: str(uuid4()))
     description: str = ""
     task_type: str = "general"  # 任务类型
-    domain: str | None = None  # 任务领域
-    category: str | None = None  # 任务分类 (professional/general)
+    domain: Optional[str] = None  # 任务领域
+    category: Optional[str] = None  # 任务分类 (professional/general)
     priority: str = "medium"  # 优先级 (high/medium/low)  # TODO: 确保除数不为零
     status: str = "pending"  # 状态
     context: dict[str, Any] = field(default_factory=dict)
     requirements: list[str] = field(default_factory=list)
     constraints: list[str] = field(default_factory=list)
-    expected_output: str | None = None
+    expected_output: Optional[str] = None
     created_at: datetime = field(default_factory=datetime.now)
     deadline: datetime | None = None
-    assigned_agent: str | None = None
+    assigned_agent: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
     # 可选的复杂度分析结果
@@ -126,7 +126,7 @@ class ExecutionPlan:
     strategy: StrategyType = StrategyType.REACT
     steps: list[Any] = field(default_factory=list)  # PlanStep列表
     created_at: datetime = field(default_factory=datetime.now)
-    estimated_duration: int | None = None  # 预估执行时间(秒)
+    estimated_duration: Optional[int] = None  # 预估执行时间(秒)
     confidence: float = 0.8
     metadata: dict[str, Any] = field(default_factory=dict)
 

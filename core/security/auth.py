@@ -106,7 +106,7 @@ class SecurityConfig:
 ALLOWED_ORIGINS = SecurityConfig.ALLOWED_ORIGINS_CONFIG
 
 
-def validate_query_input(text: str) -> tuple[bool, str | None]:
+def validate_query_input(text: str) -> Optional[tuple[bool, str]]:
     """
     验证查询输入安全性
 
@@ -135,7 +135,7 @@ def validate_query_input(text: str) -> tuple[bool, str | None]:
     return True, None
 
 
-def validate_limit(limit: int) -> tuple[bool, str | None]:
+def validate_limit(limit: int) -> Optional[tuple[bool, str]]:
     """验证limit参数"""
     if limit < SecurityConfig.MIN_LIMIT:
         return False, f"limit不能小于{SecurityConfig.MIN_LIMIT}"
@@ -256,7 +256,7 @@ def sanitize_error_message(error: Exception) -> str:
     return error_str
 
 
-def check_ip_whitelist(client_ip: str) -> tuple[bool, str | None]:
+def check_ip_whitelist(client_ip: str) -> Optional[tuple[bool, str]]:
     """
     检查IP是否在白名单中
 

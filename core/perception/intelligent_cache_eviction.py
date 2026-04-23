@@ -61,7 +61,7 @@ class CacheEntry:
     access_count: int = 0  # 访问次数
     last_access: float = field(default_factory=time.time)  # 最后访问时间
     created_at: float = field(default_factory=time.time)  # 创建时间
-    expires_at: float | None = None  # 过期时间
+    expires_at: Optional[float] = None  # 过期时间
     metadata: dict[str, Any] = field(default_factory=dict)
 
     @property
@@ -313,7 +313,7 @@ class TTLPolicy:
         self,
         key: str,
         entry: CacheEntry,
-        ttl: float | None = None,
+        ttl: Optional[float] = None,
     ) -> bool:
         """添加条目
 
@@ -560,7 +560,7 @@ class IntelligentCacheEvictor:
         policy: EvictionPolicy = EvictionPolicy.ADAPTIVE,
         max_size: int = 10000,
         max_memory: int = 1024 * 1024 * 1024,  # 1GB
-        default_ttl: float | None = None,
+        default_ttl: Optional[float] = None,
     ):
         """初始化淘汰器
 
@@ -598,7 +598,7 @@ class IntelligentCacheEvictor:
         key: str,
         value: Any,
         size: int = 1,
-        ttl: float | None = None,
+        ttl: Optional[float] = None,
         **metadata: Any,
     ) -> bool:
         """添加缓存条目

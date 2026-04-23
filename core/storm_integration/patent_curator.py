@@ -73,7 +73,7 @@ class BaseRetriever(ABC):
 
     @abstractmethod
     async def search(
-        self, query: str, context: str | None = None, top_k: int = 10
+        self, query: str, context: Optional[str] = None, top_k: int = 10
     ) -> list[RetrievedDocument]:
         """
         执行检索
@@ -101,7 +101,7 @@ class PatentDatabaseRetriever(BaseRetriever):
     从 PostgreSQL 专利数据库 (28M+ 专利) 中检索
     """
 
-    def __init__(self, connection_string: str | None = None):
+    def __init__(self, connection_string: Optional[str] = None):
         super().__init__(RetrievalSource.PATENT_DB)
         self.connection_string = connection_string
         self._connection = None
@@ -116,7 +116,7 @@ class PatentDatabaseRetriever(BaseRetriever):
             return False
 
     async def search(
-        self, query: str, context: str | None = None, top_k: int = 10
+        self, query: str, context: Optional[str] = None, top_k: int = 10
     ) -> list[RetrievedDocument]:
         """从专利数据库检索"""
         logger.info(f"从专利数据库检索: {query}")
@@ -149,7 +149,7 @@ class KnowledgeGraphRetriever(BaseRetriever):
     从 Neo4j 知识图谱中检索相关实体和关系
     """
 
-    def __init__(self, uri: str | None = None):
+    def __init__(self, uri: Optional[str] = None):
         super().__init__(RetrievalSource.KNOWLEDGE_GRAPH)
         self.uri = uri or "bolt://127.0.0.1:7687"
         self._driver = None
@@ -164,7 +164,7 @@ class KnowledgeGraphRetriever(BaseRetriever):
             return False
 
     async def search(
-        self, query: str, context: str | None = None, top_k: int = 10
+        self, query: str, context: Optional[str] = None, top_k: int = 10
     ) -> list[RetrievedDocument]:
         """从知识图谱检索"""
         logger.info(f"从知识图谱检索: {query}")
@@ -196,7 +196,7 @@ class VectorSearchRetriever(BaseRetriever):
     从 Qdrant 向量数据库 (121K+ 法律数据) 中检索
     """
 
-    def __init__(self, url: str | None = None, collection_name: str = "patents"):
+    def __init__(self, url: Optional[str] = None, collection_name: str = "patents"):
         super().__init__(RetrievalSource.VECTOR_SEARCH)
         self.url = url or "http://localhost:6333"
         self.collection_name = collection_name
@@ -212,7 +212,7 @@ class VectorSearchRetriever(BaseRetriever):
             return False
 
     async def search(
-        self, query: str, context: str | None = None, top_k: int = 10
+        self, query: str, context: Optional[str] = None, top_k: int = 10
     ) -> list[RetrievedDocument]:
         """向量检索"""
         logger.info(f"向量检索: {query}")
@@ -286,7 +286,7 @@ class WebSearchRetriever(BaseRetriever):
         return self._available
 
     async def search(
-        self, query: str, context: str | None = None, top_k: int = 10
+        self, query: str, context: Optional[str] = None, top_k: int = 10
     ) -> list[RetrievedDocument]:
         """网络搜索"""
         logger.info(f"🌐 网络搜索 ({self.engine}): {query}")
@@ -503,7 +503,7 @@ class PatentInformationCurator:
     async def curate(
         self,
         query: str,
-        context: str | None = None,
+        context: Optional[str] = None,
         top_k: int = 20,
         sources: list[RetrievalSource] | None = None,
     ) -> list[RetrievedDocument]:
@@ -646,7 +646,7 @@ class PatentInformationCurator:
 
 # 便捷函数
 async def curate_patent_information(
-    query: str | None = None, context: str | None = None, top_k: int = 20
+    query: Optional[str] = None, context: Optional[str] = None, top_k: int = 20
 ) -> list[RetrievedDocument]:
     """
     便捷函数:策展专利信息

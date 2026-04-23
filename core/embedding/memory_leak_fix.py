@@ -177,7 +177,7 @@ class FixedBGEEmbeddingService:
     添加了严格的内存管理
     """
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.name = "BGE嵌入服务(修复版)"
         self.version = "1.0.1"
 

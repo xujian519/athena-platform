@@ -137,8 +137,8 @@ class CodeExecutor:
         self,
         code: str,
         language: LanguageType = LanguageType.PYTHON,
-        context: dict[str, Any] | None = None,
-        task_id: str | None = None,
+        context: Optional[dict[str, Any]] = None,
+        task_id: Optional[str] = None,
     ) -> ExecutionResult:
         """
         执行代码
@@ -165,8 +165,8 @@ class PythonCodeExecutor(CodeExecutor):
         self,
         code: str,
         language: LanguageType = LanguageType.PYTHON,
-        context: dict[str, Any] | None = None,
-        task_id: str | None = None,
+        context: Optional[dict[str, Any]] = None,
+        task_id: Optional[str] = None,
     ) -> ExecutionResult:
         """
         执行Python代码
@@ -346,8 +346,8 @@ class CodeSandbox:
         self,
         code: str,
         language: LanguageType = LanguageType.PYTHON,
-        context: dict[str, Any] | None = None,
-        task_id: str | None = None,
+        context: Optional[dict[str, Any]] = None,
+        task_id: Optional[str] = None,
     ) -> ExecutionResult:
         """
         执行代码
@@ -366,7 +366,7 @@ class CodeSandbox:
         return result
 
     async def execute_data_analysis(
-        self, code: str, data: dict[str, Any]  | None = None, task_id: str | None = None
+        self, code: str, data: dict[str, Any]  | None = None, task_id: Optional[str] = None
     ) -> ExecutionResult:
         """
         执行数据分析代码
@@ -398,7 +398,7 @@ class CodeSandbox:
         return result
 
     async def execute_safe(
-        self, code: str, context: dict[str, Any]  | None = None, task_id: str | None = None
+        self, code: str, context: dict[str, Any]  | None = None, task_id: Optional[str] = None
     ) -> ExecutionResult:
         """
         安全执行代码(严格限制)
@@ -467,7 +467,7 @@ class CodeSandbox:
 async def execute_code(
     code: str,
     language: LanguageType = LanguageType.PYTHON,
-    context: dict[str, Any] | None = None,
+    context: Optional[dict[str, Any]] = None,
     timeout: int = 30,
 ) -> ExecutionResult:
     """
@@ -493,7 +493,7 @@ async def execute_code(
 
 
 async def analyze_data(
-    code: str, data: dict[str, Any] | None = None, timeout: int = 60
+    code: str, data: Optional[dict[str, Any]] = None, timeout: int = 60
 ) -> ExecutionResult:
     """
     便捷的数据分析函数

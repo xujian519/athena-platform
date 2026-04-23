@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 多智能体协作系统使用示例
 Usage Examples for Multi-Agent Collaboration System
@@ -7,21 +6,22 @@ Usage Examples for Multi-Agent Collaboration System
 
 import asyncio
 import json
-from datetime import datetime, timedelta
+from datetime import timedelta
+
+from core.framework.collaboration.multi_agent_collaboration import (
+    Agent,
+    MultiAgentCollaborationFramework,
+)
 
 # 导入优化后的核心组件
-from core.collaboration.unified_capability import (
-    UnifiedAgentCapability,
+from core.framework.collaboration.unified_capability import (
+    CapabilityRegistry,
     CapabilityType,
-    CapabilityRegistry
-)
-from core.collaboration.multi_agent_collaboration import (
-    MultiAgentCollaborationFramework,
-    Agent
+    UnifiedAgentCapability,
 )
 from core.monitoring.performance_monitor import (
     IntegrationPerformanceMonitor,
-    start_integration_monitoring
+    start_integration_monitoring,
 )
 
 
@@ -36,7 +36,7 @@ async def example_1_basic_usage():
     framework.start_framework()
 
     # 启动监控
-    monitor = start_integration_monitoring(framework)
+    start_integration_monitoring(framework)
 
     # 创建基础能力
     basic_capability = UnifiedAgentCapability(
@@ -136,7 +136,7 @@ async def example_3_performance_monitoring():
     print("📊 模拟系统操作...")
 
     # 记录一些事件
-    for i in range(3):
+    for _i in range(3):
         monitor.record_agent_registration()
         monitor.record_task_assignment()
         await asyncio.sleep(0.1)  # 短暂延迟
@@ -150,7 +150,7 @@ async def example_3_performance_monitoring():
     # 获取当前指标
     current_metrics = monitor.monitor.get_current_metrics()
     if current_metrics:
-        print(f"📈 当前系统指标:")
+        print("📈 当前系统指标:")
         print(f"   CPU使用率: {current_metrics.cpu_percent:.1f}%")
         print(f"   内存使用率: {current_metrics.memory_percent:.1f}%")
         print(f"   活跃智能体: {current_metrics.active_agents}")
@@ -160,14 +160,14 @@ async def example_3_performance_monitoring():
     # 获取性能摘要
     summary = monitor.monitor.get_performance_summary(minutes=1)
     if summary and "cpu" in summary:
-        print(f"📊 性能摘要:")
+        print("📊 性能摘要:")
         print(f"   平均CPU: {summary['cpu']['avg']:.1f}%")
         print(f"   最大CPU: {summary['cpu']['max']:.1f}%")
         print(f"   平均响应时间: {summary['response_time']['avg']:.0f}ms")
 
     # 获取建议
     recommendations = monitor._generate_recommendations()
-    print(f"💡 优化建议:")
+    print("💡 优化建议:")
     for rec in recommendations:
         print(f"   - {rec}")
 
@@ -184,7 +184,6 @@ async def example_4_collaboration_session():
     framework.start_framework()
 
     # 模拟创建智能体
-    agents = ["agent_001", "agent_002", "agent_003"]
 
     # 创建不同的协作配置
     collaboration_configs = [
@@ -238,17 +237,14 @@ async def example_5_error_handling():
     print("示例5: 增强的错误处理")
     print("=" * 60)
 
-    from core.protocols.collaboration_protocols import (
-        CommunicationProtocol,
-        ErrorHandler
-    )
+    from core.protocols.collaboration_protocols import CommunicationProtocol, ErrorHandler
 
     # 创建协议并演示错误处理
     try:
         print("🛡️ 创建协议并启动错误处理...")
 
         # 创建通信协议
-        comm_protocol = CommunicationProtocol("demo_protocol")
+        CommunicationProtocol("demo_protocol")
 
         # 创建错误处理器
         error_handler = ErrorHandler(
@@ -297,7 +293,7 @@ async def example_6_system_integration():
     print("✅ 性能监控已启动")
 
     # 3. 创建能力注册表
-    registry = CapabilityRegistry()
+    CapabilityRegistry()
     print("✅ 能力注册表已创建")
 
     # 4. 模拟系统运行

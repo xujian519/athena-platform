@@ -65,7 +65,7 @@ class SkillHookIntegration:
         return self._lifecycle
 
     async def before_skill_load(
-        self, skill_path: str, metadata: dict[str, Any] | None = None
+        self, skill_path: str, metadata: Optional[dict[str, Any]] = None
     ) -> HookResult:
         """技能加载前Hook
 
@@ -93,7 +93,7 @@ class SkillHookIntegration:
         )
 
     async def after_skill_load(
-        self, skill: Skill, success: bool = True, error: str | None = None
+        self, skill: Skill, success: bool = True, error: Optional[str] = None
     ) -> HookResult:
         """技能加载后Hook
 

@@ -72,7 +72,7 @@ class PlanSelector:
         cost_comparisons: list[CostComparison],
         risk_assessments: list[RiskAssessment],
         criteria: SelectionCriteria | None = None,
-        user_preferences: dict[str, Any] | None = None
+        user_preferences: Optional[dict[str, Any]] = None
     ) -> SelectionResult:
         """
         选择最优方案
@@ -154,7 +154,7 @@ class PlanSelector:
 
     def _infer_criteria_from_preferences(
         self,
-        preferences: dict[str, Any] | None
+        preferences: Optional[dict[str, Any]]
     ) -> SelectionCriteria:
         """从用户偏好推断选择标准"""
         if not preferences:

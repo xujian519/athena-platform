@@ -7,26 +7,23 @@ Hook系统增强测试
 作者: Athena平台团队
 创建时间: 2026-04-21
 """
-from __future__ import annotations
 
 import asyncio
+
 import pytest
 
 from core.hooks.base import HookContext, HookFunction, HookRegistry, HookType
+from core.hooks.enhanced.chain import HookChain, HookChainProcessor, HookMiddleware
+from core.hooks.enhanced.debugger import HookDebugger
+from core.hooks.enhanced.lifecycle import HookLifecycleManager
+from core.hooks.enhanced.performance import HookPerformanceMonitor
 from core.hooks.enhanced.types import (
+    HookDependency,
+    HookMetrics,
+    HookResult,
     HookState,
     HookStatus,
-    HookResult,
-    HookMetrics,
-    HookDependency,
-    TraceEntry,
-    PerformanceReport,
-    BenchmarkResult,
 )
-from core.hooks.enhanced.lifecycle import HookLifecycleManager
-from core.hooks.enhanced.chain import HookMiddleware, HookChain, HookChainProcessor
-from core.hooks.enhanced.performance import HookPerformanceMonitor
-from core.hooks.enhanced.debugger import HookDebugger
 
 
 class TestHookTypes:
@@ -377,7 +374,6 @@ class TestHookChainProcessor:
     @pytest.fixture
     def processor(self):
         """创建Hook链处理器"""
-        from core.hooks.base import HookRegistry
         return HookChainProcessor(registry=HookRegistry())
 
     @pytest.mark.asyncio
@@ -663,3 +659,4 @@ __all__ = [
     "TestHookPerformanceMonitor",
     "TestHookDebugger",
 ]
+

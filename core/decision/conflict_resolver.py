@@ -69,7 +69,7 @@ class ConflictResolver:
         self,
         opinions: list[AgentOpinion],
         conflict: ConflictAnalysis,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> ArbitrationDecision:
         """
         仲裁冲突

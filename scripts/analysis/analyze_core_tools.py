@@ -7,7 +7,7 @@
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -20,7 +20,7 @@ class CoreToolAnalyzer:
         self.project_root = project_root
         self.core_tools = []
 
-    def identify_core_tools(self) -> List[Dict[str, Any]]:
+    def identify_core_tools(self) -> list[dict[str, Any]:
         """识别核心工具"""
 
         # 核心工具列表（基于实际使用情况）
@@ -146,7 +146,7 @@ class CoreToolAnalyzer:
 
         return core_tool_files
 
-    def analyze_tool(self, tool_info: Dict[str, Any]) -> Dict[str, Any]:
+    def analyze_tool(self, tool_info: dict[str, Any]) -> dict[str, Any]:
         """分析单个工具"""
 
         file_path = self.project_root / tool_info["file"]
@@ -194,7 +194,7 @@ class CoreToolAnalyzer:
 
         return analysis
 
-    def generate_report(self) -> Dict[str, Any]:
+    def generate_report(self) -> dict[str, Any]:
         """生成分析报告"""
 
         tools = self.identify_core_tools()
@@ -209,9 +209,9 @@ class CoreToolAnalyzer:
             "total": len(analyzed_tools),
             "migrated": len([t for t in analyzed_tools if t["status"] == "已迁移"]),
             "pending": len([t for t in analyzed_tools if t["status"] == "待迁移"]),
-            "file_exists": len([t for t in analyzed_tools if t["file_exists"]]),
-            "can_import": len([t for t in analyzed_tools if t["can_import"]]),
-            "has_handler": len([t for t in analyzed_tools if t["has_handler"]]),
+            "file_exists": len([t for t in analyzed_tools if t["file_exists"]),
+            "can_import": len([t for t in analyzed_tools if t["can_import"]),
+            "has_handler": len([t for t in analyzed_tools if t["has_handler"]),
             "by_priority": {
                 "P0": len([t for t in analyzed_tools if t["priority"] == "P0"]),
                 "P1": len([t for t in analyzed_tools if t["priority"] == "P1"]),
@@ -269,7 +269,7 @@ def main():
             print(f"  描述: {tool['description']}")
             print(f"  文件: {tool['file']}")
             print(f"  优先级: {tool['priority']}")
-            print(f"  状态: ", end="")
+            print("  状态: ", end="")
 
             if tool["file_exists"]:
                 print("✅ 文件存在", end=" ")

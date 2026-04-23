@@ -71,7 +71,7 @@ class PerformanceAlert:
     current_value: float
     threshold: float
     timestamp: datetime
-    suggested_action: str | None = None
+    suggested_action: Optional[str] = None
 
 
 @dataclass
@@ -86,7 +86,7 @@ class EnginePerformanceReport:
     p99_response_time: float
     success_rate: float
     error_rate: float
-    cache_hit_rate: float | None = None
+    cache_hit_rate: Optional[float] = None
     timestamp: datetime = field(default_factory=datetime.now)
 
     # 趋势数据
@@ -215,8 +215,8 @@ class PerformanceMonitor:
         condition: str,  # "gt", "lt", "eq", "gte", "lte"
         threshold: float,
         severity: AlertSeverity = AlertSeverity.WARNING,
-        title: str | None = None,
-        suggested_action: str | None = None,
+        title: Optional[str] = None,
+        suggested_action: Optional[str] = None,
     ) -> None:
         """添加告警规则"""
         self.alert_rules.append({
@@ -458,7 +458,7 @@ class PerformanceMonitor:
 
         return recommendations
 
-    def clear_metrics(self, engine_name: str | None = None) -> None:
+    def clear_metrics(self, engine_name: Optional[str] = None) -> None:
         """清除指标"""
         if engine_name:
             # 清除特定引擎的指标

@@ -185,8 +185,9 @@ async def test_legal_analysis_performance():
     print("性能测试")
     print("=" * 80)
 
-    from core.tools.legal_analysis_handler import legal_analysis_handler
     import time
+
+    from core.tools.legal_analysis_handler import legal_analysis_handler
 
     # 并发测试
     queries = [
@@ -206,7 +207,7 @@ async def test_legal_analysis_performance():
 
     total_time = time.time() - start_time
 
-    print(f"✅ 并发执行完成")
+    print("✅ 并发执行完成")
     print(f"   总耗时: {total_time:.3f}秒")
     print(f"   平均耗时: {total_time/len(queries):.3f}秒/查询")
     print(f"   吞吐量: {len(queries)/total_time:.2f} 查询/秒")

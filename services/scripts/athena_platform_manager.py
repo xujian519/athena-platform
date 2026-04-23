@@ -157,13 +157,13 @@ class AthenaPlatformManager:
 
         # 用户管理
         self.users: dict[str, User] = {}
-        self.sessions: dict[str, dict[str, Any]] = {}
+        self.sessions: dict[str, dict[str, Any] = {}
 
         # 访问日志
         self.access_logs: list[ResourceAccess] = []
 
         # API密钥管理
-        self.api_keys: dict[str, dict[str, Any]] = {}
+        self.api_keys: dict[str, dict[str, Any] = {}
 
         # 权限定义
         self.role_permissions = self._define_role_permissions()
@@ -276,7 +276,7 @@ class AthenaPlatformManager:
         else:
             return b"default_encryption_key"
 
-    def _define_role_permissions(self) -> dict[UserRole, list[str]]:
+    def _define_role_permissions(self) -> dict[UserRole, list[str]:
         """定义角色权限"""
         return {
             UserRole.ADMIN: [

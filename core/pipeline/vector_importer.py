@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 class VectorDBImporter:
     """向量库导入器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化导入器
 
@@ -186,7 +186,7 @@ class VectorDBImporter:
         return doc_id
 
     async def search_similar(
-        self, query: str, limit: int = 10, filter_type: str | None = None
+        self, query: str, limit: int = 10, filter_type: Optional[str] = None
     ) -> list[dict[str, Any]]:
         """
         搜索相似文档

@@ -5,11 +5,11 @@ Testagent测试套件
 测试Testagent的各项功能
 """
 
-import pytest
-from unittest.mock import AsyncMock, patch
 
-from core.agents.testagent import Testagent
-from core.agents.xiaona.base_component import (
+import pytest
+from core.framework.agents.testagent import Testagent
+
+from core.framework.agents.xiaona.base_component import (
     AgentExecutionContext,
     AgentStatus,
 )

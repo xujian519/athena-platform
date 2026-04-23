@@ -3,15 +3,15 @@
 统一日志系统使用示例
 Unified Logging System Usage Examples
 """
-import sys
 import asyncio
+import sys
 from pathlib import Path
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from core.logging import get_logger, LogLevel
+from core.logging import LogLevel, get_logger
 
 
 def example_basic_logging():
@@ -72,14 +72,14 @@ def example_exception_logging():
 
     try:
         # 模拟一个错误
-        result = 1 / 0
+        pass
     except Exception as e:
         # 记录异常
         logger.error("计算错误", exception=e)
 
     # 或者使用exception方法
     try:
-        result = int("invalid")
+        int("invalid")
     except ValueError:
         logger.exception("类型转换失败")
 
@@ -150,7 +150,7 @@ def example_performance_logging():
     elapsed = time.time() - start
 
     logger.info(
-        f"性能测试完成",
+        "性能测试完成",
         extra={
             "iterations": iterations,
             "total_time_ms": elapsed * 1000,

@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 import asyncio
-import websockets
 import json
 import time
+
+import websockets
+
 
 async def test_handshake():
     uri = "ws://localhost:8005/ws"
@@ -25,7 +27,7 @@ async def test_handshake():
                 }
             }
 
-            print(f"发送握手消息...", flush=True)
+            print("发送握手消息...", flush=True)
             await ws.send(json.dumps(handshake))
             print("✅ 握手消息已发送", flush=True)
 
@@ -53,7 +55,7 @@ async def test_handshake():
 
                 return True
 
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 print("⚠️  等待响应超时", flush=True)
                 return False
 

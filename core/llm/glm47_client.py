@@ -32,7 +32,7 @@ class GLM47Client:
 
     def __init__(
         self,
-        api_key: str | None = None,
+        api_key: Optional[str] = None,
         base_url: str = "https://open.bigmodel.cn/api/paas/v4/",
         model: str = "glm-4-plus",
         timeout: int = 60,
@@ -69,8 +69,8 @@ class GLM47Client:
         self,
         task_description: str,
         context: dict[str, Any],        available_tools: list[dict[str, str]],
-        requirements: list[str] | None = None,
-        constraints: list[str] | None = None,
+        requirements: Optional[list[str]] = None,
+        constraints: Optional[list[str]] = None,
     ) -> dict[str, Any]:
         """
         使用GLM-4.7生成执行计划
@@ -125,8 +125,8 @@ class GLM47Client:
         self,
         task_description: str,
         context: dict[str, Any],        available_tools: list[dict[str, str]],
-        requirements: list[str] | None = None,
-        constraints: list[str] | None = None,
+        requirements: Optional[list[str]] = None,
+        constraints: Optional[list[str]] = None,
     ) -> str:
         """构建规划提示词"""
 

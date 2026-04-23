@@ -599,7 +599,7 @@ class PatentLearningOptimizer:
                 'error': str(e)
             }
 
-    def _get_best_performer_for_context(self, patent_context: Dict[str, Any]) -> str | None:
+    def _get_best_performer_for_context(self, patent_context: Dict[str, Any]) -> Optional[str]:
         """根据上下文获取最佳执行者"""
         try:
             patent_type = patent_context.get('patent_type', 'invention')

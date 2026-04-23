@@ -59,7 +59,7 @@ class BaseAdapter(ABC):
     async def execute(
         self,
         query: str,
-        parameters: dict[str, Any] | None = None,
+        parameters: Optional[dict[str, Any]] = None,
         **kwargs,
     ) -> QueryResult:
         """
@@ -191,7 +191,7 @@ class CacheStrategy(ABC):
         self,
         key: str,
         value: QueryResult,
-        ttl: int | None = None,
+        ttl: Optional[int] = None,
     ) -> None:
         """
         设置缓存

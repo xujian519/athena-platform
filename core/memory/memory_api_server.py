@@ -50,7 +50,7 @@ app.add_middleware(
 memory_system: UnifiedAgentMemorySystem | None = None
 
 # 通过agent_id获取agent_type的辅助函数
-def get_agent_type_by_id(agent_id: str) -> str | None:
+def get_agent_type_by_id(agent_id: str) -> Optional[str]:
     """通过agent_id获取对应的agent_type"""
     # 从智能体注册表中查找
     from unified_agent_memory_system import AGENT_REGISTRY
@@ -75,12 +75,12 @@ class MemoryRecallRequest(BaseModel):
     agent_id: str
     query: str
     limit: int = 10
-    memory_type: str | None = None
+    memory_type: Optional[str] = None
 
 class MemorySearchRequest(BaseModel):
     query: str
-    agent_id: str | None = None
-    memory_type: str | None = None
+    agent_id: Optional[str] = None
+    memory_type: Optional[str] = None
     importance_threshold: float = 0.0
     limit: int = 20
 

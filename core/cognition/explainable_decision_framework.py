@@ -36,7 +36,7 @@ class DecisionNode:
     node_id: str
     node_type: str
     description: str
-    condition: str | None = None
+    condition: Optional[str] = None
     value: Any = None
     confidence: float = 0.0
     children: list["DecisionNode"] = field(default_factory=list)
@@ -57,7 +57,7 @@ class Explanation:
     evidence: list[dict[str, Any]]
     confidence_score: float
     created_at: datetime = field(default_factory=datetime.now)
-    visualization_data: dict[str, Any] | None = None
+    visualization_data: Optional[dict[str, Any]] = None
 
 
 class ExplainableDecisionEngine:

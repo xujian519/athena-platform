@@ -75,8 +75,8 @@ class ModelMetadata:
 
         # 状态管理
         self.status = ModelStatus.UNLOADED
-        self.load_time: float | None = None
-        self.last_access: float | None = None
+        self.load_time: Optional[float] = None
+        self.last_access: Optional[float] = None
         self.access_count: int = 0
 
         # 资源

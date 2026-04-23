@@ -101,7 +101,7 @@ class Comment:
     resolved: bool = False
     resolved_by: str | None = None
     resolved_at: datetime | None = None
-    replies: list[dict[str, Any]] = field(default_factory=list)
+    replies: list[dict[str, Any] = field(default_factory=list)
 
 @dataclass
 class CollaborationEvent:
@@ -861,7 +861,7 @@ class RealtimeCollaborationServer:
         if not has_connection:
             await session.remove_user(user_id)
 
-    def get_all_sessions(self) -> list[dict[str, Any]]:
+    def get_all_sessions(self) -> list[dict[str, Any]:
         """获取所有会话信息"""
         return [
             {

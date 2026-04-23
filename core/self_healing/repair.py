@@ -56,8 +56,8 @@ class RepairAction:
     retry_count: int = 0
     max_retries: int = 3
     status: RepairStatus = RepairStatus.PENDING
-    result: dict[str, Any] | None = None
-    error: str | None = None
+    result: Optional[dict[str, Any]] = None
+    error: Optional[str] = None
     started_at: datetime | None = None
     completed_at: datetime | None = None
 
@@ -212,7 +212,7 @@ class AutoRepairEngine:
         logger.debug(f"📝 注册修复策略: {name} ({strategy_id})")
 
     async def execute_repair(
-        self, strategy_id: str, params: dict[str, Any] | None = None
+        self, strategy_id: str, params: Optional[dict[str, Any]] = None
     ) -> RepairResult:
         """
         执行修复策略

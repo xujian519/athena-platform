@@ -6,10 +6,11 @@
 import re
 from pathlib import Path
 
-def fix_file(file_path: Path) -> tuple[bool, list[str]]:
+
+def fix_file(file_path: Path) -> tuple[bool, list[str]:
     """修复单个文件的语法错误"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         original_content = content
@@ -19,7 +20,7 @@ def fix_file(file_path: Path) -> tuple[bool, list[str]]:
         lines = content.split('\n')
         modified_lines = []
 
-        for i, line in enumerate(lines):
+        for _i, line in enumerate(lines):
             modified_line = line
             original_line = line
 
@@ -27,7 +28,7 @@ def fix_file(file_path: Path) -> tuple[bool, list[str]]:
             if re.search(r'dict\[str,\s*list\[\w+\]\s*\|\s*None\s*=\s*None\s*[,)]', modified_line):
                 modified_line = re.sub(
                     r'dict\[str,\s*list\[(\w+)\]\s*\|\s*None\s*=\s*None',
-                    r'dict[str, list[\1]] | None = None',
+                    r'dict[str, list[\1] | None = None',
                     modified_line
                 )
                 if modified_line != original_line:
@@ -46,15 +47,15 @@ def fix_file(file_path: Path) -> tuple[bool, list[str]]:
             if re.search(r'list\[dict\[str,\s*Any\])\s*->', modified_line):
                 modified_line = re.sub(
                     r'list\[dict\[str,\s*Any\])\s*->',
-                    r'list[dict[str, Any]]) ->',
+                    r'list[dict[str, Any]) ->',
                     modified_line
                 )
                 if modified_line != original_line:
-                    fixes.append("list[dict[str, Any]]")
+                    fixes.append("list[dict[str, Any]")
 
-            # 模式4: tuple[int, ...]] | None (多余右方括号)
-            if 'tuple[int, ...]]' in modified_line:
-                modified_line = modified_line.replace('tuple[int, ...]]', 'tuple[int, ...]]')
+            # 模式4: tuple[int, ...] | None (多余右方括号)
+            if 'tuple[int, ...]' in modified_line:
+                modified_line = modified_line.replace('tuple[int, ...]', 'tuple[int, ...]')
                 if modified_line != original_line:
                     fixes.append("tuple[int, ...]")
 
@@ -155,11 +156,11 @@ def main():
                 for fix in fixes:
                     print(f"    - {fix}")
 
-    print(f"\n修复完成!")
+    print("\n修复完成!")
     print(f"修复文件数: {fixed_count}")
 
     if total_fixes:
-        print(f"\n应用的修复:")
+        print("\n应用的修复:")
         fix_counts = {}
         for fix in total_fixes:
             fix_counts[fix] = fix_counts.get(fix, 0) + 1

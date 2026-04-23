@@ -103,7 +103,7 @@ class WorkerResult:
     agent: str  # 执行智能体
     success: bool  # 是否成功
     result: Any  # 结果数据
-    error: str | None = None  # 错误信息
+    error: Optional[str] = None  # 错误信息
     execution_time: float = 0.0  # 执行耗时
     metadata: dict[str, Any] = field(default_factory=dict)  # 元数据
 

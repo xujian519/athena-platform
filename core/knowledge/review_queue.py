@@ -186,7 +186,7 @@ class ReviewQueue:
         description: str,
         content: dict[str, Any],        knowledge_type: KnowledgeType,
         category: KnowledgeCategory,
-        tags: list[str] | None = None,
+        tags: Optional[list[str]] = None,
         source: str = "manual",
     ) -> ReviewTask:
         """提交知识到审核队列
@@ -226,7 +226,7 @@ class ReviewQueue:
         logger.info(f"✅ 知识已提交到审核队列: {item.id} - {title}")
         return task
 
-    def get_pending_tasks(self, limit: int | None = None) -> list[ReviewTask]:
+    def get_pending_tasks(self, limit: Optional[int] = None) -> list[ReviewTask]:
         """获取待审核任务
 
         Args:
@@ -374,7 +374,7 @@ def submit_knowledge(
     description: str,
     content: dict[str, Any],    knowledge_type: KnowledgeType,
     category: KnowledgeCategory,
-    tags: list[str] | None = None,
+    tags: Optional[list[str]] = None,
 ) -> str:
     """便捷函数:提交知识到审核队列
 

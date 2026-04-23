@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 启动优化后的多智能体协作系统
 Start Optimized Multi-Agent Collaboration System
 """
 
 import asyncio
-import logging
 import json
+import logging
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -28,10 +27,9 @@ async def start_optimized_system():
     try:
         # 1. 演示统一能力接口
         print("\n📋 1. 演示统一能力接口...")
-        from core.collaboration.unified_capability import (
-            UnifiedAgentCapability,
+        from core.framework.collaboration.unified_capability import (
             CapabilityType,
-            CapabilityRegistry
+            UnifiedAgentCapability,
         )
 
         # 创建示例能力
@@ -53,8 +51,7 @@ async def start_optimized_system():
         # 2. 演示性能监控
         print("\n📊 2. 演示性能监控系统...")
         from core.monitoring.performance_monitor import (
-            PerformanceMonitor,
-            IntegrationPerformanceMonitor
+            IntegrationPerformanceMonitor,
         )
 
         monitor = IntegrationPerformanceMonitor()
@@ -69,13 +66,13 @@ async def start_optimized_system():
         from core.protocols.collaboration_protocols import (
             CommunicationProtocol,
             CoordinationProtocol,
-            DecisionProtocol
+            DecisionProtocol,
         )
 
         # 创建协议实例
-        comm_protocol = CommunicationProtocol("comm_001")
-        coord_protocol = CoordinationProtocol("coord_001")
-        decision_protocol = DecisionProtocol("decision_001")
+        CommunicationProtocol("comm_001")
+        CoordinationProtocol("coord_001")
+        DecisionProtocol("decision_001")
 
         print("✅ 协议错误处理已增强")
         print("   - 状态验证机制")
@@ -84,7 +81,9 @@ async def start_optimized_system():
 
         # 4. 演示集成框架
         print("\n🔄 4. 演示集成框架...")
-        from core.collaboration.multi_agent_collaboration import MultiAgentCollaborationFramework
+        from core.framework.collaboration.multi_agent_collaboration import (
+            MultiAgentCollaborationFramework,
+        )
 
         framework = MultiAgentCollaborationFramework()
         start_result = framework.start_framework()
@@ -152,7 +151,7 @@ async def start_optimized_system():
 🎯 快速开始使用优化后的系统:
 
 1. 创建智能体能力:
-   from core.collaboration.unified_capability import UnifiedAgentCapability
+   from core.framework.collaboration.unified_capability import UnifiedAgentCapability
 
 2. 启动性能监控:
    from core.monitoring.performance_monitor import start_integration_monitoring

@@ -501,9 +501,9 @@ class InteractiveReasoningEditor:
         self,
         chain_id: str,
         step_id: str,
-        new_description: str | None = None,
-        new_explanation: str | None = None,
-        new_rationale: str | None = None,
+        new_description: Optional[str] = None,
+        new_explanation: Optional[str] = None,
+        new_rationale: Optional[str] = None,
         reason: str = "",
     ) -> ReasoningAdjustment:
         """修改推理步骤"""

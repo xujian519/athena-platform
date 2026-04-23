@@ -32,7 +32,7 @@ class MemoryItem:
     timestamp: datetime
     tags: list[str] = field(default_factory=list)
     importance: float = 0.5  # 0-1之间的重要性评分
-    emotion_context: dict[str, Any] | None = None
+    emotion_context: Optional[dict[str, Any]] = None
     retrieval_count: int = 0
     last_retrieved: datetime | None = None
 
@@ -146,9 +146,9 @@ class EnhancedMemoryProcessor:
     def save_memory(self,
                     content: str,
                     memory_type: str = "conversation",
-                    tags: list[str] | None = None,
+                    tags: Optional[list[str]] = None,
                     importance: float = 0.5,
-                    emotion_context: dict[str, Any] | None = None) -> str:
+                    emotion_context: Optional[dict[str, Any]] = None) -> str:
         """保存记忆"""
         memory_id = f"mem_{int(time.time() * 1000)}"
 
@@ -194,8 +194,8 @@ class EnhancedMemoryProcessor:
 
     def save_conversation(self,
                          conversation: str,
-                         emotion: str | None = None,
-                         topics: list[str] | None = None) -> str:
+                         emotion: Optional[str] = None,
+                         topics: Optional[list[str]] = None) -> str:
         """保存对话记忆"""
         emotion_context = {
             "emotion": emotion,
@@ -214,7 +214,7 @@ class EnhancedMemoryProcessor:
     def mark_important_moment(self,
                               description: str,
                               moment_type: str = "achievement",
-                              related_context: dict[str, Any] | None = None) -> str:
+                              related_context: Optional[dict[str, Any]] = None) -> str:
         """标记重要时刻"""
         tags = ["重要时刻", moment_type]
         if moment_type == "achievement":
@@ -237,7 +237,7 @@ class EnhancedMemoryProcessor:
                            category: str,
                            preference: str,
                            confidence: float = 0.8,
-                           example: str | None = None) -> bool:
+                           example: Optional[str] = None) -> bool:
         """保存爸爸偏好"""
         try:
             with sqlite3.connect(self.memory_db_path) as conn:
@@ -301,8 +301,8 @@ class EnhancedMemoryProcessor:
             return False
 
     def retrieve_memories(self,
-                         memory_type: str | None = None,
-                         tags: list[str] | None = None,
+                         memory_type: Optional[str] = None,
+                         tags: Optional[list[str]] = None,
                          time_range: tuple[datetime, datetime] | None = None,
                          limit: int = 10) -> list[MemoryItem]:
         """检索记忆"""
@@ -354,7 +354,7 @@ class EnhancedMemoryProcessor:
 
         return memories
 
-    def get_dad_preferences(self, category: str | None = None) -> list[DadPreference]:
+    def get_dad_preferences(self, category: Optional[str] = None) -> list[DadPreference]:
         """获取爸爸偏好"""
         preferences = []
 

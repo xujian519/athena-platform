@@ -4,9 +4,11 @@
 测试撰写审查智能体的LLM调用、降级机制和各项检查功能。
 """
 
+from unittest.mock import AsyncMock, patch
+
 import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
-from core.agents.xiaona.writing_reviewer_proxy import WritingReviewerProxy
+
+from core.framework.agents.xiaona.writing_reviewer_proxy import WritingReviewerProxy
 
 
 @pytest.fixture

@@ -70,7 +70,7 @@ async def search_invention_points():
             LIMIT 20
         """
 
-        keyword_patterns = [f"%{kw}%" for kw in keywords[:5]]
+        keyword_patterns = [f"%{kw}%" for kw in keywords[:5]
         cursor.execute(search_query, keyword_patterns + keyword_patterns)
 
         decisions = cursor.fetchall()
@@ -137,7 +137,7 @@ async def search_invention_points():
             LIMIT 15
         """
 
-        keyword_patterns = [f"%{kw}%" for kw in keywords[:6]]
+        keyword_patterns = [f"%{kw}%" for kw in keywords[:6]
         cursor.execute(search_query, keyword_patterns * 3)
 
         articles = cursor.fetchall()

@@ -96,8 +96,8 @@ class TaskToolAdapter:
         self,
         prompt: str,
         tools: list[str],
-        model: str | None = None,
-        agent_type: str | None = None,
+        model: Optional[str] = None,
+        agent_type: Optional[str] = None,
         background: bool = False,
     ) -> dict[str, Any]:
         """执行任务

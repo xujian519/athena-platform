@@ -54,8 +54,8 @@ class AIModel:
     provider: AIProvider
     model_name: str
     model_type: ModelType
-    api_key: str | None = None
-    api_base: str | None = None
+    api_key: Optional[str] = None
+    api_base: Optional[str] = None
     max_tokens: int = 4096
     temperature: float = 0.7
     top_p: float = 0.9
@@ -70,7 +70,7 @@ class ModelRequest:
     prompt: str
     context: Optional[Dict[str, Any]] = None
     stream: bool = False
-    system_prompt: str | None = None
+    system_prompt: Optional[str] = None
     examples: List[Dict[str, str]] = field(default_factory=list)
 
 @dataclass
@@ -88,7 +88,7 @@ class ModelResponse:
 class OpenAIIntegration:
     """OpenAI集成"""
 
-    def __init__(self, api_key: str | None = None, api_base: str = 'https://api.openai.com/v1'):
+    def __init__(self, api_key: Optional[str] = None, api_base: str = 'https://api.openai.com/v1'):
         self.api_key = api_key or os.getenv('OPENAI_API_KEY')
         self.api_base = api_base
         self.headers = {
@@ -172,7 +172,7 @@ class OpenAIIntegration:
 class GoogleAIIntegration:
     """Google AI集成"""
 
-    def __init__(self, api_key: str | None = None):
+    def __init__(self, api_key: Optional[str] = None):
         self.api_key = api_key or os.getenv('GOOGLE_AI_API_KEY')
         self.api_url = 'https://generativelanguage.googleapis.com/v1beta/models'
 
@@ -222,7 +222,7 @@ class GoogleAIIntegration:
 class AnthropicIntegration:
     """Anthropic Claude集成"""
 
-    def __init__(self, api_key: str | None = None):
+    def __init__(self, api_key: Optional[str] = None):
         self.api_key = api_key or os.getenv('ANTHROPIC_API_KEY')
         self.api_url = 'https://api.anthropic.com/v1/messages'
 
@@ -272,7 +272,7 @@ class AnthropicIntegration:
 class HuggingFaceIntegration:
     """Hugging Face模型集成"""
 
-    def __init__(self, api_token: str | None = None):
+    def __init__(self, api_token: Optional[str] = None):
         self.api_token = api_token or os.getenv('HUGGINGFACE_API_TOKEN')
         self.api_url = 'https://api-inference.huggingface.co/models'
 

@@ -16,24 +16,9 @@ from pathlib import Path
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.evolution import (
-    EvolutionCoordinator,
-    EvolutionConfig,
-    EvolutionPhase,
-    get_evolution_coordinator
-)
-from core.evolution.mutation_engine import (
-    MutationEngine,
-    MutationType,
-    MutationIntensity,
-    get_mutation_engine
-)
-from core.evolution.auto_deployment import (
-    AutoDeployment,
-    DeploymentConfig,
-    DeploymentStrategy,
-    get_auto_deployment
-)
+from core.evolution import get_evolution_coordinator
+from core.evolution.auto_deployment import get_auto_deployment
+from core.evolution.mutation_engine import MutationIntensity, MutationType, get_mutation_engine
 
 
 async def test_phase1_basic_evolution():
@@ -48,19 +33,19 @@ async def test_phase1_basic_evolution():
     print("\n🔧 执行基础进化（参数自动调优）...")
     result = await coordinator.evolve()
 
-    print(f"\n✅ 进化结果:")
+    print("\n✅ 进化结果:")
     print(f"   成功: {result.success}")
     print(f"   阶段: {result.phase.value}")
     print(f"   改进: {result.improvement:.1%}")
     print(f"   突变数: {result.mutations_count}")
 
     if result.mutations:
-        print(f"\n📋 应用的突变:")
+        print("\n📋 应用的突变:")
         for i, mutation in enumerate(result.mutations[:3], 1):
             print(f"   {i}. {mutation.get('mutation_type', 'N/A')}: {mutation.get('target', 'N/A')}")
 
     stats = coordinator.get_stats()
-    print(f"\n📊 统计信息:")
+    print("\n📊 统计信息:")
     print(f"   总进化次数: {stats['total_evolutions']}")
     print(f"   成功率: {stats['successful_evolutions']}/{stats['total_evolutions']}")
 
@@ -87,10 +72,10 @@ async def test_phase2_intelligent_evolution():
     print(f"   变更: {param_mutation.before_value} → {param_mutation.after_value}")
 
     # 批量突变
-    results = await mutation_engine.batch_mutate(count=3)
+    await mutation_engine.batch_mutate(count=3)
 
     stats = mutation_engine.get_mutation_stats()
-    print(f"\n📊 突变统计:")
+    print("\n📊 突变统计:")
     print(f"   总突变数: {stats['total_mutations']}")
     print(f"   成功率: {stats['success_rate']:.1%}")
     print(f"   总改进: {stats['total_improvement']:.2%}")
@@ -107,7 +92,7 @@ async def test_phase3_autonomous_evolution():
     deployment = get_auto_deployment()
 
     # 创建模拟进化结果
-    from core.evolution.types import EvolutionResult, EvolutionPhase, EvolutionStrategy
+    from core.evolution.types import EvolutionPhase, EvolutionResult, EvolutionStrategy
 
     mock_result = EvolutionResult(
         success=True,
@@ -133,7 +118,7 @@ async def test_phase3_autonomous_evolution():
     print("\n🚀 执行自动部署...")
     result = await deployment.deploy_evolution(mock_result)
 
-    print(f"\n✅ 部署结果:")
+    print("\n✅ 部署结果:")
     print(f"   成功: {result.success}")
     print(f"   策略: {result.strategy.value}")
     print(f"   状态: {result.status.value}")
@@ -141,7 +126,7 @@ async def test_phase3_autonomous_evolution():
     print(f"   是否回滚: {'是' if result.rollback_performed else '否'}")
 
     stats = deployment.get_deployment_stats()
-    print(f"\n📊 部署统计:")
+    print("\n📊 部署统计:")
     print(f"   总部署数: {stats['total_deployments']}")
     print(f"   成功率: {stats['success_rate']:.1%}")
 

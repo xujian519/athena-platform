@@ -431,7 +431,7 @@ class ContextCompressor:
         else:
             print(f"无效的压缩策略: {strategy}")
 
-    def set_limits(self, max_history: int | None = None, max_tokens: int | None = None) -> None:
+    def set_limits(self, max_history: Optional[int] = None, max_tokens: Optional[int] = None) -> None:
         """设置压缩限制"""
         if max_history is not None:
             self.max_history_length = max_history
@@ -453,8 +453,8 @@ class ContextManager:
         conversation_id: str,
         role: str,
         content: str,
-        message_id: str | None = None,
-        importance: float | None = None,
+        message_id: Optional[str] = None,
+        importance: Optional[float] = None,
     ) -> None:
         """添加消息到上下文"""
         if conversation_id not in self.conversation_contexts:

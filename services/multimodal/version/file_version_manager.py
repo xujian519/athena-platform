@@ -64,7 +64,7 @@ class VersionDiff:
     old_version_id: str
     new_version_id: str
     diff_type: str  # text, binary, metadata
-    changes: list[dict[str, Any]]
+    changes: list[dict[str, Any]
     summary: str
 
 class FileVersionManager:
@@ -79,7 +79,7 @@ class FileVersionManager:
         self.versions_path.mkdir(exist_ok=True)
 
         # 版本数据库
-        self.versions_db: dict[str, list[FileVersion]] = {}  # file_id -> versions
+        self.versions_db: dict[str, list[FileVersion] = {}  # file_id -> versions
         self.version_index: dict[str, FileVersion] = {}  # version_id -> version
 
         # 版本策略配置
@@ -376,7 +376,7 @@ class FileVersionManager:
             summary=summary
         )
 
-    def _compare_text_content(self, text1: str, text2: str) -> list[dict[str, Any]]:
+    def _compare_text_content(self, text1: str, text2: str) -> list[dict[str, Any]:
         """比较文本内容"""
         lines1 = text1.splitlines(keepends=True)
         lines2 = text2.splitlines(keepends=True)
@@ -397,7 +397,7 @@ class FileVersionManager:
             for idx, line in enumerate(diff)
         ]
 
-    def _compare_binary_content(self, content1: bytes, content2: bytes) -> list[dict[str, Any]]:
+    def _compare_binary_content(self, content1: bytes, content2: bytes) -> list[dict[str, Any]:
         """比较二进制内容"""
         changes = []
 
@@ -438,7 +438,7 @@ class FileVersionManager:
         return changes
 
     def _generate_diff_summary(self, version1: FileVersion, version2: FileVersion,
-                             changes: list[dict[str, Any]]) -> str:
+                             changes: list[dict[str, Any]) -> str:
         """生成差异摘要"""
         summary_parts = []
 
@@ -452,7 +452,7 @@ class FileVersionManager:
             summary_parts.append(f"文件大小{change_str}")
 
         # 内容变化
-        content_changes = [c for c in changes if c['type'] in ['content_change', 'line_diff']]
+        content_changes = [c for c in changes if c['type'] in ['content_change', 'line_diff']
         if content_changes:
             summary_parts.append("内容已修改")
 
@@ -617,7 +617,7 @@ class FileVersionManager:
             "branches": list({v.branch_name for v in versions if v.branch_name})
         }
 
-    def _build_history_tree(self, versions: list[FileVersion]) -> list[dict[str, Any]]:
+    def _build_history_tree(self, versions: list[FileVersion]) -> list[dict[str, Any]:
         """构建版本历史树"""
         version_map = {v.version_id: v for v in versions}
         tree = []

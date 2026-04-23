@@ -11,13 +11,14 @@ Version: v2.0.0
 """
 
 import pytest
+
+from core.tools.base import ToolCategory, ToolDefinition, ToolPriority
 from core.tools.unified_registry import (
+    LazyToolLoader,
+    ToolHealthStatus,
     UnifiedToolRegistry,
     get_unified_registry,
-    ToolHealthStatus,
-    LazyToolLoader,
 )
-from core.tools.base import ToolDefinition, ToolCategory, ToolPriority
 
 
 class TestUnifiedToolRegistry:

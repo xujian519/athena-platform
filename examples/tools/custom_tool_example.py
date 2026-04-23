@@ -17,12 +17,10 @@ from core.tools.base import (
     ToolCapability,
     ToolCategory,
     ToolDefinition,
-    ToolPerformance,
     ToolPriority,
     get_global_registry,
 )
 from core.tools.tool_call_manager import ToolCallManager, get_tool_manager
-
 
 # ========================================
 # 示例1: 简单函数工具
@@ -79,7 +77,7 @@ async def async_data_fetcher(parameters: dict[str, Any], context: dict[str, Any]
         获取的数据
     """
     url = parameters.get("url", "https://api.example.com/data")
-    timeout = parameters.get("timeout", 5.0)
+    parameters.get("timeout", 5.0)
 
     # 模拟异步操作
     await asyncio.sleep(1.0)
@@ -393,7 +391,7 @@ async def example_4_performance_monitoring():
     # 获取特定工具的性能
     tool_perf = manager.get_tool_performance("simple_calculator")
     if tool_perf:
-        print(f"\nsimple_calculator 性能:")
+        print("\nsimple_calculator 性能:")
         print(f"  调用次数: {tool_perf['calls']}")
         print(f"  成功次数: {tool_perf['successes']}")
         print(f"  平均时间: {tool_perf['avg_time']:.3f}秒")

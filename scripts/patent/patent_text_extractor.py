@@ -4,13 +4,12 @@
 用于专利无效分析的自动化处理
 """
 
-import os
-import re
 import json
-from pathlib import Path
-from datetime import datetime
-from typing import Dict, List, Optional, Any
+import re
 import subprocess
+from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 try:
     import pdfplumber
@@ -34,7 +33,7 @@ class PatentTextExtractor:
         self.markdown_dir.mkdir(exist_ok=True)
         self.features_dir.mkdir(exist_ok=True)
 
-    def extract_text_from_pdf(self, pdf_path: Path) -> Optional[str]:
+    def extract_text_from_pdf(self, pdf_path: Path) -> str | None:
         """从PDF提取文本"""
         try:
             with pdfplumber.open(pdf_path) as pdf:
@@ -59,7 +58,7 @@ class PatentTextExtractor:
         text = re.sub(r'\(12\).*?发明专利申请公开说明书', '', text)
         return text.strip()
 
-    def extract_patent_info(self, text: str) -> Dict[str, Any]:
+    def extract_patent_info(self, text: str) -> dict[str, Any]:
         """提取专利基本信息"""
         info = {
             "patent_number": "",
@@ -132,7 +131,7 @@ class PatentTextExtractor:
         # 从文件名获取专利号
         return info
 
-    def extract_sections(self, text: str) -> Dict[str, str]:
+    def extract_sections(self, text: str) -> dict[str, str]:
         """提取专利各部分内容"""
         sections = {
             "technical_field": "",
@@ -195,7 +194,7 @@ class PatentTextExtractor:
 
         return sections
 
-    def extract_technical_features(self, text: str, sections: Dict[str, str]) -> Dict[str, Any]:
+    def extract_technical_features(self, text: str, sections: dict[str, str]) -> dict[str, Any]:
         """提取技术特征"""
         features = {
             "keywords": [],
@@ -221,11 +220,6 @@ class PatentTextExtractor:
             features["technical_problem"] = problem_match.group(1).strip()
 
         # 提取技术方案关键词
-        solution_keywords = [
-            "包括", "设置", "具有", "连接", "安装", "配置",
-            "滑轨", "导轨", "调节", "驱动", "传动", "限位",
-            "物料", "传送", "输送", "包装", "机构", "装置"
-        ]
 
         # 从权利要求中提取结构组件
         claims_text = sections["claims"]
@@ -249,7 +243,7 @@ class PatentTextExtractor:
 
         # 提取技术术语
         technical_terms = set()
-        for section_name, section_text in sections.items():
+        for _section_name, section_text in sections.items():
             if section_text:
                 # 提取专业术语（2-6个字，包含技术关键词）
                 terms = re.findall(r'([\u4e00-\u9fa5]{2,6}(?:机构|装置|系统|设备|组件|部件|单元|模块|机构))', section_text)
@@ -262,7 +256,7 @@ class PatentTextExtractor:
 
         return features
 
-    def _extract_keywords(self, text: str) -> List[str]:
+    def _extract_keywords(self, text: str) -> list[str]:
         """从文本中提取关键词"""
         # 简单的关键词提取：名词、技术术语
         keywords = []
@@ -276,7 +270,7 @@ class PatentTextExtractor:
                 keywords.append(word)
         return keywords
 
-    def process_single_patent(self, pdf_path: Path) -> Optional[Dict[str, Any]]:
+    def process_single_patent(self, pdf_path: Path) -> dict[str, Any] | None:
         """处理单个专利文件"""
         patent_number = pdf_path.stem
 
@@ -315,7 +309,7 @@ class PatentTextExtractor:
 
         return result
 
-    def _save_markdown(self, patent_number: str, info: Dict, sections: Dict, raw_text: str):
+    def _save_markdown(self, patent_number: str, info: dict, sections: dict, raw_text: str):
         """保存为Markdown格式"""
         md_path = self.markdown_dir / f"{patent_number}.md"
 
@@ -385,14 +379,14 @@ class PatentTextExtractor:
         with open(md_path, 'w', encoding='utf-8') as f:
             f.write(md_content)
 
-    def _save_features(self, patent_number: str, result: Dict):
+    def _save_features(self, patent_number: str, result: dict):
         """保存特征为JSON格式"""
         feature_path = self.features_dir / f"{patent_number}_features.json"
 
         with open(feature_path, 'w', encoding='utf-8') as f:
             json.dump(result, f, ensure_ascii=False, indent=2)
 
-    def process_batch(self, limit: Optional[int] = None) -> List[Dict]:
+    def process_batch(self, limit: int | None = None) -> list[dict]:
         """批量处理专利文件"""
         pdf_files = list(self.pdf_dir.glob("*.pdf"))
         pdf_files.sort()
@@ -425,7 +419,7 @@ class PatentTextExtractor:
 
         print()
         print("=" * 60)
-        print(f"✅ 处理完成！")
+        print("✅ 处理完成！")
         print(f"   成功: {success_count}")
         print(f"   失败: {fail_count}")
         print(f"   成功率: {success_count/(success_count+fail_count)*100:.1f}%")
@@ -433,7 +427,7 @@ class PatentTextExtractor:
 
         return results
 
-    def _save_summary(self, results: List[Dict], success_count: int, fail_count: int):
+    def _save_summary(self, results: list[dict], success_count: int, fail_count: int):
         """保存处理汇总报告"""
         summary_path = self.output_dir / "extraction_summary.json"
 
@@ -512,9 +506,9 @@ def main():
 
     # 创建提取器并处理
     extractor = PatentTextExtractor(pdf_dir, output_dir)
-    results = extractor.process_batch(limit=limit)
+    extractor.process_batch(limit=limit)
 
-    print(f"\n📊 输出文件:")
+    print("\n📊 输出文件:")
     print(f"   - Markdown: {extractor.markdown_dir}")
     print(f"   - Features: {extractor.features_dir}")
     print(f"   - Summary: {extractor.output_dir}/extraction_summary.md")

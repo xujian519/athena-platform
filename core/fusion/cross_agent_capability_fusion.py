@@ -654,7 +654,7 @@ class EnhancedCrossAgentFusion:
         required_capabilities: list[str],
         priority: int = 5,
         estimated_duration: float = 10.0,
-        dependencies: list[str] | None = None,
+        dependencies: Optional[list[str]] = None,
     ) -> TaskSchedule:
         """
         调度任务到合适的智能体

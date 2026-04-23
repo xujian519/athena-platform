@@ -85,7 +85,7 @@ class RateLimiter:
             f"🚦 速率限制器初始化完成 (最大{max_calls}次/{period}秒, 策略:{strategy.value})"
         )
 
-    async def acquire(self, timeout: float | None = None) -> bool:
+    async def acquire(self, timeout: Optional[float] = None) -> bool:
         """
         获取调用许可
 
@@ -266,7 +266,7 @@ class MultiRateLimiter:
             return self.limiters[key]
 
     async def acquire(
-        self, key: str, timeout: float | None = None, max_calls: int = 100, period: float = 60.0
+        self, key: str, timeout: Optional[float] = None, max_calls: int = 100, period: float = 60.0
     ) -> bool:
         """
         获取调用许可

@@ -32,7 +32,7 @@ class AgentEventPublisher:
     自动发布代理相关事件到 EventBus。
     """
 
-    def __init__(self, agent_id: str, agent_type: str, agent_name: str | None = None):
+    def __init__(self, agent_id: str, agent_type: str, agent_name: Optional[str] = None):
         """初始化事件发布器
 
         Args:
@@ -53,7 +53,7 @@ class AgentEventPublisher:
 
         logger.info(f"📡 事件发布器已初始化: {agent_id}")
 
-    async def publish_agent_started(self, capabilities: list[str] | None = None) -> None:
+    async def publish_agent_started(self, capabilities: Optional[list[str]] = None) -> None:
         """发布代理启动事件
 
         Args:
@@ -75,7 +75,7 @@ class AgentEventPublisher:
             self._stats["failed_events"] += 1
             logger.error(f"❌ 发布 AgentStarted 事件失败: {e}")
 
-    async def publish_agent_stopped(self, reason: str | None = None) -> None:
+    async def publish_agent_stopped(self, reason: Optional[str] = None) -> None:
         """发布代理停止事件
 
         Args:
@@ -99,9 +99,9 @@ class AgentEventPublisher:
 
     async def publish_agent_error(
         self,
-        error_type: str | None = None,
+        error_type: Optional[str] = None,
         error_message: str = "",
-        traceback: str | None = None,
+        traceback: Optional[str] = None,
     ) -> None:
         """发布代理错误事件
 
@@ -132,8 +132,8 @@ class AgentEventPublisher:
         self,
         tool_id: str,
         tool_name: str,
-        tool_use_id: str | None = None,
-        parameters: dict[str, Any] | None = None,
+        tool_use_id: Optional[str] = None,
+        parameters: Optional[dict[str, Any]] = None,
     ) -> None:
         """发布工具执行开始事件
 
@@ -163,8 +163,8 @@ class AgentEventPublisher:
         self,
         tool_id: str,
         tool_name: str,
-        tool_use_id: str | None = None,
-        parameters: dict[str, Any] | None = None,
+        tool_use_id: Optional[str] = None,
+        parameters: Optional[dict[str, Any]] = None,
         result: Any = None,
         execution_time: float = 0.0,
     ) -> None:
@@ -200,9 +200,9 @@ class AgentEventPublisher:
         self,
         tool_id: str,
         tool_name: str,
-        tool_use_id: str | None = None,
-        parameters: dict[str, Any] | None = None,
-        error_type: str | None = None,
+        tool_use_id: Optional[str] = None,
+        parameters: Optional[dict[str, Any]] = None,
+        error_type: Optional[str] = None,
         error_message: str = "",
         execution_time: float = 0.0,
     ) -> None:

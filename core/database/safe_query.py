@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Optional
 """
 安全的数据库查询工具模块
 提供防止SQL注入的数据库访问方法

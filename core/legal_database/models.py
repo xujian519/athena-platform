@@ -48,20 +48,20 @@ class LegalNorm:
 
     id: str
     name: str  # 法规名称
-    document_number: str | None = None  # 文号(如"国法〔2023〕X 号")
-    issuing_authority: str | None = None  # 发布机关
-    issue_date: str | None = None  # 发布日期
-    effective_date: str | None = None  # 施行日期
+    document_number: Optional[str] = None  # 文号(如"国法〔2023〕X 号")
+    issuing_authority: Optional[str] = None  # 发布机关
+    issue_date: Optional[str] = None  # 发布日期
+    effective_date: Optional[str] = None  # 施行日期
     status: LegalStatus = LegalStatus.VALID  # 状态
     hierarchy: LegalHierarchy | None = None  # 层级
-    latest_version_id: str | None = None  # 最新版本号(指向自身或另一个版本 id)
+    latest_version_id: Optional[str] = None  # 最新版本号(指向自身或另一个版本 id)
 
     # 元数据
-    category: str | None = None  # 类别(如"宪法相关法"、"行政法")
-    file_path: str | None = None  # 原始文件路径
+    category: Optional[str] = None  # 类别(如"宪法相关法"、"行政法")
+    file_path: Optional[str] = None  # 原始文件路径
 
     # 全文(用于检索)
-    full_text: str | None = None
+    full_text: Optional[str] = None
 
 
 @dataclass
@@ -72,21 +72,21 @@ class ArticleClause:
     norm_id: str  # 外键到 Norm
 
     # 层级结构
-    book_name: str | None = None  # 编名
-    chapter_name: str | None = None  # 章名
-    section_name: str | None = None  # 节名
+    book_name: Optional[str] = None  # 编名
+    chapter_name: Optional[str] = None  # 章名
+    section_name: Optional[str] = None  # 节名
 
     # 条款标识
-    article_number: str | None = None  # 条号(如"第 12 条")
-    clause_number: str | None = None  # 款号(如"1","2")
-    item_number: str | None = None  # 项号(如"(一)"、"1.")
+    article_number: Optional[str] = None  # 条号(如"第 12 条")
+    clause_number: Optional[str] = None  # 款号(如"1","2")
+    item_number: Optional[str] = None  # 项号(如"(一)"、"1.")
 
     # 内容
     original_text: str = ""  # 原始文本(纯文本内容)
 
     # 时间信息
-    effective_date: str | None = None  # 开始生效日期
-    expiry_date: str | None = None  # 失效日期
+    effective_date: Optional[str] = None  # 开始生效日期
+    expiry_date: Optional[str] = None  # 失效日期
 
     # 层级路径(用于重建结构)
     hierarchy_path: str = ""  # 如"第一章/第二节/第十二条/第一款"
@@ -100,11 +100,11 @@ class NormChange:
     norm_id: str  # 关联的法规ID
 
     change_type: ChangeType  # 变更类型
-    change_basis: str | None = None  # 变更依据文件(另一个 norm_id)
-    change_date: str | None = None  # 变更日期
-    effective_date: str | None = None  # 生效日期
+    change_basis: Optional[str] = None  # 变更依据文件(另一个 norm_id)
+    change_date: Optional[str] = None  # 变更日期
+    effective_date: Optional[str] = None  # 生效日期
 
-    remarks: str | None = None  # 备注(如"自某日起某条款不再适用")
+    remarks: Optional[str] = None  # 备注(如"自某日起某条款不再适用")
 
     # 元数据
     created_at: datetime = field(default_factory=datetime.now)
@@ -117,10 +117,10 @@ class LegalCitation:
     id: str
     source_norm_id: str  # 引用源法规ID
     target_norm_id: str  # 被引用法规ID
-    source_article_id: str | None = None  # 引用源条款ID
-    target_article_id: str | None = None  # 被引用条款ID
-    citation_type: str | None = None  # 引用类型(如"根据"、"参照"、"适用")
-    citation_context: str | None = None  # 引用上下文
+    source_article_id: Optional[str] = None  # 引用源条款ID
+    target_article_id: Optional[str] = None  # 被引用条款ID
+    citation_type: Optional[str] = None  # 引用类型(如"根据"、"参照"、"适用")
+    citation_context: Optional[str] = None  # 引用上下文
 
 
 @dataclass
@@ -136,8 +136,8 @@ class LegalEntity:
     # 元数据
     confidence: float = 0.8  # 置信度
     extraction_method: str = "llm"  # 抽取方法(rule/llm/manual)
-    span_start: int | None = None  # 文本起始位置
-    span_end: int | None = None  # 文本结束位置
+    span_start: Optional[int] = None  # 文本起始位置
+    span_end: Optional[int] = None  # 文本结束位置
 
 
 @dataclass

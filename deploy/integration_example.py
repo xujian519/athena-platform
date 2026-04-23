@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 项目集成示例
 Project Integration Example
@@ -8,11 +7,10 @@ Project Integration Example
 """
 
 import asyncio
-import sys
-from pathlib import Path
 
 # 导入按需启动AI系统
-from ready_on_demand_system import ai_system, TaskRequest
+from ready_on_demand_system import ai_system
+
 
 class YourProject:
     """您的项目类"""
@@ -85,7 +83,7 @@ async def integration_demo():
 
     # 显示系统状态
     status = await project.get_system_status()
-    print(f"\n📊 系统状态:")
+    print("\n📊 系统状态:")
     print(f"   运行智能体: {status.get('running_agents', 'N/A')}")
     print(f"   内存使用: {status.get('memory_usage_mb', 'N/A')} MB")
     print(f"   处理任务: {status.get('total_tasks', 'N/A')}")

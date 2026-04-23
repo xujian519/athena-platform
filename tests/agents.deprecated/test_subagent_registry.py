@@ -6,8 +6,12 @@ SubagentRegistry单元测试
 
 import pytest
 
-from core.agents.subagent_registry import SubagentConfig, SubagentRegistry, get_subagent_registry
-from core.agents.task_tool.models import ModelChoice
+from core.framework.agents.subagent_registry import (
+    SubagentConfig,
+    SubagentRegistry,
+    get_subagent_registry,
+)
+from core.framework.agents.task_tool.models import ModelChoice
 
 
 class TestSubagentConfig:

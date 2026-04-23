@@ -49,7 +49,7 @@ class RedisPersistence(BaseMessagePersistence):
     DEAD_LETTER_KEY = f"{KEY_PREFIX}:dead"  # Sorted Set: score=timestamp
     INDEX_KEY = f"{KEY_PREFIX}:index"  # Hash: state -> set of message_ids
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化Redis持久化
 
@@ -173,7 +173,7 @@ class RedisPersistence(BaseMessagePersistence):
             return None
 
     async def update_message_state(
-        self, message_id: str, state: MessageState, error_message: str | None = None
+        self, message_id: str, state: MessageState, error_message: Optional[str] = None
     ) -> bool:
         """更新消息状态"""
         if self._use_fallback():

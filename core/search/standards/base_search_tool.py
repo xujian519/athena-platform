@@ -94,7 +94,7 @@ class SearchDocument:
     id: str
     title: str
     content: str
-    url: str | None = None
+    url: Optional[str] = None
 
     # 元数据
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -109,10 +109,10 @@ class SearchDocument:
     retrieval_date: datetime = field(default_factory=datetime.now)
 
     # 特殊字段
-    snippet: str | None = None
-    author: str | None = None
-    language: str | None = None
-    content_type: str | None = None  # text, html, pdf, etc.
+    snippet: Optional[str] = None
+    author: Optional[str] = None
+    language: Optional[str] = None
+    content_type: Optional[str] = None  # text, html, pdf, etc.
 
 
 @dataclass
@@ -131,13 +131,13 @@ class SearchQuery:
     filters: dict[str, Any] = field(default_factory=dict)
 
     # 排序
-    sort_by: str | None = None
+    sort_by: Optional[str] = None
     sort_order: str = "desc"
 
     # 查询上下文
-    user_id: str | None = None
-    session_id: str | None = None
-    conversation_context: dict[str, Any] | None = None
+    user_id: Optional[str] = None
+    session_id: Optional[str] = None
+    conversation_context: Optional[dict[str, Any]] = None
 
     # 性能要求
     timeout: float = 30.0
@@ -189,15 +189,15 @@ class SearchResponse:
     # 工具信息
     tool_name: str = ""
     tool_version: str = ""
-    api_used: str | None = None
+    api_used: Optional[str] = None
 
     # 质量指标
     relevance_score_avg: float = 0.0
     confidence_avg: float = 0.0
 
     # 错误信息
-    error_message: str | None = None
-    error_type: str | None = None
+    error_message: Optional[str] = None
+    error_type: Optional[str] = None
 
     # 元数据
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -205,7 +205,7 @@ class SearchResponse:
 
     # 缓存信息
     cached: bool = False
-    cache_ttl: int | None = None
+    cache_ttl: Optional[int] = None
 
 
 class BaseSearchTool(ABC):
@@ -219,7 +219,7 @@ class BaseSearchTool(ABC):
     4. 监控集成 - 内置健康检查和指标收集
     """
 
-    def __init__(self, name: str, config: dict[str, Any] | None = None):
+    def __init__(self, name: str, config: Optional[dict[str, Any]] = None):
         """
         初始化搜索工具
 

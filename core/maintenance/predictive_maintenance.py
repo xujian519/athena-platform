@@ -70,7 +70,7 @@ class PredictionResult:
     prediction_horizon: float  # 预测时间范围(秒)
     confidence: float
     will_fail: bool
-    time_to_failure: float | None = None
+    time_to_failure: Optional[float] = None
     recommended_actions: list[str] = field(default_factory=list)
 
 

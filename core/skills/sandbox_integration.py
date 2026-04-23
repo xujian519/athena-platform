@@ -28,13 +28,13 @@ class SandboxSkillMixin:
         self._sandbox: Sandbox | None = None
         self._code_runner: SafeCodeRunner | None = None
         self._sandbox_backend: SandboxBackend = SandboxBackend.LOCAL
-        self._session_id: str | None = None
+        self._session_id: Optional[str] = None
 
     async def setup_sandbox(
         self,
         backend: SandboxBackend = SandboxBackend.LOCAL,
         config: SandboxConfig | None = None,
-        session_id: str | None = None
+        session_id: Optional[str] = None
     ) -> None:
         """初始化沙盒环境
 
@@ -64,8 +64,8 @@ class SandboxSkillMixin:
         code: str,
         language: str = "python",
         timeout: int = 30,
-        input_data: str | None = None,
-        files: dict[str, str | None] = None
+        input_data: Optional[str] = None,
+        files: Optional[dict[str, str]] = None
     ) -> dict[str, Any]:
         """在沙盒中执行代码
 
@@ -147,7 +147,7 @@ class ScriptExecutionSkill:
         script: str,
         language: str = "python",
         timeout: int = 60,
-        input_data: str | None = None
+        input_data: Optional[str] = None
     ) -> dict[str, Any]:
         """执行脚本
 

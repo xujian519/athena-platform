@@ -17,7 +17,7 @@ from typing import Any
 class ModelPreloader:
     """模型预加载管理器"""
 
-    def __init__(self, preload_config_path: str | None = None, max_workers: int = 3):
+    def __init__(self, preload_config_path: Optional[str] = None, max_workers: int = 3):
         """
         初始化预加载器
 

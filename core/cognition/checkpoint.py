@@ -42,9 +42,9 @@ class StepCheckpoint:
     step_id: str
     status: str  # pending/in_progress/completed/failed
     output: dict[str, Any] = field(default_factory=dict)
-    error: str | None = None
-    started_at: str | None = None
-    completed_at: str | None = None
+    error: Optional[str] = None
+    started_at: Optional[str] = None
+    completed_at: Optional[str] = None
 
     def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
@@ -63,7 +63,7 @@ class Checkpoint:
     checkpoint_id: str
     status: CheckpointStatus
     completed_steps: list[str]  # 已完成的步骤ID列表
-    current_step: str | None = None  # 当前执行的步骤
+    current_step: Optional[str] = None  # 当前执行的步骤
     step_states: dict[str, StepCheckpoint] = field(default_factory=dict)
     metadata: dict[str, Any] = field(default_factory=dict)
     created_at: str = field(default_factory=lambda: datetime.now().isoformat())
@@ -96,7 +96,7 @@ class CheckpointManager:
     负责保存、加载和管理检查点
     """
 
-    def __init__(self, storage_dir: str | None = None):
+    def __init__(self, storage_dir: Optional[str] = None):
         """
         初始化检查点管理器
 
@@ -212,7 +212,7 @@ class CheckpointManager:
             logger.error(f"❌ 加载检查点失败: {e}", exc_info=True)
             return None
 
-    def list_checkpoints(self, task_id: str | None = None) -> list[Checkpoint]:
+    def list_checkpoints(self, task_id: Optional[str] = None) -> list[Checkpoint]:
         """
         列出检查点
 

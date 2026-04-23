@@ -58,7 +58,7 @@ class PerformanceStats:
             if not success:
                 stats["errors"] += 1
 
-    def get_stats(self, name: str | None = None) -> dict:
+    def get_stats(self, name: Optional[str] = None) -> dict:
         """获取统计数据"""
         with self._lock:
             if name:
@@ -88,7 +88,7 @@ class PerformanceStats:
                     if s["count"] > 0
                 }
 
-    def reset(self, name: str | None = None) -> Any:
+    def reset(self, name: Optional[str] = None) -> Any:
         """重置统计数据"""
         with self._lock:
             if name:
@@ -108,7 +108,7 @@ perf_stats = PerformanceStats()
 
 
 def monitor_performance(
-    name: str | None = None, threshold: float | None = None, log_slow_calls: bool = True
+    name: Optional[str] = None, threshold: Optional[float] = None, log_slow_calls: bool = True
 ):
     """
     性能监控装饰器
@@ -200,7 +200,7 @@ def monitor_performance(
 class PerformanceMonitor:
     """性能监控上下文管理器"""
 
-    def __init__(self, name: str, threshold: float | None = None):
+    def __init__(self, name: str, threshold: Optional[float] = None):
         self.name = name
         self.threshold = threshold
         self.start_time = None
@@ -235,7 +235,7 @@ class PerformanceMonitor:
 # ============================================
 
 
-def generate_performance_report(name: str | None = None) -> dict:
+def generate_performance_report(name: Optional[str] = None) -> dict:
     """生成性能报告"""
     stats = perf_stats.get_stats(name)
 
@@ -286,7 +286,7 @@ def get_slow_queries(threshold: float = 1.0) -> list:
     return sorted(slow_queries, key=lambda x: x["avg_time"], reverse=True)
 
 
-def reset_stats(name: str | None = None) -> Any:
+def reset_stats(name: Optional[str] = None) -> Any:
     """重置统计数据"""
     perf_stats.reset(name)
     logger.info(f"性能统计已重置: {name or '全部'}")

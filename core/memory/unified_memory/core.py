@@ -703,8 +703,8 @@ class UnifiedAgentMemorySystem:
         emotional_weight: float = 0.0,
         family_related: bool = False,
         work_related: bool = False,
-        tags: list[str] | None = None,
-        metadata: dict[str, Any] | None = None,
+        tags: Optional[list[str]] = None,
+        metadata: Optional[dict[str, Any]] = None,
         tier: MemoryTier = MemoryTier.COLD,
     ) -> str:
         """
@@ -1406,7 +1406,7 @@ class UnifiedAgentMemorySystem:
     async def search_memories(
         self,
         query: str,
-        agent_id: str | None = None,
+        agent_id: Optional[str] = None,
         memory_type: MemoryType | None = None,
         importance_threshold: float = 0.0,
         limit: int = 20,
@@ -1567,7 +1567,7 @@ class UnifiedAgentMemorySystem:
         source_agent_id: str,
         target_agent_id: str,
         source_memory_id: str,
-        target_memory_id: str | None = None,
+        target_memory_id: Optional[str] = None,
         relation_type: str = "related",
     ) -> None:
         """
@@ -1738,7 +1738,7 @@ class UnifiedAgentMemorySystem:
         logger.info(f"⬆️ 记忆层级已升级: {memory_id} -> {new_tier.value}")
 
     async def create_conversation(
-        self, agent_id: str, session_id: str | None = None
+        self, agent_id: str, session_id: Optional[str] = None
     ) -> str:
         """
         创建新对话记录
@@ -1766,7 +1766,7 @@ class UnifiedAgentMemorySystem:
         return result["conversation_id"]
 
     async def end_conversation(
-        self, conversation_id: str, summary: str | None = None
+        self, conversation_id: str, summary: Optional[str] = None
     ) -> None:
         """
         结束对话记录

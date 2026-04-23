@@ -85,7 +85,7 @@ class Entity:
 class XiaonuoEnhancedNER:
     """小诺增强NER - 支持BERT和专利实体"""
 
-    def __init__(self, use_bert: bool = True, device: str | None = None):
+    def __init__(self, use_bert: bool = True, device: Optional[str] = None):
         """
         初始化增强NER
 

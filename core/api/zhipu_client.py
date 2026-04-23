@@ -56,8 +56,8 @@ class ZhipuResponse:
     content: str
     model: str
     usage: dict[str, int] = field(default_factory=dict)
-    finish_reason: str | None = None
-    request_id: str | None = None
+    finish_reason: Optional[str] = None
+    request_id: Optional[str] = None
     timestamp: datetime = field(default_factory=datetime.now)
 
     def __str__(self) -> str:
@@ -99,7 +99,7 @@ class ZhipuClient:
 
     def __init__(
         self,
-        api_key: str | None = None,
+        api_key: Optional[str] = None,
         model: str = "glm-4",
         rate_limit_config: RateLimitConfig | None = None,
         retry_config: RetryConfig | None = None,
@@ -151,10 +151,10 @@ class ZhipuClient:
     def chat(
         self,
         messages: list[dict[str, str]],
-        model: str | None = None,
+        model: Optional[str] = None,
         temperature: float = 0.7,
         top_p: float = 0.9,
-        max_tokens: int | None = None,
+        max_tokens: Optional[int] = None,
         **kwargs,
     ) -> ZhipuResponse:
         """
@@ -204,10 +204,10 @@ class ZhipuClient:
     async def achat(
         self,
         messages: list[dict[str, str]],
-        model: str | None = None,
+        model: Optional[str] = None,
         temperature: float = 0.7,
         top_p: float = 0.9,
-        max_tokens: int | None = None,
+        max_tokens: Optional[int] = None,
         **kwargs,
     ) -> ZhipuResponse:
         """异步聊天请求"""
@@ -324,7 +324,7 @@ class ZhipuClient:
 
 # 便捷函数
 def create_zhipu_client(
-    api_key: str | None = None,
+    api_key: Optional[str] = None,
     model: str = "glm-4",
     enable_rate_limit: bool = True,
 ) -> ZhipuClient:

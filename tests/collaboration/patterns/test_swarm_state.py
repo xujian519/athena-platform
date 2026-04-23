@@ -4,19 +4,17 @@ Swarm模式测试
 测试Swarm状态管理和Agent功能。
 """
 
-import pytest
-import asyncio
-from datetime import datetime
 
-from core.collaboration.patterns.swarm_state import (
-    SwarmState,
-    SharedKnowledge,
-    AgentState,
+import pytest
+
+from core.framework.collaboration.patterns.swarm_agent import SwarmAgent
+from core.framework.collaboration.patterns.swarm_state import (
     AgentRole,
+    SharedKnowledge,
     SwarmHealth,
     SwarmMetrics,
+    SwarmState,
 )
-from core.collaboration.patterns.swarm_agent import SwarmAgent
 
 
 class TestSwarmState:

@@ -19,7 +19,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from core.memory.unified_memory.types import (
+from core.framework.memory.unified_memory.types import (
     AgentIdentity,
     AgentType,
     CacheStatistics,

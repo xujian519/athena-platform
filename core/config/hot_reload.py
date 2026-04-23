@@ -314,7 +314,7 @@ class ConfigManager:
         with self._lock:
             return self._config_history.copy()
 
-    def rollback(self, version: int | None = None):
+    def rollback(self, version: Optional[int] = None):
         """
         回滚到指定版本的配置
 
@@ -406,7 +406,7 @@ class ConfigValidator:
     验证配置的有效性和完整性
     """
 
-    def __init__(self, schema: dict[str, Any] | None = None):
+    def __init__(self, schema: Optional[dict[str, Any]] = None):
         """
         初始化验证器
 
@@ -512,7 +512,7 @@ def create_config_manager(config_path: str, enable_hot_reload: bool = True) -> C
 _global_config_manager: ConfigManager | None = None
 
 
-def get_global_config_manager(config_path: str | None = None) -> ConfigManager:
+def get_global_config_manager(config_path: Optional[str] = None) -> ConfigManager:
     """
     获取全局配置管理器
 

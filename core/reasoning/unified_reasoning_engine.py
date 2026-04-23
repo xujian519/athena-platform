@@ -129,8 +129,8 @@ class ReasoningContext:
     background_knowledge: dict[str, Any] = field(default_factory=dict)
     working_memory: list[str] = field(default_factory=list)
     confidence_threshold: float = 0.7
-    time_limit: float | None = None
-    memory_limit: int | None = None
+    time_limit: Optional[float] = None
+    memory_limit: Optional[int] = None
     thinking_mode: ThinkingMode = ThinkingMode.DUAL_PROCESS
     meta_level: int = 1  # 元认知层级:0=基础推理,1=元推理,2=元元推理...
 
@@ -189,7 +189,7 @@ class ReasoningChain:
     overall_confidence: float = 0.0
     metadata: dict[str, Any] = field(default_factory=dict)
     created_at: float = field(default_factory=time.time)
-    completed_at: float | None = None
+    completed_at: Optional[float] = None
     total_time: float = 0.0
 
     def add_step(self, step: ReasoningStep) -> None:
@@ -252,7 +252,7 @@ class ReasoningResult:
 class BaseReasoner:
     """推理器基类"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
         self.reasoning_type = self._get_reasoning_type()
         self.performance_history: list[dict[str, float]] = []
@@ -590,7 +590,7 @@ class DualSystemReasoner(BaseReasoner):
         self,
         system1_reasoner: System1Reasoner,
         system2_reasoner: System2Reasoner,
-        config: dict[str, Any] | None = None,
+        config: Optional[dict[str, Any]] = None,
     ):
         super().__init__(config)
         self.system1 = system1_reasoner
@@ -667,7 +667,7 @@ class DualSystemReasoner(BaseReasoner):
 class UnifiedReasoningEngine:
     """统一推理引擎 - 集成所有推理模式"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
 
         # 初始化所有推理器
@@ -922,7 +922,7 @@ class UnifiedReasoningEngine:
 
 
 # 便捷函数
-def create_reasoning_engine(config: dict[str, Any] | None = None) -> UnifiedReasoningEngine:
+def create_reasoning_engine(config: Optional[dict[str, Any]] = None) -> UnifiedReasoningEngine:
     """创建统一推理引擎实例"""
     return UnifiedReasoningEngine(config)
 

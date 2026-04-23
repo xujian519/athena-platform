@@ -42,9 +42,9 @@ logger = setup_logging()
 class MonitoredToolCallResult(ToolCallResult):
     """带监控的工具调用结果"""
 
-    trace_id: str | None = None
+    trace_id: Optional[str] = None
     validation_result: ValidationResult | None = None
-    validation_error: str | None = None
+    validation_error: Optional[str] = None
     monitoring_data: dict[str, Any] = field(default_factory=dict)
 
 
@@ -78,9 +78,9 @@ class MonitoredToolCallManager(ToolCallManager):
     async def call_tool(
         self,
         tool_name: str,
-        parameters: dict[str, Any],        context: dict[str, Any] | None = None,
+        parameters: dict[str, Any],        context: Optional[dict[str, Any]] = None,
         priority: int = 2,
-        timeout: float | None = None,
+        timeout: Optional[float] = None,
         enable_monitoring: bool = True,
         enable_validation: bool = True,
     ) -> MonitoredToolCallResult:
@@ -379,7 +379,7 @@ def get_monitored_tool_manager() -> MonitoredToolCallManager:
 
 # 便捷函数
 async def call_tool(
-    tool_name: str, parameters: dict[str, Any], context: dict[str, Any] | None = None
+    tool_name: str, parameters: dict[str, Any], context: Optional[dict[str, Any]] = None
 ) -> MonitoredToolCallResult:
     """便捷的工具调用函数(带监控)"""
     manager = get_monitored_tool_manager()

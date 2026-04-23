@@ -9,7 +9,7 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from core.logging import get_logger, LogLevel
+from core.logging import LogLevel, get_logger
 
 # 测试基础日志
 logger = get_logger("test", level=LogLevel.INFO)

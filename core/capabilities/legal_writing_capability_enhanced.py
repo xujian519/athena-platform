@@ -197,11 +197,11 @@ class LegalWritingCapabilityEnhanced:
         task_type: str = "research_report",
         role: str = "scholar",
         word_count: int = 5000,
-        structure: list[str] | None = None,
-        context: dict[str, Any] | None = None,
+        structure: Optional[list[str]] = None,
+        context: Optional[dict[str, Any]] = None,
         enable_rag: bool = True,
         enable_iteration: bool = True,
-        model: str | None = None,
+        model: Optional[str] = None,
     ) -> dict[str, Any]:
         """
         生成法律文档(增强版)
@@ -345,7 +345,7 @@ class LegalWritingCapabilityEnhanced:
             raise ValueError(f"不支持的角色: {role}," f"支持的角色: {list(self.ROLES.keys())}")
 
     def _get_document_structure(
-        self, task_type: str, custom_structure: list[str] | None = None
+        self, task_type: str, custom_structure: Optional[list[str]] = None
     ) -> list[str]:
         """获取文档结构"""
         if custom_structure:
@@ -828,7 +828,7 @@ class LegalWritingCapabilityEnhanced:
         document_id: str,
         rating: int,
         feedback_text: str = "",
-        improvement_suggestions: list[str] | None = None,
+        improvement_suggestions: Optional[list[str]] = None,
     ) -> dict[str, Any]:
         """
         收集用户反馈

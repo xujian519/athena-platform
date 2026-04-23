@@ -53,7 +53,7 @@ class LayerRequest:
     payload: dict[str, Any]
     priority: int = 5  # 1-10, 10最高
     requires_response: bool = True
-    metadata: dict[str, Any] | None = None
+    metadata: Optional[dict[str, Any]] = None
 
 
 @dataclass
@@ -64,9 +64,9 @@ class LayerResponse:
     from_layer: LayerType
     status: RequestStatus
     payload: dict[str, Any]
-    error: str | None = None
+    error: Optional[str] = None
     processing_time_ms: float = 0
-    metadata: dict[str, Any] | None = None
+    metadata: Optional[dict[str, Any]] = None
 
 
 @dataclass
@@ -76,7 +76,7 @@ class FeedbackData:
     from_layer: LayerType
     feedback_type: str  # "quality", "performance", "error", "suggestion"
     content: str
-    metrics: dict[str, Any] | None = None
+    metrics: Optional[dict[str, Any]] = None
     timestamp: str = None
 
 

@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 
 from services.ai_models.glm_full_suite.glm_unified_client import ZhipuAIUnifiedClient
 
-from core.perception.technical_drawing_analyzer import AnalysisLevel, TechnicalDrawingAnalyzer
+from core.ai.perception.technical_drawing_analyzer import AnalysisLevel, TechnicalDrawingAnalyzer
 
 # 配置日志
 # setup_logging()  # 日志配置已移至模块导入
@@ -102,7 +102,7 @@ class AnalysisResponse(BaseModel):
     title: str
     description: str
     confidence: float
-    components: list[dict[str, Any]]
+    components: list[dict[str, Any]
     technical_features: list[str]
     working_principle: str
     related_claims: list[str]

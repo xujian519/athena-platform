@@ -31,8 +31,8 @@ router = APIRouter(prefix="/api/v2", tags=["IPC分类"])
 class IPCClassificationRequest(BaseModel):
     """IPC分类请求"""
 
-    title: str | None = Field(None, description="专利标题")
-    abstract: str | None = Field(None, description="专利摘要")
+    title: Optional[str] = Field(None, description="专利标题")
+    abstract: Optional[str] = Field(None, description="专利摘要")
     patent_text: str = Field(..., description="专利权利要求或全文")
     top_n: int = Field(5, description="返回前N个分类结果")
 
@@ -42,7 +42,7 @@ class IPCSearchRequest(BaseModel):
 
     query: str = Field(..., description="搜索查询")
     top_n: int = Field(10, description="返回前N个结果")
-    section_filter: str | None = Field(None, description="部级筛选 (A-H)")
+    section_filter: Optional[str] = Field(None, description="部级筛选 (A-H)")
 
 
 # IPC向量数据库单例

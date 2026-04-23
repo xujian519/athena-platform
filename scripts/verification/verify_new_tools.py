@@ -37,7 +37,7 @@ async def verify_patent_translator():
         )
 
         if result['success']:
-            print(f"✅ patent_translator 可用")
+            print("✅ patent_translator 可用")
             print(f"   原文: {result['original']}")
             print(f"   译文: {result['translated'][:80]}...")
             return True
@@ -71,7 +71,7 @@ async def verify_patent_translator_batch():
         success_count = sum(1 for r in results if r['success'])
 
         if success_count == len(results):
-            print(f"✅ patent_translator_batch 可用")
+            print("✅ patent_translator_batch 可用")
             print(f"   成功翻译: {success_count}/{len(results)} 个文本")
             return True
         else:
@@ -99,13 +99,13 @@ async def verify_academic_search():
         )
 
         if 'success' in result:
-            print(f"✅ academic_search 可用")
+            print("✅ academic_search 可用")
             print(f"   查询: {result.get('query', 'N/A')}")
             if 'papers' in result:
                 print(f"   找到论文数: {len(result['papers'])}")
             return True
         else:
-            print(f"⚠️ academic_search 返回异常结果")
+            print("⚠️ academic_search 返回异常结果")
             return False
 
     except Exception as e:

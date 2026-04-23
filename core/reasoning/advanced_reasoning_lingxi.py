@@ -41,7 +41,7 @@ class BayesianNetwork:
     prior_probabilities: dict[str, float] = field(default_factory=dict)
 
     def add_node(
-        self, node_id: str, node_type: str = "discrete", states: list[str] | None = None
+        self, node_id: str, node_type: str = "discrete", states: Optional[list[str]] = None
     ) -> None:
         """添加节点"""
         self.nodes[node_id] = {"type": node_type, "states": states or ["True", "False"]}
@@ -110,7 +110,7 @@ class FuzzySet:
 class ModalLogicFrame:
     """模态逻辑框架"""
 
-    accessibility_relations: dict[str, list[tuple[str, str]]] = field(default_factory=dict)
+    accessibility_relations: dict[str, list[tuple[str, str]] = field(default_factory=dict)
     possible_worlds: list[str] = field(default_factory=list)
     valuation: dict[str, dict[str, bool]] = field(default_factory=dict)
 
@@ -135,7 +135,7 @@ class ModalLogicFrame:
 class BayesianReasoner(BaseReasoner):
     """贝叶斯推理器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__(config or {})
         self.network = BayesianNetwork()
         self.evidence: dict[str, bool] = {}
@@ -448,7 +448,7 @@ class BayesianReasoner(BaseReasoner):
 class FuzzyReasoner(BaseReasoner):
     """模糊推理器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__(config or {})
         self.fuzzy_sets: dict[str, list[FuzzySet]] = {}
         self.fuzzy_rules: list[dict[str, Any]] = []
@@ -707,7 +707,7 @@ class FuzzyReasoner(BaseReasoner):
 class ModalReasoner(BaseReasoner):
     """模态推理器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__(config or {})
         self.modal_frame = ModalLogicFrame()
         self.modal_operators = ["□", "◇"]  # 必然性、可能性
@@ -1046,7 +1046,7 @@ class ModalReasoner(BaseReasoner):
 class CounterfactualReasoner(BaseReasoner):
     """反事实推理器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__(config or {})
         self.causal_model: dict[str, Any] = {}
         self.actual_world: dict[str, Any] = {}

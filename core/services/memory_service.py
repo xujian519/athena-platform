@@ -81,7 +81,7 @@ class MemoryService:
             logger.error(f"记忆存储失败: {e}")
             return False
 
-    async def retrieve(self, key: str, memory_type: str | None = None) -> Any | None:
+    async def retrieve(self, key: str, memory_type: Optional[str] = None) -> Any | None:
         """
         检索记忆
 
@@ -144,7 +144,7 @@ class MemoryService:
 
         return results
 
-    async def delete(self, key: str, memory_type: str | None = None) -> bool:
+    async def delete(self, key: str, memory_type: Optional[str] = None) -> bool:
         """
         删除记忆
 

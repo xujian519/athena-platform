@@ -49,7 +49,7 @@ class AgentAdapter:
 
         logger.info(f"✅ Agent适配器创建: {self.agent_name} (model={self.model})")
 
-    async def __call__(self, task: str, context: dict[str, Any] | None = None, **kwargs) -> dict[str, Any]:
+    async def __call__(self, task: str, context: Optional[dict[str, Any]] = None, **kwargs) -> dict[str, Any]:
         """
         调用Agent处理任务
 

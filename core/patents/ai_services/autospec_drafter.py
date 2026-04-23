@@ -626,10 +626,10 @@ class AutoSpecDrafter:
     async def draft_specification_full(
         self,
         disclosure: str,
-        task_id: str | None = None,
+        task_id: Optional[str] = None,
         client: str = "",
         invention_type: InventionType | None = None,
-        drawing_paths: list[str] | None = None,
+        drawing_paths: Optional[list[str]] = None,
         prior_art: list[dict] | None = None,
         enable_examiner_simulation: bool = True,
         max_iterations: int = 3
@@ -797,7 +797,7 @@ class AutoSpecDrafter:
     async def _draft_specification_content(
         self,
         understanding: InventionUnderstanding,
-        drawing_paths: list[str] | None,
+        drawing_paths: Optional[list[str]],
         inventive_points: list[str]
     ) -> SpecificationDraft:
         """撰写说明书内容"""
@@ -1036,7 +1036,7 @@ class AutoSpecDrafter:
         self,
         disclosure: str,
         invention_type: InventionType | None = None,
-        drawing_paths: list[str] | None = None,
+        drawing_paths: Optional[list[str]] = None,
         enable_quality_check: bool = True,
         max_iterations: int = 3
     ) -> SpecificationDraft:
@@ -1579,7 +1579,7 @@ class AutoSpecDrafter:
 async def draft_patent_specification(
     disclosure: str,
     llm_manager=None,
-    drawing_paths: list[str] | None = None
+    drawing_paths: Optional[list[str]] = None
 ) -> SpecificationDraft:
     """
     便捷函数: 撰写专利说明书

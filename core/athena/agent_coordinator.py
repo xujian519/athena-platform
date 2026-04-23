@@ -78,7 +78,7 @@ class CollaborationTeam:
     team_id: str
     task_id: str
     mode: CollaborationMode
-    leader: str | None = None
+    leader: Optional[str] = None
     members: list[AgentRole] = field(default_factory=list)
     formed_at: datetime = field(default_factory=datetime.now)
     status: str = "forming"
@@ -91,7 +91,7 @@ class SubTask:
     subtask_id: str
     parent_task_id: str
     description: str
-    assigned_to: str | None = None
+    assigned_to: Optional[str] = None
     dependencies: list[str] = field(default_factory=list)
     status: str = "pending"
     priority: int = 5
@@ -109,7 +109,7 @@ class Conflict:
     description: str
     detected_at: datetime = field(default_factory=datetime.now)
     severity: str = "medium"  # low, medium, high, critical
-    resolution_strategy: str | None = None
+    resolution_strategy: Optional[str] = None
     resolved: bool = False
 
 
@@ -178,7 +178,7 @@ class AgentCoordinator:
         task_id: str,
         required_agents: list[tuple[str, str]],  # (agent_id, role_name)
         mode: CollaborationMode,
-        leader_id: str | None = None,
+        leader_id: Optional[str] = None,
     ) -> CollaborationTeam:
         """组建协作团队"""
         team_id = f"team_{task_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"

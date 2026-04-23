@@ -48,7 +48,7 @@ class LegalAnalysisModule:
 
         logger.info("⚖️ 法律分析模块已初始化")
 
-    async def analyze(self, query: str, context: dict[str, Any] | None = None) -> str:
+    async def analyze(self, query: str, context: Optional[dict[str, Any]] = None) -> str:
         """
         分析法律查询
 

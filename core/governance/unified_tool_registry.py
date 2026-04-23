@@ -122,7 +122,7 @@ class ToolExecutionResult:
     tool_id: str
     success: bool
     result: Any = None
-    error: str | None = None
+    error: Optional[str] = None
     execution_time: float = 0.0
     timestamp: datetime = field(default_factory=datetime.now)
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -145,7 +145,7 @@ class UnifiedToolRegistry:
     5. 性能统计和分析
     """
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
 
         # 平台根目录
@@ -508,10 +508,10 @@ class UnifiedToolRegistry:
         description: str,
         capabilities: list[str],
         tool_instance: Any = None,
-        input_schema: dict[str, Any] | None = None,
-        output_schema: dict[str, Any] | None = None,
+        input_schema: Optional[dict[str, Any]] = None,
+        output_schema: Optional[dict[str, Any]] = None,
         registration_source: str = "manual",
-        dependencies: list[str] | None = None,
+        dependencies: Optional[list[str]] = None,
     ) -> bool:
         """注册工具"""
         try:
@@ -549,7 +549,7 @@ class UnifiedToolRegistry:
             return False
 
     async def execute_tool(
-        self, tool_id: str, parameters: dict[str, Any], context: dict[str, Any] | None = None
+        self, tool_id: str, parameters: dict[str, Any], context: Optional[dict[str, Any]] = None
     ) -> ToolExecutionResult:
         """
         统一工具执行接口
@@ -1010,7 +1010,7 @@ class UnifiedToolRegistry:
 
         return results
 
-    def get_tool_info(self, tool_id: str) -> dict[str, Any] | None:
+    def get_tool_info(self, tool_id: str) -> Optional[dict[str, Any]]:
         """获取工具详细信息"""
         metadata = self.metadata.get(tool_id)
 

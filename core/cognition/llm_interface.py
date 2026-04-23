@@ -91,16 +91,16 @@ class LLMRequest:
     """LLM请求数据结构"""
 
     prompt: str
-    model_name: str | None = None  # 使用None让LLM管理器自动选择
-    provider: str | None = None  # 可选指定提供商
+    model_name: Optional[str] = None  # 使用None让LLM管理器自动选择
+    provider: Optional[str] = None  # 可选指定提供商
     temperature: float = 0.7
     max_tokens: int = 4000
-    system_message: str | None = None
-    expert_context: dict[str, Any] | None = None
-    knowledge_context: dict[str, Any] | None = None
+    system_message: Optional[str] = None
+    expert_context: Optional[dict[str, Any]] = None
+    knowledge_context: Optional[dict[str, Any]] = None
     tools: list[dict[str, Any]] | None = None
     use_streaming: bool = False
-    capabilities: list[str] | None = None  # 指定需要的模型能力
+    capabilities: Optional[list[str]] = None  # 指定需要的模型能力
 
 
 @dataclass
@@ -111,9 +111,9 @@ class LLMResponse:
     model_used: str
     usage: dict[str, int] = field(default_factory=dict)
     response_time: float = 0.0
-    expert_analysis: dict[str, Any] | None = None
+    expert_analysis: Optional[dict[str, Any]] = None
     confidence_score: float = 0.0
-    reasoning_chain: list[str] | None = None
+    reasoning_chain: Optional[list[str]] = None
     cost: float = 0.0
     provider: str = "unknown"
 
@@ -121,7 +121,7 @@ class LLMResponse:
 class LLMInterface:
     """LLM调用接口类 - 以GLM-4为核心的Athena统一客户端"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
         self.request_history = []
         self.glm_client = None
@@ -288,7 +288,7 @@ class LLMInterface:
         else:
             return "default"
 
-    def _select_optimal_model(self, task_type: str, specified_model: str | None = None) -> Any:
+    def _select_optimal_model(self, task_type: str, specified_model: Optional[str] = None) -> Any:
         """选择最优模型"""
         # 如果指定了模型,尝试返回对应的GLM模型
         if specified_model and GLM_AVAILABLE:
@@ -386,7 +386,7 @@ class LLMInterface:
             }
         ]
 
-    async def get_model_info(self, model_name: str) -> dict[str, Any] | None:
+    async def get_model_info(self, model_name: str) -> Optional[dict[str, Any]]:
         """获取模型详细信息"""
         if not self.initialized:
             await self.initialize()
@@ -683,7 +683,7 @@ class LLMInterface:
 
 # 便捷函数
 async def call_llm_with_experts(
-    prompt: str, expert_context: dict[str, Any] = None, knowledge_context: dict[str, Any] | None = None
+    prompt: str, expert_context: dict[str, Any] = None, knowledge_context: Optional[dict[str, Any]] = None
 ) -> LLMResponse:
     """便捷的LLM调用函数,自动包含专家上下文"""
     request = LLMRequest(

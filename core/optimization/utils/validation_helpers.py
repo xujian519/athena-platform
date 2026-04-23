@@ -20,7 +20,7 @@ def validate_string(
     min_length: int = 0,
     max_length: int = 10000,
     allow_empty: bool = False,
-    pattern: str | None = None,
+    pattern: Optional[str] = None,
 ) -> str:
     """
     验证字符串参数
@@ -67,8 +67,8 @@ def validate_string(
 def validate_number(
     value: Any,
     param_name: str = "value",
-    min_value: float | None = None,
-    max_value: float | None = None,
+    min_value: Optional[float] = None,
+    max_value: Optional[float] = None,
     allow_zero: bool = True,
 ) -> float:
     """
@@ -114,7 +114,7 @@ def validate_number(
 def validate_dict(
     value: Any,
     param_name: str = "value",
-    required_keys: list[str] | None = None,
+    required_keys: Optional[list[str]] = None,
     allow_empty: bool = True,
 ) -> dict[str, Any]:
     """
@@ -157,7 +157,7 @@ def validate_list(
     value: Any,
     param_name: str = "value",
     min_length: int = 0,
-    max_length: int | None = None,
+    max_length: Optional[int] = None,
     allow_empty: bool = True,
     item_type: type | None = None,
 ) -> list[Any]:

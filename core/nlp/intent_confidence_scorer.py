@@ -121,8 +121,8 @@ class IntentConfidenceScorer:
     async def classify_with_confidence(
         self,
         message: str,
-        base_intent: str | None = None,
-        context: dict[str, Any] | None = None,
+        base_intent: Optional[str] = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> IntentClassification:
         """
         带置信度的意图分类

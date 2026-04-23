@@ -142,13 +142,13 @@ def create_reasoning_step(
     step_number: int,
     description: str,
     reasoning_type: ReasoningType = ReasoningType.ANALYTICAL,
-    input_data: dict[str, Any] | None = None,
-    output_data: dict[str, Any] | None = None,
+    input_data: Optional[dict[str, Any]] = None,
+    output_data: Optional[dict[str, Any]] = None,
     confidence: float = 0.0,
-    operation: str | None = None,
-    input_state: dict[str, Any] | None = None,
-    output_state: dict[str, Any] | None = None,
-    justification: str | None = None,
+    operation: Optional[str] = None,
+    input_state: Optional[dict[str, Any]] = None,
+    output_state: Optional[dict[str, Any]] = None,
+    justification: Optional[str] = None,
     computation_time: float = 0.0,
 ) -> ReasoningStep:
     """创建推理步骤"""
@@ -170,7 +170,7 @@ def create_reasoning_step(
 class BaseReasoner:
     """基础推理器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
         self.reasoner_id = str(uuid.uuid4())
         self.reasoning_history: list[ReasoningResult] = []

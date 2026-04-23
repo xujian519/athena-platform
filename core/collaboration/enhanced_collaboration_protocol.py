@@ -89,7 +89,7 @@ class Message:
     # 发送者和接收者
     sender_id: str = ""
     receiver_id: str = ""  # 空字符串表示广播
-    reply_to: str | None = None
+    reply_to: Optional[str] = None
 
     # 内容
     action: str = ""
@@ -102,8 +102,8 @@ class Message:
     retry_until: datetime | None = None
 
     # 状态追踪
-    correlation_id: str | None = None
-    conversation_id: str | None = None
+    correlation_id: Optional[str] = None
+    conversation_id: Optional[str] = None
 
     # 重试
     retry_count: int = 0
@@ -130,7 +130,7 @@ class Message:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "Message":
+    def from_dict(cls, data: dict[str, Any]) -> Message:
         """从字典创建"""
         return cls(
             message_id=data.get("message_id", str(uuid.uuid4())),
@@ -369,7 +369,7 @@ class EnhancedCollaborationProtocol:
         self,
         sender_id: str,
         action: str,
-        payload: dict[str, Any],        exclude: list[str] | None = None,
+        payload: dict[str, Any],        exclude: Optional[list[str]] = None,
     ) -> list[str]:
         """广播消息"""
         message_ids = []
@@ -415,7 +415,7 @@ class EnhancedCollaborationProtocol:
         subscriber_id: str,
         event_type: str,
         callback: Callable | None = None,
-        filter_criteria: dict[str, Any] | None = None,
+        filter_criteria: Optional[dict[str, Any]] = None,
     ) -> str:
         """订阅事件"""
         subscription = EventSubscription(
@@ -480,8 +480,8 @@ class EnhancedCollaborationProtocol:
         self,
         context_id: str,
         participants: list[str],
-        initial_data: dict[str, Any] | None = None,
-        ttl_seconds: int | None = None,
+        initial_data: Optional[dict[str, Any]] = None,
+        ttl_seconds: Optional[int] = None,
     ) -> SharedContext:
         """创建共享上下文"""
         import datetime as dt

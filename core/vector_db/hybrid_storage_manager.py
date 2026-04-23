@@ -332,7 +332,7 @@ class HybridStorageManager:
             return {"status": "error", "error": str(e), "storage_type": "sqlite"}
 
     def search_vectors(
-        self, query_vector: list[float], limit: int = 10, filters: dict[str, Any] | None = None
+        self, query_vector: list[float], limit: int = 10, filters: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """跨存储系统搜索向量"""
         results = {"qdrant_results": [], "sqlite_results": [], "total_results": 0, "search_time": 0}

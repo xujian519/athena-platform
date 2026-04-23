@@ -8,7 +8,7 @@ from pathlib import Path
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent))
 
-from core.agents.xiaona_professional import XiaonaProfessionalAgent
+from core.framework.agents.xiaona_professional import XiaonaProfessionalAgent
 
 
 async def main():

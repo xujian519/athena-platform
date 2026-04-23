@@ -27,7 +27,7 @@ class SearchQuery:
     search_type: SearchType
     limit: int = 10
     offset: int = 0
-    filters: dict[str, Any] | None = None
+    filters: Optional[dict[str, Any]] = None
     language: str = "zh"
 
 
@@ -37,9 +37,9 @@ class SearchResult:
 
     title: str
     content: str
-    url: str | None = None
+    url: Optional[str] = None
     relevance_score: float = 0.0
-    metadata: dict[str, Any] | None = None
+    metadata: Optional[dict[str, Any]] = None
 
 
 @dataclass
@@ -56,7 +56,7 @@ class SearchResponse:
 class BaseSearchEngine(ABC):
     """搜索引擎基类"""
 
-    def __init__(self, name: str, config: dict[str, Any] | None = None):
+    def __init__(self, name: str, config: Optional[dict[str, Any]] = None):
         self.name = name
         self.config = config or {}
 

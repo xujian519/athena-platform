@@ -1448,7 +1448,7 @@ class GooglePatentsRetriever:
         cache_str = json.dumps(cache_data, sort_keys=True)
         return hashlib.md5(cache_str.encode('utf-8'), usedforsecurity=False).hexdigest()
 
-    def _get_from_cache(self, cache_key: str) -> Dict[str, Any | None]:
+    def _get_from_cache(self, cache_key: str) -> Dict[str, Any] | None:
         """从缓存获取结果"""
         try:
             if cache_key in self.search_cache:

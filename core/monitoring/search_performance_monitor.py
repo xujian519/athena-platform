@@ -80,7 +80,7 @@ class SearchRecord:
 
     # 元数据
     success: bool = True  # 是否成功
-    error: str | None = None  # 错误信息
+    error: Optional[str] = None  # 错误信息
     timestamp: float = field(default_factory=time.time)
     cached: bool = False  # 是否来自缓存
 
@@ -314,7 +314,7 @@ class PerformanceMonitor:
 
         return suggestions
 
-    def export_metrics(self, filepath: str | None = None) -> str:
+    def export_metrics(self, filepath: Optional[str] = None) -> str:
         """
         导出指标到文件
 

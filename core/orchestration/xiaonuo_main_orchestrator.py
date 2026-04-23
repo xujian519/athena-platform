@@ -53,9 +53,9 @@ class ExecutionResult:
     def __init__(self):
         self.success = False
         self.subtask_results: dict[str, Any] = {}
-        self.task_result: dict[str, Any] | None = None
+        self.task_result: Optional[dict[str, Any]] = None
         self.execution_time = 0.0
-        self.error: str | None = None
+        self.error: Optional[str] = None
         self.metrics: dict[str, Any] = {}
 
 
@@ -203,7 +203,7 @@ class XiaonuoMainOrchestrator:
         description: str,
         priority: TaskPriority = TaskPriority.NORMAL,
         mode: OrchestrationMode | None = None,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> OrchestrationReport:
         """编排执行任务"""
         # 创建任务

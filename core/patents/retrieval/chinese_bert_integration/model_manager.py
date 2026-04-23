@@ -208,7 +208,7 @@ class ChineseBERTModelManager:
     def encode_texts(
         self,
         texts: list[str],
-        model_name: str | None = None,
+        model_name: Optional[str] = None,
         batch_size: int = 32,
         normalize: bool = True
     ) -> np.ndarray:
@@ -265,7 +265,7 @@ class ChineseBERTModelManager:
         self,
         query: str,
         passages: list[str],
-        top_k: int | None = None
+        top_k: Optional[int] = None
     ) -> list[tuple[int, float]]:
         """重排序结果
 
@@ -305,7 +305,7 @@ class ChineseBERTModelManager:
             logger.error(f"重排序失败: {e}")
             return [(i, 1.0) for i in range(len(passages))]
 
-    def get_model_info(self, model_name: str | None = None) -> dict[str, Any | None]:
+    def get_model_info(self, model_name: Optional[str] = None) -> Optional[dict[str, Any]]:
         """获取模型信息
 
         Args:
@@ -346,7 +346,7 @@ class ChineseBERTModelManager:
 
         return models
 
-    def recommend_model(self, text_type: str, speed_preference: str = 'medium') -> str | None:
+    def recommend_model(self, text_type: str, speed_preference: str = 'medium') -> Optional[str]:
         """根据文本类型和速度偏好推荐模型
 
         Args:

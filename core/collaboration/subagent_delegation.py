@@ -62,7 +62,7 @@ class SubagentTask:
     timeout: float = 300.0  # 5分钟超时
     status: SubagentStatus = SubagentStatus.PENDING
     result: Any = None
-    error: str | None = None
+    error: Optional[str] = None
     created_at: datetime = field(default_factory=datetime.now)
     started_at: datetime | None = None
     completed_at: datetime | None = None
@@ -147,7 +147,7 @@ class SubagentDelegationManager:
         name: str,
         description: str,
         task_type: str,
-        parameters: dict[str, Any] | None = None,
+        parameters: Optional[dict[str, Any]] = None,
         priority: TaskPriority = TaskPriority.MEDIUM,
         timeout: float = 300.0,
     ) -> SubagentTask:

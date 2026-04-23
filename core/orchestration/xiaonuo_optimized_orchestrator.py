@@ -69,7 +69,7 @@ class XiaonuoOptimizedOrchestrator(XiaonuoMainOrchestrator):
     3. 参数验证 - 实时验证参数有效性
     """
 
-    def __init__(self, optimization_config_path: str | None = None):
+    def __init__(self, optimization_config_path: Optional[str] = None):
         """
         初始化优化增强版编排器
 
@@ -174,8 +174,8 @@ class XiaonuoOptimizedOrchestrator(XiaonuoMainOrchestrator):
         description: str,
         priority: TaskPriority = TaskPriority.NORMAL,
         mode: OrchestrationMode | None = None,
-        context: dict[str, Any] | None = None,
-        parameters: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
+        parameters: Optional[dict[str, Any]] = None,
     ) -> OrchestrationReport:
         """
         编排执行任务(优化增强版)
@@ -437,7 +437,7 @@ class XiaonuoOptimizedOrchestrator(XiaonuoMainOrchestrator):
 
 # 便捷函数
 def create_optimized_orchestrator(
-    config_path: str | None = None, enable_optimization: bool = False
+    config_path: Optional[str] = None, enable_optimization: bool = False
 ) -> XiaonuoOptimizedOrchestrator:
     """
     创建优化增强版编排器

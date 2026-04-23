@@ -202,16 +202,16 @@ def save_work_guidelines() -> None:
 - **核心内容**: {'、'.join(guidelines['administrative_mediation']['key_points'])}
 
 ### 4. 专利程序指南 ({len(guidelines['procedures']['files'])}个)
-{chr(10).join([f"- **{item['name']}** ({item['importance']}) - {item['size']}" for item in guidelines['procedures']['files']])}
+{chr(10).join([f"- **{item['name']}** ({item['importance']}) - {item['size']}" for item in guidelines['procedures']['files'])}
 
 ### 5. 诉讼程序指南 ({len(guidelines['litigation_procedures']['files'])}个)
-{chr(10).join([f"- **{item['name']}** ({item['importance']}) - {item['size']}" for item in guidelines['litigation_procedures']['files']])}
+{chr(10).join([f"- **{item['name']}** ({item['importance']}) - {item['size']}" for item in guidelines['litigation_procedures']['files'])}
 
 ### 6. 实务工具 ({len(guidelines['practical_tools']['files'])}个)
-{chr(10).join([f"- **{item['name']}** ({item['importance']}) - {item['size']}" for item in guidelines['practical_tools']['files']])}
+{chr(10).join([f"- **{item['name']}** ({item['importance']}) - {item['size']}" for item in guidelines['practical_tools']['files'])}
 
 ### 7. 参考资料 ({len(guidelines['reference_info']['files'])}个)
-{chr(10).join([f"- **{item['name']}** ({item['importance']}) - {item['size']}" for item in guidelines['reference_info']['files']])}
+{chr(10).join([f"- **{item['name']}** ({item['importance']}) - {item['size']}" for item in guidelines['reference_info']['files'])}
 
 ## 📋 流程图资料
 包含11个高清流程图，对应各项程序的可视化指引：

@@ -63,7 +63,7 @@ class ProcessorFactory:
 
     @classmethod
     def create_processor(
-        cls, input_type: InputType, config: dict[str, Any] | None = None, singleton: bool = False
+        cls, input_type: InputType, config: Optional[dict[str, Any]] = None, singleton: bool = False
     ) -> Any:
         """
         创建处理器实例
@@ -130,7 +130,7 @@ class PerceptionEngineFactory:
         cls,
         agent_id: str,
         engine_type: str = "standard",
-        config: PerceptionConfig | dict[str, Any] | None = None,
+        config: PerceptionConfig | Optional[dict[str, Any]] = None,
         singleton: bool = False,
     ) -> Any:
         """
@@ -338,7 +338,7 @@ class PerceptionBuilder:
 async def create_perception_engine(
     agent_id: str,
     engine_type: str = "standard",
-    config: PerceptionConfig | dict[str, Any] | None = None,
+    config: PerceptionConfig | Optional[dict[str, Any]] = None,
 ) -> Any:
     """
     创建并初始化感知引擎(便捷函数)

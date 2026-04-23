@@ -31,7 +31,7 @@ class BertNERExtractor:
     - IPC_CODE: IPC分类号
     """
 
-    def __init__(self, model_path: str | None = None, device: str = "auto"):
+    def __init__(self, model_path: Optional[str] = None, device: str = "auto"):
         """
         初始化BERT NER模型
 
@@ -136,7 +136,7 @@ class BertNERExtractor:
         return self._extract_entities_rule_based(text, entity_types)
 
     async def extract_entities_batch(
-        self, texts: list[str], entity_types: list[str] | None = None
+        self, texts: list[str], entity_types: Optional[list[str]] = None
     ) -> list[list[dict[str, Any]]]:
         """
         批量从多个文本中抽取实体

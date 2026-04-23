@@ -3,15 +3,16 @@
 Athena平台快速启动脚本
 """
 
-import sys
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import os
+import sys
+from typing import Any
 
 # 添加核心库路径
 sys.path.append(os.path.dirname(__file__) + '/..')
 
-from athena import AthenaController
 import asyncio
+
+from athena import AthenaController
 
 
 def quick_start() -> Any:

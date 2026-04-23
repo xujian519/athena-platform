@@ -82,7 +82,7 @@ class EnhancedPatentSearch:
         self,
         query: str,
         max_results: int = 20,
-        sources: Optional[List[str] = None,
+        sources: Optional[List[str]] = None,
         use_cache: bool = True
     ) -> List[SearchResult]:
         """
@@ -264,7 +264,7 @@ class EnhancedPatentSearch:
 
         return (title_score + abstract_score) * source_weight
 
-    def _get_from_cache(self, cache_key: str) -> List[SearchResult | None]:
+    def _get_from_cache(self, cache_key: str) -> List[SearchResult] | None:
         """从缓存获取结果"""
         if cache_key in self.cache:
             cached_data = self.cache[cache_key]

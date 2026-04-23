@@ -4,13 +4,13 @@ Scripts模块迁移工具
 帮助将现有脚本迁移到新架构
 """
 
-import os
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import sys
-import shutil
 import json
-from pathlib import Path
+import os
+import shutil
+import sys
 from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 # 添加核心库路径
 sys.path.append(os.path.dirname(__file__) + '/..')
@@ -207,7 +207,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
-from core.database import db_manager
+from core.infrastructure.database import db_manager
 from utils.logger import ScriptLogger
 from utils.progress_tracker import ProgressTracker
 
@@ -247,7 +247,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
-from core.database import db_manager
+from core.infrastructure.database import db_manager
 from utils.logger import ScriptLogger
 from utils.progress_tracker import ProgressTracker
 
@@ -286,7 +286,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
-from core.database import db_manager
+from core.infrastructure.database import db_manager
 from utils.logger import ScriptLogger
 from utils.progress_tracker import ProgressTracker
 
@@ -335,7 +335,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
-from core.database import db_manager
+from core.infrastructure.database import db_manager
 from utils.logger import ScriptLogger
 from utils.progress_tracker import ProgressTracker
 from utils.file_manager import file_manager
@@ -384,7 +384,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
-from core.database import db_manager
+from core.infrastructure.database import db_manager
 from utils.logger import ScriptLogger
 from utils.progress_tracker import ProgressTracker
 
@@ -484,7 +484,7 @@ if __name__ == "__main__":
         with open(report_path, 'w', encoding='utf-8') as f:
             json.dump(report, f, ensure_ascii=False, indent=2)
 
-        print(f"\n📊 迁移统计:")
+        print("\n📊 迁移统计:")
         print(f"  - 总计迁移: {len(self.migration_log)} 项")
         print(f"  - 报告位置: {report_path}")
 

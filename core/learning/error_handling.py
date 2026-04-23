@@ -467,7 +467,7 @@ class ErrorHandlingMixin:
         self.fallback_handler = FallbackHandler()
         self.error_history: list[ErrorContext] = []
 
-    def _handle_error(self, error: Exception, context: dict[str, Any] | None = None) -> None:
+    def _handle_error(self, error: Exception, context: Optional[dict[str, Any]] = None) -> None:
         """处理错误"""
         if isinstance(error, LearningEngineError):
             error_context = ErrorContext(

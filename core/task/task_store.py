@@ -26,7 +26,7 @@ class TaskStore:
     - ARCHIVE层: 长期存储（未来扩展）
     """
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """初始化TaskStore
 
         Args:
@@ -300,7 +300,7 @@ class TaskStore:
             error_message=row["error_message"],
         )
 
-    def get_active_tasks(self, agent_id: str | None = None) -> list[TaskRecord]:
+    def get_active_tasks(self, agent_id: Optional[str] = None) -> list[TaskRecord]:
         """获取活动任务
 
         Args:
@@ -326,7 +326,7 @@ class TaskStore:
 
     def get_task_history(
         self,
-        agent_id: str | None = None,
+        agent_id: Optional[str] = None,
         limit: int = 100,
         offset: int = 0,
     ) -> list[TaskRecord]:

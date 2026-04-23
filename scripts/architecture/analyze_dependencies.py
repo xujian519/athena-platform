@@ -11,11 +11,8 @@
 
 import ast
 import json
-import os
-import re
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List, Set, Tuple
 
 # 配置
 PROJECT_ROOT = Path("/Users/xujian/Athena工作平台")
@@ -65,12 +62,12 @@ class DependencyAnalyzer:
                 return True
         return False
 
-    def extract_imports_from_file(self, file_path: Path) -> Set[str]:
+    def extract_imports_from_file(self, file_path: Path) -> set[str]:
         """从Python文件中提取imports"""
         imports = set()
 
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read()
 
             tree = ast.parse(content, filename=str(file_path))
@@ -143,7 +140,7 @@ class DependencyAnalyzer:
 
         print(f"✅ 扫描完成: {len(self.imports)} 个模块")
 
-    def detect_circular_dependencies(self) -> List[List[str]]:
+    def detect_circular_dependencies(self) -> list[list[str]:
         """检测循环依赖"""
         print("🔍 检测循环依赖...")
 
@@ -151,7 +148,7 @@ class DependencyAnalyzer:
         visited = set()
         rec_stack = set()
 
-        def dfs(node: str, path: List[str]):
+        def dfs(node: str, path: list[str]):
             if node in rec_stack:
                 # 找到循环
                 cycle_start = path.index(node)
@@ -176,7 +173,7 @@ class DependencyAnalyzer:
         print(f"✅ 发现 {len(cycles)} 个循环依赖")
         return cycles
 
-    def detect_violations(self) -> Dict[str, List[str]]:
+    def detect_violations(self) -> dict[str, list[str]:
         """检测架构违规"""
         print("🔍 检测架构违规...")
 
@@ -195,14 +192,14 @@ class DependencyAnalyzer:
         print(f"✅ 发现 {sum(len(v) for v in violations.values())} 个违规")
         return violations
 
-    def generate_dependency_matrix(self) -> Dict[Tuple[str, str], int]:
+    def generate_dependency_matrix(self) -> dict[tuple[str, str], int]:
         """生成依赖矩阵"""
         print("📊 生成依赖矩阵...")
 
         matrix = defaultdict(int)
-        all_modules = set(self.imports.keys()) | set(
+        all_modules = set(self.imports.keys()) | {
             imp for imports in self.imports.values() for imp in imports
-        )
+        }
 
         for module, imports in self.imports.items():
             for imp in imports:
@@ -253,9 +250,9 @@ class DependencyAnalyzer:
         import csv
 
         matrix = self.generate_dependency_matrix()
-        all_modules = sorted(set(
+        all_modules = sorted({
             k[0] for k in matrix.keys()
-        ) | set(k[1] for k in matrix.keys()))
+        } | {k[1] for k in matrix.keys()})
 
         output_path = OUTPUT_DIR / "dependency_matrix.csv"
         with open(output_path, "w", newline="", encoding="utf-8") as f:

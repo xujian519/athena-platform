@@ -62,7 +62,7 @@ class RerankResult:
 class BGEReranker:
     """BGE重排序引擎 - 完整实现"""
 
-    def __init__(self, model_path: str | None = None, config: RerankConfig | None = None):
+    def __init__(self, model_path: Optional[str] = None, config: RerankConfig | None = None):
         """
         初始化BGE重排序引擎
 
@@ -403,7 +403,7 @@ class BGEReranker:
         key_data = f"{query}|{'|'.join(contents[:5])}"  # 只使用前5个内容生成键
         return hashlib.md5(key_data.encode('utf-8'), usedforsecurity=False).hexdigest()
 
-    def _get_from_cache(self, cache_key: str) -> list[float | None]:
+    def _get_from_cache(self, cache_key: str) -> Optional[list[float]]:
         """从缓存获取"""
         return self.cache.get(cache_key)
 
@@ -479,7 +479,7 @@ _reranker_lock = threading.Lock()
 
 
 def get_bge_reranker(
-    model_path: str | None = None,
+    model_path: Optional[str] = None,
     config: RerankConfig | None = None,
     auto_initialize: bool = True,
 ) -> BGEReranker:

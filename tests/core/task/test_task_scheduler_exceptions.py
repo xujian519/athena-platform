@@ -9,9 +9,10 @@ def test_task_scheduler_future_timeout():
     """测试Future超时异常处理"""
     from concurrent.futures import Future
 
-    # 创建一个模拟超时的Future
-    from core.agents.task_tool.models import BackgroundTask, TaskStatus
     from core.task.task_scheduler import TaskScheduler
+
+    # 创建一个模拟超时的Future
+    from core.framework.agents.task_tool.models import BackgroundTask, TaskStatus
 
     class TimeoutMockBackgroundTaskManager:
         def __init__(self):
@@ -79,9 +80,10 @@ def test_task_scheduler_future_exception():
     """测试Future执行异常处理"""
     from concurrent.futures import Future
 
-    # 创建一个会抛出异常的Future
-    from core.agents.task_tool.models import BackgroundTask, TaskStatus
     from core.task.task_scheduler import TaskScheduler
+
+    # 创建一个会抛出异常的Future
+    from core.framework.agents.task_tool.models import BackgroundTask, TaskStatus
 
     class ExceptionMockBackgroundTaskManager:
         def __init__(self):

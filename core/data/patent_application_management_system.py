@@ -31,8 +31,8 @@ class ApplicantInfo:
     address: str  # 申请地址
     postal_code: str  # 邮编
     phone: str  # 联系电话
-    email: str | None = None  # 电子邮箱
-    organization_type: str | None = None  # 机构类型 (个人/企业/科研机构)
+    email: Optional[str] = None  # 电子邮箱
+    organization_type: Optional[str] = None  # 机构类型 (个人/企业/科研机构)
 
 
 @dataclass
@@ -42,10 +42,10 @@ class InventorInfo:
     name: str  # 发明人姓名
     id_number: str  # 身份证号码
     sequence: int  # 排序
-    education: str | None = None  # 学历
-    professional_title: str | None = None  # 职称
-    workplace: str | None = None  # 工作单位
-    contribution: str | None = None  # 主要贡献
+    education: Optional[str] = None  # 学历
+    professional_title: Optional[str] = None  # 职称
+    workplace: Optional[str] = None  # 工作单位
+    contribution: Optional[str] = None  # 主要贡献
 
 
 @dataclass
@@ -56,8 +56,8 @@ class FeeDetails:
     examination_fee: float  # 实质审查费 (发明专利)
     printing_fee: float  # 印刷费
     certificate_fee: float  # 证书费
-    maintenance_fee: float | None = None  # 年费
-    agency_fee: float | None = None  # 代理费
+    maintenance_fee: Optional[float] = None  # 年费
+    agency_fee: Optional[float] = None  # 代理费
     other_fees: dict[str, float] | None = None  # 其他费用
     total_amount: float = 0.0  # 总费用
     payment_status: str = "未支付"  # 支付状态
@@ -72,12 +72,12 @@ class PatentApplication:
     patent_name: str  # 专利名称
     patent_type: str  # 专利类型 (发明/实用新型/外观设计)
     application_date: str  # 申请日期
-    application_number: str | None = None  # 申请号
+    application_number: Optional[str] = None  # 申请号
 
     # 联系信息
     contact_person: str  # 联系人姓名
     contact_phone: str  # 联系电话
-    contact_email: str | None = None  # 联系邮箱
+    contact_email: Optional[str] = None  # 联系邮箱
 
     # 申请人信息 (支持多个申请人)
     applicants: list[ApplicantInfo] | None = None
@@ -90,18 +90,18 @@ class PatentApplication:
 
     # 状态信息
     application_status: str = "准备中"  # 申请状态
-    priority_date: str | None = None  # 优先权日期
+    priority_date: Optional[str] = None  # 优先权日期
 
     # 其他信息
-    technical_field: str | None = None  # 技术领域
-    abstract: str | None = None  # 摘要
-    keywords: list[str] | None = None  # 关键词
+    technical_field: Optional[str] = None  # 技术领域
+    abstract: Optional[str] = None  # 摘要
+    keywords: Optional[list[str]] = None  # 关键词
 
     # 系统信息
     created_at: str = ""  # 创建时间
     updated_at: str = ""  # 更新时间
     created_by: str = ""  # 创建人
-    notes: str | None = None  # 备注信息
+    notes: Optional[str] = None  # 备注信息
 
     def __post_init__(self):
         if not self.patent_id:
@@ -134,7 +134,7 @@ class PatentApplication:
 class PatentApplicationDatabase:
     """专利申请数据库管理"""
 
-    def __init__(self, db_path: str | None = None):
+    def __init__(self, db_path: Optional[str] = None):
         if db_path is None:
             db_path = Path(__file__).parent.parent.parent / "data" / "patent_applications.db"
         self.db_path = db_path
@@ -543,8 +543,8 @@ class PatentApplicationDatabase:
         document_type: str,
         document_name: str,
         file_path: str,
-        uploaded_by: str | None = None,
-        notes: str | None = None,
+        uploaded_by: Optional[str] = None,
+        notes: Optional[str] = None,
     ):
         """添加申请文档档案"""
         file_size = Path(file_path).stat().st_size if Path(file_path).exists() else 0
@@ -620,7 +620,7 @@ class PatentApplicationExtractor:
         self.database = database
 
     def extract_from_confirmation_form(
-        self, file_path: str, customer_name: str | None = None
+        self, file_path: str, customer_name: Optional[str] = None
     ) -> PatentApplication:
         """从确认书提取信息 - 需要手动输入或OCR识别"""
         print(f"正在解析文件: {file_path}")

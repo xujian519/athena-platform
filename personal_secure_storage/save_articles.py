@@ -187,7 +187,7 @@ def save_articles() -> None:
 
 ## 📚 相关阅读
 同类主题文章推荐：
-{chr(10).join([f"- {art['title']}" for art in articles_by_category.get(article['category'], []) if art['title'] != article['title']][:3])}""",
+{chr(10).join([f"- {art['title']}" for art in articles_by_category.get(article['category'], []) if art['title'] != article['title'][:3])}""",
             'text',
             2,
             json.dumps({

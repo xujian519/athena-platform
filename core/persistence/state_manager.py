@@ -144,7 +144,7 @@ class StatePersistenceManager:
         tool_registry: ToolRegistry | None = None,
         hook_registry: HookRegistry | None = None,
         description: str = "",
-        tags: list[str] | None = None,
+        tags: Optional[list[str]] = None,
     ) -> CheckpointMetadata:
         """
         创建系统状态检查点
@@ -391,7 +391,7 @@ class StatePersistenceManager:
         except Exception as e:
             logger.error(f"❌ 恢复Hook状态失败: {e}")
 
-    def list_checkpoints(self, tag_filter: str | None = None) -> list[CheckpointMetadata]:
+    def list_checkpoints(self, tag_filter: Optional[str] = None) -> list[CheckpointMetadata]:
         """
         列出所有检查点
 

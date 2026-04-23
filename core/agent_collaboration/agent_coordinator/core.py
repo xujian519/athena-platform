@@ -30,7 +30,7 @@ class AgentCoordinator(BaseAgent):
     """Agent协调器 - 智能任务协调专家"""
 
     def __init__(
-        self, agent_id: str = "agent_coordinator_001", config: dict[str, Any] | None = None
+        self, agent_id: str = "agent_coordinator_001", config: Optional[dict[str, Any]] = None
     ):
         super().__init__(
             agent_id=agent_id,
@@ -832,7 +832,7 @@ class AgentCoordinator(BaseAgent):
 _agent_coordinator = None
 
 
-def get_agent_coordinator(config: dict[str, Any] | None = None) -> AgentCoordinator:
+def get_agent_coordinator(config: Optional[dict[str, Any]] = None) -> AgentCoordinator:
     """获取全局Agent协调器实例"""
     global _agent_coordinator
     if _agent_coordinator is None:

@@ -32,7 +32,7 @@ P = ParamSpec("P")
 
 
 def log_execution(
-    logger_name: str | None = None,
+    logger_name: Optional[str] = None,
     level: int = logging.INFO,
     log_args: bool = True,
     log_result: bool = False,
@@ -160,7 +160,7 @@ def log_execution(
     return decorator
 
 
-def log_performance(logger_name: str | None = None, threshold_ms: float = 100.0) -> Callable:
+def log_performance(logger_name: Optional[str] = None, threshold_ms: float = 100.0) -> Callable:
     """
     性能监控装饰器
 
@@ -232,7 +232,7 @@ def log_performance(logger_name: str | None = None, threshold_ms: float = 100.0)
 
 
 def log_exceptions(
-    logger_name: str | None = None, reraise: bool = True, default_return: Any = None
+    logger_name: Optional[str] = None, reraise: bool = True, default_return: Any = None
 ) -> Callable:
     """
     异常捕获装饰器
@@ -313,7 +313,7 @@ class StructuredLogger:
     提供结构化的日志记录格式,便于日志解析和分析。
     """
 
-    def __init__(self, name: str, component: str | None = None):
+    def __init__(self, name: str, component: Optional[str] = None):
         """
         初始化结构化日志记录器
 
@@ -364,7 +364,7 @@ class StructuredLogger:
 # =============================================================================
 
 
-def get_structured_logger(name: str, component: str | None = None) -> StructuredLogger:
+def get_structured_logger(name: str, component: Optional[str] = None) -> StructuredLogger:
     """
     获取结构化日志记录器
 

@@ -171,10 +171,10 @@ class DrawIOTool(BaseTool):
         <mx_cell id='2' value='User Class' style='swimlane;font_style=1;align=center;vertical_align=top;child_layout=stack_layout;horizontal=1;start_size=30;horizontal_stack=0;resize_parent=1;resize_parent_max=0;resize_last=0;collapsible=1;margin_bottom=0;' vertex='1' parent='1'>
           <mx_geometry x='100' y='100' width='200' height='150' as='geometry' />
         </mx_cell>
-        <mx_cell id='3' value='+ name: String' style='text;stroke_color=none;fill_color=none;align=left;vertical_align=top;spacing_left=4;spacing_right=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];port_constraint=eastwest;' vertex='1' parent='2'>
+        <mx_cell id='3' value='+ name: String' style='text;stroke_color=none;fill_color=none;align=left;vertical_align=top;spacing_left=4;spacing_right=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5];port_constraint=eastwest;' vertex='1' parent='2'>
           <mx_geometry y='30' width='200' height='26' as='geometry' />
         </mx_cell>
-        <mx_cell id='4' value='+ login()' style='text;stroke_color=none;fill_color=none;align=left;vertical_align=top;spacing_left=4;spacing_right=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];port_constraint=eastwest;' vertex='1' parent='2'>
+        <mx_cell id='4' value='+ login()' style='text;stroke_color=none;fill_color=none;align=left;vertical_align=top;spacing_left=4;spacing_right=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5];port_constraint=eastwest;' vertex='1' parent='2'>
           <mx_geometry y='56' width='200' height='26' as='geometry' />
         </mx_cell>
       </root>
@@ -288,7 +288,7 @@ class EChartsTool(BaseTool):
 
         return params
 
-    def _extract_data_from_query(self, query: str) -> list[dict[str, Any]]:
+    def _extract_data_from_query(self, query: str) -> list[dict[str, Any]:
         """从查询中提取数据"""
         # 简化的数据提取（实际实现中需要NLP）
         if 'sales' in query.lower() or '销售' in query:

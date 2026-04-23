@@ -64,7 +64,7 @@ class FeedbackRecord:
     patent_id: str
     feedback_type: FeedbackType
     outcome: str  # allowed, rejected, partial
-    actual_outcome: str | None = None  # 实际审查结果
+    actual_outcome: Optional[str] = None  # 实际审查结果
     quality_score: float = 0.0
     user_satisfaction: int = 0  # 1-5分
     comments: str = ""

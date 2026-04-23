@@ -181,7 +181,7 @@ class RAGManager:
         }
 
     async def retrieve(
-        self, query: str, task_type: str, context: dict[str, Any] | None = None
+        self, query: str, task_type: str, context: Optional[dict[str, Any]] = None
     ) -> RAGContext:
         """
         执行检索增强生成

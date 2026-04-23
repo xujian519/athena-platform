@@ -88,7 +88,7 @@ class Message:
     status: MessageStatus = MessageStatus.PENDING
     timestamp: datetime = field(default_factory=datetime.now)
     metadata: dict[str, Any] = field(default_factory=dict)
-    reply_to: str | None = None
+    reply_to: Optional[str] = None
     expires_at: datetime | None = None
     priority: int = 5  # 1-10, 10最高
     tracking_enabled: bool = True
@@ -105,7 +105,7 @@ class MessageTrace:
     delivery_time: float = 0.0
     status: MessageStatus = MessageStatus.PENDING
 
-    def add_event(self, event_type: str, details: dict[str, Any] | None = None) -> None:
+    def add_event(self, event_type: str, details: Optional[dict[str, Any]] = None) -> None:
         """添加追踪事件"""
         self.events.append(
             {"event": event_type, "timestamp": datetime.now().isoformat(), "details": details or {}}
@@ -455,7 +455,7 @@ class XiaonaOptimizedCommunication:
             return None
 
     async def create_channel(
-        self, channel_id: str, channel_type: ChannelType, participants: list[str] | None = None
+        self, channel_id: str, channel_type: ChannelType, participants: Optional[list[str]] = None
     ) -> bool:
         """创建通道"""
         if channel_id in self.channels:

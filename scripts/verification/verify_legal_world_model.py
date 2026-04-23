@@ -89,6 +89,8 @@ class LegalWorldModelVerifier:
         try:
             from core.legal_world_model.scenario_rule_retriever_optimized import (
                 ScenarioRule,
+            )
+            from core.legal_world_model.scenario_rule_retriever_optimized import (
                 ScenarioRuleRetrieverOptimized as ScenarioRuleRetriever,
             )
             import_tests.append(("✅", "场景规则检索器导入成功", "scenario_rule_retriever.py"))
@@ -115,7 +117,9 @@ class LegalWorldModelVerifier:
 
         # 测试场景识别器
         try:
-            from core.legal_world_model.scenario_identifier_optimized import ScenarioIdentifierOptimized as ScenarioIdentifier
+            from core.legal_world_model.scenario_identifier_optimized import (
+                ScenarioIdentifierOptimized as ScenarioIdentifier,
+            )
 
             identifier = ScenarioIdentifier()
             test_input = "这个专利有创造性吗？"
@@ -187,7 +191,7 @@ class LegalWorldModelVerifier:
 
         # 测试扩展提示词管理器集成
         try:
-            from core.prompts.unified_prompt_manager_extended import ExtendedUnifiedPromptManager
+            from core.ai.prompts.unified_prompt_manager_extended import ExtendedUnifiedPromptManager
 
             # 测试场景感知提示词生成
             manager = ExtendedUnifiedPromptManager()
@@ -208,7 +212,6 @@ class LegalWorldModelVerifier:
 
         # 测试法律QA系统集成
         try:
-            from core.legal_qa.legal_world_qa_system import LegalWorldQASystem
 
             # 验证系统可以实例化
             integration_tests.append((

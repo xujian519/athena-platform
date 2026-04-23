@@ -13,23 +13,23 @@ Xiaona Agent HTTP API Service
 版本: 1.0.0
 """
 
-import asyncio
 import json
 import logging
-from typing import Any, Dict, Optional
-from datetime import datetime
-
-from fastapi import FastAPI, HTTPException, status
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
-import uvicorn
 
 # 添加项目路径
 import sys
+from datetime import datetime
 from pathlib import Path
+from typing import Any
+
+import uvicorn
+from fastapi import FastAPI, HTTPException, status
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.agents.xiaona_professional import XiaonaProfessionalAgent
+from core.framework.agents.xiaona_professional import XiaonaProfessionalAgent
 
 # =============================================================================
 # 日志配置
@@ -48,8 +48,8 @@ logger = logging.getLogger(__name__)
 class TaskRequest(BaseModel):
     """任务请求模型"""
     task_type: str = Field(..., description="任务类型：patent_analysis, legal_consult, case_search等")
-    input_data: Dict[str, Any] = Field(..., description="任务输入数据")
-    options: Dict[str, Any] = Field(default_factory=dict, description="可选参数")
+    input_data: dict[str, Any] = Field(..., description="任务输入数据")
+    options: dict[str, Any] = Field(default_factory=dict, description="可选参数")
 
 class TaskResponse(BaseModel):
     """任务响应模型"""
@@ -82,7 +82,7 @@ app = FastAPI(
 )
 
 # 全局变量
-xiaona_agent: Optional[XiaonaProfessionalAgent] = None
+xiaona_agent: XiaonaProfessionalAgent | None = None
 
 # =============================================================================
 # 生命周期管理

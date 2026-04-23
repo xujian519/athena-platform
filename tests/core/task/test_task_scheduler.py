@@ -4,7 +4,7 @@ TaskScheduler单元测试
 
 
 
-from core.agents.task_tool.models import TaskStatus
+from core.framework.agents.task_tool.models import TaskStatus
 
 
 class MockBackgroundTaskManager:
@@ -19,7 +19,7 @@ class MockBackgroundTaskManager:
         """模拟提交任务"""
         from concurrent.futures import Future
 
-        from core.agents.task_tool.models import BackgroundTask
+        from core.framework.agents.task_tool.models import BackgroundTask
 
         task_id = str(len(self.submitted_tasks))
         self.submitted_tasks.append(

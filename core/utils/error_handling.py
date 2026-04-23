@@ -41,7 +41,7 @@ class OAResponseBaseError(Exception):
         self,
         message: str,
         error_code: str = "UNKNOWN",
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ):
         self.message = message
         self.error_code = error_code
@@ -65,7 +65,7 @@ class PromptGenerationError(OAResponseBaseError):
     def __init__(
         self,
         message: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ):
         super().__init__(
             message=message,
@@ -80,7 +80,7 @@ class KnowledgeGraphError(OAResponseBaseError):
     def __init__(
         self,
         message: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ):
         super().__init__(
             message=message,
@@ -95,7 +95,7 @@ class WorkflowRecordError(OAResponseBaseError):
     def __init__(
         self,
         message: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ):
         super().__init__(
             message=message,
@@ -110,7 +110,7 @@ class PatternExtractionError(OAResponseBaseError):
     def __init__(
         self,
         message: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ):
         super().__init__(
             message=message,
@@ -125,7 +125,7 @@ class ConfigurationError(OAResponseBaseError):
     def __init__(
         self,
         message: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ):
         super().__init__(
             message=message,
@@ -141,7 +141,7 @@ class TimeoutErrorCustom(OAResponseBaseError):
         self,
         message: str,
         timeout_seconds: float,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ):
         super().__init__(
             message=message,
@@ -200,7 +200,7 @@ def handle_errors(
     error_types: tuple[type[Exception], ...] = (Exception,),
     default_return: Any = None,
     reraise: bool = False,
-    context: dict[str, Any] | None = None,
+    context: Optional[dict[str, Any]] = None,
 ):
     """
     异常处理上下文管理器

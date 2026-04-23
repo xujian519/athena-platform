@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺监控服务启动脚本
 Xiaonuo Monitoring Service Startup Script
@@ -11,22 +10,22 @@ Xiaonuo Monitoring Service Startup Script
 版本: v1.0.0
 """
 
-import sys
-import signal
 import asyncio
 import logging
+import signal
+import sys
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 # 添加项目根目录到Python路径
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
 import httpx
-from prometheus_client import start_http_server
 
 # 导入日志配置
 from production.logging.xiaonuo_logging import get_monitor_logger
+from prometheus_client import start_http_server
 
 # 导入指标收集器
 try:
@@ -130,7 +129,7 @@ class MonitoringService:
                 self.logger.info("🛑 监控循环已停止")
             # 上下文管理器会自动关闭client
 
-    def _print_status(self, health_data: Dict[str, Any]) -> None:
+    def _print_status(self, health_data: dict[str, Any]) -> None:
         """打印状态"""
         uptime = health_data.get('uptime', 0)
         status = health_data.get('status', 'unknown')
@@ -154,7 +153,6 @@ class MonitoringService:
 # 主程序
 # =============================================================================
 
-import asyncio
 
 async def main() -> None:
     """主函数"""

@@ -163,7 +163,7 @@ class SmartRejectionHandler:
         message_stripped = message.strip()
         return any(re.match(pattern, message_stripped) for pattern in self.UNCLEAR_PATTERNS)
 
-    def _suggest_capability(self, message: str) -> str | None:
+    def _suggest_capability(self, message: str) -> Optional[str]:
         """根据消息内容建议能力"""
         message_lower = message.lower()
 

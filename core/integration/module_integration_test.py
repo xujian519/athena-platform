@@ -61,7 +61,7 @@ class IntegrationTestResult:
     test_name: str
     success: bool = False
     execution_time: float = 0.0
-    error_message: str | None = None
+    error_message: Optional[str] = None
     test_data: dict[str, Any] = field(default_factory=dict)
     module_results: dict[str, dict[str, Any]] = field(default_factory=dict)
 

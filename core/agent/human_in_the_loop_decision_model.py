@@ -88,7 +88,7 @@ class HumanInTheLoopDecisionModel:
         self,
         problem: str,
         options_data: list[dict],
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
         human_callback: Callable | None = None,
     ) -> dict[str, Any]:
         """完整的协作决策流程"""

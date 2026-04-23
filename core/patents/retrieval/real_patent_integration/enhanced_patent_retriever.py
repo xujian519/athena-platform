@@ -29,7 +29,7 @@ class SearchResult:
     score: float
     source: str  # 'vector', 'graph', 'keyword', 'bm25'
     metadata: dict[str, Any]
-    explanation: str | None = None
+    explanation: Optional[str] = None
 
 @dataclass
 class RetrievalStats:
@@ -86,8 +86,8 @@ class EnhancedPatentRetriever:
         self,
         query: str,
         top_k: int = 10,
-        filters: dict[str, Any] | None = None,
-        search_modes: list[str] | None = None,
+        filters: Optional[dict[str, Any]] = None,
+        search_modes: Optional[list[str]] = None,
         weights: dict[str, float] | None = None
     ) -> tuple[list[SearchResult], RetrievalStats]:
         """执行增强专利检索
@@ -196,7 +196,7 @@ class EnhancedPatentRetriever:
         self,
         query: str,
         top_k: int,
-        filters: dict[str, Any] | None = None
+        filters: Optional[dict[str, Any]] = None
     ) -> tuple[list[SearchResult], float]:
         """执行向量搜索"""
         start_time = datetime.now()
@@ -264,7 +264,7 @@ class EnhancedPatentRetriever:
         self,
         query: str,
         top_k: int,
-        filters: dict[str, Any] | None = None
+        filters: Optional[dict[str, Any]] = None
     ) -> tuple[list[SearchResult], float]:
         """执行图搜索"""
         start_time = datetime.now()
@@ -329,7 +329,7 @@ class EnhancedPatentRetriever:
         self,
         query: str,
         top_k: int,
-        filters: dict[str, Any] | None = None
+        filters: Optional[dict[str, Any]] = None
     ) -> tuple[list[SearchResult], float]:
         """执行关键词搜索"""
         start_time = datetime.now()
@@ -391,7 +391,7 @@ class EnhancedPatentRetriever:
         self,
         query: str,
         top_k: int,
-        filters: dict[str, Any] | None = None
+        filters: Optional[dict[str, Any]] = None
     ) -> tuple[list[SearchResult], float]:
         """执行BM25搜索（简化版）"""
         # 这里简化处理，实际应该使用PostgreSQL的全文搜索
@@ -464,7 +464,7 @@ class EnhancedPatentRetriever:
 
         return final_results
 
-    def get_patent_details(self, patent_id: str) -> dict[str, Any | None]:
+    def get_patent_details(self, patent_id: str) -> Optional[dict[str, Any]]:
         """获取专利详细信息"""
         try:
             # 先从数据库获取

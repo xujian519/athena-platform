@@ -26,7 +26,7 @@ class AthenaError(Exception):
         self,
         message: str,
         code: str = "UNKNOWN_ERROR",
-        details: dict[str, Any] | None = None,
+        details: Optional[dict[str, Any]] = None,
         cause: Exception | None = None,
     ):
         """
@@ -81,7 +81,7 @@ class PerceptionError(AthenaError):
     def __init__(
         self,
         message: str,
-        details: dict[str, Any] | None = None,
+        details: Optional[dict[str, Any]] = None,
         cause: Exception | None = None,
     ):
         super().__init__(message, "PERCEPTION_ERROR", details, cause)
@@ -93,7 +93,7 @@ class InputValidationError(PerceptionError):
     def __init__(
         self,
         message: str,
-        field_name: str | None = None,
+        field_name: Optional[str] = None,
         validation_errors: list | None = None,
     ):
         details = {}
@@ -133,7 +133,7 @@ class IntentRecognitionError(AthenaError):
     """意图识别错误"""
 
     def __init__(
-        self, message: str, query: str | None = None, details: dict[str, Any] | None = None
+        self, message: str, query: Optional[str] = None, details: Optional[dict[str, Any]] = None
     ):
         if details is None:
             details = {}
@@ -169,7 +169,7 @@ class AgentError(AthenaError):
     """智能体错误基类"""
 
     def __init__(
-        self, message: str, agent_id: str | None = None, details: dict[str, Any] | None = None
+        self, message: str, agent_id: Optional[str] = None, details: Optional[dict[str, Any]] = None
     ):
         if details is None:
             details = {}
@@ -182,7 +182,7 @@ class AgentError(AthenaError):
 class AgentInitializationError(AgentError):
     """智能体初始化错误"""
 
-    def __init__(self, agent_id: str, reason: str, details: dict[str, Any] | None = None):
+    def __init__(self, agent_id: str, reason: str, details: Optional[dict[str, Any]] = None):
         message = f"智能体初始化失败: {agent_id} - {reason}"
         super().__init__(message, agent_id, details)
         self.code = "AGENT_INITIALIZATION_ERROR"
@@ -194,9 +194,9 @@ class AgentTaskError(AgentError):
     def __init__(
         self,
         message: str,
-        task_id: str | None = None,
-        agent_id: str | None = None,
-        task_type: str | None = None,
+        task_id: Optional[str] = None,
+        agent_id: Optional[str] = None,
+        task_type: Optional[str] = None,
     ):
         details = {}
         if task_id:
@@ -222,7 +222,7 @@ class AgentNotFoundError(AgentError):
 class AgentUnavailableError(AgentError):
     """智能体不可用错误"""
 
-    def __init__(self, agent_id: str, status: str, reason: str | None = None):
+    def __init__(self, agent_id: str, status: str, reason: Optional[str] = None):
         message = f"智能体不可用: {agent_id} (状态: {status})"
         if reason:
             message += f" - {reason}"
@@ -242,7 +242,7 @@ class CollaborationError(AthenaError):
     """协作错误基类"""
 
     def __init__(
-        self, message: str, team_id: str | None = None, details: dict[str, Any] | None = None
+        self, message: str, team_id: Optional[str] = None, details: Optional[dict[str, Any]] = None
     ):
         if details is None:
             details = {}
@@ -264,7 +264,7 @@ class TeamFormationError(CollaborationError):
 class TaskDistributionError(CollaborationError):
     """任务分发错误"""
 
-    def __init__(self, message: str, task_id: str | None = None, agent_id: str | None = None):
+    def __init__(self, message: str, task_id: Optional[str] = None, agent_id: Optional[str] = None):
         details = {}
         if task_id:
             details["task_id"] = task_id
@@ -284,9 +284,9 @@ class CommunicationError(AthenaError):
     def __init__(
         self,
         message: str,
-        from_agent: str | None = None,
-        to_agent: str | None = None,
-        details: dict[str, Any] | None = None,
+        from_agent: Optional[str] = None,
+        to_agent: Optional[str] = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         if details is None:
             details = {}
@@ -302,7 +302,7 @@ class MessageSendError(CommunicationError):
     """消息发送错误"""
 
     def __init__(
-        self, message: str, message_type: str | None = None, recipient: str | None = None
+        self, message: str, message_type: Optional[str] = None, recipient: Optional[str] = None
     ):
         details = {}
         if message_type:
@@ -317,7 +317,7 @@ class MessageSendError(CommunicationError):
 class MessageTimeoutError(CommunicationError):
     """消息超时错误"""
 
-    def __init__(self, message_id: str, timeout: float, recipient: str | None = None):
+    def __init__(self, message_id: str, timeout: float, recipient: Optional[str] = None):
         message_str = f"消息超时: {message_id} (超时时间: {timeout}秒)"
         details = {"message_id": message_id, "timeout": timeout}
         if recipient:
@@ -336,8 +336,8 @@ class ConfigurationError(AthenaError):
     def __init__(
         self,
         message: str,
-        config_key: str | None = None,
-        details: dict[str, Any] | None = None,
+        config_key: Optional[str] = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         if details is None:
             details = {}
@@ -350,7 +350,7 @@ class ConfigurationError(AthenaError):
 class MissingConfigurationError(ConfigurationError):
     """缺失配置错误"""
 
-    def __init__(self, config_key: str, config_file: str | None = None):
+    def __init__(self, config_key: str, config_file: Optional[str] = None):
         message = f"缺失必需的配置: {config_key}"
         details = {"config_key": config_key}
         if config_file:
@@ -364,7 +364,7 @@ class InvalidConfigurationError(ConfigurationError):
     """无效配置错误"""
 
     def __init__(
-        self, config_key: str, value: Any, expected_type: str, reason: str | None = None
+        self, config_key: str, value: Any, expected_type: str, reason: Optional[str] = None
     ):
         message = f"无效的配置值: {config_key} = {value}"
         if reason:
@@ -385,8 +385,8 @@ class SecurityError(AthenaError):
     def __init__(
         self,
         message: str,
-        threat_type: str | None = None,
-        details: dict[str, Any] | None = None,
+        threat_type: Optional[str] = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         if details is None:
             details = {}
@@ -404,7 +404,7 @@ class InputThreatDetectedError(SecurityError):
         message: str,
         threat_type: str,
         detected_patterns: list,
-        input_preview: str | None = None,
+        input_preview: Optional[str] = None,
     ):
         details = {"threat_type": threat_type, "detected_patterns": detected_patterns}
         if input_preview:
@@ -428,7 +428,7 @@ class AuthenticationError(SecurityError):
     """认证错误"""
 
     def __init__(
-        self, message: str, user_id: str | None = None, details: dict[str, Any] | None = None
+        self, message: str, user_id: Optional[str] = None, details: Optional[dict[str, Any]] = None
     ):
         if details is None:
             details = {}
@@ -445,9 +445,9 @@ class AuthorizationError(SecurityError):
     def __init__(
         self,
         message: str,
-        user_id: str | None = None,
-        required_permission: str | None = None,
-        resource: str | None = None,
+        user_id: Optional[str] = None,
+        required_permission: Optional[str] = None,
+        resource: Optional[str] = None,
     ):
         details = {}
         if user_id:
@@ -468,7 +468,7 @@ class DatabaseError(AthenaError):
     """数据库错误基类"""
 
     def __init__(
-        self, message: str, query: str | None = None, details: dict[str, Any] | None = None
+        self, message: str, query: Optional[str] = None, details: Optional[dict[str, Any]] = None
     ):
         if details is None:
             details = {}
@@ -481,7 +481,7 @@ class DatabaseError(AthenaError):
 class ConnectionError(DatabaseError):
     """数据库连接错误"""
 
-    def __init__(self, database: str, host: str, port: int, reason: str | None = None):
+    def __init__(self, database: str, host: str, port: int, reason: Optional[str] = None):
         message = f"数据库连接失败: {database}@{host}:{port}"
         if reason:
             message += f" - {reason}"
@@ -515,8 +515,8 @@ class ExternalServiceError(AthenaError):
     def __init__(
         self,
         message: str,
-        service_name: str | None = None,
-        details: dict[str, Any] | None = None,
+        service_name: Optional[str] = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         if details is None:
             details = {}
@@ -530,7 +530,7 @@ class ServiceUnavailableError(ExternalServiceError):
     """服务不可用错误"""
 
     def __init__(
-        self, service_name: str, status_code: int | None = None, reason: str | None = None
+        self, service_name: str, status_code: Optional[int] = None, reason: Optional[str] = None
     ):
         message = f"外部服务不可用: {service_name}"
         if status_code:
@@ -551,7 +551,7 @@ class ServiceUnavailableError(ExternalServiceError):
 class ServiceTimeoutError(ExternalServiceError):
     """服务超时错误"""
 
-    def __init__(self, service_name: str, timeout: float, endpoint: str | None = None):
+    def __init__(self, service_name: str, timeout: float, endpoint: Optional[str] = None):
         message = f"外部服务超时: {service_name} (超时时间: {timeout}秒)"
         details = {"service_name": service_name, "timeout": timeout}
         if endpoint:

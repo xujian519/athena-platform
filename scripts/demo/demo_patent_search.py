@@ -34,8 +34,8 @@ def demo_patent_search():
 
     print_section("🔍 中国专利数据库检索演示")
     print(f"时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"数据库: localhost:5432/patent_db")
-    print(f"专利总数: 75,217,242 条")
+    print("数据库: localhost:5432/patent_db")
+    print("专利总数: 75,217,242 条")
 
     # 准备结果保存目录
     result_dir = Path("/Users/xujian/Athena工作平台/data/patents/search_results")
@@ -178,7 +178,7 @@ def demo_patent_search():
             results = retriever.cursor.fetchall()
 
             if results:
-                col_names = [desc[0] for desc in retriever.cursor.description]
+                [desc[0] for desc in retriever.cursor.description]
                 for row in results:
                     print(f"  {' | '.join(str(v) for v in row)}")
 

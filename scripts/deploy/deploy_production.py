@@ -116,7 +116,7 @@ class ProductionDeployer:
             self.planner_available = False
 
         try:
-            from core.agents.xiaonuo_coordinator import XiaonuoCoordinator
+            from core.framework.agents.xiaonuo_coordinator import XiaonuoCoordinator
             results["checks"]["xiaonuo_coordinator"] = "✅ 小诺协调器可用"
             self.coordinator_available = True
         except ImportError as e:
@@ -268,7 +268,7 @@ class ProductionDeployer:
             return False
 
         try:
-            from core.agents.xiaonuo_coordinator import XiaonuoCoordinator
+            from core.framework.agents.xiaonuo_coordinator import XiaonuoCoordinator
 
             # 初始化小诺
             xiaonuo = XiaonuoCoordinator()

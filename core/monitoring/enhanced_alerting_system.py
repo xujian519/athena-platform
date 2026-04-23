@@ -79,10 +79,10 @@ class Alert:
     details: dict[str, Any] = field(default_factory=dict)
     labels: dict[str, str] = field(default_factory=dict)
     started_at: float = field(default_factory=time.time)
-    resolved_at: float | None = None
-    acknowledged_by: str | None = None
-    acknowledged_at: float | None = None
-    silence_until: float | None = None
+    resolved_at: Optional[float] = None
+    acknowledged_by: Optional[str] = None
+    acknowledged_at: Optional[float] = None
+    silence_until: Optional[float] = None
     notification_sent: bool = False
     notification_channels: list[str] = field(default_factory=list)
 
@@ -119,7 +119,7 @@ class AlertRule:
     enabled: bool = True
     cooldown_seconds: int = 300  # 冷却时间
     notification_channels: list[str] = field(default_factory=list)
-    last_triggered: float | None = None
+    last_triggered: Optional[float] = None
 
     def should_trigger(self, metrics: dict[str, Any]) -> bool:
         """检查是否应该触发"""
@@ -382,7 +382,7 @@ class AlertAggregator:
 class EnhancedAlertingSystem:
     """增强告警系统"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化告警系统
 

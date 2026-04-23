@@ -50,7 +50,7 @@ class PromptContext:
     complexity: ComplexityLevel
     domain: str = "general"
     user_id: str = "default"
-    conversation_id: str | None = None
+    conversation_id: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -377,7 +377,7 @@ class ProgressivePromptLoader:
     def __init__(
         self,
         prompts_dir: str = "/Users/xujian/Athena工作平台/prompts",
-        cache_dir: str | None = None,
+        cache_dir: Optional[str] = None,
         compression_ratio: float = 0.4,
     ):
         self.prompts_dir = Path(prompts_dir)

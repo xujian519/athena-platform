@@ -7,7 +7,6 @@ Fix hardcoded BGE-M3 paths to use API service URL
 日期: 2026-04-21
 """
 
-import os
 import re
 from pathlib import Path
 

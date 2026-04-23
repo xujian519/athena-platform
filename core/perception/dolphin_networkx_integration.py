@@ -29,7 +29,7 @@ class TechnicalEntity:
     entity_id: str
     entity_type: str  # component, method, formula, table, reference
     text: str
-    position: tuple[int, int, int, int | None] = None  # (x1, y1, x2, y2)
+    position: Optional[tuple[int, int, int, int]] = None  # (x1, y1, x2, y2)
     confidence: float = 1.0
     metadata: dict | None = None
 
@@ -207,7 +207,7 @@ class DolphinNetworkXAnalyzer:
 
         return entities
 
-    def _classify_technical_entity(self, layout_type: str, text: str) -> str | None:
+    def _classify_technical_entity(self, layout_type: str, text: str) -> Optional[str]:
         """
         根据Dolphin布局类型和文本内容分类技术实体
 

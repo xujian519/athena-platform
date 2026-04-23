@@ -79,14 +79,14 @@ class SimilaritySearchRequest(BaseModel):
 class TechTermSearchRequest(BaseModel):
     """技术术语搜索请求"""
     query: str = Field(..., description='查询词')
-    domain: str | None = Field(None, description='技术领域过滤')
+    domain: Optional[str] = Field(None, description='技术领域过滤')
     limit: int = Field(20, description='返回结果数量')
 
 class IpcClassificationRequest(BaseModel):
     """IPC分类请求"""
     patent_text: str = Field(..., description='专利文本')
-    title: str | None = Field(None, description='专利标题')
-    abstract: str | None = Field(None, description='专利摘要')
+    title: Optional[str] = Field(None, description='专利标题')
+    abstract: Optional[str] = Field(None, description='专利摘要')
 
 # 全局变量
 analyzer: KnowledgeEnhancedPatentAnalyzer | None = None

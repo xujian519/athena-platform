@@ -48,8 +48,8 @@ class DecisionOption:
     description: str
     confidence: float = 0.0
     risk_level: str = "low"  # low, medium, high
-    estimated_cost: float | None = None
-    expected_outcome: str | None = None
+    estimated_cost: Optional[float] = None
+    expected_outcome: Optional[str] = None
 
 
 @dataclass
@@ -74,7 +74,7 @@ class HumanFeedback:
     feedback: str
     confidence: int  # 1-5
     timestamp: datetime = field(default_factory=datetime.now)
-    additional_comments: str | None = None
+    additional_comments: Optional[str] = None
 
 
 class HumanInLoopDecisionEngine:

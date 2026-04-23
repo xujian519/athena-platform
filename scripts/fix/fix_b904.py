@@ -3,9 +3,8 @@
 批量修复B904问题 (raise-without-from-inside-except)
 """
 
-import re
 import subprocess
-import sys
+
 
 def get_b904_issues():
     """获取所有B904问题"""
@@ -28,7 +27,7 @@ def get_b904_issues():
 def fix_file(filepath, fix_lines):
     """修复单个文件"""
     try:
-        with open(filepath, 'r') as f:
+        with open(filepath) as f:
             lines = f.readlines()
 
         # 修复每一行

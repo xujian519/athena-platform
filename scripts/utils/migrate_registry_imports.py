@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 工具注册表导入路径迁移工具
 
@@ -18,12 +17,10 @@ Author: Agent 4 (迁移专家)
 Created: 2026-04-19
 """
 
-import ast
 import argparse
+import ast
 import logging
-import re
 from pathlib import Path
-from typing import Dict, List, Set, Tuple
 
 # 配置日志
 logging.basicConfig(
@@ -34,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 
 # 导入路径映射规则
-IMPORT_MAPPINGS: Dict[str, str] = {
+IMPORT_MAPPINGS: dict[str, str] = {
     # 旧路径 → 新路径
     "from core.tools.tool_manager import ToolManager": "from core.tools.centralized_registry import get_centralized_registry",
     "from core.tools.registry import ToolRegistry": "from core.tools.centralized_registry import CentralizedRegistry",
@@ -58,10 +55,10 @@ class ImportMigrationScanner:
             root_path: 项目根目录
         """
         self.root_path = Path(root_path)
-        self.files_to_migrate: List[Path] = []
-        self.migration_report: Dict[str, List[Dict]] = {}
+        self.files_to_migrate: list[Path] = []
+        self.migration_report: dict[str, list[dict] = {}
 
-    def scan_python_files(self) -> List[Path]:
+    def scan_python_files(self) -> list[Path]:
         """
         扫描所有Python文件
 
@@ -84,7 +81,7 @@ class ImportMigrationScanner:
         logger.info(f"✅ 找到 {len(python_files)} 个Python文件")
         return python_files
 
-    def analyze_imports(self, file_path: Path) -> List[Dict]:
+    def analyze_imports(self, file_path: Path) -> list[dict]:
         """
         分析文件的导入语句
 
@@ -95,7 +92,7 @@ class ImportMigrationScanner:
             需要迁移的导入语句列表
         """
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read()
 
             # 使用AST解析导入语句
@@ -148,7 +145,7 @@ class ImportMigrationScanner:
 
         return ""
 
-    def generate_report(self) -> Dict:
+    def generate_report(self) -> dict:
         """
         生成迁移报告
 
@@ -158,7 +155,7 @@ class ImportMigrationScanner:
         total_files = 0
         total_imports = 0
 
-        for file_path, imports in self.migration_report.items():
+        for _file_path, imports in self.migration_report.items():
             if imports:
                 total_files += 1
                 total_imports += len(imports)
@@ -191,7 +188,7 @@ class ImportMigrator:
             "errors": []
         }
 
-    def scan(self) -> Dict:
+    def scan(self) -> dict:
         """
         扫描需要迁移的文件
 
@@ -213,7 +210,7 @@ class ImportMigrator:
 
         return report
 
-    def migrate(self) -> Dict:
+    def migrate(self) -> dict:
         """
         执行迁移
 
@@ -233,7 +230,7 @@ class ImportMigrator:
         self._print_migration_summary()
         return self.migration_stats
 
-    def _migrate_file(self, file_path: Path, imports: List[Dict]):
+    def _migrate_file(self, file_path: Path, imports: list[dict]):
         """
         迁移单个文件
 
@@ -242,7 +239,7 @@ class ImportMigrator:
             imports: 需要迁移的导入列表
         """
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 lines = f.readlines()
 
             # 按行号倒序处理（避免行号偏移）
@@ -273,7 +270,7 @@ class ImportMigrator:
             logger.error(error_msg)
             self.migration_stats["errors"].append(error_msg)
 
-    def verify(self) -> Dict:
+    def verify(self) -> dict:
         """
         验证迁移结果
 
@@ -304,7 +301,7 @@ class ImportMigrator:
         self._print_verification_report(verification_report)
         return verification_report
 
-    def _print_scan_report(self, report: Dict):
+    def _print_scan_report(self, report: dict):
         """打印扫描报告"""
         logger.info("=" * 80)
         logger.info("📊 导入扫描报告")
@@ -341,7 +338,7 @@ class ImportMigrator:
 
         logger.info("=" * 80)
 
-    def _print_verification_report(self, report: Dict):
+    def _print_verification_report(self, report: dict):
         """打印验证报告"""
         logger.info("=" * 80)
         logger.info("🔍 迁移验证报告")

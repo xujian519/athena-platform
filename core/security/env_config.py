@@ -14,9 +14,9 @@ class SecurityConfigError(Exception):
 
 def get_env_var(
     key: str,
-    default: str | None = None,
+    default: Optional[str] = None,
     required: bool = True,
-    min_length: int | None = None
+    min_length: Optional[int] = None
 ) -> str:
     """
     安全获取环境变量

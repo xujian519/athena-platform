@@ -325,7 +325,7 @@ class XiaonuoToolSuitabilityScorer:
             jieba.add_word(word, freq=1000)
 
     def calculate_suitability_score(
-        self, tool_name: str, user_request: str, intent: str, context: dict[str, Any] | None = None
+        self, tool_name: str, user_request: str, intent: str, context: Optional[dict[str, Any]] = None
     ) -> SuitabilityScore:
         """计算工具适用性评分"""
         if tool_name not in self.tool_capabilities:
@@ -631,7 +631,7 @@ class XiaonuoToolSuitabilityScorer:
         user_request: str,
         intent: str,
         tool_names: list[str],
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> list[SuitabilityScore]:
         """批量评分工具"""
         scores = []
@@ -815,7 +815,7 @@ class XiaonuoToolSuitabilityScorer:
 
         logger.info(f"💾 适用性评分模型已保存: {model_path}")
 
-    def load_models(self, model_path: str | None = None) -> Any | None:
+    def load_models(self, model_path: Optional[str] = None) -> Any | None:
         """加载模型"""
         if model_path is None:
             model_path = os.path.join(self.config.model_dir, "latest_suitability_models.joblib")

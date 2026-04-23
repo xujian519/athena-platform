@@ -43,8 +43,8 @@ class ContextCompressor:
 
     def __init__(
         self,
-        config: Optional[CompressionConfig] = None,
-        scorer: Optional[MessageScorer] = None,
+        config: CompressionConfig | None = None,
+        scorer: MessageScorer | None = None,
     ):
         """初始化压缩器
 
@@ -59,7 +59,7 @@ class ContextCompressor:
             f"级别: {self.config.level.value})"
         )
 
-    def compress(self, messages: List[SessionMessage]) -> CompressionResult:
+    def compress(self, messages: list[SessionMessage]) -> CompressionResult:
         """压缩消息列表
 
         Args:
@@ -114,7 +114,7 @@ class ContextCompressor:
 
     def _compress_recent_first(
         self,
-        messages: List[SessionMessage],
+        messages: list[SessionMessage],
     ) -> tuple:
         """最近优先策略
 
@@ -147,7 +147,7 @@ class ContextCompressor:
 
     def _compress_by_importance(
         self,
-        messages: List[SessionMessage],
+        messages: list[SessionMessage],
     ) -> tuple:
         """基于重要性压缩
 
@@ -189,7 +189,7 @@ class ContextCompressor:
 
     def _compress_by_clustering(
         self,
-        messages: List[SessionMessage],
+        messages: list[SessionMessage],
     ) -> tuple:
         """语义聚类压缩
 
@@ -264,7 +264,7 @@ class ContextCompressor:
 
     def _compress_hybrid(
         self,
-        messages: List[SessionMessage],
+        messages: list[SessionMessage],
     ) -> tuple:
         """混合策略
 
@@ -322,7 +322,7 @@ class ContextCompressor:
 
         return ordered_kept, removed_messages, summaries
 
-    def _calculate_target_count(self, messages: List[SessionMessage]) -> int:
+    def _calculate_target_count(self, messages: list[SessionMessage]) -> int:
         """计算目标保留数量
 
         Args:
@@ -354,8 +354,8 @@ class ContextCompressor:
 
     def _generate_summaries(
         self,
-        messages: List[SessionMessage],
-    ) -> List[str]:
+        messages: list[SessionMessage],
+    ) -> list[str]:
         """为删除的消息生成摘要
 
         Args:
@@ -390,10 +390,10 @@ class ContextCompressor:
 
     def _create_result(
         self,
-        messages: List[SessionMessage],
-        kept_messages: List[SessionMessage],
-        removed_messages: List[SessionMessage],
-        summaries: List[str],
+        messages: list[SessionMessage],
+        kept_messages: list[SessionMessage],
+        removed_messages: list[SessionMessage],
+        summaries: list[str],
         start_time: float,
     ) -> CompressionResult:
         """创建压缩结果
@@ -447,9 +447,9 @@ class ContextCompressor:
 
     def _calculate_quality_score(
         self,
-        original: List[SessionMessage],
-        kept: List[SessionMessage],
-        removed: List[SessionMessage],
+        original: list[SessionMessage],
+        kept: list[SessionMessage],
+        removed: list[SessionMessage],
     ) -> float:
         """计算压缩质量分数
 

@@ -209,7 +209,7 @@ class SensitiveDataFilter:
             result = pattern.pattern.sub(pattern.replacement, result)
         return result
 
-    def filter_log_message(self, message: str, context: dict[str, Any] | None = None) -> str:
+    def filter_log_message(self, message: str, context: Optional[dict[str, Any]] = None) -> str:
         """过滤日志消息
 
         Args:
@@ -324,7 +324,7 @@ def filter_sensitive_data(data: Any) -> Any:
         return data
 
 
-def filter_log(message: str | None = None, context: dict[str, Any] | None = None) -> str:
+def filter_log(message: Optional[str] = None, context: Optional[dict[str, Any]] = None) -> str:
     """过滤日志消息(便捷函数)
 
     Args:

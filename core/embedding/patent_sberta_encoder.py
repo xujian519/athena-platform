@@ -45,7 +45,7 @@ class PatentSBERTaEncoder:
         self,
         model_name: str = "AI-Growth-Lab/PatentSBERTa",
         device: str = "cpu",
-        cache_dir: str | None = None,
+        cache_dir: Optional[str] = None,
     ):
         """
         初始化PatentSBERTa编码器
@@ -168,8 +168,8 @@ class PatentSBERTaEncoder:
     def encode_patent(
         self,
         title: str,
-        abstract: str | None = None,
-        claims: str | None = None,
+        abstract: Optional[str] = None,
+        claims: Optional[str] = None,
         normalize: bool = True,
     ) -> np.ndarray:
         """
@@ -306,8 +306,8 @@ class FallbackPatentEncoder:
     def encode_patent(
         self,
         title: str,
-        abstract: str | None = None,
-        claims: str | None = None,
+        abstract: Optional[str] = None,
+        claims: Optional[str] = None,
         normalize: bool = True,
     ) -> np.ndarray:
         """编码专利文档"""

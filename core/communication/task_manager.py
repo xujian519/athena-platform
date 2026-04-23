@@ -37,7 +37,7 @@ class TaskInfo:
     created_at: datetime = field(default_factory=datetime.now)
     completed_at: datetime | None = None
     error: Exception | None = None
-    timeout: float | None = None
+    timeout: Optional[float] = None
 
     @property
     def is_done(self) -> bool:
@@ -85,8 +85,8 @@ class BackgroundTaskManager:
     def create_task(
         self,
         coro,
-        name: str | None = None,
-        timeout: float | None = None,
+        name: Optional[str] = None,
+        timeout: Optional[float] = None,
         callback: Callable[[asyncio.Task, Any], None] | None = None,
     ) -> asyncio.Task:
         """
@@ -245,7 +245,7 @@ class BackgroundTaskManager:
         return cancelled_count
 
     async def wait_all(
-        self, timeout: float | None = None, return_exceptions: bool = True
+        self, timeout: Optional[float] = None, return_exceptions: bool = True
     ) -> dict[str, Any]:
         """
         等待所有任务完成

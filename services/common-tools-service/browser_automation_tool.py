@@ -184,7 +184,7 @@ class BrowserAutomationTool:
             'last_used': self.tool_info['last_used']
         }
 
-    def get_scenarios(self) -> list[dict[str, Any]]:
+    def get_scenarios(self) -> list[dict[str, Any]:
         """获取可用场景"""
         scenarios = []
         for key, scenario in self.SCENARIOS.items():
@@ -319,7 +319,7 @@ class BrowserAutomationTool:
                 'task': task
             }
 
-    def get_task_history(self, limit: int = 10) -> list[dict[str, Any]]:
+    def get_task_history(self, limit: int = 10) -> list[dict[str, Any]:
         """获取任务历史"""
         return self.task_history[-limit:]
 

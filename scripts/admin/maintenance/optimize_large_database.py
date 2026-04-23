@@ -1,20 +1,18 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 大数据库优化工具
 专门处理大型数据库文件的优化和压缩
 """
 
-import os
-import sqlite3
-import shutil
 import gzip
 import json
+import shutil
+import sqlite3
 import sys
 import time
+from datetime import datetime
 from pathlib import Path
-from datetime import datetime, timedelta
-from typing import Dict, List, Any
+from typing import Any
 
 # 添加项目路径
 sys.path.append('/Users/xujian/Athena工作平台')
@@ -81,7 +79,7 @@ class LargeDatabaseOptimizer:
             import traceback
             traceback.print_exc()
 
-    def _optimize_single_database(self, db_info: Dict[str, Any], backup_dir: Path) -> Any:
+    def _optimize_single_database(self, db_info: dict[str, Any], backup_dir: Path) -> Any:
         """优化单个数据库"""
         db_path = Path(db_info['path'])
         db_name = db_info['name']
@@ -92,7 +90,7 @@ class LargeDatabaseOptimizer:
             db_analysis = self._analyze_database_structure(db_path)
 
             # 2. 备份原始数据库
-            print(f"   💾 备份原始数据库...")
+            print("   💾 备份原始数据库...")
             original_size = self._backup_database(db_path, backup_dir, db_name)
 
             # 3. 检查数据库大小，决定优化策略
@@ -100,7 +98,7 @@ class LargeDatabaseOptimizer:
                 print(f"   🔧 数据库较大 ({round(original_size / (1024 * 1024), 2)} MB)，执行深度优化...")
                 optimized_size = self._deep_optimize_database(db_path, db_analysis)
             else:
-                print(f"   ⚡ 数据库中等大小，执行标准优化...")
+                print("   ⚡ 数据库中等大小，执行标准优化...")
                 optimized_size = self._standard_optimize_database(db_path)
 
             # 4. 计算优化效果
@@ -118,7 +116,7 @@ class LargeDatabaseOptimizer:
         except Exception as e:
             print(f"   ❌ 优化数据库失败 {db_name}: {e}")
 
-    def _analyze_database_structure(self, db_path: Path) -> Dict[str, Any]:
+    def _analyze_database_structure(self, db_path: Path) -> dict[str, Any]:
         """分析数据库结构"""
         analysis = {
             'tables': [],
@@ -164,7 +162,7 @@ class LargeDatabaseOptimizer:
             analysis['page_count'] = cursor.fetchone()[0]
 
             cursor.execute("PRAGMA page_size")
-            page_size = cursor.fetchone()[0]
+            cursor.fetchone()[0]
 
             conn.close()
 
@@ -199,21 +197,21 @@ class LargeDatabaseOptimizer:
 
         return original_size
 
-    def _deep_optimize_database(self, db_path: Path, db_analysis: Dict[str, Any]) -> int:
+    def _deep_optimize_database(self, db_path: Path, db_analysis: dict[str, Any]) -> int:
         """深度优化数据库"""
         try:
             conn = sqlite3.connect(str(db_path))
             cursor = conn.cursor()
 
-            print(f"      🔧 执行深度优化...")
+            print("      🔧 执行深度优化...")
 
             # 1. 重建索引
-            print(f"         📊 重建索引...")
+            print("         📊 重建索引...")
             cursor.execute("REINDEX")
             self.optimization_stats['index_optimization'] += 1
 
             # 2. 分析并优化表
-            print(f"         🧹 优化表结构...")
+            print("         🧹 优化表结构...")
             for table_info in db_analysis['tables']:
                 table_name = table_info['name']
                 if table_info['record_count'] > 100000:  # 只优化大表
@@ -222,7 +220,7 @@ class LargeDatabaseOptimizer:
                     cursor.execute(f"ANALYZE {table_name}")
 
             # 3. 清理碎片
-            print(f"         🧽 清理数据库碎片...")
+            print("         🧽 清理数据库碎片...")
             cursor.execute("VACUUM")
 
             # 4. 重新分析统计信息
@@ -230,7 +228,7 @@ class LargeDatabaseOptimizer:
 
             conn.close()
 
-            print(f"      ✅ 深度优化完成")
+            print("      ✅ 深度优化完成")
 
         except Exception as e:
             print(f"      ⚠️ 深度优化失败: {e}")
@@ -243,7 +241,7 @@ class LargeDatabaseOptimizer:
             conn = sqlite3.connect(str(db_path))
             cursor = conn.cursor()
 
-            print(f"      ⚡ 执行标准优化...")
+            print("      ⚡ 执行标准优化...")
 
             # 标准优化
             cursor.execute("VACUUM")
@@ -251,7 +249,7 @@ class LargeDatabaseOptimizer:
 
             conn.close()
 
-            print(f"      ✅ 标准优化完成")
+            print("      ✅ 标准优化完成")
 
         except Exception as e:
             print(f"      ⚠️ 标准优化失败: {e}")
@@ -292,7 +290,7 @@ class LargeDatabaseOptimizer:
         print("🗄️ 大数据库优化摘要")
         print("=" * 60)
 
-        print(f"📊 优化统计:")
+        print("📊 优化统计:")
         print(f"   - 处理数据库: {self.optimization_stats['databases_processed']:,} 个")
         print(f"   - 原始大小: {self.optimization_stats['original_size_mb']:,} MB")
         print(f"   - 优化后大小: {self.optimization_stats['optimized_size_mb']:,} MB")
@@ -302,11 +300,11 @@ class LargeDatabaseOptimizer:
             compression_ratio = self.optimization_stats['compression_ratio']
             print(f"   - 压缩比例: {compression_ratio:.1f}%")
 
-        print(f"\n⚙️ 优化操作:")
+        print("\n⚙️ 优化操作:")
         print(f"   - 索引优化: {self.optimization_stats['index_optimization']} 次")
         print(f"   - 数据归档: {self.optimization_stats['data_archived']} 项")
 
-        print(f"\n⏱️ 性能指标:")
+        print("\n⏱️ 性能指标:")
         print(f"   - 处理时间: {round(self.optimization_stats['processing_time'], 2)} 秒")
 
         total_saved = round(self.optimization_stats['space_saved_mb'], 2)
@@ -317,14 +315,13 @@ class LargeDatabaseOptimizer:
         else:
             print(f"   ℹ️ 数据库优化完成，节省了 {total_saved} MB 空间")
 
-        print(f"\n💡 后续建议:")
-        print(f"   - 定期执行 VACUUM 操作维护数据库性能")
-        print(f"   - 监控数据库大小增长趋势")
-        print(f"   - 考虑对超大型数据库实施分区策略")
+        print("\n💡 后续建议:")
+        print("   - 定期执行 VACUUM 操作维护数据库性能")
+        print("   - 监控数据库大小增长趋势")
+        print("   - 考虑对超大型数据库实施分区策略")
 
 def main() -> None:
     """主函数"""
-    import time
 
     print("🗄️ 大数据库优化工具")
     print("=" * 40)

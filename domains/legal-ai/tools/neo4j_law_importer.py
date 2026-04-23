@@ -115,7 +115,7 @@ def parse_markdown_file(path: Path) -> dict[str, any]:
 
 def make_ids(
     rel_path: Path, parsed: dict[str, any]
-) -> tuple[str, list[tuple[str, dict[str, any]]]]:
+) -> tuple[str, list[tuple[str, dict[str, any]]:
     law_key = (
         f"LAW::{str(rel_path)}::{parsed['title']}::{parsed.get('publish_date') or ''}"
     )

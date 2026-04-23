@@ -114,7 +114,7 @@ class ChinesePatentModelRegistry:
             }
         }
 
-    def get_recommended_models(self, top_k: int = 3) -> List[Tuple[str, Dict]]:
+    def get_recommended_models(self, top_k: int = 3) -> List[Tuple[str, Dict]:
         """获取推荐的中文专利模型"""
         recommended = [
             (name, config) for name, config in self.models.items()
@@ -193,7 +193,7 @@ class ChinesePatentModelTrainer:
             logger.info(f"❌ 模型加载失败: {e}")
             return False
 
-    def prepare_patent_training_data(self, patent_data: List[Dict]) -> List[Tuple[str, str]]:
+    def prepare_patent_training_data(self, patent_data: List[Dict]) -> List[Tuple[str, str]:
         """准备专利训练数据"""
         training_examples = []
 
@@ -215,7 +215,7 @@ class ChinesePatentModelTrainer:
 
         return training_examples
 
-    def fine_tune_model(self, training_examples: List[Tuple[str, str]],
+    def fine_tune_model(self, training_examples: List[Tuple[str, str],
                        epochs: int = 3, batch_size: int = 16):
         """微调模型"""
         from sentence_transformers import InputExample, losses

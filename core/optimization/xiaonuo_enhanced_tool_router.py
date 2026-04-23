@@ -699,7 +699,7 @@ xiaonuo_enhanced_router = XiaonuoEnhancedToolRouter()
 
 # 便捷函数
 async def smart_route(
-    intent: str, context: dict[str, Any], tools: list[str] | None = None
+    intent: str, context: dict[str, Any], tools: Optional[list[str]] = None
 ) -> list[ToolRecommendation]:
     """便捷的智能路由函数"""
     return await xiaonuo_enhanced_router.route_tools(intent, context, tools)

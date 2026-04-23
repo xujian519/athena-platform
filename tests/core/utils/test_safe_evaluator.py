@@ -7,8 +7,8 @@ import pytest
 
 from core.utils.safe_evaluator import (
     SafeExpressionEvaluator,
-    safe_eval,
     is_safe_expression,
+    safe_eval,
 )
 
 
@@ -147,15 +147,14 @@ class TestEvaluateErrors:
 
     def test_evaluate_unsupported_operator(self):
         """测试不支持的操作符"""
-        evaluator = SafeExpressionEvaluator()
+        SafeExpressionEvaluator()
         # 尝试使用不支持的操作符会失败
         # 注意: 这取决于实现,可能所有常用操作符都支持
 
     def test_evaluate_max_depth_exceeded(self):
         """测试超过最大深度"""
-        evaluator = SafeExpressionEvaluator(max_depth=2)
+        SafeExpressionEvaluator(max_depth=2)
         # 创建深度嵌套的表达式
-        deep_expr = "(((1)))"
         # 这可能不会触发深度限制,取决于嵌套结构
         # 实际测试需要更复杂的嵌套
 

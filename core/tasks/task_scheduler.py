@@ -251,7 +251,7 @@ class NotificationManager:
 class TaskStorage:
     """任务存储管理"""
 
-    def __init__(self, storage_path: str | None = None):
+    def __init__(self, storage_path: Optional[str] = None):
         if storage_path is None:
             storage_path = Path(__file__).parent.parent.parent / "data" / "tasks"
         self.storage_path = Path(storage_path)
@@ -404,7 +404,7 @@ class TaskScheduler:
         priority: TaskPriority = TaskPriority.NORMAL,
         due_at: datetime | None = None,
         assigned_to: str = "",
-        tags: list[str] | None = None,
+        tags: Optional[list[str]] = None,
     ) -> Task:
         """创建任务"""
         task_id = f"task_{int(time.time())}"
@@ -601,7 +601,7 @@ def create_task(
     priority: TaskPriority = TaskPriority.NORMAL,
     due_at: datetime | None = None,
     assigned_to: str = "",
-    tags: list[str] | None = None,
+    tags: Optional[list[str]] = None,
 ) -> Task:
     """创建任务(快捷函数)"""
     scheduler = get_scheduler()

@@ -232,7 +232,7 @@ class XiaoNuoCrawlerController:
     def _extract_urls(self, text: str) -> list[str]:
         """提取URL"""
         # 简单的URL正则表达式
-        url_pattern = r'https?://[^\s<>"{}|\\^`\[\]]+'
+        url_pattern = r'https?://[^\s<>"{}|\\^`\[\]+'
         urls = re.findall(url_pattern, text)
         return urls
 

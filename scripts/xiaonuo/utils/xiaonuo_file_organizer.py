@@ -555,8 +555,8 @@ class XiaonuoFileOrganizer:
 
 ### 文件统计
 - **总数量**: {len(scattered_files)}
-- **文件类型**: {len([f for f in scattered_files if not f['is_dir']])} 个文件
-- **目录数量**: {len([f for f in scattered_files if f['is_dir']])} 个目录
+- **文件类型**: {len([f for f in scattered_files if not f['is_dir'])} 个文件
+- **目录数量**: {len([f for f in scattered_files if f['is_dir'])} 个目录
 
 ### 文件大小分布
 """
@@ -585,7 +585,7 @@ class XiaonuoFileOrganizer:
 | 文件名 | 类型 | 大小 | 修改时间 |
 |--------|------|------|----------|
 {chr(10).join([f"| {f['name'][:30]}{'...' if len(f['name']) > 30 else ''} | {'目录' if f['is_dir'] else '文件'} | {self._format_size(f['size'])} | {f['modified'].strftime('%Y-%m-%d')} |"
-                for f in scattered_files[:20]])}
+                for f in scattered_files[:20])}
 """
 
         if len(scattered_files) > 20:
@@ -597,7 +597,7 @@ class XiaonuoFileOrganizer:
 
 ### 智能分类结果
 {chr(10).join([f"- **{item['description']}**: {item['category']} → {item['new'].replace(str(self.project_root), '.')}"
-                for item in results['organized'][:10]])}
+                for item in results['organized'][:10])}
 """
 
         if len(results['organized']) > 10:
@@ -607,7 +607,7 @@ class XiaonuoFileOrganizer:
         if results['errors']:
             report += f"""
 ### ⚠️ 整理错误
-{chr(10).join([f"- **{error['file']}**: {error['error']}" for error in results['errors']])}
+{chr(10).join([f"- **{error['file']}**: {error['error']}" for error in results['errors'])}
 """
 
         report += f"""

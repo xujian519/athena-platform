@@ -38,7 +38,7 @@ class PatentPacket(BaseModel):
     # Cognition Layer Data
     # For novelty/creativity (Art 22)
     prior_art_refs: List[Dict[str, Any]] = Field(default_factory=list)
-    novelty_analysis: str | None = None
+    novelty_analysis: Optional[str] = None
     
     # For formal checks (Art 26, Rule 20)
     formal_defects: List[str] = Field(default_factory=list)

@@ -13,7 +13,7 @@ import json
 import logging
 from typing import Any
 
-from core.database.unified_connection import get_postgres_pool
+from core.infrastructure.database.unified_connection import get_postgres_pool
 
 logger = logging.getLogger(__name__)
 
@@ -163,7 +163,7 @@ class EpisodicMemory:
             logger.error(f"存储情景记忆失败: {str(e)}")
             raise
 
-    async def retrieve(self, query: dict[str, Any], limit: int = 10) -> list[dict[str, Any]]:
+    async def retrieve(self, query: dict[str, Any], limit: int = 10) -> list[dict[str, Any]:
         """
         检索情景记忆
 
@@ -239,7 +239,7 @@ class EpisodicMemory:
                         ORDER BY embedding <=> $1
                         LIMIT ${param_index}
                     """
-                    params = [query["embedding"]] + params + [limit]
+                    params = [query["embedding"] + params + [limit]
                 else:
                     similarity_query = f"""
                         SELECT *, 1.0 as similarity

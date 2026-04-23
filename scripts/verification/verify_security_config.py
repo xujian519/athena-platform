@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena安全配置验证脚本
 验证所有安全配置是否正确设置
 """
 
+import logging
 import os
 import sys
 from pathlib import Path
-from typing import Dict, List, Tuple
-import logging
 
 # 配置日志
 logging.basicConfig(
@@ -132,7 +130,7 @@ class SecurityValidator:
         self.passed.append(f"✅ {var_name} ({config['description']})")
         return True
 
-    def check_hardcoded_secrets(self) -> List[str]:
+    def check_hardcoded_secrets(self) -> list[str]:
         """检查代码中是否还有硬编码的密钥"""
         hardcoded_secrets = []
 
@@ -193,7 +191,7 @@ class SecurityValidator:
         self.passed.append("✅ .env 文件权限正确 (600)")
         return True
 
-    def validate_all(self) -> Dict:
+    def validate_all(self) -> dict:
         """执行所有验证"""
         logger.info("🔍 开始安全配置验证...")
 

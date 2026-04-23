@@ -140,7 +140,7 @@ class EnhancedPatentCrawler:
 
         return patents
 
-    async def get_patent_details(self, patent_url: str, source: str = 'google_patents') -> Dict[str, Any | None]:
+    async def get_patent_details(self, patent_url: str, source: str = 'google_patents') -> Dict[str, Any] | None]:
         """获取专利详情"""
         logger.info(f"📄 获取专利详情: {patent_url}")
 
@@ -275,7 +275,7 @@ class EnhancedPatentCrawler:
 
         return patents
 
-    def _parse_patent_details(self, html_content: str, source: str) -> Dict[str, Any | None]:
+    def _parse_patent_details(self, html_content: str, source: str) -> Dict[str, Any] | None]:
         """解析专利详情"""
         try:
             patent_data = {

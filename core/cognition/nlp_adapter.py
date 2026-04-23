@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 class NLPAdapter:
     """NLP适配器 - 为认知引擎提供统一的NLP接口"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
         self.nlp_service = None
         self.initialized = False

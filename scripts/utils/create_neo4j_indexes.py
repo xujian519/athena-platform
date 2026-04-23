@@ -15,8 +15,9 @@ import sys
 
 sys.path.insert(0, '/Users/xujian/Athena工作平台')
 
-from config.feature_flags import is_feature_enabled
 from core.neo4j.neo4j_graph_client import Neo4jClient
+
+from config.feature_flags import is_feature_enabled
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

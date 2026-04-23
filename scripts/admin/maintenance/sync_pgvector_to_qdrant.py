@@ -14,7 +14,7 @@ import time
 
 import psycopg2
 from qdrant_client import QdrantClient
-from qdrant_client.models import Distance, VectorParams, PointStruct
+from qdrant_client.models import Distance, PointStruct, VectorParams
 
 # 配置日志
 logging.basicConfig(

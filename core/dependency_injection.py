@@ -68,7 +68,7 @@ class ServiceContainer:
         name: str,
         factory: Callable[[], T],
         lifetime: ServiceLifetime = ServiceLifetime.SINGLETON,
-        dependencies: list[str] | None = None,
+        dependencies: Optional[list[str]] = None,
     ) -> None:
         """
         注册服务
@@ -85,19 +85,19 @@ class ServiceContainer:
         logger.info(f"✅ 已注册服务: {name} ({lifetime.value})")
 
     def register_singleton(
-        self, name: str, factory: Callable[[], T], dependencies: list[str] | None = None
+        self, name: str, factory: Callable[[], T], dependencies: Optional[list[str]] = None
     ) -> None:
         """注册单例服务"""
         self.register(name, factory, ServiceLifetime.SINGLETON, dependencies)
 
     def register_scoped(
-        self, name: str, factory: Callable[[], T], dependencies: list[str] | None = None
+        self, name: str, factory: Callable[[], T], dependencies: Optional[list[str]] = None
     ) -> None:
         """注册作用域服务"""
         self.register(name, factory, ServiceLifetime.SCOPED, dependencies)
 
     def register_transient(
-        self, name: str, factory: Callable[[], T], dependencies: list[str] | None = None
+        self, name: str, factory: Callable[[], T], dependencies: Optional[list[str]] = None
     ) -> None:
         """注册瞬态服务"""
         self.register(name, factory, ServiceLifetime.TRANSIENT, dependencies)

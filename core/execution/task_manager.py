@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 class TaskManager:
     """任务管理器 - 使用统一的Task类型"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
         self.tasks: dict[str, Task] = {}
         self.task_queue = asyncio.Queue()
@@ -288,6 +288,6 @@ class TaskManager:
 
 
 # 兼容性函数
-def create_task_manager(config: dict[str, Any] | None = None) -> TaskManager:
+def create_task_manager(config: Optional[dict[str, Any]] = None) -> TaskManager:
     """创建任务管理器实例"""
     return TaskManager(config if config is not None else {})

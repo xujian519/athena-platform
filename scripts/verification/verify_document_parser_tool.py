@@ -16,13 +16,13 @@ document_parser工具验证脚本
 
 import asyncio
 import json
-import tempfile
-from pathlib import Path
-from datetime import datetime
-from typing import Any, Dict
 
 # 添加项目路径
 import sys
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
 sys.path.insert(0, "/Users/xujian/Athena工作平台")
 
 from core.tools.production_tool_implementations import document_parser_handler
@@ -40,7 +40,7 @@ class DocumentParserVerifier:
         self.temp_dir.mkdir(exist_ok=True)
         print(f"测试目录: {self.temp_dir}")
 
-    def create_test_files(self) -> Dict[str, Path]:
+    def create_test_files(self) -> dict[str, Path]:
         """创建测试文件"""
         files = {}
 
@@ -221,7 +221,7 @@ h1 {
 
         return files
 
-    async def test_file_parsing(self, file_type: str, file_path: Path) -> Dict[str, Any]:
+    async def test_file_parsing(self, file_type: str, file_path: Path) -> dict[str, Any]:
         """测试文件解析"""
         params = {
             "file_path": str(file_path),
@@ -245,7 +245,7 @@ h1 {
             "is_truncated": result.get("content_truncated", False)
         }
 
-    async def test_error_handling(self) -> Dict[str, Any]:
+    async def test_error_handling(self) -> dict[str, Any]:
         """测试错误处理"""
         error_tests = []
 
@@ -287,7 +287,7 @@ h1 {
 
         return error_tests
 
-    async def test_content_accuracy(self, file_type: str, file_path: Path) -> Dict[str, Any]:
+    async def test_content_accuracy(self, file_type: str, file_path: Path) -> dict[str, Any]:
         """测试内容提取准确性"""
         original_content = file_path.read_text(encoding="utf-8")
 
@@ -307,7 +307,7 @@ h1 {
             "is_complete": len(extracted_content) == len(original_content)
         }
 
-    async def test_large_file_handling(self) -> Dict[str, Any]:
+    async def test_large_file_handling(self) -> dict[str, Any]:
         """测试大文件处理"""
         large_path = self.temp_dir / "very_large.txt"
         large_path.write_text("测试内容行。\n" * 10000, encoding="utf-8")  # 约130KB
@@ -329,7 +329,7 @@ h1 {
             "truncated_ratio": extracted_length / original_size if original_size > 0 else 0
         }
 
-    async def run_all_tests(self) -> Dict[str, Any]:
+    async def run_all_tests(self) -> dict[str, Any]:
         """运行所有测试"""
         print("\n" + "="*60)
         print("document_parser工具验证测试")
@@ -393,7 +393,7 @@ h1 {
             "error_tests": len(error_results),
             "error_handling_ok": sum(1 for e in error_results if e["actual_error"] == e["expected_error"]),
             "large_file_truncated": large_result["is_truncated"],
-            "supported_formats": [r["type"] for r in parse_results if r["success"]],
+            "supported_formats": [r["type"] for r in parse_results if r["success"],
             "parse_results": parse_results,
             "accuracy_results": accuracy_results,
             "error_results": error_results,

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 简单任务管理器
 Simple Task Manager
@@ -11,9 +10,9 @@ Simple Task Manager
 """
 
 import subprocess
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import sys
-import os
+from typing import Any
+
 
 def run_command(cmd, description="") -> None:
     """执行命令"""

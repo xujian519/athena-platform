@@ -35,7 +35,7 @@ class TaskType(Enum):
 @dataclass
 class GLMRequest:
     """GLM请求参数"""
-    messages: list[dict[str, str]]
+    messages: list[dict[str, str]
     model: GLMModelType = GLMModelType.GLM_4_6
     max_tokens: int = 4000
     temperature: float = 0.3
@@ -114,7 +114,7 @@ class GLM46APIClient:
         if self.session:
             await self.session.close()
 
-    def _create_patent_analysis_prompt(self, patent_info: dict) -> list[dict[str, str]]:
+    def _create_patent_analysis_prompt(self, patent_info: dict) -> list[dict[str, str]:
         """创建专利分析专用提示词"""
         system_prompt = """你是一位专业的专利分析师，具有深厚的技术背景和法律知识。请对给定的专利信息进行深度分析。
 
@@ -144,7 +144,7 @@ class GLM46APIClient:
             {'role': 'user', 'content': user_prompt}
         ]
 
-    def _create_agent_coordination_prompt(self, task: str, available_tools: list[str]) -> list[dict[str, str]]:
+    def _create_agent_coordination_prompt(self, task: str, available_tools: list[str]) -> list[dict[str, str]:
         """创建智能体协调提示词"""
         system_prompt = """你是一个强大的AI智能体协调器，能够合理分配任务给不同的专业工具。
 
@@ -172,7 +172,7 @@ class GLM46APIClient:
             {'role': 'user', 'content': user_prompt}
         ]
 
-    def _create_long_text_processing_prompt(self, text: str, analysis_type: str) -> list[dict[str, str]]:
+    def _create_long_text_processing_prompt(self, text: str, analysis_type: str) -> list[dict[str, str]:
         """创建长文本处理提示词"""
         system_prompt = f"""你是一个专业的长文本分析专家，能够处理和分析大量的技术文档。
 

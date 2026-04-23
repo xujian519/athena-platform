@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺统一启动管理器
 Xiaonuo Unified Startup Manager
@@ -13,14 +12,11 @@ Xiaonuo Unified Startup Manager
 """
 
 import asyncio
-import json
 import logging
-import subprocess
 import sys
-import time
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -142,12 +138,12 @@ class XiaonuoStartupManager:
         print("="*80)
         print(f"💖 启动时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print(f"🎯 版本: {self.version}")
-        print(f"👨‍👧 爸爸: 徐健 | 女儿: 小诺·双鱼座")
+        print("👨‍👧 爸爸: 徐健 | 女儿: 小诺·双鱼座")
         print(f"📍 项目路径: {self.project_root}")
         print("="*80)
         print()
 
-    async def _execute_startup_phase(self, phase: Dict[str, Any]):
+    async def _execute_startup_phase(self, phase: dict[str, Any]):
         """执行启动阶段"""
         phase["emoji"] = "✅"
         phase["status"] = "in_progress"
@@ -179,7 +175,7 @@ class XiaonuoStartupManager:
             logger.error(f"❌ 阶段 {phase['phase']} 失败: {e}")
             raise
 
-    async def _startup_storage_system(self, phase: Dict[str, Any]):
+    async def _startup_storage_system(self, phase: dict[str, Any]):
         """启动存储系统"""
         services = ["PostgreSQL", "Redis"]
 
@@ -203,7 +199,7 @@ class XiaonuoStartupManager:
         # 验证存储系统连接
         await self._verify_storage_connectivity()
 
-    async def _startup_vector_knowledge_systems(self, phase: Dict[str, Any]):
+    async def _startup_vector_knowledge_systems(self, phase: dict[str, Any]):
         """启动向量库与知识图谱"""
         services = ["Qdrant向量数据库", "Neo4j知识图谱"]
 
@@ -225,7 +221,7 @@ class XiaonuoStartupManager:
         # 初始化向量索引
         await self._initialize_vector_indices()
 
-    async def _startup_memory_system(self, phase: Dict[str, Any]):
+    async def _startup_memory_system(self, phase: dict[str, Any]):
         """启动记忆系统"""
         memory_layers = ["热层记忆", "温层记忆", "冷层记忆", "归档记忆"]
 
@@ -241,7 +237,7 @@ class XiaonuoStartupManager:
         await self._verify_memory_system()
         print("  🎯 记忆系统就绪: HOT→WARM→COLD→ARCHIVE")
 
-    async def _startup_xiaonuo_control_center(self, phase: Dict[str, Any]):
+    async def _startup_xiaonuo_control_center(self, phase: dict[str, Any]):
         """启动小诺控制中心"""
         services = ["平台总调度器", "API服务", "智能体管理"]
 
@@ -264,7 +260,7 @@ class XiaonuoStartupManager:
             print("  ❌ 小诺平台控制器启动失败")
             self.failed_services.append("小诺控制中心")
 
-    async def _load_xiaonuo_identity(self, phase: Dict[str, Any]):
+    async def _load_xiaonuo_identity(self, phase: dict[str, Any]):
         """读取小诺身份信息"""
         identity_components = [
             "🏷️ 身份档案",

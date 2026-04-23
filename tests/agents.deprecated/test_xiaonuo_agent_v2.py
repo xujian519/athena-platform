@@ -4,9 +4,8 @@ XiaonuoAgentV2单元测试
 测试XiaonuoAgentV2的基本功能
 """
 
-import pytest
-from unittest.mock import Mock, patch
 
+import pytest
 from core.xiaonuo.xiaonuo_agent_v2 import XiaonuoAgentV2
 
 

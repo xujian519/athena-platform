@@ -71,7 +71,7 @@ class LearningResult:
     insights: list[str] = field(default_factory=list)
     recommendations: list[str] = field(default_factory=list)
     metrics: dict[str, Any] = field(default_factory=dict)
-    error: str | None = None
+    error: Optional[str] = None
 
 
 @dataclass
@@ -297,7 +297,7 @@ class BaseLearningEngine(ABC):
         if result is None:
             raise ValueError("result不能为None")
 
-    def _validate_config(self, config: dict[str, Any] | None) -> dict[str, Any]:
+    def _validate_config(self, config: Optional[dict[str, Any]]) -> dict[str, Any]:
         """
         验证并规范化配置参数
 

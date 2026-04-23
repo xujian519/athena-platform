@@ -125,7 +125,7 @@ class ClaimElement:
     element_text: str
     element_type: str  # 结构/功能/参数/方法等
     position: int
-    parent_id: str | None = None
+    parent_id: Optional[str] = None
 
 
 @dataclass
@@ -150,11 +150,11 @@ class PatentDocument:
     claims: list[str]
     claim_elements: dict[str, list[ClaimElement]]
     technical_features: list[TechnicalFeature]
-    publication_date: str | None = None
-    applicant: str | None = None
-    inventor: str | None = None
-    ipc_classification: str | None = None
-    full_text: str | None = None
+    publication_date: Optional[str] = None
+    applicant: Optional[str] = None
+    inventor: Optional[str] = None
+    ipc_classification: Optional[str] = None
+    full_text: Optional[str] = None
 
     # 向量表示
     embedding: "np.ndarray | None" = None
@@ -257,7 +257,7 @@ class DeepComparisonReport:
 class PatentDeepComparisonAnalyzer:
     """专利深度对比分析器 - 集成BGE嵌入服务和知识图谱"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """初始化分析器"""
         self.name = "专利深度对比分析器"
         self.version = "1.1.0"
@@ -1834,7 +1834,7 @@ class PatentDeepComparisonAnalyzer:
 
 # 便捷函数
 async def analyze_patent_for_office_action(
-    target_patent_text: str, reference_patents: list[str], output_path: str | None = None
+    target_patent_text: str, reference_patents: list[str], output_path: Optional[str] = None
 ) -> DeepComparisonReport:
     """
     便捷函数:分析专利用于审查意见答复
@@ -1935,7 +1935,7 @@ async def run_as_tool(
     target_patent_text: str,
     reference_patents: list[str],
     analysis_depth: str = "deep",
-    output_path: str | None = None,
+    output_path: Optional[str] = None,
     enable_kg: bool = True,
     use_vector_search: bool = True,
 ) -> dict:

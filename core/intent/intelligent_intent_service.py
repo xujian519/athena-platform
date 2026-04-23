@@ -105,18 +105,18 @@ class IntentRecognitionResult:
     matched_at_layer: IntentLayer
 
     # 推理引擎推荐
-    recommended_engine: str | None = None
-    engine_reason: str | None = None
+    recommended_engine: Optional[str] = None
+    engine_reason: Optional[str] = None
     bypass_super_reasoning: bool = False
 
     # 提取的实体
     entities: dict[str, list[str]] = field(default_factory=dict)
 
     # 任务画像
-    task_profile: dict[str, Any] | None = None
+    task_profile: Optional[dict[str, Any]] = None
 
     # 思维协议追踪(可选)
-    thought_trace: dict[str, Any] | None = None
+    thought_trace: Optional[dict[str, Any]] = None
 
     # 元数据
     processing_time_ms: float = 0.0
@@ -460,7 +460,7 @@ class Layer1RuleMatcher:
 
         return result
 
-    def match(self, text: str) -> tuple[IntentCategory, float, dict[str, Any] | None]:
+    def match(self, text: str) -> tuple[IntentCategory, float, dict[str, Any]] or None]:
         """
         匹配意图
 
@@ -597,7 +597,7 @@ class Layer2SemanticMatcher:
 
     async def match(
         self, text: str, threshold: float = 0.75
-    ) -> tuple[IntentCategory, float | None]:
+    ) -> Optional[tuple[IntentCategory, float]]:
         """
         语义匹配意图
 
@@ -726,7 +726,7 @@ class Layer3DeepAnalyzer:
 
     def build_task_profile(
         self, text: str, entities: dict[str, list[str]]
-    ) -> dict[str, Any] | None:
+    ) -> Optional[dict[str, Any]]:
         """
         构建任务画像
 
@@ -812,7 +812,7 @@ class IntelligentIntentRecognitionService:
     整合三层识别能力,提供强大的意图识别功能。
     """
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化服务
 
@@ -868,7 +868,7 @@ class IntelligentIntentRecognitionService:
         logger.info(f"   - 思维协议增强: {'✅' if self.thinking_analyzer else '❌'}")
 
     async def recognize_intent(
-        self, text: str, context: dict[str, Any] | None = None
+        self, text: str, context: Optional[dict[str, Any]] = None
     ) -> IntentRecognitionResult:
         """
         识别意图
@@ -1057,7 +1057,7 @@ _global_service: IntelligentIntentRecognitionService | None = None
 
 
 def get_intelligent_intent_service(
-    config: dict[str, Any] | None = None,
+    config: Optional[dict[str, Any]] = None,
 ) -> IntelligentIntentRecognitionService:
     """
     获取智能意图识别服务实例(单例)

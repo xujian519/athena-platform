@@ -40,7 +40,7 @@ class PatentDraftingRequest:
     drawings: list[dict] = field(default_factory=list)  # type: ignore
     applicant: str = ""
     inventor: str = ""
-    priority_date: str | None = None
+    priority_date: Optional[str] = None
 
 
 @dataclass

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 启动小娜专利服务脚本
 Start Xiaona Patents Service Script
@@ -12,14 +11,13 @@ Start Xiaona Patents Service Script
 """
 
 import asyncio
-import json
 import logging
 import subprocess
 import sys
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Any
 
 # 配置日志
 logging.basicConfig(
@@ -51,7 +49,7 @@ class XiaonaPatentsServiceStarter:
         print(f"💖 启动时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print(f"🎯 服务版本: {self.service_version}")
         print(f"📍 服务地址: {self.service_url}")
-        print(f"👩‍⚖️ 控制者: 小娜·天秤女神 (专利法律专家)")
+        print("👩‍⚖️ 控制者: 小娜·天秤女神 (专利法律专家)")
         print(f"📄 脚本路径: {self.script_path}")
         print("="*80)
 
@@ -189,7 +187,7 @@ class XiaonaPatentsServiceStarter:
                         # 显示统计信息
                         stats = status_data.get('statistics', {})
                         if stats:
-                            print(f"📊 服务统计:")
+                            print("📊 服务统计:")
                             print(f"   总请求数: {stats.get('total_requests', 0)}")
                             print(f"   成功获取: {stats.get('successful_retrievals', 0)}")
                             print(f"   失败获取: {stats.get('failed_retrievals', 0)}")
@@ -209,13 +207,13 @@ class XiaonaPatentsServiceStarter:
         print(f"📊 系统状态: {self.service_url}/status")
         print()
         print("💡 使用示例:")
-        print(f"  # 获取单个专利")
+        print("  # 获取单个专利")
         print(f"  curl {self.service_url}/patent/CN108765432A")
         print()
-        print(f"  # 获取专利详情")
+        print("  # 获取专利详情")
         print(f"  curl -X POST {self.service_url}/patent/retrieve \\")
-        print(f"    -H 'Content-Type: application/json' \\")
-        print(f"    -d '{{\"patent_number\": \"CN108765432A\", \"retrieval_type\": \"full_text\"}}'")
+        print("    -H 'Content-Type: application/json' \\")
+        print("    -d '{\"patent_number\": \"CN108765432A\", \"retrieval_type\": \"full_text\"}'")
         print("="*80)
 
     async def stop_service(self):

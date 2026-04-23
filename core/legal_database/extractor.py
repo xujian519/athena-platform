@@ -191,7 +191,7 @@ class RuleBasedExtractor:
 class HybridLegalExtractor:
     """混合法律实体抽取器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化抽取器
 
@@ -485,8 +485,8 @@ class HybridLegalExtractor:
 def create_hybrid_extractor(
     use_local_llm: bool = False,
     use_cloud_llm: bool = False,
-    local_llm_path: str | None = None,
-    zhipu_api_key: str | None = None,
+    local_llm_path: Optional[str] = None,
+    zhipu_api_key: Optional[str] = None,
 ) -> HybridLegalExtractor:
     """
     创建混合抽取器

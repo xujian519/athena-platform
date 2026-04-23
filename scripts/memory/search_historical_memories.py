@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 搜索和导入所有历史记忆
 """
 
-import os
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import sqlite3
 import json
+import os
+import sqlite3
 import subprocess
-from datetime import datetime
-from pathlib import Path
+from typing import Any
 
 # PostgreSQL连接信息
 PSQL_PATH = '/opt/homebrew/Cellar/postgresql@17/17.7/bin/psql'
@@ -61,7 +58,7 @@ def search_sqlite_memories() -> Any | None:
                             columns = [col[1] for col in cursor.fetchall()]
 
                             for row in rows:
-                                memory_data = dict(zip(columns, row))
+                                memory_data = dict(zip(columns, row, strict=False))
                                 found_memories.append({
                                     'source': db_path,
                                     'table': table_name,
@@ -89,7 +86,7 @@ def search_json_memories() -> Any | None:
         if os.path.exists(json_file):
             print(f"📁 检查: {json_file}")
             try:
-                with open(json_file, 'r', encoding='utf-8') as f:
+                with open(json_file, encoding='utf-8') as f:
                     data = json.load(f)
 
                     # 检查是否包含记忆相关内容
@@ -99,7 +96,7 @@ def search_json_memories() -> Any | None:
                             'type': 'json',
                             'data': data
                         })
-                        print(f"  ✅ 找到记忆相关数据")
+                        print("  ✅ 找到记忆相关数据")
 
             except Exception as e:
                 print(f"  ❌ 错误: {e}")

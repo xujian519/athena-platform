@@ -48,7 +48,7 @@ class ContextWindow:
     window_id: str  # 窗口ID
     session_id: str  # 会话ID
     turns: list[DialogueTurn] = field(default_factory=list)  # 对话轮次
-    current_topic: str | None = None  # 当前话题
+    current_topic: Optional[str] = None  # 当前话题
     accumulated_entities: dict[str, Any] = field(default_factory=dict)  # 累积实体
     status: ContextStatus = ContextStatus.ACTIVE  # 状态
     created_at: float = field(default_factory=lambda: datetime.now().timestamp())
@@ -200,7 +200,7 @@ class CoreferenceResolver:
 
     def resolve_ordinal_reference(
         self, message: str, context_window: ContextWindow
-    ) -> dict[str, Any] | None:
+    ) -> Optional[dict[str, Any]]:
         """
         解析序数引用(如"第3个")
 
@@ -274,7 +274,7 @@ class MultiTurnContextManager:
         logger.info(f"   指代消解: {'启用' if enable_coreference else '禁用'}")
 
     def create_context(
-        self, session_id: str, initial_context: dict[str, Any] | None = None
+        self, session_id: str, initial_context: Optional[dict[str, Any]] = None
     ) -> ContextWindow:
         """
         创建新的上下文窗口
@@ -458,7 +458,7 @@ class MultiTurnContextManager:
         return relevance_scores
 
     def get_conversation_history(
-        self, session_id: str, max_turns: int | None = None
+        self, session_id: str, max_turns: Optional[int] = None
     ) -> list[DialogueTurn]:
         """
         获取对话历史
@@ -498,7 +498,7 @@ class MultiTurnContextManager:
 
         return False
 
-    def get_context_summary(self, session_id: str) -> dict[str, Any] | None:
+    def get_context_summary(self, session_id: str) -> Optional[dict[str, Any]]:
         """
         获取上下文摘要
 

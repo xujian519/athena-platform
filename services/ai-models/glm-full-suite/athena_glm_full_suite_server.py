@@ -39,7 +39,7 @@ app = FastAPI(
 
 # Pydantic模型
 class TextRequest(BaseModel):
-    messages: list[dict[str, str]] = Field(..., description='对话消息')
+    messages: list[dict[str, str] = Field(..., description='对话消息')
     model: str = Field(default='glm-4.6', description='指定模型')
     max_tokens: int = Field(default=4000, description='最大生成tokens')
     temperature: float = Field(default=0.3, description='生成温度')
@@ -621,7 +621,7 @@ async def get_model_capabilities():
         for model_name, caps in capabilities.items():
             result.append(ModelCapabilitiesResponse(
                 model=model_name,
-                modalities=[m.value for m in caps['modalities']],
+                modalities=[m.value for m in caps['modalities'],
                 specialties=caps['specialties'],
                 context_length=caps['context_length'],
                 cost_per_1k=caps['cost_per_1k'],

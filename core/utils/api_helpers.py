@@ -63,7 +63,7 @@ class APIResponse:
     def error(
         message: str,
         code: int = 500,
-        details: dict[str, Any] | None = None
+        details: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """
         错误响应

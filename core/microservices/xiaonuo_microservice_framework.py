@@ -198,8 +198,8 @@ class ServiceResponse:
     headers: dict[str, str]
     data: Any = None
     response_time: float = 0.0
-    error: str | None = None
-    service_instance_id: str | None = None
+    error: Optional[str] = None
+    service_instance_id: Optional[str] = None
 
 
 class CircuitBreaker:

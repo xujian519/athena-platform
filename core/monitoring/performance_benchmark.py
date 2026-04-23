@@ -108,7 +108,7 @@ class ContinuousPerformanceBenchmark:
         logger.info(f"📂 已加载{total_results}条历史结果")
 
     def run_benchmark(
-        self, name: str, benchmark_func: Callable, metadata: dict[str, Any] | None = None
+        self, name: str, benchmark_func: Callable, metadata: Optional[dict[str, Any]] = None
     ) -> BenchmarkResult:
         """
         运行基准测试
@@ -318,7 +318,7 @@ class ContinuousPerformanceBenchmark:
 
         logger.debug(f"💾 结果已保存: {filepath}")
 
-    def get_benchmark_summary(self, name: str | None = None) -> dict[str, Any]:
+    def get_benchmark_summary(self, name: Optional[str] = None) -> dict[str, Any]:
         """获取基准测试摘要"""
         if name:
             if name not in self.results:
@@ -418,7 +418,7 @@ def get_benchmark_system() -> ContinuousPerformanceBenchmark:
 
 # 便捷函数
 def run_benchmark(
-    name: str, benchmark_func: Callable, metadata: dict[str, Any] | None = None
+    name: str, benchmark_func: Callable, metadata: Optional[dict[str, Any]] = None
 ) -> BenchmarkResult:
     """运行基准测试"""
     system = get_benchmark_system()

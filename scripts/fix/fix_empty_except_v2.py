@@ -4,13 +4,11 @@
 使用正则表达式识别和修复空except块
 """
 
-import os
 import re
 from pathlib import Path
-from typing import List, Tuple, Dict
 
 
-def find_empty_except_blocks(file_path: Path) -> List[Dict]:
+def find_empty_except_blocks(file_path: Path) -> list[dict]:
     """
     查找文件中的空except块
 
@@ -19,7 +17,7 @@ def find_empty_except_blocks(file_path: Path) -> List[Dict]:
     issues = []
 
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             lines = f.readlines()
 
         i = 0
@@ -112,14 +110,14 @@ def generate_fix_code(exception_type: str, indent: int, has_logger: bool) -> str
 def check_has_logger(file_path: Path) -> bool:
     """检查文件是否已有logger"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
             return 'logger = ' in content or 'logging.getLogger' in content
     except:
         return False
 
 
-def fix_file(file_path: Path) -> Tuple[bool, int]:
+def fix_file(file_path: Path) -> tuple[bool, int]:
     """
     修复单个文件
 
@@ -135,7 +133,7 @@ def fix_file(file_path: Path) -> Tuple[bool, int]:
             has_logger = True
 
         # 读取文件
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             lines = f.readlines()
 
         # 查找空except块
@@ -177,7 +175,7 @@ def fix_file(file_path: Path) -> Tuple[bool, int]:
         with open(file_path, 'w', encoding='utf-8') as f:
             f.writelines(lines)
 
-        print(f"  ✓ 修复完成")
+        print("  ✓ 修复完成")
         return True, len(issues)
 
     except Exception as e:
@@ -190,7 +188,7 @@ def fix_file(file_path: Path) -> Tuple[bool, int]:
 def add_logger_to_file(file_path: Path) -> bool:
     """向文件添加logger"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             lines = f.readlines()
 
         # 检查是否已有logging导入
@@ -274,7 +272,7 @@ def main():
     # 修复每个文件
     for file_path in python_files:
         try:
-            with open(file_path, 'r') as f:
+            with open(file_path) as f:
                 content = f.read()
 
             # 快速检查是否有空except

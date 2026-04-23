@@ -48,12 +48,12 @@ class EpisodicMemoryItem:
     timestamp: str
     content: str
     context: dict[str, Any]  # 何地、为何等上下文
-    participants: list[str] | None = None  # 参与者
-    emotional_tag: str | None = None  # 情感标记
+    participants: Optional[list[str]] = None  # 参与者
+    emotional_tag: Optional[str] = None  # 情感标记
     importance: float = 0.5  # 重要性
     embedding: list[float] | None = None
-    related_episodes: list[str] | None = None  # 相关经历
-    metadata: dict[str, Any] | None = None
+    related_episodes: Optional[list[str]] = None  # 相关经历
+    metadata: Optional[dict[str, Any]] = None
 
     def __post_init__(self):
         if self.participants is None:
@@ -87,7 +87,7 @@ class EpisodicMemory:
     - 情感标记
     """
 
-    def __init__(self, postgres_url: str | None = None):
+    def __init__(self, postgres_url: Optional[str] = None):
         """
         初始化情景记忆
 
@@ -160,13 +160,13 @@ class EpisodicMemory:
         self,
         content: str,
         experience_type: ExperienceType,
-        context: dict[str, Any] | None = None,
-        participants: list[str] | None = None,
-        emotional_tag: str | None = None,
+        context: Optional[dict[str, Any]] = None,
+        participants: Optional[list[str]] = None,
+        emotional_tag: Optional[str] = None,
         importance: float = 0.5,
         embedding: list[float] | None = None,
-        related_episodes: list[str] | None = None,
-        metadata: dict[str, Any] | None = None
+        related_episodes: Optional[list[str]] = None,
+        metadata: Optional[dict[str, Any]] = None
     ) -> str:
         """
         存储情景记忆
@@ -405,7 +405,7 @@ class EpisodicMemory:
 
     async def get_timeline(
         self,
-        participant: str | None = None,
+        participant: Optional[str] = None,
         days: int = 30
     ) -> dict[str, list[EpisodicMemoryItem]]:
         """

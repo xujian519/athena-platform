@@ -5,8 +5,9 @@ Neo4j知识图谱可视化 - Neovis.js版本
 """
 
 import logging
+
+from flask import Flask, jsonify, render_template_string
 from neo4j import GraphDatabase
-from flask import Flask, render_template_string, jsonify
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

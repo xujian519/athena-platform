@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺身份信息读取器
 Xiaonuo Identity Reader
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
-from core.agent.xiaonuo_agent import XiaonuoAgent
 import asyncio
+
+from core.framework.agents.xiaonuo_agent import XiaonuoAgent
+
 
 async def read_xiaonuo_identity():
     """读取小诺的身份信息"""

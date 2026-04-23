@@ -74,7 +74,7 @@ MODEL_CONFIGS = {
 }
 
 
-def create_lm(model_name: str = "glm-4-plus", api_key: str | None = None, **kwargs) -> dspy.LM:
+def create_lm(model_name: str = "glm-4-plus", api_key: Optional[str] = None, **kwargs) -> dspy.LM:
     """创建DSPy LM实例
 
     Args:
@@ -191,7 +191,7 @@ def get_model_info(model_name: str) -> dict[str, Any]:
 
 
 # 便捷配置函数
-def setup_glm_4_plus(api_key: str | None = None) -> dspy.LM:
+def setup_glm_4_plus(api_key: Optional[str] = None) -> dspy.LM:
     """快速设置GLM-4-Plus
 
     Args:
@@ -203,7 +203,7 @@ def setup_glm_4_plus(api_key: str | None = None) -> dspy.LM:
     return configure_dspy_lm("glm-4-plus", api_key=api_key)
 
 
-def setup_deepseek_chat(api_key: str | None = None) -> dspy.LM:
+def setup_deepseek_chat(api_key: Optional[str] = None) -> dspy.LM:
     """快速设置DeepSeek Chat
 
     Args:

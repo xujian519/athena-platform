@@ -519,7 +519,7 @@ class DynamicWeightAdjuster:
 
         return result
 
-    def get_current_weights(self, component: str) -> dict[str, float | None]:
+    def get_current_weights(self, component: str) -> Optional[dict[str, float]]:
         """获取当前权重配置"""
         config = self.weight_configs.get(component)
         return config.weights if config else None

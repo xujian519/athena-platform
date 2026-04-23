@@ -62,7 +62,7 @@ class CollaborationController:
 
     def __init__(self):
         self.tasks: dict[str, Task] = {}
-        self.results: dict[str, list[TaskResult]] = {}
+        self.results: dict[str, list[TaskResult] = {}
         self.active_sessions: dict[str, dict] = {}
         self.executor_pool = ThreadPoolExecutor(max_workers=10)
         self._load_ai_capabilities()
@@ -406,7 +406,7 @@ class CollaborationController:
             'task_id': task.id,
             'synthesis_type': 'multi_ai_collaboration',
             'primary_result': completed_results[0].result,
-            'supporting_insights': [r.result for r in completed_results[1:]],
+            'supporting_insights': [r.result for r in completed_results[1:],
             'confidence_score': sum(r.confidence or 0 for r in completed_results) / len(completed_results),
             'execution_summary': {
                 'total_participants': len(completed_results),

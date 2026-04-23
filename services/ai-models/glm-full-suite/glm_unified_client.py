@@ -47,7 +47,7 @@ class ModalityType(Enum):
 class GLMRequest:
     """GLM统一请求参数"""
     model: GLMModel
-    messages: list[dict[str, str]]
+    messages: list[dict[str, str]
     modality: ModalityType = ModalityType.TEXT
     max_tokens: int = 4000
     temperature: float = 0.3

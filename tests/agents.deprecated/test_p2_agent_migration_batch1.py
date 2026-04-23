@@ -16,21 +16,21 @@ P2 Agent Migration Tests - Batch 1
 """
 
 import asyncio
+
 import pytest
-from datetime import datetime
-from typing import Any
 
 # 导入被测试的Agent
-from core.agents.patent.patent_search_agent_v2 import PatentSearchAgentV2, create_patent_search_agent_v2
-from core.agents.yunxi.yunxi_ip_agent_v3 import YunxiIPAgentV3, create_yunxi_ip_agent_v3
-
-# 导入统一接口组件
-from core.agents.xiaona.base_component import (
-    AgentExecutionContext,
-    AgentExecutionResult,
-    AgentStatus,
+from core.framework.agents.patent.patent_search_agent_v2 import (
+    PatentSearchAgentV2,
+    create_patent_search_agent_v2,
 )
 
+# 导入统一接口组件
+from core.framework.agents.xiaona.base_component import (
+    AgentExecutionContext,
+    AgentStatus,
+)
+from core.framework.agents.yunxi.yunxi_ip_agent_v3 import YunxiIPAgentV3, create_yunxi_ip_agent_v3
 
 # ==================== PatentSearchAgentV2测试 ====================
 

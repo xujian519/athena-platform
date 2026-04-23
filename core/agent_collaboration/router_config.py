@@ -68,7 +68,7 @@ class RouterConfig:
     canary_rules: dict[str, Any] = field(default_factory=dict)
 
     @classmethod
-    def from_yaml(cls, config_path: str) -> "RouterConfig":
+    def from_yaml(cls, config_path: str) -> RouterConfig:
         """从YAML文件加载配置"""
         config_file = Path(config_path)
         if not config_file.exists():
@@ -91,7 +91,7 @@ class RouterConfig:
         with open(config_file, "w", encoding="utf-8") as f:
             yaml.dump(self.__dict__, f, allow_unicode=True, default_flow_style=False)
 
-    def is_enabled_for_user(self, user_id: str | None = None) -> bool:
+    def is_enabled_for_user(self, user_id: Optional[str] = None) -> bool:
         """检查用户是否启用新路由"""
         if not self.enabled:
             return False
@@ -204,7 +204,7 @@ def save_config(config: RouterConfig, env: str = "production"):
 _current_config: RouterConfig | None = None
 
 
-def get_config(env: str | None = None) -> RouterConfig:
+def get_config(env: Optional[str] = None) -> RouterConfig:
     """获取当前配置"""
     global _current_config
 

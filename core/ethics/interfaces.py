@@ -236,7 +236,7 @@ class ISensitiveDataFilter(ABC):
         pass
 
     @abstractmethod
-    def filter_log_message(self, message: str, context: dict[str, Any] | None = None) -> str:
+    def filter_log_message(self, message: str, context: Optional[dict[str, Any]] = None) -> str:
         """过滤日志消息
 
         Args:

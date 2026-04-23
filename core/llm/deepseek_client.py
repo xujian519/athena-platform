@@ -32,7 +32,7 @@ class DeepSeekClient:
 
     def __init__(
         self,
-        api_key: str | None = None,
+        api_key: Optional[str] = None,
         base_url: str = "https://api.deepseek.com/v1",
         model: str = "deepseek-chat",
         timeout: int = 180,

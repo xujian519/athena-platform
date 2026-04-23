@@ -27,14 +27,14 @@ def fix_optional_syntax(file_path: Path) -> int:
         content = re.sub(pattern1, replace1, content)
 
         # 模式2: Optional[type] -> type | None (返回类型)
-        pattern2 = r'->\s*Optional\[([^\]]+)\]'
+        pattern2 = r'->\s*Optional\[([^\]+)\]'
         def replace2(m):
             return f'-> {m.group(1).strip()} | None'
         content = re.sub(pattern2, replace2, content)
 
         # 模式3: def func(a: Optional[type1]
-    b: Optional[type2]]) -> def func(a: type1 | None, b: type2 | None)
-        pattern3 = r'Optional\[([^\]]+)\]\s*=\s*None'
+    b: Optional[type2]) -> def func(a: type1 | None, b: type2 | None)
+        pattern3 = r'Optional\[([^\]+)\]\s*=\s*None'
         def replace3(m):
             params = m.group(1)
             # 处理多个参数

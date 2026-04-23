@@ -48,7 +48,7 @@ class SandboxConfig:
 
     # 隔离选项
     temp_dir: str = "/tmp/athena-sandbox"  # 临时目录
-    container_image: str | None = None  # 容器镜像（Docker/K8s）
+    container_image: Optional[str] = None  # 容器镜像（Docker/K8s）
     working_dir: str = "/workspace"        # 工作目录
 
     # 路径映射（虚拟路径 → 实际路径）
@@ -84,8 +84,8 @@ class SandboxResult:
     execution_time: float = 0.0            # 执行时间（秒）
 
     # 资源使用
-    memory_used: str | None = None      # 内存使用
-    cpu_time: float | None = None       # CPU 时间
+    memory_used: Optional[str] = None      # 内存使用
+    cpu_time: Optional[float] = None       # CPU 时间
 
     # 文件系统
     files_created: list[str] = field(default_factory=list)    # 创建的文件
@@ -151,7 +151,7 @@ class Sandbox(ABC):
     def __init__(self, config: SandboxConfig | None = None):
         self._config = config or SandboxConfig()
         self._is_initialized = False
-        self._session_id: str | None = None
+        self._session_id: Optional[str] = None
 
     @property
     def config(self) -> SandboxConfig:
@@ -183,8 +183,8 @@ class Sandbox(ABC):
     async def execute_command(
         self,
         command: str,
-        working_dir: str | None = None,
-        timeout: int | None = None
+        working_dir: Optional[str] = None,
+        timeout: Optional[int] = None
     ) -> SandboxResult:
         """执行命令
 
@@ -347,7 +347,7 @@ class SandboxManager:
         self,
         backend: SandboxBackend = SandboxBackend.LOCAL,
         config: SandboxConfig | None = None,
-        session_id: str | None = None
+        session_id: Optional[str] = None
     ) -> Sandbox:
         """创建沙盒
 

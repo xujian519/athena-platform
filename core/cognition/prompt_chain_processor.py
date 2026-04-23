@@ -80,7 +80,7 @@ class ChainExecution:
     total_time: float = 0.0
     success: bool = False
     final_output: Any = None
-    error_message: str | None = None
+    error_message: Optional[str] = None
 
 
 class PromptChainProcessor:

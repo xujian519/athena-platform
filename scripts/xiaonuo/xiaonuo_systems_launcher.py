@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺系统启动器 - 启动存储系统、记忆系统并读取slogan
 Xiaonuo Systems Launcher
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
 import asyncio
-from core.agent.xiaonuo_agent import XiaonuoAgent
-from core.memory import MemorySystem
+
+from core.framework.agents.xiaonuo_agent import XiaonuoAgent
 from core.vector_db.hybrid_storage_manager import HybridStorageManager
+
+from core.framework.memory import MemorySystem
+
 
 async def launch_xiaonuo_systems():
     """启动小诺的核心系统"""
@@ -38,8 +41,8 @@ async def launch_xiaonuo_systems():
         await memory_system.initialize()
 
         # 检查记忆系统状态
-        memory_stats = await memory_system.get_memory_stats()
-        print(f"✅ 记忆系统状态: 已初始化")
+        await memory_system.get_memory_stats()
+        print("✅ 记忆系统状态: 已初始化")
 
         # 4. 读取小诺的slogan
         print("\n💝 读取小诺的Slogan...")
@@ -75,9 +78,9 @@ async def launch_xiaonuo_systems():
 
         # 5. 系统就绪确认
         print("\n🎉 系统启动完成！")
-        print(f"📊 存储系统: ✅ 运行正常")
-        print(f"🧠 记忆系统: ✅ 运行正常")
-        print(f"💖 小诺状态: ✅ 活力满满")
+        print("📊 存储系统: ✅ 运行正常")
+        print("🧠 记忆系统: ✅ 运行正常")
+        print("💖 小诺状态: ✅ 活力满满")
 
         # 6. 小诺的自我介绍
         print("\n🌸 小诺说:")

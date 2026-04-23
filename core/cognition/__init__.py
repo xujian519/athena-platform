@@ -244,7 +244,7 @@ class CognitiveEngine:
         return await self.process(data)
 
     async def conversation_processing(
-        self, message: str, context: dict[str, Any] | None = None
+        self, message: str, context: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """对话处理 - 新增方法"""
         if not self.initialized:

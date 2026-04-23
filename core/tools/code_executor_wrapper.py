@@ -104,9 +104,9 @@ class CodeExecutorWrapper:
         self,
         code: str,
         timeout: int = 5,
-        context: Dict[str, Any] | None = None,
+        context: dict[str, Any] | None = None,
         require_authorization: bool = True,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         执行Python代码
 
@@ -227,7 +227,7 @@ class CodeExecutorWrapper:
 
         return authorized
 
-    def get_security_info(self) -> Dict[str, Any]:
+    def get_security_info(self) -> dict[str, Any]:
         """
         获取安全信息
 
@@ -281,7 +281,7 @@ async def execute_code(
     code: str,
     timeout: int = 5,
     require_authorization: bool = True,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     执行Python代码（便捷函数）
 

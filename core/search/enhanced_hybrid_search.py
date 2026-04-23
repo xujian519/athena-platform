@@ -68,7 +68,7 @@ class SearchRequest:
     """搜索请求"""
 
     query: str
-    filters: dict[str, Any] | None = None
+    filters: Optional[dict[str, Any]] = None
     limit: int = 10
     vector_weight: float = 0.4
     graph_weight: float = 0.4

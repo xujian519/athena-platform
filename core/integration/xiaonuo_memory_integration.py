@@ -107,7 +107,7 @@ class XiaonuoMemoryHelper:
 
         return summary
 
-    def suggest_correction(self, wrong_name: str) -> str | None:
+    def suggest_correction(self, wrong_name: str) -> Optional[str]:
         """建议名称纠正"""
         corrections = {
             "yun-pat": "YunPat",

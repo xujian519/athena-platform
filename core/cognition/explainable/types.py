@@ -110,7 +110,7 @@ class ReasoningPath:
     start_time: datetime
     end_time: datetime | None = None
     steps: list[ReasoningStep] = field(default_factory=list)
-    final_decision: dict[str, Any] | None = None
+    final_decision: Optional[dict[str, Any]] = None
     overall_confidence: float = 0.0
     explanation: str = ""
 

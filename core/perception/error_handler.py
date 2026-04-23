@@ -85,7 +85,7 @@ class FallbackStrategy:
     def __init__(
         self,
         name: str,
-        fallback_processor: str | None = None,
+        fallback_processor: Optional[str] = None,
         fallback_data: Any | None = None,
         confidence_penalty: float = 0.1,
     ):
@@ -98,7 +98,7 @@ class FallbackStrategy:
 class PerceptionErrorHandler:
     """感知模块错误处理器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
 
         # 错误统计
@@ -427,7 +427,7 @@ class PerceptionErrorHandler:
 _global_error_handler: PerceptionErrorHandler | None = None
 
 
-def get_global_error_handler(config: dict[str, Any] | None = None) -> PerceptionErrorHandler:
+def get_global_error_handler(config: Optional[dict[str, Any]] = None) -> PerceptionErrorHandler:
     """获取全局错误处理器"""
     global _global_error_handler
     if _global_error_handler is None:
@@ -436,7 +436,7 @@ def get_global_error_handler(config: dict[str, Any] | None = None) -> Perception
 
 
 # 错误处理装饰器
-def handle_errors(config: dict[str, Any] | None = None) -> Any | None:
+def handle_errors(config: Optional[dict[str, Any]] = None) -> Any | None:
     """错误处理装饰器"""
 
     def decorator(cls) -> Any:
@@ -461,7 +461,7 @@ def handle_errors(config: dict[str, Any] | None = None) -> Any | None:
 
 
 # 重试装饰器
-def retry(config: dict[str, Any] | None = None) -> Any:
+def retry(config: Optional[dict[str, Any]] = None) -> Any:
     """重试装饰器"""
 
     def decorator(func) -> None:

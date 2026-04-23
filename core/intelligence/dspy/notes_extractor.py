@@ -165,7 +165,7 @@ class NotesDataExtractor:
 
         return meaningful_sections
 
-    def _parse_case_section(self, section: str, source_file: str) -> dict[str, Any] | None:
+    def _parse_case_section(self, section: str, source_file: str) -> Optional[dict[str, Any]]:
         """解析案例片段
 
         Args:

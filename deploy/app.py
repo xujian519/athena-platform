@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 您的AI应用入口
 Your AI Application Entry Point
@@ -37,19 +36,19 @@ async def main():
         print(f"🤖 AI: {welcome}")
 
         # 示例：专利分析
-        print(f"\n📜 示例：专利分析")
+        print("\n📜 示例：专利分析")
         patent_result = await ai_system.patent_analysis("请分析这个专利权利要求的质量")
         print(f"🤖 小娜: {patent_result[:100]}...")
 
         # 显示系统状态
         status = ai_system.get_status()
-        print(f"\n📊 系统状态:")
+        print("\n📊 系统状态:")
         print(f"   运行智能体: {status['running_agents']}/{status['total_agents']}")
         print(f"   内存使用: {status['memory_usage_mb']} MB")
         print(f"   资源效率: {status['resource_efficiency']}")
 
         # 交互模式
-        print(f"\n💬 进入交互模式 (输入 'exit' 退出)")
+        print("\n💬 进入交互模式 (输入 'exit' 退出)")
         while True:
             try:
                 user_input = input("\n👤 您: ").strip()

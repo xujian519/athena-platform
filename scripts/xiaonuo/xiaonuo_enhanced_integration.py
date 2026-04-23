@@ -1,13 +1,12 @@
-from typing import Optional
 
 # 在XiaonuoIntegratedEnhanced类中添加以下代码:
-
 from core.cognition.agentic_task_planner import AgenticTaskPlanner
-from integration.xiaonuo_planning_integration import XiaonuoPlanningIntegration
 from core.planning.unified_planning_interface import UnifiedPlanningInterface
+from integration.xiaonuo_planning_integration import XiaonuoPlanningIntegration
+
 
 class XiaonuoIntegratedEnhanced(XiaonuoEnhancedAgent):
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: Dict[str, Any] | None = None):
         super().__init__(config)
 
         # 初始化规划器相关组件

@@ -123,7 +123,7 @@ class ConfigLoader:
 
     def __init__(
         self,
-        config_path: str | None = None,
+        config_path: Optional[str] = None,
         env_prefix: str = "ATHENA_EXECUTION"
     ):
         """
@@ -381,7 +381,7 @@ _config: ExecutionConfig | None = None
 
 
 def load_config(
-    config_path: str | None = None,
+    config_path: Optional[str] = None,
     env_prefix: str = "ATHENA_EXECUTION"
 ) -> ExecutionConfig:
     """

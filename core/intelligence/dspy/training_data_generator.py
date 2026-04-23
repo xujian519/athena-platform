@@ -175,7 +175,7 @@ class TrainingDataGenerator:
         }
 
     def generate_case(
-        self, case_type: str, technical_field: str | None = None, **kwargs
+        self, case_type: str, technical_field: Optional[str] = None, **kwargs
     ) -> PatentCase:
         """生成单个案例
 

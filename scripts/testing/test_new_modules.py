@@ -4,8 +4,8 @@
 Test newly created modules
 """
 
-import sys
 import os
+import sys
 import time
 
 # 添加项目根目录到Python路径
@@ -21,7 +21,7 @@ def test_cache_module():
     # 1. 测试模块导入
     print("\n1. 测试模块导入...")
     try:
-        from core.cache import MemoryCache, RedisCache, CacheManager
+        from core.cache import CacheManager, MemoryCache, RedisCache
         print("   ✓ 所有类导入成功")
     except ImportError as e:
         print(f"   ✗ 导入失败: {e}")
@@ -39,8 +39,8 @@ def test_cache_module():
         print("   ✓ 基本set/get操作正常")
 
         # exists方法
-        assert cache.exists('test_key') == True
-        assert cache.exists('nonexistent') == False
+        assert cache.exists('test_key')
+        assert not cache.exists('nonexistent')
         print("   ✓ exists方法正常")
 
         # TTL测试
@@ -52,9 +52,9 @@ def test_cache_module():
 
         # 删除操作
         cache.set('del_key', 'del_value')
-        assert cache.exists('del_key') == True
+        assert cache.exists('del_key')
         cache.delete('del_key')
-        assert cache.exists('del_key') == False
+        assert not cache.exists('del_key')
         print("   ✓ 删除操作正常")
 
         # 批量操作
@@ -68,7 +68,7 @@ def test_cache_module():
 
         # clear操作
         cache.clear()
-        assert cache.exists('k1') == False
+        assert not cache.exists('k1')
         print("   ✓ clear操作正常")
 
     except Exception as e:
@@ -117,7 +117,7 @@ def test_cache_module():
     print("\n4. 测试 RedisCache (可选依赖)...")
     try:
         from core.cache import RedisCache
-        redis_cache = RedisCache.__new__(RedisCache)
+        RedisCache.__new__(RedisCache)
         # 不初始化Redis连接，只测试类存在
         print("   ✓ RedisCache类可用 (需要Redis服务才能完全测试)")
     except Exception as e:
@@ -136,7 +136,7 @@ def test_agents_module():
     # 1. 测试模块导入
     print("\n1. 测试模块导入...")
     try:
-        from core.agents import BaseAgent, AgentUtils, AgentResponse
+        from core.framework.agents import AgentResponse, AgentUtils, BaseAgent
         print("   ✓ 所有类导入成功")
     except ImportError as e:
         print(f"   ✗ 导入失败: {e}")
@@ -145,7 +145,6 @@ def test_agents_module():
     # 2. 测试BaseAgent抽象类
     print("\n2. 测试 BaseAgent...")
     try:
-        from abc import ABC
 
         # 创建一个具体的Agent实现
         class TestAgent(BaseAgent):
@@ -200,7 +199,7 @@ def test_agents_module():
 
         # 测试遗忘
         result = agent.forget("key1")
-        assert result == True, "遗忘失败"
+        assert result, "遗忘失败"
         assert agent.recall("key1") is None, "应该被遗忘"
         print("   ✓ 遗忘功能正常")
 
@@ -213,9 +212,9 @@ def test_agents_module():
         print("   ✓ 能力系统正常")
 
         # 测试验证方法
-        assert agent.validate_input("test") == True, "输入验证失败"
-        assert agent.validate_input("") == False, "空输入应该无效"
-        assert agent.validate_config() == True, "配置验证失败"
+        assert agent.validate_input("test"), "输入验证失败"
+        assert not agent.validate_input(""), "空输入应该无效"
+        assert agent.validate_config(), "配置验证失败"
         print("   ✓ 验证方法正常")
 
         # 测试get_info
@@ -269,16 +268,16 @@ def test_agents_module():
     try:
         # 测试成功响应
         success_resp = AgentResponse.success_response("成功", confidence=0.95)
-        assert success_resp.success == True, "应该是成功"
+        assert success_resp.success, "应该是成功"
         assert success_resp.content == "成功", "内容不对"
         assert success_resp.metadata['confidence'] == 0.95, "元数据不对"
         print("   ✓ 成功响应创建正常")
 
         # 测试错误响应
         error_resp = AgentResponse.error("出错了")
-        assert error_resp.success == False, "应该是失败"
+        assert not error_resp.success, "应该是失败"
         assert "出错了" in error_resp.content, "错误信息不对"
-        assert error_resp.metadata.get('error') == True, "错误标志不对"
+        assert error_resp.metadata.get('error'), "错误标志不对"
         print("   ✓ 错误响应创建正常")
 
         # 测试to_dict
@@ -305,9 +304,10 @@ def test_integration_fixes():
 
     print("\n1. 测试并发缓存操作...")
     try:
-        from core.cache import MemoryCache
-        from concurrent.futures import ThreadPoolExecutor
         import time
+        from concurrent.futures import ThreadPoolExecutor
+
+        from core.cache import MemoryCache
 
         def cache_operations(cache, key_prefix, num_ops):
             """执行缓存操作"""

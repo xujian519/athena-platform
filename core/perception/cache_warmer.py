@@ -207,7 +207,7 @@ class CacheWarmer:
 
     async def warmup(
         self,
-        cache_store: dict[str, Any] | None = None,
+        cache_store: Optional[dict[str, Any]] = None,
         progress_callback: Callable[..., Any] | None = None,
     ) -> WarmupResult:
         """执行预热

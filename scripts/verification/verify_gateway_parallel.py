@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Gateway架构并行运行验证脚本
 Gateway Parallel Run Verification Script
@@ -19,10 +18,10 @@ import asyncio
 import json
 import logging
 import time
+from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
-from dataclasses import dataclass, field
+from typing import Any
 
 import httpx
 import yaml
@@ -45,8 +44,8 @@ class VerificationResult:
     test_name: str
     passed: bool
     timestamp: str
-    details: Dict[str, Any] = field(default_factory=dict)
-    errors: List[str] = field(default_factory=list)
+    details: dict[str, Any] = field(default_factory=dict)
+    errors: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -55,7 +54,7 @@ class PerformanceMetrics:
     response_time: float
     status_code: int
     success: bool
-    error: Optional[str] = None
+    error: str | None = None
 
 
 # =============================================================================
@@ -73,7 +72,7 @@ class GatewayParallelVerifier:
             config_path: 配置文件路径
         """
         self.config = self._load_config(config_path)
-        self.results: List[VerificationResult] = []
+        self.results: list[VerificationResult] = []
 
         # HTTP客户端
         self.gateway_client = httpx.AsyncClient(
@@ -85,12 +84,12 @@ class GatewayParallelVerifier:
             timeout=30.0
         )
 
-    def _load_config(self, config_path: str) -> Dict:
+    def _load_config(self, config_path: str) -> dict:
         """加载配置文件"""
-        with open(config_path, 'r') as f:
+        with open(config_path) as f:
             return yaml.safe_load(f)
 
-    async def verify_all(self) -> Dict[str, Any]:
+    async def verify_all(self) -> dict[str, Any]:
         """
         执行所有验证
 
@@ -224,10 +223,9 @@ class GatewayParallelVerifier:
         try:
             # 执行性能测试
             iterations = 10
-            gateway_times = []
             legacy_times = []
 
-            for i in range(iterations):
+            for _i in range(iterations):
                 # 测试Legacy
                 start = time.time()
                 try:
@@ -297,7 +295,7 @@ class GatewayParallelVerifier:
         else:
             logger.error(f"❌ 自动回滚验证失败: {result.errors}")
 
-    def _generate_report(self) -> Dict[str, Any]:
+    def _generate_report(self) -> dict[str, Any]:
         """生成验证报告"""
         logger.info("\n📊 生成验证报告...")
 
@@ -345,7 +343,7 @@ class GatewayParallelVerifier:
 
         return report
 
-    def _generate_recommendations(self) -> List[str]:
+    def _generate_recommendations(self) -> list[str]:
         """生成建议"""
         recommendations = []
 

@@ -387,7 +387,7 @@ class GraphEnhancedReasoningEngine:
         logger.info("🧠 图谱增强推理引擎初始化完成")
 
     async def reason_with_graph(
-        self, problem: str, context: dict[str, Any] | None = None
+        self, problem: str, context: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """
         使用知识图谱增强的推理

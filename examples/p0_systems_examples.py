@@ -11,16 +11,16 @@ from __future__ import annotations
 
 import logging
 from datetime import datetime
-from typing import Dict, List, Optional
 
+from core.plugins.loader import PluginLoader as PluginLoader
+from core.plugins.registry import PluginRegistry
+
+from core.framework.memory.sessions.manager import SessionManager
+from core.framework.memory.sessions.storage import FileSessionStorage
+from core.framework.memory.sessions.types import MessageRole
 from core.skills.loader import SkillLoader
 from core.skills.registry import SkillRegistry
 from core.skills.tool_mapper import SkillToolMapper
-from core.plugins.loader import PluginLoader as PluginLoader
-from core.plugins.registry import PluginRegistry
-from core.memory.sessions.manager import SessionManager
-from core.memory.sessions.storage import FileSessionStorage
-from core.memory.sessions.types import MessageRole
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +51,7 @@ class PatentAnalysisWorkflow:
         patent_id: str,
         user_id: str,
         session_id: str,
-    ) -> Dict[str, any]:
+    ) -> dict[str, any]:
         """分析专利
 
         Args:
@@ -176,7 +176,7 @@ class MultiTurnDialogueManager:
             response = "您好！我是小娜，请问有什么可以帮助您的？"
         else:
             # 根据历史上下文生成回复
-            response = f"我理解您的需求。让我继续为您服务。"
+            response = "我理解您的需求。让我继续为您服务。"
 
         # 5. 添加助手消息
         self.session_manager.add_message(
@@ -188,7 +188,7 @@ class MultiTurnDialogueManager:
 
         return response
 
-    def get_session_summary(self, session_id: str) -> Dict[str, any]:
+    def get_session_summary(self, session_id: str) -> dict[str, any]:
         """获取会话摘要
 
         Args:
@@ -235,7 +235,7 @@ class SkillCoordinator:
         task_description: str,
         user_id: str,
         session_id: str,
-    ) -> Dict[str, any]:
+    ) -> dict[str, any]:
         """协调任务执行
 
         Args:
@@ -282,7 +282,7 @@ class SkillCoordinator:
             "conflicts": conflicts,
         }
 
-    def _analyze_task(self, task_description: str) -> List[str]:
+    def _analyze_task(self, task_description: str) -> list[str]:
         """分析任务，返回需要的技能ID
 
         Args:
@@ -370,7 +370,7 @@ class PerformanceMonitor:
 
         # 测试添加100条消息的性能
         start = time.time()
-        session = manager.create_session("perf_test", "user", "agent")
+        manager.create_session("perf_test", "user", "agent")
         for i in range(100):
             manager.add_message(
                 "perf_test",
@@ -389,7 +389,7 @@ class PerformanceMonitor:
 
         return elapsed
 
-    def get_performance_report(self) -> Dict[str, any]:
+    def get_performance_report(self) -> dict[str, any]:
         """获取性能报告
 
         Returns:
@@ -508,7 +508,7 @@ class CompleteAgent:
 
         return response
 
-    def _select_skill(self, user_input: str) -> Optional[str]:
+    def _select_skill(self, user_input: str) -> str | None:
         """选择技能
 
         Args:
@@ -544,7 +544,7 @@ class CompleteAgent:
         # 简化实现：返回技能描述
         return f"根据 {skill.name}，针对您的请求：{user_input}，我已完成相应处理。"
 
-    def get_system_stats(self) -> Dict[str, any]:
+    def get_system_stats(self) -> dict[str, any]:
         """获取系统统计信息
 
         Returns:
@@ -592,7 +592,7 @@ def main():
         session_id="chat_session_001",
         message="你好",
     )
-    print(f"用户: 你好")
+    print("用户: 你好")
     print(f"小娜: {response1}")
 
     # 第二轮对话
@@ -601,7 +601,7 @@ def main():
         session_id="chat_session_001",
         message="帮我分析专利",
     )
-    print(f"用户: 帮我分析专利")
+    print("用户: 帮我分析专利")
     print(f"小娜: {response2}")
 
     # 获取会话摘要

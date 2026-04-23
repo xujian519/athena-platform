@@ -10,10 +10,9 @@ from pathlib import Path
 def fix_all_parentheses(file_path):
     """修复文件中的所有括号问题"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
-        original_content = content
         fixes = 0
 
         # 模式1: hashlib.md5(..., usedforsecurity=False).hexdigest() -> hashlib.md5(..., usedforsecurity=False).hexdigest()
@@ -96,7 +95,7 @@ def main():
 
     for py_file in py_files:
         try:
-            with open(py_file, 'r', encoding='utf-8') as f:
+            with open(py_file, encoding='utf-8') as f:
                 content = f.read()
                 if error_pattern.search(content):
                     error_files.append(py_file)

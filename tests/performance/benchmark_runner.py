@@ -14,16 +14,13 @@ Performance Benchmark Test Suite
 创建时间: 2026-04-21
 版本: v1.0.0
 """
-from __future__ import annotations
 
-import asyncio
-import time
 import statistics
+import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Callable
-
-import pytest
+from typing import Any
 
 
 @dataclass
@@ -122,7 +119,7 @@ class PerformanceBenchmark:
 
         # 正式测试
         times = []
-        print(f"   开始测试...")
+        print("   开始测试...")
         for i in range(iterations):
             start = time.perf_counter()
             try:
@@ -209,7 +206,7 @@ class PerformanceBenchmark:
 
         # 正式测试
         times = []
-        print(f"   开始测试...")
+        print("   开始测试...")
         for i in range(iterations):
             start = time.perf_counter()
             try:
@@ -285,7 +282,7 @@ class PerformanceBenchmark:
             filepath: 报告文件路径
         """
         with open(filepath, "w", encoding="utf-8") as f:
-            f.write(f"# Athena平台性能基准测试报告\n\n")
+            f.write("# Athena平台性能基准测试报告\n\n")
             f.write(f"> **生成时间**: {datetime.now().isoformat()}\n")
             f.write(f"> **测试数量**: {len(self.results)}\n\n")
 
@@ -323,3 +320,4 @@ def get_benchmark_runner() -> PerformanceBenchmark:
     if _benchmark_runner is None:
         _benchmark_runner = PerformanceBenchmark()
     return _benchmark_runner
+

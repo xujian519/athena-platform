@@ -41,8 +41,8 @@ class VectorQuery:
     def __init__(
         self,
         vector: list[float],
-        text: str | None = None,
-        filters: dict[str, Any] | None = None,
+        text: Optional[str] = None,
+        filters: Optional[dict[str, Any]] = None,
         limit: int = 10,
         with_payload: bool = True,
         with_vectors: bool = False,
@@ -218,7 +218,7 @@ class VectorDBManager:
 
         return self.batch_search(collection_names, query)
 
-    def get_collection_info(self, collection_name: str) -> dict[str, Any] | None:
+    def get_collection_info(self, collection_name: str) -> Optional[dict[str, Any]]:
         """获取集合信息"""
         try:
             url = f"{self.qdrant_url}/collections/{collection_name}"

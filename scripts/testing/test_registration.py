@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """测试工具注册"""
 
-import sys
 import asyncio
+import sys
 
 sys.path.insert(0, "/Users/xujian/Athena工作平台")
 
+from core.tools.base import ToolCategory, ToolDefinition, ToolPriority
 from core.tools.unified_registry import get_unified_registry
-from core.tools.base import ToolDefinition, ToolCategory, ToolPriority
 
 
 async def test_bash_handler(params, context):
@@ -48,9 +47,9 @@ async def test_registration():
     print(f"  bash工具存在: {bash_tool is not None}")
     if bash_tool:
         if hasattr(bash_tool, 'handler'):
-            print(f"  有handler属性: True")
+            print("  有handler属性: True")
         elif callable(bash_tool):
-            print(f"  可调用: True")
+            print("  可调用: True")
         else:
             print(f"  类型: {type(bash_tool)}")
     print()

@@ -9,17 +9,17 @@ import time
 import pytest
 
 from core.utils.retry_utils import (
-    RetryExhaustedError,
-    RetryConfig,
-    retry_on_exception,
-    async_retry_on_exception,
-    safe_execute,
-    async_safe_execute,
+    RETRY_CONFIG_DATABASE,
     RETRY_CONFIG_FAST,
+    RETRY_CONFIG_NETWORK,
     RETRY_CONFIG_NORMAL,
     RETRY_CONFIG_SLOW,
-    RETRY_CONFIG_DATABASE,
-    RETRY_CONFIG_NETWORK,
+    RetryConfig,
+    RetryExhaustedError,
+    async_retry_on_exception,
+    async_safe_execute,
+    retry_on_exception,
+    safe_execute,
 )
 
 

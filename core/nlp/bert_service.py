@@ -35,11 +35,11 @@ class BERTModelConfig:
 
     name: str
     model_path: str
-    tokenizer_path: str | None = None
+    tokenizer_path: Optional[str] = None
     task_type: str = "feature_extraction"  # feature_extraction, classification, ner
     max_length: int = 512
     device: str = "cpu"
-    cache_dir: str | None = None
+    cache_dir: Optional[str] = None
     use_fast: bool = True
 
 
@@ -52,7 +52,7 @@ class BERTResult:
     hidden_states: list[np.ndarray] | None = None
     attentions: list[np.ndarray] | None = None
     predictions: np.ndarray | None = None  # for classification
-    confidence: float | None = None
+    confidence: Optional[float] = None
     processing_time: float = 0.0
     model_name: str = ""
 
@@ -406,7 +406,7 @@ class BERTService:
         return result
 
     async def classify_text(
-        self, text: str, model_key: str = "legal", labels: list[str] | None = None
+        self, text: str, model_key: str = "legal", labels: Optional[list[str]] = None
     ) -> dict[str, Any]:
         """
         文本分类
@@ -470,7 +470,7 @@ class BERTService:
 
         return array([])
 
-    def get_model_info(self, model_key: str | None = None) -> dict[str, Any]:
+    def get_model_info(self, model_key: Optional[str] = None) -> dict[str, Any]:
         """获取模型信息"""
         if model_key:
             if model_key in self.models:

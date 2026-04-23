@@ -64,7 +64,7 @@ class RecoveryAction:
     started_at: datetime | None = None
     completed_at: datetime | None = None
     retry_count: int = 0
-    result: dict[str, Any] | None = None
+    result: Optional[dict[str, Any]] = None
 
 
 @dataclass
@@ -85,7 +85,7 @@ class RootCause:
 class RootCauseAnalyzer:
     """根因分析器"""
 
-    def __init__(self, metrics_collector, config: dict[str, Any] | None = None):
+    def __init__(self, metrics_collector, config: Optional[dict[str, Any]] = None):
         self.metrics_collector = metrics_collector
         self.config = config or {}
         self.dependency_graph = nx.DiGraph()
@@ -374,7 +374,7 @@ class RootCauseAnalyzer:
 class AutoRecoveryEngine:
     """自动恢复引擎"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
         self.recovery_actions: dict[str, RecoveryAction] = {}
         self.action_queue = asyncio.Queue()
@@ -728,13 +728,13 @@ class AutoRecoveryEngine:
 
 # 便捷函数
 def create_root_cause_analyzer(
-    metrics_collector, config: dict[str, Any] | None = None
+    metrics_collector, config: Optional[dict[str, Any]] = None
 ) -> RootCauseAnalyzer:
     """创建根因分析器"""
     return RootCauseAnalyzer(metrics_collector, config)
 
 
-def create_auto_recovery_engine(config: dict[str, Any] | None = None) -> AutoRecoveryEngine:
+def create_auto_recovery_engine(config: Optional[dict[str, Any]] = None) -> AutoRecoveryEngine:
     """创建自动恢复引擎"""
     return AutoRecoveryEngine(config)
 

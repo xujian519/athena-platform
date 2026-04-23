@@ -47,9 +47,9 @@ class Message:
 
     role: str  # system, user, assistant, function
     content: str
-    name: str | None = None
+    name: Optional[str] = None
     tool_calls: list[dict[str, Any]] | None = None
-    tool_call_id: str | None = None
+    tool_call_id: Optional[str] = None
 
     def to_claude_format(self) -> dict[str, Any]:
         """转换为 Claude 格式"""

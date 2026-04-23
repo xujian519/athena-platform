@@ -47,7 +47,7 @@ class XiaonuoCognitionConfig:
     enable_practical_solutions: bool = True
     enable_domain_expertise: bool = True
     enable_innovation: bool = True
-    expertise_domains: list[str] | None = None
+    expertise_domains: Optional[list[str]] = None
     user_context_memory: bool = True
     solution_templates: bool = True
 
@@ -141,9 +141,9 @@ class XiaonuoCognitionEnhanced:
     async def cognize_as_xiaonuo(
         self,
         query: str,
-        user_id: str | None = None,
-        user_context: dict[str, Any] | None = None,
-        request_type: str | None = None,
+        user_id: Optional[str] = None,
+        user_context: Optional[dict[str, Any]] = None,
+        request_type: Optional[str] = None,
     ) -> dict[str, Any]:
         """小诺风格认知处理"""
         start_time = datetime.now()

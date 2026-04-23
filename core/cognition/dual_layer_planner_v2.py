@@ -70,12 +70,12 @@ class PlanStep:
     timeout: int = 300  # 超时时间(秒)
     retry_count: int = 0  # 重试次数
     max_retries: int = 3  # 最大重试次数
-    context_file: str | None = None
-    result: str | None = None
-    error: str | None = None
+    context_file: Optional[str] = None
+    result: Optional[str] = None
+    error: Optional[str] = None
     output_data: dict[str, Any] = field(default_factory=dict)
-    started_at: str | None = None
-    completed_at: str | None = None
+    started_at: Optional[str] = None
+    completed_at: Optional[str] = None
     user_notes: str = ""
     execution_mode: ExecutionMode = ExecutionMode.SEQUENTIAL
     can_parallel: bool = False  # 是否可以并行执行
@@ -246,10 +246,10 @@ class ExecutionRecord:
     action: str
     status: StepStatus
     started_at: str
-    completed_at: str | None = None
+    completed_at: Optional[str] = None
     duration: float = 0  # 执行时长(秒)
-    result: str | None = None
-    error: str | None = None
+    result: Optional[str] = None
+    error: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -664,7 +664,7 @@ class TaskExecutionEngine:
         task_id: str,
         step_id: str,
         status: StepStatus,
-        extra: dict[str, Any] | None = None,
+        extra: Optional[dict[str, Any]] = None,
     ) -> None:
         """通知进度更新"""
         if self.progress_callback:

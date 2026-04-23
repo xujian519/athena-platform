@@ -7,13 +7,12 @@ OpenClaw Content Handover Module
 """
 
 import asyncio
-from pathlib import Path
-from typing import List, Dict, Any, Optional
+import logging
+import shutil
 from dataclasses import dataclass, field
 from datetime import datetime
-import json
-import shutil
-import logging
+from pathlib import Path
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -24,8 +23,8 @@ class ArticleContent:
     title: str
     content: str  # Markdown格式
     summary: str
-    tags: List[str]
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    tags: list[str]
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -40,10 +39,10 @@ class ImageContent:
 class HandoverResult:
     """交接结果"""
     success: bool
-    article_paths: Dict[str, Path] = field(default_factory=dict)  # platform -> path
-    image_paths: List[Path] = field(default_factory=list)
+    article_paths: dict[str, Path] = field(default_factory=dict)  # platform -> path
+    image_paths: list[Path] = field(default_factory=list)
     message: str = ""
-    errors: List[str] = field(default_factory=list)
+    errors: list[str] = field(default_factory=list)
 
 
 class OpenClawHandover:
@@ -92,7 +91,7 @@ class OpenClawHandover:
         "tech": "科技风格"
     }
 
-    def __init__(self, base_path: Optional[Path] = None):
+    def __init__(self, base_path: Path | None = None):
         """
         初始化OpenClaw内容交接器
 
@@ -114,7 +113,7 @@ class OpenClawHandover:
 
     def _validate_paths(self):
         """验证并创建必要的路径"""
-        for key, path in self.PATHS.items():
+        for _key, path in self.PATHS.items():
             if not path.exists():
                 logger.warning(f"路径不存在，将自动创建: {path}")
                 path.mkdir(parents=True, exist_ok=True)
@@ -145,7 +144,7 @@ class OpenClawHandover:
         self,
         title: str,
         platform: str,
-        date: Optional[datetime] = None
+        date: datetime | None = None
     ) -> str:
         """
         生成文件名
@@ -178,9 +177,9 @@ class OpenClawHandover:
     async def handover_article(
         self,
         article: ArticleContent,
-        platforms: List[str],
-        images: Optional[List[ImageContent]] = None,
-        date: Optional[datetime] = None
+        platforms: list[str],
+        images: list[ImageContent] | None = None,
+        date: datetime | None = None
     ) -> HandoverResult:
         """
         交接文章到OpenClaw
@@ -306,8 +305,8 @@ class OpenClawHandover:
     async def _update_publish_queue(
         self,
         article: ArticleContent,
-        platforms: List[str],
-        article_paths: Dict[str, Path]
+        platforms: list[str],
+        article_paths: dict[str, Path]
     ):
         """
         更新发布队列
@@ -324,8 +323,8 @@ class OpenClawHandover:
         new_entry = f"\n## {article.title}\n\n"
         new_entry += f"- **时间**: {timestamp}\n"
         new_entry += f"- **平台**: {', '.join(platforms)}\n"
-        new_entry += f"- **状态**: 待发布\n"
-        new_entry += f"- **文件路径**:\n"
+        new_entry += "- **状态**: 待发布\n"
+        new_entry += "- **文件路径**:\n"
 
         for platform, path in article_paths.items():
             new_entry += f"  - {platform}: `{path}`\n"
@@ -342,10 +341,10 @@ class OpenClawHandover:
 
     async def batch_handover(
         self,
-        articles: List[ArticleContent],
-        platforms: List[str],
+        articles: list[ArticleContent],
+        platforms: list[str],
         generate_images: bool = False
-    ) -> List[HandoverResult]:
+    ) -> list[HandoverResult]:
         """
         批量交接文章
 
@@ -375,7 +374,7 @@ class OpenClawHandover:
 
         return results
 
-    def get_handover_status(self) -> Dict[str, Any]:
+    def get_handover_status(self) -> dict[str, Any]:
         """
         获取交接状态
 
@@ -408,10 +407,10 @@ class OpenClawHandover:
 async def handover_to_openclaw(
     title: str,
     content: str,
-    platforms: List[str],
+    platforms: list[str],
     summary: str = "",
-    tags: Optional[List[str]] = None,
-    images: Optional[List[Path]] = None
+    tags: list[str] | None = None,
+    images: list[Path] | None = None
 ) -> HandoverResult:
     """
     便捷函数：交接文章到OpenClaw
@@ -462,7 +461,7 @@ if __name__ == "__main__":
 
         # 测试状态获取
         status = handover.get_handover_status()
-        print(f"\n📊 交接状态:")
+        print("\n📊 交接状态:")
         print(f"   OpenClaw路径: {status['openclaw_path']}")
         print(f"   可用状态: {status['available']}")
         print(f"   支持平台: {', '.join(status['platforms'])}")
@@ -470,7 +469,7 @@ if __name__ == "__main__":
         print(f"   文章统计: {status['article_counts']}")
 
         # 测试文章交接
-        print(f"\n📝 测试文章交接...")
+        print("\n📝 测试文章交接...")
 
         test_article = ArticleContent(
             title="专利申请流程详解",
@@ -514,7 +513,7 @@ if __name__ == "__main__":
             platforms=["微信公众号", "小红书"]
         )
 
-        print(f"\n✅ 交接结果:")
+        print("\n✅ 交接结果:")
         print(f"   成功: {result.success}")
         print(f"   消息: {result.message}")
         print(f"   文章路径: {result.article_paths}")

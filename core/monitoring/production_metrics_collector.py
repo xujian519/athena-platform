@@ -544,7 +544,7 @@ class ProductionMetricsCollector:
 
         return generate_latest(self.registry).decode("utf-8")
 
-    def record_request(self, service: str, status: str, duration: float | None = None):
+    def record_request(self, service: str, status: str, duration: Optional[float] = None):
         """记录请求指标"""
         if self.enable_prometheus:
             self.system_request_rate.labels(service=service, status=status).inc()

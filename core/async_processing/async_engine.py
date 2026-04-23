@@ -59,17 +59,17 @@ class AsyncTask:
     priority: TaskPriority = TaskPriority.NORMAL  # 优先级
     status: TaskStatus = TaskStatus.PENDING  # 状态
     created_at: float = field(default_factory=time.time)  # 创建时间
-    started_at: float | None = None  # 开始时间
-    completed_at: float | None = None  # 完成时间
+    started_at: Optional[float] = None  # 开始时间
+    completed_at: Optional[float] = None  # 完成时间
     result: Any = None  # 结果
-    error: str | None = None  # 错误
+    error: Optional[str] = None  # 错误
     retries: int = 0  # 重试次数
     max_retries: int = 3  # 最大重试次数
-    timeout: float | None = None  # 超时时间(秒)
+    timeout: Optional[float] = None  # 超时时间(秒)
     metadata: dict[str, Any] = field(default_factory=dict)  # 元数据
 
     @property
-    def duration(self) -> float | None:
+    def duration(self) -> Optional[float]:
         """执行时长"""
         if self.started_at and self.completed_at:
             return self.completed_at - self.started_at
@@ -112,7 +112,7 @@ class AsyncTaskQueue:
         self._lock = threading.RLock()
         self._not_empty = threading.Condition(self._lock)
 
-    def put(self, task: AsyncTask, block: bool = True, timeout: float | None = None) -> bool:
+    def put(self, task: AsyncTask, block: bool = True, timeout: Optional[float] = None) -> bool:
         """
         添加任务到队列
 
@@ -147,7 +147,7 @@ class AsyncTaskQueue:
             logger.debug(f"任务加入队列: {task.name} (优先级: {task.priority.name})")
             return True
 
-    def get(self, block: bool = True, timeout: float | None = None) -> AsyncTask | None:
+    def get(self, block: bool = True, timeout: Optional[float] = None) -> AsyncTask | None:
         """
         从队列获取任务
 
@@ -240,7 +240,7 @@ class AsyncProcessor:
         self._worker_thread.start()
         logger.info("🚀 异步处理器已启动")
 
-    def stop(self, wait: bool = True, timeout: float | None = None) -> None:
+    def stop(self, wait: bool = True, timeout: Optional[float] = None) -> None:
         """
         停止异步处理器
 
@@ -265,9 +265,9 @@ class AsyncProcessor:
         kwargs: dict | None = None,
         name: str = "",
         priority: TaskPriority = TaskPriority.NORMAL,
-        timeout: float | None = None,
+        timeout: Optional[float] = None,
         max_retries: int = 3,
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> str:
         """
         提交任务
@@ -310,7 +310,7 @@ class AsyncProcessor:
             logger.error(f"任务队列已满,无法提交任务: {task.name}")
             raise queue.Full("任务队列已满")
 
-    def get_task_status(self, task_id: str) -> dict[str, Any] | None:
+    def get_task_status(self, task_id: str) -> Optional[dict[str, Any]]:
         """获取任务状态"""
         with self._lock:
             # 检查活动任务
@@ -638,7 +638,7 @@ class AsyncAPIClient:
     async def get(
         self,
         endpoint: str,
-        params: dict[str, Any] | None = None,
+        params: Optional[dict[str, Any]] = None,
         headers: dict[str, str] | None = None,
     ) -> dict[str, Any]:
         """
@@ -662,8 +662,8 @@ class AsyncAPIClient:
     async def post(
         self,
         endpoint: str,
-        data: dict[str, Any] | None = None,
-        json: dict[str, Any] | None = None,
+        data: Optional[dict[str, Any]] = None,
+        json: Optional[dict[str, Any]] = None,
         headers: dict[str, str] | None = None,
     ) -> dict[str, Any]:
         """
@@ -695,7 +695,7 @@ class AsyncAPIClient:
 def async_task(
     name: str = "",
     priority: TaskPriority = TaskPriority.NORMAL,
-    timeout: float | None = None,
+    timeout: Optional[float] = None,
     max_retries: int = 3,
 ):
     """

@@ -73,7 +73,7 @@ class ModelAPICapabilities:
     supports_streaming: bool = True
     streaming_includes_usage: bool = True    # 流式响应是否包含 usage
 
-    def get_temperature(self) -> Optional[float]:
+    def get_temperature(self) -> float | None:
         """根据能力返回合适的温度值"""
         if self.temperature_mode == 'fixed_one':
             return None  # 不设置温度，让API使用默认值

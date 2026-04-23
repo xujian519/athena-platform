@@ -36,8 +36,8 @@ class PatentResult:
     filing_date: str = ''
     publication_date: str = ''
     priority_date: str = ''
-    inventors: Optional[List[str] = None
-    ipc_codes: Optional[List[str] = None
+    inventors: Optional[List[str]] = None
+    ipc_codes: Optional[List[str]] = None
     source: str = 'browser_retrieval'
     extracted_at: str = ''
 

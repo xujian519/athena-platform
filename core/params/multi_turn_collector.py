@@ -45,7 +45,7 @@ class ParameterRequirement:
     param_type: str  # 参数类型
     required: bool = True  # 是否必需
     default_value: Any = None  # 默认值
-    validation_pattern: str | None = None  # 验证正则
+    validation_pattern: Optional[str] = None  # 验证正则
     description: str = ""  # 参数描述
     examples: list[str] = field(default_factory=list)  # 示例值
     dependencies: list[str] = field(default_factory=list)  # 依赖的其他参数
@@ -72,7 +72,7 @@ class CollectionQuestion:
     question_text: str
     parameter_name: str
     priority: int = 1  # 优先级(1-10)
-    options: list[str] | None = None  # 选项
+    options: Optional[list[str]] = None  # 选项
     hints: list[str] = field(default_factory=list)  # 提示信息
 
 
@@ -215,7 +215,7 @@ class MultiTurnParameterCollector:
         logger.debug(f"注册意图参数映射: {intent} -> {parameters}")
 
     async def collect_parameters(
-        self, intent: str, user_input: str, context: dict[str, Any] | None = None
+        self, intent: str, user_input: str, context: Optional[dict[str, Any]] = None
     ) -> CollectionResult:
         """
         收集参数

@@ -63,7 +63,7 @@ class SystemInfo:
     total_memory_gb: float
     available_memory_gb: float
     cpu_count: int
-    gpu_memory_gb: float | None = None
+    gpu_memory_gb: Optional[float] = None
 
     @property
     def memory_usage_percent(self) -> float:
@@ -382,8 +382,8 @@ class LayerOffloadManager:
 
     def optimize_for_inference(
         self,
-        max_memory_gb: float | None = None,
-        target_tokens_per_second: float | None = None
+        max_memory_gb: Optional[float] = None,
+        target_tokens_per_second: Optional[float] = None
     ) -> OffloadConfig:
         """
         针对推理优化配置
@@ -519,7 +519,7 @@ def analyze_model_offloading(
 def get_optimal_config(
     model_name: str,
     quantization: str = "q4_k_m",
-    strategy: str | None = None
+    strategy: Optional[str] = None
 ) -> OffloadConfig:
     """
     获取最优配置

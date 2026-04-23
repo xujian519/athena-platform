@@ -32,7 +32,7 @@ class CSRFProtection:
 
     def __init__(
         self,
-        secret: str | None = None,
+        secret: Optional[str] = None,
         token_age: int = 3600,
         cookie_name: str = "csrf_token",
         header_name: str = "X-CSRF-Token",
@@ -174,7 +174,7 @@ class CSRFProtection:
         return await call_next(request)
 
 
-def get_csrf_token(request: Request) -> str | None:
+def get_csrf_token(request: Request) -> Optional[str]:
     """
     从请求中获取CSRF token
 

@@ -33,7 +33,7 @@ class PerformanceMetrics:
 class PerformanceOptimizer:
     """性能优化器"""
 
-    def __init__(self, config_path: str | None = None):
+    def __init__(self, config_path: Optional[str] = None):
         """
         初始化性能优化器
 
@@ -403,7 +403,7 @@ class PerformanceOptimizer:
 
         return cleanup_results
 
-    def export_metrics(self, file_path: str | None = None) -> str:
+    def export_metrics(self, file_path: Optional[str] = None) -> str:
         """导出性能指标"""
         if file_path is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")

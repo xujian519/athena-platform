@@ -70,10 +70,10 @@ class SerperSearchRequest:
     num_results: int = 10
     page: int = 1
     # 高级参数
-    gl: str | None = None  # 地区 (如: cn, us)
-    hl: str | None = None  # 语言 (如: zh-CN, en)
-    start: int | None = None  # 起始位置
-    filter: int | None = None  # 过滤重复结果
+    gl: Optional[str] = None  # 地区 (如: cn, us)
+    hl: Optional[str] = None  # 语言 (如: zh-CN, en)
+    start: Optional[int] = None  # 起始位置
+    filter: Optional[int] = None  # 过滤重复结果
 
 
 @dataclass
@@ -87,7 +87,7 @@ class SerperSearchResult:
     results: list[dict[str, Any]]
     search_time: float
     api_credits_used: int = 1
-    error_message: str | None = None
+    error_message: Optional[str] = None
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
 
 
@@ -174,7 +174,7 @@ class SerperAPIManager:
             logger.info("🔌 Serper HTTP 会话已关闭")
 
     async def search(
-        self, request: SerperSearchRequest, use_cache: bool | None = None
+        self, request: SerperSearchRequest, use_cache: Optional[bool] = None
     ) -> SerperSearchResult:
         """
         执行搜索
@@ -499,7 +499,7 @@ class SerperAPIManager:
 
 # 工厂函数
 async def create_serper_manager(
-    api_key: str | None = None, config: SerperConfig | None = None
+    api_key: Optional[str] = None, config: SerperConfig | None = None
 ) -> SerperAPIManager:
     """
     创建并初始化 Serper API 管理器

@@ -394,7 +394,7 @@ class APIKeyManager:
         logger.info(f"为用户 {user_id} 生成API Key: {name}")
         return key
 
-    def verify_api_key(self, api_key: str) -> dict[str, Any] | None:
+    def verify_api_key(self, api_key: str) -> Optional[dict[str, Any]]:
         """
         验证API Key
 

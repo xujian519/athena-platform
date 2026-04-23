@@ -78,7 +78,7 @@ class MultimodalIntegrationService:
 
         return True
 
-    async def upload_file(self, file_path: str, description: str | None = None) -> dict[str, Any]:
+    async def upload_file(self, file_path: str, description: Optional[str] = None) -> dict[str, Any]:
         """
         上传文件到多模态系统
 
@@ -152,7 +152,7 @@ class MultimodalIntegrationService:
             logger.error(f"查询文件信息异常: {e}")
             return {"success": False, "error": str(e)}
 
-    async def list_files(self, file_type: str | None = None, limit: int = 100) -> dict[str, Any]:
+    async def list_files(self, file_type: Optional[str] = None, limit: int = 100) -> dict[str, Any]:
         """
         列出文件
 
@@ -186,7 +186,7 @@ class MultimodalIntegrationService:
             logger.error(f"获取文件列表异常: {e}")
             return {"success": False, "error": str(e)}
 
-    async def download_file(self, file_id: str, save_path: str | None = None) -> dict[str, Any]:
+    async def download_file(self, file_id: str, save_path: Optional[str] = None) -> dict[str, Any]:
         """
         下载文件
 
@@ -277,7 +277,7 @@ class MultimodalIntegrationService:
             return {"success": False, "status": "error", "error": str(e)}
 
     async def batch_upload(
-        self, file_paths: list[str], descriptions: list[str] | None = None
+        self, file_paths: list[str], descriptions: Optional[list[str]] = None
     ) -> list[dict[str, Any]]:
         """
         批量上传文件

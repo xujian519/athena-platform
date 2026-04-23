@@ -6,10 +6,11 @@
 import re
 from pathlib import Path
 
+
 def fix_file(file_path: Path) -> tuple[bool, str]:
     """修复单个文件的语法错误"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         original_content = content
@@ -32,27 +33,27 @@ def fix_file(file_path: Path) -> tuple[bool, str]:
             if re.search(r'->\s*tuple\[str,\s*list\[str\]:\s*$', line):
                 line = re.sub(
                     r'tuple\[str,\s*list\[str\]:\s*$',
-                    'tuple[str, list[str]]:',
+                    'tuple[str, list[str]:',
                     line
                 )
                 if line != original_line:
-                    fix_type = "tuple[str, list[str]]"
+                    fix_type = "tuple[str, list[str]"
 
             # 模式3: list[dict[str, Any]): (缺少右方括号)
             if re.search(r'list\[dict\[str,\s*Any\]):\s*$', line):
                 line = line.sub(
                     r'list\[dict\[str,\s*Any\]):\s*$',
-                    'list[dict[str, Any]]):',
+                    'list[dict[str, Any]):',
                     line
                 )
                 if line != original_line:
-                    fix_type = "list[dict[str, Any]]"
+                    fix_type = "list[dict[str, Any]"
 
-            # 模式4: -> list[dict[str, Any]]: (缺少左括号)
-            if re.search(r'->\s*list\[dict\[str,\s*Any\]]:\s*$', line):
+            # 模式4: -> list[dict[str, Any]: (缺少左括号)
+            if re.search(r'->\s*list\[dict\[str,\s*Any\]:\s*$', line):
                 # 需要检查参数列表是否正确闭合
                 line = re.sub(
-                    r'\w+:\s*list\[dict\[str,\s*Any\]]:\s*$',
+                    r'\w+:\s*list\[dict\[str,\s*Any\]:\s*$',
                     lambda m: m.group(0).replace(']:', ']):'),
                     line
                 )
@@ -125,7 +126,7 @@ def main():
                 fixed_count += 1
                 print(f"✓ 修复: {py_file} ({fix_type})")
 
-    print(f"\n修复完成!")
+    print("\n修复完成!")
     print(f"修复文件数: {fixed_count}")
 
 if __name__ == "__main__":

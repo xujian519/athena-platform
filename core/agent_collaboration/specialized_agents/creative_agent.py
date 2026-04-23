@@ -36,7 +36,7 @@ class CreativeAgent(BaseAgent):
     """创意Agent - 创新思维专家"""
 
     def __init__(
-        self, agent_id: str = "creative_agent_001", config: dict[str, Any] | None = None
+        self, agent_id: str = "creative_agent_001", config: Optional[dict[str, Any]] = None
     ):
         super().__init__(
             agent_id=agent_id,

@@ -26,8 +26,8 @@ class TaskScheduler:
 
     def __init__(self):
         """初始化调度器"""
-        self._queue: List[Tuple[int, TaskInfo]] = []  # 优先级队列
-        self._task_map: Dict[str, TaskInfo] = {}  # 任务映射
+        self._queue: list[tuple[int, TaskInfo]] = []  # 优先级队列
+        self._task_map: dict[str, TaskInfo] = {}  # 任务映射
         self._priority_map = {
             TaskPriority.CRITICAL: 0,
             TaskPriority.HIGH: 1,
@@ -111,7 +111,7 @@ class TaskScheduler:
         """获取队列大小"""
         return len(self._queue)
 
-    async def get_queue_status(self) -> Dict[str, int]:
+    async def get_queue_status(self) -> dict[str, int]:
         """获取队列状态"""
         # 统计各优先级的任务数量
         priority_counts = {p: 0 for p in TaskPriority}

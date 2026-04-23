@@ -23,8 +23,9 @@ async def main():
     try:
         # 初始化提示词系统
         try:
-            from core.agents.prompts.xiaona_prompts import get_system_prompt
-            from core.prompts.output_styles import get_style_manager
+            from core.framework.agents.prompts.xiaona_prompts import get_system_prompt
+
+            from core.ai.prompts.output_styles import get_style_manager
 
             # 预热输出风格管理器
             style_mgr = get_style_manager()
@@ -39,14 +40,14 @@ async def main():
 
         # 初始化声明式 Agent
         try:
-            from core.agents.declarative import load_all_agents
+            from core.framework.agents.declarative import load_all_agents
             definitions = load_all_agents()
             logger.info(f"声明式 Agent 已加载: {list(definitions.keys())}")
         except Exception as e:
             logger.warning(f"声明式 Agent 加载跳过: {e}")
 
         # 导入小娜智能体
-        from core.agents.xiaona_professional import XiaonaProfessionalAgent
+        from core.framework.agents.xiaona_professional import XiaonaProfessionalAgent
 
         # 初始化小娜（使用config字典）
         config = {

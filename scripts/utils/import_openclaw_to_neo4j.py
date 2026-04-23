@@ -7,7 +7,6 @@ OpenClaw图谱导入脚本
 
 import logging
 import time
-from typing import Dict, List, Optional
 
 import psycopg2
 from neo4j import GraphDatabase
@@ -128,7 +127,6 @@ class OpenClawGraphImporter:
         pg_cursor = self.pg_conn.cursor()
         pg_cursor.execute(query)
 
-        batch = []
         total_count = 0
 
         with self.neo4j_driver.session() as session:

@@ -31,10 +31,10 @@ class LLMRequest:
     """LLM请求"""
 
     prompt: str
-    system_message: str | None = None
+    system_message: Optional[str] = None
     temperature: float = 0.7
     max_tokens: int = 2000
-    model: str | None = None
+    model: Optional[str] = None
     provider: LLMProvider | None = None
     enable_cache: bool = True
 
@@ -55,7 +55,7 @@ class LLMResponse:
 class AthenaLLMService:
     """Athena统一LLM服务(增强版)"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化LLM服务
 
@@ -324,7 +324,7 @@ class AthenaLLMService:
 _llm_service: AthenaLLMService | None = None
 
 
-def get_athena_llm_service(config: dict[str, Any] | None = None) -> AthenaLLMService:
+def get_athena_llm_service(config: Optional[dict[str, Any]] = None) -> AthenaLLMService:
     """获取Athena LLM服务实例"""
     global _llm_service
     if _llm_service is None:

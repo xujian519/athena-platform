@@ -4,13 +4,11 @@
 用于专利无效分析中的证据筛选
 """
 
-import os
-import re
 import json
-from pathlib import Path
+import re
 from datetime import datetime
-from typing import Dict, List, Any, Tuple
-from collections import Counter
+from pathlib import Path
+from typing import Any
 
 
 class PatentRelevanceAnalyzer:
@@ -40,14 +38,14 @@ class PatentRelevanceAnalyzer:
         # 加载所有专利特征
         self.patents = self._load_patents()
 
-    def _load_patents(self) -> List[Dict]:
+    def _load_patents(self) -> list[dict]:
         """加载所有专利特征"""
         patents = []
         feature_files = list(self.features_dir.glob("*_features.json"))
 
         for feature_file in feature_files:
             try:
-                with open(feature_file, 'r', encoding='utf-8') as f:
+                with open(feature_file, encoding='utf-8') as f:
                     data = json.load(f)
                     patents.append(data)
             except Exception as e:
@@ -55,7 +53,7 @@ class PatentRelevanceAnalyzer:
 
         return patents
 
-    def calculate_ipc_similarity(self, patent: Dict) -> float:
+    def calculate_ipc_similarity(self, patent: dict) -> float:
         """计算IPC分类相似度"""
         patent_ipc = patent["info"].get("ipc_classification", "")
 
@@ -81,13 +79,13 @@ class PatentRelevanceAnalyzer:
 
         return 0.0
 
-    def calculate_keyword_similarity(self, patent: Dict) -> float:
+    def calculate_keyword_similarity(self, patent: dict) -> float:
         """计算关键词相似度"""
         sections = patent.get("sections", {})
         all_text = ""
 
         # 合并所有section的文本
-        for section_name, section_text in sections.items():
+        for _section_name, section_text in sections.items():
             if section_text:
                 all_text += section_text + " "
 
@@ -109,7 +107,7 @@ class PatentRelevanceAnalyzer:
 
         return min(similarity, 1.0)
 
-    def calculate_structure_similarity(self, patent: Dict) -> float:
+    def calculate_structure_similarity(self, patent: dict) -> float:
         """计算结构相似度"""
         sections = patent.get("sections", {})
         claims_text = sections.get("claims", "")
@@ -136,7 +134,7 @@ class PatentRelevanceAnalyzer:
 
         return min(similarity, 1.0)
 
-    def calculate_technical_effect_similarity(self, patent: Dict) -> float:
+    def calculate_technical_effect_similarity(self, patent: dict) -> float:
         """计算技术效果相似度"""
         sections = patent.get("sections", {})
         summary = sections.get("summary", "")
@@ -156,7 +154,7 @@ class PatentRelevanceAnalyzer:
 
         return match_count / len(target_effects)
 
-    def check_time_window(self, patent: Dict) -> bool:
+    def check_time_window(self, patent: dict) -> bool:
         """检查时间窗口"""
         application_date = patent["info"].get("application_date", "")
 
@@ -178,7 +176,7 @@ class PatentRelevanceAnalyzer:
         # 专利申请日必须早于目标专利
         return patent_date < target_date
 
-    def calculate_overall_relevance(self, patent: Dict) -> Dict[str, Any]:
+    def calculate_overall_relevance(self, patent: dict) -> dict[str, Any]:
         """计算综合相关性得分"""
         # 各维度得分
         ipc_score = self.calculate_ipc_similarity(patent)
@@ -224,7 +222,7 @@ class PatentRelevanceAnalyzer:
             "relevance_level": self._get_relevance_level(overall_score)
         }
 
-    def _extract_patent_name(self, patent: Dict) -> str:
+    def _extract_patent_name(self, patent: dict) -> str:
         """提取专利名称"""
         sections = patent.get("sections", {})
         abstract = sections.get("abstract", "")
@@ -237,12 +235,12 @@ class PatentRelevanceAnalyzer:
 
         return patent["info"].get("patent_name", "-")
 
-    def _extract_applicant(self, patent: Dict) -> str:
+    def _extract_applicant(self, patent: dict) -> str:
         """提取申请人"""
         # 尝试从特征中提取
         return patent["info"].get("applicant", "-")
 
-    def _extract_key_features(self, patent: Dict) -> List[str]:
+    def _extract_key_features(self, patent: dict) -> list[str]:
         """提取关键特征"""
         features = []
         sections = patent.get("sections", {})
@@ -289,7 +287,7 @@ class PatentRelevanceAnalyzer:
         else:
             return "无相关"
 
-    def analyze_all(self) -> List[Dict]:
+    def analyze_all(self) -> list[dict]:
         """分析所有专利"""
         print(f"\n🔍 开始分析 {len(self.patents)} 篇专利...")
 
@@ -319,7 +317,7 @@ class PatentRelevanceAnalyzer:
 
         return table
 
-    def save_analysis_results(self, results: List[Dict]):
+    def save_analysis_results(self, results: list[dict]):
         """保存分析结果"""
         # 保存JSON
         json_path = self.output_dir / "relevance_analysis.json"
@@ -331,11 +329,11 @@ class PatentRelevanceAnalyzer:
         with open(md_path, 'w', encoding='utf-8') as f:
             f.write(self._generate_markdown_report(results))
 
-        print(f"\n✅ 分析结果已保存:")
+        print("\n✅ 分析结果已保存:")
         print(f"   - JSON: {json_path}")
         print(f"   - Markdown: {md_path}")
 
-    def _generate_markdown_report(self, results: List[Dict]) -> str:
+    def _generate_markdown_report(self, results: list[dict]) -> str:
         """生成Markdown报告"""
         report = f"""# 专利相关性分析报告
 
@@ -417,7 +415,7 @@ def main():
     print("\n" + "=" * 60)
     print("📊 分析完成！")
     print("=" * 60)
-    print(f"\nTop 10 最高相关专利:")
+    print("\nTop 10 最高相关专利:")
     for i, result in enumerate(results[:10], 1):
         print(f"  {i}. {result['patent_number']} - 得分: {result['scores']['overall']}% - {result['relevance_level']}")
 

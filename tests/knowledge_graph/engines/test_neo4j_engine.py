@@ -5,26 +5,25 @@
 验证合并后的引擎功能完整性
 """
 
-import pytest
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import MagicMock, patch
 
+import pytest
 from core.kg_unified.engines.neo4j_engine import (
-    Neo4jEngine,
-    Neo4jConfig,
+    GraphClient,
+    GraphEdge,
+    GraphNode,
     GraphType,
     JudgmentNodeType,
-    GraphNode,
-    GraphEdge,
-    GraphClient,
     NebulaGraphClient,
+    Neo4jConfig,
+    Neo4jEngine,
     Neo4jJudgmentClient,
+    _import_neo4j,
+    get_graph_client,
+    get_neo4j_client,
     # 便捷函数
     get_neo4j_engine,
-    get_neo4j_client,
-    get_graph_client,
-    _import_neo4j,
 )
-
 
 # =============================================================================
 # 配置测试

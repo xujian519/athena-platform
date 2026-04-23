@@ -93,7 +93,7 @@ class TaskResult:
     task_id: str
     status: TaskStatus
     result: Optional[Dict[str, Any]] = None
-    error: str | None = None
+    error: Optional[str] = None
     execution_time: float = 0.0
     metadata: Dict[str, Any] = field(default_factory=dict)
     completed_at: datetime = field(default_factory=datetime.now)

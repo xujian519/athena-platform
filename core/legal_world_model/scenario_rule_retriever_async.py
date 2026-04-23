@@ -175,7 +175,7 @@ class AsyncScenarioRuleRetriever:
         if self.enable_preload and self.preload_on_init:
             asyncio.create_task(self.preload_common_rules_async())
 
-    def _get_cache_key(self, domain: str, task_type: str, phase: str | None = None) -> str:
+    def _get_cache_key(self, domain: str, task_type: str, phase: Optional[str] = None) -> str:
         """生成缓存键"""
         return f"{domain}:{task_type}:{phase or 'any'}"
 
@@ -201,7 +201,7 @@ class AsyncScenarioRuleRetriever:
         self._cache[cache_key] = (data, datetime.now())
 
     async def retrieve_rule(
-        self, domain: str, task_type: str, phase: str | None = None
+        self, domain: str, task_type: str, phase: Optional[str] = None
     ) -> ScenarioRule | None:
         """
         异步检索场景规则
@@ -352,7 +352,7 @@ class AsyncScenarioRuleRetriever:
             )
 
     async def batch_retrieve_rules(
-        self, queries: list[tuple[str, str, str]]) -> list[ScenarioRule | None]:
+        self, queries: list[tuple[str, str, str]]) -> Optional[list[ScenarioRule]]:
         """
         批量检索规则(解决N+1查询问题)
 

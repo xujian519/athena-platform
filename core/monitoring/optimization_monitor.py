@@ -76,7 +76,7 @@ class MetricsCollector:
             self._metrics[metric_name].append(point)
 
     def get_metric(
-        self, metric_name: str, duration_seconds: int | None = None
+        self, metric_name: str, duration_seconds: Optional[int] = None
     ) -> list[MetricPoint]:
         """
         获取指标数据
@@ -102,7 +102,7 @@ class MetricsCollector:
 
     def get_aggregated(
         self, metric_name: str, duration_seconds: int = 300, aggregation: str = "avg"
-    ) -> float | None:
+    ) -> Optional[float]:
         """
         获取聚合指标
 
@@ -285,7 +285,7 @@ class AlertManager:
 class OptimizationMonitor:
     """优化系统监控器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化监控器
 
@@ -588,7 +588,7 @@ _monitor_instance: OptimizationMonitor | None = None
 _monitor_lock = Lock()
 
 
-def get_optimization_monitor(config: dict[str, Any] | None = None) -> OptimizationMonitor:
+def get_optimization_monitor(config: Optional[dict[str, Any]] = None) -> OptimizationMonitor:
     """
     获取优化监控器单例
 

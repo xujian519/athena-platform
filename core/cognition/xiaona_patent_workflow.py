@@ -44,9 +44,9 @@ class PatentAnalysisRequest:
     user_requirements: list[str] = field(default_factory=list)
     priority: str = "normal"  # high, normal, low
     target_jurisdiction: str = "中国"
-    deadline_requirement: str | None = None
-    existing_art: str | None = None
-    background_art: str | None = None
+    deadline_requirement: Optional[str] = None
+    existing_art: Optional[str] = None
+    background_art: Optional[str] = None
     specific_questions: list[str] = field(default_factory=list)
 
 
@@ -760,7 +760,7 @@ async def analyze_patent_with_experts(
     invention_title: str,
     technology_field: str,
     invention_description: str,
-    user_requirements: list[str] | None = None,
+    user_requirements: Optional[list[str]] = None,
 ) -> PatentAnalysisResult:
     """便捷的专利分析函数"""
     workflow = XiaonaPatentWorkflow()

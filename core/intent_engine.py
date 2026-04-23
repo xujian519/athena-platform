@@ -240,7 +240,7 @@ class IntentRecognitionEngine:
         }
 
     async def recognize_intent(
-        self, text: str, context: dict[str, Any] | None = None
+        self, text: str, context: Optional[dict[str, Any]] = None
     ) -> IntentResult:
         """
         识别用户意图
@@ -713,7 +713,7 @@ intent_engine = IntentRecognitionEngine()
 
 # 导出的便捷函数
 async def recognize_user_intent(
-    text: str, context: dict[str, Any] | None = None
+    text: str, context: Optional[dict[str, Any]] = None
 ) -> IntentResult:
     """便捷函数:识别用户意图"""
     return await intent_engine.recognize_intent(text, context)

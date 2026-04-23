@@ -173,7 +173,7 @@ class SimpleComponentManager:
                     """)
                     scenarios = {}
                     for record in result:
-                        scenarios[record["domain"]] = record["task_types"]
+                        scenarios[record["domain"] = record["task_types"]
                     return scenarios
 
         return SimpleScenarioRuleRetriever()

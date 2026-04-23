@@ -9,6 +9,7 @@ Fix Python Type Annotation Syntax Errors
 import re
 from pathlib import Path
 
+
 def fix_syntax_errors(file_path: Path) -> int:
     """修复单个文件的语法错误，返回修复数量"""
     try:
@@ -19,7 +20,7 @@ def fix_syntax_errors(file_path: Path) -> int:
         replacements = [
             # Optional[dict | None = None] -> Optional[dict] | None = None
             (r'Optional\[dict \| None = None\]', 'Optional[dict] | None = None'),
-            (r'Optional\[list\[str\] \| None\]', 'Optional[list[str]] | None'),
+            (r'Optional\[list\[str\] \| None\]', 'Optional[list[str] | None'),
 
             # dict[str, Any] | None = None] -> dict[str, Any] | None = None
             (r'dict\[str, Any\] \| None = None\]', 'dict[str, Any] | None = None'),
@@ -72,7 +73,7 @@ def main():
             print(f"✅ 已修复: {py_file.relative_to(core_path.parent)}")
 
     print("=" * 60)
-    print(f"📊 扫描完成:")
+    print("📊 扫描完成:")
     print(f"   - 检查文件: {checked_count}")
     print(f"   - 修复文件: {fixed_count}")
 

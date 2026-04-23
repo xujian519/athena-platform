@@ -93,7 +93,7 @@ class Alert:
     level: AlertLevel
     title: str
     message: str
-    tool_name: str | None = None
+    tool_name: Optional[str] = None
     metric_point: MetricPoint | None = None
     created_at: datetime = field(default_factory=datetime.now)
     acknowledged: bool = False

@@ -26,10 +26,10 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from core.perception import InputType, TextProcessor
-from core.perception.monitoring import PerformanceMonitor
-from core.perception.performance_optimizer import PerformanceOptimizer
-from core.perception.streaming_perception_processor import StreamConfig, StreamType
+from core.ai.perception import InputType, TextProcessor
+from core.ai.perception.monitoring import PerformanceMonitor
+from core.ai.perception.performance_optimizer import PerformanceOptimizer
+from core.ai.perception.streaming_perception_processor import StreamConfig, StreamType
 
 logger = logging.getLogger(__name__)
 
@@ -102,7 +102,7 @@ class TestStreamingIntegration:
 
     async def test_streaming_to_batch_conversion(self):
         """测试流式到批处理的转换"""
-        from core.perception.streaming_perception_processor import (
+        from core.ai.perception.streaming_perception_processor import (
             StreamingPerceptionEngine,
         )
 
@@ -129,7 +129,7 @@ class TestStreamingIntegration:
 
     async def test_streaming_with_caching(self):
         """测试流式处理与缓存的集成"""
-        from core.perception.streaming_perception_processor import (
+        from core.ai.perception.streaming_perception_processor import (
             StreamingPerceptionEngine,
         )
 

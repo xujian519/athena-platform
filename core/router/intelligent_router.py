@@ -46,8 +46,8 @@ class ClientTaskRequest(BaseModel):
 class LocalProcessingData(BaseModel):
     """本地预处理数据"""
 
-    ocr: dict[str, Any] | None = None
-    image_understanding: dict[str, Any] | None = None
+    ocr: Optional[dict[str, Any]] = None
+    image_understanding: Optional[dict[str, Any]] = None
 
 
 class RouteDecision(BaseModel):

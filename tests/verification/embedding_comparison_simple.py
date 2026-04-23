@@ -93,7 +93,7 @@ class SimpleEmbeddingComparison:
         logger.info("🧪 测试BGE-M3嵌入模型")
 
         try:
-            from core.embedding.unified_embedding_service import get_unified_embedding_service
+            from core.ai.embedding.unified_embedding_service import get_unified_embedding_service
 
             service = await get_unified_embedding_service()
 
@@ -115,7 +115,7 @@ class SimpleEmbeddingComparison:
         logger.info("🧪 测试PatentSBERTa嵌入模型")
 
         try:
-            from core.embedding.patent_sberta_encoder import get_patent_encoder
+            from core.ai.embedding.patent_sberta_encoder import get_patent_encoder
 
             encoder = get_patent_encoder(use_patent_sberta=True, fallback=True)
 

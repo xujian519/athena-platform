@@ -100,7 +100,7 @@ class AgentContext:
         """
         return self.agent_call_chain.copy()
 
-    def get_last_agent(self) -> str | None:
+    def get_last_agent(self) -> Optional[str]:
         """
         获取调用的最后一个Agent
 
@@ -119,7 +119,7 @@ class AgentContext:
         if memory_id not in self.memory_references:
             self.memory_references.append(memory_id)
 
-    def merge(self, other: "AgentContext"):
+    def merge(self, other: AgentContext):
         """
         合并另一个上下文
 
@@ -166,7 +166,7 @@ class AgentContext:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "AgentContext":
+    def from_dict(cls, data: dict[str, Any]) -> AgentContext:
         """
         从字典创建
 
@@ -195,7 +195,7 @@ class AgentContext:
         return json.dumps(self.to_dict(), ensure_ascii=False, indent=2)
 
     @classmethod
-    def from_json(cls, json_str: str) -> "AgentContext":
+    def from_json(cls, json_str: str) -> AgentContext:
         """
         从JSON字符串创建
 
@@ -215,7 +215,7 @@ class AgentContext:
             logger.error(f"从JSON创建上下文失败: {e}", exc_info=True)
             return cls(session_id="", task_id="")
 
-    def create_child_context(self, task_id: str | None = None) -> "AgentContext":
+    def create_child_context(self, task_id: Optional[str] = None) -> AgentContext:
         """
         创建子上下文
 
@@ -278,8 +278,8 @@ class AgentContextManager:
 
     def create_context(
         self,
-        session_id: str | None = None,
-        task_id: str | None = None,
+        session_id: Optional[str] = None,
+        task_id: Optional[str] = None,
     ) -> AgentContext:
         """
         创建新的上下文

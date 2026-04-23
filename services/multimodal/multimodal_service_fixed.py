@@ -135,7 +135,7 @@ class StatsResponse(BaseModel):
     success: bool
     total_files: int = 0
     total_size: int = 0
-    by_type: dict[str, dict[str, Any]] = {}
+    by_type: dict[str, dict[str, Any] = {}
     processed_files: int = 0
     processing_rate: float = 0.0
 
@@ -217,8 +217,8 @@ class MemoryDatabase:
     """内存数据库（用于快速启动）"""
 
     def __init__(self):
-        self.files: dict[str, dict[str, Any]] = {}
-        self.tags: dict[str, list[str]] = {}
+        self.files: dict[str, dict[str, Any] = {}
+        self.tags: dict[str, list[str] = {}
         self.start_time = time.time()
 
     def add_file(self, file_data: dict[str, Any]) -> str:
@@ -234,7 +234,7 @@ class MemoryDatabase:
         """获取文件记录"""
         return self.files.get(file_id)
 
-    def list_files(self, file_type: str | None = None, limit: int = 20, offset: int = 0) -> tuple[list[dict[str, Any]], int]:
+    def list_files(self, file_type: str | None = None, limit: int = 20, offset: int = 0) -> tuple[list[dict[str, Any], int]:
         """列出文件"""
         files = list(self.files.values())
 

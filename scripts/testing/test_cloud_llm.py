@@ -74,7 +74,7 @@ class CloudLLMTester:
                     if response.status == 200:
                         data = await response.json()
                         content = data["choices"][0]["message"]["content"]
-                        print(f"✅ 连接成功！")
+                        print("✅ 连接成功！")
                         print(f"响应: {content[:100]}...")
                         return {
                             "status": "success",
@@ -124,7 +124,7 @@ class CloudLLMTester:
                     if response.status == 200:
                         data = await response.json()
                         content = data["choices"][0]["message"]["content"]
-                        print(f"✅ 连接成功！")
+                        print("✅ 连接成功！")
                         print(f"响应: {content[:100]}...")
                         return {
                             "status": "success",
@@ -174,7 +174,7 @@ class CloudLLMTester:
                     if response.status == 200:
                         data = await response.json()
                         content = data["choices"][0]["message"]["content"]
-                        print(f"✅ 连接成功！")
+                        print("✅ 连接成功！")
                         print(f"响应: {content[:100]}...")
                         return {
                             "status": "success",
@@ -224,7 +224,7 @@ class CloudLLMTester:
                     if response.status == 200:
                         data = await response.json()
                         content = data["content"][0]["text"]
-                        print(f"✅ 连接成功！")
+                        print("✅ 连接成功！")
                         print(f"响应: {content[:100]}...")
                         return {
                             "status": "success",

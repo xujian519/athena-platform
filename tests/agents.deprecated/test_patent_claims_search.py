@@ -6,9 +6,9 @@
 """
 
 import asyncio
+import os
 import sys
 from pathlib import Path
-import os
 
 # 添加项目根目录到路径
 project_root = Path(__file__).parent.parent
@@ -34,7 +34,7 @@ async def test_claims_search():
 
     try:
         # 导入小娜Agent
-        from core.agents.xiaona_legal import XiaonaLegalAgent
+        from core.framework.agents.xiaona_legal import XiaonaLegalAgent
 
         # 创建小娜Agent实例
         logger.info("🤖 创建小娜Agent实例...")
@@ -92,7 +92,7 @@ async def test_claims_search():
                 }
             )
 
-            print(f"\n📊 检索结果:")
+            print("\n📊 检索结果:")
             print(f"  成功: {result.get('success')}")
             print(f"  找到专利数: {result.get('total_results', 0)}")
 
@@ -122,14 +122,14 @@ async def test_claims_search():
                             print(f"     ⚖️  权利要求匹配: ...{highlight}...")
 
                 if found_in_claims:
-                    print(f"\n  ✅ 通过：在权利要求中找到匹配")
+                    print("\n  ✅ 通过：在权利要求中找到匹配")
                     passed += 1
                 else:
-                    print(f"\n  ⚠️  警告：未在权利要求中找到匹配（可能在标题或摘要中）")
+                    print("\n  ⚠️  警告：未在权利要求中找到匹配（可能在标题或摘要中）")
                     # 仍然算通过，因为检索到了结果
                     passed += 1
             else:
-                print(f"  ❌ 未找到结果")
+                print("  ❌ 未找到结果")
                 failed += 1
 
             print()

@@ -107,7 +107,7 @@ class DocumentStoreService(ABC):
 
     @abstractmethod
     def search(
-        self, query: str, filters: dict[str, Any] | None = None, limit: int = 10
+        self, query: str, filters: Optional[dict[str, Any]] = None, limit: int = 10
     ) -> list[dict[str, Any]]:
         """
         文档搜索
@@ -123,7 +123,7 @@ class DocumentStoreService(ABC):
         pass
 
     @abstractmethod
-    def get_document(self, doc_id: str) -> dict[str, Any] | None:
+    def get_document(self, doc_id: str) -> Optional[dict[str, Any]]:
         """
         获取文档
 
@@ -146,7 +146,7 @@ class UnifiedSearchEngine(ABC):
 
     @abstractmethod
     def search(
-        self, query: str, filters: dict[str, Any] | None = None, limit: int = 10
+        self, query: str, filters: Optional[dict[str, Any]] = None, limit: int = 10
     ) -> dict[str, Any]:
         """
         执行混合搜索

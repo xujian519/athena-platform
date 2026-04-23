@@ -101,7 +101,7 @@ class MultimodalContent:
     content_type: ContentType
     image_type: ImageType | None = None
     raw_data: Union[str, bytes, np.ndarray] = None
-    text_content: str | None = None
+    text_content: Optional[str] = None
     structured_data: Optional[Dict[str, Any]] = None
     bounding_boxes: Optional[List[Dict[str, Any]]] = None
     confidence: float = 0.0

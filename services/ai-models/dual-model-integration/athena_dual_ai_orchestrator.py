@@ -213,7 +213,7 @@ class AthenaDualAIOrchestrator:
         # 时间估算（秒）
         time_multipliers = {'fast': 1.0, 'medium': 1.5}
         base_time = estimated_tokens / 50  # 基础处理速度
-        estimated_time = base_time * time_multipliers[self.performance_benchmarks[primary_model]['speed']]
+        estimated_time = base_time * time_multipliers[self.performance_benchmarks[primary_model]['speed']
 
         # 生成推理说明
         reasoning = f"基于任务类型({task.task_type})、复杂度({task.complexity.value})和优先级({task.priority.value})选择{primary_model}"

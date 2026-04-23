@@ -62,7 +62,7 @@ class DistillationConfig:
     learning_rate: float = 1e-3
     batch_size: int = 32
     epochs: int = 10
-    save_path: str | None = None
+    save_path: Optional[str] = None
 
 
 class RuleExtractor:
@@ -527,7 +527,7 @@ class KnowledgeDistillation:
         self,
         train_dataloader: DataLoader,
         val_dataloader: DataLoader | None = None,
-        epochs: int | None = None,
+        epochs: Optional[int] = None,
     ) -> dict[str, list[float]]:
         """
         训练蒸馏模型

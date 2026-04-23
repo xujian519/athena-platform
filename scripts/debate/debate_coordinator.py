@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利审查辩论协调器
 Patent Debate Coordinator
@@ -11,17 +10,19 @@ Patent Debate Coordinator
 创建时间: 2026-02-09
 """
 
-import asyncio
 import json
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
 
-from core.llm.deepseek_client import DeepSeekClient
+from core.ai.llm.deepseek_client import DeepSeekClient
 from scripts.debate.debate_participants import AthenaDebator, DebateArgument, XiaonaDebator
-from scripts.debate.patent_examiner_agent import ExaminerOpinion, ExaminerStance, PatentExaminerAgent
+from scripts.debate.patent_examiner_agent import (
+    ExaminerOpinion,
+    ExaminerStance,
+    PatentExaminerAgent,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -31,8 +32,8 @@ class DebateRound:
     """单轮辩论记录"""
     round_num: int
     examiner_opinion: ExaminerOpinion
-    xiaona_argument: Optional[DebateArgument] = None
-    athena_argument: Optional[DebateArgument] = None
+    xiaona_argument: DebateArgument | None = None
+    athena_argument: DebateArgument | None = None
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
 
     def to_dict(self) -> dict:
@@ -53,9 +54,9 @@ class DebateResult:
     final_stance: ExaminerStance
     consensus_reached: bool
     summary: str
-    rounds: List[DebateRound] = field(default_factory=list)
+    rounds: list[DebateRound] = field(default_factory=list)
     start_time: str = field(default_factory=lambda: datetime.now().isoformat())
-    end_time: Optional[str] = None
+    end_time: str | None = None
 
     def to_dict(self) -> dict:
         """转换为字典"""
@@ -92,9 +93,9 @@ class DebateCoordinator:
 
     def __init__(
         self,
-        deepseek_client: Optional[DeepSeekClient] = None,
+        deepseek_client: DeepSeekClient | None = None,
         max_rounds: int = MAX_ROUNDS,
-        save_path: Optional[str] = None,
+        save_path: str | None = None,
     ):
         self.deepseek_client = deepseek_client or DeepSeekClient(model="deepseek-chat")
         self.max_rounds = max_rounds
@@ -113,8 +114,8 @@ class DebateCoordinator:
         self.athena = AthenaDebator(deepseek_client=self.deepseek_client)
 
         # 辩论记录
-        self.rounds: List[DebateRound] = []
-        self.debate_result: Optional[DebateResult] = None
+        self.rounds: list[DebateRound] = []
+        self.debate_result: DebateResult | None = None
 
         logger.info("✅ 辩论协调器初始化完成")
 
@@ -242,7 +243,7 @@ class DebateCoordinator:
             logger.error(f"❌ 辩论过程出错: {e}")
             raise
 
-    def _combine_arguments(self, arguments: List[DebateArgument]) -> str:
+    def _combine_arguments(self, arguments: list[DebateArgument]) -> str:
         """合并多个论点"""
         combined = []
         for arg in arguments:
@@ -308,14 +309,14 @@ class DebateCoordinator:
         final_stance = self.rounds[-1].examiner_opinion.stance.value
 
         summary_parts = [
-            f"## 辩论摘要",
-            f"",
+            "## 辩论摘要",
+            "",
             f"**辩论轮次**: {len(self.rounds)}轮",
             f"**初始立场**: {initial_stance}",
             f"**最终立场**: {final_stance}",
             f"**共识状态**: {'✅ 已达成共识' if self._check_consensus(self.rounds[-1].examiner_opinion) else '❌ 未达成共识'}",
-            f"",
-            f"**立场演变**:",
+            "",
+            "**立场演变**:",
         ]
 
         for i, r in enumerate(self.rounds, 1):
@@ -402,7 +403,7 @@ class DebateCoordinator:
 
         logger.info(f"📄 Markdown报告已保存: {filepath}")
 
-    def get_debate_report(self) -> Optional[str]:
+    def get_debate_report(self) -> str | None:
         """获取辩论报告"""
         if not self.debate_result:
             return None

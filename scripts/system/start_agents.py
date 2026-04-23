@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 统一Agent启动脚本
 Unified Agent Startup Script
@@ -15,7 +14,6 @@ import logging
 import signal
 import sys
 from pathlib import Path
-from typing import Any
 
 # 添加项目路径
 PROJECT_ROOT = Path(__file__).parent

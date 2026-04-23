@@ -235,7 +235,7 @@ class PatentDrawingAnalyzer:
     async def analyze_drawing(
         self,
         image_path: str,
-        claim_context: str | None = None,
+        claim_context: Optional[str] = None,
         figure_number: int = 1
     ) -> DrawingAnalysisResult:
         """
@@ -324,7 +324,7 @@ class PatentDrawingAnalyzer:
     async def batch_analyze_drawings(
         self,
         image_paths: list[str],
-        claim_context: str | None = None
+        claim_context: Optional[str] = None
     ) -> list[DrawingAnalysisResult]:
         """
         批量分析多张附图
@@ -365,7 +365,7 @@ class PatentDrawingAnalyzer:
     async def _identify_components(
         self,
         image_data: bytes,
-        claim_context: str | None = None
+        claim_context: Optional[str] = None
     ) -> dict | None:
         """调用多模态模型识别组件"""
         if self.llm_manager is None:
@@ -583,7 +583,7 @@ class PatentDrawingAnalyzer:
 async def analyze_patent_drawing(
     image_path: str,
     llm_manager=None,
-    claim_context: str | None = None
+    claim_context: Optional[str] = None
 ) -> DrawingAnalysisResult:
     """
     便捷函数: 分析专利附图

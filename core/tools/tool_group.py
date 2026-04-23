@@ -52,7 +52,7 @@ class ActivationRule:
     max_tools: int = 20
 
     def matches(
-        self, task_description: str, task_type: str | None = None, domain: str | None = None
+        self, task_description: str, task_type: Optional[str] = None, domain: Optional[str] = None
     ) -> bool:
         """
         检查任务是否匹配激活规则
@@ -202,7 +202,7 @@ class ToolGroup:
         logger.debug(f"   加载了 {len(self._active_tools)} 个工具 " f"(组: {self.definition.name})")
 
     def should_activate_for_task(
-        self, task_description: str, task_type: str | None = None, domain: str | None = None
+        self, task_description: str, task_type: Optional[str] = None, domain: Optional[str] = None
     ) -> bool:
         """
         判断是否应该为指定任务激活此工具组

@@ -60,7 +60,7 @@ def test_agent_integration():
 
     # 测试小诺协调器
     try:
-        from core.agents.xiaonuo_coordinator import XiaonuoAgent
+        from core.framework.agents.xiaonuo_coordinator import XiaonuoAgent
         print("  ✅ 小诺协调器导入成功")
         results['小诺协调器'] = True
 
@@ -78,7 +78,7 @@ def test_agent_integration():
 
     # 测试小娜专业版
     try:
-        from core.agents.xiaona_professional import XiaonaProfessionalAgent
+        from core.framework.agents.xiaona_professional import XiaonaProfessionalAgent
         print("  ✅ 小娜专业版导入成功")
         results['小娜专业版'] = True
 

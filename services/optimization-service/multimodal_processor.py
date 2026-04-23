@@ -274,7 +274,7 @@ class ImageProcessor:
                     'edge_density': float(edge_density),
                     'texture_complexity': float(texture_complexity),
                     'content_type': content_type,
-                    'dominant_colors': [(count, color) for count, color in dominant_colors[:3]]
+                    'dominant_colors': [(count, color) for count, color in dominant_colors[:3]
                 },
                 confidence=0.9,
                 model_used='OpenCV_PIL',
@@ -1071,7 +1071,7 @@ class MultimodalProcessor:
         # 模型置信度权重
         avg_confidence = 0.0
         if features['results']:
-            confidences = [result['confidence'] for result in features['results']]
+            confidences = [result['confidence'] for result in features['results']
             avg_confidence = sum(confidences) / len(confidences)
 
         # 综合分数

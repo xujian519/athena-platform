@@ -36,7 +36,7 @@ class ExecutionEngine:
     提供任务执行、工作流管理、并发控制和结果处理功能。
     """
 
-    def __init__(self, agent_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, agent_id: str, config: Optional[dict[str, Any]] = None):
         """初始化执行引擎
 
         Args:
@@ -436,7 +436,7 @@ class ExecutionEngine:
             logger.error(f"保存状态失败: {e}")
 
     @classmethod
-    async def initialize_global(cls, config: dict[str, Any] | None = None):
+    async def initialize_global(cls, config: Optional[dict[str, Any]] = None):
         """初始化全局实例"""
         if not hasattr(cls, "global_instance"):
             cls.global_instance = cls("global", config)

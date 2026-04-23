@@ -163,7 +163,7 @@ class AdvancedParameterExtractor:
         }
 
     async def extract(
-        self, text: str, intent: str, context: dict[str, Any] | None = None
+        self, text: str, intent: str, context: Optional[dict[str, Any]] = None
     ) -> ExtractionResult:
         """
         提取参数

@@ -124,7 +124,7 @@ class ConfigurationManager:
             return True
 
     def get_module_config(
-        self, module_id: str, key: str | None = None, default: Any = None
+        self, module_id: str, key: Optional[str] = None, default: Any = None
     ) -> Any:
         """获取模块配置
 

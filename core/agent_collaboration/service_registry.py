@@ -396,7 +396,7 @@ def register_all_services(kg: Any) -> None:
     print(f"已注册 {len(ALL_SERVICES)} 个服务到知识图谱")
 
 
-def get_service_by_id(service_id: str) -> dict[str, Any] | None:
+def get_service_by_id(service_id: str) -> Optional[dict[str, Any]]:
     """根据ID获取服务配置"""
     for service in ALL_SERVICES:
         if service["service_id"] == service_id:

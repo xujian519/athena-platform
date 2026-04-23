@@ -120,9 +120,9 @@ class CAPAnalysisInput:
     specific_input: dict[str, Any] = field(default_factory=dict)
 
     # 可选内容
-    description: str | None = None  # 说明书
-    prior_art_refs: list[str] | None = None  # 对比文献
-    office_action: str | None = None  # 审查意见通知书 (CAP09)
+    description: Optional[str] = None  # 说明书
+    prior_art_refs: Optional[list[str]] = None  # 对比文献
+    office_action: Optional[str] = None  # 审查意见通知书 (CAP09)
     target_claims: list[int] | None = None  # 目标权利要求 (CAP06)
 
 

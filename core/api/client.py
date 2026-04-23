@@ -36,7 +36,7 @@ class ClientRegistrationRequest(BaseModel):
 
     client_id: str
     client_type: str  # opencode, iflow-cli
-    os: str | None = None
+    os: Optional[str] = None
     timestamp: datetime = Field(default_factory=datetime.now)
     capabilities: dict[str, ClientCapability]
 
@@ -55,7 +55,7 @@ class ClientInfo(BaseModel):
 
     client_id: str
     client_type: str
-    os: str | None = None
+    os: Optional[str] = None
     registered_at: datetime
     last_seen: datetime
     capabilities: dict[str, ClientCapability]

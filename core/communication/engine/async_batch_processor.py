@@ -309,7 +309,7 @@ class AsyncBatchProcessor:
 
         return None
 
-    async def flush_all(self) -> dict[str, BatchMessage | None]:
+    async def flush_all(self) -> Optional[dict[str, BatchMessage]]:
         """
         刷新所有队列
 

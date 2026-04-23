@@ -174,7 +174,7 @@ class CronScheduler:
         self.handlers[task_type] = handler
         logger.info(f"✅ 已注册处理器: {task_type}")
 
-    def parse_natural_language(self, description: str) -> str | None:
+    def parse_natural_language(self, description: str) -> Optional[str]:
         """
         解析自然语言调度描述
 
@@ -182,7 +182,7 @@ class CronScheduler:
             description: 自然语言描述 (如 "每天检查一次专利状态")
 
         Returns:
-            str | None: 标准 cron 表达式
+            Optional[str]: 标准 cron 表达式
         """
         desc_lower = description.lower()
 
@@ -218,7 +218,7 @@ class CronScheduler:
         description: str,
         schedule: str,
         task_type: str,
-        parameters: dict[str, Any] | None = None,
+        parameters: Optional[dict[str, Any]] = None,
     ) -> ScheduledTask | None:
         """
         创建调度任务
@@ -373,7 +373,7 @@ class CronScheduler:
         else:
             logger.warning(f"⚠️ 未找到处理器: {task.task_type}")
 
-    def get_task_status(self, task_id: str) -> dict[str, Any] | None:
+    def get_task_status(self, task_id: str) -> Optional[dict[str, Any]]:
         """获取任务状态"""
         task = self.tasks.get(task_id)
         if task:

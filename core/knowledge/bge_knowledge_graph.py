@@ -28,8 +28,8 @@ class Entity:
     name: str
     type: str
     embedding: list[float] | None = None
-    description: str | None = None
-    aliases: list[str] | None = None
+    description: Optional[str] = None
+    aliases: Optional[list[str]] = None
 
 
 @dataclass
@@ -42,7 +42,7 @@ class Relation:
     type: str
     embedding: list[float] | None = None
     confidence: float = 1.0
-    description: str | None = None
+    description: Optional[str] = None
 
 
 @dataclass
@@ -169,7 +169,7 @@ class BGEKnowledgeGraph:
             return False
 
     async def add_knowledge_from_text(
-        self, text: str, entity_types: list[str] | None = None
+        self, text: str, entity_types: Optional[list[str]] = None
     ) -> list[KnowledgeTriplet]:
         """
         从文本中提取知识并添加到图谱

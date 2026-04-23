@@ -56,7 +56,7 @@ class BatchProcessor:
 
         logger.info("📦 批处理器初始化完成")
 
-    def add_message_to_batch(self, message: Message) -> str | None:
+    def add_message_to_batch(self, message: Message) -> Optional[str]:
         """添加消息到批处理队列
 
         Args:

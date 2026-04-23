@@ -66,7 +66,7 @@ class ExtractionRequest:
 class ExtractionResult:
     """提取结果"""
     success: bool
-    extractions: list[dict[str, Any]] = field(default_factory=list)
+    extractions: list[dict[str, Any] = field(default_factory=list)
     raw_response: str = ''
     model_used: str = ''
     tokens_used: int = 0
@@ -372,7 +372,7 @@ class GLMLangExtractProvider:
         self,
         response: str,
         request: ExtractionRequest
-    ) -> list[dict[str, Any]]:
+    ) -> list[dict[str, Any]:
         """解析提取响应"""
         try:
             # 尝试解析JSON响应
@@ -387,7 +387,7 @@ class GLMLangExtractProvider:
             # JSON解析失败，尝试文本提取
             return await self._extract_from_text(response)
 
-    async def _extract_from_text(self, text: str) -> list[dict[str, Any]]:
+    async def _extract_from_text(self, text: str) -> list[dict[str, Any]:
         """从文本中提取结构化信息"""
         # 简单的文本提取逻辑
         extractions = []
@@ -427,7 +427,7 @@ class GLMLangExtractProvider:
 
     async def _calculate_confidence(
         self,
-        extractions: list[dict[str, Any]],
+        extractions: list[dict[str, Any],
         response: str
     ) -> float:
         """计算置信度分数"""

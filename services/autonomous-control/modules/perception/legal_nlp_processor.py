@@ -128,7 +128,7 @@ class LegalNLPProcessor:
             logger.error(f"法律NLP解析失败: {str(e)}")
             return {'error': str(e)}
 
-    async def _extract_entities(self, text: str) -> list[dict[str, Any]]:
+    async def _extract_entities(self, text: str) -> list[dict[str, Any]:
         """提取法律实体"""
         entities = []
 
@@ -153,7 +153,7 @@ class LegalNLPProcessor:
 
         return entities
 
-    async def _extract_relations(self, text: str, entities: list[dict]) -> list[dict[str, Any]]:
+    async def _extract_relations(self, text: str, entities: list[dict]) -> list[dict[str, Any]:
         """提取实体关系"""
         relations = []
 

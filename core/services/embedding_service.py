@@ -101,7 +101,7 @@ class EmbeddingResult:
         dimension: int,
         count: int,
         response_time_ms: float,
-        error: str | None = None,
+        error: Optional[str] = None,
     ):
         self.embeddings = embeddings
         self.model = model

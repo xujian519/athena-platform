@@ -241,7 +241,7 @@ class MAMLEngine:
 
         return meta_loss_value
 
-    def fast_adapt(self, task: Task, num_steps: int | None = None) -> float:
+    def fast_adapt(self, task: Task, num_steps: Optional[int] = None) -> float:
         """
         快速适应新任务
 

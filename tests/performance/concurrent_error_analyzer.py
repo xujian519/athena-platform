@@ -116,11 +116,11 @@ class ConcurrentErrorAnalyzer:
             return {
                 "file_path": log_file_path,
                 "total_lines_analyzed": len(lines),
-                "error_lines": len([p for p in parsed_lines if p["error_types"]]),
+                "error_lines": len([p for p in parsed_lines if p["error_types"]),
                 "error_frequency": dict(error_frequency),
                 "hourly_errors": dict(hourly_errors),
                 "concurrent_patterns": concurrent_patterns,
-                "recent_errors": [p for p in parsed_lines if p["error_types"]][
+                "recent_errors": [p for p in parsed_lines if p["error_types"][
                     -10:
                 ],  # 最近10个错误
             }
@@ -167,7 +167,7 @@ class ConcurrentErrorAnalyzer:
         if resource_errors:
             concurrent_insights["resource_contention"] = {
                 "total_occurrences": len(resource_errors),
-                "patterns": [e["raw_line"] for e in resource_errors[:5]],  # 前5个例子
+                "patterns": [e["raw_line"] for e in resource_errors[:5],  # 前5个例子
             }
 
         return concurrent_insights
@@ -189,7 +189,7 @@ class ConcurrentErrorAnalyzer:
     ) -> dict[str, int]:
         """找出与其他错误的相关性"""
         correlations = {}
-        target_timestamps = [e["timestamp"] for e in target_errors if e["timestamp"]]
+        target_timestamps = [e["timestamp"] for e in target_errors if e["timestamp"]
 
         for error_type, errors in all_error_patterns.items():
             if error_type in ["connection_refused", "timeout"]:
@@ -214,7 +214,7 @@ class ConcurrentErrorAnalyzer:
         if not errors:
             return {}
 
-        timestamps = [e["timestamp"] for e in errors if e["timestamp"]]
+        timestamps = [e["timestamp"] for e in errors if e["timestamp"]
         if not timestamps:
             return {}
 

@@ -73,7 +73,7 @@ class ServiceSession:
     last_activity: datetime
     memory_mb: float = 0.0
     auto_stop: bool = True
-    custom_timeout: int | None = None  # 自定义超时时间（秒），None使用默认60分钟
+    custom_timeout: Optional[int] = None  # 自定义超时时间（秒），None使用默认60分钟
 
     @property
     def idle_time_seconds(self) -> float:
@@ -133,10 +133,10 @@ class ServiceSessionManager:
 
     def __init__(
         self,
-        idle_timeout: int | None = None,
-        cleanup_interval: int | None = None,
-        config_file: str | None = None,
-        preset: str | None = None
+        idle_timeout: Optional[int] = None,
+        cleanup_interval: Optional[int] = None,
+        config_file: Optional[str] = None,
+        preset: Optional[str] = None
     ):
         """
         初始化服务会话管理器
@@ -194,7 +194,7 @@ class ServiceSessionManager:
         service_type: ServiceType,
         service_name: str,
         auto_stop: bool = True,
-        custom_timeout: int | None = None
+        custom_timeout: Optional[int] = None
     ) -> ServiceSession:
         """
         注册服务会话
@@ -519,7 +519,7 @@ async def auto_register_current_process(
     service_type: ServiceType,
     service_name: str,
     auto_stop: bool = True,
-    custom_timeout: int | None = None
+    custom_timeout: Optional[int] = None
 ) -> ServiceSession:
     """
     自动注册当前进程

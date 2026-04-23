@@ -4,13 +4,11 @@
 使用正则表达式识别和修复空except块
 """
 
-import os
 import re
 from pathlib import Path
-from typing import List, Tuple
 
 
-def find_empty_except_blocks(file_path: Path) -> List[Tuple[int, str, str]]:
+def find_empty_except_blocks(file_path: Path) -> list[tuple[int, str, str]:
     """
     查找文件中的空except块
 
@@ -19,7 +17,7 @@ def find_empty_except_blocks(file_path: Path) -> List[Tuple[int, str, str]]:
     issues = []
 
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             lines = f.readlines()
 
         i = 0
@@ -31,7 +29,6 @@ def find_empty_except_blocks(file_path: Path) -> List[Tuple[int, str, str]]:
                 # 检查下一行或几行是否是pass或...或注释
                 j = i + 1
                 is_empty = True
-                empty_content = ""
 
                 # 跳过空行
                 while j < len(lines) and lines[j].strip() == '':
@@ -41,11 +38,9 @@ def find_empty_except_blocks(file_path: Path) -> List[Tuple[int, str, str]]:
                     next_line = lines[j].strip()
                     if next_line in ['pass', '...', '']:
                         is_empty = True
-                        empty_content = next_line
                     elif next_line.startswith('#'):
                         # 如果只有注释，也算空except
                         is_empty = True
-                        empty_content = next_line
                     else:
                         is_empty = False
 
@@ -69,10 +64,10 @@ def find_empty_except_blocks(file_path: Path) -> List[Tuple[int, str, str]]:
 
 
 def fix_empty_except_block(
-    lines: List[str],
+    lines: list[str],
     line_num: int,
     exception_type: str
-) -> List[str]:
+) -> list[str]:
     """
     修复单个空except块
 
@@ -140,13 +135,13 @@ def fix_file(file_path: Path) -> bool:
     try:
         # 检查是否已经有logger导入
         needs_logger = True
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
             if 'logger = ' in content or 'logging.getLogger' in content:
                 needs_logger = False
 
         # 读取文件
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             lines = f.readlines()
 
         # 查找空except块
@@ -174,12 +169,11 @@ def fix_file(file_path: Path) -> bool:
                 lines.insert(import_end, f'{indent_str}import logging\n')
 
                 # 添加logger初始化
-                module_name = file_path.stem
                 logger_line = f'{indent_str}logger = logging.getLogger(__name__)\n'
                 lines.insert(import_end + 1, logger_line)
 
         # 从后往前修复（避免行号变化）
-        for line_num, except_line, context in sorted(issues, key=lambda x: x[0], reverse=True):
+        for line_num, except_line, _context in sorted(issues, key=lambda x: x[0], reverse=True):
             # 提取异常类型
             match = re.search(r'except\s+(\w+(?:\s+as\s+\w+)?)', except_line)
             if match:
@@ -192,7 +186,7 @@ def fix_file(file_path: Path) -> bool:
         with open(file_path, 'w', encoding='utf-8') as f:
             f.writelines(lines)
 
-        print(f"  ✓ 修复完成")
+        print("  ✓ 修复完成")
         return True
 
     except Exception as e:
@@ -238,7 +232,7 @@ def main():
     # 修复每个文件
     for file_path in python_files:
         try:
-            with open(file_path, 'r') as f:
+            with open(file_path) as f:
                 content = f.read()
 
             # 快速检查是否有空except

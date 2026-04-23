@@ -19,14 +19,14 @@ from pathlib import Path
 
 import pytest
 
-from core.agents.declarative.loader import AgentLoader
-from core.agents.declarative.models import (
+from core.framework.agents.declarative.loader import AgentLoader
+from core.framework.agents.declarative.models import (
     AgentDefinition,
     AgentPermissionMode,
     AgentSource,
 )
-from core.agents.declarative.permissions import ToolPermissionFilter
-from core.agents.declarative.utils import parse_frontmatter
+from core.framework.agents.declarative.permissions import ToolPermissionFilter
+from core.framework.agents.declarative.utils import parse_frontmatter
 
 # ============================================================================
 # AgentDefinition 测试
@@ -321,7 +321,7 @@ class TestDeclarativeAgent:
         defaults.update(kwargs)
         definition = AgentDefinition(**defaults)
 
-        from core.agents.declarative.proxy import DeclarativeAgent
+        from core.framework.agents.declarative.proxy import DeclarativeAgent
 
         agent_cls = DeclarativeAgent.from_definition(definition)
         return agent_cls(), definition
@@ -359,7 +359,7 @@ class TestDeclarativeAgent:
         assert health.is_healthy()
 
     def test_process_no_message_returns_error(self):
-        from core.agents.base import AgentRequest
+        from core.framework.agents.base import AgentRequest
 
         agent, _ = self._create_test_agent()
         asyncio.run(agent.initialize())
@@ -373,7 +373,7 @@ class TestDeclarativeAgent:
             assert "未包含" in (resp.error or "")
 
     def test_process_with_message_returns_response(self):
-        from core.agents.base import AgentRequest
+        from core.framework.agents.base import AgentRequest
 
         agent, _ = self._create_test_agent()
         asyncio.run(agent.initialize())
@@ -405,13 +405,13 @@ class TestConditionalPrompts:
     """条件化提示词组装测试"""
 
     def test_default_sections_count(self):
-        from core.agents.prompts.xiaona_prompts import get_system_prompt
+        from core.framework.agents.prompts.xiaona_prompts import get_system_prompt
 
         sections = get_system_prompt()
         assert len(sections) >= 4  # L1 + security + verbosity + 至少一个 L 层
 
     def test_concise_style_injected(self):
-        from core.agents.prompts.xiaona_prompts import (
+        from core.framework.agents.prompts.xiaona_prompts import (
             OutputStyleType,
             PromptOptions,
             get_system_prompt,
@@ -423,7 +423,7 @@ class TestConditionalPrompts:
         assert "极简" in full
 
     def test_exclude_layers(self):
-        from core.agents.prompts.xiaona_prompts import PromptOptions, get_system_prompt
+        from core.framework.agents.prompts.xiaona_prompts import PromptOptions, get_system_prompt
 
         opts = PromptOptions(
             include_data_layer=False,
@@ -437,7 +437,7 @@ class TestConditionalPrompts:
         assert "强制HITL" not in full
 
     def test_readonly_section_injected(self):
-        from core.agents.prompts.xiaona_prompts import PromptOptions, get_system_prompt
+        from core.framework.agents.prompts.xiaona_prompts import PromptOptions, get_system_prompt
 
         opts = PromptOptions(is_readonly=True)
         sections = get_system_prompt(opts)
@@ -445,7 +445,7 @@ class TestConditionalPrompts:
         assert "只读模式" in full
 
     def test_task_section_oa_response(self):
-        from core.agents.prompts.xiaona_prompts import (
+        from core.framework.agents.prompts.xiaona_prompts import (
             PromptOptions,
             TaskType,
             get_system_prompt,
@@ -457,7 +457,7 @@ class TestConditionalPrompts:
         assert "审查意见" in full
 
     def test_model_adaptation(self):
-        from core.agents.prompts.xiaona_prompts import (
+        from core.framework.agents.prompts.xiaona_prompts import (
             PromptOptions,
             get_system_prompt,
         )
@@ -469,7 +469,7 @@ class TestConditionalPrompts:
 
     def test_backward_compatible_constants(self):
         """确保旧版常量仍可导入"""
-        from core.agents.prompts.xiaona_prompts import (
+        from core.framework.agents.prompts.xiaona_prompts import (
             XIAONA_L1_FOUNDATION,
             XiaonaPrompts,
         )
@@ -489,7 +489,7 @@ class TestOutputStyleManager:
     """输出风格管理器测试"""
 
     def test_load_builtin_styles(self):
-        from core.prompts.output_styles import OutputStyleManager
+        from core.ai.prompts.output_styles import OutputStyleManager
 
         mgr = OutputStyleManager()
         styles = mgr.load_all_styles()
@@ -500,7 +500,7 @@ class TestOutputStyleManager:
         assert "concise" in styles
 
     def test_set_and_get_style(self):
-        from core.prompts.output_styles import OutputStyleManager
+        from core.ai.prompts.output_styles import OutputStyleManager
 
         mgr = OutputStyleManager()
         mgr.load_all_styles()
@@ -510,7 +510,7 @@ class TestOutputStyleManager:
         assert current.name == "concise"
 
     def test_default_style_returns_none(self):
-        from core.prompts.output_styles import OutputStyleManager
+        from core.ai.prompts.output_styles import OutputStyleManager
 
         mgr = OutputStyleManager()
         mgr.load_all_styles()
@@ -518,7 +518,7 @@ class TestOutputStyleManager:
         assert mgr.get_current_style() is None
 
     def test_reset_style(self):
-        from core.prompts.output_styles import OutputStyleManager
+        from core.ai.prompts.output_styles import OutputStyleManager
 
         mgr = OutputStyleManager()
         mgr.load_all_styles()
@@ -527,7 +527,7 @@ class TestOutputStyleManager:
         assert mgr.get_current_style() is None
 
     def test_style_prompt_additions(self):
-        from core.prompts.output_styles import OutputStyleManager
+        from core.ai.prompts.output_styles import OutputStyleManager
 
         mgr = OutputStyleManager()
         mgr.load_all_styles()
@@ -537,7 +537,7 @@ class TestOutputStyleManager:
         assert "法律专业模式" in additions[0]
 
     def test_invalid_style_raises(self):
-        from core.prompts.output_styles import OutputStyleManager
+        from core.ai.prompts.output_styles import OutputStyleManager
 
         mgr = OutputStyleManager()
         mgr.load_all_styles()
@@ -545,7 +545,7 @@ class TestOutputStyleManager:
             mgr.set_current_style("nonexistent")
 
     def test_list_styles(self):
-        from core.prompts.output_styles import OutputStyleManager
+        from core.ai.prompts.output_styles import OutputStyleManager
 
         mgr = OutputStyleManager()
         styles = mgr.list_styles()
@@ -554,7 +554,7 @@ class TestOutputStyleManager:
         assert "concise" in names
 
     def test_custom_style_loading(self):
-        from core.prompts.output_styles import OutputStyleManager
+        from core.ai.prompts.output_styles import OutputStyleManager
 
         with tempfile.TemporaryDirectory() as tmpdir:
             style_dir = Path(tmpdir) / ".athena" / "output-styles"
@@ -628,7 +628,8 @@ class TestThreadSafety:
 
         # 重置单例
         import core.agents.declarative.loader as loader_mod
-        from core.agents.declarative.loader import get_loader
+
+        from core.framework.agents.declarative.loader import get_loader
         loader_mod._loader_instance = None
 
         loaders = []
@@ -646,7 +647,8 @@ class TestThreadSafety:
 
         # 重置单例
         import core.prompts.output_styles as styles_mod
-        from core.prompts.output_styles import get_style_manager
+
+        from core.ai.prompts.output_styles import get_style_manager
         styles_mod._manager_instance = None
 
         managers = []
@@ -698,7 +700,8 @@ class TestBugFixes:
         """get_style_manager 带 project_root 不应覆盖已有单例"""
         # 重置单例
         import core.prompts.output_styles as styles_mod
-        from core.prompts.output_styles import get_style_manager
+
+        from core.ai.prompts.output_styles import get_style_manager
         styles_mod._manager_instance = None
 
         mgr1 = get_style_manager()
@@ -713,7 +716,8 @@ class TestBugFixes:
         """get_loader 带 project_root 不应覆盖已有单例"""
         # 重置单例
         import core.agents.declarative.loader as loader_mod
-        from core.agents.declarative.loader import get_loader
+
+        from core.framework.agents.declarative.loader import get_loader
         loader_mod._loader_instance = None
 
         loader1 = get_loader()

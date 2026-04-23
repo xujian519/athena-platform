@@ -59,8 +59,7 @@ class TextEmbeddingVerifier:
 
         # 单独检查AthenaModelLoader（避免类型注解错误）
         try:
-            from core.models.athena_model_loader import AthenaModelLoader
-            print(f"✅ AthenaModelLoader: 可导入")
+            print("✅ AthenaModelLoader: 可导入")
             self.results["依赖检查"]["AthenaModelLoader"] = "可导入"
         except Exception as e:
             print(f"❌ AthenaModelLoader: 导入失败 - {type(e).__name__}: {e}")
@@ -121,7 +120,7 @@ class TextEmbeddingVerifier:
             if result.get('embedding'):
                 print(f"向量示例 (前5维): {result['embedding'][:5]}")
 
-            self.results["功能测试"][case['name']] = {
+            self.results["功能测试"][case['name'] = {
                 "success": result.get('success', False),
                 "time": elapsed,
                 "dim": result.get('embedding_dim', 0),
@@ -144,7 +143,7 @@ class TextEmbeddingVerifier:
 
         start_time = time.time()
         results = []
-        for i, text in enumerate(texts):
+        for _i, text in enumerate(texts):
             result = await text_embedding_handler(
                 params={"text": text, "model": "BAAI/bge-m3", "normalize": True},
                 context={}
@@ -197,13 +196,13 @@ class TextEmbeddingVerifier:
                 print(f"结果: {result.get('message', result.get('error', 'N/A'))}")
                 print(f"是否使用备用方案: {not result.get('success', True) or 'fallback' in result.get('model', '')}")
 
-                self.results["错误处理"][case['name']] = {
+                self.results["错误处理"][case['name'] = {
                     "handled": True,
                     "fallback_used": 'fallback' in result.get('model', '')
                 }
             except Exception as e:
                 print(f"❌ 抛出异常: {e}")
-                self.results["错误处理"][case['name']] = {
+                self.results["错误处理"][case['name'] = {
                     "handled": False,
                     "error": str(e)
                 }
@@ -235,7 +234,7 @@ class TextEmbeddingVerifier:
                 emb1 = result1['embedding']
                 emb2 = result2['embedding']
                 # 这里只计算前10维的相似度作为示例
-                similarity = sum(a*b for a, b in zip(emb1, emb2)) / (sum(a*a for a in emb1)**0.5 * sum(b*b for b in emb2)**0.5)
+                similarity = sum(a*b for a, b in zip(emb1, emb2, strict=False)) / (sum(a*a for a in emb1)**0.5 * sum(b*b for b in emb2)**0.5)
                 print(f"  '{text1}' vs '{text2}': 相似度 ≈ {similarity:.3f} (仅前10维)")
             else:
                 print(f"  '{text1}' vs '{text2}': 无法计算（向量化失败）")
@@ -272,19 +271,19 @@ class TextEmbeddingVerifier:
         report_path.parent.mkdir(parents=True, exist_ok=True)
 
         with open(report_path, 'w', encoding='utf-8') as f:
-            f.write(f"# Text Embedding工具验证报告\n\n")
+            f.write("# Text Embedding工具验证报告\n\n")
             f.write(f"**生成时间**: {time.strftime('%Y-%m-%d %H:%M:%S')}\n\n")
-            f.write(f"## 测试结果\n\n")
-            f.write(f"```json\n")
+            f.write("## 测试结果\n\n")
+            f.write("```json\n")
             f.write(json.dumps(self.results, indent=2, ensure_ascii=False))
-            f.write(f"\n```\n\n")
-            f.write(f"## 统计\n\n")
+            f.write("\n```\n\n")
+            f.write("## 统计\n\n")
             f.write(f"- 通过: {passed_tests}/{total_tests}\n")
             f.write(f"- 失败: {total_tests - passed_tests}/{total_tests}\n")
-            f.write(f"## 建议\n\n")
-            f.write(f"1. 确保所有依赖已正确安装\n")
-            f.write(f"2. 启动BGE-M3服务并确保模型已加载\n")
-            f.write(f"3. 检查向量维度是否为1024（BGE-M3标准）\n")
+            f.write("## 建议\n\n")
+            f.write("1. 确保所有依赖已正确安装\n")
+            f.write("2. 启动BGE-M3服务并确保模型已加载\n")
+            f.write("3. 检查向量维度是否为1024（BGE-M3标准）\n")
 
         print(f"\n📄 报告已保存到: {report_path}")
 

@@ -31,31 +31,31 @@ class PatentInfo:
     patent_type: str
 
     # 编号信息(重要:用于下载)
-    publication_number: str | None = None
-    authorization_number: str | None = None
+    publication_number: Optional[str] = None
+    authorization_number: Optional[str] = None
 
     # 日期信息
-    application_date: str | None = None
-    publication_date: str | None = None
-    authorization_date: str | None = None
+    application_date: Optional[str] = None
+    publication_date: Optional[str] = None
+    authorization_date: Optional[str] = None
 
     # 申请人信息
-    applicant: str | None = None
-    inventor: str | None = None
+    applicant: Optional[str] = None
+    inventor: Optional[str] = None
 
     # IPC分类
-    ipc_main_class: str | None = None
-    ipc_classification: str | None = None
+    ipc_main_class: Optional[str] = None
+    ipc_classification: Optional[str] = None
 
     # 内容
-    abstract: str | None = None
-    claims_content: str | None = None
+    abstract: Optional[str] = None
+    claims_content: Optional[str] = None
 
     # PDF信息
-    pdf_path: str | None = None
+    pdf_path: Optional[str] = None
     pdf_downloaded: bool = False
 
-    def get_best_number_for_download(self) -> str | None:
+    def get_best_number_for_download(self) -> Optional[str]:
         """
         获取最适合用于下载的专利号
 

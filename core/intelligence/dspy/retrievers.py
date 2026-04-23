@@ -32,7 +32,7 @@ class AthenaVectorRetriever(BaseAthenaRetriever):
         collection_name: str = "patent_rules_complete",
         k: int = 3,
         vector_field: str = "vector",
-        payload_fields: list[str] | None = None,
+        payload_fields: Optional[list[str]] = None,
     ):
         """初始化向量检索器
 
@@ -47,7 +47,7 @@ class AthenaVectorRetriever(BaseAthenaRetriever):
         self.vector_field = vector_field
         self.payload_fields = payload_fields or ["text", "metadata"]
 
-    def forward(self, query: str, k: int | None = None) -> list[dspy.Example]:
+    def forward(self, query: str, k: Optional[int] = None) -> list[dspy.Example]:
         """执行向量检索
 
         Args:
@@ -123,7 +123,7 @@ class AthenaGraphRetriever(BaseAthenaRetriever):
         super().__init__(k=k)
         self.space_name = space_name
 
-    def forward(self, query: str, k: int | None = None) -> list[dspy.Example]:
+    def forward(self, query: str, k: Optional[int] = None) -> list[dspy.Example]:
         """执行图谱检索
 
         Args:
@@ -204,7 +204,7 @@ class AthenaHybridRetriever(dspy.Retrieve):
         )
         self.graph_retriever = AthenaGraphRetriever(space_name=graph_space, k=int(k * graph_weight))
 
-    def forward(self, query: str, k: int | None = None) -> list[dspy.Example]:
+    def forward(self, query: str, k: Optional[int] = None) -> list[dspy.Example]:
         """执行混合检索
 
         Args:

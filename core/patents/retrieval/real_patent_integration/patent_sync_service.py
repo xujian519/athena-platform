@@ -350,7 +350,7 @@ class PatentSyncService:
             batch_stats['failed'] = batch_stats['total']
             return batch_stats
 
-    def sync_all_patents(self, limit: int | None = None) -> dict[str, Any]:
+    def sync_all_patents(self, limit: Optional[int] = None) -> dict[str, Any]:
         """同步所有专利数据
 
         Args:

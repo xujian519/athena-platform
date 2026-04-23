@@ -36,10 +36,10 @@ def semantic_analysis_handler(
     action: str,
     text1: Optional[str] = None,
     text2: Optional[str] = None,
-    intent_examples: Optional[Dict[str, List[str]]] = None,
+    intent_examples: Optional[dict[str, list[str]] = None,
     top_k: int = 5,
     train_model: bool = False,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     语义分析工具Handler
 
@@ -324,7 +324,7 @@ def calculate_text_similarity(text1: str, text2: str) -> float:
 
 def find_text_intent(
     text: str,
-    intent_examples: Optional[Dict[str, List[str]]] = None
+    intent_examples: Optional[dict[str, list[str]] = None
 ) -> tuple[str, float]:
     """
     识别文本的意图

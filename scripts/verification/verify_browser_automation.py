@@ -9,15 +9,15 @@ Author: Athena平台团队
 Created: 2026-04-19
 """
 
-import sys
 import logging
+import sys
 from pathlib import Path
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from core.tools.browser_automation_handler import browser_automation_handler, ToolContext
+from core.tools.browser_automation_handler import ToolContext, browser_automation_handler
 
 # 配置日志
 logging.basicConfig(
@@ -46,13 +46,13 @@ def test_health_check():
     result = browser_automation_handler(context)
 
     if result.success:
-        print(f"✅ 健康检查通过")
+        print("✅ 健康检查通过")
         print(f"   消息: {result.message}")
         if result.data:
             print(f"   数据: {result.data}")
         return True
     else:
-        print(f"❌ 健康检查失败")
+        print("❌ 健康检查失败")
         print(f"   错误: {result.error}")
         print(f"   消息: {result.message}")
         return False
@@ -74,11 +74,11 @@ def test_navigate():
     result = browser_automation_handler(context)
 
     if result.success:
-        print(f"✅ 页面导航成功")
+        print("✅ 页面导航成功")
         print(f"   消息: {result.message}")
         return True
     else:
-        print(f"❌ 页面导航失败")
+        print("❌ 页面导航失败")
         print(f"   错误: {result.error}")
         print(f"   消息: {result.message}")
         return False
@@ -96,12 +96,12 @@ def test_get_content():
     result = browser_automation_handler(context)
 
     if result.success:
-        print(f"✅ 获取页面内容成功")
+        print("✅ 获取页面内容成功")
         if result.data and "title" in result.data:
             print(f"   页面标题: {result.data['title']}")
         return True
     else:
-        print(f"❌ 获取页面内容失败")
+        print("❌ 获取页面内容失败")
         print(f"   错误: {result.error}")
         return False
 
@@ -126,12 +126,12 @@ def test_screenshot():
     result = browser_automation_handler(context)
 
     if result.success:
-        print(f"✅ 页面截图成功")
+        print("✅ 页面截图成功")
         if result.data and "saved_path" in result.data:
             print(f"   保存路径: {result.data['saved_path']}")
         return True
     else:
-        print(f"❌ 页面截图失败")
+        print("❌ 页面截图失败")
         print(f"   错误: {result.error}")
         return False
 
@@ -151,11 +151,11 @@ def test_execute_task():
     result = browser_automation_handler(context)
 
     if result.success:
-        print(f"✅ 智能任务执行成功")
+        print("✅ 智能任务执行成功")
         print(f"   消息: {result.message}")
         return True
     else:
-        print(f"❌ 智能任务执行失败")
+        print("❌ 智能任务执行失败")
         print(f"   错误: {result.error}")
         return False
 

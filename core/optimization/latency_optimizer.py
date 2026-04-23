@@ -49,8 +49,8 @@ class RequestMetrics:
     request_id: str
     priority: PriorityLevel
     submit_time: float
-    start_time: float | None = None
-    end_time: float | None = None
+    start_time: Optional[float] = None
+    end_time: Optional[float] = None
     queue_time: float = 0
     execution_time: float = 0
     total_time: float = 0

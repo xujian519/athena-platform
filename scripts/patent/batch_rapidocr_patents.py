@@ -13,7 +13,7 @@ import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 # 配置日志
 logging.basicConfig(
@@ -58,7 +58,7 @@ class RapidOCRBatchProcessor:
             "errors": []
         }
 
-    def find_pdf_files(self) -> List[Path]:
+    def find_pdf_files(self) -> list[Path]:
         """查找所有PDF文件"""
         logger.info(f"🔍 扫描目录: {self.input_dir}")
 
@@ -68,7 +68,7 @@ class RapidOCRBatchProcessor:
 
         return sorted(pdf_files)
 
-    def process_single_pdf(self, pdf_path: Path) -> Dict[str, Any]:
+    def process_single_pdf(self, pdf_path: Path) -> dict[str, Any]:
         """
         处理单个PDF文件
 
@@ -91,7 +91,7 @@ class RapidOCRBatchProcessor:
             ocr = RapidOCR()
 
             # PDF转图像
-            logger.info(f"  📄 转换PDF为图像...")
+            logger.info("  📄 转换PDF为图像...")
             images = convert_from_path(str(pdf_path), dpi=200)
 
             logger.info(f"  ✅ 成功转换 {len(images)} 页")
@@ -158,7 +158,7 @@ class RapidOCRBatchProcessor:
                 "processing_time": time.time() - file_start_time
             }
 
-    def process_batch(self, pdf_files: List[Path]) -> Dict[str, Any]:
+    def process_batch(self, pdf_files: list[Path]) -> dict[str, Any]:
         """
         批量处理PDF文件
 
@@ -176,7 +176,7 @@ class RapidOCRBatchProcessor:
         logger.info(f"   输入目录: {self.input_dir}")
         logger.info(f"   输出目录: {self.output_dir}")
         logger.info(f"   并行数量: {self.parallel}")
-        logger.info(f"   OCR引擎: RapidOCR")
+        logger.info("   OCR引擎: RapidOCR")
         logger.info("=" * 80)
 
         # 使用线程池并行处理
@@ -228,7 +228,7 @@ class RapidOCRBatchProcessor:
             "stats": self.stats
         }
 
-    def generate_summary_report(self, batch_result: Dict[str, Any]):
+    def generate_summary_report(self, batch_result: dict[str, Any]):
         """生成汇总报告"""
 
         stats = self.stats

@@ -58,7 +58,7 @@ class IntentBatchRecognitionRequest(BaseModel):
     """批量意图识别请求"""
 
     texts: list[str] = Field(..., description="文本列表", min_length=1, max_length=100)
-    context: dict[str, Any] | None = None
+    context: Optional[dict[str, Any]] = None
 
 
 class EngineRecommendation(BaseModel):
@@ -82,12 +82,12 @@ class IntentRecognitionResponse(BaseModel):
     methods_used: list[str]
 
     # 可选字段
-    recommended_engine: str | None = None
-    engine_reason: str | None = None
-    bypass_super_reasoning: bool | None = None
+    recommended_engine: Optional[str] = None
+    engine_reason: Optional[str] = None
+    bypass_super_reasoning: Optional[bool] = None
     entities: dict[str, list[str]] | None = None
-    task_profile: dict[str, Any] | None = None
-    thought_trace: dict[str, Any] | None = None  # 思维协议追踪
+    task_profile: Optional[dict[str, Any]] = None
+    thought_trace: Optional[dict[str, Any]] = None  # 思维协议追踪
     timestamp: str = None
 
 

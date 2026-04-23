@@ -130,7 +130,7 @@ def save_speeches() -> None:
 {chr(10).join([f"{i+1}. {case}" for i, case in enumerate(speech['case_studies'])])}
 
 ### 精彩语录
-{chr(10).join([f"> {quote}" for quote in speech['quotes']])}
+{chr(10).join([f"> {quote}" for quote in speech['quotes'])}
 
 ## 💡 演讲价值
 展现了徐健先生在知识产权领域的深厚专业知识和丰富的实战经验，为企业构建知识产权护城河提供了系统性的指导和实用的策略建议。""",
@@ -164,7 +164,7 @@ def save_speeches() -> None:
 - **专业领域**: 知识产权全链条服务
 
 ## 🎖️ 专业资质
-{chr(10).join([f"- {qualification}" for qualification in personal_info['qualifications']])}
+{chr(10).join([f"- {qualification}" for qualification in personal_info['qualifications'])}
 
 ## 📚 教育与职业背景
 - **专业背景**: {personal_info['background']['education']}

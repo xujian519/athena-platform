@@ -296,8 +296,8 @@ class GraphQueryEnhancer:
                 "description": "基于特定条件采取相应行为",
                 "query": f'''
                 MATCH (cond)-[:leads_to]->(action)
-                WHERE cond.name IN {[f"'{c}'" for c in elements["conditions"]]}
-                AND action.name IN {[f"'{a}'" for a in elements["actions"]]}
+                WHERE cond.name IN {[f"'{c}'" for c in elements["conditions"]}
+                AND action.name IN {[f"'{a}'" for a in elements["actions"]}
                 RETURN cond, action
                 '''
             })
@@ -309,8 +309,8 @@ class GraphQueryEnhancer:
                 "description": "行为导致的法律后果",
                 "query": f'''
                 MATCH (action)-[:results_in]->(consequence)
-                WHERE action.name IN {[f"'{a}'" for a in elements["actions"]]}
-                AND consequence.name IN {[f"'{c}'" for c in elements["consequences"]]}
+                WHERE action.name IN {[f"'{a}'" for a in elements["actions"]}
+                AND consequence.name IN {[f"'{c}'" for c in elements["consequences"]}
                 RETURN action, consequence
                 '''
             })

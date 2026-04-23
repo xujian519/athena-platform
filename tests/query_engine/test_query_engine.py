@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from __future__ import annotations
+
 """
 Query Engine单元测试
 Query Engine Unit Tests
@@ -10,15 +10,11 @@ Query Engine Unit Tests
 版本: 1.0.0
 """
 
-import asyncio
 import time
-from datetime import datetime
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock
 
 import pytest
-
 from core.query_engine import (
-    InvalidQueryError,
     QueryEngine,
     QueryOptimizer,
     QueryResult,
@@ -33,7 +29,6 @@ from core.query_engine.adapters import (
 )
 from core.query_engine.cache import MemoryCache, MultiLevelCache
 from core.query_engine.types import CacheKey, DataSourceType
-
 
 # ==================== 测试配置 ====================
 
@@ -594,3 +589,4 @@ class TestQueryEnginePerformance:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v", "--tb=short"])
+

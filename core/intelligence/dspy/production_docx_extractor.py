@@ -155,7 +155,7 @@ class ProductionDocxExtractor:
         logger.info(f"找到 {len(docx_files)} 个DOCX文件")
         return docx_files
 
-    def parse_docx_document(self, file_path: Path) -> dict[str, Any] | None:
+    def parse_docx_document(self, file_path: Path) -> Optional[dict[str, Any]]:
         """解析DOCX文档(复用生产环境逻辑)
 
         Args:

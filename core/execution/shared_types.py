@@ -54,7 +54,7 @@ class TaskResult:
     """任务执行结果"""
     success: bool
     data: Any = None
-    error: str | None = None
+    error: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 

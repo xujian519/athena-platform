@@ -60,7 +60,7 @@ class TaskResult:
     validation: dict[str, Any]
     human_intervention: bool = False
     execution_time: float = 0.0
-    error_message: str | None = None
+    error_message: Optional[str] = None
 
     def to_dict(self) -> dict:
         """转换为字典"""

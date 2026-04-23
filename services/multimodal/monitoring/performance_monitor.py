@@ -95,7 +95,7 @@ class APICallTracker:
         # 状态码分布
         status_distribution = defaultdict(int)
         for call in recent_calls:
-            status_distribution[call['status_code']] += 1
+            status_distribution[call['status_code'] += 1
 
         return {
             'total_calls': total_calls,
@@ -159,12 +159,12 @@ class FileProcessingTracker:
         # 文件类型分布
         file_type_counts = defaultdict(int)
         for op in recent_ops:
-            file_type_counts[op['file_type']] += 1
+            file_type_counts[op['file_type'] += 1
 
         # 操作类型分布
         operation_type_counts = defaultdict(int)
         for op in recent_ops:
-            operation_type_counts[op['operation_type']] += 1
+            operation_type_counts[op['operation_type'] += 1
 
         return {
             'total_operations': total_ops,
@@ -326,13 +326,13 @@ class SystemResourceMonitor:
             return self.metrics_history[-1]
         return None
 
-    def get_metrics_history(self, minutes: int = 60) -> list[dict[str, Any]]:
+    def get_metrics_history(self, minutes: int = 60) -> list[dict[str, Any]:
         """获取历史指标"""
         cutoff_time = datetime.now() - timedelta(minutes=minutes)
         return [m for m in self.metrics_history if m['timestamp'] > cutoff_time]
 
     def get_alerts(self, level: str | None = None,
-                   hours: int = 24) -> list[dict[str, Any]]:
+                   hours: int = 24) -> list[dict[str, Any]:
         """获取告警记录"""
         cutoff_time = datetime.now() - timedelta(hours=hours)
         alerts = [a for a in self.alerts if a['timestamp'] > cutoff_time]

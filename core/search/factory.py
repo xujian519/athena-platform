@@ -49,7 +49,7 @@ class SearchEngineFactory:
 
     @classmethod
     def create_engine(
-        cls, name: str | None = None, config: dict | None = None, singleton: bool = True
+        cls, name: Optional[str] = None, config: dict | None = None, singleton: bool = True
     ) -> BaseSearchEngine:
         """
         创建搜索引擎实例

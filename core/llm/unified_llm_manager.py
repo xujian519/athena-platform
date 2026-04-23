@@ -476,7 +476,7 @@ class UnifiedLLMManager:
             logger.warning(f"⚠️ 获取系统提示词发生未预期错误: {e}", exc_info=True)
         return ""
 
-    def _map_task_to_agent(self, task_type: str) -> str | None:
+    def _map_task_to_agent(self, task_type: str) -> Optional[str]:
         """
         将任务类型映射到智能体
 
@@ -630,7 +630,7 @@ class UnifiedLLMManager:
         self,
         original_prompt: str,
         output: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> dict[str, Any]:
         """
         反思评估便捷方法

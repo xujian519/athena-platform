@@ -2,14 +2,13 @@
 ReAct推理引擎测试（Agent编排）
 """
 
-import pytest
-from unittest.mock import AsyncMock, Mock
+from unittest.mock import AsyncMock
 
+import pytest
 from core.xiaonuo_agent.reasoning.react_engine import (
+    Action,
     ReActEngine,
     Thought,
-    Action,
-    Observation,
     ThoughtType,
 )
 

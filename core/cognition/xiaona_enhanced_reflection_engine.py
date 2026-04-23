@@ -333,7 +333,7 @@ class XiaonaEnhancedReflectionEngine:
         original_prompt: str,
         legal_output: str,
         task_type: str = "patent_analysis",
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> LegalReflectionResult:
         """对法律分析进行反思"""
 

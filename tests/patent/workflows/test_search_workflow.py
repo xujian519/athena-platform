@@ -13,7 +13,6 @@ Patent Search Workflow Tests
 from unittest.mock import Mock
 
 import pytest
-
 from core.patents.workflows.search_workflow import (
     SearchWorkflow,
     SearchWorkflowInput,

@@ -18,12 +18,12 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent.parent))
 
+from core.ai.llm.writing_materials_manager import get_materials_manager
 from core.judgment_vector_db.generation.article_generator import (
     ArticleQuality,
     ArticleType,
     GeneratedArticle,
 )
-from core.llm.writing_materials_manager import get_materials_manager
 
 # 导入风格管理器
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "services" / "self-media-agent"))

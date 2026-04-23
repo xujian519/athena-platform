@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 查看项目中可用的知识图谱
 """
 
-import json
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import logging
-import os
 from pathlib import Path
+from typing import Any
 
 from neo4j import GraphDatabase
 
@@ -108,7 +105,7 @@ def list_knowledge_graphs() -> Any:
             # 总体统计
             total_nodes = sum(node_stats.values())
             total_rels = sum(rel_stats.values())
-            logger.info(f"\n📊 总计:")
+            logger.info("\n📊 总计:")
             logger.info(f"  • 总节点数: {total_nodes:,}")
             logger.info(f"  • 总关系数: {total_rels:,}")
 
@@ -129,7 +126,7 @@ def list_knowledge_graphs() -> Any:
                 for collection in collections:
                     name = collection.get('name', 'Unknown')
                     vectors_count = collection.get('vectors_count', 0)
-                    points_count = collection.get('points_count', 0)
+                    collection.get('points_count', 0)
                     logger.info(f"  • {name:<20} {vectors_count:>10} 个向量")
             else:
                 logger.info('  暂无向量集合')

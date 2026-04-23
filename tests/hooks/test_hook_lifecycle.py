@@ -7,13 +7,12 @@ Hook生命周期管理器测试
 作者: Athena平台团队
 创建时间: 2026-04-20
 """
-from __future__ import annotations
 
 import asyncio
+
 import pytest
 
 from core.hooks.base import HookContext, HookFunction, HookRegistry, HookType
-
 
 # 由于增强模块还未创建，我们先测试现有功能
 # 然后逐步添加增强功能的测试
@@ -356,3 +355,4 @@ __all__ = [
     "TestHookFunction",
     "TestHookType",
 ]
+

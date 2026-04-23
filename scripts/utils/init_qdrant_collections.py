@@ -12,16 +12,16 @@ Qdrant向量库集合初始化脚本
 日期: 2026-04-18
 """
 
-import sys
 import logging
-from typing import Optional
+import sys
+
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
     Distance,
-    VectorParams,
-    PayloadSchemaType,
     PayloadSchemaParams,
+    PayloadSchemaType,
     PointStruct,
+    VectorParams,
 )
 
 # 配置日志

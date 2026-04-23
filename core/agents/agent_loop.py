@@ -28,10 +28,10 @@ class LLMResponse:
     """LLM 响应"""
 
     content: str = ""
-    stop_reason: str | None = None
+    stop_reason: Optional[str] = None
     tool_uses: list[dict] = field(default_factory=list)
     tool_results: list[dict] = field(default_factory=list)
-    stream_delta: str | None = None  # 流式增量
+    stream_delta: Optional[str] = None  # 流式增量
 
 
 @dataclass
@@ -41,7 +41,7 @@ class ToolResult:
     tool_id: str
     success: bool
     result: Any = None
-    error: str | None = None
+    error: Optional[str] = None
     execution_time: float = 0.0
 
 
@@ -88,7 +88,7 @@ class BaseAgentLoop:
     async def run(
         self,
         user_message: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> str:
         """执行 Agent Loop
 

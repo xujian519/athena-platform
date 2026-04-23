@@ -24,7 +24,7 @@ async def knowledge_graph_search_handler(
     query_type: str = "cypher",
     top_k: int = 10,
     return_format: str = "json"
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     知识图谱搜索处理器
 
@@ -244,7 +244,7 @@ async def knowledge_graph_search_handler(
 
 
 # 便捷函数：常用查询模板
-async def get_graph_statistics() -> Dict[str, Any]:
+async def get_graph_statistics() -> dict[str, Any]:
     """
     获取知识图谱统计信息
 
@@ -260,7 +260,7 @@ async def get_graph_statistics() -> Dict[str, Any]:
 async def search_patents_by_keyword(
     keyword: str,
     limit: int = 10
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     按关键词搜索专利节点
 
@@ -290,7 +290,7 @@ async def find_related_patents(
     patent_id: str,
     relationship_type: Optional[str] = None,
     limit: int = 10
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     查找与指定专利相关的专利
 
@@ -325,7 +325,7 @@ async def find_shortest_path(
     start_id: str,
     end_id: str,
     max_depth: int = 5
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     查找两个节点之间的最短路径
 

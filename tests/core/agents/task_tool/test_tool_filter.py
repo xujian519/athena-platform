@@ -3,13 +3,13 @@ ToolFilter单元测试
 """
 
 
-from core.agents.subagent_registry import SubagentConfig, SubagentRegistry
-from core.agents.task_tool.models import ModelChoice
+from core.framework.agents.subagent_registry import SubagentConfig, SubagentRegistry
+from core.framework.agents.task_tool.models import ModelChoice
 
 
 def test_tool_filter_initialization():
     """测试ToolFilter初始化"""
-    from core.agents.task_tool.tool_filter import ToolFilter
+    from core.framework.agents.task_tool.tool_filter import ToolFilter
 
     registry = SubagentRegistry()
     filter = ToolFilter(registry)
@@ -20,7 +20,7 @@ def test_tool_filter_initialization():
 
 def test_filter_tools_basic():
     """测试基本工具过滤"""
-    from core.agents.task_tool.tool_filter import ToolFilter
+    from core.framework.agents.task_tool.tool_filter import ToolFilter
 
     registry = SubagentRegistry()
     filter = ToolFilter(registry)
@@ -49,7 +49,7 @@ def test_filter_tools_basic():
 
 def test_filter_tools_with_wildcard():
     """测试通配符过滤"""
-    from core.agents.task_tool.tool_filter import ToolFilter
+    from core.framework.agents.task_tool.tool_filter import ToolFilter
 
     registry = SubagentRegistry()
 
@@ -85,7 +85,7 @@ def test_filter_tools_with_wildcard():
 
 def test_filter_tools_empty_allowed_list():
     """测试空允许列表（允许所有工具）"""
-    from core.agents.task_tool.tool_filter import ToolFilter
+    from core.framework.agents.task_tool.tool_filter import ToolFilter
 
     registry = SubagentRegistry()
 
@@ -113,7 +113,7 @@ def test_filter_tools_empty_allowed_list():
 
 def test_filter_tools_no_available_tools():
     """测试没有可用工具的情况"""
-    from core.agents.task_tool.tool_filter import ToolFilter
+    from core.framework.agents.task_tool.tool_filter import ToolFilter
 
     registry = SubagentRegistry()
     filter = ToolFilter(registry)
@@ -127,7 +127,7 @@ def test_filter_tools_no_available_tools():
 
 def test_is_tool_allowed_basic():
     """测试工具权限检查"""
-    from core.agents.task_tool.tool_filter import ToolFilter
+    from core.framework.agents.task_tool.tool_filter import ToolFilter
 
     registry = SubagentRegistry()
     filter = ToolFilter(registry)
@@ -144,7 +144,7 @@ def test_is_tool_allowed_basic():
 
 def test_is_tool_allowed_with_wildcard():
     """测试通配符工具权限检查"""
-    from core.agents.task_tool.tool_filter import ToolFilter
+    from core.framework.agents.task_tool.tool_filter import ToolFilter
 
     registry = SubagentRegistry()
 
@@ -172,7 +172,7 @@ def test_is_tool_allowed_with_wildcard():
 
 def test_is_tool_allowed_empty_list():
     """测试空允许列表（允许所有工具）"""
-    from core.agents.task_tool.tool_filter import ToolFilter
+    from core.framework.agents.task_tool.tool_filter import ToolFilter
 
     registry = SubagentRegistry()
 
@@ -194,7 +194,7 @@ def test_is_tool_allowed_empty_list():
 
 def test_match_pattern_basic():
     """测试基本模式匹配"""
-    from core.agents.task_tool.tool_filter import ToolFilter
+    from core.framework.agents.task_tool.tool_filter import ToolFilter
 
     registry = SubagentRegistry()
     filter = ToolFilter(registry)
@@ -219,7 +219,7 @@ def test_match_pattern_basic():
 
 def test_get_allowed_tools_for_agent():
     """测试获取代理的允许工具列表"""
-    from core.agents.task_tool.tool_filter import ToolFilter
+    from core.framework.agents.task_tool.tool_filter import ToolFilter
 
     registry = SubagentRegistry()
     filter = ToolFilter(registry)
@@ -236,7 +236,7 @@ def test_get_allowed_tools_for_agent():
 
 def test_filter_tools_with_multiple_patterns():
     """测试多个模式过滤"""
-    from core.agents.task_tool.tool_filter import ToolFilter
+    from core.framework.agents.task_tool.tool_filter import ToolFilter
 
     registry = SubagentRegistry()
 

@@ -52,12 +52,12 @@ class Task:
     status: TaskStatus = TaskStatus.PENDING
     priority: int = 3  # 1-5,5最高
     estimated_duration: float = 1.0  # 分钟
-    assignee: str | None = None
+    assignee: Optional[str] = None
     result: Any | None = None
-    error_message: str | None = None
+    error_message: Optional[str] = None
     created_at: str = field(default_factory=lambda: datetime.now().isoformat())
-    started_at: str | None = None
-    completed_at: str | None = None
+    started_at: Optional[str] = None
+    completed_at: Optional[str] = None
 
     def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
@@ -81,7 +81,7 @@ class Task:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "Task":
+    def from_dict(cls, data: dict[str, Any]) -> Task:
         """从字典创建"""
         return cls(
             task_id=data["task_id"],
@@ -171,8 +171,8 @@ class HierarchicalPlanner:
     async def plan(
         self,
         goal: str,
-        context: dict[str, Any] | None = None,
-        available_agents: list[str] | None = None,
+        context: Optional[dict[str, Any]] = None,
+        available_agents: Optional[list[str]] = None,
         max_depth: int = 3,
     ) -> ExecutionPlan:
         """
@@ -320,7 +320,7 @@ class HierarchicalPlanner:
         else:
             return "general_task"
 
-    def _find_matching_template(self, goal: str) -> dict[str, Any] | None:
+    def _find_matching_template(self, goal: str) -> Optional[dict[str, Any]]:
         """查找匹配的任务模板"""
         for template_name, template in self._task_templates.items():
             if template_name in goal:

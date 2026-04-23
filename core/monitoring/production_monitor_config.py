@@ -117,7 +117,7 @@ class PrometheusMetricsExporter:
     def export_metrics(
         self,
         service_name: str = "athena",
-        instance_id: str | None = None,
+        instance_id: Optional[str] = None,
         memory_monitor: MemoryMonitor | None = None,
     ):
         """导出指标到Prometheus"""
@@ -149,7 +149,7 @@ class PrometheusMetricsExporter:
         self,
         alert: MemoryAlert,
         service_name: str = "athena",
-        instance_id: str | None = None,
+        instance_id: Optional[str] = None,
     ):
         """记录告警指标"""
         if not self._prometheus_available:
@@ -192,7 +192,7 @@ class AlertManager:
         self,
         enabled: bool = True,
         cooldown_minutes: int = 30,
-        notification_channels: list[str] | None = None,
+        notification_channels: Optional[list[str]] = None,
     ):
         """
         初始化告警管理器
@@ -340,7 +340,7 @@ class AlertManager:
 class ProductionMemoryMonitor:
     """生产环境内存监控"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化生产环境监控
 
@@ -377,7 +377,7 @@ class ProductionMemoryMonitor:
         """处理告警"""
         await self.alert_manager.send_alert(alert)
 
-    async def start(self, prometheus_port: int | None = None):
+    async def start(self, prometheus_port: Optional[int] = None):
         """
         启动监控
 
@@ -401,7 +401,7 @@ class ProductionMemoryMonitor:
         await self.monitor.stop()
         logger.info("✅ 生产环境内存监控已停止")
 
-    def export_metrics(self, service_name: str = "athena", instance_id: str | None = None):
+    def export_metrics(self, service_name: str = "athena", instance_id: Optional[str] = None):
         """导出Prometheus指标"""
         self.metrics_exporter.export_metrics(
             service_name=service_name,

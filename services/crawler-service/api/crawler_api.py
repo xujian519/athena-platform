@@ -73,7 +73,7 @@ class CrawlResponse(BaseModel):
     """爬取响应模型"""
     task_id: str
     status: str
-    results: list[dict[str, Any]]
+    results: list[dict[str, Any]
     stats: dict[str, Any]
     message: str | None = None
 

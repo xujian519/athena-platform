@@ -92,7 +92,7 @@ class UnifiedCache:
             return None
 
     async def set(
-        self, key: str, value: Any, ttl: int | None = None
+        self, key: str, value: Any, ttl: Optional[int] = None
     ) -> bool:
         """
         设置缓存
@@ -206,7 +206,7 @@ class UnifiedCache:
             return {}
 
     async def set_multi(
-        self, items: dict[str, Any], ttl: int | None = None
+        self, items: dict[str, Any], ttl: Optional[int] = None
     ) -> bool:
         """
         批量设置缓存
@@ -367,7 +367,7 @@ async def cache_get(key: str) -> Any | None:
     return await cache.get(key)
 
 
-async def cache_set(key: str, value: Any, ttl: int | None = None) -> bool:
+async def cache_set(key: str, value: Any, ttl: Optional[int] = None) -> bool:
     """
     便捷函数：设置缓存
 

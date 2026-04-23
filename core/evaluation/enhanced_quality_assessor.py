@@ -81,7 +81,7 @@ class EnhancedQualityAssessor:
         self,
         input_text: str,
         output_text: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> QualityAssessmentResult:
         """
         评估输出质量

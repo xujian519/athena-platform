@@ -127,8 +127,8 @@ class AgentLifecycleEvent(BaseEvent):
 
     agent_id: str = field(default_factory=lambda: "")
     agent_type: str = field(default_factory=lambda: "")  # 例如: "xiaona", "xiaonuo", "yunxi"
-    agent_name: str | None = None
-    session_id: str | None = None
+    agent_name: Optional[str] = None
+    session_id: Optional[str] = None
     event_type: str = "agent_lifecycle"  # 覆盖基类
 
 
@@ -147,7 +147,7 @@ class AgentStopped(AgentLifecycleEvent):
 
     event_type: str = EventType.AGENT_STOPPED.value
     shutdown_time: float = field(default_factory=time.time)
-    reason: str | None = None  # 停止原因
+    reason: Optional[str] = None  # 停止原因
 
 
 @dataclass
@@ -156,9 +156,9 @@ class AgentError(AgentLifecycleEvent):
 
     event_type: str = EventType.AGENT_ERROR.value
     error_time: float = field(default_factory=time.time)
-    error_type: str | None = None  # 错误类型
+    error_type: Optional[str] = None  # 错误类型
     error_message: str = ""  # 错误消息
-    traceback: str | None = None  # 堆栈跟踪
+    traceback: Optional[str] = None  # 堆栈跟踪
 
 
 # ========================================
@@ -173,7 +173,7 @@ class ToolExecutionEvent(BaseEvent):
     tool_id: str = field(default_factory=lambda: "")  # 工具标识
     tool_name: str = field(default_factory=lambda: "")  # 工具名称
     agent_id: str = field(default_factory=lambda: "")  # 执行工具的代理 ID
-    tool_use_id: str | None = None  # 工具使用 ID
+    tool_use_id: Optional[str] = None  # 工具使用 ID
 
 
 @dataclass
@@ -200,7 +200,7 @@ class ToolExecutionFailed(ToolExecutionEvent):
 
     event_type: str = EventType.TOOL_EXECUTION_FAILED.value
     parameters: dict[str, Any] = field(default_factory=dict)
-    error_type: str | None = None  # 错误类型
+    error_type: Optional[str] = None  # 错误类型
     error_message: str = ""  # 错误消息
     execution_time: float = 0.0  # 执行耗时（秒）
 
@@ -216,7 +216,7 @@ class MessageEvent(BaseEvent):
 
     message_id: str = field(default_factory=lambda: "")  # 消息唯一标识
     sender_id: str = field(default_factory=lambda: "")  # 发送者 ID
-    receiver_id: str | None = None  # 接收者 ID（广播时为 None）
+    receiver_id: Optional[str] = None  # 接收者 ID（广播时为 None）
     message_type: str = "text"  # 消息类型: text, command, etc.
 
 
@@ -243,7 +243,7 @@ class MessageError(MessageEvent):
     """消息错误事件"""
 
     event_type: str = EventType.MESSAGE_ERROR.value
-    error_type: str | None = None
+    error_type: Optional[str] = None
     error_message: str = ""
 
 
@@ -275,7 +275,7 @@ class SystemShutdown(SystemEvent):
 
     event_type: str = EventType.SYSTEM_SHUTDOWN.value
     shutdown_time: float = field(default_factory=time.time)
-    reason: str | None = None  # 关闭原因
+    reason: Optional[str] = None  # 关闭原因
 
 
 @dataclass
@@ -285,9 +285,9 @@ class SystemError(SystemEvent):
     event_type: str = EventType.SYSTEM_ERROR.value
     error_time: float = field(default_factory=time.time)
     component: str = ""
-    error_type: str | None = None
+    error_type: Optional[str] = None
     error_message: str = ""
-    traceback: str | None = None
+    traceback: Optional[str] = None
 
 
 # ========================================

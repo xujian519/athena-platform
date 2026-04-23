@@ -5,8 +5,9 @@ Qdrant基准测试数据导入脚本 - 修复版本
 """
 
 import random
+from typing import Any
+
 import requests
-from typing import List, Dict, Any
 
 # Qdrant配置
 QDRANT_URL = "http://localhost:16333"
@@ -24,12 +25,12 @@ COLLECTIONS = [
 ]
 
 
-def generate_random_vector(size: int) -> List[float]:
+def generate_random_vector(size: int) -> list[float]:
     """生成指定维度的随机向量"""
     return [random.uniform(-1, 1) for _ in range(size)]
 
 
-def generate_test_payload(collection_name: str, idx: int) -> Dict[str, Any]:
+def generate_test_payload(collection_name: str, idx: int) -> dict[str, Any]:
     """生成测试数据的payload"""
     base_payload = {
         "test_id": f"{collection_name}_test_{idx}",  # 在payload中保存原始ID

@@ -1,19 +1,18 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺基础操作模块
 Xiaonuo Basic Operations - 实现小诺直接控制的基础操作
 """
 
 import json
-import sqlite3
+import logging
 import os
 import shutil
-import logging
+import sqlite3
 import uuid
-from typing import Dict, Any, List, Optional, Union
-from datetime import datetime, date
+from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 # 尝试导入PostgreSQL支持
 try:
@@ -26,15 +25,16 @@ except ImportError:
 
 # 导入PostgreSQL配置
 import sys
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from database.postgresql_config import POSTGRESQL_CONFIG, TABLE_CONFIG, SQL_TEMPLATES
+from database.postgresql_config import POSTGRESQL_CONFIG, SQL_TEMPLATES, TABLE_CONFIG
 
 logger = logging.getLogger(__name__)
 
 class PostgreSQLManager:
     """PostgreSQL管理器 - 处理PostgreSQL数据库操作"""
 
-    def __init__(self, config: Dict | None = None):
+    def __init__(self, config: dict | None = None):
         if not POSTGRESQL_AVAILABLE:
             raise ImportError("PostgreSQL support not available")
 
@@ -58,7 +58,7 @@ class PostgreSQLManager:
                 raise
         return self.connection
 
-    def execute_query(self, query: str, params: tuple = ()) -> List[Dict[str, Any]]:
+    def execute_query(self, query: str, params: tuple = ()) -> list[dict[str, Any]:
         """执行查询语句"""
         conn = self.get_connection()
         try:
@@ -190,7 +190,7 @@ class DatabaseManager:
 
         conn.commit()
 
-    def execute_query(self, db_name: str, query: str, params: tuple = ()) -> List[Dict]:
+    def execute_query(self, db_name: str, query: str, params: tuple = ()) -> list[dict]:
         """执行查询语句"""
         conn = self.get_connection(db_name)
         if not conn:
@@ -252,7 +252,7 @@ class FileManager:
     def __init__(self, base_path: str = "/Users/xujian/Athena工作平台/deploy"):
         self.base_path = Path(base_path)
 
-    def list_files(self, directory: str, pattern: str = "*", recursive: bool = False) -> List[Dict[str, Any]]:
+    def list_files(self, directory: str, pattern: str = "*", recursive: bool = False) -> list[dict[str, Any]:
         """列出文件"""
         dir_path = self.base_path / directory
         if not dir_path.exists():
@@ -292,7 +292,7 @@ class FileManager:
             return None
 
         try:
-            with open(full_path, 'r', encoding='utf-8') as f:
+            with open(full_path, encoding='utf-8') as f:
                 return f.read()
         except Exception as e:
             logger.error(f"读取文件失败 {file_path}: {e}")
@@ -359,7 +359,7 @@ class PostgreSQLCustomerManager:
 
     def query_customers(self, customer_id: str | None = None,
                        customer_name: str | None = None,
-                       limit: int = 100) -> List[Dict]:
+                       limit: int = 100) -> list[dict]:
         """查询客户资料"""
         table = self.table_config["table_name"]
 
@@ -376,7 +376,7 @@ class PostgreSQLCustomerManager:
         query += f" LIMIT {limit}"
         return self.pg_manager.execute_query(query, params)
 
-    def create_customer(self, customer_data: Dict[str, Any]) -> str | None:
+    def create_customer(self, customer_data: dict[str, Any]) -> str | None:
         """创建客户资料"""
         required_fields = ["name"]
         for field in required_fields:
@@ -405,7 +405,7 @@ class PostgreSQLCustomerManager:
             return customer_id
         return None
 
-    def update_customer(self, customer_id: str, update_data: Dict[str, Any]) -> bool:
+    def update_customer(self, customer_id: str, update_data: dict[str, Any]) -> bool:
         """更新客户资料"""
         table = self.table_config["table_name"]
         query = SQL_TEMPLATES["customers"]["update"].format(table=table)
@@ -427,7 +427,7 @@ class PostgreSQLCustomerManager:
 
         return self.pg_manager.execute_update(query, (customer_id,))
 
-    def get_customer_projects(self, customer_id: str) -> List[Dict]:
+    def get_customer_projects(self, customer_id: str) -> list[dict]:
         """获取客户项目"""
         table = TABLE_CONFIG["projects"]["table_name"]
         query = SQL_TEMPLATES["projects"]["select_by_client"].format(table=table)
@@ -465,7 +465,7 @@ class CustomerDataManager:
 
     def query_customer(self, customer_id: str | None = None,
                       customer_name: str | None = None,
-                      phone: str | None = None) -> List[Dict]:
+                      phone: str | None = None) -> list[dict]:
         """查询客户资料"""
         # 优先使用PostgreSQL
         if self.use_postgresql():
@@ -500,7 +500,7 @@ class CustomerDataManager:
 
             return self.db_manager.execute_query("baochen_finance.db", query, tuple(params))
 
-    def create_customer(self, customer_data: Dict[str, Any]) -> str | None:
+    def create_customer(self, customer_data: dict[str, Any]) -> str | None:
         """创建客户资料"""
         # 优先使用PostgreSQL
         if self.use_postgresql():
@@ -554,7 +554,7 @@ class CustomerDataManager:
 
             return None
 
-    def update_customer(self, customer_id: int, update_data: Dict[str, Any]) -> bool:
+    def update_customer(self, customer_id: int, update_data: dict[str, Any]) -> bool:
         """更新客户资料"""
         if not update_data:
             return False
@@ -593,7 +593,7 @@ class CustomerDataManager:
         query = "DELETE FROM customer_records WHERE id = ?"
         return self.db_manager.execute_update("baochen_finance.db", query, (customer_id,))
 
-    def get_customer_file(self, customer_name: str) -> Dict | None:
+    def get_customer_file(self, customer_name: str) -> dict | None:
         """获取客户档案文件"""
         file_pattern = f"客户档案_*{customer_name}*.json"
         files = self.file_manager.list_files("data", file_pattern)
@@ -617,7 +617,7 @@ class PerformanceMonitor:
         self.db_manager = DatabaseManager()
 
     def record_metric(self, metric_name: str, value: float, unit: str = "",
-                     metadata: Dict | None = None):
+                     metadata: dict | None = None):
         """记录性能指标"""
         query = '''
             INSERT INTO system_metrics
@@ -632,7 +632,7 @@ class PerformanceMonitor:
     def get_metrics(self, metric_name: str | None = None,
                    start_time: datetime | None = None,
                    end_time: datetime | None = None,
-                   limit: int = 100) -> List[Dict]:
+                   limit: int = 100) -> list[dict]:
         """获取性能指标"""
         conditions = []
         params = []
@@ -659,7 +659,7 @@ class PerformanceMonitor:
         params.append(limit)
         return self.db_manager.execute_query("performance_metrics.db", query, tuple(params))
 
-    def get_system_status(self) -> Dict[str, Any]:
+    def get_system_status(self) -> dict[str, Any]:
         """获取系统状态概览"""
         # 获取最近的性能指标
         recent_metrics = self.get_metrics(limit=10)
@@ -687,7 +687,7 @@ class PerformanceMonitor:
         except ImportError:
             return 0.0
 
-    def _get_memory_usage(self) -> Dict[str, float]:
+    def _get_memory_usage(self) -> dict[str, float]:
         """获取内存使用情况"""
         try:
             import psutil
@@ -700,7 +700,7 @@ class PerformanceMonitor:
         except ImportError:
             return {"total": 0, "used": 0, "percent": 0.0}
 
-    def _get_disk_usage(self) -> Dict[str, float]:
+    def _get_disk_usage(self) -> dict[str, float]:
         """获取磁盘使用情况"""
         try:
             import psutil
@@ -713,7 +713,7 @@ class PerformanceMonitor:
         except ImportError:
             return {"total": 0, "used": 0, "percent": 0.0}
 
-    def _check_database_status(self) -> Dict[str, bool]:
+    def _check_database_status(self) -> dict[str, bool]:
         """检查数据库状态"""
         status = {}
         for db_name in self.db_manager.supported_databases:
@@ -723,7 +723,7 @@ class PerformanceMonitor:
                 conn.close()
         return status
 
-    def _check_agent_status(self) -> Dict[str, str]:
+    def _check_agent_status(self) -> dict[str, str]:
         """检查智能体状态"""
         # 这里应该调用agent_orchestrator来获取实际状态
         # 简化实现，返回模拟状态
@@ -744,7 +744,7 @@ class XiaonuoBasicOperations:
         self.performance_monitor = PerformanceMonitor()
 
     async def execute_operation(self, operation: str, target: str,
-                              data: Dict | None = None) -> Dict[str, Any]:
+                              data: dict | None = None) -> dict[str, Any]:
         """执行基础操作"""
         try:
             # 记录操作开始

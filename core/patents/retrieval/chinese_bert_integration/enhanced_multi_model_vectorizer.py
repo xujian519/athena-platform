@@ -30,7 +30,7 @@ class EnhancedMultiModelVectorizer:
         cache_dir: str = '/Users/xujian/Athena工作平台/patent_hybrid_retrieval/cache',
         max_cache_size: int = 10000,
         enable_redis: bool = True,
-        redis_config: dict[str, Any] | None = None,
+        redis_config: Optional[dict[str, Any]] = None,
         max_workers: int = None,
         enable_parallel: bool = True
     ):
@@ -88,7 +88,7 @@ class EnhancedMultiModelVectorizer:
     def encode_with_multiple_models_enhanced(
         self,
         texts: list[str],
-        model_config: dict[str, Any] | None = None,
+        model_config: Optional[dict[str, Any]] = None,
         fusion_strategy: str = 'weighted_average',
         return_individual: bool = False,
         use_cache: bool = True,
@@ -284,7 +284,7 @@ class EnhancedMultiModelVectorizer:
     def batch_encode_with_parallel(
         self,
         text_batches: list[list[str]],
-        model_config: dict[str, Any] | None = None,
+        model_config: Optional[dict[str, Any]] = None,
         fusion_strategy: str = 'weighted_average',
         parallel_batches: bool = True
     ) -> list[dict[str, Any]]:
@@ -332,7 +332,7 @@ class EnhancedMultiModelVectorizer:
     def _encode_single_batch(
         self,
         texts: list[str],
-        model_config: dict[str, Any] | None,
+        model_config: Optional[dict[str, Any]],
         fusion_strategy: str
     ) -> dict[str, Any]:
         """编码单个批次"""
@@ -344,7 +344,7 @@ class EnhancedMultiModelVectorizer:
         )
         return result
 
-    def _get_from_cache(self, cache_key: str) -> dict[str, Any | None]:
+    def _get_from_cache(self, cache_key: str) -> Optional[dict[str, Any]]:
         """从缓存获取结果"""
         if self.cache_manager and self.cache_manager.is_connected():
             try:
@@ -553,7 +553,7 @@ class EnhancedMultiModelVectorizer:
         self,
         patents: list[dict[str, Any]],
         text_fields: list[str] = None,
-        model_config: dict[str, Any] | None = None,
+        model_config: Optional[dict[str, Any]] = None,
         fusion_strategy: str = 'weighted_average',
         parallel_threshold: int = 5
     ) -> dict[str, Any]:

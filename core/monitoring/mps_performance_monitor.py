@@ -37,8 +37,8 @@ class GPUMetrics:
     memory_used_mb: float
     memory_total_mb: float
     memory_percent: float
-    temperature_celsius: float | None = None
-    power_watts: float | None = None
+    temperature_celsius: Optional[float] = None
+    power_watts: Optional[float] = None
 
 
 @dataclass
@@ -303,7 +303,7 @@ class MPSPerformanceMonitor:
         except Exception:
             return 0.0
 
-    def _get_cuda_temperature(self) -> float | None:
+    def _get_cuda_temperature(self) -> Optional[float]:
         """获取CUDA GPU温度"""
         try:
             import pynvml
@@ -315,7 +315,7 @@ class MPSPerformanceMonitor:
             # pynvml不可用或GPU未初始化
             return None
 
-    def _get_cuda_power(self) -> float | None:
+    def _get_cuda_power(self) -> Optional[float]:
         """获取CUDA GPU功耗"""
         try:
             import pynvml
@@ -452,7 +452,7 @@ class MPSPerformanceMonitor:
             "count": len(gpu_history),
         }
 
-    def save_metrics(self, filename: str | None = None) -> None:
+    def save_metrics(self, filename: Optional[str] = None) -> None:
         """保存指标到文件"""
         if filename is None:
             filename = f"metrics_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"

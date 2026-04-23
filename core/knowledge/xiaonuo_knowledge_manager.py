@@ -601,7 +601,7 @@ class XiaonuoKnowledgeManager:
                 return item["data"]
         return None
 
-    def _set_cache(self, key: str, data, ttl: int | None = None) -> None:
+    def _set_cache(self, key: str, data, ttl: Optional[int] = None) -> None:
         """设置缓存"""
         self._cache[key] = {
             "data": data,

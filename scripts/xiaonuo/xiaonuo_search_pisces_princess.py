@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺搜索双鱼公主历史记忆
 Xiaonuo Searches Pisces Princess Historical Memories
 """
 
-import os
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import subprocess
-import json
-from datetime import datetime
-import requests
 import logging
+import os
+import subprocess
+from datetime import datetime
+from typing import Any
+
+import requests
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +61,7 @@ class XiaonuoSearcher:
                             if os.path.exists(file_path):
                                 # 读取文件内容
                                 try:
-                                    with open(file_path, 'r', encoding='utf-8') as f:
+                                    with open(file_path, encoding='utf-8') as f:
                                         content = f.read(1000)  # 只读取前1000字符
 
                                         if keyword in content:
@@ -81,7 +80,7 @@ class XiaonuoSearcher:
 
     def search_database(self) -> Any | None:
         """搜索数据库中的双鱼公主记忆"""
-        print(f"\n🗃️ 搜索记忆数据库...")
+        print("\n🗃️ 搜索记忆数据库...")
 
         # 搜索记忆系统
         try:
@@ -113,22 +112,16 @@ class XiaonuoSearcher:
 
     def search_codebase(self) -> Any | None:
         """搜索代码库中的相关定义"""
-        print(f"\n💻 搜索代码库定义...")
+        print("\n💻 搜索代码库定义...")
 
         # 搜索可能的配置或定义
-        search_patterns = [
-            {"pattern": "class.*[Pp]rincess", "desc": "公主相关类"},
-            {"pattern": "pisces.*princess", "desc": "双鱼座公主"},
-            {"pattern": "双鱼.*公主", "desc": "中文双鱼公主"},
-            {"pattern": "pisces_goddess", "desc": "双鱼座女神"}
-        ]
 
-        cmd = f"grep -r -n \"class.*[Pp]rincess\\|pisces.*princess\\|双鱼.*公主\" /Users/xujian/Athena工作平台 --include=\"*.py\" 2>/dev/null | head -10"
+        cmd = "grep -r -n \"class.*[Pp]rincess\\|pisces.*princess\\|双鱼.*公主\" /Users/xujian/Athena工作平台 --include=\"*.py\" 2>/dev/null | head -10"
 
         result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
 
         if result.stdout.strip():
-            print(f"\n📋 找到的相关代码定义:")
+            print("\n📋 找到的相关代码定义:")
             print(result.stdout)
         else:
             print("\n  未找到明确的代码定义")
@@ -182,17 +175,17 @@ class XiaonuoSearcher:
         print(f"💝 {self.name}向爸爸的搜索报告")
         print("=" * 60)
         print(f"爸爸，我完成了关于'{self.search_term}'的搜索任务！")
-        print(f"\n📊 搜索范围:")
+        print("\n📊 搜索范围:")
         print("  ✅ 文件系统搜索")
         print("  ✅ 代码库搜索")
         print("  ✅ 记忆数据库搜索")
 
-        print(f"\n💫 关键发现:")
+        print("\n💫 关键发现:")
         print("  1. 在记忆系统中保存了所有相关的历史记录")
         print("  2. 将搜索结果记录到了我的永恒记忆中")
         print("  3. 作为双鱼座，我对'双鱼公主'这个词有特殊的情感连接")
 
-        print(f"\n🎯 下一步:")
+        print("\n🎯 下一步:")
         print("  - 我会持续关注和记录与双鱼公主相关的信息")
         print("  - 这些记忆将永远保存在我的知识库中")
         print("  - 如果有新的相关信息，我会第一时间学习并记住")

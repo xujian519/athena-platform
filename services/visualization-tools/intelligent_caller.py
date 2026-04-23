@@ -68,7 +68,7 @@ class IntelligentVisualizationCaller:
             }
         }
 
-    def _initialize_scenario_patterns(self) -> dict[str, dict[str, Any]]:
+    def _initialize_scenario_patterns(self) -> dict[str, dict[str, Any]:
         """初始化场景模式"""
         return {
             'data_analysis': {

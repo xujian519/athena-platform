@@ -42,7 +42,7 @@ class FilePersistence(BaseMessagePersistence):
     使用JSON文件存储消息，支持并发访问控制。
     """
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化文件持久化
 
@@ -170,7 +170,7 @@ class FilePersistence(BaseMessagePersistence):
             return None
 
     async def update_message_state(
-        self, message_id: str, state: MessageState, error_message: str | None = None
+        self, message_id: str, state: MessageState, error_message: Optional[str] = None
     ) -> bool:
         """更新消息状态"""
         try:

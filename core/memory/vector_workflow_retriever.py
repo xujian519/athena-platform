@@ -157,7 +157,7 @@ class VectorWorkflowRetriever:
         self,
         task_embedding: np.ndarray,
         limit: int = 10,
-        min_score: float | None = None
+        min_score: Optional[float] = None
     ) -> list[RetrievalResult]:
         """
         检索相似的workflow模式

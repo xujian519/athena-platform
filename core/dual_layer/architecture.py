@@ -56,7 +56,7 @@ class WorkLevelPlan:
     resource_allocation: dict[str, Any]  # 资源分配
     agent_assignment: dict[str, str]  # Agent分配
     dependencies: dict[str, list[str]]  # 任务依赖关系
-    estimated_duration: int | None = None  # 预估时长(秒)
+    estimated_duration: Optional[int] = None  # 预估时长(秒)
 
 
 @dataclass
@@ -69,10 +69,10 @@ class TaskLevelExecution:
     action: str  # 执行的动作
     tools_used: list[str]  # 使用的工具
     input_data: dict[str, Any]  # 输入数据
-    output_data: dict[str, Any] | None = None  # 输出数据
+    output_data: Optional[dict[str, Any]] = None  # 输出数据
     status: str = "pending"
-    start_time: str | None = None
-    end_time: str | None = None
+    start_time: Optional[str] = None
+    end_time: Optional[str] = None
 
 
 class WorkLevelOrchestrator:

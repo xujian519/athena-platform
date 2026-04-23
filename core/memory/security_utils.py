@@ -160,7 +160,7 @@ class InputValidator:
         self,
         value: Any,
         field_name: str = "value",
-        max_length: int | None = None,
+        max_length: Optional[int] = None,
         allow_empty: bool = False,
         dangerous_chars: bool = False
     ) -> str:

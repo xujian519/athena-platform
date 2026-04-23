@@ -28,8 +28,8 @@ class PlanningError(Exception):
     def __init__(
         self,
         message: str,
-        error_code: str | None = None,
-        details: dict[str, Any] | None = None,
+        error_code: Optional[str] = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         """
         初始化异常
@@ -78,7 +78,7 @@ class TaskValidationError(TaskError):
     当任务输入不符合要求时抛出。
     """
 
-    def __init__(self, message: str, field: str | None = None, value: Any | None = None):
+    def __init__(self, message: str, field: Optional[str] = None, value: Any | None = None):
         """
         初始化异常
 
@@ -124,8 +124,8 @@ class TaskExecutionError(TaskError):
     def __init__(
         self,
         message: str,
-        task_id: str | None = None,
-        step: int | None = None,
+        task_id: Optional[str] = None,
+        step: Optional[int] = None,
         cause: Exception | None = None,
     ):
         """
@@ -164,7 +164,7 @@ class ComplexityAnalysisError(PlanningError):
     """
 
     def __init__(
-        self, message: str, task_id: str | None = None, analysis_stage: str | None = None
+        self, message: str, task_id: Optional[str] = None, analysis_stage: Optional[str] = None
     ):
         """
         初始化异常
@@ -222,7 +222,7 @@ class StrategyExecutionError(StrategyError):
     """
 
     def __init__(
-        self, message: str, strategy: str | None = None, cause: Exception | None = None
+        self, message: str, strategy: Optional[str] = None, cause: Exception | None = None
     ):
         """
         初始化异常
@@ -253,7 +253,7 @@ class StrategySelectionError(StrategyError):
     def __init__(
         self,
         message: str,
-        task_id: str | None = None,
+        task_id: Optional[str] = None,
         available_strategies: list | None = None,
     ):
         """
@@ -314,7 +314,7 @@ class WorkflowValidationError(WorkflowError):
     def __init__(
         self,
         message: str,
-        workflow_id: str | None = None,
+        workflow_id: Optional[str] = None,
         validation_errors: list | None = None,
     ):
         """
@@ -344,8 +344,8 @@ class WorkflowExecutionError(WorkflowError):
     def __init__(
         self,
         message: str,
-        workflow_id: str | None = None,
-        failed_step: int | None = None,
+        workflow_id: Optional[str] = None,
+        failed_step: Optional[int] = None,
         cause: Exception | None = None,
     ):
         """
@@ -384,7 +384,7 @@ class PerformanceTrackingError(PlanningError):
     """
 
     def __init__(
-        self, message: str, metric_name: str | None = None, operation: str | None = None
+        self, message: str, metric_name: Optional[str] = None, operation: Optional[str] = None
     ):
         """
         初始化异常
@@ -416,7 +416,7 @@ class ConfigurationError(PlanningError):
     """
 
     def __init__(
-        self, message: str, config_key: str | None = None, config_value: Any | None = None
+        self, message: str, config_key: Optional[str] = None, config_value: Any | None = None
     ):
         """
         初始化异常

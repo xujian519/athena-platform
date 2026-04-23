@@ -97,7 +97,7 @@ class HookDebugger:
         context: HookContext,
         execution_time: float,
         success: bool,
-        error: str | None = None,
+        error: Optional[str] = None,
     ) -> None:
         """追踪Hook执行
 
@@ -157,7 +157,7 @@ class HookDebugger:
 
         return snapshot
 
-    async def get_trace_log(self, limit: int | None = None) -> list[TraceEntry]:
+    async def get_trace_log(self, limit: Optional[int] = None) -> list[TraceEntry]:
         """获取执行追踪日志
 
         Args:

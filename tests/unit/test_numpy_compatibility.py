@@ -37,8 +37,8 @@ def test_numpy_compatibility():
         print(f"✅ 数组均值: {mean(test_arr)}")
 
         # 测试高级功能
-        a = array([[1, 2], [3, 4]])
-        b = array([[5, 6], [7, 8]])
+        a = array([[1, 2], [3, 4])
+        b = array([[5, 6], [7, 8])
         c = dot(a, b)
         print(f"✅ 矩阵乘法:\n{c}")
 

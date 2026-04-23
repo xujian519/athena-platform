@@ -41,7 +41,7 @@ logger = setup_logging()
 class LocalBGEPhase3Classifier:
     """本地BGE Phase 3意图识别器(法律语料增强版)"""
 
-    def __init__(self, model_dir: str | None = None):
+    def __init__(self, model_dir: Optional[str] = None):
         """初始化分类器并加载训练好的模型
 
         Args:

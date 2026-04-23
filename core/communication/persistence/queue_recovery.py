@@ -36,7 +36,7 @@ class QueueRecoveryManager:
     def __init__(
         self,
         persistence: PersistenceManager | BaseMessagePersistence,
-        config: dict[str, Any] | None = None,
+        config: Optional[dict[str, Any]] = None,
     ):
         """
         初始化队列恢复管理器
@@ -275,7 +275,7 @@ class QueueRecoveryManager:
 
 async def recover_queue(
     persistence: PersistenceManager | BaseMessagePersistence,
-    config: dict[str, Any] | None = None,
+    config: Optional[dict[str, Any]] = None,
 ) -> dict[str, Any]:
     """
     便捷函数：恢复队列
@@ -293,7 +293,7 @@ async def recover_queue(
 
 def get_recovery_manager(
     persistence: PersistenceManager | BaseMessagePersistence,
-    config: dict[str, Any] | None = None,
+    config: Optional[dict[str, Any]] = None,
 ) -> QueueRecoveryManager:
     """
     获取或创建队列恢复管理器实例

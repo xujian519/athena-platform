@@ -24,13 +24,13 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from core.perception import (
+from core.ai.perception import (
     InputType,
     PerceptionEngine,
     PerceptionResult,
     TextProcessor,
 )
-from core.perception.types import (
+from core.ai.perception.types import (
     CacheConfig,
     PerceptionConfig,
 )
@@ -205,7 +205,7 @@ class TestEndToEndWorkflows:
 
     async def test_text_analysis_workflow(self):
         """测试完整的文本分析工作流"""
-        from core.perception import TextProcessor
+        from core.ai.perception import TextProcessor
 
         # 创建处理器
         processor = TextProcessor(
@@ -246,7 +246,7 @@ class TestEndToEndWorkflows:
 
     async def test_batch_processing_workflow(self):
         """测试批量处理工作流"""
-        from core.perception.performance_optimizer import PerformanceOptimizer
+        from core.ai.perception.performance_optimizer import PerformanceOptimizer
 
         # 创建优化器和处理器
         optimizer = PerformanceOptimizer({"enable_batch_processing": True, "max_workers": 3})
@@ -295,7 +295,7 @@ class TestTypeSystemIntegration:
 
     async def test_input_type_handling(self):
         """测试InputType处理"""
-        from core.perception import TextProcessor
+        from core.ai.perception import TextProcessor
 
         processor = TextProcessor("type_test", {})
         await processor.initialize()

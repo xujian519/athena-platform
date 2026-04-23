@@ -4,7 +4,6 @@
 将 .encode(, usedforsecurity=False 修复为 .encode(), usedforsecurity=False
 """
 
-import os
 import re
 from pathlib import Path
 
@@ -12,10 +11,9 @@ from pathlib import Path
 def fix_encode_syntax(file_path):
     """修复文件中的encode语法错误"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
-        original_content = content
         fixes = 0
 
         # 修复 .encode(, usedforsecurity=False
@@ -66,7 +64,7 @@ def main():
     error_files = []
     for py_file in py_files:
         try:
-            with open(py_file, 'r', encoding='utf-8') as f:
+            with open(py_file, encoding='utf-8') as f:
                 content = f.read()
                 if re.search(r'\.encode\(\s*,\s*usedforsecurity=False', content):
                     error_files.append(py_file)

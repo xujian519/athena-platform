@@ -49,7 +49,7 @@ class SimilarityResult:
     description_similarity: float  # 说明书相似度
     technical_field_similarity: float  # 技术领域相似度
     similarity_level: SimilarityLevel  # 相似度等级
-    detailed_comparison: Dict[str, Any]  # 详细对比
+    detailed_comparison: dict[str, Any]  # 详细对比
 
 
 class PatentSimilarityCalculator:
@@ -72,9 +72,9 @@ class PatentSimilarityCalculator:
 
     async def calculate_similarity(
         self,
-        patent1: Dict[str, Any],
-        patent2: Dict[str, Any],
-        weights: Optional[Dict[str, float]] = None
+        patent1: dict[str, Any],
+        patent2: dict[str, Any],
+        weights: Optional[dict[str, float]] = None
     ) -> SimilarityResult:
         """
         计算两篇专利的相似度
@@ -271,7 +271,7 @@ class PatentSimilarityCalculator:
 
         return len(intersection) / len(union) if union else 0.0
 
-    def _tokenize(self, text: str) -> List[str]:
+    def _tokenize(self, text: str) -> list[str]:
         """
         分词
 
@@ -289,7 +289,7 @@ class PatentSimilarityCalculator:
 
         return words
 
-    def _cosine_similarity(self, vec1: List[float], vec2: List[float]) -> float:
+    def _cosine_similarity(self, vec1: list[float], vec2: list[float]) -> float:
         """
         计算余弦相似度
 
@@ -337,9 +337,9 @@ class PatentSimilarityCalculator:
 
     def _extract_key_differences(
         self,
-        patent1: Dict[str, Any],
-        patent2: Dict[str, Any]
-    ) -> List[str]:
+        patent1: dict[str, Any],
+        patent2: dict[str, Any]
+    ) -> list[str]:
         """
         提取关键差异
 
@@ -392,10 +392,10 @@ def get_similarity_calculator() -> PatentSimilarityCalculator:
     tags=["patent", "similarity", "comparison", "analysis"]
 )
 async def patent_similarity_handler(
-    patent1: Dict[str, Any],
-    patent2: Dict[str, Any],
-    weights: Optional[Dict[str, float]] = None
-) -> Dict[str, Any]:
+    patent1: dict[str, Any],
+    patent2: dict[str, Any],
+    weights: Optional[dict[str, float]] = None
+) -> dict[str, Any]:
     """
     专利相似度计算工具handler
 

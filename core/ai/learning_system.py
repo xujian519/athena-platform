@@ -51,9 +51,9 @@ class LearningExperience:
     task_type: str
     input_data: dict[str, Any]
     output_data: dict[str, Any]
-    feedback: dict[str, Any] | None = None
+    feedback: Optional[dict[str, Any]] = None
     feedback_type: FeedbackType | None = None
-    feedback_score: float | None = None
+    feedback_score: Optional[float] = None
     timestamp: datetime = field(default_factory=datetime.now)
     context: dict[str, Any] = field(default_factory=dict)
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -541,9 +541,9 @@ async def start_learning_system():
 async def record_ai_experience(
     ai_role_id: str,
     task_type: str,
-    input_data: dict[str, Any],    output_data: dict[str, Any],    feedback: dict[str, Any] | None = None,
+    input_data: dict[str, Any],    output_data: dict[str, Any],    feedback: Optional[dict[str, Any]] = None,
     feedback_type: FeedbackType | None = None,
-    feedback_score: float | None = None,
+    feedback_score: Optional[float] = None,
 ) -> str:
     """记录AI经验"""
     experience = LearningExperience(

@@ -29,9 +29,9 @@ class SessionMessage:
     role: str  # user/assistant/system
     content: str  # 消息内容
     timestamp: float  # 时间戳
-    intent: str | None = None  # 意图
-    capability: str | None = None  # 使用的能力
-    confidence: float | None = None  # 置信度
+    intent: Optional[str] = None  # 意图
+    capability: Optional[str] = None  # 使用的能力
+    confidence: Optional[float] = None  # 置信度
     metadata: dict[str, Any] = field(default_factory=dict)  # 其他元数据
 
 
@@ -40,7 +40,7 @@ class SessionContext:
     """会话上下文"""
 
     session_id: str  # 会话ID
-    user_id: str | None = None  # 用户ID
+    user_id: Optional[str] = None  # 用户ID
     created_at: float = field(default_factory=time.time)
     last_active: float = field(default_factory=time.time)
     message_count: int = 0
@@ -58,7 +58,7 @@ class SessionMemoryManager:
 
     def __init__(
         self,
-        db_path: str | None = None,
+        db_path: Optional[str] = None,
         session_timeout: int = 3600,  # 会话超时时间(秒)
         max_messages_per_session: int = 100,  # 每个会话最大消息数
     ):
@@ -139,7 +139,7 @@ class SessionMemoryManager:
 
         logger.info("✅ 数据库表初始化完成")
 
-    def create_session(self, session_id: str, user_id: str | None = None) -> SessionContext:
+    def create_session(self, session_id: str, user_id: Optional[str] = None) -> SessionContext:
         """
         创建新会话
 
@@ -220,10 +220,10 @@ class SessionMemoryManager:
         session_id: str,
         role: str,
         content: str,
-        intent: str | None = None,
-        capability: str | None = None,
-        confidence: float | None = None,
-        metadata: dict[str, Any] | None = None,
+        intent: Optional[str] = None,
+        capability: Optional[str] = None,
+        confidence: Optional[float] = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> SessionMessage:
         """
         添加消息到会话
@@ -287,7 +287,7 @@ class SessionMemoryManager:
         return message
 
     def get_session_messages(
-        self, session_id: str, limit: int | None = None
+        self, session_id: str, limit: Optional[int] = None
     ) -> list[SessionMessage]:
         """
         获取会话消息
@@ -347,8 +347,8 @@ class SessionMemoryManager:
     def update_session_context(
         self,
         session_id: str,
-        preferences: dict[str, Any] | None = None,
-        context_data: dict[str, Any] | None = None,
+        preferences: Optional[dict[str, Any]] = None,
+        context_data: Optional[dict[str, Any]] = None,
     ) -> bool:
         """
         更新会话上下文

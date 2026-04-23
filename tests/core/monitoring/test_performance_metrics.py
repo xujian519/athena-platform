@@ -4,7 +4,6 @@
 Tests for core.monitoring.performance_metrics_enhanced
 """
 
-import pytest
 
 
 class TestPerformanceMetrics:
@@ -17,7 +16,6 @@ class TestPerformanceMetrics:
 
     def test_metrics_class_exists(self):
         """测试指标类存在"""
-        from core.monitoring.performance_metrics_enhanced import PerformanceMetrics
         # 验证类可以被实例化（使用单例模式）
         from core.monitoring.performance_metrics_enhanced import get_performance_metrics
         metrics = get_performance_metrics()

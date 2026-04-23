@@ -67,7 +67,7 @@ async def verify_academic_search_handler():
             year="2024"
         )
 
-        print(f"   ✅ Handler调用成功")
+        print("   ✅ Handler调用成功")
         print(f"   结果类型: {type(result)}")
 
         if isinstance(result, dict):
@@ -95,8 +95,8 @@ async def register_academic_search():
     print("📝 注册academic_search到统一工具注册表")
     print("=" * 60)
 
-    from core.tools.unified_registry import get_unified_registry
     from core.tools.base import ToolCategory, ToolPriority
+    from core.tools.unified_registry import get_unified_registry
 
     registry = get_unified_registry()
 

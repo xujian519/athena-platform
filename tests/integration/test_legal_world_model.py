@@ -83,8 +83,9 @@ async def test_cross_module_integration():
     """测试跨模块集成"""
     # 测试学习引擎与法律世界模型的集成
     try:
-        from core.learning import get_module_capabilities
         from core.legal_world_model.health_check import check_health
+
+        from core.learning import get_module_capabilities
 
         # 获取学习模块能力
         capabilities = get_module_capabilities()

@@ -302,7 +302,7 @@ class PatentClassificationVectorInitializer:
             self.client = None
 
         try:
-            from core.embedding.unified_embedding_service import (
+            from core.ai.embedding.unified_embedding_service import (
                 ModuleType,
                 get_unified_embedding_service,
             )
@@ -346,7 +346,7 @@ class PatentClassificationVectorInitializer:
             except Exception as e:
                 self.logger.error(f"❌ 创建集合 {config.name} 失败: {e}")
 
-    async def generate_embeddings(self, texts: list[str]) -> list[list[float]]:
+    async def generate_embeddings(self, texts: list[str]) -> list[list[float]:
         """生成嵌入向量"""
         if self.embedding_service is None:
             # 模拟向量

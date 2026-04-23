@@ -306,7 +306,7 @@ class NeuralChainSynchronizer:
 
         logger.info(f"🧠 神经元链同步器初始化完成，模式: {sync_mode.value}, 一致性: {consistency_level.value}")
 
-    def add_neuron(self, neuron: NeuralNode, dependencies: Optional[List[str] = None):
+    def add_neuron(self, neuron: NeuralNode, dependencies: Optional[List[str]] = None):
         """添加神经元"""
         self.neurons[neuron.node_id] = neuron
         if dependencies:
@@ -376,7 +376,7 @@ class NeuralChainSynchronizer:
 
         logger.info(f"🔗 创建同步组: {group_id}, 包含 {len(neuron_ids)} 个神经元")
 
-    async def synchronize_group(self, group_id: str, timeout: float | None = None) -> bool:
+    async def synchronize_group(self, group_id: str, timeout: Optional[float] = None) -> bool:
         """同步组内所有神经元"""
         start_time = time.time()
         timeout = timeout or self.sync_timeout
@@ -603,7 +603,7 @@ class NeuralChainSynchronizer:
         logger.info(f"✅ 批量同步完成: {sum(results.values())}/{len(results)} 成功")
         return results
 
-    def get_sync_status(self, group_id: str | None = None) -> Dict[str, Any]:
+    def get_sync_status(self, group_id: Optional[str] = None) -> Dict[str, Any]:
         """获取同步状态"""
         status = {
             'sync_mode': self.sync_mode.value,

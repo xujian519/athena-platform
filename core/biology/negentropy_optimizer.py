@@ -211,7 +211,7 @@ class NegentropyOptimizer:
         self,
         candidates: list[Any],
         metric_type: NegentropyMetric = NegentropyMetric.INFORMATION_ENTROPY,
-        target_entropy: float | None = None,
+        target_entropy: Optional[float] = None,
     ) -> tuple[Any, NegentropyScore]:
         """
         为最大化负熵而优化选择

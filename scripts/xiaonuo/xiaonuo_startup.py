@@ -3,11 +3,11 @@
 小诺快速启动脚本
 """
 
-import subprocess
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import sys
 import os
+import subprocess
+import sys
 from pathlib import Path
+from typing import Any
 
 # 设置工作目录
 os.chdir(Path(__file__).parent)

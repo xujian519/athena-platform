@@ -142,7 +142,7 @@ class AdaptiveLROptimizer:
             f"✅ {self.name} 初始化完成 (初始LR: {initial_lr}, 策略: {schedule_type.value})"
         )
 
-    async def compute_lr(self, step: int, metric_value: float | None = None) -> float:
+    async def compute_lr(self, step: int, metric_value: Optional[float] = None) -> float:
         """
         计算当前学习率
 
@@ -221,7 +221,7 @@ class AdaptiveLROptimizer:
             )
 
     def _cyclic_lr(
-        self, step: int, step_size_up: int = 2000, step_size_down: int | None = None
+        self, step: int, step_size_up: int = 2000, step_size_down: Optional[int] = None
     ) -> float:
         """循环学习率"""
         step_size_down = step_size_down or step_size_up
@@ -250,7 +250,7 @@ class AdaptiveLROptimizer:
             scale = 1 - current_step / remaining_steps
             return self.min_lr + (self.max_lr - self.min_lr) * max(0, scale)
 
-    async def _adaptive_lr(self, step: int, metric_value: float | None = None) -> float:
+    async def _adaptive_lr(self, step: int, metric_value: Optional[float] = None) -> float:
         """自适应学习率"""
         if metric_value is None:
             return self.lr_state.current_lr
@@ -319,7 +319,7 @@ class AdaptiveLROptimizer:
         )
 
     async def update_with_gradient(
-        self, step: int, loss: float, gradient_norm: float, metric_value: float | None = None
+        self, step: int, loss: float, gradient_norm: float, metric_value: Optional[float] = None
     ):
         """
         基于梯度更新学习率

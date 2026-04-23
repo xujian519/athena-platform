@@ -75,7 +75,7 @@ class Conflict:
     severity: int  # 严重程度 (1-10)
     resolution_strategy: ConflictResolutionStrategy | None = None
     resolved_at: datetime | None = None  # 解决时间
-    resolution_details: dict[str, Any] | None = None
+    resolution_details: Optional[dict[str, Any]] = None
 
 
 class CollaborationOrchestrator:
@@ -154,7 +154,7 @@ class CollaborationOrchestrator:
         task_id: str,
         template_id: str,
         participating_agents: list[str],
-        context: dict[str, Any],    ) -> str | None:
+        context: dict[str, Any],    ) -> Optional[str]:
         """启动协作工作流"""
         try:
             if template_id not in self.templates:

@@ -72,14 +72,14 @@ class CreatePlanResponse(BaseModel):
     """创建计划响应"""
 
     success: bool
-    plan_id: str | None = None
-    plan_visualization: str | None = None
+    plan_id: Optional[str] = None
+    plan_visualization: Optional[str] = None
     visualization_format: str = "text"
     total_steps: int = 0
     total_confidence: float = 0.0
     total_duration_minutes: float = 0.0
     message: str = ""
-    error: str | None = None
+    error: Optional[str] = None
 
 
 class ApprovePlanRequest(BaseModel):
@@ -93,11 +93,11 @@ class ExecutePlanResponse(BaseModel):
     """执行计划响应"""
 
     success: bool
-    execution_id: str | None = None
+    execution_id: Optional[str] = None
     completed_steps: list[dict[str, Any]] = Field(default_factory=list)
     failed_steps: list[dict[str, Any]] = Field(default_factory=list)
-    final_output: dict[str, Any] | None = None
-    error: str | None = None
+    final_output: Optional[dict[str, Any]] = None
+    error: Optional[str] = None
 
 
 class PlanStatusResponse(BaseModel):
@@ -109,7 +109,7 @@ class PlanStatusResponse(BaseModel):
     approved: bool
     progress: float = 0.0
     steps: list[dict[str, Any]] = Field(default_factory=list)
-    error: str | None = None
+    error: Optional[str] = None
 
 
 # ==================== API端点 ====================
@@ -336,7 +336,7 @@ async def get_plan_status(plan_id: str):
 
 
 @app.get("/plans")
-async def list_plans(status: str | None = None, limit: int = 50):
+async def list_plans(status: Optional[str] = None, limit: int = 50):
     """列出所有计划"""
     plans = planner.plans
 

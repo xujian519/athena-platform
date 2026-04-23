@@ -462,7 +462,7 @@ class UnifiedKnowledgeService:
 """
         return prompt
 
-    async def get_comprehensive_rules(self, query: str) -> dict[str, list[dict]]:
+    async def get_comprehensive_rules(self, query: str) -> dict[str, list[dict]:
         """获取综合规则"""
         keywords = self._extract_keywords(query)
 

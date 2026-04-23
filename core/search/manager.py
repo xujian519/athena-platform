@@ -38,7 +38,7 @@ class UnifiedSearchManager:
             self._default_engines[set_as_default] = name
 
     def get_engine(
-        self, name: str | None = None, search_type: SearchType | None = None
+        self, name: Optional[str] = None, search_type: SearchType | None = None
     ) -> BaseSearchEngine:
         """
         获取搜索引擎
@@ -68,7 +68,7 @@ class UnifiedSearchManager:
         self,
         query: str,
         search_type: SearchType = SearchType.WEB,
-        engine_name: str | None = None,
+        engine_name: Optional[str] = None,
         **kwargs,
     ) -> SearchResponse:
         """
@@ -209,7 +209,7 @@ def get_search_manager() -> UnifiedSearchManager:
 async def search(
     query: str,
     search_type: SearchType = SearchType.WEB,
-    engine_name: str | None = None,
+    engine_name: Optional[str] = None,
     **kwargs,
 ) -> SearchResponse:
     """便捷的搜索函数"""

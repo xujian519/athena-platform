@@ -56,18 +56,18 @@ class AgentCreate(AgentBase):
     organization: str = Field(default="", description="所属组织")
     requires_llm: bool = Field(default=False, description="是否需要LLM")
     requires_tools: bool = Field(default=False, description="是否需要工具")
-    tags: List[str] = Field(default_factory=list, description="标签列表")
+    tags: list[str] = Field(default_factory=list, description="标签列表")
 
 
 class AgentUpdate(BaseModel):
     """Agent更新模型"""
-    display_name: Optional[str] = None
-    description: Optional[str] = None
-    long_description: Optional[str] = None
-    category: Optional[str] = None
-    requires_llm: Optional[bool] = None
-    requires_tools: Optional[bool] = None
-    tags: Optional[List[str]] = None
+    display_name: str | None = None
+    description: str | None = None
+    long_description: str | None = None
+    category: str | None = None
+    requires_llm: bool | None = None
+    requires_tools: bool | None = None
+    tags: list[str] | None = None
 
 
 class AgentResponse(AgentBase):
@@ -87,7 +87,7 @@ class AgentResponse(AgentBase):
 
 class AgentListResponse(BaseModel):
     """Agent列表响应"""
-    items: List[AgentResponse]
+    items: list[AgentResponse]
     total: int
     page: int
     page_size: int
@@ -99,8 +99,8 @@ class CapabilityCreate(BaseModel):
     name: str = Field(..., description="能力名称 (snake_case)")
     display_name: str = Field(..., description="显示名称")
     description: str = Field(..., description="描述")
-    input_types: List[str] = Field(..., description="输入类型")
-    output_types: List[str] = Field(..., description="输出类型")
+    input_types: list[str] = Field(..., description="输入类型")
+    output_types: list[str] = Field(..., description="输出类型")
     estimated_time: float = Field(default=5.0, description="预估时间 (秒)")
 
 
@@ -109,7 +109,7 @@ class ReviewCreate(BaseModel):
     rating: int = Field(..., ge=1, le=5, description="评分 (1-5)")
     title: str = Field(..., description="评价标题")
     content: str = Field(..., description="评价内容")
-    tags: List[str] = Field(default_factory=list, description="标签")
+    tags: list[str] = Field(default_factory=list, description="标签")
 
 
 class ReviewResponse(BaseModel):
@@ -120,7 +120,7 @@ class ReviewResponse(BaseModel):
     rating: int
     title: str
     content: str
-    tags: List[str]
+    tags: list[str]
     created_at: datetime
 
 
@@ -151,9 +151,9 @@ class MarketplaceService:
 
     def __init__(self):
         # 模拟数据存储
-        self.agents: Dict[str, Agent] = {}
-        self.capabilities: Dict[str, List[AgentCapability]] = {}
-        self.reviews: Dict[str, List[Any]] = {}
+        self.agents: dict[str, Agent] = {}
+        self.capabilities: dict[str, list[AgentCapability]] = {}
+        self.reviews: dict[str, list[Any]] = {}
 
     async def create_agent(self, data: AgentCreate) -> Agent:
         """创建Agent"""
@@ -178,14 +178,14 @@ class MarketplaceService:
         logger.info(f"创建Agent: {agent.id} - {agent.display_name}")
         return agent
 
-    async def get_agent(self, agent_id: str) -> Optional[Agent]:
+    async def get_agent(self, agent_id: str) -> Agent | None:
         """获取Agent"""
         return self.agents.get(agent_id)
 
     async def list_agents(
         self,
         filters: SearchFilters,
-    ) -> tuple[List[Agent], int]:
+    ) -> tuple[list[Agent], int]:
         """列出Agent"""
         agents = list(self.agents.values())
 
@@ -231,7 +231,7 @@ class MarketplaceService:
 
         return agents, total
 
-    async def update_agent(self, agent_id: str, data: AgentUpdate) -> Optional[Agent]:
+    async def update_agent(self, agent_id: str, data: AgentUpdate) -> Agent | None:
         """更新Agent"""
         agent = self.agents.get(agent_id)
         if not agent:
@@ -268,7 +268,7 @@ class MarketplaceService:
 
     async def add_capability(
         self, agent_id: str, data: CapabilityCreate
-    ) -> Optional[AgentCapability]:
+    ) -> AgentCapability | None:
         """添加能力"""
         if agent_id not in self.agents:
             return None
@@ -286,11 +286,11 @@ class MarketplaceService:
         self.capabilities[agent_id].append(capability)
         return capability
 
-    async def get_capabilities(self, agent_id: str) -> List[AgentCapability]:
+    async def get_capabilities(self, agent_id: str) -> list[AgentCapability]:
         """获取能力列表"""
         return self.capabilities.get(agent_id, [])
 
-    async def get_categories(self) -> List[Dict[str, Any]]:
+    async def get_categories(self) -> list[dict[str, Any]]:
         """获取分类列表"""
         return [
             {"value": cat.value, "label": cat.value.title()}
@@ -313,9 +313,9 @@ router = APIRouter(
 @router.get("/agents", response_model=AgentListResponse)
 async def list_agents(
     keyword: str = Query("", description="搜索关键词"),
-    category: Optional[str] = Query(None, description="类别筛选"),
-    status: Optional[str] = Query(None, description="状态筛选"),
-    min_rating: Optional[float] = Query(None, ge=0, le=5, description="最低评分"),
+    category: str | None = Query(None, description="类别筛选"),
+    status: str | None = Query(None, description="状态筛选"),
+    min_rating: float | None = Query(None, ge=0, le=5, description="最低评分"),
     sort_by: str = Query("updated_at", description="排序字段"),
     sort_order: str = Query("desc", regex="^(asc|desc)$", description="排序方向"),
     page: int = Query(1, ge=1, description="页码"),

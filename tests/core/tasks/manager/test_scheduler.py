@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from __future__ import annotations
+
 """
 任务调度器测试
 Task Scheduler Tests
@@ -9,23 +9,24 @@ Task Scheduler Tests
 版本: 1.0.0
 """
 
-import pytest
-from datetime import datetime, timedelta
-import tempfile
 import shutil
+import tempfile
+from datetime import datetime, timedelta
 
-from core.tasks.manager.scheduler import TaskScheduler
-from core.tasks.manager.storage import FileTaskStorage
+import pytest
+
+from core.tasks.manager.exceptions import (
+    TaskDependencyError,
+    TaskManagerError,
+)
 from core.tasks.manager.models import (
     Task,
-    TaskStatus,
     TaskPriority,
     TaskResult,
+    TaskStatus,
 )
-from core.tasks.manager.exceptions import (
-    TaskManagerError,
-    TaskDependencyError,
-)
+from core.tasks.manager.scheduler import TaskScheduler
+from core.tasks.manager.storage import FileTaskStorage
 
 
 @pytest.fixture
@@ -482,3 +483,4 @@ class TestTaskScheduler:
 
         # task_3应该准备就绪
         assert task3.status == TaskStatus.READY
+

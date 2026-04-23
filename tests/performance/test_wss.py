@@ -5,9 +5,11 @@ WSS (WebSocket Secure) 连接测试
 """
 
 import asyncio
-import websockets
 import json
 import ssl
+
+import websockets
+
 
 async def test_wss_connection():
     """测试WSS连接"""
@@ -62,7 +64,7 @@ async def test_wss_connection():
 
                 return True
 
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 print("⚠️  等待响应超时")
                 return False
 

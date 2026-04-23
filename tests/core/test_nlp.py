@@ -21,7 +21,7 @@ class TestNLPModule:
     def test_text_processing_import(self):
         """测试文本处理可以导入"""
         try:
-            from core.nlp.text_processor import TextProcessor
+            from core.ai.nlp.text_processor import TextProcessor
             assert TextProcessor is not None
         except ImportError:
             pytest.skip("文本处理器导入失败")

@@ -46,7 +46,7 @@ logger = setup_logging()
 class OptimizedExecutionModule(BaseModule):
     """优化版执行模块 - 集成智能调度、资源监控和负载均衡"""
 
-    def __init__(self, agent_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, agent_id: str, config: Optional[dict[str, Any]] = None):
         """初始化优化版执行模块
 
         Args:
@@ -249,12 +249,12 @@ class OptimizedExecutionModule(BaseModule):
         priority: TaskPriority = TaskPriority.NORMAL,
         args: tuple = (),
         kwargs: dict | None = None,
-        dependencies: list[str] | None = None,
-        timeout: float | None = None,
+        dependencies: Optional[list[str]] = None,
+        timeout: Optional[float] = None,
         max_retries: int = 3,
         estimated_cpu: float = 0.1,
         estimated_memory: float = 0.1,
-        tags: list[str] | None = None,
+        tags: Optional[list[str]] = None,
     ) -> str:
         """优化任务提交
 
@@ -345,7 +345,7 @@ class OptimizedExecutionModule(BaseModule):
             self.optimization_stats["total_failed_tasks"] += 1
             return False
 
-    async def get_task_status(self, task_id: str) -> dict[str, Any] | None:
+    async def get_task_status(self, task_id: str) -> Optional[dict[str, Any]]:
         """获取任务状态
 
         Args:

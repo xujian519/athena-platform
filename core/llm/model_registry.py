@@ -26,7 +26,7 @@ class ModelCapabilityRegistry:
     管理所有模型的元数据和能力定义,提供模型查询和注册功能
     """
 
-    def __init__(self, config_path: str | None = None):
+    def __init__(self, config_path: Optional[str] = None):
         """
         初始化注册表
 
@@ -408,7 +408,7 @@ class ModelCapabilityRegistry:
             "models": [cap.to_dict() for cap in self.capabilities.values()],
         }
 
-    def save_to_file(self, path: str | None = None):
+    def save_to_file(self, path: Optional[str] = None):
         """
         保存到文件
 
@@ -434,7 +434,7 @@ _registry_instance: ModelCapabilityRegistry | None = None
 _registry_lock = threading.Lock()
 
 
-def get_model_registry(config_path: str | None = None) -> ModelCapabilityRegistry:
+def get_model_registry(config_path: Optional[str] = None) -> ModelCapabilityRegistry:
     """
     获取模型能力注册表单例(线程安全)
 

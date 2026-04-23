@@ -84,7 +84,7 @@ class DrawingAnalysisResult:
     model_used: str = ""
     tokens_used: int = 0
     timestamp: datetime = field(default_factory=datetime.now)
-    error: str | None = None
+    error: Optional[str] = None
 
 
 @dataclass
@@ -156,8 +156,8 @@ class TechnicalDrawingAnalyzer:
         self,
         image_path: str,
         analysis_level: AnalysisLevel = AnalysisLevel.INTERMEDIATE,
-        specification_text: str | None = None,
-        related_claims: list[str] | None = None,
+        specification_text: Optional[str] = None,
+        related_claims: Optional[list[str]] = None,
     ) -> DrawingAnalysisResult:
         """
         分析技术图纸

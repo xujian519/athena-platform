@@ -18,12 +18,12 @@ Local CI/CD Deployment Script
 创建时间: 2026-01-26
 """
 
-import os
 import subprocess
 import sys
 import time
 from datetime import datetime
 from pathlib import Path
+
 
 # ANSI颜色码
 class Colors:
@@ -209,8 +209,6 @@ class ProductionDeployer:
         python_version = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
         self.logger.info(f"Python版本: {python_version}")
 
-        if sys.version_info < (3, 10):
-            self.logger.warning("建议使用Python 3.10+")
 
         return True
 
@@ -396,7 +394,7 @@ class ProductionDeployer:
         # 检查API端点
         command = f"curl -s http://localhost:{self.config.API_PORT}/ | head -20"
 
-        success = self.runner.run(
+        self.runner.run(
             command,
             description="检查API根路径",
         )

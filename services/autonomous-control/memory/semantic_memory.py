@@ -317,7 +317,7 @@ class SemanticMemory:
 
         return entities
 
-    async def build_concept_map(self, concepts: list[str]) -> dict[str, list[str]]:
+    async def build_concept_map(self, concepts: list[str]) -> dict[str, list[str]:
         """
         构建概念图
 

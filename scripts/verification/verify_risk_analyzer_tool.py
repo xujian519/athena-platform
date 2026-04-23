@@ -18,8 +18,8 @@ risk_analyzer工具验证脚本
 import asyncio
 import json
 import sys
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent
@@ -153,7 +153,7 @@ class RiskAnalyzerVerifier:
                 print(f"     - 缓解: {risk['mitigation'][:50]}...")
 
             # 显示缓解策略
-            print(f"\n   重点关注:")
+            print("\n   重点关注:")
             for strategy in result.get("mitigation_strategies", [])[:3]:
                 print(f"     - {strategy}")
 
@@ -339,7 +339,7 @@ class RiskAnalyzerVerifier:
             }
 
             params = {
-                "scenario": scenario_map[test_case['level']],
+                "scenario": scenario_map[test_case['level'],
                 "risk_factors": [{"name": "测试风险", "description": "测试"}]
             }
 

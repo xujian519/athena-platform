@@ -69,11 +69,11 @@ class MessageBus:
     """消息总线"""
 
     def __init__(self):
-        self.subscribers: dict[str, list[Subscription]] = defaultdict(list)
+        self.subscribers: dict[str, list[Subscription] = defaultdict(list)
         self.message_history: deque = deque(maxlen=1000)  # 保留最近1000条消息
         self.active_connections: dict[str, WebSocketServerProtocol] = {}
-        self.pending_messages: dict[str, list[Message]] = defaultdict(list)
-        self.message_handlers: dict[MessageType, list[Callable]] = defaultdict(list)
+        self.pending_messages: dict[str, list[Message] = defaultdict(list)
+        self.message_handlers: dict[MessageType, list[Callable] = defaultdict(list)
 
     def subscribe(self, subscriber: str, message_types: list[MessageType], callback: Callable) -> Any:
         """订阅消息"""

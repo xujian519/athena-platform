@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena平台启动脚本（集成多模态文件系统）
 Athena Platform Launcher with Multimodal File System Integration
@@ -7,14 +6,14 @@ Athena Platform Launcher with Multimodal File System Integration
 根据使用场景智能启动多模态文件系统
 """
 
-import os
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import sys
-import json
 import asyncio
+import json
 import logging
+import os
+import sys
+from datetime import datetime
 from pathlib import Path
-from datetime import datetime, time
+from typing import Any
 
 # 添加路径
 project_root = Path(__file__).parent
@@ -47,7 +46,7 @@ class AthenaLauncher:
 
         # 检查配置文件
         if self.config_file.exists():
-            with open(self.config_file, 'r', encoding='utf-8') as f:
+            with open(self.config_file, encoding='utf-8') as f:
                 config = json.load(f)
                 return config.get('startup_scenario', 'default')
 
@@ -61,7 +60,7 @@ class AthenaLauncher:
         else:
             return 'minimal'
 
-    def check_existing_services(self) -> Dict[str, bool]:
+    def check_existing_services(self) -> dict[str, bool]:
         """检查现有服务状态"""
         services = {
             'database': self._check_service(5432, 'postgresql'),
@@ -164,7 +163,7 @@ class AthenaLauncher:
         cpu_percent = psutil.cpu_percent(interval=1)
         memory = psutil.virtual_memory()
 
-        print(f"\n💻 系统资源:")
+        print("\n💻 系统资源:")
         print(f"  CPU使用率: {cpu_percent}%")
         print(f"  内存使用: {memory.percent}% ({memory.used/1024/1024/1024:.1f}GB / {memory.total/1024/1024/1024:.1f}GB)")
 
@@ -201,7 +200,7 @@ class AthenaLauncher:
             # 读取配置
             config_file = project_root / "services/multimodal/startup_configs.json"
             if config_file.exists():
-                with open(config_file, 'r') as f:
+                with open(config_file) as f:
                     startup_configs = json.load(f)
 
                 # 应用场景配置

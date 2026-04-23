@@ -391,7 +391,7 @@ def get_openapi_config(
     return openapi_schema
 
 
-def setup_openapi_docs(app: FastAPI | None = None, custom_openapi: dict[str, Any] | None = None) -> None:
+def setup_openapi_docs(app: FastAPI | None = None, custom_openapi: Optional[dict[str, Any]] = None) -> None:
     """
     设置OpenAPI文档
 

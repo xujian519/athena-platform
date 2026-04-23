@@ -56,7 +56,7 @@ class GraphBuildStats:
 class Neo4jLegalKnowledgeGraphBuilder:
     """Neo4j法律知识图谱构建器 (TD-001: 替换NebulaGraph)"""
 
-    def __init__(self, neo4j_config: dict[str, Any] | None = None):
+    def __init__(self, neo4j_config: Optional[dict[str, Any]] = None):
         """
         初始化图谱构建器
 
@@ -189,7 +189,7 @@ class Neo4jLegalKnowledgeGraphBuilder:
             logger.error(f"❌ Schema初始化失败: {e}")
             return False
 
-    def build_from_postgresql(self, pg_conn, limit: int | None = None) -> bool:
+    def build_from_postgresql(self, pg_conn, limit: Optional[int] = None) -> bool:
         """
         从PostgreSQL构建基础图谱结构
 
@@ -277,7 +277,7 @@ class Neo4jLegalKnowledgeGraphBuilder:
         pg_conn,
         use_rule_extraction: bool = True,
         use_cloud_llm: bool = False,
-        limit: int | None = None,
+        limit: Optional[int] = None,
     ) -> bool:
         """
         抽取实体并导入到知识图谱
@@ -373,7 +373,7 @@ class Neo4jLegalKnowledgeGraphBuilder:
             logger.error(f"❌ 实体抽取失败: {e}")
             return False
 
-    def _execute_cypher(self, query: str, params: dict[str, Any] | None = None) -> Any:
+    def _execute_cypher(self, query: str, params: Optional[dict[str, Any]] = None) -> Any:
         """
         执行Cypher语句 (TD-001: 替换_execute_statement)
 
@@ -553,7 +553,7 @@ class Neo4jLegalKnowledgeGraphBuilder:
         logger.info(f"🔗 关系总数: {self.stats.relationships_created}")
         logger.info("=" * 60 + "\n")
 
-    def import_citation_relations(self, pg_conn, limit: int | None = None) -> int:
+    def import_citation_relations(self, pg_conn, limit: Optional[int] = None) -> int:
         """
         导入引用关系到知识图谱
 
@@ -628,7 +628,7 @@ class Neo4jLegalKnowledgeGraphBuilder:
 
     def _find_norm_id_by_name(
         self, cursor, norm_name: str, fuzzy_threshold: float = 0.6
-    ) -> str | None:
+    ) -> Optional[str]:
         """
         根据法规名称查找ID(支持模糊匹配)
 
@@ -811,10 +811,10 @@ class Neo4jLegalKnowledgeGraphBuilder:
 
 def build_legal_knowledge_graph(
     pg_conn,
-    neo4j_config: dict[str, Any] | None = None,
+    neo4j_config: Optional[dict[str, Any]] = None,
     use_rule_extraction: bool = True,
     use_cloud_llm: bool = False,
-    limit: int | None = None,
+    limit: Optional[int] = None,
 ) -> bool:
     """
     构建法律知识图谱

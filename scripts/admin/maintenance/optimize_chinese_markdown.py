@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 优化中文Markdown格式阅读体验
 Optimize Chinese Markdown Reading Experience
 """
 
-import os
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import re
 import shutil
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+from typing import Any
+
 
 class ChineseMarkdownOptimizer:
     """中文Markdown优化器"""
@@ -52,14 +51,14 @@ class ChineseMarkdownOptimizer:
 
             # 列出复制的图片
             copied_images = list(self.chinese_images_dir.rglob("*"))
-            print(f"📊 复制了 {len([f for f in copied_images if f.suffix.lower() in ['.png', '.jpg', '.jpeg', '.gif', '.svg']])} 个图片文件")
+            print(f"📊 复制了 {len([f for f in copied_images if f.suffix.lower() in ['.png', '.jpg', '.jpeg', '.gif', '.svg'])} 个图片文件")
         else:
             print("⚠️ 原始图片目录不存在，将创建空的images目录")
 
     def optimize_single_markdown_file(self, md_file) -> Any:
         """优化单个Markdown文件"""
         try:
-            with open(md_file, 'r', encoding='utf-8') as f:
+            with open(md_file, encoding='utf-8') as f:
                 content = f.read()
         except Exception as e:
             print(f"⚠️ 读取文件失败: {md_file} - {e}")
@@ -199,7 +198,7 @@ class ChineseMarkdownOptimizer:
         print("📋 创建目录文件...")
 
         markdown_files = list(self.chinese_dir.rglob("*.md"))
-        markdown_files = [f for f in markdown_files if f.name not in ["阅读索引.md", "统计报告.md", "index.html"]]
+        markdown_files = [f for f in markdown_files if f.name not in ["阅读索引.md", "统计报告.md", "index.html"]
 
         toc_content = f"""# 📚 智能体设计模式 - 目录索引
 
@@ -302,7 +301,7 @@ class ChineseMarkdownOptimizer:
     def get_chapter_title(self, file_path) -> Any | None:
         """从文件中提取章节标题"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 content = f.read()
 
             # 查找第一个章节标题

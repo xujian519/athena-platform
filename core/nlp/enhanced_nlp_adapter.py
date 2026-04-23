@@ -23,14 +23,14 @@ class NLPResponse:
     confidence: float
     provider: str
     task_type: str
-    metadata: dict[str, Any] | None = None
+    metadata: Optional[dict[str, Any]] = None
     timestamp: datetime = None
 
 
 class EnhancedNLPAdapter:
     """增强型NLP适配器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
         self.nlp_service = None
         self.response_cache: dict[str, Any] = {}

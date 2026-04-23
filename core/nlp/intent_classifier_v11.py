@@ -23,7 +23,7 @@ class IntentClassifierV11:
     使用集成学习模型,准确率达到92.93%
     """
 
-    def __init__(self, model_dir: str | None = None):
+    def __init__(self, model_dir: Optional[str] = None):
         """
         初始化分类器
 

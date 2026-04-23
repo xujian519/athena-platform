@@ -85,8 +85,8 @@ class Session:
     created_at: datetime = field(default_factory=datetime.now)
     expires_at: datetime | None = None
     last_accessed: datetime = field(default_factory=datetime.now)
-    ip_address: str | None = None
-    user_agent: str | None = None
+    ip_address: Optional[str] = None
+    user_agent: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -105,10 +105,10 @@ class AuthToken:
 class PasswordManager:
     """密码管理器"""
 
-    def __init__(self, pepper: str | None = None):
+    def __init__(self, pepper: Optional[str] = None):
         self.pepper = pepper or secrets.token_hex(16)
 
-    def hash_password(self, password: str, salt: str | None = None) -> tuple[str, str]:
+    def hash_password(self, password: str, salt: Optional[str] = None) -> tuple[str, str]:
         """哈希密码"""
         if salt is None:
             salt = secrets.token_hex(16)
@@ -144,9 +144,9 @@ class SessionManager:
     async def create_session(
         self,
         user_id: str,
-        ip_address: str | None = None,
-        user_agent: str | None = None,
-        expires_in: int | None = None,
+        ip_address: Optional[str] = None,
+        user_agent: Optional[str] = None,
+        expires_in: Optional[int] = None,
     ) -> Session:
         """创建会话"""
         async with self.lock:
@@ -241,9 +241,9 @@ class TokenManager:
     async def create_token(
         self,
         user_id: str,
-        scopes: list[str] | None = None,
-        expires_in: int | None = None,
-        metadata: dict[str, Any] | None = None,
+        scopes: Optional[list[str]] = None,
+        expires_in: Optional[int] = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> AuthToken:
         """创建认证令牌"""
         async with self.lock:
@@ -308,7 +308,7 @@ class TokenManager:
 class AuthManager:
     """认证管理器主类"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
         self.initialized = False
 
@@ -426,9 +426,9 @@ class AuthManager:
         self,
         username: str,
         password: str,
-        ip_address: str | None = None,
-        user_agent: str | None = None,
-    ) -> tuple[User, Session | None]:
+        ip_address: Optional[str] = None,
+        user_agent: Optional[str] = None,
+    ) -> Optional[tuple[User, Session]]:
         """用户认证"""
         if not self.initialized:
             raise RuntimeError("认证管理器未初始化")
@@ -466,8 +466,8 @@ class AuthManager:
         return user, session
 
     async def login_with_token(
-        self, token: str, ip_address: str | None = None, user_agent: str | None = None
-    ) -> tuple[User, Session | None]:
+        self, token: str, ip_address: Optional[str] = None, user_agent: Optional[str] = None
+    ) -> Optional[tuple[User, Session]]:
         """使用令牌登录"""
         if not self.initialized:
             raise RuntimeError("认证管理器未初始化")
@@ -493,7 +493,7 @@ class AuthManager:
         return user, session
 
     async def create_access_token(
-        self, user_id: str, scopes: list[str]  | None = None, expires_in: int | None = None
+        self, user_id: str, scopes: list[str]  | None = None, expires_in: Optional[int] = None
     ) -> AuthToken | None:
         """创建访问令牌"""
         if not self.initialized:
@@ -567,7 +567,7 @@ class AuthManager:
         logger.info(f"🚪 用户全量登出: {user_id} ({count} 个会话)")
         return count
 
-    async def get_user_info(self, user_id: str) -> dict[str, Any] | None:
+    async def get_user_info(self, user_id: str) -> Optional[dict[str, Any]]:
         """获取用户信息"""
         if not self.initialized:
             raise RuntimeError("认证管理器未初始化")
@@ -696,7 +696,7 @@ class AuthManager:
 _global_auth_manager: AuthManager | None = None
 
 
-async def get_auth_manager_instance(config: dict[str, Any] | None = None) -> AuthManager:
+async def get_auth_manager_instance(config: Optional[dict[str, Any]] = None) -> AuthManager:
     """获取认证管理器实例"""
     global _global_auth_manager
     if _global_auth_manager is None:

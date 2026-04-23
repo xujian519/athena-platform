@@ -154,7 +154,7 @@ async def test_integration():
 
     # 测试执行器导入
     try:
-        from core.cognition.plan_executor import PlanExecutor, create_executor
+        from core.cognition.plan_executor import PlanExecutor, 
         logger.info("   ✅ PlanExecutor 导入成功")
     except ImportError as e:
         logger.error(f"   ❌ PlanExecutor 导入失败: {e}")
@@ -169,7 +169,6 @@ async def test_integration():
 
     # 测试小诺协调器导入
     try:
-        from core.agents.xiaonuo_coordinator import XiaonuoAgent
         logger.info("   ✅ XiaonuoAgent 导入成功")
     except ImportError as e:
         logger.error(f"   ❌ XiaonuoAgent 导入失败: {e}")
@@ -214,3 +213,4 @@ async def main():
 if __name__ == "__main__":
     success = asyncio.run(main())
     sys.exit(0 if success else 1)
+

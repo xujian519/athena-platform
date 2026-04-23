@@ -13,9 +13,9 @@ Database Performance Benchmark Tests
 创建时间: 2026-04-21
 版本: v1.0.0
 """
-from __future__ import annotations
 
 import pytest
+
 from tests.performance.benchmark_runner import get_benchmark_runner
 
 
@@ -89,3 +89,4 @@ class TestDatabasePerformance:
         )
 
         assert result.meets_target(), f"配置加载性能未达标: {result}"
+

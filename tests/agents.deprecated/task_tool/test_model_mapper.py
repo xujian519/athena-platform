@@ -15,8 +15,8 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 try:
-    from core.agents.task_tool.model_mapper import ModelMapper
-    from core.agents.task_tool.models import ModelChoice
+    from core.framework.agents.task_tool.model_mapper import ModelMapper
+    from core.framework.agents.task_tool.models import ModelChoice
 except ImportError:
     pytest.skip("model_mapper.py尚未创建", allow_module_level=True)
 

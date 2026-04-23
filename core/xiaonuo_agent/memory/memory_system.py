@@ -106,7 +106,7 @@ class MemorySystem:
     async def remember(
         self,
         information: Any,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
         memory_type: MemoryType | None = None,
         **kwargs,
     ) -> dict[str, str]:
@@ -183,7 +183,7 @@ class MemorySystem:
         query: str,
         memory_types: list[MemoryType] | None = None,
         top_k: int = 10,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> dict[MemoryType, list[Any]]:
         """
         检索记忆(并行搜索三层)
@@ -322,7 +322,7 @@ class MemorySystem:
         return consolidated
 
     async def get_timeline(
-        self, days: int = 7, participant: str | None = None
+        self, days: int = 7, participant: Optional[str] = None
     ) -> dict[str, list[EpisodicMemoryItem]]:
         """
         获取记忆时间线
@@ -363,7 +363,7 @@ class MemorySystem:
             "system_initialized": self._initialized,
         }
 
-    def _validate_input(self, information: Any, context: dict[str, Any] | None = None) -> None:
+    def _validate_input(self, information: Any, context: Optional[dict[str, Any]] = None) -> None:
         """
         验证输入参数
 

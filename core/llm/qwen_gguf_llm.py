@@ -22,7 +22,7 @@ class LocalLLM:
     支持Qwen2.5-7B-Instruct-GGUF等量化模型
     """
 
-    def __init__(self, model_path: str | None = None, n_ctx: int = 8192, n_gpu_layers: int = 0):
+    def __init__(self, model_path: Optional[str] = None, n_ctx: int = 8192, n_gpu_layers: int = 0):
         """
         初始化本地LLM
 

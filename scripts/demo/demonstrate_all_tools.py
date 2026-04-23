@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena平台基础工具综合演示
 
@@ -10,46 +9,46 @@ Created: 2026-04-20
 Version: v1.0.0
 """
 
-import sys
 import asyncio
 import os
+import sys
 import tempfile
 
 sys.path.insert(0, "/Users/xujian/Athena工作平台")
 
+from core.tools.base import ToolCategory, ToolDefinition, ToolPriority
 from core.tools.unified_registry import get_unified_registry
-from core.tools.base import ToolDefinition, ToolCategory, ToolPriority
 
 
 async def register_tools_quiet():
     """静默注册所有工具"""
     from core.tools.p0_basic_tools import bash_handler, read_handler, write_handler
     from core.tools.p1_search_edit_tools import (
+        edit_handler,
         glob_handler,
         grep_handler,
-        edit_handler,
-        web_search_handler,
         web_fetch_handler,
+        web_search_handler,
     )
     from core.tools.p2_agent_task_tools import (
         agent_handler,
         task_create_handler,
-        task_list_handler,
         task_get_handler,
-        task_update_handler,
+        task_list_handler,
         task_stop_handler,
+        task_update_handler,
     )
     from core.tools.p3_mcp_workflow_tools import (
-        mcp_tool_handler,
-        list_mcp_resources_handler,
-        read_mcp_resource_handler,
         enter_plan_mode_handler,
-        exit_plan_mode_handler,
         enter_worktree_handler,
+        exit_plan_mode_handler,
         exit_worktree_handler,
-        tool_search_handler,
+        list_mcp_resources_handler,
+        mcp_tool_handler,
         notebook_edit_handler,
+        read_mcp_resource_handler,
         send_message_handler,
+        tool_search_handler,
     )
 
     registry = get_unified_registry()
@@ -134,7 +133,7 @@ async def demonstrate_all_tools():
             {"command": "echo 'Hello from Bash!' && date", "timeout": 5.0},
             {}
         )
-        print(f"   命令: echo 'Hello from Bash!' && date")
+        print("   命令: echo 'Hello from Bash!' && date")
         print(f"   返回码: {result['returncode']}")
         print(f"   输出: {result['stdout'].strip()}")
     print()
@@ -147,7 +146,7 @@ async def demonstrate_all_tools():
             {"file_path": "/Users/xujian/Athena工作平台/README.md", "limit": 5},
             {}
         )
-        print(f"   文件: README.md")
+        print("   文件: README.md")
         print(f"   总行数: {result['line_count']}")
         print(f"   读取: {result['lines_read']}行")
         print(f"   内容预览: {result['content'][:80]}...")
@@ -187,8 +186,8 @@ async def demonstrate_all_tools():
             {"pattern": "*.md", "path": "/Users/xujian/Athena工作平台/docs/reports", "limit": 5},
             {}
         )
-        print(f"   模式: *.md")
-        print(f"   路径: docs/reports")
+        print("   模式: *.md")
+        print("   路径: docs/reports")
         print(f"   找到: {result['total_count']}个匹配文件")
         for match in result['matches'][:3]:
             print(f"      - {os.path.basename(match)}")
@@ -202,8 +201,8 @@ async def demonstrate_all_tools():
             {"pattern": "^# ", "path": "/Users/xujian/Athena工作平台/README.md", "limit": 3},
             {}
         )
-        print(f"   模式: ^#  (搜索标题)")
-        print(f"   文件: README.md")
+        print("   模式: ^#  (搜索标题)")
+        print("   文件: README.md")
         print(f"   找到: {result['total_count']}个匹配")
         if result['matches']:
             match = result['matches'][0]
@@ -227,12 +226,12 @@ async def demonstrate_all_tools():
             {}
         )
         print(f"   文件: {temp_file.name}")
-        print(f"   替换: World → Athena")
+        print("   替换: World → Athena")
         print(f"   替换数: {result['replacements']}")
         print(f"   备份: {result.get('backup_path', '无')}")
 
         # 验证
-        with open(temp_file.name, "r") as f:
+        with open(temp_file.name) as f:
             content = f.read()
         print(f"   验证: {content.strip()}")
         os.remove(temp_file.name)
@@ -248,7 +247,7 @@ async def demonstrate_all_tools():
             {"query": "Python asyncio", "limit": 3},
             {}
         )
-        print(f"   查询: Python asyncio")
+        print("   查询: Python asyncio")
         print(f"   找到: {len(result['results'])}个结果")
         if result['results']:
             print(f"   示例: {result['results'][0]['title']}")
@@ -262,7 +261,7 @@ async def demonstrate_all_tools():
             {"url": "https://example.com"},
             {}
         )
-        print(f"   URL: https://example.com")
+        print("   URL: https://example.com")
         print(f"   状态: {'成功' if result['success'] else '失败'}")
         print(f"   内容长度: {len(result.get('content', ''))}字符")
     print()
@@ -285,8 +284,8 @@ async def demonstrate_all_tools():
             },
             {}
         )
-        print(f"   Agent类型: xiaona (法律专家)")
-        print(f"   任务: 分析专利创造性")
+        print("   Agent类型: xiaona (法律专家)")
+        print("   任务: 分析专利创造性")
         print(f"   Agent ID: {result['agent_id']}")
     print()
 
@@ -303,7 +302,7 @@ async def demonstrate_all_tools():
             },
             {}
         )
-        print(f"   任务名称: 示例后台任务")
+        print("   任务名称: 示例后台任务")
         print(f"   任务ID: {result['task_id']}")
         print(f"   状态: {result['status']}")
         task_id = result['task_id']
@@ -370,8 +369,8 @@ async def demonstrate_all_tools():
             },
             {}
         )
-        print(f"   服务: academic-search")
-        print(f"   操作: search_papers")
+        print("   服务: academic-search")
+        print("   操作: search_papers")
         print(f"   状态: {'成功' if result['success'] else '失败'}")
     print()
 
@@ -383,7 +382,7 @@ async def demonstrate_all_tools():
             {"server_name": "memory"},
             {}
         )
-        print(f"   服务: memory")
+        print("   服务: memory")
         print(f"   资源数量: {result['total_count']}")
     print()
 
@@ -395,8 +394,8 @@ async def demonstrate_all_tools():
             {"server_name": "memory", "resource_name": "knowledge_graph"},
             {}
         )
-        print(f"   服务: memory")
-        print(f"   资源: knowledge_graph")
+        print("   服务: memory")
+        print("   资源: knowledge_graph")
         print(f"   状态: {'成功' if result['success'] else '失败'}")
     print()
 
@@ -415,7 +414,7 @@ async def demonstrate_all_tools():
             {"query": "file", "category": "filesystem"},
             {}
         )
-        print(f"   搜索查询: file (分类: filesystem)")
+        print("   搜索查询: file (分类: filesystem)")
         print(f"   匹配工具数: {result['total_count']}")
         for tool in result['matched_tools'][:3]:
             print(f"      - {tool}")
@@ -454,7 +453,7 @@ async def demonstrate_all_tools():
             {}
         )
         print(f"   Notebook: {os.path.basename(temp_file.name)}")
-        print(f"   操作: insert")
+        print("   操作: insert")
         print(f"   总cell数: {result['total_cells']}")
 
         os.remove(temp_file.name)
@@ -471,8 +470,8 @@ async def demonstrate_all_tools():
             },
             {}
         )
-        print(f"   目标Agent: xiaona")
-        print(f"   消息: 请分析这个专利")
+        print("   目标Agent: xiaona")
+        print("   消息: 请分析这个专利")
         print(f"   消息ID: {result['message_id']}")
         print(f"   状态: {result['status']}")
     print()

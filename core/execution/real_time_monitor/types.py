@@ -100,5 +100,5 @@ class MonitoringConfig:
     enable_custom_metrics: bool = True
     enable_alerts: bool = True
     alert_cooldown: int = 60  # 告警冷却期(秒)
-    webhook_url: str | None = None  # Webhook通知URL
+    webhook_url: Optional[str] = None  # Webhook通知URL
     websocket_port: int = 8765  # WebSocket端口

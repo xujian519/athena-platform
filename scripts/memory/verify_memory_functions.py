@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 记忆系统验证测试
 Memory System Verification Tests
@@ -12,14 +11,14 @@ Memory System Verification Tests
 """
 
 import asyncio
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-import sys
-import time
-from datetime import datetime, timedelta
-from pathlib import Path
 import logging
 import subprocess
+import sys
+import time
+from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 # 添加项目路径
 sys.path.append(str(Path(__file__).parent.parent.parent))
@@ -163,7 +162,7 @@ WHERE content ILIKE '%{keyword}%' OR tags @> ARRAY['{keyword}'];
                             if count_int > 0:
                                 self.log_result(f"关键词搜索-{keyword}", True, f"找到 {count_int} 条相关记忆")
                             else:
-                                self.log_result(f"关键词搜索-{keyword}", False, f"未找到相关记忆")
+                                self.log_result(f"关键词搜索-{keyword}", False, "未找到相关记忆")
                         except:
                             self.log_result(f"关键词搜索-{keyword}", False, "结果解析失败")
                     else:
@@ -357,7 +356,7 @@ RETURNING id;
 
                 if result.returncode == 0:
                     # 获取返回的UUID
-                    persistence_id = result.stdout.strip()
+                    result.stdout.strip()
 
                     # 3. 验证新记忆存在（通过agent_id查找最新的一条）
                     verify_sql = f"SELECT COUNT(*) FROM memory_items WHERE agent_id = 'test_agent' AND content LIKE '%持久化测试记忆_{test_timestamp}%'"
@@ -388,7 +387,7 @@ RETURNING id;
                             self.log_result("持久化-验证", True, f"记忆总数正确: {verify_count}")
 
                             # 4. 模拟数据库重启后的持久性
-                            print(f"\n💾 模拟记忆持久化...")
+                            print("\n💾 模拟记忆持久化...")
                             print("   (假设数据库重启后记忆仍然存在)")
                             self.log_result("持久性确认", True, f"重启后应有 {verify_count} 条记忆")
                         else:

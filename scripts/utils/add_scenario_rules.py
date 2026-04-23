@@ -18,7 +18,7 @@ import json
 import logging
 import os
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any
 
 from dotenv import load_dotenv
 from neo4j import GraphDatabase
@@ -861,7 +861,7 @@ class ScenarioRulesCreator:
         """关闭数据库连接"""
         self.driver.close()
 
-    def create_scenario_rule(self, rule: Dict[str, Any]) -> bool:
+    def create_scenario_rule(self, rule: dict[str, Any]) -> bool:
         """
         创建单个场景规则
 
@@ -915,7 +915,7 @@ class ScenarioRulesCreator:
                 logger.error(f"❌ 创建规则失败 {rule['rule_id']}: {e}")
                 return False
 
-    def create_all_rules(self, rules: List[Dict[str, Any]]) -> int:
+    def create_all_rules(self, rules: list[dict[str, Any]) -> int:
         """
         批量创建场景规则
 

@@ -7,7 +7,6 @@ Agentic Design Patterns Test Framework
 确保所有测试文件都能正确导入core模块。
 """
 
-import os
 import sys
 from pathlib import Path
 
@@ -24,3 +23,4 @@ if _production_path.exists() and str(_production_path) not in sys.path:
 
 __version__ = "1.0.0"
 __author__ = "Athena Platform Team"
+

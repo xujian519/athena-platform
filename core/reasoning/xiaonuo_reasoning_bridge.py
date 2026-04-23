@@ -49,9 +49,9 @@ class ReasoningRequest:
 
     problem: str  # 待解决的问题
     mode: str = "seven_step"  # 推理模式: 'six_step' 或 'seven_step'
-    context: dict[str, Any] | None = None  # 上下文信息
-    session_id: str | None = None  # 会话ID
-    user_id: str | None = None  # 用户ID
+    context: Optional[dict[str, Any]] = None  # 上下文信息
+    session_id: Optional[str] = None  # 会话ID
+    user_id: Optional[str] = None  # 用户ID
     timeout: float = 60.0  # 超时时间(秒)
 
 
@@ -67,7 +67,7 @@ class ReasoningResponse:
     execution_time: float
     insights: list[str]
     confidence: float
-    error_message: str | None = None
+    error_message: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 

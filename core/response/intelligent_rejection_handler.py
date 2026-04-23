@@ -50,7 +50,7 @@ class RejectionResponse:
     suggestions: list[str]
     alternative_agents: list[str]
     can_retry: bool
-    retry_after: float | None = None  # 秒
+    retry_after: Optional[float] = None  # 秒
     timestamp: datetime = field(default_factory=datetime.now)
 
 
@@ -192,8 +192,8 @@ class IntelligentRejectionHandler:
     async def analyze_rejection(
         self,
         user_request: str,
-        error: str | None = None,
-        context: dict[str, Any] | None = None,
+        error: Optional[str] = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> RejectionReason:
         """
         分析拒绝原因
@@ -234,7 +234,7 @@ class IntelligentRejectionHandler:
         return RejectionReason.LACKING_CAPABILITY
 
     async def generate_rejection_response(
-        self, user_request: str, reason: RejectionReason, context: dict[str, Any] | None = None
+        self, user_request: str, reason: RejectionReason, context: Optional[dict[str, Any]] = None
     ) -> RejectionResponse:
         """
         生成拒绝响应
@@ -341,7 +341,7 @@ class IntelligentRejectionHandler:
         user_request: str,
         reason: RejectionReason,
         template: dict[str, Any],
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> str:
         """生成解释说明"""
         explanation_template = template["explanation_template"]
@@ -379,7 +379,7 @@ class IntelligentRejectionHandler:
         user_request: str,
         reason: RejectionReason,
         template: dict[str, Any],
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> list[str]:
         """生成建议"""
         suggestions_template = template.get("suggestions_template", [])

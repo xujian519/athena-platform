@@ -37,7 +37,7 @@ _global_optimized_module: OptimizedCommunicationModule | None = None
 
 
 def get_optimized_module(
-    config: dict[str, Any] | None = None,
+    config: Optional[dict[str, Any]] = None,
 ) -> OptimizedCommunicationModule:
     """
     获取或创建优化通信模块实例

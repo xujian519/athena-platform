@@ -19,7 +19,7 @@ from .manager import protocol_manager
 logger = logging.getLogger(__name__)
 
 
-def create_protocol_session(protocol_type: str, participants: list[str]) -> str | None:
+def create_protocol_session(protocol_type: str, participants: list[str]) -> Optional[str]:
     """创建协议会话的便捷函数
 
     Args:
@@ -52,7 +52,7 @@ async def start_protocol_session(protocol_id: str) -> bool:
     return await protocol_manager.start_protocol(protocol_id)
 
 
-def get_protocol_session_status(protocol_id: str) -> dict[str, Any] | None:
+def get_protocol_session_status(protocol_id: str) -> Optional[dict[str, Any]]:
     """获取协议会话状态的便捷函数
 
     Args:

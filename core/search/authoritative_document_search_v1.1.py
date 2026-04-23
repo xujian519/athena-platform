@@ -101,7 +101,7 @@ class AuthoritativeDocumentSearch:
             logger.info("   将使用全文搜索作为回退方案")
             self.embedding_model = None
 
-    def _get_query_embedding(self, query: str) -> list[float | None]:
+    def _get_query_embedding(self, query: str) -> Optional[list[float]]:
         """
         获取查询的向量表示 (P1-6新增)
 

@@ -184,8 +184,8 @@ Just share your rough prompt and I'll handle the optimization!""",
         user_input: str,
         target_ai: str = "Claude",
         mode: str = "BASIC",
-        context: str | None = None,
-        output_format: str | None = None
+        context: Optional[str] = None,
+        output_format: Optional[str] = None
     ) -> dict[str, Any]:
         """
         应用Lyra优化方法（异步版本，使用真正的优化引擎）
@@ -361,8 +361,8 @@ async def apply_lyra_optimization_async(
     user_input: str,
     target_ai: str = "Claude",
     mode: str = "BASIC",
-    context: str | None = None,
-    output_format: str | None = None
+    context: Optional[str] = None,
+    output_format: Optional[str] = None
 ) -> dict[str, Any]:
     """
     应用Lyra优化（供小诺使用，异步版本，完整功能）

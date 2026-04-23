@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 存储参数调优脚本
 基于监控报告动态优化系统参数
 """
 
-import json
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import sys
-import os
-from pathlib import Path
-from datetime import datetime
 import importlib.util
+import json
+import os
+import sys
+from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 # 添加项目路径
 sys.path.append('/Users/xujian/Athena工作平台')
@@ -39,7 +38,7 @@ class StorageParameterTuner:
             print("❌ 监控报告文件不存在")
             return None
 
-        with open(self.monitoring_report_path, 'r', encoding='utf-8') as f:
+        with open(self.monitoring_report_path, encoding='utf-8') as f:
             report = json.load(f)
 
         return report
@@ -50,7 +49,7 @@ class StorageParameterTuner:
 
         # 1. 分析路由决策集中问题
         storage_usage = report.get('storage_usage_distribution', {})
-        total_tests = sum(storage_usage.values())
+        sum(storage_usage.values())
 
         if len(storage_usage) == 1:
             # 路由决策过于集中
@@ -107,7 +106,7 @@ class StorageParameterTuner:
             print("❌ 配置文件不存在，创建新配置")
             current_config = {}
         else:
-            with open(self.config_path, 'r', encoding='utf-8') as f:
+            with open(self.config_path, encoding='utf-8') as f:
                 current_config = json.load(f)
 
         print("🔧 应用参数调整建议:")
@@ -134,7 +133,7 @@ class StorageParameterTuner:
 
                 # 更新参数值
                 old_value = current_section.get(path_parts[-1], '未设置')
-                current_section[path_parts[-1]] = new_value
+                current_section[path_parts[-1] = new_value
 
                 print(f"   ✅ {param_path}: {old_value} → {new_value}")
 
@@ -265,7 +264,7 @@ if __name__ == "__main__":
    - 涉及参数: {len(rec.get('parameter_adjustments', {}))} 个
 """
 
-        report += f"""
+        report += """
 ## 🔧 实施的优化措施
 
 ### 参数调整

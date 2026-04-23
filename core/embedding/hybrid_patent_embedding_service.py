@@ -231,8 +231,8 @@ class HybridPatentEmbeddingService:
     async def encode_patent(
         self,
         title: str,
-        abstract: str | None = None,
-        claims: str | None = None,
+        abstract: Optional[str] = None,
+        claims: Optional[str] = None,
         mode: EmbeddingMode | None = None,
     ) -> HybridEmbedding:
         """

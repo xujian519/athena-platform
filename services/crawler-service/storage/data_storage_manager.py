@@ -12,7 +12,7 @@ import logging
 from abc import ABC, abstractmethod
 from contextlib import asynccontextmanager
 from dataclasses import asdict, dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any
@@ -282,7 +282,7 @@ class SQLiteStorageBackend(StorageBackend):
     async def cleanup_old_data(self, days: int) -> int:
         """清理旧数据"""
         try:
-            cutoff_date = (datetime.now(timezone.utc) -
+            cutoff_date = (datetime.now(UTC) -
                           timedelta(days=days)).isoformat()
 
             async with aiosqlite.connect(self.db_path) as db:
@@ -325,7 +325,7 @@ class SQLiteStorageBackend(StorageBackend):
                 """)
                 type_stats = {}
                 for row in await cursor.fetchall():
-                    type_stats[row[0]] = {
+                    type_stats[row[0] = {
                         'count': row[1],
                         'size': row[2]
                     }
@@ -340,7 +340,7 @@ class SQLiteStorageBackend(StorageBackend):
                 """)
                 daily_stats = {}
                 for row in await cursor.fetchall():
-                    daily_stats[row[0]] = row[1]
+                    daily_stats[row[0] = row[1]
 
                 return {
                     'total_records': total_records,
@@ -606,7 +606,7 @@ class DataStorageManager:
                 'extracted_data': crawl_result.get('extracted_data', {})
             },
             crawler_type=crawl_result.get('crawler_used', 'unknown'),
-            timestamp=datetime.now(timezone.utc),
+            timestamp=datetime.now(UTC),
             content_hash=''
         )
 
@@ -633,7 +633,7 @@ class DataStorageManager:
             }
         return None
 
-    async def search_data(self, query: dict[str, Any], limit: int = 100) -> list[dict[str, Any]]:
+    async def search_data(self, query: dict[str, Any], limit: int = 100) -> list[dict[str, Any]:
         """搜索数据"""
         results = await self.backend.search(query, limit)
         return [
@@ -674,7 +674,7 @@ class DataStorageManager:
 
         if format == 'json':
             export_data = {
-                'export_time': datetime.now(timezone.utc).isoformat(),
+                'export_time': datetime.now(UTC).isoformat(),
                 'query': query,
                 'count': len(results),
                 'data': results

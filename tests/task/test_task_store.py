@@ -15,8 +15,9 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 try:
-    from core.agents.task_tool.models import TaskInput, TaskOutput, TaskRecord, TaskStatus
     from core.task.task_store import TaskStore
+
+    from core.framework.agents.task_tool.models import TaskInput, TaskRecord, TaskStatus
 except ImportError:
     pytest.skip("task_store.py尚未创建", allow_module_level=True)
 
@@ -265,3 +266,4 @@ class TestTaskStore:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+

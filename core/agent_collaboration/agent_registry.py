@@ -46,7 +46,7 @@ class AgentInfo:
     capabilities: list[str] = field(default_factory=list)
     status: AgentStatus = AgentStatus.IDLE
     last_heartbeat: str = field(default_factory=lambda: datetime.now().isoformat())
-    current_task_id: str | None = None
+    current_task_id: Optional[str] = None
     performance_metrics: dict[str, Any] = field(default_factory=dict)
     config: dict[str, Any] = field(default_factory=dict)
 
@@ -203,7 +203,7 @@ class AgentRegistry:
         return available_agents
 
     def get_best_agent(
-        self, agent_type: AgentType, capabilities: list[str] | None = None
+        self, agent_type: AgentType, capabilities: Optional[list[str]] = None
     ) -> AgentInfo | None:
         """
         获取最适合的Agent
@@ -246,7 +246,7 @@ class AgentRegistry:
         return candidates[0]
 
     async def update_agent_status(
-        self, agent_id: str, status: AgentStatus, task_id: str | None = None
+        self, agent_id: str, status: AgentStatus, task_id: Optional[str] = None
     ):
         """
         更新Agent状态

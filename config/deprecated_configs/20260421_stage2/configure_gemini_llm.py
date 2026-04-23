@@ -13,7 +13,7 @@ Configure Google Gemini LLM
 import json
 import logging
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from domestic_llm_integration import DomesticLLMManager, LLMProvider
@@ -90,7 +90,7 @@ def save_config(api_key) -> None:
         'gemini_api_key': api_key,
         'provider': 'gemini',
         'model': 'gemini-1.5-pro-latest',
-        'configured_at': datetime.now(timezone.utc).isoformat(),
+        'configured_at': datetime.now(UTC).isoformat(),
         'status': 'active'
     }
 

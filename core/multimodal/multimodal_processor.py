@@ -63,7 +63,7 @@ class ModalityInput:
     modality: ModalityType
     data: str | bytes | dict[str, Any]
     metadata: dict[str, Any] = field(default_factory=dict)
-    source: str | None = None  # 来源(文件路径、URL等)
+    source: Optional[str] = None  # 来源(文件路径、URL等)
 
     def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
@@ -122,8 +122,8 @@ class MultimodalInput:
         self,
         modality: ModalityType,
         data: Any,
-        source: str | None = None,
-        metadata: dict[str, Any] | None = None,
+        source: Optional[str] = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> None:
         """添加输入"""
         input_item = ModalityInput(
@@ -190,7 +190,7 @@ class ModalityProcessor:
         logger.info(f"🔹 模态处理器初始化: {self.__class__.__name__}")
 
     async def process(
-        self, input_data: ModalityInput, task_id: str | None = None
+        self, input_data: ModalityInput, task_id: Optional[str] = None
     ) -> ModalityProcessingResult:
         """
         处理模态输入
@@ -209,7 +209,7 @@ class TextProcessor(ModalityProcessor):
     """文本处理器"""
 
     async def process(
-        self, input_data: ModalityInput, task_id: str | None = None
+        self, input_data: ModalityInput, task_id: Optional[str] = None
     ) -> ModalityProcessingResult:
         """处理文本输入"""
         start_time = asyncio.get_event_loop().time()
@@ -281,7 +281,7 @@ class ImageProcessor(ModalityProcessor):
         self.visual_agent = get_visual_agent()
 
     async def process(
-        self, input_data: ModalityInput, task_id: str | None = None
+        self, input_data: ModalityInput, task_id: Optional[str] = None
     ) -> ModalityProcessingResult:
         """处理图像输入"""
         start_time = asyncio.get_event_loop().time()
@@ -349,7 +349,7 @@ class AudioProcessor(ModalityProcessor):
     """音频处理器"""
 
     async def process(
-        self, input_data: ModalityInput, task_id: str | None = None
+        self, input_data: ModalityInput, task_id: Optional[str] = None
     ) -> ModalityProcessingResult:
         """处理音频输入"""
         start_time = asyncio.get_event_loop().time()
@@ -403,7 +403,7 @@ class VideoProcessor(ModalityProcessor):
     """视频处理器"""
 
     async def process(
-        self, input_data: ModalityInput, task_id: str | None = None
+        self, input_data: ModalityInput, task_id: Optional[str] = None
     ) -> ModalityProcessingResult:
         """处理视频输入"""
         start_time = asyncio.get_event_loop().time()
@@ -480,7 +480,7 @@ class MultimodalProcessor:
         logger.info("🎨 多模态处理器初始化完成")
 
     async def process_multimodal(
-        self, multimodal_input: MultimodalInput, task_id: str | None = None
+        self, multimodal_input: MultimodalInput, task_id: Optional[str] = None
     ) -> MultimodalProcessingResult:
         """
         处理多模态输入
@@ -618,7 +618,7 @@ class MultimodalProcessor:
         return aligned
 
     async def process_text_image(
-        self, text: str, image_path: str, context: str | None = None
+        self, text: str, image_path: str, context: Optional[str] = None
     ) -> MultimodalProcessingResult:
         """
         处理文本+图像组合输入
@@ -688,7 +688,7 @@ def get_multimodal_processor() -> MultimodalProcessor:
 
 
 async def process_text(
-    text: str, metadata: dict[str, Any] | None = None
+    text: str, metadata: Optional[dict[str, Any]] = None
 ) -> ModalityProcessingResult:
     """
     便捷的文本处理函数
@@ -706,7 +706,7 @@ async def process_text(
 
 
 async def process_text_image(
-    text: str | None = None, image_path: str | None = None, context: str | None = None
+    text: Optional[str] = None, image_path: Optional[str] = None, context: Optional[str] = None
 ) -> MultimodalProcessingResult:
     """
     便捷的文本+图像处理函数

@@ -82,7 +82,7 @@ class PatentEntityRecognizer:
         if API_AVAILABLE:
             self._init_llm_recognizer()
 
-    def _load_domain_vocabulary(self) -> dict[str, list[str]]:
+    def _load_domain_vocabulary(self) -> dict[str, list[str]:
         """加载领域词汇"""
         return {
             '部件': [
@@ -140,7 +140,7 @@ class PatentEntityRecognizer:
             ]
         }
 
-    def _load_entity_patterns(self) -> dict[str, list[str]]:
+    def _load_entity_patterns(self) -> dict[str, list[str]:
         """加载实体识别模式"""
         return {
             '部件': [
@@ -511,7 +511,7 @@ class PatentEntityRecognizer:
 
         return merged
 
-    def extract_entities_with_context(self, text: str, context_window: int = 50) -> list[dict[str, Any]]:
+    def extract_entities_with_context(self, text: str, context_window: int = 50) -> list[dict[str, Any]:
         """提取实体并保留上下文"""
         entities = self.recognize_entities(text)
 
@@ -545,7 +545,7 @@ class PatentEntityRecognizer:
 
         return results
 
-    def batch_recognize(self, texts: list[str], batch_size: int = 10) -> list[list[RecognizedEntity]]:
+    def batch_recognize(self, texts: list[str], batch_size: int = 10) -> list[list[RecognizedEntity]:
         """批量识别实体"""
         results = []
 

@@ -18,7 +18,7 @@ class StateSynchronizer:
         """初始化状态同步器"""
         pass
 
-    async def sync_state(self, state: Dict[str, Any]) -> bool:
+    async def sync_state(self, state: dict[str, Any]) -> bool:
         """同步状态"""
         # TODO: 实现状态同步逻辑
         return True

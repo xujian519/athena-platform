@@ -28,7 +28,7 @@ from sklearn.preprocessing import LabelEncoder
 class OnlineLearningIntentClassifier:
     """在线学习意图分类器"""
 
-    def __init__(self, model_dir: str | None = None):
+    def __init__(self, model_dir: Optional[str] = None):
         self.name = "在线学习意图识别系统"
         self.model_dir = Path(
             model_dir or "/Users/xujian/Athena工作平台/models/online_learning_v10"
@@ -265,7 +265,7 @@ class OnlineLearningIntentClassifier:
         predicted_intent: str,
         true_intent: str,
         feedback_type: str = "explicit",
-        confidence: float | None = None,
+        confidence: Optional[float] = None,
     ) -> bool:
         """添加用户反馈"""
         with self.lock:
@@ -420,7 +420,7 @@ class OnlineLearningIntentClassifier:
 
         return improvement_rate
 
-    def save_model(self, version: int, improvement: float | None = None) -> None:
+    def save_model(self, version: int, improvement: Optional[float] = None) -> None:
         """保存模型"""
         with self.lock:
             try:

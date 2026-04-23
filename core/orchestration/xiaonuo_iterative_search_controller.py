@@ -85,7 +85,7 @@ class XiaonuoIterativeSearchController:
         research_topic: str,
         max_iterations: int = 5,
         search_depth: str = "comprehensive",
-        focus_areas: list[str] | None = None,
+        focus_areas: Optional[list[str]] = None,
     ) -> dict[str, Any]:
         """智能迭代式搜索
 

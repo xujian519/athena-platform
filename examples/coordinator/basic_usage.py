@@ -7,14 +7,15 @@
 from __future__ import annotations
 
 from core.coordinator import (
+    AdvancedCoordinator,
+    AgentInfo,
+    ConflictResolutionStrategy,
+    ConflictType,
     Coordinator,
     CoordinatorConfig,
-    AgentInfo,
     MessagePriority,
-    ConflictType,
-    ConflictResolutionStrategy,
+    TaskDependency,
 )
-from core.coordinator import AdvancedCoordinator, TaskDependency, TaskRetryConfig
 
 
 def main() -> None:
@@ -31,7 +32,7 @@ def main() -> None:
         enable_conflict_detection=True,
     )
     coordinator = Coordinator(config)
-    print(f"   ✓ Coordinator创建成功")
+    print("   ✓ Coordinator创建成功")
 
     # 2. 注册Agent
     print("\n2. 注册Agent")

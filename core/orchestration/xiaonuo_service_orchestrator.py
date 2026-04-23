@@ -58,7 +58,7 @@ class ServiceInstance:
     config: ServiceConfig
     status: ServiceStatus = ServiceStatus.UNKNOWN
     process: subprocess.Popen | None = None
-    pid: int | None = None
+    pid: Optional[int] = None
     start_time: datetime | None = None
     last_check: datetime | None = None
     health_status: dict[str, Any] = field(default_factory=dict)
@@ -213,7 +213,7 @@ class XiaonuoServiceOrchestrator:
 
         return should_start
 
-    async def start_services_on_demand(self, service_names: list[str] | None = None) -> dict[str, bool]:
+    async def start_services_on_demand(self, service_names: Optional[list[str]] = None) -> dict[str, bool]:
         """按需启动服务"""
         if not service_names:
             # 默认启动所有自动启动的服务

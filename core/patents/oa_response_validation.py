@@ -134,7 +134,7 @@ class StepCompleteRequest(BaseModel):
 
     @field_validator("error_message")
     @classmethod
-    def validate_error_message(cls, v: str | None) -> str | None:
+    def validate_error_message(cls, v: Optional[str]) -> Optional[str]:
         """验证错误信息"""
         if v is not None:
             v = v.strip()
@@ -172,7 +172,7 @@ class RecordingFinishRequest(BaseModel):
 
     @field_validator("final_outcome")
     @classmethod
-    def validate_final_outcome(cls, v: str | None) -> str | None:
+    def validate_final_outcome(cls, v: Optional[str]) -> Optional[str]:
         """验证最终结果"""
         if v is not None:
             v = v.strip().lower()
@@ -183,7 +183,7 @@ class RecordingFinishRequest(BaseModel):
 
     @field_validator("strategy_used")
     @classmethod
-    def validate_strategy(cls, v: str | None) -> str | None:
+    def validate_strategy(cls, v: Optional[str]) -> Optional[str]:
         """验证策略名称"""
         if v is not None:
             v = v.strip()

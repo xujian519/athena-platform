@@ -6,10 +6,11 @@ Gateway快速压力测试（5分钟版本）
 """
 
 import asyncio
-import websockets
 import json
 import time
 from datetime import datetime
+
+import websockets
 
 GATEWAY_URL = "ws://localhost:8005/ws"
 AUTH_TOKEN = "demo_token"
@@ -56,7 +57,7 @@ async def quick_stress_test():
 
             # 计算耗时
             cycle_time = time.time() - cycle_start
-            elapsed = time.time() - start_time
+            time.time() - start_time
             remaining = end_time - time.time()
 
             # 每30秒报告一次

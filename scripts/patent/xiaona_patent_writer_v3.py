@@ -19,7 +19,7 @@ async def rewrite_patent_with_llm():
 
     try:
         # 导入统一LLM管理器
-        from core.llm.unified_llm_manager import UnifiedLLMManager
+        from core.ai.llm.unified_llm_manager import UnifiedLLMManager
 
         print("🔧 正在初始化LLM管理器...")
         llm_manager = UnifiedLLMManager()

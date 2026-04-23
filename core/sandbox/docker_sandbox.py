@@ -26,8 +26,8 @@ class DockerSandbox(Sandbox):
 
     def __init__(self, config: SandboxConfig | None = None):
         super().__init__(config)
-        self._container_id: str | None = None
-        self._container_name: str | None = None
+        self._container_id: Optional[str] = None
+        self._container_name: Optional[str] = None
 
     async def initialize(self) -> None:
         """初始化沙盒（创建容器）"""
@@ -59,8 +59,8 @@ class DockerSandbox(Sandbox):
     async def execute_command(
         self,
         command: str,
-        working_dir: str | None = None,
-        timeout: int | None = None
+        working_dir: Optional[str] = None,
+        timeout: Optional[int] = None
     ) -> SandboxResult:
         """在容器中执行命令"""
         if not self._is_initialized:

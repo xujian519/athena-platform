@@ -140,7 +140,7 @@ class TestWebSearch:
 
         # 选择优先级最高的
         selected = min(
-            [(name, config) for name, config in engines.items() if config["enabled"]],
+            [(name, config) for name, config in engines.items() if config["enabled"],
             key=lambda x: x[1]["priority"]
         )
 
@@ -433,7 +433,7 @@ class TestSearchErrorHandling:
             try:
                 result = await asyncio.wait_for(slow_search(), timeout=0.01)
                 return False, result
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 return True, None
 
         timeout_occurred, _ = asyncio.run(run_with_timeout())
@@ -571,8 +571,8 @@ class TestSearchIntegration:
         aggregated = {}
         for result in results:
             if result["id"] not in aggregated:
-                aggregated[result["id"]] = []
-            aggregated[result["id"]].append(result)
+                aggregated[result["id"] = []
+            aggregated[result["id"].append(result)
 
         # 验证聚合
         assert "1" in aggregated

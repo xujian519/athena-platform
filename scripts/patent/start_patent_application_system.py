@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利申请管理系统启动脚本
 Patent Application Management System Startup Script
@@ -12,10 +11,10 @@ Patent Application Management System Startup Script
 """
 
 import os
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import sys
 import subprocess
+import sys
 from pathlib import Path
+from typing import Any
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent
@@ -67,7 +66,7 @@ def init_database() -> Any:
         # 生成统计信息
         stats = db.generate_statistics()
 
-        print(f"✅ 数据库初始化完成")
+        print("✅ 数据库初始化完成")
         print(f"📊 当前申请总数: {stats['total_applications']}")
         print(f"📈 数据库路径: {db.db_path}")
 
@@ -80,8 +79,11 @@ def process_sunjunxia_application() -> Any | None:
     """处理孙俊霞的专利申请"""
     try:
         from core.data.patent_application_management_system import (
-            PatentApplicationDatabase, PatentApplication,
-            ApplicantInfo, InventorInfo, FeeDetails
+            ApplicantInfo,
+            FeeDetails,
+            InventorInfo,
+            PatentApplication,
+            PatentApplicationDatabase,
         )
 
         print("🔍 正在处理孙俊霞的专利申请...")
@@ -160,7 +162,7 @@ def process_sunjunxia_application() -> Any | None:
                     uploaded_by="小娜系统",
                     notes="需要提取关键信息：申请人身份信息、联系方式、费用明细"
                 )
-                print(f"✅ 确认书文档已添加到档案")
+                print("✅ 确认书文档已添加到档案")
 
             return True
 
@@ -200,8 +202,8 @@ def main() -> None:
     print("📋" + " " * 25 + "小娜专利申请管理系统" + " " * 25 + "📋")
     print("=" * 80)
     print(f"🕐 启动时间: {sys.modules['datetime'].datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"👩‍⚖️ 操作者: 小娜·天秤女神 (专利法律专家)")
-    print(f"🎯 功能目标: 统一管理专利申请信息，支持信息录入、查询、统计")
+    print("👩‍⚖️ 操作者: 小娜·天秤女神 (专利法律专家)")
+    print("🎯 功能目标: 统一管理专利申请信息，支持信息录入、查询、统计")
     print("=" * 80)
 
     # 检查依赖

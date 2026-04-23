@@ -7,11 +7,9 @@
 3. 结果返回 → 记忆保存
 """
 
-import asyncio
-import pytest
-import json
-from typing import Dict, Any
 from pathlib import Path
+
+import pytest
 
 # 标记为端到端测试
 pytestmark = pytest.mark.e2e
@@ -25,8 +23,8 @@ class TestPatentAnalysisWorkflow:
         """工作流组件fixture"""
         # 这里会初始化Gateway、智能体、记忆系统等
         # 简化版测试，只验证核心流程
-        from core.agents.xiaona.analyzer_agent import AnalyzerAgent
-        from core.memory.unified_memory_system import get_project_memory
+        from core.framework.agents.xiaona.analyzer_agent import AnalyzerAgent
+        from core.framework.memory.unified_memory_system import get_project_memory
 
         analyzer = AnalyzerAgent(agent_id="test_analyzer")
         memory = get_project_memory("/Users/xujian/Athena工作平台")
@@ -67,7 +65,7 @@ class TestPatentAnalysisWorkflow:
         assert memory is not None
 
         # 测试写入记忆
-        from core.memory.unified_memory_system import MemoryType, MemoryCategory
+        from core.framework.memory.unified_memory_system import MemoryCategory, MemoryType
 
         try:
             memory.write(
@@ -130,8 +128,8 @@ class TestAgentCollaborationWorkflow:
     @pytest.mark.asyncio
     async def test_retriever_analyzer_workflow(self):
         """测试检索者→分析者工作流"""
-        from core.agents.xiaona.retriever_agent import RetrieverAgent
-        from core.agents.xiaona.analyzer_agent import AnalyzerAgent
+        from core.framework.agents.xiaona.analyzer_agent import AnalyzerAgent
+        from core.framework.agents.xiaona.retriever_agent import RetrieverAgent
 
         retriever = RetrieverAgent(agent_id="test_retriever")
         analyzer = AnalyzerAgent(agent_id="test_analyzer")
@@ -150,7 +148,9 @@ class TestAgentCollaborationWorkflow:
         # 这里应该测试小诺协调者的工作流
         # 简化版只验证协调者存在
 
-        from core.agents.xiaonuo_orchestrator_with_memory import XiaonuoOrchestratorWithMemory
+        from core.framework.agents.xiaonuo_orchestrator_with_memory import (
+            XiaonuoOrchestratorWithMemory,
+        )
 
         try:
             coordinator = XiaonuoOrchestratorWithMemory()
@@ -188,7 +188,10 @@ class TestMemoryIntegration:
 
     def test_memory_system_initialization(self):
         """测试记忆系统初始化"""
-        from core.memory.unified_memory_system import get_global_memory, get_project_memory
+        from core.framework.memory.unified_memory_system import (
+            get_global_memory,
+            get_project_memory,
+        )
 
         global_memory = get_global_memory()
         project_memory = get_project_memory("/Users/xujian/Athena工作平台")
@@ -198,10 +201,10 @@ class TestMemoryIntegration:
 
     def test_memory_write_read_cycle(self):
         """测试记忆读写循环"""
-        from core.memory.unified_memory_system import (
-            get_project_memory,
+        from core.framework.memory.unified_memory_system import (
+            MemoryCategory,
             MemoryType,
-            MemoryCategory
+            get_project_memory,
         )
 
         memory = get_project_memory("/Users/xujian/Athena工作平台")
@@ -229,7 +232,7 @@ class TestMemoryIntegration:
 
     def test_memory_search_functionality(self):
         """测试记忆搜索功能"""
-        from core.memory.unified_memory_system import get_project_memory
+        from core.framework.memory.unified_memory_system import get_project_memory
 
         memory = get_project_memory("/Users/xujian/Athena工作平台")
 

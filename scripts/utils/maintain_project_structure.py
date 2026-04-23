@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 项目结构维护脚本
 Project Structure Maintenance Script
@@ -8,11 +7,10 @@ Project Structure Maintenance Script
 """
 
 import logging
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import os
-import shutil
 from datetime import datetime, timedelta
 from pathlib import Path
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

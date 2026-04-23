@@ -10,18 +10,18 @@ Created: 2026-04-19
 Version: v1.0.0
 """
 
-import time
 import sys
-from pathlib import Path
-from typing import Callable
+import time
+from collections.abc import Callable
 from dataclasses import dataclass
+from pathlib import Path
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from core.tools.unified_registry import get_unified_registry, UnifiedToolRegistry
-from core.tools.base import ToolDefinition, ToolCategory, get_global_registry
+from core.tools.base import ToolCategory, ToolDefinition, get_global_registry
+from core.tools.unified_registry import get_unified_registry
 
 
 @dataclass
@@ -113,11 +113,11 @@ class PerformanceBenchmark:
         print(f"   性能提升: {improvement:+.1f}%")
 
         if improvement > 0:
-            print(f"   ✅ 性能提升")
+            print("   ✅ 性能提升")
         elif improvement < 0:
-            print(f"   ⚠️ 性能下降")
+            print("   ⚠️ 性能下降")
         else:
-            print(f"   ➡️ 性能持平")
+            print("   ➡️ 性能持平")
 
     def test_register_performance(self, count: int = 1000):
         """测试注册性能"""
@@ -295,7 +295,7 @@ class PerformanceBenchmark:
         total_queries = thread_count * 1000
         throughput = total_queries / total_time
 
-        print(f"\n🔬 测试: 并发查询")
+        print("\n🔬 测试: 并发查询")
         print(f"   线程数: {thread_count}")
         print(f"   总查询数: {total_queries}")
         print(f"   总时间: {total_time:.4f}秒")
@@ -303,9 +303,9 @@ class PerformanceBenchmark:
         print(f"   错误数: {len(errors)}")
 
         if len(errors) == 0:
-            print(f"   ✅ 并发安全")
+            print("   ✅ 并发安全")
         else:
-            print(f"   ❌ 并发错误:")
+            print("   ❌ 并发错误:")
             for error in errors[:10]:  # 只显示前10个错误
                 print(f"      - {error}")
 
@@ -316,7 +316,7 @@ class PerformanceBenchmark:
         print("="*60)
 
         print(f"\n测试项目数: {len(self.results)}")
-        print(f"\n详细结果:")
+        print("\n详细结果:")
 
         for result in self.results:
             print(f"\n  {result.name}:")

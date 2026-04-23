@@ -9,9 +9,9 @@
 """
 
 import asyncio
+import os
 import sys
 from pathlib import Path
-import os
 
 # 添加项目根目录到路径
 project_root = Path(__file__).parent.parent.parent
@@ -41,7 +41,7 @@ async def test_edge_cases():
 
     try:
         # 导入小娜Agent
-        from core.agents.xiaona_legal import XiaonaLegalAgent
+        from core.framework.agents.xiaona_legal import XiaonaLegalAgent
 
         # 创建小娜Agent实例
         logger.info("🤖 创建小娜Agent实例...")
@@ -71,10 +71,10 @@ async def test_edge_cases():
             )
 
             success1 = not result1.get('success') and "缺少必需参数" in result1.get('error', '')
-            print(f"\n📊 测试结果:")
+            print("\n📊 测试结果:")
             print(f"  成功: {result1.get('success')}")
             print(f"  错误: {result1.get('error', 'N/A')}")
-            print(f"  预期: 应该返回错误（缺少query参数）")
+            print("  预期: 应该返回错误（缺少query参数）")
             print(f"  实际: {'✅ 通过' if success1 else '❌ 失败'} - 系统正确拒绝空查询")
             test_results.append(("空查询", success1))
 
@@ -100,10 +100,10 @@ async def test_edge_cases():
 
             # strip后应该变成空字符串
             success2 = not result2.get('success') or result2.get('total_results', 0) == 0
-            print(f"\n📊 测试结果:")
+            print("\n📊 测试结果:")
             print(f"  成功: {result2.get('success')}")
             print(f"  找到专利数: {result2.get('total_results', 0)}")
-            print(f"  预期: 应该返回0个结果或错误")
+            print("  预期: 应该返回0个结果或错误")
             print(f"  实际: {'✅ 通过' if success2 else '❌ 失败'}")
             test_results.append(("纯空格查询", success2))
 
@@ -129,10 +129,10 @@ async def test_edge_cases():
 
             # 不应该崩溃，应该优雅处理
             success3 = result3.get('success') is not None  # 不管成功失败，只要不崩溃
-            print(f"\n📊 测试结果:")
+            print("\n📊 测试结果:")
             print(f"  成功: {result3.get('success')}")
             print(f"  找到专利数: {result3.get('total_results', 0)}")
-            print(f"  预期: 不应该崩溃，优雅处理特殊字符")
+            print("  预期: 不应该崩溃，优雅处理特殊字符")
             print(f"  实际: {'✅ 通过' if success3 else '❌ 失败'}")
             test_results.append(("特殊字符查询", success3))
 
@@ -159,10 +159,10 @@ async def test_edge_cases():
 
             # 不应该崩溃
             success4 = result4.get('success') is not None
-            print(f"\n📊 测试结果:")
+            print("\n📊 测试结果:")
             print(f"  查询长度: {len(long_query)} 字符")
             print(f"  成功: {result4.get('success')}")
-            print(f"  预期: 不应该崩溃")
+            print("  预期: 不应该崩溃")
             print(f"  实际: {'✅ 通过' if success4 else '❌ 失败'}")
             test_results.append(("超长查询", success4))
 
@@ -188,10 +188,10 @@ async def test_edge_cases():
 
             # 应该返回错误或降级处理
             success5 = not result5.get('success') or "不支持的检索渠道" in str(result5.get('error', ''))
-            print(f"\n📊 测试结果:")
+            print("\n📊 测试结果:")
             print(f"  成功: {result5.get('success')}")
             print(f"  错误: {result5.get('error', 'N/A')}")
-            print(f"  预期: 应该返回错误（不支持的channel）")
+            print("  预期: 应该返回错误（不支持的channel）")
             print(f"  实际: {'✅ 通过' if success5 else '⚠️  降级处理'}")
             test_results.append(("无效channel", success5))
 
@@ -217,10 +217,10 @@ async def test_edge_cases():
 
             # 应该返回空结果
             success6 = result6.get('total_results', 0) == 0
-            print(f"\n📊 测试结果:")
+            print("\n📊 测试结果:")
             print(f"  成功: {result6.get('success')}")
             print(f"  找到专利数: {result6.get('total_results', 0)}")
-            print(f"  预期: 应该返回0个结果")
+            print("  预期: 应该返回0个结果")
             print(f"  实际: {'✅ 通过' if success6 else '❌ 失败'}")
             test_results.append(("max_results=0", success6))
 
@@ -246,10 +246,10 @@ async def test_edge_cases():
 
             # 应该限制到合理范围或返回错误
             success7 = result7.get('success') is not None
-            print(f"\n📊 测试结果:")
+            print("\n📊 测试结果:")
             print(f"  成功: {result7.get('success')}")
             print(f"  找到专利数: {result7.get('total_results', 0)}")
-            print(f"  预期: 不应该崩溃，应该限制到合理范围")
+            print("  预期: 不应该崩溃，应该限制到合理范围")
             print(f"  实际: {'✅ 通过' if success7 else '❌ 失败'}")
             test_results.append(("max_results超大值", success7))
 
@@ -276,10 +276,10 @@ async def test_edge_cases():
 
             # 应该安全处理，不执行SQL注入
             success8 = result8.get('success') is not None  # 只要不崩溃就算通过
-            print(f"\n📊 测试结果:")
+            print("\n📊 测试结果:")
             print(f"  查询: {sql_injection}")
             print(f"  成功: {result8.get('success')}")
-            print(f"  预期: 应该安全处理，不执行SQL注入")
+            print("  预期: 应该安全处理，不执行SQL注入")
             print(f"  实际: {'✅ 通过' if success8 else '❌ 失败'}")
             test_results.append(("SQL注入防护", success8))
 

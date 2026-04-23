@@ -203,7 +203,7 @@ class ComponentManager:
             # 动态导入并启动模块
             for module_name in component['modules']:
                 try:
-                    module = __import__(module_name, fromlist=[component_name.split('.')[1]])
+                    module = __import__(module_name, fromlist=[component_name.split('.')[1])
 
                     # 查找启动函数
                     startup_func = getattr(module, 'start', None)
@@ -290,7 +290,7 @@ class ComponentManager:
         }
 
         total_weight = sum(
-            memory_weights[self.components[comp]['memory_usage']]
+            memory_weights[self.components[comp]['memory_usage']
             for comp in self.active_components
         )
 

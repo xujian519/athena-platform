@@ -77,7 +77,7 @@ class LearningExperienceV4:
     confidence: Confidence | None = None  # 学习的置信度
     evidence: list[str] = field(default_factory=list)  # 支持证据
     evidence_quality: EvidenceQuality = EvidenceQuality.MEDIUM
-    logical_structure: str | None = None  # 学习的逻辑结构
+    logical_structure: Optional[str] = None  # 学习的逻辑结构
     learning_boundary: bool = True  # 是否在学习边界内
     timestamp: datetime = field(default_factory=datetime.now)
 
@@ -201,7 +201,7 @@ class LearningEngineV4:
         context: dict[str, Any],        action: Any,
         result: Any,
         reward: float,
-        evidence: list[str] | None = None,
+        evidence: Optional[list[str]] = None,
         evidence_quality: EvidenceQuality = EvidenceQuality.MEDIUM,
     ) -> LearningExperienceV4:
         """
@@ -313,7 +313,7 @@ class LearningEngineV4:
 
     def _extract_logical_structure(
         self, context: dict[str, Any], action: Any, result: Any
-    ) -> str | None:
+    ) -> Optional[str]:
         """
         v4.0新增:提取逻辑结构
 

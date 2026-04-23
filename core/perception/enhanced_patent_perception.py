@@ -310,7 +310,7 @@ class PatentNoveltyAnalyzer:
         ]
 
     def analyze_novelty(
-        self, patent_text: str, prior_art_text: str | None = None
+        self, patent_text: str, prior_art_text: Optional[str] = None
     ) -> dict[str, Any]:
         """分析新颖性"""
         novelty_score = 0.0
@@ -386,7 +386,7 @@ class PatentNoveltyAnalyzer:
 class EnhancedPatentPerceptionEngine:
     """增强专利感知引擎"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
         self.initialized = False
 
@@ -465,7 +465,7 @@ class EnhancedPatentPerceptionEngine:
             logger.error(f"专利数据库连接检查失败: {e}")
 
     async def process_patent_text(
-        self, text: str, patent_id: str | None = None
+        self, text: str, patent_id: Optional[str] = None
     ) -> PatentPerceptionResult:
         """处理专利文本"""
         if not self.initialized:
@@ -508,7 +508,7 @@ class EnhancedPatentPerceptionEngine:
             raise
 
     async def process_patent_drawing(
-        self, image_data: np.ndarray | bytes | str | None = None, patent_id: str | None = None
+        self, image_data: np.ndarray | bytes | Optional[str] = None, patent_id: Optional[str] = None
     ) -> PatentPerceptionResult:
         """处理专利图纸"""
         if not self.initialized:
@@ -550,7 +550,7 @@ class EnhancedPatentPerceptionEngine:
             raise
 
     async def process_multimodal_patent(
-        self, text: str, images: list[np.ndarray], patent_id: str | None = None
+        self, text: str, images: list[np.ndarray], patent_id: Optional[str] = None
     ) -> PatentPerceptionResult:
         """处理多模态专利"""
         if not self.initialized:
@@ -614,7 +614,7 @@ class EnhancedPatentPerceptionEngine:
             logger.error(f"❌ 多模态专利处理失败: {e}")
             raise
 
-    def _extract_title(self, text: str) -> str | None:
+    def _extract_title(self, text: str) -> Optional[str]:
         """提取专利标题"""
         lines = text.split("\n")
         for line in lines[:10]:  # 通常标题在前10行
@@ -629,7 +629,7 @@ class EnhancedPatentPerceptionEngine:
                 return line
         return None
 
-    def _extract_abstract(self, text: str) -> str | None:
+    def _extract_abstract(self, text: str) -> Optional[str]:
         """提取摘要"""
         # 查找摘要关键词
         abstract_keywords = ["摘要", "abstract", "发明内容", "技术领域"]

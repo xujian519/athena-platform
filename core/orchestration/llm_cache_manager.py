@@ -76,7 +76,7 @@ class CacheEntry:
     last_hit: datetime = None  # 最后命中时间
     similarity_score: float = 1.0  # 相似度分数
     embedding: list[float] | None = None  # 内容向量(用于语义匹配)
-    metadata: dict[str, Any] | None = None  # 元数据
+    metadata: Optional[dict[str, Any]] = None  # 元数据
 
 
 class LLMCacheManager:
@@ -189,7 +189,7 @@ class LLMCacheManager:
         task_type: str = "general",
         temperature: float = 0.7,
         max_tokens: int = 2000,
-    ) -> str | None:
+    ) -> Optional[str]:
         """获取缓存响应"""
         if not self.config.enabled:
             return None
@@ -238,7 +238,7 @@ class LLMCacheManager:
                 self.stats["avg_response_time"] * (self.stats["total_requests"] - 1) + response_time
             ) / self.stats["total_requests"]
 
-    async def _get_exact_match(self, cache_key: str) -> str | None:
+    async def _get_exact_match(self, cache_key: str) -> Optional[str]:
         """精确匹配缓存"""
         # 先查内存缓存
         with self.cache_lock:
@@ -270,7 +270,7 @@ class LLMCacheManager:
 
     async def _get_semantic_match(
         self, prompt: str, model_name: str, task_type: str
-    ) -> str | None:
+    ) -> Optional[str]:
         """语义相似匹配"""
         # 这里可以集成embedding模型进行相似度计算
         # 简化实现:使用文本相似度
@@ -290,7 +290,7 @@ class LLMCacheManager:
 
         return None
 
-    async def _get_pattern_match(self, prompt: str, model_name: str) -> str | None:
+    async def _get_pattern_match(self, prompt: str, model_name: str) -> Optional[str]:
         """模式匹配"""
         prompt_lower = prompt.lower()
 
@@ -311,7 +311,7 @@ class LLMCacheManager:
         task_type: str = "general",
         temperature: float = 0.7,
         max_tokens: int = 2000,
-        ttl: int | None = None,
+        ttl: Optional[int] = None,
     ) -> bool:
         """设置缓存"""
         if not self.config.enabled:
@@ -492,7 +492,7 @@ class LLMCacheManager:
             "avg_response_time_ms": f"{self.stats['avg_response_time'] * 1000:.2f}",
         }
 
-    def clear_cache(self, pattern: str | None = None) -> None:
+    def clear_cache(self, pattern: Optional[str] = None) -> None:
         """清理缓存"""
         if pattern:
             # 清理匹配模式的缓存

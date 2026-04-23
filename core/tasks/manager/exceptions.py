@@ -19,8 +19,8 @@ class TaskManagerError(Exception):
     def __init__(
         self,
         message: str,
-        task_id: str | None = None,
-        details: dict[str, Any] | None = None,
+        task_id: Optional[str] = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         """初始化异常
 
@@ -57,7 +57,7 @@ class TaskDependencyError(TaskManagerError):
     def __init__(
         self,
         task_id: str,
-        dependency_id: str | None = None,
+        dependency_id: Optional[str] = None,
         reason: str = "",
     ):
         super().__init__(
@@ -72,8 +72,8 @@ class TaskValidationError(TaskManagerError):
 
     def __init__(
         self,
-        task_id: str | None = None,
-        field: str | None = None,
+        task_id: Optional[str] = None,
+        field: Optional[str] = None,
         reason: str = "",
     ):
         super().__init__(
@@ -89,7 +89,7 @@ class TaskExecutionError(TaskManagerError):
     def __init__(
         self,
         task_id: str,
-        executor: str | None = None,
+        executor: Optional[str] = None,
         reason: str = "",
     ):
         super().__init__(
@@ -118,7 +118,7 @@ class TaskSchedulingError(TaskManagerError):
 
     def __init__(
         self,
-        task_id: str | None = None,
+        task_id: Optional[str] = None,
         reason: str = "",
     ):
         super().__init__(

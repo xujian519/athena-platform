@@ -5,6 +5,7 @@
 """
 
 import logging
+
 from neo4j import GraphDatabase
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

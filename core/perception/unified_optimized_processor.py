@@ -92,7 +92,7 @@ class UnifiedOptimizedProcessor(BaseProcessor):
     5. 内存优化
     """
 
-    def __init__(self, processor_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, processor_id: str, config: Optional[dict[str, Any]] = None):
         super().__init__(processor_id, config)
 
         # 配置
@@ -576,7 +576,7 @@ class UnifiedOptimizedProcessor(BaseProcessor):
 
 # 便捷函数
 def create_unified_optimized_processor(
-    processor_id: str = "unified_optimized", config: dict[str, Any] | None = None
+    processor_id: str = "unified_optimized", config: Optional[dict[str, Any]] = None
 ) -> UnifiedOptimizedProcessor:
     """创建统一优化处理器实例"""
     return UnifiedOptimizedProcessor(processor_id, config)

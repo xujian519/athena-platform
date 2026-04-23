@@ -193,7 +193,7 @@ class XiaonuoEnhancedController:
         logger.info("ℹ️ 提示词层将在首次使用时异步加载")
         self._load_default_prompt_layers()
 
-    def _extract_layer_content(self, full_content: str, layer_name: str) -> str | None:
+    def _extract_layer_content(self, full_content: str, layer_name: str) -> Optional[str]:
         """从完整内容中提取指定层的内容"""
         # 简化实现: 根据常见的L1-L4标记提取
         lines = full_content.split("\n")
@@ -246,8 +246,8 @@ class XiaonuoEnhancedController:
         logger.info("✅ 使用默认提示词层配置")
 
     async def load_agent_prompt(
-        self, agent: str, layers: list[str] | None = None
-    ) -> str | None:
+        self, agent: str, layers: Optional[list[str]] = None
+    ) -> Optional[str]:
         """
         加载智能体提示词 (统一接口)
 
@@ -275,7 +275,7 @@ class XiaonuoEnhancedController:
 
     async def optimize_prompt_with_lyra(
         self, content: str, target_ai: str = "Claude", mode: str = "BASIC"
-    ) -> str | None:
+    ) -> Optional[str]:
         """
         使用Lyra优化提示词 (统一接口)
 

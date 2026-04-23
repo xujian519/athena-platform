@@ -7,21 +7,15 @@
 - 端到端工作流测试
 """
 
-from __future__ import annotations
-
 import pytest
-
 from core.coordinator import (
+    AdvancedCoordinator,
+    AgentInfo,
     Coordinator,
     CoordinatorConfig,
-    AgentInfo,
-    AdvancedCoordinator,
-    TaskDependency,
-    RoundRobinStrategy,
 )
+
 from core.tasks.manager import TaskManager, TaskPriority
-from core.skills.manager import SkillManager
-from core.skills.base import Skill, SkillMetadata, SkillResult
 
 
 class MockAgent:
@@ -231,7 +225,7 @@ class TestEndToEndWorkflow:
         self, coordinator: Coordinator
     ) -> None:
         """测试冲突检测和解决"""
-        from core.coordinator import ConflictType, ConflictResolutionStrategy
+        from core.coordinator import ConflictResolutionStrategy, ConflictType
 
         # 注册Agent
         agent1 = AgentInfo(
@@ -350,3 +344,4 @@ class TestCustomSchedulingStrategy:
 
         assert isinstance(strategy, CustomStrategy)
         assert strategy.get_name() == "custom"
+

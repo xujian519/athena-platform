@@ -76,7 +76,7 @@ class ToolCallResult:
     tool_name: str
     status: ToolCallStatus
     result: Any = None
-    error: str | None = None
+    error: Optional[str] = None
     execution_time: float = 0.0
     start_time: datetime = field(default_factory=datetime.now)
     end_time: datetime | None = None
@@ -527,7 +527,7 @@ xiaonuo_utci = XiaonuoUnifiedToolCallInterface()
 
 # 便捷函数
 async def smart_call(
-    intent: str, context: dict[str, Any], tools: list[str] | None = None
+    intent: str, context: dict[str, Any], tools: Optional[list[str]] = None
 ) -> list[ToolCallResult]:
     """便捷的智能调用函数"""
     return await xiaonuo_utci.smart_function_call(intent, context, tools)

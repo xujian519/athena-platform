@@ -46,9 +46,9 @@ class ErrorInfo:
     severity: ErrorSeverity
     message: str
     timestamp: datetime = field(default_factory=datetime.now)
-    traceback_str: str | None = None
+    traceback_str: Optional[str] = None
     context: dict[str, Any] = field(default_factory=dict)
-    recovery_suggestion: str | None = None
+    recovery_suggestion: Optional[str] = None
     retry_able: bool = False
 
 
@@ -176,7 +176,7 @@ class ErrorHandler:
     async def handle_error(
         self,
         error: Exception,
-        context: dict[str, Any] | None | None = None
+        context: Optional[dict[str, Any]] | None = None
     ) -> ErrorInfo:
         """
         处理错误

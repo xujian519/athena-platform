@@ -54,11 +54,11 @@ class Task:
         category: TaskCategory = TaskCategory.WORK,
         estimated_time: int = 30,  # 预估时间(分钟)
         due_date: datetime | None = None,
-        tags: list[str] | None = None,
-        parent_task: str | None = None,
-        subtasks: list[str] | None = None,
+        tags: Optional[list[str]] = None,
+        parent_task: Optional[str] = None,
+        subtasks: Optional[list[str]] = None,
         created_at: datetime | None = None,
-        task_id: str | None = None
+        task_id: Optional[str] = None
     ):
         self.task_id = task_id or self._generate_task_id()
         self.title = title
@@ -104,7 +104,7 @@ class Task:
         }
 
     @classmethod
-    def from_dict(cls, data: dict) -> "Task":
+    def from_dict(cls, data: dict) -> Task:
         """从字典创建任务"""
         task = cls(
             title=data["title"],

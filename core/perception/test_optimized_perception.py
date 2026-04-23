@@ -323,7 +323,7 @@ async def test_memory_optimization():
         return False
 
 
-async def _create_test_document(content: str | None = None, suffix: str = "") -> str:
+async def _create_test_document(content: Optional[str] = None, suffix: str = "") -> str:
     """创建测试文档"""
     if content is None:
         # 创建示例内容

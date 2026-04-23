@@ -85,7 +85,7 @@ class ErrorContext:
     timestamp: datetime
     retry_count: int = 0
     context_data: dict[str, Any] = field(default_factory=dict)
-    stack_trace: str | None = None
+    stack_trace: Optional[str] = None
 
 
 @dataclass
@@ -223,7 +223,7 @@ class FaultToleranceManager:
         self.circuit_breakers: dict[str, CircuitBreaker] = {}
 
         # 降级策略注册表
-        self.degradation_strategies: dict[ErrorType, list[Callable[..., Any]]] = {}
+        self.degradation_strategies: dict[ErrorType, list[Callable[..., Any]] = {}
 
         # 重试配置
         self.retry_configs: dict[str, RetryConfig] = {}
@@ -232,7 +232,7 @@ class FaultToleranceManager:
         self.health_checks: dict[str, Callable[..., Any]] = {}
 
         # 恢复机制
-        self.recovery_handlers: dict[ErrorType, list[Callable[..., Any]]] = {}
+        self.recovery_handlers: dict[ErrorType, list[Callable[..., Any]] = {}
 
         logger.info("🚀 容错管理器初始化完成")
 
@@ -269,7 +269,7 @@ class FaultToleranceManager:
         self.recovery_handlers[error_type].append(handler)
         logger.info(f"📋 注册恢复处理器: {error_type.value}")
 
-    def handle_error(self, error: Exception, context: dict[str, Any] | None = None) -> ErrorContext:
+    def handle_error(self, error: Exception, context: Optional[dict[str, Any]] = None) -> ErrorContext:
         """处理错误"""
         error_type = self._classify_error(error)
         error_message = str(error)
@@ -295,7 +295,7 @@ class FaultToleranceManager:
         self,
         primary_func: Callable[[], T],
         fallback_func: Callable[[], T],
-        error_context: dict[str, Any] | None = None,
+        error_context: Optional[dict[str, Any]] = None,
     ) -> T:
         """执行带降级的函数"""
         try:
@@ -316,7 +316,7 @@ class FaultToleranceManager:
             return fallback_func()
 
     def execute_with_retry(
-        self, func: Callable[..., T], config_name: str | None = None, *args: Any, **kwargs: Any
+        self, func: Callable[..., T], config_name: Optional[str] = None, *args: Any, **kwargs: Any
     ) -> T:
         """执行带重试的函数"""
         config = self.retry_configs.get(config_name or "default", RetryConfig())
@@ -593,7 +593,7 @@ class FallbackStrategies:
 
 # 使用示例和装饰器
 def with_fallback(
-    fallback_func: Callable[..., Any] = None, error_context: dict[str, Any] | None = None
+    fallback_func: Callable[..., Any] = None, error_context: Optional[dict[str, Any]] = None
 ) -> Any:
     """带降级的装饰器"""
 

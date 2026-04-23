@@ -89,7 +89,7 @@ class Message:
     metadata: dict[str, Any] = field(default_factory=dict)
     protocol: ProtocolType = ProtocolType.JSON
     priority: int = 0  # 优先级 0-9
-    ttl: int | None = None  # 生存时间(秒)
+    ttl: Optional[int] = None  # 生存时间(秒)
     retry_count: int = 0
     max_retries: int = 3
 
@@ -140,7 +140,7 @@ class MessageQueue:
                 # 普通消息进入普通队列
                 self.queues[message.channel_id].append(message)
 
-    async def dequeue(self, channel_id: str | None = None) -> Message | None:
+    async def dequeue(self, channel_id: Optional[str] = None) -> Message | None:
         """从队列取出消息"""
         async with self.lock:
             # 优先处理高优先级消息
@@ -159,7 +159,7 @@ class MessageQueue:
 
             return None
 
-    def size(self, channel_id: str | None = None) -> int:
+    def size(self, channel_id: Optional[str] = None) -> int:
         """获取队列大小"""
         if channel_id:
             return len(self.queues.get(channel_id, []))
@@ -325,7 +325,7 @@ class APIGateway:
 class CommunicationEngine:
     """通讯引擎 - 完整实现"""
 
-    def __init__(self, agent_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, agent_id: str, config: Optional[dict[str, Any]] = None):
         self.agent_id = agent_id
         self.config = config or {}
         self.initialized = False
@@ -387,7 +387,7 @@ class CommunicationEngine:
         self,
         receiver_id: str,
         content: Any,
-        channel_id: str | None = None,
+        channel_id: Optional[str] = None,
         message_type: MessageType = MessageType.TEXT,
         priority: int = 0,
     ) -> str:
@@ -469,7 +469,7 @@ class CommunicationEngine:
         return message_id
 
     async def create_channel(
-        self, channel_id: str, name: str, channel_type: ChannelType, participants: list[str] | None = None
+        self, channel_id: str, name: str, channel_type: ChannelType, participants: Optional[list[str]] = None
     ) -> Channel:
         """创建通道"""
         if channel_id in self.channels:
@@ -487,7 +487,7 @@ class CommunicationEngine:
         return channel
 
     async def create_session(
-        self, participant_ids: list[str], channel_id: str | None = None
+        self, participant_ids: list[str], channel_id: Optional[str] = None
     ) -> CommunicationSession:
         """创建通信会话"""
         session_id = str(uuid.uuid4())
@@ -514,7 +514,7 @@ class CommunicationEngine:
         return session
 
     async def get_messages(
-        self, channel_id: str | None = None, limit: int = 50
+        self, channel_id: Optional[str] = None, limit: int = 50
     ) -> list[Message]:
         """获取消息"""
         messages = []
@@ -531,7 +531,7 @@ class CommunicationEngine:
 
         return messages[:limit]
 
-    async def get_channels(self, agent_id: str | None = None) -> list[Channel]:
+    async def get_channels(self, agent_id: Optional[str] = None) -> list[Channel]:
         """获取通道列表"""
         channels = []
 
@@ -544,7 +544,7 @@ class CommunicationEngine:
 
         return channels
 
-    async def get_sessions(self, agent_id: str | None = None) -> list[CommunicationSession]:
+    async def get_sessions(self, agent_id: Optional[str] = None) -> list[CommunicationSession]:
         """获取会话列表"""
         sessions = []
 

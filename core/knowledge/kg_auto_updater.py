@@ -111,7 +111,7 @@ class GraphVersion:
     version_number: int
     created_at: datetime = field(default_factory=datetime.now)
     changes_summary: str = ""
-    data_snapshot: str | None = None  # 快照路径
+    data_snapshot: Optional[str] = None  # 快照路径
 
 
 class KnowledgeGraphAutoUpdater:

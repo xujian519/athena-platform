@@ -26,7 +26,7 @@ async def vector_search_handler(
     collection: str = "patent_rules_1024",
     top_k: int = 10,
     threshold: float = 0.7
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     向量语义搜索Handler（1024维版本）
 

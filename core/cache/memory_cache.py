@@ -23,7 +23,7 @@ class MemoryCache:
         self._lock = threading.RLock()
         self._default_ttl = default_ttl
 
-    def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
+    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
         """
         设置缓存值
 

@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 云熙IP管理API服务（简化版）
 Yunxi IP Management API (Simple Version)
 """
 
-from fastapi import FastAPI
 from datetime import datetime
-from typing import Dict, List, Any
+
 import uvicorn
-from core.async_main import async_main
+from fastapi import FastAPI
 
 app = FastAPI(
     title="云熙IP管理API",
@@ -122,7 +120,7 @@ if __name__ == "__main__":
     print("=" * 50)
     print(f"📋 角色：{yunxi_identity['role']}")
     print(f"🏷️  称号：{yunxi_identity['title']}")
-    print(f"📍 端口：8007")
+    print("📍 端口：8007")
     print(f"💫 Slogan：{yunxi_identity['slogan']}")
     print(f"✨ 座右铭：{yunxi_identity['motto']}")
     print("")
@@ -130,5 +128,5 @@ if __name__ == "__main__":
     print("")
 
     # 启动服务
-    print(f"🚀 云熙IP管理API启动中...")
+    print("🚀 云熙IP管理API启动中...")
     uvicorn.run(app, host="127.0.0.1", port=8007)  # 内网通信，通过Gateway访问

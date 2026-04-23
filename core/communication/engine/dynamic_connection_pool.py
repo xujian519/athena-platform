@@ -197,7 +197,7 @@ class DynamicConnectionPool:
 
         logger.info(f"✅ 连接池初始化完成: {len(self._all_connections)}个连接")
 
-    async def acquire(self, timeout: float | None = None) -> Any:
+    async def acquire(self, timeout: Optional[float] = None) -> Any:
         """
         获取连接
 

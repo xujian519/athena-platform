@@ -11,16 +11,16 @@
 版本: 1.0.0
 """
 
-from typing import Any, Dict
 import logging
 from datetime import datetime
+from typing import Any
 
-from core.agents.xiaona.base_component import (
-    BaseXiaonaComponent,
+from core.framework.agents.xiaona.base_component import (
     AgentCapability,
     AgentExecutionContext,
     AgentExecutionResult,
     AgentStatus,
+    BaseXiaonaComponent,
 )
 
 logger = logging.getLogger(__name__)
@@ -134,7 +134,7 @@ JSON格式的回显结果
                 execution_time=(datetime.now() - start_time).total_seconds(),
             )
 
-    def _echo(self, text: str) -> Dict[str, Any]:
+    def _echo(self, text: str) -> dict[str, Any]:
         """回显文本"""
         return {
             "operation": "echo",
@@ -144,7 +144,7 @@ JSON格式的回显结果
             "length": len(text),
         }
 
-    def _reverse(self, text: str) -> Dict[str, Any]:
+    def _reverse(self, text: str) -> dict[str, Any]:
         """反转文本"""
         return {
             "operation": "reverse",
@@ -154,7 +154,7 @@ JSON格式的回显结果
             "length": len(text),
         }
 
-    def get_stats(self) -> Dict[str, int]:
+    def get_stats(self) -> dict[str, int]:
         """获取统计信息"""
         return {
             "echo_count": self.echo_count,
@@ -171,7 +171,6 @@ def create_simple_echo_agent(agent_id: str = "simple_echo_001") -> SimpleEchoAge
 # 测试入口
 async def main():
     """测试入口"""
-    import asyncio
 
     # 配置日志
     logging.basicConfig(level=logging.INFO)
@@ -202,7 +201,7 @@ async def main():
     print(f"结果: {result.output_data}")
 
     # 统计
-    print(f"\n=== 统计 ===")
+    print("\n=== 统计 ===")
     stats = agent.get_stats()
     print(f"回显次数: {stats['echo_count']}")
     print(f"字符总数: {stats['char_count']}")

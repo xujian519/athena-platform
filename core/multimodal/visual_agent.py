@@ -129,7 +129,7 @@ class VisionAnalysisResult:
 class VisionModelClient:
     """视觉模型客户端基类"""
 
-    def __init__(self, model_name: str, api_key: str | None = None):
+    def __init__(self, model_name: str, api_key: Optional[str] = None):
         """
         初始化视觉模型客户端
 
@@ -220,7 +220,7 @@ class VisualAgent:
         logger.info("👁️ 视觉Agent初始化完成")
 
     async def analyze_patent_drawing(
-        self, image: ImageInput, context: str | None = None
+        self, image: ImageInput, context: Optional[str] = None
     ) -> VisionAnalysisResult:
         """
         分析专利附图
@@ -265,7 +265,7 @@ class VisualAgent:
         return result
 
     async def analyze_technical_diagram(
-        self, image: ImageInput, diagram_type: str | None = None
+        self, image: ImageInput, diagram_type: Optional[str] = None
     ) -> VisionAnalysisResult:
         """
         分析技术图纸
@@ -311,7 +311,7 @@ class VisualAgent:
         return result
 
     async def analyze_schematic(
-        self, image: ImageInput, system_description: str | None = None
+        self, image: ImageInput, system_description: Optional[str] = None
     ) -> VisionAnalysisResult:
         """
         分析原理图
@@ -350,7 +350,7 @@ class VisualAgent:
         return result
 
     async def analyze_flowchart(
-        self, image: ImageInput, process_context: str | None = None
+        self, image: ImageInput, process_context: Optional[str] = None
     ) -> VisionAnalysisResult:
         """
         分析流程图
@@ -389,7 +389,7 @@ class VisualAgent:
         return result
 
     async def batch_analyze(
-        self, images: list[ImageInput], task_type: VisionTaskType, context: str | None = None
+        self, images: list[ImageInput], task_type: VisionTaskType, context: Optional[str] = None
     ) -> list[VisionAnalysisResult]:
         """
         批量分析图像
@@ -520,7 +520,7 @@ class VisualToolIntegration:
         return result
 
     async def extract_technical_features(
-        self, diagram_path: str, diagram_type: str | None = None
+        self, diagram_path: str, diagram_type: Optional[str] = None
     ) -> dict[str, Any]:
         """
         从技术图纸中提取特征
@@ -635,7 +635,7 @@ def get_visual_tool_integration() -> VisualToolIntegration:
 
 
 async def analyze_patent_drawing(
-    image_path: str | None = None, context: str | None = None
+    image_path: Optional[str] = None, context: Optional[str] = None
 ) -> VisionAnalysisResult:
     """
     便捷的专利附图分析函数
@@ -662,7 +662,7 @@ async def analyze_patent_drawing(
 
 
 async def analyze_technical_diagram(
-    image_path: str | None = None, diagram_type: str | None = None
+    image_path: Optional[str] = None, diagram_type: Optional[str] = None
 ) -> VisionAnalysisResult:
     """
     便捷的技术图纸分析函数

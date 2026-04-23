@@ -108,7 +108,7 @@ class ExecutionStep:
     dependencies: list[str] = field(default_factory=list)
     estimated_time: int = 0
     required_resources: list[str] = field(default_factory=list)
-    fallback_strategy: str | None = None
+    fallback_strategy: Optional[str] = None
 
 
 @dataclass
@@ -230,7 +230,7 @@ class XiaonuoPlannerEngine:
     async def plan(
         self,
         user_input: str,
-        context: dict[str, Any] | None = None
+        context: Optional[dict[str, Any]] = None
     ) -> ExecutionPlan:
         """
         生成执行规划
@@ -289,10 +289,10 @@ class XiaonuoPlannerEngine:
     async def plan_with_options(
         self,
         user_input: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
         strategies: list | None = None,
-        selection_criteria: str | None = None,
-        user_preferences: dict[str, Any] | None = None
+        selection_criteria: Optional[str] = None,
+        user_preferences: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """
         智能多方案规划（Phase 2增强功能）
@@ -578,10 +578,10 @@ class XiaonuoPlannerEngine:
         self,
         plan: ExecutionPlan,
         feedback_type: str,
-        satisfaction: str | None = None,
-        execution_time: int | None = None,
-        success_rate: float | None = None,
-        user_comments: str | None = None,
+        satisfaction: Optional[str] = None,
+        execution_time: Optional[int] = None,
+        success_rate: Optional[float] = None,
+        user_comments: Optional[str] = None,
     ) -> dict[str, Any]:
         """收集方案执行反馈（Phase 3）"""
         if not self.phase3_enabled:
@@ -619,7 +619,7 @@ class XiaonuoPlannerEngine:
     async def evaluate_plan(
         self,
         plan: ExecutionPlan,
-        actual_execution_time: int | None = None,
+        actual_execution_time: Optional[int] = None,
     ) -> dict[str, Any]:
         """评估方案执行效果（Phase 3）"""
         if not self.phase3_enabled:
@@ -702,9 +702,9 @@ class XiaonuoPlannerEngine:
 
     def query_knowledge(
         self,
-        intent_type: str | None = None,
-        strategy: str | None = None,
-        tags: list[str] | None = None,
+        intent_type: Optional[str] = None,
+        strategy: Optional[str] = None,
+        tags: Optional[list[str]] = None,
         limit: int = 5,
     ) -> dict[str, Any]:
         """查询规划知识库（Phase 3）"""
@@ -774,7 +774,7 @@ class XiaonuoPlannerEngine:
 
 async def create_plan(
     user_input: str,
-    context: dict[str, Any] | None = None
+    context: Optional[dict[str, Any]] = None
 ) -> ExecutionPlan:
     """便捷函数：创建执行规划"""
     planner = XiaonuoPlannerEngine()

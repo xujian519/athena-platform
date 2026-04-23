@@ -58,7 +58,7 @@ class AgentResponse:
     response_id: str
     content: str  # 响应内容
     reasoning_trace: list[dict[str, Any]]  # 推理轨迹
-    emotional_state: "EmotionalState"  # 情感状态(使用字符串注解)
+    emotional_state: EmotionalState  # 情感状态(使用字符串注解)
     confidence: float  # 置信度
     actions_taken: list[str]  # 采取的行动
     memory_used: list[str]  # 使用的记忆
@@ -115,10 +115,10 @@ class XiaonuoAgent:
 
     def __init__(
         self,
-        agent_id: str | None = None,
+        agent_id: Optional[str] = None,
         name: str = "小诺",
         version: str = "2.0.0",
-        config: dict[str, Any] | None = None,
+        config: Optional[dict[str, Any]] = None,
     ):
         """
         初始化小诺智能体
@@ -249,7 +249,7 @@ class XiaonuoAgent:
             return False
 
     async def process(
-        self, input_text: str, context: dict[str, Any] | None = None
+        self, input_text: str, context: Optional[dict[str, Any]] = None
     ) -> AgentResponse:
         """
         处理用户输入
@@ -375,8 +375,8 @@ class XiaonuoAgent:
             raise
 
     async def plan_and_execute(
-        self, goal: str, context: dict[str, Any] | None = None
-    ) -> "ExecutionPlan":
+        self, goal: str, context: Optional[dict[str, Any]] = None
+    ) -> ExecutionPlan:
         """
         规划并执行目标
 

@@ -306,7 +306,7 @@ async def get_workflow_status(workflow_id: str):
 
 
 @app.get('/api/v1/workflows')
-async def list_workflows(status: str | None = None):
+async def list_workflows(status: Optional[str] = None):
     """列出工作流"""
     try:
         from workflow_orchestrator import WorkflowStatus

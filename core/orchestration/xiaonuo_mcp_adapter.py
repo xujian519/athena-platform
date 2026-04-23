@@ -290,7 +290,7 @@ class XiaonuoMCPAdapter:
 
         return {"error": "未收到响应"}
 
-    def get_available_tools(self, category: str | None = None) -> list[dict[str, Any]]:
+    def get_available_tools(self, category: Optional[str] = None) -> list[dict[str, Any]]:
         """获取可用工具列表"""
         tools = []
         for tool in self.tool_registry.values():

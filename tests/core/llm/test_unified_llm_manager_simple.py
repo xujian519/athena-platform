@@ -4,7 +4,6 @@
 Tests for core.llm.unified_llm_manager (Simple version)
 """
 
-import pytest
 
 
 class TestUnifiedLLMManager:
@@ -12,18 +11,18 @@ class TestUnifiedLLMManager:
 
     def test_import_manager(self):
         """测试导入管理器模块"""
-        from core.llm.unified_llm_manager import UnifiedLLMManager
+        from core.ai.llm.unified_llm_manager import UnifiedLLMManager
         assert UnifiedLLMManager is not None
 
     def test_manager_initialization(self):
         """测试管理器初始化"""
-        from core.llm.unified_llm_manager import UnifiedLLMManager
+        from core.ai.llm.unified_llm_manager import UnifiedLLMManager
         manager = UnifiedLLMManager()
         assert manager is not None
 
     def test_manager_has_methods(self):
         """测试管理器具有必需的方法"""
-        from core.llm.unified_llm_manager import UnifiedLLMManager
+        from core.ai.llm.unified_llm_manager import UnifiedLLMManager
         manager = UnifiedLLMManager()
         # 验证关键方法存在
         assert hasattr(manager, 'generate')
@@ -36,7 +35,7 @@ class TestModelSelection:
 
     def test_manager_has_select_model(self):
         """测试管理器有模型选择方法"""
-        from core.llm.unified_llm_manager import UnifiedLLMManager
+        from core.ai.llm.unified_llm_manager import UnifiedLLMManager
         manager = UnifiedLLMManager()
         assert hasattr(manager, 'select_model')
 
@@ -46,6 +45,6 @@ class TestLLMProviders:
 
     def test_manager_exists(self):
         """测试管理器存在"""
-        from core.llm.unified_llm_manager import UnifiedLLMManager
+        from core.ai.llm.unified_llm_manager import UnifiedLLMManager
         manager = UnifiedLLMManager()
         assert manager is not None

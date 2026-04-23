@@ -36,7 +36,7 @@ logger = setup_logging()
 class PatentEnhancedIntentClassifier:
     """专利代理领域增强意图识别器"""
 
-    def __init__(self, model_dir: str | None = None):
+    def __init__(self, model_dir: Optional[str] = None):
         """
         初始化分类器并加载训练好的模型
 

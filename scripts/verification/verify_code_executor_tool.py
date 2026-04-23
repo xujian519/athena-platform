@@ -13,9 +13,9 @@ code_executor工具验证脚本
 仅在受控环境中使用，且需要用户明确授权。
 """
 
+import asyncio
 import sys
 import time
-import asyncio
 from pathlib import Path
 from typing import Any
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 服务自动释放集成示例
 Service Auto-Release Integration Example
@@ -13,7 +12,6 @@ Service Auto-Release Integration Example
 
 import asyncio
 import logging
-import signal
 import sys
 from pathlib import Path
 
@@ -23,9 +21,8 @@ sys.path.insert(0, str(project_root))
 
 from core.session.service_session_manager import (
     ServiceType,
-    ServiceSession,
+    auto_register_current_process,
     get_service_session_manager,
-    auto_register_current_process
 )
 
 # 配置日志
@@ -58,7 +55,7 @@ async def example_simple_integration():
 
     logger.info(f"✅ 服务已注册: {session.service_name}")
     logger.info(f"📍 进程ID: {session.process_id}")
-    logger.info(f"⏰ 空闲超时: 60分钟")
+    logger.info("⏰ 空闲超时: 60分钟")
     logger.info(f"💾 初始内存: {session.memory_mb:.1f}MB")
 
     # 你的服务正常逻辑
@@ -103,7 +100,7 @@ async def example_custom_timeout():
     )
 
     logger.info(f"✅ 服务已注册: {session.service_name}")
-    logger.info(f"⏰ 自定义超时: 30分钟")
+    logger.info("⏰ 自定义超时: 30分钟")
 
     # 服务运行逻辑
     try:
@@ -136,7 +133,7 @@ async def example_never_stop_service():
     )
 
     logger.info(f"✅ 核心服务已注册: {session.service_name}")
-    logger.info(f"🛡️ 自动停止: 关闭（永不停止）")
+    logger.info("🛡️ 自动停止: 关闭（永不停止）")
 
     # 服务运行逻辑
     try:
@@ -267,7 +264,7 @@ async def example_manual_session_management():
 # =============================================================================
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+
 
 async def example_fastapi_integration():
     """
@@ -416,7 +413,7 @@ async def main():
     import sys
 
     if len(sys.argv) > 1:
-        example = sys.argv[1]
+        sys.argv[1]
     else:
         # 显示使用指南
         await show_usage_guide()

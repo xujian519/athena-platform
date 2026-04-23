@@ -66,8 +66,8 @@ class ExecutionResult:
     executed_at: str
     execution_time_seconds: float
     success: bool
-    user_satisfaction: float | None = None  # 0.0-1.0
-    actual_outcome: str | None = None
+    user_satisfaction: Optional[float] = None  # 0.0-1.0
+    actual_outcome: Optional[str] = None
     resource_usage: dict[str, Any] = field(default_factory=dict)
 
 
@@ -104,8 +104,8 @@ class ImprovementAction:
     description: str
     target_component: str
     applied: bool = False
-    applied_at: str | None = None
-    result: str | None = None
+    applied_at: Optional[str] = None
+    result: Optional[str] = None
 
 
 @dataclass
@@ -115,8 +115,8 @@ class LearningRecord:
     record_id: str
     decision_id: str
     lesson_learned: str
-    best_practice: str | None = None
-    avoidance_pattern: str | None = None
+    best_practice: Optional[str] = None
+    avoidance_pattern: Optional[str] = None
     knowledge_category: str = "general"
     created_at: str = field(default_factory=lambda: datetime.now().isoformat())
 
@@ -169,9 +169,9 @@ class SystemFeedbackLoop:
         decision: Decision,
         execution_time: float,
         success: bool,
-        user_satisfaction: float | None = None,
-        actual_outcome: str | None = None,
-        resource_usage: dict[str, Any] | None = None,
+        user_satisfaction: Optional[float] = None,
+        actual_outcome: Optional[str] = None,
+        resource_usage: Optional[dict[str, Any]] = None,
     ) -> ExecutionResult:
         """
         记录决策执行结果
@@ -494,7 +494,7 @@ class SystemFeedbackLoop:
         }
 
     def get_recent_learnings(
-        self, category: str | None = None, limit: int = 5
+        self, category: Optional[str] = None, limit: int = 5
     ) -> list[LearningRecord]:
         """获取最近的学习记录"""
         learnings = self.learning_records
@@ -522,7 +522,7 @@ async def record_and_learn(
     decision: Decision,
     execution_time: float,
     success: bool,
-    user_satisfaction: float | None = None,
+    user_satisfaction: Optional[float] = None,
 ) -> EffectivenessAssessment:
     """便捷函数:记录执行并触发学习闭环"""
     loop = get_feedback_loop()

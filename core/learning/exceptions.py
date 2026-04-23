@@ -18,7 +18,7 @@ class LearningModuleError(Exception):
     所有学习模块自定义异常的基类。
     """
 
-    def __init__(self, message: str, error_code: str | None = None):
+    def __init__(self, message: str, error_code: Optional[str] = None):
         """初始化异常
 
         Args:

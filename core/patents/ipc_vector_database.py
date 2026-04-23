@@ -55,7 +55,7 @@ class IPCEntry:
     ipc_description: str  # 详细描述
     ipc_level: IPCLevel  # 分类级别
     section: str  # 所属部
-    parent_code: str | None = None  # 父级代码
+    parent_code: Optional[str] = None  # 父级代码
 
     # 扩展信息
     keywords: list[str] = field(default_factory=list)  # 关键词
@@ -122,7 +122,7 @@ class IPCVectorDatabase:
     4. 技术领域推荐
     """
 
-    def __init__(self, ipc_data_path: str | None = None):
+    def __init__(self, ipc_data_path: Optional[str] = None):
         """初始化IPC向量数据库"""
         self.name = "IPC分类向量数据库"
         self.version = "v0.1.2"
@@ -266,7 +266,7 @@ class IPCVectorDatabase:
             self.by_domain[domain] = ipc_codes
 
     def search_by_text(
-        self, query_text: str, top_n: int = 10, section_filter: str | None = None
+        self, query_text: str, top_n: int = 10, section_filter: Optional[str] = None
     ) -> list[IPCMatchResult]:
         """
         基于文本搜索IPC分类(语义匹配)

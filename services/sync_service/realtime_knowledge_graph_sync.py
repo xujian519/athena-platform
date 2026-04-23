@@ -544,7 +544,7 @@ class KnowledgeGraphSyncService:
             result = sock.connect_ex(("localhost", 8182))
             sock.close()
             return result == 0
-        except (asyncio.CancelledError, asyncio.TimeoutError, Exception):
+        except (TimeoutError, asyncio.CancelledError, Exception):
             return False
 
     def _load_checkpoint(self) -> dict:

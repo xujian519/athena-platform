@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+
 print("Python version:", sys.version, flush=True)
 print("开始测试...", flush=True)
 

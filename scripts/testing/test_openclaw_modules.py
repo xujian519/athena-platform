@@ -10,9 +10,8 @@ Patent Analysis Modules Integration Test for OpenClaw
 版本: v1.0.0
 """
 
-import sys
 import logging
-from pathlib import Path
+import sys
 
 # 添加Athena工作平台路径
 sys.path.insert(0, '/Users/xujian/Athena工作平台')
@@ -49,7 +48,7 @@ class OpenClawModuleTester:
 
             # 如果指定了类名，尝试实例化
             if class_name:
-                cls = getattr(module, class_name)
+                getattr(module, class_name)
                 logger.info(f"✅ {module_name}: 导入并访问类 {class_name} 成功")
             else:
                 logger.info(f"✅ {module_name}: 导入成功")

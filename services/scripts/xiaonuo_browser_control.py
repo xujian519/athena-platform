@@ -203,7 +203,7 @@ class XiaoNuoBrowserController:
                 'error_details': str(e)
             }
 
-    def _get_trigger_keywords(self) -> dict[str, list[str]]:
+    def _get_trigger_keywords(self) -> dict[str, list[str]:
         """获取触发关键词"""
         return {
             'price_monitor': ['价格', '多少钱', '费用', '成本', '优惠', '折扣', '比价'],
@@ -214,7 +214,7 @@ class XiaoNuoBrowserController:
             'monitor': ['监控', '关注', '留意', '通知', '提醒']
         }
 
-    def _match_keywords(self, text: str, keywords: dict[str, list[str]]) -> dict[str, int]:
+    def _match_keywords(self, text: str, keywords: dict[str, list[str]) -> dict[str, int]:
         """匹配关键词"""
         matches = {}
         text_lower = text.lower()

@@ -357,8 +357,8 @@ class PredictiveErrorDetector:
     async def record_error(
         self,
         error_pattern: ErrorPattern,
-        context: dict[str, Any] | None = None,
-        recovery_time: float | None = None,
+        context: Optional[dict[str, Any]] = None,
+        recovery_time: Optional[float] = None,
     ):
         """记录错误发生"""
         metrics = self.error_patterns[error_pattern]

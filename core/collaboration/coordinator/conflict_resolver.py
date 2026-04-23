@@ -20,7 +20,7 @@ class ConflictResolver:
         """初始化冲突解决器"""
         pass
 
-    def detect_conflicts(self) -> List[ConflictInfo]:
+    def detect_conflicts(self) -> list[ConflictInfo]:
         """检测冲突"""
         # TODO: 实现冲突检测逻辑
         return []

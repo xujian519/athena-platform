@@ -117,7 +117,7 @@ class CommunicationSystemConfig:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "CommunicationSystemConfig":
+    def from_dict(cls, data: dict[str, Any]) -> CommunicationSystemConfig:
         """从字典创建配置"""
         redis_config = data.get("redis", {})
         message_queue_config = data.get("message_queue", {})

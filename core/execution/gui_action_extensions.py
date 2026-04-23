@@ -53,7 +53,7 @@ class ScrollAction:
 
     direction: str = "down"  # up, down, left, right
     amount: int = 500  # 滚动像素
-    element: str | None = None  # 目标元素
+    element: Optional[str] = None  # 目标元素
 
 
 @dataclass
@@ -80,7 +80,7 @@ class RightClickAction:
     """右键操作"""
 
     element: str  # 目标元素
-    menu_item: str | None = None  # 点击的菜单项
+    menu_item: Optional[str] = None  # 点击的菜单项
 
 
 @dataclass

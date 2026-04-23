@@ -40,7 +40,7 @@ class EmbeddingResult:
 class BGEEmbeddingService:
     """BGE嵌入服务"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.name = "BGE-M3嵌入服务"
         self.version = "2.0.0"
         self.logger = logging.getLogger(self.name)
@@ -138,7 +138,7 @@ class BGEEmbeddingService:
 
     async def _check_cache(
         self, texts: list[str], task_type: str = "default"
-    ) -> list[list[float | None]]:
+    ) -> Optional[list[list[float]]]:
         """检查缓存(先检查Redis,再检查内存)"""
         if not self.config.get("cache_enabled", True):
             return None
@@ -179,7 +179,7 @@ class BGEEmbeddingService:
         self,
         texts: str | list[str],
         task_type: str = "default",
-        batch_size: int | None = None,
+        batch_size: Optional[int] = None,
     ) -> EmbeddingResult:
         """
         文本编码
@@ -288,7 +288,7 @@ class BGEEmbeddingService:
         return embeddings
 
     async def encode_with_cache(
-        self, texts: str | list[str] | None, cache_key: str | None = None
+        self, texts: str | Optional[list[str]], cache_key: Optional[str] = None
     ) -> EmbeddingResult:
         """带缓存键的编码(用于持久化缓存)"""
         # TODO: 集成Redis缓存
@@ -363,7 +363,7 @@ class BGEEmbeddingService:
 _bge_service = None
 
 
-async def get_bge_service(config: dict[str, Any] | None = None) -> BGEEmbeddingService:
+async def get_bge_service(config: Optional[dict[str, Any]] = None) -> BGEEmbeddingService:
     """获取BGE服务实例"""
     global _bge_service
     if _bge_service is None:

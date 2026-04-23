@@ -77,8 +77,8 @@ class WorkflowStepRecord:
 
     # 执行信息
     status: StepStatus = StepStatus.PENDING
-    start_time: str | None = None
-    end_time: str | None = None
+    start_time: Optional[str] = None
+    end_time: Optional[str] = None
     duration: float = 0.0
 
     # 输入输出
@@ -87,7 +87,7 @@ class WorkflowStepRecord:
 
     # 结果评估
     success: bool = True
-    error_message: str | None = None
+    error_message: Optional[str] = None
     quality_score: float = 0.0  # 0-1
 
     # 依赖关系
@@ -132,16 +132,16 @@ class OAResponseTrajectory:
 
     # 时间信息
     start_time: str = field(default_factory=lambda: datetime.now().isoformat())
-    end_time: str | None = None
+    end_time: Optional[str] = None
     total_duration: float = 0.0
 
     # 结果评估
     overall_success: bool = True
-    final_outcome: str | None = None  # "allowed", "rejected", "partial"
+    final_outcome: Optional[str] = None  # "allowed", "rejected", "partial"
 
     # 质量指标
     avg_quality_score: float = 0.0
-    strategy_used: str | None = None
+    strategy_used: Optional[str] = None
     success_probability: float = 0.0
 
     # 元数据
@@ -268,8 +268,8 @@ class OAResponseWorkflowRecorder:
         step_type: OAStepType,
         name: str,
         description: str,
-        inputs: dict[str, Any] | None = None,
-        dependencies: list[str] | None = None,
+        inputs: Optional[dict[str, Any]] = None,
+        dependencies: Optional[list[str]] = None,
     ) -> WorkflowStepRecord:
         """
         记录步骤开始
@@ -309,9 +309,9 @@ class OAResponseWorkflowRecorder:
     def record_step_complete(
         self,
         step_id: str,
-        outputs: dict[str, Any] | None = None,
+        outputs: Optional[dict[str, Any]] = None,
         success: bool = True,
-        error_message: str | None = None,
+        error_message: Optional[str] = None,
         quality_score: float = 0.0,
     ):
         """
@@ -351,8 +351,8 @@ class OAResponseWorkflowRecorder:
     def finish_recording(
         self,
         overall_success: bool = True,
-        final_outcome: str | None = None,
-        strategy_used: str | None = None,
+        final_outcome: Optional[str] = None,
+        strategy_used: Optional[str] = None,
         success_probability: float = 0.0,
     ) -> OAResponseTrajectory:
         """

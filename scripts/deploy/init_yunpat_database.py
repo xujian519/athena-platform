@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 云熙专利业务管理系统数据库初始化脚本
 YunPat Patent Management System Database Initialization
@@ -12,14 +11,11 @@ YunPat Patent Management System Database Initialization
 版本: v1.0.0
 """
 
+from datetime import datetime
+from typing import Any
+
 import psycopg2
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import psycopg2.extras
-import sys
-from pathlib import Path
-from datetime import datetime, date
-import uuid
-import json
 
 # 数据库连接配置
 DB_CONFIG = {
@@ -392,8 +388,8 @@ def main() -> None:
     print("🗄️" + " " * 25 + "云熙专利数据库初始化" + " " * 25 + "🗄️")
     print("=" * 80)
     print(f"🕐 初始化时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"👩‍⚖️ 操作者: 小娜·天秤女神 (专利法律专家)")
-    print(f"🎯 初始化目标: 创建完整的专利业务管理数据库")
+    print("👩‍⚖️ 操作者: 小娜·天秤女神 (专利法律专家)")
+    print("🎯 初始化目标: 创建完整的专利业务管理数据库")
     print("=" * 80)
 
     initializer = YunPatDatabaseInitializer()

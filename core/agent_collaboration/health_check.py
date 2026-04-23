@@ -67,7 +67,7 @@ class HealthCheckResult:
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
     response_time_ms: float = 0.0
     error_rate: float = 0.0
-    last_error: str | None = None
+    last_error: Optional[str] = None
     details: dict[str, Any] = field(default_factory=dict)
 
 
@@ -85,7 +85,7 @@ class AgentHealthInfo:
     average_response_time: float = 0.0
     is_available: bool = True
     in_circuit_breaker: bool = False
-    last_error: str | None = None  # 添加last_error字段
+    last_error: Optional[str] = None  # 添加last_error字段
 
     def calculate_error_rate(self) -> float:
         """计算错误率"""

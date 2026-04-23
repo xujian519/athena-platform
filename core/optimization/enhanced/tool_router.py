@@ -113,7 +113,7 @@ class EnhancedToolRouter:
         tool_id: str,
         tool_name: str,
         capabilities: list[str],
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ):
         """注册工具"""
         self.tool_registry[tool_id] = {
@@ -129,8 +129,8 @@ class EnhancedToolRouter:
     async def select_tools(
         self,
         query: str,
-        intent: str | None = None,
-        context: dict[str, Any] | None = None,
+        intent: Optional[str] = None,
+        context: Optional[dict[str, Any]] = None,
         max_tools: int = 3,
     ) -> RoutingDecision:
         """

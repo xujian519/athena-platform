@@ -46,8 +46,8 @@ class Span:
     trace_id: str  # 追踪ID
     operation_name: str  # 操作名称
     start_time: float  # 开始时间
-    end_time: float | None = None  # 结束时间
-    duration_ms: float | None = None  # 耗时(毫秒)
+    end_time: Optional[float] = None  # 结束时间
+    duration_ms: Optional[float] = None  # 耗时(毫秒)
     status: SpanStatus = SpanStatus.STARTED  # 状态
     tags: dict[str, Any] = field(default_factory=dict)  # 标签
     logs: list[dict[str, Any]] = field(default_factory=list)  # 日志
@@ -90,8 +90,8 @@ class TraceContext:
 
     trace_id: str  # 追踪ID
     request_id: str  # 请求ID
-    user_id: str | None = None  # 用户ID
-    session_id: str | None = None  # 会话ID
+    user_id: Optional[str] = None  # 用户ID
+    session_id: Optional[str] = None  # 会话ID
     spans: list[Span] = field(default_factory=list)  # Span列表
     metadata: dict[str, Any] = field(default_factory=dict)  # 元数据
     start_time: float = field(default_factory=time.time)  # 开始时间
@@ -99,8 +99,8 @@ class TraceContext:
     def create_span(
         self,
         operation_name: str,
-        parent_id: str | None = None,
-        tags: dict[str, Any] | None = None,
+        parent_id: Optional[str] = None,
+        tags: Optional[dict[str, Any]] = None,
     ) -> Span:
         """创建新Span"""
         span = Span(
@@ -172,10 +172,10 @@ class TracingManager:
 
     def start_trace(
         self,
-        request_id: str | None = None,
-        user_id: str | None = None,
-        session_id: str | None = None,
-        metadata: dict[str, Any] | None = None,
+        request_id: Optional[str] = None,
+        user_id: Optional[str] = None,
+        session_id: Optional[str] = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> TraceContext:
         """
         开始新的追踪
@@ -209,8 +209,8 @@ class TracingManager:
         return context
 
     def end_trace(
-        self, trace_id: str | None = None, status: str = "completed"
-    ) -> dict[str, Any] | None:
+        self, trace_id: Optional[str] = None, status: str = "completed"
+    ) -> Optional[dict[str, Any]]:
         """
         结束追踪
 
@@ -255,7 +255,7 @@ class TracingManager:
         return _request_context.get()
 
     def create_span(
-        self, operation_name: str, tags: dict[str, Any] | None = None
+        self, operation_name: str, tags: Optional[dict[str, Any]] = None
     ) -> Span | None:
         """
         创建新Span
@@ -288,7 +288,7 @@ class TracingManager:
         """完成Span"""
         span.finish(status)
 
-    def get_trace(self, trace_id: str) -> dict[str, Any] | None:
+    def get_trace(self, trace_id: str) -> Optional[dict[str, Any]]:
         """获取追踪详情"""
         # 检查活跃追踪
         if trace_id in self.active_traces:
@@ -333,7 +333,7 @@ def get_tracing_manager() -> TracingManager:
     return _tracing_manager
 
 
-def traced(operation_name: str | None = None, tags: dict[str, Any] | None = None):
+def traced(operation_name: Optional[str] = None, tags: Optional[dict[str, Any]] = None):
     """
     追踪装饰器
 
@@ -369,7 +369,7 @@ def traced(operation_name: str | None = None, tags: dict[str, Any] | None = None
 class TracingContextManager:
     """追踪上下文管理器(支持with语句)"""
 
-    def __init__(self, operation_name: str, tags: dict[str, Any] | None = None):
+    def __init__(self, operation_name: str, tags: Optional[dict[str, Any]] = None):
         self.operation_name = operation_name
         self.tags = tags
         self.span = None

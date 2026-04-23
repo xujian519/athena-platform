@@ -43,7 +43,7 @@ class LRUCache:
     用于缓存频繁访问的数据，自动淘汰最少使用的项。
     """
 
-    def __init__(self, max_size: int = 128, ttl: float | None = None):
+    def __init__(self, max_size: int = 128, ttl: Optional[float] = None):
         """
         初始化LRU缓存
 
@@ -162,7 +162,7 @@ class LRUCache:
 def cached(
     cache_instance: LRUCache | None = None,
     key_func: Callable[..., str] | None = None,
-    ttl: float | None = None
+    ttl: Optional[float] = None
 ):
     """
     函数结果缓存装饰器
@@ -220,7 +220,7 @@ def cached(
 def async_cached(
     cache_instance: LRUCache | None = None,
     key_func: Callable[..., str] | None = None,
-    ttl: float | None = None
+    ttl: Optional[float] = None
 ):
     """
     异步函数结果缓存装饰器
@@ -395,7 +395,7 @@ class PerformanceMonitor:
         else:
             metrics["failures"] += 1
 
-    def get_stats(self, func_name: str) -> dict[str, Any] | None:
+    def get_stats(self, func_name: str) -> Optional[dict[str, Any]]:
         """
         获取函数统计信息
 

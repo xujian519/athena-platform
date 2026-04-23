@@ -4,10 +4,11 @@ CreativityAnalyzerProxy LLM集成测试
 测试创造性分析智能体的LLM调用功能。
 """
 
+from unittest.mock import AsyncMock
+
 import pytest
-import asyncio
-from unittest.mock import Mock, AsyncMock, patch
-from core.agents.xiaona.creativity_analyzer_proxy import CreativityAnalyzerProxy
+
+from core.framework.agents.xiaona.creativity_analyzer_proxy import CreativityAnalyzerProxy
 
 
 @pytest.fixture
@@ -103,7 +104,7 @@ class TestObviousnessAssessmentWithLLM:
         result = await analyzer.assess_obviousness(sample_patent)
 
         # 验证结果
-        assert result["is_obvious"] == False
+        assert not result["is_obvious"]
         assert result["confidence"] == 0.85
         assert "reasoning" in result
         assert "key_factors" in result
@@ -155,7 +156,7 @@ class TestInventiveStepEvaluationWithLLM:
         result = await analyzer.evaluate_inventive_step(sample_patent)
 
         # 验证结果
-        assert result["has_inventive_step"] == True
+        assert result["has_inventive_step"]
         assert result["step_magnitude"] == "significant"
         assert result["confidence"] == 0.9
         assert len(result["evidence"]) == 3
@@ -190,7 +191,7 @@ class TestInventiveStepEvaluationWithLLM:
         result = await analyzer.evaluate_inventive_step(sample_patent_low_creativity)
 
         # 验证结果
-        assert result["has_inventive_step"] == False
+        assert not result["has_inventive_step"]
         assert result["step_magnitude"] == "none"
         assert result["technical_difficulty"] == "low"
         assert result["innovation_level"] == "routine"
@@ -233,7 +234,7 @@ class TestTechnicalAdvancementAnalysisWithLLM:
         result = await analyzer.analyze_technical_advancement(sample_patent)
 
         # 验证结果
-        assert result["has_advancement"] == True
+        assert result["has_advancement"]
         assert result["advancement_type"] == "performance"
         assert result["improvement_degree"] == "significant"
         assert result["confidence"] == 0.9
@@ -371,7 +372,7 @@ class TestResponseParsing:
 
         result = analyzer._parse_obviousness_response(response)
 
-        assert result["is_obvious"] == False
+        assert not result["is_obvious"]
         assert result["confidence"] == 0.85
         assert result["reasoning"] == "非显而易见"
 
@@ -382,7 +383,7 @@ class TestResponseParsing:
         result = analyzer._parse_obviousness_response(response)
 
         # 应该返回默认值
-        assert result["is_obvious"] == True
+        assert result["is_obvious"]
         assert result["confidence"] == 0.5
         assert "LLM响应解析失败" in result["reasoning"]
 
@@ -398,7 +399,7 @@ class TestResponseParsing:
 
         result = analyzer._parse_inventive_step_response(response)
 
-        assert result["has_inventive_step"] == True
+        assert result["has_inventive_step"]
         assert result["step_magnitude"] == "significant"
         assert result["confidence"] == 0.9
 
@@ -415,7 +416,7 @@ class TestResponseParsing:
 
         result = analyzer._parse_technical_advancement_response(response)
 
-        assert result["has_advancement"] == True
+        assert result["has_advancement"]
         assert result["advancement_type"] == "performance"
         assert result["improvement_degree"] == "significant"
         assert result["confidence"] == 0.9
@@ -435,8 +436,8 @@ class TestResponseParsing:
 
         result = analyzer._parse_comprehensive_creativity_response(response, sample_patent)
 
-        assert result["obviousness_assessment"]["is_obvious"] == False
-        assert result["inventive_step_evaluation"]["has_inventive_step"] == True
+        assert not result["obviousness_assessment"]["is_obvious"]
+        assert result["inventive_step_evaluation"]["has_inventive_step"]
         assert result["creativity_conclusion"] == "具备创造性"
         assert result["creativity_level"] == "high"
         assert result["patent_id"] == "CN123456789A"

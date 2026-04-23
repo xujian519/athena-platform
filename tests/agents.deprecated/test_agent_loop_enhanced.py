@@ -7,7 +7,6 @@ Agent Loop 增强版单元测试
 作者: Athena平台团队
 创建时间: 2026-04-20
 """
-from __future__ import annotations
 
 import asyncio
 import logging
@@ -18,14 +17,13 @@ logger = logging.getLogger(__name__)
 
 async def test_streaming_handler():
     """测试流式处理器"""
-    from core.agents.streaming_handler import (
-        LoggingStreamingHandler,
-        StreamingHandler,
-    )
-    from core.agents.stream_events import (
+    from core.framework.agents.stream_events import (
         AssistantTextDelta,
         StatusEvent,
         stream_event_to_json,
+    )
+    from core.framework.agents.streaming_handler import (
+        LoggingStreamingHandler,
     )
 
     print("\n=== 测试流式处理器 ===")
@@ -59,7 +57,7 @@ async def test_streaming_handler():
 
 async def test_llm_adapter():
     """测试 LLM 适配器"""
-    from core.agents.llm_adapter import LLMAdapter, LLMRequest
+    from core.framework.agents.llm_adapter import LLMAdapter, LLMRequest
 
     print("\n=== 测试 LLM 适配器 ===")
 
@@ -88,7 +86,7 @@ async def test_llm_adapter():
         if event.__class__.__name__ == "AssistantTextDelta":
             print(f"   增量: {event.text}")
         elif event.__class__.__name__ == "AssistantTurnComplete":
-            print(f"✅ 流式调用完成")
+            print("✅ 流式调用完成")
             break
 
     # 检查统计
@@ -100,9 +98,10 @@ async def test_llm_adapter():
 
 async def test_event_publisher():
     """测试事件发布器"""
-    from core.agents.event_publisher import AgentEventPublisher
-    from core.events.event_bus import get_global_event_bus, CallbackSubscriber
-    from core.events.event_types import AgentStarted, ToolExecutionStarted
+    from core.events.event_bus import CallbackSubscriber, get_global_event_bus
+    from core.events.event_types import AgentStarted
+
+    from core.framework.agents.event_publisher import AgentEventPublisher
 
     print("\n=== 测试事件发布器 ===")
 
@@ -153,10 +152,9 @@ async def test_event_publisher():
 
 async def test_enhanced_agent_loop():
     """测试增强版 Agent Loop"""
-    from core.agents.agent_loop_enhanced import (
+    from core.framework.agents.agent_loop_enhanced import (
         AgentLoopConfig,
         EnhancedAgentLoop,
-        create_enhanced_agent_loop,
     )
 
     print("\n=== 测试增强版 Agent Loop ===")
@@ -197,7 +195,7 @@ async def test_enhanced_agent_loop():
 
 async def test_enhanced_agent_loop_stream():
     """测试增强版 Agent Loop 流式执行"""
-    from core.agents.agent_loop_enhanced import create_enhanced_agent_loop
+    from core.framework.agents.agent_loop_enhanced import create_enhanced_agent_loop
 
     print("\n=== 测试增强版 Agent Loop 流式执行 ===")
 
@@ -261,3 +259,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+

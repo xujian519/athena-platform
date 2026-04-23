@@ -125,7 +125,7 @@ class IntelligentPrioritizationSystem:
         print(f"⚡ {self.name} v{self.version} 初始化完成")
 
     async def calculate_priority(
-        self, task: dict[str, Any], context: dict[str, Any] | None = None
+        self, task: dict[str, Any], context: Optional[dict[str, Any]] = None
     ) -> float:
         """
         计算任务优先级分数
@@ -266,7 +266,7 @@ class IntelligentPrioritizationSystem:
         return None
 
     async def reprioritize_all(
-        self, reason: str = "定期调整", context: dict[str, Any] | None = None
+        self, reason: str = "定期调整", context: Optional[dict[str, Any]] = None
     ) -> ReprioritizationResult:
         """
         重新对所有任务排序

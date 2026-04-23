@@ -45,7 +45,7 @@ class CallResult:
 
     success: bool
     duration: float
-    error: str | None = None
+    error: Optional[str] = None
     result: Any = None
 
 
@@ -356,7 +356,7 @@ def get_circuit_breaker_sync(
     return registry.get_breaker(service_id, config)
 
 
-def with_circuit_breaker(service_id: str | None,
+def with_circuit_breaker(service_id: Optional[str],
     config: CircuitBreakerConfig | None = None):
     """
     断路器装饰器

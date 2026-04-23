@@ -6,11 +6,11 @@ Agent适配器单元测试
 """
 
 import pytest
-
-from core.agents.declarative.models import AgentDefinition, AgentSource
 from core.xiaonuo_agent.adapters.agent_adapter import AgentAdapter
 from core.xiaonuo_agent.adapters.proxy_adapter import ProxyAgentAdapter
 from core.xiaonuo_agent.adapters.registry import AgentToolRegistry, get_agent_registry
+
+from core.framework.agents.declarative.models import AgentDefinition, AgentSource
 
 
 @pytest.fixture

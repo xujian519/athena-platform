@@ -9,15 +9,16 @@
 - 执行监控
 """
 
+
 import pytest
-from core.agents.xiaona.base_component import (
-    BaseXiaonaComponent,
+
+from core.framework.agents.xiaona.base_component import (
     AgentCapability,
-    AgentStatus,
     AgentExecutionContext,
-    AgentExecutionResult
+    AgentExecutionResult,
+    AgentStatus,
+    BaseXiaonaComponent,
 )
-from typing import Any, Dict
 
 
 class TestableBaseComponent(BaseXiaonaComponent):

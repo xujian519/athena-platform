@@ -76,7 +76,7 @@ class ModelPointers:
         'quick': 'qwen3.5',
     })
 
-    def resolve(self, pointer: str, fallback_available: Optional[list[str]] = None) -> str:
+    def resolve(self, pointer: str, fallback_available: list[str] | None = None) -> str:
         """
         解析指针到具体模型ID
 
@@ -214,11 +214,11 @@ def _get_default_config_path() -> str:
 # 单例管理
 # ============================================================
 
-_pointers_instance: Optional[ModelPointers] = None
+_pointers_instance: ModelPointers | None = None
 _pointers_lock = threading.Lock()
 
 
-def get_model_pointers(config_path: Optional[str] = None) -> ModelPointers:
+def get_model_pointers(config_path: str | None = None) -> ModelPointers:
     """
     获取模型指针单例（线程安全）
 
@@ -244,7 +244,7 @@ def reset_model_pointers() -> None:
         _pointers_instance = None
 
 
-def reload_model_pointers(config_path: Optional[str] = None) -> ModelPointers:
+def reload_model_pointers(config_path: str | None = None) -> ModelPointers:
     """重新加载模型指针配置"""
     reset_model_pointers()
     return get_model_pointers(config_path)

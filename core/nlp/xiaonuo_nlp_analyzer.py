@@ -109,7 +109,7 @@ class CallAnalysis:
     call_success: bool
     response_time: float
     response_quality: float
-    error_message: str | None = None
+    error_message: Optional[str] = None
 
 
 @dataclass
@@ -119,8 +119,8 @@ class RobustnessAnalysis:
     text: str
     clarity_score: float
     ambiguity_level: int
-    rejection_reason: str | None
-    fallback_response: str | None
+    rejection_reason: Optional[str]
+    fallback_response: Optional[str]
     recovery_success: bool
 
 
@@ -846,7 +846,7 @@ class XiaonuoNLPAnalyzer:
         """生成缓存键"""
         return hashlib.md5(text.encode("utf-8", usedforsecurity=False), usedforsecurity=False).hexdigest()[:16]
 
-    def _get_from_cache(self, text: str) -> dict[str, Any] | None:
+    def _get_from_cache(self, text: str) -> Optional[dict[str, Any]]:
         """从缓存获取结果"""
         cache_key = self._get_cache_key(text)
         return self._cache.get(cache_key)

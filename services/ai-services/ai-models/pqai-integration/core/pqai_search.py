@@ -76,7 +76,7 @@ class PQAIEnhancedPatentSearcher:
             logger.error(f"模型加载失败: {e}")
             raise
 
-    def build_index(self, patent_texts: list[dict[str, Any]]) -> Any:
+    def build_index(self, patent_texts: list[dict[str, Any]) -> Any:
         """
         构建专利检索索引
 

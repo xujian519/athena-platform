@@ -41,7 +41,7 @@ class DatabaseOptimizer:
         "mmap_size": 268435456,  # 内存映射大小(256MB)
     }
 
-    def __init__(self, db_path: str | None = None):
+    def __init__(self, db_path: Optional[str] = None):
         """
         初始化数据库优化器
 
@@ -296,7 +296,7 @@ class DatabaseOptimizer:
 _db_optimizer: DatabaseOptimizer | None = None
 
 
-def get_database_optimizer(db_path: str | None = None) -> DatabaseOptimizer:
+def get_database_optimizer(db_path: Optional[str] = None) -> DatabaseOptimizer:
     """
     获取数据库优化器实例(单例模式)
 

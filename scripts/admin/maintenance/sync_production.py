@@ -23,7 +23,7 @@ import shutil
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -264,7 +264,7 @@ class ProductionSyncer:
         if not dry_run and self.changes:
             self._update_version()
 
-        logger.info(f"✅ 同步完成")
+        logger.info("✅ 同步完成")
         logger.info(f"   总计: {self.result.total_files}")
         logger.info(f"   同步: {self.result.synced_files}")
         logger.info(f"   删除: {self.result.deleted_files}")
@@ -295,7 +295,7 @@ class ProductionSyncer:
 
         self.save_version(version_info)
 
-    def rollback(self, version: Optional[str] = None) -> bool:
+    def rollback(self, version: str | None = None) -> bool:
         """
         回滚到指定版本
 
@@ -379,7 +379,7 @@ async def main():
     syncer = ProductionSyncer(project_root)
 
     # 执行同步
-    result = syncer.sync(dry_run=dry_run)
+    syncer.sync(dry_run=dry_run)
 
     # 生成报告
     report_path = project_root / "reports" / "production_sync_report.json"

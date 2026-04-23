@@ -73,7 +73,7 @@ class ConcurrencyLimiter:
     def __init__(
         self,
         max_concurrent: int = 100,
-        timeout: float | None = None,
+        timeout: Optional[float] = None,
         name: str = "ConcurrencyLimiter",
     ):
         """
@@ -386,7 +386,7 @@ class RateLimiter:
     """
 
     def __init__(
-        self, rate: int, per: float = 1.0, burst: int | None = None, name: str = "RateLimiter"
+        self, rate: int, per: float = 1.0, burst: Optional[int] = None, name: str = "RateLimiter"
     ):
         """
         初始化速率限制器
@@ -516,7 +516,7 @@ class AdaptiveConcurrencyController:
         """获取许可"""
         await self.semaphore.acquire()
 
-    def release(self, latency_ms: float | None = None) -> Any:
+    def release(self, latency_ms: Optional[float] = None) -> Any:
         """释放许可并记录性能"""
         self.semaphore.release()
 

@@ -41,14 +41,14 @@ class TaskResponse:
     success: bool
     result: dict[str, Any]
     execution_time: float
-    error_message: str | None = None
+    error_message: Optional[str] = None
     agent_details: dict[str, Any] = field(default_factory=dict)
 
 
 class TaskManager:
     """任务管理器 - 统一管理多Agent协作任务"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
 
         # 核心组件
@@ -125,7 +125,7 @@ class TaskManager:
         workflow_type: str = "sequential",
         priority: int = 2,
         deadline: datetime | None = None,
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> TaskResponse:
         """
         提交任务给多Agent系统处理
@@ -542,7 +542,7 @@ class TaskManager:
         if len(self.task_history) > self.max_history_size:
             self.task_history = self.task_history[-self.max_history_size :]
 
-    async def get_task_status(self, request_id: str) -> dict[str, Any] | None:
+    async def get_task_status(self, request_id: str) -> Optional[dict[str, Any]]:
         """获取任务状态"""
         if request_id in self.active_requests:
             request = self.active_requests[request_id]
@@ -691,7 +691,7 @@ class TaskManager:
 _task_manager = None
 
 
-def get_task_manager(config: dict[str, Any] | None = None) -> TaskManager:
+def get_task_manager(config: Optional[dict[str, Any]] = None) -> TaskManager:
     """获取全局任务管理器实例"""
     global _task_manager
     if _task_manager is None:

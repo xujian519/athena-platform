@@ -7,19 +7,15 @@
 3. 小诺编排者记忆集成测试
 """
 
-import pytest
-import tempfile
 import shutil
-from pathlib import Path
-from datetime import datetime
+import tempfile
 
-from core.agents.base_agent import BaseAgent
-from core.agents.xiaona_agent_with_unified_memory import XiaonaAgentWithMemory
-from core.agents.xiaonuo_orchestrator_with_memory import XiaonuoOrchestratorWithMemory
-from core.memory.unified_memory_system import (
-    MemoryType,
-    MemoryCategory
-)
+import pytest
+from core.framework.agents.xiaona_agent_with_unified_memory import XiaonaAgentWithMemory
+from core.framework.agents.xiaonuo_orchestrator_with_memory import XiaonuoOrchestratorWithMemory
+
+from core.framework.agents.base_agent import BaseAgent
+from core.framework.memory.unified_memory_system import MemoryCategory, MemoryType
 
 
 class TestBaseAgentMemoryIntegration:

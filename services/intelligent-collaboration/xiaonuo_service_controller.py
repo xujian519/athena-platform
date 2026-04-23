@@ -12,8 +12,7 @@ from pathlib import Path
 
 import aiohttp
 import psutil
-
-from core.logging import get_logger, LogLevel
+from core.logging import LogLevel, get_logger
 
 logger = get_logger("xiaonuo", level=LogLevel.INFO)
 
@@ -196,7 +195,7 @@ class XiaonuoServiceController:
             # 等待服务启动
             await asyncio.sleep(3)
             return True
-        except (asyncio.CancelledError, asyncio.TimeoutError, Exception):
+        except (TimeoutError, asyncio.CancelledError, Exception):
             return False
 
     async def _start_application_service(self, service_id: str) -> bool:
@@ -349,7 +348,7 @@ class XiaonuoServiceController:
                         async with session.get(url, timeout=2) as resp:
                             if resp.status < 500:
                                 return True
-                    except (asyncio.TimeoutError, ConnectionError, OSError):
+                    except (TimeoutError, ConnectionError, OSError):
                         # 连接失败，尝试下一个URL
                         continue
 

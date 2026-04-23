@@ -189,7 +189,7 @@ class UnifiedVectorSearcher:
         return results
 
     def intelligent_search(
-        self, query: VectorQuery, query_text: str | None = None
+        self, query: VectorQuery, query_text: Optional[str] = None
     ) -> dict[str, list[VectorResult]]:
         """智能搜索 - 根据查询内容自动路由到合适的向量库"""
         if query_text:

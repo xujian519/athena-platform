@@ -123,8 +123,8 @@ class AthenaLLMDirect:
 
 def create_athena_dspy_lm(
     model: str = "openai/gpt-4o-mini",  # 使用LiteLLM格式的模型名
-    api_base: str | None = None,
-    api_key: str | None = None,
+    api_base: Optional[str] = None,
+    api_key: Optional[str] = None,
     **kwargs,
 ) -> dspy.LM:
     """创建DSPy LM实例(使用LiteLLM后端)

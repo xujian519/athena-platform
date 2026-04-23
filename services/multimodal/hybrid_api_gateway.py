@@ -91,7 +91,7 @@ class BatchProcessingResponse(BaseModel):
     failed_files: int
     total_cost: float
     total_time: float
-    results: list[dict[str, Any]]
+    results: list[dict[str, Any]
 
 # 存储文件
 async def save_uploaded_file(file: UploadFile) -> str:

@@ -5,9 +5,7 @@
 
 import tempfile
 from pathlib import Path
-from unittest.mock import Mock, patch
-
-import pytest
+from unittest.mock import patch
 
 from core.utils.backup_manager import BackupManager
 

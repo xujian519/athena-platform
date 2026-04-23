@@ -429,7 +429,7 @@ class OptimizedParameterExtractionModel:
         # 使用类型默认名
         return type_mappings.get(param_type, "parameter")
 
-    async def _extract_value_after_keyword(self, text: str, keyword: str) -> str | None:
+    async def _extract_value_after_keyword(self, text: str, keyword: str) -> Optional[str]:
         """提取关键词后的值"""
         # 查找关键词位置
         keyword_pos = text.lower().find(keyword.lower())

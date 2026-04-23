@@ -1,20 +1,18 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 智能文件清理系统
 基于优化后的存储系统，自动备份过期文件和删除冗余文件
 """
 
-import os
-import shutil
+import hashlib
 import json
+import shutil
 import sys
 import time
-import hashlib
-from pathlib import Path
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Tuple, Set
 from collections import defaultdict
+from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 # 添加项目路径
 sys.path.append('/Users/xujian/Athena工作平台')
@@ -113,7 +111,7 @@ class IntelligentFileCleaner:
 
         print(f"✅ 备份目录已准备: {date_dir}")
 
-    def _scan_and_analyze_files(self) -> Dict[str, Any]:
+    def _scan_and_analyze_files(self) -> dict[str, Any]:
         """扫描和分析文件"""
         file_analysis = {
             'files_by_age': defaultdict(list),
@@ -141,7 +139,7 @@ class IntelligentFileCleaner:
 
         return file_analysis
 
-    def _scan_directory(self, dir_path: Path, file_analysis: Dict[str, Any]) -> Any:
+    def _scan_directory(self, dir_path: Path, file_analysis: dict[str, Any]) -> Any:
         """扫描单个目录"""
         try:
             for item in dir_path.rglob('*'):
@@ -168,7 +166,7 @@ class IntelligentFileCleaner:
 
         return False
 
-    def _analyze_file(self, file_path: Path) -> Dict[str, Any]:
+    def _analyze_file(self, file_path: Path) -> dict[str, Any]:
         """分析单个文件"""
         try:
             stat = file_path.stat()
@@ -205,7 +203,7 @@ class IntelligentFileCleaner:
         except:
             return None
 
-    def _categorize_file(self, file_info: Dict[str, Any], file_analysis: Dict[str, Any]) -> Any:
+    def _categorize_file(self, file_info: dict[str, Any], file_analysis: dict[str, Any]) -> Any:
         """将文件分类"""
         # 按年龄分类
         days_old = (datetime.now() - file_info['access_time']).days
@@ -219,7 +217,7 @@ class IntelligentFileCleaner:
             file_analysis['files_by_age']['old'].append(file_info)
 
         # 按类型分类
-        file_analysis['files_by_type'][file_info['extension']].append(file_info)
+        file_analysis['files_by_type'][file_info['extension'].append(file_info)
 
         # 按大小分类
         size_kb = file_info['size'] / 1024
@@ -236,14 +234,14 @@ class IntelligentFileCleaner:
         if file_info['hash']:
             if file_info['hash'] in file_analysis['file_hashes']:
                 file_analysis['duplicates'].append({
-                    'original': file_analysis['file_hashes'][file_info['hash']],
+                    'original': file_analysis['file_hashes'][file_info['hash'],
                     'duplicate': file_info
                 })
                 self.scan_stats['duplicate_files'] += 1
             else:
-                file_analysis['file_hashes'][file_info['hash']] = file_info
+                file_analysis['file_hashes'][file_info['hash'] = file_info
 
-    def _identify_cleanup_candidates(self, file_analysis: Dict[str, Any]) -> Tuple[List[Dict], List[Dict]]:
+    def _identify_cleanup_candidates(self, file_analysis: dict[str, Any]) -> tuple[list[dict], list[dict]:
         """识别需要清理的文件"""
         expired_files = []
         duplicate_files = file_analysis['duplicates']
@@ -263,7 +261,7 @@ class IntelligentFileCleaner:
 
         return expired_files, duplicate_files
 
-    def _should_backup_file(self, file_info: Dict[str, Any]) -> bool:
+    def _should_backup_file(self, file_info: dict[str, Any]) -> bool:
         """判断是否应该备份文件"""
         # 检查文件扩展名
         if file_info['extension'] in self.cleanup_config['file_types_to_backup']:
@@ -276,7 +274,7 @@ class IntelligentFileCleaner:
 
         return False
 
-    def _should_delete_file(self, file_info: Dict[str, Any]) -> bool:
+    def _should_delete_file(self, file_info: dict[str, Any]) -> bool:
         """判断是否应该删除文件"""
         # 检查文件扩展名
         if file_info['extension'] in self.cleanup_config['file_types_to_delete']:
@@ -289,7 +287,7 @@ class IntelligentFileCleaner:
 
         return False
 
-    def _backup_expired_files(self, expired_files: List[Dict]) -> Any:
+    def _backup_expired_files(self, expired_files: list[dict]) -> Any:
         """备份过期文件"""
         if not expired_files:
             print("   ℹ️ 没有需要备份的过期文件")
@@ -319,7 +317,7 @@ class IntelligentFileCleaner:
 
         print(f"   ✅ 备份完成: {self.scan_stats['files_backed_up']} 个文件, {round(self.scan_stats['backup_size_mb'], 2)} MB")
 
-    def _delete_redundant_files(self, duplicate_files: List[Dict]) -> Any:
+    def _delete_redundant_files(self, duplicate_files: list[dict]) -> Any:
         """删除冗余文件"""
         if not duplicate_files:
             print("   ℹ️ 没有发现重复文件")
@@ -337,10 +335,8 @@ class IntelligentFileCleaner:
                     if duplicate_file.stat().st_mtime > original_file.stat().st_mtime:
                         # 删除较旧的文件
                         file_to_delete = original_file
-                        keep_file = duplicate_file
                     else:
                         file_to_delete = duplicate_file
-                        keep_file = original_file
 
                     # 删除重复文件
                     file_to_delete.unlink()
@@ -378,7 +374,7 @@ class IntelligentFileCleaner:
                 except Exception as e:
                     print(f"   ⚠️ 清理系统文件 {item} 失败: {e}")
 
-        print(f"   ✅ 临时文件清理完成")
+        print("   ✅ 临时文件清理完成")
 
     def _verify_cleanup_results(self) -> Any:
         """验证清理结果"""
@@ -427,25 +423,25 @@ class IntelligentFileCleaner:
         print("📊 智能文件清理摘要")
         print("=" * 60)
 
-        print(f"📁 扫描统计:")
+        print("📁 扫描统计:")
         print(f"   - 总文件数: {self.scan_stats['total_files']:,}")
         print(f"   - 总大小: {self.scan_stats['total_size_mb']:,} MB")
 
-        print(f"\n💾 备份操作:")
+        print("\n💾 备份操作:")
         print(f"   - 备份文件数: {self.scan_stats['files_backed_up']:,}")
         print(f"   - 备份大小: {round(self.scan_stats['backup_size_mb'], 2):,} MB")
         print(f"   - 备份位置: {self.backup_path}")
 
-        print(f"\n🗑️ 删除操作:")
+        print("\n🗑️ 删除操作:")
         print(f"   - 删除文件数: {self.scan_stats['files_deleted']:,}")
         print(f"   - 释放空间: {round(self.scan_stats['space_freed_mb'], 2):,} MB")
         print(f"   - 重复文件: {self.scan_stats['duplicate_files']:,}")
 
-        print(f"\n⏱️ 性能指标:")
+        print("\n⏱️ 性能指标:")
         print(f"   - 处理时间: {round(self.scan_stats['processing_time'], 2)} 秒")
         print(f"   - 处理效率: {self.scan_stats['total_files'] / max(self.scan_stats['processing_time'], 1):.1f} 文件/秒")
 
-        print(f"\n🎯 清理效果:")
+        print("\n🎯 清理效果:")
         files_processed = self.scan_stats['files_backed_up'] + self.scan_stats['files_deleted']
         print(f"   - 处理文件总数: {files_processed:,}")
         print(f"   - 空间优化率: {round((self.scan_stats['space_freed_mb'] / max(self.scan_stats['total_size_mb'], 1)) * 100, 2)}%")
@@ -457,8 +453,8 @@ class IntelligentFileCleaner:
         else:
             print(f"   ℹ️ 清理完成，释放了 {round(self.scan_stats['space_freed_mb'], 2)} MB 空间")
 
-        print(f"\n💡 建议:")
-        print(f"   - 定期执行清理: 建议每周运行一次")
+        print("\n💡 建议:")
+        print("   - 定期执行清理: 建议每周运行一次")
         print(f"   - 监控备份大小: 当前备份 {round(self.scan_stats['backup_size_mb'], 2)} MB")
         print(f"   - 检查重复文件: 发现了 {self.scan_stats['duplicate_files']} 个重复文件")
 

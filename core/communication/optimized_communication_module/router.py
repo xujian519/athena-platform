@@ -60,7 +60,7 @@ class MessageRouter:
         self.subscriptions[subscriber_id].add(message_type)
         logger.debug(f"订阅者 {subscriber_id} 订阅 {message_type}")
 
-    def unsubscribe(self, subscriber_id: str, message_type: str | None = None):
+    def unsubscribe(self, subscriber_id: str, message_type: Optional[str] = None):
         """取消订阅
 
         Args:

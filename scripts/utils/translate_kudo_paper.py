@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 翻译 Kudo 2013 磺酸离子液体催化剂论文为中文 Markdown 格式
 Translate Kudo 2013 Sulfonate Ionic Liquid Catalyst Paper to Chinese Markdown
 """
 
 import re
-import os
 from datetime import datetime
 
 # 输入输出路径
@@ -118,7 +116,6 @@ def parse_paper_sections(content):
     }
 
     current_section = "header"
-    in_abstract = False
     in_keywords = False
 
     for line in lines:
@@ -129,7 +126,6 @@ def parse_paper_sections(content):
         # 检测部分标题
         if line == "Abstract:":
             current_section = "abstract"
-            in_abstract = True
             sections["abstract"].append("## 摘要\n")
             continue
         elif line == "Keywords:":
@@ -214,7 +210,7 @@ def create_markdown(sections):
     md_content.append("")
 
     # 各部分内容
-    for section_name, content in sections.items():
+    for _section_name, content in sections.items():
         if content:
             md_content.extend(content)
             md_content.append("")
@@ -229,7 +225,7 @@ def main():
 
     # 读取提取的文本
     print("\n1️⃣ 读取原始文本...")
-    with open(INPUT_FILE, 'r', encoding='utf-8') as f:
+    with open(INPUT_FILE, encoding='utf-8') as f:
         content = f.read()
 
     print(f"   ✓ 读取了 {len(content.split(chr(10)))} 行文本")
@@ -249,7 +245,7 @@ def main():
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         f.write(markdown_content)
 
-    print(f"   ✓ 翻译文件已保存至：")
+    print("   ✓ 翻译文件已保存至：")
     print(f"   {OUTPUT_FILE}")
 
     print("\n" + "="*80)

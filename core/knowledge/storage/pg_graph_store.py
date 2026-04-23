@@ -130,8 +130,8 @@ class PGGraphStore:
         node_id: str,
         node_type: str,
         name: str,
-        content: str | None = None,
-        properties: dict[str, Any] | None = None,
+        content: Optional[str] = None,
+        properties: Optional[dict[str, Any]] = None,
     ) -> bool:
         """Add or update a node"""
         query = """
@@ -157,7 +157,7 @@ class PGGraphStore:
         target_id: str,
         relation_type: str,
         weight: float = 1.0,
-        properties: dict[str, Any] | None = None,
+        properties: Optional[dict[str, Any]] = None,
     ) -> bool:
         """Add a relation"""
         # First ensure nodes exist (optional check, but FK constraints will handle it)
@@ -176,7 +176,7 @@ class PGGraphStore:
             logger.error(f"Failed to add relation {source_id}->{target_id}: {e}")
             return False
 
-    async def get_node(self, node_id: str) -> dict[str, Any] | None:
+    async def get_node(self, node_id: str) -> Optional[dict[str, Any]]:
         """Get a node by ID"""
         query = "SELECT id, type, name, content, properties FROM kg_nodes WHERE id = %s"
         rows = self._execute(query, (node_id,), fetch=True)
@@ -212,7 +212,7 @@ class PGGraphStore:
         return nodes
 
     async def get_related_nodes(
-        self, node_id: str, relation_types: list[str] | None = None
+        self, node_id: str, relation_types: Optional[list[str]] = None
     ) -> list[dict[str, Any]]:
         """Get nodes directly related to the given node"""
         query = """
@@ -276,7 +276,7 @@ class PGGraphStore:
         self._execute("TRUNCATE TABLE kg_nodes CASCADE")
         logger.warning("Knowledge Graph data cleared from PostgreSQL")
 
-    async def get_node(self, node_id: str) -> dict[str, Any] | None:
+    async def get_node(self, node_id: str) -> Optional[dict[str, Any]]:
         """获取单个节点"""
         query = """
         SELECT id, type, name, content, properties, created_at, updated_at
@@ -361,7 +361,7 @@ class PGGraphStore:
         return connected_nodes
 
     async def search_nodes(
-        self, keyword: str, node_types: list[str] | None = None, limit: int = 50
+        self, keyword: str, node_types: Optional[list[str]] = None, limit: int = 50
     ) -> list[dict[str, Any]]:
         """搜索节点"""
         # 构建WHERE条件
@@ -406,7 +406,7 @@ class PGGraphStore:
         return nodes
 
     async def full_text_search(
-        self, query: str, node_types: list[str] | None = None, limit: int = 50
+        self, query: str, node_types: Optional[list[str]] = None, limit: int = 50
     ) -> list[dict[str, Any]]:
         """全文搜索(使用PostgreSQL的全文检索)"""
         # 构建WHERE条件

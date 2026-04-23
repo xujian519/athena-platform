@@ -46,7 +46,7 @@ class ConsensusCollaborationPattern(CollaborationPattern):
 
     async def initiate_collaboration(
         self, task: Task, participants: list[str], context: dict[str, Any]
-    ) -> str | None:
+    ) -> Optional[str]:
         """启动共识协作"""
         try:
             session_id = str(uuid.uuid4())

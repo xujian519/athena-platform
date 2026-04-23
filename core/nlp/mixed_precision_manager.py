@@ -396,7 +396,7 @@ class MixedPrecisionManager:
                    targets: torch.Tensor,
                    optimizer: torch.optim.Optimizer,
                    criterion: nn.Module,
-                   clip_grad_norm: float | None = None) -> dict[str, float]:
+                   clip_grad_norm: Optional[float] = None) -> dict[str, float]:
         """执行混合精度训练步骤"""
         if not self.scaler:
             # 非AMP训练

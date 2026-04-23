@@ -4,9 +4,8 @@ WriterAgent单元测试
 测试WriterAgent的基本功能
 """
 
-import pytest
-from unittest.mock import Mock, patch
 
+import pytest
 from core.xiaona.writer_agent import WriterAgent
 
 

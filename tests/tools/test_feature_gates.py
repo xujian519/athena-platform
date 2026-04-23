@@ -12,15 +12,15 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-import pytest
 import os
 
+import pytest
+
 from core.tools.feature_gates import (
-    FeatureState,
     FeatureGate,
-    FeatureGates,
-    get_feature_gates,
+    FeatureState,
     feature,
+    get_feature_gates,
 )
 
 
@@ -38,19 +38,19 @@ class TestFeatureGates:
         gates = get_feature_gates()
 
         # 检查部分默认标志
-        assert gates.is_enabled("parallel_tool_execution") == True
-        assert gates.is_enabled("tool_cache") == True
-        assert gates.is_enabled("rate_limit") == True
-        assert gates.is_enabled("performance_monitoring") == True
+        assert gates.is_enabled("parallel_tool_execution")
+        assert gates.is_enabled("tool_cache")
+        assert gates.is_enabled("rate_limit")
+        assert gates.is_enabled("performance_monitoring")
 
     def test_feature_disabled_by_default(self):
         """测试默认禁用的功能"""
         gates = get_feature_gates()
 
         # 这些功能默认禁用
-        assert gates.is_enabled("permission_system") == False
-        assert gates.is_enabled("hook_system") == False
-        assert gates.is_enabled("verbose_logging") == False
+        assert not gates.is_enabled("permission_system")
+        assert not gates.is_enabled("hook_system")
+        assert not gates.is_enabled("verbose_logging")
 
     def test_set_state(self):
         """测试设置功能状态"""
@@ -58,11 +58,11 @@ class TestFeatureGates:
 
         # 测试启用
         gates.set_state("verbose_logging", FeatureState.ENABLED)
-        assert gates.is_enabled("verbose_logging") == True
+        assert gates.is_enabled("verbose_logging")
 
         # 测试禁用
         gates.set_state("verbose_logging", FeatureState.DISABLED)
-        assert gates.is_enabled("verbose_logging") == False
+        assert not gates.is_enabled("verbose_logging")
 
     def test_get_state(self):
         """测试获取功能状态"""
@@ -118,17 +118,17 @@ class TestFeatureGates:
 
         gates.register(custom_gate)
 
-        assert gates.is_enabled("test_feature") == False
+        assert not gates.is_enabled("test_feature")
 
         # 启用后
         gates.set_state("test_feature", FeatureState.ENABLED)
-        assert gates.is_enabled("test_feature") == True
+        assert gates.is_enabled("test_feature")
 
     def test_feature_convenience_function(self):
         """测试便捷函数"""
         # 使用便捷函数检查功能
-        assert feature("parallel_tool_execution") == True
-        assert feature("permission_system") == False
+        assert feature("parallel_tool_execution")
+        assert not feature("permission_system")
 
     def test_environment_variable_override(self):
         """测试环境变量覆盖"""
@@ -143,7 +143,7 @@ class TestFeatureGates:
         )
 
         # 应该被环境变量启用
-        assert gate.is_enabled() == True
+        assert gate.is_enabled()
 
         # 清理
         del os.environ["ATHENA_FLAG_TEST_ENV_VAR"]

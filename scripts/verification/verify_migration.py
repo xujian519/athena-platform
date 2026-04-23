@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 工具注册表迁移验证脚本
 
@@ -24,10 +23,8 @@ Created: 2026-04-19
 import argparse
 import importlib
 import logging
-import sys
 import time
 from pathlib import Path
-from typing import Dict, List, Set, Tuple
 
 # 配置日志
 logging.basicConfig(
@@ -48,11 +45,11 @@ class MigrationVerifier:
             root_path: 项目根目录
         """
         self.root_path = Path(root_path)
-        self.verification_results: Dict[str, Dict] = {}
-        self.errors: List[str] = []
-        self.warnings: List[str] = []
+        self.verification_results: dict[str, dict] = {}
+        self.errors: list[str] = []
+        self.warnings: list[str] = []
 
-    def verify_all(self) -> Dict:
+    def verify_all(self) -> dict:
         """
         执行所有验证检查
 
@@ -86,7 +83,7 @@ class MigrationVerifier:
         self._print_summary()
         return self.verification_results
 
-    def verify_tool_registration(self) -> Dict:
+    def verify_tool_registration(self) -> dict:
         """
         验证工具注册
 
@@ -143,7 +140,7 @@ class MigrationVerifier:
                 "message": f"工具注册验证失败: {e}"
             }
 
-    def verify_agent_integration(self) -> Dict:
+    def verify_agent_integration(self) -> dict:
         """
         验证智能体集成
 
@@ -194,7 +191,7 @@ class MigrationVerifier:
 
         return result
 
-    def verify_no_circular_imports(self) -> Dict:
+    def verify_no_circular_imports(self) -> dict:
         """
         验证无循环导入
 
@@ -236,7 +233,7 @@ class MigrationVerifier:
 
         return result
 
-    def verify_performance_benchmarks(self) -> Dict:
+    def verify_performance_benchmarks(self) -> dict:
         """
         验证性能基准
 
@@ -300,7 +297,7 @@ class MigrationVerifier:
 
         return result
 
-    def verify_documentation(self) -> Dict:
+    def verify_documentation(self) -> dict:
         """
         验证文档完整性
 
@@ -333,7 +330,7 @@ class MigrationVerifier:
 
         return result
 
-    def _print_check_result(self, check_name: str, result: Dict):
+    def _print_check_result(self, check_name: str, result: dict):
         """打印检查结果"""
         status_icon = {
             "success": "✅",

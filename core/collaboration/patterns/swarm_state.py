@@ -69,11 +69,11 @@ class AgentState:
     role: AgentRole = AgentRole.WORKER
     load: float = 0.0  # 负载（0-1）
     last_seen: datetime = field(default_factory=datetime.now)
-    capabilities: List[str] = field(default_factory=list)
+    capabilities: list[str] = field(default_factory=list)
     current_task: Optional[str] = None
     status: str = "active"  # active, inactive, error
-    neighbors: List[str] = field(default_factory=list)  # 邻居Agent列表
-    role_history: List[AgentRole] = field(default_factory=list)  # 角色变更历史
+    neighbors: list[str] = field(default_factory=list)  # 邻居Agent列表
+    role_history: list[AgentRole] = field(default_factory=list)  # 角色变更历史
 
     def is_available(self) -> bool:
         """检查Agent是否可用"""
@@ -95,11 +95,11 @@ class AgentState:
 class SharedKnowledge:
     """共享知识库"""
     knowledge_id: str
-    data: Dict[str, Any] = field(default_factory=dict)
+    data: dict[str, Any] = field(default_factory=dict)
     version: int = 1
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
-    contributors: Set[str] = field(default_factory=set)
+    contributors: set[str] = field(default_factory=set)
 
     def update(self, key: str, value: Any, agent_id: str) -> None:
         """更新知识"""
@@ -142,7 +142,7 @@ class SwarmMetrics:
                 setattr(self, key, value)
         self.last_update = datetime.now()
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "total_agents": self.total_agents,
@@ -166,15 +166,15 @@ class SwarmState:
     def __init__(self, swarm_id: str):
         """初始化Swarm状态"""
         self.swarm_id = swarm_id
-        self._agents: Dict[str, AgentState] = {}
-        self._knowledge: Dict[str, SharedKnowledge] = {}
+        self._agents: dict[str, AgentState] = {}
+        self._knowledge: dict[str, SharedKnowledge] = {}
         self._metrics = SwarmMetrics()
         self._health = SwarmHealth.HEALTHY
         self._lock = asyncio.Lock()
 
         logger.info(f"SwarmState {swarm_id} initialized")
 
-    async def add_agent(self, agent_id: str, capabilities: List[str] = None) -> None:
+    async def add_agent(self, agent_id: str, capabilities: list[str] = None) -> None:
         """添加Agent"""
         async with self._lock:
             if agent_id in self._agents:
@@ -207,7 +207,7 @@ class SwarmState:
         """获取Agent状态"""
         return self._agents.get(agent_id)
 
-    async def list_agents(self, role: Optional[AgentRole] = None) -> List[AgentState]:
+    async def list_agents(self, role: Optional[AgentRole] = None) -> list[AgentState]:
         """列出Agent"""
         async with self._lock:
             agents = list(self._agents.values())
@@ -231,7 +231,7 @@ class SwarmState:
                 agent.assign_role(role)
                 logger.info(f"Agent {agent_id} assigned role: {role}")
 
-    async def add_knowledge(self, knowledge_id: str, initial_data: Dict[str, Any] = None) -> SharedKnowledge:
+    async def add_knowledge(self, knowledge_id: str, initial_data: dict[str, Any] = None) -> SharedKnowledge:
         """添加共享知识"""
         async with self._lock:
             if knowledge_id in self._knowledge:
@@ -294,7 +294,7 @@ class SwarmState:
 
             return self._health
 
-    async def get_available_agents(self) -> List[AgentState]:
+    async def get_available_agents(self) -> list[AgentState]:
         """获取可用的Agent"""
         async with self._lock:
             return [agent for agent in self._agents.values() if agent.is_available()]

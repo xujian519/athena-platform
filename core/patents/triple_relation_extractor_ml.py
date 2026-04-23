@@ -117,8 +117,8 @@ class TripleRelationExtractorML:
         self,
         patent_text: str,
         technical_problem: str = "",
-        technical_features: list[str] | None = None,
-        technical_effects: list[str] | None = None,
+        technical_features: Optional[list[str]] = None,
+        technical_effects: Optional[list[str]] = None,
     ) -> list[TripleExtractionResult]:
         """
         提取问题-特征-效果三元关系

@@ -250,7 +250,7 @@ class ErrorClassifier:
         return category in ErrorClassifier.RETRYABLE_CATEGORIES
 
     @staticmethod
-    def get_retry_delay(attempt: int | None,
+    def get_retry_delay(attempt: Optional[int],
                         error: Exception | None = None) -> float:
         """
         获取重试延迟(指数退避)

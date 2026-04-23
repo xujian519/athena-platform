@@ -40,7 +40,7 @@ elif USE_CASE == "minimal":
     MEMORY_CONFIG = {k: int(v * 0.7) for k, v in MEMORY_CONFIG.items()}
     IDLE_TIMEOUTS = {k: max(v // 2, 60) for k, v in IDLE_TIMEOUTS.items() if k != "xiaonuo"}
 
-print(f"📊 当前配置:")
+print("📊 当前配置:")
 print(f"   使用模式: {USE_CASE}")
 print(f"   内存配置: {MEMORY_CONFIG}")
 print(f"   空闲超时: {IDLE_TIMEOUTS}")

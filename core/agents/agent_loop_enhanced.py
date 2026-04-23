@@ -57,7 +57,7 @@ class AgentResult:
     iterations: int = 0
     total_time: float = 0.0
     tool_executions: int = 0
-    error: str | None = None
+    error: Optional[str] = None
 
 
 class EnhancedAgentLoop:
@@ -145,7 +145,7 @@ class EnhancedAgentLoop:
     async def run(
         self,
         user_message: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> AgentResult:
         """执行 Agent Loop
 
@@ -262,7 +262,7 @@ class EnhancedAgentLoop:
     async def run_stream(
         self,
         user_message: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> AsyncIterator[StreamEvent]:
         """流式执行 Agent Loop
 

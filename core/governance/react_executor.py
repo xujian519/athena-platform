@@ -59,11 +59,11 @@ class ReActStep:
     step_type: ReActStepType
     content: str
     timestamp: datetime = field(default_factory=datetime.now)
-    tool_id: str | None = None
+    tool_id: Optional[str] = None
     parameters: dict[str, Any] = field(default_factory=dict)
     result: Any = None
     success: bool = True
-    error: str | None = None
+    error: Optional[str] = None
     thinking_time: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
@@ -126,7 +126,7 @@ class ReActExecutor:
     参考:ReAct: Synergizing Reasoning and Acting in Language Models
     """
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
 
         # 最大迭代次数
@@ -186,8 +186,8 @@ class ReActExecutor:
     async def execute(
         self,
         query: str,
-        context: dict[str, Any] | None = None,
-        max_iterations: int | None = None,
+        context: Optional[dict[str, Any]] = None,
+        max_iterations: Optional[int] = None,
     ) -> ReActResult:
         """
         执行ReAct循环

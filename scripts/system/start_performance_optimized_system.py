@@ -4,18 +4,17 @@
 集成响应缓存、模型预加载、上下文压缩等功能
 """
 
-import sys
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import time
 import argparse
+import sys
+import time
 from pathlib import Path
+from typing import Any
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from core.performance.performance_optimizer import get_optimizer, optimize_request
-from core.performance.model_preloader import auto_preload_on_startup
+from core.performance.performance_optimizer import get_optimizer
 
 
 def print_system_banner() -> Any:
@@ -193,7 +192,7 @@ def print_final_stats(optimizer) -> Any:
 
     if health['performance_summary']:
         summary = health['performance_summary']
-        print(f"\\n📊 性能摘要:")
+        print("\\n📊 性能摘要:")
         for key, value in summary.items():
             print(f"  {key}: {value}")
 

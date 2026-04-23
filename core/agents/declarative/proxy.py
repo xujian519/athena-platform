@@ -45,7 +45,7 @@ class DeclarativeAgent(BaseAgent):
        )
     """
 
-    def __init__(self, definition: AgentDefinition, config: dict[str, Any] | None = None):
+    def __init__(self, definition: AgentDefinition, config: Optional[dict[str, Any]] = None):
         # BaseAgent.__init__() 通过 self.name 访问 _agent_name，必须先设置
         self._agent_name = definition.name
         super().__init__(config)
@@ -96,7 +96,7 @@ class DeclarativeAgent(BaseAgent):
         class _DeclarativeAgentImpl(DeclarativeAgent):
             _class_definition = definition
 
-            def __init__(self, config: dict[str, Any] | None = None):
+            def __init__(self, config: Optional[dict[str, Any]] = None):
                 super().__init__(self._class_definition, config)
 
         _DeclarativeAgentImpl.__name__ = f"Declarative_{definition.name}"
@@ -250,7 +250,7 @@ class DeclarativeAgent(BaseAgent):
         self,
         tool_id: str,
         parameters: dict[str, Any],
-        context: dict[str, Any] | None = None
+        context: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """
         带权限检查的工具调用

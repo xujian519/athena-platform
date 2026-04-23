@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 协作协议演示脚本
 Collaboration Protocols Demo
@@ -8,23 +7,26 @@ Collaboration Protocols Demo
 """
 
 import asyncio
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import sys
-import os
-import time
 from datetime import datetime, timedelta
-import json
+from typing import Any
 
 # 添加项目路径
 sys.path.append('/Users/xujian/Athena工作平台')
 
-from core.protocols.collaboration_protocols import (
-    ProtocolManager, ProtocolType, ProtocolMessage,
-    create_protocol_session, start_protocol_session
-)
 from core.protocols.advanced_coordination import (
-    AdvancedCoordinationEngine, AgentCapability, TaskSpecification,
-    TaskPriority, ResourceType, register_agent, submit_task
+    AdvancedCoordinationEngine,
+    AgentCapability,
+    ResourceType,
+    TaskPriority,
+    TaskSpecification,
+    register_agent,
+    submit_task,
+)
+from core.protocols.collaboration_protocols import (
+    ProtocolManager,
+    ProtocolMessage,
+    start_protocol_session,
 )
 
 
@@ -308,13 +310,13 @@ async def demo_decision_protocol():
         consensus_ratio = agree_votes / total_votes if total_votes > 0 else 0
 
         print(f"   赞成票: {agree_votes}/{total_votes} ({consensus_ratio:.1%})")
-        print(f"   共识阈值: 70%")
+        print("   共识阈值: 70%")
         print(f"   决策结果: {'✅ 达成共识' if consensus_ratio >= 0.7 else '❌ 未达成共识'}")
 
         # 显示协议状态
         status = manager.get_protocol_status(protocol_id)
         if status:
-            print(f"\n📈 协议性能:")
+            print("\n📈 协议性能:")
             print(f"   协议ID: {status['protocol_id']}")
             print(f"   当前阶段: {status['current_phase']}")
             print(f"   状态: {status['status']}")
@@ -431,8 +433,8 @@ async def demo_protocol_integration():
         print("🔍 系统集成指标:")
         print(f"   活跃协议数: {len(all_status)}")
         print(f"   参与智能体数: {len(participants)}")
-        print(f"   协议间通信: ✅ 正常")
-        print(f"   集成状态: ✅ 稳定")
+        print("   协议间通信: ✅ 正常")
+        print("   集成状态: ✅ 稳定")
 
     except Exception as e:
         print(f"❌ 协议集成演示失败: {e}")

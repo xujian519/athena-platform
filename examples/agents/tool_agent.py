@@ -14,16 +14,16 @@ Tool Agent - 使用工具系统的Agent示例
 - core.tools.unified_registry
 """
 
-from typing import Any, Dict, List, Optional
 import logging
 from datetime import datetime
+from typing import Any
 
-from core.agents.xiaona.base_component import (
-    BaseXiaonaComponent,
+from core.framework.agents.xiaona.base_component import (
     AgentCapability,
     AgentExecutionContext,
     AgentExecutionResult,
     AgentStatus,
+    BaseXiaonaComponent,
 )
 
 logger = logging.getLogger(__name__)
@@ -85,7 +85,7 @@ class ToolAgent(BaseXiaonaComponent):
             logger.warning("工具注册表不可用")
 
         # 初始化工具列表
-        self.available_tools: List[str] = []
+        self.available_tools: list[str] = []
         if self.tools_available:
             self._refresh_tools()
 
@@ -155,7 +155,7 @@ class ToolAgent(BaseXiaonaComponent):
                 execution_time=(datetime.now() - start_time).total_seconds(),
             )
 
-    async def _use_tool(self, context: AgentExecutionContext) -> Dict[str, Any]:
+    async def _use_tool(self, context: AgentExecutionContext) -> dict[str, Any]:
         """使用工具"""
         if not self.tools_available or not self.tool_registry:
             return {
@@ -190,7 +190,7 @@ class ToolAgent(BaseXiaonaComponent):
             "result": tool_result,
         }
 
-    def _list_tools(self) -> Dict[str, Any]:
+    def _list_tools(self) -> dict[str, Any]:
         """列出工具"""
         self._refresh_tools()
 
@@ -211,7 +211,7 @@ class ToolAgent(BaseXiaonaComponent):
             "total": len(tool_info),
         }
 
-    async def _tool_chain(self, context: AgentExecutionContext) -> Dict[str, Any]:
+    async def _tool_chain(self, context: AgentExecutionContext) -> dict[str, Any]:
         """执行工具链"""
         if not self.tools_available:
             return {
@@ -287,7 +287,6 @@ def create_tool_agent(agent_id: str = "tool_001") -> ToolAgent:
 # 测试入口
 async def main():
     """测试入口"""
-    import asyncio
 
     # 配置日志
     logging.basicConfig(level=logging.INFO)

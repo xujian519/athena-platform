@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 测试JSON格式修复
 """
@@ -76,10 +75,10 @@ for i, json_format in enumerate(json_formats, 1):
     result = subprocess.run(cmd, capture_output=True, text=True)
 
     if result.returncode == 0:
-        print(f"  ✅ 成功")
+        print("  ✅ 成功")
         print(f"  📝 返回ID: {result.stdout.strip()[:50]}...")
     else:
-        print(f"  ❌ 失败")
+        print("  ❌ 失败")
         print(f"  🚨 错误: {result.stderr.strip()[:100]}...")
 
     print()

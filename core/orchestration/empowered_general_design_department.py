@@ -163,7 +163,7 @@ class EmpoweredGeneralDesignDepartment:
         task_type: TaskType = TaskType.GENERAL_QUERY,
         requester: str = "徐健",
         priority: Priority = Priority.MEDIUM,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> str:
         """
         提交任务到总体设计部

@@ -115,7 +115,7 @@ class TaskProfile:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     # 推理结果
-    selected_engine: str | None = None
+    selected_engine: Optional[str] = None
     confidence: float = 0.0
     reasoning_trace: list[dict] = field(default_factory=list)
 
@@ -137,7 +137,7 @@ class EngineRecommendation:
 
     # 新增: A/B测试支持
     is_ab_test: bool = False  # 是否是A/B测试
-    test_group: str | None = None  # 测试组别
+    test_group: Optional[str] = None  # 测试组别
     alternative_engines: list[str] = field(default_factory=list)  # 备选引擎
 
 
@@ -195,7 +195,7 @@ class ReasoningCache:
         content = f"{task_description}_{task_type}_{json.dumps(metadata or {}, sort_keys=True)}"
         return hashlib.md5(content.encode('utf-8'), usedforsecurity=False).hexdigest()
 
-    def get(self, cache_key: str) -> dict[str, Any] | None:
+    def get(self, cache_key: str) -> Optional[dict[str, Any]]:
         """获取缓存"""
         self.cache_stats["total_requests"] += 1
 

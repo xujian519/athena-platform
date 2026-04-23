@@ -217,8 +217,8 @@ class SafeToolExecutor:
         self,
         tool_id: str,
         parameters: dict[str, Any],
-        timeout: int | None = None,
-        context: dict[str, Any] | None = None
+        timeout: Optional[int] = None,
+        context: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """
         执行工具

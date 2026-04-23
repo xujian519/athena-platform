@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小娜专利命名系统演示
 Xiaona Patent Naming System Demo
@@ -15,19 +14,20 @@ Xiaona Patent Naming System Demo
 import asyncio
 import json
 import sys
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent
 sys.path.append(str(project_root))
 
 from core.cognition.xiaona_patent_naming_system import (
-    XiaonaPatentNamingSystem,
+    NamingStyle,
     PatentNamingRequest,
     PatentType,
-    NamingStyle
+    XiaonaPatentNamingSystem,
 )
+
 
 async def demo_naming_system():
     """演示专利命名系统"""
@@ -35,8 +35,8 @@ async def demo_naming_system():
     print("⚖️" + " "*25 + "小娜专利命名系统演示" + " "*25 + "⚖️")
     print("="*80)
     print(f"🕐 演示时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"👩‍⚖️ 操作者: 小娜·天秤女神 (专利法律专家)")
-    print(f"🎯 演示目标: 展示专利命名系统功能")
+    print("👩‍⚖️ 操作者: 小娜·天秤女神 (专利法律专家)")
+    print("🎯 演示目标: 展示专利命名系统功能")
     print("="*80)
 
     # 初始化命名系统
@@ -45,7 +45,7 @@ async def demo_naming_system():
 
     # 显示系统统计
     stats = naming_system.get_naming_statistics()
-    print(f"✅ 系统初始化完成")
+    print("✅ 系统初始化完成")
     print(f"📊 支持专利类型: {', '.join(stats['supported_types'])}")
     print(f"📚 技术词汇库: {stats['technical_vocabulary_count']} 个领域")
     print(f"📝 命名模板: {stats['naming_templates_count']} 个")

@@ -39,7 +39,7 @@ class DefenseSample:
 class InvalidationDefenseExtractor:
     """从无效决定书中提取成功辩护的提取器"""
 
-    def __init__(self, data_dir: str | None = None):
+    def __init__(self, data_dir: Optional[str] = None):
         """初始化提取器
 
         Args:
@@ -359,7 +359,7 @@ class InvalidationDefenseExtractor:
 
         return samples
 
-    def extract_from_directory(self, directory: str | None = None) -> list[DefenseSample]:
+    def extract_from_directory(self, directory: Optional[str] = None) -> list[DefenseSample]:
         """从目录中批量提取
 
         Args:
@@ -402,7 +402,7 @@ class InvalidationDefenseExtractor:
 
         return all_samples
 
-    def export_training_data(self, samples: list[DefenseSample], output_file: str | None = None) -> Any:
+    def export_training_data(self, samples: list[DefenseSample], output_file: Optional[str] = None) -> Any:
         """导出为训练数据格式
 
         Args:

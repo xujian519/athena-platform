@@ -6,19 +6,20 @@ Canvas/Host UI系统演示
 """
 
 import asyncio
-import sys
 import os
+import sys
 
 # 添加项目路径
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from datetime import datetime
+
 from core.canvas.canvas_host import (
     CanvasHost,
+    UIComponent,
     UIComponentFactory,
     UIComponentType,
-    UIComponent,
 )
-from datetime import datetime
 
 
 async def demo_basic_usage():
@@ -86,7 +87,7 @@ async def demo_basic_usage():
 
     # 获取统计信息
     stats = host.get_statistics()
-    print(f"\n📊 统计信息:")
+    print("\n📊 统计信息:")
     print(f"  - Canvas数量: {stats['total_canvases']}")
     print(f"  - 运行状态: {stats['running']}")
 

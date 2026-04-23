@@ -7,7 +7,6 @@
 作者: Athena平台团队
 创建时间: 2026-04-20
 """
-from __future__ import annotations
 
 import logging
 import statistics
@@ -251,3 +250,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

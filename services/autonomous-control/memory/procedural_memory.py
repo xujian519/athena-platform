@@ -26,11 +26,11 @@ class LegalProcedure:
     name: str
     category: str  # patent, trademark, copyright, contract
     description: str
-    steps: list[dict[str, Any]]
+    steps: list[dict[str, Any]
     required_documents: list[str]
     timeline: dict[str, str]
     costs: dict[str, float]
-    risks: list[dict[str, str]]
+    risks: list[dict[str, str]
     success_rate: float
     last_updated: str
     tags: list[str]

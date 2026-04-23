@@ -61,7 +61,7 @@ class NLPServiceAdapter:
 
         # 服务信息
         self._service_info: dict | None = None
-        self._vector_dimension: int | None = None
+        self._vector_dimension: Optional[int] = None
 
         logger.info(f"🔗 NLP服务适配器初始化: {self.service_url}")
 
@@ -115,7 +115,7 @@ class NLPServiceAdapter:
         return self._vector_dimension
 
     async def process_text(
-        self, text: str, user_id: str | None = None, session_id: str | None = None
+        self, text: str, user_id: Optional[str] = None, session_id: Optional[str] = None
     ) -> dict:
         """
         处理文本(调用NLP服务的/process接口)

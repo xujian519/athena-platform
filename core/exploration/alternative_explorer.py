@@ -59,10 +59,10 @@ class ComparisonResult:
 
     task_id: str
     alternatives: list[AlternativeSolution] = field(default_factory=list)
-    best_overall: str | None = None
-    fastest: str | None = None
-    most_reliable: str | None = None
-    most_innovative: str | None = None
+    best_overall: Optional[str] = None
+    fastest: Optional[str] = None
+    most_reliable: Optional[str] = None
+    most_innovative: Optional[str] = None
     comparison_matrix: dict[str, dict[str, float]] = field(default_factory=dict)
     recommendations: list[str] = field(default_factory=list)
 
@@ -474,7 +474,7 @@ class AlternativeExplorer:
 
     async def _determine_best_overall(
         self, alternatives: list[AlternativeSolution]
-    ) -> str | None:
+    ) -> Optional[str]:
         """确定总体最优方案"""
         if not alternatives:
             return None
@@ -485,7 +485,7 @@ class AlternativeExplorer:
 
         return max(alternatives, key=overall_score).solution_id
 
-    async def _determine_fastest(self, alternatives: list[AlternativeSolution]) -> str | None:
+    async def _determine_fastest(self, alternatives: list[AlternativeSolution]) -> Optional[str]:
         """确定最快方案"""
         if not alternatives:
             return None
@@ -494,7 +494,7 @@ class AlternativeExplorer:
 
     async def _determine_most_reliable(
         self, alternatives: list[AlternativeSolution]
-    ) -> str | None:
+    ) -> Optional[str]:
         """确定最可靠方案"""
         if not alternatives:
             return None
@@ -507,7 +507,7 @@ class AlternativeExplorer:
 
     async def _determine_most_innovative(
         self, alternatives: list[AlternativeSolution]
-    ) -> str | None:
+    ) -> Optional[str]:
         """确定最创新方案"""
         if not alternatives:
             return None

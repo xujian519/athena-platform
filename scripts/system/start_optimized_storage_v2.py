@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 优化后的存储系统启动脚本 (版本 2.0)
 基于监控报告参数调优的改进版本
 """
 
 import asyncio
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import sys
-import os
 import importlib.util
+import sys
+from typing import Any
 
 # 添加项目路径
 sys.path.append('/Users/xujian/Athena工作平台')
@@ -27,7 +25,7 @@ async def start_optimized_storage_v2():
     try:
         # 1. 加载优化配置
         config_path = "/Users/xujian/Athena工作平台/config/storage_optimization.json"
-        with open(config_path, 'r') as f:
+        with open(config_path) as f:
             config = json.load(f)
 
         print("✅ 优化配置已加载")
@@ -35,7 +33,7 @@ async def start_optimized_storage_v2():
         # 2. 初始化智能路由器 (带调优参数)
         smart_storage_router = load_component_from_file('smart_storage_router',
             '/Users/xujian/Athena工作平台/storage-system/smart_storage_router.py')
-        router = smart_storage_router.SmartStorageRouter()
+        smart_storage_router.SmartStorageRouter()
 
         # 应用路由参数调优
         if 'router_config' in config:
@@ -46,7 +44,7 @@ async def start_optimized_storage_v2():
         parallel_storage_executor = load_component_from_file('parallel_storage_executor',
             '/Users/xujian/Athena工作平台/storage-system/parallel_storage_executor.py')
         max_workers = config.get('storage_optimization', {}).get('max_parallel_workers', 6)
-        executor = parallel_storage_executor.ParallelStorageExecutor(max_workers=max_workers)
+        parallel_storage_executor.ParallelStorageExecutor(max_workers=max_workers)
         print(f"✅ 并行执行器已初始化 ({max_workers} 个工作线程)")
 
         # 4. 初始化性能监控器 (优化监控间隔)

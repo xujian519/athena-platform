@@ -20,7 +20,7 @@ from pathlib import Path
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.agents.xiaona_with_legal_world import (
+from core.framework.agents.xiaona_with_legal_world import (
     LegalWorldIntegrationMode,
     XiaonaWithLegalWorld,
 )

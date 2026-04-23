@@ -188,8 +188,8 @@ class SmartOfficeActionResponder:
 
     def _build_dynamic_context(
         self,
-        office_action: dict[str, Any],        patent_info: dict[str, Any] | None = None,
-        knowledge_graph: dict[str, Any] | None = None,
+        office_action: dict[str, Any],        patent_info: Optional[dict[str, Any]] = None,
+        knowledge_graph: Optional[dict[str, Any]] = None,
     ) -> str:
         """
         构建动态提示词生成器的输入上下文
@@ -268,9 +268,9 @@ class SmartOfficeActionResponder:
 
     async def _generate_dynamic_prompt(
         self,
-        office_action: dict[str, Any],        patent_info: dict[str, Any] | None = None,
-        knowledge_graph: dict[str, Any] | None = None,
-    ) -> dict[str, Any] | None:
+        office_action: dict[str, Any],        patent_info: Optional[dict[str, Any]] = None,
+        knowledge_graph: Optional[dict[str, Any]] = None,
+    ) -> Optional[dict[str, Any]]:
         """
         生成动态提示词
 
@@ -356,8 +356,8 @@ class SmartOfficeActionResponder:
     async def create_response_plan(
         self,
         office_action: dict[str, Any],  # 改为接收字典
-        patent_info: dict[str, Any] | None = None,
-        knowledge_graph: dict[str, Any] | None = None,  # 新增：知识图谱数据
+        patent_info: Optional[dict[str, Any]] = None,
+        knowledge_graph: Optional[dict[str, Any]] = None,  # 新增：知识图谱数据
     ) -> ResponsePlan:
         """
         创建答复方案
@@ -517,7 +517,7 @@ class SmartOfficeActionResponder:
         self,
         office_action: OfficeAction,
         strategy: ResponseStrategy,
-        patent_info: dict[str, Any] | None = None,
+        patent_info: Optional[dict[str, Any]] = None,
     ) -> list[str]:
         """生成争辩论点"""
         arguments = []
@@ -543,7 +543,7 @@ class SmartOfficeActionResponder:
         self,
         office_action: OfficeAction,
         strategy: ResponseStrategy,
-        patent_info: dict[str, Any] | None = None,
+        patent_info: Optional[dict[str, Any]] = None,
     ) -> list[str]:
         """生成修改建议"""
         modifications = []
@@ -1155,7 +1155,7 @@ class SmartOfficeActionResponder:
         self,
         plan_id: str,
         dynamic_prompt_data: dict[str, Any],        actual_outcome: str,
-        user_feedback: str | None = None,
+        user_feedback: Optional[str] = None,
     ) -> None:
         """
         P2: 记录反馈用于学习优化

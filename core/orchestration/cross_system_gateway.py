@@ -60,7 +60,7 @@ class EndpointConfig:
     retry_count: int = 3  # 重试次数
     circuit_breaker_threshold: int = 5  # 熔断阈值
     headers: dict[str, str] = field(default_factory=dict)
-    health_check_url: str | None = None
+    health_check_url: Optional[str] = None
 
 
 @dataclass
@@ -78,7 +78,7 @@ class RequestRecord:
     status_code: int
     response_size: int
     success: bool
-    error: str | None = None
+    error: Optional[str] = None
 
 
 class CircuitBreaker:
@@ -303,8 +303,8 @@ class CrossSystemGateway:
         method: str,
         path: str,
         headers: dict[str, str] | None = None,
-        params: dict[str, Any] | None = None,
-        json_data: dict[str, Any] | None = None,
+        params: Optional[dict[str, Any]] = None,
+        json_data: Optional[dict[str, Any]] = None,
         data: str | bytes | None = None,
     ) -> dict[str, Any]:
         """发送HTTP请求"""
@@ -538,7 +538,7 @@ class CrossSystemGateway:
             index = int(len(durations) * 0.95)
             self.metrics["p95_response_time"] = durations[min(index, len(durations) - 1)]
 
-    async def health_check(self, endpoint_id: str | None = None) -> dict[str, Any]:
+    async def health_check(self, endpoint_id: Optional[str] = None) -> dict[str, Any]:
         """健康检查"""
         if endpoint_id:
             # 检查特定端点

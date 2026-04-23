@@ -113,7 +113,7 @@ class PerformanceMonitor:
 class AthenaAgent(BaseAgent):
     """Athena Agent - 智慧女神"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__(AgentType.ATHENA, config)
         self.reasoning_depth = 0.9
         self.leadership_level = 0.95
@@ -761,7 +761,7 @@ class AthenaAgent(BaseAgent):
         content: str,
         importance: float = 0.8,
         emotional_weight: float = 0.7,
-        tags: list[str] | None = None,
+        tags: Optional[list[str]] = None,
     ) -> bool:
         """
         记录智慧记忆
@@ -854,7 +854,7 @@ class AthenaAgent(BaseAgent):
             tags=["学习", "知识", topic],
         )
 
-    async def remember_work(self, task: str, result: str | None = None, importance: float = 0.6) -> bool:
+    async def remember_work(self, task: str, result: Optional[str] = None, importance: float = 0.6) -> bool:
         """
         记录工作内容
 

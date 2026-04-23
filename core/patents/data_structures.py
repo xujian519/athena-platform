@@ -70,8 +70,8 @@ class TechnicalFeature:
     id: str
     description: str
     feature_type: FeatureType
-    component: str | None = None
-    function: str | None = None
+    component: Optional[str] = None
+    function: Optional[str] = None
     equivalent_features: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
@@ -173,7 +173,7 @@ class FeatureComparison:
     feature_description: str
     disclosure_status: DisclosureStatus
     disclosed_by: list[str]
-    disclosure_location: str | None = None
+    disclosure_location: Optional[str] = None
     notes: str = ""
 
     def to_dict(self) -> dict:
@@ -198,8 +198,8 @@ class Claim:
     claim_number: int
     claim_type: ClaimType
     content: str
-    depends_on: int | None = None
-    inventive_point_id: str | None = None
+    depends_on: Optional[int] = None
+    inventive_point_id: Optional[str] = None
 
     def to_dict(self) -> dict:
         return {

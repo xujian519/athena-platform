@@ -206,7 +206,6 @@ class PerformanceBenchmark:
 
         try:
             import numpy as np
-
             from core.vector.qdrant_adapter import QdrantVectorAdapter
 
             adapter = QdrantVectorAdapter()

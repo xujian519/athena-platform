@@ -43,7 +43,7 @@ except ImportError:
 class RealPatentSearchAdapter(BaseSearchTool):
     """真实专利搜索适配器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化真实专利搜索适配器
 
@@ -408,7 +408,7 @@ from ..registry.tool_registry import register_to_registry
 
 @register_to_registry(category="real_patent_search", auto_init=False)
 def create_real_patent_search_adapter(
-    config: dict[str, Any] | None = None,
+    config: Optional[dict[str, Any]] = None,
 ) -> RealPatentSearchAdapter:
     """创建真实专利搜索适配器的工厂函数"""
     return RealPatentSearchAdapter(config)
@@ -416,7 +416,7 @@ def create_real_patent_search_adapter(
 
 # 便捷函数
 async def create_real_patent_search(
-    config: dict[str, Any] | None = None,
+    config: Optional[dict[str, Any]] = None,
 ) -> RealPatentSearchAdapter:
     """
     创建并初始化真实专利搜索适配器

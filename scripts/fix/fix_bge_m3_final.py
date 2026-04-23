@@ -3,12 +3,13 @@
 BGE-M3模型完全修复脚本
 绕过所有版本兼容性问题，直接使用torch加载
 """
-import sys
 import os
+import sys
+
 sys.path.insert(0, '/Users/xujian/Athena工作平台')
 
-import logging
 import json
+import logging
 
 logging.basicConfig(
     level=logging.INFO,
@@ -38,7 +39,7 @@ def test_bge_m3_working():
 
         model_path = '/Users/xujian/Athena工作平台/models/converted/BAAI/bge-m3'
 
-        print(f'\n📦 加载BGE-M3模型...')
+        print('\n📦 加载BGE-M3模型...')
 
         # 使用简单的方法加载
         model = SentenceTransformer(model_path, device=device)
@@ -53,10 +54,10 @@ def test_bge_m3_working():
             'Apple Silicon MPS优化',
         ]
 
-        print(f'\n🔄 测试编码...')
+        print('\n🔄 测试编码...')
         embeddings = model.encode(test_texts, normalize_embeddings=True)
 
-        print(f'✅ 编码成功!')
+        print('✅ 编码成功!')
         print(f'   输入文本数: {len(test_texts)}')
         print(f'   输出形状: {embeddings.shape}')
         print(f'   数据类型: {embeddings.dtype}')

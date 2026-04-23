@@ -33,9 +33,9 @@ class KnowledgeQuery:
 
     query_text: str
     query_type: str = "similarity"  # similarity, relationship, hybrid
-    technology_field: str | None = None
-    patent_type: str | None = None
-    analysis_type: str | None = None
+    technology_field: Optional[str] = None
+    patent_type: Optional[str] = None
+    analysis_type: Optional[str] = None
     limit: int = 10
     filters: dict[str, Any] = field(default_factory=dict)
 
@@ -558,7 +558,7 @@ class KnowledgeConnector:
 
 # 便捷函数
 async def search_patent_knowledge(
-    query_text: str | None = None, technology_field: str | None = None, limit: int = 5
+    query_text: Optional[str] = None, technology_field: Optional[str] = None, limit: int = 5
 ) -> KnowledgeResult:
     """便捷的专利知识搜索函数"""
     connector = KnowledgeConnector()

@@ -54,7 +54,7 @@ class AgentMessage:
     context: dict[str, Any] = field(default_factory=dict)
     metadata: dict[str, Any] = field(default_factory=dict)
     timestamp: datetime = field(default_factory=datetime.now)
-    reply_to: str | None = None  # 回复的消息ID
+    reply_to: Optional[str] = None  # 回复的消息ID
 
 
 @dataclass
@@ -65,7 +65,7 @@ class AgentResponse:
     success: bool  # 是否成功
     content: str  # 响应内容
     data: dict[str, Any] = field(default_factory=dict)
-    error: str | None = None  # 错误信息
+    error: Optional[str] = None  # 错误信息
     agent_status: AgentStatus = AgentStatus.ONLINE
     processing_time: float = 0.0
     timestamp: datetime = field(default_factory=datetime.now)
@@ -82,8 +82,8 @@ class AgentInfo:
     description: str  # 描述
     version: str  # 版本号
     capabilities: list[str]  # 能力列表
-    endpoint: str | None = None  # API端点
-    port: int | None = None  # 端口号
+    endpoint: Optional[str] = None  # API端点
+    port: Optional[int] = None  # 端口号
     protocol: str = "http"  # 协议类型
     status: AgentStatus = AgentStatus.OFFLINE
     last_health_check: datetime | None = None
@@ -148,7 +148,7 @@ class AgentClient:
         self.timeout = 30.0  # 默认超时
 
     async def send_message(
-        self, content: str, context: dict[str, Any] | None = None
+        self, content: str, context: Optional[dict[str, Any]] = None
     ) -> AgentResponse:
         """发送消息到智能体
 

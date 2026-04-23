@@ -32,8 +32,8 @@ class SearchResult:
         snippet: str,
         source: str,
         relevance_score: float = 0.0,
-        published_date: str | None = None,
-        metadata: dict[str, Any] | None = None,
+        published_date: Optional[str] = None,
+        metadata: Optional[dict[str, Any]] = None,
     ):
         self.title = title
         self.url = url
@@ -58,7 +58,7 @@ class SearchResult:
 class SecureUnifiedWebSearchManager:
     """安全版统一Web搜索管理器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化搜索管理器
 
@@ -125,7 +125,7 @@ class SecureUnifiedWebSearchManager:
     async def search(
         self,
         query: str,
-        engines: list[str] | None = None,
+        engines: Optional[list[str]] = None,
         max_results: int = 10,
         parallel: bool = True,
     ) -> dict[str, Any]:
@@ -306,7 +306,7 @@ class SecureUnifiedWebSearchManager:
 class BaseSearchEngine:
     """搜索引擎基类"""
 
-    def __init__(self, api_keys: list[str] | None = None):
+    def __init__(self, api_keys: Optional[list[str]] = None):
         self.api_keys = api_keys or []
         self.current_key_index = 0
         self.last_error_time = None
@@ -320,7 +320,7 @@ class BaseSearchEngine:
         """是否不需要API密钥"""
         return False
 
-    def get_next_api_key(self) -> str | None:
+    def get_next_api_key(self) -> Optional[str]:
         """获取下一个API密钥(轮换)"""
         if not self.api_keys:
             return None
@@ -534,7 +534,7 @@ class BraveSearchEngine(BaseSearchEngine):
 
 # 便捷函数
 async def create_secure_search_manager(
-    config: dict[str, Any] | None = None,
+    config: Optional[dict[str, Any]] = None,
 ) -> SecureUnifiedWebSearchManager:
     """创建安全的搜索管理器"""
     return SecureUnifiedWebSearchManager(config)

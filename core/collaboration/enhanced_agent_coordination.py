@@ -137,7 +137,7 @@ class CollaborationMessage:
     priority: MessagePriority = MessagePriority.NORMAL
     timestamp: datetime = field(default_factory=datetime.now)
     requires_response: bool = False
-    response_to: str | None = None
+    response_to: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -217,7 +217,7 @@ class EnhancedAgentCoordinator:
         mode: CollaborationMode,
         participants: list[str],
         coordinator_id: str,
-        workflow: list[str] | None = None,
+        workflow: Optional[list[str]] = None,
     ) -> str:
         """创建协作会话"""
         try:
@@ -396,7 +396,7 @@ class EnhancedAgentCoordinator:
             logger.error(f"分配任务失败: {e}")
             return False
 
-    async def _find_best_agent_for_task(self, task: CollaborationTask) -> str | None:
+    async def _find_best_agent_for_task(self, task: CollaborationTask) -> Optional[str]:
         """找到最适合处理任务的智能体"""
         best_agent = None
         best_score = 0.0
@@ -418,7 +418,7 @@ class EnhancedAgentCoordinator:
 
         return best_agent
 
-    async def _find_agent_for_stage(self, stage: str) -> str | None:
+    async def _find_agent_for_stage(self, stage: str) -> Optional[str]:
         """找到处理特定阶段的智能体"""
         stage_keywords = {
             "analysis": ["analyst", "小娜"],
@@ -545,7 +545,7 @@ class EnhancedAgentCoordinator:
             logger.error(f"处理响应失败: {e}")
             return False
 
-    async def get_session_status(self, session_id: str) -> dict[str, Any] | None:
+    async def get_session_status(self, session_id: str) -> Optional[dict[str, Any]]:
         """获取会话状态"""
         session = self.sessions.get(session_id)
         if not session:

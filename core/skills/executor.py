@@ -26,8 +26,8 @@ class ExecutionContext:
     skill_name: str
     parameters: dict[str, Any] = field(default_factory=dict)
     metadata: dict[str, Any] = field(default_factory=dict)
-    user_id: str | None = None
-    session_id: str | None = None
+    user_id: Optional[str] = None
+    session_id: Optional[str] = None
 
     def get(self, key: str, default: Any = None) -> Any:
         """获取上下文数据"""
@@ -206,7 +206,7 @@ class SkillExecutor:
 
     def get_execution_history(
         self,
-        skill_name: str | None = None,
+        skill_name: Optional[str] = None,
         limit: int = 100
     ) -> list[dict[str, Any]]:
         """获取执行历史
@@ -267,7 +267,7 @@ class SkillComposer:
     async def parallel(
         self,
         skill_names: list[str],
-        parameters_list: list[dict[str, Any | None]] = None
+        parameters_list: Optional[list[dict[str, Any]] = None
     ) -> list[SkillResult]:
         """并行执行多个技能
 
@@ -292,7 +292,7 @@ class SkillComposer:
         self,
         condition: str,
         skill_if_true: str,
-        skill_if_false: str | None = None,
+        skill_if_false: Optional[str] = None,
         **parameters
     ) -> SkillResult:
         """条件执行

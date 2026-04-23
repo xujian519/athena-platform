@@ -22,7 +22,9 @@ async def test_human_in_loop_decision():
 
     try:
         # 导入模型
-        from core.agent.human_in_the_loop_decision_model import HumanInTheLoopDecisionModel
+        from core.framework.agents.human_in_the_loop_decision_model import (
+            HumanInTheLoopDecisionModel,
+        )
 
         # 创建决策模型（模拟环境）
         decision_model = HumanInTheLoopDecisionModel(

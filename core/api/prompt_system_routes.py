@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 """
 动态提示词系统API路由
 Dynamic Prompt System API Routes
@@ -7,7 +8,10 @@ Dynamic Prompt System API Routes
 提供优化后的动态提示词系统的API端点
 """
 
+import asyncio
 import logging
+import time
+import uuid
 from datetime import datetime
 from typing import Any
 
@@ -30,6 +34,21 @@ router = APIRouter(prefix="/api/v1/prompt-system", tags=["动态提示词系统"
 _config = get_config()
 _db_config = get_database_config()
 _llm_config = get_llm_config()
+
+# 灰度配置（延迟初始化，支持热重载）
+_rollout_config = None
+
+
+def _get_rollout_config():
+    """获取灰度配置单例，支持热重载。"""
+    global _rollout_config
+    if _rollout_config is None:
+        from core.legal_prompt_fusion.rollout_config import FusionRolloutConfig
+
+        _rollout_config = FusionRolloutConfig.from_file("config/prompt_fusion_rollout.yaml")
+    else:
+        _rollout_config.maybe_reload()
+    return _rollout_config
 
 
 # ============================================================================
@@ -442,7 +461,96 @@ async def generate_prompt(request: PromptGenerateRequest):
         # 4. 准备变量(用于缓存键和变量替换)
         all_variables = {**context.extracted_variables, **(request.additional_context or {})}
 
-        # 5. 检查提示词缓存(P1优化)
+        # 4.5 变量治理（校验 + 清洗）
+        try:
+            from core.prompt_engine.sanitizer import PromptSanitizer
+            from core.prompt_engine.schema import PromptSchema, VariableSpec, VariableType
+            from core.prompt_engine.validators import VariableValidator
+
+            sanitizer = PromptSanitizer()
+            validator = VariableValidator()
+
+            # 构造 schema（从规则的 variables 字段或独立存储）
+            # 当前阶段：从 rule.variables 推断 schema，后续可迁移到独立 schema 存储
+            schema_vars = []
+            if hasattr(rule, "variables") and rule.variables:
+                for var_name, var_info in rule.variables.items():
+                    if isinstance(var_info, dict):
+                        schema_vars.append(VariableSpec(
+                            name=var_name,
+                            type=VariableType(var_info.get("type", "string")),
+                            required=var_info.get("required", True),
+                            source=var_info.get("source", ""),
+                            default=var_info.get("default"),
+                            max_length=var_info.get("max_length"),
+                        ))
+                    else:
+                        # 简单字符串标记，默认 required=True
+                        schema_vars.append(VariableSpec(name=var_name, required=True))
+            else:
+                # 无 schema 时，从模板中提取占位符作为 required 变量
+                import re
+                placeholders = set(
+                    re.findall(r"\{\{?\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}?\}", rule.system_prompt_template)
+                ) | set(
+                    re.findall(r"\{\{?\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}?\}", rule.user_prompt_template)
+                )
+                for ph in placeholders:
+                    if ph not in ("__wiki_revision", "__fusion_template_version"):
+                        schema_vars.append(VariableSpec(name=ph, required=True))
+
+            schema = PromptSchema(
+                rule_id=rule.rule_id,
+                template_version=getattr(rule, "template_version", "1.0.0"),
+                variables=schema_vars,
+            )
+
+            # 校验
+            validation = validator.validate(schema, all_variables)
+            if not validation.valid:
+                logger.warning(f"变量校验失败: {validation.errors}")
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail={
+                        "error": "MISSING_VARIABLES",
+                        "missing": validation.errors,
+                        "message": f"Required variables missing: {', '.join(validation.errors)}",
+                    },
+                )
+
+            # 清洗
+            sanitized_vars, risks = sanitizer.sanitize_variables(all_variables, schema=schema)
+            high_risks = [r for r in risks if r.level in ("high", "critical")]
+            if high_risks:
+                logger.warning(f"检测到高风险注入: {[r.pattern_matched for r in high_risks]}")
+            all_variables = sanitized_vars
+
+        except HTTPException:
+            raise
+        except Exception as e:
+            # 变量治理模块异常时不阻断主链路（避免影响已有功能）
+            logger.warning(f"变量治理模块异常，跳过校验: {e}")
+
+        # 5. 判断融合开关 + 初始化指标
+        request_id = uuid.uuid4().hex
+        rollout = _get_rollout_config()
+        user_id = (request.additional_context or {}).get("user_id", "")
+        fusion_enabled = rollout.should_enable(
+            domain=context.domain.value,
+            task_type=context.task_type.value,
+            user_id=user_id,
+        )
+
+        from core.legal_prompt_fusion.metrics import FusionMetrics, _send_metrics_async
+
+        fusion_metrics = FusionMetrics(
+            request_id=request_id,
+            domain=context.domain.value,
+            task_type=context.task_type.value,
+            fusion_enabled=fusion_enabled,
+        )
+
+        # 6. 检查提示词缓存(P1优化)
         from core.capabilities.prompt_template_cache import get_prompt_cache
 
         prompt_cache = get_prompt_cache()
@@ -456,6 +564,9 @@ async def generate_prompt(request: PromptGenerateRequest):
         if cached_prompts:
             # 缓存命中
             system_prompt, user_prompt = cached_prompts
+            fusion_metrics.cache_hit = True
+            # 异步发送基线指标（不阻塞）
+            asyncio.create_task(_send_metrics_async(fusion_metrics))
             processing_time = (datetime.now() - start_time).total_seconds() * 1000
             logger.info(f"✅ 提示词缓存命中: {processing_time:.0f}ms")
 
@@ -470,10 +581,50 @@ async def generate_prompt(request: PromptGenerateRequest):
                 cached=True,
             )
 
-        # 6. 缓存未命中,生成提示词
-        system_prompt, user_prompt = rule.substitute_variables(all_variables)
+        # 缓存未命中
+        fusion_metrics.cache_hit = False
 
-        # 7. 保存到缓存
+        # 7. 生成提示词（融合注入点）
+        if fusion_enabled:
+            from core.legal_prompt_fusion.models import PromptGenerationRequest
+            from core.legal_prompt_fusion.prompt_context_builder import LegalPromptContextBuilder
+
+            fusion_start = time.monotonic()
+            try:
+                builder = LegalPromptContextBuilder()
+                fusion_request = PromptGenerationRequest(
+                    user_query=request.user_input,
+                    domain=context.domain.value,
+                    scenario=context.task_type.value,
+                    additional_context=request.additional_context or {},
+                )
+                # 融合 builder 是同步 IO 密集型操作，放入线程池避免阻塞事件循环
+                fusion_result = await asyncio.to_thread(builder.build, fusion_request)
+                fusion_metrics.latency_ms = round((time.monotonic() - fusion_start) * 1000, 3)
+                fusion_metrics.evidence_count = len(fusion_result.context.evidence)
+                fusion_metrics.evidence_by_source = {
+                    "postgres": len(fusion_result.context.legal_articles),
+                    "neo4j": len(fusion_result.context.graph_relations),
+                    "wiki": len(fusion_result.context.wiki_background),
+                }
+                fusion_metrics.wiki_revision = fusion_result.context.freshness.get("wiki_revision", "unknown")
+                fusion_metrics.template_version = fusion_result.template_version
+                system_prompt = fusion_result.system_prompt
+                user_prompt = fusion_result.user_prompt
+            except Exception as e:
+                fusion_metrics.latency_ms = round((time.monotonic() - fusion_start) * 1000, 3)
+                fusion_metrics.error = str(e)
+                logger.warning(f"⚠️ 法律提示词融合失败，回退到规则变量替换: {e}")
+                # 融合失败时回退到原逻辑
+                system_prompt, user_prompt = rule.substitute_variables(all_variables)
+        else:
+            # 融合关闭，使用原逻辑
+            system_prompt, user_prompt = rule.substitute_variables(all_variables)
+
+        # 异步发送指标（不阻塞主链路）
+        asyncio.create_task(_send_metrics_async(fusion_metrics))
+
+        # 8. 保存到缓存
         prompt_cache.set(
             domain=context.domain.value,
             task_type=context.task_type.value,
@@ -733,7 +884,7 @@ async def get_config_status():
         # 尝试获取全局配置管理器
         try:
             config_manager = get_global_config_manager()
-            status = {
+            config_status = {
                 "config_path": config_manager.config_path,
                 "version": config_manager._config_version,
                 "hot_reload_enabled": config_manager.enable_hot_reload,
@@ -743,10 +894,10 @@ async def get_config_status():
             }
         except Exception:
             # 全局配置管理器未初始化
-            status = {"status": "not_initialized", "message": "全局配置管理器未初始化"}
+            config_status = {"status": "not_initialized", "message": "全局配置管理器未初始化"}
 
         logger.info("📋 获取配置状态")
-        return status
+        return config_status
 
     except Exception as e:
         logger.error(f"❌ 获取配置状态失败: {e}")

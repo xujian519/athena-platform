@@ -39,7 +39,7 @@ class DatabaseConfig:
     # Redis配置
     redis_host: str = "localhost"
     redis_port: int = 6379
-    redis_password: str | None = None
+    redis_password: Optional[str] = None
     redis_db: int = 0
 
     def __post_init__(self):
@@ -84,7 +84,7 @@ class LLMConfig:
     """LLM配置"""
 
     # ZhipuAI配置
-    zhipuai_api_key: str | None = None
+    zhipuai_api_key: Optional[str] = None
     zhipuai_model: str = "glm-4-flash"
     zhipuai_temperature: float = 0.1
     zhipuai_max_tokens: int = 500
@@ -105,7 +105,7 @@ class QdrantConfig:
     """Qdrant向量数据库配置"""
 
     url: str = "http://localhost:6333"
-    api_key: str | None = None
+    api_key: Optional[str] = None
 
     @classmethod
     def from_env(cls) -> "QdrantConfig":

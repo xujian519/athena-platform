@@ -32,7 +32,7 @@ class SwarmAgent:
         agent_id: str,
         capabilities: list[str],
         initial_role: SwarmRole = SwarmRole.WORKER,
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ):
         """
         初始化Swarm Agent
@@ -215,7 +215,7 @@ class SwarmAgent:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "SwarmAgent":
+    def from_dict(cls, data: dict[str, Any]) -> SwarmAgent:
         """
         从字典创建SwarmAgent
 

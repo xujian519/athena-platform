@@ -49,7 +49,7 @@ class AgentConfig:
     name: str
     description: str
     capabilities: list[AgentCapability]
-    system_prompt: str | None = None
+    system_prompt: Optional[str] = None
     temperature: float = 0.7
     max_tokens: int = 2000
     enable_memory: bool = True
@@ -61,7 +61,7 @@ class AgentRequest:
 
     message: str
     agent_type: AgentType = AgentType.XIAONUO
-    context: dict[str, Any] | None = None
+    context: Optional[dict[str, Any]] = None
     user_id: str = "user"
     enable_reasoning: bool = False
 
@@ -73,7 +73,7 @@ class AgentResponse:
     content: str
     agent_type: AgentType
     agent_name: str
-    reasoning: str | None = None
+    reasoning: Optional[str] = None
     confidence: float = 0.0
     memory_used: bool = False
     processing_time: float = 0.0

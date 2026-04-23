@@ -124,7 +124,7 @@ class BatchPatternExtractor:
 
         return json_files
 
-    def load_invalid_decision(self, file_path: Path) -> dict[str, Any] | None:
+    def load_invalid_decision(self, file_path: Path) -> Optional[dict[str, Any]]:
         """
         加载无效决定JSON文件
 
@@ -277,7 +277,7 @@ class BatchPatternExtractor:
 
         return "其他"
 
-    def run(self, max_files: int | None = None) -> None:
+    def run(self, max_files: Optional[int] = None) -> None:
         """
         运行批处理提取流程
 

@@ -72,7 +72,7 @@ class PriorityTask:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     # 公平性字段
-    user_id: str | None = None  # 用户ID(用于公平调度)
+    user_id: Optional[str] = None  # 用户ID(用于公平调度)
     queue_time: datetime = field(default_factory=datetime.now)
 
     # 动态优先级字段

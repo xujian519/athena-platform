@@ -4,11 +4,11 @@ NoveltyAnalyzerProxy LLM集成测试
 测试新颖性分析智能体的LLM增强功能。
 """
 
-import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
-import json
 
-from core.agents.xiaona.novelty_analyzer_proxy import NoveltyAnalyzerProxy
+import pytest
+
+from core.framework.agents.xiaona.novelty_analyzer_proxy import NoveltyAnalyzerProxy
 
 
 class TestNoveltyAnalyzerLLMIntegration:

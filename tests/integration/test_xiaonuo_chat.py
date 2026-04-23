@@ -10,12 +10,12 @@ import requests
 
 # 添加项目路径
 sys.path.append('/Users/xujian/Athena工作平台')
-from core.memory.agent_identity_memory import (
+from core.framework.memory.agent_identity_memory import (
     check_name,
     get_agent_identity,
     get_lyra_learning_record,
 )
-from core.memory.lyra_prompt_memory import get_lyra_identity
+from core.framework.memory.lyra_prompt_memory import get_lyra_identity
 
 
 def test_xiaonuo_responses():

@@ -82,7 +82,7 @@ class DeploymentResult:
     duration: float = 0.0
 
     # 错误信息
-    error: str | None = None
+    error: Optional[str] = None
     rollback_performed: bool = False
 
 

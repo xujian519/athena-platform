@@ -247,7 +247,7 @@ class InputValidator:
 
         return entropy
 
-    def _check_character_distribution(self, data: str) -> str | None:
+    def _check_character_distribution(self, data: str) -> Optional[str]:
         """检查字符分布是否异常"""
         if len(data) < 50:
             return None

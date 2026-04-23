@@ -106,7 +106,7 @@ class RedisCacheManager:
         self,
         prefix: str,
         identifier: str,
-        params: dict[str, Any] | None = None
+        params: Optional[dict[str, Any]] = None
     ) -> str:
         """
         生成缓存键
@@ -161,7 +161,7 @@ class RedisCacheManager:
         self,
         key: str,
         value: Any,
-        ttl: int | None = None
+        ttl: Optional[int] = None
     ) -> bool:
         """
         设置缓存值
@@ -240,7 +240,7 @@ class RedisCacheManager:
         image_path: str,
         language: str,
         preprocess: bool
-    ) -> dict[str, Any] | None:
+    ) -> Optional[dict[str, Any]]:
         """
         获取OCR结果缓存
 
@@ -293,8 +293,8 @@ class RedisCacheManager:
         self,
         image_path: str,
         operation: str,
-        parameters: dict[str, Any] | None = None
-    ) -> dict[str, Any] | None:
+        parameters: Optional[dict[str, Any]] = None
+    ) -> Optional[dict[str, Any]]:
         """
         获取图像特征缓存
 
@@ -314,7 +314,7 @@ class RedisCacheManager:
         image_path: str,
         operation: str,
         features: dict[str, Any],
-        parameters: dict[str, Any] | None = None,
+        parameters: Optional[dict[str, Any]] = None,
         ttl: int = 7200,  # 2小时
     ) -> bool:
         """
@@ -411,7 +411,7 @@ class RedisCacheManager:
     async def set_many(
         self,
         mapping: dict[str, Any],
-        ttl: int | None = None
+        ttl: Optional[int] = None
     ) -> int:
         """
         批量设置缓存

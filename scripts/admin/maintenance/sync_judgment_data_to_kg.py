@@ -16,7 +16,6 @@ Sync Judgment Data from Vector DB to Knowledge Graph
 import logging
 import sys
 from datetime import datetime
-from typing import Any, Dict, List
 
 from neo4j import GraphDatabase
 from qdrant_client import QdrantClient
@@ -51,7 +50,7 @@ class JudgmentDataSyncer:
         """关闭连接"""
         self.neo4j_driver.close()
 
-    def get_vector_judgment_data(self) -> List[dict]:
+    def get_vector_judgment_data(self) -> list[dict]:
         """从Qdrant获取所有司法案例数据"""
         logger.info("📥 从Qdrant读取司法案例数据...")
 
@@ -97,7 +96,7 @@ class JudgmentDataSyncer:
         logger.info(f"✅ Neo4j中有 {len(judgment_ids):,} 个司法案例")
         return judgment_ids
 
-    def sync_judgment_nodes(self, vector_data: List[dict], neo4j_ids: set):
+    def sync_judgment_nodes(self, vector_data: list[dict], neo4j_ids: set):
         """同步司法案例节点
 
         将Qdrant中存在但Neo4j中不存在的案例同步到Neo4j

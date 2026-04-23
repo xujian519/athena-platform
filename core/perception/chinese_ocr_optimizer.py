@@ -125,7 +125,7 @@ class ChineseOCROptimizer:
             "辨": "辩",
         }
 
-    async def preprocess_image(self, image_path: str, output_path: str | None = None) -> str:
+    async def preprocess_image(self, image_path: str, output_path: Optional[str] = None) -> str:
         """
         图像预处理
 
@@ -248,7 +248,7 @@ class ChineseOCROptimizer:
         return OCRResult(text="", confidence=0.0, engine=engine_name)
 
     async def optimize_chinese_text(
-        self, image_path: str, raw_result: str | None = None
+        self, image_path: str, raw_result: Optional[str] = None
     ) -> OCRResult:
         """
         优化中文OCR识别
@@ -337,7 +337,7 @@ class GUITextExtractor:
         }
 
     async def extract_text_from_screenshot(
-        self, screenshot_path: str, focus_areas: list[str] | None = None
+        self, screenshot_path: str, focus_areas: Optional[list[str]] = None
     ) -> dict[str, str]:
         """
         从截图提取文字

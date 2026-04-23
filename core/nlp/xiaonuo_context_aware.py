@@ -127,7 +127,7 @@ class XiaonuoContextAwareSystem:
         self,
         user_input: str,
         intent: str,
-        entities: list[str] | None = None,
+        entities: Optional[list[str]] = None,
         response: str = "",
         confidence: float = 0.0,
     ) -> None:
@@ -525,7 +525,7 @@ class XiaonuoContextAwareSystem:
 
         logger.info(f"💾 上下文模型已保存: {model_path}")
 
-    def load_context_models(self, model_path: str | None = None) -> Any | None:
+    def load_context_models(self, model_path: Optional[str] = None) -> Any | None:
         """加载上下文模型"""
         if model_path is None:
             model_path = os.path.join(self.config.model_dir, "latest_context_models.joblib")

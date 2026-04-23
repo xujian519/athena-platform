@@ -8,9 +8,9 @@ import asyncio
 import pytest
 
 from core.utils.task_manager import (
-    TaskStatus,
     TaskInfo,
     TaskManager,
+    TaskStatus,
     get_task_manager,
     shutdown_all_managers,
 )

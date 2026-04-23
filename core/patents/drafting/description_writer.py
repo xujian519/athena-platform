@@ -212,7 +212,7 @@ class DescriptionWriter:
         self,
         understanding: InventionUnderstanding,
         claims: List[str],
-        prior_art: Optional[List[Dict[str, Any]]] = None,
+        prior_art: Optional[List[Dict[str, Any]], None,
         embodiments: Optional[List[Dict[str, Any]]] = None
     ) -> Dict[str, str]:
         """

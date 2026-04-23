@@ -79,8 +79,8 @@ class QualityMetric:
     name: str
     value: float
     unit: str
-    threshold_min: float | None = None
-    threshold_max: float | None = None
+    threshold_min: Optional[float] = None
+    threshold_max: Optional[float] = None
     quality_level: QualityLevel = QualityLevel.ACCEPTABLE
 
 
@@ -215,7 +215,7 @@ class XiaonuoFunctionCallingQualityAssurance:
         tool_name: str,
         function: Callable,
         parameters: dict[str, Any],        validation_level: ValidationLevel = ValidationLevel.STANDARD,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> QualityReport:
         """
         验证函数调用质量
@@ -342,7 +342,7 @@ class XiaonuoFunctionCallingQualityAssurance:
         rule: ValidationRule,
         tool_name: str,
         function: Callable,
-        parameters: dict[str, Any],        context: dict[str, Any] | None = None,
+        parameters: dict[str, Any],        context: Optional[dict[str, Any]] = None,
     ) -> bool:
         """执行验证规则"""
         try:
@@ -359,7 +359,7 @@ class XiaonuoFunctionCallingQualityAssurance:
         self,
         tool_name: str,
         function: Callable,
-        parameters: dict[str, Any],        context: dict[str, Any] | None = None,
+        parameters: dict[str, Any],        context: Optional[dict[str, Any]] = None,
     ) -> bool:
         """验证参数结构"""
         if not isinstance(parameters, dict):
@@ -392,7 +392,7 @@ class XiaonuoFunctionCallingQualityAssurance:
         self,
         tool_name: str,
         function: Callable,
-        parameters: dict[str, Any],        context: dict[str, Any] | None = None,
+        parameters: dict[str, Any],        context: Optional[dict[str, Any]] = None,
     ) -> bool:
         """验证参数类型"""
         try:
@@ -428,7 +428,7 @@ class XiaonuoFunctionCallingQualityAssurance:
         self,
         tool_name: str,
         function: Callable,
-        parameters: dict[str, Any],        context: dict[str, Any] | None = None,
+        parameters: dict[str, Any],        context: Optional[dict[str, Any]] = None,
     ) -> bool:
         """验证参数值"""
         # 检查空值
@@ -454,7 +454,7 @@ class XiaonuoFunctionCallingQualityAssurance:
         self,
         tool_name: str,
         function: Callable,
-        parameters: dict[str, Any],        context: dict[str, Any] | None = None,
+        parameters: dict[str, Any],        context: Optional[dict[str, Any]] = None,
     ) -> bool:
         """安全性验证"""
         # 检查危险模式
@@ -487,7 +487,7 @@ class XiaonuoFunctionCallingQualityAssurance:
         self,
         tool_name: str,
         function: Callable,
-        parameters: dict[str, Any],        context: dict[str, Any] | None = None,
+        parameters: dict[str, Any],        context: Optional[dict[str, Any]] = None,
     ) -> bool:
         """验证资源限制"""
         # 检查递归深度(如果有)
@@ -507,7 +507,7 @@ class XiaonuoFunctionCallingQualityAssurance:
         self,
         tool_name: str,
         function: Callable,
-        parameters: dict[str, Any],        context: dict[str, Any] | None = None,
+        parameters: dict[str, Any],        context: Optional[dict[str, Any]] = None,
     ) -> bool:
         """验证依赖关系"""
         try:
@@ -602,7 +602,7 @@ class XiaonuoFunctionCallingQualityAssurance:
         self,
         tool_name: str,
         parameters: dict[str, Any],        validation_results: dict[str, bool],
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> RiskAssessment:
         """风险评估"""
         risks = []

@@ -38,7 +38,7 @@ class AgentIdentityManager:
                 },
             }
 
-    def get_agent_identity(self, agent_key: str) -> dict[str, Any] | None:
+    def get_agent_identity(self, agent_key: str) -> Optional[dict[str, Any]]:
         """获取智能体身份信息"""
         return self.identity_config.get("agents_identity", {}).get(agent_key)
 

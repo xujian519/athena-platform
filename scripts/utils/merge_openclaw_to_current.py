@@ -6,6 +6,7 @@
 
 import logging
 import time
+
 from neo4j import GraphDatabase
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -220,10 +221,10 @@ class OpenClawDataMerger:
                                 result = target_session.run("""
                                     MATCH (s:OpenClawNode), (t:OpenClawNode)
                                     WHERE s.id = $source_id AND t.id = $target_id
-                                    CREATE (s)-[r:%s]->(t)
+                                    CREATE (s)-[r:{}]->(t)
                                     SET r += $props
                                     RETURN count(r) as count
-                                """ % item['rel_type'],
+                                """.format(item['rel_type']),
                                 source_id=item['source_id'],
                                 target_id=item['target_id'],
                                 props=item['props']
@@ -232,7 +233,7 @@ class OpenClawDataMerger:
                                 if result.single()['count'] > 0:
                                     created += 1
 
-                            except Exception as e:
+                            except Exception:
                                 skipped_count += 1
 
                         imported_count += created

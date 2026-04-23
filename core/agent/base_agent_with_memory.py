@@ -348,7 +348,7 @@ class MemoryEnabledAgent(ABC):
 
         return session_id
 
-    async def end_conversation_session(self, conversation_id: str, summary: str | None = None):
+    async def end_conversation_session(self, conversation_id: str, summary: Optional[str] = None):
         """结束对话会话"""
         if self.memory_system and conversation_id:
             await self.memory_system.end_conversation(conversation_id, summary)

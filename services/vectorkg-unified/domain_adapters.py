@@ -214,7 +214,7 @@ class PatentDomainAdapter(DomainAdapter):
         }
         return formats.get(intent, "## 分析报告\n### 要点分析\n### 结论建议")
 
-    def _get_suggested_actions(self, intent: str) -> list[dict[str, str]]:
+    def _get_suggested_actions(self, intent: str) -> list[dict[str, str]:
         """获取建议操作"""
         actions = {
             "novelty": [
@@ -246,7 +246,7 @@ class PatentDomainAdapter(DomainAdapter):
         return round(confidence, 2)
 
     def _extract_rules_by_keywords(self, text: str, keywords: list[str],
-                                  rule_type: str) -> list[dict[str, Any]]:
+                                  rule_type: str) -> list[dict[str, Any]:
         """根据关键词提取规则"""
         # 这里应该调用知识图谱进行规则提取
         # 简化实现，返回模拟规则

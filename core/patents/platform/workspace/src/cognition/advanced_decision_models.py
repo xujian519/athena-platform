@@ -101,7 +101,7 @@ class RandomDecisionModel(DecisionModel):
 class RandomForestDecisionModel(DecisionModel):
     """随机森林决策模型"""
 
-    def __init__(self, n_estimators: int = 100, max_depth: int | None = None):
+    def __init__(self, n_estimators: int = 100, max_depth: Optional[int] = None):
         super().__init__('RandomForestDecisionModel')
         self.n_estimators = n_estimators
         self.max_depth = max_depth
@@ -451,7 +451,7 @@ class NeuralNetworkDecisionModel(DecisionModel):
 class EnsembleVotingModel(DecisionModel):
     """集成投票模型"""
 
-    def __init__(self, models: Optional[List[DecisionModel] = None, voting: str = 'soft'):
+    def __init__(self, models: Optional[List[DecisionModel]] = None, voting: str = 'soft'):
         super().__init__('EnsembleVotingModel')
         self.models = models or []
         self.voting = voting  # 'soft' or 'hard'

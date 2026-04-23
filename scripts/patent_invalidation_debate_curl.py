@@ -11,10 +11,9 @@
 日期：2026-04-23
 """
 
-import json
 import asyncio
+import json
 import subprocess
-from typing import Dict, List
 from datetime import datetime
 from pathlib import Path
 
@@ -29,7 +28,7 @@ class CurlPatentDebateAgent:
         self.api_url = "http://localhost:8009/v1/chat/completions"
         self.api_key = "xj781102@"
         self.model = "Qwen3.5-27B-4bit"
-        self.debate_history: List[Dict] = []
+        self.debate_history: list[dict] = []
 
     def _call_omlx(self, user_message: str) -> str:
         """使用curl调用oMLX"""
@@ -115,9 +114,9 @@ class CurlPatentDebateManager:
 
     def __init__(self):
         print("🔧 本地模型配置：")
-        print(f"   API地址：http://localhost:8009/v1")
-        print(f"   模型：Qwen3.5-27B-4bit")
-        print(f"   使用方式：subprocess + curl")
+        print("   API地址：http://localhost:8009/v1")
+        print("   模型：Qwen3.5-27B-4bit")
+        print("   使用方式：subprocess + curl")
 
         # 创建系统提示词
         self.requester_prompt = self._create_requester_prompt()
@@ -136,7 +135,7 @@ class CurlPatentDebateManager:
             self.patentee_prompt
         )
 
-        self.debate_log: List[Dict] = []
+        self.debate_log: list[dict] = []
 
     def _create_requester_prompt(self) -> str:
         return """你是济南力邦（无效请求人）的专利律师，对专利201921401279.9提出无效宣告。
@@ -162,12 +161,12 @@ class CurlPatentDebateManager:
 
 任务：证明权利要求1-10具备创造性。强调技术路线差异，指出对方论证错误。"""
 
-    async def conduct_debate(self, rounds: int = 5) -> Dict:
+    async def conduct_debate(self, rounds: int = 5) -> dict:
         """进行多轮辩论"""
 
         print(f"\n{'='*80}")
-        print(f"专利无效宣告本地模型辩论开始")
-        print(f"专利号：201921401279.9")
+        print("专利无效宣告本地模型辩论开始")
+        print("专利号：201921401279.9")
         print(f"辩论轮次：{rounds}轮")
         print(f"{'='*80}\n")
 
@@ -230,8 +229,8 @@ class CurlPatentDebateManager:
 
         return {
             "total_rounds": rounds,
-            "requester_count": len([x for x in self.debate_log if "请求人" in x["speaker"]]),
-            "patentee_count": len([x for x in self.debate_log if "专利权人" in x["speaker"]]),
+            "requester_count": len([x for x in self.debate_log if "请求人" in x["speaker"]),
+            "patentee_count": len([x for x in self.debate_log if "专利权人" in x["speaker"]),
             "debate_log": self.debate_log
         }
 
@@ -246,9 +245,9 @@ class CurlPatentDebateManager:
         md_file = output_dir / f"专利无效宣告辩论_curl_{timestamp}.md"
         with open(md_file, 'w', encoding='utf-8') as f:
             f.write("# 专利无效宣告辩论记录（使用curl）\n\n")
-            f.write(f"**专利号**：201921401279.9\n")
+            f.write("**专利号**：201921401279.9\n")
             f.write(f"**辩论时间**：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-            f.write(f"**使用模型**：Qwen3.5-27B-4bit（本地oMLX）\n")
+            f.write("**使用模型**：Qwen3.5-27B-4bit（本地oMLX）\n")
             f.write(f"**辩论轮次**：{len(self.debate_log)}轮\n\n")
             f.write("---\n\n")
 

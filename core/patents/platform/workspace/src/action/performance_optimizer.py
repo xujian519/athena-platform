@@ -76,7 +76,7 @@ class TaskPerformanceData:
     cache_hits: int = 0
     cache_misses: int = 0
     success: bool = True
-    error_message: str | None = None
+    error_message: Optional[str] = None
     resource_allocation: Dict[str, float] = field(default_factory=dict)
 
 
@@ -249,7 +249,7 @@ class IntelligentCache:
 
             return value
 
-    def put(self, key: str, value: Any, ttl: int | None = None) -> None:
+    def put(self, key: str, value: Any, ttl: Optional[int] = None) -> None:
         """设置缓存值"""
         with self.lock:
             expiry_time = datetime.now() + timedelta(seconds=ttl or self.default_ttl)
@@ -312,7 +312,7 @@ class LoadBalancer:
         self.node_weights[node_id] = weight
         self.logger.info(f"注册执行节点: {node_id}")
 
-    def select_best_node(self, task_requirements: Dict[str, Any]) -> str | None:
+    def select_best_node(self, task_requirements: Dict[str, Any]) -> Optional[str]:
         """选择最佳执行节点"""
         available_nodes = [
             node_id for node_id, node_info in self.nodes.items()
@@ -701,7 +701,7 @@ class ResourceMonitor:
             self.alerts.extend(alerts)
             self.logger.warning(f"触发 {len(alerts)} 个资源告警")
 
-    def get_current_metrics(self) -> Dict[str, Any | None]:
+    def get_current_metrics(self) -> Dict[str, Any] | None:
         """获取当前指标"""
         return self.resource_history[-1] if self.resource_history else None
 

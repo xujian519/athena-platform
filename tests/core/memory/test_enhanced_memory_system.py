@@ -15,14 +15,14 @@ EnhancedMemorySystem单元测试
 - 边界情况
 """
 
-import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import patch
 
-from core.memory.enhanced_memory_system import (
+import pytest
+
+from core.framework.memory.enhanced_memory_system import (
     EnhancedMemorySystem,
     MemoryType,
 )
-
 
 # ==================== Mock适配器 ====================
 

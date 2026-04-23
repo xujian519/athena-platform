@@ -126,7 +126,7 @@ class DeepSearchIntegration:
 
         return env
 
-    async def start_server(self, port: int = 3000, secret: str | None = None) -> bool:
+    async def start_server(self, port: int = 3000, secret: Optional[str] = None) -> bool:
         """
         启动DeepResearch服务器
 
@@ -416,7 +416,7 @@ class DeepSearchIntegration:
 class DeepSearchEngine(BaseSearchEngine):
     """DeepResearch搜索引擎适配器"""
 
-    def __init__(self, api_keys: list[str] | None = None, config: dict[str, Any] | None = None):
+    def __init__(self, api_keys: Optional[list[str]] = None, config: Optional[dict[str, Any]] = None):
         """初始化DeepResearch搜索引擎"""
         super().__init__(api_keys or ["integrated"], config)
         self.deepsearch = DeepSearchIntegration()

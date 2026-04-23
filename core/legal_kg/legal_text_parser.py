@@ -38,7 +38,7 @@ class LawArticle:
     content: str
     law_id: str
     level: LawLevel
-    parent_id: str | None = None
+    parent_id: Optional[str] = None
     order: int = 0
 
 

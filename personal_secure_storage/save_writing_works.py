@@ -131,13 +131,13 @@ def save_writing_works() -> None:
 ## 📊 作品分类
 
 ### 📝 书信创作 ({len(writing_categories['letters']['works'])}篇)
-{chr(10).join([f"- **{work['title']}** ({work['date']}){chr(10)}  类型: {work['type']}{chr(10)}  风格: {work.get('style', '现代')}{chr(10)}  特点: {', '.join(work['key_features'][:2])}" for work in writing_categories['letters']['works']])}
+{chr(10).join([f"- **{work['title']}** ({work['date']}){chr(10)}  类型: {work['type']}{chr(10)}  风格: {work.get('style', '现代')}{chr(10)}  特点: {', '.join(work['key_features'][:2])}" for work in writing_categories['letters']['works'])}
 
 ### 📝 创意写作 ({len(writing_categories['creative_writing']['works'])}篇)
-{chr(10).join([f"- **{work['title']}** ({work['date']}){chr(10)}  类型: {work['type']}{chr(10)}  特点: {', '.join(work['key_features'][:2])}" for work in writing_categories['creative_writing']['works']])}
+{chr(10).join([f"- **{work['title']}** ({work['date']}){chr(10)}  类型: {work['type']}{chr(10)}  特点: {', '.join(work['key_features'][:2])}" for work in writing_categories['creative_writing']['works'])}
 
 ### 📝 专业写作 ({len(writing_categories['professional']['works'])}篇)
-{chr(10).join([f"- **{work['title']}** ({work['date']}){chr(10)}  类型: {work['type']}{chr(10)}  特点: {', '.join(work['key_features'][:2])}" for work in writing_categories['professional']['works']])}
+{chr(10).join([f"- **{work['title']}** ({work['date']}){chr(10)}  类型: {work['type']}{chr(10)}  特点: {', '.join(work['key_features'][:2])}" for work in writing_categories['professional']['works'])}
 
 ## 🌟 创作特色
 

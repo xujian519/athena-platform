@@ -80,7 +80,7 @@ class ModelConfig:
 
     # 元数据
     description: str = ""  # 模型描述
-    tags: list[str] | None = None  # 标签
+    tags: Optional[list[str]] = None  # 标签
     created_at: str = None  # 创建时间
 
     def __post_init__(self):
@@ -93,7 +93,7 @@ class ModelConfig:
 class ModelRegistry:
     """模型注册中心"""
 
-    def __init__(self, registry_path: str | None = None):
+    def __init__(self, registry_path: Optional[str] = None):
         """
         初始化模型注册中心
 

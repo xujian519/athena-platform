@@ -99,7 +99,7 @@ class BaseEnsembleModel:
         )
 
     async def predict(
-        self, input_data: dict[str, Any], context: dict[str, Any] | None = None
+        self, input_data: dict[str, Any], context: Optional[dict[str, Any]] = None
     ) -> ModelPrediction:
         """
         模型预测(子类实现)
@@ -170,7 +170,7 @@ class MultiModelEnsemble:
     async def predict(
         self,
         input_data: dict[str, Any],        method: EnsembleMethod | None = None,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> EnsembleResult:
         """
         集成预测

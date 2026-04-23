@@ -120,7 +120,7 @@ class UnifiedGLMClient:
         system_prompt: Optional[str] = None,
         temperature: float = 0.3,
         max_tokens: int = 2500
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         生成文本（包含使用统计）
 
@@ -161,7 +161,7 @@ class UnifiedGLMClient:
 
     async def _call_api(
         self,
-        messages: List[Dict],
+        messages: list[dict],
         temperature: float,
         max_tokens: int
     ) -> str:
@@ -171,7 +171,7 @@ class UnifiedGLMClient:
 
     async def _call_api_with_usage(
         self,
-        messages: List[Dict],
+        messages: list[dict],
         temperature: float,
         max_tokens: int
     ):
@@ -284,9 +284,9 @@ async def deep_analyze(
 
 
 async def batch_screening(
-    prompts: List[str],
+    prompts: list[str],
     api_key: Optional[str] = None
-) -> List[str]:
+) -> list[str]:
     """
     批量筛选（使用Air模型）
 

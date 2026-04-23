@@ -355,7 +355,7 @@ class IntelligentScheduler:
         # 这里需要从队列或其他地方获取任务,简化实现
         return None
 
-    def get_task_status(self, task_id: str) -> dict[str, Any] | None:
+    def get_task_status(self, task_id: str) -> Optional[dict[str, Any]]:
         """获取任务状态
 
         Args:

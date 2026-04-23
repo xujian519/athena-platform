@@ -111,7 +111,7 @@ class OutputContract:
     required_fields: set[str] = field(default_factory=set)  # 必需输出字段
     optional_fields: set[str] = field(default_factory=set)  # 可选输出字段
     field_types: dict[str, str] = field(default_factory=dict)  # 字段类型
-    output_format: str | None = None  # 输出格式 (json/xml/text)
+    output_format: Optional[str] = None  # 输出格式 (json/xml/text)
     min_quality_score: float = 0.0  # 最低质量分数
     post_conditions: list[str] = field(default_factory=list)  # 后置条件描述
 
@@ -192,8 +192,8 @@ class AtomicTask:
     status: AtomicTaskStatus = AtomicTaskStatus.PENDING
     started_at: datetime | None = None
     completed_at: datetime | None = None
-    result: dict[str, Any] | None = None
-    error: str | None = None
+    result: Optional[dict[str, Any]] = None
+    error: Optional[str] = None
 
     def is_ready(self, completed_tasks: set[str]) -> bool:
         """检查任务是否准备好执行（所有依赖已完成）"""
@@ -288,7 +288,7 @@ class AtomicTaskDecomposer:
     def decompose_step(
         self,
         step: ExecutionStep,
-        parent_task_id: str | None = None,
+        parent_task_id: Optional[str] = None,
     ) -> list[AtomicTask]:
         """
         将ExecutionStep分解为原子任务
@@ -313,7 +313,7 @@ class AtomicTaskDecomposer:
     def _create_generic_atomic_task(
         self,
         step: ExecutionStep,
-        parent_task_id: str | None = None,
+        parent_task_id: Optional[str] = None,
     ) -> AtomicTask:
         """创建通用原子任务"""
         task_id = f"{parent_task_id or 'task'}_{step.id}" if parent_task_id else step.id
@@ -336,7 +336,7 @@ class AtomicTaskDecomposer:
         self,
         step: ExecutionStep,
         template: dict[str, Any],
-        parent_task_id: str | None = None,
+        parent_task_id: Optional[str] = None,
     ) -> AtomicTask:
         """创建基于模板的原子任务"""
         task_id = f"{parent_task_id or 'task'}_{step.id}" if parent_task_id else step.id
@@ -356,7 +356,7 @@ class AtomicTaskDecomposer:
     def decompose_complex_step(
         self,
         step: ExecutionStep,
-        parent_task_id: str | None = None,
+        parent_task_id: Optional[str] = None,
     ) -> list[AtomicTask]:
         """
         分解复杂步骤为多个原子任务
@@ -428,7 +428,7 @@ class AtomicTaskExecutor:
     async def execute(
         self,
         task: AtomicTask,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> AtomicTask:
         """
         执行原子任务
@@ -508,7 +508,7 @@ class AtomicTaskExecutor:
     def _resolve_parameters(
         self,
         parameters: dict[str, Any],
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> dict[str, Any]:
         """
         解析参数（处理引用和动态值）

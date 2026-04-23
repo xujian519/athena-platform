@@ -33,10 +33,10 @@ class ServiceMetrics:
     def __init__(self):
         """初始化指标收集器"""
         # 指标历史数据 - 存储带时间戳的度量数据
-        self.response_times: dict[str, list[dict[str, Any]]] = defaultdict(list)  # type: ignore[assignment]
-        self.request_counts: dict[str, list[dict[str, Any]]] = defaultdict(list)  # type: ignore[assignment]
-        self.error_rates: dict[str, list[dict[str, Any]]] = defaultdict(list)  # type: ignore[assignment]
-        self.health_history: dict[str, list[dict[str, Any]]] = defaultdict(list)  # type: ignore[assignment]
+        self.response_times: dict[str, list[dict[str, Any]], defaultdict(list)  # type: ignore[assignment]
+        self.request_counts: dict[str, list[dict[str, Any]], defaultdict(list)  # type: ignore[assignment]
+        self.error_rates: dict[str, list[dict[str, Any]], defaultdict(list)  # type: ignore[assignment]
+        self.health_history: dict[str, list[dict[str, Any]], defaultdict(list)  # type: ignore[assignment]
 
         # 时间窗口
         self.time_window = timedelta(minutes=10)

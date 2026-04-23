@@ -61,8 +61,8 @@ class UnifiedAgentCapability:
     # 元数据
     metadata: dict[str, Any] = field(default_factory=dict)  # 其他元数据
     tags: set[str] = field(default_factory=set)  # 标签
-    created_at: str | None = None  # 创建时间
-    updated_at: str | None = None  # 更新时间
+    created_at: Optional[str] = None  # 创建时间
+    updated_at: Optional[str] = None  # 更新时间
 
     def __post_init__(self):
         """初始化后处理"""
@@ -104,7 +104,7 @@ class UnifiedAgentCapability:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "UnifiedAgentCapability":
+    def from_dict(cls, data: dict[str, Any]) -> UnifiedAgentCapability:
         """从字典创建"""
         # 处理estimated_duration
         if isinstance(data.get("estimated_duration"), str):
@@ -367,7 +367,7 @@ class CapabilityRegistry:
         return [cap for cap in self.capabilities.values() if cap.type == cap_type]
 
     def find_available(
-        self, requirements: dict[str, Any] | None = None
+        self, requirements: Optional[dict[str, Any]] = None
     ) -> list[UnifiedAgentCapability]:
         """查找可用能力"""
         available = [cap for cap in self.capabilities.values() if cap.is_available()]

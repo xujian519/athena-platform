@@ -4,14 +4,11 @@
 专注于核心功能测试。
 """
 
+
 import pytest
-from typing import Any
-from core.agents.xiaona.base_component import (
+
+from core.framework.agents.xiaona.base_component import (
     BaseXiaonaComponent,
-    AgentCapability,
-    AgentExecutionContext,
-    AgentExecutionResult,
-    AgentStatus,
 )
 
 
@@ -106,7 +103,7 @@ class InterfaceComplianceChecker:
 @pytest.mark.asyncio
 async def test_retriever_agent_compliance():
     """测试RetrieverAgent是否符合接口标准"""
-    from core.agents.xiaona.retriever_agent import RetrieverAgent
+    from core.framework.agents.xiaona.retriever_agent import RetrieverAgent
 
     # 创建Agent实例
     agent = RetrieverAgent(agent_id="test_retriever")
@@ -140,7 +137,7 @@ async def test_retriever_agent_compliance():
 @pytest.mark.asyncio
 async def test_analyzer_agent_compliance():
     """测试AnalyzerAgent是否符合接口标准"""
-    from core.agents.xiaona.analyzer_agent import AnalyzerAgent
+    from core.framework.agents.xiaona.analyzer_agent import AnalyzerAgent
 
     # 创建Agent实例
     agent = AnalyzerAgent(agent_id="test_analyzer")
@@ -163,7 +160,7 @@ async def test_analyzer_agent_compliance():
 @pytest.mark.asyncio
 async def test_writer_agent_compliance():
     """测试WriterAgent是否符合接口标准"""
-    from core.agents.xiaona.writer_agent import WriterAgent
+    from core.framework.agents.xiaona.writer_agent import WriterAgent
 
     # 创建Agent实例
     agent = WriterAgent(agent_id="test_writer")
@@ -185,7 +182,7 @@ async def test_writer_agent_compliance():
 
 def test_all_agents_compliance():
     """测试所有Agent是否符合接口标准"""
-    from core.agents.xiaona import retriever_agent, analyzer_agent, writer_agent
+    from core.framework.agents.xiaona import analyzer_agent, retriever_agent, writer_agent
 
     agents_to_test = [
         ("RetrieverAgent", retriever_agent.RetrieverAgent),
@@ -206,7 +203,7 @@ def test_all_agents_compliance():
             results = checker.check_agent_instance(agent)
         except Exception as e:
             print(f"❌ 创建实例失败: {e}")
-            assert False, f"{agent_name} 创建实例失败: {e}"
+            raise AssertionError(f"{agent_name} 创建实例失败: {e}")
 
         # 统计结果
         total_passed = len(results["passed"])

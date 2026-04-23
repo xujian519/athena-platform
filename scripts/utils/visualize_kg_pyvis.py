@@ -4,9 +4,9 @@
 """
 
 import logging
+
 from neo4j import GraphDatabase
 from pyvis.network import Network
-import pandas as pd
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -97,7 +97,7 @@ def visualize_sample(query, output_file, title="知识图谱"):
 
                     elif hasattr(value, 'type') and hasattr(value, 'start') and hasattr(value, 'end'):
                         # 关系
-                        edge_id = str(value.element_id)
+                        str(value.element_id)
                         source_id = str(value.start_node.element_id)
                         target_id = str(value.end_node.element_id)
 

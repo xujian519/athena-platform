@@ -8,7 +8,6 @@
 创建时间: 2026-04-20
 """
 
-import asyncio
 import sys
 from pathlib import Path
 
@@ -17,9 +16,9 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 sys.path.insert(0, '.')
 
-import psycopg2
-from datetime import datetime
 import logging
+
+import psycopg2
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -294,10 +293,10 @@ def verify_fulltext_search():
             results = cursor.fetchall()
             print(f"\n查询: '{query}'")
             if results:
-                for rank, (patent_id, title, relevance) in enumerate(results[:3], 1):
+                for rank, (patent_id, title, _relevance) in enumerate(results[:3], 1):
                     print(f"  {rank}. [{patent_id}] {title}")
             else:
-                print(f"  未找到结果")
+                print("  未找到结果")
 
         conn.commit()
 
@@ -314,7 +313,7 @@ def main():
     print("📝 添加专利测试数据")
     print("=" * 80)
 
-    print(f"\n数据库配置:")
+    print("\n数据库配置:")
     print(f"  主机: {DB_CONFIG['host']}:{DB_CONFIG['port']}")
     print(f"  数据库: {DB_CONFIG['database']}")
     print(f"  用户: {DB_CONFIG['user']}")
@@ -337,10 +336,10 @@ def main():
     print("✅ 数据添加完成！")
     print("=" * 80)
 
-    print(f"\n📊 数据库统计:")
+    print("\n📊 数据库统计:")
     print(f"  总专利数: {total_count}")
-    print(f"  涵盖技术: AI, 深度学习, 自动驾驶, 区块链, 量子计算等")
-    print(f"  申请人: 北京大学, 百度, 阿里巴巴, 腾讯, 科大讯飞等")
+    print("  涵盖技术: AI, 深度学习, 自动驾驶, 区块链, 量子计算等")
+    print("  申请人: 北京大学, 百度, 阿里巴巴, 腾讯, 科大讯飞等")
     print()
 
     print("🚀 下一步: 运行检索测试")

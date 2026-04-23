@@ -42,7 +42,7 @@ class PersistenceManager:
     BACKEND_REDIS = "redis"
     BACKEND_FILE = "file"
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化持久化管理器
 
@@ -152,7 +152,7 @@ class PersistenceManager:
         return await self.backend.get_message(message_id)
 
     async def update_message_state(
-        self, message_id: str, state: MessageState, error_message: str | None = None
+        self, message_id: str, state: MessageState, error_message: Optional[str] = None
     ) -> bool:
         """更新消息状态"""
         if not self._initialized:
@@ -221,7 +221,7 @@ class PersistenceManager:
 
 
 def create_persistence_manager(
-    backend_type: str = "memory", backend_config: dict[str, Any] | None = None
+    backend_type: str = "memory", backend_config: Optional[dict[str, Any]] = None
 ) -> PersistenceManager:
     """
     便捷函数：创建持久化管理器

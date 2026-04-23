@@ -386,7 +386,7 @@ class ToolsetManager:
 
     def get_toolset_schemas(
         self,
-        toolset_names: list[str] | None = None,
+        toolset_names: Optional[list[str]] = None,
     ) -> list[dict]:
         """
         获取工具集的 OpenAI schema

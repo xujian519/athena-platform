@@ -345,7 +345,7 @@ class RLToolRouter:
         logger.info(f"📝 已注册 {len(self.tool_registry)} 个工具")
 
     async def select_tool(
-        self, query: str, intent: str, context: dict[str, Any] | None = None
+        self, query: str, intent: str, context: Optional[dict[str, Any]] = None
     ) -> RLAction:
         """
         选择工具(基于RL)
@@ -476,7 +476,7 @@ class RLToolRouter:
         reward_type: RewardType,
         success: bool = True,
         latency_ms: float = 0,
-        user_score: float | None = None,
+        user_score: Optional[float] = None,
     ):
         """
         提供反馈(奖励信号)

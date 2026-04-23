@@ -7,15 +7,13 @@ Plugins系统单元测试 - PluginRegistry
 作者: Athena平台团队
 创建时间: 2026-04-21
 """
-from __future__ import annotations
 
 import pytest
-
 from core.plugins.types import (
     PluginDefinition,
+    PluginMetadata,
     PluginStatus,
     PluginType,
-    PluginMetadata,
 )
 
 
@@ -278,3 +276,4 @@ def test_find_plugins_by_name():
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+

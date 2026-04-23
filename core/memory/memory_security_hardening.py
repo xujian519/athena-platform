@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 from __future__ import annotations
 """
@@ -69,9 +68,9 @@ class AuditEvent:
     resource_type: str
     timestamp: datetime = field(default_factory=datetime.now)
     success: bool = True
-    failure_reason: str | None = None
-    ip_address: str | None = None
-    user_agent: str | None = None
+    failure_reason: Optional[str] = None
+    ip_address: Optional[str] = None
+    user_agent: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -122,8 +121,8 @@ class AuditLogger:
 
     async def query_events(
         self,
-        user_id: str | None = None,
-        event_type: str | None = None,
+        user_id: Optional[str] = None,
+        event_type: Optional[str] = None,
         start_time: datetime | None = None,
         end_time: datetime | None = None,
         limit: int = 100

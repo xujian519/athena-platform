@@ -36,7 +36,7 @@ class ServiceAutoReleaseMixin:
         service_name: str,
         service_type: ServiceType,
         auto_stop: bool = True,
-        idle_timeout: int | None = None
+        idle_timeout: Optional[int] = None
     ):
         """
         初始化自动释放功能
@@ -150,7 +150,7 @@ class FastAPIAutoReleaseMixin:
         service_name: str,
         service_type: ServiceType,
         auto_stop: bool = True,
-        idle_timeout: int | None = None
+        idle_timeout: Optional[int] = None
     ):
         """
         初始化FastAPI自动释放功能
@@ -322,8 +322,8 @@ def get_service_auto_stop_config(service_name: str) -> bool:
 def with_auto_release(
     service_name: str,
     service_type: ServiceType,
-    auto_stop: bool | None = None,
-    idle_timeout: int | None = None
+    auto_stop: Optional[bool] = None,
+    idle_timeout: Optional[int] = None
 ):
     """
     自动释放装饰器

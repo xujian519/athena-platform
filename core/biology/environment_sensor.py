@@ -72,7 +72,7 @@ class AdaptationAction:
     action_type: str
     confidence: float = 0.5
     executed: bool = False
-    result: str | None = None
+    result: Optional[str] = None
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
 
 
@@ -142,7 +142,7 @@ class EnvironmentSensor:
         description: str,
         urgency: UrgencyLevel = UrgencyLevel.MEDIUM,
         source: str = "system",
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> str:
         """
         检测环境压力
@@ -195,7 +195,7 @@ class EnvironmentSensor:
             logger.info(f"🌍 压力已解决: {pressure_id}")
 
     def evaluate_urgency(
-        self, pressure_type: PressureType, context: dict[str, Any] | None = None
+        self, pressure_type: PressureType, context: Optional[dict[str, Any]] = None
     ) -> UrgencyLevel:
         """
         评估压力紧急程度

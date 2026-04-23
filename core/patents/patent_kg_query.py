@@ -31,7 +31,7 @@ class PatentKGQueryInterface:
     5. 相似案例查询
     """
 
-    def __init__(self, data_path: str | None = None):
+    def __init__(self, data_path: Optional[str] = None):
         """初始化查询接口"""
         self.data_path = data_path or "data/knowledge_graph/patent_kg_data.json"
         self.kg_data = self._load_kg_data()

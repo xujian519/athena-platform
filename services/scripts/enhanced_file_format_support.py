@@ -208,7 +208,7 @@ class EnhancedFileFormatSupport:
         for ext, mime in custom_mimes.items():
             mimetypes.add_type(mime, ext)
 
-    def _get_comprehensive_format_list(self) -> dict[str, dict[str, Any]]:
+    def _get_comprehensive_format_list(self) -> dict[str, dict[str, Any]:
         """获取全面的文件格式支持列表"""
         return {
             # 文档类
@@ -869,7 +869,7 @@ class EnhancedFileFormatSupport:
                 for child in element:
                     if child.tag in result:
                         if not isinstance(result[child.tag], list):
-                            result[child.tag] = [result[child.tag]]
+                            result[child.tag] = [result[child.tag]
                         result[child.tag].append(xml_to_dict(child))
                     else:
                         result[child.tag] = xml_to_dict(child)
@@ -1343,7 +1343,7 @@ class EnhancedFileFormatSupport:
         """处理目标文件"""
         return await self.handle_default(file_path, options)
 
-    def get_supported_extensions(self) -> dict[str, list[str]]:
+    def get_supported_extensions(self) -> dict[str, list[str]:
         """获取所有支持的文件扩展名"""
         extensions = {}
 

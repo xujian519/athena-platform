@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺·双鱼公主八大核心模型完整性验证器
 Xiaonuo Pisces Princess Core Eight Models Integrity Verifier
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
 import asyncio
 import json
-from datetime import datetime
-from typing import Dict, Any, List
 import traceback
+from datetime import datetime
 
-from core.agent.xiaonuo_integrated_enhanced import XiaonuoIntegratedEnhanced
+from core.framework.agents.xiaonuo_integrated_enhanced import XiaonuoIntegratedEnhanced
+
 
 class PrincessSystemVerifier:
     """公主系统验证器"""
@@ -529,7 +529,7 @@ class PrincessSystemVerifier:
             "checking": 0
         }
 
-        for module, result in self.verification_results.items():
+        for _module, result in self.verification_results.items():
             status = result.get("status", "checking")
             status_count[status] += 1
 
@@ -548,7 +548,7 @@ class PrincessSystemVerifier:
 
         # 详细报告
         print("\n📋 详细验证报告:")
-        for module, result in self.verification_results.items():
+        for _module, result in self.verification_results.items():
             status_icon = {
                 "operational": "✅",
                 "partial": "⚠️",

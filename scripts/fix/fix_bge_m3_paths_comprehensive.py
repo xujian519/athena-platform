@@ -7,7 +7,6 @@ Comprehensive fix for all BGE-M3 hardcoded paths
 日期: 2026-04-21
 """
 
-import os
 import re
 from pathlib import Path
 

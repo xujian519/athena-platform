@@ -13,7 +13,7 @@ import uuid
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any
@@ -63,7 +63,7 @@ class BatchTask:
     retry_count: int = 0
     max_retries: int = 3
     progress: int = 0  # 0-100
-    results: list[dict[str, Any]] = None
+    results: list[dict[str, Any] = None
     cost: float = 0.0
 
     def __post_init__(self):
@@ -203,13 +203,13 @@ class DatabaseManager:
                         UPDATE batch_tasks
                         SET status = ?, started_at = ?, error_message = ?
                         WHERE id = ?
-                    """, (status.value, datetime.now(timezone.utc).isoformat(), error_message, task_id))
+                    """, (status.value, datetime.now(UTC).isoformat(), error_message, task_id))
                 elif status in [TaskStatus.COMPLETED, TaskStatus.FAILED, TaskStatus.CANCELLED]:
                     cursor.execute("""
                         UPDATE batch_tasks
                         SET status = ?, completed_at = ?, error_message = ?
                         WHERE id = ?
-                    """, (status.value, datetime.now(timezone.utc).isoformat(), error_message, task_id))
+                    """, (status.value, datetime.now(UTC).isoformat(), error_message, task_id))
                 else:
                     cursor.execute("""
                         UPDATE batch_tasks
@@ -225,7 +225,7 @@ class DatabaseManager:
             return False
 
     async def update_task_progress(self, task_id: str, progress: int,
-                                  results: list[dict[str, Any]] = None,
+                                  results: list[dict[str, Any] = None,
                                   cost: float = 0.0) -> bool:
         """更新任务进度"""
         try:
@@ -328,7 +328,7 @@ class TaskQueue:
                     if task and task.status == TaskStatus.PENDING:
                         return task
 
-                except asyncio.TimeoutError:
+                except TimeoutError:
                     continue
 
             return None
@@ -437,7 +437,7 @@ class BatchProcessor:
             options=options or {},
             priority=priority,
             status=TaskStatus.PENDING,
-            created_at=datetime.now(timezone.utc),
+            created_at=datetime.now(UTC),
             max_retries=self.config.retry_attempts
         )
 

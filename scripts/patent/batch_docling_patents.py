@@ -7,14 +7,13 @@ Author: Athena平台团队
 Date: 2026-04-22
 """
 
-import asyncio
 import json
 import logging
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 # 配置日志
 logging.basicConfig(
@@ -62,7 +61,7 @@ class DoclingBatchProcessor:
             "errors": []
         }
 
-    def find_pdf_files(self) -> List[Path]:
+    def find_pdf_files(self) -> list[Path]:
         """查找所有PDF文件"""
         logger.info(f"🔍 扫描目录: {self.input_dir}")
 
@@ -72,7 +71,7 @@ class DoclingBatchProcessor:
 
         return sorted(pdf_files)
 
-    def process_single_pdf(self, pdf_path: Path) -> Dict[str, Any]:
+    def process_single_pdf(self, pdf_path: Path) -> dict[str, Any]:
         """
         处理单个PDF文件
 
@@ -88,9 +87,9 @@ class DoclingBatchProcessor:
             logger.info(f"🔄 处理: {pdf_path.name}")
 
             # 导入Docling
+            from docling.datamodel.pipeline_options import AcceleratorOptions
             from docling.document_converter import DocumentConverter
             from docling.pipeline_options import PdfPipelineOptions
-            from docling.datamodel.pipeline_options import AcceleratorOptions
 
             # 配置pipeline选项 - 强制使用RapidOCR
             pipeline_options = PdfPipelineOptions()
@@ -178,7 +177,7 @@ class DoclingBatchProcessor:
                 "processing_time": time.time() - file_start_time
             }
 
-    def process_batch(self, pdf_files: List[Path]) -> Dict[str, Any]:
+    def process_batch(self, pdf_files: list[Path]) -> dict[str, Any]:
         """
         批量处理PDF文件
 
@@ -248,7 +247,7 @@ class DoclingBatchProcessor:
             "stats": self.stats
         }
 
-    def generate_summary_report(self, batch_result: Dict[str, Any]):
+    def generate_summary_report(self, batch_result: dict[str, Any]):
         """生成汇总报告"""
 
         stats = self.stats

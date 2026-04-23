@@ -30,7 +30,7 @@ class ReasoningPhases:
         """
         self.engine = engine
 
-    async def initial_engagement(self, query: str, context: dict[str, Any] | None = None):
+    async def initial_engagement(self, query: str, context: Optional[dict[str, Any]] = None):
         """初始参与阶段"""
         logger.info("📍 进入初始参与阶段...")
 
@@ -82,7 +82,7 @@ class ReasoningPhases:
 
         return query
 
-    async def _form_initial_impression(self, query: str, context: dict[str, Any] | None = None) -> str:
+    async def _form_initial_impression(self, query: str, context: Optional[dict[str, Any]] = None) -> str:
         """形成初步印象"""
         if "技术" in query or "技术" in query:
             return "这是一个技术相关的问题,需要从技术角度分析"

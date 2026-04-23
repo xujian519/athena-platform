@@ -33,7 +33,7 @@ logger = setup_logging()
 class NebulaGraphClient:
     """NebulaGraph知识图谱客户端"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化NebulaGraph客户端
 
@@ -463,7 +463,7 @@ class NebulaGraphClient:
 
 
 # 便捷函数
-def get_nebula_client(config: dict[str, Any] | None = None) -> NebulaGraphClient | None:
+def get_nebula_client(config: Optional[dict[str, Any]] = None) -> NebulaGraphClient | None:
     """
     获取NebulaGraph客户端单例
 

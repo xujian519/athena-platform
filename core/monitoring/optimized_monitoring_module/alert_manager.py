@@ -29,7 +29,7 @@ class AlertManager:
     负责管理告警规则、评估告警条件和触发告警。
     """
 
-    def __init__(self, metrics_collector: MetricsCollector, config: dict[str, Any] | None = None):
+    def __init__(self, metrics_collector: MetricsCollector, config: Optional[dict[str, Any]] = None):
         """初始化告警管理器
 
         Args:

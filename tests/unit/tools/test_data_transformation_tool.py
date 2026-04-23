@@ -7,9 +7,6 @@ Created: 2026-04-19
 Version: v1.0.0
 """
 
-import json
-import tempfile
-from pathlib import Path
 
 import pandas as pd
 import pytest
@@ -22,7 +19,6 @@ from core.tools.data_transformation_handler import (
     get_info,
     get_statistics,
     load_csv,
-    load_excel,
     merge_data,
     sort_data,
 )

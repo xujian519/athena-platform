@@ -224,7 +224,7 @@ class ConfigManager:
         """获取配置段"""
         return self._merged_config.get(section, {})
 
-    def reload_config(self, source_name: str | None = None) -> Any:
+    def reload_config(self, source_name: Optional[str] = None) -> Any:
         """重新加载配置"""
         if source_name:
             if source_name in self._config_sources:
@@ -254,7 +254,7 @@ class ConfigManager:
 
         return changes
 
-    def list_configs(self) -> dict[str, dict[str, Any]]:
+    def list_configs(self) -> dict[str, dict[str, Any]:
         """列出所有配置及其状态"""
         configs = {}
 

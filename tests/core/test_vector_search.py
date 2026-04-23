@@ -9,23 +9,19 @@
 - 性能测试（批量处理）
 """
 
-from __future__ import annotations
-
 import tempfile  # noqa: ARG001 (used in fixtures)
 from pathlib import Path
 from unittest.mock import AsyncMock, patch  # noqa: ARG001 (used in tests)
 
-import numpy as np
 import pytest
 
-from core.memory.embedding_store import EmbeddingStore, SearchResult, get_embedding_store
-from core.memory.vector_search import VectorSearchService, get_vector_search_service
-from core.memory.unified_memory_system import (
+from core.framework.memory.embedding_store import EmbeddingStore, SearchResult
+from core.framework.memory.unified_memory_system import (
     MemoryCategory,
-    MemoryEntry,
     MemoryType,
     UnifiedMemorySystem,
 )
+from core.framework.memory.vector_search import VectorSearchService
 
 
 @pytest.mark.unit
@@ -45,7 +41,7 @@ class TestEmbeddingStore:
 
     def test_initialization(self, temp_db_path: Path) -> None:
         """测试初始化"""
-        store = EmbeddingStore(db_path=str(temp_db_path))
+        EmbeddingStore(db_path=str(temp_db_path))
 
         # 验证数据库创建
         assert temp_db_path.exists()
@@ -101,7 +97,7 @@ class TestEmbeddingStore:
         assert retrieved is not None
         assert len(retrieved) == len(vector)
         # 验证向量值（考虑浮点精度）
-        for i, (a, b) in enumerate(zip(retrieved, vector)):
+        for _i, (a, b) in enumerate(zip(retrieved, vector, strict=False)):
             assert abs(a - b) < 1e-6
 
     @pytest.mark.asyncio
@@ -126,7 +122,7 @@ class TestEmbeddingStore:
         # 验证更新
         retrieved = await embedding_store.get_vector(memory_id)
         assert retrieved is not None
-        for i, (a, b) in enumerate(zip(retrieved, vector2)):
+        for _i, (a, b) in enumerate(zip(retrieved, vector2, strict=False)):
             assert abs(a - b) < 1e-6
 
     @pytest.mark.asyncio
@@ -395,7 +391,7 @@ class TestVectorSearchService:
     ) -> None:
         """测试混合检索"""
         # 写入记忆
-        entry = memory_system.write(
+        memory_system.write(
             type=MemoryType.GLOBAL,
             category=MemoryCategory.USER_PREFERENCE,
             key="hybrid_test",
@@ -541,3 +537,4 @@ class TestPerformance:
         assert elapsed_time < 30.0, f"批量索引耗时过长: {elapsed_time:.2f}秒"
 
         print(f"✅ 批量索引性能: {elapsed_time:.2f}秒 (100条记忆)")
+

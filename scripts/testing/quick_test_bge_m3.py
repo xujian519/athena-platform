@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """快速测试BGE-M3模型是否可用"""
 import sys
+
 sys.path.insert(0, '/Users/xujian/Athena工作平台')
 
 print("=" * 60)
@@ -32,7 +33,7 @@ print("\n3. 测试文本嵌入...")
 try:
     test_text = "这是一个测试文本"
     embedding = model.encode(test_text, show_progress_bar=False)
-    print(f"✅ 文本嵌入成功")
+    print("✅ 文本嵌入成功")
     print(f"   - 向量维度: {len(embedding)}")
     print(f"   - 前5维: {embedding[:5]}")
 except Exception as e:

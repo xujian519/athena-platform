@@ -13,9 +13,9 @@ LLM Performance Benchmark Tests
 创建时间: 2026-04-21
 版本: v1.0.0
 """
-from __future__ import annotations
 
 import pytest
+
 from tests.performance.benchmark_runner import get_benchmark_runner
 
 
@@ -30,7 +30,7 @@ class TestLLMPerformance:
         runner = get_benchmark_runner()
 
         async def init_manager():
-            from core.llm.unified_llm_manager import UnifiedLLMManager
+            from core.ai.llm.unified_llm_manager import UnifiedLLMManager
             manager = UnifiedLLMManager()
             return manager
 
@@ -50,14 +50,14 @@ class TestLLMPerformance:
         runner = get_benchmark_runner()
 
         async def select_model():
-            from core.llm.model_selector import IntelligentModelSelector
-            from core.llm.model_registry import get_model_registry
+            from core.ai.llm.model_registry import get_model_registry
+            from core.ai.llm.model_selector import IntelligentModelSelector
 
             registry = get_model_registry()
             selector = IntelligentModelSelector(registry)
 
             # 模拟模型选择
-            from core.llm.base import SelectionCriteria, LLMRequest, SelectionStrategy
+            from core.ai.llm.base import LLMRequest, SelectionCriteria, SelectionStrategy
 
             criteria = SelectionCriteria(
                 task_type="creativity_analysis",
@@ -88,7 +88,7 @@ class TestLLMPerformance:
         runner = get_benchmark_runner()
 
         async def cache_operation():
-            from core.llm.response_cache import get_response_cache
+            from core.ai.llm.response_cache import get_response_cache
 
             cache = get_response_cache()
 
@@ -121,7 +121,7 @@ class TestLLMPerformance:
         runner = get_benchmark_runner()
 
         async def routing_decision():
-            from core.llm.smart_model_routing import TaskComplexityAnalyzer
+            from core.ai.llm.smart_model_routing import TaskComplexityAnalyzer
 
             analyzer = TaskComplexityAnalyzer()
 
@@ -143,3 +143,4 @@ class TestLLMPerformance:
         )
 
         assert result.meets_target(), f"智能路由性能未达标: {result}"
+

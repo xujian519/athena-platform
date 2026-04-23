@@ -10,21 +10,21 @@ import asyncio
 import json
 import sys
 import time
-from pathlib import Path
 from datetime import datetime
-from typing import List, Dict, Any
+from pathlib import Path
+from typing import Any
 
 # 添加项目根目录到sys.path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 from tests.e2e.test_agent_workflow import (
-    TestE2EWorkflow,
-    TestAgentPerformance,
-    TestAgentIntegration,
-    MockRetrieverAgent,
     MockAnalyzerAgent,
-    MockWriterAgent
+    MockRetrieverAgent,
+    MockWriterAgent,
+    TestAgentIntegration,
+    TestAgentPerformance,
+    TestE2EWorkflow,
 )
 
 
@@ -37,7 +37,7 @@ class E2ETestRunner:
         self.results = []
 
     def create_test_report(self, test_name: str, start_time: float, end_time: float,
-                          status: str, details: Dict[str, Any] = None) -> Dict[str, Any]:
+                          status: str, details: dict[str, Any] = None) -> dict[str, Any]:
         """创建测试报告"""
         duration = end_time - start_time
 
@@ -51,7 +51,7 @@ class E2ETestRunner:
 
         return report
 
-    async def run_workflow_tests(self) -> List[Dict[str, Any]]:
+    async def run_workflow_tests(self) -> list[dict[str, Any]:
         """运行工作流测试"""
         print("🚀 开始运行工作流测试...")
 
@@ -103,7 +103,7 @@ class E2ETestRunner:
 
         return results
 
-    async def run_performance_tests(self) -> List[Dict[str, Any]]:
+    async def run_performance_tests(self) -> list[dict[str, Any]:
         """运行性能测试"""
         print("\n🔥 开始运行性能测试...")
 
@@ -133,7 +133,7 @@ class E2ETestRunner:
 
         return results
 
-    async def run_integration_tests(self) -> List[Dict[str, Any]]:
+    async def run_integration_tests(self) -> list[dict[str, Any]:
         """运行集成测试"""
         print("\n🔗 开始运行集成测试...")
 
@@ -163,7 +163,7 @@ class E2ETestRunner:
 
         return results
 
-    def generate_summary_report(self, all_results: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def generate_summary_report(self, all_results: list[dict[str, Any]) -> dict[str, Any]:
         """生成汇总报告"""
         total_tests = len(all_results)
         passed_tests = sum(1 for r in all_results if r["status"] == "passed")
@@ -173,9 +173,9 @@ class E2ETestRunner:
         avg_duration = total_duration / total_tests if total_tests > 0 else 0
 
         # 按测试类型分组
-        workflow_results = [r for r in all_results if "workflow" in r["test_name"]]
-        performance_results = [r for r in all_results if "performance" in r["test_name"]]
-        integration_results = [r for r in all_results if "integration" in r["test_name"]]
+        workflow_results = [r for r in all_results if "workflow" in r["test_name"]
+        performance_results = [r for r in all_results if "performance" in r["test_name"]
+        integration_results = [r for r in all_results if "integration" in r["test_name"]
 
         summary = {
             "total_tests": total_tests,
@@ -207,7 +207,7 @@ class E2ETestRunner:
 
         return summary
 
-    def save_results(self, summary: Dict[str, Any]) -> None:
+    def save_results(self, summary: dict[str, Any]) -> None:
         """保存测试结果"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -220,11 +220,11 @@ class E2ETestRunner:
         md_file = self.output_dir / f"e2e_test_report_{timestamp}.md"
         self.generate_markdown_report(summary, md_file)
 
-        print(f"\n📊 测试报告已保存到:")
+        print("\n📊 测试报告已保存到:")
         print(f"   JSON: {json_file}")
         print(f"   Markdown: {md_file}")
 
-    def generate_markdown_report(self, summary: Dict[str, Any], output_file: Path) -> None:
+    def generate_markdown_report(self, summary: dict[str, Any], output_file: Path) -> None:
         """生成Markdown报告"""
         md_content = f"""# 端到端测试报告
 
@@ -271,7 +271,7 @@ class E2ETestRunner:
         with open(output_file, 'w', encoding='utf-8') as f:
             f.write(md_content)
 
-    async def run_all_tests(self) -> Dict[str, Any]:
+    async def run_all_tests(self) -> dict[str, Any]:
         """运行所有测试"""
         print("=" * 80)
         print("🚀 Athena平台端到端测试开始")

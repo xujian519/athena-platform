@@ -54,7 +54,7 @@ class LightweightCoordinator:
         self,
         registry: ToolRegistry | None = None,
         selector: AthenaSearchSelector | None = None,
-        config: dict[str, Any] | None = None,
+        config: Optional[dict[str, Any]] = None,
     ):
         """初始化轻量协调器
 
@@ -131,7 +131,7 @@ class LightweightCoordinator:
         config_type: ConfigType,
         description: str = "",
         scope: str = "global",
-        tool_name: str | None = None,
+        tool_name: Optional[str] = None,
     ) -> bool:
         """设置配置"""
         return await self.config_manager.set_config(
@@ -158,7 +158,7 @@ class LightweightCoordinator:
         value: float,
         unit: str = "",
         tags: dict[str, str] | None = None,
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ):
         """添加指标"""
         metric_point = MetricPoint(
@@ -196,7 +196,7 @@ class LightweightCoordinator:
         level: AlertLevel,
         title: str,
         message: str,
-        tool_name: str | None = None,
+        tool_name: Optional[str] = None,
         metric_point: MetricPoint | None = None,
     ) -> Alert:
         """添加告警"""

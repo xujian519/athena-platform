@@ -19,7 +19,7 @@ from datetime import datetime
 # 跳过整个模块（模块导入失败时）
 pytest.importorskip("core.agents.base")
 
-from core.agents.base import (
+from core.framework.agents.base import (
     AgentCapability,
     AgentMetadata,
     AgentRegistry,

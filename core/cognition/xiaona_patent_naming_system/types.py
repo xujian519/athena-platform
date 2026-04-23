@@ -45,7 +45,7 @@ class PatentNamingRequest:
     naming_preferences: list[str] = field(default_factory=list)
     naming_style: NamingStyle = NamingStyle.TECHNICAL
     special_requirements: list[str] = field(default_factory=list)
-    client_info: dict[str, Any] | None = None
+    client_info: Optional[dict[str, Any]] = None
 
 
 @dataclass

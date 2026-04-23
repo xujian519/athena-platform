@@ -137,7 +137,7 @@ class AthenaResponse:
 
     success: bool
     result: Any
-    reasoning: str | None = None
+    reasoning: Optional[str] = None
     tools_used: list[str] = field(default_factory=list)
     validation_results: dict[str, ValidationResult] = field(default_factory=dict)
     error_predictions: list[ErrorPrediction] = field(default_factory=list)
@@ -681,7 +681,7 @@ async def get_athena_optimized() -> AthenaWisdomAgentOptimized:
 
 # 便捷使用函数
 async def process_task_optimized(
-    task: str, parameters: dict[str, Any] = None, context: dict[str, Any] | None = None
+    task: str, parameters: dict[str, Any] = None, context: Optional[dict[str, Any]] = None
 ) -> AthenaResponse:
     """
     便捷函数:处理任务(优化版)

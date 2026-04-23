@@ -49,7 +49,7 @@ class WorkflowStep(BaseModel):
     description: str = Field(description="步骤描述")
 
     # 工具调用相关
-    action: str | None = Field(default=None, description="工具名称或动作")
+    action: Optional[str] = Field(default=None, description="工具名称或动作")
     input_schema: dict[str, Any] = Field(default_factory=dict, description="输入schema")
     output_schema: dict[str, Any] = Field(default_factory=dict, description="输出schema")
 
@@ -258,7 +258,7 @@ class WorkflowPattern(BaseModel):
             logger.warning(f"⚠️ 计算余弦相似度失败: {e}")
             return 0.0
 
-    def adapt_to_task(self, task_params: dict[str, Any]) -> 'WorkflowPattern':
+    def adapt_to_task(self, task_params: dict[str, Any]) -> WorkflowPattern:
         """
         适应当前任务参数
 
@@ -285,9 +285,9 @@ class WorkflowPattern(BaseModel):
 
     def _apply_rule(
         self,
-        pattern: 'WorkflowPattern',
+        pattern: WorkflowPattern,
         rule: dict[str, Any],        task_params: dict[str, Any]
-    ) -> 'WorkflowPattern':
+    ) -> WorkflowPattern:
         """应用适应规则"""
         modifications = rule.get("modifications", {})
 
@@ -319,7 +319,7 @@ class TaskTrajectory(BaseModel):
     )
 
     # 最终结果
-    final_result: dict[str, Any] | None = Field(default=None, description="最终结果")
+    final_result: Optional[dict[str, Any]] = Field(default=None, description="最终结果")
 
     # 执行统计
     start_time: datetime = Field(description="开始时间")

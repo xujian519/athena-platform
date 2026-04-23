@@ -63,8 +63,8 @@ class TaskResult:
     """任务执行结果"""
 
     success: bool  # 是否成功
-    data: dict[str, Any] | None = None  # 结果数据
-    error: str | None = None  # 错误信息
+    data: Optional[dict[str, Any]] = None  # 结果数据
+    error: Optional[str] = None  # 错误信息
     execution_time: float = 0.0  # 执行时间（秒）
     token_usage: int = 0  # Token使用量
     metadata: dict[str, Any] = field(default_factory=dict)  # 元数据
@@ -98,10 +98,10 @@ class Task:
     started_at: datetime | None = None  # 开始时间
     completed_at: datetime | None = None  # 完成时间
     deadline: datetime | None = None  # 截止时间
-    assigned_to: str | None = None  # 分配给的Agent ID
-    created_by: str | None = None  # 创建者ID
-    session_id: str | None = None  # 关联的会话ID
-    skill_id: str | None = None  # 关联的技能ID
+    assigned_to: Optional[str] = None  # 分配给的Agent ID
+    created_by: Optional[str] = None  # 创建者ID
+    session_id: Optional[str] = None  # 关联的会话ID
+    skill_id: Optional[str] = None  # 关联的技能ID
     dependencies: list[TaskDependency] = field(default_factory=list)  # 任务依赖
     dependents: list[str] = field(default_factory=list)  # 依赖此任务的其他任务ID
     result: TaskResult | None = None  # 执行结果
@@ -110,7 +110,7 @@ class Task:
     metadata: dict[str, Any] = field(default_factory=dict)  # 元数据
     retry_count: int = 0  # 重试次数
     max_retries: int = 3  # 最大重试次数
-    timeout_seconds: int | None = None  # 超时时间（秒）
+    timeout_seconds: Optional[int] = None  # 超时时间（秒）
 
     def can_start(self, completed_tasks: set[str]) -> bool:
         """检查任务是否可以开始

@@ -27,9 +27,9 @@ class LogLevel:
 
 def setup_logging(
     level: int = logging.INFO,
-    format_string: str | None = None,
+    format_string: Optional[str] = None,
     log_file: str | Path | None = None,
-    name: str | None = None,
+    name: Optional[str] = None,
 ) -> logging.Logger:
     """
     设置日志配置
@@ -98,7 +98,7 @@ def setup_logging(
     return logger
 
 
-def get_logger(name: str | None = None) -> logging.Logger:
+def get_logger(name: Optional[str] = None) -> logging.Logger:
     """
     获取logger实例(快捷方法)
 

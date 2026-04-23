@@ -4,7 +4,6 @@
 """
 
 import logging
-from pathlib import Path
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -72,7 +71,7 @@ def main():
     tool = registry.get(tool_id)
 
     if tool:
-        print(f"✅ 工具验证成功，可以正常调用")
+        print("✅ 工具验证成功，可以正常调用")
         print()
 
         # 测试工具调用
@@ -92,7 +91,7 @@ def main():
             result = asyncio.run(test_tool())
 
             if result.get("success"):
-                print(f"✅ 工具调用测试成功")
+                print("✅ 工具调用测试成功")
                 print(f"   查询: {result['query']}")
                 print(f"   集合: {result['collection']}")
                 print(f"   维度: {result['dimension']}")
@@ -109,7 +108,7 @@ def main():
             print()
             return False
     else:
-        print(f"❌ 工具验证失败，无法获取工具")
+        print("❌ 工具验证失败，无法获取工具")
         print()
         return False
 

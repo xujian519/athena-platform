@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 直接导入历史记忆
 Direct Import Historical Memories
@@ -10,12 +9,12 @@ Direct Import Historical Memories
 创建时间: 2025年12月15日
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-import sys
-from datetime import datetime
+import sqlite3
 import subprocess
+from datetime import datetime
+from typing import Any
+
 
 def export_from_sqlite() -> Any:
     """从SQLite导出"""
@@ -211,7 +210,7 @@ def main() -> None:
     print("  - import_historical_memories.sql (SQL导入脚本)")
     print("\n📊 导入统计:")
     print(f"  - 总记忆数: {len(sql_statements)}")
-    print(f"  - 目标系统: PostgreSQL(memory_module@localhost:5438)")
+    print("  - 目标系统: PostgreSQL(memory_module@localhost:5438)")
     print(f"  - 导入时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
 if __name__ == "__main__":

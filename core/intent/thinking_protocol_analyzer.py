@@ -95,7 +95,7 @@ class ThinkingProtocolAnalyzer:
     async def analyze_with_thinking_protocol(
         self,
         text: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
         entities: dict[str, list[str]] | None = None,
         previous_trace: ThoughtTrace | None = None,
     ) -> ThoughtTrace:
@@ -368,7 +368,7 @@ class ThinkingProtocolAnalyzer:
             return "需要深入分析的通用查询"
 
     @staticmethod
-    def _analyze_background(text: str, context: dict) -> str | None:
+    def _analyze_background(text: str, context: dict) -> Optional[str]:
         """分析背景信息"""
         if not context:
             return None

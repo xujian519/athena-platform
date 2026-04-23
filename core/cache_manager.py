@@ -66,7 +66,7 @@ class AthenaCacheManager:
         except Exception as e:
             logging.error(f"❌ Redis连接失败: {e}")
 
-    def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
+    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
         """
         设置缓存
         Args:

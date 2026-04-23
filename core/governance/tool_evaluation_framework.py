@@ -134,7 +134,7 @@ class ToolEvaluationFramework:
     参考:Anthropic团队 - Evaluation-Driven Optimization
     """
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
 
         # 指标权重
@@ -267,7 +267,7 @@ class ToolEvaluationFramework:
         return result
 
     async def evaluate_all_tools(
-        self, category: str | None = None
+        self, category: Optional[str] = None
     ) -> list[ToolEvaluationResult]:
         """
         评估所有工具或指定类别的工具

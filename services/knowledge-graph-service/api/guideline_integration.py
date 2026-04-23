@@ -166,7 +166,7 @@ class GuidelineIntegration:
 
         # 构建层次结构
         sections = [n for n in self.graph_data.get("nodes", [])
-                   if n.get("type") in ["Part", "Chapter", "Section"]]
+                   if n.get("type") in ["Part", "Chapter", "Section"]
 
         # 按level和ID排序
         sections.sort(key=lambda x: (x.get("properties", {}).get("level", 1), x["id"]))

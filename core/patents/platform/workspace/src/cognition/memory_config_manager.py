@@ -70,7 +70,7 @@ class LoggingConfig:
     """日志配置"""
     level: str = 'INFO'
     format: str = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    file_path: str | None = None
+    file_path: Optional[str] = None
     max_file_size: int = 10 * 1024 * 1024  # 10MB
     backup_count: int = 5
 
@@ -101,12 +101,12 @@ class MemoryConfigManager:
         '/etc/athena/memory_config.yaml'
     ]
 
-    def __init__(self, config_path: str | None = None):
+    def __init__(self, config_path: Optional[str] = None):
         self.config_path = config_path
         self.config: MemorySystemConfig | None = None
         self._config_sources = {}  # 记录每个配置项的来源
 
-    def load_config(self, config_path: str | None = None) -> MemorySystemConfig:
+    def load_config(self, config_path: Optional[str] = None) -> MemorySystemConfig:
         """加载配置"""
         # 1. 从默认配置开始
         self.config = MemorySystemConfig()
@@ -133,7 +133,7 @@ class MemoryConfigManager:
         logger.info(f"✅ 配置加载完成，来源: {unique_sources}")
         return self.config
 
-    def _load_from_file(self, config_path: str | None = None) -> Dict[str, Any | None]:
+    def _load_from_file(self, config_path: Optional[str] = None) -> Dict[str, Any] | None:
         """从文件加载配置"""
         search_paths = []
 
@@ -324,7 +324,7 @@ class MemoryConfigManager:
 
         logger.info(f"📝 配置已更新，来源: {source}")
 
-    def save_config(self, file_path: str | None = None):
+    def save_config(self, file_path: Optional[str] = None):
         """保存配置到文件"""
         if not self.config:
             raise ValueError('没有可保存的配置')
@@ -422,7 +422,7 @@ class MemoryConfigManager:
 # 全局配置管理器实例
 _global_config_manager: MemoryConfigManager | None = None
 
-def get_config_manager(config_path: str | None = None) -> MemoryConfigManager:
+def get_config_manager(config_path: Optional[str] = None) -> MemoryConfigManager:
     """获取全局配置管理器实例"""
     global _global_config_manager
 
@@ -441,6 +441,6 @@ def update_config(updates: Dict[str, Any]):
     """更新配置"""
     get_config_manager().update_config(updates)
 
-def save_config(file_path: str | None = None):
+def save_config(file_path: Optional[str] = None):
     """保存配置"""
     get_config_manager().save_config(file_path)

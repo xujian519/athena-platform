@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 # 便捷函数
 def create_monitoring_module(
-    agent_id: str, config: dict[str, Any] | None = None
+    agent_id: str, config: Optional[dict[str, Any]] = None
 ) -> OptimizedMonitoringModule:
     """创建监控模块
 

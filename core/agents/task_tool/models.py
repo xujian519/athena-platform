@@ -44,7 +44,7 @@ class TaskInput:
     prompt: str
     tools: list[str] = field(default_factory=list)
     context: dict[str, Any] = field(default_factory=dict)
-    agent_type: str | None = None
+    agent_type: Optional[str] = None
     fork_context: Optional["ForkContext"] = None  # noqa: F821 - Forward reference, resolved at runtime
 
 
@@ -75,7 +75,7 @@ class TaskOutput:
     tool_uses: int = 0
     duration: float = 0.0
     success: bool = True
-    error: str | None = None
+    error: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -105,7 +105,7 @@ class TaskRecord:
     output: TaskOutput | None = None
     created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat() + "Z")
     updated_at: str = field(default_factory=lambda: datetime.utcnow().isoformat() + "Z")
-    error_message: str | None = None
+    error_message: Optional[str] = None
 
     def to_dict(self) -> dict[str, Any]:
         """转换为字典"""

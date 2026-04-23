@@ -59,7 +59,7 @@ class Alert:
     resolved_at: datetime | None = None
     labels: dict[str, str] | None = None
     annotations: dict[str, str] | None = None
-    fingerprint: str | None = None
+    fingerprint: Optional[str] = None
 
 @dataclass
 class AlertRule:
@@ -80,8 +80,8 @@ class NotificationConfig:
     """通知配置"""
     channel: NotificationChannel
     enabled: bool = True
-    config: dict[str, Any] | None = None
-    filters: dict[str, Any] | None = None  # 过滤条件
+    config: Optional[dict[str, Any]] = None
+    filters: Optional[dict[str, Any]] = None  # 过滤条件
 
 @dataclass
 class Silence:
@@ -230,7 +230,7 @@ class SlackNotifier:
     def __init__(self, webhook_url: str):
         self.webhook_url = webhook_url
 
-    async def send(self, alert: Alert, channel: str | None = None):
+    async def send(self, alert: Alert, channel: Optional[str] = None):
         """发送Slack通知"""
         try:
             severity_emoji = {
@@ -544,7 +544,7 @@ class AlertManager:
                 except Exception as e:
                     logger.error(f"发送通知失败 {config.channel.value}: {e}")
 
-    def _passes_filters(self, alert: Alert, filters: dict[str, Any] | None = None) -> bool:
+    def _passes_filters(self, alert: Alert, filters: Optional[dict[str, Any]] = None) -> bool:
         """检查是否通过过滤条件"""
         if not filters:
             return True

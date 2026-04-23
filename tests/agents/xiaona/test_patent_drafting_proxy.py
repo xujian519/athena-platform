@@ -18,11 +18,11 @@ Date: 2026-04-23
 
 import pytest
 
-from core.agents.xiaona.base_component import (
+from core.framework.agents.xiaona.base_component import (
     AgentExecutionContext,
     AgentStatus,
 )
-from core.agents.xiaona.patent_drafting_proxy import PatentDraftingProxy
+from core.framework.agents.xiaona.patent_drafting_proxy import PatentDraftingProxy
 
 # ========== 测试数据 Fixtures ==========
 

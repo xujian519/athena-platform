@@ -43,7 +43,7 @@ class SearchRequest:
 
     query: str  # 查询文本
     top_k: int = 10  # 返回结果数量
-    scenario: str | None = None  # 场景提示
+    scenario: Optional[str] = None  # 场景提示
     conversation_mode: bool = False  # 对话模式
     requires_answer: bool = False  # 需要答案
     batch_mode: bool = False  # 批量模式
@@ -51,7 +51,7 @@ class SearchRequest:
 
     # 性能选项
     enable_cache: bool = True  # 启用缓存
-    max_latency: float | None = None  # 最大延迟限制
+    max_latency: Optional[float] = None  # 最大延迟限制
 
     # 调试选项
     debug_mode: bool = False  # 调试模式
@@ -81,8 +81,8 @@ class SearchResponse:
     search_time: float  # 搜索耗时
 
     # LLM增强信息
-    rewritten_query: str | None = None  # 重写后的查询
-    generated_answer: str | None = None  # 生成的答案
+    rewritten_query: Optional[str] = None  # 重写后的查询
+    generated_answer: Optional[str] = None  # 生成的答案
     query_understanding: dict | None = None  # 查询理解
 
     # 路由分析
@@ -94,7 +94,7 @@ class SearchResponse:
     llm_time: float = 0.0
 
     # 元数据
-    metadata: dict[str, Any] | None = None
+    metadata: Optional[dict[str, Any]] = None
 
     def __post_init__(self):
         if self.metadata is None:
@@ -388,7 +388,7 @@ class UnifiedSearchService:
             )
 
     async def batch_search(
-        self, queries: list[str], top_k: int = 10, scenario: str | None = None
+        self, queries: list[str], top_k: int = 10, scenario: Optional[str] = None
     ) -> list[SearchResponse]:
         """
         批量搜索
@@ -449,7 +449,7 @@ class UnifiedSearchService:
             return self.monitor.get_optimization_suggestions()
         return []
 
-    def export_metrics(self, filepath: str | None = None) -> str | None:
+    def export_metrics(self, filepath: Optional[str] = None) -> Optional[str]:
         """导出性能指标"""
         if self.monitor:
             return self.monitor.export_metrics(filepath)
@@ -475,7 +475,7 @@ async def get_unified_search_service() -> UnifiedSearchService:
 async def unified_search(
     query: str,
     top_k: int = 10,
-    scenario: str | None = None,
+    scenario: Optional[str] = None,
     requires_answer: bool = False,
     conversation_mode: bool = False,
 ) -> SearchResponse:

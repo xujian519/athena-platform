@@ -75,8 +75,8 @@ class DialogTurn:
     response_strategy: ResponseStrategy
     assistant_response: str
     confidence: float
-    user_satisfaction: float | None = None
-    user_feedback: str | None = None
+    user_satisfaction: Optional[float] = None
+    user_feedback: Optional[str] = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -96,9 +96,9 @@ class DialogTurn:
 class DialogContext:
     """对话上下文"""
     session_id: str
-    user_id: str | None
+    user_id: Optional[str]
     start_time: datetime
-    topic: str | None = None
+    topic: Optional[str] = None
     history: list[DialogTurn] = field(default_factory=list)
     metadata: dict[str, Any] = field(default_factory=dict)
 
@@ -194,7 +194,7 @@ class LearningDialogManager:
         self,
         user_message: str,
         session_id: str,
-        user_id: str | None = None,
+        user_id: Optional[str] = None,
         use_learning: bool = True,
     ) -> DialogResponse:
         """
@@ -392,7 +392,7 @@ class LearningDialogManager:
     def _get_or_create_context(
         self,
         session_id: str,
-        user_id: str | None,
+        user_id: Optional[str],
     ) -> DialogContext:
         """获取或创建对话上下文"""
         if session_id not in self.dialog_sessions:
@@ -412,7 +412,7 @@ class LearningDialogManager:
         session_id: str,
         turn_id: str,
         user_satisfaction: float,
-        user_feedback: str | None = None,
+        user_feedback: Optional[str] = None,
     ):
         """
         从对话反馈中学习
@@ -621,7 +621,7 @@ class LearningDialogManager:
 
         return report
 
-    async def export_learning_data(self, filepath: str | None = None) -> str | None:
+    async def export_learning_data(self, filepath: Optional[str] = None) -> Optional[str]:
         """导出学习数据"""
         if not self.enable_learning or not self.learning_interface:
             return None

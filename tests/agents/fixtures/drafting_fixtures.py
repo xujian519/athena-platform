@@ -4,14 +4,13 @@
 提供统一的测试数据，避免在测试文件中重复定义。
 """
 
-from typing import Any, Dict
-import pytest
-from datetime import datetime
+from typing import Any
 
+import pytest
 
 # ========== 技术交底书测试数据 ==========
 
-VALID_DISCLOSURE: Dict[str, Any] = {
+VALID_DISCLOSURE: dict[str, Any] = {
     "disclosure_id": "TEST_20240423_001",
     "title": "一种基于深度学习的图像识别方法",
     "technical_field": "人工智能与计算机视觉",
@@ -50,7 +49,7 @@ VALID_DISCLOSURE: Dict[str, Any] = {
     ]
 }
 
-MINIMAL_DISCLOSURE: Dict[str, Any] = {
+MINIMAL_DISCLOSURE: dict[str, Any] = {
     "disclosure_id": "TEST_MINIMAL_001",
     "title": "测试专利",
     "technical_field": "测试领域",
@@ -58,13 +57,13 @@ MINIMAL_DISCLOSURE: Dict[str, Any] = {
     "technical_solution": "测试解决方案"
 }
 
-INVALID_DISCLOSURE: Dict[str, Any] = {
+INVALID_DISCLOSURE: dict[str, Any] = {
     "disclosure_id": "",
     "title": "",
     "technical_field": ""
 }
 
-DEVICE_DISCLOSURE: Dict[str, Any] = {
+DEVICE_DISCLOSURE: dict[str, Any] = {
     "disclosure_id": "TEST_DEVICE_001",
     "title": "一种智能包装机物品传送装置",
     "technical_field": "食品包装机械",
@@ -82,7 +81,7 @@ DEVICE_DISCLOSURE: Dict[str, Any] = {
     "examples": []
 }
 
-METHOD_DISCLOSURE: Dict[str, Any] = {
+METHOD_DISCLOSURE: dict[str, Any] = {
     "disclosure_id": "TEST_METHOD_001",
     "title": "一种自动驾驶掉头路段脱困规划方法",
     "technical_field": "自动驾驶技术",
@@ -106,7 +105,7 @@ METHOD_DISCLOSURE: Dict[str, Any] = {
 
 # ========== 权利要求书测试数据 ==========
 
-VALID_CLAIMS: Dict[str, Any] = {
+VALID_CLAIMS: dict[str, Any] = {
     "independent_claim": "1. 一种基于深度学习的图像识别方法，其特征在于，包括：构建卷积神经网络模型；使用预训练数据集进行预训练；采用迁移学习进行微调；引入注意力机制提取特征。",
     "dependent_claims": [
         "2. 根据权利要求1所述的方法，其特征在于，所述卷积神经网络模型包含18-50层卷积层。",
@@ -115,7 +114,7 @@ VALID_CLAIMS: Dict[str, Any] = {
     ]
 }
 
-DEVICE_CLAIMS: Dict[str, Any] = {
+DEVICE_CLAIMS: dict[str, Any] = {
     "independent_claim": "1. 一种智能包装机物品传送装置，其特征在于，包括：传送带；设置在传送带两侧的限位板；与限位板连接的调节机构，用于调节限位板间距。",
     "dependent_claims": [
         "2. 根据权利要求1所述的装置，其特征在于，所述调节机构包括丝杆和螺母座。",
@@ -126,7 +125,7 @@ DEVICE_CLAIMS: Dict[str, Any] = {
 
 # ========== 说明书测试数据 ==========
 
-VALID_SPECIFICATION: Dict[str, Any] = {
+VALID_SPECIFICATION: dict[str, Any] = {
     "title": "一种基于深度学习的图像识别方法",
     "technical_field": "本发明涉及人工智能技术领域，具体涉及基于深度学习的图像识别方法。",
     "background_art": """
@@ -159,7 +158,7 @@ VALID_SPECIFICATION: Dict[str, Any] = {
 
 # ========== 审查意见测试数据 ==========
 
-VALID_OFFICE_ACTION: Dict[str, Any] = {
+VALID_OFFICE_ACTION: dict[str, Any] = {
     "patent_number": "CN202310123456.7",
     "decision": "驳回",
     "issues": [
@@ -181,7 +180,7 @@ VALID_OFFICE_ACTION: Dict[str, Any] = {
 
 # ========== 无效宣告测试数据 ==========
 
-VALID_INVALIDATION_DATA: Dict[str, Any] = {
+VALID_INVALIDATION_DATA: dict[str, Any] = {
     "target_patent": {
         "patent_number": "CN201921401279.9",
         "title": "包装机物品传送装置的物料限位板自动调节机构",
@@ -208,7 +207,7 @@ VALID_INVALIDATION_DATA: Dict[str, Any] = {
 
 # ========== LLM响应测试数据 ==========
 
-LLM_SUCCESS_RESPONSES: Dict[str, str] = {
+LLM_SUCCESS_RESPONSES: dict[str, str] = {
     "claims": """```json
 {
     "independent_claim": "1. 一种基于深度学习的图像识别方法，其特征在于，包括：构建卷积神经网络模型；使用预训练数据集进行预训练。",
@@ -278,7 +277,7 @@ The response is not in JSON format"""
 
 # ========== 上下文测试数据 ==========
 
-VALID_EXECUTION_CONTEXT: Dict[str, Any] = {
+VALID_EXECUTION_CONTEXT: dict[str, Any] = {
     "task_id": "TASK_20240423_001",
     "session_id": "SESSION_001",
     "input_data": {
@@ -292,7 +291,7 @@ VALID_EXECUTION_CONTEXT: Dict[str, Any] = {
     "previous_results": {}
 }
 
-WRITER_CONTEXT_CLAIMS: Dict[str, Any] = {
+WRITER_CONTEXT_CLAIMS: dict[str, Any] = {
     "task_id": "TASK_CLAIMS_001",
     "input_data": {
         "user_input": "请撰写权利要求书",
@@ -308,7 +307,7 @@ WRITER_CONTEXT_CLAIMS: Dict[str, Any] = {
     }
 }
 
-WRITER_CONTEXT_RESPONSE: Dict[str, Any] = {
+WRITER_CONTEXT_RESPONSE: dict[str, Any] = {
     "task_id": "TASK_RESPONSE_001",
     "input_data": {
         "user_input": "请答复审查意见",
@@ -324,7 +323,7 @@ WRITER_CONTEXT_RESPONSE: Dict[str, Any] = {
     }
 }
 
-WRITER_CONTEXT_INVALIDATION: Dict[str, Any] = {
+WRITER_CONTEXT_INVALIDATION: dict[str, Any] = {
     "task_id": "TASK_INVALIDATION_001",
     "input_data": {
         "user_input": "请撰写无效宣告请求书",
@@ -343,7 +342,7 @@ WRITER_CONTEXT_INVALIDATION: Dict[str, Any] = {
     }
 }
 
-DRAFTING_PROXY_CONTEXT_ANALYZE: Dict[str, Any] = {
+DRAFTING_PROXY_CONTEXT_ANALYZE: dict[str, Any] = {
     "task_id": "TASK_ANALYZE_001",
     "session_id": "SESSION_001",
     "input_data": {
@@ -354,7 +353,7 @@ DRAFTING_PROXY_CONTEXT_ANALYZE: Dict[str, Any] = {
     }
 }
 
-DRAFTING_PROXY_CONTEXT_ASSESS: Dict[str, Any] = {
+DRAFTING_PROXY_CONTEXT_ASSESS: dict[str, Any] = {
     "task_id": "TASK_ASSESS_001",
     "input_data": {
         "disclosure": VALID_DISCLOSURE,
@@ -365,7 +364,7 @@ DRAFTING_PROXY_CONTEXT_ASSESS: Dict[str, Any] = {
     }
 }
 
-DRAFTING_PROXY_CONTEXT_SPECIFICATION: Dict[str, Any] = {
+DRAFTING_PROXY_CONTEXT_SPECIFICATION: dict[str, Any] = {
     "task_id": "TASK_SPEC_001",
     "input_data": {
         "disclosure": VALID_DISCLOSURE,
@@ -379,7 +378,7 @@ DRAFTING_PROXY_CONTEXT_SPECIFICATION: Dict[str, Any] = {
     }
 }
 
-DRAFTING_PROXY_CONTEXT_CLAIMS: Dict[str, Any] = {
+DRAFTING_PROXY_CONTEXT_CLAIMS: dict[str, Any] = {
     "task_id": "TASK_CLAIMS_001",
     "input_data": {
         "disclosure": VALID_DISCLOSURE,
@@ -390,7 +389,7 @@ DRAFTING_PROXY_CONTEXT_CLAIMS: Dict[str, Any] = {
     }
 }
 
-DRAFTING_PROXY_CONTEXT_OPTIMIZE: Dict[str, Any] = {
+DRAFTING_PROXY_CONTEXT_OPTIMIZE: dict[str, Any] = {
     "task_id": "TASK_OPTIMIZE_001",
     "input_data": {
         "claims": VALID_CLAIMS,
@@ -401,7 +400,7 @@ DRAFTING_PROXY_CONTEXT_OPTIMIZE: Dict[str, Any] = {
     }
 }
 
-DRAFTING_PROXY_CONTEXT_ADEQUACY: Dict[str, Any] = {
+DRAFTING_PROXY_CONTEXT_ADEQUACY: dict[str, Any] = {
     "task_id": "TASK_ADEQUACY_001",
     "input_data": {
         "specification": VALID_SPECIFICATION,
@@ -412,7 +411,7 @@ DRAFTING_PROXY_CONTEXT_ADEQUACY: Dict[str, Any] = {
     }
 }
 
-DRAFTING_PROXY_CONTEXT_ERRORS: Dict[str, Any] = {
+DRAFTING_PROXY_CONTEXT_ERRORS: dict[str, Any] = {
     "task_id": "TASK_ERRORS_001",
     "input_data": {
         "specification": VALID_SPECIFICATION,

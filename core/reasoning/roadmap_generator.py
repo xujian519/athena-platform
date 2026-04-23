@@ -78,7 +78,7 @@ class DevelopmentPhase:
     key_activities: list[str]
     milestones: list[str] = field(default_factory=list)
     deliverables: list[str] = field(default_factory=list)
-    budget_estimate: float | None = None
+    budget_estimate: Optional[float] = None
     team_requirements: dict[str, int] = field(default_factory=dict)
 
 
@@ -230,9 +230,9 @@ class RoadmapGenerator:
         self,
         focus_technology: str,
         roadmap_type: RoadmapType,
-        time_horizon_months: int | None = None,
-        context: dict[str, Any] | None = None,
-        patent_data: dict[str, Any] | None = None,
+        time_horizon_months: Optional[int] = None,
+        context: Optional[dict[str, Any]] = None,
+        patent_data: Optional[dict[str, Any]] = None,
     ) -> TechnologyRoadmap:
         """
         生成技术路线图

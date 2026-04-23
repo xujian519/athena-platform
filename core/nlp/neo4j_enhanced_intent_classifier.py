@@ -87,7 +87,7 @@ class Neo4jGraphConnection:
             logger.error(f"❌ Neo4j连接失败: {e}")
             return False
 
-    async def execute_query(self, query: str, params: dict[str, Any] | None = None):
+    async def execute_query(self, query: str, params: Optional[dict[str, Any]] = None):
         """执行Cypher查询"""
         if not self.connected:
             return None
@@ -231,7 +231,7 @@ class Neo4jEnhancedIntentClassifier:
             return False
 
     async def classify_intent(
-        self, text: str, context: dict[str, Any] | None = None
+        self, text: str, context: Optional[dict[str, Any]] = None
     ) -> IntentClassificationResult:
         """分类意图"""
         if not self.model_loaded:

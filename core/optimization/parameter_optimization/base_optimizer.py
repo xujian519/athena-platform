@@ -52,7 +52,7 @@ class OptimizationConfig:
 
     # 优化算法参数
     n_trials: int = 100
-    timeout: float | None = None
+    timeout: Optional[float] = None
     n_jobs: int = 1
 
     # TPE采样器参数(借鉴Heretic的配置)
@@ -146,7 +146,7 @@ class BaseParameterOptimizer(abc.ABC):
 
     def create_study(
         self,
-        study_name: str | None = None,
+        study_name: Optional[str] = None,
         direction: str = "maximize",
         load_if_exists: bool = True,
     ) -> optuna.Study:
@@ -255,7 +255,7 @@ class BaseParameterOptimizer(abc.ABC):
         return min(base_score, 1.0)
 
     async def optimize(
-        self, n_trials: int | None = None, timeout: float | None = None
+        self, n_trials: Optional[int] = None, timeout: Optional[float] = None
     ) -> OptimizationResult:
         """
         执行优化

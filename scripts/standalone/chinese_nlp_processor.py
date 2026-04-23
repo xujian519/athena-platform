@@ -32,8 +32,8 @@ class ProcessResult:
 
     text: str
     tokens: list[str]
-    pos_tags: list[tuple[str, str]]
-    entities: list[dict[str, Any]]
+    pos_tags: list[tuple[str, str]
+    entities: list[dict[str, Any]
     keywords: list[str]
     confidence: float
     metadata: dict[str, Any]
@@ -113,7 +113,7 @@ class ChineseNLPProcessor:
             pattern = r"[，。！？、；："r"''（）【】\s]+"
             return [t for t in re.split(pattern, text) if t]
 
-    def _pos_tag(self, tokens: list[str]) -> list[tuple[str, str]]:
+    def _pos_tag(self, tokens: list[str]) -> list[tuple[str, str]:
         """词性标注"""
         if self.use_jieba:
             text = "".join(tokens)
@@ -122,7 +122,7 @@ class ChineseNLPProcessor:
             # 简单标注
             return [(t, "x") for t in tokens]
 
-    def _extract_entities(self, text: str, tokens: list[str]) -> list[dict[str, Any]]:
+    def _extract_entities(self, text: str, tokens: list[str]) -> list[dict[str, Any]:
         """提取命名实体"""
         entities = []
 

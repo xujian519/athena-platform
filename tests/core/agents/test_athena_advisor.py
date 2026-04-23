@@ -21,16 +21,17 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 try:
-    from core.agents.athena_advisor import (
+    from core.framework.agents.athena_advisor import (
         AdvisorTaskType,
         AthenaAdvisorAgent,
     )
-    from core.agents.base import (
+    from core.framework.agents.xiaona_legal import XiaonaLegalAgent
+
+    from core.framework.agents.base import (
         AgentRegistry,
         AgentRequest,
         AgentStatus,
     )
-    from core.agents.xiaona_legal import XiaonaLegalAgent
 except ImportError:
     pass  # 模块导入失败时，测试会被跳过
 

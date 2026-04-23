@@ -66,7 +66,7 @@ class OutputStyleManager:
     def __init__(self, project_root: str | Path | None = None):
         self._project_root = Path(project_root) if project_root else Path.cwd()
         self._styles: dict[str, OutputStyleDefinition] = {}
-        self._current_style: str | None = None
+        self._current_style: Optional[str] = None
         self._loaded = False
 
     def _get_builtin_styles(self) -> list[OutputStyleDefinition]:
@@ -349,7 +349,7 @@ _manager_instance: OutputStyleManager | None = None
 _manager_lock = threading.Lock()
 
 
-def get_style_manager(project_root: str | None = None) -> OutputStyleManager:
+def get_style_manager(project_root: Optional[str] = None) -> OutputStyleManager:
     """获取 OutputStyleManager 单例（线程安全）"""
     global _manager_instance
     if _manager_instance is None:

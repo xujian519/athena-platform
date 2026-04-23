@@ -38,7 +38,7 @@ class OptimizedMonitoringModule(BaseModule):
     提供全方位的系统监控、性能分析和智能告警功能。
     """
 
-    def __init__(self, agent_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, agent_id: str, config: Optional[dict[str, Any]] = None):
         """初始化监控模块
 
         Args:

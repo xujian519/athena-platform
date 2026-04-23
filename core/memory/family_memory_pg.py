@@ -69,7 +69,7 @@ class FamilyMemoryPG:
         port: int = 5432,
         database: str = "athena_memory",
         user: str = "xujian",
-        model_path: str | None = None,
+        model_path: Optional[str] = None,
     ):
         """初始化PostgreSQL记忆库
 
@@ -175,8 +175,8 @@ class FamilyMemoryPG:
     async def search_similar_memories(
         self,
         query: str,
-        agent: str | None = None,
-        memory_type: str | None = None,
+        agent: Optional[str] = None,
+        memory_type: Optional[str] = None,
         limit: int = 5,
     ) -> list[dict]:
         """搜索相似记忆"""
@@ -243,7 +243,7 @@ class FamilyMemoryPG:
 
             return dict(result) if result else None
 
-    async def get_recent_memories(self, agent: str | None = None, limit: int = 10) -> list[dict]:
+    async def get_recent_memories(self, agent: Optional[str] = None, limit: int = 10) -> list[dict]:
         """获取最近的记忆"""
         async with self.pool.acquire() as conn:
             if agent:

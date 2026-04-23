@@ -330,7 +330,7 @@ class XiaochenAnalyticsTracker:
             content_scores.append((m.content_id, score))
 
         content_scores.sort(key=lambda x: x[1], reverse=True)
-        best_performing = [item[0] for item in content_scores[:5]]
+        best_performing = [item[0] for item in content_scores[:5]
 
         # 计算增长率
         growth_metrics = await self._calculate_growth_rates(period_metrics)

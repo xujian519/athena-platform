@@ -21,7 +21,7 @@ async def test_bge_service():
     print("=" * 60)
 
     try:
-        from core.nlp.bge_embedding_service import get_bge_service
+        from core.ai.nlp.bge_embedding_service import get_bge_service
 
         print("⏳ 获取BGE服务实例...")
         bge_service = await get_bge_service()
@@ -116,7 +116,7 @@ async def test_text_embedding_handler():
 
                 # 验证维度
                 if result.get('embedding_dim') == test_case['expected_dim']:
-                    print(f"   ✅ 维度正确")
+                    print("   ✅ 维度正确")
                     success_count += 1
                 else:
                     print(f"   ❌ 维度错误，期望{test_case['expected_dim']}，实际{result.get('embedding_dim', 0)}")
@@ -141,7 +141,7 @@ async def test_batch_embedding():
     print("=" * 60)
 
     try:
-        from core.nlp.bge_embedding_service import get_bge_service
+        from core.ai.nlp.bge_embedding_service import get_bge_service
 
         bge_service = await get_bge_service()
 
@@ -183,7 +183,7 @@ async def test_cache_performance():
     print("=" * 60)
 
     try:
-        from core.nlp.bge_embedding_service import get_bge_service
+        from core.ai.nlp.bge_embedding_service import get_bge_service
 
         bge_service = await get_bge_service()
 

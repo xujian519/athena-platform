@@ -330,7 +330,7 @@ class EnhancedVectorSearch:
         self,
         patent_ids: list[int],
         filters: dict[str, Any] | None = None
-    ) -> list[dict[str, Any]]:
+    ) -> list[dict[str, Any]:
         """根据ID获取专利信息"""
         if not self.db_connection:
             return []

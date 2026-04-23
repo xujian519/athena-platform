@@ -175,7 +175,7 @@ async def example_6_multi_source_search():
     )
 
     if result["success"]:
-        print(f"✅ 搜索成功")
+        print("✅ 搜索成功")
         print(f"   数据源: {result['source']}")
 
         if "breakdown" in result:
@@ -185,7 +185,7 @@ async def example_6_multi_source_search():
         print(f"   合并后总数: {result['total_results']} 篇")
         print()
     else:
-        print(f"⚠️ 双数据源搜索失败（可能未配置API密钥）")
+        print("⚠️ 双数据源搜索失败（可能未配置API密钥）")
         print(f"   错误: {result.get('error', 'Unknown')}")
 
 

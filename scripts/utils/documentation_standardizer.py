@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena工作平台文档标准化工具
 Documentation Standardizer for Athena Work Platform
@@ -19,11 +18,10 @@ python3 documentation_standardizer.py --generate-template
 
 import argparse
 import logging
-import os
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -239,7 +237,7 @@ class DocumentationStandardizer:
 {examples}
 """
 
-    def _get_validation_rules(self) -> Dict[str, Any]:
+    def _get_validation_rules(self) -> dict[str, Any]:
         """获取文档验证规则"""
         return {
             'readme_required_sections': [
@@ -266,7 +264,7 @@ class DocumentationStandardizer:
             }
         }
 
-    def scan_documentation(self) -> Dict[str, Any]:
+    def scan_documentation(self) -> dict[str, Any]:
         """扫描项目中的所有文档"""
         logger.info('🔍 扫描项目文档...')
 
@@ -291,7 +289,7 @@ class DocumentationStandardizer:
             relative_path = readme_file.relative_to(self.project_root)
 
             try:
-                with open(readme_file, 'r', encoding='utf-8') as f:
+                with open(readme_file, encoding='utf-8') as f:
                     content = f.read()
 
                 file_info = {
@@ -331,7 +329,7 @@ class DocumentationStandardizer:
             relative_path = md_file.relative_to(self.project_root)
 
             try:
-                with open(md_file, 'r', encoding='utf-8') as f:
+                with open(md_file, encoding='utf-8') as f:
                     content = f.read()
 
                 scan_results['other_docs'][str(relative_path)] = {
@@ -409,7 +407,7 @@ class DocumentationStandardizer:
 
         return min(100, score)
 
-    def validate_documentation(self) -> Dict[str, Any]:
+    def validate_documentation(self) -> dict[str, Any]:
         """验证文档标准化程度"""
         logger.info('✅ 验证文档标准化程度...')
 
@@ -586,16 +584,16 @@ class DocumentationStandardizer:
             logger.info(f"❌ 模板生成失败: {e}")
             return ''
 
-    def print_scan_results(self, results: Dict[str, Any]) -> Any:
+    def print_scan_results(self, results: dict[str, Any]) -> Any:
         """打印扫描结果"""
-        logger.info(f"\n📊 文档扫描结果")
+        logger.info("\n📊 文档扫描结果")
         logger.info(f"🕐 扫描时间: {results['scan_time']}")
         logger.info(f"📄 README文件总数: {results['total_readmes']}")
         logger.info(f"📝 其他文档总数: {results['total_md_files']}")
         logger.info(f"📈 标准化评分: {results['standardization_score']}/100")
 
         if results['readmes']:
-            logger.info(f"\n📋 README文件质量排行:")
+            logger.info("\n📋 README文件质量排行:")
             sorted_readmes = sorted(
                 results['readmes'].items(),
                 key=lambda x: x[1].get('estimated_quality', 0),
@@ -608,13 +606,13 @@ class DocumentationStandardizer:
                 logger.info(f"  {i:2d}. {status_emoji} {quality:3.0f}% {path}")
 
         if results['directories_without_readme']:
-            logger.info(f"\n❌ 缺少README的目录:")
+            logger.info("\n❌ 缺少README的目录:")
             for directory in results['directories_without_readme']:
                 logger.info(f"  • {directory}")
 
-    def print_validation_results(self, results: Dict[str, Any]) -> Any:
+    def print_validation_results(self, results: dict[str, Any]) -> Any:
         """打印验证结果"""
-        logger.info(f"\n✅ 文档验证结果")
+        logger.info("\n✅ 文档验证结果")
         logger.info(f"🕐 验证时间: {results['validation_time']}")
         logger.info(f"📊 检查文件数: {results['total_files_checked']}")
         logger.info(f"✅ 有效文件: {results['valid_files']}")
@@ -622,12 +620,12 @@ class DocumentationStandardizer:
         logger.info(f"📈 总体评分: {results['overall_score']}/100")
 
         if results['issues']:
-            logger.info(f"\n🚨 发现的问题:")
+            logger.info("\n🚨 发现的问题:")
             for issue in results['issues'][:10]:  # 只显示前10个问题
                 logger.info(f"  {issue}")
 
         if results['recommendations']:
-            logger.info(f"\n💡 改进建议:")
+            logger.info("\n💡 改进建议:")
             for recommendation in results['recommendations']:
                 logger.info(f"  {recommendation}")
 
@@ -661,7 +659,7 @@ def main() -> None:
             logger.info('❌ README标准化失败')
 
     elif args.generate_template:
-        template_file = standardizer.generate_template(args.generate_template)
+        standardizer.generate_template(args.generate_template)
 
 if __name__ == '__main__':
     main()

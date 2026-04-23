@@ -56,7 +56,7 @@ class MediaContent:
     media_type: MediaType  # 媒体类型
     content: str | bytes  # 内容
     metadata: dict[str, Any] = field(default_factory=dict)  # 元数据
-    file_path: str | None = None  # 文件路径
+    file_path: Optional[str] = None  # 文件路径
     size: int = 0  # 大小(字节)
     created_at: float = field(default_factory=time.time)  # 创建时间
 
@@ -77,7 +77,7 @@ class OCRResult:
     text: str  # 识别的文本
     confidence: float  # 置信度
     bounding_boxes: list[dict[str, Any]] = field(default_factory=list)  # 边界框
-    language: str | None = None  # 语言
+    language: Optional[str] = None  # 语言
     metadata: dict[str, Any] = field(default_factory=dict)  # 元数据
 
     def to_dict(self) -> dict[str, Any]:
@@ -358,7 +358,7 @@ class MultimodalIntegrator:
             raise ValueError(f"不支持的文件格式: {file_ext}")
 
     async def understand_content(
-        self, content: str, media_files: list[str] | None = None
+        self, content: str, media_files: Optional[list[str]] = None
     ) -> MultimodalUnderstanding:
         """
         理解内容(文本+媒体)
@@ -454,7 +454,7 @@ async def process_file(file_path: str, ocr: bool = True) -> OCRResult | Document
 
 
 async def understand_content(
-    content: str, media_files: list[str] | None = None
+    content: str, media_files: Optional[list[str]] = None
 ) -> MultimodalUnderstanding:
     """理解内容(文本+媒体)"""
     integrator = get_multimodal_integrator()

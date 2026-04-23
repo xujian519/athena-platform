@@ -215,13 +215,13 @@ def save_ip_studies() -> None:
 ## 💡 学习心得
 
 ### 学习方法
-{chr(10).join([f"- {method}" for method in learning_insights['study_method']])}
+{chr(10).join([f"- {method}" for method in learning_insights['study_method'])}
 
 ### 专业收获
-{chr(10).join([f"- {gain}" for gain in learning_insights['professional_gains']])}
+{chr(10).join([f"- {gain}" for gain in learning_insights['professional_gains'])}
 
 ### 实践应用
-{chr(10).join([f"- {app}" for app in learning_insights['practice_applications']])}
+{chr(10).join([f"- {app}" for app in learning_insights['practice_applications'])}
 
 ## 🎯 小诺的学习总结
 
@@ -266,7 +266,7 @@ def save_ip_studies() -> None:
 {case['case_number']}
 
 ## 核心要点
-{chr(10).join([f"- {point}" for point in case['key_points']])}
+{chr(10).join([f"- {point}" for point in case['key_points'])}
 
 ## 法律依据
 {case.get('legal_basis', '待补充')}

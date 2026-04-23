@@ -39,7 +39,7 @@ class AthenaMCPClient:
         self.server_tools: dict[str, list[dict]] = {}
         self.server_resources: dict[str, list[str]] = {}
 
-    async def connect_to_server(self, command: str, args: list[str] | None = None) -> dict[str, Any]:
+    async def connect_to_server(self, command: str, args: Optional[list[str]] = None) -> dict[str, Any]:
         """
         连接到MCP服务器
 
@@ -183,7 +183,7 @@ class AthenaMCPClient:
             logger.error(f"❌ 读取资源失败: {e}", exc_info=True)
             return f"错误: {e!s}"
 
-    def get_available_tools(self, server_name: str | None = None) -> dict[str, list[dict]]:
+    def get_available_tools(self, server_name: Optional[str] = None) -> dict[str, list[dict]]:
         """
         获取可用的工具列表
 
@@ -198,7 +198,7 @@ class AthenaMCPClient:
         else:
             return self.server_tools.copy()
 
-    def get_available_resources(self, server_name: str | None = None) -> dict[str, list]:
+    def get_available_resources(self, server_name: Optional[str] = None) -> dict[str, list]:
         """
         获取可用的资源列表
 
@@ -213,7 +213,7 @@ class AthenaMCPClient:
         else:
             return self.server_resources.copy()
 
-    async def close(self, server_name: str | None = None):
+    async def close(self, server_name: Optional[str] = None):
         """
         关闭连接
 

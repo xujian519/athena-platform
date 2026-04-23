@@ -40,7 +40,7 @@ class PatentAnalysisResponse(BaseModel):
     success: bool
     patent_id: str
     analysis_result: Optional[Dict[str, Any]] = None
-    error_message: str | None = None
+    error_message: Optional[str] = None
     timestamp: str
 
 # 全局认知集成客户端

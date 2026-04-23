@@ -146,7 +146,7 @@ class ResponseCache:
         return hashlib.md5(content.encode('utf-8'), usedforsecurity=False).hexdigest()
 
     def get(
-        self, message: str, task_type: str, model_id: str | None = None
+        self, message: str, task_type: str, model_id: Optional[str] = None
     ) -> CacheEntry | None:
         """
         获取缓存的响应(线程安全)
@@ -232,7 +232,7 @@ class ResponseCache:
         model_used: str,
         tokens_used: int,
         cost: float,
-        ttl: int | None = None,
+        ttl: Optional[int] = None,
     ) -> None:
         """
         设置缓存(线程安全)
@@ -375,7 +375,7 @@ class ResponseCache:
         logger.info("🧹 缓存已清空")
 
     def configure_task_type(
-        self, task_type: str, cacheable: bool, ttl: int | None = None
+        self, task_type: str, cacheable: bool, ttl: Optional[int] = None
     ) -> None:
         """
         配置任务类型的缓存设置

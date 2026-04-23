@@ -87,10 +87,10 @@ class ReflectionThresholds:
     EXCELLENT_QUALITY_SCORE: float = 0.85
 
     # 不可反思关键词
-    UNSAYABLE_KEYWORDS: list[str] | None = None
+    UNSAYABLE_KEYWORDS: Optional[list[str]] = None
 
     # 创意内容关键词
-    CREATIVE_KEYWORDS: list[str] | None = None
+    CREATIVE_KEYWORDS: Optional[list[str]] = None
 
     def __post_init__(self):
         """初始化列表"""

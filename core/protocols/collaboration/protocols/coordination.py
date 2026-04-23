@@ -151,7 +151,7 @@ class CoordinationProtocol(BaseProtocol):
         except Exception as e:
             logger.error(f"处理任务分配失败: {e}")
 
-    async def _assign_task(self, task: dict[str, Any]) -> dict[str, Any] | None:
+    async def _assign_task(self, task: dict[str, Any]) -> Optional[dict[str, Any]]:
         """分配任务"""
         try:
             strategy = self.coordination_rules["assignment_strategy"]
@@ -171,7 +171,7 @@ class CoordinationProtocol(BaseProtocol):
 
     async def _assign_task_capability_based(
         self, task: dict[str, Any]
-    ) -> dict[str, Any] | None:
+    ) -> Optional[dict[str, Any]]:
         """基于能力分配任务"""
         required_capabilities = task.get("required_capabilities", [])
         candidate_scores = []
@@ -225,7 +225,7 @@ class CoordinationProtocol(BaseProtocol):
 
     async def _assign_task_load_balanced(
         self, task: dict[str, Any]
-    ) -> dict[str, Any] | None:
+    ) -> Optional[dict[str, Any]]:
         """负载均衡分配任务"""
         candidate_loads = []
 
@@ -257,7 +257,7 @@ class CoordinationProtocol(BaseProtocol):
 
     async def _assign_task_priority_based(
         self, task: dict[str, Any]
-    ) -> dict[str, Any] | None:
+    ) -> Optional[dict[str, Any]]:
         """基于优先级分配任务"""
         task_priority = task.get("priority", 5)
         candidate_priorities = []

@@ -72,7 +72,7 @@ class ArgumentExtractor:
         "conclusion": ["判决", "裁定", "认定", "支持", "驳回", "确认", "不予支持"],
     }
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化论点提取器
 
@@ -360,7 +360,7 @@ class ArgumentExtractor:
 class JudgmentStructurer:
     """判决书结构化处理器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化结构化处理器
 
@@ -506,7 +506,7 @@ class JudgmentStructurer:
 
 # 便捷函数
 def structure_judgment(
-    extraction_result: dict[str, Any], config: dict[str, Any] | None = None
+    extraction_result: dict[str, Any], config: Optional[dict[str, Any]] = None
 ) -> dict[str, Any]:
     """
     结构化判决书

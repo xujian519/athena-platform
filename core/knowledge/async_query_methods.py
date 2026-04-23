@@ -79,7 +79,7 @@ class AsyncQueryMixin:
             "timestamp": datetime.now().isoformat()
         }
 
-    async def _get_patent_by_id(self, patent_id: str) -> dict[str, Any] | None:
+    async def _get_patent_by_id(self, patent_id: str) -> Optional[dict[str, Any]]:
         """
         根据ID获取专利（异步）
 

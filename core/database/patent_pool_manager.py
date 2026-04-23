@@ -38,7 +38,7 @@ class PatentPoolConfig:
 class PatentDBPoolManager:
     """Patent数据库连接池管理器(优化版)"""
 
-    _instance: Optional["PatentDBPoolManager"] = None
+    _instance: PatentDBPoolManager | None = None
     _pool: asyncpg.Pool | None = None
 
     def __new__(cls):

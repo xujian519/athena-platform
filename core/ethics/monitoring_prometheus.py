@@ -88,7 +88,7 @@ class PrometheusMonitor:
                     print(f"⚠️  无法启动Prometheus端点: {e}")
                     print(f"   端口{self.port}可能已被占用,请尝试其他端口")
 
-    def record_evaluation(self, agent_id: str, status: str, duration: float, score: float | None = None):
+    def record_evaluation(self, agent_id: str, status: str, duration: float, score: Optional[float] = None):
         """记录评估指标"""
         ETHICS_EVALUATION_TOTAL.labels(agent_id=agent_id, status=status).inc()
         ETHICS_EVALUATION_DURATION.labels(agent_id=agent_id).observe(duration)

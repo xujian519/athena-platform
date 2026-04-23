@@ -192,13 +192,13 @@ class FileCacheManager:
         return cache_manager.get(f"file_info:{file_id}")
 
     @staticmethod
-    def cache_search_results(query: str, file_type: str, results: list[dict[str, Any]], timeout: int = 300) -> Any:
+    def cache_search_results(query: str, file_type: str, results: list[dict[str, Any], timeout: int = 300) -> Any:
         """缓存搜索结果"""
         cache_key = f"search:{query}:{file_type}"
         cache_manager.set(cache_key, results, timeout)
 
     @staticmethod
-    def get_cached_search_results(query: str, file_type: str) -> list[dict[str, Any | None]]:
+    def get_cached_search_results(query: str, file_type: str) -> list[dict[str, Any | None]:
         """获取缓存的搜索结果"""
         cache_key = f"search:{query}:{file_type}"
         return cache_manager.get(cache_key)

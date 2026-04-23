@@ -5,14 +5,16 @@
 提供测试所需的fixture和配置
 """
 
-import pytest
 import asyncio
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any
+
+import pytest
 
 # 添加项目根目录到sys.path
 project_root = Path(__file__).parent.parent
 import sys
+
 sys.path.insert(0, str(project_root))
 
 
@@ -25,7 +27,7 @@ def event_loop():
 
 
 @pytest.fixture
-def test_config() -> Dict[str, Any]:
+def test_config() -> dict[str, Any]:
     """测试配置"""
     return {
         "test_mode": True,
@@ -38,7 +40,7 @@ def test_config() -> Dict[str, Any]:
 
 
 @pytest.fixture
-def test_patent_data() -> Dict[str, Any]:
+def test_patent_data() -> dict[str, Any]:
     """测试专利数据"""
     return {
         "target_patent": {
@@ -77,7 +79,7 @@ def test_patent_data() -> Dict[str, Any]:
 
 
 @pytest.fixture
-def test_workflow_scenarios() -> Dict[str, Any]:
+def test_workflow_scenarios() -> dict[str, Any]:
     """测试场景"""
     return {
         "patent_analysis": {
@@ -108,7 +110,7 @@ def test_workflow_scenarios() -> Dict[str, Any]:
 
 
 @pytest.fixture
-def performance_metrics() -> Dict[str, Any]:
+def performance_metrics() -> dict[str, Any]:
     """性能指标"""
     return {
         "thresholds": {

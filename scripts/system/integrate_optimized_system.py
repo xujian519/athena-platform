@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 系统集成脚本 - 集成所有优化模式到Athena平台
 将反思模式、并行化模式、记忆管理和多智能体协作集成到现有系统
@@ -9,13 +8,12 @@
 """
 
 import asyncio
+import importlib.util
 import json
 import logging
-import importlib.util
-import sys
-from pathlib import Path
-from typing import Dict, Any, List, Optional
 from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 # 配置日志
 logging.basicConfig(
@@ -86,7 +84,7 @@ class SystemIntegration:
 
         return True
 
-    async def load_optimization_modules(self) -> Dict[str, Any]:
+    async def load_optimization_modules(self) -> dict[str, Any]:
         """加载优化模块"""
         logger.info("📦 加载优化模块...")
 
@@ -139,7 +137,7 @@ class SystemIntegration:
 
         return modules
 
-    async def create_integrated_system(self, modules: Dict[str, Any]) -> Any:
+    async def create_integrated_system(self, modules: dict[str, Any]) -> Any:
         """创建集成系统"""
         logger.info("🔧 创建集成系统...")
 
@@ -148,7 +146,7 @@ class SystemIntegration:
             class AthenaOptimizedSystem:
                 """Athena优化系统集成"""
 
-                def __init__(self, modules: Dict[str, Any], integration_config: Dict[str, Any]):
+                def __init__(self, modules: dict[str, Any], integration_config: dict[str, Any]):
                     self.modules = modules
                     self.components = {}
                     self.integration_config = integration_config
@@ -180,7 +178,7 @@ class SystemIntegration:
                     """获取组件"""
                     return self.components.get(component_name)
 
-                def get_system_status(self) -> Dict[str, Any]:
+                def get_system_status(self) -> dict[str, Any]:
                     """获取系统状态"""
                     return {
                         "active_components": list(self.components.keys()),
@@ -414,7 +412,7 @@ class TestSystemIntegration(unittest.TestCase):
     def test_memory_integration(self):
         """测试记忆管理集成"""
         try:
-            from core.memory.enhanced_memory_manager import EnhancedMemoryManager
+            from core.framework.memory.enhanced_memory_manager import EnhancedMemoryManager
             memory_manager = EnhancedMemoryManager()
             self.assert_is_not_none(memory_manager)
             self.integration_status["memory_manager"] = True
@@ -425,7 +423,7 @@ class TestSystemIntegration(unittest.TestCase):
     def test_coordination_integration(self):
         """测试智能体协作集成"""
         try:
-            from core.collaboration.enhanced_agent_coordination import EnhancedAgentCoordinator
+            from core.framework.collaboration.enhanced_agent_coordination import EnhancedAgentCoordinator
             coordinator = EnhancedAgentCoordinator()
             self.assert_is_not_none(coordinator)
             self.integration_status["agent_coordination"] = True
@@ -504,7 +502,7 @@ if __name__ == "__main__":
             logger.error(f"❌ 创建集成测试失败: {e}")
             return False
 
-    async def generate_integration_report(self) -> Dict[str, Any]:
+    async def generate_integration_report(self) -> dict[str, Any]:
         """生成集成报告"""
         logger.info("📊 生成集成报告...")
 
@@ -579,7 +577,7 @@ if __name__ == "__main__":
                 return False
 
             # 6. 生成集成报告
-            report = await self.generate_integration_report()
+            await self.generate_integration_report()
 
             # 7. 运行测试验证
             logger.info("🧪 运行集成测试验证...")

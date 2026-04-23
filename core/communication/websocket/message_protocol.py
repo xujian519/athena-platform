@@ -128,7 +128,7 @@ class MessageProtocol:
         self,
         message_type: WebSocketMessageType,
         data: dict[str, Any],
-        message_id: str | None = None,
+        message_id: Optional[str] = None,
     ) -> str:
         """
         创建消息
@@ -162,7 +162,7 @@ class MessageProtocol:
 
     # 便捷方法
 
-    def create_text_message(self, text: str, sender: str | None = None) -> str:
+    def create_text_message(self, text: str, sender: Optional[str] = None) -> str:
         """创建文本消息"""
         return self.create_message(
             WebSocketMessageType.MESSAGE,
@@ -182,7 +182,7 @@ class MessageProtocol:
         )
 
     def create_error_message(
-        self, code: str, message: str, details: dict[str, Any] | None = None
+        self, code: str, message: str, details: Optional[dict[str, Any]] = None
     ) -> str:
         """创建错误消息"""
         data = {"code": code, "message": message}
@@ -191,7 +191,7 @@ class MessageProtocol:
         return self.create_message(WebSocketMessageType.ERROR, data)
 
     def create_broadcast_message(
-        self, content: Any, sender: str | None = None
+        self, content: Any, sender: Optional[str] = None
     ) -> str:
         """创建广播消息"""
         return self.create_message(
@@ -200,7 +200,7 @@ class MessageProtocol:
         )
 
     def create_system_notification(
-        self, notification_type: str, message: str, data: dict[str, Any] | None = None
+        self, notification_type: str, message: str, data: Optional[dict[str, Any]] = None
     ) -> str:
         """创建系统通知"""
         payload = {"type": notification_type, "message": message}

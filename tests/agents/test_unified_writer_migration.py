@@ -14,23 +14,21 @@
 """
 
 import json
+from unittest.mock import AsyncMock, Mock, patch
+
 import pytest
-from unittest.mock import Mock, AsyncMock, patch, MagicMock
-from datetime import datetime
+
+from core.framework.agents.xiaona.base_component import (
+    AgentExecutionContext,
+    AgentStatus,
+)
+from core.framework.agents.xiaona.patent_drafting_proxy import PatentDraftingProxy
 
 # 导入被测试的类
-from core.agents.xiaona.writer_agent import WriterAgent
-from core.agents.xiaona.patent_drafting_proxy import PatentDraftingProxy
-from core.agents.xiaona.base_component import (
-    AgentExecutionContext,
-    AgentExecutionResult,
-    AgentStatus,
-    AgentCapability,
-)
+from core.framework.agents.xiaona.writer_agent import WriterAgent
 
 # 导入测试数据
 from tests.agents.fixtures.drafting_fixtures import *
-
 
 # ============================================================================
 # WriterAgent 测试套件 (4个功能)
@@ -860,7 +858,7 @@ def test_counter(request):
     # 测试结束后打印统计
     if test_counter.count == request.node.session.testscollected:
         print(f"\n{'='*60}")
-        print(f"测试套件统计:")
+        print("测试套件统计:")
         print(f"  收集的测试: {request.node.session.testscollected}")
         print(f"  执行的测试: {test_counter.count}")
         print(f"{'='*60}\n")

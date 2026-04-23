@@ -99,7 +99,7 @@ class CausalGraph:
         node_id: str,
         name: str,
         node_type: str = "variable",
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> CausalNode:
         """
         添加节点
@@ -131,7 +131,7 @@ class CausalGraph:
         relation_type: CausalRelationType = CausalRelationType.DIRECT,
         strength: float = 1.0,
         confidence: float = 1.0,
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> CausalEdge:
         """
         添加边(因果关系)
@@ -236,7 +236,7 @@ class CausalGraph:
         paths.sort(key=lambda p: p.total_strength, reverse=True)
         return paths
 
-    def _find_edge(self, source: str, target: str) -> str | None:
+    def _find_edge(self, source: str, target: str) -> Optional[str]:
         """查找从source到target的边"""
         for edge_id, edge in self.edges.items():
             if edge.source == source and edge.target == target:

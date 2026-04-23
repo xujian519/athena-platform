@@ -8,8 +8,13 @@
 """
 
 import pytest
-from core.agents.xiaona.creativity_analyzer_proxy import CreativityAnalyzerProxy
-from core.agents.xiaona.base_component import AgentExecutionContext, AgentExecutionResult, AgentStatus
+
+from core.framework.agents.xiaona.base_component import (
+    AgentExecutionContext,
+    AgentExecutionResult,
+    AgentStatus,
+)
+from core.framework.agents.xiaona.creativity_analyzer_proxy import CreativityAnalyzerProxy
 
 
 class TestableCreativityAnalyzerProxy(CreativityAnalyzerProxy):
@@ -136,7 +141,7 @@ class TestCreativityAnalyzerProxy:
             "differences": "仅做简单替换"
         }
 
-        result = await agent.assess_obviousness(patent_data)
+        await agent.assess_obviousness(patent_data)
 
         # 简单替换应该被认为是显而易见
         if len(patent_data["prior_art"]) > 0 and patent_data["differences"] == "仅做简单替换":

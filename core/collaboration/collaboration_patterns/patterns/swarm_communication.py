@@ -36,9 +36,9 @@ class SwarmMessage:
         message_type: SwarmMessageType,
         sender_id: str,
         content: dict[str, Any],
-        receiver_id: str | None = None,
+        receiver_id: Optional[str] = None,
         target_role: SwarmRole | None = None,
-        message_id: str | None = None,
+        message_id: Optional[str] = None,
     ):
         """
         初始化消息
@@ -79,7 +79,7 @@ class SwarmMessage:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "SwarmMessage":
+    def from_dict(cls, data: dict[str, Any]) -> SwarmMessage:
         """从字典创建消息"""
         return cls(
             message_type=SwarmMessageType(data["message_type"]),
@@ -383,7 +383,7 @@ class SwarmGossipProtocol:
     def select_gossip_partners(
         self,
         members: list[str],
-        exclude: list[str] | None = None,
+        exclude: Optional[list[str]] = None,
     ) -> list[str]:
         """
         选择Gossip伙伴
@@ -549,7 +549,7 @@ class SwarmKnowledgeSharing:
     def share_knowledge(
         self,
         knowledge: SwarmKnowledgeItem,
-        propagate_to: list[str] | None = None,
+        propagate_to: Optional[list[str]] = None,
     ) -> None:
         """
         共享知识

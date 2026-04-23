@@ -42,7 +42,7 @@ class LLMResponse:
     """LLM 响应"""
 
     content: str = ""
-    stop_reason: str | None = None
+    stop_reason: Optional[str] = None
     tool_uses: list[dict] = field(default_factory=list)
     usage: dict[str, Any] = field(default_factory=dict)
     model: str = ""

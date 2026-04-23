@@ -36,7 +36,7 @@ class AnalysisAgent(BaseAgent):
     """分析Agent - 技术分析专家"""
 
     def __init__(
-        self, agent_id: str = "analysis_agent_001", config: dict[str, Any] | None = None
+        self, agent_id: str = "analysis_agent_001", config: Optional[dict[str, Any]] = None
     ):
         super().__init__(
             agent_id=agent_id,

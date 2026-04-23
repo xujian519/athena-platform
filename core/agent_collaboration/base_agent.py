@@ -34,7 +34,7 @@ class BaseAgent(ABC):
         name: str,
         agent_type: AgentType,
         description: str = "",
-        config: dict[str, Any] | None = None,
+        config: Optional[dict[str, Any]] = None,
     ):
         self.agent_id = agent_id
         self.name = name
@@ -44,7 +44,7 @@ class BaseAgent(ABC):
 
         # 状态管理
         self.status = AgentStatus.IDLE
-        self.current_task_id: str | None = None
+        self.current_task_id: Optional[str] = None
 
         # 性能统计
         self.task_count = 0

@@ -357,7 +357,7 @@ def get_capability(capability_id: str) -> CapabilityDefinition | None:
     return capability_registry.get(capability_id)
 
 
-def find_capabilities(tags: list[str] = None, category: str | None = None) -> list[CapabilityDefinition]:
+def find_capabilities(tags: list[str] = None, category: Optional[str] = None) -> list[CapabilityDefinition]:
     """查找能力"""
     if tags:
         return capability_registry.find_by_tags(tags)

@@ -39,8 +39,8 @@ class BenchmarkTestCase:
 
     # 输入数据
     office_action: dict[str, Any]
-    patent_info: dict[str, Any] | None = None
-    knowledge_graph: dict[str, Any] | None = None
+    patent_info: Optional[dict[str, Any]] = None
+    knowledge_graph: Optional[dict[str, Any]] = None
 
     # 预期结果
     expected_confidence_min: float = 0.7  # 最低置信度
@@ -58,11 +58,11 @@ class BenchmarkResult:
     # 执行信息
     execution_time: float
     success: bool
-    error_message: str | None = None
+    error_message: Optional[str] = None
 
     # 性能指标
-    generation_duration: float | None = None
-    confidence_score: float | None = None
+    generation_duration: Optional[float] = None
+    confidence_score: Optional[float] = None
     sources_count: int = 0
     dimensions_count: int = 0
 
@@ -73,7 +73,7 @@ class BenchmarkResult:
     overall_pass: bool = False
 
     # 详细数据
-    dynamic_prompt_data: dict[str, Any] | None = None
+    dynamic_prompt_data: Optional[dict[str, Any]] = None
 
 
 @dataclass
@@ -259,7 +259,7 @@ class DynamicPromptBenchmark:
         logger.info(f"✅ 已添加测试用例: {test_case.case_id} - {test_case.name}")
 
     async def run_benchmark(
-        self, specific_case_ids: list[str] | None = None
+        self, specific_case_ids: Optional[list[str]] = None
     ) -> BenchmarkReport:
         """
         运行基准测试

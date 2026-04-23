@@ -13,12 +13,12 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 from core.logging import (
-    get_logger,
-    LogLevel,
-    LoggingConfigLoader,
     AsyncLogHandler,
+    LoggingConfigLoader,
+    LogLevel,
     RotatingFileHandler,
-    SensitiveDataFilter
+    SensitiveDataFilter,
+    get_logger,
 )
 
 
@@ -68,8 +68,9 @@ def example_async_logging():
     """示例3: 异步日志集成"""
     print("\n=== 示例3: 异步日志集成 ===\n")
 
-    from core.logging import TextFormatter
     import logging
+
+    from core.logging import TextFormatter
 
     logger = get_logger("async_service", level=LogLevel.INFO)
 

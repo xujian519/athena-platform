@@ -89,7 +89,7 @@ class ProxyAgentAdapter:
         },
     }
 
-    def __init__(self, agent_name: str, method_name: str | None = None):
+    def __init__(self, agent_name: str, method_name: Optional[str] = None):
         """
         初始化代理适配器
 

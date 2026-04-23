@@ -46,7 +46,7 @@ class LearningSample:
 
     features: dict[str, float]
     label: Any | None = None
-    reward: float | None = None
+    reward: Optional[float] = None
     timestamp: datetime = field(default_factory=datetime.now)
     metadata: dict[str, Any] = field(default_factory=dict)
 
@@ -199,8 +199,8 @@ class OnlineLearningEngine:
         self,
         features: dict[str, float],
         label: Any | None = None,
-        reward: float | None = None,
-        metadata: dict[str, Any] | None = None,
+        reward: Optional[float] = None,
+        metadata: Optional[dict[str, Any]] = None,
     ):
         """
         添加学习样本

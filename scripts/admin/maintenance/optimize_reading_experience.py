@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Agentic Design Patterns 阅读体验优化工具
 Reading Experience Optimizer for Agentic Design Patterns
 """
 
-import os
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
+import os
 import shutil
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+from typing import Any
+
 
 class ReadingOptimizer:
     """阅读体验优化器"""
@@ -53,7 +53,7 @@ class ReadingOptimizer:
             return
 
         # 遍历所有Markdown文件
-        for root, dirs, files in os.walk(self.original_dir):
+        for root, _dirs, files in os.walk(self.original_dir):
             for file in files:
                 if file.endswith('.md'):
                     self.optimize_single_markdown_file(root, file)
@@ -69,7 +69,7 @@ class ReadingOptimizer:
 
         # 读取原文件
         try:
-            with open(source_file, 'r', encoding='utf-8') as f:
+            with open(source_file, encoding='utf-8') as f:
                 content = f.read()
         except Exception as e:
             print(f"⚠️ 读取文件失败: {source_file} - {e}")
@@ -183,7 +183,7 @@ class ReadingOptimizer:
 
         resource_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.pdf', '.zip']
 
-        for root, dirs, files in os.walk(self.original_dir):
+        for root, _dirs, files in os.walk(self.original_dir):
             for file in files:
                 if any(file.lower().endswith(ext) for ext in resource_extensions):
                     source_file = Path(root) / file
@@ -218,7 +218,7 @@ class ReadingOptimizer:
 
         # 扫描并添加所有Markdown文件
         md_files = []
-        for root, dirs, files in os.walk(self.original_dir):
+        for root, _dirs, files in os.walk(self.original_dir):
             for file in files:
                 if file.endswith('.md'):
                     rel_path = Path(root).relative_to(self.original_dir) / file
@@ -317,7 +317,7 @@ class ReadingOptimizer:
 
     def create_table_of_contents(self, md_files) -> Any:
         """创建详细目录"""
-        toc_content = f"""# 📋 Agentic Design Patterns 目录总览
+        toc_content = """# 📋 Agentic Design Patterns 目录总览
 
 > **页数**: 424页
 > **章节**: 21个核心模式
@@ -416,7 +416,7 @@ class ReadingOptimizer:
     def create_reading_interface(self) -> Any:
         """创建阅读界面"""
         # 创建简单的HTML阅读界面
-        html_content = f"""<!DOCTYPE html>
+        html_content = """<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">

@@ -12,7 +12,6 @@ import argparse
 import re
 import sys
 from pathlib import Path
-from typing import Dict, List, Set, Tuple
 
 # 导入映射表：检测变量名到应添加的导入语句
 IMPORT_MAPPING = {
@@ -76,7 +75,7 @@ STDLIB_IMPORTS = {
 }
 
 
-def detect_undefined_variables(file_path: Path) -> Set[str]:
+def detect_undefined_variables(file_path: Path) -> set[str]:
     """检测文件中使用的未定义变量"""
     try:
         content = file_path.read_text(encoding='utf-8')
@@ -141,7 +140,7 @@ def has_existing_import(content: str, import_statement: str) -> bool:
     return False
 
 
-def add_import_to_file(file_path: Path, imports: Set[str], dry_run: bool = False) -> bool:
+def add_import_to_file(file_path: Path, imports: set[str], dry_run: bool = False) -> bool:
     """向文件添加缺失的导入语句"""
     try:
         content = file_path.read_text(encoding='utf-8')
@@ -181,7 +180,6 @@ def add_import_to_file(file_path: Path, imports: Set[str], dry_run: bool = False
             break
 
     # 准备要添加的导入语句
-    import_statements = []
     typing_imports = []
     stdlib_imports = []
     thirdparty_imports = []
@@ -251,7 +249,7 @@ def add_import_to_file(file_path: Path, imports: Set[str], dry_run: bool = False
         return False
 
 
-def scan_and_fix(directory: Path, dry_run: bool = False) -> Dict[str, int]:
+def scan_and_fix(directory: Path, dry_run: bool = False) -> dict[str, int]:
     """扫描并修复目录中的所有Python文件"""
     stats = {
         'scanned': 0,
@@ -299,7 +297,7 @@ def scan_and_fix(directory: Path, dry_run: bool = False) -> Dict[str, int]:
     return stats
 
 
-def verify_fixes(directory: Path) -> Dict[str, int]:
+def verify_fixes(directory: Path) -> dict[str, int]:
     """验证修复结果"""
     print("\n🔍 验证修复结果...")
 

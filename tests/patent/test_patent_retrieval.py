@@ -99,7 +99,7 @@ class PatentRetriever:
             print(f"❌ 获取统计信息失败: {e}")
             return {}
 
-    def fulltext_search(self, query: str, limit: int = 10) -> list[dict[str, Any]]:
+    def fulltext_search(self, query: str, limit: int = 10) -> list[dict[str, Any]:
         """
         全文检索专利
 
@@ -146,7 +146,7 @@ class PatentRetriever:
             print(f"❌ 全文检索失败: {e}")
             return []
 
-    def keyword_search(self, keyword: str, field: str = "patent_name", limit: int = 10) -> list[dict[str, Any]]:
+    def keyword_search(self, keyword: str, field: str = "patent_name", limit: int = 10) -> list[dict[str, Any]:
         """
         关键词搜索专利
 
@@ -203,7 +203,7 @@ class PatentRetriever:
             print(f"❌ 关键词搜索失败: {e}")
             return []
 
-    def ipc_search(self, ipc_code: str, limit: int = 10) -> list[dict[str, Any]]:
+    def ipc_search(self, ipc_code: str, limit: int = 10) -> list[dict[str, Any]:
         """
         按IPC分类号搜索专利
 
@@ -243,7 +243,7 @@ class PatentRetriever:
             print(f"❌ IPC分类搜索失败: {e}")
             return []
 
-    def applicant_search(self, applicant_name: str, limit: int = 10) -> list[dict[str, Any]]:
+    def applicant_search(self, applicant_name: str, limit: int = 10) -> list[dict[str, Any]:
         """
         按申请人搜索专利
 
@@ -316,7 +316,7 @@ def print_statistics(stats: dict[str, Any]):
     print("=" * 60 + "\n")
 
 
-def print_results(results: list[dict[str, Any]], title: str = "检索结果"):
+def print_results(results: list[dict[str, Any], title: str = "检索结果"):
     """打印检索结果"""
     print(f"\n{'=' * 60}")
     print(f"📋 {title}")

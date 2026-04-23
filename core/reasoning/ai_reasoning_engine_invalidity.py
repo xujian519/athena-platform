@@ -93,7 +93,7 @@ class AIReasoningEngine:
 
     def __init__(
         self,
-        openai_api_key: str | None = None,
+        openai_api_key: Optional[str] = None,
         model_name: str = "gpt-3.5-turbo",
         use_mock: bool = True,
         cache_dir: str = "./ai_reasoning_cache",
@@ -316,7 +316,7 @@ class AIReasoningEngine:
             return []
 
     def add_document_to_store(
-        self, doc_id: str, text: str, metadata: dict[str, Any] | None = None
+        self, doc_id: str, text: str, metadata: Optional[dict[str, Any]] = None
     ) -> None:
         """添加文档到存储"""
         document = {"id": doc_id, "text": text, "metadata": metadata or {}, "added_at": time.time()}

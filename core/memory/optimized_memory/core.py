@@ -50,7 +50,7 @@ logger = setup_logging()
 class OptimizedMemorySystem(BaseModule):
     """优化版记忆系统 - 智能分层存储 + 向量索引优化"""
 
-    def __init__(self, agent_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, agent_id: str, config: Optional[dict[str, Any]] = None):
         super().__init__(agent_id, config)
 
         # 优化配置
@@ -236,7 +236,7 @@ class OptimizedMemorySystem(BaseModule):
         self,
         data_id: str,
         content: Any,
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
         vector_embedding: np.ndarray | None = None,
     ) -> bool:
         """优化存储"""
@@ -358,7 +358,7 @@ class OptimizedMemorySystem(BaseModule):
         self,
         query_vector: np.ndarray,
         k: int = 10,
-        filters: dict[str, Any] | None = None,
+        filters: Optional[dict[str, Any]] = None,
     ) -> list[dict[str, Any]]:
         """优化向量搜索"""
         time.time()

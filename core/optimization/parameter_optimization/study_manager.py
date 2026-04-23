@@ -48,7 +48,7 @@ class StudyManager:
 
         logger.info(f"📊 初始化Study管理器: {storage_url}")
 
-    def list_studies(self, pattern: str | None = None) -> list[dict[str, Any]]:
+    def list_studies(self, pattern: Optional[str] = None) -> list[dict[str, Any]]:
         """
         列出所有Study
 

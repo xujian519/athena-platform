@@ -30,7 +30,7 @@ def get_search_selector() -> AthenaSearchSelector:
 
 
 async def initialize_search_selector(
-    registry: ToolRegistry | None = None, config: dict[str, Any] | None = None
+    registry: ToolRegistry | None = None, config: Optional[dict[str, Any]] = None
 ) -> AthenaSearchSelector:
     """初始化全局搜索选择器"""
     selector = get_search_selector()

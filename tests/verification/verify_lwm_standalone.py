@@ -5,7 +5,6 @@ Legal World Model Function Verification Script (Standalone)
 """
 
 import sys
-import os
 from pathlib import Path
 
 # 设置路径
@@ -37,12 +36,12 @@ def test_constitution():
         print(f"  ✅ 批准日期: {module.CONSTITUTION_RATIFICATION_DATE}")
 
         # 测试LayerType
-        print(f"\n  三层架构:")
+        print("\n  三层架构:")
         print(f"    - {module.LayerType.BASE_LAW}")
         print(f"    - {module.LayerType.PATENT_LAW}")
         print(f"    - {module.LayerType.CASE_LAW}")
 
-        print(f"\n  ✅ 宪法模块功能正常")
+        print("\n  ✅ 宪法模块功能正常")
         return True
 
     except Exception as e:
@@ -77,7 +76,7 @@ def test_scenario_identifier():
             "分析这个专利的保护范围"
         ]
 
-        print(f"\n  测试场景识别:")
+        print("\n  测试场景识别:")
         for i, text in enumerate(test_cases, 1):
             try:
                 result = identifier.identify_scenario(text)
@@ -87,7 +86,7 @@ def test_scenario_identifier():
             except Exception as e:
                 print(f"    {i}. 测试失败: {e}")
 
-        print(f"\n  ✅ 场景识别器功能正常")
+        print("\n  ✅ 场景识别器功能正常")
         return True
 
     except Exception as e:
@@ -111,11 +110,10 @@ def test_db_manager():
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
 
-        LegalWorldDBManager = module.LegalWorldDBManager
         print("  ✅ 数据库管理器类导入成功")
 
         # 测试配置验证
-        print(f"  ✅ 数据库管理器结构完整")
+        print("  ✅ 数据库管理器结构完整")
         return True
 
     except Exception as e:
@@ -168,7 +166,7 @@ def test_knowledge_graph_builder():
         spec.loader.exec_module(module)
 
         print("  ✅ 知识图谱构建器模块导入成功")
-        print(f"  ✅ 模块大小: 42KB（大型复杂模块）")
+        print("  ✅ 模块大小: 42KB（大型复杂模块）")
         return True
 
     except Exception as e:

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 P1搜索和编辑工具实现
 
@@ -42,14 +41,14 @@ logger = logging.getLogger(__name__)
 class GlobInput(BaseModel):
     """Glob工具输入参数"""
     pattern: str = Field(..., description="文件名模式（支持通配符: *, ?, **）")
-    path: Optional[str] = Field(default=None, description="搜索目录（默认当前目录）")
-    recursive: Optional[bool] = Field(default=True, description="是否递归搜索")
-    limit: Optional[int] = Field(default=100, description="返回结果数量限制", ge=1, le=1000)
+    path: str | None = Field(default=None, description="搜索目录（默认当前目录）")
+    recursive: bool | None = Field(default=True, description="是否递归搜索")
+    limit: int | None = Field(default=100, description="返回结果数量限制", ge=1, le=1000)
 
 
 class GlobOutput(BaseModel):
     """Glob工具输出结果"""
-    matches: List[str] = Field(..., description="匹配的文件路径列表")
+    matches: list[str] = Field(..., description="匹配的文件路径列表")
     total_count: int = Field(..., description="总匹配数量")
     search_path: str = Field(..., description="搜索路径")
     pattern: str = Field(..., description="使用的模式")
@@ -61,7 +60,7 @@ class GlobOutput(BaseModel):
     category="filesystem",
     tags=["search", "file", "filesystem", "glob"],
 )
-async def glob_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def glob_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     Glob工具处理器
 
@@ -157,12 +156,12 @@ async def glob_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[
 class GrepInput(BaseModel):
     """Grep工具输入参数"""
     pattern: str = Field(..., description="正则表达式模式")
-    path: Optional[str] = Field(default=None, description="搜索目录或文件路径")
-    file_pattern: Optional[str] = Field(default="*", description="文件名模式过滤")
-    recursive: Optional[bool] = Field(default=True, description="是否递归搜索")
-    case_insensitive: Optional[bool] = Field(default=False, description="是否忽略大小写")
-    context_lines: Optional[int] = Field(default=0, description="上下文行数（B/A参数）", ge=0, le=10)
-    limit: Optional[int] = Field(default=100, description="返回结果数量限制", ge=1, le=1000)
+    path: str | None = Field(default=None, description="搜索目录或文件路径")
+    file_pattern: str | None = Field(default="*", description="文件名模式过滤")
+    recursive: bool | None = Field(default=True, description="是否递归搜索")
+    case_insensitive: bool | None = Field(default=False, description="是否忽略大小写")
+    context_lines: int | None = Field(default=0, description="上下文行数（B/A参数）", ge=0, le=10)
+    limit: int | None = Field(default=100, description="返回结果数量限制", ge=1, le=1000)
 
 
 class GrepMatch(BaseModel):
@@ -170,13 +169,13 @@ class GrepMatch(BaseModel):
     file_path: str = Field(..., description="文件路径")
     line_number: int = Field(..., description="行号")
     line_content: str = Field(..., description="行内容")
-    context_before: List[str] = Field(default_factory=list, description="之前的上下文行")
-    context_after: List[str] = Field(default_factory=list, description="之后的上下文行")
+    context_before: list[str] = Field(default_factory=list, description="之前的上下文行")
+    context_after: list[str] = Field(default_factory=list, description="之后的上下文行")
 
 
 class GrepOutput(BaseModel):
     """Grep工具输出结果"""
-    matches: List[GrepMatch] = Field(..., description="匹配结果列表")
+    matches: list[GrepMatch] = Field(..., description="匹配结果列表")
     total_count: int = Field(..., description="总匹配数量")
     pattern: str = Field(..., description="使用的正则表达式")
 
@@ -187,7 +186,7 @@ class GrepOutput(BaseModel):
     category="filesystem",
     tags=["search", "content", "regex", "grep"],
 )
-async def grep_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def grep_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     Grep工具处理器
 
@@ -260,7 +259,7 @@ async def grep_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[
         matches = []
         for file_path in files:
             try:
-                with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                with open(file_path, encoding="utf-8", errors="ignore") as f:
                     lines = f.readlines()
 
                 for line_num, line in enumerate(lines, 1):
@@ -327,14 +326,14 @@ class EditInput(BaseModel):
     file_path: str = Field(..., description="文件路径")
     old_text: str = Field(..., description="要替换的旧文本")
     new_text: str = Field(..., description="新文本")
-    replace_all: Optional[bool] = Field(default=False, description="是否替换所有匹配项")
+    replace_all: bool | None = Field(default=False, description="是否替换所有匹配项")
 
 
 class EditOutput(BaseModel):
     """Edit工具输出结果"""
     replacements: int = Field(..., description="替换数量")
     file_path: str = Field(..., description="文件路径")
-    backup_path: Optional[str] = Field(None, description="备份文件路径")
+    backup_path: str | None = Field(None, description="备份文件路径")
 
 
 @tool(
@@ -343,7 +342,7 @@ class EditOutput(BaseModel):
     category="filesystem",
     tags=["edit", "file", "replace", "text"],
 )
-async def edit_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def edit_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     Edit工具处理器
 
@@ -404,7 +403,7 @@ async def edit_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[
             }
 
         # 读取文件内容
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             content = f.read()
 
         # 执行替换
@@ -481,7 +480,7 @@ async def edit_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[
 class WebSearchInput(BaseModel):
     """WebSearch工具输入参数"""
     query: str = Field(..., description="搜索查询")
-    limit: Optional[int] = Field(default=10, description="返回结果数量", ge=1, le=50)
+    limit: int | None = Field(default=10, description="返回结果数量", ge=1, le=50)
 
 
 class WebSearchResult(BaseModel):
@@ -493,7 +492,7 @@ class WebSearchResult(BaseModel):
 
 class WebSearchOutput(BaseModel):
     """WebSearch工具输出结果"""
-    results: List[WebSearchResult] = Field(..., description="搜索结果列表")
+    results: list[WebSearchResult] = Field(..., description="搜索结果列表")
     query: str = Field(..., description="搜索查询")
     total_count: int = Field(..., description="结果总数")
 
@@ -504,7 +503,7 @@ class WebSearchOutput(BaseModel):
     category="web_search",
     tags=["search", "web", "internet"],
 )
-async def web_search_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def web_search_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     WebSearch工具处理器
 
@@ -577,14 +576,14 @@ async def web_search_handler(params: Dict[str, Any], context: Dict[str, Any]) ->
 class WebFetchInput(BaseModel):
     """WebFetch工具输入参数"""
     url: str = Field(..., description="要抓取的URL")
-    timeout: Optional[int] = Field(default=30, description="超时时间（秒）", ge=5, le=120)
+    timeout: int | None = Field(default=30, description="超时时间（秒）", ge=5, le=120)
 
 
 class WebFetchOutput(BaseModel):
     """WebFetch工具输出结果"""
     url: str = Field(..., description="URL")
     content: str = Field(..., description="网页内容（Markdown格式）")
-    title: Optional[str] = Field(None, description="网页标题")
+    title: str | None = Field(None, description="网页标题")
     content_type: str = Field(..., description="内容类型")
 
 
@@ -594,7 +593,7 @@ class WebFetchOutput(BaseModel):
     category="web_search",
     tags=["fetch", "web", "scrape", "markdown"],
 )
-async def web_fetch_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def web_fetch_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     WebFetch工具处理器
 

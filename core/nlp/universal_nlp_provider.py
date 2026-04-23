@@ -49,7 +49,7 @@ class TaskType(Enum):
 class BaseNLPProvider(ABC):
     """NLP服务提供者基类"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config: dict[str, Any] = config or {}
         self.provider_name: str = self.__class__.__name__
         self.is_initialized: bool = False
@@ -86,7 +86,7 @@ class GLM47Provider(BaseNLPProvider):
     max_retries: int
     retry_delay: float
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__(config)
         # 🔧 安全修复:从环境变量读取API密钥
         self.api_key = (
@@ -250,7 +250,7 @@ class GLM47Provider(BaseNLPProvider):
 class LocalBERTProvider(BaseNLPProvider):
     """本地BERT模型提供者"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__(config)
         self.model_path = self.config.get(
             "model_path", "/Users/xujian/Athena工作平台/models/pretrained/chinese_bert"
@@ -292,7 +292,7 @@ class LocalBERTProvider(BaseNLPProvider):
 class BasicNLPProvider(BaseNLPProvider):
     """基础NLP提供者(降级方案)"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__(config)
 
     async def initialize(self):
@@ -333,7 +333,7 @@ class BasicNLPProvider(BaseNLPProvider):
 class OllamaProvider(BaseNLPProvider):
     """Ollama本地模型提供者(支持Qwen3.5等模型)"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__(config)
         self.base_url = self.config.get("base_url", "http://localhost:11434")
         self.model = self.config.get("model", "qwen3.5")
@@ -464,7 +464,7 @@ class OllamaProvider(BaseNLPProvider):
 class UniversalNLPService:
     """通用NLP服务"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
         self.providers = {}
         self.primary_provider = None
@@ -594,7 +594,7 @@ class UniversalNLPService:
 _nlp_service = None
 
 
-async def get_nlp_service(config: dict[str, Any] | None = None) -> UniversalNLPService:
+async def get_nlp_service(config: Optional[dict[str, Any]] = None) -> UniversalNLPService:
     """获取NLP服务实例"""
     global _nlp_service
     if _nlp_service is None:
@@ -622,7 +622,7 @@ async def emotional_analysis(text: str, **kwargs: Any) -> dict[str, Any]:
     return await nlp.process(text, TaskType.EMOTIONAL_ANALYSIS, **kwargs)
 
 
-async def conversation_response(text: str | None = None, context: dict | None = None, **kwargs: Any) -> dict[str, Any]:
+async def conversation_response(text: Optional[str] = None, context: dict | None = None, **kwargs: Any) -> dict[str, Any]:
     """对话响应"""
     nlp = await get_nlp_service()
     return await nlp.process(text, TaskType.CONVERSATION, **kwargs)

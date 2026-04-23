@@ -46,8 +46,8 @@ class VectorSearchService:
         self,
         query: str,
         top_k: int = 10,
-        memory_type: Optional[MemoryType] = None,
-        category: Optional[MemoryCategory] = None,
+        memory_type: MemoryType | None = None,
+        category: MemoryCategory | None = None,
     ) -> list[MemoryEntry]:
         """纯向量搜索
 
@@ -124,8 +124,8 @@ class VectorSearchService:
         query: str,
         top_k: int = 10,
         alpha: float = 0.5,
-        memory_type: Optional[MemoryType] = None,
-        category: Optional[MemoryCategory] = None,
+        memory_type: MemoryType | None = None,
+        category: MemoryCategory | None = None,
     ) -> list[MemoryEntry]:
         """混合检索（向量+关键词）
 
@@ -354,7 +354,7 @@ class VectorSearchService:
 
 # 便捷函数
 async def get_vector_search_service(
-    memory_system, embedding_store: Optional[EmbeddingStore] = None
+    memory_system, embedding_store: EmbeddingStore | None = None
 ) -> VectorSearchService:
     """获取向量搜索服务实例
 

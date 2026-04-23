@@ -56,7 +56,7 @@ class RedisConfig:
 
     host: str
     port: int
-    password: str | None = None
+    password: Optional[str] = None
     db: int = 0
     ssl_enabled: bool = False
 
@@ -65,9 +65,9 @@ class RedisConfig:
 class AIModelConfig:
     """AI模型配置"""
 
-    glm_api_key: str | None = None
+    glm_api_key: Optional[str] = None
     glm_base_url: str = "https://open.bigmodel.cn/api/paas/v4"
-    openai_api_key: str | None = None
+    openai_api_key: Optional[str] = None
     openai_base_url: str = "https://api.openai.com/v1"
     model_path: Path | None = None
     bert_model_path: Path | None = None
@@ -81,7 +81,7 @@ class SecurityConfig:
     jwt_secret: str
     jwt_algorithm: str = "HS256"
     jwt_expire_hours: int = 24
-    cors_origins: list[str] | None = None
+    cors_origins: Optional[list[str]] = None
     api_key_header: str = "X-API-Key"
 
     def __post_init__(self):
@@ -98,8 +98,8 @@ class MonitoringConfig:
     grafana_username: str = "admin"
     grafana_password: str = ""
     log_level: str = "INFO"
-    alert_webhook_url: str | None = None
-    alert_email: str | None = None
+    alert_webhook_url: Optional[str] = None
+    alert_email: Optional[str] = None
 
 
 class EnvironmentManager:
@@ -198,7 +198,7 @@ class EnvironmentManager:
 
         return self.get(key, default_path, Path)
 
-    def get_list(self, key: str, default: list[str] | None = None) -> list[str]:
+    def get_list(self, key: str, default: Optional[list[str]] = None) -> list[str]:
         """获取列表类型环境变量"""
         if default is None:
             default = []

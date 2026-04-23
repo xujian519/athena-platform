@@ -4,11 +4,11 @@ Phase 1和Phase 2全面验证脚本
 Comprehensive Verification Script for Phase 1 & 2
 """
 import asyncio
-import sys
-import logging
-from pathlib import Path
-from typing import Dict, List, Any
 import json
+import logging
+import sys
+from pathlib import Path
+from typing import Any
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent
@@ -27,8 +27,8 @@ class VerificationResult:
     def __init__(self, name: str):
         self.name = name
         self.passed = False
-        self.details: List[str] = []
-        self.errors: List[str] = []
+        self.details: list[str] = []
+        self.errors: list[str] = []
 
     def add_detail(self, detail: str):
         """添加详情"""
@@ -42,7 +42,7 @@ class VerificationResult:
         """设置是否通过"""
         self.passed = passed
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "name": self.name,
@@ -58,7 +58,7 @@ class ComprehensiveVerifier:
 
     def __init__(self):
         """初始化验证器"""
-        self.results: List[VerificationResult] = []
+        self.results: list[VerificationResult] = []
 
     def add_result(self, result: VerificationResult):
         """添加验证结果"""
@@ -100,7 +100,7 @@ class ComprehensiveVerifier:
             try:
                 from core.config.unified_settings import UnifiedSettings
                 settings = UnifiedSettings()
-                result.add_detail(f"✓ UnifiedSettings加载成功")
+                result.add_detail("✓ UnifiedSettings加载成功")
                 result.add_detail(f"  - 数据库: {settings.database_url[:30]}...")
                 result.add_detail(f"  - Redis: {settings.redis_url[:30]}...")
                 result.add_detail(f"  - LLM: {settings.llm_default_provider}")
@@ -112,7 +112,7 @@ class ComprehensiveVerifier:
             try:
                 from core.config.unified_config_loader import load_full_config
                 config = load_full_config('development', 'xiaona')
-                result.add_detail(f"✓ 配置加载器成功")
+                result.add_detail("✓ 配置加载器成功")
                 result.add_detail(f"  - 服务名: {config.get('service', {}).get('name')}")
             except Exception as e:
                 result.add_error(f"配置加载器失败: {e}")
@@ -120,7 +120,6 @@ class ComprehensiveVerifier:
             # 4. 检查配置适配器
             result.add_detail("检查配置适配器...")
             try:
-                from core.config.config_adapter import ConfigAdapter
                 result.add_detail("✓ 配置适配器可用")
             except Exception as e:
                 result.add_error(f"配置适配器导入失败: {e}")
@@ -184,9 +183,10 @@ class ComprehensiveVerifier:
             # 2. 测试内存存储
             result.add_detail("测试内存存储...")
             try:
-                from core.service_registry.storage_memory import InMemoryServiceRegistryStorage
-                from core.service_registry import ServiceInstance, ServiceStatus
                 from datetime import datetime
+
+                from core.service_registry import ServiceInstance, ServiceStatus
+                from core.service_registry.storage_memory import InMemoryServiceRegistryStorage
 
                 storage = InMemoryServiceRegistryStorage()
 
@@ -228,7 +228,6 @@ class ComprehensiveVerifier:
             result.add_detail("测试服务发现...")
             try:
                 from core.service_registry.discovery import ServiceDiscovery
-                from core.service_registry import LoadBalanceStrategy
 
                 discovery = ServiceDiscovery(storage=storage)
 
@@ -304,7 +303,7 @@ class ComprehensiveVerifier:
                 import os
 
                 python_files = []
-                for root, dirs, files in os.walk(project_root / "core"):
+                for root, _dirs, files in os.walk(project_root / "core"):
                     for file in files:
                         if file.endswith(".py"):
                             python_files.append(os.path.join(root, file))
@@ -312,7 +311,7 @@ class ComprehensiveVerifier:
                 syntax_errors = []
                 for file in python_files[:20]:  # 检查前20个文件
                     try:
-                        with open(file, 'r', encoding='utf-8') as f:
+                        with open(file, encoding='utf-8') as f:
                             ast.parse(f.read())
                     except SyntaxError as e:
                         syntax_errors.append(f"{file}: {e}")
@@ -341,7 +340,7 @@ class ComprehensiveVerifier:
                 try:
                     __import__(module)
                     result.add_detail(f"✓ {module}")
-                except ImportError as e:
+                except ImportError:
                     failed_imports.append(module)
                     result.add_error(f"导入失败: {module}")
 
@@ -403,8 +402,8 @@ class ComprehensiveVerifier:
             # 1. 配置管理功能测试
             result.add_detail("测试配置管理功能...")
             try:
-                from core.config.unified_settings import UnifiedSettings
                 from core.config.unified_config_loader import load_full_config
+                from core.config.unified_settings import UnifiedSettings
 
                 settings = UnifiedSettings()
                 config = load_full_config('development', 'xiaona')
@@ -425,13 +424,11 @@ class ComprehensiveVerifier:
             # 2. 服务注册功能测试
             result.add_detail("测试服务注册功能...")
             try:
-                from core.service_registry.storage_memory import InMemoryServiceRegistryStorage
+
                 from core.service_registry import (
-                    ServiceInstance,
                     ServiceRegistration,
-                    ServiceStatus
                 )
-                from datetime import datetime
+                from core.service_registry.storage_memory import InMemoryServiceRegistryStorage
 
                 storage = InMemoryServiceRegistryStorage()
 

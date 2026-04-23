@@ -66,7 +66,7 @@ class PlanningRequest:
     constraints: list[str] = field(default_factory=list)
     priority: Priority = Priority.MEDIUM
     deadline: datetime | None = None
-    assigned_agent: str | None = None
+    assigned_agent: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -77,9 +77,9 @@ class PlanningResult:
     request_id: str
     planner_type: PlannerType
     success: bool
-    plan_id: str | None = None
+    plan_id: Optional[str] = None
     steps: list[dict[str, Any]] = field(default_factory=list)
-    timeline: dict[str, Any] | None = None
+    timeline: Optional[dict[str, Any]] = None
     resources: list[str] = field(default_factory=list)
     dependencies: list[str] = field(default_factory=list)
     estimated_duration: timedelta | None = None

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 简单监控示例
 Simple Monitor Example
@@ -8,14 +7,15 @@ Simple Monitor Example
 """
 
 import asyncio
-import sys
-from pathlib import Path
-from datetime import datetime
 import json
+import sys
+from datetime import datetime
+from pathlib import Path
 
 # 导入按需启动AI系统
 sys.path.append(str(Path.cwd()))
 from ready_on_demand_system import ai_system
+
 
 class SimpleMonitor:
     """简单监控器"""
@@ -45,7 +45,7 @@ class SimpleMonitor:
 
             # 运行中的智能体
             if 'running_agent_names' in status:
-                print(f"\n🤖 当前运行的智能体:")
+                print("\n🤖 当前运行的智能体:")
                 for agent in status['running_agent_names']:
                     print(f"   ✅ {agent}")
 
@@ -55,13 +55,13 @@ class SimpleMonitor:
             saved_memory = total_possible_memory - current_memory
             saved_percentage = (saved_memory / total_possible_memory) * 100
 
-            print(f"\n💡 性能分析:")
+            print("\n💡 性能分析:")
             print(f"   理论最大内存: {total_possible_memory} MB")
             print(f"   当前使用内存: {current_memory} MB")
             print(f"   节省内存: {saved_memory} MB ({saved_percentage:.1f}%)")
 
             # 状态评估
-            print(f"\n📋 状态评估:")
+            print("\n📋 状态评估:")
             if saved_percentage > 50:
                 print("   ✅ 优秀: 内存节省率超过50%")
             elif saved_percentage > 30:
@@ -90,7 +90,7 @@ class SimpleMonitor:
             with open('monitor_report.json', 'w') as f:
                 json.dump(report, f, indent=2)
 
-            print(f"\n📄 报告已保存到: monitor_report.json")
+            print("\n📄 报告已保存到: monitor_report.json")
 
             return True
 

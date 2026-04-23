@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 P0基础工具实现
 
@@ -41,9 +40,9 @@ logger = logging.getLogger(__name__)
 class BashInput(BaseModel):
     """Bash工具输入参数"""
     command: str = Field(..., description="要执行的Shell命令")
-    timeout: Optional[float] = Field(default=30.0, description="超时时间（秒）", ge=0.1, le=300.0)
-    working_dir: Optional[str] = Field(default=None, description="工作目录（绝对路径）")
-    env: Optional[Dict[str, str]] = Field(default=None, description="环境变量")
+    timeout: float | None = Field(default=30.0, description="超时时间（秒）", ge=0.1, le=300.0)
+    working_dir: str | None = Field(default=None, description="工作目录（绝对路径）")
+    env: dict[str, str] | None = Field(default=None, description="环境变量")
 
 
 class BashOutput(BaseModel):
@@ -62,7 +61,7 @@ class BashOutput(BaseModel):
     category="system",
     tags=["shell", "command", "system", "bash"],
 )
-async def bash_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def bash_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     Bash工具处理器
 
@@ -207,9 +206,9 @@ async def bash_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[
 class ReadInput(BaseModel):
     """Read工具输入参数"""
     file_path: str = Field(..., description="文件路径（绝对或相对路径）")
-    offset: Optional[int] = Field(default=0, description="起始行号（从0开始）", ge=0)
-    limit: Optional[int] = Field(default=None, description="读取行数限制", ge=1)
-    encoding: Optional[str] = Field(default="utf-8", description="文件编码")
+    offset: int | None = Field(default=0, description="起始行号（从0开始）", ge=0)
+    limit: int | None = Field(default=None, description="读取行数限制", ge=1)
+    encoding: str | None = Field(default="utf-8", description="文件编码")
 
 
 class ReadOutput(BaseModel):
@@ -229,7 +228,7 @@ class ReadOutput(BaseModel):
     category="filesystem",
     tags=["file", "read", "filesystem"],
 )
-async def read_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def read_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     Read工具处理器
 
@@ -303,14 +302,14 @@ async def read_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[
 
         # 尝试读取文件
         try:
-            with open(path, "r", encoding=encoding) as f:
+            with open(path, encoding=encoding) as f:
                 all_lines = f.readlines()
         except UnicodeDecodeError:
             # 尝试其他编码
             logger.warning(f"编码{encoding}失败，尝试自动检测")
             for alt_encoding in ["utf-8-sig", "gbk", "gb2312", "latin-1"]:
                 try:
-                    with open(path, "r", encoding=alt_encoding) as f:
+                    with open(path, encoding=alt_encoding) as f:
                         all_lines = f.readlines()
                     logger.info(f"✅ 使用编码: {alt_encoding}")
                     encoding = alt_encoding
@@ -374,15 +373,15 @@ class WriteInput(BaseModel):
     """Write工具输入参数"""
     file_path: str = Field(..., description="文件路径（绝对或相对路径）")
     content: str = Field(..., description="要写入的内容")
-    mode: Optional[str] = Field(
+    mode: str | None = Field(
         default="overwrite",
         description="写入模式: overwrite(覆盖) / append(追加)",
     )
-    create_dirs: Optional[bool] = Field(
+    create_dirs: bool | None = Field(
         default=True,
         description="是否自动创建父目录",
     )
-    encoding: Optional[str] = Field(default="utf-8", description="文件编码")
+    encoding: str | None = Field(default="utf-8", description="文件编码")
 
 
 class WriteOutput(BaseModel):
@@ -399,7 +398,7 @@ class WriteOutput(BaseModel):
     category="filesystem",
     tags=["file", "write", "filesystem"],
 )
-async def write_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def write_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     Write工具处理器
 
@@ -482,7 +481,7 @@ async def write_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict
             with os.fdopen(temp_fd, "w", encoding=encoding) as f:
                 if mode == "append" and file_exists:
                     # 追加模式：先读取原内容
-                    with open(path, "r", encoding=encoding) as original:
+                    with open(path, encoding=encoding) as original:
                         original_content = original.read()
                     f.write(original_content)
                     f.write(content)

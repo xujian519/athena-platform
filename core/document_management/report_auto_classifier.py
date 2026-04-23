@@ -38,7 +38,7 @@ class ReportMetadata:
     creation_date: datetime  # 创建日期
     tags: list = None  # 标签
     summary: str = ""  # 摘要
-    category_hint: str | None = None  # 分类提示
+    category_hint: Optional[str] = None  # 分类提示
     priority: int = 0  # 优先级
 
 
@@ -73,7 +73,7 @@ class ReportAutoClassifier:
         self,
         content: str,
         metadata: ReportMetadata,
-        filename: str | None = None,
+        filename: Optional[str] = None,
         auto_classify: bool = True,
         save_to_temp: bool = False,
     ) -> ClassificationResult:
@@ -272,8 +272,8 @@ def create_report_with_auto_classification(
     report_type: str,
     author: str = "小诺·双鱼公主",
     tags: list | None = None,
-    category_hint: str | None = None,
-    docs_root: str | None = None,
+    category_hint: Optional[str] = None,
+    docs_root: Optional[str] = None,
 ) -> ClassificationResult:
     """
     便捷函数:创建报告并自动分类
@@ -306,11 +306,11 @@ def create_report_with_auto_classification(
 
 # 装饰器:用于报告生成函数
 def auto_classify_report(
-    title: str | None = None,
+    title: Optional[str] = None,
     report_type: str = "report",
     author: str = "小诺·双鱼公主",
-    category_hint: str | None = None,
-    docs_root: str | None = None,
+    category_hint: Optional[str] = None,
+    docs_root: Optional[str] = None,
 ):
     """
     装饰器:自动分类报告

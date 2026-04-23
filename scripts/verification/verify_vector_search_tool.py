@@ -77,8 +77,8 @@ async def verify_qdrant_service():
 
         if response.status_code == 200:
             collections = response.json()
-            print(f"✅ Qdrant服务运行中")
-            print(f"   端点: http://localhost:6333")
+            print("✅ Qdrant服务运行中")
+            print("   端点: http://localhost:6333")
             print(f"   集合数: {len(collections.get('result', {}).get('collections', []))}")
 
             # 列出集合
@@ -116,8 +116,8 @@ async def verify_embedding_model():
         print("加载BGE-M3模型...")
         model = SentenceTransformer('BAAI/bge-m3')
 
-        print(f"✅ BGE-M3模型加载成功")
-        print(f"   模型: BAAI/bge-m3")
+        print("✅ BGE-M3模型加载成功")
+        print("   模型: BAAI/bge-m3")
         print(f"   向量维度: {model.get_sentence_embedding_dimension()}")
         print(f"   最大序列长度: {model.max_seq_length}")
 
@@ -125,7 +125,7 @@ async def verify_embedding_model():
         test_text = "这是一个测试句子"
         embedding = model.encode(test_text)
 
-        print(f"✅ 测试编码成功")
+        print("✅ 测试编码成功")
         print(f"   输入: '{test_text}'")
         print(f"   输出维度: {len(embedding)}")
         print(f"   输出范围: [{embedding.min():.4f}, {embedding.max():.4f}]")
@@ -155,9 +155,9 @@ async def verify_vector_manager():
         print("创建IntelligentVectorManager实例...")
         manager = IntelligentVectorManager()
 
-        print(f"✅ 向量管理器创建成功")
-        print(f"   Qdrant客户端: 已连接")
-        print(f"   嵌入模型: 已加载")
+        print("✅ 向量管理器创建成功")
+        print("   Qdrant客户端: 已连接")
+        print("   嵌入模型: 已加载")
         print(f"   配置集合: {len(manager.collections_config)}")
 
         # 测试搜索
@@ -170,9 +170,9 @@ async def verify_vector_manager():
                 score_threshold=0.0
             )
 
-            print(f"✅ 向量搜索成功")
-            print(f"   查询: '专利检索'")
-            print(f"   集合: legal_main")
+            print("✅ 向量搜索成功")
+            print("   查询: '专利检索'")
+            print("   集合: legal_main")
             print(f"   结果数: {len(results)}")
 
             if results:

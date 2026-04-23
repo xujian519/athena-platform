@@ -65,7 +65,7 @@ class PromptEnhancementResult:
     original_prompt: str
     retrieval_results: dict[str, Any]
     metadata: dict[str, Any] = field(default_factory=dict)
-    error: str | None = None
+    error: Optional[str] = None
     processing_time: float = 0.0
 
 

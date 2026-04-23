@@ -22,7 +22,7 @@ async def test_optimized_features():
 
     try:
         # 导入优化后的类
-        from core.agent.xiaonuo_integrated_enhanced import XiaonuoIntegratedEnhanced
+        from core.framework.agents.xiaonuo_integrated_enhanced import XiaonuoIntegratedEnhanced
 
         # 创建小诺实例
         print("🚀 正在创建优化后的小诺实例...")

@@ -5,10 +5,11 @@
 import re
 from pathlib import Path
 
+
 def clean_xiaochen_references(file_path):
     """清理文件中的xiaochen引用"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         original_content = content

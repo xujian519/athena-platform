@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺·双鱼公主认知与决策模块优化器
 Xiaonuo Pisces Princess Cognition & Decision Modules Optimizer
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
 import asyncio
 import json
 from datetime import datetime
-from typing import Dict, Any, List, Optional
+from typing import Any
+
 
 class CognitionDecisionOptimizer:
     """认知与决策模块优化器"""
@@ -53,7 +54,7 @@ from integration.xiaonuo_planning_integration import XiaonuoPlanningIntegration
 from core.planning.unified_planning_interface import UnifiedPlanningInterface
 
 class XiaonuoIntegratedEnhanced(XiaonuoEnhancedAgent):
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: Optional[Dict[str, Any] = None):
         super().__init__(config)
 
         # 初始化规划器相关组件
@@ -118,7 +119,7 @@ class XiaonuoIntegratedEnhanced(XiaonuoEnhancedAgent):
 
         # 读取原文件
         file_path = "/Users/xujian/Athena工作平台/core/agent/xiaonuo_integrated_enhanced.py"
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         # 添加导入语句
@@ -279,7 +280,7 @@ class EnhancedDecisionModel:
         print("\n  🔧 正在集成决策模型...")
 
         file_path = "/Users/xujian/Athena工作平台/core/agent/xiaonuo_integrated_enhanced.py"
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         # 添加决策模型导入和初始化

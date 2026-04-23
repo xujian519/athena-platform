@@ -347,7 +347,7 @@ class AthenaMultimodalReasoningEngine:
     async def execute_reasoning(
         self,
         problem: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
         reasoning_mode: ReasoningMode = ReasoningMode.STANDARD_INFERENCE,
         complexity: ThinkingComplexity = ThinkingComplexity.ANALYSIS,
     ) -> dict[str, Any]:

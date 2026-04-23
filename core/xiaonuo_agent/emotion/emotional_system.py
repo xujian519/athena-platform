@@ -129,7 +129,7 @@ class EmotionalState:
         self.dominance *= decay_factor
         self.timestamp = datetime.now().isoformat()
 
-    def distance_to(self, other: "EmotionalState") -> float:
+    def distance_to(self, other: EmotionalState) -> float:
         """计算与另一个情感状态的距离(欧氏距离)"""
         return math.sqrt(
             (self.pleasure - other.pleasure) ** 2
@@ -258,7 +258,7 @@ class EmotionalSystem:
         self,
         stimulus_type: StimulusType,
         intensity: float = 0.5,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> EmotionalState:
         """
         接受刺激并更新情感状态

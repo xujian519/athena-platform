@@ -12,13 +12,7 @@ Collaboration模块__init__.py单元测试
 
 import pytest
 
-from core.collaboration import (
-    # 便捷函数
-    create_collaboration_framework,
-    create_agent,
-    create_task,
-    create_collaboration_pattern,
-    get_available_patterns,
+from core.framework.collaboration import (
     # 常量
     DEFAULT_MAX_AGENTS,
     DEFAULT_MAX_TASKS,
@@ -27,15 +21,19 @@ from core.collaboration import (
     Agent,
     AgentCapability,
     AgentStatus,
-    Task,
-    TaskStatus,
-    Priority,
     CollaborationStrategy,
     ConflictResolutionStrategy,
-    CollaborationPatternFactory,
     MultiAgentCollaborationFramework,
+    Priority,
+    Task,
+    TaskStatus,
+    create_agent,
+    # 便捷函数
+    create_collaboration_framework,
+    create_collaboration_pattern,
+    create_task,
+    get_available_patterns,
 )
-
 
 # ==================== 便捷函数测试 ====================
 
@@ -413,7 +411,7 @@ class TestPerformance:
 
         start = time.time()
         for _ in range(10):
-            framework = create_collaboration_framework()
+            create_collaboration_framework()
         elapsed = time.time() - start
 
         # 创建10个框架应该很快 (< 0.1秒)

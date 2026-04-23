@@ -389,7 +389,7 @@ db_manager = DatabaseConnectionManager()
 
 
 # 便捷函数
-async def get_db_manager(configs: dict[str, Any] | None = None) -> DatabaseConnectionManager:
+async def get_db_manager(configs: Optional[dict[str, Any]] = None) -> DatabaseConnectionManager:
     """获取数据库管理器实例"""
     global db_manager
 
@@ -494,7 +494,7 @@ class SyncDatabaseConnectionManager:
     @contextmanager
     def postgresql_connection(
         self, autocommit: bool = True
-    ) -> Generator[psycopg2.extensions.connection, None, None]:
+    ) -> Generator[psycopg2.extensions.connection]:
         """
         PostgreSQL连接上下文管理器
 
@@ -525,8 +525,8 @@ class SyncDatabaseConnectionManager:
 
     @contextmanager
     def postgresql_cursor(
-        self, autocommit: bool | None = None, cursor_factory: object | None = None
-    ) -> Generator[psycopg2.extensions.cursor, None, None]:
+        self, autocommit: Optional[bool] = None, cursor_factory: object | None = None
+    ) -> Generator[psycopg2.extensions.cursor]:
         """
         PostgreSQL游标上下文管理器
 
@@ -557,7 +557,7 @@ class SyncDatabaseConnectionManager:
                     logger.debug("🔒 PostgreSQL游标已关闭")
 
     @contextmanager
-    def neo4j_session(self) -> Generator[Neo4jSession, None, None]:
+    def neo4j_session(self) -> Generator[Neo4jSession]:
         """
         Neo4j会话上下文管理器
 
@@ -619,7 +619,7 @@ class SyncDatabaseConnectionManager:
             logger.error(f"❌ Qdrant客户端创建失败: {e}")
             raise
 
-    def execute_batch(self, sql: str, params_list: list, batch_size: int | None = None) -> None:
+    def execute_batch(self, sql: str, params_list: list, batch_size: Optional[int] = None) -> None:
         """
         批量执行SQL语句
 

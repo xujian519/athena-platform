@@ -312,7 +312,7 @@ async def _generate_suggestions(query: str, results: list[PatentInfo]) -> list[s
         ipc_counter = {}
         for ipc in ipc_classes:
             if ipc:
-                ipc_counter[ipc[:3]] = ipc_counter.get(ipc[:3], 0) + 1
+                ipc_counter[ipc[:3] = ipc_counter.get(ipc[:3], 0) + 1
 
         # 添加IPC分类建议
         for ipc, count in sorted(ipc_counter.items(), key=lambda x: x[1], reverse=True)[:3]:

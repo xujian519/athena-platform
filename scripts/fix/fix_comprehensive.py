@@ -6,7 +6,8 @@
 import re
 from pathlib import Path
 
-def fix_comprehensive(content: str) -> tuple[str, list[str]]:
+
+def fix_comprehensive(content: str) -> tuple[str, list[str]:
     """全面修复语法错误"""
     fixes = []
 
@@ -27,9 +28,9 @@ def fix_comprehensive(content: str) -> tuple[str, list[str]]:
                 fixes.append(f"第{i+1}行: 默认值语法")
 
         # 模式2: Optional[list[Type | None = None)] (括号错误)
-        if re.search(r'Optional\[list\[[^\]]+\|\s*None\s*=\s*None\]', line):
+        if re.search(r'Optional\[list\[[^\]+\|\s*None\s*=\s*None\]', line):
             line = re.sub(
-                r'Optional\[list\[([^\]]+)\|\s*None\s*=\s*None\]',
+                r'Optional\[list\[([^\]+)\|\s*None\s*=\s*None\]',
                 r'list[\1] | None',
                 line
             )
@@ -82,10 +83,10 @@ def fix_comprehensive(content: str) -> tuple[str, list[str]]:
 
     return '\n'.join(result_lines), fixes
 
-def fix_file(file_path: Path) -> tuple[bool, list[str]]:
+def fix_file(file_path: Path) -> tuple[bool, list[str]:
     """修复单个文件"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         new_content, fixes = fix_comprehensive(content)
@@ -129,7 +130,7 @@ def main():
                 for fix in fixes[:3]:
                     print(f"    {fix}")
 
-    print(f"\n修复完成!")
+    print("\n修复完成!")
     print(f"修复文件数: {fixed_count}")
 
 if __name__ == "__main__":

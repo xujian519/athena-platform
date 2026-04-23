@@ -144,7 +144,7 @@ def update_database() -> None:
         if not ret:
             continue
         pub_at = ret.group(1)
-        name = f[:ret.span()[0]]
+        name = f[:ret.span()[0]
 
         exist_laws = law_db.get_laws(name, pub_at)
         if exist_laws:

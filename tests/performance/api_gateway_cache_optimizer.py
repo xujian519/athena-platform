@@ -109,7 +109,7 @@ class APIGatewayCacheOptimizer:
 
         return analysis
 
-    def generate_optimization_recommendations(self) -> list[dict[str, Any]]:
+    def generate_optimization_recommendations(self) -> list[dict[str, Any]:
         """生成优化建议"""
         recommendations = []
 

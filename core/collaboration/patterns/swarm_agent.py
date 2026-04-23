@@ -37,7 +37,7 @@ class SwarmTask:
         self,
         id: str,
         description: str,
-        required_capabilities: List[str] = None,
+        required_capabilities: list[str] = None,
         status: TaskStatus = TaskStatus.PENDING,
     ):
         """初始化Swarm任务"""
@@ -45,12 +45,12 @@ class SwarmTask:
         self.description = description
         self.required_capabilities = required_capabilities or []
         self.status = status
-        self.assignees: List[str] = []
-        self.subtasks: List["SwarmTask"] = []
+        self.assignees: list[str] = []
+        self.subtasks: list["SwarmTask"] = []
         self.parent_id: Optional[str] = None
         self.created_at = datetime.now()
         self.completed_at: Optional[datetime] = None
-        self.result: Optional[Dict[str, Any]] = None  # 任务执行结果
+        self.result: Optional[dict[str, Any]] = None  # 任务执行结果
         self.error: Optional[str] = None  # 任务失败原因
 
         logger.debug(f"SwarmTask {id} created: {description}")
@@ -68,7 +68,7 @@ class SwarmTask:
             self.status = TaskStatus.ASSIGNED
             logger.debug(f"Task {self.id} assigned to agent {agent_id}")
 
-    def complete(self, result: Dict[str, Any] = None) -> None:
+    def complete(self, result: dict[str, Any] = None) -> None:
         """标记任务为完成"""
         self.status = TaskStatus.COMPLETED
         self.completed_at = datetime.now()
@@ -93,7 +93,7 @@ class SwarmAgent:
         self,
         agent_id: str,
         initial_role: AgentRole = AgentRole.WORKER,
-        capabilities: List[str] = None,
+        capabilities: list[str] = None,
     ):
         """初始化Swarm Agent"""
         self.agent_id = agent_id
@@ -102,12 +102,12 @@ class SwarmAgent:
             role=initial_role,
             capabilities=capabilities or [],
         )
-        self._task_history: List[str] = []
-        self._performance_metrics: Dict[str, float] = {}
+        self._task_history: list[str] = []
+        self._performance_metrics: dict[str, float] = {}
 
         logger.info(f"SwarmAgent {agent_id} initialized with role {initial_role}")
 
-    async def execute_task(self, task_id: str, task_data: Dict[str, Any]) -> Any:
+    async def execute_task(self, task_id: str, task_data: dict[str, Any]) -> Any:
         """
         执行任务
 
@@ -178,7 +178,7 @@ class SwarmAgent:
         """检查Agent是否可用"""
         return self._state.is_available()
 
-    def get_capabilities(self) -> List[str]:
+    def get_capabilities(self) -> list[str]:
         """获取Agent能力"""
         return self._state.capabilities
 
@@ -189,7 +189,7 @@ class SwarmAgent:
         return self._state.role
 
     @property
-    def capabilities(self) -> List[str]:
+    def capabilities(self) -> list[str]:
         """获取能力列表（属性访问）"""
         return self._state.capabilities
 
@@ -214,12 +214,12 @@ class SwarmAgent:
         self._state.load = max(0.0, min(1.0, value))
 
     @property
-    def role_history(self) -> List[AgentRole]:
+    def role_history(self) -> list[AgentRole]:
         """获取角色历史（属性访问）"""
         return self._state.role_history
 
     @property
-    def neighbors(self) -> List[str]:
+    def neighbors(self) -> list[str]:
         """获取邻居列表（属性访问）"""
         return self._state.neighbors
 
@@ -279,11 +279,11 @@ class SwarmAgent:
         # 检查是否具备所有必需的能力
         return all(cap in self._state.capabilities for cap in required_caps)
 
-    def get_task_history(self) -> List[str]:
+    def get_task_history(self) -> list[str]:
         """获取任务历史"""
         return self._task_history.copy()
 
-    def get_performance_metrics(self) -> Dict[str, float]:
+    def get_performance_metrics(self) -> dict[str, float]:
         """获取性能指标"""
         return self._performance_metrics.copy()
 
@@ -350,12 +350,12 @@ class SwarmSharedState:
 
     def __init__(self):
         """初始化共享状态"""
-        self.member_states: Dict[str, AgentState] = {}
-        self.knowledge: Dict[str, Any] = {}
-        self.emergency_flags: List[str] = []
+        self.member_states: dict[str, AgentState] = {}
+        self.knowledge: dict[str, Any] = {}
+        self.emergency_flags: list[str] = []
         self.statistics = SwarmStatistics()
 
-    def update_member_state(self, agent_id: str, state_dict: Dict[str, Any]) -> None:
+    def update_member_state(self, agent_id: str, state_dict: dict[str, Any]) -> None:
         """
         更新成员状态
 

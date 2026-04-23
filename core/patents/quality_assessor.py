@@ -43,8 +43,8 @@ class QualityIssue:
     dimension: QualityDimension
     description: str
     severity: SeverityLevel
-    location: str | None = None  # 问题在文本中的位置
-    suggestion: str | None = None
+    location: Optional[str] = None  # 问题在文本中的位置
+    suggestion: Optional[str] = None
 
 
 @dataclass
@@ -188,8 +188,8 @@ class ClaimQualityAssessor:
     def assess(self,
              claim_text: str,
              description: str,
-             prior_art: list[str] | None = None,
-             cpc_code: str | None = None) -> QualityAssessment:
+             prior_art: Optional[list[str]] = None,
+             cpc_code: Optional[str] = None) -> QualityAssessment:
         """
         全面评估权利要求质量
 
@@ -245,8 +245,8 @@ class ClaimQualityAssessor:
                       dimension: QualityDimension,
                       claim: str,
                       description: str,
-                      prior_art: list[str] | None,
-                      cpc_code: str | None) -> DimensionScore:
+                      prior_art: Optional[list[str]],
+                      cpc_code: Optional[str]) -> DimensionScore:
         """评估单个维度"""
 
         prompt = self._build_evaluation_prompt(
@@ -263,8 +263,8 @@ class ClaimQualityAssessor:
                               dimension: QualityDimension,
                               claim: str,
                               description: str,
-                              prior_art: list[str] | None,
-                              cpc_code: str | None) -> str:
+                              prior_art: Optional[list[str]],
+                              cpc_code: Optional[str]) -> str:
         """构建评估提示词"""
 
         base_prompt = self._evaluation_prompts.get(dimension.value)

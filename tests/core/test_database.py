@@ -26,7 +26,7 @@ class TestDatabaseModule:
     def test_database_config_import(self):
         """测试数据库配置可以导入"""
         try:
-            from core.database.config import DatabaseConfig
+            from core.infrastructure.database.config import DatabaseConfig
             assert DatabaseConfig is not None
         except ImportError:
             pytest.skip("数据库配置导入失败")
@@ -34,7 +34,7 @@ class TestDatabaseModule:
     def test_connection_pool_import(self):
         """测试连接池可以导入"""
         try:
-            from core.database.connection_pool import ConnectionPool
+            from core.infrastructure.database.connection_pool import ConnectionPool
             assert ConnectionPool is not None
         except ImportError:
             pytest.skip("连接池导入失败")

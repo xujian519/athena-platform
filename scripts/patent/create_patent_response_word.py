@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 创建Word格式的审查意见答复文件
 Create Word format response for patent office action
@@ -9,10 +8,12 @@ Create Word format response for patent office action
 创建时间: 2026-02-09
 """
 
-from docx import Document
-from docx.shared import Pt, Cm
-from docx.enum.text import WD_ALIGN_PARAGRAPH
 from datetime import datetime
+
+from docx import Document
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.shared import Cm, Pt
+
 
 def create_response_document():
     """创建审查意见答复Word文档"""

@@ -55,7 +55,7 @@ class IPManagementModule:
 
         logger.info("💼 IP管理模块已初始化")
 
-    async def manage(self, query: str, context: dict[str, Any] | None = None) -> str:
+    async def manage(self, query: str, context: Optional[dict[str, Any]] = None) -> str:
         """
         处理IP管理查询
 

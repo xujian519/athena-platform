@@ -184,7 +184,7 @@ class ResourcePool:
 
     def __init__(self):
         self.resources: dict[str, dict[str, Any]] = {}
-        self.allocations: dict[str, list[dict[str, Any]]] = defaultdict(
+        self.allocations: dict[str, list[dict[str, Any]], defaultdict(
             list
         )  # resource_type -> allocations
         self.reservation_queue: list[dict[str, Any]] = []
@@ -209,7 +209,7 @@ class ResourcePool:
 
     def allocate_resource(
         self, requirement: ResourceRequirement, task_id: str, duration: timedelta | None = None
-    ) -> str | None:
+    ) -> Optional[str]:
         """分配资源"""
         # 寻找合适的资源
         suitable_resources = []
@@ -302,7 +302,7 @@ class ResourcePool:
         return True
 
     def _select_best_resource(
-        self, suitable_resources: list[tuple[str, dict[str, Any]]], requirement: ResourceRequirement
+        self, suitable_resources: list[tuple[str, dict[str, Any]], requirement: ResourceRequirement
     ) -> str:
         """选择最优资源"""
         best_resource_id = None
@@ -511,7 +511,7 @@ class AdvancedCoordinationEngine:
 
     async def _select_best_agent(
         self, task_spec: TaskSpecification, suitable_agents: list[str]
-    ) -> str | None:
+    ) -> Optional[str]:
         """选择最优智能体"""
         if self.coordination_strategy == CoordinationStrategy.ADAPTIVE:
             return await self._select_agent_adaptive(task_spec, suitable_agents)
@@ -524,7 +524,7 @@ class AdvancedCoordinationEngine:
 
     async def _select_agent_adaptive(
         self, task_spec: TaskSpecification, suitable_agents: list[str]
-    ) -> str | None:
+    ) -> Optional[str]:
         """自适应选择智能体"""
         best_agent_id = None
         best_score = float("-inf")
@@ -557,7 +557,7 @@ class AdvancedCoordinationEngine:
 
     async def _select_agent_predictive(
         self, task_spec: TaskSpecification, suitable_agents: list[str]
-    ) -> str | None:
+    ) -> Optional[str]:
         """预测性选择智能体"""
         # 基于历史数据和机器学习预测最优智能体
         # 这里简化为使用历史表现
@@ -565,7 +565,7 @@ class AdvancedCoordinationEngine:
 
     async def _select_agent_market_based(
         self, task_spec: TaskSpecification, suitable_agents: list[str]
-    ) -> str | None:
+    ) -> Optional[str]:
         """基于市场机制选择智能体"""
         best_agent_id = None
         best_bid = float("inf")

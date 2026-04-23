@@ -192,7 +192,7 @@ class GlobalMemoryMonitor:
 class BGEEmbeddingServiceFixed:
     """修复后的BGE嵌入服务"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.name = "BGE嵌入服务(修复版)"
         self.version = "1.0.1"
         self.logger = logging.getLogger(self.name)
@@ -232,7 +232,7 @@ class BGEEmbeddingServiceFixed:
         combined_text = "|||".join(texts)
         return hashlib.md5(combined_text.encode('utf-8'), usedforsecurity=False).hexdigest()
 
-    async def _check_cache(self, texts: list[str]) -> list[list[float | None]]:
+    async def _check_cache(self, texts: list[str]) -> Optional[list[list[float]]]:
         """检查缓存(使用LRU缓存)"""
         if not self.config.get("cache_enabled", True):
             return None

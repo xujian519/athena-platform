@@ -92,7 +92,7 @@ class FusionConfig:
     cache_ttl_seconds: int = 3600
 
     @classmethod
-    def from_unified_config(cls) -> "FusionConfig":
+    def from_unified_config(cls) -> FusionConfig:
         """从统一配置创建 (TD-001)"""
         db_config = get_database_config()
         neo4j_config = db_config.get("neo4j", {})
@@ -274,8 +274,8 @@ class VectorGraphFusionService:
         content: str,
         memory_type: str,
         importance: float = 0.5,
-        tags: list[str] | None = None,
-        metadata: dict[str, Any] | None = None,
+        tags: Optional[list[str]] = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> str:
         """存储记忆到向量-图融合系统"""
         if not self.initialized:
@@ -388,8 +388,8 @@ class VectorGraphFusionService:
     async def search_memories(
         self,
         query: str,
-        agent_id: str | None = None,
-        memory_type: str | None = None,
+        agent_id: Optional[str] = None,
+        memory_type: Optional[str] = None,
         limit: int = 10,
         strategy: QueryStrategy = None,
     ) -> list[FusionQueryResult]:
@@ -506,7 +506,7 @@ class VectorGraphFusionService:
 
         return []
 
-    async def get_memory_by_id(self, memory_id: str) -> dict[str, Any] | None:
+    async def get_memory_by_id(self, memory_id: str) -> Optional[dict[str, Any]]:
         """通过 ID 获取记忆"""
         if not self.initialized:
             raise RuntimeError("服务未初始化")

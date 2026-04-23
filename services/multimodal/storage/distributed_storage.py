@@ -87,13 +87,13 @@ class DistributedStorageManager:
     def __init__(self):
         self.storage_configs: dict[StorageType, StorageConfig] = {}
         self.default_storage: StorageType = StorageType.LOCAL
-        self.tier_routing: dict[StorageTier, list[StorageType]] = {
+        self.tier_routing: dict[StorageTier, list[StorageType] = {
             StorageTier.HOT: [StorageType.LOCAL, StorageType.S3],
             StorageTier.WARM: [StorageType.S3, StorageType.ALIYUN_OSS],
             StorageTier.COLD: [StorageType.ALIYUN_OSS, StorageType.TENCENT_COS]
         }
         self.storage_clients: dict[StorageType, Any] = {}
-        self.access_patterns: dict[str, dict[str, Any]] = {}  # 文件访问模式记录
+        self.access_patterns: dict[str, dict[str, Any] = {}  # 文件访问模式记录
         self.replication_enabled = True
         self.compression_enabled = True
 

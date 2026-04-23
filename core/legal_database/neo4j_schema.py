@@ -205,7 +205,7 @@ class Neo4jQueryBuilder:
 
     @staticmethod
     def create_relationship(
-        src_id: str, dst_id: str, rel_type: str, props: dict[str, Any] | None = None
+        src_id: str, dst_id: str, rel_type: str, props: Optional[dict[str, Any]] = None
     ) -> str:
         """
         构建创建关系的Cypher语句

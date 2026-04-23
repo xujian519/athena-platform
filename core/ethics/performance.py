@@ -143,7 +143,7 @@ class PerformanceMonitor:
 
         return summary
 
-    def reset(self, operation_name: str | None = None) -> Any:
+    def reset(self, operation_name: Optional[str] = None) -> Any:
         """重置指标"""
         with self._lock:
             if operation_name:

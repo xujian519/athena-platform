@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 CORS安全测试工具
 CORS Security Testing Tool
@@ -10,13 +9,11 @@ CORS Security Testing Tool
 3. 生成安全测试报告
 """
 
+import json
 import os
 import re
 import sys
 from pathlib import Path
-from typing import Dict, List, Tuple
-import subprocess
-import json
 
 # 添加项目根目录到路径
 project_root = Path(__file__).parent.parent.parent
@@ -74,7 +71,7 @@ class CORSSecurityTester:
         """判断是否为模板文件"""
         return "template" in str(file_path).lower()
 
-    def check_cors_security(self, file_path: Path) -> Tuple[bool, str]:
+    def check_cors_security(self, file_path: Path) -> tuple[bool, str]:
         """
         检查文件的CORS安全性
 
@@ -110,9 +107,9 @@ class CORSSecurityTester:
                 return True, "从环境变量读取 ALLOWED_ORIGINS"
 
             # 检查硬编码的列表
-            if re.search(r'allow_origins\s*=\s*\[[^\]]+\]', content):
+            if re.search(r'allow_origins\s*=\s*\[[^\]+\]', content):
                 # 检查是否包含通配符
-                match = re.search(r'allow_origins\s*=\s*\[([^\]]+)\]', content)
+                match = re.search(r'allow_origins\s*=\s*\[([^\]+)\]', content)
                 if match:
                     origins = match.group(1)
                     if '"*"' in origins or "'*'" in origins:
@@ -127,7 +124,7 @@ class CORSSecurityTester:
         except Exception as e:
             return False, f"读取失败: {e}"
 
-    def run_tests(self) -> Dict:
+    def run_tests(self) -> dict:
         """运行CORS安全测试"""
         print("🔍 开始CORS安全测试...\n")
 
@@ -167,7 +164,7 @@ class CORSSecurityTester:
         print("=" * 60)
         print("CORS安全测试报告")
         print("=" * 60)
-        print(f"\n📊 统计信息:")
+        print("\n📊 统计信息:")
         print(f"   扫描文件总数: {self.results['total_files']}")
         print(f"   ✅ 安全配置: {self.results['safe_files']}")
         print(f"   ⚠️  不安全配置: {self.results['unsafe_files']}")
@@ -198,12 +195,12 @@ class CORSSecurityTester:
 
         # 列出问题
         if self.results["issues"]:
-            print(f"\n⚠️  发现的问题:")
+            print("\n⚠️  发现的问题:")
             for i, issue in enumerate(self.results["issues"], 1):
                 print(f"   {i}. {issue['file']}")
                 print(f"      问题: {issue['issue']}")
         else:
-            print(f"\n✅ 未发现安全问题！")
+            print("\n✅ 未发现安全问题！")
 
         print("\n" + "=" * 60)
 

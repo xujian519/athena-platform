@@ -438,7 +438,7 @@ class LegalWorldPromptGenerator:
         return min(score, 1.0)
 
     def generate_dynamic_prompt(
-        self, business_context: str, user_domain: str | None = None, max_rules: int = 10
+        self, business_context: str, user_domain: Optional[str] = None, max_rules: int = 10
     ) -> dict[str, Any]:
         """
         生成动态提示词

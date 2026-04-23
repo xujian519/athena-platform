@@ -40,8 +40,8 @@ class FusionSearchRequest(BaseModel):
     """融合搜索请求"""
 
     query: str
-    agent_id: str | None = None
-    memory_type: str | None = None
+    agent_id: Optional[str] = None
+    memory_type: Optional[str] = None
     limit: int = Field(default=10, ge=1, le=100)
     strategy: str = Field(default="fusion_both")
 

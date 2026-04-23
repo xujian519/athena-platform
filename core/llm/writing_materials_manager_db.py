@@ -139,7 +139,7 @@ class WritingMaterialsManagerDB:
         }
         return role_task_map.get(role, "default")
 
-    def _get_full_content(self, retrieval_result: Any) -> str | None:
+    def _get_full_content(self, retrieval_result: Any) -> Optional[str]:
         """
         根据检索结果获取全文内容
 
@@ -179,7 +179,7 @@ class WritingMaterialsManagerDB:
 
         return None
 
-    def _infer_filename(self, metadata: dict[str, Any]) -> str | None:
+    def _infer_filename(self, metadata: dict[str, Any]) -> Optional[str]:
         """
         根据元数据推断文件名
 
@@ -205,7 +205,7 @@ class WritingMaterialsManagerDB:
 
         return None
 
-    def _read_file_content(self, file_path: Path) -> str | None:
+    def _read_file_content(self, file_path: Path) -> Optional[str]:
         """
         读取文件内容
 
@@ -285,7 +285,7 @@ class WritingMaterialsManagerDB:
         return enhanced_prompt
 
     def search_materials(
-        self, query: str, category: str | None = None, top_k: int = 5
+        self, query: str, category: Optional[str] = None, top_k: int = 5
     ) -> list[dict[str, Any]]:
         """
         搜索素材(兼容旧版本接口)

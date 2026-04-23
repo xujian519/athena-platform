@@ -140,9 +140,9 @@ class KnowledgeEntity:
     id: str                               # 唯一标识符
     type: EntityType                      # 实体类型
     name: str                             # 实体名称
-    description: str | None = None     # 描述
+    description: Optional[str] = None     # 描述
     properties: Dict[str, Any] = None     # 属性字典
-    source: str | None = None          # 来源文档
+    source: Optional[str] = None          # 来源文档
     confidence: float = 1.0              # 置信度
     created_at: datetime = None          # 创建时间
     updated_at: datetime = None          # 更新时间
@@ -158,10 +158,10 @@ class KnowledgeEntity:
 @dataclass
 class LawEntity(KnowledgeEntity):
     """法律实体"""
-    law_type: str | None = None        # 法律类型
+    law_type: Optional[str] = None        # 法律类型
     promulgation_date: datetime | None = None  # 颁布日期
     effective_date: datetime | None = None      # 生效日期
-    issuing_authority: str | None = None       # 发布机关
+    issuing_authority: Optional[str] = None       # 发布机关
 
     def __post_init__(self):
         super().__post_init__()
@@ -171,10 +171,10 @@ class LawEntity(KnowledgeEntity):
 @dataclass
 class LegalArticleEntity(KnowledgeEntity):
     """法条实体"""
-    article_number: str | None = None  # 条款编号
-    content: str | None = None         # 条款内容
-    chapter: str | None = None         # 章节
-    section: str | None = None         # 节
+    article_number: Optional[str] = None  # 条款编号
+    content: Optional[str] = None         # 条款内容
+    chapter: Optional[str] = None         # 章节
+    section: Optional[str] = None         # 节
 
     def __post_init__(self):
         super().__post_init__()
@@ -184,12 +184,12 @@ class LegalArticleEntity(KnowledgeEntity):
 @dataclass
 class CaseEntity(KnowledgeEntity):
     """案例实体"""
-    case_number: str | None = None     # 案件编号
+    case_number: Optional[str] = None     # 案件编号
     decision_date: datetime | None = None  # 决定日期
-    case_type: str | None = None       # 案件类型
-    parties: Optional[List[str] = None             # 当事人
-    outcome: str | None = None         # 判决结果
-    key_points: Optional[List[str] = None          # 关键要点
+    case_type: Optional[str] = None       # 案件类型
+    parties: Optional[List[str]] = None             # 当事人
+    outcome: Optional[str] = None         # 判决结果
+    key_points: Optional[List[str]] = None          # 关键要点
 
     def __post_init__(self):
         super().__post_init__()
@@ -211,10 +211,10 @@ class CaseEntity(KnowledgeEntity):
 @dataclass
 class TechnicalConceptEntity(KnowledgeEntity):
     """技术概念实体"""
-    concept_category: str | None = None  # 概念类别
-    technical_field: str | None = None   # 技术领域
-    definition: str | None = None        # 定义
-    related_patents: Optional[List[str] = None       # 相关专利
+    concept_category: Optional[str] = None  # 概念类别
+    technical_field: Optional[str] = None   # 技术领域
+    definition: Optional[str] = None        # 定义
+    related_patents: Optional[List[str]] = None       # 相关专利
 
     def __post_init__(self):
         super().__post_init__()
@@ -236,8 +236,8 @@ class KnowledgeRelation:
     type: RelationType                    # 关系类型
     properties: Dict[str, Any] = None     # 关系属性
     confidence: float = 1.0              # 置信度
-    evidence: str | None = None        # 支撑证据
-    source_document: str | None = None # 来源文档
+    evidence: Optional[str] = None        # 支撑证据
+    source_document: Optional[str] = None # 来源文档
     created_at: datetime = None          # 创建时间
 
     def __post_init__(self):
@@ -249,9 +249,9 @@ class KnowledgeRelation:
 @dataclass
 class LegalRelation(KnowledgeRelation):
     """法律关系"""
-    legal_basis: str | None = None     # 法律依据
-    jurisdiction: str | None = None    # 管辖范围
-    scope: str | None = None           # 适用范围
+    legal_basis: Optional[str] = None     # 法律依据
+    jurisdiction: Optional[str] = None    # 管辖范围
+    scope: Optional[str] = None           # 适用范围
 
     def __post_init__(self):
         super().__post_init__()
@@ -259,9 +259,9 @@ class LegalRelation(KnowledgeRelation):
 @dataclass
 class InterpretationRelation(KnowledgeRelation):
     """解释关系"""
-    interpretation_method: str | None = None  # 解释方法
-    context: str | None = None         # 解释上下文
-    alternative_meanings: Optional[List[str] = None      # 其他含义
+    interpretation_method: Optional[str] = None  # 解释方法
+    context: Optional[str] = None         # 解释上下文
+    alternative_meanings: Optional[List[str]] = None      # 其他含义
 
     def __post_init__(self):
         super().__post_init__()

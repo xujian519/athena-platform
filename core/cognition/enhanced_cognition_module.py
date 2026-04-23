@@ -46,7 +46,7 @@ logger = setup_logging()
 class EnhancedCognitionConfig:
     """增强认知配置"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         config = config or {}
 
         # 认知模式配置
@@ -80,14 +80,14 @@ class CognitionResult:
     reasoning_steps: list[str]
     processing_time: float
     mode_used: str
-    error: str | None = None
+    error: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
 class EnhancedCognitionModule(BaseModule):
     """增强认知决策模块 - BaseModule标准接口版本"""
 
-    def __init__(self, agent_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, agent_id: str, config: Optional[dict[str, Any]] = None):
         """
         初始化增强认知决策模块
 
@@ -205,7 +205,7 @@ class EnhancedCognitionModule(BaseModule):
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    async def reason(self, query: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
+    async def reason(self, query: str, context: Optional[dict[str, Any]] = None) -> dict[str, Any]:
         """推理方法 - 逻辑推理"""
         try:
             cognition_result = await self.cognize(query, context)
@@ -225,7 +225,7 @@ class EnhancedCognitionModule(BaseModule):
             raise
 
     async def decide(
-        self, options: list[str] | dict[str, Any] | None, criteria: dict[str, Any] | None = None
+        self, options: list[str] | Optional[dict[str, Any]], criteria: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """决策方法 - 智能决策"""
         try:
@@ -257,7 +257,7 @@ class EnhancedCognitionModule(BaseModule):
         return await self.analyze(input_data)
 
     async def cognize(
-        self, query: str, context: dict[str, Any] | None = None
+        self, query: str, context: Optional[dict[str, Any]] = None
     ) -> CognitionResult:
         """
         认知处理 - 核心功能方法
@@ -488,7 +488,7 @@ class EnhancedCognitionModule(BaseModule):
 
 # 便捷创建函数
 def create_enhanced_cognition_module(
-    agent_id: str, config: dict[str, Any] | None = None
+    agent_id: str, config: Optional[dict[str, Any]] = None
 ) -> EnhancedCognitionModule:
     """
     创建增强认知决策模块实例

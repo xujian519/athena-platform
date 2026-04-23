@@ -28,7 +28,7 @@ class AnalysisResult:
 class EnhancedLocalNLPProvider:
     """增强的本地NLP提供者"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
         self.is_initialized = False
 
@@ -423,7 +423,7 @@ _enhanced_local_provider = None
 
 
 async def get_enhanced_local_provider(
-    config: dict[str, Any] | None = None,
+    config: Optional[dict[str, Any]] = None,
 ) -> EnhancedLocalNLPProvider:
     """获取增强本地NLP提供者实例"""
     global _enhanced_local_provider

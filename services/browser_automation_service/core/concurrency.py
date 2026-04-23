@@ -148,7 +148,7 @@ class SemaphoreManager:
 
             yield
 
-        except asyncio.TimeoutError:
+        except TimeoutError:
             logger.warning(
                 f"⚠️ {self.name}: 获取信号量超时 ({timeout}s)"
             )

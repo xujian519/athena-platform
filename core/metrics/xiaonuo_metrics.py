@@ -42,7 +42,7 @@ class MetricPoint:
     timestamp: datetime
     value: float
     labels: dict[str, str] | None = None
-    metadata: dict[str, Any] | None = None
+    metadata: Optional[dict[str, Any]] = None
 
 
 @dataclass

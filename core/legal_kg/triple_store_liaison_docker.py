@@ -43,8 +43,8 @@ class LegalDocument:
     category: str
     content: str
     file_path: str
-    vector_id: int | None = None
-    similarity: float | None = None
+    vector_id: Optional[int] = None
+    similarity: Optional[float] = None
     graph_entities: list[dict] | None = None
     graph_relations: list[dict] | None = None
 

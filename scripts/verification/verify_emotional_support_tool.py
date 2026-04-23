@@ -15,12 +15,10 @@ Emotional Support工具验证脚本
 """
 
 import asyncio
-import json
 import logging
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent
@@ -613,7 +611,7 @@ async def main():
         await verifier.test_conversation_continuity()
 
         # 生成报告
-        report = verifier.generate_report()
+        verifier.generate_report()
 
         logger.info("\n" + "=" * 60)
         logger.info("验证完成")

@@ -270,7 +270,7 @@ class AthenaIterativeSearchAgent:
     async def _cluster_patents(
         self,
         patents: list[PatentSearchResult]
-    ) -> dict[str, list[PatentSearchResult]]:
+    ) -> dict[str, list[PatentSearchResult]:
         """聚类专利结果"""
         clusters = {}
 
@@ -383,7 +383,7 @@ class AthenaIterativeSearchAgent:
                 f"{company_name}拥有{len(target_company_patents)}项相关专利",
                 f"竞争对手拥有{len(other_company_patents)}项相关专利"
             ],
-            main_patents=[p.title for p in target_company_patents[:5]],
+            main_patents=[p.title for p in target_company_patents[:5],
             technological_trends=[
                 f"专利数量比例: {company_name} vs 竞争对手 = {len(target_company_patents)}:{len(other_company_patents)}"
             ],
@@ -416,7 +416,7 @@ class AthenaIterativeSearchAgent:
             key_findings=[
                 f"在过去{time_period}内发现{len(all_patents)}项相关专利"
             ],
-            main_patents=[p.title for p in all_patents[:10]],
+            main_patents=[p.title for p in all_patents[:10],
             technological_trends=self._extract_technology_trends(all_patents),
             innovation_insights=[
                 f"{technology}技术的发展方向和应用前景"

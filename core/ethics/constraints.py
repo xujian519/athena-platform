@@ -39,8 +39,8 @@ class ConstraintResult:
     action_taken: ConstraintAction
     allowed: bool
     message: str
-    modified_action: str | None = None
-    escalation_target: str | None = None
+    modified_action: Optional[str] = None
+    escalation_target: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 

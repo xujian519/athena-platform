@@ -16,12 +16,13 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 try:
-    from core.agents.athena_advisor import AthenaAdvisorAgent
-    from core.agents.base import AgentRegistry
-    from core.agents.base_agent import AgentRegistry
-    from core.agents.factory import AgentFactory
-    from core.agents.xiaona_legal import XiaonaLegalAgent
-    from core.agents.xiaonuo_coordinator import XiaonuoAgent
+    from core.framework.agents.athena_advisor import AthenaAdvisorAgent
+    from core.framework.agents.xiaona_legal import XiaonaLegalAgent
+    from core.framework.agents.xiaonuo_coordinator import XiaonuoAgent
+
+    from core.framework.agents.base import AgentRegistry
+    from core.framework.agents.base_agent import AgentRegistry
+    from core.framework.agents.factory import AgentFactory
 except ImportError:
     pass  # 模块导入失败时，测试会被跳过
 

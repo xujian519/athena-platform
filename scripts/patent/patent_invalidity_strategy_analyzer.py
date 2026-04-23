@@ -5,9 +5,9 @@
 """
 
 import json
-from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Any
+from pathlib import Path
+from typing import Any
 
 
 class InvalidityStrategyAnalyzer:
@@ -37,13 +37,13 @@ class InvalidityStrategyAnalyzer:
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
         # 加载相关性分析数据
-        with open(self.relevance_file, 'r', encoding='utf-8') as f:
+        with open(self.relevance_file, encoding='utf-8') as f:
             self.relevance_data = json.load(f)
 
         # 获取候选证据（排除目标专利本身）
-        self.candidates = [p for p in self.relevance_data if p['patent_number'] != self.TARGET_PATENT['patent_number']]
+        self.candidates = [p for p in self.relevance_data if p['patent_number'] != self.TARGET_PATENT['patent_number']
 
-    def analyze_evidence_combination(self) -> Dict[str, Any]:
+    def analyze_evidence_combination(self) -> dict[str, Any]:
         """分析证据组合策略"""
 
         # 分析三种证据组合策略
@@ -55,7 +55,7 @@ class InvalidityStrategyAnalyzer:
 
         return strategies
 
-    def _analyze_single_evidence(self) -> Dict[str, Any]:
+    def _analyze_single_evidence(self) -> dict[str, Any]:
         """策略A：单一证据 + 公知常识"""
 
         # 选择最相关的单一证据
@@ -87,7 +87,7 @@ class InvalidityStrategyAnalyzer:
             "risk_level": "高风险"
         }
 
-    def _analyze_combination_evidence(self) -> Dict[str, Any]:
+    def _analyze_combination_evidence(self) -> dict[str, Any]:
         """策略B：多证据组合"""
 
         # 选择Top 5候选证据
@@ -121,7 +121,7 @@ class InvalidityStrategyAnalyzer:
             "risk_level": "中高风险"
         }
 
-    def _analyze_progressive_evidence(self) -> Dict[str, Any]:
+    def _analyze_progressive_evidence(self) -> dict[str, Any]:
         """策略C：渐进式技术演进"""
 
         # 按时间/技术复杂度组织证据
@@ -160,7 +160,7 @@ class InvalidityStrategyAnalyzer:
             "risk_level": "中高风险"
         }
 
-    def _get_disclosed_features(self, candidate: Dict) -> List[str]:
+    def _get_disclosed_features(self, candidate: dict) -> list[str]:
         """获取已公开特征"""
         features = []
         key_feats = candidate.get('key_features', [])
@@ -177,7 +177,7 @@ class InvalidityStrategyAnalyzer:
 
         return features if features else ['基础结构']
 
-    def _assign_role(self, candidate: Dict, index: int, all_candidates: List) -> str:
+    def _assign_role(self, candidate: dict, index: int, all_candidates: list) -> str:
         """分配证据角色"""
         if index == 0:
             return "主证据"
@@ -186,12 +186,12 @@ class InvalidityStrategyAnalyzer:
         else:
             return "辅助证据"
 
-    def _get_key_contribution(self, candidate: Dict) -> str:
+    def _get_key_contribution(self, candidate: dict) -> str:
         """获取关键贡献"""
         feats = candidate.get('key_features', [])
         return " | ".join(feats[:3]) if feats else "技术方案支撑"
 
-    def _calculate_combination_coverage(self, candidates: List[Dict]) -> Dict:
+    def _calculate_combination_coverage(self, candidates: list[dict]) -> dict:
         """计算组合特征覆盖率"""
         # 模拟计算：假设每篇证据平均覆盖20%特征，5篇证据组合后约覆盖50%
         return {
@@ -201,7 +201,7 @@ class InvalidityStrategyAnalyzer:
             "missing_core_features": ["斜向滑轨间距渐变", "滑动轴反向延伸"]
         }
 
-    def assess_inventive_step(self) -> Dict[str, Any]:
+    def assess_inventive_step(self) -> dict[str, Any]:
         """评估创造性"""
         return {
             "novelty_assessment": {
@@ -240,7 +240,7 @@ class InvalidityStrategyAnalyzer:
         strategies = self.analyze_evidence_combination()
 
         # 评估创造性
-        creativity_assessment = self.assess_inventive_step()
+        self.assess_inventive_step()
 
         report = f"""# CN210456236U 专利无效宣告可行性分析报告
 
@@ -589,7 +589,7 @@ class InvalidityStrategyAnalyzer:
 
         return report
 
-    def _generate_strategy_detail(self, strategy: Dict) -> str:
+    def _generate_strategy_detail(self, strategy: dict) -> str:
         """生成策略详情"""
         detail = f"""
 **策略描述**: {strategy['description']}
@@ -615,7 +615,7 @@ class InvalidityStrategyAnalyzer:
                 detail += f"- **{p['stage']}**: {p['evidence']}\n"
                 detail += f"  - 公开内容: {p['disclosed']}\n"
 
-        detail += f"""
+        detail += """
 **优势**:
 """
         for s in strategy['strengths']:
@@ -634,7 +634,7 @@ class InvalidityStrategyAnalyzer:
 """
         return detail
 
-    def _generate_creativity_assessment(self, assessment: Dict) -> str:
+    def _generate_creativity_assessment(self, assessment: dict) -> str:
         """生成创造性评估部分"""
         creativity = assessment['overall_assessment']
         novelty = assessment['novelty_assessment']

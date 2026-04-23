@@ -23,7 +23,7 @@ logger = setup_logging()
 class QdrantClient:
     """Qdrant向量数据库客户端"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化Qdrant客户端
 
@@ -187,7 +187,7 @@ class QdrantClient:
         query_vector: list[float],
         limit: int = 10,
         score_threshold: float = 0.0,
-        filters: dict[str, Any] | None = None,
+        filters: Optional[dict[str, Any]] = None,
     ) -> list[dict[str, Any]]:
         """
         向量搜索
@@ -242,7 +242,7 @@ class QdrantClient:
             logger.error(f"❌ 搜索失败: {e!s}")
             return []
 
-    def get_collection_info(self, layer: str) -> dict[str, Any] | None:
+    def get_collection_info(self, layer: str) -> Optional[dict[str, Any]]:
         """
         获取集合信息
 
@@ -327,7 +327,7 @@ class QdrantClient:
 
 
 # 便捷函数
-def get_qdrant_client(config: dict[str, Any] | None = None) -> QdrantClient | None:
+def get_qdrant_client(config: Optional[dict[str, Any]] = None) -> QdrantClient | None:
     """
     获取Qdrant客户端单例
 

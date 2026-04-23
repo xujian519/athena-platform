@@ -30,7 +30,7 @@ class CacheConfig:
     host: str = 'localhost'
     port: int = 6379
     db: int = 0
-    password: str | None = None
+    password: Optional[str] = None
     max_connections: int = 20
     socket_timeout: int = 5
     socket_connect_timeout: int = 5

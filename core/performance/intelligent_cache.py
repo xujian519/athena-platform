@@ -18,7 +18,7 @@ from typing import Any
 class IntelligentCache:
     """智能响应缓存系统"""
 
-    def __init__(self, cache_dir: str | None = None, max_ttl_hours: int = 24, max_items: int = 1000):
+    def __init__(self, cache_dir: Optional[str] = None, max_ttl_hours: int = 24, max_items: int = 1000):
         self.cache_dir = (
             Path(cache_dir) if cache_dir else Path(__file__).parent.parent / "cache" / "responses"
         )
@@ -80,7 +80,7 @@ class IntelligentCache:
             self._save_index()
             print(f"🗑️ 清理了 {len(expired_keys)} 个过期缓存条目")
 
-    def get(self, query: str, context: str = "") -> str | None:
+    def get(self, query: str, context: str = "") -> Optional[str]:
         """获取缓存的响应"""
         self.stats["total_requests"] += 1
 

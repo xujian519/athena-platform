@@ -21,7 +21,7 @@ import json
 import logging
 import pytest
 import time
-from typing import Any
+from typing import Any, Optional
 
 # 配置日志
 logging.basicConfig(level=logging.DEBUG)
@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 # 尝试导入Gateway客户端
 try:
-    from core.agents.gateway_client import (
+    from core.framework.agents.gateway_client import (
         GatewayClient,
         GatewayClientConfig,
         AgentType,
@@ -155,7 +155,7 @@ class TestAgentGatewayCommunication:
 
         # 创建一个事件来跟踪处理器调用
         handler_called = asyncio.Event()
-        received_message: Message | None = None
+        received_message: Optional[Message] = None
 
         async def test_handler(message: Message):
             nonlocal received_message
@@ -304,7 +304,7 @@ class TestBaseAgentIntegration:
 
     async def test_base_agent_gateway_methods(self):
         """测试BaseAgent的Gateway方法"""
-        from core.agents.base_agent import BaseAgent
+        from core.framework.agents.base_agent import BaseAgent
 
         # 创建测试Agent
         class TestAgent(BaseAgent):

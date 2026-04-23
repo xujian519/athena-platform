@@ -56,14 +56,14 @@ logger = logging.getLogger(__name__)
 
 class OptimizationRequest(BaseModel):
     """优化请求模型"""
-    policies: List[Dict[str, Any]]
-    reference_group: List[Dict[str, Any]]
+    policies: List[Dict[str, Any]
+    reference_group: List[Dict[str, Any]
     learning_rate: float = 1e-5
     temperature: float = 0.7
 
 class OptimizationResponse(BaseModel):
     """优化响应模型"""
-    optimized_policies: List[Dict[str, Any]]
+    optimized_policies: List[Dict[str, Any]
     improvement_score: float
     convergence_info: Dict[str, float]
 
@@ -247,9 +247,9 @@ class DataGenerationRequest(BaseModel):
 
 class DataGenerationResponse(BaseModel):
     """数据生成响应模型"""
-    generated_samples: List[Dict[str, Any]]
+    generated_samples: List[Dict[str, Any]
     quality_scores: List[float]
-    selected_samples: List[Dict[str, Any]]
+    selected_samples: List[Dict[str, Any]
     generation_stats: Dict[str, Any]
 
 class PatentDataGenerator:
@@ -291,7 +291,7 @@ class PatentDataGenerator:
             # 如果没有样本通过筛选，选择质量最高的
             if not selected_samples:
                 max_idx = np.argmax(quality_scores)
-                selected_samples = [samples[max_idx]]
+                selected_samples = [samples[max_idx]
                 selected_indices = [max_idx]
 
             stats = {
@@ -697,7 +697,7 @@ if __name__ == '__main__':
                     stderr=subprocess.PIPE,
                 )
 
-                self.services[service['name']] = {
+                self.services[service['name'] = {
                     'process': process,
                     'port': service['port'],
                     'url': f"http://localhost:{service['port']}",

@@ -25,11 +25,11 @@ class MCPService:
     directory: str
     type: str  # nodejs or python
     main_file: str
-    port: int | None = None
+    port: Optional[int] = None
     status: str = "stopped"  # stopped, running, error
     process: subprocess.Popen | None = None
     description: str = ""
-    capabilities: list[str] | None = None
+    capabilities: Optional[list[str]] = None
 
 
 class UnifiedMCPManager:

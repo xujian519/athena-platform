@@ -29,7 +29,7 @@ __author__ = "小娜 AI System"
 class AthenaSearchEngine:
     """Athena搜索引擎主类"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化Athena搜索引擎
 
@@ -132,7 +132,7 @@ class AthenaSearchEngine:
     async def search(
         self,
         query: str,
-        sources: list[str] | None = None,
+        sources: Optional[list[str]] = None,
         search_type: SearchType = SearchType.HYBRID,
         limit: int = 10,
     ) -> list[SearchResult]:

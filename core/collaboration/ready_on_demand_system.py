@@ -60,7 +60,7 @@ class TaskRequest:
     task_type: str = ""
     content: str = ""
     priority: int = 1
-    preferred_agent: str | None = None
+    preferred_agent: Optional[str] = None
 
 
 class ReadyOnDemandSystem:

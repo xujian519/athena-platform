@@ -10,7 +10,6 @@ Import Invalidation Decisions from Local JSON Files
 
 import json
 import logging
-import os
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -91,11 +90,10 @@ class InvalidationDecisionImporter:
 
         with self.conn.cursor() as cursor:
             batch_size = 100
-            batch = []
 
-            for i, json_file in enumerate(json_files):
+            for _i, json_file in enumerate(json_files):
                 try:
-                    with open(json_file, 'r', encoding='utf-8') as f:
+                    with open(json_file, encoding='utf-8') as f:
                         data = json.load(f)
 
                     # 提取关键字段
@@ -136,7 +134,7 @@ class InvalidationDecisionImporter:
                         self.conn.commit()
                         logger.info(f"  已导入: {imported_count}/{len(json_files)}")
 
-                except json.JSONDecodeError as e:
+                except json.JSONDecodeError:
                     skipped_count += 1
                     if skipped_count <= 5:
                         logger.warning(f"  ⚠️ 跳过 {json_file.name}: JSON解析错误")
@@ -148,7 +146,7 @@ class InvalidationDecisionImporter:
             # 最后提交
             self.conn.commit()
 
-        logger.info(f"✅ 导入完成:")
+        logger.info("✅ 导入完成:")
         logger.info(f"  • 成功: {imported_count:,}")
         logger.info(f"  • 跳过: {skipped_count:,}")
         logger.info(f"  • 错误: {error_count:,}")

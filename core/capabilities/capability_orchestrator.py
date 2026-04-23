@@ -167,7 +167,7 @@ class CapabilityOrchestrator:
     async def _execute_invocation(
         self,
         invocation: CapabilityInvocation,
-        context: dict[str, Any],        previous_results: dict[str, Any],    ) -> dict[str, Any] | None:
+        context: dict[str, Any],        previous_results: dict[str, Any],    ) -> Optional[dict[str, Any]]:
         """
         执行单个能力调用
 

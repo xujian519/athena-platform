@@ -11,7 +11,6 @@ PDF转优雅Markdown工具 V4 - 终极版
 
 import re
 from pathlib import Path
-from typing import List, Tuple
 
 try:
     import pdfplumber
@@ -52,7 +51,7 @@ class PDFToMarkdownConverter:
             return True
         return False
 
-    def extract_text_from_pdf(self) -> List[str]:
+    def extract_text_from_pdf(self) -> list[str]:
         """从PDF提取文本内容，返回清洗后的行列表"""
         all_lines = []
 
@@ -77,7 +76,7 @@ class PDFToMarkdownConverter:
 
         return all_lines
 
-    def classify_line(self, line: str) -> Tuple[str, int]:
+    def classify_line(self, line: str) -> tuple[str, int]:
         """
         分类每一行
         返回: (类型, 级别)
@@ -115,7 +114,7 @@ class PDFToMarkdownConverter:
         # 默认为正文
         return 'text', 0
 
-    def process_content(self, lines: List[str]) -> List[str]:
+    def process_content(self, lines: list[str]) -> list[str]:
         """处理内容，合并段落并格式化"""
         if not lines:
             return []
@@ -185,7 +184,7 @@ class PDFToMarkdownConverter:
 
         return result
 
-    def format_to_markdown(self, processed: List[Tuple[str, int, str]]) -> str:
+    def format_to_markdown(self, processed: list[tuple[str, int, str]) -> str:
         """将处理后的内容格式化为Markdown"""
         lines = []
 
@@ -256,7 +255,7 @@ class PDFToMarkdownConverter:
         # 5. 添加头部
         final_text = self.add_document_header(cleaned_text)
 
-        print(f"  ✓ 完成!")
+        print("  ✓ 完成!")
         return final_text
 
     def save(self, output_path: str):

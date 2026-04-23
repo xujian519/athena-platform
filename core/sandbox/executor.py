@@ -25,12 +25,12 @@ class ExecutionRequest:
     """代码执行请求"""
     code: str                              # 要执行的代码
     language: Language                     # 编程语言
-    input_data: str | None = None       # 标准输入
+    input_data: Optional[str] = None       # 标准输入
     files: dict[str, str] | None = None      # 要创建的文件 {路径: 内容}
-    timeout: int | None = None          # 超时时间
+    timeout: Optional[int] = None          # 超时时间
     config: SandboxConfig | None = None # 沙盒配置
     backend: SandboxBackend = SandboxBackend.LOCAL  # 沙盒后端
-    session_id: str | None = None       # 会话 ID（复用沙盒）
+    session_id: Optional[str] = None       # 会话 ID（复用沙盒）
 
     def to_dict(self) -> dict:
         """转换为字典"""
@@ -54,7 +54,7 @@ class ExecutionResponse:
     error: str                             # 标准错误
     execution_time: float                  # 执行时间（秒）
     exit_code: int                         # 退出码
-    files: list[str | None] = None      # 输出文件列表
+    files: Optional[list[str]] = None      # 输出文件列表
     metadata: dict[str, Any] = None        # 额外元数据
 
     def to_dict(self) -> dict:
@@ -274,7 +274,7 @@ class CodeExecutor:
     def get_execution_history(
         self,
         limit: int = 100,
-        language: str | None = None
+        language: Optional[str] = None
     ) -> list[dict[str, Any]]:
         """获取执行历史
 
@@ -372,7 +372,7 @@ class SafeCodeRunner:
         code: str,
         language: str = "python",
         timeout: int = 30,
-        input_data: str | None = None,
+        input_data: Optional[str] = None,
     ) -> dict[str, Any]:
         """运行代码
 

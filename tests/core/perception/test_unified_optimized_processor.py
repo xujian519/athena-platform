@@ -13,17 +13,16 @@ UnifiedOptimizedProcessor单元测试
 - 边界情况
 """
 
-import pytest
-from pathlib import Path
-from unittest.mock import AsyncMock, MagicMock, patch
 from datetime import datetime, timedelta
+from unittest.mock import AsyncMock, MagicMock, patch
 
-from core.perception.unified_optimized_processor import (
-    UnifiedOptimizedProcessor,
-    ProcessingStrategy,
+import pytest
+
+from core.ai.perception.unified_optimized_processor import (
     ProcessingStats,
+    ProcessingStrategy,
+    UnifiedOptimizedProcessor,
 )
-
 
 # ==================== 初始化测试 ====================
 
@@ -156,7 +155,7 @@ class TestCacheManagement:
         await processor.initialize()
 
         # 添加一些缓存项（包括过期的）
-        from core.perception.types import OCRCacheEntry
+        from core.ai.perception.types import OCRCacheEntry
 
         # 过期的OCR缓存
         old_entry = OCRCacheEntry(
@@ -256,8 +255,8 @@ class TestDocumentProcessing:
         await processor.initialize()
 
         # Mock _process_generic方法
-        from core.perception import PerceptionResult
-        from core.perception.types import InputType
+        from core.ai.perception import PerceptionResult
+        from core.ai.perception.types import InputType
 
         processor._process_generic = AsyncMock(return_value=PerceptionResult(
             input_type=InputType.UNKNOWN,
@@ -281,8 +280,8 @@ class TestDocumentProcessing:
         await processor.initialize()
 
         # Mock处理方法
-        from core.perception import PerceptionResult
-        from core.perception.types import InputType
+        from core.ai.perception import PerceptionResult
+        from core.ai.perception.types import InputType
 
         processor._process_generic = AsyncMock(return_value=PerceptionResult(
             input_type=InputType.UNKNOWN,
@@ -408,7 +407,7 @@ class TestEdgeCases:
         await processor.initialize()
 
         # 添加大量文档元数据
-        from core.perception.types import DocumentMetadata, DocumentChangeType, DocumentType
+        from core.ai.perception.types import DocumentChangeType, DocumentMetadata, DocumentType
 
         for i in range(1000):
             metadata = DocumentMetadata(
@@ -453,7 +452,7 @@ class TestPerformance:
         await processor.initialize()
 
         # 添加大量缓存
-        from core.perception.types import OCRCacheEntry
+        from core.ai.perception.types import OCRCacheEntry
 
         for i in range(1000):
             entry = OCRCacheEntry(
@@ -482,8 +481,8 @@ class TestPerformance:
         await processor.initialize()
 
         # Mock处理方法
-        from core.perception import PerceptionResult
-        from core.perception.types import InputType
+        from core.ai.perception import PerceptionResult
+        from core.ai.perception.types import InputType
 
         processor._process_generic = AsyncMock(return_value=PerceptionResult(
             input_type=InputType.UNKNOWN,

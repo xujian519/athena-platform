@@ -38,7 +38,7 @@ class VectorizedData:
 class JudgmentVectorizer:
     """判决书向量化器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化向量化器
 
@@ -418,7 +418,7 @@ class JudgmentVectorizer:
 
 # 便捷函数
 def vectorize_judgment(
-    structured_data: dict[str, Any], config: dict[str, Any] | None = None
+    structured_data: dict[str, Any], config: Optional[dict[str, Any]] = None
 ) -> list[VectorizedData]:
     """
     向量化判决书

@@ -40,7 +40,7 @@ async def test_cpu_monitoring() -> dict[str, Any]:
 
     result = await system_monitor_handler(params, {})
 
-    print(f"✅ CPU监控结果:")
+    print("✅ CPU监控结果:")
     print(f"   - 使用率: {result['metrics']['cpu']['usage_percent']}%")
     print(f"   - 状态: {result['metrics']['cpu']['status']}")
     print(f"   - 时间戳: {result['timestamp']}")
@@ -71,7 +71,7 @@ async def test_memory_monitoring() -> dict[str, any]:
 
     result = await system_monitor_handler(params, {})
 
-    print(f"✅ 内存监控结果:")
+    print("✅ 内存监控结果:")
     print(f"   - 使用率: {result['metrics']['memory']['usage_percent']}%")
     print(f"   - 可用空间: {result['metrics']['memory'].get('free_gb', 'N/A')} GB")
     print(f"   - 已用空间: {result['metrics']['memory'].get('used_gb', 'N/A')} GB")
@@ -103,7 +103,7 @@ async def test_disk_monitoring() -> dict[str, any]:
 
     result = await system_monitor_handler(params, {})
 
-    print(f"✅ 磁盘监控结果:")
+    print("✅ 磁盘监控结果:")
     if "total" in result["metrics"]["disk"]:
         print(f"   - 总容量: {result['metrics']['disk']['total']}")
         print(f"   - 已用空间: {result['metrics']['disk']['used']}")
@@ -137,7 +137,7 @@ async def test_combined_monitoring() -> dict[str, any]:
 
     result = await system_monitor_handler(params, {})
 
-    print(f"✅ 综合监控结果:")
+    print("✅ 综合监控结果:")
     print(f"   - CPU使用率: {result['metrics']['cpu']['usage_percent']}% ({result['metrics']['cpu']['status']})")
     print(f"   - 内存使用率: {result['metrics']['memory']['usage_percent']}% ({result['metrics']['memory']['status']})")
     print(f"   - 磁盘使用率: {result['metrics']['disk']['usage_percent']}% ({result['metrics']['disk']['status']})")
@@ -173,7 +173,7 @@ async def test_health_status_logic() -> dict[str, any]:
     memory_status = result["metrics"]["memory"]["status"]
     disk_status = result["metrics"]["disk"]["status"]
 
-    print(f"✅ 健康状态判断:")
+    print("✅ 健康状态判断:")
     print(f"   - CPU状态: {cpu_status} (阈值: 80%)")
     print(f"   - 内存状态: {memory_status} (阈值: 80%)")
     print(f"   - 磁盘状态: {disk_status} (阈值: 85%)")
@@ -218,20 +218,20 @@ async def test_cross_platform_compatibility() -> dict[str, any]:
 
         if result["metrics"]["cpu"]["status"] != "error":
             success_count += 1
-            print(f"   ✅ CPU监控: 正常")
+            print("   ✅ CPU监控: 正常")
 
         if result["metrics"]["memory"]["status"] != "error":
             success_count += 1
-            print(f"   ✅ 内存监控: 正常")
+            print("   ✅ 内存监控: 正常")
 
         if result["metrics"]["disk"]["status"] != "error":
             success_count += 1
-            print(f"   ✅ 磁盘监控: 正常")
+            print("   ✅ 磁盘监控: 正常")
 
         success_rate = (success_count / total_count) * 100
         print(f"\n   📊 成功率: {success_rate:.1f}% ({success_count}/{total_count})")
 
-        print(f"✅ 跨平台兼容性测试完成")
+        print("✅ 跨平台兼容性测试完成")
         return result
 
     except Exception as e:
@@ -257,7 +257,7 @@ async def test_error_handling() -> dict[str, any]:
 
     # 应该返回空结果而不是抛出异常
     assert "metrics" in result, "错误处理失败：应该返回metrics字段"
-    print(f"✅ 错误处理测试通过（不支持的metrics不会导致崩溃）")
+    print("✅ 错误处理测试通过（不支持的metrics不会导致崩溃）")
 
     return result
 
@@ -302,8 +302,8 @@ async def generate_performance_report(
         }
     }
 
-    print(f"✅ 性能报告生成完成")
-    print(f"\n📊 系统状态摘要:")
+    print("✅ 性能报告生成完成")
+    print("\n📊 系统状态摘要:")
     print(f"   - CPU: {report['performance_metrics']['cpu_usage_percent']}% ({report['health_status']['cpu']})")
     print(f"   - 内存: {report['performance_metrics']['memory_usage_percent']}% ({report['health_status']['memory']})")
     print(f"   - 磁盘: {report['performance_metrics']['disk_usage_percent']}% ({report['health_status']['disk']})")

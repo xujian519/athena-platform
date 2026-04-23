@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利审查辩论主程序
 Patent Debate Main Script
@@ -12,7 +11,6 @@ Patent Debate Main Script
 """
 
 import asyncio
-import json
 import logging
 import sys
 from pathlib import Path
@@ -195,19 +193,19 @@ async def main():
 
         final_stance_text = stance_emoji.get(result.final_stance, result.final_stance)
 
-        logger.info(f"\n📊 辩论结果：")
+        logger.info("\n📊 辩论结果：")
         logger.info(f"   辩论轮次：{result.total_rounds}轮")
         logger.info(f"   最终立场：{final_stance_text}")
         logger.info(f"   共识状态：{'✅ 已达成共识' if result.consensus_reached else '❌ 未达成共识'}")
 
-        logger.info(f"\n📝 辩论摘要：")
+        logger.info("\n📝 辩论摘要：")
         logger.info(result.summary)
 
         # 关闭协调器
         await coordinator.close()
 
         logger.info("\n✅ 辩论系统运行完成！")
-        logger.info(f"💾 详细结果已保存到: /Users/xujian/Athena工作平台/logs/debate_results/")
+        logger.info("💾 详细结果已保存到: /Users/xujian/Athena工作平台/logs/debate_results/")
 
         return result
 

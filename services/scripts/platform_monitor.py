@@ -549,7 +549,7 @@ class PlatformMonitor:
 
         return summary
 
-    def get_active_alerts(self) -> list[dict[str, Any]]:
+    def get_active_alerts(self) -> list[dict[str, Any]:
         """获取活跃告警"""
         return [
             {

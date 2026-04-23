@@ -24,7 +24,7 @@ logger = setup_logging()
 class Neo4jJudgmentClient:
     """Neo4j专利判决知识图谱客户端"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化Neo4j客户端
 
@@ -474,7 +474,7 @@ class Neo4jJudgmentClient:
 
 
 # 便捷函数
-def get_neo4j_judgment_client(config: dict[str, Any] | None = None) -> Neo4jJudgmentClient | None:
+def get_neo4j_judgment_client(config: Optional[dict[str, Any]] = None) -> Neo4jJudgmentClient | None:
     """
     获取Neo4j判决图谱客户端
 
@@ -497,7 +497,7 @@ class NebulaGraphClient(Neo4jJudgmentClient):
     保持向后兼容,内部使用Neo4j实现
     """
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         # 映射配置
         mapped_config = None
         if config:
@@ -515,7 +515,7 @@ class NebulaGraphClient(Neo4jJudgmentClient):
         return self.initialize_graph()
 
 
-def get_nebula_client(config: dict[str, Any] | None = None) -> NebulaGraphClient | None:
+def get_nebula_client(config: Optional[dict[str, Any]] = None) -> NebulaGraphClient | None:
     """
     获取NebulaGraph客户端单例(兼容层)
 

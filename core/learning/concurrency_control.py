@@ -98,7 +98,7 @@ class AsyncSemaphore:
         self.total_released = 0
         self.total_timeouts = 0
 
-    async def acquire(self, timeout: float | None = None) -> bool:
+    async def acquire(self, timeout: Optional[float] = None) -> bool:
         """
         获取信号量
 
@@ -172,7 +172,7 @@ class ConcurrencyController:
         self,
         coro: Callable[[], Any],
         priority: int = 0,
-        timeout: float | None = None,
+        timeout: Optional[float] = None,
     ) -> Any:
         """
         提交任务到并发控制器
@@ -232,7 +232,7 @@ class ConcurrencyController:
             self.semaphore.release()
 
     async def submit_batch(
-        self, coros: list[Callable[[], Any]], timeout: float | None = None
+        self, coros: list[Callable[[], Any]], timeout: Optional[float] = None
     ) -> list[Any]:
         """
         批量提交任务

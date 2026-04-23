@@ -89,8 +89,8 @@ class LyraCLI:
         # 默认设置
         current_mode = OptimizationMode.BASIC
         current_ai = TargetAI.CLAUDE
-        context: str | None = None
-        output_format: str | None = None
+        context: Optional[str] = None
+        output_format: Optional[str] = None
 
         while self.running:
             try:
@@ -180,8 +180,8 @@ class LyraCLI:
         user_input: str,
         mode: OptimizationMode,
         target_ai: TargetAI,
-        context: str | None,
-        output_format: str | None
+        context: Optional[str],
+        output_format: Optional[str]
     ):
         """优化提示词"""
         request = OptimizationRequest(

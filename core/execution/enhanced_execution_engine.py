@@ -50,7 +50,7 @@ class EnhancedExecutionEngine(BaseModule):
     继承BaseModule,提供标准化的接口和任务管理
     """
 
-    def __init__(self, agent_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, agent_id: str, config: Optional[dict[str, Any]] = None):
         """
         初始化增强执行引擎
 

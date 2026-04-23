@@ -28,7 +28,7 @@ class TestMemorySystemInitialization:
     async def test_memory_manager_initialization(self):
         """测试记忆管理器初始化"""
         try:
-            from core.memory.enhanced_memory_manager import EnhancedMemoryManager
+            from core.framework.memory.enhanced_memory_manager import EnhancedMemoryManager
 
             memory = EnhancedMemoryManager()
             assert memory is not None
@@ -44,7 +44,7 @@ class TestMemorySystemInitialization:
     async def test_four_tier_architecture(self):
         """测试四层记忆架构"""
         try:
-            from core.memory.enhanced_memory_manager import EnhancedMemoryManager
+            from core.framework.memory.enhanced_memory_manager import EnhancedMemoryManager
 
             memory = EnhancedMemoryManager()
             await memory.initialize()
@@ -66,7 +66,7 @@ class TestMemoryStoreAndRetrieve:
     async def test_memory_store_and_retrieve(self):
         """测试基本存储和检索"""
         try:
-            from core.memory.enhanced_memory_manager import EnhancedMemoryManager
+            from core.framework.memory.enhanced_memory_manager import EnhancedMemoryManager
 
             memory = EnhancedMemoryManager()
             await memory.initialize()
@@ -95,7 +95,7 @@ class TestMemoryStoreAndRetrieve:
     async def test_memory_store_with_metadata(self):
         """测试带元数据的存储"""
         try:
-            from core.memory.enhanced_memory_manager import EnhancedMemoryManager
+            from core.framework.memory.enhanced_memory_manager import EnhancedMemoryManager
 
             memory = EnhancedMemoryManager()
             await memory.initialize()
@@ -123,7 +123,7 @@ class TestMemoryStoreAndRetrieve:
     async def test_memory_retrieve_nonexistent_key(self):
         """测试检索不存在的键"""
         try:
-            from core.memory.enhanced_memory_manager import EnhancedMemoryManager
+            from core.framework.memory.enhanced_memory_manager import EnhancedMemoryManager
 
             memory = EnhancedMemoryManager()
             await memory.initialize()
@@ -144,7 +144,7 @@ class TestMemoryTTL:
     async def test_memory_with_short_ttl(self):
         """测试短TTL记忆"""
         try:
-            from core.memory.enhanced_memory_manager import EnhancedMemoryManager
+            from core.framework.memory.enhanced_memory_manager import EnhancedMemoryManager
 
             memory = EnhancedMemoryManager()
             await memory.initialize()
@@ -172,7 +172,7 @@ class TestMemoryTTL:
     async def test_memory_with_long_ttl(self):
         """测试长TTL记忆"""
         try:
-            from core.memory.enhanced_memory_manager import EnhancedMemoryManager
+            from core.framework.memory.enhanced_memory_manager import EnhancedMemoryManager
 
             memory = EnhancedMemoryManager()
             await memory.initialize()
@@ -204,7 +204,7 @@ class TestMemoryTierPromotion:
     async def test_hot_tier_storage(self):
         """测试HOT层存储"""
         try:
-            from core.memory.enhanced_memory_manager import EnhancedMemoryManager
+            from core.framework.memory.enhanced_memory_manager import EnhancedMemoryManager
 
             memory = EnhancedMemoryManager()
             await memory.initialize()
@@ -226,7 +226,7 @@ class TestMemoryTierPromotion:
     async def test_warm_tier_storage(self):
         """测试WARM层存储"""
         try:
-            from core.memory.enhanced_memory_manager import EnhancedMemoryManager
+            from core.framework.memory.enhanced_memory_manager import EnhancedMemoryManager
 
             memory = EnhancedMemoryManager()
             await memory.initialize()
@@ -248,7 +248,7 @@ class TestMemoryTierPromotion:
     async def test_cold_tier_storage(self):
         """测试COLD层存储"""
         try:
-            from core.memory.enhanced_memory_manager import EnhancedMemoryManager
+            from core.framework.memory.enhanced_memory_manager import EnhancedMemoryManager
 
             memory = EnhancedMemoryManager()
             await memory.initialize()
@@ -274,7 +274,7 @@ class TestMemoryCapacity:
     async def test_hot_tier_capacity(self):
         """测试HOT层容量限制（100MB）"""
         try:
-            from core.memory.enhanced_memory_manager import EnhancedMemoryManager
+            from core.framework.memory.enhanced_memory_manager import EnhancedMemoryManager
 
             memory = EnhancedMemoryManager()
             await memory.initialize()
@@ -302,7 +302,7 @@ class TestMemoryCapacity:
     async def test_memory_eviction(self):
         """测试记忆淘汰机制"""
         try:
-            from core.memory.enhanced_memory_manager import EnhancedMemoryManager
+            from core.framework.memory.enhanced_memory_manager import EnhancedMemoryManager
 
             memory = EnhancedMemoryManager()
             await memory.initialize()
@@ -328,7 +328,7 @@ class TestMemorySearch:
     async def test_memory_search_by_metadata(self):
         """测试按元数据搜索"""
         try:
-            from core.memory.enhanced_memory_manager import EnhancedMemoryManager
+            from core.framework.memory.enhanced_memory_manager import EnhancedMemoryManager
 
             memory = EnhancedMemoryManager()
             await memory.initialize()
@@ -355,7 +355,7 @@ class TestMemorySearch:
     async def test_memory_search_by_key_pattern(self):
         """测试按键模式搜索"""
         try:
-            from core.memory.enhanced_memory_manager import EnhancedMemoryManager
+            from core.framework.memory.enhanced_memory_manager import EnhancedMemoryManager
 
             memory = EnhancedMemoryManager()
             await memory.initialize()
@@ -381,7 +381,7 @@ class TestMemoryCleanup:
     async def test_memory_delete(self):
         """测试记忆删除"""
         try:
-            from core.memory.enhanced_memory_manager import EnhancedMemoryManager
+            from core.framework.memory.enhanced_memory_manager import EnhancedMemoryManager
 
             memory = EnhancedMemoryManager()
             await memory.initialize()
@@ -408,7 +408,7 @@ class TestMemoryCleanup:
     async def test_memory_clear_all(self):
         """测试清空所有记忆"""
         try:
-            from core.memory.enhanced_memory_manager import EnhancedMemoryManager
+            from core.framework.memory.enhanced_memory_manager import EnhancedMemoryManager
 
             memory = EnhancedMemoryManager()
             await memory.initialize()

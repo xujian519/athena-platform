@@ -245,7 +245,7 @@ class EnhancedStorageManager:
         return None
 
     async def search_files(self, query: str = None, file_type: str = None,
-                          limit: int = 20, offset: int = 0) -> list[dict[str, Any]]:
+                          limit: int = 20, offset: int = 0) -> list[dict[str, Any]:
         """搜索文件"""
         search_key = f"search:{query}:{file_type}:{limit}:{offset}"
         cached = cache.get(search_key)

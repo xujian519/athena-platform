@@ -6,15 +6,15 @@ Sync PostgreSQL vector embeddings to Qdrant (Fixed Version)
 处理PostgreSQL中存储为JSON字符串的向量数据
 """
 
-import psycopg2
-import numpy as np
-import requests
-import time
 import json
-from pathlib import Path
+import time
 from datetime import datetime
-from dotenv import load_dotenv
+from pathlib import Path
 from typing import Any
+
+import psycopg2
+import requests
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -82,7 +82,7 @@ def create_qdrant_collection(collection_name: str, vector_size: int = 1024):
     })
 
     if response.status_code == 200:
-        log(f"  ✅ 集合创建成功")
+        log("  ✅ 集合创建成功")
         return True, 0
     else:
         log(f"  ❌ 集合创建失败: {response.text}")
@@ -94,7 +94,7 @@ def sync_legal_articles_vectors():
     collection_name = "legal_articles_v2"
 
     log(f"\n{'='*80}")
-    log(f"同步法律条文向量: legal_articles_v2_embeddings")
+    log("同步法律条文向量: legal_articles_v2_embeddings")
     log(f"{'='*80}\n")
 
     conn = psycopg2.connect(
@@ -215,7 +215,7 @@ def sync_patent_invalid_vectors():
     collection_name = "patent_invalid_embeddings"
 
     log(f"\n{'='*80}")
-    log(f"同步专利无效向量: patent_invalid_embeddings")
+    log("同步专利无效向量: patent_invalid_embeddings")
     log(f"{'='*80}\n")
 
     conn = psycopg2.connect(
@@ -290,7 +290,7 @@ def sync_patent_invalid_vectors():
         })
 
         if len(batch) >= BATCH_SIZE:
-            response = requests.put(
+            requests.put(
                 f"{QDRANT_URL}/collections/{collection_name}/points",
                 json={"points": batch},
                 timeout=60
@@ -327,7 +327,7 @@ def sync_judgment_vectors():
     collection_name = "judgment_embeddings"
 
     log(f"\n{'='*80}")
-    log(f"同步判决向量: judgment_embeddings")
+    log("同步判决向量: judgment_embeddings")
     log(f"{'='*80}\n")
 
     conn = psycopg2.connect(
@@ -402,7 +402,7 @@ def sync_judgment_vectors():
         })
 
         if len(batch) >= BATCH_SIZE:
-            response = requests.put(
+            requests.put(
                 f"{QDRANT_URL}/collections/{collection_name}/points",
                 json={"points": batch},
                 timeout=60
@@ -439,7 +439,7 @@ def sync_patent_judgment_vectors():
     collection_name = "patent_judgment_vectors"
 
     log(f"\n{'='*80}")
-    log(f"同步专利判决向量: patent_judgment_vectors")
+    log("同步专利判决向量: patent_judgment_vectors")
     log(f"{'='*80}\n")
 
     conn = psycopg2.connect(
@@ -514,7 +514,7 @@ def sync_patent_judgment_vectors():
         })
 
         if len(batch) >= BATCH_SIZE:
-            response = requests.put(
+            requests.put(
                 f"{QDRANT_URL}/collections/{collection_name}/points",
                 json={"points": batch},
                 timeout=60

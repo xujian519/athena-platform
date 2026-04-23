@@ -32,7 +32,7 @@ class BatchOperation:
     operation_id: str
     operation_type: str  # upload, download, process, analyze, delete
     user_id: str
-    files: list[dict[str, Any]]
+    files: list[dict[str, Any]
     status: BatchOperationStatus
     progress: float = 0.0
     total_files: int = 0
@@ -43,7 +43,7 @@ class BatchOperation:
     started_at: datetime = None
     completed_at: datetime = None
     error_message: str | None = None
-    results: list[dict[str, Any]] = None
+    results: list[dict[str, Any] = None
     config: dict[str, Any] = None
 
     def __post_init__(self):
@@ -67,7 +67,7 @@ class BatchOperationManager:
         self.thread_pool = ThreadPoolExecutor(max_workers=max_workers)
         self.running = False
         self.worker_task = None
-        self.progress_callbacks: dict[str, list[Callable]] = {}
+        self.progress_callbacks: dict[str, list[Callable] = {}
 
     async def start(self):
         """启动批量操作管理器"""
@@ -141,7 +141,7 @@ class BatchOperationManager:
                 await asyncio.sleep(1)
 
     async def create_batch_operation(self, operation_type: str, user_id: str,
-                                   files: list[dict[str, Any]],
+                                   files: list[dict[str, Any],
                                    config: dict[str, Any] = None) -> str:
         """创建批量操作"""
         operation_id = str(uuid.uuid4())

@@ -566,7 +566,7 @@ class EnhancedParameterClarification:
         return None
 
     def generate_clarification_question(
-        self, param_name: str, missing_params: list[str], context: dict[str, Any] | None = None
+        self, param_name: str, missing_params: list[str], context: Optional[dict[str, Any]] = None
     ) -> ClarificationQuestion:
         """
         生成澄清问题 - 增强版

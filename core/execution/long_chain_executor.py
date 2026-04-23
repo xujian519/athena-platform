@@ -52,7 +52,7 @@ class ExecutionStep:
     dependencies: list[str] = field(default_factory=list)
     status: StepStatus = StepStatus.PENDING
     result: Any = None
-    error: str | None = None
+    error: Optional[str] = None
     retry_count: int = 0
     max_retries: int = 3
     timeout: float = 30.0

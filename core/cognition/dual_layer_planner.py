@@ -61,11 +61,11 @@ class PlanStep:
     agent: str = "xiaonuo"  # 执行智能体
     dependencies: list[str] = field(default_factory=list)
     estimated_time: int = 0  # 预估时间(秒)
-    context_file: str | None = None  # 上下文文件
-    result: str | None = None  # 执行结果
-    error: str | None = None  # 错误信息
-    started_at: str | None = None
-    completed_at: str | None = None
+    context_file: Optional[str] = None  # 上下文文件
+    result: Optional[str] = None  # 执行结果
+    error: Optional[str] = None  # 错误信息
+    started_at: Optional[str] = None
+    completed_at: Optional[str] = None
     user_notes: str = ""  # 用户备注
 
     def to_markdown(self) -> str:

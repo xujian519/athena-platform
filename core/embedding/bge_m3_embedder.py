@@ -36,7 +36,7 @@ class BGE_M3_Embedder:
     - 设备支持: MPS(Apple Silicon)、CUDA、CPU
     """
 
-    def __init__(self, model_path: str | None = None, device: str = "auto"):
+    def __init__(self, model_path: Optional[str] = None, device: str = "auto"):
         """
         初始化BGE-M3嵌入器
 
@@ -200,7 +200,7 @@ class BGE_M3_Embedder:
             return [[0.0] * self.dimension] * len(texts)
 
     async def embed_decision_chunks(
-        self, chunks: list[dict[str, Any]], instruction: str | None = None
+        self, chunks: list[dict[str, Any]], instruction: Optional[str] = None
     ) -> list[list[float]]:
         """
         为专利决定文档块生成高质量向量

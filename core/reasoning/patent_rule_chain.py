@@ -312,7 +312,7 @@ class PatentRuleChainEngine:
     async def analyze_patent(
         self,
         patent_data: dict[str, Any],        analysis_types: list[str] = None,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> PatentAnalysis:
         """
         分析专利
@@ -708,7 +708,7 @@ async def get_patent_rule_chain_engine() -> PatentRuleChainEngine:
 
 
 async def check_patent_compliance(
-    patent_data: dict[str, Any], check_types: list[str] | None = None
+    patent_data: dict[str, Any], check_types: Optional[list[str]] = None
 ) -> list[ComplianceCheck]:
     """便捷函数:检查专利合规性"""
     engine = await get_patent_rule_chain_engine()

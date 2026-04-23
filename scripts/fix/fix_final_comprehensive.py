@@ -6,10 +6,11 @@
 import re
 from pathlib import Path
 
-def fix_all_remaining_errors(file_path: Path) -> tuple[bool, list[str]]:
+
+def fix_all_remaining_errors(file_path: Path) -> tuple[bool, list[str]:
     """修复所有剩余的语法错误"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         original_content = content
@@ -27,7 +28,7 @@ def fix_all_remaining_errors(file_path: Path) -> tuple[bool, list[str]]:
         # ============================================================
         if re.search(r'Optional\[dict\[str,\s*Any\]\s*\|\s*None\s*=\s*None\]', content):
             content = re.sub(r'Optional\[dict\[str,\s*Any\]\s*\|\s*None\s*=\s*None\]', r'dict[str, Any] | None', content)
-            fixes.append('Optional[dict[str, Any]]')
+            fixes.append('Optional[dict[str, Any]')
 
         # ============================================================
         # 3. 修复 Optional[list | None = None] 类型错误
@@ -41,20 +42,20 @@ def fix_all_remaining_errors(file_path: Path) -> tuple[bool, list[str]]:
         # ============================================================
         if re.search(r'Optional\[list\["[^"]+"\]\s*=\s*None\]', content):
             content = re.sub(r'Optional\[list\["[^"]+"\]\s*=\s*None\]', r'list | None', content)
-            fixes.append('Optional[list["key"]]')
+            fixes.append('Optional[list["key"]')
 
         # ============================================================
         # 5. 修复 Optional[list[CacheLevel] | None = None] 类型错误
         # ============================================================
         if re.search(r'Optional\[list\[CacheLevel\]\s*\|\s*None\s*=\s*None\]', content):
             content = re.sub(r'Optional\[list\[CacheLevel\]\s*\|\s*None\s*=\s*None\]', r'list[CacheLevel] | None', content)
-            fixes.append('Optional[list[CacheLevel]]')
+            fixes.append('Optional[list[CacheLevel]')
 
         # ============================================================
-        # 6. 修复 algorithms=[JWT_ALGORITHM]] 括号错误
+        # 6. 修复 algorithms=[JWT_ALGORITHM] 括号错误
         # ============================================================
         if re.search(r'algorithms=\[JWT_ALGORITHM\]\]', content):
-            content = re.sub(r'algorithms=\[JWT_ALGORITHM\]\]', r'algorithms=[JWT_ALGORITHM]]', content)
+            content = re.sub(r'algorithms=\[JWT_ALGORITHM\]\]', r'algorithms=[JWT_ALGORITHM]', content)
             fixes.append('algorithms 括号')
 
         # ============================================================
@@ -66,30 +67,30 @@ def fix_all_remaining_errors(file_path: Path) -> tuple[bool, list[str]]:
         for i, line in enumerate(lines):
             original_line = line
 
-            # 修复 dict[dict[str, str]] -> bool:
+            # 修复 dict[dict[str, str] -> bool:
             if re.search(r'dict\[dict\[str,\s*str\]\]\s*->\s*bool:', line):
-                line = re.sub(r'dict\[dict\[str,\s*str\]\]\s*->\s*bool:', r'dict[dict[str, str]] -> bool:', line)
+                line = re.sub(r'dict\[dict\[str,\s*str\]\]\s*->\s*bool:', r'dict[dict[str, str] -> bool:', line)
                 if line != original_line:
-                    fixes.append(f'第{i+1}行: dict[dict[str, str]]')
+                    fixes.append(f'第{i+1}行: dict[dict[str, str]')
 
             # 修复 list[str]: (函数参数缺少闭合)
             if re.search(r':\s*list\[str\]:\s*$', line):
                 # 检查是否在函数定义中
                 if i > 0 and 'def ' in lines[i-1]:
-                    line = re.sub(r':\s*list\[str\]:\s*$', r': list[str]]:', line)
+                    line = re.sub(r':\s*list\[str\]:\s*$', r': list[str]:', line)
                     if line != original_line:
                         fixes.append(f'第{i+1}行: list[str] 参数')
 
             # 修复 cases: list[str]: (函数参数缺少闭合)
             if re.search(r'cases:\s*list\[str\]:\s*$', line):
-                line = re.sub(r'cases:\s*list\[str\]:\s*$', r'cases: list[str]]:', line)
+                line = re.sub(r'cases:\s*list\[str\]:\s*$', r'cases: list[str]:', line)
                 if line != original_line:
                     fixes.append(f'第{i+1}行: list[str] 参数')
 
             # 修复 vectors: list[list[dict[str] -> list[int]: (嵌套类型注解)
             if re.search(r'vectors:\s*list\[list\[dict\[str\]\s*->\s*list\[int\]:\s*$', line):
                 line = re.sub(r'vectors:\s*list\[list\[dict\[str\]\s*->\s*list\[int\]:\s*$',
-                          r'vectors: list[list[dict[str]]] -> list[int]:', line)
+                          r'vectors: list[list[dict[str]] -> list[int]:', line)
                 if line != original_line:
                     fixes.append(f'第{i+1}行: 嵌套list类型')
 
@@ -109,14 +110,14 @@ def fix_all_remaining_errors(file_path: Path) -> tuple[bool, list[str]]:
             if re.search(r'domains:\s*Optional\[list\["[^"]+"\]\s*=\s*None\]', line):
                 line = re.sub(r'domains:\s*Optional\[list\["[^"]+"\]\s*=\s*None\]', r'domains: list | None', line)
                 if line != original_line:
-                    fixes.append(f'第{i+1}行: Optional[list["key"]]')
+                    fixes.append(f'第{i+1}行: Optional[list["key"]')
 
             # 修复 config: Optional[dict[str, Any] | None = None
             if re.search(r'config:\s*Optional\[dict\[str,\s*Any\]\s*\|\s*None\s*=\s*None\s*[,)]', line):
                 line = re.sub(r'config:\s*Optional\[dict\[str,\s*Any\]\s*\|\s*None\s*=\s*None',
                           r'config: dict[str, Any] | None', line)
                 if line != original_line:
-                    fixes.append(f'第{i+1}行: Optional[dict[str, Any]]')
+                    fixes.append(f'第{i+1}行: Optional[dict[str, Any]')
 
             modified_lines.append(line)
 
@@ -132,7 +133,7 @@ def fix_all_remaining_errors(file_path: Path) -> tuple[bool, list[str]]:
             original_line = line
 
             # 检查 __all__ = [ 后面是否跟 for 循环
-            if re.search(r'__all__\s*=\s*\[[^\]]*\s*$', line):
+            if re.search(r'__all__\s*=\s*\[[^\]*\s*$', line):
                 # 检查下一行
                 if i + 1 < len(lines) and re.search(r'\s+for\s+', lines[i + 1]):
                     line = line.rstrip() + ']'
@@ -140,7 +141,7 @@ def fix_all_remaining_errors(file_path: Path) -> tuple[bool, list[str]]:
                         fixes.append(f'第{i+1}行: 闭合 __all__ 列表')
 
             # 检查其他未闭合的列表
-            if re.search(r'\w+\s*=\s*\[[^\]]*\s*$', line):
+            if re.search(r'\w+\s*=\s*\[[^\]*\s*$', line):
                 if i + 1 < len(lines):
                     next_line = lines[i + 1].strip()
                     if next_line.startswith('for ') or next_line.startswith('if '):

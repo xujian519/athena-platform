@@ -152,7 +152,7 @@ class XiaonuoSixStepReasoningEngine:
         logger.info("🧠 小诺六步推理引擎已初始化")
 
     async def execute_super_reasoning(
-        self, problem: str, context: dict[str, Any] | None = None
+        self, problem: str, context: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """执行六步超级推理
 

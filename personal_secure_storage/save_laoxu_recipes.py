@@ -118,13 +118,13 @@ def save_laoxu_recipes() -> None:
 ## 📋 菜品分类
 
 ### 🥩 肉类与主食类 ({len(laoxu_recipes['categories']['肉类与主食类'])}个)
-{chr(10).join([f"- {dish}" for dish in laoxu_recipes['categories']['肉类与主食类']])}
+{chr(10).join([f"- {dish}" for dish in laoxu_recipes['categories']['肉类与主食类'])}
 
 ### 🐂 牛肉相关菜品 ({len(laoxu_recipes['categories']['牛肉相关菜品'])}个)
-{chr(10).join([f"- {dish}" for dish in laoxu_recipes['categories']['牛肉相关菜品']])}
+{chr(10).join([f"- {dish}" for dish in laoxu_recipes['categories']['牛肉相关菜品'])}
 
 ### 🍲 汤品类 ({len(laoxu_recipes['categories']['汤品'])}个)
-{chr(10).join([f"- {dish}" for dish in laoxu_recipes['categories']['汤品']])}
+{chr(10).join([f"- {dish}" for dish in laoxu_recipes['categories']['汤品'])}
 
 ### 🥟 特色菜品
 - **牛肉馅饺子** (含详细配料)

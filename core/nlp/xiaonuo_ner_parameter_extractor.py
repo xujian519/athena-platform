@@ -928,7 +928,7 @@ class XiaonuoNERParameterExtractor:
         confidence = entity_confidence * relation_factor - error_penalty
         return max(0.0, min(1.0, confidence))
 
-    def save_models(self, save_path: str | None = None) -> None:
+    def save_models(self, save_path: Optional[str] = None) -> None:
         """保存模型"""
         if not save_path:
             save_path = self.config.model_dir
@@ -943,7 +943,7 @@ class XiaonuoNERParameterExtractor:
 
         logger.info(f"💾 NER模型已保存: {save_path}")
 
-    def load_models(self, load_path: str | None = None) -> Any | None:
+    def load_models(self, load_path: Optional[str] = None) -> Any | None:
         """加载模型"""
         if not load_path:
             load_path = self.config.model_dir

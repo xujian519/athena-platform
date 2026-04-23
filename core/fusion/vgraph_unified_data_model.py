@@ -104,8 +104,8 @@ class VectorGraphMapping:
 
     # 索引优化
     confidence: float = 1.0
-    embedding_quality_score: float | None = None
-    graph_centrality_score: float | None = None
+    embedding_quality_score: Optional[float] = None
+    graph_centrality_score: Optional[float] = None
 
     # 元数据
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -154,7 +154,7 @@ class UnifiedEntity:
     # 向量特征
     vector_embedding: list[float] | None = None
     vector_dimension: int = 1024
-    vector_id: str | None = None
+    vector_id: Optional[str] = None
 
     # 图特征
     importance_score: float = 0.0

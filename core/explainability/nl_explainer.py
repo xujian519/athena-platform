@@ -249,7 +249,7 @@ class NLExplainer:
             natural_language=natural_language,
         )
 
-    def explain_error(self, error: str, fallback: str | None = None) -> DecisionExplanation:
+    def explain_error(self, error: str, fallback: Optional[str] = None) -> DecisionExplanation:
         """
         解释错误
 

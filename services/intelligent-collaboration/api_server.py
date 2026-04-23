@@ -51,7 +51,7 @@ class TaskStatusResponse(BaseModel):
     task_id: str
     status: str
     created_at: str
-    results: list[dict[str, Any]]
+    results: list[dict[str, Any]
     execution_summary: dict[str, Any] | None = None
 
 class CollaborationInsight(BaseModel):

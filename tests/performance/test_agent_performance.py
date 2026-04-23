@@ -13,9 +13,9 @@ Agent Performance Benchmark Tests
 创建时间: 2026-04-21
 版本: v1.0.0
 """
-from __future__ import annotations
 
 import pytest
+
 from tests.performance.benchmark_runner import get_benchmark_runner
 
 
@@ -53,7 +53,7 @@ class TestAgentPerformance:
         async def discover_service():
             from core.service_registry import get_discovery_api
 
-            api = get_discovery_api()
+            get_discovery_api()
 
             # 模拟服务发现（不实际调用，避免依赖）
             import asyncio
@@ -79,7 +79,7 @@ class TestAgentPerformance:
         async def health_check():
             from core.service_registry import get_health_checker
 
-            checker = get_health_checker()
+            get_health_checker()
 
             # 模拟健康检查
             import asyncio
@@ -96,3 +96,4 @@ class TestAgentPerformance:
         )
 
         assert result.meets_target(), f"健康检查性能未达标: {result}"
+

@@ -13,7 +13,7 @@ from datetime import timedelta
 # 添加项目路径
 sys.path.append('/Users/xujian/Athena工作平台')
 
-from core.collaboration import (
+from core.framework.collaboration import (
     Agent,
     AgentCapability,
     Message,
@@ -23,7 +23,7 @@ from core.collaboration import (
     Task,
     TaskStatus,
 )
-from core.collaboration.collaboration_patterns import (
+from core.framework.collaboration.collaboration_patterns import (
     ConsensusCollaborationPattern,
     HierarchicalCollaborationPattern,
     ParallelCollaborationPattern,

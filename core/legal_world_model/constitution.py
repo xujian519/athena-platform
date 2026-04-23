@@ -328,7 +328,7 @@ class Judgment(Case):
     parties: dict[str, str] = field(default_factory=dict)  # 当事人
     claims_interpretation: dict[str, str] = field(default_factory=dict)  # 权利要求解释
     infringement_finding: dict[str, Any] = field(default_factory=dict)  # 侵权认定
-    damages: float | None = None  # 赔偿金额
+    damages: Optional[float] = None  # 赔偿金额
 
     def __post_init__(self):
         if self.entity_type is None:
@@ -624,9 +624,9 @@ class CitationReference:
     document_type: DocumentType
     source: DocumentSource
     document_id: str  # 文档标识(如条号、案号)
-    section: str | None = None  # 章节/条款
-    paragraph: str | None = None  # 段落
-    url: str | None = None  # 在线地址
+    section: Optional[str] = None  # 章节/条款
+    paragraph: Optional[str] = None  # 段落
+    url: Optional[str] = None  # 在线地址
     accessed_date: datetime | None = None  # 访问日期
 
     def format_citation(self) -> str:

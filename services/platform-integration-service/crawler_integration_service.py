@@ -363,7 +363,7 @@ class CrawlerIntegrationService:
             'queue_size': self.task_scheduler.qsize()
         }
 
-    async def batch_process(self, requests: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    async def batch_process(self, requests: list[dict[str, Any]) -> list[dict[str, Any]:
         """批量处理请求
 
         Args:

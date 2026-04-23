@@ -43,9 +43,9 @@ class SearchQuery:
     region: str = "CN"
     safe_search: str = "moderate"
     time_range: str = ""  # y=year, m=month, w=week, d=day
-    domains: list[str] | None = None
-    exclude_domains: list[str] | None = None
-    include_domains: list[str] | None = None
+    domains: Optional[list[str]] = None
+    exclude_domains: Optional[list[str]] = None
+    include_domains: Optional[list[str]] = None
     file_type: str = ""  # pdf, doc, docx, etc.
     advanced: bool = False  # 高级搜索模式
 
@@ -61,7 +61,7 @@ class SearchResult:
     engine: str
     relevance_score: float = 0.0
     timestamp: str = ""
-    metadata: dict[str, Any] | None = None
+    metadata: Optional[dict[str, Any]] = None
 
     def __post_init__(self):
         if not self.timestamp:
@@ -83,7 +83,7 @@ class SearchResponse:
     api_key_used: str = ""
     error_message: str = ""
     timestamp: str = ""
-    metadata: dict[str, Any] | None = None
+    metadata: Optional[dict[str, Any]] = None
 
     def __post_init__(self):
         if not self.timestamp:

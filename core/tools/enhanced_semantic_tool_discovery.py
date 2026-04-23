@@ -117,7 +117,7 @@ class EnhancedSemanticToolDiscovery:
     async def discover_tools(
         self,
         task_description: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
         top_k: int = 5,
         enable_reranking: bool = True,
     ) -> list[SemanticMatch]:
@@ -480,7 +480,7 @@ class EnhancedSemanticToolDiscovery:
         return "; ".join(reasons)
 
     async def record_usage(
-        self, tool_id: str, success: bool, context: dict[str, Any] | None = None
+        self, tool_id: str, success: bool, context: Optional[dict[str, Any]] = None
     ):
         """记录工具使用并学习模式"""
         tool_context = self.tool_contexts[tool_id]

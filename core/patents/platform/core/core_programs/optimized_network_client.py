@@ -334,7 +334,7 @@ class OptimizedNetworkClient:
 
         return patents
 
-    def _extract_patent_data(self, item) -> Dict[str, Any | None]:
+    def _extract_patent_data(self, item) -> Dict[str, Any] | None]:
         """从HTML元素中提取专利数据"""
         patent_data = {}
 

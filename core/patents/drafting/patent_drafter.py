@@ -47,15 +47,15 @@ class PatentApplication:
     filing_date: str = ""  # 申请日期
     title: str = ""  # 发明名称
     abstract: str = ""  # 摘要
-    claims: List[str] = field(default_factory=list)  # 权利要求书
+    claims: list[str] = field(default_factory=list)  # 权利要求书
     technical_field: str = ""  # 技术领域
     background_art: str = ""  # 背景技术
     summary: str = ""  # 发明内容
     detailed_description: str = ""  # 具体实施方式
-    drawings_description: List[str] = field(default_factory=list)  # 附图说明
-    metadata: Dict[str, Any] = field(default_factory=dict)  # 元数据
+    drawings_description: list[str] = field(default_factory=list)  # 附图说明
+    metadata: dict[str, Any] = field(default_factory=dict)  # 元数据
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "application_number": self.application_number,
@@ -218,9 +218,9 @@ class PatentDrafter:
 
     async def batch_draft(
         self,
-        disclosure_files: List[str],
+        disclosure_files: list[str],
         options: Optional[DraftingOptions] = None
-    ) -> List[PatentApplication]:
+    ) -> list[PatentApplication]:
         """
         批量撰写专利申请
 

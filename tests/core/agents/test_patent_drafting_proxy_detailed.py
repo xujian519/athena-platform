@@ -8,7 +8,8 @@ PatentDraftingProxy详细功能测试
 """
 
 import pytest
-from core.agents.xiaona.patent_drafting_proxy import PatentDraftingProxy
+
+from core.framework.agents.xiaona.patent_drafting_proxy import PatentDraftingProxy
 
 
 class TestPatentDraftingProxyDetailed:

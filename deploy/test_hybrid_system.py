@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 混合架构系统测试脚本
 Test script for the hybrid architecture system
 """
 
 import asyncio
-import json
 import logging
-from datetime import datetime
 from pathlib import Path
 
 # 设置日志
@@ -101,10 +98,10 @@ async def test_hybrid_architecture():
     print("=" * 50)
 
     from core.xiaonuo_hybrid_architecture import (
+        DataType,
         HybridArchitectureController,
         OperationRequest,
         OperationType,
-        DataType
     )
 
     controller = HybridArchitectureController()
@@ -166,10 +163,10 @@ async def test_complete_workflow():
 
     # 模拟完整的用户请求流程
     from core.xiaonuo_hybrid_architecture import (
+        DataType,
         HybridArchitectureController,
         OperationRequest,
         OperationType,
-        DataType
     )
 
     controller = HybridArchitectureController()

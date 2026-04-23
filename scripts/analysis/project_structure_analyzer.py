@@ -6,12 +6,10 @@ Project Structure Analyzer and Optimization Planner
 分析当前项目结构，并根据标准化方案提供逐步整理建议
 """
 
-import os
-import json
-from pathlib import Path
-from collections import defaultdict
-from typing import Dict, List, Tuple
 import argparse
+import os
+from collections import defaultdict
+from pathlib import Path
 
 
 class ProjectStructureAnalyzer:
@@ -27,7 +25,7 @@ class ProjectStructureAnalyzer:
             'recommendations': []
         }
 
-    def analyze(self) -> Dict:
+    def analyze(self) -> dict:
         """执行完整分析"""
         print("🔍 开始分析项目结构...")
 
@@ -243,7 +241,7 @@ class ProjectOptimizer:
             'phase5_cleanup': []
         }
 
-    def generate_migration_plan(self) -> Dict:
+    def generate_migration_plan(self) -> dict:
         """生成完整的迁移计划"""
         # 阶段1：准备工作
         self._phase1_preparation()
@@ -499,7 +497,7 @@ class ProjectOptimizer:
         return script_path
 
 
-def print_analysis_report(analysis: Dict):
+def print_analysis_report(analysis: dict):
     """打印分析报告"""
     print("\n" + "="*80)
     print("📊 Athena项目目录结构分析报告".center(80))
@@ -534,7 +532,7 @@ def print_analysis_report(analysis: Dict):
             print()
 
 
-def print_recommendations(recommendations: List[Dict]):
+def print_recommendations(recommendations: list[dict]):
     """打印优化建议"""
     print("💡 优化建议:")
     print("=" * 80)

@@ -23,7 +23,8 @@ import logging
 from abc import ABC, abstractmethod
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
-from typing import Any, Awaitable, Callable, Dict, Optional, TypeVar, Union
+from typing import Any, Callable, Dict, Optional, TypeVar, Union
+from collections.abc import Awaitable
 
 from .feature_gates import feature
 
@@ -43,9 +44,9 @@ class ToolContext:
     session_id: Optional[str] = None  # 会话ID
     user_id: Optional[str] = None  # 用户ID
     request_id: Optional[str] = None  # 请求ID
-    metadata: Optional[Dict[str, Any]] = None  # 元数据
+    metadata: Optional[dict[str, Any]] = None  # 元数据
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "session_id": self.session_id,
@@ -75,7 +76,7 @@ class BaseTool(ABC):
 
     @abstractmethod
     async def call(
-        self, parameters: Dict[str, Any], context: Optional[ToolContext] = None
+        self, parameters: dict[str, Any], context: Optional[ToolContext] = None
     ) -> Any:
         """
         调用工具（异步接口）
@@ -90,7 +91,7 @@ class BaseTool(ABC):
         pass
 
     async def __call__(
-        self, parameters: Dict[str, Any], context: Optional[ToolContext] = None
+        self, parameters: dict[str, Any], context: Optional[ToolContext] = None
     ) -> Any:
         """
         可调用对象接口
@@ -104,7 +105,7 @@ class BaseTool(ABC):
         """
         return await self.call(parameters, context)
 
-    def validate_parameters(self, parameters: Dict[str, Any]) -> tuple[bool, list[str]]:
+    def validate_parameters(self, parameters: dict[str, Any]) -> tuple[bool, list[str]]:
         """
         验证参数（子类可重写）
 
@@ -127,7 +128,7 @@ class SyncToolWrapper(BaseTool):
     def __init__(
         self,
         name: str,
-        sync_handler: Callable[[Dict[str, Any]], Any],
+        sync_handler: Callable[[dict[str, Any]], Any],
         description: str = "",
     ):
         """
@@ -142,7 +143,7 @@ class SyncToolWrapper(BaseTool):
         self.sync_handler = sync_handler
 
     async def call(
-        self, parameters: Dict[str, Any], context: Optional[ToolContext] = None
+        self, parameters: dict[str, Any], context: Optional[ToolContext] = None
     ) -> Any:
         """
         调用同步工具（在线程池中执行）
@@ -169,7 +170,7 @@ class AsyncToolWrapper(BaseTool):
     def __init__(
         self,
         name: str,
-        async_handler: Callable[[Dict[str, Any]], Awaitable[Any]],
+        async_handler: Callable[[dict[str, Any]], Awaitable[Any]],
         description: str = "",
     ):
         """
@@ -184,7 +185,7 @@ class AsyncToolWrapper(BaseTool):
         self.async_handler = async_handler
 
     async def call(
-        self, parameters: Dict[str, Any], context: Optional[ToolContext] = None
+        self, parameters: dict[str, Any], context: Optional[ToolContext] = None
     ) -> Any:
         """
         调用异步工具
@@ -202,7 +203,7 @@ class AsyncToolWrapper(BaseTool):
 def to_async_tool(
     name: str,
     description: str = "",
-) -> Callable[[Union[Callable[[Dict[str, Any]], Any], Callable[[Dict[str, Any]], Awaitable[Any]]]], BaseTool]:
+) -> Callable[[Union[Callable[[dict[str, Any]], Any], Callable[[dict[str, Any]], Awaitable[Any]]]], BaseTool]:
     """
     装饰器：将函数转换为异步工具
 
@@ -221,7 +222,7 @@ def to_async_tool(
         ...     return {"result": "success"}
     """
     def decorator(
-        func: Union[Callable[[Dict[str, Any]], Any], Callable[[Dict[str, Any]], Awaitable[Any]]]
+        func: Union[Callable[[dict[str, Any]], Any], Callable[[dict[str, Any]], Awaitable[Any]]]
     ) -> BaseTool:
         # 检测是否为异步函数
         if asyncio.iscoroutinefunction(func):
@@ -245,7 +246,7 @@ async def tool_context(
     session_id: Optional[str] = None,
     user_id: Optional[str] = None,
     request_id: Optional[str] = None,
-    metadata: Optional[Dict[str, Any]] = None,
+    metadata: Optional[dict[str, Any]] = None,
 ):
     """
     工具执行上下文管理器
@@ -301,7 +302,7 @@ class ToolExecutor:
     async def execute(
         self,
         tool: BaseTool,
-        parameters: Dict[str, Any],
+        parameters: dict[str, Any],
         context: Optional[ToolContext] = None,
     ) -> Any:
         """
@@ -364,7 +365,7 @@ class ToolExecutor:
 
 async def call_tool(
     tool: BaseTool,
-    parameters: Dict[str, Any],
+    parameters: dict[str, Any],
     context: Optional[ToolContext] = None,
     executor: Optional[ToolExecutor] = None,
 ) -> Any:

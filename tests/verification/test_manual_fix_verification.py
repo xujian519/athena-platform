@@ -50,11 +50,11 @@ async def test_enhanced_xiaonuo():
     print("\n📋 测试1: 导入模块")
 
     try:
-        from core.agents.xiaonuo.enhanced_xiaonuo import EnhancedXiaonuo
+        from core.framework.agents.xiaonuo.enhanced_xiaonuo import EnhancedXiaonuo
         add_result("导入 Enhanced Xiaonuo", True, "模块导入成功")
     except ImportError as e:
         add_result("导入 Enhanced Xiaonuo", False, f"导入失败: {e}")
-        print(f"❌ 无法继续测试，导入失败")
+        print("❌ 无法继续测试，导入失败")
         return False
 
     # ========== 测试2: 检查类属性 ==========
@@ -85,7 +85,7 @@ async def test_enhanced_xiaonuo():
 
         # 检查实例属性
         has_engine = agent.reflection_engine_v5 is not None
-        add_result("反思引擎实例", has_engine, f"反思引擎已初始化" if has_engine else "反思引擎未初始化")
+        add_result("反思引擎实例", has_engine, "反思引擎已初始化" if has_engine else "反思引擎未初始化")
 
         # 检查能力列表
         has_capabilities = len(agent.enhanced_capabilities) > 0
@@ -102,8 +102,9 @@ async def test_enhanced_xiaonuo():
     print("\n📋 测试4: 测试反思功能")
 
     try:
-        from core.intelligence.reflection_engine_v5 import ThoughtStep, ReflectionType
         from datetime import datetime
+
+        from core.intelligence.reflection_engine_v5 import ReflectionType, ThoughtStep
 
         # 创建思维链
         thought_chain = [

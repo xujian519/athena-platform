@@ -173,8 +173,8 @@ class AnalysisResult:
     comparison_results: list[dict] = field(default_factory=list)
 
     # 量化指标
-    novelty_score: float | None = None
-    inventiveness_score: float | None = None
+    novelty_score: Optional[float] = None
+    inventiveness_score: Optional[float] = None
 
     # 质量指标
     confidence_level: float = 0.8  # 置信度
@@ -570,7 +570,7 @@ class EnhancedPatentAnalyzer:
         problems: list[str],
         features: list[str],
         effects: list[str],
-        claims_text: str | None = None,
+        claims_text: Optional[str] = None,
     ) -> list[TechnicalTriple]:
         """构建技术三元组"""
         triples = []
@@ -626,8 +626,8 @@ class EnhancedPatentAnalyzer:
         self,
         analysis_result: AnalysisResult,
         output_format: str = "markdown",
-        output_path: str | None = None,
-    ) -> str | None:
+        output_path: Optional[str] = None,
+    ) -> Optional[str]:
         """
         生成分析报告
 
@@ -758,7 +758,7 @@ class EnhancedPatentAnalyzer:
 
     # ==================== 可视化 ====================
 
-    def visualize(self, analysis_result: AnalysisResult, output_path: str | None = None):
+    def visualize(self, analysis_result: AnalysisResult, output_path: Optional[str] = None):
         """可视化分析结果"""
         if not self.kg:
             print("❌ 知识图谱未启用,无法生成可视化")

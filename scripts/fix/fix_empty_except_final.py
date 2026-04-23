@@ -4,20 +4,18 @@
 处理各种特殊情况
 """
 
-import os
 import re
 from pathlib import Path
-from typing import List, Tuple
 
 
-def fix_file_smart(file_path: Path) -> Tuple[bool, int]:
+def fix_file_smart(file_path: Path) -> tuple[bool, int]:
     """
     智能修复单个文件中的所有空except块
 
     返回: (是否成功, 修复数量)
     """
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         # 检查是否有空except块

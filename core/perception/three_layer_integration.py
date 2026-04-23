@@ -135,7 +135,7 @@ class PerceptionQueries:
         """
 
     @staticmethod
-    def query_layer2_patents(document_type: str | None = None, limit: int = 10) -> str:
+    def query_layer2_patents(document_type: Optional[str] = None, limit: int = 10) -> str:
         """查询Layer 2专利文档"""
         if document_type:
             return f"""
@@ -152,7 +152,7 @@ class PerceptionQueries:
         """
 
     @staticmethod
-    def query_layer3_judgments(case_type: str | None = None, limit: int = 10) -> str:
+    def query_layer3_judgments(case_type: Optional[str] = None, limit: int = 10) -> str:
         """查询Layer 3判决文书"""
         if case_type:
             return f"""

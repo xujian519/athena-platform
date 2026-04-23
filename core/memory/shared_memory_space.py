@@ -71,7 +71,7 @@ class SharedMemory:
 
     # 版本控制
     version: int = 1
-    parent_memory_id: str | None = None
+    parent_memory_id: Optional[str] = None
 
     # 访问统计
     access_count: int = 0
@@ -144,11 +144,11 @@ class SharedMemorySpace:
         content: str,
         memory_type: MemoryType = MemoryType.EPISODIC,
         access_level: MemoryAccessLevel = MemoryAccessLevel.RESTRICTED,
-        allowed_agents: list[str] | None = None,
-        tags: list[str] | None = None,
-        metadata: dict[str, Any] | None = None,
+        allowed_agents: Optional[list[str]] = None,
+        tags: Optional[list[str]] = None,
+        metadata: Optional[dict[str, Any]] = None,
         importance: float = 0.5,
-        ttl_seconds: int | None = None,
+        ttl_seconds: Optional[int] = None,
     ) -> str:
         """存储共享记忆"""
         memory = SharedMemory(
@@ -219,7 +219,7 @@ class SharedMemorySpace:
         requester_id: str,
         query: str,
         memory_type: MemoryType | None = None,
-        tags: list[str] | None = None,
+        tags: Optional[list[str]] = None,
         min_importance: float = 0.0,
         limit: int = 10,
     ) -> list[SharedMemory]:
@@ -261,7 +261,7 @@ class SharedMemorySpace:
         memory_id: str,
         updater_id: str,
         updates: dict[str, Any],        create_new_version: bool = True,
-    ) -> str | None:
+    ) -> Optional[str]:
         """更新记忆"""
         memory = self.memories.get(memory_id)
 
@@ -313,7 +313,7 @@ class SharedMemorySpace:
 
     async def merge_memories(
         self, memory_ids: list[str], merger_id: str, merge_strategy: str = "concatenate"
-    ) -> str | None:
+    ) -> Optional[str]:
         """合并多个记忆"""
         memories = []
         for mid in memory_ids:
@@ -359,7 +359,7 @@ class SharedMemorySpace:
         self,
         subscriber_id: str,
         memory_types: list[MemoryType] | None = None,
-        tags: list[str] | None = None,
+        tags: Optional[list[str]] = None,
         min_importance: float = 0.0,
         callback: callable | None = None,
     ) -> str:

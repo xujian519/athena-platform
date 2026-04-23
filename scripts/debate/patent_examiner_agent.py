@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 专利审查员智能体
 Patent Examiner Agent
@@ -11,14 +10,12 @@ Patent Examiner Agent
 创建时间: 2026-02-09
 """
 
-import asyncio
-import json
 import logging
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from core.llm.deepseek_client import DeepSeekClient
+from core.ai.llm.deepseek_client import DeepSeekClient
 
 logger = logging.getLogger(__name__)
 
@@ -42,8 +39,8 @@ class ExaminerOpinion:
     """审查员意见"""
     stance: ExaminerStance
     reasoning: str
-    key_concerns: List[str] = field(default_factory=list)
-    requested_clarifications: List[str] = field(default_factory=list)
+    key_concerns: list[str] = field(default_factory=list)
+    requested_clarifications: list[str] = field(default_factory=list)
     confidence: float = 0.5
 
     def to_dict(self) -> dict:
@@ -81,13 +78,13 @@ class PatentExaminerAgent:
     def __init__(
         self,
         name: str = "审查员肖玉林",
-        deepseek_client: Optional[DeepSeekClient] = None,
+        deepseek_client: DeepSeekClient | None = None,
         stance: ExaminerStance = ExaminerStance.FULLY_REJECT,
     ):
         self.name = name
         self.stance = stance
         self.deepseek_client = deepseek_client or DeepSeekClient(model="deepseek-chat")
-        self.debate_history: List[Dict[str, Any]] = []
+        self.debate_history: list[dict[str, Any] = []
 
         logger.info(f"✅ 审查员智能体初始化完成: {self.name}")
 

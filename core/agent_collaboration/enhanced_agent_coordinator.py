@@ -42,7 +42,7 @@ class EnhancedAgentCoordinator:
         }
 
     async def select_agent_for_task(
-        self, task_type: str, task_content: dict[str, Any], user_id: str | None = None
+        self, task_type: str, task_content: dict[str, Any], user_id: Optional[str] = None
     ) -> str:
         """
         选择合适的Agent执行任务
@@ -81,7 +81,7 @@ class EnhancedAgentCoordinator:
             return await self._select_agent_traditional(task_type, task_content)
 
     async def _select_agent_with_router(
-        self, task_type: str, task_content: dict[str, Any], user_id: str | None = None
+        self, task_type: str, task_content: dict[str, Any], user_id: Optional[str] = None
     ) -> str:
         """使用智能路由引擎选择Agent"""
 
@@ -145,7 +145,7 @@ class EnhancedAgentCoordinator:
         self,
         task_type: str,
         task_content: dict[str, Any],        workflow_type: str = "sequential",
-        user_id: str | None = None,
+        user_id: Optional[str] = None,
     ) -> dict[str, Any]:
         """
         协调任务执行

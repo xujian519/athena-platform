@@ -456,7 +456,7 @@ class ExpertRuleEngine:
         self,
         facts: list[str],
         reasoning_type: ReasoningType = ReasoningType.HYBRID,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> ReasoningChain:
         """
         执行专家推理
@@ -747,7 +747,7 @@ class ExpertRuleEngine:
         combined = f"{reasoning_type.value}|{'|'.join(sorted(facts))}|{json.dumps(context or {}, sort_keys=True)}"
         return hashlib.md5(combined.encode('utf-8'), usedforsecurity=False).hexdigest()
 
-    async def get_reasoning_explanation(self, chain_id: str) -> str | None:
+    async def get_reasoning_explanation(self, chain_id: str) -> Optional[str]:
         """获取推理解释"""
         if chain_id not in self.reasoning_cache:
             return None
@@ -792,7 +792,7 @@ async def get_expert_rule_engine() -> ExpertRuleEngine:
 
 
 async def reason_patent_compliance(
-    patent_facts: list[str], context: dict[str, Any] | None = None
+    patent_facts: list[str], context: Optional[dict[str, Any]] = None
 ) -> ReasoningChain:
     """便捷函数:专利合规性推理"""
     engine = await get_expert_rule_engine()

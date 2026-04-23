@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 class ExcelExporter:
     """Excel导出器"""
 
-    def __init__(self, output_dir: str | None = None):
+    def __init__(self, output_dir: Optional[str] = None):
         """
         初始化Excel导出器
 
@@ -40,9 +40,9 @@ class ExcelExporter:
         self,
         markdown_table: str,
         sheet_name: str = "Sheet1",
-        output_filename: str | None = None,
+        output_filename: Optional[str] = None,
         keep_formatting: bool = True,
-    ) -> str | None:
+    ) -> Optional[str]:
         """
         导出Markdown表格到Excel
 
@@ -95,7 +95,7 @@ class ExcelExporter:
             logger.error(f"❌ 表格导出失败: {e}")
             return None
 
-    def _parse_markdown_table(self, markdown_table: str) -> list[list[str | None]]:
+    def _parse_markdown_table(self, markdown_table: str) -> Optional[list[list[str]]]:
         """
         解析Markdown表格
 
@@ -154,9 +154,9 @@ class ExcelExporter:
     def export_data_analysis(
         self,
         data: list[dict] | dict | str,
-        output_filename: str | None = None,
+        output_filename: Optional[str] = None,
         sheet_name: str = "数据分析",
-    ) -> str | None:
+    ) -> Optional[str]:
         """
         导出数据分析结果到Excel
 
@@ -211,8 +211,8 @@ class ExcelExporter:
             return None
 
     def export_multiple_sheets(
-        self, sheets_data: dict[str, list[dict] | str | None], output_filename: str | None = None
-    ) -> str | None:
+        self, sheets_data: dict[str, list[dict] | str] or None], output_filename: Optional[str] = None
+    ) -> Optional[str]:
         """
         导出多个工作表到一个Excel文件
 
@@ -263,7 +263,7 @@ class ExcelExporter:
 _excel_exporter_instance = None
 
 
-def get_excel_exporter(output_dir: str | None | None = None) -> ExcelExporter:
+def get_excel_exporter(output_dir: Optional[str] | None = None) -> ExcelExporter:
     """获取Excel导出器单例"""
     global _excel_exporter_instance
     if _excel_exporter_instance is None:

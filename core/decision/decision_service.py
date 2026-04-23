@@ -91,7 +91,7 @@ class DecisionService:
         self,
         problem: str,
         options: list[dict[str, Any]],        category: str = "general",
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> dict[str, Any]:
         """执行决策"""
         print(f"\n🎯 决策服务: {problem}")
@@ -262,7 +262,7 @@ class DecisionService:
         else:
             return await self._free_form_decision(prompt)
 
-    def _parse_decision_type(self, prompt: str) -> str | None:
+    def _parse_decision_type(self, prompt: str) -> Optional[str]:
         """解析决策类型"""
         for template_name, template_info in self.decision_templates.items():
             for keyword in template_info.get("questions"):

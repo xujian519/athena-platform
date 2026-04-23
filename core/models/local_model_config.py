@@ -33,7 +33,7 @@ class LocalModelConfig:
         os.environ["TRANSFORMERS_OFFLINE"] = "1"
         os.environ["HF_OFFLINE"] = "1"
 
-    def get_local_model_path(self, model_name: str) -> str | None:
+    def get_local_model_path(self, model_name: str) -> Optional[str]:
         """获取本地模型路径
 
         Args:

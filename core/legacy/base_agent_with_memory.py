@@ -48,8 +48,8 @@ class MemoryEnabledAgent(ABC):
         agent_id: str,
         agent_type: AgentType,
         role: AgentRole,
-        name: str | None = None,
-        english_name: str | None = None,
+        name: Optional[str] = None,
+        english_name: Optional[str] = None,
     ):
         """
         初始化智能体
@@ -127,9 +127,9 @@ class MemoryEnabledAgent(ABC):
         emotional_weight: float = 0.0,
         family_related: bool = False,
         work_related: bool = False,
-        tags: list[str] | None = None,
+        tags: Optional[list[str]] = None,
         metadata: dict | None = None,
-    ) -> str | None:
+    ) -> Optional[str]:
         """
         存储记忆
 
@@ -206,7 +206,7 @@ class MemoryEnabledAgent(ABC):
 
     async def remember_conversation(
         self, user_message: str, agent_response: str, context: dict | None = None
-    ) -> str | None:
+    ) -> Optional[str]:
         """
         记录对话
 
@@ -229,7 +229,7 @@ class MemoryEnabledAgent(ABC):
 
     async def remember_emotion(
         self, emotion: str, description: str, intensity: float = 0.5
-    ) -> str | None:
+    ) -> Optional[str]:
         """
         记录情感记忆
 
@@ -250,7 +250,7 @@ class MemoryEnabledAgent(ABC):
             tags=["情感", emotion],
         )
 
-    async def remember_family(self, content: str, importance: float = 1.0) -> str | None:
+    async def remember_family(self, content: str, importance: float = 1.0) -> Optional[str]:
         """
         记录家庭记忆
 
@@ -271,7 +271,7 @@ class MemoryEnabledAgent(ABC):
             tags=["家庭", "永恒"],
         )
 
-    async def remember_work(self, content: str, importance: float = 0.7) -> str | None:
+    async def remember_work(self, content: str, importance: float = 0.7) -> Optional[str]:
         """
         记录工作记忆
 
@@ -293,7 +293,7 @@ class MemoryEnabledAgent(ABC):
 
     async def remember_learning(
         self, topic: str, knowledge: str, importance: float = 0.6
-    ) -> str | None:
+    ) -> Optional[str]:
         """
         记录学习记忆
 

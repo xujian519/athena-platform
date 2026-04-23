@@ -122,7 +122,7 @@ class ActiveExplorationEngine:
         print(f"🔍 {self.name} v{self.version} 初始化完成")
 
     async def discover_knowledge_gaps(
-        self, domain: str, context: dict[str, Any] | None = None
+        self, domain: str, context: Optional[dict[str, Any]] = None
     ) -> list[KnowledgeGap]:
         """
         发现知识空白
@@ -420,7 +420,7 @@ class ActiveExplorationEngine:
 
     async def _simulate_knowledge_retrieval(
         self, query: str, knowledge_gap: KnowledgeGap
-    ) -> dict[str, Any] | None:
+    ) -> Optional[dict[str, Any]]:
         """模拟知识检索"""
         # 实际实现中会调用真实的检索API
         return {

@@ -68,7 +68,7 @@ class CommunicationConfig:
 
     # 安全配置
     enable_auth: bool = True
-    jwt_secret: str | None = None
+    jwt_secret: Optional[str] = None
     jwt_algorithm: str = "HS256"
     jwt_expiration: int = 3600  # JWT过期时间(秒)
 
@@ -86,7 +86,7 @@ class CommunicationConfig:
     # 日志配置
     log_level: str = "INFO"
     log_format: str = "json"  # json, text
-    log_file: str | None = None
+    log_file: Optional[str] = None
     log_max_size: int = 10 * 1024 * 1024  # 日志文件最大大小(10MB)
     log_backup_count: int = 5
 
@@ -221,7 +221,7 @@ class CommunicationConfig:
 
         return config
 
-    def save_to_file(self, path: str | None = None) -> bool:
+    def save_to_file(self, path: Optional[str] = None) -> bool:
         """
         保存配置到文件
 
@@ -288,7 +288,7 @@ class ConfigManager:
 
     def __init__(self, config: CommunicationConfig | None = None):
         self.config = config or CommunicationConfig()
-        self._config_path: str | None = None
+        self._config_path: Optional[str] = None
         self._observers: list[Callable[[CommunicationConfig], None]] = []
 
     def load_config(self, path: str) -> bool:
@@ -309,7 +309,7 @@ class ConfigManager:
             return True
         return False
 
-    def save_config(self, path: str | None = None) -> bool:
+    def save_config(self, path: Optional[str] = None) -> bool:
         """
         保存配置到文件
 

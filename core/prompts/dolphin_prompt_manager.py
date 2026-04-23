@@ -92,7 +92,7 @@ class DolphinPromptManager:
         self,
         task_description: str,
         requirements: list[str],
-        constraints: list[str] | None = None,
+        constraints: Optional[list[str]] = None,
         output_format: str = "markdown",
     ) -> str:
         """
@@ -620,7 +620,7 @@ def get_prompt(prompt_type: PromptType | None = None, config: PromptConfig | Non
 def create_custom_prompt(
     task_description: str,
     requirements: list[str],
-    constraints: list[str] | None = None,
+    constraints: Optional[list[str]] = None,
     output_format: str = "markdown",
 ) -> str:
     """

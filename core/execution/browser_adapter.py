@@ -31,7 +31,7 @@ class BrowserActionInput:
     """
 
     task: str  # 任务描述
-    url: str | None = None  # 起始URL
+    url: Optional[str] = None  # 起始URL
     verification: dict | None = None  # 验证规则
     max_steps: int = 50  # 最大执行步数
     enable_screenshots: bool = True  # 是否截图
@@ -60,7 +60,7 @@ class ActionResult:
     success: bool
     action_type: str
     result: Any = None
-    error: str | None = None
+    error: Optional[str] = None
     metadata: dict | None = None  # 使用 Optional
 
     def __post_init__(self):

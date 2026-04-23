@@ -163,7 +163,7 @@ class BaseSettingsManager:
             current = current[key]
 
         # 设置值
-        current[keys[-1]] = value
+        current[keys[-1] = value
 
         # 保存设置
         return self.save_settings()

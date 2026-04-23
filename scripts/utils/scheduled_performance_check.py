@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 定期性能优化检查系统
 自动执行存储系统性能检查和优化建议
 """
 
-import asyncio
 import json
 import sys
-import os
-import schedule
 import time
-from pathlib import Path
 from datetime import datetime, timedelta
-from typing import Dict, List, Any
+from pathlib import Path
+from typing import Any
+
+import schedule
 
 # 添加项目路径
 sys.path.append('/Users/xujian/Athena工作平台')
@@ -67,7 +65,7 @@ class ScheduledPerformanceChecker:
 
         return health_status
 
-    def _check_config_file(self) -> Dict[str, Any]:
+    def _check_config_file(self) -> dict[str, Any]:
         """检查配置文件"""
         result = {
             'status': 'unknown',
@@ -81,7 +79,7 @@ class ScheduledPerformanceChecker:
                 result['issues'].append('配置文件不存在')
                 return result
 
-            with open(self.config_path, 'r', encoding='utf-8') as f:
+            with open(self.config_path, encoding='utf-8') as f:
                 config = json.load(f)
 
             # 检查必要的配置项
@@ -111,7 +109,7 @@ class ScheduledPerformanceChecker:
 
         return result
 
-    def _check_performance_metrics(self) -> Dict[str, Any]:
+    def _check_performance_metrics(self) -> dict[str, Any]:
         """检查性能指标"""
         result = {
             'status': 'unknown',
@@ -130,7 +128,7 @@ class ScheduledPerformanceChecker:
 
             # 获取最新的报告
             latest_report = max(monitoring_reports, key=lambda x: x.stat().st_mtime)
-            with open(latest_report, 'r', encoding='utf-8') as f:
+            with open(latest_report, encoding='utf-8') as f:
                 report = json.load(f)
 
             # 分析性能指标
@@ -161,7 +159,7 @@ class ScheduledPerformanceChecker:
 
         return result
 
-    def _check_storage_components(self) -> Dict[str, Any]:
+    def _check_storage_components(self) -> dict[str, Any]:
         """检查存储组件状态"""
         result = {
             'status': 'unknown',
@@ -203,7 +201,7 @@ class ScheduledPerformanceChecker:
 
         return result
 
-    def _check_system_resources(self) -> Dict[str, Any]:
+    def _check_system_resources(self) -> dict[str, Any]:
         """检查系统资源"""
         result = {
             'status': 'unknown',
@@ -254,7 +252,7 @@ class ScheduledPerformanceChecker:
 
         return result
 
-    def _check_log_files(self) -> Dict[str, Any]:
+    def _check_log_files(self) -> dict[str, Any]:
         """检查日志文件"""
         result = {
             'status': 'unknown',
@@ -302,7 +300,7 @@ class ScheduledPerformanceChecker:
 
         return result
 
-    def _calculate_health_score(self, checks: Dict[str, Any]) -> int:
+    def _calculate_health_score(self, checks: dict[str, Any]) -> int:
         """计算健康评分"""
         scores = {
             'healthy': 100,
@@ -314,7 +312,7 @@ class ScheduledPerformanceChecker:
         total_score = 0
         check_count = len(checks)
 
-        for check_name, check_result in checks.items():
+        for _check_name, check_result in checks.items():
             status = check_result.get('status', 'unknown')
             total_score += scores.get(status, 50)
 
@@ -338,7 +336,7 @@ class ScheduledPerformanceChecker:
         else:
             return 'F (需要立即关注)'
 
-    def _save_health_check(self, health_status: Dict[str, Any]) -> Any:
+    def _save_health_check(self, health_status: dict[str, Any]) -> Any:
         """保存健康检查结果"""
         self.health_check_history.append(health_status)
 
@@ -355,7 +353,7 @@ class ScheduledPerformanceChecker:
         if len(self.health_check_history) > 10:
             self.health_check_history = self.health_check_history[-10:]
 
-    def _trigger_auto_optimization(self, health_status: Dict[str, Any]) -> Any:
+    def _trigger_auto_optimization(self, health_status: dict[str, Any]) -> Any:
         """触发自动优化"""
         print("🔧 触发自动优化流程...")
 

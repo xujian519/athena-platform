@@ -5,27 +5,26 @@ PatentDraftingProxy部署验证脚本
 验证PatentDraftingProxy是否正确部署并可以正常使用。
 """
 
-import sys
 import asyncio
+import sys
 from pathlib import Path
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent))
 
-from core.agents.xiaona import PatentDraftingProxy
-from core.llm.unified_llm_manager import UnifiedLLMManager
+from core.framework.agents.xiaona import PatentDraftingProxy
 
 
 async def test_basic_import():
     """测试1: 基本导入"""
     print("📦 测试1: 检查模块导入...")
     try:
-        from core.agents.xiaona import (
-            BaseXiaonaComponent,
-            RetrieverAgent,
+        from core.framework.agents.xiaona import (
             AnalyzerAgent,
-            WriterAgent,
+            BaseXiaonaComponent,
             PatentDraftingProxy,
+            RetrieverAgent,
+            WriterAgent,
         )
         print("✅ 所有xiaona模块导入成功")
         print(f"   - BaseXiaonaComponent: {BaseXiaonaComponent}")
@@ -61,7 +60,7 @@ async def test_capabilities(proxy):
     print("\n⚡ 测试3: 检查PatentDraftingProxy能力...")
     try:
         info = proxy.get_info()
-        print(f"✅ 能力信息获取成功")
+        print("✅ 能力信息获取成功")
         # get_info()可能没有description字段
         if 'description' in info:
             print(f"   - 描述: {info['description']}")
@@ -84,7 +83,7 @@ async def test_capabilities(proxy):
             "detect_common_errors",
         ]
 
-        actual_capabilities = [cap['name'] for cap in info['capabilities']]
+        actual_capabilities = [cap['name'] for cap in info['capabilities']
         missing = set(expected_capabilities) - set(actual_capabilities)
 
         if missing:
@@ -135,7 +134,7 @@ async def test_factory_creation():
     """测试5: Agent工厂创建"""
     print("\n🏭 测试5: 通过AgentFactory创建...")
     try:
-        from core.agents.factory import AgentFactory
+        from core.framework.agents.factory import AgentFactory
 
         # 检查是否已注册
         if "patent-drafting-proxy" in AgentFactory.list_agents():

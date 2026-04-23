@@ -39,7 +39,7 @@ class PatentSearchResult:
         applicant: Optional[str] = None,
         inventor: Optional[str] = None,
         score: Optional[float] = None,
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: Optional[dict[str, Any]] = None
     ):
         self.patent_id = patent_id
         self.title = title
@@ -52,7 +52,7 @@ class PatentSearchResult:
         self.score = score
         self.metadata = metadata or {}
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "patent_id": self.patent_id,
@@ -119,7 +119,7 @@ class UnifiedPatentRetriever:
         channel: PatentRetrievalChannel = PatentRetrievalChannel.LOCAL_POSTGRES,
         max_results: int = 10,
         **kwargs
-    ) -> List[PatentSearchResult]:
+    ) -> list[PatentSearchResult]:
         """
         统一检索接口
 
@@ -156,7 +156,7 @@ class UnifiedPatentRetriever:
         query: str,
         max_results: int,
         **kwargs
-    ) -> List[PatentSearchResult]:
+    ) -> list[PatentSearchResult]:
         """本地PostgreSQL检索 - 使用增强版检索器（支持title、abstract、claims）"""
         logger.info(f"  🔍 使用本地PostgreSQL检索...")
 
@@ -215,7 +215,7 @@ class UnifiedPatentRetriever:
         query: str,
         max_results: int,
         **kwargs
-    ) -> List[PatentSearchResult]:
+    ) -> list[PatentSearchResult]:
         """Google Patents检索 - 使用v2检索器"""
         logger.info(f"  🔍 使用Google Patents检索...")
 
@@ -298,7 +298,7 @@ class UnifiedPatentRetriever:
         query: str,
         max_results: int,
         **kwargs
-    ) -> Dict[str, List[PatentSearchResult]]:
+    ) -> dict[str, list[PatentSearchResult]]:
         """同时使用两个渠道检索"""
         logger.info(f"  🔍 同时使用两个渠道检索...")
 
@@ -331,7 +331,7 @@ class UnifiedPatentRetriever:
 # Tool Handler - 用于工具系统注册
 # ============================================================================
 
-async def patent_search_handler(params: Dict[str, Any], context: Dict) -> Dict[str, Any]:
+async def patent_search_handler(params: dict[str, Any], context: dict) -> dict[str, Any]:
     """
     专利检索工具Handler
 
@@ -424,7 +424,7 @@ async def search_patents(
     query: str,
     channel: str = "local_postgres",
     max_results: int = 10
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """
     便捷的专利检索函数
 
@@ -456,7 +456,7 @@ async def search_patents(
 async def search_local_patents(
     query: str,
     max_results: int = 10
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """便捷的本地检索函数"""
     return await search_patents(query, "local_postgres", max_results)
 
@@ -464,7 +464,7 @@ async def search_local_patents(
 async def search_google_patents(
     query: str,
     max_results: int = 10
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """便捷的Google检索函数"""
     return await search_patents(query, "google_patents", max_results)
 

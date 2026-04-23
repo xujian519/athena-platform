@@ -16,7 +16,7 @@ import pytest
 
 # 尝试导入统一记忆系统，如果失败则使用Mock
 try:
-    from core.memory.unified_memory import (
+    from core.framework.memory.unified_memory import (
         AgentType,
         CacheStatistics,
         MemoryType,

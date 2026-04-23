@@ -58,7 +58,7 @@ class ReasoningRecord:
     task_description: str
     task_type: str
     engine_name: str
-    reasoning_mode: str | None = None
+    reasoning_mode: Optional[str] = None
 
     # 输入信息
     input_data: dict[str, Any] = field(default_factory=dict)
@@ -72,12 +72,12 @@ class ReasoningRecord:
     execution_time: float = 0.0
     from_cache: bool = False
     success: bool = True
-    error_message: str | None = None
+    error_message: Optional[str] = None
 
     # 用户反馈
     user_feedback: FeedbackType | None = None
-    feedback_score: float | None = None  # 0-10
-    feedback_comment: str | None = None
+    feedback_score: Optional[float] = None  # 0-10
+    feedback_comment: Optional[str] = None
 
     # 上下文信息
     context: dict[str, Any] = field(default_factory=dict)
@@ -175,7 +175,7 @@ class EnginePerformanceStats:
         else:
             self.cache_misses += 1
 
-    def get_score(self, metric_weights: dict[str, float | None] | None = None) -> float:
+    def get_score(self, metric_weights: Optional[dict[str, float]] | None = None) -> float:
         """计算综合评分"""
         weights = metric_weights or {
             "speed": 0.3,
@@ -243,7 +243,7 @@ class ReasoningHistoryAnalyzer:
 
     def __init__(
         self,
-        storage_path: str | None = None,
+        storage_path: Optional[str] = None,
         max_history_size: int = 10000,
         analysis_window: int = 7,  # 天
     ):
@@ -562,7 +562,7 @@ class IncrementalLearningSystem:
 
     def get_personalized_recommendation(
         self, task_type: str
-    ) -> dict[str, float | None]:
+    ) -> Optional[dict[str, float]]:
         """获取个性化推荐"""
         return self.user_preferences.get(task_type)
 

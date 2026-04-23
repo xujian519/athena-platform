@@ -214,7 +214,7 @@ class EnhancedMemorySystem:
 
         return stats
 
-    async def search_knowledge_entities(self, query: str, entity_types: list[str] | None = None) -> list[dict]:
+    async def search_knowledge_entities(self, query: str, entity_types: Optional[list[str]] = None) -> list[dict]:
         """搜索知识图谱实体"""
         if not self.knowledge_adapter:
             return []

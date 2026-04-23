@@ -9,8 +9,13 @@
 """
 
 import pytest
-from core.agents.xiaona.infringement_analyzer_proxy import InfringementAnalyzerProxy
-from core.agents.xiaona.base_component import AgentExecutionContext, AgentExecutionResult, AgentStatus
+
+from core.framework.agents.xiaona.base_component import (
+    AgentExecutionContext,
+    AgentExecutionResult,
+    AgentStatus,
+)
+from core.framework.agents.xiaona.infringement_analyzer_proxy import InfringementAnalyzerProxy
 
 
 class TestableInfringementAnalyzerProxy(InfringementAnalyzerProxy):

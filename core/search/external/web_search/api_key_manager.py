@@ -43,7 +43,7 @@ class APIKeyManager:
             engine: {} for engine in api_keys
         }
 
-    def get_next_key(self, engine_type: SearchEngineType) -> str | None:
+    def get_next_key(self, engine_type: SearchEngineType) -> Optional[str]:
         """
         获取下一个可用的API密钥
 
@@ -71,7 +71,7 @@ class APIKeyManager:
         # 策略2:如果所有密钥都达到限制,返回最近使用的
         return keys[self.key_indices[engine_name]] if keys else None
 
-    def _select_best_key(self, engine_name: str) -> str | None:
+    def _select_best_key(self, engine_name: str) -> Optional[str]:
         """选择最佳密钥"""
         current_time = datetime.now()
         best_key = None

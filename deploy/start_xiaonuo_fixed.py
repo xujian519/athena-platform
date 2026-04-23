@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺系统启动器 - 修复版
 解决了无限循环和EOF错误问题
 """
 
-import sys
+import asyncio
 import os
 import signal
-import asyncio
+import sys
 from pathlib import Path
 
 # 添加当前目录到Python路径
@@ -24,9 +23,6 @@ def check_environment():
     print("🔍 检查运行环境...")
 
     # 检查Python版本
-    if sys.version_info < (3, 7):
-        print("❌ 错误: 需要Python 3.7或更高版本")
-        return False
 
     # 检查必要目录
     required_dirs = ['core', 'data', 'logs']

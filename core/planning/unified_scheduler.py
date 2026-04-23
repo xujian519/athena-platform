@@ -41,7 +41,7 @@ class ScheduleItem:
     description: str
     schedule_type: ScheduleType
     scheduled_time: datetime
-    agent: str | None = None
+    agent: Optional[str] = None
     priority: int = 2  # 1-低, 2-中, 3-高, 4-紧急
     estimated_duration: int = 0  # 预估时长(分钟)
     dependencies: list[str] = field(default_factory=list)
@@ -95,7 +95,7 @@ class UnifiedScheduler(BasePlanner):
         """执行调度计划"""
         return await self.execute_schedule(plan_id)
 
-    async def get_plan_status(self, plan_id: str) -> dict[str, Any] | None:
+    async def get_plan_status(self, plan_id: str) -> Optional[dict[str, Any]]:
         """获取计划状态"""
         if plan_id in self.active_schedules:
             item = self.active_schedules[plan_id]

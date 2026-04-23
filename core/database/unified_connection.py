@@ -58,25 +58,25 @@ class PostgreSQLConnection:
         async with self._pool.acquire() as conn, conn.transaction():
             yield conn
 
-    async def execute(self, query: str, *args, timeout: float | None = None) -> str:
+    async def execute(self, query: str, *args, timeout: Optional[float] = None) -> str:
         """执行SQL(不返回结果)"""
         async with self.connection() as conn:
             return await conn.execute(query, *args, timeout=timeout)
 
-    async def fetch(self, query: str, *args, timeout: float | None = None) -> list[dict]:
+    async def fetch(self, query: str, *args, timeout: Optional[float] = None) -> list[dict]:
         """查询并返回所有行"""
         async with self.connection() as conn:
             rows = await conn.fetch(query, *args, timeout=timeout)
             return [dict(r) for r in rows]
 
-    async def fetchone(self, query: str, *args, timeout: float | None = None) -> dict | None:
+    async def fetchone(self, query: str, *args, timeout: Optional[float] = None) -> dict | None:
         """查询并返回一行"""
         async with self.connection() as conn:
             row = await conn.fetchrow(query, *args, timeout=timeout)
             return dict(row) if row else None
 
     async def fetchval(
-        self, query: str, *args, column: int = 0, timeout: float | None = None
+        self, query: str, *args, column: int = 0, timeout: Optional[float] = None
     ) -> Any:
         """查询单个值"""
         async with self.connection() as conn:

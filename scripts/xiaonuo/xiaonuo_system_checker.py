@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺系统状态检查器
 Xiaonuo System Status Checker
@@ -17,10 +16,8 @@ import logging
 import socket
 import subprocess
 import sys
-import time
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -131,7 +128,7 @@ class XiaonuoSystemChecker:
         except Exception as e:
             print(f"❌ Docker检查失败: {e}")
 
-    async def _check_service(self, service_name: str, service_info: Dict):
+    async def _check_service(self, service_name: str, service_info: dict):
         """检查单个服务"""
         port = service_info["port"]
         service_type = service_info["type"]
@@ -177,7 +174,7 @@ class XiaonuoSystemChecker:
         except Exception:
             return False
 
-    async def _check_service_by_type(self, service_name: str, service_type: str) -> Dict:
+    async def _check_service_by_type(self, service_name: str, service_type: str) -> dict:
         """根据服务类型进行详细检查"""
         result = {"healthy": False}
 
@@ -201,7 +198,7 @@ class XiaonuoSystemChecker:
 
         return result
 
-    async def _check_database_service(self, service_name: str) -> Dict:
+    async def _check_database_service(self, service_name: str) -> dict:
         """检查数据库服务"""
         result = {"healthy": False}
 
@@ -238,7 +235,7 @@ class XiaonuoSystemChecker:
 
         return result
 
-    async def _check_redis_service(self, service_name: str) -> Dict:
+    async def _check_redis_service(self, service_name: str) -> dict:
         """检查Redis服务"""
         result = {"healthy": False}
 
@@ -263,13 +260,13 @@ class XiaonuoSystemChecker:
 
         return result
 
-    async def _check_qdrant_service(self, service_name: str) -> Dict:
+    async def _check_qdrant_service(self, service_name: str) -> dict:
         """检查Qdrant服务"""
         result = {"healthy": False}
 
         try:
             import requests
-            response = requests.get(f"http://localhost:6333/health", timeout=5)
+            response = requests.get("http://localhost:6333/health", timeout=5)
 
             if response.status_code == 200:
                 data = response.json()
@@ -286,7 +283,7 @@ class XiaonuoSystemChecker:
 
         return result
 
-    async def _check_neo4j_service(self, service_name: str) -> Dict:
+    async def _check_neo4j_service(self, service_name: str) -> dict:
         """检查Neo4j服务"""
         result = {"healthy": False}
 
@@ -330,7 +327,7 @@ class XiaonuoSystemChecker:
 
         return result
 
-    async def _check_elasticsearch_service(self, service_name: str) -> Dict:
+    async def _check_elasticsearch_service(self, service_name: str) -> dict:
         """检查Elasticsearch服务"""
         result = {"healthy": False}
 
@@ -353,7 +350,7 @@ class XiaonuoSystemChecker:
 
         return result
 
-    async def _check_http_service(self, service_name: str) -> Dict:
+    async def _check_http_service(self, service_name: str) -> dict:
         """检查HTTP服务"""
         result = {"healthy": False}
 
@@ -405,7 +402,7 @@ class XiaonuoSystemChecker:
 
         return result
 
-    async def _check_proxy_service(self, service_name: str) -> Dict:
+    async def _check_proxy_service(self, service_name: str) -> dict:
         """检查代理服务"""
         result = {"healthy": False}
 
@@ -466,7 +463,7 @@ class XiaonuoSystemChecker:
                 )
 
                 if result.returncode == 0 and result.stdout.strip():
-                    print(f"\n🐳 Docker容器资源使用:")
+                    print("\n🐳 Docker容器资源使用:")
                     lines = result.stdout.strip().split('\n')
                     for line in lines[:10]:  # 只显示前10个
                         print(f"   {line}")
@@ -488,10 +485,10 @@ class XiaonuoSystemChecker:
         # 统计信息
         total_services = len(self.services)
         healthy_services = len([s for s in self.check_results.values() if s["status"] == "healthy"])
-        essential_services = len([s for s in self.services.values() if s["essential"]])
+        essential_services = len([s for s in self.services.values() if s["essential"])
         healthy_essential = len([s for s in self.check_results.values() if s["essential"] and s["status"] == "healthy"])
 
-        print(f"📊 服务状态总览:")
+        print("📊 服务状态总览:")
         print(f"   总服务数: {total_services}")
         print(f"   健康服务: {healthy_services} ({healthy_services/total_services*100:.1f}%)")
         print(f"   核心服务: {healthy_essential}/{essential_services}")
@@ -506,10 +503,10 @@ class XiaonuoSystemChecker:
                 error_info = service_info.get("detailed_status", {}).get("error", "连接失败")
                 print(f"   - {service_name}: {error_info}")
         else:
-            print(f"\n✅ 所有服务运行正常!")
+            print("\n✅ 所有服务运行正常!")
 
         # 建议和修复提示
-        print(f"\n💡 修复建议:")
+        print("\n💡 修复建议:")
 
         if healthy_essential < essential_services:
             print("   1. 核心服务异常，建议检查Docker服务状态")
@@ -540,7 +537,7 @@ class XiaonuoSystemChecker:
                 "summary": {
                     "total_services": len(self.services),
                     "healthy_services": len([s for s in self.check_results.values() if s["status"] == "healthy"]),
-                    "essential_services": len([s for s in self.services.values() if s["essential"]])
+                    "essential_services": len([s for s in self.services.values() if s["essential"])
                 },
                 "services": self.check_results
             }

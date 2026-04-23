@@ -97,7 +97,7 @@ class LegalWorldDBManager:
     async def execute_query(
         self,
         cypher: str,
-        parameters: dict[str, Any] | None = None,
+        parameters: Optional[dict[str, Any]] = None,
     ) -> list[dict[str, Any]]:
         """
         执行Cypher查询
@@ -116,9 +116,9 @@ class LegalWorldDBManager:
 
     async def get_scenario_rules(
         self,
-        domain: str | None = None,
-        task_type: str | None = None,
-        phase: str | None = None,
+        domain: Optional[str] = None,
+        task_type: Optional[str] = None,
+        phase: Optional[str] = None,
     ) -> list[dict[str, Any]]:
         """
         获取场景规则
@@ -163,8 +163,8 @@ class LegalWorldDBManager:
 
     async def get_legal_documents(
         self,
-        domain: str | None = None,
-        doc_type: str | None = None,
+        domain: Optional[str] = None,
+        doc_type: Optional[str] = None,
         limit: int = 100,
     ) -> list[dict[str, Any]]:
         """
@@ -207,8 +207,8 @@ class LegalWorldDBManager:
 
     async def get_reference_cases(
         self,
-        domain: str | None = None,
-        case_type: str | None = None,
+        domain: Optional[str] = None,
+        case_type: Optional[str] = None,
         limit: int = 50,
     ) -> list[dict[str, Any]]:
         """

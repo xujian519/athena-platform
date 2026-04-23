@@ -9,9 +9,9 @@
 """
 
 import asyncio
+import os
 import sys
 from pathlib import Path
-import os
 
 # 添加项目根目录到路径
 project_root = Path(__file__).parent.parent
@@ -41,8 +41,8 @@ async def test_patent_search():
 
     try:
         # 确保路径正确
-        import sys
         import os
+        import sys
         from pathlib import Path
 
         # 获取项目根目录（从tests/agents/向上两级）
@@ -69,7 +69,7 @@ async def test_patent_search():
         print()
 
         # 导入小娜Agent
-        from core.agents.xiaona_legal import XiaonaLegalAgent
+        from core.framework.agents.xiaona_legal import XiaonaLegalAgent
 
         # 创建小娜Agent实例
         logger.info("🤖 创建小娜Agent实例...")
@@ -98,7 +98,7 @@ async def test_patent_search():
             }
         )
 
-        print(f"\n📊 检索结果:")
+        print("\n📊 检索结果:")
         print(f"  成功: {result1.get('success')}")
         print(f"  消息: {result1.get('message')}")
 
@@ -110,7 +110,7 @@ async def test_patent_search():
             print(f"  检索策略: {result1.get('search_strategy')}")
 
             if patents:
-                print(f"\n  前3个相关专利:")
+                print("\n  前3个相关专利:")
                 for i, patent in enumerate(patents[:3], 1):
                     print(f"    {i}. {patent.get('patent_id')} - {patent.get('title')}")
                     if patent.get('abstract'):
@@ -135,7 +135,7 @@ async def test_patent_search():
             }
         )
 
-        print(f"\n📊 检索结果:")
+        print("\n📊 检索结果:")
         print(f"  成功: {result2.get('success')}")
         print(f"  消息: {result2.get('message')}")
 
@@ -161,7 +161,7 @@ async def test_patent_search():
             }
         )
 
-        print(f"\n📊 检索结果:")
+        print("\n📊 检索结果:")
         print(f"  成功: {result3.get('success')}")
         print(f"  消息: {result3.get('message')}")
 
@@ -173,7 +173,7 @@ async def test_patent_search():
             print(f"  检索策略: {result3.get('search_strategy', 'N/A')}")
 
             if patents:
-                print(f"\n  前3个相关专利:")
+                print("\n  前3个相关专利:")
                 for i, patent in enumerate(patents[:3], 1):
                     print(f"    {i}. {patent.get('patent_id')} - {patent.get('title')}")
                     if patent.get('abstract'):
@@ -201,7 +201,7 @@ async def test_patent_search():
             }
         )
 
-        print(f"\n📊 检索结果:")
+        print("\n📊 检索结果:")
         print(f"  成功: {result4.get('success')}")
         print(f"  消息: {result4.get('message')}")
 

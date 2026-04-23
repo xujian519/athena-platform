@@ -52,7 +52,7 @@ class TrendPrediction:
 class IntelligentRecommender:
     """智能推荐系统 - 适配新核心架构"""
 
-    def __init__(self, agent_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, agent_id: str, config: Optional[dict[str, Any]] = None):
         self.agent_id = agent_id
         self.config = config or {}
         self.initialized = False
@@ -97,8 +97,8 @@ class IntelligentRecommender:
     async def generate_recommendations(
         self,
         query: str,
-        item_info: dict[str, Any] | None = None,
-        recommendation_types: list[str] | None = None,
+        item_info: Optional[dict[str, Any]] = None,
+        recommendation_types: Optional[list[str]] = None,
         k: int = 10,
     ) -> dict[str, Any]:
         """生成推荐"""
@@ -582,7 +582,7 @@ class IntelligentRecommender:
         types_str = "_".join(sorted(types)) if types else "all"
         return f"{hash(query)}_{types_str}_{k}"
 
-    def _get_cached_recommendation(self, cache_key: str) -> dict[str, Any] | None:
+    def _get_cached_recommendation(self, cache_key: str) -> Optional[dict[str, Any]]:
         """获取缓存的推荐"""
         if cache_key in self.recommendation_cache:
             cached_item = self.recommendation_cache[cache_key]
@@ -596,7 +596,7 @@ class IntelligentRecommender:
         """缓存推荐结果"""
         self.recommendation_cache[cache_key] = {"data": data, "timestamp": time.time()}
 
-    def _get_cached_prediction(self, cache_key: str) -> dict[str, Any] | None:
+    def _get_cached_prediction(self, cache_key: str) -> Optional[dict[str, Any]]:
         """获取缓存的预测"""
         if cache_key in self.prediction_cache:
             cached_item = self.prediction_cache[cache_key]
@@ -634,7 +634,7 @@ _global_instances: dict[str, IntelligentRecommender] = {}
 
 
 async def get_recommender_instance(
-    agent_id: str, config: dict[str, Any] | None = None
+    agent_id: str, config: Optional[dict[str, Any]] = None
 ) -> IntelligentRecommender:
     """获取推荐系统实例"""
     if agent_id not in _global_instances:
@@ -643,7 +643,7 @@ async def get_recommender_instance(
     return _global_instances[agent_id]
 
 
-async def shutdown_recommender(agent_id: str | None = None):
+async def shutdown_recommender(agent_id: Optional[str] = None):
     """关闭推荐系统实例"""
     if agent_id:
         if agent_id in _global_instances:

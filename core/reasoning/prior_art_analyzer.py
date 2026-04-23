@@ -65,7 +65,7 @@ class TechNode:
     title: str
     abstract: str
     publication_date: datetime
-    assignee: str | None = None
+    assignee: Optional[str] = None
     inventors: list[str] = field(default_factory=list)
     technology_field: str = ""
     claims: int = 0

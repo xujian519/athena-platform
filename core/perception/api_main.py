@@ -52,9 +52,9 @@ class OCRResponse(BaseModel):
     task_id: str
     agent_id: str
     status: str
-    text: str | None = None
-    confidence: float | None = None
-    processing_time: float | None = None
+    text: Optional[str] = None
+    confidence: Optional[float] = None
+    processing_time: Optional[float] = None
 
 class ImageProcessRequest(BaseModel):
     """图像处理请求"""
@@ -67,8 +67,8 @@ class ImageProcessResponse(BaseModel):
     task_id: str
     agent_id: str
     status: str
-    result: dict[str, Any] | None | None = None
-    processing_time: float | None = None
+    result: Optional[dict[str, Any]] | None = None
+    processing_time: Optional[float] = None
 
 class TaskListResponse(BaseModel):
     """任务列表响应"""
@@ -434,7 +434,7 @@ async def process_image(
 @app.get("/api/v1/perception/tasks", response_model=TaskListResponse, tags=["任务管理"])
 async def get_tasks(
     agent_id: str = Depends(get_agent_id),
-    status: str | None = None,
+    status: Optional[str] = None,
     limit: int = 100
 ):
     """

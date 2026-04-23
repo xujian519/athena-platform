@@ -6,7 +6,6 @@
 """
 
 import pytest
-from unittest.mock import MagicMock, AsyncMock, patch
 
 from core.kg_unified.models.patent import (
     # 枚举类型
@@ -413,3 +412,4 @@ class TestCompatibilityLayers:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+

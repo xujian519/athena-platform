@@ -53,7 +53,7 @@ logger = setup_logging()
 class EnhancedCommunicationConfig:
     """增强通信配置"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         config = config or {}
 
         # 基础配置
@@ -82,7 +82,7 @@ class MessageResult:
 
     success: bool
     message_id: str
-    error: str | None = None
+    error: Optional[str] = None
     delivery_time: float = 0.0
     status: str = "unknown"
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -94,7 +94,7 @@ class ChannelResult:
 
     success: bool
     channel_id: str
-    error: str | None = None
+    error: Optional[str] = None
     participant_count: int = 0
     status: str = "unknown"
     message: str = ""
@@ -105,7 +105,7 @@ class ChannelResult:
 class EnhancedCommunicationModule(BaseModule):
     """增强通信模块 - BaseModule标准接口版本 (修复版)"""
 
-    def __init__(self, agent_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, agent_id: str, config: Optional[dict[str, Any]] = None):
         """
         初始化增强通信模块
 
@@ -235,8 +235,8 @@ class EnhancedCommunicationModule(BaseModule):
         receiver_id: str,
         content: Any,
         message_type: str = "text",
-        channel_id: str | None = None,
-        metadata: dict[str, Any] | None = None,
+        channel_id: Optional[str] = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> MessageResult:
         """
         发送消息
@@ -310,7 +310,7 @@ class EnhancedCommunicationModule(BaseModule):
             )
 
     async def receive_messages(
-        self, limit: int = 10, channel_id: str | None = None , since: datetime | None = None
+        self, limit: int = 10, channel_id: Optional[str] = None , since: datetime | None = None
     ) -> list[Message]:
         """
         接收消息
@@ -347,7 +347,7 @@ class EnhancedCommunicationModule(BaseModule):
             return []
 
     async def create_channel(
-        self, name: str, channel_type: str = "direct", participants: list[str] | None = None
+        self, name: str, channel_type: str = "direct", participants: Optional[list[str]] = None
     ) -> ChannelResult:
         """
         创建通道
@@ -406,8 +406,8 @@ class EnhancedCommunicationModule(BaseModule):
         self,
         content: Any,
         message_type: str = "text",
-        channel_id: str | None = None,
-        metadata: dict[str, Any] | None = None,
+        channel_id: Optional[str] = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> MessageResult:
         """广播消息"""
         try:

@@ -5,8 +5,6 @@ PostgreSQL到Neo4j数据导入脚本
 """
 
 import logging
-import time
-from typing import Dict, List, Optional
 
 import psycopg2
 from neo4j import GraphDatabase
@@ -73,7 +71,7 @@ class PgToNeo4jImporter:
             self.neo4j_driver.close()
             logger.info("✅ Neo4j连接已关闭")
 
-    def import_law_documents(self, batch_size: int = 1000, limit: Optional[int] = None):
+    def import_law_documents(self, batch_size: int = 1000, limit: int | None = None):
         """导入法律文档"""
         logger.info("📚 开始导入法律文档...")
 
@@ -100,7 +98,6 @@ class PgToNeo4jImporter:
         pg_cursor.execute(query)
 
         total = 0
-        batch = []
 
         with self.neo4j_driver.session() as session:
             while True:

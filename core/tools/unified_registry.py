@@ -128,7 +128,7 @@ class UnifiedToolRegistry:
         logger.info("✅ 统一工具注册表已创建")
 
     @classmethod
-    def get_instance(cls) -> "UnifiedToolRegistry":
+    def get_instance(cls) -> UnifiedToolRegistry:
         """
         获取单例实例
 
@@ -144,7 +144,7 @@ class UnifiedToolRegistry:
     async def initialize(
         self,
         auto_discover: bool = True,
-        scan_paths: list[str] | None = None,
+        scan_paths: Optional[list[str]] = None,
     ) -> bool:
         """
         初始化统一工具注册表
@@ -194,7 +194,7 @@ class UnifiedToolRegistry:
         logger.info(f"   已加载 {stats['total_tools']} 个工具")
 
     async def _auto_discover_tools(
-        self, scan_paths: list[str] | None = None
+        self, scan_paths: Optional[list[str]] = None
     ):
         """
         自动发现工具
@@ -386,7 +386,7 @@ class UnifiedToolRegistry:
     def register(
         self,
         tool: ToolDefinition,
-    ) -> "UnifiedToolRegistry":
+    ) -> UnifiedToolRegistry:
         """
         注册工具（同步接口，委托给base_registry）
 
@@ -535,8 +535,8 @@ class UnifiedToolRegistry:
     def search_tools(
         self,
         category: ToolCategory | None = None,
-        domain: str | None = None,
-        tags: list[str] | None = None,
+        domain: Optional[str] = None,
+        tags: Optional[list[str]] = None,
         min_priority: ToolPriority | None = None,
         enabled_only: bool = True,
     ) -> list[ToolDefinition]:
@@ -639,7 +639,7 @@ def get_unified_registry() -> UnifiedToolRegistry:
 
 async def initialize_unified_registry(
     auto_discover: bool = True,
-    scan_paths: list[str] | None = None,
+    scan_paths: Optional[list[str]] = None,
 ) -> UnifiedToolRegistry:
     """
     初始化统一工具注册表

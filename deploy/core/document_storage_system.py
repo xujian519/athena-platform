@@ -523,7 +523,7 @@ class DocumentStorageSystem:
             print(f"❌ 生成失败: {str(e)}")
             return index
 
-    def search_files(self, pattern: str, file_types: Optional[List[str] = None) -> List[Dict[str, Any]]:
+    def search_files(self, pattern: str, file_types: Optional[List[str] = None) -> List[Dict[str, Any]:
         """搜索文件"""
         results = []
 

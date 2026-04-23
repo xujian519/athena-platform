@@ -58,11 +58,11 @@ async def run_system_integration_tests():
 
     try:
         # 导入各个模块
-        from integration.multi_agent_integration import MultiAgentIntegration
-
-        from core.collaboration import Agent, MultiAgentCollaborationFramework
         from core.protocols import ProtocolManager
         from core.protocols.advanced_coordination import AdvancedCoordinationEngine
+        from integration.multi_agent_integration import MultiAgentIntegration
+
+        from core.framework.collaboration import Agent, MultiAgentCollaborationFramework
 
         print("1. 测试模块导入...")
         # 模块导入测试
@@ -96,7 +96,7 @@ async def run_system_integration_tests():
         # 组件集成测试
         # 注册智能体 - 使用统一能力接口
         try:
-            from core.collaboration.unified_capability import (
+            from core.framework.collaboration.unified_capability import (
                 CapabilityAdapter,
                 CapabilityType,
                 UnifiedAgentCapability,
@@ -123,8 +123,9 @@ async def run_system_integration_tests():
             coord_cap = CapabilityAdapter.to_advanced_coordination(unified_cap)
         else:
             # 使用原有接口
-            from core.collaboration import AgentCapability as CollabCapability
             from core.protocols.advanced_coordination import AgentCapability as CoordCapability
+
+            from core.framework.collaboration import AgentCapability as CollabCapability
             capabilities = [CollabCapability("integration_test", 0.9, timedelta(minutes=10))]
             coord_cap = CoordCapability(
                 capability_name="integration_test",
@@ -151,7 +152,7 @@ async def run_system_integration_tests():
 
         print("\n4. 测试完整工作流...")
         # 完整工作流测试
-        from core.collaboration import Priority, Task, TaskStatus
+        from core.framework.collaboration import Priority, Task, TaskStatus
 
         # 创建任务
         task = Task(
@@ -198,9 +199,14 @@ async def run_performance_integration_tests():
     print("=" * 50)
 
     try:
-        from core.collaboration import Agent, AgentCapability, MultiAgentCollaborationFramework
         from core.protocols import ProtocolManager
         from core.protocols.advanced_coordination import AdvancedCoordinationEngine
+
+        from core.framework.collaboration import (
+            Agent,
+            AgentCapability,
+            MultiAgentCollaborationFramework,
+        )
 
         # 创建系统组件
         framework = MultiAgentCollaborationFramework()
@@ -216,7 +222,7 @@ async def run_performance_integration_tests():
 
         # 导入统一能力接口
         try:
-            from core.collaboration.unified_capability import (
+            from core.framework.collaboration.unified_capability import (
                 CapabilityAdapter,
                 CapabilityType,
                 UnifiedAgentCapability,
@@ -274,7 +280,7 @@ async def run_performance_integration_tests():
         successful_assignments = 0
         for i in range(200):
             # 创建任务
-            from core.collaboration import Priority, Task
+            from core.framework.collaboration import Priority, Task
             task = Task(
                 title=f"性能任务{i:04d}",
                 required_capabilities=[f"capability_{i%5}"],
@@ -322,7 +328,7 @@ async def run_scenario_based_tests():
     print("=" * 50)
 
     try:
-        from core.collaboration import (
+        from core.framework.collaboration import (
             Agent,
             AgentCapability,
             MultiAgentCollaborationFramework,

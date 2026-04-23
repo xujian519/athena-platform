@@ -52,7 +52,7 @@ class ModelConfig:
     # 感知编码器配置
     text_encoder: str = "bert-base-chinese"
     image_encoder: str = "google/vit-base-patch16-224"
-    audio_encoder: str | None = None  # 可选
+    audio_encoder: Optional[str] = None  # 可选
 
     # 认知编码器配置
     cognition_layers: int = 6
@@ -93,7 +93,7 @@ class ModelInput:
     audio_values: torch.Tensor | None = None
 
     # 元数据
-    task_type: str | None = None
+    task_type: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -598,7 +598,7 @@ class ModelFactory:
 
     @classmethod
     def load_pretrained(
-        cls, checkpoint_path: str | None = None, config: ModelConfig | None = None
+        cls, checkpoint_path: Optional[str] = None, config: ModelConfig | None = None
     ) -> EndToEndModel:
         """
         加载预训练模型

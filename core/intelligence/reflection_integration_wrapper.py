@@ -84,7 +84,7 @@ class ReflectionIntegrationWrapper:
             logger.info("🔗 将自动检测平台AI系统")
 
     async def process_with_reflection(
-        self, prompt: str, context: dict[str, Any] | None = None, **kwargs
+        self, prompt: str, context: Optional[dict[str, Any]] = None, **kwargs
     ) -> dict[str, Any]:
         """
         带反思的AI处理流程

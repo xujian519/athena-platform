@@ -4,18 +4,16 @@ RetrieverAgent单元测试
 完整的测试套件，包括单元测试、集成测试和性能测试。
 """
 
-import pytest
-from unittest.mock import AsyncMock, Mock, patch
-from datetime import datetime
 import asyncio
+from unittest.mock import AsyncMock, Mock, patch
 
-from core.agents.xiaona.retriever_agent import RetrieverAgent
-from core.agents.xiaona.base_component import (
+import pytest
+
+from core.framework.agents.xiaona.base_component import (
     AgentExecutionContext,
-    AgentExecutionResult,
     AgentStatus,
 )
-
+from core.framework.agents.xiaona.retriever_agent import RetrieverAgent
 
 # ==================== 单元测试 ====================
 
@@ -285,7 +283,7 @@ class TestRetrieverAgentIntegration:
     @pytest.mark.asyncio
     async def test_with_llm_manager(self):
         """测试与LLM Manager的集成"""
-        from core.llm.unified_llm_manager import UnifiedLLMManager
+        from core.ai.llm.unified_llm_manager import UnifiedLLMManager
 
         agent = RetrieverAgent(agent_id="test_retriever")
 
@@ -303,7 +301,7 @@ class TestRetrieverAgentIntegration:
         # 验证工具注册表已初始化
         assert agent.tool_registry is not None
         # 应该能够获取工具
-        registry = get_unified_registry()
+        get_unified_registry()
 
 
 # ==================== 性能测试 ====================

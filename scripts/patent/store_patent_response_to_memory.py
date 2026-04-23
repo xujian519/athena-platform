@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 存储审查意见答复到记忆系统
 Store Patent Office Action Response to Memory System
@@ -35,10 +34,10 @@ async def store_patent_response_to_memory():
 
     try:
         # 导入记忆系统
-        from core.memory.unified_memory import (
-            UnifiedAgentMemorySystem,
-            MemoryType,
+        from core.framework.memory.unified_memory import (
             AgentType,
+            MemoryType,
+            UnifiedAgentMemorySystem,
         )
 
         # 初始化记忆系统
@@ -252,7 +251,7 @@ async def store_patent_response_to_memory():
             logger.warning("⚠️ 未检索到相关记忆")
 
         logger.info("\n✅ 记忆存储完成!")
-        logger.info(f"📝 已存储3条记忆:")
+        logger.info("📝 已存储3条记忆:")
         logger.info(f"   1. 主记忆 (ID: {memory_id_1})")
         logger.info(f"   2. 技术细节记忆 (ID: {memory_id_2})")
         logger.info(f"   3. 学习经验记忆 (ID: {memory_id_3})")

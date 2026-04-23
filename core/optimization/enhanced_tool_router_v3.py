@@ -310,7 +310,7 @@ class EnhancedToolRouter:
         logger.info(f"✅ 冲突规则加载完成: {len(self.conflict_rules)}条规则")
 
     async def route(
-        self, intent: str, context: dict[str, Any], available_tools: list[str] | None = None
+        self, intent: str, context: dict[str, Any], available_tools: Optional[list[str]] = None
     ) -> RoutingDecision:
         """
         智能路由决策

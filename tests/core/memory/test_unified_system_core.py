@@ -24,7 +24,12 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from datetime import datetime
 from unittest.mock import patch
 
-from core.memory.unified_memory import AgentType, MemoryTier, MemoryType, UnifiedAgentMemorySystem
+from core.framework.memory.unified_memory import (
+    AgentType,
+    MemoryTier,
+    MemoryType,
+    UnifiedAgentMemorySystem,
+)
 
 
 @pytest.mark.asyncio

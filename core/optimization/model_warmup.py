@@ -60,7 +60,7 @@ class WarmupMetrics:
     end_time: datetime | None = None
     duration: float = 0.0  # 预热耗时(秒)
     attempts: int = 0  # 尝试次数
-    last_error: str | None = None
+    last_error: Optional[str] = None
     cold_start_count: int = 0  # 冷启动次数
     avg_warmup_time: float = 0.0  # 平均预热时间
 
@@ -72,7 +72,7 @@ class WarmupResult:
     model_id: str
     success: bool
     duration: float
-    error: str | None = None
+    error: Optional[str] = None
     sample_results: list[Any] = field(default_factory=list)
 
 

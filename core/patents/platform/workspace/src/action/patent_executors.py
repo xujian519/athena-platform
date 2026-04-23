@@ -35,7 +35,7 @@ class ExecutionResult:
     def __init__(self,
                  status: str = 'success',
                  data: Optional[Dict[str, Any]] = None,
-                 error: str | None = None,
+                 error: Optional[str] = None,
                  execution_time: float = 0.0,
                  metadata: Optional[Dict[str, Any]] = None):
         self.status = status  # success, failed, partial

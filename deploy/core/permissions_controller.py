@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 权限控制器
 Permissions Controller - 实现分层权限控制和操作验证
 """
 
-import json
 import hashlib
+import json
 import logging
-from typing import Dict, List, Any, Optional, Set, Tuple
-from datetime import datetime, timedelta
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta
 from enum import Enum
-import jwt
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +39,7 @@ class PermissionRule:
     risk_level: OperationRisk
     requires_dual_auth: bool = False
     requires_confirmation: bool = False
-    time_restriction: Optional[Tuple[int, int]] = None  # (start_hour, end_hour)
+    time_restriction: tuple[int, int] | None = None  # (start_hour, end_hour)
     description: str = ""
 
 @dataclass
@@ -61,11 +59,11 @@ class PermissionsController:
     """权限控制器"""
 
     def __init__(self):
-        self.permission_rules: Dict[str, PermissionRule] = {}
-        self.user_permissions: Dict[str, Dict[str, PermissionLevel]] = {}
-        self.access_logs: List[AccessLog] = []
-        self.session_tokens: Dict[str, Dict[str, Any]] = {}
-        self.dual_auth_requests: Dict[str, Dict[str, Any]] = {}
+        self.permission_rules: dict[str, PermissionRule] = {}
+        self.user_permissions: dict[str, dict[str, PermissionLevel] = {}
+        self.access_logs: list[AccessLog] = []
+        self.session_tokens: dict[str, dict[str, Any] = {}
+        self.dual_auth_requests: dict[str, dict[str, Any] = {}
 
         self._initialize_permission_rules()
         self._initialize_user_permissions()
@@ -348,7 +346,7 @@ class PermissionsController:
         }
 
     def check_permission(self, user: str, data_type: str, operation: str, target: str = "",
-                        session_id: str = "", ip_address: str = "localhost") -> Tuple[bool, str]:
+                        session_id: str = "", ip_address: str = "localhost") -> tuple[bool, str]:
         """检查权限"""
         rule_key = (data_type, operation)
 
@@ -436,7 +434,7 @@ class PermissionsController:
         return True
 
     def request_dual_authentication(self, user: str, operation: str, data_type: str,
-                                  target: str, details: Dict[str, Any]) -> str:
+                                  target: str, details: dict[str, Any]) -> str:
         """请求双重认证"""
         request_id = hashlib.sha256(f"{user}{operation}{datetime.now().isoformat()}".encode()).hexdigest()[:32]
 
@@ -512,7 +510,7 @@ class PermissionsController:
     def get_access_logs(self, user: str | None = None, data_type: str | None = None,
                        start_time: datetime | None = None,
                        end_time: datetime | None = None,
-                       limit: int = 100) -> List[Dict[str, Any]]:
+                       limit: int = 100) -> list[dict[str, Any]:
         """获取访问日志"""
         logs = self.access_logs
 
@@ -546,7 +544,7 @@ class PermissionsController:
 
         return result
 
-    def get_permission_matrix(self) -> Dict[str, Dict[str, str]]:
+    def get_permission_matrix(self) -> dict[str, dict[str, str]:
         """获取权限矩阵"""
         matrix = {}
 
@@ -557,14 +555,14 @@ class PermissionsController:
 
         return matrix
 
-    def export_access_report(self, days: int = 7) -> Dict[str, Any]:
+    def export_access_report(self, days: int = 7) -> dict[str, Any]:
         """导出访问报告"""
         start_time = datetime.now() - timedelta(days=days)
         logs = self.get_access_logs(start_time=start_time)
 
         # 统计信息
         total_requests = len(logs)
-        successful_requests = len([log for log in logs if log["granted"]])
+        successful_requests = len([log for log in logs if log["granted"])
         failed_requests = total_requests - successful_requests
 
         # 按用户统计

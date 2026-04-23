@@ -281,8 +281,8 @@ class FamilyMemoryVectorDB:
         self,
         query_embedding: list[float],
         limit: int = 10,
-        memory_type: str | None = None,
-        agent: str | None = None,
+        memory_type: Optional[str] = None,
+        agent: Optional[str] = None,
         min_importance: float = 0.0,
         filters: dict | None = None,
     ) -> list[dict]:

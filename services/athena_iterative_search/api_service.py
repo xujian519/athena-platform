@@ -70,7 +70,7 @@ class IterativeSearchResponse(BaseModel):
     total_patents_found: int
     unique_patents: int
     research_summary: dict[str, Any]
-    iterations: list[dict[str, Any]]
+    iterations: list[dict[str, Any]
     timestamp: str
 
 class HealthResponse(BaseModel):

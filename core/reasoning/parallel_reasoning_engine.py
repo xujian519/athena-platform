@@ -74,7 +74,7 @@ class FusionResult:
     fusion_strategy: FusionStrategy
     source_engines: list[str]
     conflict_detected: bool
-    conflict_resolution: str | None = None
+    conflict_resolution: Optional[str] = None
     fusion_details: dict[str, Any] = field(default_factory=dict)
     execution_time: float = 0.0
 
@@ -635,7 +635,7 @@ class ParallelReasoningEngine:
         self,
         task_description: str,
         engines: list[Any],  # 引擎实例列表
-        engine_names: list[str] | None = None,
+        engine_names: Optional[list[str]] = None,
         fusion_strategy: FusionStrategy = FusionStrategy.CONFIDENCE_BASED,
     ) -> FusionResult:
         """并行执行多个推理引擎并融合结果"""

@@ -88,7 +88,7 @@ class TaskRequest:
     priority: Priority
     resource_requirements: dict[str, float] = field(default_factory=dict)
     dependencies: list[str] = field(default_factory=list)
-    timeout: float | None = None
+    timeout: Optional[float] = None
     created_at: datetime = field(default_factory=datetime.now)
     wait_time: float = 0.0
     execution_time: float = 0.0
@@ -207,8 +207,8 @@ class FineGrainedConcurrencyController:
         *args,
         priority: Priority = Priority.NORMAL,
         resources: dict[str, float] | None = None,
-        dependencies: list[str] | None = None,
-        timeout: float | None = None,
+        dependencies: Optional[list[str]] = None,
+        timeout: Optional[float] = None,
         **kwargs,
     ) -> str:
         """提交任务"""
@@ -241,8 +241,8 @@ class FineGrainedConcurrencyController:
         self,
         resource_id: str,
         lock_type: LockType = LockType.WRITE,
-        owner_id: str | None = None,
-        timeout: float | None = None,
+        owner_id: Optional[str] = None,
+        timeout: Optional[float] = None,
     ) -> bool:
         """获取资源锁"""
         owner_id = owner_id or str(uuid.uuid4())
@@ -360,7 +360,7 @@ class FineGrainedConcurrencyController:
             for semaphore in semaphores:
                 semaphore.release()
 
-    async def get_task_result(self, task_id: str, timeout: float | None = None) -> Any:
+    async def get_task_result(self, task_id: str, timeout: Optional[float] = None) -> Any:
         """获取任务结果"""
         start_time = time.time()
 

@@ -98,7 +98,7 @@ class EvaluationEngine:
         target_id: str,
         evaluation_type: EvaluationType,
         criteria: list[EvaluationCriteria],
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> EvaluationResult:
         """执行评估"""
         if not self.initialized:
@@ -176,7 +176,7 @@ class EvaluationEngine:
             raise
 
     async def reflect(
-        self, evaluation_id: str, context: dict[str, Any] | None = None
+        self, evaluation_id: str, context: Optional[dict[str, Any]] = None
     ) -> ReflectionRecord:
         """对评估结果进行反思"""
         if evaluation_id not in self.evaluations:
@@ -577,8 +577,8 @@ class EvaluationEngine:
 class EvaluationContext:
     """评估上下文"""
     agent_id: str
-    session_id: str | None = None
-    metadata: dict[str, Any] | None = None
+    session_id: Optional[str] = None
+    metadata: Optional[dict[str, Any]] = None
 
     def to_dict(self) -> dict[str, Any]:
         return {

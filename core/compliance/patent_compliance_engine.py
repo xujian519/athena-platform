@@ -178,7 +178,7 @@ class PatentComplianceEngine:
         }
 
     async def analyze_compliance(
-        self, patent_data: dict[str, Any], analysis_config: dict[str, Any] | None = None
+        self, patent_data: dict[str, Any], analysis_config: Optional[dict[str, Any]] = None
     ) -> ComplianceReport:
         """
         分析专利合规性

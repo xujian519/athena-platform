@@ -103,7 +103,7 @@ def save_personal_profile() -> None:
 ## 💼 职业经历
 
 ### 早期经历（2005年前）
-{chr(10).join([f"- {company}" for company in personal_profile['early_career']])}
+{chr(10).join([f"- {company}" for company in personal_profile['early_career'])}
 
 ### 现任职务（2005年至今）
 - **工作单位**: {personal_profile['current_work']['company']}

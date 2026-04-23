@@ -279,7 +279,7 @@ class TaskComplexityAnalyzer:
 
         return score, matched_keywords
 
-    def _score_task_type(self, task_type: str | None) -> tuple[float, list[str]]:
+    def _score_task_type(self, task_type: Optional[str]) -> tuple[float, list[str]]:
         """
         任务类型评分
 
@@ -419,7 +419,7 @@ class SmartModelRouter:
     ECONOMY_THRESHOLD = 0.3  # 低于此值使用经济模型
     BALANCED_THRESHOLD = 0.7  # 低于此值使用平衡模型
 
-    def __init__(self, available_models: list[str] | None = None):
+    def __init__(self, available_models: Optional[list[str]] = None):
         """
         初始化智能模型路由器
 
@@ -438,7 +438,7 @@ class SmartModelRouter:
     async def route_request(
         self,
         request: LLMRequest,
-        available_adapters: dict[str, Any] | None = None,
+        available_adapters: Optional[dict[str, Any]] = None,
     ) -> RoutingDecision:
         """
         智能路由请求到最适合的模型
@@ -500,7 +500,7 @@ class SmartModelRouter:
 
     def _select_economy_model(
         self,
-        available_adapters: dict[str, Any] | None,
+        available_adapters: Optional[dict[str, Any]],
     ) -> tuple[str, str, float]:
         """
         选择经济模型
@@ -527,7 +527,7 @@ class SmartModelRouter:
     def _select_balanced_model(
         self,
         complexity: float,
-        available_adapters: dict[str, Any] | None,
+        available_adapters: Optional[dict[str, Any]],
     ) -> tuple[str, str, float]:
         """
         选择平衡模型
@@ -556,7 +556,7 @@ class SmartModelRouter:
 
     def _select_premium_model(
         self,
-        available_adapters: dict[str, Any] | None,
+        available_adapters: Optional[dict[str, Any]],
     ) -> tuple[str, str, float]:
         """
         选择高级模型
@@ -577,7 +577,7 @@ class SmartModelRouter:
     def _filter_available_models(
         self,
         model_list: list[dict[str, Any]],
-        available_adapters: dict[str, Any] | None,
+        available_adapters: Optional[dict[str, Any]],
     ) -> list[dict[str, Any]]:
         """
         过滤出可用的模型

@@ -4,15 +4,13 @@ Canvas/Host UI系统测试
 测试Canvas渲染和UI组件功能。
 """
 
-import pytest
-import asyncio
-from datetime import datetime
 
+import pytest
 from core.canvas.canvas_host import (
     CanvasHost,
     UIComponent,
-    UIComponentType,
     UIComponentFactory,
+    UIComponentType,
 )
 
 

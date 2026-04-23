@@ -7,8 +7,7 @@ PatentDraftingProxy 代码质量完整修复脚本
 """
 
 import subprocess
-import sys
-from pathlib import Path
+
 
 def run_command(cmd: list, description: str) -> bool:
     """运行命令并显示结果"""
@@ -49,7 +48,7 @@ def main():
 
     print("🚀 PatentDraftingProxy 代码质量完整修复")
     print(f"📄 文件: {file_path}")
-    print(f"⏱️  预计时间: 3小时")
+    print("⏱️  预计时间: 3小时")
     print()
 
     # 阶段1: 自动化修复（30分钟）

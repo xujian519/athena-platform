@@ -8,10 +8,15 @@
 - 撰写质量评估
 """
 
+
 import pytest
-from unittest.mock import Mock, patch
-from core.agents.xiaona.writing_reviewer_proxy import WritingReviewerProxy
-from core.agents.xiaona.base_component import AgentExecutionContext, AgentExecutionResult, AgentStatus
+
+from core.framework.agents.xiaona.base_component import (
+    AgentExecutionContext,
+    AgentExecutionResult,
+    AgentStatus,
+)
+from core.framework.agents.xiaona.writing_reviewer_proxy import WritingReviewerProxy
 
 
 class TestableWritingReviewerProxy(WritingReviewerProxy):

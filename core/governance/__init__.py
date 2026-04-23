@@ -212,7 +212,7 @@ async def shutdown_governance():
 
 
 async def execute_with_reflection(
-    query: str | None = None, context: dict | None = None, enable_reflection: bool = True
+    query: Optional[str] = None, context: dict | None = None, enable_reflection: bool = True
 ) -> dict:
     """
     执行查询并返回结果(可选反思)
@@ -262,7 +262,7 @@ async def execute_with_reflection(
     return result
 
 
-async def evaluate_and_report(tool_ids: list = None, output_path: str | None = None) -> str:
+async def evaluate_and_report(tool_ids: list = None, output_path: Optional[str] = None) -> str:
     """
     评估工具并生成报告
 

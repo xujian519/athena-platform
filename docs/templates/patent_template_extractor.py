@@ -288,7 +288,7 @@ class PatentTemplateExtractor:
 
         return result
 
-    def _parse_drawings_description(self, text: str) -> list[dict[str, str]]:
+    def _parse_drawings_description(self, text: str) -> list[dict[str, str]:
         """解析附图说明"""
         drawings = []
         pattern = r"图(\d+)[是]?\s*([^\n]+)"

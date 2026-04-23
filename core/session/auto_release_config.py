@@ -68,7 +68,7 @@ class AutoReleaseConfig:
     def __init__(
         self,
         config_file: str | Path | None = None,
-        preset: str | None = None
+        preset: Optional[str] = None
     ):
         """
         初始化配置管理器
@@ -86,7 +86,7 @@ class AutoReleaseConfig:
     def _load_config(
         self,
         config_file: str | Path | None,
-        preset: str | None
+        preset: Optional[str]
     ):
         """加载配置"""
         # 1. 从默认值开始
@@ -113,7 +113,7 @@ class AutoReleaseConfig:
     def _load_yaml_config(
         self,
         config_file: str | Path
-    ) -> dict[str, Any] | None:
+    ) -> Optional[dict[str, Any]]:
         """从YAML文件加载配置"""
         try:
             import yaml
@@ -211,7 +211,7 @@ class AutoReleaseConfig:
         """检查是否启用自动释放"""
         return self._config.get('enabled', True)
 
-    def get_idle_timeout(self, service_name: str | None = None) -> int:
+    def get_idle_timeout(self, service_name: Optional[str] = None) -> int:
         """
         获取空闲超时时间
 
@@ -266,7 +266,7 @@ _global_config: AutoReleaseConfig | None = None
 
 def get_auto_release_config(
     config_file: str | Path | None = None,
-    preset: str | None = None,
+    preset: Optional[str] = None,
     reload: bool = False
 ) -> AutoReleaseConfig:
     """

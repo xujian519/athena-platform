@@ -121,7 +121,7 @@ class ProductionAgentManager:
         logger.info("=" * 60)
 
         try:
-            from core.agents.xiaonuo_coordinator import XiaonuoAgent
+            from core.framework.agents.xiaonuo_coordinator import XiaonuoAgent
 
             config = {
                 'agent_id': 'xiaonuo-pisces-production',
@@ -154,7 +154,7 @@ class ProductionAgentManager:
         logger.info("=" * 60)
 
         try:
-            from core.agents.xiaona_professional import XiaonaProfessionalAgent
+            from core.framework.agents.xiaona_professional import XiaonaProfessionalAgent
 
             config = {
                 "llm_provider": "anthropic",

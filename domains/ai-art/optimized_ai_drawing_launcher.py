@@ -29,7 +29,7 @@ class OptimizedAIDrawingLauncher:
         self.engine = EnhancedAIDrawingEngine()
         self.demo_scenes = self._load_demo_scenes()
 
-    def _load_demo_scenes(self) -> list[dict[str, Any]]:
+    def _load_demo_scenes(self) -> list[dict[str, Any]:
         """加载演示场景"""
         return [
             # 专利技术图纸

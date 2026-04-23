@@ -87,7 +87,7 @@ class StatefulMCPClient:
         self._semaphore = asyncio.Semaphore(max_concurrent_requests)
 
         # 服务信息
-        self.server_name: str | None = None
+        self.server_name: Optional[str] = None
         self.server_tools: list[dict] = []
         self.server_resources: list[Any] = []
 
@@ -96,7 +96,7 @@ class StatefulMCPClient:
             f"(timeout: {session_timeout}s, keepalive: {keepalive_interval}s)"
         )
 
-    async def connect_to_server(self, command: str, args: list[str] | None = None) -> dict[str, Any]:
+    async def connect_to_server(self, command: str, args: Optional[list[str]] = None) -> dict[str, Any]:
         """
         连接到MCP服务器
 

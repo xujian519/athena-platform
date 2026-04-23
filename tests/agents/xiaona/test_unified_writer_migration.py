@@ -7,11 +7,12 @@
 运行: pytest tests/agents/xiaona/test_unified_writer_migration.py -v
 """
 
-import pytest
-from unittest.mock import Mock, patch, AsyncMock
-from core.agents.xiaona.writer_agent import WriterAgent
-from core.agents.xiaona.patent_drafting_proxy import PatentDraftingProxy
+from unittest.mock import Mock, patch
 
+import pytest
+
+from core.framework.agents.xiaona.patent_drafting_proxy import PatentDraftingProxy
+from core.framework.agents.xiaona.writer_agent import WriterAgent
 
 # ============================================================================
 # WriterAgent 测试用例 (4个)
@@ -392,7 +393,7 @@ class TestMigrationIntegration:
             assert os.path.exists(file_path), f"{filename} 不存在"
 
             # 验证文件不为空
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 content = f.read()
                 assert len(content) > 0, f"{filename} 内容为空"
 

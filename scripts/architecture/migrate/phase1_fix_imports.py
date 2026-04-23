@@ -9,12 +9,11 @@
 #   4. 生成迁移报告
 # ============================================================================
 
-import re
 import ast
+import re
 import shutil
-from pathlib import Path
-from typing import Dict, List, Set, Tuple
 from datetime import datetime
+from pathlib import Path
 
 # 配置
 PROJECT_ROOT = Path("/Users/xujian/Athena工作平台")
@@ -63,9 +62,9 @@ class ImportFixer:
     """Import修复器"""
 
     def __init__(self):
-        self.fixed_files: List[Path] = []
-        self.errors: List[Tuple[Path, str]] = []
-        self.violations_found: Dict[str, int] = {
+        self.fixed_files: list[Path] = []
+        self.errors: list[tuple[Path, str] = []
+        self.violations_found: dict[str, int] = {
             "from services.": 0,
             "from domains.": 0,
         }
@@ -78,7 +77,7 @@ class ImportFixer:
         shutil.copy2(file_path, backup_path)
         return backup_path
 
-    def find_violations(self) -> Set[Path]:
+    def find_violations(self) -> set[Path]:
         """查找所有违反架构的文件"""
         violating_files = set()
 
@@ -164,7 +163,7 @@ class ImportFixer:
             self.errors.append((file_path, str(e)))
             return False
 
-    def fix_all(self) -> Dict:
+    def fix_all(self) -> dict:
         """修复所有文件"""
         print("🔍 查找架构违规...")
         violating_files = self.find_violations()
@@ -193,7 +192,7 @@ class ImportFixer:
             "violations": self.violations_found,
         }
 
-    def generate_report(self, stats: Dict):
+    def generate_report(self, stats: dict):
         """生成迁移报告"""
         report_path = REPORTS_DIR / f"migration_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
 
@@ -215,7 +214,7 @@ class ImportFixer:
             if count > 0:
                 report_content += f"- **{violation_type}**: {count} 处\n"
 
-        report_content += f"""
+        report_content += """
 
 ## 修复文件列表
 
@@ -224,7 +223,7 @@ class ImportFixer:
             report_content += f"- `{file_path.relative_to(PROJECT_ROOT)}`\n"
 
         if self.errors:
-            report_content += f"""
+            report_content += """
 
 ## 错误列表
 

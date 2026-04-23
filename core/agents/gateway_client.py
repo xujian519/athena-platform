@@ -135,7 +135,7 @@ class TaskRequest:
         session_id: str,
         task_type: str,
         target_agent: AgentType,
-        parameters: dict[str, Any] | None = None,
+        parameters: Optional[dict[str, Any]] = None,
         priority: int = 5
     ) -> "TaskRequest":
         """创建任务请求"""
@@ -301,7 +301,7 @@ class GatewayClient:
         self,
         task_type: str,
         target_agent: AgentType,
-        parameters: dict[str, Any] | None = None,
+        parameters: Optional[dict[str, Any]] = None,
         priority: int = 5
     ) -> Response | None:
         """

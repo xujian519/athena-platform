@@ -43,7 +43,7 @@ class CacheConfig:
     redis_host: str = "localhost"
     redis_port: int = 6379
     redis_db: int = 0
-    redis_password: str | None = None
+    redis_password: Optional[str] = None
     fallback_to_memory: bool = True  # Redis 不可用时回退到内存缓存
 
 
@@ -137,7 +137,7 @@ class MemoryCache:
         self,
         key: str,
         value: Any,
-        ttl: int | None = None,
+        ttl: Optional[int] = None,
     ) -> bool:
         """设置缓存值"""
         async with self._lock:
@@ -289,7 +289,7 @@ class RedisCache:
         self,
         key: str,
         value: Any,
-        ttl: int | None = None,
+        ttl: Optional[int] = None,
     ) -> bool:
         """设置缓存值"""
         if not self._enabled:
@@ -394,7 +394,7 @@ class StepResultCache:
         agent: str,
         action: str,
         parameters: dict[str, Any],
-    ) -> dict[str, Any] | None:
+    ) -> Optional[dict[str, Any]]:
         """获取缓存的步骤结果"""
         if not self.config.enabled:
             return None
@@ -421,7 +421,7 @@ class StepResultCache:
         action: str,
         parameters: dict[str, Any],
         result: dict[str, Any],
-        ttl: int | None = None,
+        ttl: Optional[int] = None,
     ) -> bool:
         """缓存步骤结果"""
         if not self.config.enabled:

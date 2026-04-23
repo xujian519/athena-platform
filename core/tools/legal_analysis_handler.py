@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 async def legal_analysis_handler(
     query: str,
-    context: dict[str, Any] | None = None,
+    context: Optional[dict[str, Any]] = None,
     **kwargs: Any,
 ) -> dict[str, Any]:
     """

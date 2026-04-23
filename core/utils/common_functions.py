@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 # ==================== 日志相关 ====================
 
 
-def get_logger(name: str | None = None) -> logging.Logger:
+def get_logger(name: Optional[str] = None) -> logging.Logger:
     """获取logger实例"""
     if name is None:
         import inspect

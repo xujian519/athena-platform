@@ -136,7 +136,7 @@ class RealReflectionEngine:
         }
 
     async def reflect_on_output(
-        self, original_prompt: str, output: str, context: dict[str, Any] | None = None
+        self, original_prompt: str, output: str, context: Optional[dict[str, Any]] = None
     ) -> ReflectionResult:
         """对输出进行真实反思评估"""
 
@@ -253,7 +253,7 @@ class EnhancedAIProcessor:
         # self.ai_processor = YourAIProcessor()
 
     async def process_with_reflection(
-        self, prompt: str, context: dict[str, Any] | None = None
+        self, prompt: str, context: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """处理AI请求并进行反思评估"""
 

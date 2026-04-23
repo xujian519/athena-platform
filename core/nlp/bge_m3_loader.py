@@ -130,7 +130,7 @@ class BGEM3ModelLoader:
         logger.info(f"✅ 模型路径验证通过: {model_path}")
         return True
 
-    def _find_model_path(self) -> str | None:
+    def _find_model_path(self) -> Optional[str]:
         """查找可用的模型路径
 
         Returns:
@@ -243,7 +243,7 @@ class BGEM3ModelLoader:
     def encode(
         self,
         texts: list[str],
-        batch_size: int | None = None,
+        batch_size: Optional[int] = None,
         show_progress: bool = False,
         normalize: bool = True,
     ) -> Any:

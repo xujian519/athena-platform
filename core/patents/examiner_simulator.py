@@ -394,7 +394,7 @@ class ExaminerSimulator:
         self,
         feature: str,
         prior_art_analysis: dict
-    ) -> tuple[bool, dict | None]:
+    ) -> Optional[tuple[bool, dict]]:
         """检查特征是否在对比文件中公开"""
         # 简化实现：检查undisclosed_features列表
         for key, value in prior_art_analysis.items():
@@ -414,7 +414,7 @@ class ExaminerSimulator:
         self,
         feature: str,
         prior_art_analysis: dict
-    ) -> str | None:
+    ) -> Optional[str]:
         """查找最相似的特征"""
         from difflib import SequenceMatcher
 

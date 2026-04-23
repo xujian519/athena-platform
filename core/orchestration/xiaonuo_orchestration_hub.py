@@ -106,12 +106,12 @@ class SubTask:
     required_capabilities: set[AgentCapability] = field(default_factory=set)
     resource_requirement: ResourceRequirement = field(default_factory=ResourceRequirement)
     status: TaskStatus = TaskStatus.PENDING
-    assigned_agent: str | None = None
+    assigned_agent: Optional[str] = None
     created_at: datetime = field(default_factory=datetime.now)
     started_at: datetime | None = None
     completed_at: datetime | None = None
-    result: dict[str, Any] | None = None
-    error: str | None = None
+    result: Optional[dict[str, Any]] = None
+    error: Optional[str] = None
 
 
 @dataclass
@@ -127,7 +127,7 @@ class Task:
     status: TaskStatus = TaskStatus.PENDING
     created_at: datetime = field(default_factory=datetime.now)
     completed_at: datetime | None = None
-    result: dict[str, Any] | None = None
+    result: Optional[dict[str, Any]] = None
 
 
 class DynamicTaskDecomposer:

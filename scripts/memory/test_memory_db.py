@@ -1,23 +1,20 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 测试记忆库功能
 验证general_memory_db是否正常工作
 """
 
-import asyncio
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import json
 import logging
 import os
 import sys
+from typing import Any
 
 # 添加项目路径
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, project_root)
 
 from qdrant_client import QdrantClient
-from qdrant_client.models import Filter, FieldCondition, MatchValue
+from qdrant_client.models import FieldCondition, Filter, MatchValue
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -41,13 +38,13 @@ def test_memory_db() -> Any:
 
         # 2. 获取集合信息
         collection_info = client.get_collection(collection_name)
-        logger.info(f"\n📊 集合信息:")
+        logger.info("\n📊 集合信息:")
         logger.info(f"  - 向量数量: {collection_info.points_count}")
         logger.info(f"  - 向量维度: {collection_info.config.params.vectors.size}")
         logger.info(f"  - 距离度量: {collection_info.config.params.vectors.distance}")
 
         # 3. 查询所有数据
-        logger.info(f"\n📋 查询所有记忆数据:")
+        logger.info("\n📋 查询所有记忆数据:")
         all_points = client.scroll(
             collection_name=collection_name,
             limit=100,
@@ -62,7 +59,7 @@ def test_memory_db() -> Any:
             logger.info(f"     重要性: {payload.get('importance', 0)}")
 
         # 4. 测试按类别过滤
-        logger.info(f"\n🔍 按类别过滤测试:")
+        logger.info("\n🔍 按类别过滤测试:")
         categories = ["platform_identity", "assistant_identity", "memory_system"]
 
         for category in categories:
@@ -97,7 +94,7 @@ def test_memory_db() -> Any:
                 logger.debug(f"    类别 {category} 查询失败: {e}")
 
         # 5. 测试相似度搜索
-        logger.info(f"\n🎯 相似度搜索测试:")
+        logger.info("\n🎯 相似度搜索测试:")
         # 使用特定的查询向量
         import numpy as np
         query_vector = np.random.normal(0, 1, 1024).tolist()
@@ -118,9 +115,9 @@ def test_memory_db() -> Any:
         except Exception as e:
             logger.error(f"  ❌ 搜索失败: {e}")
 
-        logger.info(f"\n✅ 记忆库测试完成！")
+        logger.info("\n✅ 记忆库测试完成！")
         logger.info(f"📊 总计: {len(all_points)} 条记忆数据")
-        logger.info(f"🧠 记忆模块功能正常，可以正常使用！")
+        logger.info("🧠 记忆模块功能正常，可以正常使用！")
 
         return True
 

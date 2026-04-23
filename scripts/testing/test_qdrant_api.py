@@ -22,7 +22,7 @@ try:
         query=[0.1] * 1024,  # 测试向量
         limit=5
     )
-    print(f"✅ query_points工作正常")
+    print("✅ query_points工作正常")
     print(f"   结果数: {len(result.points)}")
 except Exception as e:
     print(f"❌ query_points失败: {e}")
@@ -34,7 +34,7 @@ try:
         collection_name="patent_rules_1024",
         limit=5
     )
-    print(f"✅ recommend工作正常")
+    print("✅ recommend工作正常")
     print(f"   结果数: {len(result)}")
 except Exception as e:
     print(f"❌ recommend失败: {e}")
@@ -47,7 +47,7 @@ try:
         query_vector=[0.1] * 1024,
         limit=5
     )
-    print(f"✅ search工作正常")
+    print("✅ search工作正常")
     print(f"   结果数: {len(result)}")
 except Exception as e:
     print(f"❌ search失败: {e}")

@@ -134,7 +134,7 @@ def search_session_to_dict(session: SearchSession) -> dict[str, Any]:
                 'total_results': iter.total_results,
                 'quality_score': iter.quality_score,
                 'insights': iter.insights,
-                'results': [patent_result_to_dict(r) for r in iter.results[:5]]  # 只返回前5个结果
+                'results': [patent_result_to_dict(r) for r in iter.results[:5]  # 只返回前5个结果
             }
             for iter in session.iterations
         ],

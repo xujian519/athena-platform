@@ -69,7 +69,7 @@ class AthenaSuperReasoningEngine:
             "historical_cases": {},
         }
 
-    async def reason(self, query: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
+    async def reason(self, query: str, context: Optional[dict[str, Any]] = None) -> dict[str, Any]:
         """执行推理过程
 
         Args:

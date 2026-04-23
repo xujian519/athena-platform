@@ -247,7 +247,7 @@ class Parser(ABC):
         self.parse_type = parse_type
 
     @abstractmethod
-    def parse(self, result, detail) -> tuple[str, str, list[str]]:
+    def parse(self, result, detail) -> tuple[str, str, list[str]:
         pass
 
     def __eq__(self, __o: object) -> bool:
@@ -281,7 +281,7 @@ class WordParser(Parser):
             elif isinstance(child, CT_Tbl):
                 yield Table(child, parent)
 
-    def parse(self, result, detail) -> tuple[str, str, list[str]]:
+    def parse(self, result, detail) -> tuple[str, str, list[str]:
         document = self.request.get_word(detail['path'])
         if not document:
             logger.warning(f"document {detail['path']} not exists")
@@ -361,7 +361,7 @@ class HTMLParser(Parser):
     def __init__(self) -> None:
         super().__init__('HTML')
 
-    def parse(self, result, detail) -> tuple[str, str, list[str]]:
+    def parse(self, result, detail) -> tuple[str, str, list[str]:
         html_data = self.request.get_html(detail['url'])
         if not html_data:
             return

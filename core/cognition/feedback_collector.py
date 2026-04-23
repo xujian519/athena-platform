@@ -52,11 +52,11 @@ class ExecutionFeedback:
     plan_id: str
     feedback_type: FeedbackType
     satisfaction: SatisfactionLevel | None = None
-    execution_time: int | None = None  # 实际执行时间（秒）
-    success_rate: float | None = None  # 成功率 0-1
+    execution_time: Optional[int] = None  # 实际执行时间（秒）
+    success_rate: Optional[float] = None  # 成功率 0-1
     failed_steps: list[str] = field(default_factory=list)
     error_messages: list[str] = field(default_factory=list)
-    user_comments: str | None = None
+    user_comments: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
     timestamp: datetime = field(default_factory=datetime.now)
 
@@ -83,7 +83,7 @@ class FeedbackCollector:
     4. 维护反馈历史
     """
 
-    def __init__(self, storage_path: str | None = None):
+    def __init__(self, storage_path: Optional[str] = None):
         self.logger = logging.getLogger(__name__)
         self.feedback_history: list[ExecutionFeedback] = []
         self.storage_path = storage_path or "data/feedback_history.json"
@@ -201,12 +201,12 @@ class FeedbackCollector:
         plan: ExecutionPlan,
         feedback_type: FeedbackType,
         satisfaction: SatisfactionLevel | None = None,
-        execution_time: int | None = None,
-        success_rate: float | None = None,
-        failed_steps: list[str] | None = None,
-        error_messages: list[str] | None = None,
-        user_comments: str | None = None,
-        metadata: dict[str, Any] | None = None,
+        execution_time: Optional[int] = None,
+        success_rate: Optional[float] = None,
+        failed_steps: Optional[list[str]] = None,
+        error_messages: Optional[list[str]] = None,
+        user_comments: Optional[str] = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> ExecutionFeedback:
         """
         收集执行反馈

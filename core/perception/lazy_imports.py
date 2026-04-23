@@ -25,7 +25,7 @@ class LazyLoader:
     延迟加载重型依赖库，只在真正需要时才导入
     """
 
-    def __init__(self, module_name: str, import_path: str | None = None):
+    def __init__(self, module_name: str, import_path: Optional[str] = None):
         """
         初始化懒加载器
 
@@ -61,7 +61,7 @@ class LazyLoader:
         return self._module is not None
 
 
-def lazy_import(module_name: str, import_path: str | None = None) -> LazyLoader:
+def lazy_import(module_name: str, import_path: Optional[str] = None) -> LazyLoader:
     """
     创建懒加载器的便捷函数
 

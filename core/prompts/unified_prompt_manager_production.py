@@ -299,7 +299,7 @@ class ProductionUnifiedPromptManager(UnifiedPromptManager):
 
     @retry_on_failure()
     def retrieve_rule_with_validation(
-        self, domain: str, task_type: str, phase: str | None = None
+        self, domain: str, task_type: str, phase: Optional[str] = None
     ) -> ScenarioRule | None:
         """带验证的规则检索"""
         # 参数验证
@@ -340,7 +340,7 @@ class ProductionUnifiedPromptManager(UnifiedPromptManager):
         self,
         user_input: str,
         scenario_context: ScenarioContext | None = None,
-        additional_context: dict[str, Any] | None = None,
+        additional_context: Optional[dict[str, Any]] = None,
         enable_l1_l4: bool = True,
         enable_expert: bool = True,
         enable_lyra: bool = True,

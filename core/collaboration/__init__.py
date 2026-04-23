@@ -96,7 +96,7 @@ def create_agent(agent_id: str, name: str, capabilities: list[AgentCapability], 
 
 
 def create_task(
-    title: str, description: str = "", required_capabilities: list[str] | None = None, **kwargs
+    title: str, description: str = "", required_capabilities: Optional[list[str]] = None, **kwargs
 ) -> Task:
     """创建任务实例"""
     return Task(

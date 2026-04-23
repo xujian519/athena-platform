@@ -26,7 +26,7 @@ from .engine import (
 
 # 便捷函数
 def recognize_intent(
-    text: str, context: dict[str, Any]  | None = None, user_id: str | None = None
+    text: str, context: dict[str, Any]  | None = None, user_id: Optional[str] = None
 ) -> Any:
     """便捷函数:识别意图(同步)"""
     engine = get_enhanced_intent_engine()
@@ -34,7 +34,7 @@ def recognize_intent(
 
 
 async def recognize_intent_async(
-    text: str, context: dict[str, Any]  | None = None, user_id: str | None = None
+    text: str, context: dict[str, Any]  | None = None, user_id: Optional[str] = None
 ) -> Any:
     """便捷函数:异步识别意图"""
     engine = get_enhanced_intent_engine()

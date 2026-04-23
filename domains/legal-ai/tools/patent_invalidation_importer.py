@@ -132,7 +132,7 @@ def cn_num_to_int(s: str) -> int | None:
         if s.endswith('十'):
             return mapping.get(s[0], 0) * 10
         if len(s) == 2 and s[1] in mapping and s[0] in mapping:
-            return mapping[s[0]] * 10 + mapping[s[1]]
+            return mapping[s[0] * 10 + mapping[s[1]
     except Exception as e:
         # 记录异常但不中断流程
         logger.debug(f"[patent_invalidation_importer] Exception: {e}")
@@ -174,8 +174,8 @@ def extract_sections(lines: list[str]) -> dict[str, str]:
     ret: dict[str, str] = {}
     for n, k in enumerate(order):
         start = idxs[k] + 1
-        end = len(lines) if n == len(order) - 1 else idxs[order[n + 1]]
-        content = "\n".join([x.strip() for x in lines[start:end]]).strip()
+        end = len(lines) if n == len(order) - 1 else idxs[order[n + 1]
+        content = "\n".join([x.strip() for x in lines[start:end]).strip()
         if content:
             ret[k] = content
     return ret
@@ -406,7 +406,7 @@ def import_invalidation_kg(base_dir: str, limit: int = 500) -> Any:
         'processed': 0,
         'failures': {'conversion_failed': 0, 'read_failed': 0, 'no_structure': 0},
     }
-    failed_samples: list[dict[str, str]] = []
+    failed_samples: list[dict[str, str] = []
     with driver.session(database=cfg['database']) as session:
         try:
             session.run(

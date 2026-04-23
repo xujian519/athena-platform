@@ -1,0 +1,55 @@
+# 法律提示词融合模块告警规则
+# Alert Rules for Legal Prompt Fusion
+
+groups:
+  - name: prompt_fusion_alerts
+    interval: 30s
+    rules:
+      # 融合延迟 P95 超过 500ms
+      - alert: FusionLatencyHigh
+        expr: |
+          histogram_quantile(0.95,
+            rate(fusion_latency_seconds_bucket[5m])
+          ) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+          service: "legal_prompt_fusion"
+        annotations:
+          summary: "Fusion latency P95 > 500ms"
+          description: "融合链路 P95 延迟达到 {{ $value }}s，超过 500ms 阈值"
+          action: "降低 traffic_percentage 或检查 Wiki 索引"
+
+      # 融合证据命中率低于 60%（10 分钟窗口）
+      - alert: FusionEvidenceLow
+        expr: |
+          (
+            rate(fusion_evidence_count[10m])
+            /
+            rate(fusion_requests_total{fusion_enabled="true"}[10m])
+          ) < 0.6
+        for: 10m
+        labels:
+          severity: warning
+          service: "legal_prompt_fusion"
+        annotations:
+          summary: "Fusion evidence hit rate < 60%"
+          description: "融合证据命中率 {{ $value | humanizePercentage }}，低于 60% 阈值"
+          action: "检查 Wiki 索引状态和 PostgreSQL schema"
+
+      # 融合缓存命中率突降至 30% 以下（5 分钟窗口）
+      - alert: FusionCacheMissBurst
+        expr: |
+          (
+            rate(fusion_cache_hits_total[5m])
+            /
+            rate(fusion_requests_total[5m])
+          ) < 0.3
+        for: 5m
+        labels:
+          severity: critical
+          service: "legal_prompt_fusion"
+        annotations:
+          summary: "Fusion cache hit rate < 30%"
+          description: "融合缓存命中率 {{ $value | humanizePercentage }}，低于 30% 阈值"
+          action: "检查 wiki_revision 计算是否过于敏感"

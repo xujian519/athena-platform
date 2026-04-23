@@ -15,16 +15,14 @@
 - 能力：chat（对话）
 """
 
-from typing import Any, Dict
 import logging
-import json
 
-from core.agents.xiaona.base_component import (
-    BaseXiaonaComponent,
+from core.framework.agents.xiaona.base_component import (
     AgentCapability,
     AgentExecutionContext,
     AgentExecutionResult,
     AgentStatus,
+    BaseXiaonaComponent,
 )
 
 logger = logging.getLogger(__name__)
@@ -57,7 +55,7 @@ class ChatAgent(BaseXiaonaComponent):
         ])
 
         # TODO: 初始化LLM Manager
-        from core.llm.unified_llm_manager import UnifiedLLMManager
+        from core.ai.llm.unified_llm_manager import UnifiedLLMManager
         self.llm = UnifiedLLMManager()
 
         logger.info(f"ChatAgent初始化完成: {self.agent_id}")
@@ -148,7 +146,6 @@ class ChatAgent(BaseXiaonaComponent):
 # 测试代码
 async def test_chat_agent():
     """测试ChatAgent"""
-    import asyncio
 
     # 创建Agent
     agent = ChatAgent(agent_id="chat_agent_001")
@@ -157,7 +154,7 @@ async def test_chat_agent():
     print("=== Agent信息 ===")
     info = agent.get_info()
     print(f"Agent ID: {info['agent_id']}")
-    print(f"能力: {[c['name'] for c in info['capabilities']]}")
+    print(f"能力: {[c['name'] for c in info['capabilities']}")
 
     # 测试对话
     test_messages = [

@@ -111,7 +111,7 @@ class RealPatentConnectorV2:
         limit: int = 10000,
         include_abstract: bool = True,
         include_claims: bool = True,
-        filters: dict[str, Any] | None = None
+        filters: Optional[dict[str, Any]] = None
     ) -> list[dict[str, Any]]:
         """加载专利数据"""
         patents = []
@@ -199,7 +199,7 @@ class RealPatentConnectorV2:
         self,
         query: str,
         limit: int = 100,
-        search_fields: list[str] | None = None
+        search_fields: Optional[list[str]] = None
     ) -> list[dict[str, Any]]:
         """全文搜索专利"""
         if search_fields is None:
@@ -247,7 +247,7 @@ class RealPatentConnectorV2:
 
         return patents
 
-    def get_patent_details(self, patent_id: str) -> dict[str, Any | None]:
+    def get_patent_details(self, patent_id: str) -> Optional[dict[str, Any]]:
         """获取专利详细信息"""
         try:
             with self.get_cursor() as cursor:

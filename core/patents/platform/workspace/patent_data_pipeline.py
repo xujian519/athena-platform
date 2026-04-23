@@ -228,7 +228,7 @@ class PatentDataPipeline:
 
         return pending_patents
 
-    async def crawl_patent_data(self, search_queries: Optional[List[str] = None) -> List[Dict[str, Any]]:
+    async def crawl_patent_data(self, search_queries: Optional[List[str]] = None) -> List[Dict[str, Any]]]:
         """爬取专利数据"""
         if not search_queries:
             search_queries = [

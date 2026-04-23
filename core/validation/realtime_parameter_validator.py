@@ -70,9 +70,9 @@ class ParameterSchema:
     name: str
     type: type
     required: bool = True
-    min_length: int | None = None
-    max_length: int | None = None
-    pattern: str | None = None
+    min_length: Optional[int] = None
+    max_length: Optional[int] = None
+    pattern: Optional[str] = None
     enum: list[Any] | None = None
     custom_validator: Callable | None = None
     priority: ValidationPriority = ValidationPriority.NORMAL

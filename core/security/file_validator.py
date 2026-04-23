@@ -106,9 +106,9 @@ SAFE_FILENAME_PATTERN = re.compile(r"^[\w\-\.\u4e00-\u9fff]+$")
 
 def validate_file_upload(
     filename: str,
-    content_type: str | None = None,
+    content_type: Optional[str] = None,
     content: bytes | None = None,
-    max_size: int | None = None,
+    max_size: Optional[int] = None,
 ) -> dict[str, Any]:
     """
     验证上传文件的安全性
@@ -232,7 +232,7 @@ def sanitize_filename(filename: str) -> str:
     return filename
 
 
-def detect_file_type_by_magic_number(content: bytes) -> str | None:
+def detect_file_type_by_magic_number(content: bytes) -> Optional[str]:
     """
     通过魔术数字检测文件类型
 
@@ -295,7 +295,7 @@ def _is_valid_mime_mismatch(declared_mime: str, detected_mime: str) -> bool:
 
 
 def validate_batch_upload(
-    files: list[dict[str, Any]], max_total_size: int | None = None, max_file_count: int = 100
+    files: list[dict[str, Any]], max_total_size: Optional[int] = None, max_file_count: int = 100
 ) -> dict[str, Any]:
     """
     验证批量上传

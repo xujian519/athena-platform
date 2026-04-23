@@ -63,7 +63,7 @@ class DialogueMessage:
 class ThreePersonDialogue:
     """三人对话管理器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
         self.state = DialogueState.INITIALIZING
         self.dialogue_id = f"dialogue_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
@@ -189,7 +189,7 @@ class ThreePersonDialogue:
             logger.error(f"❌ 对话上下文设置失败: {e}")
             raise
 
-    async def start_dialogue(self, initial_message: str | None = None) -> dict[str, Any]:
+    async def start_dialogue(self, initial_message: Optional[str] = None) -> dict[str, Any]:
         """开始对话"""
         try:
             if self.state != DialogueState.ACTIVE:
@@ -331,7 +331,7 @@ class ThreePersonDialogue:
         except Exception as e:
             logger.error(f"记录消息到记忆失败: {e}")
 
-    async def _generate_athena_response(self, message: DialogueMessage) -> str | None:
+    async def _generate_athena_response(self, message: DialogueMessage) -> Optional[str]:
         """生成Athena的响应"""
         try:
             athena = self.participants[DialogueRole.ATHENA]
@@ -363,7 +363,7 @@ class ThreePersonDialogue:
             logger.error(f"生成Athena响应失败: {e}")
             return "🏛️ 抱歉,我在分析时遇到了问题。请再说一遍?"
 
-    async def _generate_xiaonuo_response(self, message: DialogueMessage) -> str | None:
+    async def _generate_xiaonuo_response(self, message: DialogueMessage) -> Optional[str]:
         """生成小诺的响应"""
         try:
             xiaonuo = self.participants[DialogueRole.XIAONUO]

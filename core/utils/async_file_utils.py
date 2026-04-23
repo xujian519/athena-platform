@@ -355,7 +355,7 @@ class AsyncFileOperations:
         """
         semaphore = asyncio.Semaphore(concurrency)
 
-        async def read_with_semaphore(file_path: str | Path) -> tuple[Path, bytes | str | None]:
+        async def read_with_semaphore(file_path: str | Path) -> Optional[tuple[Path, bytes | str]]:
             async with semaphore:
                 try:
                     path = Path(file_path) if isinstance(file_path, str) else file_path
@@ -416,7 +416,7 @@ class AsyncFileProcessor:
 
     async def process_file(
         self, file_path: str | Path, processor: callable, output_path: str | Path | None = None
-    ) -> bytes | str | None:
+    ) -> bytes | Optional[str]:
         """
         处理文件
 

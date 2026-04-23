@@ -149,7 +149,7 @@ class IntentEnsemble:
         }
 
     async def predict(
-        self, text: str, context: dict[str, Any] | None = None, method: str = "weighted_voting"
+        self, text: str, context: Optional[dict[str, Any]] = None, method: str = "weighted_voting"
     ) -> IntentEnsembleResult:
         """
         执行意图识别集成预测

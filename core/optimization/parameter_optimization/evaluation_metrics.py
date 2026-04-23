@@ -26,7 +26,7 @@ class EvaluationResult:
 
     score: float  # 总分(0-1)
     metrics: dict[str, float]  # 详细指标
-    details: dict[str, Any] | None = None  # 额外细节
+    details: Optional[dict[str, Any]] = None  # 额外细节
 
 
 class EvaluationMetrics:
@@ -56,7 +56,7 @@ class EvaluationMetrics:
         logger.info(f"📊 初始化评估指标系统,权重: {self.weights}")
 
     async def evaluate_response(
-        self, response: str, expected: str, input_text: str | None = None
+        self, response: str, expected: str, input_text: Optional[str] = None
     ) -> EvaluationResult:
         """
         评估单个响应质量

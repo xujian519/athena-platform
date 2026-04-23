@@ -10,7 +10,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from core.perception.exceptions import (
+from core.ai.perception.exceptions import (
     AudioFormatError,
     CacheError,
     ConcurrencyError,

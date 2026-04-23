@@ -87,7 +87,7 @@ class ThinkingProcess:
     thought_steps: list[dict[str, Any]] = field(default_factory=list)
     strategy_changes: list[dict[str, Any]] = field(default_factory=list)
     meta_observations: list[str] = field(default_factory=list)
-    effectiveness_score: float | None = None
+    effectiveness_score: Optional[float] = None
 
 
 class MetaCognitionEngine:

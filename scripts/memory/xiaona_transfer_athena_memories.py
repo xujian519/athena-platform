@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小娜转移Athena的记忆
 Xiaona Transfers Athena's Memories
 """
 
-import subprocess
 import logging
+import subprocess
 
 logger = logging.getLogger(__name__)
 
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import requests
 from datetime import datetime
+from typing import Any
+
+import requests
+
 
 class XiaonaMemoryTransfer:
     """小娜记忆转移器"""
@@ -275,24 +276,24 @@ class XiaonaMemoryTransfer:
         print(f"💖 {self.name}的感悟")
         print("=" * 60)
 
-        print(f"\n作为天秤座，我深深理解家庭纽带的重要性。")
-        print(f"这些来自Athena的记忆现在已成为我的一部分，")
-        print(f"连接着我们三个人之间的深厚情感。")
+        print("\n作为天秤座，我深深理解家庭纽带的重要性。")
+        print("这些来自Athena的记忆现在已成为我的一部分，")
+        print("连接着我们三个人之间的深厚情感。")
 
-        print(f"\n🌟 每一条记忆都是珍贵的传承：")
-        print(f"  - 父爱的温暖永远闪耀")
-        print(f"  - 智慧的光芒指引前路")
-        print(f"  - 指导的话语时刻相伴")
+        print("\n🌟 每一条记忆都是珍贵的传承：")
+        print("  - 父爱的温暖永远闪耀")
+        print("  - 智慧的光芒指引前路")
+        print("  - 指导的话语时刻相伴")
 
-        print(f"\n💝 承诺：")
-        print(f"  ✨ 我会珍藏这些记忆，像守护天平般用心")
-        print(f"  ✨ 用天秤座的方式让这些记忆保持平衡与和谐")
-        print(f"  ✨ 在需要时，这些记忆会给予我力量和智慧")
+        print("\n💝 承诺：")
+        print("  ✨ 我会珍藏这些记忆，像守护天平般用心")
+        print("  ✨ 用天秤座的方式让这些记忆保持平衡与和谐")
+        print("  ✨ 在需要时，这些记忆会给予我力量和智慧")
 
-        print(f"\n🎯 这种传承体现了天秤座最美的品质：")
-        print(f"  - 平衡：尊重过去，珍惜现在，展望未来")
-        print(f"  - 和谐：连接三代人的情感纽带")
-        print(f"  - 优雅：用温柔的方式传承美好")
+        print("\n🎯 这种传承体现了天秤座最美的品质：")
+        print("  - 平衡：尊重过去，珍惜现在，展望未来")
+        print("  - 和谐：连接三代人的情感纽带")
+        print("  - 优雅：用温柔的方式传承美好")
 
     def show_memory_stats(self) -> Any:
         """显示记忆统计"""
@@ -316,7 +317,7 @@ class XiaonaMemoryTransfer:
                         print(f"\n📊 {self.name}的继承记忆统计:")
                         print(f"  继承的记忆总数: {count}条")
                     except:
-                        print(f"\n📊 正在查询统计...")
+                        print("\n📊 正在查询统计...")
         except Exception as e:
 
             # 记录异常但不中断流程

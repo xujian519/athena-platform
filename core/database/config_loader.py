@@ -18,18 +18,18 @@ class DatabaseConfig:
     type: str
     host: str
     port: int
-    user: str | None = None
-    password: str | None = None
-    database: str | None = None
+    user: Optional[str] = None
+    password: Optional[str] = None
+    database: Optional[str] = None
     readonly: bool = False
-    pool: dict[str, Any] | None = None
-    options: dict[str, Any] | None = None
+    pool: Optional[dict[str, Any]] = None
+    options: Optional[dict[str, Any]] = None
 
 
 class DatabaseConfigLoader:
     """数据库配置加载器"""
 
-    def __init__(self, config_path: str | None = None):
+    def __init__(self, config_path: Optional[str] = None):
         self.config_path = config_path or self._find_config_file()
         self.config = self._load_config()
         self._resolve_env_variables()
@@ -139,7 +139,7 @@ class DatabaseConfigLoader:
 _config_loader = None
 
 
-def get_database_config_loader(config_path: str | None = None) -> DatabaseConfigLoader:
+def get_database_config_loader(config_path: Optional[str] = None) -> DatabaseConfigLoader:
     """获取数据库配置加载器实例"""
     global _config_loader
     if _config_loader is None:

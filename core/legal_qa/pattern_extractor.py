@@ -366,8 +366,8 @@ class PatternExtractor:
 
         return CreativityLevel.CREATIVITY_MEDIUM
 
-    def _calculate_pattern_confidence(self, step1: list[str], step2: list[str] | None = None,
-                                       step3: list[str] | None = None) -> float:
+    def _calculate_pattern_confidence(self, step1: list[str], step2: Optional[list[str]] = None,
+                                       step3: Optional[list[str]] = None) -> float:
         """计算模式提取置信度"""
         confidence = 0.0
 
@@ -503,7 +503,7 @@ def test_pattern_extractor():
     print(f"  平均置信度: {stats['avg_confidence']:.2%}")
 
 
-def extract_from_file(input_file: str, output_file: str | None = None):
+def extract_from_file(input_file: str, output_file: Optional[str] = None):
     """从文件提取推理模式"""
     print(f"📄 读取文件: {input_file}")
 

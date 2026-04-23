@@ -172,13 +172,13 @@ def save_chanshuozen_notes() -> None:
 ## 💡 投资哲学
 
 ### 核心信念
-{chr(10).join([f"- {belief}" for belief in chanshuozen_notes['investment_philosophy']['core_beliefs']])}
+{chr(10).join([f"- {belief}" for belief in chanshuozen_notes['investment_philosophy']['core_beliefs'])}
 
 ### 交易心态
-{chr(10).join([f"- {mindset}" for mindset in chanshuozen_notes['investment_philosophy']['trading_mindset']])}
+{chr(10).join([f"- {mindset}" for mindset in chanshuozen_notes['investment_philosophy']['trading_mindset'])}
 
 ### 实践指南
-{chr(10).join([f"- {guide}" for guide in chanshuozen_notes['investment_philosophy']['practice_guidelines']])}
+{chr(10).join([f"- {guide}" for guide in chanshuozen_notes['investment_philosophy']['practice_guidelines'])}
 
 ## 🎯 学习价值
 

@@ -52,9 +52,9 @@ class FeedbackMessage:
     level: FeedbackLevel
     timestamp: str
     content: str
-    metadata: dict[str, Any] | None = None
-    step_id: str | None = None
-    progress: float | None = None  # 0.0 - 1.0
+    metadata: Optional[dict[str, Any]] = None
+    step_id: Optional[str] = None
+    progress: Optional[float] = None  # 0.0 - 1.0
 
     def to_dict(self) -> dict:
         """转换为字典"""
@@ -125,7 +125,7 @@ class RealTimeFeedback:
             )
 
     async def executing(
-        self, content: str, step_id: str | None = None, metadata: dict | None = None
+        self, content: str, step_id: Optional[str] = None, metadata: dict | None = None
     ) -> None:
         """
         发送执行反馈
@@ -174,8 +174,8 @@ class RealTimeFeedback:
         type: FeedbackType,
         content: str,
         metadata: dict | None = None,
-        step_id: str | None = None,
-        progress: float | None = None,
+        step_id: Optional[str] = None,
+        progress: Optional[float] = None,
     ) -> None:
         """发送反馈消息"""
         message = FeedbackMessage(

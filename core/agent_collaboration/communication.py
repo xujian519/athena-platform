@@ -44,13 +44,13 @@ class TaskMessage:
 
     task_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     sender_id: str = ""
-    recipient_id: str | None = None  # None表示广播
+    recipient_id: Optional[str] = None  # None表示广播
     message_type: MessageType = MessageType.TASK
     task_type: str = ""  # search, analysis, creative等
     content: dict[str, Any] = field(default_factory=dict)
     priority: TaskPriority = TaskPriority.MEDIUM
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
-    deadline: str | None = None
+    deadline: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -69,7 +69,7 @@ class TaskMessage:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "TaskMessage":
+    def from_dict(cls, data: dict[str, Any]) -> TaskMessage:
         """从字典创建消息对象"""
         task_id_value = data.get("task_id")
         task_id: str = task_id_value if task_id_value else str(uuid.uuid4())  # type: ignore[assignment]
@@ -98,7 +98,7 @@ class ResponseMessage:
     message_type: MessageType = MessageType.RESPONSE
     success: bool = True
     content: dict[str, Any] = field(default_factory=dict)
-    error_message: str | None = None
+    error_message: Optional[str] = None
     execution_time: float = 0.0
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -228,7 +228,7 @@ class MessageBus:
             self.message_history = self.message_history[-self.max_history :]
 
     def get_message_history(
-        self, agent_id: str | None = None, limit: int = 100
+        self, agent_id: Optional[str] = None, limit: int = 100
     ) -> list[dict[str, Any]]:
         """获取消息历史"""
         history = self.message_history

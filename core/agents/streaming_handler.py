@@ -140,7 +140,7 @@ class SSEStreamingHandler(StreamingHandler):
     将流式事件转换为 SSE 格式输出。
     """
 
-    def __init__(self, output_callback: Callable[[str], Awaitable[None] | None]):
+    def __init__(self, output_callback: Callable[[str], Awaitable[None]] or None]):
         """初始化 SSE 处理器
 
         Args:

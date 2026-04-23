@@ -10,12 +10,13 @@
 """
 
 import asyncio
+
 from core.tools.permissions import (
-    ToolPermissionContext,
-    PermissionMode,
-    PermissionRule,
     DEFAULT_ALLOW_RULES,
     DEFAULT_DENY_RULES,
+    PermissionMode,
+    PermissionRule,
+    ToolPermissionContext,
     get_global_permission_context,
 )
 
@@ -189,11 +190,11 @@ async def example_3_priority_resolution():
 
     # 测试优先级
     decision = ctx.check_permission("file:write")
-    print(f"\n工具: file:write")
+    print("\n工具: file:write")
     print(f"结果: {'✅ 允许' if decision.allowed else '❌ 拒绝'}")
     print(f"原因: {decision.reason}")
     print(f"匹配规则: {decision.matched_rule}")
-    print(f"\n说明: 优先级最高的规则生效 (priority=200)")
+    print("\n说明: 优先级最高的规则生效 (priority=200)")
 
 
 async def example_4_default_rules():
@@ -213,7 +214,7 @@ async def example_4_default_rules():
 
     # 查看所有规则
     rules = ctx.get_rules()
-    print(f"\n默认规则:")
+    print("\n默认规则:")
     print(f"  允许规则: {len(rules['allow'])} 条")
     for rule in rules["allow"]:
         print(f"    - {rule['id']}: {rule['pattern']} ({rule['description']})")

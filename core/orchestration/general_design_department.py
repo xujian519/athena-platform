@@ -72,7 +72,7 @@ class Task:
     assigned_to: list[AgentRole] = field(default_factory=list)
     status: str = "pending"  # pending, processing, completed, failed
     result: dict | None = None
-    error: str | None = None
+    error: Optional[str] = None
 
 
 @dataclass
@@ -134,7 +134,7 @@ class GeneralDesignDepartment:
         task_type: TaskType = TaskType.GENERAL_QUERY,
         requester: str = "徐健",
         priority: Priority = Priority.MEDIUM,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> str:
         """
         提交任务到总体设计部

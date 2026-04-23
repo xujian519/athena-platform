@@ -110,7 +110,7 @@ class StaticResourceOptimizer:
 
         return status
 
-    def generate_optimization_strategies(self) -> list[dict[str, Any]]:
+    def generate_optimization_strategies(self) -> list[dict[str, Any]:
         """生成优化策略"""
         strategies = []
 

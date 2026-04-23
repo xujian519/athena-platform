@@ -87,7 +87,7 @@ class ProtocolManager:
             logger.error(f"停止协议失败: {e}")
             return False
 
-    def get_protocol_status(self, protocol_id: str) -> dict[str, Any] | None:
+    def get_protocol_status(self, protocol_id: str) -> Optional[dict[str, Any]]:
         """获取协议状态"""
         try:
             protocol = self.protocols.get(protocol_id)

@@ -1,17 +1,15 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 存储性能监控系统
 实时监控和评估优化效果
 """
 
 import asyncio
-import time
 import json
 import sys
+import time
+from datetime import datetime
 from pathlib import Path
-from datetime import datetime, timedelta
-from typing import Dict, List, Any
 
 # 添加项目路径
 sys.path.append('/Users/xujian/Athena工作平台')
@@ -19,6 +17,7 @@ sys.path.append('/Users/xujian/Athena工作平台/storage-system')
 
 # 直接导入组件
 import importlib.util
+
 
 def load_component_from_file(module_name, file_path) -> None:
     spec = importlib.util.spec_from_file_location(module_name, file_path)
@@ -151,19 +150,19 @@ class StoragePerformanceTracker:
         worst_execution = max(execution_times)
 
         print(f"📊 性能统计 (基于 {len(self.performance_data)} 次测试):")
-        print(f"   路由性能:")
+        print("   路由性能:")
         print(f"     - 平均响应时间: {avg_routing:.3f}s")
         print(f"     - 最佳响应时间: {best_routing:.3f}s")
         print(f"     - 最差响应时间: {worst_routing:.3f}s")
-        print(f"   执行性能:")
+        print("   执行性能:")
         print(f"     - 平均执行时间: {avg_execution:.3f}s")
         print(f"     - 最佳执行时间: {best_execution:.3f}s")
         print(f"     - 最差执行时间: {worst_execution:.3f}s")
-        print(f"   可靠性:")
+        print("   可靠性:")
         print(f"     - 平均成功率: {avg_success:.1%}")
 
         # 优化效果对比
-        print(f"\n🚀 优化效果:")
+        print("\n🚀 优化效果:")
         if avg_execution < 0.1:  # 假设优化前平均执行时间为0.5s
             improvement = ((0.5 - avg_execution) / 0.5) * 100
             print(f"   - 响应时间优化: {improvement:.1f}% (相比优化前0.5s)")
@@ -183,14 +182,14 @@ class StoragePerformanceTracker:
             storage = d['chosen_storage']
             storage_usage[storage] = storage_usage.get(storage, 0) + 1
 
-        print(f"\n🎯 存储路由决策:")
+        print("\n🎯 存储路由决策:")
         for storage, count in sorted(storage_usage.items(), key=lambda x: x[1], reverse=True):
             percentage = (count / len(self.performance_data)) * 100
             print(f"   - {storage}: {count} 次 ({percentage:.1f}%)")
 
         # 监控器摘要
         monitor_summary = monitor.get_monitoring_summary()
-        print(f"\n🔍 监控系统状态:")
+        print("\n🔍 监控系统状态:")
         print(f"   - 收集指标总数: {monitor_summary['metrics_collected']}")
         print(f"   - 反思触发次数: {monitor_summary['reflection_results']}")
         print(f"   - 自动优化状态: {'启用' if monitor_summary['auto_optimization'] else '禁用'}")
@@ -237,7 +236,7 @@ class StoragePerformanceTracker:
         print(f"\n💾 详细报告已保存: {report_path}")
 
         # 建议和结论
-        print(f"\n💡 性能分析结论:")
+        print("\n💡 性能分析结论:")
 
         if avg_execution < 0.1:
             print("   ✅ 响应时间优化效果显著")

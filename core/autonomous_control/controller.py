@@ -46,7 +46,7 @@ class AutonomousTask:
     deadline: datetime | None = None
     status: str = "pending"  # pending, in_progress, completed, failed
     progress: float = 0.0
-    result: dict[str, Any] | None = None
+    result: Optional[dict[str, Any]] = None
 
 
 class AutonomousController:
@@ -447,7 +447,7 @@ class AutonomousController:
             logger.error(f"执行小诺任务失败: {e}")
             return {"error": str(e)}
 
-    def _extract_service_name_from_description(self, description: str) -> str | None:
+    def _extract_service_name_from_description(self, description: str) -> Optional[str]:
         """从描述中提取服务名"""
         service_keywords = {
             "api": "api-gateway",

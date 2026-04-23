@@ -54,12 +54,12 @@ class Message:
     compression: CompressionType = CompressionType.AUTO
     delivery_mode: DeliveryMode = DeliveryMode.ASYNCHRONOUS
     timestamp: datetime = field(default_factory=datetime.now)
-    ttl: float | None = None
+    ttl: Optional[float] = None
     retry_count: int = 0
     max_retries: int = 3
     metadata: dict[str, Any] = field(default_factory=dict)
     tags: list[str] = field(default_factory=list)
-    correlation_id: str | None = None
+    correlation_id: Optional[str] = None
 
 
 @dataclass

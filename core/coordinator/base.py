@@ -227,8 +227,8 @@ class TaskAssignment:
     created_at: datetime = field(default_factory=datetime.now)
     started_at: datetime | None = None
     completed_at: datetime | None = None
-    result: dict[str, Any] | None = None
-    error: str | None = None
+    result: Optional[dict[str, Any]] = None
+    error: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def __lt__(self, other: TaskAssignment) -> bool:
@@ -260,7 +260,7 @@ class ConflictInfo:
     conflict_id: str
     conflict_type: ConflictType
     agents: list[str]
-    resource_id: str | None = None
+    resource_id: Optional[str] = None
     description: str = ""
     status: str = "detected"
     resolution_strategy: ConflictResolutionStrategy | None = None
@@ -682,7 +682,7 @@ class Coordinator:
         self,
         conflict_type: ConflictType,
         agents: list[str],
-        resource_id: str | None = None,
+        resource_id: Optional[str] = None,
         description: str = "",
     ) -> ConflictInfo | None:
         """检测冲突

@@ -4,10 +4,11 @@
 """
 
 import re
-from docx import Document
-from docx.shared import Pt
-from docx.oxml.ns import qn
 from pathlib import Path
+
+from docx import Document
+from docx.oxml.ns import qn
+from docx.shared import Pt
 
 
 class MarkdownToDocxConverter:
@@ -214,7 +215,7 @@ def convert_md_to_docx(input_file, output_file=None):
         output_file = input_path.with_suffix('.docx')
 
     # 读取Markdown文件
-    with open(input_path, 'r', encoding='utf-8') as f:
+    with open(input_path, encoding='utf-8') as f:
         md_content = f.read()
 
     # 转换

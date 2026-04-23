@@ -46,7 +46,7 @@ class GLMMCPServer:
     capabilities: list[GLMMCPCapability]
     config: dict[str, Any]
     status: str = "unknown"
-    health_check_url: str | None = None
+    health_check_url: Optional[str] = None
 
 
 class GLMMCPIntegration:
@@ -113,7 +113,7 @@ class GLMMCPIntegration:
             logger.error(f"❌ 加载配置失败: {e}")
             raise
 
-    async def health_check(self, server_name: str | None = None) -> dict[str, Any]:
+    async def health_check(self, server_name: Optional[str] = None) -> dict[str, Any]:
         """
         健康检查
 
@@ -214,7 +214,7 @@ class GLMMCPIntegration:
             logger.error(f"❌ MCP工具调用失败: {e}")
             raise
 
-    def get_capabilities(self, server_name: str | None = None) -> dict[str, list[str]]:
+    def get_capabilities(self, server_name: Optional[str] = None) -> dict[str, list[str]]:
         """
         获取MCP服务能力列表
 

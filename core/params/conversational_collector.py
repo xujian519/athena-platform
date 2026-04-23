@@ -22,7 +22,7 @@ class CollectionState:
     session_id: str  # 会话ID
     intent: str  # 当前意图
     collected_params: dict[str, Any]  # 已收集的参数
-    current_question: str | None  # 当前问题
+    current_question: Optional[str]  # 当前问题
     question_count: int  # 已提问次数
     start_time: datetime  # 开始时间
     last_activity: datetime  # 最后活动时间

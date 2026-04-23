@@ -8,9 +8,10 @@
 4. 工作历史记录
 """
 
-import pytest
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+
+import pytest
 
 pytestmark = [pytest.mark.e2e, pytest.mark.integration]
 
@@ -183,7 +184,7 @@ class TestMemorySystemFunctionality:
 
     def test_global_memory_initialization(self):
         """测试全局记忆初始化"""
-        from core.memory.unified_memory_system import get_global_memory
+        from core.framework.memory.unified_memory_system import get_global_memory
 
         memory = get_global_memory()
         assert memory is not None
@@ -193,7 +194,7 @@ class TestMemorySystemFunctionality:
 
     def test_project_memory_initialization(self):
         """测试项目记忆初始化"""
-        from core.memory.unified_memory_system import get_project_memory
+        from core.framework.memory.unified_memory_system import get_project_memory
 
         memory = get_project_memory("/Users/xujian/Athena工作平台")
         assert memory is not None
@@ -203,10 +204,10 @@ class TestMemorySystemFunctionality:
 
     def test_memory_write_read_cycle(self):
         """测试记忆读写循环"""
-        from core.memory.unified_memory_system import (
-            get_project_memory,
+        from core.framework.memory.unified_memory_system import (
+            MemoryCategory,
             MemoryType,
-            MemoryCategory
+            get_project_memory,
         )
 
         memory = get_project_memory("/Users/xujian/Athena工作平台")
@@ -237,7 +238,7 @@ class TestMemorySystemFunctionality:
 
     def test_memory_search_functionality(self):
         """测试记忆搜索功能"""
-        from core.memory.unified_memory_system import get_project_memory
+        from core.framework.memory.unified_memory_system import get_project_memory
 
         memory = get_project_memory("/Users/xujian/Athena工作平台")
 
@@ -255,7 +256,7 @@ class TestMemorySystemFunctionality:
 
     def test_work_history_recording(self):
         """测试工作历史记录"""
-        from core.memory.unified_memory_system import get_project_memory
+        from core.framework.memory.unified_memory_system import get_project_memory
 
         memory = get_project_memory("/Users/xujian/Athena工作平台")
 
@@ -331,7 +332,7 @@ class TestMemorySystemPerformance:
         # 这里应该测试搜索性能
         # 简化版只验证搜索方法存在
 
-        from core.memory.unified_memory_system import get_project_memory
+        from core.framework.memory.unified_memory_system import get_project_memory
 
         memory = get_project_memory("/Users/xujian/Athena工作平台")
 

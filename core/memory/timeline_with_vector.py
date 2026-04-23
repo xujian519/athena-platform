@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 class TimelineMemoryWithVector(TimelineMemory):
     """增强的时间线记忆系统 - 集成向量存储"""
 
-    def __init__(self, base_path: str | None = None):
+    def __init__(self, base_path: Optional[str] = None):
         """初始化记忆系统"""
         super().__init__(base_path)
 
@@ -56,9 +56,9 @@ class TimelineMemoryWithVector(TimelineMemory):
         self,
         title: str,
         content: str,
-        event_date: str | None = None,
-        participants: list[str] | None = None,
-        tags: list[str] | None = None,
+        event_date: Optional[str] = None,
+        participants: Optional[list[str]] = None,
+        tags: Optional[list[str]] = None,
         emotional_weight: float = 0.5,
         key_event: bool = False,
         auto_vectorize: bool = True,
@@ -102,8 +102,8 @@ class TimelineMemoryWithVector(TimelineMemory):
         key: str,
         value: Any,
         confidence: float = 1.0,
-        source: str | None = None,
-        tags: list[str] | None = None,
+        source: Optional[str] = None,
+        tags: Optional[list[str]] = None,
         auto_vectorize: bool = True,
     ) -> str:
         """
@@ -137,10 +137,10 @@ class TimelineMemoryWithVector(TimelineMemory):
         self,
         skill_name: str,
         steps: list[str],
-        context: str | None = None,
+        context: Optional[str] = None,
         frequency: int = 1,
         proficiency: float = 0.5,
-        tags: list[str] | None = None,
+        tags: Optional[list[str]] = None,
         auto_vectorize: bool = True,
     ) -> str:
         """
@@ -183,9 +183,9 @@ class TimelineMemoryWithVector(TimelineMemory):
         title: str = "",
         agent: str = "小诺",
         emotional_weight: float = 0.5,
-        tags: list[str] | None = None,
-        participants: list[str] | None = None,
-        event_date: str | None = None,
+        tags: Optional[list[str]] = None,
+        participants: Optional[list[str]] = None,
+        event_date: Optional[str] = None,
         metadata: dict | None = None,
     ):
         """将记忆向量化存储"""
@@ -218,7 +218,7 @@ class TimelineMemoryWithVector(TimelineMemory):
             raise
 
     async def semantic_search(
-        self, query: str, limit: int = 10, memory_type: str | None = None
+        self, query: str, limit: int = 10, memory_type: Optional[str] = None
     ) -> list[dict]:
         """
         语义搜索记忆

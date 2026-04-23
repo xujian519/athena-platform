@@ -40,7 +40,7 @@ def test_patent_analysis_tool():
         tool = registry.get("patent_analysis")
 
         if tool:
-            logger.info(f"✅ 工具已注册: patent_analysis")
+            logger.info("✅ 工具已注册: patent_analysis")
             # 获取统计信息来验证
             stats = registry.get_statistics()
             logger.info(f"   注册工具总数: {stats['total_tools']}")
@@ -81,7 +81,7 @@ def test_patent_analysis_tool():
         )
 
         if result.get("success"):
-            logger.info(f"✅ 基础分析成功")
+            logger.info("✅ 基础分析成功")
             logger.info(f"   专利号: {result['patent_id']}")
             logger.info(f"   分析类型: {result['analysis_type']}")
             logger.info(f"   执行时间: {result['execution_time']}秒")
@@ -113,7 +113,7 @@ def test_patent_analysis_tool():
         )
 
         if result.get("success"):
-            logger.info(f"✅ 创造性评估成功")
+            logger.info("✅ 创造性评估成功")
             logger.info(f"   创造性评分: {result['results']['creativity_score']:.2f}")
             logger.info(f"   技术强度: {result['results']['technical_strength']}")
             logger.info(f"   创新洞察: {len(result['results']['innovation_insights'])}条")
@@ -139,7 +139,7 @@ def test_patent_analysis_tool():
         )
 
         if result.get("success"):
-            logger.info(f"✅ 新颖性判断成功")
+            logger.info("✅ 新颖性判断成功")
             logger.info(f"   新颖性评分: {result['results']['novelty_score']:.2f}")
             logger.info(f"   相似专利数量: {result['results']['similar_patents_count']}")
             logger.info(f"   最高相似度: {result['results']['max_similarity']:.2f}")
@@ -165,10 +165,10 @@ def test_patent_analysis_tool():
         )
 
         if result.get("success"):
-            logger.info(f"✅ 综合分析成功")
+            logger.info("✅ 综合分析成功")
             logger.info(f"   专利性评分: {result['results']['patentability_score']:.2f}/1.0")
             logger.info(f"   分析摘要: {result['results']['analysis_summary']}")
-            logger.info(f"   建议:")
+            logger.info("   建议:")
             for rec in result["results"]["recommendations"]:
                 logger.info(f"     {rec}")
         else:
@@ -189,7 +189,7 @@ def test_patent_analysis_tool():
         logger.info(f"启用工具数: {stats['enabled_tools']}")
         logger.info(f"禁用工具数: {stats['disabled_tools']}")
         logger.info(f"懒加载工具数: {stats['lazy_tools']}")
-        logger.info(f"\n健康状态分布:")
+        logger.info("\n健康状态分布:")
         for status, count in stats['health_distribution'].items():
             logger.info(f"  {status}: {count}")
 

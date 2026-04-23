@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 from __future__ import annotations
 """
@@ -43,7 +42,7 @@ class Participant(Enum):
 class TimelineMemory:
     """时间线记忆系统"""
 
-    def __init__(self, base_path: str | None = None):
+    def __init__(self, base_path: Optional[str] = None):
         """初始化记忆系统"""
         if base_path is None:
             base_path = (
@@ -106,9 +105,9 @@ class TimelineMemory:
         self,
         title: str,
         content: str,
-        event_date: str | None = None,
-        participants: list[str] | None = None,
-        tags: list[str] | None = None,
+        event_date: Optional[str] = None,
+        participants: Optional[list[str]] = None,
+        tags: Optional[list[str]] = None,
         emotional_weight: float = 0.5,
         key_event: bool = False,
     ) -> str:
@@ -174,8 +173,8 @@ class TimelineMemory:
         key: str,
         value: Any,
         confidence: float = 1.0,
-        source: str | None = None,
-        tags: list[str] | None = None,
+        source: Optional[str] = None,
+        tags: Optional[list[str]] = None,
     ) -> str:
         """
         添加语义记忆 - 事实和偏好
@@ -228,10 +227,10 @@ class TimelineMemory:
         self,
         skill_name: str,
         steps: list[str],
-        context: str | None = None,
+        context: Optional[str] = None,
         frequency: int = 1,
         proficiency: float = 0.5,
-        tags: list[str] | None = None,
+        tags: Optional[list[str]] = None,
     ) -> str:
         """
         添加程序记忆 - 操作习惯和技能
@@ -316,7 +315,7 @@ class TimelineMemory:
 
         return memories
 
-    def get_semantic_value(self, key: str, category: str | None = None) -> Any:
+    def get_semantic_value(self, key: str, category: Optional[str] = None) -> Any:
         """获取语义记忆值"""
         memories = self.get_memories_by_type(MemoryType.SEMANTIC)
         for memory in memories:
@@ -367,7 +366,7 @@ class TimelineMemory:
             "last_updated": self.index["last_updated"],
         }
 
-    def export_memory_report(self, output_path: str | None = None) -> str:
+    def export_memory_report(self, output_path: Optional[str] = None) -> str:
         """导出记忆报告"""
         if output_path is None:
             output_path = (

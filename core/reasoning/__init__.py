@@ -627,7 +627,7 @@ except Exception:
 # =============================================================================
 
 
-def get_reasoning_engine(mode: str = "auto", task_description: str | None = None, **kwargs):
+def get_reasoning_engine(mode: str = "auto", task_description: Optional[str] = None, **kwargs):
     """获取推理引擎实例(支持自动选择)
 
     Args:

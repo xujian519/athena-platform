@@ -48,7 +48,7 @@ class OpenCVImageProcessor:
         """检查OpenCV是否可用"""
         return self.available
 
-    def get_version(self) -> str | None:
+    def get_version(self) -> Optional[str]:
         """获取OpenCV版本"""
         if self.available:
             return self.cv2.__version__
@@ -58,7 +58,7 @@ class OpenCVImageProcessor:
         self,
         image_path: str,
         operation: str,
-        parameters: dict[str, Any] | None | None = None
+        parameters: Optional[dict[str, Any]] | None = None
     ) -> dict[str, Any]:
         """
         处理图像
@@ -425,7 +425,7 @@ class OpenCVImageProcessor:
         self,
         image_paths: list[str],
         operation: str,
-        parameters: dict[str, Any] | None | None = None
+        parameters: Optional[dict[str, Any]] | None = None
     ) -> list[dict[str, Any]]:
         """
         批量处理图像

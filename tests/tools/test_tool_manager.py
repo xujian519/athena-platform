@@ -12,9 +12,10 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 import pytest
-from core.tools.tool_manager import ToolManager, ToolSelectionResult
-from core.tools.base import ToolDefinition, ToolRegistry, ToolPriority
+
+from core.tools.base import ToolDefinition, ToolPriority
 from core.tools.tool_group import ToolGroupDef
+from core.tools.tool_manager import ToolManager, ToolSelectionResult
 
 
 class TestToolManager:

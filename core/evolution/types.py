@@ -97,7 +97,7 @@ class EvolutionResult:
 
     # 状态信息
     status: EvolutionStatus = EvolutionStatus.COMPLETED
-    error: str | None = None
+    error: Optional[str] = None
 
     # 时间信息
     started_at: datetime = field(default_factory=datetime.now)

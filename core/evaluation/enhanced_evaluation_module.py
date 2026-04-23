@@ -68,10 +68,10 @@ class EvaluationTaskResult:
 
     success: bool
     task_id: str
-    evaluation_id: str | None = None
+    evaluation_id: Optional[str] = None
     score: float = 0.0
     level: str = "unknown"
-    error: str | None = None
+    error: Optional[str] = None
     execution_time: float = 0.0
     insights: list[str] = field(default_factory=list)
     recommendations: list[str] = field(default_factory=list)
@@ -80,7 +80,7 @@ class EvaluationTaskResult:
 class EnhancedEvaluationModule(BaseModule):
     """增强评估模块 - BaseModule标准接口版本"""
 
-    def __init__(self, agent_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, agent_id: str, config: Optional[dict[str, Any]] = None):
         """
         初始化增强评估模块
 
@@ -204,7 +204,7 @@ class EnhancedEvaluationModule(BaseModule):
         target_id: str,
         evaluation_type: str = "performance",
         criteria: list[dict[str, Any]] | None = None,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> EvaluationTaskResult:
         """
         执行评估
@@ -305,7 +305,7 @@ class EnhancedEvaluationModule(BaseModule):
             )
 
     async def reflect(
-        self, evaluation_id: str, context: dict[str, Any] | None = None
+        self, evaluation_id: str, context: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """
         对评估结果进行反思
@@ -359,7 +359,7 @@ class EnhancedEvaluationModule(BaseModule):
         target_id: str,
         evaluation_type: str = "performance",
         criteria: list[dict[str, Any]] | None = None,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> str:
         """
         创建评估任务

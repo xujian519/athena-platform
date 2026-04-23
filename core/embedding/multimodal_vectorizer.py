@@ -109,7 +109,7 @@ class MultimodalVectorizer:
         logger.info("🚀 多模态向量化器初始化完成")
 
     async def vectorize_file(
-        self, file_path: str | Path | None = None, file_id: str | None = None
+        self, file_path: str | Path | None = None, file_id: Optional[str] = None
     ) -> VectorizationResult:
         """
         向量化单个文件

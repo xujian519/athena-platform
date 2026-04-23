@@ -7,6 +7,6 @@ Hook系统测试包
 作者: Athena平台团队
 创建时间: 2026-04-20
 """
-from __future__ import annotations
 
 __all__ = []
+

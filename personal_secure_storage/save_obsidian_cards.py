@@ -26,7 +26,7 @@ def extract_content_from_card(file_path) -> Any:
                 title = line.strip()
                 break
 
-        # 清理Markdown链接格式 [[文字]]
+        # 清理Markdown链接格式 [[文字]
         content_clean = re.sub(r'\[\[(.*?)\]\]', r'\1', content)
 
         # 清理其他Markdown格式

@@ -38,7 +38,7 @@ class DrawingRequest:
     text_description: str
     drawing_type: str  # 'flowchart', 'mechanical', 'system', 'circuit'
     hand_drawn_sketch: bytes | None = None
-    compliance_requirements: Optional[List[str] = None
+    compliance_requirements: Optional[List[str]] = None
     output_format: str = 'svg'
 
 @dataclass

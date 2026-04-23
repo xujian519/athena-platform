@@ -59,7 +59,7 @@ class MultiModelVectorizer:
     def encode_with_multiple_models(
         self,
         texts: list[str],
-        model_config: dict[str, Any] | None = None,
+        model_config: Optional[dict[str, Any]] = None,
         fusion_strategy: str = 'weighted_average',
         return_individual: bool = False
     ) -> dict[str, Any]:
@@ -353,7 +353,7 @@ class MultiModelVectorizer:
         self,
         patents: list[dict[str, Any]],
         text_fields: list[str] = None,
-        model_config: dict[str, Any] | None = None,
+        model_config: Optional[dict[str, Any]] = None,
         fusion_strategy: str = 'weighted_average'
     ) -> dict[str, Any]:
         """编码专利数据
@@ -406,7 +406,7 @@ class MultiModelVectorizer:
     def batch_encode(
         self,
         text_batches: list[list[str]],
-        model_config: dict[str, Any] | None = None,
+        model_config: Optional[dict[str, Any]] = None,
         fusion_strategy: str = 'weighted_average'
     ) -> list[dict[str, Any]]:
         """批量编码

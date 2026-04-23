@@ -33,8 +33,8 @@ class CollectionConfig:
     description: str
     vector_size: int = 1024
     distance_metric: str = "Cosine"
-    content_types: list[str] | None = None
-    node_types: list[str] | None = None
+    content_types: Optional[list[str]] = None
+    node_types: Optional[list[str]] = None
     priority: int = 1  # 检索优先级
 
 
@@ -135,7 +135,7 @@ class OptimizedCollectionMapper:
         }
 
     def map_node_to_collection(
-        self, node_type: str, content: str | None = None, title: str | None = None
+        self, node_type: str, content: Optional[str] = None, title: Optional[str] = None
     ) -> CollectionType:
         """
         将节点映射到最适合的集合
@@ -163,7 +163,7 @@ class OptimizedCollectionMapper:
         # 3. 默认映射到技术术语集合
         return CollectionType.TECHNICAL_TERMS
 
-    def get_search_strategy(self, query_type: str | None = None) -> list[CollectionType]:
+    def get_search_strategy(self, query_type: Optional[str] = None) -> list[CollectionType]:
         """
         根据查询类型获取最优的检索策略
 

@@ -63,7 +63,7 @@ class NodeInfo:
     node_id: str
     attributes: dict[str, Any] = field(default_factory=dict)
     centrality_scores: dict[str, float] = field(default_factory=dict)
-    community_id: int | None = None
+    community_id: Optional[int] = None
 
 
 @dataclass
@@ -127,7 +127,7 @@ class NetworkXGraphManager:
         self.graph.add_edge(source, target, weight=weight, **attributes)
         self.logger.debug(f"添加边: {source} -> {target} (权重: {weight})")
 
-    def add_nodes_from(self, nodes: list[tuple[str, dict[str, Any]]]) -> None:
+    def add_nodes_from(self, nodes: list[tuple[str, dict[str, Any]]) -> None]:
         """批量添加节点
 
         Args:
@@ -136,7 +136,7 @@ class NetworkXGraphManager:
         self.graph.add_nodes_from(nodes)
         self.logger.debug(f"批量添加 {len(nodes)} 个节点")
 
-    def add_edges_from(self, edges: list[tuple[str, str, float, dict[str, Any]]]) -> None:
+    def add_edges_from(self, edges: list[tuple[str, str, float, dict[str, Any]]) -> None]:
         """批量添加边
 
         Args:
@@ -185,7 +185,7 @@ class NetworkXGraphManager:
 
     def get_shortest_path(
         self, source: str, target: str, weight: str = "weight"
-    ) -> list[str | None]:
+    ) -> Optional[list[str]]:
         """获取最短路径
 
         Args:
@@ -206,7 +206,7 @@ class NetworkXGraphManager:
             return None
 
     def get_all_shortest_paths(
-        self, source: str, cutoff: int | None = None
+        self, source: str, cutoff: Optional[int] = None
     ) -> dict[str, list[str]]:
         """获取到所有节点的最短路径
 
@@ -313,7 +313,7 @@ class NetworkXGraphManager:
 
         return stats
 
-    def find_cycles(self, length: int | None = None) -> list[list[str]]:
+    def find_cycles(self, length: Optional[int] = None) -> list[list[str]]:
         """查找图中的环
 
         Args:

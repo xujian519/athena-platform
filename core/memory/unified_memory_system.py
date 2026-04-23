@@ -65,7 +65,7 @@ class MemoryEntry:
     metadata: dict[str, Any] = field(default_factory=dict)
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
-    embedding: Optional[list[float]] = None
+    embedding: list[float] | None = None
 
 
 class UnifiedMemorySystem:
@@ -92,7 +92,7 @@ class UnifiedMemorySystem:
     def __init__(
         self,
         global_memory_path: str = "~/.athena/memory",
-        current_project_path: Optional[str] = None
+        current_project_path: str | None = None
     ) -> None:
         """初始化记忆系统
 
@@ -155,7 +155,7 @@ class UnifiedMemorySystem:
         category: MemoryCategory,
         key: str,
         content: str,
-        metadata: Optional[dict[str, Any]] = None
+        metadata: dict[str, Any] | None = None
     ) -> MemoryEntry:
         """写入记忆
 
@@ -211,14 +211,14 @@ class UnifiedMemorySystem:
 
         except Exception as e:
             logger.error(f"记忆写入失败: {e}")
-            raise IOError(f"无法写入记忆: {e}") from e
+            raise OSError(f"无法写入记忆: {e}") from e
 
     def read(
         self,
         type: MemoryType,
         category: MemoryCategory,
         key: str
-    ) -> Optional[str]:
+    ) -> str | None:
         """读取记忆
 
         Args:
@@ -243,7 +243,7 @@ class UnifiedMemorySystem:
                 return None
 
             # 读取文件
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 content = f.read()
 
             logger.debug(
@@ -259,8 +259,8 @@ class UnifiedMemorySystem:
     def search(
         self,
         query: str,
-        type: Optional[MemoryType] = None,
-        category: Optional[MemoryCategory] = None,
+        type: MemoryType | None = None,
+        category: MemoryCategory | None = None,
         limit: int = 10,
         use_cache: bool = True
     ) -> list[MemoryEntry]:
@@ -480,7 +480,7 @@ class UnifiedMemorySystem:
             return {}
 
         try:
-            with open(index_file, 'r', encoding='utf-8') as f:
+            with open(index_file, encoding='utf-8') as f:
                 index = json.load(f)
 
             logger.info(f"记忆索引加载成功 - {len(index)} 条记录")

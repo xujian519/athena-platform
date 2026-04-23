@@ -15,15 +15,14 @@ EnhancedCognitionModule单元测试
 - 边界情况
 """
 
+from unittest.mock import AsyncMock
+
 import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
-
 from core.cognition.enhanced_cognition_module import (
-    EnhancedCognitionModule,
-    EnhancedCognitionConfig,
     CognitionResult,
+    EnhancedCognitionConfig,
+    EnhancedCognitionModule,
 )
-
 
 # ==================== 初始化测试 ====================
 

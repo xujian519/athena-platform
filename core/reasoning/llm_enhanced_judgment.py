@@ -85,7 +85,7 @@ class JudgmentResult:
     recommendations: list[str]
     risk_factors: list[str]
     evidence_items: list[EvidenceItem]
-    llm_analysis: dict[str, Any] | None = None
+    llm_analysis: Optional[dict[str, Any]] = None
     timestamp: datetime = field(default_factory=datetime.now)
 
 

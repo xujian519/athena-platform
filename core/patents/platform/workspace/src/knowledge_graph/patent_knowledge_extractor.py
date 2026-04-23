@@ -862,7 +862,7 @@ class PatentKnowledgeExtractor:
 
         return deduplicated
 
-    def _extract_issuing_authority(self, text: str) -> str | None:
+    def _extract_issuing_authority(self, text: str) -> Optional[str]:
         """提取发布机关"""
         authority_patterns = [
             r'([^。\n]*委员会[^。\n]*)发布',
@@ -877,7 +877,7 @@ class PatentKnowledgeExtractor:
 
         return None
 
-    def _extract_effective_date(self, text: str) -> str | None:
+    def _extract_effective_date(self, text: str) -> Optional[str]:
         """提取生效日期"""
         date_patterns = [
             r'自(\d{4}年\d{1,2}月\d{1,2}日)起施行',
@@ -892,14 +892,14 @@ class PatentKnowledgeExtractor:
 
         return None
 
-    def _extract_chapter_number(self, chapter_title: str) -> str | None:
+    def _extract_chapter_number(self, chapter_title: str) -> Optional[str]:
         """提取章节编号"""
         match = re.search(r'第([一二三四五六七八九十百千万\d]+)章', chapter_title)
         if match:
             return match.group(1)
         return None
 
-    def _extract_case_number_from_filename(self, filename: str) -> str | None:
+    def _extract_case_number_from_filename(self, filename: str) -> Optional[str]:
         """从文件名提取案件编号"""
         # 常见的案件编号模式
         patterns = [

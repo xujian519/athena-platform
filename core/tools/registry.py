@@ -54,11 +54,11 @@ class ParameterSchema:
     description: str
     required: bool = True
     default: Any = None
-    enum: list[str] | None = None  # 枚举值
-    min_value: float | None = None  # 最小值 (用于 number/integer)
-    max_value: float | None = None  # 最大值
+    enum: Optional[list[str]] = None  # 枚举值
+    min_value: Optional[float] = None  # 最小值 (用于 number/integer)
+    max_value: Optional[float] = None  # 最大值
     items_type: ParameterType | None = None  # 数组元素类型
-    properties: dict[str, "ParameterSchema"] | None = None  # 对象属性
+    properties: dict[str, ParameterSchema] | None = None  # 对象属性
 
     def to_openai_schema(self) -> dict[str, Any]:
         """
@@ -191,8 +191,8 @@ class UnifiedToolRegistry:
         description: str,
         category: ToolCategory,
         parameters: list[ParameterSchema],
-        domains: list[str] | None = None,
-        tags: list[str] | None = None,
+        domains: Optional[list[str]] = None,
+        tags: Optional[list[str]] = None,
         priority: int = 1,
     ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
         """
@@ -311,7 +311,7 @@ class UnifiedToolRegistry:
         """
         return [t for t in self._registered_tools.values() if domain in t.domains]
 
-    def to_openai_schemas(self, tool_ids: list[str] | None = None) -> list[dict]:
+    def to_openai_schemas(self, tool_ids: Optional[list[str]] = None) -> list[dict]:
         """
         生成 OpenAI function calling schemas
 
@@ -467,8 +467,8 @@ def register_tool(
     description: str,
     category: ToolCategory,
     parameters: list[ParameterSchema],
-    domains: list[str] | None = None,
-    tags: list[str] | None = None,
+    domains: Optional[list[str]] = None,
+    tags: Optional[list[str]] = None,
     priority: int = 1,
 ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
     """

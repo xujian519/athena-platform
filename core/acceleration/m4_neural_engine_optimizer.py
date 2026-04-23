@@ -153,7 +153,7 @@ class M4NeuralEngineOptimizer:
                                                 model: Any,
                                                 model_name: str,
                                                 input_shape: tuple[int, ...] = (1, 3, 224, 224),
-                                                min_deployment_target: ct.target.i_os15 = None) -> str | None:
+                                                min_deployment_target: ct.target.i_os15 = None) -> Optional[str]:
         """转换为Core ML模型以利用Neural Engine"""
         if not APPLE_ML_AVAILABLE:
             logger.error('Core ML不可用,无法转换模型')

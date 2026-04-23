@@ -218,7 +218,7 @@ class EnvLoader:
         return cls.get(key, default, str, required)
 
     @classmethod
-    def get_list(cls, key: str | None = None, default: list | None = None, required: bool = False) -> list:
+    def get_list(cls, key: Optional[str] = None, default: list | None = None, required: bool = False) -> list:
         """获取列表类型环境变量"""
         if default is None:
             default = []
@@ -281,7 +281,7 @@ def init_env(env_file: Path | None = None, force_reload: bool = False) -> Any:
 
 
 def get_env(
-    key: str | None = None, default: T | None = None, var_type: type[T] = str, required: bool = False
+    key: Optional[str] = None, default: T | None = None, var_type: type[T] = str, required: bool = False
 ) -> T | None:
     """获取环境变量(便捷函数)"""
     return EnvLoader.get(key, default, var_type, required)
@@ -307,7 +307,7 @@ def get_env_str(key: str, default: str = "", required: bool = False) -> str:
     return EnvLoader.get_str(key, default, required)
 
 
-def get_env_list(key: str | None = None, default: list | None = None, required: bool = False) -> list:
+def get_env_list(key: Optional[str] = None, default: list | None = None, required: bool = False) -> list:
     """获取列表环境变量(便捷函数)"""
     return EnvLoader.get_list(key, default, required)
 

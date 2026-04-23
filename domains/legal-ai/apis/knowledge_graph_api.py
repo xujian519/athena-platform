@@ -728,12 +728,12 @@ async def get_graph_statistics(graph_id: str):
                     'MATCH (n) RETURN n.entity_type as type, COUNT(n) as count'
                 )
                 for r in res1:
-                    node_types[r['type']] = r['count']
+                    node_types[r['type'] = r['count']
                 res2 = session.run(
                     'MATCH ()-[r]->() RETURN type(r) as type, COUNT(r) as count'
                 )
                 for r in res2:
-                    relation_types[r['type']] = r['count']
+                    relation_types[r['type'] = r['count']
                 return {
                     'graph_id': graph_id,
                     'total_nodes': sum(node_types.values()),

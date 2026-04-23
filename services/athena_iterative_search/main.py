@@ -90,7 +90,7 @@ class IterativeSearchResponse(BaseModel):
     query_id: str
     original_query: str
     optimized_queries: list[str]
-    results: list[dict[str, Any]]
+    results: list[dict[str, Any]
     metadata: dict[str, Any]
     timestamp: str
 

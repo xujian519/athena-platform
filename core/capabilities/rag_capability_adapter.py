@@ -40,7 +40,7 @@ class RAGCapabilityAdapter:
     async def invoke_vector_search(
         self,
         query_text: str,
-        collections: list[str] | None = None,
+        collections: Optional[list[str]] = None,
         limit: int = 5,
         threshold: float = 0.3,
         task_type: str = "default",

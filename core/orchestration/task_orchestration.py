@@ -67,11 +67,11 @@ class TaskResult:
     task_id: str  # 任务ID
     status: TaskStatus  # 执行状态
     result: Any = None  # 执行结果
-    error: str | None = None  # 错误信息
-    start_time: float | None = None  # 开始时间
-    end_time: float | None = None  # 结束时间
-    duration_ms: float | None = None  # 耗时(毫秒)
-    agent_used: str | None = None  # 使用的智能体
+    error: Optional[str] = None  # 错误信息
+    start_time: Optional[float] = None  # 开始时间
+    end_time: Optional[float] = None  # 结束时间
+    duration_ms: Optional[float] = None  # 耗时(毫秒)
+    agent_used: Optional[str] = None  # 使用的智能体
     metadata: dict[str, Any] = field(default_factory=dict)  # 元数据
 
     def to_dict(self) -> dict[str, Any]:
@@ -132,8 +132,8 @@ class DAGWorkflow:
     edges: list[tuple[str, str]] = field(default_factory=list)  # 边列表 (from_task_id, to_task_id)
     status: TaskStatus = TaskStatus.PENDING  # 工作流状态
     created_at: float = field(default_factory=time.time)  # 创建时间
-    started_at: float | None = None  # 开始时间
-    completed_at: float | None = None  # 完成时间
+    started_at: Optional[float] = None  # 开始时间
+    completed_at: Optional[float] = None  # 完成时间
     metadata: dict[str, Any] = field(default_factory=dict)  # 元数据
 
     def add_task(self, task: Task) -> None:
@@ -494,7 +494,7 @@ class OrchestrationEngine:
         logger.info(f"   最大并发任务数: {max_concurrent_tasks}")
 
     def create_workflow(
-        self, name: str, description: str, metadata: dict[str, Any] | None = None
+        self, name: str, description: str, metadata: Optional[dict[str, Any]] = None
     ) -> DAGWorkflow:
         """
         创建新工作流
@@ -630,7 +630,7 @@ class OrchestrationEngine:
 
         return results
 
-    def get_workflow_status(self, workflow_id: str) -> dict[str, Any] | None:
+    def get_workflow_status(self, workflow_id: str) -> Optional[dict[str, Any]]:
         """获取工作流状态"""
         with self.lock:
             workflow = self.active_workflows.get(workflow_id)
@@ -675,7 +675,7 @@ def create_task(
     name: str,
     capability: Capability,
     input_data: dict[str, Any],    description: str = "",
-    dependencies: list[str] | None = None,
+    dependencies: Optional[list[str]] = None,
     priority: int = 0,
     agent_preference: AgentType | None = None,
 ) -> Task:

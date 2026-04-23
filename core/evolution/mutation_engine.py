@@ -43,7 +43,7 @@ class MutationResult:
     success: bool
     mutation: Mutation
     actual_improvement: float = 0.0
-    error: str | None = None
+    error: Optional[str] = None
     timestamp: datetime = field(default_factory=datetime.now)
 
 

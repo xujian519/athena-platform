@@ -120,7 +120,7 @@ class SubGoal:
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
     due_date: datetime | None = None
-    assigned_agent: str | None = None
+    assigned_agent: Optional[str] = None
 
 
 @dataclass

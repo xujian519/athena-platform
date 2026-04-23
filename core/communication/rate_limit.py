@@ -47,7 +47,7 @@ class RateLimitInfo:
     allowed: bool
     remaining: int
     reset_time: float
-    retry_after: float | None = None
+    retry_after: Optional[float] = None
 
 
 class RateLimiter:
@@ -262,7 +262,7 @@ class MultiLevelRateLimiter:
 
         logger.info("多级速率限制器初始化完成")
 
-    def is_allowed(self, ip: str | None = None, user_id: str | None = None) -> bool:
+    def is_allowed(self, ip: Optional[str] = None, user_id: Optional[str] = None) -> bool:
         """
         检查是否允许请求
 

@@ -54,15 +54,15 @@ class OCRRequest(BaseModel):
 class OCRResponse(BaseModel):
     """OCR响应"""
     success: bool
-    task_id: str | None = None
+    task_id: Optional[str] = None
     agent_id: str
     status: str
-    text: str | None = None
-    confidence: float | None = None
-    processing_time: float | None = None
-    word_count: int | None = None
-    char_count: int | None = None
-    error: str | None = None
+    text: Optional[str] = None
+    confidence: Optional[float] = None
+    processing_time: Optional[float] = None
+    word_count: Optional[int] = None
+    char_count: Optional[int] = None
+    error: Optional[str] = None
 
 class ImageProcessRequest(BaseModel):
     """图像处理请求"""
@@ -73,12 +73,12 @@ class ImageProcessRequest(BaseModel):
 class ImageProcessResponse(BaseModel):
     """图像处理响应"""
     success: bool
-    task_id: str | None = None
+    task_id: Optional[str] = None
     agent_id: str
     operation: str
-    result: dict[str, Any] | None | None = None
-    processing_time: float | None = None
-    error: str | None = None
+    result: Optional[dict[str, Any]] | None = None
+    processing_time: Optional[float] = None
+    error: Optional[str] = None
 
 class BatchProcessRequest(BaseModel):
     """批量处理请求"""

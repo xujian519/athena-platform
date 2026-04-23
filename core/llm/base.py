@@ -127,10 +127,10 @@ class LLMRequest:
     enable_thinking: bool = False  # 是否启用深度思考模式
 
     # 约束条件
-    preferred_model: str | None = None  # 偏好的模型
-    max_cost: float | None = None  # 最大成本
-    max_latency: float | None = None  # 最大延迟(秒)
-    require_quality: float | None = None  # 要求的最小质量分数
+    preferred_model: Optional[str] = None  # 偏好的模型
+    max_cost: Optional[float] = None  # 最大成本
+    max_latency: Optional[float] = None  # 最大延迟(秒)
+    require_quality: Optional[float] = None  # 要求的最小质量分数
     prefer_local: bool = False  # 是否偏好本地模型
 
     def to_dict(self) -> dict[str, Any]:

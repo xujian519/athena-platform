@@ -130,10 +130,10 @@ def save_stock_learning_notes() -> None:
 - **类别**: {stock_learning_content['key_theorems'][6]['category']}
 
 ## 💡 投资哲学
-{chr(10).join([f"- {philosophy}" for philosophy in stock_learning_content['investment_philosophy']])}
+{chr(10).join([f"- {philosophy}" for philosophy in stock_learning_content['investment_philosophy'])}
 
 ## 📚 学习要点
-{chr(10).join([f"### {point['point']}{chr(10)}{point['description']}" for point in stock_learning_content['learning_points']])}""",
+{chr(10).join([f"### {point['point']}{chr(10)}{point['description']}" for point in stock_learning_content['learning_points'])}""",
         'text',
         2,  # 投资学习比较私密
         json.dumps({

@@ -7,15 +7,14 @@ Hook链和中间件测试
 作者: Athena平台团队
 创建时间: 2026-04-20
 """
-from __future__ import annotations
 
 import asyncio
-import pytest
 from dataclasses import dataclass
 from typing import Any
 
-from core.hooks.base import HookContext, HookRegistry, HookType
+import pytest
 
+from core.hooks.base import HookContext, HookRegistry, HookType
 
 # 定义增强功能的类型（待实现）
 
@@ -361,3 +360,4 @@ __all__ = [
     "TestHookResult",
     "TestContextModification",
 ]
+

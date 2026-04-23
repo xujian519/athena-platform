@@ -50,7 +50,7 @@ class GoogleScholarSearchTool(BaseSearchTool):
     集成: Serper.dev API
     """
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化 Google Scholar 搜索工具
 
@@ -312,14 +312,14 @@ from ..registry.tool_registry import register_to_registry
 
 
 @register_to_registry(category="academic_search", auto_init=False)
-def create_google_scholar_tool(config: dict[str, Any] | None = None) -> GoogleScholarSearchTool:
+def create_google_scholar_tool(config: Optional[dict[str, Any]] = None) -> GoogleScholarSearchTool:
     """创建 Google Scholar 搜索工具的工厂函数"""
     return GoogleScholarSearchTool(config)
 
 
 # 便捷函数
 async def create_scholar_search(
-    serper_api_key: str | None = None, enable_cache: bool = True
+    serper_api_key: Optional[str] = None, enable_cache: bool = True
 ) -> GoogleScholarSearchTool:
     """
     创建并初始化 Google Scholar 搜索工具

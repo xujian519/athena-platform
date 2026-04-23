@@ -60,7 +60,7 @@ class GLMModelSelector:
         if config_path is None:
             config_path = Path(__file__).parent.parent.parent / "config" / "glm_models.yaml"
 
-        with open(config_path, 'r', encoding='utf-8') as f:
+        with open(config_path, encoding='utf-8') as f:
             self.config = yaml.safe_load(f)
 
         self.models = self.config['models']

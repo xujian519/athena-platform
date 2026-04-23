@@ -193,9 +193,9 @@ class HybridSearchResult:
 @dataclass
 class ImageSearchQuery:
     """图像检索查询"""
-    query_image_id: str | None     # 查询图像ID
+    query_image_id: Optional[str]     # 查询图像ID
     query_image_vector: np.ndarray | None  # 查询图像向量
-    query_text: str | None         # 辅助文本描述
+    query_text: Optional[str]         # 辅助文本描述
     query_text_vector: np.ndarray | None   # 文本向量
     image_type_filter: ImageType | None    # 图像类型过滤
     top_k: int = 10                   # 返回数量
@@ -403,7 +403,7 @@ class CrossModalRetriever:
         self,
         query_vector: np.ndarray,
         top_k: int = 10,
-        filters: dict[str, Any] | None = None
+        filters: Optional[dict[str, Any]] = None
     ) -> list[tuple[str, float]]:
         """
         使用文本向量搜索图像
@@ -439,7 +439,7 @@ class CrossModalRetriever:
         self,
         query_vector: np.ndarray,
         top_k: int = 10,
-        filters: dict[str, Any] | None = None
+        filters: Optional[dict[str, Any]] = None
     ) -> list[tuple[str, float]]:
         """
         使用图像向量搜索文本
@@ -689,7 +689,7 @@ class MultimodalRetrievalSystem:
         query: str,
         query_image: bytes | None = None,
         config: RetrievalConfig | None = None,
-        filters: dict[str, Any] | None = None
+        filters: Optional[dict[str, Any]] = None
     ) -> HybridSearchResult:
         """
         执行多模态检索
@@ -769,7 +769,7 @@ class MultimodalRetrievalSystem:
         self,
         query: str,
         config: RetrievalConfig,
-        filters: dict[str, Any] | None
+        filters: Optional[dict[str, Any]]
     ) -> list[SearchResult]:
         """执行文本检索"""
         results = []
@@ -799,7 +799,7 @@ class MultimodalRetrievalSystem:
         self,
         query_image: bytes,
         config: RetrievalConfig,
-        filters: dict[str, Any] | None
+        filters: Optional[dict[str, Any]]
     ) -> list[SearchResult]:
         """执行图像检索"""
         results = []
@@ -833,7 +833,7 @@ class MultimodalRetrievalSystem:
         self,
         query: str,
         config: RetrievalConfig,
-        filters: dict[str, Any] | None
+        filters: Optional[dict[str, Any]]
     ) -> list[SearchResult]:
         """执行跨模态检索"""
         results = []

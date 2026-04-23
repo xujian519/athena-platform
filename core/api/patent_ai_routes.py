@@ -47,7 +47,7 @@ class ClassificationCode(BaseModel):
     """分类代码"""
     code: str
     confidence: float
-    description: str | None = None
+    description: Optional[str] = None
 
 
 class ClassifyResponse(BaseModel):
@@ -61,7 +61,7 @@ class ClaimRevisionRequest(BaseModel):
     """权利要求修订请求"""
     claims: list[str] = Field(..., description="原始权利要求列表")
     office_action: str = Field(..., description="审查意见文本")
-    prior_art: list[str] | None = Field(default=None, description="对比文件列表")
+    prior_art: Optional[list[str]] = Field(default=None, description="对比文件列表")
     revision_mode: str = Field(default="conservative", description="修订模式 (conservative/balanced/aggressive)")
 
 
@@ -95,7 +95,7 @@ class WeakPoint(BaseModel):
     category: str
     issue: str
     impact: str
-    suggestion: str | None = None
+    suggestion: Optional[str] = None
 
 
 class InvalidityPredictionResponse(BaseModel):
@@ -132,8 +132,8 @@ class QualityScoringResponse(BaseModel):
 class RiskAssessmentRequest(BaseModel):
     """风险评估请求"""
     claims: list[str] = Field(..., description="权利要求列表")
-    cpc_code: str | None = Field(default=None, description="CPC分类代码")
-    assignee_type: str | None = Field(default=None, description="权利人类型")
+    cpc_code: Optional[str] = Field(default=None, description="CPC分类代码")
+    assignee_type: Optional[str] = Field(default=None, description="权利人类型")
 
 
 class RiskAssessmentResponse(BaseModel):
@@ -150,8 +150,8 @@ class DraftFullSpecRequest(BaseModel):
     """完整9阶段说明书撰写请求"""
     disclosure: str = Field(..., description="技术交底书内容")
     client: str = Field(default="", description="客户名称")
-    invention_type: str | None = Field(default=None, description="发明类型")
-    drawing_paths: list[str] | None = Field(default=None, description="附图路径列表")
+    invention_type: Optional[str] = Field(default=None, description="发明类型")
+    drawing_paths: Optional[list[str]] = Field(default=None, description="附图路径列表")
     prior_art: list[dict] | None = Field(default=None, description="对比文件列表")
     enable_examiner_simulation: bool = Field(default=True, description="启用审查员模拟")
     max_iterations: int = Field(default=3, ge=1, le=5, description="最大迭代次数")
@@ -185,11 +185,11 @@ class DraftFullSpecResponse(BaseModel):
     current_phase: int
     phases_completed: list[int]
     processing_time_ms: float
-    invention_title: str | None = None
-    claims_count: int | None = None
-    word_count: int | None = None
+    invention_title: Optional[str] = None
+    claims_count: Optional[int] = None
+    word_count: Optional[int] = None
     examiner_report: ExaminerReportResponse | None = None
-    full_specification: str | None = None
+    full_specification: Optional[str] = None
     notes: list[str] = []
 
 
@@ -410,8 +410,8 @@ async def score_quality(request: QualityScoringRequest):
 @router.get("/risk/assess", response_model=RiskAssessmentResponse)
 async def assess_risk(
     claims: list[str] = Query(..., description="权利要求列表"),
-    cpc_code: str | None = Query(None, description="CPC分类代码"),
-    assignee_type: str | None = Query(None, description="权利人类型"),
+    cpc_code: Optional[str] = Query(None, description="CPC分类代码"),
+    assignee_type: Optional[str] = Query(None, description="权利人类型"),
 ):
     """
     风险评估 (快速)
@@ -662,7 +662,7 @@ async def review_specification_quality(
 
 @router.get("/tasks", response_model=TaskListResponse)
 async def list_tasks(
-    status: str | None = Query(None, description="筛选状态"),
+    status: Optional[str] = Query(None, description="筛选状态"),
     limit: int = Query(20, ge=1, le=100, description="返回数量限制")
 ):
     """

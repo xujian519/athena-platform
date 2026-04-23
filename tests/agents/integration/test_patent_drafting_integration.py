@@ -12,22 +12,19 @@ Author: Athena Team
 Date: 2026-04-23
 """
 
-import pytest
 import asyncio
-import json
 import time
-from unittest.mock import Mock, AsyncMock, patch, MagicMock
 from datetime import datetime
-from typing import Dict, Any, List
+from unittest.mock import patch
 
-from core.agents.xiaona.patent_drafting_proxy import PatentDraftingProxy
-from core.agents.xiaona.base_component import (
+import pytest
+
+from core.framework.agents.xiaona.base_component import (
     AgentExecutionContext,
-    AgentExecutionResult,
     AgentStatus,
 )
-from core.agents.xiaona.patent_drafting_prompts import PatentDraftingPrompts
-
+from core.framework.agents.xiaona.patent_drafting_prompts import PatentDraftingPrompts
+from core.framework.agents.xiaona.patent_drafting_proxy import PatentDraftingProxy
 
 # ========== 测试数据 Fixtures ==========
 

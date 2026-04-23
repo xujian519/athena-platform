@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺·双鱼公主系统深度检查器
 Xiaonuo Pisces Princess Deep System Checker
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
 import asyncio
-from core.agent.xiaonuo_integrated_enhanced import XiaonuoIntegratedEnhanced
+
+from core.framework.agents.xiaonuo_integrated_enhanced import XiaonuoIntegratedEnhanced
+
 
 async def deep_system_check():
     """深度检查小诺系统"""
@@ -31,7 +33,7 @@ async def deep_system_check():
     engine_attrs = [attr for attr in all_attrs if 'engine' in attr.lower()]
     print(f"\n⚙️ 引擎相关属性 ({len(engine_attrs)}个):")
     for attr in sorted(engine_attrs):
-        has_value = hasattr(princess, attr)
+        hasattr(princess, attr)
         value = getattr(princess, attr, None)
         value_type = type(value).__name__ if value else "None"
         print(f"  • {attr}: {value_type}")
@@ -40,13 +42,13 @@ async def deep_system_check():
     cognition_attrs = [attr for attr in all_attrs if 'cognit' in attr.lower()]
     print(f"\n🧠 认知相关属性 ({len(cognition_attrs)}个):")
     for attr in sorted(cognition_attrs):
-        has_value = hasattr(princess, attr)
+        hasattr(princess, attr)
         value = getattr(princess, attr, None)
         value_type = type(value).__name__ if value else "None"
         print(f"  • {attr}: {value_type}")
 
     # 检查父类
-    print(f"\n🏛️ 类继承链:")
+    print("\n🏛️ 类继承链:")
     cls = princess.__class__
     inheritance_chain = []
     while cls:
@@ -58,7 +60,7 @@ async def deep_system_check():
         print(f"{indent}└─ {class_name}")
 
     # 检查实际可用的引擎
-    print(f"\n✅ 实际可用的引擎:")
+    print("\n✅ 实际可用的引擎:")
     engine_status = {}
 
     engines_to_check = [
@@ -84,13 +86,13 @@ async def deep_system_check():
             print(f"  ❌ {display_name}: 不存在")
 
     # 检查是否有间接的认知功能
-    print(f"\n🔍 检查间接认知功能:")
+    print("\n🔍 检查间接认知功能:")
 
     # 检查NLP相关
     if hasattr(princess, 'nlp_adapter'):
         print(f"  ✅ NLP适配器: {type(princess.nlp_adapter).__name__}")
     else:
-        print(f"  ❌ NLP适配器: 不存在")
+        print("  ❌ NLP适配器: 不存在")
 
     # 检查是否有认知处理方法
     cognitive_methods = ['cognize', 'reason', 'think', 'understand', 'analyze']
@@ -102,19 +104,19 @@ async def deep_system_check():
     if found_methods:
         print(f"  ✅ 认知方法: {', '.join(found_methods)}")
     else:
-        print(f"  ❌ 认知方法: 未找到")
+        print("  ❌ 认知方法: 未找到")
 
     # 尝试功能测试
-    print(f"\n🧪 功能测试:")
+    print("\n🧪 功能测试:")
     try:
         # 测试基础处理能力
-        result = await princess.process_input("你好，小诺", "text")
-        print(f"  ✅ 基础处理: 成功")
+        await princess.process_input("你好，小诺", "text")
+        print("  ✅ 基础处理: 成功")
     except Exception as e:
         print(f"  ❌ 基础处理: {e}")
 
     # 总结
-    print(f"\n📊 系统状态总结:")
+    print("\n📊 系统状态总结:")
     operational_count = sum(1 for status in engine_status.values() if status['exists'])
     total_count = len(engine_status)
     print(f"  • 引擎可用率: {operational_count}/{total_count} ({operational_count/total_count*100:.1f}%)")

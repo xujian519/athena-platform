@@ -59,7 +59,7 @@ class KnowledgeNode:
     type: NodeType
     name: str
     properties: dict[str, Any]
-    text: str | None = None
+    text: Optional[str] = None
 
 
 @dataclass
@@ -535,7 +535,7 @@ class PatentRulesGraphBuilder:
         source_id: str,
         target_id: str,
         relation_type: RelationType,
-        properties: dict[str, Any] | None = None,
+        properties: Optional[dict[str, Any]] = None,
     ):
         """添加关系"""
         relation = KnowledgeRelation(

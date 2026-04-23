@@ -146,7 +146,7 @@ class StatelessMCPClient:
 
         logger.info(f"✅ 动态连接池已初始化: {self.min_pool_size}-{self.max_pool_size}")
 
-    async def connect_to_server(self, command: str, args: list[str] | None = None) -> dict[str, Any]:
+    async def connect_to_server(self, command: str, args: Optional[list[str]] = None) -> dict[str, Any]:
         """
         连接到MCP服务器
 
@@ -197,7 +197,7 @@ class StatelessMCPClient:
             logger.error(f"❌ 连接测试失败: {e}", exc_info=True)
             return {"server_name": server_name, "status": "failed", "error": str(e)}
 
-    async def _create_connection(self, server_name: str | None = None):
+    async def _create_connection(self, server_name: Optional[str] = None):
         """
         创建新的连接
 

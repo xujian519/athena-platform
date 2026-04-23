@@ -18,8 +18,9 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from core.logging_config import setup_logging
 from core.intelligence.reflection_engine_v5 import ReflectionType, ThoughtStep
+
+from core.logging_config import setup_logging
 
 logger = setup_logging()
 
@@ -30,7 +31,7 @@ async def demo_basic_usage():
     print("📖 演示1: 基本使用".center(80))
     print("=" * 80)
 
-    from core.agents.xiaonuo.enhanced_xiaonuo import EnhancedXiaonuo
+    from core.framework.agents.xiaonuo.enhanced_xiaonuo import EnhancedXiaonuo
 
     # 创建实例
     print("\n🤖 创建 Enhanced Xiaonuo 实例...")
@@ -49,7 +50,7 @@ async def demo_basic_usage():
     print(f"\n🤖 响应:\n{response}")
 
     # 查看性能统计
-    print(f"\n📊 性能统计:")
+    print("\n📊 性能统计:")
     print(f"  - 交互次数: {agent.performance_tracker['interactions']}")
 
     print("\n✅ 基本使用演示完成")
@@ -61,7 +62,7 @@ async def demo_reflection():
     print("📖 演示2: 反思功能".center(80))
     print("=" * 80)
 
-    from core.agents.xiaonuo.enhanced_xiaonuo import EnhancedXiaonuo
+    from core.framework.agents.xiaonuo.enhanced_xiaonuo import EnhancedXiaonuo
 
     agent = EnhancedXiaonuo()
 
@@ -107,14 +108,14 @@ async def demo_reflection():
         reflection_types=[ReflectionType.OUTPUT, ReflectionType.PROCESS, ReflectionType.CAUSAL],
     )
 
-    print(f"\n📊 反思结果:")
+    print("\n📊 反思结果:")
     print(f"  - 循环ID: {loop.loop_id}")
     print(f"  - 反思类型数: {len(loop.reflection_result)}")
     print(f"  - 因子数: {len(loop.causal_factors)}")
     print(f"  - 行动项数: {len(loop.action_items)}")
 
     if loop.action_items:
-        print(f"\n📝 生成的行动项:")
+        print("\n📝 生成的行动项:")
         for action in loop.action_items[:3]:
             print(f"  - {action.description} (优先级: {action.priority.value})")
 
@@ -127,7 +128,7 @@ async def demo_with_reflection():
     print("📖 演示3: 带反思的完整处理流程".center(80))
     print("=" * 80)
 
-    from core.agents.xiaonuo.enhanced_xiaonuo import EnhancedXiaonuo
+    from core.framework.agents.xiaonuo.enhanced_xiaonuo import EnhancedXiaonuo
 
     agent = EnhancedXiaonuo()
 
@@ -142,7 +143,7 @@ async def demo_with_reflection():
     print(f"\n🤖 响应:\n{response}")
 
     # 查看性能统计
-    print(f"\n📊 处理后的性能统计:")
+    print("\n📊 处理后的性能统计:")
     print(f"  - 交互次数: {agent.performance_tracker['interactions']}")
     print(f"  - 反思次数: {agent.performance_tracker['reflections_performed']}")
     print(f"  - 学习周期: {agent.performance_tracker['learning_cycles']}")
@@ -156,7 +157,7 @@ async def demo_memory_consolidation():
     print("📖 演示4: 记忆整合".center(80))
     print("=" * 80)
 
-    from core.agents.xiaonuo.enhanced_xiaonuo import EnhancedXiaonuo
+    from core.framework.agents.xiaonuo.enhanced_xiaonuo import EnhancedXiaonuo
 
     agent = EnhancedXiaonuo()
 
@@ -173,7 +174,7 @@ async def demo_memory_consolidation():
         print("\n🔄 执行记忆整合...")
         try:
             report = await agent.memory_consolidation.consolidate_memories(force=True)
-            print(f"\n📊 整合报告:")
+            print("\n📊 整合报告:")
             print(f"  - 状态: {report.get('status', 'unknown')}")
             print(f"  - 整合数量: {report.get('consolidated_count', 0)}")
             print(f"  - 发现模式: {report.get('patterns_discovered', 0)}")
@@ -191,7 +192,7 @@ async def demo_statistics():
     print("📖 演示5: 统计信息".center(80))
     print("=" * 80)
 
-    from core.agents.xiaonuo.enhanced_xiaonuo import EnhancedXiaonuo
+    from core.framework.agents.xiaonuo.enhanced_xiaonuo import EnhancedXiaonuo
 
     agent = EnhancedXiaonuo()
 

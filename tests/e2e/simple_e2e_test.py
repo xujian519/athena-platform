@@ -8,11 +8,12 @@
 import asyncio
 import time
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any
 
 # 添加项目根目录到sys.path
 project_root = Path(__file__).parent.parent
 import sys
+
 sys.path.insert(0, str(project_root))
 
 
@@ -23,7 +24,7 @@ class SimpleMockAgent:
         self.agent_id = agent_id
         self.delay = delay
 
-    async def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
+    async def execute(self, context: dict[str, Any]) -> dict[str, Any]:
         """模拟执行"""
         await asyncio.sleep(self.delay)
         return {
@@ -50,7 +51,7 @@ async def test_workflow():
     # 步骤1：检索
     print("\n🔍 步骤1：检索")
     start_time = time.time()
-    search_result = await agents["retriever"].execute({"query": "test"})
+    await agents["retriever"].execute({"query": "test"})
     search_time = time.time() - start_time
     print(f"✅ 检索完成，耗时: {search_time:.2f}秒")
     results.append(("检索", search_time, "success"))
@@ -58,7 +59,7 @@ async def test_workflow():
     # 步骤2：分析
     print("\n🔬 步骤2：分析")
     start_time = time.time()
-    analysis_result = await agents["analyzer"].execute({"data": "test"})
+    await agents["analyzer"].execute({"data": "test"})
     analysis_time = time.time() - start_time
     print(f"✅ 分析完成，耗时: {analysis_time:.2f}秒")
     results.append(("分析", analysis_time, "success"))
@@ -66,7 +67,7 @@ async def test_workflow():
     # 步骤3：撰写
     print("\n✍️ 步骤3：撰写")
     start_time = time.time()
-    writing_result = await agents["writer"].execute({"content": "test"})
+    await agents["writer"].execute({"content": "test"})
     writing_time = time.time() - start_time
     print(f"✅ 撰写完成，耗时: {writing_time:.2f}秒")
     results.append(("撰写", writing_time, "success"))

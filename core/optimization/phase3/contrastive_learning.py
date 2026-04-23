@@ -59,7 +59,7 @@ class ContrastivePair:
     anchor: np.ndarray
     positive: np.ndarray
     negatives: list[np.ndarray]
-    label: int | None = None
+    label: Optional[int] = None
 
 
 @dataclass

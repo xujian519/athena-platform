@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Agentic Design Patterns 简化下载工具 - 专注中文和英文备份
 Agentic Design Patterns Simple Downloader - Focus on Chinese and English Backup
 """
 
 import os
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import subprocess
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+from typing import Any
+
 
 def download_with_git() -> Any:
     """使用Git克隆仓库"""
@@ -57,7 +57,7 @@ def download_with_git() -> Any:
 
                 # 检查关键文件
                 key_files = ['README.md', 'docs/', 'content/', 'chapters/']
-                print(f"\n🔍 检查关键文件:")
+                print("\n🔍 检查关键文件:")
 
                 for key_file in key_files:
                     key_path = original_dir / key_file
@@ -67,7 +67,7 @@ def download_with_git() -> Any:
                         print(f"   ❌ {key_file} (未找到)")
 
                 # 列出所有Markdown文件
-                print(f"\n📚 Markdown文件列表:")
+                print("\n📚 Markdown文件列表:")
                 for root, dirs, files in os.walk(original_dir):
                     for file in files:
                         if file.endswith('.md'):
@@ -282,9 +282,9 @@ def main() -> None:
         print(f"📖 阅读索引: {target_dir}/reading_index.md")
         print(f"📝 使用说明: {target_dir}/usage_notes.md")
 
-        print(f"\n🚀 快速开始:")
+        print("\n🚀 快速开始:")
         print(f"   cd {target_dir}/original")
-        print(f"   # 使用你喜欢的Markdown阅读器打开README.md")
+        print("   # 使用你喜欢的Markdown阅读器打开README.md")
 
     else:
         print("\n❌ 下载失败")

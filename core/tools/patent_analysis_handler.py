@@ -25,8 +25,8 @@ def patent_analysis_handler(
     patent_id: str,
     title: str,
     abstract: str,
-    claims: list[str] | None = None,
-    description: str | None = None,
+    claims: Optional[list[str]] = None,
+    description: Optional[str] = None,
     analysis_type: str = "comprehensive",
     **kwargs: Any,
 ) -> dict[str, Any]:
@@ -134,8 +134,8 @@ def _basic_analysis(
     patent_id: str,
     title: str,
     abstract: str,
-    claims: list[str] | None = None,
-    description: str | None = None,
+    claims: Optional[list[str]] = None,
+    description: Optional[str] = None,
 ) -> dict[str, Any]:
     """
     基础分析：技术特征提取
@@ -166,8 +166,8 @@ def _creativity_analysis(
     patent_id: str,
     title: str,
     abstract: str,
-    claims: list[str] | None = None,
-    description: str | None = None,
+    claims: Optional[list[str]] = None,
+    description: Optional[str] = None,
 ) -> dict[str, Any]:
     """
     创造性评估：基于知识图谱和技术对比
@@ -223,8 +223,8 @@ def _novelty_analysis(
     patent_id: str,
     title: str,
     abstract: str,
-    claims: list[str] | None = None,
-    description: str | None = None,
+    claims: Optional[list[str]] = None,
+    description: Optional[str] = None,
 ) -> dict[str, Any]:
     """
     新颖性判断：基于向量检索
@@ -298,8 +298,8 @@ def _comprehensive_analysis(
     patent_id: str,
     title: str,
     abstract: str,
-    claims: list[str] | None = None,
-    description: str | None = None,
+    claims: Optional[list[str]] = None,
+    description: Optional[str] = None,
 ) -> dict[str, Any]:
     """
     综合分析：整合基础、创造性、新颖性分析
@@ -404,7 +404,7 @@ def _extract_technical_features(text: str) -> list[dict[str, Any]]:
 
 
 def _calculate_simple_creativity_score(
-    title: str, abstract: str, claims: list[str] | None = None
+    title: str, abstract: str, claims: Optional[list[str]] = None
 ) -> float:
     """
     计算简化创造性评分（0-1）

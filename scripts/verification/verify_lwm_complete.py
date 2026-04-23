@@ -6,6 +6,7 @@
 
 import logging
 import time
+
 import psycopg2
 from neo4j import GraphDatabase
 
@@ -144,7 +145,7 @@ class LegalWorldModelVerifierV2:
                     line_str = str(line[0])
                     if 'Execution Time' in line_str:
                         exec_time = float(line_str.split(':')[1].strip().split()[0])
-                        self.results['vector_search'][test['name']] = {
+                        self.results['vector_search'][test['name'] = {
                             'status': 'success',
                             'time_ms': exec_time
                         }
@@ -152,17 +153,17 @@ class LegalWorldModelVerifierV2:
 
                         # 评估性能
                         if exec_time < 20:
-                            logger.info(f"   🟢 性能优秀")
+                            logger.info("   🟢 性能优秀")
                         elif exec_time < 50:
-                            logger.info(f"   🟡 性能良好")
+                            logger.info("   🟡 性能良好")
                         else:
-                            logger.info(f"   🔴 需要优化")
+                            logger.info("   🔴 需要优化")
                         break
                 cursor.close()
 
             except Exception as e:
                 logger.error(f"   ❌ 测试失败: {e}")
-                self.results['vector_search'][test['name']] = {
+                self.results['vector_search'][test['name'] = {
                     'status': 'failed',
                     'error': str(e)
                 }
@@ -213,7 +214,7 @@ class LegalWorldModelVerifierV2:
                     records = list(result)
                     exec_time = (time.time() - start_time) * 1000
 
-                    self.results['graph_query'][query['name']] = {
+                    self.results['graph_query'][query['name'] = {
                         'status': 'success',
                         'time_ms': exec_time,
                         'record_count': len(records)
@@ -228,7 +229,7 @@ class LegalWorldModelVerifierV2:
 
                 except Exception as e:
                     logger.error(f"   ❌ 测试失败: {e}")
-                    self.results['graph_query'][query['name']] = {
+                    self.results['graph_query'][query['name'] = {
                         'status': 'failed',
                         'error': str(e)
                     }
@@ -262,14 +263,14 @@ class LegalWorldModelVerifierV2:
             logger.info(f"\n📊 测试: {test['name']}")
             try:
                 result = test['function']()
-                self.results['overall'][test['name']] = {
+                self.results['overall'][test['name'] = {
                     'status': 'success',
                     'data': result
                 }
                 logger.info(f"   ✅ {test['name']} - 成功")
             except Exception as e:
                 logger.error(f"   ❌ {test['name']} - 失败: {e}")
-                self.results['overall'][test['name']] = {
+                self.results['overall'][test['name'] = {
                     'status': 'failed',
                     'error': str(e)
                 }

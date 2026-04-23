@@ -73,7 +73,7 @@ class MemoryCache(CacheStrategy):
         self,
         key: str,
         value: QueryResult,
-        ttl: int | None = None,
+        ttl: Optional[int] = None,
     ) -> None:
         """
         设置缓存
@@ -196,7 +196,7 @@ class RedisCache(CacheStrategy):
         self,
         key: str,
         value: QueryResult,
-        ttl: int | None = None,
+        ttl: Optional[int] = None,
     ) -> None:
         """
         设置缓存
@@ -316,7 +316,7 @@ class MultiLevelCache(CacheStrategy):
         self,
         key: str,
         value: QueryResult,
-        ttl: int | None = None,
+        ttl: Optional[int] = None,
     ) -> None:
         """
         设置缓存（同时写入L1和L2）

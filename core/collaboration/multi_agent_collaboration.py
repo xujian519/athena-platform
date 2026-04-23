@@ -178,11 +178,11 @@ class Task:
     estimated_duration: timedelta | None = None  # 预估持续时间
     dependencies: list[str] = field(default_factory=list)  # 依赖的其他任务
     metadata: dict[str, Any] = field(default_factory=dict)  # 任务元数据
-    subtasks: list["Task"] = field(default_factory=list)  # 子任务
-    parent_task: str | None = None  # 父任务ID
+    subtasks: list[Task] = field(default_factory=list)  # 子任务
+    parent_task: Optional[str] = None  # 父任务ID
     progress: float = 0.0  # 进度 (0.0 - 1.0)
     result: Any | None = None  # 任务结果
-    error_message: str | None = None  # 错误信息
+    error_message: Optional[str] = None  # 错误信息
 
     def add_dependency(self, task_id: str) -> None:
         """添加任务依赖"""
@@ -217,7 +217,7 @@ class Message:
     timestamp: datetime = field(default_factory=datetime.now)  # 时间戳
     priority: Priority = Priority.NORMAL  # 优先级
     requires_response: bool = False  # 是否需要响应
-    correlation_id: str | None = None  # 关联ID(用于请求-响应匹配)
+    correlation_id: Optional[str] = None  # 关联ID(用于请求-响应匹配)
     expires_at: datetime | None = None  # 过期时间
     retry_count: int = 0  # 重试次数
     max_retries: int = 3  # 最大重试次数
@@ -364,7 +364,7 @@ class ResourceManager:
         agent_id: str,
         resource_type: str,
         requirements: dict[str, Any],        duration: timedelta | None = None,
-    ) -> str | None:
+    ) -> Optional[str]:
         """请求资源"""
         with self._lock:
             # 查找合适资源
@@ -592,7 +592,7 @@ class MultiAgentCollaborationFramework:
 
     def start_collaboration_session(
         self, task_id: str, participants: list[str], session_type: str = "general"
-    ) -> str | None:
+    ) -> Optional[str]:
         """启动协作会话"""
         try:
             session_id = str(uuid.uuid4())

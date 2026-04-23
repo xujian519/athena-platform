@@ -35,14 +35,14 @@ class AnalysisExecutionResult:
     stage: str  # 当前阶段
 
     # 小娜深度分析结果
-    deep_analysis: dict[str, Any] | None = None
+    deep_analysis: Optional[dict[str, Any]] = None
     deep_analysis_report_path: str = ""
 
     # 答复策略结果
-    response_plan: dict[str, Any] | None = None
+    response_plan: Optional[dict[str, Any]] = None
 
     # 增强分析结果（新增）
-    enhanced_analysis: dict[str, Any] | None = None
+    enhanced_analysis: Optional[dict[str, Any]] = None
     enhanced_analysis_time: float = 0.0
 
     # 输出文件

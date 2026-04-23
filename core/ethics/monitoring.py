@@ -81,7 +81,7 @@ class Alert:
     level: AlertLevel
     message: str
     agent_id: str
-    principle_id: str | None = None
+    principle_id: Optional[str] = None
     timestamp: datetime = field(default_factory=datetime.now)
     resolved: bool = False
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -197,7 +197,7 @@ class EthicsMonitor:
                 )
 
     def _create_alert(
-        self, level: AlertLevel, message: str, agent_id: str, principle_id: str | None = None
+        self, level: AlertLevel, message: str, agent_id: str, principle_id: Optional[str] = None
     ):
         """创建告警"""
         alert = Alert(

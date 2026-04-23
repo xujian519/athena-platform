@@ -71,7 +71,7 @@ class CustomAIRole:
     name: str
     english_name: str
     description: str
-    avatar_url: str | None = None
+    avatar_url: Optional[str] = None
     personality: AIPersonality = field(default_factory=AIPersonality)
     capabilities: list[AICapability] = field(default_factory=list)
     knowledge_domains: list[str] = field(default_factory=list)
@@ -372,7 +372,7 @@ class CustomAIManager:
         return await self.create_role(template_role)
 
     async def clone_role(
-        self, source_role_id: str, new_role_id: str, modifications: dict[str, Any] | None = None
+        self, source_role_id: str, new_role_id: str, modifications: Optional[dict[str, Any]] = None
     ) -> str:
         """克隆角色"""
         source_role = self.get_role(source_role_id)
@@ -399,7 +399,7 @@ class CustomAIManager:
 
         return await self.create_role(new_role)
 
-    def search_roles(self, query: str, filters: dict[str, Any] | None = None) -> list[CustomAIRole]:
+    def search_roles(self, query: str, filters: Optional[dict[str, Any]] = None) -> list[CustomAIRole]:
         """搜索角色"""
         query = query.lower()
         results = []
@@ -516,7 +516,7 @@ class CustomAIManager:
 
         return response
 
-    def export_role(self, role_id: str) -> dict[str, Any] | None:
+    def export_role(self, role_id: str) -> Optional[dict[str, Any]]:
         """导出角色配置"""
         role = self.get_role(role_id)
         if not role:

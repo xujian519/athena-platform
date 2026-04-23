@@ -43,9 +43,9 @@ class DialogueContext:
     session_id: str  # 会话ID
     user_id: str  # 用户ID
     history: list[dict[str, str]]  # 历史对话
-    current_topic: str | None = None  # 当前主题
-    pending_tasks: list[str] | None = None  # 待处理任务
-    preferences: dict[str, Any] | None = None  # 用户偏好
+    current_topic: Optional[str] = None  # 当前主题
+    pending_tasks: Optional[list[str]] = None  # 待处理任务
+    preferences: Optional[dict[str, Any]] = None  # 用户偏好
 
 
 @dataclass
@@ -69,7 +69,7 @@ class PureDialogueInterface:
         hybrid_retriever,
         viewpoint_analyzer,
         article_generator,
-        config: dict[str, Any] | None = None,
+        config: Optional[dict[str, Any]] = None,
     ):
         """
         初始化对话接口
@@ -588,7 +588,7 @@ def create_dialogue_interface(
     hybrid_retriever,
     viewpoint_analyzer,
     article_generator,
-    config: dict[str, Any] | None = None,
+    config: Optional[dict[str, Any]] = None,
 ) -> PureDialogueInterface:
     """
     创建对话接口

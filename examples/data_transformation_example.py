@@ -18,7 +18,6 @@ from core.tools.data_transformation_handler import (
     aggregate_data,
     clean_data,
     data_transformation_handler,
-    filter_data,
     get_info,
     get_statistics,
     load_csv,
@@ -68,8 +67,8 @@ def example_1_basic_operations():
     sort_result = sort_data(df, "salary", ascending=False)
     if sort_result["success"]:
         sorted_df = pd.DataFrame(sort_result["data"]["data"])
-        print(f"   排序后数据:")
-        print(sorted_df[["name", "salary"]])
+        print("   排序后数据:")
+        print(sorted_df[["name", "salary"])
 
 
 def example_2_data_cleaning():
@@ -122,7 +121,7 @@ def example_3_csv_operations():
     load_result = load_csv(csv_path)
     if load_result["success"]:
         loaded_df = pd.DataFrame(load_result["data"]["data"])
-        print(f"   加载成功！")
+        print("   加载成功！")
         print(f"   数据:\n{loaded_df}")
 
     print("\n3. 计算总价（price * quantity）:")
@@ -162,7 +161,7 @@ def example_4_data_aggregation():
         operation="group_by", data=df, params={"group_by": "department", "agg_func": "mean"}
     )
     if agg_result["success"]:
-        print(f"   聚合成功！")
+        print("   聚合成功！")
         print(f"   分组数: {agg_result['metadata']['groups']}")
         # 注意：group_by返回的是分组后的数据
         print(f"   聚合数据类型: {type(agg_result['data'])}")
@@ -200,7 +199,7 @@ def example_5_data_merge():
     merge_result = merge_data(df1, df2, on="employee_id", how="inner")
     if merge_result["success"]:
         merged_df = pd.DataFrame(merge_result["data"]["data"])
-        print(f"   合并成功！")
+        print("   合并成功！")
         print(f"   合并后行数: {merge_result['metadata']['merged_rows']}")
         print(f"   合并后数据:\n{merged_df}")
 

@@ -29,13 +29,13 @@ class IPCClassification:
     code: str
     name: str
     section: str
-    class_code: str | None = None
-    subclass: str | None = None
-    group: str | None = None
-    subgroup: str | None = None
+    class_code: Optional[str] = None
+    subclass: Optional[str] = None
+    group: Optional[str] = None
+    subgroup: Optional[str] = None
     level: str = 'unknown'  # section, class, subclass, group, subgroup
-    keywords: Optional[List[str] = None
-    examples: Optional[List[str] = None
+    keywords: Optional[List[str]] = None
+    examples: Optional[List[str]] = None
     domain: str = 'unknown'
 
 @dataclass
@@ -50,7 +50,7 @@ class IPCMatchResult:
 class IPCClassificationSystem:
     """IPC分类系统"""
 
-    def __init__(self, ipc_data_path: str | None = None):
+    def __init__(self, ipc_data_path: Optional[str] = None):
         self.ipc_data_path = ipc_data_path or \
             '/Users/xujian/Athena工作平台/patent-platform/workspace/data/ipc_classification_knowledge.json'
         self.ipc_data: Dict[str, Any] = {}

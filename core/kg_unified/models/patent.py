@@ -143,7 +143,7 @@ class TechnicalTriple:
     problem: str  # 技术问题
     features: list[str]  # 技术特征列表
     effect: str  # 技术效果
-    source_claim: int | None = None  # 来源权利要求号
+    source_claim: Optional[int] = None  # 来源权利要求号
 
     def __str__(self) -> str:
         return f"[{self.problem}] + {self.features} -> [{self.effect}]"
@@ -157,7 +157,7 @@ class FeatureRelation:
     target_feature: str  # 目标特征
     relation_type: RelationType  # 关系类型
     strength: float = 1.0  # 关系强度(0-1)
-    description: str | None = None  # 关系描述
+    description: Optional[str] = None  # 关系描述
 
 
 @dataclass
@@ -644,7 +644,7 @@ class UnifiedPatentKnowledgeGraph:
         document_name: str,
         triples: list[TechnicalTriple],
         feature_relations: list[FeatureRelation] | None = None,
-        ipc_classifications: list[str] | None = None,
+        ipc_classifications: Optional[list[str]] = None,
         document_type: str = "专利",
     ) -> DocumentAnalysis:
         """
@@ -793,7 +793,7 @@ class UnifiedPatentKnowledgeGraph:
                     properties={"description": relation.description} if relation.description else {}
                 ))
 
-    def _find_feature_node(self, document_id: str, feature_name: str) -> str | None:
+    def _find_feature_node(self, document_id: str, feature_name: str) -> Optional[str]:
         """查找特征节点ID"""
         # 遍历所有三元组查找匹配的特征
         for analysis in self.document_analyses.values():
@@ -922,7 +922,7 @@ class UnifiedPatentKnowledgeGraph:
     # 可视化功能
     # -------------------------------------------------------------------------
 
-    def visualize_graph(self, output_path: str | None = None) -> Any | None:
+    def visualize_graph(self, output_path: Optional[str] = None) -> Any | None:
         """
         可视化图谱
 

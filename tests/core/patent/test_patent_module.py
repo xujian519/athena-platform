@@ -12,6 +12,7 @@ Patent模块单元测试
 
 import pytest
 
+
 # 测试导入
 @pytest.mark.skip(reason="专利系统分散在多个目录，需要统一后再测试")
 def test_patent_systems_import():
@@ -19,8 +20,8 @@ def test_patent_systems_import():
     # 尝试导入专利相关的核心系统
     try:
         from core.cognition.top_patent_expert_system import (
-            TopPatentExpertSystem,
             PatentExpertConfig,
+            TopPatentExpertSystem,
         )
         top_expert_available = True
     except ImportError:
@@ -28,8 +29,8 @@ def test_patent_systems_import():
 
     try:
         from core.cognition.xiaona_patent_naming_system import (
-            PatentNamingSystem,
             PatentNamingConfig,
+            PatentNamingSystem,
         )
         naming_system_available = True
     except ImportError:
@@ -46,8 +47,8 @@ class TestTopPatentExpertSystem:
         """测试系统创建"""
         try:
             from core.cognition.top_patent_expert_system import (
-                TopPatentExpertSystem,
                 PatentExpertConfig,
+                TopPatentExpertSystem,
             )
 
             # 尝试创建系统实例
@@ -79,8 +80,8 @@ class TestPatentNamingSystem:
         """测试命名系统创建"""
         try:
             from core.cognition.xiaona_patent_naming_system import (
-                PatentNamingSystem,
                 PatentNamingConfig,
+                PatentNamingSystem,
             )
 
             # 尝试创建命名系统实例
@@ -112,8 +113,8 @@ class TestPatentUtils:
         """测试专利搜索工具"""
         try:
             from core.utils.patent_search import (
-                search_patents,
                 filter_patents,
+                search_patents,
                 sort_patents,
             )
 
@@ -129,8 +130,8 @@ class TestPatentUtils:
         try:
             from core.knowledge.patent_analysis import (
                 analyze_patent_claims,
-                extract_patent_entities,
                 compare_patents,
+                extract_patent_entities,
             )
 
             # 验证函数可调用
@@ -244,7 +245,6 @@ class TestEdgeCases:
             from core.cognition.xiaona_patent_naming_system import PatentNamingSystem
 
             # 验证系统可以处理特殊字符
-            special_content = "测试!@#$%^&*()中文"
 
             # 系统应该能处理或验证
             assert True  # 如果没有抛出异常，测试通过
@@ -263,7 +263,7 @@ class TestPerformance:
             from core.cognition.top_patent_expert_system import TopPatentExpertSystem
 
             start = time.time()
-            system = TopPatentExpertSystem()
+            TopPatentExpertSystem()
             elapsed = time.time() - start
 
             # 初始化应该很快 (< 0.5秒)

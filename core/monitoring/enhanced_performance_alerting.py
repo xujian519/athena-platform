@@ -145,8 +145,8 @@ class EmailAlertChannel(AlertChannel):
         smtp_port: int,
         from_email: str,
         to_emails: list[str],
-        username: str | None = None,
-        password: str | None = None,
+        username: Optional[str] = None,
+        password: Optional[str] = None,
     ):
         self.smtp_server = smtp_server
         self.smtp_port = smtp_port
@@ -178,7 +178,7 @@ class EmailAlertChannel(AlertChannel):
 class PerformanceAlertingSystem:
     """性能监控告警系统"""
 
-    def __init__(self, config_path: str | None = None):
+    def __init__(self, config_path: Optional[str] = None):
         """
         初始化性能监控告警系统
 
@@ -423,7 +423,7 @@ class PerformanceAlertingSystem:
             self.alert_history.clear()
             logger.info("🧹 告警历史已清空")
 
-    def generate_report(self, output_file: str | None = None) -> str:
+    def generate_report(self, output_file: Optional[str] = None) -> str:
         """生成性能告警报告"""
         stats = self.get_alert_stats()
         recent_alerts = self.get_alert_history(limit=50)

@@ -59,7 +59,7 @@ class MCPClientManager:
     """
 
     def __init__(
-        self, config_path: str | None = None, connection_timeout: int = 30, max_connections: int = 10
+        self, config_path: Optional[str] = None, connection_timeout: int = 30, max_connections: int = 10
     ):
         """
         初始化MCP客户端管理器
@@ -197,7 +197,7 @@ class MCPClientManager:
             raise
 
     async def call_method(
-        self, server_id: str, method: str, params: dict[str, Any] | None = None, timeout: int = 30
+        self, server_id: str, method: str, params: Optional[dict[str, Any]] = None, timeout: int = 30
     ) -> Any:
         """
         调用MCP服务器的方法
@@ -317,7 +317,7 @@ _mcp_client_manager: MCPClientManager | None = None
 
 
 def get_mcp_client_manager(
-    config_path: str | None = None, connection_timeout: int = 30
+    config_path: Optional[str] = None, connection_timeout: int = 30
 ) -> MCPClientManager:
     """
     获取MCP客户端管理器单例

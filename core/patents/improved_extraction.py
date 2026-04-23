@@ -23,8 +23,8 @@ class ImprovedPatentData:
     patent_owner: str = ""
     patent_title: str = ""
     decision_result: str = ""
-    dispute_foci: list[str] | None = None
-    legal_basis: list[str] | None = None
+    dispute_foci: Optional[list[str]] = None
+    legal_basis: Optional[list[str]] = None
     decision_reason: str = ""
     full_content: str = ""
 

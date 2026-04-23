@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from __future__ import annotations
+
 """
 任务管理器模型测试
 Task Manager Models Tests
@@ -9,17 +9,16 @@ Task Manager Models Tests
 版本: 1.0.0
 """
 
-import pytest
 from datetime import datetime, timedelta
 
 from core.tasks.manager.models import (
     Task,
-    TaskStatus,
-    TaskPriority,
     TaskDependency,
     TaskDependencyType,
-    TaskResult,
     TaskMetrics,
+    TaskPriority,
+    TaskResult,
+    TaskStatus,
 )
 
 
@@ -439,3 +438,4 @@ class TestTaskMetrics:
         assert metrics.blocked_tasks == 5
         assert metrics.average_execution_time == 5.5
         assert metrics.total_token_usage == 50000
+

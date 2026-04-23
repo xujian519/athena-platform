@@ -6,8 +6,8 @@ Legal World Model Integrity Verification Script
 独立验证脚本，避免循环导入问题
 """
 
-import sys
 import os
+import sys
 from datetime import datetime
 
 # 设置路径
@@ -20,23 +20,23 @@ def test_constitution():
 
     try:
         from core.legal_world_model.constitution import (
-            LayerType,
+            ConstitutionalValidator,
             DocumentType,
+            LayerType,
             LegalEntityType,
             LegalRelationType,
-            ConstitutionalValidator
         )
 
         print("  ✅ 核心类导入成功")
 
         # 测试三层架构
-        print(f"\n  三层架构:")
+        print("\n  三层架构:")
         print(f"    - 基础法律层: {LayerType.BASE_LAW.value}")
         print(f"    - 专利专业层: {LayerType.PATENT_LAW.value}")
         print(f"    - 司法案例层: {LayerType.CASE_LAW.value}")
 
         # 测试文档类型
-        print(f"\n  文档类型:")
+        print("\n  文档类型:")
         for doc_type in DocumentType:
             print(f"    - {doc_type.value}")
 
@@ -46,7 +46,7 @@ def test_constitution():
 
         # 创建验证器
         validator = ConstitutionalValidator()
-        print(f"\n  ✅ 宪法验证器创建成功")
+        print("\n  ✅ 宪法验证器创建成功")
         print(f"  宪法版本: {validator.constitution_version}")
 
         return True
@@ -102,7 +102,6 @@ def test_db_manager():
     print("=" * 70)
 
     try:
-        from core.legal_world_model.db_manager import LegalWorldDBManager
 
         print("  ✅ 数据库管理器导入成功")
 
@@ -132,7 +131,7 @@ def test_knowledge_graph_builder():
         spec.loader.exec_module(module)
 
         print("  ✅ 知识图谱构建器导入成功")
-        print(f"  模块大小: 42K (较大的复杂模块)")
+        print("  模块大小: 42K (较大的复杂模块)")
 
         return True
     except Exception as e:
@@ -149,19 +148,18 @@ def test_health_checker():
 
     try:
         from core.legal_world_model.health_check import (
-            LegalWorldModelHealthChecker,
             HealthStatus,
-            SystemHealthReport
+            LegalWorldModelHealthChecker,
         )
 
         print("  ✅ 健康检查器导入成功")
 
         # 创建检查器
-        checker = LegalWorldModelHealthChecker()
+        LegalWorldModelHealthChecker()
         print("  ✅ 健康检查器实例化成功")
 
         # 测试状态枚举
-        print(f"\n  健康状态类型:")
+        print("\n  健康状态类型:")
         for status in HealthStatus:
             print(f"    - {status.value}")
 
@@ -188,7 +186,7 @@ def test_scenario_retriever():
         spec.loader.exec_module(module)
 
         print("  ✅ 场景规则检索器导入成功")
-        print(f"  模块大小: 30K (优化版本)")
+        print("  模块大小: 30K (优化版本)")
 
         return True
     except Exception as e:

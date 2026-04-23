@@ -45,9 +45,9 @@ class ChainStep:
     tool_name: str
     action: str
     input_data: dict[str, Any]
-    output_data: dict[str, Any] | None = None
+    output_data: Optional[dict[str, Any]] = None
     status: ChainStatus = ChainStatus.PENDING
-    error: str | None = None
+    error: Optional[str] = None
     start_time: datetime | None = None
     end_time: datetime | None = None
     execution_time: float = 0.0
@@ -234,7 +234,7 @@ class CascadeExecutor:
 
         return result
 
-    def _validate_chain(self, steps: list[ChainStep]) -> str | None:
+    def _validate_chain(self, steps: list[ChainStep]) -> Optional[str]:
         """验证链路"""
         if not steps:
             return "链路为空"
@@ -364,7 +364,7 @@ class CascadeExecutor:
         latest = max(self.checkpoints.values(), key=lambda c: c.timestamp)
         return latest
 
-    def _extract_final_output(self, completed_steps: list[ChainStep]) -> dict[str, Any] | None:
+    def _extract_final_output(self, completed_steps: list[ChainStep]) -> Optional[dict[str, Any]]:
         """提取最终输出"""
         if not completed_steps:
             return None
@@ -416,7 +416,7 @@ def create_step(
     step_id: str,
     tool_name: str,
     action: str,
-    input_data: dict[str, Any],    depends_on: list[str] | None = None,
+    input_data: dict[str, Any],    depends_on: Optional[list[str]] = None,
 ) -> ChainStep:
     """创建链路步骤"""
     return ChainStep(

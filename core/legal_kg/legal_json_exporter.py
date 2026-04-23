@@ -112,7 +112,7 @@ class LegalDocumentExporter:
         importance = self.parser.determine_importance(title)
         return importance.value
 
-    def parse_and_export_document(self, doc: dict) -> str | None:
+    def parse_and_export_document(self, doc: dict) -> Optional[str]:
         """解析并导出单个文档"""
         doc_id = doc["id"]
         title = doc["title"]

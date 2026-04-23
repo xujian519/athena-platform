@@ -9,9 +9,7 @@ Fix Empty Except Blocks Script
 import ast
 import logging
 import os
-import re
 from pathlib import Path
-from typing import Dict, List, Tuple
 
 # 配置日志
 logging.basicConfig(
@@ -26,8 +24,8 @@ class EmptyExceptFixer:
 
     def __init__(self, project_root: Path):
         self.project_root = project_root
-        self.fixed_files: List[Path] = []
-        self.error_files: List[Tuple[Path, str]] = []
+        self.fixed_files: list[Path] = []
+        self.error_files: list[tuple[Path, str] = []
 
         # 需要排除的目录
         self.exclude_dirs = {
@@ -54,7 +52,7 @@ class EmptyExceptFixer:
 
         return False
 
-    def find_python_files(self) -> List[Path]:
+    def find_python_files(self) -> list[Path]:
         """查找所有Python文件"""
         python_files = []
         for root, dirs, files in os.walk(self.project_root):
@@ -69,7 +67,7 @@ class EmptyExceptFixer:
 
         return python_files
 
-    def check_empty_except(self, source_code: str) -> List[Dict]:
+    def check_empty_except(self, source_code: str) -> list[dict]:
         """检查代码中的空except块"""
         issues = []
 
@@ -123,7 +121,7 @@ class EmptyExceptFixer:
         """修复单个文件"""
         try:
             # 读取文件内容
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 source_code = f.read()
                 original_lines = source_code.splitlines(keepends=True)
 
@@ -139,7 +137,6 @@ class EmptyExceptFixer:
 
             # 构建修复后的代码
             fixed_lines = original_lines.copy()
-            line_offset = 0
 
             for issue in sorted(issues, key=lambda x: x['line'], reverse=True):
                 line_num = issue['line'] - 1  # 转换为0-index
@@ -206,7 +203,7 @@ class EmptyExceptFixer:
             else:
                 return f'{indent_str}logger.error(f"捕获{exception_type}异常", exc_info=True)\n'
 
-    def fix_all(self) -> Dict:
+    def fix_all(self) -> dict:
         """修复所有文件"""
         logger.info(f"开始扫描项目: {self.project_root}")
 
@@ -229,7 +226,7 @@ class EmptyExceptFixer:
             'error_file_list': self.error_files
         }
 
-    def generate_report(self, results: Dict) -> str:
+    def generate_report(self, results: dict) -> str:
         """生成修复报告"""
         report = []
         report.append("=" * 80)

@@ -8,10 +8,15 @@
 - 无效请求书生成
 """
 
+
 import pytest
-from unittest.mock import Mock, patch, AsyncMock
-from core.agents.xiaona.invalidation_analyzer_proxy import InvalidationAnalyzerProxy
-from core.agents.xiaona.base_component import AgentExecutionContext, AgentExecutionResult, AgentStatus
+
+from core.framework.agents.xiaona.base_component import (
+    AgentExecutionContext,
+    AgentExecutionResult,
+    AgentStatus,
+)
+from core.framework.agents.xiaona.invalidation_analyzer_proxy import InvalidationAnalyzerProxy
 
 
 class TestableInvalidationAnalyzerProxy(InvalidationAnalyzerProxy):
@@ -521,7 +526,7 @@ class TestInvalidationAnalyzerProxy:
 
         # 2. 制定证据策略
         strategy = await agent.develop_evidence_strategy(
-            [g["ground_type"] for g in grounds["valid_grounds"]],
+            [g["ground_type"] for g in grounds["valid_grounds"],
             sample_references
         )
 

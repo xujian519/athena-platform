@@ -5,6 +5,7 @@ Qdrant基准测试数据导入脚本
 """
 
 import random
+
 from qdrant_client import QdrantClient
 from qdrant_client.models import PointStruct
 

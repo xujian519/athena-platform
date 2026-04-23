@@ -105,7 +105,7 @@ class PromptTemplateCache:
 
     def get(
         self, domain: str, task_type: str, phase: str, variables: dict[str, Any]
-    ) -> tuple[str, str | None]:
+    ) -> Optional[tuple[str, str]]:
         """
         从缓存获取提示词
 
@@ -198,7 +198,7 @@ class PromptTemplateCache:
 
             logger.debug(f"💾 缓存已保存: {cache_key[:16]}...")
 
-    def invalidate(self, domain: str | None = None, task_type: str | None = None):
+    def invalidate(self, domain: Optional[str] = None, task_type: Optional[str] = None):
         """
         使缓存失效
 

@@ -81,8 +81,8 @@ class CheckpointManager:
     async def save_checkpoint(
         self,
         state_module: StateModule,
-        checkpoint_id: str | None = None,
-        metadata: dict[str, Any] | None = None
+        checkpoint_id: Optional[str] = None,
+        metadata: Optional[dict[str, Any]] = None
     ) -> CheckpointInfo:
         """
         保存检查点
@@ -130,7 +130,7 @@ class CheckpointManager:
     async def load_checkpoint(
         self,
         state_module: StateModule,
-        checkpoint_id: str | None = None
+        checkpoint_id: Optional[str] = None
     ) -> CheckpointInfo | None:
         """
         加载检查点
@@ -173,8 +173,8 @@ class CheckpointManager:
 
     async def _find_checkpoint_file(
         self,
-        checkpoint_id: str | None = None
-    ) -> str | None:
+        checkpoint_id: Optional[str] = None
+    ) -> Optional[str]:
         """
         查找检查点文件
 
@@ -353,7 +353,7 @@ class CheckpointManager:
     async def save_with_metadata(
         self,
         state_module: StateModule,
-        checkpoint_id: str | None = None,
+        checkpoint_id: Optional[str] = None,
         **metadata
     ) -> CheckpointInfo:
         """

@@ -412,7 +412,7 @@ class PlatformMemoryImporter:
 
     def determine_agent_from_memory(
         self, memory: dict[str, Any], source_name: str
-    ) -> dict[str, Any] | None:
+    ) -> Optional[dict[str, Any]]:
         """从记忆确定智能体"""
         # 检查participants字段
         if "participants" in memory:
@@ -494,7 +494,7 @@ class PlatformMemoryImporter:
         # 根据source_type确定
         return 0.8  # 默认较高重要性
 
-    def map_user_to_agent(self, user_id: str) -> dict[str, Any] | None:
+    def map_user_to_agent(self, user_id: str) -> Optional[dict[str, Any]]:
         """映射用户ID到智能体"""
         user_id_lower = user_id.lower()
 

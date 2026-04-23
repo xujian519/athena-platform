@@ -28,7 +28,7 @@ class PerformanceAnalyzer:
     负责分析指标趋势、检测异常和生成性能报告。
     """
 
-    def __init__(self, metrics_collector: MetricsCollector, config: dict[str, Any] | None = None):
+    def __init__(self, metrics_collector: MetricsCollector, config: Optional[dict[str, Any]] = None):
         """初始化性能分析器
 
         Args:

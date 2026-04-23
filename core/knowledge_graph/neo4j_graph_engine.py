@@ -42,9 +42,9 @@ class GraphNode:
     id: str
     type: str
     properties: dict[str, Any]
-    content: str | None = None
+    content: Optional[str] = None
     embedding: list[float] | None = None
-    metadata: dict[str, Any] | None = None
+    metadata: Optional[dict[str, Any]] = None
 
 @dataclass
 class GraphEdge:
@@ -53,8 +53,8 @@ class GraphEdge:
     to_node: str
     relation_type: str
     properties: dict[str, Any]
-    weight: float | None = 1.0
-    confidence: float | None = 1.0
+    weight: Optional[float] = 1.0
+    confidence: Optional[float] = 1.0
 
 class Neo4jGraphEngine:
     """Neo4j知识图谱引擎"""

@@ -53,7 +53,7 @@ class ToolExecutionRecord:
     output_length: int
     user_satisfaction: float  # 1-5分
     resource_usage: dict[str, float]  # CPU, Memory等
-    context: dict[str, Any] | None = None
+    context: Optional[dict[str, Any]] = None
 
 
 @dataclass
@@ -309,7 +309,7 @@ class ToolPerformanceTracker:
             self.logger.error(f"❌ 生成优化建议失败: {e!s}")
 
     def get_tool_performance(
-        self, tool_name: str, days: int = 7, hours: float | None = None
+        self, tool_name: str, days: int = 7, hours: Optional[float] = None
     ) -> PerformanceReport | None:
         """获取工具性能报告"""
         try:
@@ -534,7 +534,7 @@ class ToolPerformanceTracker:
             return {"error": str(e)}
 
     def get_optimization_suggestions(
-        self, tool_name: str | None = None, limit: int = 10
+        self, tool_name: Optional[str] = None, limit: int = 10
     ) -> list[dict[str, Any]]:
         """获取优化建议"""
         try:

@@ -45,11 +45,11 @@ class WorkflowTask:
     task_id: str
     report_type: ReportType
     input_source: str
-    output_dir: str | None = None
+    output_dir: Optional[str] = None
     custom_data: dict | None = None
     status: WorkflowStatus = WorkflowStatus.PENDING
     result: ReportResult | None = None
-    error: str | None = None
+    error: Optional[str] = None
     created_at: datetime = field(default_factory=datetime.now)
     started_at: datetime | None = None
     completed_at: datetime | None = None
@@ -111,7 +111,7 @@ class HybridWorkflowProcessor:
         task_id: str,
         report_type: ReportType,
         input_source: str,
-        output_dir: str | None = None,
+        output_dir: Optional[str] = None,
         custom_data: dict | None = None,
     ) -> WorkflowTask:
         """
@@ -323,7 +323,7 @@ class HybridWorkflowProcessor:
 async def batch_generate_reports(
     documents: list[str],
     report_type: ReportType = ReportType.PATENT_TECHNICAL_ANALYSIS,
-    output_dir: str | None = None,
+    output_dir: Optional[str] = None,
     max_concurrent: int = 3,
 ) -> list[ReportResult]:
     """
@@ -359,7 +359,7 @@ async def batch_generate_reports(
 
 async def batch_compare_documents(
     document_pairs: list[tuple],
-    output_dir: str | None = None,
+    output_dir: Optional[str] = None,
     max_concurrent: int = 2,
 ) -> list[ReportResult]:
     """

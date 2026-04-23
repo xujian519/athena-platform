@@ -18,8 +18,8 @@ import pytest
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
-from core.memory.cross_task_workflow_memory import CrossTaskWorkflowMemory
-from core.memory.workflow_pattern import (
+from core.framework.memory.cross_task_workflow_memory import CrossTaskWorkflowMemory
+from core.framework.memory.workflow_pattern import (
     StepType,
     TaskDomain,
     TaskTrajectory,
@@ -103,7 +103,7 @@ async def test_workflow_extractor():
     print("测试2: WorkflowExtractor模式提取")
     print("="*60)
 
-    from core.memory.workflow_extractor import WorkflowExtractor
+    from core.framework.memory.workflow_extractor import WorkflowExtractor
 
     # 创建测试任务轨迹 (增加步骤以满足最小模式长度)
     trajectory = TaskTrajectory(

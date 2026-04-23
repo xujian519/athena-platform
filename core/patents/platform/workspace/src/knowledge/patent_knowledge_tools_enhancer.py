@@ -79,8 +79,8 @@ class PatentTool:
     description: str
     category: ToolCategory
     version: str = '1.0'
-    api_endpoint: str | None = None
-    function_name: str | None = None
+    api_endpoint: Optional[str] = None
+    function_name: Optional[str] = None
     parameters: Dict[str, Any] = field(default_factory=dict)
     usage_count: int = 0
     success_rate: float = 1.0

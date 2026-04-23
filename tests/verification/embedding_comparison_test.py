@@ -301,8 +301,8 @@ class EmbeddingComparisonTester:
         # 计算相对提升
         model_names = list(self.results.keys())
         if len(model_names) == 2:
-            baseline = self.results[model_names[0]]
-            candidate = self.results[model_names[1]]
+            baseline = self.results[model_names[0]
+            candidate = self.results[model_names[1]
 
             comparison["improvements"] = {
                 "precision_at_1": (candidate.precision_at_k[1] - baseline.precision_at_k[1]) / baseline.precision_at_k[1] * 100,
@@ -352,7 +352,7 @@ async def main():
 
     # 测试BGE-M3
     try:
-        from core.nlp.bge_m3_loader import get_bgem3_loader
+        from core.ai.nlp.bge_m3_loader import get_bgem3_loader
 
         bge_loader = get_bgem3_loader()
 
@@ -373,7 +373,7 @@ async def main():
 
     # 测试PatentSBERTa
     try:
-        from core.embedding.patent_sberta_encoder import get_patent_encoder
+        from core.ai.embedding.patent_sberta_encoder import get_patent_encoder
 
         patent_encoder = get_patent_encoder(use_patent_sberta=True, fallback=True)
 

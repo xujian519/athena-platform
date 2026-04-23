@@ -23,8 +23,8 @@ class IntentRecognitionRequest(BaseModel):
     """意图识别请求"""
 
     text: str = Field(..., description="待识别的文本", min_length=1, max_length=10000)
-    context: dict[str, Any] | None = Field(default=None, description="上下文信息")
-    engine: str | None = Field(default="keyword", description="引擎类型")
+    context: Optional[dict[str, Any]] = Field(default=None, description="上下文信息")
+    engine: Optional[str] = Field(default="keyword", description="引擎类型")
 
     @field_validator("text")
     @classmethod
@@ -39,7 +39,7 @@ class BatchIntentRecognitionRequest(BaseModel):
     """批量意图识别请求"""
 
     texts: list[str] = Field(..., description="待识别的文本列表", min_items=1, max_items=100)
-    engine: str | None = Field(default="keyword", description="引擎类型")
+    engine: Optional[str] = Field(default="keyword", description="引擎类型")
 
     @field_validator("texts")
     @classmethod
@@ -59,7 +59,7 @@ class BatchIntentRecognitionRequest(BaseModel):
 class ModelLoadRequest(BaseModel):
     """模型加载请求"""
 
-    device: str | None = Field(default="auto", description="设备类型")
+    device: Optional[str] = Field(default="auto", description="设备类型")
 
 
 # ========================================================================
@@ -119,11 +119,11 @@ class ModelInfo(BaseModel):
     name: str = Field(description="模型名称")
     type: str = Field(description="模型类型")
     status: str = Field(description="模型状态")
-    device: str | None = Field(description="设备类型")
+    device: Optional[str] = Field(description="设备类型")
     load_time: datetime | None = Field(description="加载时间")
     last_access: datetime | None = Field(description="最后访问时间")
     access_count: int = Field(description="访问次数")
-    memory_usage_mb: float | None = Field(description="内存使用(MB)")
+    memory_usage_mb: Optional[float] = Field(description="内存使用(MB)")
 
 
 class ModelsListResponse(BaseModel):
@@ -148,7 +148,7 @@ class ModelUnloadResponse(BaseModel):
 
     message: str = Field(description="响应消息")
     model_name: str = Field(description="模型名称")
-    memory_freed_mb: float | None = Field(description="释放的内存(MB)")
+    memory_freed_mb: Optional[float] = Field(description="释放的内存(MB)")
 
 
 # ========================================================================
@@ -177,7 +177,7 @@ class ErrorResponse(BaseModel):
 
     error: str = Field(description="错误类型")
     message: str = Field(description="错误消息")
-    details: dict[str, Any] | None = Field(default=None, description="错误详情")
+    details: Optional[dict[str, Any]] = Field(default=None, description="错误详情")
     timestamp: datetime = Field(description="错误时间")
 
 

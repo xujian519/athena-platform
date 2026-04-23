@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺·双鱼座身份档案读取器
 Xiaonuo Pisces Identity Reader
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
 import asyncio
 from datetime import datetime
 
 # 使用基础小诺Agent
-from core.agent.xiaonuo_agent import XiaonuoAgent
+from core.framework.agents.xiaonuo_agent import XiaonuoAgent
+
 
 async def read_xiaonuo_pisces_identity():
     """读取小诺·双鱼座的身份档案"""
@@ -25,7 +26,7 @@ async def read_xiaonuo_pisces_identity():
     await xiaonuo.initialize()
 
     print("\n📋 基础身份信息:")
-    print(f"  • 姓名: 小诺·双鱼座")
+    print("  • 姓名: 小诺·双鱼座")
     print(f"  • ID: {xiaonuo.agent_id}")
     print(f"  • 主要身份: {xiaonuo.profile.description}")
     print(f"  • 创建时间: {xiaonuo.profile.created_at}")

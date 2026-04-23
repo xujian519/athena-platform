@@ -125,7 +125,7 @@ class ContextOptimizer:
         content: Any,
         context_type: ContextType,
         priority: ContextPriority = ContextPriority.MEDIUM,
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ):
         """
         添加上下文项
@@ -202,7 +202,7 @@ class ContextOptimizer:
         if total_tokens > self.max_tokens:
             await self.compress_context()
 
-    async def compress_context(self, target_tokens: int | None = None) -> ContextCompression:
+    async def compress_context(self, target_tokens: Optional[int] = None) -> ContextCompression:
         """
         压缩上下文
 
@@ -280,7 +280,7 @@ class ContextOptimizer:
             self.stats["total_tokens"] -= item.tokens
 
     async def get_optimal_context(
-        self, query: str, max_tokens: int | None = None
+        self, query: str, max_tokens: Optional[int] = None
     ) -> list[ContextItem]:
         """
         获取最优上下文

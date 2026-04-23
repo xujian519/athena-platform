@@ -107,8 +107,8 @@ class ThinkingModeSelector:
         self,
         task_description: str,
         task_type: str = "general",
-        complexity: str | None = None,
-        domain: str | None = None,
+        complexity: Optional[str] = None,
+        domain: Optional[str] = None,
         user_preference: ThinkingMode | None = None,
     ) -> ThinkingMode:
         """
@@ -267,7 +267,7 @@ class ThinkingModeExecutor:
         task_description: str,
         task_type: str = "general",
         mode: ThinkingMode | None = None,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> dict[str, Any]:
         """
         使用指定或自动选择的模式执行任务

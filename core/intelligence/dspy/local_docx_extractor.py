@@ -81,7 +81,7 @@ class DocxPatentExtractor:
         logger.info(f"找到 {len(docx_files)} 个DOCX文件")
         return docx_files
 
-    def extract_text_from_docx(self, docx_path: Path) -> str | None:
+    def extract_text_from_docx(self, docx_path: Path) -> Optional[str]:
         """从DOCX文件提取文本
 
         Args:
@@ -111,7 +111,7 @@ class DocxPatentExtractor:
             logger.warning(f"提取 {docx_path.name} 失败: {e}")
             return None
 
-    def _extract_text_fallback(self, docx_path: Path) -> str | None:
+    def _extract_text_fallback(self, docx_path: Path) -> Optional[str]:
         """备用文本提取方法(使用系统工具)"""
         import subprocess
         import tempfile

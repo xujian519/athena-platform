@@ -109,7 +109,7 @@ class StatePersistenceManager:
 
         logger.info(f"💾 StatePersistenceManager初始化完成 (策略: {self.config.strategy.value})")
 
-    def register_module(self, name: str, module: StateModule, auto_save: bool | None = None) -> None:
+    def register_module(self, name: str, module: StateModule, auto_save: Optional[bool] = None) -> None:
         """
         注册状态模块
 
@@ -147,7 +147,7 @@ class StatePersistenceManager:
             del self._modules[name]
             logger.info(f"❌ 状态模块已取消注册: {name}")
 
-    async def save_module(self, name: str, force: bool = False) -> str | None:
+    async def save_module(self, name: str, force: bool = False) -> Optional[str]:
         """
         保存模块状态
 
@@ -199,7 +199,7 @@ class StatePersistenceManager:
                 logger.error(f"❌ 保存失败: {name} - {e}", exc_info=True)
                 return None
 
-    async def _delayed_save(self, name: str) -> str | None:
+    async def _delayed_save(self, name: str) -> Optional[str]:
         """
         延迟保存
 
@@ -218,7 +218,7 @@ class StatePersistenceManager:
 
         return None
 
-    async def load_module(self, name: str, file_path: str | None = None) -> bool:
+    async def load_module(self, name: str, file_path: Optional[str] = None) -> bool:
         """
         加载模块状态
 
@@ -281,7 +281,7 @@ class StatePersistenceManager:
 
         return str(Path(self.config.persistence_dir) / filename)
 
-    def _get_latest_file_path(self, name: str) -> str | None:
+    def _get_latest_file_path(self, name: str) -> Optional[str]:
         """
         获取最新的状态文件路径
 
@@ -345,7 +345,7 @@ class StatePersistenceManager:
             self._periodic_task = asyncio.create_task(periodic_save_loop())
             logger.info(f"🔄 定期保存任务已启动 (间隔: {self.config.periodic_interval}秒)")
 
-    async def save_all(self, force: bool = True) -> dict[str, str | None]:
+    async def save_all(self, force: bool = True) -> Optional[dict[str, str]]:
         """
         保存所有模块
 
@@ -382,7 +382,7 @@ class StatePersistenceManager:
 
         return results
 
-    def get_metrics(self, name: str | None = None) -> Any:
+    def get_metrics(self, name: Optional[str] = None) -> Any:
         """
         获取持久化指标
 

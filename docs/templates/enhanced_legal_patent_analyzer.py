@@ -220,7 +220,7 @@ class EnhancedLegalPatentAnalyzer:
             'extraction_statistics': self._calculate_statistics(entities, relationships)
         }
 
-    def _extract_technical_features(self, claim_text: str) -> list[dict[str, Any]]:
+    def _extract_technical_features(self, claim_text: str) -> list[dict[str, Any]:
         """提取技术特征"""
         # 去除权利要求编号
         clean_text = re.sub(r"^\d+[、.]\s*", '', claim_text)
@@ -300,7 +300,7 @@ class EnhancedLegalPatentAnalyzer:
             return '重要特征'
         return '一般特征'
 
-    def _extract_entities_from_features(self, features: list[dict[str, Any]]) -> list[Entity]:
+    def _extract_entities_from_features(self, features: list[dict[str, Any]) -> list[Entity]:
         """从特征中提取实体"""
         entities = []
         entity_map = {}  # 名称到实体的映射
@@ -332,7 +332,7 @@ class EnhancedLegalPatentAnalyzer:
                                     type=entity_type,
                                     reference_number=ref_number,
                                     attributes=attributes,
-                                    source_features=[feature['id']]
+                                    source_features=[feature['id']
                                 )
 
                                 entities.append(entity)
@@ -378,7 +378,7 @@ class EnhancedLegalPatentAnalyzer:
 
         return attributes
 
-    def _analyze_relationships_from_features(self, features: list[dict[str, Any]], entities: list[Entity]) -> list[Relationship]:
+    def _analyze_relationships_from_features(self, features: list[dict[str, Any], entities: list[Entity]) -> list[Relationship]:
         """分析实体间关系"""
         relationships = []
         entity_name_to_id = {e.name: e.id for e in entities}
@@ -413,7 +413,7 @@ class EnhancedLegalPatentAnalyzer:
                                     description=feature_text,
                                     confidence=1.0 if subject_id and object_id else 0.7,
                                     strength=strength,
-                                    source_features=[feature['id']],
+                                    source_features=[feature['id'],
                                     legal_implications=legal_implications
                                 )
 
@@ -523,8 +523,8 @@ class EnhancedLegalPatentAnalyzer:
         degree_count = defaultdict(int)
 
         for edge in edges:
-            degree_count[edge['source']] += 1
-            degree_count[edge['target']] += 1
+            degree_count[edge['source'] += 1
+            degree_count[edge['target'] += 1
 
         max_degree = max(degree_count.values()) if degree_count else 1
 
@@ -667,7 +667,7 @@ class EnhancedLegalPatentAnalyzer:
     def _analyze_for_fto(self, entities: list[Entity], relationships: list[Relationship]) -> dict[str, Any]:
         """FTO分析场景"""
         # 识别高风险要素
-        high_risk_entities = [e for e in entities if e.type in ['部件', '结构']]
+        high_risk_entities = [e for e in entities if e.type in ['部件', '结构']
         critical_relationships = [r for r in relationships if r.confidence > 0.9]
 
         return {

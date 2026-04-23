@@ -8,8 +8,6 @@ import tempfile
 from pathlib import Path
 from unittest.mock import patch
 
-import pytest
-
 from core.utils.agent_identity_manager import (
     AgentIdentityManager,
     display_identity,

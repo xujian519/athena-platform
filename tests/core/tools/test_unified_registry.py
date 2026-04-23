@@ -4,7 +4,6 @@
 Tests for core.tools.unified_registry
 """
 
-import pytest
 
 
 class TestUnifiedToolRegistry:

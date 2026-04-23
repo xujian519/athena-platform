@@ -6,7 +6,6 @@ Configuration Migration Script
 将旧配置迁移到新的统一配置系统
 """
 import sys
-import os
 from pathlib import Path
 
 # 添加项目根目录到Python路径
@@ -30,7 +29,7 @@ def migrate_all_configs():
     for config_path in db_configs:
         if Path(config_path).exists():
             try:
-                new_config = ConfigAdapter.migrate_database_config(config_path)
+                ConfigAdapter.migrate_database_config(config_path)
                 print(f"   ✓ {config_path}")
             except Exception as e:
                 print(f"   ✗ {config_path}: {e}")
@@ -44,7 +43,7 @@ def migrate_all_configs():
     for config_path in redis_configs:
         if Path(config_path).exists():
             try:
-                new_config = ConfigAdapter.migrate_redis_config(config_path)
+                ConfigAdapter.migrate_redis_config(config_path)
                 print(f"   ✓ {config_path}")
             except Exception as e:
                 print(f"   ✗ {config_path}: {e}")
@@ -59,7 +58,7 @@ def migrate_all_configs():
     for config_path in llm_configs:
         if Path(config_path).exists():
             try:
-                new_config = ConfigAdapter.migrate_llm_config(config_path)
+                ConfigAdapter.migrate_llm_config(config_path)
                 print(f"   ✓ {config_path}")
             except Exception as e:
                 print(f"   ✗ {config_path}: {e}")

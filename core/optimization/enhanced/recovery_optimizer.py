@@ -56,7 +56,7 @@ class ErrorPattern:
     recovery_strategy: RecoveryStrategy
     max_retries: int = 3
     retry_delay_ms: int = 1000
-    fallback_handler: str | None = None
+    fallback_handler: Optional[str] = None
 
 
 @dataclass
@@ -71,7 +71,7 @@ class RecoveryAction:
     started_at: datetime
     completed_at: datetime | None = None
     success: bool = False
-    result: dict[str, Any] | None = None
+    result: Optional[dict[str, Any]] = None
     recovery_time_ms: float = 0
 
 
@@ -177,7 +177,7 @@ class EnhancedRecoveryOptimizer:
         logger.info(f"📋 已注册 {len(self.patterns)} 个错误模式")
 
     async def handle_error(
-        self, error: Exception, context: dict[str, Any] | None = None
+        self, error: Exception, context: Optional[dict[str, Any]] = None
     ) -> RecoveryAction:
         """
         处理错误

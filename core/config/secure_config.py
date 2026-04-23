@@ -36,7 +36,7 @@ class SecureConfig:
     从环境变量加载配置,避免硬编码敏感信息
     """
 
-    def __init__(self, env_file: str | None = None):
+    def __init__(self, env_file: Optional[str] = None):
         """
         初始化配置管理器
 
@@ -46,7 +46,7 @@ class SecureConfig:
         self._config: dict[str, Any] = {}
         self._load_env_file(env_file)
 
-    def _load_env_file(self, env_file: str | None = None) -> Any:
+    def _load_env_file(self, env_file: Optional[str] = None) -> Any:
         """
         加载.env文件
 
@@ -75,7 +75,7 @@ class SecureConfig:
         elif not DOTENV_AVAILABLE:
             logger.warning("⚠️ python-dotenv未安装,无法加载.env文件")
 
-    def get(self, key: str, default: str | None = None, required: bool = False) -> str | None:
+    def get(self, key: str, default: Optional[str] = None, required: bool = False) -> Optional[str]:
         """
         获取配置值
 
@@ -173,7 +173,7 @@ class SecureConfig:
 _global_config: SecureConfig | None = None
 
 
-def get_config(env_file: str | None = None) -> SecureConfig:
+def get_config(env_file: Optional[str] = None) -> SecureConfig:
     """
     获取全局配置实例
 

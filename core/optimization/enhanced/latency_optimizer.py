@@ -202,7 +202,7 @@ class P99LatencyOptimizer:
 
     async def _try_fast_path(
         self, request_id: str, params: dict[str, Any]
-    ) -> dict[str, Any] | None:
+    ) -> Optional[dict[str, Any]]:
         """尝试快速路径(缓存命中)"""
         cache_key = self._generate_cache_key(params)
 
@@ -222,7 +222,7 @@ class P99LatencyOptimizer:
 
     async def _try_batch_processing(
         self, request_id: str, handler: Callable, request_type: RequestType, params: dict[str, Any]
-    ) -> dict[str, Any] | None:
+    ) -> Optional[dict[str, Any]]:
         """尝试批处理"""
         # 添加到批处理缓冲区
         self.batch_buffer[request_type].append(
@@ -346,7 +346,7 @@ class P99LatencyOptimizer:
 
         logger.debug(f"📤 请求加入队列: {request_id} (优先级: {priority.value})")
 
-    async def process_next_priority_request(self) -> dict[str, Any] | None:
+    async def process_next_priority_request(self) -> Optional[dict[str, Any]]:
         """处理下一个高优先级请求"""
         async with self.queue_lock:
             if not self.priority_queue:

@@ -45,7 +45,7 @@ class TesseractAdapter(BaseDocumentParser):
         super().__init__(ParserBackend.TESSERACT)
         self.dpi = max(72, min(dpi, 600))  # DPI范围限制
         self.default_language = language
-        self._tesseract_path: str | None = None
+        self._tesseract_path: Optional[str] = None
         self._is_available: bool = False
 
         # 统计信息
@@ -278,7 +278,7 @@ class TesseractAdapter(BaseDocumentParser):
         return await loop.run_in_executor(None, _convert)
 
     @staticmethod
-    def _find_tesseract() -> str | None:
+    def _find_tesseract() -> Optional[str]:
         """查找tesseract可执行文件"""
         try:
             result = subprocess.run(
@@ -317,7 +317,7 @@ class TesseractAdapter(BaseDocumentParser):
             return False
 
     @staticmethod
-    def _find_pdftoppm() -> str | None:
+    def _find_pdftoppm() -> Optional[str]:
         """查找pdftoppm可执行文件"""
         try:
             result = subprocess.run(["which", "pdftoppm"], capture_output=True, text=True)

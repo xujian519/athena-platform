@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 """
 Athena通信系统 - 消息验证器
 Message Validator for Communication System
@@ -20,6 +19,7 @@ Message Validator for Communication System
 
 import logging
 import re
+from typing import Optional, Tuple
 
 from .types import Message, MessageType
 
@@ -74,7 +74,7 @@ class MessageValidator:
         # 编译危险模式正则
         self.dangerous_regex = [re.compile(p, re.IGNORECASE) for p in self.DANGEROUS_PATTERNS]
 
-    def validate(self, message: Message) -> tuple[bool, str | None]:
+    def validate(self, message: Message) -> Optional[Tuple[bool, str]]:
         """
         验证消息
 
@@ -111,7 +111,7 @@ class MessageValidator:
 
         return True, None
 
-    def _validate_size(self, message: Message) -> str | None:
+    def _validate_size(self, message: Message) -> Optional[str]:
         """验证消息大小"""
         # 估算消息大小
         message_str = str(message.to_dict())
@@ -122,7 +122,7 @@ class MessageValidator:
 
         return None
 
-    def _validate_required_fields(self, message: Message) -> str | None:
+    def _validate_required_fields(self, message: Message) -> Optional[str]:
         """验证必填字段"""
         if not message.id:
             return "消息ID不能为空"
@@ -146,7 +146,7 @@ class MessageValidator:
 
         return None
 
-    def _validate_formats(self, message: Message) -> str | None:
+    def _validate_formats(self, message: Message) -> Optional[str]:
         """验证字段格式"""
         # 验证ID格式
         if message.id and not self.ID_PATTERN.match(message.id):
@@ -168,7 +168,7 @@ class MessageValidator:
 
         return None
 
-    def _validate_security(self, message: Message) -> str | None:
+    def _validate_security(self, message: Message) -> Optional[str]:
         """验证内容安全性"""
         content = message.content
 
@@ -186,7 +186,7 @@ class MessageValidator:
 
         return None
 
-    def _validate_metadata(self, message: Message) -> str | None:
+    def _validate_metadata(self, message: Message) -> Optional[str]:
         """验证元数据"""
         if not message.metadata:
             return None
@@ -224,7 +224,7 @@ def create_message_validator(
 
 
 # 默认验证器实例
-_default_validator: MessageValidator | None = None
+_default_validator: Optional[MessageValidator] = None
 
 
 def get_default_validator() -> MessageValidator:
@@ -235,7 +235,7 @@ def get_default_validator() -> MessageValidator:
     return _default_validator
 
 
-def validate_message(message: Message) -> tuple[bool, str | None]:
+def validate_message(message: Message) -> Optional[Tuple[bool, str]]:
     """
     使用默认验证器验证消息
 
@@ -248,7 +248,7 @@ def validate_message(message: Message) -> tuple[bool, str | None]:
     return get_default_validator().validate(message)
 
 
-def validate_channel(channel_id: str, channel_type: str = "default") -> tuple[bool, str | None]:
+def validate_channel(channel_id: str, channel_type: str = "default") -> Optional[Tuple[bool, str]]:
     """
     验证通道ID和类型
 

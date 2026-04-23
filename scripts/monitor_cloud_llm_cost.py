@@ -5,10 +5,9 @@
 """
 
 import json
+from collections import defaultdict
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict
-from collections import defaultdict
 
 
 class CostTracker:
@@ -28,10 +27,10 @@ class CostTracker:
         self.log_file.parent.mkdir(parents=True, exist_ok=True)
         self.usage_data = self._load_usage_data()
 
-    def _load_usage_data(self) -> Dict:
+    def _load_usage_data(self) -> dict:
         """加载使用数据"""
         if self.log_file.exists():
-            with open(self.log_file, "r", encoding="utf-8") as f:
+            with open(self.log_file, encoding="utf-8") as f:
                 return json.load(f)
         return {"calls": []}
 
@@ -72,7 +71,7 @@ class CostTracker:
 
         return call_record
 
-    def get_stats(self, period: str = "today") -> Dict:
+    def get_stats(self, period: str = "today") -> dict:
         """获取统计数据
 
         Args:
@@ -133,13 +132,13 @@ class CostTracker:
             print("📊 本周期无API调用记录")
             return
 
-        print(f"\n📈 总体统计:")
+        print("\n📈 总体统计:")
         print(f"  调用次数: {stats['calls']:,}")
         print(f"  总Token数: {stats['total_tokens']:,}")
         print(f"  总成本: ¥{stats['total_cost']:.4f}")
         print(f"  平均每次: ¥{stats['total_cost']/stats['calls']:.6f}")
 
-        print(f"\n🏢 分服务商统计:")
+        print("\n🏢 分服务商统计:")
         for provider, data in sorted(
             stats["by_provider"].items(),
             key=lambda x: x[1]["cost"],
@@ -155,7 +154,7 @@ class CostTracker:
         savings = local_cost - stats["total_cost"]
         savings_pct = (savings / local_cost) * 100
 
-        print(f"\n💡 成本对比:")
+        print("\n💡 成本对比:")
         print(f"  本地模型日均成本: ¥{local_cost:.2f}")
         print(f"  云端模型实际成本: ¥{stats['total_cost']:.4f}")
         print(f"  节省: ¥{savings:.2f} ({savings_pct:.1f}%)")

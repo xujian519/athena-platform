@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 class ImageProcessor(BaseProcessor):
     """图像处理器"""
 
-    def __init__(self, processor_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, processor_id: str, config: Optional[dict[str, Any]] = None):
         super().__init__(processor_id, config)
         self.supported_formats = ["jpg", "jpeg", "png", "gif", "bmp", "webp"]
         self.max_image_size = config.get("max_image_size", 10 * 1024 * 1024)  # 10MB

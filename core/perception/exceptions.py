@@ -20,7 +20,7 @@ class PerceptionError(Exception):
     所有感知模块相关异常的基类
     """
 
-    def __init__(self, message: str, error_code: str | None = None, details: dict[str, Any] | None = None):
+    def __init__(self, message: str, error_code: Optional[str] = None, details: Optional[dict[str, Any]] = None):
         self.message = message
         self.error_code = error_code or "PERCEPTION_ERROR"
         self.details = details or {}
@@ -42,7 +42,7 @@ class ProcessingError(PerceptionError):
     当数据处理过程中发生错误时抛出
     """
 
-    def __init__(self, message: str, processor_id: str | None = None, input_type: str | None = None):
+    def __init__(self, message: str, processor_id: Optional[str] = None, input_type: Optional[str] = None):
         self.processor_id = processor_id
         self.input_type = input_type
         details = {}
@@ -59,7 +59,7 @@ class ValidationError(PerceptionError):
     当输入验证失败时抛出
     """
 
-    def __init__(self, message: str, field_name: str | None = None, value: Any = None):
+    def __init__(self, message: str, field_name: Optional[str] = None, value: Any = None):
         self.field_name = field_name
         details = {}
         if field_name:
@@ -75,7 +75,7 @@ class InitializationError(PerceptionError):
     当处理器或引擎初始化失败时抛出
     """
 
-    def __init__(self, message: str, component: str | None = None):
+    def __init__(self, message: str, component: Optional[str] = None):
         details = {}
         if component:
             details["component"] = component
@@ -88,7 +88,7 @@ class ConfigurationError(PerceptionError):
     当配置无效或缺失时抛出
     """
 
-    def __init__(self, message: str, config_key: str | None = None, config_value: Any = None):
+    def __init__(self, message: str, config_key: Optional[str] = None, config_value: Any = None):
         details = {}
         if config_key:
             details["config_key"] = config_key
@@ -103,7 +103,7 @@ class ResourceError(PerceptionError):
     当资源（内存、文件、网络等）不可用时抛出
     """
 
-    def __init__(self, message: str, resource_type: str | None = None, resource_path: str | None = None):
+    def __init__(self, message: str, resource_type: Optional[str] = None, resource_path: Optional[str] = None):
         details = {}
         if resource_type:
             details["resource_type"] = resource_type
@@ -118,7 +118,7 @@ class ModelLoadError(ResourceError):
     当AI模型加载失败时抛出
     """
 
-    def __init__(self, message: str, model_name: str | None = None):
+    def __init__(self, message: str, model_name: Optional[str] = None):
         self.model_name = model_name
         super().__init__(message, "model", model_name)
         self.error_code = "MODEL_LOAD_ERROR"
@@ -130,7 +130,7 @@ class FileReadError(ResourceError):
     当文件读取失败时抛出
     """
 
-    def __init__(self, message: str, file_path: str | None = None):
+    def __init__(self, message: str, file_path: Optional[str] = None):
         self.file_path = file_path
         super().__init__(message, "file", file_path)
         self.error_code = "FILE_READ_ERROR"
@@ -142,7 +142,7 @@ class NetworkError(PerceptionError):
     当网络请求失败时抛出
     """
 
-    def __init__(self, message: str, url: str | None = None, status_code: int | None = None):
+    def __init__(self, message: str, url: Optional[str] = None, status_code: Optional[int] = None):
         self.url = url
         self.status_code = status_code
         details: dict[str, str | int] = {}
@@ -159,7 +159,7 @@ class TimeoutError(PerceptionError):
     当操作超时时抛出
     """
 
-    def __init__(self, message: str, timeout_seconds: float | None = None):
+    def __init__(self, message: str, timeout_seconds: Optional[float] = None):
         self.timeout_seconds = timeout_seconds
         details = {}
         if timeout_seconds:
@@ -173,7 +173,7 @@ class RateLimitError(PerceptionError):
     当超过速率限制时抛出
     """
 
-    def __init__(self, message: str, retry_after: float | None = None):
+    def __init__(self, message: str, retry_after: Optional[float] = None):
         self.retry_after = retry_after
         details = {}
         if retry_after:
@@ -187,7 +187,7 @@ class MemoryError(PerceptionError):
     当内存不足时抛出
     """
 
-    def __init__(self, message: str, required_mb: float | None = None, available_mb: float | None = None):
+    def __init__(self, message: str, required_mb: Optional[float] = None, available_mb: Optional[float] = None):
         details = {}
         if required_mb:
             details["required_mb"] = required_mb
@@ -202,7 +202,7 @@ class ConcurrencyError(PerceptionError):
     当并发控制失败时抛出
     """
 
-    def __init__(self, message: str, max_concurrent: int | None = None):
+    def __init__(self, message: str, max_concurrent: Optional[int] = None):
         details = {}
         if max_concurrent:
             details["max_concurrent"] = max_concurrent
@@ -215,7 +215,7 @@ class CacheError(PerceptionError):
     当缓存操作失败时抛出
     """
 
-    def __init__(self, message: str, cache_key: str | None = None, operation: str | None = None):
+    def __init__(self, message: str, cache_key: Optional[str] = None, operation: Optional[str] = None):
         details = {}
         if cache_key:
             details["cache_key"] = cache_key
@@ -230,7 +230,7 @@ class FormatError(PerceptionError):
     当输入格式不正确时抛出
     """
 
-    def __init__(self, message: str, expected_format: str | None = None, actual_format: str | None = None):
+    def __init__(self, message: str, expected_format: Optional[str] = None, actual_format: Optional[str] = None):
         details = {}
         if expected_format:
             details["expected_format"] = expected_format
@@ -242,7 +242,7 @@ class FormatError(PerceptionError):
 class ImageFormatError(FormatError):
     """图像格式错误"""
 
-    def __init__(self, message: str, supported_formats: list[str] | None = None):
+    def __init__(self, message: str, supported_formats: Optional[list[str]] = None):
         details = {}
         if supported_formats:
             details["supported_formats"] = ", ".join(supported_formats)
@@ -255,7 +255,7 @@ class ImageFormatError(FormatError):
 class AudioFormatError(FormatError):
     """音频格式错误"""
 
-    def __init__(self, message: str, supported_formats: list[str] | None = None):
+    def __init__(self, message: str, supported_formats: Optional[list[str]] = None):
         details = {}
         if supported_formats:
             details["supported_formats"] = ", ".join(supported_formats)
@@ -268,7 +268,7 @@ class AudioFormatError(FormatError):
 class VideoFormatError(FormatError):
     """视频格式错误"""
 
-    def __init__(self, message: str, supported_formats: list[str] | None = None):
+    def __init__(self, message: str, supported_formats: Optional[list[str]] = None):
         details = {}
         if supported_formats:
             details["supported_formats"] = ", ".join(supported_formats)

@@ -303,8 +303,8 @@ class SanitizingFormatter(logging.Formatter):
     def __init__(
         self,
         sanitizer: LogSanitizer | None = None,
-        fmt: str | None = None,
-        datefmt: str | None = None,
+        fmt: Optional[str] = None,
+        datefmt: Optional[str] = None,
     ):
         """
         初始化格式化器

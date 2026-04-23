@@ -56,7 +56,7 @@ class SearchTask:
     created_at: datetime
     started_at: datetime | None = None
     completed_at: datetime | None = None
-    results: Optional[List[PatentData] = None
+    results: Optional[List[PatentData]] = None
     error: str | None = None
     metadata: Optional[Dict[str, Any]] = None
 

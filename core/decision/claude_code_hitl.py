@@ -38,8 +38,8 @@ class DecisionRequest:
     options: list[dict[str, Any]]
     category: DecisionCategory
     urgency: DecisionUrgency = DecisionUrgency.MEDIUM
-    context: dict[str, Any] | None = None
-    stakeholders: list[str] | None = None
+    context: Optional[dict[str, Any]] = None
+    stakeholders: Optional[list[str]] = None
     deadline: datetime | None = None
 
 @dataclass
@@ -47,8 +47,8 @@ class DecisionResult:
     """决策结果"""
     chosen_option: str
     confidence: float
-    human_feedback: str | None = None
-    rationale: str | None = None
+    human_feedback: Optional[str] = None
+    rationale: Optional[str] = None
     timestamp: datetime = None
 
 class ClaudeCodeHITLDecisionEngine:

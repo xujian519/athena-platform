@@ -12,24 +12,23 @@ Athena平台工具库验证测试套件
 日期: 2026-04-18
 """
 
-import asyncio
 import json
+
+# 核心服务导入
+import sys
 import time
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-import pytest
 import httpx
+import pytest
 
-# 核心服务导入
-import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "core"))
 
-from tools.mcp.athena_mcp_manager import AthenaMCPManager
 from governance.unified_tool_registry import UnifiedToolRegistry
-
+from tools.mcp.athena_mcp_manager import AthenaMCPManager
 
 # ============================================================================
 # 测试配置

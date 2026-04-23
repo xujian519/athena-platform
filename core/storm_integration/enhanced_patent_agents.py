@@ -120,7 +120,7 @@ class EnhancedPatentExaminerAgent(BasePatentAgent):
         self,
         conversation_history: list[Utterance],
         current_perspective: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> Utterance:
         """
         生成审查员的话语(增强版)
@@ -341,7 +341,7 @@ class EnhancedTechnicalExpertAgent(BasePatentAgent):
         self,
         conversation_history: list[Utterance],
         current_perspective: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> Utterance:
         """生成技术专家的话语(增强版)"""
         if not conversation_history:
@@ -656,7 +656,7 @@ class EnhancedPatentAttorneyAgent(BasePatentAgent):
         self,
         conversation_history: list[Utterance],
         current_perspective: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> Utterance:
         """生成专利律师的话语(增强版)"""
         if not conversation_history:

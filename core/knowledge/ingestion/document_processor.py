@@ -58,7 +58,7 @@ class DocumentChunk:
     metadata: dict[str, Any] = field(default_factory=dict)
     source_info: dict[str, Any] = field(default_factory=dict)
     hierarchy_level: int = 0
-    parent_id: str | None = None
+    parent_id: Optional[str] = None
     child_ids: list[str] = field(default_factory=list)
 
 
@@ -169,7 +169,7 @@ class DocumentProcessor:
             logger.error(f"❌ 文档处理失败 {file_path}: {e}")
             return None
 
-    async def _read_document(self, file_path: Path) -> str | None:
+    async def _read_document(self, file_path: Path) -> Optional[str]:
         """读取文档内容"""
         try:
             if file_path.suffix.lower() == ".txt":
@@ -189,7 +189,7 @@ class DocumentProcessor:
             logger.error(f"❌ 文件读取失败 {file_path}: {e}")
             return None
 
-    def _read_pdf(self, file_path: Path) -> str | None:
+    def _read_pdf(self, file_path: Path) -> Optional[str]:
         """读取PDF文件"""
         if not PDF_AVAILABLE:
             logger.error("❌ PyPDF2未安装,无法处理PDF文件")
@@ -210,7 +210,7 @@ class DocumentProcessor:
             logger.error(f"❌ PDF读取失败 {file_path}: {e}")
             return None
 
-    def _read_docx(self, file_path: Path) -> str | None:
+    def _read_docx(self, file_path: Path) -> Optional[str]:
         """读取DOCX文件"""
         if not DOCX_AVAILABLE:
             logger.error("❌ python-docx未安装,无法处理DOCX文件")

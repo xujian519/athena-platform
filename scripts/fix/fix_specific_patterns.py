@@ -6,7 +6,8 @@
 import re
 from pathlib import Path
 
-def fix_specific_patterns(content: str) -> tuple[str, list[str]]:
+
+def fix_specific_patterns(content: str) -> tuple[str, list[str]:
     """修复特定的语法错误模式"""
     fixes = []
 
@@ -21,11 +22,11 @@ def fix_specific_patterns(content: str) -> tuple[str, list[str]]:
         if re.search(r'dict\[str,\s*list\[str\]\s*=\s*field', line):
             line = re.sub(
                 r'dict\[str,\s*list\[str\]\s*=\s*field',
-                'dict[str, list[str]] = field',
+                'dict[str, list[str] = field',
                 line
             )
             if line != original_line:
-                fixes.append(f"第{i+1}行: dict[str, list[str]]")
+                fixes.append(f"第{i+1}行: dict[str, list[str]")
 
         # 模式2: hashlib.md5(..., usedforsecurity=False.isoformat()...)
         # 修复错误的参数顺序
@@ -51,8 +52,8 @@ def fix_specific_patterns(content: str) -> tuple[str, list[str]]:
                 fixes.append(f"第{i+1}行: 修复默认值语法")
 
         # 模式4: algorithms=[value) (缺少右方括号)
-        if re.search(r'algorithms=\[([^\]]+)\)', line):
-            line = re.sub(r'algorithms=\[([^\]]+)\)', r'algorithms=[\1]]', line)
+        if re.search(r'algorithms=\[([^\]+)\)', line):
+            line = re.sub(r'algorithms=\[([^\]+)\)', r'algorithms=[\1]', line)
             if line != original_line:
                 fixes.append(f"第{i+1}行: algorithms 括号修复")
 
@@ -68,9 +69,9 @@ def fix_specific_patterns(content: str) -> tuple[str, list[str]]:
             if line != original_line:
                 fixes.append(f"第{i+1}行: list[str] 参数分隔")
 
-        # 模式7: return type: dict[str, Any]]: (多余右方括号)
+        # 模式7: return type: dict[str, Any]: (多余右方括号)
         if re.search(r'->\s*dict\[str,\s*Any\]\]:\s*$', line):
-            line = re.sub(r'dict\[str,\s*Any\]\]:', 'dict[str, Any]]:', line)
+            line = re.sub(r'dict\[str,\s*Any\]\]:', 'dict[str, Any]:', line)
             if line != original_line:
                 fixes.append(f"第{i+1}行: 移除多余括号")
 
@@ -78,11 +79,11 @@ def fix_specific_patterns(content: str) -> tuple[str, list[str]]:
         if re.search(r'dict\[[\w:]+,\s*list\[str\]\s*=\s*\{', line):
             line = re.sub(
                 r'dict\[([\w:]+),\s*list\[str\]\s*=\s*\{',
-                r'dict[\1, list[str]] = {',
+                r'dict[\1, list[str] = {',
                 line
             )
             if line != original_line:
-                fixes.append(f"第{i+1}行: dict[Type, list[str]]")
+                fixes.append(f"第{i+1}行: dict[Type, list[str]")
 
         # 模式9: double None assignment: param: type | None = None | None = None
         if re.search(r'\w+:\s*[^=]+\|\s*None\s*=\s*None\s*\|\s*None\s*=\s*None', line):
@@ -104,10 +105,10 @@ def fix_specific_patterns(content: str) -> tuple[str, list[str]]:
 
     return '\n'.join(result_lines), fixes
 
-def fix_file(file_path: Path) -> tuple[bool, list[str]]:
+def fix_file(file_path: Path) -> tuple[bool, list[str]:
     """修复单个文件"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         new_content, fixes = fix_specific_patterns(content)
@@ -151,7 +152,7 @@ def main():
                 for fix in fixes[:5]:  # 只显示前5个修复
                     print(f"    {fix}")
 
-    print(f"\n修复完成!")
+    print("\n修复完成!")
     print(f"修复文件数: {fixed_count}")
 
 if __name__ == "__main__":

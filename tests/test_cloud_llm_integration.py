@@ -5,15 +5,15 @@
 """
 
 import asyncio
-import sys
 import os
+import sys
 from pathlib import Path
 
 # 添加项目路径
 project_root = Path("/Users/xujian/Athena工作平台")
 sys.path.insert(0, str(project_root))
 
-from core.llm.adapters.cloud_adapter import CloudLLMAdapter
+from core.ai.llm.adapters.cloud_adapter import CloudLLMAdapter
 
 
 async def test_provider(provider: str, model: str) -> bool:
@@ -43,7 +43,7 @@ async def test_provider(provider: str, model: str) -> bool:
 
         # 显示结果预览
         preview = result[:150] + "..." if len(result) > 150 else result
-        print(f"✅ 生成成功")
+        print("✅ 生成成功")
         print(f"📝 结果: {preview}")
 
         # 关闭连接
@@ -99,7 +99,7 @@ async def test_cost_optimization():
     if available_providers:
         print(f"\n💡 推荐使用: {available_providers[0]}（成本最低且可用）")
     else:
-        print(f"\n⚠️ 没有可用的云端服务商，请检查API密钥配置")
+        print("\n⚠️ 没有可用的云端服务商，请检查API密钥配置")
 
 
 async def main():
@@ -176,7 +176,7 @@ async def main():
     if passed == total:
         print("\n🎉 所有测试通过！云端LLM已准备就绪。")
     elif passed > 0:
-        print(f"\n⚠️ 部分测试通过，可使用已成功的服务商。")
+        print("\n⚠️ 部分测试通过，可使用已成功的服务商。")
     else:
         print("\n❌ 所有测试失败，请检查:")
         print("  1. API密钥是否正确")

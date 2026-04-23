@@ -55,7 +55,7 @@ class LoadBalancer:
             }
         )
 
-    def select_best_node(self, task: Task) -> dict[str, Any] | None:
+    def select_best_node(self, task: Task) -> Optional[dict[str, Any]]:
         """选择最佳工作节点
 
         Args:

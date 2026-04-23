@@ -79,7 +79,7 @@ class SemanticEnhancedIntentEngine(EnhancedIntentRecognitionEngine):
     engine_name = "semantic_enhanced_engine"
     engine_version = "2.0.0"
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化语义增强引擎
 
@@ -277,7 +277,7 @@ class SemanticEnhancedIntentEngine(EnhancedIntentRecognitionEngine):
             ],
         }
 
-    def recognize_intent(self, text: str, context: dict[str, Any] | None = None) -> IntentResult:
+    def recognize_intent(self, text: str, context: Optional[dict[str, Any]] = None) -> IntentResult:
         """
         识别意图(同步版本)
 
@@ -295,8 +295,8 @@ class SemanticEnhancedIntentEngine(EnhancedIntentRecognitionEngine):
     async def recognize_intent_async(
         self,
         text: str,
-        context: dict[str, Any] | None = None,
-        user_id: str | None = None,
+        context: Optional[dict[str, Any]] = None,
+        user_id: Optional[str] = None,
         enable_semantic: bool = True,
         force_semantic: bool = False,
     ) -> IntentResult:
@@ -605,7 +605,7 @@ class SemanticEnhancedIntentEngine(EnhancedIntentRecognitionEngine):
 
         return similarities.tolist()
 
-    def _get_cached_embeddings(self, intent_type: str) -> list[list[float | None]]:
+    def _get_cached_embeddings(self, intent_type: str) -> Optional[list[list[float]]]:
         """获取缓存的嵌入向量"""
         cache_entry = self.embedding_cache.get(intent_type)
         if cache_entry:
@@ -658,7 +658,7 @@ class SemanticEnhancedIntentEngine(EnhancedIntentRecognitionEngine):
 
 
 def create_semantic_intent_engine(
-    config: dict[str, Any] | None = None,
+    config: Optional[dict[str, Any]] = None,
 ) -> SemanticEnhancedIntentEngine:
     """
     创建语义增强意图识别引擎
@@ -696,7 +696,7 @@ async def get_semantic_intent_engine() -> SemanticEnhancedIntentEngine:
 
 # 便捷函数
 async def recognize_intent_semantic(
-    text: str, context: dict[str, Any]  | None = None, user_id: str | None = None
+    text: str, context: dict[str, Any]  | None = None, user_id: Optional[str] = None
 ) -> IntentResult:
     """便捷函数:语义增强意图识别"""
     engine = await get_semantic_intent_engine()

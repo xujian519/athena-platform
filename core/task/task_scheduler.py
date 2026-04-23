@@ -24,7 +24,7 @@ class ScheduledTask:
     priority: int  # 优先级，数字越大优先级越高
     task_id: str  # 任务ID（用于排序时的唯一标识）
     task: BackgroundTask  # 实际任务
-    timeout: float | None = None  # 超时时间（秒）
+    timeout: Optional[float] = None  # 超时时间（秒）
     created_at: float = field(default_factory=lambda: __import__("time").time())
 
 
@@ -58,7 +58,7 @@ class TaskScheduler:
         self,
         func: Callable,
         priority: int = 5,
-        timeout: float | None = None,
+        timeout: Optional[float] = None,
         **kwargs,
     ) -> BackgroundTask:
         """调度任务

@@ -39,7 +39,7 @@ class KnowledgeGraphExpander:
 
     def __init__(
         self,
-        nebula_config: dict[str, Any] | None = None,
+        nebula_config: Optional[dict[str, Any]] = None,
         config: KGExpansionConfig | None = None,
     ):
         """

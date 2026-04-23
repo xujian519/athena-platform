@@ -56,9 +56,9 @@ class OAProcessingResult:
     stage: str  # 当前阶段
 
     # 各阶段数据
-    parsed_data: dict[str, Any] | None = None
+    parsed_data: Optional[dict[str, Any]] = None
     user_modifications: dict[str, Any] = field(default_factory=dict)
-    response_plan: dict[str, Any] | None = None
+    response_plan: Optional[dict[str, Any]] = None
 
     # 元数据
     started_at: str = field(default_factory=lambda: datetime.now().isoformat())

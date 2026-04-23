@@ -349,7 +349,7 @@ class PlanVisualizer:
 
         return "".join(html_parts)
 
-    def get_step_details(self, plan: ExecutionPlan, step_number: int) -> dict[str, Any] | None:
+    def get_step_details(self, plan: ExecutionPlan, step_number: int) -> Optional[dict[str, Any]]:
         """获取特定步骤的详细信息"""
         for step in plan.steps:
             if step.step_number == step_number:

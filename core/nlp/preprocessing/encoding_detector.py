@@ -90,7 +90,7 @@ class EncodingDetector:
         # 长度应该是4的倍数
         return len(text) % 4 == 0
 
-    def _try_base64_decode(self, text: str) -> str | None:
+    def _try_base64_decode(self, text: str) -> Optional[str]:
         """尝试Base64解码"""
         try:
             decoded = base64.b64decode(text).decode("utf-8")

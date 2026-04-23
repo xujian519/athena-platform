@@ -114,10 +114,9 @@ async def main():
 
     try:
         from core.evaluation.evaluation_engine import (
-            EvaluationEngine,
             EvaluationCriteria,
+            EvaluationEngine,
             EvaluationType,
-            EvaluationLevel,
         )
 
         # 创建引擎
@@ -195,7 +194,11 @@ async def main():
     print("\n🔍 测试模块集成...")
 
     try:
-        from core.evaluation.evaluation_engine import EvaluationEngine, EvaluationCriteria, EvaluationType
+        from core.evaluation.evaluation_engine import (
+            EvaluationCriteria,
+            EvaluationEngine,
+            EvaluationType,
+        )
         from core.intelligence.reflection_engine_v5 import ReflectionEngineV5, ReflectionType
 
         # 创建引擎
@@ -245,8 +248,8 @@ async def main():
     # 测试反思集成包装器
     try:
         from core.intelligence.reflection_integration_wrapper import (
-            ReflectionIntegrationWrapper,
             ReflectionConfig,
+            ReflectionIntegrationWrapper,
         )
 
         # 创建包装器
@@ -266,7 +269,11 @@ async def main():
 
     # 测试数据序列化
     try:
-        from core.evaluation.evaluation_engine import EvaluationEngine, EvaluationCriteria, EvaluationType
+        from core.evaluation.evaluation_engine import (
+            EvaluationCriteria,
+            EvaluationEngine,
+            EvaluationType,
+        )
 
         engine = EvaluationEngine(agent_id="serialization_test")
         await engine.initialize()
@@ -335,8 +342,8 @@ async def main():
     # 场景1: 专利分析质量评估
     try:
         from core.evaluation.evaluation_engine import (
-            EvaluationEngine,
             EvaluationCriteria,
+            EvaluationEngine,
             EvaluationType,
         )
         from core.intelligence.reflection_engine_v5 import ReflectionEngineV5, ReflectionType

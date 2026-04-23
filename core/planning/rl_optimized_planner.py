@@ -101,8 +101,8 @@ class QNetwork:
         task_type: str,
         action: str,
         reward: float,
-        next_complexity: str | None = None,
-        next_task_type: str | None = None,
+        next_complexity: Optional[str] = None,
+        next_task_type: Optional[str] = None,
     ) -> float:
         """
         Q-learning更新规则
@@ -236,8 +236,8 @@ class ExperienceReplay:
         task_type: str,
         action: str,
         reward: float,
-        next_complexity: str | None = None,
-        next_task_type: str | None = None,
+        next_complexity: Optional[str] = None,
+        next_task_type: Optional[str] = None,
         done: bool = False,
     ) -> None:
         """添加经验"""
@@ -374,7 +374,7 @@ class QLearningAgent:
         )
 
     def select_action(
-        self, complexity: str, task_type: str, available_actions: list[str] | None = None
+        self, complexity: str, task_type: str, available_actions: Optional[list[str]] = None
     ) -> str:
         """
         选择动作 (epsilon-greedy策略)
@@ -421,8 +421,8 @@ class QLearningAgent:
         execution_time: float,
         quality_score: float,
         expected_time: float,
-        next_complexity: str | None = None,
-        next_task_type: str | None = None,
+        next_complexity: Optional[str] = None,
+        next_task_type: Optional[str] = None,
     ) -> float:
         """
         更新Q值
@@ -505,7 +505,7 @@ class RLOptimizedPlanner:
         learning_rate: float = 0.1,
         discount_factor: float = 0.95,
         epsilon: float = 0.1,
-        q_table_path: str | None = None,
+        q_table_path: Optional[str] = None,
     ):
         """
         初始化RL优化规划器

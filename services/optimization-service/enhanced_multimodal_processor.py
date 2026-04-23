@@ -387,7 +387,7 @@ class EnhancedMultimodalProcessor:
             categorized = result['merged_content'].get('categorized_content', {})
             if categorized:
                 summary['content_types'] = [content_type for content_type in categorized.keys()
-                                          if categorized[content_type]]
+                                          if categorized[content_type]
                 summary['structure_detected'] = True
 
         # 评估提取质量
@@ -589,7 +589,7 @@ class EnhancedMultimodalProcessor:
         return merged
 
     async def cross_modal_search(self, query: str, modality_filter: ModalityType | None = None,
-                               limit: int = 10) -> list[dict[str, Any]]:
+                               limit: int = 10) -> list[dict[str, Any]:
         """跨模态搜索（继承原有功能）"""
         if self.base_processor:
             return await self.base_processor.cross_modal_search(query, modality_filter, limit)

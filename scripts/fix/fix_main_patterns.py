@@ -6,7 +6,8 @@
 import re
 from pathlib import Path
 
-def fix_main_patterns(content: str) -> tuple[str, list[str]]:
+
+def fix_main_patterns(content: str) -> tuple[str, list[str]:
     """修复主要的语法错误模式"""
     fixes = []
     lines = content.split('\n')
@@ -18,19 +19,19 @@ def fix_main_patterns(content: str) -> tuple[str, list[str]]:
         # 模式1: dict[str, ...] | None = None (缺少右括号)
         # 匹配: param: dict[str, type | None = None
         # 应该是: param: dict[str, type] | None = None
-        if re.search(r'\w+:\s*dict\[str,\s*[^|\]]+\s*\|\s*None\s*=\s*None\s*[,)]', line):
+        if re.search(r'\w+:\s*dict\[str,\s*[^|\]+\s*\|\s*None\s*=\s*None\s*[,)]', line):
             # 检查是否缺少闭合括号
-            match = re.search(r'dict\[str,\s*([^|\]]+?)\s*\|\s*None\s*=\s*None', line)
+            match = re.search(r'dict\[str,\s*([^|\]+?)\s*\|\s*None\s*=\s*None', line)
             if match:
                 # 在 | None 之前添加 ]
                 new_line = re.sub(
-                    r'dict\[str,\s*([^|\]]+?)\s*\|\s*None\s*=\s*None',
-                    r'dict[str, \1]] | None = None',
+                    r'dict\[str,\s*([^|\]+?)\s*\|\s*None\s*=\s*None',
+                    r'dict[str, \1] | None = None',
                     line
                 )
-                if new_line != line and ']]' in new_line:
+                if new_line != line and ']' in new_line:
                     line = new_line
-                    fixes.append(f"第{i+1}行: dict[str, ...]]")
+                    fixes.append(f"第{i+1}行: dict[str, ...]")
 
         # 模式2: Optional[错误]
         # 匹配: Optional[None, param: ... 或 Optional[True, ...
@@ -44,9 +45,9 @@ def fix_main_patterns(content: str) -> tuple[str, list[str]]:
                 fixes.append(f"第{i+1}行: 移除错误的 Optional")
 
         # 模式3: Optional[list[Type | None = None)]
-        if re.search(r'Optional\[list\[[^\]]+\|\s*None\s*=\s*None\]', line):
+        if re.search(r'Optional\[list\[[^\]+\|\s*None\s*=\s*None\]', line):
             line = re.sub(
-                r'Optional\[list\[([^\]]+)\|\s*None\s*=\s*None\]',
+                r'Optional\[list\[([^\]+)\|\s*None\s*=\s*None\]',
                 r'list[\1] | None',
                 line
             )
@@ -54,14 +55,14 @@ def fix_main_patterns(content: str) -> tuple[str, list[str]]:
                 fixes.append(f"第{i+1}行: Optional[list]")
 
         # 模式4: dict[Type, list[str] = {...} (缺少右括号)
-        if re.search(r'dict\[[^]]+,\s*list\[str\]\s*=\s*\{', line):
+        if re.search(r'dict\[[^]+,\s*list\[str\]\s*=\s*\{', line):
             line = re.sub(
-                r'dict\[([^]]+),\s*list\[str\]\s*=\s*\{',
-                r'dict[\1, list[str]] = {',
+                r'dict\[([^]+),\s*list\[str\]\s*=\s*\{',
+                r'dict[\1, list[str] = {',
                 line
             )
             if line != original_line:
-                fixes.append(f"第{i+1}行: dict[Type, list[str]]")
+                fixes.append(f"第{i+1}行: dict[Type, list[str]")
 
         # 模式5: param: type | None = None, param2: ... (缺少闭合)
         if re.search(r'\w+:\s*[^,]+,\s*\w+:', line):
@@ -78,10 +79,10 @@ def fix_main_patterns(content: str) -> tuple[str, list[str]]:
 
     return '\n'.join(result_lines), fixes
 
-def fix_file(file_path: Path) -> tuple[bool, list[str]]:
+def fix_file(file_path: Path) -> tuple[bool, list[str]:
     """修复单个文件"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         new_content, fixes = fix_main_patterns(content)
@@ -125,7 +126,7 @@ def main():
                 for fix in fixes[:3]:
                     print(f"    {fix}")
 
-    print(f"\n修复完成!")
+    print("\n修复完成!")
     print(f"修复文件数: {fixed_count}")
 
 if __name__ == "__main__":

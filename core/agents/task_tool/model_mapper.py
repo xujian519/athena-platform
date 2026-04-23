@@ -52,7 +52,7 @@ class ModelMapper:
 
     def __init__(self):
         """初始化ModelMapper"""
-        self._environment_model: str | None = os.getenv("ATHENA_SUBAGENT_MODEL")
+        self._environment_model: Optional[str] = os.getenv("ATHENA_SUBAGENT_MODEL")
         if self._environment_model:
             self._environment_model = self.normalize_model_name(self._environment_model)
 
@@ -143,7 +143,7 @@ class ModelMapper:
         """
         return list(self.MODEL_MAPPING.keys())
 
-    def get_environment_model(self) -> str | None:
+    def get_environment_model(self) -> Optional[str]:
         """获取环境变量中指定的模型
 
         Returns:

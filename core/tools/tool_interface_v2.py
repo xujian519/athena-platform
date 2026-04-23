@@ -61,17 +61,17 @@ class InterruptBehavior(Enum):
 class ToolValidationResult(BaseModel):
     """工具验证结果"""
     is_valid: bool
-    errors: List[str] = Field(default_factory=list)
-    warnings: List[str] = Field(default_factory=list)
+    errors: list[str] = Field(default_factory=list)
+    warnings: list[str] = Field(default_factory=list)
 
 
 class ToolResult(BaseModel, Generic[Output]):
     """工具执行结果"""
     success: bool
-    output: Optional[Output] = None
-    error: Optional[str] = None
+    output: Output | None = None
+    error: str | None = None
     execution_time: float = 0.0
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
     class Config:
         arbitrary_types_allowed = True
@@ -87,8 +87,8 @@ class ToolContext:
 
     # 会话信息
     session_id: str
-    agent_id: Optional[str] = None
-    agent_type: Optional[str] = None
+    agent_id: str | None = None
+    agent_type: str | None = None
 
     # 系统配置
     model: str = "claude-sonnet-4-6"
@@ -97,25 +97,25 @@ class ToolContext:
 
     # 资源限制
     max_result_size_chars: int = 100_000
-    file_reading_limits: Dict[str, int] = field(default_factory=dict)
-    glob_limits: Dict[str, int] = field(default_factory=dict)
+    file_reading_limits: dict[str, int] = field(default_factory=dict)
+    glob_limits: dict[str, int] = field(default_factory=dict)
 
     # MCP集成
-    mcp_clients: Dict[str, Any] = field(default_factory=dict)
-    mcp_resources: Dict[str, Any] = field(default_factory=dict)
+    mcp_clients: dict[str, Any] = field(default_factory=dict)
+    mcp_resources: dict[str, Any] = field(default_factory=dict)
 
     # 权限和安全
     permission_mode: PermissionMode = PermissionMode.DEFAULT
     working_directory: str = ""
 
     # 取消控制
-    abort_controller: Optional[Any] = None
+    abort_controller: Any | None = None
 
     # 消息上下文
-    messages: List[Dict[str, Any]] = field(default_factory=list)
+    messages: list[dict[str, Any]] = field(default_factory=list)
 
     # 父消息（用于子代理）
-    parent_message: Optional[Dict[str, Any]] = None
+    parent_message: dict[str, Any] | None = None
 
     def is_aborted(self) -> bool:
         """检查是否已取消"""
@@ -140,15 +140,15 @@ class ToolMetadata:
     priority: str = "medium"
 
     # 别名和搜索
-    aliases: List[str] = field(default_factory=list)
-    search_hint: Optional[str] = None
+    aliases: list[str] = field(default_factory=list)
+    search_hint: str | None = None
 
     # 模式定义（使用Pydantic模型）
-    input_schema: Optional[Type[BaseModel]] = None
-    output_schema: Optional[Type[BaseModel]] = None
+    input_schema: type[BaseModel] | None = None
+    output_schema: type[BaseModel] | None = None
 
     # JSON模式（用于MCP）
-    input_json_schema: Optional[Dict[str, Any]] = None
+    input_json_schema: dict[str, Any] | None = None
 
     # 限制和约束
     max_result_size_chars: int = 100_000
@@ -161,7 +161,7 @@ class ToolMetadata:
     is_search_or_read_command: bool = False
 
     # 行为特性
-    interrupt_behavior: Optional[InterruptBehavior] = None
+    interrupt_behavior: InterruptBehavior | None = None
     is_open_world: bool = False
     requires_user_interaction: bool = False
 
@@ -173,7 +173,7 @@ class ToolMetadata:
     # MCP信息
     is_mcp: bool = False
     is_lsp: bool = False
-    mcp_info: Optional[Dict[str, str]] = None
+    mcp_info: dict[str, str] | None = None
 
 
 class BaseTool(ABC, Generic[Input, Output, Progress]):
@@ -201,7 +201,7 @@ class BaseTool(ABC, Generic[Input, Output, Progress]):
         args: Input,
         context: ToolContext,
         can_use_tool: Callable[[str], bool],
-        on_progress: Optional[Callable[[Progress], None]] = None,
+        on_progress: Callable[[Progress], None] | None = None,
     ) -> ToolResult[Output]:
         """
         执行工具
@@ -246,13 +246,13 @@ class BaseTool(ABC, Generic[Input, Output, Progress]):
         """检查工具是否具有破坏性"""
         return self.metadata.is_destructive
 
-    def interrupt_behavior(self) -> Optional[InterruptBehavior]:
+    def interrupt_behavior(self) -> InterruptBehavior | None:
         """返回中断行为"""
         return self.metadata.interrupt_behavior
 
     def is_search_or_read_command(
         self, input: Input
-    ) -> Optional[Dict[str, bool]]:
+    ) -> dict[str, bool] | None:
         """
         检查是否为搜索或读命令
 
@@ -331,8 +331,8 @@ class ToolRegistry:
     """
 
     def __init__(self):
-        self._tools: Dict[str, BaseTool] = {}
-        self._aliases: Dict[str, str] = {}  # alias -> tool_name
+        self._tools: dict[str, BaseTool] = {}
+        self._aliases: dict[str, str] = {}  # alias -> tool_name
         self._lock = asyncio.Lock()
         self._logger = logging.getLogger(f"{__name__}.ToolRegistry")
 
@@ -353,7 +353,7 @@ class ToolRegistry:
 
             self._logger.info(f"✅ 工具已注册: {name}")
 
-    def get(self, name: str) -> Optional[BaseTool]:
+    def get(self, name: str) -> BaseTool | None:
         """
         获取工具
 
@@ -367,7 +367,7 @@ class ToolRegistry:
         tool_name = self._aliases.get(name, name)
         return self._tools.get(tool_name)
 
-    def list_tools(self) -> List[str]:
+    def list_tools(self) -> list[str]:
         """列出所有工具名称"""
         return list(self._tools.keys())
 
@@ -376,8 +376,8 @@ class ToolRegistry:
         name: str,
         args: Any,
         context: ToolContext,
-        can_use_tool: Optional[Callable[[str], bool]] = None,
-        on_progress: Optional[Callable[[Any], None]] = None,
+        can_use_tool: Callable[[str], bool] | None = None,
+        on_progress: Callable[[Any], None] | None = None,
     ) -> ToolResult:
         """
         调用工具

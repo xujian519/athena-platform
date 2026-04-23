@@ -473,8 +473,8 @@ class ModelQuantizationSystem:
     async def auto_optimize(
         self,
         model_name: str,
-        target_latency_ms: float | None = None,
-        target_memory_mb: float | None = None,
+        target_latency_ms: Optional[float] = None,
+        target_memory_mb: Optional[float] = None,
         min_accuracy: float = 0.90,
     ) -> list[OptimizationResult]:
         """

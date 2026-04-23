@@ -26,6 +26,7 @@ from core.tools.real_tool_implementations import real_web_search_handler
 def setup_logger():
     """配置日志记录器"""
     import logging
+
     from core.logging_config import setup_logging
 
     logging.basicConfig(
@@ -144,8 +145,8 @@ async def register_production_tools():
     total_tools = stats["total_tools"]
 
     logger.info(f"   注册的工具总数: {total_tools}")
-    logger.info(f"   本地网络搜索: ✅")
-    logger.info(f"   增强文档解析器: ✅")
+    logger.info("   本地网络搜索: ✅")
+    logger.info("   增强文档解析器: ✅")
     logger.info("")
     logger.info("🎉 生产级工具注册完成！")
     logger.info("=" * 60)
@@ -162,7 +163,7 @@ async def test_registered_tools():
     logger.info("🧪 测试已注册工具")
     logger.info("=" * 60)
 
-    registry = get_global_registry()
+    get_global_registry()
 
     # 测试1: 本地网络搜索
     logger.info("  测试1: 本地网络搜索")
@@ -234,7 +235,7 @@ def main():
 
     # 运行注册
     try:
-        registry = asyncio.run(register_production_tools())
+        asyncio.run(register_production_tools())
 
         # 询问是否测试
         print("")

@@ -15,11 +15,11 @@
 """
 
 import json
-import os
-import psutil
 import time
 from datetime import datetime
 from pathlib import Path
+
+import psutil
 
 
 class LearningModuleMonitor:
@@ -36,7 +36,7 @@ class LearningModuleMonitor:
         if self.pid_file.exists():
             try:
                 return int(self.pid_file.read_text().strip())
-            except (ValueError, IOError):
+            except (OSError, ValueError):
                 return None
         return None
 
@@ -75,7 +75,7 @@ class LearningModuleMonitor:
 
         try:
             # 读取最后N行
-            with open(log_path, 'r', encoding='utf-8') as f:
+            with open(log_path, encoding='utf-8') as f:
                 log_lines = f.readlines()[-lines:]
 
             # 统计日志级别
@@ -267,9 +267,9 @@ class LearningModuleMonitor:
         history = []
         if output_path.exists():
             try:
-                with open(output_path, 'r', encoding='utf-8') as f:
+                with open(output_path, encoding='utf-8') as f:
                     history = json.load(f)
-            except (json.JSONDecodeError, IOError):
+            except (OSError, json.JSONDecodeError):
                 pass
 
         # 添加新数据
@@ -309,7 +309,7 @@ def main():
         monitor.print_report()
         if args.save:
             monitor.save_metrics()
-            print(f"💾 指标已保存到 logs/learning_metrics.json")
+            print("💾 指标已保存到 logs/learning_metrics.json")
 
 
 if __name__ == "__main__":

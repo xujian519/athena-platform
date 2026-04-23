@@ -93,7 +93,7 @@ class PlanningGatewayIntegration:
         return False, "简单任务,直接执行"
 
     async def process_with_planning(
-        self, user_message: str, context: dict[str, Any]  | None = None, session_id: str | None = None
+        self, user_message: str, context: dict[str, Any]  | None = None, session_id: Optional[str] = None
     ) -> dict[str, Any]:
         """
         使用规划引擎处理用户请求

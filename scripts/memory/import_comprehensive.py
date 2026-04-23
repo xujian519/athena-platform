@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 综合记忆导入系统
 Comprehensive Memory Import System
@@ -12,15 +11,13 @@ Comprehensive Memory Import System
 """
 
 import json
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
+import logging
 import os
 import sqlite3
 import subprocess
 from datetime import datetime
 from pathlib import Path
-import sys
-import uuid
-import logging
+from typing import Any
 
 # 配置日志
 logging.basicConfig(
@@ -104,7 +101,7 @@ class ComprehensiveMemoryImporter:
                 f.write(f"-- 导出时间: {datetime.now().isoformat()}\n\n")
 
                 for i, row in enumerate(rows, 1):
-                    data = dict(zip(columns, row))
+                    data = dict(zip(columns, row, strict=False))
 
                     # 提取内容
                     content = data.get('content', data.get('text', ''))
@@ -196,10 +193,10 @@ INSERT INTO memory_items (
     def _import_json_file(self, json_path) -> Any:
         """导入单个JSON文件"""
         try:
-            with open(json_path, 'r', encoding='utf-8') as f:
+            with open(json_path, encoding='utf-8') as f:
                 data = json.load(f)
 
-            file_name = Path(json_path).stem
+            Path(json_path).stem
 
             # 特殊处理不同类型的JSON文件
             if 'xiaonuo' in json_path.lower():
@@ -212,7 +209,7 @@ INSERT INTO memory_items (
                 self._import_generic_json(json_path, data)
 
             self.import_stats['total_sources'] += 1
-            print(f"  ✅ 已处理")
+            print("  ✅ 已处理")
 
         except Exception as e:
             print(f"  ❌ JSON导入失败 {json_path}: {e}")
@@ -220,14 +217,14 @@ INSERT INTO memory_items (
     def _import_xiaonuo_status(self, json_path, data) -> Any:
         """导入小诺状态文件"""
         # 将状态信息作为知识记忆
-        content = f"小诺增强状态报告:\n"
+        content = "小诺增强状态报告:\n"
         content += f"Agent ID: {data.get('agent_id', 'unknown')}\n"
         content += f"状态: {data.get('status', 'unknown')}\n"
         content += f"启动时间: {data.get('start_time', 'unknown')}\n"
 
         stats = data.get('stats', {})
         if 'personality_traits' in stats:
-            content += f"\n个性特征:\n"
+            content += "\n个性特征:\n"
             for trait, value in stats['personality_traits'].items():
                 content += f"- {trait}: {value}\n"
 
@@ -263,7 +260,7 @@ INSERT INTO memory_items (
 
         self._execute_sql_file(sql_file)
         self.import_stats['total_imports'] += 1
-        print(f"    📊 导入小诺状态记录")
+        print("    📊 导入小诺状态记录")
 
     def _import_test_results(self, json_path, data) -> Any:
         """导入测试结果"""
@@ -272,7 +269,7 @@ INSERT INTO memory_items (
         for test_name, result in results.items():
             if result.get('success', False):
                 content = f"测试结果: {test_name}\n"
-                content += f"状态: 通过\n"
+                content += "状态: 通过\n"
 
                 if 'memory_stats' in result:
                     stats = result['memory_stats']
@@ -308,7 +305,7 @@ INSERT INTO memory_items (
 
     def _import_health_check(self, json_path, data) -> Any:
         """导入健康检查报告"""
-        content = f"系统健康检查报告:\n"
+        content = "系统健康检查报告:\n"
         content += f"时间: {json_path}\n"
 
         # 简化处理
@@ -432,7 +429,7 @@ INSERT INTO memory_items (
     def _import_conversation_file(self, log_file) -> Any:
         """导入对话日志文件"""
         try:
-            with open(log_file, 'r', encoding='utf-8', errors='ignore') as f:
+            with open(log_file, encoding='utf-8', errors='ignore') as f:
                 content = f.read(2000)  # 只读取前2000字符
 
             if not content.strip():
@@ -467,7 +464,7 @@ INSERT INTO memory_items (
                     f.write(sql)
 
                 self._execute_sql_file(sql_file)
-                print(f"    ✅ 导入对话日志")
+                print("    ✅ 导入对话日志")
                 self.import_stats['total_imports'] += 1
 
         except Exception as e:
@@ -498,7 +495,7 @@ INSERT INTO memory_items (
 
     def _import_qdrant_metadata(self, collection) -> Any:
         """导入Qdrant集合元数据"""
-        content = f"Qdrant集合信息:\n"
+        content = "Qdrant集合信息:\n"
         content += f"名称: {collection.get('name', 'unknown')}\n"
         content += f"向量大小: {collection.get('config', {}).get('params', {}).get('vector', {}).get('size', 'unknown')}\n"
         content += f"距离类型: {collection.get('config', {}).get('params', {}).get('vector', {}).get('distance', 'unknown')}\n"
@@ -582,7 +579,7 @@ INSERT INTO memory_items (
 
                 result2 = subprocess.run(cmd2, capture_output=True, text=True)
                 if result2.returncode == 0:
-                    print(f"\n📊 按类型分布:")
+                    print("\n📊 按类型分布:")
                     for line in result2.stdout.strip().split('\n'):
                         if line and '|' in line:
                             parts = line.split('|')
@@ -620,7 +617,7 @@ INSERT INTO memory_items (
             # 总结
             print("\n" + "=" * 60)
             print("🎉 综合记忆导入完成！")
-            print(f"\n📊 导入统计:")
+            print("\n📊 导入统计:")
             print(f"  - 数据源数: {self.import_stats['total_sources']}")
             print(f"  - 总导入数: {self.import_stats['total_imports']}")
             print(f"  - PostgreSQL: {self.db_host}:{self.db_port}/{self.db_name}")

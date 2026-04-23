@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺引擎问题修复器
 Xiaonuo Engines Issues Fixer
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
 import asyncio
 from datetime import datetime
-from typing import Dict, Any, List
+from typing import Any
+
 
 async def fix_engine_issues():
     """修复引擎问题"""
@@ -41,7 +42,7 @@ async def fix_learning_engine():
     engine_path = "/Users/xujian/Athena工作平台/core/learning/learning_engine.py"
 
     try:
-        with open(engine_path, 'r', encoding='utf-8') as f:
+        with open(engine_path, encoding='utf-8') as f:
             content = f.read()
 
         # 检查是否缺少必要方法
@@ -261,7 +262,7 @@ async def fix_evaluation_engine():
     engine_path = "/Users/xujian/Athena工作平台/core/evaluation/evaluation_engine.py"
 
     try:
-        with open(engine_path, 'r', encoding='utf-8') as f:
+        with open(engine_path, encoding='utf-8') as f:
             content = f.read()
 
         # 检查是否缺少必要方法
@@ -477,7 +478,7 @@ async def fix_planner():
     integration_path = "/Users/xujian/Athena工作平台/core/agent/xiaonuo_integrated_enhanced.py"
 
     try:
-        with open(integration_path, 'r', encoding='utf-8') as f:
+        with open(integration_path, encoding='utf-8') as f:
             content = f.read()
 
         # 检查导入语句
@@ -496,37 +497,7 @@ async def fix_planner():
                     content += import_line
 
         # 修改规划器初始化部分，使其更健壮
-        planner_init_old = '''        # 🚀 初始化规划器模块
-        try:
-            self.task_planner = AgenticTaskPlanner()
-            self.planning_integration = XiaonuoPlanningIntegration(self)
-            self.active_plans = {}
-            logger.info("✅ 规划器初始化完成")
-        except Exception as e:
-            logger.warning(f"规划器初始化失败: {e}")
-            self.task_planner = None
-            self.planning_integration = None'''
 
-        planner_init_new = '''        # 🚀 初始化规划器模块
-        try:
-            self.task_planner = AgenticTaskPlanner()
-            self.active_plans = {}
-            logger.info("✅ 任务规划器初始化完成")
-        except Exception as e:
-            logger.warning(f"任务规划器初始化失败: {e}")
-            self.task_planner = None
-            # 创建简化的规划功能
-            self.active_plans = {}
-            self._simple_planner_enabled = True
-            logger.info("⚠️ 启用简化规划功能")
-
-        try:
-            from integration.xiaonuo_planning_integration import XiaonuoPlanningIntegration
-            self.planning_integration = XiaonuoPlanningIntegration(self)
-            logger.info("✅ 规划集成器初始化完成")
-        except Exception as e:
-            logger.warning(f"规划集成器初始化失败: {e}")
-            self.planning_integration = None'''
 
         # 替换规划器初始化部分
         if "self.task_planner = AgenticTaskPlanner()" in content:

@@ -38,7 +38,7 @@ class PlaywrightEngine:
         self.playwright = None
         self.browser: Browser | None = None
         self.contexts: dict[str, BrowserContext] = {}
-        self._pages: dict[str, dict[str, Page]] = {}  # {context_id: {page_id: Page}}
+        self._pages: dict[str, dict[str, Page] = {}  # {context_id: {page_id: Page}}
         self._page_counter = 0  # 用于生成唯一页面ID
         self._initialized = False
 

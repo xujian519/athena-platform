@@ -80,7 +80,7 @@ class FactV4:
     confidence: Confidence  # v4.0:使用完整的置信度对象
     relations: list[dict]  # v4.0:与其他事实的关系
     boundary: FactBoundary  # v4.0:事实边界
-    logical_structure: str | None = None  # v4.0:逻辑结构(命题形式)
+    logical_structure: Optional[str] = None  # v4.0:逻辑结构(命题形式)
     created_at: datetime = field(default_factory=datetime.now)
 
 
@@ -95,7 +95,7 @@ class TimelineMemoryV4:
     4. 从"无限扩展"到"明确边界"
     """
 
-    def __init__(self, base_path: str | None = None):
+    def __init__(self, base_path: Optional[str] = None):
         """初始化记忆系统"""
         if base_path is None:
             base_path = "/Users/xujian/Athena工作平台/core/modules/memory/modules/memory/timeline_memories_v4"
@@ -165,12 +165,12 @@ class TimelineMemoryV4:
         self,
         content: str,
         fact_type: MemoryType,
-        evidence: list[str] | None = None,
+        evidence: Optional[list[str]] = None,
         confidence: float = 0.5,
         boundary: FactBoundary = FactBoundary.SAYABLE,
-        source: str | None = None,
-        tags: list[str] | None = None,
-        related_facts: list[str] | None = None,
+        source: Optional[str] = None,
+        tags: Optional[list[str]] = None,
+        related_facts: Optional[list[str]] = None,
     ) -> str:
         """
         v4.0新增:添加事实(而非事物)
@@ -238,7 +238,7 @@ class TimelineMemoryV4:
 
         return fact_id
 
-    def _extract_logical_structure(self, content: str) -> str | None:
+    def _extract_logical_structure(self, content: str) -> Optional[str]:
         """
         v4.0新增:提取逻辑结构
 
@@ -275,7 +275,7 @@ class TimelineMemoryV4:
         fact_id_2: str,
         relation_type: FactRelationType,
         confidence: float = 0.7,
-        evidence: list[str] | None = None,
+        evidence: Optional[list[str]] = None,
     ) -> str:
         """
         v4.0新增:添加事实关系
@@ -341,9 +341,9 @@ class TimelineMemoryV4:
         self,
         title: str,
         content: str,
-        event_date: str | None = None,
-        participants: list[str] | None = None,
-        tags: list[str] | None = None,
+        event_date: Optional[str] = None,
+        participants: Optional[list[str]] = None,
+        tags: Optional[list[str]] = None,
         emotional_weight: float = 0.5,
         key_event: bool = False,
         confidence: float = 0.8,  # v4.0新增
@@ -403,8 +403,8 @@ class TimelineMemoryV4:
         key: str,
         value: Any,
         confidence: float = 1.0,
-        source: str | None = None,
-        tags: list[str] | None = None,
+        source: Optional[str] = None,
+        tags: Optional[list[str]] = None,
     ) -> str:
         """
         添加语义记忆 - v4.0版本

@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PostgreSQL操作测试脚本
 Test PostgreSQL operations with the hybrid architecture
 """
 
 import asyncio
-import json
 import logging
-from datetime import datetime
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -65,7 +62,7 @@ async def test_customer_query():
         print(f"找到 {len(customers)} 个客户")
 
         for customer in customers:
-            print(f"\n🏢 客户信息:")
+            print("\n🏢 客户信息:")
             print(f"   ID: {customer.get('id', 'N/A')}")
             print(f"   名称: {customer.get('name', customer.get('customer_name', 'N/A'))}")
             print(f"   类型: {customer.get('type', 'N/A')}")
@@ -107,7 +104,7 @@ async def test_customer_creation():
         customer_id = customer_manager.create_customer(test_customer)
 
         if customer_id:
-            print(f"✅ 客户创建成功")
+            print("✅ 客户创建成功")
             print(f"   客户ID: {customer_id}")
 
             # 查询刚创建的客户
@@ -152,7 +149,7 @@ async def test_customer_search():
                     name = customer.get('name', customer.get('customer_name', 'N/A'))
                     print(f"   • {name}")
             else:
-                print(f"   未找到匹配客户")
+                print("   未找到匹配客户")
 
     except Exception as e:
         print(f"❌ 客户搜索测试失败: {e}")

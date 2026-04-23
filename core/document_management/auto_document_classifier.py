@@ -96,7 +96,7 @@ class ClassificationRule:
     priority: int = 0  # 优先级 (数字越大越优先)
     patterns: list[str] = field(default_factory=list)  # 文件名模式
     keywords: list[str] = field(default_factory=list)  # 内容关键词
-    date_pattern: str | None = None  # 日期模式 (如: %Y%m%d)
+    date_pattern: Optional[str] = None  # 日期模式 (如: %Y%m%d)
     custom_classifier: Callable | None = None  # 自定义分类函数
 
     def matches_filename(self, filename: str) -> bool:
@@ -135,9 +135,9 @@ class ClassificationResult:
     source_path: Path  # 源文件路径
     target_path: Path | None  # 目标文件路径
     category: DocumentCategory | None  # 分类
-    rule_name: str | None  # 使用的规则名称
+    rule_name: Optional[str]  # 使用的规则名称
     confidence: float = 0.0  # 置信度 (0.0-1.0)
-    error_message: str | None = None  # 错误消息
+    error_message: Optional[str] = None  # 错误消息
 
 
 class AutoDocumentClassifier:
@@ -554,7 +554,7 @@ class AutoDocumentClassifier:
 
 # 便捷函数
 def classify_document(
-    file_path: str | None = None, docs_root: str | None = None, move_file: bool = True, dry_run: bool = False
+    file_path: Optional[str] = None, docs_root: Optional[str] = None, move_file: bool = True, dry_run: bool = False
 ) -> ClassificationResult:
     """
     便捷函数:分类单个文档
@@ -574,7 +574,7 @@ def classify_document(
 
 def classify_documents_in_directory(
     source_dir: str,
-    docs_root: str | None = None,
+    docs_root: Optional[str] = None,
     pattern: str = "*.md",
     move_files: bool = True,
     dry_run: bool = False,

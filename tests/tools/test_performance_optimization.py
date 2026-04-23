@@ -7,15 +7,13 @@
 
 import asyncio
 import time
-from typing import Any
 
 import pytest
 
 from core.tools.base import (
-    ToolDefinition,
-    ToolCategory,
     ToolCapability,
-    ToolPerformance,
+    ToolCategory,
+    ToolDefinition,
     ToolRegistry,
 )
 
@@ -71,14 +69,14 @@ class TestCachingPerformance:
         # 后续99次查询（缓存命中）
         start = time.time()
         for _ in range(99):
-            tools = registry.find_by_category(ToolCategory.PATENT_SEARCH)
+            registry.find_by_category(ToolCategory.PATENT_SEARCH)
         cached_queries_time = time.time() - start
 
         # 缓存统计
         stats = registry.get_statistics()
         cache_info = stats["cache_performance"]["find_by_category"]
 
-        print(f"\n📊 分类查找缓存性能:")
+        print("\n📊 分类查找缓存性能:")
         print(f"  首次查询时间: {first_query_time * 1000:.2f}ms")
         print(f"  99次缓存查询时间: {cached_queries_time * 1000:.2f}ms")
         print(f"  平均缓存查询时间: {(cached_queries_time / 99) * 1000:.2f}ms")
@@ -106,7 +104,7 @@ class TestCachingPerformance:
                 capability=ToolCapability(
                     input_types=["text"],
                     output_types=["json"],
-                    domains=[domains[i % len(domains)]],
+                    domains=[domains[i % len(domains)],
                     task_types=["search"],
                 ),
             )
@@ -115,13 +113,13 @@ class TestCachingPerformance:
         # 查询每个领域100次
         for domain in domains:
             for _ in range(100):
-                tools = registry.find_by_domain(domain)
+                registry.find_by_domain(domain)
 
         # 缓存统计
         stats = registry.get_statistics()
         cache_info = stats["cache_performance"]["find_by_domain"]
 
-        print(f"\n📊 领域查找缓存性能:")
+        print("\n📊 领域查找缓存性能:")
         print(f"  总查询数: {cache_info['hits'] + cache_info['misses']}")
         print(f"  缓存命中数: {cache_info['hits']}")
         print(f"  缓存未命中数: {cache_info['misses']}")
@@ -224,7 +222,7 @@ class TestParallelExecutionPerformance:
         # 计算加速比
         speedup = serial_time / parallel_time
 
-        print(f"\n📊 并行执行性能对比:")
+        print("\n📊 并行执行性能对比:")
         print(f"  串行执行时间: {serial_time * 1000:.2f}ms")
         print(f"  并行执行时间: {parallel_time * 1000:.2f}ms")
         print(f"  加速比: {speedup:.2f}x")
@@ -257,7 +255,7 @@ class TestOverallPerformance:
                 capability=ToolCapability(
                     input_types=["text"],
                     output_types=["json"],
-                    domains=[domains[i % len(domains)]],
+                    domains=[domains[i % len(domains)],
                     task_types=["search"],
                 ),
             )
@@ -280,7 +278,7 @@ class TestOverallPerformance:
         category_hit_rate = stats["cache_performance"]["find_by_category"]["hit_rate"]
         domain_hit_rate = stats["cache_performance"]["find_by_domain"]["hit_rate"]
 
-        print(f"\n📊 整体性能测试:")
+        print("\n📊 整体性能测试:")
         print(f"  工具数量: {num_tools}")
         print(f"  200次查询总时间: {query_time * 1000:.2f}ms")
         print(f"  平均查询时间: {(query_time / 200) * 1000:.2f}ms")

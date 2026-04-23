@@ -19,7 +19,7 @@ class ProductionOCRProcessor:
         self.tesseract_path = self._find_tesseract()
         self.supported_languages = ['chi_sim', 'chi_tra', 'eng']
 
-    def _find_tesseract(self) -> str | None:
+    def _find_tesseract(self) -> Optional[str]:
         """查找Tesseract可执行文件"""
         try:
             result = subprocess.run(

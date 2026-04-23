@@ -5,9 +5,11 @@
 
 import json
 import sys
-import psycopg2
 from datetime import datetime
 from pathlib import Path
+
+import psycopg2
+
 
 def main():
     # 数据库配置
@@ -66,7 +68,7 @@ def main():
         if results1:
             col_names = ['patent_name', 'application_number', 'publication_number',
                         'applicant', 'application_date', 'abstract']
-            export1 = [dict(zip(col_names, r)) for r in results1]
+            export1 = [dict(zip(col_names, r, strict=False)) for r in results1]
             output1 = result_dir / f"分子筛配方_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
             with open(output1, "w", encoding="utf-8") as f:
                 json.dump(export1, f, ensure_ascii=False, indent=2, default=str)
@@ -104,7 +106,7 @@ def main():
         if results2:
             col_names = ['patent_name', 'application_number', 'publication_number',
                         'applicant', 'application_date', 'ipc_main_class', 'abstract']
-            export2 = [dict(zip(col_names, r)) for r in results2]
+            export2 = [dict(zip(col_names, r, strict=False)) for r in results2]
             output2 = result_dir / f"制氧机分子筛_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
             with open(output2, "w", encoding="utf-8") as f:
                 json.dump(export2, f, ensure_ascii=False, indent=2, default=str)
@@ -149,7 +151,7 @@ def main():
         if results3:
             col_names = ['patent_name', 'application_number', 'publication_number',
                         'applicant', 'application_date', 'abstract']
-            export3 = [dict(zip(col_names, r)) for r in results3]
+            export3 = [dict(zip(col_names, r, strict=False)) for r in results3]
             output3 = result_dir / f"深度检索_分子筛配方_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
             with open(output3, "w", encoding="utf-8") as f:
                 json.dump(export3, f, ensure_ascii=False, indent=2, default=str)
@@ -185,7 +187,7 @@ def main():
         if results4:
             col_names = ['patent_name', 'application_number', 'publication_number',
                         'applicant', 'application_date', 'abstract']
-            export4 = [dict(zip(col_names, r)) for r in results4]
+            export4 = [dict(zip(col_names, r, strict=False)) for r in results4]
             output4 = result_dir / f"沸石分子筛_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
             with open(output4, "w", encoding="utf-8") as f:
                 json.dump(export4, f, ensure_ascii=False, indent=2, default=str)
@@ -216,7 +218,7 @@ def main():
         print("\n" + "=" * 80)
         print("检索完成")
         print("=" * 80)
-        print(f"\n📊 检索统计:")
+        print("\n📊 检索统计:")
         print(f"   - 分子筛配方: {len(results1)} 件")
         print(f"   - 制氧机分子筛: {len(results2)} 件")
         print(f"   - 深度检索: {len(results3)} 件")

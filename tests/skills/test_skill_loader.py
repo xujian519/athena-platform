@@ -7,7 +7,6 @@ Skills系统单元测试 - SkillLoader
 作者: Athena平台团队
 创建时间: 2026-04-21
 """
-from __future__ import annotations
 
 import tempfile
 from pathlib import Path
@@ -17,7 +16,7 @@ import yaml
 
 from core.skills.loader import SkillLoader
 from core.skills.registry import SkillRegistry
-from core.skills.types import SkillDefinition, SkillCategory, SkillMetadata
+from core.skills.types import SkillCategory
 
 
 def test_load_from_file():
@@ -286,3 +285,4 @@ def test_load_from_custom_registry():
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+

@@ -33,7 +33,7 @@ class GLMClient:
 
     def __init__(
         self,
-        api_key: str | None = None,
+        api_key: Optional[str] = None,
         base_url: str = "https://open.bigmodel.cn/api/paas/v4",
         model: str = "glm-4.7",
         timeout: int = 60,

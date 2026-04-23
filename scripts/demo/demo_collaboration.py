@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 多智能体协作演示脚本
 Multi-Agent Collaboration Demo
@@ -8,22 +7,19 @@ Multi-Agent Collaboration Demo
 """
 
 import asyncio
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import sys
-import os
-import time
 from datetime import datetime
-import json
+from typing import Any
 
 # 添加项目路径
 sys.path.append('/Users/xujian/Athena工作平台')
 
 from integration.multi_agent_integration import (
+    get_agent_status,
+    get_collaboration_status,
+    get_system_status,
     initialize_multi_agent_system,
     start_collaboration,
-    get_system_status,
-    get_agent_status,
-    get_collaboration_status
 )
 
 
@@ -195,7 +191,7 @@ def show_available_templates() -> Any:
         }
     }
 
-    for template_id, template_info in templates.items():
+    for _template_id, template_info in templates.items():
         print(f"\n📋 {template_info['name']}:")
         print(f"   协作模式: {template_info['pattern']}")
         print(f"   参与智能体: {', '.join(template_info['participants'])}")

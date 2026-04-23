@@ -59,7 +59,7 @@ class AsyncNLPProcessor:
         )
 
     async def process_single(
-        self, text: str, processor: Callable[[str], Awaitable[dict[str, Any]]], **kwargs: Any
+        self, text: str, processor: Callable[[str], Awaitable[dict[str, Any]], **kwargs: Any
     ) -> dict[str, Any]:
         """
         异步处理单个文本
@@ -93,7 +93,7 @@ class AsyncNLPProcessor:
     async def process_batch(
         self,
         texts: list[str],
-        processor: Callable[[str], Awaitable[dict[str, Any]]],
+        processor: Callable[[str], Awaitable[dict[str, Any]],
         show_progress: bool = False,
         **kwargs: Any,
     ) -> list[dict[str, Any]]:
@@ -134,7 +134,7 @@ class AsyncNLPProcessor:
     async def process_batch_with_rate_limit(
         self,
         texts: list[str],
-        processor: Callable[[str], Awaitable[dict[str, Any]]],
+        processor: Callable[[str], Awaitable[dict[str, Any]],
         rate_limit: float = 100.0,  # 每秒请求数
         **kwargs: Any,
     ) -> list[dict[str, Any]]:
@@ -175,7 +175,7 @@ class AsyncNLPProcessor:
     async def process_streaming(
         self,
         texts: list[str],
-        processor: Callable[[str], Awaitable[dict[str, Any]]],
+        processor: Callable[[str], Awaitable[dict[str, Any]],
         batch_size: int = 32,
         **kwargs: Any,
     ) -> Any:

@@ -21,14 +21,15 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 try:
-    from core.agents.base import (
+    from core.framework.agents.xiaona_legal import (
+        LegalTaskType,
+        XiaonaLegalAgent,
+    )
+
+    from core.framework.agents.base import (
         AgentRegistry,
         AgentRequest,
         AgentStatus,
-    )
-    from core.agents.xiaona_legal import (
-        LegalTaskType,
-        XiaonaLegalAgent,
     )
 except ImportError:
     pass  # 模块导入失败时，测试会被跳过

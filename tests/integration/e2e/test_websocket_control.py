@@ -8,11 +8,9 @@ WebSocket控制平面测试
 4. 广播功能
 """
 
-import asyncio
-import pytest
-import json
-from typing import Dict, Any
 from pathlib import Path
+
+import pytest
 
 pytestmark = [pytest.mark.e2e, pytest.mark.integration]
 

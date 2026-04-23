@@ -69,7 +69,7 @@ class QueryResult:
     data: list[dict[str, Any]]  # 结果数据
     status: QueryStatus  # 查询状态
     stats: QueryStats  # 统计信息
-    error: str | None = None  # 错误信息
+    error: Optional[str] = None  # 错误信息
     metadata: dict[str, Any] = field(default_factory=dict)  # 元数据
 
     def to_dict(self) -> dict[str, Any]:
@@ -100,7 +100,7 @@ class CacheKey:
     data_source: DataSourceType
     query: str
     parameters: tuple[Any, ...] = ()
-    hash_value: str | None = None
+    hash_value: Optional[str] = None
 
     def __post_init__(self):
         """生成缓存键哈希值"""
@@ -122,7 +122,7 @@ class QueryPlan:
     estimated_cost: float  # 预估成本
     data_sources: list[DataSourceType]  # 涉及的数据源
     parallelizable: bool = False  # 是否可并行执行
-    cache_strategy: str | None = None  # 缓存策略
+    cache_strategy: Optional[str] = None  # 缓存策略
 
     def to_dict(self) -> dict[str, Any]:
         """转换为字典"""

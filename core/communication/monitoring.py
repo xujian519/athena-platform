@@ -285,7 +285,7 @@ class CommunicationMetrics:
 
     # ========== 连接池指标方法 ==========
     async def record_connection_acquired(
-        self, pool_name: str, wait_time: float | None = None, status: str = "success"
+        self, pool_name: str, wait_time: Optional[float] = None, status: str = "success"
     ) -> None:
         """记录获取连接"""
         if self._enabled:

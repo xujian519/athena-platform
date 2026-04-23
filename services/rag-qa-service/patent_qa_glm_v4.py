@@ -711,7 +711,7 @@ def extract_key_paragraphs(reasoning: str, question: str, max_paragraphs: int = 
 
     # 按相关性排序并取前N个
     scored_paragraphs.sort(key=lambda x: x[1], reverse=True)
-    selected = [p[0] for p in scored_paragraphs[:max_paragraphs]]
+    selected = [p[0] for p in scored_paragraphs[:max_paragraphs]
 
     return '\n\n'.join(selected)
 

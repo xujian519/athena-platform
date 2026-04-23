@@ -545,7 +545,7 @@ class LangExtractIntegrationService:
     def _extract_urls_from_text(self, text: str) -> list[str]:
         """从文本中提取URL"""
         import re
-        url_pattern = r'https?://[^\s<>"{}|\\^`\[\]]+'
+        url_pattern = r'https?://[^\s<>"{}|\\^`\[\]+'
         urls = re.findall(url_pattern, text)
         return urls
 
@@ -688,7 +688,7 @@ class LangExtractIntegrationService:
                 'error': f"专利分析失败: {str(e)}"
             }
 
-    def _analyze_claims_structure(self, extractions: list[dict[str, Any]]) -> dict[str, Any]:
+    def _analyze_claims_structure(self, extractions: list[dict[str, Any]) -> dict[str, Any]:
         """分析权利要求结构"""
         claims = [ext for ext in extractions if ext.get('extraction_class') == 'claim']
         return {
@@ -697,17 +697,17 @@ class LangExtractIntegrationService:
             'dependent_claims': len([c for c in claims if 'dependent' in c.get('attributes', {})])
         }
 
-    def _extract_technical_features(self, extractions: list[dict[str, Any]]) -> list[str]:
+    def _extract_technical_features(self, extractions: list[dict[str, Any]) -> list[str]:
         """提取技术特征"""
         features = [ext for ext in extractions if ext.get('extraction_class') == 'technical_feature']
         return [feature['extraction_text'] for feature in features]
 
-    def _identify_innovation_highlights(self, extractions: list[dict[str, Any]]) -> list[str]:
+    def _identify_innovation_highlights(self, extractions: list[dict[str, Any]) -> list[str]:
         """识别创新亮点"""
         innovations = [ext for ext in extractions if ext.get('extraction_class') == 'innovation']
         return [innovation['extraction_text'] for innovation in innovations]
 
-    def _assess_patent_business_value(self, extractions: list[dict[str, Any]]) -> dict[str, Any]:
+    def _assess_patent_business_value(self, extractions: list[dict[str, Any]) -> dict[str, Any]:
         """评估专利商业价值"""
         # 简化的商业价值评估
         return {

@@ -52,8 +52,8 @@ class Alert:
     timestamp: datetime = field(default_factory=datetime.now)
     labels: dict[str, str] = field(default_factory=dict)
     annotations: dict[str, str] = field(default_factory=dict)
-    value: float | None = None      # 触发告警的值
-    threshold: float | None = None  # 阈值
+    value: Optional[float] = None      # 触发告警的值
+    threshold: Optional[float] = None  # 阈值
 
 
 @dataclass
@@ -62,21 +62,21 @@ class NotificationConfig:
     enabled: bool = True
 
     # Webhook配置
-    webhook_url: str | None = None
+    webhook_url: Optional[str] = None
     webhook_timeout: int = 10
 
     # 邮件配置
-    smtp_host: str | None = None
+    smtp_host: Optional[str] = None
     smtp_port: int = 587
-    smtp_user: str | None = None
-    smtp_password: str | None = None
-    smtp_from: str | None = None
+    smtp_user: Optional[str] = None
+    smtp_password: Optional[str] = None
+    smtp_from: Optional[str] = None
     smtp_to: list[str] = field(default_factory=list)
 
     # 短信配置
     sms_enabled: bool = False
-    sms_api_key: str | None = None
-    sms_api_url: str | None = None
+    sms_api_key: Optional[str] = None
+    sms_api_url: Optional[str] = None
     sms_recipients: list[str] = field(default_factory=list)
 
     # 通知过滤
@@ -463,7 +463,7 @@ def create_queue_size_check(
     warning_threshold: float = 0.7,
     critical_threshold: float = 0.9,
     instance: str = "default"
-) -> Callable[[str | None, Alert]]:
+) -> Callable[[Optional[str], Alert]]:
     """
     创建队列大小检查函数
 
@@ -522,7 +522,7 @@ def create_error_rate_check(
     warning_threshold: float = 0.05,
     critical_threshold: float = 0.1,
     instance: str = "default"
-) -> Callable[[str | None, Alert]]:
+) -> Callable[[Optional[str], Alert]]:
     """
     创建错误率检查函数
 

@@ -95,7 +95,7 @@ class CachePolicy:
         # 预热策略
         self.preload_queries = ["专利侵权", "发明专利的保护期", "商标注册流程"]
 
-    def get_ttl(self, level: CacheLevel, query_type: str | None = None) -> int:
+    def get_ttl(self, level: CacheLevel, query_type: Optional[str] = None) -> int:
         """获取TTL"""
         base_ttl = self.default_ttls[level]
 
@@ -223,7 +223,7 @@ class OptimizedCacheManager:
         mode: str,
         top_k: int = 10,
         level: CacheLevel = CacheLevel.L1_MEMORY,
-        ttl: int | None = None,
+        ttl: Optional[int] = None,
         **kwargs,
     ):
         """

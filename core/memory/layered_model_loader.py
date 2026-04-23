@@ -55,7 +55,7 @@ class LayeredModelLoader:
         ],
     }
 
-    def __init__(self, models_path: str | None = None):
+    def __init__(self, models_path: Optional[str] = None):
         """
         初始化分层模型加载器
 

@@ -25,8 +25,8 @@ class OnDemandService:
         self.health_endpoint = health_endpoint
         self.base_url = f"http://localhost:{port}"
         self.process: subprocess.Popen | None = None
-        self.start_time: float | None = None
-        self.last_used: float | None = None
+        self.start_time: Optional[float] = None
+        self.last_used: Optional[float] = None
         self.max_idle_time = 300  # 5分钟无访问后自动停止
 
     def is_running(self) -> bool:
@@ -143,7 +143,7 @@ class OnDemandManager:
         #     health_endpoint="/health"
         # )
 
-    async def get_service(self, service_name: str) -> str | None:
+    async def get_service(self, service_name: str) -> Optional[str]:
         """获取服务URL(确保服务运行)"""
         if service_name not in self.services:
             print(f"❌ 未知服务: {service_name}")
@@ -225,12 +225,12 @@ def get_on_demand_manager() -> OnDemandManager:
     return _manager
 
 # 便捷函数
-async def get_laws_api_url() -> str | None:
+async def get_laws_api_url() -> Optional[str]:
     """获取法律API URL(按需启动)"""
     manager = get_on_demand_manager()
     return await manager.get_service("laws")
 
-async def get_xiaochen_api_url() -> str | None:
+async def get_xiaochen_api_url() -> Optional[str]:
     """获取小宸API URL(按需启动)"""
     manager = get_on_demand_manager()
     return await manager.get_service("xiaochen")

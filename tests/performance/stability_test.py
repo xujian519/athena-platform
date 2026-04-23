@@ -10,14 +10,14 @@ Gateway长时间稳定性测试
 """
 
 import asyncio
-import websockets
 import json
+import statistics
 import time
+from datetime import datetime, timedelta
+
 import psutil
 import requests
-from datetime import datetime, timedelta
-from typing import List
-import statistics
+import websockets
 
 # 测试配置
 GATEWAY_URL = "ws://localhost:8005/ws"
@@ -136,11 +136,10 @@ async def test_connection_cycle(metrics: StabilityMetrics, cycles: int = 10):
 
                 # 接收响应
                 try:
-                    response = await asyncio.wait_for(ws.recv(), timeout=5.0)
-                    response_time = (time.time() - start_time) * 1000  # ms
-                except asyncio.TimeoutError:
+                    await asyncio.wait_for(ws.recv(), timeout=5.0)
+                    (time.time() - start_time) * 1000  # ms
+                except TimeoutError:
                     errors += 1
-                    response_time = 0
 
                 # 发送测试消息
                 ping = {

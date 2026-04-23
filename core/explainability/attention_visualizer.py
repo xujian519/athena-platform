@@ -90,7 +90,7 @@ class AttentionVisualizer:
         input_text: str,
         tokens: list[str],
         attention_weights: list[list[float]],
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> AttentionMap:
         """
         创建注意力图

@@ -244,7 +244,7 @@ class AgentProductionChecker:
             try:
                 # 尝试导入和创建智能体
                 if agent_type in ["athena", "xiaonuo"]:
-                    from core.agent.agent_factory import AgentFactory
+                    from core.framework.agents.agent_factory import AgentFactory
 
                     factory = AgentFactory()
                     await factory.initialize()

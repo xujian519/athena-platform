@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 P3 MCP和工作流工具实现
 
@@ -50,7 +49,7 @@ logger = logging.getLogger(__name__)
     category="mcp_service",
     tags=["mcp", "service", "integration"],
 )
-async def mcp_tool_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def mcp_tool_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     MCPTool工具处理器
 
@@ -116,7 +115,7 @@ async def mcp_tool_handler(params: Dict[str, Any], context: Dict[str, Any]) -> D
     category="mcp_service",
     tags=["mcp", "resources", "list"],
 )
-async def list_mcp_resources_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def list_mcp_resources_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     ListMcpResources工具处理器
 
@@ -169,7 +168,7 @@ async def list_mcp_resources_handler(params: Dict[str, Any], context: Dict[str, 
     category="mcp_service",
     tags=["mcp", "resources", "read"],
 )
-async def read_mcp_resource_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def read_mcp_resource_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     ReadMcpResource工具处理器
 
@@ -232,7 +231,7 @@ _plan_mode_state = {}
     category="system",
     tags=["workflow", "plan", "mode"],
 )
-async def enter_plan_mode_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def enter_plan_mode_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     EnterPlanMode工具处理器
 
@@ -289,7 +288,7 @@ async def enter_plan_mode_handler(params: Dict[str, Any], context: Dict[str, Any
     category="system",
     tags=["workflow", "plan", "mode"],
 )
-async def exit_plan_mode_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def exit_plan_mode_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     ExitPlanMode工具处理器
 
@@ -339,7 +338,7 @@ async def exit_plan_mode_handler(params: Dict[str, Any], context: Dict[str, Any]
     category="system",
     tags=["workflow", "git", "worktree"],
 )
-async def enter_worktree_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def enter_worktree_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     EnterWorktree工具处理器
 
@@ -406,7 +405,7 @@ async def enter_worktree_handler(params: Dict[str, Any], context: Dict[str, Any]
     category="system",
     tags=["workflow", "git", "worktree"],
 )
-async def exit_worktree_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def exit_worktree_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     ExitWorktree工具处理器
 
@@ -457,7 +456,7 @@ async def exit_worktree_handler(params: Dict[str, Any], context: Dict[str, Any])
     category="system",
     tags=["search", "tool", "discovery"],
 )
-async def tool_search_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def tool_search_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     ToolSearch工具处理器
 
@@ -513,7 +512,7 @@ async def tool_search_handler(params: Dict[str, Any], context: Dict[str, Any]) -
     category="system",
     tags=["jupyter", "notebook", "edit"],
 )
-async def notebook_edit_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def notebook_edit_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     NotebookEdit工具处理器
 
@@ -548,7 +547,7 @@ async def notebook_edit_handler(params: Dict[str, Any], context: Dict[str, Any])
             }
 
         # 读取笔记本
-        with open(notebook_path, "r", encoding="utf-8") as f:
+        with open(notebook_path, encoding="utf-8") as f:
             notebook = json.load(f)
 
         # 执行操作
@@ -597,7 +596,7 @@ async def notebook_edit_handler(params: Dict[str, Any], context: Dict[str, Any])
     category="agent",
     tags=["agent", "message", "communication"],
 )
-async def send_message_handler(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+async def send_message_handler(params: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     """
     SendMessage工具处理器
 

@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺·双鱼公主认知与决策模块深度验证器
 Xiaonuo Pisces Princess Cognition & Decision Modules Deep Verifier
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
 import asyncio
 import json
 from datetime import datetime
-from typing import Dict, Any, List
 
-from core.agent.xiaonuo_integrated_enhanced import XiaonuoIntegratedEnhanced
+from core.framework.agents.xiaonuo_integrated_enhanced import XiaonuoIntegratedEnhanced
+
 
 class CognitionDecisionModulesVerifier:
     """认知与决策模块验证器"""
@@ -109,7 +109,7 @@ class CognitionDecisionModulesVerifier:
 
                     # 测试推理功能
                     try:
-                        test_result = await self.princess.cognitive_reasoning(
+                        await self.princess.cognitive_reasoning(
                             "如果今天下雨，那么地面会湿。今天地面是湿的，能推出什么？",
                             context="逻辑推理测试"
                         )
@@ -296,7 +296,7 @@ class CognitionDecisionModulesVerifier:
                 ]
 
                 decision_count = 0
-                for scenario in test_scenarios:
+                for _scenario in test_scenarios:
                     try:
                         # 使用认知引擎进行决策分析
                         if hasattr(self.princess, 'cognition') and hasattr(self.princess.cognition, 'nlp_adapter'):
@@ -389,7 +389,6 @@ class CognitionDecisionModulesVerifier:
 
             # 检查评估引擎中的反思功能
             if hasattr(self.princess, 'evaluation_engine'):
-                evaluation = self.princess.evaluation_engine
                 print("  ✅ 评估引擎可用于反思评估")
                 result["capabilities"].append("评估反思")
 
@@ -465,7 +464,7 @@ class CognitionDecisionModulesVerifier:
         }
 
         total_capabilities = []
-        for module, result in self.verification_results.items():
+        for _module, result in self.verification_results.items():
             status = result.get("status", "checking")
             status_count[status] += 1
 
@@ -494,7 +493,7 @@ class CognitionDecisionModulesVerifier:
 
         # 详细报告
         print("\n📋 详细验证报告:")
-        for module, result in self.verification_results.items():
+        for _module, result in self.verification_results.items():
             status_icon = {
                 "operational": "✅",
                 "partial": "⚠️",

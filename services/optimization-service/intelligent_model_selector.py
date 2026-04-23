@@ -78,7 +78,7 @@ class SelectionResult:
     expected_cost: float
     expected_latency: float
     expected_accuracy: float
-    alternatives: list[tuple[GLMModelType, float]] = field(default_factory=list)
+    alternatives: list[tuple[GLMModelType, float] = field(default_factory=list)
 
 class ModelPerformanceTracker:
     """模型性能跟踪器"""
@@ -279,7 +279,7 @@ class IntelligentModelSelector:
         )
 
         # 6. 准备备选方案
-        alternatives = [(model, score) for model, score in model_scores[1:3]] if len(model_scores) > 1 else []
+        alternatives = [(model, score) for model, score in model_scores[1:3] if len(model_scores) > 1 else []
 
         result = SelectionResult(
             selected_model=selected_model,
@@ -446,7 +446,7 @@ class IntelligentModelSelector:
 
         return base_latency * multiplier * concurrency_impact
 
-    def _calculate_confidence(self, model_scores: list[tuple[GLMModelType, float]],
+    def _calculate_confidence(self, model_scores: list[tuple[GLMModelType, float],
                             requirement: TaskRequirement) -> float:
         """计算选择置信度"""
         if len(model_scores) < 2:
@@ -472,7 +472,7 @@ class IntelligentModelSelector:
         return confidence
 
     def _generate_reasoning(self, selected_model: GLMModelType, requirement: TaskRequirement,
-                          model_scores: list[tuple[GLMModelType, float]]) -> list[str]:
+                          model_scores: list[tuple[GLMModelType, float]) -> list[str]:
         """生成选择理由"""
         capability = self.model_capabilities[selected_model]
         reasoning = []
@@ -571,7 +571,7 @@ class IntelligentModelSelector:
                 record['accuracy'] = accuracy
                 break
 
-    def get_model_recommendations(self, task_type: str, count: int = 3) -> list[dict[str, Any]]:
+    def get_model_recommendations(self, task_type: str, count: int = 3) -> list[dict[str, Any]:
         """获取模型推荐"""
         recommendations = []
 

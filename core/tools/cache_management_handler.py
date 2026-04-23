@@ -19,7 +19,7 @@ async def cache_management_handler(
     ttl: int = 3600,
     pattern: str = None,
     keys: list[str] = None
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     统一缓存管理Handler
 

@@ -74,7 +74,7 @@ class ChaosExperiment:
     fault_injections: list[FaultInjection]
     duration: float
     success_criteria: dict[TestMetric, float]
-    results: dict[str, Any] | None = None
+    results: Optional[dict[str, Any]] = None
     timestamp: datetime = None
 
 

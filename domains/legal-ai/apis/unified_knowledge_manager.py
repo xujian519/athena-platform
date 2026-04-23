@@ -216,7 +216,7 @@ class UnifiedKnowledgeManager:
             logger.error(f"连接数据库失败 {kg_type}: {e}")
             return None
 
-    def search_across_kgs(self, query: str, kg_types: list[str] | None = None, limit: int = 100) -> list[dict[str, Any]]:
+    def search_across_kgs(self, query: str, kg_types: list[str] | None = None, limit: int = 100) -> list[dict[str, Any]:
         """跨知识图谱搜索"""
         results = []
 
@@ -496,7 +496,7 @@ async def get_graph_metadata(kg_type: str):
         cursor.execute('SELECT key, value FROM kg_metadata')
         metadata = {}
         for row in cursor.fetchall():
-            metadata[row[0]] = row[1]
+            metadata[row[0] = row[1]
 
         return {
             'kg_type': kg_type,

@@ -180,7 +180,7 @@ class AthenaTracer:
         self.logger = logging.getLogger(f"{__name__}.{service_name}")
 
     def trace(self, operation_name: str,
-              attributes: dict[str, Any] | None = None):
+              attributes: Optional[dict[str, Any]] = None):
         """
         装饰器：自动追踪函数/方法
 
@@ -287,7 +287,7 @@ class AthenaTracer:
 
     @asynccontextmanager
     async def start_async_span(self, operation_name: str,
-                               attributes: dict[str, Any] | None = None):
+                               attributes: Optional[dict[str, Any]] = None):
         """
         异步上下文管理器：手动创建Span
 
@@ -318,7 +318,7 @@ class AthenaTracer:
 
     @contextmanager
     def start_span(self, operation_name: str,
-                   attributes: dict[str, Any] | None = None):
+                   attributes: Optional[dict[str, Any]] = None):
         """
         同步上下文管理器：手动创建Span
 

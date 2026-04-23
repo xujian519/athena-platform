@@ -147,7 +147,7 @@ class TestToolExecution:
             try:
                 result = await asyncio.wait_for(slow_tool(), timeout=0.01)
                 return False, result
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 return True, None
 
         timeout_occurred, _ = asyncio.run(run_with_timeout())

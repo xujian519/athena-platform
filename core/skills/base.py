@@ -50,7 +50,7 @@ class SkillMetadata:
     enabled: bool = True                   # 是否启用
 
     # 性能指标
-    avg_execution_time: float | None = None  # 平均执行时间（秒）
+    avg_execution_time: Optional[float] = None  # 平均执行时间（秒）
     success_rate: float = 1.0               # 成功率
 
     def to_dict(self) -> dict:
@@ -93,7 +93,7 @@ class SkillResult:
     """技能执行结果"""
     success: bool                          # 是否成功
     data: Any                              # 返回数据
-    error: str | None = None            # 错误信息
+    error: Optional[str] = None            # 错误信息
     execution_time: float = 0.0            # 执行时间（秒）
     metadata: dict[str, Any] = field(default_factory=dict)  # 额外元数据
 

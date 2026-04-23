@@ -25,7 +25,7 @@ def safe_exists(path: str | Path) -> bool:
         return False
 
 
-def safe_read(file_path: str | Path, encoding: str = "utf-8") -> str | None:
+def safe_read(file_path: str | Path, encoding: str = "utf-8") -> Optional[str]:
     """安全地读取文件"""
     try:
         return Path(file_path).read_text(encoding=encoding)

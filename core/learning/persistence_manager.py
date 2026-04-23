@@ -47,7 +47,7 @@ class LearningDataRecord:
     content: dict[str, Any]
     timestamp: datetime
     metadata: dict[str, Any] = field(default_factory=dict)
-    ttl: int | None = None  # 过期时间(秒)
+    ttl: Optional[int] = None  # 过期时间(秒)
 
     def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
@@ -83,7 +83,7 @@ class StorageBackendInterface(ABC):
 
     @abstractmethod
     async def query(
-        self, agent_id: str, data_type: str | None = None, limit: int = 100
+        self, agent_id: str, data_type: Optional[str] = None, limit: int = 100
     ) -> list[LearningDataRecord]:
         """查询记录"""
         pass
@@ -202,7 +202,7 @@ class FileStorageBackend(StorageBackendInterface):
                 f.write("\n")
 
     async def query(
-        self, agent_id: str, data_type: str | None = None, limit: int = 100
+        self, agent_id: str, data_type: Optional[str] = None, limit: int = 100
     ) -> list[LearningDataRecord]:
         """查询记录"""
         try:
@@ -340,7 +340,7 @@ class RedisStorageBackend(StorageBackendInterface):
             return False
 
     async def query(
-        self, agent_id: str, data_type: str | None = None, limit: int = 100
+        self, agent_id: str, data_type: Optional[str] = None, limit: int = 100
     ) -> list[LearningDataRecord]:
         """查询记录"""
         try:
@@ -441,8 +441,8 @@ class LearningPersistenceManager:
     async def save_experience(
         self,
         agent_id: str,
-        experience: dict[str, Any],        metadata: dict[str, Any] | None = None,
-        ttl: int | None = None,
+        experience: dict[str, Any],        metadata: Optional[dict[str, Any]] = None,
+        ttl: Optional[int] = None,
     ) -> str:
         """保存学习经验"""
         if not self._initialized:
@@ -469,7 +469,7 @@ class LearningPersistenceManager:
     async def save_pattern(
         self,
         agent_id: str,
-        pattern: dict[str, Any],        metadata: dict[str, Any] | None = None,
+        pattern: dict[str, Any],        metadata: Optional[dict[str, Any]] = None,
     ) -> str:
         """保存学习模式"""
         if not self._initialized:
@@ -496,7 +496,7 @@ class LearningPersistenceManager:
     async def save_knowledge(
         self,
         agent_id: str,
-        knowledge: dict[str, Any],        metadata: dict[str, Any] | None = None,
+        knowledge: dict[str, Any],        metadata: Optional[dict[str, Any]] = None,
     ) -> str:
         """保存知识"""
         if not self._initialized:

@@ -27,7 +27,7 @@ class MetricsCollector:
     负责收集、存储和检索各种类型的指标。
     """
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """初始化指标收集器
 
         Args:

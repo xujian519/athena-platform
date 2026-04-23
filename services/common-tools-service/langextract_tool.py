@@ -627,7 +627,7 @@ class LangExtractTool:
         hash_obj = hashlib.md5(timestamp.encode(), usedforsecurity=False)
         return f"langextract_{hash_obj.hexdigest()[:8]}_{timestamp}"
 
-    async def visualize_results(self, extractions: list[dict[str, Any]], output_path: str = None) -> str:
+    async def visualize_results(self, extractions: list[dict[str, Any], output_path: str = None) -> str:
         """生成交互式可视化结果"""
         try:
             if not self.is_available:
@@ -647,7 +647,7 @@ class LangExtractTool:
             logger.error(f"可视化生成失败: {e}")
             return f"<html><body><h1>可视化生成失败</h1><p>{str(e)}</p></body></html>"
 
-    def _generate_simple_visualization(self, extractions: list[dict[str, Any]]) -> str:
+    def _generate_simple_visualization(self, extractions: list[dict[str, Any]) -> str:
         """生成简单的HTML可视化"""
         html = """
         <!DOCTYPE html>

@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 将启动指南存储到小诺记忆模块
 Store Startup Guide to Xiaonuo Memory Module
 """
 
 import sys
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import asyncio
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 # 添加项目路径
 sys.path.append(str(Path(__file__).parent.parent))
@@ -19,7 +16,7 @@ def store_startup_guide_to_memory() -> None:
 
     try:
         # 导入记忆管理器
-        from core.memory.enhanced_memory_manager import EnhancedMemoryManager
+        from core.framework.memory.enhanced_memory_manager import EnhancedMemoryManager
 
         # 连接小诺的记忆模块
         xiaonuo_memory = EnhancedMemoryManager('xiaonuo')
@@ -63,7 +60,7 @@ python3 app.py
 ```python
 import sys
 sys.path.append('/Users/xujian/Athena工作平台')
-from core.collaboration.ready_on_demand_system import ai_system
+from core.framework.collaboration.ready_on_demand_system import ai_system
 
 # 基础对话 - 使用小诺
 response = await ai_system.chat("你好，小诺")

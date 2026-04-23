@@ -31,7 +31,7 @@ class MemoryRecorder:
         self,
         user_input: str,
         xiaonuo_response: str,
-        xiana_response: str | None = None,
+        xiana_response: Optional[str] = None,
         emotional_tone: str = "neutral",
     ):
         """
@@ -98,7 +98,7 @@ class MemoryRecorder:
         self,
         title: str,
         description: str,
-        participants: list[str] | None = None,
+        participants: Optional[list[str]] = None,
         emotional_weight: float = 0.7,
     ):
         """
@@ -135,7 +135,7 @@ class MemoryRecorder:
         )
 
     def record_skill_practice(
-        self, skill_name: str, steps: list[str], context: str | None = None
+        self, skill_name: str, steps: list[str], context: Optional[str] = None
     ) -> Any:
         """记录技能实践"""
         skill = self.memory.get_procedural_skill(skill_name)
@@ -158,7 +158,7 @@ class MemoryRecorder:
                 tags=["新技能", "实践中"],
             )
 
-    def end_session(self, session_summary: str | None = None) -> Any:
+    def end_session(self, session_summary: Optional[str] = None) -> Any:
         """
         结束当前会话
 
@@ -187,7 +187,7 @@ class MemoryRecorder:
         self.current_session_messages = []
         self.current_session_start = None
 
-    def query_memory(self, query: str, memory_type: str | None = None) -> list[dict]:
+    def query_memory(self, query: str, memory_type: Optional[str] = None) -> list[dict]:
         """
         查询记忆
 
@@ -252,7 +252,7 @@ class MemoryRecorder:
         return self.memory.export_memory_report()
 
     def get_timeline(
-        self, start_date: str | None = None, end_date: str | None = None
+        self, start_date: Optional[str] = None, end_date: Optional[str] = None
     ) -> list[dict]:
         """
         获取时间线

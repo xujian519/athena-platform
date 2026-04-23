@@ -107,14 +107,14 @@ class TransferResult:
     performance_after: float
     transfer_time: float
     success: bool
-    error_message: str | None = None
+    error_message: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
 class TransferLearningFramework:
     """迁移学习框架"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {
             "similarity_threshold": 0.3,
             "max_source_tasks": 100,
@@ -166,7 +166,7 @@ class TransferLearningFramework:
         model: Any,
         performance_metrics: dict[str, float],
         feature_space: str = "unknown",
-        data_statistics: dict[str, Any] | None = None,
+        data_statistics: Optional[dict[str, Any]] = None,
     ) -> bool:
         """注册源任务"""
         try:
@@ -304,7 +304,7 @@ class TransferLearningFramework:
     async def find_similar_tasks(
         self,
         target_task_id: str,
-        target_description: dict[str, Any] | None = None,
+        target_description: Optional[dict[str, Any]] = None,
         top_k: int = 5,
     ) -> list[tuple[str, float]]:
         """查找相似任务"""

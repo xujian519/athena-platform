@@ -513,7 +513,7 @@ class MemoryProcessor:
     async def store_memory(self,
                           content: Dict[str, Any],
                           memory_type: MemoryType,
-                          tags: Optional[List[str] = None,
+                          tags: Optional[List[str]] = None,
                           importance: float = 0.5,
                           emotional_valence: float = 0.0,
                           context: Optional[Dict[str, Any]] = None) -> str:

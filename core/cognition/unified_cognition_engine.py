@@ -47,9 +47,9 @@ class CognitionRequest:
 
     input_data: Any
     mode: CognitionMode = CognitionMode.STANDARD
-    context: dict[str, Any] | None = None
-    expert_context: dict[str, Any] | None = None
-    knowledge_context: dict[str, Any] | None = None
+    context: Optional[dict[str, Any]] = None
+    expert_context: Optional[dict[str, Any]] = None
+    knowledge_context: Optional[dict[str, Any]] = None
     enable_reasoning_chain: bool = False
     enable_uncertainty: bool = True
 
@@ -60,11 +60,11 @@ class CognitionResponse:
 
     result: Any
     mode: CognitionMode
-    reasoning_chain: list[str] | None = None
+    reasoning_chain: Optional[list[str]] = None
     confidence: float = 0.0
-    uncertainty: str | None = None
-    evidence: list[str] | None = None
-    limitations: list[str] | None = None
+    uncertainty: Optional[str] = None
+    evidence: Optional[list[str]] = None
+    limitations: Optional[list[str]] = None
     processing_time: float = 0.0
 
 

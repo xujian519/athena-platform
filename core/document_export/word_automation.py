@@ -105,7 +105,7 @@ class WordAutomation:
             logger.error(f"❌ 打开文档失败: {e}")
             return False
 
-    def get_active_word_app(self) -> str | None:
+    def get_active_word_app(self) -> Optional[str]:
         """
         获取当前活动的Word应用
 
@@ -130,7 +130,7 @@ class WordDocumentInserter:
         self.automation = WordAutomation()
         self.system = platform.system()
 
-    def insert_at_cursor(self, docx_path: str, content: str | None = None) -> bool:
+    def insert_at_cursor(self, docx_path: str, content: Optional[str] = None) -> bool:
         """
         在Word文档光标位置插入内容
 

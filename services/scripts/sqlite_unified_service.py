@@ -285,7 +285,7 @@ async def vector_search(request: VectorSearchRequest):
                 for row in rows:
                     row_dict = {}
                     for i, col in enumerate(columns):
-                        row_dict[col[1]] = row[i]
+                        row_dict[col[1] = row[i]
                     results.append({
                         'table': table_name,
                         'data': row_dict,

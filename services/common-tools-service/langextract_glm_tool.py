@@ -713,7 +713,7 @@ class LangExtractGLMTool:
 
     async def visualize_results(
         self,
-        extractions: list[dict[str, Any]],
+        extractions: list[dict[str, Any],
         output_path: str = None
     ) -> str:
         """生成交互式可视化结果"""
@@ -729,7 +729,7 @@ class LangExtractGLMTool:
             logger.error(f"可视化生成失败: {e}")
             return f"<html><body><h1>GLM可视化生成失败</h1><p>{str(e)}</p></body></html>"
 
-    def _generate_glm_visualization(self, extractions: list[dict[str, Any]]) -> str:
+    def _generate_glm_visualization(self, extractions: list[dict[str, Any]) -> str:
         """生成GLM主题的HTML可视化"""
         html = f"""
         <!DOCTYPE html>

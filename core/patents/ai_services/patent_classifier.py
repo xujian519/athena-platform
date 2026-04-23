@@ -39,7 +39,7 @@ class ClassificationResult:
     sub_classifications: list[dict] = field(default_factory=list)
     confidence_scores: list[float] = field(default_factory=list)
 
-    def get_top_code(self) -> str | None:
+    def get_top_code(self) -> Optional[str]:
         """获取最可能的分类代码"""
         if self.codes:
             return self.codes[0]["code"]

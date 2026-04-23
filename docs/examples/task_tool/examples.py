@@ -36,7 +36,7 @@ def example_1_basic_task_execution():
     print("示例1: 基础任务执行")
     print("=" * 60)
 
-    from core.agents.task_tool import TaskTool
+    from core.framework.agents.task_tool import TaskTool
 
     # 创建TaskTool实例
     task_tool = TaskTool()
@@ -75,7 +75,7 @@ def example_2_background_task():
     print("示例2: 异步后台任务")
     print("=" * 60)
 
-    from core.agents.task_tool import BackgroundTaskManager, TaskTool
+    from core.framework.agents.task_tool import BackgroundTaskManager, TaskTool
 
     # 创建实例
     task_tool = TaskTool()
@@ -137,7 +137,7 @@ def example_3_model_mapping():
     print("示例3: 模型选择和映射")
     print("=" * 60)
 
-    from core.agents.task_tool import ModelMapper
+    from core.framework.agents.task_tool import ModelMapper
 
     # 创建ModelMapper实例
     mapper = ModelMapper()
@@ -189,7 +189,7 @@ def example_4_patent_agents():
     print("示例4: 专利代理类型使用")
     print("=" * 60)
 
-    from core.agents.task_tool import TaskTool
+    from core.framework.agents.task_tool import TaskTool
 
     # 创建TaskTool实例
     task_tool = TaskTool()
@@ -329,7 +329,7 @@ def example_6_error_handling():
     print("示例6: 高级使用 - 错误处理和重试")
     print("=" * 60)
 
-    from core.agents.task_tool import TaskTool
+    from core.framework.agents.task_tool import TaskTool
 
     # 创建TaskTool实例
     task_tool = TaskTool()
@@ -398,7 +398,7 @@ def example_7_task_monitoring():
     print("示例7: 高级使用 - 任务状态监控")
     print("=" * 60)
 
-    from core.agents.task_tool import BackgroundTaskManager, TaskTool
+    from core.framework.agents.task_tool import BackgroundTaskManager, TaskTool
 
     # 创建实例
     task_tool = TaskTool()
@@ -472,7 +472,7 @@ def example_8_resource_management():
     print("\n1. 使用上下文管理器 (推荐):")
     print("""
     # 推荐做法: 使用with语句确保资源正确释放
-    from core.agents.task_tool import TaskTool, BackgroundTaskManager
+    from core.framework.agents.task_tool import TaskTool, BackgroundTaskManager
 
     with BackgroundTaskManager(max_workers=10) as task_manager:
         task_tool = TaskTool()
@@ -492,7 +492,7 @@ def example_8_resource_management():
     print("\n2. 手动资源管理 (不推荐):")
     print("""
     # 不推荐做法: 手动管理资源
-    from core.agents.task_tool import TaskTool, BackgroundTaskManager
+    from core.framework.agents.task_tool import TaskTool, BackgroundTaskManager
 
     task_manager = BackgroundTaskManager(max_workers=10)
     task_tool = TaskTool()

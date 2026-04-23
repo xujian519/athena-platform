@@ -38,7 +38,7 @@ class PostgreSQLConfig:
     timeout: int = 60
 
     @classmethod
-    def from_env(cls) -> 'PostgreSQLConfig':
+    def from_env(cls) -> PostgreSQLConfig:
         """从环境变量加载配置"""
         return cls(
             host=os.getenv('MEMORY_DB_HOST', 'localhost'),
@@ -70,11 +70,11 @@ class RedisConfig:
     host: str
     port: int
     db: int
-    password: str | None = None
+    password: Optional[str] = None
     ttl: dict[str, int] = field(default_factory=dict)
 
     @classmethod
-    def from_env(cls) -> 'RedisConfig':
+    def from_env(cls) -> RedisConfig:
         """从环境变量加载配置"""
         return cls(
             host=os.getenv('REDIS_HOST', 'localhost'),
@@ -106,11 +106,11 @@ class QdrantConfig:
 
     host: str
     port: int
-    api_key: str | None = None
+    api_key: Optional[str] = None
     collections: dict[str, str] = field(default_factory=dict)
 
     @classmethod
-    def from_env(cls) -> 'QdrantConfig':
+    def from_env(cls) -> QdrantConfig:
         """从环境变量加载配置"""
         return cls(
             host=os.getenv('QDRANT_HOST', 'localhost'),
@@ -139,12 +139,12 @@ class EmbeddingConfig:
     enable_real_embeddings: bool = True
     model_type: str = "local"  # local, openai, md5
     model_name: str = "BAAI/bge-m3"
-    model_path: str | None = None
-    openai_api_key: str | None = None
+    model_path: Optional[str] = None
+    openai_api_key: Optional[str] = None
     dimension: int = 1024
 
     @classmethod
-    def from_env(cls) -> 'EmbeddingConfig':
+    def from_env(cls) -> EmbeddingConfig:
         """从环境变量加载配置"""
         enable_real = os.getenv('ENABLE_REAL_EMBEDDINGS', 'true').lower() == 'true'
         has_openai_key = bool(os.getenv('OPENAI_API_KEY'))
@@ -192,7 +192,7 @@ class PerformanceConfig:
     query_timeout: int = 30
 
     @classmethod
-    def from_env(cls) -> 'PerformanceConfig':
+    def from_env(cls) -> PerformanceConfig:
         """从环境变量加载配置"""
         return cls(
             hot_cache_limit=int(os.getenv('HOT_CACHE_LIMIT', '200')),  # 优化: 默认值提升到200
@@ -210,7 +210,7 @@ class SecurityConfig:
     cors_allowed_origins: str = "*"
 
     @classmethod
-    def from_env(cls) -> 'SecurityConfig':
+    def from_env(cls) -> SecurityConfig:
         """从环境变量加载配置"""
         return cls(
             environment=os.getenv('ENVIRONMENT', 'production'),
@@ -231,7 +231,7 @@ class MemorySystemConfig:
     security: SecurityConfig
 
     @classmethod
-    def from_env(cls) -> 'MemorySystemConfig':
+    def from_env(cls) -> MemorySystemConfig:
         """从环境变量加载所有配置"""
         return cls(
             postgresql=PostgreSQLConfig.from_env(),
@@ -331,7 +331,7 @@ class MemorySystemConfig:
         logger.info("=" * 50)
 
 
-def load_production_config(env_file: str | None = None) -> MemorySystemConfig:
+def load_production_config(env_file: Optional[str] = None) -> MemorySystemConfig:
     """
     加载生产环境配置
 

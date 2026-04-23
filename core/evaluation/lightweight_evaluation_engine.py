@@ -335,7 +335,7 @@ class LightweightEvaluationEngine:
             self.evaluation_history = self.evaluation_history[-self.max_history_size :]
 
     def get_evaluation_history(
-        self, task_id: str | None = None, limit: int = 50
+        self, task_id: Optional[str] = None, limit: int = 50
     ) -> list[EvaluationResult]:
         """获取评估历史"""
         history = self.evaluation_history

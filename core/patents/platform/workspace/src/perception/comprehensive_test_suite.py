@@ -52,7 +52,7 @@ class TestCase:
     expected_result: Any
     timeout: float = 30.0
     category: str = 'general'
-    dependencies: Optional[List[str] = None
+    dependencies: Optional[List[str]] = None
 
 @dataclass
 class TestResult:
@@ -61,7 +61,7 @@ class TestResult:
     test_name: str
     passed: bool
     execution_time: float
-    error_message: str | None = None
+    error_message: Optional[str] = None
     actual_result: Any = None
     expected_result: Any = None
     performance_metrics: Dict[str, float] = None

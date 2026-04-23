@@ -33,14 +33,14 @@ class LoadBalancer:
         """
         self.strategy = strategy
         self._round_robin_index = 0
-        self._agent_stats: Dict[str, Dict] = {}  # Agent统计信息
+        self._agent_stats: dict[str, dict] = {}  # Agent统计信息
 
         logger.info(f"LoadBalancer initialized with strategy: {strategy}")
 
     def select_agent(
         self,
         task: TaskInfo,
-        available_agents: List[AgentInfo]
+        available_agents: list[AgentInfo]
     ) -> Optional[AgentInfo]:
         """
         选择最适合的Agent
@@ -67,13 +67,13 @@ class LoadBalancer:
             logger.warning(f"Unknown strategy: {self.strategy}, using least_loaded")
             return self._least_loaded_select(available_agents)
 
-    def _round_robin_select(self, agents: List[AgentInfo]) -> AgentInfo:
+    def _round_robin_select(self, agents: list[AgentInfo]) -> AgentInfo:
         """轮询选择"""
         agent = agents[self._round_robin_index % len(agents)]
         self._round_robin_index += 1
         return agent
 
-    def _least_loaded_select(self, agents: List[AgentInfo]) -> AgentInfo:
+    def _least_loaded_select(self, agents: list[AgentInfo]) -> AgentInfo:
         """选择负载最少的Agent"""
         # 按当前任务数排序
         sorted_agents = sorted(agents, key=lambda a: len(a.current_tasks))
@@ -82,7 +82,7 @@ class LoadBalancer:
     def _capability_based_select(
         self,
         task: TaskInfo,
-        agents: List[AgentInfo]
+        agents: list[AgentInfo]
     ) -> Optional[AgentInfo]:
         """
         基于能力选择Agent
@@ -157,10 +157,10 @@ class LoadBalancer:
 
         logger.debug(f"Agent {agent_id} performance updated")
 
-    def get_agent_stats(self, agent_id: str) -> Optional[Dict]:
+    def get_agent_stats(self, agent_id: str) -> Optional[dict]:
         """获取Agent统计信息"""
         return self._agent_stats.get(agent_id)
 
-    def get_all_stats(self) -> Dict[str, Dict]:
+    def get_all_stats(self) -> dict[str, dict]:
         """获取所有Agent统计信息"""
         return self._agent_stats.copy()

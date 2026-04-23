@@ -17,9 +17,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 try:
-    from core.agents.base import AgentRegistry, AgentRequest, AgentStatus
-    from core.agents.example_agent import ExampleAgent
-    from core.agents.xiaonuo_with_planning import XiaonuoEnhancedAgent
+
+    from core.framework.agents.base import AgentRegistry, AgentRequest, AgentStatus
+    from core.framework.agents.example_agent import ExampleAgent
 except ImportError:
     pass  # 模块导入失败时，测试会被跳过
 
@@ -358,3 +358,4 @@ class TestExampleAgentErrorHandling:
 if __name__ == "__main__":
     print("运行ExampleAgent测试...")
     pytest.main([__file__, "-v"])
+

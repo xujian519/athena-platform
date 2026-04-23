@@ -112,8 +112,8 @@ class LitigationSupporter:
         litigation_type: LitigationType,
         litigation_role: LitigationRole,
         case_info: Dict[str, Any],
-        evidences: Optional[List[Dict[str, Any]]] = None,
-        pleading_arguments: Optional[List[Dict[str, Any]]] = None,
+        evidences: Optional[List[Dict[str, Any]], None,
+        pleading_arguments: Optional[List[Dict[str, Any]], None,
         options: Optional[LitigationSupportOptions] = None
     ) -> LitigationSupportResult:
         """

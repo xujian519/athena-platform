@@ -281,9 +281,9 @@ class SemanticReasoningEngine:
     async def reason(
         self,
         query: str,
-        context: str | None = None,
+        context: Optional[str] = None,
         reasoning_types: list[ReasoningType] | None = None,
-        domain: str | None = None,
+        domain: Optional[str] = None,
     ) -> list[ReasoningResult]:
         """执行推理"""
         if reasoning_types is None:

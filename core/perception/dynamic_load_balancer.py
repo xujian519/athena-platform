@@ -104,7 +104,7 @@ class RoutingResult:
     """路由结果"""
 
     success: bool
-    node_id: str | None = None
+    node_id: Optional[str] = None
     result: Any = None
     error: Exception | None = None
     routing_time: float = 0.0
@@ -309,7 +309,7 @@ class ConsistentHashAlgorithm(LoadBalancingAlgorithm):
     async def select_node(
         self,
         nodes: list[ProcessorNode],
-        request_key: str | None = None,
+        request_key: Optional[str] = None,
     ) -> ProcessorNode | None:
         """根据请求键选择节点"""
         if not nodes:
@@ -496,7 +496,7 @@ class DynamicLoadBalancer:
         node_id: str,
         processor: Any,
         weight: int = 1,
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> None:
         """添加处理器节点
 
@@ -532,7 +532,7 @@ class DynamicLoadBalancer:
     async def route_request(
         self,
         handler: Callable[[Any], Any],
-        request_key: str | None = None,
+        request_key: Optional[str] = None,
         **kwargs: Any,
     ) -> RoutingResult:
         """路由请求

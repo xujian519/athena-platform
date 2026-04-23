@@ -6,10 +6,11 @@
 import re
 from pathlib import Path
 
-def fix_specific_file_errors(file_path: Path) -> tuple[bool, list[str]]:
+
+def fix_specific_file_errors(file_path: Path) -> tuple[bool, list[str]:
     """修复特定文件的语法错误"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         original_content = content
@@ -24,29 +25,29 @@ def fix_specific_file_errors(file_path: Path) -> tuple[bool, list[str]]:
         if 'Optional[dict | None = None]' in content:
             content = content.replace('Optional[dict | None = None]', 'dict | None')
 
-        # 模式3: algorithms=[JWT_ALGORITHM]] -> algorithms=[JWT_ALGORITHM]]
+        # 模式3: algorithms=[JWT_ALGORITHM] -> algorithms=[JWT_ALGORITHM]
         if re.search(r'algorithms=\[JWT_ALGORITHM\]\]', content):
-            content = re.sub(r'algorithms=\[JWT_ALGORITHM\]\]', r'algorithms=[JWT_ALGORITHM]]', content)
+            content = re.sub(r'algorithms=\[JWT_ALGORITHM\]\]', r'algorithms=[JWT_ALGORITHM]', content)
             fixes.append("修复 algorithms 括号")
 
         # 模式4: Optional[list["key"] = None] -> list | None
         if re.search(r'Optional\[list\["[^"]+"\]\s*=\s*None\]', content):
             content = re.sub(r'Optional\[list\["[^"]+"\]\s*=\s*None\]', r'list | None', content)
-            fixes.append("修复 Optional[list['key']]")
+            fixes.append("修复 Optional[list['key']")
 
-        # 模式5: dict[str, list[str]: -> dict[str, list[str]]:
+        # 模式5: dict[str, list[str]: -> dict[str, list[str]:
         if re.search(r'dict\[str,\s*list\[str\]:\s*$', content):
-            content = re.sub(r'dict\[str,\s*list\[str\]:\s*$', r'dict[str, list[str]]:', content)
-            fixes.append("修复 dict[str, list[str]]")
+            content = re.sub(r'dict\[str,\s*list\[str\]:\s*$', r'dict[str, list[str]:', content)
+            fixes.append("修复 dict[str, list[str]")
 
-        # 模式6: dict[dict[str] -> bool: -> dict[dict[str, str]] -> bool:
+        # 模式6: dict[dict[str] -> bool: -> dict[dict[str, str] -> bool:
         if re.search(r'dict\[dict\[str\]\s*->\s*bool:', content):
-            content = re.sub(r'dict\[dict\[str\]\s*->\s*bool:', r'dict[dict[str, str]] -> bool:', content)
-            fixes.append("修复 dict[dict[str]]")
+            content = re.sub(r'dict\[dict\[str\]\s*->\s*bool:', r'dict[dict[str, str] -> bool:', content)
+            fixes.append("修复 dict[dict[str]")
 
-        # 模式7: Optional[asyncio.Task[None]) | None -> Optional[asyncio.Task[None]] | None
+        # 模式7: Optional[asyncio.Task[None]) | None -> Optional[asyncio.Task[None] | None
         if re.search(r'Optional\[asyncio\.Task\[None\)\]\s*\|\s*None', content):
-            content = re.sub(r'Optional\[asyncio\.Task\[None\)\]\s*\|\s*None', r'Optional[asyncio.Task[None]] | None', content)
+            content = re.sub(r'Optional\[asyncio\.Task\[None\)\]\s*\|\s*None', r'Optional[asyncio.Task[None] | None', content)
             fixes.append("修复 Optional[asyncio.Task]")
 
         # 模式8: list[Any) | None -> list[Any] | None
@@ -59,15 +60,15 @@ def fix_specific_file_errors(file_path: Path) -> tuple[bool, list[str]]:
             content = re.sub(r'dict\[str,\s*Any\)\]\s*\|\s*None', r'dict[str, Any] | None', content)
             fixes.append("修复 dict[str, Any])")
 
-        # 模式10: *args[]] -> *args]
+        # 模式10: *args[] -> *args]
         if re.search(r'\*args\[\]\]', content):
             content = re.sub(r'\*args\[\]\]', r'*args]', content)
             fixes.append("修复 *args[]")
 
-        # 模式11: list[str]]) | None -> list[str] | None
+        # 模式11: list[str]) | None -> list[str] | None
         if re.search(r'list\[str\]\]\]\s*\|\s*None', content):
             content = re.sub(r'list\[str\]\]\]\s*\|\s*None', r'list[str] | None', content)
-            fixes.append("修复 list[str]]")
+            fixes.append("修复 list[str]")
 
         # 模式12: dict[str, int | None = None -> dict[str, int] | None = None
         if re.search(r'dict\[str,\s*int\s*\|\s*None\s*=\s*None\s*[,)]', content):
@@ -130,7 +131,7 @@ def main():
                 for fix in fixes[:3]:
                     print(f"    {fix}")
 
-    print(f"\n修复完成!")
+    print("\n修复完成!")
     print(f"修复文件数: {fixed_count}")
 
 if __name__ == "__main__":

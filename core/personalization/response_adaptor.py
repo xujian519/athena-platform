@@ -89,7 +89,7 @@ class UserPreference:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "UserPreference":
+    def from_dict(cls, data: dict[str, Any]) -> UserPreference:
         """从字典创建"""
         return cls(
             user_id=data["user_id"],
@@ -226,7 +226,7 @@ class ResponseAdapter:
         logger.debug(f"保存用户偏好: {preference.user_id}")
 
     def adapt_response(
-        self, user_id: str, content: str, metadata: dict[str, Any] | None = None
+        self, user_id: str, content: str, metadata: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """
         根据用户偏好适配响应
@@ -326,7 +326,7 @@ class ResponseAdapter:
         return f"| 内容 |\n|------|\n| {content} |"
 
     def learn_from_feedback(
-        self, user_id: str, feedback: str, context: dict[str, Any] | None = None
+        self, user_id: str, feedback: str, context: Optional[dict[str, Any]] = None
     ) -> None:
         """
         从反馈中学习
@@ -399,14 +399,14 @@ def save_user_preference(preference: UserPreference) -> None:
 
 
 def adapt_response(
-    user_id: str, content: str, metadata: dict[str, Any] | None = None
+    user_id: str, content: str, metadata: Optional[dict[str, Any]] = None
 ) -> dict[str, Any]:
     """适配响应"""
     return get_response_adapter().adapt_response(user_id, content, metadata)
 
 
 def learn_from_feedback(
-    user_id: str, feedback: str, context: dict[str, Any] | None = None
+    user_id: str, feedback: str, context: Optional[dict[str, Any]] = None
 ) -> None:
     """从反馈中学习"""
     get_response_adapter().learn_from_feedback(user_id, feedback, context)

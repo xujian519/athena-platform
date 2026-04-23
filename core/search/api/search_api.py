@@ -26,11 +26,11 @@ class SearchRequest:
     """搜索请求"""
 
     query: str
-    sources: list[str] | None = None
+    sources: Optional[list[str]] = None
     search_type: SearchType = SearchType.HYBRID
     limit: int = 10
-    filters: dict[str, Any] | None = None
-    sort_by: str | None = None
+    filters: Optional[dict[str, Any]] = None
+    sort_by: Optional[str] = None
     include_metadata: bool = True
 
 
@@ -47,7 +47,7 @@ class SearchResponse:
 class SearchAPI:
     """搜索API类"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化搜索API
 
@@ -137,7 +137,7 @@ class SearchAPI:
             raise
 
     async def quick_search(
-        self, query: str, sources: list[str] | None = None, limit: int = 10
+        self, query: str, sources: Optional[list[str]] = None, limit: int = 10
     ) -> SearchResponse:
         """
         快速搜索(简化接口)
@@ -175,7 +175,7 @@ class SearchAPI:
         return await self.search(request)
 
     async def external_search(
-        self, query: str, engines: list[str] | None = None, limit: int = 10
+        self, query: str, engines: Optional[list[str]] = None, limit: int = 10
     ) -> SearchResponse:
         """
         外部搜索

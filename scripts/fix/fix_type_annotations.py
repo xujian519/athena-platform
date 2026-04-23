@@ -5,12 +5,11 @@ Auto-fix Python 3.10+ type annotations to Python 3.9 compatible format
 """
 
 import re
-from pathlib import Path
-from typing import Set, Tuple, List
 import shutil
+from pathlib import Path
 
 
-def fix_type_annotations(content: str) -> Tuple[str, int]:
+def fix_type_annotations(content: str) -> tuple[str, int]:
     """
     修复Python 3.10+类型注解为Python 3.9兼容格式
 
@@ -57,9 +56,9 @@ def fix_type_annotations(content: str) -> Tuple[str, int]:
 
             fix_count += len(re.findall(pattern1, original_content)) + len(re.findall(pattern2, original_content))
 
-    # 2. 修复复杂类型注解: list[str] | None -> Optional[List[str]]
-    # list[str] | None -> Optional[List[str]]
-    complex_pattern = r'\b(list|dict|tuple|set)\[([^\]]+)\]\s*\|\s*None'
+    # 2. 修复复杂类型注解: list[str] | None -> Optional[List[str]
+    # list[str] | None -> Optional[List[str]
+    complex_pattern = r'\b(list|dict|tuple|set)\[([^\]+)\]\s*\|\s*None'
     if re.search(complex_pattern, content):
         # 确保导入了List, Dict, Tuple, Set
         needed_types = []
@@ -89,18 +88,18 @@ def fix_type_annotations(content: str) -> Tuple[str, int]:
                 content = f'from typing import {", ".join(needed_types)}\n' + content
                 fix_count += 1
 
-        # 替换 list[str] | None -> Optional[List[str]]
+        # 替换 list[str] | None -> Optional[List[str]
         def replace_complex_type(match):
             container = match.group(1)  # list, dict, tuple, set
             inner = match.group(2)       # str, int, etc.
             container_cap = container.capitalize()
-            return f'Optional[{container_cap}[{inner}]]'
+            return f'Optional[{container_cap}[{inner}]'
 
         content = re.sub(complex_pattern, replace_complex_type, content)
         fix_count += len(re.findall(complex_pattern, original_content))
 
-    # 3. 修复 dict[K, V] | None -> Optional[Dict[K, V]]
-    dict_pattern = r'\bdict\[([^,]+),\s*([^\]]+)\]\s*\|\s*None'
+    # 3. 修复 dict[K, V] | None -> Optional[Dict[K, V]
+    dict_pattern = r'\bdict\[([^,]+),\s*([^\]+)\]\s*\|\s*None'
     if re.search(dict_pattern, content):
         # 确保导入了Dict
         if 'from typing import' in content and 'Dict' not in content:
@@ -111,7 +110,7 @@ def fix_type_annotations(content: str) -> Tuple[str, int]:
                     f'from typing import {import_match.group(1)}, Dict'
                 )
 
-        content = re.sub(dict_pattern, r'Optional[Dict[\1, \2]]', content)
+        content = re.sub(dict_pattern, r'Optional[Dict[\1, \2]', content)
         fix_count += len(re.findall(dict_pattern, original_content))
 
     return content, fix_count
@@ -153,7 +152,7 @@ def fix_file(file_path: Path) -> bool:
             fixed_lines = fixed_content.split('\n')[:10]
 
             print("\n   修复示例 (前10行对比):")
-            for i, (orig, fixed) in enumerate(zip(original_lines, fixed_lines), 1):
+            for i, (orig, fixed) in enumerate(zip(original_lines, fixed_lines, strict=False), 1):
                 if orig != fixed and '|' in orig:
                     print(f"   行 {i}:")
                     print(f"     修改前: {orig}")
@@ -161,7 +160,7 @@ def fix_file(file_path: Path) -> bool:
                     break
             return True
         else:
-            print(f"   ℹ️  无需修复: 文件已是Python 3.9兼容格式")
+            print("   ℹ️  无需修复: 文件已是Python 3.9兼容格式")
             # 删除备份文件
             backup_path.unlink()
             return True
@@ -171,7 +170,7 @@ def fix_file(file_path: Path) -> bool:
         # 恢复备份
         if backup_path.exists():
             shutil.copy(backup_path, file_path)
-            print(f"   ✅ 已从备份恢复")
+            print("   ✅ 已从备份恢复")
         return False
 
 
@@ -222,7 +221,7 @@ def main():
         print("\n🎉 所有文件修复完成！")
         return 0
     else:
-        print(f"\n⚠️  部分文件修复失败，请检查日志")
+        print("\n⚠️  部分文件修复失败，请检查日志")
         return 1
 
 

@@ -8,10 +8,11 @@ Gateway性能测试
 4. gRPC流式响应性能
 """
 
-import pytest
-import time
 import statistics
-from typing import List, Dict, Any
+import time
+from typing import Any
+
+import pytest
 
 pytestmark = [pytest.mark.performance, pytest.mark.integration]
 
@@ -25,7 +26,7 @@ class TestIntentRouterPerformance:
         # 这里应该导入Go实现的意图路由器
         # 简化版使用Python模拟
         class MockIntentRouter:
-            def route(self, input_text: str) -> Dict[str, Any]:
+            def route(self, input_text: str) -> dict[str, Any]:
                 # 简化的关键词匹配
                 keywords = {
                     "patent_analysis": ["分析", "专利", "创造性"],
@@ -64,7 +65,7 @@ class TestIntentRouterPerformance:
         ] * 100  # 500次请求
 
         start = time.perf_counter()
-        results = [intent_router.route(inp) for inp in test_inputs]
+        [intent_router.route(inp) for inp in test_inputs]
         elapsed = time.perf_counter() - start
 
         # 验证平均路由时间 < 5ms
@@ -105,14 +106,14 @@ class TestLoadBalancerPerformance:
         ]
 
         # 简化的轮询选择
-        def round_robin_select(instances: List[Dict], index: int) -> Dict:
+        def round_robin_select(instances: list[dict], index: int) -> dict:
             return instances[index % len(instances)]
 
         start = time.perf_counter()
 
         # 执行10000次选择
         for i in range(10000):
-            selected = round_robin_select(instances, i)
+            round_robin_select(instances, i)
 
         elapsed = time.perf_counter() - start
 
@@ -124,12 +125,12 @@ class TestLoadBalancerPerformance:
         # 模拟连接统计
         connections = {f"instance_{i}": 0 for i in range(10)}
 
-        def least_connections_select(instances: List[Dict]) -> Dict:
+        def least_connections_select(instances: list[dict]) -> dict:
             # 选择连接数最少的实例
             min_conn = min(connections.values())
             for inst in instances:
-                if connections[inst["id"]] == min_conn:
-                    connections[inst["id"]] += 1
+                if connections[inst["id"] == min_conn:
+                    connections[inst["id"] += 1
                     return inst
             return instances[0]
 
@@ -138,7 +139,7 @@ class TestLoadBalancerPerformance:
         # 执行1000次选择
         instances = [{"id": f"instance_{i}", "host": "127.0.0.1"} for i in range(10)]
         for _ in range(1000):
-            selected = least_connections_select(instances)
+            least_connections_select(instances)
 
         elapsed = time.perf_counter() - start
 
@@ -151,7 +152,11 @@ class TestMemorySystemPerformance:
 
     def test_memory_write_performance(self):
         """测试记忆写入性能"""
-        from core.memory.unified_memory_system import get_project_memory, MemoryType, MemoryCategory
+        from core.framework.memory.unified_memory_system import (
+            MemoryCategory,
+            MemoryType,
+            get_project_memory,
+        )
 
         memory = get_project_memory("/Users/xujian/Athena工作平台")
 
@@ -178,7 +183,11 @@ class TestMemorySystemPerformance:
 
     def test_memory_read_performance(self):
         """测试记忆读取性能"""
-        from core.memory.unified_memory_system import get_project_memory, MemoryType, MemoryCategory
+        from core.framework.memory.unified_memory_system import (
+            MemoryCategory,
+            MemoryType,
+            get_project_memory,
+        )
 
         memory = get_project_memory("/Users/xujian/Athena工作平台")
 
@@ -194,7 +203,7 @@ class TestMemorySystemPerformance:
         for _ in range(100):
             start = time.perf_counter()
 
-            content = memory.read(
+            memory.read(
                 MemoryType.PROJECT,
                 MemoryCategory.TECHNICAL_FINDINGS,
                 "perf_read_test"
@@ -210,7 +219,7 @@ class TestMemorySystemPerformance:
 
     def test_memory_search_performance(self):
         """测试记忆搜索性能"""
-        from core.memory.unified_memory_system import get_project_memory
+        from core.framework.memory.unified_memory_system import get_project_memory
 
         memory = get_project_memory("/Users/xujian/Athena工作平台")
 
@@ -218,7 +227,7 @@ class TestMemorySystemPerformance:
         for _ in range(10):
             start = time.perf_counter()
 
-            results = memory.search(
+            memory.search(
                 query="测试",
                 limit=10
             )
@@ -257,7 +266,7 @@ class TestWebSocketPerformance:
         for _ in range(1000):
             start = time.perf_counter()
 
-            serialized = json.dumps(message)
+            json.dumps(message)
 
             elapsed = time.perf_counter() - start
             serialize_times.append(elapsed)
@@ -278,7 +287,7 @@ class TestWebSocketPerformance:
         for _ in range(1000):
             start = time.perf_counter()
 
-            message = json.loads(serialized)
+            json.loads(serialized)
 
             elapsed = time.perf_counter() - start
             deserialize_times.append(elapsed)
@@ -312,7 +321,7 @@ class TestOverallPerformance:
         # 模拟并发请求处理
         import concurrent.futures
 
-        def process_request(request_id: int) -> Dict[str, Any]:
+        def process_request(request_id: int) -> dict[str, Any]:
             # 模拟请求处理
             time.sleep(0.1)  # 100ms处理时间
             return {"request_id": request_id, "status": "completed"}
@@ -331,14 +340,19 @@ class TestOverallPerformance:
 
     def test_memory_usage(self):
         """测试内存使用"""
-        import psutil
         import os
+
+        import psutil
 
         process = psutil.Process(os.getpid())
         initial_memory = process.memory_info().rss / 1024 / 1024  # MB
 
         # 执行一些操作
-        from core.memory.unified_memory_system import get_project_memory, MemoryType, MemoryCategory
+        from core.framework.memory.unified_memory_system import (
+            MemoryCategory,
+            MemoryType,
+            get_project_memory,
+        )
 
         memory = get_project_memory("/Users/xujian/Athena工作平台")
 

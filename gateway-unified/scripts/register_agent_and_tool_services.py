@@ -18,7 +18,6 @@ Register Agent and Tool Services to Gateway
 import argparse
 import logging
 import sys
-import time
 
 import requests
 

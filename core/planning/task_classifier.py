@@ -46,7 +46,7 @@ class TaskClassification:
     domain: TaskDomain | None  # 领域
     confidence: float  # 置信度 (0-1)
     reasoning: str  # 分类理由
-    suggested_agent: str | None  # 建议的Agent
+    suggested_agent: Optional[str]  # 建议的Agent
     requires_rules: bool  # 是否需要查询规则
 
 

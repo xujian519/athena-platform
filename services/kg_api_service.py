@@ -4,10 +4,11 @@ Athena知识图谱API服务
 提供统一的REST API接口访问Neo4j知识图谱
 """
 
+import os
+
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from neo4j import GraphDatabase
-import os
 
 app = Flask(__name__)
 CORS(app)
@@ -49,7 +50,7 @@ def query_knowledge_graph():
             return jsonify({"error": "缺少查询参数"}), 400
 
         # 简单查询示例
-        with driver.session() as session:
+        with driver.session():
             # 这里应该是真正的查询逻辑
             # 暂时返回示例响应
             result = {

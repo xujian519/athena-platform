@@ -91,7 +91,7 @@ class Observation:
     step: int
     result: Any
     success: bool
-    error_message: str | None = None
+    error_message: Optional[str] = None
     new_information: list[str] = field(default_factory=list)
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
 
@@ -115,9 +115,9 @@ class ReActResult:
     thoughts: list[Thought]
     actions: list[Action]
     observations: list[Observation]
-    final_answer: str | None = None
+    final_answer: Optional[str] = None
     success: bool = False
-    error_message: str | None = None
+    error_message: Optional[str] = None
     total_steps: int = 0
     execution_time: float = 0.0
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
@@ -158,7 +158,7 @@ class ReActEngine:
     def __init__(
         self,
         max_steps: int = 10,
-        tools: dict[str, Any] | None = None,
+        tools: Optional[dict[str, Any]] = None,
         llm_client: Any | None = None,
     ):
         """
@@ -185,8 +185,8 @@ class ReActEngine:
     async def solve(
         self,
         task: str,
-        context: dict[str, Any] | None = None,
-        tools: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
+        tools: Optional[dict[str, Any]] = None,
     ) -> ReActResult:
         """
         使用ReAct循环解决问题
@@ -726,7 +726,7 @@ class ReActEngine:
         # 默认为通用任务
         return "general_task"
 
-    async def _select_agent(self, task_type: str, available_tools: dict[str, Any]) -> str | None:
+    async def _select_agent(self, task_type: str, available_tools: dict[str, Any]) -> Optional[str]:
         """
         选择合适的Agent
 

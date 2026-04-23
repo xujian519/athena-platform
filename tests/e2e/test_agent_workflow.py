@@ -14,16 +14,17 @@ Version: 1.0.0
 """
 
 import asyncio
-import json
-import pytest
 import uuid
-from pathlib import Path
-from typing import Any, Dict, List, Optional
 from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+import pytest
 
 # 添加项目根目录到sys.path
 project_root = Path(__file__).parent.parent
 import sys
+
 sys.path.insert(0, str(project_root))
 
 # from core.orchestration.agent_registry import AgentRegistry, get_agent_registry
@@ -37,7 +38,7 @@ class MockRetrieverAgent:
         self.agent_id = "xiaona_retriever"
         self.capabilities = ["patent_search", "keyword_expansion"]
 
-    async def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
+    async def execute(self, context: dict[str, Any]) -> dict[str, Any]:
         """模拟检索执行"""
         await asyncio.sleep(0.1)  # 模拟处理时间
 
@@ -98,7 +99,7 @@ class MockAnalyzerAgent:
         self.agent_id = "xiaona_analyzer"
         self.capabilities = ["feature_extraction", "novelty_analysis"]
 
-    async def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
+    async def execute(self, context: dict[str, Any]) -> dict[str, Any]:
         """模拟分析执行"""
         await asyncio.sleep(0.2)  # 模拟处理时间
 
@@ -157,7 +158,7 @@ class MockWriterAgent:
         self.agent_id = "xiaona_writer"
         self.capabilities = ["patent_drafting", "oa_response"]
 
-    async def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
+    async def execute(self, context: dict[str, Any]) -> dict[str, Any]:
         """模拟撰写执行"""
         await asyncio.sleep(0.3)  # 模拟处理时间
 
@@ -205,7 +206,7 @@ class TestE2EWorkflow:
     """端到端工作流测试"""
 
     @pytest.fixture
-    def mock_agents(self) -> Dict[str, Any]:
+    def mock_agents(self) -> dict[str, Any]:
         """创建模拟智能体"""
         return {
             "retriever": MockRetrieverAgent(),
@@ -231,7 +232,7 @@ class TestE2EWorkflow:
         """
 
     @pytest.fixture
-    def expected_workflow_steps(self) -> List[str]:
+    def expected_workflow_steps(self) -> list[str]:
         """预期的工作流步骤"""
         return [
             "检索：专利检索",
@@ -240,7 +241,7 @@ class TestE2EWorkflow:
             "撰写：专利申请文件"
         ]
 
-    async def test_retriever_agent_workflow(self, mock_agents: Dict[str, Any]) -> None:
+    async def test_retriever_agent_workflow(self, mock_agents: dict[str, Any]) -> None:
         """测试检索者工作流"""
         print("\n" + "=" * 60)
         print("🔍 测试检索者工作流")
@@ -274,7 +275,7 @@ class TestE2EWorkflow:
         print(f"✅ 检索完成，找到 {len(result['output_data']['patents'])} 个相关专利")
         print(f"📊 检索耗时: {result['execution_time']:.2f}秒")
 
-    async def test_analyzer_agent_workflow(self, mock_agents: Dict[str, Any]) -> None:
+    async def test_analyzer_agent_workflow(self, mock_agents: dict[str, Any]) -> None:
         """测试分析者工作流"""
         print("\n" + "=" * 60)
         print("🔬 测试分析者工作流")
@@ -318,7 +319,7 @@ class TestE2EWorkflow:
         print(f"📊 创造性评分: {result['output_data']['novelty_analysis']['novelty_level']:.2f}")
         print(f"📊 侵权风险: {result['output_data']['infringement_risk']['risk_level']}")
 
-    async def test_writer_agent_workflow(self, mock_agents: Dict[str, Any]) -> None:
+    async def test_writer_agent_workflow(self, mock_agents: dict[str, Any]) -> None:
         """测试撰写者工作流"""
         print("\n" + "=" * 60)
         print("✍️ 测试撰写者工作流")
@@ -363,7 +364,7 @@ class TestE2EWorkflow:
         print(f"📊 文档字数: {result['output_data']['draft_summary']['word_count']}")
         print(f"📊 完整性评分: {result['output_data']['draft_summary']['completeness_score']:.2f}")
 
-    async def test_complete_workflow(self, mock_agents: Dict[str, Any], scenario_detector) -> None:
+    async def test_complete_workflow(self, mock_agents: dict[str, Any], scenario_detector) -> None:
         """测试完整工作流"""
         print("\n" + "=" * 80)
         print("🚀 测试完整工作流：检索→分析→撰写")
@@ -473,7 +474,7 @@ class TestE2EWorkflow:
         assert len(workflow_result["steps"]) == 3
         assert all(step["status"] == "success" for step in workflow_result["steps"])
 
-        print(f"✅ 完整工作流执行成功")
+        print("✅ 完整工作流执行成功")
         print(f"📊 总耗时: {total_time:.2f}秒")
         print(f"📊 检索专利: {workflow_result['final_output']['patents_count']} 个")
         print(f"📊 分析特征: {workflow_result['final_output']['features_count']} 个")
@@ -481,20 +482,15 @@ class TestE2EWorkflow:
 
         return workflow_result
 
-    async def test_error_handling(self, mock_agents: Dict[str, Any]) -> None:
+    async def test_error_handling(self, mock_agents: dict[str, Any]) -> None:
         """测试错误处理"""
         print("\n" + "=" * 60)
         print("❌ 测试错误处理")
         print("=" * 60)
 
         # 测试无效输入
-        retriever = mock_agents["retriever"]
+        mock_agents["retriever"]
 
-        invalid_context = {
-            "session_id": "",  # 无效session_id
-            "task_id": "error_test",
-            "input_data": {}
-        }
 
         # 这里应该测试错误处理逻辑
         # 由于是模拟，我们只是验证系统能处理
@@ -563,7 +559,7 @@ class TestAgentPerformance:
         max_time = max(total_times)
         min_time = min(total_times)
 
-        print(f"\n📈 性能统计:")
+        print("\n📈 性能统计:")
         print(f"   平均耗时: {avg_time:.2f}秒")
         print(f"   最大耗时: {max_time:.2f}秒")
         print(f"   最小耗时: {min_time:.2f}秒")

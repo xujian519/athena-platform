@@ -6,8 +6,8 @@
 
 import pytest
 
-from core.agents.task_tool.task_tool import TaskTool
-from core.agents.task_tool.tool_manager_adapter import TaskToolAdapter
+from core.framework.agents.task_tool.task_tool import TaskTool
+from core.framework.agents.task_tool.tool_manager_adapter import TaskToolAdapter
 from core.tools.base import ToolRegistry
 from core.tools.tool_manager import ToolManager
 

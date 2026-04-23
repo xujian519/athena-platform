@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 启动小娜增强系统
 Start Xiaona Enhanced System
@@ -11,24 +10,25 @@ Start Xiaona Enhanced System
 版本: v2.0.0
 """
 
+import argparse
 import asyncio
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
 import logging
 import sys
-import argparse
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent
 sys.path.append(str(project_root))
 
 from core.cognition.xiaona_integrated_enhanced_system import (
+    EnhancementConfig,
     XiaonaIntegratedEnhancedSystem,
-    EnhancementConfig
 )
-from core.collaboration.human_ai_collaboration_framework import HumanExpert, TaskType
+
+from core.framework.collaboration.human_ai_collaboration_framework import HumanExpert
 
 # 配置日志
 logging.basicConfig(
@@ -51,8 +51,8 @@ class XiaonaEnhancedLauncher:
         print("⚖️" + " "*25 + "小娜增强系统启动器" + " "*25 + "⚖️")
         print("="*80)
         print(f"💖 启动时间: {self.start_time.strftime('%Y-%m-%d %H:%M:%S')}")
-        print(f"🎯 系统版本: v2.0.0 Integrated")
-        print(f"👩‍⚖️ 控制者: 小娜·天秤女神 (专利法律专家)")
+        print("🎯 系统版本: v2.0.0 Integrated")
+        print("👩‍⚖️ 控制者: 小娜·天秤女神 (专利法律专家)")
         print(f"📄 启动脚本: {__file__}")
         print("="*80)
 
@@ -62,7 +62,7 @@ class XiaonaEnhancedLauncher:
 
         if self.config_file and Path(self.config_file).exists():
             try:
-                with open(self.config_file, 'r', encoding='utf-8') as f:
+                with open(self.config_file, encoding='utf-8') as f:
                     config_data = json.load(f)
 
                 # 更新配置
@@ -174,7 +174,7 @@ class XiaonaEnhancedLauncher:
             try:
                 result = await self.enhanced_system.process_legal_task(**task)
 
-                print(f"✅ 任务完成")
+                print("✅ 任务完成")
                 print(f"   应用的增强: {', '.join(result.enhancement_applied)}")
                 print(f"   处理时间: {result.processing_time:.2f}秒")
                 print(f"   最终置信度: {result.final_confidence:.2f}")
@@ -205,7 +205,7 @@ class XiaonaEnhancedLauncher:
                 # 分析输入类型
                 task_type = "patent_analysis" if "专利" in user_input else "legal_research"
 
-                print(f"🔄 正在处理您的请求...")
+                print("🔄 正在处理您的请求...")
 
                 # 处理任务
                 result = await self.enhanced_system.process_legal_task(
@@ -215,7 +215,7 @@ class XiaonaEnhancedLauncher:
                 )
 
                 # 显示结果
-                print(f"\n📊 处理结果:")
+                print("\n📊 处理结果:")
                 print(f"   处理时间: {result.processing_time:.2f}秒")
                 print(f"   置信度: {result.final_confidence:.2f}")
                 print(f"   应用增强: {', '.join(result.enhancement_applied)}")
@@ -223,7 +223,7 @@ class XiaonaEnhancedLauncher:
                 if result.reflection_result and result.reflection_result.should_refine:
                     print(f"   💡 建议: {', '.join(result.reflection_result.recommendations[:2])}")
 
-                print(f"\n📝 分析结果:")
+                print("\n📝 分析结果:")
                 output = result.enhanced_output or result.initial_output
                 print(output)
 
@@ -244,12 +244,12 @@ class XiaonaEnhancedLauncher:
 
         status = self.enhanced_system.get_system_status()
 
-        print(f"✅ 启用模块:")
+        print("✅ 启用模块:")
         for module, enabled in status["enabled_modules"].items():
             status_icon = "✅" if enabled else "❌"
             print(f"   {status_icon} {module}")
 
-        print(f"\n📈 处理统计:")
+        print("\n📈 处理统计:")
         stats = status["processing_statistics"]
         print(f"   总处理任务: {stats['total_processed']}")
         print(f"   应用反思: {stats['reflection_applied']}")
@@ -259,21 +259,21 @@ class XiaonaEnhancedLauncher:
         print(f"   成功率: {stats['success_rate']:.2%}")
 
         if "reflection_engine" in status:
-            print(f"\n🔍 反思引擎:")
+            print("\n🔍 反思引擎:")
             ref_stats = status["reflection_engine"]
             print(f"   总反思次数: {ref_stats['total_reflections']}")
             print(f"   平均评分: {ref_stats['average_score']:.2f}")
             print(f"   改进率: {ref_stats['improvement_rate']:.2%}")
 
         if "collaboration_engine" in status:
-            print(f"\n👥 协作引擎:")
+            print("\n👥 协作引擎:")
             collab_stats = status["collaboration_engine"]
             print(f"   活跃会话: {collab_stats['active_sessions']}")
             print(f"   完成会话: {collab_stats['completed_sessions']}")
             print(f"   注册专家: {collab_stats['registered_experts']}")
 
         if "learning_system" in status:
-            print(f"\n🧠 学习系统:")
+            print("\n🧠 学习系统:")
             learn_stats = status["learning_system"]
             print(f"   知识条目: {learn_stats['knowledge_items']}")
             print(f"   学习事件: {learn_stats['learning_events']}")

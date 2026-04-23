@@ -418,7 +418,7 @@ class ComprehensiveExtractor:
 
     def _parse_document(
         self, text: str, doc_id: str, source: str, metadata: dict | None = None
-    ) -> dict[str, Any] | None:
+    ) -> Optional[dict[str, Any]]:
         """解析文档文本为结构化案例
 
         Args:

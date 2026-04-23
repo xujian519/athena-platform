@@ -84,10 +84,10 @@ class DualSystemInteraction:
 class System1Reasoner(BaseReasoner):
     """System 1 快速直觉推理器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__(config)
         self.profile = System1Profile(**config.get("system1_profile", {}))
-        self.patterns: dict[str, list[dict[str, Any]]] = {}
+        self.patterns: dict[str, list[dict[str, Any]] = {}
         self.heuristics_cache: dict[str, Any] = {}
 
     def _get_reasoning_type(self) -> ReasoningType:
@@ -382,7 +382,7 @@ class System1Reasoner(BaseReasoner):
 class System2Reasoner(BaseReasoner):
     """System 2 慢速分析推理器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__(config)
         self.profile = System2Profile(**config.get("system2_profile", {}))
         self.logical_rules: dict[str, Callable] = {}
@@ -872,7 +872,7 @@ class System2Reasoner(BaseReasoner):
 class DualSystemReasoner(BaseReasoner):
     """双系统协同推理器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__(config)
         self.system1 = System1Reasoner(config)
         self.system2 = System2Reasoner(config)

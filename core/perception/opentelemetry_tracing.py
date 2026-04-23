@@ -213,7 +213,7 @@ class PerceptionTracer:
     async def trace_operation(
         self,
         operation_name: str,
-        attributes: dict[str, Any] | None = None,
+        attributes: Optional[dict[str, Any]] = None,
     ):
         """追踪操作上下文管理器
 
@@ -243,7 +243,7 @@ class PerceptionTracer:
         finally:
             span.end()
 
-    def trace_method(self, operation_name: str | None = None):
+    def trace_method(self, operation_name: Optional[str] = None):
         """方法追踪装饰器
 
         Args:
@@ -310,7 +310,7 @@ class PerceptionTracer:
 
         return decorator
 
-    def add_event(self, name: str, attributes: dict[str, Any] | None = None) -> None:
+    def add_event(self, name: str, attributes: Optional[dict[str, Any]] = None) -> None:
         """添加事件到当前span
 
         Args:
@@ -419,7 +419,7 @@ async def initialize_tracing(config: TracingConfig | None = None) -> PerceptionT
 
 
 # 便捷装饰器
-def trace(operation_name: str | None = None) -> Callable:
+def trace(operation_name: Optional[str] = None) -> Callable:
     """追踪装饰器(使用全局追踪器)
 
     Args:

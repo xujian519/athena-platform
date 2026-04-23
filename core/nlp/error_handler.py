@@ -56,8 +56,8 @@ class NLError(Exception):
         self,
         message: str,
         severity: ErrorSeverity = ErrorSeverity.MEDIUM,
-        error_code: str | None = None,
-        context: dict[str, Any] | None = None,
+        error_code: Optional[str] = None,
+        context: Optional[dict[str, Any]] = None,
     ):
         super().__init__(message)
         self.message = message
@@ -70,7 +70,7 @@ class NLError(Exception):
 class ModelLoadError(NLError):
     """模型加载错误"""
 
-    def __init__(self, message: str, model_name: str | None = None):
+    def __init__(self, message: str, model_name: Optional[str] = None):
         super().__init__(message, ErrorSeverity.HIGH, "MODEL_LOAD_ERROR")
         self.context["model_name"] = model_name
 
@@ -78,7 +78,7 @@ class ModelLoadError(NLError):
 class InferenceError(NLError):
     """推理错误"""
 
-    def __init__(self, message: str, operation: str | None = None, input_data: Any = None):
+    def __init__(self, message: str, operation: Optional[str] = None, input_data: Any = None):
         super().__init__(message, ErrorSeverity.MEDIUM, "INFERENCE_ERROR")
         self.context["operation"] = operation
         self.context["input_data_summary"] = str(input_data)[:100] if input_data else None
@@ -87,7 +87,7 @@ class InferenceError(NLError):
 class ResourceExhaustedError(NLError):
     """资源耗尽错误"""
 
-    def __init__(self, message: str, resource_type: str | None = None):
+    def __init__(self, message: str, resource_type: Optional[str] = None):
         super().__init__(message, ErrorSeverity.HIGH, "RESOURCE_EXHAUSTED")
         self.context["resource_type"] = resource_type
 
@@ -95,7 +95,7 @@ class ResourceExhaustedError(NLError):
 class CacheError(NLError):
     """缓存错误"""
 
-    def __init__(self, message: str, cache_key: str | None = None):
+    def __init__(self, message: str, cache_key: Optional[str] = None):
         super().__init__(message, ErrorSeverity.LOW, "CACHE_ERROR")
         self.context["cache_key"] = cache_key
 
@@ -129,7 +129,7 @@ class ErrorHandler:
             "jitter": True,
         }
 
-    def handle_error(self, error: Exception, context: dict[str, Any] | None = None) -> Any:
+    def handle_error(self, error: Exception, context: Optional[dict[str, Any]] = None) -> Any:
         """处理错误"""
         with self.lock:
             self._record_error(error, context)
@@ -145,7 +145,7 @@ class ErrorHandler:
         # 执行降级策略
         return self._execute_fallback_strategy(strategy, error, context)
 
-    def _record_error(self, error: Exception, context: dict[str, Any] | None = None) -> Any:
+    def _record_error(self, error: Exception, context: Optional[dict[str, Any]] = None) -> Any:
         """记录错误统计"""
         self.error_stats["total_errors"] += 1
 
@@ -175,7 +175,7 @@ class ErrorHandler:
             self.error_stats["recent_errors"] = self.error_stats["recent_errors"][-100:]
 
     def _execute_fallback_strategy(
-        self, strategy: FallbackStrategy, error: Exception, context: dict[str, Any] | None = None
+        self, strategy: FallbackStrategy, error: Exception, context: Optional[dict[str, Any]] = None
     ) -> Any:
         """执行降级策略"""
         logger.info(f"执行降级策略: {strategy.value}")
@@ -199,7 +199,7 @@ class ErrorHandler:
         else:
             raise error
 
-    def _get_default_value(self, context: dict[str, Any] | None = None) -> Any:
+    def _get_default_value(self, context: Optional[dict[str, Any]] = None) -> Any:
         """根据上下文返回默认值"""
         if not context:
             return None
@@ -246,9 +246,9 @@ def get_error_handler() -> ErrorHandler:
 
 
 def robust_retry(
-    max_attempts: int | None = None,
-    base_delay: float | None = None,
-    max_delay: float | None = None,
+    max_attempts: Optional[int] = None,
+    base_delay: Optional[float] = None,
+    max_delay: Optional[float] = None,
     exceptions: tuple[type[Exception], ...] = (Exception,),
     fallback_strategy: FallbackStrategy = FallbackStrategy.RAISE_ERROR,
 ):

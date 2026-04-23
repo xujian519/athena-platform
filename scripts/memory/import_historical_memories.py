@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 历史记忆导入系统
 Historical Memory Import System
@@ -13,22 +12,21 @@ Historical Memory Import System
 
 import asyncio
 import json
-import sqlite3
 import logging
+import sqlite3
 import sys
 from datetime import datetime
 from pathlib import Path
-import uuid
-from typing import Dict, List, Any, Optional
+from typing import Any
 
 # 添加项目路径
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from core.memory.unified_agent_memory_system import (
-    UnifiedAgentMemorySystem,
+from core.framework.memory.unified_agent_memory_system import (
     AgentType,
+    MemoryTier,
     MemoryType,
-    MemoryTier
+    UnifiedAgentMemorySystem,
 )
 
 # 配置日志
@@ -88,16 +86,16 @@ class HistoricalMemoryImporter:
                     self.import_stats['failed_imports'] += 1
 
             conn.close()
-            print(f"✅ SQLite导入完成")
+            print("✅ SQLite导入完成")
 
         except Exception as e:
             print(f"❌ SQLite导入失败: {e}")
             logger.error("SQLite导入错误", exc_info=True)
 
-    async def _process_memory_row(self, row: tuple, columns: List[str]):
+    async def _process_memory_row(self, row: tuple, columns: list[str]):
         """处理单条记忆记录"""
         # 解析数据
-        data = dict(zip(columns, row))
+        data = dict(zip(columns, row, strict=False))
 
         # 提取内容
         content = data.get('content', '')
@@ -120,7 +118,7 @@ class HistoricalMemoryImporter:
         importance = float(data.get('importance', 0.5))
 
         # 创建记忆
-        memory_id = await self.memory_system.store_memory(
+        await self.memory_system.store_memory(
             agent_id=f"historical_{agent_type.value}",
             agent_type=agent_type,
             content=text,
@@ -147,7 +145,7 @@ class HistoricalMemoryImporter:
         self.import_stats['by_agent'][agent_name] = self.import_stats['by_agent'].get(agent_name, 0) + 1
         self.import_stats['by_type'][memory_type.value] = self.import_stats['by_type'].get(memory_type.value, 0) + 1
 
-    def _determine_memory_type(self, data: Dict, text: str) -> MemoryType:
+    def _determine_memory_type(self, data: dict, text: str) -> MemoryType:
         """确定记忆类型"""
         text_lower = text.lower()
 
@@ -164,7 +162,7 @@ class HistoricalMemoryImporter:
         else:
             return MemoryType.CONVERSATION
 
-    def _determine_agent_type(self, data: Dict, text: str) -> AgentType:
+    def _determine_agent_type(self, data: dict, text: str) -> AgentType:
         """确定智能体类型"""
         text_lower = text.lower()
 
@@ -198,7 +196,7 @@ class HistoricalMemoryImporter:
         text_lower = text.lower()
         return any(keyword in text_lower for keyword in family_keywords)
 
-    def _extract_tags(self, text: str) -> List[str]:
+    def _extract_tags(self, text: str) -> list[str]:
         """提取标签"""
         tags = []
         text_lower = text.lower()
@@ -230,7 +228,7 @@ class HistoricalMemoryImporter:
 
         for json_file in json_files:
             try:
-                with open(json_file, 'r', encoding='utf-8') as f:
+                with open(json_file, encoding='utf-8') as f:
                     data = json.load(f)
 
                 # 处理不同类型的JSON文件
@@ -244,7 +242,7 @@ class HistoricalMemoryImporter:
             except Exception as e:
                 logger.error(f"处理JSON文件失败 {json_file}: {e}")
 
-    async def _process_identity_file(self, file_path: Path, data: Dict):
+    async def _process_identity_file(self, file_path: Path, data: dict):
         """处理身份配置文件"""
         agent_name = data.get('identity', {}).get('name', 'unknown')
 
@@ -265,7 +263,7 @@ class HistoricalMemoryImporter:
             tier=MemoryTier.ETERNAL
         )
 
-    async def _process_memories_file(self, file_path: Path, data: Dict):
+    async def _process_memories_file(self, file_path: Path, data: dict):
         """处理包含记忆的JSON文件"""
         memories = data.get('memories', [])
 

@@ -9,9 +9,8 @@ decision_engine工具使用示例
 """
 
 import asyncio
-import json
-from pathlib import Path
 import sys
+from pathlib import Path
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent
@@ -82,7 +81,7 @@ async def example_patent_solution_selection():
 
     print(f"\n决策背景: {result['context']}")
     print(f"\n评估标准: {result['analysis']['criteria_used']}")
-    print(f"\n决策排名:")
+    print("\n决策排名:")
 
     for rank in result["ranking"]:
         print(f"\n  第{rank['rank']}名: {rank['option']}")
@@ -90,7 +89,7 @@ async def example_patent_solution_selection():
 
     print(f"\n推荐方案: {result['best_option']}")
 
-    print(f"\n决策分析:")
+    print("\n决策分析:")
     print(f"  方案数量: {result['analysis']['total_options']}")
     print(f"  分数范围: {result['analysis']['score_range']}")
     print(f"  置信度: {result['analysis']['confidence']}")
@@ -117,12 +116,12 @@ async def example_investment_decision():
 
     result = await decision_engine_handler(params, {})
 
-    print(f"\n投资决策排名:")
+    print("\n投资决策排名:")
     for rank in result["ranking"]:
         print(f"  {rank['rank']}. {rank['option']}: {rank['score']:.3f}")
 
     print(f"\n推荐投资: {result['best_option']}")
-    print(f"风险提示: 投资有风险，决策需谨慎")
+    print("风险提示: 投资有风险，决策需谨慎")
 
     return result
 
@@ -170,7 +169,7 @@ async def example_vendor_selection():
 
     result = await decision_engine_handler(params, {})
 
-    print(f"\n供应商评估:")
+    print("\n供应商评估:")
     for rank in result["ranking"]:
         print(f"  {rank['rank']}. {rank['option']}: {rank['score']:.3f}")
 
@@ -194,11 +193,11 @@ async def example_auto_scoring():
     result = await decision_engine_handler(params, {})
 
     print(f"\n默认评估标准: {result['analysis']['criteria_used']}")
-    print(f"\n自动评分结果:")
+    print("\n自动评分结果:")
     for rank in result["ranking"]:
         print(f"  {rank['rank']}. {rank['option']}: {rank['score']:.3f}")
 
-    print(f"\n注意: 这是随机生成的分数，仅用于原型验证")
+    print("\n注意: 这是随机生成的分数，仅用于原型验证")
 
     return result
 
@@ -222,14 +221,14 @@ async def example_weight_normalization():
 
     result = await decision_engine_handler(params, {})
 
-    print(f"\n原始权重: 质量=0.5, 价格=0.8, 服务=0.7 (总和=2.0)")
-    print(f"归一化后: 质量=0.25, 价格=0.40, 服务=0.35 (总和=1.0)")
+    print("\n原始权重: 质量=0.5, 价格=0.8, 服务=0.7 (总和=2.0)")
+    print("归一化后: 质量=0.25, 价格=0.40, 服务=0.35 (总和=1.0)")
 
-    print(f"\n归一化评分:")
+    print("\n归一化评分:")
     for rank in result["ranking"]:
         print(f"  {rank['option']}: {rank['score']:.3f}")
 
-    print(f"\n✓ 权重已自动归一化")
+    print("\n✓ 权重已自动归一化")
 
     return result
 

@@ -6,7 +6,8 @@
 import re
 from pathlib import Path
 
-def fix_all_errors(content: str) -> tuple[str, list[str]]:
+
+def fix_all_errors(content: str) -> tuple[str, list[str]:
     """全面修复所有语法错误"""
     fixes = []
 
@@ -21,8 +22,8 @@ def fix_all_errors(content: str) -> tuple[str, list[str]]:
         (r'Optional\[str\s*\|\s*None\s*=\s*None\]', 'str | None', 'Optional[str | None]'),
         (r'Optional\[bool\s*\|\s*None\s*=\s*None\]', 'bool | None', 'Optional[bool | None]'),
         (r'Optional\[float\s*\|\s*None\s*=\s*None\]', 'float | None', 'Optional[float | None]'),
-        (r'Optional\[list\["[^"]+"\]\s*=\s*None\]', 'list | None', 'Optional[list["key"]]'),
-        (r'Optional\[list\[CacheLevel\]\s*\|\s*None\s*=\s*None\]', 'list[CacheLevel] | None', 'Optional[list[CacheLevel]]'),
+        (r'Optional\[list\["[^"]+"\]\s*=\s*None\]', 'list | None', 'Optional[list["key"]'),
+        (r'Optional\[list\[CacheLevel\]\s*\|\s*None\s*=\s*None\]', 'list[CacheLevel] | None', 'Optional[list[CacheLevel]'),
     ]
 
     for pattern, replacement, name in optional_patterns:
@@ -34,14 +35,14 @@ def fix_all_errors(content: str) -> tuple[str, list[str]]:
     # 2. 修复多余右方括号 (括号不匹配: ( ... ])
     # ============================================================
     bracket_patterns = [
-        (r'algorithms=\[JWT_ALGORITHM\]\]', r'algorithms=[JWT_ALGORITHM]]', 'algorithms 括号'),
-        (r'(\w+)\]\]\s*\|\s*None', r'\1] | None', '多余 ]]'),
-        (r'list\[str\]\]\]\s*\|\s*None', r'list[str] | None', 'list[str]]]'),
-        (r'list\[dict\[str,\s*Any\]\]\]\s*\|\s*None', r'list[dict[str, Any]] | None', 'list[dict]]]'),
+        (r'algorithms=\[JWT_ALGORITHM\]\]', r'algorithms=[JWT_ALGORITHM]', 'algorithms 括号'),
+        (r'(\w+)\]\]\s*\|\s*None', r'\1] | None', '多余 ]'),
+        (r'list\[str\]\]\]\s*\|\s*None', r'list[str] | None', 'list[str]]'),
+        (r'list\[dict\[str,\s*Any\]\]\]\s*\|\s*None', r'list[dict[str, Any] | None', 'list[dict]]'),
         (r'dict\[str,\s*Any\)\]\s*\|\s*None', r'dict[str, Any] | None', 'dict[str, Any])]'),
         (r'dict\[str,\s*str\)\]\s*\|\s*None', r'dict[str, str] | None', 'dict[str, str])]'),
-        (r'tuple\[float,\s*dict\[str,\s*Any\]\]\]\s*=', r'tuple[float, dict[str, Any]]] =', 'tuple 缺少括号'),
-        (r'tuple\[bool,\s*list\[str\]\]\]\s*=', r'tuple[bool, list[str]]] =', 'tuple[bool, list[str]]]'),
+        (r'tuple\[float,\s*dict\[str,\s*Any\]\]\]\s*=', r'tuple[float, dict[str, Any]] =', 'tuple 缺少括号'),
+        (r'tuple\[bool,\s*list\[str\]\]\]\s*=', r'tuple[bool, list[str]] =', 'tuple[bool, list[str]]'),
     ]
 
     for pattern, replacement, name in bracket_patterns:
@@ -53,11 +54,11 @@ def fix_all_errors(content: str) -> tuple[str, list[str]]:
     # 3. 修复缺少右方括号 (括号未闭合: [)
     # ============================================================
     unclosed_patterns = [
-        (r'dict\[str,\s*list\[list\[float\]:\s*$', r'dict[str, list[list[float]]]:', 'dict[str, list[list[float]]]'),
-        (r'dict\[ModuleType,\s*list\[str\]\]\s*\)\s*->\s*dict\[ModuleType,\s*list\[list\[float\]:\s*$', r'dict[ModuleType, list[str]]) -> dict[ModuleType, list[list[float]]]:', '函数返回类型'),
-        (r'dict\[DecisionLayer,\s*dict\[str,\s*Any\s*#', r'dict[DecisionLayer, dict[str, Any]]  #', 'dataclass 字段'),
-        (r'list\[str\]:\s*$', r'list[str]]:', 'list[str]:'),
-        (r'Optional\[int\]\s*$', r'Optional[int]]:', 'Optional[int] 参数'),
+        (r'dict\[str,\s*list\[list\[float\]:\s*$', r'dict[str, list[list[float]]:', 'dict[str, list[list[float]]'),
+        (r'dict\[ModuleType,\s*list\[str\]\]\s*\)\s*->\s*dict\[ModuleType,\s*list\[list\[float\]:\s*$', r'dict[ModuleType, list[str]) -> dict[ModuleType, list[list[float]]:', '函数返回类型'),
+        (r'dict\[DecisionLayer,\s*dict\[str,\s*Any\s*#', r'dict[DecisionLayer, dict[str, Any]  #', 'dataclass 字段'),
+        (r'list\[str\]:\s*$', r'list[str]:', 'list[str]:'),
+        (r'Optional\[int\]\s*$', r'Optional[int]:', 'Optional[int] 参数'),
     ]
 
     for pattern, replacement, name in unclosed_patterns:
@@ -97,7 +98,7 @@ def fix_all_errors(content: str) -> tuple[str, list[str]]:
         original_line = line
 
         # 修复 __all__ = [ 未闭合
-        if re.search(r'__all__\s*=\s*\[[^\]]*\s*$', line):
+        if re.search(r'__all__\s*=\s*\[[^\]*\s*$', line):
             # 检查下一行是否是 for 循环
             if i + 1 < len(lines) and ' for ' in lines[i + 1]:
                 line = line.rstrip() + ']'
@@ -105,7 +106,7 @@ def fix_all_errors(content: str) -> tuple[str, list[str]]:
                     fixes.append(f'第{i+1}行: 闭合 __all__ 列表')
 
         # 修复 matched_tools = [ 后面跟 for 循环
-        if re.search(r'\w+\s*=\s*\[[^\]]*\s*$', line):
+        if re.search(r'\w+\s*=\s*\[[^\]*\s*$', line):
             if i + 1 < len(lines) and re.search(r'\s+for\s+', lines[i + 1]):
                 line = line.rstrip() + ']'
                 if line != original_line:
@@ -139,11 +140,11 @@ def fix_all_errors(content: str) -> tuple[str, list[str]]:
             if line != original_line:
                 fixes.append(f'第{i+1}行: 移除多余逗号')
 
-        # 修复 dict[dict[str, str]] -> bool: (缺少括号)
+        # 修复 dict[dict[str, str] -> bool: (缺少括号)
         if re.search(r'dict\[dict\[str,\s*str\]\]\s*->\s*bool:\s*$', line):
-            line = re.sub(r'dict\[dict\[str,\s*str\]\]\s*->\s*bool:\s*$', r'dict[dict[str, str]] -> bool:', line)
+            line = re.sub(r'dict\[dict\[str,\s*str\]\]\s*->\s*bool:\s*$', r'dict[dict[str, str] -> bool:', line)
             if line != original_line:
-                fixes.append(f'第{i+1}行: dict[dict[str, str]]')
+                fixes.append(f'第{i+1}行: dict[dict[str, str]')
 
         modified_lines.append(line)
 
@@ -158,10 +159,10 @@ def fix_all_errors(content: str) -> tuple[str, list[str]]:
 
     return content, fixes
 
-def fix_file(file_path: Path) -> tuple[bool, list[str]]:
+def fix_file(file_path: Path) -> tuple[bool, list[str]:
     """修复单个文件"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         original_content = content

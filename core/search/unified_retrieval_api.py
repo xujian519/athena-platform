@@ -143,7 +143,7 @@ class SearchRequest(BaseModel):
         return v
 
     @validator("intent")
-    def validate_intent(self, v: str,) -> str | None:
+    def validate_intent(self, v: str,) -> Optional[str]:
         """验证意图参数"""
         if v is not None:
             valid_intents = ["patent_search", "legal_search", "hybrid_search", "case_analysis"]
@@ -152,7 +152,7 @@ class SearchRequest(BaseModel):
         return v
 
     @validator("sources")
-    def validate_sources(self, v: list[str]) -> list[str | None]:
+    def validate_sources(self, v: list[str]) -> Optional[list[str]]:
         """验证数据源参数"""
         if v is not None:
             valid_sources = ["patent_vectors", "legal_vectors", "patent_kg", "legal_kg"]

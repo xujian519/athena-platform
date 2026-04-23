@@ -314,7 +314,7 @@ class CrawlerScenarioLauncher:
 
     def _extract_urls(self, text: str) -> list[str]:
         """提取URL"""
-        url_pattern = r'https?://[^\s<>"{}|\\^`\[\]]+'
+        url_pattern = r'https?://[^\s<>"{}|\\^`\[\]+'
         return re.findall(url_pattern, text)
 
     def _calculate_context_score(self, user_input: str, trigger: CrawlerScenarioTrigger,

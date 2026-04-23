@@ -12,7 +12,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from core.perception.types import (
+from core.ai.perception.types import (
     AgentStatus,
     ConfidenceLevel,
     DocumentChangeType,

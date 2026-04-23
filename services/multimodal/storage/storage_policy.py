@@ -70,7 +70,7 @@ class StoragePolicy:
     encryption_enabled: bool = False
     backup_enabled: bool = True
     lifecycle_rules: list[LifecycleRule] = None
-    storage_preferences: dict[StorageTier, list[StorageType]] = None
+    storage_preferences: dict[StorageTier, list[StorageType] = None
 
     def __post_init__(self):
         if self.lifecycle_rules is None:
@@ -224,7 +224,7 @@ class StoragePolicyManager:
         # 实际实现时需要从数据库或存储中获取文件列表
         pass
 
-    async def evaluate_file_lifecycle(self, file_id: str, file_info: dict[str, Any]) -> list[dict[str, Any]]:
+    async def evaluate_file_lifecycle(self, file_id: str, file_info: dict[str, Any]) -> list[dict[str, Any]:
         """评估单个文件的生命周期"""
         policy = self.get_file_policy(file_id)
         if not policy:

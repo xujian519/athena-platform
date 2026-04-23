@@ -399,7 +399,7 @@ class OptimizedConnectionManager:
         self.configs: dict[str, dict] = {}
         self.pool_config = PoolConfig()
 
-    def load_config(self, config_path: str | None = None) -> Any | None:
+    def load_config(self, config_path: Optional[str] = None) -> Any | None:
         """加载数据库配置"""
         if config_path:
             with open(config_path, encoding="utf-8") as f:
@@ -429,7 +429,7 @@ class OptimizedConnectionManager:
                 },
             }
 
-    async def initialize(self, config_path: str | None = None):
+    async def initialize(self, config_path: Optional[str] = None):
         """初始化所有连接池"""
         logger.info("🚀 初始化优化连接管理器...")
 
@@ -585,7 +585,7 @@ connection_manager = OptimizedConnectionManager()
 
 
 # 便捷函数
-async def initialize_connection_manager(config_path: str | None = None):
+async def initialize_connection_manager(config_path: Optional[str] = None):
     """初始化连接管理器"""
     await connection_manager.initialize(config_path)
 

@@ -13,7 +13,7 @@ import json
 import unittest
 from unittest.mock import patch
 
-from core.agents.fork_context_builder import ForkContext, ForkContextBuilder
+from core.framework.agents.fork_context_builder import ForkContext, ForkContextBuilder
 
 
 class TestForkContext(unittest.TestCase):

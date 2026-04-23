@@ -12,16 +12,16 @@ import asyncio
 import json
 import logging
 import sys
-from pathlib import Path
-from typing import Any, Dict, List, Optional
-from datetime import datetime
 from argparse import ArgumentParser
+from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.llm.unified_glm_client import UnifiedGLMClient
-from core.llm.glm_model_selector import TaskType, PerformancePreference
+from core.ai.llm.glm_model_selector import PerformancePreference, TaskType
+from core.ai.llm.unified_glm_client import UnifiedGLMClient
 
 # 配置日志
 logging.basicConfig(
@@ -38,9 +38,9 @@ class SmartPatentAnalyzer:
         self,
         ocr_output_dir: str,
         analysis_output_dir: str,
-        model: Optional[str] = None,
+        model: str | None = None,
         preference: str = "quality",
-        api_key: Optional[str] = None
+        api_key: str | None = None
     ):
         """
         初始化分析器
@@ -118,7 +118,7 @@ class SmartPatentAnalyzer:
             "model_used": self.client.model
         }
 
-    def find_text_files(self) -> List[Path]:
+    def find_text_files(self) -> list[Path]:
         """查找所有OCR生成的TXT文件"""
         logger.info(f"🔍 扫描OCR输出目录: {self.ocr_output_dir}")
 
@@ -131,7 +131,7 @@ class SmartPatentAnalyzer:
 
         return sorted(txt_files)
 
-    async def analyze_single_patent(self, txt_path: Path) -> Dict[str, Any]:
+    async def analyze_single_patent(self, txt_path: Path) -> dict[str, Any]:
         """
         分析单个专利文件
 
@@ -271,7 +271,7 @@ class SmartPatentAnalyzer:
                 "analysis_time": asyncio.get_event_loop().time() - file_start_time
             }
 
-    async def analyze_batch(self, txt_files: List[Path]) -> Dict[str, Any]:
+    async def analyze_batch(self, txt_files: list[Path]) -> dict[str, Any]:
         """批量分析专利文件"""
         self.stats["start_time"] = asyncio.get_event_loop().time()
         self.stats["total_files"] = len(txt_files)
@@ -313,7 +313,7 @@ class SmartPatentAnalyzer:
             "stats": self.stats
         }
 
-    def save_intermediate_results(self, results: List[Dict[str, Any]]):
+    def save_intermediate_results(self, results: list[dict[str, Any]):
         """保存中间结果"""
         output_file = self.analysis_output_dir / f"中间结果_{self.client.model}_{len(results)}个文件.json"
         output_file.write_text(
@@ -321,7 +321,7 @@ class SmartPatentAnalyzer:
             encoding="utf-8"
         )
 
-    def save_final_results(self, batch_result: Dict[str, Any]):
+    def save_final_results(self, batch_result: dict[str, Any]):
         """保存最终结果"""
         # 保存JSON结果
         output_json = self.analysis_output_dir / f"深度技术分析完整结果_{self.client.model}.json"
@@ -333,7 +333,7 @@ class SmartPatentAnalyzer:
         # 生成汇总报告
         self.generate_summary_report(batch_result)
 
-    def generate_summary_report(self, batch_result: Dict[str, Any]):
+    def generate_summary_report(self, batch_result: dict[str, Any]):
         """生成汇总报告"""
 
         results = batch_result["results"]

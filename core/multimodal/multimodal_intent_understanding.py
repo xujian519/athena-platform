@@ -114,7 +114,7 @@ class MultiModalIntentUnderstanding:
         logger.info("🎭 多模态意图理解系统初始化完成")
 
     async def understand_intent(
-        self, inputs: list[ModalInput], context: dict[str, Any] | None = None
+        self, inputs: list[ModalInput], context: Optional[dict[str, Any]] = None
     ) -> MultiModalIntentResult:
         """
         多模态意图理解
@@ -351,7 +351,7 @@ class MultiModalIntentUnderstanding:
 
         return 0.0
 
-    async def _analyze_emotion(self, features: list[ModalFeature]) -> dict[str, float | None]:
+    async def _analyze_emotion(self, features: list[ModalFeature]) -> Optional[dict[str, float]]:
         """分析情感"""
         emotions = {"happy": 0.0, "sad": 0.0, "angry": 0.0, "neutral": 0.0, "excited": 0.0}
 
@@ -658,7 +658,7 @@ class EnhancedMultiModalProcessor:
 
         return detected
 
-    async def _extract_text_from_image(self, image_data: bytes) -> str | None:
+    async def _extract_text_from_image(self, image_data: bytes) -> Optional[str]:
         """从图像中提取文字(OCR)"""
         # 简化实现:模拟OCR
         import random
@@ -789,7 +789,7 @@ class EnhancedMultiModalProcessor:
         return quality
 
     async def understand_with_enhancement(
-        self, inputs: list[ModalInput], context: dict[str, Any] | None = None
+        self, inputs: list[ModalInput], context: Optional[dict[str, Any]] = None
     ) -> MultiModalIntentResult:
         """
         增强多模态理解

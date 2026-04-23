@@ -383,7 +383,7 @@ class LegalKnowledgeEnhancer:
         except Exception as e:
             logger.error(f"❌ 存储到图谱失败: {e}")
 
-    async def legal_reasoning(self, query: str, context: str | None = None) -> dict[str, Any]:
+    async def legal_reasoning(self, query: str, context: Optional[str] = None) -> dict[str, Any]:
         """法律推理"""
         try:
             reasoning_results = []

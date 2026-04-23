@@ -86,7 +86,7 @@ class VectorRetriever:
         self,
         texts: str | list[str],
         payloads: list[dict[str, Any]] | None = None,
-        ids: list[str] | None = None,
+        ids: Optional[list[str]] = None,
     ) -> list[str]:
         """
         添加文本向量到存储
@@ -129,9 +129,9 @@ class VectorRetriever:
     def search(
         self,
         query: str,
-        top_k: int | None = None,
-        score_threshold: float | None = None,
-        filters: dict[str, Any] | None = None,
+        top_k: Optional[int] = None,
+        score_threshold: Optional[float] = None,
+        filters: Optional[dict[str, Any]] = None,
     ) -> list[dict[str, Any]]:
         """
         向量检索

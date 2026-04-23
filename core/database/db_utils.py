@@ -75,7 +75,7 @@ class DatabaseManager:
         self,
         query: str,
         params: tuple | None = None,
-        returning: str | None = None
+        returning: Optional[str] = None
     ) -> Any | None:
         """执行插入语句"""
         with self.get_cursor() as cursor:
@@ -98,7 +98,7 @@ class DatabaseManager:
             return cursor.rowcount
 
 
-def build_safe_query(table: str, columns: list[str] | None = None,
+def build_safe_query(table: str, columns: Optional[list[str]] = None,
                      where_conditions: dict[str, Any] = None,
                      order_by: str = None, limit: int = None) -> tuple[str, tuple]:
     """构建安全的SQL查询"""

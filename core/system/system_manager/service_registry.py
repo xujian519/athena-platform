@@ -83,7 +83,7 @@ class ServiceRegistry:
             _, instance = self.services[service_name]
             return instance
 
-    def get_service_provider(self, service_name: str) -> str | None:
+    def get_service_provider(self, service_name: str) -> Optional[str]:
         """获取服务提供者模块ID
 
         Args:

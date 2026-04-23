@@ -195,10 +195,12 @@ async def test_resource_cleanup() -> dict[str, Any]:
     print("测试4: 资源清理")
     print("=" * 60)
 
-    from core.tools.code_executor_sandbox_wrapper import execute_code_sandbox
     import gc
-    import psutil
     import os
+
+    import psutil
+
+    from core.tools.code_executor_sandbox_wrapper import execute_code_sandbox
 
     # 获取当前进程
     process = psutil.Process(os.getpid())
@@ -235,9 +237,9 @@ result = sum(data)
     has_leak = memory_increase > 10  # 超过10MB认为有泄漏
 
     if has_leak:
-        print(f"⚠️ 可能存在内存泄漏")
+        print("⚠️ 可能存在内存泄漏")
     else:
-        print(f"✅ 内存清理正常")
+        print("✅ 内存清理正常")
 
     return {
         "initial_memory_mb": initial_memory,
@@ -325,7 +327,7 @@ exec(code)
         print(f"{status} {name}: {'已阻止' if blocked else '可能绕过'}")
 
         if not blocked:
-            print(f"   ⚠️ 警告: 代码执行成功！")
+            print("   ⚠️ 警告: 代码执行成功！")
 
         results[name] = {
             "blocked": blocked,
@@ -393,7 +395,7 @@ async def generate_extended_report(
     if not report["summary"]["recommendations"]:
         report["summary"]["recommendations"].append("所有测试通过，沙箱安全性良好")
 
-    print(f"\n📊 扩展测试总结:")
+    print("\n📊 扩展测试总结:")
     print(f"   并发执行: {concurrent_result['successful']}/{concurrent_result['total_tasks']} 成功")
     print(f"   复杂代码: {report['extended_tests']['complex_code']['passed']}/{len(complex_result)} 通过")
     print(f"   边界情况: {report['extended_tests']['edge_cases']['passed']}/{len(edge_result)} 通过")

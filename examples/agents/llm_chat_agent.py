@@ -14,16 +14,16 @@ LLM Chat Agent - 带LLM的Agent示例
 - core.llm.unified_llm_manager
 """
 
-from typing import Any, Dict, List, Optional
 import logging
 from datetime import datetime
+from typing import Any
 
-from core.agents.xiaona.base_component import (
-    BaseXiaonaComponent,
+from core.framework.agents.xiaona.base_component import (
     AgentCapability,
     AgentExecutionContext,
     AgentExecutionResult,
     AgentStatus,
+    BaseXiaonaComponent,
 )
 
 logger = logging.getLogger(__name__)
@@ -74,7 +74,7 @@ class LLMChatAgent(BaseXiaonaComponent):
 
         # 初始化LLM
         try:
-            from core.llm.unified_llm_manager import UnifiedLLMManager
+            from core.ai.llm.unified_llm_manager import UnifiedLLMManager
             self.llm = UnifiedLLMManager()
             self.llm_available = True
         except ImportError:
@@ -88,7 +88,7 @@ class LLMChatAgent(BaseXiaonaComponent):
         self.max_tokens = self.config.get("max_tokens", 2000)
 
         # 对话管理
-        self.conversation_history: List[Dict[str, str]] = []
+        self.conversation_history: list[dict[str, str] = []
         self.max_history = self.config.get("max_history", 10)
 
         logger.info(f"LLMChatAgent初始化完成: {self.agent_id}, LLM可用: {self.llm_available}")
@@ -155,7 +155,7 @@ class LLMChatAgent(BaseXiaonaComponent):
                 execution_time=(datetime.now() - start_time).total_seconds(),
             )
 
-    async def _chat(self, context: AgentExecutionContext) -> Dict[str, Any]:
+    async def _chat(self, context: AgentExecutionContext) -> dict[str, Any]:
         """处理对话"""
         user_message = context.input_data.get("message", "")
 
@@ -227,7 +227,7 @@ class LLMChatAgent(BaseXiaonaComponent):
         import random
         return random.choice(responses)
 
-    async def _summarize(self, context: AgentExecutionContext) -> Dict[str, Any]:
+    async def _summarize(self, context: AgentExecutionContext) -> dict[str, Any]:
         """总结对话"""
         if not self.conversation_history:
             return {
@@ -272,7 +272,7 @@ class LLMChatAgent(BaseXiaonaComponent):
             logger.error(f"摘要生成失败: {e}")
             return "摘要生成失败"
 
-    def _clear_history(self) -> Dict[str, Any]:
+    def _clear_history(self) -> dict[str, Any]:
         """清空历史"""
         count = len(self.conversation_history)
         self.conversation_history.clear()
@@ -281,7 +281,7 @@ class LLMChatAgent(BaseXiaonaComponent):
             "message": f"已清空{count}条历史记录",
         }
 
-    def get_conversation_history(self) -> List[Dict[str, str]]:
+    def get_conversation_history(self) -> list[dict[str, str]:
         """获取对话历史"""
         return self.conversation_history.copy()
 
@@ -309,7 +309,6 @@ def create_llm_chat_agent(
 # 测试入口
 async def main():
     """测试入口"""
-    import asyncio
 
     # 配置日志
     logging.basicConfig(level=logging.INFO)

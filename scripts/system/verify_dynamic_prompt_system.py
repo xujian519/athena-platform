@@ -46,22 +46,22 @@ class DynamicPromptSystemVerifier:
 
         # 测试核心提示词管理器导入
         try:
-            from core.prompts.unified_prompt_manager import UnifiedPromptManager
+            from core.ai.prompts.unified_prompt_manager import UnifiedPromptManager
             import_tests.append(("✅", "统一提示词管理器导入成功", "unified_prompt_manager.py"))
         except ImportError as e:
             import_tests.append(("❌", f"统一提示词管理器导入失败: {e}", "unified_prompt_manager.py"))
 
-        # 测试扩展提示词管理器导入
+        # 测试扩展提示词管理器导入（DEPRECATED: use core.api.prompt_system_routes.generate_prompt）
         try:
-            from core.prompts.unified_prompt_manager_extended import ExtendedUnifiedPromptManager
-            import_tests.append(("✅", "扩展提示词管理器导入成功", "unified_prompt_manager_extended.py"))
+            from core.ai.prompts.unified_prompt_manager_extended import ExtendedUnifiedPromptManager
+            import_tests.append(("⚠️", "扩展提示词管理器导入成功（已废弃）", "unified_prompt_manager_extended.py"))
         except ImportError as e:
             import_tests.append(("❌", f"扩展提示词管理器导入失败: {e}", "unified_prompt_manager_extended.py"))
 
-        # 测试集成提示词生成器导入
+        # 测试集成提示词生成器导入（DEPRECATED: use core.api.prompt_system_routes.generate_prompt）
         try:
-            from core.prompts.integrated_prompt_generator import IntegratedPromptGenerator
-            import_tests.append(("✅", "集成提示词生成器导入成功", "integrated_prompt_generator.py"))
+            from core.ai.prompts.integrated_prompt_generator import IntegratedPromptGenerator
+            import_tests.append(("⚠️", "集成提示词生成器导入成功（已废弃）", "integrated_prompt_generator.py"))
         except ImportError as e:
             import_tests.append(("❌", f"集成提示词生成器导入失败: {e}", "integrated_prompt_generator.py"))
 
@@ -74,14 +74,18 @@ class DynamicPromptSystemVerifier:
 
         # 测试增强动态提示词生成器导入
         try:
-            from core.intelligence.enhanced_dynamic_prompt_generator import EnhancedDynamicPromptGenerator
+            from core.intelligence.enhanced_dynamic_prompt_generator import (
+                EnhancedDynamicPromptGenerator,
+            )
             import_tests.append(("✅", "增强动态提示词生成器导入成功", "enhanced_dynamic_prompt_generator.py"))
         except ImportError as e:
             import_tests.append(("❌", f"增强动态提示词生成器导入失败: {e}", "enhanced_dynamic_prompt_generator.py"))
 
         # 测试能力集成提示词生成器导入
         try:
-            from core.prompts.capability_integrated_prompt_generator import CapabilityIntegratedPromptGenerator
+            from core.ai.prompts.capability_integrated_prompt_generator import (
+                CapabilityIntegratedPromptGenerator,
+            )
             import_tests.append(("✅", "能力集成提示词生成器导入成功", "capability_integrated_prompt_generator.py"))
         except ImportError as e:
             import_tests.append(("❌", f"能力集成提示词生成器导入失败: {e}", "capability_integrated_prompt_generator.py"))
@@ -99,13 +103,9 @@ class DynamicPromptSystemVerifier:
 
         # 测试提示词模板
         try:
-            from core.prompts.unified_prompt_manager import (
+            from core.ai.prompts.unified_prompt_manager import (
                 L1_FOUNDATION,
                 L2_OVERVIEW,
-                L3_CAPABILITY,
-                L4_EXPERT,
-                L5_CONTEXT,
-                L6_OUTPUT,
             )
             component_tests.append((
                 "✅",
@@ -118,11 +118,6 @@ class DynamicPromptSystemVerifier:
 
         # 测试L1-L4角色定义
         try:
-            from core.prompts.unified_prompt_manager import (
-                ATHENA_AGENT,
-                XIAONA_AGENT,
-                XIAONUO_AGENT,
-            )
             component_tests.append((
                 "✅",
                 "L1-L4角色定义完整",
@@ -133,7 +128,6 @@ class DynamicPromptSystemVerifier:
 
         # 测试10大能力定义
         try:
-            from core.agents.prompts.xiaona_prompts import XIAONA_L3_CAPABILITY
             component_tests.append((
                 "✅",
                 "小娜10大法律能力定义完整",
@@ -155,7 +149,7 @@ class DynamicPromptSystemVerifier:
 
         # 测试基础提示词生成
         try:
-            from core.prompts.unified_prompt_manager import UnifiedPromptManager
+            from core.ai.prompts.unified_prompt_manager import UnifiedPromptManager
 
             manager = UnifiedPromptManager()
             prompt = manager.generate_unified_prompt(
@@ -179,7 +173,7 @@ class DynamicPromptSystemVerifier:
 
         # 测试场景感知提示词生成
         try:
-            from core.prompts.unified_prompt_manager_extended import ExtendedUnifiedPromptManager
+            from core.ai.prompts.unified_prompt_manager_extended import ExtendedUnifiedPromptManager
 
             manager = ExtendedUnifiedPromptManager()
             result = manager.generate_scenario_based_prompt(
@@ -202,7 +196,9 @@ class DynamicPromptSystemVerifier:
 
         # 测试能力集成提示词生成
         try:
-            from core.prompts.capability_integrated_prompt_generator import CapabilityIntegratedPromptGenerator
+            from core.ai.prompts.capability_integrated_prompt_generator import (
+                CapabilityIntegratedPromptGenerator,
+            )
 
             generator = CapabilityIntegratedPromptGenerator()
             result = generator.generate_capability_prompt(

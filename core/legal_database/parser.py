@@ -25,8 +25,8 @@ class ParsedArticle:
 
     norm_id: str
     article_number: str  # 如"第12条"
-    chapter_name: str | None = None
-    section_name: str | None = None
+    chapter_name: Optional[str] = None
+    section_name: Optional[str] = None
 
     # 条款内容
     clauses: list[dict[str, Any]] = field(default_factory=list)  # 款列表
@@ -48,13 +48,13 @@ class ParsedNorm:
     file_path: str
 
     # 元数据
-    document_number: str | None = None
-    issuing_authority: str | None = None
-    issue_date: str | None = None
-    effective_date: str | None = None
+    document_number: Optional[str] = None
+    issuing_authority: Optional[str] = None
+    issue_date: Optional[str] = None
+    effective_date: Optional[str] = None
     status: str = "现行有效"
-    hierarchy: str | None = None
-    category: str | None = None
+    hierarchy: Optional[str] = None
+    category: Optional[str] = None
 
     # 结构化内容
     chapters: dict[str, list[ParsedArticle]] = field(default_factory=dict)
@@ -102,7 +102,7 @@ class LegalTextParser:
         r"([^、。;;\s]{2,30}令第[^、。;;\s]{1,10}号)",  # XX令第X号
     ]
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化解析器
 
@@ -117,7 +117,7 @@ class LegalTextParser:
             "failed_files": 0,
         }
 
-    def parse_file(self, file_path: Path, category: str | None = None) -> ParsedNorm | None:
+    def parse_file(self, file_path: Path, category: Optional[str] = None) -> ParsedNorm | None:
         """
         解析法律文件
 

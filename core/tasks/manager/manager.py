@@ -70,14 +70,14 @@ class TaskManager:
         title: str,
         description: str = "",
         priority: TaskPriority = TaskPriority.NORMAL,
-        assigned_to: str | None = None,
-        created_by: str | None = None,
-        session_id: str | None = None,
-        skill_id: str | None = None,
+        assigned_to: Optional[str] = None,
+        created_by: Optional[str] = None,
+        session_id: Optional[str] = None,
+        skill_id: Optional[str] = None,
         deadline: datetime | None = None,
-        dependencies: list[str] | None = None,
-        tags: list[str] | None = None,
-        metadata: dict[str, Any] | None = None,
+        dependencies: Optional[list[str]] = None,
+        tags: Optional[list[str]] = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> Task:
         """创建新任务
 
@@ -230,7 +230,7 @@ class TaskManager:
 
         return result
 
-    def get_next_task(self, agent_id: str | None = None) -> Task | None:
+    def get_next_task(self, agent_id: Optional[str] = None) -> Task | None:
         """获取下一个可执行的任务
 
         Args:
@@ -434,14 +434,14 @@ def create_task(
     title: str,
     description: str = "",
     priority: TaskPriority = TaskPriority.NORMAL,
-    assigned_to: str | None = None,
-    created_by: str | None = None,
-    session_id: str | None = None,
-    skill_id: str | None = None,
+    assigned_to: Optional[str] = None,
+    created_by: Optional[str] = None,
+    session_id: Optional[str] = None,
+    skill_id: Optional[str] = None,
     deadline: datetime | None = None,
-    dependencies: list[str] | None = None,
-    tags: list[str] | None = None,
-    metadata: dict[str, Any] | None = None,
+    dependencies: Optional[list[str]] = None,
+    tags: Optional[list[str]] = None,
+    metadata: Optional[dict[str, Any]] = None,
 ) -> Task:
     """创建任务（快捷函数）
 

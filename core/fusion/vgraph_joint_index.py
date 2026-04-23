@@ -44,8 +44,8 @@ class SimilarityCacheEntry:
     similarity_score: float
     distance_score: float
     has_graph_relation: bool = False
-    graph_distance: int | None = None
-    graph_path: list[str] | None = None
+    graph_distance: Optional[int] = None
+    graph_path: Optional[list[str]] = None
 
 
 @dataclass

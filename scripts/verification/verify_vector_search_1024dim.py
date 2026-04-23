@@ -21,7 +21,7 @@ async def verify_dimension_config():
     print("=" * 80)
 
     try:
-        from config.vector_config import VECTOR_DIMENSION, COLLECTION_CONFIGS
+        from config.vector_config import COLLECTION_CONFIGS, VECTOR_DIMENSION
 
         print(f"✅ 向量维度配置: {VECTOR_DIMENSION}")
 
@@ -33,8 +33,8 @@ async def verify_dimension_config():
         print(f"✅ 维度配置正确: {VECTOR_DIMENSION}")
 
         # 验证集合配置
-        print(f"\n向量集合配置:")
-        for coll_name, coll_config in COLLECTION_CONFIGS.items():
+        print("\n向量集合配置:")
+        for _coll_name, coll_config in COLLECTION_CONFIGS.items():
             print(f"  - {coll_config['name']}")
             print(f"    维度: {coll_config['dimension']}")
             print(f"    距离: {coll_config['distance']}")
@@ -43,7 +43,7 @@ async def verify_dimension_config():
                 print(f"    ❌ 维度错误: {coll_config['dimension']}")
                 return False
             else:
-                print(f"    ✅ 维度正确")
+                print("    ✅ 维度正确")
 
         return True
 
@@ -64,7 +64,7 @@ async def verify_bge_m3_dimension():
     print("=" * 80)
 
     try:
-        from core.embedding.bge_m3_embedder import BGE_M3_Embedder
+        from core.ai.embedding.bge_m3_embedder import BGE_M3_Embedder
 
         print("初始化BGE-M3嵌入器...")
         embedder = BGE_M3_Embedder()
@@ -80,7 +80,7 @@ async def verify_bge_m3_dimension():
         # 单条文本
         embedding = await embedder.encode([test_text])
 
-        print(f"   输入: 1条文本")
+        print("   输入: 1条文本")
         print(f"   输出形状: {embedding.shape}")
 
         # 验证维度
@@ -146,12 +146,12 @@ async def verify_qdrant_collections_dimension():
             print(f"  维度: {vector_size}")
 
             if vector_size == 1024:
-                print(f"  ✅ 维度正确")
+                print("  ✅ 维度正确")
             elif "_1024" in name:
-                print(f"  ⚠️ 名称包含_1024但维度不是1024")
+                print("  ⚠️ 名称包含_1024但维度不是1024")
                 all_correct = False
             else:
-                print(f"  ⚠️ 维度不是1024（名称也不包含_1024）")
+                print("  ⚠️ 维度不是1024（名称也不包含_1024）")
                 all_correct = False
 
         if all_correct:
@@ -184,7 +184,7 @@ async def verify_vector_manager():
         print("创建IntelligentVectorManager实例...")
         manager = IntelligentVectorManager()
 
-        print(f"✅ 向量管理器创建成功")
+        print("✅ 向量管理器创建成功")
         print(f"   配置集合: {len(manager.collections_config)}")
 
         # 测试搜索（如果集合存在）
@@ -197,7 +197,7 @@ async def verify_vector_manager():
                 score_threshold=0.0
             )
 
-            print(f"✅ 向量搜索成功")
+            print("✅ 向量搜索成功")
             print(f"   结果数: {len(results)}")
 
             # 验证结果向量维度
@@ -460,7 +460,7 @@ async def main():
     manager_ok = await verify_vector_manager()
 
     # 5. 创建Handler包装器
-    handler_ok = await create_handler_wrapper()
+    await create_handler_wrapper()
 
     # 6. 生成报告
     report = await generate_report(dimension_ok, model_ok, collections_ok, manager_ok)

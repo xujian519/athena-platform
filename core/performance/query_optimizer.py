@@ -176,7 +176,7 @@ class MultiLevelCache:
 
         return None
 
-    async def set(self, value: Any, ttl: int | None = None, *args, **kwargs) -> None:
+    async def set(self, value: Any, ttl: Optional[int] = None, *args, **kwargs) -> None:
         """设置缓存值(同时写入L1和L2)"""
         key = self._generate_key(*args, **kwargs)
 
@@ -371,7 +371,7 @@ class PerformanceOptimizer:
     async def optimized_query(
         self,
         query_func: Callable,
-        cache_key: str | None = None,
+        cache_key: Optional[str] = None,
         cache_ttl: int = 3600,
         *args,
         **kwargs,
@@ -411,7 +411,7 @@ class PerformanceOptimizer:
 
         return result
 
-    def get_metrics(self, query_name: str | None = None) -> dict[str, PerformanceMetrics]:
+    def get_metrics(self, query_name: Optional[str] = None) -> dict[str, PerformanceMetrics]:
         """
         获取性能指标
 
@@ -452,7 +452,7 @@ def get_global_optimizer() -> PerformanceOptimizer:
 
 # 便捷函数
 async def optimized_query(
-    query_func: Callable | None = None, cache_key: str | None = None, *args, **kwargs
+    query_func: Callable | None = None, cache_key: Optional[str] = None, *args, **kwargs
 ) -> Any:
     """
     便捷的优化查询函数

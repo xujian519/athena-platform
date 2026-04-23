@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺混合架构控制器
 Xiaonuo Hybrid Architecture Controller
 实现小诺为主 + 专业智能体按需协作的混合架构
 """
 
-import json
-import logging
 import asyncio
-from typing import Dict, Any, Optional, List
-from datetime import datetime
+import logging
 from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
+from typing import Any
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -50,7 +48,7 @@ class OperationRequest:
     operation_type: OperationType
     data_type: DataType
     target: str  # 目标存储路径或ID
-    data: Optional[Dict[Any, Any]] = None
+    data: dict[Any, Any] | None = None
     user: str = "爸爸"
     timestamp: str = None
 
@@ -113,7 +111,7 @@ class StorageManager:
             }
         }
 
-    def get_storage_info(self, data_type: DataType) -> Dict[str, Any]:
+    def get_storage_info(self, data_type: DataType) -> dict[str, Any]:
         """获取存储信息"""
         return self.storage_map.get(data_type, {})
 
@@ -235,7 +233,7 @@ class HybridArchitectureController:
 
         return min(complexity, 1.0)
 
-    def determine_processing_strategy(self, request: OperationRequest) -> Dict[str, Any]:
+    def determine_processing_strategy(self, request: OperationRequest) -> dict[str, Any]:
         """确定处理策略"""
         complexity = self.calculate_complexity(request)
         storage_info = self.storage_manager.get_storage_info(request.data_type)
@@ -269,7 +267,7 @@ class HybridArchitectureController:
 
         return strategy
 
-    async def process_request(self, request: OperationRequest) -> Dict[str, Any]:
+    async def process_request(self, request: OperationRequest) -> dict[str, Any]:
         """处理操作请求"""
         logger.info(f"🎯 收到请求: {request.operation_type.value} {request.data_type.value}")
 
@@ -310,7 +308,7 @@ class HybridArchitectureController:
 
         return result
 
-    async def _process_xiaonuo_direct(self, request: OperationRequest, strategy: Dict) -> Dict[str, Any]:
+    async def _process_xiaonuo_direct(self, request: OperationRequest, strategy: dict) -> dict[str, Any]:
         """小诺直接处理"""
         logger.info(f"⚡ 小诺直接处理: {request.target}")
 
@@ -325,7 +323,7 @@ class HybridArchitectureController:
             "timestamp": datetime.now().isoformat()
         }
 
-    async def _process_with_specialist(self, request: OperationRequest, strategy: Dict) -> Dict[str, Any]:
+    async def _process_with_specialist(self, request: OperationRequest, strategy: dict) -> dict[str, Any]:
         """使用专业智能体处理"""
         specialist = strategy["primary_agent"]
         logger.info(f"🎓 启动专业智能体: {specialist}")
@@ -350,7 +348,7 @@ class HybridArchitectureController:
             "details": result
         }
 
-    async def _process_dual_verification(self, request: OperationRequest, strategy: Dict) -> Dict[str, Any]:
+    async def _process_dual_verification(self, request: OperationRequest, strategy: dict) -> dict[str, Any]:
         """双重验证处理"""
         primary = strategy["primary_agent"]
         secondary = strategy["secondary_agent"]
@@ -367,7 +365,7 @@ class HybridArchitectureController:
         if primary_result["success"] and secondary_result["success"]:
             return {
                 "success": True,
-                "message": f"双重验证通过，操作已完成",
+                "message": "双重验证通过，操作已完成",
                 "processors": [primary, secondary],
                 "mode": "dual_verification",
                 "primary_result": primary_result,
@@ -377,12 +375,12 @@ class HybridArchitectureController:
         else:
             raise RuntimeError("双重验证失败，操作被拒绝")
 
-    async def _call_specialist_agent(self, agent_name: str, request: OperationRequest) -> Dict[str, Any]:
+    async def _call_specialist_agent(self, agent_name: str, request: OperationRequest) -> dict[str, Any]:
         """调用专业智能体API"""
         # 这里实现具体的API调用逻辑
         # 可以是HTTP请求、进程间通信等
 
-        agent_info = self.agent_manager.agents.get(agent_name, {})
+        self.agent_manager.agents.get(agent_name, {})
 
         # 模拟API调用
         await asyncio.sleep(0.1)  # 模拟网络延迟
@@ -394,7 +392,7 @@ class HybridArchitectureController:
             "processed": True
         }
 
-    def get_operation_statistics(self) -> Dict[str, Any]:
+    def get_operation_statistics(self) -> dict[str, Any]:
         """获取操作统计信息"""
         total_operations = len(self.operation_log)
         successful_ops = sum(1 for op in self.operation_log if op.get("success", False))
@@ -448,7 +446,7 @@ async def main():
 
     # 显示统计信息
     stats = controller.get_operation_statistics()
-    print(f"\n📈 操作统计:")
+    print("\n📈 操作统计:")
     print(f"   总操作数: {stats['total_operations']}")
     print(f"   成功率: {stats['success_rate']:.2%}")
     print(f"   处理模式分布: {stats['processing_modes']}")

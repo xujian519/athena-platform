@@ -62,8 +62,8 @@ class CircuitBreaker:
         self.state = CircuitState.CLOSED
         self.failure_count = 0
         self.success_count = 0
-        self.last_failure_time: float | None = None
-        self.opened_at: float | None = None
+        self.last_failure_time: Optional[float] = None
+        self.opened_at: Optional[float] = None
 
         logger.info(
             f"✅ 熔断器初始化: {name}, "

@@ -613,7 +613,7 @@ class RealTimeMonitor:
         condition: Callable[[float], bool],
         level: AlertLevel,
         message: str,
-        threshold: float | None = None,
+        threshold: Optional[float] = None,
     ):
         """添加告警规则
 

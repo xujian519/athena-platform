@@ -82,7 +82,7 @@ class LanguageGame:
     patterns: list[GamePattern] = field(default_factory=list)
     confidence_threshold: float = 0.7  # 默认置信度阈值
     uncertainty_strategy: str = "negotiate"  # negotiate, escalate, refuse
-    escalation_path: str | None = None
+    escalation_path: Optional[str] = None
     capabilities: list[str] = field(default_factory=list)  # 可调用的能力
     metadata: dict[str, Any] = field(default_factory=dict)
     enabled: bool = True
@@ -280,7 +280,7 @@ class WittgensteinGuard:
         """列出所有语言游戏"""
         return list(self.language_games.keys())
 
-    def evaluate_query(self, query: str, game_id: str | None = None) -> dict[str, Any]:
+    def evaluate_query(self, query: str, game_id: Optional[str] = None) -> dict[str, Any]:
         """评估查询
 
         Args:
@@ -333,7 +333,7 @@ class WittgensteinGuard:
         }
 
     def check_epistemic_honesty(
-        self, claim: str, confidence: float, threshold: float | None = None
+        self, claim: str, confidence: float, threshold: Optional[float] = None
     ) -> dict[str, Any]:
         """检查认识论诚实
 

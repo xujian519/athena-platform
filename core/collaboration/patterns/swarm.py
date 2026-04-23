@@ -32,8 +32,8 @@ class SwarmCollaborationPattern:
         self.swarm_id = swarm_id
         self._state = SwarmState(swarm_id)
         self._running = False
-        self.active_sessions: Dict[str, Dict[str, Any]] = {}  # 活跃会话（公开属性）
-        self.swarm_agents: Dict[str, Any] = {}  # Swarm agents（公开属性）
+        self.active_sessions: dict[str, dict[str, Any]] = {}  # 活跃会话（公开属性）
+        self.swarm_agents: dict[str, Any] = {}  # Swarm agents（公开属性）
         self._session_counter = 0
         self.framework = framework  # 协作框架（用于消息传递）
 
@@ -59,7 +59,7 @@ class SwarmCollaborationPattern:
         self.active_sessions.clear()
         logger.info(f"Swarm {self.swarm_id} stopped")
 
-    async def add_agent(self, agent_id: str, capabilities: List[str] = None) -> bool:
+    async def add_agent(self, agent_id: str, capabilities: list[str] = None) -> bool:
         """添加Agent到Swarm"""
         await self._state.add_agent(agent_id, capabilities)
         return True
@@ -73,7 +73,7 @@ class SwarmCollaborationPattern:
         """获取Swarm状态"""
         return self._state
 
-    async def get_statistics(self) -> Dict[str, Any]:
+    async def get_statistics(self) -> dict[str, Any]:
         """获取Swarm统计信息"""
         metrics = await self._state.get_metrics()
         return metrics.to_dict()
@@ -85,8 +85,8 @@ class SwarmCollaborationPattern:
     async def initiate_collaboration(
         self,
         task: Any,
-        participants: List[Any],
-        context: Dict[str, Any] = None
+        participants: list[Any],
+        context: dict[str, Any] = None
     ) -> str:
         """
         发起协作会话
@@ -246,7 +246,7 @@ class SwarmCollaborationPattern:
     async def handle_proposal(
         self,
         session_id: str,
-        proposal: Dict[str, Any]
+        proposal: dict[str, Any]
     ) -> bool:
         """
         处理提案
@@ -286,7 +286,7 @@ class SwarmCollaborationPattern:
     async def handle_vote(
         self,
         session_id: str,
-        vote: Dict[str, Any]
+        vote: dict[str, Any]
     ) -> bool:
         """
         处理投票
@@ -385,7 +385,7 @@ class SwarmCollaborationPattern:
     # 自组织
     # ========================================================================
 
-    async def _self_organize(self, session_id: str) -> Dict[str, Any]:
+    async def _self_organize(self, session_id: str) -> dict[str, Any]:
         """
         自组织 - 自动分配角色
 
@@ -467,7 +467,7 @@ class SwarmCollaborationPattern:
         logger.warning(f"Emergency mode initiated for session {session_id}: {emergency_type}")
         return True
 
-    async def handle_emergency(self, session_id: str, action: Dict[str, Any]) -> bool:
+    async def handle_emergency(self, session_id: str, action: dict[str, Any]) -> bool:
         """
         处理紧急情况
 

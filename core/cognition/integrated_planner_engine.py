@@ -191,7 +191,7 @@ class IntegratedPlannerEngine(XiaonuoPlannerEngine):
             self.enhanced_available = False
             self.logger.info("   📌 使用基础意图分析器（增强分析器已禁用）")
 
-    async def analyze(self, user_input: str, context: dict[str, Any] | None = None):
+    async def analyze(self, user_input: str, context: Optional[dict[str, Any]] = None):
         """
         分析用户意图 - 集成版本
 
@@ -239,7 +239,7 @@ class IntegratedPlannerEngine(XiaonuoPlannerEngine):
     async def plan(
         self,
         user_input: str,
-        context: dict[str, Any] | None = None
+        context: Optional[dict[str, Any]] = None
     ) -> ExecutionPlan:
         """
         生成执行规划 - 集成版本

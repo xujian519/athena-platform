@@ -109,7 +109,7 @@ class ConversationContext:
     conversation_id: str
     user_id: str
     history: List[Dict[str, str]]
-    current_topic: str | None = None
+    current_topic: Optional[str] = None
     patent_context: Optional[Dict[str, Any]] = None
     preferences: Dict[str, Any] = None
     created_at: datetime = None
@@ -232,7 +232,7 @@ class ModelManager:
             logger.error(f"模型加载失败 {model_name}: {str(e)}")
             return False
 
-    def get_model_for_task(self, task_type: TaskType, model_size: ModelSize = ModelSize.MEDIUM) -> str | None:
+    def get_model_for_task(self, task_type: TaskType, model_size: ModelSize = ModelSize.MEDIUM) -> Optional[str]:
         """根据任务类型获取最适合的模型"""
         suitable_models = []
 
@@ -788,7 +788,7 @@ class LargeLanguageModelIntegration:
             'active_conversations': len(self.conversation_manager.conversations)
         }
 
-    def export_conversation(self, conversation_id: str) -> Dict[str, Any | None]:
+    def export_conversation(self, conversation_id: str) -> Dict[str, Any] | None:
         """导出对话记录"""
         context = self.conversation_manager.get_conversation(conversation_id)
         if not context:

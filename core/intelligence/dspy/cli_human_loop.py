@@ -343,7 +343,7 @@ class TaskInteractive:
 class EditorInteractive:
     """编辑器集成交互类"""
 
-    def __init__(self, editor: str | None = None):
+    def __init__(self, editor: Optional[str] = None):
         """
         Args:
             editor: 编辑器路径 (None则自动检测)

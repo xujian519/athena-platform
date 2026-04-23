@@ -446,7 +446,7 @@ class EnhancedDecisionEngine:
     async def make_decision(self,
                            context: DecisionContext,
                            alternatives: List[DecisionAlternative],
-                           model_name: str | None = None) -> DecisionResult:
+                           model_name: Optional[str] = None) -> DecisionResult:
         """做出决策"""
         start_time = datetime.now()
         decision_id = str(uuid.uuid4())
@@ -704,7 +704,7 @@ class EnhancedDecisionEngine:
 
         return report
 
-    def export_decisions(self, file_path: str, limit: int | None = None):
+    def export_decisions(self, file_path: str, limit: Optional[int] = None):
         """导出决策历史"""
         decisions_to_export = list(self.decision_history)[-limit:] if limit else list(self.decision_history)
 

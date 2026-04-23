@@ -10,17 +10,16 @@ Created: 2026-04-19
 Version: v1.0.0
 """
 
-import pytest
 import threading
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
+import pytest
+
+from core.tools.base import ToolCategory, ToolDefinition
 from core.tools.unified_registry import (
-    UnifiedToolRegistry,
-    get_unified_registry,
     ToolHealthStatus,
+    get_unified_registry,
 )
-from core.tools.base import ToolDefinition, ToolCategory
 
 
 class TestConcurrency:

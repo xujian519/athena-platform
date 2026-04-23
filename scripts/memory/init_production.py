@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena记忆模块 - 生产环境初始化脚本
 Production Environment Initialization Script
@@ -25,18 +24,18 @@ Production Environment Initialization Script
 版本: 1.0.0
 """
 
-import asyncio
 import argparse
-import sys
+import asyncio
 import logging
+import sys
 from pathlib import Path
 
 # 添加项目根目录到路径
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from core.memory.config import load_production_config, MemorySystemConfig
-from core.memory.unified_agent_memory_system import UnifiedAgentMemorySystem
+from core.framework.memory.config import MemorySystemConfig, load_production_config
+from core.framework.memory.unified_agent_memory_system import UnifiedAgentMemorySystem
 
 # 配置日志
 logging.basicConfig(
@@ -91,7 +90,7 @@ class ProductionInitializer:
                 timeout=10
             )
             version = await conn.fetchval('SELECT version()')
-            logger.info(f"✅ PostgreSQL连接成功")
+            logger.info("✅ PostgreSQL连接成功")
             logger.info(f"   版本: {version.split()[1]}")
 
             # 检查pgvector扩展
@@ -128,7 +127,7 @@ class ProductionInitializer:
             else:
                 redis_client.ping()
 
-            logger.info(f"✅ Redis连接成功")
+            logger.info("✅ Redis连接成功")
             logger.info(f"   主机: {self.config.redis.host}:{self.config.redis.port}")
 
             await redis_client.close()
@@ -147,7 +146,7 @@ class ProductionInitializer:
                     timeout=aiohttp.ClientTimeout(total=5)
                 ) as resp:
                     if resp.status == 200:
-                        logger.info(f"✅ Qdrant连接成功")
+                        logger.info("✅ Qdrant连接成功")
                         logger.info(f"   主机: {self.config.qdrant.host}:{self.config.qdrant.port}")
                     else:
                         logger.warning(f"⚠️ Qdrant状态异常: {resp.status}")
@@ -208,7 +207,11 @@ class ProductionInitializer:
         logger.info("=" * 50)
 
         try:
-            from core.memory.unified_agent_memory_system import AgentType, MemoryType, MemoryTier
+            from core.framework.memory.unified_agent_memory_system import (
+                AgentType,
+                MemoryTier,
+                MemoryType,
+            )
 
             # 测试1: 存储记忆
             logger.info("\n📝 测试1: 存储记忆...")

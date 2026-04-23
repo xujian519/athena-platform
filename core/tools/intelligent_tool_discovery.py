@@ -136,7 +136,7 @@ class IntelligentToolDiscovery:
     async def discover_tools(
         self,
         task_description: str,
-        required_capabilities: list[str] | None = None,
+        required_capabilities: Optional[list[str]] = None,
         category_filter: ToolCategory | None = None,
         top_k: int = 5,
     ) -> list[ToolMatch]:
@@ -278,7 +278,7 @@ class IntelligentToolDiscovery:
         logger.debug(f"📊 工具使用已记录: {tool_id}")
 
     async def recommend_tools(
-        self, context: dict[str, Any], exclude: list[str] | None = None
+        self, context: dict[str, Any], exclude: Optional[list[str]] = None
     ) -> list[Tool]:
         """基于上下文推荐工具"""
         task = context.get("task", "")

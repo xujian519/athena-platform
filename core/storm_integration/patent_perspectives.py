@@ -303,7 +303,7 @@ class PatentPerspectiveDiscoverer:
         return custom_perspectives
 
     def get_questions_for_perspective(
-        self, perspective: Perspective, context: str | None = None
+        self, perspective: Perspective, context: Optional[str] = None
     ) -> list[str]:
         """
         获取特定视角的引导问题

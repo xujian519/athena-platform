@@ -90,7 +90,7 @@ class ExecutionStep:
     expected_duration: timedelta
     dependencies: list[str] = field(default_factory=list)
     success_criteria: list[str] = field(default_factory=list)
-    fallback_plan: str | None = None
+    fallback_plan: Optional[str] = None
 
 @dataclass
 class ExecutionResult:

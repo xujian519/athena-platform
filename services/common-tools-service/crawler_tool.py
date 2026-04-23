@@ -58,7 +58,7 @@ class CrawlerResult:
     """爬虫结果"""
     task_id: str
     success: bool
-    data: list[dict[str, Any]] = field(default_factory=list)
+    data: list[dict[str, Any] = field(default_factory=list)
     error: str | None = None
     stats: dict[str, Any] = field(default_factory=dict)
     execution_time: float = 0.0
@@ -642,7 +642,7 @@ class CrawlerTool:
 
         return None
 
-    def get_supported_data_sources(self) -> list[dict[str, Any]]:
+    def get_supported_data_sources(self) -> list[dict[str, Any]:
         """获取支持的数据源"""
         sources = []
 

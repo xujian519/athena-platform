@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Agentic Design Patterns 一键启动阅读体验
 One-Click Reading Experience Launcher for Agentic Design Patterns
 """
 
-import os
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import sys
 import subprocess
+import sys
 import webbrowser
 from pathlib import Path
+from typing import Any
+
 
 def check_content_exists() -> bool:
     """检查内容是否存在"""
@@ -32,7 +31,7 @@ def check_content_exists() -> bool:
 
 def prepare_optimized_content() -> Any:
     """准备优化内容"""
-    base_dir = Path("/Users/xujian/Athena工作平台/knowledge/agentic_design_patterns")
+    Path("/Users/xujian/Athena工作平台/knowledge/agentic_design_patterns")
     optimizer_script = Path("/Users/xujian/Athena工作平台/scripts/optimize_reading_experience.py")
 
     print("🔧 准备优化内容...")
@@ -404,8 +403,8 @@ def main() -> None:
     if launch_reading_interface():
         print("🌐 阅读界面已在浏览器中打开")
         print("\n📁 内容位置:")
-        print(f"   原始内容: /Users/xujian/Athena工作平台/knowledge/agentic_design_patterns/original/")
-        print(f"   优化界面: /Users/xujian/Athena工作平台/knowledge/agentic_design_patterns/optimized/")
+        print("   原始内容: /Users/xujian/Athena工作平台/knowledge/agentic_design_patterns/original/")
+        print("   优化界面: /Users/xujian/Athena工作平台/knowledge/agentic_design_patterns/optimized/")
 
         print("\n💡 使用提示:")
         print("   - 建议使用Chrome或Safari浏览器")

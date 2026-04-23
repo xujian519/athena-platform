@@ -53,7 +53,7 @@ class FeedbackItem:
     content: str
     context: dict[str, Any] = field(default_factory=dict)
     tags: list[str] = field(default_factory=list)
-    action_taken: str | None = None
+    action_taken: Optional[str] = None
     impact_score: float = 0.0  # 影响分数
 
 
@@ -149,7 +149,7 @@ class XiaonuoFeedbackSystem:
             logger.error(f"捕获异常: {e}", exc_info=True)
 
     def collect_explicit_feedback(
-        self, satisfaction: int, content: str, context: dict[str, Any] | None = None
+        self, satisfaction: int, content: str, context: Optional[dict[str, Any]] = None
     ) -> str:
         """收集明确反馈"""
         feedback_id = f"fb_{int(time.time() * 1000)}"
@@ -173,7 +173,7 @@ class XiaonuoFeedbackSystem:
 
     def infer_implicit_feedback(
         self, user_response: str, interaction_context: dict[str, Any]
-    ) -> str | None:
+    ) -> Optional[str]:
         """推断隐式反馈"""
         satisfaction = self._analyze_sentiment(user_response)
 
@@ -215,7 +215,7 @@ class XiaonuoFeedbackSystem:
             return 3
 
     def evaluate_service_quality(
-        self, response: str, response_time: float, context: dict[str, Any] | None = None
+        self, response: str, response_time: float, context: Optional[dict[str, Any]] = None
     ) -> ServiceMetrics:
         """评估服务质量"""
         # 计算各项指标
@@ -248,7 +248,7 @@ class XiaonuoFeedbackSystem:
 
         return self.service_metrics
 
-    def _evaluate_accuracy(self, response: str, context: dict[str, Any] | None = None) -> float:
+    def _evaluate_accuracy(self, response: str, context: Optional[dict[str, Any]] = None) -> float:
         """评估准确性"""
         # 简化的准确性评估
         if not context:
@@ -262,7 +262,7 @@ class XiaonuoFeedbackSystem:
 
         return 0.8
 
-    def _evaluate_helpfulness(self, response: str, context: dict[str, Any] | None = None) -> float:
+    def _evaluate_helpfulness(self, response: str, context: Optional[dict[str, Any]] = None) -> float:
         """评估有用性"""
         helpfulness_indicators = [
             "建议",
@@ -295,7 +295,7 @@ class XiaonuoFeedbackSystem:
 
         return (length_score + structure_score) / 2
 
-    def _evaluate_completeness(self, response: str, context: dict[str, Any] | None = None) -> float:
+    def _evaluate_completeness(self, response: str, context: Optional[dict[str, Any]] = None) -> float:
         """评估完整性"""
         completeness_score = 0.8  # 基础分数
 

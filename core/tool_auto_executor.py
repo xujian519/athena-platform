@@ -67,7 +67,7 @@ class ExecutionResult:
     tool_name: str
     success: bool
     result: Any = None
-    error: str | None = None
+    error: Optional[str] = None
     execution_time: float = 0.0
     start_time: datetime | None = None
     end_time: datetime | None = None
@@ -216,8 +216,8 @@ class ToolAutoExecutionEngine:
         )
 
     async def register_tool(self, name: str, description: str,
-                          input_schema: dict[str, Any],                          output_schema: dict[str, Any],                          tags: list[str] | None = None,
-                          dependencies: list[str] | None = None) -> bool:
+                          input_schema: dict[str, Any],                          output_schema: dict[str, Any],                          tags: Optional[list[str]] = None,
+                          dependencies: Optional[list[str]] = None) -> bool:
         """注册工具"""
         try:
             capability = ToolCapability(
@@ -240,7 +240,7 @@ class ToolAutoExecutionEngine:
             self.logger.error(f"❌ 工具注册失败 {name}: {str(e)}")
             return False
 
-    async def execute_from_intent(self, intent: IntentResult, context: dict[str, Any] | None = None) -> list[ExecutionResult]:
+    async def execute_from_intent(self, intent: IntentResult, context: Optional[dict[str, Any]] = None) -> list[ExecutionResult]:
         """
         基于意图自动执行工具
 
@@ -268,7 +268,7 @@ class ToolAutoExecutionEngine:
 
         return results
 
-    async def _select_tools_for_intent(self, intent: IntentResult, context: dict[str, Any] | None = None) -> list[str]:
+    async def _select_tools_for_intent(self, intent: IntentResult, context: Optional[dict[str, Any]] = None) -> list[str]:
         """为意图选择合适的工具"""
         candidate_tools = []
 
@@ -309,7 +309,7 @@ class ToolAutoExecutionEngine:
 
     async def _create_execution_requests(self, intent: IntentResult,
                                         selected_tools: list[str],
-                                        context: dict[str, Any] | None = None) -> list[ExecutionRequest]:
+                                        context: Optional[dict[str, Any]] = None) -> list[ExecutionRequest]:
         """创建执行请求"""
         requests = []
 
@@ -344,7 +344,7 @@ class ToolAutoExecutionEngine:
         return requests
 
     async def _generate_tool_parameters(self, tool_name: str, intent: IntentResult,
-                                      context: dict[str, Any] | None = None) -> dict[str, Any]:
+                                      context: Optional[dict[str, Any]] = None) -> dict[str, Any]:
         """生成工具参数"""
         parameters = {}
 
@@ -641,7 +641,7 @@ class ToolAutoExecutionEngine:
                 self.tool_status[tool_name] = ToolStatus.ERROR
                 self.logger.error(f"❌ 工具健康检查失败 {tool_name}: {str(e)}")
 
-    async def auto_execute(self, text: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
+    async def auto_execute(self, text: str, context: Optional[dict[str, Any]] = None) -> dict[str, Any]:
         """
         自动执行:从文本到工具执行的完整流程
 
@@ -834,7 +834,7 @@ class ToolAutoExecutionEngine:
 tool_executor = ToolAutoExecutionEngine()
 
 # 导出的便捷函数
-async def auto_execute_request(text: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
+async def auto_execute_request(text: str, context: Optional[dict[str, Any]] = None) -> dict[str, Any]:
     """便捷函数:自动执行用户请求"""
     return await tool_executor.auto_execute(text, context)
 

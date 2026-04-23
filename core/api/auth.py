@@ -40,7 +40,7 @@ class RateLimitStats:
 
     requests: list[float] = field(default_factory=list)
     blocked_count: int = 0
-    last_request_time: float | None = None
+    last_request_time: Optional[float] = None
     total_requests: int = 0
 
 
@@ -142,7 +142,7 @@ class RateLimiter:
 
     def check_rate_limit(
         self, request: Request, raise_exception: bool = True
-    ) -> tuple[bool, str | None]:
+    ) -> Optional[tuple[bool, str]]:
         """
         检查是否超过速率限制
 
@@ -266,7 +266,7 @@ class SecurityMiddleware:
             f"✅ 安全中间件初始化完成 " f"(认证: {enable_auth}, 速率限制: {enable_rate_limit})"
         )
 
-    async def verify_request(self, request: Request, api_key: str | None = None) -> None:
+    async def verify_request(self, request: Request, api_key: Optional[str] = None) -> None:
         """
         验证请求(认证 + 速率限制)
 
@@ -348,7 +348,7 @@ def get_security_middleware(
 # FastAPI依赖项
 async def verify_api_key(
     request: Request,
-    x_api_key: str | None = None,
+    x_api_key: Optional[str] = None,
 ) -> None:
     """
     FastAPI依赖项:验证API密钥

@@ -123,7 +123,7 @@ class GPUVectorEmbedder:
         model_name: str = "paraphrase-multilingual-MiniLM-L12-v2",
         use_gpu: bool = True,
         device: Any | None = None,
-        model_path: str | None = None,
+        model_path: Optional[str] = None,
     ):
         """
         初始化GPU加速向量嵌入器(M4 Pro优化版)
@@ -234,7 +234,7 @@ class GPUVectorEmbedder:
         except Exception as e:
             logger.error(f"❌ 向量嵌入模型加载失败: {e}")
 
-    def encode(self, texts: list[str], batch_size: int | None = None) -> np.ndarray | None:
+    def encode(self, texts: list[str], batch_size: Optional[int] = None) -> np.ndarray | None:
         """
         将文本编码为向量(GPU加速 + M4 Pro动态批处理优化)
 
@@ -386,7 +386,7 @@ class GPUVectorToolDiscovery:
     def __init__(
         self,
         tool_metadata: dict[str, Any],        model_name: str = "paraphrase-multilingual-MiniLM-L12-v2",
-        cache_dir: str | None = None,
+        cache_dir: Optional[str] = None,
         use_gpu: bool = True,
     ):
         """
@@ -517,7 +517,7 @@ class GPUVectorToolDiscovery:
             logger.warning(f"⚠️ 缓存保存失败: {e}")
 
     async def discover_tools(
-        self, query: str, limit: int = 10, category: str | None = None, threshold: float = 0.3
+        self, query: str, limit: int = 10, category: Optional[str] = None, threshold: float = 0.3
     ) -> list[dict[str, Any]]:
         """
         基于语义相似度发现工具(GPU加速)
@@ -591,7 +591,7 @@ class GPUVectorToolDiscovery:
         self,
         query: str,
         limit: int = 10,
-        category: str | None = None,
+        category: Optional[str] = None,
         vector_weight: float = 0.7,
         keyword_weight: float = 0.3,
     ) -> list[dict[str, Any]]:

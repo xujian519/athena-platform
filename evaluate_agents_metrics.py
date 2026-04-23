@@ -1,24 +1,24 @@
-import os
 import ast
-import json
+import os
+
 
 def analyze_file(filepath):
     try:
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with open(filepath, encoding='utf-8') as f:
             content = f.read()
         tree = ast.parse(content)
-        
+
         has_logging = 'logging' in content or 'logger' in content
         has_print = 'print(' in content
         has_typing = 'typing' in content or 'List[' in content or 'Dict[' in content
-        
+
         functions = [node for node in ast.walk(tree) if isinstance(node, ast.FunctionDef)]
         async_functions = [node for node in ast.walk(tree) if isinstance(node, ast.AsyncFunctionDef)]
-        
+
         classes = [node for node in ast.walk(tree) if isinstance(node, ast.ClassDef)]
-        
+
         hardcoded_secrets = 'api_key' in content.lower() or 'secret' in content.lower()
-        
+
         return {
             "has_logging": has_logging,
             "has_print": has_print,
@@ -36,7 +36,7 @@ agents_dir = ['core/agents', 'core/agent', 'core/xiaonuo_agent', 'core/agent_col
 report = {}
 
 for d in agents_dir:
-    for root, dirs, files in os.walk(d):
+    for root, _dirs, files in os.walk(d):
         for file in files:
             if file.endswith('.py') and not file.startswith('__'):
                 filepath = os.path.join(root, file)
@@ -51,7 +51,7 @@ issues = {
 
 for f, data in report.items():
     if "error" in data: continue
-    
+
     if data["has_print"] and not data["has_logging"]:
         issues["no_logging_uses_print"].append(f)
     if not data["has_typing"] and data["loc"] > 20:

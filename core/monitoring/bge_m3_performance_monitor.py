@@ -232,7 +232,7 @@ class BGE_M3_PerformanceMonitor:
 
     def calculate_stats(
         self,
-        operation: str | None = None,
+        operation: Optional[str] = None,
         time_window: timedelta | None = None,
     ) -> PerformanceStats:
         """计算性能统计
@@ -304,7 +304,7 @@ class BGE_M3_PerformanceMonitor:
     def get_recent_stats(
         self,
         minutes: int = 5,
-        operation: str | None = None,
+        operation: Optional[str] = None,
     ) -> PerformanceStats:
         """获取最近的性能统计
 

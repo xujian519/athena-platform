@@ -4,10 +4,9 @@ Athena专利系统 - 完整系统测试套件
 
 测试所有10个核心模块和三大Agent的协作。
 """
-import asyncio
 import sys
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent
@@ -104,12 +103,12 @@ class SystemTestSuite:
 def test_cap01_patent_search():
     """测试CAP01: 专利检索系统"""
     try:
-        from core.patents.enhanced_patent_retriever import EnhancedPatentRetriever
         from core.patents.comprehensive_analyzer import ComprehensivePatentAnalyzer
+        from core.patents.enhanced_patent_retriever import EnhancedPatentRetriever
 
         print("初始化专利检索系统...")
-        retriever = EnhancedPatentRetriever()
-        analyzer = ComprehensivePatentAnalyzer()
+        EnhancedPatentRetriever()
+        ComprehensivePatentAnalyzer()
 
         print("✅ CAP01模块加载成功")
         return True
@@ -121,13 +120,6 @@ def test_cap01_patent_search():
 def test_cap02_patent_evaluation():
     """测试CAP02: 专利评估系统"""
     try:
-        from core.patents.quality_assessor import (
-            QualityAssessment,
-            QualityDimension,
-            SeverityLevel,
-            QualityIssue,
-            DimensionScore
-        )
 
         print("初始化专利评估系统...")
         # 只验证模块可以导入，不创建实例
@@ -144,7 +136,7 @@ def test_cap03_patent_drafting():
         from core.patents.drafting.patent_drafter import PatentDrafter
 
         print("初始化专利撰写系统...")
-        drafter = PatentDrafter()
+        PatentDrafter()
 
         print("✅ CAP03模块加载成功")
         return True
@@ -159,7 +151,7 @@ def test_cap04_oa_response():
         from core.patents.oa_response.oa_responder import OAResponder
 
         print("初始化审查答复系统...")
-        responder = OAResponder()
+        OAResponder()
 
         print("✅ CAP04模块加载成功")
         return True
@@ -174,7 +166,7 @@ def test_cap05_invalidity():
         from core.patents.invalidity.invalidity_petitioner import InvalidityPetitioner
 
         print("初始化无效宣告系统...")
-        petitioner = InvalidityPetitioner()
+        InvalidityPetitioner()
 
         print("✅ CAP05模块加载成功")
         return True
@@ -189,7 +181,7 @@ def test_cap06_infringement():
         from core.patents.infringement.infringement_analyzer import InfringementAnalyzer
 
         print("初始化侵权分析系统...")
-        analyzer = InfringementAnalyzer()
+        InfringementAnalyzer()
 
         print("✅ CAP06模块加载成功")
         return True
@@ -204,7 +196,7 @@ def test_cap07_licensing():
         from core.patents.licensing.licensing_drafting import LicensingDrafting
 
         print("初始化许可协议起草系统...")
-        drafting = LicensingDrafting()
+        LicensingDrafting()
 
         print("✅ CAP07模块加载成功")
         return True
@@ -219,7 +211,7 @@ def test_cap08_litigation():
         from core.patents.litigation.litigation_supporter import LitigationSupporter
 
         print("初始化专利诉讼支持系统...")
-        supporter = LitigationSupporter()
+        LitigationSupporter()
 
         print("✅ CAP08模块加载成功")
         return True
@@ -234,7 +226,7 @@ def test_cap09_portfolio():
         from core.patents.portfolio.portfolio_manager import PortfolioManager
 
         print("初始化专利组合管理系统...")
-        manager = PortfolioManager()
+        PortfolioManager()
 
         print("✅ CAP09模块加载成功")
         return True
@@ -246,10 +238,12 @@ def test_cap09_portfolio():
 def test_cap10_international():
     """测试CAP10: 国际专利申请系统"""
     try:
-        from core.patents.international.international_filing_manager import InternationalFilingManager
+        from core.patents.international.international_filing_manager import (
+            InternationalFilingManager,
+        )
 
         print("初始化国际专利申请系统...")
-        manager = InternationalFilingManager()
+        InternationalFilingManager()
 
         print("✅ CAP10模块加载成功")
         return True
@@ -261,10 +255,10 @@ def test_cap10_international():
 def test_xiaona_agent():
     """测试小娜Agent"""
     try:
-        from core.agents.xiaona_legal import XiaonaLegalAgent
+        from core.framework.agents.xiaona_legal import XiaonaLegalAgent
 
         print("初始化小娜Agent...")
-        agent = XiaonaLegalAgent()
+        XiaonaLegalAgent()
         # 不调用initialize()以避免异步问题
 
         print("✅ 小娜Agent加载成功")
@@ -277,10 +271,10 @@ def test_xiaona_agent():
 def test_yunxi_agent():
     """测试云熙Agent"""
     try:
-        from core.agents.yunxi_ip_agent import YunxiIPAgent
+        from core.framework.agents.yunxi_ip_agent import YunxiIPAgent
 
         print("初始化云熙Agent...")
-        agent = YunxiIPAgent()
+        YunxiIPAgent()
         # 不调用initialize()以避免异步问题
 
         print("✅ 云熙Agent加载成功")
@@ -293,14 +287,15 @@ def test_yunxi_agent():
 def test_agent_collaboration():
     """测试Agent协作"""
     try:
-        from core.agents.xiaona_legal import XiaonaLegalAgent
-        from core.agents.yunxi_ip_agent import YunxiIPAgent
+        from core.framework.agents.xiaona_legal import XiaonaLegalAgent
+
+        from core.framework.agents.yunxi_ip_agent import YunxiIPAgent
 
         print("初始化三大Agent协作测试...")
 
         # 初始化两个Agent
-        xiaona = XiaonaLegalAgent()
-        yunxi = YunxiIPAgent()
+        XiaonaLegalAgent()
+        YunxiIPAgent()
 
         print("✅ 小娜Agent和云熙Agent协作正常")
         return True
@@ -349,7 +344,7 @@ def run_all_tests():
     save_test_report(suite.test_results)
 
 
-def save_test_report(results: List[Dict[str, Any]]):
+def save_test_report(results: list[dict[str, Any]):
     """保存测试报告"""
     report_path = Path(__file__).parent.parent / "docs" / "reports" / "SYSTEM_TEST_REPORT_20260420.md"
 

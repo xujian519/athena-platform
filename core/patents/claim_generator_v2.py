@@ -14,7 +14,7 @@ class ClaimGenerationResult:
 class ClaimGeneratorV2:
     """专利权利要求生成器 V2"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
 
     def generate_claims(self, invention_description: str) -> ClaimGenerationResult:

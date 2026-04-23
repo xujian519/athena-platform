@@ -352,10 +352,10 @@ class PersistentMemoryManager:
 
     def update_project_info(
         self,
-        project_name: str | None = None,
-        project_type: str | None = None,
-        current_phase: str | None = None,
-        core_objective: str | None = None,
+        project_name: Optional[str] = None,
+        project_type: Optional[str] = None,
+        current_phase: Optional[str] = None,
+        core_objective: Optional[str] = None,
     ) -> None:
         """
         更新项目信息
@@ -377,7 +377,7 @@ class PersistentMemoryManager:
 
         self.save_project_memory()
 
-    def add_known_issue(self, title: str, description: str, solution: str | None = None) -> None:
+    def add_known_issue(self, title: str, description: str, solution: Optional[str] = None) -> None:
         """
         添加已知问题
 
@@ -424,9 +424,9 @@ class PersistentMemoryManager:
 
     def update_user_preference(
         self,
-        communication_style: str | None = None,
-        preferred_depth: str | None = None,
-        language_preference: str | None = None,
+        communication_style: Optional[str] = None,
+        preferred_depth: Optional[str] = None,
+        language_preference: Optional[str] = None,
     ) -> None:
         """
         更新用户偏好

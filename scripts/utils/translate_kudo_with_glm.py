@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 使用GLM-4.7翻译Kudo论文为中文
 """
 
 import asyncio
-import json
 import os
 import re
 from datetime import datetime
-from pathlib import Path
 
 import httpx
 
@@ -218,7 +215,7 @@ async def main():
 
     # 1. 读取PDF提取的文本
     print("\n1️⃣ 读取原始文本...")
-    with open(INPUT_FILE, 'r', encoding='utf-8') as f:
+    with open(INPUT_FILE, encoding='utf-8') as f:
         content = f.read()
 
     print(f"   ✓ 读取了 {len(content.split(chr(10)))} 行文本")
@@ -349,7 +346,7 @@ async def main():
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write("\n".join(md_lines))
 
-    print(f"   ✓ 翻译文件已保存至：")
+    print("   ✓ 翻译文件已保存至：")
     print(f"   {output_path}")
 
     print("\n" + "="*80)

@@ -585,7 +585,7 @@ def test_ontology_manager():
         print(f"    {concept_type}: {count}")
 
 
-def build_from_file(input_file: str, output_file: str | None = None):
+def build_from_file(input_file: str, output_file: Optional[str] = None):
     """从文件构建本体"""
     print(f"📄 读取文件: {input_file}")
 

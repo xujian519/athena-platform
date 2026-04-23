@@ -49,9 +49,9 @@ class GUIAction:
     """GUI动作定义"""
 
     action_type: str  # 动作类型: click, type, navigate, etc.
-    target: str | None = None  # 目标元素选择器
-    value: str | None = None  # 输入值
-    url: str | None = None  # URL(用于navigate)
+    target: Optional[str] = None  # 目标元素选择器
+    value: Optional[str] = None  # 输入值
+    url: Optional[str] = None  # URL(用于navigate)
     description: str = ""  # 动作描述
 
 
@@ -63,15 +63,15 @@ class VerificationResult:
     confidence: float  # 置信度 0.0-1.0
     message: str  # 验证消息
     details: dict[str, Any] = field(default_factory=dict)
-    before_screenshot: str | None = None
-    after_screenshot: str | None = None
+    before_screenshot: Optional[str] = None
+    after_screenshot: Optional[str] = None
     timestamp: datetime = field(default_factory=datetime.now)
 
     # 详细验证结果
     text_match_score: float = 0.0  # 文本匹配分数
     element_detection: dict[str, bool] = field(default_factory=dict)
     visual_difference: float = 0.0  # 视觉差异分数 0-1
-    detected_text: str | None = None
+    detected_text: Optional[str] = None
 
 
 class VisualVerificationEngine:
@@ -85,7 +85,7 @@ class VisualVerificationEngine:
     4. 差异分析 - 分析执行前后的视觉变化
     """
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化视觉验证引擎
 
@@ -188,7 +188,7 @@ class VisualVerificationEngine:
         before_screenshot: str,
         after_screenshot: str,
         expected_elements: list[str] = None,
-        expected_text: str | None = None,
+        expected_text: Optional[str] = None,
         verify_change: bool = True,
     ) -> VerificationResult:
         """
@@ -474,7 +474,7 @@ class VisualVerificationEngine:
 
         return results
 
-    async def capture_and_save(self, page, label: str, task_id: str | None = None) -> str:
+    async def capture_and_save(self, page, label: str, task_id: Optional[str] = None) -> str:
         """
         捕获页面截图并保存
 

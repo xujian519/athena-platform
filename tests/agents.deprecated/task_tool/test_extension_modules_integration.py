@@ -5,9 +5,9 @@
 
 import pytest
 
-from core.agents.fork_context_builder import ForkContext
-from core.agents.subagent_registry import SubagentRegistry
-from core.agents.task_tool.task_tool import TaskTool
+from core.framework.agents.fork_context_builder import ForkContext
+from core.framework.agents.subagent_registry import SubagentRegistry
+from core.framework.agents.task_tool.task_tool import TaskTool
 
 
 class TestExtensionModulesIntegration:

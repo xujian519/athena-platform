@@ -199,47 +199,47 @@ def save_baochen_product_system() -> None:
 ### 1. 专利业务（核心板块）
 
 #### 1.1 专利确权业务
-{chr(10).join([f"- {service}" for service in baochen_products['product_categories']['专利']['subcategories']['专利确权业务']['services']])}
+{chr(10).join([f"- {service}" for service in baochen_products['product_categories']['专利']['subcategories']['专利确权业务']['services'])}
 
 **特色服务**:
-{chr(10).join([f"- {feature}" for feature in baochen_products['product_categories']['专利']['subcategories']['专利确权业务']['features']])}
+{chr(10).join([f"- {feature}" for feature in baochen_products['product_categories']['专利']['subcategories']['专利确权业务']['features'])}
 
 #### 1.2 专利法律服务
-{chr(10).join([f"- {service}" for service in baochen_products['product_categories']['专利']['subcategories']['专利法律服务']['services']])}
+{chr(10).join([f"- {service}" for service in baochen_products['product_categories']['专利']['subcategories']['专利法律服务']['services'])}
 
 #### 1.3 国际专利申请
-{chr(10).join([f"- {service}" for service in baochen_products['product_categories']['专利']['subcategories']['国际专利申请']['services']])}
+{chr(10).join([f"- {service}" for service in baochen_products['product_categories']['专利']['subcategories']['国际专利申请']['services'])}
 
 #### 1.4 其他专利业务
-{chr(10).join([f"- {service}" for service in baochen_products['product_categories']['专利']['subcategories']['其他业务']['services']])}
+{chr(10).join([f"- {service}" for service in baochen_products['product_categories']['专利']['subcategories']['其他业务']['services'])}
 
 ### 2. 商标业务
-{chr(10).join([f"- {service}" for service in baochen_products['product_categories']['商标']['services']])}
+{chr(10).join([f"- {service}" for service in baochen_products['product_categories']['商标']['services'])}
 
 ### 3. 版权业务
-{chr(10).join([f"- {service}" for service in baochen_products['product_categories']['版权']['services']])}
+{chr(10).join([f"- {service}" for service in baochen_products['product_categories']['版权']['services'])}
 
 ## ✨ 服务特色
 
 ### 专业性
-{chr(10).join([f"- {feature}" for feature in baochen_products['service_features']['专业性']])}
+{chr(10).join([f"- {feature}" for feature in baochen_products['service_features']['专业性'])}
 
 ### 服务质量
-{chr(10).join([f"- {feature}" for feature in baochen_products['service_features']['服务质量']])}
+{chr(10).join([f"- {feature}" for feature in baochen_products['service_features']['服务质量'])}
 
 ### 创新能力
-{chr(10).join([f"- {feature}" for feature in baochen_products['service_features']['创新能力']])}
+{chr(10).join([f"- {feature}" for feature in baochen_products['service_features']['创新能力'])}
 
 ## 🚀 未来发展方向
 
 ### 业务拓展
-{chr(10).join([f"- {direction}" for direction in baochen_products['future_development']['业务拓展']])}
+{chr(10).join([f"- {direction}" for direction in baochen_products['future_development']['业务拓展'])}
 
 ### 能力提升
-{chr(10).join([f"- {improvement}" for improvement in baochen_products['future_development']['能力提升']])}
+{chr(10).join([f"- {improvement}" for improvement in baochen_products['future_development']['能力提升'])}
 
 ### 数字化转型
-{chr(10).join([f"- {transform}" for transform in baochen_products['future_development']['数字化转型']])}
+{chr(10).join([f"- {transform}" for transform in baochen_products['future_development']['数字化转型'])}
 
 ## 💡 对云熙和小宸的价值
 

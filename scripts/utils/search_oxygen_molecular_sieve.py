@@ -30,7 +30,7 @@ def search_oxygen_molecular_sieve():
 
     print_section("🔍 高效制氧机分子筛配方专利检索")
     print(f"检索时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"数据库: localhost:5432/patent_db")
+    print("数据库: localhost:5432/patent_db")
 
     # 准备结果保存目录
     result_dir = Path("/Users/xujian/Athena工作平台/data/patents/search_results")

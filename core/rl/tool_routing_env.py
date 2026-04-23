@@ -137,7 +137,7 @@ class ToolRoutingEnv:
 
     metadata = {"render_modes": [], "render_fps": 30}
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.name = "工具路由RL环境"
         self.version = "1.0.0"
 
@@ -185,7 +185,7 @@ class ToolRoutingEnv:
             },
         }
 
-    def reset(self, seed: int | None = None) -> RoutingState:
+    def reset(self, seed: Optional[int] = None) -> RoutingState:
         """重置环境"""
         # 随机生成初始状态
         self.state = self._generate_random_state()

@@ -26,7 +26,7 @@ class IntentConfig:
     提供配置加载、环境变量替换、路径解析等功能。
     """
 
-    def __init__(self, config_path: str | None = None):
+    def __init__(self, config_path: Optional[str] = None):
         """
         初始化配置管理器
 

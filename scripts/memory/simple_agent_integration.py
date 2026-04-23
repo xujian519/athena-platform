@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 简化版：为每个智能体添加记忆系统集成说明
 """
 
 import os
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
+from typing import Any
+
 
 def create_integration_guide() -> Any:
     """创建智能体记忆系统集成指南"""
@@ -48,7 +48,7 @@ response = requests.post("http://localhost:8003/api/memory/recall", json={
 ### 方式二：使用BaseAgentWithUnifiedMemory基类
 
 ```python
-from core.agent.base_agent_with_unified_memory import BaseAgentWithUnifiedMemory
+from core.framework.agents.base_agent_with_unified_memory import BaseAgentWithUnifiedMemory
 
 class YourAgent(BaseAgentWithUnifiedMemory):
     def __init__(self):

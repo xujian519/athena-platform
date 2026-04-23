@@ -18,7 +18,7 @@ async def test_bge_service():
     print("=" * 50)
 
     try:
-        from core.nlp.bge_embedding_service import get_bge_service
+        from core.ai.nlp.bge_embedding_service import get_bge_service
 
         # 初始化服务
         bge_service = await get_bge_service()
@@ -39,7 +39,7 @@ async def test_bge_service():
         print("\n📝 测试编码结果:")
         print(f"   - 处理时间: {result.processing_time:.3f}秒")
         print(f"   - 向量维度: {result.dimension}")
-        print(f"   - 向量前5位: {[f'{x:.4f}' for x in result.embeddings[:5]]}")
+        print(f"   - 向量前5位: {[f'{x:.4f}' for x in result.embeddings[:5]}")
 
         # 批量测试
         test_texts = [
@@ -198,8 +198,9 @@ async def performance_benchmark():
     print("\n🏃 性能基准测试...")
     print("-" * 30)
 
-    from core.nlp.bge_embedding_service import get_bge_service
     from core.orchestration.xiaonuo_model_router import XiaonuoModelRouter
+
+    from core.ai.nlp.bge_embedding_service import get_bge_service
 
     # 获取服务
     bge_service = await get_bge_service()

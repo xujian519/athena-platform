@@ -222,7 +222,7 @@ class WritingMaterialsManager:
     def search_materials(
         self,
         query: str,
-        category: str | None = None,
+        category: Optional[str] = None,
         top_k: int = 5
     ) -> list[dict[str, Any]]:
         """
@@ -298,7 +298,7 @@ class WritingMaterialsManager:
 
         return selected
 
-    def get_material_content(self, material_id: str) -> str | None:
+    def get_material_content(self, material_id: str) -> Optional[str]:
         """
         获取素材内容
 

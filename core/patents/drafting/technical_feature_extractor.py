@@ -31,8 +31,8 @@ class TechnicalFeatureExtractor:
     async def extract_features(
         self,
         disclosure_text: str,
-        sections: Optional[Dict[str, str]] = None
-    ) -> List[TechnicalFeature]:
+        sections: Optional[dict[str, str]] = None
+    ) -> list[TechnicalFeature]:
         """
         从技术交底书提取技术特征
 
@@ -81,9 +81,9 @@ class TechnicalFeatureExtractor:
     async def extract_problem_feature_effects(
         self,
         disclosure_text: str,
-        sections: Optional[Dict[str, str]] = None,
-        features: Optional[List[TechnicalFeature]] = None
-    ) -> List[ProblemFeatureEffect]:
+        sections: Optional[dict[str, str]] = None,
+        features: Optional[list[TechnicalFeature]] = None
+    ) -> list[ProblemFeatureEffect]:
         """
         提取问题-特征-效果三元组
 
@@ -184,7 +184,7 @@ class TechnicalFeatureExtractor:
 
         return ""
 
-    def _extract_component_features(self, solution_text: str) -> List[TechnicalFeature]:
+    def _extract_component_features(self, solution_text: str) -> list[TechnicalFeature]:
         """提取组件特征"""
         features = []
 
@@ -208,7 +208,7 @@ class TechnicalFeatureExtractor:
 
         return features
 
-    def _extract_step_features(self, solution_text: str) -> List[TechnicalFeature]:
+    def _extract_step_features(self, solution_text: str) -> list[TechnicalFeature]:
         """提取步骤特征"""
         features = []
 
@@ -232,7 +232,7 @@ class TechnicalFeatureExtractor:
 
         return features
 
-    def _extract_parameter_features(self, solution_text: str) -> List[TechnicalFeature]:
+    def _extract_parameter_features(self, solution_text: str) -> list[TechnicalFeature]:
         """提取参数特征"""
         features = []
 
@@ -258,8 +258,8 @@ class TechnicalFeatureExtractor:
 
     def _classify_features(
         self,
-        features: List[TechnicalFeature]
-    ) -> List[TechnicalFeature]:
+        features: list[TechnicalFeature]
+    ) -> list[TechnicalFeature]:
         """分类特征类型"""
         # 简单的分类逻辑
         # 核心特征：主要组件、关键步骤
@@ -285,7 +285,7 @@ class TechnicalFeatureExtractor:
 
         return ""
 
-    def _parse_effects(self, effects_text: str) -> List[str]:
+    def _parse_effects(self, effects_text: str) -> list[str]:
         """解析技术效果"""
         effects = []
 

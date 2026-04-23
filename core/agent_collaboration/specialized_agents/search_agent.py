@@ -173,7 +173,7 @@ class SearchAgent(BaseAgent):
                 error_message=str(e),
             )
 
-    async def _patent_search(self,  content: dict[str,  Any]) -> dict[str,  Any]:
+    async def _patent_search(self,  content: dict[str,  Any]) -> dict[str, Any]:
         """增强专利搜索 - 基于Meta标签技术的完整专利数据获取"""
         query = content.get("query",  "")
         filters = content.get("filters",  {})
@@ -258,7 +258,7 @@ class SearchAgent(BaseAgent):
             # 降级到模拟数据, 确保系统可用性
             return await self._fallback_patent_search(content)
 
-    async def _fallback_patent_search(self,  content: dict[str,  Any]) -> dict[str,  Any]:
+    async def _fallback_patent_search(self,  content: dict[str,  Any]) -> dict[str, Any]:
         """专利搜索降级方案 - 使用模拟数据"""
         query = content.get("query",  "")
         filters = content.get("filters",  {})
@@ -307,7 +307,7 @@ class SearchAgent(BaseAgent):
             },
         }
 
-    async def _semantic_search(self,  content: dict[str,  Any]) -> dict[str,  Any]:
+    async def _semantic_search(self,  content: dict[str,  Any]) -> dict[str, Any]:
         """语义搜索"""
         text = content.get("text",  "")
         similarity_threshold = content.get("threshold",  0.7)
@@ -331,7 +331,7 @@ class SearchAgent(BaseAgent):
             "search_time": 1.2,
         }
 
-    async def _classification_search(self,  content: dict[str,  Any]) -> dict[str,  Any]:
+    async def _classification_search(self,  content: dict[str,  Any]) -> dict[str, Any]:
         """分类搜索"""
         ipc_codes = content.get("ipc_codes",  [])
         cpc_codes = content.get("cpc_codes",  [])
@@ -353,7 +353,7 @@ class SearchAgent(BaseAgent):
             ],
         }
 
-    async def _multi_source_search(self,  content: dict[str,  Any]) -> dict[str,  Any]:
+    async def _multi_source_search(self,  content: dict[str,  Any]) -> dict[str, Any]:
         """多源搜索"""
         query = content.get("query",  "")
         sources = content.get("sources",  self.search_engines)  # type: ignore[attr-defined]
@@ -382,7 +382,7 @@ class SearchAgent(BaseAgent):
             ),
         }
 
-    async def _search_single_source(self,  source: str,  query: str) -> dict[str,  Any]:
+    async def _search_single_source(self,  source: str,  query: str) -> dict[str, Any]:
         """单个数据源搜索 - 仅支持Google Patents"""
         if source != "google_patents":
             logger.warning(f"⚠️ 不支持的数据源: {source}, 仅支持Google Patents")
@@ -423,7 +423,7 @@ class SearchAgent(BaseAgent):
 
     def _merge_search_results(
         self,  results: list[dict[str,  Any]],  sources: list[str]
-    ) -> dict[str,  Any]:
+    ) -> dict[str, Any]:
         """合并搜索结果"""
         merged_results = []
         stats = {}
@@ -508,7 +508,7 @@ class SearchAgent(BaseAgent):
 
         return unique_results
 
-    async def _optimize_search(self,  content: dict[str,  Any]) -> dict[str,  Any]:
+    async def _optimize_search(self,  content: dict[str,  Any]) -> dict[str, Any]:
         """搜索优化"""
         original_query = content.get("query",  "")
         search_history = content.get("search_history",  [])
@@ -558,7 +558,7 @@ class SearchAgent(BaseAgent):
 
         return suggestions
 
-    async def _general_search(self,  content: dict[str,  Any]) -> dict[str,  Any]:
+    async def _general_search(self,  content: dict[str,  Any]) -> dict[str, Any]:
         """通用搜索"""
         query = content.get("query",  "")
 
@@ -577,7 +577,7 @@ class SearchAgent(BaseAgent):
 
     # ========== 搜索Agent优化方法 ==========
 
-    async def _concurrent_search(self,  content: dict[str,  Any]) -> dict[str,  Any]:
+    async def _concurrent_search(self,  content: dict[str,  Any]) -> dict[str, Any]:
         """并发搜索 - 同时从多个搜索引擎获取结果"""
         query = content.get("query",  "")
         engines = content.get("engines",  self.search_engines)  # type: ignore[attr-defined]
@@ -649,7 +649,7 @@ class SearchAgent(BaseAgent):
 
     async def _intelligent_caching_search(
         self,  content: dict[str,  Any]
-    ) -> dict[str,  Any]:
+    ) -> dict[str, Any]:
         """智能缓存搜索 - 优先使用缓存结果"""
         query = content.get("query",  "")
         cache_key = f"search_{hash(query)}"
@@ -683,7 +683,7 @@ class SearchAgent(BaseAgent):
             logger.error(f"❌ 智能缓存搜索失败: {e}")
             return {"error": str(e),  "patents": []}
 
-    async def _cross_platform_search(self,  content: dict[str,  Any]) -> dict[str,  Any]:
+    async def _cross_platform_search(self,  content: dict[str,  Any]) -> dict[str, Any]:
         """跨平台搜索 - 整合多个平台的搜索结果"""
         query = content.get("query",  "")
         platforms = content.get("platforms",  ["google_patents",  "baidu_patent"])
@@ -698,7 +698,7 @@ class SearchAgent(BaseAgent):
             "total_count": 0,
         }
 
-    async def _smart_query_expansion(self,  content: dict[str,  Any]) -> dict[str,  Any]:
+    async def _smart_query_expansion(self,  content: dict[str,  Any]) -> dict[str, Any]:
         """智能查询扩展 - 自动扩展查询关键词"""
         query = content.get("query",  "")
 
@@ -711,7 +711,7 @@ class SearchAgent(BaseAgent):
             "expansion_strategy": "semantic_similarity",
         }
 
-    async def _quality_assessment(self,  content: dict[str,  Any]) -> dict[str,  Any]:
+    async def _quality_assessment(self,  content: dict[str,  Any]) -> dict[str, Any]:
         """质量评估 - 评估搜索结果的质量"""
         results = content.get("results",  [])
 
@@ -728,7 +728,7 @@ class SearchAgent(BaseAgent):
             },
         }
 
-    def get_search_performance_stats(self) -> dict[str,  Any]:
+    def get_search_performance_stats(self) -> dict[str, Any]:
         """获取搜索性能统计"""
         return {
             "agent_id": self.agent_id,

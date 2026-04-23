@@ -48,9 +48,9 @@ class ModelConfig:
     model_name: str
     model_type: ModelType
     task_type: TaskType
-    model_path: str | None = None
-    config_path: str | None = None
-    tokenizer_path: str | None = None
+    model_path: Optional[str] = None
+    config_path: Optional[str] = None
+    tokenizer_path: Optional[str] = None
     max_length: int = 512
     batch_size: int = 32
     cache_size: int = 1000
@@ -409,7 +409,7 @@ class AIModelUpgrader:
                     return [0.0] * 100
 
                 async def _fuse_features(self, text_features: List[float],
-                                       image_features: Optional[List[float] = None) -> List[float]:
+                                       image_features: Optional[List[float]] = None) -> List[float]]:
                     """融合特征"""
                     if image_features:
                         # 简单拼接

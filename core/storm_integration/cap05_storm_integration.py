@@ -54,7 +54,7 @@ class CreativityAnalysisInput:
     inventor: str  # 发明人
     application_date: str  # 申请日期
     ipc_classification: str  # IPC 分类
-    description: str | None = None  # 说明书(可选)
+    description: Optional[str] = None  # 说明书(可选)
 
 
 @dataclass
@@ -95,7 +95,7 @@ class Step3Analysis:
 
     obviousness_assessment: str  # 显而易见性评估
     evidence: list[str]  # 证据
-    motivation: str | None  # 动机
+    motivation: Optional[str]  # 动机
     conclusion: str  # 结论
 
 

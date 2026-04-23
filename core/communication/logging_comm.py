@@ -212,7 +212,7 @@ class StructuredFormatter(logging.Formatter):
 
 
 def setup_structured_logging(
-    component: str, level: str = "INFO", log_file: str | None = None, log_format: str = "json"
+    component: str, level: str = "INFO", log_file: Optional[str] = None, log_format: str = "json"
 ):
     """
     设置结构化日志

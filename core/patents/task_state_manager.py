@@ -54,10 +54,10 @@ class PhaseState:
     phase_id: int
     phase_name: str
     status: str = "pending"
-    subagent_id: str | None = None
-    output_file: str | None = None
-    started_at: str | None = None
-    completed_at: str | None = None
+    subagent_id: Optional[str] = None
+    output_file: Optional[str] = None
+    started_at: Optional[str] = None
+    completed_at: Optional[str] = None
     notes: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
@@ -224,8 +224,8 @@ class TaskStateManager:
         task_id: str,
         phase_id: int,
         status: str,
-        output_file: str | None = None,
-        notes: list[str] | None = None,
+        output_file: Optional[str] = None,
+        notes: Optional[list[str]] = None,
     ) -> TaskState | None:
         """
         更新阶段状态
@@ -397,7 +397,7 @@ class TaskStateManager:
             "updated": task.updated,
         }
 
-    def list_tasks(self, status: str | None = None) -> list[dict]:
+    def list_tasks(self, status: Optional[str] = None) -> list[dict]:
         """
         列出所有任务
 

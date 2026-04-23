@@ -25,7 +25,7 @@ class PredictionResult:
     will_fail: bool
     probability: float  # 0-1
     predicted_time: datetime | None = None
-    time_to_failure: str | None = None  # "5-10分钟"
+    time_to_failure: Optional[str] = None  # "5-10分钟"
     confidence: str = "low"  # low, medium, high
     factors: list[str] = field(default_factory=list)
     recommendations: list[str] = field(default_factory=list)
@@ -118,7 +118,7 @@ class FailurePredictor:
             last_updated=datetime.now(),
         )
 
-    async def predict_failure(self, metric_name: str | None = None) -> PredictionResult:
+    async def predict_failure(self, metric_name: Optional[str] = None) -> PredictionResult:
         """
         预测故障
 

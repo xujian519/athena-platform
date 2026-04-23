@@ -50,7 +50,7 @@ class BrowserUseTask:
     mode: BrowserUseMode
     engine: BrowserEngine
     instructions: str
-    url: str | None = None
+    url: Optional[str] = None
     target_elements: list[str] = field(default_factory=list)
     output_format: str = "text"  # text, json, screenshot
     screenshot: bool = False
@@ -61,8 +61,8 @@ class BrowserUseTask:
     started_at: datetime | None = None
     completed_at: datetime | None = None
     status: str = "pending"
-    result: dict[str, Any] | None = None
-    error: str | None = None
+    result: Optional[dict[str, Any]] = None
+    error: Optional[str] = None
 
 @dataclass
 class BrowserUseAgent:
@@ -71,10 +71,10 @@ class BrowserUseAgent:
     name: str
     model_provider: str  # openai, anthropic, google, ollama
     model_name: str
-    api_key: str | None = None
+    api_key: Optional[str] = None
     temperature: float = 0.7
     max_tokens: int = 4096
-    system_prompt: str | None = None
+    system_prompt: Optional[str] = None
     capabilities: list[str] = field(default_factory=list)
 
 @dataclass
@@ -86,9 +86,9 @@ class BrowserUseSession:
     headless: bool = True
     width: int = 1280
     height: int = 720
-    user_data_dir: str | None = None
+    user_data_dir: Optional[str] = None
     extensions: list[str] = field(default_factory=list)
-    proxy: str | None = None
+    proxy: Optional[str] = None
     status: str = "idle"
     created_at: datetime = field(default_factory=datetime.now)
     last_used: datetime | None = None
@@ -618,7 +618,7 @@ async def main():
             "queue_length": len(self.task_queue)
         }
 
-    def get_task_status(self, task_id: str) -> dict[str, Any] | None:
+    def get_task_status(self, task_id: str) -> Optional[dict[str, Any]]:
         """获取任务状态"""
         task = self.tasks.get(task_id)
         if not task:

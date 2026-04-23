@@ -3,8 +3,8 @@
 统一监控系统使用示例
 Unified Monitoring System Usage Examples
 """
-import sys
 import asyncio
+import sys
 import time
 from pathlib import Path
 
@@ -12,10 +12,7 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from core.monitoring.unified_metrics import (
-    get_metrics_collector,
-    monitor_performance
-)
+from core.monitoring.unified_metrics import get_metrics_collector, monitor_performance
 
 
 def example_basic_metrics():

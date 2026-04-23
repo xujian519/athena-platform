@@ -152,7 +152,7 @@ class EnhancedVectorSearchWithReranker:
             logger.info("✅ BGE嵌入服务已加载")
 
     async def search(
-        self, query: str, mode: SearchMode | None = None, top_k: int | None = None
+        self, query: str, mode: SearchMode | None = None, top_k: Optional[int] = None
     ) -> EnhancedSearchResult:
         """
         执行增强搜索

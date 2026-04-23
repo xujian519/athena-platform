@@ -1,417 +1,271 @@
-# Athena Scripts 新架构
+# Athena平台工具集
 
-## 概述
+> **整理日期**: 2026-04-22
+> **整理版本**: v2.0
+> **状态**: ✅ 已整理完成
 
-这是Athena平台Scripts模块的全新架构，采用模块化设计，大幅简化了脚本管理，提高了可维护性和可扩展性。
+---
 
-## 🚀 快速开始
+## 📊 整理统计
 
-### 1. 环境准备
+| 项目 | 整理前 | 整理后 | 改善 |
+|-----|--------|--------|------|
+| 根目录Python文件 | 60个 | 0个 | ✅ 100% |
+| 重复工具 | ~25个 | 0个 | ✅ 100% |
+| 目录分类 | 3个 | 18个 | ✅ 500% |
+
+---
+
+## 🗂️ 目录结构
+
+```
+tools/
+├── patent/              # 专利相关工具 ⭐
+│   ├── importer/       # 专利档案导入
+│   ├── downloader/     # 专利下载
+│   ├── analyzer/       # 专利分析
+│   ├── database/       # 专利数据库
+│   └── payment/        # 专利费用管理
+├── customer/           # 客户管理工具
+├── database/           # 数据库检查工具
+├── agent/              # Agent开发工具
+├── system/             # 系统工具
+│   ├── cleanup/        # 清理工具
+│   └── optimization/   # 优化工具
+├── analysis/           # 分析工具
+├── utils/              # 通用工具
+├── cli/                # CLI工具
+├── advanced/           # 高级工具
+├── automation/         # 自动化脚本
+├── deployment/         # 部署工具
+├── download/           # 下载工具
+├── mcp/                # MCP服务器管理
+├── monitoring/         # 监控工具
+├── optimization/       # 性能优化
+├── patent-guideline-system/  # 专利审查指南GraphRAG
+├── search/             # 搜索工具
+└── README.md           # 本文档
+```
+
+---
+
+## 🚀 快速导航
+
+### 专利工具 (patent/)
+
+#### 导入工具 (patent/importer/)
+- `patent_archive_importer.py` - 专利档案导入器（v3，Ollama）
+- `patent_archive_multimodal_importer.py` - 多模态专利导入器
+
+#### 下载工具 (patent/downloader/)
+- `google_patents_downloader.py` - Google Patents下载器
+- `arxiv_downloader.py` - arXiv论文下载器
+- `uspto_drip_irrigation_search.py` - USPTO滴灌搜索
+
+#### 分析工具 (patent/analyzer/)
+- `patent_ai_analyzer.py` - AI专利分析器
+- `patent_ai_simple.py` - 简化版AI分析器
+- `patent_3d_search_enhanced.py` - 增强版3D搜索
+- `patent_3d_search_analyzer.py` - 3D搜索分析器
+- `patent_claim_tools.py` - 权利要求工具
+- `patent_pgsql_searcher.py` - PostgreSQL专利搜索
+- `patent_excel_parser.py` - Excel解析器
+- `patent_statistics.py` - 专利统计
+
+#### 数据库工具 (patent/database/)
+- `patent_db_import.py` - 专利数据库导入
+- `restructure_patent_db.py` - 专利数据库重构
+- `patent_archive_updater.py` - 专利档案更新
+
+#### 费用管理 (patent/payment/)
+- `patent_fee_association_manager.py` - 费用关联管理器
+- `patent_fee_ocr_processor.py` - 费用OCR处理
+- `patent_payment_final.py` - 最终费用处理
+- `patent_payment_updater.py` - 费用更新器
+- `update_patents_from_fees.py` - 从费用更新专利
+- `associate_payment_images.py` - 关联支付图片
+- `process_payment_with_voucher.py` - 凭证支付处理
+- `fee_payment_importer.py` - 费用支付导入
+- `fix_payment_table.py` - 修复支付表
+
+---
+
+### 客户工具 (customer/)
+
+- `extract_all_customers.py` - 提取所有客户信息
+- `organize_customer_files.py` - 整理客户文件
+- `extract_contract_info.py` - 提取合同信息
+- `parse_contract.py` - 解析合同
+
+---
+
+### 数据库工具 (database/)
+
+- `check_data_integrity.py` - 检查数据完整性
+- `check_database_structure.py` - 检查数据库结构
+- `check_patent_numbers.py` - 检查专利号
+- `diagnose_patent_numbers.py` - 诊断专利号问题
+
+---
+
+### Agent工具 (agent/)
+
+- `agent_certifier.py` - Agent认证工具
+- `create_agent.py` - 创建Agent
+- `deep_technical_analysis_tools.py` - 深度技术分析
+- `prompt_optimizer.py` - 提示词优化器
+
+---
+
+### 系统工具 (system/)
+
+#### 清理工具 (system/cleanup/)
+- `platform_cleanup.py` - 平台清理
+
+#### 优化工具 (system/optimization/)
+- `unify_numpy_stack.py` - 统一NumPy堆栈
+
+---
+
+### 分析工具 (analysis/)
+
+- `analyze_dependencies.py` - 分析依赖关系
+- `analyze_m4_usage.py` - 分析M4使用情况
+- `analyze_tools_categories.py` - 分析工具分类
+
+---
+
+### 通用工具 (utils/)
+
+- `file_type_detector.py` - 文件类型检测器
+- `fix_syntax_errors.py` - 修复语法错误
+- `organize_work_folder.py` - 整理工作文件夹
+
+---
+
+## 📋 已删除的重复工具
+
+### 专利导入工具（已删除）
+- ❌ `patent_archive_ollama_importer.py` - MLX版本（过时）
+- ❌ `patent_archive_ollama_importer_v2.py` - MLX版本（过时）
+
+### 客户工具（已删除）
+- ❌ `export_customers_simple.py` - 重复
+- ❌ `get_real_customers.py` - 重复
+- ❌ `check_current_customers.py` - 重复
+- ❌ `query_customer_sun_junxia.py` - 个人化工具
+- ❌ `query_customer_wang_yurong.py` - 个人化工具
+
+### NumPy工具（已删除）
+- ❌ `fix_numpy_compatibility.py` - 重复
+- ❌ `manage_numpy_versions.py` - 重复
+
+### 清理工具（已删除）
+- ❌ `project_cleaner.py` - 重复
+- ❌ `quick_cleanup_scan.py` - 重复
+
+### 其他（已删除）
+- ❌ `patent_downloader.py` - 与google_patents_downloader重复
+- ❌ `simple_fee_importer.py` - 与fee_payment_importer重复
+- ❌ `test_ollama_response.py` - 测试文件
+- ❌ `test_patent_format.py` - 测试文件
+
+---
+
+## 🔧 使用指南
+
+### 专利档案导入
 
 ```bash
-# 复制环境配置模板
-cp .env.template .env
+# 使用Ollama导入专利档案
+python tools/patent/importer/patent_archive_importer.py
 
-# 编辑配置文件
-vim .env
-
-# 创建日志目录
-mkdir -p logs
+# 使用多模态导入
+python tools/patent/importer/patent_archive_multimodal_importer.py
 ```
 
-### 2. 基本命令
+### 专利下载
 
 ```bash
-# 查看帮助
-python3 athena.py --help
+# 从Google Patents下载
+python tools/patent/downloader/google_patents_downloader.py
 
-# 启动完整平台
-python3 athena.py start
-
-# 启动特定服务
-python3 athena.py start --services core_server ai_service
-
-# 查看平台状态
-python3 athena.py status
-
-# 实时监控
-python3 athena.py monitor
-
-# 快速启动（交互式）
-python3 start.py
+# 从arXiv下载论文
+python tools/patent/downloader/arxiv_downloader.py
 ```
 
-## 📋 命令参考
-
-### 启动控制
+### 费用管理
 
 ```bash
-# 启动命令
-python3 athena.py start [选项]
-  --services [服务名...]  指定要启动的服务
-  --no-monitor           禁用监控
-  --env <环境名>         指定环境
+# OCR处理费用
+python tools/patent/payment/patent_fee_ocr_processor.py
 
-# 停止命令
-python3 athena.py stop
-
-# 重启命令
-python3 athena.py restart [选项]
-  --services [服务名...]  指定要重启的服务
+# 关联费用
+python tools/patent/payment/patent_fee_association_manager.py
 ```
 
-### 部署管理
+### 数据库检查
 
 ```bash
-# 部署
-python3 athena.py deploy <配置名> [选项]
-  --version <版本号>    指定版本
-  --env <环境名>       指定环境
+# 检查数据完整性
+python tools/database/check_data_integrity.py
 
-# 回滚
-python3 athena.py rollback <配置名> [选项]
-  --version <版本号>    回滚到指定版本
-
-# 查看部署历史
-python3 athena.py list [选项]
-  --config <配置名>    指定配置
+# 检查数据库结构
+python tools/database/check_database_structure.py
 ```
 
-### 系统维护
+---
 
-```bash
-# 清理系统
-python3 athena.py cleanup [选项]
-  --days <天数>       清理多少天前的数据（默认30天）
-  --dry-run           预览模式
+## 📝 维护规范
 
-# 查看日志
-python3 athena.py logs [选项]
-  --service <服务名>   查看特定服务日志
-  --tail <行数>       显示最后N行（默认100）
+### 新增工具
 
-# 查看配置
-python3 athena.py config [键名]
+1. **按功能分类** - 将工具放入合适的子目录
+2. **命名规范** - 使用描述性名称，添加功能前缀
+3. **文档说明** - 为工具添加docstring和使用说明
+4. **避免重复** - 检查是否已有类似功能
+
+### 工具命名规范
+
+```
+[功能前缀]_[具体功能]_[后缀].py
+
+示例:
+- patent_archive_importer.py
+- google_patents_downloader.py
+- check_data_integrity.py
 ```
 
-## 🏗️ 架构设计
+### 定期清理
 
-### 核心组件
+- 每季度检查一次重复工具
+- 删除过时和不再使用的工具
+- 更新README文档
 
-1. **配置管理 (core.config)**
-   - 统一的配置获取
-   - 支持环境变量覆盖
-   - 多环境配置支持
+---
 
-2. **数据库管理 (core.database)**
-   - 连接池管理
-   - 事务支持
-   - 自动重连
+## 🔄 更新历史
 
-3. **服务管理 (services)**
-   - 服务生命周期管理
-   - 依赖关系处理
-   - 健康检查
+### v2.0 (2026-04-22)
+- ✅ 根目录Python文件：60个 → 0个
+- ✅ 删除重复工具：~25个
+- ✅ 新增分类目录：15个
+- ✅ 创建索引文档
 
-4. **工具类 (utils)**
-   - 日志记录
-   - 进度跟踪
-   - 文件管理
-   - 邮件通知
+### v1.0 (初始版本)
+- 根目录包含60个Python文件
+- 无分类结构
+- 大量重复功能
 
-### 服务列表
+---
 
-| 服务名 | 端口 | 依赖 | 描述 |
-|--------|------|------|------|
-| core_server | 8000 | - | 核心服务 |
-| ai_service | 8001 | core_server | AI服务 |
-| patent_api | 8002 | core_server | 专利API |
-| storage_service | - | core_server | 存储服务 |
-| memory_service | 8003 | core_server, storage_service | 记忆服务 |
-| agent_service | 8004 | core_server, ai_service | 智能体服务 |
+## 📞 反馈与建议
 
-## 📊 监控和告警
+如发现工具问题或有改进建议，请联系：
+- **维护者**: 徐健 (xujian519@gmail.com)
+- **项目**: Athena工作平台
 
-### 系统指标
+---
 
-- CPU使用率
-- 内存使用率
-- 磁盘使用率
-- 网络IO
-
-### 告警规则
-
-```yaml
-alerts:
-  high_cpu:
-    threshold: 80%
-    level: warning
-  high_memory:
-    threshold: 85%
-    level: warning
-  high_disk:
-    threshold: 90%
-    level: critical
-```
-
-### 健康检查
-
-```python
-# 检查所有服务
-health_checker.check_all_services()
-
-# 检查特定服务
-health_checker.check_service('core_server')
-
-# 获取不健康的服务
-health_checker.get_unhealthy_services()
-```
-
-## 🔧 配置详解
-
-### 主配置文件 (config.yaml)
-
-```yaml
-# 环境配置
-environment:
-  name: "${ATHENA_ENV:development}"
-  debug: ${DEBUG:false}
-
-# 数据库配置
-database:
-  host: "${DB_HOST:localhost}"
-  port: ${DB_PORT:5432}
-  ...
-
-# 服务配置
-services:
-  core_server:
-    command: "python -m core.app"
-    port: 8000
-    dependencies: []
-    health_check: "http://localhost:8000/health"
-```
-
-### 环境变量 (.env)
-
-```bash
-# 必填项
-DB_PASSWORD=your_password
-JWT_SECRET=your_secret_key
-
-# 可选项
-API_PORT=8000
-LOG_LEVEL=INFO
-```
-
-## 📝 使用示例
-
-### 1. 启动开发环境
-
-```bash
-# 设置环境变量
-export ATHENA_ENV=development
-export DEBUG=true
-
-# 启动核心服务和AI服务
-python3 athena.py start --services core_server ai_service --no-monitor
-```
-
-### 2. 部署到生产环境
-
-```bash
-# 设置生产环境
-export ATHENA_ENV=production
-
-# 部署
-python3 athena.py deploy athena_platform --env production --version v2.1.0
-
-# 检查部署状态
-python3 athena.py status
-```
-
-### 3. 系统维护
-
-```bash
-# 查看系统状态
-python3 athena.py status
-
-# 清理30天前的数据
-python3 athena.py cleanup --days 30
-
-# 查看最近的错误日志
-python3 athena.py logs --tail 50
-```
-
-## 🔄 迁移指南
-
-### 从旧脚本迁移
-
-| 旧脚本 | 新命令 |
-|--------|--------|
-| `./start_athena.sh` | `python3 athena.py start` |
-| `./start_xiaonuo_integrated.sh` | `python3 athena.py start --services core_server ai_service patent_api` |
-| `./deployment/deploy.sh` | `python3 athena.py deploy athena_platform` |
-| `./database/cleanup.sh` | `python3 athena.py cleanup` |
-
-### 迁移步骤
-
-1. 备份现有脚本
-   ```bash
-   python3 migrate.py
-   ```
-
-2. 更新cron任务
-   ```bash
-   # 旧命令
-   0 2 * * * /path/to/scripts/database/cleanup.sh
-
-   # 新命令
-   0 2 * * * cd /path/to/scripts_new && python3 athena.py cleanup
-   ```
-
-3. 更新启动脚本路径
-   ```bash
-   # 旧路径
-   /scripts/start_athena.sh
-
-   # 新路径
-   /scripts_new/athena.py start
-   ```
-
-## 🛠️ 开发指南
-
-### 添加新服务
-
-1. 在配置文件中添加服务定义
-   ```yaml
-   services:
-     new_service:
-       command: "python -m new_service.main"
-       port: 8005
-       dependencies: ["core_server"]
-       health_check: "http://localhost:8005/health"
-   ```
-
-2. 实现健康检查端点
-   ```python
-   from flask import Flask
-   app = Flask(__name__)
-
-   @app.route('/health')
-   def health():
-       return {"status": "healthy"}
-   ```
-
-### 自定义告警规则
-
-```python
-from services.monitoring import monitoring_service
-
-monitoring_service.add_rule('custom_alert', {
-    'metric': 'custom_metric',
-    'condition': 'gt',
-    'threshold': 100,
-    'level': 'warning',
-    'message': '自定义指标告警'
-})
-```
-
-### 扩展日志
-
-```python
-from utils.logger import ScriptLogger
-
-class MyService:
-    def __init__(self):
-        self.logger = ScriptLogger("MyService")
-
-    def process(self):
-        self.logger.info("开始处理")
-        # ...
-        self.logger.info("处理完成")
-```
-
-## 🔍 故障排除
-
-### 常见问题
-
-1. **服务启动失败**
-   - 检查端口是否被占用
-   - 查看服务日志：`python3 athena.py logs --service <服务名>`
-   - 确认依赖服务已启动
-
-2. **数据库连接失败**
-   - 检查数据库服务状态
-   - 验证配置文件中的数据库信息
-   - 确认网络连通性
-
-3. **配置不生效**
-   - 确认环境变量设置正确
-   - 检查配置文件路径
-   - 验证YAML语法
-
-### 调试技巧
-
-```bash
-# 启用调试模式
-export DEBUG=true
-export LOG_LEVEL=DEBUG
-
-# 查看完整配置
-python3 athena.py config
-
-# 单独测试服务
-python3 athena.py start --services core_server
-```
-
-## 📚 API参考
-
-### ServiceManager
-
-```python
-from services.manager import ServiceManager
-
-manager = ServiceManager.instance()
-
-# 启动服务
-manager.start_service('core_server')
-
-# 获取状态
-status = manager.get_all_status()
-
-# 停止服务
-manager.stop_service('core_server')
-```
-
-### DatabaseManager
-
-```python
-from core.database import db_manager
-
-# 执行查询
-results = db_manager.execute_query("SELECT * FROM users")
-
-# 执行更新
-count = db_manager.execute_update("UPDATE users SET active = true")
-
-# 使用事务
-with db_manager.transaction():
-    # 批量操作
-    pass
-```
-
-### 其他工具
-
-详见各个模块的文档字符串。
-
-## 📞 支持
-
-如有问题，请：
-1. 查看日志获取详细错误信息
-2. 参考故障排除章节
-3. 提交Issue到项目仓库
-
-## 📄 许可证
-
-MIT License
+**最后更新**: 2026-04-22
+**整理状态**: ✅ 完成

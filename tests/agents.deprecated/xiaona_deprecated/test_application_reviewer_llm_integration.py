@@ -4,10 +4,11 @@ ApplicationReviewerProxy LLM集成测试
 测试申请文件审查智能体的LLM调用功能。
 """
 
+from unittest.mock import AsyncMock
+
 import pytest
-import asyncio
-from unittest.mock import Mock, AsyncMock, patch
-from core.agents.xiaona.application_reviewer_proxy import ApplicationDocumentReviewerProxy
+
+from core.framework.agents.xiaona.application_reviewer_proxy import ApplicationDocumentReviewerProxy
 
 
 @pytest.fixture

@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 测试共享记忆查询逻辑
 """
 
 import subprocess
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
+from typing import Any
 
 # PostgreSQL连接信息
 PSQL_PATH = '/opt/homebrew/Cellar/postgresql@17/17.7/bin/psql'
@@ -92,13 +91,13 @@ def test_shared_memory_query() -> Any:
             # 解析输出
             lines = result.stdout.strip().split('\n')
             if len(lines) > 2:  # 有数据
-                print(f"    ✅ 可以访问")
+                print("    ✅ 可以访问")
                 # 显示内容
                 content_line = lines[2] if len(lines) > 2 else ""
                 if "【共享记忆】" in content_line:
-                    print(f"    📝 找到共享记忆")
+                    print("    📝 找到共享记忆")
             else:
-                print(f"    ❌ 无法访问")
+                print("    ❌ 无法访问")
         else:
             print(f"    ❌ 查询失败: {result.stderr[:100]}...")
 

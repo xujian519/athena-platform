@@ -14,7 +14,7 @@ from core.agents.base_agent import BaseAgent
 class AthenaAdvisor(BaseAgent):
     """Athena顾问代理 - 提供战略建议和咨询"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__(name="athena_advisor")
         self.config = config or {}
 

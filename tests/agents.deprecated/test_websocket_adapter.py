@@ -5,23 +5,22 @@ Python WebSocket Agent适配器测试
 """
 
 import asyncio
-import pytest
-import sys
 import os
+import sys
+
+import pytest
 
 # 添加项目路径
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 
-from core.agents.websocket_adapter import (
+from core.framework.agents.websocket_adapter import (
+    AgentType,
     WebSocketClient,
     XiaonaAgentAdapter,
     XiaonuoAgentAdapter,
     YunxiAgentAdapter,
-    MessageType,
-    AgentType,
-    create_xiaona_agent
+    create_xiaona_agent,
 )
-
 
 # 测试配置
 GATEWAY_URL = "ws://localhost:8005/ws"
@@ -40,13 +39,13 @@ class TestWebSocketClient:
         )
 
         # 连接到Gateway
-        assert await client.connect() == True
-        assert client.is_connected == True
+        assert await client.connect()
+        assert client.is_connected
         assert client.session_id is not None
 
         # 断开连接
         await client.disconnect()
-        assert client.is_connected == False
+        assert not client.is_connected
 
     @pytest.mark.asyncio
     async def test_send_task(self):
@@ -107,12 +106,12 @@ class TestXiaonaAgent:
 
         # 启动Agent
         await agent.start()
-        assert agent.is_running == True
-        assert agent.is_connected == True
+        assert agent.is_running
+        assert agent.is_connected
 
         # 停止Agent
         await agent.stop()
-        assert agent.is_running == False
+        assert not agent.is_running
 
     @pytest.mark.asyncio
     async def test_patent_search_task(self):
@@ -185,10 +184,10 @@ class TestXiaonuoAgent:
         )
 
         await agent.start()
-        assert agent.is_running == True
+        assert agent.is_running
 
         await agent.stop()
-        assert agent.is_running == False
+        assert not agent.is_running
 
 
 class TestYunxiAgent:
@@ -203,10 +202,10 @@ class TestYunxiAgent:
         )
 
         await agent.start()
-        assert agent.is_running == True
+        assert agent.is_running
 
         await agent.stop()
-        assert agent.is_running == False
+        assert not agent.is_running
 
 
 @pytest.mark.integration
@@ -226,14 +225,14 @@ class TestEndToEnd:
         await asyncio.sleep(2)
 
         # 3. 验证Agent状态
-        assert xiaona.is_running == True
-        assert xiaona.is_connected == True
+        assert xiaona.is_running
+        assert xiaona.is_connected
 
         # 4. 停止Agent
         await xiaona.stop()
 
         # 5. 验证已停止
-        assert xiaona.is_running == False
+        assert not xiaona.is_running
 
 
 if __name__ == "__main__":

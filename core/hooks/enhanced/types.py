@@ -47,7 +47,7 @@ class HookResult:
 
     success: bool  # 是否成功
     data: Any = None  # 返回数据
-    error: str | None = None  # 错误信息
+    error: Optional[str] = None  # 错误信息
     execution_time: float = 0.0  # 执行时间（秒）
     stopped: bool = False  # 是否中断链
     modified_context: bool = False  # 是否修改了上下文
@@ -90,7 +90,7 @@ class HookMetrics:
     min_time: float = float("inf")  # 最小耗时（秒）
     max_time: float = 0.0  # 最大耗时（秒）
     error_count: int = 0  # 错误次数
-    last_execution: float | None = None  # 最后执行时间戳
+    last_execution: Optional[float] = None  # 最后执行时间戳
     success_rate: float = 1.0  # 成功率
 
     def update(self, execution_time: float, success: bool) -> None:
@@ -166,7 +166,7 @@ class TraceEntry:
     execution_time: float  # 执行时间（秒）
     success: bool  # 是否成功
     context_data: dict[str, Any] = field(default_factory=dict)  # 上下文数据快照
-    error: str | None = None  # 错误信息
+    error: Optional[str] = None  # 错误信息
 
     def to_dict(self) -> dict[str, Any]:
         """转换为字典"""

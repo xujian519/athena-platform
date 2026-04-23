@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 按照技术栈整理数据目录
 - Neo4j知识图谱数据
@@ -11,14 +10,12 @@
 """
 
 import hashlib
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
 import logging
-import os
 import shutil
-import sqlite3
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 # 配置日志
 logging.basicConfig(
@@ -317,7 +314,7 @@ class DataOrganizer:
             'statistics': {
                 'total_files_processed': len(self.file_hash_map),
                 'duplicate_files_found': len(self.duplicate_files),
-                'duplicate_files': [(str(d[0]), str(d[1])) for d in self.duplicate_files[:10]]  # 只显示前10个
+                'duplicate_files': [(str(d[0]), str(d[1])) for d in self.duplicate_files[:10]  # 只显示前10个
             }
         }
 

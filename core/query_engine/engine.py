@@ -95,8 +95,8 @@ class QueryEngine:
         self,
         query: str,
         data_source: DataSourceType,
-        parameters: dict[str, Any] | None = None,
-        use_cache: bool | None = None,
+        parameters: Optional[dict[str, Any]] = None,
+        use_cache: Optional[bool] = None,
         **kwargs,
     ) -> QueryResult:
         """
@@ -150,7 +150,7 @@ class QueryEngine:
         self,
         queries: dict[DataSourceType, str],
         join_strategy: str = "sequential",
-        join_key: str | None = None,
+        join_key: Optional[str] = None,
     ) -> QueryResult:
         """
         执行跨数据源查询
@@ -409,10 +409,10 @@ class QueryOptimizer:
 
 # 工厂函数
 async def create_query_engine(
-    postgres_config: dict[str, Any] | None = None,
-    redis_config: dict[str, Any] | None = None,
-    qdrant_config: dict[str, Any] | None = None,
-    neo4j_config: dict[str, Any] | None = None,
+    postgres_config: Optional[dict[str, Any]] = None,
+    redis_config: Optional[dict[str, Any]] = None,
+    qdrant_config: Optional[dict[str, Any]] = None,
+    neo4j_config: Optional[dict[str, Any]] = None,
     enable_cache: bool = True,
 ) -> QueryEngine:
     """

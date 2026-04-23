@@ -49,7 +49,7 @@ class LocalEmbeddingModel:
         },
     }
 
-    def __init__(self, model_name: str = "bge-large-zh", device: str | None = None):
+    def __init__(self, model_name: str = "bge-large-zh", device: Optional[str] = None):
         """
         初始化本地 Embedding 模型
 

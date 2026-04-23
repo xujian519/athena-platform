@@ -6,22 +6,23 @@
 """
 import sys
 from pathlib import Path
-from unittest.mock import Mock, patch, AsyncMock
+from unittest.mock import patch
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 import pytest
-from core.tools.tool_manager import ToolManager
-from core.tools.selector import ToolSelector, SelectionStrategy
-from core.tools.tool_call_manager import ToolCallManager, ToolCallRequest, CallStatus
-from core.tools.base import ToolDefinition, ToolRegistry, ToolPriority
+
+from core.tools.base import ToolDefinition, ToolPriority
 from core.tools.permissions import (
-    ToolPermissionContext,
     PermissionMode,
     PermissionRule,
+    ToolPermissionContext,
 )
+from core.tools.selector import ToolSelector
+from core.tools.tool_call_manager import CallStatus, ToolCallManager, ToolCallRequest
+from core.tools.tool_manager import ToolManager
 
 
 class TestToolSystemIntegration:
@@ -298,12 +299,12 @@ class TestToolSystemIntegration:
                 parameters={"index": i},
             )
 
-            start_time = time.time()
+            time.time()
 
             with patch.object(call_manager, "_execute_tool_impl", return_value={"result": i}):
                 result = call_manager.execute_tool(request)
 
-            end_time = time.time()
+            time.time()
 
             if result.status == CallStatus.SUCCESS:
                 execution_times.append(result.execution_time)

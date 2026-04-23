@@ -44,8 +44,8 @@ class InferenceRequest:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     creation_time: float = field(default_factory=time.time)
-    start_time: float | None = None
-    completion_time: float | None = None
+    start_time: Optional[float] = None
+    completion_time: Optional[float] = None
 
     @property
     def waiting_time(self) -> float:
@@ -156,9 +156,9 @@ class MetalBatchProcessor:
         max_tokens: int = 512,
         temperature: float = 0.7,
         top_p: float = 0.9,
-        stop: list[str] | None = None,
+        stop: Optional[list[str]] = None,
         priority: int = 0,
-        request_id: str | None = None,
+        request_id: Optional[str] = None,
     ) -> InferenceResult:
         """
         提交推理请求

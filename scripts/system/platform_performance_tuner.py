@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 平台性能调优器
 针对当前平台速度慢的问题提供优化方案
@@ -10,11 +9,12 @@
 
 import asyncio
 import json
-import psutil
-import time
-from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Any, Optional
+from pathlib import Path
+from typing import Any
+
+import psutil
+
 
 class PlatformPerformanceTuner:
     """平台性能调优器"""
@@ -24,7 +24,7 @@ class PlatformPerformanceTuner:
         self.performance_data = {}
         self.optimization_suggestions = []
 
-    async def analyze_platform_performance(self) -> Dict[str, Any]:
+    async def analyze_platform_performance(self) -> dict[str, Any]:
         """分析平台性能现状"""
         print("🔍 正在分析平台性能现状...")
 
@@ -63,7 +63,7 @@ class PlatformPerformanceTuner:
 
         return analysis
 
-    def identify_performance_bottlenecks(self, analysis: Dict[str, Any]) -> List[str]:
+    def identify_performance_bottlenecks(self, analysis: dict[str, Any]) -> list[str]:
         """识别性能瓶颈"""
         bottlenecks = []
 
@@ -93,7 +93,7 @@ class PlatformPerformanceTuner:
 
         return bottlenecks
 
-    def generate_optimization_suggestions(self, analysis: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def generate_optimization_suggestions(self, analysis: dict[str, Any]) -> list[dict[str, Any]:
         """生成优化建议"""
         suggestions = []
 
@@ -157,7 +157,7 @@ class PlatformPerformanceTuner:
 
         return suggestions
 
-    def create_implementation_plan(self, suggestions: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def create_implementation_plan(self, suggestions: list[dict[str, Any]) -> dict[str, Any]:
         """创建实施计划"""
         # 按优先级排序
         high_priority = [s for s in suggestions if s["priority"] == "高"]
@@ -202,7 +202,7 @@ class PlatformPerformanceTuner:
 
         return plan
 
-    async def generate_performance_report(self) -> Dict[str, Any]:
+    async def generate_performance_report(self) -> dict[str, Any]:
         """生成性能分析报告"""
         print("📊 正在生成性能分析报告...")
 
@@ -240,7 +240,7 @@ class PlatformPerformanceTuner:
         print(f"✅ 性能报告已保存: {report_path}")
         return report
 
-    def print_summary(self, report: Dict[str, Any]) -> Any:
+    def print_summary(self, report: dict[str, Any]) -> Any:
         """打印性能优化摘要"""
         print("\n" + "="*60)
         print("📈 平台性能优化摘要")
@@ -248,7 +248,7 @@ class PlatformPerformanceTuner:
 
         # 当前状态
         analysis = report["performance_analysis"]
-        print(f"📊 当前系统状态:")
+        print("📊 当前系统状态:")
         print(f"   CPU使用率: {analysis['system_resources']['cpu_percent']:.1f}%")
         print(f"   内存使用率: {analysis['system_resources']['memory_percent']:.1f}%")
         print(f"   Python进程数: {len(analysis['python_processes'])}")
@@ -257,24 +257,24 @@ class PlatformPerformanceTuner:
         # 性能瓶颈
         bottlenecks = report["identified_bottlenecks"]
         if bottlenecks:
-            print(f"\n⚠️ 发现的性能瓶颈:")
+            print("\n⚠️ 发现的性能瓶颈:")
             for bottleneck in bottlenecks:
                 print(f"   • {bottleneck}")
         else:
-            print(f"\n✅ 未发现明显性能瓶颈")
+            print("\n✅ 未发现明显性能瓶颈")
 
         # 优化建议
         suggestions = report["optimization_suggestions"]
         high_priority = [s for s in suggestions if s["priority"] == "高"]
 
-        print(f"\n🚀 立即优化建议 (优先级: 高):")
+        print("\n🚀 立即优化建议 (优先级: 高):")
         for i, suggestion in enumerate(high_priority[:3], 1):
             print(f"{i}. {suggestion['suggestion']}")
             print(f"   预期效果: {suggestion['expected_improvement']}")
 
         # 实施计划
         plan = report["implementation_plan"]
-        print(f"\n📋 实施计划:")
+        print("\n📋 实施计划:")
         print(f"   立即执行: {len(plan['immediate_actions'])}项")
         print(f"   短期改进: {len(plan['short_term_improvements'])}项")
         print(f"   长期优化: {len(plan['long_term_optimizations'])}项")
@@ -297,11 +297,11 @@ async def main():
         # 打印摘要
         tuner.print_summary(report)
 
-        print(f"\n🎯 下一步操作建议:")
-        print(f"1. 查看详细报告: cat platform_performance_report.json")
-        print(f"2. 立即实施AI响应缓存 (最高优先级)")
-        print(f"3. 优化Python进程管理")
-        print(f"4. 监控优化效果")
+        print("\n🎯 下一步操作建议:")
+        print("1. 查看详细报告: cat platform_performance_report.json")
+        print("2. 立即实施AI响应缓存 (最高优先级)")
+        print("3. 优化Python进程管理")
+        print("4. 监控优化效果")
 
     except Exception as e:
         print(f"❌ 性能分析失败: {e}")

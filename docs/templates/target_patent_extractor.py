@@ -128,7 +128,7 @@ class TargetPatentExtractor:
             'claim_numbers': [int(num) for num in claim_numbers]
         }
 
-    def _parse_claims(self, claims_text: str) -> list[dict[str, Any]]:
+    def _parse_claims(self, claims_text: str) -> list[dict[str, Any]:
         """解析权利要求"""
         claims = []
 
@@ -180,7 +180,7 @@ class TargetPatentExtractor:
 
         return analysis
 
-    def _extract_features_by_punctuation(self, claim_text: str) -> list[dict[str, Any]]:
+    def _extract_features_by_punctuation(self, claim_text: str) -> list[dict[str, Any]:
         """基于标点符号提取技术特征"""
         features = []
 
@@ -270,7 +270,7 @@ class TargetPatentExtractor:
         # 其他为一般特征
         return '一般特征'
 
-    def _extract_entities_from_features(self, features: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    def _extract_entities_from_features(self, features: list[dict[str, Any]) -> list[dict[str, Any]:
         """从特征中提取实体"""
         entities = []
 
@@ -332,7 +332,7 @@ class TargetPatentExtractor:
                                     'entity_name': entity_name,
                                     'entity_type': entity_type,
                                     'reference_number': ref_number,
-                                    'source_features': [feature['feature_id']],
+                                    'source_features': [feature['feature_id'],
                                     'first_appearance_claim': feature['claim_number']
                                 }
                                 entities.append(entity)
@@ -349,7 +349,7 @@ class TargetPatentExtractor:
 
         return entities
 
-    def _extract_relationships_from_features(self, features: list[dict[str, Any]], entities: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    def _extract_relationships_from_features(self, features: list[dict[str, Any], entities: list[dict[str, Any]) -> list[dict[str, Any]:
         """从特征中提取关系"""
         relationships = []
 
@@ -415,7 +415,7 @@ class TargetPatentExtractor:
 
         return relationships
 
-    def _deduplicate_entities(self, entities: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    def _deduplicate_entities(self, entities: list[dict[str, Any]) -> list[dict[str, Any]:
         """去除重复实体"""
         seen = set()
         unique_entities = []
@@ -428,7 +428,7 @@ class TargetPatentExtractor:
 
         return unique_entities
 
-    def _build_extraction_details(self, features: list[dict[str, Any]]) -> dict[str, Any]:
+    def _build_extraction_details(self, features: list[dict[str, Any]) -> dict[str, Any]:
         """构建提取详情"""
         total_features = len(features)
         category_stats = {}
@@ -453,7 +453,7 @@ class TargetPatentExtractor:
             'extraction_timestamp': datetime.now().isoformat()
         }
 
-    def _build_features_structure(self, features: list[dict[str, Any]]) -> dict[str, Any]:
+    def _build_features_structure(self, features: list[dict[str, Any]) -> dict[str, Any]:
         """构建特征结构"""
         return {
             'features_list': features,
@@ -465,7 +465,7 @@ class TargetPatentExtractor:
             }
         }
 
-    def _build_entity_structure(self, entities: list[dict[str, Any]], relationships: list[dict[str, Any]]) -> dict[str, Any]:
+    def _build_entity_structure(self, entities: list[dict[str, Any], relationships: list[dict[str, Any]) -> dict[str, Any]:
         """构建实体结构"""
         return {
             'identified_entities': entities,

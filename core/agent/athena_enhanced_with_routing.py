@@ -96,7 +96,7 @@ logger = logging.getLogger(__name__)
 class AthenaEnhancedAgent(AthenaAgent):
     """增强版Athena代理 - 集成智能路由"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__(config)
 
         # 初始化智能路由系统

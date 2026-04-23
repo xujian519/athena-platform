@@ -14,7 +14,7 @@ class CacheManager:
     """缓存管理器类"""
 
     def __init__(
-        self, use_redis: bool | None = None, redis_config: dict | None = None, default_ttl: int = 300
+        self, use_redis: Optional[bool] = None, redis_config: dict | None = None, default_ttl: int = 300
     ):
         """
         初始化缓存管理器
@@ -35,7 +35,7 @@ class CacheManager:
             redis_config = redis_config or {}
             self._l2_cache = RedisCache(default_ttl=default_ttl, **redis_config)
 
-    def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
+    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
         """
         设置缓存值（多级缓存）
 

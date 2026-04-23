@@ -20,8 +20,8 @@ async def test_bge_m3_api():
     print("=" * 60)
 
     try:
-        import urllib.request
         import json
+        import urllib.request
 
         # 健康检查
         print("\n⏳ 健康检查...")
@@ -130,7 +130,7 @@ async def test_text_embedding_handler():
 
                 # 验证维度
                 if result.get('embedding_dim') == 1024:
-                    print(f"   ✅ 维度正确（1024）")
+                    print("   ✅ 维度正确（1024）")
                     success_count += 1
                 else:
                     print(f"   ⚠️ 维度为{result.get('embedding_dim', 0)}，期望1024")
@@ -155,8 +155,8 @@ async def test_batch_embedding():
     print("=" * 60)
 
     try:
-        import urllib.request
         import json
+        import urllib.request
 
         texts = [
             "专利检索是专利分析的基础",

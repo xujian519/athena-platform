@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 系统性能全面优化脚本
 Comprehensive System Performance Optimization Script
@@ -11,7 +10,6 @@ Comprehensive System Performance Optimization Script
 版本: v1.0.0
 """
 
-import os
 import logging
 
 logger = logging.getLogger(__name__)
@@ -20,9 +18,9 @@ import shutil
 import sqlite3
 import subprocess
 import time
-from pathlib import Path
 from datetime import datetime
-from typing import List, Dict, Tuple
+from pathlib import Path
+
 
 class SystemOptimizer:
     """系统性能优化器"""
@@ -53,7 +51,7 @@ class SystemOptimizer:
             bytes_size /= 1024.0
         return f"{bytes_size:.1f}PB"
 
-    def analyze_databases(self) -> List[Dict]:
+    def analyze_databases(self) -> list[dict]:
         """分析所有SQLite数据库"""
         databases = []
 
@@ -84,7 +82,7 @@ class SystemOptimizer:
         databases.sort(key=lambda x: x['size'], reverse=True)
         return databases
 
-    def remove_empty_databases(self, databases: List[Dict]) -> int:
+    def remove_empty_databases(self, databases: list[dict]) -> int:
         """删除空的数据库文件"""
         removed_count = 0
 
@@ -101,7 +99,7 @@ class SystemOptimizer:
 
         return removed_count
 
-    def remove_duplicate_databases(self, databases: List[Dict]) -> int:
+    def remove_duplicate_databases(self, databases: list[dict]) -> int:
         """删除重复的数据库文件"""
         removed_count = 0
 
@@ -134,7 +132,7 @@ class SystemOptimizer:
 
         return removed_count
 
-    def optimize_active_databases(self, databases: List[Dict]) -> int:
+    def optimize_active_databases(self, databases: list[dict]) -> int:
         """优化活跃的数据库"""
         optimized_count = 0
 
@@ -375,13 +373,13 @@ class SystemOptimizer:
 
             # 显示结果
             optimization_time = time.time() - start_time
-            print(f"\n✅ 优化完成！")
+            print("\n✅ 优化完成！")
             print(f"⏱️ 耗时: {optimization_time:.1f} 秒")
             print(f"💾 释放空间: {self.format_bytes(self.space_freed)}")
             print(f"📄 详细报告: {report_path}")
 
             # 显示优化摘要
-            print(f"\n📋 优化摘要:")
+            print("\n📋 优化摘要:")
             print(f"  - 删除空数据库: {empty_removed} 个")
             print(f"  - 删除重复数据库: {duplicate_removed} 个")
             print(f"  - 优化活跃数据库: {active_optimized} 个")

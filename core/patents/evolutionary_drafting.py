@@ -78,7 +78,7 @@ class DraftTrait:
     fitness: float = 0.5  # 适应度
 
     # 来源
-    source_case: str | None = None  # 来源案例
+    source_case: Optional[str] = None  # 来源案例
     mutation_type: MutationType | None = None
 
 
@@ -98,7 +98,7 @@ class PatentDraft:
     embodiments: str = ""
 
     # 演化信息
-    parent_draft: str | None = None  # 父草稿ID(遗传)
+    parent_draft: Optional[str] = None  # 父草稿ID(遗传)
     traits: list[DraftTrait] = field(default_factory=list)  # 特征集合
     fitness: float = 0.5  # 适应度
 

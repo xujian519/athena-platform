@@ -89,8 +89,8 @@ class RuleResult:
     rule_id: str
     content: str
     confidence: float
-    metadata: dict[str, Any] | None = None
-    references: list[str] | None = None
+    metadata: Optional[dict[str, Any]] = None
+    references: Optional[list[str]] = None
 
 
 @dataclass
@@ -683,7 +683,7 @@ class RealRuleDatabaseQuerier:
         text: str,
         exact_match: bool = False,
         use_cache: bool = True,
-        domain: str | None = None
+        domain: Optional[str] = None
     ) -> list[RuleResult]:
         """
         规则数据库查询

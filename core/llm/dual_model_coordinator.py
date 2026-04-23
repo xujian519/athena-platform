@@ -43,7 +43,7 @@ class ValidationResult:
     primary_answer: str
     validator_answer: str
     confidence: float
-    discrepancy_details: dict[str, Any] | None = None
+    discrepancy_details: Optional[dict[str, Any]] = None
     recommendation: str = ""
 
 
@@ -54,7 +54,7 @@ class DualModelCoordinator:
         self,
         primary_model: str = "glm-4.7",
         validator_model: str = "deepseek-reasoner",
-        config_path: str | None = None,
+        config_path: Optional[str] = None,
     ):
         self.primary_model = primary_model
         self.validator_model = validator_model

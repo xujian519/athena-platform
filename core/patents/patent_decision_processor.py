@@ -536,7 +536,7 @@ class PatentDecisionProcessor:
             raise ValueError(f"不支持的文件格式: {file_path}")
 
     def process_directory(
-        self, directory: str, limit: int | None = None, pattern: str | None = None
+        self, directory: str, limit: Optional[int] = None, pattern: Optional[str] = None
     ) -> list[PatentDecisionData]:
         """
         批量处理目录中的文件

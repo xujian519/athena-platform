@@ -16,7 +16,7 @@ import numpy as np
 import uvicorn
 from fastapi import FastAPI, HTTPException
 
-from core.database.unified_connection import get_postgres_pool
+from core.infrastructure.database.unified_connection import get_postgres_pool
 
 # 添加路径
 sys.path.append('/Users/xujian/Athena工作平台/services/autonomous-control')

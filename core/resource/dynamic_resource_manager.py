@@ -90,7 +90,7 @@ class ResourceAllocation:
     resource_id: str
     requester: str  # 请求者标识
     allocated_at: datetime
-    duration: float | None = None  # 持续时间(秒)
+    duration: Optional[float] = None  # 持续时间(秒)
     status: str = "active"
 
 
@@ -224,7 +224,7 @@ class DynamicResourceManager:
 
     async def allocate_resource(
         self, resource_type: ResourceType, requester: str, timeout: float = 5.0
-    ) -> str | None:
+    ) -> Optional[str]:
         """
         分配资源
 
@@ -568,7 +568,7 @@ class DynamicResourceManager:
         return stats
 
     def get_recovery_history(
-        self, resource_id: str | None = None, limit: int = 50
+        self, resource_id: Optional[str] = None, limit: int = 50
     ) -> list[RecoveryAction]:
         """
         获取恢复历史

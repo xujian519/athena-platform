@@ -14,18 +14,18 @@ Date: 2026-04-20
 
 import asyncio
 import time
-from typing import Any, Callable, Dict, List, Optional
+from collections.abc import Callable
+from typing import Any
+
 from pydantic import BaseModel, Field
 
 from core.tools.tool_interface_v2 import (
     BaseTool,
+    PermissionMode,
     ToolContext,
     ToolMetadata,
     ToolResult,
-    PermissionMode,
-    InterruptBehavior,
 )
-
 
 # ============================================
 # 示例1: 简单的专利搜索工具
@@ -40,14 +40,14 @@ class PatentSearchInput(BaseModel):
 
 class PatentSearchOutput(BaseModel):
     """专利搜索输出模式"""
-    results: List[Dict[str, Any]] = Field(description="搜索结果列表")
+    results: list[dict[str, Any] = Field(description="搜索结果列表")
     count: int = Field(description="结果数量")
     query: str = Field(description="原始查询")
     source: str = Field(description="使用的数据源")
     execution_time: float = Field(description="执行时间（秒）")
 
 
-class SimplePatentSearchTool(BaseTool[PatentSearchInput, PatentSearchOutput, Dict[str, float]]):
+class SimplePatentSearchTool(BaseTool[PatentSearchInput, PatentSearchOutput, dict[str, float]):
     """
     简单的专利搜索工具示例
 
@@ -79,7 +79,7 @@ class SimplePatentSearchTool(BaseTool[PatentSearchInput, PatentSearchOutput, Dic
         args: PatentSearchInput,
         context: ToolContext,
         can_use_tool: Callable[[str], bool],
-        on_progress: Optional[Callable[[Dict[str, float]], None]] = None,
+        on_progress: Callable[[dict[str, float], None] | None = None,
     ) -> ToolResult[PatentSearchOutput]:
         """执行专利搜索"""
         start_time = time.time()
@@ -141,7 +141,7 @@ class SimplePatentSearchTool(BaseTool[PatentSearchInput, PatentSearchOutput, Dic
                 execution_time=execution_time
             )
 
-    async def _simulate_search(self, query: str, limit: int) -> List[Dict[str, Any]]:
+    async def _simulate_search(self, query: str, limit: int) -> list[dict[str, Any]:
         """模拟搜索（实际应用中应连接真实API）"""
         # 模拟搜索结果
         results = []
@@ -210,7 +210,7 @@ class FileReadTool(BaseTool[FileReadInput, FileReadOutput, None]):
         args: FileReadInput,
         context: ToolContext,
         can_use_tool: Callable[[str], bool],
-        on_progress: Optional[Callable[[None], None]] = None,
+        on_progress: Callable[[None], None] | None = None,
     ) -> ToolResult[FileReadOutput]:
         """读取文件"""
         start_time = time.time()
@@ -238,7 +238,7 @@ class FileReadTool(BaseTool[FileReadInput, FileReadOutput, None]):
 
             # 读取文件
             try:
-                with open(file_path, 'r', encoding='utf-8') as f:
+                with open(file_path, encoding='utf-8') as f:
                     lines = f.readlines()
 
                 # 应用offset和limit
@@ -316,7 +316,7 @@ class WebSearchInput(BaseModel):
 
 class WebSearchOutput(BaseModel):
     """Web搜索输出模式"""
-    results: List[Dict[str, Any]] = Field(description="搜索结果")
+    results: list[dict[str, Any] = Field(description="搜索结果")
     count: int = Field(description="结果数量")
     query: str = Field(description="搜索查询")
     engine: str = Field(description="使用的搜索引擎")
@@ -353,7 +353,7 @@ class WebSearchTool(BaseTool[WebSearchInput, WebSearchOutput, None]):
         args: WebSearchInput,
         context: ToolContext,
         can_use_tool: Callable[[str], bool],
-        on_progress: Optional[Callable[[None], None]] = None,
+        on_progress: Callable[[None], None] | None = None,
     ) -> ToolResult[WebSearchOutput]:
         """执行Web搜索"""
         start_time = time.time()
@@ -397,13 +397,13 @@ class WebSearchTool(BaseTool[WebSearchInput, WebSearchOutput, None]):
 
     async def _search_via_mcp(
         self, args: WebSearchInput, context: ToolContext
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]:
         """通过MCP服务搜索"""
         # 实际应用中调用MCP搜索服务
         # 这里简化为模拟
         return await self._simulate_search(args.query, args.limit)
 
-    async def _simulate_search(self, query: str, limit: int) -> List[Dict[str, Any]]:
+    async def _simulate_search(self, query: str, limit: int) -> list[dict[str, Any]:
         """模拟搜索结果"""
         results = []
         for i in range(min(limit, 5)):
@@ -422,7 +422,7 @@ class WebSearchTool(BaseTool[WebSearchInput, WebSearchOutput, None]):
 
 async def example_patent_search():
     """专利搜索示例"""
-    from core.tools.tool_interface_v2 import ToolRegistry, ToolContext
+    from core.tools.tool_interface_v2 import ToolContext, ToolRegistry
 
     # 创建注册表
     registry = ToolRegistry()
@@ -448,7 +448,7 @@ async def example_patent_search():
     )
 
     # 定义进度回调
-    async def progress_callback(progress: Dict[str, float]):
+    async def progress_callback(progress: dict[str, float]):
         stage = progress.get("stage", "unknown")
         value = progress.get("progress", 0)
         print(f"  进度: {stage} - {value*100:.0f}%")
@@ -471,7 +471,7 @@ async def example_patent_search():
 
     # 显示结果
     if result.success:
-        print(f"✅ 搜索成功")
+        print("✅ 搜索成功")
         print(f"   找到: {result.output.count} 个专利")
         print(f"   执行时间: {result.output.execution_time:.2f}秒")
         print()
@@ -484,7 +484,7 @@ async def example_patent_search():
 
 async def example_file_read():
     """文件读取示例"""
-    from core.tools.tool_interface_v2 import ToolRegistry, ToolContext
+    from core.tools.tool_interface_v2 import ToolContext, ToolRegistry
 
     # 创建注册表
     registry = ToolRegistry()
@@ -523,7 +523,7 @@ async def example_file_read():
 
     # 显示结果
     if result.success:
-        print(f"✅ 读取成功")
+        print("✅ 读取成功")
         print(f"   行数: {result.output.lines}")
         print(f"   编码: {result.output.encoding}")
         print()
@@ -537,7 +537,7 @@ async def example_file_read():
 
 async def example_web_search():
     """Web搜索示例"""
-    from core.tools.tool_interface_v2 import ToolRegistry, ToolContext
+    from core.tools.tool_interface_v2 import ToolContext, ToolRegistry
 
     # 创建注册表
     registry = ToolRegistry()
@@ -576,7 +576,7 @@ async def example_web_search():
 
     # 显示结果
     if result.success:
-        print(f"✅ 搜索成功")
+        print("✅ 搜索成功")
         print(f"   找到: {result.output.count} 个结果")
         print()
         print("   结果:")

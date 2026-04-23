@@ -33,7 +33,7 @@ class AthenaException(Exception):
         message: str,
         code: str = "INTERNAL_ERROR",
         status_code: int = 500,
-        details: dict[str, Any] | None = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         self.message = message
         self.code = code
@@ -72,10 +72,10 @@ class FileException(AthenaException):
     def __init__(
         self,
         message: str,
-        file_path: str | None = None,
+        file_path: Optional[str] = None,
         code: str = "FILE_ERROR",
         status_code: int = 500,
-        details: dict[str, Any] | None = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         details = details or {}
         if file_path:
@@ -89,8 +89,8 @@ class FileUploadException(FileException):
     def __init__(
         self,
         message: str,
-        file_path: str | None = None,
-        details: dict[str, Any] | None = None,
+        file_path: Optional[str] = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         super().__init__(
             message, file_path, code="FILE_UPLOAD_ERROR", status_code=400, details=details
@@ -103,9 +103,9 @@ class FileProcessingException(FileException):
     def __init__(
         self,
         message: str,
-        file_path: str | None = None,
-        operation: str | None = None,
-        details: dict[str, Any] | None = None,
+        file_path: Optional[str] = None,
+        operation: Optional[str] = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         details = details or {}
         if operation:
@@ -118,7 +118,7 @@ class FileProcessingException(FileException):
 class FileNotFoundException(FileException):
     """文件未找到异常"""
 
-    def __init__(self, file_path: str, details: dict[str, Any] | None = None):
+    def __init__(self, file_path: str, details: Optional[dict[str, Any]] = None):
         super().__init__(
             f"文件未找到: {file_path}",
             file_path,
@@ -134,9 +134,9 @@ class FileValidationException(FileException):
     def __init__(
         self,
         message: str,
-        file_path: str | None = None,
+        file_path: Optional[str] = None,
         validation_errors: list | None = None,
-        details: dict[str, Any] | None = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         details = details or {}
         if validation_errors:
@@ -154,7 +154,7 @@ class FileSizeException(FileException):
         file_path: str,
         file_size: int,
         max_size: int,
-        details: dict[str, Any] | None = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         details = details or {}
         details.update(
@@ -182,7 +182,7 @@ class FileTypeException(FileException):
         file_path: str,
         file_type: str,
         allowed_types: list,
-        details: dict[str, Any] | None = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         details = details or {}
         details.update({"file_type": file_type, "allowed_types": allowed_types})
@@ -206,8 +206,8 @@ class ConfigurationException(AthenaException):
     def __init__(
         self,
         message: str,
-        config_key: str | None = None,
-        details: dict[str, Any] | None = None,
+        config_key: Optional[str] = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         details = details or {}
         if config_key:
@@ -218,7 +218,7 @@ class ConfigurationException(AthenaException):
 class MissingConfigException(ConfigurationException):
     """缺少配置异常"""
 
-    def __init__(self, config_key: str, details: dict[str, Any] | None = None):
+    def __init__(self, config_key: str, details: Optional[dict[str, Any]] = None):
         super().__init__(
             f"缺少必需的配置: {config_key}",
             config_key,
@@ -232,7 +232,7 @@ class InvalidConfigException(ConfigurationException):
     """无效配置异常"""
 
     def __init__(
-        self, config_key: str, value: Any, reason: str, details: dict[str, Any] | None = None
+        self, config_key: str, value: Any, reason: str, details: Optional[dict[str, Any]] = None
     ):
         details = details or {}
         details.update({"config_key": config_key, "value": str(value), "reason": reason})
@@ -256,10 +256,10 @@ class CacheException(AthenaException):
     def __init__(
         self,
         message: str,
-        cache_key: str | None = None,
+        cache_key: Optional[str] = None,
         code: str = "CACHE_ERROR",
         status_code: int = 500,
-        details: dict[str, Any] | None = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         details = details or {}
         if cache_key:
@@ -270,7 +270,7 @@ class CacheException(AthenaException):
 class CacheMissException(CacheException):
     """缓存未命中异常"""
 
-    def __init__(self, cache_key: str, details: dict[str, Any] | None = None):
+    def __init__(self, cache_key: str, details: Optional[dict[str, Any]] = None):
         super().__init__(
             f"缓存未命中: {cache_key}",
             cache_key,
@@ -291,9 +291,9 @@ class NetworkException(AthenaException):
     def __init__(
         self,
         message: str,
-        url: str | None = None,
+        url: Optional[str] = None,
         status_code: int = 503,
-        details: dict[str, Any] | None = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         details = details or {}
         if url:
@@ -304,7 +304,7 @@ class NetworkException(AthenaException):
 class AuthenticationException(AthenaException):
     """认证异常"""
 
-    def __init__(self, message: str = "认证失败", details: dict[str, Any] | None = None):
+    def __init__(self, message: str = "认证失败", details: Optional[dict[str, Any]] = None):
         super().__init__(message, code="AUTHENTICATION_ERROR", status_code=401, details=details)
 
 
@@ -314,7 +314,7 @@ class AuthorizationException(AthenaException):
     def __init__(
         self,
         message: str = "权限不足",
-        required_permission: str | None = None,
+        required_permission: Optional[str] = None,
         details: dict[str, Any] = None,
     ):
         details = details or {}
@@ -326,7 +326,7 @@ class AuthorizationException(AthenaException):
 class RequestTimeoutException(NetworkException):
     """请求超时异常"""
 
-    def __init__(self, url: str, timeout: float, details: dict[str, Any] | None = None):
+    def __init__(self, url: str, timeout: float, details: Optional[dict[str, Any]] = None):
         details = details or {}
         details["timeout_seconds"] = timeout
         super().__init__(
@@ -345,10 +345,10 @@ class StorageException(AthenaException):
     def __init__(
         self,
         message: str,
-        storage_type: str | None = None,
+        storage_type: Optional[str] = None,
         code: str = "STORAGE_ERROR",
         status_code: int = 500,
-        details: dict[str, Any] | None = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         details = details or {}
         if storage_type:
@@ -360,7 +360,7 @@ class DatabaseException(StorageException):
     """数据库异常"""
 
     def __init__(
-        self, message: str, query: str | None = None, details: dict[str, Any] | None = None
+        self, message: str, query: Optional[str] = None, details: Optional[dict[str, Any]] = None
     ):
         details = details or {}
         if query:
@@ -380,8 +380,8 @@ class ConnectionException(StorageException):
     def __init__(
         self,
         message: str,
-        connection_string: str | None = None,
-        details: dict[str, Any] | None = None,
+        connection_string: Optional[str] = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         details = details or {}
         if connection_string:
@@ -420,9 +420,9 @@ class ValidationException(AthenaException):
     def __init__(
         self,
         message: str,
-        field: str | None = None,
+        field: Optional[str] = None,
         value: Any | None = None,
-        details: dict[str, Any] | None = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         details = details or {}
         if field:
@@ -435,7 +435,7 @@ class ValidationException(AthenaException):
 class RequiredFieldException(ValidationException):
     """必填字段缺失异常"""
 
-    def __init__(self, field: str, details: dict[str, Any] | None = None):
+    def __init__(self, field: str, details: Optional[dict[str, Any]] = None):
         super().__init__(
             f"必填字段缺失: {field}", field=field, details=details
         )
@@ -447,7 +447,7 @@ class InvalidFormatException(ValidationException):
     """无效格式异常"""
 
     def __init__(
-        self, field: str, value: Any, expected_format: str, details: dict[str, Any] | None = None
+        self, field: str, value: Any, expected_format: str, details: Optional[dict[str, Any]] = None
     ):
         details = details or {}
         details["expected_format"] = expected_format
@@ -474,7 +474,7 @@ class BusinessException(AthenaException):
         message: str,
         code: str = "BUSINESS_ERROR",
         status_code: int = 400,
-        details: dict[str, Any] | None = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         super().__init__(message, code, status_code, details)
 
@@ -483,7 +483,7 @@ class ResourceNotFoundException(BusinessException):
     """资源未找到异常"""
 
     def __init__(
-        self, resource_type: str, resource_id: str, details: dict[str, Any] | None = None
+        self, resource_type: str, resource_id: str, details: Optional[dict[str, Any]] = None
     ):
         details = details or {}
         details.update({"resource_type": resource_type, "resource_id": resource_id})
@@ -499,7 +499,7 @@ class DuplicateResourceException(BusinessException):
     """重复资源异常"""
 
     def __init__(
-        self, resource_type: str, identifier: str, details: dict[str, Any] | None = None
+        self, resource_type: str, identifier: str, details: Optional[dict[str, Any]] = None
     ):
         details = details or {}
         details.update({"resource_type": resource_type, "identifier": identifier})
@@ -517,9 +517,9 @@ class OperationNotAllowedException(BusinessException):
     def __init__(
         self,
         message: str,
-        operation: str | None = None,
-        reason: str | None = None,
-        details: dict[str, Any] | None = None,
+        operation: Optional[str] = None,
+        reason: Optional[str] = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         details = details or {}
         if operation:

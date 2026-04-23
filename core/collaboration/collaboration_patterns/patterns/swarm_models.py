@@ -131,7 +131,7 @@ class SwarmKnowledgeItem:
     source: str  # 来源Agent ID
     confidence: float  # 置信度 (0.0 - 1.0)
     timestamp: datetime = field(default_factory=datetime.now)  # 时间戳
-    ttl: int | None = None  # 生存时间（秒），None表示永久
+    ttl: Optional[int] = None  # 生存时间（秒），None表示永久
     version: int = 1  # 版本号
     metadata: dict[str, Any] = field(default_factory=dict)  # 元数据
 

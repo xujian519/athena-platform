@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 P0基础工具综合验证脚本
 
@@ -9,10 +8,10 @@ Author: Athena平台团队
 Created: 2026-04-20
 """
 
-import sys
 import asyncio
-import tempfile
 import os
+import sys
+import tempfile
 
 sys.path.insert(0, "/Users/xujian/Athena工作平台")
 
@@ -61,7 +60,7 @@ async def verify_p0_tools():
     )
     assert result["success"], "命令执行失败"
     print(f"   ✅ 当前目录: {result['stdout'].split()[0]}")
-    print(f"   ✅ ls输出前5行已获取")
+    print("   ✅ ls输出前5行已获取")
     print()
 
     # 测试1.3: Git命令
@@ -70,11 +69,11 @@ async def verify_p0_tools():
         {"command": "git status --short", "timeout": 5.0},
         {"working_directory": "/Users/xujian/Athena工作平台"}
     )
-    print(f"   ✅ Git状态已获取")
+    print("   ✅ Git状态已获取")
     if result["stdout"].strip():
-        print(f"   📝 有未提交的更改")
+        print("   📝 有未提交的更改")
     else:
-        print(f"   📝 工作目录干净")
+        print("   📝 工作目录干净")
     print()
 
     # ========================================
@@ -161,7 +160,7 @@ async def verify_p0_tools():
         )
         assert read_result["success"], "无法读取写入的文件"
         assert test_content in read_result["content"], "内容不匹配"
-        print(f"   ✅ 内容验证通过")
+        print("   ✅ 内容验证通过")
         print()
 
         # 测试3.3: 追加模式
@@ -177,7 +176,7 @@ async def verify_p0_tools():
         )
         assert result["success"], "文件追加失败"
         assert not result["created_new"], "不应该创建新文件"
-        print(f"   ✅ 追加成功")
+        print("   ✅ 追加成功")
         print()
 
         # 测试3.6: 自动创建目录
@@ -194,7 +193,7 @@ async def verify_p0_tools():
         )
         assert result["success"], "嵌套文件写入失败"
         assert result["created_new"], "未创建新文件"
-        print(f"   ✅ 自动创建目录成功")
+        print("   ✅ 自动创建目录成功")
         print()
 
         # 清理

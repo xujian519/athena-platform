@@ -145,7 +145,7 @@ class LightweightToolDiscovery:
         self,
         task_description: str,
         available_tools: list[str] = None,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
         top_k: int = 5,
     ) -> list[SemanticMatch]:
         """

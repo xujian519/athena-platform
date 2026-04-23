@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import argparse
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import logging
 import os
 import subprocess

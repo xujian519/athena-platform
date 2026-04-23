@@ -525,7 +525,7 @@ class MultimodalStorageManager:
         query_vector: list[float],
         limit: int = 10,
         file_type: FileType | None = None
-    ) -> list[dict[str, Any]]:
+    ) -> list[dict[str, Any]:
         """通过向量搜索相似文件"""
         try:
             qdrant_client = await self.get_qdrant_client()

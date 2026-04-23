@@ -7,13 +7,12 @@ Skills系统单元测试 - SkillToolMapper
 作者: Athena平台团队
 创建时间: 2026-04-21
 """
-from __future__ import annotations
 
 import pytest
 
 from core.skills.registry import SkillRegistry
 from core.skills.tool_mapper import SkillToolMapper
-from core.skills.types import SkillDefinition, SkillCategory
+from core.skills.types import SkillCategory, SkillDefinition
 
 
 def test_map_tools_to_skills():
@@ -305,3 +304,4 @@ def test_find_unused_tools():
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+

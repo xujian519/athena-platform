@@ -88,7 +88,7 @@ class TaskProfile:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     # 推理结果
-    selected_engine: str | None = None
+    selected_engine: Optional[str] = None
     confidence: float = 0.0
     reasoning_trace: list[dict] = field(default_factory=list)
 

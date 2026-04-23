@@ -14,17 +14,17 @@ Patent Agent - 专利分析Agent示例
 - core.llm.unified_llm_manager (可选)
 """
 
-from typing import Any, Dict, List, Optional
 import logging
-from datetime import datetime
 import re
+from datetime import datetime
+from typing import Any
 
-from core.agents.xiaona.base_component import (
-    BaseXiaonaComponent,
+from core.framework.agents.xiaona.base_component import (
     AgentCapability,
     AgentExecutionContext,
     AgentExecutionResult,
     AgentStatus,
+    BaseXiaonaComponent,
 )
 
 logger = logging.getLogger(__name__)
@@ -115,7 +115,7 @@ class PatentAgent(BaseXiaonaComponent):
 
         # 初始化LLM（可选）
         try:
-            from core.llm.unified_llm_manager import UnifiedLLMManager
+            from core.ai.llm.unified_llm_manager import UnifiedLLMManager
             self.llm = UnifiedLLMManager()
             self.llm_available = True
         except ImportError:
@@ -199,7 +199,7 @@ class PatentAgent(BaseXiaonaComponent):
                 execution_time=(datetime.now() - start_time).total_seconds(),
             )
 
-    async def _search(self, context: AgentExecutionContext) -> Dict[str, Any]:
+    async def _search(self, context: AgentExecutionContext) -> dict[str, Any]:
         """检索专利"""
         keywords = context.input_data.get("keywords", "")
         field = context.input_data.get("field", "")
@@ -238,7 +238,7 @@ class PatentAgent(BaseXiaonaComponent):
             "search_count": self.search_count,
         }
 
-    def _calculate_relevance(self, keywords: str, patent: Dict[str, Any]) -> float:
+    def _calculate_relevance(self, keywords: str, patent: dict[str, Any]) -> float:
         """计算相关性分数"""
         score = 0.0
         keywords_lower = keywords.lower()
@@ -253,7 +253,7 @@ class PatentAgent(BaseXiaonaComponent):
 
         return score
 
-    async def _analyze(self, context: AgentExecutionContext) -> Dict[str, Any]:
+    async def _analyze(self, context: AgentExecutionContext) -> dict[str, Any]:
         """分析专利"""
         patent_id = context.input_data.get("patent_id", "")
         patent_doc = context.input_data.get("patent_doc")
@@ -298,7 +298,7 @@ class PatentAgent(BaseXiaonaComponent):
             "analyze_count": self.analyze_count,
         }
 
-    def _extract_key_points(self, patent: Dict[str, Any]) -> List[str]:
+    def _extract_key_points(self, patent: dict[str, Any]) -> list[str]:
         """提取技术要点"""
         # 模拟提取（实际应用中应使用NLP）
         title = patent["title"]
@@ -316,7 +316,7 @@ class PatentAgent(BaseXiaonaComponent):
 
         return points
 
-    def _identify_field(self, patent: Dict[str, Any]) -> str:
+    def _identify_field(self, patent: dict[str, Any]) -> str:
         """识别技术领域"""
         title = patent["title"].lower()
 
@@ -329,7 +329,7 @@ class PatentAgent(BaseXiaonaComponent):
         else:
             return "通用技术"
 
-    def _assess_innovation(self, patent: Dict[str, Any]) -> str:
+    def _assess_innovation(self, patent: dict[str, Any]) -> str:
         """评估创新水平"""
         claims = patent.get("claims", 0)
 
@@ -340,7 +340,7 @@ class PatentAgent(BaseXiaonaComponent):
         else:
             return "基础"
 
-    async def _enhance_with_llm(self, analysis: Dict[str, Any]) -> Dict[str, Any]:
+    async def _enhance_with_llm(self, analysis: dict[str, Any]) -> dict[str, Any]:
         """使用LLM增强分析"""
         try:
             prompt = f"""请分析以下专利，提供专业见解：
@@ -370,7 +370,7 @@ class PatentAgent(BaseXiaonaComponent):
             logger.error(f"LLM分析失败: {e}")
             return {"error": str(e)}
 
-    async def _compare(self, context: AgentExecutionContext) -> Dict[str, Any]:
+    async def _compare(self, context: AgentExecutionContext) -> dict[str, Any]:
         """对比专利"""
         patent_ids = context.input_data.get("patent_ids", [])
 
@@ -406,20 +406,20 @@ class PatentAgent(BaseXiaonaComponent):
             "comparison": comparison,
         }
 
-    def _find_common_fields(self, patents: List[Dict[str, Any]]) -> List[str]:
+    def _find_common_fields(self, patents: list[dict[str, Any]) -> list[str]:
         """查找共同技术领域"""
         fields = [self._identify_field(p) for p in patents]
         # 简化处理：返回第一个专利的领域
         return list(set(fields))
 
-    def _find_unique_features(self, patents: List[Dict[str, Any]]) -> Dict[str, List[str]]:
+    def _find_unique_features(self, patents: list[dict[str, Any]) -> dict[str, list[str]:
         """查找各专利的独特之处"""
         return {
             p["patent_id"]: self._extract_key_points(p)
             for p in patents
         }
 
-    def _calculate_similarity(self, patents: List[Dict[str, Any]]) -> Dict[str, float]:
+    def _calculate_similarity(self, patents: list[dict[str, Any]) -> dict[str, float]:
         """计算相似度矩阵"""
         # 简化处理：基于标题相似度
         result = {}
@@ -432,7 +432,7 @@ class PatentAgent(BaseXiaonaComponent):
                     result[key] = round(similarity, 2)
         return result
 
-    def _validate_patent_id(self, context: AgentExecutionContext) -> Dict[str, Any]:
+    def _validate_patent_id(self, context: AgentExecutionContext) -> dict[str, Any]:
         """验证专利号格式"""
         patent_id = context.input_data.get("patent_id", "")
 
@@ -448,7 +448,7 @@ class PatentAgent(BaseXiaonaComponent):
             "format": "CN格式 (如: CN123456789A)" if not is_valid else "符合格式要求",
         }
 
-    def get_stats(self) -> Dict[str, int]:
+    def get_stats(self) -> dict[str, int]:
         """获取统计信息"""
         return {
             "search_count": self.search_count,
@@ -465,7 +465,6 @@ def create_patent_agent(agent_id: str = "patent_001") -> PatentAgent:
 # 测试入口
 async def main():
     """测试入口"""
-    import asyncio
 
     # 配置日志
     logging.basicConfig(level=logging.INFO)
@@ -535,7 +534,7 @@ async def main():
         print(f"  {tid}: {status}")
 
     # 统计
-    print(f"\n=== 统计 ===")
+    print("\n=== 统计 ===")
     stats = agent.get_stats()
     print(f"检索次数: {stats['search_count']}")
     print(f"分析次数: {stats['analyze_count']}")

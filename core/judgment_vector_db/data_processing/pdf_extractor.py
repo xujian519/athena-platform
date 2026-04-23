@@ -76,7 +76,7 @@ class PDFExtractor:
         "judgment_result": ["判决如下", "裁定如下", "判决结果", "裁决结果"],
     }
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化PDF提取器
 
@@ -90,7 +90,7 @@ class PDFExtractor:
             "total_pages": 0,
         }
 
-    def extract_from_pdf(self, pdf_path: str) -> dict[str, Any] | None:
+    def extract_from_pdf(self, pdf_path: str) -> Optional[dict[str, Any]]:
         """
         从PDF文件提取完整判决书信息
 
@@ -237,7 +237,7 @@ class PDFExtractor:
             judges=judges,
         )
 
-    def _extract_case_number(self, text: str) -> str | None:
+    def _extract_case_number(self, text: str) -> Optional[str]:
         """提取案号"""
         for pattern in self.CASE_NUMBER_PATTERNS:
             matches = re.findall(pattern, text)
@@ -497,7 +497,7 @@ class PDFExtractor:
 
 
 # 便捷函数
-def extract_pdf(pdf_path: str | None = None, config: dict[str, Any] | None = None) -> dict[str, Any] | None:
+def extract_pdf(pdf_path: Optional[str] = None, config: Optional[dict[str, Any]] = None) -> Optional[dict[str, Any]]:
     """
     提取PDF判决书
 

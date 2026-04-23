@@ -41,7 +41,7 @@ class PluginType(Enum):
 class PluginMetadata:
     """插件元数据"""
 
-    author: str | None = None
+    author: Optional[str] = None
     version: str = "1.0.0"
     description: str = ""
     tags: list[str] = field(default_factory=list)
@@ -66,7 +66,7 @@ class PluginDefinition:
     config: dict[str, Any] = field(default_factory=dict)
     enabled: bool = True
     skills: list[str] = field(default_factory=list)  # 提供的技能列表
-    path: str | None = None  # 插件路径
+    path: Optional[str] = None  # 插件路径
 
     def __post_init__(self):
         """初始化后处理"""

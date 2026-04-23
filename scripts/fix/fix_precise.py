@@ -6,10 +6,11 @@
 import re
 from pathlib import Path
 
-def fix_file_errors(file_path: Path) -> tuple[bool, list[str]]:
+
+def fix_file_errors(file_path: Path) -> tuple[bool, list[str]:
     """修复单个文件的所有错误"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         original_content = content
@@ -38,25 +39,25 @@ def fix_file_errors(file_path: Path) -> tuple[bool, list[str]]:
             if re.search(r'Optional\[list\["[^"]+"\]\s*=\s*None\]', line):
                 line = re.sub(r'Optional\[list\["[^"]+"\]\s*=\s*None\]', r'list | None', line)
                 if line != original_line:
-                    fixes.append(f'第{i+1}行: Optional[list["key"]]')
+                    fixes.append(f'第{i+1}行: Optional[list["key"]')
 
             # 模式4: Optional[dict[str, Any] | None = None]
             if re.search(r'Optional\[dict\[str,\s*Any\]\s*\|\s*None\s*=\s*None\]', line):
                 line = re.sub(r'Optional\[dict\[str,\s*Any\]\s*\|\s*None\s*=\s*None\]', r'dict[str, Any] | None', line)
                 if line != original_line:
-                    fixes.append(f'第{i+1}行: Optional[dict[str, Any]]')
+                    fixes.append(f'第{i+1}行: Optional[dict[str, Any]')
 
-            # 模式5: algorithms=[JWT_ALGORITHM]]
+            # 模式5: algorithms=[JWT_ALGORITHM]
             if re.search(r'algorithms=\[JWT_ALGORITHM\]\]', line):
-                line = re.sub(r'algorithms=\[JWT_ALGORITHM\]\]', r'algorithms=[JWT_ALGORITHM]]', line)
+                line = re.sub(r'algorithms=\[JWT_ALGORITHM\]\]', r'algorithms=[JWT_ALGORITHM]', line)
                 if line != original_line:
                     fixes.append(f'第{i+1}行: algorithms 括号')
 
-            # 模式6: dict[dict[str, str]] -> bool:
+            # 模式6: dict[dict[str, str] -> bool:
             if re.search(r'dict\[dict\[str,\s*str\]\]\s*->\s*bool:', line):
-                line = re.sub(r'dict\[dict\[str,\s*str\]\]\s*->\s*bool:', r'dict[dict[str, str]] -> bool:', line)
+                line = re.sub(r'dict\[dict\[str,\s*str\]\]\s*->\s*bool:', r'dict[dict[str, str] -> bool:', line)
                 if line != original_line:
-                    fixes.append(f'第{i+1}行: dict[dict[str, str]]')
+                    fixes.append(f'第{i+1}行: dict[dict[str, str]')
 
             # 模式7: *args]
             if re.search(r'\*\s*(?:args|kwargs)\]', line):
@@ -71,12 +72,12 @@ def fix_file_errors(file_path: Path) -> tuple[bool, list[str]]:
                     fixes.append(f'第{i+1}行: config 嵌套括号')
 
             # 模式9: dict[DecisionLayer, dict[str, Any] (dataclass 字段)
-            if re.search(r'dict\[[^]]+, dict\[str,\s*Any\s*#', line):
-                line = re.sub(r'(dict\[[^]]+, dict\[str,\s*Any)(\s*#)', r'\1]\2', line)
+            if re.search(r'dict\[[^]+, dict\[str,\s*Any\s*#', line):
+                line = re.sub(r'(dict\[[^]+, dict\[str,\s*Any)(\s*#)', r'\1]\2', line)
                 if line != original_line:
                     fixes.append(f'第{i+1}行: dataclass 字段括号')
 
-            # 模式10: f-string 错误 {[.2f}') for k]]}
+            # 模式10: f-string 错误 {[.2f}') for k]}
             if re.search(r'{\[\.2f\'\)\s*for\s+k\]\]\}', line):
                 line = re.sub(r'{\[\.2f\'\)\s*for\s+k\]\]\}', r'{key:.2f}', line)
                 if line != original_line:
@@ -84,15 +85,15 @@ def fix_file_errors(file_path: Path) -> tuple[bool, list[str]]:
 
             # 模式11: dict[str, list[str]) -> str | None: (缺少闭合括号)
             if re.search(r'dict\[str,\s*list\[str\)\]\s*->\s*str\s*\|\s*None:', line):
-                line = re.sub(r'dict\[str,\s*list\[str\)\]\s*->\s*str\s*\|\s*None:', r'dict[str, list[str]] -> str | None:', line)
+                line = re.sub(r'dict\[str,\s*list\[str\)\]\s*->\s*str\s*\|\s*None:', r'dict[str, list[str] -> str | None:', line)
                 if line != original_line:
-                    fixes.append(f'第{i+1}行: dict[str, list[str]]')
+                    fixes.append(f'第{i+1}行: dict[str, list[str]')
 
             # 模式12: list[list[float]: (缺少闭合括号)
             if re.search(r'list\[list\[float\]:\s*$', line):
-                line = re.sub(r'list\[list\[float\]:\s*$', r'list[list[float]]:', line)
+                line = re.sub(r'list\[list\[float\]:\s*$', r'list[list[float]:', line)
                 if line != original_line:
-                    fixes.append(f'第{i+1}行: list[list[float]]')
+                    fixes.append(f'第{i+1}行: list[list[float]')
 
             # 模式13: 修复多余的 ] 符号
             if re.search(r'\]\]\s*\)', line):

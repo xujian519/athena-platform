@@ -62,9 +62,9 @@ class PermissionCheckedToolCallManager(ToolCallManager):
         self,
         tool_name: str,
         parameters: dict[str, Any],
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
         priority: int = 2,
-        timeout: float | None = None,
+        timeout: Optional[float] = None,
     ) -> ToolCallResult:
         """调用工具（带权限检查）
 

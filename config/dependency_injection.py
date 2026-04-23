@@ -9,10 +9,11 @@
     3. 优先使用依赖注入而非直接导入
 """
 
-from typing import Dict, Type, TypeVar, Optional, Any
-from core.interfaces.vector_store import VectorStoreProvider
+from typing import Any, TypeVar
+
 from core.interfaces.knowledge_base import KnowledgeBaseService
 from core.interfaces.patent_service import PatentRetrievalService
+from core.interfaces.vector_store import VectorStoreProvider
 
 T = TypeVar('T')
 
@@ -24,11 +25,11 @@ class DIContainer:
     管理接口与实现的映射关系。
     """
 
-    _registry: Dict[Type, Any] = {}
-    _singletons: Dict[Type, Any] = {}
+    _registry: dict[type, Any] = {}
+    _singletons: dict[type, Any] = {}
 
     @classmethod
-    def register(cls, interface: Type[T], implementation: T, singleton: bool = True):
+    def register(cls, interface: type[T], implementation: T, singleton: bool = True):
         """
         注册实现
 
@@ -42,7 +43,7 @@ class DIContainer:
             cls._singletons[interface] = implementation
 
     @classmethod
-    def resolve(cls, interface: Type[T]) -> Optional[T]:
+    def resolve(cls, interface: type[T]) -> T | None:
         """
         解析实现
 
@@ -66,7 +67,7 @@ class DIContainer:
         cls._singletons.clear()
 
     @classmethod
-    def is_registered(cls, interface: Type[T]) -> bool:
+    def is_registered(cls, interface: type[T]) -> bool:
         """检查接口是否已注册"""
         return interface in cls._registry
 
@@ -117,17 +118,17 @@ def setup_dependency_injection():
         print(f"⚠️  GooglePatentsRetriever not available: {e}")
 
 
-def get_vector_store() -> Optional[VectorStoreProvider]:
+def get_vector_store() -> VectorStoreProvider | None:
     """便捷方法：获取向量存储提供者"""
     return DIContainer.resolve(VectorStoreProvider)
 
 
-def get_knowledge_base() -> Optional[KnowledgeBaseService]:
+def get_knowledge_base() -> KnowledgeBaseService | None:
     """便捷方法：获取知识库服务"""
     return DIContainer.resolve(KnowledgeBaseService)
 
 
-def get_patent_service() -> Optional[PatentRetrievalService]:
+def get_patent_service() -> PatentRetrievalService | None:
     """便捷方法：获取专利检索服务"""
     return DIContainer.resolve(PatentRetrievalService)
 

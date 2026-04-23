@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 class XiaonuoIntegratedEnhanced(XiaonuoEnhancedAgent):
     """小诺集成增强版 - 整合四大核心职责"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__(config)
 
         # 初始化四个核心模块

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 
 """
 Swarm协作模式测试
@@ -12,14 +11,19 @@ Swarm Collaboration Pattern Tests
 测试Swarm群体智能协作模式的各项功能。
 """
 
-import asyncio
-import pytest
 from datetime import datetime
-from typing import Any
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock
 
-from core.collaboration.patterns.swarm import SwarmCollaborationPattern
-from core.collaboration.patterns.swarm_agent import (
+import pytest
+
+from core.framework.collaboration.multi_agent_collaboration import (
+    Message,
+    MessageType,
+    MultiAgentCollaborationFramework,
+    Task,
+)
+from core.framework.collaboration.patterns.swarm import SwarmCollaborationPattern
+from core.framework.collaboration.patterns.swarm_agent import (
     SwarmAgent,
     SwarmKnowledgeItem,
     SwarmSharedState,
@@ -27,22 +31,13 @@ from core.collaboration.patterns.swarm_agent import (
     SwarmTask,
     TaskStatus,
 )
-from core.collaboration.patterns.swarm_state import (
+from core.framework.collaboration.patterns.swarm_state import (
     AgentRole as SwarmRole,
-    SharedKnowledge,
+)
+from core.framework.collaboration.patterns.swarm_state import (
     SwarmDecisionType,
     SwarmEmergencyType,
-    SwarmMessageType,
 )
-from core.collaboration.collaboration_patterns.base import CollaborationPattern
-from core.collaboration.multi_agent_collaboration import (
-    Message,
-    MessageType,
-    MultiAgentCollaborationFramework,
-    Task,
-    TaskStatus as MultiAgentTaskStatus,
-)
-
 
 # ============================================================================
 # Fixtures
@@ -147,7 +142,7 @@ class TestSwarmAgent:
             capabilities=["search", "analyze"],
         )
 
-        task = SwarmTask(
+        SwarmTask(
             id="task_001",
             description="搜索专利",
             required_capabilities=["search"],
@@ -521,7 +516,7 @@ class TestSelfOrganization:
         # 触发自组织
         await swarm_pattern._self_organize(session_id)
 
-        session = swarm_pattern.active_sessions[session_id]
+        swarm_pattern.active_sessions[session_id]
 
         # 验证角色已分配
         for agent_id in sample_agents:
@@ -764,7 +759,7 @@ class TestStateSynchronization:
     @pytest.mark.asyncio
     async def test_state_conflict_resolution(self, swarm_pattern, sample_task, sample_agents):
         """测试状态冲突解决"""
-        session_id = await swarm_pattern.initiate_collaboration(
+        await swarm_pattern.initiate_collaboration(
             task=sample_task,
             participants=sample_agents,
             context={},
@@ -791,7 +786,7 @@ class TestConflictHandling:
     @pytest.mark.asyncio
     async def test_task_conflict_resolution(self, swarm_pattern, sample_task, sample_agents):
         """测试任务冲突解决"""
-        from core.collaboration.collaboration_manager import Conflict
+        from core.framework.collaboration.collaboration_manager import Conflict
 
         session_id = await swarm_pattern.initiate_collaboration(
             task=sample_task,
@@ -815,7 +810,7 @@ class TestConflictHandling:
     @pytest.mark.asyncio
     async def test_decision_conflict(self, swarm_pattern, sample_task, sample_agents):
         """测试决策冲突"""
-        from core.collaboration.collaboration_manager import Conflict
+        from core.framework.collaboration.collaboration_manager import Conflict
 
         session_id = await swarm_pattern.initiate_collaboration(
             task=sample_task,
@@ -938,3 +933,4 @@ class TestIntegration:
         # 6. 验证结果
         session = swarm_pattern.active_sessions[session_id]
         assert session["status"] in ["running", "completed"]
+

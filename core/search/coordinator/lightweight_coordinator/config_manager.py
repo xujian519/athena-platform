@@ -37,7 +37,7 @@ class ConfigManager:
         config_type: ConfigType,
         description: str = "",
         scope: str = "global",
-        tool_name: str | None = None,
+        tool_name: Optional[str] = None,
         sync_callback: Callable[[str, ConfigItem, Any]] | None = None,
     ) -> bool:
         """设置配置

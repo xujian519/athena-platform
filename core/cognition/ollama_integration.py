@@ -38,7 +38,7 @@ class NLPConfig:
 class OllamaNLPIntegration:
     """Ollama NLP集成服务 - 适配新核心架构"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """初始化NLP集成服务"""
         self.config = config or {}
         self.base_url = self.config.get("base_url", "http://localhost:11434")
@@ -257,7 +257,7 @@ class OllamaNLPIntegration:
         }
 
     async def conversation_response(
-        self, message: str, context: dict[str, Any] | None = None
+        self, message: str, context: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """对话响应生成"""
         config = self.model_configs.get("conversation")
@@ -406,7 +406,7 @@ class OllamaNLPIntegration:
 _global_instance: OllamaNLPIntegration | None = None
 
 
-async def get_ollama_nlp_instance(config: dict[str, Any] | None = None) -> OllamaNLPIntegration:
+async def get_ollama_nlp_instance(config: Optional[dict[str, Any]] = None) -> OllamaNLPIntegration:
     """获取全局Ollama NLP实例"""
     global _global_instance
     if _global_instance is None:

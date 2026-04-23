@@ -136,7 +136,7 @@ class UnifiedReportService:
         self,
         document_path: str,
         report_type: ReportType = ReportType.PATENT_TECHNICAL_ANALYSIS,
-        output_dir: str | None = None,
+        output_dir: Optional[str] = None,
         custom_data: dict | None = None,
     ) -> ReportResult:
         """
@@ -224,7 +224,7 @@ class UnifiedReportService:
         self,
         data: dict,
         report_type: ReportType,
-        output_dir: str | None = None,
+        output_dir: Optional[str] = None,
     ) -> ReportResult:
         """
         从数据直接生成报告(跳过Dolphin解析和NetworkX分析)
@@ -276,7 +276,7 @@ class UnifiedReportService:
         self,
         doc1_path: str,
         doc2_path: str,
-        output_dir: str | None = None,
+        output_dir: Optional[str] = None,
     ) -> ReportResult:
         """
         对比两个文档并生成对比报告
@@ -681,7 +681,7 @@ class UnifiedReportService:
             result.output_files["json"] = str(json_path)
             logger.info(f"✅ JSON已导出: {json_path}")
 
-    async def _convert_to_docx(self, md_path: Path) -> str | None:
+    async def _convert_to_docx(self, md_path: Path) -> Optional[str]:
         """转换Markdown为DOCX"""
         try:
             # 使用PasteMD核心模块
@@ -776,7 +776,7 @@ class UnifiedReportService:
 async def generate_report_from_document(
     document_path: str,
     report_type: ReportType = ReportType.PATENT_TECHNICAL_ANALYSIS,
-    output_dir: str | None = None,
+    output_dir: Optional[str] = None,
 ) -> ReportResult:
     """
     便捷函数:从文档生成报告
@@ -800,7 +800,7 @@ async def generate_report_from_document(
 async def compare_documents(
     doc1_path: str,
     doc2_path: str,
-    output_dir: str | None = None,
+    output_dir: Optional[str] = None,
 ) -> ReportResult:
     """
     便捷函数:对比两个文档

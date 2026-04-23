@@ -22,8 +22,8 @@ class VerificationConfig:
     """验证配置"""
     enabled: bool = True  # 是否启用验证
     required: bool = True  # 验证是否必须通过（False时警告不中断）
-    verifier_type: str | None = None  # 指定验证器类型
-    custom_criteria: dict[str, Any] | None = None  # 自定义验证标准
+    verifier_type: Optional[str] = None  # 指定验证器类型
+    custom_criteria: Optional[dict[str, Any]] = None  # 自定义验证标准
     timeout_seconds: int = 30  # 验证超时时间
 
 
@@ -35,7 +35,7 @@ class EnhancedExecutionStep(ExecutionStep):
     继承自 ExecutionStep，添加验证相关字段
     """
     verification: VerificationConfig = field(default_factory=VerificationConfig)
-    expected_output_schema: dict[str, Any] | None = None  # 期望的输出格式
+    expected_output_schema: Optional[dict[str, Any]] = None  # 期望的输出格式
     success_conditions: list[str] = field(default_factory=list)  # 成功条件
     retry_on_failure: bool = False  # 验证失败时是否重试
     max_retries: int = 0  # 最大重试次数

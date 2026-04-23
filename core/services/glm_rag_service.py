@@ -58,7 +58,7 @@ class GLM_RAGService:
         qdrant_config: dict | None = None,
         postgres_config: dict | None = None,
         nebula_config: dict | None = None,
-        api_key: str | None = None,
+        api_key: Optional[str] = None,
     ):
         """
         初始化GLM RAG服务

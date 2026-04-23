@@ -181,7 +181,7 @@ class SearchStatistics:
     average_response_time: float = 0.0
     average_results_per_search: float = 0.0
     most_common_queries: list[str] = field(default_factory=list)
-    engine_performance: dict[str, dict[str, float]] = field(default_factory=dict)
+    engine_performance: dict[str, dict[str, float] = field(default_factory=dict)
     patent_type_distribution: dict[str, int] = field(default_factory=dict)
     ipc_distribution: dict[str, int] = field(default_factory=dict)
     applicant_distribution: dict[str, int] = field(default_factory=dict)

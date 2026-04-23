@@ -51,7 +51,7 @@ class StageResult:
     status: ExecutionStatus
     latency_ms: float
     output: Any = None
-    error: str | None = None
+    error: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -124,7 +124,7 @@ class EndToEndOptimizer:
         logger.info(f"✅ {self.name} 初始化完成 (目标成功率: {target_success_rate:.1%})")
 
     async def execute_pipeline(
-        self, request_id: str, stages: list[Callable], context: dict[str, Any] | None = None
+        self, request_id: str, stages: list[Callable], context: Optional[dict[str, Any]] = None
     ) -> ExecutionTrace:
         """
         执行端到端流程

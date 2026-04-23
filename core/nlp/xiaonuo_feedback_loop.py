@@ -147,7 +147,7 @@ class XiaonuoFeedbackLoop:
         self.feedback_records: list[FeedbackRecord] = []
         self.tool_metrics: dict[str, ToolPerformanceMetrics] = {}
         # 用户反馈模式: user_id -> tool_name -> metrics_dict
-        self.user_feedback_patterns: dict[str, dict[str, dict[str, float]]] = {}
+        self.user_feedback_patterns: dict[str, dict[str, dict[str, float]] = {}
 
         # 机器学习模型
         self.feedback_predictor = None
@@ -203,11 +203,11 @@ class XiaonuoFeedbackLoop:
         feedback_channel: FeedbackChannel,
         execution_success: bool,
         response_time: float,
-        satisfaction_score: float | None = None,
+        satisfaction_score: Optional[float] = None,
         quality_metrics: dict[str, float] | None = None,
         performance_metrics: dict[str, float] | None = None,
         user_comments: str = "",
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ):
         """记录反馈 - 🔧 线程安全修复:添加线程锁保护"""
         feedback = FeedbackRecord(
@@ -437,7 +437,7 @@ class XiaonuoFeedbackLoop:
                 self.optimization_history[-1]["optimization_action"] = "completed"
 
     def analyze_feedback_patterns(
-        self, tool_name: str | None = None, days: int = 30
+        self, tool_name: Optional[str] = None, days: int = 30
     ) -> dict[str, Any]:
         """分析反馈模式"""
         cutoff_date = datetime.now() - timedelta(days=days)
@@ -680,7 +680,7 @@ class XiaonuoFeedbackLoop:
         return features
 
     def predict_optimization_need(
-        self, tool_name: str, user_id: str, intent: str, context: dict[str, Any] | None = None
+        self, tool_name: str, user_id: str, intent: str, context: Optional[dict[str, Any]] = None
     ) -> tuple[float, str]:
         """预测优化需求"""
         if not self.feedback_predictor:
@@ -786,7 +786,7 @@ class XiaonuoFeedbackLoop:
 
         logger.info(f"💾 反馈循环模型已保存: {model_path}")
 
-    def load_models(self, model_path: str | None = None) -> Any | None:
+    def load_models(self, model_path: Optional[str] = None) -> Any | None:
         """加载模型 - 🔧 安全修复:使用上下文管理器和线程锁"""
         if model_path is None:
             model_path = os.path.join(self.config.model_dir, "latest_feedback_loop_models.pkl")

@@ -61,8 +61,8 @@ class LocalSandbox(Sandbox):
     async def execute_command(
         self,
         command: str,
-        working_dir: str | None = None,
-        timeout: int | None = None
+        working_dir: Optional[str] = None,
+        timeout: Optional[int] = None
     ) -> SandboxResult:
         """执行命令（安全版本）
 
@@ -272,7 +272,7 @@ class LocalSandbox(Sandbox):
             return True
         return False
 
-    def _get_working_dir(self, relative_path: str | None = None) -> Path:
+    def _get_working_dir(self, relative_path: Optional[str] = None) -> Path:
         """获取工作目录的完整路径"""
         if relative_path is None:
             return self._temp_dir / self._config.working_dir.lstrip("/")

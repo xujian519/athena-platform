@@ -252,3 +252,36 @@ build/
 scripts/standalone/*.py
 !start_xiaona.py
 docs/archive/phase_reports/
+
+# 运行时数据
+*.db
+*.sqlite
+*.log
+*.pid
+
+# 报告和临时文件
+*_report.json
+*_report.md
+build/reports/
+htmlcov/
+.pytest_cache/
+
+# 备份目录
+scripts.backup.*
+*.backup
+*.bak
+
+# 模型文件（大文件）
+models/*.bin
+models/*.safetensors
+*.gguf
+
+# 数据文件（运行时生成）
+data/cache/
+data/temp/
+data/logs/
+
+# 架构优化临时文件
+core.backup.*
+domains/*.backup
+

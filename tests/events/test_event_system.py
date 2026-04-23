@@ -7,7 +7,6 @@
 作者: Athena平台团队
 创建时间: 2026-04-20
 """
-from __future__ import annotations
 
 import asyncio
 import logging
@@ -18,8 +17,8 @@ logger = logging.getLogger(__name__)
 
 async def test_event_bus():
     """测试事件总线"""
-    from core.events.event_bus import EventBus, CallbackSubscriber, QueueSubscriber
-    from core.events.event_types import AgentStarted, AgentStopped
+    from core.events.event_bus import CallbackSubscriber, EventBus
+    from core.events.event_types import AgentStarted
 
     print("\n=== 测试事件总线 ===")
 
@@ -82,7 +81,7 @@ async def test_event_bus():
 
 async def test_event_types():
     """测试事件类型序列化"""
-    from core.events.event_types import AgentStarted, AgentStopped, ToolExecutionStarted
+    from core.events.event_types import AgentStarted
 
     print("\n=== 测试事件类型 ===")
 
@@ -122,3 +121,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+

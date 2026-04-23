@@ -101,7 +101,7 @@ class EntityExtractor:
         self.entity_patterns = self._initialize_patterns()
         self.type_keywords = self._initialize_type_keywords()
 
-    def _initialize_patterns(self) -> dict[str, list[str]]:
+    def _initialize_patterns(self) -> dict[str, list[str]:
         """初始化实体识别模式"""
         return {
             'patent': [
@@ -129,7 +129,7 @@ class EntityExtractor:
             ]
         }
 
-    def _initialize_type_keywords(self) -> dict[EntityType, list[str]]:
+    def _initialize_type_keywords(self) -> dict[EntityType, list[str]:
         """初始化类型关键词"""
         return {
             EntityType.PERSON: ['人', '发明人', '申请人', '作者', '研究员', '工程师'],
@@ -482,7 +482,7 @@ class KnowledgeGraphBuilder:
 
         return results
 
-    def find_path(self, source: str, target: str, max_depth: int = 5) -> list[list[str]]:
+    def find_path(self, source: str, target: str, max_depth: int = 5) -> list[list[str]:
         """查找实体间路径"""
         try:
             paths = list(nx.all_simple_paths(self.graph, source, target, cutoff=max_depth))
@@ -730,10 +730,10 @@ class KnowledgeGraphReasoner:
         conclusion = rule['conclusion']
 
         # 查找匹配第一个前提的关系
-        relations1 = [r for r in self.graph_builder.relations.values() if r.predicate == premise1[1]]
+        relations1 = [r for r in self.graph_builder.relations.values() if r.predicate == premise1[1]
 
         # 查找匹配第二个前提的关系
-        relations2 = [r for r in self.graph_builder.relations.values() if r.predicate == premise2[1]]
+        relations2 = [r for r in self.graph_builder.relations.values() if r.predicate == premise2[1]
 
         # 寻找匹配的组合
         for rel1 in relations1:
@@ -866,7 +866,7 @@ def get_knowledge_graph() -> KnowledgeGraphBuilder:
     return _knowledge_graph
 
 # 工具函数
-async def build_knowledge_graph_from_documents(documents: list[dict[str, str]]) -> dict[str, Any]:
+async def build_knowledge_graph_from_documents(documents: list[dict[str, str]) -> dict[str, Any]:
     """从文档构建知识图谱"""
     kg = get_knowledge_graph()
     reasoner = KnowledgeGraphReasoner(kg)

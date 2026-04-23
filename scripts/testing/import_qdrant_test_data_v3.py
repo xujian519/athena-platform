@@ -5,8 +5,8 @@ Qdrant基准测试数据导入脚本 v3
 """
 
 import random
+
 import requests
-import json
 
 # Qdrant配置
 QDRANT_URL = "http://localhost:16333"

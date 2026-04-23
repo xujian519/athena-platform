@@ -36,7 +36,7 @@ class SessionManager:
 
     def __init__(
         self,
-        storage: Optional[SessionStorage] = None,
+        storage: SessionStorage | None = None,
         session_timeout: int = 3600,
     ):
         """初始化会话管理器
@@ -47,7 +47,7 @@ class SessionManager:
         """
         self.storage = storage
         self.session_timeout = session_timeout
-        self._sessions: Dict[str, SessionMemory] = {}
+        self._sessions: dict[str, SessionMemory] = {}
         logger.info("🧠 会话管理器已初始化")
 
     def create_session(
@@ -55,7 +55,7 @@ class SessionManager:
         session_id: str,
         user_id: str,
         agent_id: str,
-        metadata: Optional[Dict[str, any]] = None,
+        metadata: dict[str, any] | None = None,
     ) -> SessionMemory:
         """创建新会话
 
@@ -81,7 +81,7 @@ class SessionManager:
         logger.info(f"✅ 创建会话: {session_id}")
         return memory
 
-    def get_session(self, session_id: str) -> Optional[SessionMemory]:
+    def get_session(self, session_id: str) -> SessionMemory | None:
         """获取会话
 
         Args:
@@ -139,8 +139,8 @@ class SessionManager:
         role: MessageRole,
         content: str,
         token_count: int = 0,
-        metadata: Optional[Dict[str, any]] = None,
-    ) -> Optional[SessionMessage]:
+        metadata: dict[str, any] | None = None,
+    ) -> SessionMessage | None:
         """添加消息到会话
 
         Args:
@@ -173,9 +173,9 @@ class SessionManager:
     def get_session_messages(
         self,
         session_id: str,
-        count: Optional[int] = None,
-        role: Optional[MessageRole] = None,
-    ) -> List[SessionMessage]:
+        count: int | None = None,
+        role: MessageRole | None = None,
+    ) -> list[SessionMessage]:
         """获取会话消息
 
         Args:
@@ -200,7 +200,7 @@ class SessionManager:
 
         return messages
 
-    def get_active_sessions(self, user_id: Optional[str] = None) -> List[SessionMemory]:
+    def get_active_sessions(self, user_id: str | None = None) -> list[SessionMemory]:
         """获取活跃会话
 
         Args:
@@ -240,7 +240,7 @@ class SessionManager:
 
         return expired_count
 
-    def get_session_stats(self) -> Dict[str, any]:
+    def get_session_stats(self) -> dict[str, any]:
         """获取会话统计信息
 
         Returns:
@@ -263,9 +263,9 @@ class SessionManager:
         session_id: str,
         title: str,
         summary: str,
-        key_points: Optional[List[str]] = None,
-        tags: Optional[List[str]] = None,
-    ) -> Optional[SessionSummary]:
+        key_points: list[str] | None = None,
+        tags: list[str] | None = None,
+    ) -> SessionSummary | None:
         """生成会话摘要
 
         Args:

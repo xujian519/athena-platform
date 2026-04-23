@@ -13,7 +13,6 @@ Database Connection Verification Script
 import asyncio
 import sys
 from pathlib import Path
-from datetime import datetime
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent.parent.parent
@@ -32,9 +31,10 @@ async def verify_all_connections():
     # 1. 验证Neo4j
     print("【1】验证Neo4j连接...")
     try:
-        from dotenv import load_dotenv
-        import subprocess
         import os
+        import subprocess
+
+        from dotenv import load_dotenv
 
         load_dotenv()
 
@@ -61,10 +61,10 @@ async def verify_all_connections():
                     print(f"  ✅ Neo4j连接成功！节点数: {count:,}")
                     results["neo4j"] = True
                 except ValueError:
-                    print(f"  ✅ Neo4j连接成功！")
+                    print("  ✅ Neo4j连接成功！")
                     results["neo4j"] = True
             else:
-                print(f"  ✅ Neo4j连接成功！")
+                print("  ✅ Neo4j连接成功！")
                 results["neo4j"] = True
         else:
             # 尝试使用Python驱动作为备用方案
@@ -78,7 +78,7 @@ async def verify_all_connections():
                 driver.close()
                 print(f"  ✅ Neo4j连接成功！节点数: {count:,}")
                 results["neo4j"] = True
-            except Exception as e2:
+            except Exception:
                 print(f"  ❌ Neo4j连接失败: {result.stderr}")
                 results["neo4j"] = False
 
@@ -89,9 +89,10 @@ async def verify_all_connections():
     # 2. 验证PostgreSQL
     print("\n【2】验证PostgreSQL连接...")
     try:
+        import os
+
         import psycopg2
         from dotenv import load_dotenv
-        import os
 
         load_dotenv()
 
@@ -121,9 +122,10 @@ async def verify_all_connections():
     # 3. 验证Redis
     print("\n【3】验证Redis连接...")
     try:
+        import os
+
         import redis
         from dotenv import load_dotenv
-        import os
 
         load_dotenv()
 
@@ -134,9 +136,9 @@ async def verify_all_connections():
         r = redis.Redis(host=host, port=port, password=password, decode_responses=True)
         r.ping()
 
-        info = r.info("stats")
+        r.info("stats")
 
-        print(f"  ✅ Redis连接成功！")
+        print("  ✅ Redis连接成功！")
         results["redis"] = True
 
     except Exception as e:
@@ -146,9 +148,10 @@ async def verify_all_connections():
     # 4. 验证Qdrant
     print("\n【4】验证Qdrant连接...")
     try:
-        from qdrant_client import QdrantClient
-        from dotenv import load_dotenv
         import os
+
+        from dotenv import load_dotenv
+        from qdrant_client import QdrantClient
 
         load_dotenv()
 

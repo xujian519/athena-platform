@@ -16,15 +16,15 @@ BaseAgent单元测试
 - 响应类
 """
 
+from unittest.mock import patch
+
 import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
 
-from core.agents.base_agent import (
-    BaseAgent,
-    AgentUtils,
+from core.framework.agents.base_agent import (
     AgentResponse,
+    AgentUtils,
+    BaseAgent,
 )
-
 
 # ==================== 测试Agent实现 ====================
 

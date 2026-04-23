@@ -209,7 +209,7 @@ class StandardizedKnowledgeAdapter(APIAdapter):
         )
 
     async def search_patent_knowledge(self, query_text: str,
-                                    knowledge_types: Optional[List[str] = None,
+                                    knowledge_types: Optional[List[str]] = None,
                                     max_results: int = 10,
                                     relevance_threshold: float = 0.5) -> KnowledgeResponse:
         """搜索专利知识的便捷方法"""

@@ -29,7 +29,7 @@ class RetrievalRequest:
     """检索请求"""
 
     query: str
-    filters: dict[str, Any] | None = None
+    filters: Optional[dict[str, Any]] = None
     limit: int = 20
     offset: int = 0
     search_mode: str = "hybrid"  # hybrid, fulltext, vector, kg
@@ -47,7 +47,7 @@ class RetrievalResponse:
     search_mode: str
     execution_time: float
     performance_metrics: dict[str, Any]
-    explanation: str | None = None
+    explanation: Optional[str] = None
 
 
 class PatentRetrievalEngine:

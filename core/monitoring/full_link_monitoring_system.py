@@ -144,7 +144,7 @@ class LinkTrace:
     """链路追踪"""
 
     trace_id: str
-    parent_trace_id: str | None = None
+    parent_trace_id: Optional[str] = None
     operation: str = ""
     start_time: datetime = field(default_factory=datetime.now)
     end_time: datetime | None = None
@@ -152,11 +152,11 @@ class LinkTrace:
 
     # 状态
     status: str = "running"  # running, success, failed, timeout
-    error: str | None = None
+    error: Optional[str] = None
 
     # 数据流
-    input_data: dict[str, Any] | None = None
-    output_data: dict[str, Any] | None = None
+    input_data: Optional[dict[str, Any]] = None
+    output_data: Optional[dict[str, Any]] = None
 
     # 性能指标
     metrics: dict[str, Any] = field(default_factory=dict)
@@ -216,8 +216,8 @@ class ResultValidator:
         }
 
     def validate(
-        self, tool_name: str, result: Any, context: dict[str, Any] | None = None
-    ) -> tuple[ValidationResult, str | None]:
+        self, tool_name: str, result: Any, context: Optional[dict[str, Any]] = None
+    ) -> Optional[tuple[ValidationResult, str]]:
         """
         验证工具调用结果
 
@@ -422,8 +422,8 @@ class FullLinkMonitoringSystem:
     def start_trace(
         self,
         operation: str,
-        parent_trace_id: str | None = None,
-        input_data: dict[str, Any] | None = None,
+        parent_trace_id: Optional[str] = None,
+        input_data: Optional[dict[str, Any]] = None,
         tags: dict[str, str] | None = None,
     ) -> str:
         """
@@ -462,9 +462,9 @@ class FullLinkMonitoringSystem:
     def finish_trace(
         self,
         trace_id: str,
-        output_data: dict[str, Any] | None = None,
+        output_data: Optional[dict[str, Any]] = None,
         status: str = "success",
-        error: str | None = None,
+        error: Optional[str] = None,
     ) -> LinkTrace:
         """
         完成链路追踪
@@ -688,8 +688,8 @@ class FullLinkMonitoringSystem:
             return metrics
 
     def validate_result(
-        self, tool_name: str, result: Any, trace_id: str | None = None
-    ) -> tuple[ValidationResult, str | None]:
+        self, tool_name: str, result: Any, trace_id: Optional[str] = None
+    ) -> Optional[tuple[ValidationResult, str]]:
         """
         验证工具调用结果
 
@@ -727,7 +727,7 @@ class FullLinkMonitoringSystem:
 
         return validation_result, error_msg
 
-    def get_trace(self, trace_id: str) -> dict[str, Any] | None:
+    def get_trace(self, trace_id: str) -> Optional[dict[str, Any]]:
         """获取追踪信息"""
         with self.lock:
             if trace_id in self.active_traces:
@@ -884,7 +884,7 @@ def get_monitoring_system() -> FullLinkMonitoringSystem:
 
 
 # 便捷装饰器
-def trace_operation(operation: str | None = None, tags: dict[str, str] | None | None = None) -> Any:
+def trace_operation(operation: Optional[str] = None, tags: dict[str, str] | None | None = None) -> Any:
     """追踪操作的装饰器"""
     monitor = get_monitoring_system()
 

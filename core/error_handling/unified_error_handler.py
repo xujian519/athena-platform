@@ -73,7 +73,7 @@ class ErrorRecord:
     category: ErrorCategory
     severity: ErrorSeverity
     message: str
-    stack_trace: str | None = None
+    stack_trace: Optional[str] = None
     context: dict[str, Any] = field(default_factory=dict)
     recovery_strategy: RecoveryStrategy | None = None
     recovery_attempted: bool = False
@@ -157,7 +157,7 @@ class UnifiedErrorHandler:
         ]
 
     async def handle_error(
-        self, error: Exception, context: dict[str, Any] | None = None
+        self, error: Exception, context: Optional[dict[str, Any]] = None
     ) -> ErrorRecord:
         """
         处理错误
@@ -435,7 +435,7 @@ def get_error_handler() -> UnifiedErrorHandler:
 
 # 装饰器
 def with_error_handling(
-    fallback: Callable = None, context: dict[str, Any] | None = None
+    fallback: Callable = None, context: Optional[dict[str, Any]] = None
 ):
     """错误处理装饰器"""
 

@@ -109,8 +109,8 @@ class ForkContextBuilder:
     def build(
         self,
         prompt: str,
-        context: dict[str, Any] | None = None,
-        tool_use_id: str | None = None,
+        context: Optional[dict[str, Any]] = None,
+        tool_use_id: Optional[str] = None,
     ) -> ForkContext:
         """构建Fork上下文
 
@@ -149,7 +149,7 @@ class ForkContextBuilder:
     def build_prompt_messages(
         self,
         prompt: str,
-        tool_use_id: str | None = None,
+        tool_use_id: Optional[str] = None,
     ) -> list[dict[str, str]]:
         """构建prompt消息
 

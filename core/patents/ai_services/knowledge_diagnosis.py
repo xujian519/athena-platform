@@ -365,7 +365,7 @@ class KnowledgeActivationDiagnoser:
         self,
         query: str,
         response: str,
-        ground_truth: str | None = None
+        ground_truth: Optional[str] = None
     ) -> DiagnosisResult:
         """
         诊断回答错误
@@ -505,7 +505,7 @@ class KnowledgeActivationDiagnoser:
         self,
         query: str,
         response: str,
-        ground_truth: str | None = None
+        ground_truth: Optional[str] = None
     ) -> ActivationSession:
         """
         创建完整的激活会话
@@ -571,7 +571,7 @@ class KnowledgeActivationDiagnoser:
         self,
         query: str,
         response: str,
-        ground_truth: str | None,
+        ground_truth: Optional[str],
         diagnosis_id: str
     ) -> DiagnosisResult:
         """LLM深度诊断"""
@@ -604,7 +604,7 @@ class KnowledgeActivationDiagnoser:
         self,
         query: str,
         response: str,
-        ground_truth: str | None,
+        ground_truth: Optional[str],
         diagnosis_id: str,
         error_type: ErrorType
     ) -> DiagnosisResult:
@@ -830,7 +830,7 @@ class KnowledgeActivationDiagnoser:
         self,
         original: str,
         improved: str,
-        ground_truth: str | None
+        ground_truth: Optional[str]
     ) -> float:
         """计算改进分数"""
         if not ground_truth:
@@ -868,7 +868,7 @@ class KnowledgeActivationDiagnoser:
 async def diagnose_response(
     query: str,
     response: str,
-    ground_truth: str | None = None,
+    ground_truth: Optional[str] = None,
     llm_manager=None
 ) -> DiagnosisResult:
     """

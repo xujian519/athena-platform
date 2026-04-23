@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 将启动指南正确集成到小诺记忆模块
 Integrate Startup Guide to Xiaonuo Memory Module Correctly
 """
 
-import sys
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
-from pathlib import Path
+import sys
 from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 # 添加项目路径
 sys.path.append(str(Path(__file__).parent.parent))
@@ -55,7 +54,7 @@ python3 app.py
 ```python
 import sys
 sys.path.append('/Users/xujian/Athena工作平台')
-from core.collaboration.ready_on_demand_system import ai_system
+from core.framework.collaboration.ready_on_demand_system import ai_system
 
 # 基础对话 - 使用小诺
 response = await ai_system.chat("你好，小诺")
@@ -134,7 +133,7 @@ def store_to_memory_files(memory_data) -> None:
     index_file = memory_base_path / "memory_index.json"
 
     try:
-        with open(index_file, 'r', encoding='utf-8') as f:
+        with open(index_file, encoding='utf-8') as f:
             index_data = json.load(f)
     except FileNotFoundError:
         index_data = {"memories": [], "last_updated": None}
@@ -241,7 +240,7 @@ def main() -> None:
         print(f"🏷️ 标签: {', '.join(memory_data['tags'])}")
         print(f"⏰ 时间: {memory_data['timestamp']}")
 
-        print(f"\n📚 创建的文件:")
+        print("\n📚 创建的文件:")
         print(f"  📄 记忆文件: {memory_file}")
         print(f"  📋 索引文件: {index_file}")
         print(f"  📖 快速参考: {quick_ref_path}")

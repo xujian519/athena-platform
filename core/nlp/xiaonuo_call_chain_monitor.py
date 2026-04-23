@@ -77,11 +77,11 @@ class Span:
     operation_name: str  # 操作名称
     start_time: datetime  # 开始时间
     end_time: datetime | None = None  # 结束时间
-    duration_ms: float | None = None  # 持续时间(毫秒)
+    duration_ms: Optional[float] = None  # 持续时间(毫秒)
 
     # 状态和结果
     status: str = "unknown"  # unknown, success, error, timeout
-    error_message: str | None = None  # 错误信息
+    error_message: Optional[str] = None  # 错误信息
     result: Any | None = None  # 结果数据
 
     # 标签和注解
@@ -101,7 +101,7 @@ class TraceContext:
 
     trace_id: str
     spans: dict[str, Span] = field(default_factory=dict)
-    root_span: str | None = None
+    root_span: Optional[str] = None
     start_time: datetime = field(default_factory=datetime.now)
 
     # 性能统计
@@ -223,7 +223,7 @@ class CallChainMonitor:
     def start_trace(
         self,
         operation_name: str,
-        parent_span_id: str | None = None,
+        parent_span_id: Optional[str] = None,
         tags: dict[str, str] | None = None,
     ) -> Span:
         """开始追踪"""
@@ -272,7 +272,7 @@ class CallChainMonitor:
         self,
         span: Span,
         status: str = "success",
-        error_message: str | None = None,
+        error_message: Optional[str] = None,
         result: Any = None,
     ) -> Span:
         """完成追踪"""
@@ -584,7 +584,7 @@ class CallChainMonitor:
                 },
             }
 
-    def export_traces(self, filepath: str, filter_condition: dict[str, Any] | None = None) -> Any:
+    def export_traces(self, filepath: str, filter_condition: Optional[dict[str, Any]] = None) -> Any:
         """导出追踪数据"""
         try:
             all_traces = []
@@ -780,7 +780,7 @@ def get_call_chain_monitor() -> CallChainMonitor:
 
 
 # 便捷装饰器
-def trace_operation(operation_name: str | None = None, tags: dict[str, str] | None = None) -> Any:
+def trace_operation(operation_name: Optional[str] = None, tags: dict[str, str] | None = None) -> Any:
     """追踪操作的便捷装饰器"""
     monitor = get_call_chain_monitor()
     return monitor.record_function_call(operation_name, tags)

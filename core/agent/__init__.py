@@ -83,7 +83,7 @@ class BaseAgent(ABC):
     evaluation_engine: Any
     knowledge_manager: Any
 
-    def __init__(self, agent_type: AgentType, config: dict[str, Any] | None = None):
+    def __init__(self, agent_type: AgentType, config: Optional[dict[str, Any]] = None):
         self.agent_id = str(uuid.uuid4())
         self.agent_type = agent_type
         self.config = config or {}

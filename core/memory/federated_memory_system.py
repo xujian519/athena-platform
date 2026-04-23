@@ -50,7 +50,7 @@ class AgentIdentity:
     agent_type: str
     capabilities: list[str]
     trust_score: float = 0.5
-    public_key: str | None = None
+    public_key: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 @dataclass
@@ -70,7 +70,7 @@ class FederatedMemory:
     endorsements: list[str] = field(default_factory=list)  # 其他智能体的背书
     conflicts: list[str] = field(default_factory=list)    # 冲突的记忆ID
     access_control: list[str] = field(default_factory=list)  # 允许访问的智能体ID
-    encryption_key: str | None = None
+    encryption_key: Optional[str] = None
     federated_updates: list[dict[str, Any]] = field(default_factory=list)
     metadata: dict[str, Any] = field(default_factory=dict)
 
@@ -90,7 +90,7 @@ class MemoryUpdate:
     timestamp: datetime
     previous_version: int
     new_version: int
-    signature: str | None = None
+    signature: Optional[str] = None
 
 @dataclass
 class ConflictResolution:
@@ -106,7 +106,7 @@ class ConflictResolution:
 class FederatedMemorySystem:
     """联邦记忆系统"""
 
-    def __init__(self, agent_identity: AgentIdentity, config: dict[str, Any] | None = None):
+    def __init__(self, agent_identity: AgentIdentity, config: Optional[dict[str, Any]] = None):
         self.agent_identity = agent_identity
         self.config = config or {
             'max_federated_memories': 5000,
@@ -494,7 +494,7 @@ class FederatedMemorySystem:
         logger.info(f"背书记忆: {memory_id}")
         return True
 
-    async def search_federated_memories(self, query: str, filters: dict[str, Any] | None = None,
+    async def search_federated_memories(self, query: str, filters: Optional[dict[str, Any]] = None,
                                       limit: int = 10) -> list[tuple[FederatedMemory, float]]:
         """搜索联邦记忆"""
         results = []

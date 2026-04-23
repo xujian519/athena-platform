@@ -128,7 +128,7 @@ class TestEmbeddingFunctions:
     def test_text_embedding_basic(self):
         """测试基本文本嵌入功能"""
         try:
-            from core.embedding.bge_embedding_service import BGEEmbeddingService
+            from core.ai.embedding.bge_embedding_service import BGEEmbeddingService
 
             # 创建嵌入服务（可能需要模型）
             # 这里只测试导入，不实际运行
@@ -274,7 +274,7 @@ class TestVectorUtilities:
     def test_batch_vector_conversion(self):
         """测试批量向量转换"""
         # List[List]转numpy array
-        vectors_list = [[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]]
+        vectors_list = [[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]
         vectors_array = np.array(vectors_list)
 
         assert vectors_array.shape == (3, 2)

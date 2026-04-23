@@ -42,10 +42,10 @@ class LegalWorkflowResult:
     steps_completed: list[str]  # 完成的步骤
     statutes: list[dict[str, Any]] | None = None  # 相关法律条文
     cases: list[dict[str, Any]] | None = None  # 相关案例
-    legal_analysis: dict[str, Any] | None = None  # 法理分析
-    trend_analysis: dict[str, Any] | None = None  # 趋势分析
-    legal_opinion: str | None = None  # 法律意见
-    error: str | None = None  # 错误信息
+    legal_analysis: Optional[dict[str, Any]] = None  # 法理分析
+    trend_analysis: Optional[dict[str, Any]] = None  # 趋势分析
+    legal_opinion: Optional[str] = None  # 法律意见
+    error: Optional[str] = None  # 错误信息
     metadata: dict[str, Any] = field(default_factory=dict)  # 元数据
 
 
@@ -63,7 +63,7 @@ class LegalWorkflow:
     def __init__(
         self,
         task_tool: TaskTool | None = None,
-        config: dict[str, Any] | None = None,
+        config: Optional[dict[str, Any]] = None,
     ):
         """初始化法律研究工作流
 
@@ -272,7 +272,7 @@ class LegalWorkflow:
     def _step_case_law_search(
         self,
         parsed_query: dict[str, Any],
-        case_types: list[str] | None,
+        case_types: Optional[list[str]],
         time_range: dict[str, str] | None,
     ) -> list[dict[str, Any]]:
         """步骤3: 案例法检索

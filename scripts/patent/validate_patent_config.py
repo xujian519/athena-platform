@@ -167,7 +167,7 @@ class ConfigValidator:
         # 性能配置
         if "performance" in agent:
             perf = agent["performance"]
-            if perf.get("run_in_background") != True:
+            if not perf.get("run_in_background"):
                 self.warnings.append("patent-searcher建议支持后台运行")
 
         return len(self.errors) == 0

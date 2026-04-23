@@ -174,7 +174,7 @@ class SemanticCache:
 
         logger.debug(f"🗑️ 使用LRU策略淘汰了 {num_to_evict} 个缓存条目")
 
-    def get(self, query: str) -> dict[str, Any] | None:
+    def get(self, query: str) -> Optional[dict[str, Any]]:
         """
         从缓存中获取搜索结果
 
@@ -221,7 +221,7 @@ class SemanticCache:
     def set(
         self,
         query: str,
-        results: dict[str, Any],        ttl: int | None = None,
+        results: dict[str, Any],        ttl: Optional[int] = None,
         compute_embedding: bool = True,
     ):
         """
@@ -327,7 +327,7 @@ class SimpleCache:
         key_str = json.dumps(key_dict, sort_keys=True, default=str)
         return hashlib.sha256(key_str.encode()).hexdigest()
 
-    def get(self, *args, **kwargs) -> dict[str, Any] | None:
+    def get(self, *args, **kwargs) -> Optional[dict[str, Any]]:
         """
         从缓存中获取结果
 

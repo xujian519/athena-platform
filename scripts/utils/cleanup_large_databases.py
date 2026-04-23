@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 清理大型数据库脚本
 Cleanup Large Databases Script
@@ -11,12 +10,11 @@ Cleanup Large Databases Script
 版本: v1.0.0
 """
 
-import os
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import shutil
 import sqlite3
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+from typing import Any
+
 
 def check_large_databases() -> bool:
     """检查大型数据库"""

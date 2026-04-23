@@ -139,7 +139,7 @@ class EnhancedPatentMetrics:
         return min(score, 1.0)
 
     @staticmethod
-    def _extract_case_type(obj) -> str | None:
+    def _extract_case_type(obj) -> Optional[str]:
         """提取案例类型"""
         if hasattr(obj, "case_type"):
             return str(obj.case_type).strip()
@@ -176,7 +176,7 @@ class EnhancedPatentMetrics:
         return False
 
     @staticmethod
-    def _extract_patent_number(text: str) -> str | None:
+    def _extract_patent_number(text: str) -> Optional[str]:
         """
         提取专利号
 
@@ -246,7 +246,7 @@ class EnhancedPatentMetrics:
         return " ".join(text_parts)
 
     @staticmethod
-    def _extract_reasoning(pred: dspy.Prediction) -> str | None:
+    def _extract_reasoning(pred: dspy.Prediction) -> Optional[str]:
         """提取推理内容"""
         # 优先使用reasoning字段
         if hasattr(pred, "reasoning") and pred.reasoning:

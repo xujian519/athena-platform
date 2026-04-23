@@ -267,7 +267,7 @@ class XiaonuoOptimizationManager:
         self,
         task_description: str,
         parameters: dict[str, Any],        available_tools: list[str] = None,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> OptimizationResult:
         """
         优化任务执行(一站式API)
@@ -424,7 +424,7 @@ class XiaonuoOptimizationManager:
         self,
         task_description: str,
         available_tools: list[Any],
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
         top_k: int = 5,
     ) -> list[Any]:
         """
@@ -654,7 +654,7 @@ _manager_instance: XiaonuoOptimizationManager | None = None
 
 
 def get_optimization_manager(
-    config: OptimizationConfig | None = None, config_path: str | None = None
+    config: OptimizationConfig | None = None, config_path: Optional[str] = None
 ) -> XiaonuoOptimizationManager:
     """
     获取优化管理器单例

@@ -54,7 +54,7 @@ class ProcessingResult:
     task_id: str
     original_input: str
     initial_output: str
-    enhanced_output: str | None = None
+    enhanced_output: Optional[str] = None
     reflection_result: LegalReflectionResult | None = None
     collaboration_session: CollaborationSession | None = None
     learning_events: list[LearningEvent] = field(default_factory=list)
@@ -112,8 +112,8 @@ class XiaonaIntegratedEnhancedSystem:
         task_id: str,
         task_input: str,
         task_type: str = "patent_analysis",
-        context: dict[str, Any] | None = None,
-        user_id: str | None = None,
+        context: Optional[dict[str, Any]] = None,
+        user_id: Optional[str] = None,
     ) -> ProcessingResult:
         """处理法律任务 - 主入口"""
 

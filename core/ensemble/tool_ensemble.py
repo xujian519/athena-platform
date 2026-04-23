@@ -56,7 +56,7 @@ class ToolExecutionResult:
     success: bool
     result: Any
     execution_time: float
-    error: str | None = None
+    error: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -123,7 +123,7 @@ class ToolCallEnsemble:
     async def execute(
         self,
         intent: str,
-        parameters: dict[str, Any],        context: dict[str, Any] | None = None,
+        parameters: dict[str, Any],        context: Optional[dict[str, Any]] = None,
         strategy: RoutingStrategy | None = None,
     ) -> EnsembleToolResult:
         """

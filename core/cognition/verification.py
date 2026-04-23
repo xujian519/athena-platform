@@ -40,8 +40,8 @@ class VerificationIssue:
     code: str  # 问题代码
     message: str  # 问题描述
     severity: str  # 严重程度: error/warning/info
-    location: str | None = None  # 问题位置
-    suggestion: str | None = None  # 修复建议
+    location: Optional[str] = None  # 问题位置
+    suggestion: Optional[str] = None  # 修复建议
 
 
 @dataclass
@@ -148,8 +148,8 @@ class Verifier(ABC):
         code: str,
         message: str,
         severity: str = "error",
-        location: str | None = None,
-        suggestion: str | None = None,
+        location: Optional[str] = None,
+        suggestion: Optional[str] = None,
     ) -> VerificationIssue:
         """创建验证问题"""
         return VerificationIssue(
@@ -315,7 +315,7 @@ class DataQualityVerifier(Verifier):
     def _check_forbidden_patterns(
         self,
         data: dict[str, Any],
-    ) -> list[tuple[str, str | None]]:
+    ) -> list[Optional[tuple[str, str]]]:
         """检查禁止模式"""
         matches = []
 

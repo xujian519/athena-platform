@@ -209,11 +209,11 @@ class PlatformManager:
 
         # 调整文本长度
         if "body" in adapted and len(adapted["body"]) > platform_config["max_text_length"]:
-            adapted["body"] = adapted["body"][:platform_config["max_text_length"]] + "..."
+            adapted["body"] = adapted["body"][:platform_config["max_text_length"] + "..."
 
         # 调整标签数量
         if "tags" in adapted and len(adapted["tags"]) > platform_config["hashtag_limit"]:
-            adapted["tags"] = adapted["tags"][:platform_config["hashtag_limit"]]
+            adapted["tags"] = adapted["tags"][:platform_config["hashtag_limit"]
 
         # 平台特定适配
         if platform == "小红书":
@@ -241,7 +241,7 @@ class PlatformManager:
 
         # 添加话题标签
         if "tags" in adapted:
-            adapted["tags"] = [f"#{tag}" for tag in adapted["tags"]]
+            adapted["tags"] = [f"#{tag}" for tag in adapted["tags"]
 
         # 添加引导语
         adapted["body"] = "大家好，我是小宸～\n\n" + adapted.get("body", "")
@@ -308,7 +308,7 @@ class PlatformManager:
 
         # 添加话题
         if "tags" in adapted:
-            adapted["tags"] = [f"#{tag}#" for tag in adapted["tags"]]
+            adapted["tags"] = [f"#{tag}#" for tag in adapted["tags"]
 
         return adapted
 
@@ -344,7 +344,7 @@ class PlatformManager:
 
         # 计算统计数据
         total_published = len(history)
-        successful_published = len([r for r in history if r["success"]])
+        successful_published = len([r for r in history if r["success"])
 
         # 统计各平台发布数量
         platform_stats = {}

@@ -46,7 +46,7 @@ class CircuitBreakerState:
     state: CircuitState = CircuitState.CLOSED
     failure_count: int = 0
     success_count: int = 0
-    last_failure_time: float | None = None
+    last_failure_time: Optional[float] = None
     last_state_change: float = field(default_factory=time.time)
     rolling_failures: list[float] = field(default_factory=list)
 
@@ -250,7 +250,7 @@ class DegradationManager:
         self,
         service_name: str,
         func: Callable,
-        fallback_name: str | None = None,
+        fallback_name: Optional[str] = None,
         *args,
         **kwargs
     ) -> Any:
@@ -336,7 +336,7 @@ class DegradationManager:
             del self.degraded_services[service_name]
             logger.info(f"服务已恢复: {service_name}")
 
-    def is_degraded(self, service_name: str | None = None) -> bool:
+    def is_degraded(self, service_name: Optional[str] = None) -> bool:
         """
         检查是否降级
 

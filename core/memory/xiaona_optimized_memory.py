@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 from __future__ import annotations
 """
@@ -501,10 +500,10 @@ class XiaonaOptimizedMemory:
         emotional_weight: float = 0.0,
         family_related: bool = False,
         work_related: bool = False,
-        tags: list[str] | None = None,
-        metadata: dict[str, Any] | None = None,
+        tags: Optional[list[str]] = None,
+        metadata: Optional[dict[str, Any]] = None,
         tier: MemoryTier = MemoryTier.WARM,
-        related_agents: list[str] | None = None,
+        related_agents: Optional[list[str]] = None,
     ) -> str:
         """存储记忆"""
         track_id = self.performance_tracker.start_tracking("memory_store")
@@ -559,7 +558,7 @@ class XiaonaOptimizedMemory:
 
     async def retrieve_memories(
         self,
-        query: str | None = None,
+        query: Optional[str] = None,
         memory_type: MemoryType = None,
         tier: MemoryTier = None,
         limit: int = 10,
@@ -622,7 +621,7 @@ class XiaonaOptimizedMemory:
     def _match_criteria(
         self,
         item: MemoryItem,
-        query: str | None = None,
+        query: Optional[str] = None,
         memory_type: MemoryType = None,
         importance_threshold: float = 0.0,
     ) -> bool:
@@ -648,7 +647,7 @@ class XiaonaOptimizedMemory:
 
     async def _search_database(
         self,
-        query: str | None = None,
+        query: Optional[str] = None,
         memory_type: MemoryType = None,
         tier: MemoryTier = None,
         limit: int = 10,

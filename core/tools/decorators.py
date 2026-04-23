@@ -36,7 +36,7 @@ class ToolMetadata:
     name: str  # 工具名称
     description: str  # 工具描述
     tags: list[str] = field(default_factory=list)  # 标签
-    category: str | None = None  # 分类
+    category: Optional[str] = None  # 分类
     version: str = "1.0.0"  # 版本
     author: str = "Athena Team"  # 作者
     lazy: bool = False  # 是否懒加载
@@ -45,10 +45,10 @@ class ToolMetadata:
 
 
 def tool(
-    name: str | None = None,
-    description: str | None = None,
-    tags: list[str] | None = None,
-    category: str | None = None,
+    name: Optional[str] = None,
+    description: Optional[str] = None,
+    tags: Optional[list[str]] = None,
+    category: Optional[str] = None,
     version: str = "1.0.0",
     author: str = "Athena Team",
     lazy: bool = False,
@@ -191,7 +191,7 @@ def get_tool_metadata(func: Any) -> ToolMetadata | None:
     return getattr(func, "_tool_metadata", None)
 
 
-def get_tool_name(func: Any) -> str | None:
+def get_tool_name(func: Any) -> Optional[str]:
     """
     获取工具名称
 
@@ -206,7 +206,7 @@ def get_tool_name(func: Any) -> str | None:
     return getattr(func, "_tool_name", None)
 
 
-def get_tool_description(func: Any) -> str | None:
+def get_tool_description(func: Any) -> Optional[str]:
     """
     获取工具描述
 
@@ -221,7 +221,7 @@ def get_tool_description(func: Any) -> str | None:
     return getattr(func, "_tool_description", None)
 
 
-def get_tool_tags(func: Any) -> list[str] | None:
+def get_tool_tags(func: Any) -> Optional[list[str]]:
     """
     获取工具标签
 

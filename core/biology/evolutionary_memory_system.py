@@ -109,7 +109,7 @@ class EvolutionaryMemory:
 
         logger.info(f"🧬 {self.name} ({self.version}) 初始化完成")
 
-    def register_agent(self, agent_id: str, parents: list[str] | None = None) -> None:
+    def register_agent(self, agent_id: str, parents: Optional[list[str]] = None) -> None:
         """
         注册新智能体(类似新物种诞生)
 
@@ -204,7 +204,7 @@ class EvolutionaryMemory:
         return trait_id
 
     def natural_selection(
-        self, pressure: EvolutionaryPressure, environment_context: dict[str, Any] | None = None
+        self, pressure: EvolutionaryPressure, environment_context: Optional[dict[str, Any]] = None
     ) -> list[str]:
         """
         自然选择:根据环境压力筛选基因

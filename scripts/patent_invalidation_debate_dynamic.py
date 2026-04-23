@@ -12,13 +12,12 @@
 日期：2026-04-23
 """
 
-import json
 import asyncio
-from typing import Dict, List
-from datetime import datetime
-from pathlib import Path
+import json
 import os
 import sys
+from datetime import datetime
+from pathlib import Path
 
 # 设置路径
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -43,8 +42,8 @@ def load_api_config():
     }
 
     # 优先使用本地oMLX
-    print(f"✅ 检测到本地oMLX配置：localhost:8009")
-    print(f"✅ 可用模型：Qwen3.5-27B-4bit, Qwen3.5-4B-MLX-4bit")
+    print("✅ 检测到本地oMLX配置：localhost:8009")
+    print("✅ 可用模型：Qwen3.5-27B-4bit, Qwen3.5-4B-MLX-4bit")
 
     return config
 
@@ -65,43 +64,43 @@ def load_knowledge_base():
     # 读取创造性判断法条画像
     法条画像_file = Path("/Users/xujian/Athena工作平台/core/legal_world_model/legal_provisions/创造性判断_法条画像.md")
     if 法条画像_file.exists():
-        with open(法条画像_file, 'r', encoding='utf-8') as f:
+        with open(法条画像_file, encoding='utf-8') as f:
             knowledge_base["法条画像"] = f.read()
 
     # 读取无效策略能力提示词
     无效策略_file = Path("/Users/xujian/Athena工作平台/prompts/capability/cap05_invalid.md")
     if 无效策略_file.exists():
-        with open(无效策略_file, 'r', encoding='utf-8') as f:
+        with open(无效策略_file, encoding='utf-8') as f:
             knowledge_base["无效策略能力"] = f.read()
 
     # 读取无效分析任务提示词
     无效分析_file = Path("/Users/xujian/Athena工作平台/prompts/business/task07_invalid_strategy.md")
     if 无效分析_file.exists():
-        with open(无效分析_file, 'r', encoding='utf-8') as f:
+        with open(无效分析_file, encoding='utf-8') as f:
             knowledge_base["无效分析任务"] = f.read()
 
     # 读取目标专利结构化提取
     目标专利_file = Path("/Users/xujian/Nutstore Files/02无效诉讼/济南力邦/201921401279.9无效材料/补充证据和理由2026.4.22/结构化提取_目标专利201921401279.9.md")
     if 目标专利_file.exists():
-        with open(目标专利_file, 'r', encoding='utf-8') as f:
+        with open(目标专利_file, encoding='utf-8') as f:
             knowledge_base["目标专利信息"] = f.read()
 
     # 读取D1结构化提取
     D1_file = Path("/Users/xujian/Nutstore Files/02无效诉讼/济南力邦/201921401279.9无效材料/补充证据和理由2026.4.22/结构化提取_D1_CN208647230U.md")
     if D1_file.exists():
-        with open(D1_file, 'r', encoding='utf-8') as f:
+        with open(D1_file, encoding='utf-8') as f:
             knowledge_base["D1信息"] = f.read()
 
     # 读取D2结构化提取
     D2_file = Path("/Users/xujian/Nutstore Files/02无效诉讼/济南力邦/201921401279.9无效材料/补充证据和理由2026.4.22/结构化提取_D2_CN201198403Y.md")
     if D2_file.exists():
-        with open(D2_file, 'r', encoding='utf-8') as f:
+        with open(D2_file, encoding='utf-8') as f:
             knowledge_base["D2信息"] = f.read()
 
     # 读取E1结构化提取
     E1_file = Path("/Users/xujian/Nutstore Files/02无效诉讼/济南力邦/201921401279.9无效材料/补充证据和理由2026.4.22/结构化提取_E1_CN206156248U.md")
     if E1_file.exists():
-        with open(E1_file, 'r', encoding='utf-8') as f:
+        with open(E1_file, encoding='utf-8') as f:
             knowledge_base["E1信息"] = f.read()
 
     return knowledge_base
@@ -110,14 +109,14 @@ def load_knowledge_base():
 class DynamicPatentDebateAgent:
     """动态专利辩论代理"""
 
-    def __init__(self, name: str, role: str, client: AsyncOpenAI, system_prompt: str, knowledge_base: Dict, model: str = "claude-sonnet-4-20250514"):
+    def __init__(self, name: str, role: str, client: AsyncOpenAI, system_prompt: str, knowledge_base: dict, model: str = "claude-sonnet-4-20250514"):
         self.name = name
         self.role = role
         self.client = client
         self.model = model
         self.system_prompt = system_prompt
         self.knowledge_base = knowledge_base
-        self.debate_history: List[Dict] = []
+        self.debate_history: list[dict] = []
 
     async def generate_response(self, opponent_argument: str, round_num: int) -> str:
         """根据对方发言动态生成回应"""
@@ -164,7 +163,7 @@ class DynamicPatentDebateAgent:
 
         messages = [
             {"role": "system", "content": self.system_prompt},
-            {"role": "user", "content": context + f"""
+            {"role": "user", "content": context + """
 
 请根据你的角色立场，针对对方的观点进行反驳，并进一步阐述你的法律依据。
 
@@ -280,12 +279,12 @@ class DynamicPatentDebateManager:
             self.model
         )
 
-        self.debate_log: List[Dict] = []
+        self.debate_log: list[dict] = []
 
     def _create_requester_prompt(self) -> str:
         """创建无效请求人代理的系统提示词"""
 
-        return f"""你是济南力邦（无效请求人）的资深专利律师，正在对专利201921401279.9（广东冠一机械科技有限公司）提出无效宣告请求。
+        return """你是济南力邦（无效请求人）的资深专利律师，正在对专利201921401279.9（广东冠一机械科技有限公司）提出无效宣告请求。
 
 # 你的核心任务
 
@@ -365,7 +364,7 @@ class DynamicPatentDebateManager:
     def _create_patentee_prompt(self) -> str:
         """创建被请求人代理的系统提示词"""
 
-        return f"""你是广东冠一机械科技有限公司（专利权人）的资深专利律师，正在为专利201921401279.9进行有效辩护。
+        return """你是广东冠一机械科技有限公司（专利权人）的资深专利律师，正在为专利201921401279.9进行有效辩护。
 
 # 你的核心任务
 
@@ -452,13 +451,13 @@ class DynamicPatentDebateManager:
 5. **不能泛泛而谈，必须针对对方的每一个论点进行反驳**
 """
 
-    async def conduct_debate(self, rounds: int = 5) -> Dict:
+    async def conduct_debate(self, rounds: int = 5) -> dict:
         """进行多轮动态辩论"""
 
         print(f"\n{'='*80}")
-        print(f"专利无效宣告动态辩论开始")
-        print(f"专利号：201921401279.9")
-        print(f"专利名称：包装机物品传送装置的物料限位板自动调节机构")
+        print("专利无效宣告动态辩论开始")
+        print("专利号：201921401279.9")
+        print("专利名称：包装机物品传送装置的物料限位板自动调节机构")
         print(f"辩论轮次：{rounds}轮（双方交替发言，共{2*rounds}场）")
         print(f"{'='*80}\n")
 
@@ -525,8 +524,8 @@ class DynamicPatentDebateManager:
 
         return {
             "total_rounds": rounds,
-            "requester_arguments": len([x for x in self.debate_log if "请求人" in x["speaker"]]),
-            "patentee_arguments": len([x for x in self.debate_log if "专利权人" in x["speaker"]]),
+            "requester_arguments": len([x for x in self.debate_log if "请求人" in x["speaker"]),
+            "patentee_arguments": len([x for x in self.debate_log if "专利权人" in x["speaker"]),
             "debate_log": self.debate_log
         }
 
@@ -547,11 +546,11 @@ class DynamicPatentDebateManager:
         md_file = output_dir / f"专利无效宣告动态辩论记录_{timestamp}.md"
         with open(md_file, 'w', encoding='utf-8') as f:
             f.write("# 专利无效宣告动态辩论记录\n\n")
-            f.write(f"**专利号**：201921401279.9\n")
-            f.write(f"**专利名称**：包装机物品传送装置的物料限位板自动调节机构\n")
+            f.write("**专利号**：201921401279.9\n")
+            f.write("**专利名称**：包装机物品传送装置的物料限位板自动调节机构\n")
             f.write(f"**辩论时间**：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
             f.write(f"**辩论轮次**：{len(self.debate_log)}轮\n")
-            f.write(f"**辩论类型**：动态辩论（使用实时LLM根据对方发言生成回应）\n\n")
+            f.write("**辩论类型**：动态辩论（使用实时LLM根据对方发言生成回应）\n\n")
             f.write("---\n\n")
 
             for entry in self.debate_log:
@@ -559,7 +558,7 @@ class DynamicPatentDebateManager:
                 f.write(f"{entry['content']}\n\n")
                 f.write("---\n\n")
 
-        print(f"\n辩论记录已保存：")
+        print("\n辩论记录已保存：")
         print(f"- JSON格式：{json_file}")
         print(f"- Markdown格式：{md_file}")
 

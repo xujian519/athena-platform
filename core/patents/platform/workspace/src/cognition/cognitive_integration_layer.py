@@ -117,7 +117,7 @@ class CognitiveRequest:
     context: Optional[Dict[str, Any]] = None
     options: Optional[Dict[str, Any]] = None
     priority: int = 1  # 1-5, 5最高
-    user_id: str | None = None
+    user_id: Optional[str] = None
 
 
 @dataclass
@@ -1027,7 +1027,7 @@ class CognitiveIntegrationLayer:
             'knowledge_updates': len(self.knowledge_updates)
         }
 
-    def export_knowledge_graph(self, format: str = 'json') -> str | None:
+    def export_knowledge_graph(self, format: str = 'json') -> Optional[str]:
         """导出知识图谱"""
         if not self.module_manager.is_available('knowledge_graph'):
             return None

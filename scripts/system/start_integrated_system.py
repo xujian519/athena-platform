@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 集成系统启动脚本
 启动包含所有优化模式的Athena平台
@@ -9,12 +8,11 @@
 """
 
 import asyncio
-import json
 import logging
 import sys
-from pathlib import Path
-from typing import Dict, Any
 from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 # 配置日志
 logging.basicConfig(
@@ -50,13 +48,13 @@ class IntegratedSystemLauncher:
             logger.info("✅ 反思引擎初始化完成")
 
             # 导入并行执行器
-            from core.execution.parallel_executor import ParallelExecutor, TaskPriority
+            from core.execution.parallel_executor import ParallelExecutor
             parallel_executor = ParallelExecutor(max_workers=5, max_concurrent_tasks=10)
             logger.info("✅ 并行执行器初始化完成")
 
             # 导入智能体协作器
-            from core.collaboration.enhanced_agent_coordination import (
-                EnhancedAgentCoordinator, CollaborationMode, AgentCapability
+            from core.framework.collaboration.enhanced_agent_coordination import (
+                EnhancedAgentCoordinator,
             )
 
             # 创建智能体能力实例（因为枚举不存在）
@@ -77,7 +75,10 @@ class IntegratedSystemLauncher:
             self.AgentCapability = MockAgentCapability
 
             # 导入记忆管理器
-            from core.memory.enhanced_memory_manager import EnhancedMemoryManager, MemoryType
+            from core.framework.memory.enhanced_memory_manager import (
+                EnhancedMemoryManager,
+                MemoryType,
+            )
             self.MemoryType = MemoryType
             memory_manager = EnhancedMemoryManager()
             logger.info("✅ 记忆管理器初始化完成")
@@ -410,14 +411,14 @@ class IntegratedSystemLauncher:
 
             if stats['current_system']:
                 current = stats['current_system']
-                print(f"\n当前系统资源:")
+                print("\n当前系统资源:")
                 print(f"   CPU使用率: {current['cpu_percent']:.1f}%")
                 print(f"   内存使用率: {current['memory_percent']:.1f}%")
                 print(f"   内存使用量: {current['memory_used_mb']:.1f} MB")
                 print(f"   活跃线程数: {current['active_threads']}")
 
             if summary and summary.get('status') != 'no_data':
-                print(f"\n系统健康状态:")
+                print("\n系统健康状态:")
                 print(f"   总体状态: {summary['overall_status']}")
                 print(f"   健康评分: {summary['health_score']}/100")
                 print(f"   平均CPU: {summary['performance_averages']['cpu_percent']:.1f}%")
@@ -460,7 +461,7 @@ class IntegratedSystemLauncher:
         print("   - 性能指标统计")
         print("   - 自动警报系统")
 
-    async def system_health_check(self) -> Dict[str, Any]:
+    async def system_health_check(self) -> dict[str, Any]:
         """系统健康检查"""
         try:
             checks = {
@@ -505,7 +506,7 @@ class IntegratedSystemLauncher:
                 "error": str(e)
             }
 
-    async def system_self_check(self) -> Dict[str, Any]:
+    async def system_self_check(self) -> dict[str, Any]:
         """系统自检"""
         issues = []
 

@@ -17,8 +17,8 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from core.agents.base_agent import BaseAgent
-from core.memory.unified_memory_system import MemoryType, MemoryCategory
+from core.framework.agents.base_agent import BaseAgent
+from core.framework.memory.unified_memory_system import MemoryType, MemoryCategory
 
 
 def demo_base_agent_memory():
@@ -94,7 +94,7 @@ def demo_xiaona_agent():
     print("=" * 60)
 
     try:
-        from core.agents.xiaona_agent_with_unified_memory import XiaonaAgentWithMemory
+        from core.framework.agents.xiaona_agent_with_unified_memory import XiaonaAgentWithMemory
 
         # 创建临时项目目录
         temp_dir = tempfile.mkdtemp()
@@ -147,7 +147,7 @@ def demo_xiaonuo_orchestrator():
     print("=" * 60)
 
     try:
-        from core.agents.xiaonuo_orchestrator_with_memory import XiaonuoOrchestratorWithMemory
+        from core.framework.agents.xiaonuo_orchestrator_with_memory import XiaonuoOrchestratorWithMemory
 
         # 创建临时项目目录
         temp_dir = tempfile.mkdtemp()

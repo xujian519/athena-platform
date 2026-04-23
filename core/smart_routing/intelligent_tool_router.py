@@ -54,7 +54,7 @@ class ToolRecommendation:
     confidence: float
     reason: str
     estimated_time: float
-    dependencies: list[str] | None = None
+    dependencies: Optional[list[str]] = None
     file_path: str = None
 
 
@@ -69,7 +69,7 @@ class RoutingResult:
     workflow: str
     estimated_total_time: float
     optimization_suggestions: list[str]
-    fallback_options: list[str] | None = None
+    fallback_options: Optional[list[str]] = None
 
 
 class IntelligentToolRouter:
@@ -221,7 +221,7 @@ class IntelligentToolRouter:
         }
 
     async def route_request(
-        self, user_input: str, context: dict[str, Any] | None = None
+        self, user_input: str, context: Optional[dict[str, Any]] = None
     ) -> RoutingResult:
         """智能路由请求"""
         start_time = time.time()

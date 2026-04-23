@@ -142,7 +142,7 @@ class ReflectionEngine:
     参考:Andrew Ng - Agentic Design Patterns
     """
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
 
         # 反思历史 - 使用正确的工厂方法
@@ -639,7 +639,7 @@ class ReflectionEngine:
         """获取所有反思历史"""
         return dict(self.history)
 
-    def clear_history(self, tool_id: str | None = None) -> None:
+    def clear_history(self, tool_id: Optional[str] = None) -> None:
         """清除反思历史"""
         if tool_id:
             self.history.pop(tool_id, None)

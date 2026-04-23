@@ -5,7 +5,6 @@
 
 import numpy as np
 from qdrant_client import QdrantClient
-from qdrant_client.http.models import Filter, ScrollRequest
 
 client = QdrantClient(host='localhost', port=6333)
 
@@ -20,11 +19,11 @@ try:
     )
 
     points = result[0]  # points
-    print(f"✅ scroll方法正常工作")
+    print("✅ scroll方法正常工作")
     print(f"   找到 {len(points)} 个点")
 
     if points:
-        print(f"\n第一个点的信息:")
+        print("\n第一个点的信息:")
         point = points[0]
         print(f"  ID: {point.id}")
         print(f"  向量维度: {len(point.vector) if hasattr(point.vector, '__len__') else 'unknown'}")
@@ -32,7 +31,7 @@ try:
 
     # 如果有数据，尝试简单的余弦相似度搜索
     if points:
-        print(f"\n尝试手动相似度计算:")
+        print("\n尝试手动相似度计算:")
         query_vector = np.random.rand(1024)  # 随机查询向量
 
         similarities = []
@@ -50,7 +49,7 @@ try:
         # 按相似度排序
         similarities.sort(key=lambda x: x["score"], reverse=True)
 
-        print(f"✅ 手动相似度计算成功")
+        print("✅ 手动相似度计算成功")
         for i, item in enumerate(similarities[:3], 1):
             print(f"  {i}. ID: {item['id']}, Score: {item['score']:.4f}")
 

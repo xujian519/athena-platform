@@ -74,9 +74,9 @@ class CollaborationTask:
     title: str
     description: str
     context: dict[str, Any]
-    ai_output: str | None = None
-    human_review: str | None = None
-    final_decision: str | None = None
+    ai_output: Optional[str] = None
+    human_review: Optional[str] = None
+    final_decision: Optional[str] = None
     decision_level: DecisionLevel = DecisionLevel.MEDIUM
     collaboration_mode: CollaborationMode = CollaborationMode.SEMI_AUTOMATIC
     assigned_expert: HumanExpert | None = None
@@ -96,7 +96,7 @@ class CollaborationSession:
     ai_confidence: float = 0.0
     human_confidence: float = 0.0
     consensus_reached: bool = False
-    final_output: str | None = None
+    final_output: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
     created_at: datetime = field(default_factory=datetime.now)
     completed_at: datetime | None = None
@@ -281,7 +281,7 @@ class HumanInTheLoopEngine:
         return session
 
     async def process_human_input(
-        self, session_id: str, human_input: str, confidence: float | None = None
+        self, session_id: str, human_input: str, confidence: Optional[float] = None
     ) -> dict[str, Any]:
         """处理人类输入"""
 

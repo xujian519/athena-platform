@@ -247,7 +247,7 @@ class UnknownErrorHandler:
         logger.debug(f"注册错误模式: {pattern.pattern_id} - {pattern.name}")
 
     def handle_error(
-        self, error: Exception, context: dict[str, Any] | None = None
+        self, error: Exception, context: Optional[dict[str, Any]] = None
     ) -> RecoveryResult:
         """
         处理错误
@@ -336,7 +336,7 @@ class UnknownErrorHandler:
 
     def _identify_pattern(
         self, error_type: str, error_message: str, stack_trace: str
-    ) -> str | None:
+    ) -> Optional[str]:
         """识别错误模式"""
         # 组合所有文本
         combined_text = f"{error_type} {error_message} {stack_trace}".lower()

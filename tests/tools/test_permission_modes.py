@@ -6,31 +6,29 @@
 作者: Athena平台团队
 创建时间: 2026-04-20
 """
-from __future__ import annotations
 
 import pytest
 
-from core.tools.permissions_v2.modes import (
-    PermissionMode,
-    PLAN_MODE_WRITES,
-    DENIED_COMMANDS,
-    is_plan_mode_write,
-    is_read_only_tool,
-)
-from core.tools.permissions_v2.path_rules import (
-    PathRule,
-    PathRuleManager,
-    DEFAULT_PATH_RULES,
+from core.tools.permissions_v2.checker import (
+    EnhancedPermissionChecker,
+    PermissionConfig,
 )
 from core.tools.permissions_v2.command_blacklist import (
     CommandBlacklist,
     check_denied_command,
 )
-from core.tools.permissions_v2.checker import (
-    EnhancedPermissionChecker,
-    PermissionConfig,
+from core.tools.permissions_v2.modes import (
+    DENIED_COMMANDS,
+    PLAN_MODE_WRITES,
+    PermissionMode,
+    is_plan_mode_write,
+    is_read_only_tool,
 )
-
+from core.tools.permissions_v2.path_rules import (
+    DEFAULT_PATH_RULES,
+    PathRule,
+    PathRuleManager,
+)
 
 # ========================================
 # PermissionMode 测试
@@ -462,3 +460,4 @@ def test_bypass_mode_allows_all():
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+

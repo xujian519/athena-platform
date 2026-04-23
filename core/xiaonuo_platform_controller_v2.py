@@ -72,7 +72,7 @@ class HealthCheckConfig:
     """健康检查配置"""
 
     enabled: bool = True
-    url: str | None = None
+    url: Optional[str] = None
     interval: int = 30  # 检查间隔(秒)
     timeout: int = 5  # 超时时间
     retries: int = 3  # 重试次数
@@ -87,12 +87,12 @@ class ServiceInfo:
     category: str
     service_type: ServiceType
     path: str
-    entry_file: str | None
-    port: int | None
+    entry_file: Optional[str]
+    port: Optional[int]
     status: ServiceStatus = ServiceStatus.UNKNOWN
-    pid: int | None = None
-    container_id: str | None = None
-    health_url: str | None = None
+    pid: Optional[int] = None
+    container_id: Optional[str] = None
+    health_url: Optional[str] = None
     dependencies: list[str] = field(default_factory=list)
     startup_order: int = 0
     description: str = ""

@@ -98,8 +98,8 @@ class PlanEvaluator:
         self,
         plan: ExecutionPlan,
         feedback: list[ExecutionFeedback],
-        actual_execution_time: int | None = None,
-        resource_usage: dict[str, Any] | None = None,
+        actual_execution_time: Optional[int] = None,
+        resource_usage: Optional[dict[str, Any]] = None,
     ) -> PlanEvaluation:
         """
         评估方案执行效果
@@ -178,7 +178,7 @@ class PlanEvaluator:
         self,
         plan: ExecutionPlan,
         feedback: list[ExecutionFeedback],
-        actual_time: int | None
+        actual_time: Optional[int]
     ) -> DimensionScore:
         """评估时间准确性"""
         # 优先使用实际执行时间
@@ -326,7 +326,7 @@ class PlanEvaluator:
     def _evaluate_resource_efficiency(
         self,
         plan: ExecutionPlan,
-        resource_usage: dict[str, Any] | None
+        resource_usage: Optional[dict[str, Any]]
     ) -> DimensionScore:
         """评估资源效率"""
         # 基于方案配置估算

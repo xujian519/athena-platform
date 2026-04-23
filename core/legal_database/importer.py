@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 class LegalDatabaseImporter:
     """法律数据库导入器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化导入器
 
@@ -219,8 +219,8 @@ class LegalDatabaseImporter:
         self,
         data_dir: Path,
         batch_size: int = 100,
-        limit: int | None = None,
-        categories: list[str] | None = None,
+        limit: Optional[int] = None,
+        categories: Optional[list[str]] = None,
     ):
         """
         从目录导入法律文件

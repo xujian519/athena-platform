@@ -32,7 +32,7 @@ class APIResponse(BaseModel):
     data: Any | None = None
     errors: list | None = None
     timestamp: str = None
-    request_id: str | None = None
+    request_id: Optional[str] = None
 
     class Config:
         json_schema_extra = {
@@ -248,7 +248,7 @@ def setup_api_middleware(app: FastAPI, config: dict | None = None) -> None:
 
 
 def success_response(
-    message: str = "操作成功", data: Any | None = None, request_id: str | None = None
+    message: str = "操作成功", data: Any | None = None, request_id: Optional[str] = None
 ) -> dict[str, Any]:
     """创建成功响应"""
     return {

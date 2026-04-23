@@ -47,7 +47,7 @@ def get_allowed_dirs() -> list[str]:
     return DEFAULT_ALLOWED_DIRS
 
 
-def validate_file_path(file_path: str | None = None, allowed_dirs: list[str] = None) -> Path:
+def validate_file_path(file_path: Optional[str] = None, allowed_dirs: list[str] = None) -> Path:
     """
     验证文件路径是否在允许的目录内(防止路径遍历攻击)
 

@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any
 
-from core.database.unified_connection import get_postgres_pool
+from core.infrastructure.database.unified_connection import get_postgres_pool
 
 # 添加路径
 sys.path.append('/Users/xujian/Athena工作平台/services/autonomous-control')
@@ -81,7 +81,7 @@ class TechnologyTrendAnalyzer:
         self.technology_keywords = self._init_technology_keywords()
         self.ipc_tech_mapping = self._init_ipc_mapping()
 
-    def _init_technology_keywords(self) -> dict[str, list[str]]:
+    def _init_technology_keywords(self) -> dict[str, list[str]:
         """初始化技术关键词词典"""
         return {
             "人工智能": [
@@ -638,7 +638,7 @@ class TechnologyTrendAnalyzer:
                         "heat_index": h.heat_index,
                         "growth_potential": h.growth_potential,
                         "market_size": h.market_size,
-                        "key_players": [p[0] for p in h.key_players[:3]],
+                        "key_players": [p[0] for p in h.key_players[:3],
                         "emerging_keywords": h.emerging_keywords[:5]
                     }
                     for h in hotspots[:5]
@@ -696,9 +696,9 @@ class TechnologyTrendAnalyzer:
             insights.append(f"发现{len(high_growth_techs)}个高增长潜力技术领域值得关注")
 
         # 市场规模分析
-        large_markets = [h for h in hotspots if h.market_size in ["大型市场", "中大型市场"]]
+        large_markets = [h for h in hotspots if h.market_size in ["大型市场", "中大型市场"]
         if large_markets:
-            insights.append(f"大型市场技术领域：{', '.join([h.hotspot_field for h in large_markets[:3]])}")
+            insights.append(f"大型市场技术领域：{', '.join([h.hotspot_field for h in large_markets[:3])}")
 
         # 技术融合机会
         ipc_overlaps = self._find_technology_overlaps(hotspots)
@@ -908,7 +908,7 @@ async def identify_hotspots(request: dict):
                 "heat_index": round(hotspot.heat_index * 100, 1),
                 "growth_potential": round(hotspot.growth_potential * 100, 1),
                 "market_size": hotspot.market_size,
-                "key_players": [player[0] for player in hotspot.key_players[:3]],
+                "key_players": [player[0] for player in hotspot.key_players[:3],
                 "emerging_keywords": hotspot.emerging_keywords[:5]
             })
 
@@ -920,7 +920,7 @@ async def identify_hotspots(request: dict):
             "market_overview": {
                 "high_heat_technologies": len([h for h in hotspots if h.heat_index > 0.7]),
                 "high_growth_technologies": len([h for h in hotspots if h.growth_potential > 0.7]),
-                "large_market_technologies": len([h for h in hotspots if h.market_size in ["大型市场", "中大型市场"]])
+                "large_market_technologies": len([h for h in hotspots if h.market_size in ["大型市场", "中大型市场"])
             },
             "analysis_time": datetime.now().isoformat()
         }

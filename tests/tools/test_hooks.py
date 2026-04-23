@@ -12,8 +12,9 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-import pytest
 from datetime import datetime
+
+import pytest
 
 from core.tools.hooks import (
     BaseHook,
@@ -454,7 +455,7 @@ class TestRateLimitHook:
             parameters={},
         )
 
-        for i in range(5):
+        for _i in range(5):
             result = await hook.process(HookEvent.PRE_TOOL_USE, context)
             assert result.should_proceed is True
 
@@ -469,7 +470,7 @@ class TestRateLimitHook:
         )
 
         # 前3次成功
-        for i in range(3):
+        for _i in range(3):
             result = await hook.process(HookEvent.PRE_TOOL_USE, context)
             assert result.should_proceed is True
 
@@ -489,7 +490,7 @@ class TestRateLimitHook:
         )
 
         # 达到限制
-        for i in range(2):
+        for _i in range(2):
             await hook.process(HookEvent.PRE_TOOL_USE, context)
 
         result = await hook.process(HookEvent.PRE_TOOL_USE, context)

@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 部署验证脚本
 验证智能体设计模式组件是否正确部署
 """
 
 import sys
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import os
 from pathlib import Path
 
 # 添加项目路径
@@ -103,7 +100,7 @@ def verify_component_deployment() -> bool:
 
     try:
         from core.cognition import AgenticTaskPlanner
-        planner = AgenticTaskPlanner()
+        AgenticTaskPlanner()
         print("   ✅ 任务规划器实例化成功")
 
         from core.management import GoalManagementSystem

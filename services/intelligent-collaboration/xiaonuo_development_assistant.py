@@ -4,7 +4,6 @@
 帮助爸爸进行软件开发，提供智能辅助和建议
 """
 
-import asyncio
 import logging
 import os
 import re
@@ -58,7 +57,7 @@ class XiaonuoDevAssistant:
                     if resp.status == 200:
                         self.athena_bridge = True
                         print("✅ Athena已连接 - 可以提供专利专业建议")
-        except (ConnectionError, OSError, asyncio.TimeoutError):
+        except (TimeoutError, ConnectionError, OSError):
             print("⚠️ Athena未运行 - 诺诺可以启动它")
             self.athena_bridge = False
 

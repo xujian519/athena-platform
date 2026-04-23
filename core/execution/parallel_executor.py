@@ -56,7 +56,7 @@ class ParallelTask:
     timeout: float = 300  # 5分钟超时
     retry_count: int = 0
     max_retries: int = 2
-    dependencies: list[str] | None = None
+    dependencies: Optional[list[str]] = None
     estimated_time: float = 0  # 预估执行时间(秒)
     result: Any = None
     error: Exception | None = None
@@ -126,8 +126,8 @@ class ParallelExecutor:
         args: tuple = (),
         kwargs: dict | None = None,
         priority: TaskPriority = TaskPriority.NORMAL,
-        timeout: float | None = None,
-        dependencies: list[str] | None = None,
+        timeout: Optional[float] = None,
+        dependencies: Optional[list[str]] = None,
         max_retries: int = 2,
     ) -> bool:
         """提交并行任务"""

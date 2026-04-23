@@ -24,7 +24,7 @@ class RelevanceJudgment:
     query_id: str
     doc_id: str
     relevance: int  # 0=不相关, 1=相关, 2=高度相关
-    assessor: str | None = None
+    assessor: Optional[str] = None
 
 
 @dataclass

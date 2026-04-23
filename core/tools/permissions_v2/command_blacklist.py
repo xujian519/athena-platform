@@ -23,7 +23,7 @@ class CommandBlacklist:
     检查命令是否包含危险操作，防止系统破坏。
     """
 
-    def __init__(self, denied_patterns: list[str] | None = None):
+    def __init__(self, denied_patterns: Optional[list[str]] = None):
         """初始化命令黑名单检查器
 
         Args:
@@ -46,14 +46,14 @@ class CommandBlacklist:
 
         logger.info(f"🚫 命令黑名单初始化 (模式数: {len(self._patterns)})")
 
-    def check(self, command: str) -> tuple[bool, str | None]:
+    def check(self, command: str) -> Optional[tuple[bool, str]]:
         """检查命令是否在黑名单中
 
         Args:
             command: 要检查的命令
 
         Returns:
-            tuple[bool, str | None]: (是否被拒绝, 拒绝原因)
+            Optional[tuple[bool, str]]: (是否被拒绝, 拒绝原因)
             - True: 命令被拒绝
             - False: 命令未被拒绝
             - 原因: 拒绝原因描述
@@ -142,14 +142,14 @@ class CommandBlacklist:
 # 辅助函数
 # ========================================
 
-def check_denied_command(command: str) -> tuple[bool, str | None]:
+def check_denied_command(command: str) -> Optional[tuple[bool, str]]:
     """检查命令是否被拒绝（便捷函数）
 
     Args:
         command: 要检查的命令
 
     Returns:
-        tuple[bool, str | None]: (是否被拒绝, 拒绝原因)
+        Optional[tuple[bool, str]]: (是否被拒绝, 拒绝原因)
     """
     blacklist = CommandBlacklist()
     return blacklist.check(command)

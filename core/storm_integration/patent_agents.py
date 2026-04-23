@@ -69,7 +69,7 @@ class Conversation:
         utterance.turn = len(self.utterances)
         self.utterances.append(utterance)
 
-    def get_history(self, last_n: int | None = None) -> list[Utterance]:
+    def get_history(self, last_n: Optional[int] = None) -> list[Utterance]:
         """获取对话历史"""
         if last_n is None:
             return self.utterances
@@ -109,7 +109,7 @@ class BasePatentAgent(ABC):
         self,
         conversation_history: list[Utterance],
         current_perspective: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> Utterance:
         """
         生成话语
@@ -201,7 +201,7 @@ class PatentExaminerAgent(BasePatentAgent):
         self,
         conversation_history: list[Utterance],
         current_perspective: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> Utterance:
         """
         生成审查员的话语
@@ -334,7 +334,7 @@ class TechnicalExpertAgent(BasePatentAgent):
         self,
         conversation_history: list[Utterance],
         current_perspective: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> Utterance:
         """生成技术专家的话语"""
         if not conversation_history:
@@ -453,7 +453,7 @@ class PatentAttorneyAgent(BasePatentAgent):
         self,
         conversation_history: list[Utterance],
         current_perspective: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> Utterance:
         """生成专利律师的话语"""
         if not conversation_history:

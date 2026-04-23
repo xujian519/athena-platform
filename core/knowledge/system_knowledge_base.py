@@ -155,7 +155,7 @@ class SystemKnowledgeBase:
         title: str,
         description: str,
         content: dict[str, Any],
-        tags: list[str] | None = None,
+        tags: Optional[list[str]] = None,
         confidence: float = 1.0,
     ) -> KnowledgeItem:
         """
@@ -210,7 +210,7 @@ class SystemKnowledgeBase:
         query: str,
         knowledge_type: KnowledgeType | None = None,
         category: KnowledgeCategory | None = None,
-        tags: list[str] | None = None,
+        tags: Optional[list[str]] = None,
     ) -> list[KnowledgeItem]:
         """
         搜索知识
@@ -281,7 +281,7 @@ class SystemKnowledgeBase:
         items.sort(key=lambda x: x.usage_count, reverse=True)
         return items[:limit]
 
-    def record_usage(self, item_id: str, effectiveness: float | None = None) -> Any:
+    def record_usage(self, item_id: str, effectiveness: Optional[float] = None) -> Any:
         """记录知识使用"""
         if item_id in self.knowledge:
             item = self.knowledge[item_id]

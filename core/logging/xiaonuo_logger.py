@@ -54,12 +54,12 @@ class LogCategory(Enum):
 class LogContext:
     """日志上下文"""
 
-    session_id: str | None = None
-    user_id: str | None = None
-    request_id: str | None = None
-    component: str | None = None
-    action: str | None = None
-    extra: dict[str, Any] | None = None
+    session_id: Optional[str] = None
+    user_id: Optional[str] = None
+    request_id: Optional[str] = None
+    component: Optional[str] = None
+    action: Optional[str] = None
+    extra: Optional[dict[str, Any]] = None
 
 
 class StructuredFormatter(logging.Formatter):

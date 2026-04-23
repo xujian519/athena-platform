@@ -235,7 +235,7 @@ class InputValidator:
 
         logger.info(f"🚀 输入验证器初始化完成 (级别: {validation_level.value})")
 
-    def validate_input(self, input_text: str, context: dict[str, Any] | None = None) -> ValidationResult:
+    def validate_input(self, input_text: str, context: Optional[dict[str, Any]] = None) -> ValidationResult:
         """验证输入"""
         start_time = datetime.now()
 
@@ -639,7 +639,7 @@ class InputValidator:
 
         return max_severity
 
-    def _get_validation_cache_key(self, text: str, context: dict[str, Any] | None = None) -> str:
+    def _get_validation_cache_key(self, text: str, context: Optional[dict[str, Any]] = None) -> str:
         """生成验证缓存键"""
         content = text + json.dumps(context or {}, sort_keys=True)
         return hashlib.md5(content.encode('utf-8'), usedforsecurity=False).hexdigest()[:16]

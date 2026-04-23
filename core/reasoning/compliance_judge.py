@@ -68,8 +68,8 @@ class ComplianceIssue:
     severity: SeverityLevel
     title: str
     description: str
-    location: str | None = None  # 问题位置
-    reference: str | None = None  # 参考法规
+    location: Optional[str] = None  # 问题位置
+    reference: Optional[str] = None  # 参考法规
     suggestions: list[str] = field(default_factory=list)
     auto_fixable: bool = False
     confidence: float = 0.8
@@ -111,7 +111,7 @@ class CompliancePrediction:
     key_factors: list[str]
     risk_factors: list[str]
     improvement_areas: list[str]
-    estimated_timeline: str | None = None
+    estimated_timeline: Optional[str] = None
     confidence: float = 0.7
 
 
@@ -315,7 +315,7 @@ class ComplianceJudge:
     async def comprehensive_compliance_review(
         self,
         patent_data: dict[str, Any],        review_template: str = "detailed",
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> ComprehensiveComplianceReview:
         """
         综合合规性审查

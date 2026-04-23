@@ -164,7 +164,7 @@ class IntelligentModelSelector:
     def select_model(
         self,
         query: str,
-        preferred_models: list[str] | None = None,
+        preferred_models: Optional[list[str]] = None,
         speed_preference: str = 'medium'
     ) -> tuple[str, dict[str, Any]]:
         """智能选择最适合的模型

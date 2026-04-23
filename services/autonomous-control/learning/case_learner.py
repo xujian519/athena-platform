@@ -756,7 +756,7 @@ class CaseLearner:
             return self.failure_patterns.get(business_type, {})
         return self.failure_patterns
 
-    async def _get_learning_trends(self, business_type: str = None) -> list[dict[str, Any]]:
+    async def _get_learning_trends(self, business_type: str = None) -> list[dict[str, Any]:
         """获取学习趋势"""
         # 简化实现
         return [

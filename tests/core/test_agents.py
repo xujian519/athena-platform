@@ -21,7 +21,7 @@ class TestAgentModule:
     def test_base_agent_import(self):
         """测试基础智能体可以导入"""
         try:
-            from core.agents.base_agent import BaseAgent
+            from core.framework.agents.base_agent import BaseAgent
             assert BaseAgent is not None
         except ImportError:
             pytest.skip("BaseAgent导入失败")
@@ -29,7 +29,7 @@ class TestAgentModule:
     def test_athena_agent_import(self):
         """测试Athena智能体可以导入"""
         try:
-            from core.agents.athena import AthenaAgent
+            from core.framework.agents.athena import AthenaAgent
             assert AthenaAgent is not None
         except ImportError:
             pytest.skip("AthenaAgent导入失败")
@@ -147,7 +147,7 @@ class TestAgentCapabilities:
         ]
 
         # 筛选启用的工具
-        enabled_tools = [t for t in available_tools if t["enabled"]]
+        enabled_tools = [t for t in available_tools if t["enabled"]
 
         # 验证
         assert len(enabled_tools) == 2

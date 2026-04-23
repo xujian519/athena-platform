@@ -14,14 +14,12 @@
 import json
 from datetime import datetime
 from pathlib import Path
-from typing import List, Dict
-import random
 
 
 class PatentDebateAgent:
     """专利辩论代理基类"""
 
-    def __init__(self, name: str, role: str, arguments: List[str]):
+    def __init__(self, name: str, role: str, arguments: list[str]):
         self.name = name
         self.role = role
         self.arguments = arguments
@@ -419,15 +417,15 @@ D1、D2、E1均未教导这一应用方向。
 
         self.requester_agent = PatentDebateAgent("济南力邦（无效请求人）", "requester", requester_arguments)
         self.patentee_agent = PatentDebateAgent("广东冠一（专利权人）", "patentee", patentee_arguments)
-        self.debate_log: List[Dict] = []
+        self.debate_log: list[dict] = []
 
-    def conduct_debate(self, rounds: int = 5) -> Dict:
+    def conduct_debate(self, rounds: int = 5) -> dict:
         """进行多轮辩论"""
 
         print(f"\n{'='*80}")
-        print(f"专利无效宣告辩论开始")
-        print(f"专利号：201921401279.9")
-        print(f"专利名称：包装机物品传送装置的物料限位板自动调节机构")
+        print("专利无效宣告辩论开始")
+        print("专利号：201921401279.9")
+        print("专利名称：包装机物品传送装置的物料限位板自动调节机构")
         print(f"辩论轮次：{rounds}轮")
         print(f"{'='*80}\n")
 
@@ -493,8 +491,8 @@ D1、D2、E1均未教导这一应用方向。
 
         return {
             "total_rounds": rounds,
-            "requester_arguments": len([x for x in self.debate_log if "请求人" in x["speaker"]]),
-            "patentee_arguments": len([x for x in self.debate_log if "专利权人" in x["speaker"]]),
+            "requester_arguments": len([x for x in self.debate_log if "请求人" in x["speaker"]),
+            "patentee_arguments": len([x for x in self.debate_log if "专利权人" in x["speaker"]),
             "debate_log": self.debate_log
         }
 
@@ -513,8 +511,8 @@ D1、D2、E1均未教导这一应用方向。
         md_file = output_dir / f"专利无效宣告辩论记录_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
         with open(md_file, 'w', encoding='utf-8') as f:
             f.write("# 专利无效宣告辩论记录\n\n")
-            f.write(f"**专利号**：201921401279.9\n")
-            f.write(f"**专利名称**：包装机物品传送装置的物料限位板自动调节机构\n")
+            f.write("**专利号**：201921401279.9\n")
+            f.write("**专利名称**：包装机物品传送装置的物料限位板自动调节机构\n")
             f.write(f"**辩论时间**：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
             f.write(f"**辩论轮次**：{len(self.debate_log)}轮\n\n")
             f.write("---\n\n")
@@ -524,7 +522,7 @@ D1、D2、E1均未教导这一应用方向。
                 f.write(f"{entry['content']}\n\n")
                 f.write("---\n\n")
 
-        print(f"\n辩论记录已保存：")
+        print("\n辩论记录已保存：")
         print(f"- JSON格式：{json_file}")
         print(f"- Markdown格式：{md_file}")
 

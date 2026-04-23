@@ -69,7 +69,7 @@ def main():
     tool = registry.get(tool_id)
 
     if tool:
-        print(f"✅ 工具验证成功，可以正常调用")
+        print("✅ 工具验证成功，可以正常调用")
         print()
 
         # 测试工具调用
@@ -86,10 +86,10 @@ def main():
             result = asyncio.run(test_tool())
 
             if result.get("success"):
-                print(f"✅ 工具调用测试成功")
+                print("✅ 工具调用测试成功")
                 print(f"   操作: {result['action']}")
                 stats = result.get('stats', {})
-                print(f"   缓存统计:")
+                print("   缓存统计:")
                 print(f"     命中率: {stats.get('hit_rate', 0)}%")
                 print(f"     总键数: {stats.get('total_keys', 0)}")
                 print(f"     内存使用: {stats.get('memory_usage', 'unknown')}")
@@ -105,7 +105,7 @@ def main():
             print()
             return False
     else:
-        print(f"❌ 工具验证失败，无法获取工具")
+        print("❌ 工具验证失败，无法获取工具")
         print()
         return False
 

@@ -40,9 +40,9 @@ class ParameterSchema:
     required: bool = True
     default: Any = None
     enum_values: list[str] = None
-    format: str | None = None  # 如 email, url, date
-    min_value: float | None = None
-    max_value: float | None = None
+    format: Optional[str] = None  # 如 email, url, date
+    min_value: Optional[float] = None
+    max_value: Optional[float] = None
     description: str = ""
 
 
@@ -110,7 +110,7 @@ class AdvancedParameterExtractor:
         self,
         query: str,
         intent: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
         conversation_history: list[dict[str, Any]] | None = None,
     ) -> list[ExtractedParameter]:
         """
@@ -278,7 +278,7 @@ class AdvancedParameterExtractor:
         query: str,
         schema: list[ParameterSchema],
         explicit_params: list[ExtractedParameter],
-        context: dict[str, list[dict[str, Any]]],
+        context: dict[str, list[dict[str, Any]],
         conversation_history: list[dict[str, Any]] | None = None,
     ) -> list[ExtractedParameter]:
         """推理隐式参数"""

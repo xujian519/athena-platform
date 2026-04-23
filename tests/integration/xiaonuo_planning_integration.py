@@ -43,7 +43,7 @@ class XiaonuoPlanningIntegration:
     def __init__(self):
         self.plans: dict[str, IntegrationPlan] = {}
 
-    async def create_plan(self, tasks: list[dict[str, Any]]) -> IntegrationPlan:
+    async def create_plan(self, tasks: list[dict[str, Any]) -> IntegrationPlan:
         """创建规划"""
         plan_id = f"plan_{len(self.plans) + 1}"
         steps = [

@@ -4,18 +4,15 @@ AnalyzerAgent单元测试
 完整的测试套件，包括单元测试、集成测试和性能测试。
 """
 
-import pytest
-from unittest.mock import AsyncMock, Mock, patch
-from datetime import datetime
-import asyncio
+from unittest.mock import AsyncMock, patch
 
-from core.agents.xiaona.analyzer_agent import AnalyzerAgent
-from core.agents.xiaona.base_component import (
+import pytest
+
+from core.framework.agents.xiaona.analyzer_agent import AnalyzerAgent
+from core.framework.agents.xiaona.base_component import (
     AgentExecutionContext,
-    AgentExecutionResult,
     AgentStatus,
 )
-
 
 # ==================== 单元测试 ====================
 

@@ -426,7 +426,7 @@ class IntentMetricsManager:
         errors_total.labels(error_type=error_type, component=component).inc()
 
     def update_system_resources(
-        self, cpu_percent: float, memory_percent: float, gpu_utilization: float | None = None
+        self, cpu_percent: float, memory_percent: float, gpu_utilization: Optional[float] = None
     ) -> None:
         """
         更新系统资源指标

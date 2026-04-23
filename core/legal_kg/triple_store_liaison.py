@@ -68,8 +68,8 @@ class LegalDocument:
     file_path: str
 
     # Qdrant数据
-    vector_id: int | None = None
-    similarity: float | None = None
+    vector_id: Optional[int] = None
+    similarity: Optional[float] = None
 
     # NebulaGraph数据
     graph_entities: list[dict] | None = None

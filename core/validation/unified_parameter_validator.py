@@ -63,13 +63,13 @@ class ValidationRule:
     type_check: ParameterType | None = None
     required: bool = False
     default: Any = None
-    min_value: int | float | None = None
-    max_value: int | float | None = None
-    min_length: int | None = None
-    max_length: int | None = None
-    pattern: str | None = None
+    min_value: int | Optional[float] = None
+    max_value: int | Optional[float] = None
+    min_length: Optional[int] = None
+    max_length: Optional[int] = None
+    pattern: Optional[str] = None
     allowed_values: list[str] = None
-    custom_validator: Callable[[Any, tuple[bool, str]]] | None = None
+    custom_validator: Callable[[Any, tuple[bool, str]] | None = None
     depends_on: list[str] = None
 
 
@@ -154,7 +154,7 @@ class UnifiedParameterValidator:
         parameter_name: str,
         parameter_value: Any,
         rules: list[ValidationRule],
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> ValidationResult:
         """
         验证单个参数
@@ -319,7 +319,7 @@ class UnifiedParameterValidator:
 
     async def pre_execution_check(
         self, tool_id: str, parameters: dict[str, Any]
-    ) -> tuple[bool, str | None, dict[str, Any]]:
+    ) -> tuple[bool, Optional[str], dict[str, Any]]:
         """
         执行前完整性检查
 
@@ -350,7 +350,7 @@ class UnifiedParameterValidator:
 
     async def _validate_type(
         self, value: Any, expected_type: ParameterType
-    ) -> tuple[bool, str | None]:
+    ) -> Optional[tuple[bool, str]]:
         """验证参数类型"""
         if expected_type == ParameterType.STRING:
             if not isinstance(value, str):
@@ -412,9 +412,9 @@ class UnifiedParameterValidator:
     async def _validate_range(
         self,
         value: Any,
-        min_value: int | float | None,
-        max_value: int | float | None,
-    ) -> tuple[bool, str | None]:
+        min_value: int | Optional[float],
+        max_value: int | Optional[float],
+    ) -> Optional[tuple[bool, str]]:
         """验证数值范围"""
         try:
             num_value = float(value)
@@ -431,7 +431,7 @@ class UnifiedParameterValidator:
 
     async def _validate_length(
         self, value: Any, min_length: int, max_length: int,
-    ) -> tuple[bool, str | None]:
+    ) -> Optional[tuple[bool, str]]:
         """验证长度"""
         try:
             length = len(value)
@@ -446,7 +446,7 @@ class UnifiedParameterValidator:
 
         return True, None
 
-    async def _validate_pattern(self, value: Any, pattern: str) -> tuple[bool, str | None]:
+    async def _validate_pattern(self, value: Any, pattern: str) -> Optional[tuple[bool, str]]:
         """验证正则模式"""
         if not isinstance(value, str):
             return False, "模式验证需要字符串类型"
@@ -458,7 +458,7 @@ class UnifiedParameterValidator:
 
     async def _validate_allowed_values(
         self, value: Any, allowed_values: list[Any]
-    ) -> tuple[bool, str | None]:
+    ) -> Optional[tuple[bool, str]]:
         """验证允许值"""
         if value in allowed_values:
             return True, None
@@ -467,7 +467,7 @@ class UnifiedParameterValidator:
 
     async def _validate_dependencies(
         self, param_name: str, depends_on: list[str], context: dict[str, Any]
-    ) -> tuple[bool, str | None]:
+    ) -> Optional[tuple[bool, str]]:
         """验证依赖关系"""
         for dep_param in depends_on:
             if dep_param not in context or context[dep_param] is None:

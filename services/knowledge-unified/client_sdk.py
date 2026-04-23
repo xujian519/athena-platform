@@ -95,7 +95,7 @@ class PatentKGClient:
 
     def batch_query(
         self,
-        queries: list[dict[str, Any]],
+        queries: list[dict[str, Any],
         max_parallel: int = 5
     ) -> dict[str, Any]:
         """
@@ -266,7 +266,7 @@ class PatentKGAsyncClient:
 
     async def batch_query(
         self,
-        queries: list[dict[str, Any]],
+        queries: list[dict[str, Any],
         max_parallel: int = 5
     ) -> dict[str, Any]:
         """异步批量查询"""

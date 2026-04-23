@@ -73,7 +73,7 @@ class CorrelationNetwork:
 class PatentCorrelationAnalyzer:
     """专利关联分析器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """初始化关联分析器"""
         self.name = "专利智能关联分析器"
         self.version = "1.0.0"
@@ -339,7 +339,7 @@ class PatentCorrelationAnalyzer:
             "analysis_timestamp": datetime.now().isoformat(),
         }
 
-    async def _get_case_by_id(self, case_id: str) -> dict[str, Any] | None:
+    async def _get_case_by_id(self, case_id: str) -> Optional[dict[str, Any]]:
         """根据ID获取案例"""
         # 在各个集合中搜索
         collections = ["patent_decisions_review", "patent_decisions_invalid"]
@@ -580,7 +580,7 @@ class PatentCorrelationAnalyzer:
 
         return statistics
 
-    async def generate_correlation_report(self, output_file: str | None = None) -> dict[str, Any]:
+    async def generate_correlation_report(self, output_file: Optional[str] = None) -> dict[str, Any]:
         """生成关联分析报告"""
         logger.info("📊 生成关联分析报告")
 

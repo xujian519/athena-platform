@@ -164,7 +164,7 @@ class EthicsEvaluator:
         return hashlib.md5(key_str.encode('utf-8'), usedforsecurity=False).hexdigest()
 
     def evaluate_action(
-        self, agent_id: str, action: str, context: dict[str, Any] | None = None
+        self, agent_id: str, action: str, context: Optional[dict[str, Any]] = None
     ) -> EvaluationResult:
         """评估行动是否符合伦理原则
 

@@ -7,17 +7,17 @@
 作者: Athena平台团队
 创建时间: 2026-04-21
 """
-from __future__ import annotations
 
-import pytest
 from datetime import datetime, timedelta
 
-from core.memory.sessions.types import (
-    SessionMessage,
-    SessionContext,
-    SessionStatus,
+import pytest
+
+from core.framework.memory.sessions.types import (
     MessageRole,
+    SessionContext,
     SessionMemory,
+    SessionMessage,
+    SessionStatus,
     SessionSummary,
 )
 
@@ -218,3 +218,4 @@ def test_create_session_summary():
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+

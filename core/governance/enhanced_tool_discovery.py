@@ -274,7 +274,7 @@ class EnhancedToolDiscovery:
         self,
         query: str,
         limit: int = 10,
-        category: str | None = None,
+        category: Optional[str] = None,
         enable_synonyms: bool = True,
         enable_fuzzy: bool = True,
     ) -> list[dict[str, Any]]:

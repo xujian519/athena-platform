@@ -4,10 +4,9 @@ Athena Gateway 服务注册脚本
 自动将所有后端服务注册到统一网关
 """
 
-import requests
-import json
 import sys
-from typing import List, Dict
+
+import requests
 
 # Gateway配置
 GATEWAY_URL = "http://localhost:8005"
@@ -156,7 +155,7 @@ ROUTE_RULES = [
 ]
 
 
-def register_services(services: List[Dict]) -> bool:
+def register_services(services: list[dict]) -> bool:
     """批量注册服务实例"""
     url = f"{GATEWAY_URL}/api/services/batch_register"
     headers = {"Content-Type": "application/json"}
@@ -175,11 +174,11 @@ def register_services(services: List[Dict]) -> bool:
 
         if response.status_code == 200:
             result = response.json()
-            print(f"✅ 服务注册成功！")
+            print("✅ 服务注册成功！")
             print(f"   已注册: {result.get('data', {}).get('registered', 0)} 个服务")
             return True
         else:
-            print(f"❌ 服务注册失败！")
+            print("❌ 服务注册失败！")
             print(f"   状态码: {response.status_code}")
             print(f"   响应: {response.text}")
             return False
@@ -189,7 +188,7 @@ def register_services(services: List[Dict]) -> bool:
         return False
 
 
-def register_routes(routes: List[Dict]) -> bool:
+def register_routes(routes: list[dict]) -> bool:
     """注册路由规则"""
     url = f"{GATEWAY_URL}/api/routes"
     headers = {"Content-Type": "application/json"}
@@ -283,7 +282,7 @@ def main():
             timeout=5
         )
         if response.status_code == 200:
-            print(f"✅ Gateway运行正常 (端口8005)")
+            print("✅ Gateway运行正常 (端口8005)")
         else:
             print(f"⚠️  Gateway状态异常: {response.status_code}")
     except Exception as e:

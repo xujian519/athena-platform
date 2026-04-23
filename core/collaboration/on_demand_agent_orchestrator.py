@@ -88,7 +88,7 @@ class TaskRequest:
     context: dict[str, Any] = field(default_factory=dict)
     priority: int = 1
     required_capabilities: list[str] = field(default_factory=list)
-    preferred_agent: str | None = None
+    preferred_agent: Optional[str] = None
 
 @dataclass
 class AgentInstance:
@@ -96,7 +96,7 @@ class AgentInstance:
     config: AgentConfig
     status: AgentStatus = AgentStatus.STOPPED
     process: subprocess.Popen | None = None
-    pid: int | None = None
+    pid: Optional[int] = None
     start_time: datetime | None = None
     last_activity: datetime | None = None
     task_count: int = 0

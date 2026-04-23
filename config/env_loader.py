@@ -4,10 +4,9 @@
 支持配置继承和环境变量覆盖
 """
 from pathlib import Path
-from typing import Dict
 
 
-def load_env(env_name: str = "development") -> Dict[str, str]:
+def load_env(env_name: str = "development") -> dict[str, str]:
     """
     加载环境配置，支持继承
 
@@ -57,7 +56,7 @@ def load_env(env_name: str = "development") -> Dict[str, str]:
     return {**base_env, **current_env}
 
 
-def get_env(env_name: str = "development") -> Dict[str, str]:
+def get_env(env_name: str = "development") -> dict[str, str]:
     """
     获取环境配置（便捷函数）
 
@@ -80,7 +79,7 @@ def print_env_info(env_name: str = "development") -> None:
     config = load_env(env_name)
     print(f"=== 环境配置: {env_name} ===")
     print(f"配置项数量: {len(config)}")
-    print(f"\n主要配置:")
+    print("\n主要配置:")
     for key in sorted(config.keys())[:10]:  # 只显示前10个
         # 隐藏密码
         value = config[key]

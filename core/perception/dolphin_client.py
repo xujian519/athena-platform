@@ -24,7 +24,7 @@ class DolphinDocumentParser:
     def __init__(
         self,
         service_url: str = "http://localhost:8090",
-        api_key: str | None = None,
+        api_key: Optional[str] = None,
         timeout: float = 300.0,  # 5分钟超时
     ):
         """
@@ -336,7 +336,7 @@ _client: DolphinDocumentParser | None = None
 
 async def get_dolphin_client(
     service_url: str = "http://localhost:8090",
-    api_key: str | None = None,
+    api_key: Optional[str] = None,
 ) -> DolphinDocumentParser:
     """
     获取全局Dolphin客户端实例

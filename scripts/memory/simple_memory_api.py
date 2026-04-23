@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena记忆系统API服务
 Athena Memory System API Service
@@ -7,22 +6,18 @@ Athena Memory System API Service
 智能记忆管理和知识检索系统
 """
 
-import sys
-from pathlib import Path
-import asyncio
-import json
 import logging
-import os
 import subprocess
+import sys
 from datetime import datetime
-from typing import Dict, List, Optional, Any
+from pathlib import Path
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 from core.security.auth import ALLOWED_ORIGINS
-from pydantic import BaseModel
 
 # 添加项目路径
 sys.path.append(str(Path(__file__).parent.parent.parent))
@@ -101,7 +96,7 @@ class MemoryStoreRequest(BaseModel):
     content: str
     memory_type: str
     importance: float = 0.5
-    tags: List[str] = []
+    tags: list[str] = []
 
 class MemoryRecallRequest(BaseModel):
     agent_id: str

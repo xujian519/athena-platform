@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 COLLECTION_NAME = "baochen_wiki"
 
 # 场景模式到知识库分类的映射（移植自 patent_agent/prompts.py）
-KB_FILTERS: Optional[dict[str, list[str]]] = {
+KB_FILTERS: Optional[dict[str, list[str]] = {
     "法律咨询": ["法律法规", "审查指南", "复审无效"],
     "审查意见": ["审查指南", "复审无效", "专利实务", "法律法规"],
     "侵权分析": ["专利侵权", "专利判决", "法律法规"],

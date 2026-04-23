@@ -221,7 +221,7 @@ class MetricsCollector:
 class PerceptionMonitor:
     """感知模块监控器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
 
         # 监控配置
@@ -623,7 +623,7 @@ class PerceptionMonitor:
 _global_monitor: PerceptionMonitor | None = None
 
 
-async def get_global_monitor(config: dict[str, Any] | None = None) -> PerceptionMonitor:
+async def get_global_monitor(config: Optional[dict[str, Any]] = None) -> PerceptionMonitor:
     """获取全局监控器"""
     global _global_monitor
     if _global_monitor is None:

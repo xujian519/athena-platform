@@ -7,7 +7,6 @@ Hook系统独立测试脚本
 
 import asyncio
 import sys
-from datetime import datetime
 
 # 添加路径
 sys.path.insert(0, '/Users/xujian/Athena工作平台')
@@ -18,7 +17,6 @@ from core.tools.hooks import (
     HookEvent,
     HookRegistry,
     HookResult,
-    LoggingHook,
     MetricsHook,
     RateLimitHook,
     ValidationHook,
@@ -138,7 +136,7 @@ async def test_rate_limit_hook():
     )
 
     # 前3次成功
-    for i in range(3):
+    for _i in range(3):
         result = await hook.process(HookEvent.PRE_TOOL_USE, context)
         assert result.should_proceed is True
 

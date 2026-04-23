@@ -34,11 +34,11 @@ class LawArticle:
     full_path: str  # 如 "第一章 > 第二十六条 > 第1款"
     level: ArticleLevel
     article_number: str  # 如 "26"
-    paragraph_number: int | None  # 如 1, 2, 3
-    item_number: str | None  # 如 "(一)", "1"
+    paragraph_number: Optional[int]  # 如 1, 2, 3
+    item_number: Optional[str]  # 如 "(一)", "1"
     title: str  # 如 "第1款" 或 "(一)"
     content: str  # 条文内容
-    parent_id: str | None = None  # 父级ID
+    parent_id: Optional[str] = None  # 父级ID
 
     def to_dict(self) -> dict[str, Any]:
         return {

@@ -43,7 +43,7 @@ class SessionMessage:
     role: MessageRole
     content: str
     timestamp: datetime = field(default_factory=datetime.now)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
     token_count: int = 0
     message_id: str = ""
 
@@ -75,7 +75,7 @@ class SessionContext:
     start_time: datetime = field(default_factory=datetime.now)
     last_activity: datetime = field(default_factory=datetime.now)
     status: SessionStatus = SessionStatus.ACTIVE
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
     total_tokens: int = 0
     message_count: int = 0
 
@@ -103,8 +103,8 @@ class SessionSummary:
     session_id: str
     title: str
     summary: str
-    key_points: List[str] = field(default_factory=list)
-    tags: List[str] = field(default_factory=list)
+    key_points: list[str] = field(default_factory=list)
+    tags: list[str] = field(default_factory=list)
     created_at: datetime = field(default_factory=datetime.now)
     message_count: int = 0
 
@@ -114,9 +114,9 @@ class SessionMemory:
     """会话记忆"""
 
     context: SessionContext
-    messages: List[SessionMessage] = field(default_factory=list)
-    summary: Optional[SessionSummary] = None
-    embeddings: Dict[str, List[float]] = field(default_factory=dict)
+    messages: list[SessionMessage] = field(default_factory=list)
+    summary: SessionSummary | None = None
+    embeddings: dict[str, list[float]] = field(default_factory=dict)
 
     def add_message(self, message: SessionMessage) -> None:
         """添加消息
@@ -132,8 +132,8 @@ class SessionMemory:
     def get_recent_messages(
         self,
         count: int = 10,
-        role: Optional[MessageRole] = None,
-    ) -> List[SessionMessage]:
+        role: MessageRole | None = None,
+    ) -> list[SessionMessage]:
         """获取最近的消息
 
         Args:

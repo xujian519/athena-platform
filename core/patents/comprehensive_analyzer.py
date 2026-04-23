@@ -82,9 +82,9 @@ class PatentAnalysisReport:
     analysis_time: str
 
     # 各维度分析结果
-    novelty: dict[str, Any] | None = None
-    inventiveness: dict[str, Any] | None = None
-    utility: dict[str, Any] | None = None
+    novelty: Optional[dict[str, Any]] = None
+    inventiveness: Optional[dict[str, Any]] = None
+    utility: Optional[dict[str, Any]] = None
 
     # 综合评估
     overall_assessment: str = ""

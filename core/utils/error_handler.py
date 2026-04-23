@@ -56,7 +56,7 @@ class ErrorHandler:
         self.last_error_time: datetime | None = None
 
     def handle_error(
-        self, error: Exception, context: str = "", additional_info: dict[str, Any] | None = None
+        self, error: Exception, context: str = "", additional_info: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """
         处理错误并返回统一格式的错误响应
@@ -158,7 +158,7 @@ def create_error_handler(component_name: str, raise_on_error: bool = False) -> E
 
 
 def async_error_handler(
-    context: str = "", raise_on_error: bool = False, component_name: str | None = None
+    context: str = "", raise_on_error: bool = False, component_name: Optional[str] = None
 ):
     """
     异步错误处理装饰器
@@ -202,7 +202,7 @@ def async_error_handler(
 
 
 def sync_error_handler(
-    context: str = "", raise_on_error: bool = False, component_name: str | None = None
+    context: str = "", raise_on_error: bool = False, component_name: Optional[str] = None
 ):
     """
     同步错误处理装饰器
@@ -357,7 +357,7 @@ def log_error(
     error: Exception,
     context: str = "",
     level: str = "ERROR",
-    extra: dict[str, Any] | None = None,
+    extra: Optional[dict[str, Any]] = None,
 ):
     """
     记录错误日志

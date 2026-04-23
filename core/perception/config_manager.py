@@ -133,7 +133,7 @@ class PerceptionConfigManager:
         # 使用默认配置
         return CacheConfig()
 
-    def _load_from_env(self) -> dict[str, Any] | None:
+    def _load_from_env(self) -> Optional[dict[str, Any]]:
         """从环境变量加载配置
 
         支持的环境变量:

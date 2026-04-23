@@ -554,8 +554,8 @@ class TemplateManager:
 
     def list_templates(
         self,
-        category: str | None = None,
-        tags: list[str] | None = None,
+        category: Optional[str] = None,
+        tags: Optional[list[str]] = None,
     ) -> list[TaskTemplate]:
         """列出模板"""
         templates = list(self.templates.values())
@@ -577,7 +577,7 @@ class TemplateManager:
         task_id: str,
         title: str,
         description: str,
-        parameters: dict[str, Any] | None = None,
+        parameters: Optional[dict[str, Any]] = None,
     ) -> dict[str, Any]:
         """从模板创建任务计划"""
         template = self.get_template(template_id)

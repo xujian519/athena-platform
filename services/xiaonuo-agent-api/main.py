@@ -14,19 +14,19 @@ Xiaonuo Agent HTTP API Service
 """
 
 import asyncio
-import json
 import logging
-from typing import Any, Dict, Optional, List
-from datetime import datetime
-
-from fastapi import FastAPI, HTTPException, status
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
-import uvicorn
 
 # 添加项目路径
 import sys
+from datetime import datetime
 from pathlib import Path
+from typing import Any
+
+import uvicorn
+from fastapi import FastAPI, HTTPException, status
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # 注意：这里使用小诺的实现类
@@ -49,13 +49,13 @@ logger = logging.getLogger(__name__)
 class CoordinationTaskRequest(BaseModel):
     """协调任务请求模型"""
     task_type: str = Field(..., description="任务类型")
-    agents: List[str] = Field(default=[], description="参与的智能体列表")
-    input_data: Dict[str, Any] = Field(..., description="任务输入数据")
+    agents: list[str] = Field(default=[], description="参与的智能体列表")
+    input_data: dict[str, Any] = Field(..., description="任务输入数据")
     coordination_mode: str = Field("sequential", description="协调模式：sequential(顺序), parallel(并行), hierarchical(层级)")
 
 class AgentStatusRequest(BaseModel):
     """智能体状态查询请求"""
-    agent_names: List[str] = Field(..., description="要查询的智能体名称列表")
+    agent_names: list[str] = Field(..., description="要查询的智能体名称列表")
 
 class TaskResponse(BaseModel):
     """任务响应模型"""
@@ -64,7 +64,7 @@ class TaskResponse(BaseModel):
     result: Any = None
     error: str = None
     execution_time: float = 0.0
-    involved_agents: List[str] = []
+    involved_agents: list[str] = []
 
 class HealthResponse(BaseModel):
     """健康检查响应"""
@@ -74,7 +74,7 @@ class HealthResponse(BaseModel):
     version: str
     timestamp: str
     initialized: bool
-    available_agents: List[str]
+    available_agents: list[str]
 
 # =============================================================================
 # FastAPI应用
@@ -104,7 +104,7 @@ async def startup_event():
 
     try:
         # 使用小诺协调器实现
-        from core.agents.xiaonuo_coordinator import XiaonuoAgent
+        from core.framework.agents.xiaonuo_coordinator import XiaonuoAgent
 
         # 创建小诺实例
         xiaonuo_agent = XiaonuoAgent()
@@ -139,10 +139,10 @@ async def shutdown_event():
 
 async def simulate_coordination_task(
     task_type: str,
-    agents: List[str],
-    input_data: Dict[str, Any],
+    agents: list[str],
+    input_data: dict[str, Any],
     mode: str
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     模拟协调任务（当小诺实例不可用时）
     """
@@ -155,7 +155,7 @@ async def simulate_coordination_task(
         "agents_involved": agents,
         "status": "completed",
         "result": {
-            "message": f"任务已协调完成（模拟模式）",
+            "message": "任务已协调完成（模拟模式）",
             "summary": f"协调了{len(agents)}个智能体执行{task_type}任务"
         },
         "timestamp": datetime.now().isoformat()
@@ -267,7 +267,7 @@ async def coordinate_task(request: CoordinationTaskRequest):
 class DispatchTaskRequest(BaseModel):
     """任务分发请求"""
     target_agent: str = Field(..., description="目标智能体名称")
-    task_data: Dict[str, Any] = Field(..., description="任务数据")
+    task_data: dict[str, Any] = Field(..., description="任务数据")
 
 @app.post("/api/v1/xiaonuo/dispatch", tags=["Xiaonuo"])
 async def dispatch_task(request: DispatchTaskRequest):
@@ -315,7 +315,7 @@ async def dispatch_task(request: DispatchTaskRequest):
         )
 
 
-async def dispatch_task_via_http(target_agent: str, task_data: Dict[str, Any]):
+async def dispatch_task_via_http(target_agent: str, task_data: dict[str, Any]):
     """通过HTTP分发任务到其他智能体服务"""
     import httpx
 

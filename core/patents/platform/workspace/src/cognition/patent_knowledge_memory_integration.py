@@ -80,7 +80,7 @@ class PatentKnowledgeMemoryIntegrator:
         self.patent_cases: Dict[str, PatentCase] = {}
 
         # 知识图谱关系
-        self.knowledge_graph: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+        self.knowledge_graph: Dict[str, List[Dict[str, Any]], defaultdict(list)
 
         # 向量数据库路径
         self.vector_db_path = '/Users/xujian/Athena工作平台/data/professional_patent/vectors/patent_rules_vectors_20251205_080132.json'

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 CORS安全修复工具
 CORS Security Fix Tool
@@ -14,7 +13,6 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import List, Tuple
 
 # 添加项目根目录到路径
 project_root = Path(__file__).parent.parent.parent
@@ -67,7 +65,7 @@ class CORSFixer:
 
         return True
 
-    def find_cors_files(self) -> List[Path]:
+    def find_cors_files(self) -> list[Path]:
         """查找所有包含CORS配置的Python文件"""
         cors_files = []
 
@@ -191,7 +189,7 @@ class CORSFixer:
 
     def run(self) -> dict:
         """执行修复"""
-        print(f"🔍 搜索CORS配置文件...")
+        print("🔍 搜索CORS配置文件...")
 
         cors_files = self.find_cors_files()
         print(f"📊 找到 {len(cors_files)} 个包含CORS配置的文件")
@@ -206,7 +204,7 @@ class CORSFixer:
                 pass
 
         print(f"⚠️  发现 {unsafe_count} 个不安全的CORS配置")
-        print(f"🔧 开始修复...")
+        print("🔧 开始修复...")
 
         fixed_count = 0
         for file_path in cors_files:
@@ -214,12 +212,12 @@ class CORSFixer:
                 fixed_count += 1
                 print(f"  ✅ {file_path.relative_to(self.project_root)}")
 
-        print(f"\n✅ 修复完成！")
+        print("\n✅ 修复完成！")
         print(f"   - 修复文件数: {fixed_count}")
         print(f"   - 错误数: {len(self.errors)}")
 
         if self.errors:
-            print(f"\n❌ 错误列表:")
+            print("\n❌ 错误列表:")
             for error in self.errors:
                 print(f"   - {error}")
 
@@ -260,7 +258,7 @@ def main():
     if args.dry_run:
         print("🔍 仅扫描模式 (dry-run)")
         cors_files = fixer.find_cors_files()
-        print(f"\n📊 扫描结果:")
+        print("\n📊 扫描结果:")
         print(f"   - 总文件数: {len(cors_files)}")
 
         unsafe_files = []
@@ -273,7 +271,7 @@ def main():
                 pass
 
         print(f"   - 不安全配置: {len(unsafe_files)}")
-        print(f"\n⚠️  不安全文件列表:")
+        print("\n⚠️  不安全文件列表:")
         for file_path in unsafe_files:
             print(f"   - {file_path.relative_to(project_root)}")
 

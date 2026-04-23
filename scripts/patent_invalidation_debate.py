@@ -11,13 +11,12 @@
 日期：2026-04-23
 """
 
-import json
 import asyncio
-from typing import Dict, List
+import json
+import os
+import sys
 from datetime import datetime
 from pathlib import Path
-import sys
-import os
 
 # 设置路径
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -35,7 +34,7 @@ def load_api_key():
     """从.env文件加载Anthropic API密钥"""
     env_file = Path("/Users/xujian/Athena工作平台/.env")
     if env_file.exists():
-        with open(env_file, 'r', encoding='utf-8') as f:
+        with open(env_file, encoding='utf-8') as f:
             for line in f:
                 line = line.strip()
                 if line.startswith('anthropic_api_key='):
@@ -53,7 +52,7 @@ class PatentDebateAgent:
         self.client = client
         self.model = model
         self.system_prompt = system_prompt
-        self.debate_history: List[Dict] = []
+        self.debate_history: list[dict] = []
 
     async def generate_response(self, opponent_argument: str, round_num: int) -> str:
         """生成辩论回应"""
@@ -192,15 +191,15 @@ class PatentDebateManager:
 
         self.requester_agent = InvalidationRequesterAgent.create(self.client)
         self.patentee_agent = PatenteeAgent.create(self.client)
-        self.debate_log: List[Dict] = []
+        self.debate_log: list[dict] = []
 
-    async def conduct_debate(self, rounds: int = 5) -> Dict:
+    async def conduct_debate(self, rounds: int = 5) -> dict:
         """进行多轮辩论"""
 
         print(f"\n{'='*80}")
-        print(f"专利无效宣告辩论开始")
-        print(f"专利号：201921401279.9")
-        print(f"专利名称：包装机物品传送装置的物料限位板自动调节机构")
+        print("专利无效宣告辩论开始")
+        print("专利号：201921401279.9")
+        print("专利名称：包装机物品传送装置的物料限位板自动调节机构")
         print(f"辩论轮次：{rounds}轮")
         print(f"{'='*80}\n")
 
@@ -284,8 +283,8 @@ class PatentDebateManager:
         md_file = output_dir / f"专利无效宣告辩论记录_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
         with open(md_file, 'w', encoding='utf-8') as f:
             f.write("# 专利无效宣告辩论记录\n\n")
-            f.write(f"**专利号**：201921401279.9\n")
-            f.write(f"**专利名称**：包装机物品传送装置的物料限位板自动调节机构\n")
+            f.write("**专利号**：201921401279.9\n")
+            f.write("**专利名称**：包装机物品传送装置的物料限位板自动调节机构\n")
             f.write(f"**辩论时间**：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
             f.write(f"**辩论轮次**：{len(self.debate_log)}轮\n\n")
             f.write("---\n\n")
@@ -295,7 +294,7 @@ class PatentDebateManager:
                 f.write(f"{entry['content']}\n\n")
                 f.write("---\n\n")
 
-        print(f"\n辩论记录已保存：")
+        print("\n辩论记录已保存：")
         print(f"- JSON格式：{json_file}")
         print(f"- Markdown格式：{md_file}")
 

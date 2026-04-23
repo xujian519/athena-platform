@@ -32,7 +32,7 @@ class MessageScorer:
     """
 
     # 角色基础权重
-    ROLE_WEIGHTS: Dict[MessageRole, float] = {
+    ROLE_WEIGHTS: dict[MessageRole, float] = {
         MessageRole.SYSTEM: 1.0,  # 系统消息最关键
         MessageRole.ASSISTANT: 0.9,  # 助手回复重要
         MessageRole.USER: 0.8,  # 用户询问重要
@@ -75,7 +75,7 @@ class MessageScorer:
             "|".join(self.CRITICAL_PATTERNS), re.IGNORECASE
         )
 
-    def score_messages(self, messages: List[SessionMessage]) -> List[ImportanceScore]:
+    def score_messages(self, messages: list[SessionMessage]) -> list[ImportanceScore]:
         """批量评分消息
 
         Args:

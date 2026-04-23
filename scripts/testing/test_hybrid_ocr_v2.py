@@ -13,7 +13,8 @@ import json
 import logging
 import sys
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
+
 import PIL.Image
 
 # 配置日志
@@ -41,7 +42,7 @@ class HybridOCREngineV2:
         """初始化所有组件"""
         try:
             # 初始化LLM适配器
-            from core.llm.adapters.local_8009_adapter import Local8009Adapter
+            from core.ai.llm.adapters.local_8009_adapter import Local8009Adapter
 
             self.llm_adapter = Local8009Adapter(
                 base_url=self.llm_base_url,
@@ -64,7 +65,7 @@ class HybridOCREngineV2:
             logger.error(f"❌ 初始化失败: {e}", exc_info=True)
             return False
 
-    async def analyze_pdf_structure(self, pdf_path: str) -> Dict[str, Any]:
+    async def analyze_pdf_structure(self, pdf_path: str) -> dict[str, Any]:
         """
         分析PDF基本信息（无需Docling）
 
@@ -74,7 +75,7 @@ class HybridOCREngineV2:
         Returns:
             PDF基本信息
         """
-        logger.info(f"🔍 阶段1：分析PDF基本信息...")
+        logger.info("🔍 阶段1：分析PDF基本信息...")
 
         try:
             pdf_file = Path(pdf_path)
@@ -114,7 +115,7 @@ class HybridOCREngineV2:
                 from pdf2image import convert_from_path
 
                 # 转换第一页来检查
-                images = convert_from_path(pdf_path, first_page=1, last_page=1)
+                convert_from_path(pdf_path, first_page=1, last_page=1)
                 result["total_pages"] = "未知"
                 result["has_text_layer"] = False
                 result["is_scanned"] = True
@@ -130,7 +131,7 @@ class HybridOCREngineV2:
         self,
         pdf_path: str,
         max_pages: int = 3
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         使用GLM-OCR（VLM）识别PDF内容
 
@@ -202,7 +203,7 @@ class HybridOCREngineV2:
 4. 如果有附图，说明附图内容
 5. 保持段落结构"""
 
-                user_prompt = f"""请识别这页专利文档的内容。
+                user_prompt = """请识别这页专利文档的内容。
 
 特别注意：
 - 专利号、申请日、授权公告日等关键信息
@@ -255,7 +256,7 @@ class HybridOCREngineV2:
         self,
         pdf_path: str,
         output_markdown: str = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         测试单个PDF文件
 
@@ -282,7 +283,7 @@ class HybridOCREngineV2:
             logger.error(f"❌ PDF分析失败: {structure_info['error']}")
             return structure_info
 
-        logger.info(f"✅ PDF分析完成:")
+        logger.info("✅ PDF分析完成:")
         logger.info(f"   - 文件大小: {structure_info.get('file_size_mb', 0):.2f} MB")
         logger.info(f"   - 总页数: {structure_info.get('total_pages', '未知')}")
         logger.info(f"   - 是否扫描件: {structure_info.get('is_scanned', '未知')}")
@@ -294,7 +295,7 @@ class HybridOCREngineV2:
             logger.error(f"❌ VLM识别失败: {vlm_result['error']}")
             return vlm_result
 
-        logger.info(f"✅ VLM识别完成:")
+        logger.info("✅ VLM识别完成:")
         logger.info(f"   - 处理页数: {vlm_result['processed_pages']}")
         logger.info(f"   - 成功页数: {vlm_result['successful_pages']}")
 
@@ -323,7 +324,7 @@ class HybridOCREngineV2:
 
     def _generate_markdown_report(
         self,
-        result: Dict[str, Any],
+        result: dict[str, Any],
         output_path: str
     ):
         """生成Markdown格式报告"""

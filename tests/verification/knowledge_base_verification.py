@@ -12,29 +12,23 @@ Athena平台知识库验证测试套件
 日期: 2026-04-18
 """
 
-import asyncio
 import json
+
+# 核心服务导入
+import sys
 import time
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-import pytest
 import httpx
-from neo4j import AsyncGraphDatabase
-from qdrant_client import QdrantClient
-from qdrant_client.models import Distance, VectorParams, PointStruct
+import pytest
 import redis.asyncio as redis
-import psycopg2
-from psycopg2 import sql
 
-# 核心服务导入
-import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "core"))
 
 from embedding.unified_embedding_service import UnifiedEmbeddingService
-
 
 # ============================================================================
 # 测试配置

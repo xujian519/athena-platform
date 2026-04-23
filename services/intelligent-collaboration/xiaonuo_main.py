@@ -15,14 +15,13 @@ from typing import Any
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
 # 导入小诺的各个能力模块
+# 导入优化后的规划器
+# 导入决策服务
+from core.planning.planning_monitor import monitor
 from xiaonuo_development_assistant import XiaonuoDevAssistant
 from xiaonuo_knowledge_base import XiaonuoKnowledgeBase
 from xiaonuo_life_assistant import XiaonuoLifeAssistant
 from xiaonuo_service_controller import XiaonuoServiceController
-
-# 导入优化后的规划器
-# 导入决策服务
-from core.planning.planning_monitor import monitor
 
 
 class XiaonuoMain:

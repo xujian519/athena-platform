@@ -151,8 +151,8 @@ class UnifiedKnowledgeItem:
     last_accessed_at: datetime | None = None
 
     # ===== 图谱关联 =====
-    nebula_node_id: str | None = None
-    qdrant_point_id: str | None = None
+    nebula_node_id: Optional[str] = None
+    qdrant_point_id: Optional[str] = None
 
     def __post_init__(self):
         """初始化后处理"""
@@ -259,7 +259,7 @@ class UnifiedKnowledgeItem:
         """是否为优秀知识(置顶推荐)"""
         return self.quality_level == QualityLevel.EXCELLENT
 
-    def record_usage(self, effectiveness: float | None = None) -> Any:
+    def record_usage(self, effectiveness: Optional[float] = None) -> Any:
         """记录使用
 
         Args:
@@ -283,7 +283,7 @@ def create_knowledge_item(
     description: str,
     content: dict[str, Any],    knowledge_type: KnowledgeType,
     category: KnowledgeCategory,
-    tags: list[str] | None = None,
+    tags: Optional[list[str]] = None,
     source: str = "manual",
 ) -> UnifiedKnowledgeItem:
     """便捷函数:创建知识条目

@@ -10,16 +10,15 @@ WebSocket性能测试脚本
 """
 
 import asyncio
-import websockets
 import json
-import time
 import statistics
-import psutil
-import threading
-from typing import List, Dict, Any
+import time
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Any
 
+import psutil
+import websockets
 
 # 测试配置
 GATEWAY_URL = "ws://localhost:8005/ws"
@@ -41,7 +40,7 @@ class PerformanceTestResult:
     """性能测试结果"""
 
     def __init__(self):
-        self.metrics: List[PerformanceMetrics] = []
+        self.metrics: list[PerformanceMetrics] = []
         self.start_time = datetime.now()
         self.end_time: datetime = None
 
@@ -115,7 +114,7 @@ class WebSocketClient:
                     "client_id": self.client_id,
                     "auth_token": AUTH_TOKEN,
                     "capabilities": ["task", "query"],
-                    "user_agent": f"PerformanceTestClient/1.0"
+                    "user_agent": "PerformanceTestClient/1.0"
                 }
             }
 
@@ -135,7 +134,7 @@ class WebSocketClient:
             print(f"客户端 {self.client_id} 连接失败: {e}")
             return False
 
-    async def send_message(self, msg_type: str, data: Dict[str, Any]) -> bool:
+    async def send_message(self, msg_type: str, data: dict[str, Any]) -> bool:
         """发送消息"""
         if not self.connected:
             return False
@@ -153,7 +152,7 @@ class WebSocketClient:
             self.messages_sent += 1
             return True
 
-        except Exception as e:
+        except Exception:
             self.errors += 1
             return False
 
@@ -219,7 +218,7 @@ async def test_message_throughput(result: PerformanceTestResult):
 
     num_clients = 10
     messages_per_client = 100
-    total_messages = num_clients * messages_per_client
+    num_clients * messages_per_client
 
     clients = []
 
@@ -345,12 +344,12 @@ async def test_resource_usage(result: PerformanceTestResult):
     initial_cpu = process.cpu_percent(interval=1)
     initial_memory = process.memory_info().rss / 1024 / 1024  # MB
 
-    print(f"初始资源使用:")
+    print("初始资源使用:")
     print(f"  CPU: {initial_cpu}%")
     print(f"  内存: {initial_memory:.2f} MB")
 
     # 运行负载测试
-    print(f"\n运行负载测试（50个客户端，每客户端50条消息）...")
+    print("\n运行负载测试（50个客户端，每客户端50条消息）...")
 
     num_clients = 50
     messages_per_client = 50
@@ -393,7 +392,7 @@ async def test_resource_usage(result: PerformanceTestResult):
     result.add_metric("resource_memory_max", max_memory, "MB")
     result.add_metric("resource_test_duration", duration, "秒")
 
-    print(f"\n✅ 资源使用统计:")
+    print("\n✅ 资源使用统计:")
     print(f"   平均CPU: {avg_cpu:.1f}%")
     print(f"   峰值CPU: {max_cpu:.1f}%")
     print(f"   平均内存: {avg_memory:.2f} MB")

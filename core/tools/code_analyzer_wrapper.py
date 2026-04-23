@@ -14,7 +14,7 @@ async def code_analyzer(
     code: str,
     language: str = "python",
     style: str = "basic"
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     分析代码的统计信息、复杂度和潜在问题
 
@@ -203,7 +203,7 @@ async def code_analyzer(
 
 
 # 便捷函数：快速分析代码（使用默认参数）
-async def quick_analyze(code: str, language: str = "python") -> Dict[str, Any]:
+async def quick_analyze(code: str, language: str = "python") -> dict[str, Any]:
     """
     快速分析代码（使用基础模式）
 
@@ -218,7 +218,7 @@ async def quick_analyze(code: str, language: str = "python") -> Dict[str, Any]:
 
 
 # 便捷函数：深度分析代码（使用详细模式）
-async def deep_analyze(code: str, language: str = "python") -> Dict[str, Any]:
+async def deep_analyze(code: str, language: str = "python") -> dict[str, Any]:
     """
     深度分析代码（使用详细模式，包含问题检测）
 

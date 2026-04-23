@@ -80,7 +80,7 @@ class ServiceControlResponse(BaseModel):
     service: str
     action: str
     message: str
-    data: dict[str, Any] | None = None
+    data: Optional[dict[str, Any]] = None
 
 
 class OrchestrationRequest(BaseModel):

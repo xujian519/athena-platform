@@ -4,10 +4,11 @@ InvalidationAnalyzerProxy LLM集成测试
 测试无效宣告分析智能体的LLM调用功能。
 """
 
+from unittest.mock import AsyncMock
+
 import pytest
-import asyncio
-from unittest.mock import Mock, AsyncMock, patch
-from core.agents.xiaona.invalidation_analyzer_proxy import InvalidationAnalyzerProxy
+
+from core.framework.agents.xiaona.invalidation_analyzer_proxy import InvalidationAnalyzerProxy
 
 
 @pytest.fixture
@@ -827,7 +828,7 @@ class TestEdgeCasesAndErrorHandling:
     async def test_llm_timeout(self, analyzer, sample_patent, sample_references):
         """测试LLM超时"""
         analyzer._call_llm_with_fallback = AsyncMock(
-            side_effect=asyncio.TimeoutError("LLM timeout")
+            side_effect=TimeoutError("LLM timeout")
         )
 
         result = await analyzer.analyze_invalidation(

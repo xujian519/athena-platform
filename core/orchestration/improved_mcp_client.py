@@ -119,7 +119,7 @@ class ImprovedMCPClient:
         self.process.stdin.write(message_str.encode() + b"\n")
         await self.process.stdin.drain()
 
-    async def _read_message(self) -> dict[str, Any] | None:
+    async def _read_message(self) -> Optional[dict[str, Any]]:
         """从MCP服务读取消息"""
         if not self.process:
             return None

@@ -75,13 +75,13 @@ class LogEntry:
     component: str
     message: str
     details: Optional[Dict[str, Any]] = None
-    user_id: str | None = None
-    session_id: str | None = None
-    request_id: str | None = None
-    stack_trace: str | None = None
+    user_id: Optional[str] = None
+    session_id: Optional[str] = None
+    request_id: Optional[str] = None
+    stack_trace: Optional[str] = None
     performance_metrics: Optional[Dict[str, float]] = None
     tags: List[str] = field(default_factory=list)
-    correlation_id: str | None = None
+    correlation_id: Optional[str] = None
 
 @dataclass
 class ErrorReport:
@@ -95,7 +95,7 @@ class ErrorReport:
     stack_trace: str
     context: Dict[str, Any]
     severity: str
-    recovery_action: str | None = None
+    recovery_action: Optional[str] = None
     resolved: bool = False
     resolution_time: datetime | None = None
 
@@ -374,8 +374,8 @@ class ErrorManager:
     async def handle_error(self,
                           exception: Exception,
                           context: Optional[Dict[str, Any]] = None,
-                          user_id: str | None = None,
-                          session_id: str | None = None) -> str:
+                          user_id: Optional[str] = None,
+                          session_id: Optional[str] = None) -> str:
         """处理错误"""
         error_id = str(uuid.uuid4())
         context = context or {}
@@ -581,7 +581,7 @@ class CognitiveLogger:
             message: str,
             category: LogCategory = LogCategory.SYSTEM,
             details: Optional[Dict[str, Any]] = None,
-            tags: Optional[List[str] = None,
+            tags: Optional[List[str]] = None,
             performance_metrics: Optional[Dict[str, float]] = None):
         """记录日志"""
         log_entry = LogEntry(

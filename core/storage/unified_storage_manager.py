@@ -324,7 +324,7 @@ class UnifiedStorageManager:
         title: str,
         content: str,
         vectors: list[float],
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> str:
         """
         写入文档到三个存储系统(三写一致性)
@@ -430,7 +430,7 @@ class UnifiedStorageManager:
             if conn:
                 self.pg_pool.putconn(conn)
 
-    def _write_to_qdrant(self, doc_id: str, vectors: list[dict[str, Any]], payload: dict[str, Any] | None = None):
+    def _write_to_qdrant(self, doc_id: str, vectors: list[dict[str, Any]], payload: Optional[dict[str, Any]] = None):
         """写入Qdrant"""
         # 确保集合存在
         self._ensure_qdrant_collection()
@@ -507,8 +507,8 @@ class UnifiedStorageManager:
         self,
         query_text: str,
         query_vector: list[str] = None,
-        domain: str | None = None,
-        document_type: str | None = None,
+        domain: Optional[str] = None,
+        document_type: Optional[str] = None,
         limit: int = 10,
     ) -> list[dict[str, Any]]:
         """
@@ -722,7 +722,7 @@ class UnifiedStorageManager:
             if conn:
                 self.pg_pool.putconn(conn)
 
-    def _fuse_results(self, results: dict[str, list[dict[str, Any]]]) -> list[dict[str, Any]]:
+    def _fuse_results(self, results: dict[str, list[dict[str, Any]]) -> list[dict[str, Any]]]:
         """融合多源结果"""
         # 简单融合:合并所有结果并按分数排序
         all_results = []
@@ -755,7 +755,7 @@ class UnifiedStorageManager:
         title: str,
         content: str,
         vectors: list[float],
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> str:
         """
         写入历史数据到专用表和集合
@@ -921,7 +921,7 @@ class UnifiedStorageManager:
         data_type: HistoricalDataType,
         query_vector: list[float],
         limit: int = 10,
-        filters: dict[str, Any] | None = None,
+        filters: Optional[dict[str, Any]] = None,
     ) -> list[dict[str, Any]]:
         """
         搜索历史数据

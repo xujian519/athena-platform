@@ -68,8 +68,8 @@ class ModelConfig:
     model_type: ModelType
     provider: ModelProvider
     model_name: str
-    api_key: str | None = None
-    api_base: str | None = None
+    api_key: Optional[str] = None
+    api_base: Optional[str] = None
     max_tokens: int = 2048
     temperature: float = 0.7
     timeout: float = 30.0
@@ -343,7 +343,7 @@ class ModelRegistry:
         self,
         name: str,
         model_class: type[AIModel],
-        aliases: list[str] | None = None,
+        aliases: Optional[list[str]] = None,
     ) -> None:
         """注册模型
 
@@ -433,7 +433,7 @@ class ModelPipeline:
         """
         self.registry = registry
         self._stages: list[tuple[str, ModelConfig]] = []
-        self._parallel_groups: list[list[tuple[str, ModelConfig]]] = []
+        self._parallel_groups: list[list[tuple[str, ModelConfig]] = []
         logger.info("🔗 模型管道初始化完成")
 
     def add_stage(self, model_name: str, config: ModelConfig) -> "ModelPipeline":

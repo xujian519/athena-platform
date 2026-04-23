@@ -6,7 +6,6 @@
 
 import asyncio
 import sys
-import os
 
 # 添加项目路径
 sys.path.append('/Users/xujian/Athena工作平台')
@@ -18,12 +17,12 @@ async def start_optimized_storage():
     try:
         # 1. 初始化智能路由器
         from storage_system.smart_storage_router import SmartStorageRouter
-        router = SmartStorageRouter()
+        SmartStorageRouter()
         print("✅ 智能路由器已初始化")
 
         # 2. 初始化并行执行器
         from storage_system.parallel_storage_executor import ParallelStorageExecutor
-        executor = ParallelStorageExecutor(max_workers=4)
+        ParallelStorageExecutor(max_workers=4)
         print("✅ 并行执行器已初始化 (4个工作线程)")
 
         # 3. 初始化性能监控器

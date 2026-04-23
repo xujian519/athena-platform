@@ -52,7 +52,7 @@ class ServiceHealth:
 
                     self.response_time = response_time
 
-        except asyncio.TimeoutError:
+        except TimeoutError:
             self.status = 'timeout'
             self.error = f"Request timeout after {self.timeout}s"
             self.consecutive_failures += 1

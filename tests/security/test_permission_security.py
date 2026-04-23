@@ -7,7 +7,6 @@
 作者: Athena平台团队
 创建时间: 2026-04-20
 """
-from __future__ import annotations
 
 import logging
 
@@ -177,7 +176,7 @@ def test_race_condition_protection():
     all_blocked = all(not allowed for _, allowed, _ in results)
 
     if all_blocked:
-        print(f"✅ 所有 100 个并发请求都被正确阻止（PLAN 模式）")
+        print("✅ 所有 100 个并发请求都被正确阻止（PLAN 模式）")
     else:
         blocked_count = sum(1 for _, allowed, _ in results if not allowed)
         print(f"⚠️ 并发结果不一致: {blocked_count}/100 被阻止")
@@ -240,3 +239,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

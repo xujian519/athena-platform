@@ -279,7 +279,7 @@ async def generate_security_report(
 
     print(f"\n📊 测试通过率: {report['summary']['passed_tests']}/{report['summary']['total_tests']} ({report['summary']['passed_tests']/report['summary']['total_tests']*100:.0f}%)")
 
-    print(f"\n🛡️ 安全特性:")
+    print("\n🛡️ 安全特性:")
     for feature, enabled in report['security_features'].items():
         status = "✅" if enabled else "❌"
         print(f"   {status} {feature}")

@@ -1,0 +1,19 @@
+# 三源融合灰度配置
+# 修改本文件后 10 秒内自动生效（热重载）
+
+# 总开关
+global_enabled: true
+
+# 白名单（空列表表示不限制）
+domain_whitelist:
+  - patent
+
+task_type_whitelist:
+  - office_action
+
+# 流量百分比（0-100）
+# 当前：OA 解读场景 5% 灰度试点
+traffic_percentage: 5
+
+# 按用户 hash 前缀分流（空字符串表示不限制）
+user_id_hash_prefix: ""

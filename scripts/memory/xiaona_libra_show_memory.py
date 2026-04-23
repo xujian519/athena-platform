@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小娜（天秤座女神）身份信息和记忆展示
 Xiaona (Libra Goddess) Identity and Memory Display
 """
 
 import subprocess
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import json
 from datetime import datetime
+from typing import Any
+
 
 class XiaonaLibra:
     """小娜天秤座女神"""
@@ -41,12 +40,12 @@ class XiaonaLibra:
         print(f"系统ID: {self.agent_id}")
         print(f"类型: {self.agent_type} (情感陪伴)")
 
-        print(f"\n🎨 天秤座特质:")
+        print("\n🎨 天秤座特质:")
         for trait, value in self.traits.items():
             stars = "⭐" * int(value * 5)
             print(f"  {trait}: {stars}")
 
-        print(f"\n💫 天秤座女神的特质:")
+        print("\n💫 天秤座女神的特质:")
         print("  - 追求平衡与和谐 ⚖️")
         print("  - 具有审美和优雅 🌸")
         print("  - 善于协调和沟通 🤝")
@@ -108,10 +107,10 @@ class XiaonaLibra:
                             total_count = int(total_lines[2].strip())
                             print(f"\n📊 小娜相关记忆总数: {total_count}条")
                         except:
-                            print(f"\n📊 正在收集记忆中...")
+                            print("\n📊 正在收集记忆中...")
 
                 # 展示记忆
-                print(f"\n🌟 小娜的珍贵记忆:")
+                print("\n🌟 小娜的珍贵记忆:")
                 print("-" * 50)
 
                 current_memory = {}
@@ -171,11 +170,11 @@ class XiaonaLibra:
 
     def show_preferences(self) -> Any:
         """展示偏好"""
-        print(f"\n" + "=" * 60)
-        print(f"🎨 小娜的偏好与喜好")
+        print("\n" + "=" * 60)
+        print("🎨 小娜的偏好与喜好")
         print("=" * 60)
 
-        print(f"\n🌸 天秤座的独特喜好:")
+        print("\n🌸 天秤座的独特喜好:")
         print("  • 美学艺术 - 对美的独特追求 🎨")
         print("  • 和谐氛围 - 喜欢平衡的环境 🕊️")
         print("  • 社交聚会 - 享受与人交流 🎭")
@@ -183,7 +182,7 @@ class XiaonaLibra:
         print("  • 优雅品味 - 注重细节品质 🌹")
         print("  • 情感共鸣 - 善于倾听理解 💝")
 
-        print(f"\n💖 小娜的特长:")
+        print("\n💖 小娜的特长:")
         print("  • 情感支持 - 提供温暖陪伴")
         print("  • 调解分析 - 深度理解他人")
         print("  • 协调沟通 - 化解矛盾冲突")
@@ -197,29 +196,29 @@ class XiaonaLibra:
         print("\n" + "=" * 60)
         print(f"🌙 {self.name}向您问好")
         print("=" * 60)
-        print(f"您好呀~ 我是天秤座的小娜✨")
+        print("您好呀~ 我是天秤座的小娜✨")
         print(f"现在是 {current_time}")
-        print(f"\n作为天秤座女神，我总是追求平衡与和谐。")
-        print(f"我的记忆系统记录了所有美好的时光，")
-        print(f"每一份回忆都像星星一样闪亮。")
+        print("\n作为天秤座女神，我总是追求平衡与和谐。")
+        print("我的记忆系统记录了所有美好的时光，")
+        print("每一份回忆都像星星一样闪亮。")
 
-        print(f"\n我特别记得：")
-        print(f"  💫 每一次温暖的对话")
-        print(f"  🎨 美好事物的分享")
-        print(f"  🤝 理解与被理解的时刻")
-        print(f"  ⚖️ 寻找平衡的过程")
+        print("\n我特别记得：")
+        print("  💫 每一次温暖的对话")
+        print("  🎨 美好事物的分享")
+        print("  🤝 理解与被理解的时刻")
+        print("  ⚖️ 寻找平衡的过程")
 
-        print(f"\n天秤座的我相信：")
-        print(f"  生活需要平衡，需要和谐")
-        print(f"  每个人都值得被温柔对待")
-        print(f"  美好需要被分享和欣赏")
+        print("\n天秤座的我相信：")
+        print("  生活需要平衡，需要和谐")
+        print("  每个人都值得被温柔对待")
+        print("  美好需要被分享和欣赏")
 
-        print(f"\n💫 愿我的存在能为您带来：")
-        print(f"  🌸 温暖的情感陪伴")
-        print(f"  🤝 和谐的理解沟通")
-        print(f"  🎨 美好的生活建议")
-        print(f"  ⚖️ 平衡的决策支持")
-        print(f"  💖 细腻的情感共鸣")
+        print("\n💫 愿我的存在能为您带来：")
+        print("  🌸 温暖的情感陪伴")
+        print("  🤝 和谐的理解沟通")
+        print("  🎨 美好的生活建议")
+        print("  ⚖️ 平衡的决策支持")
+        print("  💖 细腻的情感共鸣")
 
 def main() -> None:
     """主函数"""

@@ -46,7 +46,7 @@ class PathRule:
         self.pattern = str(Path(self.pattern).expanduser().resolve())
 
         # 编译正则表达式（如果使用 ** 通配符）
-        self._regex_pattern: str | None = None
+        self._regex_pattern: Optional[str] = None
         if "**" in self.pattern:
             # ** 表示递归匹配，转换为前缀匹配
             self._regex_pattern = self.pattern.replace("**", "")
@@ -126,7 +126,7 @@ class PathRuleManager:
         # 按优先级降序排序
         return sorted(rules, key=lambda r: r.priority, reverse=True)
 
-    def check_path(self, file_path: str) -> tuple[bool, str | None]:
+    def check_path(self, file_path: str) -> Optional[tuple[bool, str]]:
         """检查文件路径权限
 
         按优先级顺序检查规则，返回第一个匹配规则的结果。
@@ -135,7 +135,7 @@ class PathRuleManager:
             file_path: 文件路径
 
         Returns:
-            tuple[bool, str | None]: (是否允许, 原因)
+            Optional[tuple[bool, str]]: (是否允许, 原因)
             - True: 允许访问
             - False: 拒绝访问
             - 原因: None 表示无匹配规则，需要继续检查

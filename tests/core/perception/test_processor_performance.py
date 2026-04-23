@@ -27,8 +27,8 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from core.perception import ImageProcessor, PerceptionEngine, TextProcessor
-from core.perception.streaming_perception_processor import StreamConfig, StreamType
+from core.ai.perception import ImageProcessor, PerceptionEngine, TextProcessor
+from core.ai.perception.streaming_perception_processor import StreamConfig, StreamType
 
 logger = logging.getLogger(__name__)
 
@@ -153,7 +153,7 @@ class TestStreamingProcessorPerformance:
 
     async def test_streaming_throughput(self):
         """测试流式处理吞吐量"""
-        from core.perception.streaming_perception_processor import (
+        from core.ai.perception.streaming_perception_processor import (
             StreamingPerceptionEngine,
         )
 
@@ -183,7 +183,7 @@ class TestStreamingProcessorPerformance:
 
     async def test_streaming_latency(self):
         """测试流式处理延迟"""
-        from core.perception.streaming_perception_processor import (
+        from core.ai.perception.streaming_perception_processor import (
             StreamingPerceptionEngine,
         )
 
@@ -221,7 +221,7 @@ class TestCachePerformanceUnderLoad:
 
     async def test_cache_performance_with_high_tps(self):
         """测试高TPS下的缓存性能"""
-        from core.perception.performance_optimizer import PerformanceOptimizer
+        from core.ai.perception.performance_optimizer import PerformanceOptimizer
 
         optimizer = PerformanceOptimizer({"enable_cache": True})
 
@@ -263,7 +263,7 @@ class TestCachePerformanceUnderLoad:
         """测试缓存内存效率"""
         from datetime import datetime
 
-        from core.perception.performance_optimizer import PerformanceOptimizer
+        from core.ai.perception.performance_optimizer import PerformanceOptimizer
 
         optimizer = PerformanceOptimizer({"enable_cache": True})
 

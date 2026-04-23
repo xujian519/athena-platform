@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 创建孙俊霞专利申请记录
 Create Sun Junxia Patent Application Records
@@ -12,14 +11,14 @@ Create Sun Junxia Patent Application Records
 版本: v1.0.0
 """
 
-import psycopg2
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import psycopg2.extras
-import sys
-from datetime import datetime, date
-import uuid
 import json
+import uuid
+from datetime import date, datetime
 from pathlib import Path
+from typing import Any
+
+import psycopg2
+import psycopg2.extras
 
 # 数据库连接配置
 DB_CONFIG = {
@@ -403,15 +402,15 @@ class SunJunxiaRecordCreator:
             # 客户信息
             self.cursor.execute("SELECT * FROM clients WHERE id = %s", (client_id,))
             client = self.cursor.fetchone()
-            print(f"👤 客户信息:")
+            print("👤 客户信息:")
             print(f"  姓名: {client[2]}")
             print(f"  类型: {client[3]}")
-            print(f"  状态: 活跃客户")
+            print("  状态: 活跃客户")
 
             # 项目信息
             self.cursor.execute("SELECT * FROM projects WHERE id = %s", (project_id,))
             project = self.cursor.fetchone()
-            print(f"\n📁 项目信息:")
+            print("\n📁 项目信息:")
             print(f"  项目名称: {project[3]}")
             print(f"  项目经理: {project[5]}")
             print(f"  状态: {project[9]}")
@@ -421,7 +420,7 @@ class SunJunxiaRecordCreator:
             # 案卷信息
             self.cursor.execute("SELECT * FROM cases WHERE id = %s", (case_id,))
             case = self.cursor.fetchone()
-            print(f"\n📄 案卷信息:")
+            print("\n📄 案卷信息:")
             print(f"  案卷号: {case[4]}")
             print(f"  专利名称: {case[5]}")
             print(f"  专利类型: {case[7]}")
@@ -430,21 +429,21 @@ class SunJunxiaRecordCreator:
             # 任务统计
             self.cursor.execute("SELECT COUNT(*) FROM tasks WHERE case_id = %s", (case_id,))
             task_count = self.cursor.fetchone()[0]
-            print(f"\n📝 任务信息:")
+            print("\n📝 任务信息:")
             print(f"  总任务数: {task_count}")
 
             # 财务统计
             self.cursor.execute("SELECT COUNT(*), SUM(amount) FROM financial_records WHERE case_id = %s", (case_id,))
             finance_stats = self.cursor.fetchone()
             total_amount = finance_stats[1] or 0
-            print(f"\n💰 财务信息:")
+            print("\n💰 财务信息:")
             print(f"  财务记录数: {finance_stats[0]}")
             print(f"  总费用: ¥{total_amount}")
 
             # 文档统计
             self.cursor.execute("SELECT COUNT(*) FROM documents WHERE case_id = %s", (case_id,))
             doc_count = self.cursor.fetchone()[0]
-            print(f"\n📁 文档信息:")
+            print("\n📁 文档信息:")
             print(f"  关联文档数: {doc_count}")
 
             print("\n" + "=" * 80)
@@ -473,8 +472,8 @@ def main() -> None:
     print("📝" + " " * 25 + "创建孙俊霞专利申请记录" + " " * 25 + "📝")
     print("=" * 80)
     print(f"🕐 创建时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"👩‍⚖️ 操作者: 小娜·天秤女神 (专利法律专家)")
-    print(f"🎯 创建目标: 完整的专利申请业务记录")
+    print("👩‍⚖️ 操作者: 小娜·天秤女神 (专利法律专家)")
+    print("🎯 创建目标: 完整的专利申请业务记录")
     print("=" * 80)
 
     creator = SunJunxiaRecordCreator()

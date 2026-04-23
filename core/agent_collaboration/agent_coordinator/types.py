@@ -44,10 +44,10 @@ class TaskDefinition:
     task_type: str
     content: dict[str, Any]
     required_agents: list[str]
-    dependencies: list[str] | None = None
+    dependencies: Optional[list[str]] = None
     priority: int = 2
-    deadline: str | None = None
-    created_at: str | None = None
+    deadline: Optional[str] = None
+    created_at: Optional[str] = None
 
 
 @dataclass
@@ -56,8 +56,8 @@ class TaskExecution:
 
     task_definition: TaskDefinition
     status: TaskStatus = TaskStatus.PENDING
-    assigned_agents: list[str] | None = None
-    results: dict[str, Any] | None = None
-    start_time: str | None = None
-    end_time: str | None = None
-    error_message: str | None = None
+    assigned_agents: Optional[list[str]] = None
+    results: Optional[dict[str, Any]] = None
+    start_time: Optional[str] = None
+    end_time: Optional[str] = None
+    error_message: Optional[str] = None

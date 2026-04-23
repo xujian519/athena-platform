@@ -6,10 +6,11 @@
 import re
 from pathlib import Path
 
+
 def fix_file(file_path: Path) -> bool:
     """修复单个文件的语法错误"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         original_content = content
@@ -19,10 +20,9 @@ def fix_file(file_path: Path) -> bool:
         pattern1 = r'(\w+\s*:\s*list\[dict\[str,\s*Any\])\)\s*->'
         if re.search(pattern1, content):
             content = re.sub(pattern1, r'\1]) ->', content)
-            fixes.append("修复 list[dict[...]] 缺少括号")
+            fixes.append("修复 list[dict[...] 缺少括号")
 
         # 模式2: dict[str, str | None = None (缺少右方括号)
-        pattern2 = r'(\w+\s*:\s*dict\[str,\s*str\s*\|\s*None\s*=)\s*$'
         def replace_pattern2(match):
             # 检查是否在同一行
             line_start = content.rfind('\n', 0, match.start()) + 1
@@ -41,20 +41,20 @@ def fix_file(file_path: Path) -> bool:
         modified_lines = []
         for line in lines:
             # 模式2修复
-            if 'dict[str, str | None = None' in line and not 'dict[str, str] | None' in line:
+            if 'dict[str, str | None = None' in line and 'dict[str, str] | None' not in line:
                 if ') ->' in line or '])' in line:
                     line = line.replace('dict[str, str | None = None', 'dict[str, str] | None = None')
             modified_lines.append(line)
         content = '\n'.join(modified_lines)
 
-        # 模式3: tuple[int, ...]] | None (多余右方括号)
+        # 模式3: tuple[int, ...] | None (多余右方括号)
         content = re.sub(r'tuple\[int,\s*\.\.\.]\]\s*\|\s*None', 'tuple[int, ...] | None', content)
 
         # 模式4: Optional[tuple[int | None = None, ... | None = None)]
         pattern4 = r'Optional\[tuple\[int\s*\|\s*None\s*=\s*None,\s*\.\.\.\s*\|\s*None\s*=\s*None\)\]'
         if re.search(pattern4, content):
             content = re.sub(pattern4, 'tuple[int, ...] | None', content)
-            fixes.append("修复 Optional[tuple[...]] 混乱类型")
+            fixes.append("修复 Optional[tuple[...] 混乱类型")
 
         # 模式5: RoutingResult] -> RoutingResult,
         content = re.sub(r'(\w+)\s*:\s*(\w+)\]', r'\1: \2,', content)
@@ -62,8 +62,8 @@ def fix_file(file_path: Path) -> bool:
         # 模式6: dict[AgentType, list[str] = {...}] (缺少右方括号)
         pattern6 = r'dict\[(\w+),\s*list\[str\]\s*=\s*\{'
         if re.search(pattern6, content):
-            content = re.sub(pattern6, r'dict[\1, list[str]] = {', content)
-            fixes.append("修复 dict[Type, list[str]] 缺少括号")
+            content = re.sub(pattern6, r'dict[\1, list[str] = {', content)
+            fixes.append("修复 dict[Type, list[str] 缺少括号")
 
         # 模式7: Callable[... | None = None, Any | None = None]
         pattern7 = r'Callable\[\.\.\.\s*\|\s*None\s*=\s*None,\s*Any\s*\|\s*None\s*=\s*None\]'
@@ -124,11 +124,11 @@ def main():
                 for fix in fixes:
                     print(f"    {fix}")
 
-    print(f"\n修复完成!")
+    print("\n修复完成!")
     print(f"修复文件数: {fixed_count}")
 
     if total_fixes:
-        print(f"\n应用的修复模式:")
+        print("\n应用的修复模式:")
         for fix in set(total_fixes):
             print(f"  - {fix}")
 

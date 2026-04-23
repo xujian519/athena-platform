@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 自动导入历史记忆
 Auto Import Historical Memories
@@ -10,13 +9,13 @@ Auto Import Historical Memories
 创建时间: 2025年12月15日
 """
 
-import sqlite3
-import json
-import sys
-from datetime import datetime
-import uuid
 import asyncio
+import json
 import logging
+import sqlite3
+import sys
+import uuid
+from datetime import datetime
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -57,7 +56,7 @@ async def import_historical_memories():
         # 转换数据
         memories = []
         for row in rows:
-            memory = dict(zip(columns, row))
+            memory = dict(zip(columns, row, strict=False))
 
             # 解析内容
             content = memory.get('content', '')
@@ -156,7 +155,7 @@ async def import_historical_memories():
 
         await conn.close()
 
-        print(f"\n📊 导入结果:")
+        print("\n📊 导入结果:")
         print(f"  ✅ 成功: {success_count}")
         print(f"  ❌ 失败: {error_count}")
         print(f"  📈 成功率: {success_count/(success_count+error_count)*100:.1f}%")
@@ -203,7 +202,7 @@ async def import_historical_memories():
     print("\n📊 导入统计:")
     print(f"  - 总记忆数: {len(memories)}")
     print(f"  - 成功导入: {success_count}")
-    print(f"  - 存储位置: PostgreSQL(memory_module@localhost:5438)")
+    print("  - 存储位置: PostgreSQL(memory_module@localhost:5438)")
 
     # 6. 验证导入
     print("\n🔍 步骤4: 验证导入结果...")
@@ -228,7 +227,7 @@ async def import_historical_memories():
         )
 
         if sample:
-            print(f"\n📝 记忆样本:")
+            print("\n📝 记忆样本:")
             print(f"  内容: {sample['content'][:50]}...")
             print(f"  类型: {sample['memory_type']}")
             print(f"  智能体: {sample['agent_type']}")

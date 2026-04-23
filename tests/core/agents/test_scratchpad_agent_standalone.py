@@ -7,8 +7,6 @@
 
 import json
 import sys
-from datetime import datetime
-from typing import Any
 
 
 # 模拟BaseAgent（避免导入整个平台）
@@ -26,12 +24,13 @@ class BaseAgent:
 sys.path.insert(0, '/Users/xujian/Athena工作平台')
 
 # 暂时替换BaseAgent，避免导入错误
-import core.agents.base_agent as base_module
+import core.framework.agents.base_agent as base_module
+
 original_base = base_module.BaseAgent
 base_module.BaseAgent = BaseAgent
 
 # 现在导入我们的代理
-from core.agents.xiaona_agent_with_scratchpad import XiaonaAgentWithScratchpad
+from core.framework.agents.xiaona_agent_with_scratchpad import XiaonaAgentWithScratchpad
 
 # 恢复原始BaseAgent
 base_module.BaseAgent = original_base
@@ -45,7 +44,7 @@ def test_agent():
 
     # 创建代理
     agent = XiaonaAgentWithScratchpad()
-    print(f"\n✅ 代理创建成功")
+    print("\n✅ 代理创建成功")
     print(f"   名称: {agent.name}")
     print(f"   角色: {agent.role}")
 
@@ -61,7 +60,7 @@ def test_agent():
     print(f"✅ 有推理摘要: {'reasoning_summary' in result}")
     print(f"✅ 有输出内容: {'output' in result}")
     print(f"✅ Scratchpad可用: {result.get('scratchpad_available', False)}")
-    print(f"\n推理摘要（前200字符）:")
+    print("\n推理摘要（前200字符）:")
     print(result['reasoning_summary'][:200] + "...")
 
     # 测试2: JSON输入
@@ -126,7 +125,7 @@ def test_agent():
 
     if scratchpads:
         latest = scratchpads[-1]
-        print(f"✅ 最新记录:")
+        print("✅ 最新记录:")
         print(f"   任务ID: {latest.get('task_id', 'N/A')}")
         print(f"   任务类型: {latest.get('task_type', 'N/A')}")
         print(f"   时间戳: {latest.get('timestamp', 'N/A')}")

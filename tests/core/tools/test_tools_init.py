@@ -13,25 +13,26 @@ Tools模块__init__.py单元测试
 
 import pytest
 
+
 # 测试所有主要导入
 def test_module_imports():
     """测试模块主要导入"""
     from core.tools import (
+        GroupActivationRule,
+        SelectionScore,
+        SelectionStrategy,
         ToolCapability,
         ToolCategory,
         ToolDefinition,
-        ToolPerformance,
-        ToolPriority,
-        ToolRegistry,
-        get_global_registry,
-        SelectionScore,
-        SelectionStrategy,
-        ToolSelector,
-        GroupActivationRule,
         ToolGroup,
         ToolGroupDef,
         ToolManager,
+        ToolPerformance,
+        ToolPriority,
+        ToolRegistry,
         ToolSelectionResult,
+        ToolSelector,
+        get_global_registry,
         get_tool_manager,
     )
 

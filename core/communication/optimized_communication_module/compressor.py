@@ -90,7 +90,7 @@ class MessageCompressor:
 
     def compress_message(
         self, message: Message
-    ) -> tuple[Message, CompressionResult | None]:
+    ) -> Optional[tuple[Message, CompressionResult]]:
         """压缩消息
 
         Args:

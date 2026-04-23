@@ -9,8 +9,13 @@
 """
 
 import pytest
-from core.agents.xiaona.application_reviewer_proxy import ApplicationDocumentReviewerProxy
-from core.agents.xiaona.base_component import AgentExecutionContext, AgentExecutionResult, AgentStatus
+
+from core.framework.agents.xiaona.application_reviewer_proxy import ApplicationDocumentReviewerProxy
+from core.framework.agents.xiaona.base_component import (
+    AgentExecutionContext,
+    AgentExecutionResult,
+    AgentStatus,
+)
 
 
 class TestableApplicationDocumentReviewerProxy(ApplicationDocumentReviewerProxy):

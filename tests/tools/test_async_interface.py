@@ -7,23 +7,23 @@
 
 import sys
 from pathlib import Path
-from typing import Optional
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-import pytest
 import asyncio
 
+import pytest
+
 from core.tools.async_interface import (
+    AsyncToolWrapper,
     BaseTool,
     SyncToolWrapper,
-    AsyncToolWrapper,
     ToolContext,
     ToolExecutor,
-    to_async_tool,
     call_tool,
+    to_async_tool,
     tool_context,
 )
 
@@ -47,7 +47,7 @@ class DummyAsyncTool(BaseTool):
         super().__init__("dummy_async", "异步工具示例")
         self.call_count = 0
 
-    async def call(self, parameters: dict, context: Optional[ToolContext] = None) -> dict:
+    async def call(self, parameters: dict, context: ToolContext | None = None) -> dict:
         """异步调用"""
         await asyncio.sleep(0.01)  # 模拟异步操作
         self.call_count += 1
@@ -197,7 +197,7 @@ class TestAsyncInterface:
 
         # 默认验证通过
         is_valid, errors = tool.validate_parameters({"arg1": "value1"})
-        assert is_valid == True
+        assert is_valid
         assert len(errors) == 0
 
 

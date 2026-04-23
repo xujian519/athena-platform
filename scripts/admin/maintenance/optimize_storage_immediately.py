@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 立即优化存储系统
 基于《Agentic Design Patterns》的立即可行优化方案
@@ -9,20 +8,18 @@
 版本: v1.0.0
 """
 
-import asyncio
-import time
-import logging
 import json
-import subprocess
+import logging
 import os
-from pathlib import Path
+import subprocess
 from datetime import datetime
-from typing import Dict, List, Any
+from pathlib import Path
+from typing import Any
 
 # 导入我们的优化组件
 try:
-    from storage_system.smart_storage_router import SmartStorageRouter
     from storage_system.parallel_storage_executor import ParallelStorageExecutor
+    from storage_system.smart_storage_router import SmartStorageRouter
     from storage_system.storage_performance_monitor import StoragePerformanceMonitor
 except ImportError as e:
     print(f"⚠️ 导入优化组件失败: {e}")
@@ -315,7 +312,7 @@ optimal_storage = await router.route_storage_request(
 
         return test_results
 
-    def generate_report(self, test_results: Dict[str, Any]) -> Any:
+    def generate_report(self, test_results: dict[str, Any]) -> Any:
         """生成优化报告"""
         print("\n📋 步骤 6: 生成优化报告")
 
@@ -471,7 +468,7 @@ optimal_storage = await router.route_storage_request(
             optimization_time = (datetime.now() - self.start_time).total_seconds()
             print(f"\n✅ 优化完成! 耗时: {optimization_time:.1f} 秒")
             print(f"📋 执行了 {len(self.optimization_log)} 个优化动作")
-            print(f"🎯 预期性能提升: 40-60%")
+            print("🎯 预期性能提升: 40-60%")
 
             return test_results
 

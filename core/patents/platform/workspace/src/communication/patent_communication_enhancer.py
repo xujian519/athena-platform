@@ -58,7 +58,7 @@ class PatentCommunicationMessage:
     recipients: List[str] = field(default_factory=list)
     subject: str = ''
     content: str = ''
-    patent_id: str | None = None
+    patent_id: Optional[str] = None
     technical_terms: List[str] = field(default_factory=list)
     legal_references: List[str] = field(default_factory=list)
     attachments: List[Dict[str, Any]] = field(default_factory=list)
@@ -655,9 +655,9 @@ class PatentCommunicationEnhancer:
         return stats
 
     async def search_communication_history(self,
-                                         patent_id: str | None = None,
+                                         patent_id: Optional[str] = None,
                                          communication_type: PatentCommunicationType | None = None,
-                                         sender: str | None = None,
+                                         sender: Optional[str] = None,
                                          date_range: tuple | None = None) -> List[PatentCommunicationMessage]:
         """搜索通信历史"""
         try:

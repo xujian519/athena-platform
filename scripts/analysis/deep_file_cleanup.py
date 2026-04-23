@@ -1,23 +1,20 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 深度文件清理系统
 识别并处理过期、大文件和冗余数据
 """
 
-import os
 import logging
 
 logger = logging.getLogger(__name__)
 
-import shutil
 import json
-import sys
-import time
+import shutil
 import sqlite3
-from pathlib import Path
+import sys
 from datetime import datetime, timedelta
-from typing import Dict, List, Any, Tuple
+from pathlib import Path
+from typing import Any
 
 # 添加项目路径
 sys.path.append('/Users/xujian/Athena工作平台')
@@ -151,7 +148,7 @@ class DeepFileCleaner:
 
         return any(pattern in str(file_path) for pattern in skip_patterns)
 
-    def _should_compress_large_file(self, file_info: Dict[str, Any]) -> bool:
+    def _should_compress_large_file(self, file_info: dict[str, Any]) -> bool:
         """判断是否应该压缩大文件"""
         path = Path(file_info['path'])
 
@@ -167,7 +164,7 @@ class DeepFileCleaner:
 
         return False
 
-    def _compress_large_file(self, file_info: Dict[str, Any]) -> Any:
+    def _compress_large_file(self, file_info: dict[str, Any]) -> Any:
         """压缩大文件"""
         try:
             source_path = Path(file_info['path'])
@@ -223,7 +220,7 @@ class DeepFileCleaner:
             except Exception as e:
                 print(f"   ⚠️ 处理数据库失败 {db_file}: {e}")
 
-    def _backup_and_remove_old_database(self, db_info: Dict[str, Any]) -> Any:
+    def _backup_and_remove_old_database(self, db_info: dict[str, Any]) -> Any:
         """备份并删除过期数据库"""
         try:
             source_path = Path(db_info['path'])
@@ -243,7 +240,7 @@ class DeepFileCleaner:
         except Exception as e:
             print(f"   ⚠️ 备份数据库失败 {db_info['path']}: {e}")
 
-    def _vacuum_large_database(self, db_info: Dict[str, Any]) -> Any:
+    def _vacuum_large_database(self, db_info: dict[str, Any]) -> Any:
         """清理过大的数据库"""
         try:
             source_path = Path(db_info['path'])
@@ -295,7 +292,7 @@ class DeepFileCleaner:
             except Exception as e:
                 print(f"   ⚠️ 归档日志失败 {log_file}: {e}")
 
-    def _archive_single_log(self, log_info: Dict[str, Any]) -> Any:
+    def _archive_single_log(self, log_info: dict[str, Any]) -> Any:
         """归档单个日志文件"""
         try:
             source_path = Path(log_info['path'])
@@ -473,28 +470,28 @@ class DeepFileCleaner:
         print("🔬 深度文件清理摘要")
         print("=" * 60)
 
-        print(f"📊 大文件分析:")
+        print("📊 大文件分析:")
         print(f"   - 发现大文件: {self.cleanup_stats['large_files_found']:,} 个")
         print(f"   - 大文件总大小: {self.cleanup_stats['large_files_size_mb']:,} MB")
 
-        print(f"\n🗄️ 数据库清理:")
+        print("\n🗄️ 数据库清理:")
         print(f"   - 清理数据库: {self.cleanup_stats['databases_cleaned']:,} 个")
         print(f"   - 释放空间: {round(self.cleanup_stats['db_space_freed_mb'], 2):,} MB")
 
-        print(f"\n📋 日志归档:")
+        print("\n📋 日志归档:")
         print(f"   - 归档日志: {self.cleanup_stats['logs_archived']:,} 个")
         print(f"   - 释放空间: {round(self.cleanup_stats['log_space_freed_mb'], 2):,} MB")
 
-        print(f"\n🗂️ 缓存清理:")
+        print("\n🗂️ 缓存清理:")
         print(f"   - 清理缓存: {self.cleanup_stats['caches_cleared']:,} 项")
         print(f"   - 释放空间: {round(self.cleanup_stats['cache_space_freed_mb'], 2):,} MB")
 
-        print(f"\n🧹 临时文件:")
+        print("\n🧹 临时文件:")
         print(f"   - 删除临时文件: {self.cleanup_stats['temp_files_removed']:,} 个")
         print(f"   - 释放空间: {round(self.cleanup_stats['temp_space_freed_mb'], 2):,} MB")
 
         total_freed = round(self.cleanup_stats['total_space_freed_mb'], 2)
-        print(f"\n🎯 总体效果:")
+        print("\n🎯 总体效果:")
         print(f"   - 总释放空间: {total_freed:,} MB")
         print(f"   - 处理文件总数: {self.cleanup_stats['large_files_found'] + self.cleanup_stats['databases_cleaned'] + self.cleanup_stats['logs_archived'] + self.cleanup_stats['caches_cleared'] + self.cleanup_stats['temp_files_removed']:,}")
 

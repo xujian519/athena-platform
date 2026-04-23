@@ -6,7 +6,6 @@ Risk Analyzer工具使用示例
 """
 
 import asyncio
-import json
 import sys
 from pathlib import Path
 

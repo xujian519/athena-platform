@@ -35,8 +35,8 @@ class RuleResult:
     rule_id: str
     content: str
     confidence: float
-    metadata: dict[str, Any] | None = None
-    references: list[str] | None = None
+    metadata: Optional[dict[str, Any]] = None
+    references: Optional[list[str]] = None
 
 
 @dataclass

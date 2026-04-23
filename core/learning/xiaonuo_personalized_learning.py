@@ -117,8 +117,8 @@ class XiaonuoPersonalizedLearning:
 
     def learn_from_interaction(
         self,
-        interaction: dict[str, Any],        dad_response: str | None = None,
-        satisfaction_score: float | None = None,
+        interaction: dict[str, Any],        dad_response: Optional[str] = None,
+        satisfaction_score: Optional[float] = None,
     ):
         """从交互中学习"""
         # 创建学习实例
@@ -227,7 +227,7 @@ class XiaonuoPersonalizedLearning:
                 else:
                     setattr(self.dad_preference, category, value)
 
-    def adapt_response(self, base_response: str, context: dict[str, Any] | None = None) -> str:
+    def adapt_response(self, base_response: str, context: Optional[dict[str, Any]] = None) -> str:
         """根据学习结果调整回应"""
         adapted_response = base_response
 
@@ -345,7 +345,7 @@ class XiaonuoPersonalizedLearning:
         }
 
     def predict_response_satisfaction(
-        self, response: str, context: dict[str, Any] | None = None
+        self, response: str, context: Optional[dict[str, Any]] = None
     ) -> float:
         """预测回应满意度"""
         satisfaction_score = 0.5  # 基础分数

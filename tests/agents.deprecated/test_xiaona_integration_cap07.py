@@ -12,8 +12,9 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from core.agents.xiaona_legal import XiaonaLegalAgent, LegalTaskType
-from core.agents.base import AgentRequest
+from core.framework.agents.xiaona_legal import LegalTaskType, XiaonaLegalAgent
+
+from core.framework.agents.base import AgentRequest
 
 
 async def test_licensing_full_processing():
@@ -68,7 +69,7 @@ async def test_licensing_full_processing():
 
         # 输出结果
         result = response.data
-        print(f"\n✅ 许可协议起草完成:")
+        print("\n✅ 许可协议起草完成:")
         print(f"   任务类型: {result.get('task_type')}")
         print(f"   状态: {result.get('status')}")
 
@@ -83,7 +84,7 @@ async def test_licensing_full_processing():
         licensing_result = result.get('licensing_result', {})
         if 'agreement_text' in licensing_result:
             agreement_text = licensing_result['agreement_text']
-            print(f"\n📄 协议文本（前500字）:")
+            print("\n📄 协议文本（前500字）:")
             print(agreement_text[:500] + "...")
 
         print("\n" + "="*80)
@@ -129,7 +130,7 @@ async def test_licensing_simplified_advice():
             }
         )
 
-        print(f"✅ 请求创建成功（信息不完整）")
+        print("✅ 请求创建成功（信息不完整）")
 
         # 处理请求
         response = await agent.process(request)
@@ -140,17 +141,17 @@ async def test_licensing_simplified_advice():
 
         # 输出结果
         result = response.data
-        print(f"\n💡 返回起草建议:")
+        print("\n💡 返回起草建议:")
         print(f"   任务类型: {result.get('task_type')}")
         print(f"   状态: {result.get('status')}")
 
         if 'drafting_requirements' in result:
-            print(f"\n   📋 起草要求:")
+            print("\n   📋 起草要求:")
             for req in result['drafting_requirements']:
                 print(f"      - {req}")
 
         if 'recommended_steps' in result:
-            print(f"\n   📝 推荐步骤:")
+            print("\n   📝 推荐步骤:")
             for step in result['recommended_steps']:
                 print(f"      {step}")
 

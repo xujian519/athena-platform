@@ -648,7 +648,7 @@ class VectorToKGSync:
             return None
 
     def _scroll_qdrant_collection(
-        self, collection_name: str, limit: int = 100, offset: str | None = None
+        self, collection_name: str, limit: int = 100, offset: Optional[str] = None
     ) -> list[VectorData]:
         """滚动获取Qdrant集合数据 - 添加超时防止无限等待"""
         try:

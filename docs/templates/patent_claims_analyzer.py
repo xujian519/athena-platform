@@ -280,7 +280,7 @@ class PatentClaimsAnalyzer:
                                     'entity_name': entity_name,
                                     'entity_type': entity_type,
                                     'reference_number': reference_number,
-                                    'feature_ids': [feature['feature_id']],
+                                    'feature_ids': [feature['feature_id'],
                                     'entity_attributes': attributes,
                                     'synonyms': []
                                 }
@@ -349,7 +349,7 @@ class PatentClaimsAnalyzer:
                                     'relationship_type': relationship_type,
                                     'relationship_description': feature_text,
                                     'relationship_strength': self._assess_relationship_strength(feature_text),
-                                    'source_feature_ids': [feature['feature_id']]
+                                    'source_feature_ids': [feature['feature_id']
                                 }
                                 relationships.append(relationship)
                                 relationship_id_counter += 1
@@ -407,8 +407,8 @@ class PatentClaimsAnalyzer:
         # 计算度中心性
         degree_count = defaultdict(int)
         for edge in edges:
-            degree_count[edge['source']] += 1
-            degree_count[edge['target']] += 1
+            degree_count[edge['source'] += 1
+            degree_count[edge['target'] += 1
 
         max_degree = max(degree_count.values()) if degree_count else 1
 

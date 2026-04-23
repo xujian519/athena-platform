@@ -7,22 +7,23 @@ P0系统端到端集成测试
 作者: Athena平台团队
 创建时间: 2026-04-21
 """
-from __future__ import annotations
 
 import logging
-import pytest
 import tempfile
+
+import pytest
 
 logger = logging.getLogger(__name__)
 
+from core.plugins.loader import PluginLoader as PluginLoader
+from core.plugins.registry import PluginRegistry
+
+from core.framework.memory.sessions.manager import SessionManager
+from core.framework.memory.sessions.storage import FileSessionStorage
+from core.framework.memory.sessions.types import MessageRole, SessionStatus
 from core.skills.loader import SkillLoader
 from core.skills.registry import SkillRegistry
 from core.skills.tool_mapper import SkillToolMapper
-from core.plugins.loader import PluginLoader as PluginLoader
-from core.plugins.registry import PluginRegistry
-from core.memory.sessions.manager import SessionManager
-from core.memory.sessions.storage import FileSessionStorage
-from core.memory.sessions.types import MessageRole, SessionStatus
 
 
 class TestP0Integration:
@@ -84,7 +85,7 @@ class TestP0Integration:
     ):
         """测试会话与Skills系统集成"""
         # 1. 创建会话
-        session = session_manager.create_session(
+        session_manager.create_session(
             session_id="test_session_001",
             user_id="user123",
             agent_id="xiaona",
@@ -154,7 +155,7 @@ class TestP0Integration:
     ):
         """测试多技能工作流"""
         # 1. 创建会话
-        session = session_manager.create_session(
+        session_manager.create_session(
             session_id="test_session_002",
             user_id="user456",
             agent_id="xiaona",
@@ -414,7 +415,7 @@ class TestP0Performance:
 
             # 测试创建会话性能
             start = time.time()
-            session = manager.create_session("perf_test", "user", "agent")
+            manager.create_session("perf_test", "user", "agent")
             create_time = time.time() - start
 
             assert create_time < 0.01  # 应在10ms内完成
@@ -440,7 +441,7 @@ class TestP0Performance:
             assert query_time < 0.01  # 查询应在10ms内完成
             assert len(messages) == 100
 
-            logger.info(f"✅ 会话操作性能:")
+            logger.info("✅ 会话操作性能:")
             logger.info(f"  创建: {create_time*1000:.2f}ms")
             logger.info(f"  添加100条消息: {add_time*1000:.2f}ms")
             logger.info(f"  查询: {query_time*1000:.2f}ms")
@@ -490,7 +491,7 @@ class TestP0ErrorHandling:
 
     def test_duplicate_skill_registration(self, skill_registry):
         """测试重复技能注册"""
-        from core.skills.types import SkillDefinition, SkillCategory
+        from core.skills.types import SkillCategory, SkillDefinition
 
         skill = SkillDefinition(
             id="dup_test",
@@ -539,3 +540,4 @@ if __name__ == "__main__":
 
     # 运行测试
     sys.exit(pytest.main([__file__, "-v", "--tb=short"]))
+

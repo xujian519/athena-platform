@@ -4,16 +4,15 @@ Mock Agent - 用于测试的模拟Agent
 提供可配置的行为，用于测试各种场景。
 """
 
-from typing import Any, Dict, List, Optional
 from datetime import datetime
-import logging
+from typing import Any
 
-from core.agents.xiaona.base_component import (
-    BaseXiaonaComponent,
+from core.framework.agents.xiaona.base_component import (
     AgentCapability,
     AgentExecutionContext,
     AgentExecutionResult,
     AgentStatus,
+    BaseXiaonaComponent,
 )
 
 
@@ -27,8 +26,8 @@ class MockAgent(BaseXiaonaComponent):
     def __init__(
         self,
         agent_id: str,
-        config: Optional[Dict[str, Any]] = None,
-        mock_behavior: Optional[Dict[str, Any]] = None
+        config: dict[str, Any] | None = None,
+        mock_behavior: dict[str, Any] | None = None
     ):
         """
         初始化Mock Agent
@@ -231,7 +230,7 @@ class ConfigurableMockAgent(MockAgent):
 
 def create_success_mock(
     agent_id: str = "success_mock",
-    result: Optional[Dict[str, Any]] = None
+    result: dict[str, Any] | None = None
 ) -> MockAgent:
     """
     创建一个总是成功的Mock Agent
@@ -306,7 +305,7 @@ async def example_usage():
     # 1. 使用默认Mock Agent
     print("=== 示例1: 默认Mock Agent ===")
     mock1 = MockAgent(agent_id="mock1")
-    from core.agents.xiaona.base_component import AgentExecutionContext
+    from core.framework.agents.xiaona.base_component import AgentExecutionContext
     context1 = AgentExecutionContext(
         session_id="SESSION_001",
         task_id="TASK_001",

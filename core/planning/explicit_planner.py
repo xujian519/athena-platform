@@ -70,14 +70,14 @@ class PlanStep:
     step_number: int = 0
     name: str = ""
     description: str = ""
-    tool: str | None = None
+    tool: Optional[str] = None
     tool_parameters: dict[str, Any] = field(default_factory=dict)
     dependencies: list[str] = field(default_factory=list)
     confidence: float = 0.8
     estimated_duration: timedelta = field(default_factory=lambda: timedelta(minutes=5))
     status: PlanStepStatus = PlanStepStatus.PENDING
-    result: dict[str, Any] | None = None
-    error: str | None = None
+    result: Optional[dict[str, Any]] = None
+    error: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 

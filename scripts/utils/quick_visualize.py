@@ -5,6 +5,7 @@
 """
 
 import logging
+
 from neo4j import GraphDatabase
 from pyvis.network import Network
 

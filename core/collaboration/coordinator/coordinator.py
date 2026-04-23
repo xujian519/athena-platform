@@ -37,11 +37,11 @@ class Coordinator:
     def __init__(self, coordinator_id: str = "coordinator_main"):
         """初始化协调器"""
         self.coordinator_id = coordinator_id
-        self._agents: Dict[str, AgentInfo] = {}
-        self._tasks: Dict[str, TaskInfo] = {}
-        self._completed_tasks: Set[str] = set()
-        self._pending_tasks: List[str] = []
-        self._conflicts: List[ConflictingInfo] = []
+        self._agents: dict[str, AgentInfo] = {}
+        self._tasks: dict[str, TaskInfo] = {}
+        self._completed_tasks: set[str] = set()
+        self._pending_tasks: list[str] = []
+        self._conflicts: list[ConflictingInfo] = []
         self._running = False
 
         logger.info(f"Coordinator {coordinator_id} initialized")
@@ -104,7 +104,7 @@ class Coordinator:
         """获取Agent信息"""
         return self._agents.get(agent_id)
 
-    def list_agents(self, status: Optional[AgentStatus] = None) -> List[AgentInfo]:
+    def list_agents(self, status: Optional[AgentStatus] = None) -> list[AgentInfo]:
         """
         列出Agent
 
@@ -245,7 +245,7 @@ class Coordinator:
                 logger.info(f"Triggering task {task_id} (dependency {completed_task_id} completed)")
                 await self._schedule_task(task_info)
 
-    def get_statistics(self) -> Dict[str, any]:
+    def get_statistics(self) -> dict[str, any]:
         """获取统计信息"""
         return {
             "coordinator_id": self.coordinator_id,

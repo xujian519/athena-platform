@@ -134,9 +134,9 @@ class ToolSelector:
         self,
         task_type: str,
         domain: str,
-        input_data: dict[str, Any] | None = None,
+        input_data: Optional[dict[str, Any]] = None,
         category: ToolCategory | None = None,
-        exclude_tools: list[str] | None = None,
+        exclude_tools: Optional[list[str]] = None,
     ) -> ToolDefinition | None:
         """
         为单个任务选择最佳工具
@@ -187,9 +187,9 @@ class ToolSelector:
         task_type: str,
         domain: str,
         max_tools: int = 3,
-        input_data: dict[str, Any] | None = None,
+        input_data: Optional[dict[str, Any]] = None,
         category: ToolCategory | None = None,
-        exclude_tools: list[str] | None = None,
+        exclude_tools: Optional[list[str]] = None,
     ) -> list[ToolDefinition]:
         """
         为任务选择多个工具(Top-K)
@@ -231,7 +231,7 @@ class ToolSelector:
         task_type: str,
         domain: str,
         category: ToolCategory | None = None,
-        exclude_tools: list[str] | None = None,
+        exclude_tools: Optional[list[str]] = None,
     ) -> list[ToolDefinition]:
         """
         查找候选工具

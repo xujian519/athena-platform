@@ -12,19 +12,16 @@ Athena平台统一网关兼容性验证测试套件
 日期: 2026-04-18
 """
 
-import asyncio
 import json
 import time
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-import pytest
 import httpx
-import websockets
+import pytest
 from websockets.client import connect
-
 
 # ============================================================================
 # 测试配置

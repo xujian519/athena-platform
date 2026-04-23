@@ -4,10 +4,11 @@ InfringementAnalyzerProxy LLM集成测试
 测试侵权分析智能体的LLM调用功能。
 """
 
+from unittest.mock import AsyncMock
+
 import pytest
-import asyncio
-from unittest.mock import Mock, AsyncMock, patch
-from core.agents.xiaona.infringement_analyzer_proxy import InfringementAnalyzerProxy
+
+from core.framework.agents.xiaona.infringement_analyzer_proxy import InfringementAnalyzerProxy
 
 
 @pytest.fixture

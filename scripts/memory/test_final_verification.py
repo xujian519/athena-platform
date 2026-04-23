@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 最终验证测试 - 测试修复的两个问题
 """
 
 import asyncio
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import time
 import subprocess
-from datetime import datetime
+import time
+from typing import Any
 
 # PostgreSQL连接信息
 PSQL_PATH = '/opt/homebrew/Cellar/postgresql@17/17.7/bin/psql'

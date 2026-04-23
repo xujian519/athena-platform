@@ -78,7 +78,7 @@ class CacheService:
         self,
         key: str,
         value: Any,
-        ttl: int | None = None,
+        ttl: Optional[int] = None,
     ) -> bool:
         """
         设置缓存值

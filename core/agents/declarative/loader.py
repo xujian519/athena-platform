@@ -168,7 +168,7 @@ _loader_instance: AgentLoader | None = None
 _loader_lock = threading.Lock()
 
 
-def get_loader(project_root: str | None = None) -> AgentLoader:
+def get_loader(project_root: Optional[str] = None) -> AgentLoader:
     """获取 AgentLoader 单例（线程安全）"""
     global _loader_instance
     if _loader_instance is None:
@@ -181,11 +181,11 @@ def get_loader(project_root: str | None = None) -> AgentLoader:
     return _loader_instance
 
 
-def load_all_agents(project_root: str | None = None) -> dict[str, AgentDefinition]:
+def load_all_agents(project_root: Optional[str] = None) -> dict[str, AgentDefinition]:
     """加载所有声明式 Agent 定义"""
     return get_loader(project_root).load_all()
 
 
-def get_agent(name: str, project_root: str | None = None) -> AgentDefinition | None:
+def get_agent(name: str, project_root: Optional[str] = None) -> AgentDefinition | None:
     """获取指定名称的 Agent 定义"""
     return get_loader(project_root).get(name)

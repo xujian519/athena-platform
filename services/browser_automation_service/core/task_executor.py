@@ -121,7 +121,7 @@ class TaskExecutor:
                 "error": str(e),
             }
 
-    async def _parse_task(self, task: str, url: str | None = None) -> list[dict[str, Any]]:
+    async def _parse_task(self, task: str, url: str | None = None) -> list[dict[str, Any]:
         """
         解析自然语言任务
 

@@ -161,7 +161,7 @@ class Task:
 
     # 依赖和约束
     dependencies: list[str] = field(default_factory=list)
-    timeout: float | None = None  # 秒数
+    timeout: Optional[float] = None  # 秒数
     retry_count: int = 0
     max_retries: int = 3
 
@@ -172,7 +172,7 @@ class Task:
 
     # 结果和错误
     result: Any = None
-    error: str | None = None
+    error: Optional[str] = None
 
     # 进度和元数据
     progress: float = 0.0
@@ -214,7 +214,7 @@ class Task:
             self.started_at = datetime.now()
 
     def complete(
-        self, success: bool, data: Any | None = None, error: str | None = None, execution_time: float = 0.0
+        self, success: bool, data: Any | None = None, error: Optional[str] = None, execution_time: float = 0.0
     ) -> None:
         """
         标记任务完成
@@ -319,7 +319,7 @@ class ExecutionResult:
     task_name: str
     success: bool
     result: Any = None
-    error: Exception | str | None = None
+    error: Exception | Optional[str] = None
     execution_time: float = 0
     start_time: datetime = field(default_factory=datetime.now)
     end_time: datetime = field(default_factory=datetime.now)
@@ -550,7 +550,7 @@ class TaskResult:
     task_id: str
     success: bool
     data: Any = None
-    error: str | None = None
+    error: Optional[str] = None
     execution_time: float = 0.0
     start_time: datetime = field(default_factory=datetime.now)
     end_time: datetime = field(default_factory=datetime.now)

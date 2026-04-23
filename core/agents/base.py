@@ -101,7 +101,7 @@ class AgentResponse:
     request_id: str
     success: bool
     data: Any = None
-    error: str | None = None
+    error: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
     timestamp: datetime = field(default_factory=datetime.now)
     processing_time_ms: int = 0
@@ -203,7 +203,7 @@ class BaseAgent(ABC):
     # 类级别的注册表
     _registry: dict[str, type] = {}
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化智能体
 
@@ -465,7 +465,7 @@ class BaseAgent(ABC):
         self,
         tool_id: str,
         parameters: dict[str, Any],
-        context: dict[str, Any] | None = None
+        context: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """
         调用工具
@@ -521,7 +521,7 @@ class BaseAgent(ABC):
     async def discover_tools(
         self,
         query: str,
-        category: str | None = None,
+        category: Optional[str] = None,
         limit: int = 5,
         use_vector: bool = False
     ) -> list[dict[str, Any]]:
@@ -567,8 +567,8 @@ class BaseAgent(ABC):
 
     async def list_tools(
         self,
-        category: str | None = None,
-        status: str | None = None
+        category: Optional[str] = None,
+        status: Optional[str] = None
     ) -> list[dict[str, Any]]:
         """
         列出可用工具
@@ -603,7 +603,7 @@ class BaseAgent(ABC):
             self.logger.error(f"列出工具失败: {e}")
             return []
 
-    async def get_tool_info(self, tool_id: str) -> dict[str, Any] | None:
+    async def get_tool_info(self, tool_id: str) -> Optional[dict[str, Any]]:
         """
         获取工具详细信息
 

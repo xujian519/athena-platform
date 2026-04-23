@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺混合架构主程序
 Xiaonuo Hybrid Architecture Main
@@ -11,20 +10,21 @@ import json
 import logging
 import signal
 import sys
-from typing import Dict, Any, Optional
 from datetime import datetime
 from pathlib import Path
+from typing import Any
+
+from core.agent_orchestrator import get_agent_orchestrator
+from core.permissions_controller import permissions_controller
+from core.xiaonuo_basic_operations import xiaonuo_operations
 
 # 导入混合架构核心模块
 from core.xiaonuo_hybrid_architecture import (
+    DataType,
     HybridArchitectureController,
     OperationRequest,
     OperationType,
-    DataType
 )
-from core.agent_orchestrator import get_agent_orchestrator, AgentTask
-from core.permissions_controller import permissions_controller
-from core.xiaonuo_basic_operations import xiaonuo_operations
 
 # 配置日志
 logging.basicConfig(
@@ -147,7 +147,7 @@ class XiaonuoHybridSystem:
                 # 给用户一个退出机会
                 print("输入 'exit' 退出，或继续输入命令")
 
-    async def _parse_and_execute(self, user_input: str) -> Dict[str, Any]:
+    async def _parse_and_execute(self, user_input: str) -> dict[str, Any]:
         """解析并执行用户命令"""
         parts = user_input.split(maxsplit=3)
         if not parts:
@@ -237,7 +237,7 @@ class XiaonuoHybridSystem:
         # 执行操作
         return await self.hybrid_controller.process_request(request)
 
-    async def _show_system_status(self) -> Dict[str, Any]:
+    async def _show_system_status(self) -> dict[str, Any]:
         """显示系统状态"""
         # 获取各组件状态
         system_overview = self.agent_orchestrator.get_system_overview()
@@ -259,7 +259,7 @@ class XiaonuoHybridSystem:
             "timestamp": datetime.now().isoformat()
         }
 
-    def _show_help(self) -> Dict[str, Any]:
+    def _show_help(self) -> dict[str, Any]:
         """显示帮助信息"""
         help_text = """
 🌸 小诺混合架构系统帮助
@@ -313,7 +313,7 @@ class XiaonuoHybridSystem:
             "timestamp": datetime.now().isoformat()
         }
 
-    def _display_result(self, result: Dict[str, Any]):
+    def _display_result(self, result: dict[str, Any]):
         """显示执行结果"""
         print("\n" + "-"*50)
 

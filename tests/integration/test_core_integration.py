@@ -14,7 +14,6 @@ class TestCacheVectorIntegration:
         """测试在缓存中存储向量数据"""
         try:
             import numpy as np
-
             from core.cache.memory_cache import MemoryCache
 
             # 创建缓存实例
@@ -45,7 +44,6 @@ class TestCacheVectorIntegration:
         """测试基于缓存的向量相似度搜索"""
         try:
             import numpy as np
-
             from core.cache.memory_cache import MemoryCache
 
             # 创建缓存
@@ -292,7 +290,6 @@ class TestSystemIntegration:
         """测试端到端工作流"""
         try:
             import numpy as np
-
             from core.cache.memory_cache import MemoryCache
 
             # 1. 初始化缓存

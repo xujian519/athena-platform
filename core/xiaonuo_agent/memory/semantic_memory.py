@@ -50,9 +50,9 @@ class SemanticMemoryItem:
     knowledge_type: KnowledgeType
     content: str
     embedding: list[float] | None = None
-    entities: list[str] | None = None
+    entities: Optional[list[str]] = None
     relations: dict[str, list[str]] | None = None  # {"related_to": ["id1", "id2"]}
-    metadata: dict[str, Any] | None = None
+    metadata: Optional[dict[str, Any]] = None
     confidence: float = 1.0
     created_at: str = None
     last_accessed: str = None
@@ -173,9 +173,9 @@ class SemanticMemory:
         self,
         content: str,
         knowledge_type: KnowledgeType,
-        entities: list[str] | None = None,
+        entities: Optional[list[str]] = None,
         relations: dict[str, list[str]] | None = None,
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
         confidence: float = 1.0,
     ) -> str:
         """
@@ -356,7 +356,7 @@ class SemanticMemory:
         return memories
 
     async def get_related(
-        self, knowledge_id: str, relation_type: str | None = None, max_depth: int = 2
+        self, knowledge_id: str, relation_type: Optional[str] = None, max_depth: int = 2
     ) -> list[SemanticMemoryItem]:
         """
         获取相关知识(通过Neo4j图遍历)

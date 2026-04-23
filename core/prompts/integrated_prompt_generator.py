@@ -143,7 +143,7 @@ class IntegratedPromptGenerator:
         scenario_context: ScenarioContext,
         scenario_rule: ScenarioRule,
         user_input: str,
-        additional_variables: dict[str, Any] | None = None,
+        additional_variables: Optional[dict[str, Any]] = None,
     ) -> IntegratedPrompt:
         """
         生成集成提示词
@@ -244,7 +244,7 @@ class IntegratedPromptGenerator:
 
         return integrated_prompt
 
-    def _get_agent_role_prompt(self, agent_level: str) -> str | None:
+    def _get_agent_role_prompt(self, agent_level: str) -> Optional[str]:
         """
         获取代理角色提示词
 
@@ -284,7 +284,7 @@ class IntegratedPromptGenerator:
             logger.warning(f"⚠️ 加载代理角色提示词失败: {e}")
             return None
 
-    def _get_expert_prompt(self, expert_config: dict[str, Any]) -> str | None:
+    def _get_expert_prompt(self, expert_config: dict[str, Any]) -> Optional[str]:
         """
         获取专家提示词
 
@@ -336,7 +336,7 @@ class IntegratedPromptGenerator:
         scenario_context: ScenarioContext,
         scenario_rule: ScenarioRule,
         user_input: str,
-        legal_basis: list[dict[str, Any]],        reference_cases: list[dict[str, Any]],        additional_variables: dict[str, Any] | None = None,
+        legal_basis: list[dict[str, Any]],        reference_cases: list[dict[str, Any]],        additional_variables: Optional[dict[str, Any]] = None,
     ) -> IntegratedPrompt:
         """
         生成包含法律上下文的集成提示词
@@ -395,7 +395,7 @@ def generate_integrated_prompt(
     scenario_rule: ScenarioRule,
     user_input: str,
     unified_prompt_manager=None,
-    additional_variables: dict[str, Any] | None = None,
+    additional_variables: Optional[dict[str, Any]] = None,
 ) -> IntegratedPrompt:
     """
     便捷函数:生成集成提示词

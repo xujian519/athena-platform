@@ -39,11 +39,11 @@ class ServiceInfo:
     name: str
     category: str
     path: str
-    entry_file: str | None
-    port: int | None
+    entry_file: Optional[str]
+    port: Optional[int]
     status: ServiceStatus
-    pid: int | None
-    health_url: str | None
+    pid: Optional[int]
+    health_url: Optional[str]
     dependencies: list[str]
     description: str
 
@@ -343,7 +343,7 @@ class PlatformController:
             "services": all_status,
         }
 
-    def start_all(self, category: str | None = None) -> dict[str, Any]:
+    def start_all(self, category: Optional[str] = None) -> dict[str, Any]:
         """启动所有服务或指定类别的服务"""
         results = {}
 

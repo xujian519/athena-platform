@@ -144,7 +144,7 @@ async def legal_qa(request: QueryRequest):
         if request.agent_id:
             prompt_result = prompt_generator.generate_prompt(request.query, request.context)
             prompt = prompt_result["prompt"]
-            legal_basis = [LegalBasis(**lb) for lb in prompt_result["legal_basis"]]
+            legal_basis = [LegalBasis(**lb) for lb in prompt_result["legal_basis"]
             confidence = prompt_result["confidence"]
             suggestions = prompt_generator.get_prompt_suggestions(request.query)
         else:
@@ -220,7 +220,7 @@ async def generate_prompt(request: PromptRequest):
         result = prompt_generator.generate_prompt(request.query, request.context)
 
         # 转换格式
-        legal_basis = [LegalBasis(**lb) for lb in result["legal_basis"]]
+        legal_basis = [LegalBasis(**lb) for lb in result["legal_basis"]
         suggestions = prompt_generator.get_prompt_suggestions(request.query)
 
         return PromptResponse(
@@ -335,7 +335,7 @@ def apply_filters(results: list[dict], filters: dict) -> list[dict]:
 
     # 按来源过滤
     if "source" in filters:
-        filtered = [r for r in filtered if r.get("source") in filters["source"]]
+        filtered = [r for r in filtered if r.get("source") in filters["source"]
 
     # 按相似度过滤
     if "min_similarity" in filters:
@@ -344,7 +344,7 @@ def apply_filters(results: list[dict], filters: dict) -> list[dict]:
 
     # 按类型过滤
     if "type" in filters:
-        filtered = [r for r in filtered if r.get("type") in filters["type"]]
+        filtered = [r for r in filtered if r.get("type") in filters["type"]
 
     return filtered
 

@@ -54,7 +54,7 @@ class EmbeddingStore:
             db_path: SQLite数据库路径
         """
         self.db_path = Path(db_path).expanduser()
-        self.embedding_service: Optional[Any] = None
+        self.embedding_service: Any | None = None
 
         # 创建数据库目录
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
@@ -170,7 +170,7 @@ class EmbeddingStore:
         vector: list[float],
         memory_type: str,
         category: str,
-        metadata: Optional[dict[str, Any]] = None,
+        metadata: dict[str, Any] | None = None,
     ) -> None:
         """存储向量
 
@@ -227,7 +227,7 @@ class EmbeddingStore:
             logger.error(f"向量存储失败: {e}")
             raise
 
-    async def get_vector(self, memory_id: str) -> Optional[list[float]]:
+    async def get_vector(self, memory_id: str) -> list[float] | None:
         """获取向量
 
         Args:
@@ -281,8 +281,8 @@ class EmbeddingStore:
         query_vector: list[float],
         top_k: int = 10,
         threshold: float = 0.7,
-        memory_type: Optional[str] = None,
-        category: Optional[str] = None,
+        memory_type: str | None = None,
+        category: str | None = None,
     ) -> list[SearchResult]:
         """相似度搜索
 

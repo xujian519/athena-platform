@@ -45,7 +45,7 @@ class InferenceResult:
     outputs: Any
     inference_time_ms: float
     success: bool
-    error: str | None = None
+    error: Optional[str] = None
 
 
 @dataclass

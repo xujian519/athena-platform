@@ -280,7 +280,7 @@ class AppleSiliconOptimizer:
 
     async def convert_to_coreml(
         self, model: Any, model_name: str, input_shape: tuple[int, ...] | None = None
-    ) -> str | None:
+    ) -> Optional[str]:
         """转换为Core ML模型"""
         if not COREML_AVAILABLE:
             logger.warning("Core ML不可用,跳过转换")

@@ -176,7 +176,7 @@ class EnhancedCommunicationMetrics(CommunicationMetrics):
         operation: str,
         backend_type: str,
         status: str = "success",
-        duration: float | None = None,
+        duration: Optional[float] = None,
     ) -> None:
         """
         记录持久化操作
@@ -247,7 +247,7 @@ class EnhancedCommunicationMetrics(CommunicationMetrics):
             self.websocket_active_connections.dec()
 
     def record_websocket_message(
-        self, message_type: str, direction: str, duration: float | None = None
+        self, message_type: str, direction: str, duration: Optional[float] = None
     ) -> None:
         """
         记录WebSocket消息

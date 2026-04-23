@@ -14,9 +14,8 @@ import gc
 import time
 
 import pytest
-from core.session_manager import SessionManager
-
 from core.concurrency import ConcurrencyManager, RateLimiter, SemaphoreManager
+from core.session_manager import SessionManager
 
 
 class TestPerformanceBenchmarks:

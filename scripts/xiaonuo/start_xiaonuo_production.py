@@ -36,7 +36,7 @@ async def start_xiaonuo_coordinator():
     try:
         # 初始化提示词系统
         try:
-            from core.prompts.output_styles import get_style_manager
+            from core.ai.prompts.output_styles import get_style_manager
 
             # 预热输出风格管理器
             style_mgr = get_style_manager()
@@ -47,14 +47,14 @@ async def start_xiaonuo_coordinator():
 
         # 初始化声明式 Agent
         try:
-            from core.agents.declarative import load_all_agents
+            from core.framework.agents.declarative import load_all_agents
             definitions = load_all_agents()
             logger.info(f"声明式 Agent 已加载: {list(definitions.keys())}")
         except Exception as e:
             logger.warning(f"声明式 Agent 加载跳过: {e}")
 
         # 导入小诺协调器
-        from core.agents.xiaonuo_coordinator import XiaonuoAgent
+        from core.framework.agents.xiaonuo_coordinator import XiaonuoAgent
 
         # 配置
         config = {

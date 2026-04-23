@@ -32,8 +32,8 @@ class NormChange:
 
     norm_id: str
     change_type: ChangeType
-    target_norm_id: str | None  # 目标法规ID(如有)
-    change_date: str | None
+    target_norm_id: Optional[str]  # 目标法规ID(如有)
+    change_date: Optional[str]
     change_basis: str  # 变更依据(文号等)
     confidence: float
 
@@ -156,7 +156,7 @@ class VersionDetector:
 
         return changes
 
-    def _extract_change_date(self, text: str) -> str | None:
+    def _extract_change_date(self, text: str) -> Optional[str]:
         """提取变更日期"""
         date_pattern = r"(\d{4})年(\d{1,2})月(\d{1,2})日"
         match = re.search(date_pattern, text)
@@ -174,7 +174,7 @@ class VersionDetector:
 
     def _find_replaced_norm(
         self, context: str, all_norms: list[dict[str, Any]]
-    ) -> dict[str, Any] | None:
+    ) -> Optional[dict[str, Any]]:
         """
         查找被代替的法规
 

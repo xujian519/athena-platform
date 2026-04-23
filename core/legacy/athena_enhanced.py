@@ -118,7 +118,7 @@ class AthenaEnhanced:
             return {"success": False, "error": str(e), "query": query}
 
     async def multi_agent_task_dispatch(
-        self, task: str, agents: list[str] | None = None
+        self, task: str, agents: Optional[list[str]] = None
     ) -> dict[str, Any]:
         """多Agent任务调度"""
         if agents is None:

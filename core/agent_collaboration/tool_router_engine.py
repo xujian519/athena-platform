@@ -392,7 +392,7 @@ class ToolRouterEngine:
         logger.info(f"智能工具路由引擎初始化完成,策略: {strategy.value}")
 
     async def route(
-        self, user_input: str, context: dict[str, Any] | None = None, top_k: int = 3
+        self, user_input: str, context: Optional[dict[str, Any]] = None, top_k: int = 3
     ) -> list[RoutingDecision]:
         """路由决策"""
         # 1. 分析用户意图

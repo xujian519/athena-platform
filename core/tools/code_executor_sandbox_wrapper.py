@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 code_executor_sandbox工具包装器
 
@@ -30,9 +29,9 @@ logger = logging.getLogger(__name__)
 
 
 async def code_executor_sandbox_handler(
-    params: Dict[str, Any],
-    context: Dict[str, Any],  # noqa: ARG001 (保留用于接口兼容性)
-) -> Dict[str, Any]:
+    params: dict[str, Any],
+    context: dict[str, Any],  # noqa: ARG001 (保留用于接口兼容性)
+) -> dict[str, Any]:
     """
     沙箱化代码执行处理器 - 符合统一工具接口
 
@@ -151,7 +150,7 @@ async def execute_code_sandbox(
     code: str,
     timeout: float = 10.0,
     max_memory: int = 100 * 1024 * 1024,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     在沙箱中执行代码（便捷函数）
 

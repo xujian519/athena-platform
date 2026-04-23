@@ -28,9 +28,9 @@ class ParameterDefinition:
     param_type: type  # 参数类型
     description: str  # 参数描述
     default_value: Any = None  # 默认值
-    validation_pattern: str | None = None  # 验证正则表达式
+    validation_pattern: Optional[str] = None  # 验证正则表达式
     validation_options: list[Any] | None = None  # 枚举选项
-    depends_on: str | None = None  # 依赖的其他参数
+    depends_on: Optional[str] = None  # 依赖的其他参数
 
 
 @dataclass
@@ -221,7 +221,7 @@ class ParameterValidator:
         param_defs = self.intent_params.get(intent, [])
         return [p for p in param_defs if p.requirement == ParamRequirement.REQUIRED]
 
-    def get_param_description(self, intent: str, param_name: str) -> str | None:
+    def get_param_description(self, intent: str, param_name: str) -> Optional[str]:
         """获取参数的描述信息"""
         param_defs = self.intent_params.get(intent, [])
         for p in param_defs:
@@ -229,7 +229,7 @@ class ParameterValidator:
                 return p.description
         return None
 
-    def suggest_next_question(self, intent: str, current_params: dict[str, Any]) -> str | None:
+    def suggest_next_question(self, intent: str, current_params: dict[str, Any]) -> Optional[str]:
         """
         建议下一个收集参数的问题
 

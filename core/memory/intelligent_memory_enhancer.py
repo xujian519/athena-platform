@@ -96,7 +96,7 @@ class PreferenceExtractor:
         }
 
     def extract_from_conversation(
-        self, user_input: str, context: dict[str, Any] | None = None
+        self, user_input: str, context: Optional[dict[str, Any]] = None
     ) -> list[UserPreference]:
         """
         从对话中提取偏好
@@ -339,7 +339,7 @@ class PersonalizedRecommender:
             logger.error("操作失败: e", exc_info=True)
             raise
     async def process_conversation(
-        self, user_input: str, xiaonuo_response: str, context: dict[str, Any] | None = None
+        self, user_input: str, xiaonuo_response: str, context: Optional[dict[str, Any]] = None
     ) -> list[PersonalizedSuggestion]:
         """
         处理对话,提供个性化建议
@@ -440,7 +440,7 @@ class PersonalizedRecommender:
 
         return suggestions
 
-    def _identify_scenario(self, user_input: str) -> str | None:
+    def _identify_scenario(self, user_input: str) -> Optional[str]:
         """识别当前场景"""
         if "专利" in user_input:
             return "专利相关决策"
@@ -531,7 +531,7 @@ class IntelligentMemoryEnhancer:
         logger.info("🧠 智能记忆增强器已启动")
 
     async def enhance_conversation(
-        self, user_input: str, xiaonuo_response: str, context: dict[str, Any] | None = None
+        self, user_input: str, xiaonuo_response: str, context: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """
         增强对话(自动记录偏好、学习模式、提供个性化建议)

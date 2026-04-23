@@ -39,12 +39,12 @@ class PatentSearchQuery:
 
     query_text: str
     search_mode: VectorSearchMode = VectorSearchMode.HYBRID
-    patent_id: str | None = None
+    patent_id: Optional[str] = None
     filters: dict[str, Any] = field(default_factory=dict)
     limit: int = 10
     threshold: float = 0.7
-    technical_field: str | None = None
-    ipc_classification: list[str] | None = None
+    technical_field: Optional[str] = None
+    ipc_classification: Optional[list[str]] = None
 
 
 @dataclass
@@ -56,8 +56,8 @@ class PatentSearchResult:
     title: str
     abstract: str
     similarity_score: float
-    technical_field: str | None = None
-    ipc_classification: list[str] | None = None
+    technical_field: Optional[str] = None
+    ipc_classification: Optional[list[str]] = None
     key_features: list[str] = field(default_factory=list)
     snippet: str = ""
     ranking_position: int = 0
@@ -355,7 +355,7 @@ class PatentEmbeddingGenerator:
 class EnhancedPatentVectorSearch:
     """增强专利向量检索系统"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
         self.initialized = False
 
@@ -457,10 +457,10 @@ class EnhancedPatentVectorSearch:
         patent_id: str,
         title: str,
         abstract: str,
-        technical_field: str | None = None,
-        ipc_classification: list[str] | None = None,
-        key_features: list[str] | None = None,
-        metadata: dict[str, Any] | None = None,
+        technical_field: Optional[str] = None,
+        ipc_classification: Optional[list[str]] = None,
+        key_features: Optional[list[str]] = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> bool:
         """索引专利"""
         if not self.initialized:

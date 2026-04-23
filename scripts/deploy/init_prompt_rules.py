@@ -8,13 +8,12 @@ Prompt System Rules Initialization Script
 
 import asyncio
 import logging
-from pathlib import Path
 import sys
+from pathlib import Path
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.database.connection_manager import get_db_manager
 from core.config.api_config import get_database_config
 
 logging.basicConfig(level=logging.INFO)
@@ -216,7 +215,7 @@ async def init_prompt_rules():
         }
 
         # 初始化数据库管理器
-        from core.database.connection_manager import DatabaseConnectionManager
+        from core.infrastructure.database.connection_manager import DatabaseConnectionManager
         db_manager = DatabaseConnectionManager()
         await db_manager.initialize(configs)
 

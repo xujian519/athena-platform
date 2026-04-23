@@ -179,7 +179,7 @@ class DataProcessor:
 
     @staticmethod
     def extract_links(soup: BeautifulSoup, base_url: str = None,
-                      pattern: str = None) -> list[dict[str, str]]:
+                      pattern: str = None) -> list[dict[str, str]:
         """
         提取链接信息
 
@@ -218,7 +218,7 @@ class DataProcessor:
         return links
 
     @staticmethod
-    def extract_images(soup: BeautifulSoup, base_url: str = None) -> list[dict[str, str]]:
+    def extract_images(soup: BeautifulSoup, base_url: str = None) -> list[dict[str, str]:
         """
         提取图片信息
 

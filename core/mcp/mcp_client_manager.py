@@ -104,7 +104,7 @@ class ClientInfo:
     # 连接信息
     connected_at: datetime | None = None
     disconnected_at: datetime | None = None
-    last_error: str | None = None
+    last_error: Optional[str] = None
 
     @property
     def success_rate(self) -> float:

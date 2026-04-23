@@ -15,23 +15,23 @@ Usage:
 
 import asyncio
 import statistics
+
+# 添加项目路径
+import sys
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 import pytest
 
-# 添加项目路径
-import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from core.agents.xiaona.base_component import AgentExecutionContext
-from core.agents.xiaona.retriever_agent import RetrieverAgent
-from core.agents.xiaona.analyzer_agent import AnalyzerAgent
-from core.agents.xiaona.writer_agent import WriterAgent
-
+from core.framework.agents.xiaona.analyzer_agent import AnalyzerAgent
+from core.framework.agents.xiaona.base_component import AgentExecutionContext
+from core.framework.agents.xiaona.retriever_agent import RetrieverAgent
+from core.framework.agents.xiaona.writer_agent import WriterAgent
 
 # ==================== 性能基准数据 ====================
 
@@ -77,7 +77,7 @@ BENCHMARKS = {
 class PerformanceMetrics:
     """性能指标"""
     name: str
-    samples: List[float] = field(default_factory=list)
+    samples: list[float] = field(default_factory=list)
     unit: str = "ms"
     timestamp: datetime = field(default_factory=datetime.now)
 
@@ -123,7 +123,7 @@ class PerformanceMetrics:
             return 0.0
         return statistics.stdev(self.samples)
 
-    def check_benchmark(self, benchmark: PerformanceBenchmark) -> Dict[str, Any]:
+    def check_benchmark(self, benchmark: PerformanceBenchmark) -> dict[str, Any]:
         """检查是否符合基准"""
         return {
             "p50_pass": self.median <= benchmark.target_p50,
@@ -195,7 +195,7 @@ class TestAgentInitializationPerformance:
         benchmark = BENCHMARKS["agent_initialization"]
         check = metrics.check_benchmark(benchmark)
 
-        print(f"\n📊 RetrieverAgent初始化性能:")
+        print("\n📊 RetrieverAgent初始化性能:")
         print(f"   平均: {metrics.avg:.2f}ms")
         print(f"   P50: {metrics.median:.2f}ms")
         print(f"   P95: {metrics.p95:.2f}ms")
@@ -220,7 +220,7 @@ class TestAgentInitializationPerformance:
         benchmark = BENCHMARKS["agent_initialization"]
         check = metrics.check_benchmark(benchmark)
 
-        print(f"\n📊 AnalyzerAgent初始化性能:")
+        print("\n📊 AnalyzerAgent初始化性能:")
         print(f"   平均: {metrics.avg:.2f}ms")
         print(f"   P95: {metrics.p95:.2f}ms")
 
@@ -241,7 +241,7 @@ class TestAgentInitializationPerformance:
         benchmark = BENCHMARKS["agent_initialization"]
         check = metrics.check_benchmark(benchmark)
 
-        print(f"\n📊 WriterAgent初始化性能:")
+        print("\n📊 WriterAgent初始化性能:")
         print(f"   平均: {metrics.avg:.2f}ms")
         print(f"   P95: {metrics.p95:.2f}ms")
 
@@ -266,7 +266,7 @@ class TestCapabilityDiscoveryPerformance:
         benchmark = BENCHMARKS["capability_discovery"]
         check = metrics.check_benchmark(benchmark)
 
-        print(f"\n📊 get_capabilities性能:")
+        print("\n📊 get_capabilities性能:")
         print(f"   平均: {metrics.avg:.4f}ms")
         print(f"   P95: {metrics.p95:.4f}ms")
 
@@ -282,7 +282,7 @@ class TestCapabilityDiscoveryPerformance:
             elapsed = measure_time(agent.get_info)
             metrics.samples.append(elapsed)
 
-        print(f"\n📊 get_info性能:")
+        print("\n📊 get_info性能:")
         print(f"   平均: {metrics.avg:.4f}ms")
 
         # get_info应该很快
@@ -298,7 +298,7 @@ class TestCapabilityDiscoveryPerformance:
             elapsed = measure_time(agent.get_system_prompt)
             metrics.samples.append(elapsed)
 
-        print(f"\n📊 get_system_prompt性能:")
+        print("\n📊 get_system_prompt性能:")
         print(f"   平均: {metrics.avg:.2f}ms")
 
         # system prompt可以稍慢，但不应超过10ms
@@ -330,7 +330,7 @@ class TestInputValidationPerformance:
         benchmark = BENCHMARKS["input_validation"]
         check = metrics.check_benchmark(benchmark)
 
-        print(f"\n📊 validate_input性能:")
+        print("\n📊 validate_input性能:")
         print(f"   平均: {metrics.avg:.4f}ms")
         print(f"   P95: {metrics.p95:.4f}ms")
 
@@ -370,7 +370,7 @@ class TestAgentExecutionPerformance:
             benchmark = BENCHMARKS["agent_execution"]
             check = metrics.check_benchmark(benchmark)
 
-            print(f"\n📊 RetrieverAgent执行性能:")
+            print("\n📊 RetrieverAgent执行性能:")
             print(f"   样本数: {metrics.count}")
             print(f"   平均: {metrics.avg:.2f}ms")
             print(f"   P95: {metrics.p95:.2f}ms")
@@ -378,7 +378,7 @@ class TestAgentExecutionPerformance:
 
             # 注意：执行性能受LLM响应时间影响，这里只做警告
             if not check["p95_pass"]:
-                print(f"   ⚠️ P95超过基准，可能需要优化或LLM响应较慢")
+                print("   ⚠️ P95超过基准，可能需要优化或LLM响应较慢")
 
     @pytest.mark.asyncio
     @pytest.mark.performance
@@ -403,7 +403,7 @@ class TestAgentExecutionPerformance:
                 print(f"   执行 #{i} 失败: {e}")
 
         if metrics.samples:
-            print(f"\n📊 AnalyzerAgent执行性能:")
+            print("\n📊 AnalyzerAgent执行性能:")
             print(f"   平均: {metrics.avg:.2f}ms")
             print(f"   P95: {metrics.p95:.2f}ms")
 
@@ -432,7 +432,7 @@ class TestAgentThroughput:
         throughput = num_agents / elapsed  # agents per second
         avg_time = (elapsed / num_agents) * 1000  # ms per agent
 
-        print(f"\n📊 并发初始化吞吐量:")
+        print("\n📊 并发初始化吞吐量:")
         print(f"   Agent数量: {num_agents}")
         print(f"   总耗时: {elapsed:.2f}s")
         print(f"   吞吐量: {throughput:.2f} QPS")
@@ -457,7 +457,7 @@ class TestAgentThroughput:
         elapsed = time.perf_counter() - start_time
         throughput = len(agents) / elapsed
 
-        print(f"\n📊 并发能力发现吞吐量:")
+        print("\n📊 并发能力发现吞吐量:")
         print(f"   Agent数量: {len(agents)}")
         print(f"   吞吐量: {throughput:.2f} ops/s")
 
@@ -480,11 +480,11 @@ class TestPerformanceBaseline:
         assert "benchmarks" in baseline
         assert "timestamp" in baseline
 
-    def _load_or_create_baseline(self) -> Dict[str, Any]:
+    def _load_or_create_baseline(self) -> dict[str, Any]:
         """加载或创建基准数据"""
         if self.BASELINE_FILE.exists():
             import json
-            with open(self.BASELINE_FILE, 'r', encoding='utf-8') as f:
+            with open(self.BASELINE_FILE, encoding='utf-8') as f:
                 return json.load(f)
 
         # 创建默认基准

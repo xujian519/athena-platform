@@ -4,4 +4,3 @@
 测试Coordinator模式的核心功能。
 """
 
-from __future__ import annotations

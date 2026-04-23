@@ -296,7 +296,7 @@ class MetaLearningEngine:
         self,
         learner_id: str,
         task: Task,
-        num_adaptation_steps: int | None = None,
+        num_adaptation_steps: Optional[int] = None,
         num_shots: int = 5,
     ) -> AdaptationResult:
         """

@@ -9,24 +9,22 @@
 - 调度策略
 """
 
-from __future__ import annotations
-
 import time
-import pytest
 
+import pytest
 from core.coordinator import (
     AdvancedCoordinator,
+    AgentInfo,
     Coordinator,
     CoordinatorConfig,
-    AgentInfo,
-    TaskDependency,
-    TaskRetryConfig,
-    RoundRobinStrategy,
     LeastLoadedStrategy,
     PriorityStrategy,
-    WeightedStrategy,
+    RoundRobinStrategy,
     StrategyFactory,
     TaskAssignment,
+    TaskDependency,
+    TaskRetryConfig,
+    WeightedStrategy,
 )
 
 
@@ -472,3 +470,4 @@ class TestStrategyFactory:
         assert "least_loaded" in strategies
         assert "priority" in strategies
         assert "weighted" in strategies
+

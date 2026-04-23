@@ -85,7 +85,7 @@ class ExtendedUnifiedPromptManager(UnifiedPromptManager):
         self,
         user_input: str,
         scenario_context: ScenarioContext | None = None,
-        additional_context: dict[str, Any] | None = None,
+        additional_context: Optional[dict[str, Any]] = None,
         enable_l1_l4: bool = True,
         enable_expert: bool = True,
         enable_lyra: bool = True,
@@ -234,7 +234,7 @@ class ExtendedUnifiedPromptManager(UnifiedPromptManager):
         return result
 
     def process_query_with_scenario(
-        self, user_query: str, additional_context: dict[str, Any] | None = None, **options
+        self, user_query: str, additional_context: Optional[dict[str, Any]] = None, **options
     ) -> dict[str, Any]:
         """
         使用场景感知的方式处理查询
@@ -290,7 +290,7 @@ class ExtendedUnifiedPromptManager(UnifiedPromptManager):
 
         return suggestions
 
-    def list_available_scenarios(self, domain: str | None = None) -> list:
+    def list_available_scenarios(self, domain: Optional[str] = None) -> list:
         """
         列出可用的场景
 
@@ -303,7 +303,7 @@ class ExtendedUnifiedPromptManager(UnifiedPromptManager):
         return self.scenario_rule_retriever.list_available_scenarios(domain)
 
     def get_scenario_rule(
-        self, domain: str, task_type: str, phase: str | None = None
+        self, domain: str, task_type: str, phase: Optional[str] = None
     ) -> ScenarioRule | None:
         """
         获取场景规则

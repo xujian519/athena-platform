@@ -16,16 +16,15 @@
 - 能力：greet（打招呼）
 """
 
-from typing import Any, Dict
 import logging
 
 # TODO: 导入必要的基类和数据类
-from core.agents.xiaona.base_component import (
-    BaseXiaonaComponent,
+from core.framework.agents.xiaona.base_component import (
     AgentCapability,
     AgentExecutionContext,
     AgentExecutionResult,
     AgentStatus,
+    BaseXiaonaComponent,
 )
 
 logger = logging.getLogger(__name__)
@@ -119,7 +118,6 @@ class HelloAgent(BaseXiaonaComponent):
 # 测试代码
 async def test_hello_agent():
     """测试HelloAgent"""
-    import asyncio
 
     # 创建Agent
     agent = HelloAgent(agent_id="hello_agent_001")
@@ -129,7 +127,7 @@ async def test_hello_agent():
     info = agent.get_info()
     print(f"Agent ID: {info['agent_id']}")
     print(f"Agent 类型: {info['agent_type']}")
-    print(f"能力列表:")
+    print("能力列表:")
     for cap in info['capabilities']:
         print(f"  - {cap['name']}: {cap['description']}")
 

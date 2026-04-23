@@ -130,7 +130,7 @@ class PerformanceAnalysisReportGenerator:
 
         return summary
 
-    def generate_detailed_recommendations(self, analysis_results: dict) -> list[dict[str, Any]]:
+    def generate_detailed_recommendations(self, analysis_results: dict) -> list[dict[str, Any]:
         """生成详细建议"""
         recommendations = []
 
@@ -414,7 +414,7 @@ class PerformanceAnalysisReportGenerator:
         }次
 
 ### 关键问题
-{chr(10).join([f"- {issue}" for issue in report_data["executive_summary"]["critical_issues"]])}
+{chr(10).join([f"- {issue}" for issue in report_data["executive_summary"]["critical_issues"])}
 
 ### 性能瓶颈
 {

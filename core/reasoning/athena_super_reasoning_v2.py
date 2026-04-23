@@ -148,7 +148,7 @@ class LLMEnhancedHypothesisManager(HypothesisManager):
 class LLMEnhancedSuperReasoningEngine:
     """LLM增强的超级推理引擎"""
 
-    def __init__(self, config: dict[str, Any] | None = None, llm_client=None):
+    def __init__(self, config: Optional[dict[str, Any]] = None, llm_client=None):
         self.config = config or {}
         self.llm_client = llm_client
 
@@ -164,7 +164,7 @@ class LLMEnhancedSuperReasoningEngine:
         logger.info("🧠 Athena超级推理引擎V2初始化完成 (LLM增强版)")
 
     async def execute_super_reasoning(
-        self, problem: str, context: dict[str, Any] | None = None
+        self, problem: str, context: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """执行超级推理"""
         start_time = datetime.now()
@@ -241,7 +241,7 @@ class LLMEnhancedSuperReasoningEngine:
             }
 
     async def _initial_engagement(
-        self, problem: str, context: dict[str, Any] | None = None
+        self, problem: str, context: Optional[dict[str, Any]] = None
     ) -> None:
         """初始参与阶段"""
         logger.info("📝 阶段1: 初始参与")
@@ -267,7 +267,7 @@ class LLMEnhancedSuperReasoningEngine:
         await asyncio.sleep(0.1)
 
     async def _problem_analysis_enhanced(
-        self, problem: str, context: dict[str, Any] | None = None
+        self, problem: str, context: Optional[dict[str, Any]] = None
     ) -> None:
         """问题分析阶段 (LLM增强)"""
         logger.info("🔍 阶段2: 问题分析 (LLM增强)")
@@ -348,7 +348,7 @@ class LLMEnhancedSuperReasoningEngine:
         )
 
     async def _hypothesis_generation_enhanced(
-        self, problem: str, context: dict[str, Any] | None = None
+        self, problem: str, context: Optional[dict[str, Any]] = None
     ) -> None:
         """假设生成阶段 (LLM增强)"""
         logger.info("💡 阶段3: 假设生成 (LLM增强)")

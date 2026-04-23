@@ -51,7 +51,7 @@ class MCPServiceInfo:
     # 状态信息
     status: MCPServiceStatus = MCPServiceStatus.STOPPED
     last_check: datetime | None = None
-    last_error: str | None = None
+    last_error: Optional[str] = None
 
     # 工具列表
     available_tools: list[str] = field(default_factory=list)
@@ -82,13 +82,13 @@ class MCPCallMetrics:
     max_execution_time: float = 0.0
 
     last_called: datetime | None = None
-    last_error: str | None = None
+    last_error: Optional[str] = None
     last_success: datetime | None = None
 
     # 错误分类
     error_counts: dict[str, int] = field(default_factory=dict)
 
-    def update(self, execution_time: float, success: bool, error: str | None = None) -> Any:
+    def update(self, execution_time: float, success: bool, error: Optional[str] = None) -> Any:
         """
         更新调用指标
 
@@ -410,7 +410,7 @@ class MCPServiceRegistry:
         tool_name: str,
         execution_time: float,
         success: bool,
-        error: str | None = None,
+        error: Optional[str] = None,
     ) -> None:
         """
         更新MCP调用指标

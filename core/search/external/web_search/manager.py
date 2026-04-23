@@ -35,7 +35,7 @@ logger = setup_logging()
 class UnifiedWebSearchManager:
     """统一联网搜索管理器 - 整合多个搜索引擎"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化统一搜索管理器
 

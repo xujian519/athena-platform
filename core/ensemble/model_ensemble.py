@@ -131,7 +131,7 @@ class ModelEnsemble:
         return config
 
     async def predict(
-        self, ensemble_id: str, input_data: Any, context: dict[str, Any] | None = None
+        self, ensemble_id: str, input_data: Any, context: Optional[dict[str, Any]] = None
     ) -> EnsembleResult:
         """
         执行集成预测

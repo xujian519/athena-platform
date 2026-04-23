@@ -68,12 +68,12 @@ class ModelConfig:
 
     name: str
     provider: str
-    api_endpoint: str | None = None
+    api_endpoint: Optional[str] = None
     temperature: float = 0.7
     max_tokens: int = 2000
     priority: int = 10
     monthly_cost: float = 0.0
-    capabilities: list[str] | None = None
+    capabilities: Optional[list[str]] = None
 
 
 @dataclass
@@ -84,9 +84,9 @@ class TaskRequest:
     task_type: TaskType
     content: str
     priority: int = 1
-    context: dict[str, Any] | None = None
+    context: Optional[dict[str, Any]] = None
     timestamp: datetime = None
-    user_id: str | None = None
+    user_id: Optional[str] = None
 
 
 @dataclass
@@ -226,7 +226,7 @@ class XiaonuoModelRouter:
         temperature: float = 0.7,
         max_tokens: int = 2000,
         use_cache: bool = True,
-    ) -> str | None:
+    ) -> Optional[str]:
         """
         调用LLM并使用缓存
 
@@ -287,7 +287,7 @@ class XiaonuoModelRouter:
 
     async def _call_actual_llm(
         self, prompt: str, model_name: str, task_type: str, temperature: float, max_tokens: int
-    ) -> str | None:
+    ) -> Optional[str]:
         """调用实际的LLM API"""
         # 这里应集成实际的LLM调用逻辑
         # 简化实现,实际应用中需要根据不同provider实现
@@ -302,7 +302,7 @@ class XiaonuoModelRouter:
 
     async def get_embedding(
         self, texts: str | list[str], task_type: str = "default"
-    ) -> list[float | None]:
+    ) -> Optional[list[float]]:
         """
         获取文本嵌入向量
 
@@ -372,7 +372,7 @@ class XiaonuoModelRouter:
 
     async def _call_glm4_api(
         self, prompt: str, temperature: float, max_tokens: int
-    ) -> str | None:
+    ) -> Optional[str]:
         """调用智谱GLM-4 API"""
         try:
             import requests
@@ -407,7 +407,7 @@ class XiaonuoModelRouter:
 
     async def _call_ollama_api(
         self, model_name: str, prompt: str, temperature: float, max_tokens: int
-    ) -> str | None:
+    ) -> Optional[str]:
         """调用Ollama本地API"""
         try:
             import requests

@@ -8,19 +8,20 @@
 - 边界条件处理
 """
 
-import pytest
 import asyncio
-from core.agents.xiaona.invalidation_analyzer_proxy import InvalidationAnalyzerProxy
-from core.agents.xiaona.application_reviewer_proxy import ApplicationDocumentReviewerProxy
-from core.agents.xiaona.novelty_analyzer_proxy import NoveltyAnalyzerProxy
-from core.agents.xiaona.creativity_analyzer_proxy import CreativityAnalyzerProxy
-from core.agents.xiaona.infringement_analyzer_proxy import InfringementAnalyzerProxy
-from core.agents.xiaona.base_component import (
+
+import pytest
+
+from core.framework.agents.xiaona.application_reviewer_proxy import ApplicationDocumentReviewerProxy
+from core.framework.agents.xiaona.base_component import (
     AgentExecutionContext,
     AgentExecutionResult,
     AgentStatus,
-    AgentCapability
 )
+from core.framework.agents.xiaona.creativity_analyzer_proxy import CreativityAnalyzerProxy
+from core.framework.agents.xiaona.infringement_analyzer_proxy import InfringementAnalyzerProxy
+from core.framework.agents.xiaona.invalidation_analyzer_proxy import InvalidationAnalyzerProxy
+from core.framework.agents.xiaona.novelty_analyzer_proxy import NoveltyAnalyzerProxy
 
 
 # 测试用子类
@@ -350,9 +351,9 @@ class TestErrorHandling:
 
         # 第一次调用可能失败
         try:
-            result1 = await agent.analyze_invalidation(None, [], "quick")
+            await agent.analyze_invalidation(None, [], "quick")
         except:
-            result1 = None
+            pass
 
         # 第二次调用应该成功
         result2 = await agent.analyze_invalidation({"patent_id": "CN123"}, [], "quick")
@@ -407,11 +408,10 @@ class TestErrorHandling:
         agent = TestableInvalidationAnalyzerProxy(agent_id="test_agent")
 
         # 模拟资源使用
-        initial_status = agent.status
 
         # 尝试执行可能失败的任务
         try:
-            result = await agent.analyze_invalidation(None, [], "quick")
+            await agent.analyze_invalidation(None, [], "quick")
         except:
             pass
 

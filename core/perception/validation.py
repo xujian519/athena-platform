@@ -72,8 +72,8 @@ class StringValidator(Validator):
         min_length: int = 0,
         max_length: int = 10000,
         allow_empty: bool = True,
-        pattern: str | None = None,
-        forbidden_chars: list[str] | None = None,
+        pattern: Optional[str] = None,
+        forbidden_chars: Optional[list[str]] = None,
         sanitize_html: bool = True,
     ):
         self.min_length = min_length
@@ -145,7 +145,7 @@ class PathValidator(Validator):
         self,
         allow_absolute: bool = False,
         allow_relative: bool = True,
-        allowed_extensions: list[str] | None = None,
+        allowed_extensions: Optional[list[str]] = None,
         max_length: int = 255,
         check_existence: bool = False,
     ):
@@ -207,7 +207,7 @@ class ImageValidator(Validator):
         max_size_mb: float = 10.0,
         min_dimensions: tuple[int, int] = (1, 1),
         max_dimensions: tuple[int, int] = (10000, 10000),
-        allowed_formats: list[str] | None = None,
+        allowed_formats: Optional[list[str]] = None,
     ):
         self.max_size_bytes = max_size_mb * 1024 * 1024
         self.min_dimensions = min_dimensions
@@ -254,8 +254,8 @@ class NumberValidator(Validator):
 
     def __init__(
         self,
-        min_value: float | None = None,
-        max_value: float | None = None,
+        min_value: Optional[float] = None,
+        max_value: Optional[float] = None,
         allow_float: bool = True,
         allow_negative: bool = True,
     ):

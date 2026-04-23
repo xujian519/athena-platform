@@ -60,11 +60,11 @@ class TaskMessage(UnifiedMessage):
         self,
         task_id: str = "",
         sender_id: str = "",
-        recipient_id: str | None = None,
+        recipient_id: Optional[str] = None,
         task_type: str = "",
-        content: dict[str, Any] | None = None,
+        content: Optional[dict[str, Any]] = None,
         priority: TaskPriority = TaskPriority.NORMAL,
-        deadline: str | None = None,
+        deadline: Optional[str] = None,
         **kwargs,
     ):
         # 转换为统一类型
@@ -148,8 +148,8 @@ class ResponseMessage(UnifiedMessage):
         sender_id: str = "",
         recipient_id: str = "",
         success: bool = True,
-        content: dict[str, Any] | None = None,
-        error_message: str | None = None,
+        content: Optional[dict[str, Any]] = None,
+        error_message: Optional[str] = None,
         execution_time: float = 0.0,
     ):
         response_content = {
@@ -359,9 +359,9 @@ class AgentMessageBus:
 def create_task_message(
     task_id: str,
     sender_id: str,
-    recipient_id: str | None = None,
+    recipient_id: Optional[str] = None,
     task_type: str = "",
-    content: dict[str, Any] | None = None,
+    content: Optional[dict[str, Any]] = None,
     priority: TaskPriority = TaskPriority.NORMAL,
 ) -> TaskMessage:
     """创建任务消息"""
@@ -380,7 +380,7 @@ def create_response_message(
     sender_id: str,
     recipient_id: str,
     success: bool = True,
-    content: dict[str, Any] | None = None,
+    content: Optional[dict[str, Any]] = None,
 ) -> ResponseMessage:
     """创建响应消息"""
     return ResponseMessage(

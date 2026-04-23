@@ -75,10 +75,10 @@ class ErrorDetail:
 
     code: ErrorCode
     message: str
-    details: dict[str, Any] | None = None
+    details: Optional[dict[str, Any]] = None
     timestamp: str = ""
     request_id: str = ""
-    stack_trace: str | None = None
+    stack_trace: Optional[str] = None
 
     def __post_init__(self):
         if not self.timestamp:
@@ -111,7 +111,7 @@ class AthenaException(Exception):
         self,
         code: ErrorCode,
         message: str,
-        details: dict[str, Any] | None = None,
+        details: Optional[dict[str, Any]] = None,
     ):
         """
         初始化异常
@@ -149,42 +149,42 @@ class AthenaException(Exception):
 class AuthenticationError(AthenaException):
     """认证错误"""
 
-    def __init__(self, message: str = "认证失败", details: dict[str, Any] | None = None):
+    def __init__(self, message: str = "认证失败", details: Optional[dict[str, Any]] = None):
         super().__init__(ErrorCode.UNAUTHORIZED, message, details)
 
 
 class RateLimitError(AthenaException):
     """速率限制错误"""
 
-    def __init__(self, message: str = "超过速率限制", details: dict[str, Any] | None = None):
+    def __init__(self, message: str = "超过速率限制", details: Optional[dict[str, Any]] = None):
         super().__init__(ErrorCode.RATE_LIMIT_EXCEEDED, message, details)
 
 
 class ValidationError(AthenaException):
     """验证错误"""
 
-    def __init__(self, message: str = "输入验证失败", details: dict[str, Any] | None = None):
+    def __init__(self, message: str = "输入验证失败", details: Optional[dict[str, Any]] = None):
         super().__init__(ErrorCode.VALIDATION_ERROR, message, details)
 
 
 class SearchError(AthenaException):
     """搜索引擎错误"""
 
-    def __init__(self, message: str = "搜索失败", details: dict[str, Any] | None = None):
+    def __init__(self, message: str = "搜索失败", details: Optional[dict[str, Any]] = None):
         super().__init__(ErrorCode.SEARCH_FAILED, message, details)
 
 
 class DatabaseError(AthenaException):
     """数据库错误"""
 
-    def __init__(self, message: str = "数据库操作失败", details: dict[str, Any] | None = None):
+    def __init__(self, message: str = "数据库操作失败", details: Optional[dict[str, Any]] = None):
         super().__init__(ErrorCode.DATABASE_ERROR, message, details)
 
 
 class ExternalAPIError(AthenaException):
     """外部API错误"""
 
-    def __init__(self, message: str = "外部API调用失败", details: dict[str, Any] | None = None):
+    def __init__(self, message: str = "外部API调用失败", details: Optional[dict[str, Any]] = None):
         super().__init__(ErrorCode.EXTERNAL_API_ERROR, message, details)
 
 

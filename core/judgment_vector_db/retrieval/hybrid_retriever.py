@@ -65,7 +65,7 @@ class HybridRetriever:
         postgres_client,
         nebula_client,
         vectorizer,
-        config: dict[str, Any] | None = None,
+        config: Optional[dict[str, Any]] = None,
     ):
         """
         初始化混合检索引擎
@@ -98,7 +98,7 @@ class HybridRetriever:
         strategy: RetrievalStrategy = RetrievalStrategy.HYBRID_STANDARD,
         layer: str = "L3",
         limit: int = 10,
-        filters: dict[str, Any] | None = None,
+        filters: Optional[dict[str, Any]] = None,
     ) -> HybridResult:
         """
         执行混合检索
@@ -507,7 +507,7 @@ def create_hybrid_retriever(
     postgres_client,
     nebula_client,
     vectorizer,
-    config: dict[str, Any] | None = None,
+    config: Optional[dict[str, Any]] = None,
 ) -> HybridRetriever:
     """
     创建混合检索引擎

@@ -56,7 +56,7 @@ class OCRPerformanceMonitor:
     def __init__(
         self,
         agent_id: str = "ocr_optimizer",
-        log_dir: str | None = None,
+        log_dir: Optional[str] = None,
         enable_alerts: bool = True,
     ):
         self.agent_id = agent_id
@@ -248,7 +248,7 @@ class OCRPerformanceMonitor:
         except Exception as e:
             logger.error(f"保存指标日志失败: {e}")
 
-    def save_report(self, filename: str | None = None) -> None:
+    def save_report(self, filename: Optional[str] = None) -> None:
         """保存性能报告"""
         if filename is None:
             filename = f"ocr_performance_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"

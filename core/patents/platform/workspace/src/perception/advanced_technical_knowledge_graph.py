@@ -34,8 +34,8 @@ class TechEntity:
     category: str = 'general'  # 术语类别
     domain: str = 'unknown'  # 技术领域
     ipc_codes: List[str] = field(default_factory=list)  # 相关IPC分类
-    definition: str | None = None
-    description: str | None = None
+    definition: Optional[str] = None
+    description: Optional[str] = None
     attributes: Dict[str, Any] = field(default_factory=dict)
     relationships: Dict[str, List[str]] = field(default_factory=dict)
     embedding: np.ndarray | None = None

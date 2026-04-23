@@ -67,7 +67,7 @@ class LogQuery:
         self.categories: List[str] = []
         self.components: List[str] = []
         self.keywords: List[str] = []
-        self.regex_pattern: str | None = None
+        self.regex_pattern: Optional[str] = None
         self.limit: int = 1000
         self.sort_by: str = 'timestamp'
         self.sort_order: str = 'desc'

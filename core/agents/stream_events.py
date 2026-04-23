@@ -37,7 +37,7 @@ class ToolExecutionStarted:
     tool_id: str
     tool_name: str
     tool_input: dict[str, Any]
-    tool_use_id: str | None = None
+    tool_use_id: Optional[str] = None
 
 
 @dataclass(frozen=True)
@@ -57,7 +57,7 @@ class ErrorEvent:
 
     message: str
     recoverable: bool = True
-    error_type: str | None = None
+    error_type: Optional[str] = None
 
 
 @dataclass(frozen=True)

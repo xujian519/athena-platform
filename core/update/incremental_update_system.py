@@ -145,12 +145,12 @@ class FileChangeRecord:
     change_type: str  # new, modified, deleted, moved
     processing_status: str  # pending, processing, completed, failed
     processing_time: float = 0.0
-    error_message: str | None = None
-    previous_hash: str | None = None
+    error_message: Optional[str] = None
+    previous_hash: Optional[str] = None
     priority: int = 5  # 1-10, 10为最高优先级
     retry_count: int = 0
-    vector_id: str | None = None
-    graph_vertex_id: str | None = None
+    vector_id: Optional[str] = None
+    graph_vertex_id: Optional[str] = None
 
 @dataclass
 class UpdateSession:
@@ -291,7 +291,7 @@ class MultiLevelCache:
 
         return None
 
-    async def set(self, key: str, value: Any, ttl_seconds: int | None = None):
+    async def set(self, key: str, value: Any, ttl_seconds: Optional[int] = None):
         """设置缓存值"""
         ttl = ttl_seconds or self.config.cache_configs["cache_ttl_seconds"]
 
@@ -547,7 +547,7 @@ class IncrementalUpdateSystem:
 
             logger.info(f"✅ 更新会话结束: {session_id} - {status}")
 
-    async def detect_changes(self, external_path: str | None = None) -> dict[str, Any]:
+    async def detect_changes(self, external_path: Optional[str] = None) -> dict[str, Any]:
         """检测文件变更"""
         logger.info("🔍 检测文件变更...")
 
@@ -892,7 +892,7 @@ class IncrementalUpdateSystem:
             from scripts.external_storage_processor import ExternalStorageProcessor
             self.external_processor = ExternalStorageProcessor()
 
-    async def smart_change_detection(self, external_path: str | None = None) -> dict[str, Any]:
+    async def smart_change_detection(self, external_path: Optional[str] = None) -> dict[str, Any]:
         """智能变更检测(支持多种优化)"""
         logger.info("🧠 开始智能变更检测...")
 
@@ -914,7 +914,7 @@ class IncrementalUpdateSystem:
             logger.error(f"智能变更检测失败: {e}")
             return {"error": str(e), "fallback_used": True}
 
-    async def batch_process_with_retry(self, session_id: str, limit: int | None = None) -> dict[str, Any]:
+    async def batch_process_with_retry(self, session_id: str, limit: Optional[int] = None) -> dict[str, Any]:
         """带重试机制的批量处理"""
         logger.info("🔄 开始带重试机制的批量处理...")
 
@@ -1057,7 +1057,7 @@ class IncrementalUpdateSystem:
         conn.commit()
         conn.close()
 
-    async def process_changes(self, session_id: str, limit: int | None = None) -> dict[str, Any]:
+    async def process_changes(self, session_id: str, limit: Optional[int] = None) -> dict[str, Any]:
         """处理变更文件"""
         logger.info(f"🔄 开始处理变更文件 (限制: {limit or '无'})")
 
@@ -1219,7 +1219,7 @@ class IncrementalUpdateSystem:
         # 暂时只记录日志,实际处理逻辑可以调用 external_storage_processor.py
         pass
 
-    def _update_change_status(self, file_path: str, status: str, processing_time: float | None = None, error_message: str | None = None):
+    def _update_change_status(self, file_path: str, status: str, processing_time: Optional[float] = None, error_message: Optional[str] = None):
         """更新变更状态"""
         conn = sqlite3.connect(self.config.resume_db_path)
         cursor = conn.cursor()
@@ -1288,7 +1288,7 @@ class IncrementalUpdateSystem:
         conn.close()
         return type_stats
 
-    def get_session_status(self, session_id: str | None = None) -> dict[str, Any]:
+    def get_session_status(self, session_id: Optional[str] = None) -> dict[str, Any]:
         """获取会话状态"""
         conn = sqlite3.connect(self.config.resume_db_path)
         cursor = conn.cursor()

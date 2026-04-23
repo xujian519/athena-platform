@@ -6,9 +6,11 @@ Test Dynamic Prompt System - Working Version
 
 import logging
 import sys
+
 sys.path.insert(0, '/Users/xujian/Athena工作平台')
 
 from core.logging_config import setup_logging
+
 logging.basicConfig(level=logging.INFO)
 logger = setup_logging()
 
@@ -31,7 +33,7 @@ def test_scenario_identifier():
         # 使用正确的方法名
         scenario = identifier.identify_scenario(test_input)
 
-        logger.info(f"   ✅ 场景识别成功!")
+        logger.info("   ✅ 场景识别成功!")
         logger.info(f"   领域: {scenario.domain}")
         logger.info(f"   任务类型: {scenario.task_type}")
         logger.info(f"   阶段: {scenario.phase}")
@@ -78,7 +80,7 @@ def test_law_document_retrieval():
                     LIMIT 5
                 """)
                 records = list(result)
-                logger.info(f"   示例文档:")
+                logger.info("   示例文档:")
                 for record in records:
                     logger.info(f"      - {record['d.law_id']}: {record['d.article_title'][:50] if record['d.article_title'] else 'N/A'}")
 

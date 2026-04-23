@@ -49,7 +49,7 @@ class OptimizedCommunicationModule(BaseModule):
     提供消息压缩、批处理、智能路由等功能。
     """
 
-    def __init__(self, agent_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, agent_id: str, config: Optional[dict[str, Any]] = None):
         """初始化优化版通信模块
 
         Args:
@@ -216,9 +216,9 @@ class OptimizedCommunicationModule(BaseModule):
         priority: MessagePriority = MessagePriority.NORMAL,
         compression: CompressionType = CompressionType.AUTO,
         delivery_mode: DeliveryMode = DeliveryMode.ASYNCHRONOUS,
-        ttl: float | None = None,
-        metadata: dict[str, Any] | None = None,
-        tags: list[str] | None = None,
+        ttl: Optional[float] = None,
+        metadata: Optional[dict[str, Any]] = None,
+        tags: Optional[list[str]] = None,
     ) -> str:
         """优化消息发送"""
         try:

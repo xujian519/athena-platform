@@ -6,10 +6,11 @@
 import re
 from pathlib import Path
 
-def fix_remaining_errors(file_path: Path) -> tuple[bool, list[str]]:
+
+def fix_remaining_errors(file_path: Path) -> tuple[bool, list[str]:
     """修复剩余的语法错误"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         original_content = content
@@ -18,7 +19,7 @@ def fix_remaining_errors(file_path: Path) -> tuple[bool, list[str]]:
         # 模式1: 修复各种 Optional[...] 错误
         patterns_to_fix = [
             # Optional[list[...] | None = None] -> list[...] | None
-            (r'Optional\[list\[([^\]]+)\]\s*\|\s*None\s*=\s*None\]', r'list[\1] | None', 'Optional[list[...]]'),
+            (r'Optional\[list\[([^\]+)\]\s*\|\s*None\s*=\s*None\]', r'list[\1] | None', 'Optional[list[...]'),
             # Optional[dict | None = None] -> dict | None
             (r'Optional\[dict\s*\|\s*None\s*=\s*None\]', r'dict | None', 'Optional[dict]'),
             # Optional[...] 错误
@@ -44,8 +45,8 @@ def fix_remaining_errors(file_path: Path) -> tuple[bool, list[str]]:
         for i, line in enumerate(lines):
             original_line = line
 
-            # 修复 [1:4] -> [1:4]]
-            if re.search(r'\[\d+:\d+\][^]]\s*$', line) and line.count('[') > line.count(']'):
+            # 修复 [1:4] -> [1:4]
+            if re.search(r'\[\d+:\d+\][^]\s*$', line) and line.count('[') > line.count(']'):
                 if not line.rstrip().endswith(']'):
                     line = line.rstrip() + ']'
                 elif line.count('[') > line.count(']'):
@@ -53,19 +54,19 @@ def fix_remaining_errors(file_path: Path) -> tuple[bool, list[str]]:
                 if line != original_line:
                     fixes.append(f"第{i+1}行: 添加闭合括号")
 
-            # 修复 algorithms=[value]]
-            if re.search(r'algorithms=\[[^\]]+\]\]', line):
-                line = re.sub(r'algorithms=\[([^\]]+)\]\]', r'algorithms=[\1]', line)
+            # 修复 algorithms=[value]
+            if re.search(r'algorithms=\[[^\]+\]\]', line):
+                line = re.sub(r'algorithms=\[([^\]+)\]\]', r'algorithms=[\1]', line)
                 if line != original_line:
                     fixes.append(f"第{i+1}行: 移除多余的 ]")
 
-            # 修复 type]] | None
+            # 修复 type] | None
             if re.search(r'\w+\]\]\s*\|\s*None', line):
                 line = re.sub(r'(\w+)\]\]\s*\|\s*None', r'\1] | None', line)
                 if line != original_line:
                     fixes.append(f"第{i+1}行: 移除多余的 ]")
 
-            # 修复 dict[str, tuple[...]] (缺少闭合括号)
+            # 修复 dict[str, tuple[...] (缺少闭合括号)
             if re.search(r'dict\[str,\s*tuple\[.*?\]\s*=', line):
                 match = re.search(r'(dict\[str,\s*tuple\[.*?\])\s*=', line)
                 if match:
@@ -78,11 +79,11 @@ def fix_remaining_errors(file_path: Path) -> tuple[bool, list[str]]:
                         if line != original_line:
                             fixes.append(f"第{i+1}行: 闭合 tuple")
 
-            # 修复 list[str | Optional[dict[...]],
+            # 修复 list[str | Optional[dict[...],
             if re.search(r'list\[str\s*\|\s*Optional\[dict\[str,\s*Any\],\s*$', line):
                 line = re.sub(
                     r'list\[str\s*\|\s*Optional\[dict\[str,\s*Any\],',
-                    'list[str] | Optional[dict[str, Any]],',
+                    'list[str] | Optional[dict[str, Any],',
                     line
                 )
                 if line != original_line:
@@ -142,7 +143,7 @@ def main():
                 for fix in fixes[:3]:
                     print(f"    {fix}")
 
-    print(f"\n修复完成!")
+    print("\n修复完成!")
     print(f"修复文件数: {fixed_count}")
 
 if __name__ == "__main__":

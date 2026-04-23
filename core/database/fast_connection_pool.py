@@ -45,7 +45,7 @@ class FastPostgreSQLPool:
         self.config = config or FastPoolConfig()
         self.pool: asyncpg.Pool | None = None
         self._initialized = False
-        self._connect_time: float | None = None
+        self._connect_time: Optional[float] = None
         self._query_count = 0
         self._total_query_time = 0.0
 
@@ -130,7 +130,7 @@ class FastPostgreSQLPool:
         async with self.pool.acquire() as connection:
             yield connection
 
-    async def fetch(self, query: str, *args: Any, timeout: float | None = None) -> list:
+    async def fetch(self, query: str, *args: Any, timeout: Optional[float] = None) -> list:
         """执行查询并返回所有结果"""
         start_time = time.time()
 
@@ -144,7 +144,7 @@ class FastPostgreSQLPool:
                 raise
 
     async def fetchrow(
-        self, query: str | None = None, *args, timeout: float | None = None
+        self, query: Optional[str] = None, *args, timeout: Optional[float] = None
     ) -> asyncpg.Record | None:
         """执行查询并返回一行结果"""
         start_time = time.time()
@@ -159,7 +159,7 @@ class FastPostgreSQLPool:
                 raise
 
     async def fetchval(
-        self, query: str, *args, column: int = 0, timeout: float | None = None
+        self, query: str, *args, column: int = 0, timeout: Optional[float] = None
     ) -> Any:
         """执行查询并返回单个值"""
         start_time = time.time()
@@ -173,7 +173,7 @@ class FastPostgreSQLPool:
                 logger.error(f"查询执行失败: {e}")
                 raise
 
-    async def execute(self, query: str, *args, timeout: float | None = None) -> str:
+    async def execute(self, query: str, *args, timeout: Optional[float] = None) -> str:
         """执行查询并返回状态字符串"""
         start_time = time.time()
 
@@ -186,7 +186,7 @@ class FastPostgreSQLPool:
                 logger.error(f"查询执行失败: {e}")
                 raise
 
-    async def executemany(self, command: str, args, timeout: float | None = None):
+    async def executemany(self, command: str, args, timeout: Optional[float] = None):
         """批量执行命令"""
         start_time = time.time()
 

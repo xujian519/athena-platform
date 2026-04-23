@@ -101,8 +101,8 @@ class ReasoningTask:
     domain: str = "general"
     complexity: ReasoningComplexity = ReasoningComplexity.MODERATE
     confidence_threshold: float = 0.7
-    time_limit: float | None = None
-    memory_limit: int | None = None
+    time_limit: Optional[float] = None
+    memory_limit: Optional[int] = None
     preferred_reasoning_types: list[ReasoningType] = field(default_factory=list)
     exclude_reasoning_types: list[ReasoningType] = field(default_factory=list)
     context: dict[str, Any] = field(default_factory=dict)
@@ -111,7 +111,7 @@ class ReasoningTask:
 class AthenaReasoningEngine:
     """Athena增强推理引擎 - 32种推理模式的完整实现"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
 
         # 初始化核心推理器
@@ -374,7 +374,7 @@ class AthenaReasoningEngine:
         self,
         query: str,
         reasoning_type: ReasoningType = None,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
         **kwargs,
     ) -> ReasoningResult:
         """
@@ -688,6 +688,6 @@ class ReasoningPerformanceMonitor:
 
 
 # 便捷函数
-async def create_athena_reasoning_engine(config: dict[str, Any] | None = None) -> AthenaReasoningEngine:
+async def create_athena_reasoning_engine(config: Optional[dict[str, Any]] = None) -> AthenaReasoningEngine:
     """创建Athena推理引擎实例"""
     return AthenaReasoningEngine(config)

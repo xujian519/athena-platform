@@ -70,11 +70,11 @@ class MessageTrace:
     events: list[MessageTraceEvent] = field(default_factory=list)
     completed_at: datetime | None = None
     status: MessageStatus = MessageStatus.PENDING
-    error: str | None = None
+    error: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def add_event(
-        self, event_type: MessageEventType, details: dict[str, Any] | None = None
+        self, event_type: MessageEventType, details: Optional[dict[str, Any]] = None
     ) -> None:
         """添加追踪事件"""
         self.events.append(
@@ -83,7 +83,7 @@ class MessageTrace:
             )
         )
 
-    def complete(self, status: MessageStatus, error: str | None = None) -> Any:
+    def complete(self, status: MessageStatus, error: Optional[str] = None) -> Any:
         """完成追踪"""
         self.completed_at = datetime.now()
         self.status = status
@@ -126,7 +126,7 @@ class MessageTraceManager:
         self._traces: dict[str, MessageTrace] = {}
         self._counter = 0
 
-    def create_trace(self, message_id: str, metadata: dict[str, Any] | None = None) -> MessageTrace:
+    def create_trace(self, message_id: str, metadata: Optional[dict[str, Any]] = None) -> MessageTrace:
         """
         创建消息追踪
 
@@ -172,7 +172,7 @@ class MessageTraceManager:
         else:
             logger.warning(f"未找到消息追踪: {message_id}")
 
-    def complete_trace(self, message_id: str, status: MessageStatus, error: str | None = None):
+    def complete_trace(self, message_id: str, status: MessageStatus, error: Optional[str] = None):
         """
         完成消息追踪
 

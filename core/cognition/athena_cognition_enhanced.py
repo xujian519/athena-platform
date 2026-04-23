@@ -95,7 +95,7 @@ class AthenaCognitionEnhanced:
 
         logger.info("✅ Athena增强认知系统初始化完成")
 
-    async def cognize(self, query: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
+    async def cognize(self, query: str, context: Optional[dict[str, Any]] = None) -> dict[str, Any]:
         """执行认知过程"""
         start_time = datetime.now()
         self.performance_metrics["total_cognitions"] += 1
@@ -133,7 +133,7 @@ class AthenaCognitionEnhanced:
             }
 
     async def _super_reasoning_cognition(
-        self, query: str, context: dict[str, Any] | None = None
+        self, query: str, context: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """超级推理认知"""
         logger.info("🧠 启动超级推理认知模式...")
@@ -171,7 +171,7 @@ class AthenaCognitionEnhanced:
         return enhanced_result
 
     async def _enhanced_cognition(
-        self, query: str, context: dict[str, Any] | None = None
+        self, query: str, context: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """增强认知"""
         logger.info("🔍 启动增强认知模式...")
@@ -211,7 +211,7 @@ class AthenaCognitionEnhanced:
         return enhanced_result
 
     async def _basic_cognition(
-        self, query: str, context: dict[str, Any] | None = None
+        self, query: str, context: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """基础认知"""
         logger.info("📝 启动基础认知模式...")
@@ -347,7 +347,7 @@ class AthenaCognitionEnhanced:
         # 简化的记忆检索
         return {"episodic_memories": [], "semantic_memories": [], "procedural_memories": []}
 
-    async def _identify_patterns(self, query: str, context: dict[str, Any] | None = None) -> list[str]:
+    async def _identify_patterns(self, query: str, context: Optional[dict[str, Any]] = None) -> list[str]:
         """识别模式"""
         patterns = []
 

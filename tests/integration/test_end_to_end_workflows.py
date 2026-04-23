@@ -14,30 +14,30 @@ Date: 2026-04-21
 
 import asyncio
 import sys
-import pytest
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
+
+import pytest
 
 # 添加项目根目录到路径
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 # 导入统一接口
-from core.agents.base import (
+from core.framework.agents.base import (
     AgentRegistry,
     AgentRequest,
-    AgentResponse,
     AgentStatus,
-    HealthStatus,
 )
 
 # 导入测试的Agent
 try:
-    from core.agents.xiaonuo_coordinator import XiaonuoAgent
-    from core.agents.xiaona_with_legal_world import XiaonaWithLegalWorld
-    from core.agents.patent_search_agent import PatentSearchAgent
+    from core.framework.agents.xiaona_with_legal_world import XiaonaWithLegalWorld
+    from core.framework.agents.xiaonuo_coordinator import XiaonuoAgent
+
+    from core.framework.agents.patent_search_agent import PatentSearchAgent
     AGENTS_AVAILABLE = True
 except ImportError as e:
     AGENTS_AVAILABLE = False
@@ -101,7 +101,7 @@ async def initialized_agents():
 
 
 @pytest.fixture
-def sample_patent_request() -> Dict[str, Any]:
+def sample_patent_request() -> dict[str, Any]:
     """示例专利分析请求"""
     return {
         "request_id": "e2e-test-001",
@@ -119,7 +119,7 @@ def sample_patent_request() -> Dict[str, Any]:
 
 
 @pytest.fixture
-def sample_oa_request() -> Dict[str, Any]:
+def sample_oa_request() -> dict[str, Any]:
     """示例审查意见答复请求"""
     return {
         "request_id": "e2e-test-002",
@@ -257,7 +257,7 @@ class TestRetrieverAnalyzerWriterWorkflow:
 
         start_time = time.time()
         response = await xiaonuo.safe_process(request)
-        execution_time = (time.time() - start_time) * 1000
+        (time.time() - start_time) * 1000
 
         # 验证并行执行结果
         assert response.success is True
@@ -294,7 +294,7 @@ class TestCoordinationWorkflow:
         # 验证
         assert response.success is True
         assert response.data["total_count"] >= 1
-        agent_names = [a["name"] for a in response.data["agents"]]
+        agent_names = [a["name"] for a in response.data["agents"]
         assert "xiaonuo-coordinator" in agent_names or "xiaona-legal-world" in agent_names
 
     async def test_xiaonuo_platform_status(self, initialized_agents):
@@ -629,13 +629,13 @@ def print_test_results():
     print("端到端测试套件 - 执行摘要")
     print("=" * 60)
     print(f"测试时间: {datetime.now().isoformat()}")
-    print(f"测试场景:")
-    print(f"  1. 检索-分析-撰写工作流")
-    print(f"  2. 协调流程")
-    print(f"  3. 完整专利分析流程")
-    print(f"  4. Agent间协作")
-    print(f"  5. 性能和可扩展性")
-    print(f"  6. 错误处理和恢复")
+    print("测试场景:")
+    print("  1. 检索-分析-撰写工作流")
+    print("  2. 协调流程")
+    print("  3. 完整专利分析流程")
+    print("  4. Agent间协作")
+    print("  5. 性能和可扩展性")
+    print("  6. 错误处理和恢复")
     print("=" * 60)
 
 

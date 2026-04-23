@@ -124,12 +124,12 @@ class ChinesePatentModelFineTuner:
             idx1, idx2 = np.random.choice(len(texts), 2, replace=False)
             if idx1 != idx2:
                 # 确保不是来自同一个专利
-                negative_examples.append(InputExample(texts=[texts[idx1], texts[idx2]], label=0.0))
+                negative_examples.append(InputExample(texts=[texts[idx1], texts[idx2], label=0.0))
 
         logger.info(f"✅ 生成 {len(negative_examples)} 个负样本")
         return negative_examples
 
-    def prepare_validation_data(self, patents: list[dict]) -> list[tuple[str, str, float]]:
+    def prepare_validation_data(self, patents: list[dict]) -> list[tuple[str, str, float]:
         """准备验证数据"""
         validation_pairs = []
 
@@ -160,7 +160,7 @@ class ChinesePatentModelFineTuner:
         return validation_pairs
 
     def fine_tune_model(self, training_examples: list[InputExample],
-                       validation_examples: list[tuple[str, str, float]] = None,
+                       validation_examples: list[tuple[str, str, float] = None,
                        epochs: int = 3, batch_size: int = 16, warmup_steps: int = 100,
                        output_path: str = './fine_tuned_chinese_patent_model'):
         """微调模型"""

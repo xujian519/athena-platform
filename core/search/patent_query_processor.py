@@ -236,7 +236,7 @@ class PatentQueryProcessor:
             "legal_status": "{patent_id} legal_status",
         }
 
-    def process_query(self, query: str, context: dict[str, Any] | None = None) -> ProcessedQuery:
+    def process_query(self, query: str, context: Optional[dict[str, Any]] = None) -> ProcessedQuery:
         """
         处理查询
 

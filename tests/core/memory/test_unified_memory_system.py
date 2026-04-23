@@ -10,8 +10,6 @@
 - 错误处理
 """
 
-from __future__ import annotations
-
 import tempfile  # noqa: ARG001 (used in fixtures)
 from datetime import datetime
 from pathlib import Path
@@ -19,7 +17,7 @@ from unittest.mock import patch  # noqa: ARG001 (used in tests)
 
 import pytest
 
-from core.memory.unified_memory_system import (
+from core.framework.memory.unified_memory_system import (
     MemoryCategory,
     MemoryEntry,
     MemoryType,
@@ -186,7 +184,7 @@ class TestUnifiedMemorySystem:
         assert file_path.exists()
 
         # 验证文件内容
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             assert f.read() == content
 
     def test_write_project_memory(
@@ -857,3 +855,4 @@ class TestIntegrationScenarios:
 
         assert content is not None
         assert "本地PG" in content
+

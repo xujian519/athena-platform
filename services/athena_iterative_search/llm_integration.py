@@ -415,7 +415,7 @@ class QwenLLMIntegration:
 
         except Exception as e:
             logger.error(f"解析洞察失败: {e}")
-            return [response[:200]] if response else []
+            return [response[:200] if response else []
 
     def _get_from_cache(self, key: str) -> Any:
         """从缓存获取"""
@@ -484,7 +484,7 @@ class MockLLMIntegration:
                 '技术发展呈现多样化和专业化趋势',
                 '主要申请人在该领域有较强技术积累'
             ],
-            main_patents=[r.title for r in all_results[:5]],
+            main_patents=[r.title for r in all_results[:5],
             technological_trends=[
                 '技术向智能化、集成化方向发展',
                 '应用场景不断扩展',

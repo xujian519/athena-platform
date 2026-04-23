@@ -146,7 +146,7 @@ class APIKeyManager:
         logger.info("🔄 重新加载API密钥...")
         self._load_keys()
 
-    def get_engine_key(self, engine: str, index: int = 0) -> str | None:
+    def get_engine_key(self, engine: str, index: int = 0) -> Optional[str]:
         """
         获取指定引擎的特定索引的密钥
 

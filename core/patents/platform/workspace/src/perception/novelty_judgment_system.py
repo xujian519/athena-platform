@@ -473,7 +473,7 @@ class NoveltyPromptGenerator:
         }
 
     def generate_dynamic_prompt(self, patent_info: Dict[str, Any],
-                               prior_art: Optional[List[PriorArtReference] = None) -> str:
+                               prior_art: Optional[List[PriorArtReference]] = None) -> str]:
         """生成动态提示词"""
 
         # 1. 获取适用的规则

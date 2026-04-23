@@ -106,14 +106,14 @@ class FileUploadResponse(BaseModel):
 
 class FileListResponse(BaseModel):
     success: bool
-    files: List[Dict[str, Any]]
+    files: List[Dict[str, Any]
     total: int
 
 class ProcessingTaskResponse(BaseModel):
     success: bool
     task_id: str
     status: str
-    result: Optional[Dict[str, Any]] = None
+    result: Optional[Dict[str, Any] = None
     error: str | None = None
 
 # AI处理器实例

@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 class APIKeyManager:
     """API密钥管理器"""
 
-    def __init__(self, config_file: str | None = None):
+    def __init__(self, config_file: Optional[str] = None):
         """
         初始化API密钥管理器
 
@@ -91,7 +91,7 @@ class APIKeyManager:
             logger.error(f"❌ 保存配置失败: {e}")
             return False
 
-    def get_api_key(self, service: str, prefer_backup: bool = False) -> str | None:
+    def get_api_key(self, service: str, prefer_backup: bool = False) -> Optional[str]:
         """
         获取API密钥
 

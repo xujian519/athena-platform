@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """错误处理器单元测试"""
 
-import pytest
 
 
 class TestFormatErrorResponse:

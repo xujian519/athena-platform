@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 启动任务管理系统
 Start Task Management System
@@ -11,20 +10,25 @@ Start Task Management System
 版本: 1.0.0
 """
 
-import sys
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import time
 import argparse
+import sys
+import time
 from datetime import datetime, timedelta
 from pathlib import Path
+from typing import Any
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 try:
-    from core.tasks.task_scheduler import get_scheduler, TaskPriority, TaskStatus, ReminderType
-    from core.tasks.enhanced_todo_write import get_enhanced_todo, add_todo, complete_todo, get_todo_dashboard
+    from core.tasks.enhanced_todo_write import (
+        add_todo,
+        complete_todo,
+        get_enhanced_todo,
+        get_todo_dashboard,
+    )
+    from core.tasks.task_scheduler import ReminderType, TaskPriority, TaskStatus, get_scheduler
 except ImportError as e:
     print(f"❌ 导入模块失败: {e}")
     sys.exit(1)
@@ -50,18 +54,18 @@ def initialize_system() -> Any:
 
     # 初始化任务调度器
     scheduler = get_scheduler()
-    print(f"✅ 任务调度器已启动")
+    print("✅ 任务调度器已启动")
 
     # 初始化增强TodoWrite
     todo_manager = get_enhanced_todo()
-    print(f"✅ 增强TodoWrite已初始化")
+    print("✅ 增强TodoWrite已初始化")
 
     # 迁移现有任务
     print("🔄 迁移现有任务...")
 
     # 显示系统状态
     dashboard = get_todo_dashboard()
-    print(f"📊 当前任务统计:")
+    print("📊 当前任务统计:")
     print(f"   总任务数: {dashboard.get('total', 0)}")
     print(f"   已完成: {dashboard.get('completed', 0)}")
     print(f"   待处理: {dashboard.get('pending', 0)}")
@@ -135,7 +139,7 @@ def add_task_interactive(todo_manager) -> None:
 
                     scheduler_task = scheduler.create_task(
                         title=content,
-                        description=f"任务从TodoWrite创建",
+                        description="任务从TodoWrite创建",
                         priority=priority_map.get(priority, TaskPriority.NORMAL),
                         due_at=deadline_dt,
                         tags=tags
@@ -306,7 +310,7 @@ def test_reminder_system(scheduler, todo_manager) -> Any:
         )
 
         print(f"✅ 测试任务已创建: {task.title}")
-        print(f"   提醒时间: 立即")
+        print("   提醒时间: 立即")
         print(f"   截止时间: {test_time.strftime('%Y-%m-%d %H:%M:%S')}")
 
         print("📱 请检查系统通知...")

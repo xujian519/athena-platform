@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """专利数据导入器单元测试"""
 
-import pytest
 
 
 class TestPatentDataImporterBasic:

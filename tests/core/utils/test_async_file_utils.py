@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """异步文件工具单元测试"""
 
-import pytest
 
 
 class TestAsyncFileUtilsBasic:

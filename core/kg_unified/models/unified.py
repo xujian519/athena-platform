@@ -71,8 +71,8 @@ class GraphStatistics:
     backend: GraphBackend
     node_count: int = 0
     edge_count: int = 0
-    tag_types: list[str] | None = None
-    edge_types: list[str] | None = None
+    tag_types: Optional[list[str]] = None
+    edge_types: Optional[list[str]] = None
     is_available: bool = False
 
 
@@ -342,7 +342,7 @@ class UnifiedKnowledgeGraph:
         source_id: str,
         target_id: str,
         relation_type: str,
-        properties: dict[str, Any] | None = None
+        properties: Optional[dict[str, Any]] = None
     ) -> bool:
         """添加关系"""
         backend = self.get_active_backend()

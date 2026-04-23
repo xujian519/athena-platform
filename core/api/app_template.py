@@ -232,7 +232,7 @@ def success_response(data: Any = None, message: str = "操作成功") -> Any:
     return ResponseBuilder.success(data=data, message=message)
 
 
-def error_response(error: Exception, message: str | None = None) -> Any:
+def error_response(error: Exception, message: Optional[str] = None) -> Any:
     """创建错误响应的便捷函数"""
     if isinstance(error, APIError):
         return ResponseBuilder.error(error=error)

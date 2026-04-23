@@ -133,7 +133,7 @@ class RobustnessManager:
         self.fault_tolerance_manager.register_health_check("robustness_modules", self._health_check)
 
     def process_input(
-        self, input_text: str, context: dict[str, Any] | None = None
+        self, input_text: str, context: Optional[dict[str, Any]] = None
     ) -> RobustnessResult:
         """处理输入(集成所有鲁棒性功能)"""
         start_time = datetime.now()
@@ -326,7 +326,7 @@ class RobustnessManager:
                 final_status="error",
             )
 
-    def _validate_input(self, text: str, context: dict[str, Any] | None = None) -> Any:
+    def _validate_input(self, text: str, context: Optional[dict[str, Any]] = None) -> Any:
         """验证输入"""
         return self.input_validator.validate_input(text, context)
 
@@ -431,7 +431,7 @@ class RobustnessManager:
             final_status="blocked",
         )
 
-    def _get_cache_key(self, text: str, context: dict[str, Any] | None = None) -> str:
+    def _get_cache_key(self, text: str, context: Optional[dict[str, Any]] = None) -> str:
         """生成缓存键"""
         import hashlib
 
@@ -468,7 +468,7 @@ class RobustnessManager:
         )
 
     def batch_process(
-        self, inputs: list[str], context: dict[str, Any] | None = None
+        self, inputs: list[str], context: Optional[dict[str, Any]] = None
     ) -> list[RobustnessResult]:
         """批量处理"""
         return [self.process_input(text, context) for text in inputs]

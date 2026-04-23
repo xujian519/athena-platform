@@ -4,15 +4,16 @@
 测试OrchestrationModule的完整流程编排功能。
 """
 
-import pytest
-from unittest.mock import AsyncMock, patch
 from datetime import datetime
+from unittest.mock import AsyncMock, patch
 
-from core.agents.xiaona.modules.orchestration_module import (
+import pytest
+
+from core.framework.agents.xiaona.modules.orchestration_module import (
     OrchestrationModule,
-    TaskStatus,
-    TaskResult,
     OrchestrationProgress,
+    TaskResult,
+    TaskStatus,
 )
 
 

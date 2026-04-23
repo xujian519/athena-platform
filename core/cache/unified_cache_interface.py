@@ -35,7 +35,7 @@ class UnifiedCacheInterface(ABC):
         pass
 
     @abstractmethod
-    def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
+    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
         """
         设置缓存值
 
@@ -103,7 +103,7 @@ class SemanticCacheAdapter(UnifiedCacheInterface):
             logger.warning(f"⚠️ 语义缓存获取失败: {e}")
             return None
 
-    def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
+    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
         """设置缓存"""
         try:
             self.cache.set(key, value, ttl=ttl)
@@ -155,7 +155,7 @@ class MultiLevelCacheAdapter(UnifiedCacheInterface):
             logger.warning(f"⚠️ 多级缓存获取失败: {e}")
             return None
 
-    def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
+    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
         """设置缓存"""
         try:
             self.cache.set(key, value, ttl=ttl)
@@ -251,7 +251,7 @@ class UnifiedCacheManager:
 
         return result
 
-    def set(self, cache_name: str, key: str, value: Any, ttl: int | None = None) -> bool:
+    def set(self, cache_name: str, key: str, value: Any, ttl: Optional[int] = None) -> bool:
         """
         设置缓存值
 
@@ -291,7 +291,7 @@ class UnifiedCacheManager:
 
         return self.caches[cache_name].delete(key)
 
-    def clear(self, cache_name: str | None = None) -> bool:
+    def clear(self, cache_name: Optional[str] = None) -> bool:
         """
         清空缓存
 
@@ -315,7 +315,7 @@ class UnifiedCacheManager:
                     success = False
             return success
 
-    def get_stats(self, cache_name: str | None = None) -> dict[str, Any]:
+    def get_stats(self, cache_name: Optional[str] = None) -> dict[str, Any]:
         """
         获取统计信息
 

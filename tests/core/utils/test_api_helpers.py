@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """API助手工具单元测试"""
 
-import pytest
 
 
 class TestAPIHelpersBasic:

@@ -28,7 +28,7 @@ logger = setup_logging()
 class BackupManager:
     """统一备份管理器"""
 
-    def __init__(self, config_path: str | None = None):
+    def __init__(self, config_path: Optional[str] = None):
         """
         初始化备份管理器
 
@@ -161,7 +161,7 @@ class BackupManager:
             logger.error(f"❌ 文件备份失败: {e}")
             return False
 
-    def cleanup_old_backups(self, backup_type: str | None = None, keep: int | None = None) -> Any:
+    def cleanup_old_backups(self, backup_type: Optional[str] = None, keep: Optional[int] = None) -> Any:
         """
         清理旧备份
 

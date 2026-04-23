@@ -256,7 +256,7 @@ class ExpertPromptGenerator:
         self,
         expert_name: str,
         analysis_type: str,
-        context_data: dict[str, Any],        user_requirements: list[str] | None = None,
+        context_data: dict[str, Any],        user_requirements: Optional[list[str]] = None,
     ) -> GeneratedPrompt:
         """生成专家提示词"""
 
@@ -421,7 +421,7 @@ class ExpertPromptGenerator:
         self,
         expert_names: list[str],
         analysis_type: str,
-        context_data: dict[str, Any],        team_objectives: list[str] | None = None,
+        context_data: dict[str, Any],        team_objectives: Optional[list[str]] = None,
     ) -> dict[str, GeneratedPrompt]:
         """生成团队提示词"""
         team_prompts = {}
@@ -490,7 +490,7 @@ class ExpertPromptGenerator:
 
 # 便捷函数
 async def generate_patent_analysis_prompt(
-    expert_name: str, invention_description: str, user_requirements: list[str] | None = None
+    expert_name: str, invention_description: str, user_requirements: Optional[list[str]] = None
 ) -> GeneratedPrompt:
     """便捷的专利分析提示词生成函数"""
     generator = ExpertPromptGenerator()

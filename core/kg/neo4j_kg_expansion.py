@@ -44,7 +44,7 @@ class Neo4jKnowledgeGraphExpander:
 
     def __init__(
         self,
-        neo4j_config: dict[str, Any] | None = None,
+        neo4j_config: Optional[dict[str, Any]] = None,
         config: KGExpansionConfig | None = None,
     ):
         """

@@ -76,9 +76,9 @@ class AccessRequest:
     user_id: str
     resource: Resource
     action: Action
-    resource_id: str | None = None
+    resource_id: Optional[str] = None
     context: dict[str, Any] = field(default_factory=dict)
-    ip_address: str | None = None
+    ip_address: Optional[str] = None
     timestamp: datetime = field(default_factory=datetime.now)
 
 
@@ -427,7 +427,7 @@ class PolicyEngine:
 class AccessController:
     """访问控制器"""
 
-    def __init__(self, auth_manager, config: dict[str, Any] | None = None):
+    def __init__(self, auth_manager, config: Optional[dict[str, Any]] = None):
         self.auth_manager = auth_manager
         self.config = config or {}
         self.initialized = False
@@ -506,9 +506,9 @@ class AccessController:
         user_id: str,
         resource: Resource,
         action: Action,
-        resource_id: str | None = None,
-        context: dict[str, Any] | None = None,
-        ip_address: str | None = None,
+        resource_id: Optional[str] = None,
+        context: Optional[dict[str, Any]] = None,
+        ip_address: Optional[str] = None,
     ) -> AccessResult:
         """检查访问权限"""
         if not self.initialized:
@@ -626,7 +626,7 @@ class AccessController:
         resource: Resource,
         action: Action,
         effect: AccessDecision,
-        conditions: dict[str, Any] | None = None,
+        conditions: Optional[dict[str, Any]] = None,
         description: str = "",
         priority: int = 0,
     ) -> str:
@@ -651,7 +651,7 @@ class AccessController:
 
     async def get_access_logs(
         self,
-        user_id: str | None = None,
+        user_id: Optional[str] = None,
         resource: Resource | None = None,
         action: Action | None = None,
         limit: int = 100,

@@ -78,8 +78,8 @@ class TechnicalEffect:
     effect_id: str
     effect_description: str
     effect_type: str  # direct, indirect, unexpected
-    quantification: str | None = None
-    verification_method: str | None = None
+    quantification: Optional[str] = None
+    verification_method: Optional[str] = None
 
 
 @dataclass
@@ -329,7 +329,7 @@ class EnhancedLegalReasoningEngine:
         self,
         claim_text: str,
         prior_art_references: list[PriorArtReference],
-        distinguishing_features: list[str] | None = None,
+        distinguishing_features: Optional[list[str]] = None,
     ) -> InventivenessAnalysisResult:
         """
         创造性分析 - 重点改进技术效果分析和启示判断

@@ -134,8 +134,8 @@ class EnhancedMemoryManager:
         content: Any,
         memory_type: MemoryType,
         priority: MemoryPriority = MemoryPriority.MEDIUM,
-        tags: list[str] | None = None,
-        metadata: dict[str, Any] | None = None,
+        tags: Optional[list[str]] = None,
+        metadata: Optional[dict[str, Any]] = None,
         expiration: datetime | None = None,
         embedding: list[float] | None = None,
         source: str = ""
@@ -364,7 +364,7 @@ class EnhancedMemoryManager:
         query: str,
         memory_type: MemoryType | None = None,
         limit: int = 10,
-        tags: list[str] | None = None
+        tags: Optional[list[str]] = None
     ) -> list[MemoryItem]:
         """搜索记忆"""
         try:

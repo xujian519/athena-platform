@@ -30,10 +30,10 @@ class RedisCache:
 
     def __init__(
         self,
-        host: str | None = None,
-        port: int | None = None,
-        db: int | None = None,
-        password: str | None = None,
+        host: Optional[str] = None,
+        port: Optional[int] = None,
+        db: Optional[int] = None,
+        password: Optional[str] = None,
         default_ttl: int = 300,
         use_config: bool = True,
         **kwargs,
@@ -76,7 +76,7 @@ class RedisCache:
             **kwargs
         )
 
-    def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
+    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
         """
         设置缓存值
 
@@ -251,7 +251,7 @@ class RedisCache:
         except Exception:
             return -2
 
-    def increment(self, key: str, amount: int = 1) -> int | None:
+    def increment(self, key: str, amount: int = 1) -> Optional[int]:
         """
         原子递增
 
@@ -267,7 +267,7 @@ class RedisCache:
         except Exception:
             return None
 
-    def decrement(self, key: str, amount: int = 1) -> int | None:
+    def decrement(self, key: str, amount: int = 1) -> Optional[int]:
         """
         原子递减
 

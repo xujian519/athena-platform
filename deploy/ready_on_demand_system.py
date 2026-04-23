@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 立即可用 - 按需启动智能协作系统
 Ready-to-Use On-Demand Intelligent Collaboration System
@@ -13,16 +12,13 @@ Ready-to-Use On-Demand Intelligent Collaboration System
 """
 
 import asyncio
-import json
 import logging
 import time
-import sys
-import os
-from datetime import datetime, timedelta
-from typing import Dict, Any, List, Optional, Callable
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
 from pathlib import Path
+from typing import Any
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -43,7 +39,7 @@ class AgentConfig:
     memory_mb: int
     startup_time: float  # 秒
     idle_timeout: int   # 空闲超时秒数，0表示永不停止
-    capabilities: List[str]
+    capabilities: list[str]
     auto_stop: bool = True
 
 @dataclass
@@ -63,9 +59,9 @@ class ReadyOnDemandSystem:
         """初始化系统"""
         self.project_root = Path(__file__).parent.parent.parent
         self.agents = self._init_agents()
-        self.running_processes: Dict[str, subprocess.Popen] = {}
+        self.running_processes: dict[str, subprocess.Popen] = {}
         self.task_queue = asyncio.Queue()
-        self.last_activity: Dict[str, datetime] = {}
+        self.last_activity: dict[str, datetime] = {}
         self.task_count = 0
 
         # 统计信息
@@ -86,7 +82,7 @@ class ReadyOnDemandSystem:
         logger.info("🎭 按需启动智能协作系统已启动")
         logger.info("👑 小诺正在启动...")
 
-    def _init_agents(self) -> Dict[AgentType, AgentConfig]:
+    def _init_agents(self) -> dict[AgentType, AgentConfig]:
         """初始化智能体配置"""
         return {
             AgentType.XIAONUO: AgentConfig(
@@ -134,7 +130,7 @@ class ReadyOnDemandSystem:
         self.last_activity['xiaonuo'] = datetime.now()
         logger.info("✅ 小诺已启动并就绪")
 
-    async def submit_task(self, task_request: TaskRequest) -> Dict[str, Any]:
+    async def submit_task(self, task_request: TaskRequest) -> dict[str, Any]:
         """
         提交任务请求
 
@@ -237,7 +233,7 @@ class ReadyOnDemandSystem:
 
     async def _process_task(self, task_request: TaskRequest, target_agent: AgentType):
         """处理任务"""
-        agent_config = self.agents[target_agent]
+        self.agents[target_agent]
 
         logger.info(f"🔄 {target_agent.value}正在处理任务 {task_request.task_id}")
 
@@ -246,7 +242,7 @@ class ReadyOnDemandSystem:
         await asyncio.sleep(processing_time / 5)  # 加速演示
 
         # 生成响应
-        response = await self._generate_response(task_request, target_agent)
+        await self._generate_response(task_request, target_agent)
 
         logger.info(f"✅ 任务 {task_request.task_id} 处理完成")
 
@@ -349,7 +345,7 @@ class ReadyOnDemandSystem:
                 logger.error(f"空闲监控错误: {e}")
                 await asyncio.sleep(10)
 
-    def get_running_agents(self) -> List[str]:
+    def get_running_agents(self) -> list[str]:
         """获取运行中的智能体列表"""
         running = []
         current_time = datetime.now()
@@ -374,14 +370,14 @@ class ReadyOnDemandSystem:
         running_agents = self.get_running_agents()
 
         for agent_name in running_agents:
-            for agent_type, config in self.agents.items():
+            for _agent_type, config in self.agents.items():
                 if config.name == agent_name:
                     total_memory += config.memory_mb
                     break
 
         return total_memory
 
-    def get_system_status(self) -> Dict[str, Any]:
+    def get_system_status(self) -> dict[str, Any]:
         """获取系统状态"""
         running_agents = self.get_running_agents()
         total_agents = len(self.agents)
@@ -522,19 +518,19 @@ async def quick_start_example():
     # 方式1: 使用便捷接口
     print("\n📝 方式1: 使用便捷接口")
     response1 = await ai_system.chat("你好，介绍一下系统功能")
-    print(f"用户: 你好，介绍一下系统功能")
+    print("用户: 你好，介绍一下系统功能")
     print(f"AI: {response1}")
 
     # 方式2: 使用专业服务
     print("\n📜 方式2: 专利分析服务")
     response2 = await ai_system.patent_analysis("请分析这个专利权利要求的质量")
-    print(f"用户: 请分析这个专利权利要求的质量")
+    print("用户: 请分析这个专利权利要求的质量")
     print(f"小娜: {response2}")
 
     # 方式3: IP管理服务
     print("\n📂 方式3: IP管理服务")
     response3 = await ai_system.ip_management("查询案卷CASE_001的状态")
-    print(f"用户: 查询案卷CASE_001的状态")
+    print("用户: 查询案卷CASE_001的状态")
     print(f"云熙: {response3}")
 
     # 查看系统状态
@@ -551,7 +547,7 @@ async def quick_start_example():
 
     # 再次查看状态
     final_status = ai_system.get_status()
-    print(f"\n📊 最终状态:")
+    print("\n📊 最终状态:")
     print(f"   运行智能体: {final_status['running_agents']}/{final_status['total_agents']}")
     print(f"   内存使用: {final_status['memory_usage_mb']} MB")
     print(f"   节省内存: {final_status['memory_saved_mb']} MB")

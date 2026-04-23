@@ -47,7 +47,7 @@ class UncertaintyQuantifier:
     def quantify(
         self,
         claim: str,
-        evidence: list[str] | None = None,
+        evidence: Optional[list[str]] = None,
         information_completeness: float = 1.0,
     ) -> Confidence:
         """
@@ -163,7 +163,7 @@ class PropositionalResponse:
         self.evidence: list[str] = []
 
     def build_response(
-        self, claim: str, evidence: list[str] | None = None, completeness: float = 1.0
+        self, claim: str, evidence: Optional[list[str]] = None, completeness: float = 1.0
     ) -> str:
         """
         构建命题式响应

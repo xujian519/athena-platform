@@ -120,7 +120,7 @@ class SuperThinkingIntentEngine:
     async def recognize_with_super_thinking(
         self,
         text: str,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
         force_super_thinking: bool = False,
     ) -> EnhancedIntentResult:
         """
@@ -738,7 +738,7 @@ super_thinking_intent_engine = SuperThinkingIntentEngine()
 
 # 导出的便捷函数
 async def recognize_with_super_thinking(
-    text: str, context: dict[str, Any] | None = None, force_super_thinking: bool = False
+    text: str, context: Optional[dict[str, Any]] = None, force_super_thinking: bool = False
 ) -> EnhancedIntentResult:
     """便捷函数:使用超级思维链识别意图"""
     return await super_thinking_intent_engine.recognize_with_super_thinking(

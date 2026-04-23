@@ -64,7 +64,7 @@ class ErrorInfo:
     message: str
     timestamp: datetime
     context: dict[str, Any] = field(default_factory=dict)
-    stack_trace: str | None = None
+    stack_trace: Optional[str] = None
     recovery_attempts: int = 0
     max_recovery_attempts: int = 3
     resolved: bool = False
@@ -160,7 +160,7 @@ class ErrorHandler:
             self.error_handlers[category] = []
         self.error_handlers[category].append(handler)
 
-    def handle_error(self, error: Exception, context: dict[str, Any] | None = None) -> ErrorInfo:
+    def handle_error(self, error: Exception, context: Optional[dict[str, Any]] = None) -> ErrorInfo:
         """处理错误"""
         if context is None:
             context = {}
@@ -383,7 +383,7 @@ async def safe_execute_async(
     func: Callable,
     fallback_func: Callable | None = None,
     error_handler: Callable | None = None,
-    timeout: float | None = None,
+    timeout: Optional[float] = None,
     *args,
     **kwargs,
 ):

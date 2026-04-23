@@ -109,7 +109,7 @@ class ToolKnowledgeGraph:
         self.relationships: dict[str, list[ToolRelationship]] = defaultdict(list)
 
         # 能力索引
-        self.capability_index: dict[CapabilityType, dict[str, set[str]]] = defaultdict(
+        self.capability_index: dict[CapabilityType, dict[str, set[str]] = defaultdict(
             lambda: defaultdict(set)
         )
 
@@ -249,7 +249,7 @@ class ToolKnowledgeGraph:
         self,
         task_description: str,
         required_capabilities: list[tuple[CapabilityType, str]],
-        exclude: list[str] | None = None,
+        exclude: Optional[list[str]] = None,
         top_k: int = 5,
     ) -> list[tuple[str, float]]:
         """
@@ -307,7 +307,7 @@ class ToolKnowledgeGraph:
 
         return sorted_tools[:top_k]
 
-    async def get_tool_path(self, start_tool: str, end_tool: str) -> list[str | None]:
+    async def get_tool_path(self, start_tool: str, end_tool: str) -> Optional[list[str]]:
         """
         获取工具路径(BFS)
 

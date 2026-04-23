@@ -67,7 +67,7 @@ class PatentEvaluationResult:
     strengths: list[str]
     weaknesses: list[str]
     recommendations: list[str]
-    estimated_value: float | None = None
+    estimated_value: Optional[float] = None
     confidence_level: float = 0.0
     created_at: datetime = field(default_factory=datetime.now)
 
@@ -464,7 +464,7 @@ class PatentEvaluator:
 
     async def _estimate_patent_value(
         self, patent_data: dict[str, Any], overall_score: float
-    ) -> float | None:
+    ) -> Optional[float]:
         """估算专利价值"""
         try:
             # 简化的价值估算模型

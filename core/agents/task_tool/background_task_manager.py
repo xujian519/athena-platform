@@ -41,8 +41,8 @@ class BackgroundTaskManager:
         self,
         func: Callable,
         args: tuple[Any, ...] | None = None,
-        kwargs: dict[str, Any] | None = None,
-        agent_id: str | None = None,
+        kwargs: Optional[dict[str, Any]] = None,
+        agent_id: Optional[str] = None,
         input_data: TaskInput | None = None,
     ) -> BackgroundTask:
         """提交后台任务
@@ -142,7 +142,7 @@ class BackgroundTaskManager:
             return self._tasks.get(task_id)
 
     def wait_get_task(
-        self, task_id: str, timeout: float | None = None
+        self, task_id: str, timeout: Optional[float] = None
     ) -> BackgroundTask | None:
         """等待任务完成并返回结果
 

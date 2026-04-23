@@ -75,8 +75,8 @@ class ToolInfo:
     priority: ToolPriority  # 优先级
     description: str = ""  # 描述
     version: str = "1.0.0"  # 版本
-    dependencies: list[str] | None = None  # 依赖
-    metadata: dict[str, Any] | None = None  # 元数据
+    dependencies: Optional[list[str]] = None  # 依赖
+    metadata: Optional[dict[str, Any]] = None  # 元数据
 
     def __post_init__(self):
         if self.dependencies is None:

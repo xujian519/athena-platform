@@ -3,46 +3,46 @@
 统一异常定义单元测试
 """
 
-import pytest
 from datetime import datetime
 
+import pytest
 from core.errors.exceptions import (
+    AthenaError,
     # 基础异常
     AthenaException,
-    AthenaError,
-    # 文件异常
-    FileException,
-    FileUploadException,
-    FileProcessingException,
-    FileNotFoundException,
-    FileValidationException,
-    FileSizeException,
-    FileTypeException,
-    # 配置异常
-    ConfigurationException,
-    MissingConfigException,
-    InvalidConfigException,
+    AuthenticationException,
+    AuthorizationException,
+    # 业务异常
+    BusinessException,
     # 缓存异常
     CacheException,
     CacheMissException,
+    # 配置异常
+    ConfigurationException,
+    ConnectionException,
+    DatabaseException,
+    DuplicateResourceException,
+    # 文件异常
+    FileException,
+    FileNotFoundException,
+    FileProcessingException,
+    FileSizeException,
+    FileTypeException,
+    FileUploadException,
+    FileValidationException,
+    InvalidConfigException,
+    InvalidFormatException,
+    MissingConfigException,
     # 网络异常
     NetworkException,
-    AuthenticationException,
-    AuthorizationException,
+    OperationNotAllowedException,
     RequestTimeoutException,
+    RequiredFieldException,
+    ResourceNotFoundException,
     # 存储异常
     StorageException,
-    DatabaseException,
-    ConnectionException,
     # 验证异常
     ValidationException,
-    RequiredFieldException,
-    InvalidFormatException,
-    # 业务异常
-    BusinessException,
-    ResourceNotFoundException,
-    DuplicateResourceException,
-    OperationNotAllowedException,
 )
 
 

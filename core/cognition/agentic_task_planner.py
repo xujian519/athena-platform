@@ -335,7 +335,7 @@ class AgenticTaskPlanner:
         else:
             return {"type": "general_task", "complexity": "medium"}
 
-    def _select_template(self, goal_analysis: dict[str, Any]) -> str | None:
+    def _select_template(self, goal_analysis: dict[str, Any]) -> Optional[str]:
         """选择执行模板"""
         goal_type = goal_analysis["type"]
         return self.execution_templates.get(goal_type)

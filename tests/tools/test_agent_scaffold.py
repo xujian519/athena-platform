@@ -8,16 +8,13 @@ Agent脚手架工具测试
 版本: 1.0.0
 """
 
-import os
-import shutil
+# 添加tools目录到路径
+import sys
 import tempfile
 from pathlib import Path
-from unittest.mock import Mock, patch
 
 import pytest
 
-# 添加tools目录到路径
-import sys
 TOOLS_DIR = Path(__file__).parent.parent.parent / "tools"
 sys.path.insert(0, str(TOOLS_DIR))
 
@@ -25,7 +22,6 @@ from create_agent import (
     AgentScaffoldTool,
     Colors,
 )
-
 
 # ==================== 固定装置 ====================
 
@@ -303,7 +299,7 @@ class TestAgentValidation:
         agent_code = '''
 """Test Agent"""
 from typing import Dict, Any
-from core.agents.xiaona.base_component import (
+from core.framework.agents.xiaona.base_component import (
     BaseXiaonaComponent,
     AgentCapability,
     AgentExecutionContext,
@@ -338,7 +334,7 @@ class TestValidAgent(BaseXiaonaComponent):
         agent_file.write_text(agent_code, encoding="utf-8")
 
         result = scaffold_tool.validate_agent(agent_file)
-        assert result == True
+        assert result
 
     def test_validate_missing_import(self, scaffold_tool, temp_dir):
         """测试验证缺少导入的Agent"""
@@ -352,12 +348,12 @@ class InvalidAgent:
         agent_file.write_text(agent_code, encoding="utf-8")
 
         result = scaffold_tool.validate_agent(agent_file)
-        assert result == False
+        assert not result
 
     def test_validate_nonexistent_file(self, scaffold_tool):
         """测试验证不存在的文件"""
         result = scaffold_tool.validate_agent(Path("/nonexistent/file.py"))
-        assert result == False
+        assert not result
 
 
 # ==================== 模板测试 ====================

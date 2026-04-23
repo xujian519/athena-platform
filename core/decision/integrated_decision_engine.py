@@ -173,7 +173,7 @@ class IntegratedDecisionEngine:
         task_id: str,
         task_description: str,
         agent_opinions: list[AgentOpinion],
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> Decision:
         """
         做出综合集成决策
@@ -519,7 +519,7 @@ async def make_integrated_decision(
     task_id: str,
     task_description: str,
     agent_opinions: list[AgentOpinion],
-    context: dict[str, Any] | None = None,
+    context: Optional[dict[str, Any]] = None,
 ) -> Decision:
     """便捷函数:做出综合集成决策"""
     engine = get_decision_engine()

@@ -186,7 +186,7 @@ class BaseIntentEngine(ABC):
     engine_version: str = "1.0.0"
     supported_intents: set[IntentType] = {IntentType.UNKNOWN}
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化引擎
 
@@ -210,7 +210,7 @@ class BaseIntentEngine(ABC):
         pass
 
     @abstractmethod
-    def recognize_intent(self, text: str, context: dict[str, Any] | None = None) -> IntentResult:
+    def recognize_intent(self, text: str, context: Optional[dict[str, Any]] = None) -> IntentResult:
         """
         识别意图(核心方法,子类必须实现)
 
@@ -228,7 +228,7 @@ class BaseIntentEngine(ABC):
         pass
 
     async def recognize_intent_async(
-        self, text: str, context: dict[str, Any]  | None = None, user_id: str | None = None
+        self, text: str, context: dict[str, Any]  | None = None, user_id: Optional[str] = None
     ) -> IntentResult:
         """
         异步识别意图(默认实现,子类可重写优化)
@@ -253,7 +253,7 @@ class BaseIntentEngine(ABC):
         return result
 
     def recognize_batch(
-        self, texts: list[str], context: dict[str, Any] | None = None
+        self, texts: list[str], context: Optional[dict[str, Any]] = None
     ) -> list[IntentResult]:
         """
         批量识别意图(默认实现,子类可重写优化)
@@ -461,7 +461,7 @@ class IntentEngineFactory:
         cls._registered_engines[engine_type] = engine_class
 
     @classmethod
-    def create(cls, engine_type: str | None = None, config: dict[str, Any] | None = None) -> BaseIntentEngine:
+    def create(cls, engine_type: Optional[str] = None, config: Optional[dict[str, Any]] = None) -> BaseIntentEngine:
         """
         创建引擎实例
 

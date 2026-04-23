@@ -12,9 +12,10 @@ import asyncio
 import json
 import logging
 import sys
-from pathlib import Path
-from typing import Any, Dict, List
 from datetime import datetime
+from pathlib import Path
+from typing import Any
+
 import httpx
 
 # 配置日志
@@ -121,7 +122,7 @@ class GLMPatentAnalyzer:
             logger.error(f"❌ 初始化失败: {e}", exc_info=True)
             return False
 
-    def find_text_files(self) -> List[Path]:
+    def find_text_files(self) -> list[Path]:
         """查找所有OCR生成的TXT文件"""
         logger.info(f"🔍 扫描OCR输出目录: {self.ocr_output_dir}")
 
@@ -134,7 +135,7 @@ class GLMPatentAnalyzer:
 
         return sorted(txt_files)
 
-    async def analyze_single_patent(self, txt_path: Path) -> Dict[str, Any]:
+    async def analyze_single_patent(self, txt_path: Path) -> dict[str, Any]:
         """
         分析单个专利文件
 
@@ -302,7 +303,7 @@ class GLMPatentAnalyzer:
                 "analysis_time": asyncio.get_event_loop().time() - file_start_time
             }
 
-    async def analyze_batch(self, txt_files: List[Path]) -> Dict[str, Any]:
+    async def analyze_batch(self, txt_files: list[Path]) -> dict[str, Any]:
         """
         批量分析专利文件（顺序执行）
 
@@ -349,7 +350,7 @@ class GLMPatentAnalyzer:
             "stats": self.stats
         }
 
-    def save_intermediate_results(self, results: List[Dict[str, Any]]):
+    def save_intermediate_results(self, results: list[dict[str, Any]):
         """保存中间结果"""
         output_file = self.analysis_output_dir / f"中间结果_GLM_{len(results)}个文件.json"
         output_file.write_text(
@@ -357,7 +358,7 @@ class GLMPatentAnalyzer:
             encoding="utf-8"
         )
 
-    def save_final_results(self, batch_result: Dict[str, Any]):
+    def save_final_results(self, batch_result: dict[str, Any]):
         """保存最终结果"""
         # 保存JSON结果
         output_json = self.analysis_output_dir / "深度技术分析完整结果_GLM.json"
@@ -369,7 +370,7 @@ class GLMPatentAnalyzer:
         # 生成汇总报告
         self.generate_summary_report(batch_result)
 
-    def generate_summary_report(self, batch_result: Dict[str, Any]):
+    def generate_summary_report(self, batch_result: dict[str, Any]):
         """生成汇总报告"""
 
         results = batch_result["results"]

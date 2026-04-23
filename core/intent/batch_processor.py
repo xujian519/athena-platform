@@ -106,7 +106,7 @@ class BatchItem:
 
     text: str
     callback: Callable[..., Any] | None = None
-    context: dict[str, Any] | None = None
+    context: Optional[dict[str, Any]] = None
     timestamp: float = 0.0
     text_length: int = 0
     estimated_complexity: float = 1.0
@@ -198,7 +198,7 @@ class DynamicBatchProcessor:
         self,
         text: str,
         callback: Callable[..., Any] | None = None,
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
     ) -> None:
         """
         提交单个文本到批处理队列

@@ -3,17 +3,16 @@
 时间处理工具模块单元测试
 """
 
-import pytest
 from datetime import datetime, timedelta
 
 from core.utils.time_utils import (
-    now_str,
-    now_iso,
-    parse_time,
-    add_seconds,
-    add_minutes,
-    add_hours,
     add_days,
+    add_hours,
+    add_minutes,
+    add_seconds,
+    now_iso,
+    now_str,
+    parse_time,
 )
 
 
@@ -249,7 +248,7 @@ class TestIntegration:
     def test_calculation_chain(self):
         """测试计算链"""
         # 当前时间
-        base = datetime.now()
+        datetime.now()
 
         # 添加各种时间
         t1 = add_seconds(30)

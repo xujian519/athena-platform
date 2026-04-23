@@ -183,7 +183,7 @@ class OnlineLearningEngine:
             return []
 
     async def adapt_to_user_feedback(
-        self, user_id: str, feedback: dict[str, Any], context: dict[str, Any] | None = None
+        self, user_id: str, feedback: dict[str, Any], context: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """
         适应用户反馈

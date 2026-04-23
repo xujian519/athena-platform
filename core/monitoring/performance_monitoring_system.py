@@ -198,7 +198,7 @@ class PerformanceMonitoringSystem:
         category: MetricCategory,
         unit: str = "",
         labels: dict[str, str] | None = None,
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ):
         """采集指标"""
         metric = MetricData(

@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 import uvicorn
 from fastapi import FastAPI, HTTPException
 
-from core.database.unified_connection import get_postgres_pool
+from core.infrastructure.database.unified_connection import get_postgres_pool
 
 logger = logging.getLogger(__name__)
 
@@ -162,7 +162,7 @@ async def get_overall_trends(years: int = 5) -> dict:
         # 按IPC分类组织数据
         ipc_data = defaultdict(list)
         for row in top_ipc_trends:
-            ipc_data[row['ipc_main_class']].append({
+            ipc_data[row['ipc_main_class'].append({
                 "year": int(row['year']),
                 "count": row['count']
             })

@@ -7,11 +7,9 @@
 2. 确保所有使用Optional的文件都正确导入了Optional
 """
 
-import os
 import re
 import sys
 from pathlib import Path
-from typing import Set, Tuple
 
 # 需要跳过的目录
 SKIP_DIRS = {
@@ -48,13 +46,13 @@ def should_skip_dir(path: Path) -> bool:
     return False
 
 
-def fix_typing_in_file(file_path: Path) -> Tuple[bool, int, str]:
+def fix_typing_in_file(file_path: Path) -> tuple[bool, int, str]:
     """修复单个文件的类型注解问题
 
     返回: (是否修改, 修复数量, 详情)
     """
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
     except Exception as e:
         return False, 0, f"读取失败: {e}"
@@ -243,7 +241,7 @@ def main():
     stats = scan_and_fix(root_path, dry_run=args.dry_run)
 
     print("=" * 80)
-    print(f"📊 统计信息:")
+    print("📊 统计信息:")
     print(f"  - 总文件数: {stats['total_files']}")
     print(f"  - 修复文件: {stats['fixed_files']}")
     print(f"  - 跳过文件: {stats['skipped_files']}")

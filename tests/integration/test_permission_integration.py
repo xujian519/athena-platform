@@ -5,7 +5,6 @@
 作者: Athena平台团队
 创建时间: 2026-04-20
 """
-from __future__ import annotations
 
 import asyncio
 import logging
@@ -73,10 +72,10 @@ async def test_tool_call_integration():
     """测试工具调用集成"""
     print("\n=== 测试工具调用集成 ===")
 
+    from core.tools.permissions_v2.modes import PermissionMode
     from core.tools.permissions_v2.tool_call_integration import (
         create_tool_manager_with_permissions,
     )
-    from core.tools.permissions_v2.modes import PermissionMode
 
     # 创建带权限检查的工具管理器
     tool_manager = create_tool_manager_with_permissions(
@@ -113,3 +112,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+

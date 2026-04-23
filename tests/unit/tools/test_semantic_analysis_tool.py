@@ -155,7 +155,7 @@ def test_semantic_analysis_handler():
         print(f"✅ 正确捕获错误: {result['error']}")
         print(f"📋 错误代码: {result['code']}")
     else:
-        print(f"❌ 应该返回错误但没有")
+        print("❌ 应该返回错误但没有")
         return False
 
     return True
@@ -190,7 +190,7 @@ def test_tool_registration():
         return False
 
     print("✅ 工具已在注册表中找到")
-    print(f"📊 工具信息:")
+    print("📊 工具信息:")
     print(f"  - ID: {tool.tool_id}")
     print(f"  - 名称: {tool.name}")
     print(f"  - 分类: {tool.category.value}")

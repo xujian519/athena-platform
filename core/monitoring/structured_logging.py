@@ -153,7 +153,7 @@ class StructuredLogger:
             handler.setFormatter(StructuredFormatter(service_name=service_name))
             self.logger.addHandler(handler)
 
-    def _add_extra_fields(self, extra: dict[str, Any]) -> dict[str, Any] | None:
+    def _add_extra_fields(self, extra: dict[str, Any]) -> Optional[dict[str, Any]]:
         """添加额外字段到日志记录"""
         if not extra:
             return None
@@ -231,7 +231,7 @@ def get_structured_logger(name: str, level: int = logging.INFO) -> StructuredLog
 
 
 @contextmanager
-def request_context(request_id: str | None = None):
+def request_context(request_id: Optional[str] = None):
     """
     请求上下文管理器
 

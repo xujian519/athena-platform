@@ -31,9 +31,9 @@ class InventionUnderstandingBuilder:
 
     async def build_understanding(
         self,
-        disclosure_data: Dict[str, Any],
-        features: List[TechnicalFeature],
-        pfe_tuples: List[ProblemFeatureEffect]
+        disclosure_data: dict[str, Any],
+        features: list[TechnicalFeature],
+        pfe_tuples: list[ProblemFeatureEffect]
     ) -> InventionUnderstanding:
         """
         构建发明理解结果
@@ -119,7 +119,7 @@ class InventionUnderstandingBuilder:
     def _determine_invention_type(
         self,
         text: str,
-        features: List[TechnicalFeature]
+        features: list[TechnicalFeature]
     ) -> InventionType:
         """
         确定发明类型
@@ -156,7 +156,7 @@ class InventionUnderstandingBuilder:
             # 默认为产品
             return InventionType.PRODUCT
 
-    def _extract_title(self, sections: Dict[str, str]) -> str:
+    def _extract_title(self, sections: dict[str, str]) -> str:
         """提取发明名称"""
         # 从"发明名称"章节提取
         if "发明名称" in sections and sections["发明名称"]:
@@ -165,7 +165,7 @@ class InventionUnderstandingBuilder:
         # 从文本开头提取
         return "未命名发明"
 
-    def _extract_technical_field(self, sections: Dict[str, str]) -> str:
+    def _extract_technical_field(self, sections: dict[str, str]) -> str:
         """提取技术领域"""
         if "技术领域" in sections and sections["技术领域"]:
             return sections["技术领域"].strip()
@@ -174,8 +174,8 @@ class InventionUnderstandingBuilder:
 
     def _extract_core_innovation(
         self,
-        sections: Dict[str, str],
-        features: List[TechnicalFeature]
+        sections: dict[str, str],
+        features: list[TechnicalFeature]
     ) -> str:
         """提取核心创新点"""
         # 从技术方案提取
@@ -193,8 +193,8 @@ class InventionUnderstandingBuilder:
 
     def _extract_technical_problem(
         self,
-        sections: Dict[str, str],
-        pfe_tuples: List[ProblemFeatureEffect]
+        sections: dict[str, str],
+        pfe_tuples: list[ProblemFeatureEffect]
     ) -> str:
         """提取技术问题"""
         # 优先从三元组提取
@@ -209,8 +209,8 @@ class InventionUnderstandingBuilder:
 
     def _extract_technical_solution(
         self,
-        sections: Dict[str, str],
-        features: List[TechnicalFeature]
+        sections: dict[str, str],
+        features: list[TechnicalFeature]
     ) -> str:
         """提取技术方案"""
         # 从章节提取
@@ -226,9 +226,9 @@ class InventionUnderstandingBuilder:
 
     def _extract_technical_effects(
         self,
-        sections: Dict[str, str],
-        pfe_tuples: List[ProblemFeatureEffect]
-    ) -> List[str]:
+        sections: dict[str, str],
+        pfe_tuples: list[ProblemFeatureEffect]
+    ) -> list[str]:
         """提取技术效果"""
         effects = []
 
@@ -249,9 +249,9 @@ class InventionUnderstandingBuilder:
 
     def _calculate_confidence(
         self,
-        sections: Dict[str, str],
-        features: List[TechnicalFeature],
-        pfe_tuples: List[ProblemFeatureEffect]
+        sections: dict[str, str],
+        features: list[TechnicalFeature],
+        pfe_tuples: list[ProblemFeatureEffect]
     ) -> float:
         """计算置信度"""
         confidence = 0.0

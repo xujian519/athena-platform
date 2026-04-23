@@ -144,7 +144,7 @@ def decode_access_token(token: str) -> dict:
 # ========================================================================
 
 
-def verify_api_key(api_key: str) -> str | None:
+def verify_api_key(api_key: str) -> Optional[str]:
     """
     验证API密钥
 
@@ -165,7 +165,7 @@ def verify_api_key(api_key: str) -> str | None:
     return valid_keys.get(key_to_check)
 
 
-def generate_api_key(user_id: str, expire_days: int | None = None) -> str:
+def generate_api_key(user_id: str, expire_days: Optional[int] = None) -> str:
     """
     生成API密钥
 
@@ -243,7 +243,7 @@ async def get_current_user(
 async def get_current_user_optional(
     credentials: HTTPAuthorizationCredentials = Security(security),
     api_key: str = Security(API_KEY_HEADER),
-) -> str | None:
+) -> Optional[str]:
     """
     获取当前用户(可选)
 
@@ -317,7 +317,7 @@ class RateLimiter:
 
         self._last_cleanup = now
 
-    def check_rate_limit(self, user_id: str) -> tuple[bool, str | None]:
+    def check_rate_limit(self, user_id: str) -> Optional[tuple[bool, str]]:
         """
         检查速率限制
 
@@ -399,7 +399,7 @@ async def check_rate_limit_depends(user_id: str = Security(get_current_user)):
 # ========================================================================
 
 
-def require_auth(permission: str | None = None) -> Any:
+def require_auth(permission: Optional[str] = None) -> Any:
     """
     需要认证的装饰器
 

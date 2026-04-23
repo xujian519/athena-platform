@@ -163,9 +163,9 @@ class DecisionResult:
     executed_at: datetime | None = None
 
     # 结果追踪
-    actual_outcomes: dict[str, Any] | None = None
+    actual_outcomes: Optional[dict[str, Any]] = None
     lessons_learned: list[str] = field(default_factory=list)
-    emotional_satisfaction: float | None = None
+    emotional_satisfaction: Optional[float] = None
 
 
 class DecisionStrategy(ABC):

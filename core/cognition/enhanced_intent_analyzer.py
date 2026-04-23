@@ -152,7 +152,7 @@ class EnhancedIntent:
     created_at: datetime = field(default_factory=datetime.now)
 
     # 建议的处理方式
-    suggested_agent: str | None = None
+    suggested_agent: Optional[str] = None
     required_documents: list[DocumentType] = field(default_factory=list)
     required_layers: list[LayerType] = field(default_factory=list)
 
@@ -342,7 +342,7 @@ class EnhancedIntentAnalyzer:
     async def analyze(
         self,
         user_input: str,
-        context: dict[str, Any] | None = None
+        context: Optional[dict[str, Any]] = None
     ) -> EnhancedIntent:
         """
         分析用户意图
@@ -583,7 +583,7 @@ class EnhancedIntentAnalyzer:
         self,
         intent_type: EnhancedIntentType,
         scenario_context: ScenarioContext | None = None
-    ) -> str | None:
+    ) -> Optional[str]:
         """建议处理智能体"""
         # 专利相关任务 -> 小娜
         if intent_type in [
@@ -673,7 +673,7 @@ class EnhancedIntentAnalyzer:
 
 async def analyze_intent_enhanced(
     user_input: str,
-    context: dict[str, Any] | None = None
+    context: Optional[dict[str, Any]] = None
 ) -> EnhancedIntent:
     """
     便捷的增强意图分析函数

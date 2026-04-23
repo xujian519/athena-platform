@@ -11,13 +11,11 @@
 日期：2026-04-23
 """
 
-import json
 import asyncio
-from typing import Dict, List
-from datetime import datetime
-from pathlib import Path
 import os
 import sys
+from datetime import datetime
+from pathlib import Path
 
 # 设置路径
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -39,7 +37,7 @@ class LocalPatentDebateAgent:
         self.client = client
         self.model = model
         self.system_prompt = system_prompt
-        self.debate_history: List[Dict] = []
+        self.debate_history: list[dict] = []
 
     async def generate_response(self, opponent_argument: str, round_num: int) -> str:
         """根据对方发言生成回应（优化版，适合本地模型）"""
@@ -101,7 +99,7 @@ class LocalPatentDebateAgent:
 
             return content
 
-        except asyncio.TimeoutError:
+        except TimeoutError:
             return f"[超时]：本地模型响应时间过长（超过180秒）。\n\n请基于对方观点：{opponent_argument[:200]}..."
         except Exception as e:
             return f"[生成失败]：{str(e)}\n\n请基于对方观点：{opponent_argument[:200]}..."
@@ -149,7 +147,7 @@ class LocalPatentDebateManager:
             self.model
         )
 
-        self.debate_log: List[Dict] = []
+        self.debate_log: list[dict] = []
 
     def _create_requester_prompt(self) -> str:
         """创建无效请求人提示词"""
@@ -178,12 +176,12 @@ class LocalPatentDebateManager:
 
 你的任务：证明权利要求1-10具备创造性。强调技术路线差异，指出对方论证错误。"""
 
-    async def conduct_debate(self, rounds: int = 5) -> Dict:
+    async def conduct_debate(self, rounds: int = 5) -> dict:
         """进行多轮辩论"""
 
         print(f"\n{'='*80}")
-        print(f"专利无效宣告本地模型辩论开始")
-        print(f"专利号：201921401279.9")
+        print("专利无效宣告本地模型辩论开始")
+        print("专利号：201921401279.9")
         print(f"辩论轮次：{rounds}轮（共{2*rounds}场）")
         print(f"{'='*80}\n")
 
@@ -248,8 +246,8 @@ class LocalPatentDebateManager:
 
         return {
             "total_rounds": rounds,
-            "requester_count": len([x for x in self.debate_log if "请求人" in x["speaker"]]),
-            "patentee_count": len([x for x in self.debate_log if "专利权人" in x["speaker"]]),
+            "requester_count": len([x for x in self.debate_log if "请求人" in x["speaker"]),
+            "patentee_count": len([x for x in self.debate_log if "专利权人" in x["speaker"]),
             "debate_log": self.debate_log
         }
 
@@ -264,7 +262,7 @@ class LocalPatentDebateManager:
         md_file = output_dir / f"专利无效宣告本地模型辩论记录_{timestamp}.md"
         with open(md_file, 'w', encoding='utf-8') as f:
             f.write("# 专利无效宣告本地模型辩论记录\n\n")
-            f.write(f"**专利号**：201921401279.9\n")
+            f.write("**专利号**：201921401279.9\n")
             f.write(f"**辩论时间**：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
             f.write(f"**使用模型**：{self.model}\n")
             f.write(f"**辩论轮次**：{len(self.debate_log)}轮\n\n")

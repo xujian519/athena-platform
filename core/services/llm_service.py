@@ -24,10 +24,10 @@ class LLMRequest:
     """LLM请求"""
 
     prompt: str
-    system_message: str | None = None
+    system_message: Optional[str] = None
     temperature: float = 0.7
     max_tokens: int = 2000
-    model: str | None = None
+    model: Optional[str] = None
     enable_cache: bool = True
 
 

@@ -101,9 +101,9 @@ class NLPRequest:
     """NLP处理请求"""
 
     text: str  # 输入文本
-    user_id: str | None = None  # 用户ID
-    session_id: str | None = None  # 会话ID
-    context: dict[str, Any] | None = None  # 上下文
+    user_id: Optional[str] = None  # 用户ID
+    session_id: Optional[str] = None  # 会话ID
+    context: Optional[dict[str, Any]] = None  # 上下文
     mode: ProcessingMode = ProcessingMode.SINGLE  # 处理模式
     enable_caching: bool = True  # 启用缓存
     priority: int = 5  # 优先级 (1-10)
@@ -1029,7 +1029,7 @@ class XiaonuoUnifiedInterface:
         return responses
 
     def process_conversation(
-        self, user_id: str, message: str, session_id: str | None = None
+        self, user_id: str, message: str, session_id: Optional[str] = None
     ) -> NLPResponse:
         """处理对话消息 - 🔧 性能优化:使用xxhash生成会话ID"""
         if not session_id:
@@ -1186,7 +1186,7 @@ class XiaonuoUnifiedInterface:
             logger.error(f"❌ 获取优化建议失败: {e}")
             return []
 
-    def save_comprehensive_performance_data(self, filepath: str | None = None) -> None:
+    def save_comprehensive_performance_data(self, filepath: Optional[str] = None) -> None:
         """保存完整的性能数据"""
         if filepath is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -1224,7 +1224,7 @@ class XiaonuoUnifiedInterface:
         """获取当前活跃的告警"""
         return self.call_chain_monitor.get_active_alerts()
 
-    def save_call_chain_data(self, filepath: str | None = None) -> None:
+    def save_call_chain_data(self, filepath: Optional[str] = None) -> None:
         """保存调用链路监控数据"""
         if filepath is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -1253,7 +1253,7 @@ class XiaonuoUnifiedInterface:
         except Exception as e:
             logger.error(f"❌ 保存调用链路数据失败: {e}")
 
-    def save_performance_data(self, filepath: str | None = None) -> None:
+    def save_performance_data(self, filepath: Optional[str] = None) -> None:
         """保存性能数据"""
         if filepath is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")

@@ -12,6 +12,7 @@ Execution模块__init__.py单元测试
 
 import pytest
 
+
 # 测试所有主要导入
 def test_module_imports():
     """测试模块主要导入"""
@@ -235,6 +236,7 @@ class TestPerformance:
     async def test_initialization_speed(self):
         """测试初始化速度"""
         import time
+
         from core.execution import ExecutionEngine
 
         start = time.time()
@@ -248,11 +250,12 @@ class TestPerformance:
     def test_metrics_creation_speed(self):
         """测试指标创建速度"""
         import time
+
         from core.execution import PerformanceMetrics
 
         start = time.time()
         for _ in range(100):
-            metrics = PerformanceMetrics(
+            PerformanceMetrics(
                 execution_time_ms=1.0,
                 memory_usage_mb=1024,
                 cpu_usage_percent=0.5

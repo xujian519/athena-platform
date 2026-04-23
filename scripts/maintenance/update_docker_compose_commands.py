@@ -6,7 +6,6 @@
 新格式: docker-compose -f docker-compose.unified.yml --profile <profile> [command]
 """
 
-import os
 import re
 from pathlib import Path
 
@@ -126,10 +125,10 @@ def main():
         print(f"📝 处理: {file_path_str}")
 
         if update_file(file_path):
-            print(f"  ✅ 已更新")
+            print("  ✅ 已更新")
             updated_count += 1
         else:
-            print(f"  ℹ️  无需更新")
+            print("  ℹ️  无需更新")
             skipped_count += 1
 
     print()

@@ -18,7 +18,7 @@ async def test_bert_service():
     print("=" * 50)
 
     try:
-        from core.nlp.bert_service import get_bert_service
+        from core.ai.nlp.bert_service import get_bert_service
 
         # 初始化服务
         bert_service = await get_bert_service()
@@ -38,7 +38,7 @@ async def test_bert_service():
         # 测试编码（通用BERT）
         print("\n🔹 测试通用BERT编码...")
         try:
-            from core.nlp.bert_service import encode_with_general_bert
+            from core.ai.nlp.bert_service import encode_with_general_bert
 
             test_text = "这是一个测试文本，用于验证BERT编码功能。"
             result = await encode_with_general_bert(test_text)
@@ -54,7 +54,7 @@ async def test_bert_service():
         # 测试法律BERT
         print("\n🔹 测试法律BERT编码...")
         try:
-            from core.nlp.bert_service import encode_with_legal_bert
+            from core.ai.nlp.bert_service import encode_with_legal_bert
 
             legal_text = "根据《中华人民共和国专利法》，发明专利的保护期限为二十年。"
             result = await encode_with_legal_bert(legal_text)
@@ -126,7 +126,7 @@ async def test_model_comparison():
     print("-" * 30)
 
     try:
-        from core.nlp.bert_service import get_bert_service
+        from core.ai.nlp.bert_service import get_bert_service
 
         bert_service = await get_bert_service()
 
@@ -165,7 +165,7 @@ async def test_model_comparison():
             print(f"   - 模型: {data['model']}")
             print(f"   - 向量维度: {data['vector_size']}")
             print(f"   - 处理时间: {data['processing_time']:.3f}秒")
-            print(f"   - 向量前5位: {[f'{x:.4f}' for x in data['vector_sample']]}")
+            print(f"   - 向量前5位: {[f'{x:.4f}' for x in data['vector_sample']}")
 
         # 向量相似度计算
         if len(results) > 1:
@@ -198,8 +198,8 @@ async def test_integration_with_existing_modules():
 
     # 测试与BGE的协同使用
     try:
-        from core.embedding.unified_embedding_service import encode_for_document
-        from core.nlp.bert_service import encode_with_general_bert
+        from core.ai.embedding.unified_embedding_service import encode_for_document
+        from core.ai.nlp.bert_service import encode_with_general_bert
 
         test_text = "这份专利文件描述了一种新型的机器学习算法。"
 

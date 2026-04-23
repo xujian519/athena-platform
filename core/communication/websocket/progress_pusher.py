@@ -90,8 +90,8 @@ class ProgressUpdate:
     current_step: int
     total_steps: int
     message: str = ""
-    result: str | None = None
-    error: str | None = None
+    result: Optional[str] = None
+    error: Optional[str] = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -119,7 +119,7 @@ class ConnectionManager:
 
         logger.info("🔌 WebSocket 连接管理器初始化")
 
-    async def connect(self, websocket: Any, connection_id: str | None = None) -> str:
+    async def connect(self, websocket: Any, connection_id: Optional[str] = None) -> str:
         """接受新连接"""
         if connection_id is None:
             connection_id = str(uuid.uuid4())

@@ -65,7 +65,7 @@ class TaskResult:
 
     success: bool
     data: Any = None
-    error: str | None = None
+    error: Optional[str] = None
     execution_time: float = 0.0
     metrics: dict[str, Any] = field(default_factory=dict)
     timestamp: datetime = field(default_factory=datetime.now)
@@ -121,8 +121,8 @@ class Task:
 
     # 执行信息
     agent_id: str = ""
-    executor_id: str | None = None
-    worker_id: str | None = None
+    executor_id: Optional[str] = None
+    worker_id: Optional[str] = None
     retry_count: int = 0
     max_retries: int = 3
 

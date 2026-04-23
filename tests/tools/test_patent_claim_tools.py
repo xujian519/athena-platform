@@ -188,7 +188,7 @@ async def test_patent_claim_tools():
         print(f"   - utility.patent_claim_tools.{tool_name}")
     print()
     print("🎯 使用示例:")
-    print("   from core.agents.base import BaseAgent")
+    print("   from core.framework.agents.base import BaseAgent")
     print("   agent = BaseAgent()")
     print("   result = await agent.call_tool(")
     print("       'utility.patent_claim_tools.extract_claims_from_text',")

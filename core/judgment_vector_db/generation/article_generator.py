@@ -47,7 +47,7 @@ class ArticleSection:
     section_id: str  # 段落ID
     title: str  # 标题
     content: str  # 内容
-    subsections: list["ArticleSection"]  # 子段落
+    subsections: list[ArticleSection]  # 子段落
     metadata: dict[str, Any]  # 元数据
 
 
@@ -81,7 +81,7 @@ class ArticleGenerator:
     """文章生成引擎"""
 
     def __init__(
-        self, viewpoint_analyzer, hybrid_retriever, config: dict[str, Any] | None = None
+        self, viewpoint_analyzer, hybrid_retriever, config: Optional[dict[str, Any]] = None
     ):
         """
         初始化生成引擎
@@ -103,8 +103,8 @@ class ArticleGenerator:
         self,
         topic: str,
         article_type: ArticleType = ArticleType.REVIEW,
-        analysis_report: dict[str, Any] | None = None,
-        requirements: dict[str, Any] | None = None,
+        analysis_report: Optional[dict[str, Any]] = None,
+        requirements: Optional[dict[str, Any]] = None,
     ) -> GeneratedArticle:
         """
         生成文章
@@ -622,7 +622,7 @@ class ArticleGenerator:
 def create_article_generator(
     viewpoint_analyzer = None,
     hybrid_retriever = None,
-    config: dict[str, Any] | None = None
+    config: Optional[dict[str, Any]] = None
 ) -> ArticleGenerator:
     """
     创建文章生成器

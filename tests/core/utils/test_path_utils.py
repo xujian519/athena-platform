@@ -3,17 +3,16 @@
 路径处理工具模块单元测试
 """
 
-import pytest
 import tempfile
 from pathlib import Path
 
 from core.utils.path_utils import (
     ensure_dir,
+    get_ext,
+    get_stem,
     safe_exists,
     safe_read,
     safe_write,
-    get_ext,
-    get_stem,
 )
 
 

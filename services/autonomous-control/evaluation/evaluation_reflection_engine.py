@@ -479,7 +479,7 @@ class EvaluationReflectionEngine:
             "type": reflection_type.value,
             "timestamp": datetime.now().isoformat(),
             "metrics": dict(self.metrics),
-            "reflections": [asdict(r) for r in self.reflections[-10:]]  # 最近10条反思
+            "reflections": [asdict(r) for r in self.reflections[-10:]  # 最近10条反思
         }
 
         if context:
@@ -498,19 +498,19 @@ class EvaluationReflectionEngine:
         }
         return analysis
 
-    async def _identify_patterns(self, data: dict[str, Any]) -> list[dict[str, Any]]:
+    async def _identify_patterns(self, data: dict[str, Any]) -> list[dict[str, Any]:
         """识别模式"""
         patterns = []
         # 简化实现，返回空列表
         return patterns
 
-    async def _find_correlations(self, data: dict[str, Any]) -> list[dict[str, Any]]:
+    async def _find_correlations(self, data: dict[str, Any]) -> list[dict[str, Any]:
         """发现关联"""
         correlations = []
         # 简化实现，返回空列表
         return correlations
 
-    async def _detect_anomalies(self, data: dict[str, Any]) -> list[dict[str, Any]]:
+    async def _detect_anomalies(self, data: dict[str, Any]) -> list[dict[str, Any]:
         """检测异常"""
         anomalies = []
         # 简化实现，返回空列表
@@ -563,7 +563,7 @@ class EvaluationReflectionEngine:
 
         return insights
 
-    async def _create_action_items(self, insights: list[str]) -> list[dict[str, Any]]:
+    async def _create_action_items(self, insights: list[str]) -> list[dict[str, Any]:
         """创建行动项"""
         action_items = []
 
@@ -586,7 +586,7 @@ class EvaluationReflectionEngine:
         return action_items
 
     async def _assess_impact(self, insights: list[str],
-                           action_items: list[dict[str, Any]]) -> str:
+                           action_items: list[dict[str, Any]) -> str:
         """评估影响"""
         high_priority_count = sum(1 for item in action_items if item.get("priority") == "high")
 
@@ -620,7 +620,7 @@ class EvaluationReflectionEngine:
         else:
             return "战略规划反思"
 
-    async def _execute_action_items(self, action_items: list[dict[str, Any]]):
+    async def _execute_action_items(self, action_items: list[dict[str, Any]):
         """执行行动项"""
         for item in action_items:
             # 这里应该实际执行行动

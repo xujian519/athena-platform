@@ -184,7 +184,7 @@ class TokenManager:
             scope=[],
         )
 
-    def verify_token(self, token: str) -> dict[str, Any] | None:
+    def verify_token(self, token: str) -> Optional[dict[str, Any]]:
         """验证令牌"""
         try:
             payload = jwt.decode(
@@ -240,7 +240,7 @@ class APIKeyManager:
             logger.error(f"连接Redis失败: {e}")
 
     async def create_api_key(
-        self, user_id: str, name: str, permissions: list[str], expires_in_days: int | None = None
+        self, user_id: str, name: str, permissions: list[str], expires_in_days: Optional[int] = None
     ) -> str:
         """创建API密钥"""
         # 生成密钥
@@ -509,12 +509,12 @@ class AuthenticationService:
             },
         }
 
-    async def refresh_token(self, refresh_token: str) -> str | None:
+    async def refresh_token(self, refresh_token: str) -> Optional[str]:
         """刷新访问令牌"""
         new_token = self.token_manager.refresh_access_token(refresh_token)
         return new_token.token if new_token else None
 
-    def verify_jwt_token(self, token: str) -> dict[str, Any] | None:
+    def verify_jwt_token(self, token: str) -> Optional[dict[str, Any]]:
         """验证JWT令牌"""
         return self.token_manager.verify_token(token)
 
@@ -523,7 +523,7 @@ class AuthenticationService:
         return await self.api_key_manager.verify_api_key(api_key)
 
     async def create_api_key(
-        self, user_id: str, name: str, permissions: list[str], expires_in_days: int | None = None
+        self, user_id: str, name: str, permissions: list[str], expires_in_days: Optional[int] = None
     ) -> str:
         """创建API密钥"""
         return await self.api_key_manager.create_api_key(

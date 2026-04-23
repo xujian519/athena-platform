@@ -33,7 +33,7 @@ class TermInfo:
     importance: str  # 重要性：high/medium/low
     synonyms: List[str] = field(default_factory=list)  # 同义词
     related_terms: List[str] = field(default_factory=list)  # 相关术语
-    definition: str | None = None  # 定义
+    definition: Optional[str] = None  # 定义
     features: List[str] = field(default_factory=list)  # 特征标签
     frequency: int = 0  # 使用频率
     confidence: float = 1.0  # 置信度
@@ -41,7 +41,7 @@ class TermInfo:
 class TechnicalDictionaryManager:
     """技术词典管理器"""
 
-    def __init__(self, dict_path: str | None = None):
+    def __init__(self, dict_path: Optional[str] = None):
         self.dict_path = dict_path or 'patent-platform/workspace/data/technical_dictionary.json'
         self.terms: Dict[str, TermInfo] = {}
         self.domain_terms: Dict[str, List[str]] = defaultdict(list)
@@ -242,7 +242,7 @@ class TechnicalDictionaryManager:
             self.category_terms[term_info.category].append(term_text)
 
     def add_term(self, term_text: str, domain: str, category: str, importance: str = 'medium',
-                 synonyms: Optional[List[str] = None, definition: str | None = None):
+                 synonyms: Optional[List[str]] = None, definition: Optional[str] = None):
         """添加新术语"""
         term_info = TermInfo(
             text=term_text,

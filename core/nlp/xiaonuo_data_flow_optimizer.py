@@ -347,7 +347,7 @@ class DataFlowOptimizer:
             loop.close()
 
     def optimize_data_transfer(
-        self, source_data: dict[str, Any], target_keys: list[str] | None = None
+        self, source_data: dict[str, Any], target_keys: Optional[list[str]] = None
     ) -> dict[str, Any]:
         """优化数据传输,只传输必要的数据"""
         if target_keys is None:

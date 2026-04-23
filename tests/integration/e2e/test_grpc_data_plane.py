@@ -8,10 +8,10 @@ gRPC数据平面测试
 4. 状态查询
 """
 
-import pytest
 import subprocess
 from pathlib import Path
-from typing import List
+
+import pytest
 
 pytestmark = [pytest.mark.e2e, pytest.mark.integration]
 

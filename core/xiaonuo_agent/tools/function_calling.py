@@ -50,7 +50,7 @@ class ToolParameter:
     required: bool = True
     default: Any = None
     enum: list[Any] | None = None  # 枚举值
-    format: str | None = None  # 格式要求
+    format: Optional[str] = None  # 格式要求
 
     def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
@@ -80,7 +80,7 @@ class ToolDefinition:
     category: str = "general"  # 工具分类
     status: ToolStatus = ToolStatus.AVAILABLE
     timeout: float = 30.0  # 超时时间(秒)
-    rate_limit: int | None = None  # 速率限制(每分钟调用次数)
+    rate_limit: Optional[int] = None  # 速率限制(每分钟调用次数)
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -104,7 +104,7 @@ class ToolCallResult:
     tool_name: str
     success: bool
     result: Any
-    error_message: str | None = None
+    error_message: Optional[str] = None
     execution_time: float = 0.0
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
 
@@ -129,7 +129,7 @@ class ToolCallRecord:
     tool_name: str
     parameters: dict[str, Any]
     result: ToolCallResult
-    caller: str | None = None
+    caller: Optional[str] = None
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
 
 
@@ -175,8 +175,8 @@ class FunctionCallingSystem:
         parameters: list[ToolParameter] | None = None,
         category: str = "general",
         timeout: float = 30.0,
-        rate_limit: int | None = None,
-        metadata: dict[str, Any] | None = None,
+        rate_limit: Optional[int] = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> ToolDefinition:
         """
         注册工具
@@ -240,8 +240,8 @@ class FunctionCallingSystem:
     async def call_tool(
         self,
         tool_name: str,
-        parameters: dict[str, Any],        timeout: float | None = None,
-        caller: str | None = None,
+        parameters: dict[str, Any],        timeout: Optional[float] = None,
+        caller: Optional[str] = None,
     ) -> ToolCallResult:
         """
         调用工具
@@ -378,7 +378,7 @@ class FunctionCallingSystem:
         return call_result
 
     async def call_tool_batch(
-        self, calls: list[dict[str, Any]], caller: str | None = None
+        self, calls: list[dict[str, Any]], caller: Optional[str] = None
     ) -> list[ToolCallResult]:
         """
         批量调用工具
@@ -404,7 +404,7 @@ class FunctionCallingSystem:
         return self._tools.get(tool_name)
 
     def list_tools(
-        self, category: str | None = None, status: ToolStatus | None = None
+        self, category: Optional[str] = None, status: ToolStatus | None = None
     ) -> list[ToolDefinition]:
         """
         列出工具
@@ -508,7 +508,7 @@ class FunctionCallingSystem:
 
     def _validate_parameters(
         self, tool: ToolDefinition, parameters: dict[str, Any]
-    ) -> str | None:
+    ) -> Optional[str]:
         """验证参数"""
         # 检查必需参数
         for param in tool.parameters:
@@ -570,7 +570,7 @@ class FunctionCallingSystem:
             self._call_history = self._call_history[-1000:]
 
     def get_call_history(
-        self, tool_name: str | None = None, limit: int = 50
+        self, tool_name: Optional[str] = None, limit: int = 50
     ) -> list[ToolCallRecord]:
         """获取调用历史"""
         history = self._call_history
@@ -621,11 +621,11 @@ async def get_function_calling_system() -> FunctionCallingSystem:
 
 # 便捷装饰器
 def tool(
-    name: str | None = None,
-    description: str | None = None,
+    name: Optional[str] = None,
+    description: Optional[str] = None,
     category: str = "general",
     timeout: float = 30.0,
-    rate_limit: int | None = None,
+    rate_limit: Optional[int] = None,
 ):
     """
     工具装饰器

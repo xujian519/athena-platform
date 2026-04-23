@@ -4,7 +4,7 @@ ForkContextBuilder使用示例
 演示如何使用ForkContextBuilder构建和管理子代理的Fork上下文。
 """
 
-from core.agents.fork_context_builder import ForkContext, ForkContextBuilder
+from core.framework.agents.fork_context_builder import ForkContext, ForkContextBuilder
 
 
 def example_basic_usage():

@@ -42,7 +42,7 @@ class DocumentReader:
     """文档读取器 - 解决编码问题"""
 
     @staticmethod
-    def read_document(file_path: str) -> str | None:
+    def read_document(file_path: str) -> Optional[str]:
         """读取文档内容，自动处理编码"""
         try:
             # 尝试多种编码方式
@@ -159,7 +159,7 @@ class EntityExtractor:
 
         return entities, relations
 
-    def _infer_relation_type(self, entity1: Dict, entity2: Dict) -> str | None:
+    def _infer_relation_type(self, entity1: Dict, entity2: Dict) -> Optional[str]:
         """推断实体间关系类型"""
         type1, type2 = entity1['type'], entity2['type']
 

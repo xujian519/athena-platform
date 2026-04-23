@@ -33,7 +33,7 @@ class ValidationResult:
     category: str  # 验证类别
     item: str  # 验证项
     message: str  # 验证消息
-    suggestion: str | None = None  # 修复建议
+    suggestion: Optional[str] = None  # 修复建议
 
     def __str__(self) -> str:
         prefix = {
@@ -191,7 +191,7 @@ class ConfigValidator:
         category: str,
         item: str,
         message: str,
-        suggestion: str | None = None,
+        suggestion: Optional[str] = None,
     ) -> None:
         """添加验证结果"""
         self.results.append(

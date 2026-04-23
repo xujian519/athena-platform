@@ -479,7 +479,7 @@ def create_request_merger(
 # 装饰器
 def merge_requests(
     merger: RequestMerger | None = None,
-    method: str | None = None,
+    method: Optional[str] = None,
 ):
     """请求合并装饰器
 

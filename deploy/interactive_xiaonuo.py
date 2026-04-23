@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺交互式客户端
 Interactive client for Xiaonuo system
 """
 
 import asyncio
-import sys
+
 from ready_on_demand_system import ai_system
+
 
 async def interactive_chat():
     """交互式聊天"""
@@ -32,7 +32,7 @@ async def interactive_chat():
 
             elif user_input.lower() in ['status', '状态']:
                 status = ai_system.get_status()
-                print(f"\n📊 系统状态:")
+                print("\n📊 系统状态:")
                 print(f"   运行智能体: {status['running_agents']}/{status['total_agents']}")
                 print(f"   运行中: {', '.join(status['running_agent_names'])}")
                 print(f"   内存使用: {status['memory_usage_mb']} MB")
@@ -42,14 +42,14 @@ async def interactive_chat():
                 continue
 
             elif user_input.lower() in ['help', '帮助']:
-                print(f"\n📖 可用命令:")
-                print(f"   普通对话 - 直接输入消息")
-                print(f"   专利分析 - 输入包含'专利'、'权利要求'等关键词")
-                print(f"   IP管理 - 输入包含'IP'、'案卷'、'查询'等关键词")
-                print(f"   内容创作 - 输入包含'文章'、'写作'、'创作'等关键词")
-                print(f"   status - 查看系统状态")
-                print(f"   help - 显示帮助")
-                print(f"   quit/exit - 退出")
+                print("\n📖 可用命令:")
+                print("   普通对话 - 直接输入消息")
+                print("   专利分析 - 输入包含'专利'、'权利要求'等关键词")
+                print("   IP管理 - 输入包含'IP'、'案卷'、'查询'等关键词")
+                print("   内容创作 - 输入包含'文章'、'写作'、'创作'等关键词")
+                print("   status - 查看系统状态")
+                print("   help - 显示帮助")
+                print("   quit/exit - 退出")
                 continue
 
             elif not user_input:

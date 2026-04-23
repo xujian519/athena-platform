@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 云熙IP管理API服务
 Yunxi IP Management API
@@ -8,19 +7,15 @@ Yunxi IP Management API
 """
 
 import sys
-from core.async_main import async_main
-import os
-from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Any, Optional
+from pathlib import Path
 
 # 添加项目路径
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
 import uvicorn
-import json
+from fastapi import FastAPI
+from pydantic import BaseModel
 
 # 导入身份管理器
 from core.utils.agent_identity_manager import identity_manager
@@ -180,8 +175,8 @@ if __name__ == "__main__":
     print(identity_manager.display_identity("yunxi"))
 
     # 启动服务
-    print(f"🚀 云熙IP管理API启动中...")
-    print(f"📍 端口: 8007")
+    print("🚀 云熙IP管理API启动中...")
+    print("📍 端口: 8007")
     print(f"💫 Slogan: {yunxi_identity['slogan']}")
 
     uvicorn.run(app, host="127.0.0.1", port=8007)  # 内网通信，通过Gateway访问

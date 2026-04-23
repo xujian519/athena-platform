@@ -812,7 +812,7 @@ class PatentEvaluationReflectionSystem:
 
     async def get_comprehensive_patent_assessment(self,
                                                  patent_id: str,
-                                                 evaluation_types: Optional[List[EvaluationType] = None) -> Dict[str, Any]:
+                                                 evaluation_types: Optional[List[EvaluationType]] = None) -> Dict[str, Any]]:
         """获取专利综合评估"""
         try:
             if evaluation_types is None:

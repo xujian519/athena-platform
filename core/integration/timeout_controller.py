@@ -78,7 +78,7 @@ class CallResult:
     success: bool
     duration: float
     timed_out: bool
-    error: str | None = None
+    error: Optional[str] = None
     result: Any = None
     timeout_used: float = 0.0
 
@@ -135,7 +135,7 @@ class ExternalServiceTimeoutController:
         service_id: str,
         func: Callable,
         *args,
-        custom_timeout: float | None = None,
+        custom_timeout: Optional[float] = None,
         **kwargs,
     ) -> CallResult:
         """
@@ -364,7 +364,7 @@ class ExternalServiceTimeoutController:
         }
 
 
-def with_timeout(service_id: str, timeout: float | None = None):
+def with_timeout(service_id: str, timeout: Optional[float] = None):
     """
     超时控制装饰器
 

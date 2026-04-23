@@ -52,7 +52,7 @@ class VectorSearchRequest(BaseModel):
 
 class VectorSearchResponse(BaseModel):
     status: str
-    results: list[dict[str, Any]]
+    results: list[dict[str, Any]
     query_time: float
     total_results: int
 
@@ -205,7 +205,7 @@ async def search_vectors(request: VectorSearchRequest):
         raise HTTPException(status_code=500, detail='搜索失败') from e
 
 @app.post('/api/v1/vector/add')
-async def add_vectors(collection_type: str, vectors: list[dict[str, Any]]):
+async def add_vectors(collection_type: str, vectors: list[dict[str, Any]):
     """添加向量"""
     try:
         success = await vector_adapter.add_vectors(collection_type, vectors)

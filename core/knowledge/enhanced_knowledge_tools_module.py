@@ -67,7 +67,7 @@ class QueryResult:
     recommendations: list[dict[str, Any]] = field(default_factory=list)
     confidence: float = 0.0
     execution_time: float = 0.0
-    error: str | None = None
+    error: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -81,14 +81,14 @@ class ToolExecutionResult:
     result: Any = None
     output: str = ""
     execution_time: float = 0.0
-    error: str | None = None
+    error: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
 class EnhancedKnowledgeToolsModule(BaseModule):
     """增强知识库与工具库模块 - BaseModule标准接口版本"""
 
-    def __init__(self, agent_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, agent_id: str, config: Optional[dict[str, Any]] = None):
         """
         初始化增强知识库与工具库模块
 
@@ -246,7 +246,7 @@ class EnhancedKnowledgeToolsModule(BaseModule):
         self,
         query: str,
         service_type: str = "knowledge_query",
-        context: dict[str, Any] | None = None,
+        context: Optional[dict[str, Any]] = None,
         **kwargs,
     ) -> QueryResult:
         """
@@ -369,7 +369,7 @@ class EnhancedKnowledgeToolsModule(BaseModule):
             )
 
     async def recommend_tools(
-        self, query: str, context: dict[str, Any] | None = None, max_recommendations: int = 5
+        self, query: str, context: Optional[dict[str, Any]] = None, max_recommendations: int = 5
     ) -> list[dict[str, Any]]:
         """
         推荐工具
@@ -416,7 +416,7 @@ class EnhancedKnowledgeToolsModule(BaseModule):
             return []
 
     async def execute_tool(
-        self, tool_name: str, parameters: dict[str, Any], context: dict[str, Any] | None = None
+        self, tool_name: str, parameters: dict[str, Any], context: Optional[dict[str, Any]] = None
     ) -> ToolExecutionResult:
         """
         执行工具

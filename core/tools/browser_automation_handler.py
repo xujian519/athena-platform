@@ -53,7 +53,7 @@ class BrowserAutomationClient:
         self,
         method: str,
         endpoint: str,
-        data: dict[str, Any] | None = None,
+        data: Optional[dict[str, Any]] = None,
         timeout: int = 30
     ) -> dict[str, Any]:
         """
@@ -130,7 +130,7 @@ class BrowserAutomationClient:
             {"url": url, "wait_until": wait_until}
         )
 
-    def click(self, selector: str, timeout: int | None = None) -> dict[str, Any]:
+    def click(self, selector: str, timeout: Optional[int] = None) -> dict[str, Any]:
         """
         点击元素
 
@@ -147,7 +147,7 @@ class BrowserAutomationClient:
             {"selector": selector, "timeout": timeout}
         )
 
-    def fill(self, selector: str, value: str, timeout: int | None = None) -> dict[str, Any]:
+    def fill(self, selector: str, value: str, timeout: Optional[int] = None) -> dict[str, Any]:
         """
         填写表单
 
@@ -165,7 +165,7 @@ class BrowserAutomationClient:
             {"selector": selector, "value": value, "timeout": timeout}
         )
 
-    def screenshot(self, full_page: bool = False, save_path: str | None = None) -> dict[str, Any]:
+    def screenshot(self, full_page: bool = False, save_path: Optional[str] = None) -> dict[str, Any]:
         """
         截取当前页面
 
@@ -427,7 +427,7 @@ async def navigate_to_url(url: str, wait_until: str = "load") -> dict[str, Any]:
     }, {})
 
 
-async def take_screenshot(full_page: bool = False, save_path: str | None = None) -> dict[str, Any]:
+async def take_screenshot(full_page: bool = False, save_path: Optional[str] = None) -> dict[str, Any]:
     """
     便捷函数：截图
 

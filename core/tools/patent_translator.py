@@ -93,7 +93,7 @@ class PatentTranslator:
         source_lang: str,
         target_lang: str,
         preserve_terms: bool = True
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         翻译文本
 
@@ -299,11 +299,11 @@ class PatentTranslator:
 
     async def translate_batch(
         self,
-        texts: List[str],
+        texts: list[str],
         source_lang: str,
         target_lang: str,
         preserve_terms: bool = True
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         批量翻译
 
@@ -347,7 +347,7 @@ async def patent_translator_handler(
     target_lang: str = "en",
     source_lang: str = "auto",
     preserve_terms: bool = True
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     专利翻译工具handler
 
@@ -397,11 +397,11 @@ async def patent_translator_handler(
     tags=["patent", "translation", "batch", "multilingual"]
 )
 async def patent_translator_batch_handler(
-    texts: List[str],
+    texts: list[str],
     target_lang: str = "en",
     source_lang: str = "auto",
     preserve_terms: bool = True
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """
     批量专利翻译工具handler
 

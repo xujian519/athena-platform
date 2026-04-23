@@ -26,7 +26,7 @@ class QwenVLAdapter:
     - qwen-vl-v1 (轻量级视觉模型)
     """
 
-    def __init__(self, model_id: str, capability: ModelCapability, api_key: str | None = None):
+    def __init__(self, model_id: str, capability: ModelCapability, api_key: Optional[str] = None):
         """
         初始化Qwen-VL适配器
 
@@ -72,7 +72,7 @@ class QwenVLAdapter:
         self,
         request: LLMRequest,
         image_data: bytes | None = None,
-        image_url: str | None = None,
+        image_url: Optional[str] = None,
     ) -> LLMResponse:
         """
         生成响应（支持多模态输入）
@@ -268,8 +268,8 @@ QWEN_VL_MODELS = {
 }
 
 
-def create_qwen_vl_adapter(model_id: str | None = None,
-    api_key: str | None = None) -> QwenVLAdapter:
+def create_qwen_vl_adapter(model_id: Optional[str] = None,
+    api_key: Optional[str] = None) -> QwenVLAdapter:
     """
     创建Qwen-VL适配器的便捷函数
 

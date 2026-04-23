@@ -40,8 +40,8 @@ class ModuleConfig:
     """模块配置"""
 
     task_type: str = "default"
-    temperature: float | None = None
-    max_length: int | None = None
+    temperature: Optional[float] = None
+    max_length: Optional[int] = None
     batch_size: int = 32
     cache_ttl: int = 3600  # 缓存时间(秒)
     priority: int = 1  # 优先级

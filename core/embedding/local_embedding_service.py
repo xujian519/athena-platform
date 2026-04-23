@@ -193,7 +193,7 @@ class EmbeddingModelManager:
         self.models = {}
         self.default_model = "BAAI/bge-m3"
 
-    async def get_model(self, model_name: str | None = None) -> LocalEmbeddingModel:
+    async def get_model(self, model_name: Optional[str] = None) -> LocalEmbeddingModel:
         """获取模型实例"""
         model_name = model_name or self.default_model
 
@@ -205,7 +205,7 @@ class EmbeddingModelManager:
         return self.models[model_name]
 
     async def encode(
-        self, texts: str | list[str] | None, model_name: str | None = None
+        self, texts: str | Optional[list[str]], model_name: Optional[str] = None
     ) -> np.ndarray:
         """便捷编码方法"""
         model = await self.get_model(model_name)
@@ -215,7 +215,7 @@ class EmbeddingModelManager:
         self,
         texts1: str | list[str],
         texts2: str | list[str],
-        model_name: str | None = None,
+        model_name: Optional[str] = None,
     ) -> float | np.ndarray:
         """便捷相似度计算方法"""
         model = await self.get_model(model_name)

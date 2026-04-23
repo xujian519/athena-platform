@@ -73,7 +73,7 @@ class CollaborationTask:
     status: str = "pending"  # pending, in_progress, completed, failed
     created_at: datetime = field(default_factory=datetime.now)
     completed_at: datetime | None = None
-    result: dict[str, Any] | None = None
+    result: Optional[dict[str, Any]] = None
 
 
 class AgentCoordinator:

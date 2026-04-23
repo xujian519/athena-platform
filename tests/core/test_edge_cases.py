@@ -13,9 +13,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from core.agents import AgentResponse, AgentUtils, BaseAgent
 from core.cache.cache_manager import CacheManager
 from core.cache.memory_cache import MemoryCache
+
+from core.framework.agents import AgentResponse, AgentUtils, BaseAgent
 
 
 class TestMemoryCacheEdgeCases:

@@ -4,17 +4,17 @@
 这是一个完整的示例，展示如何创建符合统一接口标准的Agent。
 """
 
-from typing import Any, Dict, List, Optional
-import logging
 import asyncio
+import logging
 from datetime import datetime
+from typing import Any
 
-from core.agents.xiaona.base_component import (
-    BaseXiaonaComponent,
+from core.framework.agents.xiaona.base_component import (
     AgentCapability,
     AgentExecutionContext,
     AgentExecutionResult,
     AgentStatus,
+    BaseXiaonaComponent,
 )
 
 logger = logging.getLogger(__name__)
@@ -155,7 +155,7 @@ class ExampleAgent(BaseXiaonaComponent):
         self,
         user_input: str,
         context: AgentExecutionContext
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         执行示例能力
 
@@ -187,7 +187,7 @@ class ExampleAgent(BaseXiaonaComponent):
         self,
         user_input: str,
         context: AgentExecutionContext
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         执行另一个能力
 
@@ -225,7 +225,7 @@ class ExampleAgent(BaseXiaonaComponent):
 # 使用示例
 async def main():
     """演示如何使用ExampleAgent"""
-    from core.agents.xiaona.base_component import AgentExecutionContext
+    from core.framework.agents.xiaona.base_component import AgentExecutionContext
 
     # 创建Agent
     agent = ExampleAgent(

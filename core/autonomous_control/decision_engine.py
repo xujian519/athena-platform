@@ -145,7 +145,7 @@ class DecisionEngine:
         self,
         context: DecisionContext,
         decision_type: DecisionType,
-        options: list[str] | None = None,
+        options: Optional[list[str]] = None,
     ) -> tuple[DecisionOption, float]:
         """
         基于上下文和类型进行决策
@@ -248,7 +248,7 @@ class DecisionEngine:
         self,
         context: DecisionContext,
         decision_type: DecisionType,
-        situation_analysis: dict[str, Any],        suggested_options: list[str] | None = None,
+        situation_analysis: dict[str, Any],        suggested_options: Optional[list[str]] = None,
     ) -> list[DecisionOption]:
         """生成决策选项"""
         options = []
@@ -657,7 +657,7 @@ class DecisionEngine:
             logger.warning(f"记录决策失败: {e}")
 
     def update_decision_success(
-        self, action: str, success: bool, actual_outcome: dict[str, Any] | None = None
+        self, action: str, success: bool, actual_outcome: Optional[dict[str, Any]] = None
     ) -> None:
         """更新决策成功状态"""
         try:

@@ -34,7 +34,7 @@ class ToolCallRecord:
     output_data: Any | None = None
     execution_time: float = 0.0
     success: bool = True
-    error_message: str | None = None
+    error_message: Optional[str] = None
 
     # 额外元数据
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -54,7 +54,7 @@ class ToolCallRecord:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> 'ToolCallRecord':
+    def from_dict(cls, data: dict[str, Any]) -> ToolCallRecord:
         """从字典创建实例"""
         return cls(
             call_id=data["call_id"],
@@ -87,12 +87,12 @@ class ToolCallTrajectory:
         self.start_time = datetime.now()
         self.calls: OrderedDict[str, ToolCallRecord] = OrderedDict()
         self.call_counter = 0
-        self._current_call_id: str | None = None
+        self._current_call_id: Optional[str] = None
 
     def start_call(
         self,
         tool_name: str,
-        input_data: dict[str, Any],        metadata: dict[str, Any] | None = None
+        input_data: dict[str, Any],        metadata: Optional[dict[str, Any]] = None
     ) -> str:
         """
         开始记录工具调用
@@ -129,7 +129,7 @@ class ToolCallTrajectory:
         output_data: Any,
         execution_time: float,
         success: bool = True,
-        error_message: str | None = None
+        error_message: Optional[str] = None
     ) -> None:
         """
         结束工具调用记录
@@ -244,7 +244,7 @@ class ToolCallTrajectory:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> 'ToolCallTrajectory':
+    def from_dict(cls, data: dict[str, Any]) -> ToolCallTrajectory:
         """从字典创建实例"""
         trajectory = cls(task_id=data["task_id"])
         trajectory.start_time = datetime.fromisoformat(data["start_time"])
@@ -263,7 +263,7 @@ class ToolCallTrajectory:
         logger.debug(f"💾 轨迹已保存: {file_path}")
 
     @classmethod
-    def load_from_file(cls, file_path: str) -> 'ToolCallTrajectory':
+    def load_from_file(cls, file_path: str) -> ToolCallTrajectory:
         """从文件加载"""
         with open(file_path, encoding='utf-8') as f:
             data = json.load(f)
@@ -279,7 +279,7 @@ class ToolCallRecorder:
     管理多个任务的工具调用轨迹。
     """
 
-    def __init__(self, storage_path: str | None = None):
+    def __init__(self, storage_path: Optional[str] = None):
         """
         初始化工具调用记录器
 
@@ -330,7 +330,7 @@ class ToolCallRecorder:
         """获取所有轨迹"""
         return list(self.trajectories.values())
 
-    def save_trajectory(self, task_id: str, file_path: str | None = None) -> None:
+    def save_trajectory(self, task_id: str, file_path: Optional[str] = None) -> None:
         """
         保存轨迹到文件
 

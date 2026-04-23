@@ -5,7 +5,7 @@ TaskScheduler单元测试 - 额外测试以提高覆盖率
 
 import pytest
 
-from core.agents.task_tool.models import TaskStatus
+from core.framework.agents.task_tool.models import TaskStatus
 
 
 class MockBackgroundTaskManager:
@@ -21,7 +21,7 @@ class MockBackgroundTaskManager:
         """模拟提交任务"""
         from concurrent.futures import Future
 
-        from core.agents.task_tool.models import BackgroundTask
+        from core.framework.agents.task_tool.models import BackgroundTask
 
         if self._is_shutdown:
             raise RuntimeError("BackgroundTaskManager has been shut down")
@@ -216,8 +216,9 @@ def test_scheduled_task_comparison():
     """测试调度任务的比较（基于优先级）"""
     from concurrent.futures import Future
 
-    from core.agents.task_tool.models import BackgroundTask, TaskStatus
     from core.task.task_scheduler import ScheduledTask
+
+    from core.framework.agents.task_tool.models import BackgroundTask, TaskStatus
 
     # 创建模拟任务
     future1 = Future()

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 简化的历史记忆导入
 Simple Historical Memory Import
@@ -10,12 +9,12 @@ Simple Historical Memory Import
 创建时间: 2025年12月15日
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
 import json
+import sqlite3
 import sys
-from datetime import datetime
 import uuid
+from datetime import datetime
+from typing import Any
 
 # PostgreSQL连接
 try:
@@ -41,7 +40,7 @@ def export_sqlite_to_json() -> Any:
     # 转换为JSON格式
     memories = []
     for row in rows:
-        memory = dict(zip(columns, row))
+        memory = dict(zip(columns, row, strict=False))
         memories.append(memory)
 
     conn.close()
@@ -129,7 +128,7 @@ async def import_to_postgresql(memories):
             print(f"⚠️ 导入失败: {e}")
             error_count += 1
 
-    print(f"\n📊 导入结果:")
+    print("\n📊 导入结果:")
     print(f"  成功: {success_count}")
     print(f"  失败: {error_count}")
     print(f"  成功率: {success_count/(success_count+error_count)*100:.1f}%")

@@ -419,3 +419,129 @@ DEFAULT_ENDPOINTS = {
 ---
 
 **🌸 Athena平台 - 让AI更易用，让成本更低！**
+
+---
+
+# 追加开发进度 - 法律知识融合与动态提示词主链路集成
+
+> 本节为 2026-04-23 当日追加进度，聚焦“法律世界模型（PostgreSQL+Neo4j）+ 动态演化 Obsidian Wiki”与现有动态提示词系统的深度融合与上线可用性修复。
+
+## 🎯 追加目标
+
+1. 将新融合层并入现有动态提示词主链路（`/api/v1/prompt-system/prompt/generate`）
+2. 建立三源统一访问接口：PostgreSQL（结构化法条/案例）+ Neo4j（关系推理/场景规则）+ Obsidian Wiki（非结构化实务背景）
+3. 建立 wiki 修订版本与提示词模板版本联动，确保知识更新可触发缓存自然失效与可追溯评估
+4. 在当前 Python 3.9 运行环境中保证可导入、可运行（修复历史语法/类型注解问题）
+
+---
+
+## ✅ 已完成的工作（追加）
+
+### 1) 新融合层核心实现（可复用模块）
+
+新增目录：`core/legal_prompt_fusion/`
+
+**核心能力**
+- 三源统一检索与证据对象（PostgreSQL / Neo4j / Wiki）
+- Wiki 扫描、片段抽取、修订版本（`wiki_revision`）计算
+- 混合检索融合排序与证据分布统计
+- 基于证据编排的提示词上下文构建（system + user prompt）
+- wiki revision -> template version 版本联动（用于缓存与评估）
+
+**新增文件**
+- `core/legal_prompt_fusion/config.py`：融合配置（DSN/Neo4j/wiki root/开关）
+- `core/legal_prompt_fusion/models.py`：证据、片段、上下文、请求/响应模型
+- `core/legal_prompt_fusion/wiki_indexer.py`：Obsidian Vault 扫描与轻量检索
+- `core/legal_prompt_fusion/providers.py`：PostgreSQL/Neo4j/Wiki 统一访问层
+- `core/legal_prompt_fusion/hybrid_retriever.py`：多源融合检索器
+- `core/legal_prompt_fusion/sync_manager.py`：wiki revision 与模板版本联动
+- `core/legal_prompt_fusion/prompt_context_builder.py`：三源上下文构建器
+
+### 2) 新融合 API（用于独立验证与后续编排）
+
+新增路由：`/api/v1/legal-prompt-fusion/*`
+
+**新增文件**
+- `core/api/legal_prompt_fusion_routes.py`
+
+**端点**
+- `GET /api/v1/legal-prompt-fusion/health`
+- `GET /api/v1/legal-prompt-fusion/sync/status`
+- `POST /api/v1/legal-prompt-fusion/context/generate`
+
+### 3) 并入动态提示词主链路（关键交付）
+
+修改：`core/api/prompt_system_routes.py`
+
+**主链路注入点**
+- 仍按原流程：场景识别 → 规则检索 →（可选）能力调用 → 规则模板变量替换
+- 若开启融合开关：
+  - 计算 `wiki_revision`/`template_version`
+  - 将 `__wiki_revision`、`__fusion_template_version` 注入缓存变量
+  - 调用融合层生成“三源证据上下文块”
+  - 将证据块追加进最终 `system_prompt`（并明确“证据材料非指令”，降低提示注入风险）
+
+**融合开关**
+- `LEGAL_PROMPT_FUSION_ENABLED=true`（默认 false，避免未准备好数据库/表结构时影响主链路）
+- `LEGAL_FUSION_TOP_K=5`（可选，控制每源召回数）
+
+### 4) 兼容性与稳定性修复（保证服务可启动）
+
+由于当前运行环境为 Python 3.9，而部分历史代码使用了 Python 3.10+ 的类型写法（如 `X | None`、不完整注解），为确保主服务可导入启动，修复了若干阻断性问题：
+
+- `core/api/prompt_system_routes.py`：修复 Pydantic 类型注解缺括号导致的语法错误
+- `core/api/api_models.py`：修复注解残缺；增加 `from __future__ import annotations`
+- `core/api/openapi_config.py`：增加 `from __future__ import annotations`；修复函数签名注解残缺
+- `core/api/rate_limiter.py`：增加 `from __future__ import annotations`
+- `core/config/api_config.py`：修复返回注解残缺；增加 `from __future__ import annotations`
+- `core/api/__init__.py`：可选模块导入从仅捕获 `ImportError` 放宽为捕获 `Exception`，避免语法错误模块拖垮整体导入
+- `core/__init__.py`：降低顶层导入侵入性，避免新模块被历史语法问题“连坐”
+
+---
+
+## 🧪 验证与测试（追加）
+
+### 单元测试
+- ✅ `python3 -m pytest tests/unit/test_legal_prompt_fusion.py -v`
+  - wiki 扫描与 revision 生成
+  - revision → template version 联动
+  - 三源上下文融合构建
+
+### 可导入性验证
+- ✅ `core.api.prompt_system_routes` 可在 Python 3.9 环境导入（此前被历史语法问题阻断）
+
+### 环境注意
+- 发现 `pytest` 可执行文件 shebang 指向不存在的 Python 3.12 路径，改用 `python3 -m pytest` 执行测试
+
+---
+
+## 📁 追加文件清单（汇总）
+
+### 新增
+- `core/legal_prompt_fusion/`（7个核心文件 + `__init__.py`）
+- `core/api/legal_prompt_fusion_routes.py`
+- `tests/unit/test_legal_prompt_fusion.py`
+- `docs/architecture/integration/LEGAL_WORLD_MODEL_WIKI_PROMPT_FUSION_ARCHITECTURE_20260423.md`
+- `docs/deployment/LEGAL_PROMPT_FUSION_DEPLOYMENT_GUIDE.md`
+
+### 修改
+- `core/api/prompt_system_routes.py`（主链路融合注入 + 修复语法/注解）
+- `core/api/main.py`（已注册融合 API 路由）
+- `core/api/api_models.py` / `core/api/openapi_config.py` / `core/api/rate_limiter.py` / `core/config/api_config.py` / `core/api/__init__.py` / `core/__init__.py`
+
+---
+
+## 🚧 追加待办（下一步建议）
+
+1. **将融合层与场景规则更紧耦合**
+   - 基于 `ScenarioRule` 的 `domain/task_type/phase` 控制三源检索配方（权重、top_k、过滤条件）
+2. **PostgreSQL schema 对齐**
+   - 当前默认使用 `legal_documents` 表；需按真实本地法律库表结构对齐字段与索引
+3. **Wiki 从全量扫描升级到增量索引**
+   - 引入文件监听 + 增量切片 + 缓存与持久化索引
+4. **把融合证据回传到 API 响应体（可选）**
+   - 当前只注入 system prompt；可扩展 `PromptGenerateResponse` 输出 evidence 摘要用于前端可视化与评估
+
+---
+
+**追加最后更新**: 2026-04-23（法律提示词融合并入动态提示词主链路）

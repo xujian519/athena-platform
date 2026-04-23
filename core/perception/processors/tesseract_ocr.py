@@ -30,7 +30,7 @@ class TesseractOCRProcessor:
     - 版面分析
     """
 
-    def __init__(self, tesseract_path: str | None = None):
+    def __init__(self, tesseract_path: Optional[str] = None):
         """
         初始化OCR处理器
 
@@ -45,7 +45,7 @@ class TesseractOCRProcessor:
         if not self.is_available():
             logger.warning("Tesseract OCR不可用，请安装tesseract-ocr")
 
-    def _find_tesseract(self) -> str | None:
+    def _find_tesseract(self) -> Optional[str]:
         """查找Tesseract可执行文件"""
         try:
             result = subprocess.run(
@@ -88,7 +88,7 @@ class TesseractOCRProcessor:
         except Exception:
             return False
 
-    def get_version(self) -> str | None:
+    def get_version(self) -> Optional[str]:
         """获取Tesseract版本"""
         try:
             result = subprocess.run(

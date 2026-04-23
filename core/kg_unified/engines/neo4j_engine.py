@@ -137,8 +137,8 @@ class GraphEdge:
     to_node: str
     relation_type: str
     properties: Dict[str, Any]
-    weight: float | None = 1.0
-    confidence: float | None = 1.0
+    weight: Optional[float] = 1.0
+    confidence: Optional[float] = 1.0
 
 
 # =============================================================================

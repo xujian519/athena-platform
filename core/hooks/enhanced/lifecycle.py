@@ -48,7 +48,7 @@ class HookLifecycleManager:
     async def register(
         self,
         hook: HookFunction,
-        dependencies: list[str] | None = None,
+        dependencies: Optional[list[str]] = None,
         auto_activate: bool = True,
     ) -> bool:
         """注册Hook

@@ -56,17 +56,17 @@ logger = logging.getLogger(__name__)
 class PatentSearchQuery:
     """专利检索查询参数"""
     query: str
-    assignee: str | None = None
-    inventor: str | None = None
-    patent_number: str | None = None
-    filing_date_start: str | None = None
-    filing_date_end: str | None = None
-    publication_date_start: str | None = None
-    publication_date_end: str | None = None
-    patent_type: str | None = None
-    status: str | None = None
-    country: str | None = None
-    language: str | None = None
+    assignee: Optional[str] = None
+    inventor: Optional[str] = None
+    patent_number: Optional[str] = None
+    filing_date_start: Optional[str] = None
+    filing_date_end: Optional[str] = None
+    publication_date_start: Optional[str] = None
+    publication_date_end: Optional[str] = None
+    patent_type: Optional[str] = None
+    status: Optional[str] = None
+    country: Optional[str] = None
+    language: Optional[str] = None
     sort_by: Optional[str] = 'relevance'  # relevance, newest, oldest
     max_results: int = 10
 

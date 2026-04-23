@@ -602,7 +602,7 @@ class CognitiveDecisionManager:
             'most_common_decision': max(distribution_pct, key=distribution_pct.get) if distribution_pct else None
         }
 
-    def export_decision_history(self, file_path: str, limit: int | None = None):
+    def export_decision_history(self, file_path: str, limit: Optional[int] = None):
         """导出决策历史"""
         history_to_export = self.decision_history[-limit:] if limit else self.decision_history
 

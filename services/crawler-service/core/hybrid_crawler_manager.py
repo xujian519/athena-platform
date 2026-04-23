@@ -56,8 +56,8 @@ class HybridCrawlResult:
     # 增强结果
     extracted_data: dict[str, Any] | None = None
     markdown_content: str | None = None
-    links: list[dict[str, str]] | None = None
-    images: list[dict[str, str]] | None = None
+    links: list[dict[str, str] | None = None
+    images: list[dict[str, str] | None = None
 
 
 class CostLimiter:

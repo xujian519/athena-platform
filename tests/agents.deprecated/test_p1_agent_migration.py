@@ -15,26 +15,23 @@ P1 Agent Migration Tests - Validate migrated agents comply with unified interfac
 """
 
 import asyncio
-import pytest
-from datetime import datetime
-from typing import Any
 
-# 导入被测试的Agent
-from core.agents.xiaona.writer_agent import WriterAgent
-from core.agents.xiaonuo.xiaonuo_agent_v2 import XiaonuoAgentV2, create_xiaonuo_agent_v2
-from core.agents.xiaona.xiaona_agent_scratchpad_v2 import (
+import pytest
+from core.framework.agents.xiaona.xiaona_agent_scratchpad_v2 import (
     XiaonaAgentScratchpadV2,
     create_xiaona_agent_v2,
 )
 
 # 导入统一接口组件
-from core.agents.xiaona.base_component import (
+from core.framework.agents.xiaona.base_component import (
     AgentExecutionContext,
     AgentExecutionResult,
     AgentStatus,
-    AgentCapability,
 )
 
+# 导入被测试的Agent
+from core.framework.agents.xiaona.writer_agent import WriterAgent
+from core.framework.agents.xiaonuo.xiaonuo_agent_v2 import XiaonuoAgentV2, create_xiaonuo_agent_v2
 
 # ==================== WriterAgent测试 ====================
 

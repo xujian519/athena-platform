@@ -72,8 +72,8 @@ def safe_set_nested(data: dict[K, dict[K, V]], outer_key: K, inner_key: K, value
 
 
 def safe_max_from_dict(
-    data: dict[K, int | float], default: int | float | None = None
-) -> int | float | None:
+    data: dict[K, int | float], default: int | Optional[float] = None
+) -> int | Optional[float]:
     """
     安全获取字典中的最大值
 

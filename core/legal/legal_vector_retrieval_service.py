@@ -65,12 +65,12 @@ class LegalRetrievalRequest:
     """法律检索请求"""
 
     query: str  # 查询文本
-    collections: list[str] | None = None  # 要检索的集合,None表示所有
+    collections: Optional[list[str]] = None  # 要检索的集合,None表示所有
     limit: int = 10  # 返回结果数量
     score_threshold: float = 0.75  # 相似度阈值
     with_payload: bool = True  # 是否返回payload
     with_vector: bool = False  # 是否返回向量
-    filters: dict[str, Any] | None = None  # 过滤条件
+    filters: Optional[dict[str, Any]] = None  # 过滤条件
 
 
 @dataclass
@@ -83,7 +83,7 @@ class LegalRetrievalResponse:
     collections_searched: list[str]
     query: str
     processing_time: float
-    error: str | None = None
+    error: Optional[str] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -212,7 +212,7 @@ class LegalVectorRetrievalService:
     async def search(
         self,
         query: str,
-        collections: list[str] | None = None,
+        collections: Optional[list[str]] = None,
         limit: int = DEFAULT_LIMIT,
         score_threshold: float = DEFAULT_SCORE_THRESHOLD,
         with_payload: bool = True,

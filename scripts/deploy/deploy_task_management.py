@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 任务管理系统部署脚本
 Task Management System Deployment Script
@@ -11,15 +10,13 @@ Task Management System Deployment Script
 版本: 1.0.0
 """
 
-import os
-from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-import sys
 import json
-import time
+import os
 import subprocess
-import threading
+import sys
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 # 添加项目路径
 project_root = Path(__file__).parent.parent
@@ -43,11 +40,7 @@ class TaskManagerDeployer:
         python_version = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
         print(f"   Python版本: {python_version}")
 
-        if sys.version_info.major < 3:
-            print("   ❌ Python 3.0+ 是必需的")
-            return False
-        else:
-            print("   ✅ Python版本符合要求")
+        print("   ✅ Python版本符合要求")
 
         # 检查必要模块
         required_modules = ['schedule', 'json', 'threading', 'datetime', 'pathlib']
@@ -190,16 +183,14 @@ class TaskManagerDeployer:
             self.data_dir / "todos_backup.json"
         ]
 
-        original_todos_found = False
         todo_data = None
 
         for source_file in todo_sources:
             if source_file.exists():
                 try:
-                    with open(source_file, 'r', encoding='utf-8') as f:
+                    with open(source_file, encoding='utf-8') as f:
                         todo_data = json.load(f)
                     print(f"   ✅ 找到TodoWrite文件: {source_file.name}")
-                    original_todos_found = True
                     break
                 except Exception as e:
                     print(f"   ⚠️ 读取文件失败 {source_file}: {e}")
@@ -242,13 +233,13 @@ class TaskManagerDeployer:
 
         try:
             # 导入任务管理模块
-            from core.tasks.task_scheduler import get_scheduler
             from core.tasks.enhanced_todo_write import get_enhanced_todo
+            from core.tasks.task_scheduler import get_scheduler
 
             print("   ✅ 模块导入成功")
 
             # 测试任务调度器
-            scheduler = get_scheduler()
+            get_scheduler()
             print("   ✅ 任务调度器初始化成功")
 
             # 测试增强TodoWrite
@@ -422,9 +413,9 @@ WantedBy=multi-user.target
             for line in service_content.split('\n'):
                 print(f"      {line}")
             print("      EOF")
-            print(f"      sudo systemctl daemon-reload")
-            print(f"      sudo systemctl enable athena-task-manager")
-            print(f"      sudo systemctl start athena-task-manager")
+            print("      sudo systemctl daemon-reload")
+            print("      sudo systemctl enable athena-task-manager")
+            print("      sudo systemctl start athena-task-manager")
             return True
         except Exception as e:
             print(f"   ⚠️ systemd服务准备失败: {e}")

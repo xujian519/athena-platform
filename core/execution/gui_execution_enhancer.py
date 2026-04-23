@@ -44,7 +44,7 @@ class BrowserAction:
     """浏览器动作定义"""
 
     task: str  # 任务描述
-    url: str | None = None  # 起始URL
+    url: Optional[str] = None  # 起始URL
     verification: dict = field(default_factory=dict)
     max_steps: int = 50  # 最大执行步数
     timeout: int = 30  # 超时时间(秒)
@@ -62,8 +62,8 @@ class GUIExecutionResult:
     message: str
 
     # 截图
-    before_screenshot: str | None = None
-    after_screenshot: str | None = None
+    before_screenshot: Optional[str] = None
+    after_screenshot: Optional[str] = None
     step_screenshots: list[str] = field(default_factory=list)
 
     # 验证结果
@@ -80,7 +80,7 @@ class GUIExecutionResult:
     completed_at: datetime | None = None
 
     # 错误信息
-    error: str | None = None
+    error: Optional[str] = None
 
 
 class GUIExecutionEnhancer:
@@ -331,7 +331,7 @@ class GUIExecutionEnhancer:
             verify_change=True,
         )
 
-    async def _capture_initial_page(self, url: str, task_id: str) -> str | None:
+    async def _capture_initial_page(self, url: str, task_id: str) -> Optional[str]:
         """
         捕获初始页面截图
 
@@ -347,7 +347,7 @@ class GUIExecutionEnhancer:
         logger.info(f"📸 捕获初始页面: {url}")
         return None  # 实际应该调用API获取截图
 
-    async def _capture_final_page(self, task_id: str) -> str | None:
+    async def _capture_final_page(self, task_id: str) -> Optional[str]:
         """
         捕获最终页面截图
 

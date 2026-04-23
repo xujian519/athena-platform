@@ -299,7 +299,7 @@ class PatentHybridRetrieval:
         keywords = [w for w in words if len(w) > 1 and w not in stop_words]
         return keywords[:5]  # 返回前5个关键词
 
-    async def _get_patent_info(self, patent_id: str) -> dict[str, Any | None]:
+    async def _get_patent_info(self, patent_id: str) -> Optional[dict[str, Any]]:
         """从PostgreSQL获取专利详细信息"""
         if not self.pg_conn:
             return None
@@ -387,7 +387,7 @@ class PatentHybridRetrieval:
         final_results.sort(key=lambda x: x.score, reverse=True)
         return final_results[:top_k]
 
-    async def get_patent_details(self, patent_id: str) -> dict[str, Any | None]:
+    async def get_patent_details(self, patent_id: str) -> Optional[dict[str, Any]]:
         """获取专利详细信息"""
         patent_info = await self._get_patent_info(patent_id)
         if not patent_info:

@@ -103,7 +103,7 @@ class NaturalThinkingFlow:
         content: str,
         phase: ThinkingPhase,
         confidence: float = 0.5,
-        connections: list[str] | None = None,
+        connections: Optional[list[str]] = None,
     ):
         """添加思维节点 - 改进版本，支持大小限制"""
         thought = ThoughtNode(
@@ -493,7 +493,7 @@ class MetaCognitiveMonitor:
 class AthenaSuperReasoningEngine:
     """Athena超级推理引擎"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
         self.thinking_flow = NaturalThinkingFlow()
         self.hypothesis_manager = HypothesisManager(
@@ -506,7 +506,7 @@ class AthenaSuperReasoningEngine:
         logger.info("🧠 Athena超级推理引擎初始化完成")
 
     async def execute_super_reasoning(
-        self, problem: str, context: dict[str, Any] | None = None
+        self, problem: str, context: Optional[dict[str, Any]] = None
     ) -> dict[str, Any]:
         """执行超级推理"""
         start_time = datetime.now()
@@ -579,7 +579,7 @@ class AthenaSuperReasoningEngine:
             }
 
     async def _initial_engagement(
-        self, problem: str, context: dict[str, Any] | None = None
+        self, problem: str, context: Optional[dict[str, Any]] = None
     ) -> None:
         """初始参与阶段"""
         logger.info("📝 阶段1: 初始参与")

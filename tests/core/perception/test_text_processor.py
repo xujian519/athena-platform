@@ -13,8 +13,8 @@ import pytest
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent.parent))
 
-from core.perception import TextProcessor
-from core.perception.types import InputType
+from core.ai.perception import TextProcessor
+from core.ai.perception.types import InputType
 
 
 @pytest.mark.asyncio

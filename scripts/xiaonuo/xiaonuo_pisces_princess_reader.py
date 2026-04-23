@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 小诺·双鱼公主身份信息读取器
 Xiaonuo Pisces Princess Identity Reader
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
 import asyncio
 import json
 from datetime import datetime
-from typing import Dict, Any
 
-from core.agent.xiaonuo_integrated_enhanced import XiaonuoIntegratedEnhanced
+from core.framework.agents.xiaonuo_integrated_enhanced import XiaonuoIntegratedEnhanced
+
 
 async def read_pisces_princess_identity():
     """读取小诺·双鱼公主的完整身份信息"""
@@ -26,7 +26,7 @@ async def read_pisces_princess_identity():
     config_path = "/Users/xujian/Athena工作平台/config/agents_identity_config.json"
 
     try:
-        with open(config_path, 'r', encoding='utf-8') as f:
+        with open(config_path, encoding='utf-8') as f:
             config = json.load(f)
 
         xiaonuo_config = config['agents_identity']['xiaonuo']
@@ -43,7 +43,7 @@ async def read_pisces_princess_identity():
         print("\n💫 公主宣言:")
         print(f"  {xiaonuo_config['slogan']}")
 
-        print(f"\n📱 启动信息:")
+        print("\n📱 启动信息:")
         print(f"  {xiaonuo_config['startup_message']}")
 
     except Exception as e:

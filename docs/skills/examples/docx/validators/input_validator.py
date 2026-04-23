@@ -295,7 +295,7 @@ class DocxInputValidator:
             if d.is_dir() and (d / "template.docx").exists()
         ]
 
-    def _get_template_variables(self, template_name: str) -> list[dict[str, Any]]:
+    def _get_template_variables(self, template_name: str) -> list[dict[str, Any]:
         """获取模板变量定义"""
         import json
 

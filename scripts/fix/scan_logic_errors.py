@@ -16,11 +16,9 @@ Logic Error Scanner for Cognitive & Decision Module
 
 import ast
 import os
-import sys
-from pathlib import Path
-from typing import List, Dict, Any, Tuple
-from dataclasses import dataclass
 from collections import defaultdict
+from dataclasses import dataclass
+from pathlib import Path
 
 
 @dataclass
@@ -40,10 +38,10 @@ class LogicErrorScanner(ast.NodeVisitor):
 
     def __init__(self, file_path: str):
         self.file_path = file_path
-        self.errors: List[LogicError] = []
-        self.source_lines: List[str] = []
+        self.errors: list[LogicError] = []
+        self.source_lines: list[str] = []
 
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             self.source_lines = f.readlines()
 
     def get_code_snippet(self, line_no: int, context: int = 2) -> str:
@@ -86,14 +84,14 @@ class LogicErrorScanner(ast.NodeVisitor):
                             target,
                             "cannot_assign_to_complex_subscript",
                             "high",
-                            f"尝试对复杂的下标表达式赋值，可能导致运行时错误"
+                            "尝试对复杂的下标表达式赋值，可能导致运行时错误"
                         )
                 elif isinstance(target, ast.Call):
                     self.add_error(
                         target,
                         "cannot_assign_to_function_call",
                         "critical",
-                        f"尝试对函数调用结果赋值，这是不允许的"
+                        "尝试对函数调用结果赋值，这是不允许的"
                     )
 
         self.generic_visit(node)
@@ -260,10 +258,10 @@ class LogicErrorScanner(ast.NodeVisitor):
         return False
 
 
-def scan_file(file_path: str) -> List[LogicError]:
+def scan_file(file_path: str) -> list[LogicError]:
     """扫描单个文件"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             source = f.read()
 
         tree = ast.parse(source, filename=file_path)
@@ -279,7 +277,7 @@ def scan_file(file_path: str) -> List[LogicError]:
         return []
 
 
-def scan_directory(directory: str, pattern: str = "*.py") -> Dict[str, List[LogicError]]:
+def scan_directory(directory: str, pattern: str = "*.py") -> dict[str, list[LogicError]:
     """扫描目录"""
     results = {}
     dir_path = Path(directory)
@@ -292,12 +290,12 @@ def scan_directory(directory: str, pattern: str = "*.py") -> Dict[str, List[Logi
     return results
 
 
-def print_results(results: Dict[str, List[LogicError]]):
+def print_results(results: dict[str, list[LogicError]):
     """打印扫描结果"""
     total_errors = sum(len(errors) for errors in results.values())
 
     print("\n" + "="*80)
-    print(f"📊 逻辑错误扫描结果")
+    print("📊 逻辑错误扫描结果")
     print("="*80)
     print(f"扫描文件数: {len(results)}")
     print(f"发现问题数: {total_errors}")
@@ -328,7 +326,7 @@ def print_results(results: Dict[str, List[LogicError]]):
             print(f"\n📁 {file_path}:{error.line_no}")
             print(f"   类型: {error.error_type}")
             print(f"   说明: {error.message}")
-            print(f"\n   代码上下文:")
+            print("\n   代码上下文:")
             for line in error.code_snippet.split('\n'):
                 print(f"   {line}")
 

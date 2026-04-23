@@ -123,7 +123,7 @@ class DatabaseConnectionPool:
 _connection_pool: DatabaseConnectionPool | None = None
 
 
-async def get_connection_pool(config=None, db_url: str | None = None) -> DatabaseConnectionPool:
+async def get_connection_pool(config=None, db_url: Optional[str] = None) -> DatabaseConnectionPool:
     """获取连接池实例"""
     global _connection_pool
 

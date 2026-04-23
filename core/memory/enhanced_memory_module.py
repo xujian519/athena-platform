@@ -71,7 +71,7 @@ class MemorySearchResult:
 class EnhancedMemoryConfig:
     """增强记忆配置"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         config = config or {}
 
         # 基础配置
@@ -97,7 +97,7 @@ class EnhancedMemoryConfig:
 class EnhancedMemoryModule(BaseModule):
     """增强记忆系统模块 - BaseModule标准接口版本"""
 
-    def __init__(self, agent_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, agent_id: str, config: Optional[dict[str, Any]] = None):
         """
         初始化增强记忆系统模块
 
@@ -204,8 +204,8 @@ class EnhancedMemoryModule(BaseModule):
             return False
 
     async def store(self, content: str, memory_type: str = 'short_term',
-                   tags: list[str] | None = None,
-                   metadata: dict[str, Any] | None = None) -> dict[str, Any]:
+                   tags: Optional[list[str]] = None,
+                   metadata: Optional[dict[str, Any]] = None) -> dict[str, Any]:
         """
         存储记忆 - 核心功能方法
 
@@ -270,7 +270,7 @@ class EnhancedMemoryModule(BaseModule):
                 'agent_id': self.agent_id
             }
 
-    async def retrieve(self, query: str, memory_type: str | None = None,
+    async def retrieve(self, query: str, memory_type: Optional[str] = None,
                       k: int = 10, threshold: float = 0.3) -> MemorySearchResult:
         """
         检索记忆
@@ -335,8 +335,8 @@ class EnhancedMemoryModule(BaseModule):
                 relevance_threshold=threshold
             )
 
-    async def consolidate(self, memory_ids: list[str] | None = None,
-                         criteria: dict[str, Any] | None = None) -> dict[str, Any]:
+    async def consolidate(self, memory_ids: Optional[list[str]] = None,
+                         criteria: Optional[dict[str, Any]] = None) -> dict[str, Any]:
         """记忆巩固"""
         try:
             logger.info('🔄 开始记忆巩固...')
@@ -594,7 +594,7 @@ class EnhancedMemoryModule(BaseModule):
             return False
 
 # 便捷创建函数
-def create_enhanced_memory_module(agent_id: str | None = None, config: dict[str, Any] | None = None) -> EnhancedMemoryModule:
+def create_enhanced_memory_module(agent_id: Optional[str] = None, config: Optional[dict[str, Any]] = None) -> EnhancedMemoryModule:
     """
     创建增强记忆系统模块实例
 

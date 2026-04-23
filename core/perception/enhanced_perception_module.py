@@ -112,7 +112,7 @@ logger = setup_logging()
 class EnhancedPerceptionModule(BaseModule):
     """增强感知模块 - BaseModule标准接口版本"""
 
-    def __init__(self, agent_id: str, config: dict[str, Any] | None = None):
+    def __init__(self, agent_id: str, config: Optional[dict[str, Any]] = None):
         """
         初始化增强感知模块
 
@@ -548,7 +548,7 @@ class EnhancedPerceptionModule(BaseModule):
 
 # 便捷创建函数
 def create_enhanced_perception_module(
-    agent_id: str, config: dict[str, Any] | None = None
+    agent_id: str, config: Optional[dict[str, Any]] = None
 ) -> EnhancedPerceptionModule:
     """
     创建增强感知模块实例

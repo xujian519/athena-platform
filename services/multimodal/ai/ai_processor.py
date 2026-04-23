@@ -315,7 +315,7 @@ class AIProcessor:
 
         return {
             'dominant_colors': dominant_colors,
-            'color_palette': [color['hex'] for color in dominant_colors[:5]]
+            'color_palette': [color['hex'] for color in dominant_colors[:5]
         }
 
     def _analyze_image_quality(self, img: Image.Image) -> dict[str, Any]:
@@ -540,7 +540,7 @@ class AIProcessor:
 
         return result
 
-    def _detect_objects(self, file_path: str) -> list[dict[str, Any]]:
+    def _detect_objects(self, file_path: str) -> list[dict[str, Any]:
         """物体检测（简化实现）"""
         # 这里应该使用训练好的物体检测模型
         # 简化实现，返回空列表

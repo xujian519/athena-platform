@@ -70,8 +70,8 @@ class SwarmDecisionEngine:
         content: dict[str, Any],
         proposal_type: str,
         decision_type: SwarmDecisionType | None = None,
-        consensus_threshold: float | None = None,
-        expires_in: float | None = None,
+        consensus_threshold: Optional[float] = None,
+        expires_in: Optional[float] = None,
     ) -> Proposal:
         """
         创建提案

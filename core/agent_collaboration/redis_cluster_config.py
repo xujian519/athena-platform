@@ -56,7 +56,7 @@ class RedisNodeConfig:
 
     host: str
     port: int
-    password: str | None = None
+    password: Optional[str] = None
     db: int = 0
     max_connections: int = 50
     socket_timeout: int = 5
@@ -69,7 +69,7 @@ class RedisSentinelConfig:
 
     sentinels: list[RedisNodeConfig] = field(default_factory=list)
     master_name: str = "mymaster"
-    password: str | None = None
+    password: Optional[str] = None
     socket_timeout: int = 5
     socket_connect_timeout: int = 5
 
@@ -79,7 +79,7 @@ class RedisClusterConfig:
     """Redis集群配置"""
 
     nodes: list[RedisNodeConfig] = field(default_factory=list)
-    password: str | None = None
+    password: Optional[str] = None
     max_connections: int = 50
     socket_timeout: int = 5
     socket_connect_timeout: int = 5

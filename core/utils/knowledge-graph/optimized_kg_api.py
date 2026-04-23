@@ -58,7 +58,7 @@ class QueryParams:
     """查询参数"""
     skip: int = Field(default=0, ge=0, description='跳过记录数')
     limit: int = Field(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE, description='返回记录数')
-    order_by: str | None = Field(default=None, description='排序字段')
+    order_by: Optional[str] = Field(default=None, description='排序字段')
     order_direction: str = Field(default='ASC', pattern='^(ASC|DESC)$', description='排序方向')
 
 @dataclass
@@ -139,7 +139,7 @@ class OptimizedNodeResponse(BaseModel):
     id: str
     labels: list[str]
     properties: dict[str, Any]
-    degree: int | None = None  # 节点度数
+    degree: Optional[int] = None  # 节点度数
 
 class OptimizedRelationshipResponse(BaseModel):
     """优化的关系响应模型"""
@@ -148,7 +148,7 @@ class OptimizedRelationshipResponse(BaseModel):
     start_node: str
     end_node: str
     properties: dict[str, Any]
-    weight: float | None = None
+    weight: Optional[float] = None
 
 class PaginatedResponse(BaseModel):
     """分页响应模型"""
@@ -295,7 +295,7 @@ class OptimizedKnowledgeGraphAPI:
         @self.app.get('/nodes', response_model=PaginatedResponse)
         async def get_nodes_paginated(
             params: QueryParams = Depends(),
-            label: str | None = Query(None, description='节点标签过滤')
+            label: Optional[str] = Query(None, description='节点标签过滤')
         ):
             """分页获取节点列表"""
             if not self.driver:
@@ -356,7 +356,7 @@ class OptimizedKnowledgeGraphAPI:
 
         @self.app.get('/nodes/stream')
         async def stream_nodes(
-            label: str | None = Query(None, description='节点标签过滤'),
+            label: Optional[str] = Query(None, description='节点标签过滤'),
             batch_size: int = Query(100, ge=1, le=1000, description='批次大小')
         ):
             """流式获取节点"""

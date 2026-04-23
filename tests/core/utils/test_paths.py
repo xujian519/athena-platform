@@ -7,15 +7,12 @@ import os
 import sys
 import tempfile
 from pathlib import Path
-from unittest.mock import patch
-
-import pytest
 
 from core.utils.paths import (
     AthenaPaths,
+    ensure_project_root_in_path,
     get_paths,
     get_project_root,
-    ensure_project_root_in_path,
 )
 
 

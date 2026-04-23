@@ -254,7 +254,7 @@ class PatentRuleVectorizer:
         except Exception as e:
             logger.error(f"❌ 创建集合 {collection_name} 失败: {e}")
 
-    async def vectorize_patent_rule(self, rule_data: dict[str, Any]) -> dict[str, Any] | None:
+    async def vectorize_patent_rule(self, rule_data: dict[str, Any]) -> Optional[dict[str, Any]]:
         """向量化专利规则"""
         if self.embedding_model is None:
             logger.warning("⚠️ 嵌入模型未初始化")
@@ -449,7 +449,7 @@ class PatentRuleVectorizer:
     async def search_similar_rules(
         self,
         query: str,
-        category: str | None = None,
+        category: Optional[str] = None,
         limit: int = 10,
         score_threshold: float = 0.7
     ) -> list[dict[str, Any]]:

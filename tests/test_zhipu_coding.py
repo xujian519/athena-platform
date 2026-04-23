@@ -12,7 +12,7 @@ from pathlib import Path
 project_root = Path("/Users/xujian/Athena工作平台")
 sys.path.insert(0, str(project_root))
 
-from core.llm.adapters.cloud_adapter import CloudLLMAdapter
+from core.ai.llm.adapters.cloud_adapter import CloudLLMAdapter
 
 
 async def test_zhipu_coding():
@@ -139,7 +139,7 @@ async def compare_chat_vs_coding():
     code_task = "编写一个快速排序算法"
 
     # 测试聊天端点
-    print(f"\n1️⃣ 聊天端点 (https://open.bigmodel.cn/api/paas/v4)")
+    print("\n1️⃣ 聊天端点 (https://open.bigmodel.cn/api/paas/v4)")
     print(f"任务: {code_task}\n")
 
     try:
@@ -165,7 +165,7 @@ async def compare_chat_vs_coding():
         chat_result = ""
 
     # 测试编程端点
-    print(f"\n2️⃣ 编程端点 (https://open.bigmodel.cn/api/coding/paas/v4)")
+    print("\n2️⃣ 编程端点 (https://open.bigmodel.cn/api/coding/paas/v4)")
     print(f"任务: {code_task}\n")
 
     try:

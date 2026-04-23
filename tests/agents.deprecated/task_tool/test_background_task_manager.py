@@ -15,8 +15,7 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 try:
-    from core.agents.task_tool.background_task_manager import BackgroundTaskManager
-    from core.agents.task_tool.models import BackgroundTask, TaskStatus
+    from core.framework.agents.task_tool.background_task_manager import BackgroundTaskManager
 except ImportError:
     pytest.skip("background_task_manager.py尚未创建", allow_module_level=True)
 
@@ -241,3 +240,4 @@ class TestBackgroundTaskManager:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+

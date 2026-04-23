@@ -84,7 +84,7 @@ class SafeExpressionEvaluator:
     def evaluate(
         self,
         expression: str,
-        context: dict[str, Any] | None = None
+        context: Optional[dict[str, Any]] = None
     ) -> Any:
         """安全地求值表达式
 
@@ -255,7 +255,7 @@ _default_evaluator = SafeExpressionEvaluator()
 
 def safe_eval(
     expression: str,
-    context: dict[str, Any] | None = None
+    context: Optional[dict[str, Any]] = None
 ) -> Any:
     """安全求值表达式（便捷函数）
 

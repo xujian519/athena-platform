@@ -73,7 +73,7 @@ class ServicesConsistencyChecker:
         py_files = list(path.rglob("*.py"))
 
         # 检查主要入口点
-        main_files = [f for f in py_files if f.name in ["main.py", "app.py", "server.py", "run.py", "start.py"]]
+        main_files = [f for f in py_files if f.name in ["main.py", "app.py", "server.py", "run.py", "start.py"]
         service_info["entry_points"] = [str(f.relative_to(path)) for f in main_files]
 
         if any(f.name == "main.py" for f in main_files):

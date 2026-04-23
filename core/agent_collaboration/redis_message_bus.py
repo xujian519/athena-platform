@@ -73,7 +73,7 @@ class MessageEnvelope:
         return json.dumps(data, ensure_ascii=False).encode("utf-8")
 
     @classmethod
-    def from_bytes(cls, data: bytes) -> "MessageEnvelope":
+    def from_bytes(cls, data: bytes) -> MessageEnvelope:
         """从字节反序列化"""
         data_dict = json.loads(data.decode("utf-8"))
         return cls(**data_dict)
@@ -395,7 +395,7 @@ class RedisMessageBus:
     # ==================== 消费者管理 ====================
 
     async def register_consumer(
-        self, consumer_id: str, channels: list[str] | None = None
+        self, consumer_id: str, channels: Optional[list[str]] = None
     ) -> bool:
         """
         注册消费者
@@ -571,7 +571,7 @@ class RedisMessageBus:
             "running": self.running,
         }
 
-    async def get_consumer_stats(self, consumer_id: str) -> dict[str, Any] | None:
+    async def get_consumer_stats(self, consumer_id: str) -> Optional[dict[str, Any]]:
         """获取消费者统计"""
         if consumer_id not in self.consumers:
             return None

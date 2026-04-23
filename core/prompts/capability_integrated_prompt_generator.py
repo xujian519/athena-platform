@@ -51,7 +51,7 @@ class CapabilityIntegratedPromptGenerator(IntegratedPromptGenerator):
         scenario_context: ScenarioContext,
         scenario_rule: ScenarioRule,
         user_input: str,
-        additional_variables: dict[str, Any] | None = None,
+        additional_variables: Optional[dict[str, Any]] = None,
     ) -> IntegratedPrompt:
         """
         生成带能力调用的集成提示词
@@ -233,7 +233,7 @@ async def generate_prompt_with_capabilities(
     scenario_rule: ScenarioRule,
     user_input: str,
     unified_prompt_manager=None,
-    additional_variables: dict[str, Any] | None = None,
+    additional_variables: Optional[dict[str, Any]] = None,
 ) -> IntegratedPrompt:
     """
     便捷的带能力调用的提示词生成函数

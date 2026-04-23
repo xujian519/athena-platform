@@ -136,7 +136,7 @@ class PerformanceMonitor:
             except Exception as e:
                 logger.error(f"监控循环异常: {e}")
 
-    def record_request(self, latency: float, success: bool, metadata: dict[str, Any] | None = None):
+    def record_request(self, latency: float, success: bool, metadata: Optional[dict[str, Any]] = None):
         """
         记录请求
 

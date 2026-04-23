@@ -50,7 +50,7 @@ class SearchRequest(BaseModel):
 class SearchResponse(BaseModel):
     query: str
     search_type: str
-    results: list[dict[str, Any]]
+    results: list[dict[str, Any]
     execution_time: float
     vector_results: int | None = None
     graph_results: int | None = None
@@ -60,7 +60,7 @@ class PatentInsight(BaseModel):
     title: str
     abstract: str
     vector_similarity: float | None = None
-    graph_relationships: list[dict[str, Any]] = []
+    graph_relationships: list[dict[str, Any] = []
     insights: list[str] = []
 
 @app.on_event('startup')

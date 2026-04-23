@@ -50,10 +50,9 @@ def backup_file(file_path):
 def remove_handlers_from_file(file_path, handler_names):
     """从文件中删除指定的handler函数"""
 
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with open(file_path, encoding='utf-8') as f:
         content = f.read()
 
-    original_content = content
     removed_count = 0
 
     for handler_name in handler_names:
@@ -77,7 +76,7 @@ def remove_handlers_from_file(file_path, handler_names):
 
         return removed_count
     else:
-        logger.warning(f"⚠️ 未找到指定的handler")
+        logger.warning("⚠️ 未找到指定的handler")
         return 0
 
 
@@ -112,7 +111,7 @@ def main():
         print("-" * 40)
 
         if not os.path.exists(file_path):
-            print(f"   ⚠️ 文件不存在，跳过")
+            print("   ⚠️ 文件不存在，跳过")
             continue
 
         # 1. 备份文件
@@ -120,7 +119,7 @@ def main():
         backup_path = backup_file(file_path)
 
         if backup_path is None:
-            print(f"   ❌ 文件不存在，跳过")
+            print("   ❌ 文件不存在，跳过")
             continue
 
         # 2. 删除handler
@@ -131,15 +130,16 @@ def main():
         if removed == 0:
             # 恢复备份
             shutil.copy2(backup_path, file_path)
-            print(f"   ⚠️ 未找到handler，已恢复备份")
+            print("   ⚠️ 未找到handler，已恢复备份")
 
     # 3. 验证删除结果
     print("\n" + "=" * 60)
     print("🔍 验证删除结果")
     print("=" * 60)
 
-    from core.tools.unified_registry import get_unified_registry
     import asyncio
+
+    from core.tools.unified_registry import get_unified_registry
 
     async def verify():
         registry = get_unified_registry()
@@ -159,7 +159,7 @@ def main():
     print("=" * 60)
     print(f"处理文件: {len(tools_to_remove)}")
     print(f"删除handler: {total_removed}个")
-    print(f"备份位置: /Users/xujian/Athena工作平台/.backup/removed_tools/")
+    print("备份位置: /Users/xujian/Athena工作平台/.backup/removed_tools/")
 
     print("\n删除的工具:")
     print("\nreal_tool_implementations.py:")

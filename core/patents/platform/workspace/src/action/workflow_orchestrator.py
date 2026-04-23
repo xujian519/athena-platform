@@ -77,7 +77,7 @@ class WorkflowStep:
     retry_delay: timedelta = timedelta(seconds=30)
     status: StepStatus = StepStatus.WAITING
     result: Optional[Dict[str, Any]] = None
-    error: str | None = None
+    error: Optional[str] = None
     start_time: datetime | None = None
     end_time: datetime | None = None
     execution_time: float = 0.0
@@ -675,7 +675,7 @@ class WorkflowOrchestrator:
         if total_finished > 0:
             self.workflow_stats['success_rate'] = self.workflow_stats['total_completed'] / total_finished
 
-    def get_workflow_status(self, workflow_id: str) -> Dict[str, Any | None]:
+    def get_workflow_status(self, workflow_id: str) -> Dict[str, Any] | None]:
         """获取工作流状态"""
         workflow = self.active_workflows.get(workflow_id) or self.completed_workflows.get(workflow_id)
         if not workflow:

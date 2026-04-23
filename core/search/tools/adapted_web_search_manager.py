@@ -42,7 +42,7 @@ class AdaptedWebSearchManager(BaseSearchTool):
     保持原有功能的同时,支持统一管理和智能选择
     """
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化适配版Web搜索管理器
 
@@ -301,7 +301,7 @@ class AdaptedWebSearchManager(BaseSearchTool):
             "timeout": query.timeout,
         }
 
-    def _select_engines(self, query: SearchQuery) -> list[str | None]:
+    def _select_engines(self, query: SearchQuery) -> Optional[list[str]]:
         """选择搜索引擎"""
         # 基于查询内容选择合适的引擎
         text_lower = query.text.lower()
@@ -528,7 +528,7 @@ class AdaptedWebSearchManager(BaseSearchTool):
 
 # 便捷函数
 async def create_adapted_web_search_manager(
-    config: dict[str, Any] | None = None,
+    config: Optional[dict[str, Any]] = None,
 ) -> AdaptedWebSearchManager:
     """
     创建适配版Web搜索管理器
@@ -549,7 +549,7 @@ from ..registry.tool_registry import register_to_registry
 
 
 @register_to_registry(category="web_search", auto_init=False)
-def create_web_search_tool(config: dict[str, Any] | None = None) -> AdaptedWebSearchManager:
+def create_web_search_tool(config: Optional[dict[str, Any]] = None) -> AdaptedWebSearchManager:
     """创建Web搜索工具的工厂函数"""
     return AdaptedWebSearchManager(config)
 

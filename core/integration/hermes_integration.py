@@ -223,7 +223,7 @@ await scheduler.start()
 }
 
 
-def get_integration_guide(module_name: str) -> str | None:
+def get_integration_guide(module_name: str) -> Optional[str]:
     """
     获取模块的集成指南
 
@@ -231,7 +231,7 @@ def get_integration_guide(module_name: str) -> str | None:
         module_name: 模块名称
 
     Returns:
-        str | None: 集成指南
+        Optional[str]: 集成指南
     """
     return INTEGRATION_GUIDES.get(module_name)
 

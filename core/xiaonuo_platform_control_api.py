@@ -43,9 +43,9 @@ class ServiceControlResponse(BaseModel):
     """服务控制响应"""
     success: bool
     service: str
-    message: str | None = None
-    error: str | None = None
-    pid: int | None = None
+    message: Optional[str] = None
+    error: Optional[str] = None
+    pid: Optional[int] = None
 
 
 class PlatformSummaryResponse(BaseModel):

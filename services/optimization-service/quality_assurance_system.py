@@ -751,7 +751,7 @@ class CodeQualityAnalyzer:
 
         return counts
 
-    def _get_most_common_issues(self, issues: list[QualityIssue]) -> list[dict[str, Any]]:
+    def _get_most_common_issues(self, issues: list[QualityIssue]) -> list[dict[str, Any]:
         """获取最常见的问题"""
         issue_counts = {}
 
@@ -762,7 +762,7 @@ class CodeQualityAnalyzer:
         # 按频率排序
         sorted_issues = sorted(issue_counts.items(), key=lambda x: x[1], reverse=True)
 
-        return [{'title': title, 'count': count} for title, count in sorted_issues[:5]]
+        return [{'title': title, 'count': count} for title, count in sorted_issues[:5]
 
     def _identify_improvement_areas(self, metrics: dict[str, Any]) -> list[str]:
         """识别改进领域"""
@@ -1550,7 +1550,7 @@ class SecurityAuditor:
 
         return max(0, base_score)
 
-    def _assess_security_risk(self, security_issues: list[dict[str, Any]]) -> dict[str, Any]:
+    def _assess_security_risk(self, security_issues: list[dict[str, Any]) -> dict[str, Any]:
         """评估安全风险"""
         if not security_issues:
             return {
@@ -1815,7 +1815,7 @@ class QualityAssuranceSystem:
             vulnerabilities = qa_results.get('security_audit', {}).get('security_issues', [])
 
             # 按严重程度排序
-            critical_issues = [i for i in issues + vulnerabilities if i.get('severity') in ['critical', 'high']]
+            critical_issues = [i for i in issues + vulnerabilities if i.get('severity') in ['critical', 'high']
             medium_issues = [i for i in issues + vulnerabilities if i.get('severity') == 'medium']
 
             if critical_issues:

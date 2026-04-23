@@ -68,7 +68,7 @@ class XiaoNuoChatRequest(BaseModel):
 
 class VisualizationRequest(BaseModel):
     """可视化请求"""
-    extractions: list[dict[str, Any]] = Field(..., description='提取结果')
+    extractions: list[dict[str, Any] = Field(..., description='提取结果')
     output_path: str | None = Field(None, description='输出路径')
 
 # 响应模型

@@ -338,7 +338,7 @@ class DeepLearningEngine:
 
     async def get_best_model(
         self, task_type: LearningTask | None = None, metric: str = "f1_score"
-    ) -> str | None:
+    ) -> Optional[str]:
         """获取最佳模型"""
         candidates = []
 

@@ -174,7 +174,7 @@ class SessionManager:
             return True
         return False
 
-    async def list_sessions(self) -> list[dict[str, Any]]:
+    async def list_sessions(self) -> list[dict[str, Any]:
         """
         列出所有会话
 

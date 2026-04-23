@@ -148,7 +148,7 @@ class MemoryCache:
 
             return item.value
 
-    def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
+    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
         """设置缓存值"""
         with self.lock:
             if ttl is None:
@@ -284,7 +284,7 @@ class RedisCache:
 
         return None
 
-    def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
+    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
         """设置缓存值"""
         if not self.enabled:
             return False
@@ -466,7 +466,7 @@ class MultiLevelCacheManager:
         self,
         key: str,
         value: Any,
-        ttl: int | None = None,
+        ttl: Optional[int] = None,
         levels: list[str] = None,
     ) -> bool:
         """
@@ -505,7 +505,7 @@ class MultiLevelCacheManager:
 
         return l1_deleted or l2_deleted
 
-    def get_or_set(self, key: str, func: Callable[[], Any], ttl: int | None = None) -> Any:
+    def get_or_set(self, key: str, func: Callable[[], Any], ttl: Optional[int] = None) -> Any:
         """
         获取缓存值,如果不存在则通过函数计算并缓存
 
@@ -529,7 +529,7 @@ class MultiLevelCacheManager:
 
         return value
 
-    def invalidate(self, pattern: str | None = None) -> Any:
+    def invalidate(self, pattern: Optional[str] = None) -> Any:
         """
         使缓存失效
 

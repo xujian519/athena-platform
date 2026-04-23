@@ -60,7 +60,7 @@ class TemporalTrend:
 class ViewpointAnalyzer:
     """观点聚合分析器"""
 
-    def __init__(self, postgres_client, hybrid_retriever, config: dict[str, Any] | None = None):
+    def __init__(self, postgres_client, hybrid_retriever, config: Optional[dict[str, Any]] = None):
         """
         初始化分析器
 
@@ -459,7 +459,7 @@ class ViewpointAnalyzer:
 
 # 便捷函数
 def create_viewpoint_analyzer(
-    postgres_client=None, hybrid_retriever=None, config: dict[str, Any] | None = None
+    postgres_client=None, hybrid_retriever=None, config: Optional[dict[str, Any]] = None
 ) -> ViewpointAnalyzer:
     """
     创建观点分析器

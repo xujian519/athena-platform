@@ -53,7 +53,7 @@ class Message:
     content: Any = None
     metadata: dict[str, Any] = field(default_factory=dict)
     timestamp: datetime = field(default_factory=datetime.now)
-    reply_to: str | None = None
+    reply_to: Optional[str] = None
     expires_at: datetime | None = None
     retry_count: int = 0
     max_retries: int = 3
@@ -62,7 +62,7 @@ class Message:
 class MessageHandler:
     """消息处理器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
         self.message_handlers: dict[str, Callable] = {}
         self.message_queue = asyncio.Queue()
@@ -115,9 +115,9 @@ class MessageHandler:
         message_type: MessageType = MessageType.TEXT,
         priority: MessagePriority = MessagePriority.NORMAL,
         sender: str = "",
-        reply_to: str | None = None,
-        metadata: dict[str, Any] | None = None,
-        expires_in: int | None = None,
+        reply_to: Optional[str] = None,
+        metadata: Optional[dict[str, Any]] = None,
+        expires_in: Optional[int] = None,
     ) -> str:
         """
         发送消息
@@ -160,7 +160,7 @@ class MessageHandler:
         priority: MessagePriority = MessagePriority.NORMAL,
         sender: str = "",
         receivers: list[str] = None,
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> list[str]:
         """
         广播消息
@@ -198,7 +198,7 @@ class MessageHandler:
         """获取消息"""
         return self.processed_messages.get(message_id)
 
-    async def get_message_status(self, message_id: str) -> str | None:
+    async def get_message_status(self, message_id: str) -> Optional[str]:
         """获取消息状态"""
         if message_id in self.processed_messages:
             return "processed"
@@ -307,7 +307,7 @@ class MessageHandler:
         receiver: str,
         command: str,
         args: list[Any] | None = None,
-        kwargs: dict[str, Any] | None = None,
+        kwargs: Optional[dict[str, Any]] = None,
         sender: str = "",
     ) -> str:
         """发送命令消息"""
@@ -370,7 +370,7 @@ class MessageHandler:
 
 
 # 兼容性函数
-def create_message_handler(config: dict[str, Any] | None = None) -> MessageHandler:
+def create_message_handler(config: Optional[dict[str, Any]] = None) -> MessageHandler:
     """创建消息处理器实例"""
     return MessageHandler(config)
 

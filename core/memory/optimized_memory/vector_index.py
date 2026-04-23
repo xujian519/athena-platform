@@ -35,7 +35,7 @@ class OptimizedVectorIndex:
         # 初始化索引结构
         self.vectors: list[np.ndarray] = []
         self.index_metadata: dict[str, dict[str, Any]] = {}
-        self.build_time: float | None = None
+        self.build_time: Optional[float] = None
         self.query_count = 0
 
         # 性能统计
@@ -56,7 +56,7 @@ class OptimizedVectorIndex:
         self.kmeans_model = None  # type: ignore
 
     def add_vector(
-        self, vector: np.ndarray, metadata: dict[str, Any] | None = None
+        self, vector: np.ndarray, metadata: Optional[dict[str, Any]] = None
     ) -> str:
         """添加向量"""
         vector_id = str(uuid.uuid4())

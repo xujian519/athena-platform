@@ -29,9 +29,9 @@ class SelectionCriteria:
     strategy: SelectionStrategy = SelectionStrategy.BALANCED  # 选择策略
 
     # 约束条件
-    max_cost: float | None = None  # 最大成本
-    max_latency: float | None = None  # 最大延迟(秒)
-    min_quality: float | None = None  # 最小质量分数
+    max_cost: Optional[float] = None  # 最大成本
+    max_latency: Optional[float] = None  # 最大延迟(秒)
+    min_quality: Optional[float] = None  # 最小质量分数
 
     # 偏好
     prefer_local: bool = False  # 是否偏好本地模型
@@ -144,7 +144,7 @@ class IntelligentModelSelector:
 
     async def select_model(
         self, request: LLMRequest, criteria: SelectionCriteria | None = None
-    ) -> str | None:
+    ) -> Optional[str]:
         """
         智能选择最合适的模型
 

@@ -122,7 +122,7 @@ class DatabasePerformanceAnalyzer:
                         errors.append(str(e))
 
                 if times:
-                    query_results[query_info["name"]] = {
+                    query_results[query_info["name"] = {
                         "sql": query_info["sql"],
                         "description": query_info["description"],
                         "avg_time_ms": statistics.mean(times) * 1000,
@@ -133,7 +133,7 @@ class DatabasePerformanceAnalyzer:
                         "success_rate": len(times) / 10,
                     }
                 else:
-                    query_results[query_info["name"]] = {
+                    query_results[query_info["name"] = {
                         "sql": query_info["sql"],
                         "description": query_info["description"],
                         "error": "所有查询都失败了",

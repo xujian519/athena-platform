@@ -37,7 +37,7 @@ class CollaborationPattern(ABC):
     @abstractmethod
     async def initiate_collaboration(
         self, task: Task, participants: list[str], context: dict[str, Any]
-    ) -> str | None:
+    ) -> Optional[str]:
         """启动协作"""
         pass
 
@@ -62,7 +62,7 @@ class SequentialCollaborationPattern(CollaborationPattern):
 
     async def initiate_collaboration(
         self, task: Task, participants: list[str], context: dict[str, Any]
-    ) -> str | None:
+    ) -> Optional[str]:
         """启动串行协作"""
         try:
             session_id = str(uuid.uuid4())
@@ -255,7 +255,7 @@ class ParallelCollaborationPattern(CollaborationPattern):
 
     async def initiate_collaboration(
         self, task: Task, participants: list[str], context: dict[str, Any]
-    ) -> str | None:
+    ) -> Optional[str]:
         """启动并行协作"""
         try:
             session_id = str(uuid.uuid4())
@@ -516,7 +516,7 @@ class HierarchicalCollaborationPattern(CollaborationPattern):
 
     async def initiate_collaboration(
         self, task: Task, participants: list[str], context: dict[str, Any]
-    ) -> str | None:
+    ) -> Optional[str]:
         """启动层次协作"""
         try:
             session_id = str(uuid.uuid4())
@@ -782,7 +782,7 @@ class ConsensusCollaborationPattern(CollaborationPattern):
 
     async def initiate_collaboration(
         self, task: Task, participants: list[str], context: dict[str, Any]
-    ) -> str | None:
+    ) -> Optional[str]:
         """启动共识协作"""
         try:
             session_id = str(uuid.uuid4())

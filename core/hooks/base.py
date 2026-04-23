@@ -332,7 +332,7 @@ def get_global_registry() -> HookRegistry:
     return _global_registry
 
 
-def register_hook(hook_type: HookType | None = None, name: str | None = None, priority: int = 0):
+def register_hook(hook_type: HookType | None = None, name: Optional[str] = None, priority: int = 0):
     """
     装饰器: 快速注册Hook
 

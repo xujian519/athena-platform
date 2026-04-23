@@ -16,12 +16,12 @@ Execution Module Performance Tests
 创建时间: 2026-01-27
 """
 
-import pytest
-
 import asyncio
 import statistics
 import sys
 import time
+
+import pytest
 
 from core.execution.parallel_executor import ParallelExecutor
 from core.execution.shared_types import (
@@ -394,7 +394,6 @@ class TestMemoryEfficiency:
 
     def test_task_memory_footprint(self):
         """测试任务内存占用"""
-        import sys
 
         task = Task(
             task_id="test_001",
@@ -411,7 +410,6 @@ class TestMemoryEfficiency:
 
     def test_queue_memory_efficiency(self):
         """测试队列内存效率"""
-        import sys
 
         queue = TaskQueue(max_size=1000)
 

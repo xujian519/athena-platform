@@ -52,7 +52,7 @@ class LLMEnhancedSearchConfig:
 
     # 任务类型配置
     task_type: str = "patent_analysis"  # 任务类型
-    system_message: str | None = None  # 系统消息
+    system_message: Optional[str] = None  # 系统消息
 
     # 性能配置
     enable_cache: bool = True  # 启用缓存

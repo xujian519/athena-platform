@@ -112,7 +112,7 @@ class IntegratedPatentService:
         # 默认返回通用查询
         return "general_inquiry"
 
-    def _generate_suggested_actions(self, intent: str) -> list[dict[str, str]]:
+    def _generate_suggested_actions(self, intent: str) -> list[dict[str, str]:
         """生成建议的操作"""
         action_map = {
             "patent_review": [
@@ -141,7 +141,7 @@ class IntegratedPatentService:
             {"action": "general_analysis", "label": "综合分析"}
         ])
 
-    def _get_knowledge_sources(self) -> list[dict[str, str]]:
+    def _get_knowledge_sources(self) -> list[dict[str, str]:
         """获取知识来源信息"""
         return [
             {
@@ -172,8 +172,8 @@ class IntegratedPatentService:
 
     async def batch_process_queries(
         self,
-        queries: list[dict[str, Any]]
-    ) -> list[dict[str, Any]]:
+        queries: list[dict[str, Any]
+    ) -> list[dict[str, Any]:
         """批量处理查询"""
         results = []
 

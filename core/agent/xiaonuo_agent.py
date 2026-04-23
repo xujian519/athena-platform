@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 class XiaonuoAgent(BaseAgent):
     """小诺Agent - 情感精灵"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__(AgentType.XIAONUO, config)
         self.emotional_state = "happy"
         self.creativity_level = 0.8

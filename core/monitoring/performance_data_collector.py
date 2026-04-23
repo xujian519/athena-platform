@@ -77,7 +77,7 @@ class PerformanceMetric:
     # 端到端指标
     total_processing_time: float = 0.0
     success: bool = True
-    user_satisfaction: float | None = None  # 1-5分
+    user_satisfaction: Optional[float] = None  # 1-5分
 
     # 上下文信息
     context: dict[str, Any] = field(default_factory=dict)
@@ -507,7 +507,7 @@ async def record_tool_selection_metric(
     tools_available: int,
     tools_selected: int,
     selection_time: float,
-    accuracy: float | None = None,
+    accuracy: Optional[float] = None,
 ):
     """记录工具选择指标"""
     collector = get_performance_collector()
@@ -559,7 +559,7 @@ async def record_end_to_end_metric(
     task_description: str,
     total_time: float,
     success: bool,
-    user_satisfaction: float | None = None,
+    user_satisfaction: Optional[float] = None,
 ):
     """记录端到端指标"""
     collector = get_performance_collector()

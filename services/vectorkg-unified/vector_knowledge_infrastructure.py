@@ -348,7 +348,7 @@ class VectorKnowledgeInfrastructure:
     def _find_vector_graph_links(self, vector_results: list[dict], graph_results: list[dict]) -> list[dict]:
         """找到向量结果和图谱结果的关联"""
         links = []
-        vector_content = " ".join([r.get('content', '') for r in vector_results[:5]])
+        vector_content = " ".join([r.get('content', '') for r in vector_results[:5])
         graph_entities = [r['node']['name'] for r in graph_results]
 
         # 简化的关联检测

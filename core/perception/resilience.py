@@ -77,8 +77,8 @@ class RetryConfig:
     jitter_factor: float = 0.1  # 抖动因子
 
     # 超时配置
-    timeout: float | None = None  # 单次请求超时
-    total_timeout: float | None = None  # 总超时时间
+    timeout: Optional[float] = None  # 单次请求超时
+    total_timeout: Optional[float] = None  # 总超时时间
 
     # 重试条件
     retry_on: list[type[Exception]] | None = None  # 需要重试的异常类型

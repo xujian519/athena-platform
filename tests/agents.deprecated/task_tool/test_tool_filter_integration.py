@@ -5,7 +5,7 @@
 
 import pytest
 
-from core.agents.task_tool.task_tool import TaskTool
+from core.framework.agents.task_tool.task_tool import TaskTool
 
 
 class TestToolFilterIntegration:

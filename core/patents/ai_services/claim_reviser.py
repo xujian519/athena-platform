@@ -181,7 +181,7 @@ class ClaimReviser:
         self,
         claims: list[str],
         office_action: str,
-        prior_art: list[str] | None = None,
+        prior_art: Optional[list[str]] = None,
         revision_mode: str = "conservative",
         num_alternatives: int = 2,
     ) -> RevisionResult:
@@ -387,7 +387,7 @@ class ClaimReviser:
         self,
         claims: list[str],
         oa_analysis: OfficeActionAnalysis,
-        prior_art: list[str] | None,
+        prior_art: Optional[list[str]],
         revision_mode: RevisionMode,
         num_candidates: int,
     ) -> list[dict]:
@@ -411,7 +411,7 @@ class ClaimReviser:
         self,
         claims: list[str],
         oa_analysis: OfficeActionAnalysis,
-        prior_art: list[str] | None,
+        prior_art: Optional[list[str]],
         revision_mode: RevisionMode,
         variation_index: int,
     ) -> dict | None:

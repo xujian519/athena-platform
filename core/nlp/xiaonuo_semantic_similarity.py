@@ -507,7 +507,7 @@ class XiaonuoSemanticSimilarity:
 
         logger.info(f"💾 语义模型已保存: {model_path}")
 
-    def load_models(self, model_path: str | None = None) -> Any | None:
+    def load_models(self, model_path: Optional[str] = None) -> Any | None:
         """加载模型"""
         if model_path is None:
             model_path = os.path.join(self.config.model_dir, "latest_semantic_models.pkl")

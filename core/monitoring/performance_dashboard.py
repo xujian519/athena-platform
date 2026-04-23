@@ -184,7 +184,7 @@ class PerformanceDashboard:
 
         return summary
 
-    def export_metrics(self, filepath: str | None = None) -> Any:
+    def export_metrics(self, filepath: Optional[str] = None) -> Any:
         """导出指标到文件"""
         if not filepath:
             filepath = f"performance_metrics_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"

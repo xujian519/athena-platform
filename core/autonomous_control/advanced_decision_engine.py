@@ -84,7 +84,7 @@ class DecisionResult:
     risk_assessment: dict[str, float]
     created_at: datetime = field(default_factory=datetime.now)
     executed_at: datetime | None = None
-    outcome: dict[str, Any] | None = None
+    outcome: Optional[dict[str, Any]] = None
 
 
 class AdvancedDecisionEngine:

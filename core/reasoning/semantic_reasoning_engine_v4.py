@@ -321,11 +321,11 @@ class SemanticReasoningEngineV4:
     async def reason(
         self,
         query: str,
-        context: str | None = None,
-        keys: list[str] | None = None,
-        constraints: str | None = None,
+        context: Optional[str] = None,
+        keys: Optional[list[str]] = None,
+        constraints: Optional[str] = None,
         reasoning_types: list[ReasoningType] | None = None,
-        domain: str | None = None,
+        domain: Optional[str] = None,
     ) -> list[ReasoningResultV4]:
         """
         执行推理 - v4.0版本
@@ -398,7 +398,7 @@ class SemanticReasoningEngineV4:
             return SimpleConfidence(value=confidence_value)
 
     async def _rule_based_reasoning_v4(
-        self, query: str, context: str | None, domain: str | None = None
+        self, query: str, context: Optional[str], domain: Optional[str] = None
     ) -> list[ReasoningResultV4]:
         """基于规则的推理 - v4.0版本"""
         results = []
@@ -563,7 +563,7 @@ class SemanticReasoningEngineV4:
         return conclusion
 
     async def _semantic_reasoning_v4(
-        self, query: str, context: str | None, domain: str | None = None
+        self, query: str, context: Optional[str], domain: Optional[str] = None
     ) -> list[ReasoningResultV4]:
         """语义推理 - v4.0版本"""
         results = []
@@ -673,7 +673,7 @@ class SemanticReasoningEngineV4:
             return 0.0
 
     async def _case_based_reasoning_v4(
-        self, query: str, context: str | None, domain: str | None = None
+        self, query: str, context: Optional[str], domain: Optional[str] = None
     ) -> list[ReasoningResultV4]:
         """基于案例的推理 - v4.0版本"""
         results = []
@@ -756,7 +756,7 @@ class SemanticReasoningEngineV4:
             return 0.0
 
     async def _causal_reasoning_v4(
-        self, query: str, context: str | None, domain: str | None = None
+        self, query: str, context: Optional[str], domain: Optional[str] = None
     ) -> list[ReasoningResultV4]:
         """因果推理 - v4.0版本"""
         results = []
@@ -812,7 +812,7 @@ class SemanticReasoningEngineV4:
         return results
 
     async def _hybrid_reasoning_v4(
-        self, initial_results: list[ReasoningResultV4], query: str, context: str | None
+        self, initial_results: list[ReasoningResultV4], query: str, context: Optional[str]
     ) -> list[ReasoningResultV4]:
         """混合推理 - v4.0版本"""
         results = []

@@ -39,7 +39,7 @@ def check_dependencies():
 
     for module_name, description in dependencies:
         try:
-            module = __import__(module_name, fromlist=[""])
+            __import__(module_name, fromlist=[""])
             print(f"✅ {description:30s} ({module_name})")
             existing.append(module_name)
         except ImportError as e:
@@ -49,74 +49,74 @@ def check_dependencies():
 
     # 统计
     print("\n" + "-" * 80)
-    print(f"📊 统计:")
+    print("📊 统计:")
     print(f"  ✅ 已存在: {len(existing)} 个")
     print(f"  ❌ 缺失: {len(missing)} 个")
 
     # 详细分析
     if missing:
-        print(f"\n⚠️  缺失模块详情:")
+        print("\n⚠️  缺失模块详情:")
         for module_name, description, error in missing:
             print(f"\n  模块: {description} ({module_name})")
             print(f"  错误: {error}")
 
             # 提供解决方案
-            print(f"  💡 解决方案:")
+            print("  💡 解决方案:")
 
             if "unified_agent_memory_system" in module_name:
-                print(f"     - 检查 core/memory/ 目录")
-                print(f"     - 可能需要从 production 复制或创建简化版本")
+                print("     - 检查 core/memory/ 目录")
+                print("     - 可能需要从 production 复制或创建简化版本")
             elif "enhanced_meta_learning" in module_name:
-                print(f"     - 检查 core/learning/ 目录")
-                print(f"     - 可能需要创建基础实现")
+                print("     - 检查 core/learning/ 目录")
+                print("     - 可能需要创建基础实现")
             elif "memory_consolidation_system" in module_name:
-                print(f"     - 检查 core/learning/ 目录")
-                print(f"     - 可能需要创建基础实现")
+                print("     - 检查 core/learning/ 目录")
+                print("     - 可能需要创建基础实现")
 
     # 测试实际导入
     print("\n" + "-" * 80)
     print("🔍 测试 Enhanced Xiaonuo 实际导入:\n")
 
     try:
-        from core.agents.xiaonuo.enhanced_xiaonuo import EnhancedXiaonuo
+        from core.framework.agents.xiaonuo.enhanced_xiaonuo import EnhancedXiaonuo
         print("✅ Enhanced Xiaonuo 导入成功!")
         print(f"   - 类名: {EnhancedXiaonuo.__name__}")
         print(f"   - 模块: {EnhancedXiaonuo.__module__}")
 
         # 检查类属性
-        print(f"\n📋 类属性:")
+        print("\n📋 类属性:")
         if hasattr(EnhancedXiaonuo, '__init__'):
-            print(f"   ✅ __init__ 方法")
+            print("   ✅ __init__ 方法")
         if hasattr(EnhancedXiaonuo, 'reflection_engine_v5'):
-            print(f"   ✅ reflection_engine_v5 属性")
+            print("   ✅ reflection_engine_v5 属性")
 
     except ImportError as e:
         print(f"❌ Enhanced Xiaonuo 导入失败: {e}")
 
         # 提供详细的修复建议
-        print(f"\n💡 修复建议:")
+        print("\n💡 修复建议:")
 
         if missing:
-            print(f"\n1. 创建缺失的依赖模块:")
+            print("\n1. 创建缺失的依赖模块:")
             for module_name, description, _ in missing:
                 print(f"   - {description}")
 
-            print(f"\n2. 或者在 enhanced_xiaonuo.py 中添加备用实现:")
-            print(f"   ```python")
-            print(f"   # 添加备用类")
-            print(f"   try:")
-            print(f"       from core.memory.unified_agent_memory_system import ...")
-            print(f"   except ImportError:")
-            print(f"       class UnifiedAgentMemorySystem:")
-            print(f"           # 备用实现")
-            print(f"           pass")
-            print(f"   ```")
+            print("\n2. 或者在 enhanced_xiaonuo.py 中添加备用实现:")
+            print("   ```python")
+            print("   # 添加备用类")
+            print("   try:")
+            print("       from core.framework.memory.unified_agent_memory_system import ...")
+            print("   except ImportError:")
+            print("       class UnifiedAgentMemorySystem:")
+            print("           # 备用实现")
+            print("           pass")
+            print("   ```")
 
-            print(f"\n3. 或者简化 enhanced_xiaonuo.py:")
-            print(f"   ```python")
-            print(f"   # 临时注释掉非核心依赖")
-            print(f"   # from core.memory... import ...")
-            print(f"   ```")
+            print("\n3. 或者简化 enhanced_xiaonuo.py:")
+            print("   ```python")
+            print("   # 临时注释掉非核心依赖")
+            print("   # from core.framework.memory... import ...")
+            print("   ```")
 
     print("\n" + "=" * 80)
 

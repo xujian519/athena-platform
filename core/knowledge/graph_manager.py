@@ -74,7 +74,7 @@ class KnowledgeGraphManager:
             self._neo4j_manager.close()
             self._connected = False
 
-    def search_nodes(self, query: str, node_types: list[str] | None = None,
+    def search_nodes(self, query: str, node_types: Optional[list[str]] = None,
                     max_depth: int = 2, limit: int = 20) -> list[dict[str, Any]]:
         """
         搜索知识图谱节点
@@ -117,9 +117,9 @@ class KnowledgeGraphManager:
             logger.error(f"搜索节点失败: {e}")
             return self._get_mock_nodes(query, limit)
 
-    def search_relations(self, source_id: str | None = None,
-                        target_id: str | None = None,
-                        relation_type: str | None = None,
+    def search_relations(self, source_id: Optional[str] = None,
+                        target_id: Optional[str] = None,
+                        relation_type: Optional[str] = None,
                         limit: int = 20) -> list[dict[str, Any]]:
         """
         搜索关系
@@ -187,7 +187,7 @@ class KnowledgeGraphManager:
                 'relation_types': {}
             }
 
-    def execute_query(self, cypher: str, params: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+    def execute_query(self, cypher: str, params: Optional[dict[str, Any]] = None) -> list[dict[str, Any]]:
         """
         执行Cypher查询
 

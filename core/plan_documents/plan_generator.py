@@ -39,8 +39,8 @@ class PlanStep:
     name: str
     description: str
     status: str = "pending"
-    context_file: str | None = None
-    dependencies: list[str] | None = None
+    context_file: Optional[str] = None
+    dependencies: Optional[list[str]] = None
 
     def __post_init__(self):
         if self.dependencies is None:
@@ -345,7 +345,7 @@ class PlanDocument:
             return False
 
     async def update_step_status(
-        self, task_id: str, step_id: str, new_status: str, context_file: str | None = None
+        self, task_id: str, step_id: str, new_status: str, context_file: Optional[str] = None
     ) -> bool:
         """
         更新步骤状态

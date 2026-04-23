@@ -253,7 +253,7 @@ def setup_tracing(
 
 
 # 追踪装饰器(简化版)
-def trace_operation(operation_name: str | None = None,
+def trace_operation(operation_name: Optional[str] = None,
     attributes: dict[str, str] | None = None):
     """
     操作追踪装饰器

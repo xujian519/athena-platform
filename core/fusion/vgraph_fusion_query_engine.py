@@ -143,9 +143,9 @@ class FusionQueryEngine:
         self,
         query_text: str,
         query_vector: list[float],
-        entity_types: list[str] | None = None,
+        entity_types: Optional[list[str]] = None,
         limit: int = 10,
-        filters: dict[str, Any] | None = None,
+        filters: Optional[dict[str, Any]] = None,
         strategy: str = "balanced",
     ) -> tuple[list[QueryResult], dict[str, Any]]:
         """
@@ -306,7 +306,7 @@ class FusionQueryEngine:
         return steps.get(query_type, [])
 
     async def _execute_vector_query(
-        self, query_vector: list[float], plan: QueryPlan, filters: dict[str, Any] | None = None
+        self, query_vector: list[float], plan: QueryPlan, filters: Optional[dict[str, Any]] = None
     ) -> list[QueryResult]:
         """执行纯向量查询"""
         results = []
@@ -358,7 +358,7 @@ class FusionQueryEngine:
         return results
 
     async def _execute_graph_query(
-        self, query_text: str, plan: QueryPlan, filters: dict[str, Any] | None = None
+        self, query_text: str, plan: QueryPlan, filters: Optional[dict[str, Any]] = None
     ) -> list[QueryResult]:
         """执行纯图查询"""
         results = []
@@ -412,7 +412,7 @@ class FusionQueryEngine:
         query_vector: list[float],
         query_text: str,
         plan: QueryPlan,
-        filters: dict[str, Any] | None = None,
+        filters: Optional[dict[str, Any]] = None,
     ) -> list[QueryResult]:
         """执行向量引导图遍历"""
         # 使用联合索引的优化方法
@@ -456,7 +456,7 @@ class FusionQueryEngine:
         query_vector: list[float],
         query_text: str,
         plan: QueryPlan,
-        filters: dict[str, Any] | None = None,
+        filters: Optional[dict[str, Any]] = None,
     ) -> list[QueryResult]:
         """执行图剪枝向量检索"""
         entities = self._extract_entities(query_text)
@@ -509,7 +509,7 @@ class FusionQueryEngine:
         query_vector: list[float],
         query_text: str,
         plan: QueryPlan,
-        filters: dict[str, Any] | None = None,
+        filters: Optional[dict[str, Any]] = None,
     ) -> list[QueryResult]:
         """执行完全融合查询"""
         # 并行执行向量检索和图遍历

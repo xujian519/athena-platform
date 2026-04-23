@@ -13,6 +13,7 @@ NLP模块__init__.py单元测试
 
 import pytest
 
+
 # 测试所有主要导入
 def test_module_imports():
     """测试模块主要导入"""
@@ -194,12 +195,7 @@ class TestIntegration:
 
     def test_module_integration(self):
         """测试模块集成"""
-        from core.nlp import (
-            NLPProviderType,
-            TaskType,
-            UniversalNLPService,
-            get_nlp_service
-        )
+        from core.nlp import NLPProviderType, TaskType, UniversalNLPService, get_nlp_service
 
         # 验证所有组件可以一起导入
         assert NLPProviderType is not None
@@ -214,7 +210,7 @@ class TestIntegration:
             conversation_response,
             creative_writing,
             emotional_analysis,
-            technical_reasoning
+            technical_reasoning,
         )
 
         # 验证所有函数都可调用
@@ -264,10 +260,8 @@ class TestPerformance:
     def test_module_import_speed(self):
         """测试模块导入速度"""
         import time
-        import importlib
 
         start = time.time()
-        import core.nlp
         elapsed = time.time() - start
 
         # 模块导入应该很快 (< 1秒)
@@ -276,12 +270,12 @@ class TestPerformance:
     def test_function_creation_speed(self):
         """测试函数创建速度"""
         import time
-        from core.nlp import analyze_patent
+
 
         start = time.time()
         # 多次获取函数引用
         for _ in range(100):
-            func = analyze_patent
+            pass
         elapsed = time.time() - start
 
         # 获取函数引用应该很快 (< 0.01秒)

@@ -138,7 +138,7 @@ class RealPatentConnector:
         limit: int = 10000,
         include_abstract: bool = True,
         include_claims: bool = True,
-        filters: dict[str, Any] | None = None
+        filters: Optional[dict[str, Any]] = None
     ) -> list[dict[str, Any]]:
         """加载专利数据
 
@@ -209,7 +209,7 @@ class RealPatentConnector:
 
         return patents
 
-    def load_patent_with_details(self, patent_id: str) -> dict[str, Any | None]:
+    def load_patent_with_details(self, patent_id: str) -> Optional[dict[str, Any]]:
         """加载单个专利的详细信息
 
         Args:

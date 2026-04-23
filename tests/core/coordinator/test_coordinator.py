@@ -10,13 +10,7 @@
 - 状态同步管理
 """
 
-from __future__ import annotations
-
-import asyncio
 import pytest
-from datetime import datetime
-from typing import Any
-
 from core.coordinator.base import (
     AgentInfo,
     AgentStatus,
@@ -772,3 +766,4 @@ class TestCoordinatorMetrics:
         assert metrics["total_tasks_submitted"] == 1
         assert metrics["total_tasks_completed"] == 1
         assert metrics["total_messages_sent"] == 0
+

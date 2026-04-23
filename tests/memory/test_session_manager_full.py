@@ -7,15 +7,14 @@
 作者: Athena平台团队
 创建时间: 2026-04-21
 """
-from __future__ import annotations
+
+import tempfile
 
 import pytest
-import tempfile
-from pathlib import Path
 
-from core.memory.sessions.manager import SessionManager
-from core.memory.sessions.storage import FileSessionStorage
-from core.memory.sessions.types import (
+from core.framework.memory.sessions.manager import SessionManager
+from core.framework.memory.sessions.storage import FileSessionStorage
+from core.framework.memory.sessions.types import (
     MessageRole,
     SessionStatus,
 )
@@ -306,7 +305,7 @@ def test_file_storage_integration():
         manager.close_session("test_session")
 
         # Act - 创建新的管理器，从存储加载
-        manager2 = SessionManager(storage=storage)
+        SessionManager(storage=storage)
         loaded = storage.load("test_session")
 
         # Assert
@@ -318,3 +317,4 @@ def test_file_storage_integration():
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+

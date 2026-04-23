@@ -423,7 +423,7 @@ class ConcurrencyOptimizer:
             'recommendations': recommendations
         }
 
-    def optimize_thread_pool(self, pool_size: int | None = None) -> Dict[str, Any]:
+    def optimize_thread_pool(self, pool_size: Optional[int] = None) -> Dict[str, Any]:
         """优化线程池"""
         cpu_count = psutil.cpu_count()
 

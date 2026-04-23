@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 from __future__ import annotations
 """
@@ -134,12 +133,12 @@ class MemoryPerformanceMonitor:
 
         logger.info("🔍 性能监控器初始化完成")
 
-    def add_alert_rule(self, rule: "AlertRule") -> None:
+    def add_alert_rule(self, rule: AlertRule) -> None:
         """添加告警规则"""
         self.alert_rules.append(rule)
         logger.info(f"✅ 添加告警规则: {rule.name}")
 
-    def add_alert_handler(self, handler: "AlertHandler") -> None:
+    def add_alert_handler(self, handler: AlertHandler) -> None:
         """添加告警处理器"""
         self.alert_handlers.append(handler)
         logger.info(f"✅ 添加告警处理器: {handler.__class__.__name__}")
@@ -274,7 +273,7 @@ class MemoryPerformanceMonitor:
 
         return [m for m in self.metrics[metric_name] if m.timestamp >= cutoff]
 
-    def get_current_value(self, metric_name: str) -> float | None:
+    def get_current_value(self, metric_name: str) -> Optional[float]:
         """获取当前指标值"""
         if metric_name not in self.metrics or not self.metrics[metric_name]:
             return None
@@ -369,7 +368,7 @@ class AlertRule:
         self.cooldown_seconds = cooldown_seconds
         self.last_triggered = None
 
-    async def check(self, monitor: MemoryPerformanceMonitor, handlers: list["AlertHandler"]):
+    async def check(self, monitor: MemoryPerformanceMonitor, handlers: list[AlertHandler]):
         """检查告警条件"""
         current_value = monitor.get_current_value(self.metric_name)
 
@@ -524,12 +523,12 @@ class EmailAlertHandler(AlertHandler):
 
     def __init__(
         self,
-        smtp_server: str | None = None,
+        smtp_server: Optional[str] = None,
         smtp_port: int = 587,
-        username: str | None = None,
-        password: str | None = None,
-        from_addr: str | None = None,
-        to_addrs: list[str] | None = None,
+        username: Optional[str] = None,
+        password: Optional[str] = None,
+        from_addr: Optional[str] = None,
+        to_addrs: Optional[list[str]] = None,
     ):
         self.smtp_server = smtp_server or os.getenv("SMTP_SERVER")
         self.smtp_port = smtp_port

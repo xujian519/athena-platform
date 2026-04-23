@@ -7,9 +7,6 @@ Usage:
     python3 scripts/basic_tools_task_board.py
 """
 
-import asyncio
-from datetime import datetime, timedelta
-from typing import Dict, List
 
 # 任务数据
 TASKS = {
@@ -278,15 +275,15 @@ def print_task_board():
     total_tasks = len(TASKS)
     total_effort = sum(task.get("effort_hours", 0) for task in TASKS.values())
 
-    print(f"📊 项目概览")
+    print("📊 项目概览")
     print(f"   总任务数: {total_tasks}")
     print(f"   总工作量: {total_effort}小时")
-    print(f"   参与智能体: 4个")
+    print("   参与智能体: 4个")
     print()
 
     # 按阶段分组
     phases = {}
-    for task_id, task in TASKS.items():
+    for _task_id, task in TASKS.items():
         phase = task["phase"]
         if phase not in phases:
             phases[phase] = []
@@ -316,13 +313,13 @@ def print_task_board():
 
             # 显示检查清单
             if "checklist" in task:
-                print(f"   检查清单:")
+                print("   检查清单:")
                 for i, item in enumerate(task["checklist"], 1):
                     print(f"     [ ] {i}. {item}")
 
             # 显示子任务
             if "subtasks" in task:
-                print(f"   子任务:")
+                print("   子任务:")
                 for subtask in task["subtasks"]:
                     sub_status_icon = {
                         "pending": "⏳",
@@ -385,7 +382,7 @@ def print_timeline():
 
     for week in weeks:
         print(f"📍 {week['name']}")
-        print(f"   目标:")
+        print("   目标:")
         for goal in week['goals']:
             print(f"     • {goal}")
         print(f"   新增工具: {week['tools']}个")
@@ -408,7 +405,7 @@ def print_priority_order():
         "P3": []
     }
 
-    for task_id, task in TASKS.items():
+    for _task_id, task in TASKS.items():
         priority = task["priority"]
         by_priority[priority].append(task)
 

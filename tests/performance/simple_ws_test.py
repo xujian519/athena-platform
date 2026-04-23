@@ -2,8 +2,10 @@
 """简单的WebSocket连接测试"""
 
 import asyncio
-import websockets
 import json
+
+import websockets
+
 
 async def test_websocket():
     """测试WebSocket连接"""

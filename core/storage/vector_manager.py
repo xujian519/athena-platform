@@ -125,7 +125,7 @@ class VectorManager:
 
     def search(self, query_vector: list[float], collection: str,
                top_k: int = 10, threshold: float = 0.5,
-               filter_dict: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+               filter_dict: Optional[dict[str, Any]] = None) -> list[dict[str, Any]]:
         """
         向量相似度搜索
 
@@ -159,7 +159,7 @@ class VectorManager:
 
     def _search_qdrant(self, query_vector: list[float], collection: str,
                       top_k: int, threshold: float,
-                      filter_dict: dict[str, Any] | None) -> list[dict[str, Any]]:
+                      filter_dict: Optional[dict[str, Any]]) -> list[dict[str, Any]]:
         """使用Qdrant进行搜索"""
         from qdrant_client.models import FieldCondition, Filter, MatchValue
 
@@ -193,7 +193,7 @@ class VectorManager:
 
     def _search_milvus(self, query_vector: list[float], collection: str,
                       top_k: int, threshold: float,
-                      filter_dict: dict[str, Any] | None) -> list[dict[str, Any]]:
+                      filter_dict: Optional[dict[str, Any]]) -> list[dict[str, Any]]:
         """使用Milvus进行搜索"""
         from pymilvus import Collection
 
@@ -297,7 +297,7 @@ class VectorManager:
 
     def insert(self, vectors: list[list[float]], ids: list[str],
                payloads: list[dict[str, Any]] | None = None,
-               collection: str | None = None) -> bool:
+               collection: Optional[str] = None) -> bool:
         """
         插入向量
 
@@ -368,7 +368,7 @@ class VectorManager:
 
         return True
 
-    def get_collection_info(self, collection: str | None = None) -> dict[str, Any]:
+    def get_collection_info(self, collection: Optional[str] = None) -> dict[str, Any]:
         """
         获取集合信息
 

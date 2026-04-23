@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 启动小娜专业工作模式
 Start Xiaonuo Professional Working Mode
@@ -7,13 +6,15 @@ Start Xiaonuo Professional Working Mode
 让小娜准备进行专业性工作的启动脚本
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.expanduser("~/Athena工作平台"))
 
 import asyncio
-from datetime import datetime
 import json
+from datetime import datetime
+
 
 async def start_xiaonuo_professional():
     """启动小娜专业工作模式"""
@@ -25,7 +26,7 @@ async def start_xiaonuo_professional():
     try:
         # 1. 导入小娜核心模块
         print("📦 导入小娜核心模块...")
-        from core.agent.xiaonuo_integrated_enhanced import XiaonuoIntegratedEnhanced
+        from core.framework.agents.xiaonuo_integrated_enhanced import XiaonuoIntegratedEnhanced
 
         # 2. 创建小娜实例
         print("👧 创建小娜实例...")
@@ -218,16 +219,6 @@ async def configure_professional_mode(xiaonuo):
     print("-" * 40)
 
     # 设置专业工作参数
-    professional_config = {
-        "工作模式": "专业模式",
-        "响应方式": "专业严谨",
-        "分析深度": "深入细致",
-        "质量控制": "高标准",
-        "输出格式": "结构化",
-        "错误处理": "容错性强",
-        "学习能力": "持续优化",
-        "协作方式": "人机协作"
-    }
 
     # 应用配置
     if hasattr(xiaonuo, 'decision_model') and xiaonuo.decision_model:
@@ -357,14 +348,14 @@ async def generate_startup_report(xiaonuo):
         json.dump(startup_report, f, ensure_ascii=False, indent=2)
 
     print("✅ 启动报告已保存")
-    print(f"📄 报告位置: /Users/xujian/xiaonuo_professional_startup_report.json")
+    print("📄 报告位置: /Users/xujian/xiaonuo_professional_startup_report.json")
 
-    print(f"\n🎯 小娜专业版启动成功！")
+    print("\n🎯 小娜专业版启动成功！")
     print(f"   🏷️ 代理ID: {startup_report['agent_id']}")
     print(f"   📊 状态: {startup_report['status']}")
     print(f"   🔧 能力: {len([k for k, v in startup_report['capabilities'].items() if v])} 项")
     print(f"   💾 记忆: {len([k for k, v in startup_report['systems'].items() if v])} 个系统")
-    print(f"   🗄️ 数据库: 2800万+专利数据可用")
+    print("   🗄️ 数据库: 2800万+专利数据可用")
 
 if __name__ == "__main__":
     async def main():

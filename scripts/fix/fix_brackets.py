@@ -6,7 +6,8 @@
 import re
 from pathlib import Path
 
-def fix_bracket_errors(content: str) -> tuple[str, list[str]]:
+
+def fix_bracket_errors(content: str) -> tuple[str, list[str]:
     """修复括号相关的语法错误"""
     fixes = []
 
@@ -18,8 +19,8 @@ def fix_bracket_errors(content: str) -> tuple[str, list[str]]:
         original_line = line
         fix_desc = ""
 
-        # 模式1: list[dict[str, Any]] 缺少右括号
-        # 匹配: def func(self, param: list[dict[str, Any]]) -> 返回类型:
+        # 模式1: list[dict[str, Any] 缺少右括号
+        # 匹配: def func(self, param: list[dict[str, Any]) -> 返回类型:
         if re.search(r'\w+:\s*list\[dict\[str,\s*Any\]\]\s*\)\s*->', line):
             # 检查是否缺少一个 ]
             if line.count('[') > line.count(']'):
@@ -32,11 +33,11 @@ def fix_bracket_errors(content: str) -> tuple[str, list[str]]:
                 if line != original_line:
                     fix_desc = "添加缺失的 ]"
 
-        # 模式2: tuple[str, list[str]] 缺少右括号
+        # 模式2: tuple[str, list[str] 缺少右括号
         if re.search(r'->\s*tuple\[str,\s*list\[str\]:\s*$', line):
-            line = line.replace('tuple[str, list[str]:', 'tuple[str, list[str]]:')
+            line = line.replace('tuple[str, list[str]:', 'tuple[str, list[str]:')
             if line != original_line:
-                fix_desc = "tuple[str, list[str]]"
+                fix_desc = "tuple[str, list[str]"
 
         # 模式3: dict[str, Any] | None = None (类型注解错误)
         # 匹配: param: dict[str, Any | None = None
@@ -93,10 +94,10 @@ def fix_bracket_errors(content: str) -> tuple[str, list[str]]:
 
     return '\n'.join(result_lines), fixes
 
-def fix_file(file_path: Path) -> tuple[bool, list[str]]:
+def fix_file(file_path: Path) -> tuple[bool, list[str]:
     """修复单个文件"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         new_content, fixes = fix_bracket_errors(content)
@@ -140,7 +141,7 @@ def main():
                 for fix in fixes[:3]:  # 只显示前3个修复
                     print(f"    {fix}")
 
-    print(f"\n修复完成!")
+    print("\n修复完成!")
     print(f"修复文件数: {fixed_count}")
 
 if __name__ == "__main__":

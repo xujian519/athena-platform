@@ -21,11 +21,11 @@ logger = logging.getLogger(__name__)
 class DisclosureDocument:
     """技术交底书文档"""
     raw_text: str  # 原始文本
-    sections: Dict[str, str] = field(default_factory=dict)  # 各章节内容
-    metadata: Dict[str, Any] = field(default_factory=dict)  # 元数据
+    sections: dict[str, str] = field(default_factory=dict)  # 各章节内容
+    metadata: dict[str, Any] = field(default_factory=dict)  # 元数据
     confidence: float = 0.0  # 解析置信度
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "raw_text": self.raw_text,
@@ -103,7 +103,7 @@ class DisclosureDocumentParser:
                 confidence=0.0
             )
 
-    def _extract_sections(self, text: str) -> Dict[str, str]:
+    def _extract_sections(self, text: str) -> dict[str, str]:
         """
         提取各章节内容
 
@@ -230,7 +230,7 @@ class DisclosureDocumentParser:
 
     def _calculate_confidence(
         self,
-        sections: Dict[str, str],
+        sections: dict[str, str],
         raw_text: str
     ) -> float:
         """

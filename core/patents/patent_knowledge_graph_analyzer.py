@@ -38,11 +38,11 @@ class PatentTextAnalysis:
 
     application_number: str
     patent_name: str
-    abstract: str | None = None
-    claims_content: str | None = None
-    extracted_problems: list[str] | None = None
-    extracted_features: list[str] | None = None
-    extracted_effects: list[str] | None = None
+    abstract: Optional[str] = None
+    claims_content: Optional[str] = None
+    extracted_problems: Optional[list[str]] = None
+    extracted_features: Optional[list[str]] = None
+    extracted_effects: Optional[list[str]] = None
 
     def __post_init__(self):
         if self.extracted_problems is None:
@@ -276,7 +276,7 @@ class PatentKnowledgeGraphAnalyzer:
         problems: list[str],
         features: list[str],
         effects: list[str],
-        claims_text: str | None = None,
+        claims_text: Optional[str] = None,
     ) -> list[TechnicalTriple]:
         """构建技术三元组"""
         triples = []

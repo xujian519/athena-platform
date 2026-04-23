@@ -35,7 +35,7 @@ class LLMConfig:
     """大模型配置"""
     provider: LLMProvider
     api_key: str
-    api_secret: str | None = None
+    api_secret: Optional[str] = None
     base_url: str = ''
     model_name: str = ''
     max_tokens: int = 4096

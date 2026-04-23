@@ -65,8 +65,8 @@ async def verify_redis_service():
 
         # 测试ping
         client.ping()
-        print(f"✅ Redis服务运行中")
-        print(f"   端点: localhost:6379")
+        print("✅ Redis服务运行中")
+        print("   端点: localhost:6379")
 
         # 获取信息
         info = client.info('server')
@@ -106,7 +106,7 @@ async def verify_unified_cache():
         print("创建UnifiedCache实例...")
         cache = UnifiedCache()
 
-        print(f"✅ 统一缓存系统创建成功")
+        print("✅ 统一缓存系统创建成功")
         print(f"   默认TTL: {cache.default_ttl}秒")
 
         # 测试基本操作
@@ -377,7 +377,7 @@ async def test_handler():
         if result.get("success") and result.get("exists"):
             print("✅ get操作成功")
         else:
-            print(f"❌ get操作失败")
+            print("❌ get操作失败")
             return False
 
         # 测试3: exists操作
@@ -390,7 +390,7 @@ async def test_handler():
         if result.get("success") and result.get("exists"):
             print("✅ exists操作成功")
         else:
-            print(f"❌ exists操作失败")
+            print("❌ exists操作失败")
             return False
 
         # 测试4: stats操作
@@ -402,7 +402,7 @@ async def test_handler():
         if result.get("success"):
             print("✅ stats操作成功")
         else:
-            print(f"❌ stats操作失败")
+            print("❌ stats操作失败")
             return False
 
         # 测试5: delete操作
@@ -415,7 +415,7 @@ async def test_handler():
         if result.get("success"):
             print("✅ delete操作成功")
         else:
-            print(f"❌ delete操作失败")
+            print("❌ delete操作失败")
             return False
 
         # 测试6: 验证删除
@@ -427,7 +427,7 @@ async def test_handler():
         if result.get("success") and not result.get("exists"):
             print("✅ 验证删除成功")
         else:
-            print(f"❌ 验证删除失败")
+            print("❌ 验证删除失败")
             return False
 
         return True

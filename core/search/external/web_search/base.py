@@ -24,7 +24,7 @@ logger = setup_logging()
 class BaseSearchEngine(ABC):
     """搜索引擎基类 - 所有搜索引擎的抽象基类"""
 
-    def __init__(self, api_keys: list[str], config: dict[str, Any] | None = None):
+    def __init__(self, api_keys: list[str], config: Optional[dict[str, Any]] = None):
         """
         初始化搜索引擎
 

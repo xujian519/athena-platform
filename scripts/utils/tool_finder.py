@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Athena平台工具快速查找器
 Athena Platform Tool Finder
@@ -19,7 +18,7 @@ python scripts_new/utils/tool_finder.py --list
 import argparse
 import json
 import logging
-from typing import Any, Dict, List
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -191,7 +190,7 @@ class ToolFinder:
         self.tool_db = TOOL_DATABASE
         self.keyword_map = KEYWORD_MAPPING
 
-    def find_tools_by_scene(self, scene: str) -> Dict[str, Any]:
+    def find_tools_by_scene(self, scene: str) -> dict[str, Any]:
         """根据场景查找工具"""
         # 标准化场景名称
         scene = self._normalize_scene(scene)
@@ -212,7 +211,7 @@ class ToolFinder:
                 'suggestion': f"未找到精确匹配的场景'{scene}'，使用通用工具处理"
             }
 
-    def find_tools_by_keyword(self, keyword: str) -> List[Dict[str, Any]]:
+    def find_tools_by_keyword(self, keyword: str) -> list[dict[str, Any]:
         """根据关键词查找相关工具"""
         results = []
 
@@ -249,11 +248,11 @@ class ToolFinder:
 
         return scene
 
-    def list_all_scenes(self) -> List[str]:
+    def list_all_scenes(self) -> list[str]:
         """列出所有可用场景"""
         return list(self.tool_db.keys())
 
-    def get_tool_info(self, tool_name: str) -> Dict[str, Any]:
+    def get_tool_info(self, tool_name: str) -> dict[str, Any]:
         """获取工具详细信息"""
         tool_info = {
             'name': tool_name,

@@ -135,7 +135,7 @@ class WritingMaterialsManagerEnhanced:
         """生成缓存键"""
         return str(file_path)
 
-    def _get_from_cache(self, file_path: Path) -> str | None:
+    def _get_from_cache(self, file_path: Path) -> Optional[str]:
         """从缓存获取文档"""
         key = self._get_cache_key(file_path)
 
@@ -159,7 +159,7 @@ class WritingMaterialsManagerEnhanced:
 
         return None
 
-    def _add_to_cache(self, file_path: Path, content: str, metadata: dict[str, Any] | None = None):
+    def _add_to_cache(self, file_path: Path, content: str, metadata: Optional[dict[str, Any]] = None):
         """添加到缓存"""
         key = self._get_cache_key(file_path)
 
@@ -275,7 +275,7 @@ class WritingMaterialsManagerEnhanced:
 
     # ========== 全文获取(增强版)==========
 
-    def _get_full_content_enhanced(self, retrieval_result: Any) -> str | None:
+    def _get_full_content_enhanced(self, retrieval_result: Any) -> Optional[str]:
         """
         获取全文内容(增强版)
 
@@ -325,7 +325,7 @@ class WritingMaterialsManagerEnhanced:
 
         return None
 
-    def _read_from_json_metadata(self, json_path: Path) -> str | None:
+    def _read_from_json_metadata(self, json_path: Path) -> Optional[str]:
         """从JSON元数据文件读取内容"""
         try:
             if not json_path.exists():
@@ -355,7 +355,7 @@ class WritingMaterialsManagerEnhanced:
 
         return None
 
-    def _infer_and_load_file(self, source: str, metadata: dict[str, Any]) -> str | None:
+    def _infer_and_load_file(self, source: str, metadata: dict[str, Any]) -> Optional[str]:
         """根据命名规则推断并加载文件"""
         # 提取可能的文件名
         filename = None
@@ -404,8 +404,8 @@ class WritingMaterialsManagerEnhanced:
         return None
 
     def _read_and_cache_file(
-        self, file_path: Path, metadata: dict[str, Any] | None = None
-    ) -> str | None:
+        self, file_path: Path, metadata: Optional[dict[str, Any]] = None
+    ) -> Optional[str]:
         """读取文件并缓存"""
         # 先检查缓存
         cached = self._get_from_cache(file_path)
@@ -421,7 +421,7 @@ class WritingMaterialsManagerEnhanced:
 
         return content
 
-    def _read_file_content(self, file_path: Path) -> str | None:
+    def _read_file_content(self, file_path: Path) -> Optional[str]:
         """读取文件内容(支持多种格式)"""
         try:
             suffix = file_path.suffix.lower()
@@ -556,7 +556,7 @@ class WritingMaterialsManagerEnhanced:
 """
 
     def search_materials(
-        self, query: str, category: str | None = None, top_k: int = 5
+        self, query: str, category: Optional[str] = None, top_k: int = 5
     ) -> list[dict[str, Any]]:
         """搜索素材(兼容旧版本接口)"""
         if not self.rag_manager:

@@ -38,7 +38,7 @@ class LLMProvider(Enum):
 class LLMRequest:
     """LLM请求"""
     prompt: str
-    system_message: str | None = None
+    system_message: Optional[str] = None
     temperature: float = 0.3
     max_tokens: int = 2000
     top_p: float = 0.9
@@ -55,7 +55,7 @@ class LLMResponse:
     response_time: float = 0.0
     cached: bool = False
     success: bool = True
-    error: str | None = None
+    error: Optional[str] = None
 
 
 class LyraLLMConfig:

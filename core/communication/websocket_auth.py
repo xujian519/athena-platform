@@ -52,13 +52,13 @@ class WebSocketAuthResult:
     """WebSocket认证结果"""
 
     success: bool
-    user_id: str | None = None
-    username: str | None = None
+    user_id: Optional[str] = None
+    username: Optional[str] = None
     role: UserRole | None = None
-    permissions: list[str] | None = None
-    error: str | None = None
-    client_type: str | None = None
-    ai_name: str | None = None
+    permissions: Optional[list[str]] = None
+    error: Optional[str] = None
+    client_type: Optional[str] = None
+    ai_name: Optional[str] = None
 
 
 @dataclass
@@ -121,7 +121,7 @@ class WebSocketAuthenticator:
         """清除失败的认证记录"""
         self.failed_attempts.pop(connection_id, None)
 
-    def _verify_jwt_token(self, token: str) -> dict[str, Any] | None:
+    def _verify_jwt_token(self, token: str) -> Optional[dict[str, Any]]:
         """
         验证JWT令牌
 
@@ -308,7 +308,7 @@ def create_websocket_authenticator(
     enable_auth: bool = True,
     require_token: bool = True,
     allow_guest: bool = False,
-    jwt_secret: str | None = None,
+    jwt_secret: Optional[str] = None,
 ) -> WebSocketAuthenticator:
     """创建WebSocket认证器实例"""
     config = WebSocketAuthConfig(
@@ -324,7 +324,7 @@ def generate_test_token(
     user_id: str,
     username: str,
     role: UserRole = UserRole.USER,
-    permissions: list[str] | None = None,
+    permissions: Optional[list[str]] = None,
     secret: str = "your-super-secret-key-change-in-production",
     expire_hours: int = 24,
 ) -> str:

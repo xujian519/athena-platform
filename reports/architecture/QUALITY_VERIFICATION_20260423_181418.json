@@ -1,0 +1,34 @@
+{
+  "code_quality": {
+    "style": {
+      "status": "warning",
+      "errors": 17728,
+      "types": {
+        "I001": 6,
+        "F541": 18,
+        "F811": 2,
+        "UP035": 3,
+        "UP006": 9,
+        "UP045": 8,
+        "UP017": 1,
+        "UP007": 3
+      }
+    },
+    "type_hints": {
+      "status": "pass"
+    },
+    "imports": {
+      "status": "pass",
+      "errors": 0
+    }
+  },
+  "architecture": {
+    "core_structure": {
+      "status": "pass",
+      "count": 27,
+      "target": "<30"
+    },
+    "domains": {
+      "status": "pass",
+      "count": 7,
+      "expected": 

@@ -67,7 +67,7 @@ class IntentRecognitionAdapter(BaseIntentEngine):
         "SYSTEM_CONTROL",
     ]
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化适配器
 
@@ -150,7 +150,7 @@ class IntentRecognitionAdapter(BaseIntentEngine):
             self.classifier = None
             logger.warning("⚠️ 意图识别适配器进入degraded模式,将返回默认结果")
 
-    def recognize_intent(self, text: str, context: dict[str, Any] | None = None) -> IntentResult:
+    def recognize_intent(self, text: str, context: Optional[dict[str, Any]] = None) -> IntentResult:
         """
         识别意图(同步版本)
 
@@ -374,7 +374,7 @@ class IntentRecognitionAdapter(BaseIntentEngine):
 
 
 def create_intent_adapter(
-    use_phase2_model: bool | None = None, model_dir: Path | None = None
+    use_phase2_model: Optional[bool] = None, model_dir: Path | None = None
 ) -> IntentRecognitionAdapter:
     """
     创建意图识别适配器(便捷函数)

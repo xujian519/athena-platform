@@ -12,8 +12,9 @@ from pathlib import Path
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
-from core.agents.xiaona_legal import XiaonaLegalAgent
-from core.agents.base import AgentRequest
+from core.framework.agents.xiaona_legal import XiaonaLegalAgent
+
+from core.framework.agents.base import AgentRequest
 
 
 async def test_patent_drafting_integration():

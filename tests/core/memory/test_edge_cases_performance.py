@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from unittest.mock import MagicMock, patch
 
-from core.memory.unified_memory import (
+from core.framework.memory.unified_memory import (
     AgentType,
     CacheStatistics,
     MemoryItem,

@@ -7,8 +7,7 @@
 
 import os
 from dataclasses import dataclass, field
-from typing import Dict, Any, Optional
-from pathlib import Path
+from typing import Any
 
 
 @dataclass
@@ -21,7 +20,7 @@ class TestConfig:
     verbose: bool = False
 
     # 性能阈值
-    performance_thresholds: Dict[str, float] = field(default_factory=lambda: {
+    performance_thresholds: dict[str, float] = field(default_factory=lambda: {
         "agent_init_ms": 100,      # Agent初始化时间阈值（ms）
         "single_task_ms": 5000,    # 单个任务执行时间阈值（ms）
         "complete_workflow_ms": 15000,  # 完整工作流执行时间阈值（ms）
@@ -31,14 +30,14 @@ class TestConfig:
     })
 
     # 重试配置
-    retry_config: Dict[str, Any] = field(default_factory=lambda: {
+    retry_config: dict[str, Any] = field(default_factory=lambda: {
         "max_attempts": 3,
         "delay_seconds": 1,
         "backoff_factor": 2
     })
 
     # 超时配置
-    timeout_config: Dict[str, float] = field(default_factory=lambda: {
+    timeout_config: dict[str, float] = field(default_factory=lambda: {
         "agent_init": 10,      # Agent初始化超时（秒）
         "single_task": 30,     # 单个任务超时（秒）
         "complete_workflow": 60,  # 完整工作流超时（秒）
@@ -46,7 +45,7 @@ class TestConfig:
     })
 
     # 测试数据配置
-    test_data: Dict[str, Any] = field(default_factory=lambda: {
+    test_data: dict[str, Any] = field(default_factory=lambda: {
         "patent": {
             "id": "CN123456789A",
             "title": "一种结合拟人驾驶行为的自动驾驶掉头路段脱困规划方法",
@@ -62,7 +61,7 @@ class TestConfig:
     })
 
     # 输出配置
-    output_config: Dict[str, Any] = field(default_factory=lambda: {
+    output_config: dict[str, Any] = field(default_factory=lambda: {
         "report_format": ["json", "markdown"],
         "output_dir": "test_results/e2e",
         "keep_raw_logs": True,
@@ -70,7 +69,7 @@ class TestConfig:
     })
 
     # 环境配置
-    env_config: Dict[str, str] = field(default_factory=lambda: {
+    env_config: dict[str, str] = field(default_factory=lambda: {
         "POSTGRES_USER": os.getenv("POSTGRES_USER", "athena"),
         "POSTGRES_PASSWORD": os.getenv("POSTGRES_PASSWORD", "athena123"),
         "POSTGRES_DB": os.getenv("POSTGRES_DB", "athena_test"),
@@ -79,7 +78,7 @@ class TestConfig:
     })
 
     # CI/CD配置
-    cicd_config: Dict[str, Any] = field(default_factory=lambda: {
+    cicd_config: dict[str, Any] = field(default_factory=lambda: {
         "enabled": True,
         "min_pass_rate": 0.8,  # 80%通过率
         "performance_gate": True,
@@ -135,7 +134,7 @@ class TestConfig:
             print(f"Configuration validation failed: {e}")
             return False
 
-    def get_agent_config(self, agent_type: str) -> Dict[str, Any]:
+    def get_agent_config(self, agent_type: str) -> dict[str, Any]:
         """获取特定Agent的配置"""
         base_config = {
             "timeout": self.timeout_config["single_task"],
@@ -153,7 +152,7 @@ class TestConfig:
 
         return base_config
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "test_mode": self.test_mode,

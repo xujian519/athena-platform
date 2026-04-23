@@ -56,7 +56,7 @@ class PerceptionType(Enum):
 class StructuredPerceptionEngine:
     """结构化感知引擎"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
         self.ocr_processor = None
         self.nlp_processor = None
@@ -310,7 +310,7 @@ class SimpleNLPProcessor:
 
 # 兼容性函数
 def create_structured_perception_engine(
-    config: dict[str, Any] | None = None,
+    config: Optional[dict[str, Any]] = None,
 ) -> StructuredPerceptionEngine:
     """创建结构化感知引擎实例"""
     return StructuredPerceptionEngine(config)

@@ -179,7 +179,7 @@ class LearningEngine:
         result: str,
         feedback_type: FeedbackType,
         reward: float,
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> LearningExperience:
         """
         从经验中学习
@@ -390,7 +390,7 @@ class LearningEngine:
 
     async def transfer_to_knowledge(
         self, experience_id: str, memory_system: Any | None = None
-    ) -> str | None:
+    ) -> Optional[str]:
         """
         将经验迁移为知识
 
@@ -484,7 +484,7 @@ class LearningEngine:
         self.stats["success_rate"] = success_count / len(self.experiences)
 
     async def get_patterns(
-        self, situation: str | None = None, min_success_rate: float = 0.6
+        self, situation: Optional[str] = None, min_success_rate: float = 0.6
     ) -> list[BehaviorPattern]:
         """
         获取行为模式

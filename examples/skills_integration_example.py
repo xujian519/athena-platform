@@ -10,9 +10,8 @@ Skills系统集成示例
 from __future__ import annotations
 
 import logging
-from typing import Dict, List, Optional
 
-from core.agents.base_agent import BaseAgent
+from core.framework.agents.base_agent import BaseAgent
 from core.skills.loader import SkillLoader
 from core.skills.registry import SkillRegistry
 from core.skills.tool_mapper import SkillToolMapper
@@ -60,8 +59,8 @@ class SkillEnabledAgent(BaseAgent):
     def select_skill_by_task(
         self,
         task_description: str,
-        task_type: Optional[str] = None,
-    ) -> Optional[str]:
+        task_type: str | None = None,
+    ) -> str | None:
         """根据任务描述选择技能
 
         Args:
@@ -90,7 +89,7 @@ class SkillEnabledAgent(BaseAgent):
         self,
         skill_id: str,
         **_kwargs  # noqa: ARG001,
-    ) -> Dict[str, any]:
+    ) -> dict[str, any]:
         """执行技能
 
         Args:
@@ -132,7 +131,7 @@ class SkillEnabledAgent(BaseAgent):
             "results": results,
         }
 
-    def analyze_skills_usage(self) -> Dict[str, any]:
+    def analyze_skills_usage(self) -> dict[str, any]:
         """分析技能使用情况
 
         Returns:
@@ -183,7 +182,7 @@ class XiaonaAgentWithSkills(SkillEnabledAgent):
         # 返回结果
         return f"已使用 {result['skill_name']} 处理您的请求"
 
-    def process_patent_task(self, patent_id: str, task_type: str) -> Dict[str, any]:
+    def process_patent_task(self, patent_id: str, task_type: str) -> dict[str, any]:
         """处理专利相关任务
 
         Args:
@@ -209,7 +208,7 @@ class XiaonaAgentWithSkills(SkillEnabledAgent):
 
         return result
 
-    def get_patent_analysis_skills(self) -> List[str]:
+    def get_patent_analysis_skills(self) -> list[str]:
         """获取所有专利分析相关技能"""
         skills = self.skill_registry.list_skills(
             category=SkillCategory.ANALYSIS,
@@ -243,7 +242,7 @@ def demo_basic_usage():
     # 获取技能详情
     patent_skill = agent.skill_registry.get_skill("patent_analysis")
     if patent_skill:
-        print(f"\n📋 专利分析技能详情:")
+        print("\n📋 专利分析技能详情:")
         print(f"  ID: {patent_skill.id}")
         print(f"  名称: {patent_skill.name}")
         print(f"  描述: {patent_skill.description}")
@@ -267,9 +266,9 @@ def demo_skill_execution():
         patent_id="CN123456789A",
     )
 
-    print(f"\n结果:")
+    print("\n结果:")
     print(f"  技能: {result['skill_name']}")
-    print(f"  执行的工具:")
+    print("  执行的工具:")
     for tool_id, tool_result in result["results"].items():
         print(f"    - {tool_id}: {tool_result['status']}")
 
@@ -285,18 +284,18 @@ def demo_tool_mapping():
 
     # 获取技能的工具
     tools = agent.tool_mapper.get_tools_for_skill("patent_analysis")
-    print(f"\n🔧 专利分析技能使用的工具:")
+    print("\n🔧 专利分析技能使用的工具:")
     print(f"  {', '.join(tools)}")
 
     # 获取工具的技能
     skills = agent.tool_mapper.get_skills_for_tool("patent_search")
-    print(f"\n🔍 使用patent_search的技能:")
+    print("\n🔍 使用patent_search的技能:")
     for skill in skills:
         print(f"  - {skill.name}")
 
     # 工具使用统计
     stats = agent.tool_mapper.get_tool_usage_stats()
-    print(f"\n📊 工具使用统计:")
+    print("\n📊 工具使用统计:")
     for tool_id, stat in stats.items():
         print(f"  {tool_id}: 被 {stat['count']} 个技能使用")
 
@@ -313,9 +312,9 @@ def demo_analysis():
     # 生成分析报告
     report = agent.analyze_skills_usage()
 
-    print(f"\n📈 技能系统分析报告:")
+    print("\n📈 技能系统分析报告:")
     print(f"  总技能数: {report['total_skills']}")
-    print(f"  按类别分布:")
+    print("  按类别分布:")
     for category, count in report["by_category"].items():
         print(f"    - {category}: {count}个")
 
@@ -352,7 +351,7 @@ def demo_workflow():
         patent_id="CN123456789A",
     )
 
-    print(f"\n✅ 任务完成:")
+    print("\n✅ 任务完成:")
     print(f"  使用技能: {result['skill_name']}")
     print(f"  执行工具数: {len(result['results'])}")
 

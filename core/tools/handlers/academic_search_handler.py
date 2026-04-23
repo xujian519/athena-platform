@@ -37,7 +37,7 @@ async def academic_search_handler(
     limit: int = 10,
     year: str = "",
     field: str = ""
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     学术论文搜索Handler
 
@@ -136,7 +136,7 @@ async def _search_semantic_scholar(
     limit: int,
     year: str = "",
     field: str = ""
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     使用Semantic Scholar API搜索论文
 
@@ -219,7 +219,7 @@ async def _search_google_scholar(
     limit: int,
     year: str = "",
     field: str = ""
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     使用Google Scholar搜索论文（通过Serper API）
 
@@ -317,7 +317,7 @@ async def _search_both_sources(
     limit: int,
     year: str = "",
     field: str = ""
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     同时查询两个数据源并合并结果
 
@@ -434,7 +434,7 @@ async def search_papers(
     query: str,
     limit: int = 10,
     source: str = "auto"
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     便捷的学术论文搜索函数
 

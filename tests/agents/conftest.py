@@ -4,16 +4,16 @@
 处理Prometheus metrics重复注册问题
 """
 
-import pytest
 import logging
 import os
+
+import pytest
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
 
 
 # 在导入任何模块前禁用LLM metrics
-import os
 os.environ.setdefault("LLM_METRICS_ENABLED", "false")
 
 
@@ -54,7 +54,7 @@ def mock_llm_manager():
     Mock LLM管理器fixture
     避免实际调用LLM API
     """
-    from unittest.mock import Mock, AsyncMock
+    from unittest.mock import AsyncMock, Mock
 
     mock = Mock()
     mock.generate = AsyncMock(

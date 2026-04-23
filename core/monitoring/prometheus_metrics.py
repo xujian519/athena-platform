@@ -197,8 +197,8 @@ class PrometheusMetrics:
         ai_name: str,
         task_type: str,
         status: str,
-        duration: float | None = None,
-        confidence: float | None = None,
+        duration: Optional[float] = None,
+        confidence: Optional[float] = None,
     ):
         """记录AI任务指标"""
         self.ai_tasks_total.labels(ai_name=ai_name, task_type=task_type, status=status).inc()

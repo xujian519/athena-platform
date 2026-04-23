@@ -7,23 +7,23 @@
 作者: Athena平台团队
 创建时间: 2026-04-21
 """
-from __future__ import annotations
 
-import pytest
 from datetime import datetime, timedelta
 
-from core.memory.sessions.compression.types import (
-    CompressionLevel,
-    CompressionStrategy,
+import pytest
+
+from core.framework.memory.sessions.compression.compressor import ContextCompressor
+from core.framework.memory.sessions.compression.scorer import MessageScorer
+from core.framework.memory.sessions.compression.types import (
     CompressionConfig,
-    TokenBudget,
-    MessageImportance,
-    ImportanceScore,
+    CompressionLevel,
     CompressionResult,
+    CompressionStrategy,
+    ImportanceScore,
+    MessageImportance,
+    TokenBudget,
 )
-from core.memory.sessions.compression.scorer import MessageScorer
-from core.memory.sessions.compression.compressor import ContextCompressor
-from core.memory.sessions.types import SessionMessage, MessageRole
+from core.framework.memory.sessions.types import MessageRole, SessionMessage
 
 
 class TestTokenBudget:
@@ -350,7 +350,7 @@ class TestContextCompressor:
         total_tokens = sum(m.token_count for m in sample_messages)
 
         start = time.perf_counter()
-        result = compressor.compress(sample_messages)
+        compressor.compress(sample_messages)
         end = time.perf_counter()
 
         # 计算每1000 tokens的耗时（秒）
@@ -433,3 +433,4 @@ class TestCompressionResult:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+

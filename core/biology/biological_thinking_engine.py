@@ -91,7 +91,7 @@ class BiologicalThinkingEngine:
         logger.info("   ✅ 环境感知: 就绪")
 
     async def process_user_interaction(
-        self, user_input: str, system_response: str, context: dict[str, Any] | None = None
+        self, user_input: str, system_response: str, context: Optional[dict[str, Any]] = None
     ) -> BiologicalMetrics:
         """
         处理用户交互(生物学思维模式)

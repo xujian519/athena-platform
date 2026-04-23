@@ -261,7 +261,7 @@ class ToolRegistry:
 
         logger.info("🔧 ToolRegistry初始化完成(线程安全版 + 缓存优化)")
 
-    def register(self, tool: ToolDefinition) -> "ToolRegistry":
+    def register(self, tool: ToolDefinition) -> ToolRegistry:
         """
         注册工具(线程安全 + 缓存失效, P2-1)
 
@@ -422,8 +422,8 @@ class ToolRegistry:
     def search_tools(
         self,
         category: ToolCategory | None = None,
-        domain: str | None = None,
-        tags: list[str] | None = None,
+        domain: Optional[str] = None,
+        tags: Optional[list[str]] = None,
         min_priority: ToolPriority | None = None,
         enabled_only: bool = True,
     ) -> list[ToolDefinition]:

@@ -4,7 +4,6 @@
 Tests for core.service_registry.registry
 """
 
-import pytest
 
 
 class TestServiceRegistry:

@@ -240,7 +240,7 @@ class ExecutionMetrics:
         self,
         priority: str,
         error_type: str = "unknown",
-        duration: float | None = None,
+        duration: Optional[float] = None,
         instance: str = "default"
     ):
         """
@@ -471,7 +471,7 @@ def get_metrics() -> ExecutionMetrics:
 def setup_metrics(
     instance_id: str,
     version: str = "2.0.0",
-    metrics_port: int | None = None
+    metrics_port: Optional[int] = None
 ) -> ExecutionMetrics:
     """
     设置监控指标

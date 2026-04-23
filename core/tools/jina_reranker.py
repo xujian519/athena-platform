@@ -54,10 +54,10 @@ class JinaReranker:
     async def rerank(
         self,
         query: str,
-        documents: List[str],
+        documents: list[str],
         top_n: Optional[int] = None,
         model: Optional[str] = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         重排序文档
 
@@ -161,10 +161,10 @@ class JinaReranker:
 
     async def rerank_batch(
         self,
-        queries: List[str],
-        documents: List[str],
+        queries: list[str],
+        documents: list[str],
         top_n: Optional[int] = None
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         批量重排序
 
@@ -204,10 +204,10 @@ def get_reranker() -> JinaReranker:
 )
 async def jina_reranker_handler(
     query: str,
-    documents: List[str],
+    documents: list[str],
     top_n: Optional[int] = None,
     model: Optional[str] = None
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Jina Reranker工具handler
 
@@ -238,10 +238,10 @@ async def jina_reranker_handler(
     tags=["rerank", "batch", "search", "ranking"]
 )
 async def jina_reranker_batch_handler(
-    queries: List[str],
-    documents: List[str],
+    queries: list[str],
+    documents: list[str],
     top_n: Optional[int] = None
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """
     批量Jina Reranker工具handler
 

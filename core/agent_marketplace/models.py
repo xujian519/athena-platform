@@ -92,7 +92,7 @@ class Agent:
 
     # 技术信息
     python_version: str = "3.11+"        # Python版本要求
-    dependencies: List[str] = field(default_factory=list)  # 依赖列表
+    dependencies: list[str] = field(default_factory=list)  # 依赖列表
     requires_llm: bool = False           # 是否需要LLM
     requires_tools: bool = False         # 是否需要工具系统
 
@@ -112,7 +112,7 @@ class Agent:
     published_at: Optional[datetime] = None
 
     # 元数据
-    tags: List[str] = field(default_factory=list)
+    tags: list[str] = field(default_factory=list)
     featured: bool = False                # 是否精选
     verified: bool = False               # 是否官方认证
 
@@ -173,8 +173,8 @@ class AgentCapability:
     description: str = ""                # 描述
 
     # 输入输出
-    input_types: List[str] = field(default_factory=list)
-    output_types: List[str] = field(default_factory=list)
+    input_types: list[str] = field(default_factory=list)
+    output_types: list[str] = field(default_factory=list)
 
     # 性能
     estimated_time: float = 0.0          # 预估执行时间 (秒)
@@ -235,7 +235,7 @@ class AgentReview:
     content: str = ""                    # 评价内容
 
     # 标签
-    tags: List[str] = field(default_factory=list)  # 评价标签 (如: "易于使用", "功能强大")
+    tags: list[str] = field(default_factory=list)  # 评价标签 (如: "易于使用", "功能强大")
 
     # 审核
     status: ReviewStatus = ReviewStatus.PENDING
@@ -405,23 +405,23 @@ class AgentDetail:
     agent: Agent
 
     # 能力列表
-    capabilities: List[AgentCapability]
+    capabilities: list[AgentCapability]
 
     # 版本列表
-    versions: List[AgentVersion]
+    versions: list[AgentVersion]
 
     # 评分统计
     rating: AgentRating
 
     # 最新评价 (前5条)
-    recent_reviews: List[AgentReview]
+    recent_reviews: list[AgentReview]
 
     # 统计信息
     statistics: AgentStatistics
 
     # 依赖关系
-    dependencies: List[AgentDependency]
-    dependents: List[AgentDependency]
+    dependencies: list[AgentDependency]
+    dependents: list[AgentDependency]
 
 
 @dataclass
@@ -444,7 +444,7 @@ class SearchFilters:
     author_id: Optional[str] = None
 
     # 标签
-    tags: List[str] = field(default_factory=list)
+    tags: list[str] = field(default_factory=list)
 
     # 评分
     min_rating: Optional[float] = None
@@ -505,8 +505,8 @@ def create_capability(
     name: str,
     display_name: str,
     description: str,
-    input_types: List[str],
-    output_types: List[str],
+    input_types: list[str],
+    output_types: list[str],
     estimated_time: float = 5.0,
 ) -> AgentCapability:
     """

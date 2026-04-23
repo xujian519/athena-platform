@@ -91,7 +91,7 @@ class DecisionVisualizer:
             NodeType.ERROR: {"color": "#F44336", "shape": "box"},
         }
 
-    def create_chain(self, chain_id: str | None = None) -> DecisionChain:
+    def create_chain(self, chain_id: Optional[str] = None) -> DecisionChain:
         """
         创建决策链
 
@@ -116,8 +116,8 @@ class DecisionVisualizer:
         label: str,
         description: str = "",
         confidence: float = 0.0,
-        metadata: dict[str, Any] | None = None,
-        parent_id: str | None = None,
+        metadata: Optional[dict[str, Any]] = None,
+        parent_id: Optional[str] = None,
     ) -> DecisionNode:
         """
         添加节点

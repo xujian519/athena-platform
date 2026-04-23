@@ -6,9 +6,11 @@ Test Dynamic Prompt System based on Legal World Model
 
 import logging
 import sys
+
 sys.path.insert(0, '/Users/xujian/Athena工作平台')
 
 from core.logging_config import setup_logging
+
 logging.basicConfig(level=logging.INFO)
 logger = setup_logging()
 
@@ -53,7 +55,9 @@ def test_rule_retriever():
     logger.info("🧪 测试规则检索器...")
 
     try:
-        from core.legal_world_model.scenario_rule_retriever_optimized import ScenarioRuleRetrieverOptimized
+        from core.legal_world_model.scenario_rule_retriever_optimized import (
+            ScenarioRuleRetrieverOptimized,
+        )
         from neo4j import GraphDatabase
 
         # 连接Neo4j
@@ -102,7 +106,9 @@ def test_dynamic_prompt_generation():
     try:
         # 直接测试场景识别+规则检索的完整流程
         from core.legal_world_model.scenario_identifier_optimized import ScenarioIdentifierOptimized
-        from core.legal_world_model.scenario_rule_retriever_optimized import ScenarioRuleRetrieverOptimized
+        from core.legal_world_model.scenario_rule_retriever_optimized import (
+            ScenarioRuleRetrieverOptimized,
+        )
         from neo4j import GraphDatabase
 
         # 创建实例
@@ -150,10 +156,10 @@ def test_dynamic_prompt_generation():
 【任务】
 请根据上述信息，为用户提供专业的专利法律指导。
 """
-            logger.info(f"   ✅ 提示词生成成功")
+            logger.info("   ✅ 提示词生成成功")
             logger.info(f"   提示词长度: {len(prompt)} 字符")
         else:
-            logger.warning(f"   ⚠️ 未找到相关规则，使用通用提示词")
+            logger.warning("   ⚠️ 未找到相关规则，使用通用提示词")
 
         driver.close()
         logger.info("✅ 动态提示词生成测试完成")
@@ -203,7 +209,7 @@ def main():
     if passed == total:
         logger.info("\n🎉 所有核心功能测试通过！系统可以正常运行！")
     else:
-        logger.info(f"\n⚠️ 部分功能未通过，但核心场景识别和规则检索功能正常。")
+        logger.info("\n⚠️ 部分功能未通过，但核心场景识别和规则检索功能正常。")
 
     return passed == total
 

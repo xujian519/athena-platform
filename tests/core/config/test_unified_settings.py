@@ -5,8 +5,7 @@ Tests for core.config.unified_settings
 """
 
 import os
-import pytest
-from pathlib import Path
+
 from core.config.unified_settings import Settings, get_settings
 
 
@@ -64,8 +63,9 @@ class TestLazySettings:
 
     def test_lazy_settings_performance(self):
         """测试懒加载性能（<10ms）"""
-        from core.config.lazy_settings import FastSettings
         import time
+
+        from core.config.lazy_settings import FastSettings
         start = time.time()
         settings = FastSettings.load(environment="development")
         elapsed = (time.time() - start) * 1000

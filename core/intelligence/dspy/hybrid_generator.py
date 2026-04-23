@@ -90,9 +90,9 @@ class DSPyHybridPromptGenerator:
     def generate_prompt(
         self,
         user_input: str,
-        task_type: str | None = None,
-        layer: str | None = None,
-        use_dspy: bool | None = None,
+        task_type: Optional[str] = None,
+        layer: Optional[str] = None,
+        use_dspy: Optional[bool] = None,
     ) -> str:
         """生成混合提示词
 

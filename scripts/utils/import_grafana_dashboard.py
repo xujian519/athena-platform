@@ -9,11 +9,11 @@ Grafana Dashboard Importer
 版本: v1.0
 """
 
-import json
 import argparse
-import requests
+import json
 from pathlib import Path
-from typing import Optional
+
+import requests
 
 
 def import_dashboard_via_api(
@@ -42,7 +42,7 @@ def import_dashboard_via_api(
         print(f"❌ 仪表板文件不存在: {dashboard_file}")
         return False
 
-    with open(dashboard_path, 'r', encoding='utf-8') as f:
+    with open(dashboard_path, encoding='utf-8') as f:
         dashboard_json = json.load(f)
 
     # 准备导入payload
@@ -94,7 +94,7 @@ def import_dashboard_via_api(
 
     if import_response.status_code == 200:
         result = import_response.json()
-        print(f"✅ 仪表板导入成功!")
+        print("✅ 仪表板导入成功!")
         print(f"   URL: {grafana_url}{result['url']}")
         print(f"   UID: {result['uid']}")
         print(f"   版本: {result['version']}")

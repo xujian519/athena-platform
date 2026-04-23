@@ -13,12 +13,13 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 import pytest
+
 from core.tools.enhanced_document_parser import (
     EnhancedDocumentParser,
     enhanced_document_parser_handler,
     parse_document,
-    parse_pdf_with_ocr,
     parse_image_with_ocr,
+    parse_pdf_with_ocr,
 )
 
 
@@ -136,7 +137,6 @@ class TestConvenienceFunctions:
     async def test_parse_image_with_ocr(self, tmp_path):
         """测试parse_image_with_ocr便捷函数（需要minerU）"""
         # 创建一个小的PNG文件（1x1像素）
-        import struct
 
         png_file = tmp_path / "test.png"
         # 最小的PNG文件

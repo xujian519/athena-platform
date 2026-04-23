@@ -78,7 +78,7 @@ class DecisionStats(BaseModel):
     human_involvement_rate: str
     average_confidence: str
     categories: dict[str, int]
-    recent_decisions: list[dict[str, str]]
+    recent_decisions: list[dict[str, str]
 
 # API路由
 @app.get("/")

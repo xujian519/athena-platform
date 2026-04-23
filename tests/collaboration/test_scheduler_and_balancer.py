@@ -4,16 +4,16 @@ Coordinator调度器和负载均衡器测试
 测试任务调度和负载均衡功能。
 """
 
-import pytest
-import asyncio
 
-from core.collaboration.coordinator.scheduler import TaskScheduler
-from core.collaboration.coordinator.load_balancer import LoadBalancer
-from core.collaboration.coordinator.types import (
+import pytest
+
+from core.framework.collaboration.coordinator.load_balancer import LoadBalancer
+from core.framework.collaboration.coordinator.scheduler import TaskScheduler
+from core.framework.collaboration.coordinator.types import (
     AgentInfo,
+    AgentStatus,
     TaskInfo,
     TaskPriority,
-    AgentStatus,
 )
 
 

@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 class Neo4jKnowledgeGraphImporter:
     """Neo4j知识图谱导入器 (TD-001: 替换KnowledgeGraphImporter)"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         初始化导入器
 

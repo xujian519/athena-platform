@@ -200,7 +200,7 @@ class OutputStyleLoader:
             self.load_all()
         return self._styles.copy()
 
-    def resolve_name(self, raw: str) -> str | None:
+    def resolve_name(self, raw: str) -> Optional[str]:
         """
         解析风格名称（支持大小写不敏感匹配）
 
@@ -247,7 +247,7 @@ _loader_instance: OutputStyleLoader | None = None
 _loader_lock = threading.Lock()
 
 
-def get_loader(project_root: str | None = None) -> OutputStyleLoader:
+def get_loader(project_root: Optional[str] = None) -> OutputStyleLoader:
     """获取 OutputStyleLoader 单例"""
     global _loader_instance
     if _loader_instance is None:
@@ -259,16 +259,16 @@ def get_loader(project_root: str | None = None) -> OutputStyleLoader:
     return _loader_instance
 
 
-def get_available_styles(project_root: str | None = None) -> dict[str, OutputStyleDefinition]:
+def get_available_styles(project_root: Optional[str] = None) -> dict[str, OutputStyleDefinition]:
     """获取所有可用的输出风格"""
     return get_loader(project_root).load_all()
 
 
-def get_style(name: str, project_root: str | None = None) -> OutputStyleDefinition | None:
+def get_style(name: str, project_root: Optional[str] = None) -> OutputStyleDefinition | None:
     """获取指定名称的输出风格"""
     return get_loader(project_root).get(name)
 
 
-def get_style_prompt(name: str, project_root: str | None = None) -> str:
+def get_style_prompt(name: str, project_root: Optional[str] = None) -> str:
     """获取风格的提示词追加内容"""
     return get_loader(project_root).get_style_prompt(name)

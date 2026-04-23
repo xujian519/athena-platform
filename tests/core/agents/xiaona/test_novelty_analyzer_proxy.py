@@ -8,8 +8,13 @@
 """
 
 import pytest
-from core.agents.xiaona.novelty_analyzer_proxy import NoveltyAnalyzerProxy
-from core.agents.xiaona.base_component import AgentExecutionContext, AgentExecutionResult, AgentStatus
+
+from core.framework.agents.xiaona.base_component import (
+    AgentExecutionContext,
+    AgentExecutionResult,
+    AgentStatus,
+)
+from core.framework.agents.xiaona.novelty_analyzer_proxy import NoveltyAnalyzerProxy
 
 
 class TestableNoveltyAnalyzerProxy(NoveltyAnalyzerProxy):

@@ -150,7 +150,7 @@ class OptimizedQdrantClient:
 
     def search(self, collection_name: str, query_vector: list[float],
                 limit: int = 10, filters: dict | None = None,
-                score_threshold: float | None = None) -> list[dict[str, Any]]:
+                score_threshold: float | None = None) -> list[dict[str, Any]:
         """带缓存的智能搜索"""
         # 处理legal_clauses分片查询
         if collection_name == 'legal_clauses':
@@ -245,7 +245,7 @@ class OptimizedQdrantClient:
             logger.error(f"❌ 搜索失败: {e}")
             return []
 
-    def multi_search(self, queries: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    def multi_search(self, queries: list[dict[str, Any]) -> dict[str, list[dict[str, Any]]:
         """多集合搜索"""
         results = {}
 
@@ -264,7 +264,7 @@ class OptimizedQdrantClient:
 
     def hybrid_search(self, query_vector: list[float],
                      collections: list[str] = None,
-                     weights: dict[str, float] | None = None) -> list[dict[str, Any]]:
+                     weights: dict[str, float] | None = None) -> list[dict[str, Any]:
         """混合搜索：跨多个集合搜索并合并结果"""
         if collections is None:
             # 默认搜索主要集合
@@ -329,7 +329,7 @@ class OptimizedQdrantClient:
 
     def _search_legal_clauses_shards(self, query_vector: list[float], limit: int = 10,
                                     filters: dict | None = None,
-                                    score_threshold: float | None = None) -> list[dict[str, Any]]:
+                                    score_threshold: float | None = None) -> list[dict[str, Any]:
         """智能搜索legal_clauses分片"""
         # 确定要搜索的分片（基于关键词路由）
         target_shards = []
@@ -385,7 +385,7 @@ class OptimizedQdrantClient:
 
     def _search_single_collection(self, collection_name: str, query_vector: list[float],
                                  limit: int = 10, filters: dict | None = None,
-                                 score_threshold: float | None = None) -> list[dict[str, Any]]:
+                                 score_threshold: float | None = None) -> list[dict[str, Any]:
         """搜索单个集合的内部方法"""
         if not self.qdrant_client:
             return []
@@ -433,7 +433,7 @@ class OptimizedQdrantClient:
             logger.error(f"搜索集合 {collection_name} 失败: {e}")
             return []
 
-    def list_collections(self) -> list[dict[str, Any]]:
+    def list_collections(self) -> list[dict[str, Any]:
         """列出所有集合及其信息"""
         if not self.qdrant_client:
             return []

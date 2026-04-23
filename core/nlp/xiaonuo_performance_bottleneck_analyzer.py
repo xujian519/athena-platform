@@ -150,7 +150,7 @@ class PerformanceTrend:
 class PerformanceBottleneckAnalyzer:
     """性能瓶颈分析器"""
 
-    def __init__(self, config: dict[str, Any] | None = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or self._get_default_config()
 
         # 数据存储
@@ -852,7 +852,7 @@ class PerformanceBottleneckAnalyzer:
                     return True
         return False
 
-    def save_analysis_data(self, filepath: str | None = None) -> None:
+    def save_analysis_data(self, filepath: Optional[str] = None) -> None:
         """保存分析数据"""
         if filepath is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
