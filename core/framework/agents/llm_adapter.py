@@ -30,8 +30,8 @@ logger = logging.getLogger(__name__)
 class LLMRequest:
     """LLM 请求"""
 
-    messages: Optional[list[dict[str, str]] = None
-    tools: Optional[list[dict[str, Any]] = None
+    messages: Optional[list[dict[str, str]]] = None
+    tools: Optional[list[dict[str, Any]]] = None
     max_tokens: int = 4096
     temperature: float = 0.7
     stream: bool = True
@@ -43,7 +43,7 @@ class LLMResponse:
 
     content: str = ""
     stop_reason: Optional[str] = None
-    tool_uses: Optional[list[dict] = field(default_factory=list)
+    tool_uses: Optional[list[dict]] = field(default_factory=list)
     usage: Optional[dict[str, Any]] = field(default_factory=dict)
     model: str = ""
 
@@ -198,7 +198,7 @@ class LLMAdapter:
                 error_type=type(e).__name__,
             )
 
-    def _parse_response(self, response: Any) -> str:
+    def _parse_response(self, response: Any) -> LLMResponse:
         """解析 LLM 响应
 
         Args:

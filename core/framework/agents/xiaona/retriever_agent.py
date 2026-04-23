@@ -5,7 +5,7 @@
 """
 
 import logging
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional
 
 from core.ai.llm.unified_llm_manager import UnifiedLLMManager
 from core.framework.agents.xiaona.base_component import (
@@ -145,8 +145,8 @@ class RetrieverAgent(BaseXiaonaComponent):
     async def _expand_keywords(
         self,
         user_input: str,
-        previous_results: Optional[dict[str, Any]] = None
-    ) -> list[str]:
+        previous_results: Optional[Dict[str, Any]] = None
+    ) -> List[str]:
         """
         扩展关键词
 
@@ -201,7 +201,7 @@ class RetrieverAgent(BaseXiaonaComponent):
             self.logger.error("关键词扩展响应解析失败")
             return []
 
-    async def _build_search_queries(self, keywords: Optional[list[str]] = None) -> list[str]:
+    async def _build_search_queries(self, keywords: Optional[List[str]] = None) -> List[str]:
         """
         构建检索式
 
@@ -228,9 +228,9 @@ class RetrieverAgent(BaseXiaonaComponent):
 
     async def _execute_search(
         self,
-        queries: Optional[list[str]] = None,
-        config: Optional[dict[str, Any]] = None
-    ) -> list[dict[str, Any]]:
+        queries: Optional[List[str]] = None,
+        config: Optional[Dict[str, Any]] = None
+    ) -> list[Dict[str, Any]]:
         """
         执行检索
 
@@ -272,9 +272,9 @@ class RetrieverAgent(BaseXiaonaComponent):
 
     async def _filter_and_rank_results(
         self,
-        results: Optional[list[dict[str, Any]]] = None,
-        config: Optional[dict[str, Any]] = None
-    ) -> list[dict[str, Any]]:
+        results: Optional[list[Dict[str, Any]]] = None,
+        config: Optional[Dict[str, Any]] = None
+    ) -> list[Dict[str, Any]]:
         """
         筛选和排序结果
 

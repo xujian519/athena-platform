@@ -137,7 +137,7 @@ def _make_qwen_caps() -> ModelAPICapabilities:
     )
 
 
-MODEL_API_CAPABILITIES: dict[[str, ModelAPICapabilities]] = {
+MODEL_API_CAPABILITIES: dict[[[str, ModelAPICapabilities]]] = {
     # DeepSeek 系列
     'deepseek-chat': _make_deepseek_chat_caps(),
     'deepseek-coder-v2': _make_deepseek_chat_caps(),
@@ -160,7 +160,7 @@ MODEL_API_CAPABILITIES: dict[[str, ModelAPICapabilities]] = {
 }
 
 # 能力缓存（避免重复推断，线程安全）
-_capability_cache: dict[[str, ModelAPICapabilities]] = {}
+_capability_cache: dict[[[str, ModelAPICapabilities]]] = {}
 _cache_lock = threading.Lock()
 
 

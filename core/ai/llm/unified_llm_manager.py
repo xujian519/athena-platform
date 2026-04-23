@@ -107,15 +107,18 @@ class UnifiedLLMManager:
 
     def _init_prompt_manager(self):
         """初始化提示词管理器"""
+        # TODO: 迁移至主链路 core.api.prompt_system_routes.generate_prompt()
         try:
             from core.ai.prompts.unified_prompt_manager import get_unified_prompt_manager
 
             self.prompt_manager = get_unified_prompt_manager()
-            logger.info("✅ 提示词管理器已加载")
+            logger.info("✅ 提示词管理器已加载 (deprecated, will be migrated)")
         except ImportError as e:
             logger.warning(f"⚠️ 提示词管理器不可用: {e}")
+            self.prompt_manager = None
         except Exception as e:
             logger.warning(f"⚠️ 提示词管理器初始化失败: {e}", exc_info=True)
+            self.prompt_manager = None
 
     async def initialize(self, enable_cache_warmup: bool = True, warmup_cache: bool = False):
         """
@@ -462,19 +465,45 @@ class UnifiedLLMManager:
             str: 系统提示词
         """
         try:
-            # 根据任务类型获取对应的提示词
             agent_name = self._map_task_to_agent(task_type)
-            if agent_name and self.prompt_manager:
+            if not agent_name:
+                return ""
+
+            if self.prompt_manager:
                 result = await self.prompt_manager.load_prompt(
                     agent=agent_name, layers=["L1", "L2"]  # 身份层+数据层
                 )
                 if result.status == "success":
                     return result.content
+
+            # 回退：直接读取 prompts/foundation/ 文件
+            logger.warning("⚠️ prompt_manager 不可用，使用回退方案读取本地提示词")
+            return self._fallback_load_prompt(agent_name, ["L1", "L2"])
         except (AttributeError, KeyError, TypeError) as e:
             logger.warning(f"⚠️ 获取系统提示词失败: {e}", exc_info=True)
         except Exception as e:
             logger.warning(f"⚠️ 获取系统提示词发生未预期错误: {e}", exc_info=True)
         return ""
+
+    def _fallback_load_prompt(self, agent: str, layers: list[str]) -> str:
+        """回退方案：直接从 prompts/foundation/ 读取 Markdown 文件。"""
+        try:
+            from pathlib import Path
+            base = Path(__file__).resolve().parent.parent.parent / "prompts" / "foundation"
+            candidates = [f"{agent}_core_v3_compressed.md", f"{agent}_core.md", f"{agent}.md"]
+            for cand in candidates:
+                fpath = base / cand
+                if fpath.exists():
+                    content = fpath.read_text(encoding="utf-8")
+                    parts = []
+                    for layer in layers:
+                        if layer.upper() in content:
+                            parts.append(content[:2000])
+                    return "\n\n".join(parts) if parts else content
+            return ""
+        except Exception as e:
+            logger.error(f"❌ 回退加载提示词失败: {e}")
+            return ""
 
     def _map_task_to_agent(self, task_type: str) -> Optional[str]:
         """

@@ -18,7 +18,7 @@
 
 import logging
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional
 
 from core.framework.agents.xiaona.base_component import (
     AgentExecutionContext,
@@ -64,7 +64,7 @@ class UnifiedPatentWriter(BaseXiaonaComponent):
 - 意见陈述书：意见陈述、修改说明、对比分析
 """
 
-    def __init__(self, config: Optional[[dict[str, Any]]] = None):
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
 
         """
         初始化统一专利撰写代理
@@ -295,7 +295,7 @@ class UnifiedPatentWriter(BaseXiaonaComponent):
 
     async def _route_to_module(
         self, task_type: str, context: AgentExecutionContext
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         根据任务类型路由到对应模块
 
@@ -348,7 +348,7 @@ class UnifiedPatentWriter(BaseXiaonaComponent):
 
     async def _route_to_drafting_module(
         self, task_type: str, context: AgentExecutionContext
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         路由到专利撰写模块
 
@@ -384,7 +384,7 @@ class UnifiedPatentWriter(BaseXiaonaComponent):
 
     async def _route_to_response_module(
         self, task_type: str, context: AgentExecutionContext
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         路由到审查答复模块
 
@@ -412,7 +412,7 @@ class UnifiedPatentWriter(BaseXiaonaComponent):
 
     async def _route_to_orchestration_module(
         self, task_type: str, context: AgentExecutionContext
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         路由到任务编排模块
 
@@ -444,7 +444,7 @@ class UnifiedPatentWriter(BaseXiaonaComponent):
 
     async def _route_to_utility_module(
         self, task_type: str, context: AgentExecutionContext
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         路由到通用工具模块
 
@@ -492,7 +492,7 @@ class UnifiedPatentWriter(BaseXiaonaComponent):
 
     # ========== 便捷方法 ==========
 
-    async def analyze_disclosure(self, disclosure_data: Optional[[dict[str, Any]]] = None) -> dict[str, Any]:
+    async def analyze_disclosure(self, disclosure_data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         分析技术交底书（便捷方法）
 
@@ -517,9 +517,9 @@ class UnifiedPatentWriter(BaseXiaonaComponent):
 
     async def draft_full_application(
         self,
-        disclosure_data: Optional[[dict[str, Any]]] = None,
+        disclosure_data: Optional[Dict[str, Any]] = None,
         progress_callback: Optional[callable] = None
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         完整专利申请流程（便捷方法）
 
@@ -546,9 +546,9 @@ class UnifiedPatentWriter(BaseXiaonaComponent):
 
     async def draft_office_action_response(
         self,
-        office_action: Optional[[dict[str, Any]]] = None,
+        office_action: Optional[Dict[str, Any]] = None,
         progress_callback: Optional[callable] = None
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         审查意见答复流程（便捷方法）
 
@@ -578,7 +578,7 @@ class UnifiedPatentWriter(BaseXiaonaComponent):
 # ========== 工厂函数 ==========
 
     @staticmethod
-    def create_unified_patent_writer(config: Optional[dict[str, Any]] = None) -> str:
+    def create_unified_patent_writer(config: Optional[Dict[str, Any]] = None) -> str:
         """
         创建统一专利撰写代理实例
 

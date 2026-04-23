@@ -29,11 +29,11 @@ class QualityMetrics:
 @dataclass
 class DiffResult:
     """版本对比结果"""
-    added: Optional[list[str]] = field(default_factory=list)
-    removed: Optional[list[str]] = field(default_factory=list)
+    added: Optional[List[str]] = field(default_factory=list)
+    removed: Optional[List[str]] = field(default_factory=list)
     modified: Optional[list[tuple[str, str]] = field(default_factory=list)]
 
-    unchanged: Optional[list[str]] = field(default_factory=list)
+    unchanged: Optional[List[str]] = field(default_factory=list)
     similarity_ratio: float = 0.0
 
 
@@ -103,7 +103,7 @@ class UtilityModule:
 
         return content
 
-    def _format_claims(self, content: str, config: Optional[dict[str, Any])] -> str:
+    def _format_claims(self, content: str, config: Optional[Dict[str, Any])] -> str:
         """格式化权利要求书"""
         # 清理和规范化权利要求
         lines = [line.strip() for line in content.strip().split('\n') if line.strip()]
@@ -120,9 +120,9 @@ class UtilityModule:
         formatted_content = '\n'.join(formatted_lines)
         return config["template"].format(prefix=config["prefix"], content=formatted_content)
 
-    def _format_specification(self, content: str, config: Optional[dict[str, Any],]
+    def _format_specification(self, content: str, config: Optional[Dict[str, Any],]
 
-                              kwargs: Optional[dict[str, Any])] -> str:
+                              kwargs: Optional[Dict[str, Any])] -> str:
         """格式化说明书"""
         # 如果有指定章节，按章节组织
         sections = kwargs.get("sections", config.get("sections", []))
@@ -140,7 +140,7 @@ class UtilityModule:
 
         return config["template"].format(prefix=config["prefix"], content=formatted_content)
 
-    def _format_legal_document(self, content: str, config: Optional[dict[str, Any],]
+    def _format_legal_document(self, content: str, config: Optional[Dict[str, Any],]
 
                                doc_type: str) -> str:
         """格式化法律文书（答复/请求书）"""
@@ -152,7 +152,7 @@ class UtilityModule:
         )
 
     def calculate_quality_score(self, document_content: str,
-                                review_result: Optional[dict[str, Any]])] -> str:
+                                review_result: Optional[Dict[str, Any]]] -> str:
         """
         计算文档质量评分
 
@@ -289,7 +289,7 @@ class UtilityModule:
         return max(0.0, min(100.0, score))
 
     def _adjust_score_by_review(self, metrics: QualityMetrics,
-                                review_result: Optional[dict[str, Any])] -> str:
+                                review_result: Optional[Dict[str, Any])] -> str:
         """根据审查结果调整评分"""
         issues = review_result.get("issues", [])
         critical_issues = review_result.get("critical_issues", [])

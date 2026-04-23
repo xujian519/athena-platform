@@ -36,10 +36,10 @@ class ForkContext:
         system_prompt: 系统提示词列表
     """
 
-    fork_context_messages: Optional[list[dict[str, Any]] = field(default_factory=list)
-    prompt_messages: Optional[list[dict[str, Any]] = field(default_factory=list)
+    fork_context_messages: Optional[list[dict[str, Any]]] = field(default_factory=list)
+    prompt_messages: Optional[list[dict[str, Any]]] = field(default_factory=list)
     context_variables: Optional[dict[str, Any]] = field(default_factory=dict)
-    system_prompt: Optional[list[dict[str, Any]] = field(default_factory=list)
+    system_prompt: Optional[list[dict[str, Any]]] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         """转换为字典
@@ -58,7 +58,7 @@ class ForkContext:
         return json.dumps(self.to_dict(), ensure_ascii=False, indent=2)
 
     @classmethod
-    def from_dict(cls, data: Optional[dict[str, Any]])] -> str:
+    def from_dict(cls, data: Optional[dict[str, Any]]) -> "ForkContext":
         """从字典创建ForkContext
 
         Args:
@@ -70,7 +70,7 @@ class ForkContext:
         return cls(**data)
 
     @classmethod
-    def from_json(cls, json_str: str) -> str:
+    def from_json(cls, json_str: str) -> "ForkContext":
         """从JSON字符串创建ForkContext
 
         Args:
@@ -112,7 +112,7 @@ class ForkContextBuilder:
         prompt: str,
         context: Optional[dict[str, Any]],
         tool_use_id: Optional[str] = None,
-    ) -> str:
+    ) -> ForkContext:
         """构建Fork上下文
 
         Args:
@@ -151,7 +151,7 @@ class ForkContextBuilder:
         self,
         prompt: str,
         tool_use_id: Optional[str] = None,
-    ) -> list[str, Any]:
+    ) -> list[dict[str, Any]]:
         """构建prompt消息
 
         Args:
@@ -176,7 +176,7 @@ class ForkContextBuilder:
         self,
         agent_system_prompt: str,
         base_system_prompt: str = "",
-    ) -> list[str, Any]:
+    ) -> list[dict[str, Any]]:
         """构建系统提示词
 
         Args:
@@ -204,11 +204,10 @@ class ForkContextBuilder:
 
     def apply_fork_context(
         self,
-        messages: Optional[list[dict[str, Any]],]
-
+        messages: Optional[list[dict[str, Any]]],
         fork_context: ForkContext,
         include_parent_messages: bool = True,
-    ) -> list[str, Any]:
+    ) -> list[dict[str, Any]]:
         """应用Fork上下文到消息列表
 
         Args:
@@ -238,9 +237,8 @@ class ForkContextBuilder:
 
     def _build_fork_context_messages(
         self,
-        parent_messages: Optional[list[dict[str, Any]],]
-
-    ) -> list[str, Any]:
+        parent_messages: Optional[list[dict[str, Any]]],
+    ) -> list[dict[str, Any]]:
         """构建父代理上下文消息
 
         Args:
@@ -271,14 +269,13 @@ class ForkContextBuilder:
         context_variables = {}
 
         # 从context中提取变量
-        variable_keys = []
-
+        variable_keys = [
             "tool_use_id",
             "message_log_name",
             "fork_number",
             "agent_type",
             "task_id",
-        
+        ]
 
         for key in variable_keys:
             if key in context:
@@ -360,9 +357,7 @@ class ForkContextBuilder:
             return False
 
 
-__all__ = []
-
+__all__ = [
     "ForkContext",
     "ForkContextBuilder",
-
-
+]

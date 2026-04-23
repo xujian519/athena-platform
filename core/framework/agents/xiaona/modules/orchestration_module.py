@@ -37,14 +37,14 @@ class TaskResult:
     """任务执行结果"""
     task_name: str
     status: TaskStatus
-    result: Optional[dict[str, Any]]
+    result: Optional[Dict[str, Any]]
 
     error: Optional[str] = None
     start_time: Optional[datetime ] = None
     end_time: Optional[datetime ] = None
     duration: float = 0.0
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """转换为字典"""
         return {
             "task_name": self.task_name,
@@ -73,7 +73,7 @@ class OrchestrationProgress:
         if result.status == TaskStatus.COMPLETED:
             self.completed_steps += 1
 
-    def get_progress_summary(self) -> dict[str, Any]:
+    def get_progress_summary(self) -> Dict[str, Any]:
         """获取进度摘要"""
         return {
             "total_steps": self.total_steps,
@@ -134,10 +134,10 @@ class OrchestrationModule:
 
     async def draft_full_application(
         self,
-        disclosure_data: Optional[dict[str, Any],]
+        disclosure_data: Optional[Dict[str, Any],]
 
         progress_callback: Optional[Callable[[str, float], None] ] = None,
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         完整专利申请流程编排
 
@@ -329,13 +329,13 @@ class OrchestrationModule:
 
     async def orchestrate_response(
         self,
-        office_action: Optional[dict[str, Any],]
+        office_action: Optional[Dict[str, Any],]
 
-        patent_data: Optional[dict[str, Any]],]
+        patent_data: Optional[Dict[str, Any]],]
 
         search_existing_art: bool = True,
         progress_callback: Optional[Callable[[str, float], None] ] = None,
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         审查意见答复流程编排
 
@@ -498,7 +498,7 @@ class OrchestrationModule:
         self,
         tasks: Optional[list[Callable[[], Any],]]
 
-        task_names: Optional[list[str]],]
+        task_names: Optional[List[str]],]
 
     ) -> list[TaskResult]:
         """
@@ -530,7 +530,7 @@ class OrchestrationModule:
         self,
         tasks: Optional[list[Callable[[], Any],]]
 
-        task_names: Optional[list[str]],]
+        task_names: Optional[List[str]],]
 
     ) -> list[TaskResult]:
         """
@@ -612,11 +612,11 @@ class OrchestrationModule:
     async def _analyze_office_action_internal(
         self,
         analyzer: Any,
-        office_action: Optional[dict[str, Any],]
+        office_action: Optional[Dict[str, Any],]
 
-        patent_data: Optional[dict[str, Any],]
+        patent_data: Optional[Dict[str, Any],]
 
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """内部方法：分析审查意见"""
         # 这里调用分析代理的具体方法
         # 由于AnalyzerAgent的接口可能不同，这里提供通用实现
@@ -638,9 +638,9 @@ class OrchestrationModule:
     async def _analyze_citations_internal(
         self,
         analyzer: Any,
-        office_action: Optional[dict[str, Any],]
+        office_action: Optional[Dict[str, Any],]
 
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """内部方法：分析引用文献"""
         try:
             citations = office_action.get("citations", [])
@@ -659,11 +659,11 @@ class OrchestrationModule:
     async def _search_prior_art_internal(
         self,
         retriever: Any,
-        office_action: Optional[dict[str, Any],]
+        office_action: Optional[Dict[str, Any],]
 
-        analysis: Optional[dict[str, Any],]
+        analysis: Optional[Dict[str, Any],]
 
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """内部方法：检索现有技术"""
         try:
             # 提取检索关键词
@@ -690,15 +690,15 @@ class OrchestrationModule:
     async def _draft_response_internal(
         self,
         writer: Any,
-        office_action: Optional[dict[str, Any],]
+        office_action: Optional[Dict[str, Any],]
 
-        oa_analysis: Optional[dict[str, Any],]
+        oa_analysis: Optional[Dict[str, Any],]
 
-        citation_analysis: Optional[dict[str, Any],]
+        citation_analysis: Optional[Dict[str, Any],]
 
-        prior_art: Optional[dict[str, Any],]
+        prior_art: Optional[Dict[str, Any],]
 
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """内部方法：撰写答复意见"""
         try:
             context = {
@@ -725,9 +725,9 @@ class OrchestrationModule:
     async def _review_response_internal(
         self,
         writer: Any,
-        response_draft: Optional[dict[str, Any],]
+        response_draft: Optional[Dict[str, Any],]
 
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """内部方法：审查答复质量"""
         try:
             if hasattr(writer, 'review_response'):

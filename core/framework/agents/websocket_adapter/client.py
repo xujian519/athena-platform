@@ -71,7 +71,7 @@ class Message:
         return json.dumps(self.to_dict(), ensure_ascii=False)
 
     @classmethod
-    def from_dict(cls, data: Optional[Dict[str, Any]])] -> "Message":
+    def from_dict(cls, data: Optional[Dict[str, Any]]) -> "Message":
         """从字典创建消息"""
         return cls(
             id=data["id"],
@@ -88,13 +88,13 @@ class TaskRequest(Message):
     task_type: str = ""
     target_agent: AgentType = AgentType.UNKNOWN
     priority: int = 5
-    parameters: Optional[Dict[str, Any]] = field(default_factory=dict)]
+    parameters: Optional[Dict[str, Any]] = field(default_factory=dict)
 
 
     def to_dict(self) -> Dict[str, Any]:
         """转换为字典"""
         base = super().to_dict()
-        base["data"]] = {
+        base["data"] = {
             "task_type": self.task_type,
             "target_agent": self.target_agent.value,
             "priority": self.priority,
@@ -114,7 +114,7 @@ class ProgressUpdate(Message):
     def to_dict(self) -> Dict[str, Any]:
         """转换为字典"""
         base = super().to_dict()
-        base["data"]] = {
+        base["data"] = {
             "progress": self.progress,
             "status": self.status,
             "current_step": self.current_step,
@@ -133,7 +133,7 @@ class ErrorResponse(Message):
     def to_dict(self) -> Dict[str, Any]:
         """转换为字典"""
         base = super().to_dict()
-        base["data"]] = {
+        base["data"] = {
             "error_code": self.error_code,
             "error_msg": self.error_msg,
             "details": self.details
@@ -156,7 +156,7 @@ class WebSocketClient:
         auto_reconnect: bool = True,
         reconnect_interval: float = 3.0,
         ping_interval: float = 30.0,
-        capabilities: Optional[List[str]] = None]
+        capabilities: Optional[List[str]] = None
 
     ):
         """
@@ -183,7 +183,7 @@ class WebSocketClient:
         self._websocket: Optional[websockets.WebSocketClientProtocol] = None
         self._connected = False
         self._session_id: Optional[str] = None
-        self._message_handlers: Optional[Dict[MessageType, List[Callable]] = {}]]
+        self._message_handlers: Optional[Dict[MessageType, List[Callable]]] = {}
 
         self._stop_event = asyncio.Event()
 
@@ -364,8 +364,7 @@ class WebSocketClient:
         self,
         task_type: str,
         target_agent: AgentType,
-        parameters: Optional[Dict[str, Any],]
-
+        parameters: Optional[Dict[str, Any]],
         priority: int = 5
     ) -> str:
         """
@@ -399,7 +398,6 @@ class WebSocketClient:
         self,
         query_type: str,
         parameters: Optional[Dict[str, Any]]
-
     ) -> str:
         """
         发送查询请求
@@ -458,10 +456,8 @@ class WebSocketClient:
     async def send_response(
         self,
         success: bool,
-        result: Optional[Dict[str, Any],]
-
-        metadata: Optional[Dict[str, Any]] = None]
-
+        result: Optional[Dict[str, Any]],
+        metadata: Optional[Dict[str, Any]] = None
     ) -> str:
         """
         发送响应
@@ -541,8 +537,8 @@ class WebSocketClient:
 # 便捷函数
 async def create_client(
     gateway_url: str = "ws://localhost:8005/ws",
-    **_kwargs  # noqa: ARG001
-) -> str:
+    **_kwargs,  # noqa: ARG001
+) -> "WebSocketClient":
     """
     创建并连接WebSocket客户端
 
@@ -553,6 +549,6 @@ async def create_client(
     Returns:
         已连接的WebSocket客户端
     """
-    client = WebSocketClient(gateway_url=gateway_url, **_kwargs  # noqa: ARG001)
+    client = WebSocketClient(gateway_url=gateway_url, **_kwargs)  # noqa: ARG001
     await client.connect()
     return client

@@ -9,7 +9,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -39,8 +39,8 @@ class AgentCapability:
     """智能体能力描述"""
     name: str  # 能力名称
     description: str  # 能力描述
-    input_types: list[str]  # 支持的输入类型
-    output_types: list[str]  # 输出类型
+    input_types: List[str]  # 支持的输入类型
+    output_types: List[str]  # 输出类型
     estimated_time: float  # 预估执行时间（秒）
 
 
@@ -48,9 +48,9 @@ class AgentCapability:
 class AgentExecutionContext:
     """智能体执行上下文"""
     session_id: str                      # 会话ID
-    input_data: Optional[dict[str, Any]]  # 输入数据
-    config: Optional[dict[str, Any]]  # 配置参数
-    metadata: Optional[dict[str, Any]]  # 元数据
+    input_data: Optional[Dict[str, Any]]  # 输入数据
+    config: Optional[Dict[str, Any]]  # 配置参数
+    metadata: Optional[Dict[str, Any]]  # 元数据
 
     start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None
@@ -61,8 +61,8 @@ class AgentExecutionResult:
     """智能体执行结果"""
     agent_id: str                        # 智能体ID
     status: AgentStatus                  # 执行状态
-    output_data: Optional[dict[str, Any]] = None  # 输出数据
-    metadata: Optional[dict[str, Any]] = None  # 元数据
+    output_data: Optional[Dict[str, Any]] = None  # 输出数据
+    metadata: Optional[Dict[str, Any]] = None  # 元数据
 
     error_message: Optional[str] = None  # 错误信息
     execution_time: float = 0.0          # 执行时间（秒）
@@ -81,7 +81,7 @@ class BaseXiaonaComponent(ABC):
     提供统一的生命周期管理、能力描述和执行接口。
     """
 
-    def __init__(self, agent_id: str, config: Optional[dict[str, Any]]):
+    def __init__(self, agent_id: str, config: Optional[Dict[str, Any]] = None):
 
         """
         初始化智能体
@@ -100,7 +100,7 @@ class BaseXiaonaComponent(ABC):
 
         # LLM管理器（延迟初始化）
         self._llm_manager: Optional[UnifiedLLMManager ] = None
-        self._llm_config: Optional[dict[str, Any]] = {}
+        self._llm_config: Optional[Dict[str, Any]] = {}
 
         self._llm_initialized = False
 
@@ -188,7 +188,7 @@ class BaseXiaonaComponent(ABC):
         """
         return any(c.name == capability_name for c in self._capabilities)
 
-    def get_info(self) -> dict[str, Any]:
+    def get_info(self) -> Dict[str, Any]:
         """
         获取智能体信息
 
@@ -541,7 +541,7 @@ class BaseXiaonaComponent(ABC):
                 f"最后错误: {e}"
             )
 
-    def _build_llm_context(self, task_type: str) -> dict[str, Any]:
+    def _build_llm_context(self, task_type: str) -> Dict[str, Any]:
         """
         构建LLM上下文
 
@@ -560,7 +560,7 @@ class BaseXiaonaComponent(ABC):
             "system_prompt": self.get_system_prompt(),
         }
 
-    def _load_llm_config(self) -> dict[str, Any]:
+    def _load_llm_config(self) -> Dict[str, Any]:
         """
         加载LLM配置
 
@@ -592,9 +592,9 @@ class BaseXiaonaComponent(ABC):
     def _merge_llm_params(
         self,
         task_type: str,
-        user_params: Optional[dict[str, Any]]
+        user_params: Optional[Dict[str, Any]]
 
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         合并LLM参数
 

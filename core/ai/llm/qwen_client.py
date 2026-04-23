@@ -21,7 +21,7 @@ class QwenResponse:
     content: str
     model: str
     tokens_used: int
-    raw_response: dict[[str, Any]]
+    raw_response: dict[[[str, Any]]]
 class QwenClient:
     """
     Qwen(通义千问)客户端
@@ -76,7 +76,7 @@ class QwenClient:
         logger.info(f"✅ Qwen客户端初始化完成 (模型: {model}, 模拟模式: {self.mock_mode})")
 
     async def chat(
-        self, messages: list[[dict[str, str]], temperature: float = 0.7, max_tokens: int = 2000
+        self, messages: list[[[dict[str, str]]], temperature: float = 0.7, max_tokens: int = 2000
     ) -> dict[str, Any]:
         """
         对话接口
@@ -111,7 +111,7 @@ class QwenClient:
             raise
 
     async def _mock_chat(
-        self, messages: list[[dict[str, str]], temperature: float, max_tokens: int
+        self, messages: list[[[dict[str, str]]], temperature: float, max_tokens: int
     ) -> dict[str, Any]:
         """模拟对话(用于测试)"""
         user_message = messages[-1].get("content", "") if messages else ""

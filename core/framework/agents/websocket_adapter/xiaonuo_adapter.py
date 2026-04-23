@@ -26,7 +26,7 @@ class XiaonuoAgentAdapter(BaseAgentAdapter):
     - 结果汇总
     """
 
-    def __init__(self, **_kwargs  # noqa: ARG001):
+    def __init__(self, **_kwargs):  # noqa: ARG001
         """初始化小诺Agent适配器"""
         super().__init__(
             agent_type=AgentType.XIAONUO,
@@ -52,9 +52,8 @@ class XiaonuoAgentAdapter(BaseAgentAdapter):
     async def handle_task(
         self,
         task_type: str,
-        parameters: Optional[Dict[str, Any],]
-
-        progress_callback: callable
+        parameters: Optional[Dict[str, Any]],
+        progress_callback: callable,
     ) -> Dict[str, Any]:
         """处理任务"""
         handler = self._task_handlers.get(task_type)
@@ -63,7 +62,7 @@ class XiaonuoAgentAdapter(BaseAgentAdapter):
 
         return await handler(parameters, progress_callback)
 
-    async def handle_query(self, query_type: str, parameters: Optional[Dict[str, Any])] -> Dict[str, Any]:
+    async def handle_query(self, query_type: str, parameters: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """处理查询"""
         handler = self._query_handlers.get(query_type)
         if not handler:
@@ -73,9 +72,8 @@ class XiaonuoAgentAdapter(BaseAgentAdapter):
 
     async def _orchestrate_task(
         self,
-        parameters: Optional[Dict[str, Any],]
-
-        progress_callback: callable
+        parameters: Optional[Dict[str, Any]],
+        progress_callback: callable,
     ) -> Dict[str, Any]:
         """编排任务"""
         task_name = parameters.get("task_name", "")
@@ -110,9 +108,8 @@ class XiaonuoAgentAdapter(BaseAgentAdapter):
 
     async def _coordinate_agents(
         self,
-        parameters: Optional[Dict[str, Any],]
-
-        progress_callback: callable
+        parameters: Optional[Dict[str, Any]],
+        progress_callback: callable,
     ) -> Dict[str, Any]:
         """协调Agent"""
         agents = parameters.get("agents", [])
@@ -131,9 +128,8 @@ class XiaonuoAgentAdapter(BaseAgentAdapter):
 
     async def _monitor_progress(
         self,
-        parameters: Optional[Dict[str, Any],]
-
-        progress_callback: callable
+        parameters: Optional[Dict[str, Any]],
+        progress_callback: callable,
     ) -> Dict[str, Any]:
         """监控进度"""
         task_ids = parameters.get("task_ids", [])
@@ -152,9 +148,8 @@ class XiaonuoAgentAdapter(BaseAgentAdapter):
 
     async def _aggregate_results(
         self,
-        parameters: Optional[Dict[str, Any],]
-
-        progress_callback: callable
+        parameters: Optional[Dict[str, Any]],
+        progress_callback: callable,
     ) -> Dict[str, Any]:
         """汇总结果"""
         results = parameters.get("results", [])
@@ -171,7 +166,7 @@ class XiaonuoAgentAdapter(BaseAgentAdapter):
             "summary": "结果汇总完成"
         }
 
-    async def _query_agent_status(self, parameters: Optional[Dict[str, Any])] -> Dict[str, Any]:
+    async def _query_agent_status(self, parameters: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """查询Agent状态"""
         return {
             "agent": "xiaonuo",
@@ -180,11 +175,11 @@ class XiaonuoAgentAdapter(BaseAgentAdapter):
             "active_tasks": len(self._tasks)
         }
 
-    async def _query_task_queue(self, parameters: Optional[Dict[str, Any])] -> Dict[str, Any]:
+    async def _query_task_queue(self, parameters: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """查询任务队列"""
         return {
             "queue_size": len(self._tasks),
-            "pending_tasks": Optional[[]]
+            "pending_tasks": []
 
         }
 
@@ -199,7 +194,7 @@ class YunxiAgentAdapter(BaseAgentAdapter):
     - 期限管理
     """
 
-    def __init__(self, **_kwargs  # noqa: ARG001):
+    def __init__(self, **_kwargs):  # noqa: ARG001
         """初始化云希Agent适配器"""
         super().__init__(
             agent_type=AgentType.YUNXI,
@@ -225,9 +220,8 @@ class YunxiAgentAdapter(BaseAgentAdapter):
     async def handle_task(
         self,
         task_type: str,
-        parameters: Optional[Dict[str, Any],]
-
-        progress_callback: callable
+        parameters: Optional[Dict[str, Any]],
+        progress_callback: callable,
     ) -> Dict[str, Any]:
         """处理任务"""
         handler = self._task_handlers.get(task_type)
@@ -236,7 +230,7 @@ class YunxiAgentAdapter(BaseAgentAdapter):
 
         return await handler(parameters, progress_callback)
 
-    async def handle_query(self, query_type: str, parameters: Optional[Dict[str, Any])] -> Dict[str, Any]:
+    async def handle_query(self, query_type: str, parameters: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """处理查询"""
         handler = self._query_handlers.get(query_type)
         if not handler:
@@ -246,9 +240,8 @@ class YunxiAgentAdapter(BaseAgentAdapter):
 
     async def _manage_client(
         self,
-        parameters: Optional[Dict[str, Any],]
-
-        progress_callback: callable
+        parameters: Optional[Dict[str, Any]],
+        progress_callback: callable,
     ) -> Dict[str, Any]:
         """管理客户"""
         action = parameters.get("action", "")
@@ -269,9 +262,8 @@ class YunxiAgentAdapter(BaseAgentAdapter):
 
     async def _manage_project(
         self,
-        parameters: Optional[Dict[str, Any],]
-
-        progress_callback: callable
+        parameters: Optional[Dict[str, Any]],
+        progress_callback: callable,
     ) -> Dict[str, Any]:
         """管理项目"""
         project_id = parameters.get("project_id", "")
@@ -292,9 +284,8 @@ class YunxiAgentAdapter(BaseAgentAdapter):
 
     async def _check_deadline(
         self,
-        parameters: Optional[Dict[str, Any],]
-
-        progress_callback: callable
+        parameters: Optional[Dict[str, Any]],
+        progress_callback: callable,
     ) -> Dict[str, Any]:
         """检查期限"""
         # 检查过程
@@ -311,9 +302,8 @@ class YunxiAgentAdapter(BaseAgentAdapter):
 
     async def _generate_report(
         self,
-        parameters: Optional[Dict[str, Any],]
-
-        progress_callback: callable
+        parameters: Optional[Dict[str, Any]],
+        progress_callback: callable,
     ) -> Dict[str, Any]:
         """生成报告"""
         report_type = parameters.get("report_type", "")
@@ -331,7 +321,7 @@ class YunxiAgentAdapter(BaseAgentAdapter):
             "result": "报告已生成"
         }
 
-    async def _query_agent_status(self, parameters: Optional[Dict[str, Any])] -> Dict[str, Any]:
+    async def _query_agent_status(self, parameters: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """查询Agent状态"""
         return {
             "agent": "yunxi",
@@ -340,7 +330,7 @@ class YunxiAgentAdapter(BaseAgentAdapter):
             "active_tasks": len(self._tasks)
         }
 
-    async def _query_client_info(self, parameters: Optional[Dict[str, Any])] -> Dict[str, Any]:
+    async def _query_client_info(self, parameters: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """查询客户信息"""
         client_id = parameters.get("client_id", "")
         return {
@@ -352,15 +342,15 @@ class YunxiAgentAdapter(BaseAgentAdapter):
 
 
 # 便捷函数
-async def create_xiaonuo_agent(**_kwargs) ->  # noqa: ARG001 str:
+async def create_xiaonuo_agent(**_kwargs):  # noqa: ARG001
     """创建并启动小诺Agent"""
-    agent = XiaonuoAgentAdapter(**_kwargs  # noqa: ARG001)
+    agent = XiaonuoAgentAdapter(**_kwargs)  # noqa: ARG001
     await agent.start()
     return agent
 
 
-async def create_yunxi_agent(**_kwargs) ->  # noqa: ARG001 str:
+async def create_yunxi_agent(**_kwargs):  # noqa: ARG001
     """创建并启动云希Agent"""
-    agent = YunxiAgentAdapter(**_kwargs  # noqa: ARG001)
+    agent = YunxiAgentAdapter(**_kwargs)  # noqa: ARG001
     await agent.start()
     return agent

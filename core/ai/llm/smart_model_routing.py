@@ -21,7 +21,7 @@
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from core.ai.llm.base import LLMRequest
 
@@ -501,7 +501,7 @@ class SmartModelRouter:
     def _select_economy_model(
         self,
         available_adapters: Optional[dict[str, Any]],
-    ) -> tuple[str, str] | None:
+    ) -> Optional[Tuple[str, str]]:
         """
         选择经济模型
 
@@ -576,9 +576,9 @@ class SmartModelRouter:
 
     def _filter_available_models(
         self,
-        model_list: list[dict[str, Any]],
-        available_adapters: Optional[dict[str, Any]],
-    ) -> list[dict[str, Any]] | None:
+        model_list: List[Dict[str, Any]],
+        available_adapters: Optional[Dict[str, Any]],
+    ) -> Optional[List[Dict[str, Any]]]:
         """
         过滤出可用的模型
 

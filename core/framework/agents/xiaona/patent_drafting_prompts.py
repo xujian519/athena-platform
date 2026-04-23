@@ -4,14 +4,14 @@
 提供优化的提示词模板，支持Few-shot学习和CoT推理。
 """
 
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional
 
 
 class PatentDraftingPrompts:
     """专利撰写代理提示词配置"""
 
     # 提示词模板配置（简化版，避免重复）
-    PROMPTS_CONFIG: Optional[dict[str, dict[str, Any] = {]]
+    PROMPTS_CONFIG: Optional[dict[str, Dict[str, Any] = {]]
 
         "comprehensive": {
             "system_prompt": """你是一位专业的专利撰写专家，具备深厚的专利法知识和丰富的撰写经验。
@@ -24,7 +24,7 @@ class PatentDraftingPrompts:
     }
 
     @classmethod
-    def get_prompt(cls, task_type: str = "comprehensive") -> dict[str, Any]:
+    def get_prompt(cls, task_type: str = "comprehensive") -> Dict[str, Any]:
         """获取提示词配置"""
         return cls.PROMPTS_CONFIG.get(task_type, cls.PROMPTS_CONFIG["comprehensive"])
 

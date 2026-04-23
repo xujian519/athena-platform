@@ -50,7 +50,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
     _unified_writer: Any = None
 
     def __init__(
-        self, agent_id: str] = "patent_drafting_proxy", config: Optional[dict[str, Any]]
+        self, agent_id: str] = "patent_drafting_proxy", config: Optional[Dict[str, Any]]
     ):
         """
         初始化专利撰写智能体适配器
@@ -140,7 +140,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return PatentDraftingProxy._unified_writer
 
-    def _build_adapter_context(self, task_id: str, data: Optional[dict[str, Any])] -> str:
+    def _build_adapter_context(self, task_id: str, data: Optional[Dict[str, Any])] -> str:
         """
         构建适配器执行上下文（私有辅助方法）
 
@@ -206,7 +206,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
     # ========== 向后兼容接口 ==========
 
-    async def analyze_disclosure(self, disclosure_data: Optional[dict[str, Any])] -> dict[str, Any]:
+    async def analyze_disclosure(self, disclosure_data: Optional[Dict[str, Any])] -> Dict[str, Any]:
         """
         分析技术交底书（向后兼容接口）
 
@@ -227,7 +227,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
                 "disclosure_id": disclosure_data.get("disclosure_id", "未知"),
             }
 
-    async def assess_patentability(self, data: Optional[dict[str, Any])] -> dict[str, Any]:
+    async def assess_patentability(self, data: Optional[Dict[str, Any])] -> Dict[str, Any]:
         """
         评估可专利性（向后兼容接口）
 
@@ -247,7 +247,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             self.logger.error(f"assess_patentability失败: {e}")
             return {"error": str(e)}
 
-    async def draft_specification(self, data: Optional[dict[str, Any])] -> dict[str, Any]:
+    async def draft_specification(self, data: Optional[Dict[str, Any])] -> Dict[str, Any]:
         """
         撰写说明书（向后兼容接口）
 
@@ -267,7 +267,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             self.logger.error(f"draft_specification失败: {e}")
             return {"error": str(e)}
 
-    async def draft_claims(self, data: Optional[dict[str, Any])] -> dict[str, Any]:
+    async def draft_claims(self, data: Optional[Dict[str, Any])] -> Dict[str, Any]:
         """
         撰写权利要求书（向后兼容接口）
 
@@ -287,7 +287,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             self.logger.error(f"draft_claims失败: {e}")
             return {"error": str(e)}
 
-    async def optimize_protection_scope(self, data: Optional[dict[str, Any])] -> dict[str, Any]:
+    async def optimize_protection_scope(self, data: Optional[Dict[str, Any])] -> Dict[str, Any]:
         """
         优化保护范围（向后兼容接口）
 
@@ -307,7 +307,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             self.logger.error(f"optimize_protection_scope失败: {e}")
             return {"error": str(e)}
 
-    async def review_adequacy(self, data: Optional[dict[str, Any])] -> dict[str, Any]:
+    async def review_adequacy(self, data: Optional[Dict[str, Any])] -> Dict[str, Any]:
         """
         审查充分公开（向后兼容接口）
 
@@ -327,7 +327,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             self.logger.error(f"review_adequacy失败: {e}")
             return {"error": str(e)}
 
-    async def detect_common_errors(self, data: Optional[dict[str, Any])] -> dict[str, Any]:
+    async def detect_common_errors(self, data: Optional[Dict[str, Any])] -> Dict[str, Any]:
         """
         检测常见错误（向后兼容接口）
 
@@ -347,7 +347,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             self.logger.error(f"detect_common_errors失败: {e}")
             return {"error": str(e)}
 
-    async def draft_patent_application(self, data: Optional[dict[str, Any])] -> dict[str, Any]:
+    async def draft_patent_application(self, data: Optional[Dict[str, Any])] -> Dict[str, Any]:
         """
         完整专利申请撰写流程（向后兼容接口）
 
@@ -393,7 +393,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 # ========== 工厂函数（向后兼容） ==========
 
 def create_patent_drafting_proxy(
-    agent_id: str] = "patent_drafting_proxy", config: Optional[dict[str, Any]]
+    agent_id: str] = "patent_drafting_proxy", config: Optional[Dict[str, Any]]
 ) -> str:
     """
     创建专利撰写代理实例（向后兼容工厂函数）

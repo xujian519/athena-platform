@@ -5,7 +5,7 @@
 """
 
 import logging
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional
 
 from core.ai.llm.unified_llm_manager import UnifiedLLMManager
 from core.framework.agents.xiaona.base_component import (
@@ -143,8 +143,8 @@ class AnalyzerAgent(BaseXiaonaComponent):
     async def _extract_features(
         self,
         user_input: str,
-        previous_results: Optional[dict[str, Any]] = None
-    ) -> dict[str, Any]:
+        previous_results: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
         """
         提取技术特征
 
@@ -203,9 +203,9 @@ class AnalyzerAgent(BaseXiaonaComponent):
     async def _analyze_novelty(
         self,
         user_input: str,
-        previous_results: Optional[dict[str, Any]]
+        previous_results: Optional[Dict[str, Any]]
 
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         新颖性分析
 
@@ -286,9 +286,9 @@ class AnalyzerAgent(BaseXiaonaComponent):
     async def _analyze_creativity(
         self,
         user_input: str,
-        previous_results: Optional[dict[str, Any]]
+        previous_results: Optional[Dict[str, Any]]
 
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         创造性分析
 
@@ -367,9 +367,9 @@ class AnalyzerAgent(BaseXiaonaComponent):
     async def _analyze_infringement(
         self,
         user_input: str,
-        previous_results: Optional[dict[str, Any]]
+        previous_results: Optional[Dict[str, Any]]
 
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         侵权分析
 
@@ -441,7 +441,7 @@ class AnalyzerAgent(BaseXiaonaComponent):
     def _get_target_patent(
         self,
         user_input: str,
-        previous_results: Optional[dict[str, Any]]
+        previous_results: Optional[Dict[str, Any]]
 
     ) -> str:
         """获取目标专利文本"""
@@ -450,13 +450,13 @@ class AnalyzerAgent(BaseXiaonaComponent):
             return previous_results["patent_text"]
         return user_input
 
-    def _get_reference_documents(self, previous_results: Optional[dict[str, Any]] = None) -> list[dict[str, Any]]:
+    def _get_reference_documents(self, previous_results: Optional[Dict[str, Any]] = None) -> list[Dict[str, Any]]:
         """获取对比文件"""
         if "xiaona_retriever" in previous_results:
             return previous_results["xiaona_retriever"].get("patents", [])
         return []
 
-    def _format_reference_docs(self, docs: Optional[list[dict[str, Any]]] = None) -> str:
+    def _format_reference_docs(self, docs: Optional[List[Dict[str, Any]]] = None) -> str:
         """格式化对比文件"""
         formatted = []
         for i, doc in enumerate(docs[:5], 1):  # 最多5篇

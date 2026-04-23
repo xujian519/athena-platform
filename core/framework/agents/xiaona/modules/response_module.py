@@ -79,9 +79,9 @@ class ResponseModule:
         self.logger = logger
 
     async def draft_response(
-        self, user_input: str, previous_results: Optional[dict[str, Any], model: str = "kimi-k2.5"]
+        self, user_input: str, previous_results: Optional[Dict[str, Any], model: str = "kimi-k2.5"]
 
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         撰写审查意见答复
 
@@ -151,9 +151,9 @@ class ResponseModule:
             }
 
     async def draft_invalidation(
-        self, user_input: str, previous_results: Optional[dict[str, Any], model: str = "kimi-k2.5"]
+        self, user_input: str, previous_results: Optional[Dict[str, Any], model: str = "kimi-k2.5"]
 
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         撰写无效宣告请求书
 
@@ -228,7 +228,7 @@ class ResponseModule:
                 "full_text": response,  # 返回原始文本
             }
 
-    def _format_response(self, response: Optional[dict[str, Any])] -> str:
+    def _format_response(self, response: Optional[Dict[str, Any])] -> str:
         """格式化意见陈述书"""
         full_text = response.get("introduction", "") + "\n\n"
         for resp in response.get("responses", []):
@@ -237,7 +237,7 @@ class ResponseModule:
         full_text += response.get("conclusion", "")
         return full_text
 
-    def _format_petition(self, petition: Optional[dict[str, Any])] -> str:
+    def _format_petition(self, petition: Optional[Dict[str, Any])] -> str:
         """格式化无效宣告请求书"""
         parts = []
 
@@ -272,21 +272,21 @@ class ResponseModule:
 
         return "\n".join(parts)
 
-    def _get_office_action(self, user_input: str, previous_results: Optional[dict[str, Any])] -> str:
+    def _get_office_action(self, user_input: str, previous_results: Optional[Dict[str, Any])] -> str:
         """获取审查意见"""
         return user_input
 
-    def _get_analysis(self, previous_results: Optional[dict[str, Any])] -> str:
+    def _get_analysis(self, previous_results: Optional[Dict[str, Any])] -> str:
         """获取分析结果"""
         if "xiaona_analyzer" in previous_results:
             return previous_results["xiaona_analyzer"]
         return {}
 
-    def _get_target_patent(self, user_input: str, previous_results: Optional[dict[str, Any])] -> str:
+    def _get_target_patent(self, user_input: str, previous_results: Optional[Dict[str, Any])] -> str:
         """获取目标专利"""
         return user_input
 
-    def _get_evidence(self, previous_results: Optional[dict[str, Any])] -> list[Any]:
+    def _get_evidence(self, previous_results: Optional[Dict[str, Any])] -> list[Any]:
         """获取证据"""
         if "xiaona_retriever" in previous_results:
             return previous_results["xiaona_retriever"].get("patents", [])

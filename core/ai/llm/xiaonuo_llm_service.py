@@ -35,7 +35,7 @@ class XiaonuoLLMRequest:
 
     message: str
     user_id: str = "dad"
-    conversation_history: list[[dict[str, str]] = field(default_factory=list)
+    conversation_history: list[[[dict[str, str]]] = field(default_factory=list)
     system_prompt: str = ""
     temperature: float = 0.7
     max_tokens: int = 8000
@@ -53,7 +53,7 @@ class XiaonuoLLMResponse:
     model: str = "glm-4-plus"
     tokens_used: int = 0
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
-    raw_response: dict[[str, Any]] = field(default_factory=dict)
+    raw_response: dict[[[str, Any]]] = field(default_factory=dict)
 
 
 @dataclass
@@ -136,7 +136,7 @@ class XiaonuoLLMService:
         self.client = AsyncOpenAI(api_key=api_key, base_url=base_url, timeout=timeout)
 
         # 对话历史存储(按用户ID分组)
-        self.conversation_history: dict[[str, list[ConversationTurn]] = {}
+        self.conversation_history: dict[[[str, list[ConversationTurn]]] = {}
 
         logger.info(f"✅ 小诺LLM服务初始化完成: {model}")
 

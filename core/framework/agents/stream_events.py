@@ -25,7 +25,7 @@ class AssistantTurnComplete:
     """完成的助手回合"""
 
     message: str  # 完整消息
-    tool_calls: Optional[list[dict] = field(default_factory=list)  # 工具调用列表
+    tool_calls: Optional[list[dict]] = field(default_factory=list)  # 工具调用列表
     usage: Optional[dict[str, Any]] = field(default_factory=dict)  # 使用量统计
 
 
@@ -77,8 +77,7 @@ class ThinkingDelta:
 
 
 # 流式事件联合类型（Python 3.9 兼容）
-StreamEvent = Union[]
-
+StreamEvent = Union[
     AssistantTextDelta,
     AssistantTurnComplete,
     ToolExecutionStarted,
@@ -86,6 +85,7 @@ StreamEvent = Union[]
     ErrorEvent,
     StatusEvent,
     ThinkingDelta,
+]
 
 
 
@@ -193,8 +193,7 @@ def stream_event_to_json(event: StreamEvent) -> str:
     return json.dumps(stream_event_to_dict(event), ensure_ascii=False)
 
 
-__all__ = []
-
+__all__ = [
     "AssistantTextDelta",
     "AssistantTurnComplete",
     "ToolExecutionStarted",
@@ -207,5 +206,6 @@ __all__ = []
     "stream_event_to_dict_async",
     "stream_event_to_json",
     "stream_event_to_json_async",
+]
 
 

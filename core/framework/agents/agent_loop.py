@@ -26,8 +26,8 @@ class LLMResponse:
 
     content: str = ""
     stop_reason: Optional[str] = None
-    tool_uses: Optional[list[dict] = field(default_factory=list)
-    tool_results: Optional[list[dict] = field(default_factory=list)
+    tool_uses: Optional[list[dict]] = field(default_factory=list)
+    tool_results: Optional[list[dict]] = field(default_factory=list)
     stream_delta: Optional[str] = None  # 流式增量
 
 
@@ -85,7 +85,7 @@ class BaseAgentLoop:
     async def run(
         self,
         user_message: str,
-        context: Optional[dict[str, Any]],
+        context: Optional[dict[str, Any]] = None,
     ) -> str:
         """执行 Agent Loop
 
@@ -167,9 +167,9 @@ class BaseAgentLoop:
 
     async def _call_llm(
         self,
-        messages: Optional[list[dict]],
-        tools: Optional[list[dict]],
-    ) -> str:
+        messages: list[dict[str, Any]],
+        tools: list[dict[str, Any]],
+    ) -> LLMResponse:
         """调用 LLM
 
         Args:
@@ -207,7 +207,7 @@ class BaseAgentLoop:
             tools.append(tool_info)
         return tools
 
-    async def _execute_tool(self, tool_use: dict) -> str:
+    async def _execute_tool(self, tool_use: dict) -> ToolResult:
         """执行工具
 
         Args:
@@ -272,7 +272,7 @@ def create_agent_loop(
     agent_name: str,
     agent_type: str,
     system_prompt: str,
-) -> str:
+) -> BaseAgentLoop:
     """创建 Agent Loop
 
     Args:

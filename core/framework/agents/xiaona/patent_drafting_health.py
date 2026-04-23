@@ -9,7 +9,7 @@ Provides comprehensive health check and monitoring endpoints
 import asyncio
 import logging
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
@@ -42,7 +42,7 @@ class DetailedHealthCheckResponse(HealthCheckResponse):
     """详细健康检查响应"""
     components: Optional[dict[str, ComponentHealth] = Field(..., description="各组件健康状态")]
 
-    metrics: Optional[dict[str, Any] = Field(..., description="系统指标")]
+    metrics: Optional[Dict[str, Any] = Field(..., description="系统指标")]
 
 
 

@@ -53,7 +53,7 @@ class BaseAgentAdapter(ABC):
 
         # Agent状态
         self._running = False
-        self._tasks: Optional[dict[str, asyncio.Task] = {}]
+        self._tasks: dict[str, asyncio.Task] = {}
 
 
         logger.info(f"{self.agent_type.value} Agent适配器已初始化")
@@ -143,7 +143,7 @@ class BaseAgentAdapter(ABC):
         # Pong消息会由客户端自动处理
         pass
 
-    async def _process_task(self, task_id: str, task_type: str, parameters: Optional[dict[str, Any])] -> str:
+    async def _process_task(self, task_id: str, task_type: str, parameters: Optional[dict[str, Any]]) -> str:
         """
         处理任务（后台执行）
 
@@ -206,9 +206,8 @@ class BaseAgentAdapter(ABC):
     async def handle_task(
         self,
         task_type: str,
-        parameters: Optional[dict[str, Any],]
-
-        progress_callback: callable
+        parameters: Optional[dict[str, Any]],
+        progress_callback: callable,
     ) -> dict[str, Any]:
         """
         处理任务（子类必须实现）
@@ -224,7 +223,7 @@ class BaseAgentAdapter(ABC):
         raise NotImplementedError("子类必须实现handle_task方法")
 
     @abstractmethod
-    async def handle_query(self, query_type: str, parameters: Optional[dict[str, Any])] -> dict[str, Any]:
+    async def handle_query(self, query_type: str, parameters: Optional[dict[str, Any]]) -> dict[str, Any]:
         """
         处理查询（子类必须实现）
 
