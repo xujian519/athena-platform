@@ -6,7 +6,7 @@
 
 import json
 import logging
-from typing import Any, Optional
+from typing import Any, cast
 
 from core.agents.xiaona.base_component import BaseXiaonaComponent
 from core.agents.xiaona.patent_drafting_prompts import PatentDraftingPrompts
@@ -29,7 +29,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
     """
 
     def __init__(
-        self, agent_id: str = "patent_drafting_proxy", config: Optional[dict[str, Any]] = None
+        self, agent_id: str = "patent_drafting_proxy", config: dict[str, Any] | None = None
     ):
         """
         初始化专利撰写智能体
@@ -108,7 +108,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         """
         # 使用新的优化提示词系统
         prompt_config = PatentDraftingPrompts.get_prompt(task_type)
-        return prompt_config.get(
+        system_prompt = prompt_config.get(
             "system_prompt",
             """
 你是一位专业的专利撰写专家，具备深厚的专利法知识和丰富的撰写经验。
@@ -117,6 +117,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 输出必须是严格的JSON格式，不要添加任何额外的文字说明。
 """,
         )
+        return cast(str, system_prompt)
 
     async def execute(self, context) -> Any:
         """
@@ -262,7 +263,9 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         """
         # 情况1：直接提供文本内容
         if "content" in disclosure_data:
-            return disclosure_data["content"]
+            content = disclosure_data["content"]
+            assert isinstance(content, str), f"Expected str, got {type(content)}"
+            return content
 
         # 情况2：提供文件路径
         if "file_path" in disclosure_data:
@@ -342,7 +345,9 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         """
         # 优先级1：直接提供
         if "title" in disclosure_data and disclosure_data["title"]:
-            return disclosure_data["title"]
+            title = disclosure_data["title"]
+            assert isinstance(title, str), f"Expected str, got {type(title)}"
+            return title
 
         # 优先级2：从content中提取（使用规则）
         import re
@@ -374,7 +379,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
     def _identify_technical_field(
         self, content: str, disclosure_data: dict[str, Any]
-    ) -> dict[str, str]:
+    ) -> dict[str, Any]:
         """
         识别技术领域和IPC分类
 
@@ -383,7 +388,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             disclosure_data: 原始数据
 
         Returns:
-            技术领域信息（包含领域描述和IPC分类）
+            技术领域信息（包含领域描述、IPC分类列表、关键词列表）
         """
         result = {
             "技术领域": "",
@@ -461,6 +466,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         # 优先使用直接提供的信息
         if "background_art" in disclosure_data and disclosure_data["background_art"]:
             background_text = disclosure_data["background_art"]
+            assert isinstance(background_text, str), f"Expected str, got {type(background_text)}"
             result["现有技术描述"] = background_text
             # 尝试提取问题
             result["现有技术问题"] = self._extract_problems_from_text(background_text)
@@ -525,7 +531,9 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             技术问题描述
         """
         if "technical_problem" in disclosure_data and disclosure_data["technical_problem"]:
-            return disclosure_data["technical_problem"]
+            problem = disclosure_data["technical_problem"]
+            assert isinstance(problem, str), f"Expected str, got {type(problem)}"
+            return problem
 
         # 从content中提取
         import re
@@ -569,6 +577,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         if "technical_solution" in disclosure_data and disclosure_data["technical_solution"]:
             solution_text = disclosure_data["technical_solution"]
+            assert isinstance(solution_text, str), f"Expected str, got {type(solution_text)}"
             result["技术方案概述"] = solution_text
             result["核心特征"] = self._extract_features_from_text(solution_text)
         else:
@@ -637,7 +646,8 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
             # 如果是列表，直接返回
             if isinstance(effects, list):
-                return effects
+                # 确保列表元素都是字符串
+                return [str(e) for e in effects]
 
             # 如果是字符串，提取效果
             if isinstance(effects, str):
@@ -700,7 +710,9 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         # 优先使用直接提供的实施例
         if "examples" in disclosure_data and disclosure_data["examples"]:
-            return disclosure_data["examples"]
+            examples_data = disclosure_data["examples"]
+            assert isinstance(examples_data, list), f"Expected list, got {type(examples_data)}"
+            return examples_data
 
         # 从content中提取
         import re
@@ -1063,6 +1075,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         # 优先使用提供的标题
         if "title" in disclosure and disclosure["title"]:
             title = disclosure["title"]
+            assert isinstance(title, str), f"Expected str, got {type(title)}"
             # 清理标题
             title = title.replace("新型", "").replace("改进", "").strip()
             return title
@@ -1098,6 +1111,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             技术领域描述
         """
         technical_field = disclosure.get("technical_field", "")
+        assert isinstance(technical_field, str), f"Expected str, got {type(technical_field)}"
 
         if not technical_field:
             return "本发明涉及机械制造技术领域。"
@@ -1124,10 +1138,14 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             背景技术描述
         """
         background = disclosure.get("background_art", "")
+        assert isinstance(background, str), f"Expected str, got {type(background)}"
 
         if not background:
             # 基于技术问题生成简化版背景
             technical_problem = disclosure.get("technical_problem", "")
+            assert isinstance(
+                technical_problem, str
+            ), f"Expected str, got {type(technical_problem)}"
             return f"现有技术中，存在{technical_problem}等问题。"
 
         # 检查是否已包含标准结构
@@ -1235,12 +1253,15 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         """
         # 优先使用提供的实施方式
         detailed_desc = disclosure.get("detailed_description", "")
+        assert isinstance(detailed_desc, str), f"Expected str, got {type(detailed_desc)}"
         if detailed_desc:
             return detailed_desc
 
         # 基于技术方案生成实施方式
         technical_solution = disclosure.get("technical_solution", "")
+        assert isinstance(technical_solution, str), f"Expected str, got {type(technical_solution)}"
         examples = disclosure.get("examples", [])
+        assert isinstance(examples, list), f"Expected list, got {type(examples)}"
 
         if not technical_solution:
             return "下面结合附图和具体实施例对本发明作进一步详细说明。"
@@ -1834,6 +1855,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
                 json_str = response.strip()
 
             result = json.loads(json_str)
+            assert isinstance(result, dict), f"Expected dict, got {type(result)}"
             return result
 
         except (json.JSONDecodeError, Exception) as e:
