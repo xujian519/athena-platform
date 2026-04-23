@@ -9,7 +9,7 @@ Athena多智能体协作演示
 import asyncio
 
 from core.agents.base import AgentRegistry
-from core.agents.xiaona_legal import XiaonaLegalAgent
+# 小娜系列已拆分为专业代理，请使用 core.agents.xiaona 下的专业代理
 from core.agents.xiaonuo.xiaonuo_agent_v2 import XiaonuoAgentV2 as XiaonuoAgent
 
 
@@ -24,7 +24,7 @@ async def main():
 
     # 创建小娜·法律专家
     print("\n  创建小娜·法律专家...")
-    xiaona = XiaonaLegalAgent()
+    # xiaona = ApplicationReviewerProxy() 或其他专业代理
     AgentRegistry.register(xiaona)
     await xiaona.initialize()
     print(f"    ✅ {xiaona.name} - {len(xiaona.get_capabilities())}项法律能力")

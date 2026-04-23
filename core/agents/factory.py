@@ -29,7 +29,6 @@ class AgentFactory:
     Usage:
         ```python
         # 注册智能体类
-        AgentFactory.register_agent_class(XiaonaLegalAgent)
 
         # 创建智能体
         agent = AgentFactory.create("xiaona-legal")

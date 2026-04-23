@@ -29,7 +29,7 @@ except ImportError:
         "core.base_agent_with_memory已被移除。"
         "请使用新的core.agents架构:\n"
         "  from core.agents.base import BaseAgent\n"
-        "  from core.agents.xiaona_legal import XiaonaLegalAgent\n"
+        "  # 使用 core.agents.xiaona 下的专业代理替代\n"
         "  # 替换为: from core.agents.xiaonuo.xiaonuo_agent_v2 import XiaonuoAgentV2 as XiaonuoAgent\n"
         "  from core.agents.athena_advisor import AthenaAdvisorAgent"
     ) from None

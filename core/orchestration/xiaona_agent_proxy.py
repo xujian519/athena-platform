@@ -83,9 +83,9 @@ class XiaonaAgentProxy(AgentProxy):
 
         try:
             # 动态导入小娜Agent
-            from core.agents.xiaona_professional_v5 import XiaonaProfessionalV5
+            # 使用 core.agents.xiaona 下的专业代理替代
 
-            self._xiaona_agent = XiaonaProfessionalV5(
+            # self._xiaona_agent = ApplicationReviewerProxy(
                 name="小娜",
                 role="法律专家",
                 model="claude-sonnet-4-6",

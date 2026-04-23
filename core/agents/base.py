@@ -791,7 +791,6 @@ class AgentRegistry:
     Usage:
         ```python
         # 注册智能体
-        agent = XiaonaLegalAgent()
         AgentRegistry.register(agent)
 
         # 获取智能体

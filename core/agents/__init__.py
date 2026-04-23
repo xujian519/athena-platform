@@ -34,11 +34,6 @@ from .factory import (
 
 # ============ 新版智能体实现 ============
 try:
-    from .xiaona_legal import XiaonaLegalAgent
-except ImportError:
-    XiaonaLegalAgent = None
-
-try:
     from .xiaonuo.xiaonuo_agent_v2 import XiaonuoAgentV2 as XiaonuoAgent
 except ImportError:
     XiaonuoAgent = None
@@ -71,15 +66,6 @@ try:
 except ImportError:
     XiaochenSagittariusEnhancedAgent = None
 
-# 小娜专业版 (新架构)
-try:
-    from .xiaona_professional import XiaonaProfessionalAgent as XiaonaProfessionalAgent
-    # 向后兼容别名
-    XiaonaProfessionalV4Agent = XiaonaProfessionalAgent
-except ImportError:
-    XiaonaProfessionalAgent = None
-    XiaonaProfessionalV4Agent = None
-
 # ============ 版本信息 ============
 __version__ = "2.0.0"
 
@@ -106,8 +92,6 @@ def get_agent(name: str, version: str = "v2"):
             return XiaonuoPiscesPrincessAgent
         elif name == "xiaochen" and XiaochenSagittariusEnhancedAgent:
             return XiaochenSagittariusEnhancedAgent
-        elif name == "xiaona" and XiaonaProfessionalAgent:
-            return XiaonaProfessionalAgent
         return None
 
 
@@ -131,38 +115,3 @@ def list_agents(version: str = "v2") -> list:
             agents.append("xiaonuo")
         if XiaochenSagittariusEnhancedAgent:
             agents.append("xiaochen")
-        if XiaonaProfessionalAgent:
-            agents.append("xiaona")
-        return agents
-
-
-__all__ = [
-    # 新版接口 (推荐使用)
-    "AgentStatus",
-    "AgentCapability",
-    "AgentMetadata",
-    "AgentRequest",
-    "AgentResponse",
-    "HealthStatus",
-    "BaseAgent",
-    "AgentRegistry",
-    "AgentFactory",
-    "AgentAutoLoader",
-    "create_agent_from_config",
-    "create_agents_from_yaml",
-    # 新版智能体
-    "XiaonaLegalAgent",
-    "XiaonuoAgent",
-    "AthenaAdvisorAgent",
-    "XiaonaProfessionalAgent",  # 新增专业版
-    # 便捷函数
-    "get_agent",
-    "list_agents",
-    # 旧版接口 (向后兼容)
-    "AthenaAgent",
-    "XiaonuoPiscesPrincessAgent",
-    "XiaochenSagittariusEnhancedAgent",
-    "XiaonaProfessionalV4Agent",
-    "LegacyAgentResponse",
-    "AgentUtils",
-]
