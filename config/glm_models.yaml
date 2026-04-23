@@ -1,0 +1,241 @@
+# GLM模型配置文件
+# 智谱AI (Zhipu AI) GLM系列模型完整配置
+# API端点: https://open.bigmodel.cn/api/coding/paas/v4
+
+models:
+  # ==================== 旗舰模型 ====================
+  glm-4-plus:
+    name: "GLM-4-Plus"
+    description: "智谱AI旗舰大模型，最高质量和推理能力"
+    category: "premium"
+    max_tokens: 128000
+    speed: "中等"
+    quality: "⭐⭐⭐⭐⭐"
+    pricing:
+      input: 0.005  # 元/1K tokens
+      output: 0.005
+    use_cases:
+      - 复杂专利分析
+      - 深度技术推理
+      - 法律文书撰写
+      - 证据链构建
+    recommended_for:
+      - 专利深度分析（推荐）
+      - 无效理由撰写
+      - 权利要求对比
+
+  glm-4-0520:
+    name: "GLM-4-0520"
+    description: "2024年5月版本，性能优化的旗舰模型"
+    category: "premium"
+    max_tokens: 128000
+    speed: "中等"
+    quality: "⭐⭐⭐⭐⭐"
+    pricing:
+      input: 0.005
+      output: 0.005
+    use_cases:
+      - 最新性能优化版本
+      - 平衡质量和速度
+      - 生产环境推荐
+    recommended_for:
+      - 专利分析（平衡版）
+      - 实时推理任务
+
+  # ==================== 高性能模型 ====================
+  glm-4-air:
+    name: "GLM-4-Air"
+    description: "轻量级高性能模型，平衡速度与质量"
+    category: "performance"
+    max_tokens: 128000
+    speed: "快"
+    quality: "⭐⭐⭐⭐"
+    pricing:
+      input: 0.001
+      output: 0.001
+    use_cases:
+      - 快速专利检索
+      - 批量文本分析
+      - 实时问答
+    recommended_for:
+      - 初步专利筛选
+      - 技术领域分类
+      - 快速证据评估
+
+  glm-4-flash:
+    name: "GLM-4-Flash"
+    description: "超高速模型，毫秒级响应"
+    category: "speed"
+    max_tokens: 128000
+    speed: "⚡⚡⚡ 超快"
+    quality: "⭐⭐⭐"
+    pricing:
+      input: 0.0001
+      output: 0.0001
+    use_cases:
+      - 实时API调用
+      - 简单分类任务
+      - 快速文本生成
+    recommended_for:
+      - 专利号格式验证
+      - 简单文本提取
+      - 批量预处理
+
+  # ==================== 基础模型 ====================
+  glm-4:
+    name: "GLM-4"
+    description: "标准版GLM-4模型"
+    category: "standard"
+    max_tokens: 128000
+    speed: "中等"
+    quality: "⭐⭐⭐⭐"
+    pricing:
+      input: 0.005
+      output: 0.005
+    use_cases:
+      - 通用文本处理
+      - 中等复杂度任务
+    recommended_for:
+      - 一般专利分析
+      - 技术文档处理
+
+# ==================== 使用场景推荐 ====================
+scenarios:
+  # 专利深度分析
+  patent_deep_analysis:
+    primary: "glm-4-plus"
+    alternatives:
+      - "glm-4-0520"  # 性能优化版
+      - "glm-4-air"   # 快速分析
+    reasoning: "深度分析需要最高的推理能力和准确性"
+
+  # 批量专利筛选
+  patent_batch_screening:
+    primary: "glm-4-air"
+    alternatives:
+      - "glm-4-flash"  # 超快筛选
+    reasoning: "批量处理需要速度，质量要求相对较低"
+
+  # 技术特征提取
+  feature_extraction:
+    primary: "glm-4-plus"
+    alternatives:
+      - "glm-4-0520"
+    reasoning: "需要准确理解技术细节"
+
+  # 证据价值评估
+  evidence_evaluation:
+    primary: "glm-4-plus"
+    alternatives:
+      - "glm-4-air"
+    reasoning: "需要综合评估多维度信息"
+
+  # 无效理由撰写
+  invalidation_reasoning:
+    primary: "glm-4-plus"
+    alternatives:
+      - "glm-4-0520"
+    reasoning: "法律文书需要最高质量和逻辑严密性"
+
+  # 快速查询
+  quick_query:
+    primary: "glm-4-flash"
+    alternatives:
+      - "glm-4-air"
+    reasoning: "简单查询，速度优先"
+
+# ==================== 性能对比 ====================
+performance_comparison:
+  speed_ranking:
+    - "glm-4-flash (⚡⚡⚡ 最快)"
+    - "glm-4-air (⚡⚡ 快)"
+    - "glm-4-plus (⚡ 中等)"
+    - "glm-4 (⚡ 中等)"
+
+  quality_ranking:
+    - "glm-4-plus (⭐⭐⭐⭐⭐ 最高)"
+    - "glm-4-0520 (⭐⭐⭐⭐⭐ 最高)"
+    - "glm-4 (⭐⭐⭐⭐ 高)"
+    - "glm-4-air (⭐⭐⭐⭐ 高)"
+    - "glm-4-flash (⭐⭐⭐ 中等)"
+
+  cost_efficiency:
+    - "glm-4-flash (¥0.0001/1K - 最便宜)"
+    - "glm-4-air (¥0.001/1K - 性价比高)"
+    - "glm-4-plus (¥0.005/1K - 最高质量)"
+    - "glm-4-0520 (¥0.005/1K - 最新优化)"
+
+# ==================== API配置 ====================
+api_config:
+  base_url: "https://open.bigmodel.cn/api/coding/paas/v4"
+  authentication:
+    type: "Bearer Token"
+    header: "Authorization"
+  timeout:
+    default: 120  # 秒
+    flash: 30
+    air: 60
+    plus: 120
+  rate_limit:
+    requests_per_minute: 60
+    tokens_per_minute: 300000
+
+# ==================== 项目默认配置 ====================
+project_defaults:
+  # 专利分析默认模型
+  patent_analysis: "glm-4-plus"
+
+  # 快速任务默认模型
+  fast_task: "glm-4-flash"
+
+  # 平衡任务默认模型
+  balanced_task: "glm-4-air"
+
+# ==================== 模型选择指南 ====================
+selection_guide:
+  when_to_use_plus: |
+    使用 glm-4-plus 的场景：
+    1. 深度专利技术分析（当前使用）
+    2. 复杂权利要求对比
+    3. 无效理由撰写
+    4. 需要最高准确性的任务
+
+  when_to_use_air: |
+    使用 glm-4-air 的场景：
+    1. 批量专利初步筛选
+    2. 技术领域快速分类
+    3. 成本敏感的大规模任务
+    4. 平衡质量和速度的需求
+
+  when_to_use_flash: |
+    使用 glm-4-flash 的场景：
+    1. 简单文本提取
+    2. 格式验证
+    3. 超快响应需求
+    4. 大批量预处理
+
+# ==================== 成本估算 ====================
+cost_estimation:
+  # 169个专利深度分析（基于GLM-4-Plus）
+  deep_analysis_169:
+    model: "glm-4-plus"
+    input_tokens_per_file: 1500
+    output_tokens_per_file: 400
+    total_files: 169
+    estimated_cost: 1.60  # 元
+
+  # 169个专利快速筛选（基于GLM-4-Air）
+  quick_screening_169:
+    model: "glm-4-air"
+    input_tokens_per_file: 500
+    output_tokens_per_file: 200
+    total_files: 169
+    estimated_cost: 0.12  # 元
+
+  # 169个专利超快预处理（基于GLM-4-Flash）
+  ultra_fast_169:
+    model: "glm-4-flash"
+    input_tokens_per_file: 300
+    output_tokens_per_file: 100
+    total_files: 169
+    estimated_cost: 0.01  # 元

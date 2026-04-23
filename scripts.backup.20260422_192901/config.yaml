@@ -1,0 +1,266 @@
+# Athena平台配置文件
+# 支持环境变量覆盖，格式：${VAR_NAME:默认值}
+
+# 环境设置
+environment:
+  name: "${ATHENA_ENV:development}"
+  debug: ${DEBUG:false}
+  log_level: "${LOG_LEVEL:INFO}"
+
+# 数据库配置
+database:
+  host: "${DB_HOST:localhost}"
+  port: ${DB_PORT:5432}
+  database: "${DB_NAME:athena}"
+  user: "${DB_USER:postgres}"
+  password: "${DB_PASSWORD:password}"
+  max_connections: ${DB_MAX_CONN:20}
+  connection_timeout: ${DB_TIMEOUT:30}
+
+  # 连接池配置
+  pool_size: ${DB_POOL_SIZE:10}
+  max_overflow: ${DB_MAX_OVERFLOW:20}
+
+# Redis配置
+redis:
+  host: "${REDIS_HOST:localhost}"
+  port: ${REDIS_PORT:6379}
+  db: ${REDIS_DB:0}
+  password: ${REDIS_PASSWORD:}
+  max_connections: ${REDIS_MAX_CONN:20}
+
+  # 缓存配置
+  cache_ttl: ${REDIS_TTL:3600}
+  key_prefix: "${REDIS_KEY_PREFIX:athena:}"
+
+# API配置
+api:
+  host: "${API_HOST:0.0.0.0}"
+  port: ${API_PORT:8000}
+  workers: ${API_WORKERS:4}
+  reload: ${API_RELOAD:false}
+
+  # CORS配置
+  cors_origins:
+    - "${CORS_ORIGIN:*}"
+
+  # 限流配置
+  rate_limit: ${RATE_LIMIT:100}
+  rate_limit_window: ${RATE_LIMIT_WINDOW:60}
+
+# 日志配置
+logging:
+  level: "${LOG_LEVEL:INFO}"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "${LOG_FILE:logs/athena.log}"
+
+  # 日志轮转
+  max_size: "${LOG_MAX_SIZE:10MB}"
+  backup_count: ${LOG_BACKUP_COUNT:5}
+
+  # 日志组件
+  loggers:
+    - name: "database"
+      level: "${DB_LOG_LEVEL:WARNING}"
+    - name: "services"
+      level: "${SERVICE_LOG_LEVEL:INFO}"
+    - name: "monitoring"
+      level: "${MONITOR_LOG_LEVEL:INFO}"
+
+# 监控配置
+monitoring:
+  enabled: ${MONITORING_ENABLED:true}
+  system_interval: ${MONITOR_INTERVAL:30}
+  alert_interval: ${ALERT_CHECK_INTERVAL:10}
+  metrics_retention_days: ${METRICS_RETENTION:30}
+
+  # 告警规则
+  alerts:
+    high_cpu:
+      metric: "system_cpu_percent"
+      condition: "gt"
+      threshold: ${ALERT_CPU_THRESHOLD:80}
+      level: "warning"
+    high_memory:
+      metric: "system_memory_percent"
+      condition: "gt"
+      threshold: ${ALERT_MEMORY_THRESHOLD:85}
+      level: "warning"
+    high_disk:
+      metric: "system_disk_percent"
+      condition: "gt"
+      threshold: ${ALERT_DISK_THRESHOLD:90}
+      level: "critical"
+
+# 邮件配置
+email:
+  smtp_server: "${SMTP_SERVER:smtp.gmail.com}"
+  smtp_port: ${SMTP_PORT:587}
+  use_tls: ${SMTP_TLS:true}
+  username: "${SMTP_USERNAME:}"
+  password: "${SMTP_PASSWORD:}"
+  from_email: "${FROM_EMAIL:}"
+  from_name: "${FROM_NAME:Athena Platform}"
+
+# 服务配置
+services:
+  # 核心服务
+  core_server:
+    name: "Athena Core Server"
+    command: "python -m core.app"
+    port: ${CORE_PORT:8000}
+    dependencies: []
+    health_check: "http://localhost:${CORE_PORT:8000}/health"
+    env_vars:
+      - "PYTHONPATH=/Users/xujian/Athena工作平台"
+      - "ATHENA_ENV=${ATHENA_ENV:development}"
+
+  # AI服务
+  ai_service:
+    name: "Athena AI Service"
+    command: "python -m services.ai_app"
+    port: ${AI_PORT:8001}
+    dependencies: ["core_server"]
+    health_check: "http://localhost:${AI_PORT:8001}/health"
+    env_vars:
+      - "OPENAI_API_KEY=${OPENAI_API_KEY:}"
+      - "MODEL_NAME=${MODEL_NAME:gpt-4}"
+
+  # 专利API服务
+  patent_api:
+    name: "Patent API Service"
+    command: "python -m services.patent_api"
+    port: ${PATENT_PORT:8002}
+    dependencies: ["core_server"]
+    health_check: "http://localhost:${PATENT_PORT:8002}/health"
+
+  # 存储服务
+  storage_service:
+    name: "Storage Service"
+    command: "python -m storage-system.main"
+    dependencies: ["core_server"]
+    health_check: null
+
+  # 记忆服务
+  memory_service:
+    name: "Memory Service"
+    command: "python -m memory.main"
+    port: ${MEMORY_PORT:8003}
+    dependencies: ["core_server", "storage_service"]
+    health_check: "http://localhost:${MEMORY_PORT:8003}/health"
+
+  # 智能体服务
+  agent_service:
+    name: "Agent Service"
+    command: "python -m agents.main"
+    port: ${AGENT_PORT:8004}
+    dependencies: ["core_server", "ai_service"]
+    health_check: "http://localhost:${AGENT_PORT:8004}/health"
+
+# 部署配置
+deployments:
+  # Athena平台主部署
+  athena_platform:
+    name: "Athena Platform"
+    source_path: "${PROJECT_ROOT:/Users/xujian/Athena工作平台}"
+    target_path: "${DEPLOY_TARGET:/opt/athena}"
+    backup_path: "${BACKUP_DIR:/opt/athena/backups}"
+    health_check_url: "http://localhost:${API_PORT:8000}/health"
+
+    pre_deploy_commands:
+      - "pip install -r requirements.txt"
+      - "python manage.py migrate"
+      - "python manage.py collectstatic --noinput"
+
+    post_deploy_commands:
+      - "systemctl reload nginx"
+      - "systemctl restart athena-platform"
+      - "systemctl enable athena-platform"
+
+    rollback_commands:
+      - "systemctl stop athena-platform"
+      - "rm -rf /opt/athena/current"
+      - "cp -r /opt/athena/backups/{version} /opt/athena/current"
+      - "systemctl start athena-platform"
+
+  # AI模型服务部署
+  ai_models_service:
+    name: "AI Models Service"
+    source_path: "${PROJECT_ROOT}/services/ai-models"
+    target_path: "/opt/athena/ai-models"
+    backup_path: "/opt/athena/backups/ai-models"
+    health_check_url: "http://localhost:${AI_PORT:8001}/health"
+
+    pre_deploy_commands:
+      - "pip install -r requirements.txt"
+      - "python -m spacy download zh_core_web_sm"
+
+    post_deploy_commands:
+      - "systemctl restart ai-models-service"
+
+# 健康检查配置
+health_checks:
+  # 数据库健康检查
+  database:
+    type: "sql"
+    connection_string: "postgresql://${DB_USER:postgres}:${DB_PASSWORD:password}@${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:athena}"
+    query: "SELECT 1"
+    interval: 30
+
+  # Redis健康检查
+  redis:
+    type: "redis"
+    host: "${REDIS_HOST:localhost}"
+    port: ${REDIS_PORT:6379}
+    interval: 30
+
+  # 磁盘空间检查
+  disk_space:
+    type: "disk"
+    path: "${DISK_CHECK_PATH:/}"
+    threshold: ${DISK_THRESHOLD:90}
+    interval: 300
+
+# 存储配置
+storage:
+  # 文件存储
+  file_storage:
+    base_path: "${FILE_STORAGE_PATH:/opt/athena/files}"
+    max_file_size: "${MAX_FILE_SIZE:100MB}"
+    allowed_extensions:
+      - ".pdf"
+      - ".doc"
+      - ".docx"
+      - ".txt"
+      - ".jpg"
+      - ".png"
+
+  # 向量存储
+  vector_storage:
+    provider: "${VECTOR_PROVIDER:pgvector}"
+    dimension: ${VECTOR_DIM:768}
+    index_type: "${VECTOR_INDEX:hnsw}"
+
+  # 缓存存储
+  cache_storage:
+    provider: "${CACHE_PROVIDER:redis}"
+    ttl: ${CACHE_TTL:3600}
+
+# 安全配置
+security:
+  # JWT配置
+  jwt:
+    secret_key: "${JWT_SECRET:your-secret-key-here}"
+    algorithm: "HS256"
+    expiration: ${JWT_EXPIRATION:3600}
+
+  # API密钥
+  api_keys:
+    - "${API_KEY_1:}"
+    - "${API_KEY_2:}"
+
+  # SSL/TLS
+  ssl:
+    enabled: ${SSL_ENABLED:false}
+    cert_file: "${SSL_CERT:}"
+    key_file: "${SSL_KEY:}"

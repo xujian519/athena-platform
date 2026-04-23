@@ -1,0 +1,143 @@
+# Alertmanager配置
+# Alertmanager Configuration for PatentDraftingProxy
+
+global:
+  # 全局解析超时
+  resolve_timeout: 5m
+
+  # SMTP配置(邮件通知)
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'PatentDraftingProxy <alerts@athena.example.com>'
+  smtp_auth_username: 'your_email@gmail.com'
+  smtp_auth_password: 'your_email_password'
+  smtp_require_tls: true
+
+  # Slack配置(可选)
+  # slack_api_url: 'https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK'
+
+  # 其他全局配置
+  # wechat_api_url: 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=YOUR_KEY'
+  # dingtalk_webhook_url: 'https://oapi.dingtalk.com/robot/send?access_token=YOUR_TOKEN'
+
+# 路由配置
+route:
+  # 默认接收器
+  receiver: 'default-receiver'
+
+  # 分组等待时间
+  group_wait: 10s
+
+  # 分组间隔时间
+  group_interval: 10s
+
+  # 重复告警间隔时间
+  repeat_interval: 12h
+
+  # 路由分组
+  group_by: ['alertname', 'cluster', 'service']
+
+  # 子路由
+  routes:
+    # 关键告警路由
+    - match:
+        severity: critical
+      receiver: 'critical-receiver'
+      continue: true
+
+    # 警告告警路由
+    - match:
+        severity: warning
+      receiver: 'warning-receiver'
+      continue: true
+
+    # 服务特定路由
+    - match:
+        service: 'patent-drafting-proxy'
+      receiver: 'patent-drafting-receiver'
+
+    # 数据库告警路由
+    - match:
+        service: 'postgres|redis|neo4j|qdrant'
+      receiver: 'database-receiver'
+
+# 抑制规则
+inhibit_rules:
+  # 如果服务down了，抑制该服务的所有其他告警
+  - source_match:
+      alertname: 'ServiceDown'
+    target_match_re:
+      alertname: '.*'
+    equal: ['service', 'instance']
+
+  # 如果是critical告警，抑制warning告警
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'service', 'instance']
+
+# 接收器配置
+receivers:
+  # 默认接收器
+  - name: 'default-receiver'
+    email_configs:
+      - to: 'admin@athena.example.com'
+        headers:
+          Subject: '[PatentDraftingProxy] {{ .GroupLabels.alertname }}'
+        html: |
+          {{ range .Alerts }}
+          <h3>{{ .Labels.alertname }}</h3>
+          <p><strong>Severity:</strong> {{ .Labels.severity }}</p>
+          <p><strong>Service:</strong> {{ .Labels.service }}</p>
+          <p><strong>Instance:</strong> {{ .Labels.instance }}</p>
+          <p><strong>Description:</strong> {{ .Annotations.description }}</p>
+          <p><strong>Summary:</strong> {{ .Annotations.summary }}</p>
+          <p><strong>Time:</strong> {{ .StartsAt }}</p>
+          <hr>
+          {{ end }}
+
+  # 关键告警接收器
+  - name: 'critical-receiver'
+    email_configs:
+      - to: 'oncall@athena.example.com'
+        headers:
+          Subject: '[CRITICAL] PatentDraftingProxy Alert'
+    # Slack配置(可选)
+    # slack_configs:
+    #   - channel: '#alerts-critical'
+    #     title: '[CRITICAL] {{ .GroupLabels.alertname }}'
+    #     text: |
+    #       {{ range .Alerts }}
+    #       *Alert:* {{ .Labels.alertname }}
+    #       *Severity:* {{ .Labels.severity }}
+    #       *Service:* {{ .Labels.service }}
+    #       *Description:* {{ .Annotations.description }}
+    #       {{ end }}
+
+  # 警告告警接收器
+  - name: 'warning-receiver'
+    email_configs:
+      - to: 'alerts@athena.example.com'
+        headers:
+          Subject: '[WARNING] PatentDraftingProxy Alert'
+
+  # 专利撰写服务专用接收器
+  - name: 'patent-drafting-receiver'
+    email_configs:
+      - to: 'xiaona-team@athena.example.com'
+        headers:
+          Subject: '[PatentDraftingProxy] {{ .GroupLabels.alertname }}'
+    # Webhook配置(可选)
+    # webhook_configs:
+    #   - url: 'http://your-webhook-endpoint/alerts'
+
+  # 数据库告警接收器
+  - name: 'database-receiver'
+    email_configs:
+      - to: 'dba@athena.example.com'
+        headers:
+          Subject: '[Database] PatentDraftingProxy Alert'
+
+# 模板配置(可选)
+# templates:
+#   - '/etc/alertmanager/templates/*.tmpl'

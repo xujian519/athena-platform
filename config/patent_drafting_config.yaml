@@ -1,0 +1,250 @@
+# PatentDraftingProxy生产环境配置
+# Patent Drafting Proxy Production Configuration
+#
+# 配置优先级: 环境变量 > YAML配置 > 默认值
+# Configuration Priority: Environment Variables > YAML Config > Defaults
+
+app:
+  name: "PatentDraftingProxy"
+  version: "1.0.0"
+  environment: "production"
+  debug: false
+  timezone: "Asia/Shanghai"
+
+server:
+  host: "0.0.0.0"
+  port: 8010
+  workers: 4
+  reload: false
+  access_log: true
+  log_level: "INFO"
+
+# LLM配置
+llm:
+  # 主要模型
+  primary_model: "deepseek-chat"
+  primary_provider: "deepseek"
+
+  # 降级模型
+  fallback_model: "local_8009"
+  fallback_provider: "local"
+
+  # 超时配置
+  timeout: 30.0
+  max_retries: 3
+  retry_delay: 1.0
+
+  # Token限制
+  max_tokens: 4096
+  temperature: 0.7
+  top_p: 0.9
+
+  # 成本控制
+  cost_budget: 1000.0  # 每日预算(元)
+  cost_alert_threshold: 0.8  # 预算告警阈值
+
+  # 缓存配置
+  cache_enabled: true
+  cache_ttl: 3600  # 缓存生存时间(秒)
+  cache_max_size: 1000  # 最大缓存条目
+
+# 知识库配置
+knowledge_base:
+  # 知识库路径(使用iCloud同步的Obsidian知识库)
+  path: "/Users/xujian/Library/Mobile Documents/iCloud~md~obsidian/Documents/宝宸知识库"
+
+  # 自动加载配置
+  auto_load: true
+  load_on_startup: true
+
+  # 缓存配置
+  cache_enabled: true
+  cache_size: 500  # MB
+
+  # 索引配置
+  index_on_load: false
+  index_batch_size: 100
+
+# 数据库配置
+database:
+  # PostgreSQL配置
+  postgres:
+    enabled: true
+    host: "${POSTGRES_HOST:-localhost}"
+    port: ${POSTGRES_PORT:-5432}
+    database: "${POSTGRES_DB:-athena}"
+    user: "${POSTGRES_USER:-athena}"
+    password: "${POSTGRES_PASSWORD:-athena123}"
+    pool_size: 20
+    max_overflow: 10
+    pool_timeout: 30
+    pool_recycle: 3600
+
+  # Redis配置
+  redis:
+    enabled: true
+    host: "${REDIS_HOST:-localhost}"
+    port: ${REDIS_PORT:-6379}
+    password: "${REDIS_PASSWORD:-redis123}"
+    db: 0
+    max_connections: 50
+    socket_timeout: 5
+    socket_connect_timeout: 5
+
+  # Neo4j配置(知识图谱)
+  neo4j:
+    enabled: true
+    uri: "${NEO4J_URI:-bolt://localhost:7687}"
+    user: "${NEO4J_USER:-neo4j}"
+    password: "${NEO4J_PASSWORD:-neo4j123}"
+    max_connection_lifetime: 3600
+    max_connection_pool_size: 50
+    connection_acquisition_timeout: 60
+
+# 日志配置
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "json"  # json, text
+
+  # 文件日志
+  file:
+    enabled: true
+    path: "logs/patent_drafting.log"
+    rotation: "10 MB"
+    retention: "30 days"
+    compression: "gzip"
+
+  # 控制台日志
+  console:
+    enabled: true
+    level: "INFO"
+
+  # 结构化日志
+  structured: true
+  include_timestamp: true
+  include_context: true
+
+# 监控配置
+monitoring:
+  # Prometheus指标
+  prometheus:
+    enabled: true
+    port: 9090
+    path: "/metrics"
+
+  # 健康检查
+  health_check:
+    enabled: true
+    endpoint: "/health"
+    interval: 30  # 秒
+    timeout: 10
+
+  # 性能监控
+  performance:
+    enabled: true
+    track_llm_calls: true
+    track_token_usage: true
+    track_response_times: true
+    track_errors: true
+
+# API配置
+api:
+  # API版本
+  version: "v1"
+  prefix: "/api/v1"
+
+  # 限流配置
+  rate_limit:
+    enabled: true
+    requests_per_minute: 60
+    requests_per_hour: 1000
+    burst: 10
+
+  # CORS配置
+  cors:
+    enabled: true
+    origins: ["http://localhost:3000", "https://athena.example.com"]
+    methods: ["GET", "POST", "PUT", "DELETE"]
+    headers: ["*"]
+    credentials: true
+
+  # 认证配置(可选)
+  auth:
+    enabled: false
+    type: "bearer"  # bearer, api_key, basic
+    secret_key: "${JWT_SECRET:-your-secret-key-here}"
+    algorithm: "HS256"
+    token_expire: 3600  # 秒
+
+# 任务配置
+tasks:
+  # 任务超时配置(秒)
+  timeout:
+    analyze_disclosure: 900  # 15分钟
+    assess_patentability: 1200  # 20分钟
+    draft_specification: 1800  # 30分钟
+    draft_claims: 1500  # 25分钟
+    optimize_protection_scope: 1200  # 20分钟
+    review_adequacy: 900  # 15分钟
+    detect_common_errors: 600  # 10分钟
+
+  # 任务队列配置
+  queue:
+    enabled: true
+    max_concurrent_tasks: 5
+    task_timeout: 3600
+    result_ttl: 86400  # 24小时
+
+# 特性开关
+features:
+  # LLM功能
+  llm_caching: true
+  llm_fallback: true
+  llm_cost_tracking: true
+
+  # 知识库功能
+  knowledge_base_search: true
+  knowledge_base_cache: true
+
+  # 专利撰写功能
+  auto_save_drafts: true
+  version_control: true
+  collaborative_editing: false
+
+  # 高级功能
+  semantic_search: true
+  knowledge_graph_reasoning: true
+  prior_art_search: true
+
+# 安全配置
+security:
+  # 输入验证
+  input_validation: true
+  max_input_length: 100000  # 字符
+  sanitize_html: true
+
+  # 输出过滤
+  output_filtering: true
+  mask_sensitive_info: true
+
+  # 速率限制
+  rate_limiting: true
+  ban_duration: 3600  # 违规封禁时长(秒)
+
+# 备份配置
+backup:
+  enabled: true
+  path: "/backup/patent_drafting"
+  schedule: "0 2 * * *"  # 每天凌晨2点
+  retention: 7  # 保留7天
+  compress: true
+
+# 通知配置(可选)
+notifications:
+  enabled: false
+  channels: ["email", "webhook"]
+  alerts:
+    - "task_failed"
+    - "llm_error"
+    - "cost_threshold_exceeded"
+    - "system_error"

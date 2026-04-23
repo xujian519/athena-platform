@@ -1,0 +1,456 @@
+# PatentDraftingProxy CI/CD Pipeline
+# GitHub Actions workflow for continuous integration and deployment
+#
+# 触发条件:
+# - Push to main/master分支
+# - Pull Request到main/master分支
+# - 手动触发
+#
+# Triggers:
+# - Push to main/master branch
+# - Pull Request to main/master branch
+# - Manual trigger
+
+name: PatentDraftingProxy CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
+  workflow_dispatch:  # 手动触发
+
+# 环境变量
+env:
+  PYTHON_VERSION: '3.11'
+  POETRY_VERSION: '1.7.1'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+# ==================== Jobs定义 ====================
+jobs:
+  # ==================== Job 1: 代码质量检查 ====================
+  lint:
+    name: 代码质量检查
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 获取完整历史，用于better-cov
+
+      - name: 设置Python环境
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install black ruff mypy pylint
+          pip install -r requirements.txt
+
+      - name: Black代码格式检查
+        run: |
+          black --check --diff core/agents/xiaona/patent_drafting*.py
+
+      - name: Ruff代码质量检查
+        run: |
+          ruff check core/agents/xiaona/ --output-format=github
+
+      - name: MyPy类型检查
+        run: |
+          mypy core/agents/xiaona/patent_drafting*.py --ignore-missing-imports
+
+      - name: Pylint代码质量评分
+        run: |
+          pylint core/agents/xiaona/patent_drafting*.py --exit-zero
+        continue-on-error: true
+
+  # ==================== Job 2: 单元测试 ====================
+  test-unit:
+    name: 单元测试
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: lint
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python环境
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pytest-asyncio pytest-mock
+
+      - name: 运行单元测试
+        run: |
+          pytest tests/agents/xiaona/test_patent_drafting_proxy.py \
+            -v \
+            -m unit \
+            --cov=core.agents.xiaona \
+            --cov-report=xml \
+            --cov-report=html \
+            --cov-report=term-missing \
+            --junitxml=test-results/unit-tests.xml
+
+      - name: 上传测试覆盖率到Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.xml
+          flags: unit-tests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+      - name: 上传测试结果
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: unit-test-results
+          path: |
+            test-results/unit-tests.xml
+            htmlcov/
+            coverage.xml
+
+      - name: 测试报告摘要
+        uses: test-summary/action@v2
+        if: always()
+        with:
+          paths: test-results/unit-tests.xml
+
+  # ==================== Job 3: 集成测试 ====================
+  test-integration:
+    name: 集成测试
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: lint
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: test_athena
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python环境
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pytest-asyncio pytest-mock
+
+      - name: 运行集成测试
+        run: |
+          pytest tests/agents/integration/test_patent_drafting_integration.py \
+            -v \
+            -m integration \
+            --cov=core.agents.xiaona \
+            --cov-report=xml \
+            --cov-report=html \
+            --junitxml=test-results/integration-tests.xml
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+          POSTGRES_DB: test_athena
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+
+      - name: 上传测试覆盖率到Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.xml
+          flags: integration-tests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+      - name: 上传测试结果
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: integration-test-results
+          path: |
+            test-results/integration-tests.xml
+            htmlcov/
+            coverage.xml
+
+  # ==================== Job 4: 安全扫描 ====================
+  security-scan:
+    name: 安全扫描
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: lint
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python环境
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install bandit safety
+          pip install -r requirements.txt
+
+      - name: Bandit安全扫描
+        run: |
+          bandit -r core/agents/xiaona/ -f json -o bandit-report.json
+        continue-on-error: true
+
+      - name: Safety依赖检查
+        run: |
+          safety check --json --output safety-report.json
+        continue-on-error: true
+
+      - name: 上传安全扫描结果
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: security-scan-results
+          path: |
+            bandit-report.json
+            safety-report.json
+
+  # ==================== Job 5: 构建Docker镜像 ====================
+  build:
+    name: 构建Docker镜像
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [test-unit, test-integration]
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 登录到Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 提取元数据
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: 构建并推送Docker镜像
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.patent-drafting
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
+
+      - name: 导出镜像到tar文件
+        run: |
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          docker save ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest -o patent-drafting-proxy.tar
+
+      - name: 上传Docker镜像tar文件
+        uses: actions/upload-artifact@v3
+        with:
+          name: docker-image
+          path: patent-drafting-proxy.tar
+          retention-days: 7
+
+  # ==================== Job 6: 部署到生产环境 ====================
+  deploy:
+    name: 部署到生产环境
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: build
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    environment:
+      name: production
+      url: https://patent-drafting.athena.example.com
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python环境
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install docker PyYAML
+
+      - name: 下载Docker镜像
+        uses: actions/download-artifact@v3
+        with:
+          name: docker-image
+
+      - name: 加载Docker镜像
+        run: |
+          docker load -i patent-drafting-proxy.tar
+
+      - name: 部署到生产服务器
+        run: |
+          # 这里添加实际的部署脚本
+          # 例如: 使用ssh远程部署,或使用kubectl部署到Kubernetes
+          echo "部署到生产服务器..."
+          # 示例: SSH部署
+          # ssh user@server "cd /app && docker-compose pull && docker-compose up -d"
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+
+      - name: 健康检查
+        run: |
+          # 等待服务启动
+          sleep 30
+          # 执行健康检查
+          curl -f http://${{ secrets.SERVER_HOST }}:8010/health || exit 1
+
+      - name: 通知部署成功
+        if: success()
+        run: |
+          echo "部署成功！"
+          # 发送通知(例如: Slack, Email, Webhook)
+          # curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d '{"text":"PatentDraftingProxy部署成功！"}'
+
+      - name: 通知部署失败
+        if: failure()
+        run: |
+          echo "部署失败！"
+          # 发送告警通知
+          # curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d '{"text":"PatentDraftingProxy部署失败！"}'
+
+  # ==================== Job 7: 性能测试 ====================
+  performance-test:
+    name: 性能测试
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: build
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python环境
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install locust pytest-benchmark
+
+      - name: 运行性能基准测试
+        run: |
+          pytest tests/performance/ \
+            -v \
+            -m performance \
+            --benchmark-only \
+            --benchmark-json=benchmark-results.json
+
+      - name: 上传性能测试结果
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-test-results
+          path: benchmark-results.json
+
+      - name: 运行负载测试
+        run: |
+          locust -f tests/performance/locustfile.py \
+            --headless \
+            --users 100 \
+            --spawn-rate 10 \
+            --run-time 5m \
+            --host http://localhost:8010 \
+            --csv performance-test
+        continue-on-error: true
+
+  # ==================== Job 8: 发布通知 ====================
+  notify:
+    name: 发布通知
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [test-unit, test-integration, security-scan, build]
+    if: always()
+
+    steps:
+      - name: 发送通知
+        run: |
+          if [ "${{ needs.test-unit.result }}" == "success" ] && \
+             [ "${{ needs.test-integration.result }}" == "success" ] && \
+             [ "${{ needs.security-scan.result }}" == "success" ] && \
+             [ "${{ needs.build.result }}" == "success" ]; then
+            echo "✅ 所有CI/CD流程成功完成！"
+          else
+            echo "❌ CI/CD流程失败，请检查日志！"
+            exit 1
+          fi

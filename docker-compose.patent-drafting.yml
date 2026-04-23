@@ -1,0 +1,380 @@
+# PatentDraftingProxy Docker Compose配置
+# Patent Drafting Proxy Docker Compose Configuration
+#
+# 使用说明:
+#   docker-compose -f docker-compose.patent-drafting.yml --profile dev up -d
+#   docker-compose -f docker-compose.patent-drafting.yml --profile test up -d
+#   docker-compose -f docker-compose.patent-drafting.yml --profile prod up -d
+#   docker-compose -f docker-compose.patent-drafting.yml --profile monitoring up -d
+#
+# Usage:
+#   docker-compose -f docker-compose.patent-drafting.yml --profile dev up -d
+#   docker-compose -f docker-compose.patent-drafting.yml --profile test up -d
+#   docker-compose -f docker-compose.patent-drafting.yml --profile prod up -d
+#   docker-compose -f docker-compose.patent-drafting.yml --profile monitoring up -d
+
+version: '3.8'
+
+# ==================== 网络配置 ====================
+networks:
+  patent-drafting-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+# ==================== 卷配置 ====================
+volumes:
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
+  neo4j-data:
+    driver: local
+  qdrant-data:
+    driver: local
+  logs-data:
+    driver: local
+  backup-data:
+    driver: local
+
+# ==================== 服务配置 ====================
+services:
+  # ==================== PatentDraftingProxy API服务 ====================
+  patent-drafting-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.patent-drafting
+    image: patent-drafting-proxy:${IMAGE_TAG:-latest}
+    container_name: patent-drafting-api
+    restart: unless-stopped
+    ports:
+      - "${API_PORT:-8010}:8010"
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    environment:
+      # 应用配置
+      - APP_NAME=PatentDraftingProxy
+      - APP_ENV=${ENV:-production}
+      - APP_DEBUG=false
+      - APP_LOG_LEVEL=INFO
+
+      # LLM配置
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - DEEPSEEK_API_BASE=${DEEPSEEK_API_BASE:-https://api.deepseek.com/v1}
+      - LOCAL_MODEL_URL=${LOCAL_MODEL_URL:-http://host.docker.internal:8009}
+
+      # 数据库配置
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=${POSTGRES_DB:-athena}
+      - POSTGRES_USER=${POSTGRES_USER:-athena}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-athena123}
+
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-redis123}
+
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=${NEO4J_USER:-neo4j}
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD:-neo4j123}
+
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+
+      # 知识库配置
+      - KNOWLEDGE_BASE_PATH=${KNOWLEDGE_BASE_PATH:-/knowledge_base}
+
+      # 日志配置
+      - LOG_LEVEL=INFO
+      - LOG_FORMAT=json
+      - LOG_FILE_ENABLED=true
+
+      # 监控配置
+      - PROMETHEUS_ENABLED=true
+      - PROMETHEUS_PORT=9090
+      - HEALTH_CHECK_ENABLED=true
+
+      # 时区配置
+      - TZ=Asia/Shanghai
+      - LANG=zh_CN.UTF-8
+      - LC_ALL=zh_CN.UTF-8
+
+      # Python配置
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONPATH=/app
+
+    volumes:
+      # 配置文件
+      - ./config:/app/config:ro
+      - ./prompts:/app/prompts:ro
+
+      # 日志目录
+      - logs-data:/app/logs
+
+      # 备份目录
+      - backup-data:/backup
+
+      # 知识库(只读挂载)
+      - ${KNOWLEDGE_BASE_PATH:-/Users/xujian/Library/Mobile Documents/iCloud~md~obsidian/Documents/宝宸知识库}:/knowledge_base:ro
+
+      # TLS证书(可选)
+      - ${TLS_CERT_PATH:-./certs}:/certs:ro
+
+    networks:
+      - patent-drafting-network
+
+    # 健康检查
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8010/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+    # 资源限制
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+    # 依赖服务
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      neo4j:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+
+    profiles:
+      - dev
+      - test
+      - prod
+
+  # ==================== PostgreSQL数据库 ====================
+  postgres:
+    image: postgres:16-alpine
+    container_name: patent-drafting-postgres
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-athena}
+      - POSTGRES_USER=${POSTGRES_USER:-athena}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-athena123}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - TZ=Asia/Shanghai
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - patent-drafting-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-athena} -d ${POSTGRES_DB:-athena}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=200"
+      - "-c"
+      - "shared_buffers=256MB"
+      - "-c"
+      - "effective_cache_size=1GB"
+      - "-c"
+      - "maintenance_work_mem=64MB"
+      - "-c"
+      - "checkpoint_completion_target=0.9"
+      - "-c"
+      - "wal_buffers=16MB"
+      - "-c"
+      - "default_statistics_target=100"
+      - "-c"
+      - "random_page_cost=1.1"
+      - "-c"
+      - "effective_io_concurrency=200"
+      - "-c"
+      - "work_mem=1310kB"
+      - "-c"
+      - "min_wal_size=1GB"
+      - "-c"
+      - "max_wal_size=4GB"
+    profiles:
+      - dev
+      - test
+      - prod
+
+  # ==================== Redis缓存 ====================
+  redis:
+    image: redis:7-alpine
+    container_name: patent-drafting-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    command: >
+      redis-server
+      --requirepass ${REDIS_PASSWORD:-redis123}
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+      --save 900 1
+      --save 300 10
+      --save 60 10000
+      --appendonly yes
+      --appendfsync everysec
+    volumes:
+      - redis-data:/data
+    networks:
+      - patent-drafting-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-redis123}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - dev
+      - test
+      - prod
+
+  # ==================== Neo4j知识图谱 ====================
+  neo4j:
+    image: neo4j:5-community
+    container_name: patent-drafting-neo4j
+    restart: unless-stopped
+    ports:
+      - "${NEO4J_HTTP_PORT:-7474}:7474"
+      - "${NEO4J_BOLT_PORT:-7687}:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD:-neo4j123}
+      - NEO4J_dbms_default__listen__address=0.0.0.0
+      - NEO4J_dbms_default__advertised__address=neo4j
+      - NEO4J_dbms_connector_bolt_advertised__address=:7687
+      - NEO4J_dbms_connector_http_advertised__address=:7474
+      - NEO4J_dbms_memory_heap_initial__size=512m
+      - NEO4J_dbms_memory_heap_max__size=2G
+      - NEO4J_dbms_memory_pagecache_size=1G
+      - NEO4J_dbms_connector_bolt_thread__pool__max__size=400
+      - NEO4J_dbms_connector_bolt_thread__pool__min__size=5
+      - TZ=Asia/Shanghai
+    volumes:
+      - neo4j-data:/data
+      - neo4j-data:/logs
+    networks:
+      - patent-drafting-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:7474 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - dev
+      - test
+      - prod
+
+  # ==================== Qdrant向量数据库 ====================
+  qdrant:
+    image: qdrant/qdrant:v1.7.4
+    container_name: patent-drafting-qdrant
+    restart: unless-stopped
+    ports:
+      - "${QDRANT_PORT:-6333}:6333"
+      - "${QDRANT_GRPC_PORT:-6334}:6334"
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
+      - QDRANT__LOG_LEVEL=INFO
+      - TZ=Asia/Shanghai
+    volumes:
+      - qdrant-data:/qdrant/storage
+    networks:
+      - patent-drafting-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:6333/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - dev
+      - test
+      - prod
+
+  # ==================== Prometheus监控 ====================
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    container_name: patent-drafting-prometheus
+    restart: unless-stopped
+    ports:
+      - "${PROMETHEUS_UI_PORT:-9091}:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=15d'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    volumes:
+      - ./config/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    networks:
+      - patent-drafting-network
+    profiles:
+      - monitoring
+
+  # ==================== Grafana可视化 ====================
+  grafana:
+    image: grafana/grafana:10.0.0
+    container_name: patent-drafting-grafana
+    restart: unless-stopped
+    ports:
+      - "${GRAFANA_PORT:-3000}:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin123}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=http://localhost:3000
+      - GF_INSTALL_PLUGINS=
+      - TZ=Asia/Shanghai
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./config/monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./config/monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    networks:
+      - patent-drafting-network
+    depends_on:
+      - prometheus
+    profiles:
+      - monitoring
+
+  # ==================== Alertmanager告警 ====================
+  alertmanager:
+    image: prom/alertmanager:v0.25.0
+    container_name: patent-drafting-alertmanager
+    restart: unless-stopped
+    ports:
+      - "${ALERTMANAGER_PORT:-9093}:9093"
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+      - '--web.external-url=http://localhost:9093'
+    volumes:
+      - ./config/monitoring/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - alertmanager-data:/alertmanager
+    networks:
+      - patent-drafting-network
+    profiles:
+      - monitoring
+
+# ==================== 监控数据卷 ====================
+volumes:
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+  alertmanager-data:
+    driver: local

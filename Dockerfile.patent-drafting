@@ -1,0 +1,135 @@
+# PatentDraftingProxy Dockerfile
+# 多阶段构建，优化镜像大小和构建效率
+# Multi-stage build for optimized image size and build efficiency
+
+# ==================== 阶段1: 构建阶段 ====================
+FROM python:3.11-slim as builder
+
+# 设置工作目录
+WORKDIR /build
+
+# 安装构建依赖
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    g++ \
+    libpq-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# 复制依赖文件
+COPY requirements.txt ./
+COPY pyproject.toml ./
+
+# 安装Python依赖到临时目录
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
+    pip install --no-cache-dir --prefix=/install -r requirements.txt
+
+# ==================== 阶段2: 运行阶段 ====================
+FROM python:3.11-slim as runtime
+
+# 设置标签
+LABEL maintainer="Athena Team <athena@example.com>"
+LABEL description="PatentDraftingProxy - AI-Powered Patent Drafting Service"
+LABEL version="1.0.0"
+
+# 设置环境变量
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONPATH=/app \
+    APP_NAME=PatentDraftingProxy \
+    APP_ENV=production \
+    APP_DEBUG=false \
+    TZ=Asia/Shanghai \
+    LANG=zh_CN.UTF-8 \
+    LC_ALL=zh_CN.UTF-8
+
+# 安装运行时依赖
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq5 \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+    && update-ca-certificates
+
+# 设置时区
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# 创建非root用户
+RUN groupadd -r athena && useradd -r -g athena athena
+
+# 创建应用目录
+WORKDIR /app
+
+# 从构建阶段复制Python依赖
+COPY --from=builder /install /usr/local
+
+# 复制应用代码
+COPY core/ ./core/
+COPY prompts/ ./prompts/
+COPY config/ ./config/
+COPY production/ ./production/
+
+# 创建必要目录
+RUN mkdir -p logs backup tmp knowledge_base && \
+    chown -R athena:athena /app
+
+# 切换到非root用户
+USER athena
+
+# 暴露端口
+# 8010: 主应用端口
+# 9090: Prometheus指标端口
+EXPOSE 8010 9090
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8010/health || exit 1
+
+# 启动命令
+# 使用uvicorn启动FastAPI应用
+CMD ["python", "-m", "uvicorn", "core.agents.xiaona.patent_drafting_api:app", \
+     "--host", "0.0.0.0", \
+     "--port", "8010", \
+     "--workers", "4", \
+     "--loop", "uvloop", \
+     "--http", "httptools", \
+     "--log-config", "config/logging.yaml"]
+
+# ==================== 备用启动命令(开发模式) ====================
+# 如果需要开发模式(单进程，自动重载):
+# CMD ["python", "-m", "uvicorn", "core.agents.xiaona.patent_drafting_api:app", \
+#      "--host", "0.0.0.0", \
+#      "--port", "8010", \
+#      "--reload"]
+
+# ==================== 说明 ====================
+#
+# 构建镜像:
+#   docker build -f Dockerfile.patent-drafting -t patent-drafting-proxy:latest .
+#   docker build -f Dockerfile.patent-drafting -t patent-drafting-proxy:v1.0.0 .
+#
+# 运行容器:
+#   docker run -d \
+#     -p 8010:8010 \
+#     -p 9090:9090 \
+#     --name patent-drafting-api \
+#     --env-file .env.production \
+#     patent-drafting-proxy:latest
+#
+# 使用Docker Compose:
+#   docker-compose -f docker-compose.patent-drafting.yml --profile prod up -d
+#
+# 查看日志:
+#   docker logs -f patent-drafting-api
+#
+# 进入容器:
+#   docker exec -it patent-drafting-api bash
+#
+# 健康检查:
+#   curl http://localhost:8010/health
+#   docker inspect --format='{{.State.Health.Status}}' patent-drafting-api
+#
+# 资源限制建议:
+#   CPU: 0.5-2 cores
+#   Memory: 512MB-4GB
+#   根据实际负载调整

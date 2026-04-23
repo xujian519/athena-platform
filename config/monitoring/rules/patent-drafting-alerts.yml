@@ -1,0 +1,242 @@
+# PatentDraftingProxy告警规则
+# PatentDraftingProxy Alert Rules
+
+groups:
+  # ==================== 服务可用性告警 ====================
+  - name: service_availability
+    interval: 30s
+    rules:
+      # 服务down告警
+      - alert: ServiceDown
+        expr: up{job="patent-drafting-proxy"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: patent-drafting-proxy
+        annotations:
+          summary: "专利撰写服务宕机"
+          description: "{{ $labels.instance }} 服务已宕机超过1分钟"
+
+      # 健康检查失败告警
+      - alert: HealthCheckFailed
+        expr: health_check_status{job="patent-drafting-proxy"} != 1
+        for: 2m
+        labels:
+          severity: warning
+          service: patent-drafting-proxy
+        annotations:
+          summary: "健康检查失败"
+          description: "{{ $labels.instance }} 健康检查连续失败超过2分钟"
+
+  # ==================== 性能告警 ====================
+  - name: performance
+    interval: 30s
+    rules:
+      # API响应时间过长
+      - alert: HighResponseTime
+        expr: |
+          histogram_quantile(0.95,
+            rate(http_request_duration_seconds_bucket{job="patent-drafting-proxy"}[5m])
+          ) > 1.0
+        for: 5m
+        labels:
+          severity: warning
+          service: patent-drafting-proxy
+        annotations:
+          summary: "API响应时间过长"
+          description: "P95响应时间超过1秒，当前值: {{ $value }}秒"
+
+      # API错误率过高
+      - alert: HighErrorRate
+        expr: |
+          (
+            rate(http_requests_total{job="patent-drafting-proxy",status=~"5.."}[5m])
+            /
+            rate(http_requests_total{job="patent-drafting-proxy"}[5m])
+          ) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+          service: patent-drafting-proxy
+        annotations:
+          summary: "API错误率过高"
+          description: "5xx错误率超过5%，当前值: {{ $value | humanizePercentage }}"
+
+  # ==================== LLM调用告警 ====================
+  - name: llm_calls
+    interval: 1m
+    rules:
+      # LLM调用失败率过高
+      - alert: HighLLMFailureRate
+        expr: |
+          (
+            rate(llm_calls_failed_total{job="patent-drafting-proxy"}[5m])
+            /
+            rate(llm_calls_total{job="patent-drafting-proxy"}[5m])
+          ) > 0.2
+        for: 5m
+        labels:
+          severity: warning
+          service: patent-drafting-proxy
+        annotations:
+          summary: "LLM调用失败率过高"
+          description: "LLM调用失败率超过20%，当前值: {{ $value | humanizePercentage }}"
+
+      # LLM响应时间过长
+      - alert: HighLLMResponseTime
+        expr: |
+          histogram_quantile(0.95,
+            rate(llm_response_time_seconds_bucket{job="patent-drafting-proxy"}[5m])
+          ) > 30.0
+        for: 5m
+        labels:
+          severity: warning
+          service: patent-drafting-proxy
+        annotations:
+          summary: "LLM响应时间过长"
+          description: "LLM P95响应时间超过30秒，当前值: {{ $value }}秒"
+
+      # LLM成本超预算
+      - alert: LLMBudgetExceeded
+        expr: |
+          llm_cost_total{job="patent-drafting-proxy"} > llm_cost_budget{job="patent-drafting-proxy"} * 0.9
+        labels:
+          severity: warning
+          service: patent-drafting-proxy
+        annotations:
+          summary: "LLM成本接近预算上限"
+          description: "LLM成本已达到预算的90%，当前支出: ¥{{ $value }}"
+
+  # ==================== 任务处理告警 ====================
+  - name: task_processing
+    interval: 30s
+    rules:
+      # 任务队列积压
+      - alert: TaskQueueBacklog
+        expr: task_queue_size{job="patent-drafting-proxy"} > 100
+        for: 10m
+        labels:
+          severity: warning
+          service: patent-drafting-proxy
+        annotations:
+          summary: "任务队列积压"
+          description: "任务队列积压超过100个，当前: {{ $value }}个"
+
+      # 任务失败率过高
+      - alert: HighTaskFailureRate
+        expr: |
+          (
+            rate(tasks_failed_total{job="patent-drafting-proxy"}[10m])
+            /
+            rate(tasks_completed_total{job="patent-drafting-proxy"}[10m])
+          ) > 0.1
+        for: 10m
+        labels:
+          severity: warning
+          service: patent-drafting-proxy
+        annotations:
+          summary: "任务失败率过高"
+          description: "任务失败率超过10%，当前值: {{ $value | humanizePercentage }}"
+
+  # ==================== 资源使用告警 ====================
+  - name: resource_usage
+    interval: 30s
+    rules:
+      # CPU使用率过高
+      - alert: HighCPUUsage
+        expr: |
+          (
+            rate(process_cpu_seconds_total{job="patent-drafting-proxy"}[5m]) * 100
+          ) > 80
+        for: 10m
+        labels:
+          severity: warning
+          service: patent-drafting-proxy
+        annotations:
+          summary: "CPU使用率过高"
+          description: "CPU使用率持续超过80%，当前: {{ $value }}%"
+
+      # 内存使用率过高
+      - alert: HighMemoryUsage
+        expr: |
+          (
+            process_resident_memory_bytes{job="patent-drafting-proxy"}
+            /
+            node_memory_MemTotal_bytes
+          ) * 100 > 85
+        for: 10m
+        labels:
+          severity: warning
+          service: patent-drafting-proxy
+        annotations:
+          summary: "内存使用率过高"
+          description: "内存使用率超过85%，当前: {{ $value }}%"
+
+      # 磁盘空间不足
+      - alert: LowDiskSpace
+        expr: |
+          (
+            node_filesystem_avail_bytes{mountpoint="/app",job="patent-drafting-proxy"}
+            /
+            node_filesystem_size_bytes{mountpoint="/app",job="patent-drafting-proxy"}
+          ) * 100 < 15
+        for: 5m
+        labels:
+          severity: warning
+          service: patent-drafting-proxy
+        annotations:
+          summary: "磁盘空间不足"
+          description: "磁盘剩余空间低于15%，当前: {{ $value }}%"
+
+  # ==================== 缓存告警 ====================
+  - name: cache_performance
+    interval: 1m
+    rules:
+      # 缓存命中率过低
+      - alert: LowCacheHitRate
+        expr: |
+          (
+            rate(cache_hits_total{job="patent-drafting-proxy"}[10m])
+            /
+            (
+              rate(cache_hits_total{job="patent-drafting-proxy"}[10m])
+              +
+              rate(cache_misses_total{job="patent-drafting-proxy"}[10m])
+            )
+          ) < 0.7
+        for: 15m
+        labels:
+          severity: info
+          service: patent-drafting-proxy
+        annotations:
+          summary: "缓存命中率过低"
+          description: "缓存命中率低于70%，当前: {{ $value | humanizePercentage }}"
+
+  # ==================== 数据库连接告警 ====================
+  - name: database_connections
+    interval: 30s
+    rules:
+      # 数据库连接池耗尽
+      - alert: DatabasePoolExhausted
+        expr: |
+          database_pool_active_connections{job="patent-drafting-proxy"}
+          /
+          database_pool_max_connections{job="patent-drafting-proxy"} > 0.9
+        for: 5m
+        labels:
+          severity: critical
+          service: patent-drafting-proxy
+        annotations:
+          summary: "数据库连接池接近耗尽"
+          description: "数据库连接使用率超过90%，当前: {{ $value | humanizePercentage }}"
+
+      # Redis连接失败
+      - alert: RedisConnectionFailed
+        expr: redis_up{job="patent-drafting-proxy"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          service: patent-drafting-proxy
+        annotations:
+          summary: "Redis连接失败"
+          description: "无法连接到Redis服务器"

@@ -1,0 +1,187 @@
+#!/usr/bin/env bash
+# ============================================================================
+# Athena平台 - Pre-commit Hook
+# 自动运行质量检查，确保代码质量
+#
+# 安装: make install-hooks
+# 卸载: make uninstall-hooks
+# 跳过: git commit --no-verify
+# ============================================================================
+
+set -e
+
+# 颜色定义
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# 项目根目录
+PROJECT_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+cd "$PROJECT_ROOT"
+
+echo -e "${BLUE}═══════════════════════════════════════════════════════${NC}"
+echo -e "${BLUE}  🔍 Athena Pre-commit 检查${NC}"
+echo -e "${BLUE}═══════════════════════════════════════════════════════${NC}"
+echo ""
+
+# 检查是否有Python文件被修改
+PYTHON_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.py$' || true)
+
+# 检查是否有Agent文件被修改
+AGENT_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '^core/agents/' || true)
+
+# 错误计数
+ERRORS=0
+WARNINGS=0
+
+# ==================== 快速格式检查 ====================
+echo -e "${BLUE}[1/5]${NC} 代码格式检查..."
+
+if [ -n "$PYTHON_FILES" ]; then
+    # 使用ruff检查格式
+    if command -v ruff &> /dev/null; then
+        if ! ruff format --check $PYTHON_FILES 2>/dev/null; then
+            echo -e "${YELLOW}⚠️  代码格式需要调整${NC}"
+            echo -e "   运行: ${YELLOW}make lint-fix${NC} 或 ${YELLOW}ruff format .${NC}"
+            WARNINGS=$((WARNINGS + 1))
+        else
+            echo -e "${GREEN}✅${NC} 代码格式检查通过"
+        fi
+    else
+        echo -e "${YELLOW}⚠️  ruff未安装，跳过格式检查${NC}"
+    fi
+else
+    echo -e "${GREEN}⊘${NC} 没有Python文件变更，跳过"
+fi
+
+# ==================== Lint检查 ====================
+echo -e "${BLUE}[2/5]${NC} Lint检查..."
+
+if [ -n "$PYTHON_FILES" ]; then
+    if command -v ruff &> /dev/null; then
+        LINT_OUTPUT=$(ruff check $PYTHON_FILES --output-format concise 2>&1 || true)
+        if [ -n "$LINT_OUTPUT" ]; then
+            echo -e "${YELLOW}⚠️  发现lint问题${NC}"
+            echo "$LINT_OUTPUT" | head -10
+            echo -e "   运行: ${YELLOW}make lint-fix${NC}"
+            WARNINGS=$((WARNINGS + 1))
+        else
+            echo -e "${GREEN}✅${NC} Lint检查通过"
+        fi
+    fi
+else
+    echo -e "${GREEN}⊘${NC} 没有Python文件变更，跳过"
+fi
+
+# ==================== Agent认证检查 ====================
+echo -e "${BLUE}[3/5]${NC} Agent认证检查..."
+
+if [ -n "$AGENT_FILES" ]; then
+    if [ -f "tools/agent_certifier.py" ]; then
+        echo -e "${BLUE}   运行快速认证（跳过性能检查）...${NC}"
+
+        # 创建临时报告
+        TEMP_REPORT=$(mktemp)
+
+        if python3 tools/agent_certifier.py --all --skip-performance --report "$TEMP_REPORT" >/dev/null 2>&1; then
+            # 检查是否有失败的Agent
+            FAILED_COUNT=$(python3 -c "
+import json
+import sys
+try:
+    with open('$TEMP_REPORT') as f:
+        data = json.load(f)
+    failed = sum(1 for a in data.get('agents', []) if a.get('status') == 'failed')
+    print(failed)
+except:
+    print(0)
+" 2>/dev/null || echo "0")
+
+            if [ "$FAILED_COUNT" -gt "0" ]; then
+                echo -e "${YELLOW}⚠️  有 $FAILED_COUNT 个Agent认证未通过${NC}"
+                echo -e "   运行: ${YELLOW}make certify${NC} 查看详情"
+                WARNINGS=$((WARNINGS + 1))
+            else
+                echo -e "${GREEN}✅${NC} Agent认证检查通过"
+            fi
+        else
+            echo -e "${YELLOW}⚠️  Agent认证检查失败${NC}"
+            WARNINGS=$((WARNINGS + 1))
+        fi
+
+        rm -f "$TEMP_REPORT"
+    else
+        echo -e "${YELLOW}⚠️  认证工具不存在，跳过${NC}"
+    fi
+else
+    echo -e "${GREEN}⊘${NC} 没有Agent文件变更，跳过"
+fi
+
+# ==================== 类型检查（可选）====================
+echo -e "${BLUE}[4/5]${NC} 类型检查..."
+
+if [ -n "$PYTHON_FILES" ]; then
+    if command -v mypy &> /dev/null; then
+        # 只检查有明确类型注解的文件
+        TYPED_FILES=$(echo "$PYTHON_FILES" | xargs grep -l 'from typing import\|: Dict\|: List\|: Optional' 2>/dev/null || true)
+
+        if [ -n "$TYPED_FILES" ]; then
+            MYPY_OUTPUT=$(mypy $TYPED_FILES 2>&1 || true)
+            if echo "$MYPY_OUTPUT" | grep -q "error:"; then
+                echo -e "${YELLOW}⚠️  发现类型问题（可选修复）${NC}"
+                WARNINGS=$((WARNINGS + 1))
+            else
+                echo -e "${GREEN}✅${NC} 类型检查通过"
+            fi
+        else
+            echo -e "${GREEN}⊘${NC} 没有类型注解文件，跳过"
+        fi
+    else
+        echo -e "${GREEN}⊘${NC} mypy未安装，跳过"
+    fi
+else
+    echo -e "${GREEN}⊘${NC} 没有Python文件变更，跳过"
+fi
+
+# ==================== 单元测试（仅Agent文件）====================
+echo -e "${BLUE}[5/5]${NC} 单元测试..."
+
+if [ -n "$AGENT_FILES" ]; then
+    if command -v pytest &> /dev/null; then
+        echo -e "${BLUE}   运行Agent相关单元测试...${NC}"
+
+        # 提取Agent名称并运行对应测试
+        TEST_OUTPUT=$(pytest tests/agents/ -v -m unit --tb=short 2>&1 || true)
+
+        if echo "$TEST_OUTPUT" | grep -q "passed"; then
+            PASSED=$(echo "$TEST_OUTPUT" | grep -oP '\d+(?= passed)' || echo "0")
+            echo -e "${GREEN}✅${NC} 单元测试通过 ($PASSED tests)"
+        else
+            echo -e "${YELLOW}⚠️  单元测试可能有问题${NC}"
+            WARNINGS=$((WARNINGS + 1))
+        fi
+    else
+        echo -e "${YELLOW}⚠️  pytest未安装，跳过测试${NC}"
+    fi
+else
+    echo -e "${GREEN}⊘${NC} 没有Agent文件变更，跳过"
+fi
+
+# ==================== 汇总结果 ====================
+echo ""
+echo -e "${BLUE}═══════════════════════════════════════════════════════${NC}"
+
+if [ $ERRORS -eq 0 ] && [ $WARNINGS -eq 0 ]; then
+    echo -e "${GREEN}✅ 所有检查通过！可以提交。${NC}"
+    exit 0
+elif [ $ERRORS -eq 0 ]; then
+    echo -e "${YELLOW}⚠️  有 $WARNINGS 个警告，但可以提交${NC}"
+    echo -e "   建议: 运行 ${YELLOW}make lint-fix${NC} 修复警告"
+    exit 0
+else
+    echo -e "${RED}❌ 发现 $ERRORS 个错误，请修复后重试${NC}"
+    echo -e "   跳过检查: ${YELLOW}git commit --no-verify${NC}"
+    exit 1
+fi
