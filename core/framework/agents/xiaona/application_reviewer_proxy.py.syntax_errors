@@ -9,10 +9,7 @@ import logging
 import re
 from typing import Any, Dict, List, Optional
 
-from core.framework.agents.xiaona.base_component import (
-    BaseXiaonaComponent,
-    AgentCapability,
-)
+from core.framework.agents.xiaona.base_component import BaseXiaonaComponent
 
 logger = logging.getLogger(__name__)
 
@@ -31,34 +28,34 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
     def _initialize(self) -> str:
         """初始化申请文件审查智能体"""
         self._register_capabilities([
-            AgentCapability(
-                name="format_review",
-                description="格式规范审查",
-                input_types=["专利申请文件"],
-                output_types=["格式审查报告"],
-                estimated_time=10.0,
-            ),
-            AgentCapability(
-                name="disclosure_review",
-                description="技术披露充分性审查",
-                input_types=["专利申请文件"],
-                output_types=["披露审查报告"],
-                estimated_time=20.0,
-            ),
-            AgentCapability(
-                name="claims_review",
-                description="权利要求书审查",
-                input_types=["权利要求书"],
-                output_types=["权利要求审查报告"],
-                estimated_time=25.0,
-            ),
-            AgentCapability(
-                name="specification_review",
-                description="说明书审查",
-                input_types=["说明书"],
-                output_types=["说明书审查报告"],
-                estimated_time=25.0,
-            ),
+            {
+                "name": "format_review",
+                "description": "格式规范审查",
+                "input_types": ["专利申请文件"],
+                "output_types": ["格式审查报告"],
+                "estimated_time": 10.0,
+            },
+            {
+                "name": "disclosure_review",
+                "description": "技术披露充分性审查",
+                "input_types": ["专利申请文件"],
+                "output_types": ["披露审查报告"],
+                "estimated_time": 20.0,
+            },
+            {
+                "name": "claims_review",
+                "description": "权利要求书审查",
+                "input_types": ["权利要求书"],
+                "output_types": ["权利要求审查报告"],
+                "estimated_time": 25.0,
+            },
+            {
+                "name": "specification_review",
+                "description": "说明书审查",
+                "input_types": ["说明书"],
+                "output_types": ["说明书审查报告"],
+                "estimated_time": 25.0,
+            },
         ])
 
     def get_system_prompt(self) -> str:
@@ -160,7 +157,8 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     async def review_format(
         self,
-        application: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        application: Optional[Dict[str, Any]],
+    ) -> Dict[str, Any]:
         """
         审查申请文件格式（LLM版本）
 
@@ -186,7 +184,8 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     def _review_format_by_rules(
         self,
-        application: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        application: Optional[Dict[str, Any]],
+    ) -> Dict[str, Any]:
         """
         基于规则的格式审查（降级方案）
 
@@ -249,7 +248,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
             "completeness_ratio": len(provided_documents) / len(required_documents) if required_documents else 0,
         }
 
-    def _build_format_review_prompt(self, application: Optional[Dict[str, Any]] = None) -> str:
+    def _build_format_review_prompt(self, application: Optional[Dict[str, Any]] -> str:
         """构建格式审查提示词"""
         return f"""# 任务：专利申请文件格式审查
 
@@ -316,11 +315,11 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
             # 返回默认响应
             return {
                 "format_check": "failed",
-                "required_documents": Optional[List] = None
+                "required_documents": Optional[[],]
 
-                "provided_documents": Optional[List] = None
+                "provided_documents": Optional[[],]
 
-                "missing_documents": Optional[List] = None
+                "missing_documents": Optional[[],]
 
                 "applicant_data": {"status": "incomplete", "info": {}},
                 "format_issues": ["LLM响应解析失败"],
@@ -408,7 +407,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
             "completeness_score": sum(d["score"] for d in disclosures.values()) / len(disclosures),
         }
 
-    def _build_disclosure_review_prompt(self, application: Optional[Dict[str, Any]] = None) -> str:
+    def _build_disclosure_review_prompt(self, application: Optional[Dict[str, Any]] -> str:
         """构建披露审查提示词"""
         return f"""# 任务：专利申请文件技术披露充分性审查
 
@@ -573,13 +572,13 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
         return {
             "claims_review": claims_review,
             "total_claims": len(claims_list),
-            "independent_claims": len([c for c in claims_list if c["type"] == "independent"),
-            "dependent_claims": len([c for c in claims_list if c["type"] == "dependent"),
+            "independent_claims": len([c for c in claims_list if c["type"] == "independent"])
+            "dependent_claims": len([c for c in claims_list if c["type"] == "dependent"])
             "issues": issues,
             "suggestions": suggestions,
         }
 
-    def _build_claims_review_prompt(self, application: Optional[Dict[str, Any]] = None) -> str:
+    def _build_claims_review_prompt(self, application: Optional[Dict[str, Any]] -> str:
         """构建权利要求审查提示词"""
         claims_text = application.get("claims", "")
         specification = application.get("specification", "")
@@ -672,7 +671,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
                 "independent_claims": 0,
                 "dependent_claims": 0,
                 "issues": ["LLM响应解析失败"],
-                "suggestions": Optional[List] = None
+                "suggestions": Optional[[],]
 
             }
 
@@ -743,7 +742,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
             "suggestions": self._generate_specification_suggestions(specification_review),
         }
 
-    def _build_specification_review_prompt(self, application: Optional[Dict[str, Any]] = None) -> str:
+    def _build_specification_review_prompt(self, application: Optional[Dict[str, Any]] -> str:
         """构建说明书审查提示词"""
         specification = application.get("specification", "")
         embodiments = application.get("embodiments", [])
@@ -841,7 +840,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
                 "total_embodiments": 0,
                 "total_drawings": 0,
                 "issues": ["LLM响应解析失败"],
-                "suggestions": Optional[List] = None
+                "suggestions": Optional[[],]
 
             }
 
@@ -909,7 +908,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     def _assess_claims_clarity(
         self,
-        claims_list: Optional[[List[Dict[str, Any]]) -> Dict[str, Any]:
+        claims_list: Optional[List[Dict[str, Any] -> Dict[str, Any]:
         """评估权利要求清晰度"""
         avg_length = sum(len(c["text") for c in claims_list) / len(claims_list) if claims_list else 0
 
@@ -932,7 +931,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     def _assess_claims_support(
         self,
-        claims_list: Optional[List[Dict[str, Any]]] = None = None,]
+        claims_list: Optional[List[Dict[str, Any]]],]
 
         application: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """评估权利要求与说明书支持"""
@@ -949,7 +948,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
             found_in_spec = any(
                 keyword in specification
                 for keyword in keywords
-            ])
+            )
 
             if found_in_spec:
                 supported_count += 1
@@ -964,7 +963,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     def _assess_claims_breadth(
         self,
-        claims_list: Optional[[List[Dict[str, Any]]) -> Dict[str, Any]:
+        claims_list: Optional[List[Dict[str, Any] -> Dict[str, Any]:
         """评估权利要求保护范围"""
         # 独立权利要求的数量通常反映保护范围
         independent_count = len([c for c in claims_list if c["type"] == "independent")
@@ -987,7 +986,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     def _assess_claims_dependency(
         self,
-        claims_list: Optional[[List[Dict[str, Any]]) -> Dict[str, Any]:
+        claims_list: Optional[List[Dict[str, Any] -> Dict[str, Any]:
         """评估权利要求依赖关系"""
         dependent_count = len([c for c in claims_list if c["type"] == "dependent")
         independent_count = len([c for c in claims_list if c["type"] == "independent")
@@ -1130,7 +1129,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     def _generate_specification_suggestions(
         self,
-        specification_review: Optional[Dict[str, Any]] -> List[str]:
+        specification_review: Optional[Dict[str, Any]] = None) -> List[str]:
         """生成说明书改进建议"""
         suggestions = []
 

@@ -157,7 +157,8 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     async def review_legal_terminology(
         self,
-        application: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        application: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
         """
         法律用语规范性审查（LLM版本）
 
@@ -183,7 +184,8 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     async def review_technical_accuracy(
         self,
-        application: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        application: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
         """
         技术描述准确性审查（LLM版本）
 
@@ -356,7 +358,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
                 "severity": "high"
             }}
         ,
-        "missing_standards": Optional[List] = None
+        "missing_standards": Optional[[],]
 
         "consistency_check": {{
             "score": 0.9,
@@ -370,9 +372,9 @@ class WritingReviewerProxy(BaseXiaonaComponent):
     "technical_accuracy_review": {{
         "status": "good",
         "score": 0.8,
-        "accuracy_issues": Optional[List] = None
+        "accuracy_issues": Optional[[],]
 
-        "clarifications_needed": Optional[List] = None
+        "clarifications_needed": Optional[[],]
 
         "consistency_check": {{
             "is_consistent": true,
@@ -380,7 +382,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
             "suggestion": null
         }},
         "term_accuracy": {{
-            "issues": Optional[List] = None
+            "issues": Optional[[],]
 
             "accuracy_score": 0.9
         }},
@@ -392,7 +394,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
         "style_checks": {{
             "tense_consistency": {{
                 "score": 0.9,
-                "issues": Optional[List] = None
+                "issues": Optional[[],]
 
                 "description": "时态使用一致"
             }},
@@ -404,13 +406,13 @@ class WritingReviewerProxy(BaseXiaonaComponent):
             }},
             "format_consistency": {{
                 "score": 0.85,
-                "issues": Optional[List] = None
+                "issues": Optional[[],]
 
                 "description": "格式一致"
             }},
             "numbering_consistency": {{
                 "score": 0.75,
-                "issues": Optional[List] = None
+                "issues": Optional[[],]
 
                 "description": "编号一致"
             }}
@@ -437,7 +439,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
             }}
         }},
         "strengths": ["专业性: 良好", "准确性: 良好"],
-        "weaknesses": Optional[List] = None
+        "weaknesses": Optional[[],]
 
         "improvement_priority": []
 
@@ -498,7 +500,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
                 "recommendations": ["LLM响应解析失败，请检查输入格式"],
             }
 
-    def _build_legal_terminology_prompt(self, application: Optional[Dict[str, Any]] = None) -> str:
+    def _build_legal_terminology_prompt(self, application: Optional[Dict[str, Any]] -> str:
         """构建法律用语审查提示词"""
         claims_text = application.get("claims", "")
         specification_text = application.get("specification", "")
@@ -602,9 +604,9 @@ class WritingReviewerProxy(BaseXiaonaComponent):
             return {
                 "status": "poor",
                 "score": 0.0,
-                "terminology_issues": Optional[List] = None
+                "terminology_issues": Optional[[],]
 
-                "missing_standards": Optional[List] = None
+                "missing_standards": Optional[[],]
 
                 "consistency_check": {"score": 0.0, "consistent_terms_count": 0, "inconsistent_terms": Optional[[]},]
 
@@ -612,7 +614,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
                 "correction_suggestions": ["LLM响应解析失败"],
             }
 
-    def _build_technical_accuracy_prompt(self, application: Optional[Dict[str, Any]] = None) -> str:
+    def _build_technical_accuracy_prompt(self, application: Optional[Dict[str, Any]] -> str:
         """构建技术准确性审查提示词"""
         technical_field = application.get("technical_field", "")
         technical_problem = application.get("technical_problem", "")
@@ -654,7 +656,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
             "suggestion": "补充技术方案中解决技术问题的具体措施"
         }}
     ,
-    "clarifications_needed": Optional[List] = None
+    "clarifications_needed": Optional[[],]
 
     "consistency_check": {{
         "is_consistent": true,
@@ -662,7 +664,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
         "suggestion": null
     }},
     "term_accuracy": {{
-        "issues": Optional[List] = None
+        "issues": Optional[[],]
 
         "accuracy_score": 0.9
     }},
@@ -712,9 +714,9 @@ class WritingReviewerProxy(BaseXiaonaComponent):
             return {
                 "status": "poor",
                 "score": 0.0,
-                "accuracy_issues": Optional[List] = None
+                "accuracy_issues": Optional[[],]
 
-                "clarifications_needed": Optional[List] = None
+                "clarifications_needed": Optional[[],]
 
                 "consistency_check": {"is_consistent": False, "description": "LLM响应解析失败", "suggestion": "请重试"},
                 "term_accuracy": {"issues": Optional[[], "accuracy_score": 0.0},]
@@ -722,7 +724,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
                 "total_issues": 0,
             }
 
-    def _build_style_consistency_prompt(self, application: Optional[Dict[str, Any]] = None) -> str:
+    def _build_style_consistency_prompt(self, application: Optional[Dict[str, Any]] -> str:
         """构建风格一致性检查提示词"""
         claims_text = application.get("claims", "")
         specification_text = application.get("specification", "")
@@ -761,7 +763,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
     "style_checks": {{
         "tense_consistency": {{
             "score": 0.9,
-            "issues": Optional[List] = None
+            "issues": Optional[[],]
 
             "description": "时态使用一致"
         }},
@@ -779,7 +781,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
         }},
         "format_consistency": {{
             "score": 0.85,
-            "issues": Optional[List] = None
+            "issues": Optional[[],]
 
             "description": "格式一致"
         }},
@@ -847,7 +849,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     async def _review_writing_by_rules(
         self,
-        application_data: Optional[Dict[str, Any]] = None
+        application_data: Optional[Dict[str, Any],]
 
         review_scope: str
     ) -> Dict[str, Any]:
@@ -1131,7 +1133,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
         solution_addresses_problem = any(
             keyword in solution
             for keyword in problem_keywords
-        ])
+        )
 
         is_consistent = solution_addresses_problem
 
@@ -1308,7 +1310,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     def _collect_style_issues(
         self,
-        style_checks: Optional[Dict[str, Any]] -> List[str, Any]:
+        style_checks: Optional[Dict[str, Any]] = None) -> List[str, Any]:
         """收集风格问题"""
         issues = []
 

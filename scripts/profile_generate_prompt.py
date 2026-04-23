@@ -26,58 +26,19 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import httpx
 from fastapi import FastAPI
 
-# ---------------------------------------------------------------------------
-# 前置：隔离 core/ 中的语法错误模块（与 conftest.py 保持一致）
-# ---------------------------------------------------------------------------
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
+os.chdir(project_root)
 
-_core_pkg = types.ModuleType("core")
-_core_pkg.__path__ = []
-sys.modules["core"] = _core_pkg
+# 避免 hot_reload 缺失 watchdog
+sys.modules["core.config.hot_reload"] = MagicMock()
+sys.modules["core.config.hot_reload"].get_global_config_manager = MagicMock()
 
-_leaf_modules = [
-    "core.legal_world_model",
-    "core.legal_world_model.scenario_identifier_optimized",
-    "core.legal_world_model.scenario_rule_retriever_optimized",
-    "core.database",
-    "core.capabilities",
-    "core.capabilities.prompt_template_cache",
-    "core.capabilities.capability_invoker_optimized",
-    "core.capabilities.capability_registry",
-    "core.capabilities.capability_orchestrator",
-    "core.config",
-    "core.config.api_config",
-    "core.config.hot_reload",
-    "core.legal_prompt_fusion",
-    "core.legal_prompt_fusion.rollout_config",
-    "core.legal_prompt_fusion.metrics",
-    "core.legal_prompt_fusion.models",
-    "core.legal_prompt_fusion.prompt_context_builder",
-    "core.prompt_engine",
-    "core.prompt_engine.sanitizer",
-    "core.prompt_engine.schema",
-    "core.prompt_engine.validators",
-    "core.prompt_engine.renderer",
-    "core.monitoring",
-    "core.monitoring.metrics_collector",
-    "core.intent",
-    "core.intent.bge_m3_intent_classifier",
-    "core.llm",
-    "core.llm.rag_manager",
-    "core.api",
-]
-
-for subpkg_path in _leaf_modules:
-    mod = types.ModuleType(subpkg_path)
-    mod.__path__ = [str(project_root / subpkg_path.replace(".", "/"))]
-    sys.modules[subpkg_path] = mod
-    parent_name, _, child_name = subpkg_path.rpartition(".")
-    if parent_name in sys.modules:
-        setattr(sys.modules[parent_name], child_name, mod)
+os.environ.setdefault("QDRANT_URL", "http://localhost:6333")
+os.environ.setdefault("LEGAL_PROMPT_FUSION_ENABLED", "false")
 
 # ---------------------------------------------------------------------------
-# Mock 数据类与函数
+# Mock 数据类
 # ---------------------------------------------------------------------------
 
 
@@ -92,7 +53,6 @@ class _MockScenarioContext:
 
 class _MockDomain:
     PATENT = MagicMock(value="patent")
-    LEGAL = MagicMock(value="legal")
 
 
 class _MockTaskType:
@@ -158,27 +118,54 @@ class _MockRetriever:
 class _MockPromptCache:
     def __init__(self):
         self._store: dict[str, tuple[str, str]] = {}
+        self._stats = {
+            "total_requests": 0,
+            "cache_hits": 0,
+            "cache_misses": 0,
+            "evictions": 0,
+            "expirations": 0,
+        }
 
     def _key(self, domain: str, task_type: str, phase: str, variables: dict[str, Any]) -> str:
-        import hashlib, json
+        import hashlib
+        import json
 
         normalized = json.dumps(variables, sort_keys=True, ensure_ascii=False)
         key_string = f"{domain}|{task_type}|{phase or 'any'}|{normalized}"
         return hashlib.sha256(key_string.encode()).hexdigest()[:32]
 
     def get(self, domain: str, task_type: str, phase: str, variables: dict[str, Any]):
+        self._stats["total_requests"] += 1
         k = self._key(domain, task_type, phase, variables)
-        return self._store.get(k)
+        if k in self._store:
+            self._stats["cache_hits"] += 1
+            return self._store[k]
+        self._stats["cache_misses"] += 1
+        return None
 
     def set(self, domain, task_type, phase, variables, system_prompt, user_prompt, scenario_rule_id):
         k = self._key(domain, task_type, phase, variables)
         self._store[k] = (system_prompt, user_prompt)
 
     def get_stats(self):
-        return {"hit_rate": 0.0, "current_size": len(self._store)}
+        total = self._stats["total_requests"]
+        hit_rate = self._stats["cache_hits"] / total * 100 if total > 0 else 0
+        return {
+            "stats_enabled": True,
+            "total_requests": total,
+            "cache_hits": self._stats["cache_hits"],
+            "cache_misses": self._stats["cache_misses"],
+            "hit_rate": round(hit_rate, 2),
+            "evictions": self._stats["evictions"],
+            "expirations": self._stats["expirations"],
+            "current_size": len(self._store),
+            "max_size": 1000,
+            "utilization": round(len(self._store) / 1000 * 100, 2),
+        }
 
     def clear(self):
         self._store.clear()
+        self._stats = {k: 0 for k in self._stats}
 
 
 class _MockRolloutConfig:
@@ -205,6 +192,10 @@ class _MockFusionMetrics:
         self.template_version = ""
         self.source_degradation = []
         self.error = None
+        self.token_count_input = 0
+        self.token_count_output = 0
+        self.evidence_relevance_score = 0.0
+        self.budget_usage = 0.0
 
     def to_dict(self):
         return {k: v for k, v in self.__dict__.items()}
@@ -220,116 +211,72 @@ async def _mock_send_metrics_async(metrics: Any) -> None:
 
 
 # ---------------------------------------------------------------------------
-# 注册 mocks 到 sys.modules
+# Patch 目标映射
 # ---------------------------------------------------------------------------
+_patch_map = {
+    "core.legal_world_model.scenario_identifier_optimized.ScenarioIdentifierOptimized": _MockIdentifier,
+    "core.legal_world_model.scenario_rule_retriever_optimized.ScenarioRuleRetrieverOptimized": _MockRetriever,
+    "core.capabilities.prompt_template_cache.get_prompt_cache": lambda: _MockPromptCache(),
+    "core.legal_prompt_fusion.rollout_config.FusionRolloutConfig": _MockRolloutConfig,
+    "core.legal_prompt_fusion.metrics.FusionMetrics": _MockFusionMetrics,
+    "core.legal_prompt_fusion.metrics._send_metrics_async": _mock_send_metrics_async,
+    "core.monitoring.metrics_collector.get_metrics_collector": MagicMock,
+    "core.monitoring.metrics_collector.reset_metrics_collector": MagicMock,
+    "core.capabilities.capability_registry.capability_registry": MagicMock(),
+    "core.capabilities.capability_invoker_optimized.CapabilityInvokerOptimized": MagicMock,
+}
 
-# legal_world_model
-_legal_world_model = sys.modules["core.legal_world_model"]
-_legal_world_model.scenario_identifier_optimized = MagicMock()
-_legal_world_model.scenario_identifier_optimized.ScenarioIdentifierOptimized = _MockIdentifier
-_legal_world_model.scenario_identifier_optimized.Domain = _MockDomain
-_legal_world_model.scenario_identifier_optimized.TaskType = _MockTaskType
-_legal_world_model.scenario_identifier_optimized.Phase = _MockPhase
 
-_legal_world_model.scenario_rule_retriever_optimized = MagicMock()
-_legal_world_model.scenario_rule_retriever_optimized.ScenarioRuleRetrieverOptimized = _MockRetriever
+def _apply_patches():
+    patches = []
+    for target, replacement in _patch_map.items():
+        p = patch(target, replacement)
+        p.start()
+        patches.append(p)
+    return patches
 
-# database
-_database = sys.modules["core.database"]
-_database.get_sync_db_manager = MagicMock(return_value=MagicMock())
-
-# capabilities
-_capabilities = sys.modules["core.capabilities"]
-_capabilities.prompt_template_cache = MagicMock()
-_capabilities.prompt_template_cache.get_prompt_cache = MagicMock(return_value=_MockPromptCache())
-_capabilities.prompt_template_cache.PromptTemplateCache = _MockPromptCache
-_capabilities.capability_invoker_optimized = MagicMock()
-_capabilities.capability_invoker_optimized.CapabilityInvokerOptimized = MagicMock()
-_capabilities.capability_registry = MagicMock()
-_capabilities.capability_registry.capability_registry = MagicMock()
-_capabilities.capability_orchestrator = MagicMock()
-_capabilities.capability_orchestrator.execute_capability_workflow = AsyncMock(return_value={})
-
-# legal_prompt_fusion
-_legal_prompt_fusion = sys.modules["core.legal_prompt_fusion"]
-_legal_prompt_fusion.rollout_config = MagicMock()
-_legal_prompt_fusion.rollout_config.FusionRolloutConfig = _MockRolloutConfig
-_legal_prompt_fusion.metrics = MagicMock()
-_legal_prompt_fusion.metrics.FusionMetrics = _MockFusionMetrics
-_legal_prompt_fusion.metrics._send_metrics_async = _mock_send_metrics_async
-
-# prompt_engine
-_prompt_engine = sys.modules["core.prompt_engine"]
-_prompt_engine.sanitizer = MagicMock()
-_prompt_engine.sanitizer.PromptSanitizer = MagicMock
-_prompt_engine.schema = MagicMock()
-_prompt_engine.schema.PromptSchema = MagicMock
-_prompt_engine.schema.VariableSpec = MagicMock
-_prompt_engine.schema.VariableType = MagicMock
-_prompt_engine.validators = MagicMock()
-_prompt_engine.validators.VariableValidator = MagicMock
-
-# monitoring
-_monitoring = sys.modules["core.monitoring"]
-_monitoring.metrics_collector = MagicMock()
-_monitoring.metrics_collector.get_metrics_collector = MagicMock(return_value=MagicMock())
-_monitoring.metrics_collector.reset_metrics_collector = MagicMock()
-_monitoring.metrics_collector.PerformanceMonitor = MagicMock()
-
-# config
-_config_mod = sys.modules["core.config"]
-_config_mod.api_config = MagicMock()
-_config_mod.api_config.get_config = MagicMock(return_value=MagicMock())
-_config_mod.api_config.get_database_config = MagicMock(
-    return_value=MagicMock(
-        postgres_host="localhost",
-        postgres_port=5432,
-        postgres_database="athena",
-        postgres_user="user",
-        postgres_password="pass",
-        redis_host="localhost",
-        redis_port=6379,
-        redis_password="",
-        redis_db=0,
-    )
-)
-_config_mod.api_config.get_llm_config = MagicMock(return_value=MagicMock())
-_config_mod.hot_reload = MagicMock()
-_config_mod.hot_reload.get_global_config_manager = MagicMock(return_value=MagicMock())
 
 # ---------------------------------------------------------------------------
-# 导入实际路由并构建 app
+# 导入实际路由并构建 app（在 patch 保护下）
 # ---------------------------------------------------------------------------
-from core.api.prompt_system_routes import router  # noqa: E402
+_patches = _apply_patches()
+try:
+    from core.api.prompt_system_routes import router  # noqa: E402
 
-app = FastAPI()
-app.include_router(router)
-
+    app = FastAPI()
+    app.include_router(router)
+finally:
+    for p in _patches:
+        p.stop()
 
 # ---------------------------------------------------------------------------
 # 压测负载
 # ---------------------------------------------------------------------------
 PAYLOADS = [
-    {"user_input": "分析这个审查意见通知书", "additional_context": {"application_number": "CN20231001"}},
-    {"user_input": "请评估该技术方案的创造性", "additional_context": {"application_number": "CN20231002"}},
-    {"user_input": "对比权利要求1与现有技术的新颖性", "additional_context": {"application_number": "CN20231003"}},
-    {"user_input": "答复审查意见：权利要求1不具备创造性", "additional_context": {"application_number": "CN20231004"}},
-    {"user_input": "分析独立权利要求的保护范围", "additional_context": {"application_number": "CN20231005"}},
+    {"user_input": "分析这个审查意见通知书", "additional_context": {"application_number": "CN20231001", "user_input": "分析这个审查意见通知书"}},
+    {"user_input": "请评估该技术方案的创造性", "additional_context": {"application_number": "CN20231002", "user_input": "请评估该技术方案的创造性"}},
+    {"user_input": "对比权利要求1与现有技术的新颖性", "additional_context": {"application_number": "CN20231003", "user_input": "对比权利要求1与现有技术的新颖性"}},
+    {"user_input": "答复审查意见：权利要求1不具备创造性", "additional_context": {"application_number": "CN20231004", "user_input": "答复审查意见：权利要求1不具备创造性"}},
+    {"user_input": "分析独立权利要求的保护范围", "additional_context": {"application_number": "CN20231005", "user_input": "分析独立权利要求的保护范围"}},
 ]
 
 
 async def _run_requests(count: int = 200):
-    """连续发送压测请求。"""
-    transport = httpx.ASGITransport(app=app)
-    async with httpx.AsyncClient(transport=transport, base_url="http://testserver") as client:
-        for i in range(count):
-            payload = PAYLOADS[i % len(PAYLOADS)]
-            try:
-                resp = await client.post("/api/v1/prompt-system/prompt/generate", json=payload)
-                if resp.status_code != 200:
-                    print(f"[WARN] req#{i} status={resp.status_code}")
-            except Exception as exc:
-                print(f"[ERROR] req#{i}: {exc}")
+    patches = _apply_patches()
+    try:
+        transport = httpx.ASGITransport(app=app)
+        async with httpx.AsyncClient(transport=transport, base_url="http://testserver") as client:
+            for i in range(count):
+                payload = PAYLOADS[i % len(PAYLOADS)]
+                try:
+                    resp = await client.post("/api/v1/prompt-system/prompt/generate", json=payload)
+                    if resp.status_code != 200:
+                        print(f"[WARN] req#{i} status={resp.status_code} body={resp.text[:200]}")
+                except Exception as exc:
+                    print(f"[ERROR] req#{i}: {exc}")
+    finally:
+        for p in patches:
+            p.stop()
 
 
 def main():
@@ -337,7 +284,10 @@ def main():
     report_dir.mkdir(exist_ok=True)
     output_path = report_dir / "performance_profile.txt"
 
-    print(f"[*] 开始 cProfile 分析: {200} 次请求 ...")
+    print("[*] 预热请求（排除模块导入开销）...")
+    asyncio.run(_run_requests(count=10))
+
+    print(f"[*] 开始 cProfile 分析: 200 次请求 ...")
     profiler = cProfile.Profile()
     profiler.enable()
 
@@ -346,27 +296,23 @@ def main():
     profiler.disable()
     print("[*] 分析完成，生成报告 ...")
 
-    # 排序输出 top 50
     stream = io.StringIO()
     stats = pstats.Stats(profiler, stream=stream)
     stats.sort_stats(pstats.SortKey.CUMULATIVE)
     stats.print_stats(50)
     stats.sort_stats(pstats.SortKey.TIME)
     stats.print_stats(50)
-
-    # 按函数名排序，便于定位代码文件
     stats.sort_stats(pstats.SortKey.FILENAME)
     stats.print_stats("prompt_system_routes")
 
     report = stream.getvalue()
 
-    # 添加分析摘要
     summary = f"""
 ================================================================================
   性能分析摘要 — generate_prompt 端点
 ================================================================================
 测试请求数 : 200 次
-压测负载   : 5 种不同 payload 轮询
+压测负载   : 5 种不同 payload 轮询（含缓存命中与未命中）
 分析时间   : {__import__('datetime').datetime.now().isoformat()}
 
 关键发现（基于代码路径静态分析 + 运行时统计）：

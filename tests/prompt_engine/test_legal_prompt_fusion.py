@@ -20,6 +20,7 @@ from core.legal_prompt_fusion.providers import (
     UnifiedLegalKnowledgeRepository,
     WikiLegalRepository,
 )
+import core.legal_prompt_fusion.providers as _lpf_providers
 
 
 class TestLegalPromptFusion:
@@ -45,8 +46,8 @@ class TestLegalPromptFusion:
         ):
             pass
 
-        with patch("core.legal_prompt_fusion.providers.HAS_PSYCOPG2", True):
-            with patch("core.legal_prompt_fusion.providers.psycopg2") as mock_psycopg2:
+        with patch.object(_lpf_providers, "HAS_PSYCOPG2", True, create=True):
+            with patch.object(_lpf_providers, "psycopg2", create=True) as mock_psycopg2:
                 mock_cursor = MagicMock()
                 mock_cursor.fetchall.return_value = mock_rows
                 mock_conn = MagicMock()
@@ -91,9 +92,9 @@ class TestLegalPromptFusion:
             "labels": ["ScenarioRule", "LegalConcept"],
         }.get(k, default)
 
-        with patch("core.legal_prompt_fusion.providers.HAS_NEO4J", True):
-            with patch(
-                "core.legal_prompt_fusion.providers.GraphDatabase"
+        with patch.object(_lpf_providers, "HAS_NEO4J", True, create=True):
+            with patch.object(
+                _lpf_providers, "GraphDatabase", create=True
             ) as mock_graph:
                 mock_session = MagicMock()
                 mock_session.run.return_value = [mock_record]
@@ -185,9 +186,9 @@ class TestLegalPromptFusion:
         )
         repo = PostgresLegalRepository(config)
 
-        with patch("core.legal_prompt_fusion.providers.HAS_PSYCOPG2", True):
-            with patch(
-                "core.legal_prompt_fusion.providers.psycopg2"
+        with patch.object(_lpf_providers, "HAS_PSYCOPG2", True, create=True):
+            with patch.object(
+                _lpf_providers, "psycopg2", create=True
             ) as mock_psycopg2:
                 mock_psycopg2.connect.side_effect = Exception("Connection refused")
 

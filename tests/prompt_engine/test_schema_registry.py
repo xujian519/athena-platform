@@ -25,9 +25,10 @@ sys.path.insert(0, str(project_root))
 
 import types
 
-_core_pkg = types.ModuleType("core")
-_core_pkg.__path__ = []
-sys.modules["core"] = _core_pkg
+if "core" not in sys.modules:
+    _core_pkg = types.ModuleType("core")
+    _core_pkg.__path__ = []
+    sys.modules["core"] = _core_pkg
 
 for subpkg_path in [
     "core.legal_world_model",
@@ -37,6 +38,8 @@ for subpkg_path in [
     "core.legal_prompt_fusion",
     "core.prompt_engine",
 ]:
+    if subpkg_path in sys.modules:
+        continue
     mod = types.ModuleType(subpkg_path)
     mod.__path__ = [str(project_root / subpkg_path.replace(".", "/"))]
     sys.modules[subpkg_path] = mod

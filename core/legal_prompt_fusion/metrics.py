@@ -36,6 +36,11 @@ class FusionMetrics:
     template_version: str = ""
     source_degradation: list[str] = field(default_factory=list)
     error: str | None = None
+    # B5-PerfObs 新增维度
+    token_count_input: int = 0
+    token_count_output: int = 0
+    evidence_relevance_score: float = 0.0
+    budget_usage: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
         """转换为普通字典，None 值保留为 null。"""
@@ -92,6 +97,28 @@ async def _send_metrics_async(metrics: FusionMetrics) -> None:
                     1.0,
                     {"source_type": degraded_source},
                 )
+
+            # B5-PerfObs 新增指标
+            collector.observe_histogram(
+                "fusion_token_count",
+                float(metrics.token_count_input),
+                {**labels, "direction": "input"},
+            )
+            collector.observe_histogram(
+                "fusion_token_count",
+                float(metrics.token_count_output),
+                {**labels, "direction": "output"},
+            )
+            collector.observe_histogram(
+                "fusion_evidence_relevance_score",
+                metrics.evidence_relevance_score,
+                labels,
+            )
+            collector.observe_histogram(
+                "fusion_budget_usage_ratio",
+                metrics.budget_usage,
+                labels,
+            )
         except Exception:
             # Prometheus 指标发送失败不影响主链路
             pass

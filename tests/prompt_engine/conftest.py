@@ -44,6 +44,7 @@ for subpkg_path in [
 ]:
     mod = types.ModuleType(subpkg_path)
     mod.__path__ = [str(project_root / subpkg_path.replace(".", "/"))]
+    mod.__package__ = subpkg_path
     sys.modules[subpkg_path] = mod
     # 让 patch("core.xxx.yyy") 能通过属性访问找到子模块
     parent_name, _, child_name = subpkg_path.rpartition(".")
@@ -76,6 +77,9 @@ from core.legal_prompt_fusion.providers import (  # noqa: E402
     UnifiedLegalKnowledgeRepository,
     WikiLegalRepository,
 )
+
+# 强制确保 providers 子模块已附加到 core.legal_prompt_fusion（批量运行时防御）
+import core.legal_prompt_fusion.providers  # noqa: E402,F401
 
 
 # ---------------------------------------------------------------------------

@@ -12,6 +12,7 @@ from .models import (
     SourceType,
 )
 from .rollout_config import FusionRolloutConfig, RolloutConfigLoader
+from . import providers
 
 __all__ = [
     "FusionConfig",

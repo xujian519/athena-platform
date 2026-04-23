@@ -16,6 +16,7 @@ from datetime import datetime
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, status
+from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)
@@ -26,6 +27,11 @@ from core.config.api_config import (
     get_database_config,
     get_llm_config,
 )
+
+# B5-PerfObs: Token 估算器（用于指标维度）
+from core.prompt_engine.budget.utils import TokenEstimator
+
+_token_estimator = TokenEstimator()
 
 # 创建路由器
 router = APIRouter(prefix="/api/v1/prompt-system", tags=["动态提示词系统"])
@@ -621,6 +627,16 @@ async def generate_prompt(request: PromptGenerateRequest):
             # 融合关闭，使用原逻辑
             system_prompt, user_prompt = rule.substitute_variables(all_variables)
 
+        # B5-PerfObs: 填充新增指标维度
+        fusion_metrics.token_count_input = _token_estimator.estimate(request.user_input)
+        fusion_metrics.token_count_output = (
+            _token_estimator.estimate(system_prompt) + _token_estimator.estimate(user_prompt)
+        )
+        if fusion_enabled and "fusion_result" in locals() and fusion_result.context.evidence:
+            scores = [ev.score for ev in fusion_result.context.evidence if hasattr(ev, "score")]
+            fusion_metrics.evidence_relevance_score = round(sum(scores) / len(scores), 4) if scores else 0.0
+        fusion_metrics.budget_usage = round(fusion_metrics.token_count_output / 8192, 4)
+
         # 异步发送指标（不阻塞主链路）
         asyncio.create_task(_send_metrics_async(fusion_metrics))
 
@@ -693,23 +709,36 @@ async def list_capabilities():
 
 
 @router.get("/metrics")
-async def get_metrics():
+async def get_metrics(format: str = "json"):
     """
     获取系统性能指标
 
-    返回各组件的性能指标
+    支持两种格式：
+    - `format=json`（默认）：返回 JSON 结构化数据
+    - `format=prometheus`：返回 Prometheus 纯文本格式（纯 Python 模拟，无外部依赖）
     """
-    logger.info("📊 获取性能指标")
+    logger.info(f"📊 获取性能指标 (format={format})")
 
     try:
+        from core.monitoring.metrics_collector import get_metrics_collector
+
+        collector = get_metrics_collector()
+
+        if format.lower() == "prometheus":
+            # B5-PerfObs: 纯 Python 模拟 Prometheus 文本格式
+            prometheus_text = collector.export_prometheus()
+            return PlainTextResponse(
+                content=prometheus_text,
+                media_type="text/plain; version=0.0.4; charset=utf-8",
+            )
+
+        # JSON 格式（默认，向后兼容）
         from core.capabilities.capability_invoker_optimized import CapabilityInvokerOptimized
         from core.legal_world_model.scenario_identifier_optimized import ScenarioIdentifierOptimized
 
-        # 场景识别器指标
         identifier = ScenarioIdentifierOptimized()
         identifier_metrics = identifier.get_metrics()
 
-        # 能力调用器指标
         invoker = CapabilityInvokerOptimized()
         all_metrics = invoker.get_all_metrics()
 
