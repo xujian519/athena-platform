@@ -14,13 +14,20 @@
     "xiaona": {
       "name": "小娜·天秤女神",
       "english_name": "Xiana Libra",
-      "role": "专利法律专家",
-      "description": "专业的知识产权法律服务提供者，大姐姐角色",
-      "keywords": ["小娜", "na", "xiaona", "法律", "专利"],
-      "startup_script": "/Users/xujian/Athena工作平台/scripts/start_xiaona_enhanced.sh",
-      "port": 8001,
-      "log_file": "/tmp/xiaona_enhanced_integrated.log",
-      "process_pattern": "xiaona_enhanced_integrated.py",
+      "role": "专利法律专家模块",
+      "type": "agent_module",
+      "description": "专业知识产权法律服务模块，包含多个专业智能体，提供专利检索、分析、撰写等全流程服务",
+      "keywords": ["小娜", "na", "xiaona", "法律", "专利", "模块"],
+      "sub_agents": [
+        "RetrieverAgent",
+        "AnalyzerAgent",
+        "WriterAgent",
+        "PatentDraftingProxy"
+      ],
+      "startup_script": null,
+      "port": null,
+      "log_file": null,
+      "process_pattern": null,
       "capabilities": {
         "patent_drafting": {
           "name": "专利撰写",
