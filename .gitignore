@@ -292,3 +292,4 @@ data/logs/
 core.backup.*
 domains/*.backup
 
+.claude/scheduled_tasks.lock
