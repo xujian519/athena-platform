@@ -6,7 +6,7 @@
 
 import json
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from core.agents.xiaona.base_component import BaseXiaonaComponent
 from core.agents.xiaona.patent_drafting_prompts import PatentDraftingPrompts
@@ -29,7 +29,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
     """
 
     def __init__(
-        self, agent_id: str = "patent_drafting_proxy", config: Optional[Dict[str, Any]] = None
+        self, agent_id: str = "patent_drafting_proxy", config: Optional[dict[str, Any]] = None
     ):
         """
         初始化专利撰写智能体
@@ -166,6 +166,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
             # 返回统一格式的结果
             from core.agents.xiaona.base_component import AgentExecutionResult
+
             return AgentExecutionResult(
                 agent_id=self.agent_id,
                 status=AgentStatus.COMPLETED,
@@ -183,7 +184,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
                 error_message=str(e),
             )
 
-    async def analyze_disclosure(self, disclosure_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def analyze_disclosure(self, disclosure_data: dict[str, Any]) -> dict[str, Any]:
         """
         分析技术交底书
 
@@ -213,7 +214,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             self.logger.warning(f"LLM交底书分析失败: {e}，使用规则-based分析")
             return self._analyze_disclosure_by_rules(disclosure_data)
 
-    def _analyze_disclosure_by_rules(self, disclosure_data: Dict[str, Any]) -> Dict[str, Any]:
+    def _analyze_disclosure_by_rules(self, disclosure_data: dict[str, Any]) -> dict[str, Any]:
         """
         基于规则的交底书分析（降级方案）
 
@@ -249,7 +250,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             "analyzed_at": self._get_timestamp(),
         }
 
-    def _extract_document_content(self, disclosure_data: Dict[str, Any]) -> str:
+    def _extract_document_content(self, disclosure_data: dict[str, Any]) -> str:
         """
         提取文档内容（支持多种格式）
 
@@ -303,8 +304,8 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             return ""
 
     def _extract_key_information(
-        self, content: str, disclosure_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, content: str, disclosure_data: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         提取关键信息（规则引擎）
 
@@ -328,7 +329,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return extracted
 
-    def _extract_invention_name(self, content: str, disclosure_data: Dict[str, Any]) -> str:
+    def _extract_invention_name(self, content: str, disclosure_data: dict[str, Any]) -> str:
         """
         提取发明名称
 
@@ -372,8 +373,8 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         return ""
 
     def _identify_technical_field(
-        self, content: str, disclosure_data: Dict[str, Any]
-    ) -> Dict[str, str]:
+        self, content: str, disclosure_data: dict[str, Any]
+    ) -> dict[str, str]:
         """
         识别技术领域和IPC分类
 
@@ -420,7 +421,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return result
 
-    def _get_ipc_classification_keywords(self) -> dict[str, List[str]]:
+    def _get_ipc_classification_keywords(self) -> dict[str, list[str]]:
         """
         获取IPC分类关键词映射
 
@@ -439,8 +440,8 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         }
 
     def _extract_background_art(
-        self, content: str, disclosure_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, content: str, disclosure_data: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         提取背景技术
 
@@ -475,7 +476,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return result
 
-    def _extract_problems_from_text(self, text: str) -> List[str]:
+    def _extract_problems_from_text(self, text: str) -> list[str]:
         """
         从文本中提取技术问题
 
@@ -512,7 +513,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return problems[:5]  # 限制前5个
 
-    def _extract_technical_problem(self, content: str, disclosure_data: Dict[str, Any]) -> str:
+    def _extract_technical_problem(self, content: str, disclosure_data: dict[str, Any]) -> str:
         """
         提取技术问题
 
@@ -548,8 +549,8 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         return ""
 
     def _extract_technical_solution(
-        self, content: str, disclosure_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, content: str, disclosure_data: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         提取技术方案
 
@@ -582,7 +583,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return result
 
-    def _extract_features_from_text(self, text: str) -> List[str]:
+    def _extract_features_from_text(self, text: str) -> list[str]:
         """
         从文本中提取技术特征
 
@@ -618,8 +619,8 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         return features[:10]  # 限制前10个
 
     def _extract_beneficial_effects(
-        self, content: str, disclosure_data: Dict[str, Any]
-    ) -> List[str]:
+        self, content: str, disclosure_data: dict[str, Any]
+    ) -> list[str]:
         """
         提取有益效果
 
@@ -651,7 +652,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return []
 
-    def _extract_effects_from_text(self, text: str) -> List[str]:
+    def _extract_effects_from_text(self, text: str) -> list[str]:
         """
         从文本中提取效果列表
 
@@ -683,8 +684,8 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         return effects[:8]  # 限制前8个
 
     def _extract_examples(
-        self, content: str, disclosure_data: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+        self, content: str, disclosure_data: dict[str, Any]
+    ) -> list[dict[str, Any]]:
         """
         提取实施例
 
@@ -705,9 +706,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         import re
 
         # 规则1：查找"实施例"章节
-        example_sections = re.findall(
-            r"实施例?\s*\d*[：:]\s*([\s\S]*?)(?=实施例|具体实施方式|权利要求|$)", content
-        )
+        example_sections = re.findall(r"实施例?\s*\d*[：:]\s*([\s\S]*?)(?=实施例|具体实施方式|权利要求|$)", content)
 
         for idx, section in enumerate(example_sections[:3], 1):  # 限制前3个
             example = {
@@ -719,7 +718,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return examples
 
-    def _extract_parameters_from_text(self, text: str) -> Dict[str, str]:
+    def _extract_parameters_from_text(self, text: str) -> dict[str, str]:
         """
         从文本中提取关键参数
 
@@ -747,7 +746,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return parameters
 
-    def _check_completeness(self, extracted_info: Dict[str, Any]) -> dict[str, Dict[str, Any]]:
+    def _check_completeness(self, extracted_info: dict[str, Any]) -> dict[str, dict[str, Any]]:
         """
         检查完整性
 
@@ -781,8 +780,8 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         return completeness
 
     def _assess_quality(
-        self, extracted_info: Dict[str, Any], completeness: dict[str, Dict[str, Any]]
-    ) -> Dict[str, Any]:
+        self, extracted_info: dict[str, Any], completeness: dict[str, dict[str, Any]]
+    ) -> dict[str, Any]:
         """
         评估质量
 
@@ -814,7 +813,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             "质量等级": self._get_quality_level(overall_score),
         }
 
-    def _assess_detail_level(self, extracted_info: Dict[str, Any]) -> float:
+    def _assess_detail_level(self, extracted_info: dict[str, Any]) -> float:
         """
         评估详细程度
 
@@ -850,7 +849,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         # 评分标准：平均长度>100字符为满分
         return min(avg_length / 100, 1.0)
 
-    def _assess_clarity(self, extracted_info: Dict[str, Any]) -> float:
+    def _assess_clarity(self, extracted_info: dict[str, Any]) -> float:
         """
         评估清晰度
 
@@ -872,10 +871,10 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
     def _generate_disclosure_recommendations_detailed(
         self,
-        extracted_info: Dict[str, Any],
-        completeness: dict[str, Dict[str, Any]],
-        quality_assessment: Dict[str, Any],
-    ) -> List[str]:
+        extracted_info: dict[str, Any],
+        completeness: dict[str, dict[str, Any]],
+        quality_assessment: dict[str, Any],
+    ) -> list[str]:
         """
         生成详细的改进建议
 
@@ -899,17 +898,12 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         # 2. 详细程度建议
         detail_score = quality_assessment["详细程度评分"]
         if detail_score < 0.6:
-            recommendations.append(
-                "【详细程度】技术描述过于简略，建议补充具体技术参数、"
-                "实施细节等，建议每部分不少于100字"
-            )
+            recommendations.append("【详细程度】技术描述过于简略，建议补充具体技术参数、" "实施细节等，建议每部分不少于100字")
 
         # 3. 清晰度建议
         clarity_score = quality_assessment["清晰度评分"]
         if clarity_score < 0.6:
-            recommendations.append(
-                "【清晰度】技术描述不够清晰，建议使用分点描述，" "避免冗长句子混杂"
-            )
+            recommendations.append("【清晰度】技术描述不够清晰，建议使用分点描述，" "避免冗长句子混杂")
 
         # 4. 技术方案建议
         technical_solution = extracted_info.get("技术方案", {})
@@ -932,7 +926,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return recommendations
 
-    async def assess_patentability(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def assess_patentability(self, data: dict[str, Any]) -> dict[str, Any]:
         """
         评估可专利性
 
@@ -954,7 +948,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             self.logger.warning(f"LLM可专利性评估失败: {e}，使用规则-based评估")
             return self._assess_patentability_by_rules(data)
 
-    def _assess_patentability_by_rules(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def _assess_patentability_by_rules(self, data: dict[str, Any]) -> dict[str, Any]:
         """
         基于规则的可专利性评估（降级方案）
 
@@ -994,7 +988,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             "assessed_at": self._get_timestamp(),
         }
 
-    async def draft_specification(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def draft_specification(self, data: dict[str, Any]) -> dict[str, Any]:
         """
         撰写说明书
 
@@ -1019,7 +1013,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             self.logger.warning(f"LLM说明书撰写失败: {e}，使用模板生成")
             return self._draft_specification_by_template(data)
 
-    def _draft_specification_by_template(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def _draft_specification_by_template(self, data: dict[str, Any]) -> dict[str, Any]:
         """
         基于模板撰写说明书（降级方案）
 
@@ -1050,7 +1044,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             "drafted_at": self._get_timestamp(),
         }
 
-    def _generate_title(self, disclosure: Dict[str, Any]) -> str:
+    def _generate_title(self, disclosure: dict[str, Any]) -> str:
         """
         生成发明名称
 
@@ -1091,7 +1085,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return "未命名发明"
 
-    def _draft_technical_field(self, disclosure: Dict[str, Any]) -> str:
+    def _draft_technical_field(self, disclosure: dict[str, Any]) -> str:
         """
         撰写技术领域
 
@@ -1114,7 +1108,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return technical_field
 
-    def _draft_background_art(self, disclosure: Dict[str, Any]) -> str:
+    def _draft_background_art(self, disclosure: dict[str, Any]) -> str:
         """
         撰写背景技术
 
@@ -1145,7 +1139,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return background_text
 
-    def _draft_invention_content(self, disclosure: Dict[str, Any]) -> str:
+    def _draft_invention_content(self, disclosure: dict[str, Any]) -> str:
         """
         撰写发明内容（三段式）
 
@@ -1192,7 +1186,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return "\n\n".join(parts)
 
-    def _draft_drawing_description(self, disclosure: Dict[str, Any]) -> str:
+    def _draft_drawing_description(self, disclosure: dict[str, Any]) -> str:
         """
         撰写附图说明
 
@@ -1224,7 +1218,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return "\n".join(drawing_descriptions)
 
-    def _draft_detailed_description(self, disclosure: Dict[str, Any]) -> str:
+    def _draft_detailed_description(self, disclosure: dict[str, Any]) -> str:
         """
         撰写具体实施方式
 
@@ -1269,7 +1263,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return "\n".join(parts)
 
-    def _assemble_specification(self, parts: Dict[str, str]) -> str:
+    def _assemble_specification(self, parts: dict[str, str]) -> str:
         """
         组装完整说明书
 
@@ -1298,7 +1292,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return "\n".join(lines)
 
-    async def draft_claims(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def draft_claims(self, data: dict[str, Any]) -> dict[str, Any]:
         """
         撰写权利要求书
 
@@ -1321,7 +1315,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             self.logger.warning(f"LLM权利要求书撰写失败: {e}，使用模板生成")
             return self._draft_claims_by_template(data)
 
-    def _draft_claims_by_template(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def _draft_claims_by_template(self, data: dict[str, Any]) -> dict[str, Any]:
         """
         基于模板撰写权利要求书（降级方案）
 
@@ -1363,7 +1357,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             "drafted_at": self._get_timestamp(),
         }
 
-    def _extract_essential_features(self, disclosure: Dict[str, Any]) -> List[str]:
+    def _extract_essential_features(self, disclosure: dict[str, Any]) -> list[str]:
         """
         提取必要技术特征
 
@@ -1398,7 +1392,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         # 限制数量（独立权利要求通常5-10个特征）
         return essential_features[:10]
 
-    def _extract_preferred_features(self, disclosure: Dict[str, Any]) -> List[str]:
+    def _extract_preferred_features(self, disclosure: dict[str, Any]) -> list[str]:
         """
         提取优选技术特征
 
@@ -1426,7 +1420,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         return preferred
 
     def _generate_independent_claim(
-        self, disclosure: Dict[str, Any], essential_features: List[str]
+        self, disclosure: dict[str, Any], essential_features: list[str]
     ) -> str:
         """
         生成独立权利要求
@@ -1453,7 +1447,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         else:
             return self._format_independent_device_claim(title, essential_features)
 
-    def _determine_claim_type(self, disclosure: Dict[str, Any]) -> str:
+    def _determine_claim_type(self, disclosure: dict[str, Any]) -> str:
         """
         判断权利要求类型
 
@@ -1474,7 +1468,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         # 默认为装置类
         return "device"
 
-    def _format_independent_method_claim(self, title: str, features: List[str]) -> str:
+    def _format_independent_method_claim(self, title: str, features: list[str]) -> str:
         """
         格式化方法独立权利要求
 
@@ -1504,7 +1498,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return claim
 
-    def _format_independent_device_claim(self, title: str, features: List[str]) -> str:
+    def _format_independent_device_claim(self, title: str, features: list[str]) -> str:
         """
         格式化装置独立权利要求
 
@@ -1533,8 +1527,8 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         return claim
 
     def _generate_dependent_claims(
-        self, preferred_features: List[str], start_number: int
-    ) -> List[str]:
+        self, preferred_features: list[str], start_number: int
+    ) -> list[str]:
         """
         生成从属权利要求
 
@@ -1564,7 +1558,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return dependent_claims
 
-    def _number_claims(self, claims: List[str]) -> List[str]:
+    def _number_claims(self, claims: list[str]) -> list[str]:
         """
         权利要求编号
 
@@ -1590,7 +1584,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return numbered
 
-    async def optimize_protection_scope(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def optimize_protection_scope(self, data: dict[str, Any]) -> dict[str, Any]:
         """
         优化保护范围
 
@@ -1615,7 +1609,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
                 "error": str(e),
             }
 
-    async def review_adequacy(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def review_adequacy(self, data: dict[str, Any]) -> dict[str, Any]:
         """
         审查充分公开
 
@@ -1640,7 +1634,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
                 "error": str(e),
             }
 
-    async def detect_common_errors(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def detect_common_errors(self, data: dict[str, Any]) -> dict[str, Any]:
         """
         检测常见错误
 
@@ -1665,7 +1659,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
                 "error": str(e),
             }
 
-    async def draft_patent_application(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def draft_patent_application(self, data: dict[str, Any]) -> dict[str, Any]:
         """
         完整专利申请撰写流程
 
@@ -1730,7 +1724,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
     # ========== 辅助方法 ==========
 
-    def _build_disclosure_analysis_prompt(self, disclosure_data: Dict[str, Any]) -> str:
+    def _build_disclosure_analysis_prompt(self, disclosure_data: dict[str, Any]) -> str:
         """
         构建交底书分析提示词
 
@@ -1741,7 +1735,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             disclosure_data=json.dumps(disclosure_data, ensure_ascii=False, indent=2),
         )
 
-    def _build_patentability_assessment_prompt(self, data: Dict[str, Any]) -> str:
+    def _build_patentability_assessment_prompt(self, data: dict[str, Any]) -> str:
         """
         构建可专利性评估提示词
 
@@ -1756,7 +1750,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             prior_art=json.dumps(prior_art, ensure_ascii=False, indent=2),
         )
 
-    def _build_specification_draft_prompt(self, data: Dict[str, Any]) -> str:
+    def _build_specification_draft_prompt(self, data: dict[str, Any]) -> str:
         """
         构建说明书撰写提示词
 
@@ -1771,7 +1765,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             patentability_assessment=json.dumps(patentability, ensure_ascii=False, indent=2),
         )
 
-    def _build_claims_draft_prompt(self, data: Dict[str, Any]) -> str:
+    def _build_claims_draft_prompt(self, data: dict[str, Any]) -> str:
         """
         构建权利要求书撰写提示词
 
@@ -1786,7 +1780,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             specification=specification,
         )
 
-    def _build_optimization_prompt(self, data: Dict[str, Any]) -> str:
+    def _build_optimization_prompt(self, data: dict[str, Any]) -> str:
         """
         构建保护范围优化提示词
 
@@ -1801,7 +1795,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             prior_art=json.dumps(prior_art, ensure_ascii=False, indent=2),
         )
 
-    def _build_adequacy_review_prompt(self, data: Dict[str, Any]) -> str:
+    def _build_adequacy_review_prompt(self, data: dict[str, Any]) -> str:
         """
         构建充分公开审查提示词
 
@@ -1814,7 +1808,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             "adequacy_review", specification=specification, claims=claims
         )
 
-    def _build_error_detection_prompt(self, data: Dict[str, Any]) -> str:
+    def _build_error_detection_prompt(self, data: dict[str, Any]) -> str:
         """
         构建常见错误检测提示词
 
@@ -1827,7 +1821,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             "error_detection", specification=specification, claims=claims
         )
 
-    def _parse_analysis_response(self, response: str) -> Dict[str, Any]:
+    def _parse_analysis_response(self, response: str) -> dict[str, Any]:
         """解析LLM分析响应"""
         try:
             import re
@@ -1860,7 +1854,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
         else:
             return "待改进"
 
-    def _generate_disclosure_recommendations(self, completeness: dict[str, bool]) -> List[str]:
+    def _generate_disclosure_recommendations(self, completeness: dict[str, bool]) -> list[str]:
         """生成交底书改进建议"""
         recommendations = []
 
