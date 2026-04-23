@@ -1,0 +1,149 @@
+{
+  "patent_rules": {
+    "version": "2024版",
+    "title": "专利法及实施细则",
+    "last_updated": "2024-01-01",
+    "legal_framework": {
+      "constitution": {
+        "article_20": "国家发展自然科学和社会科学事业，普及科学和技术知识，奖励科学研究成果和技术发明创造。"
+      },
+      "patent_law": {
+        "article_1": "为了保护专利权人的合法权益，鼓励发明创造，推动发明创造的应用，提高创新能力，促进科学技术进步和经济社会发展，制定本法。",
+        "article_2": "本法所称的发明创造是指发明、实用新型和外观设计。",
+        "article_3": "国务院专利行政部门负责管理全国的专利工作；统一受理和审查专利申请，依法授予专利权。",
+        "article_5": "对违反法律、社会公德或者妨害公共利益的发明创造，不授予专利权。",
+        "article_22": {
+          "clause_1": "授予专利权的发明和实用新型，应当具备新颖性、创造性和实用性。",
+          "clause_2": "新颖性，是指该发明或者实用新型不属于现有技术；也没有任何单位或者个人就同样的发明或者实用新型在申请日以前向国务院专利行政部门提出过申请，并记载在申请日以后公布的专利申请文件或者公告的专利文件中。",
+          "clause_3": "创造性，是指与现有技术相比，该发明具有突出的实质性特点和显著的进步，该实用新型具有实质性特点和进步。",
+          "clause_4": "实用性，是指该发明或者实用新型能够制造或者使用，并且能够产生积极效果。",
+          "clause_5": "本法所称现有技术，是指申请日以前在国内外为公众所知的技术。"
+        },
+        "article_26": {
+          "clause_1": "申请发明或者实用新型专利的，应当提交请求书、说明书及其摘要和权利要求书等文件。",
+          "clause_2": "请求书应当写明发明或者实用新型的名称，发明人的姓名，申请人姓名或者名称、地址，以及其他事项。",
+          "clause_3": "说明书应当对发明或者实用新型作出清楚、完整的说明，以所属技术领域的技术人员能够实现为准；必要的时候，应当有附图。摘要应当简要说明发明或者实用新型的技术要点。",
+          "clause_4": "权利要求书应当以说明书为依据，清楚、简要地限定要求专利保护的范围。"
+        },
+        "article_31": "一件发明或者实用新型专利申请应当限于一项发明或者实用新型。属于一个总的发明构思的两项以上的发明或者实用新型，可以作为一件申请提出。"
+      },
+      "implementation_rules": {
+        "article_20": "权利要求书应当有独立权利要求，也可以有从属权利要求。",
+        "article_21": "独立权利要求应当从整体上反映发明或者实用新型的技术方案，记载解决技术问题的必要技术特征。",
+        "article_22": "从属权利要求应当用附加的技术特征，对引用的权利要求作进一步的限定。"
+      }
+    },
+    "procedural_rules": {
+      "filing_procedures": {
+        "pre_filing": [
+          "进行专利检索",
+          "评估专利前景",
+          "准备技术交底材料"
+        ],
+        "filing_requirements": [
+          "提交完整的申请文件",
+          "缴纳申请费用",
+          "符合格式要求"
+        ],
+        "post_filing": [
+          "审查意见答复",
+          "修改申请文件",
+          "缴纳相关费用"
+        ]
+      },
+      "examination_procedures": {
+        "preliminary_examination": {
+          "scope": "形式审查",
+          "time_limit": "18个月",
+          "focus": ["申请文件格式", "费用缴纳", "申请主题适格性"]
+        },
+        "substantive_examination": {
+          "scope": "实质审查",
+          "time_limit": "自申请日起3年",
+          "focus": ["新颖性", "创造性", "实用性", "公开充分性"]
+        }
+      }
+    },
+    "interpretation_rules": {
+      "claim_interpretation": {
+        "principles": [
+          "权利要求优先原则",
+          "说明书支持原则",
+          "合理保护范围原则"
+        ],
+        "methods": [
+          "字面解释",
+          "等同原则",
+          "禁止反悔原则"
+        ]
+      },
+      "technical_feature_analysis": {
+        "essential_features": "解决技术问题所必需的技术特征",
+        "additional_features": "附加的、非必要的技术特征",
+        "functional_features": "通过功能限定的技术特征"
+      }
+    },
+    "risk_management": {
+      "common_risks": [
+        {
+          "risk": "新颖性不足",
+          "probability": "高",
+          "impact": "严重",
+          "prevention": "充分的现有技术检索"
+        },
+        {
+          "risk": "创造性缺陷",
+          "probability": "中",
+          "impact": "严重",
+          "prevention": "深入的技术对比分析"
+        },
+        {
+          "risk": "公开不充分",
+          "probability": "中",
+          "impact": "中等",
+          "prevention": "详细的技术实现说明"
+        },
+        {
+          "risk": "权利要求不支持",
+          "probability": "中",
+          "impact": "中等",
+          "prevention": "权利要求与说明书的一致性"
+        }
+      ],
+      "mitigation_strategies": {
+        "pre_filing": [
+          "全面的专利检索",
+          "详细的技术方案梳理",
+          "专业的申请文件撰写"
+        ],
+        "examination": [
+          "针对性的审查意见答复",
+          "合理的申请文件修改",
+          "充分的技术论证"
+        ],
+        "post_grant": [
+          "专利维持管理",
+          "侵权监测预警",
+          "专利价值实现"
+        ]
+      }
+    },
+    "professional_guidelines": {
+      "technical_analysis": {
+        "depth_requirement": "深入理解技术方案本质和创新点",
+        "scope_requirement": "全面覆盖所有技术特征",
+        "accuracy_requirement": "准确识别技术问题和解决方案"
+      },
+      "legal_application": {
+        "precision_requirement": "精确适用相关法律规定",
+        "consistency_requirement": "保持法律适用的一致性",
+        "reasoning_requirement": "严密的法律逻辑推理"
+      },
+      "practical_advice": {
+        "actionability": "提供具体可操作的建议",
+        "risk_awareness": "识别并管理潜在风险",
+        "optimization_focus": "持续改进和优化策略"
+      }
+    }
+  }
+}

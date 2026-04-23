@@ -1,0 +1,155 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+"""
+规划系统数据模型
+Planning System Data Models
+
+定义规划系统使用的所有数据结构:
+- Task: 任务模型
+- ComplexityAnalysis: 复杂度分析结果
+- ComplexityLevel: 复杂度级别
+- StrategyType: 策略类型
+
+作者: Athena平台团队
+创建时间: 2026-01-20
+版本: v1.0.0 "Phase 2"
+"""
+
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any
+from uuid import uuid4
+
+
+class ComplexityLevel(str, Enum):
+    """任务复杂度级别"""
+
+    SIMPLE = "simple"  # 简单任务 (score <= 5)
+    MEDIUM = "medium"  # 中等任务 (5 < score <= 10)
+    COMPLEX = "complex"  # 复杂任务 (score > 10)
+
+
+class StrategyType(str, Enum):
+    """规划策略类型"""
+
+    REACT = "react"  # ReAct: 思考-行动循环
+    PLANNING = "planning"  # Planning: 显式规划
+    WORKFLOW_REUSE = "workflow_reuse"  # WorkflowReuse: 复用工作流模式
+    ADAPTIVE = "adaptive"  # Adaptive: 自适应选择
+
+
+@dataclass
+class ComplexityFactors:
+    """复杂度因素"""
+
+    task_type: str  # 任务类型
+    estimated_tools: int  # 预估需要的工具数量
+    estimated_steps: int  # 预估步骤数
+    requires_multi_source: bool  # 是否需要多源数据
+    requires_creative_reasoning: bool  # 是否需要创造性推理
+    domain_specific_knowledge: bool  # 是否需要领域知识
+    requires_real_time_data: bool  # 是否需要实时数据
+    parallelizable: bool  # 是否可并行化
+
+    def to_dict(self) -> dict[str, Any]:
+        """转换为字典"""
+        return {
+            "task_type": self.task_type,
+            "estimated_tools": self.estimated_tools,
+            "estimated_steps": self.estimated_steps,
+            "requires_multi_source": self.requires_multi_source,
+            "requires_creative_reasoning": self.requires_creative_reasoning,
+            "domain_specific_knowledge": self.domain_specific_knowledge,
+            "requires_real_time_data": self.requires_real_time_data,
+            "parallelizable": self.parallelizable,
+        }
+
+
+@dataclass
+class ComplexityAnalysis:
+    """任务复杂度分析结果"""
+
+    task_id: str  # 任务ID
+    complexity: ComplexityLevel  # 复杂度级别
+    score: float  # 复杂度分数 (0-20)
+    confidence: float  # 分析置信度 (0-1)
+    factors: ComplexityFactors  # 复杂度因素
+    reasoning: str  # 分析理由
+    suggested_strategy: StrategyType  # 建议的策略
+    analysis_timestamp: datetime = field(default_factory=datetime.now)
+
+    def to_dict(self) -> dict[str, Any]:
+        """转换为字典"""
+        return {
+            "task_id": self.task_id,
+            "complexity": self.complexity.value,
+            "score": self.score,
+            "confidence": self.confidence,
+            "factors": self.factors.to_dict(),
+            "reasoning": self.reasoning,
+            "suggested_strategy": self.suggested_strategy.value,
+            "analysis_timestamp": self.analysis_timestamp.isoformat(),
+        }
+
+
+@dataclass
+class Task:
+    """任务模型"""
+
+    task_id: str = field(default_factory=lambda: str(uuid4()))
+    description: str = ""
+    task_type: str = "general"  # 任务类型
+    domain: str | None = None  # 任务领域
+    category: str | None = None  # 任务分类 (professional/general)
+    priority: str = "medium"  # 优先级 (high/medium/low)  # TODO: 确保除数不为零
+    status: str = "pending"  # 状态
+    context: dict[str, Any] = field(default_factory=dict)
+    requirements: list[str] = field(default_factory=list)
+    constraints: list[str] = field(default_factory=list)
+    expected_output: str | None = None
+    created_at: datetime = field(default_factory=datetime.now)
+    deadline: datetime | None = None
+    assigned_agent: str | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    # 可选的复杂度分析结果
+    complexity_analysis: ComplexityAnalysis | None = None
+
+
+@dataclass
+class ExecutionPlan:
+    """执行计划"""
+
+    plan_id: str = field(default_factory=lambda: str(uuid4()))
+    task_id: str = ""
+    strategy: StrategyType = StrategyType.REACT
+    steps: list[Any] = field(default_factory=list)  # PlanStep列表
+    created_at: datetime = field(default_factory=datetime.now)
+    estimated_duration: int | None = None  # 预估执行时间(秒)
+    confidence: float = 0.8
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class PlanningMetrics:
+    """规划性能指标"""
+
+    task_type: str
+    complexity: ComplexityLevel
+    strategy: StrategyType
+    success: bool
+    execution_time: float
+    quality_score: float
+    timestamp: datetime = field(default_factory=datetime.now)
+
+
+__all__ = [
+    "ComplexityAnalysis",
+    "ComplexityFactors",
+    "ComplexityLevel",
+    "ExecutionPlan",
+    "PlanningMetrics",
+    "StrategyType",
+    "Task",
+]

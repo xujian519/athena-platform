@@ -1,0 +1,1278 @@
+{
+  "stats": {
+    "total_modules": 389,
+    "total_dependencies": 483,
+    "circular_dependencies": 1,
+    "violations": {}
+  },
+  "imports": {
+    ".": [
+      "core"
+    ],
+    "tools.patent-guideline-system.scripts": [
+      "scripts"
+    ],
+    "tools.patent-guideline-system.src.vectorization": [
+      "config"
+    ],
+    "tools.analysis": [
+      "core"
+    ],
+    "tools.patent.database": [
+      "security"
+    ],
+    "tools.patent.payment": [
+      "tools"
+    ],
+    "tools.patent.analyzer": [
+      "core"
+    ],
+    "tools.agent": [
+      "core"
+    ],
+    "tools.mcp": [
+      "tools"
+    ],
+    "tools.cli.search": [
+      "core",
+      "tools"
+    ],
+    "tools.search": [
+      "config",
+      "core",
+      "services"
+    ],
+    "domains.legal-ai.apis": [
+      "config",
+      "core",
+      "shared"
+    ],
+    "core": [
+      "core",
+      "security"
+    ],
+    "core.judgment_vector_db": [
+      "core"
+    ],
+    "core.judgment_vector_db.analysis": [
+      "core"
+    ],
+    "core.judgment_vector_db.integration": [
+      "core"
+    ],
+    "core.judgment_vector_db.data_processing": [
+      "core"
+    ],
+    "core.judgment_vector_db.storage": [
+      "core"
+    ],
+    "core.judgment_vector_db.retrieval": [
+      "core"
+    ],
+    "core.personalization": [
+      "core"
+    ],
+    "core.fusion": [
+      "core"
+    ],
+    "core.microservices": [
+      "core"
+    ],
+    "core.document_parser": [
+      "core"
+    ],
+    "core.logging.disabled": [
+      "core"
+    ],
+    "core.agent_marketplace": [
+      "core"
+    ],
+    "core.neo4j": [
+      "core"
+    ],
+    "core.https": [
+      "core"
+    ],
+    "core.database": [
+      "config",
+      "core"
+    ],
+    "core.collaboration": [
+      "core"
+    ],
+    "core.collaboration.collaboration_patterns": [
+      "core"
+    ],
+    "core.collaboration.collaboration_patterns.patterns": [
+      "core"
+    ],
+    "core.legal_kg": [
+      "core"
+    ],
+    "core.acceleration": [
+      "config",
+      "core"
+    ],
+    "core.pipeline": [
+      "core"
+    ],
+    "core.reporting": [
+      "core"
+    ],
+    "core.agent_collaboration": [
+      "core"
+    ],
+    "core.agent_collaboration.agent_coordinator": [
+      "core"
+    ],
+    "core.cognitive.services.07-agent-services.intelligent-agents.core.super_reasoning": [
+      "core"
+    ],
+    "core.knowledge_graph": [
+      "core"
+    ],
+    "core.tasks.manager": [
+      "models"
+    ],
+    "core.tools": [
+      "core"
+    ],
+    "core.tools.permissions_v2": [
+      "core"
+    ],
+    "core.tools.handlers": [
+      "core"
+    ],
+    "core.llm": [
+      "core"
+    ],
+    "core.llm.adapters": [
+      "core"
+    ],
+    "core.storm_integration": [
+      "config",
+      "core"
+    ],
+    "core.context": [
+      "core"
+    ],
+    "core.xiaonuo_agent": [
+      "core"
+    ],
+    "core.xiaonuo_agent.tools": [
+      "core"
+    ],
+    "core.xiaonuo_agent.memory": [
+      "core"
+    ],
+    "core.xiaonuo_agent.learning": [
+      "core"
+    ],
+    "core.xiaonuo_agent.adapters": [
+      "core"
+    ],
+    "core.xiaonuo_agent.metacognition": [
+      "core"
+    ],
+    "core.xiaonuo_agent.emotion": [
+      "core"
+    ],
+    "core.capabilities": [
+      "core"
+    ],
+    "core.analysis": [
+      "core"
+    ],
+    "core.coordination": [
+      "core"
+    ],
+    "core.memory": [
+      "config",
+      "core"
+    ],
+    "core.memory.optimized_memory": [
+      "core"
+    ],
+    "core.memory.serializers": [
+      "core"
+    ],
+    "core.memory.unified_memory": [
+      "core"
+    ],
+    "core.cache": [
+      "core"
+    ],
+    "core.patents": [
+      "core"
+    ],
+    "core.patents.drafting": [
+      "core"
+    ],
+    "core.patents.ai_services": [
+      "core"
+    ],
+    "core.patents.platform.workspace.src.tools": [
+      "domains",
+      "tools"
+    ],
+    "core.patents.platform.workspace.src.cognition": [
+      "config",
+      "core"
+    ],
+    "core.patents.platform.workspace.src.action": [
+      "core",
+      "shared"
+    ],
+    "core.patents.platform.workspace.src.api": [
+      "core"
+    ],
+    "core.patents.platform.workspace.src.perception": [
+      "config",
+      "core",
+      "models"
+    ],
+    "core.patents.workflows": [
+      "core"
+    ],
+    "core.patents.infringement": [
+      "core"
+    ],
+    "core.patents.retrieval": [
+      "config",
+      "core"
+    ],
+    "core.patents.retrieval.chinese_bert_integration": [
+      "config",
+      "core"
+    ],
+    "core.patents.portfolio": [
+      "core"
+    ],
+    "core.patents.litigation": [
+      "core"
+    ],
+    "core.patents.licensing": [
+      "core"
+    ],
+    "core.patents.oa_response": [
+      "core"
+    ],
+    "core.patents.international": [
+      "core"
+    ],
+    "core.update": [
+      "core",
+      "scripts"
+    ],
+    "core.clarification": [
+      "core"
+    ],
+    "core.legal_world_model": [
+      "core"
+    ],
+    "core.service_registry": [
+      "core",
+      "models"
+    ],
+    "core.vector_db": [
+      "config",
+      "core",
+      "services"
+    ],
+    "core.nebula": [
+      "core"
+    ],
+    "core.intelligence": [
+      "core",
+      "services"
+    ],
+    "core.intelligence.dspy": [
+      "config",
+      "core"
+    ],
+    "core.intelligence.v4": [
+      "core"
+    ],
+    "core.config": [
+      "core"
+    ],
+    "core.auth": [
+      "core"
+    ],
+    "core.cognition": [
+      "core"
+    ],
+    "core.cognition.explainable": [
+      "core"
+    ],
+    "core.cognition.top_patent_expert_system": [
+      "core"
+    ],
+    "core.cognition.xiaona_patent_naming_system": [
+      "core"
+    ],
+    "core.integration": [
+      "core"
+    ],
+    "core.learning": [
+      "api",
+      "core"
+    ],
+    "core.learning.learning_engine": [
+      "core"
+    ],
+    "core.learning.enhanced_learning_engine": [
+      "core"
+    ],
+    "core.learning.rapid_learning": [
+      "config"
+    ],
+    "core.connection_pool": [
+      "core"
+    ],
+    "core.optimization": [
+      "core"
+    ],
+    "core.optimization.enhanced": [
+      "utils"
+    ],
+    "core.serialization": [
+      "core"
+    ],
+    "core.kg_unified.models": [
+      "core"
+    ],
+    "core.kg_unified.engines": [
+      "core"
+    ],
+    "core.health": [
+      "config",
+      "core"
+    ],
+    "core.platform": [
+      "core"
+    ],
+    "core.embedding": [
+      "core"
+    ],
+    "core.document_management": [
+      "core"
+    ],
+    "core.planning": [
+      "core",
+      "models"
+    ],
+    "core.planning.adaptive_meta_planner": [
+      "core",
+      "models"
+    ],
+    "core.legacy": [
+      "core"
+    ],
+    "core.dependency": [
+      "core"
+    ],
+    "core.agents": [
+      "core"
+    ],
+    "core.agents.yunxi": [
+      "core"
+    ],
+    "core.agents.task_tool": [
+      "core",
+      "models"
+    ],
+    "core.agents.patent": [
+      "core"
+    ],
+    "core.agents.xiaona": [
+      "core",
+      "prompts"
+    ],
+    "core.agents.xiaona.modules": [
+      "core"
+    ],
+    "core.agents.declarative": [
+      "core",
+      "models",
+      "utils"
+    ],
+    "core.agents.legacy-athena": [
+      "core"
+    ],
+    "core.agents.legacy-athena.athena-unified.capabilities": [
+      "core"
+    ],
+    "core.agents.xiaonuo": [
+      "core"
+    ],
+    "core.agents.xiaonuo.capabilities": [
+      "core"
+    ],
+    "core.utils": [
+      "core"
+    ],
+    "core.utils.knowledge-graph": [
+      "shared"
+    ],
+    "core.utils.patent-search": [
+      "domains",
+      "services"
+    ],
+    "core.utils.system-integration": [
+      "core"
+    ],
+    "core.agent": [
+      "core"
+    ],
+    "core.mcp": [
+      "core"
+    ],
+    "core.models": [
+      "core"
+    ],
+    "core.rules_query": [
+      "core"
+    ],
+    "core.observability.metrics": [
+      "shared"
+    ],
+    "core.observability.tracing": [
+      "shared"
+    ],
+    "core.rag": [
+      "core"
+    ],
+    "core.reasoning": [
+      "core"
+    ],
+    "core.explainability": [
+      "core"
+    ],
+    "core.exploration": [
+      "core"
+    ],
+    "core.feedback": [
+      "core"
+    ],
+    "core.storage": [
+      "core"
+    ],
+    "core.search": [
+      "config",
+      "core",
+      "domains"
+    ],
+    "core.search.coordinator.lightweight_coordinator": [
+      "core"
+    ],
+    "core.search.deepsearch": [
+      "core"
+    ],
+    "core.search.local_search": [
+      "config"
+    ],
+    "core.search.examples": [
+      "core",
+      "tools"
+    ],
+    "core.search.external": [
+      "core"
+    ],
+    "core.search.external.web_search": [
+      "core"
+    ],
+    "core.search.external.web_search.engines": [
+      "core"
+    ],
+    "core.search.external.web_search.engines.all_engines": [
+      "core"
+    ],
+    "core.multimodal": [
+      "core"
+    ],
+    "core.system": [
+      "core"
+    ],
+    "core.ethics": [
+      "config",
+      "core"
+    ],
+    "core.ethics.deployment": [
+      "core"
+    ],
+    "core.retrieval": [
+      "core"
+    ],
+    "core.intent": [
+      "core"
+    ],
+    "core.intent.enhanced_intent_recognition": [
+      "core"
+    ],
+    "core.v4": [
+      "core"
+    ],
+    "core.autonomous_control": [
+      "core",
+      "docker"
+    ],
+    "core.autonomous_control.security_monitor": [
+      "core"
+    ],
+    "core.legal_database": [
+      "core"
+    ],
+    "core.resilience": [
+      "config",
+      "core"
+    ],
+    "core.knowledge": [
+      "core"
+    ],
+    "core.knowledge.storage": [
+      "core"
+    ],
+    "core.async_processing": [
+      "core"
+    ],
+    "core.dual_layer": [
+      "core"
+    ],
+    "core.execution": [
+      "core"
+    ],
+    "core.execution.optimized_execution_module": [
+      "core"
+    ],
+    "core.ai": [
+      "core"
+    ],
+    "core.hooks": [
+      "core"
+    ],
+    "core.hooks.integrations": [
+      "core"
+    ],
+    "core.evolution": [
+      "core"
+    ],
+    "core.persistence": [
+      "core"
+    ],
+    "core.kg": [
+      "core"
+    ],
+    "core.task": [
+      "core"
+    ],
+    "core.document_export": [
+      "core"
+    ],
+    "core.nlp": [
+      "config",
+      "core"
+    ],
+    "core.nlp.preprocessing": [
+      "security"
+    ],
+    "core.orchestration": [
+      "core"
+    ],
+    "core.governance": [
+      "core"
+    ],
+    "core.registry": [
+      "core"
+    ],
+    "core.prompts": [
+      "core",
+      "services"
+    ],
+    "core.api": [
+      "core",
+      "scripts",
+      "services"
+    ],
+    "core.evaluation": [
+      "core"
+    ],
+    "core.decision": [
+      "core"
+    ],
+    "core.skills": [
+      "core"
+    ],
+    "core.legal_qa": [
+      "core"
+    ],
+    "core.communication": [
+      "core"
+    ],
+    "core.communication.websocket": [
+      "core"
+    ],
+    "core.communication.persistence": [
+      "core"
+    ],
+    "core.communication.optimized_communication_module": [
+      "core"
+    ],
+    "core.communication.engine": [
+      "core"
+    ],
+    "core.perception": [
+      "core",
+      "services"
+    ],
+    "core.perception.tests": [
+      "core"
+    ],
+    "core.errors": [
+      "core"
+    ],
+    "core.monitoring": [
+      "core"
+    ],
+    "core.monitoring.optimized_monitoring_module": [
+      "core"
+    ],
+    "core.query_engine": [
+      "core"
+    ],
+    "core.query_engine.adapters": [
+      "core"
+    ],
+    "core.performance": [
+      "core"
+    ],
+    "core.legal": [
+      "core"
+    ],
+    "core.data": [
+      "core"
+    ],
+    "core.knowledge_sync": [
+      "core"
+    ],
+    "core.vector": [
+      "config",
+      "core"
+    ],
+    "core.protocols": [
+      "core"
+    ],
+    "core.protocols.collaboration": [
+      "core",
+      "utils"
+    ],
+    "core.protocols.collaboration.protocols": [
+      "core"
+    ],
+    "core.logging": [
+      "config",
+      "core"
+    ],
+    "core.services": [
+      "core"
+    ],
+    "core.reranking": [
+      "core"
+    ],
+    "core.biology": [
+      "core"
+    ],
+    "core.session": [
+      "core"
+    ],
+    "config": [
+      "core",
+      "services"
+    ],
+    "deploy": [
+      "core"
+    ],
+    "tests": [
+      "core"
+    ],
+    "tests.collaboration": [
+      "core"
+    ],
+    "tests.collaboration.patterns": [
+      "core"
+    ],
+    "tests.unit": [
+      "config",
+      "core"
+    ],
+    "tests.unit.tools": [
+      "core"
+    ],
+    "tests.unit.core.learning": [
+      "core"
+    ],
+    "tests.unit.core.learning.learning_engine": [
+      "core"
+    ],
+    "tests.unit.planning": [
+      "core"
+    ],
+    "tests.unit.patent": [
+      "core"
+    ],
+    "tests.unit.state": [
+      "core"
+    ],
+    "tests.unit.communication": [
+      "core"
+    ],
+    "tests.knowledge_graph.models": [
+      "core"
+    ],
+    "tests.knowledge_graph.engines": [
+      "core"
+    ],
+    "tests.tools": [
+      "core"
+    ],
+    "tests.xiaonuo_agent.reasoning": [
+      "core"
+    ],
+    "tests.xiaonuo_agent.adapters": [
+      "core"
+    ],
+    "tests.core": [
+      "core"
+    ],
+    "tests.core.collaboration": [
+      "core"
+    ],
+    "tests.core.tasks.manager": [
+      "core"
+    ],
+    "tests.core.tools": [
+      "core"
+    ],
+    "tests.core.coordinator": [
+      "core"
+    ],
+    "tests.core.llm": [
+      "core"
+    ],
+    "tests.core.memory": [
+      "core",
+      "tests"
+    ],
+    "tests.core.service_registry": [
+      "core"
+    ],
+    "tests.core.config": [
+      "core"
+    ],
+    "tests.core.cognition": [
+      "core"
+    ],
+    "tests.core.learning": [
+      "core"
+    ],
+    "tests.core.learning.integration": [
+      "core"
+    ],
+    "tests.core.patent": [
+      "core"
+    ],
+    "tests.core.agents": [
+      "core"
+    ],
+    "tests.core.agents.task_tool": [
+      "core"
+    ],
+    "tests.core.agents.xiaona": [
+      "core"
+    ],
+    "tests.core.utils": [
+      "core"
+    ],
+    "tests.core.agent": [
+      "core"
+    ],
+    "tests.core.execution": [
+      "core"
+    ],
+    "tests.core.task": [
+      "core"
+    ],
+    "tests.core.nlp": [
+      "core"
+    ],
+    "tests.core.evaluation": [
+      "core"
+    ],
+    "tests.core.communication": [
+      "core"
+    ],
+    "tests.core.perception": [
+      "core"
+    ],
+    "tests.core.errors": [
+      "core"
+    ],
+    "tests.core.monitoring": [
+      "core"
+    ],
+    "tests.core.validation": [
+      "core"
+    ],
+    "tests.memory": [
+      "core"
+    ],
+    "tests.legal_world_model": [
+      "core"
+    ],
+    "tests.security": [
+      "core"
+    ],
+    "tests.plugins": [
+      "core"
+    ],
+    "tests.integration": [
+      "core"
+    ],
+    "tests.integration.tools": [
+      "core"
+    ],
+    "tests.integration.core.intent": [
+      "core"
+    ],
+    "tests.integration.learning": [
+      "core"
+    ],
+    "tests.integration.phase1": [
+      "core"
+    ],
+    "tests.integration.e2e": [
+      "core"
+    ],
+    "tests.planning": [
+      "core"
+    ],
+    "tests.patent.workflows": [
+      "core"
+    ],
+    "tests.agents": [
+      "core",
+      "tests"
+    ],
+    "tests.agents.integration": [
+      "core"
+    ],
+    "tests.agents.xiaona": [
+      "core"
+    ],
+    "tests.agents.xiaona.modules": [
+      "core"
+    ],
+    "tests.canvas": [
+      "core"
+    ],
+    "tests.verification": [
+      "core",
+      "services",
+      "tools"
+    ],
+    "tests.system": [
+      "core"
+    ],
+    "tests.agents.deprecated": [
+      "core",
+      "tests"
+    ],
+    "tests.agents.deprecated.mocks": [
+      "core",
+      "tests"
+    ],
+    "tests.agents.deprecated.task_tool": [
+      "core"
+    ],
+    "tests.agents.deprecated.xiaona_deprecated": [
+      "core"
+    ],
+    "tests.hooks": [
+      "core"
+    ],
+    "tests.scripts": [
+      "core",
+      "tests"
+    ],
+    "tests.task": [
+      "core"
+    ],
+    "tests.evaluation": [
+      "core"
+    ],
+    "tests.skills": [
+      "core"
+    ],
+    "tests.events": [
+      "core"
+    ],
+    "tests.query_engine": [
+      "core"
+    ],
+    "tests.performance": [
+      "core",
+      "tests"
+    ],
+    "tests.performance.tools": [
+      "core"
+    ],
+    "tests.e2e": [
+      "tests"
+    ],
+    "tests.protocols": [
+      "core"
+    ],
+    "utils.patent-search": [
+      "domains",
+      "services"
+    ],
+    "utils.system-integration": [
+      "core"
+    ],
+    "shared.auth": [
+      "core"
+    ],
+    "shared.observability.metrics": [
+      "shared"
+    ],
+    "shared.observability.tracing": [
+      "shared"
+    ],
+    "docs.training.exercises": [
+      "core",
+      "tests"
+    ],
+    "docs.examples": [
+      "core"
+    ],
+    "docs.examples.task_tool": [
+      "core"
+    ],
+    "examples": [
+      "core"
+    ],
+    "examples.tools": [
+      "core"
+    ],
+    "examples.coordinator": [
+      "core"
+    ],
+    "examples.agents": [
+      "core"
+    ],
+    "scripts.demo": [
+      "core"
+    ],
+    "scripts.analysis": [
+      "core"
+    ],
+    "scripts.memory": [
+      "core"
+    ],
+    "scripts.standalone": [
+      "core"
+    ],
+    "scripts.deploy": [
+      "core"
+    ],
+    "scripts.patent": [
+      "core",
+      "scripts"
+    ],
+    "scripts.legacy": [
+      "core"
+    ],
+    "scripts.utils": [
+      "config",
+      "core"
+    ],
+    "scripts.debate": [
+      "core",
+      "scripts"
+    ],
+    "scripts.testing": [
+      "core"
+    ],
+    "scripts.verification": [
+      "config",
+      "core"
+    ],
+    "scripts.system": [
+      "core"
+    ],
+    "scripts.xiaonuo": [
+      "core"
+    ],
+    "scripts.migration": [
+      "core",
+      "utils"
+    ],
+    "api": [
+      "core"
+    ],
+    "skills.legal-world-model.examples": [
+      "skills"
+    ],
+    "skills.public.hello-world": [
+      "core"
+    ],
+    "mcp-servers.patent_downloader.src.patent_downloader": [
+      "models"
+    ],
+    "mcp-servers.gaode-mcp-server.src.amap_mcp_server": [
+      "api",
+      "config",
+      "tools"
+    ],
+    "mcp-servers.gaode-mcp-server.src.amap_mcp_server.tools": [
+      "api"
+    ],
+    "mcp-servers.gaode-mcp-server.src.amap_mcp_server.api": [
+      "config"
+    ],
+    "apps.patent-platform.workspace.src.api": [
+      "core"
+    ],
+    "apps.patent-platform.workspace.src.perception": [
+      "core"
+    ],
+    "services.xiaonuo-agent-api": [
+      "core"
+    ],
+    "services.xiaona-xinuo.personal_assistant": [
+      "core"
+    ],
+    "services.tool-registry-api": [
+      "core"
+    ],
+    "services.legal-world-model-service": [
+      "core"
+    ],
+    "services.ai-models": [
+      "core"
+    ],
+    "services.legal-support": [
+      "core"
+    ],
+    "services.intelligent-collaboration": [
+      "core"
+    ],
+    "services.athena_iterative_search": [
+      "config",
+      "core",
+      "services"
+    ],
+    "services.xiaona-agent-api": [
+      "core"
+    ],
+    "services.optimization-service": [
+      "core"
+    ],
+    "services.plan_tracker": [
+      "core"
+    ],
+    "services.self-media-agent.app": [
+      "core",
+      "utils"
+    ],
+    "services.self-media-agent.app.core": [
+      "utils"
+    ],
+    "services.self-media-agent.app.utils": [
+      "config"
+    ],
+    "services.multimodal": [
+      "core",
+      "security"
+    ],
+    "services.multimodal.batch": [
+      "security"
+    ],
+    "services.multimodal.scripts": [
+      "core"
+    ],
+    "services.multimodal.backup.deprecated_20251217_203034": [
+      "core"
+    ],
+    "services.multimodal.backup.deprecated_20251217_203431": [
+      "core"
+    ],
+    "services.rag-qa-service": [
+      "core"
+    ],
+    "services.rag-qa-service.qa_modules.pqai-integration": [
+      "core"
+    ],
+    "services.core-services.health-checker": [
+      "core"
+    ],
+    "services.browser_automation_service": [
+      "api",
+      "config",
+      "core"
+    ],
+    "services.browser_automation_service.core": [
+      "config",
+      "core"
+    ],
+    "services.browser_automation_service.tests": [
+      "api",
+      "config",
+      "core"
+    ],
+    "services.browser_automation_service.api.middleware": [
+      "api",
+      "config",
+      "core"
+    ],
+    "services.browser_automation_service.api.routes": [
+      "api",
+      "config",
+      "core"
+    ],
+    "services.platform-integration-service": [
+      "core"
+    ],
+    "services.knowledge-graph-service": [
+      "api",
+      "core"
+    ],
+    "services.knowledge-graph-service.api": [
+      "core"
+    ],
+    "services.scripts": [
+      "config",
+      "core"
+    ],
+    "services.crawler-service": [
+      "config",
+      "core",
+      "utils"
+    ],
+    "services.crawler-service.core": [
+      "config",
+      "core"
+    ],
+    "services.crawler-service.storage": [
+      "core"
+    ],
+    "services.crawler-service.api": [
+      "config",
+      "core",
+      "utils"
+    ],
+    "services.api": [
+      "core"
+    ],
+    "services.common-tools-service": [
+      "core"
+    ],
+    "services.knowledge-unified": [
+      "core"
+    ],
+    "services.agent-services": [
+      "core"
+    ],
+    "services.agent-services.vector_db": [
+      "core",
+      "services"
+    ],
+    "services.agent-services.unified-identity": [
+      "core"
+    ],
+    "services.visualization-tools": [
+      "core",
+      "shared"
+    ],
+    "services.sync_service": [
+      "core"
+    ],
+    "services.article-writer-service.app": [
+      "config",
+      "core"
+    ],
+    "services.article-writer-service.app.core": [
+      "core"
+    ],
+    "services.video-metadata-extractor": [
+      "core"
+    ],
+    "services.video-metadata-extractor.app": [
+      "core",
+      "models"
+    ],
+    "services.communication-hub": [
+      "core"
+    ],
+    "services.ai-services": [
+      "core"
+    ],
+    "services.ai-services.ai-models.deepseek-math-v2": [
+      "core"
+    ],
+    "services.ai-services.ai-models.deepseek-math-v2.core": [
+      "config",
+      "core"
+    ],
+    "services.ai-services.ai-models.pqai-integration": [
+      "api",
+      "core"
+    ],
+    "services.ai-services.ai-models.pqai-integration.scripts": [
+      "core"
+    ],
+    "services.ai-services.ai-models.pqai-integration.api": [
+      "core"
+    ],
+    "services.yunxi-ip": [
+      "core"
+    ],
+    "services.pqai-integration": [
+      "core"
+    ],
+    "services.vectorkg-unified": [
+      "core"
+    ],
+    "services.autonomous-control": [
+      "config",
+      "core",
+      "tools"
+    ],
+    "services.autonomous-control.memory": [
+      "core"
+    ],
+    "services.autonomous-control.cognition": [
+      "core"
+    ],
+    "services.autonomous-control.agent_identity": [
+      "core"
+    ],
+    "services.autonomous-control.modules.perception": [
+      "core"
+    ],
+    "services.autonomous-control.athena_dev_assistant": [
+      "tools"
+    ],
+    "services.drawing-analysis-service": [
+      "core",
+      "services"
+    ]
+  },
+  "circular_dependencies": [
+    [
+      "core",
+      "core"
+    ]
+  ],
+  "violations": {}
+}

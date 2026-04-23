@@ -1,0 +1,115 @@
+{
+  "start_time": "2025-12-21T18:53:15.411136",
+  "collections": {
+    "patent_rules_unified": {
+      "before_optimization": {
+        "points_count": 1322,
+        "indexed_vectors_count": 0,
+        "segments_count": 7,
+        "disk_usage": {}
+      },
+      "after_optimization": {
+        "points_count": 1322,
+        "indexed_vectors_count": 0,
+        "segments_count": 7,
+        "disk_usage": {}
+      },
+      "optimization_success": false,
+      "search_performance": {
+        "search_times": [
+          3.5431385040283203,
+          3.908872604370117,
+          3.2739639282226562
+        ],
+        "result_counts": [
+          0,
+          0,
+          0
+        ],
+        "average_time": 3.5753250122070312,
+        "max_time": 3.908872604370117,
+        "min_time": 3.2739639282226562
+      }
+    },
+    "patent_vectors_production": {
+      "before_optimization": {
+        "points_count": 0,
+        "indexed_vectors_count": 0,
+        "segments_count": 7,
+        "disk_usage": {}
+      },
+      "after_optimization": {
+        "points_count": 0,
+        "indexed_vectors_count": 0,
+        "segments_count": 7,
+        "disk_usage": {}
+      },
+      "optimization_success": false,
+      "search_performance": {
+        "search_times": [
+          5.10406494140625,
+          3.793954849243164,
+          2.9571056365966797
+        ],
+        "result_counts": [],
+        "average_time": 3.9517084757486978,
+        "max_time": 5.10406494140625,
+        "min_time": 2.9571056365966797
+      }
+    },
+    "knowledge_graph_embeddings_production": {
+      "before_optimization": {
+        "points_count": 0,
+        "indexed_vectors_count": 0,
+        "segments_count": 7,
+        "disk_usage": {}
+      },
+      "after_optimization": {
+        "points_count": 0,
+        "indexed_vectors_count": 0,
+        "segments_count": 7,
+        "disk_usage": {}
+      },
+      "optimization_success": false,
+      "search_performance": {
+        "search_times": [
+          2.9191970825195312,
+          2.537965774536133,
+          2.3040771484375
+        ],
+        "result_counts": [],
+        "average_time": 2.5870800018310547,
+        "max_time": 2.9191970825195312,
+        "min_time": 2.3040771484375
+      }
+    },
+    "reasoning_embeddings_production": {
+      "before_optimization": {
+        "points_count": 0,
+        "indexed_vectors_count": 0,
+        "segments_count": 7,
+        "disk_usage": {}
+      },
+      "after_optimization": {
+        "points_count": 0,
+        "indexed_vectors_count": 0,
+        "segments_count": 7,
+        "disk_usage": {}
+      },
+      "optimization_success": false,
+      "search_performance": {
+        "search_times": [
+          3.7887096405029297,
+          3.1049251556396484,
+          3.6101341247558594
+        ],
+        "result_counts": [],
+        "average_time": 3.501256306966146,
+        "max_time": 3.7887096405029297,
+        "min_time": 3.1049251556396484
+      }
+    }
+  },
+  "overall_success": false,
+  "end_time": "2025-12-21T18:53:35.566832"
+}

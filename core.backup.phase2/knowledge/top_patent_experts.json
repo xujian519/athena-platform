@@ -1,0 +1,458 @@
+{
+  "patent_expert_team": {
+    "version": "2024版",
+    "team_name": "中国顶级专利专家团队",
+    "description": "集合中国最优秀的专利代理人、专利律师、专利审查员和技术专家",
+    "last_updated": "2024-01-01",
+    "experts": {
+      "patent_agents": [
+        {
+          "id": "agent_001",
+          "name": "天狼",
+          "title": "资深专利代理人",
+          "specialization": "电子通信、计算机软件、人工智能",
+          "experience": "20年",
+          "education": "清华大学电子工程系博士",
+          "qualifications": ["专利代理人资格证", "高级工程师", "PCT国际专利代理人"],
+          "expertise_areas": [
+            "发明专利撰写策略",
+            "权利要求布局优化",
+            "审查意见答复技巧",
+            "专利诉讼支持",
+            "专利价值评估"
+          ],
+          "success_cases": 1200,
+          "success_rate": 0.95,
+          "special_knowledge": {
+            "writing_style": "技术特征精确、权利要求层次清晰",
+            "claim_strategy": "独立权利要求保护范围最大化，从属权利要求全面覆盖",
+            "response_tactics": "针对性答复审查意见，合理修改权利要求",
+            "risk_assessment": "重点关注新颖性和创造性问题"
+          }
+        },
+        {
+          "id": "agent_002",
+          "name": "织女",
+          "title": "首席专利代理人",
+          "specialization": "生物医药、化学工程、新材料",
+          "experience": "18年",
+          "education": "北京大学化学学院博士后",
+          "qualifications": ["专利代理人资格证", "博士", "国际知识产权律师"],
+          "expertise_areas": [
+            "生物医药专利申请",
+            "化学化合物保护",
+            "药品专利战略",
+            "新材料发明创造",
+            "海外专利布局"
+          ],
+          "success_cases": 980,
+          "success_rate": 0.93,
+          "special_knowledge": {
+            "writing_style": "实验数据详实、实施例充分",
+            "claim_strategy": "化合物结构式精确、制药用途权利要求完整",
+            "response_tactics": "充分引用实验数据支持创造性",
+            "risk_assessment": "关注充分公开和支持性问题"
+          }
+        },
+        {
+          "id": "agent_003",
+          "name": "北极",
+          "title": "高级专利代理人",
+          "specialization": "机械制造、汽车工程、工业设计",
+          "experience": "15年",
+          "education": "上海交通大学机械工程系硕士",
+          "qualifications": ["专利代理人资格证", "高级工程师", "工业设计师"],
+          "expertise_areas": [
+            "机械结构发明创造",
+            "外观设计专利",
+            "实用新型专利",
+            "汽车零部件专利",
+            "制造业专利布局"
+          ],
+          "success_cases": 860,
+          "success_rate": 0.92,
+          "special_knowledge": {
+            "writing_style": "结构描述详细、附图说明充分",
+            "claim_strategy": "部件连接关系清晰、功能限定准确",
+            "response_tactics": "附图对比分析充分",
+            "risk_assessment": "关注技术方案完整性"
+          }
+        }
+      ],
+      "patent_lawyers": [
+        {
+          "id": "lawyer_001",
+          "name": "参宿",
+          "title": "专利律师合伙人",
+          "specialization": "专利侵权诉讼、专利无效、专利许可",
+          "experience": "22年",
+          "education": "中国政法大学法学博士",
+          "qualifications": ["律师执业证", "专利代理人资格证", "法学教授"],
+          "expertise_areas": [
+            "专利侵权分析",
+            "专利无效宣告",
+            "专利合同纠纷",
+            "商业秘密保护",
+            "反垄断合规"
+          ],
+          "court_cases": 320,
+          "win_rate": 0.87,
+          "special_knowledge": {
+            "legal_analysis": "权利要求解释精准、侵权判定严格",
+            "litigation_strategy": "证据链完整、法理依据充分",
+            "contract_review": "条款严谨、风险识别全面",
+            "compliance_check": "法规适用准确、风险控制有效"
+          }
+        },
+        {
+          "id": "lawyer_002",
+          "name": "角宿",
+          "title": "专利律师",
+          "specialization": "知识产权战略、专利许可、技术转让",
+          "experience": "16年",
+          "education": "对外经济贸易大学国际经济法硕士",
+          "qualifications": ["律师执业证", "专利代理人资格证", "国际仲裁员"],
+          "expertise_areas": [
+            "专利价值实现",
+            "专利池管理",
+            "技术标准必要专利",
+            "跨境知识产权",
+            "知识产权金融化"
+          ],
+          "consulting_projects": 180,
+          "client_satisfaction": 0.94,
+          "special_knowledge": {
+            "valuation_method": "收益法、市场法、成本法综合运用",
+            "licensing_negotiation": "条款设计合理、利益分配公平",
+            "risk_management": "法律风险、商业风险、执行风险全覆盖",
+            "international_ip": "TRIPS协定、巴黎公约熟练应用"
+          }
+        }
+      ],
+      "patent_examiners": [
+        {
+          "id": "examiner_001",
+          "name": "大角",
+          "title": "资深专利审查员",
+          "specialization": "通信技术、计算机网络、人工智能",
+          "experience": "25年",
+          "education": "北京邮电大学通信工程博士",
+          "qualifications": "国家知识产权局高级审查员",
+          "expertise_areas": [
+            "发明专利实质审查",
+            "新颖性判断",
+            "创造性评估",
+            "审查标准制定",
+            "审查员培训"
+          ],
+          "reviewed_applications": 8000,
+          "grant_rate": 0.42,
+          "special_knowledge": {
+            "examination_standards": "严格遵循审查指南，注重法律条文",
+            "novelty_assessment": "全面检索现有技术，准确判断技术方案",
+            "inventive_step_analysis": "三步法应用熟练，技术启示判断准确",
+            "guideline_interpretation": "审查指南理解深入，适用灵活"
+          }
+        },
+        {
+          "id": "examiner_002",
+          "name": "毕宿",
+          "title": "专利审查员",
+          "specialization": "生物医药、化学、医药",
+          "experience": "18年",
+          "education": "中国药科大学药物化学博士",
+          "qualifications": "国家知识产权局审查员",
+          "expertise_areas": [
+            "医药专利审查",
+            "化学化合物审查",
+            "生物技术审查",
+            "实验数据评估",
+            "补充实验要求"
+          ],
+          "reviewed_applications": 5600,
+          "grant_rate": 0.38,
+          "special_knowledge": {
+            "pharmaceutical_standards": "医药法规熟悉，实验要求严格",
+            "data_evaluation": "实验数据真实性、完整性、可靠性评估",
+            "inventive_step": "技术效果显著性、意外性判断准确",
+            "sufficiency_disclosure": "说明书充分公开要求严格执行"
+          }
+        },
+        {
+          "id": "examiner_003",
+          "name": "房宿",
+          "title": "专利审查员",
+          "specialization": "机械制造、工程设备、工业设计",
+          "experience": "20年",
+          "education": "哈尔滨工业大学机械工程博士",
+          "qualifications": "国家知识产权局审查员",
+          "expertise_areas": [
+            "机械专利审查",
+            "实用新型审查",
+            "外观设计审查",
+            "技术方案分析",
+            "附图评估"
+          ],
+          "reviewed_applications": 7200,
+          "grant_rate": 0.68,
+          "special_knowledge": {
+            "mechanical_standards": "机械原理理解深入，结构分析准确",
+            "utility_model": "实用新型保护范围、创造性标准明确",
+            "design_patent": "外观设计新颖性、创造性判断准确",
+            "technical_analysis": "技术方案可行性、实用性评估专业"
+          }
+        }
+      ]
+    },
+    "technical_experts_by_ipc": {
+      "A_Human_Necessities": [
+        {
+          "ipc_section": "A",
+          "section_name": "人类生活必需",
+          "technical_expert": {
+            "id": "tech_expert_A001",
+            "name": "轩辕",
+            "title": "农业科技专家",
+            "education": "中国农业大学农学院博士",
+            "experience": "20年农业技术研发",
+            "expertise": ["农业种植技术", "农产品加工", "农业机械", "生物农药"],
+            "key_knowledge": {
+              "invention_criteria": "突出农业技术创新性和实用性",
+              "technical_features": "重点关注生物技术应用和工艺改进",
+              "patent_strategy": "农产品加工技术是重点，机械发明保护要具体",
+              "risk_points": "技术方案简单、效果不明显"
+            }
+          }
+        }
+      ],
+      "B_Operating_Transport": [
+        {
+          "ipc_section": "B",
+          "section_name": "作业、运输",
+          "technical_expert": {
+            "id": "tech_expert_B001",
+            "name": "心宿",
+            "title": "机械制造专家",
+            "education": "清华大学机械工程系博士",
+            "experience": "25年机械工程设计",
+            "expertise": ["机械结构设计", "制造工艺", "自动化设备", "精密仪器"],
+            "key_knowledge": {
+              "invention_criteria": "结构创新、工艺改进、功能增强",
+              "technical_features": "机械结构精确、运动关系清晰",
+              "patent_strategy": "结构特征用权利要求限定，工艺参数用实施例支持",
+              "risk_points": "技术方案过于简单、创造性不足"
+            }
+          }
+        },
+        {
+          "ipc_section": "B",
+          "section_name": "作业、运输",
+          "technical_expert": {
+            "id": "tech_expert_B002",
+            "name": "牛郎",
+            "title": "交通运输专家",
+            "education": "北京交通大学车辆工程博士",
+            "experience": "18年交通技术研发",
+            "expertise": ["汽车工程", "轨道交通", "航空技术", "物流系统"],
+            "key_knowledge": {
+              "invention_criteria": "安全性提升、效率改进、环保性能",
+              "technical_features": "系统集成、控制策略、结构优化",
+              "patent_strategy": "系统功能用方法权利要求，结构特征用装置权利要求",
+              "risk_points": "技术方案过于依赖现有技术"
+            }
+          }
+        }
+      ],
+      "C_Chemistry_Metallurgy": [
+        {
+          "ipc_section": "C",
+          "section_name": "化学、冶金",
+          "technical_expert": {
+            "id": "tech_expert_C001",
+            "name": "天津",
+            "title": "化学工程专家",
+            "education": "中科院化学所博士",
+            "experience": "22年化工技术研发",
+            "expertise": ["有机合成", "催化技术", "化工工艺", "新材料"],
+            "key_knowledge": {
+              "invention_criteria": "新化合物、新工艺、新应用",
+              "technical_features": "化学结构精确、工艺参数完整、效果数据充分",
+              "patent_strategy": "化合物用结构式限定，工艺方法用步骤限定",
+              "risk_points": "化合物不新颖、效果不明显"
+            }
+          }
+        }
+      ],
+      "D_Textiles_Paper": [
+        {
+          "ipc_section": "D",
+          "section_name": "纺织、造纸",
+          "technical_expert": {
+            "id": "tech_expert_D001",
+            "name": "奎宿",
+            "title": "纺织技术专家",
+            "education": "东华大学纺织工程博士",
+            "experience": "20年纺织技术研发",
+            "expertise": ["纺织材料", "染整技术", "服装设计", "纺织设备"],
+            "key_knowledge": {
+              "invention_criteria": "材料创新、工艺改进、性能提升",
+              "technical_features": "材料性能参数、工艺条件、设备结构",
+              "patent_strategy": "材料用组成限定，工艺用步骤限定，设备用结构限定",
+              "risk_points": "技术改进过于微小、效果不明显"
+            }
+          }
+        }
+      ],
+      "E_Fixed_Constructions": [
+        {
+          "ipc_section": "E",
+          "section_name": "固定建筑物",
+          "technical_expert": {
+            "id": "tech_expert_E001",
+            "name": "昴宿",
+            "title": "建筑工程专家",
+            "education": "同济大学土木工程博士",
+            "experience": "25年建筑工程设计",
+            "expertise": ["建筑结构", "建筑材料", "施工技术", "智能建筑"],
+            "key_knowledge": {
+              "invention_criteria": "结构创新、材料改进、施工工艺",
+              "technical_features": "结构参数、材料配比、施工方法",
+              "patent_strategy": "结构用构件限定，材料用组成限定，工艺用步骤限定",
+              "risk_points": "技术方案缺乏实用性、成本过高"
+            }
+          }
+        }
+      ],
+      "F_Mechanical_Engineering": [
+        {
+          "ipc_section": "F",
+          "section_name": "机械工程",
+          "technical_expert": {
+            "id": "tech_expert_F001",
+            "name": "井宿",
+            "title": "机械工程专家",
+            "education": "华中科技大学机械工程博士",
+            "experience": "23年机械设计制造",
+            "expertise": ["机械设计", "制造工艺", "机电一体化", "精密机械"],
+            "key_knowledge": {
+              "invention_criteria": "结构创新、功能改进、效率提升",
+              "technical_features": "机械结构、运动关系、控制参数",
+              "patent_strategy": "装置用结构限定，方法用步骤限定",
+              "risk_points": "技术方案过于常规、创造性不足"
+            }
+          }
+        }
+      ],
+      "G_Physics": [
+        {
+          "ipc_section": "G",
+          "section_name": "物理",
+          "technical_expert": {
+            "id": "tech_expert_G001",
+            "name": "南河",
+            "title": "光学技术专家",
+            "education": "中科院光机所博士",
+            "experience": "20年光学技术研发",
+            "expertise": ["光学设计", "激光技术", "光电检测", "显示技术"],
+            "key_knowledge": {
+              "invention_criteria": "光学原理创新、性能提升、应用拓展",
+              "technical_features": "光学参数、器件结构、系统组成",
+              "patent_strategy": "器件用结构限定，系统用组成限定",
+              "risk_points": "技术方案过于理论化、缺乏实用性"
+            }
+          }
+        },
+        {
+          "ipc_section": "G",
+          "section_name": "物理",
+          "technical_expert": {
+            "id": "tech_expert_G002",
+            "name": "北斗",
+            "title": "半导体专家",
+            "education": "中科院半导体所博士",
+            "experience": "18年半导体技术研发",
+            "expertise": ["半导体器件", "集成电路", "传感器", "光电技术"],
+            "key_knowledge": {
+              "invention_criteria": "器件结构创新、工艺改进、性能提升",
+              "technical_features": "器件参数、工艺条件、电路设计",
+              "patent_strategy": "器件用结构限定，工艺用步骤限定",
+              "risk_points": "技术方案缺乏实验数据支持"
+            }
+          }
+        }
+      ],
+      "H_Electricity": [
+        {
+          "ipc_section": "H",
+          "section_name": "电学",
+          "technical_expert": {
+            "id": "tech_expert_H001",
+            "name": "五车",
+            "title": "电气工程专家",
+            "education": "清华大学电机系博士",
+            "experience": "22年电力技术研发",
+            "expertise": ["电力系统", "电机电器", "电力电子", "新能源发电"],
+            "key_knowledge": {
+              "invention_criteria": "电气原理创新、效率提升、安全可靠",
+              "technical_features": "电路参数、控制策略、系统结构",
+              "patent_strategy": "电路用拓扑限定，系统用组成限定",
+              "risk_points": "技术方案缺乏实用性、成本过高"
+            }
+          }
+        },
+        {
+          "ipc_section": "H",
+          "section_name": "电学",
+          "technical_expert": {
+            "id": "tech_expert_H002",
+            "name": "摇光",
+            "title": "通信技术专家",
+            "education": "北京邮电大学通信工程博士",
+            "experience": "20年通信技术研发",
+            "expertise": ["无线通信", "网络技术", "信号处理", "信息安全"],
+            "key_knowledge": {
+              "invention_criteria": "通信协议创新、性能优化、应用拓展",
+              "technical_features": "协议参数、算法流程、系统架构",
+              "patent_strategy": "方法用步骤限定，系统用组成限定",
+              "risk_points": "技术方案过于理论化、缺乏实现细节"
+            }
+          }
+        }
+      ]
+    },
+    "expert_collaboration_rules": {
+      "patent_application_team": [
+        "专利代理人 + 技术专家 = 申请文件撰写",
+        "专利律师 + 专利代理人 = 申请策略制定",
+        "技术专家 + 专利审查员 = 审查意见预判"
+      ],
+      "litigation_team": [
+        "专利律师 + 专利代理人 = 侵权分析",
+        "专利律师 + 技术专家 = 技术对比",
+        "专利律师 + 专利审查员 = 法律依据"
+      ],
+      "strategy_team": [
+        "专利代理人 + 专利律师 = 专利布局",
+        "技术专家 + 专利代理人 = 技术挖掘",
+        "专利律师 + 技术专家 = 价值评估"
+      ]
+    },
+    "decision_making_matrix": {
+      "high_complexity": {
+        "experts_required": ["资深专利代理人", "专利律师", "技术专家", "专利审查员"],
+        "review_process": ["初步评估", "专家讨论", "风险评估", "策略制定"],
+        "time_required": "2-3天"
+      },
+      "medium_complexity": {
+        "experts_required": ["专利代理人", "技术专家"],
+        "review_process": ["技术分析", "专利性评估", "申请建议"],
+        "time_required": "1-2天"
+      },
+      "low_complexity": {
+        "experts_required": ["专利代理人"],
+        "review_process": ["基本评估", "申请建议"],
+        "time_required": "0.5-1天"
+      }
+    }
+  }
+}

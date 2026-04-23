@@ -1,0 +1,50 @@
+{
+  "start_time": "2025-12-21T19:05:03.787833",
+  "collections_processed": {
+    "patent_laws_production": {
+      "source": "patent_laws",
+      "collection": "patent_laws_production",
+      "data_count": 5,
+      "added_vectors": 5,
+      "success": true
+    },
+    "trademark_laws_production": {
+      "source": "trademark_laws",
+      "collection": "trademark_laws_production",
+      "data_count": 5,
+      "added_vectors": 5,
+      "success": true
+    },
+    "copyright_laws_production": {
+      "source": "copyright_laws",
+      "collection": "copyright_laws_production",
+      "data_count": 5,
+      "added_vectors": 5,
+      "success": true
+    },
+    "court_judgments_production": {
+      "source": "court_judgments",
+      "collection": "court_judgments_production",
+      "data_count": 3,
+      "added_vectors": 3,
+      "success": true
+    },
+    "legal_regulations_production": {
+      "source": "regulations",
+      "collection": "legal_regulations_production",
+      "data_count": 3,
+      "added_vectors": 3,
+      "success": true
+    }
+  },
+  "total_added_vectors": 21,
+  "data_sources": {
+    "patent_laws": 5,
+    "trademark_laws": 5,
+    "copyright_laws": 5,
+    "court_judgments": 3,
+    "regulations": 3
+  },
+  "success": true,
+  "end_time": "2025-12-21T19:05:04.366716"
+}

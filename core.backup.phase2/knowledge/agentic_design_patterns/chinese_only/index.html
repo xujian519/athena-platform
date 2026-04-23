@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 智能体设计模式 - 中文版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Source Han Sans CN", sans-serif;
+            line-height: 1.8;
+            color: #333333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6572 100%);
+            color: white;
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: rgba(255,255,255,0.15);
+            padding: 1.2rem 2rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-3px);
+            background: rgba(255,255,255,0.25);
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            margin-top: 0.3rem;
+        }
+
+        .content {
+            padding: 3rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-weight: 600;
+        }
+
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .file-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+            border-color: #3498db;
+        }
+
+        .file-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+        }
+
+        .file-card h3 {
+            color: #2c3e50;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-weight: 600;
+        }
+
+        .file-card .chapter-number {
+            background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .file-card p {
+            color: #6c757d;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1.2rem;
+        }
+
+        .file-card .file-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: #868e96;
+            border-top: 1px solid #e9ecef;
+            padding-top: 1rem;
+        }
+
+        .intro-section {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 5px solid #2196f3;
+            padding: 2.5rem;
+            border-radius: 12px;
+            margin: 2.5rem 0;
+        }
+
+        .intro-section h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .intro-section p {
+            color: #495057;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .intro-section ul {
+            list-style: none;
+            color: #495057;
+        }
+
+        .intro-section li {
+            padding: 0.8rem 0;
+            padding-left: 2rem;
+            position: relative;
+            font-size: 1.05rem;
+        }
+
+        .intro-section li::before {
+            content: '✓';
+            color: #4caf50;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .learning-path {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .path-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .path-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-color: #3498db;
+        }
+
+        .path-card h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .path-card .level {
+            color: #6c757d;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .path-card .chapters {
+            color: #3498db;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .action-buttons {
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .button {
+            display: inline-block;
+            background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            margin: 0.8rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            font-weight: 500;
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+        }
+
+        .button.secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        }
+
+        .search-box {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .search-box input {
+            width: 100%;
+            max-width: 600px;
+            padding: 1.2rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            transition: border-color 0.3s ease;
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .quick-access {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+        }
+
+        .quick-access h3 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .quick-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .quick-links a {
+            background: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #2c3e50;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .quick-links a:hover {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            .header {
+                padding: 2rem;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .content {
+                padding: 2rem;
+            }
+
+            .file-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                gap: 1rem;
+            }
+
+            .stat-item {
+                padding: 0.8rem 1.5rem;
+            }
+
+            .search-box input {
+                font-size: 1rem;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 2.5rem;
+            text-align: center;
+            color: #6c757d;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .footer p {
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+        }
+
+        /* 修复中文字体和编码 */
+        .chinese-text {
+            font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Source Han Sans CN", sans-serif;
+            font-weight: 400;
+        }
+
+        /* 优化段落间距 */
+        .file-card p {
+            margin-bottom: 1.2rem;
+        }
+
+        /* 改进中英文混排 */
+        .mixed-text {
+            letter-spacing: 0.02em;
+        }
+
+        /* 确保UTF-8编码正确显示 */
+        @font-face {
+            font-family: 'PingFang SC';
+            src: local('PingFang SC'), local('PingFang SC Regular');
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="chinese-text">📚 智能体设计模式</h1>
+            <p class="chinese-text">Agentic Design Patterns 中文简体版</p>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number">424</span>
+                    <span class="stat-label">总页数</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">21</span>
+                    <span class="stat-label">核心模式</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">中文内容</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">UTF-8</span>
+                    <span class="stat-label">字符编码</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="intro-section">
+                <h2 class="chinese-text">🎯 欢迎阅读智能体设计模式中文版</h2>
+                <p class="chinese-text">《智能体设计模式》是构建智能系统的实践指南，包含21个核心设计模式，每个模式都配有详细的中文说明和实践指导。</p>
+                <ul>
+                    <li class="chinese-text">📖 系统化的智能体设计方法论（中文版）</li>
+                    <li class="chinese-text">💻 完整的代码示例和中文实现指导</li>
+                    <li class="chinese-text">🔄 从基础到高级的中文学习路径</li>
+                    <li class="chinese-text">🌐 纯中文阅读，无英文干扰</li>
+                    <li class="chinese-text">🚀 适合中国开发者的实践导向内容</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2 class="chinese-text">🔍 搜索和快速导航</h2>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="搜索章节标题或中文内容..." onkeyup="filterChapters()">
+                </div>
+
+                <div class="quick-access">
+                    <h3 class="chinese-text">📚 快速访问</h3>
+                    <div class="quick-links">
+                        <a href="README.md" class="chinese-text">📖 项目介绍</a>
+                        <a href="阅读索引.md" class="chinese-text">🧭 阅读索引</a>
+                        <a href="00-Table-of-Contents.md" class="chinese-text">📋 完整目录</a>
+                        <a href="05-Introduction.md" class="chinese-text">🎯 开始阅读</a>
+                        <a href="06-What-Makes-Agent.md" class="chinese-text">🤖 关于智能体</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="chinese-text">📚 学习路径</h2>
+                <div class="learning-path">
+                    <div class="path-card">
+                        <h3 class="chinese-text">🌟 初学者</h3>
+                        <div class="level chinese-text">第1-7章 · 基础模式</div>
+                        <div class="chapters chinese-text">提示链、路由、并行化...</div>
+                    </div>
+                    <div class="path-card">
+                        <h3 class="chinese-text">🚀 进阶者</h3>
+                        <div class="level chinese-text">第8-14章 · 高级模式</div>
+                        <div class="chapters chinese-text">记忆管理、学习适应、检索增强...</div>
+                    </div>
+                    <div class="path-card">
+                        <h3 class="chinese-text">🏭 专家级</h3>
+                        <div class="level chinese-text">第15-21章 · 生产模式</div>
+                        <div class="chapters chinese-text">通信协议、安全防护、推理技术...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="chinese-text">📖 章节列表</h2>
+                <div class="file-grid" id="chapterGrid">
+                    <!-- 章节将通过JavaScript动态加载 -->
+                    <div class="loading chinese-text">正在加载章节列表...</div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="button chinese-text" onclick="openRandomChapter()">🎲 随机章节</button>
+                <button class="button chinese-text" onclick="scrollToTop()">⬆️ 返回顶部</button>
+                <button class="button secondary chinese-text" onclick="showReadingGuide()">📖 阅读指南</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p class="chinese-text">💡 提示：点击章节卡片开始阅读 • 使用搜索功能快速定位 • 建议按顺序学习</p>
+            <p class="chinese-text">📁 本地存储位置：<code>/Users/xujian/Athena工作平台/knowledge/agentic_design_patterns/chinese_only/</code></p>
+            <p class="chinese-text">🌐 解决方案：纯中文内容 • UTF-8编码 • 优化字体</p>
+        </div>
+    </div>
+
+    <script>
+        // 章节数据（中文版）
+        const chapters = [
+            { number: 0, title: "目录", file: "00-Table-of-Contents.md", description: "完整的书籍目录结构", type: "preface" },
+            { number: 1, title: "提示链", file: "07-Chapter-01-Prompt-Chaining.md", description: "任务分解与处理流水线", type: "basic" },
+            { number: 2, title: "路由", file: "08-Chapter-02-Routing.md", description: "智能决策与动态分发", type: "basic" },
+            { number: 3, title: "并行化", file: "09-Chapter-03-Parallelization.md", description: "并发执行与性能提升", type: "basic" },
+            { number: 4, title: "反思", file: "10-Chapter-04-Reflection.md", description: "自我评估和迭代改进", type: "basic" },
+            { number: 5, title: "工具使用", file: "11-Chapter-05-Tool-Use.md", description: "外部工具与API集成", type: "basic" },
+            { number: 6, title: "规划", file: "12-Chapter-06-Planning.md", description: "多步骤计划制定与执行", type: "basic" },
+            { number: 7, title: "多智能体协作", file: "13-Chapter-07-Multi-Agent-Collaboration.md", description: "协同工作架构", type: "basic" },
+            { number: 8, title: "记忆管理", file: "14-Chapter-08-Memory-Management.md", description: "短期和长期记忆管理", type: "advanced" },
+            { number: 10, title: "模型上下文协议", file: "16-Chapter-10-Model-Context-Protocol.md", description: "标准化交互规范", type: "advanced" },
+            { number: 11, title: "目标设定与监控", file: "17-Chapter-11-Goal-Setting-And-Monitoring.md", description: "动态目标管理", type: "advanced" },
+            { number: 12, title: "异常处理与恢复", file: "18-Chapter-12-Exception-Handling-and-Recovery.md", description: "系统稳定性保障", type: "integration" },
+            { number: 13, title: "人机协作", file: "19-Chapter-13-Human-in-the-Loop.md", description: "人类智慧与AI能力融合", type: "integration" },
+            { number: 14, title: "知识检索(RAG)", file: "20-Chapter-14-Knowledge-Retrieval-RAG.md", description: "外部知识库集成", type: "integration" },
+            { number: 15, title: "智能体间通信", file: "21-Chapter-15-Inter-Agent-Communication.md", description: "高效交互协议", type: "production" },
+            { number: 16, title: "资源感知优化", file: "22-Chapter-16-Resource-Aware-Optimization.md", description: "性能与成本平衡", type: "production" },
+            { number: 17, title: "推理技术", file: "23-Chapter-17-Reasoning-Techniques.md", description: "决策质量提升", type: "production" },
+            { number: 19, title: "评估与监控", file: "25-Chapter-19-Evaluation-and-Monitoring.md", description: "性能量化评估", type: "production" },
+            { number: 20, title: "优先级排序", file: "26-Chapter-20-Prioritization.md", description: "任务优先级管理", type: "production" },
+            { number: 21, title: "探索与发现", file: "27-Chapter-21-Exploration-and-Discovery.md", description: "自主探索机制", type: "production" }
+        ];
+
+        // 其他中文文档
+        const otherDocs = [
+            { title: "项目介绍", file: "README.md", description: "了解项目概况和使用方法", icon: "📘" },
+            { title: "什么是智能体", file: "06-What-Makes-Agent.md", description: "智能体的基本概念和特性", icon: "🤖" },
+            { title: "引言", file: "05-Introduction.md", description: "书籍的背景和目标读者", icon: "📖" },
+            { title: "阅读索引", file: "阅读索引.md", description: "详细的中文阅读索引", icon: "🧭" },
+            { title: "统计报告", file: "统计报告.md", description: "中文内容提取统计", icon: "📊" }
+        ];
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadChapterList();
+            loadOtherDocuments();
+        });
+
+        function loadChapterList() {
+            const grid = document.getElementById('chapterGrid');
+            grid.innerHTML = '';
+
+            // 按类型分组
+            const basicChapters = chapters.filter(c => c.type === 'basic');
+            const advancedChapters = chapters.filter(c => c.type === 'advanced');
+            const integrationChapters = chapters.filter(c => c.type === 'integration');
+            const productionChapters = chapters.filter(c => c.type === 'production');
+
+            // 渲染章节卡片
+            renderChapterCards(basicChapters, '🌟 核心基础模式 (第1-7章)', '#27ae60');
+            renderChapterCards(advancedChapters, '🚀 高级进阶模式 (第8、10、11章)', '#f39c12');
+            renderChapterCards(integrationChapters, '🔗 集成应用模式 (第12-14章)', '#e74c3c');
+            renderChapterCards(productionChapters, '🏭 生产级模式 (第15-21章)', '#8e44ad');
+        }
+
+        function renderChapterCards(chapterList, title, color) {
+            const grid = document.getElementById('chapterGrid');
+
+            // 添加分组标题
+            if (chapterList.length > 0) {
+                const titleElement = document.createElement('div');
+                titleElement.style.gridColumn = '1 / -1';
+                titleElement.innerHTML = `<h3 style="color: ${color}; margin: 2rem 0 1rem 0; font-weight: 600;" class="chinese-text">${title}</h3>`;
+                grid.appendChild(titleElement);
+            }
+
+            // 添加章节卡片
+            chapterList.forEach(chapter => {
+                const card = document.createElement('div');
+                card.className = 'file-card';
+                card.innerHTML = `
+                    <h3>
+                        <span class="chapter-number">第${chapter.number}章</span>
+                        <span class="chinese-text">${chapter.title}</span>
+                    </h3>
+                    <p class="chinese-text">${chapter.description}</p>
+                    <div class="file-info">
+                        <span class="chinese-text">📄 ${chapter.file}</span>
+                        <span class="chinese-text">💡 ${getTypeLabel(chapter.type)}</span>
+                    </div>
+                `;
+                card.onclick = () => openChapter(chapter);
+                grid.appendChild(card);
+            });
+        }
+
+        function loadOtherDocuments() {
+            const grid = document.getElementById('chapterGrid');
+
+            // 添加其他文档标题
+            const titleElement = document.createElement('div');
+            titleElement.style.gridColumn = '1 / -1';
+            titleElement.innerHTML = `<h3 style="margin: 2rem 0 1rem 0; font-weight: 600;" class="chinese-text">📚 其他重要文档</h3>`;
+            grid.appendChild(titleElement);
+
+            // 添加其他文档卡片
+            otherDocs.forEach(doc => {
+                const card = document.createElement('div');
+                card.className = 'file-card';
+                card.innerHTML = `
+                    <h3>${doc.icon} <span class="chinese-text">${doc.title}</span></h3>
+                    <p class="chinese-text">${doc.description}</p>
+                    <div class="file-info">
+                        <span class="chinese-text">📄 ${doc.file}</span>
+                        <span class="chinese-text">📖 参考文档</span>
+                    </div>
+                `;
+                card.onclick = () => openChapter({ file: doc.file, title: doc.title });
+                grid.appendChild(card);
+            });
+        }
+
+        function getTypeLabel(type) {
+            const labels = {
+                'preface': '前言',
+                'basic': '基础',
+                'advanced': '高级',
+                'integration': '集成',
+                'production': '生产'
+            };
+            return labels[type] || type;
+        }
+
+        function openChapter(chapter) {
+            window.open(chapter.file, '_blank');
+        }
+
+        function filterChapters() {
+            const searchInput = document.getElementById('searchInput');
+            const searchTerm = searchInput.value.toLowerCase();
+            const cards = document.querySelectorAll('.file-card');
+
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function openRandomChapter() {
+            const allChapters = [...chapters, ...otherDocs];
+            const randomIndex = Math.floor(Math.random() * allChapters.length);
+            const randomChapter = allChapters[randomIndex];
+
+            if (randomChapter) {
+                openChapter(randomChapter);
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showReadingGuide() {
+            const guide = `
+📖 智能体设计模式 中文版阅读指南
+
+🎯 推荐学习顺序：
+1. 📚 先阅读"项目介绍"了解概况
+2. 🌟 学习第1-7章核心基础模式
+3. 🚀 进阶第8-14章高级模式
+4. 🏭 掌握第15-21章生产级模式
+
+💡 学习技巧：
+• 按顺序学习，循序渐进
+• 理论与实践结合
+• 多做笔记和总结
+• 应用到实际项目
+
+🔧 快捷键：
+• Ctrl+F: 页面内搜索
+• Ctrl+D: 添加书签
+
+✨ 中文版特色：
+• 纯中文内容，无英文干扰
+• UTF-8编码，完美显示
+• 优化中文字体
+• 适合中国开发者
+
+祝您学习愉快！🎉
+            `;
+            alert(guide);
+        }
+
+        // 键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+        });
+
+        // 确保页面使用UTF-8编码
+        document.charset = 'UTF-8';
+    </script>
+</body>
+</html>

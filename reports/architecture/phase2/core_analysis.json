@@ -1,0 +1,1482 @@
+{
+  "total_modules": 163,
+  "modules": {
+    "deprecated_agents": {
+      "category": "framework",
+      "file_count": 0,
+      "path": "core/deprecated_agents"
+    },
+    "judgment_vector_db": {
+      "category": "infrastructure",
+      "file_count": 19,
+      "path": "core/judgment_vector_db"
+    },
+    "personalization": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/personalization"
+    },
+    "fusion": {
+      "category": "other",
+      "file_count": 8,
+      "path": "core/fusion"
+    },
+    "microservices": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/microservices"
+    },
+    "document_parser": {
+      "category": "other",
+      "file_count": 5,
+      "path": "core/document_parser"
+    },
+    "logging.disabled": {
+      "category": "infrastructure",
+      "file_count": 3,
+      "path": "core/logging.disabled"
+    },
+    "thinking_modes": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/thinking_modes"
+    },
+    "agent_marketplace": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/agent_marketplace"
+    },
+    "neo4j": {
+      "category": "infrastructure",
+      "file_count": 2,
+      "path": "core/neo4j"
+    },
+    "metrics": {
+      "category": "infrastructure",
+      "file_count": 2,
+      "path": "core/metrics"
+    },
+    "https": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/https"
+    },
+    "middleware": {
+      "category": "other",
+      "file_count": 3,
+      "path": "core/middleware"
+    },
+    "advanced": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/advanced"
+    },
+    "database": {
+      "category": "infrastructure",
+      "file_count": 15,
+      "path": "core/database"
+    },
+    "collaboration": {
+      "category": "framework",
+      "file_count": 37,
+      "path": "core/collaboration"
+    },
+    "legal_kg": {
+      "category": "business",
+      "file_count": 7,
+      "path": "core/legal_kg"
+    },
+    "acceleration": {
+      "category": "other",
+      "file_count": 6,
+      "path": "core/acceleration"
+    },
+    "ensemble": {
+      "category": "other",
+      "file_count": 3,
+      "path": "core/ensemble"
+    },
+    "pipeline": {
+      "category": "other",
+      "file_count": 4,
+      "path": "core/pipeline"
+    },
+    "reporting": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/reporting"
+    },
+    "causality": {
+      "category": "other",
+      "file_count": 4,
+      "path": "core/causality"
+    },
+    "tracing": {
+      "category": "infrastructure",
+      "file_count": 3,
+      "path": "core/tracing"
+    },
+    "agent_collaboration": {
+      "category": "framework",
+      "file_count": 30,
+      "path": "core/agent_collaboration"
+    },
+    "cognitive": {
+      "category": "other",
+      "file_count": 4,
+      "path": "core/cognitive"
+    },
+    "knowledge_graph": {
+      "category": "other",
+      "file_count": 6,
+      "path": "core/knowledge_graph"
+    },
+    "tasks": {
+      "category": "other",
+      "file_count": 9,
+      "path": "core/tasks"
+    },
+    "tools": {
+      "category": "utils",
+      "file_count": 66,
+      "path": "core/tools"
+    },
+    "coordinator": {
+      "category": "other",
+      "file_count": 4,
+      "path": "core/coordinator"
+    },
+    "llm": {
+      "category": "ai",
+      "file_count": 43,
+      "path": "core/llm"
+    },
+    "prioritization": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/prioritization"
+    },
+    "storm_integration": {
+      "category": "other",
+      "file_count": 18,
+      "path": "core/storm_integration"
+    },
+    "context": {
+      "category": "other",
+      "file_count": 6,
+      "path": "core/context"
+    },
+    "xiaonuo_agent": {
+      "category": "other",
+      "file_count": 23,
+      "path": "core/xiaonuo_agent"
+    },
+    "capabilities": {
+      "category": "other",
+      "file_count": 11,
+      "path": "core/capabilities"
+    },
+    "analysis": {
+      "category": "other",
+      "file_count": 4,
+      "path": "core/analysis"
+    },
+    "coordination": {
+      "category": "framework",
+      "file_count": 1,
+      "path": "core/coordination"
+    },
+    "self_healing": {
+      "category": "other",
+      "file_count": 4,
+      "path": "core/self_healing"
+    },
+    "response": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/response"
+    },
+    "memory": {
+      "category": "framework",
+      "file_count": 85,
+      "path": "core/memory"
+    },
+    "cache": {
+      "category": "infrastructure",
+      "file_count": 12,
+      "path": "core/cache"
+    },
+    "patents": {
+      "category": "business",
+      "file_count": 277,
+      "path": "core/patents"
+    },
+    "update": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/update"
+    },
+    "clarification": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/clarification"
+    },
+    "enterprise": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/enterprise"
+    },
+    "legal_world_model": {
+      "category": "ai",
+      "file_count": 11,
+      "path": "core/legal_world_model"
+    },
+    "service_registry": {
+      "category": "other",
+      "file_count": 8,
+      "path": "core/service_registry"
+    },
+    "vector_db": {
+      "category": "infrastructure",
+      "file_count": 13,
+      "path": "core/vector_db"
+    },
+    "scheduling": {
+      "category": "framework",
+      "file_count": 1,
+      "path": "core/scheduling"
+    },
+    "nebula": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/nebula"
+    },
+    "intelligence": {
+      "category": "ai",
+      "file_count": 43,
+      "path": "core/intelligence"
+    },
+    "config": {
+      "category": "infrastructure",
+      "file_count": 23,
+      "path": "core/config"
+    },
+    "security": {
+      "category": "other",
+      "file_count": 8,
+      "path": "core/security"
+    },
+    "auth": {
+      "category": "other",
+      "file_count": 4,
+      "path": "core/auth"
+    },
+    "plugins": {
+      "category": "other",
+      "file_count": 3,
+      "path": "core/plugins"
+    },
+    "cognition": {
+      "category": "ai",
+      "file_count": 87,
+      "path": "core/cognition"
+    },
+    "integration": {
+      "category": "other",
+      "file_count": 8,
+      "path": "core/integration"
+    },
+    "learning": {
+      "category": "other",
+      "file_count": 50,
+      "path": "core/learning"
+    },
+    "connection_pool": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/connection_pool"
+    },
+    "optimization": {
+      "category": "other",
+      "file_count": 42,
+      "path": "core/optimization"
+    },
+    "serialization": {
+      "category": "other",
+      "file_count": 3,
+      "path": "core/serialization"
+    },
+    "kg_unified": {
+      "category": "other",
+      "file_count": 5,
+      "path": "core/kg_unified"
+    },
+    "health": {
+      "category": "other",
+      "file_count": 3,
+      "path": "core/health"
+    },
+    "platform": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/platform"
+    },
+    "prediction": {
+      "category": "other",
+      "file_count": 5,
+      "path": "core/prediction"
+    },
+    "embedding": {
+      "category": "ai",
+      "file_count": 10,
+      "path": "core/embedding"
+    },
+    "graph": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/graph"
+    },
+    "document_management": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/document_management"
+    },
+    "planning": {
+      "category": "other",
+      "file_count": 22,
+      "path": "core/planning"
+    },
+    "management": {
+      "category": "other",
+      "file_count": 7,
+      "path": "core/management"
+    },
+    "legacy": {
+      "category": "other",
+      "file_count": 3,
+      "path": "core/legacy"
+    },
+    "dependency": {
+      "category": "other",
+      "file_count": 3,
+      "path": "core/dependency"
+    },
+    "agents": {
+      "category": "framework",
+      "file_count": 84,
+      "path": "core/agents"
+    },
+    "utils": {
+      "category": "utils",
+      "file_count": 36,
+      "path": "core/utils"
+    },
+    "agent": {
+      "category": "other",
+      "file_count": 16,
+      "path": "core/agent"
+    },
+    "mcp": {
+      "category": "other",
+      "file_count": 11,
+      "path": "core/mcp"
+    },
+    "models": {
+      "category": "ai",
+      "file_count": 12,
+      "path": "core/models"
+    },
+    "rules_query": {
+      "category": "other",
+      "file_count": 3,
+      "path": "core/rules_query"
+    },
+    "observability": {
+      "category": "other",
+      "file_count": 5,
+      "path": "core/observability"
+    },
+    "state": {
+      "category": "other",
+      "file_count": 4,
+      "path": "core/state"
+    },
+    "updates": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/updates"
+    },
+    "compliance": {
+      "category": "business",
+      "file_count": 2,
+      "path": "core/compliance"
+    },
+    "exceptions": {
+      "category": "other",
+      "file_count": 1,
+      "path": "core/exceptions"
+    },
+    "tokenization": {
+      "category": "other",
+      "file_count": 3,
+      "path": "core/tokenization"
+    },
+    "rag": {
+      "category": "other",
+      "file_count": 6,
+      "path": "core/rag"
+    },
+    "reasoning": {
+      "category": "other",
+      "file_count": 32,
+      "path": "core/reasoning"
+    },
+    "explainability": {
+      "category": "other",
+      "file_count": 3,
+      "path": "core/explainability"
+    },
+    "exploration": {
+      "category": "other",
+      "file_count": 5,
+      "path": "core/exploration"
+    },
+    "feedback": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/feedback"
+    },
+    "storage": {
+      "category": "infrastructure",
+      "file_count": 3,
+      "path": "core/storage"
+    },
+    "canvas": {
+      "category": "other",
+      "file_count": 1,
+      "path": "core/canvas"
+    },
+    "search": {
+      "category": "other",
+      "file_count": 80,
+      "path": "core/search"
+    },
+    "error_handling": {
+      "category": "other",
+      "file_count": 5,
+      "path": "core/error_handling"
+    },
+    "alerts": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/alerts"
+    },
+    "adapters": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/adapters"
+    },
+    "multimodal": {
+      "category": "other",
+      "file_count": 11,
+      "path": "core/multimodal"
+    },
+    "concurrency": {
+      "category": "other",
+      "file_count": 1,
+      "path": "core/concurrency"
+    },
+    "system": {
+      "category": "other",
+      "file_count": 11,
+      "path": "core/system"
+    },
+    "ethics": {
+      "category": "other",
+      "file_count": 21,
+      "path": "core/ethics"
+    },
+    "retrieval": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/retrieval"
+    },
+    "intent": {
+      "category": "other",
+      "file_count": 34,
+      "path": "core/intent"
+    },
+    "v4": {
+      "category": "other",
+      "file_count": 5,
+      "path": "core/v4"
+    },
+    "autonomous_control": {
+      "category": "other",
+      "file_count": 11,
+      "path": "core/autonomous_control"
+    },
+    "legal_database": {
+      "category": "infrastructure",
+      "file_count": 12,
+      "path": "core/legal_database"
+    },
+    "resilience": {
+      "category": "other",
+      "file_count": 4,
+      "path": "core/resilience"
+    },
+    "knowledge": {
+      "category": "other",
+      "file_count": 49,
+      "path": "core/knowledge"
+    },
+    "sandbox": {
+      "category": "other",
+      "file_count": 5,
+      "path": "core/sandbox"
+    },
+    "performance_monitoring": {
+      "category": "infrastructure",
+      "file_count": 2,
+      "path": "core/performance_monitoring"
+    },
+    "async_processing": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/async_processing"
+    },
+    "dual_layer": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/dual_layer"
+    },
+    "execution": {
+      "category": "other",
+      "file_count": 45,
+      "path": "core/execution"
+    },
+    "ai": {
+      "category": "other",
+      "file_count": 3,
+      "path": "core/ai"
+    },
+    "hooks": {
+      "category": "other",
+      "file_count": 12,
+      "path": "core/hooks"
+    },
+    "evolution": {
+      "category": "other",
+      "file_count": 5,
+      "path": "core/evolution"
+    },
+    "implementation": {
+      "category": "other",
+      "file_count": 1,
+      "path": "core/implementation"
+    },
+    "params": {
+      "category": "other",
+      "file_count": 4,
+      "path": "core/params"
+    },
+    "persistence": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/persistence"
+    },
+    "kg": {
+      "category": "other",
+      "file_count": 3,
+      "path": "core/kg"
+    },
+    "context_management": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/context_management"
+    },
+    "task": {
+      "category": "other",
+      "file_count": 3,
+      "path": "core/task"
+    },
+    "document_export": {
+      "category": "other",
+      "file_count": 4,
+      "path": "core/document_export"
+    },
+    "nlp": {
+      "category": "ai",
+      "file_count": 86,
+      "path": "core/nlp"
+    },
+    "text_processing": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/text_processing"
+    },
+    "orchestration": {
+      "category": "framework",
+      "file_count": 36,
+      "path": "core/orchestration"
+    },
+    "governance": {
+      "category": "other",
+      "file_count": 11,
+      "path": "core/governance"
+    },
+    "registry": {
+      "category": "other",
+      "file_count": 1,
+      "path": "core/registry"
+    },
+    "prompts": {
+      "category": "ai",
+      "file_count": 12,
+      "path": "core/prompts"
+    },
+    "authenticity": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/authenticity"
+    },
+    "api": {
+      "category": "other",
+      "file_count": 23,
+      "path": "core/api"
+    },
+    "evaluation": {
+      "category": "other",
+      "file_count": 17,
+      "path": "core/evaluation"
+    },
+    "plan_documents": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/plan_documents"
+    },
+    "maintenance": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/maintenance"
+    },
+    "decision": {
+      "category": "other",
+      "file_count": 9,
+      "path": "core/decision"
+    },
+    "skills": {
+      "category": "other",
+      "file_count": 9,
+      "path": "core/skills"
+    },
+    "abstractions": {
+      "category": "other",
+      "file_count": 1,
+      "path": "core/abstractions"
+    },
+    "legal_qa": {
+      "category": "business",
+      "file_count": 8,
+      "path": "core/legal_qa"
+    },
+    "communication": {
+      "category": "other",
+      "file_count": 51,
+      "path": "core/communication"
+    },
+    "perception": {
+      "category": "ai",
+      "file_count": 86,
+      "path": "core/perception"
+    },
+    "errors": {
+      "category": "other",
+      "file_count": 4,
+      "path": "core/errors"
+    },
+    "monitoring": {
+      "category": "infrastructure",
+      "file_count": 45,
+      "path": "core/monitoring"
+    },
+    "events": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/events"
+    },
+    "query_engine": {
+      "category": "other",
+      "file_count": 11,
+      "path": "core/query_engine"
+    },
+    "resource": {
+      "category": "other",
+      "file_count": 1,
+      "path": "core/resource"
+    },
+    "performance": {
+      "category": "other",
+      "file_count": 15,
+      "path": "core/performance"
+    },
+    "legal": {
+      "category": "business",
+      "file_count": 4,
+      "path": "core/legal"
+    },
+    "modules": {
+      "category": "other",
+      "file_count": 1,
+      "path": "core/modules"
+    },
+    "data": {
+      "category": "other",
+      "file_count": 3,
+      "path": "core/data"
+    },
+    "knowledge_sync": {
+      "category": "other",
+      "file_count": 5,
+      "path": "core/knowledge_sync"
+    },
+    "vector": {
+      "category": "other",
+      "file_count": 8,
+      "path": "core/vector"
+    },
+    "chaos": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/chaos"
+    },
+    "protocols": {
+      "category": "other",
+      "file_count": 13,
+      "path": "core/protocols"
+    },
+    "logging": {
+      "category": "infrastructure",
+      "file_count": 11,
+      "path": "core/logging"
+    },
+    "rl": {
+      "category": "other",
+      "file_count": 2,
+      "path": "core/rl"
+    },
+    "services": {
+      "category": "other",
+      "file_count": 8,
+      "path": "core/services"
+    },
+    "reranking": {
+      "category": "other",
+      "file_count": 4,
+      "path": "core/reranking"
+    },
+    "validation": {
+      "category": "other",
+      "file_count": 4,
+      "path": "core/validation"
+    },
+    "emotion": {
+      "category": "business",
+      "file_count": 2,
+      "path": "core/emotion"
+    },
+    "interfaces": {
+      "category": "other",
+      "file_count": 5,
+      "path": "core/interfaces"
+    },
+    "biology": {
+      "category": "business",
+      "file_count": 6,
+      "path": "core/biology"
+    },
+    "athena": {
+      "category": "other",
+      "file_count": 4,
+      "path": "core/athena"
+    },
+    "smart_routing": {
+      "category": "framework",
+      "file_count": 2,
+      "path": "core/smart_routing"
+    },
+    "session": {
+      "category": "infrastructure",
+      "file_count": 5,
+      "path": "core/session"
+    },
+    "router": {
+      "category": "other",
+      "file_count": 1,
+      "path": "core/router"
+    }
+  },
+  "summary": {
+    "framework": 9,
+    "infrastructure": 15,
+    "other": 121,
+    "business": 7,
+    "utils": 2,
+    "ai": 9
+  },
+  "migration_plan": {
+    "deprecated_agents": {
+      "action": "reorganize",
+      "target": "core/framework/deprecated_agents"
+    },
+    "judgment_vector_db": {
+      "action": "reorganize",
+      "target": "core/infrastructure/judgment_vector_db"
+    },
+    "personalization": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "fusion": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "microservices": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "document_parser": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "logging.disabled": {
+      "action": "reorganize",
+      "target": "core/infrastructure/logging.disabled"
+    },
+    "thinking_modes": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "agent_marketplace": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "neo4j": {
+      "action": "reorganize",
+      "target": "core/infrastructure/neo4j"
+    },
+    "metrics": {
+      "action": "reorganize",
+      "target": "core/infrastructure/metrics"
+    },
+    "https": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "middleware": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "advanced": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "database": {
+      "action": "reorganize",
+      "target": "core/infrastructure/database"
+    },
+    "collaboration": {
+      "action": "reorganize",
+      "target": "core/framework/collaboration"
+    },
+    "legal_kg": {
+      "action": "move_to_domains",
+      "target": "domains/legal_kg"
+    },
+    "acceleration": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "ensemble": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "pipeline": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "reporting": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "causality": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "tracing": {
+      "action": "reorganize",
+      "target": "core/infrastructure/tracing"
+    },
+    "agent_collaboration": {
+      "action": "reorganize",
+      "target": "core/framework/agent_collaboration"
+    },
+    "cognitive": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "knowledge_graph": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "tasks": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "tools": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "coordinator": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "llm": {
+      "action": "reorganize",
+      "target": "core/ai/llm"
+    },
+    "prioritization": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "storm_integration": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "context": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "xiaonuo_agent": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "capabilities": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "analysis": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "coordination": {
+      "action": "reorganize",
+      "target": "core/framework/coordination"
+    },
+    "self_healing": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "response": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "memory": {
+      "action": "reorganize",
+      "target": "core/framework/memory"
+    },
+    "cache": {
+      "action": "reorganize",
+      "target": "core/infrastructure/cache"
+    },
+    "patents": {
+      "action": "move_to_domains",
+      "target": "domains/patents"
+    },
+    "update": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "clarification": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "enterprise": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "legal_world_model": {
+      "action": "reorganize",
+      "target": "core/ai/legal_world_model"
+    },
+    "service_registry": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "vector_db": {
+      "action": "reorganize",
+      "target": "core/infrastructure/vector_db"
+    },
+    "scheduling": {
+      "action": "reorganize",
+      "target": "core/framework/scheduling"
+    },
+    "nebula": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "intelligence": {
+      "action": "reorganize",
+      "target": "core/ai/intelligence"
+    },
+    "config": {
+      "action": "reorganize",
+      "target": "core/infrastructure/config"
+    },
+    "security": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "auth": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "plugins": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "cognition": {
+      "action": "reorganize",
+      "target": "core/ai/cognition"
+    },
+    "integration": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "learning": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "connection_pool": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "optimization": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "serialization": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "kg_unified": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "health": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "platform": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "prediction": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "embedding": {
+      "action": "reorganize",
+      "target": "core/ai/embedding"
+    },
+    "graph": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "document_management": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "planning": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "management": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "legacy": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "dependency": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "agents": {
+      "action": "reorganize",
+      "target": "core/framework/agents"
+    },
+    "utils": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "agent": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "mcp": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "models": {
+      "action": "reorganize",
+      "target": "core/ai/models"
+    },
+    "rules_query": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "observability": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "state": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "updates": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "compliance": {
+      "action": "move_to_domains",
+      "target": "domains/compliance"
+    },
+    "exceptions": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "tokenization": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "rag": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "reasoning": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "explainability": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "exploration": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "feedback": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "storage": {
+      "action": "reorganize",
+      "target": "core/infrastructure/storage"
+    },
+    "canvas": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "search": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "error_handling": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "alerts": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "adapters": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "multimodal": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "concurrency": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "system": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "ethics": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "retrieval": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "intent": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "v4": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "autonomous_control": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "legal_database": {
+      "action": "reorganize",
+      "target": "core/infrastructure/legal_database"
+    },
+    "resilience": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "knowledge": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "sandbox": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "performance_monitoring": {
+      "action": "reorganize",
+      "target": "core/infrastructure/performance_monitoring"
+    },
+    "async_processing": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "dual_layer": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "execution": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "ai": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "hooks": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "evolution": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "implementation": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "params": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "persistence": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "kg": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "context_management": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "task": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "document_export": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "nlp": {
+      "action": "reorganize",
+      "target": "core/ai/nlp"
+    },
+    "text_processing": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "orchestration": {
+      "action": "reorganize",
+      "target": "core/framework/orchestration"
+    },
+    "governance": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "registry": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "prompts": {
+      "action": "reorganize",
+      "target": "core/ai/prompts"
+    },
+    "authenticity": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "api": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "evaluation": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "plan_documents": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "maintenance": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "decision": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "skills": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "abstractions": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "legal_qa": {
+      "action": "move_to_domains",
+      "target": "domains/legal_qa"
+    },
+    "communication": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "perception": {
+      "action": "reorganize",
+      "target": "core/ai/perception"
+    },
+    "errors": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "monitoring": {
+      "action": "reorganize",
+      "target": "core/infrastructure/monitoring"
+    },
+    "events": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "query_engine": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "resource": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "performance": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "legal": {
+      "action": "move_to_domains",
+      "target": "domains/legal"
+    },
+    "modules": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "data": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "knowledge_sync": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "vector": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "chaos": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "protocols": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "logging": {
+      "action": "reorganize",
+      "target": "core/infrastructure/logging"
+    },
+    "rl": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "services": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "reranking": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "validation": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "emotion": {
+      "action": "move_to_domains",
+      "target": "domains/emotion"
+    },
+    "interfaces": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "biology": {
+      "action": "move_to_domains",
+      "target": "domains/biology"
+    },
+    "athena": {
+      "action": "review",
+      "reason": "Category not determined"
+    },
+    "smart_routing": {
+      "action": "reorganize",
+      "target": "core/framework/smart_routing"
+    },
+    "session": {
+      "action": "reorganize",
+      "target": "core/infrastructure/session"
+    },
+    "router": {
+      "action": "review",
+      "reason": "Category not determined"
+    }
+  }
+}

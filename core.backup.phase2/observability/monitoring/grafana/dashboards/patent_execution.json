@@ -1,0 +1,533 @@
+{
+  "dashboard": {
+    "title": "专利执行专项监控",
+    "description": "专利执行服务的详细监控仪表板",
+    "tags": ["athena", "patent", "execution"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 1,
+    "refresh": "30s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "今日处理专利数",
+        "type": "stat",
+        "gridPos": {"x": 0, "y": 0, "w": 6, "h": 5},
+        "targets": [
+          {
+            "expr": "daily_patents_processed",
+            "legendFormat": "今日处理"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": {"mode": "palette-classic"},
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "blue"},
+                {"value": 100, "color": "green"},
+                {"value": 500, "color": "yellow"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "累计处理专利数",
+        "type": "stat",
+        "gridPos": {"x": 6, "y": 0, "w": 6, "h": 5},
+        "targets": [
+          {
+            "expr": "total_patents_processed",
+            "legendFormat": "累计处理"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short"
+          }
+        }
+      },
+      {
+        "id": 3,
+        "title": "平均分析成本",
+        "type": "stat",
+        "gridPos": {"x": 12, "y": 0, "w": 6, "h": 5},
+        "targets": [
+          {
+            "expr": "patent_analysis_cost_yuan",
+            "legendFormat": "成本（元）"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "currencyCNY",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "green"},
+                {"value": 10, "color": "yellow"},
+                {"value": 15, "color": "red"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "分析成功率",
+        "type": "gauge",
+        "gridPos": {"x": 18, "y": 0, "w": 6, "h": 5},
+        "targets": [
+          {
+            "expr": "patent_analysis_success_rate * 100",
+            "legendFormat": "成功率"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 90, "color": "yellow"},
+                {"value": 95, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 5,
+        "title": "分析类型分布",
+        "type": "piechart",
+        "gridPos": {"x": 0, "y": 5, "w": 8, "h": 6},
+        "targets": [
+          {
+            "expr": "sum(patent_analysis_total{status=\"completed\"}) by (type)",
+            "legendFormat": "{{type}}"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "分析延迟分布",
+        "type": "heatmap",
+        "gridPos": {"x": 8, "y": 5, "w": 8, "h": 6},
+        "targets": [
+          {
+            "expr": "sum(rate(patent_analysis_duration_seconds_bucket[5m])) by (le, type)",
+            "legendFormat": "{{type}}"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "分析延迟P50/P95/P99",
+        "type": "graph",
+        "gridPos": {"x": 16, "y": 5, "w": 8, "h": 6},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, sum(rate(patent_analysis_duration_seconds_bucket[5m])) by (le, type))",
+            "legendFormat": "P50 - {{type}}",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(patent_analysis_duration_seconds_bucket[5m])) by (le, type))",
+            "legendFormat": "P95 - {{type}}",
+            "refId": "B"
+          },
+          {
+            "expr": "histogram_quantile(0.99, sum(rate(patent_analysis_duration_seconds_bucket[5m])) by (le, type))",
+            "legendFormat": "P99 - {{type}}",
+            "refId": "C"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s"
+          }
+        }
+      },
+      {
+        "id": 8,
+        "title": "LLM调用量趋势",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 11, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "sum(rate(llm_requests_total{model=\"glm-4-plus\"}[5m]))",
+            "legendFormat": "GLM-4-Plus",
+            "refId": "A"
+          },
+          {
+            "expr": "sum(rate(llm_requests_total{model=\"deepseek-chat\"}[5m]))",
+            "legendFormat": "DeepSeek-Chat",
+            "refId": "B"
+          },
+          {
+            "expr": "sum(rate(llm_requests_total{model=\"deepseek-reasoner\"}[5m]))",
+            "legendFormat": "DeepSeek-Reasoner",
+            "refId": "C"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ops"
+          }
+        }
+      },
+      {
+        "id": 9,
+        "title": "LLM响应时间",
+        "type": "graph",
+        "gridPos": {"x": 12, "y": 11, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "avg(llm_response_time_seconds{model=\"glm-4-plus\"})",
+            "legendFormat": "GLM-4-Plus",
+            "refId": "A"
+          },
+          {
+            "expr": "avg(llm_response_time_seconds{model=\"deepseek-chat\"})",
+            "legendFormat": "DeepSeek-Chat",
+            "refId": "B"
+          },
+          {
+            "expr": "avg(llm_response_time_seconds{model=\"deepseek-reasoner\"})",
+            "legendFormat": "DeepSeek-Reasoner",
+            "refId": "C"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s"
+          }
+        }
+      },
+      {
+        "id": 10,
+        "title": "Token使用量趋势",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 17, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "sum(rate(llm_tokens_total{token_type=\"input\"}[5m]))",
+            "legendFormat": "Input Tokens",
+            "refId": "A"
+          },
+          {
+            "expr": "sum(rate(llm_tokens_total{token_type=\"output\"}[5m]))",
+            "legendFormat": "Output Tokens",
+            "refId": "B"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ops"
+          }
+        }
+      },
+      {
+        "id": 11,
+        "title": "LLM成本趋势（按模型）",
+        "type": "graph",
+        "gridPos": {"x": 12, "y": 17, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "sum(llm_cost_yuan) by (model)",
+            "legendFormat": "{{model}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "currencyCNY"
+          }
+        }
+      },
+      {
+        "id": 12,
+        "title": "缓存性能对比",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 23, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "sum(rate(cache_hits_total{cache=\"redis\"}[5m])) / (sum(rate(cache_hits_total{cache=\"redis\"}[5m])) + sum(rate(cache_misses_total{cache=\"redis\"}[5m])))",
+            "legendFormat": "Redis命中率",
+            "refId": "A"
+          },
+          {
+            "expr": "sum(rate(cache_hits_total{cache=\"memory\"}[5m])) / (sum(rate(cache_hits_total{cache=\"memory\"}[5m])) + sum(rate(cache_misses_total{cache=\"memory\"}[5m])))",
+            "legendFormat": "Memory命中率",
+            "refId": "B"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percentunit",
+            "min": 0,
+            "max": 1
+          }
+        }
+      },
+      {
+        "id": 13,
+        "title": "缓存操作延迟",
+        "type": "graph",
+        "gridPos": {"x": 12, "y": 23, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "avg(cache_operation_duration_seconds{cache=\"redis\",operation=\"get\"})",
+            "legendFormat": "Redis GET",
+            "refId": "A"
+          },
+          {
+            "expr": "avg(cache_operation_duration_seconds{cache=\"redis\",operation=\"set\"})",
+            "legendFormat": "Redis SET",
+            "refId": "B"
+          },
+          {
+            "expr": "avg(cache_operation_duration_seconds{cache=\"memory\",operation=\"get\"})",
+            "legendFormat": "Memory GET",
+            "refId": "C"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s"
+          }
+        }
+      },
+      {
+        "id": 14,
+        "title": "数据库查询性能",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 29, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "avg(db_query_duration_seconds{database=\"postgresql\",operation=\"select\"})",
+            "legendFormat": "PostgreSQL SELECT",
+            "refId": "A"
+          },
+          {
+            "expr": "avg(db_query_duration_seconds{database=\"postgresql\",operation=\"insert\"})",
+            "legendFormat": "PostgreSQL INSERT",
+            "refId": "B"
+          },
+          {
+            "expr": "avg(db_query_duration_seconds{database=\"redis\",operation=\"get\"})",
+            "legendFormat": "Redis GET",
+            "refId": "C"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s"
+          }
+        }
+      },
+      {
+        "id": 15,
+        "title": "数据库连接数",
+        "type": "gauge",
+        "gridPos": {"x": 12, "y": 29, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "db_connections_active{database=\"postgresql\"}",
+            "legendFormat": "PostgreSQL: {{value}}"
+          },
+          {
+            "expr": "db_connections_active{database=\"redis\"}",
+            "legendFormat": "Redis: {{value}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "green"},
+                {"value": 50, "color": "yellow"},
+                {"value": 80, "color": "red"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 16,
+        "title": "重试统计",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 35, "w": 8, "h": 6},
+        "targets": [
+          {
+            "expr": "sum(rate(retry_total{status=\"success\"}[5m]))",
+            "legendFormat": "重试成功",
+            "refId": "A"
+          },
+          {
+            "expr": "sum(rate(retry_total{status=\"failure\"}[5m]))",
+            "legendFormat": "重试失败",
+            "refId": "B"
+          },
+          {
+            "expr": "sum(rate(retry_total{status=\"exhausted\"}[5m]))",
+            "legendFormat": "重试耗尽",
+            "refId": "C"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ops"
+          }
+        }
+      },
+      {
+        "id": 17,
+        "title": "熔断器状态",
+        "type": "stat",
+        "gridPos": {"x": 8, "y": 35, "w": 8, "h": 6},
+        "targets": [
+          {
+            "expr": "circuit_breaker_state",
+            "legendFormat": "{{breaker_name}}: {{value}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {"value": 0, "text": "CLOSED"},
+              {"value": 1, "text": "OPEN"},
+              {"value": 2, "text": "HALF_OPEN"}
+            ],
+            "color": {"mode": "thresholds"},
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "green"},
+                {"value": 1, "color": "red"},
+                {"value": 2, "color": "yellow"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 18,
+        "title": "死信队列大小",
+        "type": "gauge",
+        "gridPos": {"x": 16, "y": 35, "w": 8, "h": 6},
+        "targets": [
+          {
+            "expr": "dead_letter_queue_size",
+            "legendFormat": "队列大小"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "green"},
+                {"value": 100, "color": "yellow"},
+                {"value": 500, "color": "red"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 19,
+        "title": "并发任务数",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 41, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "sum(concurrent_tasks) by (task_type)",
+            "legendFormat": "{{task_type}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short"
+          }
+        }
+      },
+      {
+        "id": 20,
+        "title": "任务队列大小",
+        "type": "graph",
+        "gridPos": {"x": 12, "y": 41, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "task_queue_size",
+            "legendFormat": "{{queue_name}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short"
+          }
+        }
+      },
+      {
+        "id": 21,
+        "title": "内存使用趋势",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 47, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "memory_usage_bytes{type=\"rss\"} / 1024 / 1024 / 1024",
+            "legendFormat": "RSS (GB)",
+            "refId": "A"
+          },
+          {
+            "expr": "memory_usage_bytes{type=\"heap\"} / 1024 / 1024 / 1024",
+            "legendFormat": "Heap (GB)",
+            "refId": "B"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "bytes"
+          }
+        }
+      },
+      {
+        "id": 22,
+        "title": "对象池利用率",
+        "type": "gauge",
+        "gridPos": {"x": 12, "y": 47, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "object_pool_utilization{pool_type=\"dict\"} * 100",
+            "legendFormat": "Dict Pool"
+          },
+          {
+            "expr": "object_pool_utilization{pool_type=\"list\"} * 100",
+            "legendFormat": "List Pool"
+          },
+          {
+            "expr": "object_pool_utilization{pool_type=\"bytearray\"} * 100",
+            "legendFormat": "ByteArray Pool"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100
+          }
+        }
+      }
+    ]
+  }
+}

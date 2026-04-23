@@ -1,0 +1,123 @@
+{
+  "case_id": "CN202310000000.0",
+  "timestamp": "2025-12-30T12:30:25.973691",
+  "metadata": {
+    "total_tasks": 4,
+    "ai_executed": 2,
+    "human_intervened": 2,
+    "avg_confidence": 0.9425,
+    "total_execution_time": 2.002716064453125e-05
+  },
+  "task_breakdown": [
+    {
+      "task_id": "novelty_extract_claims",
+      "sequence": 0,
+      "description": "提取涉案专利权利要求",
+      "task_type": "AI_AUTOMATIC",
+      "result": {
+        "claims": [
+          {
+            "number": "1",
+            "content": "一种数据处理方法，包括..."
+          },
+          {
+            "number": "2",
+            "content": "根据权利要求1所述的方法，其特征在于..."
+          }
+        ],
+        "total_claims": 2
+      },
+      "confidence": 0.95,
+      "human_intervention": false,
+      "execution_time": 6.9141387939453125e-06
+    },
+    {
+      "task_id": "novelty_extract_evidence",
+      "sequence": 1,
+      "description": "提取对比文件证据",
+      "task_type": "AI_AUTOMATIC",
+      "result": {
+        "evidence_list": [
+          {
+            "number": "证据1",
+            "content": "CN1234567A",
+            "type": "专利文献"
+          },
+          {
+            "number": "证据2",
+            "content": "US2021000000A1",
+            "type": "专利文献"
+          }
+        ],
+        "total_evidence": 2
+      },
+      "confidence": 0.92,
+      "human_intervention": false,
+      "execution_time": 6.9141387939453125e-06
+    },
+    {
+      "task_id": "novelty_claim_comparison",
+      "sequence": 2,
+      "description": "权利要求与证据逐条对比",
+      "task_type": "AI_WITH_VALIDATION",
+      "result": {
+        "comparison_matrix": [
+          {
+            "feature": "特征A",
+            "claim": "包含",
+            "evidence": "包含",
+            "difference": "无"
+          },
+          {
+            "feature": "特征B",
+            "claim": "包含",
+            "evidence": "不包含",
+            "difference": "有"
+          }
+        ],
+        "conclusion": "存在区别特征",
+        "human_modified": true,
+        "modifications": [
+          "修正了特征描述",
+          "补充了对比细节"
+        ]
+      },
+      "confidence": 0.9,
+      "human_intervention": true,
+      "execution_time": 6.198883056640625e-06
+    },
+    {
+      "task_id": "novelty_novelty_conclusion",
+      "sequence": 3,
+      "description": "新颖性结论判断",
+      "task_type": "HUMAN_DECISION",
+      "result": {
+        "decision": "专利权全部无效",
+        "reasoning": "经综合分析现有技术特征...",
+        "confidence": 1.0,
+        "expert_signature": "专家ID: H001"
+      },
+      "confidence": 1.0,
+      "human_intervention": true,
+      "execution_time": 0.0
+    }
+  ],
+  "final_conclusion": "专利权全部无效",
+  "confidence_report": {
+    "high_confidence": 4,
+    "medium_confidence": 0,
+    "low_confidence": 0,
+    "human_verified": 2
+  },
+  "recommendations": [
+    {
+      "type": "human_intervention",
+      "priority": "medium",
+      "message": "2个任务需要人类介入",
+      "task_ids": [
+        "novelty_claim_comparison",
+        "novelty_novelty_conclusion"
+      ]
+    }
+  ]
+}

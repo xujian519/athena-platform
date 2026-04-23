@@ -1,0 +1,257 @@
+{
+  "status": "success",
+  "processing_time": 35.236749,
+  "scan_result": {
+    "total_files": 3117,
+    "directories": {
+      "根目录": {
+        "files": 3,
+        "size": 787686
+      },
+      "宪法相关法": {
+        "files": 52,
+        "size": 884565
+      },
+      "其他": {
+        "files": 3,
+        "size": 50850
+      },
+      "行政法": {
+        "files": 103,
+        "size": 2575663
+      },
+      "民法商法": {
+        "files": 25,
+        "size": 842882
+      },
+      "社会法": {
+        "files": 25,
+        "size": 598576
+      },
+      "刑法": {
+        "files": 13,
+        "size": 333525
+      },
+      "经济法": {
+        "files": 82,
+        "size": 1748235
+      },
+      "dev/scripts": {
+        "files": 4,
+        "size": 48000
+      },
+      "案例": {
+        "files": 1,
+        "size": 33
+      },
+      "案例/劳动人事": {
+        "files": 11,
+        "size": 34848
+      },
+      "案例/消费购物": {
+        "files": 19,
+        "size": 65498
+      },
+      "案例/行政协议诉讼": {
+        "files": 11,
+        "size": 51767
+      },
+      "案例/民法典": {
+        "files": 15,
+        "size": 39762
+      },
+      "部门规章": {
+        "files": 1,
+        "size": 33
+      },
+      "部门规章/人力资源社会保障部": {
+        "files": 2,
+        "size": 6716
+      },
+      "部门规章/公安部": {
+        "files": 10,
+        "size": 562564
+      },
+      "部门规章/国家安全部": {
+        "files": 1,
+        "size": 8455
+      },
+      "部门规章/市场监督管理总局": {
+        "files": 18,
+        "size": 320520
+      },
+      "诉讼与非诉讼程序法": {
+        "files": 11,
+        "size": 391797
+      },
+      "司法解释": {
+        "files": 393,
+        "size": 4582845
+      },
+      "地方性法规": {
+        "files": 1,
+        "size": 33
+      },
+      "地方性法规/上海": {
+        "files": 207,
+        "size": 3825945
+      },
+      "地方性法规/浙江": {
+        "files": 411,
+        "size": 7012538
+      },
+      "地方性法规/河南": {
+        "files": 419,
+        "size": 6533423
+      },
+      "地方性法规/北京": {
+        "files": 166,
+        "size": 2712750
+      },
+      "地方性法规/山东": {
+        "files": 473,
+        "size": 8265699
+      },
+      "宪法": {
+        "files": 7,
+        "size": 83730
+      },
+      "民法典": {
+        "files": 9,
+        "size": 325554
+      },
+      "行政法规": {
+        "files": 621,
+        "size": 8250024
+      }
+    },
+    "file_types": {
+      ".md": 3112,
+      ".sqlite3": 1,
+      ".txt": 1,
+      ".py": 3
+    },
+    "size_total": 50944516,
+    "categories": {
+      "根目录": 3,
+      "宪法相关法": 52,
+      "其他": 3,
+      "行政法": 103,
+      "民法商法": 25,
+      "社会法": 25,
+      "刑法": 13,
+      "经济法": 82,
+      "dev/scripts": 4,
+      "案例": 1,
+      "案例/劳动人事": 11,
+      "案例/消费购物": 19,
+      "案例/行政协议诉讼": 11,
+      "案例/民法典": 15,
+      "部门规章": 1,
+      "部门规章/人力资源社会保障部": 2,
+      "部门规章/公安部": 10,
+      "部门规章/国家安全部": 1,
+      "部门规章/市场监督管理总局": 18,
+      "诉讼与非诉讼程序法": 11,
+      "司法解释": 393,
+      "地方性法规": 1,
+      "地方性法规/上海": 207,
+      "地方性法规/浙江": 411,
+      "地方性法规/河南": 419,
+      "地方性法规/北京": 166,
+      "地方性法规/山东": 473,
+      "宪法": 7,
+      "民法典": 9,
+      "行政法规": 621
+    }
+  },
+  "vector_result": {
+    "status": "success",
+    "total_documents": 3112,
+    "vectors_created": 3112,
+    "collections_created": [
+      "laws_enhanced_其他",
+      "laws_enhanced_条例",
+      "laws_enhanced_案例",
+      "laws_enhanced_法律",
+      "laws_enhanced_规定"
+    ],
+    "processing_time": 10.782404,
+    "errors": []
+  },
+  "knowledge_graph_result": {
+    "status": "success",
+    "entities_created": 3423,
+    "relations_created": 6932169,
+    "categories_built": 29,
+    "hierarchies_built": 5,
+    "processing_time": 22.546968,
+    "graph_statistics": {
+      "total_entities": 3423,
+      "total_relations": 6932169,
+      "entity_types": {
+        "法律文档": 3112,
+        "法律实体": 311
+      },
+      "relation_types": {
+        "contains": 27771,
+        "related_to": 6904398
+      },
+      "categories_count": 29,
+      "hierarchy_levels": 5,
+      "graph_density": 0.5918099158356175
+    }
+  },
+  "final_statistics": {
+    "start_time": "2025-12-21 19:19:01.661553",
+    "total_documents": 3112,
+    "processed_documents": 3112,
+    "vectors_created": 3112,
+    "knowledge_graph_entities": 3423,
+    "knowledge_graph_relations": 6932169,
+    "errors": [],
+    "categories_processed": {
+      "根目录": 2,
+      "宪法相关法": 52,
+      "其他": 3,
+      "行政法": 103,
+      "民法商法": 25,
+      "社会法": 25,
+      "刑法": 13,
+      "经济法": 82,
+      "案例": 1,
+      "案例/劳动人事": 11,
+      "案例/消费购物": 19,
+      "案例/行政协议诉讼": 11,
+      "案例/民法典": 15,
+      "部门规章": 1,
+      "部门规章/人力资源社会保障部": 2,
+      "部门规章/公安部": 10,
+      "部门规章/国家安全部": 1,
+      "部门规章/市场监督管理总局": 18,
+      "诉讼与非诉讼程序法": 11,
+      "司法解释": 393,
+      "地方性法规": 1,
+      "地方性法规/上海": 207,
+      "地方性法规/浙江": 411,
+      "地方性法规/河南": 419,
+      "地方性法规/北京": 166,
+      "地方性法规/山东": 473,
+      "宪法": 7,
+      "民法典": 9,
+      "行政法规": 621
+    },
+    "file_types_processed": {},
+    "end_time": "2025-12-21T19:19:36.898326"
+  },
+  "summary": {
+    "total_files_found": 3117,
+    "documents_parsed": 3112,
+    "vectors_created": 3112,
+    "collections_created": 5,
+    "kg_entities": 3423,
+    "kg_relations": 6932169,
+    "categories_processed": 29,
+    "processing_errors": 0
+  }
+}

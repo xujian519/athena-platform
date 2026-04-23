@@ -1,10 +1,16 @@
 package gateway
 
 import (
+	"fmt"
 	"sync"
 	"testing"
 	"time"
 )
+
+// generateServiceID 生成服务实例ID（测试辅助函数）
+func generateServiceID(serviceName, host string, port, index int) string {
+	return fmt.Sprintf("%s-%s-%d-%d", serviceName, host, port, index)
+}
 
 // TestNewServiceRegistry 测试创建服务注册表
 func TestNewServiceRegistry(t *testing.T) {

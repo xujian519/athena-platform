@@ -91,12 +91,12 @@ class TaskTool:
             config=self.config,
         )
 
-    def _tool_handler(self, **_kwargs  # noqa: ARG001) -> dict[str, Any]:
+    async def _tool_handler(self, **kwargs) -> dict[str, Any]:
         """
         ToolDefinition的处理器函数
 
         Args:
-            **_kwargs  # noqa: ARG001: 任务参数
+            **kwargs: 任务参数
 
         Returns:
             任务执行结果
@@ -107,7 +107,7 @@ class TaskTool:
         agent_type = kwargs.get("agent_type")
         background = kwargs.get("background", False)
 
-        return self.execute(
+        return await self.execute_async(
             prompt=prompt,
             tools=tools,
             model=model,
@@ -124,7 +124,31 @@ class TaskTool:
         background: bool = False,
         fork_context: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
-        """执行任务
+        """执行任务 (同步包装器，如果可能建议使用 execute_async)"""
+        import asyncio
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            import nest_asyncio
+            nest_asyncio.apply()
+        return loop.run_until_complete(self.execute_async(
+            prompt=prompt,
+            tools=tools,
+            model=model,
+            agent_type=agent_type,
+            background=background,
+            fork_context=fork_context,
+        ))
+
+    async def execute_async(
+        self,
+        prompt: str,
+        tools: list[str],
+        model: str | None = None,
+        agent_type: str | None = None,
+        background: bool = False,
+        fork_context: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """异步执行任务
 
         Args:
             prompt: 任务提示词
@@ -171,9 +195,13 @@ class TaskTool:
 
         # 执行任务
         if background:
-            return self._execute_background(task_record)
+            import asyncio
+            loop = asyncio.get_running_loop()
+            # 在后台运行
+            loop.create_task(self._execute_background_async(task_record))
+            return {"status": "background", "task_id": task_record.task_id}
         else:
-            return self._execute_sync(task_record)
+            return await self._execute_sync_async(task_record)
 
     def _build_fork_context(
         self,
@@ -268,8 +296,8 @@ class TaskTool:
         if not isinstance(tools, list):
             raise ValueError("Tools必须是列表")
 
-    def _execute_sync(self, task_record: TaskRecord) -> dict[str, Any]:
-        """同步执行任务
+    async def _execute_sync_async(self, task_record: TaskRecord) -> dict[str, Any]:
+        """异步执行任务
 
         Args:
             task_record: 任务记录
@@ -289,7 +317,7 @@ class TaskTool:
                 if task_record.input:
                     task_record.input.tools = filtered_tools
 
-        # TODO: 实现同步执行逻辑
+        # TODO: 实现异步执行逻辑
         task_record.status = TaskStatus.COMPLETED
         task_record.updated_at = datetime.utcnow().isoformat() + "F"
         self.task_store.save_task(task_record)
@@ -302,8 +330,8 @@ class TaskTool:
             "filtered_tools": task_record.input.tools if task_record.input else [],
         }
 
-    def _execute_background(self, task_record: TaskRecord) -> dict[str, Any]:
-        """后台执行任务
+    async def _execute_background_async(self, task_record: TaskRecord) -> dict[str, Any]:
+        """后台异步执行任务
 
         Args:
             task_record: 任务记录
@@ -323,7 +351,14 @@ class TaskTool:
                 if task_record.input:
                     task_record.input.tools = filtered_tools
 
-        # TODO: 实现后台执行逻辑
+        # TODO: 实现后台异步执行逻辑
+        import asyncio
+        await asyncio.sleep(0.1) # 模拟后台执行延迟
+        
+        task_record.status = TaskStatus.COMPLETED
+        task_record.updated_at = datetime.utcnow().isoformat() + "F"
+        self.task_store.save_task(task_record)
+        
         return {
             "task_id": task_record.task_id,
             "status": "submitted",

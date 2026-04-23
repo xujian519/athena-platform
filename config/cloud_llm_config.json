@@ -1,0 +1,91 @@
+{
+  "description": "云端LLM服务配置",
+  "services": {
+    "deepseek": {
+      "name": "DeepSeek",
+      "api_key": "${DEEPSEEK_API_KEY}",
+      "base_url": "https://api.deepseek.com/v1",
+      "models": {
+        "chat": "deepseek-chat",
+        "reasoner": "deepseek-reasoner"
+      },
+      "pricing": {
+        "input": 0.000001,
+        "output": 0.000001,
+        "currency": "CNY",
+        "unit": "per_token"
+      },
+      "capabilities": ["chat", "reasoning", "function_calling"],
+      "recommended_for": ["日常任务", "成本敏感"]
+    },
+    "qwen": {
+      "name": "通义千问",
+      "api_key": "${DASHSCOPE_API_KEY}",
+      "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "models": {
+        "turbo": "qwen-turbo",
+        "plus": "qwen-plus",
+        "max": "qwen-max"
+      },
+      "pricing": {
+        "input": 0.0000008,
+        "output": 0.0000008,
+        "currency": "CNY",
+        "unit": "per_token"
+      },
+      "capabilities": ["chat", "function_calling", "vision"],
+      "recommended_for": ["中文任务", "多模态"]
+    },
+    "zhipu": {
+      "name": "智谱GLM",
+      "api_key": "${ZHIPU_API_KEY}",
+      "base_url": "https://open.bigmodel.cn/api/paas/v4",
+      "coding_url": "https://open.bigmodel.cn/api/coding/paas/v4",
+      "models": {
+        "flash": "glm-4-flash",
+        "plus": "glm-4-plus",
+        "air": "glm-4-air",
+        "coding": "glm-4-flash"
+      },
+      "pricing": {
+        "input": 0.0000005,
+        "output": 0.0000005,
+        "currency": "CNY",
+        "unit": "per_token"
+      },
+      "capabilities": ["chat", "function_calling", "coding"],
+      "recommended_for": ["快速响应", "成本优化", "编程任务"]
+    },
+    "claude": {
+      "name": "Claude API",
+      "api_key": "${ANTHROPIC_API_KEY}",
+      "base_url": "https://api.anthropic.com",
+      "models": {
+        "haiku": "claude-3-5-haiku-20241022",
+        "sonnet": "claude-3-5-sonnet-20241022",
+        "opus": "claude-3-5-opus-20241022"
+      },
+      "pricing": {
+        "input": 0.000003,
+        "output": 0.000015,
+        "currency": "USD",
+        "unit": "per_token"
+      },
+      "capabilities": ["chat", "reasoning", "vision", "code"],
+      "recommended_for": ["复杂推理", "代码生成", "英文任务"]
+    }
+  },
+  "routing_strategy": {
+    "default": "deepseek",
+    "cost_optimization": "zhipu",
+    "quality_optimization": "claude",
+    "chinese_optimization": "qwen",
+    "fallback_order": ["deepseek", "qwen", "zhipu", "claude"]
+  },
+  "rate_limits": {
+    "deepseek": "10000/minute",
+    "qwen": "10000/minute",
+    "zhipu": "5000/minute",
+    "claude": "5000/minute"
+  }
+}
