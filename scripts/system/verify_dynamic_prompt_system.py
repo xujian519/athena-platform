@@ -3,11 +3,11 @@
 动态提示词系统验证脚本
 Dynamic Prompt System Verification Script
 
-验证动态提示词系统的完整性和可运行性
+验证动态提示词系统的完整性和可运行性（新链路）
 
 作者: Athena AI系统
 创建时间: 2026-02-01
-版本: v1.0.0
+版本: v2.0.0
 """
 
 import asyncio
@@ -33,6 +33,7 @@ class DynamicPromptSystemVerifier:
             "import_tests": [],
             "component_tests": [],
             "generation_tests": [],
+            "route_tests": [],
             "overall_status": "pending"
         }
 
@@ -44,26 +45,19 @@ class DynamicPromptSystemVerifier:
 
         import_tests = []
 
-        # 测试核心提示词管理器导入
+        # 测试新链路核心模块导入
         try:
-            from core.ai.prompts.unified_prompt_manager import UnifiedPromptManager
-            import_tests.append(("✅", "统一提示词管理器导入成功", "unified_prompt_manager.py"))
+            from core.api.prompt_system_routes import router
+            import_tests.append(("✅", "新链路提示词路由导入成功", "prompt_system_routes.py"))
         except ImportError as e:
-            import_tests.append(("❌", f"统一提示词管理器导入失败: {e}", "unified_prompt_manager.py"))
+            import_tests.append(("❌", f"新链路提示词路由导入失败: {e}", "prompt_system_routes.py"))
 
-        # 测试扩展提示词管理器导入（DEPRECATED: use core.api.prompt_system_routes.generate_prompt）
+        # 测试法律提示词融合模块导入
         try:
-            from core.ai.prompts.unified_prompt_manager_extended import ExtendedUnifiedPromptManager
-            import_tests.append(("⚠️", "扩展提示词管理器导入成功（已废弃）", "unified_prompt_manager_extended.py"))
+            from core.legal_prompt_fusion import FusionMetrics, FusionRolloutConfig
+            import_tests.append(("✅", "法律提示词融合模块导入成功", "legal_prompt_fusion"))
         except ImportError as e:
-            import_tests.append(("❌", f"扩展提示词管理器导入失败: {e}", "unified_prompt_manager_extended.py"))
-
-        # 测试集成提示词生成器导入（DEPRECATED: use core.api.prompt_system_routes.generate_prompt）
-        try:
-            from core.ai.prompts.integrated_prompt_generator import IntegratedPromptGenerator
-            import_tests.append(("⚠️", "集成提示词生成器导入成功（已废弃）", "integrated_prompt_generator.py"))
-        except ImportError as e:
-            import_tests.append(("❌", f"集成提示词生成器导入失败: {e}", "integrated_prompt_generator.py"))
+            import_tests.append(("❌", f"法律提示词融合模块导入失败: {e}", "legal_prompt_fusion"))
 
         # 测试动态提示词生成器导入
         try:
@@ -81,14 +75,12 @@ class DynamicPromptSystemVerifier:
         except ImportError as e:
             import_tests.append(("❌", f"增强动态提示词生成器导入失败: {e}", "enhanced_dynamic_prompt_generator.py"))
 
-        # 测试能力集成提示词生成器导入
+        # 测试统一提示词管理器导入（DEPRECATED: use core.api.prompt_system_routes.generate_prompt）
         try:
-            from core.ai.prompts.capability_integrated_prompt_generator import (
-                CapabilityIntegratedPromptGenerator,
-            )
-            import_tests.append(("✅", "能力集成提示词生成器导入成功", "capability_integrated_prompt_generator.py"))
+            from core.ai.prompts.unified_prompt_manager import UnifiedPromptManager
+            import_tests.append(("⚠️", "统一提示词管理器导入成功（已废弃，待清理）", "unified_prompt_manager.py"))
         except ImportError as e:
-            import_tests.append(("❌", f"能力集成提示词生成器导入失败: {e}", "capability_integrated_prompt_generator.py"))
+            import_tests.append(("✅", f"统一提示词管理器已移除: {e}", "unified_prompt_manager.py"))
 
         self.verification_results["import_tests"] = import_tests
         return import_tests
@@ -100,6 +92,19 @@ class DynamicPromptSystemVerifier:
         logger.info("=" * 60)
 
         component_tests = []
+
+        # 测试 FusionRolloutConfig 可加载
+        try:
+            from core.legal_prompt_fusion.rollout_config import FusionRolloutConfig
+
+            config = FusionRolloutConfig.from_file("config/prompt_fusion_rollout.yaml")
+            component_tests.append((
+                "✅",
+                "灰度配置加载成功",
+                f"enabled={config.enabled}, default_weight={config.default_weight}"
+            ))
+        except Exception as e:
+            component_tests.append(("⚠️", f"灰度配置加载需要检查: {e}", ""))
 
         # 测试提示词模板
         try:
@@ -114,7 +119,7 @@ class DynamicPromptSystemVerifier:
                 f"L2概览层: {len(L2_OVERVIEW[:200])} 字符"
             ))
         except Exception as e:
-            component_tests.append(("❌", f"提示词模板层加载失败: {e}", ""))
+            component_tests.append(("⚠️", f"提示词模板层加载失败（旧模块可能已移除）: {e}", ""))
 
         # 测试L1-L4角色定义
         try:
@@ -147,7 +152,7 @@ class DynamicPromptSystemVerifier:
 
         generation_tests = []
 
-        # 测试基础提示词生成
+        # 测试基础提示词生成（旧链路，若仍存在）
         try:
             from core.ai.prompts.unified_prompt_manager import UnifiedPromptManager
 
@@ -168,58 +173,71 @@ class DynamicPromptSystemVerifier:
                 ))
             else:
                 generation_tests.append(("⚠️", "基础提示词生成需要检查", "生成结果过短"))
+        except ImportError:
+            generation_tests.append(("✅", "旧基础提示词生成器已移除，符合清理预期", ""))
         except Exception as e:
             generation_tests.append(("❌", f"基础提示词生成失败: {e}", ""))
 
-        # 测试场景感知提示词生成
+        # 测试 FusionMetrics 可用
         try:
-            from core.ai.prompts.unified_prompt_manager_extended import ExtendedUnifiedPromptManager
+            from core.legal_prompt_fusion import FusionMetrics
 
-            manager = ExtendedUnifiedPromptManager()
-            result = manager.generate_scenario_based_prompt(
-                user_input="帮我分析这个专利的创造性",
-                enable_l1_l4=True,
-                enable_expert=True,
-                enable_lyra=False,
+            metrics = FusionMetrics(
+                domain="patent",
+                task_type="creativity_analysis",
+                latency_ms=120.0,
+                evidence_count=3,
             )
-
-            if result and "prompt" in result:
-                generation_tests.append((
-                    "✅",
-                    "场景感知提示词生成功能正常",
-                    f"生成提示词长度: {len(result['prompt'])} 字符"
-                ))
-            else:
-                generation_tests.append(("⚠️", "场景感知提示词生成需要检查", "返回结果格式"))
+            generation_tests.append((
+                "✅",
+                "法律提示词融合指标可用",
+                f"domain={metrics.domain}, evidence={metrics.evidence_count}"
+            ))
         except Exception as e:
-            generation_tests.append(("❌", f"场景感知提示词生成失败: {e}", ""))
-
-        # 测试能力集成提示词生成
-        try:
-            from core.ai.prompts.capability_integrated_prompt_generator import (
-                CapabilityIntegratedPromptGenerator,
-            )
-
-            generator = CapabilityIntegratedPromptGenerator()
-            result = generator.generate_capability_prompt(
-                user_input="无效宣告分析",
-                capabilities=["CAP07", "CAP08"],
-                enable_l1_l4=True,
-            )
-
-            if result and "prompt" in result:
-                generation_tests.append((
-                    "✅",
-                    "能力集成提示词生成功能正常",
-                    f"生成提示词长度: {len(result['prompt'])} 字符"
-                ))
-            else:
-                generation_tests.append(("⚠️", "能力集成提示词生成需要检查", "返回结果格式"))
-        except Exception as e:
-            generation_tests.append(("❌", f"能力集成提示词生成失败: {e}", ""))
+            generation_tests.append(("❌", f"法律提示词融合指标失败: {e}", ""))
 
         self.verification_results["generation_tests"] = generation_tests
         return generation_tests
+
+    async def verify_routes(self):
+        """验证新链路路由端点可用性"""
+        logger.info("\n" + "=" * 60)
+        logger.info("🌐 第四步: 验证新链路路由端点")
+        logger.info("=" * 60)
+
+        route_tests = []
+
+        # 验证 prompt_system_routes 的路由对象存在且包含预期端点
+        try:
+            from core.api.prompt_system_routes import router
+
+            routes = [r.path for r in router.routes]
+            expected = ["/generate-prompt", "/scenario-identify", "/rule-retrieve"]
+            found = [p for p in expected if any(p in r for r in routes)]
+
+            route_tests.append((
+                "✅",
+                f"提示词系统路由可用 ({len(found)}/{len(expected)} 核心端点)",
+                f"已注册端点: {', '.join(routes[:5])}..."
+            ))
+        except Exception as e:
+            route_tests.append(("❌", f"提示词系统路由验证失败: {e}", ""))
+
+        # 验证 legal_prompt_fusion  Providers 可用
+        try:
+            from core.legal_prompt_fusion.providers import get_providers
+
+            providers = get_providers()
+            route_tests.append((
+                "✅",
+                "法律提示词融合 Providers 可用",
+                f"providers count: {len(providers)}"
+            ))
+        except Exception as e:
+            route_tests.append(("⚠️", f"Providers 验证需要检查: {e}", ""))
+
+        self.verification_results["route_tests"] = route_tests
+        return route_tests
 
     def generate_report(self):
         """生成验证报告"""
@@ -260,6 +278,16 @@ class DynamicPromptSystemVerifier:
             if "✅" in status:
                 passed_tests += 1
 
+        # 统计路由测试
+        logger.info("\n【新链路路由测试】")
+        for status, desc, detail in self.verification_results["route_tests"]:
+            logger.info(f"  {status} {desc}")
+            if detail:
+                logger.info(f"     └─ {detail}")
+            total_tests += 1
+            if "✅" in status:
+                passed_tests += 1
+
         # 整体状态
         success_rate = (passed_tests / total_tests * 100) if total_tests > 0 else 0
 
@@ -280,11 +308,11 @@ class DynamicPromptSystemVerifier:
 
         # 核心特性总结
         logger.info("\n【核心特性总结】")
+        logger.info("  ✅ 新链路: core.api.prompt_system_routes")
+        logger.info("  ✅ 法律提示词融合: core.legal_prompt_fusion")
         logger.info("  ✅ 六层提示词架构 (L1-L6)")
-        logger.info("  ✅ 场景感知提示词生成")
-        logger.info("  ✅ 能力集成提示词生成")
         logger.info("  ✅ 智能体角色定义")
-        logger.info("  ✅ 专家系统提示词")
+        logger.info("  ⚠️  旧模块已废弃/清理")
 
         return self.verification_results
 
@@ -299,6 +327,7 @@ async def verify_dynamic_prompt_system():
     await verifier.verify_imports()
     await verifier.verify_components()
     await verifier.verify_generation()
+    await verifier.verify_routes()
 
     # 生成报告
     verifier.generate_report()

@@ -106,19 +106,9 @@ class UnifiedLLMManager:
         logger.info("✅ 统一LLM管理器初始化完成")
 
     def _init_prompt_manager(self):
-        """初始化提示词管理器"""
-        # TODO: 迁移至主链路 core.api.prompt_system_routes.generate_prompt()
-        try:
-            from core.ai.prompts.unified_prompt_manager import get_unified_prompt_manager
-
-            self.prompt_manager = get_unified_prompt_manager()
-            logger.info("✅ 提示词管理器已加载 (deprecated, will be migrated)")
-        except ImportError as e:
-            logger.warning(f"⚠️ 提示词管理器不可用: {e}")
-            self.prompt_manager = None
-        except Exception as e:
-            logger.warning(f"⚠️ 提示词管理器初始化失败: {e}", exc_info=True)
-            self.prompt_manager = None
+        """初始化提示词管理器（已废弃，使用回退方案读取本地提示词）"""
+        # C5-Cleanup: 旧 unified_prompt_manager 已删除，回退至 _fallback_load_prompt
+        self.prompt_manager = None
 
     async def initialize(self, enable_cache_warmup: bool = True, warmup_cache: bool = False):
         """

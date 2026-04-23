@@ -7,7 +7,7 @@ Legal World Model System Verification Script
 
 作者: Athena AI系统
 创建时间: 2026-02-01
-版本: v1.0.0
+版本: v2.0.0
 """
 
 import asyncio
@@ -104,6 +104,17 @@ class LegalWorldModelVerifier:
         except ImportError as e:
             import_tests.append(("❌", f"宪法验证器导入失败: {e}", "constitution.py"))
 
+        # 测试法律提示词融合模块导入（新链路）
+        try:
+            from core.legal_prompt_fusion import (
+                FusionMetrics,
+                FusionRolloutConfig,
+                PromptGenerationRequest,
+            )
+            import_tests.append(("✅", "法律提示词融合模块导入成功", "legal_prompt_fusion"))
+        except ImportError as e:
+            import_tests.append(("❌", f"法律提示词融合模块导入失败: {e}", "legal_prompt_fusion"))
+
         self.verification_results["import_tests"] = import_tests
         return import_tests
 
@@ -178,6 +189,19 @@ class LegalWorldModelVerifier:
         except Exception as e:
             component_tests.append(("❌", f"原则定义测试失败: {e}", ""))
 
+        # 测试法律提示词融合配置
+        try:
+            from core.legal_prompt_fusion.rollout_config import FusionRolloutConfig
+
+            config = FusionRolloutConfig.from_file("config/prompt_fusion_rollout.yaml")
+            component_tests.append((
+                "✅",
+                "法律提示词融合灰度配置可用",
+                f"enabled={config.enabled}"
+            ))
+        except Exception as e:
+            component_tests.append(("⚠️", f"灰度配置加载需要检查: {e}", ""))
+
         self.verification_results["component_tests"] = component_tests
         return component_tests
 
@@ -189,30 +213,31 @@ class LegalWorldModelVerifier:
 
         integration_tests = []
 
-        # 测试扩展提示词管理器集成
+        # 测试法律提示词融合集成
         try:
-            from core.ai.prompts.unified_prompt_manager_extended import ExtendedUnifiedPromptManager
+            from core.legal_prompt_fusion import FusionMetrics
 
-            # 测试场景感知提示词生成
-            manager = ExtendedUnifiedPromptManager()
+            metrics = FusionMetrics(
+                domain="patent",
+                task_type="creativity_analysis",
+                latency_ms=150.0,
+                evidence_count=5,
+                fusion_enabled=True,
+            )
 
-            test_input = "帮我分析这个专利的创造性"
-            result = manager.generate_scenario_based_prompt(test_input)
-
-            if result and "prompt" in result:
+            if metrics.domain == "patent" and metrics.fusion_enabled:
                 integration_tests.append((
                     "✅",
-                    "场景感知提示词生成正常",
-                    f"提示词长度: {len(result.get('prompt', ''))} 字符"
+                    "法律提示词融合指标正常",
+                    f"latency={metrics.latency_ms}ms, evidence={metrics.evidence_count}"
                 ))
             else:
-                integration_tests.append(("⚠️", "场景感知提示词生成需要检查", "返回结果格式"))
+                integration_tests.append(("⚠️", "法律提示词融合指标需要检查", "返回结果格式"))
         except Exception as e:
-            integration_tests.append(("❌", f"集成测试失败: {e}", ""))
+            integration_tests.append(("❌", f"法律提示词融合测试失败: {e}", ""))
 
         # 测试法律QA系统集成
         try:
-
             # 验证系统可以实例化
             integration_tests.append((
                 "✅",

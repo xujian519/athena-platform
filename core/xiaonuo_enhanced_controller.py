@@ -42,11 +42,16 @@ from core.orchestration.supervisor_orchestrator import (
     orchestrate_task,
 )
 
-# 导入统一提示词管理器
-from core.prompts.unified_prompt_manager import (
-    PromptFormat,
-    get_unified_prompt_manager,
-)
+# 导入统一提示词管理器（已废弃，保留向后兼容）
+try:
+    from core.prompts.unified_prompt_manager import (
+        PromptFormat,
+        get_unified_prompt_manager,
+    )
+except ImportError:
+    PromptFormat = None  # type: ignore
+    get_unified_prompt_manager = None  # type: ignore
+
 
 # 导入原始控制器
 from core.xiaonuo_platform_controller import PlatformController
@@ -138,6 +143,9 @@ class XiaonuoEnhancedController:
 
     async def _load_prompt_layers_from_manager_async(self):
         """从统一提示词管理器加载提示词层 (异步版本)"""
+        if self.prompt_manager is None or PromptFormat is None:
+            logger.warning("⚠️ 统一提示词管理器不可用，使用默认提示词层")
+            return False
         try:
             # 尝试从统一管理器加载小娜提示词
             result = await self.prompt_manager.load_prompt(
@@ -265,7 +273,7 @@ class XiaonuoEnhancedController:
         Returns:
             提示词内容,失败返回None
         """
-        if self.prompt_manager is None:
+        if self.prompt_manager is None or PromptFormat is None:
             logger.warning("⚠️ prompt_manager 未初始化，使用回退方案")
             return self._fallback_load_prompt(agent, layers)
 
@@ -543,8 +551,17 @@ class XiaonuoEnhancedController:
         # 失败模式防护指标
         prevention_metrics = self.failure_prevention.get_metrics()
 
-        # 统一提示词管理器统计 ✨
-        prompt_manager_stats = self.prompt_manager.get_statistics()
+        # 统一提示词管理器统计（已废弃，保留兼容）
+        if self.prompt_manager is not None:
+            try:
+                prompt_manager_stats = self.prompt_manager.get_statistics()
+                pm_enabled = True
+            except Exception:
+                prompt_manager_stats = None
+                pm_enabled = False
+        else:
+            prompt_manager_stats = None
+            pm_enabled = False
 
         return {
             "performance_metrics": {
@@ -567,20 +584,24 @@ class XiaonuoEnhancedController:
                 "alerts_resolved": prevention_metrics.alerts_resolved,
                 "last_check": prevention_metrics.last_check_time,
             },
-            "prompt_manager": {  # ✨ 新增
-                "l1l4_available": prompt_manager_stats["systems"]["l1l4_available"],
-                "lyra_available": prompt_manager_stats["systems"]["lyra_available"],
-                "total_loads": prompt_manager_stats["statistics"]["total_loads"],
-                "total_optimizations": prompt_manager_stats["statistics"]["total_optimizations"],
-                "total_combined": prompt_manager_stats["statistics"]["total_combined"],
-                "cached_items": prompt_manager_stats["cache"]["cached_items"],
-            },
+            "prompt_manager": (
+                {
+                    "l1l4_available": prompt_manager_stats["systems"]["l1l4_available"],
+                    "lyra_available": prompt_manager_stats["systems"]["lyra_available"],
+                    "total_loads": prompt_manager_stats["statistics"]["total_loads"],
+                    "total_optimizations": prompt_manager_stats["statistics"]["total_optimizations"],
+                    "total_combined": prompt_manager_stats["statistics"]["total_combined"],
+                    "cached_items": prompt_manager_stats["cache"]["cached_items"],
+                }
+                if prompt_manager_stats
+                else {"status": "deprecated", "note": "use core.api.prompt_system_routes"}
+            ),
             "optimization_enabled": {
                 "supervisor_orchestrator": True,
                 "context_compressor": True,
                 "dynamic_selector": True,
                 "failure_prevention": True,
-                "unified_prompt_manager": True,  # ✨ 新增
+                "unified_prompt_manager": pm_enabled,
             },
             "generated_at": datetime.now().isoformat(),
         }

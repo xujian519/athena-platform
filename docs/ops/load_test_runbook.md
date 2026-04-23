@@ -41,53 +41,116 @@
 - [ ] 团队通知已发送
 - [ ] 回滚方案已确认
 
+### 1.5 依赖安装与环境准备
+
+首次执行或在新机器上压测前，确保以下依赖已安装：
+
+```bash
+# 1. Python 3.11（必须）
+python3.11 --version  # 期望输出 Python 3.11.x
+
+# 2. Locust（压测引擎）
+pip install locust>=2.15.0
+locust --version
+
+# 3. bc（脚本内部计算 spawn-rate 用）
+# macOS:
+brew install bc
+# Ubuntu/Debian:
+# sudo apt-get install bc
+
+# 4. jq（JSON 格式化与提取）
+# macOS:
+brew install jq
+# Ubuntu/Debian:
+# sudo apt-get install jq
+
+# 5. 验证数据集与脚本完整性
+bash -n scripts/run_load_test.sh
+ls tests/load/payloads/*.json  # 应输出 3 个 JSON 文件
+```
+
 ---
 
 ## 二、压测执行（Execution）
 
 ### 2.1 实际执行步骤
 
-按以下顺序执行，每步确认成功后再进入下一步：
+按以下顺序执行，每步确认成功后再进入下一步。
 
-**步骤 1：环境确认**
+#### 步骤 1：环境确认
+
 ```bash
 export HOST="http://localhost:8000"
+
+# 服务健康检查
 curl -f "${HOST}/api/v1/prompt-system/health" || { echo "服务未就绪"; exit 1; }
+
+# 扩展健康检查（数据库、缓存、LLM）
+curl -f "${HOST}/api/v1/prompt-system/health/extended" | jq .
+
+# 压测机资源检查（CPU < 50%, 内存 > 2G 空闲）
+# macOS:
+vm_stat | head -5
+# Linux:
+# free -h
 ```
 
-**步骤 2：清空缓存并重置指标**
+#### 步骤 2：清空缓存并重置指标
+
 ```bash
+# 清空提示词模板缓存
 curl -X POST "${HOST}/api/v1/prompt-system/cache/clear"
+
+# 重置服务内部性能指标
 curl -X POST "${HOST}/api/v1/prompt-system/monitoring/metrics/reset"
+
+# 确认缓存已清空
+curl -s "${HOST}/api/v1/prompt-system/cache/stats" | jq '.current_size'
+# 期望输出: 0
 ```
 
-**步骤 3：执行基线压测（10 用户 → 50 用户 → 100 用户）**
+#### 步骤 3：执行基线压测（阶梯式加载）
+
 ```bash
 # 低并发基线（10 用户，5 分钟）
+# 目标：验证服务在轻量负载下的响应能力与稳定性
 ./scripts/run_load_test.sh "${HOST}" 10 5m
 
 # 中等并发基线（50 用户，10 分钟）
+# 目标：验证服务在中等压力下的吞吐量与资源瓶颈
 ./scripts/run_load_test.sh "${HOST}" 50 10m
 
 # 高并发基线（100 用户，10 分钟）
+# 目标：验证服务在接近容量上限时的表现，识别降级拐点
 ./scripts/run_load_test.sh "${HOST}" 100 10m
 ```
 
 > **判停标准**：任意一步若触及「红色熔断阈值」（见 2.3），立即停止后续压测，保留现场并进入「四、应急响应」。
+> **渐进式观察**：每完成一个并发阶梯，观察 2 分钟 Locust 统计，确认 P95/P99 无持续上升趋势后再进入下一阶梯。
 
-**步骤 4：采集 Prometheus 指标**
+#### 步骤 4：采集 Prometheus 指标
+
 ```bash
-curl -s "${HOST}/api/v1/prompt-system/metrics?format=prometheus" > reports/load/prometheus_$(date +%Y%m%d_%H%M%S).txt
+PROM_FILE="reports/load/prometheus_$(date +%Y%m%d_%H%M%S).txt"
+curl -s "${HOST}/api/v1/prompt-system/metrics?format=prometheus" > "${PROM_FILE}"
+echo "Prometheus 指标已保存: ${PROM_FILE}"
 ```
 
-**步骤 5：采集性能快照**
+#### 步骤 5：采集性能快照
+
 ```bash
-curl -s "${HOST}/api/v1/prompt-system/monitoring/performance" | jq . > reports/load/performance_snapshot_$(date +%Y%m%d_%H%M%S).json
+PERF_FILE="reports/load/performance_snapshot_$(date +%Y%m%d_%H%M%S).json"
+curl -s "${HOST}/api/v1/prompt-system/monitoring/performance" | jq . > "${PERF_FILE}"
+echo "性能快照已保存: ${PERF_FILE}"
 ```
 
-**步骤 6：采集缓存统计**
+#### 步骤 6：采集缓存统计
+
 ```bash
-curl -s "${HOST}/api/v1/prompt-system/cache/stats" | jq . > reports/load/cache_stats_$(date +%Y%m%d_%H%M%S).json
+CACHE_FILE="reports/load/cache_stats_$(date +%Y%m%d_%H%M%S).json"
+curl -s "${HOST}/api/v1/prompt-system/cache/stats" | jq . > "${CACHE_FILE}"
+echo "缓存统计已保存: ${CACHE_FILE}"
 ```
 
 ### 2.2 实时指标 Dashboard
@@ -106,17 +169,37 @@ curl -s "${HOST}/api/v1/prompt-system/cache/stats" | jq . > reports/load/cache_s
 
 ### 2.3 关键阈值与熔断决策
 
+#### 压测中实时阈值
+
 | 指标 | 黄色警告 | 红色熔断 | 熔断动作 |
 |---|---|---|---|
-| 错误率 | ≥ 1% | ≥ 5% | 立即停止压测，保留现场 |
-| P99 延迟 | ≥ 10s | ≥ 30s | 降级并发或停止压测 |
-| CPU 使用率 | ≥ 70% | ≥ 90% | 观察是否持续 2min，是则停止 |
-| 内存使用 | ≥ 80% | ≥ 95% | 立即停止，防止 OOM |
-| LLM 队列深度 | ≥ 20 | ≥ 50 | 停止压测，通知 LLM 运维 |
-| 数据库连接数 | ≥ 80% 上限 | ≥ 95% 上限 | 停止压测，检查连接泄漏 |
+| 错误率 | ≥ 1% | ≥ 5% | **立即停止压测**，保留现场 |
+| P99 延迟 | ≥ 10s | ≥ 30s | 降级并发或**停止压测** |
+| CPU 使用率 | ≥ 70% | ≥ 90% | 观察是否持续 2min，是则**停止** |
+| 内存使用 | ≥ 80% | ≥ 95% | **立即停止**，防止 OOM |
+| LLM 队列深度 | ≥ 20 | ≥ 50 | **停止压测**，通知 LLM 运维 |
+| 数据库连接数 | ≥ 80% 上限 | ≥ 95% 上限 | **停止压测**，检查连接泄漏 |
 | 缓存命中率 | < 50% | < 30% | 检查缓存配置或预热逻辑 |
 
-> **熔断原则**：一旦触及红色阈值，优先停止压测，保护生产环境，事后分析日志定位根因。
+#### 何时停止压测（Stop）
+
+- **任意指标触及红色熔断阈值**：优先保护生产环境，立即停止 locust，保留现场数据。
+- **渐进式降级迹象**：P95/P99 随时间线性上升，错误率缓慢增长，即使未达红色阈值也应提前终止当前阶梯。
+- **服务健康检查失败**：`health/extended` 返回非 200 或任一依赖（Neo4j/PostgreSQL/Redis）状态不为 `ok`。
+- **团队人工叫停**：测试负责人或值班 SRE 有权随时叫停。
+
+#### 何时回滚（Rollback）
+
+回滚比「停止」更进一步，意味着当前部署版本存在**不可逆缺陷**，需恢复到上一个稳定版本：
+
+| 场景 | 判停标准 | 回滚动作 |
+|---|---|---|
+| 数据损坏 | 缓存污染导致大量用户收到错误/空提示词，且 `cache/clear` 后仍复现 | 执行 4.2 紧急回滚流程 |
+| 连接泄漏 | 错误率 ≥ 5% 且服务重启后 5 分钟内再次恶化 | 回滚到上一版本并排查代码 |
+| 配置污染 | 新版本配置导致 P99 ≥ 30s 持续 3min 以上，且降级配置无效 | 回滚并锁定配置变更 |
+| 依赖不兼容 | Neo4j/PostgreSQL driver 升级后查询性能断崖式下跌 | 回滚镜像版本 |
+
+> **熔断原则**：一旦触及红色阈值，优先停止压测；若停止后服务仍无法自愈，则触发回滚。保护生产环境优先于完成压测。
 
 ### 2.4 日志观察
 
@@ -178,21 +261,79 @@ tail -f /var/log/athena/prompt-system.log | grep "fusion_metrics"
 
 ### 4.1 压测导致服务异常
 
+**立即执行（2 分钟内完成）：**
+
 ```bash
 # 1. 立即停止 locust（Ctrl+C 或 kill）
+pkill -f locust || true
+
 # 2. 检查服务健康状态
 curl -f ${HOST}/api/v1/prompt-system/health/extended | jq .
 
 # 3. 如服务不健康，执行重启（根据部署方式）
 # Docker Compose:
-docker compose restart prompt-system
+docker compose -f deploy/docker-compose.yml restart prompt-system
 
 # Kubernetes:
 kubectl rollout restart deployment/prompt-system -n athena
+kubectl rollout status deployment/prompt-system -n athena --timeout=120s
 
-# 4. 清理缓存并复位指标
+# 4. 清理缓存并复位指标（防止脏数据影响后续请求）
 curl -X POST ${HOST}/api/v1/prompt-system/cache/clear
 curl -X POST ${HOST}/api/v1/prompt-system/monitoring/metrics/reset
+
+# 5. 验证恢复
+sleep 5
+curl -f ${HOST}/api/v1/prompt-system/health || echo "服务仍未恢复，需人工介入"
+```
+
+### 4.2 紧急回滚流程
+
+当压测引发**数据损坏、配置污染或核心功能不可用**时，触发回滚：
+
+```bash
+# 1. 停止压测
+pkill -f locust || true
+
+# 2. 回滚到上一个稳定版本（K8s）
+kubectl rollout undo deployment/prompt-system -n athena
+kubectl rollout status deployment/prompt-system -n athena --timeout=180s
+
+# 3. 回滚到上一个稳定版本（Docker Compose）
+# 先停止当前服务
+docker compose -f deploy/docker-compose.yml down prompt-system
+# 切换到上一个镜像标签并启动
+docker compose -f deploy/docker-compose.yml up -d prompt-system
+
+# 4. 回滚后强制清空缓存（避免新旧版本模板混用）
+curl -X POST ${HOST}/api/v1/prompt-system/cache/clear
+
+# 5. 验证回滚成功
+curl -f ${HOST}/api/v1/prompt-system/health/extended | jq .
+# 确认版本号、数据库连接、缓存状态均正常
+```
+
+> **回滚触发条件**：
+> - 错误率 ≥ 5% 且服务重启后无法恢复
+> - 数据库连接泄漏导致其他业务受影响
+> - 缓存污染导致大量用户收到错误提示词
+> - P99 延迟 ≥ 30s 持续 3 分钟以上
+
+### 4.3 数据库连接池耗尽应急
+
+```bash
+# 1. 立即停止压测
+pkill -f locust
+
+# 2. 查看当前数据库连接数（Neo4j）
+curl -s -u neo4j:password "http://neo4j-host:7474/db/manage/server/jmx/domain/org.neo4j/instance%3Dkernel%230%2Cname%3DConfiguration" | jq .
+
+# 3. 重启应用服务以释放泄漏连接
+kubectl rollout restart deployment/prompt-system -n athena
+
+# 4. 临时降低应用连接池上限（如使用 HikariCP / Neo4j driver）
+# 修改环境变量并重启：
+# NEO4J_MAX_CONNECTION_POOL_SIZE=10
 ```
 
 ### 4.2 联系清单
@@ -320,3 +461,4 @@ curl -X POST http://localhost:8000/api/v1/prompt-system/monitoring/metrics/reset
 |---|---|---|---|
 | 2026-04-23 | v1.0 | 初始版本 | Agent-QA |
 | 2026-04-23 | v1.1 | 补充实际执行步骤、判停标准、Prometheus 指标采集、缓存优化建议 | Agent-PerfObs |
+| 2026-04-23 | v1.2 | 补充依赖安装、阶梯式加载观察、紧急回滚流程、数据库连接池应急、判停标准细化 | Agent-PerfObs |

@@ -1,0 +1,95 @@
+{
+  "summary": {
+    "total": 4,
+    "passed": 4,
+    "failed": 0,
+    "pass_rate": 100.0
+  },
+  "results": [
+    {
+      "name": "Phase 1: 统一配置管理系统",
+      "passed": true,
+      "details": [
+        "检查配置文件...",
+        "✓ 所有配置文件存在 (10个)",
+        "测试配置加载...",
+        "✓ UnifiedSettings加载成功",
+        "  - 数据库: postgresql://athena:athena123@...",
+        "  - Redis: redis://:redis123@localhost:63...",
+        "  - LLM: anthropic",
+        "测试配置加载器...",
+        "✓ 配置加载器成功",
+        "  - 服务名: xiaona",
+        "检查配置适配器...",
+        "✓ 配置适配器可用",
+        "检查文档...",
+        "✓ 文档完整 (3个)"
+      ],
+      "errors": [],
+      "score": 100.0
+    },
+    {
+      "name": "Phase 2: 服务注册中心",
+      "passed": true,
+      "details": [
+        "检查服务注册模块...",
+        "✓ models",
+        "✓ storage",
+        "✓ storage_memory",
+        "✓ health_checker",
+        "✓ discovery",
+        "✓ registry",
+        "测试内存存储...",
+        "✓ 注册功能正常",
+        "✓ 获取功能正常",
+        "✓ 查询功能正常",
+        "测试服务发现...",
+        "✓ 服务发现功能正常",
+        "✓ 服务列表功能正常",
+        "测试统一注册中心...",
+        "✓ 注册中心统计功能正常",
+        "检查文档...",
+        "✓ 文档完整 (2个)"
+      ],
+      "errors": [],
+      "score": 100.0
+    },
+    {
+      "name": "代码质量检查",
+      "passed": true,
+      "details": [
+        "检查Python语法...",
+        "✓ 语法检查通过 (20个文件)",
+        "检查关键模块导入...",
+        "✓ core.config.unified_settings",
+        "✓ core.config.unified_config_loader",
+        "✓ core.service_registry.registry",
+        "✓ core.service_registry.discovery",
+        "检查代码组织...",
+        "✓ 配置管理模块存在",
+        "✓ 服务注册模块存在",
+        "检查类型注解...",
+        "✓ 类型注解使用 (2/2个文件)"
+      ],
+      "errors": [],
+      "score": 100.0
+    },
+    {
+      "name": "功能测试",
+      "passed": true,
+      "details": [
+        "测试配置管理功能...",
+        "✓ 配置功能测试 (3/3通过)",
+        "测试服务注册功能...",
+        "✓ 服务注册功能正常",
+        "✓ 心跳功能正常",
+        "测试服务发现功能...",
+        "✓ 服务发现功能正常",
+        "执行集成测试...",
+        "✓ 集成测试通过"
+      ],
+      "errors": [],
+      "score": 100.0
+    }
+  ]
+}

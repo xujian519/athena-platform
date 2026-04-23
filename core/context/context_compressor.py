@@ -147,7 +147,7 @@ class ContextCompressor:
     # ========================================
     # 专利法律领域关键词权重 (增强功能)
     # ========================================
-    LEGAL_KEYWORDS: dict[str, dict[str, list[str]] = {
+    LEGAL_KEYWORDS: dict[str, dict[str, list[str]]] = {
         "critical": [
             # 关键关键词 - 必须保留
             "权利要求",

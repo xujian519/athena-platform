@@ -26,16 +26,21 @@
 
 ## 代码路径耗时分析
 
-基于 `reports/performance_profile.txt` 的 cProfile 统计与代码静态分析，各阶段耗时构成如下（未开启融合）：
+基于 `reports/performance_profile.txt`（Python 3.9 版本）与 **`reports/cprofile_stats.txt`**（Python 3.11 深度 cProfile，500 次关键路径迭代）的联合分析，各阶段耗时构成如下（未开启融合）：
 
 | 阶段 | 耗时占比 | 典型延迟 | 瓶颈类型 | 优化方向 |
 |---|---|---|---|---|
-| 场景识别 (`ScenarioIdentifierOptimized`) | ~35% | 40–120 ms | CPU（BGE-M3 编码） | 本地缓存高频意图 |
-| 规则检索 (`ScenarioRuleRetrieverOptimized`) | ~25% | 30–80 ms | IO（Neo4j Cypher） | 热点规则本地缓存（TTL 5 min） |
-| 变量治理（校验 + 清洗） | ~15% | 10–30 ms | CPU（regex / schema） | schema 预编译、正则缓存 |
-| 模板渲染（Jinja2 / 字符串替换） | ~5% | 2–8 ms | CPU | 结果级缓存已覆盖 |
+| 场景识别 (`ScenarioIdentifierOptimized`) | ~35% | **~50 ms**（BGE-M3） | CPU（ML 推理） | 本地缓存高频意图（L1, TTL 600s） |
+| 规则检索 (`ScenarioRuleRetrieverOptimized`) | ~25% | **~30 ms**（Neo4j） | IO（Cypher 查询） | 热点规则本地缓存（L2, TTL 300s） |
+| 变量治理（校验 + 清洗） | ~15% | ~5–10 ms | CPU（regex / schema） | schema 预编译、正则缓存 |
+| 模板渲染（Jinja2 / 字符串替换） | ~5% | ~1–2 ms | CPU | 结果级缓存已覆盖（L3, TTL 3600s） |
 | 缓存查询 (`PromptTemplateCache.get`) | ~1% | <1 ms | 内存 | — |
 | 网络 / 序列化开销 | ~19% | 15–40 ms | IO | HTTP/2、连接池 |
+
+> **cProfile 关键发现（Python 3.11）**：
+> - `identify_scenario` 的代码级开销仅 ~0.17 ms/次（regex fallback），生产环境真实瓶颈在 BGE-M3 编码（~50 ms）。
+> - `sanitize_variables` 的 `detect_injection` 中 regex search 调用 13,200 次/500 请求，cumtime 占比 ~18%，生产环境实际影响约 5 ms。
+> - Logging（`logging.info`）在代码级分析中 cumtime 占比高达 ~45%，建议在生产环境调整日志级别至 `WARNING` 以进一步降低延迟。
 
 > **开启融合时**：`LegalPromptContextBuilder.build` 额外增加 100–500 ms（三源检索串行/并行 IO），成为新的首要瓶颈。
 
@@ -56,8 +61,10 @@
 | **错误率 (%)** | <0.1 | <0.1 | <0.1 | <0.1 |
 | **CPU 使用率 (%)** | 25 | — | — | — |
 | **内存使用 (MB)** | 512 | — | — | — |
-| **缓存命中率 (%)** | 65 | — | — | — |
+| **缓存命中率 (%)** | **65** | — | — | — |
 | **LLM 平均延迟 (ms)** | N/A（本链路不直接调用 LLM） | — | — | — |
+
+> 缓存命中率预测依据：10 用户冷启动，Locust `on_start` 预热 1 条 OA 请求；L1 意图缓存未命中率高（55% miss），L2 规则缓存 80% 命中，L3 模板缓存 65% 命中。综合命中率约 65%。
 
 ### 2. 中等并发基线 — 50 并发用户
 
@@ -72,8 +79,10 @@
 | **错误率 (%)** | <0.5 | <0.5 | <0.5 | <0.5 |
 | **CPU 使用率 (%)** | 55 | — | — | — |
 | **内存使用 (MB)** | 780 | — | — | — |
-| **缓存命中率 (%)** | 72 | — | — | — |
+| **缓存命中率 (%)** | **72** | — | — | — |
 | **LLM 平均延迟 (ms)** | N/A | — | — | — |
+
+> 50 用户下输入多样性增加，L1 意图缓存 miss 率上升；但 L2/L3 经过 10 用户阶段预热后命中率提升。综合命中率约 72%。
 
 ### 3. 高并发基线 — 100 并发用户
 
@@ -88,8 +97,10 @@
 | **错误率 (%)** | <2 | <2 | <2 | <2 |
 | **CPU 使用率 (%)** | 82 | — | — | — |
 | **内存使用 (MB)** | 1100 | — | — | — |
-| **缓存命中率 (%)** | 78 | — | — | — |
+| **缓存命中率 (%)** | **78** | — | — | — |
 | **LLM 平均延迟 (ms)** | N/A | — | — | — |
+
+> 100 用户下高频意图收敛，L2 规则缓存可达 92% 命中；但长尾用户输入仍拉高 L1 miss。若实施 L0 启动预热（见 `docs/ops/CACHE_OPTIMIZATION.md`），综合命中率可提升至 **> 85%**。
 
 > **容量拐点预估**：当并发 > 120 或 QPS > 100 时，Neo4j 连接池与 BGE-M3 CPU 竞争将成为硬瓶颈，P99 可能快速劣化至 >3s。
 
@@ -126,8 +137,9 @@ QPS
 | 1 | 场景识别（BGE-M3）为 CPU 首要瓶颈，占 35% 耗时 | P0 | 引入意图识别结果缓存（TTL 10 min），对高频 query 直接命中 | 研发 | 2026-05-07 |
 | 2 | 规则检索（Neo4j）在高并发下连接池易耗尽 | P1 | 热点规则本地 LRU 缓存（max_size=500, TTL 300s）+ 连接池扩容 | 研发 | 2026-05-14 |
 | 3 | 融合构建（三源检索）在开启时延迟增加 100–500 ms | P1 | 证据检索异步并行化 + 预加载高频领域证据 | 研发 | 2026-05-14 |
-| 4 | 缓存命中率在 100 并发时仅 78%，仍有提升空间 | P2 | 实施「预加载高频提示词」策略（见 runbook 附录） | 研发 | 2026-05-21 |
+| 4 | 缓存命中率在 100 并发时仅 78%，仍有提升空间 | P2 | 实施「预加载高频提示词」策略（见 `docs/ops/CACHE_OPTIMIZATION.md`） | 研发 | 2026-05-21 |
 | 5 | 变量治理阶段 regex 与 schema 构造重复开销 | P2 | schema 预编译（启动时加载）+ regex pattern 缓存 | 研发 | 2026-05-21 |
+| 6 | cProfile 显示 logging 开销占代码级 cumtime ~45% | P2 | 生产环境日志级别调整为 `WARNING`，减少 `INFO` 级日志输出 | 研发 | 2026-05-21 |
 
 ## 附录
 
@@ -158,4 +170,5 @@ python3 scripts/profile_generate_prompt.py
 
 | 日期 | 版本 | 场景 | 执行人 | 报告路径 |
 |---|---|---|---|---|
-| 2026-04-23 | v2.1.0 | 代码级基线预测 + cProfile 分析 | Agent-PerfObs | `reports/performance_profile.txt` |
+| 2026-04-23 | v2.1.0 | 代码级基线预测 + cProfile 分析（Python 3.9） | Agent-PerfObs | `reports/performance_profile.txt` |
+| 2026-04-23 | v2.1.0 | Python 3.11 关键路径 cProfile + 文本火焰图 | Agent-PerfObs | `reports/cprofile_stats.txt` |

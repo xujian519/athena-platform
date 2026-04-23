@@ -4,55 +4,33 @@
 
 定义 FusionMetrics 数据类，用于在融合链路中收集和传递观测数据，
 支持字典与 JSON 序列化，便于接入 ELK / Loki / Prometheus 等观测系统。
+
+.. note::
+    FusionMetrics 已迁移至 ``metrics_collector.py``，本模块保留向后兼容的
+    重新导出与异步发送逻辑。
 """
 
-
-import json
 import logging
-from dataclasses import asdict, dataclass, field
-from typing import Any
 
 logger = logging.getLogger(__name__)
 
-
-@dataclass
-class FusionMetrics:
-    """单次融合请求的完整指标快照。
-
-    字段覆盖延迟、证据分布、缓存命中、来源降级、错误等维度，
-    可直接通过 to_json() 输出为结构化日志。
-    """
-
-    request_id: str
-    domain: str
-    task_type: str
-    fusion_enabled: bool = False
-    latency_ms: float = 0.0
-    evidence_count: int = 0
-    evidence_by_source: dict[str, int] = field(default_factory=dict)
-    cache_hit: bool = False
-    wiki_revision: str = "unknown"
-    template_version: str = ""
-    source_degradation: list[str] = field(default_factory=list)
-    error: str | None = None
-    # B5-PerfObs 新增维度
-    token_count_input: int = 0
-    token_count_output: int = 0
-    evidence_relevance_score: float = 0.0
-    budget_usage: float = 0.0
-
-    def to_dict(self) -> dict[str, Any]:
-        """转换为普通字典，None 值保留为 null。"""
-        return asdict(self)
-
-    def to_json(self) -> str:
-        """序列化为 JSON 字符串（确保中文不转义）。"""
-        return json.dumps(self.to_dict(), ensure_ascii=False, separators=(",", ":"))
+# 从独立模块导入增强版 FusionMetrics
+from core.legal_prompt_fusion.metrics_collector import (  # noqa: F401
+    FusionMetrics,
+    get_prompt_metrics_collector,
+)
 
 
 async def _send_metrics_async(metrics: FusionMetrics) -> None:
     """异步发送融合指标。失败不阻断主链路，仅记录 warning 日志。"""
     try:
+        # 0. 写入本地环形缓冲区（C4-Metrics）
+        try:
+            collector = get_prompt_metrics_collector()
+            collector.record(metrics)
+        except Exception:
+            pass
+
         # 1. 结构化 JSON 日志输出（接入 ELK / Loki）
         logger.info("fusion_metrics %s", metrics.to_json())
 
@@ -97,7 +75,7 @@ async def _send_metrics_async(metrics: FusionMetrics) -> None:
                     {"source_type": degraded_source},
                 )
 
-            # B5-PerfObs 新增指标
+            # B5-PerfObs / C4-Metrics 新增指标
             collector.observe_histogram(
                 "fusion_token_count",
                 float(metrics.token_count_input),
@@ -115,7 +93,7 @@ async def _send_metrics_async(metrics: FusionMetrics) -> None:
             )
             collector.observe_histogram(
                 "fusion_budget_usage_ratio",
-                metrics.budget_usage,
+                metrics.budget_usage_ratio,
                 labels,
             )
         except Exception:

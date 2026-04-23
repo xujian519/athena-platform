@@ -9,8 +9,10 @@ Dynamic Prompt System API Routes
 
 import asyncio
 import logging
+import os
 import time
 import uuid
+from dataclasses import asdict
 from datetime import datetime
 from typing import Any
 
@@ -31,6 +33,21 @@ from core.config.api_config import (
 from core.prompt_engine.budget.utils import TokenEstimator
 
 _token_estimator = TokenEstimator()
+
+# C1-Budget: Context Budget Manager（环境变量控制，默认 8K）
+from core.prompt_engine.budget.manager import ContextBudgetManager
+from core.prompt_engine.budget.truncation import EvidenceItem
+
+_budget_manager: ContextBudgetManager | None = None
+
+
+def _get_budget_manager() -> ContextBudgetManager:
+    """获取 Budget Manager 单例（延迟初始化）。"""
+    global _budget_manager
+    if _budget_manager is None:
+        total_budget = int(os.getenv("LEGAL_FUSION_BUDGET_TOKENS", "8192"))
+        _budget_manager = ContextBudgetManager(total_budget=total_budget)
+    return _budget_manager
 
 # 创建路由器
 router = APIRouter(prefix="/api/v1/prompt-system", tags=["动态提示词系统"])
@@ -466,49 +483,53 @@ async def generate_prompt(request: PromptGenerateRequest):
         # 4. 准备变量(用于缓存键和变量替换)
         all_variables = {**context.extracted_variables, **(request.additional_context or {})}
 
-        # 4.5 变量治理（校验 + 清洗）
+        # 4.5 变量治理（校验 + 清洗 + Schema Registry 集成）
         try:
             from core.prompt_engine.sanitizer import PromptSanitizer
             from core.prompt_engine.schema import PromptSchema, VariableSpec, VariableType
             from core.prompt_engine.validators import VariableValidator
+            from core.prompt_engine.registry import PromptSchemaRegistry
 
             sanitizer = PromptSanitizer()
             validator = VariableValidator()
+            registry = PromptSchemaRegistry()
 
-            # 构造 schema（从规则的 variables 字段或独立存储）
-            # 当前阶段：从 rule.variables 推断 schema，后续可迁移到独立 schema 存储
-            schema_vars = []
-            if hasattr(rule, "variables") and rule.variables:
-                for var_name, var_info in rule.variables.items():
-                    if isinstance(var_info, dict):
-                        schema_vars.append(VariableSpec(
-                            name=var_name,
-                            type=VariableType(var_info.get("type", "string")),
-                            required=var_info.get("required", True),
-                            source=var_info.get("source", ""),
-                            default=var_info.get("default"),
-                            max_length=var_info.get("max_length"),
-                        ))
-                    else:
-                        # 简单字符串标记，默认 required=True
-                        schema_vars.append(VariableSpec(name=var_name, required=True))
-            else:
-                # 无 schema 时，从模板中提取占位符作为 required 变量
-                import re
-                placeholders = set(
-                    re.findall(r"\{\{?\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}?\}", rule.system_prompt_template)
-                ) | set(
-                    re.findall(r"\{\{?\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}?\}", rule.user_prompt_template)
+            # C2-SchemaIntegration: 优先从 PromptSchemaRegistry 获取 Schema
+            schema = registry.get(rule.rule_id)
+            if schema is None:
+                # 回退：从规则的 variables 字段或模板推断 schema（存量模板兼容）
+                schema_vars = []
+                if hasattr(rule, "variables") and rule.variables:
+                    for var_name, var_info in rule.variables.items():
+                        if isinstance(var_info, dict):
+                            schema_vars.append(VariableSpec(
+                                name=var_name,
+                                type=VariableType(var_info.get("type", "string")),
+                                required=var_info.get("required", True),
+                                source=var_info.get("source", ""),
+                                default=var_info.get("default"),
+                                max_length=var_info.get("max_length"),
+                            ))
+                        else:
+                            # 简单字符串标记，默认 required=True
+                            schema_vars.append(VariableSpec(name=var_name, required=True))
+                else:
+                    # 无 schema 时，从模板中提取占位符作为 required 变量
+                    import re
+                    placeholders = set(
+                        re.findall(r"\{\{?\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}?\}", rule.system_prompt_template)
+                    ) | set(
+                        re.findall(r"\{\{?\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}?\}", rule.user_prompt_template)
+                    )
+                    for ph in placeholders:
+                        if ph not in ("__wiki_revision", "__fusion_template_version"):
+                            schema_vars.append(VariableSpec(name=ph, required=True))
+
+                schema = PromptSchema(
+                    rule_id=rule.rule_id,
+                    template_version=getattr(rule, "template_version", "1.0.0"),
+                    variables=schema_vars,
                 )
-                for ph in placeholders:
-                    if ph not in ("__wiki_revision", "__fusion_template_version"):
-                        schema_vars.append(VariableSpec(name=ph, required=True))
-
-            schema = PromptSchema(
-                rule_id=rule.rule_id,
-                template_version=getattr(rule, "template_version", "1.0.0"),
-                variables=schema_vars,
-            )
 
             # 校验
             validation = validator.validate(schema, all_variables)
@@ -523,12 +544,28 @@ async def generate_prompt(request: PromptGenerateRequest):
                     },
                 )
 
+            # C2-SchemaIntegration: 填充默认值（对 registry 和 fallback schema 均生效）
+            all_variables = registry.upgrade_variables(rule.rule_id, all_variables)
+
             # 清洗
             sanitized_vars, risks = sanitizer.sanitize_variables(all_variables, schema=schema)
             high_risks = [r for r in risks if r.level in ("high", "critical")]
             if high_risks:
                 logger.warning(f"检测到高风险注入: {[r.pattern_matched for r in high_risks]}")
             all_variables = sanitized_vars
+
+            # C2-SchemaIntegration: 暴露 Schema 覆盖率指标到 Prometheus
+            try:
+                from core.monitoring.metrics_collector import get_metrics_collector
+
+                collector = get_metrics_collector()
+                coverage = registry.get_coverage_report()
+                collector.set_gauge("prompt_schema_total", float(coverage["total_schemas"]))
+                collector.set_gauge("prompt_schema_with_variables", float(coverage["schemas_with_variables"]))
+                collector.set_gauge("prompt_schema_coverage_rate", coverage["coverage_rate"])
+            except Exception:
+                # 指标暴露失败不阻断主链路
+                pass
 
         except HTTPException:
             raise
@@ -590,6 +627,7 @@ async def generate_prompt(request: PromptGenerateRequest):
         fusion_metrics.cache_hit = False
 
         # 7. 生成提示词（融合注入点）
+        budget_metrics = None  # C1-BudgetIntegration
         if fusion_enabled:
             from core.legal_prompt_fusion.models import PromptGenerationRequest
             from core.legal_prompt_fusion.prompt_context_builder import LegalPromptContextBuilder
@@ -614,8 +652,68 @@ async def generate_prompt(request: PromptGenerateRequest):
                 }
                 fusion_metrics.wiki_revision = fusion_result.context.freshness.get("wiki_revision", "unknown")
                 fusion_metrics.template_version = fusion_result.template_version
+
+                # C1-BudgetIntegration: 接入 Budget Manager
                 system_prompt = fusion_result.system_prompt
                 user_prompt = fusion_result.user_prompt
+                if fusion_result.context.evidence:
+                    try:
+                        evidence_items = [
+                            EvidenceItem(
+                                content=ev.content,
+                                relevance_score=ev.score,
+                                source=ev.source_type.value,
+                                metadata={"original": ev},
+                            )
+                            for ev in fusion_result.context.evidence
+                        ]
+                        budget_result = _get_budget_manager().build_context(
+                            system_prompt=system_prompt,
+                            user_query=user_prompt,
+                            evidence_list=evidence_items,
+                            elapsed_ms=fusion_metrics.latency_ms if fusion_metrics.latency_ms > 0 else None,
+                        )
+                        budget_metrics = budget_result["metrics"]
+                        fusion_metrics.evidence_count = budget_metrics.evidence_count_after
+                        fusion_metrics.budget_usage = budget_metrics.budget_usage_ratio
+                        fusion_metrics.budget_usage_ratio = budget_metrics.budget_usage_ratio
+                        fusion_metrics.budget_metrics = asdict(budget_metrics)
+
+                        if budget_result["target_mode"] in ("single_source", "aborted"):
+                            logger.warning(
+                                f"⚠️ Budget rollback: {budget_result['rollback'].message}"
+                            )
+                            fusion_metrics.source_degradation.append("budget_rollback")
+                            system_prompt, user_prompt = rule.substitute_variables(all_variables)
+                        else:
+                            kept_items = budget_result["evidence"]
+                            if budget_metrics.evidence_count_after < budget_metrics.evidence_count_before:
+                                kept_evidence = [
+                                    item.metadata["original"] for item in kept_items
+                                ]
+                                fusion_result.context.evidence = kept_evidence
+                                fusion_result.context.legal_articles = builder._convert_to_snippets(
+                                    kept_evidence, SourceType.POSTGRES
+                                )
+                                fusion_result.context.graph_relations = builder._convert_to_snippets(
+                                    kept_evidence, SourceType.NEO4J
+                                )
+                                fusion_result.context.wiki_background = builder._convert_to_snippets(
+                                    kept_evidence, SourceType.WIKI
+                                )
+                                system_prompt = builder._render_system_prompt(fusion_result.context)
+                                user_prompt = builder._render_user_prompt(
+                                    fusion_result.context, request.additional_context or {}
+                                )
+
+                            fusion_metrics.evidence_by_source = {
+                                "postgres": len(fusion_result.context.legal_articles),
+                                "neo4j": len(fusion_result.context.graph_relations),
+                                "wiki": len(fusion_result.context.wiki_background),
+                            }
+                    except Exception as budget_err:
+                        logger.warning(f"⚠️ Budget manager 异常，跳过裁剪: {budget_err}")
+                        # 保持原有的 system_prompt / user_prompt
             except Exception as e:
                 fusion_metrics.latency_ms = round((time.monotonic() - fusion_start) * 1000, 3)
                 fusion_metrics.error = str(e)
@@ -634,7 +732,13 @@ async def generate_prompt(request: PromptGenerateRequest):
         if fusion_enabled and "fusion_result" in locals() and fusion_result.context.evidence:
             scores = [ev.score for ev in fusion_result.context.evidence if hasattr(ev, "score")]
             fusion_metrics.evidence_relevance_score = round(sum(scores) / len(scores), 4) if scores else 0.0
-        fusion_metrics.budget_usage = round(fusion_metrics.token_count_output / 8192, 4)
+        if budget_metrics is not None:
+            fusion_metrics.budget_usage = budget_metrics.budget_usage_ratio
+            fusion_metrics.budget_usage_ratio = budget_metrics.budget_usage_ratio
+        else:
+            ratio = round(fusion_metrics.token_count_output / 8192, 4)
+            fusion_metrics.budget_usage = ratio
+            fusion_metrics.budget_usage_ratio = ratio
 
         # 异步发送指标（不阻塞主链路）
         asyncio.create_task(_send_metrics_async(fusion_metrics))

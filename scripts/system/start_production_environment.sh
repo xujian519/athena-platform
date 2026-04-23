@@ -268,12 +268,20 @@ start_dynamic_prompt_system() {
     print_info "动态提示词系统集成在智能体中"
     print_info "将在启动智能体时自动加载"
 
-    # 验证提示词规则文件
-    local prompt_rules="$PROJECT_ROOT/core/prompts/unified_prompt_manager_production.py"
-    if [ -f "$prompt_rules" ]; then
-        print_success "提示词规则文件存在"
+    # 验证新链路提示词系统配置
+    local prompt_fusion_config="$PROJECT_ROOT/config/prompt_fusion_rollout.yaml"
+    if [ -f "$prompt_fusion_config" ]; then
+        print_success "提示词融合灰度配置文件存在"
     else
-        print_warning "提示词规则文件不存在"
+        print_warning "提示词融合灰度配置文件不存在"
+    fi
+
+    # 验证提示词系统路由模块
+    local prompt_routes="$PROJECT_ROOT/core/api/prompt_system_routes.py"
+    if [ -f "$prompt_routes" ]; then
+        print_success "提示词系统路由模块存在"
+    else
+        print_warning "提示词系统路由模块不存在"
     fi
 
     return 0
