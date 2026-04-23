@@ -49,58 +49,75 @@ class LLMetrics:
             logger.info("⏭️ Prometheus metrics已禁用")
             return
 
-        # 请求计数器
-        self.request_total = PromCounter(
-            "llm_requests_total",
-            "LLM请求总数",
-            ["model_id", "task_type", "status"],  # status: success, failure, cached
-        )
+        try:
+            # 请求计数器
+            self.request_total = PromCounter(
+                "llm_requests_total",
+                "LLM请求总数",
+                ["model_id", "task_type", "status"],  # status: success, failure, cached
+            )
 
-        # 延迟分布
-        self.request_duration = Histogram(
-            "llm_request_duration_seconds",
-            "LLM请求耗时",
-            ["model_id", "task_type"],
-            buckets=(0.1, 0.5, 1.0, 2.0, 5.0, 10.0, 30.0, 60.0, 120.0),
-        )
+            # 延迟分布
+            self.request_duration = Histogram(
+                "llm_request_duration_seconds",
+                "LLM请求耗时",
+                ["model_id", "task_type"],
+                buckets=(0.1, 0.5, 1.0, 2.0, 5.0, 10.0, 30.0, 60.0, 120.0),
+            )
 
-        # Token计数器
-        self.tokens_total = PromCounter(
-            "llm_tokens_total",
-            "LLM Token使用总数",
-            ["model_id", "task_type", "token_type"],  # token_type: prompt, completion
-        )
+            # Token计数器
+            self.tokens_total = PromCounter(
+                "llm_tokens_total",
+                "LLM Token使用总数",
+                ["model_id", "task_type", "token_type"],  # token_type: prompt, completion
+            )
 
-        # 成本追踪
-        self.cost_total = PromCounter("llm_cost_yuan", "LLM总成本(元)", ["model_id", "task_type"])
+            # 成本追踪
+            self.cost_total = PromCounter("llm_cost_yuan", "LLM总成本(元)", ["model_id", "task_type"])
 
-        # 模型健康状态
-        self.model_health = Gauge(
-            "llm_model_health", "模型健康状态(1=健康,0=不健康)", ["model_id"]
-        )
+            # 模型健康状态
+            self.model_health = Gauge(
+                "llm_model_health", "模型健康状态(1=健康,0=不健康)", ["model_id"]
+            )
 
-        # 模型质量评分
-        self.model_quality_score = Gauge("llm_model_quality_score", "模型质量评分", ["model_id"])
+            # 模型质量评分
+            self.model_quality_score = Gauge("llm_model_quality_score", "模型质量评分", ["model_id"])
 
-        # 缓存统计
-        self.cache_hits = PromCounter("llm_cache_hits_total", "缓存命中总数", ["task_type"])
+            # 缓存统计
+            self.cache_hits = PromCounter("llm_cache_hits_total", "缓存命中总数", ["task_type"])
 
-        self.cache_misses = PromCounter("llm_cache_misses_total", "缓存未命中总数", ["task_type"])
+            self.cache_misses = PromCounter("llm_cache_misses_total", "缓存未命中总数", ["task_type"])
 
-        # 预算使用率
-        self.budget_utilization = Gauge(
-            "llm_budget_utilization",
-            "预算使用率(0-1)",
-            ["budget_type"],  # budget_type: daily, alert_threshold
-        )
+            # 预算使用率
+            self.budget_utilization = Gauge(
+                "llm_budget_utilization",
+                "预算使用率(0-1)",
+                ["budget_type"],  # budget_type: daily, alert_threshold
+            )
 
-        # 系统信息
-        self.llm_info = Info("llm_build_info", "LLM系统构建信息")
-        self.llm_info.info(
-            {"version": "1.0.0", "author": "Claude Code", "description": "Athena统一LLM层"}
-        )
+            # 系统信息
+            self.llm_info = Info("llm_build_info", "LLM系统构建信息")
+            self.llm_info.info(
+                {"version": "1.0.0", "author": "Claude Code", "description": "Athena统一LLM层"}
+            )
 
-        logger.info("✅ Prometheus metrics已启用")
+            logger.info("✅ Prometheus metrics已启用")
+        except ValueError as e:
+            if "Duplicated timeseries" in str(e):
+                logger.warning(f"⚠️ Metrics已注册，使用已存在的实例")
+                # 设置所有metrics为None，避免重复注册
+                self.request_total = None
+                self.request_duration = None
+                self.tokens_total = None
+                self.cost_total = None
+                self.model_health = None
+                self.model_quality_score = None
+                self.cache_hits = None
+                self.cache_misses = None
+                self.budget_utilization = None
+                self.llm_info = None
+            else:
+                raise
 
     def record_request(
         self,
@@ -300,7 +317,16 @@ def get_metrics(enabled: bool = True) -> LLMetrics:
     """
     global _metrics_instance
     if _metrics_instance is None:
-        _metrics_instance = LLMetrics(enabled=enabled)
+        try:
+            _metrics_instance = LLMetrics(enabled=enabled)
+        except ValueError as e:
+            if "Duplicated timeseries" in str(e):
+                # 如果metrics已存在，尝试重置并重新创建
+                logger.warning(f"⚠️ 检测到重复的metrics，尝试重置: {e}")
+                reset_metrics()
+                _metrics_instance = LLMetrics(enabled=enabled)
+            else:
+                raise
     return _metrics_instance
 
 

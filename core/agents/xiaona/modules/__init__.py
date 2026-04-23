@@ -12,9 +12,15 @@
 TODO: 实现各模块的具体功能
 """
 
+# 导入模块类
+from core.agents.xiaona.modules.drafting_module import PatentDraftingModule
+from core.agents.xiaona.modules.response_module import ResponseModule
+from core.agents.xiaona.modules.orchestration_module import OrchestrationModule
+from core.agents.xiaona.modules.utility_module import UtilityModule
+
 # 模块导出
 __all__ = [
-    "DraftingModule",
+    "PatentDraftingModule",
     "ResponseModule",
     "OrchestrationModule",
     "UtilityModule",

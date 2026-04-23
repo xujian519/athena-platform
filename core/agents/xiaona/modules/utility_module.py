@@ -12,7 +12,7 @@
 
 import re
 import difflib
-from typing import Dict, Any, List, Tuple
+from typing import Dict, Any, List, Tuple, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
 
@@ -148,7 +148,7 @@ class UtilityModule:
         )
 
     def calculate_quality_score(self, document_content: str,
-                                review_result: Dict[str, Any] | None = None) -> QualityMetrics:
+                                review_result: Optional[Dict[str, Any]] = None) -> QualityMetrics:
         """
         计算文档质量评分
 

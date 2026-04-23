@@ -21,6 +21,7 @@ class ModelType(Enum):
     MULTIMODAL = "multimodal"  # 多模态模型 - 支持图像、音频等多模态处理
     SPECIALIZED = "specialized"  # 专用模型 - 数学、代码、专利分析等
     LOCAL = "local"  # 本地模型 - 本地部署的开源模型
+    RERANK = "rerank"  # 重排序模型 - 用于结果重排序和优化
 
 
 class DeploymentType(Enum):
