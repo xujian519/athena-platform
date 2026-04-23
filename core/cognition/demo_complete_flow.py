@@ -165,7 +165,7 @@ async def demo_complete_flow():
     print_step(6, "完整流程 - 通过小诺协调器")
 
     from core.agents.base import AgentRequest
-    from core.agents.xiaonuo_coordinator import XiaonuoAgent
+    from core.agents.xiaonuo.xiaonuo_agent_v2 import XiaonuoAgentV2 as XiaonuoAgent
 
     # 创建小诺协调器
     xiaonuo = XiaonuoAgent()
@@ -314,7 +314,7 @@ result = await executor.execute(
 )
 
 # 示例2: 通过智能体调用工具
-from core.agents.xiaonuo_coordinator import XiaonuoAgent
+from core.agents.xiaonuo.xiaonuo_agent_v2 import XiaonuoAgentV2 as XiaonuoAgent
 from core.agents.base import AgentRequest
 
 xiaonuo = XiaonuoAgent()

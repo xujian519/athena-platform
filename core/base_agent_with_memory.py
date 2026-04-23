@@ -30,6 +30,6 @@ except ImportError:
         "请使用新的core.agents架构:\n"
         "  from core.agents.base import BaseAgent\n"
         "  from core.agents.xiaona_legal import XiaonaLegalAgent\n"
-        "  from core.agents.xiaonuo_coordinator import XiaonuoAgent\n"
+        "  # 替换为: from core.agents.xiaonuo.xiaonuo_agent_v2 import XiaonuoAgentV2 as XiaonuoAgent\n"
         "  from core.agents.athena_advisor import AthenaAdvisorAgent"
     ) from None

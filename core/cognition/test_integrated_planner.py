@@ -97,7 +97,7 @@ async def test_xiaonuo_coordinator():
     print_separator("测试小诺协调器集成")
 
     from core.agents.base import AgentRequest
-    from core.agents.xiaonuo_coordinator import XiaonuoAgent
+    from core.agents.xiaonuo.xiaonuo_agent_v2 import XiaonuoAgentV2 as XiaonuoAgent
 
     # 创建小诺协调器
     xiaonuo = XiaonuoAgent()

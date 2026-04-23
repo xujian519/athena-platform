@@ -10,7 +10,7 @@ import asyncio
 
 from core.agents.base import AgentRegistry
 from core.agents.xiaona_legal import XiaonaLegalAgent
-from core.agents.xiaonuo_coordinator import XiaonuoAgent
+from core.agents.xiaonuo.xiaonuo_agent_v2 import XiaonuoAgentV2 as XiaonuoAgent
 
 
 async def main():

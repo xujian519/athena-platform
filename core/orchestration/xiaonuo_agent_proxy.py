@@ -80,7 +80,7 @@ class XiaonuoAgentProxy(AgentProxy):
 
         try:
             # 动态导入小诺Agent
-            from core.agents.xiaonuo.unified_xiaonuo_agent import XiaonuoUnifiedAgent
+            from core.agents.xiaonuo.xiaonuo_agent_v2 import XiaonuoAgentV2
 
             self._xiaonuo_agent = XiaonuoUnifiedAgent(
                 name="小诺",

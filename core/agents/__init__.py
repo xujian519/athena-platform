@@ -39,7 +39,7 @@ except ImportError:
     XiaonaLegalAgent = None
 
 try:
-    from .xiaonuo_coordinator import XiaonuoAgent
+    from .xiaonuo.xiaonuo_agent_v2 import XiaonuoAgentV2 as XiaonuoAgent
 except ImportError:
     XiaonuoAgent = None
 
