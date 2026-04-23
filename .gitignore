@@ -167,6 +167,9 @@ computer-use-ootb/
 !archive/deprecated_syntax_errors_*/
 archive/*
 
+# 归档清理日志
+archive/cleanup.log
+
 # 大型数据目录
 data/*.db
 data/*.sqlite
