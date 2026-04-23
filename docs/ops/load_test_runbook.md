@@ -23,14 +23,15 @@
 | 8 | 性能指标已重置 | `curl -X POST ${HOST}/api/v1/prompt-system/monitoring/metrics/reset` | 返回 `{"status":"success"}` |
 | 9 | 数据库连接正常 | `curl -f ${HOST}/api/v1/prompt-system/health/extended` | `neo4j`、`postgres`、`redis` 均为 `ok` |
 | 10 | LLM 后端可用 | 查看 LLM 服务健康端点 | 状态正常，队列深度 < 5 |
+| 11 | Prometheus 指标端点可访问 | `curl -f "${HOST}/api/v1/prompt-system/metrics?format=prometheus"` | HTTP 200，返回 Prometheus 文本 |
 
 ### 1.3 告警与通知
 
 | # | 检查项 | 操作 | 通过标准 |
 |---|---|---|---|
-| 11 | 生产告警静默 | 在告警平台创建静默规则（Maintenance Window） | 压测期间不触发 P1/P2 告警 |
-| 12 | 相关人员通知 | 在团队频道发送压测预告 | 研发、运维、业务方已周知 |
-| 13 | 压测时间窗口 | 确认非业务高峰期 | 避开 09:00-11:00、14:00-16:00 |
+| 12 | 生产告警静默 | 在告警平台创建静默规则（Maintenance Window） | 压测期间不触发 P1/P2 告警 |
+| 13 | 相关人员通知 | 在团队频道发送压测预告 | 研发、运维、业务方已周知 |
+| 14 | 压测时间窗口 | 确认非业务高峰期 | 避开 09:00-11:00、14:00-16:00 |
 
 ### 1.4 预检查 Checklist 签字
 
@@ -42,9 +43,54 @@
 
 ---
 
-## 二、压测中观察（Observation）
+## 二、压测执行（Execution）
 
-### 2.1 实时指标 Dashboard
+### 2.1 实际执行步骤
+
+按以下顺序执行，每步确认成功后再进入下一步：
+
+**步骤 1：环境确认**
+```bash
+export HOST="http://localhost:8000"
+curl -f "${HOST}/api/v1/prompt-system/health" || { echo "服务未就绪"; exit 1; }
+```
+
+**步骤 2：清空缓存并重置指标**
+```bash
+curl -X POST "${HOST}/api/v1/prompt-system/cache/clear"
+curl -X POST "${HOST}/api/v1/prompt-system/monitoring/metrics/reset"
+```
+
+**步骤 3：执行基线压测（10 用户 → 50 用户 → 100 用户）**
+```bash
+# 低并发基线（10 用户，5 分钟）
+./scripts/run_load_test.sh "${HOST}" 10 5m
+
+# 中等并发基线（50 用户，10 分钟）
+./scripts/run_load_test.sh "${HOST}" 50 10m
+
+# 高并发基线（100 用户，10 分钟）
+./scripts/run_load_test.sh "${HOST}" 100 10m
+```
+
+> **判停标准**：任意一步若触及「红色熔断阈值」（见 2.3），立即停止后续压测，保留现场并进入「四、应急响应」。
+
+**步骤 4：采集 Prometheus 指标**
+```bash
+curl -s "${HOST}/api/v1/prompt-system/metrics?format=prometheus" > reports/load/prometheus_$(date +%Y%m%d_%H%M%S).txt
+```
+
+**步骤 5：采集性能快照**
+```bash
+curl -s "${HOST}/api/v1/prompt-system/monitoring/performance" | jq . > reports/load/performance_snapshot_$(date +%Y%m%d_%H%M%S).json
+```
+
+**步骤 6：采集缓存统计**
+```bash
+curl -s "${HOST}/api/v1/prompt-system/cache/stats" | jq . > reports/load/cache_stats_$(date +%Y%m%d_%H%M%S).json
+```
+
+### 2.2 实时指标 Dashboard
 
 压测启动后，持续观察以下数据源：
 
@@ -53,22 +99,10 @@
 | Locust Web UI | `http://localhost:8089` | RPS、Failures、Response Time |
 | 服务性能快照 | `curl ${HOST}/api/v1/prompt-system/monitoring/performance` | P95、P99、请求总量 |
 | 缓存统计 | `curl ${HOST}/api/v1/prompt-system/cache/stats` | hit_rate、current_size |
+| Prometheus 指标 | `curl "${HOST}/api/v1/prompt-system/metrics?format=prometheus"` | fusion_latency_seconds、fusion_cache_hits_total |
 | 容器/主机监控 | Grafana / Prometheus / `htop` | CPU、内存、网络 IO、磁盘 IO |
 | 数据库监控 | Neo4j Browser / pgAdmin / Redis CLI | 连接数、慢查询、缓存命中率 |
 | LLM 后端监控 | LLM 服务 Dashboard | 队列长度、Token 吞吐量、错误率 |
-
-### 2.2 日志观察
-
-```bash
-# 实时跟踪服务端错误日志（根据实际部署调整）
-tail -f /var/log/athena/prompt-system.log | grep -E "ERROR|WARN|❌|⚠️"
-
-# 观察 5xx 错误
-tail -f /var/log/athena/prompt-system.log | grep "status_code=5"
-
-# 观察慢请求（>5s）
-tail -f /var/log/athena/prompt-system.log | grep -E "processing_time_ms":[5-9][0-9]{3,}
-```
 
 ### 2.3 关键阈值与熔断决策
 
@@ -80,8 +114,25 @@ tail -f /var/log/athena/prompt-system.log | grep -E "processing_time_ms":[5-9][0
 | 内存使用 | ≥ 80% | ≥ 95% | 立即停止，防止 OOM |
 | LLM 队列深度 | ≥ 20 | ≥ 50 | 停止压测，通知 LLM 运维 |
 | 数据库连接数 | ≥ 80% 上限 | ≥ 95% 上限 | 停止压测，检查连接泄漏 |
+| 缓存命中率 | < 50% | < 30% | 检查缓存配置或预热逻辑 |
 
 > **熔断原则**：一旦触及红色阈值，优先停止压测，保护生产环境，事后分析日志定位根因。
+
+### 2.4 日志观察
+
+```bash
+# 实时跟踪服务端错误日志（根据实际部署调整）
+tail -f /var/log/athena/prompt-system.log | grep -E "ERROR|WARN|❌|⚠️"
+
+# 观察 5xx 错误
+tail -f /var/log/athena/prompt-system.log | grep "status_code=5"
+
+# 观察慢请求（>5s）
+tail -f /var/log/athena/prompt-system.log | grep -E "processing_time_ms":[5-9][0-9]{3,}
+
+# 观察融合指标（B5-PerfObs 新增）
+tail -f /var/log/athena/prompt-system.log | grep "fusion_metrics"
+```
 
 ---
 
@@ -107,7 +158,7 @@ tail -f /var/log/athena/prompt-system.log | grep -E "processing_time_ms":[5-9][0
 
 | # | 操作项 | 说明 |
 |---|---|---|
-| 7 | 收集报告文件 | 将 `reports/load/` 下本次压测的 CSV + HTML 复制到归档目录 |
+| 7 | 收集报告文件 | 将 `reports/load/` 下本次压测的 CSV + HTML + Prometheus 文本复制到归档目录 |
 | 8 | 填写基线文档 | 将核心指标填入 `docs/reports/PERFORMANCE_BASELINE.md` |
 | 9 | 记录异常与发现 | 在基线文档「关键结论与行动项」中登记问题 |
 | 10 | 提交 Git 记录 | 将基线更新和 runbook 改进提交到版本库 |
@@ -168,6 +219,9 @@ curl -X POST ${HOST}/api/v1/prompt-system/monitoring/metrics/reset
 
 # 一键执行 100 用户基线压测
 ./scripts/run_load_test.sh http://localhost:8000 100 10m
+
+# 性能分析（cProfile）
+python3 scripts/profile_generate_prompt.py
 ```
 
 ### 5.2 常用诊断命令
@@ -185,6 +239,9 @@ curl -s http://localhost:8000/api/v1/prompt-system/monitoring/performance | jq .
 # 缓存统计
 curl -s http://localhost:8000/api/v1/prompt-system/cache/stats | jq .
 
+# Prometheus 指标（纯文本格式，可直接被 Prometheus 抓取）
+curl -s "http://localhost:8000/api/v1/prompt-system/metrics?format=prometheus"
+
 # 清理缓存
 curl -X POST http://localhost:8000/api/v1/prompt-system/cache/clear
 
@@ -192,8 +249,74 @@ curl -X POST http://localhost:8000/api/v1/prompt-system/cache/clear
 curl -X POST http://localhost:8000/api/v1/prompt-system/monitoring/metrics/reset
 ```
 
-### 5.3 修订记录
+### 5.3 缓存优化建议
+
+基于 `reports/performance_profile.txt` 的 cProfile 分析与代码路径审查，当前缓存机制存在以下优化空间：
+
+#### A. 当前缓存机制分析
+
+| 缓存层级 | 实现 | 命中率 | TTL | 瓶颈 |
+|---|---|---|---|---|
+| 提示词模板缓存 (`PromptTemplateCache`) | 内存 LRU + SHA256 键 | 中等 | 3600s | 键计算涉及全量变量 JSON 序列化 |
+| 意图识别结果 | 无 | — | — | 每次请求重复 BGE-M3 编码 |
+| 规则检索结果 | 无 | — | — | 每次请求重复 Neo4j Cypher 查询 |
+
+#### B. 预加载高频提示词策略
+
+**目标**：服务启动后 30 秒内将缓存命中率提升至 >85%。
+
+**实施步骤**：
+
+1. **定义高频组合清单**
+   ```yaml
+   # config/prompt_fusion_rollout.yaml 中增加 preload_rules 字段
+   preload_rules:
+     - domain: patent
+       task_type: office_action
+       phase: examination
+     - domain: patent
+       task_type: creativity_analysis
+       phase: examination
+     - domain: patent
+       task_type: novelty_analysis
+       phase: examination
+   ```
+
+2. **启动预加载脚本**
+   ```python
+   # 在 prompt_system_routes.py 或独立启动脚本中
+   def _preload_hot_prompts():
+       cache = get_prompt_cache()
+       for rule in PRELOAD_RULES:
+           # 使用典型变量构造缓存键并预生成提示词
+           system_prompt, user_prompt = generate_for_rule(rule, TYPICAL_VARIABLES)
+           cache.set(..., system_prompt=system_prompt, user_prompt=user_prompt)
+   ```
+
+3. **预热验证**
+   ```bash
+   curl -s http://localhost:8000/api/v1/prompt-system/cache/stats | jq '.hit_rate'
+   # 预期：启动后立即 >80%
+   ```
+
+#### C. 其他优化建议
+
+- **意图识别缓存**：对 `user_input` 做 SHA256 哈希，缓存 `ScenarioIdentifierOptimized` 输出（TTL 600s）。
+- **规则缓存**：对 `domain+task_type` 组合缓存 `ScenarioRule` 对象（TTL 300s），避免重复 Neo4j 查询。
+- **变量治理缓存**：对同一 `rule_id` 的 schema 做启动时预编译，避免每次请求重新构造 `VariableSpec` 列表。
+
+### 5.4 判停标准（Success / Stop Criteria）
+
+| 场景 | 判停标准 | 后续动作 |
+|---|---|---|
+| **成功完成** | 所有并发阶梯均通过，无红色阈值触发 | 归档报告，更新基线文档 |
+| **黄色警告** | 某项指标触及黄色阈值，但未持续恶化 | 记录观察日志，继续压测但提高采样频率 |
+| **红色熔断** | 任意指标触及红色阈值 | 立即停止 locust，保留现场，进入应急响应 |
+| **渐进式降级** | P95/P99 随时间线性上升，错误率缓慢增长 | 提前终止当前阶梯，记录拐点并发数 |
+
+### 5.5 修订记录
 
 | 日期 | 版本 | 修订内容 | 修订人 |
 |---|---|---|---|
 | 2026-04-23 | v1.0 | 初始版本 | Agent-QA |
+| 2026-04-23 | v1.1 | 补充实际执行步骤、判停标准、Prometheus 指标采集、缓存优化建议 | Agent-PerfObs |

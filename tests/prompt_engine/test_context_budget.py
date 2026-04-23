@@ -82,10 +82,10 @@ class TestTokenEstimator:
 
     def test_estimate_ascii_approximate(self):
         est = TokenEstimator()
-        # 回退模式下 4 字符 ~ 1 token
-        text = "a" * 100
+        # 回退模式下 4 字符 ~ 1 token；tiktoken 对重复字符会 BPE 压缩
+        text = "The quick brown fox jumps over the lazy dog. " * 3  # ~150 chars
         tokens = est.estimate(text)
-        assert tokens >= 20  # 100 / 4 = 25，允许一定误差
+        assert tokens >= 15  # 足够覆盖 tiktoken 和回退两种模式
 
     def test_estimate_cjk_approximate(self):
         est = TokenEstimator()
