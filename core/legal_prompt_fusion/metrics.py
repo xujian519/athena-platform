@@ -6,7 +6,6 @@
 支持字典与 JSON 序列化，便于接入 ELK / Loki / Prometheus 等观测系统。
 """
 
-from __future__ import annotations
 
 import json
 import logging

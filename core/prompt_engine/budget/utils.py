@@ -1,6 +1,5 @@
 """Token 估算工具 — tiktoken 优先，无依赖时回退到近似算法。"""
 
-from typing import Optional
 
 
 class TokenEstimator:
@@ -12,10 +11,10 @@ class TokenEstimator:
     该回退方案在多数场景下误差 < 20%，足以支撑 budget 管理。
     """
 
-    _encoding: Optional[object] = None
+    _encoding: object | None = None
     _encoding_name: str = "cl100k_base"
 
-    def __init__(self, encoding_name: Optional[str] = None) -> None:
+    def __init__(self, encoding_name: str | None = None) -> None:
         self._init_encoding(encoding_name or self._encoding_name)
 
     def _init_encoding(self, name: str) -> None:

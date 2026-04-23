@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import List, Optional
 
 
 class RollbackReason(str, Enum):
@@ -50,8 +49,8 @@ class RollbackTrigger:
         evidence_kept_count: int,
         evidence_tokens: int,
         evidence_budget: int,
-        elapsed_ms: Optional[float] = None,
-        extra_context: Optional[dict] = None,
+        elapsed_ms: float | None = None,
+        extra_context: dict | None = None,
     ) -> RollbackDecision:
         """执行回滚检查。
 

@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, List, Optional
+from typing import Any
 
 
 class VariableType(str, Enum):
@@ -24,9 +24,9 @@ class VariableSpec:
     source: str = ""  # user_input | document | extracted | system
     default: Any = None
     description: str = ""
-    max_length: Optional[int] = None
-    pattern: Optional[str] = None  # 正则校验（可选）
-    enum: Optional[List[str]] = None  # 枚举值（可选）
+    max_length: int | None = None
+    pattern: str | None = None  # 正则校验（可选）
+    enum: list[str] | None = None  # 枚举值（可选）
 
 
 @dataclass
@@ -41,20 +41,20 @@ class PromptSchema:
 
     rule_id: str
     template_version: str
-    variables: List[VariableSpec] = field(default_factory=list)
+    variables: list[VariableSpec] = field(default_factory=list)
 
     @property
     def version(self) -> str:
         """语义化版本号，与 template_version 保持一致。"""
         return self.template_version
 
-    def get_required_vars(self) -> List[str]:
+    def get_required_vars(self) -> list[str]:
         return [v.name for v in self.variables if v.required]
 
-    def get_optional_vars(self) -> List[str]:
+    def get_optional_vars(self) -> list[str]:
         return [v.name for v in self.variables if not v.required]
 
-    def get_spec(self, name: str) -> Optional[VariableSpec]:
+    def get_spec(self, name: str) -> VariableSpec | None:
         for v in self.variables:
             if v.name == name:
                 return v

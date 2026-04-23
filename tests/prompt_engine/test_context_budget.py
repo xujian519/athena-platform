@@ -8,11 +8,9 @@ Context Budget 模块单元测试
 - ContextBudgetManager 端到端分配、动态调整、metrics 采集
 """
 
-from __future__ import annotations
 
 import sys
 from pathlib import Path
-from typing import List
 
 import pytest
 
@@ -59,7 +57,7 @@ def rollback_trigger():
 
 
 @pytest.fixture
-def sample_evidence() -> List[EvidenceItem]:
+def sample_evidence() -> list[EvidenceItem]:
     """构造 5 条证据，长度与相关性递减。"""
     return [
         EvidenceItem(content="核心法条：专利法第22条关于创造性的规定。", relevance_score=0.95, source="law"),

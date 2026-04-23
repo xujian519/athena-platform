@@ -8,7 +8,6 @@
 - 默认 200ms 超时，可通过 LEGAL_FUSION_SOURCE_TIMEOUT_MS 环境变量调整
 """
 
-from __future__ import annotations
 
 import concurrent.futures
 import logging

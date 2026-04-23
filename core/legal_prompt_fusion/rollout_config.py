@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 
 """
 法律提示词融合灰度配置 Schema 与热重载实现。

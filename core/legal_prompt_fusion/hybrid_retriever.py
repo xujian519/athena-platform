@@ -1,4 +1,3 @@
-from __future__ import annotations
 
 """
 法律知识混合检索器。

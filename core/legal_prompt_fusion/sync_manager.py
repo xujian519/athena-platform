@@ -1,4 +1,3 @@
-from __future__ import annotations
 
 """
 Wiki 变更同步与模板版本策略。
@@ -7,7 +6,7 @@ Wiki 变更同步与模板版本策略。
 import hashlib
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Any, Optional
+from typing import Any
 
 from .config import FusionConfig
 from .providers import UnifiedLegalKnowledgeRepository
@@ -27,8 +26,8 @@ class WikiSyncManager:
 
     def __init__(
         self,
-        repository: Optional[UnifiedLegalKnowledgeRepository] = None,
-        config: Optional[FusionConfig] = None,
+        repository: UnifiedLegalKnowledgeRepository | None = None,
+        config: FusionConfig | None = None,
     ):
         self.config = config or FusionConfig()
         self.repository = repository or UnifiedLegalKnowledgeRepository(self.config)

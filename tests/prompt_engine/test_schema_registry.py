@@ -11,11 +11,10 @@ Prompt Schema Registry 集成测试
 - 高频使用 Schema 的完整性验证
 """
 
-from __future__ import annotations
 
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import pytest
 
@@ -208,7 +207,7 @@ class TestVariableUpgrade:
 
     def test_upgrade_missing_schema_returns_original(self, registry: PromptSchemaRegistry):
         """Schema 不存在时返回原始变量字典。"""
-        original: Dict[str, Any] = {"a": 1}
+        original: dict[str, Any] = {"a": 1}
         result = registry.upgrade_variables("missing", original)
         assert result == original
 

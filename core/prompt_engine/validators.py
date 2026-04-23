@@ -2,7 +2,7 @@
 
 import re
 from dataclasses import dataclass, field
-from typing import Any, List
+from typing import Any
 
 from .schema import PromptSchema, VariableSpec, VariableType
 
@@ -10,16 +10,16 @@ from .schema import PromptSchema, VariableSpec, VariableType
 @dataclass
 class ValidationResult:
     valid: bool
-    errors: List[str] = field(default_factory=list)
-    warnings: List[str] = field(default_factory=list)
+    errors: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
 
 
 class VariableValidator:
     """基于 PromptSchema 的变量校验器。"""
 
     def validate(self, schema: PromptSchema, variables: dict) -> ValidationResult:
-        errors: List[str] = []
-        warnings: List[str] = []
+        errors: list[str] = []
+        warnings: list[str] = []
 
         for spec in schema.variables:
             value = variables.get(spec.name)

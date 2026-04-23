@@ -1,4 +1,3 @@
-from __future__ import annotations
 
 """
 法律提示词上下文构建器。

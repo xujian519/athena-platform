@@ -2,7 +2,7 @@
 PromptSchemaRegistry - 提示词 Schema 注册表与版本管理
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.prompt_engine.schema import PromptSchema
 
@@ -31,8 +31,8 @@ class PromptSchemaRegistry:
     """
 
     def __init__(self) -> None:
-        self._schemas: Dict[str, PromptSchema] = {}
-        self._domain_index: Dict[str, List[str]] = {}
+        self._schemas: dict[str, PromptSchema] = {}
+        self._domain_index: dict[str, list[str]] = {}
         self._register_builtin_schemas()
 
     def _register_builtin_schemas(self) -> None:
@@ -113,19 +113,19 @@ class PromptSchemaRegistry:
         domain = schema.rule_id.split('/')[0] if '/' in schema.rule_id else 'root'
         self._domain_index.setdefault(domain, []).append(schema.rule_id)
 
-    def get(self, schema_id: str) -> Optional[PromptSchema]:
+    def get(self, schema_id: str) -> PromptSchema | None:
         """通过 schema_id 获取 Schema。"""
         return self._schemas.get(schema_id)
 
-    def list_all(self) -> List[str]:
+    def list_all(self) -> list[str]:
         """返回所有已注册的 schema_id 列表。"""
         return list(self._schemas.keys())
 
-    def list_by_domain(self, domain: str) -> List[str]:
+    def list_by_domain(self, domain: str) -> list[str]:
         """返回指定 domain 下的所有 schema_id。"""
         return self._domain_index.get(domain, [])
 
-    def get_by_status(self, status: str) -> List[PromptSchema]:
+    def get_by_status(self, status: str) -> list[PromptSchema]:
         """按状态过滤 Schema（基于 template_version 前缀推断）。
 
         状态与版本映射:
@@ -134,7 +134,7 @@ class PromptSchemaRegistry:
         - draft       -> 0.1.x
         - deprecated  -> 0.0.x
         """
-        result: List[PromptSchema] = []
+        result: list[PromptSchema] = []
         version_map = {"production": "1.0", "staging": "0.9", "draft": "0.1", "deprecated": "0.0"}
         prefix = version_map.get(status, '')
         for schema in self._schemas.values():
@@ -162,8 +162,8 @@ class PromptSchemaRegistry:
     def upgrade_variables(
         self,
         schema_id: str,
-        variables: Dict[str, Any],
-    ) -> Dict[str, Any]:
+        variables: dict[str, Any],
+    ) -> dict[str, Any]:
         """根据 Schema 定义升级/规范化变量字典。
 
         - 填充默认值（对可选变量）
@@ -174,7 +174,7 @@ class PromptSchemaRegistry:
             return variables
         return schema.upgrade_variables(variables)
 
-    def get_coverage_report(self) -> Dict[str, Any]:
+    def get_coverage_report(self) -> dict[str, Any]:
         """生成 Schema 覆盖率报告。"""
         total = len(self._schemas)
         with_vars = sum(1 for s in self._schemas.values() if s.variables)
