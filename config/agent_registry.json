@@ -20,7 +20,41 @@
       "startup_script": "/Users/xujian/Athena工作平台/scripts/start_xiaona_enhanced.sh",
       "port": 8001,
       "log_file": "/tmp/xiaona_enhanced_integrated.log",
-      "process_pattern": "xiaona_enhanced_integrated.py"
+      "process_pattern": "xiaona_enhanced_integrated.py",
+      "capabilities": {
+        "patent_drafting": {
+          "name": "专利撰写",
+          "description": "完整的专利申请文件撰写能力",
+          "component": "PatentDraftingProxy",
+          "abilities": [
+            "analyze_disclosure",
+            "assess_patentability",
+            "draft_specification",
+            "draft_claims",
+            "optimize_protection_scope",
+            "review_adequacy",
+            "detect_common_errors"
+          ],
+          "version": "1.0.0",
+          "quality_score": 90,
+          "production_ready": true
+        },
+        "patent_analysis": {
+          "name": "专利分析",
+          "description": "专利检索与分析能力",
+          "component": "AnalyzerAgent"
+        },
+        "patent_retrieval": {
+          "name": "专利检索",
+          "description": "专利数据检索能力",
+          "component": "RetrieverAgent"
+        },
+        "patent_writing": {
+          "name": "专利写作",
+          "description": "专利文本写作能力",
+          "component": "WriterAgent"
+        }
+      }
     },
     "xiaochen": {
       "name": "小宸",
