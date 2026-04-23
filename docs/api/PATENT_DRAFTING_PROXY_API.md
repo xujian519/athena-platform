@@ -1,9 +1,23 @@
 # PatentDraftingProxy API文档
 
-> **版本**: v1.0.0  
-> **最后更新**: 2026-04-23  
-> **代码质量**: 90/100（优秀）  
-> **生产状态**: ✅ 就绪
+> **⚠️ 废弃通知 (2026-04-23)**
+>
+> 此文档已废弃。PatentDraftingProxy和WriterAgent已合并为**UnifiedPatentWriter**。
+>
+> 请使用新的统一API:
+> ```python
+> from core.agents.xiaona.unified_patent_writer import UnifiedPatentWriter
+> writer = UnifiedPatentWriter()
+> ```
+>
+> 本文档保留用于历史参考。
+
+---
+
+> **版本**: v1.0.0
+> **最后更新**: 2026-04-23
+> **代码质量**: 90/100（优秀）
+> **生产状态**: ⚠️ 已废弃，请使用UnifiedPatentWriter
 
 ---
 

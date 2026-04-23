@@ -21,18 +21,35 @@
       "sub_agents": [
         "RetrieverAgent",
         "AnalyzerAgent",
-        "WriterAgent",
-        "PatentDraftingProxy"
+        "UnifiedPatentWriter"
       ],
       "startup_script": null,
       "port": null,
       "log_file": null,
       "process_pattern": null,
+      "deprecated": [
+        {
+          "name": "WriterAgent",
+          "replacement": "UnifiedPatentWriter",
+          "deprecated_since": "2.0.0",
+          "reason": "已合并到UnifiedPatentWriter，提供统一的专利撰写能力",
+          "migration_guide": "将WriterAgent调用替换为UnifiedPatentWriter，API保持兼容"
+        },
+        {
+          "name": "PatentDraftingProxy",
+          "replacement": "UnifiedPatentWriter",
+          "deprecated_since": "2.0.0",
+          "reason": "已合并到UnifiedPatentWriter，统一专利撰写流程",
+          "migration_guide": "将PatentDraftingProxy调用替换为UnifiedPatentWriter，使用新的统一API"
+        }
+      ],
+      "version": "2.0.0",
+      "updated": "2026-04-23",
       "capabilities": {
         "patent_drafting": {
           "name": "专利撰写",
           "description": "完整的专利申请文件撰写能力",
-          "component": "PatentDraftingProxy",
+          "component": "UnifiedPatentWriter",
           "abilities": [
             "analyze_disclosure",
             "assess_patentability",
@@ -59,7 +76,7 @@
         "patent_writing": {
           "name": "专利写作",
           "description": "专利文本写作能力",
-          "component": "WriterAgent"
+          "component": "UnifiedPatentWriter"
         }
       }
     },

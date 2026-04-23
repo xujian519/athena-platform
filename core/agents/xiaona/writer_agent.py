@@ -1,38 +1,70 @@
 """
-小娜·撰写者
+小娜·撰写者 - WriterAgent适配器
 
-负责专利申请文件撰写、审查意见答复等任务。
+向后兼容适配器，将旧的WriterAgent接口路由到新的UnifiedPatentWriter。
+
+适配器特性：
+- 保留原有类名和基本结构
+- 延迟加载UnifiedPatentWriter
+- 任务类型自动映射
+- 完整错误处理和日志
+- 原有方法标记为废弃但可用
+
+迁移说明：
+- 旧的writing_type参数映射到新的task_type
+- 旧的execute()方法自动路由到UnifiedPatentWriter
+- 建议直接使用UnifiedPatentWriter获取新功能
 """
 
-from typing import Any, Dict, List, Optional
 import logging
+import warnings
+from datetime import datetime
+from typing import Any, Dict, Optional
 
 from core.agents.xiaona.base_component import (
-    BaseXiaonaComponent,
     AgentCapability,
     AgentExecutionContext,
     AgentExecutionResult,
     AgentStatus,
+    BaseXiaonaComponent,
 )
-from core.llm.unified_llm_manager import UnifiedLLMManager
 
 logger = logging.getLogger(__name__)
+
+# 任务类型映射表：旧的writing_type → 新的task_type
+TASK_TYPE_MAPPING = {
+    "claims": "draft_claims",
+    "description": "draft_specification",
+    "office_action_response": "draft_response",
+    "invalidation": "draft_invalidation",
+    "full_application": "draft_full_application",
+}
 
 
 class WriterAgent(BaseXiaonaComponent):
     """
-    小娜·撰写者
+    小娜·撰写者（适配器版本）
 
-    专注于专利文书撰写任务，包括：
-    - 权利要求书撰写
-    - 说明书撰写
-    - 审查意见答复撰写
-    - 无效宣告请求书撰写
+    向后兼容适配器，将调用路由到UnifiedPatentWriter。
+
+    .. deprecated::
+        建议直接使用 UnifiedPatentWriter 获取完整功能。
+        此适配器仅用于向后兼容。
+
+    适配的任务类型：
+    - claims → draft_claims（权利要求书撰写）
+    - description → draft_specification（说明书撰写）
+    - office_action_response → draft_response（审查意见答复）
+    - invalidation → draft_invalidation（无效宣告请求书）
+    - full_application → draft_full_application（完整申请文件）
     """
+
+    # UnifiedPatentWriter实例（延迟加载）
+    _unified_writer: Optional["UnifiedPatentWriter"] = None
 
     def _initialize(self) -> None:
         """初始化撰写者智能体"""
-        # 注册能力
+        # 注册能力（保持原有结构）
         self._register_capabilities([
             AgentCapability(
                 name="claim_drafting",
@@ -64,13 +96,139 @@ class WriterAgent(BaseXiaonaComponent):
             ),
         ])
 
-        # 初始化LLM
-        self.llm_manager = UnifiedLLMManager()
+        # 初始化LLM（保留原有字段）
+        try:
+            from core.llm.unified_llm_manager import UnifiedLLMManager
+            self.llm_manager = UnifiedLLMManager()
+        except Exception as e:
+            logger.warning(f"LLM管理器初始化失败: {e}")
+            self.llm_manager = None
 
-        self.logger.info(f"撰写者智能体初始化完成: {self.agent_id}")
+        self.logger.info(f"撰写者智能体初始化完成（适配器模式）: {self.agent_id}")
+
+    def _get_unified_writer(self) -> "UnifiedPatentWriter":
+        """
+        获取UnifiedPatentWriter实例（延迟加载）
+
+        Returns:
+            UnifiedPatentWriter实例
+        """
+        if WriterAgent._unified_writer is None:
+            from core.agents.xiaona.unified_patent_writer import UnifiedPatentWriter
+
+            WriterAgent._unified_writer = UnifiedPatentWriter()
+        return WriterAgent._unified_writer
+
+    def _map_task_type(self, writing_type: str) -> str:
+        """
+        映射任务类型
+
+        Args:
+            writing_type: 旧的writing_type参数
+
+        Returns:
+            新的task_type
+        """
+        mapped = TASK_TYPE_MAPPING.get(writing_type, writing_type)
+        if mapped != writing_type:
+            self.logger.debug(f"任务类型映射: {writing_type} → {mapped}")
+        return mapped
+
+    def _convert_context(
+        self,
+        old_context: AgentExecutionContext,
+        new_task_type: str
+    ) -> AgentExecutionContext:
+        """
+        转换上下文格式
+
+        Args:
+            old_context: 旧的上下文格式
+            new_task_type: 新的任务类型
+
+        Returns:
+            转换后的上下文
+        """
+        # 提取旧格式的数据
+        user_input = old_context.input_data.get("user_input", "")
+        previous_results = old_context.input_data.get("previous_results", {})
+        old_data = old_context.input_data.get("data", {})
+
+        # 构建新格式
+        new_input_data: Dict[str, Any] = {
+            "task_type": new_task_type,
+        }
+
+        # 根据任务类型添加相应的数据
+        if new_task_type in ["draft_claims", "draft_specification", "draft_full_application"]:
+            # 专利撰写类任务
+            new_input_data["data"] = old_data or {"user_input": user_input}
+            if previous_results:
+                new_input_data["data"]["previous_results"] = previous_results
+
+        elif new_task_type in ["draft_response", "draft_invalidation"]:
+            # 审查答复类任务
+            new_input_data["user_input"] = user_input
+            new_input_data["previous_results"] = previous_results
+            new_input_data["model"] = old_context.config.get("model", "kimi-k2.5")
+
+        return AgentExecutionContext(
+            session_id=old_context.session_id,
+            task_id=old_context.task_id,
+            input_data=new_input_data,
+            config=old_context.config,
+            metadata=old_context.metadata,
+        )
+
+    async def execute(self, context: AgentExecutionContext) -> AgentExecutionResult:
+        """
+        执行撰写任务（适配器方法）
+
+        此方法将调用路由到UnifiedPatentWriter。
+
+        Args:
+            context: 执行上下文
+
+        Returns:
+            执行结果
+        """
+        start_time = datetime.now()
+        writing_type = context.config.get("writing_type", "description")
+        task_type = self._map_task_type(writing_type)
+
+        try:
+            self.logger.info(f"适配器路由: {writing_type} → {task_type}")
+
+            unified_writer = self._get_unified_writer()
+            new_context = self._convert_context(context, task_type)
+            result = await unified_writer.execute(new_context)
+
+            # 添加迁移提示
+            if result.output_data:
+                result.output_data["_adapter_note"] = (
+                    f"通过WriterAgent适配器处理。建议迁移到UnifiedPatentWriter直接调用。"
+                    f"原任务类型: {writing_type}, 新任务类型: {task_type}"
+                )
+
+            return result
+
+        except Exception as e:
+            self.logger.exception(f"适配器执行失败: writing_type={writing_type}")
+            return AgentExecutionResult(
+                agent_id=self.agent_id,
+                status=AgentStatus.ERROR,
+                output_data=None,
+                error_message=f"适配器错误: {str(e)}",
+                execution_time=(datetime.now() - start_time).total_seconds(),
+            )
 
     def get_system_prompt(self) -> str:
-        """获取系统提示词"""
+        """
+        获取系统提示词
+
+        Returns:
+            系统提示词字符串
+        """
         return """你是小娜·撰写者，专利文书撰写专家。
 
 你的核心能力：
@@ -89,56 +247,15 @@ class WriterAgent(BaseXiaonaComponent):
 - 权利要求书：独立权利要求 + 从属权利要求
 - 说明书：发明名称、技术领域、背景技术、发明内容、附图说明、具体实施方式
 - 意见陈述书：意见陈述、修改说明、对比分析
+
+注意：此适配器将自动路由到UnifiedPatentWriter处理。
 """
 
-    async def execute(self, context: AgentExecutionContext) -> AgentExecutionResult:
-        """
-        执行撰写任务
+    # ========== 向后兼容方法（已废弃） ==========
 
-        Args:
-            context: 执行上下文
-
-        Returns:
-            执行结果
-        """
-        try:
-            # 获取输入数据
-            user_input = context.input_data.get("user_input", "")
-            previous_results = context.input_data.get("previous_results", {})
-
-            # 确定撰写类型
-            writing_type = context.config.get("writing_type", "description")
-
-            self.logger.info(f"开始撰写任务: {context.task_id}, 类型: {writing_type}")
-
-            # 根据撰写类型执行不同的撰写
-            if writing_type == "claims":
-                output_data = await self._draft_claims(user_input, previous_results)
-            elif writing_type == "description":
-                output_data = await self._draft_description(user_input, previous_results)
-            elif writing_type == "office_action_response":
-                output_data = await self._draft_response(user_input, previous_results)
-            elif writing_type == "invalidation":
-                output_data = await self._draft_invalidation(user_input, previous_results)
-            else:
-                # 默认：完整申请文件
-                output_data = await self._draft_full_application(user_input, previous_results)
-
-            return AgentExecutionResult(
-                agent_id=self.agent_id,
-                status=AgentStatus.COMPLETED,
-                output_data=output_data,
-                metadata={"writing_type": writing_type},
-            )
-
-        except Exception as e:
-            self.logger.exception(f"撰写任务失败: {context.task_id}")
-            return AgentExecutionResult(
-                agent_id=self.agent_id,
-                status=AgentStatus.ERROR,
-                output_data=None,
-                error_message=str(e),
-            )
+    def _deprecated_warning(self, method_name: str, replacement: str) -> None:
+        """发出废弃警告"""
+        warnings.warn(f"{method_name}已废弃，建议使用{replacement}。", DeprecationWarning, stacklevel=3)
 
     async def _draft_claims(
         self,
@@ -146,62 +263,15 @@ class WriterAgent(BaseXiaonaComponent):
         previous_results: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        撰写权利要求书
+        撰写权利要求书（废弃方法）
 
-        Args:
-            user_input: 用户输入
-            previous_results: 前面步骤的结果
-
-        Returns:
-            权利要求书内容
+        .. deprecated::
+            使用 UnifiedPatentWriter.draft_claims() 代替
         """
-        # 获取技术特征
-        features = self._get_features(previous_results)
+        self._deprecated_warning("_draft_claims", "UnifiedPatentWriter.draft_claims")
 
-        prompt = f"""请根据技术特征撰写权利要求书。
-
-技术特征：
-{features}
-
-要求：
-1. 撰写1项独立权利要求
-2. 撰写3-5项从属权利要求
-3. 独立权利要求包含必要技术特征
-4. 从属权利要求形成层次结构
-5. 使用规范的专利撰写语言
-
-输出格式：JSON
-{{
-    "independent_claim": "1. 一种[技术主题]，其特征在于，包括：...",
-    "dependent_claims": [
-        "2. 根据权利要求1所述的[技术主题]，其特征在于...",
-        "3. 根据权利要求1或2所述的[技术主题]，其特征在于..."
-    ]
-}}
-"""
-
-        response = await self.llm_manager.generate(
-            prompt=prompt,
-            system_prompt=self.get_system_prompt(),
-            model="kimi-k2.5",
-        )
-
-        # 解析JSON
-        import json
-        try:
-            claims = json.loads(response)
-            return {
-                "document_type": "claims",
-                "content": claims,
-                "full_text": self._format_claims(claims),
-            }
-        except json.JSONDecodeError:
-            self.logger.error("权利要求书撰写响应解析失败")
-            return {
-                "document_type": "claims",
-                "content": {},
-                "full_text": response,  # 如果解析失败，返回原始文本
-            }
+        unified_writer = self._get_unified_writer()
+        return await unified_writer.draft_claims(previous_results or {"user_input": user_input})
 
     async def _draft_description(
         self,
@@ -209,66 +279,15 @@ class WriterAgent(BaseXiaonaComponent):
         previous_results: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        撰写说明书
+        撰写说明书（废弃方法）
 
-        Args:
-            user_input: 用户输入
-            previous_results: 前面步骤的结果
-
-        Returns:
-            说明书内容
+        .. deprecated::
+            使用 UnifiedPatentWriter.draft_specification() 代替
         """
-        # 获取技术特征和权利要求
-        features = self._get_features(previous_results)
-        claims = self._get_claims(previous_results)
+        self._deprecated_warning("_draft_description", "UnifiedPatentWriter.draft_specification")
 
-        prompt = f"""请根据技术特征撰写完整的说明书。
-
-技术特征：
-{features}
-
-权利要求书：
-{claims}
-
-要求：
-1. 包含所有必要部分（发明名称、技术领域、背景技术、发明内容、附图说明、具体实施方式）
-2. 详细描述技术方案
-3. 提供具体实施例
-4. 清楚说明有益效果
-
-输出格式：JSON
-{{
-    "title": "发明名称",
-    "technical_field": "技术领域",
-    "background_art": "背景技术",
-    "summary": "发明内容",
-    "brief_description": "附图说明",
-    "detailed_description": "具体实施方式"
-}}
-"""
-
-        response = await self.llm_manager.generate(
-            prompt=prompt,
-            system_prompt=self.get_system_prompt(),
-            model="kimi-k2.5",
-        )
-
-        # 解析JSON
-        import json
-        try:
-            description = json.loads(response)
-            return {
-                "document_type": "description",
-                "content": description,
-                "full_text": self._format_description(description),
-            }
-        except json.JSONDecodeError:
-            self.logger.error("说明书撰写响应解析失败")
-            return {
-                "document_type": "description",
-                "content": {},
-                "full_text": response,
-            }
+        unified_writer = self._get_unified_writer()
+        return await unified_writer.draft_specification(previous_results or {"user_input": user_input})
 
     async def _draft_response(
         self,
@@ -276,71 +295,19 @@ class WriterAgent(BaseXiaonaComponent):
         previous_results: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        撰写审查意见答复
+        撰写审查意见答复（废弃方法）
 
-        Args:
-            user_input: 用户输入
-            previous_results: 前面步骤的结果
-
-        Returns:
-            意见陈述书
+        .. deprecated::
+            使用 UnifiedPatentWriter.draft_response() 代替
         """
-        # 获取审查意见和分析结果
-        office_action = self._get_office_action(user_input, previous_results)
-        analysis = self._get_analysis(previous_results)
+        self._deprecated_warning("_draft_response", "UnifiedPatentWriter.draft_response")
 
-        prompt = f"""请撰写审查意见答复陈述书。
-
-审查意见：
-{office_action}
-
-分析结果：
-{analysis}
-
-要求：
-1. 针对每条审查意见进行答复
-2. 说明修改内容和理由
-3. 与对比文件进行对比
-4. 论述专利性和创造性
-5. 使用礼貌、专业的语言
-
-输出格式：JSON
-{{
-    "introduction": "开场陈述",
-    "responses": [
-        {{
-            "issue": "审查意见1",
-            "response": "答复内容",
-            "amendments": "修改说明",
-            "arguments": "论述理由"
-        }}
-    ],
-    "conclusion": "总结陈述"
-}}
-"""
-
-        response = await self.llm_manager.generate(
-            prompt=prompt,
-            system_prompt=self.get_system_prompt(),
-            model="kimi-k2.5",
+        unified_writer = self._get_unified_writer()
+        return await unified_writer.response_module.draft_response(
+            user_input,
+            previous_results,
+            "kimi-k2.5"
         )
-
-        # 解析JSON
-        import json
-        try:
-            response_doc = json.loads(response)
-            return {
-                "document_type": "office_action_response",
-                "content": response_doc,
-                "full_text": self._format_response(response_doc),
-            }
-        except json.JSONDecodeError:
-            self.logger.error("审查意见答复撰写响应解析失败")
-            return {
-                "document_type": "office_action_response",
-                "content": {},
-                "full_text": response,
-            }
 
     async def _draft_invalidation(
         self,
@@ -348,77 +315,19 @@ class WriterAgent(BaseXiaonaComponent):
         previous_results: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        撰写无效宣告请求书
+        撰写无效宣告请求书（废弃方法）
 
-        Args:
-            user_input: 用户输入
-            previous_results: 前面步骤的结果
-
-        Returns:
-            无效宣告请求书
+        .. deprecated::
+            使用 UnifiedPatentWriter.draft_invalidation() 代替
         """
-        # 获取目标专利和证据
-        target_patent = self._get_target_patent(user_input, previous_results)
-        evidence = self._get_evidence(previous_results)
-        analysis = self._get_analysis(previous_results)
+        self._deprecated_warning("_draft_invalidation", "UnifiedPatentWriter.draft_invalidation")
 
-        prompt = f"""请撰写无效宣告请求书。
-
-目标专利：
-{target_patent}
-
-证据：
-{evidence}
-
-分析结果：
-{analysis}
-
-要求：
-1. 明确无效理由（新颖性/创造性/其他）
-2. 引用证据文件
-3. 逐一分析权利要求
-4. 论述无效理由
-
-输出格式：JSON
-{{
-    "petition_title": "无效宣告请求书",
-    "target_patent": "目标专利信息",
-    "ground_for_invalidity": "无效理由",
-    "evidence_list": ["证据列表"],
-    "claim_analysis": [
-        {{
-            "claim": "权利要求1",
-            "evidence": "D1+D2",
-            "analysis": "分析",
-            "conclusion": "应予无效"
-        }}
-    ],
-    "conclusion": "请求结论"
-}}
-"""
-
-        response = await self.llm_manager.generate(
-            prompt=prompt,
-            system_prompt=self.get_system_prompt(),
-            model="kimi-k2.5",
+        unified_writer = self._get_unified_writer()
+        return await unified_writer.response_module.draft_invalidation(
+            user_input,
+            previous_results,
+            "kimi-k2.5"
         )
-
-        # 解析JSON
-        import json
-        try:
-            petition = json.loads(response)
-            return {
-                "document_type": "invalidation_petition",
-                "content": petition,
-                "full_text": self._format_petition(petition),
-            }
-        except json.JSONDecodeError:
-            self.logger.error("无效宣告请求书撰写响应解析失败")
-            return {
-                "document_type": "invalidation_petition",
-                "content": {},
-                "full_text": response,
-            }
 
     async def _draft_full_application(
         self,
@@ -426,40 +335,30 @@ class WriterAgent(BaseXiaonaComponent):
         previous_results: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        撰写完整申请文件
+        撰写完整申请文件（废弃方法）
 
-        Args:
-            user_input: 用户输入
-            previous_results: 前面步骤的结果
-
-        Returns:
-            完整申请文件
+        .. deprecated::
+            使用 UnifiedPatentWriter.draft_full_application() 代替
         """
-        # 依次撰写各部分
-        claims_result = await self._draft_claims(user_input, previous_results)
-        description_result = await self._draft_description(user_input, previous_results)
+        self._deprecated_warning("_draft_full_application", "UnifiedPatentWriter.draft_full_application")
 
-        # 组合完整申请文件
-        full_application = {
-            "claims": claims_result["content"],
-            "description": description_result["content"],
-            "full_text": (
-                description_result["full_text"] + "\n\n" +
-                "权利要求书\n" + "="*50 + "\n" +
-                claims_result["full_text"]
-            ),
-        }
+        unified_writer = self._get_unified_writer()
+        return await unified_writer.draft_full_application(
+            previous_results or {"user_input": user_input}
+        )
 
-        return full_application
+    # ========== 便捷格式化方法（保留） ==========
 
-    def _format_claims(self, claims: Dict[str, Any]) -> str:
+    @staticmethod
+    def _format_claims(claims: Dict[str, Any]) -> str:
         """格式化权利要求书"""
-        full_text = claims.get("independent_claim", "") + "\n\n"
+        text = claims.get("independent_claim", "") + "\n\n"
         for claim in claims.get("dependent_claims", []):
-            full_text += claim + "\n"
-        return full_text
+            text += claim + "\n"
+        return text
 
-    def _format_description(self, description: Dict[str, Any]) -> str:
+    @staticmethod
+    def _format_description(description: Dict[str, Any]) -> str:
         """格式化说明书"""
         return "\n\n".join([
             description.get("title", ""),
@@ -470,47 +369,76 @@ class WriterAgent(BaseXiaonaComponent):
             description.get("detailed_description", ""),
         ])
 
-    def _format_response(self, response: Dict[str, Any]) -> str:
+    @staticmethod
+    def _format_response(response: Dict[str, Any]) -> str:
         """格式化意见陈述书"""
-        full_text = response.get("introduction", "") + "\n\n"
+        text = response.get("introduction", "") + "\n\n"
         for resp in response.get("responses", []):
-            full_text += f"审查意见：{resp.get('issue', '')}\n"
-            full_text += f"答复：{resp.get('response', '')}\n\n"
-        full_text += response.get("conclusion", "")
-        return full_text
+            text += f"审查意见：{resp.get('issue', '')}\n"
+            text += f"答复：{resp.get('response', '')}\n\n"
+        text += response.get("conclusion", "")
+        return text
 
-    def _format_petition(self, petition: Dict[str, Any]) -> str:
+    @staticmethod
+    def _format_petition(petition: Dict[str, Any]) -> str:
         """格式化无效宣告请求书"""
-        # 简化实现
         return str(petition)
 
-    def _get_features(self, previous_results: Dict[str, Any]) -> Any:
-        """获取技术特征"""
-        if "xiaona_analyzer" in previous_results:
-            return previous_results["xiaona_analyzer"].get("features", {})
-        return {}
 
-    def _get_claims(self, previous_results: Dict[str, Any]) -> str:
-        """获取权利要求"""
-        # 如果前面步骤已经撰写了权利要求
-        return ""
+# ========== 便捷函数 ==========
 
-    def _get_office_action(self, user_input: str, previous_results: Dict[str, Any]) -> str:
-        """获取审查意见"""
-        return user_input
+def create_writer_agent(config: Optional[Dict[str, Any]] = None) -> WriterAgent:
+    """
+    创建WriterAgent实例（便捷函数）
 
-    def _get_analysis(self, previous_results: Dict[str, Any]) -> Any:
-        """获取分析结果"""
-        if "xiaona_analyzer" in previous_results:
-            return previous_results["xiaona_analyzer"]
-        return {}
+    Args:
+        config: 配置参数
 
-    def _get_target_patent(self, user_input: str, previous_results: Dict[str, Any]) -> str:
-        """获取目标专利"""
-        return user_input
+    Returns:
+        WriterAgent实例
+    """
+    return WriterAgent(config=config)
 
-    def _get_evidence(self, previous_results: Dict[str, Any]) -> List[Any]:
-        """获取证据"""
-        if "xiaona_retriever" in previous_results:
-            return previous_results["xiaona_retriever"].get("patents", [])
-        return []
+
+def get_writer_agent() -> WriterAgent:
+    """
+    获取WriterAgent单例实例（便捷函数）
+
+    Returns:
+        WriterAgent实例
+    """
+    if not hasattr(get_writer_agent, "_instance"):
+        get_writer_agent._instance = WriterAgent()
+    return get_writer_agent._instance
+
+
+# ========== 迁移辅助函数 ==========
+
+def migrate_to_unified() -> "UnifiedPatentWriter":
+    """
+    迁移辅助函数 - 获取UnifiedPatentWriter实例
+
+    使用示例：
+        # 旧代码
+        from core.agents.xiaona.writer_agent import WriterAgent
+        writer = WriterAgent()
+
+        # 迁移后
+        from core.agents.xiaona.writer_agent import migrate_to_unified
+        writer = migrate_to_unified()
+
+    Returns:
+        UnifiedPatentWriter实例
+    """
+    from core.agents.xiaona.unified_patent_writer import UnifiedPatentWriter
+    return UnifiedPatentWriter()
+
+
+def get_task_type_mapping() -> Dict[str, str]:
+    """
+    获取任务类型映射表（用于迁移参考）
+
+    Returns:
+        旧的writing_type到新的task_type的映射
+    """
+    return TASK_TYPE_MAPPING.copy()

@@ -4,12 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Athena工作平台** is an enterprise-level AI agent collaboration platform focused on patent legal services. It integrates multiple intelligent agents (小娜/Xiaona - legal expert, 小诺/Xiaonuo - coordinator, 云熙/Yunxi - IP management) through a centralized Gateway architecture.
+**Athena工作平台** is an enterprise-level AI agent collaboration platform focused on patent legal services. It integrates multiple intelligent agents (小娜/Xiaona - legal expert module with 9 specialized agents, 小诺/Xiaonuo - coordinator, 云熙/Yunxi - IP management) through a centralized Gateway architecture.
 
 **Key Characteristics:**
 - Multi-language tech stack: Python 3.11+, Go, TypeScript/JavaScript
 - Four-tier memory system: HOT (memory) → WARM (Redis) → COLD (SQLite) → ARCHIVE
 - Multi-agent architecture with WebSocket-based coordination
+- **Specialized Agent System**: 小娜拆解为9个专业代理，覆盖专利全生命周期
 - Patent-focused domain knowledge and workflows
 
 ## Common Development Commands
@@ -142,10 +143,29 @@ The platform uses a centralized Gateway pattern for multi-agent coordination:
 └─────────────────────────────────────────────────────────┘
          │         │         │
     ┌────┴────┐ ┌──┴────┐ ┌┴──────┐
-    │小娜代理  │ │小诺代理 │ │云熙代理 │
-    │(Legal)  │ │(Coord) │ │ (IP)   │
-    └─────────┘ └───────┘ └───────┘
+    │小娜模块  │ │小诺代理 │ │云熙代理 │
+    │(9个专业 │ │(Coord) │ │ (IP)   │
+    │  代理)  │ │        │ │        │
+    └────┬────┘ └───────┘ └───────┘
+         │
+    ┌────┴─────────────────────────────────────────────┐
+    │          小娜专业代理矩阵                          │
+    ├─────────┬─────────┬─────────┬─────────┬─────────┤
+    │检索代理  │分析代理  │统一撰写  │新颖性   │创造性   │
+    │Retriever│Analyzer │Unified  │Novelty  │Creativity│
+    │         │         │Patent   │         │         │
+    │         │         │Writer   │         │         │
+    ├─────────┼─────────┼─────────┼─────────┼─────────┤
+    │侵权分析  │无效分析  │申请审查  │写作审查  │         │
+    │Infringement│Invalidation│Reviewer│Writing │         │
+    └─────────┴─────────┴─────────┴─────────┴─────────┘
 ```
+
+**代理调用模式**：
+- **单代理调用**：直接调用特定专业代理
+- **串行调用**：检索→分析→撰写（如专利申请流程）
+- **并行调用**：新颖性+创造性同时评估（如可专利性评估）
+- **组合调用**：多个代理协作完成复杂任务
 
 ### Directory Structure
 
@@ -196,11 +216,76 @@ Athena工作平台/
 ### Core Systems
 
 **1. Agent System** (`core/agents/`)
+
+**1.1 基础架构**
 - **Base Agent**: `base_agent.py` - Foundation for all agents
-- **Xiaona (小娜)**: Legal expert agent for patent analysis
-- **Xiaonuo (小诺)**: Platform coordinator agent
-- **Yunxi (云熙)**: IP management agent
-- Each agent has: capabilities, prompts, memory integration
+- **Base Component**: `agents/xiaona/base_component.py` - 专业代理基类
+
+**1.2 核心智能体**
+- **Xiaonuo (小诺·双鱼座)**: Platform coordinator agent - 平台总调度官
+- **Yunxi (云熙)**: IP management agent - IP管理专家
+
+**1.3 小娜专业代理模块（9个专业代理）**
+
+小娜已从单一代理拆解为9个专业代理，覆盖专利全生命周期：
+
+| 代理名称 | 文件 | 功能 | 状态 |
+|---------|------|------|------|
+| **检索代理** | `retriever_agent.py` | 专利检索、现有技术查找 | ✅ 生产就绪 |
+| **分析代理** | `analyzer_agent.py` | 专利分析、技术方案解析 | ✅ 生产就绪 |
+| **统一撰写代理** | `unified_patent_writer.py` | 完整撰写流程（交底书分析→权利要求→说明书），整合原WriterAgent和PatentDraftingProxy | ✅ 生产就绪 |
+| **新颖性分析代理** | `novelty_analyzer_proxy.py` | 新颖性评估、现有技术对比 | ✅ 生产就绪 |
+| **创造性分析代理** | `creativity_analyzer_proxy.py` | 创造性评估、技术效果分析 | ✅ 生产就绪 |
+| **侵权分析代理** | `infringement_analyzer_proxy.py` | 侵权风险评估、权利要求解释 | ✅ 生产就绪 |
+| **无效分析代理** | `invalidation_analyzer_proxy.py` | 无效宣告分析、证据评估 | ✅ 生产就绪 |
+| **申请审查代理** | `application_reviewer_proxy.py` | 申请文件审查、质量检查 | ✅ 生产就绪 |
+| **写作审查代理** | `writing_reviewer_proxy.py` | 文本质量审查、错误检测 | ✅ 生产就绪 |
+
+**架构特点**：
+- 每个代理独立部署、独立调用
+- 共享 `base_component.py` 基类能力
+- 支持组合调用完成复杂任务
+- 统一健康检查和监控接口
+
+**1.4 专业代理调用示例**
+
+```python
+# 单代理调用 - 专利检索
+from core.agents.xiaona.retriever_agent import RetrieverAgent
+retriever = RetrieverAgent()
+results = retriever.search_patents(query="深度学习 图像识别")
+
+# 串行调用 - 专利申请流程（使用统一撰写代理）
+from core.agents.xiaona.unified_patent_writer import UnifiedPatentWriter
+writer = UnifiedPatentWriter()
+disclosure = writer.analyze_disclosure(disclosure_path="交底书.docx")
+claims = writer.draft_claims(technical_disclosure=disclosure)
+specification = writer.draft_specification(claims=claims)
+
+# 并行调用 - 可专利性评估
+from core.agents.xiaona.novelty_analyzer_proxy import NoveltyAnalyzerProxy
+from core.agents.xiaona.creativity_analyzer_proxy import CreativityAnalyzerProxy
+novelty = NoveltyAnalyzerProxy().assess_novelty(patent_data=...)
+creativity = CreativityAnalyzerProxy().assess_creativity(patent_data=...)
+
+# 组合调用 - 无效宣告分析
+from core.agents.xiaona.invalidation_analyzer_proxy import InvalidationAnalyzerProxy
+invalidation = InvalidationAnalyzerProxy()
+analysis = invalidation.analyze_invalidation(
+    patent_number="CN201921401279.9",
+    evidence_list=["D1", "D2", "D3"]
+)
+```
+
+**1.5 专业代理协作模式**
+
+| 任务类型 | 代理组合 | 调用模式 | 示例 |
+|---------|---------|---------|------|
+| 专利申请 | 检索→分析→统一撰写→审查 | 串行 | 交底书→申请文件 |
+| 可专利性评估 | 新颖性+创造性 | 并行 | 技术方案→评估报告 |
+| 无效宣告 | 检索→无效分析→侵权分析 | 混合 | 证据组合→无效报告 |
+| 专利撰写 | 统一撰写代理+写作审查 | 串行 | 初稿→审查→定稿 |
+| FTO分析 | 检索→侵权分析 | 串行 | 技术方案→FTO报告 |
 
 **2. LLM Management** (`core/llm/`)
 - **Unified Manager**: `unified_llm_manager.py` - Central LLM orchestration
@@ -825,10 +910,27 @@ docker-compose exec redis redis-cli ping
 
 ## Key Files
 
+### Agent System
+
+| File | Purpose |
+|------|---------|
+| `core/agents/base_agent.py` | Base agent class |
+| `core/agents/xiaona/base_component.py` | 专业代理基类 |
+| `core/agents/xiaona/retriever_agent.py` | 检索代理 - 专利检索 |
+| `core/agents/xiaona/analyzer_agent.py` | 分析代理 - 专利分析 |
+| `core/agents/xiaona/unified_patent_writer.py` | 统一撰写代理 - 完整撰写流程（整合原writer_agent和patent_drafting_proxy） |
+| `core/agents/xiaona/novelty_analyzer_proxy.py` | 新颖性分析代理 |
+| `core/agents/xiaona/creativity_analyzer_proxy.py` | 创造性分析代理 |
+| `core/agents/xiaona/infringement_analyzer_proxy.py` | 侵权分析代理 |
+| `core/agents/xiaona/invalidation_analyzer_proxy.py` | 无效分析代理 |
+| `core/agents/xiaona/application_reviewer_proxy.py` | 申请审查代理 |
+| `core/agents/xiaona/writing_reviewer_proxy.py` | 写作审查代理 |
+
+### Core Systems
+
 | File | Purpose |
 |------|---------|
 | `scripts/xiaonuo_unified_startup.py` | Main platform startup script |
-| `core/agents/base_agent.py` | Base agent class |
 | `core/llm/unified_llm_manager.py` | LLM orchestration |
 | `core/embedding/unified_embedding_service.py` | Embedding service |
 | `core/memory/` | Memory system implementation |
@@ -846,6 +948,7 @@ docker-compose exec redis redis-cli ping
 | `gateway-unified/` | Unified Go gateway system ⭐ |
 | `mcp-servers/` | MCP servers (gaode, academic-search, jina-ai, etc.) |
 | `config/service_discovery.json` | Service registry |
+| `config/agent_registry.json` | Agent registry (9个专业代理配置) |
 | `docker-compose.yml` | Main Docker configuration |
 | `pyproject.toml` | Python project config |
 | `tests/pytest.ini` | Test configuration |
