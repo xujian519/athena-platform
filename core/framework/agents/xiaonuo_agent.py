@@ -52,10 +52,8 @@ class XiaonuoAgent:
     async def coordinate_agents(
         self,
         task: str,
-        agents: Optional[List[str],]
-
-        context: Optional[Dict[str, Any]] = None]
-
+        agents: Optional[List[str]] = None,
+        context: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """
         协调多个智能体完成任务
@@ -94,8 +92,7 @@ class XiaonuoAgent:
         self,
         agent_name: str,
         task: str,
-        context: Optional[Dict[str, Any]] = None]
-
+        context: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """
         路由任务到指定代理
@@ -176,8 +173,7 @@ class XiaonuoAgent:
 
     def get_available_agents(self) -> List[str]:
         """获取可用的代理列表"""
-        return []
-
+        return [
             "xiaona-retriever",
             "xiaona-analyzer",
             "xiaona-writer",
@@ -187,7 +183,8 @@ class XiaonuoAgent:
             "xiaona-invalidation",
             "xiaona-application_reviewer",
             "xiaona-writing_reviewer",
-        
+        ]
+
 
 
 # 便捷函数
@@ -197,9 +194,9 @@ async def create_xiaonuo_agent() -> str:
 
 
 # 导出
-__all__ = []
-
+__all__ = [
     "XiaonuoAgent",
     "create_xiaonuo_agent",
+]
 
 

@@ -160,7 +160,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     async def review_format(
         self,
-        application: Optional[dict[str, Any]]
+        application: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -188,7 +188,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     def _review_format_by_rules(
         self,
-        application: Optional[dict[str, Any]]
+        application: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -208,7 +208,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
             "权利要求书",
             "摘要",
             "说明书附图"  # 如有
-        
+
 
         # 检查文件完整性
         provided_documents = application.get("documents", [])
@@ -216,7 +216,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
             doc for doc in required_documents
             if doc not in provided_documents
-        
+
 
         # 检查申请人信息
         applicant_data = application.get("applicant_data", {})
@@ -335,7 +335,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     async def review_disclosure(
         self,
-        application: Optional[dict[str, Any]]
+        application: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -363,7 +363,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     def _review_disclosure_by_rules(
         self,
-        application: Optional[dict[str, Any]]
+        application: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -514,7 +514,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     async def review_claims(
         self,
-        application: Optional[dict[str, Any]]
+        application: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -542,7 +542,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     def _review_claims_by_rules(
         self,
-        application: Optional[dict[str, Any]]
+        application: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -692,7 +692,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     async def review_specification(
         self,
-        application: Optional[dict[str, Any]]
+        application: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -720,7 +720,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     def _review_specification_by_rules(
         self,
-        application: Optional[dict[str, Any]]
+        application: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -927,7 +927,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     def _assess_claims_clarity(
         self,
-        claims_list: Optional[list[dict[str, Any]]
+        claims_list: Optional[[list[dict[str, Any]]]
     ) -> dict[str, Any]:
         """评估权利要求清晰度"""
         avg_length = sum(len(c["text"]) for c in claims_list) / len(claims_list) if claims_list else 0
@@ -951,9 +951,9 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     def _assess_claims_support(
         self,
-        claims_list: Optional[list[dict[str, Any]],]
+        claims_list: Optional[[list[dict[str, Any]]],]
 
-        application: Optional[dict[str, Any]]
+        application: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """评估权利要求与说明书支持"""
@@ -985,7 +985,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     def _assess_claims_breadth(
         self,
-        claims_list: Optional[list[dict[str, Any]]
+        claims_list: Optional[[list[dict[str, Any]]]
     ) -> dict[str, Any]:
         """评估权利要求保护范围"""
         # 独立权利要求的数量通常反映保护范围
@@ -1009,7 +1009,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     def _assess_claims_dependency(
         self,
-        claims_list: Optional[list[dict[str, Any]]
+        claims_list: Optional[[list[dict[str, Any]]]
     ) -> dict[str, Any]:
         """评估权利要求依赖关系"""
         dependent_count = len([c for c in claims_list if c["type"] == "dependent"])
@@ -1031,7 +1031,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     def _assess_specification_completeness(
         self,
-        application: Optional[dict[str, Any]]
+        application: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """评估说明书完整性"""
@@ -1042,7 +1042,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
             "发明内容",
             "附图说明",
             "具体实施方式",
-        
+
 
         specification = application.get("specification", "")
         complete_sections = sum(
@@ -1079,7 +1079,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
     def _assess_enablement(
         self,
         specification_text: str,
-        embodiments: Optional[list[Any]]
+        embodiments: Optional[[list[Any]]]
 
     ) -> dict[str, Any]:
         """评估充分公开（本领域技术人员能否实现）"""
@@ -1110,7 +1110,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     def _assess_best_mode(
         self,
-        application: Optional[dict[str, Any]]
+        application: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """评估最佳实施方式披露"""
@@ -1125,7 +1125,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
     def _assess_drawings_support(
         self,
         specification_text: str,
-        drawings: Optional[list[Any]]
+        drawings: Optional[[list[Any]]]
 
     ) -> dict[str, Any]:
         """评估附图支持"""
@@ -1161,7 +1161,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
 
     def _generate_specification_suggestions(
         self,
-        specification_review: Optional[dict[str, Any]]
+        specification_review: Optional[[dict[str, Any]]]
 
     ) -> list[str]:
         """生成说明书改进建议"""
@@ -1195,7 +1195,7 @@ class ApplicationDocumentReviewerProxy(BaseXiaonaComponent):
             disclosure_result.get("completeness_score", 0),
             claims_result.get("claims_review", {}).get("clarity", {}).get("score", 0),
             specification_result.get("specification_review", {}).get("completeness", {}).get("score", 0),
-        
+
 
         return sum(scores) / len(scores) if scores else 0
 

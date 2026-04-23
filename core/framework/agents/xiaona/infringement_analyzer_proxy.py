@@ -160,7 +160,7 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
 
     async def interpret_claims(
         self,
-        patent_data: Optional[dict[str, Any]]
+        patent_data: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -188,7 +188,7 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
 
     def _interpret_claims_by_rules(
         self,
-        patent_data: Optional[dict[str, Any]]
+        patent_data: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -284,7 +284,7 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
             "functional_features": ["功能性限定特征列表"],
             "broad_concepts": ["上位概念列表"]
         }}
-    
+
 }}
 ```
 
@@ -327,9 +327,9 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
 
     async def compare_features(
         self,
-        claims: Optional[list[dict[str, Any]],]
+        claims: Optional[[list[dict[str, Any]]],]
 
-        product_description: Optional[dict[str, Any]]
+        product_description: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -358,9 +358,9 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
 
     def _compare_features_by_rules(
         self,
-        claims: Optional[list[dict[str, Any]],]
+        claims: Optional[[list[dict[str, Any]]],]
 
-        product_description: Optional[dict[str, Any]]
+        product_description: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -423,9 +423,9 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
 
     def _build_feature_comparison_prompt(
         self,
-        claims: Optional[list[dict[str, Any]],]
+        claims: Optional[[list[dict[str, Any]]],]
 
-        product_description: Optional[dict[str, Any]]
+        product_description: Optional[[dict[str, Any]]]
 
     ) -> str:
         """构建特征比对提示词"""
@@ -526,7 +526,7 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
 
     async def determine_infringement(
         self,
-        comparisons: Optional[list[dict[str, Any]]
+        comparisons: Optional[[list[dict[str, Any]]]
     ) -> dict[str, Any]:
         """
         判定是否侵权（全面原则、等同原则）（LLM版本）
@@ -553,7 +553,7 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
 
     def _determine_infringement_by_rules(
         self,
-        comparisons: Optional[list[dict[str, Any]]
+        comparisons: Optional[[list[dict[str, Any]]]
     ) -> dict[str, Any]:
         """
         基于规则的侵权判定（降级方案）
@@ -612,7 +612,7 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
 
     def _build_infringement_determination_prompt(
         self,
-        comparisons: Optional[list[dict[str, Any]]
+        comparisons: Optional[[list[dict[str, Any]]]
     ) -> str:
         """构建侵权判定提示词"""
         return f"""# 任务：专利侵权判定
@@ -790,7 +790,7 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
                 "通过技术改进，实现与专利不同的技术方案",
                 "寻求专利无效宣告或专利权评价",
                 "评估许可谈判的可行性",
-            
+
 
         return {
             "risk_level": risk_level,
@@ -966,7 +966,7 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
         return claims if claims else []
 
             {"number": 1, "type": "independent", "text": claims_text}
-        
+
 
     def _extract_essential_features(
         self,
@@ -1001,7 +1001,7 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
     def _feature_covered(
         self,
         feature: str,
-        product_features: Optional[dict[str, Any]]
+        product_features: Optional[[dict[str, Any]]]
 
     ) -> str:
         """判断特征是否被覆盖"""
@@ -1024,7 +1024,7 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
         self,
         missing_features: Optional[list[str],]
 
-        product_features: Optional[dict[str, Any]]
+        product_features: Optional[[dict[str, Any]]]
 
     ) -> list[str]:
         """查找等同特征"""
@@ -1060,7 +1060,7 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
 
     def _generate_comparison_summary(
         self,
-        comparisons: Optional[list[dict[str, Any]]
+        comparisons: Optional[[list[dict[str, Any]]]
     ) -> dict[str, Any]:
         """生成比对摘要"""
         total = len(comparisons)
@@ -1082,7 +1082,7 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
         self,
         literal_claims: Optional[list[int],]
 
-        equivalent_claims: Optional[list[int]]
+        equivalent_claims: Optional[[list[int]]]
 
     ) -> str:
         """获取法律依据"""
@@ -1097,7 +1097,7 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
 
     def _generate_infringement_reasoning(
         self,
-        comparisons: Optional[list[dict[str, Any]]
+        comparisons: Optional[[list[dict[str, Any]]]
     ) -> str:
         """生成侵权判定推理"""
         reasoning_parts = []
@@ -1136,7 +1136,7 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
                 "寻求专业律师意见",
                 "考虑与专利权人协商许可",
                 "评估无效宣告的可能性",
-            
+
         elif risk_level == "medium":
             return []
 
@@ -1144,14 +1144,14 @@ class InfringementAnalyzerProxy(BaseXiaonaComponent):
                 "准备规避设计方案",
                 "收集不侵权证据",
                 "评估许可谈判的可行性",
-            
+
         else:
             return []
 
                 "继续现有业务",
                 "定期更新技术方案",
                 "关注专利法律动态",
-            
+
 
     def _get_timestamp(self) -> str:
         """获取当前时间戳"""

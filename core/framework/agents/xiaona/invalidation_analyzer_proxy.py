@@ -135,7 +135,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
         self,
         target_patent: Optional[dict[str, Any],]
 
-        prior_art_references: Optional[list[dict[str, Any]],]
+        prior_art_references: Optional[[list[dict[str, Any]]],]
 
         analysis_depth: str = "comprehensive"
 
@@ -199,7 +199,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
         self,
         target_patent: Optional[dict[str, Any],]
 
-        prior_art_references: Optional[list[dict[str, Any]],]
+        prior_art_references: Optional[[list[dict[str, Any]]],]
 
         analysis_depth: str = "comprehensive"
     ) -> dict[str, Any]:
@@ -269,7 +269,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
         self,
         target_patent: Optional[dict[str, Any],]
 
-        prior_art_references: Optional[list[dict[str, Any]],]
+        prior_art_references: Optional[[list[dict[str, Any]]],]
 
         analysis_depth: str
     ) -> str:
@@ -419,7 +419,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
         self,
         patent: Optional[dict[str, Any],]
 
-        references: Optional[list[dict[str, Any]]
+        references: Optional[[list[dict[str, Any]]]
     ) -> dict[str, Any]:
         """
         分析无效理由（LLM版本）
@@ -450,7 +450,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
         self,
         patent: Optional[dict[str, Any],]
 
-        references: Optional[list[dict[str, Any]]
+        references: Optional[[list[dict[str, Any]]]
     ) -> dict[str, Any]:
         """
         基于规则的无效理由分析（降级方案）
@@ -532,7 +532,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
         self,
         patent: Optional[dict[str, Any],]
 
-        references: Optional[list[dict[str, Any]]
+        references: Optional[[list[dict[str, Any]]]
     ) -> str:
         """构建无效理由分析提示词"""
         return f"""# 任务：专利无效理由分析
@@ -646,7 +646,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
         self,
         valid_grounds: Optional[list[Any],]
 
-        existing_references: Optional[list[dict[str, Any]]
+        existing_references: Optional[[list[dict[str, Any]]]
     ) -> dict[str, Any]:
         """
         制定证据搜集策略（LLM版本）
@@ -683,7 +683,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
         self,
         valid_grounds: Optional[list[Any],]
 
-        _existing_references: Optional[list[dict[str, Any]]
+        _existing_references: Optional[[list[dict[str, Any]]]
     ) -> dict[str, Any]:
         """
         基于规则的证据搜集策略（降级方案）
@@ -777,7 +777,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
                 "priority": "high" if i == 0 else "medium"
             }
             for i, g in enumerate(ground_types)
-        
+
 
         return strategy
 
@@ -785,7 +785,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
         self,
         ground_types: Optional[list[str],]
 
-        existing_references: Optional[list[dict[str, Any]]
+        existing_references: Optional[[list[dict[str, Any]]]
     ) -> str:
         """构建证据策略提示词"""
         return f"""# 任务：证据搜集策略制定
@@ -832,7 +832,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
                     "estimated_time": "3-5天",
                     "responsible": "负责人"
                 }}
-            
+
         }}
     ,
     "priority_list": []
@@ -841,7 +841,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
             "ground": "lack_of_novelty",
             "priority": "high/medium/low"
         }}
-    
+
 }}
 ```
 
@@ -1026,7 +1026,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
 
                     }
                     for g in recommended_grounds
-                
+
             }
         })
 
@@ -1066,7 +1066,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
     async def _analyze_novelty_ground(
         self,
         patent: dict,
-        references: Optional[list[dict]]
+        references: Optional[[list[dict]]]
 
     ) -> str:
         """分析新颖性无效理由（LLM版本）"""
@@ -1088,7 +1088,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
     def _analyze_novelty_by_rules(
         self,
         patent: dict,
-        references: Optional[list[dict]]
+        references: Optional[[list[dict]]]
 
     ) -> str:
         """基于规则的新颖性分析（降级方案）"""
@@ -1115,7 +1115,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
     def _build_novelty_analysis_prompt(
         self,
         patent: dict,
-        references: Optional[list[dict]]
+        references: Optional[[list[dict]]]
 
     ) -> str:
         """构建新颖性分析提示词"""
@@ -1192,7 +1192,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
     async def _analyze_creativity_ground(
         self,
         patent: dict,
-        references: Optional[list[dict]]
+        references: Optional[[list[dict]]]
 
     ) -> str:
         """分析创造性无效理由（LLM版本）"""
@@ -1214,7 +1214,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
     def _analyze_creativity_by_rules(
         self,
         patent: dict,
-        references: Optional[list[dict]]
+        references: Optional[[list[dict]]]
 
     ) -> str:
         """基于规则的创造性分析（降级方案）"""
@@ -1234,7 +1234,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
     def _build_creativity_analysis_prompt(
         self,
         patent: dict,
-        references: Optional[list[dict]]
+        references: Optional[[list[dict]]]
 
     ) -> str:
         """构建创造性分析提示词"""
@@ -1468,7 +1468,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
 
     def _select_best_grounds(
         self,
-        valid_grounds: Optional[list[dict]]
+        valid_grounds: Optional[[list[dict]]]
 
     ) -> list[dict]:
         """选择最佳无效理由"""
@@ -1507,14 +1507,14 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
                 "技术常识",
                 "标准文献",
                 "技术手册"
-            
+
         }
 
         return keywords_map.get(ground_type, [])
 
     def _calculate_ground_strength_score(
         self,
-        ground_strengths: Optional[list[dict]]
+        ground_strengths: Optional[[list[dict]]]
 
     ) -> str:
         """计算理由强度得分"""
@@ -1531,7 +1531,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
 
             strength_scores.get(g["strength"], 0) * g.get("confidence", 0.5)
             for g in ground_strengths
-        
+
 
         return sum(scores) / len(scores) if scores else 0
 
@@ -1558,7 +1558,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
     def _generate_outcome_prediction(
         self,
         probability: float,
-        ground_strengths: Optional[list[dict]]
+        ground_strengths: Optional[[list[dict]]]
 
     ) -> str:
         """生成结果预测"""
@@ -1583,7 +1583,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
 
     def _identify_risk_factors(
         self,
-        ground_strengths: Optional[list[dict]]
+        ground_strengths: Optional[[list[dict]]]
 
     ) -> list[str]:
         """识别风险因素"""
@@ -1607,7 +1607,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
     def _generate_strategy_recommendation(
         self,
         probability: float,
-        _ground_strengths: Optional[list[dict]]
+        _ground_strengths: Optional[[list[dict]]]
 
     ) -> str:
         """生成策略建议
@@ -1625,7 +1625,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
 
     def _generate_legal_reasoning(
         self,
-        recommended_grounds: Optional[list[dict]]
+        recommended_grounds: Optional[[list[dict]]]
 
     ) -> str:
         """生成法律依据说明"""
@@ -1644,7 +1644,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
 
     def _generate_argument_1(
         self,
-        recommended_grounds: Optional[list[dict]]
+        recommended_grounds: Optional[[list[dict]]]
 
     ) -> str:
         """生成论据1"""
@@ -1653,7 +1653,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
 
     def _generate_argument_2(
         self,
-        recommended_grounds: Optional[list[dict]]
+        recommended_grounds: Optional[[list[dict]]]
 
     ) -> str:
         """生成论据2"""
@@ -1718,7 +1718,7 @@ class InvalidationAnalyzerProxy(BaseXiaonaComponent):
             "撰写具体理由阐述",
             "检查格式规范",
             "准备申请费用"
-        
+
 
     def _generate_overall_recommendation(
         self,

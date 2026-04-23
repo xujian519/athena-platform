@@ -64,7 +64,7 @@ class UnifiedPatentWriter(BaseXiaonaComponent):
 - 意见陈述书：意见陈述、修改说明、对比分析
 """
 
-    def __init__(self, config: Optional[dict[str, Any]] = None):
+    def __init__(self, config: Optional[[dict[str, Any]]] = None):
 
         """
         初始化统一专利撰写代理
@@ -492,7 +492,7 @@ class UnifiedPatentWriter(BaseXiaonaComponent):
 
     # ========== 便捷方法 ==========
 
-    async def analyze_disclosure(self, disclosure_data: Optional[dict[str, Any]] = None) -> dict[str, Any]:
+    async def analyze_disclosure(self, disclosure_data: Optional[[dict[str, Any]]] = None) -> dict[str, Any]:
         """
         分析技术交底书（便捷方法）
 
@@ -517,7 +517,7 @@ class UnifiedPatentWriter(BaseXiaonaComponent):
 
     async def draft_full_application(
         self,
-        disclosure_data: Optional[dict[str, Any]] = None,
+        disclosure_data: Optional[[dict[str, Any]]] = None,
         progress_callback: Optional[callable] = None
     ) -> dict[str, Any]:
         """
@@ -546,7 +546,7 @@ class UnifiedPatentWriter(BaseXiaonaComponent):
 
     async def draft_office_action_response(
         self,
-        office_action: Optional[dict[str, Any]] = None,
+        office_action: Optional[[dict[str, Any]]] = None,
         progress_callback: Optional[callable] = None
     ) -> dict[str, Any]:
         """
@@ -577,7 +577,7 @@ class UnifiedPatentWriter(BaseXiaonaComponent):
 
 # ========== 工厂函数 ==========
 
-@staticmethod
+    @staticmethod
     def create_unified_patent_writer(config: Optional[dict[str, Any]] = None) -> str:
         """
         创建统一专利撰写代理实例

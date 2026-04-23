@@ -136,7 +136,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
 
     async def assess_obviousness(
         self,
-        patent_data: Optional[dict[str, Any]]
+        patent_data: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -164,7 +164,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
 
     async def evaluate_inventive_step(
         self,
-        patent_data: Optional[dict[str, Any]]
+        patent_data: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -192,7 +192,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
 
     async def analyze_technical_advancement(
         self,
-        patent_data: Optional[dict[str, Any]]
+        patent_data: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -256,7 +256,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
 
             "预料不到", "意外", "显著提高", "大幅改善",
             "远超", "突破", "出乎意料"
-        
+
 
         has_surprising_effect = False
         effect_description = "未发现明显预料不到的效果"
@@ -276,7 +276,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
     async def _assess_obviousness_internal(
         self,
         differences: Any,
-        prior_art: Optional[dict[str, Any]]
+        prior_art: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """内部显而易见性评估"""
@@ -299,7 +299,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
 
     async def _analyze_technical_advancement_internal(
         self,
-        patent_data: Optional[dict[str, Any]]
+        patent_data: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """内部技术进步分析"""
@@ -316,7 +316,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
 
         progress: Optional[dict[str, Any],]
 
-        effects: Optional[dict[str, Any]]
+        effects: Optional[[dict[str, Any]]]
 
     ) -> str:
         """计算置信度分数"""
@@ -341,9 +341,9 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
     # 保留原有的内部方法（用于兼容）
     async def _assess_obviousness(
         self,
-        differences: Optional[list[dict[str, Any]],]
+        differences: Optional[[list[dict[str, Any]]],]
 
-        prior_art: Optional[dict[str, Any]]
+        prior_art: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """评估显而易见性（保留用于兼容）"""
@@ -351,7 +351,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
 
     async def _evaluate_progress(
         self,
-        differences: Optional[list[dict[str, Any]]
+        differences: Optional[[list[dict[str, Any]]]
     ) -> dict[str, Any]:
         """评估显著进步（保留用于兼容）"""
         return {
@@ -364,7 +364,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
         self,
         features: Optional[dict[str, Any],]
 
-        prior_art: Optional[dict[str, Any]]
+        prior_art: Optional[[dict[str, Any]]]
 
     ) -> list[str, Any]:
         """识别区别特征（保留用于兼容）"""
@@ -375,11 +375,11 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
                 "difference": "与现有技术的区别",
                 "novel": True,
             }
-        
+
 
     async def _assess_unexpected_effects(
         self,
-        differences: Optional[list[dict[str, Any]]
+        differences: Optional[[list[dict[str, Any]]]
     ) -> dict[str, Any]:
         """评估预料不到的效果（保留用于兼容）"""
         return {
@@ -391,7 +391,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
         self,
         target_patent: Optional[dict[str, Any],]
 
-        reference_docs: Optional[list[dict[str, Any]],]
+        reference_docs: Optional[[list[dict[str, Any]]],]
 
         analysis_depth: str = "standard"
     ) -> dict[str, Any]:
@@ -444,7 +444,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
 
     async def _extract_technical_features(
         self,
-        patent: Optional[dict[str, Any]]
+        patent: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """提取技术特征"""
@@ -456,7 +456,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
 
     async def _analyze_prior_art(
         self,
-        reference_docs: Optional[list[dict[str, Any]]
+        reference_docs: Optional[[list[dict[str, Any]]]
     ) -> dict[str, Any]:
         """分析现有技术"""
         return {
@@ -470,7 +470,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
         self,
         features: Optional[dict[str, Any],]
 
-        prior_art: Optional[dict[str, Any]]
+        prior_art: Optional[[dict[str, Any]]]
 
     ) -> list[str, Any]:
         """识别区别特征"""
@@ -481,13 +481,13 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
                 "difference": "与现有技术的区别",
                 "novel": True,
             }
-        
+
 
     async def _assess_obviousness(
         self,
-        differences: Optional[list[dict[str, Any]],]
+        differences: Optional[[list[dict[str, Any]]],]
 
-        prior_art: Optional[dict[str, Any]]
+        prior_art: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """评估显而易见性"""
@@ -499,7 +499,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
 
     async def _evaluate_progress(
         self,
-        differences: Optional[list[dict[str, Any]]
+        differences: Optional[[list[dict[str, Any]]]
     ) -> dict[str, Any]:
         """评估显著进步"""
         return {
@@ -510,7 +510,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
 
     async def _assess_unexpected_effects(
         self,
-        differences: Optional[list[dict[str, Any]]
+        differences: Optional[[list[dict[str, Any]]]
     ) -> dict[str, Any]:
         """评估预料不到的效果"""
         return {
@@ -524,7 +524,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
 
         progress: Optional[dict[str, Any],]
 
-        effects: Optional[dict[str, Any]]
+        effects: Optional[[dict[str, Any]]]
 
     ) -> str:
         """生成创造性结论"""
@@ -621,7 +621,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
     def _parse_comprehensive_creativity_response(
         self,
         response: str,
-        patent_data: Optional[dict[str, Any]]
+        patent_data: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """解析完整创造性分析LLM响应"""
@@ -641,7 +641,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
                 "obviousness_assessment", "inventive_step_evaluation",
                 "technical_advancement", "unexpected_effects",
                 "creativity_conclusion", "creativity_level"
-            
+
             for field in required_fields:
                 if field not in result:
                     result[field] = None
@@ -1026,7 +1026,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
 
     async def _assess_obviousness_by_rules(
         self,
-        patent_data: Optional[dict[str, Any]]
+        patent_data: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """基于规则的显而易见性评估（降级方案）"""
@@ -1044,7 +1044,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
 
             "预料不到", "意外", "显著提高", "大幅改善",
             "远超", "突破", "出乎意料"
-        
+
 
         has_surprising_keyword = any(
             keyword in invention_content or keyword in beneficial_effects
@@ -1082,7 +1082,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
 
     async def _evaluate_inventive_step_by_rules(
         self,
-        patent_data: Optional[dict[str, Any]]
+        patent_data: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """基于规则的创造性步骤评估（降级方案）"""
@@ -1119,7 +1119,7 @@ class CreativityAnalyzerProxy(BaseXiaonaComponent):
 
     async def _analyze_technical_advancement_by_rules(
         self,
-        patent_data: Optional[dict[str, Any]]
+        patent_data: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """基于规则的技术进步分析（降级方案）"""

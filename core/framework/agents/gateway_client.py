@@ -70,7 +70,7 @@ class Message:
     type: MessageType = MessageType.TASK
     timestamp: int = field(default_factory=lambda: int(datetime.now().timestamp() * 1e9))
     session_id: str = ""
-    data: Optional[dict[str, Any]] = field(default_factory=dict)
+    data: Optional[[dict[str, Any]]] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         """转换为字典（用于JSON序列化）"""
@@ -87,7 +87,7 @@ class Message:
         return json.dumps(self.to_dict(), ensure_ascii=False)
 
     @classmethod
-    def from_dict(cls, data: Optional[dict[str, Any]]) -> "Message":
+    def from_dict(cls, data: Optional[[dict[str, Any]]]) -> "Message":
         """从字典创建"""
         return cls(
             id=data.get("id", ""),
@@ -111,7 +111,7 @@ class TaskRequest:
     task_type: str
     target_agent: AgentType
     priority: int = 5
-    parameters: Optional[dict[str, Any]] = field(default_factory=dict)
+    parameters: Optional[[dict[str, Any]]] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
@@ -134,7 +134,7 @@ class TaskRequest:
         session_id: str,
         task_type: str,
         target_agent: AgentType,
-        parameters: Optional[dict[str, Any]],
+        parameters: Optional[[dict[str, Any]]],
         priority: int = 5
     ) -> str:
         """创建任务请求"""
@@ -152,8 +152,8 @@ class Response:
     """响应消息"""
     message: Message
     success: bool
-    result: Optional[dict[str, Any]] = field(default_factory=dict)
-    metadata: Optional[dict[str, Any]] = field(default_factory=dict)
+    result: Optional[[dict[str, Any]]] = field(default_factory=dict)
+    metadata: Optional[[dict[str, Any]]] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
@@ -210,8 +210,8 @@ class GatewayClient:
         self._websocket: Optional[ws_client.WebSocketClientProtocol ] = None
         self._connected = False
         self._session_id = ""
-        self._message_handlers: Optional[dict[MessageType, list[Callable]]] = {}
-        self._pending_requests: Optional[dict[str, asyncio.Future]] = {}
+        self._message_handlers: Optional[[dict[MessageType, list[Callable]]]] = {}
+        self._pending_requests: Optional[[dict[str, asyncio.Future]]] = {}
         self._receive_task: Optional[asyncio.Task ] = None
         self._heartbeat_task: Optional[asyncio.Task ] = None
         self._reconnect_task: Optional[asyncio.Task ] = None
@@ -300,7 +300,7 @@ class GatewayClient:
         self,
         task_type: str,
         target_agent: AgentType,
-        parameters: Optional[dict[str, Any]],
+        parameters: Optional[[dict[str, Any]]],
         priority: int = 5
     ) -> Response:
         """
@@ -334,7 +334,7 @@ class GatewayClient:
         response = await self._wait_for_response(task.message.id, timeout=self.config.message_timeout)
         return response
 
-    async def broadcast(self, data: Optional[dict[str, Any]]) -> bool:
+    async def broadcast(self, data: Optional[[dict[str, Any]]]) -> bool:
         """
         广播消息
 

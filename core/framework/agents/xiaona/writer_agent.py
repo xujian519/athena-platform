@@ -263,7 +263,7 @@ class WriterAgent(BaseXiaonaComponent):
     async def _draft_claims(
         self,
         user_input: str,
-        previous_results: Optional[dict[str, Any]]
+        previous_results: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -280,7 +280,7 @@ class WriterAgent(BaseXiaonaComponent):
     async def _draft_description(
         self,
         user_input: str,
-        previous_results: Optional[dict[str, Any]]
+        previous_results: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -297,7 +297,7 @@ class WriterAgent(BaseXiaonaComponent):
     async def _draft_response(
         self,
         user_input: str,
-        previous_results: Optional[dict[str, Any]]
+        previous_results: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -318,7 +318,7 @@ class WriterAgent(BaseXiaonaComponent):
     async def _draft_invalidation(
         self,
         user_input: str,
-        previous_results: Optional[dict[str, Any]]
+        previous_results: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -339,7 +339,7 @@ class WriterAgent(BaseXiaonaComponent):
     async def _draft_full_application(
         self,
         user_input: str,
-        previous_results: Optional[dict[str, Any]]
+        previous_results: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -396,7 +396,7 @@ class WriterAgent(BaseXiaonaComponent):
 
 # ========== 便捷函数 ==========
 
-def create_writer_agent(config: Optional[dict[str, Any]])] -> str:
+def create_writer_agent(config: Optional[[dict[str, Any]]])] -> str:
     """
     创建WriterAgent实例（便捷函数）
 

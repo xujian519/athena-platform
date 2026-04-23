@@ -68,9 +68,9 @@ class GLM47Client:
     async def generate_plan(
         self,
         task_description: str,
-        context: dict[str, Any],        available_tools: list[dict[str, str],
-        requirements: Optional[list[str]] = None,
-        constraints: Optional[list[str]] = None,
+        context: dict[[str, Any]],        available_tools: list[[dict[str, str]],
+        requirements: Optional[[list[str]]] = None,
+        constraints: Optional[[list[str]]] = None,
     ) -> dict[str, Any]:
         """
         使用GLM-4.7生成执行计划
@@ -124,9 +124,9 @@ class GLM47Client:
     def _build_planning_prompt(
         self,
         task_description: str,
-        context: dict[str, Any],        available_tools: list[dict[str, str],
-        requirements: Optional[list[str]] = None,
-        constraints: Optional[list[str]] = None,
+        context: dict[[str, Any]],        available_tools: list[[dict[str, str]],
+        requirements: Optional[[list[str]]] = None,
+        constraints: Optional[[list[str]]] = None,
     ) -> str:
         """构建规划提示词"""
 
@@ -201,7 +201,7 @@ class GLM47Client:
 
     async def _call_llm(
         self,
-        messages: list[dict[str, str],
+        messages: list[[dict[str, str]],
         temperature: float = 0.7,
         max_tokens: int = 2000,
         top_p: float = 0.9,
@@ -294,7 +294,7 @@ class GLM47Client:
             raise ValueError(f"无法解析LLM响应为JSON: {e}") from e
 
     async def _mock_generate_plan(
-        self, task_description: str, context: dict[str, Any], available_tools: list[dict[str, str]
+        self, task_description: str, context: dict[[str, Any]], available_tools: list[[dict[str, str]]
     ) -> dict[str, Any]:
         """
         模拟计划生成(用于测试或降级)
@@ -427,7 +427,7 @@ class GLM47Client:
             }
 
     async def suggest_adjustment(
-        self, failed_step: dict[str, Any], error_message: str, plan_context: dict[str, Any]]
+        self, failed_step: dict[[str, Any]], error_message: str, plan_context: dict[[str, Any]]]
     ) -> dict[str, Any]:
         """
         当步骤失败时,使用GLM-4.7生成调整建议
@@ -522,7 +522,7 @@ class GLM47Client:
                 "confidence": 0.5,
             }
 
-    async def identify_parallel_tasks(self, plan: dict[str, Any]) -> list[list[int]]:
+    async def identify_parallel_tasks(self, plan: dict[[[str, Any]]]) -> list[list[int]]:
         """
         识别可以并行执行的任务
 

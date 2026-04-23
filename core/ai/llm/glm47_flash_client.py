@@ -36,8 +36,8 @@ class GLM47FlashResponse:
     reasoning_content: str = ""  # 推理内容(深度思考模式)
     model: str = "glm-4.7-flash"  # 使用的模型
     finish_reason: str = ""  # 结束原因
-    usage: dict[str, int] = field(default_factory=dict)  # token使用情况
-    raw_response: dict[str, Any] = field(default_factory=dict)  # 原始响应
+    usage: dict[[str, int]] = field(default_factory=dict)  # token使用情况
+    raw_response: dict[[str, Any]] = field(default_factory=dict)  # 原始响应
 
 
 @dataclass
@@ -110,7 +110,7 @@ class GLM47FlashClient:
 
     async def chat(
         self,
-        messages: list[dict[str, str] | GLM47FlashMessage],
+        messages: list[[dict[str, str]] | GLM47FlashMessage],
         max_tokens: Optional[int] = None,
         temperature: Optional[float] = None,
         top_p: float = 0.9,
@@ -199,7 +199,7 @@ class GLM47FlashClient:
 
         return await self.chat(messages, **kwargs)
 
-    async def chat_stream(self, messages: list[dict[str, str] | GLM47FlashMessage], **kwargs):
+    async def chat_stream(self, messages: list[[[dict[str, str]]] | GLM47FlashMessage], **kwargs):
         """
         流式对话接口
 
@@ -265,7 +265,7 @@ class GLM47FlashClient:
             raise
 
     def _format_messages(
-        self, messages: list[dict[str, str] | GLM47FlashMessage]
+        self, messages: list[[dict[str, str]] | GLM47FlashMessage]
     ) -> list[dict[str, str]]:
         """格式化消息列表"""
         formatted = []
@@ -278,7 +278,7 @@ class GLM47FlashClient:
                 formatted.append({"role": msg.role, "content": msg.content})
         return formatted
 
-    def _parse_response(self, result: dict[str, Any]) -> GLM47FlashResponse:
+    def _parse_response(self, result: dict[[[str, Any]]]) -> GLM47FlashResponse:
         """解析API响应"""
         try:
             choice = result.get("choices", [{}])[0]

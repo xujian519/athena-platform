@@ -157,7 +157,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     async def review_legal_terminology(
         self,
-        application: Optional[dict[str, Any]]
+        application: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -185,7 +185,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     async def review_technical_accuracy(
         self,
-        application: Optional[dict[str, Any]]
+        application: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -213,7 +213,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     async def check_writing_style_consistency(
         self,
-        application: Optional[dict[str, Any]]
+        application: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -262,7 +262,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
             legal_review.get("score", 0) * 0.3,  # 30%权重
             technical_review.get("score", 0) * 0.4,  # 40%权重
             style_review.get("overall_score", 0) * 0.3,  # 30%权重
-        
+
         overall_score = sum(scores) if scores else 0
 
         # 确定质量等级
@@ -454,7 +454,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
     "recommendations": []
 
         "撰写质量良好，建议保持"
-    
+
 }}
 ```
 
@@ -562,7 +562,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
                 "variants": ["感应器", "探测装置"],
                 "suggestion": "统一使用'传感器'，避免使用变体"
             }}
-        
+
     }},
     "total_issues": 2,
     "correction_suggestions": ["将'大约'替换为更确切的表述", "在权利要求中规范使用'所述'"]
@@ -782,7 +782,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
                     "variants": ["感应器"],
                     "suggestion": "统一使用'传感器'"
                 }}
-            
+
         }},
         "format_consistency": {{
             "score": 0.85,
@@ -810,7 +810,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
             "issue": "权利要求引用了附图，但说明书中无附图说明",
             "suggestion": "确保说明书中有对应的附图说明"
         }}
-    
+
 }}
 ```
 
@@ -909,7 +909,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     async def _review_legal_terminology_by_rules(
         self,
-        application: Optional[dict[str, Any]]
+        application: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """基于规则的法律用语审查（降级方案）"""
@@ -976,7 +976,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     async def _review_technical_accuracy_by_rules(
         self,
-        application: Optional[dict[str, Any]]
+        application: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """基于规则的技术准确性审查（降级方案）"""
@@ -1049,7 +1049,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     async def _check_style_consistency_by_rules(
         self,
-        application: Optional[dict[str, Any]]
+        application: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """基于规则的风格一致性检查（降级方案）"""
@@ -1082,7 +1082,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
             style_checks["terminology_consistency"]["score"],
             style_checks["format_consistency"]["score"],
             style_checks["numbering_consistency"]["score"],
-        
+
         avg_score = sum(scores) / len(scores) if scores else 0
 
         return {
@@ -1322,7 +1322,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     def _collect_style_issues(
         self,
-        style_checks: Optional[dict[str, Any]]
+        style_checks: Optional[[dict[str, Any]]]
 
     ) -> list[str, Any]:
         """收集风格问题"""
@@ -1347,7 +1347,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     def _identify_strengths(
         self,
-        dimensions: Optional[dict[str, dict]]
+        dimensions: Optional[[dict[str, dict]]]
 
     ) -> list[str]:
         """识别优势"""
@@ -1361,7 +1361,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     def _identify_weaknesses(
         self,
-        dimensions: Optional[dict[str, dict]]
+        dimensions: Optional[[dict[str, dict]]]
 
     ) -> list[str]:
         """识别劣势"""
@@ -1375,7 +1375,7 @@ class WritingReviewerProxy(BaseXiaonaComponent):
 
     def _determine_improvement_priority(
         self,
-        dimensions: Optional[dict[str, dict]]
+        dimensions: Optional[[dict[str, dict]]]
 
     ) -> list[str, Any]:
         """确定改进优先级"""
@@ -1420,14 +1420,14 @@ class WritingReviewerProxy(BaseXiaonaComponent):
                 "统一全文时态",
                 "统一术语使用",
                 "规范编号格式"
-            
+
         }
 
         return suggestions_map.get(aspect, ["加强该维度的质量"])
 
     def _generate_terminology_corrections(
         self,
-        issues: Optional[list[dict]]
+        issues: Optional[[list[dict]]]
 
     ) -> list[str]:
         """生成术语纠正建议"""

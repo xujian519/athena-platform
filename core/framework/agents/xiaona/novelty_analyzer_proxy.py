@@ -276,7 +276,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
     def _parse_novelty_analysis_response(
         self,
         response: str,
-        patent_data: Optional[dict[str, Any]]
+        patent_data: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """解析新颖性分析LLM响应"""
@@ -303,7 +303,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
                 "distinguishing_features",
                 "novelty_conclusion",
                 "confidence_assessment"
-            
+
             for field in required_fields:
                 if field not in result:
                     self.logger.warning(f"LLM响应缺少字段: {field}")
@@ -354,7 +354,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
         self,
         target_features: Optional[dict[str, Any],]
 
-        reference_doc: Optional[dict[str, Any]]
+        reference_doc: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -399,7 +399,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
     def _parse_feature_comparison_response(
         self,
         response: str,
-        reference_doc: Optional[dict[str, Any]]
+        reference_doc: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """解析特征对比LLM响应"""
@@ -422,7 +422,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
                 "undisclosed_count",
                 "total_count",
                 "disclosure_ratio"
-            
+
             for field in required_fields:
                 if field not in result:
                     result[field] = None
@@ -435,9 +435,9 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
 
     async def _judge_novelty(
         self,
-        novel_features: Optional[list[dict[str, Any]],]
+        novel_features: Optional[[list[dict[str, Any]]],]
 
-        target_features: Optional[dict[str, Any]]
+        target_features: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -468,9 +468,9 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
 
     def _judge_novelty_by_rules(
         self,
-        novel_features: Optional[list[dict[str, Any]],]
+        novel_features: Optional[[list[dict[str, Any]]],]
 
-        target_features: Optional[dict[str, Any]]
+        target_features: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """
@@ -529,7 +529,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
                 "novelty_conclusion",
                 "strength",
                 "reasoning"
-            
+
             for field in required_fields:
                 if field not in result:
                     result[field] = None
@@ -542,7 +542,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
 
     async def _extract_all_features(
         self,
-        patent: Optional[dict[str, Any]]
+        patent: Optional[[dict[str, Any]]]
 
     ) -> dict[str, Any]:
         """提取所有技术特征"""
@@ -559,7 +559,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
     def _extract_features_by_type(
         self,
         claims_text: str,
-        keywords: Optional[list[str]]
+        keywords: Optional[[list[str]]]
 
     ) -> list[str]:
         """根据关键词提取特征"""
@@ -578,7 +578,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
         self,
         target_features: Optional[dict[str, Any],]
 
-        comparison_results: Optional[list[dict[str, Any]]
+        comparison_results: Optional[[list[dict[str, Any]]]
     ) -> list[str, Any]:
         """识别新颖特征"""
         novel_features = []
@@ -604,9 +604,9 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
 
     def _calculate_novelty_confidence(
         self,
-        novel_features: Optional[list[dict[str, Any]],]
+        novel_features: Optional[[list[dict[str, Any]]],]
 
-        target_features: Optional[dict[str, Any]]
+        target_features: Optional[[dict[str, Any]]]
 
     ) -> str:
         """
@@ -642,7 +642,7 @@ class NoveltyAnalyzerProxy(BaseXiaonaComponent):
         self,
         target_patent: Optional[dict[str, Any],]
 
-        reference_docs: Optional[list[dict[str, Any]],]
+        reference_docs: Optional[[list[dict[str, Any]]],]
 
         comparison_mode: str = "individual"
     ) -> dict[str, Any]:
