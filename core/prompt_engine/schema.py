@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
+from typing import Any, Optional
 
 
 class VariableType(str, Enum):
@@ -24,9 +24,9 @@ class VariableSpec:
     source: str = ""  # user_input | document | extracted | system
     default: Any = None
     description: str = ""
-    max_length: int | None = None
-    pattern: str | None = None  # 正则校验（可选）
-    enum: list[str] | None = None  # 枚举值（可选）
+    max_length: Optional[int] = None
+    pattern: Optional[str] = None  # 正则校验（可选）
+    enum: Optional[list] = None  # 枚举值（可选）
 
 
 @dataclass
@@ -54,7 +54,7 @@ class PromptSchema:
     def get_optional_vars(self) -> list[str]:
         return [v.name for v in self.variables if not v.required]
 
-    def get_spec(self, name: str) -> VariableSpec | None:
+    def get_spec(self, name: str) -> Optional[VariableSpec]:
         for v in self.variables:
             if v.name == name:
                 return v

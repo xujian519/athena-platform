@@ -11,7 +11,7 @@ import json
 import threading
 from collections import deque
 from dataclasses import asdict, dataclass, field
-from typing import Any
+from typing import Any, Dict, Optional
 
 
 @dataclass
@@ -33,15 +33,15 @@ class FusionMetrics:
     wiki_revision: str = "unknown"
     template_version: str = ""
     source_degradation: list[str] = field(default_factory=list)
-    error: str | None = None
+    error: Optional[str] = None
     token_count_input: int = 0
     token_count_output: int = 0
     evidence_relevance_score: float = 0.0
     budget_usage_ratio: float = 0.0
-    rollback_reason: str | None = None
+    rollback_reason: Optional[str] = None
     schema_validated: bool = False
     # C1-BudgetIntegration: 记录 BudgetMetrics 快照
-    budget_metrics: dict[str, Any] | None = None
+    budget_metrics: Optional[Dict[str, Any]] = None
 
     def to_dict(self) -> dict[str, Any]:
         """转换为普通字典，None 值保留为 null。"""
@@ -74,7 +74,7 @@ class PromptMetricsCollector:
     并提供 Prometheus 纯文本格式导出（前缀 ``athena_prompt_``）。
     """
 
-    _instance: PromptMetricsCollector | None = None
+    _instance: Optional[PromptMetricsCollector] = None
     _lock = threading.Lock()
 
     def __new__(cls) -> PromptMetricsCollector:

@@ -3,7 +3,7 @@
 import re
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any
+from typing import Any, List, Optional, Tuple
 
 from .schema import PromptSchema, VariableSpec
 
@@ -26,7 +26,7 @@ class PromptSanitizer:
     """用户输入清洗与 Prompt Injection 检测。"""
 
     # 常见 injection 模式（可扩展）
-    INJECTION_PATTERNS: list[tuple[str, RiskLevel]] = [
+    INJECTION_PATTERNS: List[Tuple[str, RiskLevel]] = [
         (
             r"ignore\s+(all\s+)?(previous|above|prior)\s+(instructions?|prompts?|commands?)",
             RiskLevel.CRITICAL,
@@ -58,8 +58,8 @@ class PromptSanitizer:
             value = value.replace(ch, "\\" + ch)
         return value
 
-    def detect_injection(self, value: str) -> list[InjectionRisk]:
-        risks: list[InjectionRisk] = []
+    def detect_injection(self, value: str) -> List[InjectionRisk]:
+        risks: List[InjectionRisk] = []
         value_lower = value.lower()
         for pattern, level in self.INJECTION_PATTERNS:
             if re.search(pattern, value_lower, re.IGNORECASE):
@@ -73,11 +73,11 @@ class PromptSanitizer:
         return risks
 
     def sanitize_variables(
-        self, variables: dict[str, Any], schema: PromptSchema | None = None
-    ) -> tuple[dict[str, Any], list[InjectionRisk]]:
+        self, variables: dict[str, Any], schema: Optional[PromptSchema] = None
+    ) -> Tuple[dict[str, Any], List[InjectionRisk]]:
         """清洗变量字典，返回 (清洗后变量, 风险列表)。"""
         sanitized: dict[str, Any] = {}
-        all_risks: list[InjectionRisk] = []
+        all_risks: List[InjectionRisk] = []
 
         for key, value in variables.items():
             str_value = str(value) if value is not None else ""

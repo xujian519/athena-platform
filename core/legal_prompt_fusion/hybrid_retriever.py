@@ -4,6 +4,7 @@
 """
 
 from collections.abc import Iterable
+from typing import List, Optional
 
 from .config import FusionConfig
 from .models import RetrievalEvidence, SourceType
@@ -15,14 +16,14 @@ class HybridLegalRetriever:
 
     def __init__(
         self,
-        repository: UnifiedLegalKnowledgeRepository | None = None,
-        config: FusionConfig | None = None,
+        repository: Optional[UnifiedLegalKnowledgeRepository] = None,
+        config: Optional[FusionConfig] = None,
     ):
         self.config = config or FusionConfig()
         self.repository = repository or UnifiedLegalKnowledgeRepository(self.config)
         self.last_source_degradation: list[str] = []
 
-    def retrieve(self, query: str, top_k_per_source: int | None = None) -> list[RetrievalEvidence]:
+    def retrieve(self, query: str, top_k_per_source: Optional[int] = None) -> List[RetrievalEvidence]:
         bundle = self.repository.retrieve_all(query, top_k_per_source=top_k_per_source)
         self.last_source_degradation = list(bundle.source_degradation)
         all_items = [*bundle.postgres, *bundle.neo4j, *bundle.wiki]

@@ -1,6 +1,7 @@
 """证据裁剪算法 — 按相关性排序并动态移除低优先级证据。"""
 
 from dataclasses import dataclass, field
+from typing import Optional
 
 from .utils import TokenEstimator
 
@@ -40,7 +41,7 @@ class EvidenceTruncator:
     4. 保证至少保留 min_core_count 条（即使超限也由上层 RollbackTrigger 处理）。
     """
 
-    def __init__(self, estimator: TokenEstimator | None = None) -> None:
+    def __init__(self, estimator: Optional[TokenEstimator] = None) -> None:
         self._estimator = estimator or TokenEstimator()
 
     def truncate(

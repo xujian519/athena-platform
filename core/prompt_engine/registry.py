@@ -2,7 +2,7 @@
 PromptSchemaRegistry - 提示词 Schema 注册表与版本管理
 """
 
-from typing import Any
+from typing import Any, Optional
 
 from core.prompt_engine.schema import PromptSchema
 
@@ -113,7 +113,7 @@ class PromptSchemaRegistry:
         domain = schema.rule_id.split('/')[0] if '/' in schema.rule_id else 'root'
         self._domain_index.setdefault(domain, []).append(schema.rule_id)
 
-    def get(self, schema_id: str) -> PromptSchema | None:
+    def get(self, schema_id: str) -> Optional[PromptSchema]:
         """通过 schema_id 获取 Schema。"""
         return self._schemas.get(schema_id)
 

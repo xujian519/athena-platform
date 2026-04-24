@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 
 """
 法律提示词融合灰度配置 Schema 与热重载实现。
@@ -355,7 +356,7 @@ class RolloutConfigLoader:
         except OSError as exc:
             logger.error("Rollout 配置首次加载失败: %s", exc)
 
-    def _parse(self, raw: str) -> FusionRolloutConfig | None:
+    def _parse(self, raw: str) -> Optional[FusionRolloutConfig]:
         if not HAS_YAML:
             # 降级为 JSON 解析
             try:

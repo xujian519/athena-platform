@@ -1,7 +1,7 @@
 # ============================================================================
 # Athena学习模块 - Dockerfile
 # ============================================================================
-# 基于Python 3.11的轻量级生产环境镜像
+# 基于Python 3.12的轻量级生产环境镜像
 #
 # 构建命令:
 #   docker build -f Dockerfile.learning -t athena-learning-module:latest .
@@ -14,7 +14,7 @@
 #     athena-learning-module:latest
 # ============================================================================
 
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 # 设置元数据
 LABEL maintainer="Athena Platform Team <athena@xujian519.com>"
@@ -105,7 +105,7 @@ CMD ["python3", "-m", "pytest", "tests/core/learning/", "-v", "--tb=short"]
 # ============================================================================
 # 如需使用多阶段构建，取消以下注释：
 
-# FROM python:3.11-slim as builder
+# FROM python:3.12-slim as builder
 #
 # WORKDIR /app
 #
@@ -116,7 +116,7 @@ CMD ["python3", "-m", "pytest", "tests/core/learning/", "-v", "--tb=short"]
 # COPY requirements.txt .
 # RUN pip install --user --no-cache-dir -r requirements.txt
 #
-# FROM python:3.11-slim
+# FROM python:3.12-slim
 #
 # WORKDIR /app
 #

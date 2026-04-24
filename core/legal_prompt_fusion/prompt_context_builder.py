@@ -3,7 +3,7 @@
 法律提示词上下文构建器。
 """
 
-from typing import Any
+from typing import Any, Optional
 
 from .config import FusionConfig
 from .hybrid_retriever import HybridLegalRetriever
@@ -23,9 +23,9 @@ class LegalPromptContextBuilder:
 
     def __init__(
         self,
-        retriever: HybridLegalRetriever | None = None,
-        sync_manager: WikiSyncManager | None = None,
-        config: FusionConfig | None = None,
+        retriever: Optional[HybridLegalRetriever] = None,
+        sync_manager: Optional[WikiSyncManager] = None,
+        config: Optional[FusionConfig] = None,
     ):
         self.config = config or FusionConfig()
         self.retriever = retriever or HybridLegalRetriever(config=self.config)

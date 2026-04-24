@@ -13,6 +13,7 @@ import concurrent.futures
 import logging
 import os
 from dataclasses import dataclass, field
+from typing import Optional
 
 from .config import FusionConfig
 from .models import RetrievalEvidence, SourceType
@@ -259,13 +260,13 @@ class WikiLegalRepository(_DegradableMixin):
 
 
 class UnifiedLegalKnowledgeRepository:
-    def __init__(self, config: FusionConfig | None = None):
+    def __init__(self, config: Optional[FusionConfig] = None):
         self.config = config or FusionConfig()
         self.postgres = PostgresLegalRepository(self.config)
         self.neo4j = Neo4jLegalRepository(self.config)
         self.wiki = WikiLegalRepository(self.config)
 
-    def retrieve_all(self, query: str, top_k_per_source: int | None = None) -> RetrievalBundle:
+    def retrieve_all(self, query: str, top_k_per_source: Optional[int] = None) -> RetrievalBundle:
         limit = top_k_per_source or self.config.default_top_k_per_source
 
         pg_results = self.postgres.retrieve(query, limit)

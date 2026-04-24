@@ -18,6 +18,7 @@ Xiaonuo Enhanced Controller with Prompt System Optimization
 """
 
 import logging
+import re
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -207,22 +208,14 @@ class XiaonuoEnhancedController:
         self._load_default_prompt_layers()
 
     def _extract_layer_content(self, full_content: str, layer_name: str) -> Optional[str]:
-        """从完整内容中提取指定层的内容"""
-        # 简化实现: 根据常见的L1-L4标记提取
-        lines = full_content.split("\n")
-        layer_content = []
-        in_layer = False
-
-        for line in lines:
-            if layer_name in line and ("层" in line or "Layer" in line):
-                in_layer = True
-                continue
-            elif in_layer:
-                if line.strip().startswith("#") and layer_name not in line:
-                    break
-                layer_content.append(line)
-
-        return "\n".join(layer_content).strip() if layer_content else None
+        """从 Markdown 内容中提取指定层的内容。"""
+        layer_upper = layer_name.upper()
+        # 匹配 ## L1 或 # L1 或 ## L1:xxx 等变体
+        pattern = rf'(?:^|\n)#+\s*{layer_upper}\b[^\n]*\n(.*?)(?=\n#+\s*L\d|\Z)'
+        match = re.search(pattern, full_content, re.DOTALL | re.IGNORECASE)
+        if match:
+            return match.group(1).strip()
+        return None
 
     def _load_default_prompt_layers(self) -> Any:
         """加载默认提示词层 (后备方案)"""

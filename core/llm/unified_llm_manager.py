@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import re
 from datetime import datetime
 from typing import Any
 
@@ -487,14 +488,24 @@ class UnifiedLLMManager:
                     content = fpath.read_text(encoding="utf-8")
                     parts = []
                     for layer in layers:
-                        # 简化层提取
-                        if layer.upper() in content:
-                            parts.append(content[:2000])  # 取前2000字符作为近似
+                        part = self._extract_layer_content(content, layer)
+                        if part:
+                            parts.append(part)
                     return "\n\n".join(parts) if parts else content
             return ""
         except Exception as e:
             logger.error(f"❌ 回退加载提示词失败: {e}")
             return ""
+
+    def _extract_layer_content(self, content: str, layer: str) -> str:
+        """从 Markdown 内容中提取指定层的内容。"""
+        layer_upper = layer.upper()
+        # 匹配 ## L1 或 # L1 或 ## L1:xxx 等变体
+        pattern = rf'(?:^|\n)#+\s*{layer_upper}\b[^\n]*\n(.*?)(?=\n#+\s*L\d|\Z)'
+        match = re.search(pattern, content, re.DOTALL | re.IGNORECASE)
+        if match:
+            return match.group(1).strip()
+        return ""
 
     def _map_task_to_agent(self, task_type: str) -> Optional[str]:
         """

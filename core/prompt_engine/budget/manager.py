@@ -1,6 +1,7 @@
 """Context Budget Manager — 总 budget 分配、动态调整与观测指标。"""
 
 from dataclasses import dataclass, field
+from typing import Optional
 
 from .rollback import RollbackDecision, RollbackReason, RollbackTrigger
 from .truncation import EvidenceItem, EvidenceTruncator, TruncationResult
@@ -39,9 +40,9 @@ class BudgetMetrics:
     evidence_count_before: int = 0
     evidence_count_after: int = 0
     evidence_dropped_count: int = 0
-    rollback_reason: str | None = None
+    rollback_reason: Optional[str] = None
     target_mode: str = "multi_source"
-    elapsed_ms: float | None = None
+    elapsed_ms: Optional[float] = None
 
 
 class ContextBudgetManager:
@@ -89,10 +90,10 @@ class ContextBudgetManager:
     def __init__(
         self,
         total_budget: int,
-        allocation: BudgetAllocation | None = None,
+        allocation: Optional[BudgetAllocation] = None,
         min_core_evidence: int = 2,
         timeout_ms: float = 200.0,
-        estimator: TokenEstimator | None = None,
+        estimator: Optional[TokenEstimator] = None,
         enable_dynamic_shift: bool = True,
     ) -> None:
         """
@@ -118,7 +119,7 @@ class ContextBudgetManager:
         )
 
         # 内部状态（每次 build_context 后更新）
-        self.last_metrics: BudgetMetrics | None = None
+        self.last_metrics: Optional[BudgetMetrics] = None
 
     def _select_default_allocation(self, total: int) -> BudgetAllocation:
         if total >= 32768:
@@ -178,7 +179,7 @@ class ContextBudgetManager:
         system_prompt: str,
         user_query: str,
         evidence_list: list[EvidenceItem],
-        elapsed_ms: float | None = None,
+        elapsed_ms: Optional[float] = None,
     ) -> dict:
         """构建上下文，执行裁剪与回滚检查。
 
@@ -251,6 +252,6 @@ class ContextBudgetManager:
             "target_mode": rollback.target_mode,
         }
 
-    def get_metrics(self) -> BudgetMetrics | None:
+    def get_metrics(self) -> Optional[BudgetMetrics]:
         """获取最近一次 build_context 的 metrics。"""
         return self.last_metrics
