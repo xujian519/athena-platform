@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 """
 基础智能体类
@@ -13,6 +14,10 @@
 2. 智能体执行时保存工作历史
 3. 智能体学习成果自动更新
 4. 项目上下文自动读取
+
+安全特性 (P0修复):
+1. 强制TLS通信 (wss://)
+2. 消息大小限制
 """
 
 import logging
@@ -20,6 +25,14 @@ from abc import ABC, abstractmethod
 from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
+
+# ============ 安全配置 (P0修复) ============
+
+# 强制使用TLS加密的WebSocket
+DEFAULT_GATEWAY_URL = "wss://localhost:8005/ws"  # wss:// 而非 ws://
+
+# 消息大小限制（防止DoS攻击）
+MAX_MESSAGE_SIZE = 10 * 1024 * 1024  # 10MB
 
 # Gateway客户端导入（可选依赖）
 try:
@@ -152,7 +165,7 @@ class BaseAgent(ABC):
         """
         pass
 
-    def add_to_history(self, role: str, content: str) -> str:
+    def add_to_history(self, role: str, content: str) -> None:  # P0修复: 返回None
         """
         添加到对话历史
 
@@ -162,15 +175,15 @@ class BaseAgent(ABC):
         """
         self.conversation_history.append({"role": role, "content": content})
 
-    def clear_history(self) -> str:
+    def clear_history(self) -> None:  # P0修复: 返回None
         """清空对话历史"""
         self.conversation_history.clear()
 
-    def get_history(self) -> list[str, Any]:
+    def get_history(self) -> list[dict[str, str]]:  # P0修复: 正确的类型
         """获取对话历史"""
         return self.conversation_history.copy()
 
-    def remember(self, key: str, value: Any) -> str:
+    def remember(self, key: str, value: Any) -> None:  # P0修复: 返回None
         """
         记住信息
 
@@ -180,7 +193,7 @@ class BaseAgent(ABC):
         """
         self.memory[key] = value
 
-    def recall(self, key: str) -> str:
+    def recall(self, key: str) -> Any | None:  # P0修复: 返回Any|None
         """
         回忆信息
 
@@ -192,7 +205,7 @@ class BaseAgent(ABC):
         """
         return self.memory.get(key)
 
-    def forget(self, key: str) -> str:
+    def forget(self, key: str) -> bool:  # P0修复: 返回bool
         """
         忘记信息
 
@@ -207,7 +220,7 @@ class BaseAgent(ABC):
             return True
         return False
 
-    def add_capability(self, capability: str) -> str:
+    def add_capability(self, capability: str) -> None:  # P0修复: 返回None
         """
         添加能力
 
@@ -217,7 +230,7 @@ class BaseAgent(ABC):
         if capability not in self.capabilities:
             self.capabilities.append(capability)
 
-    def has_capability(self, capability: str) -> str:
+    def has_capability(self, capability: str) -> bool:  # P0修复: 返回bool
         """
         检查是否具有某个能力
 
@@ -233,7 +246,7 @@ class BaseAgent(ABC):
         """获取所有能力"""
         return self.capabilities.copy()
 
-    def validate_input(self, input_text: str) -> str:
+    def validate_input(self, input_text: str) -> bool:  # P0修复: 返回bool
         """
         验证输入
 
@@ -245,7 +258,7 @@ class BaseAgent(ABC):
         """
         return bool(input_text and input_text.strip())
 
-    def validate_config(self) -> str:
+    def validate_config(self) -> bool:  # P0修复: 返回bool
         """
         验证配置
 
@@ -282,7 +295,7 @@ class BaseAgent(ABC):
 
     # ==================== Gateway通信方法 ====================
 
-    async def connect_gateway(self) -> str:
+    async def connect_gateway(self) -> bool:  # P0修复: 返回bool
         """
         连接到Gateway
 
@@ -312,7 +325,7 @@ class BaseAgent(ABC):
 
         return await self._gateway_client.connect()
 
-    async def disconnect_gateway(self) -> str:
+    async def disconnect_gateway(self) -> None:  # P0修复: 返回None
         """断开Gateway连接"""
         if self._gateway_client:
             await self._gateway_client.disconnect()
@@ -321,9 +334,9 @@ class BaseAgent(ABC):
         self,
         target_agent: str,
         task_type: str,
-        parameters: Optional[dict[str, Any]],
+        parameters: Optional[dict[str, Any]] = None,  # P0修复: 添加默认值
         priority: int = 5
-    ) -> str:
+    ) -> Any | None:  # P0修复: 正确的返回类型
         """
         发送消息到其他Agent
 
@@ -361,7 +374,7 @@ class BaseAgent(ABC):
 
         return response.result if response and response.success else None
 
-    async def broadcast(self, data: Optional[dict[str, Any]]) -> str:
+    async def broadcast(self, data: Optional[dict[str, Any]]) -> bool:  # P0修复: 返回bool
         """
         广播消息到所有Agent
 
@@ -377,15 +390,15 @@ class BaseAgent(ABC):
 
         return await self._gateway_client.broadcast(data)
 
-    def _handle_gateway_task(self, message: Message) -> str:
+    def _handle_gateway_task(self, message: Message) -> None:  # P0修复: 返回None
         """处理Gateway任务消息"""
         logger.info(f"📨 收到任务: {message.data}")
 
-    def _handle_gateway_query(self, message: Message) -> str:
+    def _handle_gateway_query(self, message: Message) -> None:  # P0修复: 返回None
         """处理Gateway查询消息"""
         logger.info(f"📨 收到查询: {message.data}")
 
-    def _handle_gateway_notify(self, message: Message) -> str:
+    def _handle_gateway_notify(self, message: Message) -> None:  # P0修复: 返回None
         """处理Gateway通知消息"""
         logger.info(f"📨 收到通知: {message.data}")
 
@@ -436,7 +449,7 @@ class BaseAgent(ABC):
         key: str,
         content: str,
         metadata: Optional[dict[str, Any]]
-    ) -> str:
+    ) -> bool:  # P0修复: 返回bool
         """
         保存记忆
 
@@ -466,7 +479,7 @@ class BaseAgent(ABC):
         task: str,
         result: str,
         status: str = "success"
-    ) -> str:
+    ) -> bool:  # P0修复: 返回bool
         """
         保存工作历史
 
@@ -499,7 +512,7 @@ class BaseAgent(ABC):
         type: Optional[MemoryType] = None,
         category: Optional[MemoryCategory] = None,
         limit: int = 10
-    ) -> str:
+    ) -> list:  # P0修复: 返回list
         """
         搜索记忆
 

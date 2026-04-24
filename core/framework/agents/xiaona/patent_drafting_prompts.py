@@ -11,8 +11,7 @@ class PatentDraftingPrompts:
     """专利撰写代理提示词配置"""
 
     # 提示词模板配置（简化版，避免重复）
-    PROMPTS_CONFIG: Optional[dict[str, Dict[str, Any] = {]]
-
+    PROMPTS_CONFIG: Dict[str, Dict[str, Any]] = {
         "comprehensive": {
             "system_prompt": """你是一位专业的专利撰写专家，具备深厚的专利法知识和丰富的撰写经验。
 
@@ -27,10 +26,3 @@ class PatentDraftingPrompts:
     def get_prompt(cls, task_type: str = "comprehensive") -> Dict[str, Any]:
         """获取提示词配置"""
         return cls.PROMPTS_CONFIG.get(task_type, cls.PROMPTS_CONFIG["comprehensive"])
-
-    @classmethod
-    def format_user_prompt(cls, task_type: str, **kwargs) -> str:
-        """格式化用户提示词"""
-        config = cls.get_prompt(task_type)
-        template = config.get("user_template", "")
-        return template.format(**kwargs) if template else template

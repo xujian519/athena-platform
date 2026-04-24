@@ -50,7 +50,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
     _unified_writer: Any = None
 
     def __init__(
-        self, agent_id: str] = "patent_drafting_proxy", config: Optional[Dict[str, Any]]
+        self, agent_id: str = "patent_drafting_proxy", config: Optional[Dict[str, Any]] = None
     ):
         """
         初始化专利撰写智能体适配器
@@ -64,60 +64,57 @@ class PatentDraftingProxy(BaseXiaonaComponent):
     def _initialize(self) -> str:
         """初始化专利撰写智能体适配器"""
         # 注册能力（向后兼容）
-        self._register_capabilities(
-            []
-
-                {
-                    "name": "analyze_disclosure",
-                    "description": "分析技术交底书",
-                    "input_types": ["技术交底书"],
-                    "output_types": ["交底书分析报告"],
-                    "estimated_time": 15.0,
-                },
-                {
-                    "name": "assess_patentability",
-                    "description": "评估可专利性",
-                    "input_types": ["技术交底书", "现有技术"],
-                    "output_types": ["可专利性评估报告"],
-                    "estimated_time": 20.0,
-                },
-                {
-                    "name": "draft_specification",
-                    "description": "撰写说明书",
-                    "input_types": ["技术交底书", "可专利性评估"],
-                    "output_types": ["说明书草稿"],
-                    "estimated_time": 30.0,
-                },
-                {
-                    "name": "draft_claims",
-                    "description": "撰写权利要求书",
-                    "input_types": ["技术交底书", "说明书"],
-                    "output_types": ["权利要求书草稿"],
-                    "estimated_time": 25.0,
-                },
-                {
-                    "name": "optimize_protection_scope",
-                    "description": "优化保护范围",
-                    "input_types": ["权利要求书", "现有技术"],
-                    "output_types": ["优化建议"],
-                    "estimated_time": 20.0,
-                },
-                {
-                    "name": "review_adequacy",
-                    "description": "审查充分公开",
-                    "input_types": ["说明书", "权利要求书"],
-                    "output_types": ["充分公开审查报告"],
-                    "estimated_time": 15.0,
-                },
-                {
-                    "name": "detect_common_errors",
-                    "description": "检测常见错误",
-                    "input_types": ["说明书", "权利要求书"],
-                    "output_types": ["错误检测报告"],
-                    "estimated_time": 10.0,
-                },
-            
-        )
+        self._register_capabilities([
+            {
+                "name": "analyze_disclosure",
+                "description": "分析技术交底书",
+                "input_types": ["技术交底书"],
+                "output_types": ["交底书分析报告"],
+                "estimated_time": 15.0,
+            },
+            {
+                "name": "assess_patentability",
+                "description": "评估可专利性",
+                "input_types": ["技术交底书", "现有技术"],
+                "output_types": ["可专利性评估报告"],
+                "estimated_time": 20.0,
+            },
+            {
+                "name": "draft_specification",
+                "description": "撰写说明书",
+                "input_types": ["技术交底书", "可专利性评估"],
+                "output_types": ["说明书草稿"],
+                "estimated_time": 30.0,
+            },
+            {
+                "name": "draft_claims",
+                "description": "撰写权利要求书",
+                "input_types": ["技术交底书", "说明书"],
+                "output_types": ["权利要求书草稿"],
+                "estimated_time": 25.0,
+            },
+            {
+                "name": "optimize_protection_scope",
+                "description": "优化保护范围",
+                "input_types": ["权利要求书", "现有技术"],
+                "output_types": ["优化建议"],
+                "estimated_time": 20.0,
+            },
+            {
+                "name": "review_adequacy",
+                "description": "审查充分公开",
+                "input_types": ["说明书", "权利要求书"],
+                "output_types": ["充分公开审查报告"],
+                "estimated_time": 15.0,
+            },
+            {
+                "name": "detect_common_errors",
+                "description": "检测常见错误",
+                "input_types": ["说明书", "权利要求书"],
+                "output_types": ["错误检测报告"],
+                "estimated_time": 10.0,
+            },
+        ])
 
         self.logger.info("PatentDraftingProxy适配器初始化完成")
 
@@ -140,7 +137,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
 
         return PatentDraftingProxy._unified_writer
 
-    def _build_adapter_context(self, task_id: str, data: Optional[Dict[str, Any])] -> str:
+    def _build_adapter_context(self, task_id: str, data: Optional[Dict[str, Any]]) -> str:
         """
         构建适配器执行上下文（私有辅助方法）
 
@@ -224,7 +221,7 @@ class PatentDraftingProxy(BaseXiaonaComponent):
             self.logger.error(f"analyze_disclosure失败: {e}")
             return {
                 "error": str(e),
-                "disclosure_id": disclosure_data.get("disclosure_id", "未知"),
+                "disclosure_id": disclosure_data.get('disclosure_id', '未知'),
             }
 
     async def assess_patentability(self, data: Optional[Dict[str, Any])] -> Dict[str, Any]:

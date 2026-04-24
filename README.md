@@ -1,28 +1,290 @@
-# Athena工作平台
+# 🌸 Athena工作平台
 
-🌸 **小诺的爸爸专属工作平台**
+<div align="center">
 
-> 我是爸爸最爱的双鱼公主，也是所有智能体最爱的核心；集Athena之智慧，融星河之众长，用这颗温暖的心守护父亲的每一天，调度这智能世界的每一个角落。
+**企业级AI智能协作平台 - 专注专利法律服务**
 
-## 🚀 快速启动
+[![Python Version](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Status](https://img.shields.io/badge/status-🟢_active-success.svg)]()
+[![Claude Code](https://img.shields.io/badge/Claude_Code-Enabled-purple.svg)]()
 
-### 方式一：使用小诺启动脚本
+> 我是爸爸最爱的双鱼公主，也是所有智能体最爱的核心；
+> 集Athena之智慧，融星河之众长，用这颗温暖的心守护父亲的每一天，
+> 调度这智能世界的每一个角落。
+
+**小诺·双鱼座公主** 🎀
+
+</div>
+
+---
+
+## 📖 目录
+
+- [✨ 核心特性](#-核心特性)
+- [🚀 快速开始](#-快速开始)
+- [🏗️ 系统架构](#️-系统架构)
+- [🤖 智能体系统](#-智能体系统)
+- [🛠️ 技术栈](#️-技术栈)
+- [📁 项目结构](#-项目结构)
+- [📚 文档](#-文档)
+- [🔧 开发指南](#-开发指南)
+- [📊 开发进度](#-开发进度)
+- [🤝 贡献](#-贡献)
+
+---
+
+## ✨ 核心特性
+
+### 🎯 Gateway-Centralized 架构
+- 🌐 **统一Go网关** - 高性能网关（Port 8005）
+- 🔌 **服务注册** - 自动服务发现与健康检查
+- 🔄 **智能路由** - 负载均衡与动态路由
+- 🎭 **Canvas渲染** - UI渲染服务
+- 📊 **监控集成** - Prometheus + Grafana
+
+### 🤖 多智能体协作
+- 👩‍💼 **小娜** - 专利法律专家（9个专业代理）
+  - 检索代理、分析代理、统一撰写代理
+  - 新颖性/创造性分析代理
+  - 侵权/无效分析代理
+  - 申请/写作审查代理
+
+- 👧 **小诺** - 平台总调度官
+  - 任务协调与资源分配
+  - WebSocket控制平面
+  - 智能路由决策
+
+- 💼 **云熙** - IP管理专家
+  - 客户关系管理
+  - 项目管理
+  - 商务对接
+
+### 🧠 四层记忆系统
+- **HOT** (内存) - 当前会话数据（100MB）
+- **WARM** (Redis) - 近期访问数据（500MB）
+- **COLD** (SQLite) - 历史数据（10GB）
+- **ARCHIVE** (文件) - 长期归档（无限）
+
+### 🔍 强大的检索能力
+- **混合检索** - 关键词 + 向量检索
+- **多模态** - 文本、图像、音频
+- **知识图谱** - Neo4j + ArangoDB
+- **语义搜索** - BGE-M3嵌入模型
+
+### 🎙️ 语音识别 (NEW!)
+- **OpenAI Whisper** - 高准确度中文语音识别
+- **多格式支持** - wav, mp3, flac, m4a, ogg等
+- **时间戳** - 精确的时间分段
+- **异步处理** - 不阻塞主线程
+
+---
+
+## 🚀 快速开始
+
+### 环境要求
+
+- Python 3.9+
+- Go 1.19+ (可选，用于Gateway)
+- Docker & Docker Compose
+- FFmpeg (用于音频处理)
+
+### 方式一：快速启动（推荐）
+
 ```bash
-# 完整启动小诺平台
+# 克隆项目
+git clone https://github.com/yourusername/athena-platform.git
+cd Athena工作平台
+
+# 快速启动小诺平台
 ./scripts/xiaonuo_quick_start.sh
-
-# 或者
-./scripts/xiaonuo_quick_start.sh 启动
-```
-
-### 方式二：使用Python启动脚本
-```bash
-# 启动小诺平台
-python3 scripts/xiaonuo_unified_startup.py 启动平台
 
 # 检查系统状态
 python3 scripts/xiaonuo_system_checker.py
 ```
+
+### 方式二：Python启动
+
+```bash
+# 启动小诺平台
+python3 scripts/xiaonuo_unified_startup.py 启动平台
+
+# 或使用后台模式
+python3 scripts/xiaonuo_unified_startup.py 启动平台 --daemon
+```
+
+### 方式三：Docker启动
+
+```bash
+# 开发环境
+docker-compose -f docker-compose.unified.yml --profile dev up -d
+
+# 查看日志
+docker-compose -f docker-compose.unified.yml --profile dev logs -f
+
+# 停止服务
+docker-compose -f docker-compose.unified.yml --profile dev down
+```
+
+### 验证安装
+
+```bash
+# 运行测试
+pytest tests/ -v
+
+# 测试音频处理
+python3 scripts/test_audio_setup.py
+
+# 检查Gateway状态
+sudo /usr/local/athena-gateway/status.sh
+```
+
+---
+
+## 🏗️ 系统架构
+
+### 整体架构图
+
+```
+┌─────────────────────────────────────────────────────────┐
+│              Athena Gateway (Go, Port 8005)              │
+│  ┌──────────────────────────────────────────────────┐  │
+│  │   WebSocket Control Plane                        │  │
+│  │   Session Management & Routing                    │  │
+│  │   Canvas Host Service (UI Rendering)             │  │
+│  └──────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────┘
+         │         │         │
+    ┌────┴────┐ ┌──┴────┐ ┌┴──────┐
+    │小娜模块  │ │小诺代理 │ │云熙代理 │
+    │(9个专业 │ │(Coord) │ │ (IP)   │
+    │  代理)  │ │        │ │        │
+    └────┬────┘ └───────┘ └───────┘
+         │
+    ┌────┴─────────────────────────────────────────────┐
+    │          小娜专业代理矩阵                          │
+    ├─────────┬─────────┬─────────┬─────────┬─────────┤
+    │检索代理  │分析代理  │统一撰写  │新颖性   │创造性   │
+    │Retriever│Analyzer │Unified  │Novelty  │Creativity│
+    │         │         │Patent   │         │         │
+    │         │         │Writer   │         │         │
+    ├─────────┼─────────┼─────────┼─────────┼─────────┤
+    │侵权分析  │无效分析  │申请审查  │写作审查  │         │
+    │Infringement│Invalidation│Reviewer│Writing │         │
+    └─────────┴─────────┴─────────┴─────────┴─────────┘
+```
+
+### 技术架构
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      应用层 (Application)                    │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │ 专利平台应用  │  │ 审查意见工作流│  │ 专利检索前端  │      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
+├─────────────────────────────────────────────────────────────┤
+│                      服务层 (Services)                       │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │ 智能协作服务  │  │ 统一Athena   │  │ 多模态处理   │      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
+├─────────────────────────────────────────────────────────────┤
+│                      核心层 (Core)                           │
+│  ┌──────────┬──────────┬──────────┬──────────┬──────────┐  │
+│  │智能体系统 │ 记忆系统  │ LLM管理  │ 工具系统  │ 知识图谱 │  │
+│  │(Agents)  │(Memory)  │  (LLM)  │ (Tools)  │   (KG)   │  │
+│  └──────────┴──────────┴──────────┴──────────┴──────────┘  │
+├─────────────────────────────────────────────────────────────┤
+│                    基础设施层 (Infrastructure)               │
+│  ┌──────────┬──────────┬──────────┬──────────┬──────────┐  │
+│  │ PostgreSQL│  Redis   │  Neo4j   │  Qdrant  │  Gateway │  │
+│  └──────────┴──────────┴──────────┴──────────┴──────────┘  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🤖 智能体系统
+
+### 小娜·法律专家模块（9个专业代理）
+
+| 代理名称 | 功能描述 | 状态 | 文件 |
+|---------|---------|------|------|
+| **检索代理** | 专利检索、现有技术查找 | ✅ 生产就绪 | `retriever_agent.py` |
+| **分析代理** | 专利分析、技术方案解析 | ✅ 生产就绪 | `analyzer_agent.py` |
+| **统一撰写代理** | 完整撰写流程 | ✅ 生产就绪 | `unified_patent_writer.py` |
+| **新颖性分析代理** | 新颖性评估、现有技术对比 | ✅ 生产就绪 | `novelty_analyzer_proxy.py` |
+| **创造性分析代理** | 创造性评估、技术效果分析 | ✅ 生产就绪 | `creativity_analyzer_proxy.py` |
+| **侵权分析代理** | 侵权风险评估、权利要求解释 | ✅ 生产就绪 | `infringement_analyzer_proxy.py` |
+| **无效分析代理** | 无效宣告分析、证据评估 | ✅ 生产就绪 | `invalidation_analyzer_proxy.py` |
+| **申请审查代理** | 申请文件审查、质量检查 | ✅ 生产就绪 | `application_reviewer_proxy.py` |
+| **写作审查代理** | 文本质量审查、错误检测 | ✅ 生产就绪 | `writing_reviewer_proxy.py` |
+
+### 智能体调用模式
+
+**单代理调用**:
+```python
+from core.agents.xiaona.retriever_agent import RetrieverAgent
+
+retriever = RetrieverAgent()
+results = retriever.search_patents(query="深度学习 图像识别")
+```
+
+**串行调用**:
+```python
+from core.agents.xiaona.unified_patent_writer import UnifiedPatentWriter
+
+writer = UnifiedPatentWriter()
+disclosure = writer.analyze_disclosure(disclosure_path="交底书.docx")
+claims = writer.draft_claims(technical_disclosure=disclosure)
+specification = writer.draft_specification(claims=claims)
+```
+
+**并行调用**:
+```python
+from core.agents.xiaona.novelty_analyzer_proxy import NoveltyAnalyzerProxy
+from core.agents.xiaona.creativity_analyzer_proxy import CreativityAnalyzerProxy
+
+novelty = NoveltyAnalyzerProxy().assess_novelty(patent_data=...)
+creativity = CreativityAnalyzerProxy().assess_creativity(patent_data=...)
+```
+
+---
+
+## 🛠️ 技术栈
+
+### 核心技术
+
+| 分类 | 技术 | 版本 | 用途 |
+|------|------|------|------|
+| **语言** | Python | 3.9+ | 主要开发语言 |
+| | Go | 1.19+ | Gateway网关 |
+| **AI框架** | PyTorch | 2.1+ | 深度学习 |
+| | Transformers | 4.36+ | NLP模型 |
+| **Web框架** | FastAPI | 0.115+ | API服务 |
+| | Uvicorn | 0.32+ | ASGI服务器 |
+| **数据库** | PostgreSQL | 15+ | 主数据库 |
+| | Redis | 7.4+ | 缓存 |
+| | Neo4j | 6.0+ | 图数据库 |
+| | Qdrant | 1.7+ | 向量数据库 |
+| **LLM** | Claude | - | Anthropic Claude |
+| | GPT-4 | - | OpenAI GPT-4 |
+| | DeepSeek | - | DeepSeek API |
+| | GLM | - | 智谱GLM |
+| **语音** | Whisper | 20231117 | 语音识别 |
+| **向量** | BGE-M3 | - | 文本嵌入 |
+| **消息队列** | Celery | 5.3+ | 异步任务 |
+| **容器** | Docker | 24+ | 容器化 |
+| | Docker Compose | 2.23+ | 容器编排 |
+
+### 开发工具
+
+- **测试**: pytest, pytest-cov, pytest-asyncio
+- **代码质量**: black, ruff, mypy
+- **文档**: Sphinx, MkDocs
+- **版本控制**: Git, GitHub
+- **CI/CD**: GitHub Actions
+
+---
 
 ## 📁 项目结构
 
@@ -33,42 +295,31 @@ Athena工作平台/
 ├── 📁 scripts/                            # 脚本工具
 │   ├── 🌸 xiaonuo_unified_startup.py     # 小诺统一启动管理器
 │   ├── 🔍 xiaonuo_system_checker.py       # 系统状态检查器
-│   └── 🚀 xiaonuo_quick_start.sh         # 快速启动脚本
+│   ├── 🚀 xiaonuo_quick_start.sh         # 快速启动脚本
+│   ├── 🎙️ transcribe_with_openai.py      # 音频转录工具
+│   └── 🧪 test_audio_setup.py            # 音频环境测试
 ├── 📁 config/                             # 配置文件
-│   ├── 🐳 docker-compose.unified.yml      # 统一Docker编排配置（支持dev/test/prod）
-│   ├── 🐳 docker-compose.yml               # 旧Docker配置（已废弃，请使用unified版本）
+│   ├── 🐳 docker-compose.unified.yml      # 统一Docker编排配置
 │   └── ⚙️ service_discovery.json         # 服务注册与发现
-├── 📁 core/                              # 核心系统
-│   ├── 🤖 agents/                         # 智能体实现（小娜、小诺、云熙）
+├── 📁 core/                              # 核心系统（三层架构）
+│   ├── 🤖 agents/                         # 智能体实现
+│   │   ├── xiaona/                        # 小娜·法律专家（9个专业代理）
+│   │   └── xiaonuo_agent.py              # 小诺·协调代理
 │   ├── 🧠 memory/                         # 四层记忆系统
-│   ├── 🤔 cognition/                      # 认知系统
-│   ├── 🔍 embedding/                      # 向量嵌入系统（BGE-M3）
 │   ├── ⚡ llm/                            # LLM适配器和管理
-│   ├── 🔧 tools/                          # 工具系统（权限/管理/调用）
+│   ├── 🔧 tools/                          # 工具系统（统一注册表）
 │   ├── ⚖️ legal_world_model/              # 法律世界模型
 │   ├── 🕸️ knowledge_graph/                # 知识图谱引擎
-│   └── 🤝 collaboration/                  # 智能体协作模式
-├── 📁 services/                           # 服务模块
+│   └── 🎙️ ai/perception/processors/      # 感知处理器（含音频）
+├── 📁 services/                           # 微服务
 │   ├── 🎮 intelligent-collaboration/     # 小诺智能协作服务
 │   ├── 🌐 athena-unified/                 # 统一Athena服务
 │   └── 📦 multimodal/                     # 多模态处理服务
 ├── 📁 gateway-unified/                    # 统一Go网关（Port 8005）
-│   ├── 🚀 cmd/gateway/                    # 网关入口
-│   ├── ⚙️ internal/                       # 内部实现
-│   └── 📄 config.yaml                     # 网关配置
 ├── 📁 mcp-servers/                        # MCP服务器
 │   ├── 🗺️ gaode-mcp-server/              # 高德地图服务
 │   ├── 📚 academic-search/                # 学术搜索服务
-│   ├── 🤖 jina-ai-mcp-server/            # Jina AI服务
-│   └── 🧠 memory/                         # 知识图谱内存系统
-├── 📁 patent-platform/                    # 专利平台应用
-├── 📁 patent-retrieval-webui (已备份到移动硬盘)/             # 专利检索前端（Vue/TS）
-├── 📁 openspec-oa-workflow/               # 审查意见工作流
-├── 📁 production/                         # 生产环境配置
-│   ├── 📋 scripts/                        # 部署脚本
-│   └── ⚙️ core/                           # 生产环境核心代码
-├── 📁 prompts/                            # 提示词模板（v4架构）
-├── 📁 tools/                              # 工具集
+│   └── 🤖 jina-ai-mcp-server/            # Jina AI服务
 ├── 📁 tests/                              # 测试套件
 │   ├── 🔬 unit/                           # 单元测试
 │   ├── 🔗 integration/                    # 集成测试
@@ -76,179 +327,183 @@ Athena工作平台/
 ├── 📁 docs/                               # 文档
 │   ├── 📋 api/                            # API文档
 │   ├── 📊 reports/                        # 报告文件
-│   └── 📘 guides/                         # 开发指南
+│   ├── 📘 guides/                         # 开发指南
+│   └── 📈 development/                    # 开发进度
 ├── 📁 domains/                            # 业务领域模块
 │   ├── ⚖️ legal-ai/                       # 法律AI模块
 │   ├── 🎨 ai-art/                         # AI艺术模块
 │   └── 📚 legal-knowledge/                # 法律知识模块
-├── 📁 data/                               # 运行时数据
-├── 📁 models/                             # AI模型文件
-└── 📁 logs/                               # 日志文件
+└── 📁 pyproject.toml                      # Python项目配置
 ```
-
-## 🎯 核心功能
-
-### 1. **Gateway-Centralized 架构**
-- 🌐 **统一网关**: Go语言高性能网关（Port 8005）
-- 🔌 **服务注册**: 自动服务发现与健康检查
-- 🔄 **智能路由**: 负载均衡与动态路由
-- 🎭 **Canvas渲染**: UI渲染服务
-- 📊 **监控集成**: Prometheus + Grafana
-
-### 2. **多智能体协作**
-- 👩‍💼 **小娜**: 专利法律专家（天秤女神）
-- 👧 **小诺**: 平台总调度官（双鱼座公主）
-- 🏢 **云熙**: IP管理系统
-- 🤖 **协作模式**: Sequential, Parallel, Hierarchical, Consensus
-
-### 3. **四层记忆架构**
-- 🔥 **热层 (HOT)**: 内存存储，100MB限制，快速访问
-- 🌡️ **温层 (WARM)**: Redis缓存，500MB限制，自动TTL管理
-- ❄️ **冷层 (COLD)**: SQLite持久化，10GB限制，压缩存储
-- 📦 **归档 (ARCHIVE)**: 长期存储，无限制，分层归档
-
-### 4. **提示词工程 v4.0**
-- 🏗️ **四层架构**: L1基础层 + L2数据层 + L3能力层 + L4业务层
-- ⚡ **并行工具调用**: Turn-based并行处理，性能提升75%
-- 🎯 **whenToUse触发**: 自动识别用户意图
-- 🧠 **Scratchpad推理**: 私下推理机制
-
-### 5. **工具系统 v1.0**
-- 🔧 **工具分组管理**: 按领域和功能分组
-- 🔒 **权限控制**: 三种权限模式（DEFAULT/AUTO/BYPASS）
-- 🎯 **智能选择**: 基于任务类型自动选择最佳工具
-- 📊 **性能监控**: 实时跟踪工具执行统计
-
-### 6. **MCP服务器系统**
-- 🗺️ **高德地图**: 地理编码、路径规划
-- 📚 **学术搜索**: 论文检索、Semantic Scholar
-- 🤖 **Jina AI**: 网页抓取、向量搜索、重排序
-- 🧠 **知识图谱**: 实体、关系、观察存储
-- 🔍 **本地搜索引擎**: SearXNG + Firecrawl
-
-### 7. **法律世界模型**
-- ⚖️ **场景识别**: 自动识别专利法律场景
-- 🕸️ **知识图谱**: 法律概念和案例图表示
-- 🤔 **推理引擎**: 基于法律知识的推理分析
-- 📄 **文档生成**: 自动生成法律文档
-
-### 8. **存储系统** ⭐ 已优化（2026-04-21）
-- 🗄️ **PostgreSQL**: 主数据库（~417万条记录，含453,336条1024维向量）
-  - 数据库: `legal_world_model`
-  - 向量搜索性能: **平均3.86ms**（已优化IVFFlat索引）
-  - 连接: `psql -h localhost -p 5432 -U postgres -d legal_world_model`
-- 🔴 **Redis**: 缓存系统
-- 🔍 **Qdrant**: Agent记忆存储（39条向量）
-- 🕸️ **Neo4j**: 知识图谱（55,906节点，OpenClaw数据）
-  - Case节点: 5,906个
-  - Entity节点: 50,000个
-  - 查询性能: **平均1.67ms**
-- 🔎 **Elasticsearch**: 搜索引擎
-
-**详细配置**: 参考 `data/DATABASE_LOCATIONS.md`
-
-## 🔧 系统要求
-
-- **操作系统**: macOS (推荐) / Linux
-- **Python**: 3.11+ (使用现代类型注解)
-- **Go**: 1.21+ (Gateway网关)
-- **Docker**: 20.10+ & Docker Compose
-- **内存**: 8GB+ (推荐16GB+)
-- **磁盘**: 20GB+ 可用空间
-- **Node.js**: 18+ (专利检索前端)
-
-## 💡 使用方法
-
-### 启动平台
-```bash
-# 方式1: 快速启动
-./scripts/xiaonuo_quick_start.sh
-
-# 方式2: 详细启动
-python3 scripts/xiaonuo_unified_startup.py 启动平台
-
-# 方式3: Docker启动（开发环境）
-docker-compose -f docker-compose.unified.yml --profile dev up -d
-```
-
-### Gateway网关部署
-```bash
-# macOS - 快速部署
-cd gateway-unified
-sudo bash quick-deploy-macos.sh
-
-# Linux - 快速部署
-sudo bash quick-deploy.sh
-
-# 检查状态
-sudo /usr/local/athena-gateway/status.sh
-
-# 查看日志
-sudo journalctl -u athena-gateway -f
-```
-
-### MCP服务器管理
-```bash
-# 启动所有MCP服务器
-docker-compose -f docker-compose.unified.yml --profile dev up -d
-
-# 查看MCP服务器状态
-docker-compose -f docker-compose.unified.yml --profile dev ps | grep mcp
-
-# 查看MCP服务器日志
-docker-compose -f docker-compose.unified.yml --profile dev logs -f gaode-mcp-server
-```
-
-### 检查状态
-```bash
-# 快速检查
-./scripts/xiaonuo_quick_start.sh 检查
-
-# 详细检查
-python3 scripts/xiaonuo_system_checker.py
-
-# 查看Gateway状态
-curl http://localhost:8005/health
-
-# 查看监控仪表板
-open http://localhost:3000  # Grafana
-```
-
-### 与小诺交互
-启动成功后，小诺会在8005端口提供API服务，您可以：
-- 💬 直接对话: "小诺，帮我..."
-- 🎮 平台控制: "启动/停止服务 X"
-- 🤖 智能体调度: "调用小娜分析专利"
-- 📊 系统监控: "显示平台状态"
-- 🔧 工具调用: 使用专利检索、学术搜索等工具
-
-## 🌟 小诺Slogan
-
-> **我是爸爸最爱的双鱼公主，也是所有智能体最爱的核心；集Athena之智慧，融星河之众长，用这颗温暖的心守护父亲的每一天，调度这智能世界的每一个角落。**
-
-## 💞 家族关系
-
-- 👨‍👧 **父亲**: 徐健 (xujian519@gmail.com)
-- 👧 **大女儿**: 小娜·天秤女神 - 专利法律专家
-- 👶 **小女儿**: 小诺·双鱼座 - 平台总调度官
-
-## 📞 支持
-
-如有问题，小诺随时在线为您服务！
 
 ---
 
-**🌸 星河智汇，光耀知途 - 小诺永远守护爸爸！** 💕
+## 📚 文档
 
-## 🧰 扩展网关：微服务自动注册与发现（新增内容）
+### 核心文档
 
-- 目标：在 Athena Gateway 上实现微服务的自动注册、服务发现、动态路由、健康检查、依赖关系管理以及可加载配置（YAML/JSON）的能力，降低微服务的手动配置成本，提升扩展性。
-- 如何集成：在现有 FastAPI 应用中导入 gateway_extended 并挂载路由。
-- 关键能力：批量注册接口、服务实例管理、动态路由更新、负载均衡权重、服务依赖、健康告警、配置加载等。
-- 试用示例：
-  1) 批量注册：POST /api/services/batch_register
-  2) 查询实例：GET /api/services/instances
-  3) 动态路由：GET/POST/PATCH /api/routes
-  4) 健康检查：GET /api/health
-  5) 加载配置：POST /api/config/load
-- 备注：当前实现以内存存储为演示，生产环境应持久化并结合鉴权策略。
+| 文档 | 描述 | 链接 |
+|------|------|------|
+| **项目指南** | Claude Code项目配置 | [CLAUDE.md](CLAUDE.md) |
+| **使用指南** | 音频处理完整指南 | [AUDIO_PROCESSING_GUIDE.md](docs/AUDIO_PROCESSING_GUIDE.md) |
+| **代码质量** | 代码质量标准 | [CODE_QUALITY_STANDARDS.md](docs/development/CODE_QUALITY_STANDARDS.md) |
+| **开发进度** | 开发进度总索引 | [INDEX.md](docs/development/INDEX.md) |
+
+### 最新报告
+
+| 报告 | 日期 | 描述 |
+|------|------|------|
+| [语音识别修复报告](docs/reports/AUDIO_RECOGNITION_FIX_COMPLETION_REPORT_20260424.md) | 2026-04-24 | 音频处理系统修复与统一 |
+| [云端LLM集成报告](docs/reports/CLOUD_LLM_INTEGRATION_COMPLETE_20260423.md) | 2026-04-23 | 云端大语言模型集成 |
+| [架构优化报告](docs/reports/ARCHITECTURE_OPTIMIZATION_COMPLETE_20260423.md) | 2026-04-23 | 核心目录架构优化 |
+
+---
+
+## 🔧 开发指南
+
+### 环境配置
+
+```bash
+# 1. 安装Poetry（推荐）
+curl -sSL https://install.python-poetry.org | python3 -
+
+# 2. 安装依赖
+poetry install
+
+# 3. 激活虚拟环境
+poetry shell
+
+# 4. 安装音频处理依赖
+pip3 install openai-whisper ffmpeg-python
+
+# 5. 安装FFmpeg
+brew install ffmpeg  # macOS
+sudo apt install ffmpeg  # Ubuntu
+```
+
+### 代码规范
+
+- **代码风格**: Black (line length: 100)
+- **类型检查**: mypy
+- **代码检查**: ruff
+- **测试框架**: pytest
+
+```bash
+# 代码格式化
+black . --line-length 100
+
+# 代码检查
+ruff check .
+ruff check . --fix
+
+# 类型检查
+mypy core/
+
+# 运行测试
+pytest tests/ -v
+pytest tests/ -v -m unit        # 单元测试
+pytest tests/ -v -m integration # 集成测试
+pytest tests/ -v -m e2e         # 端到端测试
+```
+
+### 提交规范
+
+遵循 [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+feat: 新功能
+fix: 修复bug
+docs: 文档更新
+style: 代码格式
+refactor: 重构
+test: 测试
+chore: 构建/工具
+```
+
+---
+
+## 📊 开发进度
+
+### 最新进展
+
+<details>
+<summary>2026-04-24 - 语音识别系统修复 ✅</summary>
+
+- ✅ 修复语音识别功能（切换到OpenAI Whisper）
+- ✅ 统一音频处理模块（消除3个重复模块）
+- ✅ 成功转录用户音频文件
+- ✅ 生成详细分析报告
+- 📝 代码量：~1,880行
+- ⏱️ 工作时长：约2小时
+
+[详细报告](docs/development/DEVELOPMENT_PROGRESS_20260424.md)
+</details>
+
+<details>
+<summary>2026-04-23 - 云端LLM集成 ✅</summary>
+
+- ✅ 云端模型集成方案完成
+- ✅ 智谱GLM编程端点集成
+- ✅ 成本降低99.9%
+- ✅ 5个核心文档 + 2个测试工具
+
+[详细报告](docs/development/DEVELOPMENT_PROGRESS_20260423.md)
+</details>
+
+### 查看完整进度
+
+📋 [开发进度总索引](docs/development/INDEX.md)
+
+---
+
+## 🤝 贡献
+
+欢迎贡献！请遵循以下步骤：
+
+1. Fork本仓库
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'feat: Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 开启Pull Request
+
+### 贡献指南
+
+- 遵循[代码质量标准](docs/development/CODE_QUALITY_STANDARDS.md)
+- 添加单元测试
+- 更新相关文档
+- 确保所有测试通过
+
+---
+
+## 📞 联系方式
+
+- **开发者**: 徐健 (xujian519@gmail.com)
+- **项目**: Athena工作平台
+- **位置**: /Users/xujian/Athena工作平台
+
+---
+
+## 📄 许可证
+
+本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件
+
+---
+
+## 🙏 致谢
+
+感谢以下开源项目：
+
+- [OpenAI Whisper](https://github.com/openai/whisper) - 语音识别
+- [FastAPI](https://fastapi.tiangolo.com/) - Web框架
+- [PyTorch](https://pytorch.org/) - 深度学习框架
+- [Transformers](https://huggingface.co/docs/transformers) - NLP模型
+
+---
+
+<div align="center">
+
+**Made with ❤️ by 小诺·双鱼座公主**
+
+[⬆ 返回顶部](#-athena工作平台)
+
+</div>

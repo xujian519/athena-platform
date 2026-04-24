@@ -58,6 +58,18 @@ pyyaml = "^6.0.0"
 # 监控
 prometheus-client = "^0.19.0"
 psutil = "^7.0.0"
+# OpenTelemetry分布式追踪
+opentelemetry-api = "^1.22"
+opentelemetry-sdk = "^1.22"
+opentelemetry-instrumentation = "^0.43b0"
+opentelemetry-instrumentation-asyncio = "^0.43b0"
+opentelemetry-instrumentation-httpx = "^0.43b0"
+opentelemetry-instrumentation-aiohttp-client = "^0.43b0"
+opentelemetry-instrumentation-sqlalchemy = "^0.43b0"
+opentelemetry-instrumentation-redis = "^0.43b0"
+opentelemetry-semantic-conventions = "^0.43b0"
+opentelemetry-exporter-otlp = "^1.22"
+opentelemetry-exporter-jaeger-thrift = "^1.21"
 # PGVector
 pgvector = "^0.2.0"
 
@@ -73,6 +85,10 @@ crypto = {version = "^1.4.1", optional = true}
 
 # 图像处理（可选）
 opencv-python-headless = {version = "^4.8.0", optional = true}
+
+# 音频处理（可选）
+openai-whisper = {version = "^20231117", optional = true}
+ffmpeg-python = {version = "^0.2.0", optional = true}
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
@@ -99,6 +115,11 @@ playwright = "^1.40.0"
 typer = {extras = ["all"], version = "^0.12.0"}
 rich = "^13.7.0"
 
+[tool.poetry.group.audio.dependencies]
+# 音频处理和语音识别
+openai-whisper = "^20231117"
+ffmpeg-python = "^0.2.0"
+
 # === 可选依赖组 ===
 # 使用方式: poetry install --all-extras 或 poetry install --extras multimodal
 
@@ -106,6 +127,7 @@ rich = "^13.7.0"
 multimodal = ["torch", "transformers", "sentence-transformers", "opencv-python-headless", "pytesseract"]
 browser = ["playwright"]
 auth = ["pyjwt", "crypto"]
+audio = ["openai-whisper", "ffmpeg-python"]
 
 [tool.pytest.ini_options]
 minversion = "7.0"

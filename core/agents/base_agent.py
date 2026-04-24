@@ -13,13 +13,53 @@ from __future__ import annotations
 2. 智能体执行时保存工作历史
 3. 智能体学习成果自动更新
 4. 项目上下文自动读取
+
+兼容层说明:
+此文件保留用于向后兼容。新架构位于 core/unified_agents/。
+建议新代码直接使用 UnifiedBaseAgent。
 """
 
 import logging
+import warnings
 from abc import ABC, abstractmethod
 from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
+
+# ==================== 兼容层：新架构导入 ====================
+# 导入新架构的UnifiedBaseAgent，提供向前迁移路径
+try:
+    from core.unified_agents.base_agent import UnifiedBaseAgent
+    from core.unified_agents.config import UnifiedAgentConfig
+    from core.unified_agents.base import (
+        AgentRequest,
+        AgentResponse as NewAgentResponse,
+        AgentStatus,
+        HealthStatus,
+        TaskMessage,
+        ResponseMessage,
+    )
+    UNIFIED_AVAILABLE = True
+except ImportError:
+    UNIFIED_AVAILABLE = False
+    UnifiedBaseAgent = None  # type: ignore
+    UnifiedAgentConfig = None  # type: ignore
+
+# 发出迁移提示（仅在直接导入时）
+_IMPORT_WARNING_SHOWN = False
+
+
+def _show_migration_warning():
+    """显示迁移警告（仅一次）"""
+    global _IMPORT_WARNING_SHOWN
+    if not _IMPORT_WARNING_SHOWN and UNIFIED_AVAILABLE:
+        _IMPORT_WARNING_SHOWN = True
+        warnings.warn(
+            "core.agents.base_agent.BaseAgent已迁移到core.unified_agents.base_agent.UnifiedBaseAgent。"
+            "建议新代码使用: from core.unified_agents.base_agent import UnifiedBaseAgent",
+            DeprecationWarning,
+            stacklevel=3
+        )
 
 # Gateway客户端导入（可选依赖）
 try:
@@ -688,3 +728,60 @@ class AgentResponse:
             成功响应
         """
         return cls(content=content, success=True, metadata=metadata)
+
+
+# ============ 兼容层：重定向到统一架构 ============
+# 该文件已迁移到 core/unified_agents/base_agent.py
+# 保留此文件用于向后兼容，建议新代码使用 UnifiedBaseAgent
+#
+# 迁移指南:
+#   from core.agents.base_agent import BaseAgent  # 旧方式
+#   from core.unified_agents import UnifiedBaseAgent  # 新方式（推荐）
+#
+# 文档: core/unified_agents/MIGRATION_GUIDE.md
+
+import warnings
+
+# 尝试导入新的统一架构
+try:
+    from core.unified_agents.base_agent import UnifiedBaseAgent
+
+    # 创建别名，保持向后兼容
+    _LegacyBaseAgent = BaseAgent  # 保存原始类
+    _UnifiedBaseAgent = UnifiedBaseAgent  # 新架构类
+
+    # 如果用户需要，可以使用新架构替换旧类
+    # 默认保持旧行为，避免破坏现有代码
+    def _get_new_base_agent_warning():
+        """返回迁移警告消息"""
+        return (
+            "\n"
+            "╔═══════════════════════════════════════════════════════════════╗\n"
+            "║  BaseAgent 已迁移到新架构                                        ║\n"
+            "║                                                                 ║\n"
+            "║  旧位置: core.agents.base_agent.BaseAgent                       ║\n"
+            "║  新位置: core.unified_agents.base_agent.UnifiedBaseAgent        ║\n"
+            "║                                                                 ║\n"
+            "║  建议迁移:                                                       ║\n"
+            "║    from core.unified_agents import UnifiedBaseAgent             ║\n"
+            "║                                                                 ║\n"
+            "║  文档: core/unified_agents/MIGRATION_GUIDE.md                   ║\n"
+            "╚═══════════════════════════════════════════════════════════════╝"
+        )
+
+    # 导出新架构的所有公共类
+    __all__ = [
+        "BaseAgent",  # 原始类，保持兼容
+        "AgentUtils",
+        "AgentResponse",
+        "UnifiedBaseAgent",  # 新架构
+        "_get_new_base_agent_warning",  # 迁移信息
+    ]
+
+except ImportError:
+    # 新架构不可用时，静默使用旧实现
+    __all__ = [
+        "BaseAgent",
+        "AgentUtils",
+        "AgentResponse",
+    ]

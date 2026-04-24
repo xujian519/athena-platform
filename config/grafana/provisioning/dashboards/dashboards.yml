@@ -1,0 +1,16 @@
+# Grafana 仪表板自动配置
+# 自动加载预定义的仪表板
+
+apiVersion: 1
+
+providers:
+  - name: 'Athena Tracing'
+    orgId: 1
+    folder: ''
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards
+      foldersFromFilesStructure: true

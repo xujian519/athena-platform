@@ -1,0 +1,110 @@
+# OpenTelemetry Collector 配置文件
+# 用于接收、处理和导出追踪数据到Jaeger和Elasticsearch
+
+receivers:
+  # OTLP接收器 - 接收来自应用的追踪数据
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+  # Jaeger接收器 - 兼容Jaeger原生协议
+  jaeger:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:14250
+      thrift_http:
+        endpoint: 0.0.0.0:14268
+      thrift_compact:
+        endpoint: 0.0.0.0:6831
+      thrift_binary:
+        endpoint: 0.0.0.0:6832
+
+  # Zipkin接收器 - 兼容Zipkin协议
+  zipkin:
+    endpoint: 0.0.0.0:9411
+
+processors:
+  # 批处理 - 将多个span打包发送以提高效率
+  batch:
+    timeout: 5s
+    max_queue_size: 2048
+    max_export_batch_size: 512
+
+  # 内存限制器 - 防止OOM
+  memory_limiter:
+    limit_mib: 512
+    spike_limit_mib: 128
+    check_interval: 5s
+
+  # 属性处理 - 添加/修改span属性
+  attributes:
+    actions:
+      - key: service.name
+        action: upsert
+        value: athena-platform
+
+  # 资源处理 - 添加资源标签
+  resource:
+    attributes:
+      - key: environment
+        value: production
+        action: upsert
+
+exporters:
+  # Jaeger导出器
+  jaeger:
+    endpoint: jaeger:14268
+    tls:
+      insecure: true
+    timeout: 10s
+
+  # Elasticsearch导出器
+  elasticsearch:
+    endpoints:
+      - http://elasticsearch:9200
+    index: otel-traces
+    timeout: 10s
+
+  # 日志导出器 - 用于调试
+  logging:
+    loglevel: debug
+
+  # Prometheus导出器 - 指标数据
+  prometheusremotewrite:
+    endpoint: http://localhost:9090/api/v1/write
+    tls:
+      insecure: true
+
+extensions:
+  # 健康检查扩展
+  health_check:
+    endpoint: 0.0.0.0:13133
+
+  # 性能分析扩展
+  pprof:
+    endpoint: 0.0.0.0:1777
+
+service:
+  extensions: [health_check, pprof]
+
+  pipelines:
+    # 追踪数据处理管道
+    traces:
+      receivers: [otlp, jaeger, zipkin]
+      processors: [memory_limiter, batch, attributes, resource]
+      exporters: [jaeger, logging]
+
+    # 指标数据处理管道
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging]
+
+    # 日志数据处理管道
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging]

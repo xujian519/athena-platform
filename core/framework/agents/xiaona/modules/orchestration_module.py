@@ -63,9 +63,9 @@ class OrchestrationProgress:
     total_steps: int = 0
     completed_steps: int = 0
     current_step: str = ""
-    task_results: Optional[list[TaskResult] = field(default_factory=list)
-    start_time: Optional[datetime ] = None
-    end_time: Optional[datetime ] = None
+    task_results: Optional[list[TaskResult]] = field(default_factory=list)
+    start_time: Optional[datetime] = None
+    end_time: Optional[datetime] = None
 
     def add_result(self, result: TaskResult) -> str:
         """添加任务结果"""
@@ -134,9 +134,8 @@ class OrchestrationModule:
 
     async def draft_full_application(
         self,
-        disclosure_data: Optional[Dict[str, Any],]
-
-        progress_callback: Optional[Callable[[str, float], None] ] = None,
+        disclosure_data: Optional[Dict[str, Any]] = None,
+        progress_callback: Optional[Callable[[str, float], None]] = None,
     ) -> Dict[str, Any]:
         """
         完整专利申请流程编排
@@ -309,7 +308,7 @@ class OrchestrationModule:
         result["error_report"] = step6_result.result
 
         # 组装完整申请数据
-        result["application_data"]] = {
+        result["application_data"] = {
             "disclosure_analysis": step1_result.result,
             "patentability_assessment": step2_result.result,
             "claims": step3_result.result,
@@ -329,12 +328,10 @@ class OrchestrationModule:
 
     async def orchestrate_response(
         self,
-        office_action: Optional[Dict[str, Any],]
-
-        patent_data: Optional[Dict[str, Any]],]
-
+        office_action: Optional[Dict[str, Any]] = None,
+        patent_data: Optional[Dict[str, Any]] = None,
         search_existing_art: bool = True,
-        progress_callback: Optional[Callable[[str, float], None] ] = None,
+        progress_callback: Optional[Callable[[str, float], None]] = None,
     ) -> Dict[str, Any]:
         """
         审查意见答复流程编排
@@ -496,10 +493,8 @@ class OrchestrationModule:
 
     async def execute_sequential(
         self,
-        tasks: Optional[list[Callable[[], Any],]]
-
-        task_names: Optional[List[str]],]
-
+        tasks: Optional[list[Callable[[], Any]]] = None,
+        task_names: Optional[List[str]] = None,
     ) -> list[TaskResult]:
         """
         串行执行任务列表
@@ -528,10 +523,8 @@ class OrchestrationModule:
 
     async def execute_parallel(
         self,
-        tasks: Optional[list[Callable[[], Any],]]
-
-        task_names: Optional[List[str]],]
-
+        tasks: Optional[list[Callable[[], Any]]] = None,
+        task_names: Optional[List[str]] = None,
     ) -> list[TaskResult]:
         """
         并行执行任务列表
@@ -612,10 +605,8 @@ class OrchestrationModule:
     async def _analyze_office_action_internal(
         self,
         analyzer: Any,
-        office_action: Optional[Dict[str, Any],]
-
-        patent_data: Optional[Dict[str, Any],]
-
+        office_action: Optional[Dict[str, Any]] = None,
+        patent_data: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """内部方法：分析审查意见"""
         # 这里调用分析代理的具体方法
@@ -638,8 +629,7 @@ class OrchestrationModule:
     async def _analyze_citations_internal(
         self,
         analyzer: Any,
-        office_action: Optional[Dict[str, Any],]
-
+        office_action: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """内部方法：分析引用文献"""
         try:
@@ -659,10 +649,8 @@ class OrchestrationModule:
     async def _search_prior_art_internal(
         self,
         retriever: Any,
-        office_action: Optional[Dict[str, Any],]
-
-        analysis: Optional[Dict[str, Any],]
-
+        office_action: Optional[Dict[str, Any]] = None,
+        analysis: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """内部方法：检索现有技术"""
         try:
@@ -678,8 +666,7 @@ class OrchestrationModule:
                 })
             else:
                 return {
-                    "search_results": Optional[[],]
-
+                    "search_results": [],
                     "keywords_used": keywords,
                     "search_summary": "检索功能未实现",
                 }
@@ -690,13 +677,13 @@ class OrchestrationModule:
     async def _draft_response_internal(
         self,
         writer: Any,
-        office_action: Optional[Dict[str, Any],]
+        office_action: Optional[Dict[str, Any]],
 
-        oa_analysis: Optional[Dict[str, Any],]
+        oa_analysis: Optional[Dict[str, Any]],
 
-        citation_analysis: Optional[Dict[str, Any],]
+        citation_analysis: Optional[Dict[str, Any]],
 
-        prior_art: Optional[Dict[str, Any],]
+        prior_art: Optional[Dict[str, Any]]
 
     ) -> Dict[str, Any]:
         """内部方法：撰写答复意见"""
@@ -713,10 +700,8 @@ class OrchestrationModule:
             else:
                 return {
                     "response_content": "答复意见草稿（待实现）",
-                    "arguments": Optional[[],]
-
-                    "requested_amendments": Optional[[],]
-
+                    "arguments": [],
+                    "requested_amendments": [],
                 }
         except Exception as e:
             logger.error(f"答复意见撰写内部错误: {e}")
@@ -725,8 +710,7 @@ class OrchestrationModule:
     async def _review_response_internal(
         self,
         writer: Any,
-        response_draft: Optional[Dict[str, Any],]
-
+        response_draft: Optional[Dict[str, Any]]
     ) -> Dict[str, Any]:
         """内部方法：审查答复质量"""
         try:
@@ -735,10 +719,8 @@ class OrchestrationModule:
             else:
                 return {
                     "quality_score": 0.7,
-                    "issues_found": Optional[[],]
-
-                    "suggestions": Optional[[],]
-
+                    "issues_found": [],
+                    "suggestions": [],
                     "review_summary": "基础审查完成",
                 }
         except Exception as e:
@@ -747,8 +729,7 @@ class OrchestrationModule:
 
     async def _safe_callback(
         self,
-        callback: Optional[Callable[[str, float], None],]
-
+        callback: Optional[Callable[[str, float], None]],
         step_name: str,
         progress: float,
     ) -> str:
