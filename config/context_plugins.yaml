@@ -1,0 +1,75 @@
+# 上下文插件配置文件
+# Context Plugin Configuration
+
+# 插件列表
+plugins:
+  # ==================== 压缩插件 ====================
+  - name: compression
+    module_path: core.context_management.plugins.compression_plugin
+    class_name: CompressionPlugin
+    enabled: true
+    priority: 10
+    config:
+      # 压缩比例 (0.1-1.0)
+      ratio: 0.5
+      # 保留的关键词列表
+      preserve_keywords:
+        - IMPORTANT
+        - 关键
+        - 必须
+      # 最小保留长度（小于此长度不压缩）
+      min_length: 100
+
+  # ==================== 验证插件 ====================
+  - name: validation
+    module_path: core.context_management.plugins.validation_plugin
+    class_name: ValidationPlugin
+    enabled: true
+    priority: 20
+    config:
+      # 必需字段列表
+      required_fields:
+        - context_id
+        - context_type
+      # 字段最大长度
+      max_length: 100000
+      # 字段格式验证模式
+      patterns:
+        context_id: "^[a-zA-Z0-9_-]+$"
+      # 是否检查注入攻击
+      check_injection: true
+
+  # ==================== 指标插件 ====================
+  - name: metrics
+    module_path: core.context_management.plugins.metrics_plugin
+    class_name: MetricsPlugin
+    enabled: true
+    priority: 30
+    config:
+      # 启用的指标类型
+      enabled_metrics:
+        - execution_time
+        - token_count
+        - success_rate
+      # 采样率 (0.0-1.0)
+      sample_rate: 1.0
+      # 导出间隔（秒）
+      export_interval: 60
+
+# ==================== 插件组（按需加载）====================
+# 可以定义不同的插件组合用于不同场景
+plugin_groups:
+  # 开发环境配置
+  development:
+    - compression
+    - validation
+    - metrics
+
+  # 生产环境配置
+  production:
+    - validation
+    - metrics
+
+  # 最小配置
+  minimal:
+    - validation
