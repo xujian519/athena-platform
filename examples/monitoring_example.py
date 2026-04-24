@@ -1,240 +1,244 @@
 #!/usr/bin/env python3
 """
-统一监控系统使用示例
-Unified Monitoring System Usage Examples
+Athena上下文管理监控集成示例
+Monitoring Integration Example for Athena Context Management
+
+演示如何使用Prometheus监控上下文管理系统。
+
+作者: Athena平台团队
+创建时间: 2026-04-24
 """
+
 import asyncio
-import sys
-import time
+import logging
 from pathlib import Path
 
-# 添加项目路径
-project_root = Path(__file__).parent.parent
-sys.path.insert(0, str(project_root))
+# 配置日志
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
 
-from core.monitoring.unified_metrics import get_metrics_collector, monitor_performance
 
-
-def example_basic_metrics():
-    """示例1: 基础指标记录"""
-    print("\n=== 示例1: 基础指标记录 ===\n")
-
-    collector = get_metrics_collector("test_service")
-
-    # 记录HTTP请求
-    collector.record_http_request(
-        method="GET",
-        endpoint="/api/patents",
-        status=200,
-        duration=0.123
+async def example_basic_monitoring():
+    """示例1: 基础监控使用"""
+    from core.context_management.monitoring import (
+        get_metrics,
+        start_metrics_server,
     )
 
-    # 记录服务任务
-    collector.record_service_task(
-        task_type="patent_analysis",
-        status="success",
-        duration=1.234
-    )
+    logger.info("=== 示例1: 基础监控使用 ===")
+
+    # 启动metrics服务器
+    start_metrics_server(port=8000)
+    logger.info("✅ Metrics服务器已启动: http://localhost:8000/metrics")
+
+    # 获取metrics实例
+    metrics = get_metrics()
+
+    # 记录操作
+    metrics.record_operation("create", "task", "success")
+    metrics.record_operation("read", "task", "success")
+    metrics.record_operation("update", "task", "success")
 
     # 记录错误
-    collector.record_error(error_type="TimeoutError")
+    metrics.record_error("timeout", "read")
 
-    # 记录LLM请求
-    collector.record_llm_request(
-        provider="anthropic",
-        model="claude-sonnet-4-6",
-        duration=2.345
+    # 更新活跃上下文数量
+    metrics.update_active_contexts(42, "task")
+
+    # 更新对象池大小
+    metrics.update_pool_size(100, "current")
+    metrics.update_pool_size(1000, "max")
+
+    # 更新缓存命中率
+    metrics.update_cache_hit_rate(0.85, "memory")
+
+    logger.info("✅ 监控指标已记录")
+
+
+async def example_tracked_operation():
+    """示例2: 使用上下文管理器跟踪操作"""
+    from core.context_management.monitoring import track_operation_latency
+
+    logger.info("=== 示例2: 跟踪操作延迟 ===")
+
+    # 模拟一些操作
+    async def create_task():
+        await asyncio.sleep(0.01)  # 模拟工作
+        return {"task_id": "task-123"}
+
+    async def read_task():
+        await asyncio.sleep(0.005)  # 模拟工作
+        return {"task_id": "task-123", "status": "active"}
+
+    # 使用监控跟踪
+    async with track_operation_latency("create", "task"):
+        result = await create_task()
+        logger.info(f"✅ 创建任务: {result}")
+
+    async with track_operation_latency("read", "task"):
+        result = await read_task()
+        logger.info(f"✅ 读取任务: {result}")
+
+
+async def example_decorator_monitoring():
+    """示例3: 使用装饰器监控函数"""
+    from core.context_management.monitoring import monitor_context_operation
+
+    logger.info("=== 示例3: 装饰器监控 ===")
+
+    @monitor_context_operation("create", "task")
+    async def create_task_context(task_id: str, description: str):
+        await asyncio.sleep(0.01)
+        return {"task_id": task_id, "description": description}
+
+    @monitor_context_operation("process", "task")
+    async def process_task(task_id: str):
+        await asyncio.sleep(0.02)
+        return {"task_id": task_id, "status": "processed"}
+
+    # 调用被监控的函数
+    result1 = await create_task_context("task-456", "示例任务")
+    logger.info(f"✅ {result1}")
+
+    result2 = await process_task("task-456")
+    logger.info(f"✅ {result2}")
+
+
+async def example_manager_monitoring():
+    """示例4: 监控上下文管理器"""
+    from core.context_management.monitoring import monitor_context_manager
+    from core.context_management.task_context_manager import TaskContextManager
+
+    logger.info("=== 示例4: 管理器监控 ===")
+
+    # 创建原始管理器
+    manager = TaskContextManager(
+        storage_path=Path("data/example_contexts"),
+        enable_metrics=True
     )
 
-    # 记录缓存
-    collector.record_cache_hit(cache_type="vector")
-    collector.record_cache_miss(cache_type="llm")
+    # 包装为监控管理器
+    monitored_manager = monitor_context_manager(manager, "task")
 
-    print("✓ 所有指标已记录")
-
-
-def example_decorator_monitoring():
-    """示例2: 装饰器监控"""
-    print("\n=== 示例2: 装饰器监控 ===\n")
-
-    collector = get_metrics_collector("test_service")
-
-    @monitor_performance(collector, "calculation")
-    def calculate_metric(data: list) -> float:
-        """计算指标（带监控）"""
-        time.sleep(0.1)  # 模拟处理
-        return sum(data) / len(data)
-
-    # 调用函数
-    result = calculate_metric([1, 2, 3, 4, 5])
-    print(f"✓ 计算结果: {result}")
-
-    # 异步函数监控
-    @monitor_performance(collector, "async_task")
-    async def async_task():
-        """异步任务（带监控）"""
-        await asyncio.sleep(0.1)
-        return "任务完成"
-
-    result = asyncio.run(async_task())
-    print(f"✓ {result}")
-
-
-def example_service_metrics():
-    """示例3: 服务指标记录"""
-    print("\n=== 示例3: 服务指标记录 ===\n")
-
-    # 小娜服务指标
-    xiaona_collector = get_metrics_collector("xiaona")
-
-    xiaona_collector.record_service_task(
-        task_type="patent_analysis",
-        status="success",
-        duration=5.678
+    # 所有操作自动被监控
+    context = await monitored_manager.create_context(
+        task_id="example-001",
+        task_description="监控示例任务",
+        total_steps=3
     )
+    logger.info(f"✅ 创建上下文: {context.task_id}")
 
-    xiaona_collector.record_llm_request(
-        provider="anthropic",
-        model="claude-sonnet-4-6",
-        duration=2.345
-    )
+    # 读取上下文
+    loaded = await monitored_manager.load_context("example-001")
+    if loaded:
+        logger.info(f"✅ 加载上下文: {loaded.task_id}")
 
-    print("✓ 小娜服务指标已记录")
+    # 列出上下文
+    contexts = await monitored_manager.list_contexts()
+    logger.info(f"✅ 上下文列表: {len(contexts)}个")
 
-    # 小诺服务指标
-    xiaonuo_collector = get_metrics_collector("xiaonuo")
-
-    xiaonuo_collector.record_service_task(
-        task_type="task_coordination",
-        status="success",
-        duration=0.567
-    )
-
-    print("✓ 小诺服务指标已记录")
+    # 删除上下文
+    await monitored_manager.delete_context("example-001")
+    logger.info("✅ 删除上下文")
 
 
-def example_error_tracking():
-    """示例4: 错误跟踪"""
-    print("\n=== 示例4: 错误跟踪 ===\n")
+async def example_pool_monitoring():
+    """示例5: 监控对象池"""
+    from core.context_management.context_object_pool import get_context_pool
 
-    collector = get_metrics_collector("test_service")
+    logger.info("=== 示例5: 对象池监控 ===")
 
-    try:
-        # 模拟一个错误
-        raise ValueError("测试错误")
-    except ValueError as e:
-        collector.record_error("ValueError")
-        print(f"✓ 错误已记录: {type(e).__name__}")
+    # 获取对象池（自动启用监控）
+    pool = get_context_pool(max_size=100, initial_size=5)
 
-    try:
-        # 模拟另一个错误
-        raise TimeoutError("超时错误")
-    except TimeoutError as e:
-        collector.record_error("TimeoutError")
-        print(f"✓ 错误已记录: {type(e).__name__}")
+    # 获取对象（自动监控acquire延迟）
+    context1 = await pool.acquire("task-001")
+    logger.info(f"✅ 获取对象: {context1.task_id}")
 
+    context2 = await pool.acquire("task-002")
+    logger.info(f"✅ 获取对象: {context2.task_id}")
 
-async def example_llm_monitoring():
-    """示例5: LLM调用监控"""
-    print("\n=== 示例5: LLM调用监控 ===\n")
+    # 释放对象（自动监控release延迟）
+    await pool.release(context1)
+    logger.info("✅ 释放对象: task-001")
 
-    collector = get_metrics_collector("test_service")
+    await pool.release(context2)
+    logger.info("✅ 释放对象: task-002")
 
-    async def mock_llm_call(provider: str, model: str):
-        """模拟LLM调用"""
-        start_time = time.time()
-        await asyncio.sleep(0.2)  # 模拟网络延迟
-        duration = time.time() - start_time
-
-        collector.record_llm_request(provider, model, duration)
-        print(f"✓ LLM调用已记录: {provider}/{model}")
-
-    # 调用不同的LLM
-    await mock_llm_call("anthropic", "claude-sonnet-4-6")
-    await mock_llm_call("openai", "gpt-4")
-    await mock_llm_call("deepseek", "deepseek-chat")
+    # 获取统计信息
+    stats = pool.get_stats()
+    logger.info(f"📊 池统计: 复用率={stats.reuse_rate:.2%}, 创建率={stats.creation_rate:.2%}")
 
 
-def example_cache_monitoring():
+async def example_cache_monitoring():
     """示例6: 缓存监控"""
-    print("\n=== 示例6: 缓存监控 ===\n")
+    from core.context_management.monitoring import (
+        record_cache_hit,
+        record_cache_miss,
+    )
 
-    collector = get_metrics_collector("test_service")
+    logger.info("=== 示例6: 缓存监控 ===")
 
     # 模拟缓存操作
-    cache_data = {"key1": "value1", "key2": "value2"}
+    cache = {}
 
-    # 缓存命中
-    for key in ["key1", "key2"]:
-        if key in cache_data:
-            collector.record_cache_hit("memory")
-            print(f"✓ 缓存命中: {key}")
+    def get_from_cache(key: str):
+        if key in cache:
+            record_cache_hit("memory")
+            return cache[key]
+        else:
+            record_cache_miss("memory")
+            value = f"value_for_{key}"
+            cache[key] = value
+            return value
 
-    # 缓存未命中
-    for key in ["key3", "key4"]:
-        if key not in cache_data:
-            collector.record_cache_miss("memory")
-            print(f"✓ 缓存未命中: {key}")
+    # 执行一些缓存操作
+    for i in range(10):
+        key = f"key_{i % 3}"  # 3个不同的key
+        value = get_from_cache(key)
+        logger.info(f"缓存获取: {key} = {value}")
 
-
-async def example_concurrent_monitoring():
-    """示例7: 并发监控"""
-    print("\n=== 示例7: 并发监控 ===\n")
-
-    collector = get_metrics_collector("test_service")
-
-    @monitor_performance(collector, "concurrent_task")
-    async def concurrent_task(task_id: int):
-        """并发任务"""
-        await asyncio.sleep(0.1)
-        return f"任务{task_id}完成"
-
-    # 并发执行多个任务
-    tasks = [concurrent_task(i) for i in range(5)]
-    results = await asyncio.gather(*tasks)
-
-    for result in results:
-        print(f"✓ {result}")
+    logger.info("✅ 缓存监控指标已记录")
 
 
-def example_prometheus_export():
-    """示例8: Prometheus指标导出"""
-    print("\n=== 示例8: Prometheus指标导出 ===\n")
+async def main():
+    """运行所有示例"""
+    logger.info("🚀 Athena上下文管理监控示例开始")
+    logger.info("=" * 50)
 
-    collector = get_metrics_collector("test_service")
+    # 示例1: 基础监控
+    await example_basic_monitoring()
+    await asyncio.sleep(0.5)
 
-    # 记录一些指标
-    collector.record_http_request("GET", "/api/test", 200, 0.1)
-    collector.record_http_request("POST", "/api/test", 201, 0.2)
+    # 示例2: 跟踪操作
+    await example_tracked_operation()
+    await asyncio.sleep(0.5)
 
-    # 导出Prometheus格式
-    metrics = collector.get_metrics()
-    print("✓ Prometheus格式指标:")
-    print("-" * 60)
-    print(metrics.decode()[:500] + "...")
-    print("-" * 60)
+    # 示例3: 装饰器
+    await example_decorator_monitoring()
+    await asyncio.sleep(0.5)
 
+    # 示例4: 管理器监控
+    await example_manager_monitoring()
+    await asyncio.sleep(0.5)
 
-def main():
-    """主函数"""
-    print("=" * 60)
-    print("统一监控系统使用示例")
-    print("=" * 60)
+    # 示例5: 对象池监控
+    await example_pool_monitoring()
+    await asyncio.sleep(0.5)
 
-    # 运行所有示例
-    example_basic_metrics()
-    example_decorator_monitoring()
-    example_service_metrics()
-    example_error_tracking()
-    asyncio.run(example_llm_monitoring())
-    example_cache_monitoring()
-    asyncio.run(example_concurrent_monitoring())
-    example_prometheus_export()
+    # 示例6: 缓存监控
+    await example_cache_monitoring()
 
-    print("\n" + "=" * 60)
-    print("所有示例运行完成！")
-    print("=" * 60)
+    logger.info("=" * 50)
+    logger.info("✅ 所有示例执行完成")
+    logger.info("")
+    logger.info("📊 查看metrics: http://localhost:8000/metrics")
+    logger.info("📈 Prometheus: http://localhost:9090")
+    logger.info("📊 Grafana: http://localhost:3000")
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

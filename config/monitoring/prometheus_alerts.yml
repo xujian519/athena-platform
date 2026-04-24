@@ -1,339 +1,130 @@
-# Prometheus告警规则 - Athena执行模块
-# Prometheus Alert Rules for Athena Execution Module
-# 版本: 2.0.0
-# 更新日期: 2026-01-27
+# Prometheus告警规则配置
+# Athena上下文管理系统监控告警
 
 groups:
-  - name: athena_execution_alerts
+  - name: athena_context_management
     interval: 30s
     rules:
-      # ========================================================================
-      # 队列告警 (Queue Alerts)
-      # ========================================================================
-      
-      - alert: AthenaExecutionQueueNearFull
+      # 高错误率告警
+      - alert: HighContextErrorRate
         expr: |
-          (
-            sum by (instance) (athena_execution_queue_size) /
-            sum by (instance) (athena_execution_queue_max_size)
-          ) > 0.9
+          rate(athena_context_management_operations_total{status="error"}[5m]) 
+          / rate(athena_context_management_operations_total[5m]) > 0.05
         for: 5m
         labels:
           severity: warning
-          component: execution_engine
-          type: capacity
+          service: athena_context
         annotations:
-          summary: "执行队列接近满载"
-          description: >
-            实例 {{ $labels.instance }} 的执行队列使用率超过90%。
-            当前队列大小: {{ $value | humanizePercentage }}
-            队列积压可能导致任务延迟。
-          impact: "中"
-          action: "检查任务处理速度，考虑增加工作线程数或扩容"
-      
-      - alert: AthenaExecutionQueueCritical
+          summary: "上下文管理错误率过高"
+          description: "过去5分钟内上下文操作错误率为 {{ $value | humanizePercentage }} (操作: {{ $labels.operation }})"
+
+      # 严重错误率告警
+      - alert: CriticalContextErrorRate
         expr: |
-          (
-            sum by (instance) (athena_execution_queue_size) /
-            sum by (instance) (athena_execution_queue_max_size)
-          ) > 0.95
+          rate(athena_context_management_operations_total{status="error"}[5m]) 
+          / rate(athena_context_management_operations_total[5m]) > 0.10
         for: 2m
         labels:
           severity: critical
-          component: execution_engine
-          type: capacity
+          service: athena_context
         annotations:
-          summary: "执行队列严重告警"
-          description: >
-            实例 {{ $labels.instance }} 的执行队列使用率超过95%。
-            当前队列大小: {{ $value | humanizePercentage }}
-            系统可能无法接受新任务。
-          impact: "高"
-          action: "立即检查！可能需要紧急扩容或限流"
-      
-      # ========================================================================
-      # 错误率告警 (Error Rate Alerts)
-      # ========================================================================
-      
-      - alert: AthenaExecutionHighErrorRate
+          summary: "上下文管理错误率严重"
+          description: "过去5分钟内上下文操作错误率为 {{ $value | humanizePercentage }} (操作: {{ $labels.operation }})"
+
+      # 高延迟告警 (P95)
+      - alert: HighContextLatencyP95
         expr: |
-          (
-            sum by (instance) (rate(athena_execution_tasks_failed_total[5m])) /
-            sum by (instance) (rate(athena_execution_tasks_total[5m]))
-          ) > 0.05
-        for: 5m
-        labels:
-          severity: warning
-          component: execution_engine
-          type: error_rate
-        annotations:
-          summary: "任务错误率过高"
-          description: >
-            实例 {{ $labels.instance }} 的任务错误率超过5%。
-            当前错误率: {{ $value | humanizePercentage }}
-          impact: "中"
-          action: "检查错误日志，分析失败原因"
-      
-      - alert: AthenaExecutionCriticalErrorRate
-        expr: |
-          (
-            sum by (instance) (rate(athena_execution_tasks_failed_total[2m])) /
-            sum by (instance) (rate(athena_execution_tasks_total[2m]))
+          histogram_quantile(0.95, 
+            rate(athena_context_management_operation_duration_seconds_bucket[5m])
           ) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: athena_context
+        annotations:
+          summary: "上下文操作P95延迟过高"
+          description: "过去5分钟内P95延迟为 {{ $value }}s (操作: {{ $labels.operation }})"
+
+      # 严重延迟告警 (P99)
+      - alert: CriticalContextLatencyP99
+        expr: |
+          histogram_quantile(0.99, 
+            rate(athena_context_management_operation_duration_seconds_bucket[5m])
+          ) > 0.5
         for: 2m
         labels:
           severity: critical
-          component: execution_engine
-          type: error_rate
+          service: athena_context
         annotations:
-          summary: "任务错误率严重告警"
-          description: >
-            实例 {{ $labels.instance }} 的任务错误率超过10%。
-            当前错误率: {{ $value | humanizePercentage }}
-          impact: "高"
-          action: "立即检查系统状态，可能需要回滚或重启"
-      
-      # ========================================================================
-      # 性能告警 (Performance Alerts)
-      # ========================================================================
-      
-      - alert: AthenaExecutionSlowTasks
-        expr: |
-          histogram_quantile(0.95,
-            sum by (instance, le) (rate(athena_execution_task_duration_seconds_bucket[5m]))
-          ) > 180
+          summary: "上下文操作P99延迟严重"
+          description: "过去5分钟内P99延迟为 {{ $value }}s (操作: {{ $labels.operation }})"
+
+      # 活跃上下文过多告警
+      - alert: TooManyActiveContexts
+        expr: athena_context_management_active_contexts > 500
         for: 10m
         labels:
           severity: warning
-          component: execution_engine
-          type: performance
+          service: athena_context
         annotations:
-          summary: "任务执行缓慢"
-          description: >
-            实例 {{ $labels.instance }} 的P95任务执行时间超过3分钟。
-            当前P95: {{ $value | humanizeDuration }}
-          impact: "中"
-          action: "检查是否有慢任务，分析性能瓶颈"
-      
-      - alert: AthenaExecutionVerySlowTasks
+          summary: "活跃上下文数量过多"
+          description: "当前活跃上下文数量为 {{ $value }} (类型: {{ $labels.context_type }})"
+
+      # 对象池接近满载告警
+      - alert: ObjectPoolNearlyFull
         expr: |
-          histogram_quantile(0.95,
-            sum by (instance, le) (rate(athena_execution_task_duration_seconds_bucket[5m]))
-          ) > 300
+          athena_context_management_pool_size{pool_type="current"} 
+          / athena_context_management_pool_size{pool_type="max"} > 0.9
         for: 5m
         labels:
-          severity: critical
-          component: execution_engine
-          type: performance
-        annotations:
-          summary: "任务执行严重缓慢"
-          description: >
-            实例 {{ $labels.instance }} 的P95任务执行时间超过5分钟。
-            当前P95: {{ $value | humanizeDuration }}
-          impact: "高"
-          action: "立即分析！可能存在死锁或资源竞争"
-      
-      - alert: AthenaExecutionLongWaitingTime
-        expr: |
-          histogram_quantile(0.95,
-            sum by (instance, le) (rate(athena_execution_task_wait_time_seconds_bucket[5m]))
-          ) > 60
-        for: 10m
-        labels:
           severity: warning
-          component: execution_engine
-          type: queue
+          service: athena_context
         annotations:
-          summary: "任务等待时间过长"
-          description: >
-            实例 {{ $labels.instance }} 的P95任务等待时间超过1分钟。
-            当前P95: {{ $value | humanizeDuration }}
-          impact: "中"
-          action: "检查队列积压情况，考虑增加处理能力"
-      
-      # ========================================================================
-      # 资源告警 (Resource Alerts)
-      # ========================================================================
-      
-      - alert: AthenaExecutionHighMemoryUsage
-        expr: |
-          (
-            sum by (instance) (athena_execution_memory_usage_bytes) /
-            sum by (instance) (athena_execution_memory_max_bytes)
-          ) > 0.8
-        for: 10m
-        labels:
-          severity: warning
-          component: execution_engine
-          type: resource
-        annotations:
-          summary: "内存使用率过高"
-          description: >
-            实例 {{ $labels.instance }} 的内存使用率超过80%。
-            当前使用率: {{ $value | humanizePercentage }}
-          impact: "中"
-          action: "检查内存泄漏，考虑增加内存配额"
-      
-      - alert: AthenaExecutionCriticalMemoryUsage
-        expr: |
-          (
-            sum by (instance) (athena_execution_memory_usage_bytes) /
-            sum by (instance) (athena_execution_memory_max_bytes)
-          ) > 0.9
-        for: 5m
-        labels:
-          severity: critical
-          component: execution_engine
-          type: resource
-        annotations:
-          summary: "内存使用率严重告警"
-          description: >
-            实例 {{ $labels.instance }} 的内存使用率超过90%。
-            当前使用率: {{ $value | humanizePercentage }}
-          impact: "高"
-          action: "立即检查！可能导致OOM"
-      
-      - alert: AthenaExecutionHighCPUUsage
-        expr: |
-          sum by (instance) (rate(athena_execution_cpu_time_seconds_total[5m])) > 0.8
+          summary: "对象池接近满载"
+          description: "对象池使用率为 {{ $value | humanizePercentage }}"
+
+      # 缓存命中率低告警
+      - alert: LowCacheHitRate
+        expr: athena_context_management_cache_hit_rate < 0.7
         for: 15m
-        labels:
-          severity: warning
-          component: execution_engine
-          type: resource
-        annotations:
-          summary: "CPU使用率过高"
-          description: >
-            实例 {{ $labels.instance }} 的CPU使用率超过80%。
-            当前使用率: {{ $value | humanizePercentage }}
-          impact: "中"
-          action: "检查是否有计算密集型任务，考虑优化或限流"
-      
-      - alert: AthenaExecutionWorkerExhaustion
-        expr: |
-          sum by (instance) (athena_execution_workers_active) >= 
-          sum by (instance) (athena_execution_workers_max)
-        for: 5m
-        labels:
-          severity: warning
-          component: execution_engine
-          type: resource
-        annotations:
-          summary: "工作线程耗尽"
-          description: >
-            实例 {{ $labels.instance }} 的工作线程已全部占用。
-            活跃线程: {{ $value }}，最大线程数: {{ $labels.max }}
-          impact: "中"
-          action: "检查是否有长时间运行的任务，考虑增加max_workers"
-      
-      # ========================================================================
-      # 可用性告警 (Availability Alerts)
-      # ========================================================================
-      
-      - alert: AthenaExecutionDown
-        expr: |
-          up{job="athena-execution"} == 0
-        for: 2m
-        labels:
-          severity: critical
-          component: execution_engine
-          type: availability
-        annotations:
-          summary: "执行引擎实例离线"
-          description: >
-            实例 {{ $labels.instance }} 无法访问或已停止。
-            最后可见时间: {{ $value | humanizeDuration }} 前
-          impact: "高"
-          action: "立即检查实例状态，重启服务"
-      
-      - alert: AthenaExecutionHealthCheckFailed
-        expr: |
-          athena_execution_health_up{job="athena-execution"} == 0
-        for: 3m
-        labels:
-          severity: warning
-          component: execution_engine
-          type: availability
-        annotations:
-          summary: "健康检查失败"
-          description: >
-            实例 {{ $labels.instance }} 的健康检查连续失败3分钟。
-          impact: "中"
-          action: "检查系统状态，查看详细健康检查信息"
-      
-      # ========================================================================
-      # 业务指标告警 (Business Metrics Alerts)
-      # ========================================================================
-      
-      - alert: AthenaExecutionLowThroughput
-        expr: |
-          sum by (instance) (rate(athena_execution_tasks_completed_total[5m])) < 1
-        for: 15m
-        labels:
-          severity: warning
-          component: execution_engine
-          type: throughput
-        annotations:
-          summary: "任务吞吐量过低"
-          description: >
-            实例 {{ $labels.instance }} 的任务完成率低于1个/秒。
-            当前速率: {{ $value | humanize }} 任务/秒
-          impact: "中"
-          action: "检查是否有任务积压或处理能力不足"
-      
-      - alert: AthenaExecutionNoTasksProcessed
-        expr: |
-          sum by (instance) (rate(athena_execution_tasks_completed_total[10m])) == 0
-        for: 10m
         labels:
           severity: info
-          component: execution_engine
-          type: throughput
+          service: athena_context
         annotations:
-          summary: "无任务处理"
-          description: >
-            实例 {{ $labels.instance }} 在过去10分钟内没有处理任何任务。
-          impact: "低"
-          action: "确认是否为预期行为（如无新任务提交）"
+          summary: "缓存命中率偏低"
+          description: "缓存命中率为 {{ $value | humanizePercentage }} (缓存类型: {{ $labels.cache_type }})"
 
-  # ========================================================================
-  # 汇总告警 (Aggregate Alerts)
-  # ========================================================================
-  
-  - name: athena_execution_cluster_alerts
-    interval: 1m
-    rules:
-      
-      - alert: AthenaExecutionClusterHighErrorRate
+      # 严重缓存命中率低告警
+      - alert: VeryLowCacheHitRate
+        expr: athena_context_management_cache_hit_rate < 0.5
+        for: 10m
+        labels:
+          severity: warning
+          service: athena_context
+        annotations:
+          summary: "缓存命中率严重偏低"
+          description: "缓存命中率为 {{ $value | humanizePercentage }} (缓存类型: {{ $labels.cache_type }})"
+
+      # 上下文创建失败告警
+      - alert: ContextCreateErrors
         expr: |
-          (
-            sum(rate(athena_execution_tasks_failed_total[5m])) /
-            sum(rate(athena_execution_tasks_total[5m]))
-          ) > 0.05
+          rate(athena_context_management_operations_total{operation="create",status="error"}[5m]) > 0
+        for: 2m
+        labels:
+          severity: error
+          service: athena_context
+        annotations:
+          summary: "上下文创建持续失败"
+          description: "上下文创建错误率为 {{ $value }} ops/s"
+
+      # 上下文读取失败告警
+      - alert: ContextReadErrors
+        expr: |
+          rate(athena_context_management_operations_total{operation="read",status="error"}[5m]) > 0.1
         for: 5m
         labels:
           severity: warning
-          scope: cluster
-          type: error_rate
+          service: athena_context
         annotations:
-          summary: "集群整体错误率过高"
-          description: >
-            集群整体任务错误率超过5%。
-            当前错误率: {{ $value | humanizePercentage }}
-          impact: "高"
-          action: "检查所有实例的错误情况，分析共同原因"
-      
-      - alert: AthenaExecutionMultipleInstancesDown
-        expr: |
-          count by (cluster) (up{job="athena-execution"} == 0) > 1
-        for: 2m
-        labels:
-          severity: critical
-          scope: cluster
-          type: availability
-        annotations:
-          summary: "多个实例离线"
-          description: >
-            集群 {{ $labels.cluster }} 中有 {{ $value }} 个实例离线。
-          impact: "高"
-          action: "立即检查集群状态，启动故障转移"
+          summary: "上下文读取错误频繁"
+          description: "上下文读取错误率为 {{ $value }} ops/s"
