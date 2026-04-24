@@ -1,0 +1,250 @@
+# 上下文验证规则配置
+# Context Validation Rules Configuration
+# Phase 3.1安全加固
+
+# 全局配置
+global:
+  # 严格模式（任何警告都视为错误）
+  strict_mode: false
+
+  # 快速失败（发现第一个问题就停止）
+  fail_fast: false
+
+  # 验证超时（秒）
+  validation_timeout: 30
+
+# Schema验证规则
+schema:
+  # 字段长度限制
+  length_limits:
+    # 字符串字段默认限制
+    string:
+      min_length: 0
+      max_length: 10000
+
+    # 特定字段的长度限制
+    context_id:
+      min_length: 1
+      max_length: 100
+
+    context_type:
+      min_length: 1
+      max_length: 50
+
+    task_id:
+      min_length: 1
+      max_length: 100
+
+    task_description:
+      min_length: 1
+      max_length: 5000
+
+    session_id:
+      pattern: "uuid"
+
+    user_id:
+      min_length: 1
+      max_length: 100
+
+  # 数值范围限制
+  value_ranges:
+    percentage:
+      min_value: 0
+      max_value: 100
+
+    priority:
+      min_value: 1
+      max_value: 10
+
+    timeout:
+      min_value: 0
+      max_value: 3600
+
+  # 枚举值
+  enums:
+    context_status:
+      - active
+      - suspended
+      - completed
+      - failed
+      - cancelled
+
+    task_status:
+      - pending
+      - in_progress
+      - completed
+      - failed
+      - cancelled
+
+    log_level:
+      - DEBUG
+      - INFO
+      - WARNING
+      - ERROR
+      - CRITICAL
+
+# 安全检查规则
+security:
+  # 启用的检查类型
+  enabled_checks:
+    sql_injection: true
+    xss: true
+    command_injection: true
+    path_traversal: true
+    ldap_injection: true
+    nosql_injection: true
+
+  # SQL注入检测
+  sql_injection:
+    # 检测级别 (low/medium/high/strict)
+    level: "high"
+
+    # 额外的SQL关键字
+    additional_keywords:
+      - "SHOW TABLES"
+      - "DESCRIBE"
+      - "EXPLAIN"
+
+    # 允许的SQL上下文（白名单）
+    allowed_contexts: []
+
+  # XSS检测
+  xss:
+    # 额外的危险标签
+    additional_dangerous_tags:
+      - "body"
+      - "html"
+
+    # 额外的危险事件
+    additional_dangerous_events:
+      - "onmouseenter"
+      - "onmouseleave"
+
+    # 允许的HTML标签（白名单）
+    allowed_tags:
+      - "p"
+      - "br"
+      - "strong"
+      - "em"
+      - "u"
+
+    # 允许的HTML属性
+    allowed_attributes:
+      - "class"
+      - "id"
+
+  # 命令注入检测
+  command_injection:
+    # 额外的Shell元字符
+    additional_meta_chars:
+      - ">"
+      - "<"
+
+    # 允许的命令上下文
+    allowed_contexts: []
+
+  # 路径遍历检测
+  path_traversal:
+    # 允许的目录（白名单）
+    allowed_dirs:
+      - "data"
+      - "logs"
+      - "cache"
+
+    # 允许的文件扩展名
+    allowed_extensions:
+      - ".json"
+      - ".txt"
+      - ".log"
+      - ".csv"
+
+  # LDAP注入检测
+  ldap_injection:
+    # 额外的LDAP特殊字符
+    additional_special_chars: []
+
+  # NoSQL注入检测
+  nosql_injection:
+    # 额外的NoSQL操作符
+    additional_operators:
+      - "$expr"
+      - "$jsonSchema"
+
+# 上下文类型特定规则
+context_type_rules:
+  # 任务上下文
+  task:
+    max_steps: 1000
+    max_variables: 500
+    max_metadata_size: 10240  # 10KB
+
+  # 会话上下文
+  session:
+    max_messages: 10000
+    max_message_length: 50000
+    max_metadata_size: 10240  # 10KB
+
+    # 禁止的元数据字段
+    forbidden_metadata_keys:
+      - "password"
+      - "token"
+      - "secret"
+      - "api_key"
+      - "credential"
+      - "private_key"
+      - "auth"
+      - "cookie"
+      - "session_token"
+
+  # 代理上下文
+  agent:
+    max_tools: 100
+    max_memory_size: 1048576  # 1MB
+
+# 黑名单
+blacklist:
+  # 禁止的字符串模式
+  patterns:
+    - "<script"
+    - "javascript:"
+    - "eval("
+    - "exec("
+    - "system("
+
+  # 禁止的文件路径
+  paths:
+    - "/etc/passwd"
+    - "/etc/shadow"
+    - "C:\\Windows\\System32\\config\\SAM"
+
+  # 禁止的IP地址
+  ips:
+    - "127.0.0.1"
+    - "localhost"
+    - "0.0.0.0"
+
+# 白名单
+whitelist:
+  # 允许的域名
+  domains:
+    - "athena.ai"
+    - "athena-platform.com"
+
+  # 允许的URL模式
+  url_patterns:
+    - "^https://api\\.athena\\.ai/.*$"
+    - "^https://cdn\\.athena\\.ai/.*$"
+
+# 错误处理
+error_handling:
+  # 是否记录所有验证错误
+  log_all_errors: true
+
+  # 是否返回详细错误信息
+  detailed_errors: true
+
+  # 最大错误数（超过此数量停止检查）
+  max_errors: 100
+
+  # 最大安全问题数
+  max_security_issues: 50
