@@ -1,0 +1,252 @@
+# 访问控制系统配置文件
+# Access Control System Configuration
+#
+# Author: SecurityAgent
+# Date: 2026-04-24
+
+# RBAC角色定义
+rbac:
+  # 系统预定义角色
+  system_roles:
+    - name: admin
+      description: 系统管理员，拥有所有权限
+      priority: 1000
+      permissions:
+        - context.create
+        - context.read
+        - context.update
+        - context.delete
+        - context.admin
+        - user.manage
+        - role.manage
+        - audit.read
+        - system.admin
+
+    - name: moderator
+      description: 内容审核员，可读取、更新和审核内容
+      priority: 500
+      permissions:
+        - context.read
+        - context.update
+        - context.audit
+        - audit.read
+
+    - name: editor
+      description: 编辑者，可创建和编辑自己的内容
+      priority: 300
+      permissions:
+        - context.create
+        - context.read
+        - context.update
+
+    - name: viewer
+      description: 查看者，仅能读取内容
+      priority: 100
+      permissions:
+        - context.read
+
+    - name: guest
+      description: 访客，受限的读取权限
+      priority: 50
+      permissions:
+        - context.read
+
+  # 默认角色分配
+  default_role: viewer
+
+  # 超级用户
+  superusers:
+    - admin
+
+# 上下文权限配置
+context_permissions:
+  # 权限级别
+  levels:
+    - name: owner
+      description: 所有者，完全控制
+      can_read: true
+      can_edit: true
+      can_delete: true
+      can_share: true
+
+    - name: edit
+      description: 编辑权限
+      can_read: true
+      can_edit: true
+      can_delete: false
+      can_share: false
+
+    - name: read
+      description: 读取权限
+      can_read: true
+      can_edit: false
+      can_delete: false
+      can_share: false
+
+    - name: none
+      description: 无权限
+      can_read: false
+      can_edit: false
+      can_delete: false
+      can_share: false
+
+  # 默认权限策略
+  default_policy:
+    # 创建上下文时的默认权限级别
+    creator_level: owner
+
+    # 是否继承父上下文权限
+    inherit: false
+
+    # 权限继承的深度限制
+    max_inherit_depth: 5
+
+# 审计日志配置
+audit:
+  # 是否启用审计日志
+  enabled: true
+
+  # 记录的操作类型
+  log_actions:
+    - access
+    - view
+    - create_context
+    - read_context
+    - update_context
+    - delete_context
+    - grant_permission
+    - revoke_permission
+    - check_permission
+    - create_role
+    - delete_role
+    - assign_role
+    - revoke_role
+    - create_user
+    - delete_user
+    - modify_user
+    - login
+    - logout
+
+  # 是否记录IP地址
+  log_ip_address: true
+
+  # 是否记录用户代理
+  log_user_agent: true
+
+  # 是否记录会话ID
+  log_session_id: true
+
+  # 日志保留天数
+  retention_days: 90
+
+  # 是否保留失败的登录尝试
+  keep_failed_attempts: true
+
+  # 数据备份配置
+  backup:
+    enabled: true
+    interval_hours: 24
+    keep_backups: 30
+
+  # HMAC签名配置
+  hmac:
+    enabled: true
+    # 生产环境应从环境变量读取
+    key_env_var: ATHENA_AUDIT_HMAC_KEY
+
+# 安全策略
+security:
+  # 密码策略
+  password:
+    min_length: 8
+    require_uppercase: true
+    require_lowercase: true
+    require_digits: true
+    require_special_chars: false
+    max_age_days: 90
+    history_count: 5
+
+  # 会话策略
+  session:
+    timeout_minutes: 30
+    max_concurrent: 5
+
+  # 登录策略
+  login:
+    max_attempts: 5
+    lockout_duration_minutes: 30
+    require_mfa: false
+
+  # 权限检查
+  permission_check:
+    # 是否启用严格模式（拒绝未定义的操作）
+    strict_mode: true
+
+    # 是否缓存权限检查结果
+    cache_enabled: true
+
+    # 缓存过期时间（秒）
+    cache_ttl: 300
+
+  # 审计触发阈值
+  audit_thresholds:
+    # 失败登录尝试阈值
+    failed_login_threshold: 3
+
+    # 权限拒绝阈值
+    permission_denied_threshold: 10
+
+    # 时间窗口（分钟）
+    time_window_minutes: 5
+
+# 数据库配置
+database:
+  # 数据库目录
+  dir: ~/.athena
+
+  # 数据库文件名
+  rbac_db: access_control.db
+  context_perm_db: context_permissions.db
+  audit_db: audit_logs.db
+
+  # 连接池配置
+  pool:
+    max_connections: 10
+    idle_timeout_seconds: 300
+
+  # WAL模式
+  wal_mode: true
+
+  # 同步模式
+  synchronous: NORMAL
+
+  # 缓存大小（KB）
+  cache_size: -2000
+
+# 性能配置
+performance:
+  # 批量操作大小
+  batch_size: 100
+
+  # 查询超时（秒）
+  query_timeout: 30
+
+  # 是否启用连接池
+  connection_pooling: true
+
+  # 索引优化
+  auto_index: true
+
+# 监控配置
+monitoring:
+  # 是否启用性能监控
+  enabled: true
+
+  # 慢查询阈值（毫秒）
+  slow_query_threshold: 1000
+
+  # 是否记录统计信息
+  log_statistics: true
+
+  # 统计信息更新间隔（秒）
+  statistics_interval: 60
